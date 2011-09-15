@@ -1,0 +1,617 @@
+/*===================================================================================
+                                    CarDesigner
+                         Copyright Kerry R. Loux 2008-2010
+
+     No requirement for distribution of wxWidgets libraries, source, or binaries.
+                             (http://www.wxwidgets.org/)
+
+===================================================================================*/
+
+// File:  appearance_options_dialog_class.cpp
+// Created:  4/23/2009
+// Author:  K. Loux
+// Description:  A dialog object for editing the contents of the APPEARANCE_OPTIONS object.
+// History:
+//	5/7/2009	- Made grid columns re-sizable and started using the column labels, K. Loux.
+//	10/17/2010	- Added transparency options for color definition, K. Loux.
+
+// wxWidgets headers
+#include <wx/sizer.h>
+#include <wx/notebook.h>
+#include <wx/grid.h>
+#include <wx/checklst.h>
+#include <wx/colordlg.h>
+
+// VVASE headers
+#include "gui/dialogs/appearance_options_dialog_class.h"
+#include "gui/components/main_frame_class.h"
+#include "vRenderer/color_class.h"
+#include "vUtilities/convert_class.h"
+
+//==========================================================================
+// Class:			APPEARANCE_OPTIONS_DIALOG
+// Function:		APPEARANCE_OPTIONS_DIALOG
+//
+// Description:		Constructor for APPEARANCE_OPTIONS_DIALOG class.
+//
+// Input Argurments:
+//		MainFrame	= MAIN_FRAME& pointing to the application's main window
+//		_Options	= APPEARANCE_OPTIONS* pointing to the object to edit
+//		Id			= wxWindowId for this object
+//		Position	= const wxPoint& where this object will be drawn
+//		Style		= long defining the style for this dialog
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+APPEARANCE_OPTIONS_DIALOG::APPEARANCE_OPTIONS_DIALOG(MAIN_FRAME &MainFrame,
+													 APPEARANCE_OPTIONS *_Options,
+													 wxWindowID Id, const wxPoint &Position,
+													 long Style) : wxDialog(&MainFrame, Id,
+													 _T("Appearance Options"), Position,
+													 wxDefaultSize, Style),
+													 Converter(MainFrame.GetConverter())
+{
+	// Assign the pointer to the options object
+	Options = _Options;
+
+	// Copy the colors into our local color array
+	int i;
+	for (i = 0; i < APPEARANCE_OPTIONS::ColorCount; i++)
+		ColorOptions[i] = Options->GetColor((APPEARANCE_OPTIONS::OBJECT_COLOR)i);
+
+	// Create the controls
+	CreateControls();
+
+	// Center the dialog on the screen
+	Center();
+}
+
+//==========================================================================
+// Class:			APPEARANCE_OPTIONS_DIALOG
+// Function:		~APPEARANCE_OPTIONS_DIALOG
+//
+// Description:		Destructor for APPEARANCE_OPTIONS_DIALOG class.
+//
+// Input Argurments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+APPEARANCE_OPTIONS_DIALOG::~APPEARANCE_OPTIONS_DIALOG()
+{
+}
+
+//==========================================================================
+// Class:			APPEARANCE_OPTIONS_DIALOG
+// Function:		Event Table
+//
+// Description:		Links GUI events with event handler functions.
+//
+// Input Argurments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+BEGIN_EVENT_TABLE(APPEARANCE_OPTIONS_DIALOG, wxDialog)
+	EVT_BUTTON(wxID_OK,							APPEARANCE_OPTIONS_DIALOG::OKClickEvent)
+	EVT_BUTTON(wxID_CANCEL,						APPEARANCE_OPTIONS_DIALOG::CancelClickEvent)
+	EVT_GRID_CMD_CELL_LEFT_DCLICK(IdColorGrid,	APPEARANCE_OPTIONS_DIALOG::ColorGridDoubleClickEvent)
+	EVT_GRID_CELL_CHANGE(						APPEARANCE_OPTIONS_DIALOG::AlphaChangeEvent)
+END_EVENT_TABLE();
+
+//==========================================================================
+// Class:			APPEARANCE_OPTIONS_DIALOG
+// Function:		CreateControls
+//
+// Description:		Sets up this form's contents and size.
+//
+// Input Argurments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void APPEARANCE_OPTIONS_DIALOG::CreateControls(void)
+{
+	// Top-level sizer
+	wxBoxSizer *TopSizer = new wxBoxSizer(wxVERTICAL);
+
+	// Second sizer gives more space around the controls
+	wxBoxSizer *MainSizer = new wxBoxSizer(wxVERTICAL);
+	TopSizer->Add(MainSizer, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
+
+	// Create the notebook
+	Notebook = new wxNotebook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxNB_TOP);
+	MainSizer->Add(Notebook);
+
+	// Create the color panel
+	ColorPanel = new wxPanel(Notebook);
+	Notebook->AddPage(ColorPanel, _T("Colors"));
+
+	// Use another outer sizer to create more room for the controls
+	wxBoxSizer *ColorTopSizer = new wxBoxSizer(wxVERTICAL);
+
+	// Create the color page main sizer
+	wxBoxSizer *ColorSizer = new wxBoxSizer(wxVERTICAL);
+	ColorTopSizer->Add(ColorSizer, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
+
+	// Add a horizontal spacer for the text across the top
+	wxBoxSizer *ColorCaptionSizer = new wxBoxSizer(wxHORIZONTAL);
+	ColorSizer->Add(ColorCaptionSizer, 0, wxALIGN_TOP);
+
+	// Add the text to this spacer
+	wxStaticText *ColorPrompt = new wxStaticText(ColorPanel, wxID_STATIC,
+		_T("Edit the object colors:"), wxDefaultPosition, wxSize(-1, -1), 0);
+	ColorCaptionSizer->Add(-1, -1, 0, wxALL, 5);
+	ColorCaptionSizer->Add(ColorPrompt, 0, wxALL, 5);
+
+	// The column and row sizes
+	int LabelColumnWidth = 150;
+	int DataColumnWidth = 70;
+	int MainObjectWidth = LabelColumnWidth + 2 * DataColumnWidth + 18;
+	int MainObjectHeight = 250;
+
+	// Create the grid for the list of colors
+	ColorGrid = new wxGrid(ColorPanel, IdColorGrid, wxDefaultPosition, wxSize(MainObjectWidth, MainObjectHeight));
+	ColorGrid->CreateGrid(APPEARANCE_OPTIONS::ColorCount, 3, wxGrid::wxGridSelectCells);
+
+	// Begin a batch edit of the grid
+	ColorGrid->BeginBatch();
+
+	// Set the column widths
+	ColorGrid->SetColumnWidth(0, LabelColumnWidth);
+	ColorGrid->SetColumnWidth(1, DataColumnWidth);
+	ColorGrid->SetColumnWidth(2, DataColumnWidth);
+
+	// Hide the label column and set the size for the label row
+	ColorGrid->SetRowLabelSize(0);
+	ColorGrid->SetColLabelSize(ColorGrid->GetRowSize(0));
+
+	// Add the grid to the sizer
+	ColorSizer->Add(ColorGrid, 1, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALL | wxALIGN_TOP, 5);
+
+	// Set the column headings
+	ColorGrid->SetColLabelValue(0, _T("Object"));
+	ColorGrid->SetColLabelValue(1, _T("Color"));
+	ColorGrid->SetColLabelValue(2, _T("Alpha"));
+
+	// Do the processing that needs to be done for each row
+	int i;
+	for (i = 0; i < APPEARANCE_OPTIONS::ColorCount; i++)
+	{
+		// Make the first column read-only
+		ColorGrid->SetReadOnly(i, 0, true);
+
+		// Add the names of all of the points to the grid
+		ColorGrid->SetCellValue(i, 0, APPEARANCE_OPTIONS::GetColorString(
+			(APPEARANCE_OPTIONS::OBJECT_COLOR)i));
+
+		// Set the color column's cell background to match the color of the object
+		ColorGrid->SetCellBackgroundColour(i, 1, ColorOptions[i].ToWxColor());
+
+		// Set the transparency values
+		ColorGrid->SetCellValue(i, 2, Converter.FormatNumber(ColorOptions[i].GetAlpha()));
+	}
+
+	// Don't let the user move or re-size the rows and columns
+	ColorGrid->EnableDragColMove(false);
+	ColorGrid->EnableDragColSize(true);
+	ColorGrid->EnableDragGridSize(false);
+	ColorGrid->EnableDragRowSize(false);
+
+	// End the batch mode edit and re-paint the control
+	ColorGrid->EndBatch();
+
+	// Set the color panels's sizer
+	ColorPanel->SetSizer(ColorTopSizer);
+
+	// Create the Visibility panel
+	VisibilityPanel = new wxPanel(Notebook);
+	Notebook->AddPage(VisibilityPanel, _T("Visibilities"));
+
+	// Use another outer sizer to create more room for the controls
+	wxBoxSizer *VisibilityTopSizer = new wxBoxSizer(wxVERTICAL);
+
+	// Create the visibility page main sizer
+	wxBoxSizer *VisibilitySizer = new wxBoxSizer(wxVERTICAL);
+	VisibilityTopSizer->Add(VisibilitySizer, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
+
+	// Add a horizontal spacer for the text across the top
+	wxBoxSizer *VisibilityCaptionSizer = new wxBoxSizer(wxHORIZONTAL);
+	VisibilitySizer->Add(VisibilityCaptionSizer, 0, wxALIGN_TOP);
+
+	// Add the text to this spacer
+	wxStaticText *VisibilityPrompt = new wxStaticText(VisibilityPanel, wxID_STATIC,
+		_T("Choose the visible objects:"), wxDefaultPosition, wxSize(-1, -1), 0);
+	VisibilityCaptionSizer->Add(-1, -1, 0, wxALL, 5);
+	VisibilityCaptionSizer->Add(VisibilityPrompt, 0, wxALL, 5);
+
+	// The selections array contains the indicies of the items that are selected
+	// which is used to initialize the list in the list box
+	wxArrayString Choices;
+	for (i = 0; i < APPEARANCE_OPTIONS::VisibilityCount; i++)
+		// Add the item to the list
+		Choices.Add(APPEARANCE_OPTIONS::GetVisibilityString((APPEARANCE_OPTIONS::OBJECT_VISIBILITY)i));
+
+	// Create the check list box
+	VisibilityList = new wxCheckListBox(VisibilityPanel, wxID_ANY, wxDefaultPosition,
+		wxSize(MainObjectWidth, MainObjectHeight), Choices);
+
+	// Add the check list box to the sizer
+	VisibilitySizer->Add(VisibilityList, 1, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALL | wxALIGN_TOP, 5);
+
+	// Go through the list and check the boxes of the items that are currenly visible
+	for (i = 0; i < APPEARANCE_OPTIONS::VisibilityCount; i++)
+		VisibilityList->Check(i, Options->GetVisibility((APPEARANCE_OPTIONS::OBJECT_VISIBILITY)i));
+
+	// Set the visibility panel's sizer
+	VisibilityPanel->SetSizer(VisibilityTopSizer);
+
+	// Create the Size panel
+	SizePanel = new wxPanel(Notebook);
+	Notebook->AddPage(SizePanel, _T("Sizes"));
+
+	// Use another outer sizer to create more room for the controls
+	wxBoxSizer *SizeTopSizer = new wxBoxSizer(wxVERTICAL);
+
+	// Create the size page main sizer
+	wxBoxSizer *SizeSizer = new wxBoxSizer(wxVERTICAL);
+	SizeTopSizer->Add(SizeSizer, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
+
+	// Add a horizontal spacer for the text across the top
+	wxBoxSizer *SizeCaptionSizer = new wxBoxSizer(wxHORIZONTAL);
+	SizeSizer->Add(SizeCaptionSizer, 0, wxALIGN_TOP);
+
+	// Add the text to this spacer
+	wxStaticText *SizePrompt = new wxStaticText(SizePanel, wxID_STATIC,
+		_T("Edit the object sizes (units are ") + Converter.GetUnitType(CONVERT::UNIT_TYPE_DISTANCE)
+		+ _T("):"), wxDefaultPosition, wxSize(-1, -1), 0);
+	SizeCaptionSizer->Add(-1, -1, 0, wxALL, 5);
+	SizeCaptionSizer->Add(SizePrompt, 0, wxALL, 5);
+
+	// Create the grid for the list of sizes
+	SizeGrid = new wxGrid(SizePanel, wxID_ANY, wxDefaultPosition, wxSize(MainObjectWidth, MainObjectHeight));
+	SizeGrid->CreateGrid(APPEARANCE_OPTIONS::SizeCount, 2, wxGrid::wxGridSelectRows);
+
+	// Begin a batch edit of the grid
+	SizeGrid->BeginBatch();
+
+	// Set the column widths
+	SizeGrid->SetColumnWidth(0, LabelColumnWidth);
+	SizeGrid->SetColumnWidth(1, DataColumnWidth);
+
+	// Hide the label column and set the size for the label row
+	SizeGrid->SetRowLabelSize(0);
+	SizeGrid->SetColLabelSize(SizeGrid->GetRowSize(0));
+
+	// Add the grid to the sizer
+	SizeSizer->Add(SizeGrid, 1, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALL | wxALIGN_TOP, 5);
+
+	// Set the column headings
+	SizeGrid->SetColLabelValue(0, _T("Object"));
+	SizeGrid->SetColLabelValue(1, _T("Size"));
+
+	// Do the processing that needs to be done for each row
+	for (i = 0; i < APPEARANCE_OPTIONS::SizeCount; i++)
+	{
+		// Make the first column read-only
+		SizeGrid->SetReadOnly(i, 0, true);
+
+		// Set the alignment for all of the data cells to the right
+		SizeGrid->SetCellAlignment(i, 1, wxALIGN_RIGHT, wxALIGN_TOP);
+
+		// Add the names of all of the points to the grid
+		SizeGrid->SetCellValue(i, 0, APPEARANCE_OPTIONS::GetSizeString(
+			(APPEARANCE_OPTIONS::OBJECT_SIZE)i));
+
+		// Set the values of all of the data cells
+		SizeGrid->SetCellValue(i, 1, Converter.FormatNumber(Converter.ConvertDistance(
+			Options->GetSize((APPEARANCE_OPTIONS::OBJECT_SIZE)i))));
+	}
+
+	// Don't let the user move or re-size the rows and columns
+	SizeGrid->EnableDragColMove(false);
+	SizeGrid->EnableDragColSize(true);
+	SizeGrid->EnableDragGridSize(false);
+	SizeGrid->EnableDragRowSize(false);
+
+	// End the batch mode edit and re-paint the control
+	SizeGrid->EndBatch();
+
+	// Set the size panels's sizer
+	SizePanel->SetSizer(SizeTopSizer);
+
+	// Create the resolution panel
+	ResolutionPanel = new wxPanel(Notebook);
+	Notebook->AddPage(ResolutionPanel, _T("Resolutions"));
+
+	// Use another outer sizer to create more room for the controls
+	wxBoxSizer *ResolutionTopSizer = new wxBoxSizer(wxVERTICAL);
+
+	// Create the resolution page main sizer
+	wxBoxSizer *ResolutionSizer = new wxBoxSizer(wxVERTICAL);
+	ResolutionTopSizer->Add(ResolutionSizer, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
+
+	// Add a horizontal spacer for the text across the top
+	wxBoxSizer *ResolutionCaptionSizer = new wxBoxSizer(wxHORIZONTAL);
+	ResolutionSizer->Add(ResolutionCaptionSizer, 0, wxALIGN_TOP);
+
+	// Add the text to this spacer
+	wxStaticText *ResolutionPrompt = new wxStaticText(ResolutionPanel, wxID_STATIC,
+		_T("Edit the object resolutions (number of sides\nto use to approximate a round object):"),
+		wxDefaultPosition, wxSize(-1, -1), 0);
+	ResolutionCaptionSizer->Add(-1, -1, 0, wxALL, 5);
+	ResolutionCaptionSizer->Add(ResolutionPrompt, 0, wxALL, 5);
+
+	// Create the grid for the list of resolutions
+	ResolutionGrid = new wxGrid(ResolutionPanel, wxID_ANY, wxDefaultPosition, wxSize(MainObjectWidth, MainObjectHeight));
+	ResolutionGrid->CreateGrid(APPEARANCE_OPTIONS::ResolutionCount, 2, wxGrid::wxGridSelectRows);
+
+	// Begin a batch edit of the grid
+	ResolutionGrid->BeginBatch();
+
+	// Set the column widths
+	ResolutionGrid->SetColumnWidth(0, LabelColumnWidth);
+	ResolutionGrid->SetColumnWidth(1, DataColumnWidth);
+
+	// Hide the label rows/columns
+	ResolutionGrid->SetRowLabelSize(0);
+	ResolutionGrid->SetColLabelSize(ResolutionGrid->GetRowSize(0));
+
+	// Add the grid to the sizer
+	ResolutionSizer->Add(ResolutionGrid, 1, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALL | wxALIGN_TOP, 5);
+
+	// Set the column headings
+	ResolutionGrid->SetColLabelValue(0, _T("Object"));
+	ResolutionGrid->SetColLabelValue(1, _T("Resolution"));
+
+	// Do the processing that needs to be done for each row
+	wxString ValueString;
+	for (i = 0; i < APPEARANCE_OPTIONS::ResolutionCount; i++)
+	{
+		// Make the first column read-only
+		ResolutionGrid->SetReadOnly(i, 0, true);
+
+		// Set the alignment for all of the data cells to the right
+		ResolutionGrid->SetCellAlignment(i, 1, wxALIGN_RIGHT, wxALIGN_TOP);
+
+		// Add the names of all of the points to the grid
+		ResolutionGrid->SetCellValue(i, 0, APPEARANCE_OPTIONS::GetResolutionString(
+			(APPEARANCE_OPTIONS::OBJECT_RESOLUTION)i));
+
+		// Set the values of all of the data cells
+		ValueString.Printf("%i", Options->GetResolution((APPEARANCE_OPTIONS::OBJECT_RESOLUTION)i));
+		ResolutionGrid->SetCellValue(i, 1, ValueString);
+	}
+
+	// Don't let the user move or re-size the rows and columns
+	ResolutionGrid->EnableDragColMove(false);
+	ResolutionGrid->EnableDragColSize(true);
+	ResolutionGrid->EnableDragGridSize(false);
+	ResolutionGrid->EnableDragRowSize(false);
+
+	// End the batch mode edit and re-paint the control
+	ResolutionGrid->EndBatch();
+
+	// Set the resolution panels's sizer
+	ResolutionPanel->SetSizer(ResolutionTopSizer);
+
+	// Add a spacer between the notebook and the buttons
+	MainSizer->AddSpacer(10);
+
+	// Create another sizer for the buttons at the bottom and add the buttons
+	wxBoxSizer *ButtonsSizer = new wxBoxSizer(wxHORIZONTAL);
+	wxButton *OKButton = new wxButton(this, wxID_OK, _T("OK"),
+		wxDefaultPosition, wxDefaultSize, 0);
+	wxButton *CancelButton = new wxButton(this, wxID_CANCEL, _T("Cancel"),
+		wxDefaultPosition, wxDefaultSize, 0);
+	ButtonsSizer->Add(OKButton, 0, wxALL, 5);
+	ButtonsSizer->Add(CancelButton, 0, wxALL, 5);
+	MainSizer->Add(ButtonsSizer, 0, wxALIGN_CENTER_HORIZONTAL);
+
+	// Make the OK button default
+	OKButton->SetDefault();
+
+	// Tell the dialog to auto-adjust it's size
+	TopSizer->SetSizeHints(this);
+
+	// Assign the top level sizer to the dialog
+	SetSizer(TopSizer);
+
+	return;
+}
+
+//==========================================================================
+// Class:			APPEARANCE_OPTIONS_DIALOG
+// Function:		OKClickEvent
+//
+// Description:		Handles the OK button clicked events
+//
+// Input Argurments:
+//		event	= wxCommandEvent&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void APPEARANCE_OPTIONS_DIALOG::OKClickEvent(wxCommandEvent& WXUNUSED(event))
+{
+	// Update the appearance options object with the contents of this dialog
+
+	// Update the colors
+	int i;
+	double TempAlpha;
+	for (i = 0; i < APPEARANCE_OPTIONS::ColorCount; i++)
+	{
+		// Get the alpha before updating the color (wx-native dialog does not handle alpha)
+		if (ColorGrid->GetCellValue(i, 2).ToDouble(&TempAlpha))
+			ColorOptions[i].SetAlpha(TempAlpha);
+		Options->SetColor((APPEARANCE_OPTIONS::OBJECT_COLOR)i, ColorOptions[i]);
+	}
+
+	// Update the visibilities
+	for (i = 0; i < APPEARANCE_OPTIONS::VisibilityCount; i++)
+		Options->SetVisibility((APPEARANCE_OPTIONS::OBJECT_VISIBILITY)i, VisibilityList->IsChecked(i));
+
+	// Update the sizes
+	double SizeValue;
+	for (i = 0; i < APPEARANCE_OPTIONS::SizeCount; i++)
+	{
+		// Size must be a valid number
+		if (SizeGrid->GetCellValue(i, 1).ToDouble(&SizeValue))
+			Options->SetSize((APPEARANCE_OPTIONS::OBJECT_SIZE)i, Converter.ReadDistance(SizeValue));
+	}
+
+	// Update the resolutions
+	long ResolutionValue;
+	for (i = 0; i < APPEARANCE_OPTIONS::ResolutionCount; i++)
+	{
+		// Resolution must be a valid number)
+		if (ResolutionGrid->GetCellValue(i, 1).ToLong(&ResolutionValue))	
+			Options->SetResolution((APPEARANCE_OPTIONS::OBJECT_RESOLUTION)i, (int)ResolutionValue);
+	}
+
+	// The way we handle this changes depending on how this form was displayed
+	if (IsModal())
+		EndModal(wxOK);
+	else
+	{
+		SetReturnCode(wxOK);
+		Show(false);
+	}
+
+	return;
+}
+
+//==========================================================================
+// Class:			APPEARANCE_OPTIONS_DIALOG
+// Function:		CancelClickEvent
+//
+// Description:		Handles the Cancel button clicked event.
+//
+// Input Argurments:
+//		event	= wxCommandEvent&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void APPEARANCE_OPTIONS_DIALOG::CancelClickEvent(wxCommandEvent& WXUNUSED(event))
+{
+	// The way we handle this changes depending on how this form was displayed
+	if (IsModal())
+		EndModal(wxID_CANCEL);
+	else
+	{
+		SetReturnCode(wxID_CANCEL);
+		Show(false);
+	}
+
+	return;
+}
+
+//==========================================================================
+// Class:			APPEARANCE_OPTIONS_DIALOG
+// Function:		ColorGridDoubleClickEvent
+//
+// Description:		Handles the color grid double click events.
+//
+// Input Argurments:
+//		event	= wxGridEvent&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void APPEARANCE_OPTIONS_DIALOG::ColorGridDoubleClickEvent(wxGridEvent &event)
+{
+	// Get the color information that corresponds to this row, and put it in wxColor object,
+	// which in turn goes into a wxColourData object
+	wxColourData ColorData;
+	ColorData.SetColour(ColorOptions[event.GetRow()].ToWxColor());
+
+	// Display a color dialog
+	wxColourDialog ColorDialog(this, &ColorData);
+
+	// Display the dialog and check to see if the user clicked OK or Cancel
+	if (ColorDialog.ShowModal() == wxID_OK)
+	{
+		// Assign this color to the CurrentColor
+		ColorOptions[event.GetRow()].Set(ColorDialog.GetColourData().GetColour());
+
+		// Set the cell background to the new color
+		ColorGrid->SetCellBackgroundColour(event.GetRow(), 1, ColorDialog.GetColourData().GetColour());
+
+		// Re-paint the grid
+		ColorGrid->Refresh();
+		ColorGrid->Update();
+	}
+
+	return;
+}
+
+//==========================================================================
+// Class:			APPEARANCE_OPTIONS_DIALOG
+// Function:		AlphaChangeEvent
+//
+// Description:		Handles the color grid text change events.
+//
+// Input Argurments:
+//		event	= wxGridEvent&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void APPEARANCE_OPTIONS_DIALOG::AlphaChangeEvent(wxGridEvent &event)
+{
+	// Make sure this is a valid row and colum to have changed
+	if (event.GetCol() != 2)
+		return;
+
+	// Make sure the value is between 0 and 1
+	double TempAlpha;
+	if (ColorGrid->GetCellValue(event.GetRow(), event.GetCol()).ToDouble(&TempAlpha))
+	{
+		if (TempAlpha > 1.0)
+			ColorGrid->SetCellValue(event.GetRow(), event.GetCol(), Converter.FormatNumber(1.0));
+		else if (TempAlpha < 0.0)
+			ColorGrid->SetCellValue(event.GetRow(), event.GetCol(), Converter.FormatNumber(0.0));
+	}
+	else
+		ColorGrid->SetCellValue(event.GetRow(), event.GetCol(),
+		Converter.FormatNumber(ColorOptions[event.GetRow()].GetAlpha()));
+
+	return;
+}
