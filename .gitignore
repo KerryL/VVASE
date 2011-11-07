@@ -2,3 +2,14 @@
 /.lib/
 /.obj/
 /bin/
+
+# MSVC++-specific ignores
+*/Debug/
+/Debug/
+*/Release/
+/Release/
+/ipch/
+*.sdf
+*.opensdf
+*.user
+*.suo

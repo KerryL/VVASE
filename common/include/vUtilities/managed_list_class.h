@@ -26,8 +26,8 @@
 
 // Disable warning C4505 for this file
 // This warning occurs because some types (every T= is a different type) do not
-// use both of the overloaded methods in this object
-#ifdef WIN32
+// use all of the overloaded methods in this object
+#ifdef __WXMSW__
 #pragma warning (disable:4505)
 #endif
 

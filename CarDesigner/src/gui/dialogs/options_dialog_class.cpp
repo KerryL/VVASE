@@ -167,7 +167,7 @@ void OPTIONS_DIALOG::CreateControls(void)
 #ifdef __WXGTK__
 	unsigned int additionalWidth = 40;// [pixels]
 #else
-	unsigned int additionalWidth = 40;// [pixels]
+	unsigned int additionalWidth = 30;// [pixels]
 #endif
 	
 	// The column flags

@@ -2,17 +2,17 @@
                                                   VVASE Readme
                                                   Version 0.8b
 
-                                               November 23, 2009
+                                               November 7, 2011
 
-                                       Copyright Kerry R. Loux 2008-2009
+                                       Copyright Kerry R. Loux 2008-2011
 ==============================================================================================================
 
 This readme must be included any time the VVASE executable or any other binaries are distributed.  It contains
 copyright information not only for VVASE, but for third-party software libraries that were used in its
 creation.
 
-VVASE was compiled with Microsoft Visual C++ 2008 (Version 9.0), Service Pack 1.  If you are unable to run the
-executable, you should download and install the MSVC++ 9.0 SP1 Redistributable package from Mircorosft.  It is
+VVASE was compiled with Microsoft Visual C++ 2010 (Version 10.0).  If you are unable to run the
+executable, you should download and install the MSVC++ 10.0 Redistributable package from Mircorosft.  It is
 available for free online at:
 http://www.microsoft.com/downloads/details.aspx?familyid=A5C84275-3B97-4AB7-A40D-3802B2AF5FC2&displaylang=en
 
@@ -34,15 +34,11 @@ The following is a partial list of the bugs and limitations that pertain to the 
 - Help/documentation is so minimal that I have not bothered to include it in this release
 - T-bars are not yet supported
 - Third shocks/springs are not yet supported
-- The application does not write/read to the registry, so none of the user preferences are saved on exit. This
-  one is probably most annoying for anyone who prefers a different system of units.
 - There is currently no way to mount the rear tie rod to anything except the tub
 - There is no way for the user to interact with the plots (change the title, drag/scroll along the plot, change
   axis limits, colors, legends, etc.)
 - A number of minor bugs in the way that information is displayed (names get cut off, extra white space around
   grids, etc.)
-- There is no provision for dragging a file into the VVASE main window to open it, nor is it possible to double
-  click on a file to open it
 - I would like to refine the user input methods a little bit
 - The toggle for View->Kinematic Analysis Toolbar isn't working quite right
 - There are several areas I would like to address to increase the speed of computation
@@ -50,6 +46,7 @@ The following is a partial list of the bugs and limitations that pertain to the 
   not computed
 - Anti-lift for FWD is not accurate
 - Anti-geometries are only accurate for zero configuration (no pitch, roll, heave, or steer)
+- Occasional crashes when using Genetic Algorithms
 
 
 

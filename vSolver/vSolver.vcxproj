@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{D3B21E89-DD3A-4071-A3D9-20A11D3DE193}</ProjectGuid>
+    <RootNamespace>vSolver</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>C:\lib\wxWidgets-2.8.11\lib\vc_dll\mswd;C:\lib\wxWidgets-2.8.11\include;C:\Documents and Settings\kloux\My Documents\Visual Studio 2010\Projects\CarDesigner\common\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>__WXMSW__;__WXDEBUG__;WXUSINGDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>C:\Documents and Settings\kloux\My Documents\Visual Studio 2010\Projects\CarDesigner\Debug;C:\lib\wxWidgets-2.8.11\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\common\include\vSolver\optimization\genetic_algorithm_class.h" />
+    <ClInclude Include="..\common\include\vSolver\physics\dynamics_class.h" />
+    <ClInclude Include="..\common\include\vSolver\physics\integrator_class.h" />
+    <ClInclude Include="..\common\include\vSolver\physics\kinematics_class.h" />
+    <ClInclude Include="..\common\include\vSolver\physics\kinematic_outputs_class.h" />
+    <ClInclude Include="..\common\include\vSolver\physics\milliken_class.h" />
+    <ClInclude Include="..\common\include\vSolver\physics\shaker_rig_class.h" />
+    <ClInclude Include="..\common\include\vSolver\physics\state_class.h" />
+    <ClInclude Include="..\common\include\vSolver\threads\inverse_semaphore_class.h" />
+    <ClInclude Include="..\common\include\vSolver\threads\job_queue_class.h" />
+    <ClInclude Include="..\common\include\vSolver\threads\kinematics_data_class.h" />
+    <ClInclude Include="..\common\include\vSolver\threads\optimization_data_class.h" />
+    <ClInclude Include="..\common\include\vSolver\threads\thread_data_class.h" />
+    <ClInclude Include="..\common\include\vSolver\threads\thread_event_class.h" />
+    <ClInclude Include="..\common\include\vSolver\threads\thread_job_class.h" />
+    <ClInclude Include="..\common\include\vSolver\threads\worker_thread_class.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\optimization\genetic_algorithm_class.cpp" />
+    <ClCompile Include="src\physics\dynamics_class.cpp" />
+    <ClCompile Include="src\physics\integrator_class.cpp" />
+    <ClCompile Include="src\physics\kinematics_class.cpp" />
+    <ClCompile Include="src\physics\kinematic_outputs_class.cpp" />
+    <ClCompile Include="src\physics\milliken_class.cpp" />
+    <ClCompile Include="src\physics\shaker_rig_class.cpp" />
+    <ClCompile Include="src\physics\state_class.cpp" />
+    <ClCompile Include="src\threads\inverse_semaphore_class.cpp" />
+    <ClCompile Include="src\threads\job_queue_class.cpp" />
+    <ClCompile Include="src\threads\kinematics_data_class.cpp" />
+    <ClCompile Include="src\threads\optimization_data_class.cpp" />
+    <ClCompile Include="src\threads\thread_data_class.cpp" />
+    <ClCompile Include="src\threads\thread_event_class.cpp" />
+    <ClCompile Include="src\threads\thread_job_class.cpp" />
+    <ClCompile Include="src\threads\worker_thread_class.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,7 +1,7 @@
 ==============================================================================================================
                                   VVASE Compilation Instructions and Notes
-                                     Copyright Kerry R. Loux 2008-2009
-                                               Updated 11/2/2009
+                                     Copyright Kerry R. Loux 2008-2011
+                                               Updated 11/7/2011
 ==============================================================================================================
 
 NOTE:  The VVASE project files are set up to use shared libraries (.dlls) for Debug builds, and static linking
@@ -12,22 +12,25 @@ Necessary to build project:
 
 wxWidgets
 ---------
-wxWidgets 2.8.10 (http://www.wxwidgets.org/)
+wxWidgets 2.8.10-12 (http://www.wxwidgets.org/)
 For instructions on building wxWidgets and setting up your own project in windows see:
 	http://www.wxwidgets.org/wiki/index.php/Microsoft_Visual_CPP_Guide
 And under GTK:
 	http://wiki.wxwidgets.org/Compiling_and_getting_started
 
-My instructions (wxMSW:
+My instructions (wxMSW):
 1.	Download wxMSW-2.8.10-Setup.exe from www.wxwidgets.org (go to downloads page, click on wxMSW).  Run/extract
 	the file.
 2.	Add an environment variable called WXWIN that points to the directory that you just installed wxWidgets in.
 3.	Make the changes described below.
 4.	Edit the setup.h file found inclue/wx/msw to set wxUSE_GLCANVAS to 1
 5.	Follow the procedures described in the links above.
+6.  Project settings should be modified as follows:
+    a) Use Multi-byte character set
+	b) Use pre-processor flags __WXMSW__;__WXDEBUG__;WXUSINGDLL (if using .dlls)
 
 My instructions (wxGTK):
-1.  Configure with "../configure --disable-unicode --with-opengl --enable-debug" (debug argument is optional for release builds)
+1.  Configure with "../configure --disable-unicode --with-opengl --enable-debug"
 2.  Make the changes described below.
 3.  Follow the procedures described in the links above.
 

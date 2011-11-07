@@ -46,7 +46,7 @@ IMPLEMENT_APP(VVASEApp);
 //
 //==========================================================================
 const wxString VVASEApp::HostName = _T("localhost");
-const wxString VVASEApp::ServiceName = /*_T("4242");//*/_T("/tmp/VVASE_DDE");
+const wxString VVASEApp::ServiceName = _T("/tmp/VVASE_DDE");
 const wxString VVASEApp::ConnectionTopic = _T("VVASE: Open File");
 
 //==========================================================================

@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{E18757F0-3131-4D0C-AB86-0EEA8E9ED57E}</ProjectGuid>
+    <RootNamespace>vRenderer</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>C:\lib\freetype-2.4.4\include;C:\lib\ftgl-2.1.3~rc5\src;C:\lib\wxWidgets-2.8.11\lib\vc_dll\mswd;C:\lib\wxWidgets-2.8.11\include;C:\Documents and Settings\kloux\My Documents\Visual Studio 2010\Projects\CarDesigner\common\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>__WXMSW__;__WXDEBUG__;WXUSINGDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>C:\lib\freetype-2.4.4\objs\win32\vc2008;C:\lib\ftgl-2.1.3~rc5\msvc\Build;C:\Documents and Settings\kloux\My Documents\Visual Studio 2010\Projects\CarDesigner\Debug;C:\lib\wxWidgets-2.8.11\lib\vc_dll;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\3dcar\aarm_class.cpp" />
+    <ClCompile Include="src\3dcar\damper3d_class.cpp" />
+    <ClCompile Include="src\3dcar\link_class.cpp" />
+    <ClCompile Include="src\3dcar\origin_class.cpp" />
+    <ClCompile Include="src\3dcar\plane_class.cpp" />
+    <ClCompile Include="src\3dcar\point3d_class.cpp" />
+    <ClCompile Include="src\3dcar\spring3d_class.cpp" />
+    <ClCompile Include="src\3dcar\swaybar3d_class.cpp" />
+    <ClCompile Include="src\3dcar\tire3d_class.cpp" />
+    <ClCompile Include="src\3dcar\triangle_class.cpp" />
+    <ClCompile Include="src\3dcar\vector3d_class.cpp" />
+    <ClCompile Include="src\color_class.cpp" />
+    <ClCompile Include="src\primitives\axis.cpp" />
+    <ClCompile Include="src\primitives\cone.cpp" />
+    <ClCompile Include="src\primitives\cylinder.cpp" />
+    <ClCompile Include="src\primitives\disk.cpp" />
+    <ClCompile Include="src\primitives\plot_curve.cpp" />
+    <ClCompile Include="src\primitives\primitive.cpp" />
+    <ClCompile Include="src\primitives\quadrilateral.cpp" />
+    <ClCompile Include="src\primitives\sphere.cpp" />
+    <ClCompile Include="src\primitives\text_class.cpp" />
+    <ClCompile Include="src\primitives\triangle.cpp" />
+    <ClCompile Include="src\render_window_class.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\common\include\vRenderer\3dcar\aarm_class.h" />
+    <ClInclude Include="..\common\include\vRenderer\3dcar\damper3d_class.h" />
+    <ClInclude Include="..\common\include\vRenderer\3dcar\link_class.h" />
+    <ClInclude Include="..\common\include\vRenderer\3dcar\origin_class.h" />
+    <ClInclude Include="..\common\include\vRenderer\3dcar\plane_class.h" />
+    <ClInclude Include="..\common\include\vRenderer\3dcar\point3d_class.h" />
+    <ClInclude Include="..\common\include\vRenderer\3dcar\spring3d_class.h" />
+    <ClInclude Include="..\common\include\vRenderer\3dcar\swaybar3d_class.h" />
+    <ClInclude Include="..\common\include\vRenderer\3dcar\tire3d_class.h" />
+    <ClInclude Include="..\common\include\vRenderer\3dcar\triangle_class.h" />
+    <ClInclude Include="..\common\include\vRenderer\3dcar\vector3d_class.h" />
+    <ClInclude Include="..\common\include\vRenderer\color_class.h" />
+    <ClInclude Include="..\common\include\vRenderer\primitives\axis.h" />
+    <ClInclude Include="..\common\include\vRenderer\primitives\cone.h" />
+    <ClInclude Include="..\common\include\vRenderer\primitives\cylinder.h" />
+    <ClInclude Include="..\common\include\vRenderer\primitives\disk.h" />
+    <ClInclude Include="..\common\include\vRenderer\primitives\plot_curve.h" />
+    <ClInclude Include="..\common\include\vRenderer\primitives\primitive.h" />
+    <ClInclude Include="..\common\include\vRenderer\primitives\quadrilateral.h" />
+    <ClInclude Include="..\common\include\vRenderer\primitives\sphere.h" />
+    <ClInclude Include="..\common\include\vRenderer\primitives\text_class.h" />
+    <ClInclude Include="..\common\include\vRenderer\primitives\triangle.h" />
+    <ClInclude Include="..\common\include\vRenderer\render_window_class.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

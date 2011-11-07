@@ -1,0 +1,169 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>__WXMSW__;__WXDEBUG__;WXUSINGDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>C:\lib\freetype-2.4.4\include;C:\lib\ftgl-2.1.3~rc5\src;C:\lib\wxWidgets-2.8.11\lib\vc_dll\mswd;C:\lib\wxWidgets-2.8.11\include;C:\Documents and Settings\kloux\My Documents\Visual Studio 2010\Projects\CarDesigner\CarDesigner\include;C:\Documents and Settings\kloux\My Documents\Visual Studio 2010\Projects\CarDesigner\common\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalLibraryDirectories>C:\lib\ftgl-2.1.3~rc5\msvc\Build;C:\lib\freetype-2.4.4\objs\win32\vc2008;C:\Documents and Settings\kloux\My Documents\Visual Studio 2010\Projects\CarDesigner\Debug;C:\lib\wxWidgets-2.8.11\lib\vc_dll;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>vSolver.lib;vMath.lib;vUtilities.lib;vCar.lib;vRenderer.lib;wxbase28d.lib;wxmsw28d_aui.lib;wxmsw28d_adv.lib;wxbase28d_xml.lib;wxmsw28d_core.lib;wxmsw28d_gl.lib;wxzlibd.lib;wxpngd.lib;wxtiffd.lib;wxjpegd.lib;opengl32.lib;freetype244MT_D.lib;ftgl_D.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>C:\Documents and Settings\kloux\My Documents\Visual Studio 2010\Projects\CarDesigner\CarDesigner;C:\lib\wxWidgets-2.8.11\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="CarDesigner\include\application\vvaseapp_class.h" />
+    <ClInclude Include="CarDesigner\include\application\vvase_constants.h" />
+    <ClInclude Include="CarDesigner\include\environment\atmosphere_class.h" />
+    <ClInclude Include="CarDesigner\include\environment\track_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\appearance_options_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\edit_panel\edit_panel_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\edit_panel\gui_car\edit_aerodynamics_panel_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\edit_panel\gui_car\edit_brakes_panel_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\edit_panel\gui_car\edit_corner_panel_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\edit_panel\gui_car\edit_differential_panel_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\edit_panel\gui_car\edit_drivetrain_panel_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\edit_panel\gui_car\edit_engine_panel_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\edit_panel\gui_car\edit_mass_panel_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\edit_panel\gui_car\edit_suspension_notebook_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\edit_panel\gui_car\edit_suspension_panel_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\edit_panel\gui_car\edit_tires_panel_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\edit_panel\iteration\edit_iteration_notebook_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\edit_panel\iteration\edit_iteration_options_panel_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\edit_panel\iteration\edit_iteration_plots_panel_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\edit_panel\iteration\edit_iteration_range_panel_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\main_frame_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\main_notebook_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\main_tree_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\output_panel_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\dialogs\appearance_options_dialog_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\dialogs\ga_gene_dialog_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\dialogs\ga_goal_dialog_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\dialogs\options_dialog_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\drop_target_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\ga_object_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\genetic_algorithm_panel_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\genetic_optimization_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\gui_car_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\gui_object_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\ipc_client_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\ipc_connection_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\ipc_server_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\iteration_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\renderer\car_renderer_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\renderer\plot_renderer_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\undo_redo_stack_class.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CarDesigner\src\application\vvaseapp_class.cpp" />
+    <ClCompile Include="CarDesigner\src\environment\atmosphere_class.cpp" />
+    <ClCompile Include="CarDesigner\src\environment\track_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\appearance_options_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\edit_panel\edit_panel_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\edit_panel\gui_car\edit_aerodynamics_panel_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\edit_panel\gui_car\edit_brakes_panel_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\edit_panel\gui_car\edit_corner_panel_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\edit_panel\gui_car\edit_differential_panel_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\edit_panel\gui_car\edit_drivetrain_panel_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\edit_panel\gui_car\edit_engine_panel_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\edit_panel\gui_car\edit_mass_panel_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\edit_panel\gui_car\edit_suspension_notebook_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\edit_panel\gui_car\edit_suspension_panel_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\edit_panel\gui_car\edit_tires_panel_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\edit_panel\iteration\edit_iteration_notebook_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\edit_panel\iteration\edit_iteration_options_panel_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\edit_panel\iteration\edit_iteration_plots_panel_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\edit_panel\iteration\edit_iteration_range_panel_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\main_frame_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\main_notebook_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\main_tree_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\output_panel_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\dialogs\appearance_options_dialog_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\dialogs\ga_gene_dialog_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\dialogs\ga_goal_dialog_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\dialogs\options_dialog_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\drop_target_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\ga_object_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\genetic_algorithm_panel_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\genetic_optimization_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\gui_car_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\gui_object_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\ipc_client_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\ipc_connection_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\ipc_server_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\iteration_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\plot_object_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\renderer\car_renderer_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\renderer\plot_renderer_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\undo_redo_stack_class.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="CarDesigner\res\CarDesigner.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
