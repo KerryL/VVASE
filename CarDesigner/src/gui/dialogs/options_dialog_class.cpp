@@ -164,7 +164,7 @@ void OPTIONS_DIALOG::CreateControls(void)
 	
 	// When setting the control width, we need to account for the width of the
 	// "expand" button, etc., so we specify that here
-#if __WXGTK__
+#ifdef __WXGTK__
 	unsigned int additionalWidth = 40;// [pixels]
 #else
 	unsigned int additionalWidth = 40;// [pixels]
@@ -601,6 +601,7 @@ void OPTIONS_DIALOG::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Update the center of rotation for the kinematic analysis object
 	// It is important that this is done before the converter is updated!
+	// FIXME:  This should use a textvalidator and it will be much cleaner
 	VECTOR CenterOfRotation;
 	if (CenterOfRotationX->GetValue().ToDouble(&CenterOfRotation.X) &&
 		CenterOfRotationY->GetValue().ToDouble(&CenterOfRotation.Y) &&
@@ -636,22 +637,20 @@ void OPTIONS_DIALOG::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 	// Update the default units for the converter object
 	// NOTE:  This section MUST come after the center of rotation is updated in order for
 	// the units label on the center of rotation input to have been correct
-	// FIXME:  Doesn't work under GTK unless user actually makes a select (defaults cause error!)
-	// FIXMEMENOW!
-	Converter.SetAngleUnits((CONVERT::UNITS_OF_ANGLE)UnitOfAngle->GetCurrentSelection());
-	Converter.SetDistanceUnits((CONVERT::UNITS_OF_DISTANCE)UnitOfDistance->GetCurrentSelection());
-	Converter.SetForceUnits((CONVERT::UNITS_OF_FORCE)UnitOfForce->GetCurrentSelection());
-	Converter.SetAreaUnits((CONVERT::UNITS_OF_AREA)UnitOfArea->GetCurrentSelection());
-	Converter.SetPressureUnits((CONVERT::UNITS_OF_PRESSURE)UnitOfPressure->GetCurrentSelection());
-	Converter.SetMomentUnits((CONVERT::UNITS_OF_MOMENT)UnitOfMoment->GetCurrentSelection());
-	Converter.SetMassUnits((CONVERT::UNITS_OF_MASS)UnitOfMass->GetCurrentSelection());
-	Converter.SetVelocityUnits((CONVERT::UNITS_OF_VELOCITY)UnitOfVelocity->GetCurrentSelection());
-	Converter.SetAccelerationUnits((CONVERT::UNITS_OF_ACCELERATION)UnitOfAcceleration->GetCurrentSelection());
-	Converter.SetInertiaUnits((CONVERT::UNITS_OF_INERTIA)UnitOfInertia->GetCurrentSelection());
-	Converter.SetDensityUnits((CONVERT::UNITS_OF_DENSITY)UnitOfDensity->GetCurrentSelection());
-	Converter.SetPowerUnits((CONVERT::UNITS_OF_POWER)UnitOfPower->GetCurrentSelection());
-	Converter.SetEnergyUnits((CONVERT::UNITS_OF_ENERGY)UnitOfEnergy->GetCurrentSelection());
-	Converter.SetTemperatureUnits((CONVERT::UNITS_OF_TEMPERATURE)UnitOfTemperature->GetCurrentSelection());
+	Converter.SetAngleUnits((CONVERT::UNITS_OF_ANGLE)SafelyGetComboBoxSelection(UnitOfAngle));
+	Converter.SetDistanceUnits((CONVERT::UNITS_OF_DISTANCE)SafelyGetComboBoxSelection(UnitOfDistance));
+	Converter.SetForceUnits((CONVERT::UNITS_OF_FORCE)SafelyGetComboBoxSelection(UnitOfForce));
+	Converter.SetAreaUnits((CONVERT::UNITS_OF_AREA)SafelyGetComboBoxSelection(UnitOfArea));
+	Converter.SetPressureUnits((CONVERT::UNITS_OF_PRESSURE)SafelyGetComboBoxSelection(UnitOfPressure));
+	Converter.SetMomentUnits((CONVERT::UNITS_OF_MOMENT)SafelyGetComboBoxSelection(UnitOfMoment));
+	Converter.SetMassUnits((CONVERT::UNITS_OF_MASS)SafelyGetComboBoxSelection(UnitOfMass));
+	Converter.SetVelocityUnits((CONVERT::UNITS_OF_VELOCITY)SafelyGetComboBoxSelection(UnitOfVelocity));
+	Converter.SetAccelerationUnits((CONVERT::UNITS_OF_ACCELERATION)SafelyGetComboBoxSelection(UnitOfAcceleration));
+	Converter.SetInertiaUnits((CONVERT::UNITS_OF_INERTIA)SafelyGetComboBoxSelection(UnitOfInertia));
+	Converter.SetDensityUnits((CONVERT::UNITS_OF_DENSITY)SafelyGetComboBoxSelection(UnitOfDensity));
+	Converter.SetPowerUnits((CONVERT::UNITS_OF_POWER)SafelyGetComboBoxSelection(UnitOfPower));
+	Converter.SetEnergyUnits((CONVERT::UNITS_OF_ENERGY)SafelyGetComboBoxSelection(UnitOfEnergy));
+	Converter.SetTemperatureUnits((CONVERT::UNITS_OF_TEMPERATURE)SafelyGetComboBoxSelection(UnitOfTemperature));
 
 	// Update the number of digits and the rules for formatting numbers
 	Converter.SetNumberOfDigits(NumberOfDigits->GetCurrentSelection());

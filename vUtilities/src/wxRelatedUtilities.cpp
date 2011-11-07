@@ -48,3 +48,45 @@ void SetMinimumWidthFromContents(wxComboBox *control, unsigned int additional)
 	
 	control->SetMinSize(wxSize(maxWidth + additional, -1));
 }
+
+//==========================================================================
+// Class:			None
+// Function:		SafelyGetComboBoxSelection
+//
+// Description:		Returns the index of the selected combo box item
+//
+// Input Arguments:
+//		control		= wxComboBox*
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		int, index of selected item, or wxNOT_FOUND if not found
+//
+//==========================================================================
+int SafelyGetComboBoxSelection(wxComboBox *control)
+{
+	int selection = control->GetCurrentSelection();
+	
+#ifndef __WXMSW__
+	// Under MSW, this is not needed, otherwise, an initial value might cause
+	// wxNOT_FOUND to be returned (i.e., text is in the control, but the user
+	// has not changed it from the default value).  We handle that case here.
+	if (selection == wxNOT_FOUND)
+	{
+		// Compare the text displayed on the control to each item
+		unsigned int i;
+		for (i = 0; i < control->GetCount(); i++)
+		{
+			if (control->GetString(i).compare(control->GetValue()) == 0)
+			{
+				selection = i;
+				break;
+			}
+		}
+	}
+#endif
+	
+	return selection;
+}

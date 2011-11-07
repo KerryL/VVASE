@@ -22,4 +22,8 @@
 // Method for finding the width of the longest string in the list
 void SetMinimumWidthFromContents(wxComboBox *control, unsigned int additional);
 
+// Method for finding the selected index of a combo box, even if it is still the
+// default value (no selection has been made - fix for GTK)
+int SafelyGetComboBoxSelection(wxComboBox *control);
+
 #endif// _WX_RELATED_UTILIEIS_H_
