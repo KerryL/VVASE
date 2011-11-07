@@ -49,7 +49,7 @@
 //
 // Description:		Constructor for the ITERATION class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_MainFrame			= MAIN_FRAME& reference to main application window
 //		_Debugger			= const DEBUGGER& reference to the application's debug
 //							  message printing utility
@@ -118,7 +118,7 @@ ITERATION::ITERATION(MAIN_FRAME &_MainFrame, const DEBUGGER &_Debugger,
 //
 // Description:		Destructor for the ITERATION class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -163,7 +163,7 @@ ITERATION::~ITERATION()
 //
 // Description:		Where constants for the ITERATION class are delcared.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -182,7 +182,7 @@ const int ITERATION::CurrentFileVersion = 1;
 //
 // Description:		Adds the passed car to the list for the analysis.
 //
-// Input Argurments:
+// Input Arguments:
 //		ToAdd	= GUI_CAR* pointing to the car to add
 //
 // Output Arguments:
@@ -210,7 +210,7 @@ void ITERATION::AddCar(GUI_CAR *ToAdd)
 //
 // Description:		Removes the car at the passed address from the analysis.
 //
-// Input Argurments:
+// Input Arguments:
 //		ToRemove	= GUI_CAR* pointing to the car to be removed
 //
 // Output Arguments:
@@ -257,7 +257,7 @@ void ITERATION::RemoveCar(GUI_CAR *ToRemove)
 // Description:		Resets this object back to a state representative of
 //					when it was first created.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -281,7 +281,7 @@ void ITERATION::RemoveAllCars(void)
 //
 // Description:		Gets the icon handle from the systems tree.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -304,7 +304,7 @@ int ITERATION::GetIconHandle(void) const
 // Description:		Updates the iteration outputs for all of the cars for
 //					the entire range.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -457,7 +457,7 @@ void ITERATION::UpdateData(void)
 //
 // Description:		Updates the visual display of this object.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -491,7 +491,7 @@ void ITERATION::UpdateDisplay(void)
 // Description:		Updates the iteration outputs for all of the cars for
 //					the entire range.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -524,7 +524,7 @@ void ITERATION::ClearAllLists(void)
 //
 // Description:		Saves this object to file.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -575,7 +575,7 @@ bool ITERATION::PerformSaveToFile(void)
 //
 // Description:		Loads this object from file.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -652,7 +652,7 @@ bool ITERATION::PerformLoadFromFile(void)
 //
 // Description:		Read the default iteration settings from the config file.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -728,7 +728,7 @@ void ITERATION::ReadDefaultsFromConfig(void)
 //
 // Description:		Writes the current iteration settings to the config file.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -795,7 +795,7 @@ void ITERATION::WriteDefaultsToConfig(void) const
 //
 // Description:		Sets this object's range to the specified values.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Range	= const ITERATION::RANGE& specifying the desired range
 //
 // Output Arguments:
@@ -843,7 +843,7 @@ void ITERATION::SetRange(const ITERATION::RANGE &_Range)
 // Description:		Sets the number of points used to generate the plots for
 //					this object.
 //
-// Input Argurments:
+// Input Arguments:
 //		_NumberOfPoints	= const int& reference to number of points to use
 //
 // Output Arguments:
@@ -872,7 +872,7 @@ void ITERATION::SetNumberOfPoints(const int &_NumberOfPoints)
 // Description:		Sets the flag indicating whether the specified plot is
 //					active or not.
 //
-// Input Argurments:
+// Input Arguments:
 //		PlotID	=	ITERATION::PLOT_ID specifying the plot we're intersted in
 //		Active	=	const bool& true for plot is shown, false otherwise
 //
@@ -904,7 +904,7 @@ void ITERATION::SetActivePlot(PLOT_ID PlotID, const bool &Active)
 // Description:		Updates the list of associated cars, if auto-associated
 //					is turned on.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -941,7 +941,7 @@ void ITERATION::UpdateAutoAssociate(void)
 //
 // Description:		Allows the user to update the list of associated cars.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -1023,7 +1023,7 @@ void ITERATION::ShowAssociatedCarsDialog(void)
 // Description:		Checks to see if the specified car is associated with
 //					this object.
 //
-// Input Argurments:
+// Input Arguments:
 //		Test	= GUI_CAR* with which we are comparing our list
 //
 // Output Arguments:
@@ -1054,7 +1054,7 @@ bool ITERATION::AssociatedWithCar(GUI_CAR *Test) const
 // Description:		Accesses the output data for the specified car and the
 //					specified curve.
 //
-// Input Argurments:
+// Input Arguments:
 //		AssociatedCarIndex	= integer specifying the car whose output is requested
 //		Point				= integer specifying the point whose output is requested
 //		Id					= PLOT_ID specifying what data we are interesed in
@@ -1104,7 +1104,7 @@ double ITERATION::GetDataValue(int AssociatedCarIndex, int Point, PLOT_ID Id) co
 // Description:		Exports the data for this object to a comma or tab-delimited
 //					text file.
 //
-// Input Argurments:
+// Input Arguments:
 //		PathAndFileName	= wxString pointing to the location where the file is
 //						  to be saved
 //
@@ -1188,7 +1188,7 @@ void ITERATION::ExportDataToFile(wxString PathAndFileName) const
 //
 // Description:		Returns a string containing the name of the specified plot.
 //
-// Input Argurments:
+// Input Arguments:
 //		Id	= PLOT_ID specifying the plot we are interested in
 //
 // Output Arguments:
@@ -1228,7 +1228,7 @@ wxString ITERATION::GetPlotName(PLOT_ID Id) const
 //
 // Description:		Returns a string containing the units of the specified plot.
 //
-// Input Argurments:
+// Input Arguments:
 //		Id	= PLOT_ID specifying the plot we are interested in
 //
 // Output Arguments:
@@ -1262,7 +1262,7 @@ wxString ITERATION::GetPlotUnits(PLOT_ID Id) const
 //
 // Description:		Writes the file header to the specified output stream.
 //
-// Input Argurments:
+// Input Arguments:
 //		OutFile	= std::ofstream* to write to
 //
 // Output Arguments:
@@ -1293,7 +1293,7 @@ void ITERATION::WriteFileHeader(std::ofstream *OutFile)
 //
 // Description:		Reads the file header information from the specified input stream.
 //
-// Input Argurments:
+// Input Arguments:
 //		InFile	= std::ifstream* to read from
 //
 // Output Arguments:
@@ -1321,7 +1321,7 @@ ITERATION::FILE_HEADER_INFO ITERATION::ReadFileHeader(std::ifstream *InFile)
 //
 // Description:		Sets the X axis to the specified quantity.
 //
-// Input Argurments:
+// Input Arguments:
 //		_XAxisType	= AXIS_TYPE to plot against
 //
 // Output Arguments:
@@ -1351,7 +1351,7 @@ void ITERATION::SetXAxisType(AXIS_TYPE _XAxisType)
 //
 // Description:		Sets the Y axis to the specified quantity.
 //
-// Input Argurments:
+// Input Arguments:
 //		_YAxisType	= AXIS_TYPE to plot against
 //
 // Output Arguments:
@@ -1381,7 +1381,7 @@ void ITERATION::SetYAxisType(AXIS_TYPE _YAxisType)
 //
 // Description:		Sets the auto-associate with all cars flag.
 //
-// Input Argurments:
+// Input Arguments:
 //		AutoAssociate	= bool describing whether the flag should be set to
 //						  true or false
 //
@@ -1413,7 +1413,7 @@ void ITERATION::SetAutoAssociate(bool AutoAssociate)
 // Description:		To be called after one of this object's kinematics analyses
 //					completes.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:

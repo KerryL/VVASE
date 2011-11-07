@@ -35,7 +35,7 @@
 //
 // Description:		Constructor for the DRIVETRAIN class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Debugger	= const DEBUGGER& reference to applications debug printing utility
 //
 // Output Arguments:
@@ -65,7 +65,7 @@ DRIVETRAIN::DRIVETRAIN(const DEBUGGER &_Debugger) : Debugger(_Debugger)
 //
 // Description:		Copy constructor for the DRIVETRAIN class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Drivetrain	= const DRIVETRAIN&, object to be copied
 //
 // Output Arguments:
@@ -92,7 +92,7 @@ DRIVETRAIN::DRIVETRAIN(const DRIVETRAIN &Drivetrain) : Debugger(Drivetrain.Debug
 //
 // Description:		Destructor for the DRIVETRAIN class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -119,7 +119,7 @@ DRIVETRAIN::~DRIVETRAIN()
 // Description:		Sets the number of gears we have available and allocates
 //					memory for the gear ratios accordingly.
 //
-// Input Argurments:
+// Input Arguments:
 //		NumGears	= const short& describing the number of gears we have
 //
 // Output Arguments:
@@ -157,7 +157,7 @@ void DRIVETRAIN::SetNumberOfGears(const short &NumGears)
 //
 // Description:		Writes this drivetrain to file.
 //
-// Input Argurments:
+// Input Arguments:
 //		OutFile	= std::ofstream* pointing to the files stream to write to
 //
 // Output Arguments:
@@ -191,7 +191,7 @@ void DRIVETRAIN::Write(std::ofstream *OutFile) const
 //
 // Description:		Read from file to fill this drivetrain.
 //
-// Input Argurments:
+// Input Arguments:
 //		InFile		= std::ifstream* pointing to the file stream to read from
 //		FileVersion	= int specifying which file version we're reading from
 //
@@ -229,7 +229,7 @@ void DRIVETRAIN::Read(std::ifstream *InFile, int FileVersion)
 //
 // Description:		Returns the name of the drivetrain type.
 //
-// Input Argurments:
+// Input Arguments:
 //		_DriveWheels	= const DRIVE_WHEELS& specifying the type of interest
 //
 // Output Arguments:
@@ -269,7 +269,7 @@ wxString DRIVETRAIN::GetDriveWheelsName(const DRIVE_WHEELS &_DriveWheels)
 //
 // Description:		Assignment operator for DRIVETRAIN class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Drivetrain	= const DRIVETRAIN& to copy from
 //
 // Output Arguments:

@@ -35,7 +35,7 @@
 //
 // Description:		Constructor for the CORNER class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Location	= const LOCATION& describing which corner this object
 //					  represents
 //		_Debugger	= const DEBUGGER& reference to the application's debug
@@ -70,7 +70,7 @@ CORNER::CORNER(const LOCATION &_Location, const DEBUGGER &_Debugger)
 //
 // Description:		Destructor for the CORNER class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -90,7 +90,7 @@ CORNER::~CORNER()
 //
 // Description:		Returns the name of the specified actuation attachment method.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Attachment	= const ACTUATION_ATTACHMENT& of interest
 //
 // Output Arguments:
@@ -130,7 +130,7 @@ wxString CORNER::GetActuationAttachmentName(const ACTUATION_ATTACHMENT &_Attachm
 //
 // Description:		Returns the name of the specified actuation type.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Type	= const ACTUATION_TYPE& of interest
 //
 // Output Arguments:
@@ -166,7 +166,7 @@ wxString CORNER::GetActuationTypeName(const ACTUATION_TYPE &_Type)
 //
 // Description:		Returns the name of the point.
 //
-// Input Argurments:
+// Input Arguments:
 //		Point	= const HARDPOINT&, specifying the point to retrieve
 //
 // Output Arguments:
@@ -290,7 +290,7 @@ wxString CORNER::GetHardpointName(const HARDPOINTS &Point)
 //
 // Description:		Returns the name of the specified location.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Location	= const LOCATION& of interest
 //
 // Output Arguments:
@@ -335,7 +335,7 @@ wxString CORNER::GetLocationName(const LOCATION &_Location)
 // Description:		Computes the location of the wheel center based on the
 //					static toe and camber.
 //
-// Input Argurments:
+// Input Arguments:
 //		TireDiameter	= const double& specifying the tire diameter at this corner
 //
 // Output Arguments:
@@ -379,7 +379,7 @@ void CORNER::ComputeWheelCenter(const double &TireDiameter)
 //
 // Description:		Writes this corner to file.
 //
-// Input Argurments:
+// Input Arguments:
 //		OutFile	= std::ofstream* pointing to the output stream
 //
 // Output Arguments:
@@ -413,7 +413,7 @@ void CORNER::Write(std::ofstream *OutFile) const
 //
 // Description:		Read from file to fill this corner.
 //
-// Input Argurments:
+// Input Arguments:
 //		InFile		= std::ifstream* pointing to the input stream
 //		FileVersion	= int specifying which file version we're reading from
 //
@@ -455,7 +455,7 @@ void CORNER::Read(std::ifstream *InFile, int FileVersion)
 // Description:		Assignment operator.  This is necessary due to the references
 //					contained within this object.
 //
-// Input Argurments:
+// Input Arguments:
 //		Corner	= const CORNER& to be copied
 //
 // Output Arguments:

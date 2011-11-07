@@ -51,7 +51,7 @@
 //
 // Description:		Constructor for the GUI_CAR class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_MainFrame			= MAIN_FRAME&, reference to the main application window
 //		_Debugger			= const DEBUGGER&, reference to debugger utility object
 //		_PathAndFileName	= wxString containing the location of this object
@@ -144,7 +144,7 @@ GUI_CAR::GUI_CAR(MAIN_FRAME &_MainFrame, const DEBUGGER &_Debugger,
 //
 // Description:		Destructor for the GUI_CAR class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -174,7 +174,7 @@ GUI_CAR::~GUI_CAR()
 //
 // Description:		Gets the icon handle from the systems tree.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -196,7 +196,7 @@ int GUI_CAR::GetIconHandle(void) const
 //
 // Description:		Updates the 3D display models.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -232,7 +232,7 @@ void GUI_CAR::UpdateData(void)
 //
 // Description:		Updates the visual display of this object.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -256,7 +256,7 @@ void GUI_CAR::UpdateDisplay(void)
 //
 // Description:		Saves the car object to file.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -293,7 +293,7 @@ bool GUI_CAR::PerformSaveToFile(void)
 //
 // Description:		Loads the car object from file.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -331,7 +331,7 @@ bool GUI_CAR::PerformLoadFromFile(void)
 // Description:		Returns a string containing the name of the specifyied
 //					subsystem.
 //
-// Input Argurments:
+// Input Arguments:
 //		Subsystem	= SUBSYSTEM specifying the type of subsystem in which
 //					  we are interested
 //

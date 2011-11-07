@@ -36,7 +36,7 @@
 // Description:		Constructor for EDIT_SUSPENSION_PANEL class.  Initializes the form
 //					and creates the controls, etc.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Parent		= EDIT_SUSPENSION_NOTEBOOK&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
@@ -68,7 +68,7 @@ EDIT_SUSPENSION_PANEL::EDIT_SUSPENSION_PANEL(EDIT_SUSPENSION_NOTEBOOK &_Parent, 
 //
 // Description:		Destructor for EDIT_SUSPENSION_PANEL class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -88,7 +88,7 @@ EDIT_SUSPENSION_PANEL::~EDIT_SUSPENSION_PANEL()
 //
 // Description:		Links GUI events with event handler functions.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -115,7 +115,7 @@ END_EVENT_TABLE();
 // Description:		Updates the information on this panel, if the associated
 //					object already exists.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -141,7 +141,7 @@ void EDIT_SUSPENSION_PANEL::UpdateInformation(void)
 //
 // Description:		Updates the information on this panel.
 //
-// Input Argurments:
+// Input Arguments:
 //		_CurrentSuspension	= SUSPENSION* pointing to the associated suspension
 //
 // Output Arguments:
@@ -252,7 +252,7 @@ void EDIT_SUSPENSION_PANEL::UpdateInformation(SUSPENSION *_CurrentSuspension)
 //
 // Description:		Creates the controls for this panel.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -407,7 +407,7 @@ void EDIT_SUSPENSION_PANEL::CreateControls()
 // Description:		Event that fires when a cell is clicked.  Highlights the
 //					corresponding point in the 3D panel.
 //
-// Input Argurments:
+// Input Arguments:
 //		event = wxGridEvent&
 //
 // Output Arguments:
@@ -458,7 +458,7 @@ void EDIT_SUSPENSION_PANEL::SelectCellEvent(wxGridEvent &event)
 // Description:		Event that fires when a cell is changed.  Updates the
 //					3D model display.
 //
-// Input Argurments:
+// Input Arguments:
 //		event = wxGridEvent&
 //
 // Output Arguments:
@@ -544,7 +544,7 @@ void EDIT_SUSPENSION_PANEL::GridCellChangedEvent(wxGridEvent &event)
 //
 // Description:		Event that fires when the symmetry checkbox is clicked.
 //
-// Input Argurments:
+// Input Arguments:
 //		event = wxCommandEvent&
 //
 // Output Arguments:
@@ -600,7 +600,7 @@ void EDIT_SUSPENSION_PANEL::SymmetricCheckboxEvent(wxCommandEvent &event)
 // Description:		Event that fires when the front third spring checkbox is
 //					clicked.
 //
-// Input Argurments:
+// Input Arguments:
 //		event = wxCommandEvent&
 //
 // Output Arguments:
@@ -650,7 +650,7 @@ void EDIT_SUSPENSION_PANEL::FrontThirdCheckboxEvent(wxCommandEvent &event)
 // Description:		Event that fires when the rear third spring checkbox is
 //					clicked.
 //
-// Input Argurments:
+// Input Arguments:
 //		event = wxCommandEvent&
 //
 // Output Arguments:
@@ -699,7 +699,7 @@ void EDIT_SUSPENSION_PANEL::RearThirdCheckboxEvent(wxCommandEvent &event)
 //
 // Description:		Event that fires when the front bar style changes.
 //
-// Input Argurments:
+// Input Arguments:
 //		event = wxCommandEvent&
 //
 // Output Arguments:
@@ -746,7 +746,7 @@ void EDIT_SUSPENSION_PANEL::FrontBarStyleChangeEvent(wxCommandEvent &event)
 //
 // Description:		Event that fires when the rear bar style changes.
 //
-// Input Argurments:
+// Input Arguments:
 //		event = wxCommandEvent&
 //
 // Output Arguments:

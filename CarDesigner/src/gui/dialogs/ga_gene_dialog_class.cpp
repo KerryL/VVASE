@@ -22,7 +22,7 @@
 //
 // Description:		Constructor for the GA_GENE_DIALOG class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Parent			= wxWindow&, reference to the main application window
 //		_Converter		= const CONVERT&, reference to conversion utility object
 //		_Hardpoint		= const CORNER::HARDPOINTS&
@@ -75,7 +75,7 @@ GA_GENE_DIALOG::GA_GENE_DIALOG(wxWindow *Parent, const CONVERT &_Converter, cons
 //
 // Description:		Destructor for the GA_GENE_DIALOG class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -95,7 +95,7 @@ GA_GENE_DIALOG::~GA_GENE_DIALOG()
 //
 // Description:		Links GUI events with event handler functions.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -118,7 +118,7 @@ END_EVENT_TABLE()
 // Description:		Creates the controls that populate this dialog.  Also fills
 //					controls with approprite data (passed via constructor).
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -296,7 +296,7 @@ void GA_GENE_DIALOG::CreateControls(void)
 //
 // Description:		Handles the OK button clicked events.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -357,7 +357,7 @@ void GA_GENE_DIALOG::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 //
 // Description:		Handles the Cancel button clicked event.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -387,7 +387,7 @@ void GA_GENE_DIALOG::CancelClickEvent(wxCommandEvent& WXUNUSED(event))
 //
 // Description:		Updates the resolution display as the number of values changes.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:

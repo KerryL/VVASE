@@ -35,7 +35,7 @@
 //
 // Description:		Constructor for GA_OBJECT class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_MainFrame		= MAIN_FRAME& reference to the main application object
 //		_Optimization	= GENETIC_OPTIMIZATION pointing to this object's owner
 //		_Converter		= const CONVERT& reference to application's conversion utility
@@ -66,7 +66,7 @@ GA_OBJECT::GA_OBJECT(MAIN_FRAME &_MainFrame, GENETIC_OPTIMIZATION &_Optimization
 //
 // Description:		Destructor for GA_OBJECT class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -110,7 +110,7 @@ GA_OBJECT::~GA_OBJECT()
 //
 // Description:		Where constants for the GA_OBJECT class are delcared.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -129,7 +129,7 @@ const int GA_OBJECT::CurrentFileVersion = 0;
 // Description:		Overriden method from GENETIC_ALGORITHM that allows the
 //					use of threading.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -189,7 +189,7 @@ void GA_OBJECT::SimulateGeneration(void)
 //					analysis methods, as at this point, all analyses are complete
 //					and the data is available for use in the fitness funcitons.
 //
-// Input Argurments:
+// Input Arguments:
 //		CurrentGenome	= const int* pointing to the index for the genome we're analyzing
 //
 // Output Arguments:
@@ -271,7 +271,7 @@ double GA_OBJECT::DetermineFitness(const int *Citizen)
 //
 // Description:		Calls the parent class's initialization routine.
 //
-// Input Argurments:
+// Input Arguments:
 //		_TargetCar	= CAR* pointing to the object to optimize
 //
 // Output Arguments:
@@ -342,7 +342,7 @@ void GA_OBJECT::SetUp(CAR *_TargetCar)
 //
 // Description:		Updates the original car so it represents the specified genome.
 //
-// Input Argurments:
+// Input Arguments:
 //		CarIndex		= int specifying the index to use for the car arrays
 //		CurrentGenome	= const int* pointing to the genome describing the desired car
 //
@@ -487,7 +487,7 @@ void GA_OBJECT::SetCarGenome(int CarIndex, const int *CurrentGenome)
 //
 // Description:		Prints current status to the screen.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -527,7 +527,7 @@ void GA_OBJECT::PerformAdditionalActions(void)
 //
 // Description:		Adds a gene to the list to be optimized.
 //
-// Input Argurments:
+// Input Arguments:
 //		Variable		= const CORNER::HARDPOINTS& specifying to the value to be changed
 //		TiedTo			= const CORNER::HARDPOINTS& specifying to a valuethat will always equal
 //						  Variable
@@ -574,7 +574,7 @@ void GA_OBJECT::AddGene(const CORNER::HARDPOINTS &Hardpoint, const CORNER::HARDP
 //
 // Description:		Adds a goal to the list of optimization criteria.
 //
-// Input Argurments:
+// Input Arguments:
 //		Output				= const KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE& specifying
 //							  the output to optimize
 //		DesiredValue		= const double& specifying the desired value of the
@@ -624,7 +624,7 @@ void GA_OBJECT::AddGoal(const KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE &Output, const
 //
 // Description:		Updates the specified gene.
 //
-// Input Argurments:
+// Input Arguments:
 //		Index			= const int& specifying the goal to update
 //		Hardpoint		= const CORNER::HARDPOINTS& specifying to the value to be changed
 //		TiedTo			= const CORNER::HARDPOINTS& specifying to a valuethat will always equal
@@ -666,7 +666,7 @@ void GA_OBJECT::UpdateGene(const int &Index, const CORNER::HARDPOINTS &Hardpoint
 //
 // Description:		Updates the specified goal.
 //
-// Input Argurments:
+// Input Arguments:
 //		Index				= const int& specifying the goal to update
 //		Output				= const KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE& specifying
 //							  the output to optimize
@@ -714,7 +714,7 @@ void GA_OBJECT::UpdateGoal(const int &Index, const KINEMATIC_OUTPUTS::OUTPUTS_CO
 //					each set of input conditions so every input is represented
 //					exactly once.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -789,7 +789,7 @@ void GA_OBJECT::DetermineAllInputs(void)
 //
 // Description:		Updates the target car to match the best fit genome.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -816,7 +816,7 @@ void GA_OBJECT::UpdateTargetCar(void)
 //
 // Description:		Writes the file header to the specified output stream.
 //
-// Input Argurments:
+// Input Arguments:
 //		OutFile	= std::ofstream* to write to
 //
 // Output Arguments:
@@ -847,7 +847,7 @@ void GA_OBJECT::WriteFileHeader(std::ofstream *OutFile)
 //
 // Description:		Reads the file header information from the specified input stream.
 //
-// Input Argurments:
+// Input Arguments:
 //		InFile	= std::ifstream* to read from
 //
 // Output Arguments:
@@ -875,7 +875,7 @@ GA_OBJECT::FILE_HEADER_INFO GA_OBJECT::ReadFileHeader(std::ifstream *InFile)
 //
 // Description:		Saves this object to file.
 //
-// Input Argurments:
+// Input Arguments:
 //		FileName	= wxString containing the path and file name to write to.
 //
 // Output Arguments:
@@ -929,7 +929,7 @@ bool GA_OBJECT::Write(wxString FileName)
 //
 // Description:		Loads this object from file.
 //
-// Input Argurments:
+// Input Arguments:
 //		FileName	= wxString containing path and file name to read from
 //
 // Output Arguments:

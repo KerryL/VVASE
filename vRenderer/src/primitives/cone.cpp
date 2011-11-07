@@ -27,7 +27,7 @@
 //
 // Description:		Constructor for the CONE class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_RenderWindow	= RENDER_WINDOW& reference to the object that owns this
 //
 // Output Arguments:
@@ -53,7 +53,7 @@ CONE::CONE(RENDER_WINDOW &_RenderWindow) : PRIMITIVE(_RenderWindow)
 //
 // Description:		Destructor for the CONE class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -74,7 +74,7 @@ CONE::~CONE()
 // Description:		Creates the OpenGL instructions to create this object in
 //					the scene.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -194,7 +194,7 @@ void CONE::GenerateGeometry(void)
 // Description:		Checks to see if the information about this object is
 //					valid and complete (gives permission to create the object).
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -220,7 +220,7 @@ bool CONE::HasValidParameters(void)
 //
 // Description:		Sets the number of faces use to approximate the cone.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Resolution	= const int&
 //
 // Output Arguments:
@@ -248,7 +248,7 @@ void CONE::SetResolution(const int &_Resolution)
 // Description:		Sets the flag indicating whether or not the cone should be
 //					capped on the base end.
 //
-// Input Argurments:
+// Input Arguments:
 //		_DrawCaps	= const bool&
 //
 // Output Arguments:
@@ -275,7 +275,7 @@ void CONE::SetCapping(const bool &_DrawCaps)
 //
 // Description:		Sets the location of the tip of the cone.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Tip	= const VECTOR&
 //
 // Output Arguments:
@@ -302,7 +302,7 @@ void CONE::SetTip(const VECTOR &_Tip)
 //
 // Description:		Sets the location of the center of the cone's base.
 //
-// Input Argurments:
+// Input Arguments:
 //		_BaseCenter	= const VECTOR&
 //
 // Output Arguments:
@@ -329,7 +329,7 @@ void CONE::SetBaseCenter(const VECTOR &_BaseCenter)
 //
 // Description:		Sets the radius at the base of the cone.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Radius	= const double&
 //
 // Output Arguments:

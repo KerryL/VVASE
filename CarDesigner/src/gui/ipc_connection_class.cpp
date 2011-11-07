@@ -31,7 +31,7 @@
 //
 // Description:		Constructor for the IPC_CONNECTION class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -51,7 +51,7 @@ IPC_CONNECTION::IPC_CONNECTION() : wxConnection()
 //
 // Description:		Destructor for the IPC_CONNECTION class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -72,7 +72,7 @@ IPC_CONNECTION::~IPC_CONNECTION()
 // Description:		Handled by the server object.  Responds to data sent by
 //					the client object.
 //
-// Input Argurments:
+// Input Arguments:
 //		topic	= const wxString&
 //		item	= const wxString& containing the data (file name to load)
 //		data	= wxChar *

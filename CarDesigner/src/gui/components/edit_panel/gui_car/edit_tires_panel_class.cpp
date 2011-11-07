@@ -32,7 +32,7 @@
 //
 // Description:		Constructor for EDIT_TIRES_PANEL class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Parent		= EDIT_PANEL&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
@@ -65,7 +65,7 @@ EDIT_TIRES_PANEL::EDIT_TIRES_PANEL(EDIT_PANEL &_Parent, wxWindowID id,
 //
 // Description:		Destructor for EDIT_TIRES_PANEL class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -85,7 +85,7 @@ EDIT_TIRES_PANEL::~EDIT_TIRES_PANEL()
 //
 // Description:		Links GUI events with event handler functions.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -112,7 +112,7 @@ END_EVENT_TABLE();
 //
 // Description:		Updates the information on this panel.
 //
-// Input Argurments:
+// Input Arguments:
 //		_CurrentTireSet	= TIRE_SET* pointing to the associated tire set
 //
 // Output Arguments:
@@ -172,7 +172,7 @@ void EDIT_TIRES_PANEL::UpdateInformation(TIRE_SET *_CurrentTireSet)
 //
 // Description:		Creates the controls for this panel.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -351,7 +351,7 @@ void EDIT_TIRES_PANEL::CreateControls()
 //
 // Description:		Event that fires when the right front tire diameter changes.
 //
-// Input Argurments:
+// Input Arguments:
 //		event = wxCommandEvent&
 //
 // Output Arguments:
@@ -407,7 +407,7 @@ void EDIT_TIRES_PANEL::RightFrontTireDiameterChangeEvent(wxCommandEvent &event)
 //
 // Description:		Event that fires when the right front tire width changes.
 //
-// Input Argurments:
+// Input Arguments:
 //		event = wxCommandEvent&
 //
 // Output Arguments:
@@ -463,7 +463,7 @@ void EDIT_TIRES_PANEL::RightFrontTireWidthChangeEvent(wxCommandEvent &event)
 //
 // Description:		Event that fires when the left front tire diameter changes.
 //
-// Input Argurments:
+// Input Arguments:
 //		event = wxCommandEvent&
 //
 // Output Arguments:
@@ -519,7 +519,7 @@ void EDIT_TIRES_PANEL::LeftFrontTireDiameterChangeEvent(wxCommandEvent &event)
 //
 // Description:		Event that fires when the left front tire width changes.
 //
-// Input Argurments:
+// Input Arguments:
 //		event = wxCommandEvent&
 //
 // Output Arguments:
@@ -575,7 +575,7 @@ void EDIT_TIRES_PANEL::LeftFrontTireWidthChangeEvent(wxCommandEvent &event)
 //
 // Description:		Event that fires when the right rear tire diameter changes.
 //
-// Input Argurments:
+// Input Arguments:
 //		event = wxCommandEvent&
 //
 // Output Arguments:
@@ -631,7 +631,7 @@ void EDIT_TIRES_PANEL::RightRearTireDiameterChangeEvent(wxCommandEvent &event)
 //
 // Description:		Event that fires when the right rear tire width changes.
 //
-// Input Argurments:
+// Input Arguments:
 //		event = wxCommandEvent&
 //
 // Output Arguments:
@@ -687,7 +687,7 @@ void EDIT_TIRES_PANEL::RightRearTireWidthChangeEvent(wxCommandEvent &event)
 //
 // Description:		Event that fires when the left rear tire diameter changes.
 //
-// Input Argurments:
+// Input Arguments:
 //		event = wxCommandEvent&
 //
 // Output Arguments:
@@ -743,7 +743,7 @@ void EDIT_TIRES_PANEL::LeftRearTireDiameterChangeEvent(wxCommandEvent &event)
 //
 // Description:		Event that fires when the left rear tire width changes.
 //
-// Input Argurments:
+// Input Arguments:
 //		event = wxCommandEvent&
 //
 // Output Arguments:

@@ -30,7 +30,7 @@
 //
 // Description:		Constructor for the DYNAMICS class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Debugger	= const DEBUGGER&, reference to the debug message printing utility
 //
 // Output Arguments:
@@ -55,7 +55,7 @@ DYNAMICS::DYNAMICS(const DEBUGGER &_Debugger) : Debugger(_Debugger)
 //
 // Description:		Copy constructor for the DYNAMICS class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Dynamics	= const DYNAMICS& to copy to this object
 //
 // Output Arguments:
@@ -81,7 +81,7 @@ DYNAMICS::DYNAMICS(const DYNAMICS &Dynamics) : Debugger(Dynamics.Debugger)
 //
 // Description:		Destructor for the DYNAMICS class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -108,7 +108,7 @@ DYNAMICS::~DYNAMICS()
 //
 // Description:		Resets the simulation to zero initial conditions
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -129,7 +129,7 @@ void DYNAMICS::ResetSimulation(void)
 //
 // Description:		Calculates the state derivatives for this simulation.
 //
-// Input Argurments:
+// Input Arguments:
 //		State	= STATE, current state of the vehicle
 //		Inputs	= DRIVER::INPUTS representing the commands from the driver
 //
@@ -151,7 +151,7 @@ void DYNAMICS::CalculateStateDerivative(STATE State, DRIVER::INPUTS Inputs)
 //
 // Description:		Runs the current simulation.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -205,7 +205,7 @@ void DYNAMICS::RunSimulation(void)
 //
 // Description:		Assignment operator for DYNAMICS class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Dynamics	= const DYNAMICS& to assign to this object
 //
 // Output Arguments:

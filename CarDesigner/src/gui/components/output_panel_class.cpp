@@ -35,7 +35,7 @@
 // Description:		Constructor for OUTPUT_PANEL class.  Initializes the form
 //					and creates the controls, etc.
 //
-// Input Argurments:
+// Input Arguments:
 //		_MainFrame	= MAIN_FRAME&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
@@ -68,7 +68,7 @@ OUTPUT_PANEL::OUTPUT_PANEL(MAIN_FRAME &_MainFrame, wxWindowID id, const wxPoint 
 //
 // Description:		Destructor for OUTPUT_PANEL class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -88,7 +88,7 @@ OUTPUT_PANEL::~OUTPUT_PANEL()
 //
 // Description:		Event table for the OUTPUT_PANEL class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -108,7 +108,7 @@ END_EVENT_TABLE()
 //
 // Description:		Updates the information on this panel.
 //
-// Input Argurments:
+// Input Arguments:
 //		Outputs		= KINEMATIC_OUTPUTS containing the outputs we want to use
 //					  for the update
 //		Car			= CAR& pointing to the car with which these outputs are associated
@@ -281,7 +281,7 @@ void OUTPUT_PANEL::UpdateInformation(KINEMATIC_OUTPUTS Outputs, CAR &Car,
 // Description:		Second part of the panel update - this updates the units,
 //					removes extra columns, and ends the batch edit for the grid.
 //
-// Input Argurments:
+// Input Arguments:
 //		_NumberOfDataColumns	= int specifying how many data columns we should have
 //
 // Output Arguments:
@@ -339,7 +339,7 @@ void OUTPUT_PANEL::FinishUpdate(int _NumberOfDataColumns)
 //
 // Description:		Creates the controls for this panel.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -423,7 +423,7 @@ void OUTPUT_PANEL::CreateControls()
 //
 // Description:		Event handler for the column re-size event.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxGridSizeEvent&
 //
 // Output Arguments:
@@ -448,7 +448,7 @@ void OUTPUT_PANEL::ColumnResizeEvent(wxGridSizeEvent& WXUNUSED(event))
 //
 // Description:		Highlights the column with the specified column heading
 //
-// Input Argurments:
+// Input Arguments:
 //		_Name	= wxString specifying the column heading
 //
 // Output Arguments:

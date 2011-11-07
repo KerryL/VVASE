@@ -24,7 +24,7 @@
 //
 // Description:		Constructor for SPRING class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -44,7 +44,7 @@ SPRING::SPRING()
 //
 // Description:		Destructor for SPRING class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:

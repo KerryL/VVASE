@@ -23,7 +23,7 @@
 //
 // Description:		Constructor for the KINEMATICS_DATA class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Command	= THREAD_COMMANDS specifying the command type for this job
 //		_Data		= KINEMATICS_DATA* containing any additional data about the job
 //		_Name		= const wxString& Name of the car
@@ -52,7 +52,7 @@ KINEMATICS_DATA::KINEMATICS_DATA(const CAR *_OriginalCar, CAR *_WorkingCar,
 //
 // Description:		Destructor for the KINEMATICS_DATA class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -73,7 +73,7 @@ KINEMATICS_DATA::~KINEMATICS_DATA()
 // Description:		Checks to make sure this type of data is correct for the
 //					specified command.
 //
-// Input Argurments:
+// Input Arguments:
 //		Command		= THREAD_JOB::THREAD_COMMANDS& to be checked
 //
 // Output Arguments:

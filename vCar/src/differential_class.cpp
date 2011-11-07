@@ -29,7 +29,7 @@
 //
 // Description:		Constructor for the DIFFERENTIAL class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Debugger	= const DEBUGGER& reference to applications debug printing utility
 //
 // Output Arguments:
@@ -49,7 +49,7 @@ DIFFERENTIAL::DIFFERENTIAL(const DEBUGGER &_Debugger) : Debugger(_Debugger)
 //
 // Description:		Copy constructor for the DIFFERENTIAL class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Differential	= const DIFFERENTIAL& to copy to this object
 //
 // Output Arguments:
@@ -71,7 +71,7 @@ DIFFERENTIAL::DIFFERENTIAL(const DIFFERENTIAL &Differential) : Debugger(Differen
 //
 // Description:		Destructor for the DIFFERENTIAL class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -91,7 +91,7 @@ DIFFERENTIAL::~DIFFERENTIAL()
 //
 // Description:		Writes this differential to file.
 //
-// Input Argurments:
+// Input Arguments:
 //		OutFile	= std::ofstream* pointing to the files stream to write to
 //
 // Output Arguments:
@@ -115,7 +115,7 @@ void DIFFERENTIAL::Write(std::ofstream *OutFile) const
 //
 // Description:		Read from file to fill this differential.
 //
-// Input Argurments:
+// Input Arguments:
 //		InFile		= std::ifstream* pointing to the file stream to read from
 //		FileVersion	= int specifying which file version we're reading from
 //
@@ -145,7 +145,7 @@ void DIFFERENTIAL::Read(std::ifstream *InFile, int FileVersion)
 //
 // Description:		Assignment operator for DIFFERENTIAL class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Differential	= const DIFFERENTIAL& to assign to this object
 //
 // Output Arguments:

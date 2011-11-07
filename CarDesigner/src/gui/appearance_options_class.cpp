@@ -31,7 +31,7 @@
 //
 // Description:		Constructor for APPEARANCE_OPTIONS class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_MainFrame	= MAIN_FRAME&, reference to main application object
 //		_Owner		= GUI_CAR&, reference to owner of this object
 //		_Debugger	= const DEBUGGER&, reference to debug printing utility
@@ -111,7 +111,7 @@ APPEARANCE_OPTIONS::APPEARANCE_OPTIONS(MAIN_FRAME &_MainFrame, GUI_CAR &_Owner,
 //
 // Description:		Denstructor for APPEARANCE_OPTIONS class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -131,7 +131,7 @@ APPEARANCE_OPTIONS::~APPEARANCE_OPTIONS()
 //
 // Description:		Retrieves a string describing the specified visibility option.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Visibility	= OBJECT_VISIBILITY in which we are intersted
 //
 // Output Arguments:
@@ -236,7 +236,7 @@ wxString APPEARANCE_OPTIONS::GetVisibilityString(OBJECT_VISIBILITY _Visibility)
 // Description:		Displays a dialog box that allows the user to change the
 //					options controlled by this object.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -272,7 +272,7 @@ void APPEARANCE_OPTIONS::ShowAppearanceOptionsDialog(void)
 //
 // Description:		Retrieves a string describing the specified color option.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Color	= OBJECT_COLOR in which we are intersted
 //
 // Output Arguments:
@@ -368,7 +368,7 @@ wxString APPEARANCE_OPTIONS::GetColorString(OBJECT_COLOR _Color)
 //
 // Description:		Retrieves a string describing the specified size option.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Size	= OBJECT_SIZE in which we are intersted
 //
 // Output Arguments:
@@ -480,7 +480,7 @@ wxString APPEARANCE_OPTIONS::GetSizeString(OBJECT_SIZE _Size)
 //
 // Description:		Retrieves a string describing the specified resolution option.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Resolution	= OBJECT_RESOLUTION in which we are intersted
 //
 // Output Arguments:
@@ -544,7 +544,7 @@ wxString APPEARANCE_OPTIONS::GetResolutionString(OBJECT_RESOLUTION _Resolution)
 //
 // Description:		Writes these options to file.
 //
-// Input Argurments:
+// Input Arguments:
 //		OutFile	= std::ofstream* pointing to the file stream to write to
 //
 // Output Arguments:
@@ -577,7 +577,7 @@ void APPEARANCE_OPTIONS::Write(std::ofstream *OutFile)
 //
 // Description:		Read from file to fill these options.
 //
-// Input Argurments:
+// Input Arguments:
 //		InFile		= std::ifstream* pointing to the file stream to read from
 //		FileVersion	= int specifying the file version we're reading from
 //

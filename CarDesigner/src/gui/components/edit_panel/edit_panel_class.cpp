@@ -43,7 +43,7 @@
 // Description:		Constructor for EDIT_PANEL class.  Initializes the form
 //					and creates the controls, etc.
 //
-// Input Argurments:
+// Input Arguments:
 //		_MainFrame	= MAIN_FRAME&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
@@ -95,7 +95,7 @@ EDIT_PANEL::EDIT_PANEL(MAIN_FRAME &_MainFrame, wxWindowID id, const wxPoint& pos
 //
 // Description:		Destructor for EDIT_PANEL class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -116,7 +116,7 @@ EDIT_PANEL::~EDIT_PANEL()
 // Description:		Updates the information in this notebook for the current
 //					object (if one exists).
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -142,7 +142,7 @@ void EDIT_PANEL::UpdateInformation(void)
 //
 // Description:		Updates the information in this notebook.
 //
-// Input Argurments:
+// Input Arguments:
 //		_CurrentObject	= GUI_OBJECT* pointing to the currenly active object
 //
 // Output Arguments:
@@ -260,7 +260,7 @@ void EDIT_PANEL::UpdateInformation(GUI_OBJECT *_CurrentObject)
 //
 // Description:		Creates the controls for this notebook.
 //
-// Input Argurments:
+// Input Arguments:
 //		IgnoreSystemsTree	= bool indicating whether or not to trust the
 //							  type of the selection in the systems tree
 //
@@ -365,7 +365,7 @@ void EDIT_PANEL::CreateControls(bool IgnoreSystemsTree)
 //
 // Description:		Deletes all of the controls in the notebook.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:

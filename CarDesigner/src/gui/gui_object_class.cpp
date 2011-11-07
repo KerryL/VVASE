@@ -43,7 +43,7 @@
 //					link between this object and the data that it represents,
 //					depending on the object's type.
 //
-// Input Argurments:
+// Input Arguments:
 //		_MainFrame			= MAIN_FRAME& pointing to the main frame for
 //							  this application
 //		_Debugger			= const DEBUGGER& reference to the debug message printing
@@ -92,7 +92,7 @@ GUI_OBJECT::GUI_OBJECT(MAIN_FRAME &_MainFrame, const DEBUGGER &_Debugger,
 // Description:		Destructor for the GUI_OBJECT class.  Removes the object
 //					from the SystemsTree.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -118,7 +118,7 @@ GUI_OBJECT::~GUI_OBJECT()
 // Description:		Contains calls to pure virtual functions and other initialization
 //					routines.  To be called from DERIVED class constructors.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -175,7 +175,7 @@ void GUI_OBJECT::Initialize(void)
 //					type, other name-setting functions may be called as a
 //					result of the change.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Name	= wxString specifying the object's new name
 //
 // Output Arguments:
@@ -223,7 +223,7 @@ void GUI_OBJECT::SetName(wxString _Name)
 //					(removes asterisks indicating the file needs to be
 //					saved) if necessary.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -255,7 +255,7 @@ wxString GUI_OBJECT::GetCleanName(void) const
 //					If the object has been saved to file, it also changes the
 //					displayed name to include a "*".
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -287,7 +287,7 @@ void GUI_OBJECT::SetModified(void)
 // Description:		Compares the tree item ID for this object with the ID
 //					passed to this function.
 //
-// Input Argurments:
+// Input Arguments:
 //		Selected	= wxTreeItemId to compare with this object's TreeID
 //
 // Output Arguments:
@@ -345,7 +345,7 @@ bool GUI_OBJECT::IsThisObjectSelected(wxTreeItemId Selected) const
 //					confirmation to close.  If it was desired to close the
 //					object, the appropriate closing actions are executed.
 //
-// Input Argurments:
+// Input Arguments:
 //		NotebookPageAlreadyClosed	= bool to prevent memory corruption,
 //									  if this function is called as a
 //									  result of a notebook page closing,
@@ -408,7 +408,7 @@ bool GUI_OBJECT::Close(bool NotebookPageAlreadyClosed)
 //
 // Description:		Loads this object from a location on the hard disk.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -460,7 +460,7 @@ bool GUI_OBJECT::LoadFromFile(void)
 //					appropriate save function, depending on this object's
 //					type.
 //
-// Input Argurments:
+// Input Arguments:
 //		SaveAsNewFileName	= bool specifying whether or not we want to
 //							  save with a new file name
 //
@@ -566,7 +566,7 @@ bool GUI_OBJECT::SaveToFile(bool SaveAsNewFileName)
 // Description:		Calls the appropriate Update() method, depending on the
 //					type of this object.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -593,7 +593,7 @@ void GUI_OBJECT::Render(void)
 //					systems tree is an object associated with this object or
 //					not.
 //
-// Input Argurments:
+// Input Arguments:
 //		PickedObject	= PRIMITIVE* pointing to the selected actor on the active
 //						  notebook page
 //
@@ -618,7 +618,7 @@ bool GUI_OBJECT::IsThisObjectSelected(PRIMITIVE *PickedObject) const
 //					and file type, and generates an image file with the
 //					contents of the render window.
 //
-// Input Argurments:
+// Input Arguments:
 //		PathAndFileName	= wxString specifying where the file should be saved
 //
 // Output Arguments:
@@ -643,7 +643,7 @@ bool GUI_OBJECT::WriteImageToFile(wxString PathAndFileName)
 //
 // Description:		Selects the root item for this object in the systems tree.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -670,7 +670,7 @@ void GUI_OBJECT::SelectThisObjectInTree(void)
 // Description:		Strips down the path and file name (must be set before
 //					calling this function) to get just the name.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -705,7 +705,7 @@ wxString GUI_OBJECT::GetNameFromFileName(void)
 //					file name as that passed to this object.  Sets focus to
 //					the pre-opened object if there is one.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:

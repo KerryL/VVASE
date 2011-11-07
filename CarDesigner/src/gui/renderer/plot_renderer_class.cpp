@@ -33,7 +33,7 @@
 //
 // Description:		Constructor for PLOT_RENDERER class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_MainFrame	= MAIN_FRAME& reference to this object's parent window
 //		_DataSource	= ITERATION& reference to the source of data for this plot
 //		_Debugger	= const DEBUGGER& reference to the debug printing utility object
@@ -63,7 +63,7 @@ PLOT_RENDERER::PLOT_RENDERER(MAIN_FRAME &_MainFrame, ITERATION &_DataSource,
 //
 // Description:		Destructor for PLOT_RENDERER class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -86,7 +86,7 @@ PLOT_RENDERER::~PLOT_RENDERER()
 //
 // Description:		Event table for the PLOT_RENDERER class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -110,7 +110,7 @@ END_EVENT_TABLE()
 //
 // Description:		Updates the displayed plots to match the current data.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -137,7 +137,7 @@ void PLOT_RENDERER::UpdateDisplay(void)
 //
 // Description:		Creates the actors for this plot.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -162,7 +162,7 @@ void PLOT_RENDERER::CreateActors(void)
 // Description:		Handles EVT_SIZE events for this class.  Required to make
 //					the plot size update with the window.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -190,7 +190,7 @@ void PLOT_RENDERER::OnSize(wxSizeEvent &event)
 //
 // Description:		Event handler for the mouse wheel event.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxMouseEvent&
 //
 // Output Arguments:
@@ -246,7 +246,7 @@ void PLOT_RENDERER::OnMouseWheelEvent(wxMouseEvent &event)
 //					capture drag events for rotating, panning, or dollying
 //					the scene.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxMouseEvent&
 //
 // Output Arguments:

@@ -37,7 +37,7 @@
 //
 // Description:		Constructor for GENETIC_OPTIMIZATION class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_MainFrame			= MAIN_FRAME& reference to main application object
 //		_Debugger			= const DEBUGGER& reference to the debug printing utility
 //		Converter			= const CONVERT& reference to application's conversion utility
@@ -89,7 +89,7 @@ GENETIC_OPTIMIZATION::GENETIC_OPTIMIZATION(MAIN_FRAME &_MainFrame, const DEBUGGE
 //
 // Description:		Destructor for GENETIC_OPTIMIZATION class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -112,7 +112,7 @@ GENETIC_OPTIMIZATION::~GENETIC_OPTIMIZATION()
 //
 // Description:		Spawns the GA thread.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -145,7 +145,7 @@ void GENETIC_OPTIMIZATION::BeginOptimization(void)
 //
 // Description:		Stops the GA thread.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -166,7 +166,7 @@ void GENETIC_OPTIMIZATION::HaltOptimization(void)
 //
 // Description:		Loads this object's data from file.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -190,7 +190,7 @@ bool GENETIC_OPTIMIZATION::PerformLoadFromFile(void)
 //
 // Description:		Saves this object's data to file.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -211,7 +211,7 @@ bool GENETIC_OPTIMIZATION::PerformSaveToFile(void)
 //
 // Description:		Decrements the counter of outstanding analyses.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -239,7 +239,7 @@ void GENETIC_OPTIMIZATION::MarkAnalysisComplete(void)
 //
 // Description:		Returns the handle for this object's entry in the SystemsTree.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -262,7 +262,7 @@ int GENETIC_OPTIMIZATION::GetIconHandle(void) const
 // Description:		Performs the post-optimization tasks, such as updating
 //					the GUI_CAR to match the best fit genome.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -293,7 +293,7 @@ void GENETIC_OPTIMIZATION::CompleteOptimization(void)
 // Description:		Sets the pointer for the car to optimized to the address
 //					specified.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -320,7 +320,7 @@ void GENETIC_OPTIMIZATION::SetCarToOptimize(GUI_CAR *_CarToOptimize)
 //
 // Description:		Updates the display of the panel representing this object.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -345,7 +345,7 @@ void GENETIC_OPTIMIZATION::UpdateDisplay(void)
 // Description:		Updates the display of the panel representing this object.
 //					This is identical to UpdateDisplay().
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:

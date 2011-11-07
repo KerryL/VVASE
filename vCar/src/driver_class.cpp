@@ -25,7 +25,7 @@
 //
 // Description:		Constructor for the DRIVER class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Debugger	= const DEBUGGER& reference to applications debug printing utility
 //
 // Output Arguments:
@@ -45,7 +45,7 @@ DRIVER::DRIVER(const DEBUGGER &_Debugger) : Debugger(_Debugger)
 //
 // Description:		Copy constructor for the DRIVER class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Driver	= const DRIVER& to copy to this object
 //
 // Output Arguments:
@@ -67,7 +67,7 @@ DRIVER::DRIVER(const DRIVER &Driver) : Debugger(Driver.Debugger)
 //
 // Description:		Destructor
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -87,7 +87,7 @@ DRIVER::~DRIVER()
 //
 // Description:		Solves for the driver inputs
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -108,7 +108,7 @@ void DRIVER::CalculateInputs(void)
 //
 // Description:		Assignment operator for DRIVER class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Driver	= const DRIVER& to assign to this object
 //
 // Output Arguments:

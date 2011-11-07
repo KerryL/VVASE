@@ -35,7 +35,7 @@
 //
 // Description:		Constructor for the MASS_PROPERTIES class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Debugger	= const DEBUGGER& reference to applications debug printing utility
 //
 // Output Arguments:
@@ -66,7 +66,7 @@ MASS_PROPERTIES::MASS_PROPERTIES(const DEBUGGER &_Debugger) : Debugger(_Debugger
 //
 // Description:		Copy constructor for the MASS_PROPERTIES class.
 //
-// Input Argurments:
+// Input Arguments:
 //		MassProperties	= const MASS_PROPERTIES& to copy to this object
 //
 // Output Arguments:
@@ -88,7 +88,7 @@ MASS_PROPERTIES::MASS_PROPERTIES(const MASS_PROPERTIES &MassProperties) : Debugg
 //
 // Description:		Destructor for the MASS_PROPERTIES class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -109,7 +109,7 @@ MASS_PROPERTIES::~MASS_PROPERTIES()
 // Description:		Checks to see if the inertias specified by the user are
 //					physically possible
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -152,7 +152,7 @@ bool MASS_PROPERTIES::IsValidInertiaTensor(void) const
 //					principle moments of inertia in the PrincipleInertias
 //					vector where the .X value is in the IxxDirection, etc.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -381,7 +381,7 @@ bool MASS_PROPERTIES::GetPrincipleInertias(VECTOR *PrincipleInertias, VECTOR *Ix
 //
 // Description:		Writes these mass properties to file.
 //
-// Input Argurments:
+// Input Arguments:
 //		OutFile	= std::ofstream* pointing to the file stream to write to
 //
 // Output Arguments:
@@ -414,7 +414,7 @@ void MASS_PROPERTIES::Write(std::ofstream *OutFile) const
 //
 // Description:		Read from file to fill these mass properties.
 //
-// Input Argurments:
+// Input Arguments:
 //		InFile		= std::ifstream* pointing to the file stream to read from
 //		FileVersion	= int specifying which file version we're reading from
 //
@@ -453,7 +453,7 @@ void MASS_PROPERTIES::Read(std::ifstream *InFile, int FileVersion)
 //
 // Description:		Assignment operator for MASS_PROPERTIES class.
 //
-// Input Argurments:
+// Input Arguments:
 //		MassProperties	= const MASS_PROPERTIES& to assign to this object
 //
 // Output Arguments:

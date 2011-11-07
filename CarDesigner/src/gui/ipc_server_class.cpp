@@ -30,7 +30,7 @@
 //
 // Description:		Constructor for IPC_SERVER class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -52,7 +52,7 @@ IPC_SERVER::IPC_SERVER() : wxServer()
 //
 // Description:		Destructor for IPC_SERVER class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -74,7 +74,7 @@ IPC_SERVER::~IPC_SERVER()
 //
 // Description:		Kills the current connection.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -102,7 +102,7 @@ void IPC_SERVER::Disconnect(void)
 //
 // Description:		Responds to new connections.
 //
-// Input Argurments:
+// Input Arguments:
 //		topic	= const wxString&
 //
 // Output Arguments:

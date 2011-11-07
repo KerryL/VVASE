@@ -28,7 +28,7 @@
 // Description:		Constructor for the POINT3D class.  Performs the entire
 //					process necessary to add the object to the scene.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Renderer	= RENDER_WINDOW&, pointer to rendering object
 //
 // Output Arguments:
@@ -50,7 +50,7 @@ POINT3D::POINT3D(RENDER_WINDOW &_Renderer)
 //
 // Description:		Destructor for the POINT3D class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -71,7 +71,7 @@ POINT3D::~POINT3D()
 // Description:		Updates the position, orientation, and size of the spring
 //					in the scene.
 //
-// Input Argurments:
+// Input Arguments:
 //		Position	= const VECTOR&, location of the point
 //		Diameter	= const double& describing the width of the spring
 //		Resolution	= const integer& representing the number of planar sides to use

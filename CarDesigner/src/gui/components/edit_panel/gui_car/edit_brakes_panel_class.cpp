@@ -28,7 +28,7 @@
 //
 // Description:		Constructor for EDIT_BRAKES_PANEL class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Parent		= EDIT_PANEL&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
@@ -59,7 +59,7 @@ EDIT_BRAKES_PANEL::EDIT_BRAKES_PANEL(EDIT_PANEL &_Parent, wxWindowID id,
 //
 // Description:		Destructor for EDIT_BRAKES_PANEL class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -79,7 +79,7 @@ EDIT_BRAKES_PANEL::~EDIT_BRAKES_PANEL()
 //
 // Description:		Links GUI events with event handler functions.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -100,7 +100,7 @@ END_EVENT_TABLE();
 //
 // Description:		Updates the information on this panel.
 //
-// Input Argurments:
+// Input Arguments:
 //		_CurrentBrakes	= BRAKES* pointing to the associated brakes
 //
 // Output Arguments:
@@ -131,7 +131,7 @@ void EDIT_BRAKES_PANEL::UpdateInformation(BRAKES *_CurrentBrakes)
 //
 // Description:		Creates the controls for this panel.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -190,7 +190,7 @@ void EDIT_BRAKES_PANEL::CreateControls()
 //
 // Description:		Event that fires when any text box changes.
 //
-// Input Argurments:
+// Input Arguments:
 //		event = wxCommandEvent&
 //
 // Output Arguments:
@@ -283,7 +283,7 @@ void EDIT_BRAKES_PANEL::TextBoxEditEvent(wxCommandEvent &event)
 //
 // Description:		Event that fires when any check box changes.
 //
-// Input Argurments:
+// Input Arguments:
 //		event = wxCommandEvent&
 //
 // Output Arguments:

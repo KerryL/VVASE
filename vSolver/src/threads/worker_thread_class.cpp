@@ -36,7 +36,7 @@
 //
 // Description:		Constructor for the WORKER_THREAD class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_JobQueue	= JOB_QUEUE*, pointing to the queue from which this
 //					  thread will pull jobs
 //		_Debugger	= DEBUGGER& reference to the application's debugger object
@@ -68,7 +68,7 @@ WORKER_THREAD::WORKER_THREAD(JOB_QUEUE* _JobQueue, DEBUGGER &_Debugger, int _Id)
 //
 // Description:		Constructor for the WORKER_THREAD class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_JobQueue	= JOB_QUEUE*, pointing to the queue from which this
 //					  thread will pull jobs
 //		Debugger	= DEBUGGER& reference to the application's debugger object
@@ -94,7 +94,7 @@ WORKER_THREAD::~WORKER_THREAD()
 //
 // Description:		Main work loop for each thread.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -133,7 +133,7 @@ wxThread::ExitCode WORKER_THREAD::Entry(void)
 //
 // Description:		The function that process jobs as they enter the queue.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:

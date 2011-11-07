@@ -22,7 +22,7 @@
 //
 // Description:		Constructor for the GA_GOAL_DIALOG class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Parent				= wxWindow&, reference to the main application window
 //		_Converter			= const CONVERT&, reference to conversion utility object
 //		_Output				= const KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE&
@@ -70,7 +70,7 @@ GA_GOAL_DIALOG::GA_GOAL_DIALOG(wxWindow *Parent, const CONVERT &_Converter, cons
 //
 // Description:		Destructor for the GA_GOAL_DIALOG class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -90,7 +90,7 @@ GA_GOAL_DIALOG::~GA_GOAL_DIALOG()
 //
 // Description:		Links GUI events with event handler functions.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -114,7 +114,7 @@ END_EVENT_TABLE()
 // Description:		Creates the controls that populate this dialog.  Also fills
 //					controls with approprite data (passed via constructor).
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -359,7 +359,7 @@ void GA_GOAL_DIALOG::CreateControls(void)
 //
 // Description:		Handles the OK button clicked events.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -445,7 +445,7 @@ void GA_GOAL_DIALOG::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 //
 // Description:		Handles the Cancel button clicked event.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -478,7 +478,7 @@ void GA_GOAL_DIALOG::CancelClickEvent(wxCommandEvent& WXUNUSED(event))
 //					controls and changing the name on the desired value label
 //					as appropriate.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -503,7 +503,7 @@ void GA_GOAL_DIALOG::OnCheckEvent(wxCommandEvent& WXUNUSED(event))
 // Description:		Event handler when selected output changes.  Updates the
 //					units for the desired value and expected deviation.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -531,7 +531,7 @@ void GA_GOAL_DIALOG::OnOutputChangeEvent(wxCommandEvent &event)
 // Description:		Formats the dialog according to whether we want two input
 //					states or one.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:

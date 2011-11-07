@@ -44,7 +44,7 @@
 //
 // Description:		Constructor for KINEMATICS class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Debugger	= const DEBUGGER&, reference to the debug message printing utility
 //
 // Output Arguments:
@@ -68,7 +68,7 @@ KINEMATICS::KINEMATICS(const DEBUGGER &_Debugger) : Debugger(_Debugger)
 //
 // Description:		Destructor for KINEMATICS class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -89,7 +89,7 @@ KINEMATICS::~KINEMATICS()
 // Description:		This updates the position of the car to meet the current
 //					values of pitch, roll, heave, and steer.
 //
-// Input Argurments:
+// Input Arguments:
 //		_OriginalCar	= const CAR* - for reference only
 //		_WorkingCar		= CAR* to be changed (updated) by this function
 //		Name			= wxString used to print messages about this car
@@ -257,7 +257,7 @@ void KINEMATICS::UpdateKinematics(const CAR* _OriginalCar, CAR* _WorkingCar, wxS
 //					Everything from the contact patch up to the shock and
 //					spring end-points.
 //
-// Input Argurments:
+// Input Arguments:
 //		OriginalCorner	= const CORNER*, the un-perturbed locations of the
 //						  suspension hardpoints
 //		Rotations		= const VECTOR* specifying the amount to rotate the chassis

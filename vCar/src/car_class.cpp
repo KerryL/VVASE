@@ -51,7 +51,7 @@
 // Description:		Constructor for the CAR class.  Creates a set of default
 //					parameters for the object.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Debugger	= const DEBUGGER& reference to applications debug printing utility
 //
 // Output Arguments:
@@ -218,7 +218,7 @@ CAR::CAR(const DEBUGGER &_Debugger) : Debugger(_Debugger)
 //					something like:
 //						CAR NewCar = new CAR(OldCar);
 //
-// Input Argurments:
+// Input Arguments:
 //		Car	= const &CAR that is to be copied
 //
 // Output Arguments:
@@ -249,7 +249,7 @@ CAR::CAR(const CAR &Car) : Debugger(Car.Debugger)
 //
 // Description:		Destructor for the CAR class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -290,7 +290,7 @@ CAR::~CAR()
 //
 // Description:		Constant definitions for the CAR class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -310,7 +310,7 @@ const int CAR::CurrentFileVersion = 2;
 //
 // Description:		Calls all of the sub-sustem Write() functions.
 //
-// Input Argurments:
+// Input Arguments:
 //		FileName	= wxString specifying the location to write to
 //		_OutFile	= std::ofstream* used to allow writing of the appearance options in
 //					  an external function
@@ -364,7 +364,7 @@ bool CAR::SaveCarToFile(wxString FileName, std::ofstream *_OutFile) const
 //
 // Description:		Calls the Read() functions for each sub-system class.
 //
-// Input Argurments:
+// Input Arguments:
 //		FileName	= wxString specifying the location to read from
 //		_InFile		= std::ifstream* used to allow reading of the appearance options in
 //					  an external function
@@ -423,7 +423,7 @@ bool CAR::LoadCarFromFile(wxString FileName, std::ifstream *_InFile, int *FileVe
 //
 // Description:		Writes the file header information to the file stream.
 //
-// Input Argurments:
+// Input Arguments:
 //		OutFile	= ofstream* to write to
 //
 // Output Arguments:
@@ -454,7 +454,7 @@ void CAR::WriteFileHeader(std::ofstream *OutFile) const
 //
 // Description:		Reads the file header information from the file stream.
 //
-// Input Argurments:
+// Input Arguments:
 //		InFile	= ifstream* to read from
 //
 // Output Arguments:
@@ -483,7 +483,7 @@ CAR::FILE_HEADER_INFO CAR::ReadFileHeader(std::ifstream *InFile) const
 // Description:		Calls the suspension method that computes the wheel center
 //					locations based on static toe and camber.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -509,7 +509,7 @@ void CAR::ComputeWheelCenters(void)
 // Description:		Determines whether or not this car has front half shafts.
 //					(Constant)
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -538,7 +538,7 @@ bool CAR::HasFrontHalfShafts(void) const
 // Description:		Determines whether or not this car has rear half shafts.
 //					(Constant)
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -566,7 +566,7 @@ bool CAR::HasRearHalfShafts(void) const
 //
 // Description:		Assignment operator for the CAR class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Car	= const CAR& to assign to this
 //
 // Output Arguments:

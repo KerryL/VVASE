@@ -41,7 +41,7 @@
 // Description:		Constructor for the CONVERT class.  Sets up default
 //					units for all unit types.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -81,7 +81,7 @@ CONVERT::CONVERT()
 //
 // Description:		Destructor for the CONVERT class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -101,7 +101,7 @@ CONVERT::~CONVERT()
 //
 // Description:		Defines class level constants for CONVERT class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -121,7 +121,7 @@ const double CONVERT::G = 386.088582677;// [in/sec^2]
 // Description:		Returns a string containing the default units for the
 //					specified type.
 //
-// Input Argurments:
+// Input Arguments:
 //		UnitType	= UNIT_TYPE for which we want the default units
 //
 // Output Arguments:
@@ -212,7 +212,7 @@ wxString CONVERT::GetUnitType(UNIT_TYPE UnitType) const
 // Description:		Returns a string containing the specified units.
 //					Angle version.
 //
-// Input Argurments:
+// Input Arguments:
 //		Units	= UNITS_OF_ANGLE which we are retrieving
 //
 // Output Arguments:
@@ -239,7 +239,7 @@ wxString CONVERT::GetUnits(UNITS_OF_ANGLE Units) const
 // Description:		Returns a string containing the specified units.
 //					Distance version.
 //
-// Input Argurments:
+// Input Arguments:
 //		Units	= UNITS_OF_DISTANCE which we are retrieving
 //
 // Output Arguments:
@@ -276,7 +276,7 @@ wxString CONVERT::GetUnits(UNITS_OF_DISTANCE Units) const
 // Description:		Returns a string containing the specified units.
 //					Area version.
 //
-// Input Argurments:
+// Input Arguments:
 //		Units	= UNITS_OF_AREA which we are retrieving
 //
 // Output Arguments:
@@ -310,7 +310,7 @@ wxString CONVERT::GetUnits(UNITS_OF_AREA Units) const
 // Description:		Returns a string containing the specified units.
 //					Force version.
 //
-// Input Argurments:
+// Input Arguments:
 //		Units	= UNITS_OF_FORCE which we are retrieving
 //
 // Output Arguments:
@@ -341,7 +341,7 @@ wxString CONVERT::GetUnits(UNITS_OF_FORCE Units) const
 // Description:		Returns a string containing the specified units.
 //					Pressure version.
 //
-// Input Argurments:
+// Input Arguments:
 //		Units	= UNITS_OF_PRESSURE which we are retrieving
 //
 // Output Arguments:
@@ -376,7 +376,7 @@ wxString CONVERT::GetUnits(UNITS_OF_PRESSURE Units) const
 // Description:		Returns a string containing the specified units.
 //					Moment version.
 //
-// Input Argurments:
+// Input Arguments:
 //		Units	= UNITS_OF_MOMENT which we are retrieving
 //
 // Output Arguments:
@@ -407,7 +407,7 @@ wxString CONVERT::GetUnits(UNITS_OF_MOMENT Units) const
 // Description:		Returns a string containing the specified units.
 //					Mass version.
 //
-// Input Argurments:
+// Input Arguments:
 //		Units	= UNITS_OF_MASS which we are retrieving
 //
 // Output Arguments:
@@ -436,7 +436,7 @@ wxString CONVERT::GetUnits(UNITS_OF_MASS Units) const
 // Description:		Returns a string containing the specified units.
 //					Velocity version.
 //
-// Input Argurments:
+// Input Arguments:
 //		Units	= UNITS_OF_VELOCITY which we are retrieving
 //
 // Output Arguments:
@@ -473,7 +473,7 @@ wxString CONVERT::GetUnits(UNITS_OF_VELOCITY Units) const
 // Description:		Returns a string containing the specified units.
 //					Acceleration version.
 //
-// Input Argurments:
+// Input Arguments:
 //		Units	= UNITS_OF_ACCELERATION which we are retrieving
 //
 // Output Arguments:
@@ -508,7 +508,7 @@ wxString CONVERT::GetUnits(UNITS_OF_ACCELERATION Units) const
 // Description:		Returns a string containing the specified units.
 //					Inertia version.
 //
-// Input Argurments:
+// Input Arguments:
 //		Units	= UNITS_OF_INERTIA which we are retrieving
 //
 // Output Arguments:
@@ -543,7 +543,7 @@ wxString CONVERT::GetUnits(UNITS_OF_INERTIA Units) const
 // Description:		Returns a string containing the specified units.
 //					Density version.
 //
-// Input Argurments:
+// Input Arguments:
 //		Units	= UNITS_OF_DENSITY which we are retrieving
 //
 // Output Arguments:
@@ -578,7 +578,7 @@ wxString CONVERT::GetUnits(UNITS_OF_DENSITY Units) const
 // Description:		Returns a string containing the specified units.
 //					Power version.
 //
-// Input Argurments:
+// Input Arguments:
 //		Units	= UNITS_OF_POWER which we are retrieving
 //
 // Output Arguments:
@@ -611,7 +611,7 @@ wxString CONVERT::GetUnits(UNITS_OF_POWER Units) const
 // Description:		Returns a string containing the specified units.
 //					Energy version.
 //
-// Input Argurments:
+// Input Arguments:
 //		Units	= UNITS_OF_ENERGY which we are retrieving
 //
 // Output Arguments:
@@ -646,7 +646,7 @@ wxString CONVERT::GetUnits(UNITS_OF_ENERGY Units) const
 // Description:		Returns a string containing the specified units.
 //					Temperature version.
 //
-// Input Argurments:
+// Input Arguments:
 //		Units	= UNITS_OF_TEMPERATURE which we are retrieving
 //
 // Output Arguments:
@@ -677,7 +677,7 @@ wxString CONVERT::GetUnits(UNITS_OF_TEMPERATURE Units) const
 // Description:		Sets default units for angle measurement to the
 //					specified Units.
 //
-// Input Argurments:
+// Input Arguments:
 //		Units	= UNITS_OF_ANGLE to which the default will be changed
 //
 // Output Arguments:
@@ -702,7 +702,7 @@ void CONVERT::SetAngleUnits(UNITS_OF_ANGLE Units)
 // Description:		Sets default units for distance measurement to the
 //					specified Units.
 //
-// Input Argurments:
+// Input Arguments:
 //		Units	= UNITS_OF_DISTANCE to which the default will be changed
 //
 // Output Arguments:
@@ -727,7 +727,7 @@ void CONVERT::SetDistanceUnits(UNITS_OF_DISTANCE Units)
 // Description:		Sets default units for area measurement to the
 //					specified Units.
 //
-// Input Argurments:
+// Input Arguments:
 //		Units	= UNITS_OF_AREA to which the default will be changed
 //
 // Output Arguments:
@@ -752,7 +752,7 @@ void CONVERT::SetAreaUnits(UNITS_OF_AREA Units)
 // Description:		Sets default units for force measurement to the
 //					specified Units.
 //
-// Input Argurments:
+// Input Arguments:
 //		Units	= UNITS_OF_FORCE to which the default will be changed
 //
 // Output Arguments:
@@ -777,7 +777,7 @@ void CONVERT::SetForceUnits(UNITS_OF_FORCE Units)
 // Description:		Sets default units for pressure measurement to the
 //					specified Units.
 //
-// Input Argurments:
+// Input Arguments:
 //		Units	= UNITS_OF_PRESSURE to which the default will be changed
 //
 // Output Arguments:
@@ -802,7 +802,7 @@ void CONVERT::SetPressureUnits(UNITS_OF_PRESSURE Units)
 // Description:		Sets default units for moment measurement to the
 //					specified Units.
 //
-// Input Argurments:
+// Input Arguments:
 //		Units	= UNITS_OF_MOMENT to which the default will be changed
 //
 // Output Arguments:
@@ -827,7 +827,7 @@ void CONVERT::SetMomentUnits(UNITS_OF_MOMENT Units)
 // Description:		Sets default units for mass measurement to the
 //					specified Units.
 //
-// Input Argurments:
+// Input Arguments:
 //		Units	= UNITS_OF_MASS to which the default will be changed
 //
 // Output Arguments:
@@ -852,7 +852,7 @@ void CONVERT::SetMassUnits(UNITS_OF_MASS Units)
 // Description:		Sets default units for velocity measurement to the
 //					specified Units.
 //
-// Input Argurments:
+// Input Arguments:
 //		Units	= UNITS_OF_VELOCITY to which the default will be changed
 //
 // Output Arguments:
@@ -877,7 +877,7 @@ void CONVERT::SetVelocityUnits(UNITS_OF_VELOCITY Units)
 // Description:		Sets default units for acceleration measurement to the
 //					specified Units.
 //
-// Input Argurments:
+// Input Arguments:
 //		Units	= UNITS_OF_ACCELERATION to which the default will be changed
 //
 // Output Arguments:
@@ -901,7 +901,7 @@ void CONVERT::SetAccelerationUnits(UNITS_OF_ACCELERATION Units)
 // Description:		Sets default units for inertia measurement to the
 //					specified Units.
 //
-// Input Argurments:
+// Input Arguments:
 //		Units	= UNITS_OF_INERTIA to which the default will be changed
 //
 // Output Arguments:
@@ -926,7 +926,7 @@ void CONVERT::SetInertiaUnits(UNITS_OF_INERTIA Units)
 // Description:		Sets default units for density measurement to the
 //					specified Units.
 //
-// Input Argurments:
+// Input Arguments:
 //		Units	= UNITS_OF_DENSITY to which the default will be changed
 //
 // Output Arguments:
@@ -951,7 +951,7 @@ void CONVERT::SetDensityUnits(UNITS_OF_DENSITY Units)
 // Description:		Sets default units for power measurement to the
 //					specified Units.
 //
-// Input Argurments:
+// Input Arguments:
 //		Units	= UNITS_OF_POWER to which the default will be changed
 //
 // Output Arguments:
@@ -976,7 +976,7 @@ void CONVERT::SetPowerUnits(UNITS_OF_POWER Units)
 // Description:		Sets default units for energy measurement to the
 //					specified Units.
 //
-// Input Argurments:
+// Input Arguments:
 //		Units	= UNITS_OF_ENERGY to which the default will be changed
 //
 // Output Arguments:
@@ -1001,7 +1001,7 @@ void CONVERT::SetEnergyUnits(UNITS_OF_ENERGY Units)
 // Description:		Sets default units for temperature measurement to the
 //					specified Units.
 //
-// Input Argurments:
+// Input Arguments:
 //		Units	= UNITS_OF_TEMPERATURE to which the default will be changed
 //
 // Output Arguments:
@@ -1026,7 +1026,7 @@ void CONVERT::SetTemperatureUnits(UNITS_OF_TEMPERATURE Units)
 // Description:		Converts from our base units (see top of convert_class.h)
 //					into NewUnits.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value		= double to be converted
 //		NewUnits	= UNITS_OF_ANGLE in which Value will be returned
 //
@@ -1058,7 +1058,7 @@ double CONVERT::ConvertAngle(double Value, UNITS_OF_ANGLE NewUnits) const
 // Description:		Converts from our base units (see top of convert_class.h)
 //					into NewUnits.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value		= double to be converted
 //		NewUnits	= UNITS_OF_DISTANCE in which Value will be returned
 //
@@ -1100,7 +1100,7 @@ double CONVERT::ConvertDistance(double Value, UNITS_OF_DISTANCE NewUnits) const
 // Description:		Converts from our base units (see top of convert_class.h)
 //					into NewUnits.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value		= double to be converted
 //		NewUnits	= UNITS_OF_AREA in which Value will be returned
 //
@@ -1138,7 +1138,7 @@ double CONVERT::ConvertArea(double Value, UNITS_OF_AREA NewUnits) const
 // Description:		Converts from our base units (see top of convert_class.h)
 //					into NewUnits.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value		= double to be converted
 //		NewUnits	= UNITS_OF_FORCE in which Value will be returned
 //
@@ -1174,7 +1174,7 @@ double CONVERT::ConvertForce(double Value, UNITS_OF_FORCE NewUnits) const
 // Description:		Converts from our base units (see top of convert_class.h)
 //					into NewUnits.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value		= double to be converted
 //		NewUnits	= UNITS_OF_PRESSURE in which Value will be returned
 //
@@ -1214,7 +1214,7 @@ double CONVERT::ConvertPressure(double Value, UNITS_OF_PRESSURE NewUnits) const
 // Description:		Converts from our base units (see top of convert_class.h)
 //					into NewUnits.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value		= double to be converted
 //		NewUnits	= UNITS_OF_MOMENT in which Value will be returned
 //
@@ -1250,7 +1250,7 @@ double CONVERT::ConvertMoment(double Value, UNITS_OF_MOMENT NewUnits) const
 // Description:		Converts from our base units (see top of convert_class.h)
 //					into NewUnits.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value		= double to be converted
 //		NewUnits	= UNITS_OF_MASS in which Value will be returned
 //
@@ -1284,7 +1284,7 @@ double CONVERT::ConvertMass(double Value, UNITS_OF_MASS NewUnits) const
 // Description:		Converts from our base units (see top of convert_class.h)
 //					into NewUnits.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value		= double to be converted
 //		NewUnits	= UNITS_OF_VELOCITY in which Value will be returned
 //
@@ -1326,7 +1326,7 @@ double CONVERT::ConvertVelocity(double Value, UNITS_OF_VELOCITY NewUnits) const
 // Description:		Converts from our base units (see top of convert_class.h)
 //					into NewUnits.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value		= double to be converted
 //		NewUnits	= UNITS_OF_ACCELERATION in which Value will be returned
 //
@@ -1366,7 +1366,7 @@ double CONVERT::ConvertAcceleration(double Value, UNITS_OF_ACCELERATION NewUnits
 // Description:		Converts from our base units (see top of convert_class.h)
 //					into NewUnits.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value		= double to be converted
 //		NewUnits	= UNITS_OF_INERTIA in which Value will be returned
 //
@@ -1406,7 +1406,7 @@ double CONVERT::ConvertInertia(double Value, UNITS_OF_INERTIA NewUnits) const
 // Description:		Converts from our base units (see top of convert_class.h)
 //					into NewUnits.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value		= double to be converted
 //		NewUnits	= UNITS_OF_DENSITY in which Value will be returned
 //
@@ -1446,7 +1446,7 @@ double CONVERT::ConvertDensity(double Value, UNITS_OF_DENSITY NewUnits) const
 // Description:		Converts from our base units (see top of convert_class.h)
 //					into NewUnits.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value		= double to be converted
 //		NewUnits	= UNITS_OF_POWER in which Value will be returned
 //
@@ -1484,7 +1484,7 @@ double CONVERT::ConvertPower(double Value, UNITS_OF_POWER NewUnits) const
 // Description:		Converts from our base units (see top of convert_class.h)
 //					into NewUnits.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value		= double to be converted
 //		NewUnits	= UNITS_OF_ENERGY in which Value will be returned
 //
@@ -1524,7 +1524,7 @@ double CONVERT::ConvertEnergy(double Value, UNITS_OF_ENERGY NewUnits) const
 // Description:		Converts from our base units (see top of convert_class.h)
 //					into NewUnits.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value		= double to be converted
 //		NewUnits	= UNITS_OF_TEMPERATURE in which Value will be returned
 //
@@ -1561,7 +1561,7 @@ double CONVERT::ConvertTemperature(double Value, UNITS_OF_TEMPERATURE NewUnits) 
 //					into the default units that were previously specified by
 //					the user.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= double to be converted
 //
 // Output Arguments:
@@ -1585,7 +1585,7 @@ double CONVERT::ConvertAngle(double Value) const
 //					into the default units that were previously specified by
 //					the user.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= double to be converted
 //
 // Output Arguments:
@@ -1609,7 +1609,7 @@ double CONVERT::ConvertDistance(double Value) const
 //					into the default units that were previously specified by
 //					the user.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= double to be converted
 //
 // Output Arguments:
@@ -1633,7 +1633,7 @@ double CONVERT::ConvertArea(double Value) const
 //					into the default units that were previously specified by
 //					the user.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= double to be converted
 //
 // Output Arguments:
@@ -1657,7 +1657,7 @@ double CONVERT::ConvertForce(double Value) const
 //					into the default units that were previously specified by
 //					the user.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= double to be converted
 //
 // Output Arguments:
@@ -1681,7 +1681,7 @@ double CONVERT::ConvertPressure(double Value) const
 //					into the default units that were previously specified by
 //					the user.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= double to be converted
 //
 // Output Arguments:
@@ -1705,7 +1705,7 @@ double CONVERT::ConvertMoment(double Value) const
 //					into the default units that were previously specified by
 //					the user.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= double to be converted
 //
 // Output Arguments:
@@ -1729,7 +1729,7 @@ double CONVERT::ConvertMass(double Value) const
 //					into the default units that were previously specified by
 //					the user.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= double to be converted
 //
 // Output Arguments:
@@ -1753,7 +1753,7 @@ double CONVERT::ConvertVelocity(double Value) const
 //					into the default units that were previously specified by
 //					the user.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= double to be converted
 //
 // Output Arguments:
@@ -1777,7 +1777,7 @@ double CONVERT::ConvertAcceleration(double Value) const
 //					into the default units that were previously specified by
 //					the user.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= double to be converted
 //
 // Output Arguments:
@@ -1801,7 +1801,7 @@ double CONVERT::ConvertInertia(double Value) const
 //					into the default units that were previously specified by
 //					the user.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= double to be converted
 //
 // Output Arguments:
@@ -1825,7 +1825,7 @@ double CONVERT::ConvertDensity(double Value) const
 //					into the default units that were previously specified by
 //					the user.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= double to be converted
 //
 // Output Arguments:
@@ -1849,7 +1849,7 @@ double CONVERT::ConvertPower(double Value) const
 //					into the default units that were previously specified by
 //					the user.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= double to be converted
 //
 // Output Arguments:
@@ -1873,7 +1873,7 @@ double CONVERT::ConvertEnergy(double Value) const
 //					into the default units that were previously specified by
 //					the user.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= double to be converted
 //
 // Output Arguments:
@@ -1896,7 +1896,7 @@ double CONVERT::ConvertTemperature(double Value) const
 // Description:		Converts from the specified units into our base units
 //					(see top of convert_class.h).
 //
-// Input Argurments:
+// Input Arguments:
 //		Value		= double to be converted
 //		InputUnits	= UNITS_OF_ANGLE that are associated with Value
 //
@@ -1928,7 +1928,7 @@ double CONVERT::ReadAngle(double Value, UNITS_OF_ANGLE InputUnits) const
 // Description:		Converts from the specified units into our base units
 //					(see top of convert_class.h).
 //
-// Input Argurments:
+// Input Arguments:
 //		Value		= double to be converted
 //		InputUnits	= UNITS_OF_DISTANCE that are associated with Value
 //
@@ -1970,7 +1970,7 @@ double CONVERT::ReadDistance(double Value, UNITS_OF_DISTANCE InputUnits) const
 // Description:		Converts from the specified units into our base units
 //					(see top of convert_class.h).
 //
-// Input Argurments:
+// Input Arguments:
 //		Value		= double to be converted
 //		InputUnits	= UNITS_OF_AREA that are associated with Value
 //
@@ -2008,7 +2008,7 @@ double CONVERT::ReadArea(double Value, UNITS_OF_AREA InputUnits) const
 // Description:		Converts from the specified units into our base units
 //					(see top of convert_class.h).
 //
-// Input Argurments:
+// Input Arguments:
 //		Value		= double to be converted
 //		InputUnits	= UNITS_OF_FORCE that are associated with Value
 //
@@ -2044,7 +2044,7 @@ double CONVERT::ReadForce(double Value, UNITS_OF_FORCE InputUnits) const
 // Description:		Converts from the specified units into our base units
 //					(see top of convert_class.h).
 //
-// Input Argurments:
+// Input Arguments:
 //		Value		= double to be converted
 //		InputUnits	= UNITS_OF_PRESSURE that are associated with Value
 //
@@ -2084,7 +2084,7 @@ double CONVERT::ReadPressure(double Value, UNITS_OF_PRESSURE InputUnits) const
 // Description:		Converts from the specified units into our base units
 //					(see top of convert_class.h).
 //
-// Input Argurments:
+// Input Arguments:
 //		Value		= double to be converted
 //		InputUnits	= UNITS_OF_MOMENT that are associated with Value
 //
@@ -2120,7 +2120,7 @@ double CONVERT::ReadMoment(double Value, UNITS_OF_MOMENT InputUnits) const
 // Description:		Converts from the specified units into our base units
 //					(see top of convert_class.h).
 //
-// Input Argurments:
+// Input Arguments:
 //		Value		= double to be converted
 //		InputUnits	= UNITS_OF_MASS that are associated with Value
 //
@@ -2154,7 +2154,7 @@ double CONVERT::ReadMass(double Value, UNITS_OF_MASS InputUnits) const
 // Description:		Converts from the specified units into our base units
 //					(see top of convert_class.h).
 //
-// Input Argurments:
+// Input Arguments:
 //		Value		= double to be converted
 //		InputUnits	= UNITS_OF_VELOCITY that are associated with Value
 //
@@ -2196,7 +2196,7 @@ double CONVERT::ReadVelocity(double Value, UNITS_OF_VELOCITY InputUnits) const
 // Description:		Converts from the specified units into our base units
 //					(see top of convert_class.h).
 //
-// Input Argurments:
+// Input Arguments:
 //		Value		= double to be converted
 //		InputUnits	= UNITS_OF_ACCELERATION that are associated with Value
 //
@@ -2236,7 +2236,7 @@ double CONVERT::ReadAcceleration(double Value, UNITS_OF_ACCELERATION InputUnits)
 // Description:		Converts from the specified units into our base units
 //					(see top of convert_class.h).
 //
-// Input Argurments:
+// Input Arguments:
 //		Value		= double to be converted
 //		InputUnits	= UNITS_OF_INERTIA that are associated with Value
 //
@@ -2276,7 +2276,7 @@ double CONVERT::ReadInertia(double Value, UNITS_OF_INERTIA InputUnits) const
 // Description:		Converts from the specified units into our base units
 //					(see top of convert_class.h).
 //
-// Input Argurments:
+// Input Arguments:
 //		Value		= double to be converted
 //		InputUnits	= UNITS_OF_DENSITY that are associated with Value
 //
@@ -2316,7 +2316,7 @@ double CONVERT::ReadDensity(double Value, UNITS_OF_DENSITY InputUnits) const
 // Description:		Converts from the specified units into our base units
 //					(see top of convert_class.h).
 //
-// Input Argurments:
+// Input Arguments:
 //		Value		= double to be converted
 //		InputUnits	= UNITS_OF_POWER that are associated with Value
 //
@@ -2354,7 +2354,7 @@ double CONVERT::ReadPower(double Value, UNITS_OF_POWER InputUnits) const
 // Description:		Converts from the specified units into our base units
 //					(see top of convert_class.h).
 //
-// Input Argurments:
+// Input Arguments:
 //		Value		= double to be converted
 //		InputUnits	= UNITS_OF_ENERGY that are associated with Value
 //
@@ -2394,7 +2394,7 @@ double CONVERT::ReadEnergy(double Value, UNITS_OF_ENERGY InputUnits) const
 // Description:		Converts from the specified units into our base units
 //					(see top of convert_class.h).
 //
-// Input Argurments:
+// Input Arguments:
 //		Value		= double to be converted
 //		InputUnits	= UNITS_OF_TEMPERATURE that are associated with Value
 //
@@ -2430,7 +2430,7 @@ double CONVERT::ReadTemperature(double Value, UNITS_OF_TEMPERATURE InputUnits) c
 // Description:		Converts from the default units into our base units
 //					(see top of convert_class.h).
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= double to be converted
 //
 // Output Arguments:
@@ -2452,7 +2452,7 @@ double CONVERT::ReadAngle(double Value) const
 // Description:		Converts from the default units into our base units
 //					(see top of convert_class.h).
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= double to be converted
 //
 // Output Arguments:
@@ -2474,7 +2474,7 @@ double CONVERT::ReadDistance(double Value) const
 // Description:		Converts from the default units into our base units
 //					(see top of convert_class.h).
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= double to be converted
 //
 // Output Arguments:
@@ -2496,7 +2496,7 @@ double CONVERT::ReadArea(double Value) const
 // Description:		Converts from the default units into our base units
 //					(see top of convert_class.h).
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= double to be converted
 //
 // Output Arguments:
@@ -2518,7 +2518,7 @@ double CONVERT::ReadForce(double Value) const
 // Description:		Converts from the default units into our base units
 //					(see top of convert_class.h).
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= double to be converted
 //
 // Output Arguments:
@@ -2540,7 +2540,7 @@ double CONVERT::ReadPressure(double Value) const
 // Description:		Converts from the default units into our base units
 //					(see top of convert_class.h).
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= double to be converted
 //
 // Output Arguments:
@@ -2562,7 +2562,7 @@ double CONVERT::ReadMoment(double Value) const
 // Description:		Converts from the default units into our base units
 //					(see top of convert_class.h).
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= double to be converted
 //
 // Output Arguments:
@@ -2584,7 +2584,7 @@ double CONVERT::ReadMass(double Value) const
 // Description:		Converts from the default units into our base units
 //					(see top of convert_class.h).
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= double to be converted
 //
 // Output Arguments:
@@ -2606,7 +2606,7 @@ double CONVERT::ReadVelocity(double Value) const
 // Description:		Converts from the default units into our base units
 //					(see top of convert_class.h).
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= double to be converted
 //
 // Output Arguments:
@@ -2628,7 +2628,7 @@ double CONVERT::ReadAcceleration(double Value) const
 // Description:		Converts from the default units into our base units
 //					(see top of convert_class.h).
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= double to be converted
 //
 // Output Arguments:
@@ -2650,7 +2650,7 @@ double CONVERT::ReadInertia(double Value) const
 // Description:		Converts from the default units into our base units
 //					(see top of convert_class.h).
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= double to be converted
 //
 // Output Arguments:
@@ -2672,7 +2672,7 @@ double CONVERT::ReadDensity(double Value) const
 // Description:		Converts from the default units into our base units
 //					(see top of convert_class.h).
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= double to be converted
 //
 // Output Arguments:
@@ -2694,7 +2694,7 @@ double CONVERT::ReadPower(double Value) const
 // Description:		Converts from the default units into our base units
 //					(see top of convert_class.h).
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= double to be converted
 //
 // Output Arguments:
@@ -2716,7 +2716,7 @@ double CONVERT::ReadEnergy(double Value) const
 // Description:		Converts from the default units into our base units
 //					(see top of convert_class.h).
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= double to be converted
 //
 // Output Arguments:
@@ -2738,7 +2738,7 @@ double CONVERT::ReadTemperature(double Value) const
 // Description:		Converts from our base units (see top of convert_class.h)
 //					into the default units.  VECTOR overload.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= VECTOR to be converted
 //
 // Output Arguments:
@@ -2766,7 +2766,7 @@ VECTOR CONVERT::ConvertAngle(VECTOR Value) const
 // Description:		Converts from our base units (see top of convert_class.h)
 //					into the default units.  VECTOR overload.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= VECTOR to be converted
 //
 // Output Arguments:
@@ -2794,7 +2794,7 @@ VECTOR CONVERT::ConvertDistance(VECTOR Value) const
 // Description:		Converts from our base units (see top of convert_class.h)
 //					into the default units.  VECTOR overload.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= VECTOR to be converted
 //
 // Output Arguments:
@@ -2822,7 +2822,7 @@ VECTOR CONVERT::ConvertArea(VECTOR Value) const
 // Description:		Converts from our base units (see top of convert_class.h)
 //					into the default units.  VECTOR overload.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= VECTOR to be converted
 //
 // Output Arguments:
@@ -2850,7 +2850,7 @@ VECTOR CONVERT::ConvertForce(VECTOR Value) const
 // Description:		Converts from our base units (see top of convert_class.h)
 //					into the default units.  VECTOR overload.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= VECTOR to be converted
 //
 // Output Arguments:
@@ -2878,7 +2878,7 @@ VECTOR CONVERT::ConvertPressure(VECTOR Value) const
 // Description:		Converts from our base units (see top of convert_class.h)
 //					into the default units.  VECTOR overload.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= VECTOR to be converted
 //
 // Output Arguments:
@@ -2906,7 +2906,7 @@ VECTOR CONVERT::ConvertMoment(VECTOR Value) const
 // Description:		Converts from our base units (see top of convert_class.h)
 //					into the default units.  VECTOR overload.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= VECTOR to be converted
 //
 // Output Arguments:
@@ -2934,7 +2934,7 @@ VECTOR CONVERT::ConvertMass(VECTOR Value) const
 // Description:		Converts from our base units (see top of convert_class.h)
 //					into the default units.  VECTOR overload.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= VECTOR to be converted
 //
 // Output Arguments:
@@ -2962,7 +2962,7 @@ VECTOR CONVERT::ConvertVelocity(VECTOR Value) const
 // Description:		Converts from our base units (see top of convert_class.h)
 //					into the default units.  VECTOR overload.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= VECTOR to be converted
 //
 // Output Arguments:
@@ -2990,7 +2990,7 @@ VECTOR CONVERT::ConvertAcceleration(VECTOR Value) const
 // Description:		Converts from our base units (see top of convert_class.h)
 //					into the default units.  VECTOR overload.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= VECTOR to be converted
 //
 // Output Arguments:
@@ -3018,7 +3018,7 @@ VECTOR CONVERT::ConvertInertia(VECTOR Value) const
 // Description:		Converts from our base units (see top of convert_class.h)
 //					into the default units.  VECTOR overload.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= VECTOR to be converted
 //
 // Output Arguments:
@@ -3046,7 +3046,7 @@ VECTOR CONVERT::ConvertDensity(VECTOR Value) const
 // Description:		Converts from our base units (see top of convert_class.h)
 //					into the default units.  VECTOR overload.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= VECTOR to be converted
 //
 // Output Arguments:
@@ -3074,7 +3074,7 @@ VECTOR CONVERT::ConvertPower(VECTOR Value) const
 // Description:		Converts from our base units (see top of convert_class.h)
 //					into the default units.  VECTOR overload.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= VECTOR to be converted
 //
 // Output Arguments:
@@ -3102,7 +3102,7 @@ VECTOR CONVERT::ConvertEnergy(VECTOR Value) const
 // Description:		Converts from our base units (see top of convert_class.h)
 //					into the default units.  VECTOR overload.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= VECTOR to be converted
 //
 // Output Arguments:
@@ -3131,7 +3131,7 @@ VECTOR CONVERT::ConvertTemperature(VECTOR Value) const
 //					into the default units for the specified type.  Double
 //					overload.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= double to be converted
 //		Type	= UNIT_TYPE specifying what kind of value we have
 //
@@ -3209,7 +3209,7 @@ double CONVERT::Convert(double Value, UNIT_TYPE Type) const
 // Description:		Converts from the default units for the specified type to
 //					our base units.  Double overload.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= double to be converted
 //		Type	= UNIT_TYPE specifying what kind of value we have
 //
@@ -3287,7 +3287,7 @@ double CONVERT::Read(double Value, UNIT_TYPE Type) const
 // Description:		Formats a number to a pre-defined number of digits, with
 //					an option for scientific notation and significant digits.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value	= double to be formatted
 //
 // Output Arguments:
@@ -3361,7 +3361,7 @@ wxString CONVERT::FormatNumber(double Value) const
 //
 // Description:		Sets the number of digits to be used in the formatted numbers.
 //
-// Input Argurments:
+// Input Arguments:
 //		_NumberOfDigits	= int specifying the number of digits to use when
 //						  formatting numbers
 //

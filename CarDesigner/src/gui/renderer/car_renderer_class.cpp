@@ -63,7 +63,7 @@
 // Description:		Constructor for CAR_RENDERER class.  Initializes the
 //					renderer and sets up the canvas.
 //
-// Input Argurments:
+// Input Arguments:
 //		_MainFrame	= MAIN_FRAME& reference to the owner of this object
 //		_Car		= GUI_CAR& reference to the car that we are to render
 //		_Debugger	= const DEBUGGER&, reference to debug printing utility
@@ -103,7 +103,7 @@ CAR_RENDERER::CAR_RENDERER(MAIN_FRAME &_MainFrame, GUI_CAR &_Car, const DEBUGGER
 //
 // Description:		Denstructor for CAR_RENDERER class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -201,7 +201,7 @@ CAR_RENDERER::~CAR_RENDERER()
 // Description:		Updates the displayed 3D car to match the new position
 //					of the class member DisplayCar.
 //
-// Input Argurments:
+// Input Arguments:
 //		Outputs	= const KINEMATIC_OUTPUTS& containing the locations of all of the
 //				  kinematic variables that this object displays in the scene
 //
@@ -238,7 +238,7 @@ void CAR_RENDERER::UpdateDisplay(const KINEMATIC_OUTPUTS &Outputs)
 // Description:		Updates the displayed 3D car to match the new position
 //					of the class member DisplayCar.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -750,7 +750,7 @@ void CAR_RENDERER::UpdateCarDisplay(void)
 //
 // Description:		Updates the displayed 3D kinematic objects
 //
-// Input Argurments:
+// Input Arguments:
 //		Outputs	= KINEMATIC_OUTPUTS containing the locations of all of the
 //				  kinematic variables that this object displays in the scene
 //
@@ -893,7 +893,7 @@ void CAR_RENDERER::UpdateKinematicsDisplay(KINEMATIC_OUTPUTS Outputs)
 // Description:		Creates all of the objects that will be rendered in the
 //					scene.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -1001,7 +1001,7 @@ void CAR_RENDERER::CreateActors(void)
 //					This takes five arguements, of which only one is (should
 //					be) valid.
 //
-// Input Argurments:
+// Input Arguments:
 //		CornerPoint		= const CORNER::HARDPOINTS& identifying the point at the
 //						  corner of the car
 //		CornerLocation	= const CORNER::HARDPOINTS& specifying the active corner

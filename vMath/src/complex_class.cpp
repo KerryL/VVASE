@@ -31,7 +31,7 @@
 //
 // Description:		Constructor for the COMPLEX class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -51,7 +51,7 @@ COMPLEX::COMPLEX()
 //
 // Description:		Constructor for the COMPLEX class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Real		= const double& Real component of the complex number
 //		_Imaginary	= const double& imaginary component of the complex number
 //
@@ -75,7 +75,7 @@ COMPLEX::COMPLEX(const double &_Real, const double &_Imaginary)
 //
 // Description:		Destructor for the COMPLEX class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -95,7 +95,7 @@ COMPLEX::~COMPLEX()
 //
 // Description:		Defines class level constants for the COMPLES class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -113,7 +113,7 @@ const COMPLEX COMPLEX::I(0.0, 1.0);
 //
 // Description:		Writes the value of Target to a stream.
 //
-// Input Argurments:
+// Input Arguments:
 //		WriteOut	= ostream& to write out to
 //		Complex		= const COMPLEX& value to be written to the stream
 //
@@ -137,7 +137,7 @@ ostream &operator << (ostream &WriteOut, const COMPLEX &Complex)
 //
 // Description:		Prints this object to a string.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -165,7 +165,7 @@ wxString COMPLEX::Print(void) const
 //
 // Description:		Addition operator for the COMPLEX class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Complex	= const COMPLEX& to add to this
 //
 // Output Arguments:
@@ -192,7 +192,7 @@ const COMPLEX COMPLEX::operator + (const COMPLEX &Complex) const
 //
 // Description:		Subraction operator for the COMPLEX class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Complex	= const COMPLEX& to subtract from this
 //
 // Output Arguments:
@@ -219,7 +219,7 @@ const COMPLEX COMPLEX::operator - (const COMPLEX &Complex) const
 //
 // Description:		Multiplication operator for the COMPLEX class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Complex	= const COMPLEX& to multiply with this
 //
 // Output Arguments:
@@ -246,7 +246,7 @@ const COMPLEX COMPLEX::operator * (const COMPLEX &Complex) const
 //
 // Description:		Division operator for the COMPLEX class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Complex	= const COMPLEX& to divide by this
 //
 // Output Arguments:
@@ -273,7 +273,7 @@ const COMPLEX COMPLEX::operator / (const COMPLEX &Complex) const
 //
 // Description:		Raises this object to the specified power.
 //
-// Input Argurments:
+// Input Arguments:
 //		Power	= const double& specifiying the power to which this will be raised
 //
 // Output Arguments:
@@ -306,7 +306,7 @@ COMPLEX& COMPLEX::ToPower(const double &Power)
 //
 // Description:		Addition assignment operator for the COMPLEX class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Complex	= const COMPLEX& to add to this
 //
 // Output Arguments:
@@ -333,7 +333,7 @@ COMPLEX& COMPLEX::operator += (const COMPLEX &Complex)
 //
 // Description:		Subraction assignment operator for the COMPLEX class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Complex	= const COMPLEX& to subtract from this
 //
 // Output Arguments:
@@ -360,7 +360,7 @@ COMPLEX& COMPLEX::operator -= (const COMPLEX &Complex)
 //
 // Description:		Multiplication assignment operator for the COMPLEX class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Complex	= const COMPLEX& to multiply by this
 //
 // Output Arguments:
@@ -391,7 +391,7 @@ COMPLEX& COMPLEX::operator *= (const COMPLEX &Complex)
 //
 // Description:		Division assignment operator for the COMPLEX class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Complex	= const COMPLEX& to divide by this
 //
 // Output Arguments:
@@ -422,7 +422,7 @@ COMPLEX& COMPLEX::operator /= (const COMPLEX &Complex)
 //
 // Description:		Equal to comparison operator for the COMPLEX class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Complex	= const COMPLEX& to compare to this
 //
 // Output Arguments:
@@ -447,7 +447,7 @@ bool COMPLEX::operator == (const COMPLEX &Complex) const
 //
 // Description:		Not equal to comparison operator for the COMPLEX class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Complex	= const COMPLEX& to compare to this
 //
 // Output Arguments:
@@ -468,7 +468,7 @@ bool COMPLEX::operator != (const COMPLEX &Complex) const
 //
 // Description:		Returns the complex conjugate of this object.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -498,7 +498,7 @@ const COMPLEX COMPLEX::GetConjugate(void) const
 //
 // Description:		Addition operator for the COMPLEX class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Double	= const double& to add to this
 //
 // Output Arguments:
@@ -527,7 +527,7 @@ const COMPLEX COMPLEX::operator + (const double &Double) const
 //
 // Description:		Subtraction operator for the COMPLEX class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Double	= const double& to subtract from this
 //
 // Output Arguments:
@@ -556,7 +556,7 @@ const COMPLEX COMPLEX::operator - (const double &Double) const
 //
 // Description:		Multiplication operator for the COMPLEX class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Double	= const double& to multiply by this
 //
 // Output Arguments:
@@ -583,7 +583,7 @@ const COMPLEX COMPLEX::operator * (const double &Double) const
 //
 // Description:		Division operator for the COMPLEX class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Double	= const double& to divide by this
 //
 // Output Arguments:

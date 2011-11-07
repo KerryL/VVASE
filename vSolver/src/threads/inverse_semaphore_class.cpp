@@ -27,7 +27,7 @@
 //
 // Description:		Constructor for the INVERSE_SEMAPHORE class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -49,7 +49,7 @@ INVERSE_SEMAPHORE::INVERSE_SEMAPHORE()
 //
 // Description:		Destructor for the INVERSE_SEMAPHORE class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -70,7 +70,7 @@ INVERSE_SEMAPHORE::~INVERSE_SEMAPHORE()
 //
 // Description:		Decrements the counter for this object.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -105,7 +105,7 @@ INVERSE_SEMAPHORE::INVERSE_SEMAPHORE_ERROR INVERSE_SEMAPHORE::Post(void)
 //
 // Description:		Sets the counter to the desired value.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Count	= unsigned int to which the counter will be set
 //
 // Output Arguments:
@@ -140,7 +140,7 @@ INVERSE_SEMAPHORE::INVERSE_SEMAPHORE_ERROR INVERSE_SEMAPHORE::Set(unsigned int _
 //
 // Description:		Blocks the calling thread until the counter returns to zero.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:

@@ -42,7 +42,7 @@
 //
 // Description:		Constructor for PLOT_OBJECT class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Renderer	= PLOT_RENDERER& reference to the object that handles the
 //					  drawing operations
 //		_DataSource	= const ITERATION& reference to the associated iteration object
@@ -115,7 +115,7 @@ PLOT_OBJECT::PLOT_OBJECT(PLOT_RENDERER &_Renderer, const ITERATION &_DataSource,
 //
 // Description:		Destructor for PLOT_OBJECT class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -141,7 +141,7 @@ PLOT_OBJECT::~PLOT_OBJECT()
 // Description:		Updates the data in the plot and re-sets the fonts, sizes
 //					and positions.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -306,7 +306,7 @@ void PLOT_OBJECT::Update(void)
 //
 // Description:		Deletes the existing plots.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -335,7 +335,7 @@ void PLOT_OBJECT::RemoveExistingPlots(void)
 //
 // Description:		Formats the plot actor.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -599,7 +599,7 @@ void PLOT_OBJECT::FormatPlot(void)
 // Description:		Calculates the number of tick marks to use to span the range
 //					and make the plot look nice.
 //
-// Input Argurments:
+// Input Arguments:
 //		Min			= double& specifying the minimum value for the axis (required for input and output)
 //		Max			= double& specifying the maximum value for the axis (required for input and output)
 //		MaxTicks	= int specifying the maximum number of ticks to use
@@ -691,7 +691,7 @@ double PLOT_OBJECT::AutoScaleAxis(double &Min, double &Max, int MaxTicks, const 
 //
 // Description:		Sets the lower X limit.
 //
-// Input Argurments:
+// Input Arguments:
 //		_XMin	= const double& describing desired minimum X limit
 //
 // Output Arguments:
@@ -728,7 +728,7 @@ void PLOT_OBJECT::SetXMin(const double &_XMin)
 //
 // Description:		Sets the upper X limit.
 //
-// Input Argurments:
+// Input Arguments:
 //		_XMax	= const double& describing desired maximum X limit
 //
 // Output Arguments:
@@ -765,7 +765,7 @@ void PLOT_OBJECT::SetXMax(const double &_XMax)
 //
 // Description:		Sets the lower Y limit.
 //
-// Input Argurments:
+// Input Arguments:
 //		_YMin	= const double& describing desired minimum Y limit
 //
 // Output Arguments:
@@ -802,7 +802,7 @@ void PLOT_OBJECT::SetYMin(const double &_YMin)
 //
 // Description:		Sets the upper Y limit.
 //
-// Input Argurments:
+// Input Arguments:
 //		_YMax	= const double& describing desired maximum Y limit
 //
 // Output Arguments:
@@ -839,7 +839,7 @@ void PLOT_OBJECT::SetYMax(const double &_YMax)
 //
 // Description:		Sets the lower Z limit.
 //
-// Input Argurments:
+// Input Arguments:
 //		_ZMin	= const double& describing desired minimum Z limit
 //
 // Output Arguments:
@@ -876,7 +876,7 @@ void PLOT_OBJECT::SetZMin(const double &_ZMin)
 //
 // Description:		Sets the upper Z limit.
 //
-// Input Argurments:
+// Input Arguments:
 //		_ZMax	= const double& describing desired maximum Z limit
 //
 // Output Arguments:
@@ -913,7 +913,7 @@ void PLOT_OBJECT::SetZMax(const double &_ZMax)
 //
 // Description:		Resets auto-scaling for all axes.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:

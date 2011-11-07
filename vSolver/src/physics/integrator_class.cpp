@@ -26,7 +26,7 @@
 // Description:		Constructor for the INTEGRATOR class.  Sets all of the
 //					parameters that are required for integration to begin.
 //
-// Input Argurments:
+// Input Arguments:
 //		_IntegrationMethod	= const INTEGRATION_METHOD& to use for future integrations
 //		_Frequency			= const Frequency& at which the integration will occur [Hz]
 //		_Debugger			= const DEBUGGER&, reference to debug message printing utility
@@ -57,7 +57,7 @@ INTEGRATOR::INTEGRATOR(const INTEGRATION_METHOD &_IntegrationMethod, const doubl
 //
 // Description:		Copy constructor for the INTEGRATOR class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Integrator	= const INTEGRATOR& to copy to this object
 //
 // Output Arguments:
@@ -82,7 +82,7 @@ INTEGRATOR::INTEGRATOR(const INTEGRATOR &Integrator) : Debugger(Integrator.Debug
 //
 // Description:		Destructor for the INTEGRATOR class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -107,7 +107,7 @@ INTEGRATOR::~INTEGRATOR()
 //					the approprieate integration function, depending on this
 //					object's IntegrationMethod.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -141,7 +141,7 @@ STATE INTEGRATOR::ComputeNewState(void)
 //
 // Description:		Semi-implicit Euler integration.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -164,7 +164,7 @@ STATE INTEGRATOR::DoEulerSemiImplicit(void)
 //
 // Description:		2nd Order Runge-Kutta integration.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -187,7 +187,7 @@ STATE INTEGRATOR::DoRungeKuttaSecondOrder(void)
 //
 // Description:		4th Order Runge-Kutta integration.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -210,7 +210,7 @@ STATE INTEGRATOR::DoRungeKuttaFourthOrder(void)
 //
 // Description:		3rd Order Adams Bashforth Integration.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -233,7 +233,7 @@ STATE INTEGRATOR::DoAdamsBashforthThirdOrder(void)
 //
 // Description:		Resets the system to the specified initial conditions.
 //
-// Input Argurments:
+// Input Arguments:
 //		InitialConditions	= STATE at which the integration will begin
 //
 // Output Arguments:
@@ -257,7 +257,7 @@ void INTEGRATOR::Reset(STATE InitialConditions)
 //
 // Description:		Resets the system to zero initial conditions.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -285,7 +285,7 @@ void INTEGRATOR::Reset(void)
 //					memory for the correct number of state derivatives to
 //					store.
 //
-// Input Argurments:
+// Input Arguments:
 //		_IntegrationMethod	= INTEGRATION_METHOD to use for future integration
 //
 // Output Arguments:
@@ -334,7 +334,7 @@ void INTEGRATOR::SetIntegrationMethod(INTEGRATION_METHOD _IntegrationMethod)
 //
 // Description:		Sets this object's integration frequency.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Frequency	= double specifying the frequency to use for future
 //					  integrations
 //
@@ -359,7 +359,7 @@ void INTEGRATOR::SetFrequency(double _Frequency)
 //
 // Description:		Assignment operator for INTEGRATOR class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Integrator	= const INTEGRATOR& to assign to this object
 //
 // Output Arguments:

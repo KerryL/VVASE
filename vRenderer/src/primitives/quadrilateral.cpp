@@ -24,7 +24,7 @@
 //
 // Description:		Constructor for the QUADRILATERAL class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_RenderWindow	= RENDER_WINDOW& pointing to the object that owns this
 //
 // Output Arguments:
@@ -49,7 +49,7 @@ QUADRILATERAL::QUADRILATERAL(RENDER_WINDOW &_RenderWindow) : PRIMITIVE(_RenderWi
 //
 // Description:		Destructor for the QUADRILATERAL class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -70,7 +70,7 @@ QUADRILATERAL::~QUADRILATERAL()
 // Description:		Creates the OpenGL instructions to create this object in
 //					the scene.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -143,7 +143,7 @@ void QUADRILATERAL::GenerateGeometry(void)
 // Description:		Checks to see if the information about this object is
 //					valid and complete (gives permission to create the object).
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -172,7 +172,7 @@ bool QUADRILATERAL::HasValidParameters(void)
 //
 // Description:		Sets the rectangle's normal direction.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Normal	= const VECTOR&
 //
 // Output Arguments:
@@ -199,7 +199,7 @@ void QUADRILATERAL::SetNormal(const VECTOR &_Normal)
 //
 // Description:		Sets the location of the center of the rectangle.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Center	= const VECTOR&
 //
 // Output Arguments:
@@ -227,7 +227,7 @@ void QUADRILATERAL::SetCenter(const VECTOR &_Center)
 // Description:		Sets the rectangle's orientation (direction of length dimension).
 //					This vector must not be parallel to the normal direction.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Axis	= const VECTOR&
 //
 // Output Arguments:
@@ -255,7 +255,7 @@ void QUADRILATERAL::SetAxis(const VECTOR &_Axis)
 // Description:		Sets the width of the quadrilateral (perpendicular to
 //					the normal direction and to the axis).
 //
-// Input Argurments:
+// Input Arguments:
 //		_Width	= const double&
 //
 // Output Arguments:
@@ -282,7 +282,7 @@ void QUADRILATERAL::SetWidth(const double &_Width)
 //
 // Description:		Sets the length (along the axis) of the quadrilateral.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Length	= const double&
 //
 // Output Arguments:

@@ -25,7 +25,7 @@
 //
 // Description:		Constructor for the JOB_QUEUE class (default).
 //
-// Input Argurments:
+// Input Arguments:
 //		_Parent		= wxEventHandler* pointing to the main application object
 //
 // Output Arguments:
@@ -45,7 +45,7 @@ JOB_QUEUE::JOB_QUEUE(wxEvtHandler *_Parent) : Parent(_Parent)
 //
 // Description:		Adds a job to the queue
 //
-// Input Argurments:
+// Input Arguments:
 //		Job			= const THREAD_JOB& to be added to the queue
 //		Priority	= const JOB_PRIORITY& of the new job
 //
@@ -78,7 +78,7 @@ void JOB_QUEUE::AddJob(const THREAD_JOB& Job, const JOB_PRIORITY& Priority)
 //					in the std::map object, so prioritization is not seen
 //					in this function.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -116,7 +116,7 @@ THREAD_JOB JOB_QUEUE::Pop()
 //
 // Description:		Posts an event to the main thread.
 //
-// Input Argurments:
+// Input Arguments:
 //		Command		= const THREAD_COMMANDS& to report
 //		Message		= const wxString& containing string information
 //		ThreadI		= int representing the thread's ID
@@ -155,7 +155,7 @@ void JOB_QUEUE::Report(const THREAD_JOB::THREAD_COMMANDS& Command, int ThreadId,
 //
 // Description:		Returns the number of pending jobs.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:

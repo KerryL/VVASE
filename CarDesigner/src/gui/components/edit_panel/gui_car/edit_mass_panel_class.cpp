@@ -31,7 +31,7 @@
 //
 // Description:		Constructor for EDIT_MASS_PANEL class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Parent		= EDIT_PANEL&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
@@ -62,7 +62,7 @@ EDIT_MASS_PANEL::EDIT_MASS_PANEL(EDIT_PANEL &_Parent, wxWindowID id,
 //
 // Description:		Destructor for EDIT_MASS_PANEL class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -82,7 +82,7 @@ EDIT_MASS_PANEL::~EDIT_MASS_PANEL()
 //
 // Description:		Links GUI events with event handler functions.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -102,7 +102,7 @@ END_EVENT_TABLE();
 //
 // Description:		Updates the information on this panel.
 //
-// Input Argurments:
+// Input Arguments:
 //		_CurrentMassProperties	= MASS_PROPERTIES* pointing to the associated
 //								  mass properties
 //
@@ -154,7 +154,7 @@ void EDIT_MASS_PANEL::UpdateInformation(MASS_PROPERTIES *_CurrentMassProperties)
 //
 // Description:		Creates the controls for this panel.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -280,7 +280,7 @@ void EDIT_MASS_PANEL::CreateControls()
 //
 // Description:		Event that fires when any text box changes.
 //
-// Input Argurments:
+// Input Arguments:
 //		event = wxCommandEvent&
 //
 // Output Arguments:

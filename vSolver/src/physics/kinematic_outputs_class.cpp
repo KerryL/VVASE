@@ -47,7 +47,7 @@
 //
 // Description:		Constructor for KINEMATIC_OUTPUTS class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -68,7 +68,7 @@ KINEMATIC_OUTPUTS::KINEMATIC_OUTPUTS()
 //
 // Description:		Destructor for KINEMATIC_OUTPUTS class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -88,7 +88,7 @@ KINEMATIC_OUTPUTS::~KINEMATIC_OUTPUTS()
 //
 // Description:		Constant declarations for KINEMATIC_OUTPUTS class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -106,7 +106,7 @@ const DEBUGGER *KINEMATIC_OUTPUTS::Debugger = NULL;
 //
 // Description:		Initializes all outputs to QNAN
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -156,7 +156,7 @@ void KINEMATIC_OUTPUTS::InitializeAllOutputs(void)
 //					Outputs.  Every member of Outputs is included here.
 //					Measurements are take on Current.
 //
-// Input Argurments:
+// Input Arguments:
 //		Original	= cosnt CAR*, pointing to object describing the car's
 //					  un-perturbed state
 //		Current		= const SUSPENSION*, pointing to object describing the new
@@ -404,7 +404,7 @@ void KINEMATIC_OUTPUTS::Update(const CAR *Original, const SUSPENSION *Current)
 // Description:		Performs measurements that are repeated for every wheel
 //					on the car.
 //
-// Input Argurments:
+// Input Arguments:
 //		OriginalCorner	= const CORNER*, pointer to the un-perturbed state of the
 //						  corner
 //		CurrentCorner	= const CORNER*, pointer to the current state of the corner
@@ -1039,7 +1039,7 @@ void KINEMATIC_OUTPUTS::UpdateCorner(const CORNER *OriginalCorner, const CORNER 
 //
 // Description:		Returns a string containing the name of the specified output.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Output	= const CORNER_OUTPUTS_DOUBLE& specifying the output in which we are
 //				  interested
 //
@@ -1140,7 +1140,7 @@ wxString KINEMATIC_OUTPUTS::GetCornerDoubleName(const CORNER_OUTPUTS_DOUBLE &_Ou
 //
 // Description:		Returns a string containing the name of the specified output.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Output	= const CORNER_OUTPUTS_VECTOR& specifying the output in which we are
 //				  interested
 //
@@ -1181,7 +1181,7 @@ wxString KINEMATIC_OUTPUTS::GetCornerVectorName(const CORNER_OUTPUTS_VECTOR &_Ou
 //
 // Description:		Returns a string containing the name of the specified output.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Output	= const OUTPUTS_DOUBLE& specifying the output in which we are
 //				  interested
 //
@@ -1294,7 +1294,7 @@ wxString KINEMATIC_OUTPUTS::GetDoubleName(const OUTPUTS_DOUBLE &_Output)
 //
 // Description:		Returns a string containing the name of the specified output.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Output	= const OUTPUTS_VECTOR& specifying the output in which we are
 //				  interested
 //
@@ -1360,7 +1360,7 @@ wxString KINEMATIC_OUTPUTS::GetVectorName(const OUTPUTS_VECTOR &_Output)
 // Description:		Returns the value of the output from the complete list of
 //					class outputs.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Output	= const &OUTPUTS_COMPLETE specifying the output in which we are
 //				  interested
 //
@@ -1516,7 +1516,7 @@ double KINEMATIC_OUTPUTS::GetOutputValue(const OUTPUTS_COMPLETE &_Output) const
 // Description:		Returns the unit type of the output from the complete
 //					list of class outputs.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Output	= const &OUTPUTS_COMPLETE specifying the output in which we are
 //				  interested
 //
@@ -1584,7 +1584,7 @@ CONVERT::UNIT_TYPE KINEMATIC_OUTPUTS::GetOutputUnitType(const OUTPUTS_COMPLETE &
 // Description:		Returns the name of the output from the complete list of
 //					class outputs.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Output	= const OUTPUTS_COMPLETE& specifying the output in which we are
 //				  interested
 //
@@ -1758,7 +1758,7 @@ wxString KINEMATIC_OUTPUTS::GetOutputName(const OUTPUTS_COMPLETE &_Output)
 //
 // Description:		Returns a the type of units for the specified output.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Output	= const CORNER_OUTPUTS_DOUBLE& specifying the
 //				  output in which we are interested
 //
@@ -1821,7 +1821,7 @@ CONVERT::UNIT_TYPE KINEMATIC_OUTPUTS::GetCornerDoubleUnitType(const CORNER_OUTPU
 //
 // Description:		Returns a the type of units for the specified output.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Output	= const CORNER_OUTPUTS_VECTOR& specifying the
 //				  output in which we are interested
 //
@@ -1865,7 +1865,7 @@ CONVERT::UNIT_TYPE KINEMATIC_OUTPUTS::GetCornerVectorUnitType(const CORNER_OUTPU
 //
 // Description:		Returns a the type of units for the specified output.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Output	= const OUTPUTS_DOUBLE& specifying the
 //				  output in which we are interested
 //
@@ -1931,7 +1931,7 @@ CONVERT::UNIT_TYPE KINEMATIC_OUTPUTS::GetDoubleUnitType(const OUTPUTS_DOUBLE &_O
 //
 // Description:		Returns a the type of units for the specified output.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Output	= const OUTPUTS_VECTOR& specifying the
 //				  output in which we are interested
 //
@@ -1982,7 +1982,7 @@ CONVERT::UNIT_TYPE KINEMATIC_OUTPUTS::GetVectorUnitType(const OUTPUTS_VECTOR &_O
 // Description:		Returns an index refering to the list of OUTPUTS_COMPLETE
 //					for the specified output.
 //
-// Input Argurments:
+// Input Arguments:
 //		Location		= const &CORNER::Location specifying the relevant corner of the car
 //		CornerDouble	= const &CORNER_OUTPUTS_DOUBLE
 //		CornerVector	= const &CORNER_OUTPUTS_VECTOR

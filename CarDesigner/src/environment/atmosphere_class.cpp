@@ -30,7 +30,7 @@
 //
 // Description:		Constructor for ATMOSPHERE class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -52,7 +52,7 @@ ATMOSPHERE::ATMOSPHERE()
 //
 // Description:		Destructor for ATMOSPHERE class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -74,7 +74,7 @@ ATMOSPHERE::~ATMOSPHERE()
 //					of these are defined by ???? at ???? and describe
 //					conditions at sea level.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -130,7 +130,7 @@ const ATMOSPHERE::CONDITIONS ATMOSPHERE::HotDay =
 //
 // Description:		Sets today's conditions according to the passed argument.
 //
-// Input Argurments:
+// Input Arguments:
 //		_CurrentDay	= CONDITIONS describing the current day's conditions
 //
 // Output Arguments:
@@ -155,7 +155,7 @@ void ATMOSPHERE::SetConditions(ATMOSPHERE::CONDITIONS _CurrentDay)
 // Description:		Gets the conditions for the current day, adjusted for
 //					non-sea-level altitudes.
 //
-// Input Argurments:
+// Input Arguments:
 //		Altitude	= double describing current height above sea level [ft]
 //
 // Output Arguments:

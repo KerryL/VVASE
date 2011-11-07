@@ -29,7 +29,7 @@
 //
 // Description:		Constructor for the AERODYNAMICS class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Debugger	= const DEBUGGER& reference to applications debug printing utility
 //
 // Output Arguments:
@@ -49,7 +49,7 @@ AERODYNAMICS::AERODYNAMICS(const DEBUGGER &_Debugger) : Debugger(_Debugger)
 //
 // Description:		Copy constructor for the AERODYNAMICS class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Aerodynamics	= const AERODYNAMICS& to copy to this object
 //
 // Output Arguments:
@@ -71,7 +71,7 @@ AERODYNAMICS::AERODYNAMICS(const AERODYNAMICS &Aerodynamics) : Debugger(Aerodyna
 //
 // Description:		Destructor for the AERODYNAMICS class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -91,7 +91,7 @@ AERODYNAMICS::~AERODYNAMICS()
 //
 // Description:		Writes these aerodynamics to file.
 //
-// Input Argurments:
+// Input Arguments:
 //		OutFile	= std::ofstream* pointing to the output stream
 //
 // Output Arguments:
@@ -115,7 +115,7 @@ void AERODYNAMICS::Write(std::ofstream *OutFile) const
 //
 // Description:		Read from file to fill this aerodynamics.
 //
-// Input Argurments:
+// Input Arguments:
 //		InFile		= std::ifstream* pointing to the input stream
 //		FileVersion	= int specifying what file version we're reading from
 //
@@ -145,7 +145,7 @@ void AERODYNAMICS::Read(std::ifstream *InFile, int FileVersion)
 //
 // Description:		Assignment operator for AERODYNAMICS class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Aerodynamics	= const AERODYNAMICS& to assign to this object
 //
 // Output Arguments:

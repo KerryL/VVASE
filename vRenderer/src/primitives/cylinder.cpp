@@ -27,7 +27,7 @@
 //
 // Description:		Constructor for the CYLINDER class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_RenderWindow	= RENDER_WINDOW& pointing to the object that owns this
 //
 // Output Arguments:
@@ -53,7 +53,7 @@ CYLINDER::CYLINDER(RENDER_WINDOW &_RenderWindow) : PRIMITIVE(_RenderWindow)
 //
 // Description:		Destructor for the CYLINDER class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -74,7 +74,7 @@ CYLINDER::~CYLINDER()
 // Description:		Creates the OpenGL instructions to create this object in
 //					the scene.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -207,7 +207,7 @@ void CYLINDER::GenerateGeometry(void)
 // Description:		Checks to see if the information about this object is
 //					valid and complete (gives permission to create the object).
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -233,7 +233,7 @@ bool CYLINDER::HasValidParameters(void)
 //
 // Description:		Sets the number of faces use to approximate the cylinder.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Resolution	= const int&
 //
 // Output Arguments:
@@ -261,7 +261,7 @@ void CYLINDER::SetResolution(const int &_Resolution)
 // Description:		Sets the flag indicating whether or not the cylinder should be
 //					capped on the base end.
 //
-// Input Argurments:
+// Input Arguments:
 //		_DrawCaps	= const bool&
 //
 // Output Arguments:
@@ -288,7 +288,7 @@ void CYLINDER::SetCapping(const bool &_DrawCaps)
 //
 // Description:		Sets the location of the first end point.
 //
-// Input Argurments:
+// Input Arguments:
 //		_EndPoint1	= const VECTOR&
 //
 // Output Arguments:
@@ -315,7 +315,7 @@ void CYLINDER::SetEndPoint1(const VECTOR &_EndPoint1)
 //
 // Description:		Sets the location of the second end point.
 //
-// Input Argurments:
+// Input Arguments:
 //		_EndPoint2	= const VECTOR&
 //
 // Output Arguments:
@@ -342,7 +342,7 @@ void CYLINDER::SetEndPoint2(const VECTOR &_EndPoint2)
 //
 // Description:		Sets the radius at the base of the CYLINDER.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Radius	= const double&
 //
 // Output Arguments:

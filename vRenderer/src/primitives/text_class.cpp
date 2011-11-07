@@ -27,7 +27,7 @@
 //
 // Description:		Constructor for the TEXT_RENDERING class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_RenderWindow	= RENDER_WINDOW& reference to the object that owns this
 //
 // Output Arguments:
@@ -57,7 +57,7 @@ TEXT_RENDERING::TEXT_RENDERING(RENDER_WINDOW &_RenderWindow) : PRIMITIVE(_Render
 //
 // Description:		Destructor for the TEXT_RENDERING class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -78,7 +78,7 @@ TEXT_RENDERING::~TEXT_RENDERING()
 // Description:		Creates the OpenGL instructions to create this object in
 //					the scene.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -121,7 +121,7 @@ void TEXT_RENDERING::GenerateGeometry(void)
 // Description:		Checks to see if the information about this object is
 //					valid and complete (gives permission to create the object).
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -147,7 +147,7 @@ bool TEXT_RENDERING::HasValidParameters(void)
 // Description:		Returns the height of the bounding box for the current
 //					text.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -174,7 +174,7 @@ double TEXT_RENDERING::GetTextHeight(void) const
 // Description:		Returns the width of the bounding box for the current
 //					text.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:

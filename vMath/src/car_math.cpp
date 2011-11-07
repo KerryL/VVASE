@@ -32,7 +32,7 @@
 // Description:		Calculates the direction that is normal to the plane
 //					that passes through the three input points.
 //
-// Input Argurments:
+// Input Arguments:
 //		Point1	= const VECTOR& describing location of first point on the plane
 //		Point2	= const VECTOR& describing location of second point on the plane
 //		Point3	= const VECTOR& describing location of third point on the plane
@@ -71,7 +71,7 @@ VECTOR VVASEMath::GetPlaneNormal(const VECTOR &Point1, const VECTOR &Point2, con
 // Description:		Calculates the axis that is created by the intersection
 //					of two planes.
 //
-// Input Argurments:
+// Input Arguments:
 //		Normal1			= const VECTOR& describing normal direciton of first plane
 //		PointOnPlane1	= const VECTOR& describing a point on the first plane
 //		Normal2			= const VECTOR& describing normal direciton of second plane
@@ -188,7 +188,7 @@ bool VVASEMath::GetIntersectionOfTwoPlanes(const VECTOR &Normal1, const VECTOR &
 //
 // Description:		Returns true if a number is small enough to regard as zero.
 //
-// Input Argurments:
+// Input Arguments:
 //		ToCheck	= const double& to be checked for being close to zero
 //
 // Output Arguments:
@@ -213,7 +213,7 @@ bool VVASEMath::IsZero(const double &ToCheck)
 // Description:		Returns true if a number is small enough to regard as zero.
 //					This function checks the magnitude of the VECTOR.
 //
-// Input Argurments:
+// Input Arguments:
 //		ToCheck	= const VECTOR& to be checked for being close to zero
 //
 // Output Arguments:
@@ -238,7 +238,7 @@ bool VVASEMath::IsZero(const VECTOR &ToCheck)
 //
 // Description:		Determines if the specified number is or is not a number.
 //
-// Input Argurments:
+// Input Arguments:
 //		ToCheck	= const double& to check
 //
 // Output Arguments:
@@ -260,7 +260,7 @@ bool VVASEMath::IsNaN(const double &ToCheck)
 // Description:		Determines if the specified number is or is not a number.
 //					Vector version - returns false if any component is NaN.
 //
-// Input Argurments:
+// Input Arguments:
 //		ToCheck	= VECTOR& to be checked for containing valid numbers
 //
 // Output Arguments:
@@ -284,7 +284,7 @@ bool VVASEMath::IsNaN(const VECTOR &ToCheck)
 //					axis, the direction along the axis, and the point that
 //					is not on the axis.
 //
-// Input Argurments:
+// Input Arguments:
 //		PointOnAxis		= const VECTOR& describing any point on the axis
 //		DirectionOfAxis	= const VECTOR& that points in the direction of the axis
 //		TargetPoint		= const VECTOR& describing the point to compare to the
@@ -324,7 +324,7 @@ VECTOR VVASEMath::NearestPointOnAxis(const VECTOR &PointOnAxis, const VECTOR &Di
 // Description:		Returns the point in a specified plane that is closest to
 //					the specified point.
 //
-// Input Argurments:
+// Input Arguments:
 //		PointInPlane	= const VECTOR& describing any point on the plane
 //		PlaneNormal		= const VECTOR& defining the plane's orientation
 //		TargetPoint		= const VECTOR& describing the point to compare to the
@@ -357,7 +357,7 @@ VECTOR VVASEMath::NearestPointInPlane(const VECTOR &PointInPlane, const VECTOR &
 //					specified plane.  Note that this assumes the plane passes
 //					through the origin.
 //
-// Input Argurments:
+// Input Arguments:
 //		VectorToProject	= const VECTOR& to be projected
 //		PlaneNormal		= const VECTOR& that defines the plane orientation
 //
@@ -390,7 +390,7 @@ VECTOR VVASEMath::ProjectOntoPlane(const VECTOR &VectorToProject, const VECTOR &
 // Description:		Returns the point where the specified axis passes through
 //					the specified plane.
 //
-// Input Argurments:
+// Input Arguments:
 //		PlaneNormal		= const VECTOR& indicating the direction that is normal to
 //						  the plane
 //		PointOnPlane	= const VECTOR& specifying a point that lies on the plane
@@ -437,7 +437,7 @@ VECTOR VVASEMath::IntersectWithPlane(const VECTOR &PlaneNormal, const VECTOR &Po
 //					value that is returned is equal to the limit that the value
 //					has exceeded.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value		= const double& reference to the value which we want to clamp
 //		LowerLimit	= const double& lower bound of allowable values
 //		UpperLimit	= const double& upper bound of allowable values
@@ -469,7 +469,7 @@ double VVASEMath::Clamp(const double &Value, const double &LowerLimit, const dou
 // Description:		Adds or subtracts 2 * PI to the specified angle until the
 //					angle is between -pi and pi.
 //
-// Input Argurments:
+// Input Arguments:
 //		Angle		= const double& reference to the angle we want to bound
 //
 // Output Arguments:
@@ -496,7 +496,7 @@ double VVASEMath::RangeToPlusMinusPi(const double &_Angle)
 //
 // Description:		Returns 1 for positive, -1 for negative and 0 for zero.
 //
-// Input Argurments:
+// Input Arguments:
 //		Value		= const double&
 //
 // Output Arguments:

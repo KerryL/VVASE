@@ -26,7 +26,7 @@
 //
 // Description:		Constructor for the THREAD_JOB class (default).
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -46,7 +46,7 @@ THREAD_JOB::THREAD_JOB() : Command(THREAD_JOB::COMMAND_THREAD_NULL), Data(NULL)
 //
 // Description:		Constructor for the THREAD_JOB class (basic).
 //
-// Input Argurments:
+// Input Arguments:
 //		_Command		= THREAD_COMMANDS specifying the command type for this job
 //
 // Output Arguments:
@@ -70,7 +70,7 @@ THREAD_JOB::THREAD_JOB(THREAD_COMMANDS _Command) : Command(_Command), Data(NULL)
 //
 // Description:		Constructor for the THREAD_JOB class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Command	= THREAD_COMMANDS specifying the command type for this job
 //		_Name		= const wxString& Name of the car
 //		_Index		= int& representing the object index for the associated object
@@ -98,7 +98,7 @@ THREAD_JOB::THREAD_JOB(THREAD_COMMANDS _Command, THREAD_DATA *_Data,
 //
 // Description:		Destructor for the THREAD_JOB class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:

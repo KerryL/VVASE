@@ -23,7 +23,7 @@
 //
 // Description:		Constructor for the PRIMITIVE class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_RenderWindow	= RENDER_WINDOW& pointing to the object that owns this
 //
 // Output Arguments:
@@ -55,7 +55,7 @@ PRIMITIVE::PRIMITIVE(RENDER_WINDOW &_RenderWindow) : RenderWindow(_RenderWindow)
 //
 // Description:		Copy constructor for the PRIMITIVE class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Primitive	= const PRIMITIVE& to copy to this object
 //
 // Output Arguments:
@@ -77,7 +77,7 @@ PRIMITIVE::PRIMITIVE(const PRIMITIVE &Primitive) : RenderWindow(Primitive.Render
 //
 // Description:		Destructor for the PRIMITIVE class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -104,7 +104,7 @@ PRIMITIVE::~PRIMITIVE()
 //					Uses glLists if geometry has already been created and all
 //					information is up-to-date.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -181,7 +181,7 @@ void PRIMITIVE::Draw(void)
 //
 // Description:		Sets the visibility flag for this object.
 //
-// Input Argurments:
+// Input Arguments:
 //		_IsVisible	= const bool&
 //
 // Output Arguments:
@@ -208,7 +208,7 @@ void PRIMITIVE::SetVisibility(const bool &_IsVisible)
 //
 // Description:		Sets the color of this object.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Color	= const COLOR&
 //
 // Output Arguments:
@@ -235,7 +235,7 @@ void PRIMITIVE::SetColor(const COLOR &_Color)
 //
 // Description:		Assignment operator for PRIMITIVE class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Primitive	= const PRIMITIVE& to assign to this object
 //
 // Output Arguments:

@@ -25,7 +25,7 @@
 //
 // Description:		Constructor for the UNDO_REDO_STACK class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_MainFrame	= &MAIN_FRAME, reference to the main frame object
 //
 // Output Arguments:
@@ -45,7 +45,7 @@ UNDO_REDO_STACK::UNDO_REDO_STACK(MAIN_FRAME &_MainFrame) : MainFrame(_MainFrame)
 //
 // Description:		Destructor for the UNDO_REDO_STACK class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -70,7 +70,7 @@ UNDO_REDO_STACK::~UNDO_REDO_STACK()
 //						2.  Call UNDO_REDO_STACK::AddOperation()
 //						3.  Perform the operation
 //
-// Input Argurments:
+// Input Arguments:
 //		Index		= int specifying which GUI_OBJECT the operation is
 //					  associated with
 //		DataType	= OPERATION::OPERATION_DATA_TYPE describing what kind of
@@ -118,7 +118,7 @@ void UNDO_REDO_STACK::AddOperation(int Index,
 //					called when undoing/redoing and switching the operation
 //					between stacks.
 //
-// Input Argurments:
+// Input Arguments:
 //		Operation	= OPERATION to consider
 //
 // Output Arguments:
@@ -181,7 +181,7 @@ UNDO_REDO_STACK::OPERATION UNDO_REDO_STACK::UpdateValue(OPERATION Operation)
 //
 // Description:		Undoes the last logged operation.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -222,7 +222,7 @@ void UNDO_REDO_STACK::Undo(void)
 //
 // Description:		Re-performs the most recently undone operation.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -263,7 +263,7 @@ void UNDO_REDO_STACK::Redo(void)
 //
 // Description:		Applies the specified operation.
 //
-// Input Argurments:
+// Input Arguments:
 //		Operation = &OPERATION to apply
 //
 // Output Arguments:
@@ -336,7 +336,7 @@ void UNDO_REDO_STACK::ApplyOperation(OPERATION &Operation)
 //
 // Description:		Updates the screen following an undo/redo.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -363,7 +363,7 @@ void UNDO_REDO_STACK::Update(void) const
 // Description:		Clears the undo/redo stacks.  To be called after an operation
 //					that is not supported by undo/redo.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -393,7 +393,7 @@ void UNDO_REDO_STACK::ClearStacks(void)
 // Description:		Removes operations associated with the specified GUI_OBJECT
 //					from the stack.  To be called when objects are closed or saved.
 //
-// Input Argurments:
+// Input Arguments:
 //		Index	= int specifying which GUI_OJBECT to eliminate
 //
 // Output Arguments:
@@ -457,7 +457,7 @@ void UNDO_REDO_STACK::RemoveGuiObjectFromStack(int Index)
 // Description:		Removes operations associated with the specified GUI_OBJECT
 //					from the stack.  To be called when objects are closed or saved.
 //
-// Input Argurments:
+// Input Arguments:
 //		Index	= int specifying which GUI_OJBECT to eliminate
 //
 // Output Arguments:

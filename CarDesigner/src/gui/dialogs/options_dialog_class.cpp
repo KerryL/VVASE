@@ -26,6 +26,7 @@
 #include "gui/dialogs/options_dialog_class.h"
 #include "gui/components/main_frame_class.h"
 #include "vUtilities/convert_class.h"
+#include "vUtilities/wxRelatedUtilities.h"
 
 //==========================================================================
 // Class:			OPTIONS_DIALOG
@@ -33,13 +34,13 @@
 //
 // Description:		Constructor for OPTIONS_DIALOG class.
 //
-// Input Argurments:
-//		_MainFrame			= MAIN_FRAME& pointing to the application's main window
-//		_Converter			= CONVERT& pointing to the application's converter object
+// Input Arguments:
+//		_MainFrame			= MainFrame& pointing to the application's main window
+//		_Converter			= Convert& pointing to the application's converter object
 //		_KinematicInputs	= KINEMATICS::INPUTS& reference to the application's analysis options
 //		Id					= wxWindowId for this object
 //		Position			= const wxPoint& where this object will be drawn
-//		_Debugger			= DEBUGGER& pointing to this application's debug
+//		_Debugger			= Debugger& pointing to this application's debug
 //							  printing utility
 //		Style				= long defining the style for this dialog
 //
@@ -70,7 +71,7 @@ OPTIONS_DIALOG::OPTIONS_DIALOG(MAIN_FRAME &_MainFrame, CONVERT &_Converter,
 //
 // Description:		Destructor for OPTIONS_DIALOG class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -90,7 +91,7 @@ OPTIONS_DIALOG::~OPTIONS_DIALOG()
 //
 // Description:		Links GUI events with event handler functions.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -111,7 +112,7 @@ END_EVENT_TABLE();
 //
 // Description:		Sets up this form's contents and size.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -149,25 +150,29 @@ void OPTIONS_DIALOG::CreateControls(void)
 	wxBoxSizer *UnitsCaptionSizer = new wxBoxSizer(wxHORIZONTAL);
 	UnitsSizer->Add(UnitsCaptionSizer, 0, wxALIGN_TOP);
 
-	// The column widths
-	int LabelColumnWidth = 100;
-	int InputColumnWidth = 70;
-	int SpacerColumnWidth = 20;
-
 	// Add the text to this spacer
-	wxStaticText *Prompt = new wxStaticText(UnitsPage, wxID_STATIC, _T("Choose the units to use for each quantity"),
-		wxDefaultPosition, wxSize(-1, -1), 0);
+	wxStaticText *Prompt = new wxStaticText(UnitsPage, wxID_STATIC,
+		_T("Choose the units to use for each quantity"));
 	UnitsCaptionSizer->Add(-1, -1, 0, wxALL, 5);
 	UnitsCaptionSizer->Add(Prompt, 0, wxALL, 5);
 
-	// Create a sizer for each row
-	wxBoxSizer *SizerRow1 = new wxBoxSizer(wxHORIZONTAL);
-	wxBoxSizer *SizerRow2 = new wxBoxSizer(wxHORIZONTAL);
-	wxBoxSizer *SizerRow3 = new wxBoxSizer(wxHORIZONTAL);
-	wxBoxSizer *SizerRow4 = new wxBoxSizer(wxHORIZONTAL);
-	wxBoxSizer *SizerRow5 = new wxBoxSizer(wxHORIZONTAL);
-	wxBoxSizer *SizerRow6 = new wxBoxSizer(wxHORIZONTAL);
-	wxBoxSizer *SizerRow7 = new wxBoxSizer(wxHORIZONTAL);
+	// Create a sizer for each column
+	wxBoxSizer *sizerLeftLabelColumn = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer *sizerLeftUnitsColumn = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer *sizerRightLabelColumn = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer *sizerRightUnitsColumn = new wxBoxSizer(wxVERTICAL);
+	
+	// When setting the control width, we need to account for the width of the
+	// "expand" button, etc., so we specify that here
+#if __WXGTK__
+	unsigned int additionalWidth = 40;// [pixels]
+#else
+	unsigned int additionalWidth = 40;// [pixels]
+#endif
+	
+	// The column flags
+	int labelFlags = wxALL | wxALIGN_CENTER_VERTICAL | wxALIGN_LEFT;
+	int unitFlags = wxALL | wxEXPAND;
 
 	// Add the static text and text controls to these sizers
 	// For each type of units, we fill the string array with all of the options
@@ -179,184 +184,177 @@ void OPTIONS_DIALOG::CreateControls(void)
 	for (i = 0; i < CONVERT::NUMBER_OF_ANGLE_UNITS; i++)
 		Choices.Add(Converter.GetUnits((CONVERT::UNITS_OF_ANGLE)i));
 
-	wxStaticText *AngleLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of angle"),
-		wxDefaultPosition, wxSize(LabelColumnWidth, -1), 0);
+	wxStaticText *AngleLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of angle"));
 	UnitOfAngle = new wxComboBox(UnitsPage, wxID_ANY, Converter.GetUnitType(CONVERT::UNIT_TYPE_ANGLE),
-		wxDefaultPosition, wxSize(InputColumnWidth, -1), Choices, wxCB_READONLY);
-	SizerRow1->Add(AngleLabelText, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	SizerRow1->Add(UnitOfAngle, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	SizerRow1->AddSpacer(SpacerColumnWidth);
+		wxDefaultPosition, wxDefaultSize, Choices, wxCB_READONLY);
+	sizerLeftLabelColumn->Add(AngleLabelText, 1, labelFlags, 5);
+	sizerLeftUnitsColumn->Add(UnitOfAngle, 0, unitFlags, 5);
+	SetMinimumWidthFromContents(UnitOfAngle, additionalWidth);
 
 	// Distance
 	Choices.Clear();
 	for (i = 0; i < CONVERT::NUMBER_OF_DISTANCE_UNITS; i++)
 		Choices.Add(Converter.GetUnits((CONVERT::UNITS_OF_DISTANCE)i));
 
-	wxStaticText *DistanceLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of distance"),
-		wxDefaultPosition, wxSize(LabelColumnWidth, -1), 0);
+	wxStaticText *DistanceLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of distance"));
 	UnitOfDistance = new wxComboBox(UnitsPage, wxID_ANY, Converter.GetUnitType(CONVERT::UNIT_TYPE_DISTANCE),
-		wxDefaultPosition, wxSize(InputColumnWidth, -1), Choices, wxCB_READONLY);
-	SizerRow1->Add(DistanceLabelText, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	SizerRow1->Add(UnitOfDistance, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+		wxDefaultPosition, wxDefaultSize, Choices, wxCB_READONLY);
+	sizerRightLabelColumn->Add(DistanceLabelText, 1, labelFlags, 5);
+	sizerRightUnitsColumn->Add(UnitOfDistance, 0, unitFlags, 5);
+	SetMinimumWidthFromContents(UnitOfDistance, additionalWidth);
 
 	// Area
 	Choices.Clear();
 	for (i = 0; i < CONVERT::NUMBER_OF_AREA_UNITS; i++)
 		Choices.Add(Converter.GetUnits((CONVERT::UNITS_OF_AREA)i));
 
-	wxStaticText *AreaLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of area"),
-		wxDefaultPosition, wxSize(LabelColumnWidth, -1), 0);
+	wxStaticText *AreaLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of area"));
 	UnitOfArea = new wxComboBox(UnitsPage, wxID_ANY, Converter.GetUnitType(CONVERT::UNIT_TYPE_AREA),
-		wxDefaultPosition, wxSize(InputColumnWidth, -1), Choices, wxCB_READONLY);
-	SizerRow2->Add(AreaLabelText, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	SizerRow2->Add(UnitOfArea, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	SizerRow2->AddSpacer(SpacerColumnWidth);
+		wxDefaultPosition, wxDefaultSize, Choices, wxCB_READONLY);
+	sizerLeftLabelColumn->Add(AreaLabelText, 1, labelFlags, 5);
+	sizerLeftUnitsColumn->Add(UnitOfArea, 0, unitFlags, 5);
+	SetMinimumWidthFromContents(UnitOfArea, additionalWidth);
 
 	// Force
 	Choices.Clear();
 	for (i = 0; i < CONVERT::NUMBER_OF_FORCE_UNITS; i++)
 		Choices.Add(Converter.GetUnits((CONVERT::UNITS_OF_FORCE)i));
 
-	wxStaticText *ForceLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of force"),
-		wxDefaultPosition, wxSize(LabelColumnWidth, -1), 0);
+	wxStaticText *ForceLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of force"));
 	UnitOfForce = new wxComboBox(UnitsPage, wxID_ANY, Converter.GetUnitType(CONVERT::UNIT_TYPE_FORCE),
-		wxDefaultPosition, wxSize(InputColumnWidth, -1), Choices, wxCB_READONLY);
-	SizerRow2->Add(ForceLabelText, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	SizerRow2->Add(UnitOfForce, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+		wxDefaultPosition, wxDefaultSize, Choices, wxCB_READONLY);
+	sizerRightLabelColumn->Add(ForceLabelText, 1, labelFlags, 5);
+	sizerRightUnitsColumn->Add(UnitOfForce, 0, unitFlags, 5);
+	SetMinimumWidthFromContents(UnitOfForce, additionalWidth);
 
 	// Pressure
 	Choices.Clear();
 	for (i = 0; i < CONVERT::NUMBER_OF_PRESSURE_UNITS; i++)
 		Choices.Add(Converter.GetUnits((CONVERT::UNITS_OF_PRESSURE)i));
 
-	wxStaticText *PressureLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of pressure"),
-		wxDefaultPosition, wxSize(LabelColumnWidth, -1), 0);
+	wxStaticText *PressureLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of pressure"));
 	UnitOfPressure = new wxComboBox(UnitsPage, wxID_ANY, Converter.GetUnitType(CONVERT::UNIT_TYPE_PRESSURE),
-		wxDefaultPosition, wxSize(InputColumnWidth, -1), Choices, wxCB_READONLY);
-	SizerRow3->Add(PressureLabelText, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	SizerRow3->Add(UnitOfPressure, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	SizerRow3->AddSpacer(SpacerColumnWidth);
+		wxDefaultPosition, wxDefaultSize, Choices, wxCB_READONLY);
+	sizerLeftLabelColumn->Add(PressureLabelText, 1, labelFlags, 5);
+	sizerLeftUnitsColumn->Add(UnitOfPressure, 0, unitFlags, 5);
+	SetMinimumWidthFromContents(UnitOfPressure, additionalWidth);
 
 	// Moment
 	Choices.Clear();
 	for (i = 0; i < CONVERT::NUMBER_OF_MOMENT_UNITS; i++)
 		Choices.Add(Converter.GetUnits((CONVERT::UNITS_OF_MOMENT)i));
 
-	wxStaticText *MomentLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of moment"),
-		wxDefaultPosition, wxSize(LabelColumnWidth, -1), 0);
+	wxStaticText *MomentLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of moment"));
 	UnitOfMoment = new wxComboBox(UnitsPage, wxID_ANY, Converter.GetUnitType(CONVERT::UNIT_TYPE_MOMENT),
-		wxDefaultPosition, wxSize(InputColumnWidth, -1), Choices, wxCB_READONLY);
-	SizerRow3->Add(MomentLabelText, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	SizerRow3->Add(UnitOfMoment, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+		wxDefaultPosition, wxDefaultSize, Choices, wxCB_READONLY);
+	sizerRightLabelColumn->Add(MomentLabelText, 1, labelFlags, 5);
+	sizerRightUnitsColumn->Add(UnitOfMoment, 0, unitFlags, 5);
+	SetMinimumWidthFromContents(UnitOfMoment, additionalWidth);
 
 	// Mass
 	Choices.Clear();
 	for (i = 0; i < CONVERT::NUMBER_OF_MASS_UNITS; i++)
 		Choices.Add(Converter.GetUnits((CONVERT::UNITS_OF_MASS)i));
 
-	wxStaticText *MassLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of mass"),
-		wxDefaultPosition, wxSize(LabelColumnWidth, -1), 0);
+	wxStaticText *MassLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of mass"));
 	UnitOfMass = new wxComboBox(UnitsPage, wxID_ANY, Converter.GetUnitType(CONVERT::UNIT_TYPE_MASS),
-		wxDefaultPosition, wxSize(InputColumnWidth, -1), Choices, wxCB_READONLY);
-	SizerRow4->Add(MassLabelText, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	SizerRow4->Add(UnitOfMass, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	SizerRow4->AddSpacer(SpacerColumnWidth);
+		wxDefaultPosition, wxDefaultSize, Choices, wxCB_READONLY);
+	sizerLeftLabelColumn->Add(MassLabelText, 1, labelFlags, 5);
+	sizerLeftUnitsColumn->Add(UnitOfMass, 0, unitFlags, 5);
+	SetMinimumWidthFromContents(UnitOfMass, additionalWidth);
 
 	// Velocity
 	Choices.Clear();
 	for (i = 0; i < CONVERT::NUMBER_OF_VELOCITY_UNITS; i++)
 		Choices.Add(Converter.GetUnits((CONVERT::UNITS_OF_VELOCITY)i));
 
-	wxStaticText *VelocityLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of velocity"),
-		wxDefaultPosition, wxSize(LabelColumnWidth, -1), 0);
+	wxStaticText *VelocityLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of velocity"));
 	UnitOfVelocity = new wxComboBox(UnitsPage, wxID_ANY, Converter.GetUnitType(CONVERT::UNIT_TYPE_VELOCITY),
-		wxDefaultPosition, wxSize(InputColumnWidth, -1), Choices, wxCB_READONLY);
-	SizerRow4->Add(VelocityLabelText, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	SizerRow4->Add(UnitOfVelocity, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+		wxDefaultPosition, wxDefaultSize, Choices, wxCB_READONLY);
+	sizerRightLabelColumn->Add(VelocityLabelText, 1, labelFlags, 5);
+	sizerRightUnitsColumn->Add(UnitOfVelocity, 0, unitFlags, 5);
+	SetMinimumWidthFromContents(UnitOfVelocity, additionalWidth);
 
 	// Acceleration
 	Choices.Clear();
 	for (i = 0; i < CONVERT::NUMBER_OF_ACCELERATION_UNITS; i++)
 		Choices.Add(Converter.GetUnits((CONVERT::UNITS_OF_ACCELERATION)i));
 
-	wxStaticText *AccelerationLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of acceleration"),
-		wxDefaultPosition, wxSize(LabelColumnWidth, -1), 0);
+	wxStaticText *AccelerationLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of acceleration"));
 	UnitOfAcceleration = new wxComboBox(UnitsPage, wxID_ANY, Converter.GetUnitType(CONVERT::UNIT_TYPE_ACCELERATION),
-		wxDefaultPosition, wxSize(InputColumnWidth, -1), Choices, wxCB_READONLY);
-	SizerRow5->Add(AccelerationLabelText, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	SizerRow5->Add(UnitOfAcceleration, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	SizerRow5->AddSpacer(SpacerColumnWidth);
+		wxDefaultPosition, wxDefaultSize, Choices, wxCB_READONLY);
+	sizerLeftLabelColumn->Add(AccelerationLabelText, 1, labelFlags, 5);
+	sizerLeftUnitsColumn->Add(UnitOfAcceleration, 0, unitFlags, 5);
+	SetMinimumWidthFromContents(UnitOfAcceleration, additionalWidth);
 
 	// Inertia
 	Choices.Clear();
 	for (i = 0; i < CONVERT::NUMBER_OF_INERTIA_UNITS; i++)
 		Choices.Add(Converter.GetUnits((CONVERT::UNITS_OF_INERTIA)i));
 
-	wxStaticText *InertiaLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of inertia"),
-		wxDefaultPosition, wxSize(LabelColumnWidth, -1), 0);
+	wxStaticText *InertiaLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of inertia"));
 	UnitOfInertia = new wxComboBox(UnitsPage, wxID_ANY, Converter.GetUnitType(CONVERT::UNIT_TYPE_INERTIA),
-		wxDefaultPosition, wxSize(InputColumnWidth, -1), Choices, wxCB_READONLY);
-	SizerRow5->Add(InertiaLabelText, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	SizerRow5->Add(UnitOfInertia, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+		wxDefaultPosition, wxDefaultSize, Choices, wxCB_READONLY);
+	sizerRightLabelColumn->Add(InertiaLabelText, 1, labelFlags, 5);
+	sizerRightUnitsColumn->Add(UnitOfInertia, 0, unitFlags, 5);
+	SetMinimumWidthFromContents(UnitOfInertia, additionalWidth);
 
 	// Density
 	Choices.Clear();
 	for (i = 0; i < CONVERT::NUMBER_OF_DENSITY_UNITS; i++)
 		Choices.Add(Converter.GetUnits((CONVERT::UNITS_OF_DENSITY)i));
 
-	wxStaticText *DensityLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of density"),
-		wxDefaultPosition, wxSize(LabelColumnWidth, -1), 0);
+	wxStaticText *DensityLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of density"));
 	UnitOfDensity = new wxComboBox(UnitsPage, wxID_ANY, Converter.GetUnitType(CONVERT::UNIT_TYPE_DENSITY),
-		wxDefaultPosition, wxSize(InputColumnWidth, -1), Choices, wxCB_READONLY);
-	SizerRow6->Add(DensityLabelText, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	SizerRow6->Add(UnitOfDensity, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	SizerRow6->AddSpacer(SpacerColumnWidth);
+		wxDefaultPosition, wxDefaultSize, Choices, wxCB_READONLY);
+	sizerLeftLabelColumn->Add(DensityLabelText, 1, labelFlags, 5);
+	sizerLeftUnitsColumn->Add(UnitOfDensity, 0, unitFlags, 5);
+	SetMinimumWidthFromContents(UnitOfDensity, additionalWidth);
 
 	// Power
 	Choices.Clear();
 	for (i = 0; i < CONVERT::NUMBER_OF_POWER_UNITS; i++)
 		Choices.Add(Converter.GetUnits((CONVERT::UNITS_OF_POWER)i));
 
-	wxStaticText *PowerLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of power"),
-		wxDefaultPosition, wxSize(LabelColumnWidth, -1), 0);
+	wxStaticText *PowerLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of power"));
 	UnitOfPower = new wxComboBox(UnitsPage, wxID_ANY, Converter.GetUnitType(CONVERT::UNIT_TYPE_POWER),
-		wxDefaultPosition, wxSize(InputColumnWidth, -1), Choices, wxCB_READONLY);
-	SizerRow6->Add(PowerLabelText, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	SizerRow6->Add(UnitOfPower, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+		wxDefaultPosition, wxDefaultSize, Choices, wxCB_READONLY);
+	sizerRightLabelColumn->Add(PowerLabelText, 1, labelFlags, 5);
+	sizerRightUnitsColumn->Add(UnitOfPower, 0, unitFlags, 5);
+	SetMinimumWidthFromContents(UnitOfPower, additionalWidth);
 
 	// Energy
 	Choices.Clear();
 	for (i = 0; i < CONVERT::NUMBER_OF_ENERGY_UNITS; i++)
 		Choices.Add(Converter.GetUnits((CONVERT::UNITS_OF_ENERGY)i));
 
-	wxStaticText *EnergyLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of energy"),
-		wxDefaultPosition, wxSize(LabelColumnWidth, -1), 0);
+	wxStaticText *EnergyLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of energy"));
 	UnitOfEnergy = new wxComboBox(UnitsPage, wxID_ANY, Converter.GetUnitType(CONVERT::UNIT_TYPE_ENERGY),
-		wxDefaultPosition, wxSize(InputColumnWidth, -1), Choices, wxCB_READONLY);
-	SizerRow7->Add(EnergyLabelText, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	SizerRow7->Add(UnitOfEnergy, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	SizerRow7->AddSpacer(SpacerColumnWidth);
+		wxDefaultPosition, wxDefaultSize, Choices, wxCB_READONLY);
+	sizerLeftLabelColumn->Add(EnergyLabelText, 1, labelFlags, 5);
+	sizerLeftUnitsColumn->Add(UnitOfEnergy, 0, unitFlags, 5);
+	SetMinimumWidthFromContents(UnitOfEnergy, additionalWidth);
 
 	// Temperature
 	Choices.Clear();
 	for (i = 0; i < CONVERT::NUMBER_OF_TEMPERATURE_UNITS; i++)
 		Choices.Add(Converter.GetUnits((CONVERT::UNITS_OF_TEMPERATURE)i));
 
-	wxStaticText *TemperatureLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of temperature"),
-		wxDefaultPosition, wxSize(LabelColumnWidth, -1), 0);
+	wxStaticText *TemperatureLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of temperature"));
 	UnitOfTemperature = new wxComboBox(UnitsPage, wxID_ANY, Converter.GetUnitType(CONVERT::UNIT_TYPE_TEMPERATURE),
-		wxDefaultPosition, wxSize(InputColumnWidth, -1), Choices, wxCB_READONLY);
-	SizerRow7->Add(TemperatureLabelText, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	SizerRow7->Add(UnitOfTemperature, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+		wxDefaultPosition, wxDefaultSize, Choices, wxCB_READONLY);
+	sizerRightLabelColumn->Add(TemperatureLabelText, 1, labelFlags, 5);
+	sizerRightUnitsColumn->Add(UnitOfTemperature, 0, unitFlags, 5);
+	SetMinimumWidthFromContents(UnitOfTemperature, additionalWidth);
 
 	// Add the sizers to the MainSizer
-	UnitsSizer->Add(SizerRow1, 0, wxALIGN_TOP);
-	UnitsSizer->Add(SizerRow2, 0, wxALIGN_TOP);
-	UnitsSizer->Add(SizerRow3, 0, wxALIGN_TOP);
-	UnitsSizer->Add(SizerRow4, 0, wxALIGN_TOP);
-	UnitsSizer->Add(SizerRow5, 0, wxALIGN_TOP);
-	UnitsSizer->Add(SizerRow6, 0, wxALIGN_TOP);
-	UnitsSizer->Add(SizerRow7, 0, wxALIGN_TOP);
+	wxBoxSizer *columnSizer = new wxBoxSizer(wxHORIZONTAL);
+	columnSizer->Add(sizerLeftLabelColumn, 1, wxEXPAND);
+	columnSizer->Add(sizerLeftUnitsColumn, 0.5, 0);
+	columnSizer->AddSpacer(20);
+	columnSizer->Add(sizerRightLabelColumn, 1, wxEXPAND);
+	columnSizer->Add(sizerRightUnitsColumn, 0.5, 0);
+	UnitsSizer->Add(columnSizer);
 
 	// Set the unit page's sizer
 	UnitsPage->SetSizer(UnitsTopSizer);
@@ -373,13 +371,9 @@ void OPTIONS_DIALOG::CreateControls(void)
 	DigitsTopSizer->Add(DigitsSizer, 0,
 		wxALIGN_TOP | wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
 
-	// Re-size the columns
-	InputColumnWidth = 50;
-	LabelColumnWidth = 90;
-
 	// Create the label for the number of digits combo box
 	wxStaticText *NumberOfDigitsLabel = new wxStaticText(DigitsPage, wxID_STATIC,
-		_T("Number Of Digits"), wxDefaultPosition, wxSize(LabelColumnWidth, -1), 0);
+		_T("Number Of Digits"), wxDefaultPosition);
 
 	// Create the number of digits combo box
 	Choices.Clear();
@@ -391,7 +385,7 @@ void OPTIONS_DIALOG::CreateControls(void)
 	}
 	NumberString.Printf("%i", Converter.GetNumberOfDigits());
 	NumberOfDigits = new wxComboBox(DigitsPage, wxID_ANY, NumberString,
-		wxDefaultPosition, wxSize(InputColumnWidth, -1), Choices, wxCB_READONLY);
+		wxDefaultPosition, wxDefaultSize, Choices, wxCB_READONLY);
 
 	// Create a sizer for the number of digits label and input
 	wxBoxSizer *NumberOfDigitsSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -425,11 +419,10 @@ void OPTIONS_DIALOG::CreateControls(void)
 	// Use another outer sizer to create more room for the controls
 	wxBoxSizer *KinematicsTopSizer = new wxBoxSizer(wxVERTICAL);
 
-	// Re-size the columns
-	LabelColumnWidth = 100;
-	InputColumnWidth = 50;
+	// Specify the column widths
+	int inputColumnWidth = 50;
 
-	// Create the kinmatics page main sizer
+	// Create the kinematics page main sizer
 	wxBoxSizer *KinematicsSizer = new wxBoxSizer(wxVERTICAL);
 	KinematicsTopSizer->Add(KinematicsSizer, 0,
 		wxALIGN_TOP | wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
@@ -441,18 +434,17 @@ void OPTIONS_DIALOG::CreateControls(void)
 
 	// Create the center of rotation inputs
 	wxBoxSizer *CoRSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText *CoRLabel = new wxStaticText(KinematicsPage, wxID_ANY, _T("Center Of Rotation"),
-		wxDefaultPosition, wxSize(LabelColumnWidth, -1));
+	wxStaticText *CoRLabel = new wxStaticText(KinematicsPage, wxID_ANY, _T("Center Of Rotation"));
 	wxString ValueString;
 	ValueString.Printf("%0.3f", KinematicInputs.CenterOfRotation.X);
 	CenterOfRotationX = new wxTextCtrl(KinematicsPage, wxID_ANY, ValueString, wxDefaultPosition,
-		wxSize(InputColumnWidth, -1));
+		wxSize(inputColumnWidth, -1));
 	ValueString.Printf("%0.3f", KinematicInputs.CenterOfRotation.Y);
 	CenterOfRotationY = new wxTextCtrl(KinematicsPage, wxID_ANY, ValueString, wxDefaultPosition,
-		wxSize(InputColumnWidth, -1));
+		wxSize(inputColumnWidth, -1));
 	ValueString.Printf("%0.3f", KinematicInputs.CenterOfRotation.Z);
 	CenterOfRotationZ = new wxTextCtrl(KinematicsPage, wxID_ANY, ValueString, wxDefaultPosition,
-		wxSize(InputColumnWidth, -1));
+		wxSize(inputColumnWidth, -1));
 
 	// Create the center of rotation units label
 	wxStaticText *CoRUnits = new wxStaticText(KinematicsPage, wxID_ANY, _T("(") + 
@@ -505,9 +497,11 @@ void OPTIONS_DIALOG::CreateControls(void)
 
 	// Create the "Number of Threads" text box
 	wxBoxSizer *NumberOfThreadsSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText *NumberOfThreadsLabel = new wxStaticText(KinematicsPage, wxID_ANY, _T("Number of Simultaneous Threads to Execute"));
+	wxStaticText *NumberOfThreadsLabel = new wxStaticText(KinematicsPage,
+		wxID_ANY, _T("Number of Simultaneous Threads to Execute"));
 	ValueString.Printf("%i", MainFrame.GetNumberOfThreads());
-	SimultaneousThreads = new wxTextCtrl(KinematicsPage, wxID_ANY, ValueString, wxDefaultPosition, wxSize(InputColumnWidth, -1));
+	SimultaneousThreads = new wxTextCtrl(KinematicsPage, wxID_ANY, ValueString,
+		wxDefaultPosition, wxSize(inputColumnWidth, -1));
 	NumberOfThreadsSizer->Add(NumberOfThreadsLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 	NumberOfThreadsSizer->Add(SimultaneousThreads, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 
@@ -519,14 +513,14 @@ void OPTIONS_DIALOG::CreateControls(void)
 	// Set the kinematics page's sizer
 	KinematicsPage->SetSizerAndFit(KinematicsTopSizer);
 
-	// Add the Debugger page
+	// Add the debugger page
 	DebuggerPage = new wxPanel(Notebook);
-	Notebook->AddPage(DebuggerPage, _T("Debuging"));
+	Notebook->AddPage(DebuggerPage, _T("Debugging"));
 
 	// Use another outer sizer to create more room for the controls
 	wxBoxSizer *DebuggerTopSizer = new wxBoxSizer(wxVERTICAL);
 
-	// Create the kinmatics page main sizer
+	// Create the kinematics page main sizer
 	wxBoxSizer *DebuggerSizer = new wxBoxSizer(wxVERTICAL);
 	DebuggerTopSizer->Add(DebuggerSizer, 0,
 		wxALIGN_TOP | wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
@@ -550,7 +544,7 @@ void OPTIONS_DIALOG::CreateControls(void)
 		DebugLevel->SetSelection(1);
 	else if(Debugger.GetDebugLevel() == DEBUGGER::PriorityHigh)
 		DebugLevel->SetSelection(2);
-	else// DEBUGGER::PriorityVeryHigh
+	else// debugger.:PriorityVeryHigh
 		DebugLevel->SetSelection(3);
 		
 	// Add the radio box to the sizer
@@ -593,7 +587,7 @@ void OPTIONS_DIALOG::CreateControls(void)
 //
 // Description:		Handles the OK button clicked events.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -642,6 +636,8 @@ void OPTIONS_DIALOG::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 	// Update the default units for the converter object
 	// NOTE:  This section MUST come after the center of rotation is updated in order for
 	// the units label on the center of rotation input to have been correct
+	// FIXME:  Doesn't work under GTK unless user actually makes a select (defaults cause error!)
+	// FIXMEMENOW!
 	Converter.SetAngleUnits((CONVERT::UNITS_OF_ANGLE)UnitOfAngle->GetCurrentSelection());
 	Converter.SetDistanceUnits((CONVERT::UNITS_OF_DISTANCE)UnitOfDistance->GetCurrentSelection());
 	Converter.SetForceUnits((CONVERT::UNITS_OF_FORCE)UnitOfForce->GetCurrentSelection());
@@ -690,7 +686,7 @@ void OPTIONS_DIALOG::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 //
 // Description:		Handles the Cancel button clicked event.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:

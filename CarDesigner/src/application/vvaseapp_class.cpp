@@ -35,7 +35,7 @@ IMPLEMENT_APP(VVASEApp);
 //
 // Description:		Constant definitions for the VVASEApp class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -55,7 +55,7 @@ const wxString VVASEApp::ConnectionTopic = _T("VVASE: Open File");
 //
 // Description:		Initializes the VVASE application window.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -148,7 +148,7 @@ bool VVASEApp::OnInit()
 //
 // Description:		Initializes the VVASE application window.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -171,7 +171,7 @@ int VVASEApp::OnExit()
 //
 // Description:		Frees class-level dynamic memory.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:

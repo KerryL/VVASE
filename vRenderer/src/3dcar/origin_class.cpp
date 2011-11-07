@@ -27,7 +27,7 @@
 // Description:		Constructor for the ORIGIN class.  Performs the entire
 //					process necessary to add the object to the scene.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Renderer	= RENDER_WINDOW&, pointer to rendering object
 //
 // Output Arguments:
@@ -51,7 +51,7 @@ ORIGIN::ORIGIN(RENDER_WINDOW &_Renderer)
 //
 // Description:		Destructor for the ORIGIN class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -74,7 +74,7 @@ ORIGIN::~ORIGIN()
 //
 // Description:		Updates the size of the origin marker
 //
-// Input Argurments:
+// Input Arguments:
 //		ShaftLength		= const double& describing the arrow length
 //		ShaftDiameter	= const double& describing the width of the arrow
 //		TipLength		= const double& descibing the length of the head

@@ -28,7 +28,7 @@
 //
 // Description:		Constructor for the GENETIC_ALGORITHM class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -67,7 +67,7 @@ GENETIC_ALGORITHM::GENETIC_ALGORITHM()
 //
 // Description:		Denstructor for the GENETIC_ALGORITHM class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -92,7 +92,7 @@ GENETIC_ALGORITHM::~GENETIC_ALGORITHM()
 //
 // Description:		Sets the population size for this algorithm.
 //
-// Input Argurments:
+// Input Arguments:
 //		_PopulationSize	= int specifying the number citizens
 //
 // Output Arguments:
@@ -120,7 +120,7 @@ void GENETIC_ALGORITHM::SetPopulationSize(int _PopulationSize)
 //
 // Description:		Sets the generation limit for this algorithm.
 //
-// Input Argurments:
+// Input Arguments:
 //		_GenerationLimit	= int specifying the maximum number of generations
 //
 // Output Arguments:
@@ -148,7 +148,7 @@ void GENETIC_ALGORITHM::SetGenerationLimit(int _GenerationLimit)
 //
 // Description:		Sets the crossover point for this algorithm.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Crossover	= int specifying the point to apply the crossover
 //
 // Output Arguments:
@@ -184,7 +184,7 @@ void GENETIC_ALGORITHM::SetCrossoverPoint(int _Crossover)
 //
 // Description:		Sets the elitism percentage for this algorithm.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Elitism	= double specifying the new percentage to use for
 //					  elitism
 //
@@ -217,7 +217,7 @@ void GENETIC_ALGORITHM::SetElitismPercentage(double _Elitism)
 //
 // Description:		Sets the mutation probability for the algorithm.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Mutation	= double specifying the probability of mutation occuring
 //
 // Output Arguments:
@@ -249,7 +249,7 @@ void GENETIC_ALGORITHM::SetMutationProbability(double _Mutation)
 //
 // Description:		Initializes all of the variables used in the optimization.
 //
-// Input Argurments:
+// Input Arguments:
 //		_PopulationSize		= int specifying the number of objects in the population
 //		_GenerationLimit	= int specifying the maximum number of times to run
 //							  the loop
@@ -342,7 +342,7 @@ void GENETIC_ALGORITHM::InitializeAlgorithm(int _PopulationSize, int _Generation
 //
 // Description:		Determines the fitnesses for the current population.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -369,7 +369,7 @@ void GENETIC_ALGORITHM::SimulateGeneration(void)
 //
 // Description:		The main run loop for the algorithm.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -419,7 +419,7 @@ bool GENETIC_ALGORITHM::PerformOptimization(void)
 //
 // Description:		Randomly creates the first generation's genomes.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -454,7 +454,7 @@ void GENETIC_ALGORITHM::CreateFirstGeneration(void)
 // Description:		Breeds within the current generation to create the next
 //					generation.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -670,7 +670,7 @@ void GENETIC_ALGORITHM::Breed(void)
 //					flag is checked to determine how to sort (high to low or
 //					low to high).
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -708,7 +708,7 @@ void GENETIC_ALGORITHM::SortByFitness(void)
 //
 // Description:		Deletes dynamically allocated memory.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -758,7 +758,7 @@ void GENETIC_ALGORITHM::DeleteDynamicMemory(void)
 //
 // Description:		Performs any additional actions required (to be overridden).
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -780,7 +780,7 @@ void GENETIC_ALGORITHM::PerformAdditionalActions(void)
 // Description:		Sorts the fitnesses and genomes by fitness using a
 //					selection sort algorithm.
 //
-// Input Argurments:
+// Input Arguments:
 //		FitnessArray	= double* pointing to the list of values to sort
 //		GenomeArray		= int** pointing to the list of genomes - these
 //						  values are not used in the sorting process, but
@@ -846,7 +846,7 @@ void GENETIC_ALGORITHM::SelectionSort(double *FitnessArray, int **GenomeArray,
 // Description:		Sorts the fitnesses and genomes by fitness using a
 //					merge sort algorithm.
 //
-// Input Argurments:
+// Input Arguments:
 //		FitnessArray	= double* pointing to the list of values to sort
 //		GenomeArray		= int** pointing to the list of genomes - these
 //						  values are not used in the sorting process, but
@@ -976,7 +976,7 @@ void GENETIC_ALGORITHM::MergeSort(double *FitnessArray, int **GenomeArray,
 // Description:		Sorts the fitnesses and genomes by fitness using a
 //					quicksort algorithm.
 //
-// Input Argurments:
+// Input Arguments:
 //		FitnessArray	= double* pointing to the list of values to sort
 //		GenomeArray		= int** pointing to the list of genomes - these
 //						  values are not used in the sorting process, but

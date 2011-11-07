@@ -21,7 +21,7 @@
 //
 // Description:		Constructor for the STATE class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -71,7 +71,7 @@ STATE::STATE()
 //
 // Description:		Destructor for the STATE class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:

@@ -42,7 +42,7 @@ DEFINE_LOCAL_EVENT_TYPE(EVT_DEBUG)
 // Description:		Constructor for the DEBUGGER class.  Initializes the
 //					debug level to HIGH_PRIOIRTY.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -70,7 +70,7 @@ DEBUGGER::DEBUGGER()
 //
 // Description:		Destructor for the DEBUGGER class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -92,7 +92,7 @@ DEBUGGER::~DEBUGGER()
 //
 // Description:		Sets the debug level to the specified level
 //
-// Input Argurments:
+// Input Arguments:
 //		Level	= const DEBUG_LEVEL&, the level to which this will be set
 //
 // Output Arguments:
@@ -119,7 +119,7 @@ void DEBUGGER::SetDebugLevel(const DEBUG_LEVEL &Level)
 //
 // Description:		Assigns the event handler for event posting.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Parent	= *wxEvtHandler to which the events are sent.
 //
 // Output Arguments:
@@ -150,7 +150,7 @@ void DEBUGGER::SetTargetOutput(wxEvtHandler *_Parent)
 //					object.  An end-of-line character is appended at the end
 //					of every Print call.
 //
-// Input Argurments:
+// Input Arguments:
 //		Info	= const wxString& to be printed
 //		Level	= DEBUG_LEVEL of this message
 //
@@ -206,7 +206,7 @@ void DEBUGGER::Print(const wxString &Info, DEBUG_LEVEL Level) const
 // Description:		Variable argument version of Print().  This formats the
 //					input string and calls the other overload of Print().
 //
-// Input Argurments:
+// Input Arguments:
 //		Level	= const DEBUG_LEVEL& of this message
 //		format	= const char* to be formatted
 //		...		= additional arguments depending on the format

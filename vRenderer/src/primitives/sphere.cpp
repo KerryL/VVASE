@@ -35,7 +35,7 @@
 //
 // Description:		Constructor for the SPHERE class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_RenderWindow	= RENDER_WINDOW& pointing to the object that owns this
 //
 // Output Arguments:
@@ -59,7 +59,7 @@ SPHERE::SPHERE(RENDER_WINDOW &_RenderWindow) : PRIMITIVE(_RenderWindow)
 //
 // Description:		Destructor for the SPHERE class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -80,7 +80,7 @@ SPHERE::~SPHERE()
 // Description:		Creates the OpenGL instructions to create this object in
 //					the scene.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -198,7 +198,7 @@ void SPHERE::GenerateGeometry(void)
 //					smaller triangles.  The number of recursive calls determines
 //					the final resolution of the sphere.
 //
-// Input Argurments:
+// Input Arguments:
 //		Corner1	= const VECTOR& specifying the first corner of the triangle
 //		Corner2	= const VECTOR& specifying the second corner of the triangle
 //		Corner3	= const VECTOR& specifying the third corner of the triangle
@@ -267,7 +267,7 @@ void SPHERE::RecursiveSubdivision(const VECTOR &Corner1, const VECTOR &Corner2,
 // Description:		Computes and sets the normal vector, then adds the
 //					specified vertex to the OpenGL call list.
 //
-// Input Argurments:
+// Input Arguments:
 //		Vertex	= const VECTOR& to be added
 //
 // Output Arguments:
@@ -294,7 +294,7 @@ void SPHERE::AddVertex(const VECTOR &Vertex)
 // Description:		Checks to see if the information about this object is
 //					valid and complete (gives permission to create the object).
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -320,7 +320,7 @@ bool SPHERE::HasValidParameters(void)
 //
 // Description:		Sets the number of faces use to approximate the sphere.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Resolution	= const int&
 //
 // Output Arguments:
@@ -347,7 +347,7 @@ void SPHERE::SetResolution(const int &_Resolution)
 //
 // Description:		Sets the location of the center of the sphere.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Center	= const VECTOR&
 //
 // Output Arguments:
@@ -374,7 +374,7 @@ void SPHERE::SetCenter(const VECTOR &_Center)
 //
 // Description:		Sets the radius at the base of the sphere.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Radius	= const double&
 //
 // Output Arguments:

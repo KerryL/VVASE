@@ -30,7 +30,7 @@
 // Description:		Constructor for EDIT_ITERATION_NOTEBOOK class.  Initializes
 //					the form and creates the controls, etc.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Parent		= EDIT_PANEL&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
@@ -61,7 +61,7 @@ EDIT_ITERATION_NOTEBOOK::EDIT_ITERATION_NOTEBOOK(EDIT_PANEL &_Parent, wxWindowID
 //
 // Description:		Destructor for EDIT_ITERATION_NOTEBOOK class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -82,7 +82,7 @@ EDIT_ITERATION_NOTEBOOK::~EDIT_ITERATION_NOTEBOOK()
 // Description:		Updates the information in this notebook for the current
 //					object (if one exists).
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -108,7 +108,7 @@ void EDIT_ITERATION_NOTEBOOK::UpdateInformation(void)
 //
 // Description:		Updates the information in this notebook.
 //
-// Input Argurments:
+// Input Arguments:
 //		_CurrentIteration	= ITERATION* pointing to the currenly active object
 //
 // Output Arguments:
@@ -150,7 +150,7 @@ void EDIT_ITERATION_NOTEBOOK::UpdateInformation(ITERATION *_CurrentIteration)
 //
 // Description:		Creates the controls for this notebook.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:

@@ -77,7 +77,7 @@
 // Description:		Constructor for MAIN_FRAME class.  Initializes the form
 //					and creates the controls, etc.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -130,7 +130,7 @@ MAIN_FRAME::MAIN_FRAME() : wxFrame(NULL, wxID_ANY, wxEmptyString, wxDefaultPosit
 	// if a setup was previously saved
 	ReadConfiguration();
 
-	// Initialize the object managment variables
+	// Initialize the object management variables
 	ActiveIndex = -1;
 	BeingDeleted = false;
 
@@ -161,10 +161,10 @@ MAIN_FRAME::MAIN_FRAME() : wxFrame(NULL, wxID_ANY, wxEmptyString, wxDefaultPosit
 // Class:			MAIN_FRAME
 // Function:		~MAIN_FRAME
 //
-// Description:		Denstructor for MAIN_FRAME class.  Frees memory and
+// Description:		Destructor for MAIN_FRAME class.  Frees memory and
 //					releases GUI object managers.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -198,7 +198,7 @@ MAIN_FRAME::~MAIN_FRAME()
 //
 // Description:		Constant declarations for the MAIN_FRAME class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -221,7 +221,7 @@ const wxString MAIN_FRAME::PathToConfigFile = _T("config.ini");
 // Description:		Creates the layout for this window and positions the
 //					form on the screen.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -297,7 +297,7 @@ void MAIN_FRAME::DoLayout(void)
 // Description:		Sets the window properties for this window.  Includes
 //					title, frame size, and default font.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -399,7 +399,7 @@ void MAIN_FRAME::SetProperties(void)
 //
 // Description:		Initializes solver settings.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -440,7 +440,7 @@ void MAIN_FRAME::InitializeSolver(void)
 //					Handles creation or deletion of threads as necessary to
 //					ensure the correct number of threads are left.
 //
-// Input Argurments:
+// Input Arguments:
 //		NewNumberOfThreads	= unsigned int specifying the number of
 //							  threads desired
 //
@@ -493,7 +493,7 @@ void MAIN_FRAME::SetNumberOfThreads(unsigned int NewNumberOfThreads)
 //
 // Description:		Creates the menu bar and all of the sub-menus.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -592,7 +592,7 @@ void MAIN_FRAME::CreateMenuBar(void)
 //					adds the toolbar to the frame in the appropriate
 //					position.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -613,37 +613,42 @@ void MAIN_FRAME::CreateKinematicAnalysisToolbar(void)
 		wxTB_FLAT | wxTB_NODIVIDER);
 
 	// Create the controls
-	wxStaticText *PitchLabel = new wxStaticText(KinematicToolbar, wxID_ANY, _T("   Pitch "),
+	wxStaticText *PitchLabel = new wxStaticText(KinematicToolbar, wxID_ANY, _T("Pitch"),
 		wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
 	wxTextCtrl *PitchSet = new wxTextCtrl(KinematicToolbar, IdToolbarKinematicPitch, _T("0"), wxDefaultPosition,
-		wxSize(40, 16));
+		wxSize(40, -1));
 	PitchSet->SetMaxLength(5);
 
-	wxStaticText *RollLabel = new wxStaticText(KinematicToolbar, wxID_ANY, _T("   Roll "),
+	wxStaticText *RollLabel = new wxStaticText(KinematicToolbar, wxID_ANY, _T("Roll"),
 		wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
 	wxTextCtrl *RollSet = new wxTextCtrl(KinematicToolbar, IdToolbarKinematicRoll, _T("0"), wxDefaultPosition,
-		wxSize(40, 16));
+		wxSize(40, -1));
 	RollSet->SetMaxLength(5);
 
-	wxStaticText *HeaveLabel = new wxStaticText(KinematicToolbar, wxID_ANY, _T("   Heave "),
+	wxStaticText *HeaveLabel = new wxStaticText(KinematicToolbar, wxID_ANY, _T("Heave"),
 		wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
 	wxTextCtrl *HeaveSet = new wxTextCtrl(KinematicToolbar, IdToolbarKinematicHeave, _T("0"), wxDefaultPosition,
-		wxSize(40, 16));
+		wxSize(40, -1));
 	HeaveSet->SetMaxLength(5);
 
-	wxStaticText *SteerLabel = new wxStaticText(KinematicToolbar, wxID_ANY, _T("   Steer "),
+	wxStaticText *SteerLabel = new wxStaticText(KinematicToolbar, wxID_ANY, _T("Steer"),
 		wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
 	wxTextCtrl *SteerSet = new wxTextCtrl(KinematicToolbar, IdToolbarKinematicSteer, _T("0"), wxDefaultPosition,
-		wxSize(40, 16));
+		wxSize(40, -1));
 	SteerSet->SetMaxLength(5);
+
+	// Adjust the spacing a little bit
 
 	// Add the controls to the toolbar
 	KinematicToolbar->AddControl(PitchLabel);
 	KinematicToolbar->AddControl(PitchSet);
+	KinematicToolbar->AddSeparator();
 	KinematicToolbar->AddControl(RollLabel);
 	KinematicToolbar->AddControl(RollSet);
+	KinematicToolbar->AddSeparator();
 	KinematicToolbar->AddControl(HeaveLabel);
 	KinematicToolbar->AddControl(HeaveSet);
+	KinematicToolbar->AddSeparator();
 	KinematicToolbar->AddControl(SteerLabel);
 	KinematicToolbar->AddControl(SteerSet);
 
@@ -664,7 +669,7 @@ void MAIN_FRAME::CreateKinematicAnalysisToolbar(void)
 //
 // Description:		Links GUI events with event handler functions.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -739,7 +744,7 @@ END_EVENT_TABLE();
 // Description:		Generates a new GUI_CAR object and adds the car to the
 //					list of managed objects.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -767,7 +772,7 @@ void MAIN_FRAME::FileNewCarEvent(wxCommandEvent& WXUNUSED(event))
 // Description:		Generates a new ITERATION object and adds the it to the
 //					list of managed objects
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -782,7 +787,7 @@ void MAIN_FRAME::FileNewIterationEvent(wxCommandEvent& WXUNUSED(event))
 	// Create a new GUI_OBJECT with type TYPE_ITERATION
 	GUI_OBJECT *TempObject = new ITERATION(*this, Debugger);
 
-	// Make the new object active or remove it from the list (user cancelled)
+	// Make the new object active or remove it from the list (user canceled)
 	if (TempObject->IsInitialized())
 		SetActiveIndex(TempObject->GetIndex());
 	else
@@ -798,7 +803,7 @@ void MAIN_FRAME::FileNewIterationEvent(wxCommandEvent& WXUNUSED(event))
 // Description:		Generates a new GENETIC_OPTIMIZATION object and adds the
 //					it to the list of managed objects
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -827,7 +832,7 @@ void MAIN_FRAME::FileNewOptimizationEvent(wxCommandEvent& WXUNUSED(event))
 //					read from.  Creates a new GUI_OBJECT, loading the
 //					contents from the specified file name.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -868,7 +873,7 @@ void MAIN_FRAME::FileOpenEvent(wxCommandEvent& WXUNUSED(event))
 //
 // Description:		Calls the object of interests's close method.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -892,7 +897,7 @@ void MAIN_FRAME::FileCloseEvent(wxCommandEvent& WXUNUSED(event))
 //
 // Description:		Calls all of the open GUI_OBJECTs' close methods.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -921,7 +926,7 @@ void MAIN_FRAME::FileCloseAllEvent(wxCommandEvent& WXUNUSED(event))
 //
 // Description:		Calls the object of interest's save method.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -946,7 +951,7 @@ void MAIN_FRAME::FileSaveEvent(wxCommandEvent& WXUNUSED(event))
 // Description:		Calls the active object's save method and asks for a new
 //					file name.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -970,7 +975,7 @@ void MAIN_FRAME::FileSaveAsEvent(wxCommandEvent& WXUNUSED(event))
 //
 // Description:		Calls all of the open GUI_OBJECTs' save methods
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1001,7 +1006,7 @@ void MAIN_FRAME::FileSaveAllEvent(wxCommandEvent& WXUNUSED(event))
 //
 // Description:		Opens all files in the Recent Files list.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1027,7 +1032,7 @@ void MAIN_FRAME::FileOpenAllRecentEvent(wxCommandEvent& WXUNUSED(event))
 //
 // Description:		Calls the object of interest's write image file method.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1065,7 +1070,7 @@ void MAIN_FRAME::FileWriteImageFileEvent(wxCommandEvent& WXUNUSED(event))
 //
 // Description:		Attempts to close this form.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1092,7 +1097,7 @@ void MAIN_FRAME::FileExitEvent(wxCommandEvent& WXUNUSED(event))
 //
 // Description:		Handles menu events not specifically caught by other functions.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1127,7 +1132,7 @@ void MAIN_FRAME::OtherMenuClickEvents(wxCommandEvent &event)
 //
 // Description:		Event handler for the Edit menu's Undo item.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1151,7 +1156,7 @@ void MAIN_FRAME::EditUndoEvent(wxCommandEvent& WXUNUSED(event))
 //
 // Description:		Event handler for the Edit menu's Redo item.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1175,7 +1180,7 @@ void MAIN_FRAME::EditRedoEvent(wxCommandEvent& WXUNUSED(event))
 //
 // Description:		Event handler for the Edit menu's Cut item.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1196,7 +1201,7 @@ void MAIN_FRAME::EditCutEvent(wxCommandEvent &event)
 //
 // Description:		Event handler for the Edit menu's Copy item.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1217,7 +1222,7 @@ void MAIN_FRAME::EditCopyEvent(wxCommandEvent &event)
 //
 // Description:		Event handler for the Edit menu's Paste item.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1239,7 +1244,7 @@ void MAIN_FRAME::EditPasteEvent(wxCommandEvent &event)
 // Description:		Calls the ShowAppearanceOptionsDialog() function if the
 //					object of interest is a TYPE_CAR.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1269,7 +1274,7 @@ void MAIN_FRAME::CarAppearanceOptionsEvent(wxCommandEvent& WXUNUSED(event))
 // Description:		For ITERATION objects - calls the method that displays
 //					a dialog allowing the user to select the associated cars.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1298,7 +1303,7 @@ void MAIN_FRAME::IterationShowAssociatedCarsClickEvent(wxCommandEvent& WXUNUSED(
 // Description:		For ITERATION objects - toggles the auto-associate function
 //					for the object of interest.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1331,7 +1336,7 @@ void MAIN_FRAME::IterationAssociatedWithAllCarsClickEvent(wxCommandEvent &event)
 // Description:		For ITERATION objects.  Calls a method that exports the
 //					kinematic output data to a user-specified file.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1369,7 +1374,7 @@ void MAIN_FRAME::IterationExportDataToFileClickEvent(wxCommandEvent& WXUNUSED(ev
 //
 // Description:		Calls the ObjectOfInterest's save method.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1406,7 +1411,7 @@ void MAIN_FRAME::IterationXAxisPitchClickEvent(wxCommandEvent& WXUNUSED(event))
 //
 // Description:		Calls the ObjectOfInterest's save method.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1443,7 +1448,7 @@ void MAIN_FRAME::IterationXAxisRollClickEvent(wxCommandEvent& WXUNUSED(event))
 //
 // Description:		Calls the ObjectOfInterest's save method.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1480,7 +1485,7 @@ void MAIN_FRAME::IterationXAxisHeaveClickEvent(wxCommandEvent& WXUNUSED(event))
 //
 // Description:		Calls the ObjectOfInterest's save method.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxContextMenuEvent&
 //
 // Output Arguments:
@@ -1517,7 +1522,7 @@ void MAIN_FRAME::IterationXAxisRackTravelClickEvent(wxCommandEvent& WXUNUSED(eve
 //
 // Description:		Event handler for the View menu's Kinematic Toolbar item.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1550,7 +1555,7 @@ void MAIN_FRAME::ViewToolbarsKinematicEvent(wxCommandEvent &event)
 //
 // Description:		Clears all of the text in the OutputPane.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1572,7 +1577,7 @@ void MAIN_FRAME::ViewClearOutputEvent(wxCommandEvent& WXUNUSED(event))
 //
 // Description:		Event handler for the Tools menu's Design of Experiments item.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1595,7 +1600,7 @@ void MAIN_FRAME::ToolsDoEEvent(wxCommandEvent &event)
 //
 // Description:		Event handler for the Tools menu's Dynamics item.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1619,7 +1624,7 @@ void MAIN_FRAME::ToolsDynamicEvent(wxCommandEvent &event)
 // Description:		Displays the option dialog, allowing the user to specify
 //					preferences.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1660,7 +1665,7 @@ void MAIN_FRAME::ToolsOptionsEvent(wxCommandEvent& WXUNUSED(event))
 //
 // Description:		Event handler for the Help menu's Manual item.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1690,7 +1695,7 @@ void MAIN_FRAME::HelpManualEvent(wxCommandEvent& WXUNUSED(event))
 	else
 	{
 		if (wxExecute(OpenPDFManualCommand) == 0)
-			Debugger.Print(_T("ERROR:  Could not find 'VVASE Manual.pdf'!"));
+			Debugger.Print(_T("ERROR:  Could not find 'VVASE Manual.pdf'!"));// FIXME:  Use ManualFileName
 	}
 
 	return;
@@ -1703,7 +1708,7 @@ void MAIN_FRAME::HelpManualEvent(wxCommandEvent& WXUNUSED(event))
 // Description:		Displays an about message box with some information
 //					about the application.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1736,7 +1741,7 @@ readme.txt file for licensing and other information."));
 //
 // Description:		Updates the information associated with each object.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -1764,7 +1769,7 @@ void MAIN_FRAME::UpdateAnalysis(void)
 // Description:		Updates the output dispaly with the information currently
 //					in each car object.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -1805,7 +1810,7 @@ void MAIN_FRAME::UpdateOutputPanel(void)
 //
 // Description:		Adds a job to the job queue to be handled by the thread pool.
 //
-// Input Argurments:
+// Input Arguments:
 //		NewJob	= THREAD_JOB& containg in the information about the new job to
 //				  be performed
 //
@@ -1836,7 +1841,7 @@ void MAIN_FRAME::AddJob(THREAD_JOB &NewJob)
 //
 // Description:		Event that fires when the pitch text box changes value.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1877,7 +1882,7 @@ void MAIN_FRAME::KinematicToolbarPitchChangeEvent(wxCommandEvent& WXUNUSED(event
 //
 // Description:		Event that fires when the roll text box changes value.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1918,7 +1923,7 @@ void MAIN_FRAME::KinematicToolbarRollChangeEvent(wxCommandEvent& WXUNUSED(event)
 //
 // Description:		Event that fires when the heave text box changes value.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1959,7 +1964,7 @@ void MAIN_FRAME::KinematicToolbarHeaveChangeEvent(wxCommandEvent& WXUNUSED(event
 //
 // Description:		Event that fires when the steer text box changes value.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -2005,7 +2010,7 @@ void MAIN_FRAME::KinematicToolbarSteerChangeEvent(wxCommandEvent& WXUNUSED(event
 // Description:		Handles events when threads complete their jobs.  Depending
 //					on the type of event, we send the results to different places.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= &wxCommandEvent
 //
 // Output Arguments:
@@ -2098,7 +2103,7 @@ void MAIN_FRAME::ThreadCompleteEvent(wxCommandEvent &event)
 //
 // Description:		Prints debug messages when the debugger object posts messages.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= &wxCommandEvent
 //
 // Output Arguments:
@@ -2114,8 +2119,8 @@ void MAIN_FRAME::DebugMessageEvent(wxCommandEvent &event)
 	DebugPane->AppendText(event.GetString());
 
 #ifdef _DEBUG_TO_FILE_
-	// Useful for cases where the applicaton crashes and text can no longer be viewed in the output pane
-	// FIXME:  Make this part of the DEBUGGER class?
+	// Useful for cases where the application crashes and text can no longer be viewed in the output pane
+	// FIXME:  Make this part of the debugger class?
 	std::ofstream file("debug.txt", std::ios::app);
 	file << event.GetString();
 	file.close();
@@ -2131,10 +2136,10 @@ void MAIN_FRAME::DebugMessageEvent(wxCommandEvent &event)
 //					a new GUI_OBJECT.  The usual syntax and calling
 //					sequence looks something like this (it is also important
 //					to assign the index back to the GUI_OBJECT for future use):
-//						GUI_OBJECT *NewObject = new GUI_OBJECT(this, &Debugger);
+//						GUI_OBJECT *NewObject = new GUI_OBJECT(this, debugger);
 //						 NewObject->SetIndex(AddObjectToList(NewObject));
 //
-// Input Argurments:
+// Input Arguments:
 //		ObjectToAdd	= *GUI_OBJECT
 //
 // Output Arguments:
@@ -2159,7 +2164,7 @@ int MAIN_FRAME::AddObjectToList(GUI_OBJECT *ObjectToAdd)
 //					This function will handle the deletion of the GUI_OBJECT
 //					internally.
 //
-// Input Argurments:
+// Input Arguments:
 //		Index	= integer specifying the object to be removed
 //
 // Output Arguments:
@@ -2213,7 +2218,7 @@ void MAIN_FRAME::RemoveObjectFromList(int Index)
 //					index here should start at 0, just like the
 //					ActiveIndex.
 //
-// Input Argurments:
+// Input Arguments:
 //		Index	= integer specifying the notebook page to activate
 //
 // Output Arguments:
@@ -2250,7 +2255,7 @@ void MAIN_FRAME::SetNotebookPage(int Index)
 //					user confirms the close, it allows or prevents the form
 //					closing.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= &wxCloseEvent
 //
 // Output Arguments:
@@ -2299,7 +2304,7 @@ void MAIN_FRAME::WindowCloseEvent(wxCloseEvent& WXUNUSED(event))
 //					This is particularly important for plots, which do not
 //					automatically re-size with the main window.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= &wxSizeEvent (UNUSED)
 //
 // Output Arguments:
@@ -2330,7 +2335,7 @@ void MAIN_FRAME::OnSizeEvent(wxSizeEvent& WXUNUSED(event))
 //					confirmation appears for each unsaved car, with the
 //					option to cancel and abort the close.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -2362,7 +2367,7 @@ bool MAIN_FRAME::CloseThisForm(void)
 // Description:		Reads the application configuration information from
 //					file.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -2474,7 +2479,7 @@ void MAIN_FRAME::ReadConfiguration(void)
 //
 // Description:		Writes the application configuration information to file.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -2550,7 +2555,7 @@ void MAIN_FRAME::WriteConfiguration(void)
 // Description:		Updates the active object-specific menu to the new
 //					active object's type.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -2637,7 +2642,7 @@ void MAIN_FRAME::UpdateActiveObjectMenu(void)
 // Description:		Sets the active index to the specified value and brings
 //					the associated notebook page to the front.
 //
-// Input Argurments:
+// Input Arguments:
 //		Index				= integer specifying the current active object
 //		SelectNotebookTab	= bool indicated whether or not to change the current
 //							  notebook page (optional)
@@ -2703,7 +2708,7 @@ void MAIN_FRAME::SetActiveIndex(int Index, bool SelectNotebookTab)
 // Description:		Displays a context menu that is customized for the object
 //					specified by ObjectIndex.
 //
-// Input Argurments:
+// Input Arguments:
 //		ObjectIndex		= integer specifying the object in the OpenObjectList
 //						  that this menu is being created for
 //		Position		= wxPoint specifying the position to display the menu
@@ -2786,7 +2791,7 @@ void MAIN_FRAME::CreateContextMenu(int ObjectIndex, wxPoint Position, bool Allow
 //
 // Description:		Creates a drop-down menu for TYPE_CAR objects.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -2811,7 +2816,7 @@ wxMenu *MAIN_FRAME::CreateCarMenu(void)
 //
 // Description:		Creates a drop-down menu for TYPE_ITERATION objects.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -2889,7 +2894,7 @@ wxMenu *MAIN_FRAME::CreateIterationMenu(void)
 //
 // Description:		Returns true if there are any outstanding jobs.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -2921,7 +2926,7 @@ bool MAIN_FRAME::JobsPending(void) const
 //					Arguments allow this to be for opening or saving files,
 //					with different options for the wildcards.
 //
-// Input Argurments:
+// Input Arguments:
 //		DialogTitle			= wxString containing the title for the dialog
 //		DefaultDirectory	= wxString specifying the initial directory
 //		DefaultFileName		= wxString specifying the default file name
@@ -2972,7 +2977,7 @@ wxArrayString MAIN_FRAME::GetFileNameFromUser(wxString DialogTitle, wxString Def
 //
 // Description:		Public method for loading a single object from file.
 //
-// Input Argurments:
+// Input Arguments:
 //		PathAndFileName	= wxString
 //
 // Output Arguments:
@@ -3026,7 +3031,7 @@ bool MAIN_FRAME::LoadFile(wxString PathAndFileName)
 //
 // Description:		Adds the specified file to the recent history list.
 //
-// Input Argurments:
+// Input Arguments:
 //		PathAndFileName	= wxString
 //
 // Output Arguments:
@@ -3051,7 +3056,7 @@ void MAIN_FRAME::AddFileToHistory(wxString PathAndFileName)
 // Description:		Removes the specified file from the recent file list.
 //					Looks up the object index based on the file name.
 //
-// Input Argurments:
+// Input Arguments:
 //		PathAndFileName	= wxString
 //
 // Output Arguments:

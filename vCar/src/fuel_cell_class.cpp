@@ -26,7 +26,7 @@
 //
 // Description:		Constructor for FUEL_CELL class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -46,7 +46,7 @@ FUEL_CELL::FUEL_CELL()
 //
 // Description:		Destructor for FUEL_CELL class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:

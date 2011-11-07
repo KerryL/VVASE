@@ -27,7 +27,7 @@
 //
 // Description:		Constructor for the MILLIKEN_ANALYSIS class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Debugger	= const DEBUGGER&, reference to the debug message printing utility
 //
 // Output Arguments:
@@ -47,7 +47,7 @@ MILLIKEN_ANALYSIS::MILLIKEN_ANALYSIS(const DEBUGGER &_Debugger) : Debugger(_Debu
 //
 // Description:		Copy constructor for the MILLIKEN_ANALYSIS class.
 //
-// Input Argurments:
+// Input Arguments:
 //		MillikenAnalysis	= const MILLIKEN_ANALYSIS& to copy to this object
 //
 // Output Arguments:
@@ -69,7 +69,7 @@ MILLIKEN_ANALYSIS::MILLIKEN_ANALYSIS(const MILLIKEN_ANALYSIS &MillikenAnalysis) 
 //
 // Description:		Destructor for the MILLIKEN_ANALYSIS class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -89,7 +89,7 @@ MILLIKEN_ANALYSIS::~MILLIKEN_ANALYSIS()
 //
 // Description:		Assignment operator for MILLIKEN_ANALYSIS class.
 //
-// Input Argurments:
+// Input Arguments:
 //		MillikenAnalysis	= const MILLIKEN_ANALYSIS& to assign to this object
 //
 // Output Arguments:

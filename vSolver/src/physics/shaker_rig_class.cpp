@@ -28,7 +28,7 @@
 //
 // Description:		Constructor for the SHAKER_RIG class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Debugger	= const DEBUGGER&, reference to the debug message printing utility
 //
 // Output Arguments:
@@ -48,7 +48,7 @@ SHAKER_RIG::SHAKER_RIG(const DEBUGGER &_Debugger) : Debugger(_Debugger)
 //
 // Description:		Copy constructor for the SHAKER_RIG class.
 //
-// Input Argurments:
+// Input Arguments:
 //		ShakerRig	= const SHAKER_RIG& to copy to this object
 //
 // Output Arguments:
@@ -70,7 +70,7 @@ SHAKER_RIG::SHAKER_RIG(const SHAKER_RIG &ShakerRig) : Debugger(ShakerRig.Debugge
 //
 // Description:		Destructor for the SHAKER_RIG class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -90,7 +90,7 @@ SHAKER_RIG::~SHAKER_RIG()
 //
 // Description:		Assignment operator for SHAKER_RIG class.
 //
-// Input Argurments:
+// Input Arguments:
 //		ShakerRig	= const SHAKER_RIG& to assign to this object
 //
 // Output Arguments:

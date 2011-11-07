@@ -30,7 +30,7 @@
 // Description:		Constructor for the TRIANGLE3D class.  Performs the entire
 //					process necessary to add the object to the scene.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Renderer	= &RENDER_WINDOW, pointer to rendering object
 //
 // Output Arguments:
@@ -52,7 +52,7 @@ TRIANGLE3D::TRIANGLE3D(RENDER_WINDOW &_Renderer)
 //
 // Description:		Destructor for the TRIANGLE3D class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -74,7 +74,7 @@ TRIANGLE3D::~TRIANGLE3D()
 //					in the scene.  Note that the third argument is passed by
 //					value, not reference like the first two VECTORs.
 //
-// Input Argurments:
+// Input Arguments:
 //		Node1		= const VECTOR&, location of the first vertex
 //		Node2		= const VECTOR&, location of the second vertex
 //		Node3		= const VECTOR&, location of the third vertex
@@ -122,7 +122,7 @@ void TRIANGLE3D::Update(const VECTOR &Node1, const VECTOR &Node2, const VECTOR &
 //					object to determine if the argument actor is part of this
 //					object or not.
 //
-// Input Argurments:
+// Input Arguments:
 //		Actor	= const PRIMITIVE* to compare against this object's actors
 //
 // Output Arguments:

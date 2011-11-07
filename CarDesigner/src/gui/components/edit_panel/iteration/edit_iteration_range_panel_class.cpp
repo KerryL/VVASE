@@ -29,7 +29,7 @@
 // Description:		Constructor for EDIT_ITERATION_RANGE_PANEL class.  Initializes the form
 //					and creates the controls, etc.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Parent		= EDIT_ITERATION_NOTEBOOK&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
@@ -63,7 +63,7 @@ EDIT_ITERATION_RANGE_PANEL::EDIT_ITERATION_RANGE_PANEL(EDIT_ITERATION_NOTEBOOK &
 //
 // Description:		Destructor for EDIT_ITERATION_RANGE_PANEL class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -83,7 +83,7 @@ EDIT_ITERATION_RANGE_PANEL::~EDIT_ITERATION_RANGE_PANEL()
 //
 // Description:		Links GUI events with event handler functions.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -105,7 +105,7 @@ END_EVENT_TABLE();
 // Description:		Updates the information on this panel, if the associated
 //					object already exists.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -131,7 +131,7 @@ void EDIT_ITERATION_RANGE_PANEL::UpdateInformation(void)
 //
 // Description:		Updates the information on this panel.
 //
-// Input Argurments:
+// Input Arguments:
 //		_CurrentIteration	= ITERATION* pointing to the associated iteration
 //
 // Output Arguments:
@@ -174,7 +174,7 @@ void EDIT_ITERATION_RANGE_PANEL::UpdateInformation(ITERATION *_CurrentIteration)
 //
 // Description:		Creates the controls for this panel.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -292,7 +292,7 @@ void EDIT_ITERATION_RANGE_PANEL::CreateControls()
 //
 // Description:		Event handler for any text box change on this panel.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:

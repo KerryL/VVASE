@@ -29,7 +29,7 @@
 // Description:		Constructor for the SWAYBAR3D class.  Performs the entire
 //					process necessary to add the object to the scene.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Renderer	= RENDER_WINDOW&, pointer to rendering object
 //
 // Output Arguments:
@@ -63,7 +63,7 @@ SWAYBAR3D::SWAYBAR3D(RENDER_WINDOW &_Renderer)
 //
 // Description:		Destructor for the SWAYBAR3D class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -85,7 +85,7 @@ SWAYBAR3D::~SWAYBAR3D()
 //					in the scene.  Note that the third argument is passed by
 //					value, not reference like the first two VECTORs.
 //
-// Input Argurments:
+// Input Arguments:
 //		LeftLink				= const VECTOR&, point where link meets the left arm
 //		RightLink				= const VECTOR&, point where link meets the right arm
 //		TorsionMemberTopRight	= const VECTOR&, either the top OR the right end of the
@@ -171,7 +171,7 @@ void SWAYBAR3D::Update(const VECTOR &RightLink, const VECTOR &LeftLink, const VE
 //					object to determine if the argument actor is part of this
 //					object or not.
 //
-// Input Argurments:
+// Input Arguments:
 //		Actor	= const PRIMITIVE* to compare against this object's actors
 //
 // Output Arguments:

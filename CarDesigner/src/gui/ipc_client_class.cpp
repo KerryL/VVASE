@@ -29,7 +29,7 @@
 //
 // Description:		Constructor for IPC_CLIENT class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -51,7 +51,7 @@ IPC_CLIENT::IPC_CLIENT() : wxClient()
 //
 // Description:		Destructor for IPC_CLIENT class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -74,7 +74,7 @@ IPC_CLIENT::~IPC_CLIENT()
 // Description:		Attempts to connect to the specified service on the
 //					specified host.
 //
-// Input Argurments:
+// Input Arguments:
 //		Host	= const wxString& specifying the host to which we want to connect
 //		Service	= const wxString& specifying the name of the service
 //		Topic	= const wxString&
@@ -99,7 +99,7 @@ bool IPC_CLIENT::Connect(const wxString &Host, const wxString &Service, const wx
 //
 // Description:		Kills the current connection.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -127,7 +127,7 @@ void IPC_CLIENT::Disconnect(void)
 //
 // Description:		Overridden method for responding to successful connections.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:

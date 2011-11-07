@@ -36,7 +36,7 @@
 // Description:		Constructor for EDIT_CORNER_PANEL class.  Initializes the form
 //					and creates the controls, etc.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Parent		= EDIT_SUSPENSION_NOTEBOOK&, referenc to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
@@ -67,7 +67,7 @@ EDIT_CORNER_PANEL::EDIT_CORNER_PANEL(EDIT_SUSPENSION_NOTEBOOK & _Parent, wxWindo
 //
 // Description:		Destructor for EDIT_CORNER_PANEL class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -87,7 +87,7 @@ EDIT_CORNER_PANEL::~EDIT_CORNER_PANEL()
 //
 // Description:		Links GUI events with event handler functions.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -112,7 +112,7 @@ END_EVENT_TABLE();
 //
 // Description:		Updates the information on this panel.
 //
-// Input Argurments:
+// Input Arguments:
 //		_CurrentCorner	= CORNER* pointing to the associated corner
 //		BarStyle		= SUSPENSION::BAR_STYLE describing what kind of sway bar
 //						  is at this end of the car
@@ -233,7 +233,7 @@ void EDIT_CORNER_PANEL::UpdateInformation(CORNER *_CurrentCorner,
 //
 // Description:		Creates the controls for this panel.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -405,7 +405,7 @@ void EDIT_CORNER_PANEL::CreateControls()
 // Description:		Event that fires when a cell is clicked.  Highlights the
 //					corresponding point in the 3D panel.
 //
-// Input Argurments:
+// Input Arguments:
 //		event = wxGridEvent&
 //
 // Output Arguments:
@@ -456,7 +456,7 @@ void EDIT_CORNER_PANEL::SelectCellEvent(wxGridEvent &event)
 // Description:		Event that fires when a cell is changed.  Updates the
 //					3D model display.
 //
-// Input Argurments:
+// Input Arguments:
 //		event = wxGridEvent&
 //
 // Output Arguments:
@@ -558,7 +558,7 @@ void EDIT_CORNER_PANEL::GridCellChangedEvent(wxGridEvent &event)
 //
 // Description:		Event that fires when the actuation attachment changes.
 //
-// Input Argurments:
+// Input Arguments:
 //		event = wxCommandEvent&
 //
 // Output Arguments:
@@ -607,7 +607,7 @@ void EDIT_CORNER_PANEL::ActuationAttachmentChangeEvent(wxCommandEvent &event)
 //
 // Description:		Event that fires when the actuation type changes.
 //
-// Input Argurments:
+// Input Arguments:
 //		event = wxCommandEvent&
 //
 // Output Arguments:
@@ -657,7 +657,7 @@ void EDIT_CORNER_PANEL::ActuationTypeChangeEvent(wxCommandEvent &event)
 //
 // Description:		Event that fires when the static camber changes.
 //
-// Input Argurments:
+// Input Arguments:
 //		event = wxCommandEvent&
 //
 // Output Arguments:
@@ -721,7 +721,7 @@ void EDIT_CORNER_PANEL::StaticCamberChangeEvent(wxCommandEvent &event)
 //
 // Description:		Event that fires when the static toe changes.
 //
-// Input Argurments:
+// Input Arguments:
 //		event = wxCommandEvent&
 //
 // Output Arguments:

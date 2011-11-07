@@ -30,7 +30,7 @@
 //
 // Description:		Constructor for the XLSX_READER class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_PathAndFileName	= wxString describing of the .xlsx file to read.
 //
 // Output Arguments:
@@ -62,7 +62,7 @@ XLSX_READER::XLSX_READER(const wxString &_PathAndFileName)
 //
 // Description:		Destructor for the XLSX_READER class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -90,7 +90,7 @@ XLSX_READER::~XLSX_READER()
 //
 // Description:		Returns the numer of columns for the specified sheet.
 //
-// Input Argurments:
+// Input Arguments:
 //		Sheet	= const unsigned int& identifying the sheet
 //
 // Output Arguments:
@@ -114,7 +114,7 @@ unsigned int XLSX_READER::GetNumberOfColumns(const unsigned int &Sheet) const
 //
 // Description:		Returns the number of rows for the specified sheet.
 //
-// Input Argurments:
+// Input Arguments:
 //		Sheet	= const unsigned int& identifying the sheet
 //
 // Output Arguments:
@@ -138,7 +138,7 @@ unsigned int XLSX_READER::GetNumberOfRows(const unsigned int &Sheet) const
 //
 // Description:		Returns the name of the specified sheet.
 //
-// Input Argurments:
+// Input Arguments:
 //		Sheet	= const unsigned int& identifying the sheet
 //
 // Output Arguments:
@@ -161,7 +161,7 @@ wxString XLSX_READER::GetSheetName(const unsigned int &Sheet) const
 //
 // Description:		Returns the index of the selected tab
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -192,7 +192,7 @@ unsigned int XLSX_READER::GetSelectedSheet(void) const
 // Description:		Locates the wxZipEntry in the wxZipInputStream with the
 //					specified name.
 //
-// Input Argurments:
+// Input Arguments:
 //		ZipStream	= wxZipEntryStream& to look in
 //		EntryString	= const wxString& containing the name of the entry we're
 //					  looking for
@@ -228,7 +228,7 @@ wxZipEntry *XLSX_READER::GetEntry(wxZipInputStream &ZipStream, const wxString &E
 //
 // Description:		Opens and decompresses the associated .xlsx stream.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -258,7 +258,7 @@ wxZipInputStream *XLSX_READER::OpenFile(void) const
 //
 // Description:		Initializes all class data for the associated file.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -353,7 +353,7 @@ bool XLSX_READER::Initialize(void)
 // Description:		Loads the XML content of the worksheets and stores the
 //					document objects.
 //
-// Input Argurments:
+// Input Arguments:
 //		Sheet	= const unsigned int& specifying the sheet to load
 //
 // Output Arguments:
@@ -396,7 +396,7 @@ bool XLSX_READER::LoadSheet(const unsigned int &Sheet)
 // Description:		Retrieves the string describing the range of this document
 //					from the passed wxXmlDocument
 //
-// Input Argurments:
+// Input Arguments:
 //		SheetDocument	= const wxXmlDocument&
 //
 // Output Arguments:
@@ -429,7 +429,7 @@ wxString XLSX_READER::GetDimensionString(const wxXmlDocument &SheetDocument) con
 // Description:		Looks for nodes and properties indicating that this sheet
 //					was the active sheet when the document was saved.
 //
-// Input Argurments:
+// Input Arguments:
 //		SheetDocument	= const wxXmlDocument&
 //
 // Output Arguments:
@@ -480,7 +480,7 @@ bool XLSX_READER::SheetIsSelected(const wxXmlDocument &SheetDocument) const
 // Description:		Parses a string describing a cell range to determine the
 //					number of rows contained within the range.
 //
-// Input Argurments:
+// Input Arguments:
 //		DimensionString	= const wxString& describing the range (i.e. "B4:ED56")
 //
 // Output Arguments:
@@ -532,7 +532,7 @@ unsigned int XLSX_READER::ParseForRowCount(const wxString &DimensionString) cons
 // Description:		Parses a string describing a cell range to determine the
 //					number of columns contained within the range.
 //
-// Input Argurments:
+// Input Arguments:
 //		DimensionString	= const wxString& describing the range (i.e. "B4:ED56")
 //
 // Output Arguments:
@@ -580,7 +580,7 @@ unsigned int XLSX_READER::ParseForColumnCount(const wxString &DimensionString) c
 //					to a number representing the column location (starting
 //					with column 'A' = 0).
 //
-// Input Argurments:
+// Input Arguments:
 //		Column	= const wxString& containing the column identifier
 //
 // Output Arguments:
@@ -610,7 +610,7 @@ unsigned int XLSX_READER::ColumnNumberFromString(const wxString &Column) const
 // Description:		Reads the data from the specified cell and returns a
 //					wxString with the contents.
 //
-// Input Argurments:
+// Input Arguments:
 //		Sheet	= const unsigned int&
 //		Row		= const unsigned int&
 //		Column	= const unsigned int&
@@ -721,7 +721,7 @@ wxString XLSX_READER::GetCellData(const unsigned int &Sheet,
 //
 // Description:		Returns the numeric contents of the specified cell.
 //
-// Input Argurments:
+// Input Arguments:
 //		Sheet	= const unsigned int&
 //		Row		= const unsigned int&
 //		Column	= const unsigned int&
@@ -816,7 +816,7 @@ double XLSX_READER::GetNumericCellData(const unsigned int &Sheet,
 //
 // Description:		Checks to see if a cell's content is numeric.
 //
-// Input Argurments:
+// Input Arguments:
 //		Sheet	= const unsigned int&
 //		Row		= const unsigned int&
 //		Column	= const unsigned int&
@@ -895,7 +895,7 @@ bool XLSX_READER::CellIsNumeric(const unsigned int &Sheet,
 //					column indecies.  For example, calling with (0, 0, "A1")
 //					would return "A1".
 //
-// Input Argurments:
+// Input Arguments:
 //		Row		= const unsigned int&
 //		Column	= const unsigned int&
 //		ReferenceCell	= const wxString& identifying the first cell with any
@@ -950,7 +950,7 @@ wxString XLSX_READER::GetCellAddressString(const unsigned int &Row, const unsign
 //					first cell in the sheet with any content) from which
 //					all row and column references are based.
 //
-// Input Argurments:
+// Input Arguments:
 //		DimensionString	= const wxString& containing the sheet's occupied range
 //
 // Output Arguments:
@@ -980,7 +980,7 @@ wxString XLSX_READER::GetReferenceCell(const wxString &DimensionString) const
 // Description:		Looks up the specified string index in the shared strings
 //					XML file.
 //
-// Input Argurments:
+// Input Arguments:
 //		Index	= const unsigned int& specifying which string to use
 //
 // Output Arguments:

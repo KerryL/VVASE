@@ -38,7 +38,7 @@
 // Description:		Constructor for the MATRIX class.  Allocates memory for
 //					a matix of the specified size.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Rows		= const int& specifying the vertical size of the matrix
 //		_Columns	= const int& specifying the horizontal size of the matrix
 //
@@ -70,7 +70,7 @@ MATRIX::MATRIX(const int &_Rows, const int &_Columns)
 //					a matix of the specified size and fills the matrix with
 //					the specified elements.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Rows		= const int& specifying the vertical size of the matrix
 //		_Columns	= const int& specifying the horizontal size of the matrix
 //		Element1	= double specifying the first element of the matrix
@@ -116,7 +116,7 @@ MATRIX::MATRIX(const int &_Rows, const int &_Columns, double Element1, ...)
 //
 // Description:		Copy constructor for the MATRIX class.  Performs deep copy.
 //
-// Input Argurments:
+// Input Arguments:
 //		Matrix	= MATRIX& to copy form
 //
 // Output Arguments:
@@ -141,7 +141,7 @@ MATRIX::MATRIX(const MATRIX &Matrix)
 //
 // Description:		Destructor for the MATRIX class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -165,7 +165,7 @@ MATRIX::~MATRIX()
 // Description:		Changes the element at the specified location to the
 //					specified value.
 //
-// Input Argurments:
+// Input Arguments:
 //		Row		= const int& specifying the vertical position in the matrix
 //		Column	= const int& specifying the horizontal position in the matrix
 //		Value	= const double& specifying the new value of the element
@@ -195,7 +195,7 @@ void MATRIX::SetElement(const int &Row, const int &Column, const double &Value)
 // Description:		Sets the values of this matrix to the arguments passed
 //					to this function.
 //
-// Input Argurments:
+// Input Arguments:
 //		Element1	= double representing the first element
 //		..			= doubles representing the other elements.  Elements are
 //					  read by filling each column of a row before moving on
@@ -236,7 +236,7 @@ void MATRIX::Set(double Element1, ...)
 //
 // Description:		Returns the element at the specified location.
 //
-// Input Argurments:
+// Input Arguments:
 //		Row		= const int& specifying the row
 //		Column = const int& specifying the column
 //
@@ -259,7 +259,7 @@ double MATRIX::GetElement(const int &Row, const int &Column) const
 //
 // Description:		Makes this matrix an identity matrix.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -295,7 +295,7 @@ MATRIX& MATRIX::MakeIdentity(void)
 //
 // Description:		Sets all elements of this matrix to zero.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -322,7 +322,7 @@ void MATRIX::Zero(void)
 // Description:		Returns a sub-matrix made up of the specified portion of
 //					this matrix.
 //
-// Input Argurments:
+// Input Arguments:
 //		StartRow	= const int& specifying the starting row
 //		StartColumn	= const int& specifying the starting column
 //		SubRows		= const int& specifying the number of rows
@@ -363,7 +363,7 @@ MATRIX MATRIX::GetSubMatrix(const int &StartRow, const int &StartColumn,
 //
 // Description:		Transposes this matrix.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -518,7 +518,7 @@ MATRIX& MATRIX::Transpose(void)
 //
 // Description:		Multiplication operator for the MATRIX class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Vector	= const VECTOR& to multiply by
 //
 // Output Arguments:
@@ -549,7 +549,7 @@ const VECTOR MATRIX::operator * (const VECTOR &Vector) const
 //
 // Description:		Multiplication assignment operator for the MATRIX class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Matrix	= const MATRIX& to multiply
 //
 // Output Arguments:
@@ -600,7 +600,7 @@ MATRIX& MATRIX::operator *= (const MATRIX &Matrix)
 //
 // Description:		Assignment operator for the MATRIX class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Matrix	= const MATRIX& to assign to this
 //
 // Output Arguments:
@@ -638,7 +638,7 @@ MATRIX& MATRIX::operator = (const MATRIX &Matrix)
 //
 // Description:		Addition assignment operator for the MATRIX class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Matrix	= const MATRIX& to add
 //
 // Output Arguments:
@@ -667,7 +667,7 @@ MATRIX& MATRIX::operator += (const MATRIX &Matrix)
 //
 // Description:		Subrtaction assignment operator for the MATRIX class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Matrix	= const MATRIX& to subtract
 //
 // Output Arguments:
@@ -697,7 +697,7 @@ MATRIX& MATRIX::operator -= (const MATRIX &Matrix)
 // Description:		Element-wise multiplication assignment operator for the
 //					MATRIX class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Double	= const double& to multiply by
 //
 // Output Arguments:
@@ -723,7 +723,7 @@ MATRIX& MATRIX::operator *=(const double &Double)
 // Description:		Element-wise division assignment operator for the
 //					MATRIX class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Double	= const double& to divide by
 //
 // Output Arguments:
@@ -749,7 +749,7 @@ MATRIX& MATRIX::operator /=(const double &Double)
 //
 // Description:		Prints the contents of this object to a wxString.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -790,7 +790,7 @@ wxString MATRIX::Print(void) const
 //					is upper-triangular.  FIXME:  Will this work for matricies
 //					with less than full rank?  What if the matrix is not square?
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -859,7 +859,7 @@ MATRIX& MATRIX::RowReduce(void)
 //
 // Description:		Addition operator for the MATRIX class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Matrix	= MATRIX to add
 //
 // Output Arguments:
@@ -887,7 +887,7 @@ const MATRIX MATRIX::operator + (const MATRIX &Matrix) const
 //
 // Description:		Subtraction operator for the MATRIX class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Matrix	= const MATRIX& to subtract
 //
 // Output Arguments:
@@ -915,7 +915,7 @@ const MATRIX MATRIX::operator - (const MATRIX &Matrix) const
 //
 // Description:		Multiplication operator for the MATRIX class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Target	= const MATRIX& to multiply by
 //
 // Output Arguments:
@@ -943,7 +943,7 @@ const MATRIX MATRIX::operator * (const MATRIX &Matrix) const
 //
 // Description:		Element-wise multiplication operator for the MATRIX class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Double	= const double& to multiply by
 //
 // Output Arguments:
@@ -971,7 +971,7 @@ const MATRIX MATRIX::operator * (const double &Double) const
 //
 // Description:		Element-wise division operator for the MATRIX class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Double	= const double& to divide by
 //
 // Output Arguments:
@@ -1000,7 +1000,7 @@ const MATRIX MATRIX::operator / (const double &Double) const
 // Description:		Overload of the () operator for this object.  Permits accessing
 //					class data by using MATRIX(Row, Column).  Non-const version.
 //
-// Input Argurments:
+// Input Arguments:
 //		Row		= const int& specifying the row of the desired element (0-based)
 //		Column	= const int& specifying the column of the desired element (0-based)
 //
@@ -1027,7 +1027,7 @@ double &MATRIX::operator () (const int &Row, const int &Column)
 // Description:		Overload of the () operator for this object.  Permits accessing
 //					class data by using MATRIX(Row, Column).  Const version.
 //
-// Input Argurments:
+// Input Arguments:
 //		Row		= const int& specifying the row of the desired element (0-based)
 //		Column	= const int& specifying the column of the desired element (0-based)
 //

@@ -29,7 +29,7 @@
 //
 // Description:		Constructor for the ENGINE class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Debugger	= const DEBUGGER& reference to applications debug printing utility
 //
 // Output Arguments:
@@ -51,7 +51,7 @@ ENGINE::ENGINE(const DEBUGGER &_Debugger) : Debugger(_Debugger)
 //
 // Description:		Copy constructor for the ENGINE class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Engine	= const ENGINE& to copy to this object
 //
 // Output Arguments:
@@ -73,7 +73,7 @@ ENGINE::ENGINE(const ENGINE &Engine) : Debugger(Engine.Debugger)
 //
 // Description:		Destructor for the ENGINE class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -93,7 +93,7 @@ ENGINE::~ENGINE()
 //
 // Description:		Writes this engine to file.
 //
-// Input Argurments:
+// Input Arguments:
 //		OutFile	= std::ofstream* pointing to the output stream
 //
 // Output Arguments:
@@ -117,7 +117,7 @@ void ENGINE::Write(std::ofstream *OutFile) const
 //
 // Description:		Read from file to fill this engine.
 //
-// Input Argurments:
+// Input Arguments:
 //		InFile		= std::ifstream* pointing to the input stream
 //		FileVersion	= int specifying which file version we're reading from
 //
@@ -147,7 +147,7 @@ void ENGINE::Read(std::ifstream *InFile, int FileVersion)
 //
 // Description:		Assignment operator for ENGINE class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Engine	= const ENGINE& to assign to this object
 //
 // Output Arguments:

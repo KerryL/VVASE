@@ -41,7 +41,7 @@
 //
 // Description:		Constructor for the SUSPENSION class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Debugger	= const DEBUGGER& reference to applications debug printing utility
 //
 // Output Arguments:
@@ -82,7 +82,7 @@ SUSPENSION::SUSPENSION(const DEBUGGER &_Debugger)
 //
 // Description:		Destructor for the SUSPENSION class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -102,7 +102,7 @@ SUSPENSION::~SUSPENSION()
 //
 // Description:		Constant declarations for the SUSPENSION class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -128,7 +128,7 @@ const DEBUGGER *SUSPENSION::Debugger = NULL;
 //					is below.  In the event of an error, the original value
 //					is returned.
 //
-// Input Argurments:
+// Input Arguments:
 //		Center1			= const VECTOR& specifying the center of the first sphere
 //		Center2			= const VECTOR& specifying the center of the second sphere
 //		Center3			= const VECTOR& specifying the center of the third sphere
@@ -527,7 +527,7 @@ bool SUSPENSION::SolveForPoint(const VECTOR &Center1, const VECTOR &Center2, con
 //					represent the ends of the steering rack.  Travel is in
 //					inches.  Positive travel moves the rack to the right.
 //
-// Input Argurments:
+// Input Arguments:
 //		Travel	= const double& specifying the distance to move the steering rack [in]
 //
 // Output Arguments:
@@ -582,7 +582,7 @@ void SUSPENSION::MoveSteeringRack(const double &Travel)
 //					Otherwise, it works the same way as SolveForPoint.  In
 //					the event of an error, the original value is returned.
 //
-// Input Argurments:
+// Input Arguments:
 //		Center1			= const VECTOR& specifying the center of the first sphere
 //		Center2			= const VECTOR& specifying the center of the second sphere
 //		OriginalCenter1	= const VECTOR& specifying the original center of the
@@ -828,7 +828,7 @@ bool SUSPENSION::SolveForXY(const VECTOR &Center1, const VECTOR &Center2, const 
 //					is the point on the circle with minimum Z value.  In
 //					the event of an error, a zero length vector is returned.
 //
-// Input Argurments:
+// Input Arguments:
 //		WheelCenter			= const VECTOR& specifying the center of the wheel
 //		WheelPlaneNormal	= const VECTOR& specifying the orientation of the wheel
 //		TireRadius			= const double& specifying the loaded radius of the tire
@@ -906,7 +906,7 @@ bool SUSPENSION::SolveForContactPatch(const VECTOR &WheelCenter, const VECTOR &W
 //
 // Description:		Writes this suspension to file.
 //
-// Input Argurments:
+// Input Arguments:
 //		OutFile	= std::ofstream* pointing to the output stream
 //
 // Output Arguments:
@@ -947,7 +947,7 @@ void SUSPENSION::Write(std::ofstream *OutFile) const
 //
 // Description:		Read from file to fill this suspension.
 //
-// Input Argurments:
+// Input Arguments:
 //		InFile		= std::ifstream* pointing to the input stream
 //		FileVersion	= int specifying which file version we're reading from
 //
@@ -996,7 +996,7 @@ void SUSPENSION::Read(std::ifstream *InFile, int FileVersion)
 //
 // Description:		Returns the name of the sway bar style.
 //
-// Input Argurments:
+// Input Arguments:
 //		_BarStyle	= const BAR_STYLE& of interest
 //
 // Output Arguments:
@@ -1040,7 +1040,7 @@ wxString SUSPENSION::GetBarStyleName(const BAR_STYLE &_BarStyle)
 //
 // Description:		Returns the name of the point.
 //
-// Input Argurments:
+// Input Arguments:
 //		Point	= const HARDPOINTS&, specifying the point to retrieve
 //
 // Output Arguments:
@@ -1108,7 +1108,7 @@ wxString SUSPENSION::GetHardpointName(const HARDPOINTS& Point)
 //
 // Description:		Returns the name of the bar attachment method.
 //
-// Input Argurments:
+// Input Arguments:
 //		_BarAttachment	= const BAR_ATTACHMENT&, specifying the type of attachment
 //
 // Output Arguments:
@@ -1153,7 +1153,7 @@ wxString SUSPENSION::GetBarAttachmentname(const BAR_ATTACHMENT &_BarAttachment)
 // Description:		Calls the methods at each corner that compute the wheel
 //					center location.
 //
-// Input Argurments:
+// Input Arguments:
 //		RFTireDiameter	= const double& specifying the diameter of the right front tire
 //		LFTireDiameter	= const double& specifying the diameter of the left front tire
 //		RRTireDiameter	= const double& specifying the diameter of the right rear tire
@@ -1185,7 +1185,7 @@ void SUSPENSION::ComputeWheelCenters(const double &RFTireDiameter, const double 
 // Description:		Overloaded assignment operator.  This is necessary due to
 //					the references that this class contains.
 //
-// Input Argurments:
+// Input Arguments:
 //		Suspension	= const SUSPENSION& to be assigned to this
 //
 // Output Arguments:

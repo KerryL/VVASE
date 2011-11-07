@@ -30,7 +30,7 @@
 // Description:		Constructor for the DAMPER3D class.  Performs the entire
 //					process necessary to add the object to the scene.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Renderer	= RENDER_WINDOW&, pointer to rendering object
 //
 // Output Arguments:
@@ -63,7 +63,7 @@ DAMPER3D::DAMPER3D(RENDER_WINDOW &_Renderer)
 //
 // Description:		Destructor for the DAMPER3D class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -84,7 +84,7 @@ DAMPER3D::~DAMPER3D()
 // Description:		Updates the position, orientation, and size of the damper
 //					in the scene.
 //
-// Input Argurments:
+// Input Arguments:
 //		OutboardEnd		= const VECTOR&, location of the end of the shaft
 //		InboardEnd		= const VECTOR&, location of the end of the body
 //		BodyDiameter	= const double& describing the diameter of the damper body
@@ -175,7 +175,7 @@ void DAMPER3D::Update(const VECTOR &OutboardEnd, const VECTOR &InboardEnd, const
 //					object to determine if the argument actor is part of this
 //					object or not.
 //
-// Input Argurments:
+// Input Arguments:
 //		Actor	= const PRIMITIVE* to compare against this object's actors
 //
 // Output Arguments:

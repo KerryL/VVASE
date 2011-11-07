@@ -27,7 +27,7 @@
 //
 // Description:		Constructor for the THREAD_DATA class (basic).
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -47,7 +47,7 @@ THREAD_DATA::THREAD_DATA()
 //
 // Description:		Destructor for the THREAD_DATA class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:

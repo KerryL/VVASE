@@ -30,7 +30,7 @@
 //
 // Description:		Constructor for the TIRE_SET class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Debugger	= const DEBUGGER& reference to applications debug printing utility
 //
 // Output Arguments:
@@ -55,7 +55,7 @@ TIRE_SET::TIRE_SET(const DEBUGGER &_Debugger) : Debugger(_Debugger)
 //
 // Description:		Copy constructor for the TIRE_SET class.
 //
-// Input Argurments:
+// Input Arguments:
 //		TireSet	= const TIRE_SET& to be copied
 //
 // Output Arguments:
@@ -82,7 +82,7 @@ TIRE_SET::TIRE_SET(const TIRE_SET &TireSet) : Debugger(TireSet.Debugger)
 //
 // Description:		Destructor for the TIRE_SET class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -113,7 +113,7 @@ TIRE_SET::~TIRE_SET()
 //
 // Description:		Writes this tire set to file.
 //
-// Input Argurments:
+// Input Arguments:
 //		OutFile	= std::ofstream* point to the file stream to write to
 //
 // Output Arguments:
@@ -140,7 +140,7 @@ void TIRE_SET::Write(std::ofstream *OutFile) const
 //
 // Description:		Read from file to fill this tire set.
 //
-// Input Argurments:
+// Input Arguments:
 //		InFile		= std::ifstream* pointing to the file stream to read from
 //		FileVersion	= int specifying which file version we're reading from
 //
@@ -168,7 +168,7 @@ void TIRE_SET::Read(std::ifstream *InFile, int FileVersion)
 //
 // Description:		Assignment operator for the TIRE_SET class.
 //
-// Input Argurments:
+// Input Arguments:
 //		TireSet	= TIRE_SET& to copy from
 //
 // Output Arguments:

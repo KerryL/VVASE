@@ -31,7 +31,7 @@
 // Description:		Constructor for the VECTOR3D class.  Performs the entire
 //					process necessary to add the object to the scene.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Renderer	= RENDER_WINDOW&, pointer to rendering object
 //
 // Output Arguments:
@@ -58,7 +58,7 @@ VECTOR3D::VECTOR3D(RENDER_WINDOW &_Renderer)
 //
 // Description:		Destructor for the VECTOR3D class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -78,7 +78,7 @@ VECTOR3D::~VECTOR3D()
 //
 // Description:		Updates the size of the VECTOR3D marker
 //
-// Input Argurments:
+// Input Arguments:
 //		_Tip			= const VECTOR& indicating the point this vector points to
 //		_Tail			= const VECTOR& indicating the point this vector originates
 //						  from

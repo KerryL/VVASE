@@ -30,7 +30,7 @@
 // Description:		Constructor for the AARM class.  Performs the entire
 //					process necessary to add the object to the scene.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Renderer	= RENDER_WINDOW&, pointer to rendering object
 //
 // Output Arguments:
@@ -61,7 +61,7 @@ AARM::AARM(RENDER_WINDOW &_Renderer)
 //
 // Description:		Destructor for the AARM class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -81,7 +81,7 @@ AARM::~AARM()
 //
 // Description:		Updates the position and size of the a-arm in the scene
 //
-// Input Argurments:
+// Input Arguments:
 //		End1		= const VECTOR&, location of one end of the a-arm
 //		Middle		= const VECTOR&, location of the ball joint on the a-arm
 //		End2		= const VECTOR&, location of the other end of the a-arm
@@ -169,7 +169,7 @@ void AARM::Update(const VECTOR &End1, const VECTOR &Middle, const VECTOR &End2,
 //					object to determine if the argument actor is part of this
 //					object or not.
 //
-// Input Argurments:
+// Input Arguments:
 //		Actor	= const PRIMITIVE* to compare against this object's actors
 //
 // Output Arguments:

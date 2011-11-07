@@ -24,7 +24,7 @@
 //
 // Description:		Constructor for TRACK class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -44,7 +44,7 @@ TRACK::TRACK()
 //
 // Description:		Destructor for TRACK class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:

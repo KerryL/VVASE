@@ -30,7 +30,7 @@
 // Description:		Constructor for the LINK class.  Performs the entire
 //					process necessary to add the object to the scene.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Renderer	= RENDER_WINDOW&, pointer to rendering object
 //
 // Output Arguments:
@@ -58,7 +58,7 @@ LINK::LINK(RENDER_WINDOW &_Renderer)
 //
 // Description:		Destructor for the LINK class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -78,7 +78,7 @@ LINK::~LINK()
 //
 // Description:		Updates the position and size of the link in the scene
 //
-// Input Argurments:
+// Input Arguments:
 //		End1		= const VECTOR&, location of one end of the a-arm
 //		End2		= const VECTOR&, location of the other end of the a-arm
 //		Radius		= const double& describing the size of the tubing representing
@@ -142,7 +142,7 @@ void LINK::Update(const VECTOR &End1, const VECTOR &End2, const double &Diameter
 //					object to determine if the argument actor is part of this
 //					object or not.
 //
-// Input Argurments:
+// Input Arguments:
 //		Actor	= const PRIMITIVE* to compare against this object's actors
 //
 // Output Arguments:

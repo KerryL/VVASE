@@ -29,7 +29,7 @@
 //
 // Description:		Constructor for EDIT_AERODYNAMICS_PANEL class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Parent		= EDIT_PANEL&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint* for passing to parent class's constructor
@@ -56,7 +56,7 @@ EDIT_AERODYNAMICS_PANEL::EDIT_AERODYNAMICS_PANEL(EDIT_PANEL* _Parent, wxWindowID
 //
 // Description:		Destructor for EDIT_AERODYNAMICS_PANEL class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:

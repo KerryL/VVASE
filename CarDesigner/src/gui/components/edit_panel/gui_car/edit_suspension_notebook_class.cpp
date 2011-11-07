@@ -35,7 +35,7 @@
 // Description:		Constructor for EDIT_SUSPENSION_NOTEBOOK class.  Initializes
 //					the form and creates the controls, etc.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Parent		= EDIT_PANEL&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
@@ -66,7 +66,7 @@ EDIT_SUSPENSION_NOTEBOOK::EDIT_SUSPENSION_NOTEBOOK(EDIT_PANEL &_Parent, wxWindow
 //
 // Description:		Destructor for EDIT_SUSPENSION_NOTEBOOK class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -87,7 +87,7 @@ EDIT_SUSPENSION_NOTEBOOK::~EDIT_SUSPENSION_NOTEBOOK()
 // Description:		Updates the information in this notebook for the current
 //					object (if one exists).
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -113,7 +113,7 @@ void EDIT_SUSPENSION_NOTEBOOK::UpdateInformation(void)
 //
 // Description:		Updates the information in this notebook.
 //
-// Input Argurments:
+// Input Arguments:
 //		_CurrentCar	= CAR* pointing to the currenly active object
 //
 // Output Arguments:
@@ -194,7 +194,7 @@ void EDIT_SUSPENSION_NOTEBOOK::UpdateInformation(CAR *_CurrentCar)
 //
 // Description:		Creates the controls for this notebook.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -233,7 +233,7 @@ void EDIT_SUSPENSION_NOTEBOOK::CreateControls(void)
 // Description:		Goes through all of the corner point and ensures symmetry
 //					from right to left (updates left to match right).
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:

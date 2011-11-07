@@ -27,7 +27,7 @@
 //
 // Description:		Constructor for the DISK class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_RenderWindow	= RENDER_WINDOW* pointing to the object that owns this
 //
 // Output Arguments:
@@ -53,7 +53,7 @@ DISK::DISK(RENDER_WINDOW &_RenderWindow) : PRIMITIVE(_RenderWindow)
 //
 // Description:		Destructor for the DISK class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -74,7 +74,7 @@ DISK::~DISK()
 // Description:		Creates the OpenGL instructions to create this object in
 //					the scene.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -150,7 +150,7 @@ void DISK::GenerateGeometry(void)
 // Description:		Checks to see if the information about this object is
 //					valid and complete (gives permission to create the object).
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -176,7 +176,7 @@ bool DISK::HasValidParameters(void)
 //
 // Description:		Sets the number of faces use to approximate the disk.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Resolution	= const int&
 //
 // Output Arguments:
@@ -203,7 +203,7 @@ void DISK::SetResolution(const int &_Resolution)
 //
 // Description:		Sets the outer radius of the disk.
 //
-// Input Argurments:
+// Input Arguments:
 //		_OuterRadius	= const double&
 //
 // Output Arguments:
@@ -230,7 +230,7 @@ void DISK::SetOuterRadius(const double &_OuterRadius)
 //
 // Description:		Sets the inner radius of the disk.
 //
-// Input Argurments:
+// Input Arguments:
 //		_InnerRadius	= const double&
 //
 // Output Arguments:
@@ -257,7 +257,7 @@ void DISK::SetInnerRadius(const double &_InnerRadius)
 //
 // Description:		Sets the location of the center of the disk.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Center	= const VECTOR&
 //
 // Output Arguments:
@@ -284,7 +284,7 @@ void DISK::SetCenter(const VECTOR &_Center)
 //
 // Description:		Sets the disk's normal direction.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Normal	= const VECTOR&
 //
 // Output Arguments:

@@ -24,7 +24,7 @@
 //
 // Description:		Constructor for the TRIANGLE class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_RenderWindow	= RENDER_WINDOW& pointing to the object that owns this
 //
 // Output Arguments:
@@ -48,7 +48,7 @@ TRIANGLE::TRIANGLE(RENDER_WINDOW &_RenderWindow) : PRIMITIVE(_RenderWindow)
 //
 // Description:		Destructor for the TRIANGLE class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -69,7 +69,7 @@ TRIANGLE::~TRIANGLE()
 // Description:		Creates the OpenGL instructions to create this object in
 //					the scene.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -108,7 +108,7 @@ void TRIANGLE::GenerateGeometry(void)
 // Description:		Checks to see if the information about this object is
 //					valid and complete (gives permission to create the object).
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -135,7 +135,7 @@ bool TRIANGLE::HasValidParameters(void)
 //
 // Description:		Sets the location of the first corner of the triangle.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Corner1	= const VECTOR&
 //
 // Output Arguments:
@@ -162,7 +162,7 @@ void TRIANGLE::SetCorner1(const VECTOR &_Corner1)
 //
 // Description:		Sets the location of the second corner of the triangle.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Corner2	= const VECTOR&
 //
 // Output Arguments:
@@ -189,7 +189,7 @@ void TRIANGLE::SetCorner2(const VECTOR &_Corner2)
 //
 // Description:		Sets the location of the third corner of the triangle.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Corner3	= const VECTOR&
 //
 // Output Arguments:

@@ -31,7 +31,7 @@
 //
 // Description:		Constructor for EDIT_DRIVETRAIN_PANEL class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Parent		= EDIT_PANEL&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
@@ -58,7 +58,7 @@ EDIT_DRIVETRAIN_PANEL::EDIT_DRIVETRAIN_PANEL(EDIT_PANEL* _Parent, wxWindowID id,
 //
 // Description:		Destructor for EDIT_DRIVETRAIN_PANEL class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:

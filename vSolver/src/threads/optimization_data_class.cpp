@@ -24,7 +24,7 @@
 //
 // Description:		Constructor for the OPTIMIZATION_DATA class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_GeneticAlgorithm	= GENETIC_ALGORITHM* pointing to the optimization object
 //
 // Output Arguments:
@@ -45,7 +45,7 @@ OPTIMIZATION_DATA::OPTIMIZATION_DATA(GENETIC_ALGORITHM *_GeneticAlgorithm)
 //
 // Description:		Destructor for the OPTIMIZATION_DATA class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -66,7 +66,7 @@ OPTIMIZATION_DATA::~OPTIMIZATION_DATA()
 // Description:		Checks to make sure this type of data is correct for the
 //					specified command.
 //
-// Input Argurments:
+// Input Arguments:
 //		Command		= THREAD_JOB::THREAD_COMMANDS& to be checked
 //
 // Output Arguments:

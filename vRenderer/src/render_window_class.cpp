@@ -39,7 +39,7 @@
 // Description:		Constructor for RENDER_WINDOW class.  Initializes the
 //					renderer and sets up the canvas.
 //
-// Input Argurments:
+// Input Arguments:
 //		Parent		= wxWindow& reference to the owner of this object
 //		Id			= wxWindowID to identify this window
 //		Position	= const wxPoint& specifying this object's position
@@ -90,7 +90,7 @@ RENDER_WINDOW::RENDER_WINDOW(wxWindow &Parent, wxWindowID Id,
 // Description:		Destructor for RENDER_WINDOW class.  Deletes objects in
 //					the scene and other dynamic variables.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -119,7 +119,7 @@ RENDER_WINDOW::~RENDER_WINDOW()
 //
 // Description:		Event Table for the RENDER_WINDOW class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -151,7 +151,7 @@ END_EVENT_TABLE()
 // Description:		Updates the scene with all of this object's options and
 //					re-draws the image.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -203,7 +203,7 @@ void RENDER_WINDOW::Render()
 // Description:		Event handler for the paint event.  Obtains the device
 //					context and re-renders the scene.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxPaintEvent& (UNUSED)
 //
 // Output Arguments:
@@ -230,7 +230,7 @@ void RENDER_WINDOW::OnPaint(wxPaintEvent& WXUNUSED(event))
 //
 // Description:		Event handler for the window re-size event.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxSizeEvent&
 //
 // Output Arguments:
@@ -266,7 +266,7 @@ void RENDER_WINDOW::OnSize(wxSizeEvent& event)
 //					simply here to override default behaviour which would
 //					cause the screen to flicker.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxEraseEvent& (UNUSED)
 //
 // Output Arguments:
@@ -288,7 +288,7 @@ void RENDER_WINDOW::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
 //
 // Description:		Event handler for the enter window event.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxEraseEvent& (UNUSED)
 //
 // Output Arguments:
@@ -317,7 +317,7 @@ void RENDER_WINDOW::OnEnterWindow(wxMouseEvent &event)
 // Description:		Removes the specified actor from the display list, if it
 //					is in the list.
 //
-// Input Argurments:
+// Input Arguments:
 //		ToRemove	= PRIMITVE* pointing to the object to be removed
 //
 // Output Arguments:
@@ -356,7 +356,7 @@ bool RENDER_WINDOW::RemoveActor(PRIMITIVE *ToRemove)
 // Description:		Sets up the renderer's parameters.  Called on startup
 //					and any time an option changes (wireframe vs. polygon, etc.)
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -482,7 +482,7 @@ void RENDER_WINDOW::Initialize()
 //
 // Description:		Event handler for the mouse wheel event.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxMouseEvent&
 //
 // Output Arguments:
@@ -508,7 +508,7 @@ void RENDER_WINDOW::OnMouseWheelEvent(wxMouseEvent &event)
 //					capture drag events for rotating, panning, or dollying
 //					the scene.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxMouseEvent&
 //
 // Output Arguments:
@@ -584,7 +584,7 @@ void RENDER_WINDOW::OnMouseMoveEvent(wxMouseEvent &event)
 //
 // Description:		Performs the specified interaction.
 //
-// Input Argurments:
+// Input Arguments:
 //		Interaction	= INTERACTION_TYPE specifying which type of motion to create
 //		event	= wxMouseEvent&
 //
@@ -655,7 +655,7 @@ void RENDER_WINDOW::PerformInteraction(INTERACTION_TYPE Interaction, wxMouseEven
 //
 // Description:		Stores the current mouse position to a class member.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxMouseEvent&
 //
 // Output Arguments:
@@ -680,7 +680,7 @@ void RENDER_WINDOW::StoreMousePosition(wxMouseEvent &event)
 //
 // Description:		Event handler for a button becoming "unclicked."
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxMouseEvent&
 //
 // Output Arguments:
@@ -705,7 +705,7 @@ void RENDER_WINDOW::OnMouseUpEvent(wxMouseEvent& WXUNUSED(event))
 // Description:		Performs the rotate event.  Read through comments below
 //					for more information.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxMouseEvent&
 //
 // Output Arguments:
@@ -771,7 +771,7 @@ void RENDER_WINDOW::DoRotate(wxMouseEvent &event)
 //
 // Description:		Performs a dolly event triggered by a mouse wheel roll.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxMouseEvent&
 //
 // Output Arguments:
@@ -815,7 +815,7 @@ void RENDER_WINDOW::DoWheelDolly(wxMouseEvent &event)
 //
 // Description:		Performs a dolly event triggered by mouse movement.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxMouseEvent&
 //
 // Output Arguments:
@@ -872,7 +872,7 @@ void RENDER_WINDOW::DoDragDolly(wxMouseEvent &event)
 //
 // Description:		Performs a pan event.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxMouseEvent&
 //
 // Output Arguments:
@@ -927,7 +927,7 @@ void RENDER_WINDOW::DoPan(wxMouseEvent &event)
 //
 // Description:		Sets the camera view as specified.
 //
-// Input Argurments:
+// Input Arguments:
 //		Position	= const VECTOR& specifying the camera position
 //		LookAt		= const VECTOR& specifying the object at which the camera
 //					  is to be pointed
@@ -989,7 +989,7 @@ void RENDER_WINDOW::SetCameraView(const VECTOR &Position, const VECTOR &LookAt, 
 // Description:		Returns a vector equivalent to the specified vector
 //					(assumed to be in model coordinates) in view coordinates.
 //
-// Input Argurments:
+// Input Arguments:
 //		ModelVector	= const VECTOR& to be transformed
 //
 // Output Arguments:
@@ -1011,7 +1011,7 @@ VECTOR RENDER_WINDOW::TransformToView(const VECTOR &ModelVector) const
 // Description:		Returns a vector equivalent to the specified vector
 //					(assumed to be in view coordinates) in model coordinates.
 //
-// Input Argurments:
+// Input Arguments:
 //		ViewVector	= const VECTOR& to be transformed
 //
 // Output Arguments:
@@ -1034,7 +1034,7 @@ VECTOR RENDER_WINDOW::TransformToModel(const VECTOR &ViewVector) const
 //					to view coordinates and vice-versa.  Also updates the camera
 //					position variable.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -1072,7 +1072,7 @@ void RENDER_WINDOW::UpdateTransformationMatricies(void)
 //
 // Description:		Updates the view frustum to correctly match the viewport size.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -1110,7 +1110,7 @@ void RENDER_WINDOW::AutoSetFrustum(void)
 //
 // Description:		Returns a string describing any openGL errors.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -1171,7 +1171,7 @@ wxString RENDER_WINDOW::GetGLError(void) const
 //					different file types are supported, specified by the file
 //					extension.
 //
-// Input Argurments:
+// Input Arguments:
 //		PathAndFileName	= wxString specifying the location to save the image to
 //
 // Output Arguments:
@@ -1216,7 +1216,7 @@ bool RENDER_WINDOW::WriteImageToFile(wxString PathAndFileName) const
 //					different file types are supported, specified by the file
 //					extension.
 //
-// Input Argurments:
+// Input Arguments:
 //		PickedObject	= const PRIMITIVE* pointing to the selected primitive
 //
 // Output Arguments:
@@ -1248,7 +1248,7 @@ bool RENDER_WINDOW::IsThisRendererSelected(const PRIMITIVE *PickedObject) const
 // Description:		Sorts the PrimitiveList by Color.Alpha to ensure that
 //					opaque objects are rendered prior to transparent objects.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:

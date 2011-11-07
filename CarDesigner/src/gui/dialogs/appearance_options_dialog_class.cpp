@@ -34,7 +34,7 @@
 //
 // Description:		Constructor for APPEARANCE_OPTIONS_DIALOG class.
 //
-// Input Argurments:
+// Input Arguments:
 //		MainFrame	= MAIN_FRAME& pointing to the application's main window
 //		_Options	= APPEARANCE_OPTIONS* pointing to the object to edit
 //		Id			= wxWindowId for this object
@@ -77,7 +77,7 @@ APPEARANCE_OPTIONS_DIALOG::APPEARANCE_OPTIONS_DIALOG(MAIN_FRAME &MainFrame,
 //
 // Description:		Destructor for APPEARANCE_OPTIONS_DIALOG class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -97,7 +97,7 @@ APPEARANCE_OPTIONS_DIALOG::~APPEARANCE_OPTIONS_DIALOG()
 //
 // Description:		Links GUI events with event handler functions.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -120,7 +120,7 @@ END_EVENT_TABLE();
 //
 // Description:		Sets up this form's contents and size.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -446,7 +446,7 @@ void APPEARANCE_OPTIONS_DIALOG::CreateControls(void)
 //
 // Description:		Handles the OK button clicked events
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -511,7 +511,7 @@ void APPEARANCE_OPTIONS_DIALOG::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 //
 // Description:		Handles the Cancel button clicked event.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -541,7 +541,7 @@ void APPEARANCE_OPTIONS_DIALOG::CancelClickEvent(wxCommandEvent& WXUNUSED(event)
 //
 // Description:		Handles the color grid double click events.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxGridEvent&
 //
 // Output Arguments:
@@ -584,7 +584,7 @@ void APPEARANCE_OPTIONS_DIALOG::ColorGridDoubleClickEvent(wxGridEvent &event)
 //
 // Description:		Handles the color grid text change events.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxGridEvent&
 //
 // Output Arguments:

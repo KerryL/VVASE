@@ -29,7 +29,7 @@
 //
 // Description:		Constructor for the BRAKES class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Debugger	= const DEBUGGER& reference to applications debug printing utility
 //
 // Output Arguments:
@@ -52,7 +52,7 @@ BRAKES::BRAKES(const DEBUGGER &_Debugger) : Debugger(_Debugger)
 //
 // Description:		Copy constructor for the BRAKES class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Brakes	= const BRAKES& to copy to this object
 //
 // Output Arguments:
@@ -74,7 +74,7 @@ BRAKES::BRAKES(const BRAKES &Brakes) : Debugger(Brakes.Debugger)
 //
 // Description:		Destructor for the BRAKES class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -94,7 +94,7 @@ BRAKES::~BRAKES()
 //
 // Description:		Writes these brakes to file.
 //
-// Input Argurments:
+// Input Arguments:
 //		OutFile	= std::ofstream* pointing to the file stream to write to
 //
 // Output Arguments:
@@ -120,7 +120,7 @@ void BRAKES::Write(std::ofstream *OutFile) const
 //
 // Description:		Read from file to fill these brakes.
 //
-// Input Argurments:
+// Input Arguments:
 //		InFile		= std::ifstream* pointing to the file stream to read from
 //		FileVersion	= int specifying which file version we're reading from
 //
@@ -152,7 +152,7 @@ void BRAKES::Read(std::ifstream *InFile, int FileVersion)
 //
 // Description:		Assignment operator for BRAKES class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Brakes	= const BRAKES& to assign to this object
 //
 // Output Arguments:

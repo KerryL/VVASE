@@ -27,7 +27,7 @@
 // Description:		Constructor for the PLANE class.  Performs the entire
 //					process necessary to add the object to the scene.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Renderer	= RENDER_WINDOW&, pointer to rendering object
 //
 // Output Arguments:
@@ -55,7 +55,7 @@ PLANE::PLANE(RENDER_WINDOW &_Renderer)
 //
 // Description:		Destructor for the PLANE class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -75,7 +75,7 @@ PLANE::~PLANE()
 //
 // Description:		Updates the position and size of the plane in the scene
 //
-// Input Argurments:
+// Input Arguments:
 //		Length	= const double&, length of the plane in the x-direction
 //		Width	= const double&, length of the plane in the y-direction
 //		XOffset	= const double&, offset of the center of the plane in the

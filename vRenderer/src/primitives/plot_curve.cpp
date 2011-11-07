@@ -25,7 +25,7 @@
 //
 // Description:		Constructor for the PLOT_CURVE class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_RenderWindow	= RENDER_WINDOW* pointing to the object that owns this
 //
 // Output Arguments:
@@ -48,7 +48,7 @@ PLOT_CURVE::PLOT_CURVE(RENDER_WINDOW &_RenderWindow) : PRIMITIVE(_RenderWindow)
 //
 // Description:		Copy constructor for the PLOT_CURVE class.
 //
-// Input Argurments:
+// Input Arguments:
 //		PlotCurve	= const PLOT_CURVE& to copy to this object
 //
 // Output Arguments:
@@ -71,7 +71,7 @@ PLOT_CURVE::PLOT_CURVE(const PLOT_CURVE &PlotCurve) : PRIMITIVE(PlotCurve)
 //
 // Description:		Destructor for the PLOT_CURVE class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -93,7 +93,7 @@ PLOT_CURVE::~PLOT_CURVE()
 //
 // Description:		Declare class constants for the PLOT_CURVE class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -112,7 +112,7 @@ const int PLOT_CURVE::OffsetFromWindowEdge = 75;
 // Description:		Creates the OpenGL instructions to create this object in
 //					the scene.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -271,7 +271,7 @@ void PLOT_CURVE::GenerateGeometry(void)
 // Description:		Rescales the onscreen position of the point according to
 //					the size of the axis with which this object is associated.
 //
-// Input Argurments:
+// Input Arguments:
 //		XYZPoint	= const XYZPOINT containing the location of the point in plot
 //					  coordinates
 //
@@ -310,7 +310,7 @@ void PLOT_CURVE::RescalePoint(const XYZPOINT *XYZPoint, int *Point)
 //
 // Description:		Adds a point to the curve.
 //
-// Input Argurments:
+// Input Arguments:
 //		X	= const double&
 //		Z	= const double&
 //
@@ -341,7 +341,7 @@ void PLOT_CURVE::AddPoint(const double &X, const double &Z)
 //
 // Description:		Adds a point to the curve.
 //
-// Input Argurments:
+// Input Arguments:
 //		X	= const double&
 //		Y	= const double&
 //		Z	= const double&
@@ -374,7 +374,7 @@ void PLOT_CURVE::AddPoint(const double &X, const double &Y, const double &Z)
 // Description:		Checks to see if the information about this object is
 //					valid and complete (gives permission to create the object).
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -402,7 +402,7 @@ bool PLOT_CURVE::HasValidParameters(void)
 //
 // Description:		Assignment operator for PLOT_CURVE class.
 //
-// Input Argurments:
+// Input Arguments:
 //		PlotCurve	= const PLOT_CURVE& to assign to this object
 //
 // Output Arguments:

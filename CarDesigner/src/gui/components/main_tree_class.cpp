@@ -33,7 +33,7 @@
 //
 // Description:		Constructor for MAIN_TREE class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_MainFrame	= MAIN_FRAME&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
@@ -92,7 +92,7 @@ MAIN_TREE::MAIN_TREE(MAIN_FRAME &_MainFrame, wxWindowID id, const wxPoint& pos,
 //
 // Description:		Destructor for the MAIN_TREE class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -118,7 +118,7 @@ MAIN_TREE::~MAIN_TREE()
 //
 // Description:		Links the GUI  events with the event handling functions.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -140,7 +140,7 @@ END_EVENT_TABLE();
 //
 // Description:		Makes the selected car active.
 //
-// Input Argurments:
+// Input Arguments:
 //		IsActivated	= bool indicated whether this is firing on selection change
 //					  or activated event
 //
@@ -166,7 +166,7 @@ void MAIN_TREE::PerformSelection(bool IsActivated)
 //
 // Description:		Gets the application's object index for the selected object.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -196,7 +196,7 @@ int MAIN_TREE::GetSelectedObjectIndex(void)
 //
 // Description:		Makes the selected car active.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= &wxTreeEvent
 //
 // Output Arguments:
@@ -247,7 +247,7 @@ void MAIN_TREE::SelectionChangeEvent(wxTreeEvent &event)
 // Description:		Creates a pop-up menu for the selected item.  Menu
 //					contents change depending on item type.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= &wxTreeEvent
 //
 // Output Arguments:
@@ -288,7 +288,7 @@ void MAIN_TREE::ItemRightClickEvent(wxTreeEvent &event)
 //
 // Description:		Sets the active index to the current itemm
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= &wxTreeEvent
 //
 // Output Arguments:
@@ -314,7 +314,7 @@ void MAIN_TREE::ItemActivatedEvent(wxTreeEvent &event)
 //
 // Description:		Retrieves the selected item.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -351,7 +351,7 @@ GUI_OBJECT *MAIN_TREE::GetSelectedItem(wxTreeItemId *SelectedItem)
 // Description:		Returns the number of items below the root the specified
 //					child is.  Used for determining the type of a child item.
 //
-// Input Argurments:
+// Input Arguments:
 //		ItemId	= wxTreeItemId
 //
 // Output Arguments:

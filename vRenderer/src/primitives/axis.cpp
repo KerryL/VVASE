@@ -28,7 +28,7 @@
 //
 // Description:		Constructor for the AXIS class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_RenderWindow	= RENDER_WINDOW& reference to the object that owns this
 //
 // Output Arguments:
@@ -65,7 +65,7 @@ AXIS::AXIS(RENDER_WINDOW &_RenderWindow) : PRIMITIVE(_RenderWindow)
 //
 // Description:		Destructor for the AXIS class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -86,7 +86,7 @@ AXIS::~AXIS()
 // Description:		Creates the OpenGL instructions to create this object in
 //					the scene.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -345,7 +345,7 @@ void AXIS::GenerateGeometry(void)
 //
 // Description:		Checks to see if this object has horizontal orientation.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -370,7 +370,7 @@ bool AXIS::IsHorizontal(void) const
 // Description:		Checks to see if the information about this object is
 //					valid and complete (gives permission to create the object).
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:

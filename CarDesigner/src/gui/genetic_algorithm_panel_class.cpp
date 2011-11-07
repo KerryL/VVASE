@@ -35,7 +35,7 @@
 //
 // Description:		Constructor for the GENETIC_ALGORITHM_PANEL class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_MainFrame		= MAIN_FRAME&, reference to the main application window
 //		_Optimization	= GENETIC_OPTIMIZATION&, reference to the object that we represent
 //
@@ -66,7 +66,7 @@ GENETIC_ALGORITHM_PANEL::GENETIC_ALGORITHM_PANEL(MAIN_FRAME &_MainFrame,
 //
 // Description:		Destructor for the GENETIC_ALGORITHM_PANEL class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -86,7 +86,7 @@ GENETIC_ALGORITHM_PANEL::~GENETIC_ALGORITHM_PANEL()
 //
 // Description:		Links GUI events with event handler functions.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -116,7 +116,7 @@ END_EVENT_TABLE();
 //
 // Description:		Creates the controls for this dialog.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -382,7 +382,7 @@ void GENETIC_ALGORITHM_PANEL::CreateControls(void)
 //					GA_GENE_DIALOG to allow the user to create the gene
 //					they wish to add.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -423,7 +423,7 @@ void GENETIC_ALGORITHM_PANEL::AddGeneButtonClickedEvent(wxCommandEvent& WXUNUSED
 //					GA_GENE_DIALOG to allow the user to edit the gene
 //					they selected.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -472,7 +472,7 @@ void GENETIC_ALGORITHM_PANEL::EditGeneButtonClickedEvent(wxCommandEvent& WXUNUSE
 // Description:		Event handler for the Remove Gene button.  Removes the
 //					selected gene from the list.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -515,7 +515,7 @@ void GENETIC_ALGORITHM_PANEL::RemoveGeneButtonClickedEvent(wxCommandEvent& WXUNU
 //					GA_GOAL_DIALOG to allow the user to create the goal
 //					they wish to add.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -564,7 +564,7 @@ void GENETIC_ALGORITHM_PANEL::AddGoalButtonClickedEvent(wxCommandEvent& WXUNUSED
 //					GA_GOAL_DIALOG to allow the user to edit the goal
 //					they selected.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -613,7 +613,7 @@ void GENETIC_ALGORITHM_PANEL::EditGoalButtonClickedEvent(wxCommandEvent& WXUNUSE
 // Description:		Event handler for the Remove Goal button.  Removes the
 //					selected goal from the list.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -655,7 +655,7 @@ void GENETIC_ALGORITHM_PANEL::RemoveGoalButtonClickedEvent(wxCommandEvent& WXUNU
 // Description:		Event handler for the Start/Stop optimization button.
 //					Controls operation of optimization algorithm.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -758,7 +758,7 @@ void GENETIC_ALGORITHM_PANEL::StartStopOptimizationClickedEvent(wxCommandEvent& 
 // Description:		Updates the list of cars available for optimization.
 //					Every open car will be added to the list.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -814,7 +814,7 @@ void GENETIC_ALGORITHM_PANEL::UpdateSelectableCars(void)
 // Description:		Updates the parameters associated with optimization.  This
 //					includes the gene and goal lists.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -855,7 +855,7 @@ void GENETIC_ALGORITHM_PANEL::UpdateInformation(void)
 // Description:		Updates the gene list to match the genes present in the
 //					associated GA_OBJECT.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -910,7 +910,7 @@ void GENETIC_ALGORITHM_PANEL::UpdateGeneList(void)
 // Description:		Updates the goal list to match the goals present in the
 //					associated GA_OBJECT.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -966,7 +966,7 @@ void GENETIC_ALGORITHM_PANEL::UpdateGoalList(void)
 // Description:		Resets status bars to zero progress and sets range so that
 //					each completed analysis represents one increment.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -1002,7 +1002,7 @@ void GENETIC_ALGORITHM_PANEL::ResetStatusBars(void)
 //					Status bars are normalized so that every time this is
 //					called, the progress should be increased by one.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -1033,7 +1033,7 @@ void GENETIC_ALGORITHM_PANEL::IncrementStatusBars(void)
 //					input conditions.  Only GA modifiable conditions are
 //					displayed (i.e. euler rotations are not relevant here).
 //
-// Input Argurments:
+// Input Arguments:
 //		Inputs			= const KINEMATICS::INPUT& referring to the relevant inputs
 //		SecondInputs	= const KINEMATICS::INPUT* pointing to a second (optional)
 //						  set of inputs
@@ -1078,7 +1078,7 @@ wxString GENETIC_ALGORITHM_PANEL::GetInputString(const KINEMATICS::INPUTS &Input
 //					this method is to set flags to ensure wxWidgets sees that
 //					the entire row was selected, rather than just one cell.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxGridEvent&
 //
 // Output Arguments:
@@ -1104,7 +1104,7 @@ void GENETIC_ALGORITHM_PANEL::GeneListSelectCellEvent(wxGridEvent &event)
 //					this method is to set flags to ensure wxWidgets sees that
 //					the entire row was selected, rather than just one cell.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxGridEvent&
 //
 // Output Arguments:
@@ -1131,7 +1131,7 @@ void GENETIC_ALGORITHM_PANEL::GoalListSelectCellEvent(wxGridEvent &event)
 //					updates the optimization information, so the object can
 //					be saved to file.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1166,7 +1166,7 @@ void GENETIC_ALGORITHM_PANEL::TextBoxChangeEvent(wxCommandEvent &event)
 //
 // Description:		Updates the 
 //
-// Input Argurments:
+// Input Arguments:
 //		ShowWarnings	= const bool& indicating whether or not to show warning
 //						  dialog boxes
 //

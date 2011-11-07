@@ -25,7 +25,7 @@
 //
 // Description:		Constructor for DAMPER class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -45,7 +45,7 @@ DAMPER::DAMPER()
 //
 // Description:		Destructor for DAMPER class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:

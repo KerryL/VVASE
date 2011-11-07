@@ -28,7 +28,7 @@
 //
 // Description:		Constructor for the TIRE class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Debugger	= const DEBUGGER& reference to applications debug printing utility
 //
 // Output Arguments:
@@ -48,7 +48,7 @@ TIRE::TIRE(const DEBUGGER &_Debugger) : Debugger(_Debugger)
 //
 // Description:		Copy constructor for the TIRE class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Tire	= const TIRE& to copy from
 //
 // Output Arguments:
@@ -70,7 +70,7 @@ TIRE::TIRE(const TIRE &Tire) : Debugger(Tire.Debugger)
 //
 // Description:		Destructor for the TIRE class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -90,7 +90,7 @@ TIRE::~TIRE()
 //
 // Description:		Writes this tire to file.
 //
-// Input Argurments:
+// Input Arguments:
 //		OutFile	= std::ofstream* pointing to the output stream
 //
 // Output Arguments:
@@ -116,7 +116,7 @@ void TIRE::Write(std::ofstream *OutFile) const
 //
 // Description:		Read from file to fill this tire.
 //
-// Input Argurments:
+// Input Arguments:
 //		InFile		= std::ifstream* pointing to the input stream
 //		FileVersion	= int specifying the file version we're reading from
 //
@@ -148,7 +148,7 @@ void TIRE::Read(std::ifstream *InFile, int FileVersion)
 //
 // Description:		Assignment operator for the TIRE class.
 //
-// Input Argurments:
+// Input Arguments:
 //		Tire	= const TIRE& to assign to this
 //
 // Output Arguments:

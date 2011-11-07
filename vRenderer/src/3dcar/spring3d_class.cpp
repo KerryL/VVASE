@@ -30,7 +30,7 @@
 // Description:		Constructor for the SPRING3D class.  Performs the entire
 //					process necessary to add the object to the scene.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Renderer	= RENDER_WINDOW&, pointer to rendering object
 //
 // Output Arguments:
@@ -61,7 +61,7 @@ SPRING3D::SPRING3D(RENDER_WINDOW &_Renderer)
 //
 // Description:		Destructor for the SPRING3D class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -82,7 +82,7 @@ SPRING3D::~SPRING3D()
 // Description:		Updates the position, orientation, and size of the spring
 //					in the scene.
 //
-// Input Argurments:
+// Input Arguments:
 //		End1			= const VECTOR&, location of one end of the spring
 //		End2			= const VECTOR&, location of the other end of the spring
 //		Diameter		= const double& describing the width of the spring
@@ -147,7 +147,7 @@ void SPRING3D::Update(const VECTOR &End1, const VECTOR &End2, const double &Diam
 //					object to determine if the argument actor is part of this
 //					object or not.
 //
-// Input Argurments:
+// Input Arguments:
 //		Actor	= const PRIMITIVE* to compare against this object's actors
 //
 // Output Arguments:

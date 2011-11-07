@@ -30,7 +30,7 @@
 // Description:		Constructor for the TIRE3D class.  Performs the entire
 //					process necessary to add the object to the scene.
 //
-// Input Argurments:
+// Input Arguments:
 //		_Renderer	= RENDER_WINDOW&, pointer to rendering object
 //
 // Output Arguments:
@@ -59,7 +59,7 @@ TIRE3D::TIRE3D(RENDER_WINDOW &_Renderer)
 //
 // Description:		Destructor for the TIRE3D class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -80,7 +80,7 @@ TIRE3D::~TIRE3D()
 // Description:		Updates the position, orientation, and size of the tire
 //					in the scene.
 //
-// Input Argurments:
+// Input Arguments:
 //		ConctactPatch	= const VECTOR&, location of the tire's bottom
 //		Center			= const VECTOR&, location of center of the tire
 //		OriginalNomral	= VECTOR, the "staring position" of the upright plane
@@ -203,7 +203,7 @@ void TIRE3D::Update(const VECTOR &ContactPatch, const VECTOR &Center, VECTOR Ori
 //					object to determine if the argument actor is part of this
 //					object or not.
 //
-// Input Argurments:
+// Input Arguments:
 //		Actor	= const PRIMITIVE* to compare against this object's actors
 //
 // Output Arguments:
