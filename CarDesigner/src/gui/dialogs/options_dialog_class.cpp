@@ -394,6 +394,7 @@ void OPTIONS_DIALOG::CreateControls(void)
 	NumberOfDigitsSizer->Add(NumberOfDigitsLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 	NumberOfDigitsSizer->Add(NumberOfDigits, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 	DigitsSizer->Add(NumberOfDigitsSizer, 0, wxALIGN_CENTER_HORIZONTAL);
+	SetMinimumWidthFromContents(NumberOfDigits, additionalWidth);
 
 	// Create the checkboxes
 	UseSignificantDigits = new wxCheckBox(DigitsPage, wxID_ANY,
@@ -653,7 +654,7 @@ void OPTIONS_DIALOG::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 	Converter.SetTemperatureUnits((CONVERT::UNITS_OF_TEMPERATURE)SafelyGetComboBoxSelection(UnitOfTemperature));
 
 	// Update the number of digits and the rules for formatting numbers
-	Converter.SetNumberOfDigits(NumberOfDigits->GetCurrentSelection());
+	Converter.SetNumberOfDigits(SafelyGetComboBoxSelection(NumberOfDigits));
 	Converter.SetUseSignificantDigits(UseSignificantDigits->GetValue());
 	Converter.SetUseScientificNotation(UseScientificNotation->GetValue());
 
