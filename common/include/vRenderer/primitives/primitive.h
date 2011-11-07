@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -8,7 +8,7 @@
 ===================================================================================*/
 
 // File:  primitive.h
-// Created:  5/14/2009
+// Created:  5/2/2011
 // Author:  K. Loux
 // Description:  Base class for creating 3D objects.
 // History:
@@ -20,17 +20,17 @@
 #include "vRenderer/color_class.h"
 
 // Forward declarations
-class RENDER_WINDOW;
+class RenderWindow;
 
-class PRIMITIVE
+class Primitive
 {
 public:
 	// Constructor
-	PRIMITIVE(RENDER_WINDOW &_RenderWindow);
-	PRIMITIVE(const PRIMITIVE &Primitive);
+	Primitive(RenderWindow &_renderWindow);
+	Primitive(const Primitive &primitive);
 
 	// Destructor
-	virtual ~PRIMITIVE();
+	virtual ~Primitive();
 
 	// Performs the drawing operations
 	void Draw(void);
@@ -43,29 +43,31 @@ public:
 	virtual bool HasValidParameters(void) = 0;
 
 	// Private data accessors
-	void SetVisibility(const bool &_IsVisible);
-	void SetColor(const COLOR &_Color);
-	COLOR GetColor(void) { return Color; };
+	void SetVisibility(const bool &_isVisible);
+	void SetColor(const Color &_color);
+	Color GetColor(void) { return color; };
+
+	bool GetIsVisible(void) const { return isVisible; };
 
 	// Overloaded operators
-	PRIMITIVE& operator = (const PRIMITIVE &Primitive);
+	Primitive& operator = (const Primitive &primitive);
 
 protected:
 	// Visibility flag
-	bool IsVisible;
+	bool isVisible;
 
 	// The color variable
-	COLOR Color;
+	Color color;
 
 	// The "this has been modified" flag
-	bool Modified;
+	bool modified;
 
 	// The render window that contains this object
-	RENDER_WINDOW &RenderWindow;
+	RenderWindow &renderWindow;
 
 private:
 	// The openGL list index
-	unsigned int ListIndex;
+	unsigned int listIndex;
 };
 
 #endif// _PRIMITIVE_H_

@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -8,7 +8,7 @@
 ===================================================================================*/
 
 // File:  axis.cpp
-// Created:  5/23/2009
+// Created:  5/2/2011
 // Author:  K. Loux
 // Description:  Derived from PRIMITIVE for creating axis objects on a plot.
 // History:
@@ -17,56 +17,19 @@
 // Local headers
 #include "vRenderer/primitives/axis.h"
 #include "vRenderer/render_window_class.h"
-#include "vMath/car_math.h"
+#include "vUtilities/math/plot_math.h"
 
 // FTGL headers
 #include <FTGL/ftgl.h>
 
 //==========================================================================
-// Class:			AXIS
-// Function:		AXIS
+// Class:			Axis
+// Function:		Axis
 //
-// Description:		Constructor for the AXIS class.
+// Description:		Constructor for the Axis class.
 //
-// Input Arguments:
-//		_RenderWindow	= RENDER_WINDOW& reference to the object that owns this
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-AXIS::AXIS(RENDER_WINDOW &_RenderWindow) : PRIMITIVE(_RenderWindow)
-{
-	Color.Set(0.0, 0.0, 0.0, 1.0);
-
-	Orientation = OrientationBottom;
-	TickStyle = TickStyleThrough;
-
-	TickSize = 7;
-
-	Minimum = 0.0;
-	Maximum = 1.0;
-	MajorResolution = 1.0;
-	MinorResolution = 1.0;
-
-	Grid = false;
-
-	Font = NULL;
-
-	GridColor.Set(0.8, 0.8, 0.8, 1.0);
-}
-
-//==========================================================================
-// Class:			AXIS
-// Function:		~AXIS
-//
-// Description:		Destructor for the AXIS class.
-//
-// Input Arguments:
-//		None
+// Input Argurments:
+//		_renderWindow	= RenderWindow& reference to the object that owns this
 //
 // Output Arguments:
 //		None
@@ -75,18 +38,73 @@ AXIS::AXIS(RENDER_WINDOW &_RenderWindow) : PRIMITIVE(_RenderWindow)
 //		None
 //
 //==========================================================================
-AXIS::~AXIS()
+Axis::Axis(RenderWindow &_renderWindow) : Primitive(_renderWindow)
+{
+	color.Set(0.0, 0.0, 0.0, 1.0);
+
+	orientation = OrientationBottom;
+	tickStyle = TickStyleThrough;
+
+	tickSize = 7;
+
+	minimum = 0.0;
+	maximum = 1.0;
+	majorResolution = 1.0;
+	minorResolution = 1.0;
+
+	grid = false;
+
+	font = NULL;
+
+	gridColor.Set(0.8, 0.8, 0.8, 1.0);
+}
+
+//==========================================================================
+// Class:			Axis
+// Function:		~Axis
+//
+// Description:		Destructor for the Axis class.
+//
+// Input Argurments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+Axis::~Axis()
 {
 }
 
 //==========================================================================
-// Class:			AXIS
+// Class:			Axis
+// Function:		Constant Definitions
+//
+// Description:		Constants for Axis class are defined here.
+//
+// Input Argurments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+const unsigned int Axis::offsetFromWindowEdge = 75;// [pixels]
+
+//==========================================================================
+// Class:			Axis
 // Function:		GenerateGeometry
 //
 // Description:		Creates the OpenGL instructions to create this object in
 //					the scene.
 //
-// Input Arguments:
+// Input Argurments:
 //		None
 //
 // Output Arguments:
@@ -96,46 +114,45 @@ AXIS::~AXIS()
 //		None
 //
 //==========================================================================
-void AXIS::GenerateGeometry(void)
+void Axis::GenerateGeometry(void)
 {
 	// Use glLineWidth() and store it in member variable?
 
 	// Preliminary calculations
-	int AxisLength, Tick;
-	double OutsideTick = 0.0, InsideTick = 0.0;
-	double TickSpacing;// To avoid rounding errors, we convert this back to an int after we do some math
-	double GridSpacing;
-	double Sign = 1.0;
-	int OffsetFromWindowEdge = 75;
-	int NumberOfTicks = int((Maximum - Minimum) / MinorResolution + 0.5) - 1;
-	int NumberOfGridLines = int((Maximum - Minimum) / MajorResolution + 0.5) - 1;
-	int MainAxisLocation;
+	int axisLength, tick;
+	double outsideTick = 0.0, insideTick = 0.0;
+	double tickSpacing;// To avoid rounding errors, we convert this back to an int after we do some math
+	double gridSpacing;
+	double sign = 1.0;
+	int numberOfTicks = int((maximum - minimum) / minorResolution + 0.5) - 1;
+	int numberOfGridLines = int((maximum - minimum) / majorResolution + 0.5) - 1;
+	int mainAxisLocation;
 
 	// Determine where the ticks should be drawns
-	if (TickStyle == TickStyleInside)
-		InsideTick = 1.0;
-	else if (TickStyle == TickStyleOutside)
-		OutsideTick = 1.0;
-	else if (TickStyle == TickStyleThrough)
+	if (tickStyle == TickStyleInside)
+		insideTick = 1.0;
+	else if (tickStyle == TickStyleOutside)
+		outsideTick = 1.0;
+	else if (tickStyle == TickStyleThrough)
 	{
-		InsideTick = 0.5;
-		OutsideTick = 0.5;
+		insideTick = 0.5;
+		outsideTick = 0.5;
 	}
 
 	// Set the sign variable as necessary
-	if (Orientation == OrientationTop || Orientation == OrientationRight)
-		Sign = -1.0;
+	if (orientation == OrientationTop || orientation == OrientationRight)
+		sign = -1.0;
 
 	// Compute the MainAxisLocation (X for vertical axis, Y for horizontal axis)
-	if (Orientation == OrientationBottom || Orientation == OrientationLeft)
-		MainAxisLocation = OffsetFromWindowEdge;
-	else if (Orientation == OrientationRight)
-		MainAxisLocation = RenderWindow.GetSize().GetWidth() - OffsetFromWindowEdge;
+	if (orientation == OrientationBottom || orientation == OrientationLeft)
+		mainAxisLocation = offsetFromWindowEdge;
+	else if (orientation == OrientationRight)
+		mainAxisLocation = renderWindow.GetSize().GetWidth() - offsetFromWindowEdge;
 	else// OrientationTop
-		MainAxisLocation = RenderWindow.GetSize().GetHeight() - OffsetFromWindowEdge;
+		mainAxisLocation = renderWindow.GetSize().GetHeight() - offsetFromWindowEdge;
 
 	// Set the line width
-	glLineWidth(1.5f);
+	glLineWidth(1.0f);
 
 	// Create the axis
 	glBegin(GL_LINES);
@@ -143,74 +160,74 @@ void AXIS::GenerateGeometry(void)
 	// Draw the axis
 	if (IsHorizontal())
 	{
-		AxisLength = RenderWindow.GetSize().GetWidth() - 2 * OffsetFromWindowEdge;
-		glVertex2i(OffsetFromWindowEdge, MainAxisLocation);
-		glVertex2i(AxisLength + OffsetFromWindowEdge, MainAxisLocation);
+		axisLength = renderWindow.GetSize().GetWidth() - 2 * offsetFromWindowEdge;
+		glVertex2i(offsetFromWindowEdge, mainAxisLocation);
+		glVertex2i(axisLength + offsetFromWindowEdge, mainAxisLocation);
 	}
 	else
 	{
-		AxisLength = RenderWindow.GetSize().GetHeight() - 2 * OffsetFromWindowEdge;
-		glVertex2i(MainAxisLocation, OffsetFromWindowEdge);
-		glVertex2i(MainAxisLocation, AxisLength + OffsetFromWindowEdge);
+		axisLength = renderWindow.GetSize().GetHeight() - 2 * offsetFromWindowEdge;
+		glVertex2i(mainAxisLocation, offsetFromWindowEdge);
+		glVertex2i(mainAxisLocation, axisLength + offsetFromWindowEdge);
 	}
 
 	// Compute the spacing for grids and ticks
-	GridSpacing = (double)AxisLength / double(NumberOfGridLines + 1);
-	TickSpacing = (double)AxisLength / double(NumberOfTicks + 1);
+	gridSpacing = (double)axisLength / double(numberOfGridLines + 1);
+	tickSpacing = (double)axisLength / double(numberOfTicks + 1);
 
 	// Draw the grids and tick marks
 	if (IsHorizontal())
 	{
 		// Draw the grid
-		if (Grid)
+		if (grid)
 		{
-			glColor4d(GridColor.GetRed(), GridColor.GetGreen(), GridColor.GetBlue(), GridColor.GetAlpha());
+			glColor4d(gridColor.GetRed(), gridColor.GetGreen(), gridColor.GetBlue(), gridColor.GetAlpha());
 
-			for (Tick = 0; Tick < NumberOfGridLines; Tick++)
+			for (tick = 0; tick < numberOfGridLines; tick++)
 			{
-				glVertex2i(OffsetFromWindowEdge + (Tick + 1) * GridSpacing, OffsetFromWindowEdge);
-				glVertex2i(OffsetFromWindowEdge + (Tick + 1) * GridSpacing,
-					RenderWindow.GetSize().GetHeight() - OffsetFromWindowEdge);
+				glVertex2i(offsetFromWindowEdge + (tick + 1) * gridSpacing, offsetFromWindowEdge);
+				glVertex2i(offsetFromWindowEdge + (tick + 1) * gridSpacing,
+					renderWindow.GetSize().GetHeight() - offsetFromWindowEdge);
 			}
 
-			glColor4d(Color.GetRed(), Color.GetGreen(), Color.GetBlue(), Color.GetAlpha());
+			glColor4d(color.GetRed(), color.GetGreen(), color.GetBlue(), color.GetAlpha());
 		}
 
 		// Draw the tick marks (if they're turned on)
-		if (TickStyle != TickStyleNone)
+		if (tickStyle != TickStyleNone)
 		{
 			// The first and last inside ticks do not need to be drawn, thus we start this loop with Tick = 1.
-			for (Tick = 1; Tick <= NumberOfTicks; Tick++)
+			for (tick = 1; tick <= numberOfTicks; tick++)
 			{
-				glVertex2i(OffsetFromWindowEdge + Tick * TickSpacing, MainAxisLocation - TickSize * OutsideTick * Sign);
-				glVertex2i(OffsetFromWindowEdge + Tick * TickSpacing, MainAxisLocation + TickSize * InsideTick * Sign);
+				glVertex2i(offsetFromWindowEdge + tick * tickSpacing, mainAxisLocation - tickSize * outsideTick * sign);
+				glVertex2i(offsetFromWindowEdge + tick * tickSpacing, mainAxisLocation + tickSize * insideTick * sign);
 			}
 		}
 	}
 	else
 	{
 		// Draw the grid
-		if (Grid)
+		if (grid)
 		{
-			glColor4d(GridColor.GetRed(), GridColor.GetGreen(), GridColor.GetBlue(), GridColor.GetAlpha());
+			glColor4d(gridColor.GetRed(), gridColor.GetGreen(), gridColor.GetBlue(), gridColor.GetAlpha());
 
-			for (Tick = 0; Tick < NumberOfGridLines; Tick++)
+			for (tick = 0; tick < numberOfGridLines; tick++)
 			{
-				glVertex2i(OffsetFromWindowEdge, OffsetFromWindowEdge + (Tick + 1) * GridSpacing);
-				glVertex2i(RenderWindow.GetSize().GetWidth() - OffsetFromWindowEdge,
-					OffsetFromWindowEdge + (Tick + 1) * GridSpacing);
+				glVertex2i(offsetFromWindowEdge, offsetFromWindowEdge + (tick + 1) * gridSpacing);
+				glVertex2i(renderWindow.GetSize().GetWidth() - offsetFromWindowEdge,
+					offsetFromWindowEdge + (tick + 1) * gridSpacing);
 			}
 
-			glColor4d(Color.GetRed(), Color.GetGreen(), Color.GetBlue(), Color.GetAlpha());
+			glColor4d(color.GetRed(), color.GetGreen(), color.GetBlue(), color.GetAlpha());
 		}
 
 		// Draw the tick marks (if they're turned on)
-		if (TickStyle != TickStyleNone)
+		if (tickStyle != TickStyleNone)
 		{
-			for (Tick = 1; Tick <= NumberOfTicks; Tick++)
+			for (tick = 1; tick <= numberOfTicks; tick++)
 			{
-				glVertex2i(MainAxisLocation - TickSize * OutsideTick * Sign, OffsetFromWindowEdge + Tick * TickSpacing);
-				glVertex2i(MainAxisLocation + TickSize * InsideTick * Sign, OffsetFromWindowEdge + Tick * TickSpacing);
+				glVertex2i(mainAxisLocation - tickSize * outsideTick * sign, offsetFromWindowEdge + tick * tickSpacing);
+				glVertex2i(mainAxisLocation + tickSize * insideTick * sign, offsetFromWindowEdge + tick * tickSpacing);
 			}
 		}
 	}
@@ -219,46 +236,46 @@ void AXIS::GenerateGeometry(void)
 	glEnd();
 
 	// Add the text
-	if (Font)
+	if (font)
 	{
-		FTBBox BoundingBox;
-		double YTranslation, XTranslation;
+		FTBBox boundingBox;
+		double yTranslation, xTranslation;
 
 		// Add the label text
-		if (!Label.IsEmpty())
+		if (!label.IsEmpty())
 		{
-			double FontOffsetFromWindowEdge = OffsetFromWindowEdge / 3.0;
+			double fontOffsetFromWindowEdge = offsetFromWindowEdge / 3.0;
 
 			// Vertical axis need more space for the numbers
 			if (!IsHorizontal())
-				FontOffsetFromWindowEdge /= 2.0;
+				fontOffsetFromWindowEdge /= 2.0;
 
 			// FIXME:  Change plot dimension if there is a title? or if there is a title and a label for the top axis?
 
 			// Get the bounding box
-			BoundingBox = Font->BBox("H");// Some capital letter to assure uniform spacing
+			boundingBox = font->BBox("H");// Some capital letter to assure uniform spacing
 
-			switch (Orientation)
+			switch (orientation)
 			{
 			case OrientationBottom:
-				YTranslation = FontOffsetFromWindowEdge;
+				yTranslation = fontOffsetFromWindowEdge;
 				break;
 
 			case OrientationLeft:
-				YTranslation = FontOffsetFromWindowEdge + BoundingBox.Upper().Y();
+				yTranslation = fontOffsetFromWindowEdge + boundingBox.Upper().Y();
 				break;
 
 			case OrientationTop:
-				YTranslation = RenderWindow.GetSize().GetHeight() - FontOffsetFromWindowEdge - BoundingBox.Upper().Y();
+				yTranslation = renderWindow.GetSize().GetHeight() - fontOffsetFromWindowEdge - boundingBox.Upper().Y();
 				break;
 
 			case OrientationRight:
-				YTranslation = RenderWindow.GetSize().GetWidth() - FontOffsetFromWindowEdge;
+				yTranslation = renderWindow.GetSize().GetWidth() - fontOffsetFromWindowEdge;
 				break;
 
 			default:
 				assert(0);
-				YTranslation = 0.0;// To avoid MSVC++ compiler warning C4701
+				yTranslation = 0.0;// To avoid MSVC++ compiler warning C4701
 				break;
 			}
 
@@ -266,73 +283,91 @@ void AXIS::GenerateGeometry(void)
 				glLoadIdentity();
 
 				// Get the real bounding box
-				BoundingBox = Font->BBox(Label.c_str());
+				boundingBox = font->BBox(label.c_str());
 
 				if (IsHorizontal())
-					glTranslated((RenderWindow.GetSize().GetWidth() + BoundingBox.Lower().X()
-						- BoundingBox.Upper().X()) / 2.0, YTranslation, 0.0);
+					glTranslated((renderWindow.GetSize().GetWidth() + boundingBox.Lower().X()
+						- boundingBox.Upper().X()) / 2.0, yTranslation, 0.0);
 				else
 				{
 					glRotated(90.0, 0.0, 0.0, 1.0);
-					glTranslated((BoundingBox.Lower().X() - BoundingBox.Upper().X()
-						+ RenderWindow.GetSize().GetHeight()) / 2.0, -YTranslation, 0.0);
+					glTranslated((boundingBox.Lower().X() - boundingBox.Upper().X()
+						+ renderWindow.GetSize().GetHeight()) / 2.0, -yTranslation, 0.0);
 				}
 
-				Font->Render(Label.c_str());
+				font->Render(label.c_str());
 			glPopMatrix();
 		}
 
 		// Determine the precision to use for displaying the numbers
 		// Use just enough precision so that two adjacent ticks are distinguishable
-		unsigned int Precision = 2;
-		if (log10(MajorResolution) >= 0.0)
-			Precision = 0;
+		// NOTE:  Changed 5/7/2011 to show 3 significant digits.  Fixes problem with apparent
+		// accuracy of plot during panning (plot moves, grid lines don't, value appears to be wrong)
+		unsigned int precision;
+		if (log10(majorResolution) >= 0.0)
+			precision = 0;
 		else
-			Precision = -log10(MajorResolution) + 1;
+			precision = -log10(majorResolution) + 1;
+		precision += 2;// This is the change from 5/7/2011
+
+		// Set the maximum and minimum to be exactly the values show after rounding
+		wxString limit;
+		limit.Printf("%0.*f", precision, minimum);
+		if (!limit.ToDouble(&minimum))
+		{
+			// Warn the user?
+			// FIXME:  Warn the user
+		}
 
 		// Add the number values text
-		double TextValue;
-		wxString ValueLabel;
-		double ValueOffsetFromEdge = /*0.0;//*/OffsetFromWindowEdge * 0.8;
-		for (Tick = 0; Tick < NumberOfGridLines + 2; Tick++)
+		double textValue;
+		wxString valueLabel;
+		double valueOffsetFromEdge = offsetFromWindowEdge * 0.8;
+		for (tick = 0; tick < numberOfGridLines + 2; tick++)
 		{
 			// Determine the label value
-			TextValue = Minimum + (double)Tick * MajorResolution;
+			textValue = minimum + (double)tick * majorResolution;
 
 			// Assign the value to the string
-			ValueLabel.Printf("%0.*f", Precision, TextValue);
+			valueLabel.Printf("%0.*f", precision, textValue);
 
 			glPushMatrix();
 				glLoadIdentity();
 
 				// Get the real bounding box
-				BoundingBox = Font->BBox(ValueLabel);
+				boundingBox = font->BBox(valueLabel);
 
 				if (IsHorizontal())
 				{
-					if (Orientation == OrientationBottom)
-						YTranslation = ValueOffsetFromEdge - BoundingBox.Upper().Y();
+					if (orientation == OrientationBottom)
+						yTranslation = valueOffsetFromEdge - boundingBox.Upper().Y();
 					else
-						YTranslation = RenderWindow.GetSize().GetHeight() - ValueOffsetFromEdge;
+						yTranslation = renderWindow.GetSize().GetHeight() - valueOffsetFromEdge;
 
-					XTranslation = OffsetFromWindowEdge + Tick * GridSpacing -
-						(BoundingBox.Upper().X() - BoundingBox.Lower().X()) / 2.0;
+					xTranslation = offsetFromWindowEdge + tick * gridSpacing -
+						(boundingBox.Upper().X() - boundingBox.Lower().X()) / 2.0;
 				}
 				else
 				{
-					if (Orientation == OrientationLeft)
-						XTranslation = ValueOffsetFromEdge - BoundingBox.Upper().X();
+					if (orientation == OrientationLeft)
+						xTranslation = valueOffsetFromEdge - boundingBox.Upper().X();
 					else
-						XTranslation = RenderWindow.GetSize().GetWidth() - ValueOffsetFromEdge;
+						xTranslation = renderWindow.GetSize().GetWidth() - valueOffsetFromEdge;
 
-					YTranslation = OffsetFromWindowEdge + Tick * GridSpacing -
-						(BoundingBox.Upper().Y() - BoundingBox.Lower().Y()) / 2.0;
+					yTranslation = offsetFromWindowEdge + tick * gridSpacing -
+						(boundingBox.Upper().Y() - boundingBox.Lower().Y()) / 2.0;
 				}
 
-				glTranslated(XTranslation, YTranslation, 0.0);
+				glTranslated(xTranslation, yTranslation, 0.0);
 
-				Font->Render(ValueLabel);
+				font->Render(valueLabel);
 			glPopMatrix();
+		}
+
+		if (!valueLabel.ToDouble(&maximum))
+		{
+			// Warn the user?
+			// FIXME:  Warn the user
 		}
 	}
 
@@ -340,12 +375,12 @@ void AXIS::GenerateGeometry(void)
 }
 
 //==========================================================================
-// Class:			AXIS
+// Class:			Axis
 // Function:		IsHorizontal
 //
 // Description:		Checks to see if this object has horizontal orientation.
 //
-// Input Arguments:
+// Input Argurments:
 //		None
 //
 // Output Arguments:
@@ -355,22 +390,22 @@ void AXIS::GenerateGeometry(void)
 //		bool, true for horizontal, false for vertical
 //
 //==========================================================================
-bool AXIS::IsHorizontal(void) const
+bool Axis::IsHorizontal(void) const
 {
-	if (Orientation == OrientationBottom || Orientation == OrientationTop)
+	if (orientation == OrientationBottom || orientation == OrientationTop)
 		return true;
 
 	return false;
 }
 
 //==========================================================================
-// Class:			AXIS
+// Class:			Axis
 // Function:		HasValidParameters
 //
 // Description:		Checks to see if the information about this object is
 //					valid and complete (gives permission to create the object).
 //
-// Input Arguments:
+// Input Argurments:
 //		None
 //
 // Output Arguments:
@@ -380,10 +415,10 @@ bool AXIS::IsHorizontal(void) const
 //		bool, true for OK to draw, false otherwise
 //
 //==========================================================================
-bool AXIS::HasValidParameters(void)
+bool Axis::HasValidParameters(void)
 {
 	// Don't draw if any of the limits are not numbers
-	if (VVASEMath::IsNaN(Minimum) || VVASEMath::IsNaN(Maximum))
+	if (PlotMath::IsNaN(minimum) || PlotMath::IsNaN(maximum))
 		return false;
 
 	return true;

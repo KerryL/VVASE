@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -8,7 +8,7 @@
 ===================================================================================*/
 
 // File:  primitive.cpp
-// Created:  5/14/2009
+// Created:  5/2/2011
 // Author:  K. Loux
 // Description:  Abstract base class for creating 3D objects.
 // History:
@@ -18,13 +18,13 @@
 #include "vRenderer/render_window_class.h"
 
 //==========================================================================
-// Class:			PRIMITIVE
-// Function:		PRIMITIVE
+// Class:			Primitive
+// Function:		Primitive
 //
-// Description:		Constructor for the PRIMITIVE class.
+// Description:		Constructor for the Primitive class.
 //
-// Input Arguments:
-//		_RenderWindow	= RENDER_WINDOW& pointing to the object that owns this
+// Input Argurments:
+//		_renderWindow	= RenderWindow& pointing to the object that owns this
 //
 // Output Arguments:
 //		None
@@ -33,30 +33,30 @@
 //		None
 //
 //==========================================================================
-PRIMITIVE::PRIMITIVE(RENDER_WINDOW &_RenderWindow) : RenderWindow(_RenderWindow)
+Primitive::Primitive(RenderWindow &_renderWindow) : renderWindow(_renderWindow)
 {
 	// Initialize private data
-	IsVisible = true;
-	Modified = true;
+	isVisible = true;
+	modified = true;
 
 	// Initialize the color to black
-	Color = COLOR::ColorBlack;
+	color = Color::ColorBlack;
 
 	// Initialize the list index to zero
-	ListIndex = 0;
+	listIndex = 0;
 
 	// Add this object to the renderer
-	RenderWindow.AddActor(this);
+	renderWindow.AddActor(this);
 }
 
 //==========================================================================
-// Class:			PRIMITIVE
-// Function:		PRIMITIVE
+// Class:			Primitive
+// Function:		Primitive
 //
-// Description:		Copy constructor for the PRIMITIVE class.
+// Description:		Copy constructor for the Primitive class.
 //
-// Input Arguments:
-//		Primitive	= const PRIMITIVE& to copy to this object
+// Input Argurments:
+//		primitive	= const Primitive& to copy to this object
 //
 // Output Arguments:
 //		None
@@ -65,19 +65,19 @@ PRIMITIVE::PRIMITIVE(RENDER_WINDOW &_RenderWindow) : RenderWindow(_RenderWindow)
 //		None
 //
 //==========================================================================
-PRIMITIVE::PRIMITIVE(const PRIMITIVE &Primitive) : RenderWindow(Primitive.RenderWindow)
+Primitive::Primitive(const Primitive &primitive) : renderWindow(primitive.renderWindow)
 {
 	// Do the copy
-	*this = Primitive;
+	*this = primitive;
 }
 
 //==========================================================================
-// Class:			PRIMITIVE
-// Function:		~PRIMITIVE
+// Class:			Primitive
+// Function:		~Primitive
 //
-// Description:		Destructor for the PRIMITIVE class.
+// Description:		Destructor for the Primitive class.
 //
-// Input Arguments:
+// Input Argurments:
 //		None
 //
 // Output Arguments:
@@ -87,15 +87,15 @@ PRIMITIVE::PRIMITIVE(const PRIMITIVE &Primitive) : RenderWindow(Primitive.Render
 //		None
 //
 //==========================================================================
-PRIMITIVE::~PRIMITIVE()
+Primitive::~Primitive()
 {
 	// Release the glList for this object (if the list exists)
-	if (ListIndex != 0)
-		glDeleteLists(ListIndex, 1);
+	if (listIndex != 0)
+		glDeleteLists(listIndex, 1);
 }
 
 //==========================================================================
-// Class:			PRIMITIVE
+// Class:			Primitive
 // Function:		Draw
 //
 // Description:		Calls two mandatory overloads that 1) check to see if the
@@ -104,7 +104,7 @@ PRIMITIVE::~PRIMITIVE()
 //					Uses glLists if geometry has already been created and all
 //					information is up-to-date.
 //
-// Input Arguments:
+// Input Argurments:
 //		None
 //
 // Output Arguments:
@@ -114,21 +114,24 @@ PRIMITIVE::~PRIMITIVE()
 //		None
 //
 //==========================================================================
-void PRIMITIVE::Draw(void)
+void Primitive::Draw(void)
 {
 	// Check to see if we need to re-create the geometry for this object
-	if (Modified || ListIndex == 0)
+	if (modified || listIndex == 0)
 	{
+		// Reset the modified flag
+		modified = false;
+
 		// If the list index is zero, try and get a valid index
-		if (ListIndex == 0)
-			ListIndex = glGenLists(1);
+		if (listIndex == 0)
+			listIndex = glGenLists(1);
 
 		// Start a new glList
-		glNewList(ListIndex, GL_COMPILE);
+		glNewList(listIndex, GL_COMPILE);
 
 		// Check to see if this object's parameters allow for it to be drawn correctly
 		// or if the visibility flag is false
-		if (!HasValidParameters() || !IsVisible)
+		if (!HasValidParameters() || !isVisible)
 		{
 			// End the list without drawing the object
 			glEndList();
@@ -137,52 +140,49 @@ void PRIMITIVE::Draw(void)
 		}
 
 		// Set the color
-		glColor4d(Color.GetRed(), Color.GetGreen(), Color.GetBlue(), Color.GetAlpha());
+		glColor4d(color.GetRed(), color.GetGreen(), color.GetBlue(), color.GetAlpha());
 
 		// If the object is transparent, enable alpha blending
-		if (Color.GetAlpha() != 1.0)
+		/*if (color.GetAlpha() != 1.0)
 		{
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 			// Also disable the Z-buffer
 			glDepthMask(GL_FALSE);
-		}
+		}*/// FIXME:  Let this be handled by anti-aliasing controls?
 
 		// Generate the object's geometry
 		GenerateGeometry();
 
 		// Turn off alpha blending, if we turned it on to render this object
-		if (Color.GetAlpha() != 1.0)
+		/*if (color.GetAlpha() != 1.0)
 		{
 			glDisable(GL_BLEND);
 
 			// And re-enable the z-buffer
 			glDepthMask(GL_TRUE);
-		}
-
+		}*/// FIXME:  Let this be handled by anti-aliasing controls?
+		
 		// End the glList
 		glEndList();
-
-		// Reset the modified flag
-		Modified = false;
 	}
 
 	// Call the list we created for this object (if it has a valid index)
-	if (ListIndex != 0)
-		glCallList(ListIndex);
+	if (listIndex != 0)
+		glCallList(listIndex);
 
 	return;
 }
 
 //==========================================================================
-// Class:			PRIMITIVE
+// Class:			Primitive
 // Function:		SetVisibility
 //
 // Description:		Sets the visibility flag for this object.
 //
-// Input Arguments:
-//		_IsVisible	= const bool&
+// Input Argurments:
+//		_isVisible	= const bool&
 //
 // Output Arguments:
 //		None
@@ -191,25 +191,25 @@ void PRIMITIVE::Draw(void)
 //		None
 //
 //==========================================================================
-void PRIMITIVE::SetVisibility(const bool &_IsVisible)
+void Primitive::SetVisibility(const bool &_isVisible)
 {
 	// Set the visibility flag to the argument
-	IsVisible = _IsVisible;
+	isVisible = _isVisible;
 	
 	// Reset the modified flag
-	Modified = true;
+	modified = true;
 
 	return;
 }
 
 //==========================================================================
-// Class:			PRIMITIVE
+// Class:			Primitive
 // Function:		SetColor
 //
 // Description:		Sets the color of this object.
 //
-// Input Arguments:
-//		_Color	= const COLOR&
+// Input Argurments:
+//		_Color	= const Color&
 //
 // Output Arguments:
 //		None
@@ -218,24 +218,24 @@ void PRIMITIVE::SetVisibility(const bool &_IsVisible)
 //		None
 //
 //==========================================================================
-void PRIMITIVE::SetColor(const COLOR &_Color)
+void Primitive::SetColor(const Color &_color)
 {
 	// Set the color to the argument
-	Color = _Color;
+	color = _color;
 	
 	// Reset the modified flag
-	Modified = true;
+	modified = true;
 
 	return;
 }
 
 //==========================================================================
-// Class:			PRIMITIVE
+// Class:			Primitive
 // Function:		operator =
 //
-// Description:		Assignment operator for PRIMITIVE class.
+// Description:		Assignment operator for Primitive class.
 //
-// Input Arguments:
+// Input Argurments:
 //		Primitive	= const PRIMITIVE& to assign to this object
 //
 // Output Arguments:
@@ -245,19 +245,19 @@ void PRIMITIVE::SetColor(const COLOR &_Color)
 //		PRIMITIVE&, reference to this object
 //
 //==========================================================================
-PRIMITIVE& PRIMITIVE::operator = (const PRIMITIVE &Primitive)
+Primitive& Primitive::operator = (const Primitive &primitive)
 {
 	// Check for self-assignment
-	if (this == &Primitive)
+	if (this == &primitive)
 		return *this;
 
 	// Perform the assignment
-	IsVisible	= Primitive.IsVisible;
-	Color		= Primitive.Color;
-	Modified	= Primitive.Modified;
+	isVisible	= primitive.isVisible;
+	color		= primitive.color;
+	modified	= primitive.modified;
 
 	// The list index just gets zeroed out
-	ListIndex = 0;
+	listIndex = 0;
 
 	return *this;
 }

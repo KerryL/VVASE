@@ -45,7 +45,7 @@
 //		None
 //
 //==========================================================================
-SPHERE::SPHERE(RENDER_WINDOW &_RenderWindow) : PRIMITIVE(_RenderWindow)
+SPHERE::SPHERE(RenderWindow &_RenderWindow) : Primitive(_RenderWindow)
 {
 	// Initialize the private data
 	Center.Set(0.0,0.0,0.0);
@@ -104,7 +104,7 @@ void SPHERE::GenerateGeometry(void)
 	// Find twelve vertecies that define an icosohedron cirumscribed within the sphere
 	double t = (1.0 + sqrt(5.0)) / 2.0;
 	double s = sqrt(1 + t * t);
-	VECTOR Vertex[12];
+	Vector Vertex[12];
 	Vertex[0].Set(t, 1.0, 0.0);
 	Vertex[1].Set(-t, 1.0, 0.0);
 	Vertex[2].Set(t, -1.0, 0.0);
@@ -129,16 +129,16 @@ void SPHERE::GenerateGeometry(void)
 		Resolution = 3;
 
 	// Find six vertecies that define an octohedron circumscribed within the sphere
-	VECTOR Top(0.0, 0.0, Radius), Bottom(0.0, 0.0, -Radius);
-	VECTOR Equator1(Radius, 0.0, 0.0), Equator2(0.0, Radius, 0.0);
-	VECTOR Equator3(-Radius, 0.0, 0.0), Equator4(0.0, -Radius, 0.0);
+	Vector Top(0.0, 0.0, Radius), Bottom(0.0, 0.0, -Radius);
+	Vector Equator1(Radius, 0.0, 0.0), Equator2(0.0, Radius, 0.0);
+	Vector Equator3(-Radius, 0.0, 0.0), Equator4(0.0, -Radius, 0.0);
 #endif
 
 	// Push the current matrix
 	glPushMatrix();
 
 		// Translate the current matrix
-		glTranslated(Center.X, Center.Y, Center.Z);
+		glTranslated(Center.x, Center.y, Center.z);
 
 		// Begin the triangles sequence
 		glBegin(GL_TRIANGLES);
@@ -199,9 +199,9 @@ void SPHERE::GenerateGeometry(void)
 //					the final resolution of the sphere.
 //
 // Input Arguments:
-//		Corner1	= const VECTOR& specifying the first corner of the triangle
-//		Corner2	= const VECTOR& specifying the second corner of the triangle
-//		Corner3	= const VECTOR& specifying the third corner of the triangle
+//		Corner1	= const Vector& specifying the first corner of the triangle
+//		Corner2	= const Vector& specifying the second corner of the triangle
+//		Corner3	= const Vector& specifying the third corner of the triangle
 //		Level	= int specifying remaining number of recursive calls
 //
 // Output Arguments:
@@ -211,8 +211,8 @@ void SPHERE::GenerateGeometry(void)
 //		bool, true for OK to draw, false otherwise
 //
 //==========================================================================
-void SPHERE::RecursiveSubdivision(const VECTOR &Corner1, const VECTOR &Corner2,
-								  const VECTOR &Corner3, int Level)
+void SPHERE::RecursiveSubdivision(const Vector &Corner1, const Vector &Corner2,
+								  const Vector &Corner3, int Level)
 {
 	// If level is less than 1, add the triangle to the scene instead of
 	// continuing with the sub-division
@@ -238,9 +238,9 @@ void SPHERE::RecursiveSubdivision(const VECTOR &Corner1, const VECTOR &Corner2,
 	    ------------
 	   Corner 2    Corner 3
 	-----------------------*/
-	VECTOR MidPoint1 = Corner1 + (Corner2 - Corner1).Normalize() * Corner1.Distance(Corner2) / 2.0;
-	VECTOR MidPoint2 = Corner1 + (Corner3 - Corner1).Normalize() * Corner1.Distance(Corner3) / 2.0;
-	VECTOR MidPoint3 = Corner3 + (Corner2 - Corner3).Normalize() * Corner3.Distance(Corner2) / 2.0;
+	Vector MidPoint1 = Corner1 + (Corner2 - Corner1).Normalize() * Corner1.Distance(Corner2) / 2.0;
+	Vector MidPoint2 = Corner1 + (Corner3 - Corner1).Normalize() * Corner1.Distance(Corner3) / 2.0;
+	Vector MidPoint3 = Corner3 + (Corner2 - Corner3).Normalize() * Corner3.Distance(Corner2) / 2.0;
 
 	// These locations now need to be normalized such that they lie at a
 	// distance Radius from the center
@@ -268,7 +268,7 @@ void SPHERE::RecursiveSubdivision(const VECTOR &Corner1, const VECTOR &Corner2,
 //					specified vertex to the OpenGL call list.
 //
 // Input Arguments:
-//		Vertex	= const VECTOR& to be added
+//		Vertex	= const Vector& to be added
 //
 // Output Arguments:
 //		None
@@ -277,14 +277,14 @@ void SPHERE::RecursiveSubdivision(const VECTOR &Corner1, const VECTOR &Corner2,
 //		None
 //
 //==========================================================================
-void SPHERE::AddVertex(const VECTOR &Vertex)
+void SPHERE::AddVertex(const Vector &Vertex)
 {
 	// Compute and set the normal
-	VECTOR Normal = Vertex.Normalize();
-	glNormal3d(Normal.X, Normal.Y, Normal.Z);
+	Vector Normal = Vertex.Normalize();
+	glNormal3d(Normal.x, Normal.y, Normal.z);
 
 	// Add the vertex
-	glVertex3d(Vertex.X, Vertex.Y, Vertex.Z);
+	glVertex3d(Vertex.x, Vertex.y, Vertex.z);
 }
 
 //==========================================================================
@@ -336,7 +336,7 @@ void SPHERE::SetResolution(const int &_Resolution)
 	Resolution = _Resolution;
 	
 	// Reset the modified flag
-	Modified = true;
+	modified = true;
 
 	return;
 }
@@ -348,7 +348,7 @@ void SPHERE::SetResolution(const int &_Resolution)
 // Description:		Sets the location of the center of the sphere.
 //
 // Input Arguments:
-//		_Center	= const VECTOR&
+//		_Center	= const Vector&
 //
 // Output Arguments:
 //		None
@@ -357,13 +357,13 @@ void SPHERE::SetResolution(const int &_Resolution)
 //		None
 //
 //==========================================================================
-void SPHERE::SetCenter(const VECTOR &_Center)
+void SPHERE::SetCenter(const Vector &_Center)
 {
 	// Set the center point to the argument
 	Center = _Center;
 	
 	// Reset the modified flag
-	Modified = true;
+	modified = true;
 
 	return;
 }
@@ -390,7 +390,7 @@ void SPHERE::SetRadius(const double &_Radius)
 	Radius = _Radius;
 	
 	// Reset the modified flag
-	Modified = true;
+	modified = true;
 
 	return;
 }

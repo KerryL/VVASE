@@ -20,11 +20,11 @@
 #include "vRenderer/primitives/primitive.h"
 #include "vMath/vector_class.h"
 
-class TRIANGLE : public PRIMITIVE
+class TRIANGLE : public Primitive
 {
 public:
 	// Constructor
-	TRIANGLE(RENDER_WINDOW &_RenderWindow);
+	TRIANGLE(RenderWindow &_RenderWindow);
 
 	// Destructor
 	~TRIANGLE();
@@ -35,15 +35,15 @@ public:
 	bool HasValidParameters(void);
 
 	// Private data accessors
-	void SetCorner1(const VECTOR &_Corner1);
-	void SetCorner2(const VECTOR &_Corner2);
-	void SetCorner3(const VECTOR &_Corner3);
+	void SetCorner1(const Vector &_Corner1);
+	void SetCorner2(const Vector &_Corner2);
+	void SetCorner3(const Vector &_Corner3);
 
 private:
 	// The locations of the triangle's corners
-	VECTOR Corner1;
-	VECTOR Corner2;
-	VECTOR Corner3;
+	Vector Corner1;
+	Vector Corner2;
+	Vector Corner3;
 };
 
 #endif// _TRIANGLE_H_

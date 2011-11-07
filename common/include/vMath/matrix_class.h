@@ -8,20 +8,11 @@
 ===================================================================================*/
 
 // File:  matrix_class.h
-// Created:  12/2/2007
+// Created:  5/2/2011
 // Author:  K. Loux
-// Description:  Contains class declaration for MATRIX classes.
+// Description:  Contains class declaration for Matrix classes.
 // History:
-//	2/26/2008	- Changed the way the multiplaction operator works with other matricies to avoid heap
-//				  corruption when trying to pass a MATRIX back as the result of a MATRIX * MATRIX
-//				  situation, K. Loux.
-//	3/3/2008	- Made functions take addresses instead of new objects to reduce overhead, K. Loux.
-//	4/11/2009	- Changed all functions to take addresses of and use const, K. Loux.
-//	5/15/2009	- Added GetSubMatrix() and GetFirstElementPointer() methods for use with OpenGL
-//				  routines, K. Loux.
-//	6/15/2009	- Corrected function signatures for overloaded operators, K. Loux.
-//	6/17/2009	- Added copy constructor to eliminate need to DeleteElements flag, K. Loux.
-//	11/22/2009	- Moved to vMath.lib, K. Loux.
+//	11/7/2011	- Imported from DataPlotter, K. Loux.
 
 #ifndef _MATRIX_CLASS_H_
 #define _MATRIX_CLASS_H_
@@ -30,18 +21,19 @@
 class wxString;
 
 // vMath forward declarations
-class VECTOR;
+class Vector;
 
-class MATRIX
+class Matrix
 {
 public:
 	// Constructors
-	MATRIX(const int &_Rows, const int &_Columns);
-	MATRIX(const int &_Rows, const int &_Columns, double Element1, ...);
-	MATRIX(const MATRIX &Matrix);
+	Matrix();
+	Matrix(const unsigned int &_rows, const unsigned int &_columns);
+	Matrix(const unsigned int &_rows, const unsigned int &_columns, double element1, ...);
+	Matrix(const Matrix &m);
 
 	// Destructor
-	~MATRIX();
+	~Matrix();
 
 	// Sets the values of all of the elements
 	void Set(double Element1, ...);
@@ -50,55 +42,72 @@ public:
 	void Zero(void);
 
 	// Makes this matrix an identity matrix
-	MATRIX& MakeIdentity(void);
+	Matrix& MakeIdentity(void);
+	static Matrix GetIdentity(const unsigned int &_rows, const unsigned int &_columns = 0);
 
-	// Transposition function
-	MATRIX& Transpose(void);
+	bool IsSquare(void) const { return rows == columns; };
+	void Resize(const unsigned int &_rows, const unsigned int &_columns);
+	Matrix& RemoveRow(const unsigned int &row);
+	Matrix& RemoveColumn(const unsigned int &column);
+
+	unsigned int GetMinimumDimension(void) const { return (rows < columns) ? rows : columns; };
 
 	// Returns a matrix containing a sub-set of the contents of this matrix
-	MATRIX GetSubMatrix(const int &StartRow, const int &StartColumn,
-		const int &SubRows, const int &SubColumns) const;
+	Matrix GetSubMatrix(const unsigned int &startRow, const unsigned int &startColumn,
+		const unsigned int &subRows, const unsigned int &subColumns) const;
 
 	// Retrieve properties of this matrix
-	inline int GetNumberOfRows(void) const { return Rows; };
-	inline int GetNumberOfColumns(void) const { return Columns; };
-	double GetElement(const int &Row, const int &Column) const;
-
-	// Returns a pointer to the start of the array
-	inline double *GetFirstElementPointer(void) const { return Elements; };
+	inline unsigned int GetNumberOfRows(void) const { return rows; };
+	inline unsigned int GetNumberOfColumns(void) const { return columns; };
+	double GetElement(const int &row, const int &column) const;
 
 	// Set value of element at the specified location
-	void SetElement(const int &Row, const int &Column, const double &Value);
+	void SetElement(const unsigned int &row, const unsigned int &column, const double &value);
 
 	// Print this object to a string
 	wxString Print(void) const;
 
 	// Operators
-	MATRIX& operator += (const MATRIX &Matrix);
-	MATRIX& operator -= (const MATRIX &Matrix);
-	MATRIX& operator *= (const MATRIX &Matrix);
-	MATRIX& operator *= (const double &Double);
-	MATRIX& operator /= (const double &Double);
-	MATRIX& operator = (const MATRIX &Matrix);
-	double &operator () (const int &Row, const int &Column);
-	const MATRIX operator + (const MATRIX &Matrix) const;
-	const MATRIX operator - (const MATRIX &Matrix) const;
-	const MATRIX operator * (const MATRIX &Matrix) const;
-	const MATRIX operator * (const double &Double) const;
-	const VECTOR operator * (const VECTOR &Vector) const;
-	const MATRIX operator / (const double &Double) const;
-	const double &operator () (const int &Row, const int &Column) const;
+	Matrix& operator += (const Matrix &m);
+	Matrix& operator -= (const Matrix &m);
+	Matrix& operator *= (const Matrix &m);
+	Matrix& operator *= (const double &n);
+	Matrix& operator /= (const double &n);
+	Matrix& operator = (const Matrix &m);
+	double &operator () (const unsigned int &row, const unsigned int &column);
+	const Matrix operator + (const Matrix &m) const;
+	const Matrix operator - (const Matrix &m) const;
+	const Matrix operator * (const Matrix &m) const;
+	const Matrix operator * (const double &n) const;
+	const Vector operator * (const Vector &v) const;
+	const Matrix operator / (const double &target) const;
+	const double &operator () (const unsigned int &row, const unsigned int &column) const;
 
-	//VECTOR UnderVector (VECTOR Vector);// Left divide in MATLAB -> x = A\b where x and b are VECTORs
-	MATRIX& RowReduce(void);
+	// Common matrix operations ------------------------------------
+	bool GetSingularValueDecomposition(Matrix &u, Matrix &v, Matrix &w) const;
+
+	Matrix GetTranspose(void) const;
+	Matrix GetInverse(void) const;
+	Matrix GetPsuedoInverse(void) const;
+	Matrix GetDiagonalInverse(void) const;
+
+	Matrix LeftDivide(const Matrix& b) const;// x = A \ b
+	Matrix GetRowReduced(void) const;
+	unsigned int GetRank(void) const;
 
 private:
 	// The size of this matrix
-	int Rows;
-	int Columns;
+	unsigned int rows;
+	unsigned int columns;
 
 	// The array of elements of this matrix
-	double *Elements;
+	double **elements;
+
+	void FreeElements(void);
+	void AllocateElements(void);
+
+	// Helper function for SVD algorithm
+	double pythag(const double& a, const double &b) const;
 };
 
 #endif// _MATRIX_CLASS_H_

@@ -23,6 +23,7 @@
 //				  TREE_ITEM, K. Loux.
 //	5/2/2009	- Added const flag to conversion member functions, K. Loux.
 //	11/22/2009	- Moved to vUtilities.lib, K. Loux.
+//	11/7/2011	- Corrected camelCase, K. Loux.
 
 // Our "standard" units will be defined below.  All calculations will be done with
 // these units, and this converter will be called to convert to/from anything else.
@@ -50,16 +51,16 @@
 #define _CONVERT_CLASS_H_
 
 // CarDesigner forward declarations
-class VECTOR;
+class Vector;
 
-class CONVERT
+class Convert
 {
 public:
 	// Constructor
-	CONVERT();
+	Convert();
 
 	// Destructor
-	~CONVERT();
+	~Convert();
 
 	// Constants
 	static const double Pi;
@@ -140,7 +141,7 @@ public:
 	static inline double KELVIN_TO_RANKINE(double x) { return x * 1.8; };
 
 	// Enumeration for units of angle measurement
-	enum UNITS_OF_ANGLE
+	enum UnitsOfAngle
 	{
 		RADIANS,
 		DEGREES,
@@ -149,7 +150,7 @@ public:
 	};
 
 	// Enumeration for units of distance measurement
-	enum UNITS_OF_DISTANCE
+	enum UnitsOfDistance
 	{
 		INCH,
 		FOOT,
@@ -163,7 +164,7 @@ public:
 	};
 
 	// Enumeration for units of area measurement
-	enum UNITS_OF_AREA
+	enum UnitsOfArea
 	{
 		INCH_SQUARED,
 		FOOT_SQUARED,
@@ -175,7 +176,7 @@ public:
 	};
 
 	// Enumeration for units of force measurement
-	enum UNITS_OF_FORCE
+	enum UnitsOfForce
 	{
 		POUND_FORCE,
 		KILO_POUND_FORCE,
@@ -186,7 +187,7 @@ public:
 	};
 
 	// Enumeration for units of pressure measurement
-	enum UNITS_OF_PRESSURE
+	enum UnitsOfPressure
 	{
 		POUND_FORCE_PER_SQUARE_INCH,
 		POUND_FORCE_PER_SQUARE_FOOT,
@@ -199,7 +200,7 @@ public:
 	};
 
 	// Enumeration for units of moment measurement
-	enum UNITS_OF_MOMENT
+	enum UnitsOfMoment
 	{
 		INCH_POUND_FORCE,
 		FOOT_POUND_FORCE,
@@ -210,7 +211,7 @@ public:
 	};
 
 	// Enumeration for units of mass measurement
-	enum UNITS_OF_MASS
+	enum UnitsOfMass
 	{
 		SLUG,
 		POUND_MASS,
@@ -220,7 +221,7 @@ public:
 	};
 
 	// Enumeration for units of velocity measurement
-	enum UNITS_OF_VELOCITY
+	enum UnitsOfVelocity
 	{
 		INCHES_PER_SECOND,
 		FEET_PER_SECOND,
@@ -234,7 +235,7 @@ public:
 	};
 
 	// Enumeration for units of acceleration measurement
-	enum UNITS_OF_ACCELERATION
+	enum UnitsOfAcceleration
 	{
 		INCHES_PER_SECOND_SQUARED,
 		FEET_PER_SECOND_SQUARED,
@@ -247,7 +248,7 @@ public:
 	};
 
 	// Enumeration for units of inertia measurement
-	enum UNITS_OF_INERTIA
+	enum UnitsOfInertia
 	{
 		SLUG_INCHES_SQUARED,
 		SLUG_FEET_SQUARED,
@@ -260,7 +261,7 @@ public:
 	};
 
 	// Enumeration for units of density measurement
-	enum UNITS_OF_DENSITY
+	enum UnitsOfDensity
 	{
 		SLUGS_PER_INCH_CUBED,
 		POUND_MASS_PER_INCH_CUBED,
@@ -273,7 +274,7 @@ public:
 	};
 
 	// Enumeration for units of power measurement
-	enum UNITS_OF_POWER
+	enum UnitsOfPower
 	{
 		INCH_POUND_FORCE_PER_SECOND,
 		FOOT_POUND_FORCE_PER_SECOND,
@@ -285,7 +286,7 @@ public:
 	};
 
 	// Enumeration for units of energy measurement
-	enum UNITS_OF_ENERGY
+	enum UnitsOfEnergy
 	{
 		POUND_FORCE_INCH,
 		POUND_FORCE_FOOT,
@@ -298,7 +299,7 @@ public:
 	};
 
 	// Enumeration for units of temperature measurement
-	enum UNITS_OF_TEMPERATURE
+	enum UnitsOfTemperature
 	{
 		RANKINE,
 		FAHRENHEIT,
@@ -310,197 +311,197 @@ public:
 
 	// Enumeration for associating a type of unit with an item (don't let
 	// the user assign use inches to describe the temperature of a brake disk)
-	enum UNIT_TYPE
+	enum UnitType
 	{
-		UNIT_TYPE_UNKNOWN,
-		UNIT_TYPE_UNITLESS,
-		UNIT_TYPE_ANGLE,
-		UNIT_TYPE_DISTANCE,
-		UNIT_TYPE_AREA,
-		UNIT_TYPE_FORCE,
-		UNIT_TYPE_PRESSURE,
-		UNIT_TYPE_MOMENT,
-		UNIT_TYPE_MASS,
-		UNIT_TYPE_VELOCITY,
-		UNIT_TYPE_ACCELERATION,
-		UNIT_TYPE_INERTIA,
-		UNIT_TYPE_DENSITY,
-		UNIT_TYPE_POWER,
-		UNIT_TYPE_ENERGY,
-		UNIT_TYPE_TEMPERATURE
+		UnitTypeUnknown,
+		UnitTypeUnitless,
+		UnitTypeAngle,
+		UnitTypeDistance,
+		UnitTypeArea,
+		UnitTypeForce,
+		UnitTypePressure,
+		UnitTypeMoment,
+		UnitTypeMass,
+		UnitTypeVelocity,
+		UnitTypeAcceleration,
+		UnitTypeInertia,
+		UnitTypeDensity,
+		UnitTypePower,
+		UnitTypeEnergy,
+		UnitTypeTemperature
 	};
 
 	// For displaying the user defined units of a specific type
-	wxString GetUnitType(UNIT_TYPE UnitType) const;
+	wxString GetUnitType(UnitType unitType) const;
 
 	// For getting the unit enumeration associated with each type of units
-	UNITS_OF_ANGLE GetAngleUnits() const { return DefaultAngleUnits; };
-	UNITS_OF_DISTANCE GetDistanceUnits() const { return DefaultDistanceUnits; };
-	UNITS_OF_AREA GetAreaUnits() const { return DefaultAreaUnits; };
-	UNITS_OF_FORCE GetForceUnits() const { return DefaultForceUnits; };
-	UNITS_OF_PRESSURE GetPressureUnits() const { return DefaultPressureUnits; };
-	UNITS_OF_MOMENT GetMomentUnits() const { return DefaultMomentUnits; };
-	UNITS_OF_MASS GetMassUnits() const { return DefaultMassUnits; };
-	UNITS_OF_VELOCITY GetVelocityUnits() const { return DefaultVelocityUnits; };
-	UNITS_OF_ACCELERATION GetAccelerationUnits() const { return DefaultAccelerationUnits; };
-	UNITS_OF_INERTIA GetInertiaUnits() const { return DefaultInertiaUnits; };
-	UNITS_OF_DENSITY GetDensityUnits() const { return DefaultDensityUnits; };
-	UNITS_OF_POWER GetPowerUnits() const { return DefaultPowerUnits; };
-	UNITS_OF_ENERGY GetEnergyUnits() const { return DefaultEnergyUnits; };
-	UNITS_OF_TEMPERATURE GetTemperatureUnits() const { return DefaultTemperatureUnits; };
+	UnitsOfAngle GetAngleUnits() const { return defaultAngleUnits; };
+	UnitsOfDistance GetDistanceUnits() const { return defaultDistanceUnits; };
+	UnitsOfArea GetAreaUnits() const { return defaultAreaUnits; };
+	UnitsOfForce GetForceUnits() const { return defaultForceUnits; };
+	UnitsOfPressure GetPressureUnits() const { return defaultPressureUnits; };
+	UnitsOfMoment GetMomentUnits() const { return defaultMomentUnits; };
+	UnitsOfMass GetMassUnits() const { return defaultMassUnits; };
+	UnitsOfVelocity GetVelocityUnits() const { return defaultVelocityUnits; };
+	UnitsOfAcceleration GetAccelerationUnits() const { return defaultAccelerationUnits; };
+	UnitsOfInertia GetInertiaUnits() const { return defaultInertiaUnits; };
+	UnitsOfDensity GetDensityUnits() const { return defaultDensityUnits; };
+	UnitsOfPower GetPowerUnits() const { return defaultPowerUnits; };
+	UnitsOfEnergy GetEnergyUnits() const { return defaultEnergyUnits; };
+	UnitsOfTemperature GetTemperatureUnits() const { return defaultTemperatureUnits; };
 
 	// For getting the strings associated with each type of units
-	wxString GetUnits(UNITS_OF_ANGLE Units) const;
-	wxString GetUnits(UNITS_OF_DISTANCE Units) const;
-	wxString GetUnits(UNITS_OF_AREA Units) const;
-	wxString GetUnits(UNITS_OF_FORCE Units) const;
-	wxString GetUnits(UNITS_OF_PRESSURE Units) const;
-	wxString GetUnits(UNITS_OF_MOMENT Units) const;
-	wxString GetUnits(UNITS_OF_MASS Units) const;
-	wxString GetUnits(UNITS_OF_VELOCITY Units) const;
-	wxString GetUnits(UNITS_OF_ACCELERATION Units) const;
-	wxString GetUnits(UNITS_OF_INERTIA Units) const;
-	wxString GetUnits(UNITS_OF_DENSITY Units) const;
-	wxString GetUnits(UNITS_OF_POWER Units) const;
-	wxString GetUnits(UNITS_OF_ENERGY Units) const;
-	wxString GetUnits(UNITS_OF_TEMPERATURE Units) const;
+	wxString GetUnits(UnitsOfAngle units) const;
+	wxString GetUnits(UnitsOfDistance units) const;
+	wxString GetUnits(UnitsOfArea units) const;
+	wxString GetUnits(UnitsOfForce units) const;
+	wxString GetUnits(UnitsOfPressure units) const;
+	wxString GetUnits(UnitsOfMoment units) const;
+	wxString GetUnits(UnitsOfMass units) const;
+	wxString GetUnits(UnitsOfVelocity units) const;
+	wxString GetUnits(UnitsOfAcceleration units) const;
+	wxString GetUnits(UnitsOfInertia units) const;
+	wxString GetUnits(UnitsOfDensity units) const;
+	wxString GetUnits(UnitsOfPower units) const;
+	wxString GetUnits(UnitsOfEnergy units) const;
+	wxString GetUnits(UnitsOfTemperature units) const;
 
 	// For setting defaults
-	void SetAngleUnits(UNITS_OF_ANGLE Units);
-	void SetDistanceUnits(UNITS_OF_DISTANCE Units);
-	void SetAreaUnits(UNITS_OF_AREA Units);
-	void SetForceUnits(UNITS_OF_FORCE Units);
-	void SetPressureUnits(UNITS_OF_PRESSURE Units);
-	void SetMomentUnits(UNITS_OF_MOMENT Units);
-	void SetMassUnits(UNITS_OF_MASS Units);
-	void SetVelocityUnits(UNITS_OF_VELOCITY Units);
-	void SetAccelerationUnits(UNITS_OF_ACCELERATION Units);
-	void SetInertiaUnits(UNITS_OF_INERTIA Units);
-	void SetDensityUnits(UNITS_OF_DENSITY Units);
-	void SetPowerUnits(UNITS_OF_POWER Units);
-	void SetEnergyUnits(UNITS_OF_ENERGY Units);
-	void SetTemperatureUnits(UNITS_OF_TEMPERATURE Units);
+	void SetAngleUnits(UnitsOfAngle units);
+	void SetDistanceUnits(UnitsOfDistance units);
+	void SetAreaUnits(UnitsOfArea units);
+	void SetForceUnits(UnitsOfForce units);
+	void SetPressureUnits(UnitsOfPressure units);
+	void SetMomentUnits(UnitsOfMoment units);
+	void SetMassUnits(UnitsOfMass units);
+	void SetVelocityUnits(UnitsOfVelocity units);
+	void SetAccelerationUnits(UnitsOfAcceleration units);
+	void SetInertiaUnits(UnitsOfInertia units);
+	void SetDensityUnits(UnitsOfDensity units);
+	void SetPowerUnits(UnitsOfPower units);
+	void SetEnergyUnits(UnitsOfEnergy units);
+	void SetTemperatureUnits(UnitsOfTemperature units);
 
 	// Generic conversion functions
-	double Convert(double Value, UNIT_TYPE Type) const;
-	double Read(double Value, UNIT_TYPE Type) const;
+	double ConvertTo(double Value, UnitType type) const;
+	double Read(double Value, UnitType type) const;
 
 	// For numerical outputs
-	double ConvertAngle(double Value, UNITS_OF_ANGLE NewUnits) const;
-	double ConvertDistance(double Value, UNITS_OF_DISTANCE NewUnits) const;
-	double ConvertArea(double Value, UNITS_OF_AREA NewUnits) const;
-	double ConvertForce(double Value, UNITS_OF_FORCE NewUnits) const;
-	double ConvertPressure(double Value, UNITS_OF_PRESSURE NewUnits) const;
-	double ConvertMoment(double Value, UNITS_OF_MOMENT NewUnits) const;
-	double ConvertMass(double Value, UNITS_OF_MASS NewUnits) const;
-	double ConvertVelocity(double Value, UNITS_OF_VELOCITY NewUnits) const;
-	double ConvertAcceleration(double Value, UNITS_OF_ACCELERATION NewUnits) const;
-	double ConvertInertia(double Value, UNITS_OF_INERTIA NewUnits) const;
-	double ConvertDensity(double Value, UNITS_OF_DENSITY NewUnits) const;
-	double ConvertPower(double Value, UNITS_OF_POWER NewUnits) const;
-	double ConvertEnergy(double Value, UNITS_OF_ENERGY NewUnits) const;
-	double ConvertTemperature(double Value, UNITS_OF_TEMPERATURE NewUnits) const;
+	double ConvertAngle(double n, UnitsOfAngle NewUnits) const;
+	double ConvertDistance(double n, UnitsOfDistance NewUnits) const;
+	double ConvertArea(double n, UnitsOfArea NewUnits) const;
+	double ConvertForce(double n, UnitsOfForce NewUnits) const;
+	double ConvertPressure(double n, UnitsOfPressure NewUnits) const;
+	double ConvertMoment(double n, UnitsOfMoment NewUnits) const;
+	double ConvertMass(double n, UnitsOfMass NewUnits) const;
+	double ConvertVelocity(double n, UnitsOfVelocity NewUnits) const;
+	double ConvertAcceleration(double n, UnitsOfAcceleration NewUnits) const;
+	double ConvertInertia(double n, UnitsOfInertia NewUnits) const;
+	double ConvertDensity(double n, UnitsOfDensity NewUnits) const;
+	double ConvertPower(double n, UnitsOfPower NewUnits) const;
+	double ConvertEnergy(double n, UnitsOfEnergy NewUnits) const;
+	double ConvertTemperature(double n, UnitsOfTemperature NewUnits) const;
 
 	// For default units with numerical outputs
-	double ConvertAngle(double Value) const;
-	double ConvertDistance(double Value) const;
-	double ConvertArea(double Value) const;
-	double ConvertForce(double Value) const;
-	double ConvertPressure(double Value) const;
-	double ConvertMoment(double Value) const;
-	double ConvertMass(double Value) const;
-	double ConvertVelocity(double Value) const;
-	double ConvertAcceleration(double Value) const;
-	double ConvertInertia(double Value) const;
-	double ConvertDensity(double Value) const;
-	double ConvertPower(double Value) const;
-	double ConvertEnergy(double Value) const;
-	double ConvertTemperature(double Value) const;
+	double ConvertAngle(double n) const;
+	double ConvertDistance(double n) const;
+	double ConvertArea(double n) const;
+	double ConvertForce(double n) const;
+	double ConvertPressure(double n) const;
+	double ConvertMoment(double n) const;
+	double ConvertMass(double n) const;
+	double ConvertVelocity(double n) const;
+	double ConvertAcceleration(double n) const;
+	double ConvertInertia(double n) const;
+	double ConvertDensity(double n) const;
+	double ConvertPower(double n) const;
+	double ConvertEnergy(double n) const;
+	double ConvertTemperature(double n) const;
 
 	// The conversion function (for inputs)
-	double ReadAngle(double Value, UNITS_OF_ANGLE InputUnits) const;
-	double ReadDistance(double Value, UNITS_OF_DISTANCE InputUnits) const;
-	double ReadArea(double Value, UNITS_OF_AREA InputUnits) const;
-	double ReadForce(double Value, UNITS_OF_FORCE InputUnits) const;
-	double ReadPressure(double Value, UNITS_OF_PRESSURE InputUnits) const;
-	double ReadMoment(double Value, UNITS_OF_MOMENT InputUnits) const;
-	double ReadMass(double Value, UNITS_OF_MASS InputUnits) const;
-	double ReadVelocity(double Value, UNITS_OF_VELOCITY InputUnits) const;
-	double ReadAcceleration(double Value, UNITS_OF_ACCELERATION InputUnits) const;
-	double ReadInertia(double Value, UNITS_OF_INERTIA InputUnits) const;
-	double ReadDensity(double Value, UNITS_OF_DENSITY InputUnits) const;
-	double ReadPower(double Value, UNITS_OF_POWER InputUnits) const;
-	double ReadEnergy(double Value, UNITS_OF_ENERGY InputUnits) const;
-	double ReadTemperature(double Value, UNITS_OF_TEMPERATURE InputUnits) const;
+	double ReadAngle(double n, UnitsOfAngle InputUnits) const;
+	double ReadDistance(double n, UnitsOfDistance InputUnits) const;
+	double ReadArea(double n, UnitsOfArea InputUnits) const;
+	double ReadForce(double n, UnitsOfForce InputUnits) const;
+	double ReadPressure(double n, UnitsOfPressure InputUnits) const;
+	double ReadMoment(double n, UnitsOfMoment InputUnits) const;
+	double ReadMass(double n, UnitsOfMass InputUnits) const;
+	double ReadVelocity(double n, UnitsOfVelocity InputUnits) const;
+	double ReadAcceleration(double n, UnitsOfAcceleration InputUnits) const;
+	double ReadInertia(double n, UnitsOfInertia InputUnits) const;
+	double ReadDensity(double n, UnitsOfDensity InputUnits) const;
+	double ReadPower(double n, UnitsOfPower InputUnits) const;
+	double ReadEnergy(double n, UnitsOfEnergy InputUnits) const;
+	double ReadTemperature(double n, UnitsOfTemperature InputUnits) const;
 
 	// For default units
-	double ReadAngle(double Value) const;
-	double ReadDistance(double Value) const;
-	double ReadArea(double Value) const;
-	double ReadForce(double Value) const;
-	double ReadPressure(double Value) const;
-	double ReadMoment(double Value) const;
-	double ReadMass(double Value) const;
-	double ReadVelocity(double Value) const;
-	double ReadAcceleration(double Value) const;
-	double ReadInertia(double Value) const;
-	double ReadDensity(double Value) const;
-	double ReadPower(double Value) const;
-	double ReadEnergy(double Value) const;
-	double ReadTemperature(double Value) const;
+	double ReadAngle(double n) const;
+	double ReadDistance(double n) const;
+	double ReadArea(double n) const;
+	double ReadForce(double n) const;
+	double ReadPressure(double n) const;
+	double ReadMoment(double n) const;
+	double ReadMass(double n) const;
+	double ReadVelocity(double n) const;
+	double ReadAcceleration(double n) const;
+	double ReadInertia(double n) const;
+	double ReadDensity(double n) const;
+	double ReadPower(double n) const;
+	double ReadEnergy(double n) const;
+	double ReadTemperature(double n) const;
 
-	// For VECTORs
-	VECTOR ConvertAngle(VECTOR Value) const;
-	VECTOR ConvertDistance(VECTOR Value) const;
-	VECTOR ConvertArea(VECTOR Value) const;
-	VECTOR ConvertForce(VECTOR Value) const;
-	VECTOR ConvertPressure(VECTOR Value) const;
-	VECTOR ConvertMoment(VECTOR Value) const;
-	VECTOR ConvertMass(VECTOR Value) const;
-	VECTOR ConvertVelocity(VECTOR Value) const;
-	VECTOR ConvertAcceleration(VECTOR Value) const;
-	VECTOR ConvertInertia(VECTOR Value) const;
-	VECTOR ConvertDensity(VECTOR Value) const;
-	VECTOR ConvertPower(VECTOR Value) const;
-	VECTOR ConvertEnergy(VECTOR Value) const;
-	VECTOR ConvertTemperature(VECTOR Value) const;
+	// For Vectors
+	Vector ConvertAngle(Vector v) const;
+	Vector ConvertDistance(Vector v) const;
+	Vector ConvertArea(Vector v) const;
+	Vector ConvertForce(Vector v) const;
+	Vector ConvertPressure(Vector v) const;
+	Vector ConvertMoment(Vector v) const;
+	Vector ConvertMass(Vector v) const;
+	Vector ConvertVelocity(Vector v) const;
+	Vector ConvertAcceleration(Vector v) const;
+	Vector ConvertInertia(Vector v) const;
+	Vector ConvertDensity(Vector v) const;
+	Vector ConvertPower(Vector v) const;
+	Vector ConvertEnergy(Vector v) const;
+	Vector ConvertTemperature(Vector v) const;
 
 	// For formatting numbers with a specific number of digits
-	wxString FormatNumber(double Value) const;
+	wxString FormatNumber(double n) const;
 
 	// For setting the string formatting parameters
-	void SetNumberOfDigits(int _NumberOfDigits);
-	inline void SetUseSignificantDigits(bool _UseSignificantDigits) { UseSignificantDigits = _UseSignificantDigits; };
-	inline void SetUseScientificNotation(bool _UseScientificNotation) { UseScientificNotation = _UseScientificNotation; };
+	void SetNumberOfDigits(int _numberOfDigits);
+	inline void SetUseSignificantDigits(bool _useSignificantDigits) { useSignificantDigits = _useSignificantDigits; };
+	inline void SetUseScientificNotation(bool _useScientificNotation) { useScientificNotation = _useScientificNotation; };
 
 	// For getting the string formatting parameters
-	inline int GetNumberOfDigits(void) const { return NumberOfDigits; };
-	inline bool GetUseSignificantDigits(void) const { return UseSignificantDigits; };
-	inline bool GetUseScientificNotation(void) const { return UseScientificNotation; };
+	inline int GetNumberOfDigits(void) const { return numberOfDigits; };
+	inline bool GetUseSignificantDigits(void) const { return useSignificantDigits; };
+	inline bool GetUseScientificNotation(void) const { return useScientificNotation; };
 
 private:
 	// Default units
-	UNITS_OF_ANGLE DefaultAngleUnits;
-	UNITS_OF_DISTANCE DefaultDistanceUnits;
-	UNITS_OF_AREA DefaultAreaUnits;
-	UNITS_OF_FORCE DefaultForceUnits;
-	UNITS_OF_PRESSURE DefaultPressureUnits;
-	UNITS_OF_MOMENT DefaultMomentUnits;
-	UNITS_OF_MASS DefaultMassUnits;
-	UNITS_OF_VELOCITY DefaultVelocityUnits;
-	UNITS_OF_ACCELERATION DefaultAccelerationUnits;
-	UNITS_OF_INERTIA DefaultInertiaUnits;
-	UNITS_OF_DENSITY DefaultDensityUnits;
-	UNITS_OF_POWER DefaultPowerUnits;
-	UNITS_OF_ENERGY DefaultEnergyUnits;
-	UNITS_OF_TEMPERATURE DefaultTemperatureUnits;
+	UnitsOfAngle defaultAngleUnits;
+	UnitsOfDistance defaultDistanceUnits;
+	UnitsOfArea defaultAreaUnits;
+	UnitsOfForce defaultForceUnits;
+	UnitsOfPressure defaultPressureUnits;
+	UnitsOfMoment defaultMomentUnits;
+	UnitsOfMass defaultMassUnits;
+	UnitsOfVelocity defaultVelocityUnits;
+	UnitsOfAcceleration defaultAccelerationUnits;
+	UnitsOfInertia defaultInertiaUnits;
+	UnitsOfDensity defaultDensityUnits;
+	UnitsOfPower defaultPowerUnits;
+	UnitsOfEnergy defaultEnergyUnits;
+	UnitsOfTemperature defaultTemperatureUnits;
 
 	// Number of digits to display
-	int NumberOfDigits;
+	int numberOfDigits;
 
 	// Options for formatting the string
-	bool UseSignificantDigits;
-	bool UseScientificNotation;
+	bool useSignificantDigits;
+	bool useScientificNotation;
 };
 
 #endif// _CONVERT_CLASS_H_

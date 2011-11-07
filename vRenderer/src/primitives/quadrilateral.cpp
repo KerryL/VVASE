@@ -25,7 +25,7 @@
 // Description:		Constructor for the QUADRILATERAL class.
 //
 // Input Arguments:
-//		_RenderWindow	= RENDER_WINDOW& pointing to the object that owns this
+//		_RenderWindow	= RenderWindow& pointing to the object that owns this
 //
 // Output Arguments:
 //		None
@@ -34,7 +34,7 @@
 //		None
 //
 //==========================================================================
-QUADRILATERAL::QUADRILATERAL(RENDER_WINDOW &_RenderWindow) : PRIMITIVE(_RenderWindow)
+QUADRILATERAL::QUADRILATERAL(RenderWindow &_RenderWindow) : Primitive(_RenderWindow)
 {
 	// Initialize private data
 	Normal.Set(0.0, 0.0, 0.0);
@@ -83,7 +83,7 @@ QUADRILATERAL::~QUADRILATERAL()
 void QUADRILATERAL::GenerateGeometry(void)
 {
 	// Set the normal direction
-	glNormal3d(Normal.X, Normal.Y, Normal.Z);
+	glNormal3d(Normal.x, Normal.y, Normal.z);
 
 	// We'll use a triangle strip to draw the quad
 	glBegin(GL_TRIANGLE_STRIP);
@@ -95,13 +95,13 @@ void QUADRILATERAL::GenerateGeometry(void)
 	double DiagonalAngle = atan2(Width, Length);
 
 	// Force the axis direction to be perpendicular to the normal
-	VECTOR AxisDirection = Axis.Cross(Normal).Cross(Normal);
+	Vector AxisDirection = Axis.Cross(Normal).Cross(Normal);
 
 	// Compute the locations of the four corners of the quad
-	VECTOR Corner1 = Center + AxisDirection.Normalize() * HalfDiagonal;
-	VECTOR Corner2 = Center + AxisDirection.Normalize() * HalfDiagonal;
-	VECTOR Corner3 = Center - AxisDirection.Normalize() * HalfDiagonal;
-	VECTOR Corner4 = Center - AxisDirection.Normalize() * HalfDiagonal;
+	Vector Corner1 = Center + AxisDirection.Normalize() * HalfDiagonal;
+	Vector Corner2 = Center + AxisDirection.Normalize() * HalfDiagonal;
+	Vector Corner3 = Center - AxisDirection.Normalize() * HalfDiagonal;
+	Vector Corner4 = Center - AxisDirection.Normalize() * HalfDiagonal;
 
 	Corner1 -= Center;
 	Corner1.Rotate(DiagonalAngle, Normal);
@@ -125,10 +125,10 @@ void QUADRILATERAL::GenerateGeometry(void)
 	//  1 ---------- 4
 	//   |          |
 	//  2 ---------- 3
-	glVertex3d(Corner1.X, Corner1.Y, Corner1.Z);
-	glVertex3d(Corner4.X, Corner4.Y, Corner4.Z);
-	glVertex3d(Corner2.X, Corner2.Y, Corner2.Z);
-	glVertex3d(Corner3.X, Corner3.Y, Corner3.Z);
+	glVertex3d(Corner1.x, Corner1.y, Corner1.z);
+	glVertex3d(Corner4.x, Corner4.y, Corner4.z);
+	glVertex3d(Corner2.x, Corner2.y, Corner2.z);
+	glVertex3d(Corner3.x, Corner3.y, Corner3.z);
 
 	// Complete the triangle strip
 	glEnd();
@@ -173,7 +173,7 @@ bool QUADRILATERAL::HasValidParameters(void)
 // Description:		Sets the rectangle's normal direction.
 //
 // Input Arguments:
-//		_Normal	= const VECTOR&
+//		_Normal	= const Vector&
 //
 // Output Arguments:
 //		None
@@ -182,13 +182,13 @@ bool QUADRILATERAL::HasValidParameters(void)
 //		None
 //
 //==========================================================================
-void QUADRILATERAL::SetNormal(const VECTOR &_Normal)
+void QUADRILATERAL::SetNormal(const Vector &_Normal)
 {
 	// Set the normal direction to the argument
 	Normal = _Normal;
 	
 	// Reset the modified flag
-	Modified = true;
+	modified = true;
 
 	return;
 }
@@ -200,7 +200,7 @@ void QUADRILATERAL::SetNormal(const VECTOR &_Normal)
 // Description:		Sets the location of the center of the rectangle.
 //
 // Input Arguments:
-//		_Center	= const VECTOR&
+//		_Center	= const Vector&
 //
 // Output Arguments:
 //		None
@@ -209,13 +209,13 @@ void QUADRILATERAL::SetNormal(const VECTOR &_Normal)
 //		None
 //
 //==========================================================================
-void QUADRILATERAL::SetCenter(const VECTOR &_Center)
+void QUADRILATERAL::SetCenter(const Vector &_Center)
 {
 	// Set the center point to the argument
 	Center = _Center;
 	
 	// Reset the modified flag
-	Modified = true;
+	modified = true;
 
 	return;
 }
@@ -228,7 +228,7 @@ void QUADRILATERAL::SetCenter(const VECTOR &_Center)
 //					This vector must not be parallel to the normal direction.
 //
 // Input Arguments:
-//		_Axis	= const VECTOR&
+//		_Axis	= const Vector&
 //
 // Output Arguments:
 //		None
@@ -237,13 +237,13 @@ void QUADRILATERAL::SetCenter(const VECTOR &_Center)
 //		None
 //
 //==========================================================================
-void QUADRILATERAL::SetAxis(const VECTOR &_Axis)
+void QUADRILATERAL::SetAxis(const Vector &_Axis)
 {
 	// Set the axis direction to the argument
 	Axis = _Axis;
 	
 	// Reset the modified flag
-	Modified = true;
+	modified = true;
 
 	return;
 }
@@ -271,7 +271,7 @@ void QUADRILATERAL::SetWidth(const double &_Width)
 	Width = _Width;
 	
 	// Reset the modified flag
-	Modified = true;
+	modified = true;
 
 	return;
 }
@@ -298,7 +298,7 @@ void QUADRILATERAL::SetLength(const double &_Length)
 	Length = _Length;
 	
 	// Reset the modified flag
-	Modified = true;
+	modified = true;
 
 	return;
 }

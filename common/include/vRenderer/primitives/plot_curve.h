@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -8,70 +8,72 @@
 ===================================================================================*/
 
 // File:  plot_curve.h
-// Created:  5/23/2009
+// Created:  5/2/2011
 // Author:  K. Loux
-// Description:  Derived from PRIMITIVE for creating plot curves objects.
+// Description:  Derived from Primitive for creating plot curves objects.
 // History:
-//	11/9/2010	- Modified to accomodate 3D plots, K. Loux.
 
 #ifndef _PLOT_CURVE_H_
 #define _PLOT_CURVE_H_
 
-// VVASE headers
+// Local headers
 #include "vRenderer/primitives/primitive.h"
 #include "vUtilities/managed_list_class.h"
 
-// VVASE forward declarations
-class AXIS;
+// Local forward declarations
+class Axis;
+class Dataset2D;
 
-class PLOT_CURVE : public PRIMITIVE
+class PlotCurve : public Primitive
 {
 public:
 	// Constructor
-	PLOT_CURVE(RENDER_WINDOW &_RenderWindow);
-	PLOT_CURVE(const PLOT_CURVE &PlotCurve);
+	PlotCurve(RenderWindow &_renderWindow);
+	PlotCurve(const PlotCurve &plotCurve);
 
 	// Destructor
-	~PLOT_CURVE();
-
-	// The structure containg the information for each point
-	struct XYZPOINT
-	{
-		double X, Y, Z;
-	};
+	~PlotCurve();
 
 	// Mandatory overloads from PRIMITIVE - for creating geometry and testing the
 	// validity of this object's parameters
 	void GenerateGeometry(void);
 	bool HasValidParameters(void);
 
+	void SetModified(void) { modified = true; };
+
+	void SetSize(const unsigned int &_size) { size = _size; modified = true; };
+
 	// Remove all data from the plot
-	void ClearData(void) { PlotData.Clear(); };
+	void SetData(const Dataset2D *_data);
+	void ClearData(void) { data = NULL; };
 
 	// For setting up the plot
-	void BindToXAxis(const AXIS *_XAxis) { XAxis = _XAxis; Modified = true; };
-	void BindToYAxis(const AXIS *_YAxis) { YAxis = _YAxis; Modified = true; };
-	void BindToZAxis(const AXIS *_ZAxis) { ZAxis = _ZAxis; Modified = true; };
-	void AddPoint(const double &X, const double &Y);
-	void AddPoint(const double &X, const double &Y, const double &Z);
+	void BindToXAxis(Axis *_xAxis) { xAxis = _xAxis; modified = true; };
+	void BindToYAxis(Axis *_yAxis) { yAxis = _yAxis; modified = true; };
+
+	Axis *GetYAxis(void) { return yAxis; };
+
+	// Gets the Y-value that corresponds to the specified X value
+	bool GetYAt(double &value);
 
 	// Overloaded operators
-	PLOT_CURVE& operator = (const PLOT_CURVE &PlotCurve);
+	PlotCurve& operator = (const PlotCurve &plotCurve);
 
 private:
-	// The axis with which this object is associated
-	const AXIS *XAxis;
-	const AXIS *YAxis;
-	const AXIS *ZAxis;
+	// The axes with which this object is associated
+	Axis *xAxis;
+	Axis *yAxis;
+
+	unsigned int size;
 
 	// For use when the axis scale changes
-	void RescalePoint(const XYZPOINT *XYZPoint, int *Point);
+	void RescalePoint(const double *xyPoint, int *point);
 
 	// For appearance
-	static const int OffsetFromWindowEdge;
+	static const int offsetFromWindowEdge;
 
 	// The data to be plotted
-	MANAGED_LIST<XYZPOINT> PlotData;
+	const Dataset2D *data;
 };
 
 #endif// _PLOT_CURVE_H_

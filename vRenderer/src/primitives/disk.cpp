@@ -28,7 +28,7 @@
 // Description:		Constructor for the DISK class.
 //
 // Input Arguments:
-//		_RenderWindow	= RENDER_WINDOW* pointing to the object that owns this
+//		_RenderWindow	= RenderWindow* pointing to the object that owns this
 //
 // Output Arguments:
 //		None
@@ -37,7 +37,7 @@
 //		None
 //
 //==========================================================================
-DISK::DISK(RENDER_WINDOW &_RenderWindow) : PRIMITIVE(_RenderWindow)
+DISK::DISK(RenderWindow &_RenderWindow) : Primitive(_RenderWindow)
 {
 	// Initialize private data
 	OuterRadius = 0.0;
@@ -91,47 +91,47 @@ void DISK::GenerateGeometry(void)
 		Resolution = 3;
 
 	// Our reference direction will be the X-axis direction
-	VECTOR ReferenceDirection(1.0, 0.0, 0.0);
+	Vector ReferenceDirection(1.0, 0.0, 0.0);
 
 	// Determine the angle and axis of rotation
-	VECTOR AxisOfRotation = ReferenceDirection.Cross(Normal);
+	Vector AxisOfRotation = ReferenceDirection.Cross(Normal);
 	double Angle = acos(Normal * ReferenceDirection);// [rad]
 
 	// Push the current matrix
 	glPushMatrix();
 
 		// Translate the current matrix
-		glTranslated(Center.X, Center.Y, Center.Z);
+		glTranslated(Center.x, Center.y, Center.z);
 
 		// Rotate the current matrix, if the rotation axis is non-zero
 		if (!VVASEMath::IsZero(AxisOfRotation.Length()))
-			glRotated(CONVERT::RAD_TO_DEG(Angle), AxisOfRotation.X, AxisOfRotation.Y, AxisOfRotation.Z);
+			glRotated(Convert::RAD_TO_DEG(Angle), AxisOfRotation.x, AxisOfRotation.y, AxisOfRotation.z);
 
 		// Set the normal direction
-		glNormal3d(Normal.X, Normal.Y, Normal.Z);
+		glNormal3d(Normal.x, Normal.y, Normal.z);
 
 		// We'll use a triangle strip to draw the disk
 		glBegin(GL_TRIANGLE_STRIP);
 
 		// Loop to generate the triangles
-		VECTOR InsidePoint(0.0, 0.0, 0.0);
-		VECTOR OutsidePoint(0.0, 0.0, 0.0);
+		Vector InsidePoint(0.0, 0.0, 0.0);
+		Vector OutsidePoint(0.0, 0.0, 0.0);
 		int i;
 		for (i = 0; i <= Resolution; i++)
 		{
 			// Determine the angle to the current set of points
-			Angle = (double)i * 2.0 * CONVERT::Pi / (double)Resolution;
+			Angle = (double)i * 2.0 * VVASEMath::Pi / (double)Resolution;
 
 			// Determine the Y and Z ordinates based on this angle and the radii
-			OutsidePoint.Y = OuterRadius * cos(Angle);
-			OutsidePoint.Z = OuterRadius * sin(Angle);
+			OutsidePoint.y = OuterRadius * cos(Angle);
+			OutsidePoint.z = OuterRadius * sin(Angle);
 
-			InsidePoint.Y = InnerRadius * cos(Angle);
-			InsidePoint.Z = InnerRadius * sin(Angle);
+			InsidePoint.y = InnerRadius * cos(Angle);
+			InsidePoint.z = InnerRadius * sin(Angle);
 
 			// Add the next two points
-			glVertex3d(OutsidePoint.X, OutsidePoint.Y, OutsidePoint.Z);
-			glVertex3d(InsidePoint.X, InsidePoint.Y, InsidePoint.Z);
+			glVertex3d(OutsidePoint.x, OutsidePoint.y, OutsidePoint.z);
+			glVertex3d(InsidePoint.x, InsidePoint.y, InsidePoint.z);
 		}
 
 		// Complete the triangle strip
@@ -192,7 +192,7 @@ void DISK::SetResolution(const int &_Resolution)
 	Resolution = _Resolution;
 	
 	// Reset the modified flag
-	Modified = true;
+	modified = true;
 
 	return;
 }
@@ -219,7 +219,7 @@ void DISK::SetOuterRadius(const double &_OuterRadius)
 	OuterRadius = _OuterRadius;
 	
 	// Reset the modified flag
-	Modified = true;
+	modified = true;
 
 	return;
 }
@@ -246,7 +246,7 @@ void DISK::SetInnerRadius(const double &_InnerRadius)
 	InnerRadius = _InnerRadius;
 	
 	// Reset the modified flag
-	Modified = true;
+	modified = true;
 
 	return;
 }
@@ -258,7 +258,7 @@ void DISK::SetInnerRadius(const double &_InnerRadius)
 // Description:		Sets the location of the center of the disk.
 //
 // Input Arguments:
-//		_Center	= const VECTOR&
+//		_Center	= const Vector&
 //
 // Output Arguments:
 //		None
@@ -267,13 +267,13 @@ void DISK::SetInnerRadius(const double &_InnerRadius)
 //		None
 //
 //==========================================================================
-void DISK::SetCenter(const VECTOR &_Center)
+void DISK::SetCenter(const Vector &_Center)
 {
 	// Set the center point to the argument
 	Center = _Center;
 	
 	// Reset the modified flag
-	Modified = true;
+	modified = true;
 
 	return;
 }
@@ -285,7 +285,7 @@ void DISK::SetCenter(const VECTOR &_Center)
 // Description:		Sets the disk's normal direction.
 //
 // Input Arguments:
-//		_Normal	= const VECTOR&
+//		_Normal	= const Vector&
 //
 // Output Arguments:
 //		None
@@ -294,13 +294,13 @@ void DISK::SetCenter(const VECTOR &_Center)
 //		None
 //
 //==========================================================================
-void DISK::SetNormal(const VECTOR &_Normal)
+void DISK::SetNormal(const Vector &_Normal)
 {
 	// Set the normal vector to the argument
 	Normal = _Normal;
 	
 	// Reset the modified flag
-	Modified = true;
+	modified = true;
 
 	return;
 }

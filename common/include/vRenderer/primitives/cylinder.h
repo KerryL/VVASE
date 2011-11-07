@@ -20,11 +20,11 @@
 #include "vRenderer/primitives/primitive.h"
 #include "vMath/vector_class.h"
 
-class CYLINDER : public PRIMITIVE
+class CYLINDER : public Primitive
 {
 public:
 	// Constructor
-	CYLINDER(RENDER_WINDOW &_RenderWindow);
+	CYLINDER(RenderWindow &_RenderWindow);
 
 	// Destructor
 	~CYLINDER();
@@ -37,8 +37,8 @@ public:
 	// Private data accessors
 	void SetResolution(const int &_Resolution);
 	void SetCapping(const bool &_DrawCaps);
-	void SetEndPoint1(const VECTOR &_EndPoint1);
-	void SetEndPoint2(const VECTOR &_EndPoint2);
+	void SetEndPoint1(const Vector &_EndPoint1);
+	void SetEndPoint2(const Vector &_EndPoint2);
 	void SetRadius(const double &_Radius);
 
 private:
@@ -49,8 +49,8 @@ private:
 	int Resolution;
 
 	// The locations of the cylinder ends
-	VECTOR EndPoint1;
-	VECTOR EndPoint2;
+	Vector EndPoint1;
+	Vector EndPoint2;
 
 	// The cylinder's radius
 	double Radius;

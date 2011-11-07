@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -8,9 +8,9 @@
 ===================================================================================*/
 
 // File:  plot_curve.cpp
-// Created:  5/23/2009
+// Created:  5/2/2011
 // Author:  K. Loux
-// Description:  Derived from PRIMITIVE for creating data curves on a plot.
+// Description:  Derived from Primitive for creating data curves on a plot.
 // History:
 //	11/9/2010	- Modified to accomodate 3D plots, K. Loux.
 
@@ -18,15 +18,16 @@
 #include "vRenderer/primitives/plot_curve.h"
 #include "vRenderer/render_window_class.h"
 #include "vRenderer/primitives/axis.h"
+#include "vMath/dataset2D.h"
 
 //==========================================================================
-// Class:			PLOT_CURVE
-// Function:		PLOT_CURVE
+// Class:			PlotCurve
+// Function:		PlotCurve
 //
 // Description:		Constructor for the PLOT_CURVE class.
 //
-// Input Arguments:
-//		_RenderWindow	= RENDER_WINDOW* pointing to the object that owns this
+// Input Argurments:
+//		_RenderWindow	= RenderWindow* pointing to the object that owns this
 //
 // Output Arguments:
 //		None
@@ -35,21 +36,22 @@
 //		None
 //
 //==========================================================================
-PLOT_CURVE::PLOT_CURVE(RENDER_WINDOW &_RenderWindow) : PRIMITIVE(_RenderWindow)
+PlotCurve::PlotCurve(RenderWindow &_renderWindow) : Primitive(_renderWindow)
 {
-	XAxis = NULL;
-	YAxis = NULL;
-	ZAxis = NULL;
+	xAxis = NULL;
+	yAxis = NULL;
+
+	size = 1;
 }
 
 //==========================================================================
-// Class:			PLOT_CURVE
-// Function:		PLOT_CURVE
+// Class:			PlotCurve
+// Function:		PlotCurve
 //
-// Description:		Copy constructor for the PLOT_CURVE class.
+// Description:		Copy constructor for the PlotCurve class.
 //
-// Input Arguments:
-//		PlotCurve	= const PLOT_CURVE& to copy to this object
+// Input Argurments:
+//		plotCurve	= const PlotCurve& to copy to this object
 //
 // Output Arguments:
 //		None
@@ -58,20 +60,20 @@ PLOT_CURVE::PLOT_CURVE(RENDER_WINDOW &_RenderWindow) : PRIMITIVE(_RenderWindow)
 //		None
 //
 //==========================================================================
-PLOT_CURVE::PLOT_CURVE(const PLOT_CURVE &PlotCurve) : PRIMITIVE(PlotCurve)
+PlotCurve::PlotCurve(const PlotCurve &plotCurve) : Primitive(plotCurve)
 {
 	// FIXME:  Need to copy the PlotData?
 	// Do the copy
-	*this = PlotCurve;
+	*this = plotCurve;
 }
 
 //==========================================================================
-// Class:			PLOT_CURVE
-// Function:		~PLOT_CURVE
+// Class:			PlotCurve
+// Function:		~PlotCurve
 //
-// Description:		Destructor for the PLOT_CURVE class.
+// Description:		Destructor for the PlotCurve class.
 //
-// Input Arguments:
+// Input Argurments:
 //		None
 //
 // Output Arguments:
@@ -81,19 +83,17 @@ PLOT_CURVE::PLOT_CURVE(const PLOT_CURVE &PlotCurve) : PRIMITIVE(PlotCurve)
 //		None
 //
 //==========================================================================
-PLOT_CURVE::~PLOT_CURVE()
+PlotCurve::~PlotCurve()
 {
-	// Delete the data in our plot list
-	PlotData.Clear();
 }
 
 //==========================================================================
-// Class:			PLOT_CURVE
+// Class:			PlotCurve
 // Function:		Constant Declarations
 //
-// Description:		Declare class constants for the PLOT_CURVE class.
+// Description:		Declare class constants for the PlotCurve class.
 //
-// Input Arguments:
+// Input Argurments:
 //		None
 //
 // Output Arguments:
@@ -103,16 +103,16 @@ PLOT_CURVE::~PLOT_CURVE()
 //		None
 //
 //==========================================================================
-const int PLOT_CURVE::OffsetFromWindowEdge = 75;
+const int PlotCurve::offsetFromWindowEdge = 75;
 
 //==========================================================================
-// Class:			PLOT_CURVE
+// Class:			PlotCurve
 // Function:		GenerateGeometry
 //
 // Description:		Creates the OpenGL instructions to create this object in
 //					the scene.
 //
-// Input Arguments:
+// Input Argurments:
 //		None
 //
 // Output Arguments:
@@ -122,140 +122,168 @@ const int PLOT_CURVE::OffsetFromWindowEdge = 75;
 //		None
 //
 //==========================================================================
-void PLOT_CURVE::GenerateGeometry(void)
+void PlotCurve::GenerateGeometry(void)
 {
 	// Set the line width
-	glLineWidth(1.5f);
+	glLineWidth((float)size);
 
 	// Create the plot
 	glBegin(GL_LINE_STRIP);
 
 	// Create the plot
-	int i;
-	int Point[3];
-	XYZPOINT *XYZPoint;
+	unsigned int i;
+	int point[2];
+	double doubPoint[2];
 	// FIXME:  If there are more points than pixels, we should avoid sending single pixel
 	// line-draw commands to openGL
-	for (i = 0; i < PlotData.GetCount(); i++)
+	for (i = 0; i < data->GetNumberOfPoints(); i++)
 	{
-		XYZPoint = PlotData[i];
+		doubPoint[0] = data->GetXData(i);
+		doubPoint[1] = data->GetYData(i);
 
 		// Clip data that lies outside of the plot range and interpolate to the edge of the plot
-		if (YAxis)// 3D plot
+		// No interpolation necessary
+		if (doubPoint[0] >= xAxis->GetMinimum() && doubPoint[0] <= xAxis->GetMaximum() &&
+			doubPoint[1] >= yAxis->GetMinimum() && doubPoint[1] <= yAxis->GetMaximum())
 		{
-			// FIXME:  We need a better geometry generator for 3D plots (surfaces)
-			if (XYZPoint->X >= XAxis->GetMinimum() && XYZPoint->X <= XAxis->GetMaximum() &&
-				XYZPoint->Y >= YAxis->GetMinimum() && XYZPoint->Y <= YAxis->GetMaximum() &&
-				XYZPoint->Z >= ZAxis->GetMinimum() && XYZPoint->Z <= ZAxis->GetMaximum())
+			// If the previous point was interpolated, then we need to add an additional point to make the plot draw correctly
+			if (i > 0)
 			{
-				RescalePoint(XYZPoint, Point);
-				glVertex3iv(Point);
+				if (data->GetXData(i - 1) < xAxis->GetMinimum() || data->GetXData(i - 1) > xAxis->GetMaximum() ||
+					data->GetYData(i - 1) < yAxis->GetMinimum() || data->GetYData(i - 1) > yAxis->GetMaximum())
+				{
+					double interpolatedPoint[2] = { data->GetXData(i - 1), data->GetYData(i - 1) };
+
+					// Interpolate to find the correct point
+					if (interpolatedPoint[0] < xAxis->GetMinimum())
+					{
+						interpolatedPoint[0] = xAxis->GetMinimum();
+						interpolatedPoint[1] = doubPoint[1] +
+							(interpolatedPoint[0] - doubPoint[0]) / (data->GetXData(i - 1) - doubPoint[0]) *
+							(data->GetYData(i - 1) - doubPoint[1]);
+					}
+					else if (interpolatedPoint[0] > xAxis->GetMaximum())
+					{
+						interpolatedPoint[0] = xAxis->GetMaximum();
+						interpolatedPoint[1] = doubPoint[1] +
+							(interpolatedPoint[0] - doubPoint[0]) / (data->GetXData(i - 1) - doubPoint[0]) *
+							(data->GetYData(i - 1) - doubPoint[1]);
+					}
+
+					if (interpolatedPoint[1] < yAxis->GetMinimum())
+					{
+						interpolatedPoint[1] = yAxis->GetMinimum();
+						interpolatedPoint[0] = doubPoint[0] +
+							(interpolatedPoint[1] - doubPoint[1]) / (data->GetYData(i - 1) - doubPoint[1]) *
+							(data->GetXData(i - 1) - doubPoint[0]);
+					}
+					else if (interpolatedPoint[1] > yAxis->GetMaximum())
+					{
+						interpolatedPoint[1] = yAxis->GetMaximum();
+						interpolatedPoint[0] = doubPoint[0] +
+							(interpolatedPoint[1] - doubPoint[1]) / (data->GetYData(i - 1) - doubPoint[1]) *
+							(data->GetXData(i - 1) - doubPoint[0]);
+					}
+
+					RescalePoint(interpolatedPoint, point);
+					glVertex2iv(point);
+				}
 			}
+
+			RescalePoint(doubPoint, point);
+			glVertex2iv(point);
 		}
-		else// 2D plot
+		else
 		{
-			// No interpolation necessary
-			if (XYZPoint->X >= XAxis->GetMinimum() && XYZPoint->X <= XAxis->GetMaximum() &&
-				XYZPoint->Z >= ZAxis->GetMinimum() && XYZPoint->Z <= ZAxis->GetMaximum())
+			// If the next point in the series (or the previous point in the series) is within
+			// the valid drawing area, interpolate on one end, otherwise, interpolate on both ends
+			if (i > 0)
 			{
-				RescalePoint(XYZPoint, Point);
-				Point[1] = Point[2];
-				glVertex2iv(Point);
+				if (data->GetXData(i - 1) >= xAxis->GetMinimum() && data->GetXData(i - 1) <= xAxis->GetMaximum() &&
+					data->GetYData(i - 1) >= yAxis->GetMinimum() && data->GetYData(i - 1) <= yAxis->GetMaximum())
+				{
+					double interpolatedPoint[2] = { doubPoint[0], doubPoint[1] };
+
+					// Interpolate to find the correct point
+					if (interpolatedPoint[0] < xAxis->GetMinimum())
+					{
+						interpolatedPoint[0] = xAxis->GetMinimum();
+						interpolatedPoint[1] = doubPoint[1] +
+							(interpolatedPoint[0] - doubPoint[0]) / (data->GetXData(i - 1) - doubPoint[0]) *
+							(data->GetYData(i - 1) - doubPoint[1]);
+					}
+					else if (interpolatedPoint[0] > xAxis->GetMaximum())
+					{
+						interpolatedPoint[0] = xAxis->GetMaximum();
+						interpolatedPoint[1] = doubPoint[1] +
+							(interpolatedPoint[0] - doubPoint[0]) / (data->GetXData(i - 1) - doubPoint[0]) *
+							(data->GetYData(i - 1) - doubPoint[1]);
+					}
+
+					if (interpolatedPoint[1] < yAxis->GetMinimum())
+					{
+						interpolatedPoint[1] = yAxis->GetMinimum();
+						interpolatedPoint[0] = doubPoint[0] +
+							(interpolatedPoint[1] - doubPoint[1]) / (data->GetYData(i - 1) - doubPoint[1]) *
+							(data->GetXData(i - 1) - doubPoint[0]);
+					}
+					else if (interpolatedPoint[1] > yAxis->GetMaximum())
+					{
+						interpolatedPoint[1] = yAxis->GetMaximum();
+						interpolatedPoint[0] = doubPoint[0] +
+							(interpolatedPoint[1] - doubPoint[1]) / (data->GetYData(i - 1) - doubPoint[1]) *
+							(data->GetXData(i - 1) - doubPoint[0]);
+					}
+
+					RescalePoint(interpolatedPoint, point);
+					glVertex2iv(point);
+					continue;
+				}
 			}
-			else
+			if (i < data->GetNumberOfPoints() - 1)
 			{
-				// If the next point in the series (or the previous point in the series) is within
-				// the valid drawing area, interpolate on one end, otherwise, interpolate on both ends
-				if (i > 0)
+				if (data->GetXData(i + 1) >= xAxis->GetMinimum() && data->GetXData(i + 1) <= xAxis->GetMaximum() &&
+					data->GetYData(i + 1) >= yAxis->GetMinimum() && data->GetYData(i + 1) <= yAxis->GetMaximum())
 				{
-					if (PlotData[i - 1]->X >= XAxis->GetMinimum() && PlotData[i - 1]->X <= XAxis->GetMaximum() &&
-						PlotData[i - 1]->Z >= ZAxis->GetMinimum() && PlotData[i - 1]->Z <= ZAxis->GetMaximum())
+					double interpolatedPoint[2] = { doubPoint[0], doubPoint[1] };
+
+					// Interpolate to find the correct point
+					if (interpolatedPoint[0] < xAxis->GetMinimum())
 					{
-						XYZPOINT InterpolatedPoint = *XYZPoint;
-
-						// Interpolate to find the correct XYZPoint
-						if (InterpolatedPoint.X < XAxis->GetMinimum())
-						{
-							InterpolatedPoint.X = XAxis->GetMinimum();
-							InterpolatedPoint.Z = XYZPoint->Z +
-								(InterpolatedPoint.X - XYZPoint->X) / (PlotData[i - 1]->X - XYZPoint->X) *
-								(PlotData[i - 1]->Z - XYZPoint->Z);
-						}
-						else if (InterpolatedPoint.X > XAxis->GetMaximum())
-						{
-							InterpolatedPoint.X = XAxis->GetMaximum();
-							InterpolatedPoint.Z = XYZPoint->Z +
-								(InterpolatedPoint.X - XYZPoint->X) / (PlotData[i - 1]->X - XYZPoint->X) *
-								(PlotData[i - 1]->Z - XYZPoint->Z);
-						}
-
-						if (InterpolatedPoint.Z < ZAxis->GetMinimum())
-						{
-							InterpolatedPoint.Z = ZAxis->GetMinimum();
-							InterpolatedPoint.X = XYZPoint->X +
-								(InterpolatedPoint.Z - XYZPoint->Z) / (PlotData[i - 1]->Z - XYZPoint->Z) *
-								(PlotData[i - 1]->X - XYZPoint->X);
-						}
-						else if (InterpolatedPoint.Z > ZAxis->GetMaximum())
-						{
-							InterpolatedPoint.Z = ZAxis->GetMaximum();
-							InterpolatedPoint.X = XYZPoint->X +
-								(InterpolatedPoint.Z - XYZPoint->Z) / (PlotData[i - 1]->Z - XYZPoint->Z) *
-								(PlotData[i - 1]->X - XYZPoint->X);
-						}
-
-						RescalePoint(&InterpolatedPoint, Point);
-						Point[1] = Point[2];
-						glVertex2iv(Point);
-						continue;
+						interpolatedPoint[0] = xAxis->GetMinimum();
+						interpolatedPoint[1] = doubPoint[1] +
+							(interpolatedPoint[0] - doubPoint[0]) / (data->GetXData(i + 1) - doubPoint[0]) *
+							(data->GetYData(i + 1) - doubPoint[1]);
 					}
-				}
-				if (i < PlotData.GetCount() - 1)
-				{
-					if (PlotData[i + 1]->X >= XAxis->GetMinimum() && PlotData[i + 1]->X <= XAxis->GetMaximum() &&
-						PlotData[i + 1]->Z >= ZAxis->GetMinimum() && PlotData[i + 1]->Z <= ZAxis->GetMaximum())
+					else if (interpolatedPoint[0] > xAxis->GetMaximum())
 					{
-						XYZPOINT InterpolatedPoint = *XYZPoint;
-
-						// Interpolate to find the correct XYZPoint
-						if (InterpolatedPoint.X < XAxis->GetMinimum())
-						{
-							InterpolatedPoint.X = XAxis->GetMinimum();
-							InterpolatedPoint.Z = XYZPoint->Z +
-								(InterpolatedPoint.X - XYZPoint->X) / (PlotData[i + 1]->X - XYZPoint->X) *
-								(PlotData[i + 1]->Z - XYZPoint->Z);
-						}
-						else if (InterpolatedPoint.X > XAxis->GetMaximum())
-						{
-							InterpolatedPoint.X = XAxis->GetMaximum();
-							InterpolatedPoint.Z = XYZPoint->Z +
-								(InterpolatedPoint.X - XYZPoint->X) / (PlotData[i + 1]->X - XYZPoint->X) *
-								(PlotData[i + 1]->Z - XYZPoint->Z);
-						}
-
-						if (InterpolatedPoint.Z < ZAxis->GetMinimum())
-						{
-							InterpolatedPoint.Z = ZAxis->GetMinimum();
-							InterpolatedPoint.X = XYZPoint->X +
-								(InterpolatedPoint.Z - XYZPoint->Z) / (PlotData[i + 1]->Z - XYZPoint->Z) *
-								(PlotData[i + 1]->X - XYZPoint->X);
-						}
-						else if (InterpolatedPoint.Z > ZAxis->GetMaximum())
-						{
-							InterpolatedPoint.Z = ZAxis->GetMaximum();
-							InterpolatedPoint.X = XYZPoint->X +
-								(InterpolatedPoint.Z - XYZPoint->Z) / (PlotData[i + 1]->Z - XYZPoint->Z) *
-								(PlotData[i + 1]->X - XYZPoint->X);
-						}
-
-						RescalePoint(&InterpolatedPoint, Point);
-						Point[1] = Point[2];
-						glVertex2iv(Point);
+						interpolatedPoint[0] = xAxis->GetMaximum();
+						interpolatedPoint[1] = doubPoint[1] +
+							(interpolatedPoint[0] - doubPoint[0]) / (data->GetXData(i + 1) - doubPoint[0]) *
+							(data->GetYData(i + 1) - doubPoint[1]);
 					}
+					
+					if (interpolatedPoint[1] < yAxis->GetMinimum())
+					{
+						interpolatedPoint[1] = yAxis->GetMinimum();
+						interpolatedPoint[0] = doubPoint[0] +
+							(interpolatedPoint[1] - doubPoint[1]) / (data->GetYData(i + 1) - doubPoint[1]) *
+							(data->GetXData(i + 1) - doubPoint[0]);
+					}
+					else if (interpolatedPoint[1] > yAxis->GetMaximum())
+					{
+						interpolatedPoint[1] = yAxis->GetMaximum();
+						interpolatedPoint[0] = doubPoint[0] +
+							(interpolatedPoint[1] - doubPoint[1]) / (data->GetYData(i + 1) - doubPoint[1]) *
+							(data->GetXData(i + 1) - doubPoint[0]);
+					}
+
+					RescalePoint(interpolatedPoint, point);
+					glVertex2iv(point);
 				}
-				// FIXME:  If the user zooms in too much, the plot disappears - there must be some way to
-				// interpolate between just two points to draw a representative line
 			}
+			// FIXME:  If the user zooms in too much, the plot disappears - there must be some way to
+			// interpolate between just two points to draw a representative line
 		}
 	}
 
@@ -265,116 +293,49 @@ void PLOT_CURVE::GenerateGeometry(void)
 }
 
 //==========================================================================
-// Class:			PLOT_CURVE
+// Class:			PlotCurve
 // Function:		RescalePoint
 //
 // Description:		Rescales the onscreen position of the point according to
 //					the size of the axis with which this object is associated.
 //
-// Input Arguments:
-//		XYZPoint	= const XYZPOINT containing the location of the point in plot
+// Input Argurments:
+//		xyPoint	= const double* containing the location of the point in plot
 //					  coordinates
 //
 // Output Arguments:
-//		Point	= int* specifying the location of the object in screen coordinates
+//		point	= int* specifying the location of the object in screen coordinates
 //
 // Return Value:
 //		None
 //
 //==========================================================================
-void PLOT_CURVE::RescalePoint(const XYZPOINT *XYZPoint, int *Point)
+void PlotCurve::RescalePoint(const double *xyPoint, int *point)
 {
-	if (!XYZPoint || !Point)
+	if (!xyPoint || !point)
 		return;
 
 	// Get the plot size
-	int PlotHeight = RenderWindow.GetSize().GetHeight() - 2 * OffsetFromWindowEdge;
-	int PlotDepth = RenderWindow.GetSize().GetWidth() - 2 * OffsetFromWindowEdge;// FIXME!!!
-	int PlotWidth = RenderWindow.GetSize().GetWidth() - 2 * OffsetFromWindowEdge;
+	int plotHeight = renderWindow.GetSize().GetHeight() - 2 * offsetFromWindowEdge;
+	int plotWidth = renderWindow.GetSize().GetWidth() - 2 * offsetFromWindowEdge;
 
 	// Do the scaling
-	Point[0] = OffsetFromWindowEdge + (XYZPoint->X - XAxis->GetMinimum()) /
-		(XAxis->GetMaximum() - XAxis->GetMinimum()) * PlotWidth;
-	if (YAxis)
-		Point[1] = OffsetFromWindowEdge + (XYZPoint->Y - YAxis->GetMinimum()) /
-		(YAxis->GetMaximum() - YAxis->GetMinimum()) * PlotDepth;
-	Point[2] = OffsetFromWindowEdge + (XYZPoint->Z - ZAxis->GetMinimum()) /
-		(ZAxis->GetMaximum() - ZAxis->GetMinimum()) * PlotHeight;
+	point[0] = offsetFromWindowEdge + (xyPoint[0] - xAxis->GetMinimum()) /
+		(xAxis->GetMaximum() - xAxis->GetMinimum()) * plotWidth;
+	point[1] = offsetFromWindowEdge + (xyPoint[1]- yAxis->GetMinimum()) /
+		(yAxis->GetMaximum() - yAxis->GetMinimum()) * plotHeight;
 
 	return;
 }
 
 //==========================================================================
-// Class:			PLOT_CURVE
-// Function:		AddPoint
-//
-// Description:		Adds a point to the curve.
-//
-// Input Arguments:
-//		X	= const double&
-//		Z	= const double&
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-void PLOT_CURVE::AddPoint(const double &X, const double &Z)
-{
-	XYZPOINT *Point = new XYZPOINT;
-	Point->X = X;
-	Point->Y = 0.0;
-	Point->Z = Z;
-
-	PlotData.Add(Point);
-
-	Modified = true;
-
-	return;
-}
-
-//==========================================================================
-// Class:			PLOT_CURVE
-// Function:		AddPoint
-//
-// Description:		Adds a point to the curve.
-//
-// Input Arguments:
-//		X	= const double&
-//		Y	= const double&
-//		Z	= const double&
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-void PLOT_CURVE::AddPoint(const double &X, const double &Y, const double &Z)
-{
-	XYZPOINT *Point = new XYZPOINT;
-	Point->X = X;
-	Point->Y = Y;
-	Point->Z = Z;
-
-	PlotData.Add(Point);
-
-	Modified = true;
-
-	return;
-}
-
-//==========================================================================
-// Class:			PLOT_CURVE
+// Class:			PlotCurve
 // Function:		HasValidParameters
 //
 // Description:		Checks to see if the information about this object is
 //					valid and complete (gives permission to create the object).
 //
-// Input Arguments:
+// Input Argurments:
 //		None
 //
 // Output Arguments:
@@ -384,26 +345,25 @@ void PLOT_CURVE::AddPoint(const double &X, const double &Y, const double &Z)
 //		bool, true for OK to draw, false otherwise
 //
 //==========================================================================
-bool PLOT_CURVE::HasValidParameters(void)
+bool PlotCurve::HasValidParameters(void)
 {
-	if (XAxis != NULL && ZAxis != NULL && PlotData.GetCount() > 1)
+	if (xAxis != NULL && yAxis != NULL && data->GetNumberOfPoints() > 1)
 	{
-		if (XAxis->IsHorizontal() && !ZAxis->IsHorizontal())
+		if (xAxis->IsHorizontal() && !yAxis->IsHorizontal())
 			return true;
 	}
-	// FIXME!!! Add checks for 3D plots
 
 	return false;
 }
 
 //==========================================================================
-// Class:			PLOT_CURVE
+// Class:			PlotCurve
 // Function:		operator =
 //
 // Description:		Assignment operator for PLOT_CURVE class.
 //
-// Input Arguments:
-//		PlotCurve	= const PLOT_CURVE& to assign to this object
+// Input Argurments:
+//		plotCurve	= const PlotCurve& to assign to this object
 //
 // Output Arguments:
 //		None
@@ -412,16 +372,40 @@ bool PLOT_CURVE::HasValidParameters(void)
 //		PLOT_CURVE&, reference to this object
 //
 //==========================================================================
-PLOT_CURVE& PLOT_CURVE::operator = (const PLOT_CURVE &PlotCurve)
+PlotCurve& PlotCurve::operator = (const PlotCurve &plotCurve)
 {
 	// Check for self-assignment
-	if (this == &PlotCurve)
+	if (this == &plotCurve)
 		return *this;
 
 	// Copy the important information using the base class's assignment operator
-	this->PRIMITIVE::operator=(PlotCurve);
+	this->Primitive::operator=(plotCurve);
 
 	// FIMXE:  Need to handle copy of PlotData?
 
 	return *this;
+}
+
+//==========================================================================
+// Class:			PlotCurve
+// Function:		SetData
+//
+// Description:		Assigns data to the curve.
+//
+// Input Argurments:
+//		_data	= const Dataset2D* to plot
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotCurve::SetData(const Dataset2D *_data)
+{
+	data = _data;
+	modified = true;
+
+	return;
 }

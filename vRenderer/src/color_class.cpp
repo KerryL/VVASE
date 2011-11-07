@@ -1,6 +1,6 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                                    DataPlotter
+                           Copyright Kerry R. Loux 2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -8,9 +8,9 @@
 ===================================================================================*/
 
 // File:  color_class.cpp
-// Created:  4/25/2009
+// Created:  5/2/2011
 // Author:  K. Loux
-// Description:  Contains class definition for the COLOR class.  This class contains
+// Description:  Contains class definition for the Color class.  This class contains
 //				 RGBA color definitions in the form of doubles for use with wxWidgets
 //				 as well as OpenGL.
 // History:
@@ -19,16 +19,16 @@
 #include <wx/wx.h>
 #include <wx/colour.h>
 
-// VVASE headers
-#include "vRenderer/color_class.h"
+// Local headers
+#include "renderer/color_class.h"
 
 //==========================================================================
-// Class:			COLOR
-// Function:		COLOR
+// Class:			Color
+// Function:		Color
 //
-// Description:		Constructor for the COLOR class (default).
+// Description:		Constructor for the Color class (default).
 //
-// Input Arguments:
+// Input Argurments:
 //		None
 //
 // Output Arguments:
@@ -38,7 +38,7 @@
 //		None
 //
 //==========================================================================
-COLOR::COLOR()
+Color::Color()
 {
 	// Assign default values to the class members (solid black)
 	Red = 1.0;
@@ -48,13 +48,13 @@ COLOR::COLOR()
 }
 
 //==========================================================================
-// Class:			COLOR
-// Function:		COLOR
+// Class:			Color
+// Function:		Color
 //
-// Description:		Constructor for the COLOR class.  Sets the class contents
+// Description:		Constructor for the Color class.  Sets the class contents
 //					as specified by the arguments.
 //
-// Input Arguments:
+// Input Argurments:
 //		_Red	= const double& specifying the amount of red in this color (0.0 - 1.0)
 //		_Green	= const double& specifying the amount of green in this color (0.0 - 1.0)
 //		_Blue	= const double& specifying the amount of blue in this color (0.0 - 1.0)
@@ -67,7 +67,7 @@ COLOR::COLOR()
 //		None
 //
 //==========================================================================
-COLOR::COLOR(const double &_Red, const double &_Green, const double &_Blue, double _Alpha)
+Color::Color(const double &_Red, const double &_Green, const double &_Blue, double _Alpha)
 {
 	// Assign the arguments to the class members
 	Red = _Red;
@@ -79,12 +79,12 @@ COLOR::COLOR(const double &_Red, const double &_Green, const double &_Blue, doub
 }
 
 //==========================================================================
-// Class:			COLOR
-// Function:		COLOR
+// Class:			Color
+// Function:		Color
 //
-// Description:		Destructor for the COLOR class.
+// Description:		Destructor for the Color class.
 //
-// Input Arguments:
+// Input Argurments:
 //		None
 //
 // Output Arguments:
@@ -94,17 +94,17 @@ COLOR::COLOR(const double &_Red, const double &_Green, const double &_Blue, doub
 //		None
 //
 //==========================================================================
-COLOR::~COLOR()
+Color::~Color()
 {
 }
 
 //==========================================================================
-// Class:			COLOR
+// Class:			Color
 // Function:		Constant Declarations
 //
-// Description:		Constants for the COLOR class.
+// Description:		Constants for the Color class.
 //
-// Input Arguments:
+// Input Argurments:
 //		None
 //
 // Output Arguments:
@@ -114,23 +114,23 @@ COLOR::~COLOR()
 //		None
 //
 //==========================================================================
-const COLOR COLOR::ColorRed(1.0, 0.0, 0.0);
-const COLOR COLOR::ColorGreen(0.0, 1.0, 0.0);
-const COLOR COLOR::ColorBlue(0.0, 0.0, 1.0);
-const COLOR COLOR::ColorWhite(1.0, 1.0, 1.0);
-const COLOR COLOR::ColorBlack(0.0, 0.0, 0.0);
-const COLOR COLOR::ColorYellow(1.0, 1.0, 0.0);
-const COLOR COLOR::ColorCyan(0.0, 1.0, 1.0);
-const COLOR COLOR::ColorMagenta(1.0, 0.0, 1.0);
-const COLOR COLOR::ColorGray(0.5, 0.5, 0.5);
+const Color Color::ColorRed(1.0, 0.0, 0.0);
+const Color Color::ColorGreen(0.0, 1.0, 0.0);
+const Color Color::ColorBlue(0.0, 0.0, 1.0);
+const Color Color::ColorWhite(1.0, 1.0, 1.0);
+const Color Color::ColorBlack(0.0, 0.0, 0.0);
+const Color Color::ColorYellow(1.0, 1.0, 0.0);
+const Color Color::ColorCyan(0.0, 1.0, 1.0);
+const Color Color::ColorMagenta(1.0, 0.0, 1.0);
+const Color Color::ColorGray(0.5, 0.5, 0.5);
 
 //==========================================================================
-// Class:			COLOR
+// Class:			Color
 // Function:		Set
 //
 // Description:		Sets the RGBA values for this color.
 //
-// Input Arguments:
+// Input Argurments:
 //		_Red	= const double& specifying the amount of red in this color (0.0 - 1.0)
 //		_Green	= const double& specifying the amount of green in this color (0.0 - 1.0)
 //		_Blue	= const double& specifying the amount of blue in this color (0.0 - 1.0)
@@ -143,7 +143,7 @@ const COLOR COLOR::ColorGray(0.5, 0.5, 0.5);
 //		None
 //
 //==========================================================================
-void COLOR::Set(const double &_Red, const double &_Green, const double &_Blue, double _Alpha)
+void Color::Set(const double &_Red, const double &_Green, const double &_Blue, double _Alpha)
 {
 	// Assign the arguments to the class members
 	Red = _Red;
@@ -157,13 +157,13 @@ void COLOR::Set(const double &_Red, const double &_Green, const double &_Blue, d
 }
 
 //==========================================================================
-// Class:			COLOR
+// Class:			Color
 // Function:		Set
 //
 // Description:		Sets the RGBA values for this color.  Overload taking
 //					wxColor argument.
 //
-// Input Arguments:
+// Input Argurments:
 //		Color	= wxColor& to match
 //
 // Output Arguments:
@@ -173,9 +173,9 @@ void COLOR::Set(const double &_Red, const double &_Green, const double &_Blue, d
 //		None
 //
 //==========================================================================
-void COLOR::Set(wxColor &Color)
+void Color::Set(const wxColor &Color)
 {
-	// Convert from the wxColor to COLOR
+	// Convert from the wxColor to Color
 	Red = (double)Color.Red() / 255.0;
 	Green = (double)Color.Green() / 255.0;
 	Blue = (double)Color.Blue() / 255.0;
@@ -187,12 +187,12 @@ void COLOR::Set(wxColor &Color)
 }
 
 //==========================================================================
-// Class:			COLOR
+// Class:			Color
 // Function:		SetAlpha
 //
 // Description:		Sets the alpha value for this object.
 //
-// Input Arguments:
+// Input Argurments:
 //		_Alpha = const double&
 //
 // Output Arguments:
@@ -202,7 +202,7 @@ void COLOR::Set(wxColor &Color)
 //		None
 //
 //==========================================================================
-void COLOR::SetAlpha(const double &_Alpha)
+void Color::SetAlpha(const double &_Alpha)
 {
 	Alpha = _Alpha;
 
@@ -212,12 +212,12 @@ void COLOR::SetAlpha(const double &_Alpha)
 }
 
 //==========================================================================
-// Class:			COLOR
+// Class:			Color
 // Function:		ToWxColor
 //
 // Description:		Returns a wxColor object that matches this object's color.
 //
-// Input Arguments:
+// Input Argurments:
 //		None
 //
 // Output Arguments:
@@ -227,7 +227,7 @@ void COLOR::SetAlpha(const double &_Alpha)
 //		wxColor that matches this color
 //
 //==========================================================================
-wxColor COLOR::ToWxColor(void)
+wxColor Color::ToWxColor(void) const
 {
 	// Return object
 	wxColor Color;
@@ -239,13 +239,13 @@ wxColor COLOR::ToWxColor(void)
 }
 
 //==========================================================================
-// Class:			COLOR
+// Class:			Color
 // Function:		ValidateColor
 //
 // Description:		Forces all componenets of the color to be between 0 and 1
 //					if they are not already.
 //
-// Input Arguments:
+// Input Argurments:
 //		None
 //
 // Output Arguments:
@@ -255,7 +255,7 @@ wxColor COLOR::ToWxColor(void)
 //		None
 //
 //==========================================================================
-void COLOR::ValidateColor(void)
+void Color::ValidateColor(void)
 {
 	// Check red
 	if (Red < 0.0)

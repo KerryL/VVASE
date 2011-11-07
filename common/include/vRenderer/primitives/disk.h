@@ -20,11 +20,11 @@
 #include "vRenderer/primitives/primitive.h"
 #include "vMath/vector_class.h"
 
-class DISK : public PRIMITIVE
+class DISK : public Primitive
 {
 public:
 	// Constructor
-	DISK(RENDER_WINDOW &_RenderWindow);
+	DISK(RenderWindow &_RenderWindow);
 
 	// Destructor
 	~DISK();
@@ -38,18 +38,18 @@ public:
 	void SetResolution(const int &_Resolution);
 	void SetOuterRadius(const double &_OuterRadius);
 	void SetInnerRadius(const double &_InnerRadius);
-	void SetCenter(const VECTOR &_Center);
-	void SetNormal(const VECTOR &_Normal);
+	void SetCenter(const Vector &_Center);
+	void SetNormal(const Vector &_Normal);
 
 private:
 	// The resolution
 	int Resolution;
 
 	// The location of the disk
-	VECTOR Center;
+	Vector Center;
 
 	// The normal direction
-	VECTOR Normal;
+	Vector Normal;
 
 	// The inner and outer radii
 	double OuterRadius;

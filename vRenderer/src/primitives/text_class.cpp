@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -8,9 +8,9 @@
 ===================================================================================*/
 
 // File:  text_class.cpp
-// Created:  11/17/2010
+// Created:  5/2/2011
 // Author:  K. Loux
-// Description:  Derived from PRIMITIVE for creating text objects on a plot.
+// Description:  Derived from Primitive for creating text objects on a plot.
 // History:
 
 // Local headers
@@ -22,12 +22,12 @@
 #include <FTGL/ftgl.h>
 
 //==========================================================================
-// Class:			TEXT_RENDERING
-// Function:		TEXT_RENDERING
+// Class:			TextRendering
+// Function:		TextRendering
 //
-// Description:		Constructor for the TEXT_RENDERING class.
+// Description:		Constructor for the TextRendering class.
 //
-// Input Arguments:
+// Input Argurments:
 //		_RenderWindow	= RENDER_WINDOW& reference to the object that owns this
 //
 // Output Arguments:
@@ -37,27 +37,27 @@
 //		None
 //
 //==========================================================================
-TEXT_RENDERING::TEXT_RENDERING(RENDER_WINDOW &_RenderWindow) : PRIMITIVE(_RenderWindow)
+TextRendering::TextRendering(RenderWindow &_renderWindow) : Primitive(_renderWindow)
 {
-	Color.Set(0.0, 0.0, 0.0, 1.0);
+	color.Set(0.0, 0.0, 0.0, 1.0);
 
-	Angle = 0.0;
-	X = 0;
-	Y = 0;
-	Text = wxEmptyString;
+	angle = 0.0;
+	x = 0;
+	y = 0;
+	text = wxEmptyString;
 
-	Centered = false;
+	centered = false;
 
-	Font = NULL;
+	font = NULL;
 }
 
 //==========================================================================
-// Class:			TEXT_RENDERING
-// Function:		~TEXT_RENDERING
+// Class:			TextRendering
+// Function:		~TextRendering
 //
-// Description:		Destructor for the TEXT_RENDERING class.
+// Description:		Destructor for the TextRendering class.
 //
-// Input Arguments:
+// Input Argurments:
 //		None
 //
 // Output Arguments:
@@ -67,18 +67,18 @@ TEXT_RENDERING::TEXT_RENDERING(RENDER_WINDOW &_RenderWindow) : PRIMITIVE(_Render
 //		None
 //
 //==========================================================================
-TEXT_RENDERING::~TEXT_RENDERING()
+TextRendering::~TextRendering()
 {
 }
 
 //==========================================================================
-// Class:			TEXT_RENDERING
+// Class:			TextRendering
 // Function:		GenerateGeometry
 //
 // Description:		Creates the OpenGL instructions to create this object in
 //					the scene.
 //
-// Input Arguments:
+// Input Argurments:
 //		None
 //
 // Output Arguments:
@@ -88,26 +88,26 @@ TEXT_RENDERING::~TEXT_RENDERING()
 //		None
 //
 //==========================================================================
-void TEXT_RENDERING::GenerateGeometry(void)
+void TextRendering::GenerateGeometry(void)
 {
 	// Add the text
-	if (Font && !Text.IsEmpty())
+	if (font && !text.IsEmpty())
 	{
 		glPushMatrix();
 			glLoadIdentity();
 
 			// Position the text
-			if (Centered)
-				glTranslated(X - GetTextWidth() / 2.0 * cos(Angle * VVASEMath::PI / 180.0)
-					+ GetTextHeight() / 2.0 * sin(Angle * VVASEMath::PI / 180.0),
-					Y - GetTextWidth() / 2.0 * sin(Angle * VVASEMath::PI / 180.0)
-					- GetTextHeight() / 2.0 * cos(Angle * VVASEMath::PI / 180.0), 0.0);
+			if (centered)
+				glTranslated(x - GetTextWidth() / 2.0 * cos(angle * VVASEMath::Pi / 180.0)
+					+ GetTextHeight() / 2.0 * sin(angle * VVASEMath::Pi / 180.0),
+					y - GetTextWidth() / 2.0 * sin(angle * VVASEMath::Pi / 180.0)
+					- GetTextHeight() / 2.0 * cos(angle * VVASEMath::Pi / 180.0), 0.0);
 			else
-				glTranslated(X, Y, 0.0);
-			glRotated(Angle, 0.0, 0.0, 1.0);
+				glTranslated(x, y, 0.0);
+			glRotated(angle, 0.0, 0.0, 1.0);
 
 			// Render the text
-			Font->Render(Text.c_str());
+			font->Render(text.c_str());
 		glPopMatrix();
 	}
 
@@ -115,13 +115,13 @@ void TEXT_RENDERING::GenerateGeometry(void)
 }
 
 //==========================================================================
-// Class:			TEXT_RENDERING
+// Class:			TextRendering
 // Function:		HasValidParameters
 //
 // Description:		Checks to see if the information about this object is
 //					valid and complete (gives permission to create the object).
 //
-// Input Arguments:
+// Input Argurments:
 //		None
 //
 // Output Arguments:
@@ -131,23 +131,23 @@ void TEXT_RENDERING::GenerateGeometry(void)
 //		bool, true for OK to draw, false otherwise
 //
 //==========================================================================
-bool TEXT_RENDERING::HasValidParameters(void)
+bool TextRendering::HasValidParameters(void)
 {
 	// Don't draw if the angle is not a number
-	if (VVASEMath::IsNaN(Angle))
+	if (VVASEMath::IsNaN(angle))
 		return false;
 
 	return true;
 }
 
 //==========================================================================
-// Class:			TEXT_RENDERING
+// Class:			TextRendering
 // Function:		GetTextHeight
 //
 // Description:		Returns the height of the bounding box for the current
 //					text.
 //
-// Input Arguments:
+// Input Argurments:
 //		None
 //
 // Output Arguments:
@@ -157,24 +157,24 @@ bool TEXT_RENDERING::HasValidParameters(void)
 //		double, height in pixels of the current text
 //
 //==========================================================================
-double TEXT_RENDERING::GetTextHeight(void) const
+double TextRendering::GetTextHeight(void) const
 {
-	if (!Font)
+	if (!font)
 		return 0.0;
 
-	FTBBox BoundingBox = Font->BBox(Text.c_str());
+	FTBBox boundingBox = font->BBox(text.c_str());
 
-	return BoundingBox.Upper().Y() - BoundingBox.Lower().Y();
+	return boundingBox.Upper().Y() - boundingBox.Lower().Y();
 }
 
 //==========================================================================
-// Class:			TEXT_RENDERING
+// Class:			TextRendering
 // Function:		GetTextWidth
 //
 // Description:		Returns the width of the bounding box for the current
 //					text.
 //
-// Input Arguments:
+// Input Argurments:
 //		None
 //
 // Output Arguments:
@@ -184,12 +184,12 @@ double TEXT_RENDERING::GetTextHeight(void) const
 //		double, width in pixels of the current text
 //
 //==========================================================================
-double TEXT_RENDERING::GetTextWidth(void) const
+double TextRendering::GetTextWidth(void) const
 {
-	if (!Font)
+	if (!font)
 		return 0.0;
 
-	FTBBox BoundingBox = Font->BBox(Text.c_str());
+	FTBBox boundingBox = font->BBox(text.c_str());
 
-	return BoundingBox.Upper().X() - BoundingBox.Lower().X();
+	return boundingBox.Upper().X() - boundingBox.Lower().X();
 }

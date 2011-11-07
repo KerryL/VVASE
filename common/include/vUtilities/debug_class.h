@@ -21,6 +21,7 @@
 //	5/2/2009	- Made Print() functions const to allow passing this object as a constant, K. Loux.
 //	11/22/2009	- Moved to vUtilities.lib, K. Loux.
 //	12/20/2009	- Modified for thread-safe operation, K. Loux.
+//	11/7/2011	- Corrected camelCase, K. Loux.
 
 #ifndef _DEBUG_CLASS_H_
 #define _DEBUG_CLASS_H_
@@ -36,17 +37,17 @@ class wxTextCtrl;
 // Declaration of the EVT_DEBUG event
 DECLARE_LOCAL_EVENT_TYPE(EVT_DEBUG, -1)
 
-class DEBUGGER
+class Debugger
 {
 public:
 	// Constructor
-	DEBUGGER();
+	Debugger();
 
 	// Destructor
-	~DEBUGGER();
+	~Debugger();
 
 	// This enumeration describes how many debug messages we want to print
-	enum DEBUG_LEVEL
+	enum DebugLevel
 	{
 		PriorityVeryHigh,	// These messages ALWAYS print (default) - for critical errors
 		PriorityHigh,		// This type of message would include warnings that affect solution accuracy
@@ -55,28 +56,28 @@ public:
 	};
 
 	// Prints the message to the output pane, if the DEBUG_LEVEL is high enough
-	void Print(const wxString &Info, DEBUG_LEVEL Level = PriorityVeryHigh) const;
-	void Print(const DEBUG_LEVEL &Level, const char *format, ...) const;
+	void Print(const wxString &info, DebugLevel level = PriorityVeryHigh) const;
+	void Print(const DebugLevel &level, const char *format, ...) const;
 
 	// Sets the desired DEBUG_LEVEL
-	void SetDebugLevel(const DEBUG_LEVEL &Level);
+	void SetDebugLevel(const DebugLevel &level);
 
 	// Returns the current debug level
-	inline DEBUG_LEVEL GetDebugLevel(void) const { wxMutexLocker Lock(DebugMutex); return DebugLevel; };
+	inline DebugLevel GetDebugLevel(void) const { wxMutexLocker lock(debugMutex); return debugLevel; };
 
 	// Sets the event handler instead to which events are posted
-	void SetTargetOutput(wxEvtHandler *_Parent);
+	void SetTargetOutput(wxEvtHandler *_parent);
 
 private:
 	// The limit for how important a message must be to be printed
-	DEBUG_LEVEL DebugLevel;
+	DebugLevel debugLevel;
 
 	// For thread-safe debugging, we can give this a pointer to an event
 	// queue and have it post there
-	wxEvtHandler *Parent;
+	wxEvtHandler *parent;
 
 	// Synchronization object
-	mutable wxMutex DebugMutex;
+	mutable wxMutex debugMutex;
 };
 
 #endif// _DEBUG_CLASS_H_

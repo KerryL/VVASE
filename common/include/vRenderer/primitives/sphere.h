@@ -20,11 +20,11 @@
 #include "vRenderer/primitives/primitive.h"
 #include "vMath/vector_class.h"
 
-class SPHERE : public PRIMITIVE
+class SPHERE : public Primitive
 {
 public:
 	// Constructor
-	SPHERE(RENDER_WINDOW &_RenderWindow);
+	SPHERE(RenderWindow &_RenderWindow);
 
 	// Destructor
 	~SPHERE();
@@ -36,7 +36,7 @@ public:
 
 	// Private data accessors
 	void SetResolution(const int &_Resolution);
-	void SetCenter(const VECTOR &_Center);
+	void SetCenter(const Vector &_Center);
 	void SetRadius(const double &_Radius);
 
 private:
@@ -44,17 +44,17 @@ private:
 	int Resolution;
 
 	// The sphere's center point
-	VECTOR Center;
+	Vector Center;
 
 	// The sphere's radius
 	double Radius;
 
 	// Performs subdivision of the triangles to achieve a "rounder" sphere
-	void RecursiveSubdivision(const VECTOR &Corner1, const VECTOR &Corner2,
-		const VECTOR &Corner3, int Level);
+	void RecursiveSubdivision(const Vector &Corner1, const Vector &Corner2,
+		const Vector &Corner3, int Level);
 
 	// Adds a vertex to the glList
-	void AddVertex(const VECTOR &Vertex);
+	void AddVertex(const Vector &Vertex);
 };
 
 #endif// _SPHERE_H_

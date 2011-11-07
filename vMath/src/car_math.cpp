@@ -15,6 +15,7 @@
 //				 collection of functions.  The goal would be to be able to use DEBUGGER classes again.
 // History:
 //	11/22/2009	- Moved to vMath.lib, K. Loux.
+//	11/7/2011	- Corrected camelCase, K. Loux.
 
 // Standard C++ headers
 #include <cstdlib>
@@ -33,27 +34,27 @@
 //					that passes through the three input points.
 //
 // Input Arguments:
-//		Point1	= const VECTOR& describing location of first point on the plane
-//		Point2	= const VECTOR& describing location of second point on the plane
-//		Point3	= const VECTOR& describing location of third point on the plane
+//		point1	= const Vector& describing location of first point on the plane
+//		point2	= const Vector& describing location of second point on the plane
+//		point3	= const Vector& describing location of third point on the plane
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		VECTOR indicating direction that is normal to the plane that is
+//		Vector indicating direction that is normal to the plane that is
 //		defined by the three input arguments
 //
 //==========================================================================
-VECTOR VVASEMath::GetPlaneNormal(const VECTOR &Point1, const VECTOR &Point2, const VECTOR &Point3)
+Vector VVASEMath::GetPlaneNormal(const Vector &point1, const Vector &point2, const Vector &point3)
 {
 	// Check for existence of a solution
-	if (Point1 == Point2 || Point1 == Point3 || Point2 == Point3)
+	if (point1 == point2 || point1 == point3 || point2 == point3)
 	{
-		VECTOR NoSolution(QNAN, QNAN, QNAN);
+		Vector noSolution(QNAN, QNAN, QNAN);
 		//Debugger->Print(_T("Warning (GetPlaneNormal):  Coincident points"), DEBUGGER::PRIORITY_LOW);
 
-		return NoSolution;
+		return noSolution;
 	}
 
 	// To find the plane normal, we subtract the locations of two points to obtain
@@ -61,7 +62,7 @@ VECTOR VVASEMath::GetPlaneNormal(const VECTOR &Point1, const VECTOR &Point2, con
 	// obtain another vector that lies in the plane.  The cross product of these
 	// vectors yields the plane normal.
 
-	return (Point1 - Point2).Cross(Point1 - Point3).Normalize();
+	return (point1 - point2).Cross(point1 - point3).Normalize();
 }
 
 //==========================================================================
@@ -72,37 +73,37 @@ VECTOR VVASEMath::GetPlaneNormal(const VECTOR &Point1, const VECTOR &Point2, con
 //					of two planes.
 //
 // Input Arguments:
-//		Normal1			= const VECTOR& describing normal direciton of first plane
-//		PointOnPlane1	= const VECTOR& describing a point on the first plane
-//		Normal2			= const VECTOR& describing normal direciton of second plane
-//		PointOnPlane2	= const VECTOR& describing a point on the second plane
+//		normal1			= const Vector& describing normal direciton of first plane
+//		pointOnPlane1	= const Vector& describing a point on the first plane
+//		normal2			= const Vector& describing normal direciton of second plane
+//		pointOnPlane2	= const Vector& describing a point on the second plane
 //
 // Output Arguments:
-//		AxisDirection	= VECTOR& describing the direction of the axis
-//		PointOnAxis		= VECTOR& describing a point on the axis
+//		axisDirection	= Vector& describing the direction of the axis
+//		pointOnAxis		= Vector& describing a point on the axis
 //
 // Return Value:
 //		bool indicating whether or not a solution was found
 //
 //==========================================================================
-bool VVASEMath::GetIntersectionOfTwoPlanes(const VECTOR &Normal1, const VECTOR &PointOnPlane1,
-										   const VECTOR &Normal2, const VECTOR &PointOnPlane2,
-										   VECTOR &AxisDirection, VECTOR &PointOnAxis)
+bool VVASEMath::GetIntersectionOfTwoPlanes(const Vector &normal1, const Vector &pointOnPlane1,
+										   const Vector &normal2, const Vector &pointOnPlane2,
+										   Vector &axisDirection, Vector &pointOnAxis)
 {
 	// Make sure the planes are not parallel - this ensures the existence of a solution
-	if (!IsZero(Normal1 - Normal2))
+	if (!IsZero(normal1 - normal2))
 	{
 		// The direction is simply the cross product of the two normal vectors
-		AxisDirection = Normal1.Cross(Normal2).Normalize();
+		axisDirection = normal1.Cross(normal2).Normalize();
 
 		// Now find a point on that axis
 		// This comes from the vector equation of a plane:
 		// If the normal vector of a plane is known, then all points on the plane satisfy
-		// PlaneNormal * Point = SomeConstant.  Since we know a point that lies on each plane,
+		// planeNormal * point = someConstant.  Since we know a point that lies on each plane,
 		// we can solve for that constant for each plane, then solve two simultaneous systems
 		// of equations to find a common point between the two planes.
-		double PlaneConstant1 = Normal1 * PointOnPlane1;
-		double PlaneConstant2 = Normal2 * PointOnPlane2;
+		double planeConstant1 = normal1 * pointOnPlane1;
+		double planeConstant2 = normal2 * pointOnPlane2;
 
 		// To ensure numeric stability (avoid dividing by numbers close to zero),
 		// we will be "smart" about solving these equations.  Since we have two
@@ -111,64 +112,64 @@ bool VVASEMath::GetIntersectionOfTwoPlanes(const VECTOR &Normal1, const VECTOR &
 		// and we choose the component that is farthest from zero.  For example,
 		// if the axis direction is (1.0, 0.0, 0.0), we set X = 0 because we know
 		// the axis must pass through the Y-Z plane.
-		if (fabs(AxisDirection.X) > fabs(AxisDirection.Y) && fabs(AxisDirection.X) > fabs(AxisDirection.Z))
+		if (fabs(axisDirection.x) > fabs(axisDirection.y) && fabs(axisDirection.x) > fabs(axisDirection.z))
 		{
-			// Choose X = 0
-			PointOnAxis.X = 0.0;
+			// Choose x = 0
+			pointOnAxis.x = 0.0;
 
 			// Again, to ensure numerical stability we need to be smart about whether we
-			// solve Y or Z next and whether we use the first or second plane's normal
+			// solve y or z next and whether we use the first or second plane's normal
 			// vector in the denominator of the last solved component.
-			// FIXME:  This can probably be made to be safer (can we prove we will never have a divide by zero?)
-			if (fabs(Normal1.Y) > fabs(Normal1.Z))
+			// FIxME:  This can probably be made to be safer (can we prove we will never have a divide by zero?)
+			if (fabs(normal1.y) > fabs(normal1.z))
 			{
-				PointOnAxis.Z = (PlaneConstant1 * Normal2.Y - PlaneConstant2 * Normal1.Y)
-					/ (Normal2.Y * Normal1.Z - Normal2.Z * Normal1.Y);
-				PointOnAxis.Y = (PlaneConstant1 - Normal1.Z * PointOnAxis.Z) / Normal1.Y;
+				pointOnAxis.z = (planeConstant1 * normal2.y - planeConstant2 * normal1.y)
+					/ (normal2.y * normal1.z - normal2.z * normal1.y);
+				pointOnAxis.y = (planeConstant1 - normal1.z * pointOnAxis.z) / normal1.y;
 			}
 			else
 			{
-				PointOnAxis.Y = (PlaneConstant1 * Normal2.Z - PlaneConstant2 * Normal1.Z)
-					/ (Normal2.Z * Normal1.Y - Normal2.Y * Normal1.Z);
-				PointOnAxis.Z = (PlaneConstant1 - Normal1.Y * PointOnAxis.Y) / Normal1.Z;
+				pointOnAxis.y = (planeConstant1 * normal2.z - planeConstant2 * normal1.z)
+					/ (normal2.z * normal1.y - normal2.y * normal1.z);
+				pointOnAxis.z = (planeConstant1 - normal1.y * pointOnAxis.y) / normal1.z;
 			}
 		}
-		else if (fabs(AxisDirection.Y) > fabs(AxisDirection.X) && fabs(AxisDirection.Y) > fabs(AxisDirection.Z))
+		else if (fabs(axisDirection.y) > fabs(axisDirection.x) && fabs(axisDirection.y) > fabs(axisDirection.z))
 		{
-			// Choose Y = 0
-			PointOnAxis.Y = 0.0;
+			// Choose y = 0
+			pointOnAxis.y = 0.0;
 
 			// Solve the other two components
-			if (fabs(Normal1.X) > fabs(Normal1.Z))
+			if (fabs(normal1.x) > fabs(normal1.z))
 			{
-				PointOnAxis.Z = (PlaneConstant1 * Normal2.X - PlaneConstant2 * Normal1.X)
-					/ (Normal2.X * Normal1.Z - Normal2.Z * Normal1.X);
-				PointOnAxis.X = (PlaneConstant1 - Normal1.Z * PointOnAxis.Z) / Normal1.X;
+				pointOnAxis.z = (planeConstant1 * normal2.x - planeConstant2 * normal1.x)
+					/ (normal2.x * normal1.z - normal2.z * normal1.x);
+				pointOnAxis.x = (planeConstant1 - normal1.z * pointOnAxis.z) / normal1.x;
 			}
 			else
 			{
-				PointOnAxis.X = (PlaneConstant1 * Normal2.Z - PlaneConstant2 * Normal1.Z)
-					/ (Normal2.Z * Normal1.X - Normal2.X * Normal1.Z);
-				PointOnAxis.Z = (PlaneConstant1 - Normal1.X * PointOnAxis.X) / Normal1.Z;
+				pointOnAxis.x = (planeConstant1 * normal2.z - planeConstant2 * normal1.z)
+					/ (normal2.z * normal1.x - normal2.x * normal1.z);
+				pointOnAxis.z = (planeConstant1 - normal1.x * pointOnAxis.x) / normal1.z;
 			}
 		}
 		else
 		{
-			// Choose Z = 0
-			PointOnAxis.Z = 0.0;
+			// Choose z = 0
+			pointOnAxis.z = 0.0;
 
 			// Solve the other two components
-			if (fabs(Normal1.X) > fabs(Normal1.Y))
+			if (fabs(normal1.x) > fabs(normal1.y))
 			{
-				PointOnAxis.Y = (PlaneConstant1 * Normal2.X - PlaneConstant2 * Normal1.X)
-					/ (Normal2.X * Normal1.Y - Normal2.Y * Normal1.X);
-				PointOnAxis.X = (PlaneConstant1 - Normal1.Y * PointOnAxis.Y) / Normal1.X;
+				pointOnAxis.y = (planeConstant1 * normal2.x - planeConstant2 * normal1.x)
+					/ (normal2.x * normal1.y - normal2.y * normal1.x);
+				pointOnAxis.x = (planeConstant1 - normal1.y * pointOnAxis.y) / normal1.x;
 			}
 			else
 			{
-				PointOnAxis.X = (PlaneConstant1 * Normal2.Y - PlaneConstant2 * Normal1.Y)
-					/ (Normal2.Y * Normal1.X - Normal2.X * Normal1.Y);
-				PointOnAxis.Y = (PlaneConstant1 - Normal1.X * PointOnAxis.X) / Normal1.Y;
+				pointOnAxis.x = (planeConstant1 * normal2.y - planeConstant2 * normal1.y)
+					/ (normal2.y * normal1.x - normal2.x * normal1.y);
+				pointOnAxis.y = (planeConstant1 - normal1.x * pointOnAxis.x) / normal1.y;
 			}
 		}
 
@@ -176,8 +177,8 @@ bool VVASEMath::GetIntersectionOfTwoPlanes(const VECTOR &Normal1, const VECTOR &
 	}
 
 	// No solution exists - set the output arguments to QNAN and return false
-	AxisDirection.Set(QNAN, QNAN, QNAN);
-	PointOnAxis.Set(QNAN, QNAN, QNAN);
+	axisDirection.Set(QNAN, QNAN, QNAN);
+	pointOnAxis.Set(QNAN, QNAN, QNAN);
 
 	return false;
 }
@@ -189,7 +190,7 @@ bool VVASEMath::GetIntersectionOfTwoPlanes(const VECTOR &Normal1, const VECTOR &
 // Description:		Returns true if a number is small enough to regard as zero.
 //
 // Input Arguments:
-//		ToCheck	= const double& to be checked for being close to zero
+//		n	= const double& to be checked for being close to zero
 //
 // Output Arguments:
 //		None
@@ -198,9 +199,9 @@ bool VVASEMath::GetIntersectionOfTwoPlanes(const VECTOR &Normal1, const VECTOR &
 //		bool, true if the number is less than NEARLY_ZERO
 //
 //==========================================================================
-bool VVASEMath::IsZero(const double &ToCheck)
+bool VVASEMath::IsZero(const double &n)
 {
-	if (fabs(ToCheck) < NEARLY_ZERO)
+	if (fabs(n) < NearlyZero)
 		return true;
 	else
 		return false;
@@ -211,10 +212,10 @@ bool VVASEMath::IsZero(const double &ToCheck)
 // Function:		IsZero
 //
 // Description:		Returns true if a number is small enough to regard as zero.
-//					This function checks the magnitude of the VECTOR.
+//					This function checks the magnitude of the Vector.
 //
 // Input Arguments:
-//		ToCheck	= const VECTOR& to be checked for being close to zero
+//		v	= const Vector& to be checked for being close to zero
 //
 // Output Arguments:
 //		None
@@ -223,10 +224,10 @@ bool VVASEMath::IsZero(const double &ToCheck)
 //		bool, true if the magnitude is less than NEARLY_ZERO
 //
 //==========================================================================
-bool VVASEMath::IsZero(const VECTOR &ToCheck)
+bool VVASEMath::IsZero(const Vector &v)
 {
 	// Check each component of the vector
-	if (ToCheck.Length() < NEARLY_ZERO)
+	if (v.Length() < NearlyZero)
 		return true;
 
 	return false;
@@ -239,7 +240,7 @@ bool VVASEMath::IsZero(const VECTOR &ToCheck)
 // Description:		Determines if the specified number is or is not a number.
 //
 // Input Arguments:
-//		ToCheck	= const double& to check
+//		n	= const double& to check
 //
 // Output Arguments:
 //		None
@@ -248,9 +249,9 @@ bool VVASEMath::IsZero(const VECTOR &ToCheck)
 //		bool, true if the argument is NOT a number
 //
 //==========================================================================
-bool VVASEMath::IsNaN(const double &ToCheck)
+bool VVASEMath::IsNaN(const double &n)
 {
-	return ToCheck != ToCheck;
+	return n != n;
 }
 
 //==========================================================================
@@ -261,7 +262,7 @@ bool VVASEMath::IsNaN(const double &ToCheck)
 //					Vector version - returns false if any component is NaN.
 //
 // Input Arguments:
-//		ToCheck	= VECTOR& to be checked for containing valid numbers
+//		v	= Vector& to be checked for containing valid numbers
 //
 // Output Arguments:
 //		None
@@ -270,9 +271,9 @@ bool VVASEMath::IsNaN(const double &ToCheck)
 //		bool, true if the argument is NOT a number
 //
 //==========================================================================
-bool VVASEMath::IsNaN(const VECTOR &ToCheck)
+bool VVASEMath::IsNaN(const Vector &v)
 {
-	return IsNaN(ToCheck.X) || IsNaN(ToCheck.Y) || IsNaN(ToCheck.Z);
+	return IsNaN(v.x) || IsNaN(v.y) || IsNaN(v.z);
 }
 
 //==========================================================================
@@ -285,24 +286,24 @@ bool VVASEMath::IsNaN(const VECTOR &ToCheck)
 //					is not on the axis.
 //
 // Input Arguments:
-//		PointOnAxis		= const VECTOR& describing any point on the axis
-//		DirectionOfAxis	= const VECTOR& that points in the direction of the axis
-//		TargetPoint		= const VECTOR& describing the point to compare to the
+//		pointOnAxis		= const Vector& describing any point on the axis
+//		directionOfAxis	= const Vector& that points in the direction of the axis
+//		targetPoint		= const Vector& describing the point to compare to the
 //						  axis
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		VECTOR describing the point on the axis that is closest to
-//		TargetPoint
+//		Vector describing the point on the axis that is closest to
+//		targetPoint
 //
 //==========================================================================
-VECTOR VVASEMath::NearestPointOnAxis(const VECTOR &PointOnAxis, const VECTOR &DirectionOfAxis,
-						  const VECTOR &TargetPoint)
+Vector VVASEMath::NearestPointOnAxis(const Vector &pointOnAxis, const Vector &directionOfAxis,
+						  const Vector &targetPoint)
 {
 	double t;
-	VECTOR Temp;
+	Vector temp;
 
 	// The shortest distance is going to to a point on the axis where the line between
 	// TargetPoint and that point is perpendicular to the axis.  This means their dot
@@ -310,10 +311,10 @@ VECTOR VVASEMath::NearestPointOnAxis(const VECTOR &PointOnAxis, const VECTOR &Di
 	// the dot product to find the value of the parameteric parameter (t) in the
 	// equation of the line.
 
-	t = (DirectionOfAxis * (TargetPoint - PointOnAxis)) / (DirectionOfAxis * DirectionOfAxis);
-	Temp = PointOnAxis + DirectionOfAxis * t;
+	t = (directionOfAxis * (targetPoint - pointOnAxis)) / (directionOfAxis * directionOfAxis);
+	temp = pointOnAxis + directionOfAxis * t;
 
-	return Temp;
+	return temp;
 }
 
 /*
@@ -325,28 +326,28 @@ VECTOR VVASEMath::NearestPointOnAxis(const VECTOR &PointOnAxis, const VECTOR &Di
 //					the specified point.
 //
 // Input Arguments:
-//		PointInPlane	= const VECTOR& describing any point on the plane
-//		PlaneNormal		= const VECTOR& defining the plane's orientation
-//		TargetPoint		= const VECTOR& describing the point to compare to the
+//		pointInPlane	= const Vector& describing any point on the plane
+//		planeNormal		= const Vector& defining the plane's orientation
+//		targetPoint		= const Vector& describing the point to compare to the
 //						  axis
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		VECTOR describing the point on in the plane that is closest to TargetPoint
+//		Vector describing the point on in the plane that is closest to targetPoint
 //
 //==========================================================================
-VECTOR VVASEMath::NearestPointInPlane(const VECTOR &PointInPlane, const VECTOR &PlaneNormal,
-						   const VECTOR &TargetPoint)
+Vector VVASEMath::NearestPointInPlane(const Vector &pointInPlane, const Vector &planeNormal,
+						   const Vector &targetPoint)
 {
 	double t;
-	VECTOR Temp;
+	Vector temp;
 
-	t = (DirectionOfAxis * (TargetPoint - PointOnAxis)) / (DirectionOfAxis * DirectionOfAxis);
-	Temp = PointOnAxis + DirectionOfAxis * t;
+	t = (directionOfAxis * (targetPoint - pointOnAxis)) / (directionOfAxis * directionOfAxis);
+	temp = pointOnAxis + directionOfAxis * t;
 
-	return Temp;
+	return temp;
 }*/
 
 //==========================================================================
@@ -358,29 +359,28 @@ VECTOR VVASEMath::NearestPointInPlane(const VECTOR &PointInPlane, const VECTOR &
 //					through the origin.
 //
 // Input Arguments:
-//		VectorToProject	= const VECTOR& to be projected
-//		PlaneNormal		= const VECTOR& that defines the plane orientation
+//		vectorToProject	= const Vector& to be projected
+//		planeNormal		= const Vector& that defines the plane orientation
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		VECTOR after the projection
+//		Vector after the projection
 //
 //==========================================================================
-VECTOR VVASEMath::ProjectOntoPlane(const VECTOR &VectorToProject, const VECTOR &PlaneNormal)
+Vector VVASEMath::ProjectOntoPlane(const Vector &vectorToProject, const Vector &planeNormal)
 {
 	// Create the projection matrix
-	/*MATRIX ProjectionMatrix(3, 3);
-	ProjectionMatrix.MakeIdentity();
-	ProjectionMatrix -= PlaneNormal.OuterProduct(PlaneNormal);
+	/*Matrix projectionMatrix(3, 3);
+	projectionMatrix.MakeIdentity();
+	projectionMatrix -= planeNormal.OuterProduct(planeNormal);
 
 	// Do the projection
-	VECTOR ProjectedVector = VectorToProject - PlaneNormal * (VectorToProject * PlaneNormal);*/
+	Vector projectedVector = vectorToProject - planeNormal * (vectorToProject * planeNormal);*/
 
 	// Above method is equally valid, but this uses much less overhead
-
-	return VectorToProject - PlaneNormal * (VectorToProject * PlaneNormal);
+	return vectorToProject - planeNormal * (vectorToProject * planeNormal);
 }
 
 //==========================================================================
@@ -391,41 +391,41 @@ VECTOR VVASEMath::ProjectOntoPlane(const VECTOR &VectorToProject, const VECTOR &
 //					the specified plane.
 //
 // Input Arguments:
-//		PlaneNormal		= const VECTOR& indicating the direction that is normal to
+//		planeNormal		= const Vector& indicating the direction that is normal to
 //						  the plane
-//		PointOnPlane	= const VECTOR& specifying a point that lies on the plane
-//		AxisDirection	= VECTOR specifying the direction of the axis
-//		PointOnAxis		= const VECTOR& specifying a point on the axis
+//		pointOnPlane	= const Vector& specifying a point that lies on the plane
+//		axisDirection	= Vector specifying the direction of the axis
+//		pointOnAxis		= const Vector& specifying a point on the axis
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		VECTOR where the intersection occurs
+//		Vector where the intersection occurs
 //
 //==========================================================================
-VECTOR VVASEMath::IntersectWithPlane(const VECTOR &PlaneNormal, const VECTOR &PointOnPlane,
-									 VECTOR AxisDirection, const VECTOR &PointOnAxis)
+Vector VVASEMath::IntersectWithPlane(const Vector &planeNormal, const Vector &pointOnPlane,
+									 Vector axisDirection, const Vector &pointOnAxis)
 {
 	// The return vector
-	VECTOR Intersection(QNAN, QNAN, QNAN);
+	Vector intersection(QNAN, QNAN, QNAN);
 
 	// Determine what will be used as the denominator to calculate the parameter
 	// in our parametric equation
-	double Denominator = PlaneNormal * AxisDirection;
+	double denominator = planeNormal * axisDirection;
 
 	// Make sure this isn't zero (if it is, then there is no solution!)
-	if (IsZero(Denominator))
-		return Intersection;
+	if (IsZero(denominator))
+		return intersection;
 
 	// If we didn't return yet, then a solution does exist.  Determine the paramter
 	// in the parametric equation of the line: P = PointOnAxis + t * AxisDirection.Normalize()
-	double t = PlaneNormal * (PointOnPlane - PointOnAxis) / Denominator;
+	double t = planeNormal * (pointOnPlane - pointOnAxis) / denominator;
 
 	// Use the parametric equation to find the point
-	Intersection = PointOnAxis + AxisDirection.Normalize() * t;
+	intersection = pointOnAxis + axisDirection.Normalize() * t;
 
-	return Intersection;
+	return intersection;
 }
 
 //==========================================================================
@@ -438,9 +438,9 @@ VECTOR VVASEMath::IntersectWithPlane(const VECTOR &PlaneNormal, const VECTOR &Po
 //					has exceeded.
 //
 // Input Arguments:
-//		Value		= const double& reference to the value which we want to clamp
-//		LowerLimit	= const double& lower bound of allowable values
-//		UpperLimit	= const double& upper bound of allowable values
+//		n		= const double& reference to the value which we want to clamp
+//		lowerLimit	= const double& lower bound of allowable values
+//		upperLimit	= const double& upper bound of allowable values
 //
 // Output Arguments:
 //		None
@@ -449,17 +449,17 @@ VECTOR VVASEMath::IntersectWithPlane(const VECTOR &PlaneNormal, const VECTOR &Po
 //		double, equal to the clamped value
 //
 //==========================================================================
-double VVASEMath::Clamp(const double &Value, const double &LowerLimit, const double &UpperLimit)
+double VVASEMath::Clamp(const double &n, const double &lowerLimit, const double &upperLimit)
 {
 	// Make sure the arguments are valid
-	assert(LowerLimit < UpperLimit);
+	assert(lowerLimit < upperLimit);
 
-	if (Value < LowerLimit)
-		return LowerLimit;
-	else if (Value > UpperLimit)
-		return UpperLimit;
+	if (n < lowerLimit)
+		return lowerLimit;
+	else if (n > upperLimit)
+		return upperLimit;
 
-	return Value;
+	return n;
 }
 
 //==========================================================================
@@ -470,7 +470,7 @@ double VVASEMath::Clamp(const double &Value, const double &LowerLimit, const dou
 //					angle is between -pi and pi.
 //
 // Input Arguments:
-//		Angle		= const double& reference to the angle we want to bound
+//		angle		= const double& reference to the angle we want to bound
 //
 // Output Arguments:
 //		None
@@ -479,15 +479,15 @@ double VVASEMath::Clamp(const double &Value, const double &LowerLimit, const dou
 //		double, equal to the re-ranged angle
 //
 //==========================================================================
-double VVASEMath::RangeToPlusMinusPi(const double &_Angle)
+double VVASEMath::RangeToPlusMinusPi(const double &_angle)
 {
-	double Angle = _Angle;
-	while (Angle <= PI)
-		Angle += 2 * PI;
-	while (Angle > PI)
-		Angle -= 2 * PI;
+	double angle = _angle;
+	while (angle <= Pi)
+		angle += 2 * Pi;
+	while (angle > Pi)
+		angle -= 2 * Pi;
 
-	return Angle;
+	return angle;
 }
 
 //==========================================================================
@@ -497,7 +497,7 @@ double VVASEMath::RangeToPlusMinusPi(const double &_Angle)
 // Description:		Returns 1 for positive, -1 for negative and 0 for zero.
 //
 // Input Arguments:
-//		Value		= const double&
+//		n		= const double&
 //
 // Output Arguments:
 //		None
@@ -506,11 +506,11 @@ double VVASEMath::RangeToPlusMinusPi(const double &_Angle)
 //		double
 //
 //==========================================================================
-double VVASEMath::Sign(const double &Value)
+double VVASEMath::Sign(const double &n)
 {
-	if (Value > 0.0)
+	if (n > 0.0)
 		return 1.0;
-	else if (Value < 0.0)
+	else if (n < 0.0)
 		return -1.0;
 	else
 		return 0.0;

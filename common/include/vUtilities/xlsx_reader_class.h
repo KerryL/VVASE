@@ -13,6 +13,7 @@
 // Description:  Class for reading from Excel's XML-based files.  Contains functions
 //				 intended for extracting columns of data.
 // History:
+//	11/7/2011	- Corrected camelCase, K. Loux.XlsxReader
 
 #ifndef _XLSX_READER_CLASS_H_
 #define _XLSX_READER_CLASS_H_
@@ -33,61 +34,61 @@ class wxZipInputStream;
 class wxZipEntry;
 
 // Main class declaration
-class XLSX_READER
+class XlsxReader
 {
 public:
 	// Constructor
-	XLSX_READER(const wxString &_PathAndFileName);
+	XlsxReader(const wxString &_pathAndFileName);
 
 	// Destructor
-	~XLSX_READER();
+	~XlsxReader();
 
 	// For checking to make sure it opened OK
-	bool IsOk(void) const { return IsOkFlag; };
+	bool IsOk(void) const { return isOkFlag; };
 
 	// Functions for accessing file data
-	unsigned int GetNumberOfSheets(void) const { return Sheets.size(); };
-	unsigned int GetNumberOfColumns(const unsigned int &Sheet) const;
-	unsigned int GetNumberOfRows(const unsigned int &Sheet) const;
-	wxString GetSheetName(const unsigned int &Sheet) const;
+	unsigned int GetNumberOfSheets(void) const { return sheets.size(); };
+	unsigned int GetNumberOfColumns(const unsigned int &sheet) const;
+	unsigned int GetNumberOfRows(const unsigned int &sheet) const;
+	wxString GetSheetName(const unsigned int &sheet) const;
 	unsigned int GetSelectedSheet(void) const;
-	wxString GetCellData(const unsigned int &Sheet,
-		const unsigned int &Row, const unsigned int &Column) const;
-	double GetNumericCellData(const unsigned int &Sheet,
-		const unsigned int &Row, const unsigned int &Column) const;
-	bool CellIsNumeric(const unsigned int &Sheet,
-		const unsigned int &Row, const unsigned int &Column) const;
+	wxString GetCellData(const unsigned int &sheet,
+		const unsigned int &row, const unsigned int &column) const;
+	double GetNumericCellData(const unsigned int &sheet,
+		const unsigned int &row, const unsigned int &column) const;
+	bool CellIsNumeric(const unsigned int &sheet,
+		const unsigned int &row, const unsigned int &column) const;
 
 private:
 	// Path and file name
-	wxString PathAndFileName;
+	wxString pathAndFileName;
 
 	// Objects for initial access and unzipping of the files
 	wxZipInputStream *OpenFile(void) const;
-	wxZipEntry *GetEntry(wxZipInputStream &ZipStream, const wxString &EntryString) const;
-	bool LoadSheet(const unsigned int &Sheet);
+	wxZipEntry *GetEntry(wxZipInputStream &zipStream, const wxString &entryString) const;
+	bool LoadSheet(const unsigned int &sheet);
 
 	// Functions and objects required for object initialization
 	bool Initialize(void);
-	wxString GetDimensionString(const wxXmlDocument &SheetDocument) const;
-	bool SheetIsSelected(const wxXmlDocument &SheetDocument) const;
-	unsigned int ParseForRowCount(const wxString &DimensionString) const;
-	unsigned int ParseForColumnCount(const wxString &DimensionString) const;
-	wxString GetSharedString(const unsigned int &Index) const;
+	wxString GetDimensionString(const wxXmlDocument &sheetDocument) const;
+	bool SheetIsSelected(const wxXmlDocument &sheetDocument) const;
+	unsigned int ParseForRowCount(const wxString &dimensionString) const;
+	unsigned int ParseForColumnCount(const wxString &dimensionString) const;
+	wxString GetSharedString(const unsigned int &index) const;
 
-	unsigned int ColumnNumberFromString(const wxString &Column) const;
-	wxString GetCellAddressString(const unsigned int &Row, const unsigned int Column,
-		const wxString &ReferenceCell) const;
-	wxString GetReferenceCell(const wxString &DimensionString) const;
+	unsigned int ColumnNumberFromString(const wxString &column) const;
+	wxString GetCellAddressString(const unsigned int &row, const unsigned int column,
+		const wxString &referenceCell) const;
+	wxString GetReferenceCell(const wxString &dimensionString) const;
 
 	// Objects for storing the XML documents and related information
-	wxXmlDocument *Workbook;
-	wxXmlDocument *SharedStrings;
-	MANAGED_LIST<wxXmlDocument> Worksheets;
-	std::vector<std::pair<wxString, unsigned int> > Sheets;
+	wxXmlDocument *workbook;
+	wxXmlDocument *sharedStrings;
+	ManagedList<wxXmlDocument> worksheets;
+	std::vector<std::pair<wxString, unsigned int> > sheets;
 
 	// Flag indicating status of this object
-	bool IsOkFlag;
+	bool isOkFlag;
 };
 
 #endif// _XLS_READER_CLASS_H_

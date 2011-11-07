@@ -1,12 +1,11 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                                    DataPlotter
+                           Copyright Kerry R. Loux 2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
 
 ===================================================================================*/
-
 // File:  render_window_class.h
 // Created:  5/14/2009
 // Author:  K. Loux
@@ -22,25 +21,26 @@
 #define _RENDER_WINDOW_CLASS_H_
 
 // wxWidgets headers
+#include <wx/wx.h>
 #include <wx/glcanvas.h>
 
-// VVASE headers
+// Local headers
 #include "vUtilities/managed_list_class.h"
 #include "vMath/vector_class.h"
-#include "primitives/primitive.h"
+#include "vRenderer/primitives/primitive.h"
 
-// VVASE forward declarations
-class MATRIX;
+// Local forward declarations
+class Matrix;
 
-class RENDER_WINDOW : public wxGLCanvas
+class RenderWindow : public wxGLCanvas
 {
 public:
 	// Constructor
-	RENDER_WINDOW(wxWindow &Parent, wxWindowID Id,
-		const wxPoint& Position, const wxSize& Size, long Style = 0);
+	RenderWindow(wxWindow &parent, wxWindowID id,
+		const wxPoint& position, const wxSize& size, long style = 0);
 
 	// Destructor
-	virtual ~RENDER_WINDOW();
+	virtual ~RenderWindow();
 
 	// The main render method - re-draws the scene
     void Render();
@@ -49,59 +49,79 @@ public:
     void Initialize();
 
 	// Sets up the camera
-	void SetCameraView(const VECTOR &Position, const VECTOR &LookAt, const VECTOR &UpDirection);
+	void SetCameraView(const Vector &position, const Vector &lookAt, const Vector &upDirection);
 
 	// Transforms between the model coordinate system and the view (openGL) coordinate system
-	VECTOR TransformToView(const VECTOR &ModelVector) const;
-	VECTOR TransformToModel(const VECTOR &ViewVector) const;
-	VECTOR GetCameraPosition(void) const;
+	Vector TransformToView(const Vector &modelVector) const;
+	Vector TransformToModel(const Vector &viewVector) const;
+	Vector GetCameraPosition(void) const;
 
 	// Sets the viewing frustum to match the current size of the window
 	void AutoSetFrustum(void);
 
 	// Adds actors to the primitives list
-	inline void AddActor(PRIMITIVE *ToAdd) { PrimitiveList.Add(ToAdd); Modified = true; };
+	inline void AddActor(Primitive *toAdd) { primitiveList.Add(toAdd); modified = true; };
 
 	// Removes actors from the primitives list
-	bool RemoveActor(PRIMITIVE *ToRemove);
+	bool RemoveActor(Primitive *toRemove);
 
 	// Private data accessors
-	inline void SetWireFrame(bool _WireFrame) { WireFrame = _WireFrame; Modified = true; };
-	inline void SetViewOrthogonal(bool _ViewOrthogonal) { ViewOrthogonal = _ViewOrthogonal; Modified = true; };
+	inline void SetWireFrame(bool _wireFrame) { wireFrame = _wireFrame; modified = true; };
+	inline void SetViewOrthogonal(bool _viewOrthogonal) { viewOrthogonal = _viewOrthogonal; modified = true; };
 
-	inline void SetVerticalFOV(double _VerticalFOV) { VerticalFOV = _VerticalFOV; Modified = true; };
-	inline void SetAspectRatio(double _AspectRatio) { AspectRatio = _AspectRatio; Modified = true; };
-	inline void SetNearClip(double _NearClip) { NearClip = _NearClip; Modified = true; };
-	inline void SetFarClip(double _FarClip) { FarClip = _FarClip; Modified = true; };
-	inline void SetView3D(bool _View3D) { View3D = _View3D; Modified = true; };
+	inline void SetVerticalFOV(double _verticalFOV) { verticalFOV = _verticalFOV; modified = true; };
+	inline void SetAspectRatio(double _aspectRatio) { aspectRatio = _aspectRatio; modified = true; };
+	inline void SetNearClip(double _nearClip) { nearClip = _nearClip; modified = true; };
+	inline void SetFarClip(double _farClip) { farClip = _farClip; modified = true; };
+	inline void SetView3D(bool _view3D) { view3D = _view3D; modified = true; };
 
-	inline void SetBackgroundColor(COLOR _BackgroundColor) { BackgroundColor = _BackgroundColor; Modified = true; };
+	inline void SetBackgroundColor(Color _backgroundColor) { backgroundColor = _backgroundColor; modified = true; };
+	inline Color GetBackgroundColor(void) { return backgroundColor; };
 
-	inline bool GetWireFrame(void) const { return WireFrame; };
-	inline bool GetViewOrthogonal(void) const { return ViewOrthogonal; };
+	inline bool GetWireFrame(void) const { return wireFrame; };
+	inline bool GetViewOrthogonal(void) const { return viewOrthogonal; };
+	inline bool GetView3D(void) const { return view3D; };
 
 	// Returns a string containing any OpenGL errors
 	wxString GetGLError(void) const;
 
 	// Writes the current image to file
-	bool WriteImageToFile(wxString PathAndFileName) const;
+	bool WriteImageToFile(wxString pathAndFileName) const;
 
 	// Determines if a particular primitive is in the scene owned by this object
-	bool IsThisRendererSelected(const PRIMITIVE *PickedObject) const;
+	bool IsThisRendererSelected(const Primitive *pickedObject) const;
 
 private:
 	// Flags describing the options for this object's functionality
-	bool WireFrame;
-	bool ViewOrthogonal;
+	bool wireFrame;
+	bool viewOrthogonal;
 
 	// The parameters that describe the viewing frustum
-	double VerticalFOV;
-	double AspectRatio;
-	double NearClip;
-	double FarClip;
+	double verticalFOV;
+	double aspectRatio;
+	double nearClip;
+	double farClip;
 
 	// The background color
-	COLOR BackgroundColor;
+	Color backgroundColor;
+
+	// List of item indexes and alphas for sorting by alpha
+	struct ListItem
+	{
+		ListItem(const double& _alpha, const int &_i)
+		{
+			alpha = _alpha;
+			i = _i;
+		};
+
+		double alpha;
+		int i;
+
+		bool operator< (const ListItem &right) const
+		{
+			return alpha < right.alpha;
+		};
+	};
 
 	// Event handlers-----------------------------------------------------
 	// Interactor events
@@ -117,16 +137,16 @@ private:
 	// End event handlers-------------------------------------------------
 
 	// The type of ineraction to perform
-	enum INTERACTION_TYPE
+	enum InteractionType
 	{
-		InteractionDollyDrag,// zoom
-		InteractionDollyWheel,// zoom
-		InteractionPan,// translate
-		InteractionRotate
+		interactionDollyDrag,// zoom
+		interactionDollyWheel,// zoom
+		interactionPan,// translate
+		interactionRotate
 	};
 
 	// Perfoms the computations and transformations associated with the specified interaction
-	void PerformInteraction(INTERACTION_TYPE Interaction, wxMouseEvent &event);
+	void PerformInteraction(InteractionType interaction, wxMouseEvent &event);
 
 	// The interaction events (called from within the real event handlers)
 	void DoRotate(wxMouseEvent &event);
@@ -138,14 +158,14 @@ private:
 	void UpdateTransformationMatricies(void);
 
 	// The transformation matricies
-	MATRIX *ModelToView;
-	MATRIX *ViewToModel;
+	Matrix *modelToView;
+	Matrix *viewToModel;
 
 	// The camera position
-	VECTOR CameraPosition;
+	Vector cameraPosition;
 
 	// The focal point for performing interactions
-	VECTOR FocalPoint;
+	Vector focalPoint;
 
 	// Method for re-organizing the PrimitiveList so opaque objects are at the beginning and
 	// transparent objects are at the end
@@ -153,22 +173,25 @@ private:
 
 protected:
 	// Flag indicating whether or not this is a 3D rendering
-	bool View3D;
+	bool view3D;
 
 	// Flag indicating whether or not we need to re-initialize this object
-	bool Modified;
+	bool modified;
 
 	// The list of objects to create in this scene
-	MANAGED_LIST<PRIMITIVE> PrimitiveList;
+	ManagedList<Primitive> primitiveList;
 
 	// Some interactions require the previous mouse position (window coordinates)
-	long LastMousePosition[2];
+	long lastMousePosition[2];
 
 	// Stores the last mouse position variables
 	void StoreMousePosition(wxMouseEvent &event);
 
 	// Flag indicating whether or not we should select a new focal point for the interactions
-	bool IsInteracting;
+	bool isInteracting;
+
+	static void ConvertMatrixToGL(const Matrix& matrix, double gl[]);
+	static void ConvertGLToMatrix(Matrix& matrix, const double gl[]);
 
 	// For the event table
 	DECLARE_EVENT_TABLE()

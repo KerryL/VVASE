@@ -8,39 +8,34 @@
 ===================================================================================*/
 
 // File:  matrix_class.cpp
-// Created:  12/2/2007
+// Created:  5/2/2011
 // Author:  K. Loux
 // Description:  Contains class functionality for matrix class.
 // History:
-//	3/3/2008	- Removed overloaded operators that returned MATRIX type due to heap corruption issues.
-//				  Also changed function arguments to addresses where applicable to reduce overhead, K. Loux.
-//  1/2/2008	- Added Set() function with variable number of arguments for setting matrix values, K. Loux.
-//	5/15/2009	- Added GetSubMatrix() and GetFirstElementPointer() methods for use with OpenGL routines, K. Loux.
-//	6/15/2009	- Corrected function signatures for overloaded operators, K. Loux.
-//	6/17/2009	- Added copy constructor to eliminate need to DeleteElements flag, K. Loux.
-//	11/22/2009	- Moved to vMath.lib, K. Loux.
+//	11/7/2011	- Imported from DataPlotter, K. Loux.
 
 // Standard C++ headers
 #include <cstdlib>
 #include <cstdarg>
+#include <cmath>
 
 // wxWidgets headers
 #include <wx/wx.h>
 
-// VVASE headers
+// Local headers
 #include "vMath/matrix_class.h"
 #include "vMath/vector_class.h"
+#include "vMath/car_math.h"
 
 //==========================================================================
-// Class:			MATRIX
-// Function:		MATRIX
+// Class:			Matrix
+// Function:		Matrix
 //
-// Description:		Constructor for the MATRIX class.  Allocates memory for
-//					a matix of the specified size.
+// Description:		Constructor for the Matrix class.  Does not allocate any
+//					memory.
 //
-// Input Arguments:
-//		_Rows		= const int& specifying the vertical size of the matrix
-//		_Columns	= const int& specifying the horizontal size of the matrix
+// Input Argurments:
+//		None
 //
 // Output Arguments:
 //		None
@@ -49,31 +44,55 @@
 //		None
 //
 //==========================================================================
-MATRIX::MATRIX(const int &_Rows, const int &_Columns)
+Matrix::Matrix()
+{
+	rows = 0;
+	columns = 0;
+	elements = NULL;
+}
+
+//==========================================================================
+// Class:			Matrix
+// Function:		Matrix
+//
+// Description:		Constructor for the Matrix class.  Allocates memory for
+//					a matix of the specified size.
+//
+// Input Argurments:
+//		_rows		= const unsigned int& specifying the vertical size of the matrix
+//		_columns	= const unsigned int& specifying the horizontal size of the matrix
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+Matrix::Matrix(const unsigned int &_rows, const unsigned int &_columns)
 {
 	// Initialize the number of rows and columns
-	Rows = _Rows;
-	Columns = _Columns;
+	rows = _rows;
+	columns = _columns;
 
-	// Allocate memory for the elements
-	Elements = new double[Rows * Columns];
+	AllocateElements();
 
 	// Initialize the matrix
 	Zero();
 }
 
 //==========================================================================
-// Class:			MATRIX
-// Function:		MATRIX
+// Class:			Matrix
+// Function:		Matrix
 //
-// Description:		Constructor for the MATRIX class.  Allocates memory for
+// Description:		Constructor for the Matrix class.  Allocates memory for
 //					a matix of the specified size and fills the matrix with
 //					the specified elements.
 //
-// Input Arguments:
-//		_Rows		= const int& specifying the vertical size of the matrix
-//		_Columns	= const int& specifying the horizontal size of the matrix
-//		Element1	= double specifying the first element of the matrix
+// Input Argurments:
+//		_rows		= const unsigned int& specifying the vertical size of the matrix
+//		_columns	= const unsigned int& specifying the horizontal size of the matrix
+//		element1	= double specifying the first element of the matrix
 //		...			= doubles specifying the rest of the elements
 //
 // Output Arguments:
@@ -83,41 +102,46 @@ MATRIX::MATRIX(const int &_Rows, const int &_Columns)
 //		None
 //
 //==========================================================================
-MATRIX::MATRIX(const int &_Rows, const int &_Columns, double Element1, ...)
+Matrix::Matrix(const unsigned int &_rows, const unsigned int &_columns, double element1, ...)
 {
 	// Initialize the number of rows and columns
-	Rows = _Rows;
-	Columns = _Columns;
+	rows = _rows;
+	columns = _columns;
 
-	// Allocate memory for the elements
-	Elements = new double[Rows * Columns];
+	AllocateElements();
 
 	// Declare a va_list macro and initialize it with va_start
-	va_list ArgumentList;
-	va_start(ArgumentList, Element1);
+	va_list argumentList;
+	va_start(argumentList, element1);
 
 	// Assign the first element
-	Elements[0] = Element1;
+	elements[0][0] = element1;
 
 	// Fill all of the elements with the arguments
 	// FIXME:  There is no check to make sure the correct number of elements was
 	// passed!  This could result in runtime crash or wrong calculations!
-	int i;
-	for (i = 1; i < Rows * Columns; i++)
-		Elements[i] = va_arg(ArgumentList, double);
+	unsigned int i, j;
+	for (i = 0; i < rows; i++)
+	{
+		for (j = 0; j < columns; j++)
+		{
+			if (i != 0 || j != 0)// Already assigned element [0][0]
+				elements[i][j] = va_arg(argumentList, double);
+		}
+	}
 
 	// Terminate the variable argument list
-	va_end(ArgumentList);
+	va_end(argumentList);
 }
 
 //==========================================================================
-// Class:			MATRIX
-// Function:		MATRIX
+// Class:			Matrix
+// Function:		Matrix
 //
-// Description:		Copy constructor for the MATRIX class.  Performs deep copy.
+// Description:		Copy constructor for the Matrix class.  Performs deep copy.
 //
-// Input Arguments:
-//		Matrix	= MATRIX& to copy form
+// Input Argurments:
+//		matrix	= Matrix& to copy form
 //
 // Output Arguments:
 //		None
@@ -126,22 +150,24 @@ MATRIX::MATRIX(const int &_Rows, const int &_Columns, double Element1, ...)
 //		None
 //
 //==========================================================================
-MATRIX::MATRIX(const MATRIX &Matrix)
+Matrix::Matrix(const Matrix &matrix)
 {
 	// Initialize the elements pointer
-	Elements = NULL;
+	elements = NULL;
+	rows = 0;
+	columns = 0;
 
 	// Copy from the argument to this
-	*this = Matrix;
+	*this = matrix;
 }
 
 //==========================================================================
-// Class:			MATRIX
-// Function:		~MATRIX
+// Class:			Matrix
+// Function:		~Matrix
 //
-// Description:		Destructor for the MATRIX class.
+// Description:		Destructor for the Matrix class.
 //
-// Input Arguments:
+// Input Argurments:
 //		None
 //
 // Output Arguments:
@@ -151,24 +177,23 @@ MATRIX::MATRIX(const MATRIX &Matrix)
 //		None
 //
 //==========================================================================
-MATRIX::~MATRIX()
+Matrix::~Matrix()
 {
 	// Delete the elements
-	delete [] Elements;
-	Elements = NULL;
+	FreeElements();
 }
 
 //==========================================================================
-// Class:			MATRIX
+// Class:			Matrix
 // Function:		SetElement
 //
 // Description:		Changes the element at the specified location to the
 //					specified value.
 //
-// Input Arguments:
-//		Row		= const int& specifying the vertical position in the matrix
-//		Column	= const int& specifying the horizontal position in the matrix
-//		Value	= const double& specifying the new value of the element
+// Input Argurments:
+//		row		= const unsigned int& specifying the vertical position in the matrix
+//		column	= const unsigned int& specifying the horizontal position in the matrix
+//		value	= const double& specifying the new value of the element
 //
 // Output Arguments:
 //		None
@@ -177,26 +202,26 @@ MATRIX::~MATRIX()
 //		None
 //
 //==========================================================================
-void MATRIX::SetElement(const int &Row, const int &Column, const double &Value)
+void Matrix::SetElement(const unsigned int &row, const unsigned int &column, const double &value)
 {
 	// Check to make sure it is a valid index
-	assert(Row <= Rows && Column <= Columns);
+	assert(row < rows && column < columns);
 
 	// Set the element as requested
-	Elements[(Row - 1) * Columns + Column - 1] = Value;
+	elements[row][column] = value;
 
 	return;
 }
 
 //==========================================================================
-// Class:			MATRIX
+// Class:			Matrix
 // Function:		Set
 //
 // Description:		Sets the values of this matrix to the arguments passed
 //					to this function.
 //
-// Input Arguments:
-//		Element1	= double representing the first element
+// Input Argurments:
+//		element1	= double representing the first element
 //		..			= doubles representing the other elements.  Elements are
 //					  read by filling each column of a row before moving on
 //					  to the next row.
@@ -208,37 +233,43 @@ void MATRIX::SetElement(const int &Row, const int &Column, const double &Value)
 //		None
 //
 //==========================================================================
-void MATRIX::Set(double Element1, ...)
+void Matrix::Set(double element1, ...)
 {
 	// Declare a va_list macro and initialize it with va_start
-	va_list ArgumentList;
-	va_start(ArgumentList, Element1);
+	va_list argumentList;
+	va_start(argumentList, element1);
 
 	// Assign the first element
-	Elements[0] = Element1;
+	elements[0][0] = element1;
 
 	// Fill all of the elements with the arguments
 	// FIXME:  There is no check to make sure the correct number of elements was
 	// passed!  This could result in runtime crash or wrong calculations!
-	int i;
-	for (i = 1; i < Rows * Columns; i++)
-		Elements[i] = va_arg(ArgumentList, double);
+	unsigned int i, j;
+	for (i = 0; i < rows; i++)
+	{
+		for (j = 0; j < columns; j++)
+		{
+			if (i != 0 || j != 0)// Already assigned element [0][0]
+				elements[i][j] = va_arg(argumentList, double);
+		}
+	}
 
 	// Terminate the variable argument list
-	va_end(ArgumentList);
+	va_end(argumentList);
 
 	return;
 }
 
 //==========================================================================
-// Class:			MATRIX
+// Class:			Matrix
 // Function:		GetElement
 //
 // Description:		Returns the element at the specified location.
 //
-// Input Arguments:
-//		Row		= const int& specifying the row
-//		Column = const int& specifying the column
+// Input Argurments:
+//		row		= const int& specifying the row
+//		column = const int& specifying the column
 //
 // Output Arguments:
 //		None
@@ -247,19 +278,19 @@ void MATRIX::Set(double Element1, ...)
 //		double containing the value of the element at the specified location
 //
 //==========================================================================
-double MATRIX::GetElement(const int &Row, const int &Column) const
+double Matrix::GetElement(const int &row, const int &column) const
 {
 	// Return the element at the specified location
-	return Elements[(Row - 1) * Columns + Column - 1];
+	return elements[row][column];
 }
 
 //==========================================================================
-// Class:			MATRIX
+// Class:			Matrix
 // Function:		MakeIdentity
 //
 // Description:		Makes this matrix an identity matrix.
 //
-// Input Arguments:
+// Input Argurments:
 //		None
 //
 // Output Arguments:
@@ -269,33 +300,26 @@ double MATRIX::GetElement(const int &Row, const int &Column) const
 //		MATRIX& reference to this
 //
 //==========================================================================
-MATRIX& MATRIX::MakeIdentity(void)
+Matrix& Matrix::MakeIdentity(void)
 {
-	// Determine the smaller dimension
-	int MinDimension;
-	if (Rows < Columns)
-		MinDimension = Rows;
-	else
-		MinDimension = Columns;
-
 	// Set everything to zero
 	Zero();
 
 	// Make the diagonal elements 1.0
-	int i;
-	for (i = 1; i <= MinDimension; i++)
-		SetElement(i, i, 1.0);
+	unsigned int i;
+	for (i = 0; i < GetMinimumDimension(); i++)
+		elements[i][i] = 1.0;
 
 	return *this;
 }
 
 //==========================================================================
-// Class:			MATRIX
+// Class:			Matrix
 // Function:		Zero
 //
 // Description:		Sets all elements of this matrix to zero.
 //
-// Input Arguments:
+// Input Argurments:
 //		None
 //
 // Output Arguments:
@@ -305,370 +329,273 @@ MATRIX& MATRIX::MakeIdentity(void)
 //		None
 //
 //==========================================================================
-void MATRIX::Zero(void)
+void Matrix::Zero(void)
 {
 	// Go through all of the elements setting everything to zero
-	int i;
-	for (i = 0; i < Rows * Columns; i++)
-		Elements[i] = 0.0;
+	unsigned int i, j;
+	for (i = 0; i < rows; i++)
+	{
+		for (j = 0; j < columns; j++)
+			elements[i][j] = 0.0;
+	}
 
 	return;
 }
 
 //==========================================================================
-// Class:			MATRIX
+// Class:			Matrix
 // Function:		GetSubMatrix
 //
 // Description:		Returns a sub-matrix made up of the specified portion of
 //					this matrix.
 //
-// Input Arguments:
-//		StartRow	= const int& specifying the starting row
-//		StartColumn	= const int& specifying the starting column
-//		SubRows		= const int& specifying the number of rows
-//		SubColumns	= const int& specifying the number of columns
+// Input Argurments:
+//		startRow	= const unsigned int& specifying the starting row
+//		startColumn	= const unsigned int& specifying the starting column
+//		subRows		= const unsigned int& specifying the number of rows
+//		subColumns	= const unsigned int& specifying the number of columns
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		MATRIX contining the specified sub-matrix
+//		Matrix contining the specified sub-matrix
 //
 //==========================================================================
-MATRIX MATRIX::GetSubMatrix(const int &StartRow, const int &StartColumn,
-							const int &SubRows, const int &SubColumns) const
+Matrix Matrix::GetSubMatrix(const unsigned int &startRow, const unsigned int &startColumn,
+							const unsigned int &subRows, const unsigned int &subColumns) const
 {
-	// Our return matrix
-	MATRIX SubMatrix(SubRows, SubColumns);
+	assert(startRow + subRows < rows && startColumn + subColumns < columns);
 
-	// Make sure this matrix is big enough to create the desired sub-matrix
-	if (Rows >= StartRow + SubRows - 1 && Columns >= StartColumn + SubColumns - 1)
+	// Our return matrix
+	Matrix subMatrix(subRows, subColumns);
+
+	// Assign the values for the sub-matrix
+	unsigned int i, j;
+	for (i = 0; i < subRows; i++)
 	{
-		// Assign the values for the sub-matrix
-		int i, j;
-		for (i = 0; i < SubRows; i++)
-		{
-			for (j = 0; j < SubColumns; j++)
-				SubMatrix.SetElement(i + 1, j + 1,
-					GetElement(StartRow + i, StartColumn + j));
-		}
+		for (j = 0; j < subColumns; j++)
+			subMatrix.elements[i][j] = elements[i + startRow][j + startColumn];
 	}
 
-	return SubMatrix;
+	return subMatrix;
 }
 
 //==========================================================================
-// Class:			MATRIX
-// Function:		Transpose
+// Class:			Matrix
+// Function:		GetTranspose
 //
 // Description:		Transposes this matrix.
 //
-// Input Arguments:
+// Input Argurments:
 //		None
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		MATRIX&, reference to this
+//		Matrix, trasposed version of this
 //
 //==========================================================================
-MATRIX& MATRIX::Transpose(void)
+Matrix Matrix::GetTranspose(void) const
 {
-	// Define a temporary array of our elements
-	double *TempElements = new double[Rows * Columns];
-
-	// Assign all of our elements to this temporary array
-	int i;
-	for (i = 0; i < Rows * Columns; i++)
-		TempElements[i] = Elements[i];
+	Matrix transpose(columns, rows);
 
 	// Go across each row and down each column swapping the values
-	int j;
-	for (i = 1; i <= Rows; i++)
+	unsigned int i, j;
+	for (i = 0; i < rows; i++)
 	{
-		for (j = 1; j <= Columns; j++)
-			Elements[(j - 1) * Rows + i - 1] =
-				TempElements[(i - 1) * Columns + j - 1];
+		for (j = 0; j < columns; j++)
+			transpose.elements[j][i] = elements[i][j];
 	}
 
-	// Swap the number of rows and columns
-	double OldRows = Rows;
-	Rows = Columns;
-	Columns = OldRows;
-
-	// Delete the temporary array
-	delete [] TempElements;
-	TempElements = NULL;
-
-	return *this;
+	return transpose;
 }
 
-// This method returns the vector x, as in the solution to the linear
-// equation A * x = Vector.  Equivalent to MATLAB's left divide.
-// This is robust to zeros at pivot locations (we swap rows as required)
-// but an entire row or column of zeros (if the matrix doesn't have full
-// rank) will still cause problems.
-/*VECTOR MATRIX::UnderVector(VECTOR Vector)
+//==========================================================================
+// Class:			Matrix
+// Function:		LeftDivide
+//
+// Description:		Performs division from the left.  For example, to solve
+//					Ax=b for x, left divide x = A \ b, where this matrix is A.
+//					Same as A^-1 * b.
+//
+// Input Argurments:
+//		b	= const Matrix& vector to divide this into
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		Matrix result of the division (x in the above example)
+//
+//==========================================================================
+Matrix Matrix::LeftDivide(const Matrix &b) const
 {
-	VECTOR Temp(NULL, NULL, NULL);
-	double _Elements[9];
-	int col, row;
-	int PivotIndex;
-	int tempRow;
-	double Factor;
-	double ElementToSwap;
+	// Normal equations solution (not very robust?)
+	//return GetInverse() * b;
 
-	// If this isn't a 3x3 matrix we'll return a null vector
-	if (Rows != 3 || Cols != 3)
-		return Temp;
+	// Use singular value decomposition
+	Matrix u;
+	Matrix v;
+	Matrix w;
 
-	// Copy the matrix elements (Elements) into local elements (_Elements)
-	for (row = 0; row <= Rows * Cols - 1; row++)
-		_Elements[row] = Elements[row];
-
-	// Go row by row
-	for (row = 1; row < Rows; row++)
+	if (!GetSingularValueDecomposition(u, v, w))
 	{
-		PivotIndex = (row - 1) * (Cols + 1);
-		// Check to see if the pivot location is zero (row = col here)
-		if (_Elements[PivotIndex] == 0)
-		{
-			// Search for a non-zero element in the same column
-			for (tempRow = row + 1; tempRow <= Rows; tempRow++)
-			{
-				// This goes down col to tempRow and checks the value
-				if (_Elements[(tempRow -1) * Cols + row - 1] != 0)
-					break;// Element in tempRow is non-zero!!
-			}
-
-			// Swap this row with TargetRow
-			for (col = 1; col <= Cols; col++)
-			{
-				// ElementToSwap = the element at (tempRow, col)
-				ElementToSwap = _Elements[(tempRow - 1) * Cols + col - 1];
-				// The element at (tempRow, col) = the element at (row, col)
-				_Elements[(tempRow - 1) * Cols + col - 1] = _Elements[(row - 1) * Cols + col - 1];
-				// The element at (row, col) = ElementToSwap
-				_Elements[(row - 1) * Cols + col - 1] = ElementToSwap;
-			}
-
-			// Swap the numerator vector as well
-			if (row == 1 && tempRow == 2)
-			{
-				ElementToSwap = Target.X;
-				Target.X = Target.Y;
-				Target.Y = ElementToSwap;
-			}
-			else if (row == 1 && tempRow == 3)
-			{
-				ElementToSwap = Target.X;
-				Target.X = Target.Z;
-				Target.Z = ElementToSwap;
-			}
-			else if (row == 2)
-			{
-				ElementToSwap = Target.Y;
-				Target.Y = Target.Z;
-				Target.Z = ElementToSwap;
-			}
-
-		}
-
-		// Do the elimination
-		for (tempRow = row; tempRow < Rows; tempRow++)
-		{
-			// Factor is the number that multiplies the row we want to reduce (tempRow) so that it
-			// adds to the pivot row (row) to make the element below the pivot zero
-			// That is to say, the pivot row (row) doesn't change, but the rows beneath that (tempRow)
-			// do change.
-			Factor = -_Elements[(tempRow) * Cols + row - 1] / _Elements[PivotIndex];
-
-			for (col = row; col <= Cols; col++)
-				// the element at (tempRow, col) += Factor * the element at (row, col)
-				_Elements[tempRow * Cols + col - 1] += Factor * _Elements[(row - 1) * Cols + col - 1];
-
-			// Don't forget the numerator vector!
-			if (row == 1)
-			{
-				if (tempRow == 1)
-					Target.Y += Factor * Target.X;
-				else if (tempRow == 2)
-					Target.Z += Factor * Target.X;
-			}
-			else if (row == 2)
-				Target.Z += Factor * Target.Y;
-		}
+		// FIXME:  Generate an error?
+		return *this;
 	}
 
-	// Solve the equations
-	// The bottom row of the matrix, which now is a33 * Temp.Z = Target.Z
-	Temp.Z = Target.Z / _Elements[8];
-	// The middle row of the matrix, which now is a22 * Temp.Y + a23 * Temp.Z = Target.Y
-	Temp.Y = (Target.Y - Temp.Z * _Elements[5]) / _Elements[4];
-	// The top row of the matrix, now Temp.X is our only unknown
-	Temp.X = (Target.X - Temp.Y * _Elements[1] - Temp.Z * _Elements[2]) / _Elements[0];
-
-	return Temp;
-}*/
+	return v * w.GetDiagonalInverse().GetTranspose() * u.GetTranspose() * b;
+}
 
 //==========================================================================
-// Class:			MATRIX
+// Class:			Matrix
 // Function:		operator *
 //
-// Description:		Multiplication operator for the MATRIX class.
+// Description:		Multiplication operator for the Matrix class.
 //
-// Input Arguments:
-//		Vector	= const VECTOR& to multiply by
+// Input Argurments:
+//		v	= const VECTOR& to multiply by
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		const VECTOR result of the matrix multiplication
+//		const Vector result of the matrix multiplication
 //
 //==========================================================================
-const VECTOR MATRIX::operator * (const VECTOR &Vector) const
+const Vector Matrix::operator * (const Vector &v) const
 {
-	VECTOR Temp(0, 0, 0);
+	assert(rows == 3 && columns == 3);
+
+	Vector temp(0.0, 0.0, 0.0);
 
 	// Check to make sure we're a 3x3 matrix
-	if (Rows == 3 && Columns == 3)
-	{
-		Temp.X = Vector.X * Elements[0] + Vector.Y * Elements[1] + Vector.Z * Elements[2];
-		Temp.Y = Vector.X * Elements[3] + Vector.Y * Elements[4] + Vector.Z * Elements[5];
-		Temp.Z = Vector.X * Elements[6] + Vector.Y * Elements[7] + Vector.Z * Elements[8];
-	}
+	temp.x = v.x * elements[0][0] + v.y * elements[0][1] + v.z * elements[0][2];
+	temp.y = v.x * elements[1][0] + v.y * elements[1][1] + v.z * elements[1][2];
+	temp.z = v.x * elements[2][0] + v.y * elements[2][1] + v.z * elements[2][2];
 
-	return Temp;
+	return temp;
 }
 
 //==========================================================================
-// Class:			MATRIX
+// Class:			Matrix
 // Function:		operator *=
 //
-// Description:		Multiplication assignment operator for the MATRIX class.
+// Description:		Multiplication assignment operator for the Matrix class.
 //
-// Input Arguments:
-//		Matrix	= const MATRIX& to multiply
+// Input Argurments:
+//		m	= const Matrix& to multiply
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		MATRIX&
+//		Matrix&
 //
 //==========================================================================
-MATRIX& MATRIX::operator *= (const MATRIX &Matrix)
+Matrix& Matrix::operator *= (const Matrix &m)
 {
 	// Make sure the inner dimensions match
-	assert(Columns == Matrix.Rows);
+	assert(columns == m.rows);
 
 	// Store the information contained in this matrix
-	MATRIX Temp(Rows, Matrix.Columns);
-	Temp = *this;
-
-	// Update this matrix, first by re-allcoating the memory so this matrix is the right size
-	Columns = Matrix.Columns;
-	delete [] Elements;
-	Elements = new double[Rows * Columns];
+	Matrix result(rows, m.columns);
 
 	// Now do the multiplication, storing the results in this matrix
-	int counter, i, j;
-	double tempElement;
-
-	for (i = 1; i <= Rows; i++)
+	unsigned int counter, i, j;
+	for (i = 0; i < result.rows; i++)
 	{
-		for (j = 1; j <= Matrix.Columns; j++)
+		for (j = 0; j < result.columns; j++)
 		{
-			tempElement = 0.0;
-			// The element at location (Row, Col) is the sum of the products of the
-			// elements of row Row of this (now it's Temp) with column j of Target
-			for (counter = 1; counter <= Columns; counter++)
-				tempElement += Temp.Elements[(i - 1) * Columns + counter - 1] *
-					Matrix.GetElement(counter, j);
-			SetElement(i, j, tempElement);
+			result.elements[i][j] = 0.0;
+			for (counter = 0; counter < columns; counter++)
+				result.elements[i][j] += elements[i][counter] * m.elements[counter][j];
 		}
 	}
+
+	// Assign the result to this
+	*this = result;
 	
 	return *this;
 }
 
 //==========================================================================
-// Class:			MATRIX
+// Class:			Matrix
 // Function:		operator =
 //
-// Description:		Assignment operator for the MATRIX class.
+// Description:		Assignment operator for the Matrix class.
 //
-// Input Arguments:
-//		Matrix	= const MATRIX& to assign to this
+// Input Argurments:
+//		m	= const Matrix& to assign to this
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		MATRIX& result of the assignment
+//		Matrix& result of the assignment
 //
 //==========================================================================
-MATRIX& MATRIX::operator = (const MATRIX &Matrix)
+Matrix& Matrix::operator = (const Matrix &m)
 {
 	// Check for self assignment
-	if (this == &Matrix)
+	if (this == &m)
 		return *this;
 
-	// Make sure the row and column dimensions are correct
-	Rows = Matrix.Rows;
-	Columns = Matrix.Columns;
-
-	// Make sure we're the right size by simply making us the right size
-	delete [] Elements;
-	Elements = new double[Rows * Columns];
+	Resize(m.rows, m.columns);
 
 	// Now assign the elements one by one
-	int i;
-	for (i = 0; i < Rows * Columns; i++)
-		Elements[i] = Matrix.Elements[i];
+	unsigned int i, j;
+	for (i = 0; i < rows; i++)
+	{
+		for (j = 0; j < columns; j++)
+			elements[i][j] = m.elements[i][j];
+	}
 
 	return *this;
 }
 
 //==========================================================================
-// Class:			MATRIX
+// Class:			Matrix
 // Function:		operator +=
 //
-// Description:		Addition assignment operator for the MATRIX class.
+// Description:		Addition assignment operator for the Matrix class.
 //
-// Input Arguments:
-//		Matrix	= const MATRIX& to add
+// Input Argurments:
+//		m	= const Matrix& to add
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		MATRIX& result of the addition
+//		Matrix& result of the addition
 //
 //==========================================================================
-MATRIX& MATRIX::operator += (const MATRIX &Matrix)
+Matrix& Matrix::operator += (const Matrix &m)
 {
 	// Make sure dimensions match
-	assert(Columns == Matrix.Columns && Rows == Matrix.Rows);
+	assert(columns == m.columns && rows == m.rows);
 
-	// Add Matrix to this element by element
-	int i;
-	for (i = 0; i < Rows * Columns; i++)
-		Elements[i] += Matrix.Elements[i];
+	// Add target to this element by element
+	unsigned int i, j;
+	for (i = 0; i < rows; i++)
+	{
+		for (j = 0; j < columns; j++)
+			elements[i][j] += m.elements[i][j];
+	}
 
 	return *this;
 }
 
 //==========================================================================
-// Class:			MATRIX
+// Class:			Matrix
 // Function:		operator -=
 //
-// Description:		Subrtaction assignment operator for the MATRIX class.
+// Description:		Subrtaction assignment operator for the Matrix class.
 //
-// Input Arguments:
-//		Matrix	= const MATRIX& to subtract
+// Input Argurments:
+//		m	= const Matrix& to subtract
 //
 // Output Arguments:
 //		None
@@ -677,79 +604,89 @@ MATRIX& MATRIX::operator += (const MATRIX &Matrix)
 //		MATRIX& result of the subtraction
 //
 //==========================================================================
-MATRIX& MATRIX::operator -= (const MATRIX &Matrix)
+Matrix& Matrix::operator -= (const Matrix &m)
 {
 	// Make sure dimensions match
-	assert(Columns == Matrix.Columns && Rows == Matrix.Rows);
+	assert(columns == m.columns && rows == m.rows);
 
-	// Subtract Matrix from this element by element
-	int i;
-	for (i = 0; i < Rows * Columns; i++)
-		Elements[i] -= Matrix.Elements[i];
+	// Add target to this element by element
+	unsigned int i, j;
+	for (i = 0; i < rows; i++)
+	{
+		for (j = 0; j < columns; j++)
+			elements[i][j] -= m.elements[i][j];
+	}
 
 	return *this;
 }
 
 //==========================================================================
-// Class:			MATRIX
+// Class:			Matrix
 // Function:		operator *=
 //
 // Description:		Element-wise multiplication assignment operator for the
-//					MATRIX class.
+//					Matrix class.
 //
-// Input Arguments:
-//		Double	= const double& to multiply by
+// Input Argurments:
+//		n	= const double& to multiply by
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		MATRIX& result of the multiplication
+//		Matrix& result of the multiplication
 //
 //==========================================================================
-MATRIX& MATRIX::operator *=(const double &Double)
+Matrix& Matrix::operator *=(const double &n)
 {
-	int i;
-	for (i = 0; i < Rows * Columns; i++)
-		Elements[i] *= Double;
+	// Add target to this element by element
+	unsigned int i, j;
+	for (i = 0; i < rows; i++)
+	{
+		for (j = 0; j < columns; j++)
+			elements[i][j] *= n;
+	}
 
 	return *this;
 }
 
 //==========================================================================
-// Class:			MATRIX
+// Class:			Matrix
 // Function:		operator /=
 //
 // Description:		Element-wise division assignment operator for the
-//					MATRIX class.
+//					Matrix class.
 //
-// Input Arguments:
-//		Double	= const double& to divide by
+// Input Argurments:
+//		n	= const double& to divide by
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		MATRIX& result of the division
+//		Matrix& result of the division
 //
 //==========================================================================
-MATRIX& MATRIX::operator /=(const double &Double)
+Matrix& Matrix::operator /=(const double &n)
 {
-	int i;
-
-	for (i = 0; i < Rows * Columns; i++)
-		Elements[i] /= Double;
+	// Add target to this element by element
+	unsigned int i, j;
+	for (i = 0; i < rows; i++)
+	{
+		for (j = 0; j < columns; j++)
+			elements[i][j] /= n;
+	}
 
 	return *this;
 }
 
 //==========================================================================
-// Class:			MATRIX
+// Class:			Matrix
 // Function:		Print
 //
 // Description:		Prints the contents of this object to a wxString.
 //
-// Input Arguments:
+// Input Argurments:
 //		None
 //
 // Output Arguments:
@@ -759,250 +696,269 @@ MATRIX& MATRIX::operator /=(const double &Double)
 //		wxString containing the contents of this matrix
 //
 //==========================================================================
-wxString MATRIX::Print(void) const
+wxString Matrix::Print(void) const
 {
-	wxString Temp, Intermediate;
+	wxString temp, intermediate;
 
 	// Go row-by-row
-	int i, j;
-	for (i = 1; i <= Rows; i++)
+	unsigned int i, j;
+	for (i = 0; i < rows; i++)
 	{
 		// Go col-by-col
-		for (j = 1; j <= Columns; j++)
+		for (j = 0; j < columns; j++)
 		{
 			// Add the current element to the temporary string
-			Intermediate.Printf("%7.3f\t", Elements[(i - 1) * Columns + j - 1]);
-			Temp.Append(Intermediate);
+			intermediate.Printf("%7.3f\t", elements[i][j]);
+			temp.Append(intermediate);
 		}
 
-		if (i < Rows)
-			Temp.Append(_T("\n"));
+		if (i < rows - 1)
+			temp.Append(_T("\n"));
 	}
 
-	return Temp;
+	return temp;
 }
 
 //==========================================================================
-// Class:			MATRIX
-// Function:		RowReduce
+// Class:			Matrix
+// Function:		GetRowReduced
 //
 // Description:		Performs row-reduction on this object until the matrix
-//					is upper-triangular.  FIXME:  Will this work for matricies
-//					with less than full rank?  What if the matrix is not square?
+//					is upper-triangular (does not modify this - returns new
+//					Matrix).
 //
-// Input Arguments:
+// Input Argurments:
 //		None
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		MATRIX& reference to this
+//		Matrix equal to row-reduced version of this
 //
 //==========================================================================
-MATRIX& MATRIX::RowReduce(void)
+Matrix Matrix::GetRowReduced(void) const
 {
-	int PivotIndex;
-	int tempRow;
-	double Factor;
-	double ElementToSwap;
+	unsigned int curCol, curRow, pivotCol(0), pivotRow;
+	double factor;
+	Matrix reduced(*this);
 
-	// Go row by row
-	int i, j;
-	for (i = 1; i < Rows; i++)
+	for (pivotRow = 0; pivotRow < GetMinimumDimension(); pivotRow++)
 	{
-		PivotIndex = (i - 1) * (Columns + 1);
-		// Check to see if the pivot location is zero (row = col here)
-		if (Elements[PivotIndex] == 0)
+		// Make sure the pivot is non-zero
+		// If it is zero, move the row to the bottom and start over
+		// (or if it is all zeros below, then advance to the next column)
+		if (!VVASEMath::IsZero(reduced.elements[pivotRow][pivotCol]))
 		{
-			// Search for a non-zero element in the same column
-			for (tempRow = i + 1; tempRow <= Rows; tempRow++)
+			for (curRow = pivotRow + 1; curRow < rows; curRow++)
 			{
-				// This goes down col to tempRow and checks the value
-				if (Elements[(tempRow -1) * Columns + i - 1] != 0)
-					break;// Element in tempRow is non-zero!!
-			}
+				// Scale the pivot row and add it to this row such that the
+				// element of this row in the pivot column becomes zero
+				if (!VVASEMath::IsZero(reduced.elements[curRow][pivotCol]))
+				{
+					factor = reduced.elements[pivotRow][pivotCol] /
+						reduced.elements[curRow][pivotCol];
 
-			// Swap this row with TargetRow
-			for (j = 1; j <= Columns; j++)
-			{
-				// ElementToSwap = the element at (tempRow, j)
-				ElementToSwap = Elements[(tempRow - 1) * Columns + j - 1];
-				// The element at (tempRow, j) = the element at (row, col)
-				Elements[(tempRow - 1) * Columns + j - 1] = Elements[(i - 1) * Columns + j - 1];
-				// The element at (i, j) = ElementToSwap
-				Elements[(i - 1) * Columns + j - 1] = ElementToSwap;
+					for (curCol = pivotCol; curCol < columns; curCol++)
+						reduced.elements[curRow][curCol] =
+							reduced.elements[curRow][curCol] * factor -
+							reduced.elements[pivotRow][curCol];
+				}
 			}
 		}
-
-		// Do the elimination
-		for (tempRow = i; tempRow < Rows; tempRow++)
+		else
 		{
-			// Factor is the number that multiplies the row we want to reduce (tempRow) so that it
-			// adds to the pivot row (i) to make the element below the pivot zero
-			// That is to say, the pivot row (i) doesn't change, but the rows beneath that (tempRow)
-			// do change.
-			Factor = -Elements[(tempRow) * Columns + i - 1] / Elements[PivotIndex];
+			// Find a non-zero row to swap with
+			for (curRow = pivotRow + 1; curRow < rows; curRow++)
+			{
+				if (!VVASEMath::IsZero(reduced.elements[curRow][pivotCol]))
+				{
+					double temp;
+					for (curCol = pivotCol; curCol < columns; curCol++)
+					{
+						temp = reduced.elements[pivotRow][curCol];
+						reduced.elements[pivotRow][curCol] =
+							reduced.elements[curRow][curCol];
+						reduced.elements[curRow][curCol] = temp;
+					}
 
-			for (j = i; j <= Columns; j++)
-				// the element at (tempRow, col) += Factor * the element at (i, j)
-				Elements[tempRow * Columns + j - 1] += Factor * Elements[(i - 1) * Columns + j - 1];
+					// Decrement the pivot column because we need it to
+					// be the pivot column again
+					pivotCol--;
+
+					// We did the swap, so we can stop searching
+					break;
+				}
+			}
+
+			// If we didn't find anything, we just move on, but we
+			// decrement the pivot row because we need it to be the
+			// pivot row again
+			pivotRow--;
 		}
+
+		// Increment the pivot column
+		pivotCol++;
+
+		// If we get all the way to the end of the matrix and don't find
+		// anything, then we're done!
+		if (pivotCol >= columns)
+			break;
 	}
 
-	return *this;
+	return reduced;
 }
 
 //==========================================================================
-// Class:			MATRIX
+// Class:			Matrix
 // Function:		operator +
 //
-// Description:		Addition operator for the MATRIX class.
+// Description:		Addition operator for the Matrix class.
 //
-// Input Arguments:
-//		Matrix	= MATRIX to add
+// Input Argurments:
+//		m	= Matrix& to add
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		MATRIX contining the result of the addition
+//		Matrix contining the result of the addition
 //
 //==========================================================================
-const MATRIX MATRIX::operator + (const MATRIX &Matrix) const
+const Matrix Matrix::operator + (const Matrix &m) const
 {
 	// Create the return matrix
-	MATRIX Temp(Matrix.Rows, Matrix.Columns);
-	Temp = *this;
+	Matrix temp(m.rows, m.columns);
+	temp = *this;
 
 	// Do the addition
-	Temp += Matrix;
+	temp += m;
 
-	return Temp;
+	return temp;
 }
 
 //==========================================================================
-// Class:			MATRIX
+// Class:			Matrix
 // Function:		operator -
 //
-// Description:		Subtraction operator for the MATRIX class.
+// Description:		Subtraction operator for the Matrix class.
 //
-// Input Arguments:
-//		Matrix	= const MATRIX& to subtract
+// Input Argurments:
+//		m	= const Matrix& to subtract
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		const MATRIX contining the result of the subtraction
+//		const Matrix contining the result of the subtraction
 //
 //==========================================================================
-const MATRIX MATRIX::operator - (const MATRIX &Matrix) const
+const Matrix Matrix::operator - (const Matrix &m) const
 {
 	// Create the return matrix
-	MATRIX Temp(Matrix.Rows, Matrix.Columns);
-	Temp = *this;
+	Matrix temp(m.rows, m.columns);
+	temp = *this;
 
 	// Do the subtraction
-	Temp -= Matrix;
+	temp -= m;
 
-	return Temp;
+	return temp;
 }
 
 //==========================================================================
-// Class:			MATRIX
+// Class:			Matrix
 // Function:		operator *
 //
-// Description:		Multiplication operator for the MATRIX class.
+// Description:		Multiplication operator for the Matrix class.
 //
-// Input Arguments:
-//		Target	= const MATRIX& to multiply by
+// Input Argurments:
+//		m	= const Matrix& to multiply by
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		const MATRIX contining the result of the multiplication
+//		const Matrix contining the result of the multiplication
 //
 //==========================================================================
-const MATRIX MATRIX::operator * (const MATRIX &Matrix) const
+const Matrix Matrix::operator * (const Matrix &m) const
 {
 	// Create the return matrix
-	MATRIX Temp(Matrix.Rows, Matrix.Columns);
-	Temp = *this;
+	Matrix temp(m.rows, m.columns);
+	temp = *this;
 
 	// Do the multiplication
-	Temp *= Matrix;
+	temp *= m;
 
-	return Temp;
+	return temp;
 }
 
 //==========================================================================
-// Class:			MATRIX
+// Class:			Matrix
 // Function:		operator *
 //
-// Description:		Element-wise multiplication operator for the MATRIX class.
+// Description:		Element-wise multiplication operator for the Matrix class.
 //
-// Input Arguments:
-//		Double	= const double& to multiply by
+// Input Argurments:
+//		n	= const double& to multiply by
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		const MATRIX contining the result of the multiplication
+//		const Matrix contining the result of the multiplication
 //
 //==========================================================================
-const MATRIX MATRIX::operator * (const double &Double) const
+const Matrix Matrix::operator * (const double &n) const
 {
 	// Create the return matrix
-	MATRIX Temp(Rows, Columns);
-	Temp = *this;
+	Matrix temp(rows, columns);
+	temp = *this;
 
 	// Do the multiplication
-	Temp *= Double;
+	temp *= n;
 
-	return Temp;
+	return temp;
 }
 
 //==========================================================================
-// Class:			MATRIX
+// Class:			Matrix
 // Function:		operator /
 //
-// Description:		Element-wise division operator for the MATRIX class.
+// Description:		Element-wise division operator for the Matrix class.
 //
-// Input Arguments:
-//		Double	= const double& to divide by
+// Input Argurments:
+//		n	= const double& to divide by
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		const MATRIX contining the result of the division
+//		const Matrix contining the result of the division
 //
 //==========================================================================
-const MATRIX MATRIX::operator / (const double &Double) const
+const Matrix Matrix::operator / (const double &n) const
 {
 	// Create the return matrix
-	MATRIX Temp(Rows, Columns);
-	Temp = *this;
+	Matrix temp(rows, columns);
+	temp = *this;
 
 	// Do the division
-	Temp /= Double;
+	temp /= n;
 
-	return Temp;
+	return temp;
 }
 
 //==========================================================================
-// Class:			MATRIX
+// Class:			Matrix
 // Function:		operator ()
 //
 // Description:		Overload of the () operator for this object.  Permits accessing
-//					class data by using MATRIX(Row, Column).  Non-const version.
+//					class data by using Matrix(row, column).  Non-const version.
 //
-// Input Arguments:
-//		Row		= const int& specifying the row of the desired element (0-based)
-//		Column	= const int& specifying the column of the desired element (0-based)
+// Input Argurments:
+//		row		= const unsigned int& specifying the row of the desired element (0-based)
+//		column	= const unsigned int& specifying the column of the desired element (0-based)
 //
 // Output Arguments:
 //		None
@@ -1011,25 +967,25 @@ const MATRIX MATRIX::operator / (const double &Double) const
 //		double&, reference to the specified element
 //
 //==========================================================================
-double &MATRIX::operator () (const int &Row, const int &Column)
+double &Matrix::operator () (const unsigned int &row, const unsigned int &column)
 {
 	// Make sure the indecies are valid
-	assert(Row >= 0 && Row < Rows && Column >= 0 && Column < Columns);
+	assert(row < rows && column < columns);
 
 	// Return the specified element
-	return Elements[(Row - 1) * Columns + Column - 1];
+	return elements[row][column];
 }
 
 //==========================================================================
-// Class:			MATRIX
+// Class:			Matrix
 // Function:		operator ()
 //
 // Description:		Overload of the () operator for this object.  Permits accessing
-//					class data by using MATRIX(Row, Column).  Const version.
+//					class data by using Matrix(Row, Column).  Const version.
 //
-// Input Arguments:
-//		Row		= const int& specifying the row of the desired element (0-based)
-//		Column	= const int& specifying the column of the desired element (0-based)
+// Input Argurments:
+//		row		= const unsigned int& specifying the row of the desired element (0-based)
+//		column	= const unsigned int& specifying the column of the desired element (0-based)
 //
 // Output Arguments:
 //		None
@@ -1038,11 +994,790 @@ double &MATRIX::operator () (const int &Row, const int &Column)
 //		const double&, reference to the specified element
 //
 //==========================================================================
-const double &MATRIX::operator () (const int &Row, const int &Column) const
+const double &Matrix::operator () (const unsigned int &row, const unsigned int &column) const
 {
 	// Make sure the indecies are valid
-	assert(Row >= 0 && Row < Rows && Column >= 0 && Column < Columns);
+	assert(row < rows && column < columns);
 
 	// Return the specified element
-	return Elements[(Row - 1) * Columns + Column - 1];
+	return elements[row][column];
+}
+
+//==========================================================================
+// Class:			Matrix
+// Function:		GetInverse
+//
+// Description:		Returns the inverse of this matrix.  If this matrix is badly
+//					scaled or is rectangular, the psuedo-inverse is returned.
+//
+// Input Argurments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		Matrix, inverse of this
+//
+//==========================================================================
+Matrix Matrix::GetInverse(void) const
+{
+	if (!IsSquare() || GetRank() != rows)
+		return GetPsuedoInverse();
+
+	// FIXME:  I'm not sure there is a point to having two inverse methods?
+	return GetPsuedoInverse();
+}
+
+//==========================================================================
+// Class:			Matrix
+// Function:		GetPsuedoInverse
+//
+// Description:		Returns the pseudo-inverse of this matrix.
+//
+// Input Argurments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		Matrix, inverse of this
+//
+//==========================================================================
+Matrix Matrix::GetPsuedoInverse(void) const
+{
+	// Use singular value decomposition to compute the inverse
+	// SVD algorithm interpreted from Numerical Recipies in C
+	Matrix u;
+	Matrix v;
+	Matrix w;
+
+	if (!GetSingularValueDecomposition(u, v, w))
+	{
+		// FIXME:  Generate an error?
+		return *this;
+	}
+
+	return v * w.GetDiagonalInverse() * u.GetTranspose();
+}
+
+//==========================================================================
+// Class:			Matrix
+// Function:		GetDiagonalInverse
+//
+// Description:		Returns the inverse of a diagonal matrix.  Calling this
+//					on a non-diagonal matrix will return a result, but it
+//					will be meaningless.  There is no check to ensure this
+//					is only called on diagonal matrices.
+//
+// Input Argurments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		Matrix, inverse of this (as long as this is a diagonal matrix)
+//
+//==========================================================================
+Matrix Matrix::GetDiagonalInverse(void) const
+{
+	Matrix inverse(*this);
+
+	// Invert the components of W along the diagonal
+	unsigned int i;
+	for (i = 0; i < inverse.GetMinimumDimension(); i++)
+	{
+		if (VVASEMath::IsZero(elements[i][i]))
+			inverse.elements[i][i] = 0.0;
+		else
+			inverse.elements[i][i] = 1.0 / elements[i][i];
+	}
+
+	return inverse;
+}
+
+//==========================================================================
+// Class:			Matrix
+// Function:		pythag
+//
+// Description:		Helper method for SVD calculation (used in psuedo-inverse).
+//
+// Input Argurments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		double
+//
+//==========================================================================
+double Matrix::pythag(const double& a, const double &b) const
+{
+	double absa = fabs(a);
+	double absb = fabs(b);
+
+	if (absa > absb)
+		return absa * sqrt(1.0 + absb * absb / (absa * absa));
+	else if (absb == 0.0)
+		return 0.0;
+
+	return absb * sqrt(1.0 + absa * absa / (absb * absb));
+}
+
+//==========================================================================
+// Class:			Matrix
+// Function:		GetRank
+//
+// Description:		Returns the inverse of this matrix.  If this matrix is badly
+//					scaled or is rectangular, the psuedo-inverse is returned.
+//
+// Input Argurments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		unsigned int indicating the rank of this matrix
+//
+//==========================================================================
+unsigned int Matrix::GetRank(void) const
+{
+	// FIXME:  Is it better to use SVD for this?  Rank = # of non-zero singular values
+	Matrix reduced = GetRowReduced();
+
+	unsigned int rank(0), curRow, curCol;
+	for (curRow = 0; curRow < rows; curRow++)
+	{
+		for (curCol = 0; curCol < columns; curCol++)
+		{
+			if (!VVASEMath::IsZero(elements[curRow][curCol]))
+			{
+				// Row contained a non-zero element - increment the rank
+				// and stop looking at the other elements in this row
+				rank++;
+				break;
+			}
+		}
+	}
+	
+	return rank;
+}
+
+//==========================================================================
+// Class:			Matrix
+// Function:		FreeElements
+//
+// Description:		Frees memory associated with this object.
+//
+// Input Argurments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void Matrix::FreeElements(void)
+{
+	unsigned int i;
+	for (i = 0; i < rows; i++)
+		delete [] elements[i];
+	delete [] elements;
+	elements = NULL;
+}
+
+//==========================================================================
+// Class:			Matrix
+// Function:		AllocateElements
+//
+// Description:		Allocates memory for the elements according to the number
+//					of rows and columns that make up this object.
+//
+// Input Argurments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void Matrix::AllocateElements(void)
+{
+	elements = new double*[rows];
+	unsigned int i;
+	for (i = 0; i < rows; i++)
+		elements[i] = new double[columns];
+
+	return;
+}
+
+//==========================================================================
+// Class:			Matrix
+// Function:		Resize
+//
+// Description:		Resizes the dynamic memory for this object to accommodate
+//					the specified size.
+//
+// Input Argurments:
+//		_rows		= const unsigned int& specifying new vertical dimension
+//		_columns	= const unsigned int& specifying new horizontal dimension
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void Matrix::Resize(const unsigned int &_rows, const unsigned int &_columns)
+{
+	FreeElements();
+
+	rows = _rows;
+	columns = _columns;
+
+	AllocateElements();
+
+	return;
+}
+
+//==========================================================================
+// Class:			Matrix
+// Function:		GetSingularValueDecomposition
+//
+// Description:		Computes singular value decomposition of this matrix.
+//
+// Input Argurments:
+//		None
+//
+// Output Arguments:
+//		u	= Matrix&
+//		v	= Matrix&
+//		w	= Matrix& containing the singular values along its diagonal
+//
+// Return Value:
+//		true if success, false if iteration limit was reached
+//
+//==========================================================================
+bool Matrix::GetSingularValueDecomposition(Matrix &u, Matrix &v, Matrix &w) const
+{
+	// SVD algorithm interpreted from Numerical Recipies in C
+	u.Resize(rows, columns);
+	w.Resize(columns, columns);
+	w.Zero();
+	v.Resize(columns, columns);
+
+	// Copy target to u
+	int i, j;
+	for (i = 0; i < (int)u.rows; i++)
+	{
+		for (j = 0; j < (int)v.rows; j++)
+			u.elements[i][j] = elements[i][j];
+	}
+
+	// Reduce to bidiagonal form
+	int its, jj, k, l(0), nm(0);
+	double *rv1 = new double[v.rows];
+	double anorm, c, f, g, h, s, scale, x, y, z;
+	anorm = 0.0;
+	g = 0.0;
+	scale = 0.0;
+	for (i = 0; i < (int)v.rows; i++)
+	{
+		l = i + 2;
+		rv1[i] = scale * g;
+		g = 0.0;
+		scale = 0.0;
+		s = 0.0;
+		if (i < (int)u.rows)
+		{
+			for (k = i; k < (int)u.rows; k++)
+				scale += fabs(u.elements[k][i]);
+
+			if (scale != 0.0)
+			{
+				for (k = i; k < (int)u.rows; k++)
+				{
+					u.elements[k][i] /= scale;
+					s += u.elements[k][i] * u.elements[k][i];
+				}
+
+				f = u.elements[i][i];
+				if (f >= 0.0)
+					g = -sqrt(s);
+				else
+					g = sqrt(s);
+
+				h = f * g - s;
+				u.elements[i][i] = f - g;
+
+				for (j = l - 1; j < (int)v.rows; j++)
+				{
+					s = 0.0;
+					for (k = i; k < (int)u.rows; k++)
+						s += u.elements[k][i] * u.elements[k][j];
+					f = s / h;
+					for (k = i; k < (int)u.rows; k++)
+						u.elements[k][j] += f * u.elements[k][i];
+				}
+				for (k = i; k < (int)u.rows; k++)
+					u.elements[k][i] *= scale;
+			}
+		}
+
+		w.elements[i][i] = scale * g;
+		g = 0.0;
+		s = 0.0;
+		scale = 0.0;
+
+		if (i < (int)u.rows && i != (int)v.rows - 1)
+		{
+			for (k = l - 1; k < (int)v.rows; k++)
+				scale += fabs(u.elements[i][k]);
+
+			if (scale != 0.0)
+			{
+				for (k = l - 1; k < (int)v.rows; k++)
+				{
+					u.elements[i][k] /= scale;
+					s += u.elements[i][k] * u.elements[i][k];
+				}
+
+				f = u.elements[i][l - 1];
+				if (f >= 0.0)
+					g = -sqrt(s);
+				else
+					g =sqrt(s);
+
+				h = f * g - s;
+				u.elements[i][l - 1] = f - g;
+                    
+				for (k = l - 1; k < (int)v.rows; k++)
+					rv1[k] = u.elements[i][k] / h;
+
+				for (j = l - 1; j < (int)u.rows; j++)
+				{
+					s = 0.0;
+					for (k = l - 1; k < (int)v.rows; k++)
+						s += u.elements[j][k] * u.elements[i][k];
+					for (k = l - 1; k < (int)v.rows; k++)
+						u.elements[j][k] += s * rv1[k];
+				}
+
+				for (k = l - 1; k < (int)v.rows; k++)
+					u.elements[i][k] *= scale;
+			}
+		}
+
+		if (anorm < fabs((w.elements[i][i]) + fabs(rv1[i])))
+			anorm = fabs(w.elements[i][i]) + fabs(rv1[i]);
+	}
+
+	// Accumulation of right-hand transforms
+	for (i = v.rows - 1; i >= 0; i--)
+	{
+		if (i < (int)v.rows - 1)
+		{
+			if (g != 0.0)
+			{
+				for (j = l; j < (int)v.rows; j++)
+					v.elements[j][i] =
+							(u.elements[i][j] / u.elements[i][l])
+							/ g;
+
+				for (j = l; j < (int)v.rows; j++)
+				{
+					s = 0.0;
+					for (k = l; k < (int)v.rows; k++)
+						s += u.elements[i][k] * v.elements[k][j];
+
+					for (k = l; k < (int)v.rows; k++)
+						v.elements[k][j] += s * v.elements[k][i];
+				}
+			}
+
+			for (j = l; j < (int)v.rows; j++)
+			{
+				v.elements[i][j] = 0.0;
+				v.elements[j][i] = 0.0;
+			}
+		}
+		v.elements[i][i] = 1.0;
+		g = rv1[i];
+		l = i;
+	}
+
+	// Accumulation of left-hand transforms
+	for (i = GetMinimumDimension() - 1; i >= 0; i--)
+	{
+		l = i + 1;
+		g = w.elements[i][i];
+		for (j = l; j < (int)v.rows; j++)
+			u.elements[i][j] = 0.0;
+
+		if (g != 0.0)
+		{
+			g = 1.0 / g;
+			for (j = l; j < (int)v.rows; j++)
+			{
+				s = 0.0;
+				for (k = l; k < (int)u.rows; k++)
+					s += u.elements[k][i] * u.elements[k][j];
+
+				f = (s / u.elements[i][i]) * g;
+
+				for (k = i; k < (int)u.rows; k++)
+					u.elements[k][j] += f * u.elements[k][i];
+			}
+
+			for (j = i; j < (int)u.rows; j++)
+				u.elements[j][i] *= g;
+		}
+		else
+		{
+			for (j = i; j < (int)u.rows; j++)
+				u.elements[j][i] = 0.0;
+		}
+		u.elements[i][i]++;
+	}
+
+	// Diagonalization of the bidiagonal form
+	bool finished;
+	double eps = 1e-6;
+	int its_limit = 30;
+	for (k = v.rows - 1; k >= 0; k--)
+	{
+		for (its = 0; its < its_limit; its++)
+		{
+			finished = false;
+			for (l = k; l >= 0; l--)
+			{
+				nm = l - 1;
+				if (l == 0 || fabs(rv1[l]) <= eps * anorm)
+				{
+					finished = true;
+					break;
+				}
+
+				if (fabs(w.elements[nm][nm]) <= eps * anorm)
+					break;
+			}
+
+			if (!finished)
+			{
+				c = 0.0;
+				s = 1.0;
+				for (i = l; i <= k; i++)
+				{
+					f = s * rv1[i];
+					rv1[i] = c * rv1[i];
+
+					if (fabs(f) <= eps * anorm)
+						break;
+
+					g = w.elements[i][i];
+					h = pythag(f, g);
+					w.elements[i][i] = h;
+					h = 1.0 / h;
+					c = g * h;
+					s = -f * h;
+					for (j = 0; j < (int)u.rows; j++)
+					{
+						y = u.elements[j][nm];
+						z = u.elements[j][i];
+						u.elements[j][nm] = y * c + z * s;
+						u.elements[j][i] = z * c - y * s;
+					}
+				}
+			}
+
+			z = w.elements[k][k];
+			if (l == k)
+			{
+				if (z < 0.0)
+				{
+					w.elements[k][k] = -z;
+					for (j = 0; j < (int)v.rows; j++)
+						v.elements[j][k] = -v.elements[j][k];
+				}
+				break;
+			}
+
+			// Print an error if we've hit the iteration limit
+			if (its == its_limit - 1)
+				return false;
+
+			x = w.elements[l][l];
+			nm = k - 1;
+			y = w.elements[nm][nm];
+			g = rv1[nm];
+			h = rv1[k];
+			f = ((y-z) * (y+z) + (g-h) * (g+h)) / (2.0 * h * y);
+			g = pythag(f, 1.0);
+			if (f >= 0.0)
+				f = ((x-z) * (x+z) + h * ((y / (f + fabs(g))) - h)) / x;
+			else
+				f = ((x-z) * (x+z) + h * ((y / (f - fabs(g))) - h)) / x;
+
+			c = 1.0;
+			s = 1.0;
+			for (j = l; j <= nm; j++)
+			{
+				i = j + 1;
+				g = rv1[i];
+				y = w.elements[i][i];
+				h = s * g;
+				g = c * g;
+				z = pythag(f,h);
+				rv1[j] = z;
+				c = f / z;
+				s = h / z;
+				f = x * c + g * s;
+				g = g * c - x * s;
+				h = y * s;
+				y *= c;
+
+				for (jj = 0; jj < (int)v.rows; jj++)
+				{
+					x = v.elements[jj][j];
+					z = v.elements[jj][i];
+					v.elements[jj][j] = x * c + z * s;
+					v.elements[jj][i] = z * c - x * s;
+				}
+
+				z = pythag(f, h);
+				w.elements[j][j] = z;
+
+				if (z != 0.0)
+				{
+					z = 1.0 / z;
+					c = f * z;
+					s = h * z;
+				}
+
+				f = c * g + s * y;
+				x = c * y - s * g;
+
+				for (jj = 0; jj < (int)u.rows; jj++)
+				{
+					y = u.elements[jj][j];
+					z = u.elements[jj][i];
+					u.elements[jj][j] = y * c + z * s;
+					u.elements[jj][i] = z * c - y * s;
+				}
+			}
+
+			rv1[l] = 0.0;
+			rv1[k] = f;
+			w.elements[k][k] = x;
+		}
+	}
+
+	delete [] rv1;
+
+	// Remove zero-value singular values and the corresponding columns and
+	// rows from the U and V matrices
+	// Without this, the results are close, but this makes them much better
+	for (i = 0; i < (int)GetMinimumDimension(); i++)
+	{
+		// No need to use Math.abs - we've already ensured positive values
+		if (VVASEMath::IsZero(w.elements[i][i]))
+		{
+			w.elements[i][i] = 0.0;
+			u.elements[i][i] = 0.0;
+		}
+	}
+
+	// Sort singular values (and corresponding columns of U and V) by decreasing magnitude
+	its = 1;
+	double sw;
+	double *su = new double[u.rows];
+	double *sv = new double[v.rows];
+
+	do
+	{
+		its *= 3;
+		its++;
+	} while (its <= (int)v.rows);
+
+	do
+	{
+		its /= 3;
+		for (i = its; i < (int)v.rows; i++)
+		{
+			sw = w.elements[i][i];
+			for (k = 0; k < (int)u.rows; k++)
+				su[k] = u.elements[k][i];
+
+			for (k = 0; k < (int)v.rows; k++)
+				sv[k] = v.elements[k][i];
+
+			j = i;
+			while (w.elements[j - its][j - its] < sw)
+			{
+				w.elements[j][j] = w.elements[j - its][j - its];
+				for (k = 0; k < (int)u.rows; k++)
+					u.elements[k][j] = u.elements[k][j - its];
+
+				for (k = 0; k < (int)v.rows; k++)
+					v.elements[k][j] = v.elements[k][j - its];
+
+				j -= its;
+				if (j < its)
+					break;
+			}
+
+			w.elements[j][j] = sw;
+
+			for (k = 0; k < (int)u.rows; k++)
+				u.elements[k][j] = su[k];
+
+			for (k = 0; k < (int)v.rows; k++)
+				v.elements[k][j] = sv[k];
+		}
+	} while (its > 1);
+
+	for (k = 0; k < (int)v.rows; k++)
+	{
+		s = 0.0;
+		for (i = 0; i < (int)u.rows; i++)
+		{
+			if (u.elements[i][k] < 0.0)
+				s++;
+		}
+
+		for (j = 0; j < (int)v.rows; j++)
+		{
+			if (v.elements[j][k] < 0.0)
+				s++;
+		}
+
+		if (s > (u.rows + v.rows) / 2)
+		{
+			for (i = 0; i < (int)u.rows; i++)
+				u.elements[i][k] = -u.elements[i][k];
+
+			for (j = 0; j < (int)v.rows; j++)
+				v.elements[j][k] = -v.elements[j][k];
+		}
+	}
+
+	delete [] su;
+	delete [] sv;
+
+	return true;
+}
+
+//==========================================================================
+// Class:			Matrix
+// Function:		RemoveRow
+//
+// Description:		Removes the specified row from the matrix
+//
+// Input Argurments:
+//		None
+//
+// Output Arguments:
+//		row	= const unsigned int& specifying the row to remove
+//
+// Return Value:
+//		Matrix&, reference to this
+//
+//==========================================================================
+Matrix& Matrix::RemoveRow(const unsigned int &row)
+{
+	assert(row < rows);
+
+	Matrix original(*this);
+	Resize(rows - 1, columns);
+
+	unsigned int i, j;
+	for (i = 0; i < rows; i++)
+	{
+		for (j = 0; j < columns; j++)
+		{
+			if (i < row)
+				elements[i][j] = original.elements[i][j];
+			else
+				elements[i][j] = original.elements[i + 1][j];
+		}
+	}
+
+	return *this;
+}
+
+//==========================================================================
+// Class:			Matrix
+// Function:		RemoveColumn
+//
+// Description:		Removes the specified column from the matrix.
+//
+// Input Argurments:
+//		None
+//
+// Output Arguments:
+//		column	= const unsigned int& specifying the column to remove
+//
+// Return Value:
+//		Matrix&, reference to this
+//
+//==========================================================================
+Matrix& Matrix::RemoveColumn(const unsigned int &column)
+{
+	assert(column < columns);
+
+	Matrix original(*this);
+	Resize(rows, columns - 1);
+
+	unsigned int i, j;
+	for (i = 0; i < rows; i++)
+	{
+		for (j = 0; j < columns; j++)
+		{
+			if (j < column)
+				elements[i][j] = original.elements[i][j];
+			else
+				elements[i][j] = original.elements[i][j + 1];
+		}
+	}
+
+	return *this;
+}
+
+//==========================================================================
+// Class:			Matrix
+// Function:		GetIdentity
+//
+// Description:		Returns an identity matrix of the specified dimension.
+//
+// Input Argurments:
+//		None
+//
+// Output Arguments:
+//		_rows	= const unsigned int& specifying the number of rows
+//		_column	= const unsigned int& specifying the number of columns; zero
+//				  is interpreted as square (set equal to _rows)
+//
+// Return Value:
+//		Matrix containing 1s along diagonal and zeros elsewhere
+//
+//==========================================================================
+Matrix Matrix::GetIdentity(const unsigned int &_rows, const unsigned int &_columns)
+{
+	Matrix identity;
+
+	if (_columns == 0)
+		identity.Resize(_rows, _rows);
+	else
+		identity.Resize(_rows, _columns);
+
+	return identity.MakeIdentity();
 }

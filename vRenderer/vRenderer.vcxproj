@@ -81,6 +81,7 @@
     <ClCompile Include="src\color_class.cpp" />
     <ClCompile Include="src\primitives\axis.cpp" />
     <ClCompile Include="src\primitives\cone.cpp" />
+    <ClCompile Include="src\primitives\cursor_class.cpp" />
     <ClCompile Include="src\primitives\cylinder.cpp" />
     <ClCompile Include="src\primitives\disk.cpp" />
     <ClCompile Include="src\primitives\plot_curve.cpp" />
@@ -89,6 +90,7 @@
     <ClCompile Include="src\primitives\sphere.cpp" />
     <ClCompile Include="src\primitives\text_class.cpp" />
     <ClCompile Include="src\primitives\triangle.cpp" />
+    <ClCompile Include="src\primitives\zoom_box_class.cpp" />
     <ClCompile Include="src\render_window_class.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -106,6 +108,7 @@
     <ClInclude Include="..\common\include\vRenderer\color_class.h" />
     <ClInclude Include="..\common\include\vRenderer\primitives\axis.h" />
     <ClInclude Include="..\common\include\vRenderer\primitives\cone.h" />
+    <ClInclude Include="..\common\include\vRenderer\primitives\cursor_class.h" />
     <ClInclude Include="..\common\include\vRenderer\primitives\cylinder.h" />
     <ClInclude Include="..\common\include\vRenderer\primitives\disk.h" />
     <ClInclude Include="..\common\include\vRenderer\primitives\plot_curve.h" />
@@ -114,6 +117,7 @@
     <ClInclude Include="..\common\include\vRenderer\primitives\sphere.h" />
     <ClInclude Include="..\common\include\vRenderer\primitives\text_class.h" />
     <ClInclude Include="..\common\include\vRenderer\primitives\triangle.h" />
+    <ClInclude Include="..\common\include\vRenderer\primitives\zoom_box_class.h" />
     <ClInclude Include="..\common\include\vRenderer\render_window_class.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

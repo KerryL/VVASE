@@ -20,11 +20,11 @@
 #include "vRenderer/primitives/primitive.h"
 #include "vMath/vector_class.h"
 
-class QUADRILATERAL : public PRIMITIVE
+class QUADRILATERAL : public Primitive
 {
 public:
 	// Constructor
-	QUADRILATERAL(RENDER_WINDOW &_RenderWindow);
+	QUADRILATERAL(RenderWindow &_RenderWindow);
 
 	// Destructor
 	~QUADRILATERAL();
@@ -35,21 +35,21 @@ public:
 	bool HasValidParameters(void);
 
 	// Private data accessors
-	void SetNormal(const VECTOR &_Normal);
-	void SetCenter(const VECTOR &_Center);
-	void SetAxis(const VECTOR &_Axis);
+	void SetNormal(const Vector &_Normal);
+	void SetCenter(const Vector &_Center);
+	void SetAxis(const Vector &_Axis);
 	void SetWidth(const double &_Width);
 	void SetLength(const double &_Length);
 
 private:
 	// The normal direction for this object
-	VECTOR Normal;
+	Vector Normal;
 
 	// The axis direction (specifies the direction for the length)
-	VECTOR Axis;
+	Vector Axis;
 
 	// The location of the center of this object
-	VECTOR Center;
+	Vector Center;
 
 	// The dimensions of the quad
 	double Width;

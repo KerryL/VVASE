@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -8,7 +8,7 @@
 ===================================================================================*/
 
 // File:  text_class.h
-// Created:  11/17/2010
+// Created:  5/2/2011
 // Author:  K. Loux
 // Description:  Derived from PRIMITVE, this class is used to draw text.
 // History:
@@ -19,20 +19,20 @@
 // wxWidgets headers
 #include <wx/wx.h>
 
-// VVASE headers
+// Local headers
 #include "vRenderer/primitives/primitive.h"
 
 // FTGL forward declarations
 class FTFont;
 
-class TEXT_RENDERING : public PRIMITIVE
+class TextRendering : public Primitive
 {
 public:
 	// Constructor
-	TEXT_RENDERING(RENDER_WINDOW &_RenderWindow);
+	TextRendering(RenderWindow &_renderWindow);
 
 	// Destructor
-	~TEXT_RENDERING();
+	~TextRendering();
 
 	// Mandatory overloads from PRIMITIVE - for creating geometry and testing the
 	// validity of this object's parameters
@@ -40,29 +40,29 @@ public:
 	bool HasValidParameters(void);
 
 	// Set option methods
-	void SetAngle(double _Angle) { Angle = _Angle; Modified = true; };
-	void SetFont(FTFont *_Font) { Font = _Font; Modified = true; };
-	void SetText(wxString _Text) { Text = _Text; Modified = true; };
-	void SetPosition(double _X, double _Y) { X = _X; Y = _Y; Modified = true; };
-	void SetCentered(bool _Centered) { Centered = _Centered; Modified = true; };
+	void SetAngle(double _angle) { angle = _angle; modified = true; };
+	void SetFont(FTFont *_font) { font = _font; modified = true; };
+	void SetText(wxString _text) { text = _text; modified = true; };
+	void SetPosition(double _x, double _y) { x = _x; y = _y; modified = true; };
+	void SetCentered(bool _centered) { centered = _centered; modified = true; };
 
 	double GetTextHeight(void) const;
 	double GetTextWidth(void) const;
 
 private:
 	// The angle at which this text is inclined
-	double Angle;// 0 is horizontal, angle builds counter-clockwise about an axis out of the screen
+	double angle;// 0 is horizontal, angle builds counter-clockwise about an axis out of the screen
 
 	// The actual text content and font
-	wxString Text;
-	FTFont *Font;
+	wxString text;
+	FTFont *font;
 
 	// Flag indicating whether the text is centered at (X, Y) or if, if false,
 	// (X, Y) represents the lower left corner of the text bounding box
-	bool Centered;
+	bool centered;
 
 	// Position of this object in the render window
-	double X, Y;
+	double x, y;
 };
 
 #endif// _TEXT_CLASS_H_

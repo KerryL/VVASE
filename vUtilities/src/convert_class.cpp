@@ -22,6 +22,7 @@
 //	5/6/2009	- Added number formatting function for displaying consistent number of
 //				  digits, K. Loux.
 //	11/22/2009	- Moved to vUtilities.lib, K. Loux.
+//	11/7/2011	- Corrected camelCase, K. Loux.
 
 // Standard C++ headers
 #include <cfloat>
@@ -35,10 +36,10 @@
 #include "vMath/car_math.h"
 
 //==========================================================================
-// Class:			CONVERT
-// Function:		CONVERT
+// Class:			Convert
+// Function:		Convert
 //
-// Description:		Constructor for the CONVERT class.  Sets up default
+// Description:		Constructor for the Convert class.  Sets up default
 //					units for all unit types.
 //
 // Input Arguments:
@@ -51,7 +52,7 @@
 //		None
 //
 //==========================================================================
-CONVERT::CONVERT()
+Convert::Convert()
 {
 	// Set the default units
 	SetAngleUnits(DEGREES);
@@ -70,16 +71,16 @@ CONVERT::CONVERT()
 	SetTemperatureUnits(RANKINE);
 
 	// Set the default number formatting parameters
-	NumberOfDigits = 3;
-	UseSignificantDigits = false;
-	UseScientificNotation = false;
+	numberOfDigits = 3;
+	useSignificantDigits = false;
+	useScientificNotation = false;
 }
 
 //==========================================================================
-// Class:			CONVERT
-// Function:		~CONVERT
+// Class:			Convert
+// Function:		~Convert
 //
-// Description:		Destructor for the CONVERT class.
+// Description:		Destructor for the Convert class.
 //
 // Input Arguments:
 //		None
@@ -91,15 +92,15 @@ CONVERT::CONVERT()
 //		None
 //
 //==========================================================================
-CONVERT::~CONVERT()
+Convert::~Convert()
 {
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		Constant Definitions
 //
-// Description:		Defines class level constants for CONVERT class.
+// Description:		Defines class level constants for Convert class.
 //
 // Input Arguments:
 //		None
@@ -111,18 +112,18 @@ CONVERT::~CONVERT()
 //		None
 //
 //==========================================================================
-const double CONVERT::Pi = 3.141592653589793238462643;
-const double CONVERT::G = 386.088582677;// [in/sec^2]
+const double Convert::Pi = 3.141592653589793238462643;
+const double Convert::G = 386.088582677;// [in/sec^2]
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		GetUnitType
 //
 // Description:		Returns a string containing the default units for the
 //					specified type.
 //
 // Input Arguments:
-//		UnitType	= UNIT_TYPE for which we want the default units
+//		unitType	= UnitType for which we want the default units
 //
 // Output Arguments:
 //		None
@@ -131,70 +132,70 @@ const double CONVERT::G = 386.088582677;// [in/sec^2]
 //		wxString containing the default units for the specified UNIT_TYPE
 //
 //==========================================================================
-wxString CONVERT::GetUnitType(UNIT_TYPE UnitType) const
+wxString Convert::GetUnitType(UnitType unitType) const
 {
-	wxString UnitString;
+	wxString unitString;
 
-	switch (UnitType)
+	switch (unitType)
 	{
-	case UNIT_TYPE_UNITLESS:
-		UnitString.assign("-");
+	case UnitTypeUnitless:
+		unitString.assign("-");
 		break;
 
-	case UNIT_TYPE_ANGLE:
-		UnitString.assign(GetUnits(DefaultAngleUnits));
+	case UnitTypeAngle:
+		unitString.assign(GetUnits(defaultAngleUnits));
 		break;
 
-	case UNIT_TYPE_DISTANCE:
-		UnitString.assign(GetUnits(DefaultDistanceUnits));
+	case UnitTypeDistance:
+		unitString.assign(GetUnits(defaultDistanceUnits));
 		break;
 
-	case UNIT_TYPE_AREA:
-		UnitString.assign(GetUnits(DefaultAreaUnits));
+	case UnitTypeArea:
+		unitString.assign(GetUnits(defaultAreaUnits));
 		break;
 
-	case UNIT_TYPE_FORCE:
-		UnitString.assign(GetUnits(DefaultForceUnits));
+	case UnitTypeForce:
+		unitString.assign(GetUnits(defaultForceUnits));
 		break;
 
-	case UNIT_TYPE_PRESSURE:
-		UnitString.assign(GetUnits(DefaultPressureUnits));
+	case UnitTypePressure:
+		unitString.assign(GetUnits(defaultPressureUnits));
 		break;
 
-	case UNIT_TYPE_MOMENT:
-		UnitString.assign(GetUnits(DefaultMomentUnits));
+	case UnitTypeMoment:
+		unitString.assign(GetUnits(defaultMomentUnits));
 		break;
 
-	case UNIT_TYPE_MASS:
-		UnitString.assign(GetUnits(DefaultMassUnits));
+	case UnitTypeMass:
+		unitString.assign(GetUnits(defaultMassUnits));
 		break;
 
-	case UNIT_TYPE_VELOCITY:
-		UnitString.assign(GetUnits(DefaultVelocityUnits));
+	case UnitTypeVelocity:
+		unitString.assign(GetUnits(defaultVelocityUnits));
 		break;
 
-	case UNIT_TYPE_ACCELERATION:
-		UnitString.assign(GetUnits(DefaultAccelerationUnits));
+	case UnitTypeAcceleration:
+		unitString.assign(GetUnits(defaultAccelerationUnits));
 		break;
 
-	case UNIT_TYPE_INERTIA:
-		UnitString.assign(GetUnits(DefaultInertiaUnits));
+	case UnitTypeInertia:
+		unitString.assign(GetUnits(defaultInertiaUnits));
 		break;
 
-	case UNIT_TYPE_DENSITY:
-		UnitString.assign(GetUnits(DefaultDensityUnits));
+	case UnitTypeDensity:
+		unitString.assign(GetUnits(defaultDensityUnits));
 		break;
 
-	case UNIT_TYPE_POWER:
-		UnitString.assign(GetUnits(DefaultPowerUnits));
+	case UnitTypePower:
+		unitString.assign(GetUnits(defaultPowerUnits));
 		break;
 
-	case UNIT_TYPE_ENERGY:
-		UnitString.assign(GetUnits(DefaultEnergyUnits));
+	case UnitTypeEnergy:
+		unitString.assign(GetUnits(defaultEnergyUnits));
 		break;
 
-	case UNIT_TYPE_TEMPERATURE:
-		UnitString.assign(GetUnits(DefaultTemperatureUnits));
+	case UnitTypeTemperature:
+		unitString.assign(GetUnits(defaultTemperatureUnits));
 		break;
 
 	default:
@@ -202,18 +203,18 @@ wxString CONVERT::GetUnitType(UNIT_TYPE UnitType) const
 		break;
 	}
 
-	return UnitString;
+	return unitString;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		GetUnits
 //
 // Description:		Returns a string containing the specified units.
 //					Angle version.
 //
 // Input Arguments:
-//		Units	= UNITS_OF_ANGLE which we are retrieving
+//		units	= UnitsOfAngle which we are retrieving
 //
 // Output Arguments:
 //		None
@@ -222,25 +223,25 @@ wxString CONVERT::GetUnitType(UNIT_TYPE UnitType) const
 //		wxString containing the specified units
 //
 //==========================================================================
-wxString CONVERT::GetUnits(UNITS_OF_ANGLE Units) const
+wxString Convert::GetUnits(UnitsOfAngle units) const
 {
-	if (Units == RADIANS)
+	if (units == RADIANS)
 		return _T("rad");
-	else if (Units == DEGREES)
+	else if (units == DEGREES)
 		return _T("deg");
 
 	return wxEmptyString;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		GetUnits
 //
 // Description:		Returns a string containing the specified units.
 //					Distance version.
 //
 // Input Arguments:
-//		Units	= UNITS_OF_DISTANCE which we are retrieving
+//		units	= UnitsOfDistance which we are retrieving
 //
 // Output Arguments:
 //		None
@@ -249,35 +250,35 @@ wxString CONVERT::GetUnits(UNITS_OF_ANGLE Units) const
 //		wxString containing the specified units
 //
 //==========================================================================
-wxString CONVERT::GetUnits(UNITS_OF_DISTANCE Units) const
+wxString Convert::GetUnits(UnitsOfDistance units) const
 {
-	if (Units == INCH)
+	if (units == INCH)
 		return _T("inch");
-	else if (Units == FOOT)
+	else if (units == FOOT)
 		return _T("foot");
-	else if (Units == MILE)
+	else if (units == MILE)
 		return _T("mile");
-	else if (Units == MILIMETER)
+	else if (units == MILIMETER)
 		return _T("mm");
-	else if (Units == CENTIMETER)
+	else if (units == CENTIMETER)
 		return _T("cm");
-	else if (Units == METER)
+	else if (units == METER)
 		return _T("meter");
-	else if (Units == KILOMETER)
+	else if (units == KILOMETER)
 		return _T("km");
 
 	return wxEmptyString;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		GetUnits
 //
 // Description:		Returns a string containing the specified units.
 //					Area version.
 //
 // Input Arguments:
-//		Units	= UNITS_OF_AREA which we are retrieving
+//		units	= UnitsOfArea which we are retrieving
 //
 // Output Arguments:
 //		None
@@ -286,32 +287,32 @@ wxString CONVERT::GetUnits(UNITS_OF_DISTANCE Units) const
 //		wxString containing the specified units
 //
 //==========================================================================
-wxString CONVERT::GetUnits(UNITS_OF_AREA Units) const
+wxString Convert::GetUnits(UnitsOfArea units) const
 {
-	// \x00b2 is superscript 2 (see http://wxforum.shadonet.com/viewtopic.php?t=15123&highlight=superscript)
-	if (Units == INCH_SQUARED)
+	// \x00b2 is superscript 2
+	if (units == INCH_SQUARED)
 		return _T("in\x00b2");
-	else if (Units == FOOT_SQUARED)
+	else if (units == FOOT_SQUARED)
 		return _T("ft\x00b2");
-	else if (Units == MILIMETER_SQUARED)
+	else if (units == MILIMETER_SQUARED)
 		return _T("mm\x00b2");
-	else if (Units == CENTIMETER_SQUARED)
+	else if (units == CENTIMETER_SQUARED)
 		return _T("cm\x00b2");
-	else if (Units == METER_SQUARED)
+	else if (units == METER_SQUARED)
 		return _T("m\x00b2");
 
 	return wxEmptyString;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		GetUnits
 //
 // Description:		Returns a string containing the specified units.
 //					Force version.
 //
 // Input Arguments:
-//		Units	= UNITS_OF_FORCE which we are retrieving
+//		units	= UnitsOfForce which we are retrieving
 //
 // Output Arguments:
 //		None
@@ -320,29 +321,29 @@ wxString CONVERT::GetUnits(UNITS_OF_AREA Units) const
 //		wxString containing the specified units
 //
 //==========================================================================
-wxString CONVERT::GetUnits(UNITS_OF_FORCE Units) const
+wxString Convert::GetUnits(UnitsOfForce units) const
 {
-	if (Units == POUND_FORCE)
+	if (units == POUND_FORCE)
 		return _T("lbf");
-	else if (Units == KILO_POUND_FORCE)
+	else if (units == KILO_POUND_FORCE)
 		return _T("kip");
-	else if (Units == NEWTON)
+	else if (units == NEWTON)
 		return _T("N");
-	else if (Units == KILONEWTON)
+	else if (units == KILONEWTON)
 		return _T("kN");
 
 	return wxEmptyString;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		GetUnits
 //
 // Description:		Returns a string containing the specified units.
 //					Pressure version.
 //
 // Input Arguments:
-//		Units	= UNITS_OF_PRESSURE which we are retrieving
+//		units	= UnitsOfPressure which we are retrieving
 //
 // Output Arguments:
 //		None
@@ -351,33 +352,33 @@ wxString CONVERT::GetUnits(UNITS_OF_FORCE Units) const
 //		wxString containing the specified units
 //
 //==========================================================================
-wxString CONVERT::GetUnits(UNITS_OF_PRESSURE Units) const
+wxString Convert::GetUnits(UnitsOfPressure units) const
 {
-	if (Units == POUND_FORCE_PER_SQUARE_INCH)
+	if (units == POUND_FORCE_PER_SQUARE_INCH)
 		return _T("psi");
-	else if (Units == POUND_FORCE_PER_SQUARE_FOOT)
+	else if (units == POUND_FORCE_PER_SQUARE_FOOT)
 		return _T("psf");
-	else if (Units == ATMOSPHERE)
+	else if (units == ATMOSPHERE)
 		return _T("atm");
-	else if (Units == PASCAL_UNIT)
+	else if (units == PASCAL_UNIT)
 		return _T("Pa");
-	else if (Units == KILOPASCAL)
+	else if (units == KILOPASCAL)
 		return _T("kPa");
-	else if (Units == MILLIMETERS_MERCURY)
+	else if (units == MILLIMETERS_MERCURY)
 		return _T("mm Hg");
 
 	return wxEmptyString;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		GetUnits
 //
 // Description:		Returns a string containing the specified units.
 //					Moment version.
 //
 // Input Arguments:
-//		Units	= UNITS_OF_MOMENT which we are retrieving
+//		units	= UnitsOfMoment which we are retrieving
 //
 // Output Arguments:
 //		None
@@ -386,29 +387,29 @@ wxString CONVERT::GetUnits(UNITS_OF_PRESSURE Units) const
 //		wxString containing the specified units
 //
 //==========================================================================
-wxString CONVERT::GetUnits(UNITS_OF_MOMENT Units) const
+wxString Convert::GetUnits(UnitsOfMoment units) const
 {
-	if (Units == INCH_POUND_FORCE)
+	if (units == INCH_POUND_FORCE)
 		return _T("in-lbf");
-	else if (Units == FOOT_POUND_FORCE)
+	else if (units == FOOT_POUND_FORCE)
 		return _T("ft-lbf");
-	else if (Units == NEWTON_METER)
+	else if (units == NEWTON_METER)
 		return _T("Nm");
-	else if (Units == MILINEWTON_METER)
+	else if (units == MILINEWTON_METER)
 		return _T("Nmm");
 
 	return wxEmptyString;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		GetUnits
 //
 // Description:		Returns a string containing the specified units.
 //					Mass version.
 //
 // Input Arguments:
-//		Units	= UNITS_OF_MASS which we are retrieving
+//		units	= UnitsOfMass which we are retrieving
 //
 // Output Arguments:
 //		None
@@ -417,27 +418,27 @@ wxString CONVERT::GetUnits(UNITS_OF_MOMENT Units) const
 //		wxString containing the specified units
 //
 //==========================================================================
-wxString CONVERT::GetUnits(UNITS_OF_MASS Units) const
+wxString Convert::GetUnits(UnitsOfMass units) const
 {
-	if (Units == SLUG)
+	if (units == SLUG)
 		return _T("slug");
-	else if (Units == POUND_MASS)
+	else if (units == POUND_MASS)
 		return _T("lbm");
-	else if (Units == KILOGRAM)
+	else if (units == KILOGRAM)
 		return _T("kg");
 
 	return wxEmptyString;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		GetUnits
 //
 // Description:		Returns a string containing the specified units.
 //					Velocity version.
 //
 // Input Arguments:
-//		Units	= UNITS_OF_VELOCITY which we are retrieving
+//		units	= UnitsOfVelocity which we are retrieving
 //
 // Output Arguments:
 //		None
@@ -446,35 +447,35 @@ wxString CONVERT::GetUnits(UNITS_OF_MASS Units) const
 //		wxString containing the specified units
 //
 //==========================================================================
-wxString CONVERT::GetUnits(UNITS_OF_VELOCITY Units) const
+wxString Convert::GetUnits(UnitsOfVelocity units) const
 {
-	if (Units == INCHES_PER_SECOND)
+	if (units == INCHES_PER_SECOND)
 		return _T("in/sec");
-	else if (Units == FEET_PER_SECOND)
+	else if (units == FEET_PER_SECOND)
 		return _T("ft/sec");
-	else if (Units == MILES_PER_HOUR)
+	else if (units == MILES_PER_HOUR)
 		return _T("mph");
-	else if (Units == MM_PER_SECOND)
+	else if (units == MM_PER_SECOND)
 		return _T("mm/sec");
-	else if (Units == CM_PER_SECOND)
+	else if (units == CM_PER_SECOND)
 		return _T("cm/sec");
-	else if (Units == METERS_PER_SECOND)
+	else if (units == METERS_PER_SECOND)
 		return _T("m/sec");
-	else if (Units == KILOMETERS_PER_HOUR)
+	else if (units == KILOMETERS_PER_HOUR)
 		return _T("km/hr");
 
 	return wxEmptyString;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		GetUnits
 //
 // Description:		Returns a string containing the specified units.
 //					Acceleration version.
 //
 // Input Arguments:
-//		Units	= UNITS_OF_ACCELERATION which we are retrieving
+//		units	= UnitsOfAcceleration which we are retrieving
 //
 // Output Arguments:
 //		None
@@ -483,33 +484,33 @@ wxString CONVERT::GetUnits(UNITS_OF_VELOCITY Units) const
 //		wxString containing the specified units
 //
 //==========================================================================
-wxString CONVERT::GetUnits(UNITS_OF_ACCELERATION Units) const
+wxString Convert::GetUnits(UnitsOfAcceleration units) const
 {
-	if (Units == INCHES_PER_SECOND_SQUARED)
+	if (units == INCHES_PER_SECOND_SQUARED)
 		return _T("in/sec\x00b2");
-	else if (Units == FEET_PER_SECOND_SQUARED)
+	else if (units == FEET_PER_SECOND_SQUARED)
 		return _T("ft/sec\x00b2");
-	else if (Units == MM_PER_SECOND_SQUARED)
+	else if (units == MM_PER_SECOND_SQUARED)
 		return _T("mm/sec\x00b2");
-	else if (Units == CM_PER_SECOND_SQUARED)
+	else if (units == CM_PER_SECOND_SQUARED)
 		return _T("cm/sec\x00b2");
-	else if (Units == METERS_PER_SECOND_SQUARED)
+	else if (units == METERS_PER_SECOND_SQUARED)
 		return _T("m/sec\x00b2");
-	else if (Units == FREE_FALL)
+	else if (units == FREE_FALL)
 		return _T("G");
 
 	return wxEmptyString;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		GetUnits
 //
 // Description:		Returns a string containing the specified units.
 //					Inertia version.
 //
 // Input Arguments:
-//		Units	= UNITS_OF_INERTIA which we are retrieving
+//		units	= UnitsOfInertia which we are retrieving
 //
 // Output Arguments:
 //		None
@@ -518,33 +519,33 @@ wxString CONVERT::GetUnits(UNITS_OF_ACCELERATION Units) const
 //		wxString containing the specified units
 //
 //==========================================================================
-wxString CONVERT::GetUnits(UNITS_OF_INERTIA Units) const
+wxString Convert::GetUnits(UnitsOfInertia units) const
 {
-	if (Units == SLUG_INCHES_SQUARED)
+	if (units == SLUG_INCHES_SQUARED)
 		return _T("slug-in\x00b2");
-	else if (Units == SLUG_FEET_SQUARED)
+	else if (units == SLUG_FEET_SQUARED)
 		return _T("slug-ft\x00b2");
-	else if (Units == POUND_MASS_INCHES_SQUARED)
+	else if (units == POUND_MASS_INCHES_SQUARED)
 		return _T("lbm-in\x00b2");
-	else if (Units == POUND_MASS_FEET_SQUARED)
+	else if (units == POUND_MASS_FEET_SQUARED)
 		return _T("lbm-ft\x00b2");
-	else if (Units == KILOGRAM_METERS_SQUARED)
+	else if (units == KILOGRAM_METERS_SQUARED)
 		return _T("kg-m\x00b2");
-	else if (Units == KILOGRAM_MILIMETERS_SQUARED)
+	else if (units == KILOGRAM_MILIMETERS_SQUARED)
 		return _T("kg-mm\x00b2");
 
 	return wxEmptyString;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		GetUnits
 //
 // Description:		Returns a string containing the specified units.
 //					Density version.
 //
 // Input Arguments:
-//		Units	= UNITS_OF_DENSITY which we are retrieving
+//		units	= UnitsOfDensity which we are retrieving
 //
 // Output Arguments:
 //		None
@@ -553,33 +554,33 @@ wxString CONVERT::GetUnits(UNITS_OF_INERTIA Units) const
 //		wxString containing the specified units
 //
 //==========================================================================
-wxString CONVERT::GetUnits(UNITS_OF_DENSITY Units) const
+wxString Convert::GetUnits(UnitsOfDensity units) const
 {
-	if (Units == SLUGS_PER_INCH_CUBED)
+	if (units == SLUGS_PER_INCH_CUBED)
 		return _T("slug/in\x00b3");
-	else if (Units == POUND_MASS_PER_INCH_CUBED)
+	else if (units == POUND_MASS_PER_INCH_CUBED)
 		return _T("lbm/in\x00b3");
-	else if (Units == SLUGS_PER_FEET_CUBED)
+	else if (units == SLUGS_PER_FEET_CUBED)
 		return _T("slug/ft\x00b3");
-	else if (Units == POUND_MASS_PER_FEET_CUBED)
+	else if (units == POUND_MASS_PER_FEET_CUBED)
 		return _T("lbm/ft\x00b3");
-	else if (Units == KILOGRAM_PER_METER_CUBED)
+	else if (units == KILOGRAM_PER_METER_CUBED)
 		return _T("kg/m\x00b3");
-	else if (Units == GRAM_PER_CENTIMETER_CUBED)
+	else if (units == GRAM_PER_CENTIMETER_CUBED)
 		return _T("g/cc");
 
 	return wxEmptyString;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		GetUnits
 //
 // Description:		Returns a string containing the specified units.
 //					Power version.
 //
 // Input Arguments:
-//		Units	= UNITS_OF_POWER which we are retrieving
+//		units	= UnitsOfPower which we are retrieving
 //
 // Output Arguments:
 //		None
@@ -588,31 +589,31 @@ wxString CONVERT::GetUnits(UNITS_OF_DENSITY Units) const
 //		wxString containing the specified units
 //
 //==========================================================================
-wxString CONVERT::GetUnits(UNITS_OF_POWER Units) const
+wxString Convert::GetUnits(UnitsOfPower units) const
 {
-	if (Units == INCH_POUND_FORCE_PER_SECOND)
+	if (units == INCH_POUND_FORCE_PER_SECOND)
 		return _T("in-lbf/sec");
-	else if (Units == FOOT_POUND_FORCE_PER_SECOND)
+	else if (units == FOOT_POUND_FORCE_PER_SECOND)
 		return _T("ft-lbf/sec");
-	else if (Units == HORSEPOWER)
+	else if (units == HORSEPOWER)
 		return _T("HP");
-	else if (Units == WATTS)
+	else if (units == WATTS)
 		return _T("W");
-	else if (Units == KILOWATTS)
+	else if (units == KILOWATTS)
 		return _T("kW");
 
 	return wxEmptyString;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		GetUnits
 //
 // Description:		Returns a string containing the specified units.
 //					Energy version.
 //
 // Input Arguments:
-//		Units	= UNITS_OF_ENERGY which we are retrieving
+//		units	= UnitsOfEnergy which we are retrieving
 //
 // Output Arguments:
 //		None
@@ -621,33 +622,33 @@ wxString CONVERT::GetUnits(UNITS_OF_POWER Units) const
 //		wxString containing the specified units
 //
 //==========================================================================
-wxString CONVERT::GetUnits(UNITS_OF_ENERGY Units) const
+wxString Convert::GetUnits(UnitsOfEnergy units) const
 {
-	if (Units == POUND_FORCE_INCH)
+	if (units == POUND_FORCE_INCH)
 		return _T("lbf-in");
-	else if (Units == POUND_FORCE_FOOT)
+	else if (units == POUND_FORCE_FOOT)
 		return _T("lbf-ft");
-	else if (Units == BRITISH_THERMAL_UNIT)
+	else if (units == BRITISH_THERMAL_UNIT)
 		return _T("BTU");
-	else if (Units == JOULE)
+	else if (units == JOULE)
 		return _T("J");
-	else if (Units == MILIJOULE)
+	else if (units == MILIJOULE)
 		return _T("mJ");
-	else if (Units == KILOJOULE)
+	else if (units == KILOJOULE)
 		return _T("kJ");
 
 	return wxEmptyString;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		GetUnits
 //
 // Description:		Returns a string containing the specified units.
 //					Temperature version.
 //
 // Input Arguments:
-//		Units	= UNITS_OF_TEMPERATURE which we are retrieving
+//		units	= UnitsOfTemperature which we are retrieving
 //
 // Output Arguments:
 //		None
@@ -656,394 +657,394 @@ wxString CONVERT::GetUnits(UNITS_OF_ENERGY Units) const
 //		wxString containing the specified units
 //
 //==========================================================================
-wxString CONVERT::GetUnits(UNITS_OF_TEMPERATURE Units) const
+wxString Convert::GetUnits(UnitsOfTemperature units) const
 {
-	if (Units == RANKINE)
+	if (units == RANKINE)
 		return _T("R");
-	else if (Units == FAHRENHEIT)
+	else if (units == FAHRENHEIT)
 		return _T("deg F");
-	else if (Units == CELSIUS)
+	else if (units == CELSIUS)
 		return _T("deg C");
-	else if (Units == KELVIN)
+	else if (units == KELVIN)
 		return _T("K");
 
 	return wxEmptyString;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		SetAngleUnits
 //
 // Description:		Sets default units for angle measurement to the
 //					specified Units.
 //
 // Input Arguments:
-//		Units	= UNITS_OF_ANGLE to which the default will be changed
+//		Units	= UnitsOfAngle to which the default will be changed
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
+// Return n:
 //		None
 //
 //==========================================================================
-void CONVERT::SetAngleUnits(UNITS_OF_ANGLE Units)
+void Convert::SetAngleUnits(UnitsOfAngle Units)
 {
 	// Set the default angle units
-	DefaultAngleUnits = Units;
+	defaultAngleUnits = Units;
 
 	return;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		SetDistanceUnits
 //
 // Description:		Sets default units for distance measurement to the
 //					specified Units.
 //
 // Input Arguments:
-//		Units	= UNITS_OF_DISTANCE to which the default will be changed
+//		Units	= UnitsOfDistance to which the default will be changed
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
+// Return n:
 //		None
 //
 //==========================================================================
-void CONVERT::SetDistanceUnits(UNITS_OF_DISTANCE Units)
+void Convert::SetDistanceUnits(UnitsOfDistance Units)
 {
 	// Set the default distance units
-	DefaultDistanceUnits = Units;
+	defaultDistanceUnits = Units;
 
 	return;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		SeAreaUnits
 //
 // Description:		Sets default units for area measurement to the
 //					specified Units.
 //
 // Input Arguments:
-//		Units	= UNITS_OF_AREA to which the default will be changed
+//		Units	= UnitsOfArea to which the default will be changed
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
+// Return n:
 //		None
 //
 //==========================================================================
-void CONVERT::SetAreaUnits(UNITS_OF_AREA Units)
+void Convert::SetAreaUnits(UnitsOfArea Units)
 {
 	// Set the default area units
-	DefaultAreaUnits = Units;
+	defaultAreaUnits = Units;
 
 	return;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		SetForceUnits
 //
 // Description:		Sets default units for force measurement to the
 //					specified Units.
 //
 // Input Arguments:
-//		Units	= UNITS_OF_FORCE to which the default will be changed
+//		Units	= UnitsOfForce to which the default will be changed
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
+// Return n:
 //		None
 //
 //==========================================================================
-void CONVERT::SetForceUnits(UNITS_OF_FORCE Units)
+void Convert::SetForceUnits(UnitsOfForce Units)
 {
 	// Set the default force units
-	DefaultForceUnits = Units;
+	defaultForceUnits = Units;
 
 	return;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		SetPressureUnits
 //
 // Description:		Sets default units for pressure measurement to the
 //					specified Units.
 //
 // Input Arguments:
-//		Units	= UNITS_OF_PRESSURE to which the default will be changed
+//		Units	= UnitsOfPressure to which the default will be changed
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
+// Return n:
 //		None
 //
 //==========================================================================
-void CONVERT::SetPressureUnits(UNITS_OF_PRESSURE Units)
+void Convert::SetPressureUnits(UnitsOfPressure Units)
 {
 	// Set the default pressure units
-	DefaultPressureUnits = Units;
+	defaultPressureUnits = Units;
 
 	return;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		SetMomentUnits
 //
 // Description:		Sets default units for moment measurement to the
 //					specified Units.
 //
 // Input Arguments:
-//		Units	= UNITS_OF_MOMENT to which the default will be changed
+//		Units	= UnitsOfMoment to which the default will be changed
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
+// Return n:
 //		None
 //
 //==========================================================================
-void CONVERT::SetMomentUnits(UNITS_OF_MOMENT Units)
+void Convert::SetMomentUnits(UnitsOfMoment Units)
 {
 	// Set the default moment units
-	DefaultMomentUnits = Units;
+	defaultMomentUnits = Units;
 
 	return;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		SetMassUnits
 //
 // Description:		Sets default units for mass measurement to the
 //					specified Units.
 //
 // Input Arguments:
-//		Units	= UNITS_OF_MASS to which the default will be changed
+//		Units	= UnitsOfMass to which the default will be changed
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
+// Return n:
 //		None
 //
 //==========================================================================
-void CONVERT::SetMassUnits(UNITS_OF_MASS Units)
+void Convert::SetMassUnits(UnitsOfMass Units)
 {
 	// Set the default mass units
-	DefaultMassUnits = Units;
+	defaultMassUnits = Units;
 
 	return;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		SetVelocityUnits
 //
 // Description:		Sets default units for velocity measurement to the
 //					specified Units.
 //
 // Input Arguments:
-//		Units	= UNITS_OF_VELOCITY to which the default will be changed
+//		Units	= UnitsOfVelocity to which the default will be changed
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
+// Return n:
 //		None
 //
 //==========================================================================
-void CONVERT::SetVelocityUnits(UNITS_OF_VELOCITY Units)
+void Convert::SetVelocityUnits(UnitsOfVelocity Units)
 {
 	// Set the default velocity units
-	DefaultVelocityUnits = Units;
+	defaultVelocityUnits = Units;
 
 	return;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		SetAccelerationUnits
 //
 // Description:		Sets default units for acceleration measurement to the
 //					specified Units.
 //
 // Input Arguments:
-//		Units	= UNITS_OF_ACCELERATION to which the default will be changed
+//		Units	= UnitsOfAcceleration to which the default will be changed
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
+// Return n:
 //		None
 //
 //==========================================================================
-void CONVERT::SetAccelerationUnits(UNITS_OF_ACCELERATION Units)
+void Convert::SetAccelerationUnits(UnitsOfAcceleration Units)
 {
-	DefaultAccelerationUnits = Units;
+	defaultAccelerationUnits = Units;
 
 	return;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		SetInertiaUnits
 //
 // Description:		Sets default units for inertia measurement to the
 //					specified Units.
 //
 // Input Arguments:
-//		Units	= UNITS_OF_INERTIA to which the default will be changed
+//		Units	= UnitsOfInertia to which the default will be changed
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
+// Return n:
 //		None
 //
 //==========================================================================
-void CONVERT::SetInertiaUnits(UNITS_OF_INERTIA Units)
+void Convert::SetInertiaUnits(UnitsOfInertia Units)
 {
 	// Set the default inertia units
-	DefaultInertiaUnits = Units;
+	defaultInertiaUnits = Units;
 
 	return;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		SetDensityUnits
 //
 // Description:		Sets default units for density measurement to the
 //					specified Units.
 //
 // Input Arguments:
-//		Units	= UNITS_OF_DENSITY to which the default will be changed
+//		Units	= UnitsOfDensity to which the default will be changed
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
+// Return n:
 //		None
 //
 //==========================================================================
-void CONVERT::SetDensityUnits(UNITS_OF_DENSITY Units)
+void Convert::SetDensityUnits(UnitsOfDensity Units)
 {
 	// Set the default density units
-	DefaultDensityUnits = Units;
+	defaultDensityUnits = Units;
 
 	return;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		SetPowerUnits
 //
 // Description:		Sets default units for power measurement to the
 //					specified Units.
 //
 // Input Arguments:
-//		Units	= UNITS_OF_POWER to which the default will be changed
+//		Units	= UnitsOfPower to which the default will be changed
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
+// Return n:
 //		None
 //
 //==========================================================================
-void CONVERT::SetPowerUnits(UNITS_OF_POWER Units)
+void Convert::SetPowerUnits(UnitsOfPower Units)
 {
 	// Set the default power units
-	DefaultPowerUnits = Units;
+	defaultPowerUnits = Units;
 
 	return;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		SetEnergyUnits
 //
 // Description:		Sets default units for energy measurement to the
 //					specified Units.
 //
 // Input Arguments:
-//		Units	= UNITS_OF_ENERGY to which the default will be changed
+//		Units	= UnitsOfEnergy to which the default will be changed
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
+// Return n:
 //		None
 //
 //==========================================================================
-void CONVERT::SetEnergyUnits(UNITS_OF_ENERGY Units)
+void Convert::SetEnergyUnits(UnitsOfEnergy Units)
 {
 	// Set the default energy units
-	DefaultEnergyUnits = Units;
+	defaultEnergyUnits = Units;
 
 	return;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		SetTemperatureUnits
 //
 // Description:		Sets default units for temperature measurement to the
 //					specified Units.
 //
 // Input Arguments:
-//		Units	= UNITS_OF_TEMPERATURE to which the default will be changed
+//		Units	= UnitsOfTemperature to which the default will be changed
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
+// Return n:
 //		None
 //
 //==========================================================================
-void CONVERT::SetTemperatureUnits(UNITS_OF_TEMPERATURE Units)
+void Convert::SetTemperatureUnits(UnitsOfTemperature Units)
 {
 	// Set the default temperature units
-	DefaultTemperatureUnits = Units;
+	defaultTemperatureUnits = Units;
 
 	return;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertAngle
 //
 // Description:		Converts from our base units (see top of convert_class.h)
-//					into NewUnits.
+//					into newUnits.
 //
 // Input Arguments:
-//		Value		= double to be converted
-//		NewUnits	= UNITS_OF_ANGLE in which Value will be returned
+//		n		= double to be converted
+//		newUnits	= UnitsOfAngle in which n will be returned
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in units of NewUnits
+// Return n:
+//		double specifying n in units of newUnits
 //
 //==========================================================================
-double CONVERT::ConvertAngle(double Value, UNITS_OF_ANGLE NewUnits) const
+double Convert::ConvertAngle(double n, UnitsOfAngle newUnits) const
 {
 	// Do the conversion
-	if (NewUnits == RADIANS)
-		return Value;
-	else if (NewUnits == DEGREES)
-		return RAD_TO_DEG(Value);
+	if (newUnits == RADIANS)
+		return n;
+	else if (newUnits == DEGREES)
+		return RAD_TO_DEG(n);
 	else
 	{
 		// ERROR - we don't know what the units are!
@@ -1052,40 +1053,40 @@ double CONVERT::ConvertAngle(double Value, UNITS_OF_ANGLE NewUnits) const
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertDistance
 //
 // Description:		Converts from our base units (see top of convert_class.h)
-//					into NewUnits.
+//					into newUnits.
 //
 // Input Arguments:
-//		Value		= double to be converted
-//		NewUnits	= UNITS_OF_DISTANCE in which Value will be returned
+//		n		= double to be converted
+//		newUnits	= UnitsOfDistance in which n will be returned
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in units of NewUnits
+// Return n:
+//		double specifying n in units of newUnits
 //
 //==========================================================================
-double CONVERT::ConvertDistance(double Value, UNITS_OF_DISTANCE NewUnits) const
+double Convert::ConvertDistance(double n, UnitsOfDistance newUnits) const
 {
 	// Do the conversion
-	if (NewUnits == INCH)
-		return Value;
-	else if (NewUnits == FOOT)
-		return INCH_TO_FEET(Value);
-	else if (NewUnits == MILE)
-		return INCH_TO_MILE(Value);
-	else if (NewUnits == MILIMETER)
-		return INCH_TO_METER(Value) * 1000.0;
-	else if (NewUnits == CENTIMETER)
-		return INCH_TO_METER(Value) *  100.0;
-	else if (NewUnits == METER)
-		return INCH_TO_METER(Value);
-	else if (NewUnits == KILOMETER)
-		return INCH_TO_METER(Value) * 0.001;
+	if (newUnits == INCH)
+		return n;
+	else if (newUnits == FOOT)
+		return INCH_TO_FEET(n);
+	else if (newUnits == MILE)
+		return INCH_TO_MILE(n);
+	else if (newUnits == MILIMETER)
+		return INCH_TO_METER(n) * 1000.0;
+	else if (newUnits == CENTIMETER)
+		return INCH_TO_METER(n) *  100.0;
+	else if (newUnits == METER)
+		return INCH_TO_METER(n);
+	else if (newUnits == KILOMETER)
+		return INCH_TO_METER(n) * 0.001;
 	else
 	{
 		// ERROR - We don't know what the units are!
@@ -1094,36 +1095,36 @@ double CONVERT::ConvertDistance(double Value, UNITS_OF_DISTANCE NewUnits) const
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertArea
 //
 // Description:		Converts from our base units (see top of convert_class.h)
-//					into NewUnits.
+//					into newUnits.
 //
 // Input Arguments:
-//		Value		= double to be converted
-//		NewUnits	= UNITS_OF_AREA in which Value will be returned
+//		n		= double to be converted
+//		newUnits	= UnitsOfArea in which n will be returned
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in units of NewUnits
+// Return n:
+//		double specifying n in units of newUnits
 //
 //==========================================================================
-double CONVERT::ConvertArea(double Value, UNITS_OF_AREA NewUnits) const
+double Convert::ConvertArea(double n, UnitsOfArea newUnits) const
 {
 	// Do the conversion
-	if (NewUnits == INCH_SQUARED)
-		return Value;
-	else if (NewUnits == FOOT_SQUARED)
-		return INCH_SQ_TO_FEET_SQ(Value);
-	else if (NewUnits == MILIMETER_SQUARED)
-		return INCH_SQ_TO_METER_SQ(Value) * 1000000.0;
-	else if (NewUnits == CENTIMETER_SQUARED)
-		return INCH_SQ_TO_METER_SQ(Value) * 10000.0;
-	else if (NewUnits == METER_SQUARED)
-		return INCH_SQ_TO_METER_SQ(Value);
+	if (newUnits == INCH_SQUARED)
+		return n;
+	else if (newUnits == FOOT_SQUARED)
+		return INCH_SQ_TO_FEET_SQ(n);
+	else if (newUnits == MILIMETER_SQUARED)
+		return INCH_SQ_TO_METER_SQ(n) * 1000000.0;
+	else if (newUnits == CENTIMETER_SQUARED)
+		return INCH_SQ_TO_METER_SQ(n) * 10000.0;
+	else if (newUnits == METER_SQUARED)
+		return INCH_SQ_TO_METER_SQ(n);
 	else
 	{
 		// ERROR - We don't know what the units are!
@@ -1132,34 +1133,34 @@ double CONVERT::ConvertArea(double Value, UNITS_OF_AREA NewUnits) const
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertForce
 //
 // Description:		Converts from our base units (see top of convert_class.h)
-//					into NewUnits.
+//					into newUnits.
 //
 // Input Arguments:
-//		Value		= double to be converted
-//		NewUnits	= UNITS_OF_FORCE in which Value will be returned
+//		n		= double to be converted
+//		newUnits	= UnitsOfForce in which n will be returned
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in units of NewUnits
+// Return n:
+//		double specifying n in units of newUnits
 //
 //==========================================================================
-double CONVERT::ConvertForce(double Value, UNITS_OF_FORCE NewUnits) const
+double Convert::ConvertForce(double n, UnitsOfForce newUnits) const
 {
 	// Do the conversion
-	if (NewUnits == POUND_FORCE)
-		return Value;
-	else if (NewUnits == KILO_POUND_FORCE)
-		return Value * 0.001;
-	else if (NewUnits == NEWTON)
-		return LBF_TO_NEWTON(Value);
-	else if (NewUnits == KILONEWTON)
-		return LBF_TO_NEWTON(Value) * 0.001;
+	if (newUnits == POUND_FORCE)
+		return n;
+	else if (newUnits == KILO_POUND_FORCE)
+		return n * 0.001;
+	else if (newUnits == NEWTON)
+		return LBF_TO_NEWTON(n);
+	else if (newUnits == KILONEWTON)
+		return LBF_TO_NEWTON(n) * 0.001;
 	else
 	{
 		// ERROR - We don't know what the units are
@@ -1168,38 +1169,38 @@ double CONVERT::ConvertForce(double Value, UNITS_OF_FORCE NewUnits) const
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertPressure
 //
 // Description:		Converts from our base units (see top of convert_class.h)
-//					into NewUnits.
+//					into newUnits.
 //
 // Input Arguments:
-//		Value		= double to be converted
-//		NewUnits	= UNITS_OF_PRESSURE in which Value will be returned
+//		n		= double to be converted
+//		newUnits	= UnitsOfPressure in which n will be returned
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in units of NewUnits
+// Return n:
+//		double specifying n in units of newUnits
 //
 //==========================================================================
-double CONVERT::ConvertPressure(double Value, UNITS_OF_PRESSURE NewUnits) const
+double Convert::ConvertPressure(double n, UnitsOfPressure newUnits) const
 {
 	// Do the conversion
-	if (NewUnits == POUND_FORCE_PER_SQUARE_INCH)
-		return Value;
-	else if (NewUnits == POUND_FORCE_PER_SQUARE_FOOT)
-		return LBF_IN_SQ_TO_LBF_FT_SQ(Value);
-	else if (NewUnits == ATMOSPHERE)
-		return LBF_IN_SQ_TO_ATMOSPHERE(Value);
-	else if (NewUnits == PASCAL_UNIT)
-		return LBF_IN_SQ_TO_PASCAL(Value);
-	else if (NewUnits == KILOPASCAL)
-		return LBF_IN_SQ_TO_PASCAL(Value) / 1000.0;
-	else if(NewUnits == MILLIMETERS_MERCURY)
-		return LBF_IN_SQ_TO_MM_HG(Value);
+	if (newUnits == POUND_FORCE_PER_SQUARE_INCH)
+		return n;
+	else if (newUnits == POUND_FORCE_PER_SQUARE_FOOT)
+		return LBF_IN_SQ_TO_LBF_FT_SQ(n);
+	else if (newUnits == ATMOSPHERE)
+		return LBF_IN_SQ_TO_ATMOSPHERE(n);
+	else if (newUnits == PASCAL_UNIT)
+		return LBF_IN_SQ_TO_PASCAL(n);
+	else if (newUnits == KILOPASCAL)
+		return LBF_IN_SQ_TO_PASCAL(n) / 1000.0;
+	else if(newUnits == MILLIMETERS_MERCURY)
+		return LBF_IN_SQ_TO_MM_HG(n);
 	else
 	{
 		// ERROR - We don't know what the units are!
@@ -1208,34 +1209,34 @@ double CONVERT::ConvertPressure(double Value, UNITS_OF_PRESSURE NewUnits) const
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertMoment
 //
 // Description:		Converts from our base units (see top of convert_class.h)
-//					into NewUnits.
+//					into newUnits.
 //
 // Input Arguments:
-//		Value		= double to be converted
-//		NewUnits	= UNITS_OF_MOMENT in which Value will be returned
+//		n		= double to be converted
+//		newUnits	= UnitsOfMoment in which n will be returned
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in units of NewUnits
+// Return n:
+//		double specifying n in units of newUnits
 //
 //==========================================================================
-double CONVERT::ConvertMoment(double Value, UNITS_OF_MOMENT NewUnits) const
+double Convert::ConvertMoment(double n, UnitsOfMoment newUnits) const
 {
 	// Do the conversion
-	if (NewUnits == INCH_POUND_FORCE)
-		return Value;
-	else if (NewUnits == FOOT_POUND_FORCE)
-		return INCH_TO_FEET(Value);
-	else if (NewUnits == NEWTON_METER)
-		return IN_LBF_TO_NEWTON_METER(Value);
-	else if (NewUnits == MILINEWTON_METER)
-		return IN_LBF_TO_NEWTON_METER(Value) * 0.001;
+	if (newUnits == INCH_POUND_FORCE)
+		return n;
+	else if (newUnits == FOOT_POUND_FORCE)
+		return INCH_TO_FEET(n);
+	else if (newUnits == NEWTON_METER)
+		return IN_LBF_TO_NEWTON_METER(n);
+	else if (newUnits == MILINEWTON_METER)
+		return IN_LBF_TO_NEWTON_METER(n) * 0.001;
 	else
 	{
 		// ERROR - We don't know what the units are!
@@ -1244,32 +1245,32 @@ double CONVERT::ConvertMoment(double Value, UNITS_OF_MOMENT NewUnits) const
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertMass
 //
 // Description:		Converts from our base units (see top of convert_class.h)
-//					into NewUnits.
+//					into newUnits.
 //
 // Input Arguments:
-//		Value		= double to be converted
-//		NewUnits	= UNITS_OF_MASS in which Value will be returned
+//		n		= double to be converted
+//		newUnits	= UnitsOfMass in which n will be returned
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in units of NewUnits
+// Return n:
+//		double specifying n in units of newUnits
 //
 //==========================================================================
-double CONVERT::ConvertMass(double Value, UNITS_OF_MASS NewUnits) const
+double Convert::ConvertMass(double n, UnitsOfMass newUnits) const
 {
 	// Do the conversion
-	if (NewUnits == SLUG)
-		return Value;
-	else if (NewUnits == POUND_MASS)
-		return SLUG_TO_LBM(Value);
-	else if (NewUnits == KILOGRAM)
-		return SLUG_TO_KG(Value);
+	if (newUnits == SLUG)
+		return n;
+	else if (newUnits == POUND_MASS)
+		return SLUG_TO_LBM(n);
+	else if (newUnits == KILOGRAM)
+		return SLUG_TO_KG(n);
 	else
 	{
 		// ERROR - We don't know what the units are
@@ -1278,40 +1279,40 @@ double CONVERT::ConvertMass(double Value, UNITS_OF_MASS NewUnits) const
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertVelocity
 //
 // Description:		Converts from our base units (see top of convert_class.h)
-//					into NewUnits.
+//					into newUnits.
 //
 // Input Arguments:
-//		Value		= double to be converted
-//		NewUnits	= UNITS_OF_VELOCITY in which Value will be returned
+//		n		= double to be converted
+//		newUnits	= UnitsOfVelocity in which n will be returned
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in units of NewUnits
+// Return n:
+//		double specifying n in units of newUnits
 //
 //==========================================================================
-double CONVERT::ConvertVelocity(double Value, UNITS_OF_VELOCITY NewUnits) const
+double Convert::ConvertVelocity(double n, UnitsOfVelocity newUnits) const
 {
 	// Do the conversion
-	if (NewUnits == INCHES_PER_SECOND)
-		return Value;
-	else if (NewUnits == FEET_PER_SECOND)
-		return INCH_TO_FEET(Value);
-	else if (NewUnits == MILES_PER_HOUR)
-		return INCH_TO_MILE(Value) * 3600.0;
-	else if (NewUnits == MM_PER_SECOND)
-		return INCH_TO_METER(Value) * 1000.0;
-	else if (NewUnits == CM_PER_SECOND)
-		return INCH_TO_METER(Value) * 100.0;
-	else if (NewUnits == METERS_PER_SECOND)
-		return INCH_TO_METER(Value);
-	else if (NewUnits == KILOMETERS_PER_HOUR)
-		return INCH_TO_METER(Value) * 0.001 * 3600.0;
+	if (newUnits == INCHES_PER_SECOND)
+		return n;
+	else if (newUnits == FEET_PER_SECOND)
+		return INCH_TO_FEET(n);
+	else if (newUnits == MILES_PER_HOUR)
+		return INCH_TO_MILE(n) * 3600.0;
+	else if (newUnits == MM_PER_SECOND)
+		return INCH_TO_METER(n) * 1000.0;
+	else if (newUnits == CM_PER_SECOND)
+		return INCH_TO_METER(n) * 100.0;
+	else if (newUnits == METERS_PER_SECOND)
+		return INCH_TO_METER(n);
+	else if (newUnits == KILOMETERS_PER_HOUR)
+		return INCH_TO_METER(n) * 0.001 * 3600.0;
 	else
 	{
 		// ERROR - We don't know what the units are!
@@ -1320,38 +1321,38 @@ double CONVERT::ConvertVelocity(double Value, UNITS_OF_VELOCITY NewUnits) const
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertAcceleration
 //
 // Description:		Converts from our base units (see top of convert_class.h)
-//					into NewUnits.
+//					into newUnits.
 //
 // Input Arguments:
-//		Value		= double to be converted
-//		NewUnits	= UNITS_OF_ACCELERATION in which Value will be returned
+//		n		= double to be converted
+//		newUnits	= UnitsOfAcceleration in which n will be returned
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in units of NewUnits
+// Return n:
+//		double specifying n in units of newUnits
 //
 //==========================================================================
-double CONVERT::ConvertAcceleration(double Value, UNITS_OF_ACCELERATION NewUnits) const
+double Convert::ConvertAcceleration(double n, UnitsOfAcceleration newUnits) const
 {
 	// Do the conversion
-	if (NewUnits == INCHES_PER_SECOND_SQUARED)
-		return Value;
-	else if (NewUnits == FEET_PER_SECOND_SQUARED)
-		return INCH_TO_FEET(Value);
-	else if (NewUnits == MM_PER_SECOND_SQUARED)
-		return INCH_TO_METER(Value) * 1000.0;
-	else if (NewUnits == CM_PER_SECOND_SQUARED)
-		return INCH_TO_METER(Value) * 100.0;
-	else if (NewUnits == METERS_PER_SECOND_SQUARED)
-		return INCH_TO_METER(Value);
-	else if (NewUnits == FREE_FALL)
-		return Value / G;
+	if (newUnits == INCHES_PER_SECOND_SQUARED)
+		return n;
+	else if (newUnits == FEET_PER_SECOND_SQUARED)
+		return INCH_TO_FEET(n);
+	else if (newUnits == MM_PER_SECOND_SQUARED)
+		return INCH_TO_METER(n) * 1000.0;
+	else if (newUnits == CM_PER_SECOND_SQUARED)
+		return INCH_TO_METER(n) * 100.0;
+	else if (newUnits == METERS_PER_SECOND_SQUARED)
+		return INCH_TO_METER(n);
+	else if (newUnits == FREE_FALL)
+		return n / G;
 	else
 	{
 		// ERROR - We don't know what the units are
@@ -1360,38 +1361,38 @@ double CONVERT::ConvertAcceleration(double Value, UNITS_OF_ACCELERATION NewUnits
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertInertia
 //
 // Description:		Converts from our base units (see top of convert_class.h)
-//					into NewUnits.
+//					into newUnits.
 //
 // Input Arguments:
-//		Value		= double to be converted
-//		NewUnits	= UNITS_OF_INERTIA in which Value will be returned
+//		n		= double to be converted
+//		newUnits	= UnitsOfInertia in which n will be returned
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in units of NewUnits
+// Return n:
+//		double specifying n in units of newUnits
 //
 //==========================================================================
-double CONVERT::ConvertInertia(double Value, UNITS_OF_INERTIA NewUnits) const
+double Convert::ConvertInertia(double n, UnitsOfInertia newUnits) const
 {
 	// Do the conversion
-	if (NewUnits == SLUG_INCHES_SQUARED)
-		return Value;
-	else if (NewUnits == SLUG_FEET_SQUARED)
-		return INCH_TO_FEET(Value);
-	else if (NewUnits == POUND_MASS_INCHES_SQUARED)
-		return SLUG_TO_LBM(Value);
-	else if (NewUnits == POUND_MASS_FEET_SQUARED)
-		return SLUG_IN_IN_TO_LBM_FEET_FEET(Value);
-	else if (NewUnits == KILOGRAM_METERS_SQUARED)
-		return SLUG_IN_IN_TO_KG_METER_METER(Value);
-	else if (NewUnits == KILOGRAM_MILIMETERS_SQUARED)
-		return SLUG_IN_IN_TO_KG_METER_METER(Value) * 1000.0;
+	if (newUnits == SLUG_INCHES_SQUARED)
+		return n;
+	else if (newUnits == SLUG_FEET_SQUARED)
+		return INCH_TO_FEET(n);
+	else if (newUnits == POUND_MASS_INCHES_SQUARED)
+		return SLUG_TO_LBM(n);
+	else if (newUnits == POUND_MASS_FEET_SQUARED)
+		return SLUG_IN_IN_TO_LBM_FEET_FEET(n);
+	else if (newUnits == KILOGRAM_METERS_SQUARED)
+		return SLUG_IN_IN_TO_KG_METER_METER(n);
+	else if (newUnits == KILOGRAM_MILIMETERS_SQUARED)
+		return SLUG_IN_IN_TO_KG_METER_METER(n) * 1000.0;
 	else
 	{
 		// ERROR - We don't know what the units are
@@ -1400,38 +1401,38 @@ double CONVERT::ConvertInertia(double Value, UNITS_OF_INERTIA NewUnits) const
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertDensity
 //
 // Description:		Converts from our base units (see top of convert_class.h)
-//					into NewUnits.
+//					into newUnits.
 //
 // Input Arguments:
-//		Value		= double to be converted
-//		NewUnits	= UNITS_OF_DENSITY in which Value will be returned
+//		n		= double to be converted
+//		newUnits	= UnitsOfDensity in which n will be returned
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in units of NewUnits
+// Return n:
+//		double specifying n in units of newUnits
 //
 //==========================================================================
-double CONVERT::ConvertDensity(double Value, UNITS_OF_DENSITY NewUnits) const
+double Convert::ConvertDensity(double n, UnitsOfDensity newUnits) const
 {
 	// Do the conversion
-	if (NewUnits == SLUGS_PER_INCH_CUBED)
-		return Value;
-	else if (NewUnits == POUND_MASS_PER_INCH_CUBED)
-		return SLUG_IN3_TO_LBM_FT3(Value) * 144.0;
-	else if (NewUnits == SLUGS_PER_FEET_CUBED)
-		return SLUG_IN3_TO_SLUG_FT3(Value);
-	else if (NewUnits == POUND_MASS_PER_FEET_CUBED)
-		return SLUG_IN3_TO_LBM_FT3(Value);
-	else if (NewUnits == KILOGRAM_PER_METER_CUBED)
-		return SLUG_IN3_TO_KG_M3(Value);
-	else if (NewUnits == GRAM_PER_CENTIMETER_CUBED)
-		return SLUG_IN3_TO_KG_M3(Value) * 0.001;
+	if (newUnits == SLUGS_PER_INCH_CUBED)
+		return n;
+	else if (newUnits == POUND_MASS_PER_INCH_CUBED)
+		return SLUG_IN3_TO_LBM_FT3(n) * 144.0;
+	else if (newUnits == SLUGS_PER_FEET_CUBED)
+		return SLUG_IN3_TO_SLUG_FT3(n);
+	else if (newUnits == POUND_MASS_PER_FEET_CUBED)
+		return SLUG_IN3_TO_LBM_FT3(n);
+	else if (newUnits == KILOGRAM_PER_METER_CUBED)
+		return SLUG_IN3_TO_KG_M3(n);
+	else if (newUnits == GRAM_PER_CENTIMETER_CUBED)
+		return SLUG_IN3_TO_KG_M3(n) * 0.001;
 	else
 	{
 		// ERROR - We don't know what the units are
@@ -1440,36 +1441,36 @@ double CONVERT::ConvertDensity(double Value, UNITS_OF_DENSITY NewUnits) const
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertPower
 //
 // Description:		Converts from our base units (see top of convert_class.h)
-//					into NewUnits.
+//					into newUnits.
 //
 // Input Arguments:
-//		Value		= double to be converted
-//		NewUnits	= UNITS_OF_POWER in which Value will be returned
+//		n		= double to be converted
+//		newUnits	= UnitsOfPower in which n will be returned
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in units of NewUnits
+// Return n:
+//		double specifying n in units of newUnits
 //
 //==========================================================================
-double CONVERT::ConvertPower(double Value, UNITS_OF_POWER NewUnits) const
+double Convert::ConvertPower(double n, UnitsOfPower newUnits) const
 {
 	// Do the conversion
-	if (NewUnits == INCH_POUND_FORCE_PER_SECOND)
-		return Value;
-	else if (NewUnits == FOOT_POUND_FORCE_PER_SECOND)
-		return INCH_TO_FEET(Value);
-	else if (NewUnits == HORSEPOWER)
-		return IN_LBF_PER_SEC_TO_HP(Value);
-	else if (NewUnits == WATTS)
-		return IN_LBF_PER_SEC_TO_WATTS(Value);
-	else if (NewUnits == KILOWATTS)
-		return IN_LBF_PER_SEC_TO_WATTS(Value) * 0.001;
+	if (newUnits == INCH_POUND_FORCE_PER_SECOND)
+		return n;
+	else if (newUnits == FOOT_POUND_FORCE_PER_SECOND)
+		return INCH_TO_FEET(n);
+	else if (newUnits == HORSEPOWER)
+		return IN_LBF_PER_SEC_TO_HP(n);
+	else if (newUnits == WATTS)
+		return IN_LBF_PER_SEC_TO_WATTS(n);
+	else if (newUnits == KILOWATTS)
+		return IN_LBF_PER_SEC_TO_WATTS(n) * 0.001;
 	else
 	{
 		// ERROR - We don't know what the units are
@@ -1478,38 +1479,38 @@ double CONVERT::ConvertPower(double Value, UNITS_OF_POWER NewUnits) const
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertEnergy
 //
 // Description:		Converts from our base units (see top of convert_class.h)
-//					into NewUnits.
+//					into newUnits.
 //
 // Input Arguments:
-//		Value		= double to be converted
-//		NewUnits	= UNITS_OF_ENERGY in which Value will be returned
+//		n		= double to be converted
+//		newUnits	= UnitsOfEnergy in which n will be returned
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in units of NewUnits
+// Return n:
+//		double specifying n in units of newUnits
 //
 //==========================================================================
-double CONVERT::ConvertEnergy(double Value, UNITS_OF_ENERGY NewUnits) const
+double Convert::ConvertEnergy(double n, UnitsOfEnergy newUnits) const
 {
 	// Do the conversion
-	if (NewUnits == POUND_FORCE_INCH)
-		return Value;
-	else if (NewUnits == POUND_FORCE_FOOT)
-		return INCH_TO_FEET(Value);
-	else if (NewUnits == BRITISH_THERMAL_UNIT)
-		return LBF_IN_TO_BTU(Value);
-	else if (NewUnits == JOULE)
-		return IN_LBF_TO_NEWTON_METER(Value);
-	else if (NewUnits == MILIJOULE)
-		return IN_LBF_TO_NEWTON_METER(Value) * 1000.0;
-	else if (NewUnits == KILOJOULE)
-		return IN_LBF_TO_NEWTON_METER(Value) * 0.001;
+	if (newUnits == POUND_FORCE_INCH)
+		return n;
+	else if (newUnits == POUND_FORCE_FOOT)
+		return INCH_TO_FEET(n);
+	else if (newUnits == BRITISH_THERMAL_UNIT)
+		return LBF_IN_TO_BTU(n);
+	else if (newUnits == JOULE)
+		return IN_LBF_TO_NEWTON_METER(n);
+	else if (newUnits == MILIJOULE)
+		return IN_LBF_TO_NEWTON_METER(n) * 1000.0;
+	else if (newUnits == KILOJOULE)
+		return IN_LBF_TO_NEWTON_METER(n) * 0.001;
 	else
 	{
 		// ERROR - We don't know what the units are
@@ -1518,34 +1519,34 @@ double CONVERT::ConvertEnergy(double Value, UNITS_OF_ENERGY NewUnits) const
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertTemperature
 //
 // Description:		Converts from our base units (see top of convert_class.h)
-//					into NewUnits.
+//					into newUnits.
 //
 // Input Arguments:
-//		Value		= double to be converted
-//		NewUnits	= UNITS_OF_TEMPERATURE in which Value will be returned
+//		n		= double to be converted
+//		newUnits	= UnitsOfTemperature in which n will be returned
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in units of NewUnits
+// Return n:
+//		double specifying n in units of newUnits
 //
 //==========================================================================
-double CONVERT::ConvertTemperature(double Value, UNITS_OF_TEMPERATURE NewUnits) const
+double Convert::ConvertTemperature(double n, UnitsOfTemperature newUnits) const
 {
 	// Do the conversion
-	if (NewUnits == RANKINE)
-		return Value;
-	else if (NewUnits == FAHRENHEIT)
-		return RANKINE_TO_FAHRENHEIT(Value);
-	else if (NewUnits == CELSIUS)
-		return RANKINE_TO_CELSIUS(Value);
-	else if (NewUnits == KELVIN)
-		return RANKINE_TO_KELVIN(Value);
+	if (newUnits == RANKINE)
+		return n;
+	else if (newUnits == FAHRENHEIT)
+		return RANKINE_TO_FAHRENHEIT(n);
+	else if (newUnits == CELSIUS)
+		return RANKINE_TO_CELSIUS(n);
+	else if (newUnits == KELVIN)
+		return RANKINE_TO_KELVIN(n);
 	else
 	{
 		// ERROR - We don't know what the units are
@@ -1554,7 +1555,7 @@ double CONVERT::ConvertTemperature(double Value, UNITS_OF_TEMPERATURE NewUnits) 
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertAngle
 //
 // Description:		Converts from our base units (see top of convert_class.h)
@@ -1562,23 +1563,23 @@ double CONVERT::ConvertTemperature(double Value, UNITS_OF_TEMPERATURE NewUnits) 
 //					the user.
 //
 // Input Arguments:
-//		Value	= double to be converted
+//		n	= double to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in default units
+// Return n:
+//		double specifying n in default units
 //
 //==========================================================================
-double CONVERT::ConvertAngle(double Value) const
+double Convert::ConvertAngle(double n) const
 {
 	// Call the conversion function with our default units as the argument
-	return ConvertAngle(Value, DefaultAngleUnits);
+	return ConvertAngle(n, defaultAngleUnits);
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertDistance
 //
 // Description:		Converts from our base units (see top of convert_class.h)
@@ -1586,23 +1587,23 @@ double CONVERT::ConvertAngle(double Value) const
 //					the user.
 //
 // Input Arguments:
-//		Value	= double to be converted
+//		n	= double to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in default units
+// Return n:
+//		double specifying n in default units
 //
 //==========================================================================
-double CONVERT::ConvertDistance(double Value) const
+double Convert::ConvertDistance(double n) const
 {
 	// Call the conversion function with our default units as the argument
-	return ConvertDistance(Value, DefaultDistanceUnits);
+	return ConvertDistance(n, defaultDistanceUnits);
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertArea
 //
 // Description:		Converts from our base units (see top of convert_class.h)
@@ -1610,23 +1611,23 @@ double CONVERT::ConvertDistance(double Value) const
 //					the user.
 //
 // Input Arguments:
-//		Value	= double to be converted
+//		n	= double to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in default units
+// Return n:
+//		double specifying n in default units
 //
 //==========================================================================
-double CONVERT::ConvertArea(double Value) const
+double Convert::ConvertArea(double n) const
 {
 	// Call the conversion function with our default units as the argument
-	return ConvertArea(Value, DefaultAreaUnits);
+	return ConvertArea(n, defaultAreaUnits);
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertForce
 //
 // Description:		Converts from our base units (see top of convert_class.h)
@@ -1634,23 +1635,23 @@ double CONVERT::ConvertArea(double Value) const
 //					the user.
 //
 // Input Arguments:
-//		Value	= double to be converted
+//		n	= double to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in default units
+// Return n:
+//		double specifying n in default units
 //
 //==========================================================================
-double CONVERT::ConvertForce(double Value) const
+double Convert::ConvertForce(double n) const
 {
 	// Call the conversion function with our default units as the argument
-	return ConvertForce(Value, DefaultForceUnits);
+	return ConvertForce(n, defaultForceUnits);
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertPressure
 //
 // Description:		Converts from our base units (see top of convert_class.h)
@@ -1658,23 +1659,23 @@ double CONVERT::ConvertForce(double Value) const
 //					the user.
 //
 // Input Arguments:
-//		Value	= double to be converted
+//		n	= double to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in default units
+// Return n:
+//		double specifying n in default units
 //
 //==========================================================================
-double CONVERT::ConvertPressure(double Value) const
+double Convert::ConvertPressure(double n) const
 {
 	// Call the conversion function with our default units as the argument
-	return ConvertPressure(Value, DefaultPressureUnits);
+	return ConvertPressure(n, defaultPressureUnits);
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertMoment
 //
 // Description:		Converts from our base units (see top of convert_class.h)
@@ -1682,23 +1683,23 @@ double CONVERT::ConvertPressure(double Value) const
 //					the user.
 //
 // Input Arguments:
-//		Value	= double to be converted
+//		n	= double to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in default units
+// Return n:
+//		double specifying n in default units
 //
 //==========================================================================
-double CONVERT::ConvertMoment(double Value) const
+double Convert::ConvertMoment(double n) const
 {
 	// Call the conversion function with our default units as the argument
-	return ConvertMoment(Value, DefaultMomentUnits);
+	return ConvertMoment(n, defaultMomentUnits);
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertMass
 //
 // Description:		Converts from our base units (see top of convert_class.h)
@@ -1706,23 +1707,23 @@ double CONVERT::ConvertMoment(double Value) const
 //					the user.
 //
 // Input Arguments:
-//		Value	= double to be converted
+//		n	= double to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in default units
+// Return n:
+//		double specifying n in default units
 //
 //==========================================================================
-double CONVERT::ConvertMass(double Value) const
+double Convert::ConvertMass(double n) const
 {
 	// Call the conversion function with our default units as the argument
-	return ConvertMass(Value, DefaultMassUnits);
+	return ConvertMass(n, defaultMassUnits);
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertVelocity
 //
 // Description:		Converts from our base units (see top of convert_class.h)
@@ -1730,23 +1731,23 @@ double CONVERT::ConvertMass(double Value) const
 //					the user.
 //
 // Input Arguments:
-//		Value	= double to be converted
+//		n	= double to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in default units
+// Return n:
+//		double specifying n in default units
 //
 //==========================================================================
-double CONVERT::ConvertVelocity(double Value) const
+double Convert::ConvertVelocity(double n) const
 {
 	// Call the conversion function with our default units as the argument
-	return ConvertVelocity(Value, DefaultVelocityUnits);
+	return ConvertVelocity(n, defaultVelocityUnits);
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertAcceleration
 //
 // Description:		Converts from our base units (see top of convert_class.h)
@@ -1754,23 +1755,23 @@ double CONVERT::ConvertVelocity(double Value) const
 //					the user.
 //
 // Input Arguments:
-//		Value	= double to be converted
+//		n	= double to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in default units
+// Return n:
+//		double specifying n in default units
 //
 //==========================================================================
-double CONVERT::ConvertAcceleration(double Value) const
+double Convert::ConvertAcceleration(double n) const
 {
 	// Call the conversion function with our default units as the argument
-	return ConvertAcceleration(Value, DefaultAccelerationUnits);
+	return ConvertAcceleration(n, defaultAccelerationUnits);
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertInertia
 //
 // Description:		Converts from our base units (see top of convert_class.h)
@@ -1778,23 +1779,23 @@ double CONVERT::ConvertAcceleration(double Value) const
 //					the user.
 //
 // Input Arguments:
-//		Value	= double to be converted
+//		n	= double to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in default units
+// Return n:
+//		double specifying n in default units
 //
 //==========================================================================
-double CONVERT::ConvertInertia(double Value) const
+double Convert::ConvertInertia(double n) const
 {
 	// Call the conversion function with our default units as the argument
-	return ConvertInertia(Value, DefaultInertiaUnits);
+	return ConvertInertia(n, defaultInertiaUnits);
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertDensity
 //
 // Description:		Converts from our base units (see top of convert_class.h)
@@ -1802,23 +1803,23 @@ double CONVERT::ConvertInertia(double Value) const
 //					the user.
 //
 // Input Arguments:
-//		Value	= double to be converted
+//		n	= double to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in default units
+// Return n:
+//		double specifying n in default units
 //
 //==========================================================================
-double CONVERT::ConvertDensity(double Value) const
+double Convert::ConvertDensity(double n) const
 {
 	// Call the conversion function with our default units as the argument
-	return ConvertDensity(Value, DefaultDensityUnits);
+	return ConvertDensity(n, defaultDensityUnits);
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertPower
 //
 // Description:		Converts from our base units (see top of convert_class.h)
@@ -1826,23 +1827,23 @@ double CONVERT::ConvertDensity(double Value) const
 //					the user.
 //
 // Input Arguments:
-//		Value	= double to be converted
+//		n	= double to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in default units
+// Return n:
+//		double specifying n in default units
 //
 //==========================================================================
-double CONVERT::ConvertPower(double Value) const
+double Convert::ConvertPower(double n) const
 {
 	// Call the conversion function with our default units as the argument
-	return ConvertPower(Value, DefaultPowerUnits);
+	return ConvertPower(n, defaultPowerUnits);
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertEnergy
 //
 // Description:		Converts from our base units (see top of convert_class.h)
@@ -1850,23 +1851,23 @@ double CONVERT::ConvertPower(double Value) const
 //					the user.
 //
 // Input Arguments:
-//		Value	= double to be converted
+//		n	= double to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in default units
+// Return n:
+//		double specifying n in default units
 //
 //==========================================================================
-double CONVERT::ConvertEnergy(double Value) const
+double Convert::ConvertEnergy(double n) const
 {
 	// Call the conversion function with our default units as the argument
-	return ConvertEnergy(Value, DefaultEnergyUnits);
+	return ConvertEnergy(n, defaultEnergyUnits);
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertTemperature
 //
 // Description:		Converts from our base units (see top of convert_class.h)
@@ -1874,46 +1875,46 @@ double CONVERT::ConvertEnergy(double Value) const
 //					the user.
 //
 // Input Arguments:
-//		Value	= double to be converted
+//		n	= double to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in default units
+// Return n:
+//		double specifying n in default units
 //
 //==========================================================================
-double CONVERT::ConvertTemperature(double Value) const
+double Convert::ConvertTemperature(double n) const
 {
 	// Call the conversion function with our default units as the argument
-	return ConvertTemperature(Value, DefaultTemperatureUnits);
+	return ConvertTemperature(n, defaultTemperatureUnits);
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ReadAngle
 //
 // Description:		Converts from the specified units into our base units
 //					(see top of convert_class.h).
 //
 // Input Arguments:
-//		Value		= double to be converted
-//		InputUnits	= UNITS_OF_ANGLE that are associated with Value
+//		n			= double to be converted
+//		inputUnits	= UnitsOfAngle that are associated with n
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in our base units
+// Return n:
+//		double specifying n in our base units
 //
 //==========================================================================
-double CONVERT::ReadAngle(double Value, UNITS_OF_ANGLE InputUnits) const
+double Convert::ReadAngle(double n, UnitsOfAngle inputUnits) const
 {
 	// Do the converstion
-	if (InputUnits == RADIANS)
-		return Value;
-	else if (InputUnits == DEGREES)
-		return DEG_TO_RAD(Value);
+	if (inputUnits == RADIANS)
+		return n;
+	else if (inputUnits == DEGREES)
+		return DEG_TO_RAD(n);
 	else
 	{
 		// ERROR - We don't know what the units are!
@@ -1922,40 +1923,40 @@ double CONVERT::ReadAngle(double Value, UNITS_OF_ANGLE InputUnits) const
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ReadDistance
 //
 // Description:		Converts from the specified units into our base units
 //					(see top of convert_class.h).
 //
 // Input Arguments:
-//		Value		= double to be converted
-//		InputUnits	= UNITS_OF_DISTANCE that are associated with Value
+//		n			= double to be converted
+//		inputUnits	= UnitsOfDistance that are associated with n
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in our base units
+// Return n:
+//		double specifying n in our base units
 //
 //==========================================================================
-double CONVERT::ReadDistance(double Value, UNITS_OF_DISTANCE InputUnits) const
+double Convert::ReadDistance(double n, UnitsOfDistance inputUnits) const
 {
 	// Do the conversion
-	if (InputUnits == INCH)
-		return Value;
-	else if (InputUnits == FOOT)
-		return FEET_TO_INCH(Value);
-	else if (InputUnits == MILE)
-		return MILE_TO_INCH(Value);
-	else if (InputUnits == MILIMETER)
-		return METER_TO_INCH(Value * 0.001);
-	else if (InputUnits == CENTIMETER)
-		return METER_TO_INCH(Value *  0.01);
-	else if (InputUnits == METER)
-		return METER_TO_INCH(Value);
-	else if (InputUnits == KILOMETER)
-		return METER_TO_INCH(Value * 1000.0);
+	if (inputUnits == INCH)
+		return n;
+	else if (inputUnits == FOOT)
+		return FEET_TO_INCH(n);
+	else if (inputUnits == MILE)
+		return MILE_TO_INCH(n);
+	else if (inputUnits == MILIMETER)
+		return METER_TO_INCH(n * 0.001);
+	else if (inputUnits == CENTIMETER)
+		return METER_TO_INCH(n *  0.01);
+	else if (inputUnits == METER)
+		return METER_TO_INCH(n);
+	else if (inputUnits == KILOMETER)
+		return METER_TO_INCH(n * 1000.0);
 	else
 	{
 		// ERROR - We don't know what the units are!
@@ -1964,36 +1965,36 @@ double CONVERT::ReadDistance(double Value, UNITS_OF_DISTANCE InputUnits) const
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ReadArea
 //
 // Description:		Converts from the specified units into our base units
 //					(see top of convert_class.h).
 //
 // Input Arguments:
-//		Value		= double to be converted
-//		InputUnits	= UNITS_OF_AREA that are associated with Value
+//		n			= double to be converted
+//		inputUnits	= UnitsOfArea that are associated with n
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in our base units
+// Return n:
+//		double specifying n in our base units
 //
 //==========================================================================
-double CONVERT::ReadArea(double Value, UNITS_OF_AREA InputUnits) const
+double Convert::ReadArea(double n, UnitsOfArea inputUnits) const
 {
 	// Do the conversion
-	if (InputUnits == INCH_SQUARED)
-		return Value;
-	else if (InputUnits == FOOT_SQUARED)
-		return FEET_SQ_TO_INCH_SQ(Value);
-	else if (InputUnits == MILIMETER_SQUARED)
-		return METER_SQ_TO_INCH_SQ(Value * 0.000001);
-	else if (InputUnits == CENTIMETER_SQUARED)
-		return METER_SQ_TO_INCH_SQ(Value * 0.0001);
-	else if (InputUnits == METER_SQUARED)
-		return METER_SQ_TO_INCH_SQ(Value);
+	if (inputUnits == INCH_SQUARED)
+		return n;
+	else if (inputUnits == FOOT_SQUARED)
+		return FEET_SQ_TO_INCH_SQ(n);
+	else if (inputUnits == MILIMETER_SQUARED)
+		return METER_SQ_TO_INCH_SQ(n * 0.000001);
+	else if (inputUnits == CENTIMETER_SQUARED)
+		return METER_SQ_TO_INCH_SQ(n * 0.0001);
+	else if (inputUnits == METER_SQUARED)
+		return METER_SQ_TO_INCH_SQ(n);
 	else
 	{
 		// ERROR - We don't know what the units are!
@@ -2002,34 +2003,34 @@ double CONVERT::ReadArea(double Value, UNITS_OF_AREA InputUnits) const
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ReadForce
 //
 // Description:		Converts from the specified units into our base units
 //					(see top of convert_class.h).
 //
 // Input Arguments:
-//		Value		= double to be converted
-//		InputUnits	= UNITS_OF_FORCE that are associated with Value
+//		n			= double to be converted
+//		inputUnits	= UnitsOfForce that are associated with n
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in our base units
+// Return n:
+//		double specifying n in our base units
 //
 //==========================================================================
-double CONVERT::ReadForce(double Value, UNITS_OF_FORCE InputUnits) const
+double Convert::ReadForce(double n, UnitsOfForce inputUnits) const
 {
 	// Do the conversion
-	if (InputUnits == POUND_FORCE)
-		return Value;
-	else if (InputUnits == KILO_POUND_FORCE)
-		return Value * 1000.0;
-	else if (InputUnits == NEWTON)
-		return NEWTON_TO_LBF(Value);
-	else if (InputUnits == KILONEWTON)
-		return NEWTON_TO_LBF(Value * 1000.0);
+	if (inputUnits == POUND_FORCE)
+		return n;
+	else if (inputUnits == KILO_POUND_FORCE)
+		return n * 1000.0;
+	else if (inputUnits == NEWTON)
+		return NEWTON_TO_LBF(n);
+	else if (inputUnits == KILONEWTON)
+		return NEWTON_TO_LBF(n * 1000.0);
 	else
 	{
 		// ERROR - We don't know what the units are!
@@ -2038,38 +2039,38 @@ double CONVERT::ReadForce(double Value, UNITS_OF_FORCE InputUnits) const
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ReadPressure
 //
 // Description:		Converts from the specified units into our base units
 //					(see top of convert_class.h).
 //
 // Input Arguments:
-//		Value		= double to be converted
-//		InputUnits	= UNITS_OF_PRESSURE that are associated with Value
+//		n			= double to be converted
+//		inputUnits	= UnitsOfPressure that are associated with n
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in our base units
+// Return n:
+//		double specifying n in our base units
 //
 //==========================================================================
-double CONVERT::ReadPressure(double Value, UNITS_OF_PRESSURE InputUnits) const
+double Convert::ReadPressure(double n, UnitsOfPressure inputUnits) const
 {
 	// Do the conversion
-	if (InputUnits == POUND_FORCE_PER_SQUARE_INCH)
-		return Value;
-	else if (InputUnits == POUND_FORCE_PER_SQUARE_FOOT)
-		return LBF_FT_SQ_TO_LBF_IN_SQ(Value);
-	else if (InputUnits == ATMOSPHERE)
-		return ATMOSPHERE_TO_LBF_IN_SQ(Value);
-	else if (InputUnits == PASCAL_UNIT)
-		return PASCAL_TO_LBF_IN_SQ(Value);
-	else if (InputUnits == KILOPASCAL)
-		return PASCAL_TO_LBF_IN_SQ(Value * 0.001);
-	else if (InputUnits == MILLIMETERS_MERCURY)
-		return MM_HG_TO_LBF_IN_SQ(Value);
+	if (inputUnits == POUND_FORCE_PER_SQUARE_INCH)
+		return n;
+	else if (inputUnits == POUND_FORCE_PER_SQUARE_FOOT)
+		return LBF_FT_SQ_TO_LBF_IN_SQ(n);
+	else if (inputUnits == ATMOSPHERE)
+		return ATMOSPHERE_TO_LBF_IN_SQ(n);
+	else if (inputUnits == PASCAL_UNIT)
+		return PASCAL_TO_LBF_IN_SQ(n);
+	else if (inputUnits == KILOPASCAL)
+		return PASCAL_TO_LBF_IN_SQ(n * 0.001);
+	else if (inputUnits == MILLIMETERS_MERCURY)
+		return MM_HG_TO_LBF_IN_SQ(n);
 	else
 	{
 		// ERROR - We don't know what the units are!
@@ -2078,34 +2079,34 @@ double CONVERT::ReadPressure(double Value, UNITS_OF_PRESSURE InputUnits) const
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ReadMoment
 //
 // Description:		Converts from the specified units into our base units
 //					(see top of convert_class.h).
 //
 // Input Arguments:
-//		Value		= double to be converted
-//		InputUnits	= UNITS_OF_MOMENT that are associated with Value
+//		n			= double to be converted
+//		inputUnits	= UnitsOfMoment that are associated with n
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in our base units
+// Return n:
+//		double specifying n in our base units
 //
 //==========================================================================
-double CONVERT::ReadMoment(double Value, UNITS_OF_MOMENT InputUnits) const
+double Convert::ReadMoment(double n, UnitsOfMoment inputUnits) const
 {
 	// Do the conversion
-	if (InputUnits == INCH_POUND_FORCE)
-		return Value;
-	else if (InputUnits == FOOT_POUND_FORCE)
-		return FEET_TO_INCH(Value);
-	else if (InputUnits == NEWTON_METER)
-		return NEWTON_METER_TO_IN_LBF(Value);
-	else if (InputUnits == MILINEWTON_METER)
-		return NEWTON_METER_TO_IN_LBF(Value * 1000.0);
+	if (inputUnits == INCH_POUND_FORCE)
+		return n;
+	else if (inputUnits == FOOT_POUND_FORCE)
+		return FEET_TO_INCH(n);
+	else if (inputUnits == NEWTON_METER)
+		return NEWTON_METER_TO_IN_LBF(n);
+	else if (inputUnits == MILINEWTON_METER)
+		return NEWTON_METER_TO_IN_LBF(n * 1000.0);
 	else
 	{
 		// ERROR - We don't know what the units are!
@@ -2114,32 +2115,32 @@ double CONVERT::ReadMoment(double Value, UNITS_OF_MOMENT InputUnits) const
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ReadMass
 //
 // Description:		Converts from the specified units into our base units
 //					(see top of convert_class.h).
 //
 // Input Arguments:
-//		Value		= double to be converted
-//		InputUnits	= UNITS_OF_MASS that are associated with Value
+//		n			= double to be converted
+//		inputUnits	= UnitsOfMass that are associated with n
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in our base units
+// Return n:
+//		double specifying n in our base units
 //
 //==========================================================================
-double CONVERT::ReadMass(double Value, UNITS_OF_MASS InputUnits) const
+double Convert::ReadMass(double n, UnitsOfMass inputUnits) const
 {
 	// Do the conversion
-	if (InputUnits == SLUG)
-		return Value;
-	else if (InputUnits == POUND_MASS)
-		return LBM_TO_SLUG(Value);
-	else if (InputUnits == KILOGRAM)
-		return KG_TO_SLUG(Value);
+	if (inputUnits == SLUG)
+		return n;
+	else if (inputUnits == POUND_MASS)
+		return LBM_TO_SLUG(n);
+	else if (inputUnits == KILOGRAM)
+		return KG_TO_SLUG(n);
 	else
 	{
 		// ERROR - We don't know what the units are!
@@ -2148,40 +2149,40 @@ double CONVERT::ReadMass(double Value, UNITS_OF_MASS InputUnits) const
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ReadVelocity
 //
 // Description:		Converts from the specified units into our base units
 //					(see top of convert_class.h).
 //
 // Input Arguments:
-//		Value		= double to be converted
-//		InputUnits	= UNITS_OF_VELOCITY that are associated with Value
+//		n			= double to be converted
+//		inputUnits	= UnitsOfVelocity that are associated with n
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in our base units
+// Return n:
+//		double specifying n in our base units
 //
 //==========================================================================
-double CONVERT::ReadVelocity(double Value, UNITS_OF_VELOCITY InputUnits) const
+double Convert::ReadVelocity(double n, UnitsOfVelocity inputUnits) const
 {
 	// Do the conversion
-	if (InputUnits == INCHES_PER_SECOND)
-		return Value;
-	else if (InputUnits == FEET_PER_SECOND)
-		return FEET_TO_INCH(Value);
-	else if (InputUnits == MILES_PER_HOUR)
-		return MILE_TO_INCH(Value * 2.7777777778e-4);
-	else if (InputUnits == MM_PER_SECOND)
-		return METER_TO_INCH(Value * 0.001);
-	else if (InputUnits == CM_PER_SECOND)
-		return METER_TO_INCH(Value * 0.01);
-	else if (InputUnits == METERS_PER_SECOND)
-		return METER_TO_INCH(Value);
-	else if (InputUnits == KILOMETERS_PER_HOUR)
-		return METER_TO_INCH(Value * 1000.0 * 2.7777777778e-4);
+	if (inputUnits == INCHES_PER_SECOND)
+		return n;
+	else if (inputUnits == FEET_PER_SECOND)
+		return FEET_TO_INCH(n);
+	else if (inputUnits == MILES_PER_HOUR)
+		return MILE_TO_INCH(n * 2.7777777778e-4);
+	else if (inputUnits == MM_PER_SECOND)
+		return METER_TO_INCH(n * 0.001);
+	else if (inputUnits == CM_PER_SECOND)
+		return METER_TO_INCH(n * 0.01);
+	else if (inputUnits == METERS_PER_SECOND)
+		return METER_TO_INCH(n);
+	else if (inputUnits == KILOMETERS_PER_HOUR)
+		return METER_TO_INCH(n * 1000.0 * 2.7777777778e-4);
 	else
 	{
 		// ERROR - We don't know what the units are!
@@ -2190,38 +2191,38 @@ double CONVERT::ReadVelocity(double Value, UNITS_OF_VELOCITY InputUnits) const
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ReadAcceleration
 //
 // Description:		Converts from the specified units into our base units
 //					(see top of convert_class.h).
 //
 // Input Arguments:
-//		Value		= double to be converted
-//		InputUnits	= UNITS_OF_ACCELERATION that are associated with Value
+//		n			= double to be converted
+//		inputUnits	= UnitsOfAcceleration that are associated with n
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in our base units
+// Return n:
+//		double specifying n in our base units
 //
 //==========================================================================
-double CONVERT::ReadAcceleration(double Value, UNITS_OF_ACCELERATION InputUnits) const
+double Convert::ReadAcceleration(double n, UnitsOfAcceleration inputUnits) const
 {
 	// Do the conversion
-	if (InputUnits == INCHES_PER_SECOND_SQUARED)
-		return Value;
-	else if (InputUnits == FEET_PER_SECOND_SQUARED)
-		return FEET_TO_INCH(Value);
-	else if (InputUnits == MM_PER_SECOND_SQUARED)
-		return METER_TO_INCH(Value * 0.001);
-	else if (InputUnits == CM_PER_SECOND_SQUARED)
-		return METER_TO_INCH(Value * 0.01);
-	else if (InputUnits == METERS_PER_SECOND_SQUARED)
-		return METER_TO_INCH(Value);
-	else if (InputUnits == FREE_FALL)
-		return Value * G;
+	if (inputUnits == INCHES_PER_SECOND_SQUARED)
+		return n;
+	else if (inputUnits == FEET_PER_SECOND_SQUARED)
+		return FEET_TO_INCH(n);
+	else if (inputUnits == MM_PER_SECOND_SQUARED)
+		return METER_TO_INCH(n * 0.001);
+	else if (inputUnits == CM_PER_SECOND_SQUARED)
+		return METER_TO_INCH(n * 0.01);
+	else if (inputUnits == METERS_PER_SECOND_SQUARED)
+		return METER_TO_INCH(n);
+	else if (inputUnits == FREE_FALL)
+		return n * G;
 	else
 	{
 		// ERROR - We don't know what the units are!
@@ -2230,38 +2231,38 @@ double CONVERT::ReadAcceleration(double Value, UNITS_OF_ACCELERATION InputUnits)
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ReadInertia
 //
 // Description:		Converts from the specified units into our base units
 //					(see top of convert_class.h).
 //
 // Input Arguments:
-//		Value		= double to be converted
-//		InputUnits	= UNITS_OF_INERTIA that are associated with Value
+//		n			= double to be converted
+//		inputUnits	= UnitsOfInertia that are associated with n
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in our base units
+// Return n:
+//		double specifying n in our base units
 //
 //==========================================================================
-double CONVERT::ReadInertia(double Value, UNITS_OF_INERTIA InputUnits) const
+double Convert::ReadInertia(double n, UnitsOfInertia inputUnits) const
 {
 	// Do the conversion
-	if (InputUnits == SLUG_INCHES_SQUARED)
-		return Value;
-	else if (InputUnits == SLUG_FEET_SQUARED)
-		return FEET_TO_INCH(Value);
-	else if (InputUnits == POUND_MASS_INCHES_SQUARED)
-		return LBM_TO_SLUG(Value);
-	else if (InputUnits == POUND_MASS_FEET_SQUARED)
-		return LBM_FEET_FEET_TO_SLUG_IN_IN(Value);
-	else if (InputUnits == KILOGRAM_METERS_SQUARED)
-		return KG_METER_METER_TO_SLUG_IN_IN(Value);
-	else if (InputUnits == KILOGRAM_MILIMETERS_SQUARED)
-		return KG_METER_METER_TO_SLUG_IN_IN(Value * 0.001);
+	if (inputUnits == SLUG_INCHES_SQUARED)
+		return n;
+	else if (inputUnits == SLUG_FEET_SQUARED)
+		return FEET_TO_INCH(n);
+	else if (inputUnits == POUND_MASS_INCHES_SQUARED)
+		return LBM_TO_SLUG(n);
+	else if (inputUnits == POUND_MASS_FEET_SQUARED)
+		return LBM_FEET_FEET_TO_SLUG_IN_IN(n);
+	else if (inputUnits == KILOGRAM_METERS_SQUARED)
+		return KG_METER_METER_TO_SLUG_IN_IN(n);
+	else if (inputUnits == KILOGRAM_MILIMETERS_SQUARED)
+		return KG_METER_METER_TO_SLUG_IN_IN(n * 0.001);
 	else
 	{
 		// ERROR - We don't know what the units are!
@@ -2270,38 +2271,38 @@ double CONVERT::ReadInertia(double Value, UNITS_OF_INERTIA InputUnits) const
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ReadDensity
 //
 // Description:		Converts from the specified units into our base units
 //					(see top of convert_class.h).
 //
 // Input Arguments:
-//		Value		= double to be converted
-//		InputUnits	= UNITS_OF_DENSITY that are associated with Value
+//		n			= double to be converted
+//		inputUnits	= UnitsOfDensity that are associated with n
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in our base units
+// Return n:
+//		double specifying n in our base units
 //
 //==========================================================================
-double CONVERT::ReadDensity(double Value, UNITS_OF_DENSITY InputUnits) const
+double Convert::ReadDensity(double n, UnitsOfDensity inputUnits) const
 {
 	// Do the conversion
-	if (InputUnits == SLUGS_PER_INCH_CUBED)
-		return Value;
-	else if (InputUnits == POUND_MASS_PER_INCH_CUBED)
-		return LBM_TO_SLUG(Value);
-	else if (InputUnits == SLUGS_PER_FEET_CUBED)
-		return SLUG_FT3_TO_SLUG_IN3(Value);
-	else if (InputUnits == POUND_MASS_PER_FEET_CUBED)
-		return LBM_FT3_TO_SLUG_IN3(Value);
-	else if (InputUnits == KILOGRAM_PER_METER_CUBED)
-		return KG_M3_TO_SLUG_IN3(Value);
-	else if (InputUnits == GRAM_PER_CENTIMETER_CUBED)
-		return KG_M3_TO_SLUG_IN3(Value * 1000.0);
+	if (inputUnits == SLUGS_PER_INCH_CUBED)
+		return n;
+	else if (inputUnits == POUND_MASS_PER_INCH_CUBED)
+		return LBM_TO_SLUG(n);
+	else if (inputUnits == SLUGS_PER_FEET_CUBED)
+		return SLUG_FT3_TO_SLUG_IN3(n);
+	else if (inputUnits == POUND_MASS_PER_FEET_CUBED)
+		return LBM_FT3_TO_SLUG_IN3(n);
+	else if (inputUnits == KILOGRAM_PER_METER_CUBED)
+		return KG_M3_TO_SLUG_IN3(n);
+	else if (inputUnits == GRAM_PER_CENTIMETER_CUBED)
+		return KG_M3_TO_SLUG_IN3(n * 1000.0);
 	else
 	{
 		// ERROR - We don't know what the units are!
@@ -2310,36 +2311,36 @@ double CONVERT::ReadDensity(double Value, UNITS_OF_DENSITY InputUnits) const
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ReadPower
 //
 // Description:		Converts from the specified units into our base units
 //					(see top of convert_class.h).
 //
 // Input Arguments:
-//		Value		= double to be converted
-//		InputUnits	= UNITS_OF_POWER that are associated with Value
+//		n			= double to be converted
+//		inputUnits	= UnitsOfPower that are associated with n
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in our base units
+// Return n:
+//		double specifying n in our base units
 //
 //==========================================================================
-double CONVERT::ReadPower(double Value, UNITS_OF_POWER InputUnits) const
+double Convert::ReadPower(double n, UnitsOfPower inputUnits) const
 {
 	// Do the conversion
-	if (InputUnits == INCH_POUND_FORCE_PER_SECOND)
-		return Value;
-	else if (InputUnits == FOOT_POUND_FORCE_PER_SECOND)
-		return FEET_TO_INCH(Value);
-	else if (InputUnits == HORSEPOWER)
-		return HP_TO_IN_LBF_PER_SEC(Value);
-	else if (InputUnits == WATTS)
-		return WATTS_TO_IN_LBF_PER_SEC(Value);
-	else if (InputUnits == KILOWATTS)
-		return WATTS_TO_IN_LBF_PER_SEC(Value * 1000.0);
+	if (inputUnits == INCH_POUND_FORCE_PER_SECOND)
+		return n;
+	else if (inputUnits == FOOT_POUND_FORCE_PER_SECOND)
+		return FEET_TO_INCH(n);
+	else if (inputUnits == HORSEPOWER)
+		return HP_TO_IN_LBF_PER_SEC(n);
+	else if (inputUnits == WATTS)
+		return WATTS_TO_IN_LBF_PER_SEC(n);
+	else if (inputUnits == KILOWATTS)
+		return WATTS_TO_IN_LBF_PER_SEC(n * 1000.0);
 	else
 	{
 		// ERROR - We don't know what the units are!
@@ -2348,38 +2349,38 @@ double CONVERT::ReadPower(double Value, UNITS_OF_POWER InputUnits) const
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ReadEnergy
 //
 // Description:		Converts from the specified units into our base units
 //					(see top of convert_class.h).
 //
 // Input Arguments:
-//		Value		= double to be converted
-//		InputUnits	= UNITS_OF_ENERGY that are associated with Value
+//		n			= double to be converted
+//		inputUnits	= UnitsOfEnergy that are associated with n
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in our base units
+// Return n:
+//		double specifying n in our base units
 //
 //==========================================================================
-double CONVERT::ReadEnergy(double Value, UNITS_OF_ENERGY InputUnits) const
+double Convert::ReadEnergy(double n, UnitsOfEnergy inputUnits) const
 {
 	// Do the conversion
-	if (InputUnits == POUND_FORCE_INCH)
-		return Value;
-	else if (InputUnits == POUND_FORCE_FOOT)
-		return FEET_TO_INCH(Value);
-	else if (InputUnits == BRITISH_THERMAL_UNIT)
-		return BTU_TO_LBF_IN(Value);
-	else if (InputUnits == JOULE)
-		return NEWTON_METER_TO_IN_LBF(Value);
-	else if (InputUnits == MILIJOULE)
-		return NEWTON_METER_TO_IN_LBF(Value * 0.001);
-	else if (InputUnits == KILOJOULE)
-		return NEWTON_METER_TO_IN_LBF(Value * 1000.0);
+	if (inputUnits == POUND_FORCE_INCH)
+		return n;
+	else if (inputUnits == POUND_FORCE_FOOT)
+		return FEET_TO_INCH(n);
+	else if (inputUnits == BRITISH_THERMAL_UNIT)
+		return BTU_TO_LBF_IN(n);
+	else if (inputUnits == JOULE)
+		return NEWTON_METER_TO_IN_LBF(n);
+	else if (inputUnits == MILIJOULE)
+		return NEWTON_METER_TO_IN_LBF(n * 0.001);
+	else if (inputUnits == KILOJOULE)
+		return NEWTON_METER_TO_IN_LBF(n * 1000.0);
 	else
 	{
 		// ERROR - We don't know what the units are!
@@ -2388,34 +2389,34 @@ double CONVERT::ReadEnergy(double Value, UNITS_OF_ENERGY InputUnits) const
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ReadTemperature
 //
 // Description:		Converts from the specified units into our base units
 //					(see top of convert_class.h).
 //
 // Input Arguments:
-//		Value		= double to be converted
-//		InputUnits	= UNITS_OF_TEMPERATURE that are associated with Value
+//		n			= double to be converted
+//		inputUnits	= UnitsOfTemperature that are associated with n
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in our base units
+// Return n:
+//		double specifying n in our base units
 //
 //==========================================================================
-double CONVERT::ReadTemperature(double Value, UNITS_OF_TEMPERATURE InputUnits) const
+double Convert::ReadTemperature(double n, UnitsOfTemperature inputUnits) const
 {
 	// Do the conversion
-	if (InputUnits == RANKINE)
-		return Value;
-	else if (InputUnits == FAHRENHEIT)
-		return FAHRENHEIT_TO_RANKINE(Value);
-	else if (InputUnits == CELSIUS)
-		return CELSIUS_TO_RANKINE(Value);
-	else if (InputUnits == KELVIN)
-		return KELVIN_TO_RANKINE(Value);
+	if (inputUnits == RANKINE)
+		return n;
+	else if (inputUnits == FAHRENHEIT)
+		return FAHRENHEIT_TO_RANKINE(n);
+	else if (inputUnits == CELSIUS)
+		return CELSIUS_TO_RANKINE(n);
+	else if (inputUnits == KELVIN)
+		return KELVIN_TO_RANKINE(n);
 	else
 	{
 		// ERROR - We don't know what the units are!
@@ -2424,716 +2425,716 @@ double CONVERT::ReadTemperature(double Value, UNITS_OF_TEMPERATURE InputUnits) c
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ReadAngle
 //
 // Description:		Converts from the default units into our base units
 //					(see top of convert_class.h).
 //
 // Input Arguments:
-//		Value	= double to be converted
+//		n	= double to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in our base units
+// Return n:
+//		double specifying n in our base units
 //
 //==========================================================================
-double CONVERT::ReadAngle(double Value) const
+double Convert::ReadAngle(double n) const
 {
-	return ReadAngle(Value, DefaultAngleUnits);
+	return ReadAngle(n, defaultAngleUnits);
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ReadDistance
 //
 // Description:		Converts from the default units into our base units
 //					(see top of convert_class.h).
 //
 // Input Arguments:
-//		Value	= double to be converted
+//		n	= double to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in our base units
+// Return n:
+//		double specifying n in our base units
 //
 //==========================================================================
-double CONVERT::ReadDistance(double Value) const
+double Convert::ReadDistance(double n) const
 {
-	return ReadDistance(Value, DefaultDistanceUnits);
+	return ReadDistance(n, defaultDistanceUnits);
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ReadArea
 //
 // Description:		Converts from the default units into our base units
 //					(see top of convert_class.h).
 //
 // Input Arguments:
-//		Value	= double to be converted
+//		n	= double to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in our base units
+// Return n:
+//		double specifying n in our base units
 //
 //==========================================================================
-double CONVERT::ReadArea(double Value) const
+double Convert::ReadArea(double n) const
 {
-	return ReadArea(Value, DefaultAreaUnits);
+	return ReadArea(n, defaultAreaUnits);
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ReadForce
 //
 // Description:		Converts from the default units into our base units
 //					(see top of convert_class.h).
 //
 // Input Arguments:
-//		Value	= double to be converted
+//		n	= double to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in our base units
+// Return n:
+//		double specifying n in our base units
 //
 //==========================================================================
-double CONVERT::ReadForce(double Value) const
+double Convert::ReadForce(double n) const
 {
-	return ReadForce(Value, DefaultForceUnits);
+	return ReadForce(n, defaultForceUnits);
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ReadPressure
 //
 // Description:		Converts from the default units into our base units
 //					(see top of convert_class.h).
 //
 // Input Arguments:
-//		Value	= double to be converted
+//		n	= double to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in our base units
+// Return n:
+//		double specifying n in our base units
 //
 //==========================================================================
-double CONVERT::ReadPressure(double Value) const
+double Convert::ReadPressure(double n) const
 {
-	return ReadPressure(Value, DefaultPressureUnits);
+	return ReadPressure(n, defaultPressureUnits);
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ReadMoment
 //
 // Description:		Converts from the default units into our base units
 //					(see top of convert_class.h).
 //
 // Input Arguments:
-//		Value	= double to be converted
+//		n	= double to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in our base units
+// Return n:
+//		double specifying n in our base units
 //
 //==========================================================================
-double CONVERT::ReadMoment(double Value) const
+double Convert::ReadMoment(double n) const
 {
-	return ReadMoment(Value, DefaultMomentUnits);
+	return ReadMoment(n, defaultMomentUnits);
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ReadMass
 //
 // Description:		Converts from the default units into our base units
 //					(see top of convert_class.h).
 //
 // Input Arguments:
-//		Value	= double to be converted
+//		n	= double to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in our base units
+// Return n:
+//		double specifying n in our base units
 //
 //==========================================================================
-double CONVERT::ReadMass(double Value) const
+double Convert::ReadMass(double n) const
 {
-	return ReadMass(Value, DefaultMassUnits);
+	return ReadMass(n, defaultMassUnits);
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ReadVelocity
 //
 // Description:		Converts from the default units into our base units
 //					(see top of convert_class.h).
 //
 // Input Arguments:
-//		Value	= double to be converted
+//		n	= double to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in our base units
+// Return n:
+//		double specifying n in our base units
 //
 //==========================================================================
-double CONVERT::ReadVelocity(double Value) const
+double Convert::ReadVelocity(double n) const
 {
-	return ReadVelocity(Value, DefaultVelocityUnits);
+	return ReadVelocity(n, defaultVelocityUnits);
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ReadAcceleration
 //
 // Description:		Converts from the default units into our base units
 //					(see top of convert_class.h).
 //
 // Input Arguments:
-//		Value	= double to be converted
+//		n	= double to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in our base units
+// Return n:
+//		double specifying n in our base units
 //
 //==========================================================================
-double CONVERT::ReadAcceleration(double Value) const
+double Convert::ReadAcceleration(double n) const
 {
-	return ReadAcceleration(Value, DefaultAccelerationUnits);
+	return ReadAcceleration(n, defaultAccelerationUnits);
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ReadInertia
 //
 // Description:		Converts from the default units into our base units
 //					(see top of convert_class.h).
 //
 // Input Arguments:
-//		Value	= double to be converted
+//		n	= double to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in our base units
+// Return n:
+//		double specifying n in our base units
 //
 //==========================================================================
-double CONVERT::ReadInertia(double Value) const
+double Convert::ReadInertia(double n) const
 {
-	return ReadInertia(Value, DefaultInertiaUnits);
+	return ReadInertia(n, defaultInertiaUnits);
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ReadDensity
 //
 // Description:		Converts from the default units into our base units
 //					(see top of convert_class.h).
 //
 // Input Arguments:
-//		Value	= double to be converted
+//		n	= double to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in our base units
+// Return n:
+//		double specifying n in our base units
 //
 //==========================================================================
-double CONVERT::ReadDensity(double Value) const
+double Convert::ReadDensity(double n) const
 {
-	return ReadDensity(Value, DefaultDensityUnits);
+	return ReadDensity(n, defaultDensityUnits);
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ReadPower
 //
 // Description:		Converts from the default units into our base units
 //					(see top of convert_class.h).
 //
 // Input Arguments:
-//		Value	= double to be converted
+//		n	= double to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in our base units
+// Return n:
+//		double specifying n in our base units
 //
 //==========================================================================
-double CONVERT::ReadPower(double Value) const
+double Convert::ReadPower(double n) const
 {
-	return ReadPower(Value, DefaultPowerUnits);
+	return ReadPower(n, defaultPowerUnits);
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ReadEnergy
 //
 // Description:		Converts from the default units into our base units
 //					(see top of convert_class.h).
 //
 // Input Arguments:
-//		Value	= double to be converted
+//		n	= double to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in our base units
+// Return n:
+//		double specifying n in our base units
 //
 //==========================================================================
-double CONVERT::ReadEnergy(double Value) const
+double Convert::ReadEnergy(double n) const
 {
-	return ReadEnergy(Value, DefaultEnergyUnits);
+	return ReadEnergy(n, defaultEnergyUnits);
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ReadTemperature
 //
 // Description:		Converts from the default units into our base units
 //					(see top of convert_class.h).
 //
 // Input Arguments:
-//		Value	= double to be converted
+//		n	= double to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		double specifying Value in our base units
+// Return n:
+//		double specifying n in our base units
 //
 //==========================================================================
-double CONVERT::ReadTemperature(double Value) const
+double Convert::ReadTemperature(double n) const
 {
-	return ReadTemperature(Value, DefaultTemperatureUnits);
+	return ReadTemperature(n, defaultTemperatureUnits);
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertAngle
 //
 // Description:		Converts from our base units (see top of convert_class.h)
-//					into the default units.  VECTOR overload.
+//					into the default units.  Vector overload.
 //
 // Input Arguments:
-//		Value	= VECTOR to be converted
+//		v	= Vector to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		VECTOR specifying Value in the default units
+// Return v:
+//		Vector specifying v in the default units
 //
 //==========================================================================
-VECTOR CONVERT::ConvertAngle(VECTOR Value) const
+Vector Convert::ConvertAngle(Vector v) const
 {
-	VECTOR Temp;
+	Vector Temp;
 
-	Temp.X = ConvertAngle(Value.X);
-	Temp.Y = ConvertAngle(Value.Y);
-	Temp.Z = ConvertAngle(Value.Z);
+	Temp.x = ConvertAngle(v.x);
+	Temp.y = ConvertAngle(v.y);
+	Temp.z = ConvertAngle(v.z);
 
 	return Temp;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertDistance
 //
 // Description:		Converts from our base units (see top of convert_class.h)
-//					into the default units.  VECTOR overload.
+//					into the default units.  Vector overload.
 //
 // Input Arguments:
-//		Value	= VECTOR to be converted
+//		v	= Vector to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		VECTOR specifying Value in the default units
+// Return v:
+//		Vector specifying v in the default units
 //
 //==========================================================================
-VECTOR CONVERT::ConvertDistance(VECTOR Value) const
+Vector Convert::ConvertDistance(Vector v) const
 {
-	VECTOR Temp;
+	Vector Temp;
 
-	Temp.X = ConvertDistance(Value.X);
-	Temp.Y = ConvertDistance(Value.Y);
-	Temp.Z = ConvertDistance(Value.Z);
+	Temp.x = ConvertDistance(v.x);
+	Temp.y = ConvertDistance(v.y);
+	Temp.z = ConvertDistance(v.z);
 
 	return Temp;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertArea
 //
 // Description:		Converts from our base units (see top of convert_class.h)
-//					into the default units.  VECTOR overload.
+//					into the default units.  Vector overload.
 //
 // Input Arguments:
-//		Value	= VECTOR to be converted
+//		v	= Vector to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		VECTOR specifying Value in the default units
+// Return v:
+//		Vector specifying v in the default units
 //
 //==========================================================================
-VECTOR CONVERT::ConvertArea(VECTOR Value) const
+Vector Convert::ConvertArea(Vector v) const
 {
-	VECTOR Temp;
+	Vector Temp;
 
-	Temp.X = ConvertArea(Value.X);
-	Temp.Y = ConvertArea(Value.Y);
-	Temp.Z = ConvertArea(Value.Z);
+	Temp.x = ConvertArea(v.x);
+	Temp.y = ConvertArea(v.y);
+	Temp.z = ConvertArea(v.z);
 
 	return Temp;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertForce
 //
 // Description:		Converts from our base units (see top of convert_class.h)
-//					into the default units.  VECTOR overload.
+//					into the default units.  Vector overload.
 //
 // Input Arguments:
-//		Value	= VECTOR to be converted
+//		v	= Vector to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		VECTOR specifying Value in the default units
+// Return v:
+//		Vector specifying v in the default units
 //
 //==========================================================================
-VECTOR CONVERT::ConvertForce(VECTOR Value) const
+Vector Convert::ConvertForce(Vector v) const
 {
-	VECTOR Temp;
+	Vector Temp;
 
-	Temp.X = ConvertForce(Value.X);
-	Temp.Y = ConvertForce(Value.Y);
-	Temp.Z = ConvertForce(Value.Z);
+	Temp.x = ConvertForce(v.x);
+	Temp.y = ConvertForce(v.y);
+	Temp.z = ConvertForce(v.z);
 
 	return Temp;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertPressure
 //
 // Description:		Converts from our base units (see top of convert_class.h)
-//					into the default units.  VECTOR overload.
+//					into the default units.  Vector overload.
 //
 // Input Arguments:
-//		Value	= VECTOR to be converted
+//		v	= Vector to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		VECTOR specifying Value in the default units
+// Return v:
+//		Vector specifying v in the default units
 //
 //==========================================================================
-VECTOR CONVERT::ConvertPressure(VECTOR Value) const
+Vector Convert::ConvertPressure(Vector v) const
 {
-	VECTOR Temp;
+	Vector Temp;
 
-	Temp.X = ConvertPressure(Value.X);
-	Temp.Y = ConvertPressure(Value.Y);
-	Temp.Z = ConvertPressure(Value.Z);
+	Temp.x = ConvertPressure(v.x);
+	Temp.y = ConvertPressure(v.y);
+	Temp.z = ConvertPressure(v.z);
 
 	return Temp;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertMoment
 //
 // Description:		Converts from our base units (see top of convert_class.h)
-//					into the default units.  VECTOR overload.
+//					into the default units.  Vector overload.
 //
 // Input Arguments:
-//		Value	= VECTOR to be converted
+//		v	= Vector to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		VECTOR specifying Value in the default units
+// Return v:
+//		Vector specifying v in the default units
 //
 //==========================================================================
-VECTOR CONVERT::ConvertMoment(VECTOR Value) const
+Vector Convert::ConvertMoment(Vector v) const
 {
-	VECTOR Temp;
+	Vector Temp;
 
-	Temp.X = ConvertMoment(Value.X);
-	Temp.Y = ConvertMoment(Value.Y);
-	Temp.Z = ConvertMoment(Value.Z);
+	Temp.x = ConvertMoment(v.x);
+	Temp.y = ConvertMoment(v.y);
+	Temp.z = ConvertMoment(v.z);
 
 	return Temp;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertMass
 //
 // Description:		Converts from our base units (see top of convert_class.h)
-//					into the default units.  VECTOR overload.
+//					into the default units.  Vector overload.
 //
 // Input Arguments:
-//		Value	= VECTOR to be converted
+//		v	= Vector to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		VECTOR specifying Value in the default units
+// Return v:
+//		Vector specifying v in the default units
 //
 //==========================================================================
-VECTOR CONVERT::ConvertMass(VECTOR Value) const
+Vector Convert::ConvertMass(Vector v) const
 {
-	VECTOR Temp;
+	Vector Temp;
 
-	Temp.X = ConvertMass(Value.X);
-	Temp.Y = ConvertMass(Value.Y);
-	Temp.Z = ConvertMass(Value.Z);
+	Temp.x = ConvertMass(v.x);
+	Temp.y = ConvertMass(v.y);
+	Temp.z = ConvertMass(v.z);
 
 	return Temp;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertVelocity
 //
 // Description:		Converts from our base units (see top of convert_class.h)
-//					into the default units.  VECTOR overload.
+//					into the default units.  Vector overload.
 //
 // Input Arguments:
-//		Value	= VECTOR to be converted
+//		v	= Vector to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		VECTOR specifying Value in the default units
+// Return v:
+//		Vector specifying v in the default units
 //
 //==========================================================================
-VECTOR CONVERT::ConvertVelocity(VECTOR Value) const
+Vector Convert::ConvertVelocity(Vector v) const
 {
-	VECTOR Temp;
+	Vector Temp;
 
-	Temp.X = ConvertVelocity(Value.X);
-	Temp.Y = ConvertVelocity(Value.Y);
-	Temp.Z = ConvertVelocity(Value.Z);
+	Temp.x = ConvertVelocity(v.x);
+	Temp.y = ConvertVelocity(v.y);
+	Temp.z = ConvertVelocity(v.z);
 
 	return Temp;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertAcceleration
 //
 // Description:		Converts from our base units (see top of convert_class.h)
-//					into the default units.  VECTOR overload.
+//					into the default units.  Vector overload.
 //
 // Input Arguments:
-//		Value	= VECTOR to be converted
+//		v	= Vector to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		VECTOR specifying Value in the default units
+// Return v:
+//		Vector specifying v in the default units
 //
 //==========================================================================
-VECTOR CONVERT::ConvertAcceleration(VECTOR Value) const
+Vector Convert::ConvertAcceleration(Vector v) const
 {
-	VECTOR Temp;
+	Vector Temp;
 
-	Temp.X = ConvertAcceleration(Value.X);
-	Temp.Y = ConvertAcceleration(Value.Y);
-	Temp.Z = ConvertAcceleration(Value.Z);
+	Temp.x = ConvertAcceleration(v.x);
+	Temp.y = ConvertAcceleration(v.y);
+	Temp.z = ConvertAcceleration(v.z);
 
 	return Temp;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertInertia
 //
 // Description:		Converts from our base units (see top of convert_class.h)
-//					into the default units.  VECTOR overload.
+//					into the default units.  Vector overload.
 //
 // Input Arguments:
-//		Value	= VECTOR to be converted
+//		v	= Vector to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		VECTOR specifying Value in the default units
+// Return v:
+//		Vector specifying v in the default units
 //
 //==========================================================================
-VECTOR CONVERT::ConvertInertia(VECTOR Value) const
+Vector Convert::ConvertInertia(Vector v) const
 {
-	VECTOR Temp;
+	Vector Temp;
 
-	Temp.X = ConvertInertia(Value.X);
-	Temp.Y = ConvertInertia(Value.Y);
-	Temp.Z = ConvertInertia(Value.Z);
+	Temp.x = ConvertInertia(v.x);
+	Temp.y = ConvertInertia(v.y);
+	Temp.z = ConvertInertia(v.z);
 
 	return Temp;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertDensity
 //
 // Description:		Converts from our base units (see top of convert_class.h)
-//					into the default units.  VECTOR overload.
+//					into the default units.  Vector overload.
 //
 // Input Arguments:
-//		Value	= VECTOR to be converted
+//		v	= Vector to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		VECTOR specifying Value in the default units
+// Return v:
+//		Vector specifying v in the default units
 //
 //==========================================================================
-VECTOR CONVERT::ConvertDensity(VECTOR Value) const
+Vector Convert::ConvertDensity(Vector v) const
 {
-	VECTOR Temp;
+	Vector Temp;
 
-	Temp.X = ConvertDensity(Value.X);
-	Temp.Y = ConvertDensity(Value.Y);
-	Temp.Z = ConvertDensity(Value.Z);
+	Temp.x = ConvertDensity(v.x);
+	Temp.y = ConvertDensity(v.y);
+	Temp.z = ConvertDensity(v.z);
 
 	return Temp;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertPower
 //
 // Description:		Converts from our base units (see top of convert_class.h)
-//					into the default units.  VECTOR overload.
+//					into the default units.  Vector overload.
 //
 // Input Arguments:
-//		Value	= VECTOR to be converted
+//		v	= Vector to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		VECTOR specifying Value in the default units
+// Return v:
+//		Vector specifying v in the default units
 //
 //==========================================================================
-VECTOR CONVERT::ConvertPower(VECTOR Value) const
+Vector Convert::ConvertPower(Vector v) const
 {
-	VECTOR Temp;
+	Vector Temp;
 
-	Temp.X = ConvertPower(Value.X);
-	Temp.Y = ConvertPower(Value.Y);
-	Temp.Z = ConvertPower(Value.Z);
+	Temp.x = ConvertPower(v.x);
+	Temp.y = ConvertPower(v.y);
+	Temp.z = ConvertPower(v.z);
 
 	return Temp;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertEnergy
 //
 // Description:		Converts from our base units (see top of convert_class.h)
-//					into the default units.  VECTOR overload.
+//					into the default units.  Vector overload.
 //
 // Input Arguments:
-//		Value	= VECTOR to be converted
+//		v	= Vector to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		VECTOR specifying Value in the default units
+// Return v:
+//		Vector specifying v in the default units
 //
 //==========================================================================
-VECTOR CONVERT::ConvertEnergy(VECTOR Value) const
+Vector Convert::ConvertEnergy(Vector v) const
 {
-	VECTOR Temp;
+	Vector Temp;
 
-	Temp.X = ConvertEnergy(Value.X);
-	Temp.Y = ConvertEnergy(Value.Y);
-	Temp.Z = ConvertEnergy(Value.Z);
+	Temp.x = ConvertEnergy(v.x);
+	Temp.y = ConvertEnergy(v.y);
+	Temp.z = ConvertEnergy(v.z);
 
 	return Temp;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		ConvertTemperature
 //
 // Description:		Converts from our base units (see top of convert_class.h)
-//					into the default units.  VECTOR overload.
+//					into the default units.  Vector overload.
 //
 // Input Arguments:
-//		Value	= VECTOR to be converted
+//		v	= Vector to be converted
 //
 // Output Arguments:
 //		None
 //
-// Return Value:
-//		VECTOR specifying Value in the default units
+// Return v:
+//		Vector specifying v in the default units
 //
 //==========================================================================
-VECTOR CONVERT::ConvertTemperature(VECTOR Value) const
+Vector Convert::ConvertTemperature(Vector v) const
 {
-	VECTOR Temp;
+	Vector Temp;
 
-	Temp.X = ConvertTemperature(Value.X);
-	Temp.Y = ConvertTemperature(Value.Y);
-	Temp.Z = ConvertTemperature(Value.Z);
+	Temp.x = ConvertTemperature(v.x);
+	Temp.y = ConvertTemperature(v.y);
+	Temp.z = ConvertTemperature(v.z);
 
 	return Temp;
 }
 
 //==========================================================================
-// Class:			CONVERT
-// Function:		Convert
+// Class:			Convert
+// Function:		ConvertTo
 //
 // Description:		Converts from our base units (see top of convert_class.h)
 //					into the default units for the specified type.  Double
 //					overload.
 //
 // Input Arguments:
-//		Value	= double to be converted
-//		Type	= UNIT_TYPE specifying what kind of value we have
+//		n		= double to be converted
+//		type	= UnitType specifying what kind of value we have
 //
 // Output Arguments:
 //		None
@@ -3142,76 +3143,76 @@ VECTOR CONVERT::ConvertTemperature(VECTOR Value) const
 //		double specifying Value in the default units for Type
 //
 //==========================================================================
-double CONVERT::Convert(double Value, UNIT_TYPE Type) const
+double Convert::ConvertTo(double n, UnitType type) const
 {
-	double ReturnValue;
+	double returnValue;
 
-	switch (Type)
+	switch (type)
 	{
-	case UNIT_TYPE_UNITLESS:
-		ReturnValue = Value;
+	case UnitTypeUnitless:
+		returnValue = n;
 		break;
-	case UNIT_TYPE_ANGLE:
-		ReturnValue = ConvertAngle(Value);
+	case UnitTypeAngle:
+		returnValue = ConvertAngle(n);
 		break;
-	case UNIT_TYPE_DISTANCE:
-		ReturnValue = ConvertDistance(Value);
+	case UnitTypeDistance:
+		returnValue = ConvertDistance(n);
 		break;
-	case UNIT_TYPE_AREA:
-		ReturnValue = ConvertArea(Value);
+	case UnitTypeArea:
+		returnValue = ConvertArea(n);
 		break;
-	case UNIT_TYPE_FORCE:
-		ReturnValue = ConvertForce(Value);
+	case UnitTypeForce:
+		returnValue = ConvertForce(n);
 		break;
-	case UNIT_TYPE_PRESSURE:
-		ReturnValue = ConvertPressure(Value);
+	case UnitTypePressure:
+		returnValue = ConvertPressure(n);
 		break;
-	case UNIT_TYPE_MOMENT:
-		ReturnValue = ConvertMoment(Value);
+	case UnitTypeMoment:
+		returnValue = ConvertMoment(n);
 		break;
-	case UNIT_TYPE_MASS:
-		ReturnValue = ConvertMass(Value);
+	case UnitTypeMass:
+		returnValue = ConvertMass(n);
 		break;
-	case UNIT_TYPE_VELOCITY:
-		ReturnValue = ConvertVelocity(Value);
+	case UnitTypeVelocity:
+		returnValue = ConvertVelocity(n);
 		break;
-	case UNIT_TYPE_ACCELERATION:
-		ReturnValue = ConvertAcceleration(Value);
+	case UnitTypeAcceleration:
+		returnValue = ConvertAcceleration(n);
 		break;
-	case UNIT_TYPE_INERTIA:
-		ReturnValue = ConvertInertia(Value);
+	case UnitTypeInertia:
+		returnValue = ConvertInertia(n);
 		break;
-	case UNIT_TYPE_DENSITY:
-		ReturnValue = ConvertDensity(Value);
+	case UnitTypeDensity:
+		returnValue = ConvertDensity(n);
 		break;
-	case UNIT_TYPE_POWER:
-		ReturnValue = ConvertPower(Value);
+	case UnitTypePower:
+		returnValue = ConvertPower(n);
 		break;
-	case UNIT_TYPE_ENERGY:
-		ReturnValue = ConvertEnergy(Value);
+	case UnitTypeEnergy:
+		returnValue = ConvertEnergy(n);
 		break;
-	case UNIT_TYPE_TEMPERATURE:
-		ReturnValue = ConvertTemperature(Value);
+	case UnitTypeTemperature:
+		returnValue = ConvertTemperature(n);
 		break;
 	default:
 		assert(0);
-		ReturnValue = 0.0;// To avoid MSVC++ compiler warning C4701
+		returnValue = 0.0;// To avoid MSVC++ compiler warning C4701
 		break;
 	}
 
-	return ReturnValue;
+	return returnValue;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		Read
 //
 // Description:		Converts from the default units for the specified type to
 //					our base units.  Double overload.
 //
 // Input Arguments:
-//		Value	= double to be converted
-//		Type	= UNIT_TYPE specifying what kind of value we have
+//		n	= double to be converted
+//		type	= UnitType specifying what kind of value we have
 //
 // Output Arguments:
 //		None
@@ -3220,75 +3221,75 @@ double CONVERT::Convert(double Value, UNIT_TYPE Type) const
 //		double specifying Value in the base units for Type
 //
 //==========================================================================
-double CONVERT::Read(double Value, UNIT_TYPE Type) const
+double Convert::Read(double n, UnitType type) const
 {
-	double ReturnValue;
+	double returnValue;
 
-	switch (Type)
+	switch (type)
 	{
-	case UNIT_TYPE_UNITLESS:
-		ReturnValue = Value;
+	case UnitTypeUnitless:
+		returnValue = n;
 		break;
-	case UNIT_TYPE_ANGLE:
-		ReturnValue = ReadAngle(Value);
+	case UnitTypeAngle:
+		returnValue = ReadAngle(n);
 		break;
-	case UNIT_TYPE_DISTANCE:
-		ReturnValue = ReadDistance(Value);
+	case UnitTypeDistance:
+		returnValue = ReadDistance(n);
 		break;
-	case UNIT_TYPE_AREA:
-		ReturnValue = ReadArea(Value);
+	case UnitTypeArea:
+		returnValue = ReadArea(n);
 		break;
-	case UNIT_TYPE_FORCE:
-		ReturnValue = ReadForce(Value);
+	case UnitTypeForce:
+		returnValue = ReadForce(n);
 		break;
-	case UNIT_TYPE_PRESSURE:
-		ReturnValue = ReadPressure(Value);
+	case UnitTypePressure:
+		returnValue = ReadPressure(n);
 		break;
-	case UNIT_TYPE_MOMENT:
-		ReturnValue = ReadMoment(Value);
+	case UnitTypeMoment:
+		returnValue = ReadMoment(n);
 		break;
-	case UNIT_TYPE_MASS:
-		ReturnValue = ReadMass(Value);
+	case UnitTypeMass:
+		returnValue = ReadMass(n);
 		break;
-	case UNIT_TYPE_VELOCITY:
-		ReturnValue = ReadVelocity(Value);
+	case UnitTypeVelocity:
+		returnValue = ReadVelocity(n);
 		break;
-	case UNIT_TYPE_ACCELERATION:
-		ReturnValue = ReadAcceleration(Value);
+	case UnitTypeAcceleration:
+		returnValue = ReadAcceleration(n);
 		break;
-	case UNIT_TYPE_INERTIA:
-		ReturnValue = ReadInertia(Value);
+	case UnitTypeInertia:
+		returnValue = ReadInertia(n);
 		break;
-	case UNIT_TYPE_DENSITY:
-		ReturnValue = ReadDensity(Value);
+	case UnitTypeDensity:
+		returnValue = ReadDensity(n);
 		break;
-	case UNIT_TYPE_POWER:
-		ReturnValue = ReadPower(Value);
+	case UnitTypePower:
+		returnValue = ReadPower(n);
 		break;
-	case UNIT_TYPE_ENERGY:
-		ReturnValue = ReadEnergy(Value);
+	case UnitTypeEnergy:
+		returnValue = ReadEnergy(n);
 		break;
-	case UNIT_TYPE_TEMPERATURE:
-		ReturnValue = ReadTemperature(Value);
+	case UnitTypeTemperature:
+		returnValue = ReadTemperature(n);
 		break;
 	default:
 		assert(0);
-		ReturnValue = 0.0;// To avoid MSVC++ compiler warning C4701
+		returnValue = 0.0;// To avoid MSVC++ compiler warning C4701
 		break;
 	}
 
-	return ReturnValue;
+	return returnValue;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		FormatNumber
 //
 // Description:		Formats a number to a pre-defined number of digits, with
 //					an option for scientific notation and significant digits.
 //
 // Input Arguments:
-//		Value	= double to be formatted
+//		n	= double to be formatted
 //
 // Output Arguments:
 //		None
@@ -3297,72 +3298,72 @@ double CONVERT::Read(double Value, UNIT_TYPE Type) const
 //		wxString containing the formatted number
 //
 //==========================================================================
-wxString CONVERT::FormatNumber(double Value) const
+wxString Convert::FormatNumber(double n) const
 {
 	// Define the number of digits to use
-	int DigitsToUse = NumberOfDigits;
+	int digitsToUse = numberOfDigits;
 
 	// We must show at least one digit - the SetNumberOfDigits() method makes
 	// sure it's at least zero, but we need it to be 1 if significant digits
 	// are being used
-	if (NumberOfDigits < 1 && UseSignificantDigits)
-		DigitsToUse = 1;
+	if (numberOfDigits < 1 && useSignificantDigits)
+		digitsToUse = 1;
 
 	// Compute the order of magnitude
-	int OrderOfMagnitude = (int)log10(fabs(Value));
+	int orderOfMagnitude = (int)log10(fabs(n));
 
 	// If the value is zero, the order of magnitude should be zero, too
-	if (VVASEMath::IsZero(Value))
-		OrderOfMagnitude = 0;
-	else if (fabs(Value) < 1.0)
+	if (VVASEMath::IsZero(n))
+		orderOfMagnitude = 0;
+	else if (fabs(n) < 1.0)
 		// If -1 < Value < 1, the order of magnitude must be decremented
-		OrderOfMagnitude--;
+		orderOfMagnitude--;
 
 	// The string we're creating
-	wxString FormattedString;
+	wxString formattedString;
 
 	// Check to see how we should format the number
-	if (UseScientificNotation)
+	if (useScientificNotation)
 	{
 		// Determine if the order of magnitude should have a '+' or '-' sign
 		char Sign = '-';
-		if (OrderOfMagnitude >= 0)
+		if (orderOfMagnitude >= 0)
 			Sign = '+';
 
 		// Create the formatted string to match the format "0.##e+#"
-		FormattedString.Printf("%0.*fe%c%i", DigitsToUse - (int)UseSignificantDigits,
-			Value / pow(10.0, OrderOfMagnitude), Sign, abs(OrderOfMagnitude));
+		formattedString.Printf("%0.*fe%c%i", digitsToUse - (int)useSignificantDigits,
+			n / pow(10.0, orderOfMagnitude), Sign, abs(orderOfMagnitude));
 	}
-	else if (UseSignificantDigits)
+	else if (useSignificantDigits)
 	{
 		// Compute the number of decimal places we will need to display the correct number of
 		// significant digits
 		// NumberOfDecimals is: # of digits - 1 - order of magnitude (even if order of
 		//                      magnitude is negative) = # of digits - order of magnitude - 1
-		int NumberOfDecimals = DigitsToUse - OrderOfMagnitude - 1;
-		if (NumberOfDecimals < 0)
-			NumberOfDecimals = 0;
+		int numberOfDecimals = digitsToUse - orderOfMagnitude - 1;
+		if (numberOfDecimals < 0)
+			numberOfDecimals = 0;
 
 		// Create the formatted string to match the format desired
-		FormattedString.Printf("%0.*f", NumberOfDecimals, floor(Value
-			/ pow(10.0, OrderOfMagnitude - DigitsToUse + 1) + 0.5)
-			* pow(10.0, OrderOfMagnitude - DigitsToUse + 1));
+		formattedString.Printf("%0.*f", numberOfDecimals, floor(n
+			/ pow(10.0, orderOfMagnitude - digitsToUse + 1) + 0.5)
+			* pow(10.0, orderOfMagnitude - digitsToUse + 1));
 	}
 	else// Fixed number of decimal places
 		// Create the formatted string to match the format "0.###"
-		FormattedString.Printf("%0.*f", DigitsToUse, Value);
+		formattedString.Printf("%0.*f", digitsToUse, n);
 
-	return FormattedString;
+	return formattedString;
 }
 
 //==========================================================================
-// Class:			CONVERT
+// Class:			Convert
 // Function:		SetNumberOfDigits
 //
 // Description:		Sets the number of digits to be used in the formatted numbers.
 //
 // Input Arguments:
-//		_NumberOfDigits	= int specifying the number of digits to use when
+//		_numberOfDigits	= int specifying the number of digits to use when
 //						  formatting numbers
 //
 // Output Arguments:
@@ -3372,18 +3373,18 @@ wxString CONVERT::FormatNumber(double Value) const
 //		None
 //
 //==========================================================================
-void CONVERT::SetNumberOfDigits(int _NumberOfDigits)
+void Convert::SetNumberOfDigits(int _numberOfDigits)
 {
 	// Make sure the number of digits is at least 0
-	if (_NumberOfDigits < 0)
-		NumberOfDigits = 0;
+	if (_numberOfDigits < 0)
+		numberOfDigits = 0;
 	// Also check to make sure we're not being asked to show more digits than
 	// a double can represent
-	else if (_NumberOfDigits > DBL_DIG)
-		NumberOfDigits = DBL_DIG;
+	else if (_numberOfDigits > DBL_DIG)
+		numberOfDigits = DBL_DIG;
 	else
 		// Assign the value
-		NumberOfDigits = _NumberOfDigits;
+		numberOfDigits = _numberOfDigits;
 
 	return;
 }

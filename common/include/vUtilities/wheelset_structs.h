@@ -20,36 +20,36 @@
 // VVASE headers
 #include "vMath/vector_class.h"
 
-// WHEEL_SET - four doubles
-struct WHEEL_SET
+// WheelSet - four doubles
+struct WheelSet
 {
-	double RightFront;
-	double LeftFront;
-	double RightRear;
-	double LeftRear;
+	double rightFront;
+	double leftFront;
+	double rightRear;
+	double leftRear;
 };
 
-// VECTOR_SET - four VECTORs
+// VectorSet - four Vectors
 struct VECTOR_SET
 {
-	VECTOR RightFront;
-	VECTOR LeftFront;
-	VECTOR RightRear;
-	VECTOR LeftRear;
+	Vector rightFront;
+	Vector leftFront;
+	Vector rightRear;
+	Vector leftRear;
 };
 
-// FRONT_REAR_INT - two integers
-struct FRONT_REAR_INTEGER
+// FrontRearInteger - two integers
+struct FrontRearInteger
 {
-	int Front;
-	int Rear;
+	int front;
+	int rear;
 };
 
-// FRONT_REAR_DOUBLE - two doubles
-struct FRONT_REAR_DOUBLE
+// FrontRearDouble - two doubles
+struct FrontRearDouble
 {
-	double Front;
-	double Rear;
+	double front;
+	double rear;
 };
 
 #endif// _WHEELSET_STRUCTS_H_
