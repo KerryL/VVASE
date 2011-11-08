@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -12,7 +12,7 @@
 // Author:  K. Loux
 // Description:  Contains class declaration for ENGINE class.
 // History:
-//	3/9/2008	- Changed the structure of the DEBUGGER class, K. Loux.
+//	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
 #ifndef _ENGINE_CLASS_H_
@@ -22,13 +22,13 @@
 #include <iosfwd>// forward declarations of fstream objects
 
 // vUtilites forward declarations
-class DEBUGGER;
+class Debugger;
 
 class ENGINE
 {
 public:
 	// Constructor
-	ENGINE(const DEBUGGER &_Debugger);
+	ENGINE(const Debugger &_debugger);
 	ENGINE(const ENGINE &Engine);
 
 	// Destructor
@@ -47,7 +47,7 @@ public:
 
 private:
 	// Debugger message printing utility
-	const DEBUGGER &Debugger;
+	const Debugger &debugger;
 
 	// The crankshaft speed
 	double CrankshaftSpeed;// [rad/sec]

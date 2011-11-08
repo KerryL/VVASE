@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -19,8 +19,8 @@
 #define _DAMPER3D_CLASS_H_
 
 // VVASE forward declarations
-class VECTOR;
-class COLOR;
+class Vector;
+class Color;
 class CYLINDER;
 class SPHERE;
 
@@ -28,18 +28,18 @@ class DAMPER3D
 {
 public:
 	// Constructor
-	DAMPER3D(RENDER_WINDOW &_Renderer);
+	DAMPER3D(RenderWindow &_Renderer);
 
 	// Destructor
 	~DAMPER3D();
 
 	// Updates the 3D representation of the damper on the screen
-	void Update(const VECTOR &InboardEnd, const VECTOR &OutboardEnd, const double &BodyDiameter,
+	void Update(const Vector &InboardEnd, const Vector &OutboardEnd, const double &BodyDiameter,
 		const double &ShaftDiameter, const double &BodyLength, const int &Resolution,
-		const COLOR &BodyColor, const COLOR &ShaftColor, bool Show);
+		const Color &BodyColor, const Color &ShaftColor, bool Show);
 
 	// Returns true if the passed reference is to an actor from this object
-	bool ContainsThisActor(const PRIMITIVE *Actor);
+	bool ContainsThisActor(const Primitive *Actor);
 
 private:
 	// The damper body

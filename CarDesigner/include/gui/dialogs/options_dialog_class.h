@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -27,26 +27,26 @@ class wxNotebook;
 class wxRadioBox;
 
 // VVASE forward declarations
-class CONVERT;
+class Convert;
 class MAIN_FRAME;
-class DEBUGGER;
+class Debugger;
 
 class OPTIONS_DIALOG : public wxDialog
 {
 public:
 	// Constructor
-	OPTIONS_DIALOG(MAIN_FRAME &_MainFrame, CONVERT &_Converter, KINEMATICS::INPUTS &_KinematicInputs,
-		wxWindowID Id, const wxPoint &Position, DEBUGGER &_Debugger, long Style = wxDEFAULT_DIALOG_STYLE);
+	OPTIONS_DIALOG(MAIN_FRAME &_MainFrame, Convert &_Converter, KINEMATICS::INPUTS &_KinematicInputs,
+		wxWindowID Id, const wxPoint &Position, Debugger &_debugger, long Style = wxDEFAULT_DIALOG_STYLE);
 
 	// Destructor
 	~OPTIONS_DIALOG();
 
 private:
 	// Debugger printing utility
-	DEBUGGER &Debugger;
+	Debugger &Debugger;
 
 	// The object that handles the unit conversions between the input and output
-	CONVERT &Converter;
+	Convert &Converter;
 
 	// The object that contains the options for the kinematic analysis
 	KINEMATICS::INPUTS &KinematicInputs;

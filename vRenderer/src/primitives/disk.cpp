@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -12,7 +12,7 @@
 // Author:  K. Loux
 // Description:  Derived from PRIMITIVE for creating disk objects.
 // History:
-//	6/3/2009	- Modified GenerateGeometry() to make use of openGL matricies for positioning
+//	6/3/2009	- Modified GenerateGeometry() to make use of openGL matrices for positioning
 //				  and orienting the object, K.Loux.
 
 // Local headers

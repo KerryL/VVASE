@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -34,7 +34,7 @@
 // Input Arguments:
 //		_MainFrame	= MAIN_FRAME&, reference to main application object
 //		_Owner		= GUI_CAR&, reference to owner of this object
-//		_Debugger	= const DEBUGGER&, reference to debug printing utility
+//		_debugger	= const Debugger&, reference to debug printing utility
 //
 // Output Arguments:
 //		None
@@ -44,28 +44,28 @@
 //
 //==========================================================================
 APPEARANCE_OPTIONS::APPEARANCE_OPTIONS(MAIN_FRAME &_MainFrame, GUI_CAR &_Owner,
-									   const DEBUGGER &_Debugger) : Debugger(_Debugger),
+									   const Debugger &_debugger) : debugger(_debugger),
 									   MainFrame(_MainFrame), Owner(_Owner)
 {
 	// FIXME:  Read all of these from registry???
 
 	// Assign default colors
-	Color[ColorBackground].Set(0.4, 0.4, 0.9);// Bluish Gray
-	Color[ColorGroundPlane].Set(0.5, 0.5, 0.5, 0.8);// Gray (translucent)
-	Color[ColorHelperOrb].Set(1.0, 0.0, 0.0, 0.5);// Red (translucent)
-	Color[ColorAArm].Set(0.0, 0.0, 1.0);// Blue
-	Color[ColorTieRod].Set(0.2, 0.8, 0.2);// Green
-	Color[ColorUpright].Set(1.0, 0.0, 1.0);// Magenta
-	Color[ColorPushrod].Set(1.0, 1.0, 0.0);// Yellow
-	Color[ColorSwayBar].Set(1.0, 0.0, 0.0);// Red
-	Color[ColorHalfShaft].Set(0.3, 0.2, 0.2);// Brown
-	Color[ColorTire].Set(0.0, 0.0, 0.0, 0.4);// Black (translucent)
-	Color[ColorDamperBody].Set(1.0, 1.0, 0.0);// Yellow
-	Color[ColorDamperShaft].Set(0.5, 0.5, 0.5);// Gray
-	Color[ColorSpring].Set(1.0, 0.5, 0.0, 0.7);// Orange (translucent)
-	Color[ColorRollMarker].Set(0.0, 1.0, 0.0);// Green
-	Color[ColorPitchMarker].Set(1.0, 0.0, 0.0);// Red
-	Color[ColorInstantMarker].Set(1.0, 1.0, 0.0);// Yellow
+	color[ColorBackground].Set(0.4, 0.4, 0.9);// Bluish Gray
+	color[ColorGroundPlane].Set(0.5, 0.5, 0.5, 0.8);// Gray (translucent)
+	color[ColorHelperOrb].Set(1.0, 0.0, 0.0, 0.5);// Red (translucent)
+	color[ColorAArm].Set(0.0, 0.0, 1.0);// Blue
+	color[ColorTieRod].Set(0.2, 0.8, 0.2);// Green
+	color[ColorUpright].Set(1.0, 0.0, 1.0);// Magenta
+	color[ColorPushrod].Set(1.0, 1.0, 0.0);// Yellow
+	color[ColorSwayBar].Set(1.0, 0.0, 0.0);// Red
+	color[ColorHalfShaft].Set(0.3, 0.2, 0.2);// Brown
+	color[ColorTire].Set(0.0, 0.0, 0.0, 0.4);// Black (translucent)
+	color[ColorDamperBody].Set(1.0, 1.0, 0.0);// Yellow
+	color[ColorDamperShaft].Set(0.5, 0.5, 0.5);// Gray
+	color[ColorSpring].Set(1.0, 0.5, 0.0, 0.7);// Orange (translucent)
+	color[ColorRollMarker].Set(0.0, 1.0, 0.0);// Green
+	color[ColorPitchMarker].Set(1.0, 0.0, 0.0);// Red
+	color[ColorInstantMarker].Set(1.0, 1.0, 0.0);// Yellow
 
 	// Assign default visibility flags
 	int i;
@@ -273,7 +273,7 @@ void APPEARANCE_OPTIONS::ShowAppearanceOptionsDialog(void)
 // Description:		Retrieves a string describing the specified color option.
 //
 // Input Arguments:
-//		_Color	= OBJECT_COLOR in which we are intersted
+//		_color	= OBJECT_COLOR in which we are intersted
 //
 // Output Arguments:
 //		None
@@ -282,13 +282,13 @@ void APPEARANCE_OPTIONS::ShowAppearanceOptionsDialog(void)
 //		wxString containing the describing string
 //
 //==========================================================================
-wxString APPEARANCE_OPTIONS::GetColorString(OBJECT_COLOR _Color)
+wxString APPEARANCE_OPTIONS::GetColorString(OBJECT_COLOR _color)
 {
 	// The return value
 	wxString ColorString;
 
 	// Return the appropriate string
-	switch (_Color)
+	switch (_color)
 	{
 	case ColorBackground:
 		ColorString.assign(_T("Background"));
@@ -369,7 +369,7 @@ wxString APPEARANCE_OPTIONS::GetColorString(OBJECT_COLOR _Color)
 // Description:		Retrieves a string describing the specified size option.
 //
 // Input Arguments:
-//		_Size	= OBJECT_SIZE in which we are intersted
+//		_Size	= OBJECT_SIZE in which we are interested
 //
 // Output Arguments:
 //		None
@@ -563,7 +563,7 @@ void APPEARANCE_OPTIONS::Write(std::ofstream *OutFile)
 	OutFile->write((char*)Size, SizeCount * sizeof(double));
 
 	// Write the colors to the stream
-	OutFile->write((char*)Color, ColorCount * sizeof(COLOR));
+	OutFile->write((char*)color, ColorCount * sizeof(Color));
 
 	// Write the resolutions to the stream
 	OutFile->write((char*)Resolution, ResolutionCount * sizeof(int));
@@ -601,7 +601,7 @@ void APPEARANCE_OPTIONS::Read(std::ifstream *InFile, int FileVersion)
 	InFile->read((char*)Size, SizeCount * sizeof(double));
 
 	// Read the colors from the stream
-	InFile->read((char*)Color, ColorCount * sizeof(COLOR));
+	InFile->read((char*)color, ColorCount * sizeof(Color));
 
 	// Read the resolutions from the stream
 	InFile->read((char*)Resolution, ResolutionCount * sizeof(int));

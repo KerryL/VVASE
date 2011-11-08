@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -26,23 +26,23 @@
 class wxString;
 
 // VVASE forward declarations
-class DEBUGGER;
+class Debugger;
 class ITERATION;
 class PLOT_OBJECT;
 class MAIN_FRAME;
-class PRIMITIVE;
+class Primitive;
 
-class PLOT_RENDERER : public RENDER_WINDOW
+class PLOT_RENDERER : public RenderWindow
 {
 public:
 	// Constructor
-	PLOT_RENDERER(MAIN_FRAME &_MainFrame, ITERATION &_DataSource, const DEBUGGER &_Debugger);
+	PLOT_RENDERER(MAIN_FRAME &_MainFrame, ITERATION &_DataSource, const Debugger &_debugger);
 
 	// Destructor
 	~PLOT_RENDERER();
 
 	// Returns true if the selected Actor is part of this object's plot
-	bool IsThisPlotSelected(PRIMITIVE *PickedActor);
+	bool IsThisPlotSelected(Primitive *PickedActor);
 
 	// For writing the rendered image to file
 	void WriteImageFile(wxString PathAndFileName);
@@ -55,7 +55,7 @@ public:
 
 private:
 	// Debugger printing utility
-	const DEBUGGER &Debugger;
+	const Debugger &debugger;
 
 	// Called from the PLOT_RENDERER constructor only in order to initialize the display
 	void CreateActors(void);

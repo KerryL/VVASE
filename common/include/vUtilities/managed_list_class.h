@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -47,7 +47,7 @@ public:
 //
 // Description:		Removes the object at the specified index from the list.
 //
-// Input Argurments:
+// Input Arguments:
 //		index	= const int& specifying the object to remove
 //
 // Output Arguments:
@@ -112,7 +112,7 @@ void ManagedList<T>::Remove(const int &index)
 //
 // Description:		Removes all items in the list.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:

@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -13,7 +13,7 @@
 // Description:  Contains class functionality for drivetrain class.
 // History:
 //	2/24/2008	- Fixed SetNumberOfGears and added delete[] in destructor, K. Loux.
-//	3/9/2008	- Changed the structure of the DEBUGGER class, K. Loux.
+//	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
 // wxWidgets headers
@@ -36,7 +36,7 @@
 // Description:		Constructor for the DRIVETRAIN class.
 //
 // Input Arguments:
-//		_Debugger	= const DEBUGGER& reference to applications debug printing utility
+//		_debugger	= const Debugger& reference to applications debug printing utility
 //
 // Output Arguments:
 //		None
@@ -45,14 +45,14 @@
 //		None
 //
 //==========================================================================
-DRIVETRAIN::DRIVETRAIN(const DEBUGGER &_Debugger) : Debugger(_Debugger)
+DRIVETRAIN::DRIVETRAIN(const Debugger &_debugger) : debugger(_debugger)
 {
 	// Initialize the number of gears to zero
 	NumberOfGears = 0;
 	GearRatio = NULL;
 
 	// Allocate memory for the differential object
-	Differential = new DIFFERENTIAL(Debugger);
+	Differential = new DIFFERENTIAL(debugger);
 
 	// Initialize this object
 	DriveType = DRIVE_REAR_WHEEL;
@@ -75,10 +75,10 @@ DRIVETRAIN::DRIVETRAIN(const DEBUGGER &_Debugger) : Debugger(_Debugger)
 //		None
 //
 //==========================================================================
-DRIVETRAIN::DRIVETRAIN(const DRIVETRAIN &Drivetrain) : Debugger(Drivetrain.Debugger)
+DRIVETRAIN::DRIVETRAIN(const DRIVETRAIN &Drivetrain) : debugger(Drivetrain.debugger)
 {
 	// Initialize the pointers to NULL so we don't get an error when we try to
-	// delete them in the asignment operator method
+	// delete them in the assignment operator method
 	GearRatio = NULL;
 	Differential = NULL;
 
@@ -134,7 +134,7 @@ void DRIVETRAIN::SetNumberOfGears(const short &NumGears)
 	// Make sure we have at least one gear
 	if (NumGears < 1)
 	{
-		Debugger.Print(_T("ERROR:  Must have at least 1 gear!"));
+		debugger.Print(_T("ERROR:  Must have at least 1 gear!"));
 
 		return;
 	}

@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -19,8 +19,8 @@
 #define _TIRE3D_CLASS_H_
 
 // VVASE forward declarations
-class VECTOR;
-class COLOR;
+class Vector;
+class Color;
 class CYLINDER;
 class DISK;
 
@@ -28,18 +28,18 @@ class TIRE3D
 {
 public:
 	// Constructor
-	TIRE3D(RENDER_WINDOW &_Renderer);
+	TIRE3D(RenderWindow &_Renderer);
 
 	// Destructor
 	~TIRE3D();
 
 	// Updates the 3D representation of the tire on the screen
-	void Update(const VECTOR &ContactPatch, const VECTOR &Center, VECTOR OriginalNormal,
-		VECTOR TargetNormal, const double &Width, const double &InsideDiameter,
-		const int &Resolution, const COLOR &Color, bool Show);
+	void Update(const Vector &ContactPatch, const Vector &Center, Vector OriginalNormal,
+		Vector TargetNormal, const double &Width, const double &InsideDiameter,
+		const int &Resolution, const Color &color, bool Show);
 
 	// Returns true if the passed reference is to an actor from this object
-	bool ContainsThisActor(const PRIMITIVE *Actor);
+	bool ContainsThisActor(const Primitive *Actor);
 
 private:
 	// The outer surface of the tire

@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -28,8 +28,8 @@
 class wxCombo;
 
 // VVASE forward declarations
-class DEBUGGER;
-class CONVERT;
+class Debugger;
+class Convert;
 class CORNER;
 class EDIT_SUSPENSION_NOTEBOOK;
 
@@ -38,7 +38,7 @@ class EDIT_CORNER_PANEL : public wxPanel
 public:
 	// Constructor
 	EDIT_CORNER_PANEL(EDIT_SUSPENSION_NOTEBOOK &_Parent, wxWindowID id, const wxPoint& pos,
-		const wxSize& size, const DEBUGGER &_Debugger);
+		const wxSize& size, const Debugger &_debugger);
 
 	// Destructor
 	~EDIT_CORNER_PANEL();
@@ -48,10 +48,10 @@ public:
 
 private:
 	// Debugger message printing utility
-	const DEBUGGER &Debugger;
+	const Debugger &Debugger;
 
 	// The application's converter
-	const CONVERT &Converter;
+	const Convert &Converter;
 
 	// The parent panel
 	EDIT_SUSPENSION_NOTEBOOK &Parent;

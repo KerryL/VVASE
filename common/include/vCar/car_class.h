@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -12,7 +12,7 @@
 // Author:  K. Loux
 // Description:  Contains class declaration for CAR class.
 // History:
-//	3/9/2008	- Changed structure of DEBUGGER class, K. Loux.
+//	3/9/2008	- Changed structure of Debugger class, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
 // Car coordinate system:  (SAE vehicle coordinate system)
@@ -66,7 +66,7 @@ class wxString;
 // vCar forward declarations
 class AERODYNAMICS;
 class BRAKES;
-class DEBUGGER;
+class Debugger;
 class DRIVETRAIN;
 class ENGINE;
 class MASS_PROPERTIES;
@@ -77,7 +77,7 @@ class CAR
 {
 public:
 	// Constructor
-	CAR(const DEBUGGER &_Debugger);
+	CAR(const Debugger &_debugger);
 	CAR(const CAR &Car);
 
 	// Destructor
@@ -114,7 +114,7 @@ public:
 
 private:
 	// Debugger message printing utility
-	const DEBUGGER &Debugger;
+	const Debugger &debugger;
 
 	// File header information
 	struct FILE_HEADER_INFO

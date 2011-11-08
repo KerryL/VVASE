@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -20,22 +20,22 @@
 #define _POINT3D_CLASS_H_
 
 // VVASE forward declarations
-class VECTOR;
-class COLOR;
+class Vector;
+class Color;
 class SPHERE;
 
 class POINT3D
 {
 public:
 	// Constructor
-	POINT3D(RENDER_WINDOW &_Renderer);
+	POINT3D(RenderWindow &_Renderer);
 
 	// Destructor
 	~POINT3D();
 
 	// Updates the 3D representation of the point on the screen
-	void Update(const VECTOR &Position, const double &Diameter, const int &Resolution,
-		const COLOR &Color, bool Show);
+	void Update(const Vector &Position, const double &Diameter, const int &Resolution,
+		const Color &color, bool Show);
 
 private:
 	// The point actor

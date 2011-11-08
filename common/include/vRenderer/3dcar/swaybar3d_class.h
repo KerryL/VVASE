@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -22,26 +22,26 @@
 #include "vCar/suspension_class.h"
 
 // VVASE forward declarations
-class VECTOR;
-class COLOR;
+class Vector;
+class Color;
 class CYLINDER;
 
 class SWAYBAR3D
 {
 public:
 	// Constructor
-	SWAYBAR3D(RENDER_WINDOW &_Renderer);
+	SWAYBAR3D(RenderWindow &_Renderer);
 
 	// Destructor
 	~SWAYBAR3D();
 
 	// Updates the 3D representation of the sway bar on the screen
-	void Update(const VECTOR &RightLink, const VECTOR &LeftLink, const VECTOR &TorsionMemberTopRight,
-		const VECTOR &TorsionMemberBottomLeft, const SUSPENSION::BAR_STYLE &BarStyle,
-		const double &Dimension, const int &Resolution, const COLOR &Color, bool Show);
+	void Update(const Vector &RightLink, const Vector &LeftLink, const Vector &TorsionMemberTopRight,
+		const Vector &TorsionMemberBottomLeft, const SUSPENSION::BAR_STYLE &BarStyle,
+		const double &Dimension, const int &Resolution, const Color &color, bool Show);
 
 	// Returns true if the passed reference is to an actor from this object
-	bool ContainsThisActor(const PRIMITIVE *Actor);
+	bool ContainsThisActor(const Primitive *Actor);
 
 private:
 	// The two torque arms

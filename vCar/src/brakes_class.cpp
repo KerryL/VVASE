@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -12,7 +12,7 @@
 // Author:  K. Loux
 // Description:  Contains class functionality for brakes class.
 // History:
-//	3/9/2008	- Changed the structure of the DEBUGGER class, K. Loux.
+//	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
 // Standard C++ headers
@@ -30,7 +30,7 @@
 // Description:		Constructor for the BRAKES class.
 //
 // Input Arguments:
-//		_Debugger	= const DEBUGGER& reference to applications debug printing utility
+//		_debugger	= const Debugger& reference to applications debug printing utility
 //
 // Output Arguments:
 //		None
@@ -39,7 +39,7 @@
 //		None
 //
 //==========================================================================
-BRAKES::BRAKES(const DEBUGGER &_Debugger) : Debugger(_Debugger)
+BRAKES::BRAKES(const Debugger &_debugger) : debugger(_debugger)
 {
 	// Initialize the class members
 	FrontBrakesInboard = false;
@@ -62,7 +62,7 @@ BRAKES::BRAKES(const DEBUGGER &_Debugger) : Debugger(_Debugger)
 //		None
 //
 //==========================================================================
-BRAKES::BRAKES(const BRAKES &Brakes) : Debugger(Brakes.Debugger)
+BRAKES::BRAKES(const BRAKES &Brakes) : debugger(Brakes.debugger)
 {
 	// Do the copy
 	*this = Brakes;
@@ -133,7 +133,7 @@ void BRAKES::Write(std::ofstream *OutFile) const
 //==========================================================================
 void BRAKES::Read(std::ifstream *InFile, int FileVersion)
 {
-	// Read this object from file accoring to the file version we're using
+	// Read this object from file according to the file version we're using
 	if (FileVersion >= 0)// All versions
 	{
 		InFile->read((char*)&PercentFrontBraking, sizeof(double));

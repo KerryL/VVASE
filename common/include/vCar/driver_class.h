@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -12,20 +12,20 @@
 // Author:  K. Loux
 // Description:  Contains class declaration for DRIVER class.
 // History:
-//	3/9/2008	- Changed the structure of the DEBUGGER class, K. Loux.
+//	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
 #ifndef _DRIVER_CLASS_H_
 #define _DRIVER_CLASS_H_
 
 // vUtilities forward declarations
-class DEBUGGER;
+class Debugger;
 
 class DRIVER
 {
 public:
 	// Constructor
-	DRIVER(const DEBUGGER &_Debugger);
+	DRIVER(const Debugger &_debugger);
 	DRIVER(const DRIVER &Driver);
 
 	// Destructor
@@ -52,7 +52,7 @@ public:
 
 private:
 	// Debugger message printing utility
-	const DEBUGGER &Debugger;
+	const Debugger &debugger;
 
 	// The driver's inputs
 	INPUTS DriverInputs;

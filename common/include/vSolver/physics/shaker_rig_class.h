@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -19,13 +19,13 @@
 #define _SHAKER_RIG_CLASS_H_
 
 // CarDesigner forward declarations
-class DEBUGGER;
+class Debugger;
 
 class SHAKER_RIG
 {
 public:
 	// Constructor
-	SHAKER_RIG(const DEBUGGER &_Debugger);
+	SHAKER_RIG(const Debugger &_debugger);
 	SHAKER_RIG(const SHAKER_RIG &ShakerRig);
 
 	// Destructor
@@ -36,7 +36,7 @@ public:
 
 private:
 	// Debugger message printing utility
-	const DEBUGGER &Debugger;
+	const Debugger &debugger;
 };
 
 #endif// _SHAKER_RIG_CLASS_H_

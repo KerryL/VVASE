@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -29,8 +29,8 @@ class wxNotebook;
 
 // VVASE forward declarations
 class MAIN_FRAME;
-class CONVERT;
-class COLOR;
+class Convert;
+class Color;
 
 class APPEARANCE_OPTIONS_DIALOG : public wxDialog
 {
@@ -47,13 +47,13 @@ private:
 	void CreateControls(void);
 
 	// The object that handles the unit conversions between the input and output
-	const CONVERT &Converter;
+	const Convert &converter;
 
 	// The object to edit
 	APPEARANCE_OPTIONS *Options;
 
 	// A copy of the color array
-	COLOR ColorOptions[APPEARANCE_OPTIONS::ColorCount];
+	Color ColorOptions[APPEARANCE_OPTIONS::ColorCount];
 
 	// The event IDs
 	enum EVENT_ID

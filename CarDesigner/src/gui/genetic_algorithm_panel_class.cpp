@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -396,7 +396,7 @@ void GENETIC_ALGORITHM_PANEL::AddGeneButtonClickedEvent(wxCommandEvent& WXUNUSED
 {
 	// Create the dialog box with default gene properties
 	GA_GENE_DIALOG GeneDialog(static_cast<wxWindow*>(&MainFrame), Converter, (CORNER::HARDPOINTS)0,
-		(CORNER::HARDPOINTS)0, (VECTOR::AXIS)0, (CORNER::LOCATION)0, 0.0, 1.0, 5, wxID_ANY, wxDefaultPosition);
+		(CORNER::HARDPOINTS)0, (Vector::Axis)0, (CORNER::LOCATION)0, 0.0, 1.0, 5, wxID_ANY, wxDefaultPosition);
 
 	// Display the dialog
 	if (GeneDialog.ShowModal() == wxOK)
@@ -884,7 +884,7 @@ void GENETIC_ALGORITHM_PANEL::UpdateGeneList(void)
 			GeneList->SetCellValue(i, 1, _T("None"));
 		else
 			GeneList->SetCellValue(i, 1, CORNER::GetHardpointName(Optimization.GetAlgorithm().GetGene(i).TiedTo));
-		GeneList->SetCellValue(i, 2, VECTOR::GetAxisName(Optimization.GetAlgorithm().GetGene(i).Direction));
+		GeneList->SetCellValue(i, 2, Vector::GetAxisName(Optimization.GetAlgorithm().GetGene(i).Direction));
 		GeneList->SetCellValue(i, 3, Converter.FormatNumber(
 			Converter.ConvertDistance(Optimization.GetAlgorithm().GetGene(i).Minimum)));
 		GeneList->SetCellValue(i, 4, Converter.FormatNumber(
@@ -942,10 +942,10 @@ void GENETIC_ALGORITHM_PANEL::UpdateGoalList(void)
 		// Here, we make sure we perform the appropriate conversion, depending on the units
 		// of this particular output
 		GoalList->SetCellValue(i, 3, Converter.FormatNumber(
-			Converter.Convert(Optimization.GetAlgorithm().GetGoal(i).DesiredValue,
+			Converter.ConvertTo(Optimization.GetAlgorithm().GetGoal(i).DesiredValue,
 			KINEMATIC_OUTPUTS::GetOutputUnitType(Optimization.GetAlgorithm().GetGoal(i).Output))));
 		GoalList->SetCellValue(i, 4, Converter.FormatNumber(
-			Converter.Convert(Optimization.GetAlgorithm().GetGoal(i).ExpectedDeviation,
+			Converter.ConvertTo(Optimization.GetAlgorithm().GetGoal(i).ExpectedDeviation,
 			KINEMATIC_OUTPUTS::GetOutputUnitType(Optimization.GetAlgorithm().GetGoal(i).Output))));
 
 		// Make the cells read-only and center the text

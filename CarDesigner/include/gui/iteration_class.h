@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -34,15 +34,15 @@
 #include "vSolver/threads/inverse_semaphore_class.h"
 
 // VVASE forward declarations
-class DEBUGGER;
-class CONVERT;
+class Debugger;
+class Convert;
 class CAR;
 
 class ITERATION : public GUI_OBJECT
 {
 public:
 	// Constructor
-	ITERATION(MAIN_FRAME &_MainFrame, const DEBUGGER &_Debugger,
+	ITERATION(MAIN_FRAME &_MainFrame, const Debugger &_debugger,
 		wxString _PathAndFileName = wxEmptyString);
 
 	// Destructor
@@ -165,7 +165,7 @@ public:
 
 private:
 	// The application's conversion object
-	const CONVERT &Converter;
+	const Convert &Converter;
 
 	// This object's start and stop points
 	RANGE Range;
@@ -189,10 +189,10 @@ private:
 
 	// The data for this analysis - we need one list of outputs for every car
 	// Every list of outputs has one entry for every point within our range
-	MANAGED_LIST<MANAGED_LIST< KINEMATIC_OUTPUTS> > OutputLists;
+	ManagedList<ManagedList< KINEMATIC_OUTPUTS> > OutputLists;
 
 	// List of cars that are associated with this analysis
-	OBJECT_LIST<GUI_CAR> AssociatedCars;
+	ObjectList<GUI_CAR> AssociatedCars;
 
 	// Array of working cars to use for the analyses
 	CAR **WorkingCarArray;

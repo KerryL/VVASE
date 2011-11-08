@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -24,7 +24,7 @@
 //
 // Input Arguments:
 //		Parent				= wxWindow&, reference to the main application window
-//		_Converter			= const CONVERT&, reference to conversion utility object
+//		_Converter			= const Convert&, reference to conversion utility object
 //		_Output				= const KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE&
 //		_DesiredValue		= const double&
 //		_ExpectedDeviation	= const double&
@@ -42,7 +42,7 @@
 //		None
 //
 //==========================================================================
-GA_GOAL_DIALOG::GA_GOAL_DIALOG(wxWindow *Parent, const CONVERT &_Converter, const KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE &_Output,
+GA_GOAL_DIALOG::GA_GOAL_DIALOG(wxWindow *Parent, const Convert &_Converter, const KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE &_Output,
 							   const double &_DesiredValue, const double &_ExpectedDeviation, const double &_Importance,
 							   const KINEMATICS::INPUTS &_BeforeInputs, const KINEMATICS::INPUTS &_AfterInputs,
 							   wxWindowID Id, const wxPoint &Position, long Style) :
@@ -207,7 +207,7 @@ void GA_GOAL_DIALOG::CreateControls(void)
 	AfterPitchSpacer = new wxStaticText(this, wxID_STATIC, wxEmptyString, wxDefaultPosition,
 		wxSize(InputColumnWidth / 2 - CellPadding, -1), 0);
 	wxStaticText *PitchUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		Converter.GetUnitType(CONVERT::UNIT_TYPE_ANGLE),
+		Converter.GetUnitType(Convert::UNIT_TYPE_ANGLE),
 		wxDefaultPosition, wxSize(UnitsColumnWidth, -1));
 	PitchInputSizer->Add(PitchLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
 	PitchInputSizer->Add(BeforePitchText, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
@@ -227,7 +227,7 @@ void GA_GOAL_DIALOG::CreateControls(void)
 	AfterRollSpacer = new wxStaticText(this, wxID_STATIC, wxEmptyString, wxDefaultPosition,
 		wxSize(InputColumnWidth / 2 - CellPadding, -1), 0);
 	wxStaticText *RollUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		Converter.GetUnitType(CONVERT::UNIT_TYPE_ANGLE),
+		Converter.GetUnitType(Convert::UNIT_TYPE_ANGLE),
 		wxDefaultPosition, wxSize(UnitsColumnWidth, -1));
 	RollInputSizer->Add(RollLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
 	RollInputSizer->Add(BeforeRollText, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
@@ -247,7 +247,7 @@ void GA_GOAL_DIALOG::CreateControls(void)
 	AfterHeaveSpacer = new wxStaticText(this, wxID_STATIC, wxEmptyString, wxDefaultPosition,
 		wxSize(InputColumnWidth / 2 - CellPadding, -1), 0);
 	wxStaticText *HeaveUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		Converter.GetUnitType(CONVERT::UNIT_TYPE_DISTANCE),
+		Converter.GetUnitType(Convert::UNIT_TYPE_DISTANCE),
 		wxDefaultPosition, wxSize(UnitsColumnWidth, -1));
 	HeaveInputSizer->Add(HeaveLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
 	HeaveInputSizer->Add(BeforeHeaveText, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
@@ -267,7 +267,7 @@ void GA_GOAL_DIALOG::CreateControls(void)
 	AfterSteerSpacer = new wxStaticText(this, wxID_STATIC, wxEmptyString, wxDefaultPosition,
 		wxSize(InputColumnWidth / 2 - CellPadding, -1), 0);
 	wxStaticText *SteerUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		Converter.GetUnitType(CONVERT::UNIT_TYPE_DISTANCE),
+		Converter.GetUnitType(Convert::UNIT_TYPE_DISTANCE),
 		wxDefaultPosition, wxSize(UnitsColumnWidth, -1));
 	SteerInputSizer->Add(SteerLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
 	SteerInputSizer->Add(BeforeSteerText, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);

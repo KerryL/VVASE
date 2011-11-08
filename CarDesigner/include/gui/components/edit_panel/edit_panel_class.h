@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -30,7 +30,7 @@ class wxCheckBox;
 // VVASE forward declarations
 class MAIN_FRAME;
 class MAIN_TREE;
-class DEBUGGER;
+class Debugger;
 class EDIT_AERODYNAMICS_PANEL;
 class EDIT_BRAKES_PANEL;
 class EDIT_DIFFERENTIAL_PANEL;
@@ -46,7 +46,7 @@ class EDIT_PANEL : public wxPanel
 public:
 	// Constructor
 	EDIT_PANEL(MAIN_FRAME &_MainFrame, wxWindowID id, const wxPoint& pos,
-		const wxSize& size, const DEBUGGER &_Debugger);
+		const wxSize& size, const Debugger &_debugger);
 
 	// Destructor
 	~EDIT_PANEL();
@@ -66,7 +66,7 @@ public:
 
 private:
 	// Debugger message printing utility
-	const DEBUGGER &Debugger;
+	const Debugger &Debugger;
 
 	// The parent window
 	MAIN_FRAME &MainFrame;

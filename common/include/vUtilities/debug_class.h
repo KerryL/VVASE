@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -10,7 +10,7 @@
 // File:  debug_class.h
 // Created:  2/24/2008
 // Author:  K. Loux
-// Description:  Contains class declaration for DEBUGGER.  This is a simple class that
+// Description:  Contains class declaration for Debugger.  This is a simple class that
 //				 prints information to a wxTextCtrl.  This cleans up the rest of the program.
 // History:
 //	3/5/2008	- Transformed from function to class and added DEBUG_LEVEL, K. Loux

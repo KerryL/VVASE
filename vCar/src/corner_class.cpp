@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -10,7 +10,7 @@
 // File:  corner_class.cpp
 // Created:  3/23/2008
 // Author:  K. Loux
-// Description:  Contains class functionality for corner class.  This class conatins
+// Description:  Contains class functionality for corner class.  This class contains
 //				 the suspension information for one corner of the car (four instances
 //				 are required to describe the entire suspension).
 // History:
@@ -38,7 +38,7 @@
 // Input Arguments:
 //		_Location	= const LOCATION& describing which corner this object
 //					  represents
-//		_Debugger	= const DEBUGGER& reference to the application's debug
+//		_debugger	= const Debugger& reference to the application's debug
 //					  printing utility
 //
 // Output Arguments:
@@ -48,8 +48,8 @@
 //		None
 //
 //==========================================================================
-CORNER::CORNER(const LOCATION &_Location, const DEBUGGER &_Debugger)
-			   : Location(_Location), Debugger(_Debugger)
+CORNER::CORNER(const LOCATION &_Location, const Debugger &_debugger)
+			   : Location(_Location), debugger(_debugger)
 {
 	// Initialize the hardpoint locations
 	int i;
@@ -349,7 +349,7 @@ void CORNER::ComputeWheelCenter(const double &TireDiameter)
 {
 	// Get the "unperturbed" wheel center from the diameter and the contact patch location
 	Hardpoints[WheelCenter] = Hardpoints[ContactPatch];
-	Hardpoints[WheelCenter].Z = TireDiameter / 2.0;
+	Hardpoints[WheelCenter].z = TireDiameter / 2.0;
 
 	// These next two operations have sign changes depending on which
 	// side of the car this corner is on:
@@ -361,14 +361,14 @@ void CORNER::ComputeWheelCenter(const double &TireDiameter)
 	if (Location == LocationRightFront || Location == LocationRightRear)
 		RotationAngle *= -1.0;
 
-	Hardpoints[WheelCenter].Rotate(Hardpoints[ContactPatch], RotationAngle, VECTOR::AxisX);
+	Hardpoints[WheelCenter].Rotate(Hardpoints[ContactPatch], RotationAngle, Vector::AxisX);
 
 	// Rotate the wheel center about the Z axis for toe effects
 	RotationAngle = StaticToe;
 	if (Location == LocationRightFront || Location == LocationRightRear)
 		RotationAngle *= -1.0;
 
-	Hardpoints[WheelCenter].Rotate(Hardpoints[ContactPatch], RotationAngle, VECTOR::AxisZ);
+	Hardpoints[WheelCenter].Rotate(Hardpoints[ContactPatch], RotationAngle, Vector::AxisZ);
 
 	return;
 }
@@ -402,7 +402,7 @@ void CORNER::Write(std::ofstream *OutFile) const
 	OutFile->write((char*)&ActuationAttachment, sizeof(ACTUATION_ATTACHMENT));
 	OutFile->write((char*)&ActuationType, sizeof(ACTUATION_TYPE));
 	OutFile->write((char*)&Location, sizeof(LOCATION));
-	OutFile->write((char*)Hardpoints, sizeof(VECTOR) * NumberOfHardpoints);
+	OutFile->write((char*)Hardpoints, sizeof(Vector) * NumberOfHardpoints);
 
 	return;
 }
@@ -440,7 +440,7 @@ void CORNER::Read(std::ifstream *InFile, int FileVersion)
 		InFile->read((char*)&ActuationAttachment, sizeof(ACTUATION_ATTACHMENT));
 		InFile->read((char*)&ActuationType, sizeof(ACTUATION_TYPE));
 		InFile->read((char*)&Location, sizeof(LOCATION));
-		InFile->read((char*)Hardpoints, sizeof(VECTOR) * NumberOfHardpoints);
+		InFile->read((char*)Hardpoints, sizeof(Vector) * NumberOfHardpoints);
 	}
 	else
 		assert(0);

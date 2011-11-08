@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -10,9 +10,9 @@
 // File:  sphere.cpp
 // Created:  5/14/2009
 // Author:  K. Loux
-// Description:  Derived from PRIMITIVE for creating spherical objects.
+// Description:  Derived from Primitive for creating spherical objects.
 // History:
-//	6/2/2009	- Modified GenerateGeometry() to make use of openGL matricies for positioning
+//	6/2/2009	- Modified GenerateGeometry() to make use of openGL matrices for positioning
 //				  and orienting the object, K.Loux.
 //	6/2/2009	- Changed maximum resolution from 5 to 3 - it turns out spheres were the cause
 //				  of the dramatic slow-down between VTK and the new code, with the recursive calls
@@ -36,7 +36,7 @@
 // Description:		Constructor for the SPHERE class.
 //
 // Input Arguments:
-//		_RenderWindow	= RENDER_WINDOW& pointing to the object that owns this
+//		_RenderWindow	= RenderWindow& pointing to the object that owns this
 //
 // Output Arguments:
 //		None

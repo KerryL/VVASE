@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -34,7 +34,7 @@
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
-//		_Debugger	= const DEBUGGER& reference to applications debug printing utility
+//		_debugger	= const Debugger& reference to applications debug printing utility
 //
 // Output Arguments:
 //		None
@@ -45,8 +45,8 @@
 //==========================================================================
 EDIT_ITERATION_RANGE_PANEL::EDIT_ITERATION_RANGE_PANEL(EDIT_ITERATION_NOTEBOOK &_Parent,
 													   wxWindowID id, const wxPoint& pos,
-													   const wxSize& size, const DEBUGGER &_Debugger) :
-													   wxPanel(&_Parent, id, pos, size), Debugger(_Debugger),
+													   const wxSize& size, const Debugger &_debugger) :
+													   wxPanel(&_Parent, id, pos, size), Debugger(_debugger),
 													   Converter(_Parent.GetParent().GetMainFrame().GetConverter()),
 													   Parent(_Parent)
 {
@@ -223,7 +223,7 @@ void EDIT_ITERATION_RANGE_PANEL::CreateControls()
 	StartPitchInput = new wxTextCtrl(this, RangeTextBox, wxEmptyString, wxDefaultPosition, wxSize(InputColumnWidth, -1), 0);
 	EndPitchInput = new wxTextCtrl(this, RangeTextBox, wxEmptyString, wxDefaultPosition, wxSize(InputColumnWidth, -1), 0);
 	wxStaticText *PitchUnitsText = new wxStaticText(this, wxID_STATIC,
-		Converter.GetUnitType(CONVERT::UNIT_TYPE_ANGLE), wxDefaultPosition, wxDefaultSize, 0);
+		Converter.GetUnitType(Convert::UNIT_TYPE_ANGLE), wxDefaultPosition, wxDefaultSize, 0);
 	PitchSizer->Add(PitchLabelText, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 	PitchSizer->Add(StartPitchInput, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 	PitchSizer->Add(EndPitchInput, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
@@ -235,7 +235,7 @@ void EDIT_ITERATION_RANGE_PANEL::CreateControls()
 	StartRollInput = new wxTextCtrl(this, RangeTextBox, wxEmptyString, wxDefaultPosition, wxSize(InputColumnWidth, -1), 0);
 	EndRollInput = new wxTextCtrl(this, RangeTextBox, wxEmptyString, wxDefaultPosition, wxSize(InputColumnWidth, -1), 0);
 	wxStaticText *RollUnitsText = new wxStaticText(this, wxID_STATIC,
-		Converter.GetUnitType(CONVERT::UNIT_TYPE_ANGLE), wxDefaultPosition, wxDefaultSize, 0);
+		Converter.GetUnitType(Convert::UNIT_TYPE_ANGLE), wxDefaultPosition, wxDefaultSize, 0);
 	RollSizer->Add(RollLabelText, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 	RollSizer->Add(StartRollInput, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 	RollSizer->Add(EndRollInput, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
@@ -247,7 +247,7 @@ void EDIT_ITERATION_RANGE_PANEL::CreateControls()
 	StartHeaveInput = new wxTextCtrl(this, RangeTextBox, wxEmptyString, wxDefaultPosition, wxSize(InputColumnWidth, -1), 0);
 	EndHeaveInput = new wxTextCtrl(this, RangeTextBox, wxEmptyString, wxDefaultPosition, wxSize(InputColumnWidth, -1), 0);
 	wxStaticText *HeaveUnitsText = new wxStaticText(this, wxID_STATIC,
-		Converter.GetUnitType(CONVERT::UNIT_TYPE_DISTANCE), wxDefaultPosition, wxDefaultSize, 0);
+		Converter.GetUnitType(Convert::UNIT_TYPE_DISTANCE), wxDefaultPosition, wxDefaultSize, 0);
 	HeaveSizer->Add(HeaveLabelText, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 	HeaveSizer->Add(StartHeaveInput, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 	HeaveSizer->Add(EndHeaveInput, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
@@ -259,7 +259,7 @@ void EDIT_ITERATION_RANGE_PANEL::CreateControls()
 	StartSteerInput = new wxTextCtrl(this, RangeTextBox, wxEmptyString, wxDefaultPosition, wxSize(InputColumnWidth, -1), 0);
 	EndSteerInput = new wxTextCtrl(this, RangeTextBox, wxEmptyString, wxDefaultPosition, wxSize(InputColumnWidth, -1), 0);
 	wxStaticText *SteerUnitsText = new wxStaticText(this, wxID_STATIC,
-		Converter.GetUnitType(CONVERT::UNIT_TYPE_DISTANCE), wxDefaultPosition, wxDefaultSize, 0);
+		Converter.GetUnitType(Convert::UNIT_TYPE_DISTANCE), wxDefaultPosition, wxDefaultSize, 0);
 	SteerSizer->Add(SteerLabelText, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 	SteerSizer->Add(StartSteerInput, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 	SteerSizer->Add(EndSteerInput, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);

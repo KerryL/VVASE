@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -12,7 +12,7 @@
 // Author:  K. Loux
 // Description:  Contains class declaration for DYNAMIC_SIMULATION class.
 // History:
-//	3/9/2008	- Changed the structure of the DEBUGGER class, K. Loux.
+//	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
 
 #ifndef _DYNAMICS_CLASS_H_
 #define _DYNAMICS_CLASS_H_
@@ -23,26 +23,26 @@
 #include "vCar/driver_class.h"
 
 // VVASE forward declarations
-class DEBUGGER;
+class Debugger;
 class DRIVER;
 class INTEGRATOR;
 
 // The outputs from a dynamic simulation
 struct DYNAMIC_OUTPUTS
 {
-	WHEEL_SET AxleTwist;// [rad]
-	WHEEL_SET TireDeflection;// [in]
-	WHEEL_SET ComplianceToe;// [rad]
-	WHEEL_SET ComplianceCamber;// [rad]
-	WHEEL_SET SlipAngle;// [rad]
-	WHEEL_SET SlipRatio;// [-]
+	WheelSet AxleTwist;// [rad]
+	WheelSet TireDeflection;// [in]
+	WheelSet ComplianceToe;// [rad]
+	WheelSet ComplianceCamber;// [rad]
+	WheelSet SlipAngle;// [rad]
+	WheelSet SlipRatio;// [-]
 };
 
 class DYNAMICS
 {
 public:
 	// Constructor
-	DYNAMICS(const DEBUGGER &_Debugger);
+	DYNAMICS(const Debugger &_debugger);
 	DYNAMICS(const DYNAMICS &Dynamics);
 
 	// Destructor
@@ -62,7 +62,7 @@ public:
 
 private:
 	// Debugger message printing utility
-	const DEBUGGER &Debugger;
+	const Debugger &debugger;
 
 	// The states and their derivatives
 	STATE State;

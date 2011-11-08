@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -29,7 +29,7 @@
 //					process necessary to add the object to the scene.
 //
 // Input Arguments:
-//		_Renderer	= RENDER_WINDOW&, pointer to rendering object
+//		_Renderer	= RenderWindow&, pointer to rendering object
 //
 // Output Arguments:
 //		None
@@ -38,7 +38,7 @@
 //		None
 //
 //==========================================================================
-POINT3D::POINT3D(RENDER_WINDOW &_Renderer)
+POINT3D::POINT3D(RenderWindow &_Renderer)
 {
 	// Create the objects
 	Point = new SPHERE(_Renderer);
@@ -72,11 +72,11 @@ POINT3D::~POINT3D()
 //					in the scene.
 //
 // Input Arguments:
-//		Position	= const VECTOR&, location of the point
+//		Position	= const Vector&, location of the point
 //		Diameter	= const double& describing the width of the spring
 //		Resolution	= const integer& representing the number of planar sides to use
 //					  to represent the cylinders
-//		Color		= const COLOR& describing this object's color
+//		color		= const Color& describing this object's color
 //		Show		= bool, visibility flag
 //
 // Output Arguments:
@@ -86,8 +86,8 @@ POINT3D::~POINT3D()
 //		None
 //
 //==========================================================================
-void POINT3D::Update(const VECTOR &Position, const double &Diameter, const int &Resolution,
-					 const COLOR &Color, bool Show)
+void POINT3D::Update(const Vector &Position, const double &Diameter, const int &Resolution,
+					 const Color &color, bool Show)
 {
 	// Make sure all vector arguments are valid - if they are not,
 	// the object will not be made visible
@@ -102,7 +102,7 @@ void POINT3D::Update(const VECTOR &Position, const double &Diameter, const int &
 		return;
 
 	// Set this object's color
-	Point->SetColor(Color);
+	Point->SetColor(color);
 
 	// Set the size and resolution of the point
 	Point->SetRadius(Diameter / 2.0);

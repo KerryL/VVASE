@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -28,7 +28,7 @@
 // VVASE forward declarations
 class GUI_CAR;
 class CAR;
-class DEBUGGER;
+class Debugger;
 class MAIN_FRAME;
 class GENETIC_OPTIMIZATION;
 
@@ -37,7 +37,7 @@ class GA_OBJECT : public GENETIC_ALGORITHM
 public:
 	// Constructor
 	GA_OBJECT(MAIN_FRAME &_MainFrame, GENETIC_OPTIMIZATION &_Optimization,
-		const CONVERT &_Converter, const DEBUGGER &_Debugger);
+		const Convert &_converter, const Debugger &_debugger);
 
 	// Destructor
 	~GA_OBJECT();
@@ -58,7 +58,7 @@ public:
 		CORNER::LOCATION Location;
 
 		// The component of the hardpoint to optimitze
-		VECTOR::AXIS Direction;
+		Vector::Axis Direction;
 
 		// The minimum value for the gene
 		double Minimum;
@@ -93,11 +93,11 @@ public:
 	// For changing what is being optimized
 	void ClearAllGenes(void) { GeneList.Clear(); };
 	void AddGene(const CORNER::HARDPOINTS &Hardpoint, const CORNER::HARDPOINTS &TiedTo,
-		const CORNER::LOCATION &Location, const VECTOR::AXIS &Direction, const double &Minimum,
+		const CORNER::LOCATION &Location, const Vector::Axis &Direction, const double &Minimum,
 		const double &Maximum, const int &NumberOfValues);
 	void RemoveGene(const int &Index) { GeneList.Remove(Index); };
 	void UpdateGene(const int &Index, const CORNER::HARDPOINTS &Hardpoint, const CORNER::HARDPOINTS &TiedTo,
-		const CORNER::LOCATION &Location, const VECTOR::AXIS &Direction, const double &Minimum,
+		const CORNER::LOCATION &Location, const Vector::Axis &Direction, const double &Minimum,
 		const double &Maximum, const int &NumberOfValues);
 	int GetGeneCount(void) const { return GeneList.GetCount(); };
 	const GENE &GetGene(const int &Index) const { return *(GeneList[Index]); };
@@ -118,7 +118,7 @@ public:
 	bool Write(wxString FileName);
 	bool Read(wxString FileName);
 
-	// Accessor for syncronization object
+	// Accessor for synchronization object
 	void MarkAnalysisComplete(void) { InverseSemaphore.Post(); };
 
 	// Gets the number of analyses to be performed for each generation
@@ -132,10 +132,10 @@ public:
 
 private:
 	// Debugger printing utility
-	const DEBUGGER &Debugger;
+	const Debugger &debugger;
 
 	// Application's unit converter
-	const CONVERT &Converter;
+	const Convert &converter;
 
 	// Main application object
 	MAIN_FRAME &MainFrame;
@@ -162,13 +162,13 @@ private:
 	CAR *TargetCar;
 
 	// The list of genes that we're optimizing
-	MANAGED_LIST<GENE> GeneList;
+	ManagedList<GENE> GeneList;
 
 	// The list of goal's we're optimizing to
-	MANAGED_LIST<GOAL> GoalList;
+	ManagedList<GOAL> GoalList;
 
 	// The different input configurations to be run
-	MANAGED_LIST<KINEMATICS::INPUTS> InputList;
+	ManagedList<KINEMATICS::INPUTS> InputList;
 	void DetermineAllInputs(void);
 
 	// Converts a genome into a citizen
@@ -190,7 +190,7 @@ private:
 	void WriteFileHeader(std::ofstream *OutFile);
 	FILE_HEADER_INFO ReadFileHeader(std::ifstream *InFile);
 
-	// Our current file verstion
+	// Our current file version
 	static const int CurrentFileVersion;
 };
 

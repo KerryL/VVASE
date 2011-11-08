@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -18,14 +18,14 @@
 #define _ORIGIN_CLASS_H_
 
 // VVASE forward declarations
-class VECTOR3D;
-class RENDER_WINDOW;
+class Vector3D;
+class RenderWindow;
 
 class ORIGIN
 {
 public:
 	// Constructor
-	ORIGIN(RENDER_WINDOW &_Renderer);
+	ORIGIN(RenderWindow &_Renderer);
 
 	// Destructor
 	~ORIGIN();
@@ -36,9 +36,9 @@ public:
 
 private:
 	// The objects that make up the origin
-	VECTOR3D *XDirection;
-	VECTOR3D *YDirection;
-	VECTOR3D *ZDirection;
+	Vector3D *XDirection;
+	Vector3D *YDirection;
+	Vector3D *ZDirection;
 };
 
 #endif// _ORIGIN_CLASS_H_

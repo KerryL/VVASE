@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -14,7 +14,7 @@
 //				 RENDER_WINDOW, this class is associated with a loaded car file
 //				 and contains the information and methods required to render a car in 3D.
 // History:
-//	3/17/2009	- Changed SetHelperOrbPosition() to take a series of enums rather than a VECTOR to
+//	3/17/2009	- Changed SetHelperOrbPosition() to take a series of enums rather than a Vector to
 //				  allow the position to be taken from the DisplayCar rather than the coordinates
 //				  of the OriginalCar sent from the editing panels, K. Loux.
 //	4/11/2009	- Added call to Renderer->ResetCamera() to constructor to avoid opening a car
@@ -66,7 +66,7 @@
 // Input Arguments:
 //		_MainFrame	= MAIN_FRAME& reference to the owner of this object
 //		_Car		= GUI_CAR& reference to the car that we are to render
-//		_Debugger	= const DEBUGGER&, reference to debug printing utility
+//		_debugger	= const Debugger&, reference to debug printing utility
 //
 // Output Arguments:
 //		None
@@ -75,10 +75,10 @@
 //		None
 //
 //==========================================================================
-CAR_RENDERER::CAR_RENDERER(MAIN_FRAME &_MainFrame, GUI_CAR &_Car, const DEBUGGER &_Debugger)
+CAR_RENDERER::CAR_RENDERER(MAIN_FRAME &_MainFrame, GUI_CAR &_Car, const Debugger &_debugger)
 						   : RENDER_WINDOW(_MainFrame, wxID_ANY, wxDefaultPosition,
 						   wxDefaultSize, wxWANTS_CHARS | wxNO_FULL_REPAINT_ON_RESIZE),
-						   Debugger(_Debugger), MainFrame(_MainFrame),
+						   Debugger(_debugger), MainFrame(_MainFrame),
 						   AppearanceOptions(_Car.GetAppearanceOptions()),
 						   DisplayCar(_Car.GetWorkingCar()), ReferenceCar(_Car.GetOriginalCar())
 {
@@ -92,8 +92,8 @@ CAR_RENDERER::CAR_RENDERER(MAIN_FRAME &_MainFrame, GUI_CAR &_Car, const DEBUGGER
 	HelperOrbIsActive = false;
 
 	// Set the camera view so that the car is visible
-	VECTOR Position(-100.0, -100.0, 60.0), Up(0.0, 0.0, 1.0);
-	VECTOR LookAt(ReferenceCar.Suspension->LeftRear.Hardpoints[CORNER::ContactPatch].X / 2.0, 0.0, 0.0);// FIXME:  This could be better
+	Vector Position(-100.0, -100.0, 60.0), Up(0.0, 0.0, 1.0);
+	Vector LookAt(ReferenceCar.Suspension->LeftRear.Hardpoints[CORNER::ContactPatch].X / 2.0, 0.0, 0.0);// FIXME:  This could be better
 	SetCameraView(Position, LookAt, Up);
 }
 
@@ -251,8 +251,8 @@ void CAR_RENDERER::UpdateDisplay(const KINEMATIC_OUTPUTS &Outputs)
 void CAR_RENDERER::UpdateCarDisplay(void)
 {
 	// For drawing the tire
-	VECTOR TargetNormal;
-	VECTOR OriginalNormal;
+	Vector TargetNormal;
+	Vector OriginalNormal;
 
 	// Get locks on the car's mutexes
 	wxMutexLocker DisplayLock(DisplayCar.GetMutex());
@@ -321,8 +321,8 @@ void CAR_RENDERER::UpdateCarDisplay(void)
 
 	// We also need to account for toe and camber settings for the TargetNormal - apply camber first
 	// NOTE:  This corner is on the right side of the car - we flip the sign on the camber and toe angles
-	TargetNormal.Rotate(-DisplayCar.Suspension->RightFront.StaticCamber, VECTOR::AxisX);
-	TargetNormal.Rotate(-DisplayCar.Suspension->RightFront.StaticToe, VECTOR::AxisZ);
+	TargetNormal.Rotate(-DisplayCar.Suspension->RightFront.StaticCamber, Vector::AxisX);
+	TargetNormal.Rotate(-DisplayCar.Suspension->RightFront.StaticToe, Vector::AxisZ);
 
 	// Now continue with the update for this corner
 	RightFrontLowerAArm->Update(DisplayCar.Suspension->RightFront.Hardpoints[CORNER::LowerFrontTubMount],
@@ -416,8 +416,8 @@ void CAR_RENDERER::UpdateCarDisplay(void)
 							ReferenceCar.Suspension->LeftFront.Hardpoints[CORNER::OutboardTieRod]);
 
 	// We also need to account for toe and camber settings for the TargetNormal - apply camber first
-	TargetNormal.Rotate(DisplayCar.Suspension->LeftFront.StaticCamber, VECTOR::AxisX);
-	TargetNormal.Rotate(DisplayCar.Suspension->LeftFront.StaticToe, VECTOR::AxisZ);
+	TargetNormal.Rotate(DisplayCar.Suspension->LeftFront.StaticCamber, Vector::AxisX);
+	TargetNormal.Rotate(DisplayCar.Suspension->LeftFront.StaticToe, Vector::AxisZ);
 
 	// Now continue with the update for this corner
 	LeftFrontLowerAArm->Update(DisplayCar.Suspension->LeftFront.Hardpoints[CORNER::LowerFrontTubMount],
@@ -519,8 +519,8 @@ void CAR_RENDERER::UpdateCarDisplay(void)
 
 	// We also need to account for toe and camber settings for the TargetNormal - apply camber first
 	// NOTE:  This corner is on the right side of the car - we flip the sign on the camber and toe angles
-	TargetNormal.Rotate(-DisplayCar.Suspension->RightRear.StaticCamber, VECTOR::AxisX);
-	TargetNormal.Rotate(-DisplayCar.Suspension->RightRear.StaticToe, VECTOR::AxisZ);
+	TargetNormal.Rotate(-DisplayCar.Suspension->RightRear.StaticCamber, Vector::AxisX);
+	TargetNormal.Rotate(-DisplayCar.Suspension->RightRear.StaticToe, Vector::AxisZ);
 
 	// Now continue with the update for this corner
 	RightRearLowerAArm->Update(DisplayCar.Suspension->RightRear.Hardpoints[CORNER::LowerFrontTubMount],
@@ -614,8 +614,8 @@ void CAR_RENDERER::UpdateCarDisplay(void)
 							ReferenceCar.Suspension->LeftRear.Hardpoints[CORNER::OutboardTieRod]);
 
 	// We also need to account for toe and camber settings for the TargetNormal - apply camber first
-	TargetNormal.Rotate(DisplayCar.Suspension->LeftRear.StaticCamber, VECTOR::AxisX);
-	TargetNormal.Rotate(DisplayCar.Suspension->LeftRear.StaticToe, VECTOR::AxisZ);
+	TargetNormal.Rotate(DisplayCar.Suspension->LeftRear.StaticCamber, Vector::AxisX);
+	TargetNormal.Rotate(DisplayCar.Suspension->LeftRear.StaticToe, Vector::AxisZ);
 
 	// Now continue with the update for this corner
 	LeftRearLowerAArm->Update(DisplayCar.Suspension->LeftRear.Hardpoints[CORNER::LowerFrontTubMount],
@@ -721,7 +721,7 @@ void CAR_RENDERER::UpdateCarDisplay(void)
 
 	// Update the helper orb
 	// Determine which of the location variables is valid
-	VECTOR HelperOrbPosition(0.0, 0.0, 0.0);
+	Vector HelperOrbPosition(0.0, 0.0, 0.0);
 	if (HelperOrbCornerPoint != CORNER::NumberOfHardpoints)
 	{
 		if (HelperOrbLocation == CORNER::LocationRightFront)
@@ -978,14 +978,14 @@ void CAR_RENDERER::CreateActors(void)
 	RightRearInstantCenter = new POINT3D(*this);
 	LeftRearInstantCenter = new POINT3D(*this);
 
-	FrontRollAxis = new VECTOR3D(*this);
-	RearRollAxis = new VECTOR3D(*this);
-	RightPitchAxis = new VECTOR3D(*this);
-	LeftPitchAxis = new VECTOR3D(*this);
-	RightFrontInstantAxis = new VECTOR3D(*this);
-	LeftFrontInstantAxis = new VECTOR3D(*this);
-	RightRearInstantAxis = new VECTOR3D(*this);
-	LeftRearInstantAxis = new VECTOR3D(*this);
+	FrontRollAxis = new Vector3D(*this);
+	RearRollAxis = new Vector3D(*this);
+	RightPitchAxis = new Vector3D(*this);
+	LeftPitchAxis = new Vector3D(*this);
+	RightFrontInstantAxis = new Vector3D(*this);
+	LeftFrontInstantAxis = new Vector3D(*this);
+	RightRearInstantAxis = new Vector3D(*this);
+	LeftRearInstantAxis = new Vector3D(*this);
 
 	// Helper orb
 	HelperOrb = new POINT3D(*this);

@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -13,7 +13,7 @@
 // Description:  A high-level car object.  This class defines the interaction between
 //				 the GUI and the actual CAR class.
 // History:
-//	7/27/2008	- Switched to an array of TREE_ITEMs with an enum for their indicies instead
+//	7/27/2008	- Switched to an array of TREE_ITEMs with an enum for their indices instead
 //				  of using a new TREE_ITEM for every entry.  This simplifies everything except
 //				  the creation of the items, which doesn't get any more complicated,  K. Loux.
 //	8/18/2008	- Changed name of TREE_ITEM class to GUI_OBJECT, K. Loux.
@@ -39,7 +39,7 @@
 class CAR_RENDERER;
 class CAR;
 class KINEMATICS;
-class DEBUGGER;
+class Debugger;
 class APPEARANCE_OPTIONS;
 
 // wxWidgets forward declarations
@@ -49,7 +49,7 @@ class GUI_CAR : public GUI_OBJECT
 {
 public:
 	// Constructor
-	GUI_CAR(MAIN_FRAME &_MainFrame, const DEBUGGER &_Debugger,
+	GUI_CAR(MAIN_FRAME &_MainFrame, const Debugger &_debugger,
 		wxString _PathAndFileName = wxEmptyString);
 
 	// Destructor

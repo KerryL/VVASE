@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -21,28 +21,28 @@
 #define _AARM_CLASS_H_
 
 // CarDesigner forward declarations
-class RENDER_WINDOW;
-class VECTOR;
-class COLOR;
+class RenderWindow;
+class Vector;
+class Color;
 class SPHERE;
 class CYLINDER;
-class PRIMITIVE;
+class Primitive;
 
 class AARM
 {
 public:
 	// Constructor
-	AARM(RENDER_WINDOW &_Renderer);
+	AARM(RenderWindow &_Renderer);
 
 	// Destructor
 	~AARM();
 
 	// Updates the actor with the new position and size for the a-arm
-	void Update(const VECTOR &End1, const VECTOR &Middle, const VECTOR &End2, const double &Diameter,
-		const int &Resolution, const COLOR &Color, bool Show);
+	void Update(const Vector &End1, const Vector &Middle, const Vector &End2, const double &Diameter,
+		const int &Resolution, const Color &color, bool Show);
 
 	// Returns true if the passed reference is to an actor from this object
-	bool ContainsThisActor(const PRIMITIVE *Actor);
+	bool ContainsThisActor(const Primitive *Actor);
 
 private:
 	// The members

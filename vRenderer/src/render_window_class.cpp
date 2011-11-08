@@ -1,5 +1,5 @@
 /*===================================================================================
-                                    DataPlotter
+                                    CarDesigner
                            Copyright Kerry R. Loux 2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
@@ -38,7 +38,7 @@
 // Description:		Constructor for RenderWindow class.  Initializes the
 //					renderer and sets up the canvas.
 //
-// Input Argurments:
+// Input Arguments:
 //		parent		= wxWindow& reference to the owner of this object
 //		id			= wxWindowID to identify this window
 //		position	= const wxPoint& specifying this object's position
@@ -64,7 +64,7 @@ RenderWindow::RenderWindow(wxWindow &parent, wxWindowID id,
 	// Initialize the frustum parameters
 	AutoSetFrustum();
 
-	// Initialize the transformation matricies
+	// Initialize the transformation matrices
 	modelToView = new Matrix(3, 3);
 	modelToView->MakeIdentity();
 
@@ -89,7 +89,7 @@ RenderWindow::RenderWindow(wxWindow &parent, wxWindowID id,
 // Description:		Destructor for RenderWindow class.  Deletes objects in
 //					the scene and other dynamic variables.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -104,7 +104,7 @@ RenderWindow::~RenderWindow()
 	// Clear out the list of primitives
 	primitiveList.Clear();
 
-	// Delete the transformation matricies
+	// Delete the transformation matrices
 	delete modelToView;
 	modelToView = NULL;
 
@@ -118,7 +118,7 @@ RenderWindow::~RenderWindow()
 //
 // Description:		Event Table for the RENDER_WINDOW class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -150,7 +150,7 @@ END_EVENT_TABLE()
 // Description:		Updates the scene with all of this object's options and
 //					re-draws the image.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -204,7 +204,7 @@ void RenderWindow::Render()
 // Description:		Event handler for the paint event.  Obtains the device
 //					context and re-renders the scene.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxPaintEvent& (UNUSED)
 //
 // Output Arguments:
@@ -231,7 +231,7 @@ void RenderWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
 //
 // Description:		Event handler for the window re-size event.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxSizeEvent&
 //
 // Output Arguments:
@@ -270,7 +270,7 @@ void RenderWindow::OnSize(wxSizeEvent& event)
 //					simply here to override default behaviour which would
 //					cause the screen to flicker.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxEraseEvent& (UNUSED)
 //
 // Output Arguments:
@@ -291,7 +291,7 @@ void RenderWindow::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
 //
 // Description:		Event handler for the enter window event.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxEraseEvent&
 //
 // Output Arguments:
@@ -317,7 +317,7 @@ void RenderWindow::OnEnterWindow(wxMouseEvent &event)
 // Description:		Removes the specified actor from the display list, if it
 //					is in the list.
 //
-// Input Argurments:
+// Input Arguments:
 //		toRemove	= PRIMITVE* pointing to the object to be removed
 //
 // Output Arguments:
@@ -356,7 +356,7 @@ bool RenderWindow::RemoveActor(Primitive *toRemove)
 // Description:		Sets up the renderer's parameters.  Called on startup
 //					and any time an option changes (wireframe vs. polygon, etc.)
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -490,7 +490,7 @@ void RenderWindow::Initialize()
 //
 // Description:		Event handler for the mouse wheel event.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxMouseEvent&
 //
 // Output Arguments:
@@ -516,7 +516,7 @@ void RenderWindow::OnMouseWheelEvent(wxMouseEvent &event)
 //					capture drag events for rotating, panning, or dollying
 //					the scene.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxMouseEvent&
 //
 // Output Arguments:
@@ -592,7 +592,7 @@ void RenderWindow::OnMouseMoveEvent(wxMouseEvent &event)
 //
 // Description:		Performs the specified interaction.
 //
-// Input Argurments:
+// Input Arguments:
 //		interaction	= InteractionType specifying which type of motion to create
 //		event	= wxMouseEvent&
 //
@@ -608,7 +608,7 @@ void RenderWindow::PerformInteraction(InteractionType interaction, wxMouseEvent 
 	// Make this the current open GL window
 	SetCurrent();
 
-	// Update the transformation matricies
+	// Update the transformation matrices
 	UpdateTransformationMatricies();
 
 	// Set the matrix mode to the modelview matrix
@@ -663,7 +663,7 @@ void RenderWindow::PerformInteraction(InteractionType interaction, wxMouseEvent 
 //
 // Description:		Stores the current mouse position to a class member.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxMouseEvent&
 //
 // Output Arguments:
@@ -688,7 +688,7 @@ void RenderWindow::StoreMousePosition(wxMouseEvent &event)
 //
 // Description:		Event handler for a button becoming "unclicked."
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxMouseEvent&
 //
 // Output Arguments:
@@ -713,7 +713,7 @@ void RenderWindow::OnMouseUpEvent(wxMouseEvent& WXUNUSED(event))
 // Description:		Performs the rotate event.  Read through comments below
 //					for more information.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxMouseEvent&
 //
 // Output Arguments:
@@ -779,7 +779,7 @@ void RenderWindow::DoRotate(wxMouseEvent &event)
 //
 // Description:		Performs a dolly event triggered by a mouse wheel roll.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxMouseEvent&
 //
 // Output Arguments:
@@ -823,7 +823,7 @@ void RenderWindow::DoWheelDolly(wxMouseEvent &event)
 //
 // Description:		Performs a dolly event triggered by mouse movement.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxMouseEvent&
 //
 // Output Arguments:
@@ -880,7 +880,7 @@ void RenderWindow::DoDragDolly(wxMouseEvent &event)
 //
 // Description:		Performs a pan event.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxMouseEvent&
 //
 // Output Arguments:
@@ -935,7 +935,7 @@ void RenderWindow::DoPan(wxMouseEvent &event)
 //
 // Description:		Sets the camera view as specified.
 //
-// Input Argurments:
+// Input Arguments:
 //		position	= const Vector& specifying the camera position
 //		lookAt		= const Vector& specifying the object at which the camera
 //					  is to be pointed
@@ -996,7 +996,7 @@ void RenderWindow::SetCameraView(const Vector &position, const Vector &lookAt, c
 // Description:		Returns a vector equivalent to the specified vector
 //					(assumed to be in model coordinates) in view coordinates.
 //
-// Input Argurments:
+// Input Arguments:
 //		ModelVector	= const Vector& to be transformed
 //
 // Output Arguments:
@@ -1018,8 +1018,8 @@ Vector RenderWindow::TransformToView(const Vector &modelVector) const
 // Description:		Returns a vector equivalent to the specified vector
 //					(assumed to be in view coordinates) in model coordinates.
 //
-// Input Argurments:
-//		viewVector	= const VECTOR& to be transformed
+// Input Arguments:
+//		viewVector	= const Vector& to be transformed
 //
 // Output Arguments:
 //		None
@@ -1037,11 +1037,11 @@ Vector RenderWindow::TransformToModel(const Vector &viewVector) const
 // Class:			RenderWindow
 // Function:		UpdateTransformationMatricies
 //
-// Description:		Updates the matricies for transforming from model coordinates
+// Description:		Updates the matrices for transforming from model coordinates
 //					to view coordinates and vice-versa.  Also updates the camera
 //					position variable.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -1058,7 +1058,7 @@ void RenderWindow::UpdateTransformationMatricies(void)
 	glGetDoublev(GL_MODELVIEW_MATRIX, glMatrix);
 	ConvertGLToMatrix(modelViewMatrix, glMatrix);
 
-	// Extract the orientation matricies
+	// Extract the orientation matrices
 	(*modelToView) = modelViewMatrix.GetSubMatrix(0, 0, 3, 3);
 	(*viewToModel) = (*modelToView);
 	viewToModel->GetTranspose();
@@ -1080,7 +1080,7 @@ void RenderWindow::UpdateTransformationMatricies(void)
 //
 // Description:		Updates the view frustum to correctly match the viewport size.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -1125,7 +1125,7 @@ void RenderWindow::AutoSetFrustum(void)
 //
 // Description:		Returns a string describing any openGL errors.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -1186,7 +1186,7 @@ wxString RenderWindow::GetGLError(void) const
 //					different file types are supported, specified by the file
 //					extension.
 //
-// Input Argurments:
+// Input Arguments:
 //		pathAndFileName	= wxString specifying the location to save the image to
 //
 // Output Arguments:
@@ -1236,7 +1236,7 @@ bool RenderWindow::WriteImageToFile(wxString pathAndFileName) const
 //					different file types are supported, specified by the file
 //					extension.
 //
-// Input Argurments:
+// Input Arguments:
 //		pickedObject	= const PRIMITIVE* pointing to the selected primitive
 //
 // Output Arguments:
@@ -1268,7 +1268,7 @@ bool RenderWindow::IsThisRendererSelected(const Primitive *pickedObject) const
 // Description:		Sorts the PrimitiveList by Color.Alpha to ensure that
 //					opaque objects are rendered prior to transparent objects.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -1312,7 +1312,7 @@ void RenderWindow::SortPrimitivesByAlpha(void)
 //					represents the matrix.  Converts to array as required by
 //					OpenGL.
 //
-// Input Argurments:
+// Input Arguments:
 //		matrix	= const Matrix& containing the original data
 //
 // Output Arguments:
@@ -1341,7 +1341,7 @@ void RenderWindow::ConvertMatrixToGL(const Matrix& matrix, double gl[])
 // Description:		Converts from OpenGL array to Matrix type.  Size of matrix
 //					must be set before this call.
 //
-// Input Argurments:
+// Input Arguments:
 //		gl		= double[] in the form expected by OpenGL
 //
 // Output Arguments:

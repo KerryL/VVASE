@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -12,7 +12,7 @@
 // Author:  K. Loux
 // Description:  Derived from PRIMITIVE for creating cylindrical objects.
 // History:
-//	6/2/2009	- modified GenerateGeometry() to make use of openGL matricies for positioning
+//	6/2/2009	- modified GenerateGeometry() to make use of openGL matrices for positioning
 //				  and orienting the object, K.Loux.
 
 // Local headers
@@ -28,7 +28,7 @@
 // Description:		Constructor for the CYLINDER class.
 //
 // Input Arguments:
-//		_RenderWindow	= RENDER_WINDOW& pointing to the object that owns this
+//		_RenderWindow	= RenderWindow& pointing to the object that owns this
 //
 // Output Arguments:
 //		None
@@ -117,7 +117,7 @@ void CYLINDER::GenerateGeometry(void)
 			glRotated(Convert::RAD_TO_DEG(Angle), AxisOfRotation.x, AxisOfRotation.y, AxisOfRotation.z);
 
 		// Create the cylinder along the X-axis (must match the reference direction above)
-		// (the openGL matricies take care of correct position/orientation in hardware)
+		// (the openGL matrices take care of correct position/orientation in hardware)
 		// We'll use a triangle strip to draw the cylinder
 		glBegin(GL_TRIANGLE_STRIP);
 

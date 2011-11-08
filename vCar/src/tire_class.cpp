@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -12,7 +12,7 @@
 // Author:  K. Loux
 // Description:  Contains class definition for tire class.
 // History:
-//	3/9/2008	- Changed the structure of the DEBUGGER class, K. Loux.
+//	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
 // Standard C++ headers
@@ -29,7 +29,7 @@
 // Description:		Constructor for the TIRE class.
 //
 // Input Arguments:
-//		_Debugger	= const DEBUGGER& reference to applications debug printing utility
+//		_debugger	= const Debugger& reference to applications debug printing utility
 //
 // Output Arguments:
 //		None
@@ -38,7 +38,7 @@
 //		None
 //
 //==========================================================================
-TIRE::TIRE(const DEBUGGER &_Debugger) : Debugger(_Debugger)
+TIRE::TIRE(const Debugger &_debugger) : debugger(_debugger)
 {
 }
 
@@ -58,7 +58,7 @@ TIRE::TIRE(const DEBUGGER &_Debugger) : Debugger(_Debugger)
 //		None
 //
 //==========================================================================
-TIRE::TIRE(const TIRE &Tire) : Debugger(Tire.Debugger)
+TIRE::TIRE(const TIRE &Tire) : debugger(Tire.debugger)
 {
 	// Copy from the Tire to this
 	*this = Tire;

@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -21,25 +21,25 @@
 #define _TRIANGLE_CLASS_H_
 
 // VVASE forward declarations
-class VECTOR;
-class COLOR;
+class Vector;
+class Color;
 class TRIANGLE;
 
 class TRIANGLE3D
 {
 public:
 	// Constructor
-	TRIANGLE3D(RENDER_WINDOW &_Renderer);
+	TRIANGLE3D(RenderWindow &_Renderer);
 
 	// Destructor
 	~TRIANGLE3D();
 
 	// Updates the 3D representation of the tire on the screen
-	void Update(const VECTOR &Node1, const VECTOR &Node2, const VECTOR &Node3,
-		const COLOR &Color, bool Show);
+	void Update(const Vector &Node1, const Vector &Node2, const Vector &Node3,
+		const Color &color, bool Show);
 
 	// Returns true if the passed reference is to an actor from this object
-	bool ContainsThisActor(const PRIMITIVE *Actor);
+	bool ContainsThisActor(const Primitive *Actor);
 
 private:
 	// The triangle actor

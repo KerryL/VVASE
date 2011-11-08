@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -39,7 +39,7 @@
 // Input Arguments:
 //		_JobQueue	= JOB_QUEUE*, pointing to the queue from which this
 //					  thread will pull jobs
-//		_Debugger	= DEBUGGER& reference to the application's debugger object
+//		_debugger	= Debugger& reference to the application's debugger object
 //		_Id			= int representing this thread's ID number
 //
 // Output Arguments:
@@ -49,8 +49,8 @@
 //		None
 //
 //==========================================================================
-WORKER_THREAD::WORKER_THREAD(JOB_QUEUE* _JobQueue, DEBUGGER &_Debugger, int _Id)
-							 : Debugger(_Debugger), JobQueue(_JobQueue), Id(_Id)
+WORKER_THREAD::WORKER_THREAD(JOB_QUEUE* _JobQueue, Debugger &_debugger, int _Id)
+							 : debugger(_debugger), JobQueue(_JobQueue), Id(_Id)
 {
 	// Make sure the job queue exists
 	assert(_JobQueue);
@@ -59,7 +59,7 @@ WORKER_THREAD::WORKER_THREAD(JOB_QUEUE* _JobQueue, DEBUGGER &_Debugger, int _Id)
 	wxThread::Create();
 
 	// Create the analysis object
-	KinematicAnalysis = new KINEMATICS(Debugger);
+	KinematicAnalysis = new KINEMATICS(debugger);
 }
 
 //==========================================================================
@@ -71,7 +71,7 @@ WORKER_THREAD::WORKER_THREAD(JOB_QUEUE* _JobQueue, DEBUGGER &_Debugger, int _Id)
 // Input Arguments:
 //		_JobQueue	= JOB_QUEUE*, pointing to the queue from which this
 //					  thread will pull jobs
-//		Debugger	= DEBUGGER& reference to the application's debugger object
+//		Debugger	= Debugger& reference to the application's debugger object
 //		_Id			= int representing this thread's ID number
 //
 // Output Arguments:
@@ -108,7 +108,7 @@ wxThread::ExitCode WORKER_THREAD::Entry(void)
 {
 	THREAD_JOB::THREAD_COMMANDS Error;
 
-	// Tell the main thread that we succesfully started
+	// Tell the main thread that we successfully started
 	JobQueue->Report(THREAD_JOB::COMMAND_THREAD_STARTED, Id);
 
 	// Run the main loop (job handler) until it throws an exception
@@ -184,7 +184,7 @@ void WORKER_THREAD::OnJob()
 		static_cast<OPTIMIZATION_DATA*>(Job.Data)->GeneticAlgorithm->PerformOptimization();
 
 		// Determine elapsed time and print to the screen
-		Debugger.Print(DEBUGGER::PriorityVeryHigh, "Elapsed Time: %s", wxDateTime::UNow().Subtract(Start).Format().c_str());
+		debugger.Print(Debugger::PriorityVeryHigh, "Elapsed Time: %s", wxDateTime::UNow().Subtract(Start).Format().c_str());
 
 		// Tell the main thread that we're done the job
 		JobQueue->Report(Job.Command, Id, Job.Index);

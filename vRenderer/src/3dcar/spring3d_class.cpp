@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -31,7 +31,7 @@
 //					process necessary to add the object to the scene.
 //
 // Input Arguments:
-//		_Renderer	= RENDER_WINDOW&, pointer to rendering object
+//		_Renderer	= RenderWindow&, pointer to rendering object
 //
 // Output Arguments:
 //		None
@@ -40,7 +40,7 @@
 //		None
 //
 //==========================================================================
-SPRING3D::SPRING3D(RENDER_WINDOW &_Renderer)
+SPRING3D::SPRING3D(RenderWindow &_Renderer)
 {
 	// Create the objects
 	Spring = new CYLINDER(_Renderer);
@@ -51,8 +51,8 @@ SPRING3D::SPRING3D(RENDER_WINDOW &_Renderer)
 	Spring->SetCapping(false);
 
 	// Set up the spheres
-	EndPoint1->SetColor(COLOR::ColorWhite);
-	EndPoint2->SetColor(COLOR::ColorWhite);
+	EndPoint1->SetColor(Color::ColorWhite);
+	EndPoint2->SetColor(Color::ColorWhite);
 }
 
 //==========================================================================
@@ -83,13 +83,13 @@ SPRING3D::~SPRING3D()
 //					in the scene.
 //
 // Input Arguments:
-//		End1			= const VECTOR&, location of one end of the spring
-//		End2			= const VECTOR&, location of the other end of the spring
+//		End1			= const Vector&, location of one end of the spring
+//		End2			= const Vector&, location of the other end of the spring
 //		Diameter		= const double& describing the width of the spring
 //		PointDiameter	= const double& describing diameter of the end point actors
 //		Resolution		= const integer& representing the number of planar sides to use
 //						  to represent the cylinders
-//		Color			= const COLOR& describing this object's color
+//		color			= const Color& describing this object's color
 //		Show			= bool, visibility flag
 //
 // Output Arguments:
@@ -99,9 +99,9 @@ SPRING3D::~SPRING3D()
 //		None
 //
 //==========================================================================
-void SPRING3D::Update(const VECTOR &End1, const VECTOR &End2, const double &Diameter,
+void SPRING3D::Update(const Vector &End1, const Vector &End2, const double &Diameter,
 					  const double &PointDiameter, const int &Resolution,
-					  const COLOR &Color, bool Show)
+					  const Color &color, bool Show)
 {
 	// Make sure all vector arguments are valid - if they are not,
 	// the object will not be made visible
@@ -118,7 +118,7 @@ void SPRING3D::Update(const VECTOR &End1, const VECTOR &End2, const double &Diam
 		return;
 
 	// Set this object's color
-	Spring->SetColor(Color);
+	Spring->SetColor(color);
 
 	// Set the size and resolution of the CylinderSource
 	Spring->SetRadius(Diameter / 2.0);
@@ -148,16 +148,16 @@ void SPRING3D::Update(const VECTOR &End1, const VECTOR &End2, const double &Diam
 //					object or not.
 //
 // Input Arguments:
-//		Actor	= const PRIMITIVE* to compare against this object's actors
+//		Actor	= const Primitive* to compare against this object's actors
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		bool representing wether or not the Actor was part of this object
+//		bool representing whether or not the Actor was part of this object
 //
 //==========================================================================
-bool SPRING3D::ContainsThisActor(const PRIMITIVE *Actor)
+bool SPRING3D::ContainsThisActor(const Primitive *Actor)
 {
 	// Make the comparison
 	if (Spring == Actor ||

@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -13,7 +13,7 @@
 // Description:  Contains class declaration for the KINEMATICS class.
 // History:
 //	2/24/2008	- Changed Static from type CAR to SUSPENSION.  Removed DRIVETRAIN object, K. Loux.
-//	3/9/2008	- Changed structure of DEBUGGER class and added input quantites to STATIC_OUTPUTS
+//	3/9/2008	- Changed structure of Debugger class and added input quantites to STATIC_OUTPUTS
 //				  structure, K. Loux.
 //	3/23/2008	- Changed units for class members and functions from degrees to radians and
 //				  renamed class from KINEMATICS.  Also introduce OUTPUTS class and CORNER class
@@ -29,13 +29,12 @@
 
 // VVASE forward declarations
 class CAR;
-//class DEBUGGER;
 
 class KINEMATICS
 {
 public:
 	// Constructor
-	KINEMATICS(const DEBUGGER &_Debugger);
+	KINEMATICS(const Debugger &_debugger);
 
 	// Destructor
 	~KINEMATICS();
@@ -47,8 +46,8 @@ public:
 		double Roll;						// [rad]
 		double Heave;						// [in]
 		double RackTravel;					// [in]
-		VECTOR CenterOfRotation;			// [in]
-		VECTOR::AXIS FirstRotation;
+		Vector CenterOfRotation;			// [in]
+		Vector::Axis FirstRotation;
 
 		// Operators
 		bool operator == (const KINEMATICS::INPUTS &Target) const
@@ -71,8 +70,8 @@ public:
 	inline void SetRoll(const double &Roll) { Inputs.Roll = Roll; };
 	inline void SetHeave(const double &Heave) { Inputs.Heave = Heave; };
 	inline void SetRackTravel(const double &Travel) {Inputs.RackTravel = Travel; };
-	inline void SetCenterOfRotation(const VECTOR &Center) { Inputs.CenterOfRotation = Center; };
-	inline void SetFirstEulerRotation(const VECTOR::AXIS &First) { Inputs.FirstRotation = First; };
+	inline void SetCenterOfRotation(const Vector &Center) { Inputs.CenterOfRotation = Center; };
+	inline void SetFirstEulerRotation(const Vector::Axis &First) { Inputs.FirstRotation = First; };
 	inline void SetInputs(INPUTS _Inputs) { Inputs = _Inputs; };
 
 	// Main work function for this class
@@ -84,13 +83,13 @@ public:
 	inline double GetRoll(void) { return Inputs.Roll; };
 	inline double GetHeave(void) { return Inputs.Heave; };
 	inline double GetRackTravel(void) { return Inputs.RackTravel; };
-	inline VECTOR GetCenterOfRotation(void) { return Inputs.CenterOfRotation; };
-	inline VECTOR::AXIS GetFirstEulerRotation(void) { return Inputs.FirstRotation; };
+	inline Vector GetCenterOfRotation(void) { return Inputs.CenterOfRotation; };
+	inline Vector::Axis GetFirstEulerRotation(void) { return Inputs.FirstRotation; };
 	inline INPUTS GetInputs(void) { return Inputs; };
 
 private:
 	// Debugger message printing utility
-	const DEBUGGER &Debugger;
+	const Debugger &debugger;
 
 	// The inputs to the kinematic solver
 	INPUTS Inputs;
@@ -103,7 +102,7 @@ private:
 
 	// Kinematic solving routine for suspension points at each "corner" of the car
 	bool SolveCorner(CORNER &Corner, const CORNER &Original, 
-		const VECTOR &Rotations, const VECTOR::AXIS &SecondRotation);
+		const Vector &Rotations, const Vector::Axis &SecondRotation);
 
 	// Performs all of the output value calculations (angles, distances, centers, etc.)
 	void UpdateOutputs(void);

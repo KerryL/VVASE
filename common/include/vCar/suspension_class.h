@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -15,7 +15,7 @@
 //	2/24/2008	- Moved half shaft points into here from DRIVETRAIN object, K. Loux.
 //	2/25/2008	- Named BAR_STYLE and ACTUATION_STYLE enums, K. Loux.
 //	3/9/2008	- Moved enumerations inside class structure and changed the structure of the
-//				  DEBUGGER class, K. Loux.
+//				  Debugger class, K. Loux.
 //	3/23/2008	- Changed units for class members and functions from degrees to radians, K. Loux.
 //	2/16/2009	- Changed to use enumeration style array of points instead of having each
 //				  point declared individually, K. Loux.
@@ -40,14 +40,14 @@ class SUSPENSION
 {
 public:
 	// Constructor
-	SUSPENSION(const DEBUGGER &_Debugger);
+	SUSPENSION(const Debugger &_debugger);
 
 	// Destructor
 	~SUSPENSION();
 
 	// For assigning the debugger pointer
 	// (MUST be called before calling other static member functions!)
-	inline static void SetDebugger(const DEBUGGER &_Debugger) { Debugger = &_Debugger; };
+	inline static void SetDebugger(const Debugger &_debugger) { debugger = &_debugger; };
 
 	// File read/write functions
 	void Write(std::ofstream *OutFile) const;
@@ -109,10 +109,10 @@ public:
 	CORNER LeftRear;
 
 	// The hardpoints that are not within the corner
-	VECTOR Hardpoints[NumberOfHardpoints];
+	Vector Hardpoints[NumberOfHardpoints];
 
 	// Suspension parameters
-	FRONT_REAR_DOUBLE BarRate;			// [in-lb/rad]
+	FrontRearDouble BarRate;			// [in-lb/rad]
 	double RackRatio;					// (inches rack travel) / (radians at steering wheel)
 
 	// Flags and styles
@@ -131,13 +131,13 @@ public:
 	DAMPER RearThirdDamper;
 
 	// Kinematic solvers
-	static bool SolveForPoint(const VECTOR &Center1, const VECTOR &Center2, const VECTOR &Center3,
-		const VECTOR &OriginalCenter1, const VECTOR &OriginalCenter2, const VECTOR &OriginalCenter3,
-		const VECTOR &Original, VECTOR &Current);
-	static bool SolveForXY(const VECTOR &Center1, const VECTOR &Center2, const VECTOR &OriginalCenter1,
-		const VECTOR &OriginalCenter2, const VECTOR &Original, VECTOR &Current);
-	static bool SolveForContactPatch(const VECTOR &WheelCenter, const VECTOR &WheelPlaneNormal,
-		const double &TireRadius, VECTOR &Output);
+	static bool SolveForPoint(const Vector &Center1, const Vector &Center2, const Vector &Center3,
+		const Vector &OriginalCenter1, const Vector &OriginalCenter2, const Vector &OriginalCenter3,
+		const Vector &Original, Vector &Current);
+	static bool SolveForXY(const Vector &Center1, const Vector &Center2, const Vector &OriginalCenter1,
+		const Vector &OriginalCenter2, const Vector &Original, Vector &Current);
+	static bool SolveForContactPatch(const Vector &WheelCenter, const Vector &WheelPlaneNormal,
+		const double &TireRadius, Vector &Output);
 
 	// Other functions
 	void MoveSteeringRack(const double &Travel);
@@ -147,7 +147,7 @@ public:
 
 private:
 	// Debugger message printing utility
-	static const DEBUGGER *Debugger;
+	static const Debugger *debugger;
 };
 
 #endif// _SUSPENSION_CLASS_H_

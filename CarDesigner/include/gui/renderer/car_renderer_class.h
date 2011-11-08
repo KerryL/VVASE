@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -15,7 +15,7 @@
 //				 and contains the information and methods required to render a car in 3D.
 // History:
 //	5/17/2009	- Was derived from wxVTKRenderWindowInteractor, switched to custom
-//				  RENDER_WINDOW base class (eliminated dependance on VTK).
+//				  RENDER_WINDOW base class (eliminated dependence on VTK).
 //	11/22/2009	- Moved to vRenderer.lib, K. Loux.
 
 #ifndef _CAR_RENDERER_CLASS_H_
@@ -31,7 +31,7 @@
 class wxString;
 
 // VVASE forward declarations
-class DEBUGGER;
+class Debugger;
 class CAR;
 class AARM;
 class LINK;
@@ -43,17 +43,17 @@ class SPRING3D;
 class SWAYBAR3D;
 class TRIANGLE3D;
 class POINT3D;
-class VECTOR3D;
+class Vector3D;
 class KINEMATIC_OUTPUTS;
 class APPEARANCE_OPTIONS;
 class GUI_CAR;
 class MAIN_FRAME;
 
-class CAR_RENDERER : public RENDER_WINDOW
+class CAR_RENDERER : public RenderWindow
 {
 public:
 	// Constructor
-	CAR_RENDERER(MAIN_FRAME &_MainFrame, GUI_CAR &_Car, const DEBUGGER &_Debugger);
+	CAR_RENDERER(MAIN_FRAME &_MainFrame, GUI_CAR &_Car, const Debugger &_debugger);
 
 	// Destructor
 	~CAR_RENDERER();
@@ -65,7 +65,7 @@ public:
 	void WriteImageFile(wxString PathAndFileName);
 
 	// Returns the type of the selected item, or -1 for no selection
-	bool IsThisCarSelected(const PRIMITIVE *PickedActor, const GUI_OBJECT::ITEM_TYPE *ObjectType) const;
+	bool IsThisCarSelected(const Primitive *PickedActor, const GUI_OBJECT::ITEM_TYPE *ObjectType) const;
 
 	// For accessing the helper orb
 	void SetHelperOrbPosition(const CORNER::HARDPOINTS &CornerPoint, const CORNER::LOCATION &Location,
@@ -74,7 +74,7 @@ public:
 
 private:
 	// Debugger message printing utility
-	const DEBUGGER &Debugger;
+	const Debugger &debugger;
 
 	// For context menus
 	MAIN_FRAME &MainFrame;
@@ -169,14 +169,14 @@ private:
 	POINT3D *RightRearInstantCenter;
 	POINT3D *LeftRearInstantCenter;
 
-	VECTOR3D *FrontRollAxis;
-	VECTOR3D *RearRollAxis;
-	VECTOR3D *RightPitchAxis;
-	VECTOR3D *LeftPitchAxis;
-	VECTOR3D *RightFrontInstantAxis;
-	VECTOR3D *LeftFrontInstantAxis;
-	VECTOR3D *RightRearInstantAxis;
-	VECTOR3D *LeftRearInstantAxis;
+	Vector3D *FrontRollAxis;
+	Vector3D *RearRollAxis;
+	Vector3D *RightPitchAxis;
+	Vector3D *LeftPitchAxis;
+	Vector3D *RightFrontInstantAxis;
+	Vector3D *LeftFrontInstantAxis;
+	Vector3D *RightRearInstantAxis;
+	Vector3D *LeftRearInstantAxis;
 
 	// Helper orb
 	CORNER::HARDPOINTS HelperOrbCornerPoint;

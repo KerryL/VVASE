@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -46,7 +46,7 @@
 // Input Arguments:
 //		_MainFrame			= MAIN_FRAME& pointing to the main frame for
 //							  this application
-//		_Debugger			= const DEBUGGER& reference to the debug message printing
+//		_debugger			= const Debugger& reference to the debug message printing
 //							  utility
 //		_PathAndFileName	= wxString specifying the location to load this
 //							  object from
@@ -58,8 +58,8 @@
 //		None
 //
 //==========================================================================
-GUI_OBJECT::GUI_OBJECT(MAIN_FRAME &_MainFrame, const DEBUGGER &_Debugger,
-					   wxString _PathAndFileName) : Debugger(_Debugger), MainFrame(_MainFrame)
+GUI_OBJECT::GUI_OBJECT(MAIN_FRAME &_MainFrame, const Debugger &_debugger,
+					   wxString _PathAndFileName) : debugger(_debugger), MainFrame(_MainFrame)
 {
 	// Make sure we know that loading is not complete
 	ObjectIsInitialized = false;
@@ -423,7 +423,7 @@ bool GUI_OBJECT::LoadFromFile(void)
 	// Perform the load and check for errors
 	if (!PerformLoadFromFile())
 	{
-		Debugger.Print(_T("ERROR:  Could not read from file '") + PathAndFileName + _T("'!"));
+		debugger.Print(_T("ERROR:  Could not read from file '") + PathAndFileName + _T("'!"));
 
 		// Remove this file from the recent history list
 		MainFrame.RemoveFileFromHistory(PathAndFileName);
@@ -434,8 +434,8 @@ bool GUI_OBJECT::LoadFromFile(void)
 	// Make sure the desired file isn't already open - if it is, return false
 	if (!VerifyUniqueness())
 	{
-		Debugger.Print(_T("Object at '") + PathAndFileName +
-			_T("' already open!"), DEBUGGER::PriorityMedium);
+		debugger.Print(_T("Object at '") + PathAndFileName +
+			_T("' already open!"), Debugger::PriorityMedium);
 
 		return false;
 	}
@@ -444,7 +444,7 @@ bool GUI_OBJECT::LoadFromFile(void)
 	SetName(GetNameFromFileName());
 
 	// Print a message to let the user know we successfully loaded the file
-	Debugger.Print(_T("File loaded from '") + PathAndFileName + _T("'!"), DEBUGGER::PriorityMedium);
+	debugger.Print(_T("File loaded from '") + PathAndFileName + _T("'!"), Debugger::PriorityMedium);
 
 	// Add file to the recent history list
 	MainFrame.AddFileToHistory(PathAndFileName);
@@ -541,7 +541,7 @@ bool GUI_OBJECT::SaveToFile(bool SaveAsNewFileName)
 	// Perform the save and check for errors
 	if (!PerformSaveToFile())
 	{
-		Debugger.Print(_T("ERROR:  Could not save file to '") + PathAndFileName + _T("'!"));
+		debugger.Print(_T("ERROR:  Could not save file to '") + PathAndFileName + _T("'!"));
 
 		return false;
 	}
@@ -550,7 +550,7 @@ bool GUI_OBJECT::SaveToFile(bool SaveAsNewFileName)
 	ModifiedSinceLastSave = false;
 
 	// Print a message to let the user know we successfully saved the file
-	Debugger.Print(_T("File saved to '") + PathAndFileName + _T("'!"), DEBUGGER::PriorityMedium);
+	debugger.Print(_T("File saved to '") + PathAndFileName + _T("'!"), Debugger::PriorityMedium);
 
 	// Remove this object from the undo/redo stacks
 	MainFrame.GetUndoRedoStack().RemoveGuiObjectFromStack(Index);
@@ -594,7 +594,7 @@ void GUI_OBJECT::Render(void)
 //					not.
 //
 // Input Arguments:
-//		PickedObject	= PRIMITIVE* pointing to the selected actor on the active
+//		PickedObject	= Primitive* pointing to the selected actor on the active
 //						  notebook page
 //
 // Output Arguments:
@@ -605,7 +605,7 @@ void GUI_OBJECT::Render(void)
 //			   false otherwise
 //
 //==========================================================================
-bool GUI_OBJECT::IsThisObjectSelected(PRIMITIVE *PickedObject) const
+bool GUI_OBJECT::IsThisObjectSelected(Primitive *PickedObject) const
 {
 	return Renderer->IsThisRendererSelected(PickedObject);
 }

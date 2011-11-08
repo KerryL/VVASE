@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -36,7 +36,7 @@
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
-//		_Debugger	= const DEBUGGER& reference to applications debug printing utility
+//		_debugger	= const Debugger& reference to applications debug printing utility
 //
 // Output Arguments:
 //		None
@@ -47,8 +47,8 @@
 //==========================================================================
 EDIT_MASS_PANEL::EDIT_MASS_PANEL(EDIT_PANEL &_Parent, wxWindowID id,
 								 const wxPoint& pos, const wxSize& size,
-								 const DEBUGGER &_Debugger) : wxPanel(&_Parent, id, pos, size),
-								 Debugger(_Debugger),
+								 const Debugger &_debugger) : wxPanel(&_Parent, id, pos, size),
+								 Debugger(_debugger),
 								 Converter(_Parent.GetMainFrame().GetConverter()),
 								 Parent(_Parent)
 {
@@ -141,9 +141,9 @@ void EDIT_MASS_PANEL::UpdateInformation(MASS_PROPERTIES *_CurrentMassProperties)
 		Converter.ConvertDistance(CurrentMassProperties->CenterOfGravity.Z)));
 
 	// Update the units
-	InertiaUnitsLabel->SetLabel('(' + Converter.GetUnitType(CONVERT::UNIT_TYPE_INERTIA) + ')');
-	MassUnitsLabel->SetLabel('(' + Converter.GetUnitType(CONVERT::UNIT_TYPE_MASS) + ')');
-	CoGUnitsLabel->SetLabel('(' + Converter.GetUnitType(CONVERT::UNIT_TYPE_DISTANCE) + ')');
+	InertiaUnitsLabel->SetLabel('(' + Converter.GetUnitType(Convert::UNIT_TYPE_INERTIA) + ')');
+	MassUnitsLabel->SetLabel('(' + Converter.GetUnitType(Convert::UNIT_TYPE_MASS) + ')');
+	CoGUnitsLabel->SetLabel('(' + Converter.GetUnitType(Convert::UNIT_TYPE_DISTANCE) + ')');
 
 	return;
 }
@@ -296,7 +296,7 @@ void EDIT_MASS_PANEL::TextBoxEditEvent(wxCommandEvent &event)
 	double *DataLocation = NULL;
 
 	// We also need to know what kind of data we're retrieving
-	CONVERT::UNIT_TYPE Units;
+	Convert::UNIT_TYPE Units;
 
 	// A pointer to the text box
 	wxTextCtrl *TextBox = NULL;
@@ -308,70 +308,70 @@ void EDIT_MASS_PANEL::TextBoxEditEvent(wxCommandEvent &event)
 		// Get the text box, the location to write it, and the units
 		TextBox = Ixx;
 		DataLocation = &CurrentMassProperties->Ixx;
-		Units = CONVERT::UNIT_TYPE_INERTIA;
+		Units = Convert::UNIT_TYPE_INERTIA;
 		break;
 
 	case TextBoxIyy:
 		// Get the new data, the location to write it, and the units
 		TextBox = Iyy;
 		DataLocation = &CurrentMassProperties->Iyy;
-		Units = CONVERT::UNIT_TYPE_INERTIA;
+		Units = Convert::UNIT_TYPE_INERTIA;
 		break;
 
 	case TextBoxIzz:
 		// Get the new data, the location to write it, and the units
 		TextBox = Izz;
 		DataLocation = &CurrentMassProperties->Izz;
-		Units = CONVERT::UNIT_TYPE_INERTIA;
+		Units = Convert::UNIT_TYPE_INERTIA;
 		break;
 
 	case TextBoxIxy:
 		// Get the new data, the location to write it, and the units
 		TextBox = Ixy;
 		DataLocation = &CurrentMassProperties->Ixy;
-		Units = CONVERT::UNIT_TYPE_INERTIA;
+		Units = Convert::UNIT_TYPE_INERTIA;
 		break;
 
 	case TextBoxIxz:
 		// Get the new data, the location to write it, and the units
 		TextBox = Ixz;
 		DataLocation = &CurrentMassProperties->Ixz;
-		Units = CONVERT::UNIT_TYPE_INERTIA;
+		Units = Convert::UNIT_TYPE_INERTIA;
 		break;
 
 	case TextBoxIyz:
 		// Get the new data, the location to write it, and the units
 		TextBox = Iyz;
 		DataLocation = &CurrentMassProperties->Iyz;
-		Units = CONVERT::UNIT_TYPE_INERTIA;
+		Units = Convert::UNIT_TYPE_INERTIA;
 		break;
 
 	case TextBoxMass:
 		// Get the new data, the location to write it, and the units
 		TextBox = Mass;
 		DataLocation = &CurrentMassProperties->Mass;
-		Units = CONVERT::UNIT_TYPE_MASS;
+		Units = Convert::UNIT_TYPE_MASS;
 		break;
 
 	case TextBoxCenterOfGravityX:
 		// Get the new data, the location to write it, and the units
 		TextBox = CenterOfGravityX;
 		DataLocation = &CurrentMassProperties->CenterOfGravity.X;
-		Units = CONVERT::UNIT_TYPE_DISTANCE;
+		Units = Convert::UNIT_TYPE_DISTANCE;
 		break;
 
 	case TextBoxCenterOfGravityY:
 		// Get the new data, the location to write it, and the units
 		TextBox = CenterOfGravityY;
 		DataLocation = &CurrentMassProperties->CenterOfGravity.Y;
-		Units = CONVERT::UNIT_TYPE_DISTANCE;
+		Units = Convert::UNIT_TYPE_DISTANCE;
 		break;
 
 	case TextBoxCenterOfGravityZ:
 		// Get the new data, the location to write it, and the units
 		TextBox = CenterOfGravityZ;
 		DataLocation = &CurrentMassProperties->CenterOfGravity.Z;
-		Units = CONVERT::UNIT_TYPE_DISTANCE;
+		Units = Convert::UNIT_TYPE_DISTANCE;
 		break;
 
 	default:

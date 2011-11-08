@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -15,7 +15,7 @@
 //	2/24/2008	- Moved half shaft points from here into SUSPENSION object, K. Loux.
 //	2/25/2008	- Named DRIVE_WHEELS enum, K. Loux.
 //	3/9/2008	- Moved enumerations inside class structure and changed the structure of the
-//				  DEBUGGER class, K. Loux.
+//				  Debugger class, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
 #ifndef _DRIVETRAIN_CLASS_H_
@@ -28,7 +28,7 @@
 #include <wx/wx.h>
 
 // vUtilities forward declarations
-class DEBUGGER;
+class Debugger;
 
 // vCar forward declarations
 class DIFFERENTIAL;
@@ -37,7 +37,7 @@ class DRIVETRAIN
 {
 public:
 	// Constructor
-	DRIVETRAIN(const DEBUGGER &_Debugger);
+	DRIVETRAIN(const Debugger &_debugger);
 	DRIVETRAIN(const DRIVETRAIN &Drivetrain);
 
 	// Destructor
@@ -77,7 +77,7 @@ public:
 
 private:
 	// Debugger message printing utility
-	const DEBUGGER &Debugger;
+	const Debugger &debugger;
 
 	// The differential for this drivetrain
 	DIFFERENTIAL *Differential;

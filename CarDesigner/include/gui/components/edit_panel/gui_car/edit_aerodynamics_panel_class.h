@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -27,14 +27,14 @@ class EDIT_AERODYNAMICS_PANEL : public wxPanel
 public:
 	// Constructor
 	EDIT_AERODYNAMICS_PANEL(EDIT_PANEL* _Parent, wxWindowID id, const wxPoint& pos,
-		const wxSize& size, const DEBUGGER &_Debugger);
+		const wxSize& size, const Debugger &_debugger);
 
 	// Destructor
 	~EDIT_AERODYNAMICS_PANEL();
 
 private:
 	// Debugger message printing utility
-	const DEBUGGER &Debugger;
+	const Debugger &Debugger;
 
 	// Creates the controls and positions everything within the panel
 	void CreateControls(void);

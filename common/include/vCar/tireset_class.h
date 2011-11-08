@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -25,13 +25,13 @@
 class TIRE;
 
 // vUtilities forward declarations
-class DEBUGGER;
+class Debugger;
 
 class TIRE_SET
 {
 public:
 	// Constructor
-	TIRE_SET(const DEBUGGER &_Debugger);
+	TIRE_SET(const Debugger &_debugger);
 	TIRE_SET(const TIRE_SET &TireSet);
 
 	// Destructor
@@ -52,7 +52,7 @@ public:
 
 private:
 	// Debugger message printing utility
-	const DEBUGGER &Debugger;
+	const Debugger &debugger;
 };
 
 #endif// _TIRESET_CLASS_H_

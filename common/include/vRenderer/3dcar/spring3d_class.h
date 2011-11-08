@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -19,8 +19,8 @@
 #define _SPRING3D_CLASS_H_
 
 // VVASE forward declarations
-class VECTOR;
-class COLOR;
+class Vector;
+class Color;
 class CYLINDER;
 class SPHERE;
 
@@ -28,17 +28,17 @@ class SPRING3D
 {
 public:
 	// Constructor
-	SPRING3D(RENDER_WINDOW &_Renderer);
+	SPRING3D(RenderWindow &_Renderer);
 
 	// Destructor
 	~SPRING3D();
 
 	// Updates the 3D representation of the spring on the screen
-	void Update(const VECTOR &End1, const VECTOR &End2, const double &Diameter,
-		const double &PointDiameter, const int &Resolution, const COLOR &Color, bool Show);
+	void Update(const Vector &End1, const Vector &End2, const double &Diameter,
+		const double &PointDiameter, const int &Resolution, const Color &color, bool Show);
 
 	// Returns true if the passed reference is to an actor from this object
-	bool ContainsThisActor(const PRIMITIVE *Actor);
+	bool ContainsThisActor(const Primitive *Actor);
 
 private:
 	// The main body of the spring

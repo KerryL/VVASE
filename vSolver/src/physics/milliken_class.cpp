@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -28,7 +28,7 @@
 // Description:		Constructor for the MILLIKEN_ANALYSIS class.
 //
 // Input Arguments:
-//		_Debugger	= const DEBUGGER&, reference to the debug message printing utility
+//		_debugger	= const Debugger&, reference to the debug message printing utility
 //
 // Output Arguments:
 //		None
@@ -37,7 +37,7 @@
 //		None
 //
 //==========================================================================
-MILLIKEN_ANALYSIS::MILLIKEN_ANALYSIS(const DEBUGGER &_Debugger) : Debugger(_Debugger)
+MILLIKEN_ANALYSIS::MILLIKEN_ANALYSIS(const Debugger &_debugger) : debugger(_debugger)
 {
 }
 
@@ -57,7 +57,7 @@ MILLIKEN_ANALYSIS::MILLIKEN_ANALYSIS(const DEBUGGER &_Debugger) : Debugger(_Debu
 //		None
 //
 //==========================================================================
-MILLIKEN_ANALYSIS::MILLIKEN_ANALYSIS(const MILLIKEN_ANALYSIS &MillikenAnalysis) : Debugger(MillikenAnalysis.Debugger)
+MILLIKEN_ANALYSIS::MILLIKEN_ANALYSIS(const MILLIKEN_ANALYSIS &MillikenAnalysis) : debugger(MillikenAnalysis.debugger)
 {
 	// Do the copy
 	*this = MillikenAnalysis;

@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -20,16 +20,16 @@
 #include "vRenderer/primitives/primitive.h"
 #include "vMath/vector_class.h"
 
-class CONE : public PRIMITIVE
+class CONE : public Primitive
 {
 public:
 	// Constructor
-	CONE(RENDER_WINDOW &_RenderWindow);
+	CONE(RenderWindow &_RenderWindow);
 
 	// Destructor
 	~CONE();
 
-	// Mandatory overloads from PRIMITIVE - for creating geometry and testing the
+	// Mandatory overloads from Primitive - for creating geometry and testing the
 	// validity of this object's parameters
 	void GenerateGeometry(void);
 	bool HasValidParameters(void);
@@ -37,8 +37,8 @@ public:
 	// Private data accessors
 	void SetResolution(const int &_Resolution);
 	void SetCapping(const bool &_DrawCaps);
-	void SetTip(const VECTOR &_Tip);
-	void SetBaseCenter(const VECTOR &_BaseCenter);
+	void SetTip(const Vector &_Tip);
+	void SetBaseCenter(const Vector &_BaseCenter);
 	void SetRadius(const double &_Radius);
 
 private:
@@ -49,8 +49,8 @@ private:
 	int Resolution;
 
 	// The locations of the cone's tip and base
-	VECTOR Tip;
-	VECTOR BaseCenter;
+	Vector Tip;
+	Vector BaseCenter;
 
 	// The cone's radius at the base
 	double Radius;

@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -24,10 +24,10 @@
 //
 // Input Arguments:
 //		Parent			= wxWindow&, reference to the main application window
-//		_Converter		= const CONVERT&, reference to conversion utility object
+//		_Converter		= const Convert&, reference to conversion utility object
 //		_Hardpoint		= const CORNER::HARDPOINTS&
 //		_TiedTo			= const CORNER::HARDPOINTS&
-//		_AxisDirection	= const VECTOR::AXIS&
+//		_AxisDirection	= const Vector::AXIS&
 //		_CornerLocation	= const CORNER::LOCATION&
 //		_Minimum		= const double&
 //		_Maximum		= const double&
@@ -43,8 +43,8 @@
 //		None
 //
 //==========================================================================
-GA_GENE_DIALOG::GA_GENE_DIALOG(wxWindow *Parent, const CONVERT &_Converter, const CORNER::HARDPOINTS &_Hardpoint,
-							   const CORNER::HARDPOINTS &_TiedTo, const VECTOR::AXIS &_AxisDirection,
+GA_GENE_DIALOG::GA_GENE_DIALOG(wxWindow *Parent, const Convert &_Converter, const CORNER::HARDPOINTS &_Hardpoint,
+							   const CORNER::HARDPOINTS &_TiedTo, const Vector::AXIS &_AxisDirection,
 							   const CORNER::LOCATION &_CornerLocation, const double &_Minimum, const double &_Maximum,
 							   const unsigned int &_NumberOfValues, wxWindowID Id, const wxPoint &Position, long Style) :
 							   wxDialog(Parent, Id, _T("Genetic Algorithm Gene"), Position, wxDefaultSize, Style),
@@ -177,10 +177,10 @@ void GA_GENE_DIALOG::CreateControls(void)
 	// Axis Direction
 	List.Clear();
 	for (i = 0; i < 3; i++)
-		List.Add(VECTOR::GetAxisName((VECTOR::AXIS)i));
+		List.Add(Vector::GetAxisName((Vector::Axis)i));
 	wxStaticText *AxisDirectionLabel = new wxStaticText(this, wxID_STATIC, _T("Axis Direction"),
 		wxDefaultPosition, wxSize(LabelColumnWidth, -1), 0);
-	AxisDirectionCombo = new wxComboBox(this, wxID_ANY, VECTOR::GetAxisName(AxisDirection), wxDefaultPosition,
+	AxisDirectionCombo = new wxComboBox(this, wxID_ANY, Vector::GetAxisName(AxisDirection), wxDefaultPosition,
 		wxSize(InputColumnWidth, -1), List, wxCB_READONLY);
 	AxisDirectionSizer->Add(AxisDirectionLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 	AxisDirectionSizer->Add(AxisDirectionCombo, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
@@ -217,7 +217,7 @@ void GA_GENE_DIALOG::CreateControls(void)
 	MinimumText = new wxTextCtrl(this, wxID_ANY, Converter.FormatNumber(Converter.ConvertDistance(Minimum)),
 		wxDefaultPosition, wxSize(InputColumnWidth, -1), 0);
 	wxStaticText *MinimumUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		Converter.GetUnitType(CONVERT::UNIT_TYPE_DISTANCE), wxDefaultPosition, wxDefaultSize, 0);
+		Converter.GetUnitType(Convert::UNIT_TYPE_DISTANCE), wxDefaultPosition, wxDefaultSize, 0);
 	MinimumSizer->Add(MinimumLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 	MinimumSizer->Add(MinimumText, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 	MinimumSizer->Add(MinimumUnitsLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
@@ -228,7 +228,7 @@ void GA_GENE_DIALOG::CreateControls(void)
 	MaximumText = new wxTextCtrl(this, wxID_ANY, Converter.FormatNumber(Converter.ConvertDistance(Maximum)),
 		wxDefaultPosition, wxSize(InputColumnWidth, -1), 0);
 	wxStaticText *MaximumUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		Converter.GetUnitType(CONVERT::UNIT_TYPE_DISTANCE), wxDefaultPosition, wxDefaultSize, 0);
+		Converter.GetUnitType(Convert::UNIT_TYPE_DISTANCE), wxDefaultPosition, wxDefaultSize, 0);
 	MaximumSizer->Add(MaximumLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 	MaximumSizer->Add(MaximumText, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 	MaximumSizer->Add(MaximumUnitsLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
@@ -245,7 +245,7 @@ void GA_GENE_DIALOG::CreateControls(void)
 		wxDefaultPosition, wxSize(LabelColumnWidth, -1), 0);
 	Resolution = new wxStaticText(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(InputColumnWidth, -1), 0);
 	wxStaticText *ResolutionUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		Converter.GetUnitType(CONVERT::UNIT_TYPE_DISTANCE), wxDefaultPosition, wxDefaultSize, 0);
+		Converter.GetUnitType(Convert::UNIT_TYPE_DISTANCE), wxDefaultPosition, wxDefaultSize, 0);
 	ResolutionSizer->Add(ResolutionLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 	ResolutionSizer->Add(Resolution, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 	ResolutionSizer->Add(ResolutionUnitsLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
@@ -332,7 +332,7 @@ void GA_GENE_DIALOG::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 		TiedTo = (CORNER::HARDPOINTS)HardpointCombo->GetCurrentSelection();
 	else
 		TiedTo = (CORNER::HARDPOINTS)(TiedToCombo->GetCurrentSelection() - 1);
-	AxisDirection = (VECTOR::AXIS)AxisDirectionCombo->GetCurrentSelection();
+	AxisDirection = (Vector::AXIS)AxisDirectionCombo->GetCurrentSelection();
 	CornerLocation = (CORNER::LOCATION)CornerLocationCombo->GetCurrentSelection();
 
 	// Convert the input values

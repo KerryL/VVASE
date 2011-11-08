@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -28,7 +28,7 @@
 //					process necessary to add the object to the scene.
 //
 // Input Arguments:
-//		_Renderer	= RENDER_WINDOW&, pointer to rendering object
+//		_Renderer	= RenderWindow&, pointer to rendering object
 //
 // Output Arguments:
 //		None
@@ -37,12 +37,12 @@
 //		None
 //
 //==========================================================================
-ORIGIN::ORIGIN(RENDER_WINDOW &_Renderer)
+ORIGIN::ORIGIN(RenderWindow &_Renderer)
 {
 	// Create the objects
-	XDirection = new VECTOR3D(_Renderer);
-	YDirection = new VECTOR3D(_Renderer);
-	ZDirection = new VECTOR3D(_Renderer);
+	XDirection = new Vector3D(_Renderer);
+	YDirection = new Vector3D(_Renderer);
+	ZDirection = new Vector3D(_Renderer);
 }
 
 //==========================================================================
@@ -95,20 +95,20 @@ void ORIGIN::Update(const double &ShaftLength, const double &ShaftDiameter,
 					const bool &Show)
 {
 	// All of them start at the origin
-	VECTOR Origin(0.0, 0.0, 0.0);
-	VECTOR X(1.0, 0.0, 0.0);
-	VECTOR Y(0.0, 1.0, 0.0);
-	VECTOR Z(0.0, 0.0, 1.0);
+	Vector Origin(0.0, 0.0, 0.0);
+	Vector X(1.0, 0.0, 0.0);
+	Vector Y(0.0, 1.0, 0.0);
+	Vector Z(0.0, 0.0, 1.0);
 
-	// Scale the vectors to meet the specified legnths
+	// Scale the vectors to meet the specified lengths
 	X *= TipLength + ShaftLength;
 	Y *= TipLength + ShaftLength;
 	Z *= TipLength + ShaftLength;
 
 	// Call the update functions for each of the three vectors
-	XDirection->Update(X, Origin, ShaftDiameter, TipDiameter, TipLength, Resolution, COLOR::ColorRed, Show);
-	YDirection->Update(Y, Origin, ShaftDiameter, TipDiameter, TipLength, Resolution, COLOR::ColorGreen, Show);
-	ZDirection->Update(Z, Origin, ShaftDiameter, TipDiameter, TipLength, Resolution, COLOR::ColorBlue, Show);
+	XDirection->Update(X, Origin, ShaftDiameter, TipDiameter, TipLength, Resolution, Color::ColorRed, Show);
+	YDirection->Update(Y, Origin, ShaftDiameter, TipDiameter, TipLength, Resolution, Color::ColorGreen, Show);
+	ZDirection->Update(Z, Origin, ShaftDiameter, TipDiameter, TipLength, Resolution, Color::ColorBlue, Show);
 
 	return;
 }

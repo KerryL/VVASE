@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -12,7 +12,7 @@
 // Author:  K. Loux
 // Description:  Contains class functionality for dynamic state class.
 // History:
-//	3/9/2008	- Changed the structure of the DEBUGGER class, K. Loux.
+//	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
 
 // VVASE headers
 #include "vSolver/physics/dynamics_class.h"
@@ -31,7 +31,7 @@
 // Description:		Constructor for the DYNAMICS class.
 //
 // Input Arguments:
-//		_Debugger	= const DEBUGGER&, reference to the debug message printing utility
+//		_debugger	= const Debugger&, reference to the debug message printing utility
 //
 // Output Arguments:
 //		None
@@ -40,13 +40,13 @@
 //		None
 //
 //==========================================================================
-DYNAMICS::DYNAMICS(const DEBUGGER &_Debugger) : Debugger(_Debugger)
+DYNAMICS::DYNAMICS(const Debugger &_debugger) : debugger(_debugger)
 {
 	// Create the integrator object
-	Integrator = new INTEGRATOR(INTEGRATOR::INT_ADAMS_BASHFORTH_3, 100.0, Debugger);
+	Integrator = new INTEGRATOR(INTEGRATOR::INT_ADAMS_BASHFORTH_3, 100.0, debugger);
 
 	// Create the driver
-	Driver = new DRIVER(Debugger);
+	Driver = new DRIVER(debugger);
 }
 
 //==========================================================================
@@ -65,7 +65,7 @@ DYNAMICS::DYNAMICS(const DEBUGGER &_Debugger) : Debugger(_Debugger)
 //		None
 //
 //==========================================================================
-DYNAMICS::DYNAMICS(const DYNAMICS &Dynamics) : Debugger(Dynamics.Debugger)
+DYNAMICS::DYNAMICS(const DYNAMICS &Dynamics) : debugger(Dynamics.debugger)
 {
 	// Initialize the pointers
 	Driver = NULL;

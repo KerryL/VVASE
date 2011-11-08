@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -33,13 +33,13 @@
 //
 // Description:		Constructor for the MAIN_NOTEBOOK class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_MainFrame	= MAIN_FRAME&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
 //		style		= long for passing to parent class's constructor
-//		_Debugger	= const DEBUGGER& reference to applications debug printing utility
+//		_debugger	= const Debugger& reference to applications debug printing utility
 //
 // Output Arguments:
 //		None
@@ -49,9 +49,9 @@
 //
 //==========================================================================
 MAIN_NOTEBOOK::MAIN_NOTEBOOK(MAIN_FRAME &_MainFrame, wxWindowID id, const wxPoint& pos,
-							 const wxSize& size, long style, const DEBUGGER &_Debugger)
+							 const wxSize& size, long style, const Debugger &_debugger)
 							 : wxAuiNotebook(&_MainFrame, id, pos, size, style),
-							 Debugger(_Debugger), MainFrame(_MainFrame)
+							 Debugger(_debugger), MainFrame(_MainFrame)
 {
 	SetArtProvider(new wxAuiSimpleTabArt);
 }
@@ -62,7 +62,7 @@ MAIN_NOTEBOOK::MAIN_NOTEBOOK(MAIN_FRAME &_MainFrame, wxWindowID id, const wxPoin
 //
 // Description:		Denstructor for the MAIN_NOTEBOOK class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -82,7 +82,7 @@ MAIN_NOTEBOOK::~MAIN_NOTEBOOK()
 //
 // Description:		Links the GUI events with event handling functions.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -106,7 +106,7 @@ END_EVENT_TABLE();
 //					closed tab.  Vetoed if the user does not confirm the
 //					close.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= &wxAuiNotebookEvent
 //
 // Output Arguments:
@@ -140,7 +140,7 @@ void MAIN_NOTEBOOK::NotebookPageClose_Event(wxAuiNotebookEvent &event)
 // Description:		Sets the ActiveCarIndex to the car associated with the
 //					notebook page that was just selected.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= &wxAuiNotebookEvent
 //
 // Output Arguments:
@@ -165,7 +165,7 @@ void MAIN_NOTEBOOK::NotebookPageChanged_Event(wxAuiNotebookEvent& WXUNUSED(event
 // Description:		Pops-up a menu containing actions that can be performed
 //					on the selected object.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= &wxAuiNotebookEvent
 //
 // Output Arguments:

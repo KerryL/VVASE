@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -27,7 +27,7 @@ class wxGauge;
 
 // VVASE forward declarations
 class MAIN_FRAME;
-class CONVERT;
+class Convert;
 class GENETIC_OPTIMIZATION;
 
 class GENETIC_ALGORITHM_PANEL : public wxPanel
@@ -47,7 +47,7 @@ public:
 
 private:
 	// Application's converter object
-	const CONVERT &Converter;
+	const Convert &Converter;
 
 	// The optimization object that we represent
 	GENETIC_OPTIMIZATION &Optimization;

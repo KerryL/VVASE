@@ -18,7 +18,7 @@
 
 // Local headers
 #include "vUtilities/managed_list_class.h"
-#include "vmath/dataset2D.h"
+#include "vMath/dataset2D.h"
 
 // wxWidgets forward declarations
 class wxString;

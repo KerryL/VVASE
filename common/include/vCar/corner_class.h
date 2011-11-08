@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -10,7 +10,7 @@
 // File:  corner_class.h
 // Created:  3/23/2008
 // Author:  K. Loux
-// Description:  Contains class declaration for CORNER class.  This class conatins
+// Description:  Contains class declaration for CORNER class.  This class contains
 //				 the suspension information for one corner of the car (four instances
 //				 are required to describe the entire suspension).
 // History:
@@ -30,7 +30,7 @@
 #include "vMath/vector_class.h"
 
 // VVASE forward declarations
-class DEBUGGER;
+class Debugger;
 
 class CORNER
 {
@@ -47,7 +47,7 @@ public:
 	};
 
 	// Constructor
-	CORNER(const LOCATION &_Location, const DEBUGGER &_Debugger);
+	CORNER(const LOCATION &_Location, const Debugger &_debugger);
 
 	// Destructor
 	~CORNER();
@@ -142,14 +142,14 @@ public:
 	const LOCATION Location;
 
 	// The actual hardpoint locations
-	VECTOR Hardpoints[NumberOfHardpoints];
+	Vector Hardpoints[NumberOfHardpoints];
 
 	// Operators
 	CORNER& operator=(const CORNER& Corner);
 
 private:
 	// Debugger message printing utility
-	const DEBUGGER &Debugger;
+	const Debugger &debugger;
 };
 
 #endif// _CORNER_CLASS_H_

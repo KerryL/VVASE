@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -53,7 +53,7 @@
 //
 // Input Arguments:
 //		_MainFrame			= MAIN_FRAME&, reference to the main application window
-//		_Debugger			= const DEBUGGER&, reference to debugger utility object
+//		_debugger			= const Debugger&, reference to debugger utility object
 //		_PathAndFileName	= wxString containing the location of this object
 //							  on the hard disk
 //
@@ -64,19 +64,19 @@
 //		None
 //
 //==========================================================================
-GUI_CAR::GUI_CAR(MAIN_FRAME &_MainFrame, const DEBUGGER &_Debugger,
+GUI_CAR::GUI_CAR(MAIN_FRAME &_MainFrame, const Debugger &_debugger,
 				 wxString _PathAndFileName)
-				 : GUI_OBJECT(_MainFrame, _Debugger, _PathAndFileName)
+				 : GUI_OBJECT(_MainFrame, _debugger, _PathAndFileName)
 {
 	// Allocate memory for the original and working cars
-	OriginalCar = new CAR(Debugger);
+	OriginalCar = new CAR(debugger);
 	WorkingCar = new CAR(*OriginalCar);
 
 	// Create the appearance options object
-	AppearanceOptions = new APPEARANCE_OPTIONS(MainFrame, *this, Debugger);
+	AppearanceOptions = new APPEARANCE_OPTIONS(MainFrame, *this, debugger);
 
 	// Create the 3D output window
-	Renderer = new CAR_RENDERER(MainFrame, *this, Debugger);
+	Renderer = new CAR_RENDERER(MainFrame, *this, debugger);
 
 	// Get an index for this item and add it to the list in the MainFrame
 	// MUST be included BEFORE the naming, which must come BEFORE the call to Initialize

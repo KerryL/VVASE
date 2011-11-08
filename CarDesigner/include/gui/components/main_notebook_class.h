@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -23,7 +23,7 @@
 #include <wx/aui/aui.h>
 
 // VVASE forward declarations
-class DEBUGGER;
+class Debugger;
 class MAIN_FRAME;
 
 class MAIN_NOTEBOOK : public wxAuiNotebook
@@ -31,14 +31,14 @@ class MAIN_NOTEBOOK : public wxAuiNotebook
 public:
 	// Constructor
 	MAIN_NOTEBOOK(MAIN_FRAME &_Parent, wxWindowID id, const wxPoint& pos,
-		const wxSize& size, long style, const DEBUGGER &_Debugger);
+		const wxSize& size, long style, const Debugger &_debugger);
 
 	// Destructor
 	~MAIN_NOTEBOOK();
 
 private:
 	// Debugger message printing utility
-	const DEBUGGER &Debugger;
+	const Debugger &debugger;
 
 	// The frame that owns this notebook
 	MAIN_FRAME &MainFrame;

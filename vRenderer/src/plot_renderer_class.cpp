@@ -1,5 +1,5 @@
 /*===================================================================================
-                                    DataPlotter
+                                    CarDesigner
                            Copyright Kerry R. Loux 2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
@@ -18,12 +18,12 @@
 #include <wx/wx.h>
 
 // Local headers
-#include "renderer/plot_renderer_class.h"
-#include "application/plot_object_class.h"
-#include "application/main_frame_class.h"
-#include "renderer/primitives/zoom_box_class.h"
-#include "renderer/primitives/cursor_class.h"
-#include "renderer/primitives/axis.h"
+#include "vRenderer/plot_renderer_class.h"
+#include "vRenderer/plot_object_class.h"
+//#include "application/main_frame_class.h"// FIXME: Not right
+#include "vRenderer/primitives/zoom_box_class.h"
+#include "vRenderer/primitives/cursor_class.h"
+#include "vRenderer/primitives/axis.h"
 
 //==========================================================================
 // Class:			PlotRenderer
@@ -31,8 +31,8 @@
 //
 // Description:		Constructor for PlotRenderer class.
 //
-// Input Argurments:
-//		_mainFrame	= MainFrame& reference to this object's parent window
+// Input Arguments:
+//		_parent	= wxWindow& reference to this object's parent window
 //		id			= wxWindowID
 //
 // Output Arguments:
@@ -42,9 +42,9 @@
 //		None
 //
 //==========================================================================
-PlotRenderer::PlotRenderer(MainFrame &_mainFrame, wxWindowID id)
-							 : RenderWindow(_mainFrame, id, wxDefaultPosition,
-							 wxDefaultSize), mainFrame(_mainFrame)
+PlotRenderer::PlotRenderer(wxWindow &_parent, wxWindowID id)
+							 : RenderWindow(_parent, id, wxDefaultPosition,
+							 wxDefaultSize)
 {
 	// Create the actors
 	CreateActors();
@@ -62,7 +62,7 @@ PlotRenderer::PlotRenderer(MainFrame &_mainFrame, wxWindowID id)
 //
 // Description:		Destructor for PlotRenderer class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -85,7 +85,7 @@ PlotRenderer::~PlotRenderer()
 //
 // Description:		Event table for the PlotRenderer class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -117,7 +117,7 @@ END_EVENT_TABLE()
 //
 // Description:		Updates the displayed plots to match the current data.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -143,7 +143,7 @@ void PlotRenderer::UpdateDisplay(void)
 //
 // Description:		Creates the actors for this plot.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -173,7 +173,7 @@ void PlotRenderer::CreateActors(void)
 // Description:		Handles EVT_SIZE events for this class.  Required to make
 //					the plot size update with the window.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -206,7 +206,7 @@ void PlotRenderer::OnSize(wxSizeEvent &event)
 //
 // Description:		Event handler for the mouse wheel event.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxMouseEvent&
 //
 // Output Arguments:
@@ -265,7 +265,7 @@ void PlotRenderer::OnMouseWheelEvent(wxMouseEvent &event)
 //					capture drag events for rotating, panning, or dollying
 //					the scene.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxMouseEvent&
 //
 // Output Arguments:
@@ -397,7 +397,7 @@ void PlotRenderer::OnMouseMoveEvent(wxMouseEvent &event)
 //
 // Description:		Handles end of zoom-by-box events.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxMouseEvent&
 //
 // Output Arguments:
@@ -410,7 +410,7 @@ void PlotRenderer::OnMouseMoveEvent(wxMouseEvent &event)
 void PlotRenderer::OnRightButtonUpEvent(wxMouseEvent &event)
 {
 	// If the zoom box is not visible, process this like a right click event
-	if (!zoomBox->GetIsVisible())
+	/*if (!zoomBox->GetIsVisible())// FIXME:  Make this work again!
 	{
 		// Determine the context
 		MainFrame::PlotContext context;
@@ -504,7 +504,7 @@ void PlotRenderer::OnRightButtonUpEvent(wxMouseEvent &event)
 		SetRightYLimits(yRightMin, yRightMax);
 	}
 
-	UpdateDisplay();
+	UpdateDisplay();*/
 
 	return;
 }
@@ -513,9 +513,9 @@ void PlotRenderer::OnRightButtonUpEvent(wxMouseEvent &event)
 // Class:			PlotRenderer
 // Function:		GetGridOn
 //
-// Description:		Returns status of the gridlines.
+// Description:		Returns status of the grid lines.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -536,7 +536,7 @@ bool PlotRenderer::GetGridOn(void)
 //
 // Description:		Turns on plot grid.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -560,7 +560,7 @@ void PlotRenderer::SetGridOn()
 //
 // Description:		Turns off plot grid.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -584,7 +584,7 @@ void PlotRenderer::SetGridOff()
 //
 // Description:		Returns the status of the bottom grid.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -605,7 +605,7 @@ bool PlotRenderer::GetBottomGrid(void) const
 //
 // Description:		Returns the status of the left grid.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -626,7 +626,7 @@ bool PlotRenderer::GetLeftGrid(void) const
 //
 // Description:		Returns the status of the right grid.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -647,7 +647,7 @@ bool PlotRenderer::GetRightGrid(void) const
 //
 // Description:		Sets the status of the bottom axis' grid.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -672,7 +672,7 @@ void PlotRenderer::SetBottomGrid(const bool &grid)
 //
 // Description:		Sets the status of the left axis' grid.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -697,7 +697,7 @@ void PlotRenderer::SetLeftGrid(const bool &grid)
 //
 // Description:		Sets the status of the right axis' grid.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -722,7 +722,7 @@ void PlotRenderer::SetRightGrid(const bool &grid)
 //
 // Description:		Sets properties for the specified curve object.
 //
-// Input Argurments:
+// Input Arguments:
 //		index		= const unsigned int& specifying the curve
 //		color		= const Color& of the curve
 //		visible		= const bool& indiciating whether or not the curve is to
@@ -754,7 +754,7 @@ void PlotRenderer::SetCurveProperties(const unsigned int &index, const Color &co
 //
 // Description:		Sets the axis limits for the X axis.
 //
-// Input Argurments:
+// Input Arguments:
 //		min	= const double&
 //		max = const double&
 //
@@ -789,7 +789,7 @@ void PlotRenderer::SetXLimits(const double &min, const double &max)
 //
 // Description:		Sets the axis limits for the left Y axis.
 //
-// Input Argurments:
+// Input Arguments:
 //		min	= const double&
 //		max = const double&
 //
@@ -824,7 +824,7 @@ void PlotRenderer::SetLeftYLimits(const double &min, const double &max)
 //
 // Description:		Sets the axis limits for the right Y axis.
 //
-// Input Argurments:
+// Input Arguments:
 //		min	= const double&
 //		max = const double&
 //
@@ -859,7 +859,7 @@ void PlotRenderer::SetRightYLimits(const double &min, const double &max)
 //
 // Description:		Sets properties for the specified curve object.
 //
-// Input Argurments:
+// Input Arguments:
 //		data	= const Dataset2D& to be plotted
 //
 // Output Arguments:
@@ -882,7 +882,7 @@ void PlotRenderer::AddCurve(const Dataset2D &data)
 //
 // Description:		Removes all curves from the plot.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -905,7 +905,7 @@ void PlotRenderer::RemoveAllCurves()
 //
 // Description:		Removes all curves from the plot.
 //
-// Input Argurments:
+// Input Arguments:
 //		index	= const unsigned int& specifying the curve to be removed
 //
 // Output Arguments:
@@ -928,7 +928,7 @@ void PlotRenderer::RemoveCurve(const unsigned int& index)
 //
 // Description:		Enables auto-scaling of the axes.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -953,7 +953,7 @@ void PlotRenderer::AutoScale()
 //
 // Description:		Enables auto-scaling of the bottom axis.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -978,7 +978,7 @@ void PlotRenderer::AutoScaleBottom()
 //
 // Description:		Enables auto-scaling of the left axis.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -1003,7 +1003,7 @@ void PlotRenderer::AutoScaleLeft()
 //
 // Description:		Enables auto-scaling of the right axis.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -1028,7 +1028,7 @@ void PlotRenderer::AutoScaleRight()
 //
 // Description:		Sets the text for the x-axis label.
 //
-// Input Argurments:
+// Input Arguments:
 //		text	= wxString
 //
 // Output Arguments:
@@ -1053,7 +1053,7 @@ void PlotRenderer::SetXLabel(wxString text)
 //
 // Description:		Cleans up some zoom box and cursor items.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxMouseEvent&
 //
 // Output Arguments:
@@ -1084,7 +1084,7 @@ void PlotRenderer::OnMouseLeaveWindowEvent(wxMouseEvent& WXUNUSED(event))
 // Description:		Handles double click events.  Allows user to change axis
 //					limits or create a cursor.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxMouseEvent&
 //
 // Output Arguments:
@@ -1096,7 +1096,8 @@ void PlotRenderer::OnMouseLeaveWindowEvent(wxMouseEvent& WXUNUSED(event))
 //==========================================================================
 void PlotRenderer::OnDoubleClickEvent(wxMouseEvent &event)
 {
-	unsigned int x = event.GetX();
+	// FIXME:  Make this work again
+	/*unsigned int x = event.GetX();
 	unsigned int y = event.GetY();
 	unsigned int offset = Axis::GetOffsetFromWindowEdge();
 
@@ -1146,7 +1147,7 @@ void PlotRenderer::OnDoubleClickEvent(wxMouseEvent &event)
 
 		// Display the dialog
 		mainFrame.DisplayAxisRangeDialog(context);
-	}
+	}*/
 
 	UpdateDisplay();
 
@@ -1160,7 +1161,7 @@ void PlotRenderer::OnDoubleClickEvent(wxMouseEvent &event)
 // Description:		Handles double click events.  Allows user to change axis
 //					limits or create a cursor.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxMouseEvent&
 //
 // Output Arguments:
@@ -1183,7 +1184,7 @@ double PlotRenderer::GetCursorValue(const unsigned int &location)
 //
 // Description:		Checks to see if the user is dragging a cursor.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxMouseEvent&
 //
 // Output Arguments:
@@ -1210,7 +1211,7 @@ void PlotRenderer::OnLeftButtonDownEvent(wxMouseEvent &event)
 //
 // Description:		Makes sure we stop dragging when we stop clicking.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxMouseEvent&
 //
 // Output Arguments:
@@ -1234,7 +1235,7 @@ void PlotRenderer::OnLeftButtonUpEvent(wxMouseEvent& WXUNUSED(event))
 //
 // Description:		Returns status of left cursor visibility flag.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -1255,7 +1256,7 @@ bool PlotRenderer::GetLeftCursorVisible(void) const
 //
 // Description:		Returns status of right cursor visibility flag.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -1276,7 +1277,7 @@ bool PlotRenderer::GetRightCursorVisible(void) const
 //
 // Description:		Returns x-value of left cursor.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -1297,7 +1298,7 @@ double PlotRenderer::GetLeftCursorValue(void) const
 //
 // Description:		Makes sure we stop dragging when we stop clicking.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -1318,7 +1319,7 @@ double PlotRenderer::GetRightCursorValue(void) const
 //
 // Description:		Updates the cursor calculations.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -1342,7 +1343,7 @@ void PlotRenderer::UpdateCursors(void)
 //
 // Description:		Returns the minimum value of the X-axis.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -1363,7 +1364,7 @@ double PlotRenderer::GetXMin(void) const
 //
 // Description:		Returns the minimum value of the X-axis.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -1384,7 +1385,7 @@ double PlotRenderer::GetXMax(void) const
 //
 // Description:		Returns the minimum value of the X-axis.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -1405,7 +1406,7 @@ double PlotRenderer::GetLeftYMin(void) const
 //
 // Description:		Returns the minimum value of the X-axis.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -1426,7 +1427,7 @@ double PlotRenderer::GetLeftYMax(void) const
 //
 // Description:		Returns the minimum value of the X-axis.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -1447,7 +1448,7 @@ double PlotRenderer::GetRightYMin(void) const
 //
 // Description:		Returns the minimum value of the X-axis.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -1468,7 +1469,7 @@ double PlotRenderer::GetRightYMax(void) const
 //
 // Description:		Returns the color of the gridlines for this plot.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -1489,7 +1490,7 @@ Color PlotRenderer::GetGridColor(void) const
 //
 // Description:		Sets the color of the gridlines for this plot.
 //
-// Input Argurments:
+// Input Arguments:
 //		color	= const Color&
 //
 // Output Arguments:

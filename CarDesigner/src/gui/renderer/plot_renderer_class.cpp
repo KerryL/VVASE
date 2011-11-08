@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -36,7 +36,7 @@
 // Input Arguments:
 //		_MainFrame	= MAIN_FRAME& reference to this object's parent window
 //		_DataSource	= ITERATION& reference to the source of data for this plot
-//		_Debugger	= const DEBUGGER& reference to the debug printing utility object
+//		_debugger	= const Debugger& reference to the debug printing utility object
 //
 // Output Arguments:
 //		None
@@ -46,9 +46,9 @@
 //
 //==========================================================================
 PLOT_RENDERER::PLOT_RENDERER(MAIN_FRAME &_MainFrame, ITERATION &_DataSource,
-							 const DEBUGGER &_Debugger)
+							 const Debugger &_debugger)
 							 : RENDER_WINDOW(_MainFrame, wxID_ANY, wxDefaultPosition,
-							 wxDefaultSize), Debugger(_Debugger), DataSource(_DataSource)
+							 wxDefaultSize), Debugger(_debugger), DataSource(_DataSource)
 {
 	// Create the actors
 	CreateActors();

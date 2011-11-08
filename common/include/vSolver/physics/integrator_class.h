@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -20,7 +20,7 @@
 #include "vSolver/physics/state_class.h"
 
 // VVASE forward declarations
-class DEBUGGER;
+class Debugger;
 
 class INTEGRATOR
 {
@@ -36,7 +36,7 @@ public:
 
 	// Constructor
 	INTEGRATOR(const INTEGRATION_METHOD &_IntegrationMethod, const double &_Frequency,
-		const DEBUGGER &_Debugger);
+		const Debugger &_debugger);
 	INTEGRATOR(const INTEGRATOR &Integrator);
 
 	// Destructor
@@ -53,14 +53,14 @@ public:
 
 	// Reset functions for initializing the simulation
 	void Reset(STATE InitialConditions);
-	void Reset(void);// Zero intial conditions
+	void Reset(void);// Zero initial conditions
 
 	// Overloaded operators
 	INTEGRATOR& operator = (const INTEGRATOR &Integrator);
 
 private:
 	// Debugger message printing utility
-	const DEBUGGER &Debugger;
+	const Debugger &debugger;
 
 	// The integration method for this class
 	INTEGRATION_METHOD IntegrationMethod;

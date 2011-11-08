@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -140,7 +140,7 @@ void Vector::Rotate (const Vector &cor, const Vector &rotations,
 	// First do the translation
 	temp = *this - cor;
 
-	// Define the rotation matricies using the sine and cosines computed above.  There will be three
+	// Define the rotation matrices using the sine and cosines computed above.  There will be three
 	// (one for each rotation).
 	Matrix firstRotation(3, 3);
 	Matrix secondRotation(3, 3);

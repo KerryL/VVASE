@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -12,7 +12,7 @@
 // Author:  K. Loux
 // Description:  Contains class functionality for driver class.
 // History:
-//	3/9/2008	- Changed the structure of the DEBUGGER class, K. Loux.
+//	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
 // VVASE headers
@@ -26,7 +26,7 @@
 // Description:		Constructor for the DRIVER class.
 //
 // Input Arguments:
-//		_Debugger	= const DEBUGGER& reference to applications debug printing utility
+//		_debugger	= const Debugger& reference to applications debug printing utility
 //
 // Output Arguments:
 //		None
@@ -35,7 +35,7 @@
 //		None
 //
 //==========================================================================
-DRIVER::DRIVER(const DEBUGGER &_Debugger) : Debugger(_Debugger)
+DRIVER::DRIVER(const Debugger &_debugger) : debugger(_debugger)
 {
 }
 
@@ -55,7 +55,7 @@ DRIVER::DRIVER(const DEBUGGER &_Debugger) : Debugger(_Debugger)
 //		None
 //
 //==========================================================================
-DRIVER::DRIVER(const DRIVER &Driver) : Debugger(Driver.Debugger)
+DRIVER::DRIVER(const DRIVER &Driver) : debugger(Driver.debugger)
 {
 	// Do the copy
 	*this = Driver;

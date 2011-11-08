@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -12,7 +12,7 @@
 // Author:  K. Loux
 // Description:  Contains class functionality for differential class.
 // History:
-//	3/9/2008	- Changed the structure of the DEBUGGER class, K. Loux.
+//	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
 // Standard C++ headers
@@ -30,7 +30,7 @@
 // Description:		Constructor for the DIFFERENTIAL class.
 //
 // Input Arguments:
-//		_Debugger	= const DEBUGGER& reference to applications debug printing utility
+//		_debugger	= const Debugger& reference to applications debug printing utility
 //
 // Output Arguments:
 //		None
@@ -39,7 +39,7 @@
 //		None
 //
 //==========================================================================
-DIFFERENTIAL::DIFFERENTIAL(const DEBUGGER &_Debugger) : Debugger(_Debugger)
+DIFFERENTIAL::DIFFERENTIAL(const Debugger &_debugger) : debugger(_debugger)
 {
 }
 
@@ -59,7 +59,7 @@ DIFFERENTIAL::DIFFERENTIAL(const DEBUGGER &_Debugger) : Debugger(_Debugger)
 //		None
 //
 //==========================================================================
-DIFFERENTIAL::DIFFERENTIAL(const DIFFERENTIAL &Differential) : Debugger(Differential.Debugger)
+DIFFERENTIAL::DIFFERENTIAL(const DIFFERENTIAL &Differential) : debugger(Differential.debugger)
 {
 	// Do the copy
 	*this = Differential;

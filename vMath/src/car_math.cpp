@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -12,7 +12,7 @@
 // Author:  K. Loux
 // Description:  Contains useful functions that don't fit better in another class.  Hopefully this
 //				 file will one day be absolved into a real class instead of just being a kludgy
-//				 collection of functions.  The goal would be to be able to use DEBUGGER classes again.
+//				 collection of functions.  The goal would be to be able to use Debugger classes again.
 // History:
 //	11/22/2009	- Moved to vMath.lib, K. Loux.
 //	11/7/2011	- Corrected camelCase, K. Loux.
@@ -52,7 +52,7 @@ Vector VVASEMath::GetPlaneNormal(const Vector &point1, const Vector &point2, con
 	if (point1 == point2 || point1 == point3 || point2 == point3)
 	{
 		Vector noSolution(QNAN, QNAN, QNAN);
-		//Debugger->Print(_T("Warning (GetPlaneNormal):  Coincident points"), DEBUGGER::PRIORITY_LOW);
+		//Debugger->Print(_T("Warning (GetPlaneNormal):  Coincident points"), Debugger::PRIORITY_LOW);
 
 		return noSolution;
 	}

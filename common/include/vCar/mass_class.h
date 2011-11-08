@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -12,7 +12,7 @@
 // Author:  K. Loux
 // Description:  Contains class declaration for MASS_PROPERTIES class.
 // History:
-//	3/9/2008	- Changed the structure of the DEBUGGER class, K. Loux.
+//	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
 //  3/29/2008	- Added IsValidInertiaTensor function, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
@@ -27,13 +27,13 @@
 #include "vUtilities/wheelset_structs.h"
 
 // VVASE forward declarations
-class DEBUGGER;
+class Debugger;
 
 class MASS_PROPERTIES
 {
 public:
 	// Constructor
-	MASS_PROPERTIES(const DEBUGGER &_Debugger);
+	MASS_PROPERTIES(const Debugger &_debugger);
 	MASS_PROPERTIES(const MASS_PROPERTIES &MassProperties);
 
 	// Destructor
@@ -51,23 +51,23 @@ public:
 	double Ixy;						// [slug-in^2]
 	double Ixz;						// [slug-in^2]
 	double Iyz;						// [slug-in^2]
-	VECTOR CenterOfGravity;			// [in]
-	WHEEL_SET UnsprungMass;			// [slug]
-	VECTOR_SET WheelInertias;		// [slug-in^2]
+	Vector CenterOfGravity;			// [in]
+	WheelSet UnsprungMass;			// [slug]
+	VectorSet WheelInertias;		// [slug-in^2]
 
 	// To check the values that the user inputs
 	bool IsValidInertiaTensor(void) const;
 
 	// Get the principle moments of inertia for this object
-	bool GetPrincipleInertias(VECTOR *PrincipleInertias, VECTOR *IxxDirection = NULL,
-							  VECTOR *IyyDirection = NULL, VECTOR *IzzDirection = NULL) const;
+	bool GetPrincipleInertias(Vector *PrincipleInertias, Vector *IxxDirection = NULL,
+							  Vector *IyyDirection = NULL, Vector *IzzDirection = NULL) const;
 
 	// Overloaded operators
 	MASS_PROPERTIES& operator = (const MASS_PROPERTIES &MassProperties);
 
 private:
 	// Debugger message printing utility
-	const DEBUGGER &Debugger;
+	const Debugger &debugger;
 };
 
 #endif// _MASS_CLASS_H_

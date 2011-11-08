@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -51,7 +51,7 @@
 //
 // Input Arguments:
 //		_MainFrame			= MAIN_FRAME& reference to main application window
-//		_Debugger			= const DEBUGGER& reference to the application's debug
+//		_debugger			= const Debugger& reference to the application's debug
 //							  message printing utility
 //		_PathAndFileName	= wxString containing the location of this object on
 //							  the hard disk
@@ -63,9 +63,9 @@
 //		None
 //
 //==========================================================================
-ITERATION::ITERATION(MAIN_FRAME &_MainFrame, const DEBUGGER &_Debugger,
+ITERATION::ITERATION(MAIN_FRAME &_MainFrame, const Debugger &_debugger,
 					 wxString _PathAndFileName)
-					 : GUI_OBJECT(_MainFrame, _Debugger, _PathAndFileName),
+					 : GUI_OBJECT(_MainFrame, _debugger, _PathAndFileName),
 					 Converter(_MainFrame.GetConverter())
 {
 	// Initialize our list of plots to OFF
@@ -99,7 +99,7 @@ ITERATION::ITERATION(MAIN_FRAME &_MainFrame, const DEBUGGER &_Debugger,
 	NumberOfWorkingCars = 0;
 
 	// Create the renderer
-	Renderer = new PLOT_RENDERER(MainFrame, *this, Debugger);
+	Renderer = new PLOT_RENDERER(MainFrame, *this, debugger);
 
 	// Get an index for this item and add it to the list in the MainFrame
 	// MUST be included BEFORE the naming, which must come BEFORE the call to Initialize
@@ -397,7 +397,7 @@ void ITERATION::UpdateData(void)
 		NumberOfWorkingCars = InverseSemaphore.GetCount();
 		WorkingCarArray = new CAR*[NumberOfWorkingCars];
 		for (i = 0; i < NumberOfWorkingCars; i++)
-			WorkingCarArray[i] = new CAR(Debugger);
+			WorkingCarArray[i] = new CAR(debugger);
 	}
 
 	// Go through car-by-car
@@ -405,7 +405,7 @@ void ITERATION::UpdateData(void)
 	for (CurrentCar = 0; CurrentCar < AssociatedCars.GetCount(); CurrentCar++)
 	{
 		// Create a list to store the outputs for this car
-		MANAGED_LIST<KINEMATIC_OUTPUTS> *CurrentList = new MANAGED_LIST<KINEMATIC_OUTPUTS>;
+		ManagedList<KINEMATIC_OUTPUTS> *CurrentList = new ManagedList<KINEMATIC_OUTPUTS>;
 
 		// Add this list to our list of lists (bit confusing?)
 		OutputLists.Add(CurrentList);
@@ -432,7 +432,7 @@ void ITERATION::UpdateData(void)
 			KinematicInputs.Heave = AxisValuesHeave[CurrentPoint];
 			KinematicInputs.RackTravel = AxisValuesRackTravel[CurrentPoint];
 			// FIXME:  Where should these (below two variables) come from?  Can they come from MainFrame's preference settings?
-			KinematicInputs.FirstRotation = VECTOR::AxisX;
+			KinematicInputs.FirstRotation = Vector::AxisX;
 			KinematicInputs.CenterOfRotation.Set(0.0, 0.0, 0.0);
 
 			// Run The analysis
@@ -600,13 +600,13 @@ bool ITERATION::PerformLoadFromFile(void)
 	// Check to make sure the version matches
 	if (Header.FileVersion > CurrentFileVersion)
 	{
-		Debugger.Print(_T("ERROR:  Unrecognized file version - unable to open file!"));
+		debugger.Print(_T("ERROR:  Unrecognized file version - unable to open file!"));
 		InFile.close();
 
 		return false;
 	}
 	else if (Header.FileVersion != CurrentFileVersion)
-		Debugger.Print(_T("Warning:  Opening out-of-date file version."));
+		debugger.Print(_T("Warning:  Opening out-of-date file version."));
 
 	// Read this object's data
 	InFile.read((char*)&AssociatedWithAllOpenCars, sizeof(bool));
@@ -958,7 +958,7 @@ void ITERATION::ShowAssociatedCarsDialog(void)
 
 	// Set up the list of cars in MainFrame
 	wxArrayString Choices;
-	OBJECT_LIST<GUI_CAR> OpenCars;
+	ObjectList<GUI_CAR> OpenCars;
 	int i;
 	for (i = 0; i < MainFrame.GetObjectCount(); i++)
 	{
@@ -974,11 +974,11 @@ void ITERATION::ShowAssociatedCarsDialog(void)
 	// Make sure there is at least one car open
 	if (OpenCars.GetCount() == 0)
 	{
-		Debugger.Print(_T("ERROR:  Cannot display dialog - no open cars!"), DEBUGGER::PriorityHigh);
+		debugger.Print(_T("ERROR:  Cannot display dialog - no open cars!"), Debugger::PriorityHigh);
 		return;
 	}
 
-	// Initialize the selections - this array contains the indecies of the
+	// Initialize the selections - this array contains the indeces of the
 	// items that are selected
     wxArrayInt Selections;
 	for (i = 0; i < OpenCars.GetCount(); i++)
@@ -1002,7 +1002,7 @@ void ITERATION::ShowAssociatedCarsDialog(void)
 	// Remove all items from our lists
 	ClearAllLists();
 
-	// Go through the indicies that were selected and add them to our list
+	// Go through the indices that were selected and add them to our list
 	for (i = 0; i < (signed int)Selections.GetCount(); i++)
 		AddCar(OpenCars.GetObject(Selections[i]));
 
@@ -1070,7 +1070,7 @@ double ITERATION::GetDataValue(int AssociatedCarIndex, int Point, PLOT_ID Id) co
 {
 	// The value to return
 	double Value = 0.0;
-	VECTOR Temp;
+	Vector Temp;
 
 	// Make sure the arguments are valid
 	if (AssociatedCarIndex >= AssociatedCars.GetCount() ||
@@ -1080,7 +1080,7 @@ double ITERATION::GetDataValue(int AssociatedCarIndex, int Point, PLOT_ID Id) co
 	// Depending on the specified PLOT_ID, choose which member of the KINEMATIC_OUTPUTS
 	// object to return
 	if (Id < Pitch)
-		Value = Converter.Convert(OutputLists[AssociatedCarIndex]->GetObject(Point)->GetOutputValue(
+		Value = Converter.ConvertTo(OutputLists[AssociatedCarIndex]->GetObject(Point)->GetOutputValue(
 			(KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE)Id), KINEMATIC_OUTPUTS::GetOutputUnitType(
 			(KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE)Id));
 	else if (Id == Pitch)
@@ -1129,7 +1129,7 @@ void ITERATION::ExportDataToFile(wxString PathAndFileName) const
 	else
 	{
 		// Unrecognized file extension
-		Debugger.Print(_T("ERROR:  Could not export data!  Unable to determine delimiter choice!"));
+		debugger.Print(_T("ERROR:  Could not export data!  Unable to determine delimiter choice!"));
 
 		return;
 	}
@@ -1140,7 +1140,7 @@ void ITERATION::ExportDataToFile(wxString PathAndFileName) const
 	// Warn the user if the file could not be opened failed
 	if (!ExportFile.is_open() || !ExportFile.good())
 	{
-		Debugger.Print(_T("ERROR:  Could not export data to '") + PathAndFileName + _T("'!"));
+		debugger.Print(_T("ERROR:  Could not export data to '") + PathAndFileName + _T("'!"));
 
 		return;
 	}
@@ -1247,9 +1247,9 @@ wxString ITERATION::GetPlotUnits(PLOT_ID Id) const
 	if (Id < Pitch)
 		Units = Converter.GetUnitType(KINEMATIC_OUTPUTS::GetOutputUnitType((KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE)Id));
 	else if (Id == Pitch || Id == Roll)
-		Units = Converter.GetUnitType(CONVERT::UNIT_TYPE_ANGLE);
+		Units = Converter.GetUnitType(Convert::UnitTypeAngle);
 	else if (Id == Heave || Id == RackTravel)
-		Units = Converter.GetUnitType(CONVERT::UNIT_TYPE_DISTANCE);
+		Units = Converter.GetUnitType(Convert::UnitTypeDistance);
 	else
 		Units = _T("Unrecognized units");
 

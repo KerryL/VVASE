@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -98,7 +98,7 @@ KINEMATIC_OUTPUTS::~KINEMATIC_OUTPUTS()
 //		None
 //
 //==========================================================================
-const DEBUGGER *KINEMATIC_OUTPUTS::Debugger = NULL;
+const Debugger *KINEMATIC_OUTPUTS::debugger = NULL;
 
 //==========================================================================
 // Class:			KINEMATIC_OUTPUTS
@@ -195,8 +195,8 @@ void KINEMATIC_OUTPUTS::Update(const CAR *Original, const SUSPENSION *Current)
 	// Initialize the twist in case the car has no sway bars
 	Doubles[FrontARBTwist] = 0.0;
 	Doubles[RearARBTwist] = 0.0;
-	VECTOR Arm1Direction, Arm2Direction;
-	VECTOR SwayBarAxis;
+	Vector Arm1Direction, Arm2Direction;
+	Vector SwayBarAxis;
 	if (Current->FrontBarStyle == SUSPENSION::SwayBarUBar)
 	{
 		// Project these directions onto the plane whose normal is the sway bar axis
@@ -264,9 +264,9 @@ void KINEMATIC_OUTPUTS::Update(const CAR *Original, const SUSPENSION *Current)
 	//  for both side of the car (plane containing the instant axis and the contact patch
 	//  point) and intersect them.  This give us an axis, and we find the intersection of
 	//  this axis with the appropriate plane to find the actual kinematic center point.
-	VECTOR RightPlaneNormal;
-	VECTOR LeftPlaneNormal;
-	VECTOR PlaneNormal(1.0, 0.0, 0.0);// For projecting the vectors to find the kinematic centers
+	Vector RightPlaneNormal;
+	Vector LeftPlaneNormal;
+	Vector PlaneNormal(1.0, 0.0, 0.0);// For projecting the vectors to find the kinematic centers
 
 	// Front
 	// Find the normal vectors
@@ -279,8 +279,8 @@ void KINEMATIC_OUTPUTS::Update(const CAR *Original, const SUSPENSION *Current)
 	if (!VVASEMath::GetIntersectionOfTwoPlanes(RightPlaneNormal, Current->RightFront.Hardpoints[CORNER::ContactPatch],
 		LeftPlaneNormal, Current->LeftFront.Hardpoints[CORNER::ContactPatch],
 		Vectors[FrontRollAxisDirection], Vectors[FrontKinematicRC]))
-		Debugger->Print(_T("Warning (KINEMATIC_OUTPUTS::Update):  Front Kinematic Roll Center is undefined"),
-			DEBUGGER::PriorityHigh);
+		debugger->Print(_T("Warning (KINEMATIC_OUTPUTS::Update):  Front Kinematic Roll Center is undefined"),
+			Debugger::PriorityHigh);
 	else
 		// We now have the axis direction and a point on the axis, but we want a specific
 		// point on the axis.  To do that, we determine the place where this vector passes through
@@ -301,8 +301,8 @@ void KINEMATIC_OUTPUTS::Update(const CAR *Original, const SUSPENSION *Current)
 	if (!VVASEMath::GetIntersectionOfTwoPlanes(RightPlaneNormal, Current->RightRear.Hardpoints[CORNER::ContactPatch],
 		LeftPlaneNormal, Current->LeftRear.Hardpoints[CORNER::ContactPatch],
 		Vectors[RearRollAxisDirection], Vectors[RearKinematicRC]))
-		Debugger->Print(_T("Warning (KINEMATIC_OUTPUTS::Update):  Rear Kinematic Roll Center is undefined"),
-			DEBUGGER::PriorityHigh);
+		debugger->Print(_T("Warning (KINEMATIC_OUTPUTS::Update):  Rear Kinematic Roll Center is undefined"),
+			Debugger::PriorityHigh);
 	else
 		// Just like we did on for the front, intersect this vector with the wheel plane
 		Vectors[RearKinematicRC] = VVASEMath::IntersectWithPlane(PlaneNormal,
@@ -313,8 +313,8 @@ void KINEMATIC_OUTPUTS::Update(const CAR *Original, const SUSPENSION *Current)
 	// Kinematic Pitch Centers and Directions [in], [-]
 	// All of the same assumptions that we have for roll centers apply here.
 	// The method is also the same as the roll center calculations.
-	VECTOR FrontPlaneNormal;
-	VECTOR RearPlaneNormal;
+	Vector FrontPlaneNormal;
+	Vector RearPlaneNormal;
 	PlaneNormal.Set(0.0, 1.0, 0.0);// For projecting the vectors to find the kinematic centers
 
 	// Right
@@ -328,8 +328,8 @@ void KINEMATIC_OUTPUTS::Update(const CAR *Original, const SUSPENSION *Current)
 	if (!VVASEMath::GetIntersectionOfTwoPlanes(FrontPlaneNormal, Current->RightFront.Hardpoints[CORNER::ContactPatch],
 		RearPlaneNormal, Current->RightRear.Hardpoints[CORNER::ContactPatch],
 		Vectors[RightPitchAxisDirection], Vectors[RightKinematicPC]))
-		Debugger->Print(_T("Warning (KINEMATIC_OUTPUTS::Update):  Right Kinematic Pitch Center is undefined"),
-			DEBUGGER::PriorityHigh);
+		debugger->Print(_T("Warning (KINEMATIC_OUTPUTS::Update):  Right Kinematic Pitch Center is undefined"),
+			Debugger::PriorityHigh);
 	else
 		// We now have the axis direction and a point on the axis, but we want a specific
 		// point on the axis.  To do that, we determine the place where this vector passes through
@@ -350,8 +350,8 @@ void KINEMATIC_OUTPUTS::Update(const CAR *Original, const SUSPENSION *Current)
 	if (!VVASEMath::GetIntersectionOfTwoPlanes(FrontPlaneNormal, Current->LeftFront.Hardpoints[CORNER::ContactPatch],
 		RearPlaneNormal, Current->LeftRear.Hardpoints[CORNER::ContactPatch],
 		Vectors[LeftPitchAxisDirection], Vectors[LeftKinematicPC]))
-		Debugger->Print(_T("Warning (KINEMATIC_OUTPUTS::Update):  Left Kinematic Pitch Center is undefined"),
-			DEBUGGER::PriorityHigh);
+		debugger->Print(_T("Warning (KINEMATIC_OUTPUTS::Update):  Left Kinematic Pitch Center is undefined"),
+			Debugger::PriorityHigh);
 	else
 		// Just like we did for the right side, intersect this vector with the wheel plane
 		Vectors[LeftKinematicPC] = VVASEMath::IntersectWithPlane(PlaneNormal,
@@ -420,7 +420,7 @@ void KINEMATIC_OUTPUTS::UpdateCorner(const CORNER *OriginalCorner, const CORNER 
 {
 	// Assign pointers to the corner outputs and our sign conventions
 	double *CornerDoubles;
-	VECTOR *CornerVectors;
+	Vector *CornerVectors;
 	short Sign;
 	bool IsAtFront = false;
 
@@ -453,51 +453,51 @@ void KINEMATIC_OUTPUTS::UpdateCorner(const CORNER *OriginalCorner, const CORNER 
 	else
 	{
 		// Not one of our recognized locations!!!
-		Debugger->Print(_T("ERROR:  Corner location not regognized!"), DEBUGGER::PriorityHigh);
+		debugger->Print(_T("ERROR:  Corner location not regognized!"), Debugger::PriorityHigh);
 		return;
 	}
 
 	// Caster [rad]
 	CornerDoubles[Caster] = VVASEMath::RangeToPlusMinusPi(atan2(
-		CurrentCorner->Hardpoints[CORNER::UpperBallJoint].X - CurrentCorner->Hardpoints[CORNER::LowerBallJoint].X,
-		CurrentCorner->Hardpoints[CORNER::UpperBallJoint].Z - CurrentCorner->Hardpoints[CORNER::LowerBallJoint].Z));
+		CurrentCorner->Hardpoints[CORNER::UpperBallJoint].x - CurrentCorner->Hardpoints[CORNER::LowerBallJoint].x,
+		CurrentCorner->Hardpoints[CORNER::UpperBallJoint].z - CurrentCorner->Hardpoints[CORNER::LowerBallJoint].z));
 
 	// KPI [rad]
 	CornerDoubles[KPI] = VVASEMath::RangeToPlusMinusPi(Sign * atan2(
-		CurrentCorner->Hardpoints[CORNER::LowerBallJoint].Y - CurrentCorner->Hardpoints[CORNER::UpperBallJoint].Y,
-		CurrentCorner->Hardpoints[CORNER::UpperBallJoint].Z - CurrentCorner->Hardpoints[CORNER::LowerBallJoint].Z));
+		CurrentCorner->Hardpoints[CORNER::LowerBallJoint].y - CurrentCorner->Hardpoints[CORNER::UpperBallJoint].y,
+		CurrentCorner->Hardpoints[CORNER::UpperBallJoint].z - CurrentCorner->Hardpoints[CORNER::LowerBallJoint].z));
 
 	// Caster Trail [in]
 	// Note on Caster Trail:  In RCVD p. 713, it is noted that sometimes trail is
 	// meausred perpendicular to the steering axis (instead of as a horizontal
 	// distance, like we do here) because this more accurately describes the
 	// moment arm that connects the tire forces to the kingpin.
-	CornerDoubles[CasterTrail] = CurrentCorner->Hardpoints[CORNER::ContactPatch].X -
-		(CurrentCorner->Hardpoints[CORNER::UpperBallJoint].X - CurrentCorner->Hardpoints[CORNER::UpperBallJoint].Z *
-		(CurrentCorner->Hardpoints[CORNER::UpperBallJoint].X - CurrentCorner->Hardpoints[CORNER::LowerBallJoint].X) /
-		(CurrentCorner->Hardpoints[CORNER::UpperBallJoint].Z - CurrentCorner->Hardpoints[CORNER::LowerBallJoint].Z));
+	CornerDoubles[CasterTrail] = CurrentCorner->Hardpoints[CORNER::ContactPatch].x -
+		(CurrentCorner->Hardpoints[CORNER::UpperBallJoint].x - CurrentCorner->Hardpoints[CORNER::UpperBallJoint].z *
+		(CurrentCorner->Hardpoints[CORNER::UpperBallJoint].x - CurrentCorner->Hardpoints[CORNER::LowerBallJoint].x) /
+		(CurrentCorner->Hardpoints[CORNER::UpperBallJoint].z - CurrentCorner->Hardpoints[CORNER::LowerBallJoint].z));
 
 	// Scrub Radius [in]
-	CornerDoubles[ScrubRadius] = Sign * (CurrentCorner->Hardpoints[CORNER::ContactPatch].Y -
-		 CurrentCorner->Hardpoints[CORNER::UpperBallJoint].Y - CurrentCorner->Hardpoints[CORNER::UpperBallJoint].Z *
-		(CurrentCorner->Hardpoints[CORNER::LowerBallJoint].Y - CurrentCorner->Hardpoints[CORNER::UpperBallJoint].Y) /
-		(CurrentCorner->Hardpoints[CORNER::UpperBallJoint].Z - CurrentCorner->Hardpoints[CORNER::LowerBallJoint].Z));
+	CornerDoubles[ScrubRadius] = Sign * (CurrentCorner->Hardpoints[CORNER::ContactPatch].y -
+		 CurrentCorner->Hardpoints[CORNER::UpperBallJoint].y - CurrentCorner->Hardpoints[CORNER::UpperBallJoint].z *
+		(CurrentCorner->Hardpoints[CORNER::LowerBallJoint].y - CurrentCorner->Hardpoints[CORNER::UpperBallJoint].y) /
+		(CurrentCorner->Hardpoints[CORNER::UpperBallJoint].z - CurrentCorner->Hardpoints[CORNER::LowerBallJoint].z));
 
 	// Spindle Length [in]
 	//  Spindle length is the distance between the wheel center and the steer axis, at the
 	//  height of the wheel center.
-	double t = (CurrentCorner->Hardpoints[CORNER::WheelCenter].Z - CurrentCorner->Hardpoints[CORNER::LowerBallJoint].Z) /
-		(CurrentCorner->Hardpoints[CORNER::UpperBallJoint].Z - CurrentCorner->Hardpoints[CORNER::LowerBallJoint].Z);
-	VECTOR PointOnSteerAxis = CurrentCorner->Hardpoints[CORNER::LowerBallJoint] +
+	double t = (CurrentCorner->Hardpoints[CORNER::WheelCenter].z - CurrentCorner->Hardpoints[CORNER::LowerBallJoint].z) /
+		(CurrentCorner->Hardpoints[CORNER::UpperBallJoint].z - CurrentCorner->Hardpoints[CORNER::LowerBallJoint].z);
+	Vector PointOnSteerAxis = CurrentCorner->Hardpoints[CORNER::LowerBallJoint] +
 		(CurrentCorner->Hardpoints[CORNER::UpperBallJoint] - CurrentCorner->Hardpoints[CORNER::LowerBallJoint]) * t;
-	CornerDoubles[SpindleLength] = (PointOnSteerAxis.Y - CurrentCorner->Hardpoints[CORNER::WheelCenter].Y) /
-		fabs(PointOnSteerAxis.Y - CurrentCorner->Hardpoints[CORNER::WheelCenter].Y) * Sign *
+	CornerDoubles[SpindleLength] = (PointOnSteerAxis.y - CurrentCorner->Hardpoints[CORNER::WheelCenter].y) /
+		fabs(PointOnSteerAxis.y - CurrentCorner->Hardpoints[CORNER::WheelCenter].y) * Sign *
 		CurrentCorner->Hardpoints[CORNER::WheelCenter].Distance(PointOnSteerAxis);
 
 	// Camber and Steer Angle [rad]
-	VECTOR OriginalWheelPlaneNormal;
-	VECTOR NewWheelPlaneNormal;
-	VECTOR Angles;
+	Vector OriginalWheelPlaneNormal;
+	Vector NewWheelPlaneNormal;
+	Vector Angles;
 
 	OriginalWheelPlaneNormal = VVASEMath::GetPlaneNormal(
 		OriginalCorner->Hardpoints[CORNER::LowerBallJoint],
@@ -510,14 +510,14 @@ void KINEMATIC_OUTPUTS::UpdateCorner(const CORNER *OriginalCorner, const CORNER 
 
 	// Calculate the wheel angles to get the steer angle
 	Angles = OriginalWheelPlaneNormal.AnglesTo(NewWheelPlaneNormal);
-	CornerDoubles[Steer] = Angles.Z;
+	CornerDoubles[Steer] = Angles.z;
 
 	// Rotate the NewWheelPlaneNormal back about Z by the steer angle in preparation for solving for camber
-	NewWheelPlaneNormal.Rotate(CornerDoubles[Steer], VECTOR::AxisZ);
+	NewWheelPlaneNormal.Rotate(CornerDoubles[Steer], Vector::AxisZ);
 
 	// Calculate the wheel angles again, this time we want the camber angle
 	Angles = OriginalWheelPlaneNormal.AnglesTo(NewWheelPlaneNormal);
-	CornerDoubles[Camber] = Sign * Angles.X;
+	CornerDoubles[Camber] = Sign * Angles.x;
 
 	// Add in the effects of static camber and toe settings
 	CornerDoubles[Camber] += CurrentCorner->StaticCamber;
@@ -540,8 +540,8 @@ void KINEMATIC_OUTPUTS::UpdateCorner(const CORNER *OriginalCorner, const CORNER 
 		CurrentCorner->Hardpoints[CORNER::OutboardShock]);
 
 	// Scrub [in]
-	CornerDoubles[Scrub] = Sign * (CurrentCorner->Hardpoints[CORNER::ContactPatch].Y -
-		OriginalCorner->Hardpoints[CORNER::ContactPatch].Y);
+	CornerDoubles[Scrub] = Sign * (CurrentCorner->Hardpoints[CORNER::ContactPatch].y -
+		OriginalCorner->Hardpoints[CORNER::ContactPatch].y);
 
 	// Axle Plunge [in] - positive is shortened
 	if ((CurrentCar->HasFrontHalfShafts() && IsAtFront) || (CurrentCar->HasRearHalfShafts() && !IsAtFront))
@@ -560,8 +560,8 @@ void KINEMATIC_OUTPUTS::UpdateCorner(const CORNER *OriginalCorner, const CORNER 
 	//  lower control arm planes.  The direction vector can be determined by taking
 	//  the cross product of the normal vectors for the upper and lower control arm
 	//  planes.
-	VECTOR UpperPlaneNormal;
-	VECTOR LowerPlaneNormal;
+	Vector UpperPlaneNormal;
+	Vector LowerPlaneNormal;
 
 	UpperPlaneNormal = VVASEMath::GetPlaneNormal(CurrentCorner->Hardpoints[CORNER::UpperBallJoint],
 		CurrentCorner->Hardpoints[CORNER::UpperFrontTubMount], CurrentCorner->Hardpoints[CORNER::UpperRearTubMount]);
@@ -571,14 +571,14 @@ void KINEMATIC_OUTPUTS::UpdateCorner(const CORNER *OriginalCorner, const CORNER 
 	if (!VVASEMath::GetIntersectionOfTwoPlanes(UpperPlaneNormal, CurrentCorner->Hardpoints[CORNER::UpperBallJoint],
 		LowerPlaneNormal, CurrentCorner->Hardpoints[CORNER::LowerBallJoint], 
 		CornerVectors[InstantAxisDirection], CornerVectors[InstantCenter]))
-		Debugger->Print(_T("Warning (KINEMATIC_OUTPUTS::UpdateCorner):  Instant Center is undefined"),
-			DEBUGGER::PriorityHigh);
+		debugger->Print(_T("Warning (KINEMATIC_OUTPUTS::UpdateCorner):  Instant Center is undefined"),
+			Debugger::PriorityHigh);
 	else
 	{
 		// We now have the axis direction and a point on the axis, but we want a specific
 		// point on the axis.  To do that, we determine the place where this vector passes through
 		// the appropriate plane.
-		VECTOR PlaneNormal(1.0, 0.0, 0.0);
+		Vector PlaneNormal(1.0, 0.0, 0.0);
 
 		CornerVectors[InstantCenter] = VVASEMath::IntersectWithPlane(PlaneNormal, CurrentCorner->Hardpoints[CORNER::WheelCenter],
 			CornerVectors[InstantAxisDirection], CornerVectors[InstantCenter]);
@@ -603,14 +603,14 @@ void KINEMATIC_OUTPUTS::UpdateCorner(const CORNER *OriginalCorner, const CORNER 
 	// the force that is reacted through the control arm.
 	// Note that this procedure varies slightly depending on what component the pushrod is
 	// attached to on the outboard suspension.
-	VECTOR Force(0.0, 0.0, 1.0);// Applied to the wheel center
+	Vector Force(0.0, 0.0, 1.0);// Applied to the wheel center
 
-	VECTOR MomentDirection;
+	Vector MomentDirection;
 	double MomentMagnitude;
-	VECTOR MomentArm;
+	Vector MomentArm;
 
-	VECTOR PointOnAxis;
-	VECTOR ForceDirection;
+	Vector PointOnAxis;
+	Vector ForceDirection;
 
 	// This changes depending on what is actuating the shock/spring (outer in..else)
 	// and also with what the pushrod or spring/shock attach to on the outer suspension (inner
@@ -757,8 +757,8 @@ void KINEMATIC_OUTPUTS::UpdateCorner(const CORNER *OriginalCorner, const CORNER 
 		// From the principle of virtual work we have these relationships:
 		//  VirtualWork = ForceAtWheelCenter * VirtualDisplacement1
 		//  VirtualWork = ReactionAtSpring * VirtualDisplacement2
-		// From the first equation, we know VirtualWork is 1.0 * VirtualDisplacement1.Z.
-		// We can choose 1.0 for VirtualDisplacement1.Z, so now we have the following:
+		// From the first equation, we know VirtualWork is 1.0 * VirtualDisplacement1.z.
+		// We can choose 1.0 for VirtualDisplacement1.z, so now we have the following:
 		//  VirtualDisplacement2 = 1.0 / Magnitude(ReactionAtSpring);
 		// We add the sign of the dot product between the force and force direction to provide a means
 		// of identifying cases where the shock/spring move the "wrong" way (extend in jounce).
@@ -890,8 +890,8 @@ void KINEMATIC_OUTPUTS::UpdateCorner(const CORNER *OriginalCorner, const CORNER 
 		// From the principle of virtual work we have these relationships:
 		//  VirtualWork = ForceAtWheelCenter * VirtualDisplacement1
 		//  VirtualWork = ReactionAtSpring * VirtualDisplacement2
-		// From the first equation, we know VirtualWork is 1.0 * VirtualDisplacement1.Z.
-		// We can choose 1.0 for VirtualDisplacement1.Z, so now we have the following:
+		// From the first equation, we know VirtualWork is 1.0 * VirtualDisplacement1.z.
+		// We can choose 1.0 for VirtualDisplacement1.z, so now we have the following:
 		//  VirtualDisplacement2 = 1.0 / Magnitude(ReactionAtSpring);
 		// We add the sign of the dot product between the force and force direction to provide a means
 		// of identifying cases where the shock/spring move the "wrong" way (extend in jounce).
@@ -915,16 +915,16 @@ void KINEMATIC_OUTPUTS::UpdateCorner(const CORNER *OriginalCorner, const CORNER 
 	// Find the plane that contains the wheel center and has the Y direction as a
 	// normal, and find the intersection of the Instant Axis and that plane. This
 	// vector's X-coordinate is the SVSA length.
-	VECTOR PlaneNormal(0.0, 1.0, 0.0);
-	VECTOR Intersection;
+	Vector PlaneNormal(0.0, 1.0, 0.0);
+	Vector Intersection;
 
 	// Get the intersection of the Instant Center with this plane
 	Intersection = VVASEMath::IntersectWithPlane(PlaneNormal, CurrentCorner->Hardpoints[CORNER::WheelCenter],
 		CornerVectors[InstantAxisDirection], CornerVectors[InstantCenter]);
-	CornerDoubles[SideViewSwingArmLength] = fabs(Intersection.X);
+	CornerDoubles[SideViewSwingArmLength] = fabs(Intersection.x);
 
 	// We'll need this information when calculating the anti-geometry down below:
-	double SideViewSwingArmHeight = Intersection.Z;
+	double SideViewSwingArmHeight = Intersection.z;
 
 	// Front View Swing Arm Length [in]
 	// The procedure is identical to finding the SVSA length, except the plane we intersect
@@ -934,7 +934,7 @@ void KINEMATIC_OUTPUTS::UpdateCorner(const CORNER *OriginalCorner, const CORNER 
 	// Get the intersection of the Instant Center with this plane
 	Intersection = VVASEMath::IntersectWithPlane(PlaneNormal, CurrentCorner->Hardpoints[CORNER::WheelCenter],
 		CornerVectors[InstantAxisDirection], CornerVectors[InstantCenter]);
-	CornerDoubles[FrontViewSwingArmLength] = fabs(Intersection.Y);
+	CornerDoubles[FrontViewSwingArmLength] = fabs(Intersection.y);
 
 	// Anti-brake [%]
 	// Note that the equation changes if the brakes are inboard vs. outboard.  This
@@ -944,11 +944,11 @@ void KINEMATIC_OUTPUTS::UpdateCorner(const CORNER *OriginalCorner, const CORNER 
 	// by the chassis.  The nomenclature for the anti-geometry comes from RCVD p. 617.
 	// NOTE:  We are required to know the sprung mass CG height and the wheelbase here.
 	//        we assume that the static wheelbase and CG height are still accurate here (FIXME!!!)
-	double Wheelbase = (CurrentCar->Suspension->RightRear.Hardpoints[CORNER::ContactPatch].X
-		- CurrentCar->Suspension->RightFront.Hardpoints[CORNER::ContactPatch].X
-		+ CurrentCar->Suspension->LeftRear.Hardpoints[CORNER::ContactPatch].X
-		- CurrentCar->Suspension->LeftFront.Hardpoints[CORNER::ContactPatch].X) / 2.0;
-	double CGHeight = CurrentCar->MassProperties->CenterOfGravity.Z;
+	double Wheelbase = (CurrentCar->Suspension->RightRear.Hardpoints[CORNER::ContactPatch].x
+		- CurrentCar->Suspension->RightFront.Hardpoints[CORNER::ContactPatch].x
+		+ CurrentCar->Suspension->LeftRear.Hardpoints[CORNER::ContactPatch].x
+		- CurrentCar->Suspension->LeftFront.Hardpoints[CORNER::ContactPatch].x) / 2.0;
+	double CGHeight = CurrentCar->MassProperties->CenterOfGravity.z;
 	double ReactionPathAngleTangent;
 
 	// Determine if we are talking about anti-dive (front) or anti-lift (rear)
@@ -960,7 +960,7 @@ void KINEMATIC_OUTPUTS::UpdateCorner(const CORNER *OriginalCorner, const CORNER 
 		{
 			// Compute the tangent of the reaction path angle
 			ReactionPathAngleTangent = (SideViewSwingArmHeight -
-				CurrentCorner->Hardpoints[CORNER::WheelCenter].Z) / CornerDoubles[SideViewSwingArmLength];
+				CurrentCorner->Hardpoints[CORNER::WheelCenter].z) / CornerDoubles[SideViewSwingArmLength];
 
 			// Compute the anti-dive
 			CornerDoubles[AntiBrakePitch] = ReactionPathAngleTangent * Wheelbase / CGHeight
@@ -984,7 +984,7 @@ void KINEMATIC_OUTPUTS::UpdateCorner(const CORNER *OriginalCorner, const CORNER 
 		{
 			// Compute the tangent of the reaction path angle
 			ReactionPathAngleTangent = (SideViewSwingArmHeight -
-				CurrentCorner->Hardpoints[CORNER::WheelCenter].Z) / CornerDoubles[SideViewSwingArmLength];
+				CurrentCorner->Hardpoints[CORNER::WheelCenter].z) / CornerDoubles[SideViewSwingArmLength];
 
 			// Compute the anti-lift
 			CornerDoubles[AntiBrakePitch] = ReactionPathAngleTangent * Wheelbase / CGHeight
@@ -1018,7 +1018,7 @@ void KINEMATIC_OUTPUTS::UpdateCorner(const CORNER *OriginalCorner, const CORNER 
 	{
 		// Compute the tangent of the reaction path angle
 		ReactionPathAngleTangent = (SideViewSwingArmHeight -
-			CurrentCorner->Hardpoints[CORNER::WheelCenter].Z) / CornerDoubles[SideViewSwingArmLength];
+			CurrentCorner->Hardpoints[CORNER::WheelCenter].z) / CornerDoubles[SideViewSwingArmLength];
 
 		// Compute the anti-lift
 		CornerDoubles[AntiDrivePitch] = ReactionPathAngleTangent * Wheelbase / CGHeight * 100.0;
@@ -1141,7 +1141,7 @@ wxString KINEMATIC_OUTPUTS::GetCornerDoubleName(const CORNER_OUTPUTS_DOUBLE &_Ou
 // Description:		Returns a string containing the name of the specified output.
 //
 // Input Arguments:
-//		_Output	= const CORNER_OUTPUTS_VECTOR& specifying the output in which we are
+//		_Output	= const CORNER_OUTPUTS_Vector& specifying the output in which we are
 //				  interested
 //
 // Output Arguments:
@@ -1151,7 +1151,7 @@ wxString KINEMATIC_OUTPUTS::GetCornerDoubleName(const CORNER_OUTPUTS_DOUBLE &_Ou
 //		wxString containing the name of the specified output
 //
 //==========================================================================
-wxString KINEMATIC_OUTPUTS::GetCornerVectorName(const CORNER_OUTPUTS_VECTOR &_Output)
+wxString KINEMATIC_OUTPUTS::GetCornerVectorName(const CORNER_OUTPUTS_Vector &_Output)
 {
 	// The return value
 	wxString Name;
@@ -1295,7 +1295,7 @@ wxString KINEMATIC_OUTPUTS::GetDoubleName(const OUTPUTS_DOUBLE &_Output)
 // Description:		Returns a string containing the name of the specified output.
 //
 // Input Arguments:
-//		_Output	= const OUTPUTS_VECTOR& specifying the output in which we are
+//		_Output	= const OUTPUTS_Vector& specifying the output in which we are
 //				  interested
 //
 // Output Arguments:
@@ -1305,7 +1305,7 @@ wxString KINEMATIC_OUTPUTS::GetDoubleName(const OUTPUTS_DOUBLE &_Output)
 //		wxString containing the name of the specified output
 //
 //==========================================================================
-wxString KINEMATIC_OUTPUTS::GetVectorName(const OUTPUTS_VECTOR &_Output)
+wxString KINEMATIC_OUTPUTS::GetVectorName(const OUTPUTS_Vector &_Output)
 {
 	// The return value
 	wxString Name;
@@ -1376,8 +1376,8 @@ double KINEMATIC_OUTPUTS::GetOutputValue(const OUTPUTS_COMPLETE &_Output) const
 	// The return value
 	double Value;
 
-	// Temporary VECTOR for extracting componenets
-	VECTOR Temp;
+	// Temporary Vector for extracting componenets
+	Vector Temp;
 
 	// Temporary OUTPUTS_COMPLETE for math
 	OUTPUTS_COMPLETE NewOutputIndex;
@@ -1394,16 +1394,16 @@ double KINEMATIC_OUTPUTS::GetOutputValue(const OUTPUTS_COMPLETE &_Output) const
 		switch (NewOutputIndex % 3)
 		{
 		case 0:
-			Value = Temp.X;
+			Value = Temp.x;
 			break;
 
 		case 1:
-			Value = Temp.Y;
+			Value = Temp.y;
 			break;
 
 		case 2:
 		default:
-			Value = Temp.Z;
+			Value = Temp.z;
 			break;
 		}
 	}
@@ -1418,16 +1418,16 @@ double KINEMATIC_OUTPUTS::GetOutputValue(const OUTPUTS_COMPLETE &_Output) const
 		switch (NewOutputIndex % 3)
 		{
 		case 0:
-			Value = Temp.X;
+			Value = Temp.x;
 			break;
 
 		case 1:
-			Value = Temp.Y;
+			Value = Temp.y;
 			break;
 
 		case 2:
 		default:
-			Value = Temp.Z;
+			Value = Temp.z;
 			break;
 		}
 	}
@@ -1442,16 +1442,16 @@ double KINEMATIC_OUTPUTS::GetOutputValue(const OUTPUTS_COMPLETE &_Output) const
 		switch (NewOutputIndex % 3)
 		{
 		case 0:
-			Value = Temp.X;
+			Value = Temp.x;
 			break;
 
 		case 1:
-			Value = Temp.Y;
+			Value = Temp.y;
 			break;
 
 		case 2:
 		default:
-			Value = Temp.Z;
+			Value = Temp.z;
 			break;
 		}
 	}
@@ -1466,16 +1466,16 @@ double KINEMATIC_OUTPUTS::GetOutputValue(const OUTPUTS_COMPLETE &_Output) const
 		switch (NewOutputIndex % 3)
 		{
 		case 0:
-			Value = Temp.X;
+			Value = Temp.x;
 			break;
 
 		case 1:
-			Value = Temp.Y;
+			Value = Temp.y;
 			break;
 
 		case 2:
 		default:
-			Value = Temp.Z;
+			Value = Temp.z;
 			break;
 		}
 	}
@@ -1490,16 +1490,16 @@ double KINEMATIC_OUTPUTS::GetOutputValue(const OUTPUTS_COMPLETE &_Output) const
 		switch (NewOutputIndex % 3)
 		{
 		case 0:
-			Value = Temp.X;
+			Value = Temp.x;
 			break;
 
 		case 1:
-			Value = Temp.Y;
+			Value = Temp.y;
 			break;
 
 		case 2:
 		default:
-			Value = Temp.Z;
+			Value = Temp.z;
 			break;
 		}
 	}
@@ -1524,13 +1524,13 @@ double KINEMATIC_OUTPUTS::GetOutputValue(const OUTPUTS_COMPLETE &_Output) const
 //		None
 //
 // Return Value:
-//		CONVERT::UNIT_TYPE specifying the unit type of the requested output
+//		Convert::UnitType specifying the unit type of the requested output
 //
 //==========================================================================
-CONVERT::UNIT_TYPE KINEMATIC_OUTPUTS::GetOutputUnitType(const OUTPUTS_COMPLETE &_Output)
+Convert::UnitType KINEMATIC_OUTPUTS::GetOutputUnitType(const OUTPUTS_COMPLETE &_Output)
 {
 	// The value to return
-	CONVERT::UNIT_TYPE UnitType;
+	Convert::UnitType UnitType;
 
 	// For some simple math
 	OUTPUTS_COMPLETE NewOutputIndex;
@@ -1541,38 +1541,38 @@ CONVERT::UNIT_TYPE KINEMATIC_OUTPUTS::GetOutputUnitType(const OUTPUTS_COMPLETE &
 	else if (_Output <= EndRightFrontVectors)
 	{
 		NewOutputIndex = OUTPUTS_COMPLETE(_Output - StartRightFrontVectors);
-		UnitType = GetCornerVectorUnitType((CORNER_OUTPUTS_VECTOR)int(NewOutputIndex / 3));
+		UnitType = GetCornerVectorUnitType((CORNER_OUTPUTS_Vector)int(NewOutputIndex / 3));
 	}
 	else if (_Output <= EndLeftFrontDoubles)
 		UnitType = GetCornerDoubleUnitType((CORNER_OUTPUTS_DOUBLE)(_Output - StartLeftFrontDoubles));
 	else if (_Output <= EndLeftFrontVectors)
 	{
 		NewOutputIndex = OUTPUTS_COMPLETE(_Output - StartLeftFrontVectors);
-		UnitType = GetCornerVectorUnitType((CORNER_OUTPUTS_VECTOR)int(NewOutputIndex / 3));
+		UnitType = GetCornerVectorUnitType((CORNER_OUTPUTS_Vector)int(NewOutputIndex / 3));
 	}
 	else if (_Output <= EndRightRearDoubles)
 		UnitType = GetCornerDoubleUnitType((CORNER_OUTPUTS_DOUBLE)(_Output - StartRightRearDoubles));
 	else if (_Output <= EndRightRearVectors)
 	{
 		NewOutputIndex = OUTPUTS_COMPLETE(_Output - StartRightRearVectors);
-		UnitType = GetCornerVectorUnitType((CORNER_OUTPUTS_VECTOR)int(NewOutputIndex / 3));
+		UnitType = GetCornerVectorUnitType((CORNER_OUTPUTS_Vector)int(NewOutputIndex / 3));
 	}
 	else if (_Output <= EndLeftRearDoubles)
 		UnitType = GetCornerDoubleUnitType((CORNER_OUTPUTS_DOUBLE)(_Output - StartLeftRearDoubles));
 	else if (_Output <= EndLeftRearVectors)
 	{
 		NewOutputIndex = OUTPUTS_COMPLETE(_Output - StartLeftRearVectors);
-		UnitType = GetCornerVectorUnitType((CORNER_OUTPUTS_VECTOR)int(NewOutputIndex / 3));
+		UnitType = GetCornerVectorUnitType((CORNER_OUTPUTS_Vector)int(NewOutputIndex / 3));
 	}
 	else if (_Output <= EndDoubles)
 		UnitType = GetDoubleUnitType((OUTPUTS_DOUBLE)(_Output - StartDoubles));
 	else if (_Output <= EndVectors)
 	{
 		NewOutputIndex = OUTPUTS_COMPLETE(_Output - StartVectors);
-		UnitType = GetVectorUnitType((OUTPUTS_VECTOR)int(NewOutputIndex / 3));
+		UnitType = GetVectorUnitType((OUTPUTS_Vector)int(NewOutputIndex / 3));
 	}
 	else
-		UnitType = CONVERT::UNIT_TYPE_UNKNOWN;
+		UnitType = Convert::UnitTypeUnknown;
 
 	return UnitType;
 }
@@ -1604,7 +1604,7 @@ wxString KINEMATIC_OUTPUTS::GetOutputName(const OUTPUTS_COMPLETE &_Output)
 	OUTPUTS_COMPLETE NewOutputIndex;
 
 	// Depending on the specified PLOT_ID, choose the name of the string
-	// Vectors are a special case - depending on which componenet of the vector is chosen,
+	// Vectors are a special case - depending on which component of the vector is chosen,
 	// we need to append a different string to the end of the Name
 	if (_Output <= EndRightFrontDoubles)
 	{
@@ -1614,7 +1614,7 @@ wxString KINEMATIC_OUTPUTS::GetOutputName(const OUTPUTS_COMPLETE &_Output)
 	else if (_Output <= EndRightFrontVectors)
 	{
 		NewOutputIndex = OUTPUTS_COMPLETE((int)_Output - (int)StartRightFrontVectors);
-		Name = GetCornerVectorName((CORNER_OUTPUTS_VECTOR)int(NewOutputIndex / 3));
+		Name = GetCornerVectorName((CORNER_OUTPUTS_Vector)int(NewOutputIndex / 3));
 
 		// Append the appropriate tag, depending on the specified component
 		switch (NewOutputIndex % 3)
@@ -1643,7 +1643,7 @@ wxString KINEMATIC_OUTPUTS::GetOutputName(const OUTPUTS_COMPLETE &_Output)
 	else if (_Output <= EndLeftFrontVectors)
 	{
 		NewOutputIndex = OUTPUTS_COMPLETE((int)_Output - (int)StartLeftFrontVectors);
-		Name = GetCornerVectorName((CORNER_OUTPUTS_VECTOR)int(NewOutputIndex / 3));
+		Name = GetCornerVectorName((CORNER_OUTPUTS_Vector)int(NewOutputIndex / 3));
 
 		// Append the appropriate tag, depending on the specified component
 		switch (NewOutputIndex % 3)
@@ -1672,7 +1672,7 @@ wxString KINEMATIC_OUTPUTS::GetOutputName(const OUTPUTS_COMPLETE &_Output)
 	else if (_Output <= EndRightRearVectors)
 	{
 		NewOutputIndex = OUTPUTS_COMPLETE((int)_Output - (int)StartRightRearVectors);
-		Name = GetCornerVectorName((CORNER_OUTPUTS_VECTOR)int(NewOutputIndex / 3));
+		Name = GetCornerVectorName((CORNER_OUTPUTS_Vector)int(NewOutputIndex / 3));
 
 		// Append the appropriate tag, depending on the specified component
 		switch (NewOutputIndex % 3)
@@ -1701,7 +1701,7 @@ wxString KINEMATIC_OUTPUTS::GetOutputName(const OUTPUTS_COMPLETE &_Output)
 	else if (_Output <= EndLeftRearVectors)
 	{
 		NewOutputIndex = OUTPUTS_COMPLETE((int)_Output - (int)StartLeftRearVectors);
-		Name = GetCornerVectorName((CORNER_OUTPUTS_VECTOR)int(NewOutputIndex / 3));
+		Name = GetCornerVectorName((CORNER_OUTPUTS_Vector)int(NewOutputIndex / 3));
 
 		// Append the appropriate tag, depending on the specified component
 		switch (NewOutputIndex % 3)
@@ -1727,7 +1727,7 @@ wxString KINEMATIC_OUTPUTS::GetOutputName(const OUTPUTS_COMPLETE &_Output)
 	else if (_Output <= EndVectors)
 	{
 		NewOutputIndex = OUTPUTS_COMPLETE((int)_Output - (int)StartVectors);
-		Name = GetVectorName((OUTPUTS_VECTOR)int(NewOutputIndex / 3));
+		Name = GetVectorName((OUTPUTS_Vector)int(NewOutputIndex / 3));
 
 		// Append the appropriate tag, depending on the specified component
 		switch (NewOutputIndex % 3)
@@ -1766,13 +1766,13 @@ wxString KINEMATIC_OUTPUTS::GetOutputName(const OUTPUTS_COMPLETE &_Output)
 //		None
 //
 // Return Value:
-//		CONVERT::UNIT_TYPE describing the units of the specified output
+//		Convert::UnitType describing the units of the specified output
 //
 //==========================================================================
-CONVERT::UNIT_TYPE KINEMATIC_OUTPUTS::GetCornerDoubleUnitType(const CORNER_OUTPUTS_DOUBLE &_Output)
+Convert::UnitType KINEMATIC_OUTPUTS::GetCornerDoubleUnitType(const CORNER_OUTPUTS_DOUBLE &_Output)
 {
 	// The return value
-	CONVERT::UNIT_TYPE UnitType;
+	Convert::UnitType UnitType;
 
 	// Determine the units based on it's type
 	switch (_Output)
@@ -1782,7 +1782,7 @@ CONVERT::UNIT_TYPE KINEMATIC_OUTPUTS::GetCornerDoubleUnitType(const CORNER_OUTPU
 	case Camber:
 	case KPI:
 	case Steer:
-		UnitType = CONVERT::UNIT_TYPE_ANGLE;
+		UnitType = Convert::UnitTypeAngle;
 		break;
 
 		// Distances
@@ -1795,7 +1795,7 @@ CONVERT::UNIT_TYPE KINEMATIC_OUTPUTS::GetCornerDoubleUnitType(const CORNER_OUTPU
 	case SpindleLength:
 	case SideViewSwingArmLength:
 	case FrontViewSwingArmLength:
-		UnitType = CONVERT::UNIT_TYPE_DISTANCE;
+		UnitType = Convert::UnitTypeDistance;
 		break;
 
 		// Unitless
@@ -1803,12 +1803,12 @@ CONVERT::UNIT_TYPE KINEMATIC_OUTPUTS::GetCornerDoubleUnitType(const CORNER_OUTPU
 	case ShockInstallationRatio:
 	case AntiBrakePitch:
 	case AntiDrivePitch:
-		UnitType = CONVERT::UNIT_TYPE_UNITLESS;
+		UnitType = Convert::UnitTypeUnitless;
 		break;
 
 		// Unknown
 	default:
-		UnitType = CONVERT::UNIT_TYPE_UNKNOWN;
+		UnitType = Convert::UnitTypeUnknown;
 		break;
 	}
 
@@ -1822,37 +1822,37 @@ CONVERT::UNIT_TYPE KINEMATIC_OUTPUTS::GetCornerDoubleUnitType(const CORNER_OUTPU
 // Description:		Returns a the type of units for the specified output.
 //
 // Input Arguments:
-//		_Output	= const CORNER_OUTPUTS_VECTOR& specifying the
+//		_Output	= const CORNER_OUTPUTS_Vector& specifying the
 //				  output in which we are interested
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		CONVERT::UNIT_TYPE describing the units of the specified output
+//		Convert::UnitType describing the units of the specified output
 //
 //==========================================================================
-CONVERT::UNIT_TYPE KINEMATIC_OUTPUTS::GetCornerVectorUnitType(const CORNER_OUTPUTS_VECTOR &_Output)
+Convert::UnitType KINEMATIC_OUTPUTS::GetCornerVectorUnitType(const CORNER_OUTPUTS_Vector &_Output)
 {
 	// The return value
-	CONVERT::UNIT_TYPE UnitType;
+	Convert::UnitType UnitType;
 
 	// Determine the units based on it's type
 	switch (_Output)
 	{
 		// Distances
 	case InstantCenter:
-		UnitType = CONVERT::UNIT_TYPE_DISTANCE;
+		UnitType = Convert::UnitTypeDistance;
 		break;
 
 		// Unitless (no conversion)
 	case InstantAxisDirection:
-		UnitType = CONVERT::UNIT_TYPE_UNITLESS;
+		UnitType = Convert::UnitTypeUnitless;
 		break;
 
 		// Unknown
 	default:
-		UnitType = CONVERT::UNIT_TYPE_UNKNOWN;
+		UnitType = Convert::UnitTypeUnknown;
 		break;
 	}
 
@@ -1873,13 +1873,13 @@ CONVERT::UNIT_TYPE KINEMATIC_OUTPUTS::GetCornerVectorUnitType(const CORNER_OUTPU
 //		None
 //
 // Return Value:
-//		CONVERT::UNIT_TYPE describing the units of the specified output
+//		Convert::UnitType describing the units of the specified output
 //
 //==========================================================================
-CONVERT::UNIT_TYPE KINEMATIC_OUTPUTS::GetDoubleUnitType(const OUTPUTS_DOUBLE &_Output)
+Convert::UnitType KINEMATIC_OUTPUTS::GetDoubleUnitType(const OUTPUTS_DOUBLE &_Output)
 {
 	// The return value
-	CONVERT::UNIT_TYPE UnitType;
+	Convert::UnitType UnitType;
 
 	// Determine the units based on it's type
 	switch (_Output)
@@ -1899,7 +1899,7 @@ CONVERT::UNIT_TYPE KINEMATIC_OUTPUTS::GetDoubleUnitType(const OUTPUTS_DOUBLE &_O
 	case RearTrackHub:
 	case RightWheelbaseHub:
 	case LeftWheelbaseHub:
-		UnitType = CONVERT::UNIT_TYPE_DISTANCE;
+		UnitType = Convert::UnitTypeDistance;
 		break;
 
 		// Angles
@@ -1907,18 +1907,18 @@ CONVERT::UNIT_TYPE KINEMATIC_OUTPUTS::GetDoubleUnitType(const OUTPUTS_DOUBLE &_O
 	case RearARBTwist:
 	case FrontNetSteer:
 	case RearNetSteer:
-		UnitType = CONVERT::UNIT_TYPE_ANGLE;
+		UnitType = Convert::UnitTypeAngle;
 		break;
 
 		// Unitless (no conversion)
 	case FrontARBMotionRatio:
 	case RearARBMotionRatio:
-		UnitType = CONVERT::UNIT_TYPE_UNITLESS;
+		UnitType = Convert::UnitTypeUnitless;
 		break;
 
 		// Unknown units
 	default:
-		UnitType = CONVERT::UNIT_TYPE_UNKNOWN;
+		UnitType = Convert::UnitTypeUnknown;
 		break;
 	}
 
@@ -1932,20 +1932,20 @@ CONVERT::UNIT_TYPE KINEMATIC_OUTPUTS::GetDoubleUnitType(const OUTPUTS_DOUBLE &_O
 // Description:		Returns a the type of units for the specified output.
 //
 // Input Arguments:
-//		_Output	= const OUTPUTS_VECTOR& specifying the
+//		_Output	= const OUTPUTS_Vector& specifying the
 //				  output in which we are interested
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		CONVERT::UNIT_TYPE describing the units of the specified output
+//		Convert::UnitType describing the units of the specified output
 //
 //==========================================================================
-CONVERT::UNIT_TYPE KINEMATIC_OUTPUTS::GetVectorUnitType(const OUTPUTS_VECTOR &_Output)
+Convert::UnitType KINEMATIC_OUTPUTS::GetVectorUnitType(const OUTPUTS_Vector &_Output)
 {
 	// The return value
-	CONVERT::UNIT_TYPE UnitType;
+	Convert::UnitType UnitType;
 
 	// Determine the units based on it's type
 	switch (_Output)
@@ -1955,7 +1955,7 @@ CONVERT::UNIT_TYPE KINEMATIC_OUTPUTS::GetVectorUnitType(const OUTPUTS_VECTOR &_O
 	case RearKinematicRC:
 	case RightKinematicPC:
 	case LeftKinematicPC:
-		UnitType = CONVERT::UNIT_TYPE_DISTANCE;
+		UnitType = Convert::UnitTypeDistance;
 		break;
 
 		// Unitless
@@ -1963,12 +1963,12 @@ CONVERT::UNIT_TYPE KINEMATIC_OUTPUTS::GetVectorUnitType(const OUTPUTS_VECTOR &_O
 	case RearRollAxisDirection:
 	case RightPitchAxisDirection:
 	case LeftPitchAxisDirection:
-		UnitType = CONVERT::UNIT_TYPE_UNITLESS;
+		UnitType = Convert::UnitTypeUnitless;
 		break;
 
 		// Unknown
 	default:
-		UnitType = CONVERT::UNIT_TYPE_UNKNOWN;
+		UnitType = Convert::UnitTypeUnknown;
 		break;
 	}
 
@@ -1985,10 +1985,10 @@ CONVERT::UNIT_TYPE KINEMATIC_OUTPUTS::GetVectorUnitType(const OUTPUTS_VECTOR &_O
 // Input Arguments:
 //		Location		= const &CORNER::Location specifying the relevant corner of the car
 //		CornerDouble	= const &CORNER_OUTPUTS_DOUBLE
-//		CornerVector	= const &CORNER_OUTPUTS_VECTOR
+//		CornerVector	= const &CORNER_OUTPUTS_Vector
 //		Double			= const &OUTPUTS_DOUBLE
-//		Vector			= const &OUTPUTS_VECTOR
-//		Axis			= const &VECTOR::AXIS
+//		vector			= const &OUTPUTS_Vector
+//		Axis			= const &Vector::Axis
 //
 // Output Arguments:
 //		None
@@ -1999,10 +1999,10 @@ CONVERT::UNIT_TYPE KINEMATIC_OUTPUTS::GetVectorUnitType(const OUTPUTS_VECTOR &_O
 //==========================================================================
 KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE KINEMATIC_OUTPUTS::OutputsCompleteIndex(const CORNER::LOCATION &Location,
 																			const CORNER_OUTPUTS_DOUBLE &CornerDouble,
-																			const CORNER_OUTPUTS_VECTOR &CornerVector,
+																			const CORNER_OUTPUTS_Vector &CornerVector,
 																			const OUTPUTS_DOUBLE &Double,
-																			const OUTPUTS_VECTOR &Vector,
-																			const VECTOR::AXIS &Axis)
+																			const OUTPUTS_Vector &vector,
+																			const Vector::Axis &Axis)
 {
 	OUTPUTS_COMPLETE CompleteIndex = NumberOfOutputScalars;
 
@@ -2041,7 +2041,7 @@ KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE KINEMATIC_OUTPUTS::OutputsCompleteIndex(cons
 		if (Double != NumberOfOutputDoubles)
 			CompleteIndex = (KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE)(StartDoubles + Double);
 		else
-			CompleteIndex = (KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE)(StartVectors + Vector * 3 + Axis);
+			CompleteIndex = (KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE)(StartVectors + vector * 3 + Axis);
 		break;
 	}
 

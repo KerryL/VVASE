@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -25,20 +25,20 @@
 // VVASE forward declarations
 class JOB_QUEUE;
 class KINEMATICS;
-class DEBUGGER;
+class Debugger;
 
 class WORKER_THREAD : public wxThread
 {
 public:
 	// Constructor
-	WORKER_THREAD(JOB_QUEUE* _JobQueue, DEBUGGER &_Debugger, int _Id = wxID_ANY);
+	WORKER_THREAD(JOB_QUEUE* _JobQueue, Debugger &_debugger, int _Id = wxID_ANY);
 
 	// Destructor
 	~WORKER_THREAD();
 
 private:
 	// Debugging object
-	DEBUGGER &Debugger;
+	Debugger &debugger;
 
 	// The queue of jobs to be completed
 	JOB_QUEUE* JobQueue;

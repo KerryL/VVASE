@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -38,8 +38,8 @@
 // Input Arguments:
 //		_MainFrame		= MAIN_FRAME& reference to the main application object
 //		_Optimization	= GENETIC_OPTIMIZATION pointing to this object's owner
-//		_Converter		= const CONVERT& reference to application's conversion utility
-//		_Debugger		= const DEBUGGER& reference to the debug printing utility
+//		_Converter		= const Convert& reference to application's conversion utility
+//		_debugger		= const Debugger& reference to the debug printing utility
 //
 // Output Arguments:
 //		None
@@ -48,8 +48,8 @@
 //		None
 //
 //==========================================================================
-GA_OBJECT::GA_OBJECT(MAIN_FRAME &_MainFrame, GENETIC_OPTIMIZATION &_Optimization, const CONVERT &_Converter,
-					 const DEBUGGER &_Debugger) : Debugger(_Debugger), Converter(_Converter),
+GA_OBJECT::GA_OBJECT(MAIN_FRAME &_MainFrame, GENETIC_OPTIMIZATION &_Optimization, const Convert &_converter,
+					 const Debugger &_debugger) : debugger(_debugger), converter(_converter),
 					 MainFrame(_MainFrame), Optimization(_Optimization)
 {
 	// Initialize class members
@@ -108,7 +108,7 @@ GA_OBJECT::~GA_OBJECT()
 // Class:			GA_OBJECT
 // Function:		Constant declarations
 //
-// Description:		Where constants for the GA_OBJECT class are delcared.
+// Description:		Where constants for the GA_OBJECT class are declared.
 //
 // Input Arguments:
 //		None
@@ -187,7 +187,7 @@ void GA_OBJECT::SimulateGeneration(void)
 //					different from the original intended usage of this method
 //					due to the use of threads.  This will not need to call the
 //					analysis methods, as at this point, all analyses are complete
-//					and the data is available for use in the fitness funcitons.
+//					and the data is available for use in the fitness functions.
 //
 // Input Arguments:
 //		CurrentGenome	= const int* pointing to the index for the genome we're analyzing
@@ -201,7 +201,7 @@ void GA_OBJECT::SimulateGeneration(void)
 //==========================================================================
 double GA_OBJECT::DetermineFitness(const int *Citizen)
 {
-	// Here, instead of actually pointing to the current genome, the agrument points
+	// Here, instead of actually pointing to the current genome, the argument points
 	// to the index representing the current citizen.  Use Citizen[0] to get the
 	// index.
 
@@ -283,7 +283,7 @@ double GA_OBJECT::DetermineFitness(const int *Citizen)
 //==========================================================================
 void GA_OBJECT::SetUp(CAR *_TargetCar)
 {
-	// Ensure exlcusive access to this object
+	// Ensure exclusive access to this object
 	GSAMutex.Lock();
 
 	// Initialize the run
@@ -329,8 +329,8 @@ void GA_OBJECT::SetUp(CAR *_TargetCar)
 	WorkingCarArray = new CAR*[NumberOfCars];
 	for (i = 0; i < NumberOfCars; i++)
 	{
-		OriginalCarArray[i] = new CAR(Debugger);
-		WorkingCarArray[i] = new CAR(Debugger);
+		OriginalCarArray[i] = new CAR(debugger);
+		WorkingCarArray[i] = new CAR(debugger);
 	}
 
 	return;
@@ -398,82 +398,82 @@ void GA_OBJECT::SetCarGenome(int CarIndex, const int *CurrentGenome)
 		}
 
 		// Determine which component of the vector to vary
-		if (CurrentGene->Direction == VECTOR::AxisX)
+		if (CurrentGene->Direction == Vector::AxisX)
 		{
 			// Set the appropriate variable to the value that corresponds to this phenotype
-			CurrentCorner->Hardpoints[CurrentGene->Hardpoint].X = CurrentGene->Minimum +
+			CurrentCorner->Hardpoints[CurrentGene->Hardpoint].x = CurrentGene->Minimum +
 				double(CurrentGene->NumberOfValues - CurrentGenome[i] - 1)
 				* (CurrentGene->Maximum - CurrentGene->Minimum) / double(CurrentGene->NumberOfValues - 1);
 
 			// If there is a tied-to variable specified, update that as well
 			if (CurrentGene->TiedTo != CORNER::NumberOfHardpoints)
-				CurrentCorner->Hardpoints[CurrentGene->TiedTo].X =
-					CurrentCorner->Hardpoints[CurrentGene->Hardpoint].X;
+				CurrentCorner->Hardpoints[CurrentGene->TiedTo].x =
+					CurrentCorner->Hardpoints[CurrentGene->Hardpoint].x;
 
 			// If the suspension is symmetric, also update the point on the opposite corner
 			if (TargetCar->Suspension->IsSymmetric)
 			{
 				// Copy the values from one side to the other
-				OppositeCorner->Hardpoints[CurrentGene->Hardpoint].X =
-					CurrentCorner->Hardpoints[CurrentGene->Hardpoint].X;
+				OppositeCorner->Hardpoints[CurrentGene->Hardpoint].x =
+					CurrentCorner->Hardpoints[CurrentGene->Hardpoint].x;
 
 				// If there was a tied-to variable specified, we must update that on
 				// the other side of the car, too
 				if (CurrentGene->TiedTo != CORNER::NumberOfHardpoints)
-					OppositeCorner->Hardpoints[CurrentGene->TiedTo].X =
-						OppositeCorner->Hardpoints[CurrentGene->Hardpoint].X;
+					OppositeCorner->Hardpoints[CurrentGene->TiedTo].x =
+						OppositeCorner->Hardpoints[CurrentGene->Hardpoint].x;
 			}
 		}
-		else if (CurrentGene->Direction == VECTOR::AxisY)
+		else if (CurrentGene->Direction == Vector::AxisY)
 		{
 			// Set the appropriate variable to the value that corresponds to this phenotype
-			CurrentCorner->Hardpoints[CurrentGene->Hardpoint].Y = CurrentGene->Minimum +
+			CurrentCorner->Hardpoints[CurrentGene->Hardpoint].y = CurrentGene->Minimum +
 				double(CurrentGene->NumberOfValues - CurrentGenome[i] - 1)
 				* (CurrentGene->Maximum - CurrentGene->Minimum) / double(CurrentGene->NumberOfValues - 1);
 
 			// If there is a tied-to variable specified, update that as well
 			if (CurrentGene->TiedTo != CORNER::NumberOfHardpoints)
-				CurrentCorner->Hardpoints[CurrentGene->TiedTo].Y =
-					CurrentCorner->Hardpoints[CurrentGene->Hardpoint].Y;
+				CurrentCorner->Hardpoints[CurrentGene->TiedTo].y =
+					CurrentCorner->Hardpoints[CurrentGene->Hardpoint].y;
 
 			// If the suspension is symmetric, also update the point on the opposite corner
 			if (TargetCar->Suspension->IsSymmetric)
 			{
 				// Copy the values from one side to the other (Note Y is flipped)
-				OppositeCorner->Hardpoints[CurrentGene->Hardpoint].Y =
-					-CurrentCorner->Hardpoints[CurrentGene->Hardpoint].Y;
+				OppositeCorner->Hardpoints[CurrentGene->Hardpoint].y =
+					-CurrentCorner->Hardpoints[CurrentGene->Hardpoint].y;
 
 				// If there was a tied-to variable specified, we must update that on
 				// the other side of the car, too
 				if (CurrentGene->TiedTo != CORNER::NumberOfHardpoints)
-					OppositeCorner->Hardpoints[CurrentGene->TiedTo].Y =
-						OppositeCorner->Hardpoints[CurrentGene->Hardpoint].Y;
+					OppositeCorner->Hardpoints[CurrentGene->TiedTo].y =
+						OppositeCorner->Hardpoints[CurrentGene->Hardpoint].y;
 			}
 		}
-		else// VECTOR::AxisZ
+		else// Vector::AxisZ
 		{
 			// Set the appropriate variable to the value that corresponds to this phenotype
-			CurrentCorner->Hardpoints[CurrentGene->Hardpoint].Z = CurrentGene->Minimum +
+			CurrentCorner->Hardpoints[CurrentGene->Hardpoint].z = CurrentGene->Minimum +
 				double(CurrentGene->NumberOfValues - CurrentGenome[i] - 1)
 				* (CurrentGene->Maximum - CurrentGene->Minimum) / double(CurrentGene->NumberOfValues - 1);
 
 			// If there is a tied-to variable specified, update that as well
 			if (CurrentGene->TiedTo != CORNER::NumberOfHardpoints)
-				CurrentCorner->Hardpoints[CurrentGene->TiedTo].Z =
-					CurrentCorner->Hardpoints[CurrentGene->Hardpoint].Z;
+				CurrentCorner->Hardpoints[CurrentGene->TiedTo].z =
+					CurrentCorner->Hardpoints[CurrentGene->Hardpoint].z;
 
 			// If the suspension is symmetric, also update the point on the opposite corner
 			if (TargetCar->Suspension->IsSymmetric)
 			{
 				// Copy the values from one side to the other
-				OppositeCorner->Hardpoints[CurrentGene->Hardpoint].Z =
-					CurrentCorner->Hardpoints[CurrentGene->Hardpoint].Z;
+				OppositeCorner->Hardpoints[CurrentGene->Hardpoint].z =
+					CurrentCorner->Hardpoints[CurrentGene->Hardpoint].z;
 
 				// If there was a tied-to variable specified, we must update that on
 				// the other side of the car, too
 				if (CurrentGene->TiedTo != CORNER::NumberOfHardpoints)
-					OppositeCorner->Hardpoints[CurrentGene->TiedTo].Z =
-						OppositeCorner->Hardpoints[CurrentGene->Hardpoint].Z;
+					OppositeCorner->Hardpoints[CurrentGene->TiedTo].z =
+						OppositeCorner->Hardpoints[CurrentGene->Hardpoint].z;
 			}
 		}
 	}
@@ -509,10 +509,10 @@ void GA_OBJECT::PerformAdditionalActions(void)
 	// Get maximum fitness for this generation
 	double MaximumFitness = Fitnesses[CurrentGeneration][0];
 
-	// Dispaly the average and best fitnesses
-	Debugger.Print(DEBUGGER::PriorityVeryHigh, "Completed Generation %i", CurrentGeneration + 1);
-	Debugger.Print(DEBUGGER::PriorityVeryHigh, "\tAverage Fitness:  %s", Converter.FormatNumber(AverageFitness).c_str());
-	Debugger.Print(DEBUGGER::PriorityVeryHigh, "\tBest Fitness:     %s", Converter.FormatNumber(MaximumFitness).c_str());
+	// Display the average and best fitnesses
+	debugger.Print(Debugger::PriorityVeryHigh, "Completed Generation %i", CurrentGeneration + 1);
+	debugger.Print(Debugger::PriorityVeryHigh, "\tAverage Fitness:  %s", converter.FormatNumber(AverageFitness).c_str());
+	debugger.Print(Debugger::PriorityVeryHigh, "\tBest Fitness:     %s", converter.FormatNumber(MaximumFitness).c_str());
 
 	// Check to see if the simulation is still running
 	if (CurrentGeneration == GenerationLimit - 1)
@@ -529,10 +529,10 @@ void GA_OBJECT::PerformAdditionalActions(void)
 //
 // Input Arguments:
 //		Variable		= const CORNER::HARDPOINTS& specifying to the value to be changed
-//		TiedTo			= const CORNER::HARDPOINTS& specifying to a valuethat will always equal
+//		TiedTo			= const CORNER::HARDPOINTS& specifying to a value that will always equal
 //						  Variable
 //		Location		= const CORNER::LOCATION& specifying the associated corner
-//		Direction		= const VECTOR::AXIS& specifying the component of the hardpoint
+//		Direction		= const Vector::Axis& specifying the component of the hardpoint
 //						  to optimize
 //		Minimum			= const double& minimum value for this gene
 //		Maximum			= const double& maximum value for this gene
@@ -547,13 +547,13 @@ void GA_OBJECT::PerformAdditionalActions(void)
 //
 //==========================================================================
 void GA_OBJECT::AddGene(const CORNER::HARDPOINTS &Hardpoint, const CORNER::HARDPOINTS &TiedTo,
-						const CORNER::LOCATION &Location, const VECTOR::AXIS &Direction,
+						const CORNER::LOCATION &Location, const Vector::Axis &Direction,
 						const double &Minimum, const double &Maximum, const int &NumberOfValues)
 {
 	// Create a new GENE object
 	GENE *NewGene = new GENE;
 
-	// Copy the arguements to the new gene
+	// Copy the arguments to the new gene
 	NewGene->Hardpoint		= Hardpoint;
 	NewGene->TiedTo			= TiedTo;
 	NewGene->Location		= Location;
@@ -581,7 +581,7 @@ void GA_OBJECT::AddGene(const CORNER::HARDPOINTS &Hardpoint, const CORNER::HARDP
 //							  output
 //		ExpectedDeviation	= const double& specifying the allowable range for
 //							  the value
-//		Importance			= const double& specifying the relative imporance
+//		Importance			= const double& specifying the relative importance
 //							  of this goal
 //		BeforeInputs		= const KINEMATICS::INPUTS& specifying the state
 //							  of the car
@@ -604,7 +604,7 @@ void GA_OBJECT::AddGoal(const KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE &Output, const
 	// Create a new GOAL object
 	GOAL *NewGoal = new GOAL;
 
-	// Copy the arguements to the new goal
+	// Copy the arguments to the new goal
 	NewGoal->Output				= Output;
 	NewGoal->DesiredValue		= DesiredValue;
 	NewGoal->ExpectedDeviation	= ExpectedDeviation;
@@ -627,10 +627,10 @@ void GA_OBJECT::AddGoal(const KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE &Output, const
 // Input Arguments:
 //		Index			= const int& specifying the goal to update
 //		Hardpoint		= const CORNER::HARDPOINTS& specifying to the value to be changed
-//		TiedTo			= const CORNER::HARDPOINTS& specifying to a valuethat will always equal
+//		TiedTo			= const CORNER::HARDPOINTS& specifying to a value that will always equal
 //						  Variable
 //		Location		= const CORNER::LOCATION& specifying the associated corner
-//		Direction		= const VECTOR::AXIS& specifying the component of the hardpoint
+//		Direction		= const Vector::Axis& specifying the component of the hardpoint
 //						  to optimize
 //		Minimum			= const double& minimum value for this gene
 //		Maximum			= const double& maximum value for this gene
@@ -645,10 +645,10 @@ void GA_OBJECT::AddGoal(const KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE &Output, const
 //
 //==========================================================================
 void GA_OBJECT::UpdateGene(const int &Index, const CORNER::HARDPOINTS &Hardpoint, const CORNER::HARDPOINTS &TiedTo,
-						const CORNER::LOCATION &Location, const VECTOR::AXIS &Direction,
+						const CORNER::LOCATION &Location, const Vector::Axis &Direction,
 						const double &Minimum, const double &Maximum, const int &NumberOfValues)
 {
-	// Copy the arguements to the gene we're updating
+	// Copy the arguments to the gene we're updating
 	GeneList[Index]->Hardpoint		= Hardpoint;
 	GeneList[Index]->TiedTo			= TiedTo;
 	GeneList[Index]->Location		= Location;
@@ -674,7 +674,7 @@ void GA_OBJECT::UpdateGene(const int &Index, const CORNER::HARDPOINTS &Hardpoint
 //							  output
 //		ExpectedDeviation	= const double& specifying the allowable range for
 //							  the value
-//		Importance			= const double& specifying the relative imporance
+//		Importance			= const double& specifying the relative importance
 //							  of this goal
 //		BeforeInputs		= const KINEMATICS::INPUTS& specifying the state
 //							  of the car
@@ -694,7 +694,7 @@ void GA_OBJECT::UpdateGoal(const int &Index, const KINEMATIC_OUTPUTS::OUTPUTS_CO
 		const double &ExpectedDeviation, const double &Importance, const KINEMATICS::INPUTS &BeforeInputs,
 		const KINEMATICS::INPUTS &AfterInputs)
 {
-	// Copy the arguements to goal we're updating
+	// Copy the arguments to goal we're updating
 	GoalList[Index]->Output				= Output;
 	GoalList[Index]->DesiredValue		= DesiredValue;
 	GoalList[Index]->ExpectedDeviation	= ExpectedDeviation;
@@ -801,7 +801,7 @@ void GA_OBJECT::DetermineAllInputs(void)
 //==========================================================================
 void GA_OBJECT::UpdateTargetCar(void)
 {
-	// Ensure exlcusive access to this object
+	// Ensure exclusive access to this object
 	wxMutexLocker Lock(GSAMutex);
 
 	// Update the target car to match the best fit car we've got
@@ -887,7 +887,7 @@ GA_OBJECT::FILE_HEADER_INFO GA_OBJECT::ReadFileHeader(std::ifstream *InFile)
 //==========================================================================
 bool GA_OBJECT::Write(wxString FileName)
 {
-	// Ensure exlcusive access to this object
+	// Ensure exclusive access to this object
 	wxMutexLocker Lock(GSAMutex);
 
 	// Open the specified file
@@ -941,7 +941,7 @@ bool GA_OBJECT::Write(wxString FileName)
 //==========================================================================
 bool GA_OBJECT::Read(wxString FileName)
 {
-	// Ensure exlcusive access to this object
+	// Ensure exclusive access to this object
 	wxMutexLocker Lock(GSAMutex);
 
 	// Clear out current lists
@@ -961,7 +961,7 @@ bool GA_OBJECT::Read(wxString FileName)
 	// Check to make sure the version matches
 	if (Header.FileVersion != CurrentFileVersion)
 	{
-		Debugger.Print(_T("ERROR:  Incompatable file versions - could not open file!"));
+		debugger.Print(_T("ERROR:  Incompatible file versions - could not open file!"));
 
 		InFile.close();
 

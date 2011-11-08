@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -36,7 +36,7 @@
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
 //		style		= long for passing to parent class's constructor
-//		_Debugger	= const DEBUGGER& reference to applications debug printing utility
+//		_debugger	= const Debugger& reference to applications debug printing utility
 //
 // Output Arguments:
 //		None
@@ -47,9 +47,9 @@
 //==========================================================================
 EDIT_ITERATION_NOTEBOOK::EDIT_ITERATION_NOTEBOOK(EDIT_PANEL &_Parent, wxWindowID id,
 												 const wxPoint& pos, const wxSize& size,
-												 long style, const DEBUGGER &_Debugger)
+												 long style, const Debugger &_debugger)
 												 : wxNotebook(&_Parent, id, pos, size, style),
-												 Debugger(_Debugger), Parent(_Parent)
+												 Debugger(_debugger), Parent(_Parent)
 {
 	// Initialize the 'Current' class members
 	CurrentIteration = NULL;

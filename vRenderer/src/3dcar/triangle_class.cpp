@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -31,7 +31,7 @@
 //					process necessary to add the object to the scene.
 //
 // Input Arguments:
-//		_Renderer	= &RENDER_WINDOW, pointer to rendering object
+//		_Renderer	= &RenderWindow, pointer to rendering object
 //
 // Output Arguments:
 //		None
@@ -40,7 +40,7 @@
 //		None
 //
 //==========================================================================
-TRIANGLE3D::TRIANGLE3D(RENDER_WINDOW &_Renderer)
+TRIANGLE3D::TRIANGLE3D(RenderWindow &_Renderer)
 {
 	// Create the objects
 	Triangle = new TRIANGLE(_Renderer);
@@ -72,13 +72,13 @@ TRIANGLE3D::~TRIANGLE3D()
 //
 // Description:		Updates the position, orientation, and size of the tire
 //					in the scene.  Note that the third argument is passed by
-//					value, not reference like the first two VECTORs.
+//					value, not reference like the first two Vectors.
 //
 // Input Arguments:
-//		Node1		= const VECTOR&, location of the first vertex
-//		Node2		= const VECTOR&, location of the second vertex
-//		Node3		= const VECTOR&, location of the third vertex
-//		Color		= const COLOR& specifying the color of this object
+//		Node1		= const Vector&, location of the first vertex
+//		Node2		= const Vector&, location of the second vertex
+//		Node3		= const Vector&, location of the third vertex
+//		color		= const Color& specifying the color of this object
 //		Show		= bool, visibility flag
 //
 // Output Arguments:
@@ -88,8 +88,8 @@ TRIANGLE3D::~TRIANGLE3D()
 //		None
 //
 //==========================================================================
-void TRIANGLE3D::Update(const VECTOR &Node1, const VECTOR &Node2, const VECTOR &Node3,
-					  const COLOR &Color, bool Show)
+void TRIANGLE3D::Update(const Vector &Node1, const Vector &Node2, const Vector &Node3,
+					  const Color &color, bool Show)
 {
 	// Make sure all vector arguments are valid - if they are not,
 	// the object will not be made visible
@@ -104,7 +104,7 @@ void TRIANGLE3D::Update(const VECTOR &Node1, const VECTOR &Node2, const VECTOR &
 		return;
 
 	// Set this object's color
-	Triangle->SetColor(Color);
+	Triangle->SetColor(color);
 
 	// Set the locations of the points
 	Triangle->SetCorner1(Node1);
@@ -123,16 +123,16 @@ void TRIANGLE3D::Update(const VECTOR &Node1, const VECTOR &Node2, const VECTOR &
 //					object or not.
 //
 // Input Arguments:
-//		Actor	= const PRIMITIVE* to compare against this object's actors
+//		Actor	= const Primitive* to compare against this object's actors
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		bool representing wether or not the Actor was part of this object
+//		bool representing whether or not the Actor was part of this object
 //
 //==========================================================================
-bool TRIANGLE3D::ContainsThisActor(const PRIMITIVE *Actor)
+bool TRIANGLE3D::ContainsThisActor(const Primitive *Actor)
 {
 	// Make the comparison
 	if (Triangle == Actor)

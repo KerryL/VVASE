@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -34,7 +34,7 @@
 
 // VVASE forward declarations
 class CAR;
-class DEBUGGER;
+class Debugger;
 class SUSPENSION;
 
 class KINEMATIC_OUTPUTS
@@ -46,8 +46,8 @@ public:
 	// Destructor
 	~KINEMATIC_OUTPUTS();
 
-	// Sets the pointer to the DEBUGGER object
-	static inline void SetDebugger(const DEBUGGER &_Debugger) { Debugger = &_Debugger; };
+	// Sets the pointer to the Debugger object
+	static inline void SetDebugger(const Debugger &_debugger) { debugger = &_debugger; };
 
 	// Updates the kinematic variables associated with the Current SUSPENSION
 	void Update(const CAR *Original, const SUSPENSION *Current);
@@ -76,8 +76,8 @@ public:
 		NumberOfCornerOutputDoubles
 	};
 
-	// Enumeration for VECTOR outputs that get computed for every corner
-	enum CORNER_OUTPUTS_VECTOR
+	// Enumeration for Vector outputs that get computed for every corner
+	enum CORNER_OUTPUTS_Vector
 	{
 		InstantCenter,			// [in]
 		InstantAxisDirection,	// [-]
@@ -112,8 +112,8 @@ public:
 		NumberOfOutputDoubles
 	};
 
-	// Enumeration for VECTOR outputs that only get computed once per car
-	enum OUTPUTS_VECTOR
+	// Enumeration for Vector outputs that only get computed once per car
+	enum OUTPUTS_Vector
 	{
 		// Kinematic centers
 		FrontKinematicRC,			// [in]
@@ -134,7 +134,7 @@ public:
 	// but geared bars will include the twist along both lengths of bar.  This way
 	// it can be used to determine forces/stresses directly.
 	double Doubles[NumberOfOutputDoubles];
-	VECTOR Vectors[NumberOfOutputVectors];
+	Vector Vectors[NumberOfOutputVectors];
 
 	// The outputs that are associated with just one corner of the car
 	double RightFront[NumberOfCornerOutputDoubles];
@@ -142,10 +142,10 @@ public:
 	double RightRear[NumberOfCornerOutputDoubles];
 	double LeftRear[NumberOfCornerOutputDoubles];
 
-	VECTOR RightFrontVectors[NumberOfCornerOutputVectors];
-	VECTOR LeftFrontVectors[NumberOfCornerOutputVectors];
-	VECTOR RightRearVectors[NumberOfCornerOutputVectors];
-	VECTOR LeftRearVectors[NumberOfCornerOutputVectors];
+	Vector RightFrontVectors[NumberOfCornerOutputVectors];
+	Vector LeftFrontVectors[NumberOfCornerOutputVectors];
+	Vector RightRearVectors[NumberOfCornerOutputVectors];
+	Vector LeftRearVectors[NumberOfCornerOutputVectors];
 
 	// Enumeration that encompasses all of the outputs for the whole car
 	// This makes referencing these outputs from other classes a little easier
@@ -182,14 +182,14 @@ public:
 
 	// For converting from an output + location to OUTPUTS_COMPLETE
 	static OUTPUTS_COMPLETE OutputsCompleteIndex(const CORNER::LOCATION &Location,
-		const CORNER_OUTPUTS_DOUBLE &CornerDouble, const CORNER_OUTPUTS_VECTOR &CornerVector,
-		const OUTPUTS_DOUBLE &Double, const OUTPUTS_VECTOR &Vector, const VECTOR::AXIS &Axis);
+		const CORNER_OUTPUTS_DOUBLE &CornerDouble, const CORNER_OUTPUTS_Vector &CornerVector,
+		const OUTPUTS_DOUBLE &Double, const OUTPUTS_Vector &vector, const Vector::Axis &Axis);
 
 	// For accessing an output via the OUTPUTS_COMPLETE list
 	double GetOutputValue(const OUTPUTS_COMPLETE &_Output) const;
 
 	// For determining unit type of the outputs
-	static CONVERT::UNIT_TYPE GetOutputUnitType(const OUTPUTS_COMPLETE &_Output);
+	static Convert::UnitType GetOutputUnitType(const OUTPUTS_COMPLETE &_Output);
 
 	// For determining the name of an output from the OUTPUTS_COMPLETE list
 	static wxString GetOutputName(const OUTPUTS_COMPLETE &_Output);
@@ -199,7 +199,7 @@ public:
 
 private:
 	// Debugger message printing utility
-	static const DEBUGGER *Debugger;
+	static const Debugger *debugger;
 
 	// The currently associated car object
 	const CAR *CurrentCar;
@@ -209,15 +209,15 @@ private:
 
 	// For retrieving names of the outputs
 	static wxString GetCornerDoubleName(const CORNER_OUTPUTS_DOUBLE &_Output);
-	static wxString GetCornerVectorName(const CORNER_OUTPUTS_VECTOR &_Output);
+	static wxString GetCornerVectorName(const CORNER_OUTPUTS_Vector &_Output);
 	static wxString GetDoubleName(const OUTPUTS_DOUBLE &_Output);
-	static wxString GetVectorName(const OUTPUTS_VECTOR &_Output);
+	static wxString GetVectorName(const OUTPUTS_Vector &_Output);
 
 	// For retrieving units of the outputs
-	static CONVERT::UNIT_TYPE GetCornerDoubleUnitType(const CORNER_OUTPUTS_DOUBLE &_Output);
-	static CONVERT::UNIT_TYPE GetCornerVectorUnitType(const CORNER_OUTPUTS_VECTOR &_Output);
-	static CONVERT::UNIT_TYPE GetDoubleUnitType(const OUTPUTS_DOUBLE &_Output);
-	static CONVERT::UNIT_TYPE GetVectorUnitType(const OUTPUTS_VECTOR &_Output);
+	static Convert::UnitType GetCornerDoubleUnitType(const CORNER_OUTPUTS_DOUBLE &_Output);
+	static Convert::UnitType GetCornerVectorUnitType(const CORNER_OUTPUTS_Vector &_Output);
+	static Convert::UnitType GetDoubleUnitType(const OUTPUTS_DOUBLE &_Output);
+	static Convert::UnitType GetVectorUnitType(const OUTPUTS_Vector &_Output);
 
 	// Initializes all outputs to QNAN
 	void InitializeAllOutputs(void);

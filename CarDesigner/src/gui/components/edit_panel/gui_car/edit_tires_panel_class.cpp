@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -37,7 +37,7 @@
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
-//		_Debugger	= const DEBUGGER& reference to applications debug printing utility
+//		_debugger	= const Debugger& reference to applications debug printing utility
 //
 // Output Arguments:
 //		None
@@ -48,9 +48,9 @@
 //==========================================================================
 EDIT_TIRES_PANEL::EDIT_TIRES_PANEL(EDIT_PANEL &_Parent, wxWindowID id,
 								   const wxPoint& pos, const wxSize& size,
-								   const DEBUGGER &_Debugger)
+								   const Debugger &_debugger)
 								   : wxPanel(&_Parent, id, pos, size),
-								   Debugger(_Debugger),
+								   Debugger(_debugger),
 								   Converter(_Parent.GetMainFrame().GetConverter()),
 								   Parent(_Parent)
 										   
@@ -151,17 +151,17 @@ void EDIT_TIRES_PANEL::UpdateInformation(TIRE_SET *_CurrentTireSet)
 		CurrentTireSet->LeftRear->Width)));
 
 	// And their units
-	RightFrontDiameterUnitsLabel->SetLabel(Converter.GetUnitType(CONVERT::UNIT_TYPE_DISTANCE));
-	RightFrontWidthUnitsLabel->SetLabel(Converter.GetUnitType(CONVERT::UNIT_TYPE_DISTANCE));
+	RightFrontDiameterUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UNIT_TYPE_DISTANCE));
+	RightFrontWidthUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UNIT_TYPE_DISTANCE));
 
-	LeftFrontDiameterUnitsLabel->SetLabel(Converter.GetUnitType(CONVERT::UNIT_TYPE_DISTANCE));
-	LeftFrontWidthUnitsLabel->SetLabel(Converter.GetUnitType(CONVERT::UNIT_TYPE_DISTANCE));
+	LeftFrontDiameterUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UNIT_TYPE_DISTANCE));
+	LeftFrontWidthUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UNIT_TYPE_DISTANCE));
 
-	RightRearDiameterUnitsLabel->SetLabel(Converter.GetUnitType(CONVERT::UNIT_TYPE_DISTANCE));
-	RightRearWidthUnitsLabel->SetLabel(Converter.GetUnitType(CONVERT::UNIT_TYPE_DISTANCE));
+	RightRearDiameterUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UNIT_TYPE_DISTANCE));
+	RightRearWidthUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UNIT_TYPE_DISTANCE));
 
-	LeftRearDiameterUnitsLabel->SetLabel(Converter.GetUnitType(CONVERT::UNIT_TYPE_DISTANCE));
-	LeftRearWidthUnitsLabel->SetLabel(Converter.GetUnitType(CONVERT::UNIT_TYPE_DISTANCE));
+	LeftRearDiameterUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UNIT_TYPE_DISTANCE));
+	LeftRearWidthUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UNIT_TYPE_DISTANCE));
 
 	return;
 }

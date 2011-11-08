@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -41,7 +41,7 @@
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
-//		_Debugger	= const DEBUGGER& reference to applications debug printing utility
+//		_debugger	= const Debugger& reference to applications debug printing utility
 //
 // Output Arguments:
 //		None
@@ -52,9 +52,9 @@
 //==========================================================================
 EDIT_SUSPENSION_PANEL::EDIT_SUSPENSION_PANEL(EDIT_SUSPENSION_NOTEBOOK &_Parent, wxWindowID id,
 											 const wxPoint& pos, const wxSize& size,
-											 const DEBUGGER &_Debugger) :
+											 const Debugger &_debugger) :
 											 wxPanel(&_Parent, id, pos, size),
-											 Debugger(_Debugger),
+											 Debugger(_debugger),
 											 Converter(_Parent.GetParent().GetMainFrame().GetConverter()),
 											 Parent(_Parent)
 {
@@ -170,7 +170,7 @@ void EDIT_SUSPENSION_PANEL::UpdateInformation(SUSPENSION *_CurrentSuspension)
 
 	// Update the unit labels
 	wxString UnitString;
-	UnitString.Printf("(%s)", Converter.GetUnitType(CONVERT::UNIT_TYPE_DISTANCE).c_str());
+	UnitString.Printf("(%s)", Converter.GetUnitType(Convert::UNIT_TYPE_DISTANCE).c_str());
 	Hardpoints->SetCellValue(0, 1, UnitString);
 	Hardpoints->SetCellValue(0, 2, UnitString);
 	Hardpoints->SetCellValue(0, 3, UnitString);
@@ -223,7 +223,7 @@ void EDIT_SUSPENSION_PANEL::UpdateInformation(SUSPENSION *_CurrentSuspension)
 		Hardpoints->SetRowHeight(SUSPENSION::RearBarMidPoint + 1, 0);
 
 	// Update the values of all of the points
-	VECTOR Point;
+	Vector Point;
 	int i;
 	for (i = 0; i < SUSPENSION::NumberOfHardpoints; i++)
 	{

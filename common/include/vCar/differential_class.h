@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -13,7 +13,7 @@
 // Description:  Contains class declaration for DIFFERENTIAL class.
 // History:
 //	2/25/2008	- Named DIFFERENTIAL_STYLE enum, K. Loux.
-//	3/9/2008	- Changed the structure of the DEBUGGER class and moved the enumerations
+//	3/9/2008	- Changed the structure of the Debugger class and moved the enumerations
 //				  inside the class body, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
@@ -24,13 +24,13 @@
 #include <iosfwd>// forward declarations of fstream objects
 
 // vUtilities forward declarations
-class DEBUGGER;
+class Debugger;
 
 class DIFFERENTIAL
 {
 public:
 	// Constructor
-	DIFFERENTIAL(const DEBUGGER &_Debugger);
+	DIFFERENTIAL(const Debugger &_debugger);
 	DIFFERENTIAL(const DIFFERENTIAL &Differential);
 
 	// Destructor
@@ -60,7 +60,7 @@ public:
 
 private:
 	// Debugger message printing utility
-	const DEBUGGER &Debugger;
+	const Debugger &debugger;
 
 	// The parameters that describe the differential physics
 	double BiasRatio;		// [-]

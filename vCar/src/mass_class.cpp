@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -12,7 +12,7 @@
 // Author:  K. Loux
 // Description:  Contains class functionality for mass class.
 // History:
-//	3/9/2008	- Changed the structure of the DEBUGGER class, K. Loux.
+//	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
 //  3/29/2008	- Added IsValidInertiaTensor function, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
@@ -36,7 +36,7 @@
 // Description:		Constructor for the MASS_PROPERTIES class.
 //
 // Input Arguments:
-//		_Debugger	= const DEBUGGER& reference to applications debug printing utility
+//		_debugger	= const Debugger& reference to applications debug printing utility
 //
 // Output Arguments:
 //		None
@@ -45,7 +45,7 @@
 //		None
 //
 //==========================================================================
-MASS_PROPERTIES::MASS_PROPERTIES(const DEBUGGER &_Debugger) : Debugger(_Debugger)
+MASS_PROPERTIES::MASS_PROPERTIES(const Debugger &_debugger) : debugger(_debugger)
 {
 	// Initialize the mass properties
 	Mass = 0.0;
@@ -55,9 +55,9 @@ MASS_PROPERTIES::MASS_PROPERTIES(const DEBUGGER &_Debugger) : Debugger(_Debugger
 	Ixy = 0.0;
 	Ixz = 0.0;
 	Iyz = 0.0;
-	CenterOfGravity.X = 0.0;
-	CenterOfGravity.Y = 0.0;
-	CenterOfGravity.Z = 0.0;
+	CenterOfGravity.x = 0.0;
+	CenterOfGravity.y = 0.0;
+	CenterOfGravity.z = 0.0;
 }
 
 //==========================================================================
@@ -76,7 +76,7 @@ MASS_PROPERTIES::MASS_PROPERTIES(const DEBUGGER &_Debugger) : Debugger(_Debugger
 //		None
 //
 //==========================================================================
-MASS_PROPERTIES::MASS_PROPERTIES(const MASS_PROPERTIES &MassProperties) : Debugger(MassProperties.Debugger)
+MASS_PROPERTIES::MASS_PROPERTIES(const MASS_PROPERTIES &MassProperties) : debugger(MassProperties.debugger)
 {
 	// Do the copy
 	*this = MassProperties;
@@ -121,24 +121,24 @@ MASS_PROPERTIES::~MASS_PROPERTIES()
 //==========================================================================
 bool MASS_PROPERTIES::IsValidInertiaTensor(void) const
 {
-	VECTOR PrincipleInertias;
-	VECTOR IxxDirection;
-	VECTOR IyyDirection;
-	VECTOR IzzDirection;
+	Vector PrincipleInertias;
+	Vector IxxDirection;
+	Vector IyyDirection;
+	Vector IzzDirection;
 
 	if (!GetPrincipleInertias(&PrincipleInertias))
 	{
-		Debugger.Print(_T("Warning (IsValidInertiaTensor):  Failed to compute principle moments of inertia"),
-			DEBUGGER::PriorityHigh);
+		debugger.Print(_T("Warning (IsValidInertiaTensor):  Failed to compute principle moments of inertia"),
+			Debugger::PriorityHigh);
 		return false;
 	}
 
 	// To be physically possible, the sum of any two principle moments of inertia
 	// needs to be greater than the third (only valid when inertias are given with
 	// respect to the CG).  Proof for this is the Generalized Perpendicular Axis Theorem
-	if (PrincipleInertias.X + PrincipleInertias.Y <= PrincipleInertias.Z ||
-		PrincipleInertias.X + PrincipleInertias.Z <= PrincipleInertias.Y ||
-		PrincipleInertias.Y + PrincipleInertias.Z <= PrincipleInertias.X)
+	if (PrincipleInertias.x + PrincipleInertias.y <= PrincipleInertias.z ||
+		PrincipleInertias.x + PrincipleInertias.z <= PrincipleInertias.y ||
+		PrincipleInertias.y + PrincipleInertias.z <= PrincipleInertias.x)
 		return false;
 
 	return true;
@@ -150,19 +150,19 @@ bool MASS_PROPERTIES::IsValidInertiaTensor(void) const
 //
 // Description:		Returns true for successful completion.  Puts the
 //					principle moments of inertia in the PrincipleInertias
-//					vector where the .X value is in the IxxDirection, etc.
+//					vector where the .x value is in the IxxDirection, etc.
 //
 // Input Arguments:
 //		None
 //
 // Output Arguments:
-//		PrincipleInertias	= *VECTOR specifying the principle moments of
+//		PrincipleInertias	= *Vector specifying the principle moments of
 //							  inertia for this object
-//		IxxDirection		= *VECTOR specifying the first principle axis
+//		IxxDirection		= *Vector specifying the first principle axis
 //							  of rotation
-//		IyyDirection		= *VECTOR specifying the second principle axis
+//		IyyDirection		= *Vector specifying the second principle axis
 //							  of rotation
-//		IzzDirection		= *VECTOR specifying the third principle axis
+//		IzzDirection		= *Vector specifying the third principle axis
 //							  of rotation
 //
 // Return Value:
@@ -170,8 +170,8 @@ bool MASS_PROPERTIES::IsValidInertiaTensor(void) const
 //		errors
 //
 //==========================================================================
-bool MASS_PROPERTIES::GetPrincipleInertias(VECTOR *PrincipleInertias, VECTOR *IxxDirection,
-										   VECTOR *IyyDirection, VECTOR *IzzDirection) const
+bool MASS_PROPERTIES::GetPrincipleInertias(Vector *PrincipleInertias, Vector *IxxDirection,
+										   Vector *IyyDirection, Vector *IzzDirection) const
 {
 	// Lets initialize PrincipleInertias to zero in case we return false
 	PrincipleInertias->Set(0.0, 0.0, 0.0);
@@ -195,19 +195,19 @@ bool MASS_PROPERTIES::GetPrincipleInertias(VECTOR *PrincipleInertias, VECTOR *Ix
 	if (q * q * q + r * r > 0)
 		return false;
 
-	COMPLEX I = COMPLEX::I;
-	COMPLEX s(r, sqrt(-q * q * q - r * r));
-	COMPLEX t = s.GetConjugate();
+	Complex I = Complex::I;
+	Complex s(r, sqrt(-q * q * q - r * r));
+	Complex t = s.GetConjugate();
 	s = s.ToPower(1.0/3.0);
 	t = t.ToPower(1.0/3.0);
 
 	// We can ignore the imaginary parts here because we know they're zero.  We checked the
 	// descriminant above to make sure.
-	PrincipleInertias->X = (s + t - b / (3.0 * a)).Real;
-	PrincipleInertias->Y = ((s + t) * -0.5 - b / (3.0 * a) +
-		(s - t) * I * sqrt(3.0) / 2.0).Real;
-	PrincipleInertias->Z = ((s + t) * -0.5 - b / (3.0 * a) -
-		(s - t) * I * sqrt(3.0) / 2.0).Real;
+	PrincipleInertias->x = (s + t - b / (3.0 * a)).real;
+	PrincipleInertias->y = ((s + t) * -0.5 - b / (3.0 * a) +
+		(s - t) * I * sqrt(3.0) / 2.0).real;
+	PrincipleInertias->z = ((s + t) * -0.5 - b / (3.0 * a) -
+		(s - t) * I * sqrt(3.0) / 2.0).real;
 
 	// Only calculate the directions if given valid pointers
 	if (IxxDirection != NULL && IyyDirection != NULL && IzzDirection != NULL)
@@ -215,11 +215,11 @@ bool MASS_PROPERTIES::GetPrincipleInertias(VECTOR *PrincipleInertias, VECTOR *Ix
 		// Calculating the eigenvectors is simply solving the following matrix equation:
 		//  (Inertia - lambda * I) * x = 0.  Here, lambda is an eigenvalue (principle moment
 		//  of inertia, and I is the 3x3 identity matrix.
-		MATRIX Inertia(3, 3, Ixx, Ixy, Ixz, Ixy, Iyy, Iyz, Ixz, Iyz, Izz);
-		MATRIX InertiaMinusILambda(3, 3);
+		Matrix Inertia(3, 3, Ixx, Ixy, Ixz, Ixy, Iyy, Iyz, Ixz, Iyz, Izz);
+		Matrix InertiaMinusILambda(3, 3);
 
 		// Create an identity matrix
-		MATRIX Identity(3, 3);
+		Matrix Identity(3, 3);
 		Identity.MakeIdentity();
 
 		// Initialize the direction vectors
@@ -228,8 +228,8 @@ bool MASS_PROPERTIES::GetPrincipleInertias(VECTOR *PrincipleInertias, VECTOR *Ix
 		IzzDirection->Set(0.0, 0.0, 0.0);
 
 		// Assigns Inertia - lambda * I to InertiaMinusILambda
-		InertiaMinusILambda = Inertia - (Identity * PrincipleInertias->X);
-		InertiaMinusILambda.RowReduce();
+		InertiaMinusILambda = Inertia - (Identity * PrincipleInertias->x);
+		InertiaMinusILambda = InertiaMinusILambda.GetRowReduced();
 
 		// Check to see if we have any free variables and assign them 1 if we do
 		// Usually, free variables are zero, here we'll use anything smaller
@@ -238,131 +238,131 @@ bool MASS_PROPERTIES::GetPrincipleInertias(VECTOR *PrincipleInertias, VECTOR *Ix
 		if (fabs(InertiaMinusILambda.GetElement(3, 1)) < Tolerance &&
 			fabs(InertiaMinusILambda.GetElement(3, 2)) < Tolerance &&
 			fabs(InertiaMinusILambda.GetElement(3, 3)) < Tolerance)
-			IxxDirection->Z = 1.0;
+			IxxDirection->z = 1.0;
 		if (fabs(InertiaMinusILambda.GetElement(2, 1)) < Tolerance &&
 			fabs(InertiaMinusILambda.GetElement(2, 2)) < Tolerance &&
 			fabs(InertiaMinusILambda.GetElement(2, 3)) < Tolerance)
-			IxxDirection->Y = 1.0;
+			IxxDirection->y = 1.0;
 		if (fabs(InertiaMinusILambda.GetElement(1, 1)) < Tolerance &&
 			fabs(InertiaMinusILambda.GetElement(1, 2)) < Tolerance &&
 			fabs(InertiaMinusILambda.GetElement(1, 3)) < Tolerance)
-			IxxDirection->X = 1.0;
+			IxxDirection->x = 1.0;
 
-		if (IxxDirection->Z != 1.0)
+		if (IxxDirection->z != 1.0)
 		{
 			// No free pivots, null vector is the only solution
-			Debugger.Print(_T("Error (GetPrincipleInertias): NULL principle direction"));
+			debugger.Print(_T("Error (GetPrincipleInertias): NULL principle direction"));
 			return false;
 		}
-		else if (IxxDirection->Y != 1.0)
+		else if (IxxDirection->y != 1.0)
 		{
-			// One free pivot, solve for .X and .Y
-			IxxDirection->Y = -InertiaMinusILambda.GetElement(2, 3) /
+			// One free pivot, solve for .x and .y
+			IxxDirection->y = -InertiaMinusILambda.GetElement(2, 3) /
 				InertiaMinusILambda.GetElement(2, 2);
-			IxxDirection->X = -(InertiaMinusILambda.GetElement(1, 2) * IxxDirection->Y +
+			IxxDirection->x = -(InertiaMinusILambda.GetElement(1, 2) * IxxDirection->y +
 				InertiaMinusILambda.GetElement(1, 3)) / InertiaMinusILambda.GetElement(1, 1);
 		}
-		else if (IxxDirection->X != 1.0)
+		else if (IxxDirection->x != 1.0)
 		{
-			// Two free pivots, solve for .X
-			IxxDirection->X =
+			// Two free pivots, solve for .x
+			IxxDirection->x =
 				(InertiaMinusILambda.GetElement(1, 2) + InertiaMinusILambda.GetElement(1, 3)) /
 				InertiaMinusILambda.GetElement(1, 1);
 		}
 		else
 		{
 			// No fixed pivots, all vectors are solutions
-			Debugger.Print(_T("Error (GetPrincipleInertias): No limits on principle direction"));
+			debugger.Print(_T("Error (GetPrincipleInertias): No limits on principle direction"));
 			return false;
 		}
 
 		// Assigns Inertia - lambda * I to InertiaMinusILambda
-		InertiaMinusILambda = Inertia - (Identity * PrincipleInertias->Y);
-		InertiaMinusILambda.RowReduce();
+		InertiaMinusILambda = Inertia - (Identity * PrincipleInertias->y);
+		InertiaMinusILambda = InertiaMinusILambda.GetRowReduced();
 
 		if (fabs(InertiaMinusILambda.GetElement(3, 1)) < Tolerance &&
 			fabs(InertiaMinusILambda.GetElement(3, 2)) < Tolerance &&
 			fabs(InertiaMinusILambda.GetElement(3, 3)) < Tolerance)
-			IyyDirection->Z = 1.0;
+			IyyDirection->z = 1.0;
 		if (fabs(InertiaMinusILambda.GetElement(2, 1)) < Tolerance &&
 			fabs(InertiaMinusILambda.GetElement(2, 2)) < Tolerance &&
 			fabs(InertiaMinusILambda.GetElement(2, 3)) < Tolerance)
-			IyyDirection->Y = 1.0;
+			IyyDirection->y = 1.0;
 		if (fabs(InertiaMinusILambda.GetElement(1, 1)) < Tolerance &&
 			fabs(InertiaMinusILambda.GetElement(1, 2)) < Tolerance &&
 			fabs(InertiaMinusILambda.GetElement(1, 3)) < Tolerance)
-			IyyDirection->X = 1.0;
+			IyyDirection->x = 1.0;
 
-		if (IyyDirection->Z != 1.0)
+		if (IyyDirection->z != 1.0)
 		{
 			// No free pivots, null vector is the only solution
-			Debugger.Print(_T("Error (GetPrincipleInertias): NULL principle direction"));
+			debugger.Print(_T("Error (GetPrincipleInertias): NULL principle direction"));
 			return false;
 		}
-		else if (IyyDirection->Y != 1.0)
+		else if (IyyDirection->y != 1.0)
 		{
-			// One free pivot, solve for .X and .Y
-			IyyDirection->Y = -InertiaMinusILambda.GetElement(2, 3) /
+			// One free pivot, solve for .x and .y
+			IyyDirection->y = -InertiaMinusILambda.GetElement(2, 3) /
 				InertiaMinusILambda.GetElement(2, 2);
-			IyyDirection->X = -(InertiaMinusILambda.GetElement(1, 2) * IyyDirection->Y +
+			IyyDirection->x = -(InertiaMinusILambda.GetElement(1, 2) * IyyDirection->y +
 				InertiaMinusILambda.GetElement(1, 3)) / InertiaMinusILambda.GetElement(1, 1);
 		}
-		else if (IyyDirection->X != 1.0)
+		else if (IyyDirection->x != 1.0)
 		{
-			// Two free pivots, solve for .X
-			IyyDirection->X =
+			// Two free pivots, solve for .x
+			IyyDirection->x =
 				(InertiaMinusILambda.GetElement(1, 2) + InertiaMinusILambda.GetElement(1, 3)) /
 				InertiaMinusILambda.GetElement(1, 1);
 		}
 		else
 		{
 			// No fixed pivots, all vectors are solutions
-			Debugger.Print(_T("Error (GetPrincipleInertias): No limits on principle direction"));
+			debugger.Print(_T("Error (GetPrincipleInertias): No limits on principle direction"));
 			return false;
 		}
 
 		// Assigns Inertia - lambda * I to InertiaMinusILambda
-		InertiaMinusILambda = Inertia - (Identity * PrincipleInertias->Z);
-		InertiaMinusILambda.RowReduce();
+		InertiaMinusILambda = Inertia - (Identity * PrincipleInertias->z);
+		InertiaMinusILambda = InertiaMinusILambda.GetRowReduced();
 
 		if (fabs(InertiaMinusILambda.GetElement(3, 1)) < Tolerance &&
 			fabs(InertiaMinusILambda.GetElement(3, 2)) < Tolerance &&
 			fabs(InertiaMinusILambda.GetElement(3, 3)) < Tolerance)
-			IzzDirection->Z = 1.0;
+			IzzDirection->z = 1.0;
 		if (fabs(InertiaMinusILambda.GetElement(2, 1)) < Tolerance &&
 			fabs(InertiaMinusILambda.GetElement(2, 2)) < Tolerance &&
 			fabs(InertiaMinusILambda.GetElement(2, 3)) < Tolerance)
-			IzzDirection->Y = 1.0;
+			IzzDirection->y = 1.0;
 		if (fabs(InertiaMinusILambda.GetElement(1, 1)) < Tolerance &&
 			fabs(InertiaMinusILambda.GetElement(1, 2)) < Tolerance &&
 			fabs(InertiaMinusILambda.GetElement(1, 3)) < Tolerance)
-			IzzDirection->X = 1.0;
+			IzzDirection->x = 1.0;
 
-		if (IzzDirection->Z != 1.0)
+		if (IzzDirection->z != 1.0)
 		{
 			// No free pivots, null vector is the only solution
-			Debugger.Print(_T("Error (GetPrincipleInertias): NULL principle direction"));
+			debugger.Print(_T("Error (GetPrincipleInertias): NULL principle direction"));
 			return false;
 		}
-		else if (IzzDirection->Y != 1.0)
+		else if (IzzDirection->y != 1.0)
 		{
-			// One free pivot, solve for .X and .Y
-			IzzDirection->Y = -InertiaMinusILambda.GetElement(2, 3) /
+			// One free pivot, solve for .x and .y
+			IzzDirection->y = -InertiaMinusILambda.GetElement(2, 3) /
 				InertiaMinusILambda.GetElement(2, 2);
-			IzzDirection->X = -(InertiaMinusILambda.GetElement(1, 2) * IzzDirection->Y +
+			IzzDirection->x = -(InertiaMinusILambda.GetElement(1, 2) * IzzDirection->y +
 				InertiaMinusILambda.GetElement(1, 3)) / InertiaMinusILambda.GetElement(1, 1);
 		}
-		else if (IzzDirection->X != 1.0)
+		else if (IzzDirection->x != 1.0)
 		{
-			// Two free pivots, solve for .X
-			IzzDirection->X =
+			// Two free pivots, solve for .x
+			IzzDirection->x =
 				(InertiaMinusILambda.GetElement(1, 2) + InertiaMinusILambda.GetElement(1, 3)) /
 				InertiaMinusILambda.GetElement(1, 1);
 		}
 		else
 		{
 			// No fixed pivots, all vectors are solutions
-			Debugger.Print(_T("Error (GetPrincipleInertias): No limits on principle direction"));
+			debugger.Print(_T("Error (GetPrincipleInertias): No limits on principle direction"));
 			return false;
 		}
 
@@ -401,9 +401,9 @@ void MASS_PROPERTIES::Write(std::ofstream *OutFile) const
 	OutFile->write((char*)&Ixy, sizeof(double));
 	OutFile->write((char*)&Ixz, sizeof(double));
 	OutFile->write((char*)&Iyz, sizeof(double));
-	OutFile->write((char*)&CenterOfGravity, sizeof(VECTOR));
-	OutFile->write((char*)&UnsprungMass, sizeof(WHEEL_SET));
-	OutFile->write((char*)&WheelInertias, sizeof(VECTOR_SET));
+	OutFile->write((char*)&CenterOfGravity, sizeof(Vector));
+	OutFile->write((char*)&UnsprungMass, sizeof(WheelSet));
+	OutFile->write((char*)&WheelInertias, sizeof(VectorSet));
 
 	return;
 }
@@ -437,9 +437,9 @@ void MASS_PROPERTIES::Read(std::ifstream *InFile, int FileVersion)
 		InFile->read((char*)&Ixy, sizeof(double));
 		InFile->read((char*)&Ixz, sizeof(double));
 		InFile->read((char*)&Iyz, sizeof(double));
-		InFile->read((char*)&CenterOfGravity, sizeof(VECTOR));
-		InFile->read((char*)&UnsprungMass, sizeof(WHEEL_SET));
-		InFile->read((char*)&WheelInertias, sizeof(VECTOR_SET));
+		InFile->read((char*)&CenterOfGravity, sizeof(Vector));
+		InFile->read((char*)&UnsprungMass, sizeof(WheelSet));
+		InFile->read((char*)&WheelInertias, sizeof(VectorSet));
 	}
 	else
 		assert(0);

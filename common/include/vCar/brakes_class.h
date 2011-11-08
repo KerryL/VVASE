@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -12,7 +12,7 @@
 // Author:  K. Loux
 // Description:  Contains class declaration for BRAKES class (disk brakes only).
 // History:
-//	3/9/2008	- Changed the structure of the DEBUGGER class, K. Loux.
+//	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
 #ifndef _BRAKES_CLASS_H_
@@ -25,13 +25,13 @@
 #include "vUtilities/wheelset_structs.h"
 
 // CarDesigner forward declarations
-class DEBUGGER;
+class Debugger;
 
 class BRAKES
 {
 public:
 	// Constructor
-	BRAKES(const DEBUGGER &_Debugger);
+	BRAKES(const Debugger &_debugger);
 	BRAKES(const BRAKES &Brakes);
 
 	// Destructor
@@ -42,15 +42,15 @@ public:
 	void Read(std::ifstream *InFile, int FileVersion);
 
 	// Get the braking torque at each wheel as a function of pedal force
-	WHEEL_SET GetBrakingTorque(const double &PedalForce) const;	// [in-lbf]
+	WheelSet GetBrakingTorque(const double &PedalForce) const;	// [in-lbf]
 
 	// Class properties
-	FRONT_REAR_INTEGER NumberOfDisks;
-	WHEEL_SET BrakeDiameter;						// [in] - This is effective diameter, twice the moment arm
-	WHEEL_SET PistonArea;							// [in^2]
-	FRONT_REAR_DOUBLE MasterCylinderArea;			// [in^2]
+	FrontRearInteger NumberOfDisks;
+	WheelSet BrakeDiameter;						// [in] - This is effective diameter, twice the moment arm
+	WheelSet PistonArea;							// [in^2]
+	FrontRearDouble MasterCylinderArea;			// [in^2]
 	double PedalRatio;								// [-]
-	FRONT_REAR_DOUBLE LinePressure;					// [psi]
+	FrontRearDouble LinePressure;					// [psi]
 	double BiasRatio;								// [-]			Front/Rear
 	double PercentFrontBraking;						// [-]
 	// FIXME:  Make temperature dependant with thermal and cooling model (include aerodynamics?)
@@ -64,7 +64,7 @@ public:
 
 private:
 	// Debugger message printing utility
-	const DEBUGGER &Debugger;
+	const Debugger &debugger;
 };
 
 #endif// _BRAKES_CLASS_H_

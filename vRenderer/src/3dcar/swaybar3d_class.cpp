@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -30,7 +30,7 @@
 //					process necessary to add the object to the scene.
 //
 // Input Arguments:
-//		_Renderer	= RENDER_WINDOW&, pointer to rendering object
+//		_Renderer	= RenderWindow&, pointer to rendering object
 //
 // Output Arguments:
 //		None
@@ -39,7 +39,7 @@
 //		None
 //
 //==========================================================================
-SWAYBAR3D::SWAYBAR3D(RENDER_WINDOW &_Renderer)
+SWAYBAR3D::SWAYBAR3D(RenderWindow &_Renderer)
 {
 	// Create the objects
 	TorqueArm1 = new CYLINDER(_Renderer);
@@ -83,20 +83,20 @@ SWAYBAR3D::~SWAYBAR3D()
 //
 // Description:		Updates the position, orientation, and size of the tire
 //					in the scene.  Note that the third argument is passed by
-//					value, not reference like the first two VECTORs.
+//					value, not reference like the first two Vectors.
 //
 // Input Arguments:
-//		LeftLink				= const VECTOR&, point where link meets the left arm
-//		RightLink				= const VECTOR&, point where link meets the right arm
-//		TorsionMemberTopRight	= const VECTOR&, either the top OR the right end of the
+//		LeftLink				= const Vector&, point where link meets the left arm
+//		RightLink				= const Vector&, point where link meets the right arm
+//		TorsionMemberTopRight	= const Vector&, either the top OR the right end of the
 //								  sway bar (depends on bar style)
-//		TorsionMemberBottomLeft	= const VECTOR&, either the bottom OR the left end of the
+//		TorsionMemberBottomLeft	= const Vector&, either the bottom OR the left end of the
 //								  sway bar (depends on bar style)
 //		BarStyle				= const SUSPENSION::BAR_STYLE& defining the type of swaybar
 //		Dimension				= const double& describing the size of the members
 //		Resolution				= const integer& representing the number of planar sides to use
 //								  to represent the cylinders
-//		Color					= const COLOR& describing this object's color
+//		color					= const Color& describing this object's color
 //		Show					= bool, visibility flag
 //
 // Output Arguments:
@@ -106,9 +106,9 @@ SWAYBAR3D::~SWAYBAR3D()
 //		None
 //
 //==========================================================================
-void SWAYBAR3D::Update(const VECTOR &RightLink, const VECTOR &LeftLink, const VECTOR &TorsionMemberTopRight,
-					   const VECTOR &TorsionMemberBottomLeft, const SUSPENSION::BAR_STYLE &BarStyle,
-					   const double &Dimension, const int &Resolution, const COLOR &Color, bool Show)
+void SWAYBAR3D::Update(const Vector &RightLink, const Vector &LeftLink, const Vector &TorsionMemberTopRight,
+					   const Vector &TorsionMemberBottomLeft, const SUSPENSION::BAR_STYLE &BarStyle,
+					   const double &Dimension, const int &Resolution, const Color &color, bool Show)
 {
 	// Make sure all vector arguments are valid - if they are not,
 	// the object will not be made visible
@@ -131,16 +131,16 @@ void SWAYBAR3D::Update(const VECTOR &RightLink, const VECTOR &LeftLink, const VE
 		return;
 
 	// Set this object's color
-	TorqueArm1->SetColor(Color);
-	TorqueArm2->SetColor(Color);
-	TorsionMember->SetColor(Color);
+	TorqueArm1->SetColor(color);
+	TorqueArm2->SetColor(color);
+	TorsionMember->SetColor(color);
 
 	// Set the size of the source objects
 	TorqueArm1->SetRadius(Dimension / 2.0);
 	TorqueArm2->SetRadius(Dimension / 2.0);
 	TorsionMember->SetRadius(Dimension / 2.0);
 
-	// Set the resoltuion of the torsion member
+	// Set the resolution of the torsion member
 	TorsionMember->SetResolution(Resolution);
 
 	// Position the torsion member
@@ -172,16 +172,16 @@ void SWAYBAR3D::Update(const VECTOR &RightLink, const VECTOR &LeftLink, const VE
 //					object or not.
 //
 // Input Arguments:
-//		Actor	= const PRIMITIVE* to compare against this object's actors
+//		Actor	= const Primitive* to compare against this object's actors
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		bool representing wether or not the Actor was part of this object
+//		bool representing whether or not the Actor was part of this object
 //
 //==========================================================================
-bool SWAYBAR3D::ContainsThisActor(const PRIMITIVE *Actor)
+bool SWAYBAR3D::ContainsThisActor(const Primitive *Actor)
 {
 	// Make the comparison
 	if (TorqueArm1 == Actor ||

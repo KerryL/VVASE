@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -14,7 +14,7 @@
 //				 for the GUI components.  Also contains the application class definition
 //				 and functionality at the bottom of this file (minimal).
 // History:
-//	3/9/2008	- Changed the structure of the DEBUGGER class so one object can debug the
+//	3/9/2008	- Changed the structure of the Debugger class so one object can debug the
 //				  entire application and we can print the outputs to OutputPane, K. Loux.
 //  5/13/2008	- Added variables and functions to the class for managing GUI_CAR objects.
 //				  Functionality includes maintaining a list of open objects to prevent
@@ -44,7 +44,7 @@
 #include "vSolver/physics/kinematics_class.h"
 #include "gui/undo_redo_stack_class.h"
 #include "gui/gui_object_class.h"	// Can't use a forward declaration here because
-									//MANAGED_LIST can't compile without a definition
+									// ManagedList can't compile without a definition
 
 // wxWidgets forward declarations
 class wxFileHistory;
@@ -87,7 +87,7 @@ public:
 	inline int GetActiveIndex(void) const { return ActiveIndex; };
 
 	// Returns a pointer to the converter object
-	inline const CONVERT& GetConverter(void) const { return Converter; };
+	inline const Convert& GetConverter(void) const { return converter; };
 
 	// Accessor to deletion flag
 	inline bool ObjectIsBeingDeleted(void) const { return BeingDeleted; };
@@ -101,7 +101,7 @@ public:
 	void AddFileToHistory(wxString PathAndFileName);
 	void RemoveFileFromHistory(wxString PathAndFileName);
 
-	// For displaying a menu that was crated by this form
+	// For displaying a menu that was created by this form
 	// NOTE:  When calculating the Position to display this context menu,
 	// consider that the coordinates for the calling object might be different
 	// from the coordinates for this object!
@@ -147,8 +147,8 @@ private:
 	wxAuiManager Manager;
 
 	// Utility objects
-	CONVERT Converter;
-	DEBUGGER Debugger;
+	Convert converter;
+	Debugger debugger;
 
 	// Object to manage recently viewed file list
 	wxFileHistory *RecentFileManager;
@@ -338,7 +338,7 @@ private:
 	wxToolBar *KinematicToolbar;
 
 	// The list of open objects
-	MANAGED_LIST<GUI_OBJECT> OpenObjectList;
+	ManagedList<GUI_OBJECT> OpenObjectList;
 
 	// The undo/redo object
 	UNDO_REDO_STACK UndoRedo;

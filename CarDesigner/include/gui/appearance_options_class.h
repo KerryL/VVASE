@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -20,7 +20,7 @@
 // CarDesigner forward declarations
 class MAIN_FRAME;
 class GUI_CAR;
-class DEBUGGER;
+class Debugger;
 
 // Standard C++ headers
 #include <iosfwd>// for forward declarations of fstream objects
@@ -32,7 +32,7 @@ class APPEARANCE_OPTIONS
 {
 public:
 	// Constructor
-	APPEARANCE_OPTIONS(MAIN_FRAME &_MainFrame, GUI_CAR &_Owner, const DEBUGGER &_Debugger);
+	APPEARANCE_OPTIONS(MAIN_FRAME &_MainFrame, GUI_CAR &_Owner, const Debugger &_debugger);
 
 	// Destructor
 	~APPEARANCE_OPTIONS();
@@ -69,8 +69,8 @@ public:
 	static wxString GetColorString(OBJECT_COLOR _Color);
 
 	// For accessing the visibility options
-	inline void SetColor(OBJECT_COLOR _Color, COLOR ColorValue) { Color[_Color] = ColorValue; };
-	inline COLOR GetColor(OBJECT_COLOR _Color) const { return Color[_Color]; };
+	inline void SetColor(OBJECT_COLOR _color, Color ColorValue) { color[_color] = ColorValue; };
+	inline Color GetColor(OBJECT_COLOR _color) const { return color[_color]; };
 
 	// Visibility options
 	enum OBJECT_VISIBILITY
@@ -168,7 +168,7 @@ public:
 
 private:
 	// The debug printing utility
-	const DEBUGGER &Debugger;
+	const Debugger &debugger;
 
 	// The main application window
 	MAIN_FRAME &MainFrame;
@@ -177,7 +177,7 @@ private:
 	GUI_CAR &Owner;
 
 	// This object's data
-	COLOR Color[ColorCount];
+	Color color[ColorCount];
 	bool Visibility[VisibilityCount];
 	double Size[SizeCount];
 	int Resolution[ResolutionCount];

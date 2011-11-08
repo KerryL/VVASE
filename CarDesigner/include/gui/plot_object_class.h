@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -25,12 +25,12 @@
 #include "vUtilities/object_list_class.h"
 
 // VVASE forward declarations
-class PLOT_RENDERER;
-class AXIS;
+class PlotRenderer;
+class Axis;
 class TEXT_RENDERING;
 class ITERATION;
-class PLOT_CURVE;
-class DEBUGGER;
+class PlotCurve;
+class Debugger;
 
 // FTGL forward declarations
 class FTFont;
@@ -39,7 +39,7 @@ class PLOT_OBJECT
 {
 public:
 	// Constructor
-	PLOT_OBJECT(PLOT_RENDERER &_Renderer, const ITERATION &_DataSource, const DEBUGGER &_Debugger);
+	PLOT_OBJECT(PLOT_RENDERER &_Renderer, const ITERATION &_DataSource, const Debugger &_debugger);
 
 	// Destructor
 	~PLOT_OBJECT();
@@ -78,7 +78,7 @@ public:
 
 private:
 	// Debugger printing utility
-	const DEBUGGER &Debugger;
+	const Debugger &debugger;
 
 	// The associated iteration
 	const ITERATION &DataSource;
@@ -112,7 +112,7 @@ private:
 	bool AutoScaleZ;
 
 	// The actual plot objects
-	OBJECT_LIST<PLOT_CURVE> PlotList;
+	ObjectList<PlotCurve> PlotList;
 
 	// Handles all of the formatting for the plot
 	void FormatPlot(void);

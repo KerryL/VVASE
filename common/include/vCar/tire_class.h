@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -13,7 +13,7 @@
 // Description:  Contains class declaration for TIRE class.  Contains several tire models.
 // History:
 //	2/25/2008	- Named TIRE_MODEL enum, K. Loux.
-//	3/9/2008	- Moved enumerations inside class body and changed the structure of the DEBUGGER
+//	3/9/2008	- Moved enumerations inside class body and changed the structure of the Debugger
 //				  class, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
@@ -31,7 +31,7 @@ class TIRE
 {
 public:
 	// Constructor
-	TIRE(const DEBUGGER &_Debugger);
+	TIRE(const Debugger &_debugger);
 	TIRE(const TIRE &Tire);
 
 	// Destructor
@@ -50,9 +50,9 @@ public:
 	};
 
 	// The functions that calculate the tire's forces and moments
-	VECTOR GetTireForces(const double &NormalLoad, const double &SlipAngle,
+	Vector GetTireForces(const double &NormalLoad, const double &SlipAngle,
 		const double &SlipRatio, const double &LocalMu);// [lbf]
-	VECTOR GetTireMoments(const double &NormalLoad, const double &SlipAngle,
+	Vector GetTireMoments(const double &NormalLoad, const double &SlipAngle,
 		const double &SlipRatio, const double &LocalMu);// [in-lbf]
 
 	// Tire characteristics
@@ -65,7 +65,7 @@ public:
 
 private:
 	// Debugger message printing utility
-	const DEBUGGER &Debugger;
+	const Debugger &debugger;
 
 	// FIXME:  Eventually, add support for a selection of tire models
 	// These parameters come from SAE Paper # 2006-01-1968, Tire Asymmetries and Pressure

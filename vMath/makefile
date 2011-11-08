@@ -10,7 +10,9 @@ TARGET = vMath
 
 # Directories in which to search for source files
 DIRS = \
-	src
+	src \
+	src/signals \
+	src/signals/filters
 
 # Source files
 SRC = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.cpp))

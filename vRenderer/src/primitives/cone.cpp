@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -12,7 +12,7 @@
 // Author:  K. Loux
 // Description:  Derived from PRIMITIVE for creating conical objects.
 // History:
-//	6/2/2009	- Modified GenerateGeometry() to make use of openGL matricies for positioning
+//	6/2/2009	- modified GenerateGeometry() to make use of openGL matrices for positioning
 //				  and orienting the object, K.Loux.
 
 // Local headers
@@ -28,7 +28,7 @@
 // Description:		Constructor for the CONE class.
 //
 // Input Arguments:
-//		_RenderWindow	= RENDER_WINDOW& reference to the object that owns this
+//		_RenderWindow	= RenderWindow& reference to the object that owns this
 //
 // Output Arguments:
 //		None
@@ -37,7 +37,7 @@
 //		None
 //
 //==========================================================================
-CONE::CONE(RENDER_WINDOW &_RenderWindow) : PRIMITIVE(_RenderWindow)
+CONE::CONE(RenderWindow &_RenderWindow) : Primitive(_RenderWindow)
 {
 	// Initialize private data
 	DrawCaps = false;
@@ -94,22 +94,22 @@ void CONE::GenerateGeometry(void)
 	double HalfHeight = BaseCenter.Distance(Tip) / 2.0;
 
 	// Determine the desired axis for the cone
-	VECTOR AxisDirection = (Tip - BaseCenter).Normalize();
+	Vector AxisDirection = (Tip - BaseCenter).Normalize();
 
 	// Determine the center of the cone
-	VECTOR Center = BaseCenter + AxisDirection * HalfHeight;
+	Vector Center = BaseCenter + AxisDirection * HalfHeight;
 
 	// Our reference direction will be the X-axis direction
-	VECTOR ReferenceDirection(1.0, 0.0, 0.0);
+	Vector ReferenceDirection(1.0, 0.0, 0.0);
 
 	// Determine the angle and axis of rotation
-	VECTOR AxisOfRotation = ReferenceDirection.Cross(AxisDirection);
+	Vector AxisOfRotation = ReferenceDirection.Cross(AxisDirection);
 	double Angle = acos(AxisDirection * ReferenceDirection);// [rad]
 
 	// If the axis direction is opposite the reference direction, we need to rotate 180 degrees
 	if (VVASEMath::IsZero(AxisDirection + ReferenceDirection))
 	{
-		Angle = CONVERT::Pi;
+		Angle = Convert::Pi;
 		AxisOfRotation.Set(0.0, 1.0, 0.0);
 	}
 
@@ -117,14 +117,14 @@ void CONE::GenerateGeometry(void)
 	glPushMatrix();
 
 		// Translate the current matrix
-		glTranslated(Center.X, Center.Y, Center.Z);
+		glTranslated(Center.x, Center.y, Center.z);
 
 		// Rotate the current matrix, if the rotation axis is non-zero
 		if (!VVASEMath::IsZero(AxisOfRotation.Length()))
-			glRotated(CONVERT::RAD_TO_DEG(Angle), AxisOfRotation.X, AxisOfRotation.Y, AxisOfRotation.Z);
+			glRotated(Convert::RAD_TO_DEG(Angle), AxisOfRotation.x, AxisOfRotation.y, AxisOfRotation.z);
 
 		// Create the cone along the X-axis (must match the reference direction above)
-		// (the openGL matricies take care of correct position/orientation in hardware)
+		// (the openGL matrices take care of correct position/orientation in hardware)
 		// We'll use a triangle fan to draw the cone
 		glBegin(GL_TRIANGLE_FAN);
 
@@ -134,21 +134,21 @@ void CONE::GenerateGeometry(void)
 
 		// Loop to generate the triangles
 		int i;
-		VECTOR Point(-HalfHeight, 0.0, 0.0);
+		Vector Point(-HalfHeight, 0.0, 0.0);
 		for (i = 0; i <= Resolution; i++)
 		{
 			// Determine the angle to the current point
-			Angle = (double)i * 2.0 * CONVERT::Pi / (double)Resolution;
+			Angle = (double)i * 2.0 * Convert::Pi / (double)Resolution;
 
 			// Determine the Y and Z ordinates based on this angle and the radius
-			Point.Y = Radius * cos(Angle);
-			Point.Z = Radius * sin(Angle);
+			Point.y = Radius * cos(Angle);
+			Point.z = Radius * sin(Angle);
 
 			// Set the normal for the next two points
-			glNormal3d(0.0, Point.Y / Radius, Point.Z / Radius);
+			glNormal3d(0.0, Point.y / Radius, Point.z / Radius);
 
 			// Add the next point
-			glVertex3d(Point.X, Point.Y, Point.Z);
+			glVertex3d(Point.x, Point.y, Point.z);
 		}
 
 		// End the triangle strip
@@ -167,14 +167,14 @@ void CONE::GenerateGeometry(void)
 			for (i = 0; i <= Resolution; i++)
 			{
 				// Determine the angle to the current point
-				Angle = (double)i * 2.0 * CONVERT::Pi / (double)Resolution;
+				Angle = (double)i * 2.0 * Convert::Pi / (double)Resolution;
 
 				// Determine the Y and Z ordinates based on this angle and the radius
-				Point.Y = Radius * cos(Angle);
-				Point.Z = Radius * sin(Angle);
+				Point.y = Radius * cos(Angle);
+				Point.z = Radius * sin(Angle);
 
 				// Add the next point
-				glVertex3d(Point.X, Point.Y, Point.Z);
+				glVertex3d(Point.x, Point.y, Point.z);
 			}
 
 			// End the polygon
@@ -236,7 +236,7 @@ void CONE::SetResolution(const int &_Resolution)
 	Resolution = _Resolution;
 	
 	// Reset the modified flag
-	Modified = true;
+	modified = true;
 
 	return;
 }
@@ -264,7 +264,7 @@ void CONE::SetCapping(const bool &_DrawCaps)
 	DrawCaps = _DrawCaps;
 	
 	// Reset the modified flag
-	Modified = true;
+	modified = true;
 
 	return;
 }
@@ -276,7 +276,7 @@ void CONE::SetCapping(const bool &_DrawCaps)
 // Description:		Sets the location of the tip of the cone.
 //
 // Input Arguments:
-//		_Tip	= const VECTOR&
+//		_Tip	= const Vector&
 //
 // Output Arguments:
 //		None
@@ -285,13 +285,13 @@ void CONE::SetCapping(const bool &_DrawCaps)
 //		None
 //
 //==========================================================================
-void CONE::SetTip(const VECTOR &_Tip)
+void CONE::SetTip(const Vector &_Tip)
 {
 	// Set the tip location to the argument
 	Tip = _Tip;
 	
 	// Reset the modified flag
-	Modified = true;
+	modified = true;
 
 	return;
 }
@@ -303,7 +303,7 @@ void CONE::SetTip(const VECTOR &_Tip)
 // Description:		Sets the location of the center of the cone's base.
 //
 // Input Arguments:
-//		_BaseCenter	= const VECTOR&
+//		_BaseCenter	= const Vector&
 //
 // Output Arguments:
 //		None
@@ -312,13 +312,13 @@ void CONE::SetTip(const VECTOR &_Tip)
 //		None
 //
 //==========================================================================
-void CONE::SetBaseCenter(const VECTOR &_BaseCenter)
+void CONE::SetBaseCenter(const Vector &_BaseCenter)
 {
 	// Set the base location to the argument
 	BaseCenter = _BaseCenter;
 	
 	// Reset the modified flag
-	Modified = true;
+	modified = true;
 
 	return;
 }
@@ -345,7 +345,7 @@ void CONE::SetRadius(const double &_Radius)
 	Radius = _Radius;
 	
 	// Reset the modified flag
-	Modified = true;
+	modified = true;
 
 	return;
 }

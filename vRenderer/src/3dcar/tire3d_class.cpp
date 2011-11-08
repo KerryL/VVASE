@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -31,7 +31,7 @@
 //					process necessary to add the object to the scene.
 //
 // Input Arguments:
-//		_Renderer	= RENDER_WINDOW&, pointer to rendering object
+//		_Renderer	= RenderWindow&, pointer to rendering object
 //
 // Output Arguments:
 //		None
@@ -40,7 +40,7 @@
 //		None
 //
 //==========================================================================
-TIRE3D::TIRE3D(RENDER_WINDOW &_Renderer)
+TIRE3D::TIRE3D(RenderWindow &_Renderer)
 {
 	// Create the objects
 	InnerSurface = new CYLINDER(_Renderer);
@@ -81,15 +81,15 @@ TIRE3D::~TIRE3D()
 //					in the scene.
 //
 // Input Arguments:
-//		ConctactPatch	= const VECTOR&, location of the tire's bottom
-//		Center			= const VECTOR&, location of center of the tire
-//		OriginalNomral	= VECTOR, the "staring position" of the upright plane
-//		TargetNormal	= VECTOR, the "final position" of the upright plane
+//		ConctactPatch	= const Vector&, location of the tire's bottom
+//		Center			= const Vector&, location of center of the tire
+//		OriginalNomral	= Vector, the "staring position" of the upright plane
+//		TargetNormal	= Vector, the "final position" of the upright plane
 //		Width			= const double& describing width of the tire
 //		InsideDiameter	= const double& describing inner diameter of the tire
 //		Resolution		= const integer& representing the number of planar sides to use
 //						  to represent the cylinders
-//		Color			= const wxColor& describing this obejct's color
+//		color			= const Color& describing this object's color
 //		Show			= bool, visibility flag
 //
 // Output Arguments:
@@ -99,9 +99,9 @@ TIRE3D::~TIRE3D()
 //		None
 //
 //==========================================================================
-void TIRE3D::Update(const VECTOR &ContactPatch, const VECTOR &Center, VECTOR OriginalNormal,
-					VECTOR TargetNormal, const double &Width, const double &InsideDiameter,
-					const int &Resolution, const COLOR &Color, bool Show)
+void TIRE3D::Update(const Vector &ContactPatch, const Vector &Center, Vector OriginalNormal,
+					Vector TargetNormal, const double &Width, const double &InsideDiameter,
+					const int &Resolution, const Color &color, bool Show)
 {
 	// Make sure all vector arguments are valid - if they are not,
 	// the object will not be made visible
@@ -120,10 +120,10 @@ void TIRE3D::Update(const VECTOR &ContactPatch, const VECTOR &Center, VECTOR Ori
 		return;
 
 	// Set this object's color
-	InnerSurface->SetColor(Color);
-	OuterSurface->SetColor(Color);
-	Sidewall1->SetColor(Color);
-	Sidewall2->SetColor(Color);
+	InnerSurface->SetColor(color);
+	OuterSurface->SetColor(color);
+	Sidewall1->SetColor(color);
+	Sidewall2->SetColor(color);
 
 	// Set the size and resolution of the cylinders
 	InnerSurface->SetRadius(ContactPatch.Distance(Center));
@@ -149,7 +149,7 @@ void TIRE3D::Update(const VECTOR &ContactPatch, const VECTOR &Center, VECTOR Ori
 	// Because the car's tires start out in this orientation (zero pitch, roll, heave and steer),
 	// we can use only the original and final normal vectors for the upright plane to define
 	// the wheel orientation.
-	VECTOR RotationAxis;
+	Vector RotationAxis;
 	double AngleToRotate;// [rad]
 
 	// We allow rotation about any arbitrary axis, so we'll start by determining the axis of rotation
@@ -164,8 +164,8 @@ void TIRE3D::Update(const VECTOR &ContactPatch, const VECTOR &Center, VECTOR Ori
 	// axis direction.  To calculate the axis direction, we rotate a reference vector
 	// the same way that we rotate the actors.  This reference starts out aligned with
 	// the Y-axis (tire orientation with zero camber, toe, pitch, roll, etc.)
-	VECTOR SidewallPosition;
-	VECTOR AxisDirection(0.0, 1.0, 0.0);
+	Vector SidewallPosition;
+	Vector AxisDirection(0.0, 1.0, 0.0);
 
 	// Check to make sure our rotation axis is non-zero before we do the rotations
 	if (!VVASEMath::IsZero(RotationAxis.Length()))
@@ -204,16 +204,16 @@ void TIRE3D::Update(const VECTOR &ContactPatch, const VECTOR &Center, VECTOR Ori
 //					object or not.
 //
 // Input Arguments:
-//		Actor	= const PRIMITIVE* to compare against this object's actors
+//		Actor	= const Primitive* to compare against this object's actors
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		bool representing wether or not the Actor was part of this object
+//		bool representing whether or not the Actor was part of this object
 //
 //==========================================================================
-bool TIRE3D::ContainsThisActor(const PRIMITIVE *Actor)
+bool TIRE3D::ContainsThisActor(const Primitive *Actor)
 {
 	// Make the comparison
 	if (OuterSurface == Actor ||

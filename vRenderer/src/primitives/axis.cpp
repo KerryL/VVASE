@@ -17,7 +17,7 @@
 // Local headers
 #include "vRenderer/primitives/axis.h"
 #include "vRenderer/render_window_class.h"
-#include "vUtilities/math/plot_math.h"
+#include "vMath/car_math.h"
 
 // FTGL headers
 #include <FTGL/ftgl.h>
@@ -28,7 +28,7 @@
 //
 // Description:		Constructor for the Axis class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_renderWindow	= RenderWindow& reference to the object that owns this
 //
 // Output Arguments:
@@ -65,7 +65,7 @@ Axis::Axis(RenderWindow &_renderWindow) : Primitive(_renderWindow)
 //
 // Description:		Destructor for the Axis class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -85,7 +85,7 @@ Axis::~Axis()
 //
 // Description:		Constants for Axis class are defined here.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -104,7 +104,7 @@ const unsigned int Axis::offsetFromWindowEdge = 75;// [pixels]
 // Description:		Creates the OpenGL instructions to create this object in
 //					the scene.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -128,7 +128,7 @@ void Axis::GenerateGeometry(void)
 	int numberOfGridLines = int((maximum - minimum) / majorResolution + 0.5) - 1;
 	int mainAxisLocation;
 
-	// Determine where the ticks should be drawns
+	// Determine where the ticks should be drawn
 	if (tickStyle == TickStyleInside)
 		insideTick = 1.0;
 	else if (tickStyle == TickStyleOutside)
@@ -380,7 +380,7 @@ void Axis::GenerateGeometry(void)
 //
 // Description:		Checks to see if this object has horizontal orientation.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -405,7 +405,7 @@ bool Axis::IsHorizontal(void) const
 // Description:		Checks to see if the information about this object is
 //					valid and complete (gives permission to create the object).
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -418,7 +418,7 @@ bool Axis::IsHorizontal(void) const
 bool Axis::HasValidParameters(void)
 {
 	// Don't draw if any of the limits are not numbers
-	if (PlotMath::IsNaN(minimum) || PlotMath::IsNaN(maximum))
+	if (VVASEMath::IsNaN(minimum) || VVASEMath::IsNaN(maximum))
 		return false;
 
 	return true;

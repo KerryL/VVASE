@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -283,7 +283,7 @@ void APPEARANCE_OPTIONS_DIALOG::CreateControls(void)
 
 	// Add the text to this spacer
 	wxStaticText *SizePrompt = new wxStaticText(SizePanel, wxID_STATIC,
-		_T("Edit the object sizes (units are ") + Converter.GetUnitType(CONVERT::UNIT_TYPE_DISTANCE)
+		_T("Edit the object sizes (units are ") + Converter.GetUnitType(Convert::UNIT_TYPE_DISTANCE)
 		+ _T("):"), wxDefaultPosition, wxSize(-1, -1), 0);
 	SizeCaptionSizer->Add(-1, -1, 0, wxALL, 5);
 	SizeCaptionSizer->Add(SizePrompt, 0, wxALL, 5);

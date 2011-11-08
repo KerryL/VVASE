@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -10,7 +10,7 @@
 // File:  genetic_optimization_class.h
 // Created:  4/7/2009
 // Author:  K. Loux
-// Description:  This is a GUI interface for the genetica algorithm optimization.
+// Description:  This is a GUI interface for the genetic algorithm optimization.
 // History:
 //	1/11/2010	- Moved from test class to GUI_OBJECT derived object for permanent
 //				  implementation.
@@ -29,8 +29,8 @@
 // VVASE forward declarations
 class GUI_CAR;
 class CAR;
-class DEBUGGER;
-class CONVERT;
+class Debugger;
+class Convert;
 class GA_OBJECT;
 class MAIN_FRAME;
 class GENETIC_ALGORITHM_PANEL;
@@ -39,7 +39,7 @@ class GENETIC_OPTIMIZATION : public GUI_OBJECT
 {
 public:
 	// Constructor
-	GENETIC_OPTIMIZATION(MAIN_FRAME &_MainFrame, const DEBUGGER &Debugger, const CONVERT &Converter,
+	GENETIC_OPTIMIZATION(MAIN_FRAME &_MainFrame, const Debugger &_debugger, const Convert &Converter,
 		wxString _PathAndFileName = wxEmptyString);
 
 	// Destructor
@@ -75,7 +75,7 @@ public:
 
 private:
 	// Debugger printing utility
-	const DEBUGGER &Debugger;
+	const Debugger &debugger;
 
 	// Gets the icon handle for this object's icon
 	int GetIconHandle(void) const;

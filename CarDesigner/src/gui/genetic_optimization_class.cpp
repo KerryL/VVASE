@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -10,7 +10,7 @@
 // File:  genetic_optimization_class.cpp
 // Created:  4/7/2009
 // Author:  K. Loux
-// Description:  This is a GUI interface for the genetica algorithm optimization.
+// Description:  This is a GUI interface for the genetic algorithm optimization.
 // History:
 //	1/11/2010	- Moved from test class to GUI_OBJECT derived object for permanent
 //				  implementation.
@@ -39,8 +39,8 @@
 //
 // Input Arguments:
 //		_MainFrame			= MAIN_FRAME& reference to main application object
-//		_Debugger			= const DEBUGGER& reference to the debug printing utility
-//		Converter			= const CONVERT& reference to application's conversion utility
+//		_debugger			= const Debugger& reference to the debug printing utility
+//		Converter			= const Convert& reference to application's conversion utility
 //		_PathAndFileName	= wxString containing this objects location on the disk,
 //							  if we are to load from file
 //
@@ -51,13 +51,13 @@
 //		None
 //
 //==========================================================================
-GENETIC_OPTIMIZATION::GENETIC_OPTIMIZATION(MAIN_FRAME &_MainFrame, const DEBUGGER &_Debugger,
-										   const CONVERT &Converter,
-										   wxString _PathAndFileName) : GUI_OBJECT(_MainFrame, _Debugger,
-										   _PathAndFileName), Debugger(_Debugger)
+GENETIC_OPTIMIZATION::GENETIC_OPTIMIZATION(MAIN_FRAME &_MainFrame, const Debugger &_debugger,
+										   const Convert &Converter,
+										   wxString _PathAndFileName) : GUI_OBJECT(_MainFrame, _debugger,
+										   _PathAndFileName), debugger(_debugger)
 {
 	// Create the genetic algorithm
-	GeneticAlgorithm = new GA_OBJECT(_MainFrame, *this, Converter, Debugger);
+	GeneticAlgorithm = new GA_OBJECT(_MainFrame, *this, Converter, debugger);
 
 	// Get an index for this item and add it to the list in the MainFrame
 	// MUST be included BEFORE the naming, which must come BEFORE the call to Initialize
@@ -74,7 +74,7 @@ GENETIC_OPTIMIZATION::GENETIC_OPTIMIZATION(MAIN_FRAME &_MainFrame, const DEBUGGE
 
 	// Before we initialize, we need to create a renderer - optimizations don't have a renderer,
 	// but we can trick Initialize() into adding the GAPanel to the notebook instead
-	Renderer = reinterpret_cast<RENDER_WINDOW*>(GAPanel);
+	Renderer = reinterpret_cast<RenderWindow*>(GAPanel);
 
 	// Complete initialization of this object
 	Initialize();

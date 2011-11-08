@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -31,7 +31,7 @@
 // Description:		Constructor for the TIRE_SET class.
 //
 // Input Arguments:
-//		_Debugger	= const DEBUGGER& reference to applications debug printing utility
+//		_debugger	= const Debugger& reference to applications debug printing utility
 //
 // Output Arguments:
 //		None
@@ -40,13 +40,13 @@
 //		None
 //
 //==========================================================================
-TIRE_SET::TIRE_SET(const DEBUGGER &_Debugger) : Debugger(_Debugger)
+TIRE_SET::TIRE_SET(const Debugger &_debugger) : debugger(_debugger)
 {
 	// Create four tires
-	RightFront = new TIRE(Debugger);
-	LeftFront = new TIRE(Debugger);
-	RightRear = new TIRE(Debugger);
-	LeftRear = new TIRE(Debugger);
+	RightFront = new TIRE(debugger);
+	LeftFront = new TIRE(debugger);
+	RightRear = new TIRE(debugger);
+	LeftRear = new TIRE(debugger);
 }
 
 //==========================================================================
@@ -65,7 +65,7 @@ TIRE_SET::TIRE_SET(const DEBUGGER &_Debugger) : Debugger(_Debugger)
 //		None
 //
 //==========================================================================
-TIRE_SET::TIRE_SET(const TIRE_SET &TireSet) : Debugger(TireSet.Debugger)
+TIRE_SET::TIRE_SET(const TIRE_SET &TireSet) : debugger(TireSet.debugger)
 {
 	// Initialize the pointers
 	RightFront = NULL;

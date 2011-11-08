@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -39,7 +39,7 @@
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
 //		style		= long for passing to parent class's constructor
-//		_Debugger	= const DEBUGGER& reference to applications debug printing utility
+//		_debugger	= const Debugger& reference to applications debug printing utility
 //
 // Output Arguments:
 //		None
@@ -49,9 +49,9 @@
 //
 //==========================================================================
 MAIN_TREE::MAIN_TREE(MAIN_FRAME &_MainFrame, wxWindowID id, const wxPoint& pos,
-					 const wxSize& size, long style, const DEBUGGER &_Debugger)
+					 const wxSize& size, long style, const Debugger &_debugger)
 					 : wxTreeCtrl(&_MainFrame, id, pos, size, style),
-					 Debugger(_Debugger), MainFrame(_MainFrame)
+					 Debugger(_debugger), MainFrame(_MainFrame)
 {
 	// Set up the image list for tree item icons
 	int Size = 16;

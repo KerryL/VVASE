@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -20,9 +20,9 @@
 #include <wx/wx.h>
 
 // VVASE forward declarations
-class DEBUGGER;
+class Debugger;
 class ITERATION;
-class CONVERT;
+class Convert;
 class EDIT_ITERATION_NOTEBOOK;
 
 class EDIT_ITERATION_OPTIONS_PANEL : public wxPanel
@@ -30,7 +30,7 @@ class EDIT_ITERATION_OPTIONS_PANEL : public wxPanel
 public:
 	// Constructor
 	EDIT_ITERATION_OPTIONS_PANEL(EDIT_ITERATION_NOTEBOOK &_Parent, wxWindowID id, const wxPoint& pos,
-		const wxSize& size, const DEBUGGER &_Debugger);
+		const wxSize& size, const Debugger &_debugger);
 
 	// Destructor
 	~EDIT_ITERATION_OPTIONS_PANEL();
@@ -41,7 +41,7 @@ public:
 
 private:
 	// Debugger message printing utility
-	const DEBUGGER &Debugger;
+	const Debugger &Debugger;
 
 	// The parent panel
 	EDIT_ITERATION_NOTEBOOK &Parent;

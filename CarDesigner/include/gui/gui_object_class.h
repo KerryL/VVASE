@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -13,7 +13,7 @@
 // Description:  Contains class declaration for GUI_OBJECT class.  This aids with GUI functionality
 //				 by providing a common link between all the GUI controls and car objects.
 // History:
-//	7/27/2008	- Made ITEM_TYPE static and moved UNIT_TYPE to CONVERT, K. Loux.
+//	7/27/2008	- Made ITEM_TYPE static and moved UNIT_TYPE to Convert, K. Loux.
 //	8/18/2008	- Changed name from TREE_ITEM to GUI_OBJECT and broadened the functionality of the
 //				  class to include a link between all of the controls, K. Loux.
 //	1/24/2009	- Major application structure change - MAIN_FRAME uses GUI_OBJECT instead of
@@ -34,15 +34,15 @@ class ITERATION;
 class MAIN_TREE;
 class MAIN_NOTEBOOK;
 class MAIN_FRAME;
-class DEBUGGER;
-class RENDER_WINDOW;
-class PRIMITIVE;
+class Debugger;
+class RenderWindow;
+class Primitive;
 
 class GUI_OBJECT
 {
 public:
 	// Constructor
-	GUI_OBJECT(MAIN_FRAME &_MainFrame, const DEBUGGER &_Debugger,
+	GUI_OBJECT(MAIN_FRAME &_MainFrame, const Debugger &_debugger,
 		wxString _PathAndFileName = wxEmptyString);
 
 	// Destructor
@@ -61,7 +61,7 @@ public:
 	// Returns true of false depending on whether or not this item is selected in
 	// the systems tree
 	bool IsThisObjectSelected(wxTreeItemId Selected) const;
-	bool IsThisObjectSelected(PRIMITIVE *PickedObject) const;
+	bool IsThisObjectSelected(Primitive *PickedObject) const;
 
 	// Initialization of these objects requires some calls to pure virtual functions, which
 	// causes problems.  To avoid this, we make all of those calls here, and call this from
@@ -76,7 +76,7 @@ public:
 	void SetModified(void);
 
 	// Returns the object that draws this on the screen
-	inline RENDER_WINDOW *GetRenderer(void) const { return Renderer; };
+	inline RenderWindow *GetRenderer(void) const { return Renderer; };
 
 	// Re-draws the openGL image
 	virtual void Render(void);
@@ -121,7 +121,7 @@ public:
 
 protected:
 	// Debugger message printing utility
-	const DEBUGGER &Debugger;
+	const Debugger &debugger;
 
 	// The objects name (for display purposes)
 	wxString Name;
@@ -133,7 +133,7 @@ protected:
 	// Calls the read methods for the data associated with this object
 	bool LoadFromFile(void);
 
-	// Flag indiating whether or not the initialization routine is complete
+	// Flag indicating whether or not the initialization routine is complete
 	bool ObjectIsInitialized;
 
 	// Strips down file names and paths to get the object name
@@ -155,7 +155,7 @@ protected:
 	MAIN_NOTEBOOK *Notebook;
 
 	// The render window
-	RENDER_WINDOW *Renderer;
+	RenderWindow *Renderer;
 
 	// Flag indicating whether or not this object has been modified since it was last saved
 	bool ModifiedSinceLastSave;

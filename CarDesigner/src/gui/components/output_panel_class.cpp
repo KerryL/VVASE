@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -40,7 +40,7 @@
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
-//		_Debugger	= const DEBUGGER& reference to applications debug printing utility
+//		_debugger	= const Debugger& reference to applications debug printing utility
 //
 // Output Arguments:
 //		None
@@ -50,9 +50,9 @@
 //
 //==========================================================================
 OUTPUT_PANEL::OUTPUT_PANEL(MAIN_FRAME &_MainFrame, wxWindowID id, const wxPoint &pos,
-						   const wxSize &size, const DEBUGGER &_Debugger)
+						   const wxSize &size, const Debugger &_debugger)
 						   : wxPanel(&_MainFrame, id, pos, size),
-						   Debugger(_Debugger), Converter(_MainFrame.GetConverter()),
+						   Debugger(_debugger), Converter(_MainFrame.GetConverter()),
 						   MainFrame(_MainFrame)
 {
 	// Create the controls
@@ -136,7 +136,7 @@ void OUTPUT_PANEL::UpdateInformation(KINEMATIC_OUTPUTS Outputs, CAR &Car,
 		{
 			// Add column failed - print warning and return
 			Debugger.Print(_T("Warning (OUTPUT_PANEL::UpdateInformation):  InsertCols failed!"),
-				DEBUGGER::PriorityMedium);
+				Debugger::PriorityMedium);
 
 			return;
 		}
@@ -300,7 +300,7 @@ void OUTPUT_PANEL::FinishUpdate(int _NumberOfDataColumns)
 		if (!OutputsList->DeleteCols(_NumberOfDataColumns + 1, NumberOfDataColumns - _NumberOfDataColumns))
 		{
 			// Delete columns failed - display warning and return
-			Debugger.Print(_T("Warning (OUTPUT_PANEL::FinishUpdate):  DeleteCols failed!"), DEBUGGER::PriorityMedium);
+			Debugger.Print(_T("Warning (OUTPUT_PANEL::FinishUpdate):  DeleteCols failed!"), Debugger::PriorityMedium);
 
 			return;
 		}

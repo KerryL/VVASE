@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010.
+                         Copyright Kerry R. Loux 2008-2011.
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -21,8 +21,8 @@
 #include <wx/grid.h>
 
 // VVASE forward declarations
-class DEBUGGER;
-class CONVERT;
+class Debugger;
+class Convert;
 class CAR;
 class KINEMATIC_OUTPUTS;
 class MAIN_FRAME;
@@ -32,7 +32,7 @@ class OUTPUT_PANEL : public wxPanel
 public:
 	// Constructor
 	OUTPUT_PANEL(MAIN_FRAME &_MainFrame, wxWindowID id, const wxPoint &pos,
-		const wxSize &size, const DEBUGGER &_Debugger);
+		const wxSize &size, const Debugger &_debugger);
 
 	// Destructor
 	~OUTPUT_PANEL();
@@ -47,10 +47,10 @@ public:
 
 private:
 	// Debugger message printing utility
-	const DEBUGGER &Debugger;
+	const Debugger &debugger;
 
 	// The application's converter object
-	const CONVERT &Converter;
+	const Convert &Converter;
 
 	// Creates the controls and positions everything within the panel
 	void CreateControls(void);

@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -10,7 +10,7 @@
 // File:  vector3d_class.cpp
 // Created:  3/14/2009
 // Author:  K. Loux
-// Description:  Contains class definition for the VECTOR3D class.  This class contains
+// Description:  Contains class definition for the Vector3D class.  This class contains
 //				 and maintains the VTK objects that create actors representing vectors.
 // History:
 //	5/17/2009	- Removed VTK dependencies, K. Loux.
@@ -25,14 +25,14 @@
 #include "vUtilities/convert_class.h"
 
 //==========================================================================
-// Class:			VECTOR3D
-// Function:		VECTOR3D
+// Class:			Vector3D
+// Function:		Vector3D
 //
-// Description:		Constructor for the VECTOR3D class.  Performs the entire
+// Description:		Constructor for the Vector3D class.  Performs the entire
 //					process necessary to add the object to the scene.
 //
 // Input Arguments:
-//		_Renderer	= RENDER_WINDOW&, pointer to rendering object
+//		_Renderer	= RenderWindow&, pointer to rendering object
 //
 // Output Arguments:
 //		None
@@ -41,7 +41,7 @@
 //		None
 //
 //==========================================================================
-VECTOR3D::VECTOR3D(RENDER_WINDOW &_Renderer)
+Vector3D::Vector3D(RenderWindow &_Renderer)
 {
 	// Create the objects
 	Shaft = new CYLINDER(_Renderer);
@@ -53,10 +53,10 @@ VECTOR3D::VECTOR3D(RENDER_WINDOW &_Renderer)
 }
 
 //==========================================================================
-// Class:			VECTOR3D
-// Function:		~VECTOR3D
+// Class:			Vector3D
+// Function:		~Vector3D
 //
-// Description:		Destructor for the VECTOR3D class.
+// Description:		Destructor for the Vector3D class.
 //
 // Input Arguments:
 //		None
@@ -68,26 +68,26 @@ VECTOR3D::VECTOR3D(RENDER_WINDOW &_Renderer)
 //		None
 //
 //==========================================================================
-VECTOR3D::~VECTOR3D()
+Vector3D::~Vector3D()
 {
 }
 
 //==========================================================================
-// Class:			VECTOR3D
+// Class:			Vector3D
 // Function:		Update
 //
-// Description:		Updates the size of the VECTOR3D marker
+// Description:		Updates the size of the Vector3D marker
 //
 // Input Arguments:
-//		_Tip			= const VECTOR& indicating the point this vector points to
-//		_Tail			= const VECTOR& indicating the point this vector originates
+//		_Tip			= const Vector& indicating the point this vector points to
+//		_Tail			= const Vector& indicating the point this vector originates
 //						  from
 //		ShaftDiameter	= const double& describing the width of the arrow
 //		TipDiameter		= const double& describing the width of the head
 //		TipLength		= const double& specifying length of the head
 //		Resolution		= const integer& specifying the number of sides to use to
 //						  approximate the cones and cylinders
-//		Color			= const COLOR& describing this object's color
+//		color			= const Color& describing this object's color
 //		Show			= bool, visibility flag
 //
 // Output Arguments:
@@ -97,9 +97,9 @@ VECTOR3D::~VECTOR3D()
 //		None
 //
 //==========================================================================
-void VECTOR3D::Update(const VECTOR &_Tip, const VECTOR &_Tail, const double &ShaftDiameter,
+void Vector3D::Update(const Vector &_Tip, const Vector &_Tail, const double &ShaftDiameter,
 					  const double &TipDiameter, double TipLength, const int &Resolution,
-					  const COLOR &Color, bool Show)
+					  const Color &color, bool Show)
 {
 	// Make sure all vector arguments are valid - if they are not,
 	// the object will not be made visible
@@ -117,8 +117,8 @@ void VECTOR3D::Update(const VECTOR &_Tip, const VECTOR &_Tail, const double &Sha
 	// Set this object's color
 	// The wxColor stores information with unsigned char, but we're looking for
 	// doubles, so we divide by 255
-	Shaft->SetColor(Color);
-	Tip->SetColor(Color);
+	Shaft->SetColor(color);
+	Tip->SetColor(color);
 
 	// Make sure the tip proportion is less than the vector length
 	if (TipLength > _Tip.Distance(_Tail))
@@ -133,7 +133,7 @@ void VECTOR3D::Update(const VECTOR &_Tip, const VECTOR &_Tail, const double &Sha
 	Tip->SetResolution(Resolution);
 
 	// Determine the position where the tip meets the shaft
-	VECTOR MeetingPosition = _Tail + ((_Tip - _Tail) * (1.0 - TipLength / _Tip.Distance(_Tail)));
+	Vector MeetingPosition = _Tail + ((_Tip - _Tail) * (1.0 - TipLength / _Tip.Distance(_Tail)));
 
 	// Set the positions of the shaft and tip
 	Shaft->SetEndPoint1(_Tail);

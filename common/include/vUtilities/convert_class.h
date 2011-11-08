@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -47,8 +47,8 @@
 
 // FIXME:  Add Viscosity!
 
-#ifndef _CONVERT_CLASS_H_
-#define _CONVERT_CLASS_H_
+#ifndef _Convert_CLASS_H_
+#define _Convert_CLASS_H_
 
 // CarDesigner forward declarations
 class Vector;
@@ -504,4 +504,4 @@ private:
 	bool useScientificNotation;
 };
 
-#endif// _CONVERT_CLASS_H_
+#endif// _Convert_CLASS_H_

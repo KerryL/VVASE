@@ -1,5 +1,5 @@
 /*===================================================================================
-                                    DataPlotter
+                                    CarDesigner
                            Copyright Kerry R. Loux 2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
@@ -154,10 +154,10 @@ private:
 	void DoDragDolly(wxMouseEvent &event);
 	void DoPan(wxMouseEvent &event);
 
-	// Updates the transformation matricies according to the current modelview matrix
+	// Updates the transformation matrices according to the current modelview matrix
 	void UpdateTransformationMatricies(void);
 
-	// The transformation matricies
+	// The transformation matrices
 	Matrix *modelToView;
 	Matrix *viewToModel;
 

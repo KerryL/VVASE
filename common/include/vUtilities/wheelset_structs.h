@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -30,7 +30,7 @@ struct WheelSet
 };
 
 // VectorSet - four Vectors
-struct VECTOR_SET
+struct VectorSet
 {
 	Vector rightFront;
 	Vector leftFront;

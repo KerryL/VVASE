@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -31,7 +31,7 @@
 //					process necessary to add the object to the scene.
 //
 // Input Arguments:
-//		_Renderer	= RENDER_WINDOW&, pointer to rendering object
+//		_Renderer	= RenderWindow&, pointer to rendering object
 //
 // Output Arguments:
 //		None
@@ -40,7 +40,7 @@
 //		None
 //
 //==========================================================================
-AARM::AARM(RENDER_WINDOW &_Renderer)
+AARM::AARM(RenderWindow &_Renderer)
 {
 	// Create the actors
 	EndPoint1 = new SPHERE(_Renderer);
@@ -50,9 +50,9 @@ AARM::AARM(RENDER_WINDOW &_Renderer)
 	Member2 = new CYLINDER(_Renderer);
 
 	// Set up the Actors
-	EndPoint1->SetColor(COLOR::ColorWhite);
-	MidPoint->SetColor(COLOR::ColorWhite);
-	EndPoint2->SetColor(COLOR::ColorWhite);
+	EndPoint1->SetColor(Color::ColorWhite);
+	MidPoint->SetColor(Color::ColorWhite);
+	EndPoint2->SetColor(Color::ColorWhite);
 }
 
 //==========================================================================
@@ -82,14 +82,14 @@ AARM::~AARM()
 // Description:		Updates the position and size of the a-arm in the scene
 //
 // Input Arguments:
-//		End1		= const VECTOR&, location of one end of the a-arm
-//		Middle		= const VECTOR&, location of the ball joint on the a-arm
-//		End2		= const VECTOR&, location of the other end of the a-arm
+//		End1		= const Vector&, location of one end of the a-arm
+//		Middle		= const Vector&, location of the ball joint on the a-arm
+//		End2		= const Vector&, location of the other end of the a-arm
 //		Diameter	= const double& describing the size of the tubing representing
 //					  the arm
 //		Resolution	= const integer& representing the number of planar sides to use
 //					  to represent the cylindrical members
-//		Color		= const COLOR& describing the color to paint this object
+//		color		= const Color& describing the color to paint this object
 //		Show		= bool, visibility flag
 //
 // Output Arguments:
@@ -99,8 +99,8 @@ AARM::~AARM()
 //		None
 //
 //==========================================================================
-void AARM::Update(const VECTOR &End1, const VECTOR &Middle, const VECTOR &End2,
-				  const double &Diameter, const int &Resolution, const COLOR &Color, bool Show)
+void AARM::Update(const Vector &End1, const Vector &Middle, const Vector &End2,
+				  const double &Diameter, const int &Resolution, const Color &color, bool Show)
 {
 	// Make sure all vector arguments are valid - if they are not,
 	// the object will not be made visible
@@ -130,8 +130,8 @@ void AARM::Update(const VECTOR &End1, const VECTOR &Middle, const VECTOR &End2,
 	}
 
 	// Set this object's color
-	Member1->SetColor(Color);
-	Member2->SetColor(Color);
+	Member1->SetColor(color);
+	Member2->SetColor(color);
 
 	// Set up the spheres
 	EndPoint1->SetRadius(Diameter / 2.0 * 1.1);// Make the points just a smidge larger than the members
@@ -170,16 +170,16 @@ void AARM::Update(const VECTOR &End1, const VECTOR &Middle, const VECTOR &End2,
 //					object or not.
 //
 // Input Arguments:
-//		Actor	= const PRIMITIVE* to compare against this object's actors
+//		Actor	= const Primitive* to compare against this object's actors
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		bool representing wether or not the Actor was part of this object
+//		bool representing whether or not the Actor was part of this object
 //
 //==========================================================================
-bool AARM::ContainsThisActor(const PRIMITIVE *Actor)
+bool AARM::ContainsThisActor(const Primitive *Actor)
 {
 	// Make the comparison
 	if (EndPoint1 == Actor ||

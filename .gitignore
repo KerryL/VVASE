@@ -13,3 +13,4 @@
 *.opensdf
 *.user
 *.suo
+/vUtilities/.obj/

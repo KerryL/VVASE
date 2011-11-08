@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -28,7 +28,7 @@ class GA_GOAL_DIALOG : public wxDialog
 {
 public:
 	// Constructor
-	GA_GOAL_DIALOG(wxWindow *Parent, const CONVERT &_Converter, const KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE &_Output,
+	GA_GOAL_DIALOG(wxWindow *Parent, const Convert &_Converter, const KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE &_Output,
 		const double &_DesiredValue, const double &_ExpectedDeviation, const double &_Importance,
 		const KINEMATICS::INPUTS &_BeforeInputs, const KINEMATICS::INPUTS &_AfterInputs,
 		wxWindowID Id, const wxPoint &Position, long Style = wxDEFAULT_DIALOG_STYLE);
@@ -46,7 +46,7 @@ public:
 
 private:
 	// The object that handles the unit conversions between the input and output
-	const CONVERT &Converter;
+	const Convert &Converter;
 
 	// Method for creating controls
 	void CreateControls(void);

@@ -18,23 +18,22 @@
 #define _PLOT_RENDERER_CLASS_H_
 
 // Local headers
-#include "renderer/render_window_class.h"
+#include "vRenderer/render_window_class.h"
 
 // wxWidgets forward declarations
 class wxString;
 
 // Local forward declarations
-class PlotObject;
-class MainFrame;
 class Dataset2D;
 class ZoomBox;
 class PlotCursor;
+class PlotObject;
 
 class PlotRenderer : public RenderWindow
 {
 public:
 	// Constructor
-	PlotRenderer(MainFrame &_mainFrame, wxWindowID id);
+	PlotRenderer(wxWindow &_parent, wxWindowID id);
 
 	// Destructor
 	~PlotRenderer();
@@ -92,14 +91,11 @@ public:
 	void UpdateCursors(void);
 
 private:
-	// Called from the PLOT_RENDERER constructor only in order to initialize the display
+	// Called from the PlotRenderer constructor only in order to initialize the display
 	void CreateActors(void);
 
 	// The actors necessary to create the plot
 	PlotObject *plot;
-
-	// Parent window
-	MainFrame &mainFrame;
 
 	// Overload of size event
 	void OnSize(wxSizeEvent &event);

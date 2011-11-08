@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -23,7 +23,7 @@
 #include <wx/treectrl.h>
 
 // VVASE forward declarations
-class DEBUGGER;
+class Debugger;
 class MAIN_FRAME;
 class GUI_OBJECT;
 
@@ -32,7 +32,7 @@ class MAIN_TREE : public wxTreeCtrl
 public:
 	// Constructor
 	MAIN_TREE(MAIN_FRAME &_Parent, wxWindowID id, const wxPoint &pos,
-		const wxSize &size, long style, const DEBUGGER &_Debugger);
+		const wxSize &size, long style, const Debugger &_debugger);
 
 	// Destructor
 	~MAIN_TREE();
@@ -65,12 +65,12 @@ public:
 		NumberOfIcons
 	};
 
-	// For assigning icons, we need to give other objects access to the indecies
+	// For assigning icons, we need to give other objects access to the indeces
 	int GetIconHandle(ICON_HANDLE Id) { return IconHandle[Id]; };
 
 private:
 	// Debugger message utility object
-	const DEBUGGER &Debugger;
+	const Debugger &debugger;
 
 	// Pointer to this object's owner
 	MAIN_FRAME &MainFrame;
@@ -91,7 +91,7 @@ private:
 	// The image list for storing tree item icons
 	wxImageList *IconList;
 
-	// These are for storing the icon indecies as we add them to the image list
+	// These are for storing the icon indeces as we add them to the image list
 	int IconHandle[NumberOfIcons];
 
 	// For the event table

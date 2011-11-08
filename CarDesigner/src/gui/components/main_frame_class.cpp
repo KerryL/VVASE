@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -145,16 +145,16 @@ MAIN_FRAME::MAIN_FRAME() : wxFrame(NULL, wxID_ANY, wxEmptyString, wxDefaultPosit
 	Debugger.Print(temp);*/
 
 	// Some debugging information
-	/*Debugger.Print(DEBUGGER::PriorityVeryHigh, "sizeof(double): %i", sizeof(double));
-	Debugger.Print(DEBUGGER::PriorityVeryHigh, "sizeof(short): %i", sizeof(short));
-	Debugger.Print(DEBUGGER::PriorityVeryHigh, "sizeof(int): %i", sizeof(int));
-	Debugger.Print(DEBUGGER::PriorityVeryHigh, "sizeof(long): %i", sizeof(long));
-	Debugger.Print(DEBUGGER::PriorityVeryHigh, "sizeof(bool): %i", sizeof(bool));
-	Debugger.Print(DEBUGGER::PriorityVeryHigh, "sizeof(DRIVETRAIN::DRIVE_WHEELS): %i",
+	/*Debugger.Print(Debugger::PriorityVeryHigh, "sizeof(double): %i", sizeof(double));
+	Debugger.Print(Debugger::PriorityVeryHigh, "sizeof(short): %i", sizeof(short));
+	Debugger.Print(Debugger::PriorityVeryHigh, "sizeof(int): %i", sizeof(int));
+	Debugger.Print(Debugger::PriorityVeryHigh, "sizeof(long): %i", sizeof(long));
+	Debugger.Print(Debugger::PriorityVeryHigh, "sizeof(bool): %i", sizeof(bool));
+	Debugger.Print(Debugger::PriorityVeryHigh, "sizeof(DRIVETRAIN::DRIVE_WHEELS): %i",
 		sizeof(DRIVETRAIN::DRIVE_WHEELS));
-	Debugger.Print(DEBUGGER::PriorityVeryHigh, "sizeof(VECTOR): %i", sizeof(VECTOR));
-	Debugger.Print(DEBUGGER::PriorityVeryHigh, "sizeof(VECTOR_SET): %i", sizeof(VECTOR_SET));
-	Debugger.Print(DEBUGGER::PriorityVeryHigh, "sizeof(WHEEL_SET): %i", sizeof(WHEEL_SET));//*/
+	Debugger.Print(Debugger::PriorityVeryHigh, "sizeof(Vector): %i", sizeof(Vector));
+	Debugger.Print(Debugger::PriorityVeryHigh, "sizeof(Vector_SET): %i", sizeof(Vector_SET));
+	Debugger.Print(Debugger::PriorityVeryHigh, "sizeof(WHEEL_SET): %i", sizeof(WHEEL_SET));//*/
 }
 
 //==========================================================================
@@ -329,7 +329,7 @@ void MAIN_FRAME::SetProperties(void)
 
 	// Set up the debugger
 	Debugger.SetTargetOutput(DebugPane);
-	Debugger.SetDebugLevel(DEBUGGER::PriorityHigh);
+	Debugger.SetDebugLevel(Debugger::PriorityHigh);
 
 	// OutputPane properties
 	wxString FontFaceName;
@@ -372,20 +372,20 @@ void MAIN_FRAME::SetProperties(void)
 	MenuBar->FindItem(IdMenuToolsDynamic)->Enable(false);
 
 	// Set up the unit converter
-	Converter.SetAngleUnits(CONVERT::DEGREES);
-	Converter.SetDistanceUnits(CONVERT::INCH);
-	Converter.SetAreaUnits(CONVERT::INCH_SQUARED);
-	Converter.SetForceUnits(CONVERT::POUND_FORCE);
-	Converter.SetPressureUnits(CONVERT::POUND_FORCE_PER_SQUARE_INCH);
-	Converter.SetMomentUnits(CONVERT::FOOT_POUND_FORCE);
-	Converter.SetMassUnits(CONVERT::SLUG);
-	Converter.SetVelocityUnits(CONVERT::INCHES_PER_SECOND);
-	Converter.SetAccelerationUnits(CONVERT::INCHES_PER_SECOND_SQUARED);
-	Converter.SetInertiaUnits(CONVERT::SLUG_INCHES_SQUARED);
-	Converter.SetDensityUnits(CONVERT::SLUGS_PER_INCH_CUBED);
-	Converter.SetPowerUnits(CONVERT::HORSEPOWER);
-	Converter.SetEnergyUnits(CONVERT::BRITISH_THERMAL_UNIT);
-	Converter.SetTemperatureUnits(CONVERT::FAHRENHEIT);
+	Converter.SetAngleUnits(Convert::DEGREES);
+	Converter.SetDistanceUnits(Convert::INCH);
+	Converter.SetAreaUnits(Convert::INCH_SQUARED);
+	Converter.SetForceUnits(Convert::POUND_FORCE);
+	Converter.SetPressureUnits(Convert::POUND_FORCE_PER_SQUARE_INCH);
+	Converter.SetMomentUnits(Convert::FOOT_POUND_FORCE);
+	Converter.SetMassUnits(Convert::SLUG);
+	Converter.SetVelocityUnits(Convert::INCHES_PER_SECOND);
+	Converter.SetAccelerationUnits(Convert::INCHES_PER_SECOND_SQUARED);
+	Converter.SetInertiaUnits(Convert::SLUG_INCHES_SQUARED);
+	Converter.SetDensityUnits(Convert::SLUGS_PER_INCH_CUBED);
+	Converter.SetPowerUnits(Convert::HORSEPOWER);
+	Converter.SetEnergyUnits(Convert::BRITISH_THERMAL_UNIT);
+	Converter.SetTemperatureUnits(Convert::FAHRENHEIT);
 
 	// Allow draging-and-dropping of files onto this window to open them
 	SetDropTarget(dynamic_cast<wxDropTarget*>(new DROP_TARGET(*this)));
@@ -1059,9 +1059,9 @@ void MAIN_FRAME::FileWriteImageFileEvent(wxCommandEvent& WXUNUSED(event))
 
 	// Call the object's write image file method
 	if (OpenObjectList[ObjectOfInterestIndex]->WriteImageToFile(PathAndFileName.Item(0)))
-		Debugger.Print(DEBUGGER::PriorityMedium, "Image file written to %s!", PathAndFileName.Item(0).c_str());
+		Debugger.Print(Debugger::PriorityMedium, "Image file written to %s!", PathAndFileName.Item(0).c_str());
 	else
-		Debugger.Print(_T("Image file NOT written!"), DEBUGGER::PriorityHigh);
+		Debugger.Print(_T("Image file NOT written!"), Debugger::PriorityHigh);
 }
 
 //==========================================================================
@@ -2030,7 +2030,7 @@ void MAIN_FRAME::ThreadCompleteEvent(wxCommandEvent &event)
 	case THREAD_JOB::COMMAND_THREAD_EXIT:
 		// Decrement the number of active threads
 		ActiveThreads--;
-		Debugger.Print(DEBUGGER::PriorityLow, "Thread %i exited", event.GetId());
+		Debugger.Print(Debugger::PriorityLow, "Thread %i exited", event.GetId());
 
 		// If there are no more active threads, it is now safe to kill this window
 		if (ActiveThreads == 0)
@@ -2044,7 +2044,7 @@ void MAIN_FRAME::ThreadCompleteEvent(wxCommandEvent &event)
 	case THREAD_JOB::COMMAND_THREAD_STARTED:
 		// Increment the number of active threads
 		ActiveThreads++;
-		Debugger.Print(DEBUGGER::PriorityLow, "Thread %i started", event.GetId());
+		Debugger.Print(Debugger::PriorityLow, "Thread %i started", event.GetId());
 		break;
 
 	case THREAD_JOB::COMMAND_THREAD_KINEMATICS_NORMAL:
@@ -2385,33 +2385,33 @@ void MAIN_FRAME::ReadConfiguration(void)
 		wxCONFIG_USE_RELATIVE_PATH);
 
 	// Read UNITS configuration from file
-	Converter.SetAccelerationUnits(CONVERT::UNITS_OF_ACCELERATION(
+	Converter.SetAccelerationUnits(Convert::UNITS_OF_ACCELERATION(
 		ConfigurationFile->Read(_T("/Units/Acceleration"), 0l)));
-	Converter.SetAngleUnits(CONVERT::UNITS_OF_ANGLE(
+	Converter.SetAngleUnits(Convert::UNITS_OF_ANGLE(
 		ConfigurationFile->Read(_T("/Units/Angle"), 1l)));
-	Converter.SetAreaUnits(CONVERT::UNITS_OF_AREA(
+	Converter.SetAreaUnits(Convert::UNITS_OF_AREA(
 		ConfigurationFile->Read(_T("/Units/Area"), 0l)));
-	Converter.SetDensityUnits(CONVERT::UNITS_OF_DENSITY(
+	Converter.SetDensityUnits(Convert::UNITS_OF_DENSITY(
 		ConfigurationFile->Read(_T("/Units/Density"), 0l)));
-	Converter.SetDistanceUnits(CONVERT::UNITS_OF_DISTANCE(
+	Converter.SetDistanceUnits(Convert::UNITS_OF_DISTANCE(
 		ConfigurationFile->Read(_T("/Units/Distance"), 0l)));
-	Converter.SetEnergyUnits(CONVERT::UNITS_OF_ENERGY(
+	Converter.SetEnergyUnits(Convert::UNITS_OF_ENERGY(
 		ConfigurationFile->Read(_T("/Units/Energy"), 0l)));
-	Converter.SetForceUnits(CONVERT::UNITS_OF_FORCE(
+	Converter.SetForceUnits(Convert::UNITS_OF_FORCE(
 		ConfigurationFile->Read(_T("/Units/Force"), 0l)));
-	Converter.SetInertiaUnits(CONVERT::UNITS_OF_INERTIA(
+	Converter.SetInertiaUnits(Convert::UNITS_OF_INERTIA(
 		ConfigurationFile->Read(_T("/Units/Inertia"), 0l)));
-	Converter.SetMassUnits(CONVERT::UNITS_OF_MASS(
+	Converter.SetMassUnits(Convert::UNITS_OF_MASS(
 		ConfigurationFile->Read(_T("/Units/Mass"), 0l)));
-	Converter.SetMomentUnits(CONVERT::UNITS_OF_MOMENT(
+	Converter.SetMomentUnits(Convert::UNITS_OF_MOMENT(
 		ConfigurationFile->Read(_T("/Units/Moment"), 0l)));
-	Converter.SetPowerUnits(CONVERT::UNITS_OF_POWER(
+	Converter.SetPowerUnits(Convert::UNITS_OF_POWER(
 		ConfigurationFile->Read(_T("/Units/Power"), 0l)));
-	Converter.SetPressureUnits(CONVERT::UNITS_OF_PRESSURE(
+	Converter.SetPressureUnits(Convert::UNITS_OF_PRESSURE(
 		ConfigurationFile->Read(_T("/Units/Pressure"), 0l)));
-	Converter.SetTemperatureUnits(CONVERT::UNITS_OF_TEMPERATURE(
+	Converter.SetTemperatureUnits(Convert::UNITS_OF_TEMPERATURE(
 		ConfigurationFile->Read(_T("/Units/Temperature"), 0l)));
-	Converter.SetVelocityUnits(CONVERT::UNITS_OF_VELOCITY(
+	Converter.SetVelocityUnits(Convert::UNITS_OF_VELOCITY(
 		ConfigurationFile->Read(_T("/Units/Velocity"), 0l)));
 
 	// Read NUMBER FORMAT configuration from file
@@ -2433,12 +2433,12 @@ void MAIN_FRAME::ReadConfiguration(void)
 	TempDouble = 0.0;
 	ConfigurationFile->Read(_T("/Kinematics/CenterOfRotationZ"), &TempDouble);
 	KinematicInputs.CenterOfRotation.Z = TempDouble;
-	KinematicInputs.FirstRotation = (VECTOR::AXIS)ConfigurationFile->Read(
+	KinematicInputs.FirstRotation = (Vector::AXIS)ConfigurationFile->Read(
 		_T("/Kinematics/FirstRotation"), 0l);
 	ConfigurationFile->Read(_T("/Kinematics/UseRackTravel"), &UseRackTravel, true);
 
 	// Read DEBUGGING configuration from file
-	Debugger.SetDebugLevel(DEBUGGER::DEBUG_LEVEL(ConfigurationFile->Read(_T("/Debugging/DebugLevel"), 1l)));
+	Debugger.SetDebugLevel(Debugger::DEBUG_LEVEL(ConfigurationFile->Read(_T("/Debugging/DebugLevel"), 1l)));
 
 	// Read GUI configuration from file
 	wxString LayoutString;

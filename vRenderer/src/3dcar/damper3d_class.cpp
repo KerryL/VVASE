@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -31,7 +31,7 @@
 //					process necessary to add the object to the scene.
 //
 // Input Arguments:
-//		_Renderer	= RENDER_WINDOW&, pointer to rendering object
+//		_Renderer	= RenderWindow&, pointer to rendering object
 //
 // Output Arguments:
 //		None
@@ -40,7 +40,7 @@
 //		None
 //
 //==========================================================================
-DAMPER3D::DAMPER3D(RENDER_WINDOW &_Renderer)
+DAMPER3D::DAMPER3D(RenderWindow &_Renderer)
 {
 	// Create the objects
 	InboardEndPoint = new SPHERE(_Renderer);
@@ -53,8 +53,8 @@ DAMPER3D::DAMPER3D(RENDER_WINDOW &_Renderer)
 	Shaft->SetCapping(true);
 
 	// Set up the Actors
-	InboardEndPoint->SetColor(COLOR::ColorWhite);
-	OutboardEndPoint->SetColor(COLOR::ColorWhite);
+	InboardEndPoint->SetColor(Color::ColorWhite);
+	OutboardEndPoint->SetColor(Color::ColorWhite);
 }
 
 //==========================================================================
@@ -85,15 +85,15 @@ DAMPER3D::~DAMPER3D()
 //					in the scene.
 //
 // Input Arguments:
-//		OutboardEnd		= const VECTOR&, location of the end of the shaft
-//		InboardEnd		= const VECTOR&, location of the end of the body
+//		OutboardEnd		= const Vector&, location of the end of the shaft
+//		InboardEnd		= const Vector&, location of the end of the body
 //		BodyDiameter	= const double& describing the diameter of the damper body
 //		ShaftDiameter	= const double& describing the diameter of the shaft
 //		BodyLength		= const double& describing the length of the body section
 //		Resolution		= const integer& representing the number of planar sides to use
 //						  to represent the cylinders
-//		BodyColor		= const COLOR& describing this object's body color
-//		ShaftColor		= const COLOR& describing this object's shaft color
+//		BodyColor		= const Color& describing this object's body color
+//		ShaftColor		= const Color& describing this object's shaft color
 //		Show			= bool, visibility flag
 //
 // Output Arguments:
@@ -103,9 +103,9 @@ DAMPER3D::~DAMPER3D()
 //		None
 //
 //==========================================================================
-void DAMPER3D::Update(const VECTOR &OutboardEnd, const VECTOR &InboardEnd, const double &BodyDiameter,
+void DAMPER3D::Update(const Vector &OutboardEnd, const Vector &InboardEnd, const double &BodyDiameter,
 					  const double &ShaftDiameter, const double &BodyLength, const int &Resolution,
-					  const COLOR &BodyColor, const COLOR &ShaftColor, bool Show)
+					  const Color &BodyColor, const Color &ShaftColor, bool Show)
 {
 	// Make sure all vector arguments are valid - if they are not,
 	// the object will not be made visible
@@ -149,8 +149,8 @@ void DAMPER3D::Update(const VECTOR &OutboardEnd, const VECTOR &InboardEnd, const
 	Shaft->SetResolution(Resolution);
 
 	// Find the point where the body and shaft will meet
-	VECTOR ShaftDirection = OutboardEnd - InboardEnd;
-	VECTOR PointOfIntersection = ShaftDirection.Normalize()	* DisplayBodyLength + InboardEnd;
+	Vector ShaftDirection = OutboardEnd - InboardEnd;
+	Vector PointOfIntersection = ShaftDirection.Normalize()	* DisplayBodyLength + InboardEnd;
 
 	// Set the position of the body - the body should be on the inboard (chassis) side
 	Body->SetEndPoint1(InboardEnd);
@@ -176,16 +176,16 @@ void DAMPER3D::Update(const VECTOR &OutboardEnd, const VECTOR &InboardEnd, const
 //					object or not.
 //
 // Input Arguments:
-//		Actor	= const PRIMITIVE* to compare against this object's actors
+//		Actor	= const Primitive* to compare against this object's actors
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		bool representing wether or not the Actor was part of this object
+//		bool representing whether or not the Actor was part of this object
 //
 //==========================================================================
-bool DAMPER3D::ContainsThisActor(const PRIMITIVE *Actor)
+bool DAMPER3D::ContainsThisActor(const Primitive *Actor)
 {
 	// Make the comparison
 	if (InboardEndPoint == Actor ||

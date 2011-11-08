@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -29,7 +29,7 @@
 // Input Arguments:
 //		_IntegrationMethod	= const INTEGRATION_METHOD& to use for future integrations
 //		_Frequency			= const Frequency& at which the integration will occur [Hz]
-//		_Debugger			= const DEBUGGER&, reference to debug message printing utility
+//		_debugger			= const Debugger&, reference to debug message printing utility
 //
 // Output Arguments:
 //		None
@@ -39,7 +39,7 @@
 //
 //==========================================================================
 INTEGRATOR::INTEGRATOR(const INTEGRATION_METHOD &_IntegrationMethod, const double &_Frequency,
-					   const DEBUGGER &_Debugger) : Debugger(_Debugger)
+					   const Debugger &_debugger) : debugger(_debugger)
 {
 	// Assign the arguments to the class members
 	Frequency = _Frequency;
@@ -67,7 +67,7 @@ INTEGRATOR::INTEGRATOR(const INTEGRATION_METHOD &_IntegrationMethod, const doubl
 //		None
 //
 //==========================================================================
-INTEGRATOR::INTEGRATOR(const INTEGRATOR &Integrator) : Debugger(Integrator.Debugger)
+INTEGRATOR::INTEGRATOR(const INTEGRATOR &Integrator) : debugger(Integrator.debugger)
 {
 	// Initialize the pointers
 	OldStateDerivatives = NULL;
@@ -104,7 +104,7 @@ INTEGRATOR::~INTEGRATOR()
 // Function:		ComputeNextState
 //
 // Description:		This is the main work function for this class.  This calls
-//					the approprieate integration function, depending on this
+//					the appropriate integration function, depending on this
 //					object's IntegrationMethod.
 //
 // Input Arguments:

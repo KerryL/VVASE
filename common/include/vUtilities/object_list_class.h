@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -62,7 +62,7 @@ protected:
 //
 // Description:		Constructor for the ObjectList class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -86,7 +86,7 @@ ObjectList<T>::ObjectList()
 //
 // Description:		Destructor for the ObjectList class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -110,7 +110,7 @@ ObjectList<T>::~ObjectList()
 // Description:		Adds objects to the list.  Performs the necessary memory
 //					allocating and transferring routines.
 //
-// Input Argurments:
+// Input Arguments:
 //		toAdd	= const T*, pointing to the object to add
 //
 // Output Arguments:
@@ -164,7 +164,7 @@ int ObjectList<T>::Add(T *toAdd)
 //
 // Description:		Removes the object at the specified index from the list
 //
-// Input Argurments:
+// Input Arguments:
 //		index	= const int& specifying the object to remove
 //
 // Output Arguments:
@@ -222,7 +222,7 @@ void ObjectList<T>::Remove(const int &index)
 //
 // Description:		Returns a pointer to the object with the specified index.
 //
-// Input Argurments:
+// Input Arguments:
 //		index	= const int& specifying which object we want to retrieve
 //
 // Output Arguments:
@@ -247,7 +247,7 @@ T *ObjectList<T>::GetObject(const int &index) const
 //
 // Description:		Returns a pointer to the object with the specified index.
 //
-// Input Argurments:
+// Input Arguments:
 //		index	= const int& specifying which object we want to retrieve
 //
 // Output Arguments:
@@ -272,7 +272,7 @@ T *ObjectList<T>::operator[](const int &index) const
 //
 // Description:		Removes all items in the list.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -300,7 +300,7 @@ void ObjectList<T>::Clear(void)
 // Description:		Re-organizes all of the objects in the list according to
 //					the specified order.
 //
-// Input Argurments:
+// Input Arguments:
 //		newOrder	= const int* pointing to an array (MUST contain exactly
 //					  the number of elements of this list) specifying the new
 //					  order.  If the list were {3, 2, 1}, then the three element

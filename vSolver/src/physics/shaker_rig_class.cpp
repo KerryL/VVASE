@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -29,7 +29,7 @@
 // Description:		Constructor for the SHAKER_RIG class.
 //
 // Input Arguments:
-//		_Debugger	= const DEBUGGER&, reference to the debug message printing utility
+//		_debugger	= const Debugger&, reference to the debug message printing utility
 //
 // Output Arguments:
 //		None
@@ -38,7 +38,7 @@
 //		None
 //
 //==========================================================================
-SHAKER_RIG::SHAKER_RIG(const DEBUGGER &_Debugger) : Debugger(_Debugger)
+SHAKER_RIG::SHAKER_RIG(const Debugger &_debugger) : debugger(_debugger)
 {
 }
 
@@ -58,7 +58,7 @@ SHAKER_RIG::SHAKER_RIG(const DEBUGGER &_Debugger) : Debugger(_Debugger)
 //		None
 //
 //==========================================================================
-SHAKER_RIG::SHAKER_RIG(const SHAKER_RIG &ShakerRig) : Debugger(ShakerRig.Debugger)
+SHAKER_RIG::SHAKER_RIG(const SHAKER_RIG &ShakerRig) : debugger(ShakerRig.debugger)
 {
 	// Do the copy
 	*this = ShakerRig;

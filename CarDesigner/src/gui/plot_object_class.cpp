@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -46,7 +46,7 @@
 //		_Renderer	= PLOT_RENDERER& reference to the object that handles the
 //					  drawing operations
 //		_DataSource	= const ITERATION& reference to the associated iteration object
-//		_Debugger	= const DEBUGGER& reference to the application's debug printing
+//		_debugger	= const Debugger& reference to the application's debug printing
 //					  utility
 //
 // Output Arguments:
@@ -57,7 +57,7 @@
 //
 //==========================================================================
 PLOT_OBJECT::PLOT_OBJECT(PLOT_RENDERER &_Renderer, const ITERATION &_DataSource,
-						 const DEBUGGER &_Debugger) : Debugger(_Debugger),
+						 const Debugger &_debugger) : Debugger(_debugger),
 						 DataSource(_DataSource), Renderer(_Renderer)
 {
 	// Create the actors
@@ -94,7 +94,7 @@ PLOT_OBJECT::PLOT_OBJECT(PLOT_RENDERER &_Renderer, const ITERATION &_DataSource,
 		TitleFont = NULL;
 
 		// Warn the user as well
-		Debugger.Print(_T("Warning:  Could not load font file!"), DEBUGGER::PriorityLow);
+		Debugger.Print(_T("Warning:  Could not load font file!"), Debugger::PriorityLow);
 	}
 	else
 	{
@@ -548,22 +548,22 @@ void PLOT_OBJECT::FormatPlot(void)
 		{
 		case ITERATION::AxisTypePitch:
 			AxisLabel.Printf("Pitch [%s]", DataSource.GetMainFrame().
-				GetConverter().GetUnitType(CONVERT::UNIT_TYPE_ANGLE).c_str());
+				GetConverter().GetUnitType(Convert::UNIT_TYPE_ANGLE).c_str());
 			break;
 
 		case ITERATION::AxisTypeRoll:
 			AxisLabel.Printf("Roll [%s]", DataSource.GetMainFrame().
-				GetConverter().GetUnitType(CONVERT::UNIT_TYPE_ANGLE).c_str());
+				GetConverter().GetUnitType(Convert::UNIT_TYPE_ANGLE).c_str());
 			break;
 
 		case ITERATION::AxisTypeHeave:
 			AxisLabel.Printf("Heave [%s]", DataSource.GetMainFrame().
-				GetConverter().GetUnitType(CONVERT::UNIT_TYPE_DISTANCE).c_str());
+				GetConverter().GetUnitType(Convert::UNIT_TYPE_DISTANCE).c_str());
 			break;
 
 		case ITERATION::AxisTypeRackTravel:
 			AxisLabel.Printf("Rack Travel [%s]", DataSource.GetMainFrame().
-				GetConverter().GetUnitType(CONVERT::UNIT_TYPE_DISTANCE).c_str());
+				GetConverter().GetUnitType(Convert::UNIT_TYPE_DISTANCE).c_str());
 			break;
 
 		case ITERATION::AxisTypeUnused:

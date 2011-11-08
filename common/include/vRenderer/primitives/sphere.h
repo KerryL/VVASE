@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -10,7 +10,7 @@
 // File:  sphere.h
 // Created:  5/14/2009
 // Author:  K. Loux
-// Description:  Derived from PRIMITIVE for creating spherical objects.
+// Description:  Derived from Primitive for creating spherical objects.
 // History:
 
 #ifndef _SPHERE_H_

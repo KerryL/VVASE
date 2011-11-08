@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -10,36 +10,36 @@
 // File:  vector3d_class.h
 // Created:  3/14/2009
 // Author:  K. Loux
-// Description:  Contains class declaration for the VECTOR3D class.  This class contains
+// Description:  Contains class declaration for the Vector3D class.  This class contains
 //				 and maintains the VTK objects that create actors that represent vectors.
 // History:
 //	4/25/2009	- Changed Update() to include color argument in the form of wxColor and
 //				  removed PURPOSE enumeration, K. Loux.
 //	5/17/2009	- Removed VTK dependencies, K. Loux.
 
-#ifndef _VECTOR3D_CLASS_H_
-#define _VECTOR3D_CLASS_H_
+#ifndef _Vector3D_CLASS_H_
+#define _Vector3D_CLASS_H_
 
 // VVASE forward declarations
-class VECTOR;
-class COLOR;
+class Vector;
+class Color;
 class CYLINDER;
 class CONE;
-class RENDER_WINDOW;
+class RenderWindow;
 
-class VECTOR3D
+class Vector3D
 {
 public:
 	// Constructor
-	VECTOR3D(RENDER_WINDOW &_Renderer);
+	Vector3D(RenderWindow &_Renderer);
 
 	// Destructor
-	~VECTOR3D();
+	~Vector3D();
 
 	// Updates the object in the rendered scene
-	void Update(const VECTOR &_Tip, const VECTOR &_Tail, const double &ShaftDiameter,
+	void Update(const Vector &_Tip, const Vector &_Tail, const double &ShaftDiameter,
 		const double &TipDiameter, double TipLength, const int &Resolution,
-		const COLOR &Color, bool Show);
+		const Color &color, bool Show);
 
 private:
 	// The shaft
@@ -49,4 +49,4 @@ private:
 	CONE *Tip;
 };
 
-#endif// _VECTOR3D_CLASS_H_
+#endif// _Vector3D_CLASS_H_

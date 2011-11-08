@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -18,13 +18,13 @@
 #define _MILLIKEN_CLASS_H_
 
 // CarDesigner forward declarations
-class DEBUGGER;
+class Debugger;
 
 class MILLIKEN_ANALYSIS
 {
 public:
 	// Constructor
-	MILLIKEN_ANALYSIS(const DEBUGGER &_Debugger);
+	MILLIKEN_ANALYSIS(const Debugger &_debugger);
 	MILLIKEN_ANALYSIS(const MILLIKEN_ANALYSIS &MillikenAnalysis);
 
 	// Destructor
@@ -35,7 +35,7 @@ public:
 
 private:
 	// Debugger message printing utility
-	const DEBUGGER &Debugger;
+	const Debugger &debugger;
 };
 
 #endif// _MILLIKEN_CLASS_H_

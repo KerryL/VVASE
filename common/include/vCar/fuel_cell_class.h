@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -37,14 +37,14 @@ public:
 
 	// Private data accessors
 	double GetFuelWeight(void) const { return FuelWeight; };
-	VECTOR GetFuelCG(void) const { return FuelCG; };
+	Vector GetFuelCG(void) const { return FuelCG; };
 
 private:
 	// Weight of fuel remaining
 	double FuelWeight;// [lbf]
 
 	// CG of the fuel remaining
-	VECTOR FuelCG;
+	Vector FuelCG;
 };
 
 #endif// _FUEL_CELL_CLASS_H_

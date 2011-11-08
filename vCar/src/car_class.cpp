@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -13,7 +13,7 @@
 // Description:  Contains class functionaliy for car class.
 // History:
 //	2/24/2008	- Changed half shaft points from DRIVETRAIN to SUSPENSION objects, K. Loux.
-//	3/9/2008	- Changed the structure of the DEBUGGER class, K. Loux.
+//	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
 //	4/25/2009	- Added appearance options to write/read methods, incrementented file version
 //				  to version 1, K. Loux.
 //	5/3/2009	- Added file version arguement to SubSystem->Read() calls for backwards compatability
@@ -52,7 +52,7 @@
 //					parameters for the object.
 //
 // Input Arguments:
-//		_Debugger	= const DEBUGGER& reference to applications debug printing utility
+//		_debugger	= const Debugger& reference to applications debug printing utility
 //
 // Output Arguments:
 //		None
@@ -61,16 +61,16 @@
 //		None
 //
 //==========================================================================
-CAR::CAR(const DEBUGGER &_Debugger) : Debugger(_Debugger)
+CAR::CAR(const Debugger &_debugger) : debugger(_debugger)
 {
 	// Dynamically allocate memory for these classes
-	Suspension = new SUSPENSION(Debugger);
-	Drivetrain = new DRIVETRAIN(Debugger);
-	Brakes = new BRAKES(Debugger);
-	Aerodynamics = new AERODYNAMICS(Debugger);
-	Engine = new ENGINE(Debugger);
-	MassProperties = new MASS_PROPERTIES(Debugger);
-	Tires = new TIRE_SET(Debugger);
+	Suspension = new SUSPENSION(debugger);
+	Drivetrain = new DRIVETRAIN(debugger);
+	Brakes = new BRAKES(debugger);
+	Aerodynamics = new AERODYNAMICS(debugger);
+	Engine = new ENGINE(debugger);
+	MassProperties = new MASS_PROPERTIES(debugger);
+	Tires = new TIRE_SET(debugger);
 
 	// Test suspension
 	Suspension->FrontBarStyle = SUSPENSION::SwayBarUBar;
@@ -228,7 +228,7 @@ CAR::CAR(const DEBUGGER &_Debugger) : Debugger(_Debugger)
 //		None
 //
 //==========================================================================
-CAR::CAR(const CAR &Car) : Debugger(Car.Debugger)
+CAR::CAR(const CAR &Car) : debugger(Car.debugger)
 {
 	// Initialize the pointers
 	Suspension		= NULL;
@@ -308,7 +308,7 @@ const int CAR::CurrentFileVersion = 2;
 // Class:			CAR
 // Function:		SaveCarToFile
 //
-// Description:		Calls all of the sub-sustem Write() functions.
+// Description:		Calls all of the sub-system Write() functions.
 //
 // Input Arguments:
 //		FileName	= wxString specifying the location to write to
@@ -390,10 +390,10 @@ bool CAR::LoadCarFromFile(wxString FileName, std::ifstream *_InFile, int *FileVe
 
 	// Check to make sure the version matches
 	if (Header.FileVersion != CurrentFileVersion)
-		Debugger.Print(_T("Warning:  Opening file with out-of-date file format."),
-			DEBUGGER::PriorityHigh);
+		debugger.Print(_T("Warning:  Opening file with out-of-date file format."),
+			Debugger::PriorityHigh);
 
-	// Call the read function for each sus-system class
+	// Call the read function for each sub-system class
 	// NOTE:  The order that these Read() calls are made must match the order
 	// of the Write() calls in SaveCarToFile().
 	Aerodynamics->Read(&InFile, Header.FileVersion);

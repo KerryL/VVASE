@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2010
+                         Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -28,7 +28,7 @@
 //					process necessary to add the object to the scene.
 //
 // Input Arguments:
-//		_Renderer	= RENDER_WINDOW&, pointer to rendering object
+//		_Renderer	= RenderWindow&, pointer to rendering object
 //
 // Output Arguments:
 //		None
@@ -37,14 +37,14 @@
 //		None
 //
 //==========================================================================
-PLANE::PLANE(RENDER_WINDOW &_Renderer)
+PLANE::PLANE(RenderWindow &_Renderer)
 {
 	// Create objects
 	Plane = new QUADRILATERAL(_Renderer);
 
 	// Set up the plane
-	VECTOR XAxis(1.0, 0.0, 0.0);
-	VECTOR Normal(0.0, 0.0, 1.0);
+	Vector XAxis(1.0, 0.0, 0.0);
+	Vector Normal(0.0, 0.0, 1.0);
 	Plane->SetAxis(XAxis);
 	Plane->SetNormal(Normal);
 }
@@ -80,7 +80,7 @@ PLANE::~PLANE()
 //		Width	= const double&, length of the plane in the y-direction
 //		XOffset	= const double&, offset of the center of the plane in the
 //				  x-direction
-//		Color	= const COLOR& describing this object's color
+//		color	= const Color& describing this object's color
 //		Show	= const bool&, visibility flag
 //
 // Output Arguments:
@@ -91,7 +91,7 @@ PLANE::~PLANE()
 //
 //==========================================================================
 void PLANE::Update(const double &Length, const double &Width, const double &XOffset,
-				   const COLOR &Color, const bool &Show)
+				   const Color &color, const bool &Show)
 {
 	// Set the visibility flag
 	Plane->SetVisibility(Show);
@@ -101,10 +101,10 @@ void PLANE::Update(const double &Length, const double &Width, const double &XOff
 		return;
 
 	// Set this object's color
-	Plane->SetColor(Color);
+	Plane->SetColor(color);
 
 	// Set the correct position and size of the plane
-	VECTOR Center(XOffset, 0.0, 0.0);
+	Vector Center(XOffset, 0.0, 0.0);
 	Plane->SetCenter(Center);
 	Plane->SetLength(Length);
 	Plane->SetWidth(Width);
