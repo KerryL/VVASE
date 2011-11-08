@@ -59,7 +59,7 @@
 //==========================================================================
 EDIT_PANEL::EDIT_PANEL(MAIN_FRAME &_MainFrame, wxWindowID id, const wxPoint& pos,
 					   const wxSize& size, const Debugger &_debugger) :
-					   wxPanel(&_MainFrame, id, pos, size), Debugger(_debugger),
+					   wxPanel(&_MainFrame, id, pos, size), debugger(_debugger),
 					   MainFrame(_MainFrame)
 {
 	// Get the systems tree
@@ -291,7 +291,7 @@ void EDIT_PANEL::CreateControls(bool IgnoreSystemsTree)
 			{
 				// Create the brakes panel
 				EditBrakes = new EDIT_BRAKES_PANEL(*this, wxID_ANY,
-					wxDefaultPosition, wxDefaultSize, Debugger);
+					wxDefaultPosition, wxDefaultSize, debugger);
 
 				// Add the brakes panel to the sizer
 				Sizer->Add(EditBrakes);
@@ -306,7 +306,7 @@ void EDIT_PANEL::CreateControls(bool IgnoreSystemsTree)
 			{
 				// Create the mass properties panel
 				EditMass = new EDIT_MASS_PANEL(*this, wxID_ANY,
-					wxDefaultPosition, wxDefaultSize, Debugger);
+					wxDefaultPosition, wxDefaultSize, debugger);
 
 				// Add the mass panel to the sizer
 				Sizer->Add(EditMass);
@@ -315,7 +315,7 @@ void EDIT_PANEL::CreateControls(bool IgnoreSystemsTree)
 			{
 				// Create the suspension notebook
 				EditSuspension = new EDIT_SUSPENSION_NOTEBOOK(*this, wxID_ANY,
-					wxDefaultPosition, wxDefaultSize, wxNB_BOTTOM, Debugger);
+					wxDefaultPosition, wxDefaultSize, wxNB_BOTTOM, debugger);
 
 				// Add the suspension to the sizer
 				Sizer->Add(EditSuspension, 1, wxEXPAND);
@@ -324,7 +324,7 @@ void EDIT_PANEL::CreateControls(bool IgnoreSystemsTree)
 			{
 				// Create the tires panel
 				EditTires = new EDIT_TIRES_PANEL(*this, wxID_ANY,
-					wxDefaultPosition, wxDefaultSize, Debugger);
+					wxDefaultPosition, wxDefaultSize, debugger);
 
 				// Add the tire set to the sizer
 				Sizer->Add(EditTires);
@@ -336,7 +336,7 @@ void EDIT_PANEL::CreateControls(bool IgnoreSystemsTree)
 	case GUI_OBJECT::TYPE_ITERATION:
 		// Create the iteration panel
 		EditIteration = new EDIT_ITERATION_NOTEBOOK(*this, wxID_ANY,
-			wxDefaultPosition, wxDefaultSize, wxNB_BOTTOM, Debugger);
+			wxDefaultPosition, wxDefaultSize, wxNB_BOTTOM, debugger);
 
 		// Add the iteration panel to the sizer
 		Sizer->Add(EditIteration, 1, wxEXPAND);

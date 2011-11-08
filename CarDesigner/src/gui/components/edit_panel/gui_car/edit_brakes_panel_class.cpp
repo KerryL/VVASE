@@ -45,7 +45,7 @@
 EDIT_BRAKES_PANEL::EDIT_BRAKES_PANEL(EDIT_PANEL &_Parent, wxWindowID id,
 									 const wxPoint& pos, const wxSize& size,
 									 const Debugger &_debugger) :
-									 wxPanel(&_Parent, id, pos, size), Debugger(_debugger),
+									 wxPanel(&_Parent, id, pos, size), debugger(_debugger),
 									 Converter(_Parent.GetMainFrame().GetConverter()),
 									 Parent(_Parent)
 {
@@ -209,7 +209,7 @@ void EDIT_BRAKES_PANEL::TextBoxEditEvent(wxCommandEvent &event)
 	double MinValue, MaxValue;
 
 	// We also need to know what kind of data we're retrieving
-	Convert::UNIT_TYPE Units;
+	Convert::UnitType Units;
 
 	// A pointer to the text box
 	wxTextCtrl *TextBox = NULL;
@@ -221,7 +221,7 @@ void EDIT_BRAKES_PANEL::TextBoxEditEvent(wxCommandEvent &event)
 		// Get the text box, the location to write it, and the units
 		TextBox = PercentFrontBraking;
 		DataLocation = &CurrentBrakes->PercentFrontBraking;
-		Units = Convert::UNIT_TYPE_UNITLESS;
+		Units = Convert::UnitTypeUnitless;
 		MinValue = 0.0;
 		MaxValue = 1.0;
 		break;

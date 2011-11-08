@@ -54,7 +54,7 @@ EDIT_SUSPENSION_NOTEBOOK::EDIT_SUSPENSION_NOTEBOOK(EDIT_PANEL &_Parent, wxWindow
 												 const wxPoint& pos, const wxSize& size,
 												 long style, const Debugger &_debugger)
 												 : wxNotebook(&_Parent, id, pos, size, style),
-												 Debugger(_debugger), Parent(_Parent)
+												 debugger(_debugger), Parent(_Parent)
 {
 	// Initialize the 'Current' class members
 	CurrentCar = NULL;
@@ -210,11 +210,11 @@ void EDIT_SUSPENSION_NOTEBOOK::CreateControls(void)
 	DeleteAllPages();
 
 	// Create the notebook pages
-	Suspension = new EDIT_SUSPENSION_PANEL(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, Debugger);
-	RightFront = new EDIT_CORNER_PANEL(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, Debugger);
-	LeftFront = new EDIT_CORNER_PANEL(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, Debugger);
-	RightRear = new EDIT_CORNER_PANEL(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, Debugger);
-	LeftRear = new EDIT_CORNER_PANEL(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, Debugger);
+	Suspension = new EDIT_SUSPENSION_PANEL(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
+	RightFront = new EDIT_CORNER_PANEL(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
+	LeftFront = new EDIT_CORNER_PANEL(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
+	RightRear = new EDIT_CORNER_PANEL(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
+	LeftRear = new EDIT_CORNER_PANEL(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
 
 	// Add them to the notebook
 	AddPage(Suspension, _T("General"));
@@ -257,7 +257,7 @@ void EDIT_SUSPENSION_NOTEBOOK::UpdateSymmetry(void)
 			CurrentCar->Suspension->LeftFront.Hardpoints[i] = CurrentCar->Suspension->RightFront.Hardpoints[i];
 
 			// Flip the sign on the Y componenet
-			CurrentCar->Suspension->LeftFront.Hardpoints[i].Y *= -1.0;
+			CurrentCar->Suspension->LeftFront.Hardpoints[i].y *= -1.0;
 		}
 
 		// Copy the rear points
@@ -267,7 +267,7 @@ void EDIT_SUSPENSION_NOTEBOOK::UpdateSymmetry(void)
 			CurrentCar->Suspension->LeftRear.Hardpoints[i] = CurrentCar->Suspension->RightRear.Hardpoints[i];
 
 			// Flip the sign on the Y componenet
-			CurrentCar->Suspension->LeftRear.Hardpoints[i].Y *= -1.0;
+			CurrentCar->Suspension->LeftRear.Hardpoints[i].y *= -1.0;
 		}
 
 		// Copy the other information in the front

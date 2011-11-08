@@ -17,12 +17,10 @@
 //				  objects is handled by the MAIN_FRAME class.
 
 // CarDesigner headers
-#include "vCar/car_class.h"
 #include "gui/components/main_notebook_class.h"
 #include "gui/components/main_frame_class.h"
 #include "vUtilities/debug_class.h"
 #include "gui/gui_object_class.h"
-#include "gui/iteration_class.h"
 
 // wxWidgets headers
 #include <wx/utils.h>
@@ -51,7 +49,7 @@
 MAIN_NOTEBOOK::MAIN_NOTEBOOK(MAIN_FRAME &_MainFrame, wxWindowID id, const wxPoint& pos,
 							 const wxSize& size, long style, const Debugger &_debugger)
 							 : wxAuiNotebook(&_MainFrame, id, pos, size, style),
-							 Debugger(_debugger), MainFrame(_MainFrame)
+							 debugger(_debugger), MainFrame(_MainFrame)
 {
 	SetArtProvider(new wxAuiSimpleTabArt);
 }

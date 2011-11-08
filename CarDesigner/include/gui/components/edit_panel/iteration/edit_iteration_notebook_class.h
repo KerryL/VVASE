@@ -46,7 +46,7 @@ public:
 
 private:
 	// Debugger message printing utility
-	const Debugger &Debugger;
+	const Debugger &debugger;
 
 	// The parent window
 	EDIT_PANEL &Parent;

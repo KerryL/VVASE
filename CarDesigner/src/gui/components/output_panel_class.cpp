@@ -52,7 +52,7 @@
 OUTPUT_PANEL::OUTPUT_PANEL(MAIN_FRAME &_MainFrame, wxWindowID id, const wxPoint &pos,
 						   const wxSize &size, const Debugger &_debugger)
 						   : wxPanel(&_MainFrame, id, pos, size),
-						   Debugger(_debugger), Converter(_MainFrame.GetConverter()),
+						   debugger(_debugger), Converter(_MainFrame.GetConverter()),
 						   MainFrame(_MainFrame)
 {
 	// Create the controls
@@ -135,7 +135,7 @@ void OUTPUT_PANEL::UpdateInformation(KINEMATIC_OUTPUTS Outputs, CAR &Car,
 		if (!OutputsList->InsertCols(Index))
 		{
 			// Add column failed - print warning and return
-			Debugger.Print(_T("Warning (OUTPUT_PANEL::UpdateInformation):  InsertCols failed!"),
+			debugger.Print(_T("Warning (OUTPUT_PANEL::UpdateInformation):  InsertCols failed!"),
 				Debugger::PriorityMedium);
 
 			return;
@@ -156,7 +156,7 @@ void OUTPUT_PANEL::UpdateInformation(KINEMATIC_OUTPUTS Outputs, CAR &Car,
 	for (i = 0; i < KINEMATIC_OUTPUTS::NumberOfOutputScalars; i++)
 	{
 		// Convert and set the value
-		OutputsList->SetCellValue(i, Index, Converter.FormatNumber(Converter.Convert(
+		OutputsList->SetCellValue(i, Index, Converter.FormatNumber(Converter.ConvertTo(
 			Outputs.GetOutputValue((KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE)i),
 			KINEMATIC_OUTPUTS::GetOutputUnitType((KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE)i))));
 
@@ -300,7 +300,7 @@ void OUTPUT_PANEL::FinishUpdate(int _NumberOfDataColumns)
 		if (!OutputsList->DeleteCols(_NumberOfDataColumns + 1, NumberOfDataColumns - _NumberOfDataColumns))
 		{
 			// Delete columns failed - display warning and return
-			Debugger.Print(_T("Warning (OUTPUT_PANEL::FinishUpdate):  DeleteCols failed!"), Debugger::PriorityMedium);
+			debugger.Print(_T("Warning (OUTPUT_PANEL::FinishUpdate):  DeleteCols failed!"), Debugger::PriorityMedium);
 
 			return;
 		}

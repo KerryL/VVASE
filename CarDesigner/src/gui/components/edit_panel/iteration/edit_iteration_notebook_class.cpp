@@ -49,7 +49,7 @@ EDIT_ITERATION_NOTEBOOK::EDIT_ITERATION_NOTEBOOK(EDIT_PANEL &_Parent, wxWindowID
 												 const wxPoint& pos, const wxSize& size,
 												 long style, const Debugger &_debugger)
 												 : wxNotebook(&_Parent, id, pos, size, style),
-												 Debugger(_debugger), Parent(_Parent)
+												 debugger(_debugger), Parent(_Parent)
 {
 	// Initialize the 'Current' class members
 	CurrentIteration = NULL;
@@ -166,9 +166,9 @@ void EDIT_ITERATION_NOTEBOOK::CreateControls(void)
 	DeleteAllPages();
 
 	// Create the notebook pages
-	EditRange = new EDIT_ITERATION_RANGE_PANEL(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, Debugger);
-	EditPlots = new EDIT_ITERATION_PLOTS_PANEL(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, Debugger);
-	EditOptions = new EDIT_ITERATION_OPTIONS_PANEL(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, Debugger);
+	EditRange = new EDIT_ITERATION_RANGE_PANEL(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
+	EditPlots = new EDIT_ITERATION_PLOTS_PANEL(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
+	EditOptions = new EDIT_ITERATION_OPTIONS_PANEL(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
 
 	// Add them to the notebook
 	AddPage(EditRange, _T("Range"));

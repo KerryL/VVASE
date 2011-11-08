@@ -51,7 +51,7 @@
 MAIN_TREE::MAIN_TREE(MAIN_FRAME &_MainFrame, wxWindowID id, const wxPoint& pos,
 					 const wxSize& size, long style, const Debugger &_debugger)
 					 : wxTreeCtrl(&_MainFrame, id, pos, size, style),
-					 Debugger(_debugger), MainFrame(_MainFrame)
+					 debugger(_debugger), MainFrame(_MainFrame)
 {
 	// Set up the image list for tree item icons
 	int Size = 16;

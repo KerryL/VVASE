@@ -43,7 +43,7 @@ public:
 
 private:
 	// Debugger printing utility
-	Debugger &Debugger;
+	Debugger &debugger;
 
 	// The object that handles the unit conversions between the input and output
 	Convert &Converter;

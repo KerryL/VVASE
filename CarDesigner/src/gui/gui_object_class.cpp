@@ -141,7 +141,7 @@ void GUI_OBJECT::Initialize(void)
 #endif
 
 	// Add a page to the notebook for this car
-	Notebook->AddPage(Renderer, Name);
+	Notebook->AddPage(Renderer, Name);// FIXME:  This will need to change-> then GA_OBJECT can be a GUI_OBJECT too?
 
 	// Add the entry to the SystemsTree
 	TreeID = SystemsTree->AppendItem(SystemsTree->GetRootItem(), Name, NormalIcon, SelectedIcon);

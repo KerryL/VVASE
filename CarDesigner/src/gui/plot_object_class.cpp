@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2011
+                           Copyright Kerry R. Loux 2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -8,46 +8,33 @@
 ===================================================================================*/
 
 // File:  plot_object_class.cpp
-// Created:  1/22/2009
+// Created:  5/4/2011
 // Author:  K. Loux
 // Description:  Intermediate class for creating plots from arrays of data.
 // History:
-//	2/22/2009	- Fixed bug in Update() that overwrote data when plotting the same
-//				  parameter for multiple car sources, K. Loux.
-//	5/23/2009	- Re-wrote to remove VTK dependencies, K. Loux.
-//	10/27/2010	- Added IsZero() to check for very small numbers - improved stability
-//				  when attempting to create plots with range of zero, K. Loux.
-//	11/9/2010	- Renamed from PLOT2D, K. Loux.
-//	11/16/2010	- Fixed bug in auto-limit code (incorrect limit determination in
-//				  special cases), K. Loux.
-
-// CarDesigner headers
-#include "gui/plot_object_class.h"
-#include "gui/iteration_class.h"
-#include "gui/components/main_frame_class.h"
-#include "gui/renderer/plot_renderer_class.h"
-#include "vUtilities/debug_class.h"
-#include "vUtilities/convert_class.h"
-#include "vRenderer/primitives/plot_curve.h"
-#include "vRenderer/primitives/axis.h"
-#include "vRenderer/primitives/text_class.h"
-#include "vMath/car_math.h"
 
 // FTGL headers
 #include <FTGL/ftgl.h>
 
+// Local headers
+#include "gui/plot_object_class.h"
+#include "gui/renderer/plot_renderer_class.h"
+#include "vRenderer/color_class.h"
+#include "vRenderer/primitives/plot_curve.h"
+#include "vRenderer/primitives/axis.h"
+#include "vRenderer/primitives/text_class.h"
+#include "vMath/car_math.h"
+#include "vMath/dataset2D.h"
+
 //==========================================================================
-// Class:			PLOT_OBJECT
-// Function:		PLOT_OBJECT
+// Class:			PlotObject
+// Function:		PlotObject
 //
-// Description:		Constructor for PLOT_OBJECT class.
+// Description:		Constructor for PlotObject class.
 //
 // Input Arguments:
-//		_Renderer	= PLOT_RENDERER& reference to the object that handles the
+//		_renderer	= PlotRenderer& reference to the object that handles the
 //					  drawing operations
-//		_DataSource	= const ITERATION& reference to the associated iteration object
-//		_debugger	= const Debugger& reference to the application's debug printing
-//					  utility
 //
 // Output Arguments:
 //		None
@@ -56,64 +43,62 @@
 //		None
 //
 //==========================================================================
-PLOT_OBJECT::PLOT_OBJECT(PLOT_RENDERER &_Renderer, const ITERATION &_DataSource,
-						 const Debugger &_debugger) : Debugger(_debugger),
-						 DataSource(_DataSource), Renderer(_Renderer)
+PlotObject::PlotObject(PlotRenderer &_renderer) : renderer(_renderer)
 {
 	// Create the actors
-	AxisTop = new AXIS(Renderer);
-	AxisBottom = new AXIS(Renderer);
-	AxisLeft = new AXIS(Renderer);
-	AxisRight = new AXIS(Renderer);
-	TitleObject = new TEXT_RENDERING(Renderer);
+	axisTop = new Axis(renderer);
+	axisBottom = new Axis(renderer);
+	axisLeft = new Axis(renderer);
+	axisRight = new Axis(renderer);
+	titleObject = new TextRendering(renderer);
 
 	// Find the location of the fonts directory
-	wxString FontFile;
+	wxString fontFile;
 #ifdef __WXMSW__
-	FontFile = wxGetOSDirectory() + _T("\\fonts\\arial.ttf");
+	fontFile = wxGetOSDirectory() + _T("\\fonts\\arial.ttf");
 #elif defined __WXGTK__
 	// FIXME:  This probably isn't very portable...
-	FontFile = _T("/usr/share/fonts/dejavu/DejaVuSans.ttf");
+	fontFile = _T("/usr/share/fonts/dejavu/DejaVuSans.ttf");
 #else
 	// Unknown platfrom - warn the user
 #	warning "Unrecognized platform - unable to locate font files!"
-	FontFile = wxEmptyString;
+	fontFile = wxEmptyString;
 #endif
 
 	// Create the fonts
-	AxisFont = new FTGLTextureFont(FontFile.c_str());
-	TitleFont = new FTGLTextureFont(FontFile.c_str());
+	axisFont = new FTGLTextureFont(fontFile.c_str());
+	titleFont = new FTGLTextureFont(fontFile.c_str());
 
 	// Make sure the fonts loaded OK
-	if (AxisFont->Error() || TitleFont->Error())
+	if (axisFont->Error() || titleFont->Error())
 	{
-		delete AxisFont;
-		AxisFont = NULL;
+		delete axisFont;
+		axisFont = NULL;
 
-		delete TitleFont;
-		TitleFont = NULL;
-
-		// Warn the user as well
-		Debugger.Print(_T("Warning:  Could not load font file!"), Debugger::PriorityLow);
+		delete titleFont;
+		titleFont = NULL;
 	}
 	else
 	{
-		AxisFont->FaceSize(12);
-		AxisFont->CharMap(FT_ENCODING_UNICODE);
+		axisFont->FaceSize(12);
+		axisFont->CharMap(FT_ENCODING_UNICODE);
 
-		TitleFont->FaceSize(18);
-		TitleFont->CharMap(FT_ENCODING_UNICODE);
+		titleFont->FaceSize(18);
+		titleFont->CharMap(FT_ENCODING_UNICODE);
 	}
 
 	// Initialize auto-scaling to true
 	ResetAutoScaling();
+
+	// Set the background color (establish the default)
+	renderer.SetBackgroundColor(Color::ColorWhite);
 }
 
 //==========================================================================
-// Class:			PLOT_OBJECT
-// Function:		~PLOT_OBJECT
+// Class:			PlotObject
+// Function:		~PlotObject
 //
-// Description:		Destructor for PLOT_OBJECT class.
+// Description:		Destructor for PlotObject class.
 //
 // Input Arguments:
 //		None
@@ -125,17 +110,17 @@ PLOT_OBJECT::PLOT_OBJECT(PLOT_RENDERER &_Renderer, const ITERATION &_DataSource,
 //		None
 //
 //==========================================================================
-PLOT_OBJECT::~PLOT_OBJECT()
+PlotObject::~PlotObject()
 {
 	// Delete the font objects
-	delete AxisFont;
-	AxisFont = NULL;
-	delete TitleFont;
-	TitleFont = NULL;
+	delete axisFont;
+	axisFont = NULL;
+	delete titleFont;
+	titleFont = NULL;
 }
 
 //==========================================================================
-// Class:			PLOT_OBJECT
+// Class:			PlotObject
 // Function:		Update
 //
 // Description:		Updates the data in the plot and re-sets the fonts, sizes
@@ -151,157 +136,93 @@ PLOT_OBJECT::~PLOT_OBJECT()
 //		None
 //
 //==========================================================================
-void PLOT_OBJECT::Update(void)
+void PlotObject::Update(void)
 {
-	// Clear out the existing plots
-	RemoveExistingPlots();
-
-	// Clear the Z label variable
-	if (DataSource.GetAutoGenerateZLabel())
-		ZLabel = wxEmptyString;
-	else
-		ZLabel = DataSource.GetZLabel();
-
-	// Make sure we know what kind of data we're dealing with
-	int i;
-
-	// Assign a local pointer to ease readability
-	int CurrentCar;
-
-	// Initialize the list plots
-	for (i = 0; i < ITERATION::NumberOfPlots; i++)
-	{
-		// See if this plot is active
-		if (DataSource.GetActivePlot((ITERATION::PLOT_ID)i))
-		{
-			// Set up the z-axis label
-			// If units for all plots are the same, use the same units
-			// If the curves are the same property but for different corners, put the
-			// property name as the label with the corner in the legend
-			// FIXME:  Still need a legend very badly!
-			if (DataSource.GetAutoGenerateZLabel())
-			{
-				if (ZLabel.IsEmpty())
-					ZLabel = DataSource.GetPlotName((ITERATION::PLOT_ID)i) + " [" +
-						DataSource.GetPlotUnits((ITERATION::PLOT_ID)i) + "]";
-				else
-					ZLabel = _T("Multiple Variables");
-			}
-
-			// Do this once for each active car
-			for (CurrentCar = 0; CurrentCar < DataSource.GetAssociatedCarCount(); CurrentCar++)
-			{
-				// Create the objects
-				PLOT_CURVE *NewPlot = new PLOT_CURVE(Renderer);
-
-				// Bind the new curve to the left hand axis (FIXME:  Allow more options with better logic)
-				NewPlot->BindToXAxis(AxisBottom);
-				NewPlot->BindToZAxis(AxisLeft);
-
-				// Add the objects to the lists
-				PlotList.Add(NewPlot);
-			}
-		}
-	}
-
-	// Add elements to the X-axis and Z-axis data
-	int CurrentPoint;
-	double XData(0.0), ZData;
-	for (CurrentPoint = 0; CurrentPoint < DataSource.GetNumberOfPoints(); CurrentPoint++)
-	{
-		// Determine the X data based on the currently selected X-axis type
-		// We can hard-code the zero here instead of CurrentCar because the X-axis for
-		// all cars is the same.
-		switch (DataSource.GetXAxisType())
-		{
-		case ITERATION::AxisTypePitch:
-			XData = DataSource.GetDataValue(0, CurrentPoint, ITERATION::Pitch);
-			break;
-
-		case ITERATION::AxisTypeRoll:
-			XData = DataSource.GetDataValue(0, CurrentPoint, ITERATION::Roll);
-			break;
-
-		case ITERATION::AxisTypeHeave:
-			XData = DataSource.GetDataValue(0, CurrentPoint, ITERATION::Heave);
-			break;
-
-		case ITERATION::AxisTypeRackTravel:
-			XData = DataSource.GetDataValue(0, CurrentPoint, ITERATION::RackTravel);
-			break;
-
-		case ITERATION::AxisTypeUnused:
-			// No plots will be generated, but we need to continue so we can draw an empty set of axes
-			break;
-
-		default:
-			assert(0);
-			break;
-		}
-
-		// Initialize the axis limits, if necessary
-		if (CurrentPoint == 0)
-		{
-			XMinOriginal = XData;
-			XMaxOriginal = XData;
-		}
-		// Check to see if this X is the new X min or max
-		else if (XData < XMinOriginal)
-			XMinOriginal = XData;
-		else if (XData > XMaxOriginal)
-			XMaxOriginal = XData;
-
-		// Add the data for each plot
-		// This bit can be slightly confusing:
-		//    CurrentPlot refers to the actual curves being plotted (CurrentPlot is always
-		//      less than PlotList.GetCount())
-		//    i refers to the list of possible plots that we can have (it is always less
-		//      than ITERATION::NumberOfPlots)
-		int CurrentPlot = 0;
-		for (i = 0; i < ITERATION::NumberOfPlots; i++)
-		{
-			// See if the plot with this object is active
-			if (DataSource.GetActivePlot((ITERATION::PLOT_ID)i))
-			{
-				// Do this once for each active car
-				for (CurrentCar = 0; CurrentCar < DataSource.GetAssociatedCarCount(); CurrentCar++)
-				{
-					// Get the Z data
-					ZData = DataSource.GetDataValue(CurrentCar, CurrentPoint, (ITERATION::PLOT_ID)i);
-
-					// Initialize the Z mins and maxes, if necessary
-					if (CurrentPlot == 0 && CurrentPoint == 0)
-					{
-						ZMinOriginal = ZData;
-						ZMaxOriginal = ZData;
-					}
-					// Check to see if the Z data is a new max or min
-					else if (ZData < ZMinOriginal)
-						ZMinOriginal = ZData;
-					else if (ZData > ZMaxOriginal)
-						ZMaxOriginal = ZData;
-
-					// Perform the adding of the data
-					PlotList[CurrentPlot]->AddPoint(XData, ZData);
-
-					// Increment the current plot counter
-					CurrentPlot++;
-				}
-			}
-		}
-	}
-
 	// Format the plot
 	FormatPlot();
 
-	// Render the plot
-	Renderer.Render();
+	renderer.UpdateCursors();
+
+	// Update the display of cursor values
+	// FIXME:  Make this work again
+	/*dynamic_cast<MainFrame*>(renderer.GetParent())->UpdateCursorValues(
+		renderer.GetLeftCursorVisible(), renderer.GetRightCursorVisible(),
+		renderer.GetLeftCursorValue(), renderer.GetRightCursorValue());*/
 
 	return;
 }
 
 //==========================================================================
-// Class:			PLOT_OBJECT
+// Class:			PlotObject
+// Function:		SetXGrid
+//
+// Description:		Sets the status of the x-axis grid.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotObject::SetXGrid(const bool &gridOn)
+{
+	axisBottom->SetGrid(gridOn);
+
+	return;
+}
+
+//==========================================================================
+// Class:			PlotObject
+// Function:		SetLeftYGrid
+//
+// Description:		Sets the status of the left y-axis grid.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotObject::SetLeftYGrid(const bool &gridOn)
+{
+	axisLeft->SetGrid(gridOn);
+
+	return;
+}
+
+//==========================================================================
+// Class:			PlotObject
+// Function:		SetRightYGrid
+//
+// Description:		Sets the status of the right y-axis grid.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotObject::SetRightYGrid(const bool &gridOn)
+{
+	axisRight->SetGrid(gridOn);
+
+	return;
+}
+
+//==========================================================================
+// Class:			PlotObject
 // Function:		RemoveExistingPlots
 //
 // Description:		Deletes the existing plots.
@@ -316,21 +237,74 @@ void PLOT_OBJECT::Update(void)
 //		None
 //
 //==========================================================================
-void PLOT_OBJECT::RemoveExistingPlots(void)
+void PlotObject::RemoveExistingPlots(void)
 {
 	// Remove all existing plots from the list
-	while (PlotList.GetCount() > 0)
-	{
-		// Remove the object from the renderer object
-		Renderer.RemoveActor(PlotList[0]);
+	while (plotList.GetCount() > 0)
+		RemovePlot(0);
 
-		// Remove it from the local list
-		PlotList.Remove(0);
-	}
+	return;
 }
 
 //==========================================================================
-// Class:			PLOT_OBJECT
+// Class:			PlotObject
+// Function:		RemovePlot
+//
+// Description:		Deletes the specified plot.
+//
+// Input Arguments:
+//		index	= const unsigned int& specifying the curve to be removed
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotObject::RemovePlot(const unsigned int &index)
+{
+	// Remove the object from the renderer object
+	renderer.RemoveActor(plotList[index]);
+
+	// Remove it from the local list
+	plotList.Remove(index);
+	dataList.Remove(index);
+
+	return;
+}
+
+//==========================================================================
+// Class:			PlotObject
+// Function:		AddCurve
+//
+// Description:		Adds a curve to the plot.
+//
+// Input Arguments:
+//		data	= const Dataset2D& to plot
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotObject::AddCurve(const Dataset2D &data)
+{
+	PlotCurve *newPlot = new PlotCurve(renderer);
+	plotList.Add(newPlot);
+	dataList.Add(&data);
+
+	newPlot->BindToXAxis(axisBottom);
+	newPlot->BindToYAxis(axisLeft);
+	newPlot->SetData(&data);
+
+	return;
+}
+
+//==========================================================================
+// Class:			PlotObject
 // Function:		FormatPlot
 //
 // Description:		Formats the plot actor.
@@ -345,280 +319,300 @@ void PLOT_OBJECT::RemoveExistingPlots(void)
 //		None
 //
 //==========================================================================
-void PLOT_OBJECT::FormatPlot(void)
+void PlotObject::FormatPlot(void)
 {
-	// Set the background color
-	Renderer.SetBackgroundColor(COLOR::ColorWhite);
+	if (dataList.GetCount() == 0)
+		return;
+
+	// Determine "Original" values by parsing data associated with each axis
+	bool leftFound = false;
+	bool rightFound = false;
+	unsigned int i, j;
+	Axis *yAxis;
+	for (i = 0; i < (unsigned int)dataList.GetCount(); i++)
+	{
+		// If this plot is not visible, ignore it
+		if (!plotList[i]->GetIsVisible())
+			continue;
+
+		// Initialize the X limits the first time through only
+		if (!leftFound && !rightFound)
+		{
+			xMinOriginal = dataList[i]->GetXData(0);
+			xMaxOriginal = xMinOriginal;
+		}
+
+		// Determine which y-axis this dataset is associated with
+		yAxis = plotList[i]->GetYAxis();
+		if (yAxis == axisLeft && !leftFound)
+		{
+			leftFound = true;
+			yLeftMinOriginal = dataList[i]->GetYData(0);
+			yLeftMaxOriginal = yLeftMinOriginal;
+		}
+		else if (yAxis == axisRight && !rightFound)
+		{
+			rightFound = true;
+			yRightMinOriginal = dataList[i]->GetYData(0);
+			yRightMaxOriginal = yRightMinOriginal;
+		}
+
+		for (j = 0; j < dataList[i]->GetNumberOfPoints(); j++)
+		{
+			if (dataList[i]->GetXData(j) > xMaxOriginal)
+				xMaxOriginal = dataList[i]->GetXData(j);
+			else if (dataList[i]->GetXData(j) < xMinOriginal)
+				xMinOriginal = dataList[i]->GetXData(j);
+
+			if (yAxis == axisLeft)
+			{
+				if (dataList[i]->GetYData(j) > yLeftMaxOriginal)
+					yLeftMaxOriginal = dataList[i]->GetYData(j);
+				else if (dataList[i]->GetYData(j) < yLeftMinOriginal)
+					yLeftMinOriginal = dataList[i]->GetYData(j);
+			}
+			else
+			{
+				if (dataList[i]->GetYData(j) > yRightMaxOriginal)
+					yRightMaxOriginal = dataList[i]->GetYData(j);
+				else if (dataList[i]->GetYData(j) < yRightMinOriginal)
+					yRightMinOriginal = dataList[i]->GetYData(j);
+			}
+		}
+	}
+
+	// If one axis is unused, make it match the other
+	if (leftFound && !rightFound)
+	{
+		yRightMinOriginal = yLeftMinOriginal;
+		yRightMaxOriginal = yLeftMaxOriginal;
+	}
+	else if (!leftFound && rightFound)
+	{
+		yLeftMinOriginal = yRightMinOriginal;
+		yLeftMaxOriginal = yRightMaxOriginal;
+	}
+
+	// Apply limits
+
+	// Tell the curves they will need to be re-drawn
+	for (i = 0; i < (unsigned int)plotList.GetCount(); i++)
+		plotList[i]->SetModified();
 
 	// If the axes mins and maxes are equal, stretch the range to make the plot display
 	// We use IsZero to check for equality to avoid problems with very small numbers
-	if (VVASEMath::IsZero(XMaxOriginal - XMinOriginal))
+	if (VVASEMath::IsZero(xMaxOriginal - xMinOriginal))
 	{
-		if (VVASEMath::IsZero(XMinOriginal))
+		if (VVASEMath::IsZero(xMinOriginal))
 		{
-			XMinOriginal = -1.0;
-			XMaxOriginal = 1.0;
+			xMinOriginal = -1.0;
+			xMaxOriginal = 1.0;
 		}
 		else
 		{
-			XMinOriginal -= XMinOriginal * 0.1;
-			XMaxOriginal += XMaxOriginal * 0.1;
+			xMinOriginal -= xMinOriginal * 0.1;
+			xMaxOriginal += xMaxOriginal * 0.1;
 		}
 	}
 
-	if (VVASEMath::IsZero(YMaxOriginal - YMinOriginal))
+	if (VVASEMath::IsZero(yLeftMaxOriginal - yLeftMinOriginal))
 	{
-		if (VVASEMath::IsZero(YMinOriginal))
+		if (VVASEMath::IsZero(yLeftMinOriginal))
 		{
-			YMinOriginal = -1.0;
-			YMaxOriginal = 1.0;
+			yLeftMinOriginal = -1.0;
+			yLeftMaxOriginal = 1.0;
 		}
 		else
 		{
-			YMinOriginal -= YMinOriginal * 0.1;
-			YMaxOriginal += YMaxOriginal * 0.1;
+			yLeftMinOriginal -= yLeftMinOriginal * 0.1;
+			yLeftMaxOriginal += yLeftMaxOriginal * 0.1;
 		}
 	}
 
-	if (VVASEMath::IsZero(ZMaxOriginal - ZMinOriginal))
+	if (VVASEMath::IsZero(yRightMaxOriginal - yRightMinOriginal))
 	{
-		if (VVASEMath::IsZero(ZMinOriginal))
+		if (VVASEMath::IsZero(yRightMinOriginal))
 		{
-			ZMinOriginal = -1.0;
-			ZMaxOriginal = 1.0;
+			yRightMinOriginal = -1.0;
+			yRightMaxOriginal = 1.0;
 		}
 		else
 		{
-			ZMinOriginal -= ZMinOriginal * 0.1;
-			ZMaxOriginal += ZMaxOriginal * 0.1;
+			yRightMinOriginal -= yRightMinOriginal * 0.1;
+			yRightMaxOriginal += yRightMaxOriginal * 0.1;
 		}
 	}
 
 	// If we want to auto-scale the plot, set the range limits to the original values
-	if (AutoScaleX)
+	if (autoScaleX)
 	{
-		XMin = XMinOriginal;
-		XMax = XMaxOriginal;
+		xMin = xMinOriginal;
+		xMax = xMaxOriginal;
 	}
 
-	if (AutoScaleY)
+	if (autoScaleLeftY)
 	{
-		YMin = YMinOriginal;
-		YMax = YMaxOriginal;
+		yLeftMin = yLeftMinOriginal;
+		yLeftMax = yLeftMaxOriginal;
 	}
 
-	if (AutoScaleZ)
+	if (autoScaleRightY)
 	{
-		ZMin = ZMinOriginal;
-		ZMax = ZMaxOriginal;
+		yRightMin = yRightMinOriginal;
+		yRightMax = yRightMaxOriginal;
 	}
 
 	// Set up the axes resolution (and at the same time tweak the max and min)
 	// FIXME:  Make maximum number of ticks dependant on plot size and width of
 	// number (i.e. 1 2 3 fits better than 0.001 0.002 0.003)
-	double XMajorResolution = AutoScaleAxis(XMin, XMax, 7, !AutoScaleX);
-	double XMinorResolution = XMajorResolution;
-	double YMajorResolution = AutoScaleAxis(YMin, YMax, 10, !AutoScaleY);
-	double YMinorResolution = YMajorResolution;
-	double ZMajorResolution = AutoScaleAxis(ZMin, ZMax, 10, !AutoScaleZ);
-	double ZMinorResolution = ZMajorResolution;
+	double xMajorResolution = AutoScaleAxis(xMin, xMax, 7, !autoScaleX);
+	double xMinorResolution = xMajorResolution;
+	double yLeftMajorResolution = AutoScaleAxis(yLeftMin, yLeftMax, 10, !autoScaleLeftY);
+	double yLeftMinorResolution = yLeftMajorResolution;
+	double yRightMajorResolution = AutoScaleAxis(yRightMin, yRightMax, 10, !autoScaleRightY);
+	double yRightMinorResolution = yRightMajorResolution;
 
 	// Make sure the auto-scaled values are numbers
 	// If they're not numbers, set them to +/- 1 and recalculate the tick spacing
 	// (with inputs of +/- 1, they will always give valid results)
-	if (VVASEMath::IsNaN(XMin) || VVASEMath::IsNaN(XMax))
+	if (VVASEMath::IsNaN(xMin) || VVASEMath::IsNaN(xMax))
 	{
-		XMin = -1.0;
-		XMax = 1.0;
-		XMajorResolution = AutoScaleAxis(XMin, XMax, 7, !AutoScaleX);
-		XMinorResolution = XMajorResolution;
+		xMin = -1.0;
+		xMax = 1.0;
+		xMajorResolution = AutoScaleAxis(xMin, xMax, 7, !autoScaleX);
+		xMinorResolution = xMajorResolution;
 	}
 
-	if (VVASEMath::IsNaN(YMin) || VVASEMath::IsNaN(YMax))
+	if (VVASEMath::IsNaN(yLeftMin) || VVASEMath::IsNaN(yLeftMax))
 	{
-		YMin = -1.0;
-		YMax = 1.0;
-		YMajorResolution = AutoScaleAxis(YMin, YMax, 7, !AutoScaleY);
-		YMinorResolution = YMajorResolution;
+		yLeftMin = -1.0;
+		yLeftMax = 1.0;
+		yLeftMajorResolution = AutoScaleAxis(yLeftMin, yLeftMax, 7, !autoScaleLeftY);
+		yLeftMinorResolution = yLeftMajorResolution;
 	}
 
-	if (VVASEMath::IsNaN(ZMin) || VVASEMath::IsNaN(ZMax))
+	if (VVASEMath::IsNaN(yRightMin) || VVASEMath::IsNaN(yRightMax))
 	{
-		ZMin = -1.0;
-		ZMax = 1.0;
-		ZMajorResolution = AutoScaleAxis(ZMin, ZMax, 7, !AutoScaleZ);
-		ZMinorResolution = ZMajorResolution;
+		yRightMin = -1.0;
+		yRightMax = 1.0;
+		yRightMajorResolution = AutoScaleAxis(yRightMin, yRightMax, 7, !autoScaleRightY);
+		yRightMinorResolution = yRightMajorResolution;
 	}
 
 	// If we're auto-scaling, update the "original values" because chances are they
-	// have been tweaked to make the number prettier
-	if (AutoScaleX)
+	// have been tweaked to make the numbers prettier
+	if (autoScaleX)
 	{
-		XMinOriginal = XMin;
-		XMaxOriginal = XMax;
+		xMinOriginal = xMin;
+		xMaxOriginal = xMax;
 	}
 
-	if (AutoScaleY)
+	if (autoScaleLeftY)
 	{
-		YMinOriginal = YMin;
-		YMaxOriginal = YMax;
+		yLeftMinOriginal = yLeftMin;
+		yLeftMaxOriginal = yLeftMax;
 	}
 
-	if (AutoScaleZ)
+	if (autoScaleRightY)
 	{
-		ZMinOriginal = ZMin;
-		ZMaxOriginal = ZMax;
+		yRightMinOriginal = yRightMin;
+		yRightMaxOriginal = yRightMax;
 	}
 
 	// Apply the desired properties to each axis
-	AxisBottom->SetOrientation(AXIS::OrientationBottom);
-	AxisBottom->SetMinimum(XMin);
-	AxisBottom->SetMaximum(XMax);
-	AxisBottom->SetMinorResolution(XMinorResolution);
-	AxisBottom->SetMajorResolution(XMajorResolution);
-	AxisBottom->SetFont(AxisFont);
-	AxisBottom->SetTickStyle(AXIS::TickStyleInside);
-	AxisBottom->SetGrid(DataSource.GetShowGridLines());
+	Axis::TickStyle tickStyle = Axis::TickStyleInside;
 
-	AxisLeft->SetOrientation(AXIS::OrientationLeft);
-	AxisLeft->SetMinimum(ZMin);
-	AxisLeft->SetMaximum(ZMax);
-	AxisLeft->SetMinorResolution(ZMinorResolution);
-	AxisLeft->SetMajorResolution(ZMajorResolution);
-	AxisLeft->SetFont(AxisFont);
-	AxisLeft->SetLabel(ZLabel);
-	AxisLeft->SetTickStyle(AXIS::TickStyleInside);
-	AxisLeft->SetGrid(DataSource.GetShowGridLines());
+	axisBottom->SetOrientation(Axis::OrientationBottom);
+	axisBottom->SetMinimum(xMin);
+	axisBottom->SetMaximum(xMax);
+	axisBottom->SetMinorResolution(xMinorResolution);
+	axisBottom->SetMajorResolution(xMajorResolution);
+	axisBottom->SetFont(axisFont);
+	axisBottom->SetTickStyle(tickStyle);
 
-	AxisTop->SetOrientation(AXIS::OrientationTop);
-	AxisTop->SetMinimum(XMin);
-	AxisTop->SetMaximum(XMax);
-	AxisTop->SetMinorResolution(XMinorResolution);
-	AxisTop->SetMajorResolution(XMajorResolution);
-	AxisTop->SetTickStyle(AXIS::TickStyleInside);
+	axisTop->SetOrientation(Axis::OrientationTop);
+	axisTop->SetMinimum(xMin);
+	axisTop->SetMaximum(xMax);
+	axisTop->SetMinorResolution(xMinorResolution);
+	axisTop->SetMajorResolution(xMajorResolution);
+	axisTop->SetTickStyle(tickStyle);
 
-	AxisRight->SetOrientation(AXIS::OrientationRight);
-	AxisRight->SetMinimum(ZMin);
-	AxisRight->SetMaximum(ZMax);
-	AxisRight->SetMinorResolution(ZMinorResolution);
-	AxisRight->SetMajorResolution(ZMajorResolution);
-	AxisRight->SetTickStyle(AXIS::TickStyleInside);
+	axisLeft->SetOrientation(Axis::OrientationLeft);
+	axisLeft->SetMinimum(yLeftMin);
+	axisLeft->SetMaximum(yLeftMax);
+	axisLeft->SetMinorResolution(yLeftMinorResolution);
+	axisLeft->SetMajorResolution(yLeftMajorResolution);
+	axisLeft->SetFont(axisFont);
+	//axisLeft->SetLabel(wxEmptyString);// FIXME
+	axisLeft->SetTickStyle(tickStyle);
+
+	axisRight->SetOrientation(Axis::OrientationRight);
+	axisRight->SetMinimum(yRightMin);
+	axisRight->SetMaximum(yRightMax);
+	axisRight->SetMinorResolution(yRightMinorResolution);
+	axisRight->SetMajorResolution(yRightMajorResolution);
+	axisRight->SetFont(axisFont);
+	//axisRight->SetLabel(wxEmptyString);// FIXME
+	axisRight->SetTickStyle(tickStyle);
 
 	// Set the title properties
-	TitleObject->SetFont(TitleFont);
-	TitleObject->SetCentered(true);
-	if (DataSource.GetAutoGenerateTitle())
-		// Use file name
-		TitleObject->SetText(DataSource.GetCleanName());
-	else
-		// Use user-specified name
-		TitleObject->SetText(DataSource.GetTitle());
-	TitleObject->SetPosition(Renderer.GetSize().GetWidth() / 2.0,
-		Renderer.GetSize().GetHeight() - 75.0 / 2.0);// 75.0 is from OffsetFromWindowEdge in axis.cpp
-
-	// Go through all of the curves and assign them different colors
-	int i;
-	COLOR Color;
-	for (i = 0; i < PlotList.GetCount(); i++)
-	{
-		// Select the plot color
-		// FIXME:  Choose the color with a better method!!!
-		if (i == 0)
-			Color.Set(1.0, 0.0, 0.0);
-		else if (i == 1)
-			Color.Set(0.0, 1.0, 0.0);
-		else if (i == 2)
-			Color.Set(0.0, 0.0, 1.0);
-		else if (i == 3)
-			Color.Set(1.0, 0.0, 1.0);
-		else if (i == 4)
-			Color.Set(0.0, 1.0, 1.0);
-		else
-			Color.Set(0.0, 0.0, 0.0);
-
-		// Assign the color to the plot
-		PlotList[i]->SetColor(Color);
-	}
-
-	// Add the X axis label
-	wxString AxisLabel("ERROR");
-	if (DataSource.GetAutoGenerateXLabel())
-	{
-		switch (DataSource.GetXAxisType())
-		{
-		case ITERATION::AxisTypePitch:
-			AxisLabel.Printf("Pitch [%s]", DataSource.GetMainFrame().
-				GetConverter().GetUnitType(Convert::UNIT_TYPE_ANGLE).c_str());
-			break;
-
-		case ITERATION::AxisTypeRoll:
-			AxisLabel.Printf("Roll [%s]", DataSource.GetMainFrame().
-				GetConverter().GetUnitType(Convert::UNIT_TYPE_ANGLE).c_str());
-			break;
-
-		case ITERATION::AxisTypeHeave:
-			AxisLabel.Printf("Heave [%s]", DataSource.GetMainFrame().
-				GetConverter().GetUnitType(Convert::UNIT_TYPE_DISTANCE).c_str());
-			break;
-
-		case ITERATION::AxisTypeRackTravel:
-			AxisLabel.Printf("Rack Travel [%s]", DataSource.GetMainFrame().
-				GetConverter().GetUnitType(Convert::UNIT_TYPE_DISTANCE).c_str());
-			break;
-
-		case ITERATION::AxisTypeUnused:
-			// Don't print an X-axis label
-			AxisLabel = wxEmptyString;
-			break;
-
-		default:
-			assert(0);
-			break;
-		}
-	}
-	else
-		AxisLabel = DataSource.GetXLabel();
-
-	// Assign the string to the label
-	AxisBottom->SetLabel(AxisLabel.c_str());
+	/*titleObject->SetFont(titleFont);
+	titleObject->SetCentered(true);
+	titleObject->SetText(wxEmptyString);
+	titleObject->SetPosition(renderer.GetSize().GetWidth() / 2.0,
+		renderer.GetSize().GetHeight() - 75.0 / 2.0);// 75.0 is from OffsetFromWindowEdge in axis.cpp*/
 
 	// Set the axis colors
-	Color.Set(0.0, 0.0, 0.0);
-	AxisBottom->SetColor(Color);
-	AxisTop->SetColor(Color);
-	AxisLeft->SetColor(Color);
-	AxisRight->SetColor(Color);
+	Color color = Color::ColorBlack;
+	axisBottom->SetColor(color);
+	axisTop->SetColor(color);
+	axisLeft->SetColor(color);
+	axisRight->SetColor(color);
+
+	// Update the axis limits so they are exactly the same as what is displayed on screen
+	axisBottom->GenerateGeometry();
+	xMin = axisBottom->GetMinimum();
+	xMax = axisBottom->GetMaximum();
+
+	axisLeft->GenerateGeometry();
+	yLeftMin = axisLeft->GetMinimum();
+	yLeftMax = axisLeft->GetMaximum();
+
+	axisRight->GenerateGeometry();
+	yRightMin = axisRight->GetMinimum();
+	yRightMax = axisRight->GetMaximum();
 
 	return;
 }
 
 //==========================================================================
-// Class:			PLOT_OBJECT
+// Class:			PlotObject
 // Function:		AutoScaleAxis
 //
 // Description:		Calculates the number of tick marks to use to span the range
-//					and make the plot look nice.
+//					and make the plot look nice.  Also responsible for ensuring
+//					accuracy of tick, grid line and label locations.
 //
 // Input Arguments:
-//		Min			= double& specifying the minimum value for the axis (required for input and output)
-//		Max			= double& specifying the maximum value for the axis (required for input and output)
-//		MaxTicks	= int specifying the maximum number of ticks to use
-//		ForceLimits	= const bool& specifying whether or not to preserve the specified limits
+//		min			= double& specifying the minimum value for the axis (required for input and output)
+//		max			= double& specifying the maximum value for the axis (required for input and output)
+//		maxTicks	= int specifying the maximum number of ticks to use
+//		forceLimits	= const bool& specifying whether or not to preserve the specified limits
 //
 // Output Arguments:
-//		Min			= double& specifying the minimum value for the axis (required for input and output)
-//		Max			= double& specifying the maximum value for the axis (required for input and output)
+//		min			= double& specifying the minimum value for the axis (required for input and output)
+//		max			= double& specifying the maximum value for the axis (required for input and output)
 //
 // Return Value:
 //		double, spacing between each tick mark for the axis (MajorResolution)
 //
 //==========================================================================
-double PLOT_OBJECT::AutoScaleAxis(double &Min, double &Max, int MaxTicks, const bool &ForceLimits)
+double PlotObject::AutoScaleAxis(double &min, double &max, int maxTicks, const bool &forceLimits)
 {
 	// Get the order of magnitude of the axes to decide how to scale them
-	double Range = Max - Min;
-	int OrderOfMagnitude = (int)log10(Range);
-	double TickSpacing = Range / MaxTicks;
+	double range = max - min;
+	int orderOfMagnitude = (int)log10(range);
+	double tickSpacing = range / maxTicks;
 
 	// Acceptable resolution steps are:
 	//	Ones,
@@ -630,69 +624,69 @@ double PLOT_OBJECT::AutoScaleAxis(double &Min, double &Max, int MaxTicks, const 
 	// and will get us closest to the maximum number of ticks.
 
 	// Scale the tick spacing so it is between 0.1 and 10.0
-	double ScaledSpacing = TickSpacing / pow(10.0, OrderOfMagnitude - 1);
+	double scaledSpacing = tickSpacing / pow(10.0, orderOfMagnitude - 1);
 
 	// Choose the maximum spacing value that fits our criteria
-	if (ScaledSpacing > 5.0)
-		ScaledSpacing = 10.0;
-	else if (ScaledSpacing > 2.0)
-		ScaledSpacing = 5.0;
-	else if (ScaledSpacing > 1.0)
-		ScaledSpacing = 2.0;
-	else if (ScaledSpacing > 0.5)
-		ScaledSpacing = 1.0;
-	else if (ScaledSpacing > 0.2)
-		ScaledSpacing = 0.5;
-	else if (ScaledSpacing > 0.1)
-		ScaledSpacing = 0.2;
+	if (scaledSpacing > 5.0)
+		scaledSpacing = 10.0;
+	else if (scaledSpacing > 2.0)
+		scaledSpacing = 5.0;
+	else if (scaledSpacing > 1.0)
+		scaledSpacing = 2.0;
+	else if (scaledSpacing > 0.5)
+		scaledSpacing = 1.0;
+	else if (scaledSpacing > 0.2)
+		scaledSpacing = 0.5;
+	else if (scaledSpacing > 0.1)
+		scaledSpacing = 0.2;
 	else
-		ScaledSpacing = 0.1;
+		scaledSpacing = 0.1;
 
 	// Re-scale back to the correct order of magnitude
-	TickSpacing = ScaledSpacing * pow(10.0, OrderOfMagnitude - 1);
+	tickSpacing = scaledSpacing * pow(10.0, orderOfMagnitude - 1);
 
 	// Round the min and max down and up, respectively, so the plot fits within the range [Min Max]
-	if (!ForceLimits)
+	if (!forceLimits)
 	{
-		if (fmod(Min, TickSpacing) != 0)
+		if (fmod(min, tickSpacing) != 0)
 		{
-			if (Min < 0)
+			if (min < 0)
 			{
-				Min -= fmod(Min, TickSpacing);
-				Min -= TickSpacing;
+				min -= fmod(min, tickSpacing);
+				min -= tickSpacing;
 			}
 			else
-				Min -= fmod(Min, TickSpacing);
+				min -= fmod(min, tickSpacing);
 		}
-		if (fmod(Max, TickSpacing) != 0)
+		if (fmod(max, tickSpacing) != 0)
 		{
-			if (Max > 0)
+			if (max > 0)
 			{
-				Max -= fmod(Max, TickSpacing);
-				Max += TickSpacing;
+				max -= fmod(max, tickSpacing);
+				max += tickSpacing;
 			}
 			else
-				Max -= fmod(Max, TickSpacing);
+				max -= fmod(max, tickSpacing);
 		}
 	}
 
 	// If numerical processing leads to ugly numbers, clean them up a bit
-	if (VVASEMath::IsZero(Min))
-		Min = 0.0;
-	if (VVASEMath::IsZero(Max))
-		Max = 0.0;
+	if (VVASEMath::IsZero(min))
+		min = 0.0;
+	if (VVASEMath::IsZero(max))
+		max = 0.0;
 
-	return TickSpacing;
+	return tickSpacing;
 }
 
 //==========================================================================
-// Class:			PLOT_OBJECT
+// Class:			PlotObject
 // Function:		SetXMin
 //
 // Description:		Sets the lower X limit.
 //
 // Input Arguments:
-//		_XMin	= const double& describing desired minimum X limit
+//		_xMin	= const double& describing desired minimum X limit
 //
 // Output Arguments:
 //		None
@@ -701,35 +695,45 @@ double PLOT_OBJECT::AutoScaleAxis(double &Min, double &Max, int MaxTicks, const 
 //		None
 //
 //==========================================================================
-void PLOT_OBJECT::SetXMin(const double &_XMin)
+void PlotObject::SetXMin(const double &_xMin)
 {
 	// Make sure the limit is within the bounds of the original
-	if (_XMin <= XMinOriginal)
+	/*if (_xMin <= xMinOriginal)
 	{
-		XMin = XMinOriginal;
+		xMin = xMinOriginal;
 
 		// If the opposite limit is also at the original value, enable auto-scaling again
-		if (XMax == XMaxOriginal)
-			AutoScaleX = true;
+		if (xMax == xMaxOriginal)
+			autoScaleX = true;
 
 		return;
 	}
-
+	
 	// Make the assignment and disable auto-scaling
-	XMin = _XMin;
-	AutoScaleX = false;
+	xMin = _xMin;
+	autoScaleX = false;*/
+
+	// If the both limits are at the original value, enable auto-scaling again
+	if (xMax == xMaxOriginal && _xMin == xMinOriginal)
+		autoScaleX = true;
+	else
+	{
+		// Make the assignment and disable auto-scaling
+		xMin = _xMin;
+		autoScaleX = false;
+	}
 
 	return;
 }
 
 //==========================================================================
-// Class:			PLOT_OBJECT
+// Class:			PlotObject
 // Function:		SetXMax
 //
 // Description:		Sets the upper X limit.
 //
 // Input Arguments:
-//		_XMax	= const double& describing desired maximum X limit
+//		_xMax	= const double& describing desired maximum X limit
 //
 // Output Arguments:
 //		None
@@ -738,35 +742,45 @@ void PLOT_OBJECT::SetXMin(const double &_XMin)
 //		None
 //
 //==========================================================================
-void PLOT_OBJECT::SetXMax(const double &_XMax)
+void PlotObject::SetXMax(const double &_xMax)
 {
 	// Make sure the limit is within the bounds of the original
-	if (_XMax >= XMaxOriginal)
+	/*if (_xMax >= xMaxOriginal)
 	{
-		XMax = XMaxOriginal;
+		xMax = xMaxOriginal;
 
 		// If the opposite limit is also at the original value, enable auto-scaling again
-		if (XMin == XMinOriginal)
-			AutoScaleX = true;
+		if (xMin == xMinOriginal)
+			autoScaleX = true;
 
 		return;
 	}
 
 	// Make the assignment and disable auto-scaling
-	XMax = _XMax;
-	AutoScaleX = false;
+	xMax = _xMax;
+	autoScaleX = false;*/
+
+	// If the both limits are at the original value, enable auto-scaling again
+	if (xMin == xMinOriginal && _xMax == xMaxOriginal)
+		autoScaleX = true;
+	else
+	{
+		// Make the assignment and disable auto-scaling
+		xMax = _xMax;
+		autoScaleX = false;
+	}
 
 	return;
 }
 
 //==========================================================================
-// Class:			PLOT_OBJECT
-// Function:		SetYMin
+// Class:			PlotObject
+// Function:		SetLeftYMin
 //
 // Description:		Sets the lower Y limit.
 //
 // Input Arguments:
-//		_YMin	= const double& describing desired minimum Y limit
+//		_yMin	= const double& describing desired minimum Y limit
 //
 // Output Arguments:
 //		None
@@ -775,35 +789,45 @@ void PLOT_OBJECT::SetXMax(const double &_XMax)
 //		None
 //
 //==========================================================================
-void PLOT_OBJECT::SetYMin(const double &_YMin)
+void PlotObject::SetLeftYMin(const double &_yMin)
 {
 	// Make sure the limit is within the bounds of the original
-	if (_YMin <= YMinOriginal)
+	/*if (_yMin <= yLeftMinOriginal)
 	{
-		YMin = YMinOriginal;
+		yLeftMin = yLeftMinOriginal;
 
 		// If the opposite limit is also at the original value, enable auto-scaling again
-		if (YMax == YMaxOriginal)
-			AutoScaleY = true;
+		if (yLeftMax == yLeftMaxOriginal)
+			autoScaleLeftY = true;
 
 		return;
 	}
 
 	// Make the assignment and disable auto-scaling
-	YMin = _YMin;
-	AutoScaleY = false;
+	yLeftMin = _yMin;
+	autoScaleLeftY = false;*/
+
+	// If the both limits are at the original value, enable auto-scaling again
+	if (yLeftMax == yLeftMaxOriginal && _yMin == yLeftMinOriginal)
+		autoScaleLeftY = true;
+	else
+	{
+		// Make the assignment and disable auto-scaling
+		yLeftMin = _yMin;
+		autoScaleLeftY = false;
+	}
 
 	return;
 }
 
 //==========================================================================
-// Class:			PLOT_OBJECT
-// Function:		SetYMax
+// Class:			PlotObject
+// Function:		SetLeftYMax
 //
 // Description:		Sets the upper Y limit.
 //
 // Input Arguments:
-//		_YMax	= const double& describing desired maximum Y limit
+//		_yMax	= const double& describing desired maximum Y limit
 //
 // Output Arguments:
 //		None
@@ -812,35 +836,45 @@ void PLOT_OBJECT::SetYMin(const double &_YMin)
 //		None
 //
 //==========================================================================
-void PLOT_OBJECT::SetYMax(const double &_YMax)
+void PlotObject::SetLeftYMax(const double &_yMax)
 {
 	// Make sure the limit is within the bounds of the original
-	if (_YMax >= YMaxOriginal)
+	/*if (_yMax >= yLeftMaxOriginal)
 	{
-		YMax = YMaxOriginal;
+		yLeftMax = yLeftMaxOriginal;
 
 		// If the opposite limit is also at the original value, enable auto-scaling again
-		if (YMin == YMinOriginal)
-			AutoScaleY = true;
+		if (yLeftMin == yLeftMinOriginal)
+			autoScaleLeftY = true;
 
 		return;
 	}
 
 	// Make the assignment and disable auto-scaling
-	YMax = _YMax;
-	AutoScaleY = false;
+	yLeftMax = _yMax;
+	autoScaleLeftY = false;*/
+
+	// If the both limits are at the original value, enable auto-scaling again
+	if (yLeftMin == yLeftMinOriginal && _yMax == yLeftMaxOriginal)
+		autoScaleLeftY = true;
+	else
+	{
+		// Make the assignment and disable auto-scaling
+		yLeftMax = _yMax;
+		autoScaleLeftY = false;
+	}
 
 	return;
 }
 
 //==========================================================================
-// Class:			PLOT_OBJECT
-// Function:		SetZMin
+// Class:			PlotObject
+// Function:		SetRightYMin
 //
-// Description:		Sets the lower Z limit.
+// Description:		Sets the lower Y limit.
 //
 // Input Arguments:
-//		_ZMin	= const double& describing desired minimum Z limit
+//		_yMin	= const double& describing desired minimum Y limit
 //
 // Output Arguments:
 //		None
@@ -849,35 +883,45 @@ void PLOT_OBJECT::SetYMax(const double &_YMax)
 //		None
 //
 //==========================================================================
-void PLOT_OBJECT::SetZMin(const double &_ZMin)
+void PlotObject::SetRightYMin(const double &_yMin)
 {
 	// Make sure the limit is within the bounds of the original
-	if (_ZMin <= ZMinOriginal)
+	/*if (_yMin <= yRightMinOriginal)
 	{
-		ZMin = ZMinOriginal;
+		yRightMin = yRightMinOriginal;
 
 		// If the opposite limit is also at the original value, enable auto-scaling again
-		if (ZMax == ZMaxOriginal)
-			AutoScaleZ = true;
+		if (yRightMax == yRightMaxOriginal)
+			autoScaleRightY = true;
 
 		return;
 	}
 
 	// Make the assignment and disable auto-scaling
-	ZMin = _ZMin;
-	AutoScaleZ = false;
+	yRightMin = _yMin;
+	autoScaleRightY = false;*/
+
+	// If the both limits are at the original value, enable auto-scaling again
+	if (yRightMax == yRightMaxOriginal && _yMin == yRightMinOriginal)
+		autoScaleRightY = true;
+	else
+	{
+		// Make the assignment and disable auto-scaling
+		yRightMin = _yMin;
+		autoScaleRightY = false;
+	}
 
 	return;
 }
 
 //==========================================================================
-// Class:			PLOT_OBJECT
-// Function:		SetZMax
+// Class:			PlotObject
+// Function:		SetRightYMax
 //
-// Description:		Sets the upper Z limit.
+// Description:		Sets the upper Y limit.
 //
 // Input Arguments:
-//		_ZMax	= const double& describing desired maximum Z limit
+//		_yMax	= const double& describing desired maximum Y limit
 //
 // Output Arguments:
 //		None
@@ -886,29 +930,39 @@ void PLOT_OBJECT::SetZMin(const double &_ZMin)
 //		None
 //
 //==========================================================================
-void PLOT_OBJECT::SetZMax(const double &_ZMax)
+void PlotObject::SetRightYMax(const double &_yMax)
 {
 	// Make sure the limit is within the bounds of the original
-	if (_ZMax >= ZMaxOriginal)
+	/*if (_yMax >= yRightMaxOriginal)
 	{
-		ZMax = ZMaxOriginal;
+		yRightMax = yRightMaxOriginal;
 
 		// If the opposite limit is also at the original value, enable auto-scaling again
-		if (ZMin == ZMinOriginal)
-			AutoScaleZ = true;
+		if (yRightMin == yRightMinOriginal)
+			autoScaleRightY = true;
 
 		return;
 	}
 
 	// Make the assignment and disable auto-scaling
-	ZMax = _ZMax;
-	AutoScaleZ = false;
+	yRightMax = _yMax;
+	autoScaleRightY = false;*/
+
+	// If the both limits are at the original value, enable auto-scaling again
+	if (yRightMin == yRightMinOriginal && _yMax == yRightMaxOriginal)
+		autoScaleRightY = true;
+	else
+	{
+		// Make the assignment and disable auto-scaling
+		yRightMax = _yMax;
+		autoScaleRightY = false;
+	}
 
 	return;
 }
 
 //==========================================================================
-// Class:			PLOT_OBJECT
+// Class:			PlotObject
 // Function:		ResetAutoScaling
 //
 // Description:		Resets auto-scaling for all axes.
@@ -923,12 +977,167 @@ void PLOT_OBJECT::SetZMax(const double &_ZMax)
 //		None
 //
 //==========================================================================
-void PLOT_OBJECT::ResetAutoScaling(void)
+void PlotObject::ResetAutoScaling(void)
 {
 	// Enable auto-scaling for all axes
-	AutoScaleX = true;
-	AutoScaleY = true;
-	AutoScaleZ = true;
+	autoScaleX = true;
+	autoScaleLeftY = true;
+	autoScaleRightY = true;
 
 	return;
+}
+
+//==========================================================================
+// Class:			PlotObject
+// Function:		SetCurveProperties
+//
+// Description:		Sets properties for the specified curve.
+//
+// Input Arguments:
+//		index		= const unsigned int&
+//		color		= const Color&
+//		visible		= const bool&
+//		rightAxis	= const bool&
+//		size		= const unsigned int&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotObject::SetCurveProperties(const unsigned int &index, const Color &color,
+	const bool &visible, const bool &rightAxis, const unsigned int &size)
+{
+	plotList[index]->SetColor(color);
+	plotList[index]->SetVisibility(visible);
+	plotList[index]->SetSize(size);
+
+	if (rightAxis)
+		plotList[index]->BindToYAxis(axisRight);
+	else
+		plotList[index]->BindToYAxis(axisLeft);
+
+	return;
+}
+
+//==========================================================================
+// Class:			PlotObject
+// Function:		SetGrid
+//
+// Description:		Resets auto-scaling for all axes.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotObject::SetGrid(const bool &gridOn)
+{
+	axisBottom->SetGrid(gridOn);
+	axisLeft->SetGrid(gridOn);
+
+	// These axis default to off, but can be specifically turned on via a right-click
+	axisTop->SetGrid(false);
+	axisRight->SetGrid(false);
+
+	return;
+}
+
+//==========================================================================
+// Class:			PlotObject
+// Function:		GetGrid
+//
+// Description:		Returns status of gridlines.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+bool PlotObject::GetGrid(void)
+{
+	if (axisBottom == NULL)
+		return false;
+
+	return axisBottom->GetGrid();
+}
+
+//==========================================================================
+// Class:			PlotObject
+// Function:		SetXLabel
+//
+// Description:		Resets auto-scaling for all axes.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotObject::SetXLabel(wxString text)
+{
+	axisBottom->SetLabel(text);
+
+	return;
+}
+
+//==========================================================================
+// Class:			PlotObject
+// Function:		SetGridColor
+//
+// Description:		Sets gridline color.
+//
+// Input Arguments:
+//		color	= const color&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotObject::SetGridColor(const Color &color)
+{
+	axisBottom->SetGridColor(color);
+	axisTop->SetGridColor(color);
+	axisLeft->SetGridColor(color);
+	axisRight->SetGridColor(color);
+}
+
+//==========================================================================
+// Class:			PlotObject
+// Function:		GetGridColor
+//
+// Description:		Resets auto-scaling for all axes.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+Color PlotObject::GetGridColor(void) const
+{
+	return axisBottom->GetGridColor();
 }

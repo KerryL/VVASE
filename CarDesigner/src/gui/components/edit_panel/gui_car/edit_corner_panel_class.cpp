@@ -53,7 +53,7 @@
 EDIT_CORNER_PANEL::EDIT_CORNER_PANEL(EDIT_SUSPENSION_NOTEBOOK & _Parent, wxWindowID id,
 									 const wxPoint& pos, const wxSize& size,
 									 const Debugger &_debugger) : wxPanel(&_Parent, id, pos, size),
-									 Debugger(_debugger),
+									 debugger(_debugger),
 									 Converter(_Parent.GetParent().GetMainFrame().GetConverter()),
 									 Parent(_Parent)
 {
@@ -140,15 +140,15 @@ void EDIT_CORNER_PANEL::UpdateInformation(CORNER *_CurrentCorner,
 	StaticToe->ChangeValue(Converter.FormatNumber(Converter.ConvertAngle(CurrentCorner->StaticToe)));
 
 	// And their units
-	CamberUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UNIT_TYPE_ANGLE));
-	ToeUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UNIT_TYPE_ANGLE));
+	CamberUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UnitTypeAngle));
+	ToeUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UnitTypeAngle));
 
 	// Begin batch edit of the grid
 	Hardpoints->BeginBatch();
 
 	// Update the unit labels
 	wxString UnitString;
-	UnitString.Printf("(%s)", Converter.GetUnitType(Convert::UNIT_TYPE_DISTANCE).c_str());
+	UnitString.Printf("(%s)", Converter.GetUnitType(Convert::UnitTypeDistance).c_str());
 	Hardpoints->SetCellValue(0, 1, UnitString);
 	Hardpoints->SetCellValue(0, 2, UnitString);
 	Hardpoints->SetCellValue(0, 3, UnitString);
@@ -212,13 +212,13 @@ void EDIT_CORNER_PANEL::UpdateInformation(CORNER *_CurrentCorner,
 		Point = Converter.ConvertDistance(CurrentCorner->Hardpoints[i]);
 
 		// Set the X value
-		Hardpoints->SetCellValue(i + 1, 1, Converter.FormatNumber(Point.X));
+		Hardpoints->SetCellValue(i + 1, 1, Converter.FormatNumber(Point.x));
 
 		// Set the Y value
-		Hardpoints->SetCellValue(i + 1, 2, Converter.FormatNumber(Point.Y));
+		Hardpoints->SetCellValue(i + 1, 2, Converter.FormatNumber(Point.y));
 
 		// Set the Z value
-		Hardpoints->SetCellValue(i + 1, 3, Converter.FormatNumber(Point.Z));
+		Hardpoints->SetCellValue(i + 1, 3, Converter.FormatNumber(Point.z));
 	}
 
 	// End batch edit of the grid
@@ -504,9 +504,9 @@ void EDIT_CORNER_PANEL::GridCellChangedEvent(wxGridEvent &event)
 			Parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
 				Parent.GetParent().GetMainFrame().GetActiveIndex(),
 				UNDO_REDO_STACK::OPERATION::DATA_TYPE_DOUBLE,
-				&(CurrentCorner->Hardpoints[event.GetRow() - 1].X));
+				&(CurrentCorner->Hardpoints[event.GetRow() - 1].x));
 
-			CurrentCorner->Hardpoints[event.GetRow() - 1].X = Converter.ReadDistance(Value);
+			CurrentCorner->Hardpoints[event.GetRow() - 1].x = Converter.ReadDistance(Value);
 		}
 		else if (event.GetCol() == 2)// Y
 		{
@@ -514,9 +514,9 @@ void EDIT_CORNER_PANEL::GridCellChangedEvent(wxGridEvent &event)
 			Parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
 				Parent.GetParent().GetMainFrame().GetActiveIndex(),
 				UNDO_REDO_STACK::OPERATION::DATA_TYPE_DOUBLE,
-				&(CurrentCorner->Hardpoints[event.GetRow() - 1].Y));
+				&(CurrentCorner->Hardpoints[event.GetRow() - 1].y));
 
-			CurrentCorner->Hardpoints[event.GetRow() - 1].Y = Converter.ReadDistance(Value);
+			CurrentCorner->Hardpoints[event.GetRow() - 1].y = Converter.ReadDistance(Value);
 		}
 		else// Z
 		{
@@ -524,9 +524,9 @@ void EDIT_CORNER_PANEL::GridCellChangedEvent(wxGridEvent &event)
 			Parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
 				Parent.GetParent().GetMainFrame().GetActiveIndex(),
 				UNDO_REDO_STACK::OPERATION::DATA_TYPE_DOUBLE,
-				&(CurrentCorner->Hardpoints[event.GetRow() - 1].Z));
+				&(CurrentCorner->Hardpoints[event.GetRow() - 1].z));
 
-			CurrentCorner->Hardpoints[event.GetRow() - 1].Z = Converter.ReadDistance(Value);
+			CurrentCorner->Hardpoints[event.GetRow() - 1].z = Converter.ReadDistance(Value);
 		}
 
 		// Call the UpdateSymmetry method in case this is a symmetric suspension

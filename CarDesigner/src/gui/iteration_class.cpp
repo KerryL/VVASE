@@ -99,7 +99,7 @@ ITERATION::ITERATION(MAIN_FRAME &_MainFrame, const Debugger &_debugger,
 	NumberOfWorkingCars = 0;
 
 	// Create the renderer
-	Renderer = new PLOT_RENDERER(MainFrame, *this, debugger);
+	Renderer = new PlotRenderer(MainFrame, wxID_ANY, debugger);
 
 	// Get an index for this item and add it to the list in the MainFrame
 	// MUST be included BEFORE the naming, which must come BEFORE the call to Initialize
@@ -472,7 +472,7 @@ void ITERATION::UpdateDisplay(void)
 	// Make sure the renderer exists so we don't do this until after we're fully created
 	if (Renderer)
 		// Update the display associated with this object
-		static_cast<PLOT_RENDERER*>(Renderer)->UpdateDisplay();
+		static_cast<PlotRenderer*>(Renderer)->UpdateDisplay();
 
 	// Reset the "are we caught up" flag
 	AnalysesDisplayed = true;

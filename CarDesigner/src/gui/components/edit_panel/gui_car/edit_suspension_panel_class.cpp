@@ -54,7 +54,7 @@ EDIT_SUSPENSION_PANEL::EDIT_SUSPENSION_PANEL(EDIT_SUSPENSION_NOTEBOOK &_Parent, 
 											 const wxPoint& pos, const wxSize& size,
 											 const Debugger &_debugger) :
 											 wxPanel(&_Parent, id, pos, size),
-											 Debugger(_debugger),
+											 debugger(_debugger),
 											 Converter(_Parent.GetParent().GetMainFrame().GetConverter()),
 											 Parent(_Parent)
 {
@@ -170,7 +170,7 @@ void EDIT_SUSPENSION_PANEL::UpdateInformation(SUSPENSION *_CurrentSuspension)
 
 	// Update the unit labels
 	wxString UnitString;
-	UnitString.Printf("(%s)", Converter.GetUnitType(Convert::UNIT_TYPE_DISTANCE).c_str());
+	UnitString.Printf("(%s)", Converter.GetUnitType(Convert::UnitTypeDistance).c_str());
 	Hardpoints->SetCellValue(0, 1, UnitString);
 	Hardpoints->SetCellValue(0, 2, UnitString);
 	Hardpoints->SetCellValue(0, 3, UnitString);
@@ -231,13 +231,13 @@ void EDIT_SUSPENSION_PANEL::UpdateInformation(SUSPENSION *_CurrentSuspension)
 		Point = Converter.ConvertDistance(CurrentSuspension->Hardpoints[i]);
 
 		// Set the X value
-		Hardpoints->SetCellValue(i + 1, 1, Converter.FormatNumber(Point.X));
+		Hardpoints->SetCellValue(i + 1, 1, Converter.FormatNumber(Point.x));
 
 		// Set the Y value
-		Hardpoints->SetCellValue(i + 1, 2, Converter.FormatNumber(Point.Y));
+		Hardpoints->SetCellValue(i + 1, 2, Converter.FormatNumber(Point.y));
 
 		// Set the Z value
-		Hardpoints->SetCellValue(i + 1, 3, Converter.FormatNumber(Point.Z));
+		Hardpoints->SetCellValue(i + 1, 3, Converter.FormatNumber(Point.z));
 	}
 
 	// End batch edit of the grid
@@ -493,9 +493,9 @@ void EDIT_SUSPENSION_PANEL::GridCellChangedEvent(wxGridEvent &event)
 			Parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
 				Parent.GetParent().GetMainFrame().GetActiveIndex(),
 				UNDO_REDO_STACK::OPERATION::DATA_TYPE_DOUBLE,
-				&(CurrentSuspension->Hardpoints[event.GetRow() - 1].X));
+				&(CurrentSuspension->Hardpoints[event.GetRow() - 1].x));
 
-			CurrentSuspension->Hardpoints[event.GetRow() - 1].X = Converter.ReadDistance(Value);
+			CurrentSuspension->Hardpoints[event.GetRow() - 1].x = Converter.ReadDistance(Value);
 		}
 		else if (event.GetCol() == 2)// Y
 		{
@@ -503,9 +503,9 @@ void EDIT_SUSPENSION_PANEL::GridCellChangedEvent(wxGridEvent &event)
 			Parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
 				Parent.GetParent().GetMainFrame().GetActiveIndex(),
 				UNDO_REDO_STACK::OPERATION::DATA_TYPE_DOUBLE,
-				&(CurrentSuspension->Hardpoints[event.GetRow() - 1].Y));
+				&(CurrentSuspension->Hardpoints[event.GetRow() - 1].y));
 
-			CurrentSuspension->Hardpoints[event.GetRow() - 1].Y = Converter.ReadDistance(Value);
+			CurrentSuspension->Hardpoints[event.GetRow() - 1].y = Converter.ReadDistance(Value);
 		}
 		else// Z
 		{
@@ -513,9 +513,9 @@ void EDIT_SUSPENSION_PANEL::GridCellChangedEvent(wxGridEvent &event)
 			Parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
 				Parent.GetParent().GetMainFrame().GetActiveIndex(),
 				UNDO_REDO_STACK::OPERATION::DATA_TYPE_DOUBLE,
-				&(CurrentSuspension->Hardpoints[event.GetRow() - 1].Z));
+				&(CurrentSuspension->Hardpoints[event.GetRow() - 1].z));
 
-			CurrentSuspension->Hardpoints[event.GetRow() - 1].Z = Converter.ReadDistance(Value);
+			CurrentSuspension->Hardpoints[event.GetRow() - 1].z = Converter.ReadDistance(Value);
 		}
 
 		// Unlock the car

@@ -46,7 +46,7 @@
 EDIT_ITERATION_OPTIONS_PANEL::EDIT_ITERATION_OPTIONS_PANEL(EDIT_ITERATION_NOTEBOOK &_Parent,
 														   wxWindowID id, const wxPoint& pos,
 														   const wxSize& size, const Debugger &_debugger) :
-														   wxPanel(&_Parent, id, pos, size), Debugger(_debugger),
+														   wxPanel(&_Parent, id, pos, size), debugger(_debugger),
 														   Parent(_Parent)
 {
 	// Initialize the current object variable
@@ -331,7 +331,7 @@ void EDIT_ITERATION_OPTIONS_PANEL::SetAsDefaultClickedEvent(wxCommandEvent& WXUN
 	CurrentIteration->WriteDefaultsToConfig();
 
 	// Display a message to the user so they know the changes took effect
-	Debugger.Print(_T("Current plot settings saved as default"), Debugger::PriorityHigh);
+	debugger.Print(_T("Current plot settings saved as default"), Debugger::PriorityHigh);
 
 	return;
 }

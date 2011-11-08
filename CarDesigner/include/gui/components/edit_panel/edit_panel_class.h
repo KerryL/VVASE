@@ -66,7 +66,7 @@ public:
 
 private:
 	// Debugger message printing utility
-	const Debugger &Debugger;
+	const Debugger &debugger;
 
 	// The parent window
 	MAIN_FRAME &MainFrame;

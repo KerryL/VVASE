@@ -1,6 +1,6 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2011
+                                    DataPlotter
+                           Copyright Kerry R. Loux 2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -8,66 +8,98 @@
 ===================================================================================*/
 
 // File:  plot_renderer_class.h
-// Created:  1/22/2009
+// Created:  5/4/2011
 // Author:  K. Loux
-// Description:  Derived from RENDER_WINDOW, this class is used to display plots on
+// Description:  Derived from RenderWindow, this class is used to display plots on
 //				 the screen.
 // History:
-//	5/23/2009	- Re-wrote to remove VTK dependencies, K. Loux.
-//	11/22/2009	- Moved to vRenderer.lib, K. Loux.
 
 #ifndef _PLOT_RENDERER_CLASS_H_
 #define _PLOT_RENDERER_CLASS_H_
 
-// VVASE headers
+// Local headers
 #include "vRenderer/render_window_class.h"
 
 // wxWidgets forward declarations
 class wxString;
 
-// VVASE forward declarations
+// Local forward declarations
+class Dataset2D;
+class ZoomBox;
+class PlotCursor;
+class PlotObject;
 class Debugger;
-class ITERATION;
-class PLOT_OBJECT;
-class MAIN_FRAME;
-class Primitive;
 
-class PLOT_RENDERER : public RenderWindow
+class PlotRenderer : public RenderWindow
 {
 public:
 	// Constructor
-	PLOT_RENDERER(MAIN_FRAME &_MainFrame, ITERATION &_DataSource, const Debugger &_debugger);
+	PlotRenderer(wxWindow &_parent, wxWindowID id, const Debugger &_debugger);
 
 	// Destructor
-	~PLOT_RENDERER();
+	~PlotRenderer();
 
-	// Returns true if the selected Actor is part of this object's plot
-	bool IsThisPlotSelected(Primitive *PickedActor);
+	// Gets properties for actors
+	bool GetBottomGrid(void) const;
+	bool GetLeftGrid(void) const;
+	bool GetRightGrid(void) const;
 
-	// For writing the rendered image to file
-	void WriteImageFile(wxString PathAndFileName);
+	Color GetGridColor(void) const;
 
-	// Private member accessors
-	inline const ITERATION& GetDataSource(void) { return DataSource; };
+	double GetXMin(void) const;
+	double GetXMax(void) const;
+	double GetLeftYMin(void) const;
+	double GetLeftYMax(void) const;
+	double GetRightYMin(void) const;
+	double GetRightYMax(void) const;
+
+	// Sets properties for actors
+	void SetGridOn(void);
+	void SetGridOff(void);
+	void SetBottomGrid(const bool &grid);
+	void SetLeftGrid(const bool &grid);
+	void SetRightGrid(const bool &grid);
+
+	void SetGridColor(const Color &color);
+
+	void SetCurveProperties(const unsigned int &index, const Color &color,
+		const bool &visible, const bool &rightAxis, const unsigned int &size);
+	void SetXLimits(const double &min, const double &max);
+	void SetLeftYLimits(const double &min, const double &max);
+	void SetRightYLimits(const double &min, const double &max);
+
+	void SetXLabel(wxString text);
+
+	void AddCurve(const Dataset2D &data);
+	void RemoveAllCurves(void);
+	void RemoveCurve(const unsigned int &index);
+
+	void AutoScale(void);
+	void AutoScaleBottom(void);
+	void AutoScaleLeft(void);
+	void AutoScaleRight(void);
+
+	bool GetGridOn(void);
 
 	// Called to update the screen
 	void UpdateDisplay(void);
 
+	bool GetLeftCursorVisible(void) const;
+	bool GetRightCursorVisible(void) const;
+	double GetLeftCursorValue(void) const;
+	double GetRightCursorValue(void) const;
+
+	void UpdateCursors(void);
+
 private:
-	// Debugger printing utility
+	// Debugger message printing utility
 	const Debugger &debugger;
 
-	// Called from the PLOT_RENDERER constructor only in order to initialize the display
+	// Called from the PlotRenderer constructor only in order to initialize the display
 	void CreateActors(void);
 
-	// The data source for this plot
-	ITERATION &DataSource;
-
 	// The actors necessary to create the plot
-	PLOT_OBJECT *Plot;
-
-	// Parent window
-	MAIN_FRAME *MainFrame;
+	PlotObject *plot;
 
 	// Overload of size event
 	void OnSize(wxSizeEvent &event);
@@ -75,6 +107,21 @@ private:
 	// Overload of interaction events
 	void OnMouseWheelEvent(wxMouseEvent &event);
 	void OnMouseMoveEvent(wxMouseEvent &event);
+	void OnRightButtonUpEvent(wxMouseEvent &event);
+	void OnLeftButtonUpEvent(wxMouseEvent &event);
+	void OnLeftButtonDownEvent(wxMouseEvent &event);
+
+	void OnMouseLeaveWindowEvent(wxMouseEvent &event);
+	void OnDoubleClickEvent(wxMouseEvent &event);
+
+	ZoomBox *zoomBox;
+	PlotCursor *leftCursor;
+	PlotCursor *rightCursor;
+
+	bool draggingLeftCursor;
+	bool draggingRightCursor;
+
+	double GetCursorValue(const unsigned int &location);
 
 protected:
 	// For the event table

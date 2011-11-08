@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2011
+                           Copyright Kerry R. Loux 2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -8,12 +8,10 @@
 ===================================================================================*/
 
 // File:  plot_object_class.h
-// Created:  1/22/2009
+// Created:  5/4/2011
 // Author:  K. Loux
 // Description:  Intermediate class for creating plots from arrays of data.
 // History:
-//	5/23/2009	- Re-wrote to remove VTK dependencies, K. Loux.
-//	11/9/2010	- Renamed from PLOT2D, K. Loux.
 
 #ifndef _PLOT_OBJECT_CLASS_H_
 #define _PLOT_OBJECT_CLASS_H_
@@ -21,104 +19,115 @@
 // wxWidgets headers
 #include <wx/wx.h>
 
-// VVASE headers
+// Local headers
 #include "vUtilities/object_list_class.h"
 
-// VVASE forward declarations
+// Local forward declarations
 class PlotRenderer;
 class Axis;
-class TEXT_RENDERING;
-class ITERATION;
+class TextRendering;
 class PlotCurve;
-class Debugger;
+class Dataset2D;
+class Color;
 
 // FTGL forward declarations
 class FTFont;
 
-class PLOT_OBJECT
+class PlotObject
 {
 public:
 	// Constructor
-	PLOT_OBJECT(PLOT_RENDERER &_Renderer, const ITERATION &_DataSource, const Debugger &_debugger);
+	PlotObject(PlotRenderer &_renderer);
 
 	// Destructor
-	~PLOT_OBJECT();
+	~PlotObject();
 
-	// Updates the actor on the screen
+	// Updates the actors on the screen
 	void Update(void);
 
-	// Removes all of the current plot data
 	void RemoveExistingPlots(void);
+	void RemovePlot(const unsigned int &index);
+	void AddCurve(const Dataset2D &data);
 
-	// Accessors for the axes max
-	inline double GetXMin(void) const { return XMin; };
-	inline double GetXMax(void) const { return XMax; };
-	inline double GetYMin(void) const { return YMin; };
-	inline double GetYMax(void) const { return YMax; };
-	inline double GetZMin(void) const { return ZMin; };
-	inline double GetZMax(void) const { return ZMax; };
+	// Accessors for the axes limits
+	inline double GetXMin(void) const { return xMin; };
+	inline double GetXMax(void) const { return xMax; };
+	inline double GetLeftYMin(void) const { return yLeftMin; };
+	inline double GetLeftYMax(void) const { return yLeftMax; };
+	inline double GetRightYMin(void) const { return yRightMin; };
+	inline double GetRightYMax(void) const { return yRightMax; };
 
-	inline double GetXMinOriginal(void) const { return XMinOriginal; };
-	inline double GetXMaxOriginal(void) const { return XMaxOriginal; };
-	inline double GetYMinOriginal(void) const { return YMinOriginal; };
-	inline double GetYMaxOriginal(void) const { return YMaxOriginal; };
-	inline double GetZMinOriginal(void) const { return ZMinOriginal; };
-	inline double GetZMaxOriginal(void) const { return ZMaxOriginal; };
+	inline double GetXMinOriginal(void) const { return xMinOriginal; };
+	inline double GetXMaxOriginal(void) const { return xMaxOriginal; };
+	inline double GetLeftYMinOriginal(void) const { return yLeftMinOriginal; };
+	inline double GetLeftYMaxOriginal(void) const { return yLeftMaxOriginal; };
+	inline double GetRightYMinOriginal(void) const { return yRightMinOriginal; };
+	inline double GetRightYMaxOriginal(void) const { return yRightMaxOriginal; };
 
-	void SetXMin(const double &_XMin);
-	void SetXMax(const double &_XMax);
-	void SetYMin(const double &_YMin);
-	void SetYMax(const double &_YMax);
-	void SetZMin(const double &_ZMin);
-	void SetZMax(const double &_ZMax);
+	void SetXMin(const double &_xMin);
+	void SetXMax(const double &_xMax);
+	void SetLeftYMin(const double &_yMin);
+	void SetLeftYMax(const double &_yMax);
+	void SetRightYMin(const double &_yMin);
+	void SetRightYMax(const double &_yMax);
+
+	void SetCurveProperties(const unsigned int &index, const Color &color,
+		const bool &visible, const bool &rightAxis, const unsigned int &size);
+	void SetGrid(const bool &gridOn);
+	void SetXGrid(const bool &gridOn);
+	void SetLeftYGrid(const bool &gridOn);
+	void SetRightYGrid(const bool &gridOn);
+	void SetXLabel(wxString text);
+
+	void SetGridColor(const Color &color);
+	Color GetGridColor(void) const;
 
 	void ResetAutoScaling(void);
+	void SetAutoScaleBottom(void) { autoScaleX = true; };
+	void SetAutoScaleLeft(void) { autoScaleLeftY = true; };
+	void SetAutoScaleRight(void) { autoScaleRightY = true; };
 
-	// FIXME:  Associate with left/right axis or top/bottom axis (multiple scales for each axis)
+	const Axis* GetXAxis(void) const { return axisBottom; };
+	const Axis* GetLeftYAxis(void) const { return axisLeft; };
+	const Axis* GetRightYAxis(void) const { return axisRight; };
+	bool GetGrid(void);
 
 private:
-	// Debugger printing utility
-	const Debugger &debugger;
-
-	// The associated iteration
-	const ITERATION &DataSource;
-
 	// The renderer object
-	PLOT_RENDERER &Renderer;
+	PlotRenderer &renderer;
 
 	// The actors (the non-plot actors that are always present)
-	AXIS *AxisTop;
-	AXIS *AxisBottom;
-	AXIS *AxisLeft;
-	AXIS *AxisRight;
+	Axis *axisTop;
+	Axis *axisBottom;
+	Axis *axisLeft;
+	Axis *axisRight;
 
-	TEXT_RENDERING *TitleObject;
-	// FIXME:  Add legend
+	TextRendering *titleObject;
 
 	// The font objects
-	FTFont *AxisFont;
-	FTFont *TitleFont;
-
-	// The Z-axis label (including units)
-	wxString ZLabel;
+	FTFont *axisFont;
+	FTFont *titleFont;
 
 	// The minimums and maximums for the axis
-	double XMin, XMax, YMin, YMax, ZMin, ZMax;
-	double XMinOriginal, XMaxOriginal, YMinOriginal, YMaxOriginal, ZMinOriginal, ZMaxOriginal;
+	double xMin, xMax, yLeftMin, yLeftMax, yRightMin, yRightMax;
+	double xMinOriginal, xMaxOriginal, yLeftMinOriginal, yLeftMaxOriginal,
+		yRightMinOriginal, yRightMaxOriginal;
 
 	// Flag to indicate how the limits are set
-	bool AutoScaleX;
-	bool AutoScaleY;
-	bool AutoScaleZ;
+	bool autoScaleX;
+	bool autoScaleLeftY;
+	bool autoScaleRightY;
 
 	// The actual plot objects
-	ObjectList<PlotCurve> PlotList;
+	ObjectList<PlotCurve> plotList;
+	ObjectList<const Dataset2D> dataList;
 
 	// Handles all of the formatting for the plot
 	void FormatPlot(void);
 
 	// Handles the spacing of the axis ticks
-	double AutoScaleAxis(double &Min, double &Max, int MaxTicks, const bool &ForceLimits = false);
+	double AutoScaleAxis(double &min, double &max, int maxTicks,
+		const bool &forceLimits = false);
 };
 
 #endif// _PLOT_OBJECT_CLASS_H_

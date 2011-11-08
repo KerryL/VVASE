@@ -16,6 +16,8 @@
 #ifndef _FILTER_BASE_CLASS_H_
 #define _FILTER_BASE_CLASS_H_
 
+// FIXME:  MSVC generates C4512
+
 class FilterBase
 {
 public:

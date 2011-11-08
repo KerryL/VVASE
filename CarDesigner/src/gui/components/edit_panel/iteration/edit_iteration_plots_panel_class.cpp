@@ -46,7 +46,7 @@
 EDIT_ITERATION_PLOTS_PANEL::EDIT_ITERATION_PLOTS_PANEL(EDIT_ITERATION_NOTEBOOK &_Parent,
 													   wxWindowID id, const wxPoint& pos,
 													   const wxSize& size, const Debugger &_debugger) :
-													   wxPanel(&_Parent, id, pos, size), Debugger(_debugger),
+													   wxPanel(&_Parent, id, pos, size), debugger(_debugger),
 													   Parent(_Parent)
 {
 	// Initialize the current object variable

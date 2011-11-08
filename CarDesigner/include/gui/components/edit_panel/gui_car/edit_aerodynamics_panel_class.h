@@ -34,7 +34,7 @@ public:
 
 private:
 	// Debugger message printing utility
-	const Debugger &Debugger;
+	const Debugger &debugger;
 
 	// Creates the controls and positions everything within the panel
 	void CreateControls(void);

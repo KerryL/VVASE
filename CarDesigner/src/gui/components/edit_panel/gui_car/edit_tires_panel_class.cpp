@@ -50,7 +50,7 @@ EDIT_TIRES_PANEL::EDIT_TIRES_PANEL(EDIT_PANEL &_Parent, wxWindowID id,
 								   const wxPoint& pos, const wxSize& size,
 								   const Debugger &_debugger)
 								   : wxPanel(&_Parent, id, pos, size),
-								   Debugger(_debugger),
+								   debugger(_debugger),
 								   Converter(_Parent.GetMainFrame().GetConverter()),
 								   Parent(_Parent)
 										   
@@ -151,17 +151,17 @@ void EDIT_TIRES_PANEL::UpdateInformation(TIRE_SET *_CurrentTireSet)
 		CurrentTireSet->LeftRear->Width)));
 
 	// And their units
-	RightFrontDiameterUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UNIT_TYPE_DISTANCE));
-	RightFrontWidthUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UNIT_TYPE_DISTANCE));
+	RightFrontDiameterUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UnitTypeDistance));
+	RightFrontWidthUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UnitTypeDistance));
 
-	LeftFrontDiameterUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UNIT_TYPE_DISTANCE));
-	LeftFrontWidthUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UNIT_TYPE_DISTANCE));
+	LeftFrontDiameterUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UnitTypeDistance));
+	LeftFrontWidthUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UnitTypeDistance));
 
-	RightRearDiameterUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UNIT_TYPE_DISTANCE));
-	RightRearWidthUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UNIT_TYPE_DISTANCE));
+	RightRearDiameterUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UnitTypeDistance));
+	RightRearWidthUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UnitTypeDistance));
 
-	LeftRearDiameterUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UNIT_TYPE_DISTANCE));
-	LeftRearWidthUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UNIT_TYPE_DISTANCE));
+	LeftRearDiameterUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UnitTypeDistance));
+	LeftRearWidthUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UnitTypeDistance));
 
 	return;
 }

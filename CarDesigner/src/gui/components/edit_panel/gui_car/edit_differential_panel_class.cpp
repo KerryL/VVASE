@@ -47,7 +47,7 @@
 EDIT_DIFFERENTIAL_PANEL::EDIT_DIFFERENTIAL_PANEL(EDIT_PANEL* _Parent, wxWindowID id,
 										   const wxPoint& pos, const wxSize& size,
 										   const Debugger &_debugger) : wxPanel(_Parent, id,
-										   pos, size), Debugger(_debugger)
+										   pos, size), debugger(_debugger)
 {
 }
 

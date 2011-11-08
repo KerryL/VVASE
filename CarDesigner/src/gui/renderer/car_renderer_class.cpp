@@ -76,9 +76,9 @@
 //
 //==========================================================================
 CAR_RENDERER::CAR_RENDERER(MAIN_FRAME &_MainFrame, GUI_CAR &_Car, const Debugger &_debugger)
-						   : RENDER_WINDOW(_MainFrame, wxID_ANY, wxDefaultPosition,
+						   : RenderWindow(_MainFrame, wxID_ANY, wxDefaultPosition,
 						   wxDefaultSize, wxWANTS_CHARS | wxNO_FULL_REPAINT_ON_RESIZE),
-						   Debugger(_debugger), MainFrame(_MainFrame),
+						   debugger(_debugger), MainFrame(_MainFrame),
 						   AppearanceOptions(_Car.GetAppearanceOptions()),
 						   DisplayCar(_Car.GetWorkingCar()), ReferenceCar(_Car.GetOriginalCar())
 {
@@ -93,7 +93,7 @@ CAR_RENDERER::CAR_RENDERER(MAIN_FRAME &_MainFrame, GUI_CAR &_Car, const Debugger
 
 	// Set the camera view so that the car is visible
 	Vector Position(-100.0, -100.0, 60.0), Up(0.0, 0.0, 1.0);
-	Vector LookAt(ReferenceCar.Suspension->LeftRear.Hardpoints[CORNER::ContactPatch].X / 2.0, 0.0, 0.0);// FIXME:  This could be better
+	Vector LookAt(ReferenceCar.Suspension->LeftRear.Hardpoints[CORNER::ContactPatch].x / 2.0, 0.0, 0.0);// FIXME:  This could be better
 	SetCameraView(Position, LookAt, Up);
 }
 
@@ -116,7 +116,7 @@ CAR_RENDERER::CAR_RENDERER(MAIN_FRAME &_MainFrame, GUI_CAR &_Car, const Debugger
 CAR_RENDERER::~CAR_RENDERER()
 {
 	// Ideally, this stuff would be taken care of by adding these to some
-	// MANAGED_LIST, but for now we explicitly delete them one by one...
+	// ManagedList, but for now we explicitly delete them one by one...
 	delete Origin;
 	delete GroundPlane;
 
@@ -268,21 +268,21 @@ void CAR_RENDERER::UpdateCarDisplay(void)
 
 	// Figure out how big the ground plane should be
 	double GroundPlaneScaleUp = 1.1;
-	double RightMostPoint = max(ReferenceCar.Suspension->RightFront.Hardpoints[CORNER::ContactPatch].Y +
+	double RightMostPoint = max(ReferenceCar.Suspension->RightFront.Hardpoints[CORNER::ContactPatch].y +
 		ReferenceCar.Tires->RightFront->Width / 2.0,
-		ReferenceCar.Suspension->RightRear.Hardpoints[CORNER::ContactPatch].Y +
+		ReferenceCar.Suspension->RightRear.Hardpoints[CORNER::ContactPatch].y +
 		ReferenceCar.Tires->RightRear->Width / 2.0);
-	double LeftMostPoint = min(ReferenceCar.Suspension->LeftFront.Hardpoints[CORNER::ContactPatch].Y -
+	double LeftMostPoint = min(ReferenceCar.Suspension->LeftFront.Hardpoints[CORNER::ContactPatch].y -
 		ReferenceCar.Tires->LeftFront->Width / 2.0,
-		ReferenceCar.Suspension->LeftRear.Hardpoints[CORNER::ContactPatch].Y -
+		ReferenceCar.Suspension->LeftRear.Hardpoints[CORNER::ContactPatch].y -
 		ReferenceCar.Tires->LeftRear->Width / 2.0);
-	double FrontMostPoint = min(ReferenceCar.Suspension->RightFront.Hardpoints[CORNER::ContactPatch].X -
+	double FrontMostPoint = min(ReferenceCar.Suspension->RightFront.Hardpoints[CORNER::ContactPatch].x -
 		ReferenceCar.Tires->RightFront->Diameter / 2.0,
-		ReferenceCar.Suspension->LeftFront.Hardpoints[CORNER::ContactPatch].X -
+		ReferenceCar.Suspension->LeftFront.Hardpoints[CORNER::ContactPatch].x -
 		ReferenceCar.Tires->LeftFront->Diameter / 2.0);
-	double RearMostPoint = max(ReferenceCar.Suspension->RightRear.Hardpoints[CORNER::ContactPatch].X +
+	double RearMostPoint = max(ReferenceCar.Suspension->RightRear.Hardpoints[CORNER::ContactPatch].x +
 		ReferenceCar.Tires->RightRear->Diameter / 2.0,
-		ReferenceCar.Suspension->LeftRear.Hardpoints[CORNER::ContactPatch].X +
+		ReferenceCar.Suspension->LeftRear.Hardpoints[CORNER::ContactPatch].x +
 		ReferenceCar.Tires->LeftRear->Diameter / 2.0);
 
 	double XLength = fabs(FrontMostPoint - RearMostPoint) * GroundPlaneScaleUp;

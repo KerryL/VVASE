@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2011
+                           Copyright Kerry R. Loux 2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -8,35 +8,33 @@
 ===================================================================================*/
 
 // File:  plot_renderer_class.cpp
-// Created:  1/22/2009
+// Created:  5/4/2011
 // Author:  K. Loux
-// Description:  Derived from RENDER_WINDOW, this class is used to display plots on
+// Description:  Derived from RenderWindow, this class is used to display plots on
 //				 the screen.
 // History:
-//	5/23/2009	- Re-wrote to remove VTK dependencies, K. Loux.
-//	11/22/2009	- Moved to vRenderer.lib, K. Loux.
 
 // wxWidgets headers
 #include <wx/wx.h>
 
-// VVASE headers
+// Local headers
 #include "gui/renderer/plot_renderer_class.h"
-#include "vUtilities/debug_class.h"
 #include "gui/plot_object_class.h"
-#include "gui/gui_object_class.h"
-#include "gui/iteration_class.h"
 #include "gui/components/main_frame_class.h"
+#include "vRenderer/primitives/zoom_box_class.h"
+#include "vRenderer/primitives/cursor_class.h"
+#include "vRenderer/primitives/axis.h"
 
 //==========================================================================
-// Class:			PLOT_RENDERER
-// Function:		PLOT_RENDERER
+// Class:			PlotRenderer
+// Function:		PlotRenderer
 //
-// Description:		Constructor for PLOT_RENDERER class.
+// Description:		Constructor for PlotRenderer class.
 //
 // Input Arguments:
-//		_MainFrame	= MAIN_FRAME& reference to this object's parent window
-//		_DataSource	= ITERATION& reference to the source of data for this plot
-//		_debugger	= const Debugger& reference to the debug printing utility object
+//		_parent		= wxWindow& reference to this object's parent window
+//		id			= wxWindowID
+//		_debugger	= const Debugger&
 //
 // Output Arguments:
 //		None
@@ -45,23 +43,25 @@
 //		None
 //
 //==========================================================================
-PLOT_RENDERER::PLOT_RENDERER(MAIN_FRAME &_MainFrame, ITERATION &_DataSource,
-							 const Debugger &_debugger)
-							 : RENDER_WINDOW(_MainFrame, wxID_ANY, wxDefaultPosition,
-							 wxDefaultSize), Debugger(_debugger), DataSource(_DataSource)
+PlotRenderer::PlotRenderer(wxWindow &_parent, wxWindowID id, const Debugger &_debugger)
+							 : RenderWindow(_parent, id, wxDefaultPosition,
+							 wxDefaultSize), debugger(_debugger)
 {
 	// Create the actors
 	CreateActors();
 
 	// Set this to a 2D view by default
 	SetView3D(false);
+
+	draggingLeftCursor = false;
+	draggingRightCursor = false;
 }
 
 //==========================================================================
-// Class:			PLOT_RENDERER
-// Function:		~PLOT_RENDERER
+// Class:			PlotRenderer
+// Function:		~PlotRenderer
 //
-// Description:		Destructor for PLOT_RENDERER class.
+// Description:		Destructor for PlotRenderer class.
 //
 // Input Arguments:
 //		None
@@ -73,18 +73,18 @@ PLOT_RENDERER::PLOT_RENDERER(MAIN_FRAME &_MainFrame, ITERATION &_DataSource,
 //		None
 //
 //==========================================================================
-PLOT_RENDERER::~PLOT_RENDERER()
+PlotRenderer::~PlotRenderer()
 {
 	// Delete the plot object
-	delete Plot;
-	Plot = NULL;
+	delete plot;
+	plot = NULL;
 }
 
 //==========================================================================
-// Class:			PLOT_RENDERER
+// Class:			PlotRenderer
 // Function:		Event Tables
 //
-// Description:		Event table for the PLOT_RENDERER class.
+// Description:		Event table for the PlotRenderer class.
 //
 // Input Arguments:
 //		None
@@ -96,16 +96,24 @@ PLOT_RENDERER::~PLOT_RENDERER()
 //		None
 //
 //==========================================================================
-BEGIN_EVENT_TABLE(PLOT_RENDERER, RENDER_WINDOW)
-	EVT_SIZE(PLOT_RENDERER::OnSize)
+BEGIN_EVENT_TABLE(PlotRenderer, RenderWindow)
+	EVT_SIZE(PlotRenderer::OnSize)
 
 	// Interaction events
-	EVT_MOUSEWHEEL(			PLOT_RENDERER::OnMouseWheelEvent)
-	EVT_MOTION(				PLOT_RENDERER::OnMouseMoveEvent)
+	EVT_MOUSEWHEEL(		PlotRenderer::OnMouseWheelEvent)
+	EVT_MOTION(			PlotRenderer::OnMouseMoveEvent)
+
+	EVT_LEAVE_WINDOW(	PlotRenderer::OnMouseLeaveWindowEvent)
+
+	// Click events
+	EVT_LEFT_DCLICK(	PlotRenderer::OnDoubleClickEvent)
+	EVT_RIGHT_UP(		PlotRenderer::OnRightButtonUpEvent)
+	EVT_LEFT_UP(		PlotRenderer::OnLeftButtonUpEvent)
+	EVT_LEFT_DOWN(		PlotRenderer::OnLeftButtonDownEvent)
 END_EVENT_TABLE()
 
 //==========================================================================
-// Class:			PLOT_RENDERER
+// Class:			PlotRenderer
 // Function:		UpdateDisplay
 //
 // Description:		Updates the displayed plots to match the current data.
@@ -120,12 +128,11 @@ END_EVENT_TABLE()
 //		None
 //
 //==========================================================================
-void PLOT_RENDERER::UpdateDisplay(void)
+void PlotRenderer::UpdateDisplay(void)
 {
 	// Update the plot
-	Plot->Update();
+	plot->Update();
 
-	// Re-draw the image
 	Render();
 
 	return;
@@ -147,16 +154,21 @@ void PLOT_RENDERER::UpdateDisplay(void)
 //		None
 //
 //==========================================================================
-void PLOT_RENDERER::CreateActors(void)
+void PlotRenderer::CreateActors(void)
 {
-	// Create actors
-	Plot = new PLOT_OBJECT(*this, DataSource, Debugger);
+	// Create plot area
+	plot = new PlotObject(*this);
+
+	// Also create the zoom box and cursors, even though they aren't drawn yet
+	zoomBox = new ZoomBox(*this);
+	leftCursor = new PlotCursor(*this, *plot->GetXAxis());
+	rightCursor = new PlotCursor(*this, *plot->GetXAxis());
 
 	return;
 }
 
 //==========================================================================
-// Class:			PLOT_RENDERER
+// Class:			PlotRenderer
 // Function:		OnSize
 //
 // Description:		Handles EVT_SIZE events for this class.  Required to make
@@ -172,11 +184,16 @@ void PLOT_RENDERER::CreateActors(void)
 //		None
 //
 //==========================================================================
-void PLOT_RENDERER::OnSize(wxSizeEvent &event)
+void PlotRenderer::OnSize(wxSizeEvent &event)
 {
+	// If the cursors are visible, set them visible again so they get updated
+	if (leftCursor->GetIsVisible())
+		leftCursor->SetVisibility(true);
+	if (rightCursor->GetIsVisible())
+		rightCursor->SetVisibility(true);
+
 	// If the object exists, update the display
-	if (DataSource.IsInitialized())
-		UpdateDisplay();
+	UpdateDisplay();
 
 	// Skip this event so the base class OnSize event fires, too
 	event.Skip();
@@ -185,7 +202,7 @@ void PLOT_RENDERER::OnSize(wxSizeEvent &event)
 }
 
 //==========================================================================
-// Class:			PLOT_RENDERER
+// Class:			PlotRenderer
 // Function:		OnMouseWheelEvent
 //
 // Description:		Event handler for the mouse wheel event.
@@ -200,46 +217,49 @@ void PLOT_RENDERER::OnSize(wxSizeEvent &event)
 //		None
 //
 //==========================================================================
-void PLOT_RENDERER::OnMouseWheelEvent(wxMouseEvent &event)
+void PlotRenderer::OnMouseWheelEvent(wxMouseEvent &event)
 {
 	// If we are a 3D plot, let the default event handlers do their job
-	if (View3D)
+	if (view3D)
 	{
 		event.Skip();
 		return;
 	}
 
 	// ZOOM in or out
-	double ZoomScaleX = 0.05;// [% of current scale]
-	double ZoomScaleZ = 0.05;// [% of current scale]
+	double zoomScaleX = 0.05;// [% of current scale]
+	double zoomScaleY = 0.05;// [% of current scale]
 
 	// If the CTRL key is down (and not SHIFT), only scale the X-axis
 	if (event.ControlDown() && !event.ShiftDown())
-		ZoomScaleZ = 0.0;
+		zoomScaleY = 0.0;
 
-	// If the SHIFT key is down (and not CTRL), only scale the Z-axis
+	// If the SHIFT key is down (and not CTRL), only scale the Y-axis
 	else if (event.ShiftDown() && !event.ControlDown())
-		ZoomScaleX = 0.0;
+		zoomScaleX = 0.0;
 
 	// Otherwise, scale both axes
 	// FIXME:  Focus the zooming around the cursor
 	// Adjust the axis limits
-	double XDelta = (Plot->GetXMax() - Plot->GetXMin()) * ZoomScaleX * event.GetWheelRotation() / 120.0;
-	double ZDelta = (Plot->GetZMax() - Plot->GetZMin()) * ZoomScaleZ * event.GetWheelRotation() / 120.0;
+	double xDelta = (plot->GetXMax() - plot->GetXMin()) * zoomScaleX * event.GetWheelRotation() / 120.0;
+	double yLeftDelta = (plot->GetLeftYMax() - plot->GetLeftYMin()) * zoomScaleY * event.GetWheelRotation() / 120.0;
+	double yRightDelta = (plot->GetLeftYMax() - plot->GetLeftYMin()) * zoomScaleY * event.GetWheelRotation() / 120.0;
 
-	Plot->SetXMin(Plot->GetXMin() + XDelta);
-	Plot->SetXMax(Plot->GetXMax() - XDelta);
-	Plot->SetZMin(Plot->GetZMin() + ZDelta);
-	Plot->SetZMax(Plot->GetZMax() - ZDelta);
+	plot->SetXMin(plot->GetXMin() + xDelta);
+	plot->SetXMax(plot->GetXMax() - xDelta);
+	plot->SetLeftYMin(plot->GetLeftYMin() + yLeftDelta);
+	plot->SetLeftYMax(plot->GetLeftYMax() - yLeftDelta);
+	plot->SetRightYMin(plot->GetRightYMin() + yRightDelta);
+	plot->SetRightYMax(plot->GetRightYMax() - yRightDelta);
 
 	// Update the plot display
-	Plot->Update();
+	UpdateDisplay();
 
 	return;
 }
 
 //==========================================================================
-// Class:			PLOT_RENDERER
+// Class:			PlotRenderer
 // Function:		OnMouseMoveEvent
 //
 // Description:		Event handler for the mouse move event.  Only used to
@@ -256,10 +276,10 @@ void PLOT_RENDERER::OnMouseWheelEvent(wxMouseEvent &event)
 //		None
 //
 //==========================================================================
-void PLOT_RENDERER::OnMouseMoveEvent(wxMouseEvent &event)
+void PlotRenderer::OnMouseMoveEvent(wxMouseEvent &event)
 {
 	// If we are a 3D plot, let the default event handlers do their job
-	if (View3D)
+	if (view3D)
 	{
 		event.Skip();
 		return;
@@ -272,52 +292,91 @@ void PLOT_RENDERER::OnMouseMoveEvent(wxMouseEvent &event)
 		return;
 	}
 
-	// ZOOM:  Left mouse button + Ctrl OR Left mouse button + Alt OR Middle mouse button
-	if ((event.LeftIsDown() && event.ShiftDown()) || event.RightIsDown())
+	// Are we moving cursors?
+	if (draggingLeftCursor)
+		leftCursor->SetValue(GetCursorValue(event.GetX()));
+	else if (draggingRightCursor)
+		rightCursor->SetValue(GetCursorValue(event.GetX()));
+	// ZOOM:  Left or Right mouse button + CTRL or SHIFT
+	else if ((event.ControlDown() || event.ShiftDown()) && (event.RightIsDown() || event.LeftIsDown()))
 	{
+		// CTRL for Left Y-zoom
+		// SHIFT for Right Y-zoom
+
 		// ZOOM in or out
-		double ZoomScale = 0.001 * (event.GetX() - LastMousePosition[0] + event.GetY() - LastMousePosition[1]);// [% of current scale]
+		double zoomXScale = 0.005 * (event.GetX() - lastMousePosition[0]);// [% of current scale]
+		double zoomYScale = 0.005 * (event.GetY() - lastMousePosition[1]);// [% of current scale]
 
 		// FIXME:  Focus the zooming around the cursor
 		// Adjust the axis limits
-		double XDelta = (Plot->GetXMax() - Plot->GetXMin()) * ZoomScale;
-		double ZDelta = (Plot->GetZMax() - Plot->GetZMin()) * ZoomScale;
+		double xDelta = (plot->GetXMax() - plot->GetXMin()) * zoomXScale;
+		double yLeftDelta = (plot->GetLeftYMax() - plot->GetLeftYMin()) * zoomYScale * (int)event.ControlDown();
+		double yRightDelta = (plot->GetRightYMax() - plot->GetRightYMin()) * zoomYScale * (int)event.ShiftDown();
 
-		Plot->SetXMin(Plot->GetXMin() + XDelta);
-		Plot->SetXMax(Plot->GetXMax() - XDelta);
-		Plot->SetZMin(Plot->GetZMin() + ZDelta);
-		Plot->SetZMax(Plot->GetZMax() - ZDelta);
+		// Left mouse button fixes left and bottom corner, right button fixes right and top corner
+		if (event.LeftIsDown())
+		{
+			plot->SetXMax(plot->GetXMax() - xDelta);
+			plot->SetLeftYMax(plot->GetLeftYMax() + yLeftDelta);
+			plot->SetRightYMax(plot->GetRightYMax() + yRightDelta);
+		}
+		else
+		{
+			plot->SetXMin(plot->GetXMin() - xDelta);
+			plot->SetLeftYMin(plot->GetLeftYMin() + yLeftDelta);
+			plot->SetRightYMin(plot->GetRightYMin() + yRightDelta);
+		}
 	}
+	// ZOOM WITH BOX: Right mouse button
+	else if (event.RightIsDown())
+	{
+		// If we're not already visible, set the anchor and make us visible
+		if (!zoomBox->GetIsVisible())
+		{
+			zoomBox->SetVisibility(true);
+			zoomBox->SetAnchorCorner(lastMousePosition[0], GetSize().GetHeight() - lastMousePosition[1]);
+		}
 
+		// Make sure we're still over the plot area
+		unsigned int xFloat = event.GetX();
+		unsigned int yFloat = GetSize().GetHeight() - event.GetY();
+		// FIXME:  Limit zoom box to plot area
+
+		zoomBox->SetFloatingCorner(xFloat, yFloat);
+	}
 	// PAN:  Left mouse button (includes with any buttons not caught above)
 	else if (event.LeftIsDown())
 	{
 		// Determine size of plot within window and scale actions according to the scale of the plot window
-		// FIXME:  75 is a magic number from the AXIS class for OffsetFromWindowEdge
-		int Height = GetSize().GetHeight() - 2 * 75;
-		int Width = GetSize().GetWidth() - 2 * 75;
+		int height = GetSize().GetHeight() - 2 * Axis::GetOffsetFromWindowEdge();
+		int width = GetSize().GetWidth() - 2 * Axis::GetOffsetFromWindowEdge();
 
-		// FIXME:  Focus the zooming around the cursor
 		// Adjust the axis limits
-		double XDelta = (Plot->GetXMax() - Plot->GetXMin()) * (event.GetX() - LastMousePosition[0]) / Width;
-		double ZDelta = (Plot->GetZMax() - Plot->GetZMin()) * (event.GetY() - LastMousePosition[1]) / Height;
+		double xDelta = (plot->GetXMax() - plot->GetXMin()) * (event.GetX() - lastMousePosition[0]) / width;
+		double yLeftDelta = (plot->GetLeftYMax() - plot->GetLeftYMin()) * (event.GetY() - lastMousePosition[1]) / height;
+		double yRightDelta = (plot->GetRightYMax() - plot->GetRightYMin()) * (event.GetY() - lastMousePosition[1]) / height;
 
 		// Adjust the deltas so we can't zoom by scrolling (could occur if only one side was against a limit)
-		if (Plot->GetXMin() - XDelta < Plot->GetXMinOriginal())
-			XDelta = Plot->GetXMin() - Plot->GetXMinOriginal();
-		if (Plot->GetXMax() - XDelta > Plot->GetXMaxOriginal())
-			XDelta = Plot->GetXMax() - Plot->GetXMaxOriginal();
-		if (Plot->GetZMin() + ZDelta < Plot->GetZMinOriginal())
-			ZDelta = Plot->GetZMinOriginal() - Plot->GetZMin();
-		if (Plot->GetZMax() + ZDelta > Plot->GetZMaxOriginal())
-			ZDelta = Plot->GetZMaxOriginal() - Plot->GetZMax();
+		/*if (plot->GetXMin() - xDelta < plot->GetXMinOriginal())
+			xDelta = plot->GetXMin() - plot->GetXMinOriginal();
+		if (plot->GetXMax() - xDelta > plot->GetXMaxOriginal())
+			xDelta = plot->GetXMax() - plot->GetXMaxOriginal();
+		if (plot->GetLeftYMin() + yLeftDelta < plot->GetLeftYMinOriginal())
+			yLeftDelta = plot->GetLeftYMinOriginal() - plot->GetLeftYMin();
+		if (plot->GetLeftYMax() + yLeftDelta > plot->GetLeftYMaxOriginal())
+			yLeftDelta = plot->GetLeftYMaxOriginal() - plot->GetLeftYMax();
+		if (plot->GetRightYMin() + yRightDelta < plot->GetRightYMinOriginal())
+			yRightDelta = plot->GetRightYMinOriginal() - plot->GetRightYMin();
+		if (plot->GetRightYMax() + yRightDelta > plot->GetRightYMaxOriginal())
+			yRightDelta = plot->GetRightYMaxOriginal() - plot->GetRightYMax();*/
 
-		Plot->SetXMin(Plot->GetXMin() - XDelta);
-		Plot->SetXMax(Plot->GetXMax() - XDelta);
-		Plot->SetZMin(Plot->GetZMin() + ZDelta);
-		Plot->SetZMax(Plot->GetZMax() + ZDelta);
+		plot->SetXMin(plot->GetXMin() - xDelta);
+		plot->SetXMax(plot->GetXMax() - xDelta);
+		plot->SetLeftYMin(plot->GetLeftYMin() + yLeftDelta);
+		plot->SetLeftYMax(plot->GetLeftYMax() + yLeftDelta);
+		plot->SetRightYMin(plot->GetRightYMin() + yRightDelta);
+		plot->SetRightYMax(plot->GetRightYMax() + yRightDelta);
 	}
-
 	else// Not recognized
 	{
 		StoreMousePosition(event);
@@ -328,7 +387,1121 @@ void PLOT_RENDERER::OnMouseMoveEvent(wxMouseEvent &event)
 	StoreMousePosition(event);
 
 	// Update the display
-	Plot->Update();
+	UpdateDisplay();
 
 	return;
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		OnRightButtonUpEvent
+//
+// Description:		Handles end of zoom-by-box events.
+//
+// Input Arguments:
+//		event	= wxMouseEvent&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotRenderer::OnRightButtonUpEvent(wxMouseEvent &event)
+{
+	// If the zoom box is not visible, process this like a right click event
+	/*if (!zoomBox->GetIsVisible())// FIXME:  Make this work again!
+	{
+		// Determine the context
+		MainFrame::PlotContext context;
+		unsigned int x = event.GetX();
+		unsigned int y = event.GetY();
+		if (x < Axis::GetOffsetFromWindowEdge() &&
+			y > Axis::GetOffsetFromWindowEdge() &&
+			y < GetSize().GetHeight() - Axis::GetOffsetFromWindowEdge())
+			context = MainFrame::plotContextLeftYAxis;
+		else if (x > GetSize().GetWidth() - Axis::GetOffsetFromWindowEdge() &&
+			y > Axis::GetOffsetFromWindowEdge() &&
+			y < GetSize().GetHeight() - Axis::GetOffsetFromWindowEdge())
+			context = MainFrame::plotContextRightYAxis;
+		else if (y > GetSize().GetHeight() - Axis::GetOffsetFromWindowEdge() &&
+			x > Axis::GetOffsetFromWindowEdge() &&
+			x < GetSize().GetWidth() - Axis::GetOffsetFromWindowEdge())
+			context = MainFrame::plotContextXAxis;
+		else
+			context = MainFrame::plotContextPlotArea;
+
+		// Display the context menu (further events handled by MainFrame)
+		mainFrame.CreatePlotContextMenu(GetPosition() + event.GetPosition(), context);
+
+		return;
+	}
+
+	// Hide the zoom box
+	zoomBox->SetVisibility(false);
+
+	// Make sure the box isn't too small
+	int limit = 5;// [pixels]
+	if (abs(int(zoomBox->GetXAnchor() - zoomBox->GetXFloat())) > limit &&
+		abs(int(zoomBox->GetYAnchor() - zoomBox->GetYFloat())) > limit)
+	{
+		// Determine the new zoom range by interpolation
+		int offsetFromWindowEdge = 75;// [pixels]
+		int xCoordLeft = offsetFromWindowEdge;
+		int xCoordRight = GetSize().GetWidth() - offsetFromWindowEdge;
+		int yCoordBottom = offsetFromWindowEdge;
+		int yCoordTop = GetSize().GetHeight() - offsetFromWindowEdge;
+
+		int leftX;
+		int rightX;
+		int bottomY;
+		int topY;
+		if (zoomBox->GetXAnchor() > zoomBox->GetXFloat())
+		{
+			leftX = zoomBox->GetXFloat();
+			rightX = zoomBox->GetXAnchor();
+		}
+		else
+		{
+			leftX = zoomBox->GetXAnchor();
+			rightX = zoomBox->GetXFloat();
+		}
+
+		if (zoomBox->GetYAnchor() > zoomBox->GetYFloat())
+		{
+			bottomY = zoomBox->GetYFloat();
+			topY = zoomBox->GetYAnchor();
+		}
+		else
+		{
+			bottomY = zoomBox->GetYAnchor();
+			topY = zoomBox->GetYFloat();
+		}
+
+		// Do the interpolation
+		double xMin = plot->GetXMin()
+			+ double(leftX - xCoordLeft) / double(xCoordRight - xCoordLeft)
+			* (plot->GetXMax() - plot->GetXMin());
+		double xMax = plot->GetXMin()
+			+ double(rightX - xCoordLeft) / double(xCoordRight - xCoordLeft)
+			* (plot->GetXMax() - plot->GetXMin());
+		double yLeftMin = plot->GetLeftYMin()
+			+ double(bottomY - yCoordBottom) / double(yCoordTop - yCoordBottom)
+			* (plot->GetLeftYMax() - plot->GetLeftYMin());
+		double yLeftMax = plot->GetLeftYMin()
+			+ double(topY - yCoordBottom) / double(yCoordTop - yCoordBottom)
+			* (plot->GetLeftYMax() - plot->GetLeftYMin());
+		double yRightMin = plot->GetRightYMin()
+			+ double(bottomY - yCoordBottom) / double(yCoordTop - yCoordBottom)
+			* (plot->GetRightYMax() - plot->GetRightYMin());
+		double yRightMax = plot->GetRightYMin()
+			+ double(topY - yCoordBottom) / double(yCoordTop - yCoordBottom)
+			* (plot->GetRightYMax() - plot->GetRightYMin());
+
+		// Assign the results
+		SetXLimits(xMin, xMax);
+		SetLeftYLimits(yLeftMin, yLeftMax);
+		SetRightYLimits(yRightMin, yRightMax);
+	}
+
+	UpdateDisplay();*/
+
+	return;
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		GetGridOn
+//
+// Description:		Returns status of the grid lines.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		bool, true for visible, false for hidden
+//
+//==========================================================================
+bool PlotRenderer::GetGridOn(void)
+{
+	return plot->GetGrid();
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		SetGridOn
+//
+// Description:		Turns on plot grid.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotRenderer::SetGridOn()
+{
+	plot->SetGrid(true);
+	UpdateDisplay();
+
+	return;
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		SetGridOn
+//
+// Description:		Turns off plot grid.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotRenderer::SetGridOff()
+{
+	plot->SetGrid(false);
+	UpdateDisplay();
+
+	return;
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		GetBottomGrid
+//
+// Description:		Returns the status of the bottom grid.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		bool indicating status of bottom grid
+//
+//==========================================================================
+bool PlotRenderer::GetBottomGrid(void) const
+{
+	return plot->GetXAxis()->GetGrid();
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		GetLeftGrid
+//
+// Description:		Returns the status of the left grid.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		bool indicating status of left grid
+//
+//==========================================================================
+bool PlotRenderer::GetLeftGrid(void) const
+{
+	return plot->GetLeftYAxis()->GetGrid();
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		GetRightGrid
+//
+// Description:		Returns the status of the right grid.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		bool indicating status of right grid
+//
+//==========================================================================
+bool PlotRenderer::GetRightGrid(void) const
+{
+	return plot->GetRightYAxis()->GetGrid();
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		SetBottomGrid
+//
+// Description:		Sets the status of the bottom axis' grid.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotRenderer::SetBottomGrid(const bool &grid)
+{
+	plot->SetXGrid(grid);
+
+	UpdateDisplay();
+
+	return;
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		SetLeftGrid
+//
+// Description:		Sets the status of the left axis' grid.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotRenderer::SetLeftGrid(const bool &grid)
+{
+	plot->SetLeftYGrid(grid);
+
+	UpdateDisplay();
+
+	return;
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		SetRightGrid
+//
+// Description:		Sets the status of the right axis' grid.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotRenderer::SetRightGrid(const bool &grid)
+{
+	plot->SetRightYGrid(grid);
+
+	UpdateDisplay();
+
+	return;
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		SetCurveProperties
+//
+// Description:		Sets properties for the specified curve object.
+//
+// Input Arguments:
+//		index		= const unsigned int& specifying the curve
+//		color		= const Color& of the curve
+//		visible		= const bool& indiciating whether or not the curve is to
+//					  be drawn
+//		rightAxis	= const bool& indicating whether the curve should be tied
+//					  to the left or right axis
+//		size		= const unsigned int&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotRenderer::SetCurveProperties(const unsigned int &index, const Color &color,
+									  const bool &visible, const bool &rightAxis,
+									  const unsigned int &size)
+{
+	plot->SetCurveProperties(index, color, visible, rightAxis, size);
+	UpdateDisplay();
+
+	return;
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		SetXLimits
+//
+// Description:		Sets the axis limits for the X axis.
+//
+// Input Arguments:
+//		min	= const double&
+//		max = const double&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotRenderer::SetXLimits(const double &min, const double &max)
+{
+	if (max > min)
+	{
+		plot->SetXMax(max);
+		plot->SetXMin(min);
+	}
+	else
+	{
+		plot->SetXMax(min);
+		plot->SetXMin(max);
+	}
+
+	UpdateDisplay();
+
+	return;
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		SetLeftYLimits
+//
+// Description:		Sets the axis limits for the left Y axis.
+//
+// Input Arguments:
+//		min	= const double&
+//		max = const double&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotRenderer::SetLeftYLimits(const double &min, const double &max)
+{
+	if (max > min)
+	{
+		plot->SetLeftYMax(max);
+		plot->SetLeftYMin(min);
+	}
+	else
+	{
+		plot->SetLeftYMax(min);
+		plot->SetLeftYMin(max);
+	}
+
+	UpdateDisplay();
+
+	return;
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		SetRightYLimits
+//
+// Description:		Sets the axis limits for the right Y axis.
+//
+// Input Arguments:
+//		min	= const double&
+//		max = const double&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotRenderer::SetRightYLimits(const double &min, const double &max)
+{
+	if (max > min)
+	{
+		plot->SetRightYMax(max);
+		plot->SetRightYMin(min);
+	}
+	else
+	{
+		plot->SetRightYMax(min);
+		plot->SetRightYMin(max);
+	}
+
+	UpdateDisplay();
+
+	return;
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		AddCurve
+//
+// Description:		Sets properties for the specified curve object.
+//
+// Input Arguments:
+//		data	= const Dataset2D& to be plotted
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotRenderer::AddCurve(const Dataset2D &data)
+{
+	plot->AddCurve(data);
+
+	return;
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		RemoveAllCurves
+//
+// Description:		Removes all curves from the plot.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotRenderer::RemoveAllCurves()
+{
+	plot->RemoveExistingPlots();
+
+	return;
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		RemoveCurve
+//
+// Description:		Removes all curves from the plot.
+//
+// Input Arguments:
+//		index	= const unsigned int& specifying the curve to be removed
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotRenderer::RemoveCurve(const unsigned int& index)
+{
+	plot->RemovePlot(index);
+
+	return;
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		AutoScale
+//
+// Description:		Enables auto-scaling of the axes.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotRenderer::AutoScale()
+{
+	plot->ResetAutoScaling();
+
+	UpdateDisplay();
+
+	return;
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		AutoScaleBottom
+//
+// Description:		Enables auto-scaling of the bottom axis.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotRenderer::AutoScaleBottom()
+{
+	plot->SetAutoScaleBottom();
+
+	UpdateDisplay();
+
+	return;
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		AutoScaleLeft
+//
+// Description:		Enables auto-scaling of the left axis.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotRenderer::AutoScaleLeft()
+{
+	plot->SetAutoScaleLeft();
+
+	UpdateDisplay();
+
+	return;
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		AutoScaleRight
+//
+// Description:		Enables auto-scaling of the right axis.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotRenderer::AutoScaleRight()
+{
+	plot->SetAutoScaleRight();
+
+	UpdateDisplay();
+
+	return;
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		SetXLabel
+//
+// Description:		Sets the text for the x-axis label.
+//
+// Input Arguments:
+//		text	= wxString
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotRenderer::SetXLabel(wxString text)
+{
+	plot->SetXLabel(text);
+
+	UpdateDisplay();
+
+	return;
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		OnMouseLeaveWindowEvent
+//
+// Description:		Cleans up some zoom box and cursor items.
+//
+// Input Arguments:
+//		event	= wxMouseEvent&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotRenderer::OnMouseLeaveWindowEvent(wxMouseEvent& WXUNUSED(event))
+{
+	// Hide the zoom box (but only if it's not already hidden!)
+	if (zoomBox->GetIsVisible())
+		zoomBox->SetVisibility(false);
+
+	draggingLeftCursor = false;
+	draggingRightCursor = false;
+
+	UpdateDisplay();
+
+	return;
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		OnDoubleClickEvent
+//
+// Description:		Handles double click events.  Allows user to change axis
+//					limits or create a cursor.
+//
+// Input Arguments:
+//		event	= wxMouseEvent&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotRenderer::OnDoubleClickEvent(wxMouseEvent &event)
+{
+	// FIXME:  Make this work again
+	/*unsigned int x = event.GetX();
+	unsigned int y = event.GetY();
+	unsigned int offset = Axis::GetOffsetFromWindowEdge();
+
+	// If the click is within the plot area, move a cursor there and make it visible
+	if (x > offset && GetSize().GetWidth() - x > offset &&
+		y > offset && GetSize().GetHeight() - y > offset)
+	{
+		double value = GetCursorValue(x);
+
+		if (!leftCursor->GetIsVisible())
+		{
+			leftCursor->SetVisibility(true);
+			leftCursor->SetValue(value);
+		}
+		else if (!rightCursor->GetIsVisible())
+		{
+			rightCursor->SetVisibility(true);
+			rightCursor->SetValue(value);
+		}
+		else
+		{
+			// Both cursors are visible - move the closer one to the click spot
+			if (fabs(leftCursor->GetValue() - value) < fabs(rightCursor->GetValue() - value))
+				leftCursor->SetValue(value);
+			else
+				rightCursor->SetValue(value);
+		}
+	}
+	else
+	{
+		// Determine the context
+		MainFrame::PlotContext context;
+		if (x < Axis::GetOffsetFromWindowEdge() &&
+			y > Axis::GetOffsetFromWindowEdge() &&
+			y < GetSize().GetHeight() - Axis::GetOffsetFromWindowEdge())
+			context = MainFrame::plotContextLeftYAxis;
+		else if (x > GetSize().GetWidth() - Axis::GetOffsetFromWindowEdge() &&
+			y > Axis::GetOffsetFromWindowEdge() &&
+			y < GetSize().GetHeight() - Axis::GetOffsetFromWindowEdge())
+			context = MainFrame::plotContextRightYAxis;
+		else if (y > GetSize().GetHeight() - Axis::GetOffsetFromWindowEdge() &&
+			x > Axis::GetOffsetFromWindowEdge() &&
+			x < GetSize().GetWidth() - Axis::GetOffsetFromWindowEdge())
+			context = MainFrame::plotContextXAxis;
+		else
+			context = MainFrame::plotContextPlotArea;
+
+		// Display the dialog
+		mainFrame.DisplayAxisRangeDialog(context);
+	}*/
+
+	UpdateDisplay();
+
+	return;
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		OnDoubleClickEvent
+//
+// Description:		Handles double click events.  Allows user to change axis
+//					limits or create a cursor.
+//
+// Input Arguments:
+//		event	= wxMouseEvent&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+double PlotRenderer::GetCursorValue(const unsigned int &location)
+{
+	unsigned int width = GetSize().GetWidth() - 2 * Axis::GetOffsetFromWindowEdge();
+	return double(location - Axis::GetOffsetFromWindowEdge()) / (double)width *
+		(plot->GetXAxis()->GetMaximum() - plot->GetXAxis()->GetMinimum()) + plot->GetXAxis()->GetMinimum();
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		OnMouseLeftDownEvent
+//
+// Description:		Checks to see if the user is dragging a cursor.
+//
+// Input Arguments:
+//		event	= wxMouseEvent&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotRenderer::OnLeftButtonDownEvent(wxMouseEvent &event)
+{
+	// Check to see if we're on a cursor
+	if (leftCursor->IsUnder(event.GetX()))
+		draggingLeftCursor = true;
+	else if (rightCursor->IsUnder(event.GetX()))
+		draggingRightCursor = true;
+
+	return;
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		OnLeftButtonUpEvent
+//
+// Description:		Makes sure we stop dragging when we stop clicking.
+//
+// Input Arguments:
+//		event	= wxMouseEvent&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotRenderer::OnLeftButtonUpEvent(wxMouseEvent& WXUNUSED(event))
+{
+	draggingLeftCursor = false;
+	draggingRightCursor = false;
+
+	return;
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		GetLeftCursorVisible
+//
+// Description:		Returns status of left cursor visibility flag.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		bool indicating status of left cursor visibility flag
+//
+//==========================================================================
+bool PlotRenderer::GetLeftCursorVisible(void) const
+{
+	return leftCursor->GetIsVisible();
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		GetRightCursorVisible
+//
+// Description:		Returns status of right cursor visibility flag.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		bool indicating status of right cursor visibility flag
+//
+//==========================================================================
+bool PlotRenderer::GetRightCursorVisible(void) const
+{
+	return rightCursor->GetIsVisible();
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		GetLeftCursorValue
+//
+// Description:		Returns x-value of left cursor.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		double
+//
+//==========================================================================
+double PlotRenderer::GetLeftCursorValue(void) const
+{
+	return leftCursor->GetValue();
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		GetRightCursorValue
+//
+// Description:		Makes sure we stop dragging when we stop clicking.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		double
+//
+//==========================================================================
+double PlotRenderer::GetRightCursorValue(void) const
+{
+	return rightCursor->GetValue();
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		UpdateCursors
+//
+// Description:		Updates the cursor calculations.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotRenderer::UpdateCursors(void)
+{
+	leftCursor->GenerateGeometry();
+	rightCursor->GenerateGeometry();
+
+	return;
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		GetXMin
+//
+// Description:		Returns the minimum value of the X-axis.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		double indicating the minimum value of the X-axis
+//
+//==========================================================================
+double PlotRenderer::GetXMin(void) const
+{
+	return plot->GetXAxis()->GetMinimum();
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		GetXMin
+//
+// Description:		Returns the minimum value of the X-axis.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		double indicating the minimum value of the X-axis
+//
+//==========================================================================
+double PlotRenderer::GetXMax(void) const
+{
+	return plot->GetXAxis()->GetMaximum();
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		GetXMin
+//
+// Description:		Returns the minimum value of the X-axis.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		double indicating the minimum value of the X-axis
+//
+//==========================================================================
+double PlotRenderer::GetLeftYMin(void) const
+{
+	return plot->GetLeftYAxis()->GetMinimum();
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		GetXMin
+//
+// Description:		Returns the minimum value of the X-axis.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		double indicating the minimum value of the X-axis
+//
+//==========================================================================
+double PlotRenderer::GetLeftYMax(void) const
+{
+	return plot->GetLeftYAxis()->GetMaximum();
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		GetXMin
+//
+// Description:		Returns the minimum value of the X-axis.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		double indicating the minimum value of the X-axis
+//
+//==========================================================================
+double PlotRenderer::GetRightYMin(void) const
+{
+	return plot->GetRightYAxis()->GetMinimum();
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		GetXMin
+//
+// Description:		Returns the minimum value of the X-axis.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		double indicating the minimum value of the X-axis
+//
+//==========================================================================
+double PlotRenderer::GetRightYMax(void) const
+{
+	return plot->GetRightYAxis()->GetMaximum();
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		GetGridColor
+//
+// Description:		Returns the color of the gridlines for this plot.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		Color
+//
+//==========================================================================
+Color PlotRenderer::GetGridColor(void) const
+{
+	return plot->GetGridColor();
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		SetGridColor
+//
+// Description:		Sets the color of the gridlines for this plot.
+//
+// Input Arguments:
+//		color	= const Color&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotRenderer::SetGridColor(const Color &color)
+{
+	plot->SetGridColor(color);
 }
