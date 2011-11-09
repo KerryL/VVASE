@@ -7,22 +7,30 @@
 
 ===================================================================================*/
 
-// File:  rms.h
-// Created:  5/3/2011
+// File:  plot_panel.h
+// Created:  11/9/2011
 // Author:  K. Loux
-// Description:  Computes root-mean-square of data.
+// Description:  Panel containing plot renderer and grid listing active plot channels.
 // History:
 
-#ifndef _RMS_H_
-#define _RMS_H_
+#ifndef _PLOT_PANEL_H_
+#define _PLOT_PANEL_H_
 
-// Local forward declarations
-class Dataset2D;
+// wxWidgets headers
+#include <wx/wx.h>
 
-class RootMeanSquare
+class PlotPanel : wxPanel
 {
 public:
-	static Dataset2D ComputeTimeHistory(const Dataset2D &data);
+	// Constructor
+	PlotPanel(wxWindow *parent);
+
+	// Destructor
+	~PlotPanel();
+
+private:
+	// Main panel object
+	PlotRenderer *renderer;
 };
 
-#endif// _RMS_H_
+#endif// _PLOT_PANEL_H_

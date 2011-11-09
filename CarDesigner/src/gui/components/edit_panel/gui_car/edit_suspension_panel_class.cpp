@@ -433,7 +433,7 @@ void EDIT_SUSPENSION_PANEL::SelectCellEvent(wxGridEvent &event)
 		}
 
 		// Set the position of the helper orb
-		static_cast<CAR_RENDERER*>(Parent.GetParent().GetCurrentObject()->GetRenderer())->SetHelperOrbPosition(
+		static_cast<CAR_RENDERER*>(Parent.GetParent().GetCurrentObject()->GetNotebookTab())->SetHelperOrbPosition(
 			CORNER::NumberOfHardpoints, CORNER::LocationRightFront, (SUSPENSION::HARDPOINTS)(event.GetRow() - 1));
 
 		// Update the display
@@ -525,7 +525,7 @@ void EDIT_SUSPENSION_PANEL::GridCellChangedEvent(wxGridEvent &event)
 		Parent.GetParent().GetCurrentObject()->SetModified();
 
 		// Set the position of the helper orb
-		static_cast<CAR_RENDERER*>(Parent.GetParent().GetCurrentObject()->GetRenderer())->SetHelperOrbPosition(
+		static_cast<CAR_RENDERER*>(Parent.GetParent().GetCurrentObject()->GetNotebookTab())->SetHelperOrbPosition(
 			CORNER::NumberOfHardpoints, CORNER::LocationRightFront, (SUSPENSION::HARDPOINTS)(event.GetRow() - 1));
 
 		// Update the display and the kinematic outputs

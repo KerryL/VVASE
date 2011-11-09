@@ -68,19 +68,13 @@ GENETIC_OPTIMIZATION::GENETIC_OPTIMIZATION(MAIN_FRAME &_MainFrame, const Debugge
 
 	// Create the panel containing the algorithm's controls
 	GAPanel = new GENETIC_ALGORITHM_PANEL(_MainFrame, *this);
+	notebookTab = reinterpret_cast<wxWindow*>(GAPanel);
 
 	// Initialize the car to optimize
 	CarToOptimize = NULL;
 
-	// Before we initialize, we need to create a renderer - optimizations don't have a renderer,
-	// but we can trick Initialize() into adding the GAPanel to the notebook instead
-	Renderer = reinterpret_cast<RenderWindow*>(GAPanel);
-
 	// Complete initialization of this object
 	Initialize();
-
-	// Set the renderer pointer back to NULL now that it's been added to the notebook
-	Renderer = NULL;
 }
 
 //==========================================================================

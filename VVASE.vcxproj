@@ -103,6 +103,7 @@
     <ClInclude Include="CarDesigner\include\gui\dialogs\ga_gene_dialog_class.h" />
     <ClInclude Include="CarDesigner\include\gui\dialogs\ga_goal_dialog_class.h" />
     <ClInclude Include="CarDesigner\include\gui\dialogs\options_dialog_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\dialogs\range_limits_dialog_class.h" />
     <ClInclude Include="CarDesigner\include\gui\drop_target_class.h" />
     <ClInclude Include="CarDesigner\include\gui\ga_object_class.h" />
     <ClInclude Include="CarDesigner\include\gui\genetic_algorithm_panel_class.h" />
@@ -113,6 +114,8 @@
     <ClInclude Include="CarDesigner\include\gui\ipc_connection_class.h" />
     <ClInclude Include="CarDesigner\include\gui\ipc_server_class.h" />
     <ClInclude Include="CarDesigner\include\gui\iteration_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\plot_object_class.h" />
+    <ClInclude Include="CarDesigner\include\gui\plot_panel.h" />
     <ClInclude Include="CarDesigner\include\gui\renderer\car_renderer_class.h" />
     <ClInclude Include="CarDesigner\include\gui\renderer\plot_renderer_class.h" />
     <ClInclude Include="CarDesigner\include\gui\undo_redo_stack_class.h" />
@@ -145,6 +148,7 @@
     <ClCompile Include="CarDesigner\src\gui\dialogs\ga_gene_dialog_class.cpp" />
     <ClCompile Include="CarDesigner\src\gui\dialogs\ga_goal_dialog_class.cpp" />
     <ClCompile Include="CarDesigner\src\gui\dialogs\options_dialog_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\dialogs\range_limits_dialog_class.cpp" />
     <ClCompile Include="CarDesigner\src\gui\drop_target_class.cpp" />
     <ClCompile Include="CarDesigner\src\gui\ga_object_class.cpp" />
     <ClCompile Include="CarDesigner\src\gui\genetic_algorithm_panel_class.cpp" />
@@ -156,6 +160,7 @@
     <ClCompile Include="CarDesigner\src\gui\ipc_server_class.cpp" />
     <ClCompile Include="CarDesigner\src\gui\iteration_class.cpp" />
     <ClCompile Include="CarDesigner\src\gui\plot_object_class.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\plot_panel.cpp" />
     <ClCompile Include="CarDesigner\src\gui\renderer\car_renderer_class.cpp" />
     <ClCompile Include="CarDesigner\src\gui\renderer\plot_renderer_class.cpp" />
     <ClCompile Include="CarDesigner\src\gui\undo_redo_stack_class.cpp" />

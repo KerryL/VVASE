@@ -417,7 +417,7 @@ void EDIT_PANEL::DeleteAllControls(void)
 		if (CurrentObject->GetType() == GUI_OBJECT::TYPE_CAR)
 		{
 			// Deactive the helper orb
-			static_cast<CAR_RENDERER*>(CurrentObject->GetRenderer())->DeactivateHelperOrb();
+			static_cast<CAR_RENDERER*>(CurrentObject->GetNotebookTab())->DeactivateHelperOrb();
 
 			// Update the visual display
 			CurrentObject->UpdateDisplay();

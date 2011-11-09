@@ -13,8 +13,12 @@
 // Description:  Dialog for editing goal properties.
 // History:
 
+// wxWidgets headers
+#include <wx/gbsizer.h>
+
 // CarDesigner headers
 #include "gui/dialogs/ga_goal_dialog_class.h"
+#include "vUtilities/wxRelatedUtilities.h"
 
 //==========================================================================
 // Class:			GA_GOAL_DIALOG
@@ -133,31 +137,36 @@ void GA_GOAL_DIALOG::CreateControls(void)
 	wxBoxSizer *MainSizer = new wxBoxSizer(wxVERTICAL);
 	TopSizer->Add(MainSizer, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
 
-	// Create a sizer for each of the inputs
-	wxBoxSizer *OutputSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxBoxSizer *InputsSizer = new wxBoxSizer(wxVERTICAL);
-	wxBoxSizer *DesiredValueSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxBoxSizer *ExpectedDeviationSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxBoxSizer *ImportanceSizer = new wxBoxSizer(wxHORIZONTAL);
+	// Create a sizer for the inputs
+	int cellPadding(5);
+	wxGridBagSizer *inputAreaSizer = new wxGridBagSizer(cellPadding, cellPadding);
+	MainSizer->Add(inputAreaSizer, wxALL, 5);
 
-	// Set up the column widths
-	int LabelColumnWidth(100);
-	int InputColumnWidth(160);
-	int UnitsColumnWidth(40);
-	int CellPadding(5);
+	// Set sizer flags
+	int sizerFlags = wxEXPAND | wxALIGN_CENTER_VERTICAL;
+
+	// When setting the control width, we need to account for the width of the
+	// "expand" button, etc., so we specify that here
+#ifdef __WXGTK__
+	unsigned int additionalWidth = 40;
+#else
+	unsigned int additionalWidth = 30;
+#endif
 
 	// Add the controls to these sizers
 	// Output
+	int row(1);
 	int i;
 	wxArrayString List;
 	for (i = 0; i < KINEMATIC_OUTPUTS::NumberOfOutputScalars; i++)
 		List.Add(KINEMATIC_OUTPUTS::GetOutputName((KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE)i));
-	wxStaticText *OutputLabel = new wxStaticText(this, wxID_STATIC, _T("Output Parameter"),
-		wxDefaultPosition, wxSize(LabelColumnWidth, -1), 0);
+	wxStaticText *OutputLabel = new wxStaticText(this, wxID_STATIC, _T("Output Parameter"));
 	OutputCombo = new wxComboBox(this, wxID_ANY, KINEMATIC_OUTPUTS::GetOutputName(Output), wxDefaultPosition,
-		wxSize(InputColumnWidth + CellPadding + UnitsColumnWidth, -1), List, wxCB_READONLY);
-	OutputSizer->Add(OutputLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	OutputSizer->Add(OutputCombo, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+		wxDefaultSize, List, wxCB_READONLY);
+	SetMinimumWidthFromContents(OutputCombo, additionalWidth);
+	inputAreaSizer->Add(OutputLabel, wxGBPosition(row, 1), wxGBSpan(), sizerFlags);
+	inputAreaSizer->Add(OutputCombo, wxGBPosition(row, 2), wxGBSpan(1, 3), sizerFlags);
+	row++;
 
 #ifdef __WXGTK__
 	// Under GTK, the combo box selections are set to -1 until the user changes the selection, even if
@@ -167,165 +176,120 @@ void GA_GOAL_DIALOG::CreateControls(void)
 	OutputCombo->SetSelection((int)Output);
 #endif
 
-	// Input set
-	wxBoxSizer *DifferenceSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxBoxSizer *BeforeAfterLabelSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxBoxSizer *PitchInputSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxBoxSizer *RollInputSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxBoxSizer *HeaveInputSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxBoxSizer *SteerInputSizer = new wxBoxSizer(wxHORIZONTAL);
-
 	// Difference check box
 	Difference = new wxCheckBox(this, wxID_ANY, _T("Optimize difference between two states"));
-	DifferenceSizer->Add(Difference, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, CellPadding);
+	inputAreaSizer->Add(Difference, wxGBPosition(row, 1), wxGBSpan(1, 4), wxALIGN_CENTER_HORIZONTAL | sizerFlags);
 	Difference->SetValue(BeforeInputs != AfterInputs);
+	row++;
 
 	// Before and after labels
-	BeforeLabel = new wxStaticText(this, wxID_STATIC, _T("State 1"), wxDefaultPosition,
-		wxSize(InputColumnWidth / 2 - CellPadding, -1), 0);
-	AfterLabel = new wxStaticText(this, wxID_STATIC, _T("State 2"), wxDefaultPosition,
-		wxSize(InputColumnWidth / 2 - CellPadding, -1), 0);
-	BeforeLabelSpacer = new wxStaticText(this, wxID_STATIC, wxEmptyString, wxDefaultPosition,
-		wxSize(InputColumnWidth / 2 - CellPadding, -1), 0);
-	AfterLabelSpacer = new wxStaticText(this, wxID_STATIC, wxEmptyString, wxDefaultPosition,
-		wxSize(InputColumnWidth / 2 - CellPadding, -1), 0);
-	BeforeAfterLabelSizer->Add(LabelColumnWidth + 2 * CellPadding, 0, 0);
-	BeforeAfterLabelSizer->Add(BeforeLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, CellPadding);
-	BeforeAfterLabelSizer->Add(BeforeLabelSpacer, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, CellPadding);
-	BeforeAfterLabelSizer->Add(AfterLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, CellPadding);
-	BeforeAfterLabelSizer->Add(AfterLabelSpacer, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, CellPadding);
+	BeforeLabel = new wxStaticText(this, wxID_STATIC, _T("State 1"));
+	AfterLabel = new wxStaticText(this, wxID_STATIC, _T("State 2"));
+	inputAreaSizer->Add(BeforeLabel, wxGBPosition(row, 2), wxGBSpan(), wxALIGN_CENTER_HORIZONTAL | sizerFlags);
+	inputAreaSizer->Add(AfterLabel, wxGBPosition(row, 3), wxGBSpan(), wxALIGN_CENTER_HORIZONTAL | sizerFlags);
+	row++;
 
 	// Pitch inputs
-	wxStaticText *PitchLabel = new wxStaticText(this, wxID_STATIC, _T("Pitch"), wxDefaultPosition,
-		wxSize(LabelColumnWidth, -1), 0);
+	wxStaticText *PitchLabel = new wxStaticText(this, wxID_STATIC, _T("Pitch"));
 	BeforePitchText = new wxTextCtrl(this, wxID_ANY,
-		Converter.FormatNumber(Converter.ConvertAngle(BeforeInputs.Pitch)), wxDefaultPosition,
-		wxSize(InputColumnWidth / 2 - CellPadding, -1), 0);
+		Converter.FormatNumber(Converter.ConvertAngle(BeforeInputs.Pitch)));
 	AfterPitchText = new wxTextCtrl(this, wxID_ANY,
-		Converter.FormatNumber(Converter.ConvertAngle(AfterInputs.Pitch)), wxDefaultPosition,
-		wxSize(InputColumnWidth / 2 - CellPadding, -1), 0);
-	AfterPitchSpacer = new wxStaticText(this, wxID_STATIC, wxEmptyString, wxDefaultPosition,
-		wxSize(InputColumnWidth / 2 - CellPadding, -1), 0);
+		Converter.FormatNumber(Converter.ConvertAngle(AfterInputs.Pitch)));
 	wxStaticText *PitchUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		Converter.GetUnitType(Convert::UnitTypeAngle),
-		wxDefaultPosition, wxSize(UnitsColumnWidth, -1));
-	PitchInputSizer->Add(PitchLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
-	PitchInputSizer->Add(BeforePitchText, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
-	PitchInputSizer->Add(AfterPitchText, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
-	PitchInputSizer->Add(AfterPitchSpacer, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
-	PitchInputSizer->Add(PitchUnitsLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
+		Converter.GetUnitType(Convert::UnitTypeAngle));
+	inputAreaSizer->Add(PitchLabel, wxGBPosition(row, 1), wxGBSpan(), sizerFlags);
+	inputAreaSizer->Add(BeforePitchText, wxGBPosition(row, 2), wxGBSpan(), sizerFlags);
+	inputAreaSizer->Add(AfterPitchText, wxGBPosition(row, 3), wxGBSpan(), sizerFlags);
+	inputAreaSizer->Add(PitchUnitsLabel, wxGBPosition(row, 4), wxGBSpan(), sizerFlags);
+	row++;
 
 	// Roll inputs
-	wxStaticText *RollLabel = new wxStaticText(this, wxID_STATIC, _T("Roll"), wxDefaultPosition,
-		wxSize(LabelColumnWidth, -1), 0);
+	wxStaticText *RollLabel = new wxStaticText(this, wxID_STATIC, _T("Roll"));
 	BeforeRollText = new wxTextCtrl(this, wxID_ANY,
-		Converter.FormatNumber(Converter.ConvertAngle(BeforeInputs.Roll)), wxDefaultPosition,
-		wxSize(InputColumnWidth / 2 - CellPadding, -1), 0);
+		Converter.FormatNumber(Converter.ConvertAngle(BeforeInputs.Roll)));
 	AfterRollText = new wxTextCtrl(this, wxID_ANY,
-		Converter.FormatNumber(Converter.ConvertAngle(AfterInputs.Roll)), wxDefaultPosition,
-		wxSize(InputColumnWidth / 2 - CellPadding, -1), 0);
-	AfterRollSpacer = new wxStaticText(this, wxID_STATIC, wxEmptyString, wxDefaultPosition,
-		wxSize(InputColumnWidth / 2 - CellPadding, -1), 0);
+		Converter.FormatNumber(Converter.ConvertAngle(AfterInputs.Roll)));
 	wxStaticText *RollUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		Converter.GetUnitType(Convert::UnitTypeAngle),
-		wxDefaultPosition, wxSize(UnitsColumnWidth, -1));
-	RollInputSizer->Add(RollLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
-	RollInputSizer->Add(BeforeRollText, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
-	RollInputSizer->Add(AfterRollText, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
-	RollInputSizer->Add(AfterRollSpacer, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
-	RollInputSizer->Add(RollUnitsLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
+		Converter.GetUnitType(Convert::UnitTypeAngle));
+	inputAreaSizer->Add(RollLabel, wxGBPosition(row, 1), wxGBSpan(), sizerFlags);
+	inputAreaSizer->Add(BeforeRollText, wxGBPosition(row, 2), wxGBSpan(), sizerFlags);
+	inputAreaSizer->Add(AfterRollText, wxGBPosition(row, 3), wxGBSpan(), sizerFlags);
+	inputAreaSizer->Add(RollUnitsLabel, wxGBPosition(row, 4), wxGBSpan(), sizerFlags);
+	row++;
 
 	// Heave inputs
-	wxStaticText *HeaveLabel = new wxStaticText(this, wxID_STATIC, _T("Heave"), wxDefaultPosition,
-		wxSize(LabelColumnWidth, -1), 0);
+	wxStaticText *HeaveLabel = new wxStaticText(this, wxID_STATIC, _T("Heave"));
 	BeforeHeaveText = new wxTextCtrl(this, wxID_ANY,
-		Converter.FormatNumber(Converter.ConvertDistance(BeforeInputs.Heave)), wxDefaultPosition,
-		wxSize(InputColumnWidth / 2 - CellPadding, -1), 0);
+		Converter.FormatNumber(Converter.ConvertDistance(BeforeInputs.Heave)));
 	AfterHeaveText = new wxTextCtrl(this, wxID_ANY,
-		Converter.FormatNumber(Converter.ConvertDistance(AfterInputs.Heave)), wxDefaultPosition,
-		wxSize(InputColumnWidth / 2 - CellPadding, -1), 0);
-	AfterHeaveSpacer = new wxStaticText(this, wxID_STATIC, wxEmptyString, wxDefaultPosition,
-		wxSize(InputColumnWidth / 2 - CellPadding, -1), 0);
+		Converter.FormatNumber(Converter.ConvertDistance(AfterInputs.Heave)));
 	wxStaticText *HeaveUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		Converter.GetUnitType(Convert::UnitTypeDistance),
-		wxDefaultPosition, wxSize(UnitsColumnWidth, -1));
-	HeaveInputSizer->Add(HeaveLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
-	HeaveInputSizer->Add(BeforeHeaveText, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
-	HeaveInputSizer->Add(AfterHeaveText, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
-	HeaveInputSizer->Add(AfterHeaveSpacer, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
-	HeaveInputSizer->Add(HeaveUnitsLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
+		Converter.GetUnitType(Convert::UnitTypeDistance));
+	inputAreaSizer->Add(HeaveLabel, wxGBPosition(row, 1), wxGBSpan(), sizerFlags);
+	inputAreaSizer->Add(BeforeHeaveText, wxGBPosition(row, 2), wxGBSpan(), sizerFlags);
+	inputAreaSizer->Add(AfterHeaveText, wxGBPosition(row, 3), wxGBSpan(), sizerFlags);
+	inputAreaSizer->Add(HeaveUnitsLabel, wxGBPosition(row, 4), wxGBSpan(), sizerFlags);
+	row++;
 
 	// Steer inputs
-	wxStaticText *SteerLabel = new wxStaticText(this, wxID_STATIC, _T("Rack Travel"), wxDefaultPosition,
-		wxSize(LabelColumnWidth, -1), 0);
+	wxStaticText *SteerLabel = new wxStaticText(this, wxID_STATIC, _T("Rack Travel"));
 	BeforeSteerText = new wxTextCtrl(this, wxID_ANY,
-		Converter.FormatNumber(Converter.ConvertDistance(BeforeInputs.RackTravel)), wxDefaultPosition,
-		wxSize(InputColumnWidth / 2 - CellPadding, -1), 0);
+		Converter.FormatNumber(Converter.ConvertDistance(BeforeInputs.RackTravel)));
 	AfterSteerText = new wxTextCtrl(this, wxID_ANY,
-		Converter.FormatNumber(Converter.ConvertDistance(AfterInputs.RackTravel)), wxDefaultPosition,
-		wxSize(InputColumnWidth / 2 - CellPadding, -1), 0);
-	AfterSteerSpacer = new wxStaticText(this, wxID_STATIC, wxEmptyString, wxDefaultPosition,
-		wxSize(InputColumnWidth / 2 - CellPadding, -1), 0);
+		Converter.FormatNumber(Converter.ConvertDistance(AfterInputs.RackTravel)));
 	wxStaticText *SteerUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		Converter.GetUnitType(Convert::UnitTypeDistance),
-		wxDefaultPosition, wxSize(UnitsColumnWidth, -1));
-	SteerInputSizer->Add(SteerLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
-	SteerInputSizer->Add(BeforeSteerText, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
-	SteerInputSizer->Add(AfterSteerText, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
-	SteerInputSizer->Add(AfterSteerSpacer, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
-	SteerInputSizer->Add(SteerUnitsLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
-
-	// Add the input sizers to the input sizer
-	InputsSizer->Add(DifferenceSizer, 0, wxALIGN_TOP | wxALIGN_CENTER_HORIZONTAL);
-	InputsSizer->Add(BeforeAfterLabelSizer, 0, wxALIGN_TOP);
-	InputsSizer->Add(PitchInputSizer, 0, wxALIGN_TOP);
-	InputsSizer->Add(RollInputSizer, 0, wxALIGN_TOP);
-	InputsSizer->Add(HeaveInputSizer, 0, wxALIGN_TOP);
-	InputsSizer->Add(SteerInputSizer, 0, wxALIGN_TOP);
+		Converter.GetUnitType(Convert::UnitTypeDistance));
+	inputAreaSizer->Add(SteerLabel, wxGBPosition(row, 1), wxGBSpan(), sizerFlags);
+	inputAreaSizer->Add(BeforeSteerText, wxGBPosition(row, 2), wxGBSpan(), sizerFlags);
+	inputAreaSizer->Add(AfterSteerText, wxGBPosition(row, 3), wxGBSpan(), sizerFlags);
+	inputAreaSizer->Add(SteerUnitsLabel, wxGBPosition(row, 4), wxGBSpan(), sizerFlags);
+	row++;
 
 	// Desired value
-	DesiredValueLabel = new wxStaticText(this, wxID_STATIC, _T("Desired Value"),
-		wxDefaultPosition, wxSize(LabelColumnWidth, -1), 0);
+	DesiredValueLabel = new wxStaticText(this, wxID_STATIC, _T("Desired Value"));
 	DesiredValueText = new wxTextCtrl(this, wxID_ANY, Converter.FormatNumber(Converter.ConvertTo(DesiredValue,
-		KINEMATIC_OUTPUTS::GetOutputUnitType(Output))),
-		wxDefaultPosition, wxSize(InputColumnWidth, -1), 0);
+		KINEMATIC_OUTPUTS::GetOutputUnitType(Output))));
 	DesiredValueUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		Converter.GetUnitType(KINEMATIC_OUTPUTS::GetOutputUnitType(Output)),
-		wxDefaultPosition, wxSize(UnitsColumnWidth, -1), 0);
-	DesiredValueSizer->Add(DesiredValueLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
-	DesiredValueSizer->Add(DesiredValueText, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
-	DesiredValueSizer->Add(DesiredValueUnitsLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
+		Converter.GetUnitType(KINEMATIC_OUTPUTS::GetOutputUnitType(Output)));
+	inputAreaSizer->Add(DesiredValueLabel, wxGBPosition(row, 1), wxGBSpan(), sizerFlags);
+	inputAreaSizer->Add(DesiredValueText, wxGBPosition(row, 2), wxGBSpan(1, 2), sizerFlags);
+	inputAreaSizer->Add(DesiredValueUnitsLabel, wxGBPosition(row, 4), wxGBSpan(), sizerFlags);
+	row++;
 
 	// Expected deviation
-	wxStaticText *DeviationLabel = new wxStaticText(this, wxID_STATIC, _T("Expected Deviation"),
-		wxDefaultPosition, wxSize(LabelColumnWidth, -1), 0);
+	wxStaticText *DeviationLabel = new wxStaticText(this, wxID_STATIC, _T("Expected Deviation"));
 	DeviationText = new wxTextCtrl(this, wxID_ANY, Converter.FormatNumber(Converter.ConvertTo(ExpectedDeviation,
-		KINEMATIC_OUTPUTS::GetOutputUnitType(Output))),
-		wxDefaultPosition, wxSize(InputColumnWidth, -1), 0);
+		KINEMATIC_OUTPUTS::GetOutputUnitType(Output))));
 	DeviationUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		Converter.GetUnitType(KINEMATIC_OUTPUTS::GetOutputUnitType(Output)),
-		wxDefaultPosition, wxSize(UnitsColumnWidth, -1), 0);
-	ExpectedDeviationSizer->Add(DeviationLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
-	ExpectedDeviationSizer->Add(DeviationText, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
-	ExpectedDeviationSizer->Add(DeviationUnitsLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
+		Converter.GetUnitType(KINEMATIC_OUTPUTS::GetOutputUnitType(Output)));
+	inputAreaSizer->Add(DeviationLabel, wxGBPosition(row, 1), wxGBSpan(), sizerFlags);
+	inputAreaSizer->Add(DeviationText, wxGBPosition(row, 2), wxGBSpan(1, 2), sizerFlags);
+	inputAreaSizer->Add(DeviationUnitsLabel, wxGBPosition(row, 4), wxGBSpan(), sizerFlags);
+	row++;
 
 	// Importance
-	wxStaticText *ImportanceLabel = new wxStaticText(this, wxID_STATIC, _T("Relative Importance"),
-		wxDefaultPosition, wxSize(LabelColumnWidth, -1), 0);
-	ImportanceText = new wxTextCtrl(this, wxID_ANY, Converter.FormatNumber(Importance),
-		wxDefaultPosition, wxSize(InputColumnWidth, -1), 0);
-	ImportanceSizer->Add(ImportanceLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
-	ImportanceSizer->Add(ImportanceText, 0, wxALIGN_CENTER_VERTICAL | wxALL, CellPadding);
+	wxStaticText *ImportanceLabel = new wxStaticText(this, wxID_STATIC, _T("Relative Importance"));
+	ImportanceText = new wxTextCtrl(this, wxID_ANY, Converter.FormatNumber(Importance));
+	inputAreaSizer->Add(ImportanceLabel, wxGBPosition(row, 1), wxGBSpan(), sizerFlags);
+	inputAreaSizer->Add(ImportanceText, wxGBPosition(row, 2), wxGBSpan(1, 2), sizerFlags);
+	row++;
 
-	// Add the sizers to the MainSizer
-	MainSizer->Add(OutputSizer, 0, wxALIGN_TOP);
-	MainSizer->Add(InputsSizer, 0, wxALIGN_TOP);
-	MainSizer->Add(DesiredValueSizer, 0, wxALIGN_TOP);
-	MainSizer->Add(ExpectedDeviationSizer, 0, wxALIGN_TOP);
-	MainSizer->Add(ImportanceSizer, 0, wxALIGN_TOP);
+	// The width of the second and third columns should be equal
+	// We do this by creating a blank row with the widths we specify
+	inputAreaSizer->Add(-1, PitchLabel->GetSize().GetHeight(), wxGBPosition(3, 1), wxGBSpan());
+	int inputTextWidth = (OutputCombo->GetMinWidth() - PitchUnitsLabel->GetSize().GetWidth()) / 2 - 2 * cellPadding;
+	inputAreaSizer->Add(inputTextWidth, 15, wxGBPosition(row, 2), wxGBSpan());
+	inputAreaSizer->Add(inputTextWidth, 15, wxGBPosition(row, 3), wxGBSpan());
 
-	// Add a spacer between the text controls and the buttons
-	MainSizer->AddSpacer(15);
+	// Set the minimum widths of the text controls
+	BeforePitchText->SetMinSize(wxSize(inputTextWidth, -1));
+	AfterPitchText->SetMinSize(wxSize(inputTextWidth, -1));
+	BeforeRollText->SetMinSize(wxSize(inputTextWidth, -1));
+	AfterRollText->SetMinSize(wxSize(inputTextWidth, -1));
+	BeforeHeaveText->SetMinSize(wxSize(inputTextWidth, -1));
+	AfterHeaveText->SetMinSize(wxSize(inputTextWidth, -1));
+	BeforeSteerText->SetMinSize(wxSize(inputTextWidth, -1));
+	AfterSteerText->SetMinSize(wxSize(inputTextWidth, -1));
 
 	// Create another sizer for the buttons at the bottom and add the buttons
 	wxBoxSizer *ButtonsSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -333,8 +297,8 @@ void GA_GOAL_DIALOG::CreateControls(void)
 		wxDefaultPosition, wxDefaultSize, 0);
 	wxButton *CancelButton = new wxButton(this, wxID_CANCEL, _T("Cancel"),
 		wxDefaultPosition, wxDefaultSize, 0);
-	ButtonsSizer->Add(OKButton, 0, wxALL, CellPadding);
-	ButtonsSizer->Add(CancelButton, 0, wxALL, CellPadding);
+	ButtonsSizer->Add(OKButton, 0, wxALL, 5);
+	ButtonsSizer->Add(CancelButton, 0, wxALL, 5);
 	MainSizer->Add(ButtonsSizer, 0, wxALIGN_CENTER_HORIZONTAL);
 
 	// Make the OK button default
@@ -554,14 +518,6 @@ void GA_GOAL_DIALOG::FormatDialogDifference(void)
 		BeforeLabel->Show();
 		AfterLabel->Show();
 
-		// Hide the spacers
-		AfterPitchSpacer->Hide();
-		AfterRollSpacer->Hide();
-		AfterHeaveSpacer->Hide();
-		AfterSteerSpacer->Hide();
-		BeforeLabelSpacer->Hide();
-		AfterLabelSpacer->Hide();
-
 		// The desired value is actually a desired change
 		DesiredValueLabel->SetLabel(_T("Desired Change"));
 	}
@@ -574,14 +530,6 @@ void GA_GOAL_DIALOG::FormatDialogDifference(void)
 		AfterSteerText->Hide();
 		BeforeLabel->Hide();
 		AfterLabel->Hide();
-
-		// Show the spacers
-		AfterPitchSpacer->Show();
-		AfterRollSpacer->Show();
-		AfterHeaveSpacer->Show();
-		AfterSteerSpacer->Show();
-		BeforeLabelSpacer->Show();
-		AfterLabelSpacer->Show();
 
 		// The desired value really is a single value
 		DesiredValueLabel->SetLabel(_T("Desired Value"));

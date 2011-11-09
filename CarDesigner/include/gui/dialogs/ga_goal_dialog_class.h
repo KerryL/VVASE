@@ -79,14 +79,6 @@ private:
 	wxStaticText *BeforeLabel;
 	wxStaticText *AfterLabel;
 
-	// Spacers for the components that are hidden/shown
-	wxStaticText *BeforeLabelSpacer;
-	wxStaticText *AfterLabelSpacer;
-	wxStaticText *AfterPitchSpacer;
-	wxStaticText *AfterRollSpacer;
-	wxStaticText *AfterHeaveSpacer;
-	wxStaticText *AfterSteerSpacer;
-
 	// Values (populated when OK is clicked)
 	KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE Output;
 

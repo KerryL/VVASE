@@ -37,6 +37,7 @@
 class Debugger;
 class Convert;
 class CAR;
+class PlotRenderer;
 
 class ITERATION : public GUI_OBJECT
 {
@@ -250,6 +251,8 @@ private:
 	// Flag indicating that this object's analyses are complete and another analysis can be started
 	bool AnalysesDisplayed;
 	bool SecondAnalysisPending;
+
+	PlotRenderer *renderer;
 };
 
 #endif// _ITERATION_CLASS_H_

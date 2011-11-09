@@ -76,7 +76,8 @@ GUI_CAR::GUI_CAR(MAIN_FRAME &_MainFrame, const Debugger &_debugger,
 	AppearanceOptions = new APPEARANCE_OPTIONS(MainFrame, *this, debugger);
 
 	// Create the 3D output window
-	Renderer = new CAR_RENDERER(MainFrame, *this, debugger);
+	renderer = new CAR_RENDERER(MainFrame, *this, debugger);
+	notebookTab = reinterpret_cast<wxWindow*>(renderer);
 
 	// Get an index for this item and add it to the list in the MainFrame
 	// MUST be included BEFORE the naming, which must come BEFORE the call to Initialize
@@ -245,7 +246,7 @@ void GUI_CAR::UpdateData(void)
 void GUI_CAR::UpdateDisplay(void)
 {
 	// Update the display associated with this object
-	static_cast<CAR_RENDERER*>(Renderer)->UpdateDisplay(KinematicOutputs);
+	renderer->UpdateDisplay(KinematicOutputs);
 
 	return;
 }

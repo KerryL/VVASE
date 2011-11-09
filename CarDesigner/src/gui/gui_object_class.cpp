@@ -141,7 +141,7 @@ void GUI_OBJECT::Initialize(void)
 #endif
 
 	// Add a page to the notebook for this car
-	Notebook->AddPage(Renderer, Name);// FIXME:  This will need to change-> then GA_OBJECT can be a GUI_OBJECT too?
+	Notebook->AddPage(notebookTab, Name);
 
 	// Add the entry to the SystemsTree
 	TreeID = SystemsTree->AppendItem(SystemsTree->GetRootItem(), Name, NormalIcon, SelectedIcon);
@@ -188,6 +188,7 @@ void GUI_OBJECT::Initialize(void)
 void GUI_OBJECT::SetName(wxString _Name)
 {
 	// Remove the asterisks from both names, if they have one
+	// FIXME:  Why is this commented out?
 	/*wxString Asterisk('*');
 	wxString NewNameSansAsterisk, OldNameSansAsterisk;
 	if (Name.substr(Name.length() - 1, 1).compare(Asterisk) == 0)
@@ -559,7 +560,7 @@ bool GUI_OBJECT::SaveToFile(bool SaveAsNewFileName)
 	return true;
 }
 
-//==========================================================================
+/*//==========================================================================
 // Class:			GUI_OBJECT
 // Function:		Render
 //
@@ -608,7 +609,7 @@ void GUI_OBJECT::Render(void)
 bool GUI_OBJECT::IsThisObjectSelected(Primitive *PickedObject) const
 {
 	return Renderer->IsThisRendererSelected(PickedObject);
-}
+}*/
 
 //==========================================================================
 // Class:			GUI_OBJECT
@@ -631,9 +632,9 @@ bool GUI_OBJECT::IsThisObjectSelected(Primitive *PickedObject) const
 bool GUI_OBJECT::WriteImageToFile(wxString PathAndFileName)
 {
 	// Ask the renderer to write the image to file
-	if (Renderer)
+	/*if (Renderer)
 		return Renderer->WriteImageToFile(PathAndFileName);
-	else
+	else*/
 		return false;
 }
 

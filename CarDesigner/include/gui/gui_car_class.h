@@ -112,6 +112,9 @@ private:
 
 	// The object that stores the kinematics information for this car
 	KINEMATIC_OUTPUTS KinematicOutputs;
+
+	// The scene visible to the user representing this object
+	CAR_RENDERER *renderer;
 };
 
 #endif// _GUI_CAR_CLASS_H_

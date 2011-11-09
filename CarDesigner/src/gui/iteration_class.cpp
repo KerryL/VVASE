@@ -77,9 +77,6 @@ ITERATION::ITERATION(MAIN_FRAME &_MainFrame, const Debugger &_debugger,
 	// Do this prior to initialization so saved files overwrite these defaults
 	ReadDefaultsFromConfig();
 
-	// Initialized the renderer to NULL
-	Renderer = NULL;
-
 	// Initialize the pointers to the X-axis data
 	AxisValuesPitch = NULL;
 	AxisValuesRoll = NULL;
@@ -99,7 +96,8 @@ ITERATION::ITERATION(MAIN_FRAME &_MainFrame, const Debugger &_debugger,
 	NumberOfWorkingCars = 0;
 
 	// Create the renderer
-	Renderer = new PlotRenderer(MainFrame, wxID_ANY, debugger);
+	renderer = new PlotRenderer(MainFrame, wxID_ANY, debugger);
+	notebookTab = reinterpret_cast<wxWindow*>(renderer);
 
 	// Get an index for this item and add it to the list in the MainFrame
 	// MUST be included BEFORE the naming, which must come BEFORE the call to Initialize
@@ -470,9 +468,16 @@ void ITERATION::UpdateData(void)
 void ITERATION::UpdateDisplay(void)
 {
 	// Make sure the renderer exists so we don't do this until after we're fully created
-	if (Renderer)
+	if (renderer)
+	{
+		// Clear out existing data from the plot
+		renderer->RemoveAllCurves();
+
+		// Create the datasets for the plot
+
 		// Update the display associated with this object
-		static_cast<PlotRenderer*>(Renderer)->UpdateDisplay();
+		renderer->UpdateDisplay();
+	}
 
 	// Reset the "are we caught up" flag
 	AnalysesDisplayed = true;

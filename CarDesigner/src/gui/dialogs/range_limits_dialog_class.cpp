@@ -1,5 +1,5 @@
 /*===================================================================================
-                                    DataPlotter
+                                    CarDesigner
                            Copyright Kerry R. Loux 2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
@@ -14,7 +14,7 @@
 // History:
 
 // Local headers
-#include "application/range_limits_dialog_class.h"
+#include "gui/dialogs/range_limits_dialog_class.h"
 
 //==========================================================================
 // Class:			RangeLimitsDialog

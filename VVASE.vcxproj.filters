@@ -138,6 +138,15 @@
     <ClInclude Include="CarDesigner\include\gui\renderer\plot_renderer_class.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\plot_object_class.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\plot_panel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\dialogs\range_limits_dialog_class.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CarDesigner\src\application\vvaseapp_class.cpp">
@@ -261,6 +270,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CarDesigner\src\gui\renderer\plot_renderer_class.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\plot_panel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\dialogs\range_limits_dialog_class.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

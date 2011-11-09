@@ -156,23 +156,25 @@ void OPTIONS_DIALOG::CreateControls(void)
 	UnitsCaptionSizer->Add(-1, -1, 0, wxALL, 5);
 	UnitsCaptionSizer->Add(Prompt, 0, wxALL, 5);
 
-	// Create a sizer for each column
-	wxBoxSizer *sizerLeftLabelColumn = new wxBoxSizer(wxVERTICAL);
-	wxBoxSizer *sizerLeftUnitsColumn = new wxBoxSizer(wxVERTICAL);
-	wxBoxSizer *sizerRightLabelColumn = new wxBoxSizer(wxVERTICAL);
-	wxBoxSizer *sizerRightUnitsColumn = new wxBoxSizer(wxVERTICAL);
+	// Create a sizer to contain the inputs
+	wxFlexGridSizer *unitSelectionSizer = new wxFlexGridSizer(5, 5, 5);
+	unitSelectionSizer->SetFlexibleDirection(wxHORIZONTAL);
+	UnitsSizer->Add(unitSelectionSizer, 0, wxALL, 5);
 	
 	// When setting the control width, we need to account for the width of the
 	// "expand" button, etc., so we specify that here
 #ifdef __WXGTK__
-	unsigned int additionalWidth = 40;// [pixels]
+	unsigned int additionalWidth = 40;
 #else
-	unsigned int additionalWidth = 30;// [pixels]
+	unsigned int additionalWidth = 30;
 #endif
+
+	// Set some additional space between left and right sets of unit selections
+	int middleSpaceWidth = 15;
 	
 	// The column flags
-	int labelFlags = wxALL | wxALIGN_CENTER_VERTICAL | wxALIGN_LEFT;
-	int unitFlags = wxALL | wxEXPAND;
+	int labelFlags = wxALIGN_CENTER_VERTICAL | wxALIGN_LEFT;
+	int unitFlags = wxEXPAND;
 
 	// Add the static text and text controls to these sizers
 	// For each type of units, we fill the string array with all of the options
@@ -187,9 +189,10 @@ void OPTIONS_DIALOG::CreateControls(void)
 	wxStaticText *AngleLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of angle"));
 	UnitOfAngle = new wxComboBox(UnitsPage, wxID_ANY, Converter.GetUnitType(Convert::UnitTypeAngle),
 		wxDefaultPosition, wxDefaultSize, Choices, wxCB_READONLY);
-	sizerLeftLabelColumn->Add(AngleLabelText, 1, labelFlags, 5);
-	sizerLeftUnitsColumn->Add(UnitOfAngle, 0, unitFlags, 5);
 	SetMinimumWidthFromContents(UnitOfAngle, additionalWidth);
+	unitSelectionSizer->Add(AngleLabelText, 0, labelFlags);
+	unitSelectionSizer->Add(UnitOfAngle, 0, unitFlags);
+	unitSelectionSizer->AddSpacer(middleSpaceWidth);
 
 	// Distance
 	Choices.Clear();
@@ -199,9 +202,9 @@ void OPTIONS_DIALOG::CreateControls(void)
 	wxStaticText *DistanceLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of distance"));
 	UnitOfDistance = new wxComboBox(UnitsPage, wxID_ANY, Converter.GetUnitType(Convert::UnitTypeDistance),
 		wxDefaultPosition, wxDefaultSize, Choices, wxCB_READONLY);
-	sizerRightLabelColumn->Add(DistanceLabelText, 1, labelFlags, 5);
-	sizerRightUnitsColumn->Add(UnitOfDistance, 0, unitFlags, 5);
 	SetMinimumWidthFromContents(UnitOfDistance, additionalWidth);
+	unitSelectionSizer->Add(DistanceLabelText, 0, labelFlags);
+	unitSelectionSizer->Add(UnitOfDistance, 0, unitFlags);
 
 	// Area
 	Choices.Clear();
@@ -211,9 +214,10 @@ void OPTIONS_DIALOG::CreateControls(void)
 	wxStaticText *AreaLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of area"));
 	UnitOfArea = new wxComboBox(UnitsPage, wxID_ANY, Converter.GetUnitType(Convert::UnitTypeArea),
 		wxDefaultPosition, wxDefaultSize, Choices, wxCB_READONLY);
-	sizerLeftLabelColumn->Add(AreaLabelText, 1, labelFlags, 5);
-	sizerLeftUnitsColumn->Add(UnitOfArea, 0, unitFlags, 5);
 	SetMinimumWidthFromContents(UnitOfArea, additionalWidth);
+	unitSelectionSizer->Add(AreaLabelText, 0, labelFlags);
+	unitSelectionSizer->Add(UnitOfArea, 0, unitFlags);
+	unitSelectionSizer->AddSpacer(middleSpaceWidth);
 
 	// Force
 	Choices.Clear();
@@ -223,9 +227,9 @@ void OPTIONS_DIALOG::CreateControls(void)
 	wxStaticText *ForceLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of force"));
 	UnitOfForce = new wxComboBox(UnitsPage, wxID_ANY, Converter.GetUnitType(Convert::UnitTypeForce),
 		wxDefaultPosition, wxDefaultSize, Choices, wxCB_READONLY);
-	sizerRightLabelColumn->Add(ForceLabelText, 1, labelFlags, 5);
-	sizerRightUnitsColumn->Add(UnitOfForce, 0, unitFlags, 5);
 	SetMinimumWidthFromContents(UnitOfForce, additionalWidth);
+	unitSelectionSizer->Add(ForceLabelText, 0, labelFlags);
+	unitSelectionSizer->Add(UnitOfForce, 0, unitFlags);
 
 	// Pressure
 	Choices.Clear();
@@ -235,9 +239,10 @@ void OPTIONS_DIALOG::CreateControls(void)
 	wxStaticText *PressureLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of pressure"));
 	UnitOfPressure = new wxComboBox(UnitsPage, wxID_ANY, Converter.GetUnitType(Convert::UnitTypePressure),
 		wxDefaultPosition, wxDefaultSize, Choices, wxCB_READONLY);
-	sizerLeftLabelColumn->Add(PressureLabelText, 1, labelFlags, 5);
-	sizerLeftUnitsColumn->Add(UnitOfPressure, 0, unitFlags, 5);
 	SetMinimumWidthFromContents(UnitOfPressure, additionalWidth);
+	unitSelectionSizer->Add(PressureLabelText, 0, labelFlags);
+	unitSelectionSizer->Add(UnitOfPressure, 0, unitFlags);
+	unitSelectionSizer->AddSpacer(middleSpaceWidth);
 
 	// Moment
 	Choices.Clear();
@@ -247,9 +252,9 @@ void OPTIONS_DIALOG::CreateControls(void)
 	wxStaticText *MomentLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of moment"));
 	UnitOfMoment = new wxComboBox(UnitsPage, wxID_ANY, Converter.GetUnitType(Convert::UnitTypeMoment),
 		wxDefaultPosition, wxDefaultSize, Choices, wxCB_READONLY);
-	sizerRightLabelColumn->Add(MomentLabelText, 1, labelFlags, 5);
-	sizerRightUnitsColumn->Add(UnitOfMoment, 0, unitFlags, 5);
 	SetMinimumWidthFromContents(UnitOfMoment, additionalWidth);
+	unitSelectionSizer->Add(MomentLabelText, 0, labelFlags);
+	unitSelectionSizer->Add(UnitOfMoment, 0, unitFlags);
 
 	// Mass
 	Choices.Clear();
@@ -259,9 +264,10 @@ void OPTIONS_DIALOG::CreateControls(void)
 	wxStaticText *MassLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of mass"));
 	UnitOfMass = new wxComboBox(UnitsPage, wxID_ANY, Converter.GetUnitType(Convert::UnitTypeMass),
 		wxDefaultPosition, wxDefaultSize, Choices, wxCB_READONLY);
-	sizerLeftLabelColumn->Add(MassLabelText, 1, labelFlags, 5);
-	sizerLeftUnitsColumn->Add(UnitOfMass, 0, unitFlags, 5);
 	SetMinimumWidthFromContents(UnitOfMass, additionalWidth);
+	unitSelectionSizer->Add(MassLabelText, 0, labelFlags);
+	unitSelectionSizer->Add(UnitOfMass, 0, unitFlags);
+	unitSelectionSizer->AddSpacer(middleSpaceWidth);
 
 	// Velocity
 	Choices.Clear();
@@ -271,9 +277,9 @@ void OPTIONS_DIALOG::CreateControls(void)
 	wxStaticText *VelocityLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of velocity"));
 	UnitOfVelocity = new wxComboBox(UnitsPage, wxID_ANY, Converter.GetUnitType(Convert::UnitTypeVelocity),
 		wxDefaultPosition, wxDefaultSize, Choices, wxCB_READONLY);
-	sizerRightLabelColumn->Add(VelocityLabelText, 1, labelFlags, 5);
-	sizerRightUnitsColumn->Add(UnitOfVelocity, 0, unitFlags, 5);
 	SetMinimumWidthFromContents(UnitOfVelocity, additionalWidth);
+	unitSelectionSizer->Add(VelocityLabelText, 0, labelFlags);
+	unitSelectionSizer->Add(UnitOfVelocity, 0, unitFlags);
 
 	// Acceleration
 	Choices.Clear();
@@ -283,9 +289,10 @@ void OPTIONS_DIALOG::CreateControls(void)
 	wxStaticText *AccelerationLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of acceleration"));
 	UnitOfAcceleration = new wxComboBox(UnitsPage, wxID_ANY, Converter.GetUnitType(Convert::UnitTypeAcceleration),
 		wxDefaultPosition, wxDefaultSize, Choices, wxCB_READONLY);
-	sizerLeftLabelColumn->Add(AccelerationLabelText, 1, labelFlags, 5);
-	sizerLeftUnitsColumn->Add(UnitOfAcceleration, 0, unitFlags, 5);
 	SetMinimumWidthFromContents(UnitOfAcceleration, additionalWidth);
+	unitSelectionSizer->Add(AccelerationLabelText, 0, labelFlags);
+	unitSelectionSizer->Add(UnitOfAcceleration, 0, unitFlags);
+	unitSelectionSizer->AddSpacer(middleSpaceWidth);
 
 	// Inertia
 	Choices.Clear();
@@ -295,9 +302,9 @@ void OPTIONS_DIALOG::CreateControls(void)
 	wxStaticText *InertiaLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of inertia"));
 	UnitOfInertia = new wxComboBox(UnitsPage, wxID_ANY, Converter.GetUnitType(Convert::UnitTypeInertia),
 		wxDefaultPosition, wxDefaultSize, Choices, wxCB_READONLY);
-	sizerRightLabelColumn->Add(InertiaLabelText, 1, labelFlags, 5);
-	sizerRightUnitsColumn->Add(UnitOfInertia, 0, unitFlags, 5);
 	SetMinimumWidthFromContents(UnitOfInertia, additionalWidth);
+	unitSelectionSizer->Add(InertiaLabelText, 0, labelFlags);
+	unitSelectionSizer->Add(UnitOfInertia, 0, unitFlags);
 
 	// Density
 	Choices.Clear();
@@ -307,9 +314,10 @@ void OPTIONS_DIALOG::CreateControls(void)
 	wxStaticText *DensityLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of density"));
 	UnitOfDensity = new wxComboBox(UnitsPage, wxID_ANY, Converter.GetUnitType(Convert::UnitTypeDensity),
 		wxDefaultPosition, wxDefaultSize, Choices, wxCB_READONLY);
-	sizerLeftLabelColumn->Add(DensityLabelText, 1, labelFlags, 5);
-	sizerLeftUnitsColumn->Add(UnitOfDensity, 0, unitFlags, 5);
 	SetMinimumWidthFromContents(UnitOfDensity, additionalWidth);
+	unitSelectionSizer->Add(DensityLabelText, 0, labelFlags);
+	unitSelectionSizer->Add(UnitOfDensity, 0, unitFlags);
+	unitSelectionSizer->AddSpacer(middleSpaceWidth);
 
 	// Power
 	Choices.Clear();
@@ -319,9 +327,9 @@ void OPTIONS_DIALOG::CreateControls(void)
 	wxStaticText *PowerLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of power"));
 	UnitOfPower = new wxComboBox(UnitsPage, wxID_ANY, Converter.GetUnitType(Convert::UnitTypePower),
 		wxDefaultPosition, wxDefaultSize, Choices, wxCB_READONLY);
-	sizerRightLabelColumn->Add(PowerLabelText, 1, labelFlags, 5);
-	sizerRightUnitsColumn->Add(UnitOfPower, 0, unitFlags, 5);
 	SetMinimumWidthFromContents(UnitOfPower, additionalWidth);
+	unitSelectionSizer->Add(PowerLabelText, 0, labelFlags);
+	unitSelectionSizer->Add(UnitOfPower, 0, unitFlags);
 
 	// Energy
 	Choices.Clear();
@@ -331,9 +339,10 @@ void OPTIONS_DIALOG::CreateControls(void)
 	wxStaticText *EnergyLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of energy"));
 	UnitOfEnergy = new wxComboBox(UnitsPage, wxID_ANY, Converter.GetUnitType(Convert::UnitTypeEnergy),
 		wxDefaultPosition, wxDefaultSize, Choices, wxCB_READONLY);
-	sizerLeftLabelColumn->Add(EnergyLabelText, 1, labelFlags, 5);
-	sizerLeftUnitsColumn->Add(UnitOfEnergy, 0, unitFlags, 5);
 	SetMinimumWidthFromContents(UnitOfEnergy, additionalWidth);
+	unitSelectionSizer->Add(EnergyLabelText, 0, labelFlags);
+	unitSelectionSizer->Add(UnitOfEnergy, 0, unitFlags);
+	unitSelectionSizer->AddSpacer(middleSpaceWidth);
 
 	// Temperature
 	Choices.Clear();
@@ -343,18 +352,9 @@ void OPTIONS_DIALOG::CreateControls(void)
 	wxStaticText *TemperatureLabelText = new wxStaticText(UnitsPage, wxID_STATIC, _T("Units of temperature"));
 	UnitOfTemperature = new wxComboBox(UnitsPage, wxID_ANY, Converter.GetUnitType(Convert::UnitTypeTemperature),
 		wxDefaultPosition, wxDefaultSize, Choices, wxCB_READONLY);
-	sizerRightLabelColumn->Add(TemperatureLabelText, 1, labelFlags, 5);
-	sizerRightUnitsColumn->Add(UnitOfTemperature, 0, unitFlags, 5);
 	SetMinimumWidthFromContents(UnitOfTemperature, additionalWidth);
-
-	// Add the sizers to the MainSizer
-	wxBoxSizer *columnSizer = new wxBoxSizer(wxHORIZONTAL);
-	columnSizer->Add(sizerLeftLabelColumn, 1, wxEXPAND);
-	columnSizer->Add(sizerLeftUnitsColumn, 0.5, 0);
-	columnSizer->AddSpacer(20);
-	columnSizer->Add(sizerRightLabelColumn, 1, wxEXPAND);
-	columnSizer->Add(sizerRightUnitsColumn, 0.5, 0);
-	UnitsSizer->Add(columnSizer);
+	unitSelectionSizer->Add(TemperatureLabelText, 0, labelFlags);
+	unitSelectionSizer->Add(UnitOfTemperature, 0, unitFlags);
 
 	// Set the unit page's sizer
 	UnitsPage->SetSizer(UnitsTopSizer);

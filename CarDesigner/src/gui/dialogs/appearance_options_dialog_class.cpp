@@ -151,43 +151,28 @@ void APPEARANCE_OPTIONS_DIALOG::CreateControls(void)
 	wxBoxSizer *ColorTopSizer = new wxBoxSizer(wxVERTICAL);
 
 	// Create the color page main sizer
-	wxBoxSizer *ColorSizer = new wxBoxSizer(wxVERTICAL);
-	ColorTopSizer->Add(ColorSizer, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
+	wxFlexGridSizer *colorSizer = new wxFlexGridSizer(1);
+	colorSizer->SetFlexibleDirection(wxVERTICAL);
+	ColorTopSizer->Add(colorSizer, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
 
-	// Add a horizontal spacer for the text across the top
-	wxBoxSizer *ColorCaptionSizer = new wxBoxSizer(wxHORIZONTAL);
-	ColorSizer->Add(ColorCaptionSizer, 0, wxALIGN_TOP);
-
-	// Add the text to this spacer
+	// Add the text across the top of the page
 	wxStaticText *ColorPrompt = new wxStaticText(ColorPanel, wxID_STATIC,
-		_T("Edit the object colors:"), wxDefaultPosition, wxSize(-1, -1), 0);
-	ColorCaptionSizer->Add(-1, -1, 0, wxALL, 5);
-	ColorCaptionSizer->Add(ColorPrompt, 0, wxALL, 5);
-
-	// The column and row sizes
-	int LabelColumnWidth = 150;
-	int DataColumnWidth = 70;
-	int MainObjectWidth = LabelColumnWidth + 2 * DataColumnWidth + 18;
-	int MainObjectHeight = 250;
+		_T("Edit the object colors:"));
+	colorSizer->Add(ColorPrompt, 0, wxALL, 5);
 
 	// Create the grid for the list of colors
-	ColorGrid = new wxGrid(ColorPanel, IdColorGrid, wxDefaultPosition, wxSize(MainObjectWidth, MainObjectHeight));
+	ColorGrid = new wxGrid(ColorPanel, IdColorGrid);
 	ColorGrid->CreateGrid(APPEARANCE_OPTIONS::ColorCount, 3, wxGrid::wxGridSelectCells);
 
 	// Begin a batch edit of the grid
 	ColorGrid->BeginBatch();
 
-	// Set the column widths
-	ColorGrid->SetColumnWidth(0, LabelColumnWidth);
-	ColorGrid->SetColumnWidth(1, DataColumnWidth);
-	ColorGrid->SetColumnWidth(2, DataColumnWidth);
-
 	// Hide the label column and set the size for the label row
 	ColorGrid->SetRowLabelSize(0);
 	ColorGrid->SetColLabelSize(ColorGrid->GetRowSize(0));
 
-	// Add the grid to the sizer
-	ColorSizer->Add(ColorGrid, 1, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALL | wxALIGN_TOP, 5);
+	// Create a horizontal sizer so controls expand in correct direction
+	colorSizer->Add(ColorGrid, 0, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALL | wxALIGN_TOP, 5);
 
 	// Set the column headings
 	ColorGrid->SetColLabelValue(0, _T("Object"));
@@ -212,6 +197,9 @@ void APPEARANCE_OPTIONS_DIALOG::CreateControls(void)
 		ColorGrid->SetCellValue(i, 2, converter.FormatNumber(ColorOptions[i].GetAlpha()));
 	}
 
+	// Automatically size the columns
+	ColorGrid->AutoSizeColumns();
+
 	// Don't let the user move or re-size the rows and columns
 	ColorGrid->EnableDragColMove(false);
 	ColorGrid->EnableDragColSize(true);
@@ -229,21 +217,17 @@ void APPEARANCE_OPTIONS_DIALOG::CreateControls(void)
 	Notebook->AddPage(VisibilityPanel, _T("Visibilities"));
 
 	// Use another outer sizer to create more room for the controls
-	wxBoxSizer *VisibilityTopSizer = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer *VisibilityTopSizer = new wxBoxSizer(wxHORIZONTAL);
 
 	// Create the visibility page main sizer
-	wxBoxSizer *VisibilitySizer = new wxBoxSizer(wxVERTICAL);
-	VisibilityTopSizer->Add(VisibilitySizer, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
-
-	// Add a horizontal spacer for the text across the top
-	wxBoxSizer *VisibilityCaptionSizer = new wxBoxSizer(wxHORIZONTAL);
-	VisibilitySizer->Add(VisibilityCaptionSizer, 0, wxALIGN_TOP);
+	wxFlexGridSizer *visibilitySizer = new wxFlexGridSizer(1);
+	visibilitySizer->SetFlexibleDirection(wxVERTICAL);
+	VisibilityTopSizer->Add(visibilitySizer, 0, wxALIGN_CENTER_HORIZONTAL | wxALL | wxEXPAND, 5);
 
 	// Add the text to this spacer
 	wxStaticText *VisibilityPrompt = new wxStaticText(VisibilityPanel, wxID_STATIC,
 		_T("Choose the visible objects:"), wxDefaultPosition, wxSize(-1, -1), 0);
-	VisibilityCaptionSizer->Add(-1, -1, 0, wxALL, 5);
-	VisibilityCaptionSizer->Add(VisibilityPrompt, 0, wxALL, 5);
+	visibilitySizer->Add(VisibilityPrompt, 0, wxALL | wxEXPAND, 5);
 
 	// The selections array contains the indicies of the items that are selected
 	// which is used to initialize the list in the list box
@@ -253,11 +237,8 @@ void APPEARANCE_OPTIONS_DIALOG::CreateControls(void)
 		Choices.Add(APPEARANCE_OPTIONS::GetVisibilityString((APPEARANCE_OPTIONS::OBJECT_VISIBILITY)i));
 
 	// Create the check list box
-	VisibilityList = new wxCheckListBox(VisibilityPanel, wxID_ANY, wxDefaultPosition,
-		wxSize(MainObjectWidth, MainObjectHeight), Choices);
-
-	// Add the check list box to the sizer
-	VisibilitySizer->Add(VisibilityList, 1, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALL | wxALIGN_TOP, 5);
+	VisibilityList = new wxCheckListBox(VisibilityPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, Choices);
+	visibilitySizer->Add(VisibilityList, 0, wxALIGN_CENTER_HORIZONTAL | wxEXPAND | wxALL | wxALIGN_TOP, 5);
 
 	// Go through the list and check the boxes of the items that are currenly visible
 	for (i = 0; i < APPEARANCE_OPTIONS::VisibilityCount; i++)
@@ -274,37 +255,29 @@ void APPEARANCE_OPTIONS_DIALOG::CreateControls(void)
 	wxBoxSizer *SizeTopSizer = new wxBoxSizer(wxVERTICAL);
 
 	// Create the size page main sizer
-	wxBoxSizer *SizeSizer = new wxBoxSizer(wxVERTICAL);
-	SizeTopSizer->Add(SizeSizer, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
+	wxFlexGridSizer *sizeSizer = new wxFlexGridSizer(1);
+	sizeSizer->SetFlexibleDirection(wxVERTICAL);
+	SizeTopSizer->Add(sizeSizer, 0, wxALIGN_CENTER_HORIZONTAL | wxALL | wxEXPAND, 5);
 
-	// Add a horizontal spacer for the text across the top
-	wxBoxSizer *SizeCaptionSizer = new wxBoxSizer(wxHORIZONTAL);
-	SizeSizer->Add(SizeCaptionSizer, 0, wxALIGN_TOP);
-
-	// Add the text to this spacer
+	// Add the text across the top of the page
 	wxStaticText *SizePrompt = new wxStaticText(SizePanel, wxID_STATIC,
 		_T("Edit the object sizes (units are ") + converter.GetUnitType(Convert::UnitTypeDistance)
 		+ _T("):"), wxDefaultPosition, wxSize(-1, -1), 0);
-	SizeCaptionSizer->Add(-1, -1, 0, wxALL, 5);
-	SizeCaptionSizer->Add(SizePrompt, 0, wxALL, 5);
+	sizeSizer->Add(SizePrompt, 0, wxALL, 5);
 
 	// Create the grid for the list of sizes
-	SizeGrid = new wxGrid(SizePanel, wxID_ANY, wxDefaultPosition, wxSize(MainObjectWidth, MainObjectHeight));
+	SizeGrid = new wxGrid(SizePanel, wxID_ANY);
 	SizeGrid->CreateGrid(APPEARANCE_OPTIONS::SizeCount, 2, wxGrid::wxGridSelectRows);
 
 	// Begin a batch edit of the grid
 	SizeGrid->BeginBatch();
-
-	// Set the column widths
-	SizeGrid->SetColumnWidth(0, LabelColumnWidth);
-	SizeGrid->SetColumnWidth(1, DataColumnWidth);
 
 	// Hide the label column and set the size for the label row
 	SizeGrid->SetRowLabelSize(0);
 	SizeGrid->SetColLabelSize(SizeGrid->GetRowSize(0));
 
 	// Add the grid to the sizer
-	SizeSizer->Add(SizeGrid, 1, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALL | wxALIGN_TOP, 5);
+	sizeSizer->Add(SizeGrid, 1, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALL | wxALIGN_TOP, 5);
 
 	// Set the column headings
 	SizeGrid->SetColLabelValue(0, _T("Object"));
@@ -328,6 +301,9 @@ void APPEARANCE_OPTIONS_DIALOG::CreateControls(void)
 			Options->GetSize((APPEARANCE_OPTIONS::OBJECT_SIZE)i))));
 	}
 
+	// Automatically set column widths
+	SizeGrid->AutoSizeColumns();
+
 	// Don't let the user move or re-size the rows and columns
 	SizeGrid->EnableDragColMove(false);
 	SizeGrid->EnableDragColSize(true);
@@ -348,37 +324,29 @@ void APPEARANCE_OPTIONS_DIALOG::CreateControls(void)
 	wxBoxSizer *ResolutionTopSizer = new wxBoxSizer(wxVERTICAL);
 
 	// Create the resolution page main sizer
-	wxBoxSizer *ResolutionSizer = new wxBoxSizer(wxVERTICAL);
-	ResolutionTopSizer->Add(ResolutionSizer, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
+	wxFlexGridSizer *resolutionSizer = new wxFlexGridSizer(1);
+	resolutionSizer->SetFlexibleDirection(wxVERTICAL);
+	ResolutionTopSizer->Add(resolutionSizer, 0, wxALIGN_CENTER_HORIZONTAL | wxALL | wxEXPAND, 5);
 
-	// Add a horizontal spacer for the text across the top
-	wxBoxSizer *ResolutionCaptionSizer = new wxBoxSizer(wxHORIZONTAL);
-	ResolutionSizer->Add(ResolutionCaptionSizer, 0, wxALIGN_TOP);
-
-	// Add the text to this spacer
+	// Add the text across the top of the page
 	wxStaticText *ResolutionPrompt = new wxStaticText(ResolutionPanel, wxID_STATIC,
 		_T("Edit the object resolutions (number of sides\nto use to approximate a round object):"),
 		wxDefaultPosition, wxSize(-1, -1), 0);
-	ResolutionCaptionSizer->Add(-1, -1, 0, wxALL, 5);
-	ResolutionCaptionSizer->Add(ResolutionPrompt, 0, wxALL, 5);
+	resolutionSizer->Add(ResolutionPrompt, 0, wxALL, 5);
 
 	// Create the grid for the list of resolutions
-	ResolutionGrid = new wxGrid(ResolutionPanel, wxID_ANY, wxDefaultPosition, wxSize(MainObjectWidth, MainObjectHeight));
+	ResolutionGrid = new wxGrid(ResolutionPanel, wxID_ANY);
 	ResolutionGrid->CreateGrid(APPEARANCE_OPTIONS::ResolutionCount, 2, wxGrid::wxGridSelectRows);
 
 	// Begin a batch edit of the grid
 	ResolutionGrid->BeginBatch();
-
-	// Set the column widths
-	ResolutionGrid->SetColumnWidth(0, LabelColumnWidth);
-	ResolutionGrid->SetColumnWidth(1, DataColumnWidth);
 
 	// Hide the label rows/columns
 	ResolutionGrid->SetRowLabelSize(0);
 	ResolutionGrid->SetColLabelSize(ResolutionGrid->GetRowSize(0));
 
 	// Add the grid to the sizer
-	ResolutionSizer->Add(ResolutionGrid, 1, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALL | wxALIGN_TOP, 5);
+	resolutionSizer->Add(ResolutionGrid, 0, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALL | wxALIGN_TOP, 5);
 
 	// Set the column headings
 	ResolutionGrid->SetColLabelValue(0, _T("Object"));
@@ -403,6 +371,9 @@ void APPEARANCE_OPTIONS_DIALOG::CreateControls(void)
 		ResolutionGrid->SetCellValue(i, 1, ValueString);
 	}
 
+	// Automatically set the columns widths
+	ResolutionGrid->AutoSizeColumns();
+
 	// Don't let the user move or re-size the rows and columns
 	ResolutionGrid->EnableDragColMove(false);
 	ResolutionGrid->EnableDragColSize(true);
@@ -414,6 +385,11 @@ void APPEARANCE_OPTIONS_DIALOG::CreateControls(void)
 
 	// Set the resolution panels's sizer
 	ResolutionPanel->SetSizer(ResolutionTopSizer);
+
+	// FIXME:  Definitely needs clean-up here
+	/*int remainingColumnWidth = ResolutionGrid->GetSize().GetWidth() - ResolutionGrid->GetColumnWidth(1);
+	if (remainingColumnWidth > ResolutionGrid->GetColumnWidth(0))
+		ResolutionGrid->SetColumnWidth(0, remainingColumnWidth);*/
 
 	// Add a spacer between the notebook and the buttons
 	MainSizer->AddSpacer(10);

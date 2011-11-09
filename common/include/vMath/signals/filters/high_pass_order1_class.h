@@ -1,5 +1,5 @@
 /*===================================================================================
-                                    DataPlotter
+                                    CarDesigner
                            Copyright Kerry R. Loux 2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.

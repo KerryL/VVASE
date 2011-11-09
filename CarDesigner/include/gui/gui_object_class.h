@@ -76,10 +76,7 @@ public:
 	void SetModified(void);
 
 	// Returns the object that draws this on the screen
-	inline RenderWindow *GetRenderer(void) const { return Renderer; };
-
-	// Re-draws the openGL image
-	virtual void Render(void);
+	inline wxWindow *GetNotebookTab(void) const { return notebookTab; };
 
 	// Generates an image file of the render window contents
 	bool WriteImageToFile(wxString PathAndFileName);
@@ -154,8 +151,8 @@ protected:
 	MAIN_FRAME &MainFrame;
 	MAIN_NOTEBOOK *Notebook;
 
-	// The render window
-	RenderWindow *Renderer;
+	// The object to be added to the notebook
+	wxWindow *notebookTab;
 
 	// Flag indicating whether or not this object has been modified since it was last saved
 	bool ModifiedSinceLastSave;

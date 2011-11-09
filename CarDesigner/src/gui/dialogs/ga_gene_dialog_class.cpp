@@ -15,6 +15,7 @@
 
 // CarDesigner headers
 #include "gui/dialogs/ga_gene_dialog_class.h"
+#include "vUtilities/wxRelatedUtilities.h"
 
 //==========================================================================
 // Class:			GA_GENE_DIALOG
@@ -137,19 +138,23 @@ void GA_GENE_DIALOG::CreateControls(void)
 	wxBoxSizer *MainSizer = new wxBoxSizer(wxVERTICAL);
 	TopSizer->Add(MainSizer, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
 
-	// Create a sizer for each of the inputs
-	wxBoxSizer *HardpointSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxBoxSizer *TiedToSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxBoxSizer *AxisDirectionSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxBoxSizer *CornerLocationSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxBoxSizer *MinimumSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxBoxSizer *MaximumSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxBoxSizer *NumberOfValuesSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxBoxSizer *ResolutionSizer = new wxBoxSizer(wxHORIZONTAL);
+	// Create a sizer to contain the inputs
+	wxFlexGridSizer *inputAreaSizer = new wxFlexGridSizer(3, 5, 5);
+	inputAreaSizer->SetFlexibleDirection(wxHORIZONTAL);
+	MainSizer->Add(inputAreaSizer, 0, wxALL, 5);
+
+	// Specify the sizer flags for all controls in the grid here
+	int sizerFlags = wxEXPAND | wxALIGN_CENTER_VERTICAL;
+
+	// When setting the control width, we need to account for the width of the
+	// "expand" button, etc., so we specify that here
+#ifdef __WXGTK__
+	unsigned int additionalWidth = 40;
+#else
+	unsigned int additionalWidth = 30;
+#endif
 
 	// Set up the column widths
-	int LabelColumnWidth(90);
-	int InputColumnWidth(140);
 	int i;
 	wxArrayString List;
 
@@ -157,44 +162,48 @@ void GA_GENE_DIALOG::CreateControls(void)
 	// Hardpoints
 	for (i = 0; i < CORNER::NumberOfHardpoints; i++)
 		List.Add(CORNER::GetHardpointName((CORNER::HARDPOINTS)i));
-	wxStaticText *HardpointLabel = new wxStaticText(this, wxID_STATIC, _T("Hardpoint"),
-		wxDefaultPosition, wxSize(LabelColumnWidth, -1), 0);
+	wxStaticText *HardpointLabel = new wxStaticText(this, wxID_STATIC, _T("Hardpoint"));
 	HardpointCombo = new wxComboBox(this, wxID_ANY, CORNER::GetHardpointName(Hardpoint), wxDefaultPosition,
-		wxSize(InputColumnWidth, -1), List, wxCB_READONLY);
-	HardpointSizer->Add(HardpointLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	HardpointSizer->Add(HardpointCombo, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+		wxDefaultSize, List, wxCB_READONLY);
+	SetMinimumWidthFromContents(HardpointCombo, additionalWidth);
+	inputAreaSizer->Add(HardpointLabel, 0, sizerFlags);
+	inputAreaSizer->Add(HardpointCombo, 0, sizerFlags);
+	inputAreaSizer->AddSpacer(-1);
 
 	// Tied To
 	// Re-use the same list for this combo box
 	List.Insert(_T("None"), 0);
-	wxStaticText *TiedToLabel = new wxStaticText(this, wxID_STATIC, _T("Alternate With"),
-		wxDefaultPosition, wxSize(LabelColumnWidth, -1), 0);
+	wxStaticText *TiedToLabel = new wxStaticText(this, wxID_STATIC, _T("Alternate With"));
 	TiedToCombo = new wxComboBox(this, wxID_ANY, CORNER::GetHardpointName(TiedTo), wxDefaultPosition,
-		wxSize(InputColumnWidth, -1), List, wxCB_READONLY);
-	TiedToSizer->Add(TiedToLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	TiedToSizer->Add(TiedToCombo, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+		wxDefaultSize, List, wxCB_READONLY);
+	SetMinimumWidthFromContents(TiedToCombo, additionalWidth);
+	inputAreaSizer->Add(TiedToLabel, 0, sizerFlags);
+	inputAreaSizer->Add(TiedToCombo, 0, sizerFlags);
+	inputAreaSizer->AddSpacer(-1);
 
 	// Axis Direction
 	List.Clear();
 	for (i = 0; i < 3; i++)
 		List.Add(Vector::GetAxisName((Vector::Axis)i));
-	wxStaticText *AxisDirectionLabel = new wxStaticText(this, wxID_STATIC, _T("Axis Direction"),
-		wxDefaultPosition, wxSize(LabelColumnWidth, -1), 0);
+	wxStaticText *AxisDirectionLabel = new wxStaticText(this, wxID_STATIC, _T("Axis Direction"));
 	AxisDirectionCombo = new wxComboBox(this, wxID_ANY, Vector::GetAxisName(AxisDirection), wxDefaultPosition,
-		wxSize(InputColumnWidth, -1), List, wxCB_READONLY);
-	AxisDirectionSizer->Add(AxisDirectionLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	AxisDirectionSizer->Add(AxisDirectionCombo, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+		wxDefaultSize, List, wxCB_READONLY);
+	SetMinimumWidthFromContents(AxisDirectionCombo, additionalWidth);
+	inputAreaSizer->Add(AxisDirectionLabel, 0, sizerFlags);
+	inputAreaSizer->Add(AxisDirectionCombo, 0, sizerFlags);
+	inputAreaSizer->AddSpacer(-1);
 
 	// Corner Location
 	List.Clear();
 	for (i = 0; i < CORNER::NumberOfLocations; i++)
 		List.Add(CORNER::GetLocationName((CORNER::LOCATION)i));
-	wxStaticText *CornerLocationLabel = new wxStaticText(this, wxID_STATIC, _T("Corner Location"),
-		wxDefaultPosition, wxSize(LabelColumnWidth, -1), 0);
+	wxStaticText *CornerLocationLabel = new wxStaticText(this, wxID_STATIC, _T("Corner Location"));
 	CornerLocationCombo = new wxComboBox(this, wxID_ANY, CORNER::GetLocationName(CornerLocation), wxDefaultPosition,
-		wxSize(InputColumnWidth, -1), List, wxCB_READONLY);
-	CornerLocationSizer->Add(CornerLocationLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	CornerLocationSizer->Add(CornerLocationCombo, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+		wxDefaultSize, List, wxCB_READONLY);
+	SetMinimumWidthFromContents(CornerLocationCombo, additionalWidth);
+	inputAreaSizer->Add(CornerLocationLabel, 0, sizerFlags);
+	inputAreaSizer->Add(CornerLocationCombo, 0, sizerFlags);
+	inputAreaSizer->AddSpacer(-1);
 
 #ifdef __WXGTK__
 	// Under GTK, the combo box selections are set to -1 until the user changes the selection, even if
@@ -212,58 +221,43 @@ void GA_GENE_DIALOG::CreateControls(void)
 		TiedToCombo->SetSelection(0);
 
 	// Minimum
-	wxStaticText *MinimumLabel = new wxStaticText(this, wxID_STATIC, _T("Minimum"),
-		wxDefaultPosition, wxSize(LabelColumnWidth, -1), 0);
-	MinimumText = new wxTextCtrl(this, wxID_ANY, Converter.FormatNumber(Converter.ConvertDistance(Minimum)),
-		wxDefaultPosition, wxSize(InputColumnWidth, -1), 0);
+	wxStaticText *MinimumLabel = new wxStaticText(this, wxID_STATIC, _T("Minimum"));
+	MinimumText = new wxTextCtrl(this, wxID_ANY, Converter.FormatNumber(Converter.ConvertDistance(Minimum)));
 	wxStaticText *MinimumUnitsLabel = new wxStaticText(this, wxID_STATIC,
 		Converter.GetUnitType(Convert::UnitTypeDistance), wxDefaultPosition, wxDefaultSize, 0);
-	MinimumSizer->Add(MinimumLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	MinimumSizer->Add(MinimumText, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	MinimumSizer->Add(MinimumUnitsLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+	inputAreaSizer->Add(MinimumLabel, 0, sizerFlags);
+	inputAreaSizer->Add(MinimumText, 0, sizerFlags);
+	inputAreaSizer->Add(MinimumUnitsLabel, 0, sizerFlags);
 
 	// Maximum
-	wxStaticText *MaximumLabel = new wxStaticText(this, wxID_STATIC, _T("Maximum"),
-		wxDefaultPosition, wxSize(LabelColumnWidth, -1), 0);
-	MaximumText = new wxTextCtrl(this, wxID_ANY, Converter.FormatNumber(Converter.ConvertDistance(Maximum)),
-		wxDefaultPosition, wxSize(InputColumnWidth, -1), 0);
+	wxStaticText *MaximumLabel = new wxStaticText(this, wxID_STATIC, _T("Maximum"));
+	MaximumText = new wxTextCtrl(this, wxID_ANY, Converter.FormatNumber(Converter.ConvertDistance(Maximum)));
 	wxStaticText *MaximumUnitsLabel = new wxStaticText(this, wxID_STATIC,
 		Converter.GetUnitType(Convert::UnitTypeDistance), wxDefaultPosition, wxDefaultSize, 0);
-	MaximumSizer->Add(MaximumLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	MaximumSizer->Add(MaximumText, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	MaximumSizer->Add(MaximumUnitsLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+	inputAreaSizer->Add(MaximumLabel, 0, sizerFlags);
+	inputAreaSizer->Add(MaximumText, 0, sizerFlags);
+	inputAreaSizer->Add(MaximumUnitsLabel, 0, sizerFlags);
 
 	// Number of values
-	wxStaticText *NumberOfValuesLabel = new wxStaticText(this, wxID_STATIC, _T("Number of Values"),
-		wxDefaultPosition, wxSize(LabelColumnWidth, -1), 0);
-	NumberOfValuesText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(InputColumnWidth, -1), 0);
-	NumberOfValuesSizer->Add(NumberOfValuesLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	NumberOfValuesSizer->Add(NumberOfValuesText, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+	wxStaticText *NumberOfValuesLabel = new wxStaticText(this, wxID_STATIC, _T("Number of Values"));
+	NumberOfValuesText = new wxTextCtrl(this, wxID_ANY, wxEmptyString);
+	inputAreaSizer->Add(NumberOfValuesLabel, 0, sizerFlags);
+	inputAreaSizer->Add(NumberOfValuesText, 0, sizerFlags);
+	inputAreaSizer->AddSpacer(-1);
 
 	// Resolution
-	wxStaticText *ResolutionLabel = new wxStaticText(this, wxID_STATIC, _T("Resolution"),
-		wxDefaultPosition, wxSize(LabelColumnWidth, -1), 0);
-	Resolution = new wxStaticText(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(InputColumnWidth, -1), 0);
+	wxStaticText *ResolutionLabel = new wxStaticText(this, wxID_STATIC, _T("Resolution"));
+	Resolution = new wxStaticText(this, wxID_ANY, wxEmptyString);
 	wxStaticText *ResolutionUnitsLabel = new wxStaticText(this, wxID_STATIC,
 		Converter.GetUnitType(Convert::UnitTypeDistance), wxDefaultPosition, wxDefaultSize, 0);
-	ResolutionSizer->Add(ResolutionLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	ResolutionSizer->Add(Resolution, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	ResolutionSizer->Add(ResolutionUnitsLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+	inputAreaSizer->Add(ResolutionLabel, 0, sizerFlags);
+	inputAreaSizer->Add(Resolution, 0, sizerFlags);
+	inputAreaSizer->Add(ResolutionUnitsLabel, 0, sizerFlags);
 
 	// This is set as a separate event to cause the resolution to update
 	wxString Temp;
 	Temp.Printf("%lu", NumberOfValues);
 	NumberOfValuesText->SetValue(Temp);
-
-	// Add the sizers to the MainSizer
-	MainSizer->Add(HardpointSizer, 0, wxALIGN_TOP);
-	MainSizer->Add(TiedToSizer, 0, wxALIGN_TOP);
-	MainSizer->Add(AxisDirectionSizer, 0, wxALIGN_TOP);
-	MainSizer->Add(CornerLocationSizer, 0, wxALIGN_TOP);
-	MainSizer->Add(MinimumSizer, 0, wxALIGN_TOP);
-	MainSizer->Add(MaximumSizer, 0, wxALIGN_TOP);
-	MainSizer->Add(NumberOfValuesSizer, 0, wxALIGN_TOP);
-	MainSizer->Add(ResolutionSizer, 0, wxALIGN_TOP);
 
 	// Add a spacer between the text controls and the buttons
 	MainSizer->AddSpacer(15);

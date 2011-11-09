@@ -7,22 +7,11 @@
 
 ===================================================================================*/
 
-// File:  rms.h
-// Created:  5/3/2011
+// File:  plot_panel.cpp
+// Created:  11/9/2011
 // Author:  K. Loux
-// Description:  Computes root-mean-square of data.
+// Description:  Panel containing plot renderer and grid listing active plot channels.
 // History:
 
-#ifndef _RMS_H_
-#define _RMS_H_
-
-// Local forward declarations
-class Dataset2D;
-
-class RootMeanSquare
-{
-public:
-	static Dataset2D ComputeTimeHistory(const Dataset2D &data);
-};
-
-#endif// _RMS_H_
+// Local headers
+#include "gui/plot_panel.h"
