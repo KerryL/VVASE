@@ -15,3 +15,4 @@
 
 // Local headers
 #include "gui/plot_panel.h"
+#include "gui/renderer/plot_renderer_class.h"

@@ -101,7 +101,7 @@ CAR_RENDERER::CAR_RENDERER(MAIN_FRAME &_MainFrame, GUI_CAR &_Car, const Debugger
 // Class:			CAR_RENDERER
 // Function:		~CAR_RENDERER
 //
-// Description:		Denstructor for CAR_RENDERER class.
+// Description:		Destructor for CAR_RENDERER class.
 //
 // Input Arguments:
 //		None

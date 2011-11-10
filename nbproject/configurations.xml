@@ -1,0 +1,1193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="79">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <df name="CarDesigner" root=".">
+      <df name="bin">
+      </df>
+      <df name="CarDesigner">
+        <df name="include">
+          <df name="application">
+            <in>vvase_constants.h</in>
+            <in>vvaseapp_class.h</in>
+          </df>
+          <df name="environment">
+            <in>atmosphere_class.h</in>
+            <in>track_class.h</in>
+          </df>
+          <df name="gui">
+            <df name="components">
+              <df name="edit_panel">
+                <df name="gui_car">
+                  <in>edit_aerodynamics_panel_class.h</in>
+                  <in>edit_brakes_panel_class.h</in>
+                  <in>edit_corner_panel_class.h</in>
+                  <in>edit_differential_panel_class.h</in>
+                  <in>edit_drivetrain_panel_class.h</in>
+                  <in>edit_engine_panel_class.h</in>
+                  <in>edit_mass_panel_class.h</in>
+                  <in>edit_suspension_notebook_class.h</in>
+                  <in>edit_suspension_panel_class.h</in>
+                  <in>edit_tires_panel_class.h</in>
+                </df>
+                <df name="iteration">
+                  <in>edit_iteration_notebook_class.h</in>
+                  <in>edit_iteration_options_panel_class.h</in>
+                  <in>edit_iteration_plots_panel_class.h</in>
+                  <in>edit_iteration_range_panel_class.h</in>
+                </df>
+                <in>edit_panel_class.h</in>
+              </df>
+              <in>main_frame_class.h</in>
+              <in>main_notebook_class.h</in>
+              <in>main_tree_class.h</in>
+              <in>output_panel_class.h</in>
+            </df>
+            <df name="dialogs">
+              <in>appearance_options_dialog_class.h</in>
+              <in>ga_gene_dialog_class.h</in>
+              <in>ga_goal_dialog_class.h</in>
+              <in>options_dialog_class.h</in>
+            </df>
+            <df name="renderer">
+              <in>car_renderer_class.h</in>
+              <in>plot_renderer_class.h</in>
+            </df>
+            <in>appearance_options_class.h</in>
+            <in>drop_target_class.h</in>
+            <in>ga_object_class.h</in>
+            <in>genetic_algorithm_panel_class.h</in>
+            <in>genetic_optimization_class.h</in>
+            <in>gui_car_class.h</in>
+            <in>gui_object_class.h</in>
+            <in>ipc_client_class.h</in>
+            <in>ipc_connection_class.h</in>
+            <in>ipc_server_class.h</in>
+            <in>iteration_class.h</in>
+            <in>plot_object_class.h</in>
+            <in>undo_redo_stack_class.h</in>
+          </df>
+        </df>
+        <df name="res">
+          <df name="icons">
+          </df>
+        </df>
+        <df name="src">
+          <df name="application">
+            <in>vvaseapp_class.cpp</in>
+          </df>
+          <df name="environment">
+            <in>atmosphere_class.cpp</in>
+            <in>track_class.cpp</in>
+          </df>
+          <df name="gui">
+            <df name="components">
+              <df name="edit_panel">
+                <df name="gui_car">
+                  <in>edit_aerodynamics_panel_class.cpp</in>
+                  <in>edit_brakes_panel_class.cpp</in>
+                  <in>edit_corner_panel_class.cpp</in>
+                  <in>edit_differential_panel_class.cpp</in>
+                  <in>edit_drivetrain_panel_class.cpp</in>
+                  <in>edit_engine_panel_class.cpp</in>
+                  <in>edit_mass_panel_class.cpp</in>
+                  <in>edit_suspension_notebook_class.cpp</in>
+                  <in>edit_suspension_panel_class.cpp</in>
+                  <in>edit_tires_panel_class.cpp</in>
+                </df>
+                <df name="iteration">
+                  <in>edit_iteration_notebook_class.cpp</in>
+                  <in>edit_iteration_options_panel_class.cpp</in>
+                  <in>edit_iteration_plots_panel_class.cpp</in>
+                  <in>edit_iteration_range_panel_class.cpp</in>
+                </df>
+                <in>edit_panel_class.cpp</in>
+              </df>
+              <in>main_frame_class.cpp</in>
+              <in>main_notebook_class.cpp</in>
+              <in>main_tree_class.cpp</in>
+              <in>output_panel_class.cpp</in>
+            </df>
+            <df name="dialogs">
+              <in>appearance_options_dialog_class.cpp</in>
+              <in>ga_gene_dialog_class.cpp</in>
+              <in>ga_goal_dialog_class.cpp</in>
+              <in>options_dialog_class.cpp</in>
+            </df>
+            <df name="renderer">
+              <in>car_renderer_class.cpp</in>
+              <in>plot_renderer_class.cpp</in>
+            </df>
+            <in>appearance_options_class.cpp</in>
+            <in>drop_target_class.cpp</in>
+            <in>ga_object_class.cpp</in>
+            <in>genetic_algorithm_panel_class.cpp</in>
+            <in>genetic_optimization_class.cpp</in>
+            <in>gui_car_class.cpp</in>
+            <in>gui_object_class.cpp</in>
+            <in>ipc_client_class.cpp</in>
+            <in>ipc_connection_class.cpp</in>
+            <in>ipc_server_class.cpp</in>
+            <in>iteration_class.cpp</in>
+            <in>plot_object_class.cpp</in>
+            <in>undo_redo_stack_class.cpp</in>
+          </df>
+        </df>
+      </df>
+      <df name="common">
+        <df name="include">
+          <df name="vCar">
+            <in>aerodynamics_class.h</in>
+            <in>brakes_class.h</in>
+            <in>car_class.h</in>
+            <in>corner_class.h</in>
+            <in>damper_class.h</in>
+            <in>differential_class.h</in>
+            <in>driver_class.h</in>
+            <in>drivetrain_class.h</in>
+            <in>engine_class.h</in>
+            <in>fuel_cell_class.h</in>
+            <in>mass_class.h</in>
+            <in>spring_class.h</in>
+            <in>suspension_class.h</in>
+            <in>tire_class.h</in>
+            <in>tireset_class.h</in>
+          </df>
+          <df name="vMath">
+            <in>car_math.h</in>
+            <in>complex_class.h</in>
+            <in>matrix_class.h</in>
+            <in>vector_class.h</in>
+          </df>
+          <df name="vRenderer">
+            <df name="3dcar">
+              <in>aarm_class.h</in>
+              <in>damper3d_class.h</in>
+              <in>link_class.h</in>
+              <in>origin_class.h</in>
+              <in>plane_class.h</in>
+              <in>point3d_class.h</in>
+              <in>spring3d_class.h</in>
+              <in>swaybar3d_class.h</in>
+              <in>tire3d_class.h</in>
+              <in>triangle_class.h</in>
+              <in>vector3d_class.h</in>
+            </df>
+            <df name="primitives">
+              <in>axis.h</in>
+              <in>cone.h</in>
+              <in>cylinder.h</in>
+              <in>disk.h</in>
+              <in>plot_curve.h</in>
+              <in>primitive.h</in>
+              <in>quadrilateral.h</in>
+              <in>sphere.h</in>
+              <in>text_class.h</in>
+              <in>triangle.h</in>
+            </df>
+            <in>color_class.h</in>
+            <in>render_window_class.h</in>
+          </df>
+          <df name="vSolver">
+            <df name="optimization">
+              <in>genetic_algorithm_class.h</in>
+            </df>
+            <df name="physics">
+              <in>dynamics_class.h</in>
+              <in>integrator_class.h</in>
+              <in>kinematic_outputs_class.h</in>
+              <in>kinematics_class.h</in>
+              <in>milliken_class.h</in>
+              <in>shaker_rig_class.h</in>
+              <in>state_class.h</in>
+            </df>
+            <df name="threads">
+              <in>inverse_semaphore_class.h</in>
+              <in>job_queue_class.h</in>
+              <in>kinematics_data_class.h</in>
+              <in>optimization_data_class.h</in>
+              <in>thread_data_class.h</in>
+              <in>thread_event_class.h</in>
+              <in>thread_job_class.h</in>
+              <in>worker_thread_class.h</in>
+            </df>
+          </df>
+          <df name="vUtilities">
+            <in>convert_class.h</in>
+            <in>debug_class.h</in>
+            <in>machine_defs.h</in>
+            <in>managed_list_class.h</in>
+            <in>object_list_class.h</in>
+            <in>wheelset_structs.h</in>
+            <in>wxRelatedUtilities.h</in>
+            <in>xlsx_reader_class.h</in>
+          </df>
+        </df>
+      </df>
+      <df name="vCar">
+        <df name="src">
+          <in>aerodynamics_class.cpp</in>
+          <in>brakes_class.cpp</in>
+          <in>car_class.cpp</in>
+          <in>corner_class.cpp</in>
+          <in>damper_class.cpp</in>
+          <in>differential_class.cpp</in>
+          <in>driver_class.cpp</in>
+          <in>drivetrain_class.cpp</in>
+          <in>engine_class.cpp</in>
+          <in>fuel_cell_class.cpp</in>
+          <in>mass_class.cpp</in>
+          <in>spring_class.cpp</in>
+          <in>suspension_class.cpp</in>
+          <in>tire_class.cpp</in>
+          <in>tireset_class.cpp</in>
+        </df>
+      </df>
+      <df name="vMath">
+        <df name="src">
+          <in>car_math.cpp</in>
+          <in>complex_class.cpp</in>
+          <in>matrix_class.cpp</in>
+          <in>vector_class.cpp</in>
+        </df>
+      </df>
+      <df name="vRenderer">
+        <df name="src">
+          <df name="3dcar">
+            <in>aarm_class.cpp</in>
+            <in>damper3d_class.cpp</in>
+            <in>link_class.cpp</in>
+            <in>origin_class.cpp</in>
+            <in>plane_class.cpp</in>
+            <in>point3d_class.cpp</in>
+            <in>spring3d_class.cpp</in>
+            <in>swaybar3d_class.cpp</in>
+            <in>tire3d_class.cpp</in>
+            <in>triangle_class.cpp</in>
+            <in>vector3d_class.cpp</in>
+          </df>
+          <df name="primitives">
+            <in>axis.cpp</in>
+            <in>cone.cpp</in>
+            <in>cylinder.cpp</in>
+            <in>disk.cpp</in>
+            <in>plot_curve.cpp</in>
+            <in>primitive.cpp</in>
+            <in>quadrilateral.cpp</in>
+            <in>sphere.cpp</in>
+            <in>text_class.cpp</in>
+            <in>triangle.cpp</in>
+          </df>
+          <in>color_class.cpp</in>
+          <in>render_window_class.cpp</in>
+        </df>
+      </df>
+      <df name="vSolver">
+        <df name="src">
+          <df name="optimization">
+            <in>genetic_algorithm_class.cpp</in>
+          </df>
+          <df name="physics">
+            <in>dynamics_class.cpp</in>
+            <in>integrator_class.cpp</in>
+            <in>kinematic_outputs_class.cpp</in>
+            <in>kinematics_class.cpp</in>
+            <in>milliken_class.cpp</in>
+            <in>shaker_rig_class.cpp</in>
+            <in>state_class.cpp</in>
+          </df>
+          <df name="threads">
+            <in>inverse_semaphore_class.cpp</in>
+            <in>job_queue_class.cpp</in>
+            <in>kinematics_data_class.cpp</in>
+            <in>optimization_data_class.cpp</in>
+            <in>thread_data_class.cpp</in>
+            <in>thread_event_class.cpp</in>
+            <in>thread_job_class.cpp</in>
+            <in>worker_thread_class.cpp</in>
+          </df>
+        </df>
+      </df>
+      <df name="vUtilities">
+        <df name="src">
+          <in>convert_class.cpp</in>
+          <in>debug_class.cpp</in>
+          <in>wxRelatedUtilities.cpp</in>
+          <in>xlsx_reader_class.cpp</in>
+        </df>
+      </df>
+    </df>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <sourceFolderFilter>^(nbproject)$</sourceFolderFilter>
+  <sourceRootList>
+    <Elem>.</Elem>
+  </sourceRootList>
+  <projectmakefile>makefile</projectmakefile>
+  <confs>
+    <conf name="Default" type="0">
+      <toolsSet>
+        <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
+        <compilerSet>default</compilerSet>
+      </toolsSet>
+      <makefileType>
+        <makeTool>
+          <buildCommandWorkingDir>.</buildCommandWorkingDir>
+          <buildCommand>${MAKE}</buildCommand>
+          <cleanCommand>${MAKE} -f Makefile clean</cleanCommand>
+          <executablePath>bin/VVASE</executablePath>
+          <ccTool>
+            <incDir>
+              <pElem>CarDesigner</pElem>
+              <pElem>CarDesigner/include</pElem>
+            </incDir>
+            <preprocessorList>
+              <Elem>_VVASE_64_BIT_</Elem>
+              <Elem>wxUSE_GUI=1</Elem>
+            </preprocessorList>
+          </ccTool>
+        </makeTool>
+      </makefileType>
+      <item path="CarDesigner/include/application/vvase_constants.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/include/environment/atmosphere_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/include/environment/track_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/include/gui/appearance_options_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/include/gui/components/edit_panel/edit_panel_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/include/gui/components/edit_panel/gui_car/edit_aerodynamics_panel_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/include/gui/components/edit_panel/gui_car/edit_brakes_panel_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/include/gui/components/edit_panel/gui_car/edit_corner_panel_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/include/gui/components/edit_panel/gui_car/edit_differential_panel_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/include/gui/components/edit_panel/gui_car/edit_drivetrain_panel_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/include/gui/components/edit_panel/gui_car/edit_engine_panel_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/include/gui/components/edit_panel/gui_car/edit_mass_panel_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/include/gui/components/edit_panel/gui_car/edit_suspension_notebook_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/include/gui/components/edit_panel/gui_car/edit_suspension_panel_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/include/gui/components/edit_panel/gui_car/edit_tires_panel_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/include/gui/components/edit_panel/iteration/edit_iteration_notebook_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/include/gui/components/edit_panel/iteration/edit_iteration_options_panel_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/include/gui/components/edit_panel/iteration/edit_iteration_plots_panel_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/include/gui/components/edit_panel/iteration/edit_iteration_range_panel_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/include/gui/components/main_notebook_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/include/gui/components/main_tree_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/include/gui/components/output_panel_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/include/gui/dialogs/appearance_options_dialog_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/include/gui/dialogs/ga_gene_dialog_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/include/gui/dialogs/ga_goal_dialog_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/include/gui/dialogs/options_dialog_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/include/gui/drop_target_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/include/gui/genetic_algorithm_panel_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/include/gui/genetic_optimization_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/include/gui/gui_car_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/include/gui/iteration_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/include/gui/plot_object_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/include/gui/renderer/car_renderer_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/include/gui/renderer/plot_renderer_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/environment/atmosphere_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/environment/track_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/appearance_options_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/components/edit_panel/edit_panel_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/components/edit_panel/gui_car/edit_aerodynamics_panel_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/components/edit_panel/gui_car/edit_brakes_panel_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/components/edit_panel/gui_car/edit_corner_panel_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/components/edit_panel/gui_car/edit_differential_panel_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/components/edit_panel/gui_car/edit_drivetrain_panel_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/components/edit_panel/gui_car/edit_engine_panel_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/components/edit_panel/gui_car/edit_mass_panel_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/components/edit_panel/gui_car/edit_suspension_notebook_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/components/edit_panel/gui_car/edit_suspension_panel_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/components/edit_panel/gui_car/edit_tires_panel_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/components/edit_panel/iteration/edit_iteration_notebook_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/components/edit_panel/iteration/edit_iteration_options_panel_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/components/edit_panel/iteration/edit_iteration_plots_panel_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/components/edit_panel/iteration/edit_iteration_range_panel_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/components/main_frame_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/components/main_notebook_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/components/main_tree_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/components/output_panel_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/dialogs/appearance_options_dialog_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/dialogs/ga_gene_dialog_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/dialogs/ga_goal_dialog_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/drop_target_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/ga_object_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/genetic_algorithm_panel_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/genetic_optimization_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/gui_car_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/gui_object_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/ipc_client_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/ipc_connection_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/ipc_server_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/iteration_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/plot_object_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/renderer/car_renderer_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/renderer/plot_renderer_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="CarDesigner/src/gui/undo_redo_stack_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="common/include/vCar/aerodynamics_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vCar/brakes_class.h" ex="true" tool="3" flavor="0">
+      </item>
+      <item path="common/include/vCar/car_class.h" ex="true" tool="3" flavor="0">
+      </item>
+      <item path="common/include/vCar/differential_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vCar/driver_class.h" ex="true" tool="3" flavor="0">
+      </item>
+      <item path="common/include/vCar/drivetrain_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vCar/engine_class.h" ex="true" tool="3" flavor="0">
+      </item>
+      <item path="common/include/vCar/fuel_cell_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vCar/mass_class.h" ex="true" tool="3" flavor="0">
+      </item>
+      <item path="common/include/vCar/suspension_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vCar/tire_class.h" ex="true" tool="3" flavor="0">
+      </item>
+      <item path="common/include/vCar/tireset_class.h" ex="true" tool="3" flavor="0">
+      </item>
+      <item path="common/include/vMath/car_math.h" ex="true" tool="3" flavor="0">
+      </item>
+      <item path="common/include/vMath/complex_class.h" ex="true" tool="3" flavor="0">
+      </item>
+      <item path="common/include/vMath/matrix_class.h" ex="true" tool="3" flavor="0">
+      </item>
+      <item path="common/include/vRenderer/3dcar/aarm_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vRenderer/3dcar/damper3d_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vRenderer/3dcar/link_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vRenderer/3dcar/origin_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vRenderer/3dcar/plane_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vRenderer/3dcar/point3d_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vRenderer/3dcar/spring3d_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vRenderer/3dcar/swaybar3d_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vRenderer/3dcar/tire3d_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vRenderer/3dcar/triangle_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vRenderer/3dcar/vector3d_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vRenderer/color_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vRenderer/primitives/axis.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vRenderer/primitives/cone.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vRenderer/primitives/cylinder.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vRenderer/primitives/disk.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vRenderer/primitives/plot_curve.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vRenderer/primitives/primitive.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vRenderer/primitives/quadrilateral.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vRenderer/primitives/sphere.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vRenderer/primitives/text_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vRenderer/primitives/triangle.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vRenderer/render_window_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vSolver/physics/dynamics_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vSolver/physics/integrator_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vSolver/physics/milliken_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vSolver/physics/shaker_rig_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vSolver/threads/job_queue_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vSolver/threads/kinematics_data_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vSolver/threads/optimization_data_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vSolver/threads/thread_data_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vSolver/threads/thread_event_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vSolver/threads/thread_job_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vSolver/threads/worker_thread_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vUtilities/machine_defs.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vUtilities/wheelset_structs.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vUtilities/wxRelatedUtilities.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <item path="common/include/vUtilities/xlsx_reader_class.h"
+            ex="true"
+            tool="3"
+            flavor="0">
+      </item>
+      <folder path="CarDesigner/CarDesigner/src/application">
+        <ccTool>
+          <incDir>
+            <pElem>../../common/include</pElem>
+          </incDir>
+        </ccTool>
+      </folder>
+      <folder path="CarDesigner/CarDesigner/src/gui">
+        <ccTool>
+          <incDir>
+            <pElem>/usr/local/lib/wx/include/gtk2-ansi-debug-2.8</pElem>
+            <pElem>/usr/local/include/wx-2.8</pElem>
+            <pElem>/usr/include/freetype2</pElem>
+            <pElem>common/include</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>_FILE_OFFSET_BITS=64</Elem>
+            <Elem>_LARGE_FILES</Elem>
+            <Elem>__WXDEBUG__</Elem>
+            <Elem>__WXGTK__</Elem>
+          </preprocessorList>
+        </ccTool>
+      </folder>
+      <folder path="CarDesigner/vUtilities">
+        <ccTool>
+          <incDir>
+            <pElem>../../common/include</pElem>
+          </incDir>
+        </ccTool>
+      </folder>
+      <item path="vCar/src/aerodynamics_class.cpp" ex="true" tool="1" flavor="0">
+      </item>
+      <item path="vCar/src/brakes_class.cpp" ex="true" tool="1" flavor="0">
+      </item>
+      <item path="vCar/src/car_class.cpp" ex="true" tool="1" flavor="0">
+      </item>
+      <item path="vCar/src/corner_class.cpp" ex="true" tool="1" flavor="0">
+      </item>
+      <item path="vCar/src/damper_class.cpp" ex="true" tool="1" flavor="0">
+      </item>
+      <item path="vCar/src/differential_class.cpp" ex="true" tool="1" flavor="0">
+      </item>
+      <item path="vCar/src/driver_class.cpp" ex="true" tool="1" flavor="0">
+      </item>
+      <item path="vCar/src/drivetrain_class.cpp" ex="true" tool="1" flavor="0">
+      </item>
+      <item path="vCar/src/engine_class.cpp" ex="true" tool="1" flavor="0">
+      </item>
+      <item path="vCar/src/fuel_cell_class.cpp" ex="true" tool="1" flavor="0">
+      </item>
+      <item path="vCar/src/mass_class.cpp" ex="true" tool="1" flavor="0">
+      </item>
+      <item path="vCar/src/spring_class.cpp" ex="true" tool="1" flavor="0">
+      </item>
+      <item path="vCar/src/suspension_class.cpp" ex="true" tool="1" flavor="0">
+      </item>
+      <item path="vCar/src/tire_class.cpp" ex="true" tool="1" flavor="0">
+      </item>
+      <item path="vCar/src/tireset_class.cpp" ex="true" tool="1" flavor="0">
+      </item>
+      <item path="vMath/src/car_math.cpp" ex="true" tool="1" flavor="0">
+      </item>
+      <item path="vMath/src/complex_class.cpp" ex="true" tool="1" flavor="0">
+      </item>
+      <item path="vMath/src/matrix_class.cpp" ex="true" tool="1" flavor="0">
+      </item>
+      <item path="vMath/src/vector_class.cpp" ex="true" tool="1" flavor="0">
+      </item>
+      <item path="vRenderer/src/3dcar/aarm_class.cpp" ex="true" tool="1" flavor="0">
+      </item>
+      <item path="vRenderer/src/3dcar/damper3d_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="vRenderer/src/3dcar/link_class.cpp" ex="true" tool="1" flavor="0">
+      </item>
+      <item path="vRenderer/src/3dcar/origin_class.cpp" ex="true" tool="1" flavor="0">
+      </item>
+      <item path="vRenderer/src/3dcar/plane_class.cpp" ex="true" tool="1" flavor="0">
+      </item>
+      <item path="vRenderer/src/3dcar/point3d_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="vRenderer/src/3dcar/spring3d_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="vRenderer/src/3dcar/swaybar3d_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="vRenderer/src/3dcar/tire3d_class.cpp" ex="true" tool="1" flavor="0">
+      </item>
+      <item path="vRenderer/src/3dcar/triangle_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="vRenderer/src/3dcar/vector3d_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="vRenderer/src/color_class.cpp" ex="true" tool="1" flavor="0">
+      </item>
+      <item path="vRenderer/src/primitives/axis.cpp" ex="true" tool="1" flavor="0">
+      </item>
+      <item path="vRenderer/src/primitives/cone.cpp" ex="true" tool="1" flavor="0">
+      </item>
+      <item path="vRenderer/src/primitives/cylinder.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="vRenderer/src/primitives/disk.cpp" ex="true" tool="1" flavor="0">
+      </item>
+      <item path="vRenderer/src/primitives/plot_curve.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="vRenderer/src/primitives/primitive.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="vRenderer/src/primitives/quadrilateral.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="vRenderer/src/primitives/sphere.cpp" ex="true" tool="1" flavor="0">
+      </item>
+      <item path="vRenderer/src/primitives/text_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="vRenderer/src/primitives/triangle.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="vRenderer/src/render_window_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="vSolver/src/optimization/genetic_algorithm_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="vSolver/src/physics/dynamics_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="vSolver/src/physics/integrator_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="vSolver/src/physics/kinematic_outputs_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="vSolver/src/physics/kinematics_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="vSolver/src/physics/milliken_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="vSolver/src/physics/shaker_rig_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="vSolver/src/physics/state_class.cpp" ex="true" tool="1" flavor="0">
+      </item>
+      <item path="vSolver/src/threads/inverse_semaphore_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="vSolver/src/threads/job_queue_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="vSolver/src/threads/kinematics_data_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="vSolver/src/threads/optimization_data_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="vSolver/src/threads/thread_data_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="vSolver/src/threads/thread_event_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="vSolver/src/threads/thread_job_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="vSolver/src/threads/worker_thread_class.cpp"
+            ex="true"
+            tool="1"
+            flavor="0">
+      </item>
+      <item path="vUtilities/src/convert_class.cpp" ex="true" tool="1" flavor="0">
+      </item>
+      <item path="vUtilities/src/debug_class.cpp" ex="true" tool="1" flavor="0">
+      </item>
+      <item path="vUtilities/src/xlsx_reader_class.cpp" ex="true" tool="1" flavor="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>

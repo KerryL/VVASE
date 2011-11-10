@@ -58,7 +58,7 @@ MAIN_NOTEBOOK::MAIN_NOTEBOOK(MAIN_FRAME &_MainFrame, wxWindowID id, const wxPoin
 // Class:			MAIN_NOTEBOOK
 // Function:		~MAIN_NOTEBOOK
 //
-// Description:		Denstructor for the MAIN_NOTEBOOK class.
+// Description:		Destructor for the MAIN_NOTEBOOK class.
 //
 // Input Arguments:
 //		None

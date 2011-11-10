@@ -65,7 +65,7 @@ GENETIC_ALGORITHM::GENETIC_ALGORITHM()
 // Class:			GENETIC_ALGORITHM
 // Function:		~GENETIC_ALGORITHM
 //
-// Description:		Denstructor for the GENETIC_ALGORITHM class.
+// Description:		Destructor for the GENETIC_ALGORITHM class.
 //
 // Input Arguments:
 //		None

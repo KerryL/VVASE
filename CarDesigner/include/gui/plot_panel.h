@@ -19,6 +19,9 @@
 // wxWidgets headers
 #include <wx/wx.h>
 
+// Local forward declarations
+class PlotRenderer;
+
 class PlotPanel : wxPanel
 {
 public:

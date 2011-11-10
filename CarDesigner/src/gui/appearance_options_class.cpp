@@ -109,7 +109,7 @@ APPEARANCE_OPTIONS::APPEARANCE_OPTIONS(MAIN_FRAME &_MainFrame, GUI_CAR &_Owner,
 // Class:			APPEARANCE_OPTIONS
 // Function:		~APPEARANCE_OPTIONS
 //
-// Description:		Denstructor for APPEARANCE_OPTIONS class.
+// Description:		Destructor for APPEARANCE_OPTIONS class.
 //
 // Input Arguments:
 //		None
@@ -132,7 +132,7 @@ APPEARANCE_OPTIONS::~APPEARANCE_OPTIONS()
 // Description:		Retrieves a string describing the specified visibility option.
 //
 // Input Arguments:
-//		_Visibility	= OBJECT_VISIBILITY in which we are intersted
+//		_Visibility	= OBJECT_VISIBILITY in which we are interested
 //
 // Output Arguments:
 //		None
