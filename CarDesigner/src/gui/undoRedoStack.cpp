@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  undo_redo_stack_class.cpp
+// File:  undoRedoStack.cpp
 // Created:  10/18/2010
 // Author:  K. Loux
 // Description:  Class implementing std::stack to store information about recent operations
@@ -15,9 +15,9 @@
 // History:
 
 // VVASE headers
-#include "gui/undo_redo_stack_class.h"
-#include "gui/components/main_frame_class.h"
-#include "gui/components/edit_panel/edit_panel_class.h"
+#include "gui/undoRedoStack.h"
+#include "gui/components/mainFrame.h"
+#include "gui/components/editPanel/editPanel.h"
 
 //==========================================================================
 // Class:			UNDO_REDO_STACK

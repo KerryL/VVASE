@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  debug_class.h
+// File:  debugger.h
 // Created:  2/24/2008
 // Author:  K. Loux
 // Description:  Contains class declaration for Debugger.  This is a simple class that

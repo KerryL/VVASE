@@ -15,7 +15,7 @@
 
 // Local headers
 #include "vRenderer/primitives/primitive.h"
-#include "vRenderer/render_window_class.h"
+#include "vRenderer/renderWindow.h"
 
 //==========================================================================
 // Class:			Primitive

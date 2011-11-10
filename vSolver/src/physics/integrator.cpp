@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  integrator_class.cpp
+// File:  integrator.cpp
 // Created:  7/12/2008
 // Author:  K. Loux
 // Description:  Contains class definition for INTEGRATOR class.
@@ -17,7 +17,7 @@
 #include <wx/wx.h>
 
 // CarDesigner headers
-#include "vSolver/physics/integrator_class.h"
+#include "vSolver/physics/integrator.h"
 
 //==========================================================================
 // Class:			INTEGRATOR

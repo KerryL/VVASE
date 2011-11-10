@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  main_frame_class.h
+// File:  mainFrame.h
 // Created:  3/7/2008
 // Author:  K. Loux
 // Description:  Contains the class declaration for the MAIN_FRAME class.  Uses wxWidgets
@@ -27,7 +27,7 @@
 //	2/10/2009	- Added EDIT_PANEL to application, K. Loux.
 //	3/24/2009	- Created one, application level KINEMATICS object, K. Loux.
 //	6/7/2009	- Changed GetFilenameFromUser() to make use of wx functions for checking for file
-//				  existance and selecting multiple files to open, K. Loux.
+//				  existence and selecting multiple files to open, K. Loux.
 //	10/18/2010	- Added undo/redo stack object, K. Loux.
 
 #ifndef _MAIN_FRAME_CLASS_H_
@@ -38,13 +38,13 @@
 #include <wx/aui/aui.h>
 
 // VVASE headers
-#include "vUtilities/convert_class.h"
-#include "vUtilities/debug_class.h"
-#include "vUtilities/managed_list_class.h"
-#include "vSolver/physics/kinematics_class.h"
-#include "gui/undo_redo_stack_class.h"
-#include "gui/gui_object_class.h"	// Can't use a forward declaration here because
-									// ManagedList can't compile without a definition
+#include "vUtilities/convert.h"
+#include "vUtilities/debugger.h"
+#include "vUtilities/managedList.h"
+#include "vSolver/physics/kinematics.h"
+#include "gui/undoRedoStack.h"
+#include "gui/guiObject.h"	// Can't use a forward declaration here because
+							// ManagedList can't compile without a definition
 
 // wxWidgets forward declarations
 class wxFileHistory;

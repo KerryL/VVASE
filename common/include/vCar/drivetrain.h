@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  drivetrain_class.h
+// File:  drivetrain.h
 // Created:  11/3/2007
 // Author:  K. Loux
 // Description:  Contains class declaration for DRIVETRAIN class (transmission).

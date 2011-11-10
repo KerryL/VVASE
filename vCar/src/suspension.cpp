@@ -7,14 +7,14 @@
 
 ===================================================================================*/
 
-// File:  suspension_class.cpp
+// File:  suspension.cpp
 // Created:  11/3/2007
 // Author:  K. Loux
 // Description:  Contains class functionality for suspension class.
 // History:
 //	2/17/2008	- Made SolveForPoint and SolveForXY use newly found analytical solution
 //				  for intersection of three spheres problem, K. Loux.
-//	3/9/2008	- Changed strucutre of Debugger class, K. Loux.
+//	3/9/2008	- Changed structure of Debugger class, K. Loux.
 //	2/16/2009	- Changed to use enumeration style array of points instead of having each
 //				  point declared individually, K. Loux.
 //	4/11/2009	- Changed structure of SolveForPoint and SolveForXY to take original
@@ -31,9 +31,9 @@
 #include <wx/wx.h>
 
 // VVASE headers
-#include "vCar/suspension_class.h"
-#include "vMath/car_math.h"
-#include "vUtilities/machine_defs.h"
+#include "vCar/suspension.h"
+#include "vMath/carMath.h"
+#include "vUtilities/machineDefinitions.h"
 
 //==========================================================================
 // Class:			SUSPENSION

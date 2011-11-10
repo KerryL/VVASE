@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  gui_object_class.h
+// File:  guiObject.h
 // Created:  6/5/2008
 // Author:  K. Loux
 // Description:  Contains class declaration for GUI_OBJECT class.  This aids with GUI functionality

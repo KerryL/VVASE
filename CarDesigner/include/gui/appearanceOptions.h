@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  appearance_options_class.h
+// File:  appearanceOptions.h
 // Created:  4/23/2009
 // Author:  K. Loux
 // Description:  Container class for options that effect the way the car appears in the
@@ -26,7 +26,7 @@ class Debugger;
 #include <iosfwd>// for forward declarations of fstream objects
 
 // CarDesigner headers
-#include "vRenderer/color_class.h"
+#include "vRenderer/color.h"
 
 class APPEARANCE_OPTIONS
 {

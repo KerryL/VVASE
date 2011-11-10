@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  wheelset_structs.h
+// File:  wheelSetStructures.h
 // Created:  11/3/2007
 // Author:  K. Loux
 // Description:  Contains structures that are useful when defined at each corner of the car.
@@ -18,7 +18,7 @@
 #define _WHEELSET_STRUCTS_H_
 
 // VVASE headers
-#include "vMath/vector_class.h"
+#include "vMath/vector.h"
 
 // WheelSet - four doubles
 struct WheelSet

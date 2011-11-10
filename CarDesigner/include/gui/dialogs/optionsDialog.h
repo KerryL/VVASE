@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  options_dialog_class.h
+// File:  optionsDialog.h
 // Created:  2/9/2009
 // Author:  K. Loux
 // Description:  Contains the declaration for the OPTION_DIALOG class.
@@ -20,7 +20,7 @@
 #include <wx/wx.h>
 
 // VVASE headers
-#include "vSolver/physics/kinematics_class.h"
+#include "vSolver/physics/kinematics.h"
 
 // wxWidgets forward declarations
 class wxNotebook;

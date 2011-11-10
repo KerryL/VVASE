@@ -7,16 +7,16 @@
 
 ===================================================================================*/
 
-// File:  car_class.cpp
+// File:  car.cpp
 // Created:  11/3/2007
 // Author:  K. Loux
-// Description:  Contains class functionaliy for car class.
+// Description:  Contains class functionality for car class.
 // History:
 //	2/24/2008	- Changed half shaft points from DRIVETRAIN to SUSPENSION objects, K. Loux.
 //	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
 //	4/25/2009	- Added appearance options to write/read methods, incrementented file version
 //				  to version 1, K. Loux.
-//	5/3/2009	- Added file version arguement to SubSystem->Read() calls for backwards compatability
+//	5/3/2009	- Added file version argument to SubSystem->Read() calls for backwards compatability
 //				  with file versions, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 //	12/12/2010	- Removed calls to lock CarMutex within the car object - this is done to prevent
@@ -27,19 +27,19 @@
 #include <wx/wx.h>
 
 // VVASE headers
-#include "vCar/aerodynamics_class.h"
-#include "vCar/brakes_class.h"
-#include "vCar/car_class.h"
-#include "vCar/drivetrain_class.h"
-#include "vCar/engine_class.h"
-#include "vCar/mass_class.h"
-#include "vCar/suspension_class.h"
-#include "vCar/tire_class.h"
-#include "vCar/tireset_class.h"
-#include "vUtilities/debug_class.h"
-#include "vUtilities/wheelset_structs.h"
-#include "vUtilities/machine_defs.h"
-#include "vMath/vector_class.h"
+#include "vCar/aerodynamics.h"
+#include "vCar/brakes.h"
+#include "vCar/car.h"
+#include "vCar/drivetrain.h"
+#include "vCar/engine.h"
+#include "vCar/mass.h"
+#include "vCar/suspension.h"
+#include "vCar/tire.h"
+#include "vCar/tireset.h"
+#include "vUtilities/debugger.h"
+#include "vUtilities/wheelSetStructures.h"
+#include "vUtilities/machineDefinitions.h"
+#include "vMath/vector.h"
 
 // Standard C++ headers
 #include <fstream>

@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  brakes_class.h
+// File:  brakes.h
 // Created:  11/6/2007
 // Author:  K. Loux
 // Description:  Contains class declaration for BRAKES class (disk brakes only).
@@ -22,7 +22,7 @@
 #include <iosfwd>// forward declarations of fstream objects
 
 // vUtilities headers
-#include "vUtilities/wheelset_structs.h"
+#include "vUtilities/wheelSetStructures.h"
 
 // CarDesigner forward declarations
 class Debugger;

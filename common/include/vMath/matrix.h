@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  matrix_class.h
+// File:  matrix.h
 // Created:  5/2/2011
 // Author:  K. Loux
 // Description:  Contains class declaration for Matrix classes.

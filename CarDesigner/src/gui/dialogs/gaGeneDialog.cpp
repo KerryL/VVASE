@@ -7,14 +7,14 @@
 
 ===================================================================================*/
 
-// File:  ga_gene_dialog_class.cpp
+// File:  gaGeneDialog.cpp
 // Created:  7/30/2009
 // Author:  K. Loux
 // Description:  Dialog for editing gene properties.
 // History:
 
 // CarDesigner headers
-#include "gui/dialogs/ga_gene_dialog_class.h"
+#include "gui/dialogs/gaGeneDialog.h"
 #include "vUtilities/wxRelatedUtilities.h"
 
 //==========================================================================

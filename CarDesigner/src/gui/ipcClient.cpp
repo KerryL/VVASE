@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  ipc_client_class.cpp
+// File:  ipcClient.cpp
 // Created:  10/23/2010
 // Author:  K. Loux
 // Description:  Inter-process communication client class.  Used for passing file names
@@ -20,8 +20,8 @@
 #include <wx/wx.h>
 
 // VVASE headers
-#include "gui/ipc_client_class.h"
-#include "gui/ipc_connection_class.h"
+#include "gui/ipcClient.h"
+#include "gui/ipcConnection.h"
 
 //==========================================================================
 // Class:			IPC_CLIENT

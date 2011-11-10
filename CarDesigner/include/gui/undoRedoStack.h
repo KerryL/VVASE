@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  undo_redo_stack_class.h
+// File:  undoRedoStack.h
 // Created:  10/18/2010
 // Author:  K. Loux
 // Description:  Class implementing std::stack to store information about recent operations
@@ -21,7 +21,7 @@
 #include <stack>
 
 // VVASE headers
-#include "gui/ga_object_class.h"
+#include "gui/gaObject.h"
 
 // VVASE forward declarations
 class MAIN_FRAME;

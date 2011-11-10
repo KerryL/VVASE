@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  xlsx_reader_class.h
+// File:  xlsxReader.h
 // Created:  10/21/2010
 // Author:  K. Loux
 // Description:  Class for reading from Excel's XML-based files.  Contains functions
@@ -27,7 +27,7 @@
 #include <wx/xml/xml.h>
 
 // Local headers
-#include "vUtilities/managed_list_class.h"
+#include "vUtilities/managedList.h"
 
 // wxWidgets forward declarations
 class wxZipInputStream;

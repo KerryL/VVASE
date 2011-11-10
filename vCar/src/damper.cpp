@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  damper_class.cpp
+// File:  damper.cpp
 // Created:  1/3/2009
 // Author:  K. Loux
 // Description:  Contains class definition for DAMPER class.  This class contains
@@ -17,7 +17,7 @@
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
 // VVASE headers
-#include "vCar/damper_class.h"
+#include "vCar/damper.h"
 
 //==========================================================================
 // Class:			DAMPER

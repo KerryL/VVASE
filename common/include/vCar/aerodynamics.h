@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  aerodynamics_class.h
+// File:  aerodynamics.h
 // Created:  11/3/2007
 // Author:  K. Loux
 // Description:  Contains class declaration for aerodynamics class.
@@ -22,7 +22,7 @@
 #include <iosfwd>// forward declarations of fstream objects
 
 // vMath headers
-#include "vMath/vector_class.h"
+#include "vMath/vector.h"
 
 // vUtilities forward declarations
 class Debugger;

@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  thread_event_class.cpp
+// File:  threadEvent.cpp
 // Created:  11/3/2009
 // Author:  K. Loux
 // Description:  Eventually might house an actual event class - for now just an event
@@ -16,7 +16,7 @@
 // History:
 
 // VVASE headers
-#include "vSolver/threads/thread_event_class.h"
+#include "vSolver/threads/threadEvent.h"
 
 // Define the EVT_THREAD event type
 DEFINE_LOCAL_EVENT_TYPE(EVT_THREAD)

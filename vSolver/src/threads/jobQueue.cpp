@@ -1,13 +1,13 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2011
-
+_class
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
 
 ===================================================================================*/
 
-// File:  job_queue_class.cpp
+// File:  jobQueue.cpp
 // Created:  11/3/2009
 // Author:  K. Loux
 // Description:  Contains the class definition for the JOB_QUEUE class.  This queue
@@ -16,8 +16,8 @@
 // History:
 
 // VVASE headers
-#include "vSolver/threads/job_queue_class.h"
-#include "vSolver/threads/thread_event_class.h"
+#include "vSolver/threads/jobQueue.h"
+#include "vSolver/threads/threadEvent.h"
 
 //==========================================================================
 // Class:			JOB_QUEUE

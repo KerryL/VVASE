@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  triangle_class.h
+// File:  triangle3D.h
 // Created:  5/23/2008
 // Author:  K. Loux
 // Description:  Contains class declaration for the TRIANGLE3D class.  This is used for

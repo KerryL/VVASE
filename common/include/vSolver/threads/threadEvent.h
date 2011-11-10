@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  thread_event_class.h
+// File:  threadEvent.h
 // Created:  11/3/2009
 // Author:  K. Loux
 // Description:  Eventually might house an actual event class - for now just an event

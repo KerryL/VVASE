@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  gui_car_class.h
+// File:  guiCar.h
 // Created:  4/15/2008
 // Author:  K. Loux
 // Description:  A high-level car object.  This class defines the interaction between
@@ -32,8 +32,8 @@
 #include <wx/treebase.h>
 
 // VVASE headers
-#include "gui/gui_object_class.h"
-#include "vSolver/physics/kinematic_outputs_class.h"
+#include "gui/guiObject.h"
+#include "vSolver/physics/kinematicOutputs.h"
 
 // VVASE forward declarations
 class CAR_RENDERER;

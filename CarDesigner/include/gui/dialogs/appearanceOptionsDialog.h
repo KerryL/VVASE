@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  appearance_options_dialog_class.h
+// File:  appearanceOptionsDialog.h
 // Created:  4/23/2009
 // Author:  K. Loux
 // Description:  A dialog object for editing the contents of the APPEARANCE_OPTIONS object.
@@ -20,7 +20,7 @@
 #include <wx/wx.h>
 
 // VVASE headers
-#include "gui/appearance_options_class.h"
+#include "gui/appearanceOptions.h"
 
 // wxWidgets forward declarations
 class wxGridEvent;

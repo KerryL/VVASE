@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  optimization_data_class.cpp
+// File:  optimizationData.cpp
 // Created:  1/12/2009
 // Author:  K. Loux
 // Description:  Contains the class declaration for the OPTIMIZATION_DATA class.  This contains
@@ -15,8 +15,8 @@
 // History:
 
 // VVASE headers
-#include "vSolver/threads/optimization_data_class.h"
-#include "vSolver/threads/thread_job_class.h"
+#include "vSolver/threads/optimizationData.h"
+#include "vSolver/threads/threadJob.h"
 
 //==========================================================================
 // Class:			OPTIMIZATION_DATA

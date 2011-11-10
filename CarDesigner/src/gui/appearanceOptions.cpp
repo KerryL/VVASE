@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  appearance_options_class.cpp
+// File:  appearanceOptions.cpp
 // Created:  4/23/2009
 // Author:  K. Loux
 // Description:  Container class for options that effect the way the car appears in the
@@ -21,9 +21,9 @@
 #include <wx/wx.h>
 
 // CarDesigner headers
-#include "gui/appearance_options_class.h"
-#include "gui/dialogs/appearance_options_dialog_class.h"
-#include "gui/gui_car_class.h"
+#include "gui/appearanceOptions.h"
+#include "gui/dialogs/appearanceOptionsDialog.h"
+#include "gui/guiCar.h"
 
 //==========================================================================
 // Class:			APPEARANCE_OPTIONS

@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  differential_class.h
+// File:  differential.h
 // Created:  11/6/2007
 // Author:  K. Loux
 // Description:  Contains class declaration for DIFFERENTIAL class.

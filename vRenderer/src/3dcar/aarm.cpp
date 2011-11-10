@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  aarm_class.cpp
+// File:  aarm.cpp
 // Created:  5/23/2008
 // Author:  K. Loux
 // Description:  Contains class definition for the AARM class.
@@ -15,13 +15,13 @@
 //	5/17/2009	- Removed VTK dependencies, K. Loux.
 
 // VVASE headers
-#include "vRenderer/color_class.h"
-#include "vRenderer/3dcar/aarm_class.h"
+#include "vRenderer/color.h"
+#include "vRenderer/3dcar/aarm.h"
 #include "vRenderer/primitives/sphere.h"
 #include "vRenderer/primitives/cylinder.h"
-#include "vUtilities/convert_class.h"
-#include "vMath/vector_class.h"
-#include "vMath/car_math.h"
+#include "vUtilities/convert.h"
+#include "vMath/vector.h"
+#include "vMath/carMath.h"
 
 //==========================================================================
 // Class:			AARM

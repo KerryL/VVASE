@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  color_class.h
+// File:  color.h
 // Created:  5/2/2011
 // Author:  K. Loux
 // Description:  Contains class declaration for the Color class.  This class contains

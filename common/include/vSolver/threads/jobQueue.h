@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  job_queue_class.h
+// File:  jobQueue.h
 // Created:  11/3/2009
 // Author:  K. Loux
 // Description:  Contains the class declaration for the JOB_QUEUE class.  This queue
@@ -22,7 +22,7 @@
 #include <wx/wx.h>
 
 // VVASE headers
-#include "vSolver/threads/thread_job_class.h"
+#include "vSolver/threads/threadJob.h"
 
 // Standard C++ headers
 #include <map>

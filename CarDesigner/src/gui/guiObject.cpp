@@ -7,11 +7,11 @@
 
 ===================================================================================*/
 
-// File:  gui_object_class.cpp
+// File:  guiObject.cpp
 // Created:  6/5/2008
 // Author:  K. Loux
 // Description:  Contains class definition for GUI_OBJECT class.  This aids with GUI functionality for the
-//				 by serving as a link between all of the GUI componenets and the CAR object.
+//				 by serving as a link between all of the GUI components and the CAR object.
 // History:
 //	1/24/2009	- Major application structure change - MAIN_FRAME uses GUI_OBJECT instead of
 //				  GUI_CAR.  GUI_OBJECT changed to only contain either GUI_CAR or ITERATION
@@ -26,13 +26,13 @@
 #include <wx/docview.h>
 
 // VVASE headers
-#include "gui/gui_object_class.h"
-#include "gui/components/main_notebook_class.h"
-#include "gui/components/main_tree_class.h"
-#include "gui/components/main_frame_class.h"
-#include "gui/gui_car_class.h"
-#include "gui/iteration_class.h"
-#include "vRenderer/render_window_class.h"
+#include "gui/guiObject.h"
+#include "gui/components/mainNotebook.h"
+#include "gui/components/mainTree.h"
+#include "gui/components/mainFrame.h"
+#include "gui/guiCar.h"
+#include "gui/iteration.h"
+#include "vRenderer/renderWindow.h"
 
 //==========================================================================
 // Class:			GUI_OBJECT

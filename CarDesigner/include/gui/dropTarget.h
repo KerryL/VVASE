@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  drop_target_class.h
+// File:  dropTarget.h
 // Created:  10/20/2010
 // Author:  K. Loux
 // Description:  Derives from wxFileDropTarget and overrides OnDropFiles to load files

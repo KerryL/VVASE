@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  aerodynamics_class.cpp
+// File:  aerodynamics.cpp
 // Created:  11/3/2007
 // Author:  K. Loux
 // Description:  Contains class functionality for aerodynamics class.
@@ -19,9 +19,9 @@
 #include <fstream>
 
 // VVASE headers
-#include "vCar/aerodynamics_class.h"
-#include "vUtilities/debug_class.h"
-#include "vUtilities/machine_defs.h"
+#include "vCar/aerodynamics.h"
+#include "vUtilities/debugger.h"
+#include "vUtilities/machineDefinitions.h"
 
 //==========================================================================
 // Class:			AERODYNAMICS

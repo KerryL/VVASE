@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  edit_engine_panel_class.h
+// File:  editEnginePanel.h
 // Created:  2/19/2009
 // Author:  K. Loux
 // Description:  Contains the class declaration for the EDIT_ENGINE_PANEL class.

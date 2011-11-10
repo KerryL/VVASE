@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  ga_goal_dialog_class.h
+// File:  gaGoalDialog.h
 // Created:  7/30/2009
 // Author:  K. Loux
 // Description:  Dialog for editing goal properties.
@@ -17,9 +17,9 @@
 #include <wx/wx.h>
 
 // CarDesigner headers
-#include "vSolver/physics/kinematic_outputs_class.h"
-#include "vSolver/physics/kinematics_class.h"
-#include "vUtilities/convert_class.h"
+#include "vSolver/physics/kinematicOutputs.h"
+#include "vSolver/physics/kinematics.h"
+#include "vUtilities/convert.h"
 
 // CarDesigner forward declarations
 class MAIN_FRAME;

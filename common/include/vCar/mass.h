@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  mass_class.h
+// File:  mass.h
 // Created:  11/3/2007
 // Author:  K. Loux
 // Description:  Contains class declaration for MASS_PROPERTIES class.
@@ -23,8 +23,8 @@
 #include <iosfwd>// forward declarations of fstream objects
 
 // VVASE headers
-#include "vMath/vector_class.h"
-#include "vUtilities/wheelset_structs.h"
+#include "vMath/vector.h"
+#include "vUtilities/wheelSetStructures.h"
 
 // VVASE forward declarations
 class Debugger;

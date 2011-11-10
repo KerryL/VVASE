@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  convert_class.h
+// File:  convert.h
 // Created:  3/9/2008
 // Author:  K. Loux
 // Description:  Class declaration for a conversion from our "standard" units into the
@@ -47,8 +47,8 @@
 
 // FIXME:  Add Viscosity!
 
-#ifndef _Convert_CLASS_H_
-#define _Convert_CLASS_H_
+#ifndef _CONVERT_CLASS_H_
+#define _CONVERT_CLASS_H_
 
 // CarDesigner forward declarations
 class Vector;
@@ -504,4 +504,4 @@ private:
 	bool useScientificNotation;
 };
 
-#endif// _Convert_CLASS_H_
+#endif// _CONVERT_CLASS_H_

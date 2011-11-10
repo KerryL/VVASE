@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  edit_mass_panel_class.h
+// File:  editMassPanel.h
 // Created:  2/19/2009
 // Author:  K. Loux
 // Description:  Contains the class declaration for the EDIT_MASS_PANEL class.

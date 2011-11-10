@@ -15,10 +15,10 @@
 //	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
 
 // VVASE headers
-#include "vSolver/physics/dynamics_class.h"
-#include "vSolver/physics/integrator_class.h"
-#include "vUtilities/debug_class.h"
-#include "vMath/vector_class.h"
+#include "vSolver/physics/dynamics.h"
+#include "vSolver/physics/integrator.h"
+#include "vUtilities/debugger.h"
+#include "vMath/vector.h"
 
 // wxWidgets headers
 #include <wx/stopwatch.h>

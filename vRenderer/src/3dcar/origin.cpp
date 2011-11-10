@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  origin_class.cpp
+// File:  origin.cpp
 // Created:  5/23/2008
 // Author:  K. Loux
 // Description:  Contains class definition for the ORIGIN class.
@@ -15,10 +15,10 @@
 //	5/17/2009	- Removed VTK dependencies, K. Loux.
 
 // VVASE headers
-#include "vRenderer/3dcar/origin_class.h"
-#include "vRenderer/3dcar/vector3d_class.h"
-#include "vRenderer/color_class.h"
-#include "vMath/vector_class.h"
+#include "vRenderer/3dcar/origin.h"
+#include "vRenderer/3dcar/vector3D.h"
+#include "vRenderer/color.h"
+#include "vMath/vector.h"
 
 //==========================================================================
 // Class:			ORIGIN

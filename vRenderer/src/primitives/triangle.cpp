@@ -15,8 +15,8 @@
 
 // Local headers
 #include "vRenderer/primitives/triangle.h"
-#include "vRenderer/render_window_class.h"
-#include "vMath/car_math.h"
+#include "vRenderer/renderWindow.h"
+#include "vMath/carMath.h"
 
 //==========================================================================
 // Class:			TRIANGLE

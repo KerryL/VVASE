@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  car_math.h
+// File:  carMath.h
 // Created:  3/24/2008
 // Author:  K. Loux
 // Description:  Contains useful functions that don't fit better in another class.  Hopefully this

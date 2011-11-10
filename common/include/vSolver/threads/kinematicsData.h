@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  kinematics_data_class.h
+// File:  kinematicsData.h
 // Created:  1/12/2009
 // Author:  K. Loux
 // Description:  Contains the class declaration for the KINEMATICS_DATA class.  This contains
@@ -21,8 +21,8 @@
 #include <wx/wx.h>
 
 // VVASE headers
-#include "vSolver/threads/thread_data_class.h"
-#include "vSolver/physics/kinematics_class.h"
+#include "vSolver/threads/threadData.h"
+#include "vSolver/physics/kinematics.h"
 
 // VVASE forward declarations
 class CAR;

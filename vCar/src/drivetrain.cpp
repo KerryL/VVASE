@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  drivetrain_class.cpp
+// File:  drivetrain.cpp
 // Created:  11/3/2007
 // Author:  K. Loux
 // Description:  Contains class functionality for drivetrain class.
@@ -23,11 +23,11 @@
 #include <fstream>
 
 // VVASE headers
-#include "vCar/differential_class.h"
-#include "vCar/drivetrain_class.h"
-#include "vUtilities/wheelset_structs.h"
-#include "vUtilities/debug_class.h"
-#include "vUtilities/machine_defs.h"
+#include "vCar/differential.h"
+#include "vCar/drivetrain.h"
+#include "vUtilities/wheelSetStructures.h"
+#include "vUtilities/debugger.h"
+#include "vUtilities/machineDefinitions.h"
 
 //==========================================================================
 // Class:			DRIVETRAIN

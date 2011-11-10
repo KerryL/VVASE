@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  triangle_class.cpp
+// File:  triangle3D.cpp
 // Created:  1/5/2009
 // Author:  K. Loux
 // Description:  Contains class definition for the TRIANGLE3D class.  This is used for
@@ -17,11 +17,11 @@
 
 // VVASE headers
 #include "vRenderer/primitives/triangle.h"
-#include "vRenderer/3dcar/triangle_class.h"
-#include "vRenderer/color_class.h"
-#include "vUtilities/convert_class.h"
-#include "vMath/vector_class.h"
-#include "vMath/car_math.h"
+#include "vRenderer/3dcar/triangle3D.h"
+#include "vRenderer/color.h"
+#include "vUtilities/convert.h"
+#include "vMath/vector.h"
+#include "vMath/carMath.h"
 
 //==========================================================================
 // Class:			TRIANGLE3D

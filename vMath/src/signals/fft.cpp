@@ -10,7 +10,7 @@
 // File:  fft.cpp
 // Created:  5/3/2011
 // Author:  K. Loux
-// Description:  Performs fast fourier transform on data.
+// Description:  Performs Fast Fourier Transform on data.
 // History:
 
 // Standard C++ headers
@@ -24,7 +24,7 @@
 // Class:			FastFourierTransform
 // Function:		Compute (static)
 //
-// Description:		Computes the fast fourier transform for the given signal.
+// Description:		Computes the Fast Fourier Transform for the given signal.
 //					Assumes y contains data and x is time.
 //
 // Input Argurments:

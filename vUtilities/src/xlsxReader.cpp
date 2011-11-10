@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  xlsx_reader_class.cpp
+// File:  xlsxReader.cpp
 // Created:  10/21/2010
 // Author:  K. Loux
 // Description:  Class for reading from Excel's XML-based files.  Contains functions
@@ -23,7 +23,7 @@
 #include <wx/wfstream.h>
 
 // Local headers
-#include "vUtilities/xlsx_reader_class.h"
+#include "vUtilities/xlsxReader.h"
 
 //==========================================================================
 // Class:			XlsxReader

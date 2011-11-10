@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  track_class.cpp
+// File:  track.cpp
 // Created:  12/12/2008
 // Author:  K. Loux
 // Description:  Contains class definitions for TRACK class.  This is used to
@@ -16,7 +16,7 @@
 // History:
 
 // CarDesigner headers
-#include "environment/track_class.h"
+#include "environment/track.h"
 
 //==========================================================================
 // Class:			TRACK

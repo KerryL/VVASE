@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  filter_base_class.cpp
+// File:  filterBase.cpp
 // Created:  5/16/2011
 // Author:  K. Loux
 // Description:  Base class (abstract) for digital filters.
@@ -17,7 +17,7 @@
 #include <cstdlib>
 
 // Local headers
-#include "vMath/signals/filters/filter_base_class.h"
+#include "vMath/signals/filters/filterBase.h"
 
 //==========================================================================
 // Class:			FilterBase
@@ -25,7 +25,7 @@
 //
 // Description:		Constructor for the FilterBase class.
 //
-// Input Argurments:
+// Input Arguments:
 //		_sampleRate		= const double& specifying the sampling rate in Hz
 //
 // Output Arguments:
@@ -50,7 +50,7 @@ FilterBase::FilterBase(const double &_sampleRate) : sampleRate(_sampleRate)
 //
 // Description:		Destructor for the FilterBase class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:

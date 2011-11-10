@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  edit_iteration_options_panel_class.h
+// File:  editIterationOptionsPanel.h
 // Created:  11/14/2010
 // Author:  K. Loux
 // Description:  Contains the class declaration for the EDIT_ITERATION_OPTIONS_PANEL class.

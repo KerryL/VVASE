@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  render_window_class.cpp
+// File:  renderWindow.cpp
 // Created:  5/2/2011
 // Author:  K. Loux
 // Description:  Class for creating OpenGL scenes, derived from wxGLCanvas.  Contains
@@ -26,10 +26,10 @@
 #include <wx/image.h>
 
 // Local headers
-#include "vRenderer/render_window_class.h"
-#include "vMath/matrix_class.h"
-#include "vMath/vector_class.h"
-#include "vMath/car_math.h"
+#include "vRenderer/renderWindow.h"
+#include "vMath/matrix.h"
+#include "vMath/vector.h"
+#include "vMath/carMath.h"
 
 //==========================================================================
 // Class:			RenderWindow

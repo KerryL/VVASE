@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  output_panel_class.h
+// File:  outputPanel.h
 // Created:  3/15/2009
 // Author:  K. Loux
 // Description:  Contains the class declaration for the OUTPUT_PANEL class.

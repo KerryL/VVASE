@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  text_class.h
+// File:  text.h
 // Created:  5/2/2011
 // Author:  K. Loux
 // Description:  Derived from PRIMITVE, this class is used to draw text.

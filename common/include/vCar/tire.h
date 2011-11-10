@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  tire_class.h
+// File:  tire.h
 // Created:  11/3/2007
 // Author:  K. Loux
 // Description:  Contains class declaration for TIRE class.  Contains several tire models.
@@ -24,8 +24,8 @@
 #include <iosfwd>// forward declarations of fstream objects
 
 // VVASE headers
-#include "vMath/vector_class.h"
-#include "vUtilities/debug_class.h"
+#include "vMath/vector.h"
+#include "vUtilities/debugger.h"
 
 class TIRE
 {

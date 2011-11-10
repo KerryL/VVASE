@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  gui_car_class.cpp
+// File:  guiCar.cpp
 // Created:  4/15/2008
 // Author:  K. Loux
 // Description:  A high-level car object.  This class defines the interaction between
@@ -27,23 +27,23 @@
 #include <wx/treectrl.h>
 
 // VVASE headers
-#include "vCar/car_class.h"
-#include "vCar/aerodynamics_class.h"
-#include "vCar/brakes_class.h"
-#include "vCar/drivetrain_class.h"
-#include "vCar/engine_class.h"
-#include "vCar/mass_class.h"
-#include "vCar/suspension_class.h"
-#include "vCar/tire_class.h"
-#include "gui/renderer/car_renderer_class.h"
-#include "gui/appearance_options_class.h"
-#include "gui/components/main_frame_class.h"
-#include "gui/components/main_notebook_class.h"
-#include "gui/gui_car_class.h"
-#include "gui/components/main_tree_class.h"
-#include "vSolver/physics/kinematics_class.h"
-#include "vSolver/threads/thread_job_class.h"
-#include "vSolver/threads/kinematics_data_class.h"
+#include "vCar/car.h"
+#include "vCar/aerodynamics.h"
+#include "vCar/brakes.h"
+#include "vCar/drivetrain.h"
+#include "vCar/engine.h"
+#include "vCar/mass.h"
+#include "vCar/suspension.h"
+#include "vCar/tire.h"
+#include "gui/renderer/carRenderer.h"
+#include "gui/appearanceOptions.h"
+#include "gui/components/mainFrame.h"
+#include "gui/components/mainNotebook.h"
+#include "gui/guiCar.h"
+#include "gui/components/mainTree.h"
+#include "vSolver/physics/kinematics.h"
+#include "vSolver/threads/thread_Job.h"
+#include "vSolver/threads/kinematicsData.h"
 
 //==========================================================================
 // Class:			GUI_CAR

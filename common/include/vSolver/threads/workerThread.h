@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  worker_thread_class.h
+// File:  workerThread.h
 // Created:  11/3/2009
 // Author:  K. Loux
 // Description:  Contains the class declaration for the WORKER_THREAD class.  Derives

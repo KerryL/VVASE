@@ -6,7 +6,7 @@
                              (http://www.wxwidgets.org/)
 
 ===================================================================================*/
-// File:  render_window_class.h
+// File:  renderWindow.h
 // Created:  5/14/2009
 // Author:  K. Loux
 // Description:  Class for creating OpenGL scenes, derived from wxGLCanvas.  Contains
@@ -25,8 +25,8 @@
 #include <wx/glcanvas.h>
 
 // Local headers
-#include "vUtilities/managed_list_class.h"
-#include "vMath/vector_class.h"
+#include "vUtilities/managedList.h"
+#include "vMath/vector.h"
 #include "vRenderer/primitives/primitive.h"
 
 // Local forward declarations

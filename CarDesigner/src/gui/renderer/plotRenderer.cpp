@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  plot_renderer_class.cpp
+// File:  plotRenderer.cpp
 // Created:  5/4/2011
 // Author:  K. Loux
 // Description:  Derived from RenderWindow, this class is used to display plots on
@@ -18,11 +18,11 @@
 #include <wx/wx.h>
 
 // Local headers
-#include "gui/renderer/plot_renderer_class.h"
-#include "gui/plot_object_class.h"
-#include "gui/components/main_frame_class.h"
-#include "vRenderer/primitives/zoom_box_class.h"
-#include "vRenderer/primitives/cursor_class.h"
+#include "gui/renderer/plotRenderer.h"
+#include "gui/plotObject.h"
+#include "gui/components/mainFrame.h"
+#include "vRenderer/primitives/zoomBox.h"
+#include "vRenderer/primitives/plotCursor.h"
 #include "vRenderer/primitives/axis.h"
 
 //==========================================================================

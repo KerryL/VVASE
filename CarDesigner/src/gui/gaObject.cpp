@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  ga_object_class.cpp
+// File:  gaObject.cpp
 // Created:  4/7/2009
 // Author:  K. Loux
 // Description:  This is a class for testing genetic algorithm implementation.
@@ -17,17 +17,17 @@
 #include <fstream>
 
 // CarDesigner headers
-#include "gui/ga_object_class.h"
-#include "gui/genetic_optimization_class.h"
-#include "gui/components/main_frame_class.h"
-#include "vSolver/physics/kinematics_class.h"
-#include "vSolver/physics/kinematic_outputs_class.h"
-#include "vSolver/threads/kinematics_data_class.h"
-#include "vCar/car_class.h"
-#include "vCar/suspension_class.h"
-#include "vMath/car_math.h"
-#include "vUtilities/convert_class.h"
-#include "vUtilities/machine_defs.h"
+#include "gui/gaObject.h"
+#include "gui/geneticOptimization.h"
+#include "gui/components/mainFrame.h"
+#include "vSolver/physics/kinematics.h"
+#include "vSolver/physics/kinematicOutputs.h"
+#include "vSolver/threads/kinematicsData.h"
+#include "vCar/car.h"
+#include "vCar/suspension.h"
+#include "vMath/carMath.h"
+#include "vUtilities/convert.h"
+#include "vUtilities/machineDefinitions.h"
 
 //==========================================================================
 // Class:			GA_OBJECT

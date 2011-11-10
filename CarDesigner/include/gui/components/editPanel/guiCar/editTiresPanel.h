@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  edit_tires_panel_class.h
+// File:  editTiresPanel.h
 // Created:  2/19/2009
 // Author:  K. Loux
 // Description:  Contains the class declaration for the EDIT_TIRES_PANEL class.

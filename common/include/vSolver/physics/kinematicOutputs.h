@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  kinematic_outputs_class.h
+// File:  kinematicOutputs.h
 // Created:  3/23/2008
 // Author:  K. Loux
 // Description:  Contains class declaration for KINEMATIC_OUTPUTS class.  This class does the
@@ -28,9 +28,9 @@
 #include <wx/thread.h>
 
 // VVASE headers
-#include "vMath/vector_class.h"
-#include "vUtilities/convert_class.h"
-#include "vCar/corner_class.h"
+#include "vMath/vector.h"
+#include "vUtilities/convert.h"
+#include "vCar/corner.h"
 
 // VVASE forward declarations
 class CAR;

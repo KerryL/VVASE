@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  inverse_semaphore_class.h
+// File:  inverseSemaphore.h
 // Created:  4/10/2010
 // Author:  K. Loux
 // Description:  This class is a synchronization object for multi-threaded applications.

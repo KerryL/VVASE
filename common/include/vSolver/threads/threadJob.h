@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  thread_job_class.h
+// File:  threadJob.h
 // Created:  11/3/2009
 // Author:  K. Loux
 // Description:  Contains the class declaration for the THREAD_JOB class.  This is the

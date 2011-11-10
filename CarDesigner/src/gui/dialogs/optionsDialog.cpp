@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  options_dialog_class.cpp
+// File:  optionsDialog.cpp
 // Created:  2/9/2009
 // Author:  K. Loux
 // Description:  Contains the definition for the OPTION_DIALOG class.
@@ -23,9 +23,9 @@
 #include <wx/radiobox.h>
 
 // CarDesigner headers
-#include "gui/dialogs/options_dialog_class.h"
-#include "gui/components/main_frame_class.h"
-#include "vUtilities/convert_class.h"
+#include "gui/dialogs/optionsDialog.h"
+#include "gui/components/mainFrame.h"
+#include "vUtilities/convert.h"
 #include "vUtilities/wxRelatedUtilities.h"
 
 //==========================================================================

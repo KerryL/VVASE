@@ -7,10 +7,10 @@
 
 ===================================================================================*/
 
-// File:  damper_class.h
+// File:  damper.h
 // Created:  1/3/2009
 // Author:  K. Loux
-// Description:  Contains class declaration for DAMPER class.  This class conatins
+// Description:  Contains class declaration for DAMPER class.  This class contains
 //				 the information and methods required to model a non-linear viscous
 //				 damper.
 // History:

@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  differential_class.cpp
+// File:  differential.cpp
 // Created:  11/6/2007
 // Author:  K. Loux
 // Description:  Contains class functionality for differential class.
@@ -19,9 +19,9 @@
 #include <fstream>
 
 // VVASE headers
-#include "vCar/differential_class.h"
-#include "vUtilities/debug_class.h"
-#include "vUtilities/machine_defs.h"
+#include "vCar/differential.h"
+#include "vUtilities/debugger.h"
+#include "vUtilities/machineDefinitions.h"
 
 //==========================================================================
 // Class:			DIFFERENTIAL

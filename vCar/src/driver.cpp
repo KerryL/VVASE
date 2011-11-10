@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  driver_class.cpp
+// File:  driver.cpp
 // Created:  11/4/2007
 // Author:  K. Loux
 // Description:  Contains class functionality for driver class.
@@ -16,8 +16,8 @@
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
 // VVASE headers
-#include "vCar/driver_class.h"
-#include "vUtilities/debug_class.h"
+#include "vCar/driver.h"
+#include "vUtilities/debugger.h"
 
 //==========================================================================
 // Class:			DRIVER

@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  convert_class.cpp
+// File:  convert.cpp
 // Created:  3/9/2008
 // Author:  K. Loux
 // Description:  Class definition for a conversion from our "standard" units into the
@@ -31,9 +31,9 @@
 #include <wx/wx.h>
 
 // VVASE headers
-#include "vUtilities/convert_class.h"
-#include "vMath/vector_class.h"
-#include "vMath/car_math.h"
+#include "vUtilities/convert.h"
+#include "vMath/vector.h"
+#include "vMath/carMath.h"
 
 //==========================================================================
 // Class:			Convert

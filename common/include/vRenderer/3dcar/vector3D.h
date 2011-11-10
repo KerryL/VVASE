@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  vector3d_class.h
+// File:  vector3d.h
 // Created:  3/14/2009
 // Author:  K. Loux
 // Description:  Contains class declaration for the Vector3D class.  This class contains

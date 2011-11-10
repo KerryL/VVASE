@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  tire_class.cpp
+// File:  tire.cpp
 // Created:  11/3/2007
 // Author:  K. Loux
 // Description:  Contains class definition for tire class.
@@ -19,8 +19,8 @@
 #include <fstream>
 
 // VVASE headers
-#include "vCar/tire_class.h"
-#include "vUtilities/machine_defs.h"
+#include "vCar/tire.h"
+#include "vUtilities/machineDefinitions.h"
 
 //==========================================================================
 // Class:			TIRE

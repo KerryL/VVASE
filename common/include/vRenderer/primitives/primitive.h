@@ -17,7 +17,7 @@
 #define _PRIMITIVE_H_
 
 // Local headers
-#include "vRenderer/color_class.h"
+#include "vRenderer/color.h"
 
 // Forward declarations
 class RenderWindow;

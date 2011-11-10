@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  corner_class.cpp
+// File:  corner.cpp
 // Created:  3/23/2008
 // Author:  K. Loux
 // Description:  Contains class functionality for corner class.  This class contains
@@ -25,9 +25,9 @@
 #include <wx/wx.h>
 
 // VVASE headers
-#include "vCar/corner_class.h"
-#include "vUtilities/debug_class.h"
-#include "vUtilities/machine_defs.h"
+#include "vCar/corner.h"
+#include "vUtilities/debugger.h"
+#include "vUtilities/machineDefinitions.h"
 
 //==========================================================================
 // Class:			CORNER

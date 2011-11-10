@@ -7,16 +7,16 @@
 
 ===================================================================================*/
 
-// File:  plot_curve.cpp
+// File:  plotCurve.cpp
 // Created:  5/2/2011
 // Author:  K. Loux
 // Description:  Derived from Primitive for creating data curves on a plot.
 // History:
-//	11/9/2010	- Modified to accomodate 3D plots, K. Loux.
+//	11/9/2010	- Modified to accommodate 3D plots, K. Loux.
 
 // Local headers
 #include "vRenderer/primitives/plot_curve.h"
-#include "vRenderer/render_window_class.h"
+#include "vRenderer/renderWindow.h"
 #include "vRenderer/primitives/axis.h"
 #include "vMath/dataset2D.h"
 

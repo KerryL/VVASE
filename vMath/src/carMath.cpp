@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  car_math.cpp
+// File:  carMath.cpp
 // Created:  3/24/2008
 // Author:  K. Loux
 // Description:  Contains useful functions that don't fit better in another class.  Hopefully this
@@ -22,9 +22,9 @@
 #include <assert.h>
 
 // VVASE headers
-#include "vMath/car_math.h"
-#include "vMath/vector_class.h"
-#include "vMath/matrix_class.h"
+#include "vMath/carMath.h"
+#include "vMath/vector.h"
+#include "vMath/matrix.h"
 
 //==========================================================================
 // Namespace:		VVASEMath

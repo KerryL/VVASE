@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  filter_base_class.h
+// File:  filterBase.h
 // Created:  5/16/2011
 // Author:  K. Loux
 // Description:  Base class (abstract) for digital filters.

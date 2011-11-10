@@ -17,9 +17,9 @@
 
 // Local headers
 #include "vRenderer/primitives/cone.h"
-#include "vRenderer/render_window_class.h"
-#include "vMath/car_math.h"
-#include "vUtilities/convert_class.h"
+#include "vRenderer/renderWindow.h"
+#include "vMath/carMath.h"
+#include "vUtilities/convert.h"
 
 //==========================================================================
 // Class:			CONE

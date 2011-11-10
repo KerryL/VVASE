@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  link_class.h
+// File:  link.h
 // Created:  5/23/2008
 // Author:  K. Loux
 // Description:  Contains class declaration for the LINK class.  Links are

@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  thread_data_class.h
+// File:  threadData.h
 // Created:  1/12/2009
 // Author:  K. Loux
 // Description:  Contains the class declaration for the THREAD_DATA class.  This is an
@@ -22,7 +22,7 @@
 #define _THREAD_DATA_CLASS_H_
 
 // VVASE headers
-#include "vSolver/threads/thread_job_class.h"
+#include "vSolver/threads/threadJob.h"
 
 class THREAD_DATA
 {

@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  matrix_class.cpp
+// File:  matrix.cpp
 // Created:  5/2/2011
 // Author:  K. Loux
 // Description:  Contains class functionality for matrix class.
@@ -23,9 +23,9 @@
 #include <wx/wx.h>
 
 // Local headers
-#include "vMath/matrix_class.h"
-#include "vMath/vector_class.h"
-#include "vMath/car_math.h"
+#include "vMath/matrix.h"
+#include "vMath/vector.h"
+#include "vMath/carMath.h"
 
 //==========================================================================
 // Class:			Matrix

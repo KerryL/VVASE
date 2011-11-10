@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  worker_thread_class.cpp
+// File:  workerThread.cpp
 // Created:  11/3/2009
 // Author:  K. Loux
 // Description:  Contains the class definition for the WORKER_THREAD class.  Derives
@@ -20,15 +20,15 @@
 #include <assert.h>
 
 // VVASE headers
-#include "vSolver/threads/worker_thread_class.h"
-#include "vSolver/threads/job_queue_class.h"
-#include "vSolver/threads/thread_job_class.h"
-#include "vSolver/threads/kinematics_data_class.h"
-#include "vSolver/threads/optimization_data_class.h"
-#include "vSolver/physics/kinematics_class.h"
-#include "vSolver/optimization/genetic_algorithm_class.h"
-#include "vCar/car_class.h"
-#include "vUtilities/debug_class.h"
+#include "vSolver/threads/workerThread.h"
+#include "vSolver/threads/jobQueue.h"
+#include "vSolver/threads/threadJob.h"
+#include "vSolver/threads/kinematicsData.h"
+#include "vSolver/threads/optimizationData.h"
+#include "vSolver/physics/kinematics.h"
+#include "vSolver/optimization/geneticAlgorithm.h"
+#include "vCar/car.h"
+#include "vUtilities/debugger.h"
 
 //==========================================================================
 // Class:			WORKER_THREAD

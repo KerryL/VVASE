@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  fuel_cell_class.cpp
+// File:  fuelCell.cpp
 // Created:  12/12/2008
 // Author:  K. Loux
 // Description:  Contains class definitions for FUEL_CELL class.  This is for
@@ -18,7 +18,7 @@
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
 // VVASE headers
-#include "vCar/fuel_cell_class.h"
+#include "vCar/fuelCell.h"
 
 //==========================================================================
 // Class:			FUEL_CELL

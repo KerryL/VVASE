@@ -16,11 +16,11 @@
 
 // VVASE headers
 #include "vRenderer/primitives/cylinder.h"
-#include "vRenderer/3dcar/swaybar3d_class.h"
-#include "vRenderer/color_class.h"
-#include "vUtilities/convert_class.h"
-#include "vMath/vector_class.h"
-#include "vMath/car_math.h"
+#include "vRenderer/3dcar/swaybar3D.h"
+#include "vRenderer/color.h"
+#include "vUtilities/convert.h"
+#include "vMath/vector.h"
+#include "vMath/carMath.h"
 
 //==========================================================================
 // Class:			SWAYBAR3D

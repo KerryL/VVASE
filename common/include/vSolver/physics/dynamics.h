@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  dynamics_class.h
+// File:  dynamics.h
 // Created:  11/3/2007
 // Author:  K. Loux
 // Description:  Contains class declaration for DYNAMIC_SIMULATION class.
@@ -18,9 +18,9 @@
 #define _DYNAMICS_CLASS_H_
 
 // VVASE headers
-#include "vSolver/physics/state_class.h"
-#include "vUtilities/wheelset_structs.h"
-#include "vCar/driver_class.h"
+#include "vSolver/physics/state.h"
+#include "vUtilities/wheelSetStructuress.h"
+#include "vCar/driver.h"
 
 // VVASE forward declarations
 class Debugger;

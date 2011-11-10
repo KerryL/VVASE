@@ -7,13 +7,13 @@
 
 ===================================================================================*/
 
-// File:  kinematics_class.h
+// File:  kinematics.h
 // Created:  11/3/2007
 // Author:  K. Loux
 // Description:  Contains class declaration for the KINEMATICS class.
 // History:
 //	2/24/2008	- Changed Static from type CAR to SUSPENSION.  Removed DRIVETRAIN object, K. Loux.
-//	3/9/2008	- Changed structure of Debugger class and added input quantites to STATIC_OUTPUTS
+//	3/9/2008	- Changed structure of Debugger class and added input quantities to STATIC_OUTPUTS
 //				  structure, K. Loux.
 //	3/23/2008	- Changed units for class members and functions from degrees to radians and
 //				  renamed class from KINEMATICS.  Also introduce OUTPUTS class and CORNER class
@@ -25,7 +25,7 @@
 #define _KINEMATICS_CLASS_H_
 
 // VVASE headers
-#include "vSolver/physics/kinematic_outputs_class.h"
+#include "vSolver/physics/kinematicOutputs.h"
 
 // VVASE forward declarations
 class CAR;

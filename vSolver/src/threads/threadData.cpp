@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  thread_data_class.cpp
+// File:  threadData.cpp
 // Created:  1/12/2009
 // Author:  K. Loux
 // Description:  Contains the class definition for the THREAD_DATA class.  This is an
@@ -19,7 +19,7 @@
 // History:
 
 // VVASE headers
-#include "vSolver/threads/thread_data_class.h"
+#include "vSolver/threads/threadData.h"
 
 //==========================================================================
 // Class:			THREAD_DATA

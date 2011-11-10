@@ -3,11 +3,11 @@
                          Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
+                             (http://w_classww.wxwidgets.org/)
 
 ===================================================================================*/
 
-// File:  edit_iteration_notebook_class.h
+// File:  editIterationNotebook.h
 // Created:  11/14/2010
 // Author:  K. Loux
 // Description:  Contains the class declaration for the EDIT_ITERATION_NOTEBOOK class.

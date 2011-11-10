@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  plot_object_class.h
+// File:  plotObject.h
 // Created:  5/4/2011
 // Author:  K. Loux
 // Description:  Intermediate class for creating plots from arrays of data.
@@ -20,7 +20,7 @@
 #include <wx/wx.h>
 
 // Local headers
-#include "vUtilities/object_list_class.h"
+#include "vUtilities/objectList.h"
 
 // Local forward declarations
 class PlotRenderer;

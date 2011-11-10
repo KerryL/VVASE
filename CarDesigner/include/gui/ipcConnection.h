@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  ipc_connection_class.h
+// File:  ipcConnection.h
 // Created:  10/23/2010
 // Author:  K. Loux
 // Description:  Inter-process communication connection class.  Used for passing file names

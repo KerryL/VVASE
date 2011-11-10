@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  suspension_class.h
+// File:  suspension.h
 // Created:  11/3/2007
 // Author:  K. Loux
 // Description:  Contains class declaration for SUSPENSION class.
@@ -29,12 +29,12 @@
 #include <iosfwd>// forward declarations of fstream objects
 
 // VVASE headers
-#include "vCar/corner_class.h"
-#include "vCar/spring_class.h"
-#include "vCar/damper_class.h"
-#include "vMath/vector_class.h"
-#include "vUtilities/wheelset_structs.h"
-#include "vUtilities/debug_class.h"
+#include "vCar/corner.h"
+#include "vCar/spring.h"
+#include "vCar/damper.h"
+#include "vMath/vector.h"
+#include "vUtilities/wheelSetStructures.h"
+#include "vUtilities/debugger.h"
 
 class SUSPENSION
 {

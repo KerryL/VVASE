@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  damper3d_class.cpp
+// File:  damper3D.cpp
 // Created:  1/5/2009
 // Author:  K. Loux
 // Description:  Contains class definition for the DAMPER3D class.
@@ -17,11 +17,11 @@
 // VVASE headers
 #include "vRenderer/primitives/sphere.h"
 #include "vRenderer/primitives/cylinder.h"
-#include "vRenderer/3dcar/damper3d_class.h"
-#include "vRenderer/color_class.h"
-#include "vUtilities/convert_class.h"
-#include "vMath/vector_class.h"
-#include "vMath/car_math.h"
+#include "vRenderer/3dcar/damper3D.h"
+#include "vRenderer/color.h"
+#include "vUtilities/convert.h"
+#include "vMath/vector.h"
+#include "vMath/carMath.h"
 
 //==========================================================================
 // Class:			DAMPER3D

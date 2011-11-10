@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  high_pass_order1_class.h
+// File:  highPassOrder1.h
 // Created:  5/16/2011
 // Author:  K. Loux
 // Description:  First order high-pass digital filter.
@@ -17,7 +17,7 @@
 #define _HIGH_PASS_ORDER1_CLASS_H_
 
 // Local headers
-#include "vMath/signals/filters/filter_base_class.h"
+#include "vMath/signals/filters/filterBase.h"
 
 class HighPassFirstOrderFilter : public FilterBase
 {

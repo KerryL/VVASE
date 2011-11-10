@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  plane_class.cpp
+// File:  plane.cpp
 // Created:  5/23/2008
 // Author:  K. Loux
 // Description:  Contains class definition for the PLANE class.
@@ -16,9 +16,9 @@
 
 // VVASE headers
 #include "vRenderer/primitives/quadrilateral.h"
-#include "vRenderer/3dcar/plane_class.h"
-#include "vRenderer/color_class.h"
-#include "vMath/vector_class.h"
+#include "vRenderer/3dcar/plane.h"
+#include "vRenderer/color.h"
+#include "vMath/vector.h"
 
 //==========================================================================
 // Class:			PLANE

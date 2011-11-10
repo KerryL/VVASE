@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  edit_corner_panel_class.h
+// File:  editCornerPanel.h
 // Created:  2/10/2009
 // Author:  K. Loux
 // Description:  Contains the class declaration for the EDIT_CORNER_PANEL class.
@@ -21,8 +21,8 @@
 #include <wx/grid.h>
 
 // VVASE headers
-#include "vCar/suspension_class.h"
-#include "vCar/drivetrain_class.h"
+#include "vCar/suspension.h"
+#include "vCar/drivetrain.h"
 
 // wxWidgets forward declarations
 class wxCombo;

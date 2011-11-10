@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  edit_brakes_panel_class.h
+// File:  editBrakesPanel.h
 // Created:  2/19/2009
 // Author:  K. Loux
 // Description:  Contains the class declaration for the EDIT_BRAKES_PANEL class.

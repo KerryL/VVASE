@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  genetic_optimization_class.cpp
+// File:  geneticOptimization.cpp
 // Created:  4/7/2009
 // Author:  K. Loux
 // Description:  This is a GUI interface for the genetic algorithm optimization.
@@ -16,20 +16,20 @@
 //				  implementation.
 
 // CarDesigner headers
-#include "gui/genetic_optimization_class.h"
-#include "gui/gui_car_class.h"
-#include "gui/gui_object_class.h"
-#include "gui/ga_object_class.h"
-#include "gui/components/main_tree_class.h"
-#include "gui/components/main_frame_class.h"
-#include "gui/genetic_algorithm_panel_class.h"
-#include "vCar/car_class.h"
-#include "vCar/suspension_class.h"
-#include "vSolver/physics/kinematics_class.h"
-#include "vSolver/physics/kinematic_outputs_class.h"
-#include "vSolver/threads/thread_job_class.h"
-#include "vSolver/threads/optimization_data_class.h"
-#include "vMath/car_math.h"
+#include "gui/geneticOptimization.h"
+#include "gui/guiCar.h"
+#include "gui/guiObject.h"
+#include "gui/gaObject.h"
+#include "gui/components/mainTree.h"
+#include "gui/components/mainFrame.h"
+#include "gui/geneticAlgorithmPanel.h"
+#include "vCar/car.h"
+#include "vCar/suspension.h"
+#include "vSolver/physics/kinematics.h"
+#include "vSolver/physics/kinematicOutputs.h"
+#include "vSolver/threads/threadJob.h"
+#include "vSolver/threads/optimizationData.h"
+#include "vMath/carMath.h"
 
 //==========================================================================
 // Class:			GENETIC_OPTIMIZATION

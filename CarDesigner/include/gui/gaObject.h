@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  ga_object_class.h
+// File:  gaObject.h
 // Created:  4/7/2009
 // Author:  K. Loux
 // Description:  This is a wrapper class for genetic algorithm implementation.
@@ -17,13 +17,13 @@
 #define _GA_OBJECT_CLASS_H_
 
 // VVASE headers
-#include "vUtilities/managed_list_class.h"
-#include "vCar/corner_class.h"
-#include "vMath/vector_class.h"
-#include "vSolver/physics/kinematic_outputs_class.h"
-#include "vSolver/physics/kinematics_class.h"
-#include "vSolver/optimization/genetic_algorithm_class.h"
-#include "vSolver/threads/inverse_semaphore_class.h"
+#include "vUtilities/managedList.h"
+#include "vCar/corner.h"
+#include "vMath/vector.h"
+#include "vSolver/physics/kinematicOutputs.h"
+#include "vSolver/physics/kinematics.h"
+#include "vSolver/optimization/geneticAlgorithm.h"
+#include "vSolver/threads/inverseSemaphore.h"
 
 // VVASE forward declarations
 class GUI_CAR;

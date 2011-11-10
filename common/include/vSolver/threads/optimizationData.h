@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  optimization_data_class.h
+// File:  optimizationData.h
 // Created:  1/12/2009
 // Author:  K. Loux
 // Description:  Contains the class declaration for the OPTIMIZATION_DATA class.  This contains
@@ -21,7 +21,7 @@
 #include <wx/wx.h>
 
 // VVASE headers
-#include "vSolver/threads/thread_data_class.h"
+#include "vSolver/threads/threadData.h"
 
 // VVASE forward declarations
 class GENETIC_ALGORITHM;

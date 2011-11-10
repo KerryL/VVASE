@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  link_class.cpp
+// File:  link.cpp
 // Created:  5/23/2008
 // Author:  K. Loux
 // Description:  Contains class definition for the LINK class.
@@ -17,11 +17,11 @@
 // VVASE headers
 #include "vRenderer/primitives/sphere.h"
 #include "vRenderer/primitives/cylinder.h"
-#include "vRenderer/3dcar/link_class.h"
-#include "vRenderer/color_class.h"
-#include "vUtilities/convert_class.h"
-#include "vMath/vector_class.h"
-#include "vMath/car_math.h"
+#include "vRenderer/3dcar/link.h"
+#include "vRenderer/color.h"
+#include "vUtilities/convert.h"
+#include "vMath/vector.h"
+#include "vMath/carMath.h"
 
 //==========================================================================
 // Class:			LINK

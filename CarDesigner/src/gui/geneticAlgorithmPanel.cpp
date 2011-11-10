@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  genetic_algorithm_panel_class.cpp
+// File:  geneticAlgorithmPanel.cpp
 // Created:  7/30/2009
 // Author:  K. Loux
 // Description:  Contains the class definitions for a panel that allows users to specify
@@ -19,15 +19,15 @@
 #include <wx/gauge.h>
 
 // CarDesigner headers
-#include "gui/genetic_algorithm_panel_class.h"
-#include "gui/components/main_frame_class.h"
-#include "gui/dialogs/ga_goal_dialog_class.h"
-#include "gui/dialogs/ga_gene_dialog_class.h"
-#include "gui/gui_car_class.h"
-#include "gui/genetic_optimization_class.h"
-#include "gui/ga_object_class.h"
-#include "vSolver/physics/kinematic_outputs_class.h"
-#include "vCar/corner_class.h"
+#include "gui/geneticAlgorithmPanel.h"
+#include "gui/components/mainFrame.h"
+#include "gui/dialogs/gaGoalDialog.h"
+#include "gui/dialogs/gaGeneDialog.h"
+#include "gui/guiCar.h"
+#include "gui/geneticOptimization.h"
+#include "gui/gaObject.h"
+#include "vSolver/physics/kinematicOutputs.h"
+#include "vCar/corner.h"
 
 //==========================================================================
 // Class:			GENETIC_ALGORITHM_PANEL

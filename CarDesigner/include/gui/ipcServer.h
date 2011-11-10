@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  ipc_server_class.h
+// File:  ipcServer.h
 // Created:  10/23/2010
 // Author:  K. Loux
 // Description:  Inter-process communication server class.  Used for passing file names

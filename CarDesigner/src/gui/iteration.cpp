@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  iteration_class.cpp
+// File:  iteration.cpp
 // Created:  1/20/2009
 // Author:  K. Loux
 // Description:  This object maintains an array of the kinematic outputs of a car
@@ -31,17 +31,17 @@
 #include <wx/filename.h>
 
 // VVASE headers
-#include "gui/iteration_class.h"
-#include "vUtilities/debug_class.h"
-#include "vUtilities/convert_class.h"
-#include "vSolver/threads/thread_job_class.h"
-#include "vSolver/threads/kinematics_data_class.h"
-#include "vCar/car_class.h"
-#include "gui/renderer/plot_renderer_class.h"
-#include "gui/components/main_frame_class.h"
-#include "gui/components/main_tree_class.h"
-#include "vUtilities/machine_defs.h"
-#include "vMath/car_math.h"
+#include "gui/iteration.h"
+#include "vUtilities/debugger.h"
+#include "vUtilities/convert.h"
+#include "vSolver/threads/threadJob.h"
+#include "vSolver/threads/kinematicsData.h"
+#include "vCar/car.h"
+#include "gui/renderer/plotRenderer.h"
+#include "gui/components/mainFrame.h"
+#include "gui/components/mainTree.h"
+#include "vUtilities/machineDefinitions.h"
+#include "vMath/carMath.h"
 
 //==========================================================================
 // Class:			ITERATION

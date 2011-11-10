@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  engine_class.cpp
+// File:  engine.cpp
 // Created:  11/3/2007
 // Author:  K. Loux
 // Description:  Contains class functionality for engine class.
@@ -19,9 +19,9 @@
 #include <fstream>
 
 // VVASE headers
-#include "vCar/engine_class.h"
-#include "vUtilities/debug_class.h"
-#include "vUtilities/machine_defs.h"
+#include "vCar/engine.h"
+#include "vUtilities/debugger.h"
+#include "vUtilities/machineDefinitions.h"
 
 //==========================================================================
 // Class:			ENGINE

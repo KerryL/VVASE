@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  integrator_class.h
+// File:  integrator.h
 // Created:  7/12/2008
 // Author:  K. Loux
 // Description:  Contains class declaration for INTEGRATOR class.
@@ -17,7 +17,7 @@
 #define _INTEGRATOR_CLASS_H_
 
 // VVASE headers
-#include "vSolver/physics/state_class.h"
+#include "vSolver/physics/state.h"
 
 // VVASE forward declarations
 class Debugger;

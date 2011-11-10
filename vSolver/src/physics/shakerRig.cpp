@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  shaker_rig_class.cpp
+// File:  shakerRig.cpp
 // Created:  3/23/2008
 // Author:  K. Loux
 // Description:  Contains class functionality for shaker rig class.  This is a type of dynamic
@@ -19,8 +19,8 @@
 #include <cstdlib>
 
 // VVASE headers
-#include "vSolver/physics/shaker_rig_class.h"
-#include "vUtilities/debug_class.h"
+#include "vSolver/physics/shakerRig.h"
+#include "vUtilities/debugger.h"
 
 //==========================================================================
 // Class:			SHAKER_RIG

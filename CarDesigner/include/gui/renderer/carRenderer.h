@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  car_renderer_class.h
+// File:  carRenderer.h
 // Created:  4/5/2008
 // Author:  K. Loux
 // Description:  Contains class declaration for the CAR_RENDERER class.  Derived from
@@ -22,10 +22,10 @@
 #define _CAR_RENDERER_CLASS_H_
 
 // VVASE headers
-#include "vMath/vector_class.h"
-#include "vCar/suspension_class.h"
-#include "vRenderer/render_window_class.h"
-#include "gui/gui_object_class.h"
+#include "vMath/vector.h"
+#include "vCar/suspension.h"
+#include "vRenderer/renderWindow.h"
+#include "gui/guiObject.h"
 
 // wxWidgets forward declarations
 class wxString;

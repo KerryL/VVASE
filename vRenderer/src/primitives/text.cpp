@@ -7,16 +7,16 @@
 
 ===================================================================================*/
 
-// File:  text_class.cpp
+// File:  text.cpp
 // Created:  5/2/2011
 // Author:  K. Loux
 // Description:  Derived from Primitive for creating text objects on a plot.
 // History:
 
 // Local headers
-#include "vRenderer/primitives/text_class.h"
-#include "vRenderer/render_window_class.h"
-#include "vMath/car_math.h"
+#include "vRenderer/primitives/text.h"
+#include "vRenderer/renderWindow.h"
+#include "vMath/carMath.h"
 
 // FTGL headers
 #include <FTGL/ftgl.h>

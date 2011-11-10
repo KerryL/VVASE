@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  iteration_class.h
+// File:  iteration.h
 // Created:  1/20/2009
 // Author:  K. Loux
 // Description:  This object maintains an array of the kinematic outputs of a car
@@ -27,11 +27,11 @@
 #include <wx/thread.h>
 
 // VVASE headers
-#include "vUtilities/managed_list_class.h"
-#include "gui/gui_car_class.h"
-#include "vSolver/physics/kinematics_class.h"
-#include "vSolver/physics/kinematic_outputs_class.h"
-#include "vSolver/threads/inverse_semaphore_class.h"
+#include "vUtilities/managedList.h"
+#include "gui/gui_car.h"
+#include "vSolver/physics/kinematics.h"
+#include "vSolver/physics/kinematicOutputs.h"
+#include "vSolver/threads/inverseSemaphore.h"
 
 // VVASE forward declarations
 class Debugger;

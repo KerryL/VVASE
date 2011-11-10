@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  spring_class.h
+// File:  spring.h
 // Created:  1/3/2009
 // Author:  K. Loux
 // Description:  Contains class declaration for SPRING class.  This class contains

@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  state_class.h
+// File:  state.h
 // Created:  7/12/2008
 // Author:  K. Loux
 // Description:  Contains class declaration for STATE class.

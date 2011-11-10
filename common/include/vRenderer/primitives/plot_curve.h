@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  plot_curve.h
+// File:  plotCurve.h
 // Created:  5/2/2011
 // Author:  K. Loux
 // Description:  Derived from Primitive for creating plot curves objects.
@@ -18,7 +18,7 @@
 
 // Local headers
 #include "vRenderer/primitives/primitive.h"
-#include "vUtilities/managed_list_class.h"
+#include "vUtilities/managedList.h"
 
 // Local forward declarations
 class Axis;

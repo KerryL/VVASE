@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  fuel_cell_class.h
+// File:  fuelCell.h
 // Created:  12/12/2008
 // Author:  K. Loux
 // Description:  Contains class declaration for FUEL_CELL class.  This is for
@@ -21,7 +21,7 @@
 #define _FUEL_CELL_CLASS_H_
 
 // VVASE headers
-#include "vMath/vector_class.h"
+#include "vMath/vector.h"
 
 class FUEL_CELL
 {

@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  managed_list_class.h
+// File:  managedList.h
 // Created:  1/29/2009
 // Author:  K. Loux
 // Description:  This is a template class for linked lists that handle automatic deletion
@@ -20,7 +20,7 @@
 #define _MANAGED_LIST_CLASS_H_
 
 // Local headers
-#include "object_list_class.h"
+#include "objectList.h"
 
 // Standard C++ headers
 #include <cstdlib>

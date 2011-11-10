@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  genetic_algorithm_panel_class.h
+// File:  geneticAlgorithmPanel.h
 // Created:  7/30/2009
 // Author:  K. Loux
 // Description:  Contains the class declarations for a panel that allows users to specify
@@ -18,7 +18,7 @@
 #include <wx/wx.h>
 
 // VVASE headers
-#include "vSolver/physics/kinematics_class.h"
+#include "vSolver/physics/kinematics.h"
 
 // wxWidgets forward declarations
 class wxGrid;

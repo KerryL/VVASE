@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  tireset_class.cpp
+// File:  tireSet.cpp
 // Created:  3/9/2008
 // Author:  K. Loux
 // Description:  Class that contains a set of four tires.  Required to manage
@@ -19,10 +19,10 @@
 #include <fstream>
 
 // VVASE headers
-#include "vCar/tire_class.h"
-#include "vCar/tireset_class.h"
-#include "vUtilities/debug_class.h"
-#include "vUtilities/machine_defs.h"
+#include "vCar/tire.h"
+#include "vCar/tireSet.h"
+#include "vUtilities/debugger.h"
+#include "vUtilities/machineDefinitions.h"
 
 //==========================================================================
 // Class:			TIRE_SET

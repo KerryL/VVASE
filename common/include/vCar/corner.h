@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  corner_class.h
+// File:  corner.h
 // Created:  3/23/2008
 // Author:  K. Loux
 // Description:  Contains class declaration for CORNER class.  This class contains
@@ -25,9 +25,9 @@
 #include <iosfwd>// forward declarations of fstream objects
 
 // VVASE headers
-#include "vCar/spring_class.h"
-#include "vCar/damper_class.h"
-#include "vMath/vector_class.h"
+#include "vCar/spring.h"
+#include "vCar/damper.h"
+#include "vMath/vector.h"
 
 // VVASE forward declarations
 class Debugger;

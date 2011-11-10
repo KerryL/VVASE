@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  debug_class.cpp
+// File:  debug.cpp
 // Created:  2/24/2008
 // Author:  K. Loux
 // Description:  A simple class that prints information to a log file.  Just
@@ -30,8 +30,8 @@
 #include <wx/wx.h>
 
 // VVASE headers
-#include "vUtilities/debug_class.h"
-#include "vSolver/threads/thread_event_class.h"
+#include "vUtilities/debugger.h"
+#include "vSolver/threads/threadEvent.h"
 
 // Define the EVT_DEBUG event type
 DEFINE_LOCAL_EVENT_TYPE(EVT_DEBUG)

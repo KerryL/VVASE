@@ -15,9 +15,9 @@
 //  5/12/2011 - Renamed to PlotCursor from Cursor due to conflict in X.h, K. Loux
 
 // Local headers
-#include "vRenderer/primitives/cursor_class.h"
+#include "vRenderer/primitives/plotCursor.h"
 #include "vRenderer/primitives/axis.h"
-#include "vRenderer/render_window_class.h"
+#include "vRenderer/renderWindow.h"
 
 //==========================================================================
 // Class:			PlotCursor

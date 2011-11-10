@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  point3d_class.h
+// File:  point3d.h
 // Created:  1/5/2009
 // Author:  K. Loux
 // Description:  Contains class declaration for the POINT3D class.

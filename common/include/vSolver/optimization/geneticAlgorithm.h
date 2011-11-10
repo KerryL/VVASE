@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  genetic_algorithm_class.h
+// File:  geneticAlgorithm.h
 // Created:  4/7/2009
 // Author:  K. Loux
 // Description:  This is a base class for genetic algorithms.  It works with generic genomes

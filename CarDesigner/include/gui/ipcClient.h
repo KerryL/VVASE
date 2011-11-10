@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  ipc_client_class.h
+// File:  ipcClient.h
 // Created:  10/23/2010
 // Author:  K. Loux
 // Description:  Inter-process communication client class.  Used for passing file names

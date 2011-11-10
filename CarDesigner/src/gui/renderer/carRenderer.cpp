@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  car_renderer_class.cpp
+// File:  carRenderer.cpp
 // Created:  4/5/2008
 // Author:  K. Loux
 // Description:  Contains class declaration for the CAR_RENDERER class.  Derived from
@@ -28,33 +28,32 @@
 #include <wx/wx.h>
 
 // VVASE headers
-#include "gui/renderer/car_renderer_class.h"
-#include "vRenderer/3dcar/aarm_class.h"
-#include "vRenderer/3dcar/link_class.h"
-#include "vRenderer/3dcar/triangle_class.h"
-#include "vRenderer/3dcar/damper3d_class.h"
-#include "vRenderer/3dcar/spring3d_class.h"
-#include "vRenderer/3dcar/plane_class.h"
-#include "vRenderer/3dcar/point3d_class.h"
-#include "vRenderer/3dcar/origin_class.h"
-#include "vRenderer/3dcar/tire3d_class.h"
-#include "vRenderer/3dcar/swaybar3d_class.h"
-#include "vRenderer/3dcar/vector3d_class.h"
-#include "vCar/car_class.h"
-#include "vCar/brakes_class.h"
-#include "vCar/drivetrain_class.h"
-#include "vCar/suspension_class.h"
-#include "vCar/tire_class.h"
-#include "vCar/tireset_class.h"
-#include "vUtilities/debug_class.h"
-#include "vMath/car_math.h"
-#include "vMath/vector_class.h"
-#include "gui/gui_car_class.h"
-#include "gui/appearance_options_class.h"
-#include "gui/components/main_frame_class.h"
-#include "vSolver/physics/kinematic_outputs_class.h"
-
-#include "vMath/matrix_class.h"
+#include "gui/renderer/carRenderer.h"
+#include "vRenderer/3dcar/aarm.h"
+#include "vRenderer/3dcar/link.h"
+#include "vRenderer/3dcar/triangle3D.h"
+#include "vRenderer/3dcar/damper3D.h"
+#include "vRenderer/3dcar/spring3D.h"
+#include "vRenderer/3dcar/plane.h"
+#include "vRenderer/3dcar/point3D.h"
+#include "vRenderer/3dcar/origin.h"
+#include "vRenderer/3dcar/tire3D.h"
+#include "vRenderer/3dcar/swaybar3D.h"
+#include "vRenderer/3dcar/vector3D.h"
+#include "vCar/car.h"
+#include "vCar/brakes.h"
+#include "vCar/drivetrain.h"
+#include "vCar/suspension.h"
+#include "vCar/tire.h"
+#include "vCar/tireSet.h"
+#include "vUtilities/debugger.h"
+#include "vMath/carMath.h"
+#include "vMath/vector.h"
+#include "gui/guiCar.h"
+#include "gui/appearanceOptions.h"
+#include "gui/components/mainFrame.h"
+#include "vSolver/physics/kinematicOutputs.h"
+#include "vMath/matrix.h"
 
 //==========================================================================
 // Class:			CAR_RENDERER

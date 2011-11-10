@@ -18,7 +18,7 @@
 
 // Local headers
 #include "vRenderer/primitives/primitive.h"
-#include "vMath/vector_class.h"
+#include "vMath/vector.h"
 
 class SPHERE : public Primitive
 {

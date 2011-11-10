@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  kinematics_data_class.cpp
+// File:  kinematicsData.cpp
 // Created:  1/12/2009
 // Author:  K. Loux
 // Description:  Contains the class declaration for the KINEMATICS_DATA class.  This contains
@@ -15,7 +15,7 @@
 // History:
 
 // VVASE headers
-#include "vSolver/threads/kinematics_data_class.h"
+#include "vSolver/threads/kinematicsData.h"
 
 //==========================================================================
 // Class:			KINEMATICS_DATA

@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  vector3d_class.cpp
+// File:  vector3D.cpp
 // Created:  3/14/2009
 // Author:  K. Loux
 // Description:  Contains class definition for the Vector3D class.  This class contains
@@ -18,11 +18,11 @@
 // VVASE headers
 #include "vRenderer/primitives/cylinder.h"
 #include "vRenderer/primitives/cone.h"
-#include "vRenderer/3dcar/vector3d_class.h"
-#include "vRenderer/color_class.h"
-#include "vMath/vector_class.h"
-#include "vMath/car_math.h"
-#include "vUtilities/convert_class.h"
+#include "vRenderer/3dcar/vector3D.h"
+#include "vRenderer/color.h"
+#include "vMath/vector.h"
+#include "vMath/carMath.h"
+#include "vUtilities/convert.h"
 
 //==========================================================================
 // Class:			Vector3D

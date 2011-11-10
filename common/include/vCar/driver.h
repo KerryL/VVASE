@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  driver_class.h
+// File:  driver.h
 // Created:  11/4/2007
 // Author:  K. Loux
 // Description:  Contains class declaration for DRIVER class.

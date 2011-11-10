@@ -16,8 +16,8 @@
 
 // Local headers
 #include "vRenderer/primitives/axis.h"
-#include "vRenderer/render_window_class.h"
-#include "vMath/car_math.h"
+#include "vRenderer/renderWindow.h"
+#include "vMath/carMath.h"
 
 // FTGL headers
 #include <FTGL/ftgl.h>

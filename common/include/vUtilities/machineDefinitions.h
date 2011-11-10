@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  machine_defs.h
+// File:  machineDefinitions.h
 // Created:  4/15/2010
 // Author:  K. Loux
 // Description:  Collection of functions for converting built-in types on systems that

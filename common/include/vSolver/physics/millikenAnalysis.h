@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  milliken_class.h
+// File:  millikenAnalysis.h
 // Created:  3/23/2008
 // Author:  K. Loux
 // Description:  Contains class declaration for MILLIKEN_ANALYSIS (Milliken Moment

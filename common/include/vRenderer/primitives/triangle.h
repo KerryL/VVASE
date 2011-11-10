@@ -10,7 +10,7 @@
 // File:  triangle.h
 // Created:  5/14/2009
 // Author:  K. Loux
-// Description:  Derived from PRIMITIVE for creating triangluar objects.
+// Description:  Derived from PRIMITIVE for creating triangular objects.
 // History:
 
 #ifndef _TRIANGLE_H_
@@ -18,7 +18,7 @@
 
 // Local headers
 #include "vRenderer/primitives/primitive.h"
-#include "vMath/vector_class.h"
+#include "vMath/vector.h"
 
 class TRIANGLE : public Primitive
 {

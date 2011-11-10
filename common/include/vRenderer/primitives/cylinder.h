@@ -10,7 +10,7 @@
 // File:  cylinder.h
 // Created:  5/14/2009
 // Author:  K. Loux
-// Description:  Derived from PRIMITIVE for creating cylindrical objects.
+// Description:  Derived from PRIMITIV_classE for creating cylindrical objects.
 // History:
 
 #ifndef _CYLINDER_H_
@@ -18,7 +18,7 @@
 
 // Local headers
 #include "vRenderer/primitives/primitive.h"
-#include "vMath/vector_class.h"
+#include "vMath/vector.h"
 
 class CYLINDER : public Primitive
 {

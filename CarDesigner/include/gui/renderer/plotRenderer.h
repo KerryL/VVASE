@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  plot_renderer_class.h
+// File:  plotRenderer.h
 // Created:  5/4/2011
 // Author:  K. Loux
 // Description:  Derived from RenderWindow, this class is used to display plots on
@@ -18,7 +18,7 @@
 #define _PLOT_RENDERER_CLASS_H_
 
 // Local headers
-#include "vRenderer/render_window_class.h"
+#include "vRenderer/renderWindow.h"
 
 // wxWidgets forward declarations
 class wxString;

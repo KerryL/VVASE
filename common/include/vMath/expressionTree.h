@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  expression_tree_class.h
+// File:  expressionTree.h
 // Created:  5/6/2011
 // Author:  K. Loux
 // Description:  Handles user-specified mathematical operations on datasets.
@@ -17,7 +17,7 @@
 #define _EXPRESSION_TREE_CLASS_H_
 
 // Local headers
-#include "vUtilities/managed_list_class.h"
+#include "vUtilities/managedList.h"
 #include "vMath/dataset2D.h"
 
 // wxWidgets forward declarations

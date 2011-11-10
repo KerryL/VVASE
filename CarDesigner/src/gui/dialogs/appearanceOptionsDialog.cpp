@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  appearance_options_dialog_class.cpp
+// File:  appearanceOptionsDialog.cpp
 // Created:  4/23/2009
 // Author:  K. Loux
 // Description:  A dialog object for editing the contents of the APPEARANCE_OPTIONS object.
@@ -23,10 +23,10 @@
 #include <wx/colordlg.h>
 
 // VVASE headers
-#include "gui/dialogs/appearance_options_dialog_class.h"
-#include "gui/components/main_frame_class.h"
-#include "vRenderer/color_class.h"
-#include "vUtilities/convert_class.h"
+#include "gui/dialogs/appearanceOptionsDialog.h"
+#include "gui/components/mainFrame.h"
+#include "vRenderer/color.h"
+#include "vUtilities/convert.h"
 
 //==========================================================================
 // Class:			APPEARANCE_OPTIONS_DIALOG

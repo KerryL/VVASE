@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  edit_suspension_panel_class.h
+// File:  editSuspensionPanel.h
 // Created:  2/10/2009
 // Author:  K. Loux
 // Description:  Contains the class declaration for the EDIT_SUSPENSION_PANEL class.

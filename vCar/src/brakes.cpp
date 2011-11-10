@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  brakes_class.cpp
+// File:  brakes.cpp
 // Created:  11/6/2007
 // Author:  K. Loux
 // Description:  Contains class functionality for brakes class.
@@ -19,9 +19,9 @@
 #include <fstream>
 
 // VVASE headers
-#include "vCar/brakes_class.h"
-#include "vUtilities/debug_class.h"
-#include "vUtilities/machine_defs.h"
+#include "vCar/brakes.h"
+#include "vUtilities/debugGer.h"
+#include "vUtilities/machineDefinitions.h"
 
 //==========================================================================
 // Class:			BRAKES

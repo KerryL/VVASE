@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  damper3d_class.h
+// File:  damper3d.h
 // Created:  1/5/2009
 // Author:  K. Loux
 // Description:  Contains class declaration for the DAMPER3D class.

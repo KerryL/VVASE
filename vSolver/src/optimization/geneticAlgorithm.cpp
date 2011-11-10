@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  genetic_algorithm_class.cpp
+// File:  geneticAlgorithm.cpp
 // Created:  4/7/2009
 // Author:  K. Loux
 // Description:  This is a base class for genetic algorithms.  It works with generic genomes
@@ -16,7 +16,7 @@
 // History:
 
 // Local headers
-#include "vSolver/optimization/genetic_algorithm_class.h"
+#include "vSolver/optimization/geneticAlgorithm.h"
 
 // Standard C++ headers
 #include <cstdlib>

@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  car_class.h
+// File:  car.h
 // Created:  11/2/2007
 // Author:  K. Loux
 // Description:  Contains class declaration for CAR class.

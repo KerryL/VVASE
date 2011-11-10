@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  genetic_optimization_class.h
+// File:  geneticOptimization.h
 // Created:  4/7/2009
 // Author:  K. Loux
 // Description:  This is a GUI interface for the genetic algorithm optimization.
@@ -19,12 +19,12 @@
 #define _GENETIC_OPTIMIZATION_CLASS_H_
 
 // VVASE headers
-#include "gui/gui_object_class.h"
-#include "vUtilities/managed_list_class.h"
-#include "vCar/corner_class.h"
-#include "vMath/vector_class.h"
-#include "vSolver/physics/kinematic_outputs_class.h"
-#include "vSolver/physics/kinematics_class.h"
+#include "gui/guiObject.h"
+#include "vUtilities/managedList.h"
+#include "vCar/corner.h"
+#include "vMath/vector.h"
+#include "vSolver/physics/kinematicOutputs.h"
+#include "vSolver/physics/kinematics.h"
 
 // VVASE forward declarations
 class GUI_CAR;

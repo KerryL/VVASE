@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  plot_object_class.cpp
+// File:  plotObject.cpp
 // Created:  5/4/2011
 // Author:  K. Loux
 // Description:  Intermediate class for creating plots from arrays of data.
@@ -17,13 +17,13 @@
 #include <FTGL/ftgl.h>
 
 // Local headers
-#include "gui/plot_object_class.h"
-#include "gui/renderer/plot_renderer_class.h"
-#include "vRenderer/color_class.h"
-#include "vRenderer/primitives/plot_curve.h"
+#include "gui/plotObject.h"
+#include "gui/renderer/plotRenderer.h"
+#include "vRenderer/color.h"
+#include "vRenderer/primitives/plotCurve.h"
 #include "vRenderer/primitives/axis.h"
-#include "vRenderer/primitives/text_class.h"
-#include "vMath/car_math.h"
+#include "vRenderer/primitives/text.h"
+#include "vMath/carMath.h"
 #include "vMath/dataset2D.h"
 
 //==========================================================================

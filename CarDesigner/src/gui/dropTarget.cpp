@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  main_frame_class.h
+// File:  mainFrame.h
 // Created:  3/7/2008
 // Author:  K. Loux
 // Description:  Contains the class declaration for the MAIN_FRAME class.  Uses wxWidgets
@@ -16,8 +16,8 @@
 // History:
 
 // VVASE headers
-#include "gui/drop_target_class.h"
-#include "gui/components/main_frame_class.h"
+#include "gui/dropTarget.h"
+#include "gui/components/mainFrame.h"
 
 //==========================================================================
 // Class:			DROP_TARGET

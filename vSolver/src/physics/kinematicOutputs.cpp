@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  kinematic_outputs_class.cpp
+// File:  kinematicOutputs.cpp
 // Created:  3/23/2008
 // Author:  K. Loux
 // Description:  Contains class definition for outputs class.  This class does the calculations
@@ -31,15 +31,15 @@
 #include <wx/wx.h>
 
 // CarDesigner headers
-#include "vCar/car_class.h"
-#include "vCar/brakes_class.h"
-#include "vCar/drivetrain_class.h"
-#include "vCar/mass_class.h"
-#include "vCar/suspension_class.h"
-#include "vSolver/physics/kinematic_outputs_class.h"
-#include "vMath/car_math.h"
-#include "vUtilities/wheelset_structs.h"
-#include "vUtilities/debug_class.h"
+#include "vCar/car.h"
+#include "vCar/brakes.h"
+#include "vCar/drivetrain.h"
+#include "vCar/mass.h"
+#include "vCar/suspension.h"
+#include "vSolver/physics/kinematicOutputs.h"
+#include "vMath/carMath.h"
+#include "vUtilities/wheelSetStructures.h"
+#include "vUtilities/debugger.h"
 
 //==========================================================================
 // Class:			KINEMATIC_OUTPUTS

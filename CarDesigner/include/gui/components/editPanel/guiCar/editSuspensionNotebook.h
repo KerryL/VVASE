@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  edit_suspension_notebook_class.h
+// File:  editSuspensionNotebook.h
 // Created:  2/19/2009
 // Author:  K. Loux
 // Description:  Contains the class declaration for the EDIT_SUSPENSION_NOTEBOOK class.

@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  vector_class.cpp
+// File:  vector.cpp
 // Created:  11/3/2007
 // Author:  K. Loux
 // Description:  Contains class functionality for vector class.
@@ -27,8 +27,8 @@
 #include <wx/wx.h>
 
 // VVASE headers
-#include "vMath/vector_class.h"
-#include "vMath/matrix_class.h"
+#include "vMath/vector.h"
+#include "vMath/matrix.h"
 
 //==========================================================================
 // Class:			Vector

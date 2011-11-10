@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  swaybar3d_class.h
+// File:  swaybar3d.h
 // Created:  1/11/2009
 // Author:  K. Loux
 // Description:  Contains class declaration for the DAMPER3D class.
@@ -19,7 +19,7 @@
 #define _SWAYBAR3D_CLASS_H_
 
 // VVASE headers
-#include "vCar/suspension_class.h"
+#include "vCar/suspension.h"
 
 // VVASE forward declarations
 class Vector;

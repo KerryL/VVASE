@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  thread_job_class.cpp
+// File:  threadJob.cpp
 // Created:  11/3/2009
 // Author:  K. Loux
 // Description:  Contains the class definition for the THREAD_JOB class.  This is the
@@ -17,8 +17,8 @@
 // History:
 
 // VVASE headers
-#include "vSolver/threads/thread_job_class.h"
-#include "vSolver/threads/thread_data_class.h"
+#include "vSolver/threads/threadJob.h"
+#include "vSolver/threads/threadData.h"
 
 //==========================================================================
 // Class:			THREAD_JOB

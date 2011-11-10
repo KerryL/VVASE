@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  complex_class.h
+// File:  complex.h
 // Created:  3/30/2008
 // Author:  K. Loux
 // Description:  Contains class declaration for complex number class.

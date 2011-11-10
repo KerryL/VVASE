@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  spring_class.cpp
+// File:  spring.cpp
 // Created:  1/3/2009
 // Author:  K. Loux
 // Description:  Contains class definition for SPRING class.  This class contains
@@ -16,7 +16,7 @@
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
 // vCar headers
-#include "vCar/spring_class.h"
+#include "vCar/spring.h"
 
 //==========================================================================
 // Class:			SPRING

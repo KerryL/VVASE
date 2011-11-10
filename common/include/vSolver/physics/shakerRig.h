@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  shaker_rig_class.h
+// File:  shakerRig.h
 // Created:  3/23/2008
 // Author:  K. Loux
 // Description:  Contains class declaration for SHAKER_RIG class.  This is a type of dynamic

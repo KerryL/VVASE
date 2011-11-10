@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  edit_differential_panel_class.h
+// File:  editDifferentialPanel.h
 // Created:  2/19/2009
 // Author:  K. Loux
 // Description:  Contains the class declaration for the EDIT_DIFFERENTIAL_PANEL class.

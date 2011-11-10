@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  inverse_semaphore_class.cpp
+// File:  inverseSemaphore.cpp
 // Created:  4/10/2010
 // Author:  K. Loux
 // Description:  This class is a synchronization object for multi-threaded applications.
@@ -19,7 +19,7 @@
 #include <wx/wx.h>
 
 // Local headers
-#include "vSolver/threads/inverse_semaphore_class.h"
+#include "vSolver/threads/inverseSemaphore.h"
 
 //==========================================================================
 // Class:			INVERSE_SEMAPHORE

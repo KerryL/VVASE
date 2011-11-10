@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  ga_goal_dialog_class.cpp
+// File:  gaGoalDialog.cpp
 // Created:  7/30/2009
 // Author:  K. Loux
 // Description:  Dialog for editing goal properties.
@@ -17,7 +17,7 @@
 #include <wx/gbsizer.h>
 
 // CarDesigner headers
-#include "gui/dialogs/ga_goal_dialog_class.h"
+#include "gui/dialogs/gaGoalDialog.h"
 #include "vUtilities/wxRelatedUtilities.h"
 
 //==========================================================================

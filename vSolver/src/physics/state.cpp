@@ -7,13 +7,13 @@
 
 ===================================================================================*/
 
-// File:  state_class.cpp
+// File:  state.cpp
 // Created:  7/12/2008
 // Author:  K. Loux
 // Description:  Contains class definition for STATE class.
 // History:
 
-#include "vSolver/physics/state_class.h"
+#include "vSolver/physics/state.h"
 
 //==========================================================================
 // Class:			STATE

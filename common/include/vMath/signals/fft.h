@@ -10,7 +10,7 @@
 // File:  fft.h
 // Created:  5/3/2011
 // Author:  K. Loux
-// Description:  Performs fast fourier transform on data.
+// Description:  Performs Fast Fourier Transform on data.
 // History:
 
 #ifndef _FFT_H_

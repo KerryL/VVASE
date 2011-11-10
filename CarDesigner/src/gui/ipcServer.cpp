@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  ipc_server_class.cpp
+// File:  ipcServer.cpp
 // Created:  10/23/2010
 // Author:  K. Loux
 // Description:  Inter-process communication server class.  Used for passing file names
@@ -20,9 +20,9 @@
 #include <wx/wx.h>
 
 // VVASE headers
-#include "gui/ipc_server_class.h"
-#include "gui/ipc_connection_class.h"
-#include "application/vvaseapp_class.h"
+#include "gui/ipcServer.h"
+#include "gui/ipcConnection.h"
+#include "application/vvaseApplication.h"
 
 //==========================================================================
 // Class:			IPC_SERVER

@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  main_notebook_class.h
+// File:  mainNotebook.h
 // Created:  4/4/2008
 // Author:  K. Loux
 // Description:  Contains the class declaration for the MAIN_NOTEBOOK class.

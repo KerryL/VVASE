@@ -7,12 +7,12 @@
 
 ===================================================================================*/
 
-// File:  plot_panel.cpp
+// File:  plotPanel.cpp
 // Created:  11/9/2011
 // Author:  K. Loux
 // Description:  Panel containing plot renderer and grid listing active plot channels.
 // History:
 
 // Local headers
-#include "gui/plot_panel.h"
-#include "gui/renderer/plot_renderer_class.h"
+#include "gui/plotPanel.h"
+#include "gui/renderer/plotRenderer.h"

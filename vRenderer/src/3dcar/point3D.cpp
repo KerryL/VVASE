@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  point3d_class.cpp
+// File:  point3D.cpp
 // Created:  1/5/2009
 // Author:  K. Loux
 // Description:  Contains class definition for the POINT3D class.
@@ -16,10 +16,10 @@
 
 // VVASE headers
 #include "vRenderer/primitives/sphere.h"
-#include "vRenderer/3dcar/point3d_class.h"
-#include "vRenderer/color_class.h"
-#include "vMath/vector_class.h"
-#include "vMath/car_math.h"
+#include "vRenderer/3dcar/point3D.h"
+#include "vRenderer/color.h"
+#include "vMath/vector.h"
+#include "vMath/carMath.h"
 
 //==========================================================================
 // Class:			POINT3D

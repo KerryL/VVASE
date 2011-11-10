@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  engine_class.h
+// File:  engine.h
 // Created:  11/3/2007
 // Author:  K. Loux
 // Description:  Contains class declaration for ENGINE class.

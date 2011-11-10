@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  mass_class.cpp
+// File:  mass.cpp
 // Created:  11/3/2007
 // Author:  K. Loux
 // Description:  Contains class functionality for mass class.
@@ -23,11 +23,11 @@
 #include <wx/wx.h>
 
 // VVASE headers
-#include "vCar/mass_class.h"
-#include "vMath/matrix_class.h"
-#include "vMath/complex_class.h"
-#include "vUtilities/debug_class.h"
-#include "vUtilities/machine_defs.h"
+#include "vCar/mass.h"
+#include "vMath/matrix.h"
+#include "vMath/complex.h"
+#include "vUtilities/debugger.h"
+#include "vUtilities/machineDefinitions.h"
 
 //==========================================================================
 // Class:			MASS_PROPERTIES

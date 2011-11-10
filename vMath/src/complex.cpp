@@ -24,7 +24,7 @@
 #include <wx/wx.h>
 
 // VVASE headers
-#include "vMath/complex_class.h"
+#include "vMath/complex.h"
 
 //==========================================================================
 // Class:			Complex

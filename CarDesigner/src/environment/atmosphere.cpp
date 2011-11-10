@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  atmosphere_class.cpp
+// File:  atmosphere.cpp
 // Created:  12/12/2008
 // Author:  K. Loux
 // Description:  Contains class definitions for ATMOSPHERE class.  This is intended
@@ -22,7 +22,7 @@
 // History:
 
 // CarDesigner headers
-#include "environment/atmosphere_class.h"
+#include "environment/atmosphere.h"
 
 //==========================================================================
 // Class:			ATMOSPHERE

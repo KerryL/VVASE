@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  milliken_class.cpp
+// File:  millikenAnalysis.cpp
 // Created:  3/23/2008
 // Author:  K. Loux
 // Description:  Contains class definition for Milliken Moment Method analysis class.  See RCVD
@@ -18,8 +18,8 @@
 #include <cstdlib>
 
 // VVASE headers
-#include "vSolver/physics/milliken_class.h"
-#include "vUtilities/debug_class.h"
+#include "vSolver/physics/millikenAnalysis.h"
+#include "vUtilities/debugger.h"
 
 //==========================================================================
 // Class:			MILLIKEN_ANALYSIS

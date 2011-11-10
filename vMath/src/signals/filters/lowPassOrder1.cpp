@@ -7,15 +7,15 @@
 
 ===================================================================================*/
 
-// File:  low_pass_order1_class.cpp
+// File:  lowPassOrder1.cpp
 // Created:  5/16/2011
 // Author:  K. Loux
 // Description:  First order low-pass digital filter.
 // History:
 
 // Local headers
-#include "vMath/signals/filters/low_pass_order1_class.h"
-#include "vMath/car_math.h"
+#include "vMath/signals/filters/lowPassOrder1.h"
+#include "vMath/carMath.h"
 
 //==========================================================================
 // Class:			LowPassFirstOrderFilter

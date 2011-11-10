@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  range_limits_dialog_class.h
+// File:  rangeLimitsDialog.h
 // Created:  5/12/2011
 // Author:  K. Loux
 // Description:  Dialog box for entering a minimum and maximum value for an axis.

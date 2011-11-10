@@ -7,13 +7,13 @@
 
 ===================================================================================*/
 
-// File:  vector_class.h
+// File:  vector.h
 // Created:  11/3/2007
 // Author:  K. Loux
 // Description:  Contains class declaration for Vector class.  Vector class is for three element vector.
 // History:
 //	2/25/2008	- Changed RAD_TO_DEG and RAD_TO_DEG from constants to inline functions, K. Loux.
-//	2/26/2008	- Made order of rotations an argurment in the Rotate member function, K. Loux.
+//	2/26/2008	- Made order of rotations an argument in the Rotate member function, K. Loux.
 //	3/3/2008	- Changed function arguments to addresses where applicable to reduce overhead, K. Loux.
 //	3/9/2008	- Removed dependency on MFC class CString by switching to wxString, K. Loux.
 //	3/14/2008	- Added AnglesTo function, K. Loux.

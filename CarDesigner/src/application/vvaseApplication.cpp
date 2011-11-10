@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  vvaseapp_class.cpp
+// File:  vvaseApplication.cpp
 // Created:  5/17/2008
 // Author:  K. Loux
 // Description:  The application class.
@@ -20,11 +20,11 @@
 #include <wx/ipc.h>
 
 // CarDesigner headers
-#include "application/vvaseapp_class.h"
-#include "gui/components/main_frame_class.h"
-#include "gui/ipc_client_class.h"
-#include "gui/ipc_server_class.h"
-#include "gui/ipc_connection_class.h"
+#include "application/vvaseApplication.h"
+#include "gui/components/mainFrame.h"
+#include "gui/ipcClient.h"
+#include "gui/ipcServer.h"
+#include "gui/ipcConnection.h"
 
 // Implement the application (have wxWidgets set up the appropriate entry points, etc.)
 IMPLEMENT_APP(VVASEApp);

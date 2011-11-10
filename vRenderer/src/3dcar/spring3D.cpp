@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  spring3d_class.cpp
+// File:  spring3d.cpp
 // Created:  1/5/2009
 // Author:  K. Loux
 // Description:  Contains class definition for the SPRING3D class.
@@ -17,11 +17,11 @@
 // VVASE headers
 #include "vRenderer/primitives/cylinder.h"
 #include "vRenderer/primitives/sphere.h"
-#include "vRenderer/3dcar/spring3d_class.h"
-#include "vRenderer/color_class.h"
-#include "vUtilities/convert_class.h"
-#include "vMath/vector_class.h"
-#include "vMath/car_math.h"
+#include "vRenderer/3dcar/spring3D.h"
+#include "vRenderer/color.h"
+#include "vUtilities/convert.h"
+#include "vMath/vector.h"
+#include "vMath/carMath.h"
 
 //==========================================================================
 // Class:			SPRING3D

@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  kinematics_class.cpp
+// File:  kinematics.cpp
 // Created:  11/3/2007
 // Author:  K. Loux
 // Description:  Contains class functionality for static state class.  This is where
@@ -30,13 +30,13 @@
 #include <wx/stopwatch.h>
 
 // VVASE headers
-#include "vSolver/physics/kinematics_class.h"
-#include "vCar/car_class.h"
-#include "vCar/corner_class.h"
-#include "vCar/drivetrain_class.h"
-#include "vCar/suspension_class.h"
-#include "vMath/car_math.h"
-#include "vUtilities/wheelset_structs.h"
+#include "vSolver/physics/kinematics.h"
+#include "vCar/car.h"
+#include "vCar/corner.h"
+#include "vCar/drivetrain.h"
+#include "vCar/suspension.h"
+#include "vMath/carMath.h"
+#include "vUtilities/wheelAetStructures.h"
 
 //==========================================================================
 // Class:			KINEMATICS

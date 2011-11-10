@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  plot_panel.h
+// File:  plotPanel.h
 // Created:  11/9/2011
 // Author:  K. Loux
 // Description:  Panel containing plot renderer and grid listing active plot channels.

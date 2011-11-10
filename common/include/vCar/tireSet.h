@@ -7,10 +7,10 @@
 
 ===================================================================================*/
 
-// File:  tireset_class.h
+// File:  tireSet.h
 // Created:  3/9/2008
 // Author:  K. Loux
-// Description:  Contains class declararation for TIRE_SET class.  This class contains a set
+// Description:  Contains class declaration for TIRE_SET class.  This class contains a set
 //				 of four tires.  Required to manage dynamic memory allocation of a set of tires.
 // History:
 //	11/22/2009	- Moved to vCar.lib, K. Loux.

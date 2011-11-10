@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  edit_panel_class.h
+// File:  editPanel.h
 // Created:  2/10/2009
 // Author:  K. Loux
 // Description:  Contains the class declaration for the EDIT_PANEL class.
@@ -20,7 +20,7 @@
 #include <wx/wx.h>
 
 // VVASE headers
-#include "gui/gui_object_class.h"
+#include "gui/guiObject.h"
 
 // wxWidgets forward declarations
 class wxPanel;

@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  object_list_class.h
+// File:  objectList.h
 // Created:  1/20/2009
 // Author:  K. Loux
 // Description:  This is a template class for lists of objects that can be accessed by
