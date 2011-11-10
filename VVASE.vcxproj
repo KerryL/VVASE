@@ -84,7 +84,7 @@
     <ClInclude Include="CarDesigner\include\environment\track.h" />
     <ClInclude Include="CarDesigner\include\gui\appearanceOptions.h" />
     <ClInclude Include="CarDesigner\include\gui\components\editPanel\editPanel.h" />
-    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editAerodynamicPanel.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editAerodynamicsPanel.h" />
     <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editBrakesPanel.h" />
     <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editCornerPanel.h" />
     <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editDifferentialPanel.h" />

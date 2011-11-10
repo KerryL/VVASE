@@ -254,7 +254,7 @@ void APPEARANCE_OPTIONS::ShowAppearanceOptionsDialog(void)
 	// Display the dialog
 	if (OptionsDialog.ShowModal() == wxOK)
 	{
-		// FIXME:  Write the updated options to the registry
+		// FIXME:  Write the updated options to the registry as defaults?
 
 		// Update the display
 		Owner.UpdateDisplay();

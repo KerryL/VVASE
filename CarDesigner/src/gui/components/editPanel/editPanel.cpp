@@ -30,6 +30,7 @@
 #include "gui/components/editPanel/guiCar/editDifferentialPanel.h"
 #include "gui/components/editPanel/guiCar/editDrivetrainPanel.h"
 #include "gui/components/editPanel/guiCar/editEnginePanel.h"
+#include "gui/components/editPanel/guiCar/editSuspensionNotebook.h"
 #include "gui/components/editPanel/guiCar/editMassPanel.h"
 #include "gui/components/editPanel/guiCar/editTiresPanel.h"
 #include "gui/components/editPanel/iteration/editIterationNotebook.h"

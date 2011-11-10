@@ -92,9 +92,6 @@
     <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editTiresPanel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editAerodynamicPanel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editBrakesPanel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -150,6 +147,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CarDesigner\include\gui\renderer\carRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editAerodynamicsPanel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

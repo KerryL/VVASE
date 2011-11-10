@@ -14,6 +14,7 @@
 // History:
 //	5/7/2009	- Made grid columns re-sizable and started using the column labels, K. Loux.
 //	10/17/2010	- Added transparency options for color definition, K. Loux.
+//	11/9/2011	- Corrected use of sizers for better cross-platform usage, K. Loux.
 
 // wxWidgets headers
 #include <wx/sizer.h>
@@ -153,7 +154,7 @@ void APPEARANCE_OPTIONS_DIALOG::CreateControls(void)
 	// Create the color page main sizer
 	wxFlexGridSizer *colorSizer = new wxFlexGridSizer(1);
 	colorSizer->SetFlexibleDirection(wxVERTICAL);
-	ColorTopSizer->Add(colorSizer, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
+	ColorTopSizer->Add(colorSizer, 0, wxEXPAND | wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
 
 	// Add the text across the top of the page
 	wxStaticText *ColorPrompt = new wxStaticText(ColorPanel, wxID_STATIC,
@@ -172,7 +173,7 @@ void APPEARANCE_OPTIONS_DIALOG::CreateControls(void)
 	ColorGrid->SetColLabelSize(ColorGrid->GetRowSize(0));
 
 	// Create a horizontal sizer so controls expand in correct direction
-	colorSizer->Add(ColorGrid, 0, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALL | wxALIGN_TOP, 5);
+	colorSizer->Add(ColorGrid, 0, wxALIGN_CENTER_HORIZONTAL | wxEXPAND | wxALL | wxALIGN_TOP, 5);
 
 	// Set the column headings
 	ColorGrid->SetColLabelValue(0, _T("Object"));
@@ -277,7 +278,7 @@ void APPEARANCE_OPTIONS_DIALOG::CreateControls(void)
 	SizeGrid->SetColLabelSize(SizeGrid->GetRowSize(0));
 
 	// Add the grid to the sizer
-	sizeSizer->Add(SizeGrid, 1, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALL | wxALIGN_TOP, 5);
+	sizeSizer->Add(SizeGrid, 1, wxALIGN_CENTER_HORIZONTAL | wxEXPAND | wxALL | wxALIGN_TOP, 5);
 
 	// Set the column headings
 	SizeGrid->SetColLabelValue(0, _T("Object"));
@@ -346,7 +347,7 @@ void APPEARANCE_OPTIONS_DIALOG::CreateControls(void)
 	ResolutionGrid->SetColLabelSize(ResolutionGrid->GetRowSize(0));
 
 	// Add the grid to the sizer
-	resolutionSizer->Add(ResolutionGrid, 0, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALL | wxALIGN_TOP, 5);
+	resolutionSizer->Add(ResolutionGrid, 0, wxALIGN_CENTER_HORIZONTAL | wxEXPAND | wxALL | wxALIGN_TOP, 5);
 
 	// Set the column headings
 	ResolutionGrid->SetColLabelValue(0, _T("Object"));
@@ -387,7 +388,8 @@ void APPEARANCE_OPTIONS_DIALOG::CreateControls(void)
 	ResolutionPanel->SetSizer(ResolutionTopSizer);
 
 	// FIXME:  Definitely needs clean-up here
-	/*int remainingColumnWidth = ResolutionGrid->GetSize().GetWidth() - ResolutionGrid->GetColumnWidth(1);
+	// Doesn't work because nothing has been sized until the call to ShowModal, which happens after this
+	/*int remainingColumnWidth = ResolutionGrid->GetClientSize().GetWidth() - ResolutionGrid->GetColumnWidth(1) - 1;
 	if (remainingColumnWidth > ResolutionGrid->GetColumnWidth(0))
 		ResolutionGrid->SetColumnWidth(0, remainingColumnWidth);*/
 
@@ -412,6 +414,17 @@ void APPEARANCE_OPTIONS_DIALOG::CreateControls(void)
 
 	// Assign the top level sizer to the dialog
 	SetSizer(TopSizer);
+
+	// Limit the dialog size to 1/3 of the screen size in height
+	/*int screenHeight;
+	wxClientDisplayRect(NULL, NULL, NULL, &screenHeight);
+	SetMaxSize(wxSize(-1, screenHeight / 3));
+
+	wxString temp;
+	temp.Printf("max height: %i\nset to: %i", GetMaxSize().GetHeight(), screenHeight / 3);
+	wxMessageBox(temp);
+
+	TopSizer->SetSizeHints(this);*/
 
 	return;
 }
