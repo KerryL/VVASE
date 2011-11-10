@@ -14,9 +14,9 @@ DIRS = \
 	src/environment \
 	src/gui \
 	src/gui/components \
-	src/gui/components/edit_panel \
-	src/gui/components/edit_panel/gui_car \
-	src/gui/components/edit_panel/iteration \
+	src/gui/components/editPanel \
+	src/gui/components/editPanel/guiCar \
+	src/gui/components/editPanel/iteration \
 	src/gui/dialogs \
 	src/gui/renderer
 
