@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  edit_drivetrain_panel_class.cpp
+// File:  editDrivetrainPanel.cpp
 // Created:  2/10/2009
 // Author:  K. Loux
 // Description:  Contains the class definition for the EDIT_DRIVETRAIN_PANEL class.  This
@@ -16,14 +16,14 @@
 // History:
 
 // CarDesigner headers
-#include "vCar/drivetrain_class.h"
-#include "gui/renderer/car_renderer_class.h"
-#include "gui/gui_car_class.h"
-#include "gui/components/main_frame_class.h"
-#include "gui/components/edit_panel/edit_panel_class.h"
-#include "gui/components/edit_panel/gui_car/edit_drivetrain_panel_class.h"
-#include "vUtilities/convert_class.h"
-#include "vMath/vector_class.h"
+#include "vCar/drivetrain.h"
+#include "gui/renderer/carRenderer.h"
+#include "gui/guiCar.h"
+#include "gui/components/mainFrame.h"
+#include "gui/components/editPanel/editPanel.h"
+#include "gui/components/editPanel/guiCar/editDrivetrainPanel.h"
+#include "vUtilities/convert.h"
+#include "vMath/vector.h"
 
 //==========================================================================
 // Class:			EDIT_DRIVETRAIN_PANEL

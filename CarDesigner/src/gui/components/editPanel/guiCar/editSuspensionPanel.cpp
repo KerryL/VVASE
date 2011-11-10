@@ -18,16 +18,16 @@
 //				  with last value," K. Loux
 
 // CarDesigner headers
-#include "vCar/drivetrain_class.h"
-#include "vCar/suspension_class.h"
-#include "gui/renderer/car_renderer_class.h"
-#include "gui/gui_car_class.h"
-#include "gui/components/main_frame_class.h"
-#include "gui/components/edit_panel/edit_panel_class.h"
-#include "gui/components/edit_panel/gui_car/edit_suspension_panel_class.h"
-#include "gui/components/edit_panel/gui_car/edit_suspension_notebook_class.h"
-#include "vUtilities/convert_class.h"
-#include "vMath/vector_class.h"
+#include "vCar/drivetrain.h"
+#include "vCar/suspension.h"
+#include "gui/renderer/carRenderer.h"
+#include "gui/guiCar.h"
+#include "gui/components/mainFrame.h"
+#include "gui/components/editPanel/editPanel.h"
+#include "gui/components/editPanel/guiCar/editSuspensionPanel.h"
+#include "gui/components/editPanel/guiCar/editSuspensionNotebook.h"
+#include "vUtilities/convert.h"
+#include "vMath/vector.h"
 
 //==========================================================================
 // Class:			EDIT_SUSPENSION_PANEL

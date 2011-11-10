@@ -15,96 +15,96 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\common\include\vCar\aerodynamics_class.h">
+    <ClInclude Include="..\common\include\vCar\tireSet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\include\vCar\brakes_class.h">
+    <ClInclude Include="..\common\include\vCar\aerodynamics.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\include\vCar\car_class.h">
+    <ClInclude Include="..\common\include\vCar\brakes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\include\vCar\corner_class.h">
+    <ClInclude Include="..\common\include\vCar\car.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\include\vCar\damper_class.h">
+    <ClInclude Include="..\common\include\vCar\corner.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\include\vCar\differential_class.h">
+    <ClInclude Include="..\common\include\vCar\damper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\include\vCar\driver_class.h">
+    <ClInclude Include="..\common\include\vCar\differential.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\include\vCar\drivetrain_class.h">
+    <ClInclude Include="..\common\include\vCar\driver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\include\vCar\engine_class.h">
+    <ClInclude Include="..\common\include\vCar\drivetrain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\include\vCar\fuel_cell_class.h">
+    <ClInclude Include="..\common\include\vCar\engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\include\vCar\mass_class.h">
+    <ClInclude Include="..\common\include\vCar\fuelCell.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\include\vCar\spring_class.h">
+    <ClInclude Include="..\common\include\vCar\mass.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\include\vCar\suspension_class.h">
+    <ClInclude Include="..\common\include\vCar\spring.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\include\vCar\tire_class.h">
+    <ClInclude Include="..\common\include\vCar\suspension.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\include\vCar\tireset_class.h">
+    <ClInclude Include="..\common\include\vCar\tire.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\aerodynamics_class.cpp">
+    <ClCompile Include="src\tireSet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\brakes_class.cpp">
+    <ClCompile Include="src\aerodynamics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\car_class.cpp">
+    <ClCompile Include="src\brakes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\corner_class.cpp">
+    <ClCompile Include="src\car.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\damper_class.cpp">
+    <ClCompile Include="src\corner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\differential_class.cpp">
+    <ClCompile Include="src\damper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\driver_class.cpp">
+    <ClCompile Include="src\differential.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\drivetrain_class.cpp">
+    <ClCompile Include="src\driver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\engine_class.cpp">
+    <ClCompile Include="src\drivetrain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\fuel_cell_class.cpp">
+    <ClCompile Include="src\engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\mass_class.cpp">
+    <ClCompile Include="src\fuelCell.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\spring_class.cpp">
+    <ClCompile Include="src\mass.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\suspension_class.cpp">
+    <ClCompile Include="src\spring.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\tire_class.cpp">
+    <ClCompile Include="src\suspension.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\tireset_class.cpp">
+    <ClCompile Include="src\tire.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

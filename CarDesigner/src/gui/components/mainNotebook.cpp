@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  main_notebook_class.h
+// File:  mainNotebook.h
 // Created:  4/4/2008
 // Author:  K. Loux
 // Description:  Contains the class functionality (event handlers, etc.) for the
@@ -17,10 +17,10 @@
 //				  objects is handled by the MAIN_FRAME class.
 
 // CarDesigner headers
-#include "gui/components/main_notebook_class.h"
-#include "gui/components/main_frame_class.h"
-#include "vUtilities/debug_class.h"
-#include "gui/gui_object_class.h"
+#include "gui/components/mainNotebook.h"
+#include "gui/components/mainFrame.h"
+#include "vUtilities/debugger.h"
+#include "gui/guiObject.h"
 
 // wxWidgets headers
 #include <wx/utils.h>

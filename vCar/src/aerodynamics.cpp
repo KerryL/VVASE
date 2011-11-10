@@ -103,6 +103,7 @@ AERODYNAMICS::~AERODYNAMICS()
 //==========================================================================
 void AERODYNAMICS::Write(std::ofstream *OutFile) const
 {
+	// FIXME:  MSCV generates C4100
 	// Write this object to file
 	// Not yet used
 
@@ -128,6 +129,7 @@ void AERODYNAMICS::Write(std::ofstream *OutFile) const
 //==========================================================================
 void AERODYNAMICS::Read(std::ifstream *InFile, int FileVersion)
 {
+	// FIXME:  MSCV generates C4100
 	// Read this object from file according to the file version we're using
 	if (FileVersion >= 0)// All versions
 	{

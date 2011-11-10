@@ -7,21 +7,21 @@
 
 ===================================================================================*/
 
-// File:  edit_aerodynamics_panel_class.cpp
+// File:  editAerodynamicsPanel.cpp
 // Created:  2/10/2009
 // Author:  K. Loux
 // Description:  Contains the class definition for the EDIT_AERODYNAMICS_PANEL class.
 // History:
 
 // CarDesigner headers
-#include "vCar/aerodynamics_class.h"
-#include "gui/renderer/car_renderer_class.h"
-#include "gui/gui_car_class.h"
-#include "gui/components/main_frame_class.h"
-#include "gui/components/edit_panel/edit_panel_class.h"
-#include "gui/components/edit_panel/gui_car/edit_aerodynamics_panel_class.h"
-#include "vUtilities/convert_class.h"
-#include "vMath/vector_class.h"
+#include "vCar/aerodynamics.h"
+#include "gui/renderer/carRenderer.h"
+#include "gui/guiCar.h"
+#include "gui/components/mainFrame.h"
+#include "gui/components/editPanel/editPanel.h"
+#include "gui/components/editPanel/guiCar/editAerodynamicsPanel.h"
+#include "vUtilities/convert.h"
+#include "vMath/vector.h"
 
 //==========================================================================
 // Class:			EDIT_AERODYNAMICS_PANEL

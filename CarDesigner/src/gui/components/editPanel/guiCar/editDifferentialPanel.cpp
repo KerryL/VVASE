@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  edit_differential_panel_class.cpp
+// File:  editDifferentialPanel.cpp
 // Created:  2/10/2009
 // Author:  K. Loux
 // Description:  Contains the class definition for the EDIT_DIFFERENTIAL_PANEL class.  This
@@ -16,13 +16,13 @@
 // History:
 
 // CarDesigner headers
-#include "vCar/differential_class.h"
-#include "gui/gui_car_class.h"
-#include "gui/components/main_frame_class.h"
-#include "gui/components/edit_panel/edit_panel_class.h"
-#include "gui/components/edit_panel/gui_car/edit_differential_panel_class.h"
-#include "vUtilities/convert_class.h"
-#include "vMath/vector_class.h"
+#include "vCar/differential.h"
+#include "gui/guiCar.h"
+#include "gui/components/mainFrame.h"
+#include "gui/components/editPanel/editPanel.h"
+#include "gui/components/editPanel/guiCar/editDifferentialPanel.h"
+#include "vUtilities/convert.h"
+#include "vMath/vector.h"
 
 //==========================================================================
 // Class:			EDIT_DIFFERENTIAL_PANEL

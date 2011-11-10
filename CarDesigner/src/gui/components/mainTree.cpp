@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  main_tree_class.cpp
+// File:  maiTree.cpp
 // Created:  6/14/2008
 // Author:  K. Loux
 // Description:  Contains the class declaration for the MAIN_TREE class.
@@ -20,12 +20,12 @@
 #include <wx/imaglist.h>
 
 // CarDesigner headers
-#include "gui/components/main_frame_class.h"
-#include "gui/components/main_tree_class.h"
-#include "gui/gui_car_class.h"
-#include "gui/gui_object_class.h"
-#include "vUtilities/debug_class.h"
-#include "gui/iteration_class.h"
+#include "gui/components/mainFrame.h"
+#include "gui/components/mainTree.h"
+#include "gui/guiCar.h"
+#include "gui/guiObject.h"
+#include "vUtilities/debugger.h"
+#include "gui/iteration.h"
 
 //==========================================================================
 // Class:			MAIN_TREE

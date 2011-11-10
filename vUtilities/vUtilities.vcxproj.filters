@@ -15,42 +15,42 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\common\include\vUtilities\convert_class.h">
+    <ClInclude Include="..\common\include\vUtilities\xlsxReader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\include\vUtilities\debug_class.h">
+    <ClInclude Include="..\common\include\vUtilities\convert.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\include\vUtilities\machine_defs.h">
+    <ClInclude Include="..\common\include\vUtilities\debugger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\include\vUtilities\managed_list_class.h">
+    <ClInclude Include="..\common\include\vUtilities\machineDefinitions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\include\vUtilities\object_list_class.h">
+    <ClInclude Include="..\common\include\vUtilities\managedList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\include\vUtilities\wheelset_structs.h">
+    <ClInclude Include="..\common\include\vUtilities\objectList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\common\include\vUtilities\wheelSetStructures.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\common\include\vUtilities\wxRelatedUtilities.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\include\vUtilities\xlsx_reader_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\convert_class.cpp">
+    <ClCompile Include="src\xlsxReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\debug_class.cpp">
+    <ClCompile Include="src\convert.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\debugger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\wxRelatedUtilities.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\xlsx_reader_class.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

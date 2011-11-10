@@ -15,12 +15,12 @@
 // History:
 
 // CarDesigner headers
-#include "gui/iteration_class.h"
-#include "gui/components/main_frame_class.h"
-#include "gui/components/edit_panel/edit_panel_class.h"
-#include "gui/components/edit_panel/iteration/edit_iteration_options_panel_class.h"
-#include "gui/components/edit_panel/iteration/edit_iteration_notebook_class.h"
-#include "vUtilities/convert_class.h"
+#include "gui/iteration.h"
+#include "gui/components/mainFrame.h"
+#include "gui/components/editPanel/editPanel.h"
+#include "gui/components/editPanel/iteration/editIterationOptionsPanel.h"
+#include "gui/components/editPanel/iteration/editIterationNotebook.h"
+#include "vUtilities/convert.h"
 
 //==========================================================================
 // Class:			EDIT_ITERATION_OPTIONS_PANEL

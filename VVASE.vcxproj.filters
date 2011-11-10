@@ -15,273 +15,273 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CarDesigner\include\application\vvase_constants.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\application\vvaseapp_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\environment\atmosphere_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\environment\track_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\appearance_options_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\drop_target_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\ga_object_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\genetic_algorithm_panel_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\genetic_optimization_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\gui_car_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\gui_object_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\ipc_client_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\ipc_connection_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\ipc_server_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\iteration_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\undo_redo_stack_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\components\main_frame_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\components\main_notebook_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\components\main_tree_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\components\output_panel_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\components\edit_panel\edit_panel_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\components\edit_panel\gui_car\edit_aerodynamics_panel_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\components\edit_panel\gui_car\edit_brakes_panel_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\components\edit_panel\gui_car\edit_corner_panel_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\components\edit_panel\gui_car\edit_differential_panel_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\components\edit_panel\gui_car\edit_drivetrain_panel_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\components\edit_panel\gui_car\edit_engine_panel_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\components\edit_panel\gui_car\edit_mass_panel_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\components\edit_panel\gui_car\edit_suspension_notebook_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\components\edit_panel\gui_car\edit_suspension_panel_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\components\edit_panel\gui_car\edit_tires_panel_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\components\edit_panel\iteration\edit_iteration_notebook_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\components\edit_panel\iteration\edit_iteration_options_panel_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\components\edit_panel\iteration\edit_iteration_plots_panel_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\components\edit_panel\iteration\edit_iteration_range_panel_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\dialogs\appearance_options_dialog_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\dialogs\ga_gene_dialog_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\dialogs\ga_goal_dialog_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\dialogs\options_dialog_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\renderer\car_renderer_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\renderer\plot_renderer_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\plot_object_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\plot_panel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CarDesigner\include\gui\dialogs\range_limits_dialog_class.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="CarDesigner\src\application\vvaseapp_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\environment\atmosphere_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\environment\track_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\appearance_options_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\drop_target_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\ga_object_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\genetic_algorithm_panel_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\genetic_optimization_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\gui_car_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\gui_object_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\ipc_client_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\ipc_connection_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\ipc_server_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\iteration_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\plot_object_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\undo_redo_stack_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\components\main_frame_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\components\main_notebook_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\components\main_tree_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\components\output_panel_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\components\edit_panel\edit_panel_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\components\edit_panel\gui_car\edit_aerodynamics_panel_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\components\edit_panel\gui_car\edit_brakes_panel_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\components\edit_panel\gui_car\edit_corner_panel_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\components\edit_panel\gui_car\edit_differential_panel_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\components\edit_panel\gui_car\edit_drivetrain_panel_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\components\edit_panel\gui_car\edit_engine_panel_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\components\edit_panel\gui_car\edit_mass_panel_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\components\edit_panel\gui_car\edit_suspension_notebook_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\components\edit_panel\gui_car\edit_suspension_panel_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\components\edit_panel\gui_car\edit_tires_panel_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\components\edit_panel\iteration\edit_iteration_notebook_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\components\edit_panel\iteration\edit_iteration_options_panel_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\components\edit_panel\iteration\edit_iteration_plots_panel_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\components\edit_panel\iteration\edit_iteration_range_panel_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\dialogs\appearance_options_dialog_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\dialogs\ga_gene_dialog_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\dialogs\ga_goal_dialog_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\dialogs\options_dialog_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\renderer\car_renderer_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\renderer\plot_renderer_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\plot_panel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CarDesigner\src\gui\dialogs\range_limits_dialog_class.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="CarDesigner\res\CarDesigner.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CarDesigner\include\application\vvaseConstants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\application\vvaseApplication.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\environment\track.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\environment\atmosphere.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\undoRedoStack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\appearanceOptions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\dropTarget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\gaObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\geneticAlgorithmPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\geneticOptimization.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\guiCar.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\guiObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\ipcClient.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\ipcConnection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\ipcServer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\iteration.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\plotObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\plotPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\components\outputPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\components\mainFrame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\components\mainNotebook.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\components\mainTree.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\components\editPanel\editPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editTiresPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editAerodynamicPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editBrakesPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editCornerPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editDifferentialPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editDrivetrainPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editEnginePanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editMassPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editSuspensionNotebook.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editSuspensionPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\components\editPanel\iteration\editIterationRangePanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\components\editPanel\iteration\editIterationNotebook.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\components\editPanel\iteration\editIterationOptionsPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\components\editPanel\iteration\editIterationPlotsPanel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\dialogs\rangeLimitsDialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\dialogs\appearanceOptionsDialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\dialogs\gaGeneDialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\dialogs\gaGoalDialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\dialogs\optionsDialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\renderer\plotRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\renderer\carRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CarDesigner\src\application\vvaseApplication.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\environment\track.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\environment\atmosphere.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\undoRedoStack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\appearanceOptions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\dropTarget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\gaObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\geneticAlgorithmPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\geneticOptimization.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\guiCar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\guiObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\ipcClient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\ipcConnection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\ipcServer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\iteration.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\plotObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\plotPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\components\outputPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\components\mainFrame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\components\mainNotebook.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\components\mainTree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\components\editPanel\editPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editTiresPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editAerodynamicsPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editBrakesPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editCornerPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editDifferentialPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editDrivetrainPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editEnginePanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editMassPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editSuspensionNotebook.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editSuspensionPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\components\editPanel\iteration\editIterationRangePanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\components\editPanel\iteration\editIterationNotebook.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\components\editPanel\iteration\editIterationOptionsPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\components\editPanel\iteration\editIterationPlotsPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\dialogs\rangeLimitsDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\dialogs\appearanceOptionsDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\dialogs\gaGeneDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\dialogs\gaGoalDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\dialogs\optionsDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\renderer\plotRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\renderer\carRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

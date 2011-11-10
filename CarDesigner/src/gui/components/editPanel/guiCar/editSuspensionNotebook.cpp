@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  edit_suspension_notebook_class.cpp
+// File:  editSuspensionNotebook.cpp
 // Created:  2/19/2009
 // Author:  K. Loux
 // Description:  Contains the class definition for the EDIT_SUSPENSION_NOTEBOOK class.
@@ -16,17 +16,17 @@
 // History:
 
 // VVASE headers
-#include "vCar/car_class.h"
-#include "vCar/suspension_class.h"
-#include "vCar/tireset_class.h"
-#include "gui/gui_car_class.h"
-#include "gui/components/main_frame_class.h"
-#include "gui/components/main_tree_class.h"
-#include "gui/components/edit_panel/edit_panel_class.h"
-#include "gui/components/edit_panel/gui_car/edit_suspension_notebook_class.h"
-#include "gui/components/edit_panel/gui_car/edit_corner_panel_class.h"
-#include "gui/components/edit_panel/gui_car/edit_suspension_panel_class.h"
-#include "vUtilities/debug_class.h"
+#include "vCar/car.h"
+#include "vCar/suspension.h"
+#include "vCar/tireSet.h"
+#include "gui/guiCar.h"
+#include "gui/components/mainFrame.h"
+#include "gui/components/mainTree.h"
+#include "gui/components/editPanel/editPanel.h"
+#include "gui/components/editPanel/guiCar/editSuspensionNotebook.h"
+#include "gui/components/editPanel/guiCar/editCornerPanel.h"
+#include "gui/components/editPanel/guiCar/editSuspensionPanel.h"
+#include "vUtilities/debugger.h"
 
 //==========================================================================
 // Class:			EDIT_SUSPENSION_NOTEBOOK

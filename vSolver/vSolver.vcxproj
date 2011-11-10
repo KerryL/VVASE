@@ -10,6 +10,42 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\common\include\vSolver\optimization\geneticAlgorithm.h" />
+    <ClInclude Include="..\common\include\vSolver\physics\dynamics.h" />
+    <ClInclude Include="..\common\include\vSolver\physics\integrator.h" />
+    <ClInclude Include="..\common\include\vSolver\physics\kinematicOutputs.h" />
+    <ClInclude Include="..\common\include\vSolver\physics\kinematics.h" />
+    <ClInclude Include="..\common\include\vSolver\physics\millikenAnalysis.h" />
+    <ClInclude Include="..\common\include\vSolver\physics\shakerRig.h" />
+    <ClInclude Include="..\common\include\vSolver\physics\state.h" />
+    <ClInclude Include="..\common\include\vSolver\threads\inverseSemaphore.h" />
+    <ClInclude Include="..\common\include\vSolver\threads\jobQueue.h" />
+    <ClInclude Include="..\common\include\vSolver\threads\kinematicsData.h" />
+    <ClInclude Include="..\common\include\vSolver\threads\optimizationData.h" />
+    <ClInclude Include="..\common\include\vSolver\threads\threadData.h" />
+    <ClInclude Include="..\common\include\vSolver\threads\threadEvent.h" />
+    <ClInclude Include="..\common\include\vSolver\threads\threadJob.h" />
+    <ClInclude Include="..\common\include\vSolver\threads\workerThread.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\optimization\geneticAlgorithm.cpp" />
+    <ClCompile Include="src\physics\dynamics.cpp" />
+    <ClCompile Include="src\physics\integrator.cpp" />
+    <ClCompile Include="src\physics\kinematicOutputs.cpp" />
+    <ClCompile Include="src\physics\kinematics.cpp" />
+    <ClCompile Include="src\physics\millikenAnalysis.cpp" />
+    <ClCompile Include="src\physics\shakerRig.cpp" />
+    <ClCompile Include="src\physics\state.cpp" />
+    <ClCompile Include="src\threads\inverseSemaphore.cpp" />
+    <ClCompile Include="src\threads\jobQueue.cpp" />
+    <ClCompile Include="src\threads\kinematicsData.cpp" />
+    <ClCompile Include="src\threads\optimizationData.cpp" />
+    <ClCompile Include="src\threads\threadData.cpp" />
+    <ClCompile Include="src\threads\threadEvent.cpp" />
+    <ClCompile Include="src\threads\threadJob.cpp" />
+    <ClCompile Include="src\threads\workerThread.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{D3B21E89-DD3A-4071-A3D9-20A11D3DE193}</ProjectGuid>
     <RootNamespace>vSolver</RootNamespace>
@@ -64,42 +100,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="..\common\include\vSolver\optimization\genetic_algorithm_class.h" />
-    <ClInclude Include="..\common\include\vSolver\physics\dynamics_class.h" />
-    <ClInclude Include="..\common\include\vSolver\physics\integrator_class.h" />
-    <ClInclude Include="..\common\include\vSolver\physics\kinematics_class.h" />
-    <ClInclude Include="..\common\include\vSolver\physics\kinematic_outputs_class.h" />
-    <ClInclude Include="..\common\include\vSolver\physics\milliken_class.h" />
-    <ClInclude Include="..\common\include\vSolver\physics\shaker_rig_class.h" />
-    <ClInclude Include="..\common\include\vSolver\physics\state_class.h" />
-    <ClInclude Include="..\common\include\vSolver\threads\inverse_semaphore_class.h" />
-    <ClInclude Include="..\common\include\vSolver\threads\job_queue_class.h" />
-    <ClInclude Include="..\common\include\vSolver\threads\kinematics_data_class.h" />
-    <ClInclude Include="..\common\include\vSolver\threads\optimization_data_class.h" />
-    <ClInclude Include="..\common\include\vSolver\threads\thread_data_class.h" />
-    <ClInclude Include="..\common\include\vSolver\threads\thread_event_class.h" />
-    <ClInclude Include="..\common\include\vSolver\threads\thread_job_class.h" />
-    <ClInclude Include="..\common\include\vSolver\threads\worker_thread_class.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\optimization\genetic_algorithm_class.cpp" />
-    <ClCompile Include="src\physics\dynamics_class.cpp" />
-    <ClCompile Include="src\physics\integrator_class.cpp" />
-    <ClCompile Include="src\physics\kinematics_class.cpp" />
-    <ClCompile Include="src\physics\kinematic_outputs_class.cpp" />
-    <ClCompile Include="src\physics\milliken_class.cpp" />
-    <ClCompile Include="src\physics\shaker_rig_class.cpp" />
-    <ClCompile Include="src\physics\state_class.cpp" />
-    <ClCompile Include="src\threads\inverse_semaphore_class.cpp" />
-    <ClCompile Include="src\threads\job_queue_class.cpp" />
-    <ClCompile Include="src\threads\kinematics_data_class.cpp" />
-    <ClCompile Include="src\threads\optimization_data_class.cpp" />
-    <ClCompile Include="src\threads\thread_data_class.cpp" />
-    <ClCompile Include="src\threads\thread_event_class.cpp" />
-    <ClCompile Include="src\threads\thread_job_class.cpp" />
-    <ClCompile Include="src\threads\worker_thread_class.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

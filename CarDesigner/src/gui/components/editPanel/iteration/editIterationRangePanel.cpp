@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  edit_iteration_options_panel_class.cpp
+// File:  editIterationOptionsPanel.cpp
 // Created:  11/14/2010
 // Author:  K. Loux
 // Description:  Contains the class definition for the EDIT_ITERATION_RANGE_PANEL
@@ -15,12 +15,12 @@
 // History:
 
 // CarDesigner headers
-#include "gui/iteration_class.h"
-#include "gui/components/main_frame_class.h"
-#include "gui/components/edit_panel/edit_panel_class.h"
-#include "gui/components/edit_panel/iteration/edit_iteration_range_panel_class.h"
-#include "gui/components/edit_panel/iteration/edit_iteration_notebook_class.h"
-#include "vUtilities/convert_class.h"
+#include "gui/iteration.h"
+#include "gui/components/mainFrame.h"
+#include "gui/components/editPanel/editPanel.h"
+#include "gui/components/editPanel/iteration/editIterationRangePanel.h"
+#include "gui/components/editPanel/iteration/editIterationNotebook.h"
+#include "vUtilities/convert.h"
 
 //==========================================================================
 // Class:			EDIT_ITERATION_RANGE_PANEL

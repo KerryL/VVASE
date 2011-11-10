@@ -16,14 +16,14 @@
 // History:
 
 // CarDesigner headers
-#include "vCar/engine_class.h"
-#include "gui/renderer/car_renderer_class.h"
-#include "gui/gui_car_class.h"
-#include "gui/components/main_frame_class.h"
-#include "gui/components/edit_panel/edit_panel_class.h"
-#include "gui/components/edit_panel/gui_car/edit_engine_panel_class.h"
-#include "vUtilities/convert_class.h"
-#include "vMath/vector_class.h"
+#include "vCar/engine.h"
+#include "gui/renderer/carRenderer.h"
+#include "gui/guiCar.h"
+#include "gui/components/mainFrame.h"
+#include "gui/components/editPanel/editPanel.h"
+#include "gui/components/editPanel/guiCar/editEnginePanel.h"
+#include "vUtilities/convert.h"
+#include "vMath/vector.h"
 
 //==========================================================================
 // Class:			EDIT_ENGINE_PANEL

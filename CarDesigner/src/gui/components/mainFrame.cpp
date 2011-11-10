@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  main_frame_class.cpp
+// File:  mainFrame.cpp
 // Created:  3/7/2008
 // Author:  K. Loux
 // Description:  Contains the class functionality (event handlers, etc.) for the
@@ -45,30 +45,30 @@
 //#include <wx/platinfo.h>
 
 // CarDesigner headers
-#include "application/vvase_constants.h"
-#include "vCar/car_class.h"
-#include "vCar/drivetrain_class.h"
-#include "gui/renderer/car_renderer_class.h"
-#include "gui/renderer/plot_renderer_class.h"
-#include "gui/components/edit_panel/edit_panel_class.h"
-#include "gui/components/main_frame_class.h"
-#include "gui/components/main_notebook_class.h"
-#include "gui/components/main_tree_class.h"
-#include "gui/components/output_panel_class.h"
-#include "gui/gui_object_class.h"
-#include "gui/gui_car_class.h"
-#include "gui/iteration_class.h"
-#include "gui/genetic_optimization_class.h"
-#include "gui/ga_object_class.h"
-#include "gui/dialogs/options_dialog_class.h"
-#include "gui/appearance_options_class.h"
-#include "gui/drop_target_class.h"
-#include "vSolver/physics/kinematics_class.h"
-#include "vSolver/physics/kinematic_outputs_class.h"
-#include "vSolver/threads/job_queue_class.h"
-#include "vSolver/threads/worker_thread_class.h"
-#include "vSolver/threads/thread_event_class.h"
-#include "vMath/vector_class.h"
+#include "application/vvaseConstants.h"
+#include "vCar/car.h"
+#include "vCar/drivetrain.h"
+#include "gui/renderer/carRenderer.h"
+#include "gui/renderer/plotRenderer.h"
+#include "gui/components/editPanel/editPanel.h"
+#include "gui/components/mainFrame.h"
+#include "gui/components/mainNotebook.h"
+#include "gui/components/mainTree.h"
+#include "gui/components/outputPanel.h"
+#include "gui/guiObject.h"
+#include "gui/guiCar.h"
+#include "gui/iteration.h"
+#include "gui/geneticOptimization.h"
+#include "gui/gaObject.h"
+#include "gui/dialogs/optionsDialog.h"
+#include "gui/appearanceOptions.h"
+#include "gui/dropTarget.h"
+#include "vSolver/physics/kinematics.h"
+#include "vSolver/physics/kinematicOutputs.h"
+#include "vSolver/threads/jobQueue.h"
+#include "vSolver/threads/workerThread.h"
+#include "vSolver/threads/threadEvent.h"
+#include "vMath/vector.h"
 
 //==========================================================================
 // Class:			MAIN_FRAME

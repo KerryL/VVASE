@@ -10,6 +10,22 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\common\include\vUtilities\convert.h" />
+    <ClInclude Include="..\common\include\vUtilities\debugger.h" />
+    <ClInclude Include="..\common\include\vUtilities\machineDefinitions.h" />
+    <ClInclude Include="..\common\include\vUtilities\managedList.h" />
+    <ClInclude Include="..\common\include\vUtilities\objectList.h" />
+    <ClInclude Include="..\common\include\vUtilities\wheelSetStructures.h" />
+    <ClInclude Include="..\common\include\vUtilities\wxRelatedUtilities.h" />
+    <ClInclude Include="..\common\include\vUtilities\xlsxReader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\convert.cpp" />
+    <ClCompile Include="src\debugger.cpp" />
+    <ClCompile Include="src\wxRelatedUtilities.cpp" />
+    <ClCompile Include="src\xlsxReader.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7EA8AC69-6FEA-4FD8-8810-239A27B0377E}</ProjectGuid>
     <RootNamespace>vUtilities</RootNamespace>
@@ -65,22 +81,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="..\common\include\vUtilities\convert_class.h" />
-    <ClInclude Include="..\common\include\vUtilities\debug_class.h" />
-    <ClInclude Include="..\common\include\vUtilities\machine_defs.h" />
-    <ClInclude Include="..\common\include\vUtilities\managed_list_class.h" />
-    <ClInclude Include="..\common\include\vUtilities\object_list_class.h" />
-    <ClInclude Include="..\common\include\vUtilities\wheelset_structs.h" />
-    <ClInclude Include="..\common\include\vUtilities\wxRelatedUtilities.h" />
-    <ClInclude Include="..\common\include\vUtilities\xlsx_reader_class.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\convert_class.cpp" />
-    <ClCompile Include="src\debug_class.cpp" />
-    <ClCompile Include="src\wxRelatedUtilities.cpp" />
-    <ClCompile Include="src\xlsx_reader_class.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

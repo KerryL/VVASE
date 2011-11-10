@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  edit_panel_class.cpp
+// File:  editPanel.cpp
 // Created:  2/10/2009
 // Author:  K. Loux
 // Description:  Contains the class definition for the EDIT_PANEL class.  This
@@ -16,25 +16,24 @@
 // History:
 
 // CarDesigner headers
-#include "vCar/car_class.h"
-#include "vCar/tireset_class.h"
-#include "gui/gui_object_class.h"
-#include "gui/iteration_class.h"
-#include "gui/gui_car_class.h"
-#include "gui/renderer/car_renderer_class.h"
-#include "gui/components/main_frame_class.h"
-#include "gui/components/main_tree_class.h"
-#include "gui/components/edit_panel/edit_panel_class.h"
-#include "gui/components/edit_panel/gui_car/edit_aerodynamics_panel_class.h"
-#include "gui/components/edit_panel/gui_car/edit_brakes_panel_class.h"
-#include "gui/components/edit_panel/gui_car/edit_differential_panel_class.h"
-#include "gui/components/edit_panel/gui_car/edit_drivetrain_panel_class.h"
-#include "gui/components/edit_panel/gui_car/edit_engine_panel_class.h"
-#include "gui/components/edit_panel/gui_car/edit_mass_panel_class.h"
-#include "gui/components/edit_panel/gui_car/edit_suspension_notebook_class.h"
-#include "gui/components/edit_panel/gui_car/edit_tires_panel_class.h"
-#include "gui/components/edit_panel/iteration/edit_iteration_notebook_class.h"
-#include "vUtilities/debug_class.h"
+#include "vCar/car.h"
+#include "vCar/tireSet.h"
+#include "gui/guiObject.h"
+#include "gui/iteration.h"
+#include "gui/guiCar.h"
+#include "gui/renderer/carRenderer.h"
+#include "gui/components/mainFrame.h"
+#include "gui/components/mainTree.h"
+#include "gui/components/editPanel/editPanel.h"
+#include "gui/components/editPanel/guiCar/editAerodynamicsPanel.h"
+#include "gui/components/editPanel/guiCar/editBrakesPanel.h"
+#include "gui/components/editPanel/guiCar/editDifferentialPanel.h"
+#include "gui/components/editPanel/guiCar/editDrivetrainPanel.h"
+#include "gui/components/editPanel/guiCar/editEnginePanel.h"
+#include "gui/components/editPanel/guiCar/editMassPanel.h"
+#include "gui/components/editPanel/guiCar/editTiresPanel.h"
+#include "gui/components/editPanel/iteration/editIterationNotebook.h"
+#include "vUtilities/debugger.h"
 
 //==========================================================================
 // Class:			EDIT_PANEL

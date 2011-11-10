@@ -10,6 +10,40 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\common\include\vCar\aerodynamics.h" />
+    <ClInclude Include="..\common\include\vCar\brakes.h" />
+    <ClInclude Include="..\common\include\vCar\car.h" />
+    <ClInclude Include="..\common\include\vCar\corner.h" />
+    <ClInclude Include="..\common\include\vCar\damper.h" />
+    <ClInclude Include="..\common\include\vCar\differential.h" />
+    <ClInclude Include="..\common\include\vCar\driver.h" />
+    <ClInclude Include="..\common\include\vCar\drivetrain.h" />
+    <ClInclude Include="..\common\include\vCar\engine.h" />
+    <ClInclude Include="..\common\include\vCar\fuelCell.h" />
+    <ClInclude Include="..\common\include\vCar\mass.h" />
+    <ClInclude Include="..\common\include\vCar\spring.h" />
+    <ClInclude Include="..\common\include\vCar\suspension.h" />
+    <ClInclude Include="..\common\include\vCar\tire.h" />
+    <ClInclude Include="..\common\include\vCar\tireSet.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\aerodynamics.cpp" />
+    <ClCompile Include="src\brakes.cpp" />
+    <ClCompile Include="src\car.cpp" />
+    <ClCompile Include="src\corner.cpp" />
+    <ClCompile Include="src\damper.cpp" />
+    <ClCompile Include="src\differential.cpp" />
+    <ClCompile Include="src\driver.cpp" />
+    <ClCompile Include="src\drivetrain.cpp" />
+    <ClCompile Include="src\engine.cpp" />
+    <ClCompile Include="src\fuelCell.cpp" />
+    <ClCompile Include="src\mass.cpp" />
+    <ClCompile Include="src\spring.cpp" />
+    <ClCompile Include="src\suspension.cpp" />
+    <ClCompile Include="src\tire.cpp" />
+    <ClCompile Include="src\tireSet.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{EE1A01F9-26AF-4C43-A507-195A1E5FB45A}</ProjectGuid>
     <RootNamespace>vCar</RootNamespace>
@@ -68,40 +102,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="..\common\include\vCar\aerodynamics_class.h" />
-    <ClInclude Include="..\common\include\vCar\brakes_class.h" />
-    <ClInclude Include="..\common\include\vCar\car_class.h" />
-    <ClInclude Include="..\common\include\vCar\corner_class.h" />
-    <ClInclude Include="..\common\include\vCar\damper_class.h" />
-    <ClInclude Include="..\common\include\vCar\differential_class.h" />
-    <ClInclude Include="..\common\include\vCar\driver_class.h" />
-    <ClInclude Include="..\common\include\vCar\drivetrain_class.h" />
-    <ClInclude Include="..\common\include\vCar\engine_class.h" />
-    <ClInclude Include="..\common\include\vCar\fuel_cell_class.h" />
-    <ClInclude Include="..\common\include\vCar\mass_class.h" />
-    <ClInclude Include="..\common\include\vCar\spring_class.h" />
-    <ClInclude Include="..\common\include\vCar\suspension_class.h" />
-    <ClInclude Include="..\common\include\vCar\tireset_class.h" />
-    <ClInclude Include="..\common\include\vCar\tire_class.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\aerodynamics_class.cpp" />
-    <ClCompile Include="src\brakes_class.cpp" />
-    <ClCompile Include="src\car_class.cpp" />
-    <ClCompile Include="src\corner_class.cpp" />
-    <ClCompile Include="src\damper_class.cpp" />
-    <ClCompile Include="src\differential_class.cpp" />
-    <ClCompile Include="src\driver_class.cpp" />
-    <ClCompile Include="src\drivetrain_class.cpp" />
-    <ClCompile Include="src\engine_class.cpp" />
-    <ClCompile Include="src\fuel_cell_class.cpp" />
-    <ClCompile Include="src\mass_class.cpp" />
-    <ClCompile Include="src\spring_class.cpp" />
-    <ClCompile Include="src\suspension_class.cpp" />
-    <ClCompile Include="src\tireset_class.cpp" />
-    <ClCompile Include="src\tire_class.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

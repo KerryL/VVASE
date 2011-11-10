@@ -10,6 +10,60 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\common\include\vRenderer\3dcar\aarm.h" />
+    <ClInclude Include="..\common\include\vRenderer\3dcar\damper3D.h" />
+    <ClInclude Include="..\common\include\vRenderer\3dcar\link.h" />
+    <ClInclude Include="..\common\include\vRenderer\3dcar\origin.h" />
+    <ClInclude Include="..\common\include\vRenderer\3dcar\plane.h" />
+    <ClInclude Include="..\common\include\vRenderer\3dcar\point3D.h" />
+    <ClInclude Include="..\common\include\vRenderer\3dcar\spring3D.h" />
+    <ClInclude Include="..\common\include\vRenderer\3dcar\swaybar3D.h" />
+    <ClInclude Include="..\common\include\vRenderer\3dcar\tire3D.h" />
+    <ClInclude Include="..\common\include\vRenderer\3dcar\triangle3D.h" />
+    <ClInclude Include="..\common\include\vRenderer\3dcar\vector3D.h" />
+    <ClInclude Include="..\common\include\vRenderer\color.h" />
+    <ClInclude Include="..\common\include\vRenderer\primitives\axis.h" />
+    <ClInclude Include="..\common\include\vRenderer\primitives\cone.h" />
+    <ClInclude Include="..\common\include\vRenderer\primitives\cylinder.h" />
+    <ClInclude Include="..\common\include\vRenderer\primitives\disk.h" />
+    <ClInclude Include="..\common\include\vRenderer\primitives\plotCursor.h" />
+    <ClInclude Include="..\common\include\vRenderer\primitives\plotCurve.h" />
+    <ClInclude Include="..\common\include\vRenderer\primitives\primitive.h" />
+    <ClInclude Include="..\common\include\vRenderer\primitives\quadrilateral.h" />
+    <ClInclude Include="..\common\include\vRenderer\primitives\sphere.h" />
+    <ClInclude Include="..\common\include\vRenderer\primitives\text.h" />
+    <ClInclude Include="..\common\include\vRenderer\primitives\triangle.h" />
+    <ClInclude Include="..\common\include\vRenderer\primitives\zoomBox.h" />
+    <ClInclude Include="..\common\include\vRenderer\renderWindow.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\3dcar\aarm.cpp" />
+    <ClCompile Include="src\3dcar\damper3D.cpp" />
+    <ClCompile Include="src\3dcar\link.cpp" />
+    <ClCompile Include="src\3dcar\origin.cpp" />
+    <ClCompile Include="src\3dcar\plane.cpp" />
+    <ClCompile Include="src\3dcar\point3D.cpp" />
+    <ClCompile Include="src\3dcar\spring3D.cpp" />
+    <ClCompile Include="src\3dcar\swaybar3D.cpp" />
+    <ClCompile Include="src\3dcar\tire3D.cpp" />
+    <ClCompile Include="src\3dcar\triangle3D.cpp" />
+    <ClCompile Include="src\3dcar\vector3D.cpp" />
+    <ClCompile Include="src\color.cpp" />
+    <ClCompile Include="src\primitives\axis.cpp" />
+    <ClCompile Include="src\primitives\cone.cpp" />
+    <ClCompile Include="src\primitives\cylinder.cpp" />
+    <ClCompile Include="src\primitives\disk.cpp" />
+    <ClCompile Include="src\primitives\plotCursor.cpp" />
+    <ClCompile Include="src\primitives\plotCurve.cpp" />
+    <ClCompile Include="src\primitives\primitive.cpp" />
+    <ClCompile Include="src\primitives\quadrilateral.cpp" />
+    <ClCompile Include="src\primitives\sphere.cpp" />
+    <ClCompile Include="src\primitives\text.cpp" />
+    <ClCompile Include="src\primitives\triangle.cpp" />
+    <ClCompile Include="src\primitives\zoomBox.cpp" />
+    <ClCompile Include="src\renderWindow.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{E18757F0-3131-4D0C-AB86-0EEA8E9ED57E}</ProjectGuid>
     <RootNamespace>vRenderer</RootNamespace>
@@ -66,60 +120,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="src\3dcar\aarm_class.cpp" />
-    <ClCompile Include="src\3dcar\damper3d_class.cpp" />
-    <ClCompile Include="src\3dcar\link_class.cpp" />
-    <ClCompile Include="src\3dcar\origin_class.cpp" />
-    <ClCompile Include="src\3dcar\plane_class.cpp" />
-    <ClCompile Include="src\3dcar\point3d_class.cpp" />
-    <ClCompile Include="src\3dcar\spring3d_class.cpp" />
-    <ClCompile Include="src\3dcar\swaybar3d_class.cpp" />
-    <ClCompile Include="src\3dcar\tire3d_class.cpp" />
-    <ClCompile Include="src\3dcar\triangle_class.cpp" />
-    <ClCompile Include="src\3dcar\vector3d_class.cpp" />
-    <ClCompile Include="src\color_class.cpp" />
-    <ClCompile Include="src\primitives\axis.cpp" />
-    <ClCompile Include="src\primitives\cone.cpp" />
-    <ClCompile Include="src\primitives\cursor_class.cpp" />
-    <ClCompile Include="src\primitives\cylinder.cpp" />
-    <ClCompile Include="src\primitives\disk.cpp" />
-    <ClCompile Include="src\primitives\plot_curve.cpp" />
-    <ClCompile Include="src\primitives\primitive.cpp" />
-    <ClCompile Include="src\primitives\quadrilateral.cpp" />
-    <ClCompile Include="src\primitives\sphere.cpp" />
-    <ClCompile Include="src\primitives\text_class.cpp" />
-    <ClCompile Include="src\primitives\triangle.cpp" />
-    <ClCompile Include="src\primitives\zoom_box_class.cpp" />
-    <ClCompile Include="src\render_window_class.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\common\include\vRenderer\3dcar\aarm_class.h" />
-    <ClInclude Include="..\common\include\vRenderer\3dcar\damper3d_class.h" />
-    <ClInclude Include="..\common\include\vRenderer\3dcar\link_class.h" />
-    <ClInclude Include="..\common\include\vRenderer\3dcar\origin_class.h" />
-    <ClInclude Include="..\common\include\vRenderer\3dcar\plane_class.h" />
-    <ClInclude Include="..\common\include\vRenderer\3dcar\point3d_class.h" />
-    <ClInclude Include="..\common\include\vRenderer\3dcar\spring3d_class.h" />
-    <ClInclude Include="..\common\include\vRenderer\3dcar\swaybar3d_class.h" />
-    <ClInclude Include="..\common\include\vRenderer\3dcar\tire3d_class.h" />
-    <ClInclude Include="..\common\include\vRenderer\3dcar\triangle_class.h" />
-    <ClInclude Include="..\common\include\vRenderer\3dcar\vector3d_class.h" />
-    <ClInclude Include="..\common\include\vRenderer\color_class.h" />
-    <ClInclude Include="..\common\include\vRenderer\primitives\axis.h" />
-    <ClInclude Include="..\common\include\vRenderer\primitives\cone.h" />
-    <ClInclude Include="..\common\include\vRenderer\primitives\cursor_class.h" />
-    <ClInclude Include="..\common\include\vRenderer\primitives\cylinder.h" />
-    <ClInclude Include="..\common\include\vRenderer\primitives\disk.h" />
-    <ClInclude Include="..\common\include\vRenderer\primitives\plot_curve.h" />
-    <ClInclude Include="..\common\include\vRenderer\primitives\primitive.h" />
-    <ClInclude Include="..\common\include\vRenderer\primitives\quadrilateral.h" />
-    <ClInclude Include="..\common\include\vRenderer\primitives\sphere.h" />
-    <ClInclude Include="..\common\include\vRenderer\primitives\text_class.h" />
-    <ClInclude Include="..\common\include\vRenderer\primitives\triangle.h" />
-    <ClInclude Include="..\common\include\vRenderer\primitives\zoom_box_class.h" />
-    <ClInclude Include="..\common\include\vRenderer\render_window_class.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

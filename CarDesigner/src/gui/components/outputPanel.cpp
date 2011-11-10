@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  output_panel_class.cpp
+// File:  outputPanel.cpp
 // Created:  2/10/2009
 // Author:  K. Loux
 // Description:  Contains the class definition for the OUTPUT_PANEL class.  This
@@ -18,15 +18,15 @@
 //	5/7/2009	- Made grid columns re-sizable and started using the column labels, K. Loux.
 
 // CarDesigner headers
-#include "gui/components/output_panel_class.h"
-#include "gui/components/main_frame_class.h"
-#include "vCar/car_class.h"
-#include "vCar/drivetrain_class.h"
-#include "vCar/suspension_class.h"
-#include "vSolver/physics/kinematic_outputs_class.h"
-#include "vUtilities/debug_class.h"
-#include "vUtilities/convert_class.h"
-#include "vMath/car_math.h"
+#include "gui/components/outputPanel.h"
+#include "gui/components/mainFrame.h"
+#include "vCar/car.h"
+#include "vCar/drivetrain.h"
+#include "vCar/suspension.h"
+#include "vSolver/physics/kinematicOutputs.h"
+#include "vUtilities/debugger.h"
+#include "vUtilities/convert.h"
+#include "vMath/carMath.h"
 
 //==========================================================================
 // Class:			OUTPUT_PANEL

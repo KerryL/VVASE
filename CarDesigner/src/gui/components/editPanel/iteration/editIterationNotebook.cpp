@@ -14,14 +14,14 @@
 // History:
 
 // VVASE headers
-#include "gui/iteration_class.h"
-#include "gui/components/main_frame_class.h"
-#include "gui/components/edit_panel/edit_panel_class.h"
-#include "gui/components/edit_panel/iteration/edit_iteration_notebook_class.h"
-#include "gui/components/edit_panel/iteration/edit_iteration_range_panel_class.h"
-#include "gui/components/edit_panel/iteration/edit_iteration_plots_panel_class.h"
-#include "gui/components/edit_panel/iteration/edit_iteration_options_panel_class.h"
-#include "vUtilities/debug_class.h"
+#include "gui/iteration.h"
+#include "gui/components/mainframe.h"
+#include "gui/components/editPanel/editPanel.h"
+#include "gui/components/editPanel/iteration/editIterationNotebook.h"
+#include "gui/components/editPanel/iteration/editIterationRangePanel.h"
+#include "gui/components/editPanel/iteration/editIterationPlotsPanel.h"
+#include "gui/components/editPanel/iteration/editIterationOptionsPanel.h"
+#include "vUtilities/debugger.h"
 
 //==========================================================================
 // Class:			EDIT_ITERATION_NOTEBOOK
