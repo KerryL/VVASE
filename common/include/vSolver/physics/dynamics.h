@@ -19,7 +19,7 @@
 
 // VVASE headers
 #include "vSolver/physics/state.h"
-#include "vUtilities/wheelSetStructuress.h"
+#include "vUtilities/wheelSetStructures.h"
 #include "vCar/driver.h"
 
 // VVASE forward declarations

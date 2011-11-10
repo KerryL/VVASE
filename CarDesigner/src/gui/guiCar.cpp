@@ -42,7 +42,7 @@
 #include "gui/guiCar.h"
 #include "gui/components/mainTree.h"
 #include "vSolver/physics/kinematics.h"
-#include "vSolver/threads/thread_Job.h"
+#include "vSolver/threads/threadJob.h"
 #include "vSolver/threads/kinematicsData.h"
 
 //==========================================================================

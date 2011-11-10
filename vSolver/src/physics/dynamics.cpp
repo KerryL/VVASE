@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  dynamics_class.cpp
+// File:  dynamics.cpp
 // Created:  11/3/2007
 // Author:  K. Loux
 // Description:  Contains class functionality for dynamic state class.

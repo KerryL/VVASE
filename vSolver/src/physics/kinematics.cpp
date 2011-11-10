@@ -36,7 +36,7 @@
 #include "vCar/drivetrain.h"
 #include "vCar/suspension.h"
 #include "vMath/carMath.h"
-#include "vUtilities/wheelAetStructures.h"
+#include "vUtilities/wheelSetStructures.h"
 
 //==========================================================================
 // Class:			KINEMATICS

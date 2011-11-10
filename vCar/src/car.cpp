@@ -35,7 +35,7 @@
 #include "vCar/mass.h"
 #include "vCar/suspension.h"
 #include "vCar/tire.h"
-#include "vCar/tireset.h"
+#include "vCar/tireSet.h"
 #include "vUtilities/debugger.h"
 #include "vUtilities/wheelSetStructures.h"
 #include "vUtilities/machineDefinitions.h"

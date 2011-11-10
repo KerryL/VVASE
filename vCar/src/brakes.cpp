@@ -20,7 +20,7 @@
 
 // VVASE headers
 #include "vCar/brakes.h"
-#include "vUtilities/debugGer.h"
+#include "vUtilities/debugger.h"
 #include "vUtilities/machineDefinitions.h"
 
 //==========================================================================

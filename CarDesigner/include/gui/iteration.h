@@ -28,7 +28,7 @@
 
 // VVASE headers
 #include "vUtilities/managedList.h"
-#include "gui/gui_car.h"
+#include "gui/guiCar.h"
 #include "vSolver/physics/kinematics.h"
 #include "vSolver/physics/kinematicOutputs.h"
 #include "vSolver/threads/inverseSemaphore.h"

@@ -15,7 +15,7 @@
 //	11/9/2010	- Modified to accommodate 3D plots, K. Loux.
 
 // Local headers
-#include "vRenderer/primitives/plot_curve.h"
+#include "vRenderer/primitives/plotCurve.h"
 #include "vRenderer/renderWindow.h"
 #include "vRenderer/primitives/axis.h"
 #include "vMath/dataset2D.h"
