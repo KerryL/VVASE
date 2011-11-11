@@ -19,13 +19,13 @@
 // wxWidgets headers
 #include <wx/sizer.h>
 #include <wx/notebook.h>
-#include <wx/grid.h>
 #include <wx/checklst.h>
 #include <wx/colordlg.h>
 
 // VVASE headers
 #include "gui/dialogs/appearanceOptionsDialog.h"
 #include "gui/components/mainFrame.h"
+#include "gui/superGrid.h"
 #include "vRenderer/color.h"
 #include "vUtilities/convert.h"
 
@@ -149,11 +149,10 @@ void APPEARANCE_OPTIONS_DIALOG::CreateControls(void)
 	Notebook->AddPage(ColorPanel, _T("Colors"));
 
 	// Use another outer sizer to create more room for the controls
-	wxBoxSizer *ColorTopSizer = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer *ColorTopSizer = new wxBoxSizer(wxHORIZONTAL);
 
 	// Create the color page main sizer
-	wxFlexGridSizer *colorSizer = new wxFlexGridSizer(1);
-	colorSizer->SetFlexibleDirection(wxVERTICAL);
+	wxBoxSizer *colorSizer = new wxBoxSizer(wxVERTICAL);
 	ColorTopSizer->Add(colorSizer, 0, wxEXPAND | wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
 
 	// Add the text across the top of the page
@@ -162,8 +161,9 @@ void APPEARANCE_OPTIONS_DIALOG::CreateControls(void)
 	colorSizer->Add(ColorPrompt, 0, wxALL, 5);
 
 	// Create the grid for the list of colors
-	ColorGrid = new wxGrid(ColorPanel, IdColorGrid);
+	ColorGrid = new SuperGrid(ColorPanel, IdColorGrid);
 	ColorGrid->CreateGrid(APPEARANCE_OPTIONS::ColorCount, 3, wxGrid::wxGridSelectCells);
+	ColorGrid->AutoStretchColumn(0);
 
 	// Begin a batch edit of the grid
 	ColorGrid->BeginBatch();
@@ -172,7 +172,7 @@ void APPEARANCE_OPTIONS_DIALOG::CreateControls(void)
 	ColorGrid->SetRowLabelSize(0);
 	ColorGrid->SetColLabelSize(ColorGrid->GetRowSize(0));
 
-	// Create a horizontal sizer so controls expand in correct direction
+	// Add the grid to the sizer
 	colorSizer->Add(ColorGrid, 0, wxALIGN_CENTER_HORIZONTAL | wxEXPAND | wxALL | wxALIGN_TOP, 5);
 
 	// Set the column headings
@@ -218,16 +218,15 @@ void APPEARANCE_OPTIONS_DIALOG::CreateControls(void)
 	Notebook->AddPage(VisibilityPanel, _T("Visibilities"));
 
 	// Use another outer sizer to create more room for the controls
-	wxBoxSizer *VisibilityTopSizer = new wxBoxSizer(wxHORIZONTAL);
+	wxBoxSizer *VisibilityTopSizer = new wxBoxSizer(wxVERTICAL);
 
 	// Create the visibility page main sizer
-	wxFlexGridSizer *visibilitySizer = new wxFlexGridSizer(1);
-	visibilitySizer->SetFlexibleDirection(wxVERTICAL);
+	wxBoxSizer *visibilitySizer = new wxBoxSizer(wxVERTICAL);
 	VisibilityTopSizer->Add(visibilitySizer, 0, wxALIGN_CENTER_HORIZONTAL | wxALL | wxEXPAND, 5);
 
 	// Add the text to this spacer
 	wxStaticText *VisibilityPrompt = new wxStaticText(VisibilityPanel, wxID_STATIC,
-		_T("Choose the visible objects:"), wxDefaultPosition, wxSize(-1, -1), 0);
+		_T("Choose the visible objects:"));
 	visibilitySizer->Add(VisibilityPrompt, 0, wxALL | wxEXPAND, 5);
 
 	// The selections array contains the indicies of the items that are selected
@@ -253,22 +252,22 @@ void APPEARANCE_OPTIONS_DIALOG::CreateControls(void)
 	Notebook->AddPage(SizePanel, _T("Sizes"));
 
 	// Use another outer sizer to create more room for the controls
-	wxBoxSizer *SizeTopSizer = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer *SizeTopSizer = new wxBoxSizer(wxHORIZONTAL);
 
 	// Create the size page main sizer
-	wxFlexGridSizer *sizeSizer = new wxFlexGridSizer(1);
-	sizeSizer->SetFlexibleDirection(wxVERTICAL);
+	wxBoxSizer *sizeSizer = new wxBoxSizer(wxVERTICAL);
 	SizeTopSizer->Add(sizeSizer, 0, wxALIGN_CENTER_HORIZONTAL | wxALL | wxEXPAND, 5);
 
 	// Add the text across the top of the page
 	wxStaticText *SizePrompt = new wxStaticText(SizePanel, wxID_STATIC,
 		_T("Edit the object sizes (units are ") + converter.GetUnitType(Convert::UnitTypeDistance)
-		+ _T("):"), wxDefaultPosition, wxSize(-1, -1), 0);
+		+ _T("):"));
 	sizeSizer->Add(SizePrompt, 0, wxALL, 5);
 
 	// Create the grid for the list of sizes
-	SizeGrid = new wxGrid(SizePanel, wxID_ANY);
+	SizeGrid = new SuperGrid(SizePanel, wxID_ANY);
 	SizeGrid->CreateGrid(APPEARANCE_OPTIONS::SizeCount, 2, wxGrid::wxGridSelectRows);
+	SizeGrid->AutoStretchColumn(0);
 
 	// Begin a batch edit of the grid
 	SizeGrid->BeginBatch();
@@ -322,11 +321,10 @@ void APPEARANCE_OPTIONS_DIALOG::CreateControls(void)
 	Notebook->AddPage(ResolutionPanel, _T("Resolutions"));
 
 	// Use another outer sizer to create more room for the controls
-	wxBoxSizer *ResolutionTopSizer = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer *ResolutionTopSizer = new wxBoxSizer(wxHORIZONTAL);
 
 	// Create the resolution page main sizer
-	wxFlexGridSizer *resolutionSizer = new wxFlexGridSizer(1);
-	resolutionSizer->SetFlexibleDirection(wxVERTICAL);
+	wxBoxSizer *resolutionSizer = new wxBoxSizer(wxVERTICAL);
 	ResolutionTopSizer->Add(resolutionSizer, 0, wxALIGN_CENTER_HORIZONTAL | wxALL | wxEXPAND, 5);
 
 	// Add the text across the top of the page
@@ -336,8 +334,9 @@ void APPEARANCE_OPTIONS_DIALOG::CreateControls(void)
 	resolutionSizer->Add(ResolutionPrompt, 0, wxALL, 5);
 
 	// Create the grid for the list of resolutions
-	ResolutionGrid = new wxGrid(ResolutionPanel, wxID_ANY);
+	ResolutionGrid = new SuperGrid(ResolutionPanel, wxID_ANY);
 	ResolutionGrid->CreateGrid(APPEARANCE_OPTIONS::ResolutionCount, 2, wxGrid::wxGridSelectRows);
+	ResolutionGrid->AutoStretchColumn(0);
 
 	// Begin a batch edit of the grid
 	ResolutionGrid->BeginBatch();
@@ -387,12 +386,6 @@ void APPEARANCE_OPTIONS_DIALOG::CreateControls(void)
 	// Set the resolution panels's sizer
 	ResolutionPanel->SetSizer(ResolutionTopSizer);
 
-	// FIXME:  Definitely needs clean-up here
-	// Doesn't work because nothing has been sized until the call to ShowModal, which happens after this
-	/*int remainingColumnWidth = ResolutionGrid->GetClientSize().GetWidth() - ResolutionGrid->GetColumnWidth(1) - 1;
-	if (remainingColumnWidth > ResolutionGrid->GetColumnWidth(0))
-		ResolutionGrid->SetColumnWidth(0, remainingColumnWidth);*/
-
 	// Add a spacer between the notebook and the buttons
 	MainSizer->AddSpacer(10);
 
@@ -414,17 +407,6 @@ void APPEARANCE_OPTIONS_DIALOG::CreateControls(void)
 
 	// Assign the top level sizer to the dialog
 	SetSizer(TopSizer);
-
-	// Limit the dialog size to 1/3 of the screen size in height
-	/*int screenHeight;
-	wxClientDisplayRect(NULL, NULL, NULL, &screenHeight);
-	SetMaxSize(wxSize(-1, screenHeight / 3));
-
-	wxString temp;
-	temp.Printf("max height: %i\nset to: %i", GetMaxSize().GetHeight(), screenHeight / 3);
-	wxMessageBox(temp);
-
-	TopSizer->SetSizeHints(this);*/
 
 	return;
 }

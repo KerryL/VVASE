@@ -69,7 +69,7 @@ private:
 	// Enumeration for event IDs
 	enum EDIT_ITERATION_OPTIONS_EVENT_ID
 	{
-		RangeTextBox = 700 + wxID_HIGHEST
+		RangeTextBox = wxID_HIGHEST + 1300
 	};
 
 	// Event handlers-----------------------------------------------------

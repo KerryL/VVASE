@@ -21,6 +21,7 @@
 #include "gui/renderer/plotRenderer.h"
 #include "gui/plotObject.h"
 #include "gui/components/mainFrame.h"
+#include "gui/plotPanel.h"
 #include "vRenderer/primitives/zoomBox.h"
 #include "vRenderer/primitives/plotCursor.h"
 #include "vRenderer/primitives/axis.h"
@@ -32,7 +33,7 @@
 // Description:		Constructor for PlotRenderer class.
 //
 // Input Arguments:
-//		_parent		= wxWindow& reference to this object's parent window
+//		_parent		= PlotPanel& reference to this object's parent window
 //		id			= wxWindowID
 //		_debugger	= const Debugger&
 //
@@ -43,9 +44,9 @@
 //		None
 //
 //==========================================================================
-PlotRenderer::PlotRenderer(wxWindow &_parent, wxWindowID id, const Debugger &_debugger)
+PlotRenderer::PlotRenderer(PlotPanel &_parent, wxWindowID id, const Debugger &_debugger)
 							 : RenderWindow(_parent, id, wxDefaultPosition,
-							 wxDefaultSize), debugger(_debugger)
+							 wxDefaultSize), debugger(_debugger), parent(_parent)
 {
 	// Create the actors
 	CreateActors();
@@ -369,6 +370,7 @@ void PlotRenderer::OnMouseMoveEvent(wxMouseEvent &event)
 			yRightDelta = plot->GetRightYMinOriginal() - plot->GetRightYMin();
 		if (plot->GetRightYMax() + yRightDelta > plot->GetRightYMaxOriginal())
 			yRightDelta = plot->GetRightYMaxOriginal() - plot->GetRightYMax();*/
+		// FIXME:  Is this supposed to be commented out, or do we want to uncomment it?
 
 		plot->SetXMin(plot->GetXMin() - xDelta);
 		plot->SetXMax(plot->GetXMax() - xDelta);
@@ -411,29 +413,29 @@ void PlotRenderer::OnMouseMoveEvent(wxMouseEvent &event)
 void PlotRenderer::OnRightButtonUpEvent(wxMouseEvent &event)
 {
 	// If the zoom box is not visible, process this like a right click event
-	/*if (!zoomBox->GetIsVisible())// FIXME:  Make this work again!
+	if (!zoomBox->GetIsVisible())
 	{
 		// Determine the context
-		MainFrame::PlotContext context;
+		PlotPanel::PlotContext context;
 		unsigned int x = event.GetX();
 		unsigned int y = event.GetY();
 		if (x < Axis::GetOffsetFromWindowEdge() &&
 			y > Axis::GetOffsetFromWindowEdge() &&
 			y < GetSize().GetHeight() - Axis::GetOffsetFromWindowEdge())
-			context = MainFrame::plotContextLeftYAxis;
+			context = PlotPanel::plotContextLeftYAxis;
 		else if (x > GetSize().GetWidth() - Axis::GetOffsetFromWindowEdge() &&
 			y > Axis::GetOffsetFromWindowEdge() &&
 			y < GetSize().GetHeight() - Axis::GetOffsetFromWindowEdge())
-			context = MainFrame::plotContextRightYAxis;
+			context = PlotPanel::plotContextRightYAxis;
 		else if (y > GetSize().GetHeight() - Axis::GetOffsetFromWindowEdge() &&
 			x > Axis::GetOffsetFromWindowEdge() &&
 			x < GetSize().GetWidth() - Axis::GetOffsetFromWindowEdge())
-			context = MainFrame::plotContextXAxis;
+			context = PlotPanel::plotContextXAxis;
 		else
-			context = MainFrame::plotContextPlotArea;
+			context = PlotPanel::plotContextPlotArea;
 
 		// Display the context menu (further events handled by MainFrame)
-		mainFrame.CreatePlotContextMenu(GetPosition() + event.GetPosition(), context);
+		parent.CreatePlotContextMenu(GetPosition() + event.GetPosition(), context);
 
 		return;
 	}
@@ -505,7 +507,7 @@ void PlotRenderer::OnRightButtonUpEvent(wxMouseEvent &event)
 		SetRightYLimits(yRightMin, yRightMax);
 	}
 
-	UpdateDisplay();*/
+	UpdateDisplay();
 
 	return;
 }
@@ -1097,8 +1099,7 @@ void PlotRenderer::OnMouseLeaveWindowEvent(wxMouseEvent& WXUNUSED(event))
 //==========================================================================
 void PlotRenderer::OnDoubleClickEvent(wxMouseEvent &event)
 {
-	// FIXME:  Make this work again
-	/*unsigned int x = event.GetX();
+	unsigned int x = event.GetX();
 	unsigned int y = event.GetY();
 	unsigned int offset = Axis::GetOffsetFromWindowEdge();
 
@@ -1130,25 +1131,25 @@ void PlotRenderer::OnDoubleClickEvent(wxMouseEvent &event)
 	else
 	{
 		// Determine the context
-		MainFrame::PlotContext context;
+		PlotPanel::PlotContext context;
 		if (x < Axis::GetOffsetFromWindowEdge() &&
 			y > Axis::GetOffsetFromWindowEdge() &&
 			y < GetSize().GetHeight() - Axis::GetOffsetFromWindowEdge())
-			context = MainFrame::plotContextLeftYAxis;
+			context = PlotPanel::plotContextLeftYAxis;
 		else if (x > GetSize().GetWidth() - Axis::GetOffsetFromWindowEdge() &&
 			y > Axis::GetOffsetFromWindowEdge() &&
 			y < GetSize().GetHeight() - Axis::GetOffsetFromWindowEdge())
-			context = MainFrame::plotContextRightYAxis;
+			context = PlotPanel::plotContextRightYAxis;
 		else if (y > GetSize().GetHeight() - Axis::GetOffsetFromWindowEdge() &&
 			x > Axis::GetOffsetFromWindowEdge() &&
 			x < GetSize().GetWidth() - Axis::GetOffsetFromWindowEdge())
-			context = MainFrame::plotContextXAxis;
+			context = PlotPanel::plotContextXAxis;
 		else
-			context = MainFrame::plotContextPlotArea;
+			context = PlotPanel::plotContextPlotArea;
 
 		// Display the dialog
-		mainFrame.DisplayAxisRangeDialog(context);
-	}*/
+		parent.DisplayAxisRangeDialog(context);
+	}
 
 	UpdateDisplay();
 

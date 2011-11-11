@@ -29,12 +29,13 @@ class ZoomBox;
 class PlotCursor;
 class PlotObject;
 class Debugger;
+class PlotPanel;
 
 class PlotRenderer : public RenderWindow
 {
 public:
 	// Constructor
-	PlotRenderer(wxWindow &_parent, wxWindowID id, const Debugger &_debugger);
+	PlotRenderer(PlotPanel &_parent, wxWindowID id, const Debugger &_debugger);
 
 	// Destructor
 	~PlotRenderer();
@@ -97,6 +98,9 @@ private:
 
 	// Called from the PlotRenderer constructor only in order to initialize the display
 	void CreateActors(void);
+
+	// The parent panel
+	PlotPanel &parent;
 
 	// The actors necessary to create the plot
 	PlotObject *plot;

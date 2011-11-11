@@ -98,7 +98,7 @@ private:
 	// Event IDs
 	enum BUTTON_EVENT_ID
 	{
-		IdAddGene = wxID_HIGHEST + 900,
+		IdAddGene = wxID_HIGHEST + 1200,
 		IdRemoveGene,
 		IdEditGene,
 

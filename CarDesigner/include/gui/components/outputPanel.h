@@ -64,7 +64,7 @@ private:
 	// The event IDs
 	enum EVENT_ID
 	{
-		IdOutputGrid = wxID_HIGHEST + 800
+		IdOutputGrid = wxID_HIGHEST + 1100
 	};
 
 	// Event handlers-----------------------------------------------------

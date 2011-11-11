@@ -323,20 +323,22 @@ void GENETIC_ALGORITHM_PANEL::CreateControls(void)
 	GoalButtonSizer->Add(RemoveGoal, 0, wxEXPAND);
 
 	// Progress bars
-	wxBoxSizer *ProgressSizer = new wxBoxSizer(wxVERTICAL);
-	MainSizer->Add(ProgressSizer, 0, wxALL | wxGROW | wxALIGN_BOTTOM, 5);
-	wxStaticText *GenerationProgressLabel = new wxStaticText(this, wxID_ANY,
-		_T("Current Generation"));
+	wxFlexGridSizer *ProgressSizer = new wxFlexGridSizer(2, 2, 5);
+	ProgressSizer->SetFlexibleDirection(wxHORIZONTAL);
+	MainSizer->Add(ProgressSizer, 0, wxALL | wxEXPAND | wxALIGN_BOTTOM, 5);
+	ProgressSizer->AddGrowableCol(1);
+
+	wxStaticText *GenerationProgressLabel = new wxStaticText(this, wxID_ANY, _T("Current Generation"));
 	GenerationProgress = new wxGauge(this, wxID_ANY, 100, wxDefaultPosition,
-		wxDefaultSize, wxGA_HORIZONTAL | wxGA_SMOOTH);
-	ProgressSizer->Add(GenerationProgressLabel, 0, wxALIGN_LEFT);
-	ProgressSizer->Add(GenerationProgress, 0, wxGROW);
-	wxStaticText *OverallProgressLabel = new wxStaticText(this, wxID_ANY,
-		_T("Overall"));
+		wxSize(-1, GenerationProgressLabel->GetSize().GetHeight()), wxGA_HORIZONTAL | wxGA_SMOOTH);
+	ProgressSizer->Add(GenerationProgressLabel, 0, wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL);
+	ProgressSizer->Add(GenerationProgress, 0, wxEXPAND);
+
+	wxStaticText *OverallProgressLabel = new wxStaticText(this, wxID_ANY, _T("Overall"));
 	OverallProgress = new wxGauge(this, wxID_ANY, 100, wxDefaultPosition,
-		wxDefaultSize, wxGA_HORIZONTAL | wxGA_SMOOTH);
-	ProgressSizer->Add(OverallProgressLabel, 0, wxALIGN_LEFT);
-	ProgressSizer->Add(OverallProgress, 0, wxGROW);
+		wxSize(-1, OverallProgressLabel->GetSize().GetHeight()), wxGA_HORIZONTAL | wxGA_SMOOTH);
+	ProgressSizer->Add(OverallProgressLabel, 0, wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL);
+	ProgressSizer->Add(OverallProgress, 0, wxEXPAND);
 
 	// Assign the top level sizer to the dialog
 	SetSizer(TopSizer);

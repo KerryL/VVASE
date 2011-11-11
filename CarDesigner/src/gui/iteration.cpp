@@ -37,9 +37,10 @@
 #include "vSolver/threads/threadJob.h"
 #include "vSolver/threads/kinematicsData.h"
 #include "vCar/car.h"
-#include "gui/renderer/plotRenderer.h"
+//#include "gui/renderer/plotRenderer.h"
 #include "gui/components/mainFrame.h"
 #include "gui/components/mainTree.h"
+#include "gui/plotPanel.h"
 #include "vUtilities/machineDefinitions.h"
 #include "vMath/carMath.h"
 
@@ -96,8 +97,8 @@ ITERATION::ITERATION(MAIN_FRAME &_MainFrame, const Debugger &_debugger,
 	NumberOfWorkingCars = 0;
 
 	// Create the renderer
-	renderer = new PlotRenderer(MainFrame, wxID_ANY, debugger);
-	notebookTab = reinterpret_cast<wxWindow*>(renderer);
+	plotPanel = new PlotPanel(dynamic_cast<wxWindow*>(&MainFrame), debugger);
+	notebookTab = dynamic_cast<wxWindow*>(plotPanel);
 
 	// Get an index for this item and add it to the list in the MainFrame
 	// MUST be included BEFORE the naming, which must come BEFORE the call to Initialize
@@ -468,15 +469,16 @@ void ITERATION::UpdateData(void)
 void ITERATION::UpdateDisplay(void)
 {
 	// Make sure the renderer exists so we don't do this until after we're fully created
-	if (renderer)
+	if (plotPanel)
 	{
 		// Clear out existing data from the plot
-		renderer->RemoveAllCurves();
+		plotPanel->ClearAllCurves();
 
 		// Create the datasets for the plot
+		// FIXME:  Does this need to be done?
 
 		// Update the display associated with this object
-		renderer->UpdateDisplay();
+		plotPanel->UpdateDisplay();
 	}
 
 	// Reset the "are we caught up" flag

@@ -111,6 +111,7 @@
     <ClInclude Include="CarDesigner\include\gui\gaObject.h" />
     <ClInclude Include="CarDesigner\include\gui\geneticAlgorithmPanel.h" />
     <ClInclude Include="CarDesigner\include\gui\geneticOptimization.h" />
+    <ClInclude Include="CarDesigner\include\gui\superGrid.h" />
     <ClInclude Include="CarDesigner\include\gui\guiCar.h" />
     <ClInclude Include="CarDesigner\include\gui\guiObject.h" />
     <ClInclude Include="CarDesigner\include\gui\ipcClient.h" />
@@ -156,6 +157,7 @@
     <ClCompile Include="CarDesigner\src\gui\gaObject.cpp" />
     <ClCompile Include="CarDesigner\src\gui\geneticAlgorithmPanel.cpp" />
     <ClCompile Include="CarDesigner\src\gui\geneticOptimization.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\superGrid.cpp" />
     <ClCompile Include="CarDesigner\src\gui\guiCar.cpp" />
     <ClCompile Include="CarDesigner\src\gui\guiObject.cpp" />
     <ClCompile Include="CarDesigner\src\gui\ipcClient.cpp" />

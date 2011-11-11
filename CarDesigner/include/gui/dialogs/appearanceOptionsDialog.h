@@ -24,11 +24,11 @@
 
 // wxWidgets forward declarations
 class wxGridEvent;
-class wxGrid;
 class wxNotebook;
 
 // VVASE forward declarations
 class MAIN_FRAME;
+class SuperGrid;
 class Convert;
 class Color;
 
@@ -76,10 +76,10 @@ private:
 	wxPanel *SizePanel;
 	wxPanel *ResolutionPanel;
 
-	wxGrid *ColorGrid;
+	SuperGrid *ColorGrid;
 	wxCheckListBox *VisibilityList;
-	wxGrid *SizeGrid;
-	wxGrid *ResolutionGrid;
+	SuperGrid *SizeGrid;
+	SuperGrid *ResolutionGrid;
 
 	// The event table
 	DECLARE_EVENT_TABLE()

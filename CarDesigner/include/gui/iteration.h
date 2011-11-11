@@ -37,7 +37,7 @@
 class Debugger;
 class Convert;
 class CAR;
-class PlotRenderer;
+class PlotPanel;
 
 class ITERATION : public GUI_OBJECT
 {
@@ -252,7 +252,7 @@ private:
 	bool AnalysesDisplayed;
 	bool SecondAnalysisPending;
 
-	PlotRenderer *renderer;
+	PlotPanel *plotPanel;
 };
 
 #endif// _ITERATION_CLASS_H_
