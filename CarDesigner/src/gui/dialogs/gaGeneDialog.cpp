@@ -144,7 +144,8 @@ void GA_GENE_DIALOG::CreateControls(void)
 	MainSizer->Add(inputAreaSizer, 0, wxALL, 5);
 
 	// Specify the sizer flags for all controls in the grid here
-	int sizerFlags = wxEXPAND | wxALIGN_CENTER_VERTICAL;
+	int textSizerFlags = wxALIGN_CENTER_VERTICAL;
+	int comboSizerFlags = wxALIGN_CENTER_VERTICAL | wxEXPAND;
 
 	// When setting the control width, we need to account for the width of the
 	// "expand" button, etc., so we specify that here
@@ -166,8 +167,8 @@ void GA_GENE_DIALOG::CreateControls(void)
 	HardpointCombo = new wxComboBox(this, wxID_ANY, CORNER::GetHardpointName(Hardpoint), wxDefaultPosition,
 		wxDefaultSize, List, wxCB_READONLY);
 	SetMinimumWidthFromContents(HardpointCombo, additionalWidth);
-	inputAreaSizer->Add(HardpointLabel, 0, sizerFlags);
-	inputAreaSizer->Add(HardpointCombo, 0, sizerFlags);
+	inputAreaSizer->Add(HardpointLabel, 0, textSizerFlags);
+	inputAreaSizer->Add(HardpointCombo, 0, comboSizerFlags);
 	inputAreaSizer->AddSpacer(-1);
 
 	// Tied To
@@ -177,8 +178,8 @@ void GA_GENE_DIALOG::CreateControls(void)
 	TiedToCombo = new wxComboBox(this, wxID_ANY, CORNER::GetHardpointName(TiedTo), wxDefaultPosition,
 		wxDefaultSize, List, wxCB_READONLY);
 	SetMinimumWidthFromContents(TiedToCombo, additionalWidth);
-	inputAreaSizer->Add(TiedToLabel, 0, sizerFlags);
-	inputAreaSizer->Add(TiedToCombo, 0, sizerFlags);
+	inputAreaSizer->Add(TiedToLabel, 0, textSizerFlags);
+	inputAreaSizer->Add(TiedToCombo, 0, comboSizerFlags);
 	inputAreaSizer->AddSpacer(-1);
 
 	// Axis Direction
@@ -189,8 +190,8 @@ void GA_GENE_DIALOG::CreateControls(void)
 	AxisDirectionCombo = new wxComboBox(this, wxID_ANY, Vector::GetAxisName(AxisDirection), wxDefaultPosition,
 		wxDefaultSize, List, wxCB_READONLY);
 	SetMinimumWidthFromContents(AxisDirectionCombo, additionalWidth);
-	inputAreaSizer->Add(AxisDirectionLabel, 0, sizerFlags);
-	inputAreaSizer->Add(AxisDirectionCombo, 0, sizerFlags);
+	inputAreaSizer->Add(AxisDirectionLabel, 0, textSizerFlags);
+	inputAreaSizer->Add(AxisDirectionCombo, 0, comboSizerFlags);
 	inputAreaSizer->AddSpacer(-1);
 
 	// Corner Location
@@ -201,8 +202,8 @@ void GA_GENE_DIALOG::CreateControls(void)
 	CornerLocationCombo = new wxComboBox(this, wxID_ANY, CORNER::GetLocationName(CornerLocation), wxDefaultPosition,
 		wxDefaultSize, List, wxCB_READONLY);
 	SetMinimumWidthFromContents(CornerLocationCombo, additionalWidth);
-	inputAreaSizer->Add(CornerLocationLabel, 0, sizerFlags);
-	inputAreaSizer->Add(CornerLocationCombo, 0, sizerFlags);
+	inputAreaSizer->Add(CornerLocationLabel, 0, textSizerFlags);
+	inputAreaSizer->Add(CornerLocationCombo, 0, comboSizerFlags);
 	inputAreaSizer->AddSpacer(-1);
 
 #ifdef __WXGTK__
@@ -225,24 +226,24 @@ void GA_GENE_DIALOG::CreateControls(void)
 	MinimumText = new wxTextCtrl(this, wxID_ANY, Converter.FormatNumber(Converter.ConvertDistance(Minimum)));
 	wxStaticText *MinimumUnitsLabel = new wxStaticText(this, wxID_STATIC,
 		Converter.GetUnitType(Convert::UnitTypeDistance), wxDefaultPosition, wxDefaultSize, 0);
-	inputAreaSizer->Add(MinimumLabel, 0, sizerFlags);
-	inputAreaSizer->Add(MinimumText, 0, sizerFlags);
-	inputAreaSizer->Add(MinimumUnitsLabel, 0, sizerFlags);
+	inputAreaSizer->Add(MinimumLabel, 0, textSizerFlags);
+	inputAreaSizer->Add(MinimumText, 0, comboSizerFlags);
+	inputAreaSizer->Add(MinimumUnitsLabel, 0, textSizerFlags);
 
 	// Maximum
 	wxStaticText *MaximumLabel = new wxStaticText(this, wxID_STATIC, _T("Maximum"));
 	MaximumText = new wxTextCtrl(this, wxID_ANY, Converter.FormatNumber(Converter.ConvertDistance(Maximum)));
 	wxStaticText *MaximumUnitsLabel = new wxStaticText(this, wxID_STATIC,
 		Converter.GetUnitType(Convert::UnitTypeDistance), wxDefaultPosition, wxDefaultSize, 0);
-	inputAreaSizer->Add(MaximumLabel, 0, sizerFlags);
-	inputAreaSizer->Add(MaximumText, 0, sizerFlags);
-	inputAreaSizer->Add(MaximumUnitsLabel, 0, sizerFlags);
+	inputAreaSizer->Add(MaximumLabel, 0, textSizerFlags);
+	inputAreaSizer->Add(MaximumText, 0, comboSizerFlags);
+	inputAreaSizer->Add(MaximumUnitsLabel, 0, textSizerFlags);
 
 	// Number of values
 	wxStaticText *NumberOfValuesLabel = new wxStaticText(this, wxID_STATIC, _T("Number of Values"));
 	NumberOfValuesText = new wxTextCtrl(this, wxID_ANY, wxEmptyString);
-	inputAreaSizer->Add(NumberOfValuesLabel, 0, sizerFlags);
-	inputAreaSizer->Add(NumberOfValuesText, 0, sizerFlags);
+	inputAreaSizer->Add(NumberOfValuesLabel, 0, textSizerFlags);
+	inputAreaSizer->Add(NumberOfValuesText, 0, comboSizerFlags);
 	inputAreaSizer->AddSpacer(-1);
 
 	// Resolution
@@ -250,9 +251,9 @@ void GA_GENE_DIALOG::CreateControls(void)
 	Resolution = new wxStaticText(this, wxID_ANY, wxEmptyString);
 	wxStaticText *ResolutionUnitsLabel = new wxStaticText(this, wxID_STATIC,
 		Converter.GetUnitType(Convert::UnitTypeDistance), wxDefaultPosition, wxDefaultSize, 0);
-	inputAreaSizer->Add(ResolutionLabel, 0, sizerFlags);
-	inputAreaSizer->Add(Resolution, 0, sizerFlags);
-	inputAreaSizer->Add(ResolutionUnitsLabel, 0, sizerFlags);
+	inputAreaSizer->Add(ResolutionLabel, 0, textSizerFlags);
+	inputAreaSizer->Add(Resolution, 0, textSizerFlags);
+	inputAreaSizer->Add(ResolutionUnitsLabel, 0, textSizerFlags);
 
 	// This is set as a separate event to cause the resolution to update
 	wxString Temp;

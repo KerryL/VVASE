@@ -7,22 +7,66 @@
       <df name="CarDesigner">
         <df name="include">
           <df name="application">
+            <in>vvaseApplication.h</in>
+            <in>vvaseConstants.h</in>
           </df>
           <df name="environment">
+            <in>atmosphere.h</in>
+            <in>track.h</in>
           </df>
           <df name="gui">
             <df name="components">
               <df name="editPanel">
                 <df name="guiCar">
+                  <in>editAerodynamicsPanel.h</in>
+                  <in>editBrakesPanel.h</in>
+                  <in>editCornerPanel.h</in>
+                  <in>editDifferentialPanel.h</in>
+                  <in>editDrivetrainPanel.h</in>
+                  <in>editEnginePanel.h</in>
+                  <in>editMassPanel.h</in>
+                  <in>editSuspensionNotebook.h</in>
+                  <in>editSuspensionPanel.h</in>
+                  <in>editTiresPanel.h</in>
                 </df>
                 <df name="iteration">
+                  <in>editIterationNotebook.h</in>
+                  <in>editIterationOptionsPanel.h</in>
+                  <in>editIterationPlotsPanel.h</in>
+                  <in>editIterationRangePanel.h</in>
                 </df>
+                <in>editPanel.h</in>
               </df>
+              <in>mainFrame.h</in>
+              <in>mainNotebook.h</in>
+              <in>mainTree.h</in>
+              <in>outputPanel.h</in>
             </df>
             <df name="dialogs">
+              <in>appearanceOptionsDialog.h</in>
+              <in>gaGeneDialog.h</in>
+              <in>gaGoalDialog.h</in>
+              <in>optionsDialog.h</in>
+              <in>rangeLimitsDialog.h</in>
             </df>
             <df name="renderer">
+              <in>carRenderer.h</in>
+              <in>plotRenderer.h</in>
             </df>
+            <in>appearanceOptions.h</in>
+            <in>dropTarget.h</in>
+            <in>gaObject.h</in>
+            <in>geneticAlgorithmPanel.h</in>
+            <in>geneticOptimization.h</in>
+            <in>guiCar.h</in>
+            <in>guiObject.h</in>
+            <in>ipcClient.h</in>
+            <in>ipcConnection.h</in>
+            <in>ipcServer.h</in>
+            <in>iteration.h</in>
+            <in>plotObject.h</in>
+            <in>plotPanel.h</in>
+            <in>undoRedoStack.h</in>
           </df>
         </df>
         <df name="res">
@@ -31,109 +75,282 @@
         </df>
         <df name="src">
           <df name="application">
+            <in>vvaseApplication.cpp</in>
           </df>
           <df name="environment">
+            <in>atmosphere.cpp</in>
+            <in>track.cpp</in>
           </df>
           <df name="gui">
             <df name="components">
               <df name="editPanel">
                 <df name="guiCar">
+                  <in>editAerodynamicsPanel.cpp</in>
+                  <in>editBrakesPanel.cpp</in>
+                  <in>editCornerPanel.cpp</in>
+                  <in>editDifferentialPanel.cpp</in>
+                  <in>editDrivetrainPanel.cpp</in>
+                  <in>editEnginePanel.cpp</in>
+                  <in>editMassPanel.cpp</in>
+                  <in>editSuspensionNotebook.cpp</in>
+                  <in>editSuspensionPanel.cpp</in>
+                  <in>editTiresPanel.cpp</in>
                 </df>
                 <df name="iteration">
+                  <in>editIterationNotebook.cpp</in>
+                  <in>editIterationOptionsPanel.cpp</in>
+                  <in>editIterationPlotsPanel.cpp</in>
+                  <in>editIterationRangePanel.cpp</in>
                 </df>
+                <in>editPanel.cpp</in>
               </df>
+              <in>mainFrame.cpp</in>
+              <in>mainNotebook.cpp</in>
+              <in>mainTree.cpp</in>
+              <in>outputPanel.cpp</in>
             </df>
             <df name="dialogs">
+              <in>appearanceOptionsDialog.cpp</in>
+              <in>gaGeneDialog.cpp</in>
+              <in>gaGoalDialog.cpp</in>
+              <in>optionsDialog.cpp</in>
+              <in>rangeLimitsDialog.cpp</in>
             </df>
             <df name="renderer">
+              <in>carRenderer.cpp</in>
+              <in>plotRenderer.cpp</in>
             </df>
+            <in>appearanceOptions.cpp</in>
+            <in>dropTarget.cpp</in>
+            <in>gaObject.cpp</in>
+            <in>geneticAlgorithmPanel.cpp</in>
+            <in>geneticOptimization.cpp</in>
+            <in>guiCar.cpp</in>
+            <in>guiObject.cpp</in>
+            <in>ipcClient.cpp</in>
+            <in>ipcConnection.cpp</in>
+            <in>ipcServer.cpp</in>
+            <in>iteration.cpp</in>
+            <in>plotObject.cpp</in>
+            <in>plotPanel.cpp</in>
+            <in>undoRedoStack.cpp</in>
           </df>
         </df>
       </df>
       <df name="common">
         <df name="include">
           <df name="vCar">
+            <in>aerodynamics.h</in>
+            <in>brakes.h</in>
+            <in>car.h</in>
+            <in>corner.h</in>
+            <in>damper.h</in>
+            <in>differential.h</in>
+            <in>driver.h</in>
+            <in>drivetrain.h</in>
+            <in>engine.h</in>
+            <in>fuelCell.h</in>
+            <in>mass.h</in>
+            <in>spring.h</in>
+            <in>suspension.h</in>
+            <in>tire.h</in>
+            <in>tireSet.h</in>
           </df>
           <df name="vMath">
             <df name="signals">
               <df name="filters">
+                <in>filterBase.h</in>
+                <in>highPassOrder1.h</in>
+                <in>lowPassOrder1.h</in>
+                <in>lowPassOrder2.h</in>
               </df>
+              <in>curveFit.h</in>
+              <in>derivative.h</in>
+              <in>fft.h</in>
+              <in>integral.h</in>
+              <in>rms.h</in>
             </df>
+            <in>carMath.h</in>
+            <in>complex.h</in>
+            <in>dataset2D.h</in>
+            <in>expressionTree.h</in>
+            <in>matrix.h</in>
+            <in>vector.h</in>
           </df>
           <df name="vRenderer">
             <df name="3dcar">
+              <in>aarm.h</in>
+              <in>damper3D.h</in>
+              <in>link.h</in>
+              <in>origin.h</in>
+              <in>plane.h</in>
+              <in>point3D.h</in>
+              <in>spring3D.h</in>
+              <in>swaybar3D.h</in>
+              <in>tire3D.h</in>
+              <in>triangle3D.h</in>
+              <in>vector3D.h</in>
             </df>
             <df name="primitives">
               <in>axis.h</in>
               <in>cone.h</in>
               <in>cylinder.h</in>
               <in>disk.h</in>
-              <in>plot_curve.h</in>
+              <in>plotCursor.h</in>
+              <in>plotCurve.h</in>
               <in>primitive.h</in>
               <in>quadrilateral.h</in>
               <in>sphere.h</in>
-              <in>text_class.h</in>
+              <in>text.h</in>
               <in>triangle.h</in>
+              <in>zoomBox.h</in>
             </df>
+            <in>color.h</in>
+            <in>renderWindow.h</in>
           </df>
           <df name="vSolver">
             <df name="optimization">
+              <in>geneticAlgorithm.h</in>
             </df>
             <df name="physics">
+              <in>dynamics.h</in>
+              <in>integrator.h</in>
+              <in>kinematicOutputs.h</in>
+              <in>kinematics.h</in>
+              <in>millikenAnalysis.h</in>
+              <in>shakerRig.h</in>
+              <in>state.h</in>
             </df>
             <df name="threads">
+              <in>inverseSemaphore.h</in>
+              <in>jobQueue.h</in>
+              <in>kinematicsData.h</in>
+              <in>optimizationData.h</in>
+              <in>threadData.h</in>
+              <in>threadEvent.h</in>
+              <in>threadJob.h</in>
+              <in>workerThread.h</in>
             </df>
           </df>
           <df name="vUtilities">
+            <in>convert.h</in>
+            <in>debugger.h</in>
+            <in>machineDefinitions.h</in>
+            <in>managedList.h</in>
+            <in>objectList.h</in>
+            <in>wheelSetStructures.h</in>
             <in>wxRelatedUtilities.h</in>
+            <in>xlsxReader.h</in>
           </df>
         </df>
       </df>
       <df name="vCar">
         <df name="src">
+          <in>aerodynamics.cpp</in>
+          <in>brakes.cpp</in>
+          <in>car.cpp</in>
+          <in>corner.cpp</in>
+          <in>damper.cpp</in>
+          <in>differential.cpp</in>
+          <in>driver.cpp</in>
+          <in>drivetrain.cpp</in>
+          <in>engine.cpp</in>
+          <in>fuelCell.cpp</in>
+          <in>mass.cpp</in>
+          <in>spring.cpp</in>
+          <in>suspension.cpp</in>
+          <in>tire.cpp</in>
+          <in>tireSet.cpp</in>
         </df>
       </df>
       <df name="vMath">
         <df name="src">
           <df name="signals">
             <df name="filters">
+              <in>filterBase.cpp</in>
+              <in>highPassOrder1.cpp</in>
+              <in>lowPassOrder1.cpp</in>
+              <in>lowPassOrder2.cpp</in>
             </df>
+            <in>curveFit.cpp</in>
+            <in>derivative.cpp</in>
+            <in>fft.cpp</in>
+            <in>integral.cpp</in>
+            <in>rms.cpp</in>
           </df>
+          <in>carMath.cpp</in>
+          <in>complex.cpp</in>
+          <in>dataset2D.cpp</in>
+          <in>expressionTree.cpp</in>
+          <in>matrix.cpp</in>
+          <in>vector.cpp</in>
         </df>
       </df>
       <df name="vRenderer">
         <df name="src">
           <df name="3dcar">
+            <in>aarm.cpp</in>
+            <in>damper3D.cpp</in>
+            <in>link.cpp</in>
+            <in>origin.cpp</in>
+            <in>plane.cpp</in>
+            <in>point3D.cpp</in>
+            <in>spring3D.cpp</in>
+            <in>swaybar3D.cpp</in>
+            <in>tire3D.cpp</in>
+            <in>triangle3D.cpp</in>
+            <in>vector3D.cpp</in>
           </df>
           <df name="primitives">
             <in>axis.cpp</in>
             <in>cone.cpp</in>
             <in>cylinder.cpp</in>
             <in>disk.cpp</in>
+            <in>plotCursor.cpp</in>
+            <in>plotCurve.cpp</in>
             <in>primitive.cpp</in>
             <in>quadrilateral.cpp</in>
             <in>sphere.cpp</in>
+            <in>text.cpp</in>
             <in>triangle.cpp</in>
+            <in>zoomBox.cpp</in>
           </df>
+          <in>color.cpp</in>
+          <in>renderWindow.cpp</in>
         </df>
       </df>
       <df name="vSolver">
         <df name="src">
           <df name="optimization">
+            <in>geneticAlgorithm.cpp</in>
           </df>
           <df name="physics">
+            <in>dynamics.cpp</in>
+            <in>integrator.cpp</in>
+            <in>kinematicOutputs.cpp</in>
+            <in>kinematics.cpp</in>
+            <in>millikenAnalysis.cpp</in>
+            <in>shakerRig.cpp</in>
+            <in>state.cpp</in>
           </df>
           <df name="threads">
+            <in>inverseSemaphore.cpp</in>
+            <in>jobQueue.cpp</in>
+            <in>kinematicsData.cpp</in>
+            <in>optimizationData.cpp</in>
+            <in>threadData.cpp</in>
+            <in>threadEvent.cpp</in>
+            <in>threadJob.cpp</in>
+            <in>workerThread.cpp</in>
           </df>
         </df>
       </df>
       <df name="vUtilities">
-        <df name=".obj">
-          <df name="src">
-          </df>
-        </df>
         <df name="src">
+          <in>convert.cpp</in>
+          <in>debugger.cpp</in>
           <in>wxRelatedUtilities.cpp</in>
+          <in>xlsxReader.cpp</in>
         </df>
       </df>
     </df>
@@ -193,11 +410,6 @@
             tool="3"
             flavor="0">
       </item>
-      <item path="common/include/vRenderer/primitives/plot_curve.h"
-            ex="true"
-            tool="3"
-            flavor="0">
-      </item>
       <item path="common/include/vRenderer/primitives/primitive.h"
             ex="true"
             tool="3"
@@ -209,11 +421,6 @@
             flavor="0">
       </item>
       <item path="common/include/vRenderer/primitives/sphere.h"
-            ex="true"
-            tool="3"
-            flavor="0">
-      </item>
-      <item path="common/include/vRenderer/primitives/text_class.h"
             ex="true"
             tool="3"
             flavor="0">

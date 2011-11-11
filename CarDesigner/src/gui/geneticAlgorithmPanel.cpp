@@ -134,85 +134,61 @@ void GENETIC_ALGORITHM_PANEL::CreateControls(void)
 	// Second sizer gives more space around the controls
 	wxBoxSizer *MainSizer = new wxBoxSizer(wxVERTICAL);
 	TopSizer->Add(MainSizer, 1, wxALIGN_LEFT | wxGROW | wxALL, 5);
-
-	// Parameters for sizing the controls
-	int LabelTextWidth(120);
-	int TextBoxWidth(150);
-	int ButtonWidth(100);
-	int ButtonHeight(30);
+	
+	// Set the sizer flags
+	int labelSizerFlags = wxALIGN_CENTER_VERTICAL;
+	int inputSizerFlags = wxEXPAND | wxALIGN_CENTER_VERTICAL;
+	int padding(2);
 
 	// Create a sizer at the top to contain the GA parameters and the start/stop button
-	wxBoxSizer *UpperSizer = new wxBoxSizer(wxHORIZONTAL);
+	wxFlexGridSizer *UpperSizer = new wxFlexGridSizer(3, padding, padding);
+	UpperSizer->SetFlexibleDirection(wxHORIZONTAL);
 	MainSizer->Add(UpperSizer, 0, wxALL | wxGROW, 5);
 
-	// Create the controls at the top for editing basic GA parameters
-	wxBoxSizer *GAParametersSizer = new wxBoxSizer(wxVERTICAL);
-	UpperSizer->Add(GAParametersSizer);
-
 	// Population size
-	wxBoxSizer *PopulationSizeSizer = new wxBoxSizer(wxHORIZONTAL);
-	GAParametersSizer->Add(PopulationSizeSizer);
-	wxStaticText *PopulationLabel = new wxStaticText(this, wxID_ANY, _T("Population Size"),
-		wxDefaultPosition, wxSize(LabelTextWidth, -1));
-	PopulationSize = new wxTextCtrl(this, wxID_ANY, _T("500"),
-		wxDefaultPosition, wxSize(TextBoxWidth, -1));
-	PopulationSizeSizer->Add(PopulationLabel, 0, wxALIGN_CENTER_VERTICAL);
-	PopulationSizeSizer->Add(PopulationSize);
+	wxStaticText *PopulationLabel = new wxStaticText(this, wxID_ANY, _T("Population Size"));
+	PopulationSize = new wxTextCtrl(this, wxID_ANY, _T("500"));
+	UpperSizer->Add(PopulationLabel, 0, labelSizerFlags);
+	UpperSizer->Add(PopulationSize, 0, inputSizerFlags);
+	
+	// Start/stop button
+	StartStopOptimization = new wxButton(this, IdStartStopOptimization, _T("Start GA"));
+	UpperSizer->Add(StartStopOptimization, 0, wxALIGN_LEFT);
 
 	// Generation limit
-	wxBoxSizer *GenerationLimitSizer = new wxBoxSizer(wxHORIZONTAL);
-	GAParametersSizer->Add(GenerationLimitSizer);
-	wxStaticText *GenerationLimitLabel = new wxStaticText(this, wxID_ANY, _T("Generation Limit"),
-		wxDefaultPosition, wxSize(LabelTextWidth, -1));
-	GenerationLimit = new wxTextCtrl(this, wxID_ANY, _T("20"),
-		wxDefaultPosition, wxSize(TextBoxWidth, -1));
-	GenerationLimitSizer->Add(GenerationLimitLabel, 0, wxALIGN_CENTER_VERTICAL);
-	GenerationLimitSizer->Add(GenerationLimit);
+	wxStaticText *GenerationLimitLabel = new wxStaticText(this, wxID_ANY, _T("Generation Limit"));
+	GenerationLimit = new wxTextCtrl(this, wxID_ANY, _T("20"));
+	UpperSizer->Add(GenerationLimitLabel, 0, labelSizerFlags);
+	UpperSizer->Add(GenerationLimit, 0, inputSizerFlags);
+	UpperSizer->AddSpacer(-1);
 
 	// Elitism percentage
-	wxBoxSizer *ElitismSizer = new wxBoxSizer(wxHORIZONTAL);
-	GAParametersSizer->Add(ElitismSizer);
-	wxStaticText *ElitismLabel = new wxStaticText(this, wxID_ANY, _T("Elitism Fraction"),
-		wxDefaultPosition, wxSize(LabelTextWidth, -1));
-	ElitismFraction = new wxTextCtrl(this, wxID_ANY, _T("0.05"),
-		wxDefaultPosition, wxSize(TextBoxWidth, -1));
-	ElitismSizer->Add(ElitismLabel, 0, wxALIGN_CENTER_VERTICAL);
-	ElitismSizer->Add(ElitismFraction);
+	wxStaticText *ElitismLabel = new wxStaticText(this, wxID_ANY, _T("Elitism Fraction"));
+	ElitismFraction = new wxTextCtrl(this, wxID_ANY, _T("0.05"));
+	UpperSizer->Add(ElitismLabel, 0, labelSizerFlags);
+	UpperSizer->Add(ElitismFraction, 0, inputSizerFlags);
+	UpperSizer->AddSpacer(-1);
 
 	// Mutation probability
-	wxBoxSizer *MutationSizer = new wxBoxSizer(wxHORIZONTAL);
-	GAParametersSizer->Add(MutationSizer);
-	wxStaticText *MutationLabel = new wxStaticText(this, wxID_ANY, _T("Mutation Probability"),
-		wxDefaultPosition, wxSize(LabelTextWidth, -1));
-	MutationProbability = new wxTextCtrl(this, wxID_ANY, _T("0.01"),
-		wxDefaultPosition, wxSize(TextBoxWidth, -1));
-	MutationSizer->Add(MutationLabel, 0, wxALIGN_CENTER_VERTICAL);
-	MutationSizer->Add(MutationProbability);
+	wxStaticText *MutationLabel = new wxStaticText(this, wxID_ANY, _T("Mutation Probability"));
+	MutationProbability = new wxTextCtrl(this, wxID_ANY, _T("0.01"));
+	UpperSizer->Add(MutationLabel, 0, labelSizerFlags);
+	UpperSizer->Add(MutationProbability, 0, inputSizerFlags);
+	UpperSizer->AddSpacer(-1);
 
 	// Crossover point
-	wxBoxSizer *CrossoverSizer = new wxBoxSizer(wxHORIZONTAL);
-	GAParametersSizer->Add(CrossoverSizer);
-	wxStaticText *CrossoverLabel = new wxStaticText(this, wxID_ANY, _T("Crossover Point"),
-		wxDefaultPosition, wxSize(LabelTextWidth, -1));
-	CrossoverPoint = new wxTextCtrl(this, wxID_ANY, _T("0"),
-		wxDefaultPosition, wxSize(TextBoxWidth, -1));
-	CrossoverSizer->Add(CrossoverLabel, 0, wxALIGN_CENTER_VERTICAL);
-	CrossoverSizer->Add(CrossoverPoint);
+	wxStaticText *CrossoverLabel = new wxStaticText(this, wxID_ANY, _T("Crossover Point"));
+	CrossoverPoint = new wxTextCtrl(this, wxID_ANY, _T("0"));
+	UpperSizer->Add(CrossoverLabel, 0, labelSizerFlags);
+	UpperSizer->Add(CrossoverPoint, 0, inputSizerFlags);
+	UpperSizer->AddSpacer(-1);
 
 	// Selection drop down box
-	wxBoxSizer *SelectionSizer = new wxBoxSizer(wxHORIZONTAL);
-	GAParametersSizer->Add(SelectionSizer);
-	wxStaticText *SelectionLabel = new wxStaticText(this, wxID_ANY, _T("Car to Optimize"),
-		wxDefaultPosition, wxSize(LabelTextWidth, -1));
+	wxStaticText *SelectionLabel = new wxStaticText(this, wxID_ANY, _T("Car to Optimize"));
 	SelectedCar = new wxComboBox(this, IdSelectCar, wxEmptyString, wxDefaultPosition,
-		wxSize(TextBoxWidth, -1), NULL, wxCB_READONLY);
-	SelectionSizer->Add(SelectionLabel, 0, wxALIGN_CENTER_VERTICAL);
-	SelectionSizer->Add(SelectedCar);
-
-	// Start/stop button
-	StartStopOptimization = new wxButton(this, IdStartStopOptimization,
-		_T("Start GA"), wxDefaultPosition, wxSize(ButtonWidth, ButtonHeight));
-	UpperSizer->Add(StartStopOptimization, 0, wxALL | wxALIGN_RIGHT, 5);
+		wxDefaultSize, NULL, wxCB_READONLY);
+	UpperSizer->Add(SelectionLabel, 0, labelSizerFlags);
+	UpperSizer->Add(SelectedCar, 0, inputSizerFlags);
 
 	// Gene list
 	wxBoxSizer *GeneSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -273,15 +249,12 @@ void GENETIC_ALGORITHM_PANEL::CreateControls(void)
 	// Add/Edit/Remove Gene buttons
 	wxBoxSizer *GeneButtonSizer = new wxBoxSizer(wxVERTICAL);
 	GeneSizer->Add(GeneButtonSizer);
-	AddGene = new wxButton(this, IdAddGene, _T("Add Gene"), wxDefaultPosition,
-		wxSize(ButtonWidth, ButtonHeight));
-	EditGene = new wxButton(this, IdEditGene, _T("Edit Gene"), wxDefaultPosition,
-		wxSize(ButtonWidth, ButtonHeight));
-	RemoveGene = new wxButton(this, IdRemoveGene, _T("Remove Gene"), wxDefaultPosition,
-		wxSize(ButtonWidth, ButtonHeight));
-	GeneButtonSizer->Add(AddGene);
-	GeneButtonSizer->Add(EditGene);
-	GeneButtonSizer->Add(RemoveGene);
+	AddGene = new wxButton(this, IdAddGene, _T("Add Gene"));
+	EditGene = new wxButton(this, IdEditGene, _T("Edit Gene"));
+	RemoveGene = new wxButton(this, IdRemoveGene, _T("Remove Gene"));
+	GeneButtonSizer->Add(AddGene, 0, wxEXPAND);
+	GeneButtonSizer->Add(EditGene, 0, wxEXPAND);
+	GeneButtonSizer->Add(RemoveGene, 0, wxEXPAND);
 
 	// Goal list
 	wxBoxSizer *GoalSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -342,15 +315,12 @@ void GENETIC_ALGORITHM_PANEL::CreateControls(void)
 	// Add/Edit/Remove Goal buttons
 	wxBoxSizer *GoalButtonSizer = new wxBoxSizer(wxVERTICAL);
 	GoalSizer->Add(GoalButtonSizer);
-	AddGoal = new wxButton(this, IdAddGoal, _T("Add Goal"), wxDefaultPosition,
-		wxSize(ButtonWidth, ButtonHeight));
-	EditGoal = new wxButton(this, IdEditGoal, _T("Edit Goal"), wxDefaultPosition,
-		wxSize(ButtonWidth, ButtonHeight));
-	RemoveGoal = new wxButton(this, IdRemoveGoal, _T("Remove Goal"), wxDefaultPosition,
-		wxSize(ButtonWidth, ButtonHeight));
-	GoalButtonSizer->Add(AddGoal);
-	GoalButtonSizer->Add(EditGoal);
-	GoalButtonSizer->Add(RemoveGoal);
+	AddGoal = new wxButton(this, IdAddGoal, _T("Add Goal"));
+	EditGoal = new wxButton(this, IdEditGoal, _T("Edit Goal"));
+	RemoveGoal = new wxButton(this, IdRemoveGoal, _T("Remove Goal"));
+	GoalButtonSizer->Add(AddGoal, 0, wxEXPAND);
+	GoalButtonSizer->Add(EditGoal, 0, wxEXPAND);
+	GoalButtonSizer->Add(RemoveGoal, 0, wxEXPAND);
 
 	// Progress bars
 	wxBoxSizer *ProgressSizer = new wxBoxSizer(wxVERTICAL);

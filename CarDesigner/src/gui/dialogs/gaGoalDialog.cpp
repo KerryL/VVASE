@@ -143,7 +143,8 @@ void GA_GOAL_DIALOG::CreateControls(void)
 	MainSizer->Add(inputAreaSizer, wxALL, 5);
 
 	// Set sizer flags
-	int sizerFlags = wxEXPAND | wxALIGN_CENTER_VERTICAL;
+	int textSizerFlags = wxALIGN_CENTER_VERTICAL;
+	int inputSizerFlags = wxEXPAND | wxALIGN_CENTER_VERTICAL;
 
 	// When setting the control width, we need to account for the width of the
 	// "expand" button, etc., so we specify that here
@@ -164,8 +165,8 @@ void GA_GOAL_DIALOG::CreateControls(void)
 	OutputCombo = new wxComboBox(this, wxID_ANY, KINEMATIC_OUTPUTS::GetOutputName(Output), wxDefaultPosition,
 		wxDefaultSize, List, wxCB_READONLY);
 	SetMinimumWidthFromContents(OutputCombo, additionalWidth);
-	inputAreaSizer->Add(OutputLabel, wxGBPosition(row, 1), wxGBSpan(), sizerFlags);
-	inputAreaSizer->Add(OutputCombo, wxGBPosition(row, 2), wxGBSpan(1, 3), sizerFlags);
+	inputAreaSizer->Add(OutputLabel, wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
+	inputAreaSizer->Add(OutputCombo, wxGBPosition(row, 2), wxGBSpan(1, 3), inputSizerFlags);
 	row++;
 
 #ifdef __WXGTK__
@@ -178,15 +179,18 @@ void GA_GOAL_DIALOG::CreateControls(void)
 
 	// Difference check box
 	Difference = new wxCheckBox(this, wxID_ANY, _T("Optimize difference between two states"));
-	inputAreaSizer->Add(Difference, wxGBPosition(row, 1), wxGBSpan(1, 4), wxALIGN_CENTER_HORIZONTAL | sizerFlags);
+	inputAreaSizer->Add(Difference, wxGBPosition(row, 1), wxGBSpan(1, 4),
+					 wxALIGN_CENTER_HORIZONTAL);
 	Difference->SetValue(BeforeInputs != AfterInputs);
 	row++;
 
 	// Before and after labels
 	BeforeLabel = new wxStaticText(this, wxID_STATIC, _T("State 1"));
 	AfterLabel = new wxStaticText(this, wxID_STATIC, _T("State 2"));
-	inputAreaSizer->Add(BeforeLabel, wxGBPosition(row, 2), wxGBSpan(), wxALIGN_CENTER_HORIZONTAL | sizerFlags);
-	inputAreaSizer->Add(AfterLabel, wxGBPosition(row, 3), wxGBSpan(), wxALIGN_CENTER_HORIZONTAL | sizerFlags);
+	inputAreaSizer->Add(BeforeLabel, wxGBPosition(row, 2), wxGBSpan(),
+					 wxALIGN_CENTER_HORIZONTAL | textSizerFlags);
+	inputAreaSizer->Add(AfterLabel, wxGBPosition(row, 3), wxGBSpan(),
+					 wxALIGN_CENTER_HORIZONTAL | textSizerFlags);
 	row++;
 
 	// Pitch inputs
@@ -197,10 +201,10 @@ void GA_GOAL_DIALOG::CreateControls(void)
 		Converter.FormatNumber(Converter.ConvertAngle(AfterInputs.Pitch)));
 	wxStaticText *PitchUnitsLabel = new wxStaticText(this, wxID_STATIC,
 		Converter.GetUnitType(Convert::UnitTypeAngle));
-	inputAreaSizer->Add(PitchLabel, wxGBPosition(row, 1), wxGBSpan(), sizerFlags);
-	inputAreaSizer->Add(BeforePitchText, wxGBPosition(row, 2), wxGBSpan(), sizerFlags);
-	inputAreaSizer->Add(AfterPitchText, wxGBPosition(row, 3), wxGBSpan(), sizerFlags);
-	inputAreaSizer->Add(PitchUnitsLabel, wxGBPosition(row, 4), wxGBSpan(), sizerFlags);
+	inputAreaSizer->Add(PitchLabel, wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
+	inputAreaSizer->Add(BeforePitchText, wxGBPosition(row, 2), wxGBSpan(), inputSizerFlags);
+	inputAreaSizer->Add(AfterPitchText, wxGBPosition(row, 3), wxGBSpan(), inputSizerFlags);
+	inputAreaSizer->Add(PitchUnitsLabel, wxGBPosition(row, 4), wxGBSpan(), textSizerFlags);
 	row++;
 
 	// Roll inputs
@@ -211,10 +215,10 @@ void GA_GOAL_DIALOG::CreateControls(void)
 		Converter.FormatNumber(Converter.ConvertAngle(AfterInputs.Roll)));
 	wxStaticText *RollUnitsLabel = new wxStaticText(this, wxID_STATIC,
 		Converter.GetUnitType(Convert::UnitTypeAngle));
-	inputAreaSizer->Add(RollLabel, wxGBPosition(row, 1), wxGBSpan(), sizerFlags);
-	inputAreaSizer->Add(BeforeRollText, wxGBPosition(row, 2), wxGBSpan(), sizerFlags);
-	inputAreaSizer->Add(AfterRollText, wxGBPosition(row, 3), wxGBSpan(), sizerFlags);
-	inputAreaSizer->Add(RollUnitsLabel, wxGBPosition(row, 4), wxGBSpan(), sizerFlags);
+	inputAreaSizer->Add(RollLabel, wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
+	inputAreaSizer->Add(BeforeRollText, wxGBPosition(row, 2), wxGBSpan(), inputSizerFlags);
+	inputAreaSizer->Add(AfterRollText, wxGBPosition(row, 3), wxGBSpan(), inputSizerFlags);
+	inputAreaSizer->Add(RollUnitsLabel, wxGBPosition(row, 4), wxGBSpan(), textSizerFlags);
 	row++;
 
 	// Heave inputs
@@ -225,10 +229,10 @@ void GA_GOAL_DIALOG::CreateControls(void)
 		Converter.FormatNumber(Converter.ConvertDistance(AfterInputs.Heave)));
 	wxStaticText *HeaveUnitsLabel = new wxStaticText(this, wxID_STATIC,
 		Converter.GetUnitType(Convert::UnitTypeDistance));
-	inputAreaSizer->Add(HeaveLabel, wxGBPosition(row, 1), wxGBSpan(), sizerFlags);
-	inputAreaSizer->Add(BeforeHeaveText, wxGBPosition(row, 2), wxGBSpan(), sizerFlags);
-	inputAreaSizer->Add(AfterHeaveText, wxGBPosition(row, 3), wxGBSpan(), sizerFlags);
-	inputAreaSizer->Add(HeaveUnitsLabel, wxGBPosition(row, 4), wxGBSpan(), sizerFlags);
+	inputAreaSizer->Add(HeaveLabel, wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
+	inputAreaSizer->Add(BeforeHeaveText, wxGBPosition(row, 2), wxGBSpan(), inputSizerFlags);
+	inputAreaSizer->Add(AfterHeaveText, wxGBPosition(row, 3), wxGBSpan(), inputSizerFlags);
+	inputAreaSizer->Add(HeaveUnitsLabel, wxGBPosition(row, 4), wxGBSpan(), textSizerFlags);
 	row++;
 
 	// Steer inputs
@@ -239,10 +243,10 @@ void GA_GOAL_DIALOG::CreateControls(void)
 		Converter.FormatNumber(Converter.ConvertDistance(AfterInputs.RackTravel)));
 	wxStaticText *SteerUnitsLabel = new wxStaticText(this, wxID_STATIC,
 		Converter.GetUnitType(Convert::UnitTypeDistance));
-	inputAreaSizer->Add(SteerLabel, wxGBPosition(row, 1), wxGBSpan(), sizerFlags);
-	inputAreaSizer->Add(BeforeSteerText, wxGBPosition(row, 2), wxGBSpan(), sizerFlags);
-	inputAreaSizer->Add(AfterSteerText, wxGBPosition(row, 3), wxGBSpan(), sizerFlags);
-	inputAreaSizer->Add(SteerUnitsLabel, wxGBPosition(row, 4), wxGBSpan(), sizerFlags);
+	inputAreaSizer->Add(SteerLabel, wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
+	inputAreaSizer->Add(BeforeSteerText, wxGBPosition(row, 2), wxGBSpan(), inputSizerFlags);
+	inputAreaSizer->Add(AfterSteerText, wxGBPosition(row, 3), wxGBSpan(), inputSizerFlags);
+	inputAreaSizer->Add(SteerUnitsLabel, wxGBPosition(row, 4), wxGBSpan(), textSizerFlags);
 	row++;
 
 	// Desired value
@@ -251,9 +255,9 @@ void GA_GOAL_DIALOG::CreateControls(void)
 		KINEMATIC_OUTPUTS::GetOutputUnitType(Output))));
 	DesiredValueUnitsLabel = new wxStaticText(this, wxID_STATIC,
 		Converter.GetUnitType(KINEMATIC_OUTPUTS::GetOutputUnitType(Output)));
-	inputAreaSizer->Add(DesiredValueLabel, wxGBPosition(row, 1), wxGBSpan(), sizerFlags);
-	inputAreaSizer->Add(DesiredValueText, wxGBPosition(row, 2), wxGBSpan(1, 2), sizerFlags);
-	inputAreaSizer->Add(DesiredValueUnitsLabel, wxGBPosition(row, 4), wxGBSpan(), sizerFlags);
+	inputAreaSizer->Add(DesiredValueLabel, wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
+	inputAreaSizer->Add(DesiredValueText, wxGBPosition(row, 2), wxGBSpan(1, 2), inputSizerFlags);
+	inputAreaSizer->Add(DesiredValueUnitsLabel, wxGBPosition(row, 4), wxGBSpan(), textSizerFlags);
 	row++;
 
 	// Expected deviation
@@ -262,16 +266,16 @@ void GA_GOAL_DIALOG::CreateControls(void)
 		KINEMATIC_OUTPUTS::GetOutputUnitType(Output))));
 	DeviationUnitsLabel = new wxStaticText(this, wxID_STATIC,
 		Converter.GetUnitType(KINEMATIC_OUTPUTS::GetOutputUnitType(Output)));
-	inputAreaSizer->Add(DeviationLabel, wxGBPosition(row, 1), wxGBSpan(), sizerFlags);
-	inputAreaSizer->Add(DeviationText, wxGBPosition(row, 2), wxGBSpan(1, 2), sizerFlags);
-	inputAreaSizer->Add(DeviationUnitsLabel, wxGBPosition(row, 4), wxGBSpan(), sizerFlags);
+	inputAreaSizer->Add(DeviationLabel, wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
+	inputAreaSizer->Add(DeviationText, wxGBPosition(row, 2), wxGBSpan(1, 2), inputSizerFlags);
+	inputAreaSizer->Add(DeviationUnitsLabel, wxGBPosition(row, 4), wxGBSpan(), textSizerFlags);
 	row++;
 
 	// Importance
 	wxStaticText *ImportanceLabel = new wxStaticText(this, wxID_STATIC, _T("Relative Importance"));
 	ImportanceText = new wxTextCtrl(this, wxID_ANY, Converter.FormatNumber(Importance));
-	inputAreaSizer->Add(ImportanceLabel, wxGBPosition(row, 1), wxGBSpan(), sizerFlags);
-	inputAreaSizer->Add(ImportanceText, wxGBPosition(row, 2), wxGBSpan(1, 2), sizerFlags);
+	inputAreaSizer->Add(ImportanceLabel, wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
+	inputAreaSizer->Add(ImportanceText, wxGBPosition(row, 2), wxGBSpan(1, 2), inputSizerFlags);
 	row++;
 
 	// The width of the second and third columns should be equal

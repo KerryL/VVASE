@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  edit_iteration_notebook_class.cpp
+// File:  editIterationNotebook.cpp
 // Created:  11/14/2010
 // Author:  K. Loux
 // Description:  Contains the class definition for the EDIT_ITERATION_NOTEBOOK class.
@@ -15,7 +15,7 @@
 
 // VVASE headers
 #include "gui/iteration.h"
-#include "gui/components/mainframe.h"
+#include "gui/components/mainFrame.h"
 #include "gui/components/editPanel/editPanel.h"
 #include "gui/components/editPanel/iteration/editIterationNotebook.h"
 #include "gui/components/editPanel/iteration/editIterationRangePanel.h"
