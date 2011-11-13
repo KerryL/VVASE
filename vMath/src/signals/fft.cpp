@@ -27,7 +27,7 @@
 // Description:		Computes the Fast Fourier Transform for the given signal.
 //					Assumes y contains data and x is time.
 //
-// Input Argurments:
+// Input Arguments:
 //		_data	= const Dataset2D& referring to the data of interest
 //
 // Output Arguments:
@@ -123,7 +123,7 @@ Dataset2D FastFourierTransform::Compute(const Dataset2D &data)
 		c1 = sqrt((1.0 + c1) / 2.0);
 	}
 
-	double magnitude, frequency;
+	double magnitude, frequency;// FIXME:  What does this do?  these aren't used?
 	for (i = 0; i < fft.GetNumberOfPoints(); i++)
 	{
 		// Break out into magnitude (Y) and frequency (X)

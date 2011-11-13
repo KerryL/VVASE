@@ -41,6 +41,7 @@
 // Input Arguments:
 //		parent		= wxWindow& reference to the owner of this object
 //		id			= wxWindowID to identify this window
+//		args		= int[] NOTE: Must contain WX_GL_DOUBLEBUFFER at minimum (BUG somewhere)
 //		position	= const wxPoint& specifying this object's position
 //		size		= const wxSize& specifying this object's size
 //		style		= long specifying this object's style flags
@@ -52,9 +53,10 @@
 //		None
 //
 //==========================================================================
-RenderWindow::RenderWindow(wxWindow &parent, wxWindowID id,
+RenderWindow::RenderWindow(wxWindow &parent, wxWindowID id, int args[],
     const wxPoint& position, const wxSize& size, long style) : wxGLCanvas(
-	&parent, id, position, size, style | wxFULL_REPAINT_ON_RESIZE)
+	&parent, id, position, size, style | wxFULL_REPAINT_ON_RESIZE, wxEmptyString,
+	args)
 {
 	// Initialize the private data
 	wireFrame = false;
@@ -77,6 +79,9 @@ RenderWindow::RenderWindow(wxWindow &parent, wxWindowID id,
 	// Initialize the focal point parameters
 	focalPoint.Set(0.0, 0.0, 0.0);
 	isInteracting = false;
+	
+	// To avoid flashing on MSW
+	SetBackgroundStyle(wxBG_STYLE_CUSTOM);
 
 	// Initialize the openGL settings first time we try to render
 	modified = true;
@@ -132,7 +137,7 @@ BEGIN_EVENT_TABLE(RenderWindow, wxGLCanvas)
 	// Window events
 	EVT_SIZE(				RenderWindow::OnSize)
 	EVT_PAINT(				RenderWindow::OnPaint)
-	EVT_ERASE_BACKGROUND(	RenderWindow::OnEraseBackground)
+//	EVT_ERASE_BACKGROUND(	RenderWindow::OnEraseBackground)
 	EVT_ENTER_WINDOW(		RenderWindow::OnEnterWindow)
 
 	// Interaction events
@@ -166,6 +171,7 @@ void RenderWindow::Render()
 		return;
 
 	SetCurrent();
+    wxPaintDC(this);
 
 	// If modified, re-initialize
 	if (modified)
@@ -185,16 +191,16 @@ void RenderWindow::Render()
 	glMatrixMode(GL_MODELVIEW);
 
 	// Sort the primitives by Color.GetAlpha to ensure that transparent objects are rendered last
-	SortPrimitivesByAlpha();
+	if (!view3D)// For 3D views, we need to render back-to-front
+		SortPrimitivesByAlpha();
 
 	// Draw all of the primitives
 	int i;
 	for (i = 0; i < primitiveList.GetCount(); i++)
 		primitiveList[i]->Draw();
 
-	// Flush and swap the buffers to update the image
-    glFlush();
-    SwapBuffers();
+	// Swap the buffers to update the image
+	SwapBuffers();
 }
 
 //==========================================================================
@@ -216,13 +222,8 @@ void RenderWindow::Render()
 //==========================================================================
 void RenderWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
-	// Get the device context from this object
-	wxPaintDC dc(this);
-
 	// Render the scene
     Render();
-
-	return;
 }
 
 //==========================================================================
@@ -255,6 +256,7 @@ void RenderWindow::OnSize(wxSizeEvent& event)
 		SetCurrent();
 		glViewport(0, 0, (GLint) w, (GLint) h);
 	}
+	Refresh();
 
 	// This takes care of any change in aspect ratio
 	AutoSetFrustum();
@@ -267,7 +269,7 @@ void RenderWindow::OnSize(wxSizeEvent& event)
 // Function:		OnEraseBackground
 //
 // Description:		Event handler for the erase background event.  This is
-//					simply here to override default behaviour which would
+//					simply here to override default behavior which would
 //					cause the screen to flicker.
 //
 // Input Arguments:
@@ -280,10 +282,10 @@ void RenderWindow::OnSize(wxSizeEvent& event)
 //		None
 //
 //==========================================================================
-void RenderWindow::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
+/*void RenderWindow::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
 {
 	// Do nothing to avoid flashing
-}
+*/
 
 //==========================================================================
 // Class:			RENDER_WINDOW
@@ -329,11 +331,11 @@ void RenderWindow::OnEnterWindow(wxMouseEvent &event)
 //==========================================================================
 bool RenderWindow::RemoveActor(Primitive *toRemove)
 {
-	// Make sure the arguement is valid
+	// Make sure the argument is valid
 	if (!toRemove)
 		return false;
 
-	// Check every entry in the primtiives list to see if it matches the argument
+	// Check every entry in the primitives list to see if it matches the argument
 	int i;
 	for (i = 0; i < primitiveList.GetCount(); i++)
 	{
@@ -368,11 +370,6 @@ bool RenderWindow::RemoveActor(Primitive *toRemove)
 //==========================================================================
 void RenderWindow::Initialize()
 {
-	if (!GetContext() || !IsShownOnScreen())
-		return;
-
-	SetCurrent();
-
 	// Set the openGL parameters depending on whether or not we're in 3D mode
 	if (view3D)
 	{
@@ -392,11 +389,16 @@ void RenderWindow::Initialize()
 		glShadeModel(GL_SMOOTH);
 
 		// Disable alpha blending (this is enabled as-needed when rendering objects)
-		glDisable(GL_BLEND);
+		//glDisable(GL_BLEND);// FIXME:  Must leave this on?
 
 		// Enable anti-aliasing for polygons
 		glEnable(GL_POLYGON_SMOOTH);
 		glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+		
+		// FIXME:  I think this used to work without these next two lines, but
+		// somehow they're needed now?
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		// FIXME:  Note in opengl.org samples, 9.2 Polygon Antialising
 		// destination alpha is required for this algorithm to work?

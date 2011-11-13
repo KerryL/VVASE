@@ -48,7 +48,7 @@
 // Description:		Constructor for PlotPanel class.  Initializes the panel
 //					and creates the controls, etc.
 //
-// Input Argurments:
+// Input Arguments:
 //		parent		= wxWindow*
 //		_debugger	= const Debugger&
 //
@@ -70,7 +70,7 @@ PlotPanel::PlotPanel(wxWindow *parent, const Debugger &_debugger) : wxPanel(pare
 //
 // Description:		Destructor for PlotPanel class.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -90,7 +90,7 @@ PlotPanel::~PlotPanel()
 //
 // Description:		Creates the objects on the panel.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -110,7 +110,8 @@ void PlotPanel::CreateControls(void)
 
 	// Create the main control
 	optionsGrid = NULL;// To avoid crashing in UpdateCursors
-	renderer = new PlotRenderer(*this, wxID_ANY, debugger);
+	int args[] = {WX_GL_DOUBLEBUFFER, 0};
+	renderer = new PlotRenderer(*this, wxID_ANY, args, debugger);
 	renderer->SetGridOn();
 	mainSizer->Add(renderer, 0, wxEXPAND);
 
@@ -156,7 +157,7 @@ void PlotPanel::CreateControls(void)
 //
 // Description:		Links GUI events with event handler functions.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -216,7 +217,7 @@ END_EVENT_TABLE();
 //
 // Description:		Updates the plot and options grid.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -236,7 +237,7 @@ void PlotPanel::UpdateDisplay(void)
 //
 // Description:		Event fires when user clicks "RemoveCurve" in context menu.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= &wxCommandEvent
 //
 // Output Arguments:
@@ -282,7 +283,7 @@ void PlotPanel::ContextRemoveCurveEvent(wxCommandEvent& WXUNUSED(event))
 //
 // Description:		Displays a context menu for the grid control.
 //
-// Input Argurments:
+// Input Arguments:
 //		position	= const wxPoint& specifying the position to display the menu
 //		row			= const unsigned int& specifying the row that was clicked
 //
@@ -338,7 +339,7 @@ void PlotPanel::CreateGridContextMenu(const wxPoint &position, const unsigned in
 //
 // Description:		Displays a context menu for the plot.
 //
-// Input Argurments:
+// Input Arguments:
 //		position	= const wxPoint& specifying the position to display the menu
 //		context		= const PlotContext& describing the area of the plot
 //					  on which the click occured
@@ -403,7 +404,7 @@ void PlotPanel::CreatePlotContextMenu(const wxPoint &position, const PlotContext
 //
 // Description:		Writes plot to image file.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -424,7 +425,7 @@ void PlotPanel::ContextWriteImageFile(wxCommandEvent &event)
 //
 // Description:		Removes all curves from the plot.
 //
-// Input Argurments:
+// Input Arguments:
 //		None
 //
 // Output Arguments:
@@ -450,7 +451,7 @@ void PlotPanel::ClearAllCurves(void)
 // Description:		Adds a new dataset to the plot, created by operating on
 //					existing datasets.
 //
-// Input Argurments:
+// Input Arguments:
 //		mathString	= wxString describing the desired math operations
 //
 // Output Arguments:
@@ -502,7 +503,7 @@ void PlotPanel::AddCurve(wxString mathString)
 //
 // Description:		Adds an existing dataset to the plot.
 //
-// Input Argurments:
+// Input Arguments:
 //		data	= Dataset2D* to add
 //		name	= wxString specifying the label for the curve
 //
@@ -616,7 +617,7 @@ void PlotPanel::AddCurve(Dataset2D *data, wxString name)
 //
 // Description:		Removes a curve from the plot.
 //
-// Input Argurments:
+// Input Arguments:
 //		i	= const unsigned int& specifying curve to remove
 //
 // Output Arguments:
@@ -653,7 +654,7 @@ void PlotPanel::RemoveCurve(const unsigned int &i)
 // Description:		Handles right-click events on the grid control.  Displays
 //					context menu.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxGridEvent&
 //
 // Output Arguments:
@@ -678,7 +679,7 @@ void PlotPanel::GridRightClickEvent(wxGridEvent &event)
 // Description:		Handles double click event for the grid control.  If the
 //					click occurs on the color box, display the color dialog.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxGridEvent&
 //
 // Output Arguments:
@@ -729,7 +730,7 @@ void PlotPanel::GridDoubleClickEvent(wxGridEvent &event)
 //
 // Description:		Handles grid cell change events (for boolean controls).
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxGridEvent&
 //
 // Output Arguments:
@@ -761,7 +762,7 @@ void PlotPanel::GridLeftClickEvent(wxGridEvent &event)
 		optionsGrid->SetCellValue(row, event.GetCol(), _T("1"));
 
 	// If the only visible curves are FFTs, change the x-label
-	int i;
+/*	int i;
 	bool showFFTLabel(false);
 	for (i = 1; i < optionsGrid->GetRows(); i++)
 	{
@@ -776,8 +777,8 @@ void PlotPanel::GridLeftClickEvent(wxGridEvent &event)
 			}
 		}
 	}
-	// FIXME:  Carry-over from DataPlotter
-	/*if (showFFTLabel)
+	// FIXME:  This is carry-over from DataPlotter
+	if (showFFTLabel)
 		SetXDataLabel(FormatFFT);
 	else
 		SetXDataLabel(currentFileFormat);*/
@@ -799,7 +800,7 @@ void PlotPanel::GridLeftClickEvent(wxGridEvent &event)
 //
 // Description:		Handles grid cell change events (for text controls).
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxGridEvent&
 //
 // Output Arguments:
@@ -832,7 +833,7 @@ void PlotPanel::GridCellChangeEvent(wxGridEvent &event)
 //
 // Description:		Adds a user-defined math channel to the plot.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -856,7 +857,7 @@ void PlotPanel::ContextAddMathChannelEvent(wxCommandEvent& WXUNUSED(event))
 // Description:		Adds a curve showing the derivative of the selected grid
 //					row to the plot.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -885,7 +886,7 @@ void PlotPanel::ContextPlotDerivativeEvent(wxCommandEvent& WXUNUSED(event))
 // Description:		Adds a curve showing the integral of the selected grid
 //					row to the plot.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -914,7 +915,7 @@ void PlotPanel::ContextPlotIntegralEvent(wxCommandEvent& WXUNUSED(event))
 // Description:		Adds a curve showing the RMS of the selected grid
 //					row to the plot.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -943,7 +944,7 @@ void PlotPanel::ContextPlotRMSEvent(wxCommandEvent& WXUNUSED(event))
 // Description:		Adds a curve showing the FFT of the selected grid
 //					row to the plot.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -980,7 +981,7 @@ void PlotPanel::ContextPlotFFTEvent(wxCommandEvent& WXUNUSED(event))
 //
 // Description:		Adds a curve showing the filtered signal to the plot.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1035,7 +1036,7 @@ void PlotPanel::ContextFilterLowPassEvent(wxCommandEvent& WXUNUSED(event))
 //
 // Description:		Adds a curve showing the filtered signal to the plot.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1091,7 +1092,7 @@ void PlotPanel::ContextFilterHighPassEvent(wxCommandEvent& WXUNUSED(event))
 // Description:		Fits a curve to the dataset selected in the grid control.
 //					User is asked to specify the order of the fit.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1160,7 +1161,7 @@ void PlotPanel::ContextFitCurve(wxCommandEvent& WXUNUSED(event))
 //
 // Description:		Toggles gridlines for the entire plot on and off.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1188,7 +1189,7 @@ void PlotPanel::ContextToggleGridlines(wxCommandEvent& WXUNUSED(event))
 //
 // Description:		Autoscales the plot.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1213,7 +1214,7 @@ void PlotPanel::ContextAutoScale(wxCommandEvent& WXUNUSED(event))
 // Description:		Updates the values for the cursors and their differences
 //					in the options grid.
 //
-// Input Argurments:
+// Input Arguments:
 //		leftVisible		= const bool& indicating whether or not the left
 //						  cursor is visible
 //		rightVisible	= const bool& indicating whether or not the right
@@ -1320,7 +1321,7 @@ void PlotPanel::UpdateCursorValues(const bool &leftVisible, const bool &rightVis
 //					math expression.  If an expression is entered, it attempts
 //					to add the channel.
 //
-// Input Argurments:
+// Input Arguments:
 //		defaultInput	= wxString (optional)
 //
 // Output Arguments:
@@ -1350,7 +1351,7 @@ void PlotPanel::DisplayMathChannelDialog(wxString defaultInput)
 // Description:		Displays an input dialog that allows the user to set the
 //					range for an axis.
 //
-// Input Argurments:
+// Input Arguments:
 //		axis	= const PlotContext& specifying the axis which is to be resized
 //
 // Output Arguments:
@@ -1437,7 +1438,7 @@ void PlotPanel::DisplayAxisRangeDialog(const PlotContext &axis)
 //
 // Description:		Toggles gridlines for the bottom axis.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1460,7 +1461,7 @@ void PlotPanel::ContextToggleGridlinesBottom(wxCommandEvent& WXUNUSED(event))
 //
 // Description:		Auto-scales the bottom axis.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1483,7 +1484,7 @@ void PlotPanel::ContextAutoScaleBottom(wxCommandEvent& WXUNUSED(event))
 //
 // Description:		Dispalys a dialog box for setting the axis range.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1506,7 +1507,7 @@ void PlotPanel::ContextSetRangeBottom(wxCommandEvent& WXUNUSED(event))
 //
 // Description:		Toggles gridlines for the bottom axis.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1529,7 +1530,7 @@ void PlotPanel::ContextToggleGridlinesLeft(wxCommandEvent& WXUNUSED(event))
 //
 // Description:		Toggles gridlines for the bottom axis.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1552,7 +1553,7 @@ void PlotPanel::ContextAutoScaleLeft(wxCommandEvent& WXUNUSED(event))
 //
 // Description:		Dispalys a dialog box for setting the axis range.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1575,7 +1576,7 @@ void PlotPanel::ContextSetRangeLeft(wxCommandEvent& WXUNUSED(event))
 //
 // Description:		Toggles gridlines for the bottom axis.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1598,7 +1599,7 @@ void PlotPanel::ContextToggleGridlinesRight(wxCommandEvent& WXUNUSED(event))
 //
 // Description:		Toggles gridlines for the bottom axis.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1621,7 +1622,7 @@ void PlotPanel::ContextAutoScaleRight(wxCommandEvent& WXUNUSED(event))
 //
 // Description:		Dispalys a dialog box for setting the axis range.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1645,7 +1646,7 @@ void PlotPanel::ContextSetRangeRight(wxCommandEvent& WXUNUSED(event))
 // Description:		Displays a dialog allowing the user to specify the plot's
 //					background color.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:
@@ -1679,7 +1680,7 @@ void PlotPanel::ContextPlotBGColor(wxCommandEvent& WXUNUSED(event))
 // Description:		Dispalys a dialog box allowing the user to specify the
 //					gridline color.
 //
-// Input Argurments:
+// Input Arguments:
 //		event	= wxCommandEvent&
 //
 // Output Arguments:

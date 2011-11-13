@@ -76,7 +76,8 @@ GUI_CAR::GUI_CAR(MAIN_FRAME &_MainFrame, const Debugger &_debugger,
 	AppearanceOptions = new APPEARANCE_OPTIONS(MainFrame, *this, debugger);
 
 	// Create the 3D output window
-	renderer = new CAR_RENDERER(MainFrame, *this, debugger);
+	int args[] = {WX_GL_DOUBLEBUFFER, 0};
+	renderer = new CAR_RENDERER(MainFrame, *this, args, debugger);
 	notebookTab = reinterpret_cast<wxWindow*>(renderer);
 
 	// Get an index for this item and add it to the list in the MainFrame

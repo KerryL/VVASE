@@ -36,14 +36,11 @@ class RenderWindow : public wxGLCanvas
 {
 public:
 	// Constructor
-	RenderWindow(wxWindow &parent, wxWindowID id,
+	RenderWindow(wxWindow &parent, wxWindowID id, int args[],
 		const wxPoint& position, const wxSize& size, long style = 0);
 
 	// Destructor
 	virtual ~RenderWindow();
-
-	// The main render method - re-draws the scene
-    void Render();
 
 	// Sets up all of the open GL parameters
     void Initialize();
@@ -132,11 +129,14 @@ private:
 	// Window events
 	void OnPaint(wxPaintEvent& event);
     void OnSize(wxSizeEvent& event);
-    void OnEraseBackground(wxEraseEvent& event);
+//    void OnEraseBackground(wxEraseEvent& event);
 	void OnEnterWindow(wxMouseEvent &event);
 	// End event handlers-------------------------------------------------
+	
+	// The main render method - re-draws the scene
+    void Render();
 
-	// The type of ineraction to perform
+	// The type of interaction to perform
 	enum InteractionType
 	{
 		interactionDollyDrag,// zoom
@@ -145,7 +145,7 @@ private:
 		interactionRotate
 	};
 
-	// Perfoms the computations and transformations associated with the specified interaction
+	// Performs the computations and transformations associated with the specified interaction
 	void PerformInteraction(InteractionType interaction, wxMouseEvent &event);
 
 	// The interaction events (called from within the real event handlers)
@@ -177,7 +177,7 @@ protected:
 
 	// Flag indicating whether or not we need to re-initialize this object
 	bool modified;
-
+	
 	// The list of objects to create in this scene
 	ManagedList<Primitive> primitiveList;
 

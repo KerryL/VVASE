@@ -186,7 +186,7 @@ void GENETIC_ALGORITHM_PANEL::CreateControls(void)
 	// Selection drop down box
 	wxStaticText *SelectionLabel = new wxStaticText(this, wxID_ANY, _T("Car to Optimize"));
 	SelectedCar = new wxComboBox(this, IdSelectCar, wxEmptyString, wxDefaultPosition,
-		wxDefaultSize, NULL, wxCB_READONLY);
+		wxDefaultSize, 0, NULL, wxCB_READONLY);
 	UpperSizer->Add(SelectionLabel, 0, labelSizerFlags);
 	UpperSizer->Add(SelectedCar, 0, inputSizerFlags);
 

@@ -2,6 +2,44 @@
 <configurationDescriptor version="79">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <df name="CarDesigner" root=".">
+      <df name=".lib">
+      </df>
+      <df name=".obj">
+        <df name="src">
+          <df name="3dcar">
+          </df>
+          <df name="application">
+          </df>
+          <df name="environment">
+          </df>
+          <df name="gui">
+            <df name="components">
+              <df name="editPanel">
+                <df name="guiCar">
+                </df>
+                <df name="iteration">
+                </df>
+              </df>
+            </df>
+            <df name="dialogs">
+            </df>
+            <df name="renderer">
+            </df>
+          </df>
+          <df name="optimization">
+          </df>
+          <df name="physics">
+          </df>
+          <df name="primitives">
+          </df>
+          <df name="signals">
+            <df name="filters">
+            </df>
+          </df>
+          <df name="threads">
+          </df>
+        </df>
+      </df>
       <df name="bin">
       </df>
       <df name="CarDesigner">
@@ -66,6 +104,7 @@
             <in>iteration.h</in>
             <in>plotObject.h</in>
             <in>plotPanel.h</in>
+            <in>superGrid.h</in>
             <in>undoRedoStack.h</in>
           </df>
         </df>
@@ -133,6 +172,7 @@
             <in>iteration.cpp</in>
             <in>plotObject.cpp</in>
             <in>plotPanel.cpp</in>
+            <in>superGrid.cpp</in>
             <in>undoRedoStack.cpp</in>
           </df>
         </df>
@@ -380,119 +420,70 @@
           <executablePath>bin/VVASE</executablePath>
           <ccTool>
             <incDir>
-              <pElem>CarDesigner</pElem>
-              <pElem>CarDesigner/include</pElem>
+              <pElem>/usr/local/lib/wx/include/gtk2-ansi-debug-2.8</pElem>
+              <pElem>/usr/local/include/wx-2.8</pElem>
+              <pElem>/usr/include/freetype2</pElem>
+              <pElem>common/include</pElem>
             </incDir>
             <preprocessorList>
+              <Elem>_FILE_OFFSET_BITS=64</Elem>
+              <Elem>_LARGE_FILES</Elem>
               <Elem>_VVASE_64_BIT_</Elem>
+              <Elem>__WXDEBUG__</Elem>
+              <Elem>__WXGTK__</Elem>
               <Elem>wxUSE_GUI=1</Elem>
             </preprocessorList>
           </ccTool>
         </makeTool>
       </makefileType>
-      <item path="common/include/vRenderer/primitives/axis.h"
-            ex="true"
-            tool="3"
-            flavor="0">
-      </item>
-      <item path="common/include/vRenderer/primitives/cone.h"
-            ex="true"
-            tool="3"
-            flavor="0">
-      </item>
-      <item path="common/include/vRenderer/primitives/cylinder.h"
-            ex="true"
-            tool="3"
-            flavor="0">
-      </item>
-      <item path="common/include/vRenderer/primitives/disk.h"
-            ex="true"
-            tool="3"
-            flavor="0">
-      </item>
-      <item path="common/include/vRenderer/primitives/primitive.h"
-            ex="true"
-            tool="3"
-            flavor="0">
-      </item>
-      <item path="common/include/vRenderer/primitives/quadrilateral.h"
-            ex="true"
-            tool="3"
-            flavor="0">
-      </item>
-      <item path="common/include/vRenderer/primitives/sphere.h"
-            ex="true"
-            tool="3"
-            flavor="0">
-      </item>
-      <item path="common/include/vRenderer/primitives/triangle.h"
-            ex="true"
-            tool="3"
-            flavor="0">
-      </item>
-      <item path="common/include/vUtilities/wxRelatedUtilities.h"
-            ex="true"
-            tool="3"
-            flavor="0">
-      </item>
-      <folder path="CarDesigner/CarDesigner/src/application">
+      <folder path="CarDesigner/CarDesigner">
         <ccTool>
           <incDir>
-            <pElem>../../common/include</pElem>
+            <pElem>CarDesigner</pElem>
+            <pElem>CarDesigner/include</pElem>
           </incDir>
         </ccTool>
       </folder>
-      <folder path="CarDesigner/CarDesigner/src/gui">
+      <folder path="CarDesigner/vCar">
         <ccTool>
           <incDir>
-            <pElem>/usr/local/lib/wx/include/gtk2-ansi-debug-2.8</pElem>
-            <pElem>/usr/local/include/wx-2.8</pElem>
-            <pElem>/usr/include/freetype2</pElem>
-            <pElem>common/include</pElem>
+            <pElem>vCar</pElem>
+            <pElem>vCar/include</pElem>
           </incDir>
-          <preprocessorList>
-            <Elem>_FILE_OFFSET_BITS=64</Elem>
-            <Elem>_LARGE_FILES</Elem>
-            <Elem>__WXDEBUG__</Elem>
-            <Elem>__WXGTK__</Elem>
-          </preprocessorList>
+        </ccTool>
+      </folder>
+      <folder path="CarDesigner/vMath">
+        <ccTool>
+          <incDir>
+            <pElem>vMath</pElem>
+            <pElem>vMath/include</pElem>
+          </incDir>
+        </ccTool>
+      </folder>
+      <folder path="CarDesigner/vRenderer">
+        <ccTool>
+          <incDir>
+            <pElem>vRenderer/include</pElem>
+            <pElem>vRenderer</pElem>
+          </incDir>
+        </ccTool>
+      </folder>
+      <folder path="CarDesigner/vSolver">
+        <ccTool>
+          <incDir>
+            <pElem>vSolver</pElem>
+            <pElem>vSolver/include</pElem>
+          </incDir>
         </ccTool>
       </folder>
       <folder path="CarDesigner/vUtilities">
         <ccTool>
           <incDir>
-            <pElem>../../common/include</pElem>
+            <pElem>vUtilities</pElem>
+            <pElem>vUtilities/include</pElem>
           </incDir>
         </ccTool>
       </folder>
-      <item path="vRenderer/src/primitives/axis.cpp" ex="true" tool="1" flavor="0">
-      </item>
-      <item path="vRenderer/src/primitives/cone.cpp" ex="true" tool="1" flavor="0">
-      </item>
-      <item path="vRenderer/src/primitives/cylinder.cpp"
-            ex="true"
-            tool="1"
-            flavor="0">
-      </item>
-      <item path="vRenderer/src/primitives/disk.cpp" ex="true" tool="1" flavor="0">
-      </item>
-      <item path="vRenderer/src/primitives/primitive.cpp"
-            ex="true"
-            tool="1"
-            flavor="0">
-      </item>
-      <item path="vRenderer/src/primitives/quadrilateral.cpp"
-            ex="true"
-            tool="1"
-            flavor="0">
-      </item>
-      <item path="vRenderer/src/primitives/sphere.cpp" ex="true" tool="1" flavor="0">
-      </item>
-      <item path="vRenderer/src/primitives/triangle.cpp"
-            ex="true"
-            tool="1"
-            flavor="0">
-      </item>
     </conf>
   </confs>
 </configurationDescriptor>

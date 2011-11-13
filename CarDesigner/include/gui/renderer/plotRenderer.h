@@ -35,7 +35,7 @@ class PlotRenderer : public RenderWindow
 {
 public:
 	// Constructor
-	PlotRenderer(PlotPanel &_parent, wxWindowID id, const Debugger &_debugger);
+	PlotRenderer(PlotPanel &_parent, wxWindowID id, int args[], const Debugger &_debugger);
 
 	// Destructor
 	~PlotRenderer();

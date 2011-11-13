@@ -34,6 +34,7 @@
 //
 // Input Arguments:
 //		_parent		= PlotPanel& reference to this object's parent window
+//		args		= int[] NOTE: Must contain WX_GL_DOUBLEBUFFER at minimum (BUG somewhere)
 //		id			= wxWindowID
 //		_debugger	= const Debugger&
 //
@@ -44,9 +45,10 @@
 //		None
 //
 //==========================================================================
-PlotRenderer::PlotRenderer(PlotPanel &_parent, wxWindowID id, const Debugger &_debugger)
-							 : RenderWindow(_parent, id, wxDefaultPosition,
-							 wxDefaultSize), debugger(_debugger), parent(_parent)
+PlotRenderer::PlotRenderer(PlotPanel &_parent, wxWindowID id, int args[],
+						   const Debugger &_debugger)
+						   : RenderWindow(_parent, id, args, wxDefaultPosition,
+						   wxDefaultSize), debugger(_debugger), parent(_parent)
 {
 	// Create the actors
 	CreateActors();
@@ -133,8 +135,6 @@ void PlotRenderer::UpdateDisplay(void)
 {
 	// Update the plot
 	plot->Update();
-
-	Render();
 
 	return;
 }

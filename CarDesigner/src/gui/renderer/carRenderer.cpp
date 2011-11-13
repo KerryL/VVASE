@@ -65,6 +65,7 @@
 // Input Arguments:
 //		_MainFrame	= MAIN_FRAME& reference to the owner of this object
 //		_Car		= GUI_CAR& reference to the car that we are to render
+//		args		= int[] NOTE: Must contain WX_GL_DOUBLEBUFFER at minimum (BUG somewhere)
 //		_debugger	= const Debugger&, reference to debug printing utility
 //
 // Output Arguments:
@@ -74,8 +75,9 @@
 //		None
 //
 //==========================================================================
-CAR_RENDERER::CAR_RENDERER(MAIN_FRAME &_MainFrame, GUI_CAR &_Car, const Debugger &_debugger)
-						   : RenderWindow(_MainFrame, wxID_ANY, wxDefaultPosition,
+CAR_RENDERER::CAR_RENDERER(MAIN_FRAME &_MainFrame, GUI_CAR &_Car, int args[],
+						   const Debugger &_debugger)
+						   : RenderWindow(_MainFrame, wxID_ANY, args, wxDefaultPosition,
 						   wxDefaultSize, wxWANTS_CHARS | wxNO_FULL_REPAINT_ON_RESIZE),
 						   debugger(_debugger), MainFrame(_MainFrame),
 						   AppearanceOptions(_Car.GetAppearanceOptions()),
@@ -225,7 +227,6 @@ void CAR_RENDERER::UpdateDisplay(const KINEMATIC_OUTPUTS &Outputs)
 	// Render the image.  We need to reset the frustum every time we do this just in case
 	// the user zooms out very far, etc.
 	AutoSetFrustum();
-	Render();
 
 	return;
 }
@@ -291,7 +292,7 @@ void CAR_RENDERER::UpdateCarDisplay(void)
 		AppearanceOptions.GetColor(APPEARANCE_OPTIONS::ColorGroundPlane),
 		AppearanceOptions.GetVisibility(APPEARANCE_OPTIONS::VisibilityGroundPlane));
 
-	// Copy the tire paramters from the reference car
+	// Copy the tire parameters from the reference car
 	DisplayCar.Tires->RightFront->Width = ReferenceCar.Tires->RightFront->Width;
 	DisplayCar.Tires->LeftFront->Width = ReferenceCar.Tires->LeftFront->Width;
 	DisplayCar.Tires->RightRear->Width = ReferenceCar.Tires->RightRear->Width;
@@ -997,7 +998,7 @@ void CAR_RENDERER::CreateActors(void)
 // Function:		SetHelperOrbPosition
 //
 // Description:		Updates the position of the helper orb in the scene.
-//					This takes five arguements, of which only one is (should
+//					This takes five arguments, of which only one is (should
 //					be) valid.
 //
 // Input Arguments:

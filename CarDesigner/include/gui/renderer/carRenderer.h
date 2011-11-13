@@ -53,7 +53,7 @@ class CAR_RENDERER : public RenderWindow
 {
 public:
 	// Constructor
-	CAR_RENDERER(MAIN_FRAME &_MainFrame, GUI_CAR &_Car, const Debugger &_debugger);
+	CAR_RENDERER(MAIN_FRAME &_MainFrame, GUI_CAR &_Car, int args[], const Debugger &_debugger);
 
 	// Destructor
 	~CAR_RENDERER();
@@ -92,7 +92,7 @@ private:
 	const CAR &ReferenceCar;// Required for correct representation of the tires - see UpdateDisplay()
 
 	// The actors that we use to represent the car
-	// The orign marker and ground plane
+	// The origin marker and ground plane
 	ORIGIN *Origin;
 	PLANE *GroundPlane;
 
