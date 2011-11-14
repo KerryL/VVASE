@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  editIterationOptionsPanel.cpp
+// File:  editIterationPlotsPanel.cpp
 // Created:  11/14/2010
 // Author:  K. Loux
 // Description:  Contains the class definition for the EDIT_ITERATION_PLOTS_PANEL

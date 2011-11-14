@@ -3,7 +3,7 @@
                          Copyright Kerry R. Loux 2008-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://w_classww.wxwidgets.org/)
+                             (http://www.wxwidgets.org/)
 
 ===================================================================================*/
 

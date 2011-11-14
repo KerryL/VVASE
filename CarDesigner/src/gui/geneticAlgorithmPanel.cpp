@@ -48,7 +48,7 @@
 //==========================================================================
 GENETIC_ALGORITHM_PANEL::GENETIC_ALGORITHM_PANEL(MAIN_FRAME &_MainFrame,
 												 GENETIC_OPTIMIZATION &_Optimization)
-												 : wxPanel(&_MainFrame),
+												 : wxScrolledWindow(&_MainFrame),
 												 Converter(_MainFrame.GetConverter()),
 												 Optimization(_Optimization), MainFrame(_MainFrame)
 {
@@ -128,6 +128,9 @@ END_EVENT_TABLE();
 //==========================================================================
 void GENETIC_ALGORITHM_PANEL::CreateControls(void)
 {
+	// Enable scrolling
+	SetScrollRate(1, 1);
+
 	// Top-level sizer
 	wxBoxSizer *TopSizer = new wxBoxSizer(wxVERTICAL);
 
@@ -191,8 +194,8 @@ void GENETIC_ALGORITHM_PANEL::CreateControls(void)
 	UpperSizer->Add(SelectedCar, 0, inputSizerFlags);
 
 	// Gene list
-	wxBoxSizer *GeneSizer = new wxBoxSizer(wxHORIZONTAL);
-	MainSizer->Add(GeneSizer, 1, wxGROW | wxALL, 5);
+	wxFlexGridSizer *geneGoalSizer = new wxFlexGridSizer(2, 3, 3);
+	MainSizer->Add(geneGoalSizer, 1, wxGROW | wxALL, 5);
 	GeneList = new wxGrid(this, IdGeneList);
 	GeneList->CreateGrid(1, 6, wxGrid::wxGridSelectRows);
 
@@ -215,8 +218,7 @@ void GENETIC_ALGORITHM_PANEL::CreateControls(void)
 	GeneList->SetColLabelSize(GeneList->GetRowSize(0));
 
 	// Add the grid to the sizer
-	GeneSizer->Add(GeneList, 1, wxALIGN_CENTER_HORIZONTAL | wxGROW
-		| wxALL | wxALIGN_TOP, 5);
+	geneGoalSizer->Add(GeneList, 1, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALIGN_TOP);
 
 	// Set the column headings
 	GeneList->SetColLabelValue(0, _T("Hardpoint"));
@@ -248,7 +250,7 @@ void GENETIC_ALGORITHM_PANEL::CreateControls(void)
 
 	// Add/Edit/Remove Gene buttons
 	wxBoxSizer *GeneButtonSizer = new wxBoxSizer(wxVERTICAL);
-	GeneSizer->Add(GeneButtonSizer);
+	geneGoalSizer->Add(GeneButtonSizer, 0, wxALIGN_LEFT);
 	AddGene = new wxButton(this, IdAddGene, _T("Add Gene"));
 	EditGene = new wxButton(this, IdEditGene, _T("Edit Gene"));
 	RemoveGene = new wxButton(this, IdRemoveGene, _T("Remove Gene"));
@@ -257,8 +259,6 @@ void GENETIC_ALGORITHM_PANEL::CreateControls(void)
 	GeneButtonSizer->Add(RemoveGene, 0, wxEXPAND);
 
 	// Goal list
-	wxBoxSizer *GoalSizer = new wxBoxSizer(wxHORIZONTAL);
-	MainSizer->Add(GoalSizer, 1, wxGROW | wxALL, 5);
 	GoalList = new wxGrid(this, IdGoalList);
 	GoalList->CreateGrid(1, 6, wxGrid::wxGridSelectRows);
 
@@ -280,8 +280,7 @@ void GENETIC_ALGORITHM_PANEL::CreateControls(void)
 	GoalList->SetColLabelSize(GoalList->GetRowSize(0));
 
 	// Add the grid to the sizer
-	GoalSizer->Add(GoalList, 1, wxALIGN_CENTER_HORIZONTAL | wxGROW
-		| wxALL | wxALIGN_TOP, 5);
+	geneGoalSizer->Add(GoalList, 0, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALIGN_TOP);
 
 	// Set the column headings
 	GoalList->SetColLabelValue(0, _T("Output"));
@@ -314,13 +313,16 @@ void GENETIC_ALGORITHM_PANEL::CreateControls(void)
 
 	// Add/Edit/Remove Goal buttons
 	wxBoxSizer *GoalButtonSizer = new wxBoxSizer(wxVERTICAL);
-	GoalSizer->Add(GoalButtonSizer);
+	geneGoalSizer->Add(GoalButtonSizer, 0, wxALIGN_LEFT);
 	AddGoal = new wxButton(this, IdAddGoal, _T("Add Goal"));
 	EditGoal = new wxButton(this, IdEditGoal, _T("Edit Goal"));
 	RemoveGoal = new wxButton(this, IdRemoveGoal, _T("Remove Goal"));
 	GoalButtonSizer->Add(AddGoal, 0, wxEXPAND);
 	GoalButtonSizer->Add(EditGoal, 0, wxEXPAND);
 	GoalButtonSizer->Add(RemoveGoal, 0, wxEXPAND);
+
+	geneGoalSizer->AddGrowableRow(0, 1);
+	geneGoalSizer->AddGrowableRow(1, 1);
 
 	// Progress bars
 	wxFlexGridSizer *ProgressSizer = new wxFlexGridSizer(2, 2, 5);

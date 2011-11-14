@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  editIterationOptionsPanel.cpp
+// File:  editIterationRangePanel.cpp
 // Created:  11/14/2010
 // Author:  K. Loux
 // Description:  Contains the class definition for the EDIT_ITERATION_RANGE_PANEL
@@ -46,7 +46,7 @@
 EDIT_ITERATION_RANGE_PANEL::EDIT_ITERATION_RANGE_PANEL(EDIT_ITERATION_NOTEBOOK &_Parent,
 													   wxWindowID id, const wxPoint& pos,
 													   const wxSize& size, const Debugger &_debugger) :
-													   wxPanel(&_Parent, id, pos, size), debugger(_debugger),
+													   wxScrolledWindow(&_Parent, id, pos, size), debugger(_debugger),
 													   Converter(_Parent.GetParent().GetMainFrame().GetConverter()),
 													   Parent(_Parent)
 {
@@ -186,99 +186,92 @@ void EDIT_ITERATION_RANGE_PANEL::UpdateInformation(ITERATION *_CurrentIteration)
 //==========================================================================
 void EDIT_ITERATION_RANGE_PANEL::CreateControls()
 {
+	// Enable scrolling
+	SetScrollRate(1, 1);
+
 	// Top-level sizer
 	wxBoxSizer *TopSizer = new wxBoxSizer(wxVERTICAL);
 
 	// Second sizer gives more space around the controls
-	wxBoxSizer *MainSizer = new wxBoxSizer(wxVERTICAL);
-	TopSizer->Add(MainSizer, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
-
-	// Add a horizontal spacer for the text across the top
-	wxBoxSizer *TopCaptionSizer = new wxBoxSizer(wxHORIZONTAL);
-	MainSizer->Add(TopCaptionSizer, 0, wxALIGN_TOP);
-
-	// The column widths
-	int LabelColumnWidth = 60;
-	int InputColumnWidth = 50;
+	wxFlexGridSizer *MainSizer = new wxFlexGridSizer(4, 5, 5);
+	TopSizer->Add(MainSizer, 0, wxEXPAND | wxALL, 5);
 
 	// Add the text to this sizer
-	wxStaticText *TextStart = new wxStaticText(this, wxID_STATIC, _T("Start"),
-		wxDefaultPosition, wxSize(InputColumnWidth, -1), 0);
-	wxStaticText *TextEnd = new wxStaticText(this, wxID_STATIC, _T("End"),
-		wxDefaultPosition, wxSize(InputColumnWidth, -1), 0);
-	TopCaptionSizer->Add(LabelColumnWidth, -1, 0, wxALL, 5);
-	TopCaptionSizer->Add(TextStart, 0, wxALL, 5);
-	TopCaptionSizer->Add(TextEnd, 0, wxALL, 5);
-
-	// Create a sizer for each of the inputs
-	wxBoxSizer *PitchSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxBoxSizer *RollSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxBoxSizer *HeaveSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxBoxSizer *SteerSizer = new wxBoxSizer(wxHORIZONTAL);
+	wxStaticText *TextStart = new wxStaticText(this, wxID_STATIC, _T("Start"));
+	wxStaticText *TextEnd = new wxStaticText(this, wxID_STATIC, _T("End"));
+	MainSizer->AddSpacer(-1);
+	MainSizer->Add(TextStart, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL);
+	MainSizer->Add(TextEnd, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL);
+	MainSizer->AddSpacer(-1);
 
 	// Add the static text and text controls to these sizers
 	// Pitch
-	wxStaticText *PitchLabelText = new wxStaticText(this, wxID_STATIC, _T("Pitch"),
-		wxDefaultPosition, wxSize(LabelColumnWidth, -1), 0);
-	StartPitchInput = new wxTextCtrl(this, RangeTextBox, wxEmptyString, wxDefaultPosition, wxSize(InputColumnWidth, -1), 0);
-	EndPitchInput = new wxTextCtrl(this, RangeTextBox, wxEmptyString, wxDefaultPosition, wxSize(InputColumnWidth, -1), 0);
+	int textBoxWidth;
+	GetTextExtent(Converter.FormatNumber(-888.0), &textBoxWidth, NULL);
+
+	wxStaticText *PitchLabelText = new wxStaticText(this, wxID_STATIC, _T("Pitch"));
+	StartPitchInput = new wxTextCtrl(this, RangeTextBox);
+	EndPitchInput = new wxTextCtrl(this, RangeTextBox);
 	wxStaticText *PitchUnitsText = new wxStaticText(this, wxID_STATIC,
-		Converter.GetUnitType(Convert::UnitTypeAngle), wxDefaultPosition, wxDefaultSize, 0);
-	PitchSizer->Add(PitchLabelText, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	PitchSizer->Add(StartPitchInput, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	PitchSizer->Add(EndPitchInput, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	PitchSizer->Add(PitchUnitsText, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+		Converter.GetUnitType(Convert::UnitTypeAngle));
+	MainSizer->Add(PitchLabelText, 0, wxALIGN_CENTER_VERTICAL);
+	MainSizer->Add(StartPitchInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
+	MainSizer->Add(EndPitchInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
+	MainSizer->Add(PitchUnitsText, 0, wxALIGN_CENTER_VERTICAL);
 
 	// Roll
-	wxStaticText *RollLabelText = new wxStaticText(this, wxID_STATIC, _T("Roll"),
-		wxDefaultPosition, wxSize(LabelColumnWidth, -1), 0);
-	StartRollInput = new wxTextCtrl(this, RangeTextBox, wxEmptyString, wxDefaultPosition, wxSize(InputColumnWidth, -1), 0);
-	EndRollInput = new wxTextCtrl(this, RangeTextBox, wxEmptyString, wxDefaultPosition, wxSize(InputColumnWidth, -1), 0);
+	wxStaticText *RollLabelText = new wxStaticText(this, wxID_STATIC, _T("Roll"));
+	StartRollInput = new wxTextCtrl(this, RangeTextBox);
+	EndRollInput = new wxTextCtrl(this, RangeTextBox);
 	wxStaticText *RollUnitsText = new wxStaticText(this, wxID_STATIC,
-		Converter.GetUnitType(Convert::UnitTypeAngle), wxDefaultPosition, wxDefaultSize, 0);
-	RollSizer->Add(RollLabelText, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	RollSizer->Add(StartRollInput, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	RollSizer->Add(EndRollInput, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	RollSizer->Add(RollUnitsText, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+		Converter.GetUnitType(Convert::UnitTypeAngle));
+	MainSizer->Add(RollLabelText, 0, wxALIGN_CENTER_VERTICAL);
+	MainSizer->Add(StartRollInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
+	MainSizer->Add(EndRollInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
+	MainSizer->Add(RollUnitsText, 0, wxALIGN_CENTER_VERTICAL);
 
 	// Heave
-	wxStaticText *HeaveLabelText = new wxStaticText(this, wxID_STATIC, _T("Heave"),
-		wxDefaultPosition, wxSize(LabelColumnWidth, -1), 0);
-	StartHeaveInput = new wxTextCtrl(this, RangeTextBox, wxEmptyString, wxDefaultPosition, wxSize(InputColumnWidth, -1), 0);
-	EndHeaveInput = new wxTextCtrl(this, RangeTextBox, wxEmptyString, wxDefaultPosition, wxSize(InputColumnWidth, -1), 0);
+	wxStaticText *HeaveLabelText = new wxStaticText(this, wxID_STATIC, _T("Heave"));
+	StartHeaveInput = new wxTextCtrl(this, RangeTextBox);
+	EndHeaveInput = new wxTextCtrl(this, RangeTextBox);
 	wxStaticText *HeaveUnitsText = new wxStaticText(this, wxID_STATIC,
-		Converter.GetUnitType(Convert::UnitTypeDistance), wxDefaultPosition, wxDefaultSize, 0);
-	HeaveSizer->Add(HeaveLabelText, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	HeaveSizer->Add(StartHeaveInput, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	HeaveSizer->Add(EndHeaveInput, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	HeaveSizer->Add(HeaveUnitsText, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+		Converter.GetUnitType(Convert::UnitTypeDistance));
+	MainSizer->Add(HeaveLabelText, 0, wxALIGN_CENTER_VERTICAL);
+	MainSizer->Add(StartHeaveInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
+	MainSizer->Add(EndHeaveInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
+	MainSizer->Add(HeaveUnitsText, 0, wxALIGN_CENTER_VERTICAL);
 
 	// Steer
-	wxStaticText *SteerLabelText = new wxStaticText(this, wxID_STATIC, _T("Rack Travel"),
-		wxDefaultPosition, wxSize(LabelColumnWidth, -1), 0);
-	StartSteerInput = new wxTextCtrl(this, RangeTextBox, wxEmptyString, wxDefaultPosition, wxSize(InputColumnWidth, -1), 0);
-	EndSteerInput = new wxTextCtrl(this, RangeTextBox, wxEmptyString, wxDefaultPosition, wxSize(InputColumnWidth, -1), 0);
+	wxStaticText *SteerLabelText = new wxStaticText(this, wxID_STATIC, _T("Rack Travel"));
+	StartSteerInput = new wxTextCtrl(this, RangeTextBox);
+	EndSteerInput = new wxTextCtrl(this, RangeTextBox);
 	wxStaticText *SteerUnitsText = new wxStaticText(this, wxID_STATIC,
-		Converter.GetUnitType(Convert::UnitTypeDistance), wxDefaultPosition, wxDefaultSize, 0);
-	SteerSizer->Add(SteerLabelText, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	SteerSizer->Add(StartSteerInput, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	SteerSizer->Add(EndSteerInput, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	SteerSizer->Add(SteerUnitsText, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-
-	// Add the sizers to the MainSizer
-	MainSizer->Add(PitchSizer, 0, wxALIGN_TOP);
-	MainSizer->Add(RollSizer, 0, wxALIGN_TOP);
-	MainSizer->Add(HeaveSizer, 0, wxALIGN_TOP);
-	MainSizer->Add(SteerSizer, 0, wxALIGN_TOP);
+		Converter.GetUnitType(Convert::UnitTypeDistance));
+	MainSizer->Add(SteerLabelText, 0, wxALIGN_CENTER_VERTICAL);
+	MainSizer->Add(StartSteerInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
+	MainSizer->Add(EndSteerInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
+	MainSizer->Add(SteerUnitsText, 0, wxALIGN_CENTER_VERTICAL);
 
 	// Add a sizer for the number of points input
-	wxBoxSizer *NumberOfPointsSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText *NumberOfPointsLabel = new wxStaticText(this, wxID_STATIC, _T("Number of points"),
-		wxDefaultPosition, wxDefaultSize, 0);
-	NumberOfPointsInput = new wxTextCtrl(this, RangeTextBox, wxEmptyString, wxDefaultPosition, wxSize(InputColumnWidth, -1), 0);
-	NumberOfPointsSizer->Add(NumberOfPointsLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	NumberOfPointsSizer->Add(NumberOfPointsInput, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	MainSizer->Add(NumberOfPointsSizer, 0, wxALIGN_TOP);
+	wxStaticText *NumberOfPointsLabel = new wxStaticText(this, wxID_STATIC, _T("Number of points"));
+	NumberOfPointsInput = new wxTextCtrl(this, RangeTextBox);
+	MainSizer->Add(NumberOfPointsLabel, 0, wxALIGN_CENTER_VERTICAL);
+	MainSizer->Add(NumberOfPointsInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
+
+	// Set minimum widths for text controls
+	StartPitchInput->SetMinSize(wxSize(textBoxWidth, -1));
+	StartRollInput->SetMinSize(wxSize(textBoxWidth, -1));
+	StartHeaveInput->SetMinSize(wxSize(textBoxWidth, -1));
+	StartSteerInput->SetMinSize(wxSize(textBoxWidth, -1));
+	EndPitchInput->SetMinSize(wxSize(textBoxWidth, -1));
+	EndRollInput->SetMinSize(wxSize(textBoxWidth, -1));
+	EndHeaveInput->SetMinSize(wxSize(textBoxWidth, -1));
+	EndSteerInput->SetMinSize(wxSize(textBoxWidth, -1));
+	NumberOfPointsInput->SetMinSize(wxSize(textBoxWidth, -1));
+
+	// Make the middle two columns the same width
+	MainSizer->AddGrowableCol(1, 1);
+	MainSizer->AddGrowableCol(2, 1);
 
 	// Assign the top level sizer to the panel
 	SetSizer(TopSizer);

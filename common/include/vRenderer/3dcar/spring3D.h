@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  spring3d.h
+// File:  spring3D.h
 // Created:  1/5/2009
 // Author:  K. Loux
 // Description:  Contains class declaration for the SPRING3D class.

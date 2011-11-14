@@ -22,11 +22,13 @@
 #include "vCar/suspension.h"
 #include "gui/renderer/carRenderer.h"
 #include "gui/guiCar.h"
+#include "gui/superGrid.h"
 #include "gui/components/mainFrame.h"
 #include "gui/components/editPanel/editPanel.h"
 #include "gui/components/editPanel/guiCar/editSuspensionPanel.h"
 #include "gui/components/editPanel/guiCar/editSuspensionNotebook.h"
 #include "vUtilities/convert.h"
+#include "vUtilities/wxRelatedUtilities.h"
 #include "vMath/vector.h"
 
 //==========================================================================
@@ -53,7 +55,7 @@
 EDIT_SUSPENSION_PANEL::EDIT_SUSPENSION_PANEL(EDIT_SUSPENSION_NOTEBOOK &_Parent, wxWindowID id,
 											 const wxPoint& pos, const wxSize& size,
 											 const Debugger &_debugger) :
-											 wxPanel(&_Parent, id, pos, size),
+											 wxScrolledWindow(&_Parent, id, pos, size),
 											 debugger(_debugger),
 											 Converter(_Parent.GetParent().GetMainFrame().GetConverter()),
 											 Parent(_Parent)
@@ -240,8 +242,16 @@ void EDIT_SUSPENSION_PANEL::UpdateInformation(SUSPENSION *_CurrentSuspension)
 		Hardpoints->SetCellValue(i + 1, 3, Converter.FormatNumber(Point.z));
 	}
 
+	// Adjust the height of the grid based on the number of rows
+	Hardpoints->FitHeight();
+
 	// End batch edit of the grid
 	Hardpoints->EndBatch();
+
+	// Resize the sizers in case hardpoint rows were hidden or shown
+	Layout();
+
+	// FIXME:  Need way to turn grid scrollbars off
 
 	return;
 }
@@ -264,19 +274,18 @@ void EDIT_SUSPENSION_PANEL::UpdateInformation(SUSPENSION *_CurrentSuspension)
 //==========================================================================
 void EDIT_SUSPENSION_PANEL::CreateControls()
 {
+	// Enable scrolling
+	SetScrollRate(1, 1);
+
 	// Top-level sizer
 	wxBoxSizer *TopSizer = new wxBoxSizer(wxVERTICAL);
 
 	// Second sizer gives more space around the controls
-	wxBoxSizer *MainSizer = new wxBoxSizer(wxVERTICAL);
+	wxFlexGridSizer *MainSizer = new wxFlexGridSizer(1, 2, 2);
 	TopSizer->Add(MainSizer, 1, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALL, 5);
 
-	// The column widths
-	int LabelColumnWidth = 140;
-	int InputColumnWidth = 45;
-
 	// Create the grid for the hard point entry
-	Hardpoints = new wxGrid(this, wxID_ANY);
+	Hardpoints = new SuperGrid(this, wxID_ANY);
 	Hardpoints->CreateGrid(SUSPENSION::NumberOfHardpoints + 1, 4, wxGrid::wxGridSelectRows);
 
 	// Begin a batch edit of the grid
@@ -302,12 +311,6 @@ void EDIT_SUSPENSION_PANEL::CreateControls()
 		Hardpoints->SetCellValue(i + 1, 0, SUSPENSION::GetHardpointName((SUSPENSION::HARDPOINTS)i));
 	}
 
-	// Set the column widths
-	Hardpoints->SetColumnWidth(0, LabelColumnWidth);
-	Hardpoints->SetColumnWidth(1, InputColumnWidth);
-	Hardpoints->SetColumnWidth(2, InputColumnWidth);
-	Hardpoints->SetColumnWidth(3, InputColumnWidth);
-
 	// Hide the label column and set the size for the label row
 	Hardpoints->SetRowLabelSize(0);
 	Hardpoints->SetColLabelSize(Hardpoints->GetRowSize(0));
@@ -316,7 +319,8 @@ void EDIT_SUSPENSION_PANEL::CreateControls()
 	Hardpoints->SetRowMinimalAcceptableHeight(0);
 
 	// Add the grid to the sizer
-	MainSizer->Add(Hardpoints, 1, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALL | wxALIGN_TOP, 5);
+	MainSizer->Add(Hardpoints, 0, wxALIGN_TOP | wxEXPAND);
+	MainSizer->AddGrowableCol(0);
 
 	// Set the column headings
 	Hardpoints->SetColLabelValue(0, _T("Hardpoint"));
@@ -329,6 +333,16 @@ void EDIT_SUSPENSION_PANEL::CreateControls()
 		// Center the contents
 		Hardpoints->SetCellAlignment(0, i, wxALIGN_CENTER, wxALIGN_TOP);
 
+	// Size the columns
+	// The X, Y, and Z columns should be big enough to fit 80.0 as formatted
+	// by the converter.  First column is stretchable
+	Hardpoints->SetCellValue(3, 3, Converter.FormatNumber(80.0));
+	Hardpoints->AutoSizeColumn(3);
+	Hardpoints->SetColumnWidth(1, Hardpoints->GetColSize(3));
+	Hardpoints->SetColumnWidth(2, Hardpoints->GetColSize(3));
+	// The value we just put in cell (3,3) will get overwritten with a call to UpdateInformation()
+	Hardpoints->AutoStretchColumn(0);
+
 	// Don't let the user move or re-size the rows or move the columns
 	Hardpoints->EnableDragColMove(false);
 	Hardpoints->EnableDragColSize(true);
@@ -338,9 +352,13 @@ void EDIT_SUSPENSION_PANEL::CreateControls()
 	// End the batch mode edit and re-paint the control
 	Hardpoints->EndBatch();
 
-	// Re-size the columns
-	LabelColumnWidth = 100;
-	InputColumnWidth = 120;
+// When setting the control width, we need to account for the width of the
+	// "expand" button, etc., so we specify that here
+#ifdef __WXGTK__
+	unsigned int additionalWidth = 40;
+#else
+	unsigned int additionalWidth = 30;
+#endif
 
 	// Create the combo-boxes
 	// Front bar style
@@ -349,47 +367,38 @@ void EDIT_SUSPENSION_PANEL::CreateControls()
 	for (i = 0; i < SUSPENSION::NumberOfBarStyles; i++)
 		Choices.Add(SUSPENSION::GetBarStyleName((SUSPENSION::BAR_STYLE)i));
 
-	wxBoxSizer *FrontBarSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText *FrontBarLabel = new wxStaticText(this, wxID_ANY,
-		_T("Front Sway Bar Style"), wxDefaultPosition, wxSize(LabelColumnWidth, -1));
+	wxFlexGridSizer *comboSizer = new wxFlexGridSizer(2, 3, 3);
+	comboSizer->SetFlexibleDirection(wxHORIZONTAL);
+	MainSizer->Add(comboSizer, 0, wxEXPAND);
+	wxStaticText *FrontBarLabel = new wxStaticText(this, wxID_ANY, _T("Front Sway Bar Style"));
 	FrontBarStyle = new wxComboBox(this, ComboBoxFrontBarStyle, wxEmptyString, wxDefaultPosition,
-		wxSize(InputColumnWidth, -1), Choices, wxCB_READONLY);
+		wxDefaultSize, Choices, wxCB_READONLY);
+	SetMinimumWidthFromContents(FrontBarStyle, additionalWidth);
 
-	FrontBarSizer->Add(FrontBarLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
-	FrontBarSizer->Add(FrontBarStyle, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
+	comboSizer->Add(FrontBarLabel, 0, wxALIGN_CENTER_VERTICAL);
+	comboSizer->Add(FrontBarStyle, 0, wxEXPAND);
 
 	// Rear bar style
-	wxBoxSizer *RearBarSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText *RearBarLabel = new wxStaticText(this, wxID_ANY,
-		_T("Rear Sway Bar Style"), wxDefaultPosition, wxSize(LabelColumnWidth, -1));
+	wxStaticText *RearBarLabel = new wxStaticText(this, wxID_ANY, _T("Rear Sway Bar Style"));
 	RearBarStyle = new wxComboBox(this, ComboBoxRearBarStyle, wxEmptyString, wxDefaultPosition,
-		wxSize(InputColumnWidth, -1), Choices, wxCB_READONLY);
+		wxDefaultSize, Choices, wxCB_READONLY);
+	SetMinimumWidthFromContents(RearBarStyle, additionalWidth);
 
-	RearBarSizer->Add(RearBarLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
-	RearBarSizer->Add(RearBarStyle, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
+	comboSizer->Add(RearBarLabel, 0, wxALIGN_CENTER_VERTICAL);
+	comboSizer->Add(RearBarStyle, 0, wxEXPAND);
 
 	// Create the check boxes
 	// Symmetry
-	wxBoxSizer *SymmetrySizer = new wxBoxSizer(wxHORIZONTAL);
 	IsSymmetric = new wxCheckBox(this, CheckBoxIsSymmetric, _T("Is Symmetric"));
-	SymmetrySizer->Add(IsSymmetric, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
+	MainSizer->Add(IsSymmetric, 0, wxALIGN_LEFT);
 
 	// Front thrid shock/spring
-	wxBoxSizer *FrontThirdSizer = new wxBoxSizer(wxHORIZONTAL);
 	FrontHasThirdSpring = new wxCheckBox(this, CheckBoxFrontHasThirdSpring, _T("Front Has Third Spring"));
-	FrontThirdSizer->Add(FrontHasThirdSpring, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
+	MainSizer->Add(FrontHasThirdSpring, 0, wxALIGN_LEFT);
 
 	// Rear third shock/spring
-	wxBoxSizer *RearThirdSizer = new wxBoxSizer(wxHORIZONTAL);
 	RearHasThirdSpring = new wxCheckBox(this, CheckBoxRearHasThirdSpring, _T("Rear Has Third Spring"));
-	RearThirdSizer->Add(RearHasThirdSpring, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
-
-	// Add the individial sizers to the main sizer
-	MainSizer->Add(FrontBarSizer, 0, wxALIGN_BOTTOM);
-	MainSizer->Add(RearBarSizer, 0, wxALIGN_BOTTOM);
-	MainSizer->Add(SymmetrySizer, 0, wxALIGN_BOTTOM);
-	MainSizer->Add(FrontThirdSizer, 0, wxALIGN_BOTTOM);
-	MainSizer->Add(RearThirdSizer, 0, wxALIGN_BOTTOM);
+	MainSizer->Add(RearHasThirdSpring, 0, wxALIGN_LEFT);
 
 	// Assign the top level sizer to the panel
 	SetSizer(TopSizer);

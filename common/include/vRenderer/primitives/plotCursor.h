@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  PlotCursor.h
+// File:  plotCursor.h
 // Created:  5/5/2011
 // Author:  K. Loux
 // Description:  Represents an oscilloscope cursor on-screen.

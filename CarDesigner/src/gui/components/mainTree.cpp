@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  maiTree.cpp
+// File:  mainTree.cpp
 // Created:  6/14/2008
 // Author:  K. Loux
 // Description:  Contains the class declaration for the MAIN_TREE class.

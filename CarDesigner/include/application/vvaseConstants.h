@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  vvase_constants.cpp
+// File:  vvaseConstants.h
 // Created:  5/17/2008
 // Author:  K. Loux
 // Description:  Defines the application-level constants.

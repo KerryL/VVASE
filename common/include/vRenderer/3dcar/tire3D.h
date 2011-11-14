@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  tire3d.h
+// File:  tire3D.h
 // Created:  5/23/2008
 // Author:  K. Loux
 // Description:  Contains class declaration for the TIRE3D class.

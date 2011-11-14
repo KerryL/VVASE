@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  vvaseapp_class.h
+// File:  vvaseApplication.h
 // Created:  5/17/2008
 // Author:  K. Loux
 // Description:  The application class.

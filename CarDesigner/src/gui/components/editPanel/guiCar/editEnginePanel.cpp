@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  edit_engine_panel_class.cpp
+// File:  editEnginePanel.cpp
 // Created:  2/10/2009
 // Author:  K. Loux
 // Description:  Contains the class definition for the EDIT_ENGINE_PANEL class.  This

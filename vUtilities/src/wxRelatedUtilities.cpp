@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  wxRelatedUtilites.cpp
+// File:  wxRelatedUtilities.cpp
 // Created:  11/5/2011
 // Author:  K. Loux
 // Description:  Contains helper functions and wrappers for working with wxWidgets.

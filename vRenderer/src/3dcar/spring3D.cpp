@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  spring3d.cpp
+// File:  spring3D.cpp
 // Created:  1/5/2009
 // Author:  K. Loux
 // Description:  Contains class definition for the SPRING3D class.

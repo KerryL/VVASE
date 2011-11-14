@@ -23,7 +23,7 @@
 class EDIT_PANEL;
 class TIRE_SET;
 
-class EDIT_TIRES_PANEL : public wxPanel
+class EDIT_TIRES_PANEL : public wxScrolledWindow
 {
 public:
 	// Constructor

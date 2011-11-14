@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  swaybar3d.h
+// File:  swaybar3D.h
 // Created:  1/11/2009
 // Author:  K. Loux
 // Description:  Contains class declaration for the DAMPER3D class.

@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  mainNotebook.h
+// File:  mainNotebook.cpp
 // Created:  4/4/2008
 // Author:  K. Loux
 // Description:  Contains the class functionality (event handlers, etc.) for the

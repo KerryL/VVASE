@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  edit_iteration_options_panel_class.cpp
+// File:  editIterationOptionsPanel.cpp
 // Created:  11/14/2010
 // Author:  K. Loux
 // Description:  Contains the class definition for the EDIT_ITERATION_OPTIONS_PANEL
@@ -46,7 +46,7 @@
 EDIT_ITERATION_OPTIONS_PANEL::EDIT_ITERATION_OPTIONS_PANEL(EDIT_ITERATION_NOTEBOOK &_Parent,
 														   wxWindowID id, const wxPoint& pos,
 														   const wxSize& size, const Debugger &_debugger) :
-														   wxPanel(&_Parent, id, pos, size), debugger(_debugger),
+														   wxScrolledWindow(&_Parent, id, pos, size), debugger(_debugger),
 														   Parent(_Parent)
 {
 	// Initialize the current object variable
@@ -155,7 +155,7 @@ void EDIT_ITERATION_OPTIONS_PANEL::UpdateInformation(ITERATION *_CurrentIteratio
 	AutoTitle->SetValue(CurrentIteration->GetAutoGenerateTitle());
 	AutoLabelXAxis->SetValue(CurrentIteration->GetAutoGenerateXLabel());
 	AutoLabelZAxis->SetValue(CurrentIteration->GetAutoGenerateZLabel());
-	ShowGridLines->SetValue(CurrentIteration->GetShowGridLines());
+//	ShowGridLines->SetValue(CurrentIteration->GetShowGridLines());
 
 	TitleText->ChangeValue(CurrentIteration->GetTitle());
 	XLabelText->ChangeValue(CurrentIteration->GetXLabel());
@@ -203,7 +203,7 @@ void EDIT_ITERATION_OPTIONS_PANEL::CreateControls()
 	XLabelText = new wxTextCtrl(this, TextBoxIterationOptions);
 	ZLabelText = new wxTextCtrl(this, TextBoxIterationOptions);
 
-	SetAsDefault = new wxButton(this, ButtonSetAsDefault, _T("Set As Default Properties"), wxDefaultPosition, wxSize(200, -1));
+	SetAsDefault = new wxButton(this, ButtonSetAsDefault, _T("Set As Default Properties"));
 
 	// Add the controls to the sizer (and create the necessary labels)
 	MainSizer->Add(new wxStaticText(this, wxID_ANY, _T("Plot Title")));
@@ -255,7 +255,7 @@ void EDIT_ITERATION_OPTIONS_PANEL::OptionsCheckBoxEvent(wxCommandEvent& WXUNUSED
 	CurrentIteration->SetAutoGenerateTitle(AutoTitle->GetValue());
 	CurrentIteration->SetAutoGenerateXLabel(AutoLabelXAxis->GetValue());
 	CurrentIteration->SetAutoGenerateZLabel(AutoLabelZAxis->GetValue());
-	CurrentIteration->SetShowGridLines(ShowGridLines->GetValue());
+//	CurrentIteration->SetShowGridLines(ShowGridLines->GetValue());
 
 	// Enable/disable the text boxes depending on the state of the checkboxes
 	TitleText->Enable(!AutoTitle->GetValue());

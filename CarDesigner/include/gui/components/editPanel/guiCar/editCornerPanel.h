@@ -25,6 +25,7 @@
 
 // wxWidgets forward declarations
 class wxCombo;
+class wxGridEvent;
 
 // VVASE forward declarations
 class Debugger;
@@ -33,7 +34,7 @@ class CORNER;
 class EDIT_SUSPENSION_NOTEBOOK;
 class SuperGrid;
 
-class EDIT_CORNER_PANEL : public wxPanel
+class EDIT_CORNER_PANEL : public wxScrolledWindow
 {
 public:
 	// Constructor

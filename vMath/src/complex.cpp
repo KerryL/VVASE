@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  complex_class.cpp
+// File:  complex.cpp
 // Created:  3/30/2008
 // Author:  K. Loux
 // Description:  Contains class functionality for complex number class.

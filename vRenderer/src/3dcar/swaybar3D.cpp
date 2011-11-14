@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  swaybar3d_class.cpp
+// File:  swaybar3D.cpp
 // Created:  1/11/2009
 // Author:  K. Loux
 // Description:  Contains class definition for the SWAYBAR3D class.

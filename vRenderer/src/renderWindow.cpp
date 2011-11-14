@@ -654,7 +654,7 @@ void RenderWindow::PerformInteraction(InteractionType interaction, wxMouseEvent 
 	}
 
 	// Update the view
-	Render();
+	Refresh();
 
 	return;
 }

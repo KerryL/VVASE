@@ -30,7 +30,7 @@ class MAIN_FRAME;
 class Convert;
 class GENETIC_OPTIMIZATION;
 
-class GENETIC_ALGORITHM_PANEL : public wxPanel
+class GENETIC_ALGORITHM_PANEL : public wxScrolledWindow
 {
 public:
 	// Constructor

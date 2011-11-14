@@ -28,6 +28,9 @@ public:
 	// Sets the specified column to automatically fill up the remaining space in the grid
 	void AutoStretchColumn(const int &col);
 
+	// Adjust the height of the control to match the height of the sum of the columns
+	void FitHeight(void);
+
 private:
 	// List of columns to auto-stretch
 	wxArrayInt stretchColumns;

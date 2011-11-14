@@ -25,7 +25,7 @@ class ITERATION;
 class Convert;
 class EDIT_ITERATION_NOTEBOOK;
 
-class EDIT_ITERATION_OPTIONS_PANEL : public wxPanel
+class EDIT_ITERATION_OPTIONS_PANEL : public wxScrolledWindow
 {
 public:
 	// Constructor

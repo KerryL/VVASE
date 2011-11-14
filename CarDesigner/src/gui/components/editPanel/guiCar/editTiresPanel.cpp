@@ -49,7 +49,7 @@
 EDIT_TIRES_PANEL::EDIT_TIRES_PANEL(EDIT_PANEL &_Parent, wxWindowID id,
 								   const wxPoint& pos, const wxSize& size,
 								   const Debugger &_debugger)
-								   : wxPanel(&_Parent, id, pos, size),
+								   : wxScrolledWindow(&_Parent, id, pos, size),
 								   debugger(_debugger),
 								   Converter(_Parent.GetMainFrame().GetConverter()),
 								   Parent(_Parent)
@@ -184,160 +184,116 @@ void EDIT_TIRES_PANEL::UpdateInformation(TIRE_SET *_CurrentTireSet)
 //==========================================================================
 void EDIT_TIRES_PANEL::CreateControls()
 {
+	// Enable scrolling
+	SetScrollRate(1, 1);
+
 	// Top-level sizer
 	wxBoxSizer *TopSizer = new wxBoxSizer(wxVERTICAL);
 
 	// Second sizer gives more space around the controls
-	wxBoxSizer *MainSizer = new wxBoxSizer(wxVERTICAL);
-	TopSizer->Add(MainSizer, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
-
-	// The column widths
-	int LabelColumnWidth = 100;
-	int InputColumnWidth = 70;
-	int UnitsColumnWidth = 50;
+	wxFlexGridSizer *MainSizer = new wxFlexGridSizer(3, 5, 5);
+	TopSizer->Add(MainSizer, 0, wxALL | wxEXPAND, 5);
 
 	// Create the text controls
 	// Right front
-	wxBoxSizer *RightFrontSizer = new wxBoxSizer(wxVERTICAL);
 	wxStaticText *RightFrontLabel = new wxStaticText(this, wxID_ANY, _T("Right Front"));
 
-	// Diameter
-	wxBoxSizer *RightFrontDiameterSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText *RightFrontDiameterLabel = new wxStaticText(this, wxID_ANY,
-		_T("Diameter"), wxDefaultPosition, wxSize(LabelColumnWidth, -1));
-	RightFrontDiameterUnitsLabel = new wxStaticText(this, wxID_ANY,
-		wxEmptyString, wxDefaultPosition, wxSize(UnitsColumnWidth, -1));
-	RightFrontTireDiameter = new wxTextCtrl(this, TextBoxRightFrontTireDiameter,
-		wxEmptyString, wxDefaultPosition, wxSize(InputColumnWidth, -1));
+	MainSizer->Add(RightFrontLabel, wxALIGN_CENTER_VERTICAL);
+	MainSizer->AddSpacer(-1);
+	MainSizer->AddSpacer(-1);
 
-	RightFrontDiameterSizer->Add(RightFrontDiameterLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT, 5);
-	RightFrontDiameterSizer->Add(RightFrontTireDiameter, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT, 5);
-	RightFrontDiameterSizer->Add(RightFrontDiameterUnitsLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT, 5);
+	// Diameter
+	wxStaticText *RightFrontDiameterLabel = new wxStaticText(this, wxID_ANY, _T("Diameter"));
+	RightFrontDiameterUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
+	RightFrontTireDiameter = new wxTextCtrl(this, TextBoxRightFrontTireDiameter);
+
+	MainSizer->Add(RightFrontDiameterLabel, 0, wxALIGN_CENTER_VERTICAL);
+	MainSizer->Add(RightFrontTireDiameter, 0, wxEXPAND);
+	MainSizer->Add(RightFrontDiameterUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 
 	// Width
-	wxBoxSizer *RightFrontWidthSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText *RightFrontWidthLabel = new wxStaticText(this, wxID_ANY,
-		_T("Width"), wxDefaultPosition, wxSize(LabelColumnWidth, -1));
-	RightFrontWidthUnitsLabel = new wxStaticText(this, wxID_ANY,
-		wxEmptyString, wxDefaultPosition, wxSize(UnitsColumnWidth, -1));
-	RightFrontTireWidth = new wxTextCtrl(this, TextBoxRightFrontTireWidth,
-		wxEmptyString, wxDefaultPosition, wxSize(InputColumnWidth, -1));
+	wxStaticText *RightFrontWidthLabel = new wxStaticText(this, wxID_ANY, _T("Width"));
+	RightFrontWidthUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
+	RightFrontTireWidth = new wxTextCtrl(this, TextBoxRightFrontTireWidth);
 
-	RightFrontWidthSizer->Add(RightFrontWidthLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT, 5);
-	RightFrontWidthSizer->Add(RightFrontTireWidth, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT, 5);
-	RightFrontWidthSizer->Add(RightFrontWidthUnitsLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT, 5);
-
-	RightFrontSizer->Add(RightFrontLabel, 0, wxALIGN_TOP | wxBOTTOM, 5);
-	RightFrontSizer->Add(RightFrontDiameterSizer, 0, wxALIGN_TOP | wxBOTTOM, 1);
-	RightFrontSizer->Add(RightFrontWidthSizer, 0, wxALIGN_TOP | wxTOP, 1);
+	MainSizer->Add(RightFrontWidthLabel, 0, wxALIGN_CENTER_VERTICAL);
+	MainSizer->Add(RightFrontTireWidth, 0, wxEXPAND);
+	MainSizer->Add(RightFrontWidthUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 
 	// Left front
-	wxBoxSizer *LeftFrontSizer = new wxBoxSizer(wxVERTICAL);
 	wxStaticText *LeftFrontLabel = new wxStaticText(this, wxID_ANY, _T("Left Front"));
 
-	// Diameter
-	wxBoxSizer *LeftFrontDiameterSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText *LeftFrontDiameterLabel = new wxStaticText(this, wxID_ANY,
-		_T("Diameter"), wxDefaultPosition, wxSize(LabelColumnWidth, -1));
-	LeftFrontDiameterUnitsLabel = new wxStaticText(this, wxID_ANY,
-		wxEmptyString, wxDefaultPosition, wxSize(UnitsColumnWidth, -1));
-	LeftFrontTireDiameter = new wxTextCtrl(this, TextBoxLeftFrontTireDiameter,
-		wxEmptyString, wxDefaultPosition, wxSize(InputColumnWidth, -1));
+	MainSizer->Add(LeftFrontLabel, wxALIGN_CENTER_VERTICAL);
+	MainSizer->AddSpacer(-1);
+	MainSizer->AddSpacer(-1);
 
-	LeftFrontDiameterSizer->Add(LeftFrontDiameterLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT, 5);
-	LeftFrontDiameterSizer->Add(LeftFrontTireDiameter, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT, 5);
-	LeftFrontDiameterSizer->Add(LeftFrontDiameterUnitsLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT, 5);
+	// Diameter
+	wxStaticText *LeftFrontDiameterLabel = new wxStaticText(this, wxID_ANY, _T("Diameter"));
+	LeftFrontDiameterUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
+	LeftFrontTireDiameter = new wxTextCtrl(this, TextBoxLeftFrontTireDiameter);
+
+	MainSizer->Add(LeftFrontDiameterLabel, 0, wxALIGN_CENTER_VERTICAL);
+	MainSizer->Add(LeftFrontTireDiameter, 0, wxEXPAND);
+	MainSizer->Add(LeftFrontDiameterUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 
 	// Width
-	wxBoxSizer *LeftFrontWidthSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText *LeftFrontWidthLabel = new wxStaticText(this, wxID_ANY,
-		_T("Width"), wxDefaultPosition, wxSize(LabelColumnWidth, -1));
-	LeftFrontWidthUnitsLabel = new wxStaticText(this, wxID_ANY,
-		wxEmptyString, wxDefaultPosition, wxSize(UnitsColumnWidth, -1));
-	LeftFrontTireWidth = new wxTextCtrl(this, TextBoxLeftFrontTireWidth,
-		wxEmptyString, wxDefaultPosition, wxSize(InputColumnWidth, -1));
+	wxStaticText *LeftFrontWidthLabel = new wxStaticText(this, wxID_ANY, _T("Width"));
+	LeftFrontWidthUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
+	LeftFrontTireWidth = new wxTextCtrl(this, TextBoxLeftFrontTireWidth);
 
-	LeftFrontWidthSizer->Add(LeftFrontWidthLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT, 5);
-	LeftFrontWidthSizer->Add(LeftFrontTireWidth, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT, 5);
-	LeftFrontWidthSizer->Add(LeftFrontWidthUnitsLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT, 5);
-
-	LeftFrontSizer->Add(LeftFrontLabel, 0, wxALIGN_TOP | wxBOTTOM, 5);
-	LeftFrontSizer->Add(LeftFrontDiameterSizer, 0, wxALIGN_TOP | wxBOTTOM, 1);
-	LeftFrontSizer->Add(LeftFrontWidthSizer, 0, wxALIGN_TOP | wxTOP, 1);
+	MainSizer->Add(LeftFrontWidthLabel, 0, wxALIGN_CENTER_VERTICAL);
+	MainSizer->Add(LeftFrontTireWidth, 0, wxEXPAND);
+	MainSizer->Add(LeftFrontWidthUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 
 	// Right rear
-	wxBoxSizer *RightRearSizer = new wxBoxSizer(wxVERTICAL);
 	wxStaticText *RightRearLabel = new wxStaticText(this, wxID_ANY, _T("Right Rear"));
 
-	// Diameter
-	wxBoxSizer *RightRearDiameterSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText *RightRearDiameterLabel = new wxStaticText(this, wxID_ANY,
-		_T("Diameter"), wxDefaultPosition, wxSize(LabelColumnWidth, -1));
-	RightRearDiameterUnitsLabel = new wxStaticText(this, wxID_ANY,
-		wxEmptyString, wxDefaultPosition, wxSize(UnitsColumnWidth, -1));
-	RightRearTireDiameter = new wxTextCtrl(this, TextBoxRightRearTireDiameter,
-		wxEmptyString, wxDefaultPosition, wxSize(InputColumnWidth, -1));
+	MainSizer->Add(RightRearLabel, wxALIGN_CENTER_VERTICAL);
+	MainSizer->AddSpacer(-1);
+	MainSizer->AddSpacer(-1);
 
-	RightRearDiameterSizer->Add(RightRearDiameterLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT, 5);
-	RightRearDiameterSizer->Add(RightRearTireDiameter, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT, 5);
-	RightRearDiameterSizer->Add(RightRearDiameterUnitsLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT, 5);
+	// Diameter
+	wxStaticText *RightRearDiameterLabel = new wxStaticText(this, wxID_ANY, _T("Diameter"));
+	RightRearDiameterUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
+	RightRearTireDiameter = new wxTextCtrl(this, TextBoxRightRearTireDiameter);
+
+	MainSizer->Add(RightRearDiameterLabel, 0, wxALIGN_CENTER_VERTICAL);
+	MainSizer->Add(RightRearTireDiameter, 0, wxEXPAND);
+	MainSizer->Add(RightRearDiameterUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 
 	// Width
-	wxBoxSizer *RightRearWidthSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText *RightRearWidthLabel = new wxStaticText(this, wxID_ANY,
-		_T("Width"), wxDefaultPosition, wxSize(LabelColumnWidth, -1));
-	RightRearWidthUnitsLabel = new wxStaticText(this, wxID_ANY,
-		wxEmptyString, wxDefaultPosition, wxSize(UnitsColumnWidth, -1));
-	RightRearTireWidth = new wxTextCtrl(this, TextBoxRightRearTireWidth,
-		wxEmptyString, wxDefaultPosition, wxSize(InputColumnWidth, -1));
+	wxStaticText *RightRearWidthLabel = new wxStaticText(this, wxID_ANY, _T("Width"));
+	RightRearWidthUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
+	RightRearTireWidth = new wxTextCtrl(this, TextBoxRightRearTireWidth);
 
-	RightRearWidthSizer->Add(RightRearWidthLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT, 5);
-	RightRearWidthSizer->Add(RightRearTireWidth, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT, 5);
-	RightRearWidthSizer->Add(RightRearWidthUnitsLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT, 5);
-
-	RightRearSizer->Add(RightRearLabel, 0, wxALIGN_TOP | wxBOTTOM, 5);
-	RightRearSizer->Add(RightRearDiameterSizer, 0, wxALIGN_TOP | wxBOTTOM, 1);
-	RightRearSizer->Add(RightRearWidthSizer, 0, wxALIGN_TOP | wxTOP, 1);
+	MainSizer->Add(RightRearWidthLabel, 0, wxALIGN_CENTER_VERTICAL);
+	MainSizer->Add(RightRearTireWidth, 0, wxEXPAND);
+	MainSizer->Add(RightRearWidthUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 
 	// Left rear
-	wxBoxSizer *LeftRearSizer = new wxBoxSizer(wxVERTICAL);
 	wxStaticText *LeftRearLabel = new wxStaticText(this, wxID_ANY, _T("Left Rear"));
 
-	// Diameter
-	wxBoxSizer *LeftRearDiameterSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText *LeftRearDiameterLabel = new wxStaticText(this, wxID_ANY,
-		_T("Diameter"), wxDefaultPosition, wxSize(LabelColumnWidth, -1));
-	LeftRearDiameterUnitsLabel = new wxStaticText(this, wxID_ANY,
-		wxEmptyString, wxDefaultPosition, wxSize(UnitsColumnWidth, -1));
-	LeftRearTireDiameter = new wxTextCtrl(this, TextBoxLeftRearTireDiameter,
-		wxEmptyString, wxDefaultPosition, wxSize(InputColumnWidth, -1));
+	MainSizer->Add(LeftRearLabel, wxALIGN_CENTER_VERTICAL);
+	MainSizer->AddSpacer(-1);
+	MainSizer->AddSpacer(-1);
 
-	LeftRearDiameterSizer->Add(LeftRearDiameterLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT, 5);
-	LeftRearDiameterSizer->Add(LeftRearTireDiameter, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT, 5);
-	LeftRearDiameterSizer->Add(LeftRearDiameterUnitsLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT, 5);
+	// Diameter
+	wxStaticText *LeftRearDiameterLabel = new wxStaticText(this, wxID_ANY, _T("Diameter"));
+	LeftRearDiameterUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
+	LeftRearTireDiameter = new wxTextCtrl(this, TextBoxLeftRearTireDiameter);
+
+	MainSizer->Add(LeftRearDiameterLabel, 0, wxALIGN_CENTER_VERTICAL);
+	MainSizer->Add(LeftRearTireDiameter, 0, wxEXPAND);
+	MainSizer->Add(LeftRearDiameterUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 
 	// Width
-	wxBoxSizer *LeftRearWidthSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText *LeftRearWidthLabel = new wxStaticText(this, wxID_ANY,
-		_T("LR Width"), wxDefaultPosition, wxSize(LabelColumnWidth, -1));
-	LeftRearWidthUnitsLabel = new wxStaticText(this, wxID_ANY,
-		wxEmptyString, wxDefaultPosition, wxSize(UnitsColumnWidth, -1));
-	LeftRearTireWidth = new wxTextCtrl(this, TextBoxLeftRearTireWidth,
-		wxEmptyString, wxDefaultPosition, wxSize(InputColumnWidth, -1));
+	wxStaticText *LeftRearWidthLabel = new wxStaticText(this, wxID_ANY, _T("Width"));
+	LeftRearWidthUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
+	LeftRearTireWidth = new wxTextCtrl(this, TextBoxLeftRearTireWidth);
 
-	LeftRearWidthSizer->Add(LeftRearWidthLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT, 5);
-	LeftRearWidthSizer->Add(LeftRearTireWidth, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT, 5);
-	LeftRearWidthSizer->Add(LeftRearWidthUnitsLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxLEFT | wxRIGHT, 5);
-
-	LeftRearSizer->Add(LeftRearLabel, 0, wxALIGN_TOP | wxBOTTOM, 5);
-	LeftRearSizer->Add(LeftRearDiameterSizer, 0, wxALIGN_TOP | wxBOTTOM, 1);
-	LeftRearSizer->Add(LeftRearWidthSizer, 0, wxALIGN_TOP | wxTOP, 1);
-
-	// Add the sizer for each corner to the main sizer
-	MainSizer->Add(RightFrontSizer, 0, wxALIGN_BOTTOM | wxALL, 5);
-	MainSizer->Add(LeftFrontSizer, 0, wxALIGN_BOTTOM | wxALL, 5);
-	MainSizer->Add(RightRearSizer, 0, wxALIGN_BOTTOM | wxALL, 5);
-	MainSizer->Add(LeftRearSizer, 0, wxALIGN_BOTTOM | wxALL, 5);
+	MainSizer->Add(LeftRearWidthLabel, 0, wxALIGN_CENTER_VERTICAL);
+	MainSizer->Add(LeftRearTireWidth, 0, wxEXPAND);
+	MainSizer->Add(LeftRearWidthUnitsLabel, 0, wxALIGN_CENTER_VERTICAL );
 
 	// Assign the top level sizer to the dialog
 	SetSizer(TopSizer);

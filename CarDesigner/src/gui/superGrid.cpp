@@ -127,3 +127,34 @@ void SuperGrid::OnSize(wxSizeEvent& event)
 	// Skip this event to the let the default handler also work
 	event.Skip();
 }
+
+//==========================================================================
+// Class:			SuperGrid
+// Function:		FitHeight
+// Description:		Sets the height of this control to exactly contain the
+//					rows that are shown.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void SuperGrid::FitHeight(void)
+{
+	unsigned int height(GetColLabelSize() + GetNumberRows());
+	int i;
+
+	for (i = 0; i < GetNumberRows(); i++)
+		height += GetRowHeight(i);
+
+	SetSize(-1, height + 1);
+	SetMinSize(GetSize());
+
+	// Attempt to get scrollbars to dissappear (they are unneeded)
+	ForceRefresh();
+}

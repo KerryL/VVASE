@@ -7,12 +7,10 @@
 
 ===================================================================================*/
 
-// File:  mainFrame.h
+// File:  dropTarget.cpp
 // Created:  3/7/2008
 // Author:  K. Loux
-// Description:  Contains the class declaration for the MAIN_FRAME class.  Uses wxWidgets
-//				 for the GUI components.  Also contains the application class definition
-//				 and functionality at the bottom of this file (minimal).
+// Description:  Handles events when users drag-and-drop files onto this application.
 // History:
 
 // VVASE headers

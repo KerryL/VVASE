@@ -54,7 +54,7 @@
 //==========================================================================
 EDIT_CORNER_PANEL::EDIT_CORNER_PANEL(EDIT_SUSPENSION_NOTEBOOK & _Parent, wxWindowID id,
 									 const wxPoint& pos, const wxSize& size,
-									 const Debugger &_debugger) : wxPanel(&_Parent, id, pos, size),
+									 const Debugger &_debugger) : wxScrolledWindow(&_Parent, id, pos, size),
 									 debugger(_debugger),
 									 Converter(_Parent.GetParent().GetMainFrame().GetConverter()),
 									 Parent(_Parent)
@@ -106,6 +106,7 @@ BEGIN_EVENT_TABLE(EDIT_CORNER_PANEL, wxPanel)
 	EVT_COMBOBOX(ComboBoxActuationType,			EDIT_CORNER_PANEL::ActuationTypeChangeEvent)
 	EVT_TEXT(TextBoxStaticCamber,				EDIT_CORNER_PANEL::StaticCamberChangeEvent)
 	EVT_TEXT(TextBoxStaticToe,					EDIT_CORNER_PANEL::StaticToeChangeEvent)
+	//EVT_SIZE(									EDIT_CORNER_PANEL::OnSize)
 END_EVENT_TABLE();
 
 //==========================================================================
@@ -226,6 +227,11 @@ void EDIT_CORNER_PANEL::UpdateInformation(CORNER *_CurrentCorner,
 	// End batch edit of the grid
 	Hardpoints->EndBatch();
 
+	// Resize the sizers in case hardpoint rows were hidden or shown
+	Layout();
+
+	// FIXME:  Need way to turn grid scrollbars off
+
 	return;
 }
 
@@ -247,11 +253,14 @@ void EDIT_CORNER_PANEL::UpdateInformation(CORNER *_CurrentCorner,
 //==========================================================================
 void EDIT_CORNER_PANEL::CreateControls()
 {
+	// Enable scrollbars
+	SetScrollRate(1, 1);
+
 	// Top-level sizer
 	wxBoxSizer *TopSizer = new wxBoxSizer(wxVERTICAL);
 
 	// Second sizer gives more space around the controls
-	wxBoxSizer *MainSizer = new wxBoxSizer(wxVERTICAL);
+	wxFlexGridSizer *MainSizer = new wxFlexGridSizer(1, 2, 2);
 	TopSizer->Add(MainSizer, 0, wxGROW | wxALL, 5);
 
 	// Create the grid for the hard point entry
@@ -273,11 +282,12 @@ void EDIT_CORNER_PANEL::CreateControls()
 	// To enable hiding of the non-label rows, we need to set the minimum height to zero
 	Hardpoints->SetRowMinimalAcceptableHeight(0);
 
-	// We never want the wheel center to be visible | wxALL, 5
+	// We never want the wheel center to be visible
 	Hardpoints->SetRowHeight(CORNER::WheelCenter + 1, 0);
 
 	// Add the grid to the sizer
-	MainSizer->Add(Hardpoints, 0, wxALIGN_TOP | wxEXPAND | wxALL, 5);
+	MainSizer->Add(Hardpoints, 0, wxALIGN_TOP | wxEXPAND);
+	MainSizer->AddGrowableCol(0);
 
 	// Set the column headings
 	Hardpoints->SetColLabelValue(0, _T("Hardpoint"));
@@ -335,7 +345,7 @@ void EDIT_CORNER_PANEL::CreateControls()
 	
 	wxFlexGridSizer *lowerInputSizer = new wxFlexGridSizer(3, 3, 3);
 	lowerInputSizer->SetFlexibleDirection(wxHORIZONTAL);
-	MainSizer->Add(lowerInputSizer, 1, wxALIGN_BOTTOM);
+	MainSizer->Add(lowerInputSizer, 0, wxALIGN_BOTTOM);
 
 	// Create the combo-boxes
 	// Actuation type
@@ -376,6 +386,8 @@ void EDIT_CORNER_PANEL::CreateControls()
 		wxEmptyString, wxDefaultPosition);
 	StaticCamber = new wxTextCtrl(this, TextBoxStaticCamber);
 
+	StaticCamber->SetSize(wxSize(ActuationAttachment->GetMinWidth(), -1));
+
 	lowerInputSizer->Add(CamberLabel, 0, wxALIGN_CENTER_VERTICAL);
 	lowerInputSizer->Add(StaticCamber, 0, wxEXPAND);
 	lowerInputSizer->Add(CamberUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
@@ -387,12 +399,17 @@ void EDIT_CORNER_PANEL::CreateControls()
 		wxEmptyString, wxDefaultPosition);
 	StaticToe = new wxTextCtrl(this, TextBoxStaticToe);
 
+	StaticToe->SetSize(wxSize(ActuationAttachment->GetMinWidth(), -1));
+
 	lowerInputSizer->Add(ToeLabel, 0, wxALIGN_CENTER_VERTICAL);
 	lowerInputSizer->Add(StaticToe, 0, wxEXPAND);
 	lowerInputSizer->Add(ToeUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 
+	MainSizer->AddGrowableRow(0);
+	MainSizer->AddGrowableRow(1);
+
 	// Assign the top level sizer to the dialog
-	SetSizer(TopSizer);
+	SetSizerAndFit(TopSizer);
 
 	// Initialize the last row selected variable
 	LastRowSelected = -1;

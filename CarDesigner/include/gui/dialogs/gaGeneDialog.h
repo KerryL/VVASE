@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  gaGeneDialog.cpp
+// File:  gaGeneDialog.h
 // Created:  7/30/2009
 // Author:  K. Loux
 // Description:  Dialog for editing gene properties.

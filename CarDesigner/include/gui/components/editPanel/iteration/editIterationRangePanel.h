@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  editIterationOptionsPanel.h
+// File:  editIterationRangePanel.h
 // Created:  11/14/2010
 // Author:  K. Loux
 // Description:  Contains the class declaration for the EDIT_ITERATION_RANGE_PANEL class.
@@ -25,7 +25,7 @@ class ITERATION;
 class Convert;
 class EDIT_ITERATION_NOTEBOOK;
 
-class EDIT_ITERATION_RANGE_PANEL : public wxPanel
+class EDIT_ITERATION_RANGE_PANEL : public wxScrolledWindow
 {
 public:
 	// Constructor

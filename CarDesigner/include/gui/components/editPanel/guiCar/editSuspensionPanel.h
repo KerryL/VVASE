@@ -18,19 +18,20 @@
 
 // wxWidgets headers
 #include <wx/wx.h>
-#include <wx/grid.h>
 
 // wxWidgets forward declarations
 class wxCombo;
+class wxGridEvent;
 
 // VVASE forward declarations
 class Debugger;
 class SUSPENSION;
 class Convert;
 class Vector;
+class SuperGrid;
 class EDIT_SUSPENSION_NOTEBOOK;
 
-class EDIT_SUSPENSION_PANEL : public wxPanel
+class EDIT_SUSPENSION_PANEL : public wxScrolledWindow
 {
 public:
 	// Constructor
@@ -85,7 +86,7 @@ private:
 	// End event handlers-------------------------------------------------
 
 	// The text-entry control
-	wxGrid *Hardpoints;
+	SuperGrid *Hardpoints;
 
 	// Checkboxes
 	wxCheckBox *IsSymmetric;

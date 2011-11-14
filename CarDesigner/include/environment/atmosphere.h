@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  atmosphere_class.h
+// File:  atmosphere.h
 // Created:  12/12/2008
 // Author:  K. Loux
 // Description:  Contains class declaration for ATMOSPHERE class.  This is intended

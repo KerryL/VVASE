@@ -76,8 +76,15 @@ GUI_CAR::GUI_CAR(MAIN_FRAME &_MainFrame, const Debugger &_debugger,
 	AppearanceOptions = new APPEARANCE_OPTIONS(MainFrame, *this, debugger);
 
 	// Create the 3D output window
+#ifdef __WXGTK__
+	// Under GTK, we get a segmentation fault or X error on call to SwapBuffers in RenderWindow.
+	// Adding the double-buffer arugment fixes this.  Under windows, the double-buffer argument
+	// causes the colors to go funky.  So we have this #if.
 	int args[] = {WX_GL_DOUBLEBUFFER, 0};
 	renderer = new CAR_RENDERER(MainFrame, *this, args, debugger);
+#else
+	renderer = new CAR_RENDERER(MainFrame, *this, NULL, debugger);
+#endif
 	notebookTab = reinterpret_cast<wxWindow*>(renderer);
 
 	// Get an index for this item and add it to the list in the MainFrame

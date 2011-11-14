@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  debug.cpp
+// File:  debugger.cpp
 // Created:  2/24/2008
 // Author:  K. Loux
 // Description:  A simple class that prints information to a log file.  Just

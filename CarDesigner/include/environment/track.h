@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  track_class.h
+// File:  track.h
 // Created:  12/12/2008
 // Author:  K. Loux
 // Description:  Contains class declaration for TRACK class.  This is used to
