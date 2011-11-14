@@ -43,6 +43,7 @@
 #include "gui/plotPanel.h"
 #include "vUtilities/machineDefinitions.h"
 #include "vMath/carMath.h"
+#include "gui/renderer/plotRenderer.h"
 
 //==========================================================================
 // Class:			ITERATION
@@ -324,7 +325,7 @@ void ITERATION::UpdateData(void)
 		return;
 	}
 
-	// Reset the flags controling access to this method
+	// Reset the flags controlling access to this method
 	AnalysesDisplayed = false;
 	SecondAnalysisPending = false;
 
@@ -384,7 +385,7 @@ void ITERATION::UpdateData(void)
 	// Initialize the semaphore count
 	InverseSemaphore.Set(AssociatedCars.GetCount() * TotalPoints);
 
-	// Make sure the working cars are intialized
+	// Make sure the working cars are initialized
 	if (InverseSemaphore.GetCount() != (unsigned int)NumberOfWorkingCars)
 	{
 		for (i = 0; i < NumberOfWorkingCars; i++)
@@ -423,6 +424,7 @@ void ITERATION::UpdateData(void)
 			else
 			{
 				// If we also have a Y-axis, we need to be more careful when determining the axis values
+				// FIXME:  I think this is for 3D plotting?
 			}
 
 			// Assign the inputs
@@ -430,9 +432,8 @@ void ITERATION::UpdateData(void)
 			KinematicInputs.Roll = AxisValuesRoll[CurrentPoint];
 			KinematicInputs.Heave = AxisValuesHeave[CurrentPoint];
 			KinematicInputs.RackTravel = AxisValuesRackTravel[CurrentPoint];
-			// FIXME:  Where should these (below two variables) come from?  Can they come from MainFrame's preference settings?
-			KinematicInputs.FirstRotation = Vector::AxisX;
-			KinematicInputs.CenterOfRotation.Set(0.0, 0.0, 0.0);
+			KinematicInputs.FirstRotation = MainFrame.GetInputs().FirstRotation;
+			KinematicInputs.CenterOfRotation = MainFrame.GetInputs().CenterOfRotation;
 
 			// Run The analysis
 			KINEMATIC_OUTPUTS *NewOutputs = new KINEMATIC_OUTPUTS;
@@ -475,13 +476,42 @@ void ITERATION::UpdateDisplay(void)
 		plotPanel->ClearAllCurves();
 
 		// Create the datasets for the plot
-		// FIXME:  Does this need to be done?
+		// Need to create one dataset per curve per car
+		Dataset2D *dataSet;
+		unsigned int i, j, k;
+		double *x, *y;
+		for (i = 0; i < NumberOfPlots; i++)
+		{
+			// Check to see if this plot is active
+			if (PlotActive[i])
+			{
+				for (j = 0; j < (unsigned int)AssociatedCars.GetCount(); j++)
+				{
+					// Create the dataset
+					dataSet = new Dataset2D(NumberOfPoints);
+					x = dataSet->GetXPointer();
+					y = dataSet->GetYPointer();
+					
+					// Populate all values
+					for (k = 0; k < (unsigned int)NumberOfPoints; k++)
+					{
+						x[k] = GetDataValue(j, k,
+								(PLOT_ID)(KINEMATIC_OUTPUTS::NumberOfOutputScalars + XAxisType));
+						y[k] = GetDataValue(j, k, (PLOT_ID)i);
+					}
+					
+					// Add the dataset to the plot
+					plotPanel->AddCurve(dataSet, AssociatedCars[j]->GetCleanName()
+						+ _T(", ") + GetPlotName((PLOT_ID)i));
+				}
+			}
+		}
 
 		// Update the display associated with this object
 		plotPanel->UpdateDisplay();
 	}
 
-	// Reset the "are we caught up" flag
+	// Reset the "are we caught up?" flag
 	AnalysesDisplayed = true;
 
 	// If we have a second analysis pending, handle it now
@@ -568,7 +598,8 @@ bool ITERATION::PerformSaveToFile(void)
 	OutFile.write(XLabel.c_str(), (XLabel.Len() + 1) * sizeof(char));
 	OutFile.write((char*)&AutoGenerateZLabel, sizeof(bool));
 	OutFile.write(ZLabel.c_str(), (ZLabel.Len() + 1) * sizeof(char));
-	OutFile.write((char*)&ShowGridLines, sizeof(bool));
+	bool temp(plotPanel->GetRenderer()->GetGridOn());
+	OutFile.write((char*)&temp, sizeof(bool));
 
 	// Close the file
 	OutFile.close();
@@ -645,7 +676,12 @@ bool ITERATION::PerformLoadFromFile(void)
 	ZLabel.Empty();
 	while (InFile.read(&OneChar, sizeof(char)), OneChar != '\0')
 		ZLabel.Append(OneChar);
-	InFile.read((char*)&ShowGridLines, sizeof(bool));
+	bool temp;
+	InFile.read((char*)&temp, sizeof(bool));
+	if (temp)
+		plotPanel->GetRenderer()->SetGridOn();
+	else
+		plotPanel->GetRenderer()->SetGridOff();
 
 	// Close the file
 	InFile.close();
@@ -683,7 +719,12 @@ void ITERATION::ReadDefaultsFromConfig(void)
 	ConfigurationFile->Read(_T("/Iteration/XLabel"), &XLabel, wxEmptyString);
 	ConfigurationFile->Read(_T("/Iteration/AutoGenerateZLabel"), &AutoGenerateZLabel, true);
 	ConfigurationFile->Read(_T("/Iteration/ZLabel"), &ZLabel, wxEmptyString);
-	ConfigurationFile->Read(_T("/Iteration/ShowGridLines"), &ShowGridLines, false);
+	bool temp;
+	ConfigurationFile->Read(_T("/Iteration/ShowGridLines"), &temp, false);
+	/*if (temp)
+		plotPanel->GetRenderer()->SetGridOn();
+	else
+		plotPanel->GetRenderer()->SetGridOff();*///FIXME:  Make this work again
 
 	ConfigurationFile->Read(_T("/Iteration/StartPitch"), &Range.StartPitch, 0.0);
 	ConfigurationFile->Read(_T("/Iteration/StartRoll"), &Range.StartRoll, 0.0);
@@ -759,7 +800,7 @@ void ITERATION::WriteDefaultsToConfig(void) const
 	ConfigurationFile->Write(_T("/Iteration/XLabel"), XLabel);
 	ConfigurationFile->Write(_T("/Iteration/AutoGenerateZLabel"), AutoGenerateZLabel);
 	ConfigurationFile->Write(_T("/Iteration/ZLabel"), ZLabel);
-	ConfigurationFile->Write(_T("/Iteration/ShowGridLines"), ShowGridLines);
+	ConfigurationFile->Write(_T("/Iteration/ShowGridLines"), plotPanel->GetRenderer()->GetGridOn());
 
 	ConfigurationFile->Write(_T("/Iteration/StartPitch"), Range.StartPitch);
 	ConfigurationFile->Write(_T("/Iteration/StartRoll"), Range.StartRoll);
@@ -1064,13 +1105,13 @@ bool ITERATION::AssociatedWithCar(GUI_CAR *Test) const
 // Input Arguments:
 //		AssociatedCarIndex	= integer specifying the car whose output is requested
 //		Point				= integer specifying the point whose output is requested
-//		Id					= PLOT_ID specifying what data we are interesed in
+//		Id					= PLOT_ID specifying what data we are interested in
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		double, the value of the requested point
+//		double, the value of the requested point, converted to user units
 //
 //==========================================================================
 double ITERATION::GetDataValue(int AssociatedCarIndex, int Point, PLOT_ID Id) const
@@ -1211,7 +1252,7 @@ wxString ITERATION::GetPlotName(PLOT_ID Id) const
 	wxString Name;
 
 	// Depending on the specified PLOT_ID, choose the name of the string
-	// Vectors are a special case - depending on which componenet of the vector is chosen,
+	// Vectors are a special case - depending on which component of the vector is chosen,
 	// we need to append a different string to the end of the Name
 	if (Id < Pitch)
 		Name = KINEMATIC_OUTPUTS::GetOutputName((KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE)Id);

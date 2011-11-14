@@ -150,7 +150,7 @@ public:
 	void SetXLabel(const wxString &_XLabel) { XLabel = _XLabel; };
 	void SetAutoGenerateZLabel(const bool &_AutoGenerateZLabel) { AutoGenerateZLabel = _AutoGenerateZLabel; };
 	void SetZLabel(const wxString &_ZLabel) { ZLabel = _ZLabel; };
-	void SetShowGridLines(const bool &_ShowGridLines) { ShowGridLines = _ShowGridLines; };
+	//void SetShowGridLines(const bool &_ShowGridLines) { ShowGridLines = _ShowGridLines; };
 
 	bool GetAutoGenerateTitle(void) const { return GenerateTitleFromFileName; };
 	wxString GetTitle(void) const { return Title; };
@@ -158,7 +158,7 @@ public:
 	wxString GetXLabel(void) const { return XLabel; };
 	bool GetAutoGenerateZLabel(void) const { return AutoGenerateZLabel; };
 	wxString GetZLabel(void) const { return ZLabel; };
-	bool GetShowGridLines(void) const { return ShowGridLines; };
+	//bool GetShowGridLines(void) const { return ShowGridLines; };
 
 	// Methods for reading and writing default configuration settings
 	void ReadDefaultsFromConfig(void);
@@ -206,7 +206,7 @@ private:
 	double *AxisValuesHeave;//		[in]
 	double *AxisValuesRackTravel;//	[in]
 
-	// Specifies the independant variables for the plot
+	// Specifies the independent variables for the plot
 	AXIS_TYPE XAxisType;
 	AXIS_TYPE YAxisType;
 
@@ -227,7 +227,7 @@ private:
 	wxString XLabel;
 	bool AutoGenerateZLabel;
 	wxString ZLabel;
-	bool ShowGridLines;
+	//bool ShowGridLines;
 
 	// For getting converted values
 	double ConvertValue(KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE _Output);
@@ -242,12 +242,11 @@ private:
 	void WriteFileHeader(std::ofstream *OutFile);
 	FILE_HEADER_INFO ReadFileHeader(std::ifstream *InFile);
 
-	// Our current file verstion
+	// Our current file version
 	static const int CurrentFileVersion;
 
 	// Synchronization object
 	INVERSE_SEMAPHORE InverseSemaphore;
-
 	// Flag indicating that this object's analyses are complete and another analysis can be started
 	bool AnalysesDisplayed;
 	bool SecondAnalysisPending;

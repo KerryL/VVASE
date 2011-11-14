@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  edit_corner_panel_class.cpp
+// File:  editCornerPanel.cpp
 // Created:  2/10/2009
 // Author:  K. Loux
 // Description:  Contains the class definition for the EDIT_CORNER_PANEL class.  This
@@ -21,12 +21,14 @@
 #include "vCar/corner.h"
 #include "vCar/car.h"
 #include "gui/guiCar.h"
+#include "gui/superGrid.h"
 #include "gui/renderer/carRenderer.h"
 #include "gui/components/mainFrame.h"
 #include "gui/components/editPanel/editPanel.h"
 #include "gui/components/editPanel/guiCar/editCornerPanel.h"
 #include "gui/components/editPanel/guiCar/editSuspensionNotebook.h"
 #include "vUtilities/convert.h"
+#include "vUtilities/wxRelatedUtilities.h"
 #include "vMath/vector.h"
 
 //==========================================================================
@@ -37,7 +39,7 @@
 //					and creates the controls, etc.
 //
 // Input Arguments:
-//		_Parent		= EDIT_SUSPENSION_NOTEBOOK&, referenc to this object's owner
+//		_Parent		= EDIT_SUSPENSION_NOTEBOOK&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
@@ -250,14 +252,10 @@ void EDIT_CORNER_PANEL::CreateControls()
 
 	// Second sizer gives more space around the controls
 	wxBoxSizer *MainSizer = new wxBoxSizer(wxVERTICAL);
-	TopSizer->Add(MainSizer, 1, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALL, 5);
-
-	// The column widths
-	int LabelColumnWidth = 120;
-	int InputColumnWidth = 45;
+	TopSizer->Add(MainSizer, 0, wxGROW | wxALL, 5);
 
 	// Create the grid for the hard point entry
-	Hardpoints = new wxGrid(this, wxID_ANY);
+	Hardpoints = new SuperGrid(this, wxID_ANY);
 	Hardpoints->CreateGrid(CORNER::NumberOfHardpoints + 1, 4, wxGrid::wxGridSelectRows);
 
 	// Begin a batch edit of the grid
@@ -268,12 +266,6 @@ void EDIT_CORNER_PANEL::CreateControls()
 	for (i = 0; i < Hardpoints->GetNumberCols(); i++)
 		Hardpoints->SetReadOnly(0, i, true);
 
-	// Set the column widths
-	Hardpoints->SetColumnWidth(0, LabelColumnWidth);
-	Hardpoints->SetColumnWidth(1, InputColumnWidth);
-	Hardpoints->SetColumnWidth(2, InputColumnWidth);
-	Hardpoints->SetColumnWidth(3, InputColumnWidth);
-
 	// Hide the label column and set the size for the label row
 	Hardpoints->SetRowLabelSize(0);
 	Hardpoints->SetColLabelSize(Hardpoints->GetRowSize(0));
@@ -281,11 +273,11 @@ void EDIT_CORNER_PANEL::CreateControls()
 	// To enable hiding of the non-label rows, we need to set the minimum height to zero
 	Hardpoints->SetRowMinimalAcceptableHeight(0);
 
-	// We never want the wheel center to be visible
+	// We never want the wheel center to be visible | wxALL, 5
 	Hardpoints->SetRowHeight(CORNER::WheelCenter + 1, 0);
 
 	// Add the grid to the sizer
-	MainSizer->Add(Hardpoints, 1, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALL | wxALIGN_TOP, 5);
+	MainSizer->Add(Hardpoints, 0, wxALIGN_TOP | wxEXPAND | wxALL, 5);
 
 	// Set the column headings
 	Hardpoints->SetColLabelValue(0, _T("Hardpoint"));
@@ -312,6 +304,17 @@ void EDIT_CORNER_PANEL::CreateControls()
 		// Add the names of all of the points to the grid
 		Hardpoints->SetCellValue(i + 1, 0, CORNER::GetHardpointName((CORNER::HARDPOINTS)i));
 	}
+	
+	// Size the columns
+	// The X, Y, and Z columns should be big enough to fit 80.0 as formatted
+	// by the converter.  First column is stretchable
+	Hardpoints->SetCellValue(3, 3, Converter.FormatNumber(80.0));
+	Hardpoints->AutoSizeColumn(3);
+	Hardpoints->SetColumnWidth(1, Hardpoints->GetColSize(3));
+	Hardpoints->SetColumnWidth(2, Hardpoints->GetColSize(3));
+	// The value we just put in cell (3,3) will get overwritten with a call to
+	// UpdateInformation()
+	Hardpoints->AutoStretchColumn(0);
 
 	// Don't let the user move or re-size the rows or move the columns
 	Hardpoints->EnableDragColMove(false);
@@ -322,9 +325,17 @@ void EDIT_CORNER_PANEL::CreateControls()
 	// End the batch mode edit and re-paint the control
 	Hardpoints->EndBatch();
 
-	// Re-size the columns
-	LabelColumnWidth = 100;
-	InputColumnWidth = 100;
+	// When setting the control width, we need to account for the width of the
+	// "expand" button, etc., so we specify that here
+#ifdef __WXGTK__
+	unsigned int additionalWidth = 40;
+#else
+	unsigned int additionalWidth = 30;
+#endif
+	
+	wxFlexGridSizer *lowerInputSizer = new wxFlexGridSizer(3, 3, 3);
+	lowerInputSizer->SetFlexibleDirection(wxHORIZONTAL);
+	MainSizer->Add(lowerInputSizer, 1, wxALIGN_BOTTOM);
 
 	// Create the combo-boxes
 	// Actuation type
@@ -332,62 +343,53 @@ void EDIT_CORNER_PANEL::CreateControls()
 	Choices.Clear();
 	for (i = 0; i < CORNER::NumberOfActuationTypes; i++)
 		Choices.Add(CORNER::GetActuationTypeName((CORNER::ACTUATION_TYPE)i));
-
-	wxBoxSizer *ActuationTypeSizer = new wxBoxSizer(wxHORIZONTAL);
+	
 	wxStaticText *ActuationTypeLabel = new wxStaticText(this, wxID_ANY,
-		_T("Actuation Type"), wxDefaultPosition, wxSize(LabelColumnWidth, -1));
+		_T("Actuation Type"));
 	ActuationType = new wxComboBox(this, ComboBoxActuationType, wxEmptyString, wxDefaultPosition,
-		wxSize(InputColumnWidth, -1), Choices, wxCB_READONLY);
+		wxDefaultSize, Choices, wxCB_READONLY);
+	SetMinimumWidthFromContents(ActuationType, additionalWidth);
 
-	ActuationTypeSizer->Add(ActuationTypeLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
-	ActuationTypeSizer->Add(ActuationType, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
+	lowerInputSizer->Add(ActuationTypeLabel, 0, wxALIGN_CENTER_VERTICAL);
+	lowerInputSizer->Add(ActuationType, 0, wxEXPAND);
+	lowerInputSizer->AddSpacer(-1);
 
 	// Actuation attachment
 	Choices.Clear();
 	for (i = 0; i < CORNER::NumberOfAttachments; i++)
 		Choices.Add(CORNER::GetActuationAttachmentName((CORNER::ACTUATION_ATTACHMENT)i));
 
-	wxBoxSizer *AttachmentSizer = new wxBoxSizer(wxHORIZONTAL);
 	wxStaticText *AttachmentLabel = new wxStaticText(this, wxID_ANY,
-		_T("Actuation Attachment"), wxDefaultPosition, wxSize(LabelColumnWidth, -1));
+		_T("Actuation Attachment"));
 	ActuationAttachment = new wxComboBox(this, ComboBoxActuationAttachment, wxEmptyString, wxDefaultPosition,
-		wxSize(InputColumnWidth, -1), Choices, wxCB_READONLY);
+		wxDefaultSize, Choices, wxCB_READONLY);
+	SetMinimumWidthFromContents(ActuationType, additionalWidth);
 
-	AttachmentSizer->Add(AttachmentLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
-	AttachmentSizer->Add(ActuationAttachment, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
+	lowerInputSizer->Add(AttachmentLabel, 0, wxALIGN_CENTER_VERTICAL);
+	lowerInputSizer->Add(ActuationAttachment, 0, wxEXPAND);
+	lowerInputSizer->AddSpacer(-1);
 
 	// Create the text controls
 	// Camber angle
-	wxBoxSizer *CamberSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText *CamberLabel = new wxStaticText(this, wxID_ANY,
-		_T("Static Camber"), wxDefaultPosition, wxSize(LabelColumnWidth, -1));
+	wxStaticText *CamberLabel = new wxStaticText(this, wxID_ANY, _T("Static Camber"));
 	CamberUnitsLabel = new wxStaticText(this, wxID_ANY,
 		wxEmptyString, wxDefaultPosition);
-	StaticCamber = new wxTextCtrl(this, TextBoxStaticCamber, wxEmptyString,
-		wxDefaultPosition, wxSize(InputColumnWidth, -1));
+	StaticCamber = new wxTextCtrl(this, TextBoxStaticCamber);
 
-	CamberSizer->Add(CamberLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
-	CamberSizer->Add(StaticCamber, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
-	CamberSizer->Add(CamberUnitsLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
+	lowerInputSizer->Add(CamberLabel, 0, wxALIGN_CENTER_VERTICAL);
+	lowerInputSizer->Add(StaticCamber, 0, wxEXPAND);
+	lowerInputSizer->Add(CamberUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 
 	// Toe angle
-	wxBoxSizer *ToeSizer = new wxBoxSizer(wxHORIZONTAL);
 	wxStaticText *ToeLabel = new wxStaticText(this, wxID_ANY,
-		_T("Static Toe"), wxDefaultPosition, wxSize(LabelColumnWidth, -1));
+		_T("Static Toe"));
 	ToeUnitsLabel = new wxStaticText(this, wxID_ANY,
 		wxEmptyString, wxDefaultPosition);
-	StaticToe = new wxTextCtrl(this, TextBoxStaticToe, wxEmptyString,
-		wxDefaultPosition, wxSize(InputColumnWidth, -1));
+	StaticToe = new wxTextCtrl(this, TextBoxStaticToe);
 
-	ToeSizer->Add(ToeLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
-	ToeSizer->Add(StaticToe, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
-	ToeSizer->Add(ToeUnitsLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
-
-	// Add the individial sizers to the main sizer
-	MainSizer->Add(ActuationTypeSizer, 0, wxALIGN_BOTTOM);
-	MainSizer->Add(AttachmentSizer, 0, wxALIGN_BOTTOM);
-	MainSizer->Add(CamberSizer, 0, wxALIGN_BOTTOM);
-	MainSizer->Add(ToeSizer, 0, wxALIGN_BOTTOM);
+	lowerInputSizer->Add(ToeLabel, 0, wxALIGN_CENTER_VERTICAL);
+	lowerInputSizer->Add(StaticToe, 0, wxEXPAND);
+	lowerInputSizer->Add(ToeUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 
 	// Assign the top level sizer to the dialog
 	SetSizer(TopSizer);

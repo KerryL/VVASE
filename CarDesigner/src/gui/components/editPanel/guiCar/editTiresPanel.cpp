@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  edit_tires_panel_class.cpp
+// File:  editTiresPanel.cpp
 // Created:  2/10/2009
 // Author:  K. Loux
 // Description:  Contains the class definition for the EDIT_TIRES_PANEL class.  This

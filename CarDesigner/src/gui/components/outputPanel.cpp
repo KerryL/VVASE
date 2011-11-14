@@ -151,7 +151,7 @@ void OUTPUT_PANEL::UpdateInformation(KINEMATIC_OUTPUTS Outputs, CAR &Car,
 	// Update the name for this column (and make it read only, bold and centered)
 	OutputsList->SetColLabelValue(Index, Name);
 
-	// Update all of the values and unit lables
+	// Update all of the values and unit labels
 	int i;
 	for (i = 0; i < KINEMATIC_OUTPUTS::NumberOfOutputScalars; i++)
 	{
@@ -358,20 +358,12 @@ void OUTPUT_PANEL::CreateControls()
 	wxBoxSizer *MainSizer = new wxBoxSizer(wxVERTICAL);
 	TopSizer->Add(MainSizer, 1, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALL, 1);
 
-	// The column widths
-	int LabelColumnWidth = 185;
-	int UnitsColumnWidth = 45;
-
 	// Create the grid for the hard point entry
 	OutputsList = new wxGrid(this, wxID_ANY);
 	OutputsList->CreateGrid(KINEMATIC_OUTPUTS::NumberOfOutputScalars, 2, wxGrid::wxGridSelectRows);
 
 	// Begin a batch edit of the grid
 	OutputsList->BeginBatch();
-
-	// Set the column widths
-	OutputsList->SetColumnWidth(0, LabelColumnWidth);
-	OutputsList->SetColumnWidth(1, UnitsColumnWidth);
 
 	// Hide the label column and set the size for the label row
 	OutputsList->SetRowLabelSize(0);
@@ -407,6 +399,9 @@ void OUTPUT_PANEL::CreateControls()
 	OutputsList->EnableDragColSize(true);
 	OutputsList->EnableDragGridSize(false);
 	OutputsList->EnableDragRowSize(false);
+	
+	// Set the column widths automatically
+	OutputsList->AutoSizeColumns();
 
 	// End the batch mode edit and re-paint the control
 	OutputsList->EndBatch();

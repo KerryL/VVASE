@@ -135,6 +135,7 @@ void PlotRenderer::UpdateDisplay(void)
 {
 	// Update the plot
 	plot->Update();
+	Refresh();
 
 	return;
 }
@@ -1122,6 +1123,7 @@ void PlotRenderer::OnDoubleClickEvent(wxMouseEvent &event)
 		else
 		{
 			// Both cursors are visible - move the closer one to the click spot
+			// FIXME:  Another option is to always alternate which one was moved?
 			if (fabs(leftCursor->GetValue() - value) < fabs(rightCursor->GetValue() - value))
 				leftCursor->SetValue(value);
 			else

@@ -59,6 +59,8 @@ public:
 	void AddCurve(wxString mathString);
 	void AddCurve(Dataset2D *data, wxString name);
 	void RemoveCurve(const unsigned int &i);
+	
+	PlotRenderer* GetRenderer(void) { return renderer; };
 
 private:
 	const Debugger &debugger;
@@ -87,7 +89,7 @@ private:
 		colCount
 	};
 
-	// For displaying a menu that was crated by this form
+	// For displaying a menu that was created by this form
 	// NOTE:  When calculating the Position to display this context menu,
 	// consider that the coordinates for the calling object might be different
 	// from the coordinates for this object!

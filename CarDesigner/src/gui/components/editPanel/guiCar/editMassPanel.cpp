@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  edit_mass_panel_class.cpp
+// File:  editMassPanel.cpp
 // Created:  2/10/2009
 // Author:  K. Loux
 // Description:  Contains the class definition for the EDIT_MASS_PANEL class.  This

@@ -18,7 +18,6 @@
 
 // wxWidgets headers
 #include <wx/wx.h>
-#include <wx/grid.h>
 
 // VVASE headers
 #include "vCar/suspension.h"
@@ -32,6 +31,7 @@ class Debugger;
 class Convert;
 class CORNER;
 class EDIT_SUSPENSION_NOTEBOOK;
+class SuperGrid;
 
 class EDIT_CORNER_PANEL : public wxPanel
 {
@@ -89,7 +89,7 @@ private:
 	wxComboBox *ActuationType;
 
 	// The text-entry control
-	wxGrid *Hardpoints;
+	SuperGrid *Hardpoints;
 
 	// The controls for the static-setup options
 	wxTextCtrl *StaticCamber;

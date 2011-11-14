@@ -7,7 +7,7 @@
 
 ===================================================================================*/
 
-// File:  edit_suspension_panel_class.cpp
+// File:  editSuspensionPanel.cpp
 // Created:  2/10/2009
 // Author:  K. Loux
 // Description:  Contains the class definition for the EDIT_SUSPENSION_PANEL class.  This

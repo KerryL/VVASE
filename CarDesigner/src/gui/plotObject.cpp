@@ -19,6 +19,7 @@
 // Local headers
 #include "gui/plotObject.h"
 #include "gui/renderer/plotRenderer.h"
+#include "gui/plotPanel.h"
 #include "vRenderer/color.h"
 #include "vRenderer/primitives/plotCurve.h"
 #include "vRenderer/primitives/axis.h"
@@ -58,9 +59,10 @@ PlotObject::PlotObject(PlotRenderer &_renderer) : renderer(_renderer)
 	fontFile = wxGetOSDirectory() + _T("\\fonts\\arial.ttf");
 #elif defined __WXGTK__
 	// FIXME:  This probably isn't very portable...
-	fontFile = _T("/usr/share/fonts/dejavu/DejaVuSans.ttf");
+	//fontFile = _T("/usr/share/fonts/dejavu/DejaVuSans.ttf");// Fedora 13
+	fontFile = _T("/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf");// Ubuntu 11.10
 #else
-	// Unknown platfrom - warn the user
+	// Unknown platform - warn the user
 #	warning "Unrecognized platform - unable to locate font files!"
 	fontFile = wxEmptyString;
 #endif
@@ -144,10 +146,9 @@ void PlotObject::Update(void)
 	renderer.UpdateCursors();
 
 	// Update the display of cursor values
-	// FIXME:  Make this work again
-	/*dynamic_cast<MainFrame*>(renderer.GetParent())->UpdateCursorValues(
+	dynamic_cast<PlotPanel*>(renderer.GetParent())->UpdateCursorValues(
 		renderer.GetLeftCursorVisible(), renderer.GetRightCursorVisible(),
-		renderer.GetLeftCursorValue(), renderer.GetRightCursorValue());*/
+		renderer.GetLeftCursorValue(), renderer.GetRightCursorValue());
 
 	return;
 }

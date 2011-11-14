@@ -117,7 +117,7 @@ void PlotPanel::CreateControls(void)
 
 	// Create the options control
 	optionsGrid = new wxGrid(this, wxID_ANY);
-	mainSizer->Add(optionsGrid, 0, wxEXPAND | wxALIGN_BOTTOM | wxALL, 5);
+	mainSizer->Add(optionsGrid, 0, wxEXPAND | wxALIGN_BOTTOM);
 
 	// Configure the grid
 	optionsGrid->BeginBatch();
@@ -142,6 +142,10 @@ void PlotPanel::CreateControls(void)
 
 	optionsGrid->SetColLabelAlignment(wxALIGN_CENTER, wxALIGN_CENTER);
 	optionsGrid->SetDefaultCellAlignment(wxALIGN_CENTER, wxALIGN_CENTER);
+	
+	// Set the minimum size of the grid to some factor times the height of the
+	// colum heading row
+	optionsGrid->SetMinSize(wxSize(-1, 3 * optionsGrid->GetColLabelSize()));
 
 	optionsGrid->EndBatch();
 
@@ -229,6 +233,7 @@ END_EVENT_TABLE();
 //==========================================================================
 void PlotPanel::UpdateDisplay(void)
 {
+	renderer->UpdateDisplay();
 }
 
 //==========================================================================
@@ -463,7 +468,7 @@ void PlotPanel::ClearAllCurves(void)
 //==========================================================================
 void PlotPanel::AddCurve(wxString mathString)
 {
-	// String will be empty if the user cancelled
+	// String will be empty if the user canceled
 	if (mathString.IsEmpty())
 		return;
 
@@ -606,7 +611,7 @@ void PlotPanel::AddCurve(Dataset2D *data, wxString name)
 	renderer->UpdateDisplay();
 
 	// Resize to prevent scrollbars and hidden values in the grid control
-	topSizer->Layout();
+	//topSizer->Layout();
 
 	return;
 }

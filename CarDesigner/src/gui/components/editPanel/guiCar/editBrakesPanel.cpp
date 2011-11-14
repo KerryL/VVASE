@@ -149,33 +149,29 @@ void EDIT_BRAKES_PANEL::CreateControls()
 	// Second sizer gives more space around the controls
 	wxBoxSizer *MainSizer = new wxBoxSizer(wxVERTICAL);
 	TopSizer->Add(MainSizer, 1, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALL, 5);
-
-	// The column widths
-	int LabelColumnWidth = 120;
-	int InputColumnWidth = 50;
+	
+	int cellPadding(3);
 
 	// Create the check boxes
 	wxBoxSizer *FrontBrakesInboardSizer = new wxBoxSizer(wxHORIZONTAL);
 	FrontBrakesInboard = new wxCheckBox(this, CheckBoxFrontBrakesInboard, _T("Front Brakes Inboard"));
-	FrontBrakesInboardSizer->Add(FrontBrakesInboard, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
+	FrontBrakesInboardSizer->Add(FrontBrakesInboard, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, cellPadding);
 
 	wxBoxSizer *RearBrakesInboardSizer = new wxBoxSizer(wxHORIZONTAL);
 	RearBrakesInboard = new wxCheckBox(this, CheckBoxRearBrakesInboard, _T("Rear Brakes Inboard"));
-	RearBrakesInboardSizer->Add(RearBrakesInboard, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
+	RearBrakesInboardSizer->Add(RearBrakesInboard, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, cellPadding);
 
 	// Create the text input boxes
 	wxBoxSizer *PercentFrontSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText *PercentFrontBrakingLabel = new wxStaticText(this, wxID_ANY, _T("Percent Front Braking"),
-		wxDefaultPosition, wxSize(LabelColumnWidth, -1));
-	PercentFrontBraking = new wxTextCtrl(this, TextBoxPercentFrontBraking, wxEmptyString, wxDefaultPosition,
-		wxSize(InputColumnWidth, -1));
-	PercentFrontSizer->Add(PercentFrontBrakingLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
-	PercentFrontSizer->Add(PercentFrontBraking, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
+	wxStaticText *PercentFrontBrakingLabel = new wxStaticText(this, wxID_ANY, _T("Percent Front Braking"));
+	PercentFrontBraking = new wxTextCtrl(this, TextBoxPercentFrontBraking);
+	PercentFrontSizer->Add(PercentFrontBrakingLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, cellPadding);
+	PercentFrontSizer->Add(PercentFrontBraking, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, cellPadding);
 
 	// Add the sizers to the main sizer
 	MainSizer->Add(FrontBrakesInboardSizer);
 	MainSizer->Add(RearBrakesInboardSizer);
-	MainSizer->AddSpacer(15);
+	MainSizer->AddSpacer(10);
 	MainSizer->Add(PercentFrontSizer);
 
 	// Assign the top level sizer to the dialog

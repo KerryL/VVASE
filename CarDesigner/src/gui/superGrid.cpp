@@ -121,6 +121,8 @@ void SuperGrid::OnSize(wxSizeEvent& event)
 		for (j = 0; j < stretchColumns.Count(); j++)
 			SetColSize(stretchColumns[j], colWidth);
 	}
+	
+	Refresh();
 
 	// Skip this event to the let the default handler also work
 	event.Skip();
