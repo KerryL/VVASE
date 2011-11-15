@@ -10,7 +10,7 @@
 // File:  threadJob.cpp
 // Created:  11/3/2009
 // Author:  K. Loux
-// Description:  Contains the class definition for the THREAD_JOB class.  This is the
+// Description:  Contains the class definition for the ThreadJob class.  This is the
 //				 class containing information that is stored in the job queue, i.e. this
 //				 class is used for communication from the GUI thread to the worker threads
 //				 (in that direction only - reverse communication is handled with events).
@@ -21,10 +21,10 @@
 #include "vSolver/threads/threadData.h"
 
 //==========================================================================
-// Class:			THREAD_JOB
-// Function:		THREAD_JOB
+// Class:			ThreadJob
+// Function:		ThreadJob
 //
-// Description:		Constructor for the THREAD_JOB class (default).
+// Description:		Constructor for the ThreadJob class (default).
 //
 // Input Arguments:
 //		None
@@ -36,18 +36,18 @@
 //		None
 //
 //==========================================================================
-THREAD_JOB::THREAD_JOB() : Command(THREAD_JOB::COMMAND_THREAD_NULL), Data(NULL)
+ThreadJob::ThreadJob() : command(ThreadJob::CommandThreadNull), data(NULL)
 {
 }
 
 //==========================================================================
-// Class:			THREAD_JOB
-// Function:		THREAD_JOB
+// Class:			ThreadJob
+// Function:		ThreadJob
 //
-// Description:		Constructor for the THREAD_JOB class (basic).
+// Description:		Constructor for the ThreadJob class (basic).
 //
 // Input Arguments:
-//		_Command		= THREAD_COMMANDS specifying the command type for this job
+//		_command		= ThreadCommands specifying the command type for this job
 //
 // Output Arguments:
 //		None
@@ -56,24 +56,24 @@ THREAD_JOB::THREAD_JOB() : Command(THREAD_JOB::COMMAND_THREAD_NULL), Data(NULL)
 //		None
 //
 //==========================================================================
-THREAD_JOB::THREAD_JOB(THREAD_COMMANDS _Command) : Command(_Command), Data(NULL)
+ThreadJob::ThreadJob(ThreadCommands _command) : command(_command), data(NULL)
 {
 	// Only permit certian types of jobs
-	assert(Command == THREAD_JOB::COMMAND_THREAD_EXIT ||
-		Command == THREAD_JOB::COMMAND_THREAD_STARTED ||
-		Command == THREAD_JOB::COMMAND_THREAD_NULL);
+	assert(command == ThreadJob::CommandThreadExit ||
+		command == ThreadJob::CommandThreadStarted ||
+		command == ThreadJob::CommandThreadNull);
 }
 
 //==========================================================================
-// Class:			THREAD_JOB
-// Function:		THREAD_JOB
+// Class:			ThreadJob
+// Function:		ThreadJob
 //
-// Description:		Constructor for the THREAD_JOB class.
+// Description:		Constructor for the ThreadJob class.
 //
 // Input Arguments:
-//		_Command	= THREAD_COMMANDS specifying the command type for this job
-//		_Name		= const wxString& Name of the car
-//		_Index		= int& representing the object index for the associated object
+//		_command	= ThreadCommands specifying the command type for this job
+//		_name		= const wxString& Name of the car
+//		_index		= int& representing the object index for the associated object
 //					  in the MAIN_FRAME
 //
 // Output Arguments:
@@ -83,20 +83,20 @@ THREAD_JOB::THREAD_JOB(THREAD_COMMANDS _Command) : Command(_Command), Data(NULL)
 //		None
 //
 //==========================================================================
-THREAD_JOB::THREAD_JOB(THREAD_COMMANDS _Command, THREAD_DATA *_Data,
-					   const wxString &_Name, int &_Index) : Command(_Command),
-					   Data(_Data), Name(_Name), Index(_Index)
+ThreadJob::ThreadJob(ThreadCommands _command, ThreadData *_data,
+					   const wxString &_name, int &_index) : command(_command),
+					   data(_data), name(_name), index(_index)
 {
 	// Make sure the correct data was passed to this job
-	assert(Data);
-	assert(Data->OkForCommand(Command));
+	assert(data);
+	assert(data->OkForCommand(command));
 }
 
 //==========================================================================
-// Class:			THREAD_JOB
-// Function:		~THREAD_JOB
+// Class:			ThreadJob
+// Function:		~ThreadJob
 //
-// Description:		Destructor for the THREAD_JOB class.
+// Description:		Destructor for the ThreadJob class.
 //
 // Input Arguments:
 //		None
@@ -108,6 +108,6 @@ THREAD_JOB::THREAD_JOB(THREAD_COMMANDS _Command, THREAD_DATA *_Data,
 //		None
 //
 //==========================================================================
-THREAD_JOB::~THREAD_JOB()
+ThreadJob::~ThreadJob()
 {
 }

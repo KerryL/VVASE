@@ -41,6 +41,7 @@
 #include <wx/stdpaths.h>
 #include <wx/filename.h>
 #include <wx/docview.h>
+#include <wx/fontenum.h>
 
 //#include <wx/platinfo.h>
 
@@ -336,6 +337,15 @@ void MAIN_FRAME::SetProperties(void)
 	wxTextAttr OutputAttributes;
 	wxFont OutputFont;
 
+	// FIXME:  This is not necessarily portable!
+	/*wxArrayString fontList = wxFontEnumerator::GetFacenames(wxFONTENCODING_SYSTEM, true);
+	unsigned int j;
+	wxString temp;
+	for (j = 0; j < fontList.GetCount(); j++)
+		temp.Append(fontList[j] + _T("\n"));
+	wxMessageBox(temp);
+	FontFaceName = fontList[3];//*/
+	// Checkout wxFontMapper, too
 #ifdef __WXGTK__
 	FontFaceName.assign("Monospace");
 #else
@@ -349,6 +359,8 @@ void MAIN_FRAME::SetProperties(void)
 	OutputAttributes.SetFont(OutputFont);
 	if (!DebugPane->SetDefaultStyle(OutputAttributes))
 		debugger.Print(_T("Error setting font style"));
+
+	//debugger.Print(FontFaceName);
 
 	// Also put the cursor at the bottom of the text, so the window scrolls automatically
 	// as it updates with text
@@ -388,7 +400,7 @@ void MAIN_FRAME::SetProperties(void)
 	converter.SetTemperatureUnits(Convert::FAHRENHEIT);
 
 	// Allow draging-and-dropping of files onto this window to open them
-	SetDropTarget(dynamic_cast<wxDropTarget*>(new DROP_TARGET(*this)));
+	SetDropTarget(dynamic_cast<wxDropTarget*>(new DropTarget(*this)));
 
 	return;
 }
@@ -2190,7 +2202,9 @@ void MAIN_FRAME::RemoveObjectFromList(int Index)
 		// Re-set the index
 		OpenObjectList[i]->SetIndex(i);
 
-		// Update the displays
+		// Update the data and displays - data first, because in some cases data is
+		// dependent on other open objects, and we may have just closed one
+		OpenObjectList[i]->UpdateData();
 		OpenObjectList[i]->UpdateDisplay();
 	}
 

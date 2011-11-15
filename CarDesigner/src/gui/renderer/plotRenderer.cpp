@@ -541,7 +541,7 @@ bool PlotRenderer::GetGridOn(void)
 // Description:		Turns on plot grid.
 //
 // Input Arguments:
-//		None
+//		grid	= const bool&
 //
 // Output Arguments:
 //		None
@@ -550,9 +550,9 @@ bool PlotRenderer::GetGridOn(void)
 //		None
 //
 //==========================================================================
-void PlotRenderer::SetGridOn()
+void PlotRenderer::SetGridOn(const bool &grid)
 {
-	plot->SetGrid(true);
+	plot->SetGrid(grid);
 	UpdateDisplay();
 
 	return;
@@ -1022,8 +1022,6 @@ void PlotRenderer::AutoScaleRight()
 	plot->SetAutoScaleRight();
 
 	UpdateDisplay();
-
-	return;
 }
 
 //==========================================================================
@@ -1047,8 +1045,75 @@ void PlotRenderer::SetXLabel(wxString text)
 	plot->SetXLabel(text);
 
 	UpdateDisplay();
+}
 
-	return;
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		SetLeftYLabel
+//
+// Description:		Sets the text for the y-axis label.
+//
+// Input Arguments:
+//		text	= wxString
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotRenderer::SetLeftYLabel(wxString text)
+{
+	plot->SetLeftYLabel(text);
+
+	UpdateDisplay();
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		SetRightYLabel
+//
+// Description:		Sets the text for the y-axis label.
+//
+// Input Arguments:
+//		text	= wxString
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotRenderer::SetRightYLabel(wxString text)
+{
+	plot->SetRightYLabel(text);
+
+	UpdateDisplay();
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		SetTitle
+//
+// Description:		Sets the plot title text.
+//
+// Input Arguments:
+//		text	= wxString
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotRenderer::SetTitle(wxString text)
+{
+	plot->SetTitle(text);
+
+	UpdateDisplay();
 }
 
 //==========================================================================

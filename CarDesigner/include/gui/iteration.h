@@ -150,7 +150,7 @@ public:
 	void SetXLabel(const wxString &_XLabel) { XLabel = _XLabel; };
 	void SetAutoGenerateZLabel(const bool &_AutoGenerateZLabel) { AutoGenerateZLabel = _AutoGenerateZLabel; };
 	void SetZLabel(const wxString &_ZLabel) { ZLabel = _ZLabel; };
-	//void SetShowGridLines(const bool &_ShowGridLines) { ShowGridLines = _ShowGridLines; };
+	void SetShowGridLines(const bool &_ShowGridLines) { ShowGridLines = _ShowGridLines; };
 
 	bool GetAutoGenerateTitle(void) const { return GenerateTitleFromFileName; };
 	wxString GetTitle(void) const { return Title; };
@@ -158,7 +158,7 @@ public:
 	wxString GetXLabel(void) const { return XLabel; };
 	bool GetAutoGenerateZLabel(void) const { return AutoGenerateZLabel; };
 	wxString GetZLabel(void) const { return ZLabel; };
-	//bool GetShowGridLines(void) const { return ShowGridLines; };
+	bool GetShowGridLines(void) const { return ShowGridLines; };
 
 	// Methods for reading and writing default configuration settings
 	void ReadDefaultsFromConfig(void);
@@ -227,7 +227,10 @@ private:
 	wxString XLabel;
 	bool AutoGenerateZLabel;
 	wxString ZLabel;
-	//bool ShowGridLines;
+	bool ShowGridLines;
+
+	// Applies user-defined plot settings
+	void ApplyPlotFormatting(void);
 
 	// For getting converted values
 	double ConvertValue(KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE _Output);

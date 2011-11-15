@@ -227,8 +227,6 @@ void CAR_RENDERER::UpdateDisplay(const KINEMATIC_OUTPUTS &Outputs)
 	// Render the image.  We need to reset the frustum every time we do this just in case
 	// the user zooms out very far, etc.
 	AutoSetFrustum();
-
-	return;
 }
 
 //==========================================================================
@@ -740,8 +738,6 @@ void CAR_RENDERER::UpdateCarDisplay(void)
 		AppearanceOptions.GetResolution(APPEARANCE_OPTIONS::ResolutionHelperOrb),
 		AppearanceOptions.GetColor(APPEARANCE_OPTIONS::ColorHelperOrb),
 		AppearanceOptions.GetVisibility(APPEARANCE_OPTIONS::VisibilityHelperOrb) && HelperOrbIsActive);
-
-	return;
 }
 
 //==========================================================================
@@ -882,8 +878,6 @@ void CAR_RENDERER::UpdateKinematicsDisplay(KINEMATIC_OUTPUTS Outputs)
 		AppearanceOptions.GetResolution(APPEARANCE_OPTIONS::ResolutionMarker),
 		AppearanceOptions.GetColor(APPEARANCE_OPTIONS::ColorInstantMarker),
 		AppearanceOptions.GetVisibility(APPEARANCE_OPTIONS::VisibilityInstantAxis));
-
-	return;
 }
 
 //==========================================================================
@@ -989,8 +983,6 @@ void CAR_RENDERER::CreateActors(void)
 
 	// Helper orb
 	HelperOrb = new POINT3D(*this);
-
-	return;
 }
 
 //==========================================================================
@@ -1026,6 +1018,4 @@ void CAR_RENDERER::SetHelperOrbPosition(const CORNER::HARDPOINTS &CornerPoint,
 
 	// If we set the position, we'll assume that we want it to be active
 	HelperOrbIsActive = true;
-
-	return;
 }

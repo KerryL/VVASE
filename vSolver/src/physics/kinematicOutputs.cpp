@@ -157,7 +157,7 @@ void KINEMATIC_OUTPUTS::InitializeAllOutputs(void)
 //					Measurements are take on Current.
 //
 // Input Arguments:
-//		Original	= cosnt CAR*, pointing to object describing the car's
+//		Original	= const CAR*, pointing to object describing the car's
 //					  un-perturbed state
 //		Current		= const SUSPENSION*, pointing to object describing the new
 //					  state of the car

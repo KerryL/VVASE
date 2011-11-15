@@ -55,6 +55,12 @@ PlotObject::PlotObject(PlotRenderer &_renderer) : renderer(_renderer)
 
 	// Find the location of the fonts directory
 	wxString fontFile;
+	/*wxFont systemFont = wxSystemSettings::GetFont(wxSYS_SYSTEM_FONT);
+	wxMessageBox(systemFont.GetFaceName());
+	wxMessageBox(systemFont.GetNativeFontInfoDesc());
+	wxMessageBox(systemFont.GetNativeFontInfoUserDesc());
+	wxFontEnumerator
+	See stuff in mainFrame.cpp for setting output pane font*/
 #ifdef __WXMSW__
 	fontFile = wxGetOSDirectory() + _T("\\fonts\\arial.ttf");
 #elif defined __WXGTK__
@@ -544,7 +550,6 @@ void PlotObject::FormatPlot(void)
 	axisLeft->SetMinorResolution(yLeftMinorResolution);
 	axisLeft->SetMajorResolution(yLeftMajorResolution);
 	axisLeft->SetFont(axisFont);
-	//axisLeft->SetLabel(wxEmptyString);// FIXME
 	axisLeft->SetTickStyle(tickStyle);
 
 	axisRight->SetOrientation(Axis::OrientationRight);
@@ -553,13 +558,11 @@ void PlotObject::FormatPlot(void)
 	axisRight->SetMinorResolution(yRightMinorResolution);
 	axisRight->SetMajorResolution(yRightMajorResolution);
 	axisRight->SetFont(axisFont);
-	//axisRight->SetLabel(wxEmptyString);// FIXME
 	axisRight->SetTickStyle(tickStyle);
 
 	// Set the title properties
-	/*titleObject->SetFont(titleFont);
+	titleObject->SetFont(titleFont);
 	titleObject->SetCentered(true);
-	titleObject->SetText(wxEmptyString);
 	titleObject->SetPosition(renderer.GetSize().GetWidth() / 2.0,
 		renderer.GetSize().GetHeight() - 75.0 / 2.0);// 75.0 is from OffsetFromWindowEdge in axis.cpp*/
 
@@ -1079,10 +1082,10 @@ bool PlotObject::GetGrid(void)
 // Class:			PlotObject
 // Function:		SetXLabel
 //
-// Description:		Resets auto-scaling for all axes.
+// Description:		Sets the x-axis text.
 //
 // Input Arguments:
-//		None
+//		text	= wxString
 //
 // Output Arguments:
 //		None
@@ -1094,8 +1097,69 @@ bool PlotObject::GetGrid(void)
 void PlotObject::SetXLabel(wxString text)
 {
 	axisBottom->SetLabel(text);
+}
 
-	return;
+//==========================================================================
+// Class:			PlotObject
+// Function:		SetXLabel
+//
+// Description:		Sets the left y-axis text.
+//
+// Input Arguments:
+//		text	= wxString
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotObject::SetLeftYLabel(wxString text)
+{
+	axisLeft->SetLabel(text);
+}
+
+//==========================================================================
+// Class:			PlotObject
+// Function:		SetXLabel
+//
+// Description:		Sets the title text.
+//
+// Input Arguments:
+//		text	= wxString
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotObject::SetRightYLabel(wxString text)
+{
+	axisRight->SetLabel(text);
+}
+
+//==========================================================================
+// Class:			PlotObject
+// Function:		SetTitle
+//
+// Description:		Sets the title text.
+//
+// Input Arguments:
+//		text	= wxString
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotObject::SetTitle(wxString text)
+{
+	titleObject->SetText(text);
 }
 
 //==========================================================================

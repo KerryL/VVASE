@@ -14,8 +14,8 @@
 //				 information required to conduct genetic optimizations.
 // History:
 
-#ifndef _OPTIMIZATION_DATA_CLASS_H_
-#define _OPTIMIZATION_DATA_CLASS_H_
+#ifndef _OPTIMIZATION_DATA_H_
+#define _OPTIMIZATION_DATA_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -24,22 +24,22 @@
 #include "vSolver/threads/threadData.h"
 
 // VVASE forward declarations
-class GENETIC_ALGORITHM;
+class GeneticAlgorithm;
 
-class OPTIMIZATION_DATA : public THREAD_DATA
+class OptimizationData : public ThreadData
 {
 public:
 	// Constructor
-	OPTIMIZATION_DATA(GENETIC_ALGORITHM *_GeneticAlgorithm);
+	OptimizationData(GeneticAlgorithm *_geneticAlgorithm);
 
 	// Destructor
-	~OPTIMIZATION_DATA();
+	~OptimizationData();
 
 	// Data required to perform genetic optimizations (for GENETIC_OPTIMIZATION objects)
-	GENETIC_ALGORITHM *GeneticAlgorithm;
+	GeneticAlgorithm *geneticAlgorithm;
 
 	// Mandatory overload from THREAD_DATA
-	bool OkForCommand(THREAD_JOB::THREAD_COMMANDS &Command);
+	bool OkForCommand(ThreadJob::ThreadCommands &command);
 };
 
 #endif// _OPTIMIZATION_DATA_CLASS_H_

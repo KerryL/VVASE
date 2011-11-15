@@ -144,8 +144,6 @@ void ATMOSPHERE::SetConditions(ATMOSPHERE::CONDITIONS _CurrentDay)
 {
 	// Set the current conditions
 	CurrentDay = _CurrentDay;
-
-	return;
 }
 
 //==========================================================================

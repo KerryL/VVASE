@@ -163,7 +163,11 @@ void EDIT_TIRES_PANEL::UpdateInformation(TIRE_SET *_CurrentTireSet)
 	LeftRearDiameterUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UnitTypeDistance));
 	LeftRearWidthUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UnitTypeDistance));
 
-	return;
+	// Update the sizers
+	/*int minWidth;
+	GetTextExtent(LeftRearWidthUnitsLabel->GetLabel(), &minWidth, NULL);
+	LeftRearWidthUnitsLabel->SetMinSize(wxSize(minWidth, -1));
+	Layout();*/
 }
 
 //==========================================================================
@@ -192,12 +196,14 @@ void EDIT_TIRES_PANEL::CreateControls()
 
 	// Second sizer gives more space around the controls
 	wxFlexGridSizer *MainSizer = new wxFlexGridSizer(3, 5, 5);
-	TopSizer->Add(MainSizer, 0, wxALL | wxEXPAND, 5);
+	TopSizer->Add(MainSizer, 1, wxALL | wxEXPAND, 5);
+
+	// Spacing between each wheel
+	int spacing(10);
 
 	// Create the text controls
 	// Right front
 	wxStaticText *RightFrontLabel = new wxStaticText(this, wxID_ANY, _T("Right Front"));
-
 	MainSizer->Add(RightFrontLabel, wxALIGN_CENTER_VERTICAL);
 	MainSizer->AddSpacer(-1);
 	MainSizer->AddSpacer(-1);
@@ -220,9 +226,13 @@ void EDIT_TIRES_PANEL::CreateControls()
 	MainSizer->Add(RightFrontTireWidth, 0, wxEXPAND);
 	MainSizer->Add(RightFrontWidthUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 
+	// Add space before the next corner
+	MainSizer->AddSpacer(spacing);
+	MainSizer->AddSpacer(spacing);
+	MainSizer->AddSpacer(spacing);
+
 	// Left front
 	wxStaticText *LeftFrontLabel = new wxStaticText(this, wxID_ANY, _T("Left Front"));
-
 	MainSizer->Add(LeftFrontLabel, wxALIGN_CENTER_VERTICAL);
 	MainSizer->AddSpacer(-1);
 	MainSizer->AddSpacer(-1);
@@ -245,9 +255,13 @@ void EDIT_TIRES_PANEL::CreateControls()
 	MainSizer->Add(LeftFrontTireWidth, 0, wxEXPAND);
 	MainSizer->Add(LeftFrontWidthUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 
+	// Add space before the next corner
+	MainSizer->AddSpacer(spacing);
+	MainSizer->AddSpacer(spacing);
+	MainSizer->AddSpacer(spacing);
+
 	// Right rear
 	wxStaticText *RightRearLabel = new wxStaticText(this, wxID_ANY, _T("Right Rear"));
-
 	MainSizer->Add(RightRearLabel, wxALIGN_CENTER_VERTICAL);
 	MainSizer->AddSpacer(-1);
 	MainSizer->AddSpacer(-1);
@@ -270,9 +284,13 @@ void EDIT_TIRES_PANEL::CreateControls()
 	MainSizer->Add(RightRearTireWidth, 0, wxEXPAND);
 	MainSizer->Add(RightRearWidthUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 
+	// Add space before the next corner
+	MainSizer->AddSpacer(spacing);
+	MainSizer->AddSpacer(spacing);
+	MainSizer->AddSpacer(spacing);
+
 	// Left rear
 	wxStaticText *LeftRearLabel = new wxStaticText(this, wxID_ANY, _T("Left Rear"));
-
 	MainSizer->Add(LeftRearLabel, wxALIGN_CENTER_VERTICAL);
 	MainSizer->AddSpacer(-1);
 	MainSizer->AddSpacer(-1);
@@ -295,8 +313,21 @@ void EDIT_TIRES_PANEL::CreateControls()
 	MainSizer->Add(LeftRearTireWidth, 0, wxEXPAND);
 	MainSizer->Add(LeftRearWidthUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 
+	// Adjust text box minimum size
+	// Use number larger than actual anticipated value for these boxes to determine appropriate size
+	int minWidth;
+	GetTextExtent(Converter.FormatNumber(Converter.ConvertDistance(-400.0)), &minWidth, NULL);
+	RightFrontTireDiameter->SetMinSize(wxSize(minWidth, -1));
+	RightFrontTireWidth->SetMinSize(wxSize(minWidth, -1));
+	LeftFrontTireDiameter->SetMinSize(wxSize(minWidth, -1));
+	LeftFrontTireWidth->SetMinSize(wxSize(minWidth, -1));
+	RightRearTireDiameter->SetMinSize(wxSize(minWidth, -1));
+	RightRearTireWidth->SetMinSize(wxSize(minWidth, -1));
+	LeftRearTireDiameter->SetMinSize(wxSize(minWidth, -1));
+	LeftRearTireWidth->SetMinSize(wxSize(minWidth, -1));
+
 	// Assign the top level sizer to the dialog
-	SetSizerAndFit(TopSizer);
+	SetSizer(TopSizer);
 }
 
 //==========================================================================

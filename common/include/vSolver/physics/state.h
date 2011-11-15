@@ -13,43 +13,43 @@
 // Description:  Contains class declaration for STATE class.
 // History:
 
-#ifndef _STATE_CLASS_H_
-#define _STATE_CLASS_H_
+#ifndef _STATE_H_
+#define _STATE_H_
 
-class STATE
+class State
 {
 public:
 	// Constructor
-	STATE();
+	State();
 
 	// Destructor
-	~STATE();
+	~State();
 
 	// The 14 degrees-of-freedom
 	struct DOF
 	{								// Position Units	Veclocity Units
-		double X;					// [in]				[in/sec]
-		double Y;					// [in]				[in/sec]
-		double Z;					// [in]				[in/sec]
-		double Heading;				// [rad]			[rad/sec]
-		double Pitch;				// [rad]			[rad/sec]
-		double Roll;				// [rad]			[rad/sec]
-		double RightFrontDamper;	// [in]				[in/sec]
-		double LeftFrontDamper;		// [in]				[in/sec]
-		double RightRearDamper;		// [in]				[in/sec]
-		double LeftRearDamper;		// [in]				[in/sec]
-		double RightFrontWheel;		// [rad]			[rad/sec]
-		double LeftFrontWheel;		// [rad]			[rad/sec]
-		double RightRearWheel;		// [rad]			[rad/sec]
-		double LeftRearWheel;		// [rad]			[rad/sec]
+		double x;					// [in]				[in/sec]
+		double y;					// [in]				[in/sec]
+		double z;					// [in]				[in/sec]
+		double heading;				// [rad]			[rad/sec]
+		double pitch;				// [rad]			[rad/sec]
+		double roll;				// [rad]			[rad/sec]
+		double rightFrontDamper;	// [in]				[in/sec]
+		double leftFrontDamper;		// [in]				[in/sec]
+		double rightRearDamper;		// [in]				[in/sec]
+		double leftRearDamper;		// [in]				[in/sec]
+		double rightFrontWheel;		// [rad]			[rad/sec]
+		double leftFrontWheel;		// [rad]			[rad/sec]
+		double rightRearWheel;		// [rad]			[rad/sec]
+		double leftRearWheel;		// [rad]			[rad/sec]
 	};
 
 	// The rates and states that define this object
-	DOF States;
-	DOF Rates;// = d/dt(States)
+	DOF states;
+	DOF rates;// = d/dt(States)
 
 private:
 	// Operators
 };
 
-#endif// _STATE_CLASS_H_
+#endif// _STATE_H_

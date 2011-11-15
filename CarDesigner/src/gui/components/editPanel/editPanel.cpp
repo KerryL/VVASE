@@ -294,7 +294,7 @@ void EDIT_PANEL::CreateControls(bool IgnoreSystemsTree)
 					wxDefaultPosition, wxDefaultSize, debugger);
 
 				// Add the brakes panel to the sizer
-				Sizer->Add(EditBrakes);
+				Sizer->Add(EditBrakes, 1, wxEXPAND);
 			}
 			else if (SystemsTree->GetItemType(CurrentTreeID) == GUI_CAR::SubsystemDrivetrain)
 			{
@@ -309,7 +309,7 @@ void EDIT_PANEL::CreateControls(bool IgnoreSystemsTree)
 					wxDefaultPosition, wxDefaultSize, debugger);
 
 				// Add the mass panel to the sizer
-				Sizer->Add(EditMass);
+				Sizer->Add(EditMass, 1, wxEXPAND);
 			}
 			else if (SystemsTree->GetItemType(CurrentTreeID) == GUI_CAR::SubsystemSuspension)
 			{
@@ -327,7 +327,7 @@ void EDIT_PANEL::CreateControls(bool IgnoreSystemsTree)
 					wxDefaultPosition, wxDefaultSize, debugger);
 
 				// Add the tire set to the sizer
-				Sizer->Add(EditTires);
+				Sizer->Add(EditTires, 1, wxEXPAND);
 			}
 		}
 

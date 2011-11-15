@@ -55,7 +55,7 @@ public:
 	double GetRightYMax(void) const;
 
 	// Sets properties for actors
-	void SetGridOn(void);
+	void SetGridOn(const bool &grid = true);
 	void SetGridOff(void);
 	void SetBottomGrid(const bool &grid);
 	void SetLeftGrid(const bool &grid);
@@ -70,6 +70,9 @@ public:
 	void SetRightYLimits(const double &min, const double &max);
 
 	void SetXLabel(wxString text);
+	void SetLeftYLabel(wxString text);
+	void SetRightYLabel(wxString text);
+	void SetTitle(wxString text);
 
 	void AddCurve(const Dataset2D &data);
 	void RemoveAllCurves(void);

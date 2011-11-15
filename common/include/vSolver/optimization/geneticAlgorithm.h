@@ -15,33 +15,33 @@
 //				 and their object's phenotype.
 // History:
 
-#ifndef _GENETIC_ALGORITHM_CLASS_H_
-#define _GENETIC_ALGORITHM_CLASS_H_
+#ifndef _GENETIC_ALGORITHM_H_
+#define _GENETIC_ALGORITHM_H_
 
 // wxWidgets headers
 #include <wx/thread.h>
 
 // Class declaration
-class GENETIC_ALGORITHM
+class GeneticAlgorithm
 {
 public:
 	// Constructor
-	GENETIC_ALGORITHM();
+	GeneticAlgorithm();
 
 	// Destructor
-	virtual ~GENETIC_ALGORITHM();
+	virtual ~GeneticAlgorithm();
 
 	// The algorithm control
-	void InitializeAlgorithm(int _PopulationSize, int _GenerationLimit,
-		int _NumberOfGenes, int *_NumberOfPhenotypes, bool _Minimize = false,
-		int _Crossover = 0, double _Elitism = 0.0, double _Mutation = 0.0);
+	void InitializeAlgorithm(int _populationSize, int _generationLimit,
+		int _numberOfGenes, int *_numberOfPhenotypes, bool _minimize = false,
+		int _crossover = 0, double _elitism = 0.0, double _mutation = 0.0);
 	bool PerformOptimization(void);
 
 	// Sorting methods - We allow for multiple sorting algorithms
 	// because some problems may have different requirements
 	// (recursive algorithms are fast, but on large arrays they have
 	// potential to overflow the stack, for example)
-	enum SORTING_METHOD
+	enum SortingMethod
 	{
 		SortSelection,
 		SortQuicksort,
@@ -49,62 +49,62 @@ public:
 	};
 
 	// Private data accessors
-	void SetPopulationSize(int _PopulationSize);
-	inline int GetPopulationSize(void) const { wxMutexLocker Lock(GSAMutex); return PopulationSize; };
+	void SetPopulationSize(int _populationSize);
+	inline int GetPopulationSize(void) const { wxMutexLocker lock(gsaMutex); return populationSize; };
 
-	void SetGenerationLimit(int _GenerationLimit);
-	inline int GetGenerationLimit(void) const { wxMutexLocker Lock(GSAMutex); return GenerationLimit; };
+	void SetGenerationLimit(int _generationLimit);
+	inline int GetGenerationLimit(void) const { wxMutexLocker lock(gsaMutex); return generationLimit; };
 
-	void SetElitismPercentage(double _Elitism);
-	inline double GetElitismPercentage(void) const { wxMutexLocker Lock(GSAMutex); return Elitism; };
+	void SetElitismPercentage(double _elitism);
+	inline double GetElitismPercentage(void) const { wxMutexLocker lock(gsaMutex); return elitism; };
 
-	void SetMutationProbability(double _Mutation);
-	inline double GetMutationProbability(void) const { wxMutexLocker Lock(GSAMutex); return Mutation; };
+	void SetMutationProbability(double _mutation);
+	inline double GetMutationProbability(void) const { wxMutexLocker lock(gsaMutex); return mutation; };
 
-	void SetCrossoverPoint(int _Crossover);
-	inline int GetCrossoverPoint(void) const { wxMutexLocker Lock(GSAMutex); return Crossover; };
+	void SetCrossoverPoint(int _crossover);
+	inline int GetCrossoverPoint(void) const { wxMutexLocker Lock(gsaMutex); return crossover; };
 
-	inline void SetSortingMethod(SORTING_METHOD _SortingMethod) { wxMutexLocker Lock(GSAMutex); SortingMethod = _SortingMethod; };
-	inline SORTING_METHOD GetSortingMethod(void) const { wxMutexLocker Lock(GSAMutex); return SortingMethod; };
+	inline void SetSortingMethod(SortingMethod _sortingMethod) { wxMutexLocker lock(gsaMutex); sortingMethod = _sortingMethod; };
+	inline SortingMethod GetSortingMethod(void) const { wxMutexLocker lock(gsaMutex); return sortingMethod; };
 
 protected:
 	// The fitness function (MUST be overridden)
-	virtual double DetermineFitness(const int *CurrentGenome) = 0;
+	virtual double DetermineFitness(const int *currentGenome) = 0;
 
 	// This function allows room for derived classes to take additional actions
 	// (report status, interrupt operation, etc.)
 	virtual void PerformAdditionalActions(void);
 
 	// The maximum number of generations
-	int GenerationLimit;
+	int generationLimit;
 
 	// The current generation
-	int CurrentGeneration;
+	int currentGeneration;
 
 	// The population size
-	int PopulationSize;
+	int populationSize;
 
 	// The crossover point
-	int Crossover;// 0 to NumberOfGenes
+	int crossover;// 0 to NumberOfGenes
 
 	// The elitism percentage
-	double Elitism;// 0.0 to 1.0
+	double elitism;// 0.0 to 1.0
 
 	// The mutation probability
-	double Mutation;// 0.0 to 1.0
+	double mutation;// 0.0 to 1.0
 
 	// The genes and phenotypes
-	int NumberOfGenes;
-	int *NumberOfPhenotypes;
+	int numberOfGenes;
+	int *numberOfPhenotypes;
 
 	// The genomes (first index:  generation, second index:  citizen, third index:  gene)
-	int ***Genomes;
+	int ***genomes;
 
 	// The fitnesses (first index:  generation, second index:  citizen)
-	double **Fitnesses;
+	double **fitnesses;
 
 	// For thread-safety
-	mutable wxMutex GSAMutex;
+	mutable wxMutex gsaMutex;
 
 private:
 	// Creates the initial list of genomes (random)
@@ -118,15 +118,15 @@ private:
 	void Breed(void);
 
 	// This object's sorting method
-	SORTING_METHOD SortingMethod;
+	SortingMethod sortingMethod;
 
 	// Sorts the current generation's genomes and fitnesses by fitness
 	void SortByFitness(void);
 
 	// The actual sorting algorithms
-	void SelectionSort(double *FitnessArray, int **GenomeArray, const int ArraySize);
-	void MergeSort(double *FitnessArray, int **GenomeArray, const int ArraySize);
-	void Quicksort(double *FitnessArray, int **GenomeArray, const int ArraySize);
+	void SelectionSort(double *fitnessArray, int **genomeArray, const int arraySize);
+	void MergeSort(double *fitnessArray, int **genomeArray, const int arraySize);
+	void Quicksort(double *fitnessArray, int **genomeArray, const int arraySize);
 
 	// Flag that inidicates we should minimize fitness function rather than maximize it
 	bool Minimize;
@@ -135,4 +135,4 @@ private:
 	void DeleteDynamicMemory(void);
 };
 
-#endif// _GENETIC_ALGORITHM_CLASS_H_
+#endif// _GENETIC_ALGORITHM_H_

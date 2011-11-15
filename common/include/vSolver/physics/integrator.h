@@ -13,8 +13,8 @@
 // Description:  Contains class declaration for INTEGRATOR class.
 // History:
 
-#ifndef _INTEGRATOR_CLASS_H_
-#define _INTEGRATOR_CLASS_H_
+#ifndef _INTEGRATOR_H_
+#define _INTEGRATOR_H_
 
 // VVASE headers
 #include "vSolver/physics/state.h"
@@ -22,66 +22,66 @@
 // VVASE forward declarations
 class Debugger;
 
-class INTEGRATOR
+class Integrator
 {
 public:
 	// Enumeration describing the different integration methods available
-	enum INTEGRATION_METHOD
+	enum IntegrationMethod
 	{
-		INT_EULER_SEMI_IMPLICIT,
-		INT_RUNGE_KUTTA_2,
-		INT_RUNGE_KUTTA_4,
-		INT_ADAMS_BASHFORTH_3
+		MethodEulerSemiImplicit,
+		MethodRungeKutta2,
+		MethodRungeKutta4,
+		MethodAdamsBashforth3
 	};
 
 	// Constructor
-	INTEGRATOR(const INTEGRATION_METHOD &_IntegrationMethod, const double &_Frequency,
+	Integrator(const IntegrationMethod &_integrationMethod, const double &_frequency,
 		const Debugger &_debugger);
-	INTEGRATOR(const INTEGRATOR &Integrator);
+	Integrator(const Integrator &integrator);
 
 	// Destructor
-	~INTEGRATOR();
+	~Integrator();
 
 	// Calculates the state at the next time step
-	STATE ComputeNewState(void);
+	State ComputeNewState(void);
 
 	// Sets the integration method to use
-	void SetIntegrationMethod(INTEGRATION_METHOD _IntegrationMethod);
+	void SetIntegrationMethod(IntegrationMethod _integrationMethod);
 
 	// Sets the simulation frequency
-	void SetFrequency(double _Frequency);
+	void SetFrequency(double _frequency);
 
 	// Reset functions for initializing the simulation
-	void Reset(STATE InitialConditions);
+	void Reset(State initialConditions);
 	void Reset(void);// Zero initial conditions
 
 	// Overloaded operators
-	INTEGRATOR& operator = (const INTEGRATOR &Integrator);
+	Integrator& operator = (const Integrator &integrator);
 
 private:
 	// Debugger message printing utility
 	const Debugger &debugger;
 
 	// The integration method for this class
-	INTEGRATION_METHOD IntegrationMethod;
+	IntegrationMethod integrationMethod;
 
 	// The simulation frequency
-	double Frequency;// [Hz]
+	double frequency;// [Hz]
 
 	// Used for calculating future time steps.  Array size depends on integration method.
-	STATE *OldStateDerivatives;
+	State *oldStateDerivatives;
 
 	// The size of the above array (depends on integration method)
-	int NumberOfStoredDerivatives;
+	int numberOfStoredDerivatives;
 
 	// The current step number
-	int IntegrationStep;
+	int integrationStep;
 
 	// The integration functions - one for each item in INTEGRATION_METHOD
-	STATE DoEulerSemiImplicit(void);
-	STATE DoRungeKuttaSecondOrder(void);
-	STATE DoRungeKuttaFourthOrder(void);
-	STATE DoAdamsBashforthThirdOrder(void);
+	State DoEulerSemiImplicit(void);
+	State DoRungeKuttaSecondOrder(void);
+	State DoRungeKuttaFourthOrder(void);
+	State DoAdamsBashforthThirdOrder(void);
 };
 
-#endif// _INTEGRATOR_CLASS_H_
+#endif// _INTEGRATOR_H_

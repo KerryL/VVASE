@@ -18,10 +18,10 @@
 #include "gui/components/mainFrame.h"
 
 //==========================================================================
-// Class:			DROP_TARGET
-// Function:		DROP_TARGET
+// Class:			DropTarget
+// Function:		DropTarget
 //
-// Description:		Constructor for DROP_TARGET class.
+// Description:		Constructor for DropTarget class.
 //
 // Input Arguments:
 //		_MainFrame	= &MAIN_FRAME, reference to main application window
@@ -33,15 +33,15 @@
 //		None
 //
 //==========================================================================
-DROP_TARGET::DROP_TARGET(MAIN_FRAME &_MainFrame) : MainFrame(_MainFrame)
+DropTarget::DropTarget(MAIN_FRAME &_MainFrame) : MainFrame(_MainFrame)
 {
 }
 
 //==========================================================================
-// Class:			DROP_TARGET
-// Function:		~DROP_TARGET
+// Class:			DropTarget
+// Function:		~DropTarget
 //
-// Description:		Destructor for DROP_TARGET class.
+// Description:		Destructor for DropTarget class.
 //
 // Input Arguments:
 //		None
@@ -53,12 +53,12 @@ DROP_TARGET::DROP_TARGET(MAIN_FRAME &_MainFrame) : MainFrame(_MainFrame)
 //		None
 //
 //==========================================================================
-DROP_TARGET::~DROP_TARGET()
+DropTarget::~DropTarget()
 {
 }
 
 //==========================================================================
-// Class:			DROP_TARGET
+// Class:			DropTarget
 // Function:		OnDropFiles
 //
 // Description:		Overloaded virtual method from wxFileDropTarget.
@@ -76,7 +76,7 @@ DROP_TARGET::~DROP_TARGET()
 //		true to accept the data, false to veto
 //
 //==========================================================================
-bool DROP_TARGET::OnDropFiles(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
+bool DropTarget::OnDropFiles(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
 							  const wxArrayString &filenames)
 {
 	// Load each file

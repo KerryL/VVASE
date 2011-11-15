@@ -18,24 +18,24 @@
 //				 tasks.
 // History:
 
-#ifndef _THREAD_DATA_CLASS_H_
-#define _THREAD_DATA_CLASS_H_
+#ifndef _THREAD_DATA_H_
+#define _THREAD_DATA_H_
 
 // VVASE headers
 #include "vSolver/threads/threadJob.h"
 
-class THREAD_DATA
+class ThreadData
 {
 public:
 	// Constructors
-	THREAD_DATA();
+	ThreadData();
 
 	// Destructor
-	virtual ~THREAD_DATA();
+	virtual ~ThreadData();
 
 	// For checking to make sure the proper data was used with
 	// each command type
-	virtual bool OkForCommand(THREAD_JOB::THREAD_COMMANDS &Command) = 0;
+	virtual bool OkForCommand(ThreadJob::ThreadCommand &command) = 0;
 };
 
-#endif// _THREAD_DATA_CLASS_H_
+#endif// _THREAD_DATA_H_

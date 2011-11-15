@@ -105,8 +105,9 @@ void PlotPanel::CreateControls(void)
 	// Create the top sizer, and on inside of it just to pad the borders a bit
 	topSizer = new wxBoxSizer(wxHORIZONTAL);
 	wxFlexGridSizer *mainSizer = new wxFlexGridSizer(1, 5, 5);
-	topSizer->Add(mainSizer, 0, wxEXPAND | wxALL, 5);
+	topSizer->Add(mainSizer, 1, wxEXPAND | wxALL, 5);
 	mainSizer->AddGrowableRow(0);
+	mainSizer->AddGrowableCol(0);
 
 	// Create the main control
 	optionsGrid = NULL;// To avoid crashing in UpdateCursors
@@ -120,11 +121,11 @@ void PlotPanel::CreateControls(void)
 	renderer = new PlotRenderer(*this, wxID_ANY, NULL, debugger);
 #endif
 	renderer->SetGridOn();
-	mainSizer->Add(renderer, 0, wxEXPAND);
+	mainSizer->Add(renderer, 1, wxEXPAND);
 
 	// Create the options control
 	optionsGrid = new wxGrid(this, wxID_ANY);
-	mainSizer->Add(optionsGrid, 0, wxEXPAND | wxALIGN_BOTTOM);
+	mainSizer->Add(optionsGrid, 0, wxEXPAND);
 
 	// Configure the grid
 	optionsGrid->BeginBatch();
@@ -157,8 +158,7 @@ void PlotPanel::CreateControls(void)
 	optionsGrid->EndBatch();
 
 	// Assign sizers and resize the frame
-	SetSizerAndFit(topSizer);
-	SetAutoLayout(true);
+	SetSizer(topSizer);
 	topSizer->SetSizeHints(this);
 }
 

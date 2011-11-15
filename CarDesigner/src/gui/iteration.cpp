@@ -37,7 +37,6 @@
 #include "vSolver/threads/threadJob.h"
 #include "vSolver/threads/kinematicsData.h"
 #include "vCar/car.h"
-//#include "gui/renderer/plotRenderer.h"
 #include "gui/components/mainFrame.h"
 #include "gui/components/mainTree.h"
 #include "gui/plotPanel.h"
@@ -482,6 +481,12 @@ void ITERATION::UpdateDisplay(void)
 		double *x, *y;
 		for (i = 0; i < NumberOfPlots; i++)
 		{
+			// Set the x-axis information if this is the first pass
+			if (i == 0)
+			{
+				// FIXME:  Implement
+			}
+
 			// Check to see if this plot is active
 			if (PlotActive[i])
 			{
@@ -506,6 +511,9 @@ void ITERATION::UpdateDisplay(void)
 				}
 			}
 		}
+
+		// Apply formatting
+		ApplyPlotFormatting();
 
 		// Update the display associated with this object
 		plotPanel->UpdateDisplay();
@@ -719,12 +727,7 @@ void ITERATION::ReadDefaultsFromConfig(void)
 	ConfigurationFile->Read(_T("/Iteration/XLabel"), &XLabel, wxEmptyString);
 	ConfigurationFile->Read(_T("/Iteration/AutoGenerateZLabel"), &AutoGenerateZLabel, true);
 	ConfigurationFile->Read(_T("/Iteration/ZLabel"), &ZLabel, wxEmptyString);
-	bool temp;
-	ConfigurationFile->Read(_T("/Iteration/ShowGridLines"), &temp, false);
-	/*if (temp)
-		plotPanel->GetRenderer()->SetGridOn();
-	else
-		plotPanel->GetRenderer()->SetGridOff();*///FIXME:  Make this work again
+	ConfigurationFile->Read(_T("/Iteration/ShowGridLines"), &ShowGridLines, false);
 
 	ConfigurationFile->Read(_T("/Iteration/StartPitch"), &Range.StartPitch, 0.0);
 	ConfigurationFile->Read(_T("/Iteration/StartRoll"), &Range.StartRoll, 0.0);
@@ -800,7 +803,7 @@ void ITERATION::WriteDefaultsToConfig(void) const
 	ConfigurationFile->Write(_T("/Iteration/XLabel"), XLabel);
 	ConfigurationFile->Write(_T("/Iteration/AutoGenerateZLabel"), AutoGenerateZLabel);
 	ConfigurationFile->Write(_T("/Iteration/ZLabel"), ZLabel);
-	ConfigurationFile->Write(_T("/Iteration/ShowGridLines"), plotPanel->GetRenderer()->GetGridOn());
+	ConfigurationFile->Write(_T("/Iteration/ShowGridLines"), ShowGridLines);
 
 	ConfigurationFile->Write(_T("/Iteration/StartPitch"), Range.StartPitch);
 	ConfigurationFile->Write(_T("/Iteration/StartRoll"), Range.StartRoll);
@@ -835,6 +838,62 @@ void ITERATION::WriteDefaultsToConfig(void) const
 	ConfigurationFile = NULL;
 
 	return;
+}
+
+//==========================================================================
+// Class:			ITERATION
+// Function:		SetRange
+//
+// Description:		Sets this object's range to the specified values.
+//
+// Input Arguments:
+//		_Range	= const ITERATION::RANGE& specifying the desired range
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void ITERATION::ApplyPlotFormatting(void)
+{
+	if (AutoGenerateZLabel)
+	{
+		unsigned int i;
+		wxString label;
+		for (i = 0; i < NumberOfPlots; i++)
+		{
+			if (PlotActive[i])
+			{
+				if (label.IsEmpty())
+					label.assign(GetPlotName((PLOT_ID)i) + _T(" [") + GetPlotUnits((PLOT_ID)i) + _T("]"));
+				else
+					label.assign(_T("Multipl Values"));
+			}
+		}
+
+		plotPanel->GetRenderer()->SetLeftYLabel(label);
+	}
+	else
+		plotPanel->GetRenderer()->SetLeftYLabel(ZLabel);
+
+	// FIXME:  Implement dual labels
+	//plotPanel->GetRenderer()->SetRightYLabel();
+
+	if (AutoGenerateXLabel)
+		plotPanel->GetRenderer()->SetXLabel(
+		GetPlotName((PLOT_ID)(KINEMATIC_OUTPUTS::NumberOfOutputScalars + XAxisType)) + _T(" [")
+		+ GetPlotUnits((PLOT_ID)(KINEMATIC_OUTPUTS::NumberOfOutputScalars + XAxisType)) + _T("]"));
+	else
+		plotPanel->GetRenderer()->SetXLabel(XLabel);
+
+	if (AutoGenerateXLabel)
+		plotPanel->GetRenderer()->SetTitle(GetCleanName());
+	else
+		plotPanel->GetRenderer()->SetTitle(Title);
+
+	plotPanel->GetRenderer()->SetGridOn(ShowGridLines);
 }
 
 //==========================================================================
@@ -1449,7 +1508,7 @@ void ITERATION::SetAutoAssociate(bool AutoAssociate)
 	SetModified();
 
 	// Update this object
-	UpdateData();
+	UpdateDisplay();
 
 	return;
 }

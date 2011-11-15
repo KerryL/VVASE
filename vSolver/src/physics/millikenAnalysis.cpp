@@ -22,10 +22,10 @@
 #include "vUtilities/debugger.h"
 
 //==========================================================================
-// Class:			MILLIKEN_ANALYSIS
-// Function:		MILLIKEN_ANALYSIS
+// Class:			MillikenAnalysis
+// Function:		MillikenAnalysis
 //
-// Description:		Constructor for the MILLIKEN_ANALYSIS class.
+// Description:		Constructor for the MillikenAnalysis class.
 //
 // Input Arguments:
 //		_debugger	= const Debugger&, reference to the debug message printing utility
@@ -37,18 +37,18 @@
 //		None
 //
 //==========================================================================
-MILLIKEN_ANALYSIS::MILLIKEN_ANALYSIS(const Debugger &_debugger) : debugger(_debugger)
+MillikenAnalysis::MillikenAnalysis(const Debugger &_debugger) : debugger(_debugger)
 {
 }
 
 //==========================================================================
-// Class:			MILLIKEN_ANALYSIS
-// Function:		MILLIKEN_ANALYSIS
+// Class:			MillikenAnalysis
+// Function:		MillikenAnalysis
 //
-// Description:		Copy constructor for the MILLIKEN_ANALYSIS class.
+// Description:		Copy constructor for the MillikenAnalysis class.
 //
 // Input Arguments:
-//		MillikenAnalysis	= const MILLIKEN_ANALYSIS& to copy to this object
+//		MillikenAnalysis	= const MillikenAnalysis& to copy to this object
 //
 // Output Arguments:
 //		None
@@ -57,17 +57,17 @@ MILLIKEN_ANALYSIS::MILLIKEN_ANALYSIS(const Debugger &_debugger) : debugger(_debu
 //		None
 //
 //==========================================================================
-MILLIKEN_ANALYSIS::MILLIKEN_ANALYSIS(const MILLIKEN_ANALYSIS &MillikenAnalysis) : debugger(MillikenAnalysis.debugger)
+MillikenAnalysis::MillikenAnalysis(const MillikenAnalysis &millikenAnalysis) : debugger(millikenAnalysis.debugger)
 {
 	// Do the copy
-	*this = MillikenAnalysis;
+	*this = millikenAnalysis;
 }
 
 //==========================================================================
-// Class:			MILLIKEN_ANALYSIS
-// Function:		~MILLIKEN_ANALYSIS
+// Class:			MillikenAnalysis
+// Function:		~MillikenAnalysis
 //
-// Description:		Destructor for the MILLIKEN_ANALYSIS class.
+// Description:		Destructor for the MillikenAnalysis class.
 //
 // Input Arguments:
 //		None
@@ -79,30 +79,30 @@ MILLIKEN_ANALYSIS::MILLIKEN_ANALYSIS(const MILLIKEN_ANALYSIS &MillikenAnalysis) 
 //		None
 //
 //==========================================================================
-MILLIKEN_ANALYSIS::~MILLIKEN_ANALYSIS()
+MillikenAnalysis::~MillikenAnalysis()
 {
 }
 
 //==========================================================================
-// Class:			MILLIKEN_ANALYSIS
+// Class:			MillikenAnalysis
 // Function:		operator =
 //
-// Description:		Assignment operator for MILLIKEN_ANALYSIS class.
+// Description:		Assignment operator for MillikenAnalysis class.
 //
 // Input Arguments:
-//		MillikenAnalysis	= const MILLIKEN_ANALYSIS& to assign to this object
+//		millikenAnalysis	= const MillikenAnalysis& to assign to this object
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		MILLIKEN_ANALYSIS&, reference to this object
+//		MillikenAnalysis&, reference to this object
 //
 //==========================================================================
-MILLIKEN_ANALYSIS& MILLIKEN_ANALYSIS::operator = (const MILLIKEN_ANALYSIS &MillikenAnalysis)
+MillikenAnalysis& MillikenAnalysis::operator = (const MillikenAnalysis &millikenAnalysis)
 {
 	// Check for self-assignment
-	if (this == &MillikenAnalysis)
+	if (this == &millikenAnalysis)
 		return *this;
 
 	// Perform the assignment

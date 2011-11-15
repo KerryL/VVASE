@@ -16,46 +16,46 @@
 //				 (in that direction only - reverse communication is handled with events).
 // History:
 
-#ifndef _THREAD_JOB_CLASS_H_
-#define _THREAD_JOB_CLASS_H_
+#ifndef _THREAD_JOB_H_
+#define _THREAD_JOB_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
 
 // VVASE forward declarations
-class THREAD_DATA;
+class ThreadData;
 
-class THREAD_JOB
+class ThreadJob
 {
 public:
 	// Commands to send to worker thread
-	enum THREAD_COMMANDS
+	enum ThreadCommands
 	{
-		COMMAND_THREAD_EXIT = -1,
-		COMMAND_THREAD_NULL =  0,
-		COMMAND_THREAD_STARTED,
-		COMMAND_THREAD_KINEMATICS_NORMAL,
-		COMMAND_THREAD_KINEMATICS_ITERATION,
-		COMMAND_THREAD_KINEMATICS_FOR_GA,
-		COMMAND_THREAD_GENETIC_OPTIMIZATION
+		CommandThreadExit = -1,
+		CommandThreadNull =  0,
+		CommandThreadStarted,
+		CommandThreadKinematicsNormal,
+		CommandThreadKinematicsIteration,
+		CommandThreadKinematicsGA,
+		CommandThreadGeneticOptimization
 	};
 
 	// Constructors
-	THREAD_JOB();
-	THREAD_JOB(THREAD_COMMANDS _Command);
-	THREAD_JOB(THREAD_COMMANDS _Command, THREAD_DATA *_Data,
-		const wxString &_Name, int &_Index);
+	ThreadJob();
+	ThreadJob(ThreadCommands _command);
+	ThreadJob(ThreadCommands _command, ThreadData *_data,
+		const wxString &_name, int &_index);
 
 	// Destructor
-	~THREAD_JOB();
+	~ThreadJob();
 
 	// The command to be sent
-	THREAD_COMMANDS Command;
+	ThreadCommands command;
 
 	// Data to be sent to worker threads
-	THREAD_DATA *Data;
-	wxString Name;
-	int Index;
+	ThreadData *data;
+	wxString name;
+	int index;
 };
 
-#endif// _THREAD_JOB_CLASS_H_
+#endif// _THREAD_JOB_H_

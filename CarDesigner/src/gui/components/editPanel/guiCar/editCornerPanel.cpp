@@ -386,8 +386,6 @@ void EDIT_CORNER_PANEL::CreateControls()
 		wxEmptyString, wxDefaultPosition);
 	StaticCamber = new wxTextCtrl(this, TextBoxStaticCamber);
 
-	StaticCamber->SetSize(wxSize(ActuationAttachment->GetMinWidth(), -1));
-
 	lowerInputSizer->Add(CamberLabel, 0, wxALIGN_CENTER_VERTICAL);
 	lowerInputSizer->Add(StaticCamber, 0, wxEXPAND);
 	lowerInputSizer->Add(CamberUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
@@ -399,14 +397,13 @@ void EDIT_CORNER_PANEL::CreateControls()
 		wxEmptyString, wxDefaultPosition);
 	StaticToe = new wxTextCtrl(this, TextBoxStaticToe);
 
-	StaticToe->SetSize(wxSize(ActuationAttachment->GetMinWidth(), -1));
-
 	lowerInputSizer->Add(ToeLabel, 0, wxALIGN_CENTER_VERTICAL);
 	lowerInputSizer->Add(StaticToe, 0, wxEXPAND);
 	lowerInputSizer->Add(ToeUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 	
-	StaticCamber->SetMinSize(ActuationType->GetMinSize());
-	StaticToe->SetMinSize(ActuationType->GetMinSize());
+	// Choose text box min width based on a formatted number in the appropriate units
+	StaticCamber->SetMinSize(wxSize(Converter.ConvertAngle(-3.0), -1));
+	StaticToe->SetMinSize(wxSize(Converter.ConvertAngle(-3.0), -1));
 
 	MainSizer->AddGrowableRow(0);
 	MainSizer->AddGrowableRow(1);

@@ -21,8 +21,8 @@
 //				  for each output, K. Loux.
 //	3/11/2009	- Finished implementation of enum/array style data members, K. Loux.
 
-#ifndef _KINEMATIC_OUTPUTS_CLASS_H_
-#define _KINEMATIC_OUTPUTS_CLASS_H_
+#ifndef _KINEMATIC_OUTPUTS_H_
+#define _KINEMATIC_OUTPUTS_H_
 
 // wxWidgets headers
 #include <wx/thread.h>
@@ -37,23 +37,23 @@ class CAR;
 class Debugger;
 class SUSPENSION;
 
-class KINEMATIC_OUTPUTS
+class KinematicOutputs
 {
 public:
 	// Constructor
-	KINEMATIC_OUTPUTS();
+	KinematicOutputs();
 
 	// Destructor
-	~KINEMATIC_OUTPUTS();
+	~KinematicOutputs();
 
 	// Sets the pointer to the Debugger object
 	static inline void SetDebugger(const Debugger &_debugger) { debugger = &_debugger; };
 
-	// Updates the kinematic variables associated with the Current SUSPENSION
-	void Update(const CAR *Original, const SUSPENSION *Current);
+	// Updates the kinematic variables associated with the current SUSPENSION
+	void Update(const CAR *original, const SUSPENSION *current);
 
 	// Enumeration for double outputs that get computed for every corner
-	enum CORNER_OUTPUTS_DOUBLE
+	enum CornerOutputsDouble
 	{
 		Caster,						// [rad]
 		Camber,						// [rad]
@@ -77,7 +77,7 @@ public:
 	};
 
 	// Enumeration for Vector outputs that get computed for every corner
-	enum CORNER_OUTPUTS_Vector
+	enum CornerOutputsVector
 	{
 		InstantCenter,			// [in]
 		InstantAxisDirection,	// [-]
@@ -86,7 +86,7 @@ public:
 	};
 
 	// Enumeration for double outputs that only get computed once per car
-	enum OUTPUTS_DOUBLE
+	enum OutputsDouble
 	{
 		FrontARBTwist,				// [rad]
 		RearARBTwist,				// [rad]
@@ -113,7 +113,7 @@ public:
 	};
 
 	// Enumeration for Vector outputs that only get computed once per car
-	enum OUTPUTS_Vector
+	enum OutputsVector
 	{
 		// Kinematic centers
 		FrontKinematicRC,			// [in]
@@ -133,23 +133,23 @@ public:
 	// Sway bar twist will be total for all bar types... normal for U-bar and T-bar
 	// but geared bars will include the twist along both lengths of bar.  This way
 	// it can be used to determine forces/stresses directly.
-	double Doubles[NumberOfOutputDoubles];
-	Vector Vectors[NumberOfOutputVectors];
+	double doubles[NumberOfOutputDoubles];
+	Vector vectors[NumberOfOutputVectors];
 
 	// The outputs that are associated with just one corner of the car
-	double RightFront[NumberOfCornerOutputDoubles];
-	double LeftFront[NumberOfCornerOutputDoubles];
-	double RightRear[NumberOfCornerOutputDoubles];
-	double LeftRear[NumberOfCornerOutputDoubles];
+	double rightFront[NumberOfCornerOutputDoubles];
+	double leftFront[NumberOfCornerOutputDoubles];
+	double rightRear[NumberOfCornerOutputDoubles];
+	double leftRear[NumberOfCornerOutputDoubles];
 
-	Vector RightFrontVectors[NumberOfCornerOutputVectors];
-	Vector LeftFrontVectors[NumberOfCornerOutputVectors];
-	Vector RightRearVectors[NumberOfCornerOutputVectors];
-	Vector LeftRearVectors[NumberOfCornerOutputVectors];
+	Vector rightFrontVectors[NumberOfCornerOutputVectors];
+	Vector leftFrontVectors[NumberOfCornerOutputVectors];
+	Vector rightRearVectors[NumberOfCornerOutputVectors];
+	Vector leftRearVectors[NumberOfCornerOutputVectors];
 
 	// Enumeration that encompasses all of the outputs for the whole car
 	// This makes referencing these outputs from other classes a little easier
-	enum OUTPUTS_COMPLETE
+	enum OutputsComplete
 	{
 		StartRightFrontDoubles,
 		EndRightFrontDoubles = StartRightFrontDoubles + NumberOfCornerOutputDoubles - 1,
@@ -181,46 +181,46 @@ public:
 	};
 
 	// For converting from an output + location to OUTPUTS_COMPLETE
-	static OUTPUTS_COMPLETE OutputsCompleteIndex(const CORNER::LOCATION &Location,
-		const CORNER_OUTPUTS_DOUBLE &CornerDouble, const CORNER_OUTPUTS_Vector &CornerVector,
-		const OUTPUTS_DOUBLE &Double, const OUTPUTS_Vector &vector, const Vector::Axis &Axis);
+	static OutputsComplete OutputsCompleteIndex(const CORNER::LOCATION &location,
+		const CornerOutputsDouble &cornerDouble, const CornerOutputsVector &cornerVector,
+		const OutputsDouble &midDouble, const OutputsVector &vector, const Vector::Axis &axis);
 
 	// For accessing an output via the OUTPUTS_COMPLETE list
-	double GetOutputValue(const OUTPUTS_COMPLETE &_Output) const;
+	double GetOutputValue(const OutputsComplete &_output) const;
 
 	// For determining unit type of the outputs
-	static Convert::UnitType GetOutputUnitType(const OUTPUTS_COMPLETE &_Output);
+	static Convert::UnitType GetOutputUnitType(const OutputsComplete &_output);
 
 	// For determining the name of an output from the OUTPUTS_COMPLETE list
-	static wxString GetOutputName(const OUTPUTS_COMPLETE &_Output);
+	static wxString GetOutputName(const OutputsComplete &_output);
 
 	// Mutex accessor
-	//wxMutex &GetMutex(void) const { return KinematicOutputsMutex; };
+	//wxMutex &GetMutex(void) const { return kinematicOutputsMutex; };
 
 private:
 	// Debugger message printing utility
 	static const Debugger *debugger;
 
 	// The currently associated car object
-	const CAR *CurrentCar;
+	const CAR *currentCar;
 
 	// Updates the outputs associated with the associated corner
-	void UpdateCorner(const CORNER *OriginalCorner, const CORNER *CurrentCorner);
+	void UpdateCorner(const CORNER *originalCorner, const CORNER *currentCorner);
 
 	// For retrieving names of the outputs
-	static wxString GetCornerDoubleName(const CORNER_OUTPUTS_DOUBLE &_Output);
-	static wxString GetCornerVectorName(const CORNER_OUTPUTS_Vector &_Output);
-	static wxString GetDoubleName(const OUTPUTS_DOUBLE &_Output);
-	static wxString GetVectorName(const OUTPUTS_Vector &_Output);
+	static wxString GetCornerDoubleName(const CornerOutputsDouble &_output);
+	static wxString GetCornerVectorName(const CornerOutputsVector &_output);
+	static wxString GetDoubleName(const OutputsDouble &_output);
+	static wxString GetVectorName(const OutputsVector &_output);
 
 	// For retrieving units of the outputs
-	static Convert::UnitType GetCornerDoubleUnitType(const CORNER_OUTPUTS_DOUBLE &_Output);
-	static Convert::UnitType GetCornerVectorUnitType(const CORNER_OUTPUTS_Vector &_Output);
-	static Convert::UnitType GetDoubleUnitType(const OUTPUTS_DOUBLE &_Output);
-	static Convert::UnitType GetVectorUnitType(const OUTPUTS_Vector &_Output);
+	static Convert::UnitType GetCornerDoubleUnitType(const CornerOutputsDouble &_output);
+	static Convert::UnitType GetCornerVectorUnitType(const CornerOutputsVector &_output);
+	static Convert::UnitType GetDoubleUnitType(const OutputsDouble &_output);
+	static Convert::UnitType GetVectorUnitType(const OutputsVector &_output);
 
 	// Initializes all outputs to QNAN
 	void InitializeAllOutputs(void);
 };
 
-#endif// _KINEMATIC_OUTPUTS_CLASS_H_
+#endif// _KINEMATIC_OUTPUTS_H_

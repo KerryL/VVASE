@@ -262,8 +262,6 @@ void APPEARANCE_OPTIONS::ShowAppearanceOptionsDialog(void)
 		// Tell the owner that it was modified
 		Owner.SetModified();
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -567,8 +565,6 @@ void APPEARANCE_OPTIONS::Write(std::ofstream *OutFile)
 
 	// Write the resolutions to the stream
 	OutFile->write((char*)Resolution, ResolutionCount * sizeof(int));
-
-	return;
 }
 
 //==========================================================================
@@ -605,6 +601,4 @@ void APPEARANCE_OPTIONS::Read(std::ifstream *InFile, int FileVersion)
 
 	// Read the resolutions from the stream
 	InFile->read((char*)Resolution, ResolutionCount * sizeof(int));
-
-	return;
 }

@@ -155,7 +155,7 @@ void EDIT_ITERATION_OPTIONS_PANEL::UpdateInformation(ITERATION *_CurrentIteratio
 	AutoTitle->SetValue(CurrentIteration->GetAutoGenerateTitle());
 	AutoLabelXAxis->SetValue(CurrentIteration->GetAutoGenerateXLabel());
 	AutoLabelZAxis->SetValue(CurrentIteration->GetAutoGenerateZLabel());
-//	ShowGridLines->SetValue(CurrentIteration->GetShowGridLines());
+	ShowGridLines->SetValue(CurrentIteration->GetShowGridLines());
 
 	TitleText->ChangeValue(CurrentIteration->GetTitle());
 	XLabelText->ChangeValue(CurrentIteration->GetXLabel());
@@ -186,12 +186,17 @@ void EDIT_ITERATION_OPTIONS_PANEL::UpdateInformation(ITERATION *_CurrentIteratio
 //==========================================================================
 void EDIT_ITERATION_OPTIONS_PANEL::CreateControls()
 {
+	// Enable scrolling
+	SetScrollRate(1, 1);
+
 	// Top-level sizer
 	wxBoxSizer *TopSizer = new wxBoxSizer(wxVERTICAL);
 
 	// Second sizer gives more space around the controls
 	wxBoxSizer *MainSizer = new wxBoxSizer(wxVERTICAL);
 	TopSizer->Add(MainSizer, 1, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALL, 5);
+
+	int cellPadding(3);
 
 	// Creat the checkboxes
 	ShowGridLines = new wxCheckBox(this, CheckBoxIterationOptions, _T("Show Grid Lines"));
@@ -207,30 +212,28 @@ void EDIT_ITERATION_OPTIONS_PANEL::CreateControls()
 
 	// Add the controls to the sizer (and create the necessary labels)
 	MainSizer->Add(new wxStaticText(this, wxID_ANY, _T("Plot Title")));
-	MainSizer->Add(AutoTitle, 0, wxALL, 5);
-	MainSizer->Add(TitleText, 0, wxALL | wxGROW, 5);
-	MainSizer->AddSpacer(10);
+	MainSizer->Add(AutoTitle, 0, wxALL, cellPadding);
+	MainSizer->Add(TitleText, 0, wxALL | wxGROW, cellPadding);
+	MainSizer->AddSpacer(2 * cellPadding);
 
 	MainSizer->Add(new wxStaticText(this, wxID_ANY, _T("X-Axis Label")));
-	MainSizer->Add(AutoLabelXAxis, 0, wxALL, 5);
-	MainSizer->Add(XLabelText, 0, wxALL | wxGROW, 5);
-	MainSizer->AddSpacer(10);
+	MainSizer->Add(AutoLabelXAxis, 0, wxALL, cellPadding);
+	MainSizer->Add(XLabelText, 0, wxALL | wxGROW, cellPadding);
+	MainSizer->AddSpacer(2 * cellPadding);
 
 	MainSizer->Add(new wxStaticText(this, wxID_ANY, _T("Y-Axis Label")));
-	MainSizer->Add(AutoLabelZAxis, 0, wxALL, 5);
-	MainSizer->Add(ZLabelText, 0, wxALL | wxGROW, 5);
-	MainSizer->AddSpacer(20);
+	MainSizer->Add(AutoLabelZAxis, 0, wxALL, cellPadding);
+	MainSizer->Add(ZLabelText, 0, wxALL | wxGROW, cellPadding);
+	MainSizer->AddSpacer(4 * cellPadding);
 
-	MainSizer->Add(ShowGridLines, 0, wxALL, 5);
+	MainSizer->Add(ShowGridLines, 0, wxALL, cellPadding);
 
 	MainSizer->AddStretchSpacer();
 
-	MainSizer->Add(SetAsDefault, 0, wxALIGN_CENTER_HORIZONTAL | wxALL | wxALIGN_BOTTOM, 5);
+	MainSizer->Add(SetAsDefault, 0, wxALIGN_CENTER_HORIZONTAL | wxALL | wxALIGN_BOTTOM, cellPadding);
 
 	// Assign the top level sizer to the panel
 	SetSizer(TopSizer);
-
-	return;
 }
 
 //==========================================================================
@@ -255,7 +258,7 @@ void EDIT_ITERATION_OPTIONS_PANEL::OptionsCheckBoxEvent(wxCommandEvent& WXUNUSED
 	CurrentIteration->SetAutoGenerateTitle(AutoTitle->GetValue());
 	CurrentIteration->SetAutoGenerateXLabel(AutoLabelXAxis->GetValue());
 	CurrentIteration->SetAutoGenerateZLabel(AutoLabelZAxis->GetValue());
-//	CurrentIteration->SetShowGridLines(ShowGridLines->GetValue());
+	CurrentIteration->SetShowGridLines(ShowGridLines->GetValue());
 
 	// Enable/disable the text boxes depending on the state of the checkboxes
 	TitleText->Enable(!AutoTitle->GetValue());
@@ -267,8 +270,6 @@ void EDIT_ITERATION_OPTIONS_PANEL::OptionsCheckBoxEvent(wxCommandEvent& WXUNUSED
 
 	// Update the display
 	CurrentIteration->UpdateDisplay();
-
-	return;
 }
 
 //==========================================================================

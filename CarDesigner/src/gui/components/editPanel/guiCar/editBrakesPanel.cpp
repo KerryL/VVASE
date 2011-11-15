@@ -45,7 +45,7 @@
 EDIT_BRAKES_PANEL::EDIT_BRAKES_PANEL(EDIT_PANEL &_Parent, wxWindowID id,
 									 const wxPoint& pos, const wxSize& size,
 									 const Debugger &_debugger) :
-									 wxPanel(&_Parent, id, pos, size), debugger(_debugger),
+									 wxScrolledWindow(&_Parent, id, pos, size), debugger(_debugger),
 									 Converter(_Parent.GetMainFrame().GetConverter()),
 									 Parent(_Parent)
 {
@@ -143,6 +143,9 @@ void EDIT_BRAKES_PANEL::UpdateInformation(BRAKES *_CurrentBrakes)
 //==========================================================================
 void EDIT_BRAKES_PANEL::CreateControls()
 {
+	// Enable scrolling
+	SetScrollRate(1, 1);
+
 	// Top-level sizer
 	wxBoxSizer *TopSizer = new wxBoxSizer(wxVERTICAL);
 
@@ -153,26 +156,27 @@ void EDIT_BRAKES_PANEL::CreateControls()
 	int cellPadding(3);
 
 	// Create the check boxes
-	wxBoxSizer *FrontBrakesInboardSizer = new wxBoxSizer(wxHORIZONTAL);
 	FrontBrakesInboard = new wxCheckBox(this, CheckBoxFrontBrakesInboard, _T("Front Brakes Inboard"));
-	FrontBrakesInboardSizer->Add(FrontBrakesInboard, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, cellPadding);
+	MainSizer->Add(FrontBrakesInboard, 0, wxALIGN_LEFT | wxALL, cellPadding);
 
-	wxBoxSizer *RearBrakesInboardSizer = new wxBoxSizer(wxHORIZONTAL);
 	RearBrakesInboard = new wxCheckBox(this, CheckBoxRearBrakesInboard, _T("Rear Brakes Inboard"));
-	RearBrakesInboardSizer->Add(RearBrakesInboard, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, cellPadding);
+	MainSizer->Add(RearBrakesInboard, 0, wxALIGN_LEFT | wxALL, cellPadding);
 
 	// Create the text input boxes
 	wxBoxSizer *PercentFrontSizer = new wxBoxSizer(wxHORIZONTAL);
 	wxStaticText *PercentFrontBrakingLabel = new wxStaticText(this, wxID_ANY, _T("Percent Front Braking"));
 	PercentFrontBraking = new wxTextCtrl(this, TextBoxPercentFrontBraking);
-	PercentFrontSizer->Add(PercentFrontBrakingLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, cellPadding);
-	PercentFrontSizer->Add(PercentFrontBraking, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, cellPadding);
+	PercentFrontSizer->Add(PercentFrontBrakingLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, cellPadding);
+	PercentFrontSizer->Add(PercentFrontBraking, 0, wxALL | wxEXPAND, cellPadding);
+
+	// Set text box minimum size based on formatted text to appear in the box
+	int minWidth;
+	GetTextExtent(Converter.FormatNumber(-10.000), &minWidth, NULL);
+	PercentFrontBraking->SetMinSize(wxSize(minWidth, -1));
 
 	// Add the sizers to the main sizer
-	MainSizer->Add(FrontBrakesInboardSizer);
-	MainSizer->Add(RearBrakesInboardSizer);
 	MainSizer->AddSpacer(10);
-	MainSizer->Add(PercentFrontSizer);
+	MainSizer->Add(PercentFrontSizer, 0, wxEXPAND);
 
 	// Assign the top level sizer to the dialog
 	SetSizer(TopSizer);

@@ -19,7 +19,7 @@
 //	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
 //	3/15/2008	- Finished contact patch line search algorithm, K. Loux.
 //	3/23/2008	- Changed units for class members and functions from degrees to radians and
-//				  renamed class from KINEMATICS.  Also introduce OUTPUTS class and CORNER class
+//				  renamed class from Kinematics.  Also introduce OUTPUTS class and CORNER class
 //				  (major restructuring of kinematic solvers), K. Loux.
 //	3/24/2009	- Moved (physical location) to physics folder, K. Loux.
 //	4/19/2009	- Added threading for SolveCorner(), K. Loux.
@@ -39,10 +39,10 @@
 #include "vUtilities/wheelSetStructures.h"
 
 //==========================================================================
-// Class:			KINEMATICS
-// Function:		KINEMATICS
+// Class:			Kinematics
+// Function:		Kinematics
 //
-// Description:		Constructor for KINEMATICS class.
+// Description:		Constructor for Kinematics class.
 //
 // Input Arguments:
 //		_debugger	= const Debugger&, reference to the debug message printing utility
@@ -54,19 +54,19 @@
 //		None
 //
 //==========================================================================
-KINEMATICS::KINEMATICS(const Debugger &_debugger) : debugger(_debugger)
+Kinematics::Kinematics(const Debugger &_debugger) : debugger(_debugger)
 {
 	// Initialize the other pointers to zero
-	OriginalCar = NULL;
-	WorkingCar = NULL;
-	Static = NULL;
+	originalCar = NULL;
+	workingCar = NULL;
+	localSuspension = NULL;
 }
 
 //==========================================================================
-// Class:			KINEMATICS
-// Function:		~KINEMATICS
+// Class:			Kinematics
+// Function:		~Kinematics
 //
-// Description:		Destructor for KINEMATICS class.
+// Description:		Destructor for Kinematics class.
 //
 // Input Arguments:
 //		None
@@ -78,21 +78,21 @@ KINEMATICS::KINEMATICS(const Debugger &_debugger) : debugger(_debugger)
 //		None
 //
 //==========================================================================
-KINEMATICS::~KINEMATICS()
+Kinematics::~Kinematics()
 {
 }
 
 //==========================================================================
-// Class:			KINEMATICS
+// Class:			Kinematics
 // Function:		UpdateKinematics
 //
 // Description:		This updates the position of the car to meet the current
 //					values of pitch, roll, heave, and steer.
 //
 // Input Arguments:
-//		_OriginalCar	= const CAR* - for reference only
-//		_WorkingCar		= CAR* to be changed (updated) by this function
-//		Name			= wxString used to print messages about this car
+//		_originalCar	= const CAR* - for reference only
+//		_workingCar		= CAR* to be changed (updated) by this function
+//		name			= wxString used to print messages about this car
 //
 // Output Arguments:
 //		None
@@ -101,43 +101,43 @@ KINEMATICS::~KINEMATICS()
 //		None
 //
 //==========================================================================
-void KINEMATICS::UpdateKinematics(const CAR* _OriginalCar, CAR* _WorkingCar, wxString Name)
+void Kinematics::UpdateKinematics(const CAR* _originalCar, CAR* _workingCar, wxString name)
 {
 	// Start the timer for this update
 	wxStopWatch Timer;
 	Timer.Start();
 
 	// Print the car's name to the debug window
-	debugger.Print(_T("UpdateKinematics() for ") + Name, Debugger::PriorityMedium);
+	debugger.Print(_T("UpdateKinematics() for ") + name, Debugger::PriorityMedium);
 
 	// Get the original and working cars
-	OriginalCar = _OriginalCar;// This one is for reference and won't be changed by this class
-	WorkingCar = _WorkingCar;
+	originalCar = _originalCar;// This one is for reference and won't be changed by this class
+	workingCar = _workingCar;
 
 	// Ensure exclusive access to the car objects
-	wxMutexLocker OriginalLock(OriginalCar->GetMutex());
-	wxMutexLocker WorkingLock(WorkingCar->GetMutex());
+	wxMutexLocker originalLock(originalCar->GetMutex());
+	wxMutexLocker workingLock(originalCar->GetMutex());
 	
 	// Copy the information in the original car to the working car.  This minimizes rounding
 	// errors in the calculation of suspension points, and it also ensures that changes made
 	// to other sub-systems are carried over into the working car.
-	*WorkingCar = *OriginalCar;
+	*workingCar = *originalCar;
 
 	// Now we copy the pointer to the working car's suspension to the class member
 	// This must be AFTER *WorkingCar = *OriginalCar, since this assignment is a deep copy
 	// and the address of the suspension will change!
-	Static = WorkingCar->Suspension;
+	localSuspension = workingCar->Suspension;
 
 	// Rotate the steering wheel
-	Static->MoveSteeringRack(Inputs.RackTravel);
+	localSuspension->MoveSteeringRack(inputs.rackTravel);
 
 	// FIXME:  As it is right now, this section is not compatabile with monoshocks
 
-	Vector Rotations;// (X = First, Y = Second, Z = Third)
-	Vector::Axis SecondRotation;
+	Vector rotations;// (X = First, Y = Second, Z = Third)
+	Vector::Axis secondRotation;
 
 	// Determine the order to perform the Euler rotations
-	if (Inputs.FirstRotation == Vector::AxisX)// Do roll first, then pitch
+	if (inputs.firstRotation == Vector::AxisX)// Do roll first, then pitch
 	{
 		SecondRotation = Vector::AxisY;
 		Rotations.Set(Inputs.Roll, Inputs.Pitch, 0.0);
@@ -249,7 +249,7 @@ void KINEMATICS::UpdateKinematics(const CAR* _OriginalCar, CAR* _WorkingCar, wxS
 }
 
 //==========================================================================
-// Class:			KINEMATICS
+// Class:			Kinematics
 // Function:		SolveCorner
 //
 // Description:		This solves for the locations of all of the suspension
@@ -272,7 +272,7 @@ void KINEMATICS::UpdateKinematics(const CAR* _OriginalCar, CAR* _WorkingCar, wxS
 //		bool, true for success, false for error(s)
 //
 //==========================================================================
-bool KINEMATICS::SolveCorner(CORNER &Corner, const CORNER &OriginalCorner,
+bool Kinematics::SolveCorner(CORNER &Corner, const CORNER &OriginalCorner,
 							 const Vector &Rotations, const Vector::Axis &SecondRotation)
 {
 	// Determine if this corner is at the front or the rear of the car

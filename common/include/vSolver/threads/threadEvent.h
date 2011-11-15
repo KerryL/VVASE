@@ -15,8 +15,8 @@
 //				 to the GUI thread.
 // History:
 
-#ifndef _THREAD_EVENT_CLASS_H_
-#define _THREAD_EVENT_CLASS_H_
+#ifndef _THREAD_EVENT_H_
+#define _THREAD_EVENT_H_
 
 // wxWidgets headers
 #include <wx/event.h>
@@ -24,4 +24,4 @@
 // Declaration of the EVT_THREAD event
 DECLARE_LOCAL_EVENT_TYPE(EVT_THREAD, -1)
 
-#endif// _THREAD_EVENT_CLASS_H_
+#endif// _THREAD_EVENT_H_

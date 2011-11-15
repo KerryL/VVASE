@@ -14,8 +14,8 @@
 // History:
 //	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
 
-#ifndef _DYNAMICS_CLASS_H_
-#define _DYNAMICS_CLASS_H_
+#ifndef _DYNAMICS_H_
+#define _DYNAMICS_H_
 
 // VVASE headers
 #include "vSolver/physics/state.h"
@@ -24,29 +24,28 @@
 
 // VVASE forward declarations
 class Debugger;
-class DRIVER;
-class INTEGRATOR;
+class Integrator;
 
 // The outputs from a dynamic simulation
-struct DYNAMIC_OUTPUTS
+struct DynamicOutputs
 {
-	WheelSet AxleTwist;// [rad]
-	WheelSet TireDeflection;// [in]
-	WheelSet ComplianceToe;// [rad]
-	WheelSet ComplianceCamber;// [rad]
-	WheelSet SlipAngle;// [rad]
-	WheelSet SlipRatio;// [-]
+	WheelSet axleTwist;// [rad]
+	WheelSet tireDeflection;// [in]
+	WheelSet complianceToe;// [rad]
+	WheelSet complianceCamber;// [rad]
+	WheelSet slipAngle;// [rad]
+	WheelSet slipRatio;// [-]
 };
 
-class DYNAMICS
+class Dynamics
 {
 public:
 	// Constructor
-	DYNAMICS(const Debugger &_debugger);
-	DYNAMICS(const DYNAMICS &Dynamics);
+	Dynamics(const Debugger &_debugger);
+	Dynamics(const Dynamics &dynamics);
 
 	// Destructor
-	~DYNAMICS();
+	~Dynamics();
 
 	// Simulation control methods
 	void ResetSimulation(void);
@@ -58,24 +57,24 @@ public:
 	void ComputeStatesForPlayback(void);
 
 	// Overloaded operators
-	DYNAMICS& operator = (const DYNAMICS &Dynamics);
+	Dynamics& operator = (const Dynamics &dynamics);
 
 private:
 	// Debugger message printing utility
 	const Debugger &debugger;
 
 	// The states and their derivatives
-	STATE State;
-	STATE StateDerivative;
+	State state;
+	State stateDerivative;
 
 	// The driver inputs
-	DRIVER *Driver;
+	Driver *driver;
 
 	// The integrator
-	INTEGRATOR *Integrator;
-	void CalculateStateDerivative(STATE State, DRIVER::INPUTS Inputs);
+	Integrator *integrator;
+	void CalculateStateDerivative(State state, DRIVER::INPUTS inputs);
 
 	// Time history of inputs and outputs (store in a queue or a linked list?)
 };
 
-#endif// _DYNAMICS_CLASS_H_
+#endif// _DYNAMICS_H_

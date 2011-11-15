@@ -10,7 +10,7 @@
 // File:  threadData.cpp
 // Created:  1/12/2009
 // Author:  K. Loux
-// Description:  Contains the class definition for the THREAD_DATA class.  This is an
+// Description:  Contains the class definition for the ThreadData class.  This is an
 //				 abstract class from which objects should be derived to pass data to
 //				 different types of threads.  Using this class allows for a cleaner
 //				 thread management system, where the queue only needs to know about
@@ -22,10 +22,10 @@
 #include "vSolver/threads/threadData.h"
 
 //==========================================================================
-// Class:			THREAD_DATA
-// Function:		THREAD_DATA
+// Class:			ThreadData
+// Function:		ThreadData
 //
-// Description:		Constructor for the THREAD_DATA class (basic).
+// Description:		Constructor for the ThreadData class (basic).
 //
 // Input Arguments:
 //		None
@@ -37,15 +37,15 @@
 //		None
 //
 //==========================================================================
-THREAD_DATA::THREAD_DATA()
+ThreadData::ThreadData()
 {
 }
 
 //==========================================================================
-// Class:			THREAD_DATA
-// Function:		~THREAD_DATA
+// Class:			ThreadData
+// Function:		~ThreadData
 //
-// Description:		Destructor for the THREAD_DATA class.
+// Description:		Destructor for the ThreadData class.
 //
 // Input Arguments:
 //		None
@@ -57,6 +57,6 @@ THREAD_DATA::THREAD_DATA()
 //		None
 //
 //==========================================================================
-THREAD_DATA::~THREAD_DATA()
+ThreadData::~ThreadData()
 {
 }

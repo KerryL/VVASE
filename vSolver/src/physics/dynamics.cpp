@@ -25,10 +25,10 @@
 #include <wx/utils.h>
 
 //==========================================================================
-// Class:			DYNAMICS
-// Function:		DYNAMICS
+// Class:			Dynamics
+// Function:		Dynamics
 //
-// Description:		Constructor for the DYNAMICS class.
+// Description:		Constructor for the Dynamics class.
 //
 // Input Arguments:
 //		_debugger	= const Debugger&, reference to the debug message printing utility
@@ -40,23 +40,23 @@
 //		None
 //
 //==========================================================================
-DYNAMICS::DYNAMICS(const Debugger &_debugger) : debugger(_debugger)
+Dynamics::Dynamics(const Debugger &_debugger) : debugger(_debugger)
 {
 	// Create the integrator object
-	Integrator = new INTEGRATOR(INTEGRATOR::INT_ADAMS_BASHFORTH_3, 100.0, debugger);
+	integrator = new Integrator(Integrator::MethodAdamsBashforth3, 100.0, debugger);
 
 	// Create the driver
-	Driver = new DRIVER(debugger);
+	driver = new DRIVER(debugger);
 }
 
 //==========================================================================
-// Class:			DYNAMICS
-// Function:		DYNAMICS
+// Class:			Dynamics
+// Function:		Dynamics
 //
-// Description:		Copy constructor for the DYNAMICS class.
+// Description:		Copy constructor for the Dynamics class.
 //
 // Input Arguments:
-//		Dynamics	= const DYNAMICS& to copy to this object
+//		dynamics	= const Dynamics& to copy to this object
 //
 // Output Arguments:
 //		None
@@ -65,21 +65,21 @@ DYNAMICS::DYNAMICS(const Debugger &_debugger) : debugger(_debugger)
 //		None
 //
 //==========================================================================
-DYNAMICS::DYNAMICS(const DYNAMICS &Dynamics) : debugger(Dynamics.debugger)
+Dynamics::Dynamics(const Dynamics &dynamics) : debugger(dynamics.debugger)
 {
 	// Initialize the pointers
-	Driver = NULL;
-	Integrator = NULL;
+	driver = NULL;
+	integrator = NULL;
 
 	// Do the copy
-	*this = Dynamics;
+	*this = dynamics;
 }
 
 //==========================================================================
-// Class:			DYNAMICS
-// Function:		~DYNAMICS
+// Class:			Dynamics
+// Function:		~Dynamics
 //
-// Description:		Destructor for the DYNAMICS class.
+// Description:		Destructor for the Dynamics class.
 //
 // Input Arguments:
 //		None
@@ -91,19 +91,19 @@ DYNAMICS::DYNAMICS(const DYNAMICS &Dynamics) : debugger(Dynamics.debugger)
 //		None
 //
 //==========================================================================
-DYNAMICS::~DYNAMICS()
+Dynamics::~Dynamics()
 {
 	// Delete the integrator object
-	delete Integrator;
-	Integrator = NULL;
+	delete integrator;
+	integrator = NULL;
 
 	// Delete the driver object
-	delete Driver;
-	Driver = NULL;
+	delete driver;
+	driver = NULL;
 }
 
 //==========================================================================
-// Class:			DYNAMICS
+// Class:			Dynamics
 // Function:		ResetSimulation
 //
 // Description:		Resets the simulation to zero initial conditions
@@ -118,20 +118,19 @@ DYNAMICS::~DYNAMICS()
 //		None
 //
 //==========================================================================
-void DYNAMICS::ResetSimulation(void)
+void Dynamics::ResetSimulation(void)
 {
-	return;
 }
 
 //==========================================================================
-// Class:			DYNAMICS
+// Class:			Dynamics
 // Function:		CalculateStateDerivatives
 //
 // Description:		Calculates the state derivatives for this simulation.
 //
 // Input Arguments:
-//		State	= STATE, current state of the vehicle
-//		Inputs	= DRIVER::INPUTS representing the commands from the driver
+//		state	= State, current state of the vehicle
+//		inputs	= DRIVER::INPUTS representing the commands from the driver
 //
 // Output Arguments:
 //		None
@@ -140,13 +139,12 @@ void DYNAMICS::ResetSimulation(void)
 //		None
 //
 //==========================================================================
-void DYNAMICS::CalculateStateDerivative(STATE State, DRIVER::INPUTS Inputs)
+void Dynamics::CalculateStateDerivative(State state, DRIVER::INPUTS inputs)
 {
-	return;
 }
 
 //==========================================================================
-// Class:			DYNAMICS
+// Class:			Dynamics
 // Function:		RunSimulation
 //
 // Description:		Runs the current simulation.
@@ -161,37 +159,37 @@ void DYNAMICS::CalculateStateDerivative(STATE State, DRIVER::INPUTS Inputs)
 //		None
 //
 //==========================================================================
-void DYNAMICS::RunSimulation(void)
+void Dynamics::RunSimulation(void)
 {
 	// Initialize the simulation (initial conditions, environment, etc.)
 
 	// Choose and enter the correct run loop
-	wxStopWatch Timer;
+	wxStopWatch timer;
 	while (1/*SIMULATION_HAS_NOT_ENDED*/ && 1/*REAL_TIME_LOOP*/)
 	{
 		// Start loop timer
-		Timer.Start(0);
+		timer.Start(0);
 
 		// Get inputs
-		Driver->CalculateInputs();
+		driver->CalculateInputs();
 
 		// Calculate the next physics step
-		State = Integrator->ComputeNewState();
+		state = integrator->ComputeNewState();
 
 		// Store the inputs and outputs in the time history queues
 
 		// Stop the timer and calculate the elapsed time.  Sleep for the correct amount of time
 		// to meet the deisred running frequency
-		wxMilliSleep(1000/*DESIRED_TIME_STEP_IN_MSEC*/ - Timer.Time());
+		wxMilliSleep(1000/*DESIRED_TIME_STEP_IN_MSEC*/ - timer.Time());
 	}
 
 	while (1/*SIMULATION_HAS_NOT_ENDED*/ && 1/*CANNED_RUN_LOOP*/)
 	{
 		// Get/calculate the inputs
-		Driver->CalculateInputs();
+		driver->CalculateInputs();
 
 		// Calculate the next physics step
-		State = Integrator->ComputeNewState();
+		state = integrator->ComputeNewState();
 
 		// Store the inputs and outputs in the time history queues
 	}
@@ -200,41 +198,41 @@ void DYNAMICS::RunSimulation(void)
 }
 
 //==========================================================================
-// Class:			DYNAMICS
+// Class:			Dynamics
 // Function:		operator =
 //
-// Description:		Assignment operator for DYNAMICS class.
+// Description:		Assignment operator for Dynamics class.
 //
 // Input Arguments:
-//		Dynamics	= const DYNAMICS& to assign to this object
+//		dynamics	= const Dynamics& to assign to this object
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		DYNAMICS&, reference to this object
+//		Dynamics&, reference to this object
 //
 //==========================================================================
-DYNAMICS& DYNAMICS::operator = (const DYNAMICS &Dynamics)
+Dynamics& Dynamics::operator = (const Dynamics &dynamics)
 {
 	// Check for self-assignment
-	if (this == &Dynamics)
+	if (this == &dynamics)
 		return *this;
 
 	// Delete existing class members
-	delete Driver;
-	delete Integrator;
+	delete driver;
+	delete integrator;
 
 	// Initialize the pointers
-	Driver = NULL;
-	Integrator = NULL;
+	driver = NULL;
+	integrator = NULL;
 
 	// Perform the assignment
-	State			= Dynamics.State;
-	StateDerivative	= Dynamics.StateDerivative;
+	state			= dynamics.state;
+	stateDerivative	= dynamics.stateDerivative;
 
-	Driver			= new DRIVER(*Dynamics.Driver);
-	Integrator		= new INTEGRATOR(*Dynamics.Integrator);
+	driver			= new DRIVER(*dynamics.driver);
+	integrator		= new Integrator(*dynamics.integrator);
 
 	return *this;
 }

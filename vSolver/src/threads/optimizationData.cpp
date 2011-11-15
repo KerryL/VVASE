@@ -10,7 +10,7 @@
 // File:  optimizationData.cpp
 // Created:  1/12/2009
 // Author:  K. Loux
-// Description:  Contains the class declaration for the OPTIMIZATION_DATA class.  This contains
+// Description:  Contains the class declaration for the OptimizationData class.  This contains
 //				 information required to conduct genetic optimizations.
 // History:
 
@@ -19,13 +19,13 @@
 #include "vSolver/threads/threadJob.h"
 
 //==========================================================================
-// Class:			OPTIMIZATION_DATA
-// Function:		OPTIMIZATION_DATA
+// Class:			OptimizationData
+// Function:		OptimizationData
 //
-// Description:		Constructor for the OPTIMIZATION_DATA class.
+// Description:		Constructor for the OptimizationData class.
 //
 // Input Arguments:
-//		_GeneticAlgorithm	= GENETIC_ALGORITHM* pointing to the optimization object
+//		_geneticAlgorithm	= GeneticAlgorithm* pointing to the optimization object
 //
 // Output Arguments:
 //		None
@@ -34,16 +34,16 @@
 //		None
 //
 //==========================================================================
-OPTIMIZATION_DATA::OPTIMIZATION_DATA(GENETIC_ALGORITHM *_GeneticAlgorithm)
-									 : THREAD_DATA(), GeneticAlgorithm(_GeneticAlgorithm)
+OptimizationData::OptimizationData(GeneticAlgorithm *_geneticAlgorithm)
+									 : ThreadData(), geneticAlgorithm(_geneticAlgorithm)
 {
 }
 
 //==========================================================================
-// Class:			OPTIMIZATION_DATA
-// Function:		~OPTIMIZATION_DATA
+// Class:			OptimizationData
+// Function:		~OptimizationData
 //
-// Description:		Destructor for the OPTIMIZATION_DATA class.
+// Description:		Destructor for the OptimizationData class.
 //
 // Input Arguments:
 //		None
@@ -55,19 +55,19 @@ OPTIMIZATION_DATA::OPTIMIZATION_DATA(GENETIC_ALGORITHM *_GeneticAlgorithm)
 //		None
 //
 //==========================================================================
-OPTIMIZATION_DATA::~OPTIMIZATION_DATA()
+OptimizationData::~OptimizationData()
 {
 }
 
 //==========================================================================
-// Class:			OPTIMIZATION_DATA
+// Class:			OptimizationData
 // Function:		OkForCommand
 //
 // Description:		Checks to make sure this type of data is correct for the
 //					specified command.
 //
 // Input Arguments:
-//		Command		= THREAD_JOB::THREAD_COMMANDS& to be checked
+//		Command		= ThreadJob::ThreadCommands& to be checked
 //
 // Output Arguments:
 //		None
@@ -76,8 +76,8 @@ OPTIMIZATION_DATA::~OPTIMIZATION_DATA()
 //		None
 //
 //==========================================================================
-bool OPTIMIZATION_DATA::OkForCommand(THREAD_JOB::THREAD_COMMANDS &Command)
+bool OptimizationData::OkForCommand(ThreadJob::ThreadCommands &Command)
 {
 	// Make sure the command is one of the expected types
-	return Command == THREAD_JOB::COMMAND_THREAD_GENETIC_OPTIMIZATION;
+	return command == ThreadJob::CommandThreadGeneticOptimization;
 }

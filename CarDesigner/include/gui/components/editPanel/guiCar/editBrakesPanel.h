@@ -23,7 +23,7 @@
 class EDIT_PANEL;
 class BRAKES;
 
-class EDIT_BRAKES_PANEL : public wxPanel
+class EDIT_BRAKES_PANEL : public wxScrolledWindow
 {
 public:
 	// Constructor

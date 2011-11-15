@@ -14,8 +14,8 @@
 //				 information required to complete kinematics analyses and return the outputs.
 // History:
 
-#ifndef _KINEMATICS_DATA_CLASS_H_
-#define _KINEMATICS_DATA_CLASS_H_
+#ifndef _KINEMATICS_DATA_H_
+#define _KINEMATICS_DATA_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -28,24 +28,24 @@
 class CAR;
 class KINEMATIC_OUTPUTS;
 
-class KINEMATICS_DATA : public THREAD_DATA
+class KinematicsData : public ThreadData
 {
 public:
 	// Constructor
-	KINEMATICS_DATA(const CAR *_OriginalCar, CAR *_WorkingCar,
-		KINEMATICS::INPUTS _KinematicInputs, KINEMATIC_OUTPUTS *_Output);
+	KinematicsData(const CAR *_originalCar, CAR *_workingCar,
+		Kinematics::Inputs _kinematicInputs, KinematicOutputs *_output);
 
 	// Destructor
-	~KINEMATICS_DATA();
+	~KinematicsData();
 
 	// Data required to perform kinematic analyses (for GUI_CAR or ITERATION objects)
-	const CAR *OriginalCar;
-	CAR *WorkingCar;
-	KINEMATICS::INPUTS KinematicInputs;
-	KINEMATIC_OUTPUTS *Output;
+	const CAR *originalCar;
+	CAR *workingCar;
+	Kinematics::Inputs kinematicInputs;
+	KinematicOutputs *output;
 
 	// Mandatory overload from THREAD_DATA
-	bool OkForCommand(THREAD_JOB::THREAD_COMMANDS &Command);
+	bool OkForCommand(ThreadJob::ThreadCommands &Command);
 };
 
 #endif// _KINEMATICS_DATA_CLASS_H_

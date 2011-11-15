@@ -10,7 +10,7 @@
 // File:  kinematicsData.cpp
 // Created:  1/12/2009
 // Author:  K. Loux
-// Description:  Contains the class declaration for the KINEMATICS_DATA class.  This contains
+// Description:  Contains the class declaration for the KinematicsData class.  This contains
 //				 information required to complete kinematics analyses and return the outputs.
 // History:
 
@@ -18,16 +18,16 @@
 #include "vSolver/threads/kinematicsData.h"
 
 //==========================================================================
-// Class:			KINEMATICS_DATA
-// Function:		KINEMATICS_DATA
+// Class:			KinematicsData
+// Function:		KinematicsData
 //
-// Description:		Constructor for the KINEMATICS_DATA class.
+// Description:		Constructor for the KinematicsData class.
 //
 // Input Arguments:
-//		_Command	= THREAD_COMMANDS specifying the command type for this job
-//		_Data		= KINEMATICS_DATA* containing any additional data about the job
-//		_Name		= const wxString& Name of the car
-//		_Index		= int& representing the object index for the associated object
+//		_command	= ThreadCommands specifying the command type for this job
+//		_data		= KinematicsData* containing any additional data about the job
+//		_name		= const wxString& Name of the car
+//		_index		= int& representing the object index for the associated object
 //					  in the MAIN_FRAME
 //
 // Output Arguments:
@@ -37,20 +37,20 @@
 //		None
 //
 //==========================================================================
-KINEMATICS_DATA::KINEMATICS_DATA(const CAR *_OriginalCar, CAR *_WorkingCar,
-								 KINEMATICS::INPUTS _KinematicInputs,
-								 KINEMATIC_OUTPUTS *_Output) : THREAD_DATA(),
-								 OriginalCar(_OriginalCar),
-								 WorkingCar(_WorkingCar), KinematicInputs(_KinematicInputs),
-								 Output(_Output)
+KinematicsData::KinematicsData(const CAR *_originalCar, CAR *_workingCar,
+								 Kinematics::Inputs _kinematicInputs,
+								 KinematicOutputs *_output) : ThreadData(),
+								 originalCar(_originalCar),
+								 workingCar(_workingCar), kinematicInputs(_kinematicInputs),
+								 output(_output)
 {
 }
 
 //==========================================================================
-// Class:			KINEMATICS_DATA
-// Function:		~KINEMATICS_DATA
+// Class:			KinematicsData
+// Function:		~KinematicsData
 //
-// Description:		Destructor for the KINEMATICS_DATA class.
+// Description:		Destructor for the KinematicsData class.
 //
 // Input Arguments:
 //		None
@@ -62,19 +62,19 @@ KINEMATICS_DATA::KINEMATICS_DATA(const CAR *_OriginalCar, CAR *_WorkingCar,
 //		None
 //
 //==========================================================================
-KINEMATICS_DATA::~KINEMATICS_DATA()
+KinematicsData::~KinematicsData()
 {
 }
 
 //==========================================================================
-// Class:			KINEMATICS_DATA
+// Class:			KinematicsData
 // Function:		OkForCommand
 //
 // Description:		Checks to make sure this type of data is correct for the
 //					specified command.
 //
 // Input Arguments:
-//		Command		= THREAD_JOB::THREAD_COMMANDS& to be checked
+//		command		= ThreadJob::ThreadCommands& to be checked
 //
 // Output Arguments:
 //		None
@@ -83,10 +83,10 @@ KINEMATICS_DATA::~KINEMATICS_DATA()
 //		None
 //
 //==========================================================================
-bool KINEMATICS_DATA::OkForCommand(THREAD_JOB::THREAD_COMMANDS &Command)
+bool KinematicsData::OkForCommand(ThreadJob::ThreadCommands &command)
 {
 	// Make sure the command is one of the expected types
-	return Command == THREAD_JOB::COMMAND_THREAD_KINEMATICS_NORMAL ||
-		Command == THREAD_JOB::COMMAND_THREAD_KINEMATICS_ITERATION ||
-		Command == THREAD_JOB::COMMAND_THREAD_KINEMATICS_FOR_GA;
+	return command == ThreadJob::CommandThreadKinematicsNormal ||
+		command == ThreadJob::CommandThreadKinematicsIteration ||
+		command == ThreadJob::CommandThreadKinematicsGA;
 }

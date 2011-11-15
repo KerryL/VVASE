@@ -23,10 +23,10 @@
 #include "vUtilities/debugger.h"
 
 //==========================================================================
-// Class:			SHAKER_RIG
-// Function:		SHAKER_RIG
+// Class:			ShakerRig
+// Function:		ShakerRig
 //
-// Description:		Constructor for the SHAKER_RIG class.
+// Description:		Constructor for the ShakerRig class.
 //
 // Input Arguments:
 //		_debugger	= const Debugger&, reference to the debug message printing utility
@@ -38,18 +38,18 @@
 //		None
 //
 //==========================================================================
-SHAKER_RIG::SHAKER_RIG(const Debugger &_debugger) : debugger(_debugger)
+ShakerRig::ShakerRig(const Debugger &_debugger) : debugger(_debugger)
 {
 }
 
 //==========================================================================
-// Class:			SHAKER_RIG
-// Function:		SHAKER_RIG
+// Class:			ShakerRig
+// Function:		ShakerRig
 //
-// Description:		Copy constructor for the SHAKER_RIG class.
+// Description:		Copy constructor for the ShakerRig class.
 //
 // Input Arguments:
-//		ShakerRig	= const SHAKER_RIG& to copy to this object
+//		shakerRig	= const ShakerRig& to copy to this object
 //
 // Output Arguments:
 //		None
@@ -58,17 +58,17 @@ SHAKER_RIG::SHAKER_RIG(const Debugger &_debugger) : debugger(_debugger)
 //		None
 //
 //==========================================================================
-SHAKER_RIG::SHAKER_RIG(const SHAKER_RIG &ShakerRig) : debugger(ShakerRig.debugger)
+ShakerRig::ShakerRig(const ShakerRig &shakerRig) : debugger(shakerRig.debugger)
 {
 	// Do the copy
-	*this = ShakerRig;
+	*this = shakerRig;
 }
 
 //==========================================================================
-// Class:			SHAKER_RIG
-// Function:		~SHAKER_RIG
+// Class:			ShakerRig
+// Function:		~ShakerRig
 //
-// Description:		Destructor for the SHAKER_RIG class.
+// Description:		Destructor for the ShakerRig class.
 //
 // Input Arguments:
 //		None
@@ -80,30 +80,30 @@ SHAKER_RIG::SHAKER_RIG(const SHAKER_RIG &ShakerRig) : debugger(ShakerRig.debugge
 //		None
 //
 //==========================================================================
-SHAKER_RIG::~SHAKER_RIG()
+ShakerRig::~ShakerRig()
 {
 }
 
 //==========================================================================
-// Class:			SHAKER_RIG
+// Class:			ShakerRig
 // Function:		operator =
 //
-// Description:		Assignment operator for SHAKER_RIG class.
+// Description:		Assignment operator for ShakerRig class.
 //
 // Input Arguments:
-//		ShakerRig	= const SHAKER_RIG& to assign to this object
+//		shakerRig	= const ShakerRig& to assign to this object
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		SHAKER_RIG&, reference to this object
+//		ShakerRig&, reference to this object
 //
 //==========================================================================
-SHAKER_RIG& SHAKER_RIG::operator = (const SHAKER_RIG &ShakerRig)
+ShakerRig& ShakerRig::operator = (const ShakerRig &shakerRig)
 {
 	// Check for self-assignment
-	if (this == &ShakerRig)
+	if (this == &shakerRig)
 		return *this;
 
 	// Perform the assignment

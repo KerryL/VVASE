@@ -21,8 +21,8 @@
 //	3/24/2009	- Moved (physical location) to physics folder, K. Loux.
 //	4/13/2009	- Added boost::threads for SolveCorner(), K. Loux.
 
-#ifndef _KINEMATICS_CLASS_H_
-#define _KINEMATICS_CLASS_H_
+#ifndef _KINEMATICS_H_
+#define _KINEMATICS_H_
 
 // VVASE headers
 #include "vSolver/physics/kinematicOutputs.h"
@@ -30,79 +30,79 @@
 // VVASE forward declarations
 class CAR;
 
-class KINEMATICS
+class Kinematics
 {
 public:
 	// Constructor
-	KINEMATICS(const Debugger &_debugger);
+	Kinematics(const Debugger &_debugger);
 
 	// Destructor
-	~KINEMATICS();
+	~Kinematics();
 
 	// Definition for the inputs to the kinematics solver
-	struct INPUTS
+	struct Inputs
 	{
-		double Pitch;						// [rad]
-		double Roll;						// [rad]
-		double Heave;						// [in]
-		double RackTravel;					// [in]
-		Vector CenterOfRotation;			// [in]
-		Vector::Axis FirstRotation;
+		double pitch;						// [rad]
+		double roll;						// [rad]
+		double heave;						// [in]
+		double rackTravel;					// [in]
+		Vector centerOfRotation;			// [in]
+		Vector::Axis firstRotation;
 
 		// Operators
-		bool operator == (const KINEMATICS::INPUTS &Target) const
+		bool operator == (const Kinematics::Inputs &target) const
 		{
-			if (Pitch == Target.Pitch &&
-				Roll == Target.Roll &&
-				Heave == Target.Heave &&
-				RackTravel == Target.RackTravel &&
-				CenterOfRotation == Target.CenterOfRotation &&
-				FirstRotation == Target.FirstRotation)
+			if (pitch == target.pitch &&
+				roll == target.roll &&
+				heave == target.heave &&
+				rackTravel == target.rackTravel &&
+				centerOfRotation == target.centerOfRotation &&
+				firstRotation == target.firstRotation)
 				return true;
 
 			return false;
 		}
-		bool operator != (const KINEMATICS::INPUTS &Target) const { return !(*this == Target); };
+		bool operator != (const Kinematics::Inputs &target) const { return !(*this == target); };
 	};
 
 	// Private data accessors (SET)
-	inline void SetPitch(const double &Pitch) { Inputs.Pitch = Pitch; };
-	inline void SetRoll(const double &Roll) { Inputs.Roll = Roll; };
-	inline void SetHeave(const double &Heave) { Inputs.Heave = Heave; };
-	inline void SetRackTravel(const double &Travel) {Inputs.RackTravel = Travel; };
-	inline void SetCenterOfRotation(const Vector &Center) { Inputs.CenterOfRotation = Center; };
-	inline void SetFirstEulerRotation(const Vector::Axis &First) { Inputs.FirstRotation = First; };
-	inline void SetInputs(INPUTS _Inputs) { Inputs = _Inputs; };
+	inline void SetPitch(const double &pitch) { inputs.pitch = pitch; };
+	inline void SetRoll(const double &roll) { inputs.roll = roll; };
+	inline void SetHeave(const double &heave) { inputs.heave = heave; };
+	inline void SetRackTravel(const double &travel) { inputs.rackTravel = travel; };
+	inline void SetCenterOfRotation(const Vector &center) { inputs.centerOfRotation = center; };
+	inline void SetFirstEulerRotation(const Vector::Axis &first) { inputs.firstRotation = first; };
+	inline void SetInputs(Inputs _inputs) { inputs = _inputs; };
 
 	// Main work function for this class
 	void UpdateKinematics(const CAR* _OriginalCar, CAR* _WorkingCar, wxString Name);
 
 	// Private data accessors (GET)
-	inline KINEMATIC_OUTPUTS GetOutputs(void) { return Outputs; };
-	inline double GetPitch(void) { return Inputs.Pitch; };
-	inline double GetRoll(void) { return Inputs.Roll; };
-	inline double GetHeave(void) { return Inputs.Heave; };
-	inline double GetRackTravel(void) { return Inputs.RackTravel; };
-	inline Vector GetCenterOfRotation(void) { return Inputs.CenterOfRotation; };
-	inline Vector::Axis GetFirstEulerRotation(void) { return Inputs.FirstRotation; };
-	inline INPUTS GetInputs(void) { return Inputs; };
+	inline KINEMATIC_OUTPUTS GetOutputs(void) { return outputs; };
+	inline double GetPitch(void) { return inputs.pitch; };
+	inline double GetRoll(void) { return inputs.roll; };
+	inline double GetHeave(void) { return inputs.heave; };
+	inline double GetRackTravel(void) { return inputs.rackTravel; };
+	inline Vector GetCenterOfRotation(void) { return inputs.centerOfRotation; };
+	inline Vector::Axis GetFirstEulerRotation(void) { return inputs.firstRotation; };
+	inline Inputs GetInputs(void) { return inputs; };
 
 private:
 	// Debugger message printing utility
 	const Debugger &debugger;
 
 	// The inputs to the kinematic solver
-	INPUTS Inputs;
+	Inputs inputs;
 
-	const CAR *OriginalCar;// Pointer to original car data
-	CAR *WorkingCar;// Pointer to working (manipulated) car data
-	SUSPENSION *Static;// Suspension in which we move the points around
+	const CAR *originalCar;// Pointer to original car data
+	CAR *workingCar;// Pointer to working (manipulated) car data
+	SUSPENSION *localSuspension;// Suspension in which we move the points around
 
-	KINEMATIC_OUTPUTS Outputs;// Where we store everything after we UpdateOutputs
+	KINEMATIC_OUTPUTS outputs;// Where we store everything after we UpdateOutputs
 
 	// Kinematic solving routine for suspension points at each "corner" of the car
-	bool SolveCorner(CORNER &Corner, const CORNER &Original, 
-		const Vector &Rotations, const Vector::Axis &SecondRotation);
+	bool SolveCorner(CORNER &corner, const CORNER &original, 
+		const Vector &rotations, const Vector::Axis &secondRotation);
 
 	// Performs all of the output value calculations (angles, distances, centers, etc.)
 	void UpdateOutputs(void);

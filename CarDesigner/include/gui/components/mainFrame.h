@@ -30,8 +30,8 @@
 //				  existence and selecting multiple files to open, K. Loux.
 //	10/18/2010	- Added undo/redo stack object, K. Loux.
 
-#ifndef _MAIN_FRAME_CLASS_H_
-#define _MAIN_FRAME_CLASS_H_
+#ifndef _MAIN_FRAME_H_
+#define _MAIN_FRAME_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -347,4 +347,4 @@ private:
 	DECLARE_EVENT_TABLE();
 };
 
-#endif// _MAIN_FRAME_CLASS_H_
+#endif// _MAIN_FRAME_H_

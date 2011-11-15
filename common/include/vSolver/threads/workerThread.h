@@ -16,35 +16,35 @@
 //				 communicating back to the main thread.
 // History:
 
-#ifndef _WORKER_THREAD_CLASS_H_
-#define _WORKER_THREAD_CLASS_H_
+#ifndef _WORKER_THREAD_H_
+#define _WORKER_THREAD_H_
 
 // wxWidgets headers
 #include <wx/thread.h>
 
 // VVASE forward declarations
-class JOB_QUEUE;
-class KINEMATICS;
+class JobQueue;
+class Kinematics;
 class Debugger;
 
-class WORKER_THREAD : public wxThread
+class WorkerThread : public wxThread
 {
 public:
 	// Constructor
-	WORKER_THREAD(JOB_QUEUE* _JobQueue, Debugger &_debugger, int _Id = wxID_ANY);
+	WorkerThread(JobQueue* _jobQueue, Debugger &_debugger, int _id = wxID_ANY);
 
 	// Destructor
-	~WORKER_THREAD();
+	~WorkerThread();
 
 private:
 	// Debugging object
 	Debugger &debugger;
 
 	// The queue of jobs to be completed
-	JOB_QUEUE* JobQueue;
+	JobQueue* jobQueue;
 
 	// This thread's ID number
-	int Id;
+	int id;
 
 	// The thread's entry point
 	virtual wxThread::ExitCode Entry(void);
@@ -53,7 +53,7 @@ private:
 	virtual void OnJob(void);
 
 	// The objects that do the number crunching
-	KINEMATICS *KinematicAnalysis;
+	Kinematics *kinematicAnalysis;
 };
 
-#endif// _WORKER_THREAD_CLASS_H_
+#endif// _WORKER_THREAD_H_

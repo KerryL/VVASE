@@ -77,7 +77,11 @@ public:
 	void SetXGrid(const bool &gridOn);
 	void SetLeftYGrid(const bool &gridOn);
 	void SetRightYGrid(const bool &gridOn);
+
 	void SetXLabel(wxString text);
+	void SetLeftYLabel(wxString text);
+	void SetRightYLabel(wxString text);
+	void SetTitle(wxString text);
 
 	void SetGridColor(const Color &color);
 	Color GetGridColor(void) const;

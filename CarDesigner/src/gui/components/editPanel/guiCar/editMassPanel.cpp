@@ -145,6 +145,9 @@ void EDIT_MASS_PANEL::UpdateInformation(MASS_PROPERTIES *_CurrentMassProperties)
 	MassUnitsLabel->SetLabel('(' + Converter.GetUnitType(Convert::UnitTypeMass) + ')');
 	CoGUnitsLabel->SetLabel('(' + Converter.GetUnitType(Convert::UnitTypeDistance) + ')');
 
+	// Update sizers
+	Layout();
+
 	return;
 }
 
@@ -185,6 +188,9 @@ void EDIT_MASS_PANEL::CreateControls()
 	InertiaSizer->Add(InertiaCaption, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
 	InertiaSizer->Add(InertiaUnitsLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 2);
 
+	// Create sizer of input section
+	wxFlexGridSizer *inertiaInputSizer = new wxFlexGridSizer(5, 3, 3);
+
 	// Create the text boxes
 	Ixx = new wxTextCtrl(this, TextBoxIxx);
 	Iyy = new wxTextCtrl(this, TextBoxIyy);
@@ -199,7 +205,6 @@ void EDIT_MASS_PANEL::CreateControls()
 	Izy = new wxStaticText(this, wxID_ANY, wxEmptyString);
 
 	// First row
-	wxFlexGridSizer *inertiaInputSizer = new wxFlexGridSizer(5, 3, 3);
 	inertiaInputSizer->AddSpacer(-1);
 	inertiaInputSizer->Add(Ixx, 0, wxEXPAND);
 	inertiaInputSizer->Add(Ixy, 0, wxEXPAND);
@@ -259,10 +264,30 @@ void EDIT_MASS_PANEL::CreateControls()
 
 	// Add the sizers to the main sizer
 	MainSizer->Add(InertiaSizer);
-	MainSizer->Add(inertiaInputSizer, 0, wxEXPAND);
+	MainSizer->Add(inertiaInputSizer, 1, wxEXPAND);
+
+	// Set the text box minimum widths
+	// Use reasonable values in default units for an average car, add a negative sign, and format
+	// as requested to calculate the proper widths
+	int minInertiaWidth, minMassWidth, minDistanceWidth, minWidth;
+	GetTextExtent(Converter.FormatNumber(Converter.ConvertInertia(-850000.0)), &minInertiaWidth, NULL);
+	GetTextExtent(Converter.FormatNumber(Converter.ConvertMass(-8000.0)), &minMassWidth, NULL);
+	GetTextExtent(Converter.FormatNumber(Converter.ConvertDistance(-200.0)), &minDistanceWidth, NULL);
+	minWidth = std::max(minInertiaWidth, std::max(minMassWidth, minDistanceWidth));
+
+	Ixx->SetMinSize(wxSize(minWidth, -1));
+	Iyy->SetMinSize(wxSize(minWidth, -1));
+	Izz->SetMinSize(wxSize(minWidth, -1));
+	Ixy->SetMinSize(wxSize(minWidth, -1));
+	Ixz->SetMinSize(wxSize(minWidth, -1));
+	Iyz->SetMinSize(wxSize(minWidth, -1));
+	Mass->SetMinSize(wxSize(minWidth, -1));
+	CenterOfGravityX->SetMinSize(wxSize(minWidth, -1));
+	CenterOfGravityY->SetMinSize(wxSize(minWidth, -1));
+	CenterOfGravityZ->SetMinSize(wxSize(minWidth, -1));
 
 	// Assign the top level sizer to the dialog
-	SetSizerAndFit(TopSizer);
+	SetSizer(TopSizer);
 
 	return;
 }

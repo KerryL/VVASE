@@ -1024,7 +1024,7 @@ void Convert::SetTemperatureUnits(UnitsOfTemperature Units)
 // Class:			Convert
 // Function:		ConvertAngle
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into newUnits.
 //
 // Input Arguments:
@@ -1056,7 +1056,7 @@ double Convert::ConvertAngle(double n, UnitsOfAngle newUnits) const
 // Class:			Convert
 // Function:		ConvertDistance
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into newUnits.
 //
 // Input Arguments:
@@ -1098,7 +1098,7 @@ double Convert::ConvertDistance(double n, UnitsOfDistance newUnits) const
 // Class:			Convert
 // Function:		ConvertArea
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into newUnits.
 //
 // Input Arguments:
@@ -1136,7 +1136,7 @@ double Convert::ConvertArea(double n, UnitsOfArea newUnits) const
 // Class:			Convert
 // Function:		ConvertForce
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into newUnits.
 //
 // Input Arguments:
@@ -1172,7 +1172,7 @@ double Convert::ConvertForce(double n, UnitsOfForce newUnits) const
 // Class:			Convert
 // Function:		ConvertPressure
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into newUnits.
 //
 // Input Arguments:
@@ -1212,7 +1212,7 @@ double Convert::ConvertPressure(double n, UnitsOfPressure newUnits) const
 // Class:			Convert
 // Function:		ConvertMoment
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into newUnits.
 //
 // Input Arguments:
@@ -1248,7 +1248,7 @@ double Convert::ConvertMoment(double n, UnitsOfMoment newUnits) const
 // Class:			Convert
 // Function:		ConvertMass
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into newUnits.
 //
 // Input Arguments:
@@ -1282,7 +1282,7 @@ double Convert::ConvertMass(double n, UnitsOfMass newUnits) const
 // Class:			Convert
 // Function:		ConvertVelocity
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into newUnits.
 //
 // Input Arguments:
@@ -1324,7 +1324,7 @@ double Convert::ConvertVelocity(double n, UnitsOfVelocity newUnits) const
 // Class:			Convert
 // Function:		ConvertAcceleration
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into newUnits.
 //
 // Input Arguments:
@@ -1364,7 +1364,7 @@ double Convert::ConvertAcceleration(double n, UnitsOfAcceleration newUnits) cons
 // Class:			Convert
 // Function:		ConvertInertia
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into newUnits.
 //
 // Input Arguments:
@@ -1404,7 +1404,7 @@ double Convert::ConvertInertia(double n, UnitsOfInertia newUnits) const
 // Class:			Convert
 // Function:		ConvertDensity
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into newUnits.
 //
 // Input Arguments:
@@ -1444,7 +1444,7 @@ double Convert::ConvertDensity(double n, UnitsOfDensity newUnits) const
 // Class:			Convert
 // Function:		ConvertPower
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into newUnits.
 //
 // Input Arguments:
@@ -1482,7 +1482,7 @@ double Convert::ConvertPower(double n, UnitsOfPower newUnits) const
 // Class:			Convert
 // Function:		ConvertEnergy
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into newUnits.
 //
 // Input Arguments:
@@ -1522,7 +1522,7 @@ double Convert::ConvertEnergy(double n, UnitsOfEnergy newUnits) const
 // Class:			Convert
 // Function:		ConvertTemperature
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into newUnits.
 //
 // Input Arguments:
@@ -1558,7 +1558,7 @@ double Convert::ConvertTemperature(double n, UnitsOfTemperature newUnits) const
 // Class:			Convert
 // Function:		ConvertAngle
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into the default units that were previously specified by
 //					the user.
 //
@@ -1582,7 +1582,7 @@ double Convert::ConvertAngle(double n) const
 // Class:			Convert
 // Function:		ConvertDistance
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into the default units that were previously specified by
 //					the user.
 //
@@ -1606,7 +1606,7 @@ double Convert::ConvertDistance(double n) const
 // Class:			Convert
 // Function:		ConvertArea
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into the default units that were previously specified by
 //					the user.
 //
@@ -1630,7 +1630,7 @@ double Convert::ConvertArea(double n) const
 // Class:			Convert
 // Function:		ConvertForce
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into the default units that were previously specified by
 //					the user.
 //
@@ -1654,7 +1654,7 @@ double Convert::ConvertForce(double n) const
 // Class:			Convert
 // Function:		ConvertPressure
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into the default units that were previously specified by
 //					the user.
 //
@@ -1678,7 +1678,7 @@ double Convert::ConvertPressure(double n) const
 // Class:			Convert
 // Function:		ConvertMoment
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into the default units that were previously specified by
 //					the user.
 //
@@ -1702,7 +1702,7 @@ double Convert::ConvertMoment(double n) const
 // Class:			Convert
 // Function:		ConvertMass
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into the default units that were previously specified by
 //					the user.
 //
@@ -1726,7 +1726,7 @@ double Convert::ConvertMass(double n) const
 // Class:			Convert
 // Function:		ConvertVelocity
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into the default units that were previously specified by
 //					the user.
 //
@@ -1750,7 +1750,7 @@ double Convert::ConvertVelocity(double n) const
 // Class:			Convert
 // Function:		ConvertAcceleration
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into the default units that were previously specified by
 //					the user.
 //
@@ -1774,7 +1774,7 @@ double Convert::ConvertAcceleration(double n) const
 // Class:			Convert
 // Function:		ConvertInertia
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into the default units that were previously specified by
 //					the user.
 //
@@ -1798,7 +1798,7 @@ double Convert::ConvertInertia(double n) const
 // Class:			Convert
 // Function:		ConvertDensity
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into the default units that were previously specified by
 //					the user.
 //
@@ -1822,7 +1822,7 @@ double Convert::ConvertDensity(double n) const
 // Class:			Convert
 // Function:		ConvertPower
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into the default units that were previously specified by
 //					the user.
 //
@@ -1846,7 +1846,7 @@ double Convert::ConvertPower(double n) const
 // Class:			Convert
 // Function:		ConvertEnergy
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into the default units that were previously specified by
 //					the user.
 //
@@ -1870,7 +1870,7 @@ double Convert::ConvertEnergy(double n) const
 // Class:			Convert
 // Function:		ConvertTemperature
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into the default units that were previously specified by
 //					the user.
 //
@@ -1895,7 +1895,7 @@ double Convert::ConvertTemperature(double n) const
 // Function:		ReadAngle
 //
 // Description:		Converts from the specified units into our base units
-//					(see top of convert_class.h).
+//					(see top of convert.h).
 //
 // Input Arguments:
 //		n			= double to be converted
@@ -1927,7 +1927,7 @@ double Convert::ReadAngle(double n, UnitsOfAngle inputUnits) const
 // Function:		ReadDistance
 //
 // Description:		Converts from the specified units into our base units
-//					(see top of convert_class.h).
+//					(see top of convert.h).
 //
 // Input Arguments:
 //		n			= double to be converted
@@ -1969,7 +1969,7 @@ double Convert::ReadDistance(double n, UnitsOfDistance inputUnits) const
 // Function:		ReadArea
 //
 // Description:		Converts from the specified units into our base units
-//					(see top of convert_class.h).
+//					(see top of convert.h).
 //
 // Input Arguments:
 //		n			= double to be converted
@@ -2007,7 +2007,7 @@ double Convert::ReadArea(double n, UnitsOfArea inputUnits) const
 // Function:		ReadForce
 //
 // Description:		Converts from the specified units into our base units
-//					(see top of convert_class.h).
+//					(see top of convert.h).
 //
 // Input Arguments:
 //		n			= double to be converted
@@ -2043,7 +2043,7 @@ double Convert::ReadForce(double n, UnitsOfForce inputUnits) const
 // Function:		ReadPressure
 //
 // Description:		Converts from the specified units into our base units
-//					(see top of convert_class.h).
+//					(see top of convert.h).
 //
 // Input Arguments:
 //		n			= double to be converted
@@ -2083,7 +2083,7 @@ double Convert::ReadPressure(double n, UnitsOfPressure inputUnits) const
 // Function:		ReadMoment
 //
 // Description:		Converts from the specified units into our base units
-//					(see top of convert_class.h).
+//					(see top of convert.h).
 //
 // Input Arguments:
 //		n			= double to be converted
@@ -2119,7 +2119,7 @@ double Convert::ReadMoment(double n, UnitsOfMoment inputUnits) const
 // Function:		ReadMass
 //
 // Description:		Converts from the specified units into our base units
-//					(see top of convert_class.h).
+//					(see top of convert.h).
 //
 // Input Arguments:
 //		n			= double to be converted
@@ -2153,7 +2153,7 @@ double Convert::ReadMass(double n, UnitsOfMass inputUnits) const
 // Function:		ReadVelocity
 //
 // Description:		Converts from the specified units into our base units
-//					(see top of convert_class.h).
+//					(see top of convert.h).
 //
 // Input Arguments:
 //		n			= double to be converted
@@ -2195,7 +2195,7 @@ double Convert::ReadVelocity(double n, UnitsOfVelocity inputUnits) const
 // Function:		ReadAcceleration
 //
 // Description:		Converts from the specified units into our base units
-//					(see top of convert_class.h).
+//					(see top of convert.h).
 //
 // Input Arguments:
 //		n			= double to be converted
@@ -2235,7 +2235,7 @@ double Convert::ReadAcceleration(double n, UnitsOfAcceleration inputUnits) const
 // Function:		ReadInertia
 //
 // Description:		Converts from the specified units into our base units
-//					(see top of convert_class.h).
+//					(see top of convert.h).
 //
 // Input Arguments:
 //		n			= double to be converted
@@ -2275,7 +2275,7 @@ double Convert::ReadInertia(double n, UnitsOfInertia inputUnits) const
 // Function:		ReadDensity
 //
 // Description:		Converts from the specified units into our base units
-//					(see top of convert_class.h).
+//					(see top of convert.h).
 //
 // Input Arguments:
 //		n			= double to be converted
@@ -2315,7 +2315,7 @@ double Convert::ReadDensity(double n, UnitsOfDensity inputUnits) const
 // Function:		ReadPower
 //
 // Description:		Converts from the specified units into our base units
-//					(see top of convert_class.h).
+//					(see top of convert.h).
 //
 // Input Arguments:
 //		n			= double to be converted
@@ -2353,7 +2353,7 @@ double Convert::ReadPower(double n, UnitsOfPower inputUnits) const
 // Function:		ReadEnergy
 //
 // Description:		Converts from the specified units into our base units
-//					(see top of convert_class.h).
+//					(see top of convert.h).
 //
 // Input Arguments:
 //		n			= double to be converted
@@ -2393,7 +2393,7 @@ double Convert::ReadEnergy(double n, UnitsOfEnergy inputUnits) const
 // Function:		ReadTemperature
 //
 // Description:		Converts from the specified units into our base units
-//					(see top of convert_class.h).
+//					(see top of convert.h).
 //
 // Input Arguments:
 //		n			= double to be converted
@@ -2429,7 +2429,7 @@ double Convert::ReadTemperature(double n, UnitsOfTemperature inputUnits) const
 // Function:		ReadAngle
 //
 // Description:		Converts from the default units into our base units
-//					(see top of convert_class.h).
+//					(see top of convert.h).
 //
 // Input Arguments:
 //		n	= double to be converted
@@ -2451,7 +2451,7 @@ double Convert::ReadAngle(double n) const
 // Function:		ReadDistance
 //
 // Description:		Converts from the default units into our base units
-//					(see top of convert_class.h).
+//					(see top of convert.h).
 //
 // Input Arguments:
 //		n	= double to be converted
@@ -2473,7 +2473,7 @@ double Convert::ReadDistance(double n) const
 // Function:		ReadArea
 //
 // Description:		Converts from the default units into our base units
-//					(see top of convert_class.h).
+//					(see top of convert.h).
 //
 // Input Arguments:
 //		n	= double to be converted
@@ -2495,7 +2495,7 @@ double Convert::ReadArea(double n) const
 // Function:		ReadForce
 //
 // Description:		Converts from the default units into our base units
-//					(see top of convert_class.h).
+//					(see top of convert.h).
 //
 // Input Arguments:
 //		n	= double to be converted
@@ -2517,7 +2517,7 @@ double Convert::ReadForce(double n) const
 // Function:		ReadPressure
 //
 // Description:		Converts from the default units into our base units
-//					(see top of convert_class.h).
+//					(see top of convert.h).
 //
 // Input Arguments:
 //		n	= double to be converted
@@ -2539,7 +2539,7 @@ double Convert::ReadPressure(double n) const
 // Function:		ReadMoment
 //
 // Description:		Converts from the default units into our base units
-//					(see top of convert_class.h).
+//					(see top of convert.h).
 //
 // Input Arguments:
 //		n	= double to be converted
@@ -2561,7 +2561,7 @@ double Convert::ReadMoment(double n) const
 // Function:		ReadMass
 //
 // Description:		Converts from the default units into our base units
-//					(see top of convert_class.h).
+//					(see top of convert.h).
 //
 // Input Arguments:
 //		n	= double to be converted
@@ -2583,7 +2583,7 @@ double Convert::ReadMass(double n) const
 // Function:		ReadVelocity
 //
 // Description:		Converts from the default units into our base units
-//					(see top of convert_class.h).
+//					(see top of convert.h).
 //
 // Input Arguments:
 //		n	= double to be converted
@@ -2605,7 +2605,7 @@ double Convert::ReadVelocity(double n) const
 // Function:		ReadAcceleration
 //
 // Description:		Converts from the default units into our base units
-//					(see top of convert_class.h).
+//					(see top of convert.h).
 //
 // Input Arguments:
 //		n	= double to be converted
@@ -2627,7 +2627,7 @@ double Convert::ReadAcceleration(double n) const
 // Function:		ReadInertia
 //
 // Description:		Converts from the default units into our base units
-//					(see top of convert_class.h).
+//					(see top of convert.h).
 //
 // Input Arguments:
 //		n	= double to be converted
@@ -2649,7 +2649,7 @@ double Convert::ReadInertia(double n) const
 // Function:		ReadDensity
 //
 // Description:		Converts from the default units into our base units
-//					(see top of convert_class.h).
+//					(see top of convert.h).
 //
 // Input Arguments:
 //		n	= double to be converted
@@ -2671,7 +2671,7 @@ double Convert::ReadDensity(double n) const
 // Function:		ReadPower
 //
 // Description:		Converts from the default units into our base units
-//					(see top of convert_class.h).
+//					(see top of convert.h).
 //
 // Input Arguments:
 //		n	= double to be converted
@@ -2693,7 +2693,7 @@ double Convert::ReadPower(double n) const
 // Function:		ReadEnergy
 //
 // Description:		Converts from the default units into our base units
-//					(see top of convert_class.h).
+//					(see top of convert.h).
 //
 // Input Arguments:
 //		n	= double to be converted
@@ -2715,7 +2715,7 @@ double Convert::ReadEnergy(double n) const
 // Function:		ReadTemperature
 //
 // Description:		Converts from the default units into our base units
-//					(see top of convert_class.h).
+//					(see top of convert.h).
 //
 // Input Arguments:
 //		n	= double to be converted
@@ -2736,7 +2736,7 @@ double Convert::ReadTemperature(double n) const
 // Class:			Convert
 // Function:		ConvertAngle
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into the default units.  Vector overload.
 //
 // Input Arguments:
@@ -2764,7 +2764,7 @@ Vector Convert::ConvertAngle(Vector v) const
 // Class:			Convert
 // Function:		ConvertDistance
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into the default units.  Vector overload.
 //
 // Input Arguments:
@@ -2792,7 +2792,7 @@ Vector Convert::ConvertDistance(Vector v) const
 // Class:			Convert
 // Function:		ConvertArea
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into the default units.  Vector overload.
 //
 // Input Arguments:
@@ -2820,7 +2820,7 @@ Vector Convert::ConvertArea(Vector v) const
 // Class:			Convert
 // Function:		ConvertForce
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into the default units.  Vector overload.
 //
 // Input Arguments:
@@ -2848,7 +2848,7 @@ Vector Convert::ConvertForce(Vector v) const
 // Class:			Convert
 // Function:		ConvertPressure
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into the default units.  Vector overload.
 //
 // Input Arguments:
@@ -2876,7 +2876,7 @@ Vector Convert::ConvertPressure(Vector v) const
 // Class:			Convert
 // Function:		ConvertMoment
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into the default units.  Vector overload.
 //
 // Input Arguments:
@@ -2904,7 +2904,7 @@ Vector Convert::ConvertMoment(Vector v) const
 // Class:			Convert
 // Function:		ConvertMass
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into the default units.  Vector overload.
 //
 // Input Arguments:
@@ -2932,7 +2932,7 @@ Vector Convert::ConvertMass(Vector v) const
 // Class:			Convert
 // Function:		ConvertVelocity
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into the default units.  Vector overload.
 //
 // Input Arguments:
@@ -2960,7 +2960,7 @@ Vector Convert::ConvertVelocity(Vector v) const
 // Class:			Convert
 // Function:		ConvertAcceleration
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into the default units.  Vector overload.
 //
 // Input Arguments:
@@ -2988,7 +2988,7 @@ Vector Convert::ConvertAcceleration(Vector v) const
 // Class:			Convert
 // Function:		ConvertInertia
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into the default units.  Vector overload.
 //
 // Input Arguments:
@@ -3016,7 +3016,7 @@ Vector Convert::ConvertInertia(Vector v) const
 // Class:			Convert
 // Function:		ConvertDensity
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into the default units.  Vector overload.
 //
 // Input Arguments:
@@ -3044,7 +3044,7 @@ Vector Convert::ConvertDensity(Vector v) const
 // Class:			Convert
 // Function:		ConvertPower
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into the default units.  Vector overload.
 //
 // Input Arguments:
@@ -3072,7 +3072,7 @@ Vector Convert::ConvertPower(Vector v) const
 // Class:			Convert
 // Function:		ConvertEnergy
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into the default units.  Vector overload.
 //
 // Input Arguments:
@@ -3100,7 +3100,7 @@ Vector Convert::ConvertEnergy(Vector v) const
 // Class:			Convert
 // Function:		ConvertTemperature
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into the default units.  Vector overload.
 //
 // Input Arguments:
@@ -3128,7 +3128,7 @@ Vector Convert::ConvertTemperature(Vector v) const
 // Class:			Convert
 // Function:		ConvertTo
 //
-// Description:		Converts from our base units (see top of convert_class.h)
+// Description:		Converts from our base units (see top of convert.h)
 //					into the default units for the specified type.  Double
 //					overload.
 //
