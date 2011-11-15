@@ -293,12 +293,10 @@ void EDIT_TIRES_PANEL::CreateControls()
 
 	MainSizer->Add(LeftRearWidthLabel, 0, wxALIGN_CENTER_VERTICAL);
 	MainSizer->Add(LeftRearTireWidth, 0, wxEXPAND);
-	MainSizer->Add(LeftRearWidthUnitsLabel, 0, wxALIGN_CENTER_VERTICAL );
+	MainSizer->Add(LeftRearWidthUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 
 	// Assign the top level sizer to the dialog
-	SetSizer(TopSizer);
-
-	return;
+	SetSizerAndFit(TopSizer);
 }
 
 //==========================================================================

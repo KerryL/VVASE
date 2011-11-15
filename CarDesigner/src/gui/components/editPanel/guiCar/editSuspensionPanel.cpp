@@ -392,7 +392,7 @@ void EDIT_SUSPENSION_PANEL::CreateControls()
 	IsSymmetric = new wxCheckBox(this, CheckBoxIsSymmetric, _T("Is Symmetric"));
 	MainSizer->Add(IsSymmetric, 0, wxALIGN_LEFT);
 
-	// Front thrid shock/spring
+	// Front third shock/spring
 	FrontHasThirdSpring = new wxCheckBox(this, CheckBoxFrontHasThirdSpring, _T("Front Has Third Spring"));
 	MainSizer->Add(FrontHasThirdSpring, 0, wxALIGN_LEFT);
 

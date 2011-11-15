@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                           Copyright Kerry R. Loux 2011
+                           Copyright Kerry R. Loux 2009-2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -8,7 +8,7 @@
 ===================================================================================*/
 
 // File:  renderWindow.cpp
-// Created:  5/2/2011
+// Created:  5/14/2009
 // Author:  K. Loux
 // Description:  Class for creating OpenGL scenes, derived from wxGLCanvas.  Contains
 //				 event handlers for various mouse and keyboard interactions.  All objects
@@ -16,6 +16,9 @@
 //				 Objects in the PrimitivesList become managed by this object and are
 //				 deleted automatically.
 // History:
+//	11/22/2009	- Moved to vRenderer.lib, K. Loux.
+//	4/25/2010	- Fixed anti-aliasing for 2D plots, K. Loux.
+//	11/11/2011	- Updated with code from DataPlotter, K. Loux.
 
 // Standard C++ headers
 #include <vector>
@@ -137,7 +140,6 @@ BEGIN_EVENT_TABLE(RenderWindow, wxGLCanvas)
 	// Window events
 	EVT_SIZE(				RenderWindow::OnSize)
 	EVT_PAINT(				RenderWindow::OnPaint)
-//	EVT_ERASE_BACKGROUND(	RenderWindow::OnEraseBackground)
 	EVT_ENTER_WINDOW(		RenderWindow::OnEnterWindow)
 
 	// Interaction events
@@ -263,29 +265,6 @@ void RenderWindow::OnSize(wxSizeEvent& event)
 
 	return;
 }
-
-//==========================================================================
-// Class:			RenderWindow
-// Function:		OnEraseBackground
-//
-// Description:		Event handler for the erase background event.  This is
-//					simply here to override default behavior which would
-//					cause the screen to flicker.
-//
-// Input Arguments:
-//		event	= wxEraseEvent& (UNUSED)
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-/*void RenderWindow::OnEraseBackground(wxEraseEvent& WXUNUSED(event))
-{
-	// Do nothing to avoid flashing
-*/
 
 //==========================================================================
 // Class:			RENDER_WINDOW
@@ -756,7 +735,7 @@ void RenderWindow::DoRotate(wxMouseEvent &event)
 	long lastXDistance = GetSize().GetWidth() / 2 - lastMousePosition[0];
 	long lastYDistance = GetSize().GetHeight() / 2 - lastMousePosition[1];
 
-	// The angle is determined by how much the mouse moved.  1000 pixels of movement will result in
+	// The angle is determined by how much the mouse moved.  800 pixels of movement will result in
 	// a full 360 degrees rotation of the car.
 	// FIXME:  Add adjustable rotation sensitivity (actually, all of the interactions can be adjustable)
 	double angle = sqrt(fabs(double((xDistance - lastXDistance) * (xDistance - lastXDistance))
@@ -837,7 +816,7 @@ void RenderWindow::DoWheelDolly(wxMouseEvent &event)
 //==========================================================================
 void RenderWindow::DoDragDolly(wxMouseEvent &event)
 {
-	// Handle 3D dollying differntly from 2D dollying
+	// Handle 3D dollying differently from 2D dollying
 	if (view3D)
 	{
 		// Always dolly a constant distance

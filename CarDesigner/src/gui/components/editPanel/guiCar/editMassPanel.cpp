@@ -47,7 +47,7 @@
 //==========================================================================
 EDIT_MASS_PANEL::EDIT_MASS_PANEL(EDIT_PANEL &_Parent, wxWindowID id,
 								 const wxPoint& pos, const wxSize& size,
-								 const Debugger &_debugger) : wxPanel(&_Parent, id, pos, size),
+								 const Debugger &_debugger) : wxScrolledWindow(&_Parent, id, pos, size),
 								 debugger(_debugger),
 								 Converter(_Parent.GetMainFrame().GetConverter()),
 								 Parent(_Parent)
@@ -166,17 +166,15 @@ void EDIT_MASS_PANEL::UpdateInformation(MASS_PROPERTIES *_CurrentMassProperties)
 //==========================================================================
 void EDIT_MASS_PANEL::CreateControls()
 {
+	// Enable scrolling
+	SetScrollRate(1, 1);
+	
 	// Top-level sizer
 	wxBoxSizer *TopSizer = new wxBoxSizer(wxVERTICAL);
 
 	// Second sizer gives more space around the controls
 	wxBoxSizer *MainSizer = new wxBoxSizer(wxVERTICAL);
-	TopSizer->Add(MainSizer, 1, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALL, 5);
-
-	// The column widths
-	int LabelColumnWidth = 30;
-	int InputColumnWidth = 60;
-	int UnitsColumnWidth = 40;
+	TopSizer->Add(MainSizer, 1, wxGROW | wxALL, 5);
 
 	// Create the inertia inputs
 	wxBoxSizer *InertiaSizer = new wxBoxSizer(wxVERTICAL);
@@ -188,88 +186,83 @@ void EDIT_MASS_PANEL::CreateControls()
 	InertiaSizer->Add(InertiaUnitsLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 2);
 
 	// Create the text boxes
-	Ixx = new wxTextCtrl(this, TextBoxIxx, wxEmptyString, wxDefaultPosition,
-		wxSize(InputColumnWidth, -1));
-	Iyy = new wxTextCtrl(this, TextBoxIyy, wxEmptyString, wxDefaultPosition,
-		wxSize(InputColumnWidth, -1));
-	Izz = new wxTextCtrl(this, TextBoxIzz, wxEmptyString, wxDefaultPosition,
-		wxSize(InputColumnWidth, -1));
-	Ixy = new wxTextCtrl(this, TextBoxIxy, wxEmptyString, wxDefaultPosition,
-		wxSize(InputColumnWidth, -1));
-	Ixz = new wxTextCtrl(this, TextBoxIxz, wxEmptyString, wxDefaultPosition,
-		wxSize(InputColumnWidth, -1));
-	Iyz = new wxTextCtrl(this, TextBoxIyz, wxEmptyString, wxDefaultPosition,
-		wxSize(InputColumnWidth, -1));
+	Ixx = new wxTextCtrl(this, TextBoxIxx);
+	Iyy = new wxTextCtrl(this, TextBoxIyy);
+	Izz = new wxTextCtrl(this, TextBoxIzz);
+	Ixy = new wxTextCtrl(this, TextBoxIxy);
+	Ixz = new wxTextCtrl(this, TextBoxIxz);
+	Iyz = new wxTextCtrl(this, TextBoxIyz);
 
 	// Create the static text controls
-	Iyx = new wxStaticText(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(InputColumnWidth, -1));
-	Izx = new wxStaticText(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(InputColumnWidth, -1));
-	Izy = new wxStaticText(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(InputColumnWidth, -1));
+	Iyx = new wxStaticText(this, wxID_ANY, wxEmptyString);
+	Izx = new wxStaticText(this, wxID_ANY, wxEmptyString);
+	Izy = new wxStaticText(this, wxID_ANY, wxEmptyString);
 
 	// First row
-	wxBoxSizer *InertiaRow1 = new wxBoxSizer(wxHORIZONTAL);
-	InertiaRow1->Add(Ixx, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 1);
-	InertiaRow1->Add(Ixy, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 1);
-	InertiaRow1->Add(Ixz, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 1);
+	wxFlexGridSizer *inertiaInputSizer = new wxFlexGridSizer(5, 3, 3);
+	inertiaInputSizer->AddSpacer(-1);
+	inertiaInputSizer->Add(Ixx, 0, wxEXPAND);
+	inertiaInputSizer->Add(Ixy, 0, wxEXPAND);
+	inertiaInputSizer->Add(Ixz, 0, wxEXPAND);
+	inertiaInputSizer->AddSpacer(-1);
 
 	// Second row
-	wxBoxSizer *InertiaRow2 = new wxBoxSizer(wxHORIZONTAL);
-	InertiaRow2->Add(Iyx, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 1);
-	InertiaRow2->Add(Iyy, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 1);
-	InertiaRow2->Add(Iyz, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 1);
+	inertiaInputSizer->AddSpacer(-1);
+	inertiaInputSizer->Add(Iyx, 0, wxALIGN_CENTER_VERTICAL);
+	inertiaInputSizer->Add(Iyy, 0, wxEXPAND);
+	inertiaInputSizer->Add(Iyz, 0, wxEXPAND);
+	inertiaInputSizer->AddSpacer(-1);
 
 	// Third row
-	wxBoxSizer *InertiaRow3 = new wxBoxSizer(wxHORIZONTAL);
-	InertiaRow3->Add(Izx, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 1);
-	InertiaRow3->Add(Izy, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 1);
-	InertiaRow3->Add(Izz, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 1);
-
-	// Add the rows to the inertia sizer
-	InertiaSizer->Add(InertiaRow1);
-	InertiaSizer->Add(InertiaRow2);
-	InertiaSizer->Add(InertiaRow3);
-
-	// Re-size the columns
-	InputColumnWidth = 50;
+	inertiaInputSizer->AddSpacer(-1);
+	inertiaInputSizer->Add(Izx, 0, wxALIGN_CENTER_VERTICAL);
+	inertiaInputSizer->Add(Izy, 0, wxALIGN_CENTER_VERTICAL);
+	inertiaInputSizer->Add(Izz, 0, wxEXPAND);
+	inertiaInputSizer->AddSpacer(-1);
+	
+	// Blank row for space
+	int spaceSize(15);
+	inertiaInputSizer->AddSpacer(spaceSize);
+	inertiaInputSizer->AddSpacer(spaceSize);
+	inertiaInputSizer->AddSpacer(spaceSize);
+	inertiaInputSizer->AddSpacer(spaceSize);
+	inertiaInputSizer->AddSpacer(spaceSize);
 
 	// Create the mass input
-	wxBoxSizer *MassSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText *MassLabel = new wxStaticText(this, wxID_ANY, _T("Mass"), wxDefaultPosition,
-		wxSize(LabelColumnWidth, -1));
-	Mass = new wxTextCtrl(this, TextBoxMass, wxEmptyString, wxDefaultPosition, wxSize(InputColumnWidth, -1));
-	MassUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		wxSize(UnitsColumnWidth, -1));
+	wxStaticText *MassLabel = new wxStaticText(this, wxID_ANY, _T("Mass"));
+	Mass = new wxTextCtrl(this, TextBoxMass);
+	MassUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
 
-	MassSizer->Add(MassLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
-	MassSizer->Add(Mass, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
-	MassSizer->Add(MassUnitsLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
+	inertiaInputSizer->Add(MassLabel, 0, wxALIGN_CENTER_VERTICAL);
+	inertiaInputSizer->Add(Mass, 0, wxEXPAND);
+	inertiaInputSizer->Add(MassUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
+	inertiaInputSizer->AddSpacer(-1);
+	inertiaInputSizer->AddSpacer(-1);
 
 	// Create the center of gravity inputs
-	wxBoxSizer *CenterOfGravitySizer = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText *CoGLabel = new wxStaticText(this, wxID_ANY, _T("CG"), wxDefaultPosition,
-		wxSize(LabelColumnWidth, -1));
-	CenterOfGravityX = new wxTextCtrl(this, TextBoxCenterOfGravityX, wxEmptyString, wxDefaultPosition,
-		wxSize(InputColumnWidth, -1));
-	CenterOfGravityY = new wxTextCtrl(this, TextBoxCenterOfGravityY, wxEmptyString, wxDefaultPosition,
-		wxSize(InputColumnWidth, -1));
-	CenterOfGravityZ = new wxTextCtrl(this, TextBoxCenterOfGravityZ, wxEmptyString, wxDefaultPosition,
-		wxSize(InputColumnWidth, -1));
-	CoGUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxSize(UnitsColumnWidth, -1));
+	wxStaticText *CoGLabel = new wxStaticText(this, wxID_ANY, _T("CG"));
+	CenterOfGravityX = new wxTextCtrl(this, TextBoxCenterOfGravityX);
+	CenterOfGravityY = new wxTextCtrl(this, TextBoxCenterOfGravityY);
+	CenterOfGravityZ = new wxTextCtrl(this, TextBoxCenterOfGravityZ);
+	CoGUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
 
-	CenterOfGravitySizer->Add(CoGLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
-	CenterOfGravitySizer->Add(CenterOfGravityX, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
-	CenterOfGravitySizer->Add(CenterOfGravityY, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
-	CenterOfGravitySizer->Add(CenterOfGravityZ, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
-	CenterOfGravitySizer->Add(CoGUnitsLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
+	inertiaInputSizer->Add(CoGLabel, 0, wxALIGN_CENTER_VERTICAL);
+	inertiaInputSizer->Add(CenterOfGravityX, 0, wxEXPAND);
+	inertiaInputSizer->Add(CenterOfGravityY, 0, wxEXPAND);
+	inertiaInputSizer->Add(CenterOfGravityZ, 0, wxEXPAND);
+	inertiaInputSizer->Add(CoGUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
+	
+	// Make the middle columns growable
+	inertiaInputSizer->AddGrowableCol(1, 1);
+	inertiaInputSizer->AddGrowableCol(2, 1);
+	inertiaInputSizer->AddGrowableCol(3, 1);
 
 	// Add the sizers to the main sizer
 	MainSizer->Add(InertiaSizer);
-	MainSizer->AddSpacer(15);
-	MainSizer->Add(MassSizer);
-	MainSizer->Add(CenterOfGravitySizer);
+	MainSizer->Add(inertiaInputSizer, 0, wxEXPAND);
 
 	// Assign the top level sizer to the dialog
-	SetSizer(TopSizer);
+	SetSizerAndFit(TopSizer);
 
 	return;
 }

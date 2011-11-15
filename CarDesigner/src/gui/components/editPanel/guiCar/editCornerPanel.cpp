@@ -373,7 +373,7 @@ void EDIT_CORNER_PANEL::CreateControls()
 		_T("Actuation Attachment"));
 	ActuationAttachment = new wxComboBox(this, ComboBoxActuationAttachment, wxEmptyString, wxDefaultPosition,
 		wxDefaultSize, Choices, wxCB_READONLY);
-	SetMinimumWidthFromContents(ActuationType, additionalWidth);
+	SetMinimumWidthFromContents(ActuationAttachment, additionalWidth);
 
 	lowerInputSizer->Add(AttachmentLabel, 0, wxALIGN_CENTER_VERTICAL);
 	lowerInputSizer->Add(ActuationAttachment, 0, wxEXPAND);
@@ -404,6 +404,9 @@ void EDIT_CORNER_PANEL::CreateControls()
 	lowerInputSizer->Add(ToeLabel, 0, wxALIGN_CENTER_VERTICAL);
 	lowerInputSizer->Add(StaticToe, 0, wxEXPAND);
 	lowerInputSizer->Add(ToeUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
+	
+	StaticCamber->SetMinSize(ActuationType->GetMinSize());
+	StaticToe->SetMinSize(ActuationType->GetMinSize());
 
 	MainSizer->AddGrowableRow(0);
 	MainSizer->AddGrowableRow(1);

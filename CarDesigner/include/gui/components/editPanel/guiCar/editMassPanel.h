@@ -23,7 +23,7 @@
 class EDIT_PANEL;
 class MASS_PROPERTIES;
 
-class EDIT_MASS_PANEL : public wxPanel
+class EDIT_MASS_PANEL : public wxScrolledWindow
 {
 public:
 	// Constructor
