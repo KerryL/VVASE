@@ -15,8 +15,8 @@
 //	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
-#ifndef _ENGINE_CLASS_H_
-#define _ENGINE_CLASS_H_
+#ifndef _ENGINE_H_
+#define _ENGINE_H_
 
 // Standard C++ headers
 #include <iosfwd>// forward declarations of fstream objects
@@ -53,4 +53,4 @@ private:
 	double CrankshaftSpeed;// [rad/sec]
 };
 
-#endif// _ENGINE_CLASS_H_
+#endif// _ENGINE_H_

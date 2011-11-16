@@ -15,8 +15,8 @@
 //	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
-#ifndef _BRAKES_CLASS_H_
-#define _BRAKES_CLASS_H_
+#ifndef _BRAKES_H_
+#define _BRAKES_H_
 
 // Standard C++ headers
 #include <iosfwd>// forward declarations of fstream objects
@@ -67,4 +67,4 @@ private:
 	const Debugger &debugger;
 };
 
-#endif// _BRAKES_CLASS_H_
+#endif// _BRAKES_H_

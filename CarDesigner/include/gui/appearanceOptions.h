@@ -14,8 +14,8 @@
 //				 render window.
 // History:
 
-#ifndef _APPEARANCE_OPTIONS_CLASS_H_
-#define _APPEARANCE_OPTIONS_CLASS_H_
+#ifndef _APPEARANCE_OPTIONS_H_
+#define _APPEARANCE_OPTIONS_H_
 
 // CarDesigner forward declarations
 class MAIN_FRAME;
@@ -183,4 +183,4 @@ private:
 	int Resolution[ResolutionCount];
 };
 
-#endif// _APPEARANCE_OPTIONS_CLASS_H_
+#endif// _APPEARANCE_OPTIONS_H_

@@ -131,7 +131,7 @@ void Kinematics::UpdateKinematics(const CAR* _originalCar, CAR* _workingCar, wxS
 	// Rotate the steering wheel
 	localSuspension->MoveSteeringRack(inputs.rackTravel);
 
-	// FIXME:  As it is right now, this section is not compatabile with monoshocks
+	// FIXME:  As it is right now, this section is not compatible with monoshocks
 
 	Vector rotations;// (X = First, Y = Second, Z = Third)
 	Vector::Axis secondRotation;
@@ -139,13 +139,13 @@ void Kinematics::UpdateKinematics(const CAR* _originalCar, CAR* _workingCar, wxS
 	// Determine the order to perform the Euler rotations
 	if (inputs.firstRotation == Vector::AxisX)// Do roll first, then pitch
 	{
-		SecondRotation = Vector::AxisY;
-		Rotations.Set(Inputs.Roll, Inputs.Pitch, 0.0);
+		secondRotation = Vector::AxisY;
+		rotations.Set(inputs.roll, inputs.pitch, 0.0);
 	}
-	else if (Inputs.FirstRotation == Vector::AxisY)// Do pitch first, then roll
+	else if (inputs.firstRotation == Vector::AxisY)// Do pitch first, then roll
 	{
-		SecondRotation = Vector::AxisX;
-		Rotations.Set(Inputs.Pitch, Inputs.Roll, 0.0);
+		secondRotation = Vector::AxisX;
+		rotations.Set(inputs.pitch, inputs.roll, 0.0);
 	}
 	else
 	{
@@ -156,15 +156,15 @@ void Kinematics::UpdateKinematics(const CAR* _originalCar, CAR* _workingCar, wxS
 	// Solve the chassis-mounted points for left-right common items (3rd springs/shocks, sway bars)
 	// Front sway bars
 	// NOTE:  This is only for points that are NOT in the CORNER class
-	switch (Static->FrontBarStyle)
+	switch (localSuspension->FrontBarStyle)
 	{
 	case SUSPENSION::SwayBarUBar:
 		// Rotations
-		Static->Hardpoints[SUSPENSION::FrontBarMidPoint].Rotate(Inputs.CenterOfRotation, Rotations,
+		localSuspension->Hardpoints[SUSPENSION::FrontBarMidPoint].Rotate(Inputs.CenterOfRotation, Rotations,
 			Inputs.FirstRotation, SecondRotation);
 
 		// Translations
-		Static->Hardpoints[SUSPENSION::FrontBarMidPoint].z += Inputs.Heave;
+		localSuspension->Hardpoints[SUSPENSION::FrontBarMidPoint].z += Inputs.Heave;
 		break;
 
 	case SUSPENSION::SwayBarTBar:
@@ -176,15 +176,15 @@ void Kinematics::UpdateKinematics(const CAR* _originalCar, CAR* _workingCar, wxS
 	}
 
 	// Rear sway bars
-	switch (Static->RearBarStyle)
+	switch (localSuspension->RearBarStyle)
 	{
 	case SUSPENSION::SwayBarUBar:
 		// Rotations
-		Static->Hardpoints[SUSPENSION::RearBarMidPoint].Rotate(Inputs.CenterOfRotation, Rotations,
-			Inputs.FirstRotation, SecondRotation);
+		localSuspension->Hardpoints[SUSPENSION::RearBarMidPoint].Rotate(inputs.centerOfRotation,
+			rotations, inputs.firstRotation, secondRotation);
 
 		// Translations
-		Static->Hardpoints[SUSPENSION::RearBarMidPoint].z += Inputs.Heave;
+		localSuspension->Hardpoints[SUSPENSION::RearBarMidPoint].z += inputs.heave;
 		break;
 
 	case SUSPENSION::SwayBarTBar:
@@ -196,54 +196,54 @@ void Kinematics::UpdateKinematics(const CAR* _originalCar, CAR* _workingCar, wxS
 	}
 
 	// Third springs
-	if (Static->FrontHasThirdSpring)
+	if (localSuspension->FrontHasThirdSpring)
 	{
 		// Rotations
-		Static->Hardpoints[SUSPENSION::FrontThirdSpringInboard].Rotate(Inputs.CenterOfRotation, Rotations,
-			Inputs.FirstRotation, SecondRotation);
-		Static->Hardpoints[SUSPENSION::FrontThirdShockInboard].Rotate(Inputs.CenterOfRotation, Rotations,
-			Inputs.FirstRotation, SecondRotation);
+		localSuspension->Hardpoints[SUSPENSION::FrontThirdSpringInboard].Rotate(inputs.centerOfRotation,
+			rotations, inputs.firstRotation, secondRotation);
+		localSuspension->Hardpoints[SUSPENSION::FrontThirdShockInboard].Rotate(inputs.centerOfRotation,
+			rotations, inputs.firstRotation, secondRotation);
 
 		// Translations
-		Static->Hardpoints[SUSPENSION::FrontThirdSpringInboard].z += Inputs.Heave;
-		Static->Hardpoints[SUSPENSION::FrontThirdShockInboard].z += Inputs.Heave;
+		localSuspension->Hardpoints[SUSPENSION::FrontThirdSpringInboard].z += inputs.heave;
+		localSuspension->Hardpoints[SUSPENSION::FrontThirdShockInboard].z += inputs.heave;
 	}
 
-	if (Static->RearHasThirdSpring)
+	if (localSuspension->RearHasThirdSpring)
 	{
 		// Rotations
-		Static->Hardpoints[SUSPENSION::RearThirdSpringInboard].Rotate(Inputs.CenterOfRotation, Rotations,
-			Inputs.FirstRotation, SecondRotation);
-		Static->Hardpoints[SUSPENSION::RearThirdShockInboard].Rotate(Inputs.CenterOfRotation, Rotations,
-			Inputs.FirstRotation, SecondRotation);
+		localSuspension->Hardpoints[SUSPENSION::RearThirdSpringInboard].Rotate(inputs.centerOfRotation,
+			rotations, inputs.firstRotation, secondRotation);
+		localSuspension->Hardpoints[SUSPENSION::RearThirdShockInboard].Rotate(inputs.centerOfRotation,
+			rotations, inputs.firstRotation, secondRotation);
 
 		// Translations
-		Static->Hardpoints[SUSPENSION::RearThirdSpringInboard].z += Inputs.Heave;
-		Static->Hardpoints[SUSPENSION::RearThirdShockInboard].z += Inputs.Heave;
+		localSuspension->Hardpoints[SUSPENSION::RearThirdSpringInboard].z += inputs.heave;
+		localSuspension->Hardpoints[SUSPENSION::RearThirdShockInboard].z += inputs.heave;
 	}
 
-	if (!SolveCorner(Static->RightFront, OriginalCar->Suspension->RightFront, Rotations, SecondRotation))
+	if (!SolveCorner(localSuspension->RightFront, originalCar->Suspension->RightFront, rotations, secondRotation))
 		debugger.Print(_T("ERROR:  Problem solving right front corner!  Increase debug level for more information."),
 			Debugger::PriorityHigh);
-	if (!SolveCorner(Static->LeftFront, OriginalCar->Suspension->LeftFront, Rotations, SecondRotation))
+	if (!SolveCorner(localSuspension->LeftFront, originalCar->Suspension->LeftFront, rotations, secondRotation))
 		debugger.Print(_T("ERROR:  Problem solving left front corner!  Increase debug level for more information."),
 			Debugger::PriorityHigh);
-	if (!SolveCorner(Static->RightRear, OriginalCar->Suspension->RightRear, Rotations, SecondRotation))
+	if (!SolveCorner(localSuspension->RightRear, originalCar->Suspension->RightRear, rotations, secondRotation))
 		debugger.Print(_T("ERROR:  Problem solving right rear corner!  Increase debug level for more information."),
 			Debugger::PriorityHigh);
-	if (!SolveCorner(Static->LeftRear, OriginalCar->Suspension->LeftRear, Rotations, SecondRotation))
+	if (!SolveCorner(localSuspension->LeftRear, originalCar->Suspension->LeftRear, rotations, secondRotation))
 		debugger.Print(_T("ERROR:  Problem solving left rear corner!  Increase debug level for more information."),
 			Debugger::PriorityHigh);
 
 	// Now the hardpoints have been moved and located - let's look at the outputs
-	Outputs.Update(OriginalCar, Static);
+	outputs.Update(originalCar, localSuspension);
 
 	// Get the total elapsed time (includes solving for the outputs)
-	long TotalTime = Timer.Time();
+	long totalTime = timer.Time();
 
 	// Print the time to the output pane
 	debugger.Print(Debugger::PriorityLow, "Finished UpdateKinematcs() for %s in %0.3f sec",
-		Name.c_str(), TotalTime / 1000.0);
+		name.c_str(), totalTime / 1000.0);
 
 	return;
 }
@@ -258,167 +258,167 @@ void Kinematics::UpdateKinematics(const CAR* _originalCar, CAR* _workingCar, wxS
 //					spring end-points.
 //
 // Input Arguments:
-//		OriginalCorner	= const CORNER*, the un-perturbed locations of the
+//		originalCorner	= const CORNER*, the un-perturbed locations of the
 //						  suspension hardpoints
-//		Rotations		= const Vector* specifying the amount to rotate the chassis
+//		rotations		= const Vector* specifying the amount to rotate the chassis
 //						  about each axis
-//		SecondRotation	= const Vector::Axis* describing the second axis of rotation
+//		secondRotation	= const Vector::Axis* describing the second axis of rotation
 //						  (the first is an input quantity)
 //
 // Output Arguments:
-//		Corner	= CORNER*, the corner of the car we are manipulating
+//		corner	= CORNER*, the corner of the car we are manipulating
 //
 // Return Value:
 //		bool, true for success, false for error(s)
 //
 //==========================================================================
-bool Kinematics::SolveCorner(CORNER &Corner, const CORNER &OriginalCorner,
-							 const Vector &Rotations, const Vector::Axis &SecondRotation)
+bool Kinematics::SolveCorner(CORNER &corner, const CORNER &originalCorner,
+							 const Vector &rotations, const Vector::Axis &secondRotation)
 {
 	// Determine if this corner is at the front or the rear of the car
-	bool IsAtFront = false;
-	if (Corner.Location == CORNER::LocationRightFront || Corner.Location == CORNER::LocationLeftFront)
-		IsAtFront = true;
+	bool isAtFront = false;
+	if (corner.Location == CORNER::LocationRightFront || corner.Location == CORNER::LocationLeftFront)
+		isAtFront = true;
 
 	// First move all of the body-fixed points (rotations first)
-	Corner.Hardpoints[CORNER::LowerFrontTubMount].Rotate(Inputs.CenterOfRotation,
-		Rotations, Inputs.FirstRotation, SecondRotation);
-	Corner.Hardpoints[CORNER::LowerRearTubMount].Rotate(Inputs.CenterOfRotation,
-		Rotations, Inputs.FirstRotation, SecondRotation);
-	Corner.Hardpoints[CORNER::UpperFrontTubMount].Rotate(Inputs.CenterOfRotation,
-		Rotations, Inputs.FirstRotation, SecondRotation);
-	Corner.Hardpoints[CORNER::UpperRearTubMount].Rotate(Inputs.CenterOfRotation,
-		Rotations, Inputs.FirstRotation, SecondRotation);
-	Corner.Hardpoints[CORNER::BarArmAtPivot].Rotate(Inputs.CenterOfRotation,
-		Rotations, Inputs.FirstRotation, SecondRotation);
-	Corner.Hardpoints[CORNER::InboardSpring].Rotate(Inputs.CenterOfRotation,
-		Rotations, Inputs.FirstRotation, SecondRotation);
-	Corner.Hardpoints[CORNER::InboardShock].Rotate(Inputs.CenterOfRotation,
-		Rotations, Inputs.FirstRotation, SecondRotation);
-	Corner.Hardpoints[CORNER::InboardTieRod].Rotate(Inputs.CenterOfRotation,
-		Rotations, Inputs.FirstRotation, SecondRotation);
+	corner.Hardpoints[CORNER::LowerFrontTubMount].Rotate(inputs.centerOfRotation,
+		rotations, inputs.firstRotation, secondRotation);
+	corner.Hardpoints[CORNER::LowerRearTubMount].Rotate(inputs.centerOfRotation,
+		rotations, inputs.firstRotation, secondRotation);
+	corner.Hardpoints[CORNER::UpperFrontTubMount].Rotate(inputs.centerOfRotation,
+		rotations, inputs.firstRotation, secondRotation);
+	corner.Hardpoints[CORNER::UpperRearTubMount].Rotate(inputs.centerOfRotation,
+		rotations, inputs.firstRotation, secondRotation);
+	corner.Hardpoints[CORNER::BarArmAtPivot].Rotate(inputs.centerOfRotation,
+		rotations, inputs.firstRotation, secondRotation);
+	corner.Hardpoints[CORNER::InboardSpring].Rotate(inputs.centerOfRotation,
+		rotations, inputs.firstRotation, secondRotation);
+	corner.Hardpoints[CORNER::InboardShock].Rotate(inputs.centerOfRotation,
+		rotations, inputs.firstRotation, secondRotation);
+	corner.Hardpoints[CORNER::InboardTieRod].Rotate(inputs.centerOfRotation,
+		rotations, inputs.firstRotation, secondRotation);
 
 	// Now do the translations on the same points
-	Corner.Hardpoints[CORNER::LowerFrontTubMount].z += Inputs.Heave;
-	Corner.Hardpoints[CORNER::LowerRearTubMount].z += Inputs.Heave;
-	Corner.Hardpoints[CORNER::UpperFrontTubMount].z += Inputs.Heave;
-	Corner.Hardpoints[CORNER::UpperRearTubMount].z += Inputs.Heave;
-	Corner.Hardpoints[CORNER::BarArmAtPivot].z += Inputs.Heave;
-	Corner.Hardpoints[CORNER::InboardSpring].z += Inputs.Heave;
-	Corner.Hardpoints[CORNER::InboardShock].z += Inputs.Heave;
-	Corner.Hardpoints[CORNER::InboardTieRod].z += Inputs.Heave;
+	corner.Hardpoints[CORNER::LowerFrontTubMount].z += inputs.heave;
+	corner.Hardpoints[CORNER::LowerRearTubMount].z += inputs.heave;
+	corner.Hardpoints[CORNER::UpperFrontTubMount].z += inputs.heave;
+	corner.Hardpoints[CORNER::UpperRearTubMount].z += inputs.heave;
+	corner.Hardpoints[CORNER::BarArmAtPivot].z += inputs.heave;
+	corner.Hardpoints[CORNER::InboardSpring].z += inputs.heave;
+	corner.Hardpoints[CORNER::InboardShock].z += inputs.heave;
+	corner.Hardpoints[CORNER::InboardTieRod].z += inputs.heave;
 
 	// Depending on the type of actuation, we might have to move some additional points, as well
-	if (Corner.ActuationType == CORNER::ActuationPushPullrod)
+	if (corner.ActuationType == CORNER::ActuationPushPullrod)
 	{
-		Corner.Hardpoints[CORNER::BellCrankPivot1].Rotate(Inputs.CenterOfRotation,
-			Rotations, Inputs.FirstRotation, SecondRotation);
-		Corner.Hardpoints[CORNER::BellCrankPivot2].Rotate(Inputs.CenterOfRotation,
-			Rotations, Inputs.FirstRotation, SecondRotation);
+		corner.Hardpoints[CORNER::BellCrankPivot1].Rotate(inputs.centerOfRotation,
+			rotations, inputs.firstRotation, secondRotation);
+		corner.Hardpoints[CORNER::BellCrankPivot2].Rotate(inputs.centerOfRotation,
+			rotations, inputs.firstRotation, secondRotation);
 
-		Corner.Hardpoints[CORNER::BellCrankPivot1].z += Inputs.Heave;
-		Corner.Hardpoints[CORNER::BellCrankPivot2].z += Inputs.Heave;
+		corner.Hardpoints[CORNER::BellCrankPivot1].z += inputs.heave;
+		corner.Hardpoints[CORNER::BellCrankPivot2].z += inputs.heave;
 	}
 
 	// Do the rotation and translation for the inboard half shafts at the same time
-	if ((OriginalCar->HasFrontHalfShafts() && IsAtFront) ||
-		(OriginalCar->HasRearHalfShafts() && !IsAtFront))
+	if ((originalCar->HasFrontHalfShafts() && isAtFront) ||
+		(originalCar->HasRearHalfShafts() && !isAtFront))
 	{
-		Corner.Hardpoints[CORNER::InboardHalfShaft].Rotate(Inputs.CenterOfRotation,
-			Rotations, Inputs.FirstRotation, SecondRotation);
-		Corner.Hardpoints[CORNER::InboardHalfShaft].z += Inputs.Heave;
+		corner.Hardpoints[CORNER::InboardHalfShaft].Rotate(inputs.centerOfRotation,
+			rotations, inputs.firstRotation, secondRotation);
+		corner.Hardpoints[CORNER::InboardHalfShaft].z += inputs.heave;
 	}
 
 	// Declare and initialize the return value to true
-	bool Success = true;
+	bool success = true;
 
 	// Solve outboard points and work in through the pushrods and bell cranks.
 	// We will iterate the z-location of the lower ball joint and the solution of
 	// the first three outboard points until the bottom of the tire is at z = 0.
-	Vector WheelNormal;
-	Vector OriginalPlaneNormal;
-	Vector NewPlaneNormal;
-	Vector WheelRotations;
-	double UpperLimit(0.0), LowerLimit(0.0);// Initialized here to avoid MSVC++ compiler warning C4701
-	int Iteration = 1;
-	double Tolerance = 5e-8;
-	int Limit = 100;
+	Vector wheelNormal;
+	Vector originalPlaneNormal;
+	Vector newPlaneNormal;
+	Vector wheelRotations;
+	double upperLimit(0.0), lowerLimit(0.0);// Initialized here to avoid MSVC++ compiler warning C4701
+	int iteration = 1;
+	double tolerance = 5.0e-8;
+	int limit = 100;
 
-	Corner.Hardpoints[CORNER::ContactPatch].z = 1.0;// Must be initialized to > Tolerance
-	while (Iteration <= Limit && fabs(Corner.Hardpoints[CORNER::ContactPatch].z) > Tolerance)
+	corner.Hardpoints[CORNER::ContactPatch].z = 1.0;// Must be initialized to > Tolerance
+	while (iteration <= limit && fabs(corner.Hardpoints[CORNER::ContactPatch].z) > tolerance)
 	{
-		if (!SUSPENSION::SolveForXY(Corner.Hardpoints[CORNER::LowerFrontTubMount],
-			Corner.Hardpoints[CORNER::LowerRearTubMount], OriginalCorner.Hardpoints[CORNER::LowerFrontTubMount],
-			OriginalCorner.Hardpoints[CORNER::LowerRearTubMount], OriginalCorner.Hardpoints[CORNER::LowerBallJoint],
-			Corner.Hardpoints[CORNER::LowerBallJoint]))
+		if (!SUSPENSION::SolveForXY(corner.Hardpoints[CORNER::LowerFrontTubMount],
+			corner.Hardpoints[CORNER::LowerRearTubMount], originalCorner.Hardpoints[CORNER::LowerFrontTubMount],
+			originalCorner.Hardpoints[CORNER::LowerRearTubMount], originalCorner.Hardpoints[CORNER::LowerBallJoint],
+			corner.Hardpoints[CORNER::LowerBallJoint]))
 		{
 			// Print an error and switch the success boolean to indicate a failure
 			debugger.Print(_T("ERROR:  Failed to solve for lower ball joint!"), Debugger::PriorityMedium);
-			Success = false;
+			success = false;
 		}
 
-		if (!SUSPENSION::SolveForPoint(Corner.Hardpoints[CORNER::LowerBallJoint],
-			Corner.Hardpoints[CORNER::UpperFrontTubMount], Corner.Hardpoints[CORNER::UpperRearTubMount],
-			OriginalCorner.Hardpoints[CORNER::LowerBallJoint], OriginalCorner.Hardpoints[CORNER::UpperFrontTubMount],
-			OriginalCorner.Hardpoints[CORNER::UpperRearTubMount], OriginalCorner.Hardpoints[CORNER::UpperBallJoint],
-			Corner.Hardpoints[CORNER::UpperBallJoint]))
+		if (!SUSPENSION::SolveForPoint(corner.Hardpoints[CORNER::LowerBallJoint],
+			corner.Hardpoints[CORNER::UpperFrontTubMount], corner.Hardpoints[CORNER::UpperRearTubMount],
+			originalCorner.Hardpoints[CORNER::LowerBallJoint], originalCorner.Hardpoints[CORNER::UpperFrontTubMount],
+			originalCorner.Hardpoints[CORNER::UpperRearTubMount], originalCorner.Hardpoints[CORNER::UpperBallJoint],
+			corner.Hardpoints[CORNER::UpperBallJoint]))
 		{
 			// Print an error and switch the success boolean to indicate a failure
 			debugger.Print(_T("ERROR:  Failed to solve for upper ball joint!"), Debugger::PriorityMedium);
-			Success = false;
+			success = false;
 		}
 
-		if (!SUSPENSION::SolveForPoint(Corner.Hardpoints[CORNER::LowerBallJoint],
-			Corner.Hardpoints[CORNER::UpperBallJoint], Corner.Hardpoints[CORNER::InboardTieRod],
-			OriginalCorner.Hardpoints[CORNER::LowerBallJoint], OriginalCorner.Hardpoints[CORNER::UpperBallJoint],
-			OriginalCorner.Hardpoints[CORNER::InboardTieRod], OriginalCorner.Hardpoints[CORNER::OutboardTieRod],
-			Corner.Hardpoints[CORNER::OutboardTieRod]))
+		if (!SUSPENSION::SolveForPoint(corner.Hardpoints[CORNER::LowerBallJoint],
+			corner.Hardpoints[CORNER::UpperBallJoint], corner.Hardpoints[CORNER::InboardTieRod],
+			originalCorner.Hardpoints[CORNER::LowerBallJoint], originalCorner.Hardpoints[CORNER::UpperBallJoint],
+			originalCorner.Hardpoints[CORNER::InboardTieRod], originalCorner.Hardpoints[CORNER::OutboardTieRod],
+			corner.Hardpoints[CORNER::OutboardTieRod]))
 		{
 			// Print an error and switch the success boolean to indicate a failure
 			debugger.Print(_T("ERROR:  Failed to solve for outboard tie rod!"), Debugger::PriorityMedium);
-			Success = false;
+			success = false;
 		}
 
-		if (!SUSPENSION::SolveForPoint(Corner.Hardpoints[CORNER::LowerBallJoint],
-			Corner.Hardpoints[CORNER::UpperBallJoint], Corner.Hardpoints[CORNER::OutboardTieRod],
-			OriginalCorner.Hardpoints[CORNER::LowerBallJoint], OriginalCorner.Hardpoints[CORNER::UpperBallJoint],
-			OriginalCorner.Hardpoints[CORNER::OutboardTieRod], OriginalCorner.Hardpoints[CORNER::WheelCenter],
-			Corner.Hardpoints[CORNER::WheelCenter]))
+		if (!SUSPENSION::SolveForPoint(corner.Hardpoints[CORNER::LowerBallJoint],
+			corner.Hardpoints[CORNER::UpperBallJoint], corner.Hardpoints[CORNER::OutboardTieRod],
+			originalCorner.Hardpoints[CORNER::LowerBallJoint], originalCorner.Hardpoints[CORNER::UpperBallJoint],
+			originalCorner.Hardpoints[CORNER::OutboardTieRod], originalCorner.Hardpoints[CORNER::WheelCenter],
+			corner.Hardpoints[CORNER::WheelCenter]))
 		{
 			// Print an error and switch the success boolean to indicate a failure
 			debugger.Print(_T("ERROR:  Failed to solve for wheel center!"), Debugger::PriorityMedium);
-			Success = false;
+			success = false;
 		}
 
 		// Solve for the contact patch
-		OriginalPlaneNormal = VVASEMath::GetPlaneNormal(OriginalCorner.Hardpoints[CORNER::LowerBallJoint],
-			OriginalCorner.Hardpoints[CORNER::UpperBallJoint], OriginalCorner.Hardpoints[CORNER::OutboardTieRod]);
-		NewPlaneNormal = VVASEMath::GetPlaneNormal(Corner.Hardpoints[CORNER::LowerBallJoint],
-			Corner.Hardpoints[CORNER::UpperBallJoint], Corner.Hardpoints[CORNER::OutboardTieRod]);
+		originalPlaneNormal = VVASEMath::GetPlaneNormal(originalCorner.Hardpoints[CORNER::LowerBallJoint],
+			originalCorner.Hardpoints[CORNER::UpperBallJoint], originalCorner.Hardpoints[CORNER::OutboardTieRod]);
+		newPlaneNormal = VVASEMath::GetPlaneNormal(corner.Hardpoints[CORNER::LowerBallJoint],
+			corner.Hardpoints[CORNER::UpperBallJoint], corner.Hardpoints[CORNER::OutboardTieRod]);
 
 		// For some operations, if this is on the right-hand side of the car, the sign gets flipped
-		double Sign = 1.0;
-		if (Corner.Location == CORNER::LocationRightFront || Corner.Location == CORNER::LocationRightRear)
-			Sign *= -1.0;
+		double sign = 1.0;
+		if (corner.Location == CORNER::LocationRightFront || corner.Location == CORNER::LocationRightRear)
+			sign *= -1.0;
 
 		// Determine what Euler angles I need to rotate OriginalPlaneNormal through to
 		// get NewPlaneNormal.  Do one angle at a time because order of rotations matters.
-		WheelRotations = OriginalPlaneNormal.AnglesTo(NewPlaneNormal);
-		WheelNormal.Set(0.0, Sign * 1.0, 0.0);
-		WheelNormal.Rotate(WheelRotations.z, Vector::AxisZ);
-		WheelNormal.Rotate(WheelRotations.x, Vector::AxisX);
+		wheelRotations = originalPlaneNormal.AnglesTo(newPlaneNormal);
+		wheelNormal.Set(0.0, sign * 1.0, 0.0);
+		wheelNormal.Rotate(wheelRotations.z, Vector::AxisZ);
+		wheelNormal.Rotate(wheelRotations.x, Vector::AxisX);
 
 		// Add in the effects of camber and toe settings (contact patch location should not be affected
 		// by camber and toe settings - WheelCenter is calculated based on camber and toe, so we need to
 		// back that out in the contact patch solver to avoid making contact patch a function of camber
 		// and toe).
-		WheelNormal.Rotate(Sign * OriginalCorner.StaticCamber, Vector::AxisX);
-		WheelNormal.Rotate(Sign * OriginalCorner.StaticToe, Vector::AxisZ);
+		wheelNormal.Rotate(sign * originalCorner.StaticCamber, Vector::AxisX);
+		wheelNormal.Rotate(sign * originalCorner.StaticToe, Vector::AxisZ);
 
 		// Do the actual solving for the contact patch
-		SUSPENSION::SolveForContactPatch(Corner.Hardpoints[CORNER::WheelCenter], WheelNormal,
-			OriginalCorner.Hardpoints[CORNER::ContactPatch].Distance(OriginalCorner.Hardpoints[CORNER::WheelCenter]),
-			Corner.Hardpoints[CORNER::ContactPatch]);
+		SUSPENSION::SolveForContactPatch(corner.Hardpoints[CORNER::WheelCenter], wheelNormal,
+			originalCorner.Hardpoints[CORNER::ContactPatch].Distance(originalCorner.Hardpoints[CORNER::WheelCenter]),
+			corner.Hardpoints[CORNER::ContactPatch]);
 
 		// With the origin on the ground, the error is equal to the Z location of the contact patch
 		// FIXME:  This is only true when using flat ground model!!!
@@ -427,279 +427,279 @@ bool Kinematics::SolveCorner(CORNER &Corner, const CORNER &OriginalCorner,
 		// patch Z location is highly non-linear, but that would be an unusual case (extreme camber gain?)
 
 		// If this is the first iteration, initialize the limit variables
-		if (Iteration == 1)
+		if (iteration == 1)
 		{
-			UpperLimit = Corner.Hardpoints[CORNER::LowerBallJoint].z +
-				3.0 * fabs(Corner.Hardpoints[CORNER::ContactPatch].z);
-			LowerLimit = Corner.Hardpoints[CORNER::LowerBallJoint].z -
-				3.0 * fabs(Corner.Hardpoints[CORNER::ContactPatch].z);
+			upperLimit = corner.Hardpoints[CORNER::LowerBallJoint].z +
+				3.0 * fabs(corner.Hardpoints[CORNER::ContactPatch].z);
+			lowerLimit = corner.Hardpoints[CORNER::LowerBallJoint].z -
+				3.0 * fabs(corner.Hardpoints[CORNER::ContactPatch].z);
 		}
 
 		// Make the adjustment in the guess
-		if (Corner.Hardpoints[CORNER::ContactPatch].z > Tolerance)
-			UpperLimit = Corner.Hardpoints[CORNER::LowerBallJoint].z;
-		else if (Corner.Hardpoints[CORNER::ContactPatch].z < -Tolerance)
-			LowerLimit = Corner.Hardpoints[CORNER::LowerBallJoint].z;
-		Corner.Hardpoints[CORNER::LowerBallJoint].z = LowerLimit + (UpperLimit - LowerLimit) / 2.0;
+		if (corner.Hardpoints[CORNER::ContactPatch].z > tolerance)
+			upperLimit = corner.Hardpoints[CORNER::LowerBallJoint].z;
+		else if (corner.Hardpoints[CORNER::ContactPatch].z < -tolerance)
+			lowerLimit = corner.Hardpoints[CORNER::LowerBallJoint].z;
+		corner.Hardpoints[CORNER::LowerBallJoint].z = lowerLimit + (upperLimit - lowerLimit) / 2.0;
 
 		// Increment the iteration counter
-		Iteration++;
+		iteration++;
 	}
 
 	// Check to make sure we finished the loop because we were within the tolerance (and not
 	// because we hit the iteration limit)
-	if ((fabs(Corner.Hardpoints[CORNER::ContactPatch].z) > Tolerance))
+	if ((fabs(corner.Hardpoints[CORNER::ContactPatch].z) > tolerance))
 	{
 		// Print an error and switch the success boolean to indicate a failure
 		debugger.Print(_T("Warning (SolveCorner):  Contact patch location did not converge"),
 			Debugger::PriorityMedium);
-		Success = false;
+		success = false;
 	}
 
 	// Outboard shock/spring actuators
-	if (Corner.ActuationType == CORNER::ActuationPushPullrod)
+	if (corner.ActuationType == CORNER::ActuationPushPullrod)
 	{
-		if (Corner.ActuationAttachment == CORNER::AttachmentLowerAArm)
+		if (corner.ActuationAttachment == CORNER::AttachmentLowerAArm)
 		{
-			if (!SUSPENSION::SolveForPoint(Corner.Hardpoints[CORNER::LowerBallJoint],
-				Corner.Hardpoints[CORNER::LowerFrontTubMount], Corner.Hardpoints[CORNER::LowerRearTubMount],
-				OriginalCorner.Hardpoints[CORNER::LowerBallJoint], OriginalCorner.Hardpoints[CORNER::LowerFrontTubMount],
-				OriginalCorner.Hardpoints[CORNER::LowerRearTubMount], OriginalCorner.Hardpoints[CORNER::OutboardPushrod],
-				Corner.Hardpoints[CORNER::OutboardPushrod]))
+			if (!SUSPENSION::SolveForPoint(corner.Hardpoints[CORNER::LowerBallJoint],
+				corner.Hardpoints[CORNER::LowerFrontTubMount], corner.Hardpoints[CORNER::LowerRearTubMount],
+				originalCorner.Hardpoints[CORNER::LowerBallJoint], originalCorner.Hardpoints[CORNER::LowerFrontTubMount],
+				originalCorner.Hardpoints[CORNER::LowerRearTubMount], originalCorner.Hardpoints[CORNER::OutboardPushrod],
+				corner.Hardpoints[CORNER::OutboardPushrod]))
 			{
 				// Print an error and switch the success boolean to indicate a failure
 				debugger.Print(_T("ERROR:  Failed to solve for outboard pushrod!"), Debugger::PriorityMedium);
-				Success = false;
+				success = false;
 			}
 		}
-		else if (Corner.ActuationAttachment == CORNER::AttachmentUpperAArm)
+		else if (corner.ActuationAttachment == CORNER::AttachmentUpperAArm)
 		{
-			if (!SUSPENSION::SolveForPoint(Corner.Hardpoints[CORNER::UpperBallJoint],
-				Corner.Hardpoints[CORNER::UpperFrontTubMount], Corner.Hardpoints[CORNER::UpperRearTubMount],
-				OriginalCorner.Hardpoints[CORNER::UpperBallJoint], OriginalCorner.Hardpoints[CORNER::UpperFrontTubMount],
-				OriginalCorner.Hardpoints[CORNER::UpperRearTubMount], OriginalCorner.Hardpoints[CORNER::OutboardPushrod],
-				Corner.Hardpoints[CORNER::OutboardPushrod]))
+			if (!SUSPENSION::SolveForPoint(corner.Hardpoints[CORNER::UpperBallJoint],
+				corner.Hardpoints[CORNER::UpperFrontTubMount], corner.Hardpoints[CORNER::UpperRearTubMount],
+				originalCorner.Hardpoints[CORNER::UpperBallJoint], originalCorner.Hardpoints[CORNER::UpperFrontTubMount],
+				originalCorner.Hardpoints[CORNER::UpperRearTubMount], originalCorner.Hardpoints[CORNER::OutboardPushrod],
+				corner.Hardpoints[CORNER::OutboardPushrod]))
 			{
 				// Print an error and switch the success boolean to indicate a failure
 				debugger.Print(_T("ERROR:  Failed to solve for outboard pullrod!"), Debugger::PriorityMedium);
-				Success = false;
+				success = false;
 			}
 		}
-		else if (Corner.ActuationAttachment == CORNER::AttachmentUpright)
+		else if (corner.ActuationAttachment == CORNER::AttachmentUpright)
 		{
-			if (!SUSPENSION::SolveForPoint(Corner.Hardpoints[CORNER::UpperBallJoint],
-				Corner.Hardpoints[CORNER::LowerBallJoint], Corner.Hardpoints[CORNER::OutboardTieRod],
-				OriginalCorner.Hardpoints[CORNER::UpperBallJoint], OriginalCorner.Hardpoints[CORNER::LowerBallJoint],
-				OriginalCorner.Hardpoints[CORNER::OutboardTieRod], OriginalCorner.Hardpoints[CORNER::OutboardPushrod],
-				Corner.Hardpoints[CORNER::OutboardPushrod]))
+			if (!SUSPENSION::SolveForPoint(corner.Hardpoints[CORNER::UpperBallJoint],
+				corner.Hardpoints[CORNER::LowerBallJoint], corner.Hardpoints[CORNER::OutboardTieRod],
+				originalCorner.Hardpoints[CORNER::UpperBallJoint], originalCorner.Hardpoints[CORNER::LowerBallJoint],
+				originalCorner.Hardpoints[CORNER::OutboardTieRod], originalCorner.Hardpoints[CORNER::OutboardPushrod],
+				corner.Hardpoints[CORNER::OutboardPushrod]))
 			{
 				// Print an error and switch the success boolean to indicate a failure
 				debugger.Print(_T("ERROR:  Failed to solve for outboard push/pullrod!"), Debugger::PriorityMedium);
-				Success = false;
+				success = false;
 			}
 		}
 
 		// Inboard Pushrods
-		if (!SUSPENSION::SolveForPoint(Corner.Hardpoints[CORNER::BellCrankPivot1],
-			Corner.Hardpoints[CORNER::BellCrankPivot2], Corner.Hardpoints[CORNER::OutboardPushrod],
-			OriginalCorner.Hardpoints[CORNER::BellCrankPivot1], OriginalCorner.Hardpoints[CORNER::BellCrankPivot2],
-			OriginalCorner.Hardpoints[CORNER::OutboardPushrod], OriginalCorner.Hardpoints[CORNER::InboardPushrod],
-			Corner.Hardpoints[CORNER::InboardPushrod]))
+		if (!SUSPENSION::SolveForPoint(corner.Hardpoints[CORNER::BellCrankPivot1],
+			corner.Hardpoints[CORNER::BellCrankPivot2], corner.Hardpoints[CORNER::OutboardPushrod],
+			originalCorner.Hardpoints[CORNER::BellCrankPivot1], originalCorner.Hardpoints[CORNER::BellCrankPivot2],
+			originalCorner.Hardpoints[CORNER::OutboardPushrod], originalCorner.Hardpoints[CORNER::InboardPushrod],
+			corner.Hardpoints[CORNER::InboardPushrod]))
 		{
 			// Print an error and switch the success boolean to indicate a failure
 			debugger.Print(_T("ERROR:  Failed to solve for inboard push/pullrod!"), Debugger::PriorityMedium);
-			Success = false;
+			success = false;
 		}
 
 		// Outboard Shocks
-		if (!SUSPENSION::SolveForPoint(Corner.Hardpoints[CORNER::BellCrankPivot1],
-			Corner.Hardpoints[CORNER::BellCrankPivot2], Corner.Hardpoints[CORNER::InboardPushrod],
-			OriginalCorner.Hardpoints[CORNER::BellCrankPivot1], OriginalCorner.Hardpoints[CORNER::BellCrankPivot2],
-			OriginalCorner.Hardpoints[CORNER::InboardPushrod], OriginalCorner.Hardpoints[CORNER::OutboardShock],
-			Corner.Hardpoints[CORNER::OutboardShock]))
+		if (!SUSPENSION::SolveForPoint(corner.Hardpoints[CORNER::BellCrankPivot1],
+			corner.Hardpoints[CORNER::BellCrankPivot2], corner.Hardpoints[CORNER::InboardPushrod],
+			originalCorner.Hardpoints[CORNER::BellCrankPivot1], originalCorner.Hardpoints[CORNER::BellCrankPivot2],
+			originalCorner.Hardpoints[CORNER::InboardPushrod], originalCorner.Hardpoints[CORNER::OutboardShock],
+			corner.Hardpoints[CORNER::OutboardShock]))
 		{
 			// Print an error and switch the success boolean to indicate a failure
 			debugger.Print(_T("ERROR:  Failed to solve for outboard shock!"), Debugger::PriorityMedium);
-			Success = false;
+			success = false;
 		}
 
 		// Outboard Springs
-		if (!SUSPENSION::SolveForPoint(Corner.Hardpoints[CORNER::BellCrankPivot1],
-			Corner.Hardpoints[CORNER::BellCrankPivot2], Corner.Hardpoints[CORNER::InboardPushrod],
-			OriginalCorner.Hardpoints[CORNER::BellCrankPivot1], OriginalCorner.Hardpoints[CORNER::BellCrankPivot2],
-			OriginalCorner.Hardpoints[CORNER::InboardPushrod], OriginalCorner.Hardpoints[CORNER::OutboardSpring],
-			Corner.Hardpoints[CORNER::OutboardSpring]))
+		if (!SUSPENSION::SolveForPoint(corner.Hardpoints[CORNER::BellCrankPivot1],
+			corner.Hardpoints[CORNER::BellCrankPivot2], corner.Hardpoints[CORNER::InboardPushrod],
+			originalCorner.Hardpoints[CORNER::BellCrankPivot1], originalCorner.Hardpoints[CORNER::BellCrankPivot2],
+			originalCorner.Hardpoints[CORNER::InboardPushrod], originalCorner.Hardpoints[CORNER::OutboardSpring],
+			corner.Hardpoints[CORNER::OutboardSpring]))
 		{
 			// Print an error and switch the success boolean to indicate a failure
 			debugger.Print(_T("ERROR:  Failed to solve for outboard spring!"), Debugger::PriorityMedium);
-			Success = false;
+			success = false;
 		}
 
 		// Sway Bars Outboard
-		if ((Static->FrontBarStyle != SUSPENSION::SwayBarNone && IsAtFront) ||
-			(Static->RearBarStyle != SUSPENSION::SwayBarNone && !IsAtFront))
+		if ((localSuspension->FrontBarStyle != SUSPENSION::SwayBarNone && isAtFront) ||
+			(localSuspension->RearBarStyle != SUSPENSION::SwayBarNone && !isAtFront))
 		{
-			if (!SUSPENSION::SolveForPoint(Corner.Hardpoints[CORNER::BellCrankPivot1],
-				Corner.Hardpoints[CORNER::BellCrankPivot2], Corner.Hardpoints[CORNER::InboardPushrod],
-				OriginalCorner.Hardpoints[CORNER::BellCrankPivot1], OriginalCorner.Hardpoints[CORNER::BellCrankPivot2],
-				OriginalCorner.Hardpoints[CORNER::InboardPushrod], OriginalCorner.Hardpoints[CORNER::OutboardBarLink],
-				Corner.Hardpoints[CORNER::OutboardBarLink]))
+			if (!SUSPENSION::SolveForPoint(corner.Hardpoints[CORNER::BellCrankPivot1],
+				corner.Hardpoints[CORNER::BellCrankPivot2], corner.Hardpoints[CORNER::InboardPushrod],
+				originalCorner.Hardpoints[CORNER::BellCrankPivot1], originalCorner.Hardpoints[CORNER::BellCrankPivot2],
+				originalCorner.Hardpoints[CORNER::InboardPushrod], originalCorner.Hardpoints[CORNER::OutboardBarLink],
+				corner.Hardpoints[CORNER::OutboardBarLink]))
 			{
 				// Print an error and switch the success boolean to indicate a failure
 				debugger.Print(_T("ERROR:  Failed to solve for outboard swaybar!"), Debugger::PriorityMedium);
-				Success = false;
+				success = false;
 			}
 		}
 
 		// Sway Bars Inboard
-		if (Static->FrontBarStyle == SUSPENSION::SwayBarUBar && IsAtFront)
+		if (localSuspension->FrontBarStyle == SUSPENSION::SwayBarUBar && isAtFront)
 		{
-			if (!SUSPENSION::SolveForPoint(Corner.Hardpoints[CORNER::BarArmAtPivot],
-				Corner.Hardpoints[CORNER::OutboardBarLink], Static->Hardpoints[SUSPENSION::FrontBarMidPoint],// FIXME:  Do we really need the midpoint?
-				OriginalCorner.Hardpoints[CORNER::BarArmAtPivot], OriginalCorner.Hardpoints[CORNER::OutboardBarLink],
-				OriginalCar->Suspension->Hardpoints[SUSPENSION::FrontBarMidPoint], OriginalCorner.Hardpoints[CORNER::InboardBarLink],
-				Corner.Hardpoints[CORNER::InboardBarLink]))
+			if (!SUSPENSION::SolveForPoint(corner.Hardpoints[CORNER::BarArmAtPivot],
+				corner.Hardpoints[CORNER::OutboardBarLink], localSuspension->Hardpoints[SUSPENSION::FrontBarMidPoint],// FIXME:  Do we really need the midpoint?
+				originalCorner.Hardpoints[CORNER::BarArmAtPivot], originalCorner.Hardpoints[CORNER::OutboardBarLink],
+				originalCar->Suspension->Hardpoints[SUSPENSION::FrontBarMidPoint], originalCorner.Hardpoints[CORNER::InboardBarLink],
+				corner.Hardpoints[CORNER::InboardBarLink]))
 			{
 				// Print an error and switch the success boolean to indicate a failure
 				debugger.Print(_T("ERROR:  Failed to solve for inboard U-bar (front)!"), Debugger::PriorityMedium);
-				Success = false;
+				success = false;
 			}
 		}
-		else if (Static->RearBarStyle == SUSPENSION::SwayBarUBar && !IsAtFront)
+		else if (localSuspension->RearBarStyle == SUSPENSION::SwayBarUBar && !isAtFront)
 		{
-			if (!SUSPENSION::SolveForPoint(Corner.Hardpoints[CORNER::BarArmAtPivot],
-				Corner.Hardpoints[CORNER::OutboardBarLink], Static->Hardpoints[SUSPENSION::RearBarMidPoint],
-				OriginalCorner.Hardpoints[CORNER::BarArmAtPivot], OriginalCorner.Hardpoints[CORNER::OutboardBarLink],
-				OriginalCar->Suspension->Hardpoints[SUSPENSION::RearBarMidPoint], OriginalCorner.Hardpoints[CORNER::InboardBarLink],
-				Corner.Hardpoints[CORNER::InboardBarLink]))
+			if (!SUSPENSION::SolveForPoint(corner.Hardpoints[CORNER::BarArmAtPivot],
+				corner.Hardpoints[CORNER::OutboardBarLink], localSuspension->Hardpoints[SUSPENSION::RearBarMidPoint],
+				originalCorner.Hardpoints[CORNER::BarArmAtPivot], originalCorner.Hardpoints[CORNER::OutboardBarLink],
+				originalCar->Suspension->Hardpoints[SUSPENSION::RearBarMidPoint], originalCorner.Hardpoints[CORNER::InboardBarLink],
+				corner.Hardpoints[CORNER::InboardBarLink]))
 			{
 				// Print an error and switch the success boolean to indicate a failure
 				debugger.Print(_T("ERROR:  Failed to solve for inboard U-bar (rear)!"), Debugger::PriorityMedium);
-				Success = false;
+				success = false;
 			}
 		}
-		else if (Static->FrontBarStyle == SUSPENSION::SwayBarTBar && IsAtFront)
+		else if (localSuspension->FrontBarStyle == SUSPENSION::SwayBarTBar && isAtFront)
 		{
 			debugger.Print(_T("  T-Bar Front"), Debugger::PriorityHigh);
-			// FIXME:  Need to accomodate T-bars
+			// FIXME:  Need to accommodate T-bars
 			// Need to solve for InboardBarLink
 			// Two of the three points needed are: BarMidPoint and OutboardBarLink
 			// What is the third point?
 			// Maybe the solution is actually the intersection of two circles and a torus?
 		}
-		else if (Static->RearBarStyle == SUSPENSION::SwayBarTBar && !IsAtFront)
+		else if (localSuspension->RearBarStyle == SUSPENSION::SwayBarTBar && !isAtFront)
 		{
 			debugger.Print(_T("  T-Bar Rear"), Debugger::PriorityHigh);
 			// FIXME:  Need to accomodate T-bars
 		}
-		else if ((Static->FrontBarStyle == SUSPENSION::SwayBarGeared && IsAtFront) ||
-			(Static->RearBarStyle == SUSPENSION::SwayBarGeared && !IsAtFront))
+		else if ((localSuspension->FrontBarStyle == SUSPENSION::SwayBarGeared && isAtFront) ||
+			(localSuspension->RearBarStyle == SUSPENSION::SwayBarGeared && !isAtFront))
 		{
-			if (!SUSPENSION::SolveForPoint(Corner.Hardpoints[CORNER::BarArmAtPivot],
-				Corner.Hardpoints[CORNER::OutboardBarLink], Corner.Hardpoints[CORNER::GearEndBarShaft],
-				OriginalCorner.Hardpoints[CORNER::BarArmAtPivot], OriginalCorner.Hardpoints[CORNER::OutboardBarLink],
-				OriginalCorner.Hardpoints[CORNER::GearEndBarShaft], OriginalCorner.Hardpoints[CORNER::InboardBarLink],
-				Corner.Hardpoints[CORNER::InboardBarLink]))
+			if (!SUSPENSION::SolveForPoint(corner.Hardpoints[CORNER::BarArmAtPivot],
+				corner.Hardpoints[CORNER::OutboardBarLink], corner.Hardpoints[CORNER::GearEndBarShaft],
+				originalCorner.Hardpoints[CORNER::BarArmAtPivot], originalCorner.Hardpoints[CORNER::OutboardBarLink],
+				originalCorner.Hardpoints[CORNER::GearEndBarShaft], originalCorner.Hardpoints[CORNER::InboardBarLink],
+				corner.Hardpoints[CORNER::InboardBarLink]))
 			{
 				// Print an error and switch the success boolean to indicate a failure
 				debugger.Print(_T("ERROR:  Failed to solve for geared bar!"), Debugger::PriorityMedium);
-				Success = false;
+				success = false;
 			}
 		}
 	}
-	else if (Corner.ActuationType == CORNER::ActuationOutboard)
+	else if (corner.ActuationType == CORNER::ActuationOutboard)
 	{
 		// Outboard spring/shock units  - no pushrod/bell crank
 
-		if (Corner.ActuationAttachment == CORNER::AttachmentLowerAArm)
+		if (corner.ActuationAttachment == CORNER::AttachmentLowerAArm)
 		{
-			if (!SUSPENSION::SolveForPoint(Corner.Hardpoints[CORNER::LowerBallJoint],
-				Corner.Hardpoints[CORNER::LowerFrontTubMount], Corner.Hardpoints[CORNER::LowerRearTubMount],
-				OriginalCorner.Hardpoints[CORNER::LowerBallJoint], OriginalCorner.Hardpoints[CORNER::LowerFrontTubMount],
-				OriginalCorner.Hardpoints[CORNER::LowerRearTubMount], OriginalCorner.Hardpoints[CORNER::OutboardSpring],
-				Corner.Hardpoints[CORNER::OutboardSpring]))
+			if (!SUSPENSION::SolveForPoint(corner.Hardpoints[CORNER::LowerBallJoint],
+				corner.Hardpoints[CORNER::LowerFrontTubMount], corner.Hardpoints[CORNER::LowerRearTubMount],
+				originalCorner.Hardpoints[CORNER::LowerBallJoint], originalCorner.Hardpoints[CORNER::LowerFrontTubMount],
+				originalCorner.Hardpoints[CORNER::LowerRearTubMount], originalCorner.Hardpoints[CORNER::OutboardSpring],
+				corner.Hardpoints[CORNER::OutboardSpring]))
 			{
 				// Print an error and switch the success boolean to indicate a failure
 				debugger.Print(_T("ERROR:  Failed to solve for outboard spring!"), Debugger::PriorityMedium);
 				Success = false;
 			}
 
-			if (!SUSPENSION::SolveForPoint(Corner.Hardpoints[CORNER::LowerBallJoint],
-				Corner.Hardpoints[CORNER::LowerFrontTubMount], Corner.Hardpoints[CORNER::LowerRearTubMount],
-				OriginalCorner.Hardpoints[CORNER::LowerBallJoint], OriginalCorner.Hardpoints[CORNER::LowerFrontTubMount],
-				OriginalCorner.Hardpoints[CORNER::LowerRearTubMount], OriginalCorner.Hardpoints[CORNER::OutboardShock],
-				Corner.Hardpoints[CORNER::OutboardShock]))
+			if (!SUSPENSION::SolveForPoint(corner.Hardpoints[CORNER::LowerBallJoint],
+				corner.Hardpoints[CORNER::LowerFrontTubMount], corner.Hardpoints[CORNER::LowerRearTubMount],
+				originalCorner.Hardpoints[CORNER::LowerBallJoint], originalCorner.Hardpoints[CORNER::LowerFrontTubMount],
+				originalCorner.Hardpoints[CORNER::LowerRearTubMount], originalCorner.Hardpoints[CORNER::OutboardShock],
+				corner.Hardpoints[CORNER::OutboardShock]))
 			{
 				// Print an error and switch the success boolean to indicate a failure
 				debugger.Print(_T("ERROR:  Failed to solve for outboard shock!"), Debugger::PriorityMedium);
-				Success = false;
+				success = false;
 			}
 		}
-		else if (Corner.ActuationAttachment == CORNER::AttachmentUpperAArm)
+		else if (corner.ActuationAttachment == CORNER::AttachmentUpperAArm)
 		{
-			if (!SUSPENSION::SolveForPoint(Corner.Hardpoints[CORNER::UpperBallJoint],
-				Corner.Hardpoints[CORNER::UpperFrontTubMount], Corner.Hardpoints[CORNER::UpperRearTubMount],
-				OriginalCorner.Hardpoints[CORNER::UpperBallJoint], OriginalCorner.Hardpoints[CORNER::UpperFrontTubMount],
-				OriginalCorner.Hardpoints[CORNER::UpperRearTubMount], OriginalCorner.Hardpoints[CORNER::OutboardSpring],
-				Corner.Hardpoints[CORNER::OutboardSpring]))
+			if (!SUSPENSION::SolveForPoint(corner.Hardpoints[CORNER::UpperBallJoint],
+				corner.Hardpoints[CORNER::UpperFrontTubMount], corner.Hardpoints[CORNER::UpperRearTubMount],
+				originalCorner.Hardpoints[CORNER::UpperBallJoint], originalCorner.Hardpoints[CORNER::UpperFrontTubMount],
+				originalCorner.Hardpoints[CORNER::UpperRearTubMount], originalCorner.Hardpoints[CORNER::OutboardSpring],
+				corner.Hardpoints[CORNER::OutboardSpring]))
 			{
 				// Print an error and switch the success boolean to indicate a failure
 				debugger.Print(_T("ERROR:  Failed to solve for outboard spring!"), Debugger::PriorityMedium);
-				Success = false;
+				success = false;
 			}
 
-			if (!SUSPENSION::SolveForPoint(Corner.Hardpoints[CORNER::UpperBallJoint],
-				Corner.Hardpoints[CORNER::UpperFrontTubMount], Corner.Hardpoints[CORNER::UpperRearTubMount],
-				OriginalCorner.Hardpoints[CORNER::UpperBallJoint], OriginalCorner.Hardpoints[CORNER::UpperFrontTubMount],
-				OriginalCorner.Hardpoints[CORNER::UpperRearTubMount], OriginalCorner.Hardpoints[CORNER::OutboardShock],
-				Corner.Hardpoints[CORNER::OutboardShock]))
+			if (!SUSPENSION::SolveForPoint(corner.Hardpoints[CORNER::UpperBallJoint],
+				corner.Hardpoints[CORNER::UpperFrontTubMount], corner.Hardpoints[CORNER::UpperRearTubMount],
+				originalCorner.Hardpoints[CORNER::UpperBallJoint], originalCorner.Hardpoints[CORNER::UpperFrontTubMount],
+				originalCorner.Hardpoints[CORNER::UpperRearTubMount], originalCorner.Hardpoints[CORNER::OutboardShock],
+				corner.Hardpoints[CORNER::OutboardShock]))
 			{
 				// Print an error and switch the success boolean to indicate a failure
 				debugger.Print(_T("ERROR:  Failed to solve for outboard shock!"), Debugger::PriorityMedium);
-				Success = false;
+				success = false;
 			}
 		}
-		else if (Corner.ActuationAttachment == CORNER::AttachmentUpright)
+		else if (corner.ActuationAttachment == CORNER::AttachmentUpright)
 		{
-			if (!SUSPENSION::SolveForPoint(Corner.Hardpoints[CORNER::UpperBallJoint],
-				Corner.Hardpoints[CORNER::LowerBallJoint], Corner.Hardpoints[CORNER::OutboardTieRod],
-				OriginalCorner.Hardpoints[CORNER::UpperBallJoint], OriginalCorner.Hardpoints[CORNER::LowerBallJoint],
-				OriginalCorner.Hardpoints[CORNER::OutboardTieRod], OriginalCorner.Hardpoints[CORNER::OutboardSpring],
-				Corner.Hardpoints[CORNER::OutboardSpring]))
+			if (!SUSPENSION::SolveForPoint(corner.Hardpoints[CORNER::UpperBallJoint],
+				corner.Hardpoints[CORNER::LowerBallJoint], corner.Hardpoints[CORNER::OutboardTieRod],
+				originalCorner.Hardpoints[CORNER::UpperBallJoint], originalCorner.Hardpoints[CORNER::LowerBallJoint],
+				originalCorner.Hardpoints[CORNER::OutboardTieRod], originalCorner.Hardpoints[CORNER::OutboardSpring],
+				corner.Hardpoints[CORNER::OutboardSpring]))
 			{
 				// Print an error and switch the success boolean to indicate a failure
 				debugger.Print(_T("ERROR:  Failed to solve for outboard spring!"), Debugger::PriorityMedium);
-				Success = false;
+				success = false;
 			}
 
-			if (!SUSPENSION::SolveForPoint(Corner.Hardpoints[CORNER::UpperBallJoint],
-				Corner.Hardpoints[CORNER::LowerBallJoint], Corner.Hardpoints[CORNER::OutboardTieRod],
-				OriginalCorner.Hardpoints[CORNER::UpperBallJoint], OriginalCorner.Hardpoints[CORNER::LowerBallJoint],
-				OriginalCorner.Hardpoints[CORNER::OutboardTieRod], OriginalCorner.Hardpoints[CORNER::OutboardShock],
-				Corner.Hardpoints[CORNER::OutboardShock]))
+			if (!SUSPENSION::SolveForPoint(corner.Hardpoints[CORNER::UpperBallJoint],
+				corner.Hardpoints[CORNER::LowerBallJoint], corner.Hardpoints[CORNER::OutboardTieRod],
+				originalCorner.Hardpoints[CORNER::UpperBallJoint], originalCorner.Hardpoints[CORNER::LowerBallJoint],
+				originalCorner.Hardpoints[CORNER::OutboardTieRod], originalCorner.Hardpoints[CORNER::OutboardShock],
+				corner.Hardpoints[CORNER::OutboardShock]))
 			{
 				// Print an error and switch the success boolean to indicate a failure
 				debugger.Print(_T("ERROR:  Failed to solve for outboard shock!"), Debugger::PriorityMedium);
-				Success = false;
+				success = false;
 			}
 		}
 	}
 
 	// Half Shafts
-	if ((OriginalCar->HasFrontHalfShafts() && IsAtFront) ||
-		(OriginalCar->HasRearHalfShafts() && !IsAtFront))
+	if ((originalCar->HasFrontHalfShafts() && isAtFront) ||
+		(originalCar->HasRearHalfShafts() && !isAtFront))
 	{
-		if (!SUSPENSION::SolveForPoint(Corner.Hardpoints[CORNER::LowerBallJoint],
-			Corner.Hardpoints[CORNER::UpperBallJoint], Corner.Hardpoints[CORNER::OutboardTieRod],
-			OriginalCorner.Hardpoints[CORNER::LowerBallJoint], OriginalCorner.Hardpoints[CORNER::UpperBallJoint],
-			OriginalCorner.Hardpoints[CORNER::OutboardTieRod], OriginalCorner.Hardpoints[CORNER::OutboardHalfShaft],
-			Corner.Hardpoints[CORNER::OutboardHalfShaft]))
+		if (!SUSPENSION::SolveForPoint(corner.Hardpoints[CORNER::LowerBallJoint],
+			corner.Hardpoints[CORNER::UpperBallJoint], corner.Hardpoints[CORNER::OutboardTieRod],
+			originalCorner.Hardpoints[CORNER::LowerBallJoint], originalCorner.Hardpoints[CORNER::UpperBallJoint],
+			originalCorner.Hardpoints[CORNER::OutboardTieRod], originalCorner.Hardpoints[CORNER::OutboardHalfShaft],
+			corner.Hardpoints[CORNER::OutboardHalfShaft]))
 		{
 			// Print an error and switch the success boolean to indicate a failure
 			debugger.Print(_T("ERROR:  Failed to solve for outboard half shaft!"), Debugger::PriorityMedium);
-			Success = false;
+			success = false;
 		}
 	}
 
-	return Success;
+	return success;
 }

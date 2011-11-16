@@ -13,8 +13,8 @@
 // Description:  Intermediate class for creating plots from arrays of data.
 // History:
 
-#ifndef _PLOT_OBJECT_CLASS_H_
-#define _PLOT_OBJECT_CLASS_H_
+#ifndef _PLOT_OBJECT_H_
+#define _PLOT_OBJECT_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -134,4 +134,4 @@ private:
 		const bool &forceLimits = false);
 };
 
-#endif// _PLOT_OBJECT_CLASS_H_
+#endif// _PLOT_OBJECT_H_

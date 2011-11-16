@@ -20,8 +20,8 @@
 //	11/9/2010	- Added provisions for 3D plotting, K. Loux.
 //	11/16/2010	- Moved active plots selection and range inputs to edit panel, K. Loux.
 
-#ifndef _ITERATION_CLASS_H_
-#define _ITERATION_CLASS_H_
+#ifndef _ITERATION_H_
+#define _ITERATION_H_
 
 // wxWidgets headers
 #include <wx/thread.h>
@@ -257,4 +257,4 @@ private:
 	PlotPanel *plotPanel;
 };
 
-#endif// _ITERATION_CLASS_H_
+#endif// _ITERATION_H_

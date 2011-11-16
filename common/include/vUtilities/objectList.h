@@ -16,8 +16,8 @@
 //	11/22/2009	- Moved to vUtilities.lib, K. Loux.
 //	11/7/2011	- Corrected camelCase, K. Loux.
 
-#ifndef _OBJECT_LIST_CLASS_H_
-#define _OBJECT_LIST_CLASS_H_
+#ifndef _OBJECT_LIST_H_
+#define _OBJECT_LIST_H_
 
 // Standard C++ headers
 #include <cstdlib>
@@ -334,4 +334,4 @@ void ObjectList<T>::ReorderObjects(const int *newOrder)
 	return;
 }
 
-#endif// _OBJECT_LIST_CLASS_H_
+#endif// _OBJECT_LIST_H_

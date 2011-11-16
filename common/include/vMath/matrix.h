@@ -14,8 +14,8 @@
 // History:
 //	11/7/2011	- Imported from DataPlotter, K. Loux.
 
-#ifndef _MATRIX_CLASS_H_
-#define _MATRIX_CLASS_H_
+#ifndef _MATRIX_H_
+#define _MATRIX_H_
 
 // wxWidgets forward declarations
 class wxString;
@@ -110,4 +110,4 @@ private:
 	double pythag(const double& a, const double &b) const;
 };
 
-#endif// _MATRIX_CLASS_H_
+#endif// _MATRIX_H_

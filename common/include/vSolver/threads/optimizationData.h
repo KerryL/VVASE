@@ -42,4 +42,4 @@ public:
 	bool OkForCommand(ThreadJob::ThreadCommands &command);
 };
 
-#endif// _OPTIMIZATION_DATA_CLASS_H_
+#endif// _OPTIMIZATION_DATA_H_

@@ -13,8 +13,8 @@
 // Description:  Handles user-specified mathematical operations on datasets.
 // History:
 
-#ifndef _EXPRESSION_TREE_CLASS_H_
-#define _EXPRESSION_TREE_CLASS_H_
+#ifndef _EXPRESSION_TREE_H_
+#define _EXPRESSION_TREE_H_
 
 // Local headers
 #include "vUtilities/managedList.h"
@@ -50,4 +50,4 @@ private:
 	Dataset2D GetSetFromList(const unsigned int &i);
 };
 
-#endif// _EXPRESSION_TREE_CLASS_H_
+#endif// _EXPRESSION_TREE_H_

@@ -25,8 +25,8 @@
 //	2/18/2009	- Added subsystems to allow subsystems to appear in the systems tree, K. Loux.
 //	5/19/2009	- Changed to derived class from GUI_OBJECT, K. Loux.
 
-#ifndef _GUI_CAR_CLASS_H_
-#define _GUI_CAR_CLASS_H_
+#ifndef _GUI_CAR_H_
+#define _GUI_CAR_H_
 
 // wxWidgets headers
 #include <wx/treebase.h>
@@ -117,4 +117,4 @@ private:
 	CAR_RENDERER *renderer;
 };
 
-#endif// _GUI_CAR_CLASS_H_
+#endif// _GUI_CAR_H_

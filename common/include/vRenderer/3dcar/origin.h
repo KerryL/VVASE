@@ -14,8 +14,8 @@
 // History:
 //	5/17/2009	- Removed VTK dependencies, K. Loux.
 
-#ifndef _ORIGIN_CLASS_H_
-#define _ORIGIN_CLASS_H_
+#ifndef _ORIGIN_H_
+#define _ORIGIN_H_
 
 // VVASE forward declarations
 class Vector3D;
@@ -41,4 +41,4 @@ private:
 	Vector3D *ZDirection;
 };
 
-#endif// _ORIGIN_CLASS_H_
+#endif// _ORIGIN_H_

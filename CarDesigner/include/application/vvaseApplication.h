@@ -14,8 +14,8 @@
 // History:
 //	11/23/2009	- Renamed from cardesignerapp_class.h, K. Loux.
 
-#ifndef _VVASEAPP_CLASS_H_
-#define _VVASEAPP_CLASS_H_
+#ifndef _VVASEAPP_H_
+#define _VVASEAPP_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -61,4 +61,4 @@ private:
 // Declare the application object (have wxWidgets create the wxGetApp() function)
 DECLARE_APP(VVASEApp);
 
-#endif// _VVASEAPP_CLASS_H_
+#endif// _VVASEAPP_H_

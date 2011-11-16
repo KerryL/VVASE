@@ -27,8 +27,8 @@
 //				 MIL-STD Standard Atmosphere.
 // History:
 
-#ifndef _ATMOSPHERE_CLASS_H_
-#define _ATMOSPHERE_CLASS_H_
+#ifndef _ATMOSPHERE_H_
+#define _ATMOSPHERE_H_
 
 class ATMOSPHERE
 {
@@ -76,4 +76,4 @@ private:
 	CONDITIONS CurrentDay;
 };
 
-#endif// _ATMOSPHERE_CLASS_H_
+#endif// _ATMOSPHERE_H_

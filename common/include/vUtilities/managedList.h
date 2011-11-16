@@ -16,8 +16,8 @@
 //	11/22/2009	- Moved to vUtilities.lib, K. Loux.
 //	11/7/2011	- Corrected camelCase, K. Loux.
 
-#ifndef _MANAGED_LIST_CLASS_H_
-#define _MANAGED_LIST_CLASS_H_
+#ifndef _MANAGED_LIST_H_
+#define _MANAGED_LIST_H_
 
 // Local headers
 #include "objectList.h"
@@ -141,4 +141,4 @@ void ManagedList<T>::Clear(void)
 	return;
 }
 
-#endif// _MANAGED_LIST_CLASS_H_
+#endif// _MANAGED_LIST_H_

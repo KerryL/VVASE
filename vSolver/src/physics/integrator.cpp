@@ -10,7 +10,7 @@
 // File:  integrator.cpp
 // Created:  7/12/2008
 // Author:  K. Loux
-// Description:  Contains class definition for INTEGRATOR class.
+// Description:  Contains class definition for Integrator class.
 // History:
 
 // wxWidgets headers
@@ -20,15 +20,15 @@
 #include "vSolver/physics/integrator.h"
 
 //==========================================================================
-// Class:			INTEGRATOR
-// Function:		INTEGRATOR
+// Class:			Integrator
+// Function:		Integrator
 //
-// Description:		Constructor for the INTEGRATOR class.  Sets all of the
+// Description:		Constructor for the Integrator class.  Sets all of the
 //					parameters that are required for integration to begin.
 //
 // Input Arguments:
-//		_IntegrationMethod	= const INTEGRATION_METHOD& to use for future integrations
-//		_Frequency			= const Frequency& at which the integration will occur [Hz]
+//		_integrationMethod	= const IntegrationMethod& to use for future integrations
+//		_frequency			= const Frequency& at which the integration will occur [Hz]
 //		_debugger			= const Debugger&, reference to debug message printing utility
 //
 // Output Arguments:
@@ -38,27 +38,27 @@
 //		None
 //
 //==========================================================================
-INTEGRATOR::INTEGRATOR(const INTEGRATION_METHOD &_IntegrationMethod, const double &_Frequency,
+Integrator::Integrator(const IntegrationMethod &_integrationMethod, const double &_frequency,
 					   const Debugger &_debugger) : debugger(_debugger)
 {
 	// Assign the arguments to the class members
-	Frequency = _Frequency;
+	frequency = _frequency;
 
 	// Assign the integration method
-	SetIntegrationMethod(_IntegrationMethod);
+	SetIntegrationMethod(_integrationMethod);
 
 	// Initialize the integrator
 	Reset();
 }
 
 //==========================================================================
-// Class:			INTEGRATOR
-// Function:		INTEGRATOR
+// Class:			Integrator
+// Function:		Integrator
 //
-// Description:		Copy constructor for the INTEGRATOR class.
+// Description:		Copy constructor for the Integrator class.
 //
 // Input Arguments:
-//		Integrator	= const INTEGRATOR& to copy to this object
+//		integrator	= const Integrator& to copy to this object
 //
 // Output Arguments:
 //		None
@@ -67,20 +67,20 @@ INTEGRATOR::INTEGRATOR(const INTEGRATION_METHOD &_IntegrationMethod, const doubl
 //		None
 //
 //==========================================================================
-INTEGRATOR::INTEGRATOR(const INTEGRATOR &Integrator) : debugger(Integrator.debugger)
+Integrator::Integrator(const Integrator &integrator) : debugger(integrator.debugger)
 {
 	// Initialize the pointers
-	OldStateDerivatives = NULL;
+	oldStateDerivatives = NULL;
 
 	// Do the copy
-	*this = Integrator;
+	*this = integrator;
 }
 
 //==========================================================================
-// Class:			INTEGRATOR
-// Function:		~INTEGRATOR
+// Class:			Integrator
+// Function:		~Integrator
 //
-// Description:		Destructor for the INTEGRATOR class.
+// Description:		Destructor for the Integrator class.
 //
 // Input Arguments:
 //		None
@@ -92,15 +92,15 @@ INTEGRATOR::INTEGRATOR(const INTEGRATOR &Integrator) : debugger(Integrator.debug
 //		None
 //
 //==========================================================================
-INTEGRATOR::~INTEGRATOR()
+Integrator::~Integrator()
 {
 	// Delete the stored state derivatives
-	delete [] OldStateDerivatives;
-	OldStateDerivatives = 0;
+	delete [] oldStateDerivatives;
+	oldStateDerivatives = 0;
 }
 
 //==========================================================================
-// Class:			INTEGRATOR
+// Class:			Integrator
 // Function:		ComputeNextState
 //
 // Description:		This is the main work function for this class.  This calls
@@ -114,21 +114,21 @@ INTEGRATOR::~INTEGRATOR()
 //		None
 //
 // Return Value:
-//		STATE of the system at the end of this new time step
+//		State of the system at the end of this new time step
 //
 //==========================================================================
-STATE INTEGRATOR::ComputeNewState(void)
+State Integrator::ComputeNewState(void)
 {
 	// Choose the correct integration function
-	switch (IntegrationMethod)
+	switch (integrationMethod)
 	{
-	case INT_EULER_SEMI_IMPLICIT:
+	case MethodEulerSemiImplicit:
 		return DoEulerSemiImplicit();
-	case INT_RUNGE_KUTTA_2:
+	case MethodRungeKutta2:
 		return DoRungeKuttaSecondOrder();
-	case INT_RUNGE_KUTTA_4:
+	case MethodRungeKutta4:
 		return DoRungeKuttaFourthOrder();
-	case INT_ADAMS_BASHFORTH_3:
+	case MethodAdamsBashforth3:
 		return DoAdamsBashforthThirdOrder();
 	default:
 		return DoRungeKuttaFourthOrder();
@@ -136,7 +136,7 @@ STATE INTEGRATOR::ComputeNewState(void)
 }
 
 //==========================================================================
-// Class:			INTEGRATOR
+// Class:			Integrator
 // Function:		DoEulerSemiImplicit
 //
 // Description:		Semi-implicit Euler integration.
@@ -148,18 +148,18 @@ STATE INTEGRATOR::ComputeNewState(void)
 //		None
 //
 // Return Value:
-//		STATE of the system at the end of this new time step
+//		State of the system at the end of this new time step
 //
 //==========================================================================
-STATE INTEGRATOR::DoEulerSemiImplicit(void)
+State Integrator::DoEulerSemiImplicit(void)
 {
-	STATE NextState;
+	State nextState;
 
-	return NextState;
+	return nextState;
 }
 
 //==========================================================================
-// Class:			INTEGRATOR
+// Class:			Integrator
 // Function:		DoRungeKuttaSecondOrder
 //
 // Description:		2nd Order Runge-Kutta integration.
@@ -171,18 +171,18 @@ STATE INTEGRATOR::DoEulerSemiImplicit(void)
 //		None
 //
 // Return Value:
-//		STATE of the system at the end of this new time step
+//		State of the system at the end of this new time step
 //
 //==========================================================================
-STATE INTEGRATOR::DoRungeKuttaSecondOrder(void)
+State Integrator::DoRungeKuttaSecondOrder(void)
 {
-	STATE NextState;
+	State nextState;
 
-	return NextState;
+	return nextState;
 }
 
 //==========================================================================
-// Class:			INTEGRATOR
+// Class:			Integrator
 // Function:		DoRungeKuttaFourthOrder
 //
 // Description:		4th Order Runge-Kutta integration.
@@ -194,18 +194,18 @@ STATE INTEGRATOR::DoRungeKuttaSecondOrder(void)
 //		None
 //
 // Return Value:
-//		STATE of the system at the end of this new time step
+//		State of the system at the end of this new time step
 //
 //==========================================================================
-STATE INTEGRATOR::DoRungeKuttaFourthOrder(void)
+State Integrator::DoRungeKuttaFourthOrder(void)
 {
-	STATE NextState;
+	State nextState;
 
-	return NextState;
+	return nextState;
 }
 
 //==========================================================================
-// Class:			INTEGRATOR
+// Class:			Integrator
 // Function:		DoAdamsBashforthThirdOrder
 //
 // Description:		3rd Order Adams Bashforth Integration.
@@ -217,18 +217,18 @@ STATE INTEGRATOR::DoRungeKuttaFourthOrder(void)
 //		None
 //
 // Return Value:
-//		STATE of the system at the end of this new time step
+//		State of the system at the end of this new time step
 //
 //==========================================================================
-STATE INTEGRATOR::DoAdamsBashforthThirdOrder(void)
+State Integrator::DoAdamsBashforthThirdOrder(void)
 {
-	STATE NextState;
+	State nextState;
 
-	return NextState;
+	return nextState;
 }
 
 //==========================================================================
-// Class:			INTEGRATOR
+// Class:			Integrator
 // Function:		Reset
 //
 // Description:		Resets the system to the specified initial conditions.
@@ -243,16 +243,16 @@ STATE INTEGRATOR::DoAdamsBashforthThirdOrder(void)
 //		None
 //
 //==========================================================================
-void INTEGRATOR::Reset(STATE InitialConditions)
+void Integrator::Reset(State initialConditions)
 {
 	// Initialize the integration step variable
-	IntegrationStep = 0;
+	integrationStep = 0;
 
 	return;
 }
 
 //==========================================================================
-// Class:			INTEGRATOR
+// Class:			Integrator
 // Function:		Reset
 //
 // Description:		Resets the system to zero initial conditions.
@@ -267,18 +267,18 @@ void INTEGRATOR::Reset(STATE InitialConditions)
 //		None
 //
 //==========================================================================
-void INTEGRATOR::Reset(void)
+void Integrator::Reset(void)
 {
-	STATE InitialConditions;
+	State initialConditions;
 
 	// Reset the integrator with these zero initial conditions
-	Reset(InitialConditions);
+	Reset(initialConditions);
 
 	return;
 }
 
 //==========================================================================
-// Class:			INTEGRATOR
+// Class:			Integrator
 // Function:		SetIntegrationMethod
 //
 // Description:		Sets this object's integration method and allocates
@@ -286,7 +286,7 @@ void INTEGRATOR::Reset(void)
 //					store.
 //
 // Input Arguments:
-//		_IntegrationMethod	= INTEGRATION_METHOD to use for future integration
+//		_integrationMethod	= IntegrationMethod to use for future integration
 //
 // Output Arguments:
 //		None
@@ -295,25 +295,25 @@ void INTEGRATOR::Reset(void)
 //		None
 //
 //==========================================================================
-void INTEGRATOR::SetIntegrationMethod(INTEGRATION_METHOD _IntegrationMethod)
+void Integrator::SetIntegrationMethod(IntegrationMethod _integrationMethod)
 {
 	// Assign the integration method to our class member
-	IntegrationMethod = _IntegrationMethod;
+	IntegrationMethod = _integrationMethod;
 
 	// Determine the number of state derivatives we need to store
-	switch (IntegrationMethod)
+	switch (integrationMethod)
 	{
-	case INT_EULER_SEMI_IMPLICIT:
-		NumberOfStoredDerivatives = 1;
+	case MethodEulerSemiImplicit:
+		numberOfStoredDerivatives = 1;
 		break;
-	case INT_RUNGE_KUTTA_2:
-		NumberOfStoredDerivatives = 1;
+	case MethodRungeKutta2:
+		numberOfStoredDerivatives = 1;
 		break;
-	case INT_RUNGE_KUTTA_4:
-		NumberOfStoredDerivatives = 1;
+	case MethodRungeKutta4:
+		numberOfStoredDerivatives = 1;
 		break;
-	case INT_ADAMS_BASHFORTH_3:
-		NumberOfStoredDerivatives = 3;
+	case MethodAdamsBashforth3:
+		numberOfStoredDerivatives = 3;
 		break;
 	default:
 		assert(0);
@@ -321,21 +321,21 @@ void INTEGRATOR::SetIntegrationMethod(INTEGRATION_METHOD _IntegrationMethod)
 	}
 
 	// Delete the OldStateDerivatives array and reallocate it with its new size
-	delete [] OldStateDerivatives;
-	OldStateDerivatives = new STATE[NumberOfStoredDerivatives];
+	delete [] oldStateDerivatives;
+	oldStateDerivatives = new State[numberOfStoredDerivatives];
 	Reset();
 
 	return;
 }
 
 //==========================================================================
-// Class:			INTEGRATOR
+// Class:			Integrator
 // Function:		SetFrequency
 //
 // Description:		Sets this object's integration frequency.
 //
 // Input Arguments:
-//		_Frequency	= double specifying the frequency to use for future
+//		_frequency	= double specifying the frequency to use for future
 //					  integrations
 //
 // Output Arguments:
@@ -345,44 +345,44 @@ void INTEGRATOR::SetIntegrationMethod(INTEGRATION_METHOD _IntegrationMethod)
 //		None
 //
 //==========================================================================
-void INTEGRATOR::SetFrequency(double _Frequency)
+void Integrator::SetFrequency(double _frequency)
 {
 	// Assign the frequency to the class member
-	Frequency = _Frequency;
+	frequency = _frequency;
 
 	return;
 }
 
 //==========================================================================
-// Class:			INTEGRATOR
+// Class:			Integrator
 // Function:		operator =
 //
-// Description:		Assignment operator for INTEGRATOR class.
+// Description:		Assignment operator for Integrator class.
 //
 // Input Arguments:
-//		Integrator	= const INTEGRATOR& to assign to this object
+//		integrator	= const Integrator& to assign to this object
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		INTEGRATOR&, reference to this object
+//		Integrator&, reference to this object
 //
 //==========================================================================
-INTEGRATOR& INTEGRATOR::operator = (const INTEGRATOR &Integrator)
+Integrator& Integrator::operator = (const Integrator &integrator)
 {
 	// Check for self-assignment
-	if (this == &Integrator)
+	if (this == &integrator)
 		return *this;
 
 	// FIXME:  What do I do with OldStateDerivatives?
-	OldStateDerivatives = NULL;
+	oldStateDerivatives = NULL;
 
 	// Perform the assignment
-	IntegrationMethod			= Integrator.IntegrationMethod;
-	Frequency					= Integrator.Frequency;
-	NumberOfStoredDerivatives	= Integrator.NumberOfStoredDerivatives;
-	IntegrationStep				= Integrator.IntegrationStep;
+	integrationMethod			= integrator.integrationMethod;
+	frequency					= integrator.frequency;
+	numberOfStoredDerivatives	= integrator.numberOfStoredDerivatives;
+	integrationStep				= integrator.integrationStep;
 
 	return *this;
 }

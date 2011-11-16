@@ -18,8 +18,8 @@
 //				  point declared individually, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
-#ifndef _CORNER_CLASS_H_
-#define _CORNER_CLASS_H_
+#ifndef _CORNER_H_
+#define _CORNER_H_
 
 // Standard C++ headers
 #include <iosfwd>// forward declarations of fstream objects
@@ -152,4 +152,4 @@ private:
 	const Debugger &debugger;
 };
 
-#endif// _CORNER_CLASS_H_
+#endif// _CORNER_H_

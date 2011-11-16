@@ -68,7 +68,7 @@ private:
 	State stateDerivative;
 
 	// The driver inputs
-	Driver *driver;
+	DRIVER *driver;
 
 	// The integrator
 	Integrator *integrator;

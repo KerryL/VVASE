@@ -15,8 +15,8 @@
 //	1/28/2009	- Changed structure of GUI components so context menu creation for all
 //				  objects is handled by the MAIN_FRAME class.
 
-#ifndef _MAIN_TREE_CLASS_H_
-#define _MAIN_TREE_CLASS_H_
+#ifndef _MAIN_TREE_H_
+#define _MAIN_TREE_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -98,4 +98,4 @@ private:
 	DECLARE_EVENT_TABLE();
 };
 
-#endif// _MAIN_TREE_CLASS_H_
+#endif// _MAIN_TREE_H_

@@ -23,8 +23,8 @@
 //	12/20/2009	- Modified for thread-safe operation, K. Loux.
 //	11/7/2011	- Corrected camelCase, K. Loux.
 
-#ifndef _DEBUG_CLASS_H_
-#define _DEBUG_CLASS_H_
+#ifndef _DEBUG_H_
+#define _DEBUG_H_
 
 // wxWidgets headers
 #include <wx/event.h>
@@ -80,4 +80,4 @@ private:
 	mutable wxMutex debugMutex;
 };
 
-#endif// _DEBUG_CLASS_H_
+#endif// _DEBUG_H_

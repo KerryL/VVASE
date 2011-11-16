@@ -15,8 +15,8 @@
 //	4/25/2009	- Changed Update() to include color argument in the form of wxColor, K. Loux.
 //	5/17/2009	- Removed VTK dependencies, K. Loux.
 
-#ifndef _PLANE_CLASS_H_
-#define _PLANE_CLASS_H_
+#ifndef _PLANE_H_
+#define _PLANE_H_
 
 // VVASE forward declarations
 class Color;
@@ -40,4 +40,4 @@ private:
 	QUADRILATERAL *Plane;
 };
 
-#endif// _PLANE_CLASS_H_
+#endif// _PLANE_H_

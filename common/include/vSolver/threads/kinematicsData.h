@@ -48,4 +48,4 @@ public:
 	bool OkForCommand(ThreadJob::ThreadCommands &Command);
 };
 
-#endif// _KINEMATICS_DATA_CLASS_H_
+#endif// _KINEMATICS_DATA_H_

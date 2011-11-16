@@ -15,8 +15,8 @@
 //	4/25/2009	- Changed Update() to include color argument in the form of wxColor, K. Loux.
 //	5/17/2009	- Removed VTK dependencies, K. Loux.
 
-#ifndef _SPRING3D_CLASS_H_
-#define _SPRING3D_CLASS_H_
+#ifndef _SPRING3D_H_
+#define _SPRING3D_H_
 
 // VVASE forward declarations
 class Vector;
@@ -49,4 +49,4 @@ private:
 	SPHERE *EndPoint2;
 };
 
-#endif// _SPRING3D_CLASS_H_
+#endif// _SPRING3D_H_

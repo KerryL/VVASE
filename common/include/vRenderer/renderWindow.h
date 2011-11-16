@@ -18,8 +18,8 @@
 // History:
 //	11/22/2009	- Moved to vRenderer.lib, K. Loux.
 
-#ifndef _RENDER_WINDOW_CLASS_H_
-#define _RENDER_WINDOW_CLASS_H_
+#ifndef _RENDER_WINDOW_H_
+#define _RENDER_WINDOW_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -198,4 +198,4 @@ protected:
 	DECLARE_EVENT_TABLE()
 };
 
-#endif// _RENDER_WINDOW_CLASS_H_
+#endif// _RENDER_WINDOW_H_

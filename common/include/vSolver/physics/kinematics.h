@@ -108,4 +108,4 @@ private:
 	void UpdateOutputs(void);
 };
 
-#endif// _KINEMATICS_CLASS_H_
+#endif// _KINEMATICS_H_

@@ -13,8 +13,8 @@
 // Description:  Contains the class declaration for the EDIT_SUSPENSION_NOTEBOOK class.
 // History:
 
-#ifndef _EDIT_SUSPENSION_NOTEBOOK_CLASS_H_
-#define _EDIT_SUSPENSION_NOTEBOOK_CLASS_H_
+#ifndef _EDIT_SUSPENSION_NOTEBOOK_H_
+#define _EDIT_SUSPENSION_NOTEBOOK_H_
 
 // wxWidgets headers
 #include <wx/notebook.h>
@@ -72,4 +72,4 @@ private:
 	EDIT_CORNER_PANEL *LeftRear;
 };
 
-#endif// _EDIT_SUSPENSION_NOTEBOOK_CLASS_H_
+#endif// _EDIT_SUSPENSION_NOTEBOOK_H_

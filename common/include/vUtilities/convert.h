@@ -47,8 +47,8 @@
 
 // FIXME:  Add Viscosity!
 
-#ifndef _CONVERT_CLASS_H_
-#define _CONVERT_CLASS_H_
+#ifndef _CONVERT_H_
+#define _CONVERT_H_
 
 // CarDesigner forward declarations
 class Vector;
@@ -504,4 +504,4 @@ private:
 	bool useScientificNotation;
 };
 
-#endif// _CONVERT_CLASS_H_
+#endif// _CONVERT_H_

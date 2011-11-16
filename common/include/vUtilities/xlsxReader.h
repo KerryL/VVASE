@@ -15,8 +15,8 @@
 // History:
 //	11/7/2011	- Corrected camelCase, K. Loux.XlsxReader
 
-#ifndef _XLSX_READER_CLASS_H_
-#define _XLSX_READER_CLASS_H_
+#ifndef _XLSX_READER_H_
+#define _XLSX_READER_H_
 
 // Standard C++ headers
 #include <utility>
@@ -91,4 +91,4 @@ private:
 	bool isOkFlag;
 };
 
-#endif// _XLS_READER_CLASS_H_
+#endif// _XLS_READER_H_

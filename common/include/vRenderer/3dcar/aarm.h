@@ -17,8 +17,8 @@
 //	4/25/2009	- Changed Update() to include color argument in the form of wxColor, K. Loux.
 //	5/17/2009	- Removed VTK dependencies, K. Loux.
 
-#ifndef _AARM_CLASS_H_
-#define _AARM_CLASS_H_
+#ifndef _AARM_H_
+#define _AARM_H_
 
 // CarDesigner forward declarations
 class RenderWindow;
@@ -55,4 +55,4 @@ private:
 	SPHERE *EndPoint2;
 };
 
-#endif// _AARM_CLASS_H_
+#endif// _AARM_H_

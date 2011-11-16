@@ -22,10 +22,10 @@
 #include "vSolver/threads/inverseSemaphore.h"
 
 //==========================================================================
-// Class:			INVERSE_SEMAPHORE
-// Function:		INVERSE_SEMAPHORE
+// Class:			InverseSemaphore
+// Function:		InverseSemaphore
 //
-// Description:		Constructor for the INVERSE_SEMAPHORE class.
+// Description:		Constructor for the InverseSemaphore class.
 //
 // Input Arguments:
 //		None
@@ -37,17 +37,17 @@
 //		None
 //
 //==========================================================================
-INVERSE_SEMAPHORE::INVERSE_SEMAPHORE()
+InverseSemaphore::InverseSemaphore()
 {
 	// Initialize the count to zero
-	Count = 0;
+	count = 0;
 }
 
 //==========================================================================
-// Class:			INVERSE_SEMAPHORE
-// Function:		~INVERSE_SEMAPHORE
+// Class:			InverseSemaphore
+// Function:		~InverseSemaphore
 //
-// Description:		Destructor for the INVERSE_SEMAPHORE class.
+// Description:		Destructor for the InverseSemaphore class.
 //
 // Input Arguments:
 //		None
@@ -59,13 +59,13 @@ INVERSE_SEMAPHORE::INVERSE_SEMAPHORE()
 //		None
 //
 //==========================================================================
-INVERSE_SEMAPHORE::~INVERSE_SEMAPHORE()
+InverseSemaphore::~InverseSemaphore()
 {
 	// FIXME:  Check to make sure we have no pending threads?
 }
 
 //==========================================================================
-// Class:			INVERSE_SEMAPHORE
+// Class:			InverseSemaphore
 // Function:		Post
 //
 // Description:		Decrements the counter for this object.
@@ -77,65 +77,65 @@ INVERSE_SEMAPHORE::~INVERSE_SEMAPHORE()
 //		None
 //
 // Return Value:
-//		INVERSE_SEMAPHORE_ERROR (error codes for this class)
+//		InverseSemaphoreError (error codes for this class)
 //
 //==========================================================================
-INVERSE_SEMAPHORE::INVERSE_SEMAPHORE_ERROR INVERSE_SEMAPHORE::Post(void)
+InverseSemaphore::InverseSemaphoreError InverseSemaphore::Post(void)
 {
 	// Lock the mutex
-	wxMutexLocker Lock(CountMutex);
+	wxMutexLocker lock(countMutex);
 
-	// Make sure we aquired the lock
-	if (!Lock.IsOk())
+	// Make sure we acquired the lock
+	if (!lock.IsOk())
 		return ErrorMutex;
 
 	// Make sure we're not already at zero
-	if (Count == 0)
+	if (count == 0)
 		return ErrorUnderflow;
 
 	// Decrement the counter and return success
-	Count--;
+	count--;
 
 	return ErrorNone;
 }
 
 //==========================================================================
-// Class:			INVERSE_SEMAPHORE
+// Class:			InverseSemaphore
 // Function:		Set
 //
 // Description:		Sets the counter to the desired value.
 //
 // Input Arguments:
-//		_Count	= unsigned int to which the counter will be set
+//		_count	= unsigned int to which the counter will be set
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		INVERSE_SEMAPHORE_ERROR (error codes for this class)
+//		InverseSemaphore_ERROR (error codes for this class)
 //
 //==========================================================================
-INVERSE_SEMAPHORE::INVERSE_SEMAPHORE_ERROR INVERSE_SEMAPHORE::Set(unsigned int _Count)
+InverseSemaphore::InverseSemaphoreError InverseSemaphore::Set(unsigned int _count)
 {
 	// Lock the mutex
-	wxMutexLocker Lock(CountMutex);
+	wxMutexLocker lock(countMutex);
 
-	// Make sure the lock was successfully aquired
-	if (!Lock.IsOk())
+	// Make sure the lock was successfully acquired
+	if (!lock.IsOk())
 		return ErrorMutex;
 
 	// Make sure the count is zero
-	if (Count != 0)
+	if (count != 0)
 		return ErrorBusy;
 
 	// Set the count to the desired value
-	Count = _Count;
+	count = _count;
 
 	return ErrorNone;
 }
 
 //==========================================================================
-// Class:			INVERSE_SEMAPHORE
+// Class:			InverseSemaphore
 // Function:		Wait
 //
 // Description:		Blocks the calling thread until the counter returns to zero.
@@ -147,16 +147,16 @@ INVERSE_SEMAPHORE::INVERSE_SEMAPHORE_ERROR INVERSE_SEMAPHORE::Set(unsigned int _
 //		None
 //
 // Return Value:
-//		INVERSE_SEMAPHORE_ERROR (error codes for this class)
+//		InverseSemaphoreError (error codes for this class)
 //
 //==========================================================================
-INVERSE_SEMAPHORE::INVERSE_SEMAPHORE_ERROR INVERSE_SEMAPHORE::Wait(void)
+InverseSemaphore::InverseSemaphoreError InverseSemaphore::Wait(void)
 {
 	// Wait for the count to return to zero
-	while (Count > 0)
+	while (count > 0)
 	{
-		// Wait and yeild to other threads
-		// FIXME:  Should we sleep and yeild or do nothing? (currently sleeping and yielding)
+		// Wait and yield to other threads
+		// FIXME:  Should we sleep and yield or do nothing? (currently sleeping and yielding)
 		wxSafeYield();
 		wxMilliSleep(50);
 	}

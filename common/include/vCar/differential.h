@@ -17,8 +17,8 @@
 //				  inside the class body, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
-#ifndef _DIFFERENTIAL_CLASS_H_
-#define _DIFFERENTIAL_CLASS_H_
+#ifndef _DIFFERENTIAL_H_
+#define _DIFFERENTIAL_H_
 
 // Standard C++ headers
 #include <iosfwd>// forward declarations of fstream objects
@@ -70,4 +70,4 @@ private:
 	DIFFERENTIAL_STYLE Style;
 };
 
-#endif// _DIFFERENTIAL_CLASS_H_
+#endif// _DIFFERENTIAL_H_

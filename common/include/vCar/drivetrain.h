@@ -18,8 +18,8 @@
 //				  Debugger class, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
-#ifndef _DRIVETRAIN_CLASS_H_
-#define _DRIVETRAIN_CLASS_H_
+#ifndef _DRIVETRAIN_H_
+#define _DRIVETRAIN_H_
 
 // Standard C++ headers
 #include <iosfwd>// forward declarations of fstream objects
@@ -95,4 +95,4 @@ private:
 	// Clutch stuff in here, too?
 };
 
-#endif// _DRIVETRAIN_CLASS_H_
+#endif// _DRIVETRAIN_H_

@@ -18,8 +18,8 @@
 //				  RENDER_WINDOW base class (eliminated dependence on VTK).
 //	11/22/2009	- Moved to vRenderer.lib, K. Loux.
 
-#ifndef _CAR_RENDERER_CLASS_H_
-#define _CAR_RENDERER_CLASS_H_
+#ifndef _CAR_RENDERER_H_
+#define _CAR_RENDERER_H_
 
 // VVASE headers
 #include "vMath/vector.h"
@@ -186,4 +186,4 @@ private:
 	POINT3D *HelperOrb;
 };
 
-#endif// _CAR_RENDERER_CLASS_H_
+#endif// _CAR_RENDERER_H_

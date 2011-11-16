@@ -51,8 +51,8 @@
 // use quarternions.  This will be valid unless it becomes some kind of computer game (driving
 // off of cliffs or ramps?).
 
-#ifndef _CAR_CLASS_H_
-#define _CAR_CLASS_H_
+#ifndef _CAR_H_
+#define _CAR_H_
 
 // Standard C++ headers
 #include <iosfwd>// for forward declarations of fstream objects
@@ -133,4 +133,4 @@ private:
 	mutable wxMutex CarMutex;
 };
 
-#endif// _CAR_CLASS_H_
+#endif// _CAR_H_

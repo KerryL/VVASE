@@ -15,8 +15,8 @@
 //	4/25/2009	- Changed Update() to include color argument in the form of wxColor, K. Loux.
 //	5/17/2009	- Removed VTK dependencies, K. Loux.
 
-#ifndef _DAMPER3D_CLASS_H_
-#define _DAMPER3D_CLASS_H_
+#ifndef _DAMPER3D_H_
+#define _DAMPER3D_H_
 
 // VVASE forward declarations
 class Vector;
@@ -53,4 +53,4 @@ private:
 	SPHERE *OutboardEndPoint;
 };
 
-#endif// _DAMPER3D_CLASS_H_
+#endif// _DAMPER3D_H_

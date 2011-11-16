@@ -67,7 +67,7 @@ OptimizationData::~OptimizationData()
 //					specified command.
 //
 // Input Arguments:
-//		Command		= ThreadJob::ThreadCommands& to be checked
+//		command		= ThreadJob::ThreadCommands& to be checked
 //
 // Output Arguments:
 //		None
@@ -76,7 +76,7 @@ OptimizationData::~OptimizationData()
 //		None
 //
 //==========================================================================
-bool OptimizationData::OkForCommand(ThreadJob::ThreadCommands &Command)
+bool OptimizationData::OkForCommand(ThreadJob::ThreadCommands &command)
 {
 	// Make sure the command is one of the expected types
 	return command == ThreadJob::CommandThreadGeneticOptimization;

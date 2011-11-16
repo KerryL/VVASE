@@ -15,8 +15,8 @@
 //	4/25/2009	- Changed Update() to include color argument in the form of wxColor, K. Loux.
 //	5/17/2009	- Removed VTK dependencies, K. Loux.
 
-#ifndef _SWAYBAR3D_CLASS_H_
-#define _SWAYBAR3D_CLASS_H_
+#ifndef _SWAYBAR3D_H_
+#define _SWAYBAR3D_H_
 
 // VVASE headers
 #include "vCar/suspension.h"
@@ -52,4 +52,4 @@ private:
 	CYLINDER *TorsionMember;
 };
 
-#endif// _SWAYBAR3D_CLASS_H_
+#endif// _SWAYBAR3D_H_

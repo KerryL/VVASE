@@ -15,8 +15,8 @@
 //	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
-#ifndef _DRIVER_CLASS_H_
-#define _DRIVER_CLASS_H_
+#ifndef _DRIVER_H_
+#define _DRIVER_H_
 
 // vUtilities forward declarations
 class Debugger;
@@ -58,4 +58,4 @@ private:
 	INPUTS DriverInputs;
 };
 
-#endif// _DRIVER_CLASS_H_
+#endif// _DRIVER_H_

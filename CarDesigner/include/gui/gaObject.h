@@ -13,8 +13,8 @@
 // Description:  This is a wrapper class for genetic algorithm implementation.
 // History:
 
-#ifndef _GA_OBJECT_CLASS_H_
-#define _GA_OBJECT_CLASS_H_
+#ifndef _GA_OBJECT_H_
+#define _GA_OBJECT_H_
 
 // VVASE headers
 #include "vUtilities/managedList.h"
@@ -194,4 +194,4 @@ private:
 	static const int CurrentFileVersion;
 };
 
-#endif// _GA_OBJECT_CLASS_H_
+#endif// _GA_OBJECT_H_

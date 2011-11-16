@@ -13,8 +13,8 @@
 // Description:  Contains the declaration for the OPTION_DIALOG class.
 // History:
 
-#ifndef _OPTIONS_DIALOG_CLASS_H_
-#define _OPTIONS_DIALOG_CLASS_H_
+#ifndef _OPTIONS_DIALOG_H_
+#define _OPTIONS_DIALOG_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -106,4 +106,4 @@ private:
 	DECLARE_EVENT_TABLE()
 };
 
-#endif// _OPTIONS_DIALOG_CLASS_H_
+#endif// _OPTIONS_DIALOG_H_

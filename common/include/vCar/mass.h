@@ -16,8 +16,8 @@
 //  3/29/2008	- Added IsValidInertiaTensor function, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
-#ifndef _MASS_CLASS_H_
-#define _MASS_CLASS_H_
+#ifndef _MASS_H_
+#define _MASS_H_
 
 // Standard C++ headers
 #include <iosfwd>// forward declarations of fstream objects
@@ -70,4 +70,4 @@ private:
 	const Debugger &debugger;
 };
 
-#endif// _MASS_CLASS_H_
+#endif// _MASS_H_

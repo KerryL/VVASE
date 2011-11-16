@@ -42,10 +42,10 @@
 #include "vUtilities/debugger.h"
 
 //==========================================================================
-// Class:			KINEMATIC_OUTPUTS
-// Function:		KINEMATIC_OUTPUTS
+// Class:			KinematicOutputs
+// Function:		KinematicOutputs
 //
-// Description:		Constructor for KINEMATIC_OUTPUTS class.
+// Description:		Constructor for KinematicOutputs class.
 //
 // Input Arguments:
 //		None
@@ -57,16 +57,16 @@
 //		None
 //
 //==========================================================================
-KINEMATIC_OUTPUTS::KINEMATIC_OUTPUTS()
+KinematicOutputs::KinematicOutputs()
 {
 	InitializeAllOutputs();
 }
 
 //==========================================================================
-// Class:			KINEMATIC_OUTPUTS
-// Function:		~KINEMATIC_OUTPUTS
+// Class:			KinematicOutputs
+// Function:		~KinematicOutputs
 //
-// Description:		Destructor for KINEMATIC_OUTPUTS class.
+// Description:		Destructor for KinematicOutputs class.
 //
 // Input Arguments:
 //		None
@@ -78,15 +78,15 @@ KINEMATIC_OUTPUTS::KINEMATIC_OUTPUTS()
 //		None
 //
 //==========================================================================
-KINEMATIC_OUTPUTS::~KINEMATIC_OUTPUTS()
+KinematicOutputs::~KinematicOutputs()
 {
 }
 
 //==========================================================================
-// Class:			KINEMATIC_OUTPUTS
+// Class:			KinematicOutputs
 // Function:		Constant Declarations
 //
-// Description:		Constant declarations for KINEMATIC_OUTPUTS class.
+// Description:		Constant declarations for KinematicOutputs class.
 //
 // Input Arguments:
 //		None
@@ -98,13 +98,13 @@ KINEMATIC_OUTPUTS::~KINEMATIC_OUTPUTS()
 //		None
 //
 //==========================================================================
-const Debugger *KINEMATIC_OUTPUTS::debugger = NULL;
+const Debugger *KinematicOutputs::debugger = NULL;
 
 //==========================================================================
-// Class:			KINEMATIC_OUTPUTS
+// Class:			KinematicOutputs
 // Function:		InitializeAllOutputs
 //
-// Description:		Initializes all outputs to QNAN
+// Description:		Initializes all outputs to QNAN.
 //
 // Input Arguments:
 //		None
@@ -116,7 +116,7 @@ const Debugger *KINEMATIC_OUTPUTS::debugger = NULL;
 //		None
 //
 //==========================================================================
-void KINEMATIC_OUTPUTS::InitializeAllOutputs(void)
+void KinematicOutputs::InitializeAllOutputs(void)
 {
 	// Initialize all outputs to QNAN
 	int i;
@@ -124,32 +124,32 @@ void KINEMATIC_OUTPUTS::InitializeAllOutputs(void)
 	// Corner Doubles
 	for (i = 0; i < NumberOfCornerOutputDoubles; i++)
 	{
-		RightFront[i] = VVASEMath::QNAN;
-		LeftFront[i] = VVASEMath::QNAN;
-		RightRear[i] = VVASEMath::QNAN;
-		LeftRear[i] = VVASEMath::QNAN;
+		rightFront[i] = VVASEMath::QNAN;
+		leftFront[i] = VVASEMath::QNAN;
+		rightRear[i] = VVASEMath::QNAN;
+		leftRear[i] = VVASEMath::QNAN;
 	}
 
 	// Corner Vectors
 	for (i = 0; i< NumberOfCornerOutputVectors; i++)
 	{
-		RightFrontVectors[i].Set(VVASEMath::QNAN, VVASEMath::QNAN, VVASEMath::QNAN);
-		LeftFrontVectors[i].Set(VVASEMath::QNAN, VVASEMath::QNAN, VVASEMath::QNAN);
-		RightRearVectors[i].Set(VVASEMath::QNAN, VVASEMath::QNAN, VVASEMath::QNAN);
-		LeftRearVectors[i].Set(VVASEMath::QNAN, VVASEMath::QNAN, VVASEMath::QNAN);
+		rightFrontVectors[i].Set(VVASEMath::QNAN, VVASEMath::QNAN, VVASEMath::QNAN);
+		leftFrontVectors[i].Set(VVASEMath::QNAN, VVASEMath::QNAN, VVASEMath::QNAN);
+		rightRearVectors[i].Set(VVASEMath::QNAN, VVASEMath::QNAN, VVASEMath::QNAN);
+		leftRearVectors[i].Set(VVASEMath::QNAN, VVASEMath::QNAN, VVASEMath::QNAN);
 	}
 
 	// Whole-car Doubles
 	for (i = 0; i < NumberOfOutputDoubles; i++)
-		Doubles[i] = VVASEMath::QNAN;
+		OutputsDouble[i] = VVASEMath::QNAN;
 
 	// Whole-car Vectors
 	for (i = 0; i < NumberOfOutputVectors; i++)
-		Vectors[i].Set(VVASEMath::QNAN, VVASEMath::QNAN, VVASEMath::QNAN);
+		vectors[i].Set(VVASEMath::QNAN, VVASEMath::QNAN, VVASEMath::QNAN);
 }
 
 //==========================================================================
-// Class:			KINEMATIC_OUTPUTS
+// Class:			KinematicOutputs
 // Function:		Update
 //
 // Description:		Takes all of the virtual measurements and saves them in
@@ -157,9 +157,9 @@ void KINEMATIC_OUTPUTS::InitializeAllOutputs(void)
 //					Measurements are take on Current.
 //
 // Input Arguments:
-//		Original	= const CAR*, pointing to object describing the car's
+//		original	= const CAR*, pointing to object describing the car's
 //					  un-perturbed state
-//		Current		= const SUSPENSION*, pointing to object describing the new
+//		current		= const SUSPENSION*, pointing to object describing the new
 //					  state of the car
 //
 // Output Arguments:
@@ -169,89 +169,89 @@ void KINEMATIC_OUTPUTS::InitializeAllOutputs(void)
 //		None
 //
 //==========================================================================
-void KINEMATIC_OUTPUTS::Update(const CAR *Original, const SUSPENSION *Current)
+void KinematicOutputs::Update(const CAR *original, const SUSPENSION *current)
 {
 	// Copy the car pointer to our class variable
-	CurrentCar = Original;
+	currentCar = original;
 
 	// Re-initialize all outputs before doing the computations
 	InitializeAllOutputs();
 
 	// Update each corner's outputs
-	UpdateCorner(&Original->Suspension->RightFront, &Current->RightFront);
-	UpdateCorner(&Original->Suspension->LeftFront, &Current->LeftFront);
-	UpdateCorner(&Original->Suspension->RightRear, &Current->RightRear);
-	UpdateCorner(&Original->Suspension->LeftRear, &Current->LeftRear);
+	UpdateCorner(&original->Suspension->RightFront, &current->RightFront);
+	UpdateCorner(&original->Suspension->LeftFront, &current->LeftFront);
+	UpdateCorner(&original->Suspension->RightRear, &current->RightRear);
+	UpdateCorner(&original->Suspension->LeftRear, &current->LeftRear);
 
 	// Net Steer [rad]
-	Doubles[FrontNetSteer] = RightFront[Steer] - LeftFront[Steer];
-	Doubles[RearNetSteer] = RightRear[Steer] - LeftRear[Steer];
+	OutputsDouble[FrontNetSteer] = rightFront[Steer] - leftFront[Steer];
+	OutputsDouble[RearNetSteer] = rightRear[Steer] - leftRear[Steer];
 
 	// Net Scrub [in]
-	Doubles[FrontNetScrub] = RightFront[Scrub] + LeftFront[Scrub];
-	Doubles[RearNetScrub] = RightRear[Scrub] + LeftRear[Scrub];
+	OutputsDouble[FrontNetScrub] = rightFront[Scrub] + leftFront[Scrub];
+	OutputsDouble[RearNetScrub] = rightRear[Scrub] + leftRear[Scrub];
 
 	// ARB Twist [rad]
 	// Initialize the twist in case the car has no sway bars
-	Doubles[FrontARBTwist] = 0.0;
-	Doubles[RearARBTwist] = 0.0;
-	Vector Arm1Direction, Arm2Direction;
-	Vector SwayBarAxis;
-	if (Current->FrontBarStyle == SUSPENSION::SwayBarUBar)
+	OutputsDouble[FrontARBTwist] = 0.0;
+	OutputsDouble[RearARBTwist] = 0.0;
+	Vector arm1Direction, arm2Direction;
+	Vector swayBarAxis;
+	if (current->FrontBarStyle == SUSPENSION::SwayBarUBar)
 	{
 		// Project these directions onto the plane whose normal is the sway bar axis
-		SwayBarAxis = Current->RightFront.Hardpoints[CORNER::BarArmAtPivot] -
-			Current->LeftFront.Hardpoints[CORNER::BarArmAtPivot];
+		swayBarAxis = current->RightFront.Hardpoints[CORNER::BarArmAtPivot] -
+			current->LeftFront.Hardpoints[CORNER::BarArmAtPivot];
 
 		// The references for U-bar twist are the arms at the end of the bar
-		Arm1Direction = VVASEMath::ProjectOntoPlane(Current->RightFront.Hardpoints[CORNER::BarArmAtPivot] -
-			Current->RightFront.Hardpoints[CORNER::InboardBarLink], SwayBarAxis);
-		Arm2Direction = VVASEMath::ProjectOntoPlane(Current->LeftFront.Hardpoints[CORNER::BarArmAtPivot] -
-			Current->LeftFront.Hardpoints[CORNER::InboardBarLink], SwayBarAxis);
+		arm1Direction = VVASEMath::ProjectOntoPlane(current->RightFront.Hardpoints[CORNER::BarArmAtPivot] -
+			current->RightFront.Hardpoints[CORNER::InboardBarLink], SwayBarAxis);
+		arm2Direction = VVASEMath::ProjectOntoPlane(current->LeftFront.Hardpoints[CORNER::BarArmAtPivot] -
+			current->LeftFront.Hardpoints[CORNER::InboardBarLink], SwayBarAxis);
 
 		// The angle between these vectors, when projected onto the plane that is normal
 		// to the swaybar axis is given by the dot product
-		Doubles[FrontARBTwist] = acos((Arm1Direction * Arm2Direction) /
-			(Arm1Direction.Length() * Arm2Direction.Length()));
+		OutputsDouble[FrontARBTwist] = acos((arm1Direction * arm2Direction) /
+			(arm1Direction.Length() * arm2Direction.Length()));
 	}
-	else if (Current->FrontBarStyle == SUSPENSION::SwayBarTBar)
+	else if (current->FrontBarStyle == SUSPENSION::SwayBarTBar)
 	{
 		// FIXME!!!
 	}
-	else if (Current->FrontBarStyle == SUSPENSION::SwayBarGeared)
+	else if (current->FrontBarStyle == SUSPENSION::SwayBarGeared)
 	{
 		// FIXME!!!
 	}
 
-	if (Current->RearBarStyle == SUSPENSION::SwayBarUBar)
+	if (current->RearBarStyle == SUSPENSION::SwayBarUBar)
 	{
 		// Project these directions onto the plane whose normal is the swaybar axis
-		SwayBarAxis = Current->RightRear.Hardpoints[CORNER::BarArmAtPivot] -
-			Current->LeftRear.Hardpoints[CORNER::BarArmAtPivot];
+		swayBarAxis = current->RightRear.Hardpoints[CORNER::BarArmAtPivot] -
+			current->LeftRear.Hardpoints[CORNER::BarArmAtPivot];
 
 		// The references for U-bar twist are the arms at the end of the bar
-		Arm1Direction = VVASEMath::ProjectOntoPlane(Current->RightRear.Hardpoints[CORNER::BarArmAtPivot] -
-			Current->RightRear.Hardpoints[CORNER::InboardBarLink], SwayBarAxis);
-		Arm2Direction = VVASEMath::ProjectOntoPlane(Current->LeftRear.Hardpoints[CORNER::BarArmAtPivot] -
-			Current->LeftRear.Hardpoints[CORNER::InboardBarLink], SwayBarAxis);
+		arm1Direction = VVASEMath::ProjectOntoPlane(current->RightRear.Hardpoints[CORNER::BarArmAtPivot] -
+			current->RightRear.Hardpoints[CORNER::InboardBarLink], swayBarAxis);
+		arm2Direction = VVASEMath::ProjectOntoPlane(current->LeftRear.Hardpoints[CORNER::BarArmAtPivot] -
+			current->LeftRear.Hardpoints[CORNER::InboardBarLink], swayBarAxis);
 
 		// The angle between these vectors, when projected onto the plane that is normal
 		// to the swaybar axis is given by the dot product
-		Doubles[RearARBTwist] = acos((Arm1Direction * Arm2Direction) /
-			(Arm1Direction.Length() * Arm2Direction.Length()));
+		OutputsDouble[RearARBTwist] = acos((arm1Direction * arm2Direction) /
+			(arm1Direction.Length() * arm2Direction.Length()));
 	}
-	else if (Current->RearBarStyle == SUSPENSION::SwayBarTBar)
+	else if (current->RearBarStyle == SUSPENSION::SwayBarTBar)
 	{
 		// FIXME!!!
 	}
-	else if (Current->RearBarStyle == SUSPENSION::SwayBarGeared)
+	else if (current->RearBarStyle == SUSPENSION::SwayBarGeared)
 	{
 		// FIXME!!!
 	}
 
 	// Kinematic Roll Centers and Direction Vectors [in], [-]
 	//  Wm. C. Mitchell makes clear the assumptions that are made when calculating kinematic
-	//  roll centers in his SAE paper "Asymmetric Roll Centers" (983085).  My interpertation
+	//  roll centers in his SAE paper "Asymmetric Roll Centers" (983085).  My interpretation
 	//  of these is this:  Kinematic roll centers assume that your tires are pinned to the
 	//  ground.  In other words, it ignores the lateral forces created by the tires on the
 	//  pavement.  It is the point around which the car would roll if your tires couldn't
@@ -264,150 +264,148 @@ void KINEMATIC_OUTPUTS::Update(const CAR *Original, const SUSPENSION *Current)
 	//  for both side of the car (plane containing the instant axis and the contact patch
 	//  point) and intersect them.  This give us an axis, and we find the intersection of
 	//  this axis with the appropriate plane to find the actual kinematic center point.
-	Vector RightPlaneNormal;
-	Vector LeftPlaneNormal;
-	Vector PlaneNormal(1.0, 0.0, 0.0);// For projecting the vectors to find the kinematic centers
+	Vector rightPlaneNormal;
+	Vector leftPlaneNormal;
+	Vector planeNormal(1.0, 0.0, 0.0);// For projecting the vectors to find the kinematic centers
 
 	// Front
 	// Find the normal vectors
-	RightPlaneNormal = VVASEMath::GetPlaneNormal(Current->RightFront.Hardpoints[CORNER::ContactPatch],
-		RightFrontVectors[InstantCenter], RightFrontVectors[InstantCenter] + RightFrontVectors[InstantAxisDirection]);
-	LeftPlaneNormal = VVASEMath::GetPlaneNormal(Current->LeftFront.Hardpoints[CORNER::ContactPatch],
-		LeftFrontVectors[InstantCenter], LeftFrontVectors[InstantCenter] + LeftFrontVectors[InstantAxisDirection]);
+	rightPlaneNormal = VVASEMath::GetPlaneNormal(current->RightFront.Hardpoints[CORNER::ContactPatch],
+		rightFrontVectors[InstantCenter], rightFrontVectors[InstantCenter] + rightFrontVectors[InstantAxisDirection]);
+	leftPlaneNormal = VVASEMath::GetPlaneNormal(current->LeftFront.Hardpoints[CORNER::ContactPatch],
+		leftFrontVectors[InstantCenter], leftFrontVectors[InstantCenter] + leftFrontVectors[InstantAxisDirection]);
 
 	// Get the intersection of the planes
-	if (!VVASEMath::GetIntersectionOfTwoPlanes(RightPlaneNormal, Current->RightFront.Hardpoints[CORNER::ContactPatch],
-		LeftPlaneNormal, Current->LeftFront.Hardpoints[CORNER::ContactPatch],
-		Vectors[FrontRollAxisDirection], Vectors[FrontKinematicRC]))
-		debugger->Print(_T("Warning (KINEMATIC_OUTPUTS::Update):  Front Kinematic Roll Center is undefined"),
+	if (!VVASEMath::GetIntersectionOfTwoPlanes(rightPlaneNormal, current->RightFront.Hardpoints[CORNER::ContactPatch],
+		leftPlaneNormal, current->LeftFront.Hardpoints[CORNER::ContactPatch],
+		vectors[FrontRollAxisDirection], vectors[FrontKinematicRC]))
+		debugger->Print(_T("Warning (KinematicOutputs::Update):  Front Kinematic Roll Center is undefined"),
 			Debugger::PriorityHigh);
 	else
 		// We now have the axis direction and a point on the axis, but we want a specific
 		// point on the axis.  To do that, we determine the place where this vector passes through
 		// the appropriate plane.
-		Vectors[FrontKinematicRC] = VVASEMath::IntersectWithPlane(PlaneNormal,
-			(Current->RightFront.Hardpoints[CORNER::WheelCenter] +
-			Current->LeftFront.Hardpoints[CORNER::WheelCenter]) / 2.0,
-			Vectors[FrontRollAxisDirection], Vectors[FrontKinematicRC]);
+		vectors[FrontKinematicRC] = VVASEMath::IntersectWithPlane(planeNormal,
+			(current->RightFront.Hardpoints[CORNER::WheelCenter] +
+			current->LeftFront.Hardpoints[CORNER::WheelCenter]) / 2.0,
+			vectors[FrontRollAxisDirection], vectors[FrontKinematicRC]);
 
 	// Rear
 	// Find the normal vectors
-	RightPlaneNormal = VVASEMath::GetPlaneNormal(Current->RightRear.Hardpoints[CORNER::ContactPatch],
-		RightRearVectors[InstantCenter], RightRearVectors[InstantCenter] + RightRearVectors[InstantAxisDirection]);
-	LeftPlaneNormal = VVASEMath::GetPlaneNormal(Current->LeftRear.Hardpoints[CORNER::ContactPatch],
-		LeftRearVectors[InstantCenter], LeftRearVectors[InstantCenter] + LeftRearVectors[InstantAxisDirection]);
+	rightPlaneNormal = VVASEMath::GetPlaneNormal(current->RightRear.Hardpoints[CORNER::ContactPatch],
+		rightRearVectors[InstantCenter], rightRearVectors[InstantCenter] + rightRearVectors[InstantAxisDirection]);
+	leftPlaneNormal = VVASEMath::GetPlaneNormal(current->LeftRear.Hardpoints[CORNER::ContactPatch],
+		leftRearVectors[InstantCenter], leftRearVectors[InstantCenter] + leftRearVectors[InstantAxisDirection]);
 
 	// Get the intersection of the planes
-	if (!VVASEMath::GetIntersectionOfTwoPlanes(RightPlaneNormal, Current->RightRear.Hardpoints[CORNER::ContactPatch],
-		LeftPlaneNormal, Current->LeftRear.Hardpoints[CORNER::ContactPatch],
-		Vectors[RearRollAxisDirection], Vectors[RearKinematicRC]))
-		debugger->Print(_T("Warning (KINEMATIC_OUTPUTS::Update):  Rear Kinematic Roll Center is undefined"),
+	if (!VVASEMath::GetIntersectionOfTwoPlanes(rightPlaneNormal, current->RightRear.Hardpoints[CORNER::ContactPatch],
+		leftPlaneNormal, current->LeftRear.Hardpoints[CORNER::ContactPatch],
+		vectors[RearRollAxisDirection], vectors[RearKinematicRC]))
+		debugger->Print(_T("Warning (KinematicOutputs::Update):  Rear Kinematic Roll Center is undefined"),
 			Debugger::PriorityHigh);
 	else
 		// Just like we did on for the front, intersect this vector with the wheel plane
-		Vectors[RearKinematicRC] = VVASEMath::IntersectWithPlane(PlaneNormal,
-			(Current->RightRear.Hardpoints[CORNER::WheelCenter] +
-			Current->LeftRear.Hardpoints[CORNER::WheelCenter]) / 2.0,
-			Vectors[RearRollAxisDirection], Vectors[RearKinematicRC]);
+		vectors[RearKinematicRC] = VVASEMath::IntersectWithPlane(planeNormal,
+			(current->RightRear.Hardpoints[CORNER::WheelCenter] +
+			current->LeftRear.Hardpoints[CORNER::WheelCenter]) / 2.0,
+			vectors[RearRollAxisDirection], vectors[RearKinematicRC]);
 
 	// Kinematic Pitch Centers and Directions [in], [-]
 	// All of the same assumptions that we have for roll centers apply here.
 	// The method is also the same as the roll center calculations.
-	Vector FrontPlaneNormal;
-	Vector RearPlaneNormal;
-	PlaneNormal.Set(0.0, 1.0, 0.0);// For projecting the vectors to find the kinematic centers
+	Vector frontPlaneNormal;
+	Vector rearPlaneNormal;
+	planeNormal.Set(0.0, 1.0, 0.0);// For projecting the vectors to find the kinematic centers
 
 	// Right
 	// Find the normal vectors
-	FrontPlaneNormal = VVASEMath::GetPlaneNormal(Current->RightFront.Hardpoints[CORNER::ContactPatch],
-		RightFrontVectors[InstantCenter], RightFrontVectors[InstantCenter] + RightFrontVectors[InstantAxisDirection]);
-	RearPlaneNormal = VVASEMath::GetPlaneNormal(Current->RightRear.Hardpoints[CORNER::ContactPatch],
-		RightRearVectors[InstantCenter], RightRearVectors[InstantCenter] + RightRearVectors[InstantAxisDirection]);
+	frontPlaneNormal = VVASEMath::GetPlaneNormal(current->RightFront.Hardpoints[CORNER::ContactPatch],
+		rightFrontVectors[InstantCenter], rightFrontVectors[InstantCenter] + rightFrontVectors[InstantAxisDirection]);
+	rearPlaneNormal = VVASEMath::GetPlaneNormal(current->RightRear.Hardpoints[CORNER::ContactPatch],
+		rightRearVectors[InstantCenter], rightRearVectors[InstantCenter] + rightRearVectors[InstantAxisDirection]);
 
 	// Get the intersection of the planes
-	if (!VVASEMath::GetIntersectionOfTwoPlanes(FrontPlaneNormal, Current->RightFront.Hardpoints[CORNER::ContactPatch],
-		RearPlaneNormal, Current->RightRear.Hardpoints[CORNER::ContactPatch],
-		Vectors[RightPitchAxisDirection], Vectors[RightKinematicPC]))
-		debugger->Print(_T("Warning (KINEMATIC_OUTPUTS::Update):  Right Kinematic Pitch Center is undefined"),
+	if (!VVASEMath::GetIntersectionOfTwoPlanes(frontPlaneNormal, current->RightFront.Hardpoints[CORNER::ContactPatch],
+		rearPlaneNormal, current->RightRear.Hardpoints[CORNER::ContactPatch],
+		vectors[RightPitchAxisDirection], vectors[RightKinematicPC]))
+		debugger->Print(_T("Warning (KinematicOutputs::Update):  Right Kinematic Pitch Center is undefined"),
 			Debugger::PriorityHigh);
 	else
 		// We now have the axis direction and a point on the axis, but we want a specific
 		// point on the axis.  To do that, we determine the place where this vector passes through
 		// the appropriate plane.
-		Vectors[RightKinematicPC] = VVASEMath::IntersectWithPlane(PlaneNormal,
-			(Current->RightFront.Hardpoints[CORNER::WheelCenter] +
-			Current->RightRear.Hardpoints[CORNER::WheelCenter]) / 2.0,
-			Vectors[RightPitchAxisDirection], Vectors[RightKinematicPC]);
+		vectors[RightKinematicPC] = VVASEMath::IntersectWithPlane(planeNormal,
+			(current->RightFront.Hardpoints[CORNER::WheelCenter] +
+			current->RightRear.Hardpoints[CORNER::WheelCenter]) / 2.0,
+			vectors[RightPitchAxisDirection], vectors[RightKinematicPC]);
 
 	// Left
 	// Find the normal vectors
-	FrontPlaneNormal = VVASEMath::GetPlaneNormal(Current->LeftFront.Hardpoints[CORNER::ContactPatch],
-		LeftFrontVectors[InstantCenter], LeftFrontVectors[InstantCenter] + LeftFrontVectors[InstantAxisDirection]);
-	RearPlaneNormal = VVASEMath::GetPlaneNormal(Current->LeftRear.Hardpoints[CORNER::ContactPatch],
-		LeftRearVectors[InstantCenter], LeftRearVectors[InstantCenter] + LeftRearVectors[InstantAxisDirection]);
+	frontPlaneNormal = VVASEMath::GetPlaneNormal(current->LeftFront.Hardpoints[CORNER::ContactPatch],
+		leftFrontVectors[InstantCenter], leftFrontVectors[InstantCenter] + leftFrontVectors[InstantAxisDirection]);
+	rearPlaneNormal = VVASEMath::GetPlaneNormal(current->LeftRear.Hardpoints[CORNER::ContactPatch],
+		leftRearVectors[InstantCenter], leftRearVectors[InstantCenter] + leftRearVectors[InstantAxisDirection]);
 
 	// Get the intersection of the planes
-	if (!VVASEMath::GetIntersectionOfTwoPlanes(FrontPlaneNormal, Current->LeftFront.Hardpoints[CORNER::ContactPatch],
-		RearPlaneNormal, Current->LeftRear.Hardpoints[CORNER::ContactPatch],
-		Vectors[LeftPitchAxisDirection], Vectors[LeftKinematicPC]))
-		debugger->Print(_T("Warning (KINEMATIC_OUTPUTS::Update):  Left Kinematic Pitch Center is undefined"),
+	if (!VVASEMath::GetIntersectionOfTwoPlanes(frontPlaneNormal, current->LeftFront.Hardpoints[CORNER::ContactPatch],
+		rearPlaneNormal, current->LeftRear.Hardpoints[CORNER::ContactPatch],
+		vectors[LeftPitchAxisDirection], vectors[LeftKinematicPC]))
+		debugger->Print(_T("Warning (KinematicOutputs::Update):  Left Kinematic Pitch Center is undefined"),
 			Debugger::PriorityHigh);
 	else
 		// Just like we did for the right side, intersect this vector with the wheel plane
-		Vectors[LeftKinematicPC] = VVASEMath::IntersectWithPlane(PlaneNormal,
-			(Current->LeftFront.Hardpoints[CORNER::WheelCenter] +
-			Current->LeftRear.Hardpoints[CORNER::WheelCenter]) / 2.0,
-			Vectors[LeftPitchAxisDirection], Vectors[LeftKinematicPC]);
+		vectors[LeftKinematicPC] = VVASEMath::IntersectWithPlane(planeNormal,
+			(current->LeftFront.Hardpoints[CORNER::WheelCenter] +
+			current->LeftRear.Hardpoints[CORNER::WheelCenter]) / 2.0,
+			vectors[LeftPitchAxisDirection], vectors[LeftKinematicPC]);
 
 	// For the left side, we flip the sign on the axis direction
-	Vectors[LeftPitchAxisDirection] *= -1.0;
+	vectors[LeftPitchAxisDirection] *= -1.0;
 
 	// Front track at ground [in]
-	Doubles[FrontTrackGround] = Current->RightFront.Hardpoints[CORNER::ContactPatch].Distance(
-		Current->LeftFront.Hardpoints[CORNER::ContactPatch]);
+	OutputsDouble[FrontTrackGround] = current->RightFront.Hardpoints[CORNER::ContactPatch].Distance(
+		current->LeftFront.Hardpoints[CORNER::ContactPatch]);
 
 	// Rear track at ground [in]
-	Doubles[RearTrackGround] = Current->RightRear.Hardpoints[CORNER::ContactPatch].Distance(
-		Current->LeftRear.Hardpoints[CORNER::ContactPatch]);
+	OutputsDouble[RearTrackGround] = current->RightRear.Hardpoints[CORNER::ContactPatch].Distance(
+		current->LeftRear.Hardpoints[CORNER::ContactPatch]);
 
 	// Right wheelbase at ground [in]
-	Doubles[RightWheelbaseGround] = Current->RightFront.Hardpoints[CORNER::ContactPatch].Distance(
-		Current->RightRear.Hardpoints[CORNER::ContactPatch]);
+	OutputsDouble[RightWheelbaseGround] = current->RightFront.Hardpoints[CORNER::ContactPatch].Distance(
+		current->RightRear.Hardpoints[CORNER::ContactPatch]);
 
 	// Left wheelbase at ground [in]
-	Doubles[LeftWheelbaseGround] = Current->LeftFront.Hardpoints[CORNER::ContactPatch].Distance(
-		Current->LeftRear.Hardpoints[CORNER::ContactPatch]);
+	OutputsDouble[LeftWheelbaseGround] = current->LeftFront.Hardpoints[CORNER::ContactPatch].Distance(
+		current->LeftRear.Hardpoints[CORNER::ContactPatch]);
 
 	// Front track at hub [in]
-	Doubles[FrontTrackHub] = Current->RightFront.Hardpoints[CORNER::WheelCenter].Distance(
-		Current->LeftFront.Hardpoints[CORNER::WheelCenter]);
+	OutputsDouble[FrontTrackHub] = current->RightFront.Hardpoints[CORNER::WheelCenter].Distance(
+		current->LeftFront.Hardpoints[CORNER::WheelCenter]);
 
 	// Rear track at hub [in]
-	Doubles[RearTrackHub] = Current->RightRear.Hardpoints[CORNER::WheelCenter].Distance(
-		Current->LeftRear.Hardpoints[CORNER::WheelCenter]);
+	OutputsDouble[RearTrackHub] = current->RightRear.Hardpoints[CORNER::WheelCenter].Distance(
+		current->LeftRear.Hardpoints[CORNER::WheelCenter]);
 
 	// Right wheelbase at hub [in]
-	Doubles[RightWheelbaseHub] = Current->RightFront.Hardpoints[CORNER::WheelCenter].Distance(
-		Current->RightRear.Hardpoints[CORNER::WheelCenter]);
+	OutputsDouble[RightWheelbaseHub] = current->RightFront.Hardpoints[CORNER::WheelCenter].Distance(
+		current->RightRear.Hardpoints[CORNER::WheelCenter]);
 
 	// Left wheelbase at hub [in]
-	Doubles[LeftWheelbaseHub] = Current->LeftFront.Hardpoints[CORNER::WheelCenter].Distance(
-		Current->LeftRear.Hardpoints[CORNER::WheelCenter]);
-
-	return;
+	OutputsDouble[LeftWheelbaseHub] = current->LeftFront.Hardpoints[CORNER::WheelCenter].Distance(
+		current->LeftRear.Hardpoints[CORNER::WheelCenter]);
 }
 
 //==========================================================================
-// Class:			KINEMATIC_OUTPUTS
+// Class:			KinematicOutputs
 // Function:		UpdateCorner
 //
 // Description:		Performs measurements that are repeated for every wheel
 //					on the car.
 //
 // Input Arguments:
-//		OriginalCorner	= const CORNER*, pointer to the un-perturbed state of the
+//		originalCorner	= const CORNER*, pointer to the un-perturbed state of the
 //						  corner
-//		CurrentCorner	= const CORNER*, pointer to the current state of the corner
+//		currentCorner	= const CORNER*, pointer to the current state of the corner
 //
 // Output Arguments:
 //		None
@@ -416,140 +414,140 @@ void KINEMATIC_OUTPUTS::Update(const CAR *Original, const SUSPENSION *Current)
 //		None
 //
 //==========================================================================
-void KINEMATIC_OUTPUTS::UpdateCorner(const CORNER *OriginalCorner, const CORNER *CurrentCorner)
+void KinematicOutputs::UpdateCorner(const CORNER *originalCorner, const CORNER *currentCorner)
 {
 	// Assign pointers to the corner outputs and our sign conventions
-	double *CornerDoubles;
-	Vector *CornerVectors;
-	short Sign;
-	bool IsAtFront = false;
+	double *cornerDoubles;
+	Vector *cornerVectors;
+	short sign;
+	bool isAtFront = false;
 
-	if (OriginalCorner->Location == CORNER::LocationRightFront)
+	if (originalCorner->Location == CORNER::LocationRightFront)
 	{
-		CornerDoubles = RightFront;
-		CornerVectors = RightFrontVectors;
-		Sign = 1;
-		IsAtFront = true;
+		cornerDoubles = rightFront;
+		cornerVectors = rightFrontVectors;
+		sign = 1;
+		isAtFront = true;
 	}
-	else if (OriginalCorner->Location == CORNER::LocationLeftFront)
+	else if (originalCorner->Location == CORNER::LocationLeftFront)
 	{
-		CornerDoubles = LeftFront;
-		CornerVectors = LeftFrontVectors;
-		Sign = -1;
-		IsAtFront = true;
+		cornerDoubles = leftFront;
+		cornerVectors = leftFrontVectors;
+		sign = -1;
+		isAtFront = true;
 	}
-	else if (OriginalCorner->Location == CORNER::LocationRightRear)
+	else if (originalCorner->Location == CORNER::LocationRightRear)
 	{
-		CornerDoubles = RightRear;
-		CornerVectors = RightRearVectors;
-		Sign = 1;
+		cornerDoubles = rightRear;
+		cornerVectors = rightRearVectors;
+		sign = 1;
 	}
-	else if (OriginalCorner->Location == CORNER::LocationLeftRear)
+	else if (originalCorner->Location == CORNER::LocationLeftRear)
 	{
-		CornerDoubles = LeftRear;
-		CornerVectors = LeftRearVectors;
-		Sign = -1;
+		cornerDoubles = leftRear;
+		cornerVectors = leftRearVectors;
+		sign = -1;
 	}
 	else
 	{
 		// Not one of our recognized locations!!!
-		debugger->Print(_T("ERROR:  Corner location not regognized!"), Debugger::PriorityHigh);
+		debugger->Print(_T("ERROR:  Corner location not recognized!"), Debugger::PriorityHigh);
 		return;
 	}
 
 	// Caster [rad]
-	CornerDoubles[Caster] = VVASEMath::RangeToPlusMinusPi(atan2(
-		CurrentCorner->Hardpoints[CORNER::UpperBallJoint].x - CurrentCorner->Hardpoints[CORNER::LowerBallJoint].x,
-		CurrentCorner->Hardpoints[CORNER::UpperBallJoint].z - CurrentCorner->Hardpoints[CORNER::LowerBallJoint].z));
+	cornerDoubles[Caster] = VVASEMath::RangeToPlusMinusPi(atan2(
+		currentCorner->Hardpoints[CORNER::UpperBallJoint].x - currentCorner->Hardpoints[CORNER::LowerBallJoint].x,
+		currentCorner->Hardpoints[CORNER::UpperBallJoint].z - currentCorner->Hardpoints[CORNER::LowerBallJoint].z));
 
 	// KPI [rad]
-	CornerDoubles[KPI] = VVASEMath::RangeToPlusMinusPi(Sign * atan2(
-		CurrentCorner->Hardpoints[CORNER::LowerBallJoint].y - CurrentCorner->Hardpoints[CORNER::UpperBallJoint].y,
-		CurrentCorner->Hardpoints[CORNER::UpperBallJoint].z - CurrentCorner->Hardpoints[CORNER::LowerBallJoint].z));
+	cornerDoubles[KPI] = VVASEMath::RangeToPlusMinusPi(sign * atan2(
+		currentCorner->Hardpoints[CORNER::LowerBallJoint].y - currentCorner->Hardpoints[CORNER::UpperBallJoint].y,
+		currentCorner->Hardpoints[CORNER::UpperBallJoint].z - currentCorner->Hardpoints[CORNER::LowerBallJoint].z));
 
 	// Caster Trail [in]
 	// Note on Caster Trail:  In RCVD p. 713, it is noted that sometimes trail is
-	// meausred perpendicular to the steering axis (instead of as a horizontal
+	// measured perpendicular to the steering axis (instead of as a horizontal
 	// distance, like we do here) because this more accurately describes the
 	// moment arm that connects the tire forces to the kingpin.
-	CornerDoubles[CasterTrail] = CurrentCorner->Hardpoints[CORNER::ContactPatch].x -
-		(CurrentCorner->Hardpoints[CORNER::UpperBallJoint].x - CurrentCorner->Hardpoints[CORNER::UpperBallJoint].z *
-		(CurrentCorner->Hardpoints[CORNER::UpperBallJoint].x - CurrentCorner->Hardpoints[CORNER::LowerBallJoint].x) /
-		(CurrentCorner->Hardpoints[CORNER::UpperBallJoint].z - CurrentCorner->Hardpoints[CORNER::LowerBallJoint].z));
+	cornerDoubles[CasterTrail] = currentCorner->Hardpoints[CORNER::ContactPatch].x -
+		(currentCorner->Hardpoints[CORNER::UpperBallJoint].x - currentCorner->Hardpoints[CORNER::UpperBallJoint].z *
+		(currentCorner->Hardpoints[CORNER::UpperBallJoint].x - currentCorner->Hardpoints[CORNER::LowerBallJoint].x) /
+		(currentCorner->Hardpoints[CORNER::UpperBallJoint].z - currentCorner->Hardpoints[CORNER::LowerBallJoint].z));
 
 	// Scrub Radius [in]
-	CornerDoubles[ScrubRadius] = Sign * (CurrentCorner->Hardpoints[CORNER::ContactPatch].y -
-		 CurrentCorner->Hardpoints[CORNER::UpperBallJoint].y - CurrentCorner->Hardpoints[CORNER::UpperBallJoint].z *
-		(CurrentCorner->Hardpoints[CORNER::LowerBallJoint].y - CurrentCorner->Hardpoints[CORNER::UpperBallJoint].y) /
-		(CurrentCorner->Hardpoints[CORNER::UpperBallJoint].z - CurrentCorner->Hardpoints[CORNER::LowerBallJoint].z));
+	cornerDoubles[ScrubRadius] = sign * (currentCorner->Hardpoints[CORNER::ContactPatch].y -
+		 currentCorner->Hardpoints[CORNER::UpperBallJoint].y - currentCorner->Hardpoints[CORNER::UpperBallJoint].z *
+		(currentCorner->Hardpoints[CORNER::LowerBallJoint].y - currentCorner->Hardpoints[CORNER::UpperBallJoint].y) /
+		(currentCorner->Hardpoints[CORNER::UpperBallJoint].z - currentCorner->Hardpoints[CORNER::LowerBallJoint].z));
 
 	// Spindle Length [in]
 	//  Spindle length is the distance between the wheel center and the steer axis, at the
 	//  height of the wheel center.
-	double t = (CurrentCorner->Hardpoints[CORNER::WheelCenter].z - CurrentCorner->Hardpoints[CORNER::LowerBallJoint].z) /
-		(CurrentCorner->Hardpoints[CORNER::UpperBallJoint].z - CurrentCorner->Hardpoints[CORNER::LowerBallJoint].z);
-	Vector PointOnSteerAxis = CurrentCorner->Hardpoints[CORNER::LowerBallJoint] +
-		(CurrentCorner->Hardpoints[CORNER::UpperBallJoint] - CurrentCorner->Hardpoints[CORNER::LowerBallJoint]) * t;
-	CornerDoubles[SpindleLength] = (PointOnSteerAxis.y - CurrentCorner->Hardpoints[CORNER::WheelCenter].y) /
-		fabs(PointOnSteerAxis.y - CurrentCorner->Hardpoints[CORNER::WheelCenter].y) * Sign *
-		CurrentCorner->Hardpoints[CORNER::WheelCenter].Distance(PointOnSteerAxis);
+	double t = (currentCorner->Hardpoints[CORNER::WheelCenter].z - currentCorner->Hardpoints[CORNER::LowerBallJoint].z) /
+		(currentCorner->Hardpoints[CORNER::UpperBallJoint].z - currentCorner->Hardpoints[CORNER::LowerBallJoint].z);
+	Vector PointOnSteerAxis = currentCorner->Hardpoints[CORNER::LowerBallJoint] +
+		(currentCorner->Hardpoints[CORNER::UpperBallJoint] - currentCorner->Hardpoints[CORNER::LowerBallJoint]) * t;
+	cornerDoubles[SpindleLength] = (PointOnSteerAxis.y - currentCorner->Hardpoints[CORNER::WheelCenter].y) /
+		fabs(PointOnSteerAxis.y - currentCorner->Hardpoints[CORNER::WheelCenter].y) * sign *
+		currentCorner->Hardpoints[CORNER::WheelCenter].Distance(PointOnSteerAxis);
 
 	// Camber and Steer Angle [rad]
-	Vector OriginalWheelPlaneNormal;
-	Vector NewWheelPlaneNormal;
-	Vector Angles;
+	Vector originalWheelPlaneNormal;
+	Vector newWheelPlaneNormal;
+	Vector angles;
 
-	OriginalWheelPlaneNormal = VVASEMath::GetPlaneNormal(
-		OriginalCorner->Hardpoints[CORNER::LowerBallJoint],
-		OriginalCorner->Hardpoints[CORNER::UpperBallJoint],
-		OriginalCorner->Hardpoints[CORNER::OutboardTieRod]);
-	NewWheelPlaneNormal = VVASEMath::GetPlaneNormal(
-		CurrentCorner->Hardpoints[CORNER::LowerBallJoint],
-		CurrentCorner->Hardpoints[CORNER::UpperBallJoint],
-		CurrentCorner->Hardpoints[CORNER::OutboardTieRod]);
+	originalWheelPlaneNormal = VVASEMath::GetPlaneNormal(
+		originalCorner->Hardpoints[CORNER::LowerBallJoint],
+		originalCorner->Hardpoints[CORNER::UpperBallJoint],
+		originalCorner->Hardpoints[CORNER::OutboardTieRod]);
+	newWheelPlaneNormal = VVASEMath::GetPlaneNormal(
+		currentCorner->Hardpoints[CORNER::LowerBallJoint],
+		currentCorner->Hardpoints[CORNER::UpperBallJoint],
+		currentCorner->Hardpoints[CORNER::OutboardTieRod]);
 
 	// Calculate the wheel angles to get the steer angle
-	Angles = OriginalWheelPlaneNormal.AnglesTo(NewWheelPlaneNormal);
-	CornerDoubles[Steer] = Angles.z;
+	angles = originalWheelPlaneNormal.AnglesTo(newWheelPlaneNormal);
+	cornerDoubles[Steer] = angles.z;
 
 	// Rotate the NewWheelPlaneNormal back about Z by the steer angle in preparation for solving for camber
-	NewWheelPlaneNormal.Rotate(CornerDoubles[Steer], Vector::AxisZ);
+	newWheelPlaneNormal.Rotate(cornerDoubles[Steer], Vector::AxisZ);
 
 	// Calculate the wheel angles again, this time we want the camber angle
-	Angles = OriginalWheelPlaneNormal.AnglesTo(NewWheelPlaneNormal);
-	CornerDoubles[Camber] = Sign * Angles.x;
+	angles = originalWheelPlaneNormal.AnglesTo(newWheelPlaneNormal);
+	cornerDoubles[Camber] = sign * angles.x;
 
 	// Add in the effects of static camber and toe settings
-	CornerDoubles[Camber] += CurrentCorner->StaticCamber;
-	CornerDoubles[Steer] += Sign * CurrentCorner->StaticToe;
+	cornerDoubles[Camber] += currentCorner->StaticCamber;
+	cornerDoubles[Steer] += sign * currentCorner->StaticToe;
 
 	// Report Camber and Steer angles between -PI and PI
-	CornerDoubles[Camber] = VVASEMath::RangeToPlusMinusPi(CornerDoubles[Camber]);
-	CornerDoubles[Steer] = VVASEMath::RangeToPlusMinusPi(CornerDoubles[Steer]);
+	cornerDoubles[Camber] = VVASEMath::RangeToPlusMinusPi(cornerDoubles[Camber]);
+	cornerDoubles[Steer] = VVASEMath::RangeToPlusMinusPi(cornerDoubles[Steer]);
 
 	// Spring Displacement [in] - positive is compression
-	CornerDoubles[Spring] = OriginalCorner->Hardpoints[CORNER::InboardSpring].Distance(
-		OriginalCorner->Hardpoints[CORNER::OutboardSpring]) -
-		CurrentCorner->Hardpoints[CORNER::InboardSpring].Distance(
-		CurrentCorner->Hardpoints[CORNER::OutboardSpring]);
+	cornerDoubles[Spring] = originalCorner->Hardpoints[CORNER::InboardSpring].Distance(
+		originalCorner->Hardpoints[CORNER::OutboardSpring]) -
+		currentCorner->Hardpoints[CORNER::InboardSpring].Distance(
+		currentCorner->Hardpoints[CORNER::OutboardSpring]);
 
 	// Shock Displacement [in] - positive is compression
-	CornerDoubles[Shock] = OriginalCorner->Hardpoints[CORNER::InboardShock].Distance(
-		OriginalCorner->Hardpoints[CORNER::OutboardShock]) -
-		CurrentCorner->Hardpoints[CORNER::InboardShock].Distance(
-		CurrentCorner->Hardpoints[CORNER::OutboardShock]);
+	cornerDoubles[Shock] = originalCorner->Hardpoints[CORNER::InboardShock].Distance(
+		originalCorner->Hardpoints[CORNER::OutboardShock]) -
+		currentCorner->Hardpoints[CORNER::InboardShock].Distance(
+		currentCorner->Hardpoints[CORNER::OutboardShock]);
 
 	// Scrub [in]
-	CornerDoubles[Scrub] = Sign * (CurrentCorner->Hardpoints[CORNER::ContactPatch].y -
-		OriginalCorner->Hardpoints[CORNER::ContactPatch].y);
+	cornerDoubles[Scrub] = sign * (currentCorner->Hardpoints[CORNER::ContactPatch].y -
+		originalCorner->Hardpoints[CORNER::ContactPatch].y);
 
 	// Axle Plunge [in] - positive is shortened
-	if ((CurrentCar->HasFrontHalfShafts() && IsAtFront) || (CurrentCar->HasRearHalfShafts() && !IsAtFront))
-		CornerDoubles[AxlePlunge] =
-			OriginalCorner->Hardpoints[CORNER::InboardHalfShaft].Distance(
-			OriginalCorner->Hardpoints[CORNER::OutboardHalfShaft]) -
-			CurrentCorner->Hardpoints[CORNER::InboardHalfShaft].Distance(
-			CurrentCorner->Hardpoints[CORNER::OutboardHalfShaft]);
+	if ((currentCar->HasFrontHalfShafts() && isAtFront) || (currentCar->HasRearHalfShafts() && !isAtFront))
+		cornerDoubles[AxlePlunge] =
+			originalCorner->Hardpoints[CORNER::InboardHalfShaft].Distance(
+			originalCorner->Hardpoints[CORNER::OutboardHalfShaft]) -
+			currentCorner->Hardpoints[CORNER::InboardHalfShaft].Distance(
+			currentCorner->Hardpoints[CORNER::OutboardHalfShaft]);
 
 	// Kinematic Instant Centers and Direction Vectors [in], [-]
 	//  The instant centers here will be defined as the point that lies both on the
@@ -560,32 +558,32 @@ void KINEMATIC_OUTPUTS::UpdateCorner(const CORNER *OriginalCorner, const CORNER 
 	//  lower control arm planes.  The direction vector can be determined by taking
 	//  the cross product of the normal vectors for the upper and lower control arm
 	//  planes.
-	Vector UpperPlaneNormal;
-	Vector LowerPlaneNormal;
+	Vector upperPlaneNormal;
+	Vector lowerPlaneNormal;
 
-	UpperPlaneNormal = VVASEMath::GetPlaneNormal(CurrentCorner->Hardpoints[CORNER::UpperBallJoint],
-		CurrentCorner->Hardpoints[CORNER::UpperFrontTubMount], CurrentCorner->Hardpoints[CORNER::UpperRearTubMount]);
-	LowerPlaneNormal = VVASEMath::GetPlaneNormal(CurrentCorner->Hardpoints[CORNER::LowerBallJoint],
-		CurrentCorner->Hardpoints[CORNER::LowerFrontTubMount], CurrentCorner->Hardpoints[CORNER::LowerRearTubMount]);
+	upperPlaneNormal = VVASEMath::GetPlaneNormal(currentCorner->Hardpoints[CORNER::UpperBallJoint],
+		currentCorner->Hardpoints[CORNER::UpperFrontTubMount], currentCorner->Hardpoints[CORNER::UpperRearTubMount]);
+	lowerPlaneNormal = VVASEMath::GetPlaneNormal(currentCorner->Hardpoints[CORNER::LowerBallJoint],
+		currentCorner->Hardpoints[CORNER::LowerFrontTubMount], currentCorner->Hardpoints[CORNER::LowerRearTubMount]);
 
-	if (!VVASEMath::GetIntersectionOfTwoPlanes(UpperPlaneNormal, CurrentCorner->Hardpoints[CORNER::UpperBallJoint],
-		LowerPlaneNormal, CurrentCorner->Hardpoints[CORNER::LowerBallJoint], 
-		CornerVectors[InstantAxisDirection], CornerVectors[InstantCenter]))
-		debugger->Print(_T("Warning (KINEMATIC_OUTPUTS::UpdateCorner):  Instant Center is undefined"),
+	if (!VVASEMath::GetIntersectionOfTwoPlanes(upperPlaneNormal, currentCorner->Hardpoints[CORNER::UpperBallJoint],
+		lowerPlaneNormal, currentCorner->Hardpoints[CORNER::LowerBallJoint], 
+		cornerVectors[InstantAxisDirection], cornerVectors[InstantCenter]))
+		debugger->Print(_T("Warning (KinematicOutputs::UpdateCorner):  Instant Center is undefined"),
 			Debugger::PriorityHigh);
 	else
 	{
 		// We now have the axis direction and a point on the axis, but we want a specific
 		// point on the axis.  To do that, we determine the place where this vector passes through
 		// the appropriate plane.
-		Vector PlaneNormal(1.0, 0.0, 0.0);
+		Vector planeNormal(1.0, 0.0, 0.0);
 
-		CornerVectors[InstantCenter] = VVASEMath::IntersectWithPlane(PlaneNormal, CurrentCorner->Hardpoints[CORNER::WheelCenter],
-			CornerVectors[InstantAxisDirection], CornerVectors[InstantCenter]);
+		cornerVectors[InstantCenter] = VVASEMath::IntersectWithPlane(planeNormal, currentCorner->Hardpoints[CORNER::WheelCenter],
+			cornerVectors[InstantAxisDirection], cornerVectors[InstantCenter]);
 	}
 
 	// Apply the sign correction, if necessary
-	CornerVectors[InstantAxisDirection] *= Sign;
+	cornerVectors[InstantAxisDirection] *= sign;
 
 	// About the installation ratios (= 1 / motion ratio):
 	//  This is derived from calculating forces acting through the system of bodies.
@@ -593,8 +591,8 @@ void KINEMATIC_OUTPUTS::UpdateCorner(const CORNER *OriginalCorner, const CORNER 
 	//  force applied to the spring?  Use the instant center of rotation of
 	//  the upper and lower control arms to get the leverage of the wheel over the
 	//  push/pullrod.  Determine how the force is reacted through the push/pullrod,
-	//  then how the bell crank leverage changes the force.  Then we empoly the principle
-	//  of virtual work to find the relatationship between displacements based on the
+	//  then how the bell crank leverage changes the force.  Then we employ the principle
+	//  of virtual work to find the relationship between displacements based on the
 	//  relationship between the forces.  More detail is given for the spring motion
 	//  ratio, but the shock motion ratio is computed using the same process.
 
@@ -603,128 +601,128 @@ void KINEMATIC_OUTPUTS::UpdateCorner(const CORNER *OriginalCorner, const CORNER 
 	// the force that is reacted through the control arm.
 	// Note that this procedure varies slightly depending on what component the pushrod is
 	// attached to on the outboard suspension.
-	Vector Force(0.0, 0.0, 1.0);// Applied to the wheel center
+	Vector force(0.0, 0.0, 1.0);// Applied to the wheel center
 
-	Vector MomentDirection;
-	double MomentMagnitude;
-	Vector MomentArm;
+	Vector momentDirection;
+	double momentMagnitude;
+	Vector momentArm;
 
-	Vector PointOnAxis;
-	Vector ForceDirection;
+	Vector pointOnAxis;
+	Vector forceDirection;
 
 	// This changes depending on what is actuating the shock/spring (outer in..else)
 	// and also with what the pushrod or spring/shock attach to on the outer suspension (inner
 	// if..else)
-	if (CurrentCorner->ActuationType == CORNER::ActuationPushPullrod)
+	if (currentCorner->ActuationType == CORNER::ActuationPushPullrod)
 	{
 		// If the actuator attaches to the lower control arm
-		if (CurrentCorner->ActuationAttachment == CORNER::AttachmentLowerAArm)
+		if (currentCorner->ActuationAttachment == CORNER::AttachmentLowerAArm)
 		{
 			// Identify the rotation axis and a point on that axis
-			PointOnAxis = CornerVectors[InstantCenter];
+			pointOnAxis = cornerVectors[InstantCenter];
 
 			// The moment arm is any vector from the instantaneous axis of rotation to the point
 			// where the force is being applied (the wheel center here).
-			MomentArm = CurrentCorner->Hardpoints[CORNER::WheelCenter] - PointOnAxis;
+			momentArm = currentCorner->Hardpoints[CORNER::WheelCenter] - pointOnAxis;
 
 			// The magnitude of the moment is determined by the cross product of the moment arm
 			// and the force vector, but then we also take the dot product with the axis direction.
 			// This reduces the total moment to account for the portion of it that is reacted through
 			// structure and does not actually contribute to the moment.
-			MomentDirection = CornerVectors[InstantAxisDirection];
-			MomentMagnitude = MomentArm.Cross(Force) * MomentDirection.Normalize();
+			momentDirection = cornerVectors[InstantAxisDirection];
+			momentMagnitude = momentArm.Cross(force) * momentDirection.Normalize();
 
 			// The force at the ball joint is determined by dividing the moment by a new moment arm,
 			// which is a vector from the axis of rotation to the ball joint (instead of the wheel
 			// center like we used above).  We don't just take any point this time, instead we take
 			// the point on the axis that is closest to the new force application point (ball joint).
-			MomentArm = CurrentCorner->Hardpoints[CORNER::LowerBallJoint] - VVASEMath::NearestPointOnAxis(
-				PointOnAxis, MomentDirection, CurrentCorner->Hardpoints[CORNER::LowerBallJoint]);
+			momentArm = currentCorner->Hardpoints[CORNER::LowerBallJoint] - VVASEMath::NearestPointOnAxis(
+				pointOnAxis, momentDirection, currentCorner->Hardpoints[CORNER::LowerBallJoint]);
 
 			// Calculate the force acting on the lower ball joint
-			Force =  MomentDirection.Cross(MomentArm).Normalize() * MomentMagnitude / MomentArm.Length();
+			force =  momentDirection.Cross(momentArm).Normalize() * momentMagnitude / momentArm.Length();
 
 			// The next step is calculating the force through the pushrod
 			// Again, find the pivot axis and moment arm.
-			PointOnAxis = CurrentCorner->Hardpoints[CORNER::LowerFrontTubMount];
-			MomentArm = CurrentCorner->Hardpoints[CORNER::LowerBallJoint] - PointOnAxis;
-			MomentDirection = CurrentCorner->Hardpoints[CORNER::LowerRearTubMount] - PointOnAxis;
+			pointOnAxis = currentCorner->Hardpoints[CORNER::LowerFrontTubMount];
+			momentArm = currentCorner->Hardpoints[CORNER::LowerBallJoint] - pointOnAxis;
+			momentDirection = currentCorner->Hardpoints[CORNER::LowerRearTubMount] - pointOnAxis;
 
 			// Given the above information, we can calculate the moment magnitude in the same manner
 			// as we did previously
-			MomentMagnitude = MomentArm.Cross(Force) * MomentDirection.Normalize();
+			momentMagnitude = momentArm.Cross(force) * momentDirection.Normalize();
 
 			// Again, calculate the force required of the pushrod on the lower A-arm to create the moment
-			MomentArm = CurrentCorner->Hardpoints[CORNER::OutboardPushrod] - VVASEMath::NearestPointOnAxis(
-				PointOnAxis, MomentDirection, CurrentCorner->Hardpoints[CORNER::OutboardPushrod]);
-			Force = MomentDirection.Cross(MomentArm).Normalize() * MomentMagnitude / MomentArm.Length();
+			momentArm = currentCorner->Hardpoints[CORNER::OutboardPushrod] - VVASEMath::NearestPointOnAxis(
+				pointOnAxis, momentDirection, currentCorner->Hardpoints[CORNER::OutboardPushrod]);
+			force = momentDirection.Cross(momentArm).Normalize() * momentMagnitude / momentArm.Length();
 		}
-		else if (CurrentCorner->ActuationAttachment == CORNER::AttachmentUpperAArm)
+		else if (currentCorner->ActuationAttachment == CORNER::AttachmentUpperAArm)
 		{
 			// Identify the rotation axis and a point on that axis
-			PointOnAxis = CornerVectors[InstantCenter];
+			pointOnAxis = cornerVectors[InstantCenter];
 
 			// The moment arm is any vector from the instantaneous axis of rotation to the point
 			// where the force is being applied (the wheel center here).
-			MomentArm = CurrentCorner->Hardpoints[CORNER::WheelCenter] - PointOnAxis;
+			momentArm = currentCorner->Hardpoints[CORNER::WheelCenter] - pointOnAxis;
 
 			// The magnitude of the moment is determined by the cross product of the moment arm
 			// and the force vector, but then we also take the dot product with the axis direction.
 			// This reduces the total moment to account for the portion of it that is reacted through
 			// structure and does not actually contribute to the moment.
-			MomentDirection = CornerVectors[InstantAxisDirection];
-			MomentMagnitude = MomentArm.Cross(Force) * MomentDirection.Normalize();
+			momentDirection = cornerVectors[InstantAxisDirection];
+			momentMagnitude = momentArm.Cross(Force) * momentDirection.Normalize();
 
 			// The force at the ball joint is determined by dividing the moment by a new moment arm,
 			// which is a vector from the axis of rotation to the ball joint (instead of the wheel
 			// center like we used above).  We don't just take any point this time, instead we take
 			// the point on the axis that is closest to the new force application point (ball joint).
-			MomentArm = CurrentCorner->Hardpoints[CORNER::UpperBallJoint] - VVASEMath::NearestPointOnAxis(
-				PointOnAxis, MomentDirection, CurrentCorner->Hardpoints[CORNER::UpperBallJoint]);
+			momentArm = currentCorner->Hardpoints[CORNER::UpperBallJoint] - VVASEMath::NearestPointOnAxis(
+				pointOnAxis, momentDirection, currentCorner->Hardpoints[CORNER::UpperBallJoint]);
 
 			// Calculate the force acting on the upper ball joint
-			Force =  MomentDirection.Cross(MomentArm).Normalize() * MomentMagnitude / MomentArm.Length();
+			force =  momentDirection.Cross(momentArm).Normalize() * momentMagnitude / momentArm.Length();
 
 			// The next step is calculating the force through the pullrod
 			// Again, find the pivot axis and moment arm.
-			PointOnAxis = CurrentCorner->Hardpoints[CORNER::UpperFrontTubMount];
-			MomentArm = CurrentCorner->Hardpoints[CORNER::UpperBallJoint] - PointOnAxis;
-			MomentDirection = CurrentCorner->Hardpoints[CORNER::UpperRearTubMount] - PointOnAxis;
+			pointOnAxis = currentCorner->Hardpoints[CORNER::UpperFrontTubMount];
+			momentArm = currentCorner->Hardpoints[CORNER::UpperBallJoint] - pointOnAxis;
+			momentDirection = currentCorner->Hardpoints[CORNER::UpperRearTubMount] - pointOnAxis;
 
 			// Given the above information, we can calculate the moment magnitude in the same manner
 			// as we did previously
-			MomentMagnitude = MomentArm.Cross(Force) * MomentDirection.Normalize();
+			momentMagnitude = momentArm.Cross(force) * momentDirection.Normalize();
 
 			// Again, calculate the force required of the pushrod on the upper A-arm to create the moment
-			MomentArm = CurrentCorner->Hardpoints[CORNER::OutboardPushrod] - VVASEMath::NearestPointOnAxis(
-				PointOnAxis, MomentDirection, CurrentCorner->Hardpoints[CORNER::OutboardPushrod]);
-			Force = MomentDirection.Cross(MomentArm).Normalize() * MomentMagnitude / MomentArm.Length();
+			momentArm = currentCorner->Hardpoints[CORNER::OutboardPushrod] - VVASEMath::NearestPointOnAxis(
+				pointOnAxis, momentDirection, currentCorner->Hardpoints[CORNER::OutboardPushrod]);
+			force = momentDirection.Cross(momentArm).Normalize() * momentMagnitude / momentArm.Length();
 		}
-		else if (CurrentCorner->ActuationAttachment == CORNER::AttachmentUpright)
+		else if (currentCorner->ActuationAttachment == CORNER::AttachmentUpright)
 		{
 			// Identify the rotation axis and a point on that axis
-			PointOnAxis = CornerVectors[InstantCenter];
+			pointOnAxis = cornerVectors[InstantCenter];
 
 			// The moment arm is any vector from the instantaneous axis of rotation to the point
 			// where the force is being applied (the wheel center here).
-			MomentArm = CurrentCorner->Hardpoints[CORNER::WheelCenter] - PointOnAxis;
+			momentArm = currentCorner->Hardpoints[CORNER::WheelCenter] - pointOnAxis;
 
 			// The magnitude of the moment is determined by the cross product of the moment arm
 			// and the force vector, but then we also take the dot product with the axis direction.
 			// This reduces the total moment to account for the portion of it that is reacted through
 			// structure and does not actually contribute to the moment.
-			MomentDirection = CornerVectors[InstantAxisDirection];
-			MomentMagnitude = MomentArm.Cross(Force) * MomentDirection.Normalize();
+			momentDirection = cornerVectors[InstantAxisDirection];
+			momentMagnitude = momentArm.Cross(force) * momentDirection.Normalize();
 
 			// The force at the ball joint is determined by dividing the moment by a new moment arm,
 			// which is a vector from the axis of rotation to the ball joint (instead of the wheel
 			// center like we used above).  We don't just take any point this time, instead we take
 			// the point on the axis that is closest to the new force application point (ball joint).
-			MomentArm = CurrentCorner->Hardpoints[CORNER::OutboardPushrod] - VVASEMath::NearestPointOnAxis(
-				PointOnAxis, MomentDirection, CurrentCorner->Hardpoints[CORNER::OutboardPushrod]);
+			momentArm = currentCorner->Hardpoints[CORNER::OutboardPushrod] - VVASEMath::NearestPointOnAxis(
+				pointOnAxis, momentDirection, currentCorner->Hardpoints[CORNER::OutboardPushrod]);
 
 			// Calculate the force acting on the pushrod
-			Force =  MomentDirection.Cross(MomentArm).Normalize() * MomentMagnitude / MomentArm.Length();
+			force =  momentDirection.Cross(momentArm).Normalize() * momentMagnitude / momentArm.Length();
 		}
 
 		// After computing the force through the push/pullrod, the procedure is the same regardless
@@ -732,27 +730,27 @@ void KINEMATIC_OUTPUTS::UpdateCorner(const CORNER *OriginalCorner, const CORNER 
 
 		// The force from the pushrod creating the moment is not the only portion of the pushrod force.
 		// The next step is to compute the total force through the pushrod.
-		ForceDirection = (CurrentCorner->Hardpoints[CORNER::InboardPushrod]
-			- CurrentCorner->Hardpoints[CORNER::OutboardPushrod]).Normalize();
-		Force = ForceDirection * Force.Length() / (Force.Normalize() * ForceDirection);
+		forceDirection = (currentCorner->Hardpoints[CORNER::InboardPushrod]
+			- currentCorner->Hardpoints[CORNER::OutboardPushrod]).Normalize();
+		force = forceDirection * force.Length() / (force.Normalize() * forceDirection);
 
 		// Now we can calculate the forces acting on the shock and spring from the rotation of the
 		// bellcrank about its axis.
-		PointOnAxis = CurrentCorner->Hardpoints[CORNER::BellCrankPivot1];
-		MomentArm = CurrentCorner->Hardpoints[CORNER::InboardPushrod] - PointOnAxis;
-		MomentDirection = CurrentCorner->Hardpoints[CORNER::BellCrankPivot2] - PointOnAxis;
-		MomentMagnitude = MomentArm.Cross(Force) * MomentDirection.Normalize();
+		pointOnAxis = currentCorner->Hardpoints[CORNER::BellCrankPivot1];
+		momentArm = currentCorner->Hardpoints[CORNER::InboardPushrod] - pointOnAxis;
+		momentDirection = currentCorner->Hardpoints[CORNER::BellCrankPivot2] - pointOnAxis;
+		momentMagnitude = momentArm.Cross(Force) * momentDirection.Normalize();
 
 		// Spring force
-		MomentArm = CurrentCorner->Hardpoints[CORNER::OutboardSpring] - VVASEMath::NearestPointOnAxis(
-			PointOnAxis, MomentDirection, CurrentCorner->Hardpoints[CORNER::OutboardSpring]);
-		Force = MomentDirection.Cross(MomentArm).Normalize() * MomentMagnitude / MomentArm.Length();
+		momentArm = currentCorner->Hardpoints[CORNER::OutboardSpring] - VVASEMath::NearestPointOnAxis(
+			pointOnAxis, momentDirection, currentCorner->Hardpoints[CORNER::OutboardSpring]);
+		force = momentDirection.Cross(momentArm).Normalize() * momentMagnitude / momentArm.Length();
 
 		// Determine the force required in the direction of the spring (like we did for the force
 		// through the push/pullrod)
-		ForceDirection = (CurrentCorner->Hardpoints[CORNER::InboardSpring]
-		- CurrentCorner->Hardpoints[CORNER::OutboardSpring]).Normalize();
-		Force = ForceDirection * Force.Length() / (Force.Normalize() * ForceDirection);
+		forceDirection = (currentCorner->Hardpoints[CORNER::InboardSpring]
+		- currentCorner->Hardpoints[CORNER::OutboardSpring]).Normalize();
+		force = forceDirection * force.Length() / (force.Normalize() * forceDirection);
 
 		// From the principle of virtual work we have these relationships:
 		//  VirtualWork = ForceAtWheelCenter * VirtualDisplacement1
@@ -762,218 +760,218 @@ void KINEMATIC_OUTPUTS::UpdateCorner(const CORNER *OriginalCorner, const CORNER 
 		//  VirtualDisplacement2 = 1.0 / Magnitude(ReactionAtSpring);
 		// We add the sign of the dot product between the force and force direction to provide a means
 		// of identifying cases where the shock/spring move the "wrong" way (extend in jounce).
-		CornerDoubles[SpringInstallationRatio] = 1.0 / Force.Length()
-			* VVASEMath::Sign(Force.Normalize() * ForceDirection.Normalize());
+		cornerDoubles[SpringInstallationRatio] = 1.0 / force.Length()
+			* VVASEMath::Sign(force.Normalize() * forceDirection.Normalize());
 
 		// Shock force
-		MomentArm = CurrentCorner->Hardpoints[CORNER::OutboardShock] - VVASEMath::NearestPointOnAxis(
-			PointOnAxis, MomentDirection, CurrentCorner->Hardpoints[CORNER::OutboardShock]);
-		Force = MomentDirection.Cross(MomentArm).Normalize() * MomentMagnitude / MomentArm.Length();
+		momentArm = currentCorner->Hardpoints[CORNER::OutboardShock] - VVASEMath::NearestPointOnAxis(
+			pointOnAxis, momentDirection, currentCorner->Hardpoints[CORNER::OutboardShock]);
+		force = momentDirection.Cross(momentArm).Normalize() * momentMagnitude / momentArm.Length();
 
 		// Determine the force required in the direction of the shock
-		ForceDirection = (CurrentCorner->Hardpoints[CORNER::InboardShock]
-		- CurrentCorner->Hardpoints[CORNER::OutboardShock]).Normalize();
-		Force = ForceDirection * Force.Length() / (Force.Normalize() * ForceDirection);
-		CornerDoubles[ShockInstallationRatio] = 1.0 / Force.Length()
-			* VVASEMath::Sign(Force.Normalize() * ForceDirection.Normalize());
+		forceDirection = (currentCorner->Hardpoints[CORNER::InboardShock]
+		- currentCorner->Hardpoints[CORNER::OutboardShock]).Normalize();
+		force = forceDirection * force.Length() / (force.Normalize() * forceDirection);
+		cornerDoubles[ShockInstallationRatio] = 1.0 / force.Length()
+			* VVASEMath::Sign(force.Normalize() * forceDirection.Normalize());
 	}
-	else if (CurrentCorner->ActuationType == CORNER::ActuationOutboard)
+	else if (currentCorner->ActuationType == CORNER::ActuationOutboard)
 	{
 		// This part is identical to the beginning of the previous section,
 		// but the spring/shock take the place of the pushrod, so the installation
 		// ratios are calculated with those forces.
 
 		// If the actuator attaches to the lower control arm
-		if (CurrentCorner->ActuationAttachment == CORNER::AttachmentLowerAArm)
+		if (currentCorner->ActuationAttachment == CORNER::AttachmentLowerAArm)
 		{
 			// Identify the rotation axis and a point on that axis
-			PointOnAxis = CornerVectors[InstantCenter];
+			pointOnAxis = cornerVectors[InstantCenter];
 
 			// The moment arm is any vector from the instantaneous axis of rotation to the point
 			// where the force is being applied (the wheel center here).
-			MomentArm = CurrentCorner->Hardpoints[CORNER::WheelCenter] - PointOnAxis;
+			momentArm = currentCorner->Hardpoints[CORNER::WheelCenter] - pointOnAxis;
 
 			// The magnitude of the moment is determined by the cross product of the moment arm
 			// and the force vector, but then we also take the dot product with the axis direction.
 			// This reduces the total moment to account for the portion of it that is reacted through
 			// structure and does not actually contribute to the moment.
-			MomentDirection = CornerVectors[InstantAxisDirection];
-			MomentMagnitude = MomentArm.Cross(Force) * MomentDirection.Normalize();
+			momentDirection = cornerVectors[InstantAxisDirection];
+			momentMagnitude = momentArm.Cross(force) * momentDirection.Normalize();
 
 			// The force at the ball joint is determined by dividing the moment by a new moment arm,
 			// which is a vector from the axis of rotation to the ball joint (instead of the wheel
 			// center like we used above).  We don't just take any point this time, instead we take
 			// the point on the axis that is closest to the new force application point (ball joint).
-			MomentArm = CurrentCorner->Hardpoints[CORNER::LowerBallJoint] - VVASEMath::NearestPointOnAxis(
-				PointOnAxis, MomentDirection, CurrentCorner->Hardpoints[CORNER::LowerBallJoint]);
+			momentArm = currentCorner->Hardpoints[CORNER::LowerBallJoint] - VVASEMath::NearestPointOnAxis(
+				pointOnAxis, momentDirection, currentCorner->Hardpoints[CORNER::LowerBallJoint]);
 
 			// Calculate the force acting on the lower ball joint
-			Force =  MomentDirection.Cross(MomentArm).Normalize() * MomentMagnitude / MomentArm.Length();
+			force =  momentDirection.Cross(momentArm).Normalize() * momentMagnitude / momentArm.Length();
 
 			// The next step is calculating the force through shock and spring.
 			// Again, find the pivot axis and moment arm.
-			PointOnAxis = CurrentCorner->Hardpoints[CORNER::LowerFrontTubMount];
-			MomentArm = CurrentCorner->Hardpoints[CORNER::LowerBallJoint] - PointOnAxis;
-			MomentDirection = CurrentCorner->Hardpoints[CORNER::LowerRearTubMount] - PointOnAxis;
+			pointOnAxis = currentCorner->Hardpoints[CORNER::LowerFrontTubMount];
+			momentArm = currentCorner->Hardpoints[CORNER::LowerBallJoint] - pointOnAxis;
+			momentDirection = currentCorner->Hardpoints[CORNER::LowerRearTubMount] - pointOnAxis;
 
 			// Given the above information, we can calculate the moment magnitude in the same manner
 			// as we did previously
-			MomentMagnitude = MomentArm.Cross(Force) * MomentDirection.Normalize();
+			momentMagnitude = momentArm.Cross(force) * momentDirection.Normalize();
 		}
-		else if (CurrentCorner->ActuationAttachment == CORNER::AttachmentUpperAArm)
+		else if (currentCorner->ActuationAttachment == CORNER::AttachmentUpperAArm)
 		{
 			// Identify the rotation axis and a point on that axis
-			PointOnAxis = CornerVectors[InstantCenter];
+			pointOnAxis = cornerVectors[InstantCenter];
 
 			// The moment arm is any vector from the instantaneous axis of rotation to the point
 			// where the force is being applied (the wheel center here).
-			MomentArm = CurrentCorner->Hardpoints[CORNER::WheelCenter] - PointOnAxis;
+			momentArm = currentCorner->Hardpoints[CORNER::WheelCenter] - pointOnAxis;
 
 			// The magnitude of the moment is determined by the cross product of the moment arm
 			// and the force vector, but then we also take the dot product with the axis direction.
 			// This reduces the total moment to account for the portion of it that is reacted through
 			// structure and does not actually contribute to the moment.
-			MomentDirection = CornerVectors[InstantAxisDirection];
-			MomentMagnitude = MomentArm.Cross(Force) * MomentDirection.Normalize();
+			momentDirection = cornerVectors[InstantAxisDirection];
+			momentMagnitude = momentArm.Cross(force) * momentDirection.Normalize();
 
 			// The force at the ball joint is determined by dividing the moment by a new moment arm,
 			// which is a vector from the axis of rotation to the ball joint (instead of the wheel
 			// center like we used above).  We don't just take any point this time, instead we take
 			// the point on the axis that is closest to the new force application point (ball joint).
-			MomentArm = CurrentCorner->Hardpoints[CORNER::UpperBallJoint] - VVASEMath::NearestPointOnAxis(
-				PointOnAxis, MomentDirection, CurrentCorner->Hardpoints[CORNER::UpperBallJoint]);
+			momentArm = currentCorner->Hardpoints[CORNER::UpperBallJoint] - VVASEMath::NearestPointOnAxis(
+				pointOnAxis, momentDirection, currentCorner->Hardpoints[CORNER::UpperBallJoint]);
 
 			// Calculate the force acting on the upper ball joint
-			Force =  MomentDirection.Cross(MomentArm).Normalize() * MomentMagnitude / MomentArm.Length();
+			force =  momentDirection.Cross(momentArm).Normalize() * momentMagnitude / momentArm.Length();
 
 			// The next step is calculating the force through shock and spring.
 			// Again, find the pivot axis and moment arm.
-			PointOnAxis = CurrentCorner->Hardpoints[CORNER::UpperFrontTubMount];
-			MomentArm = CurrentCorner->Hardpoints[CORNER::UpperBallJoint] - PointOnAxis;
-			MomentDirection = CurrentCorner->Hardpoints[CORNER::UpperRearTubMount] - PointOnAxis;
+			pointOnAxis = currentCorner->Hardpoints[CORNER::UpperFrontTubMount];
+			momentArm = currentCorner->Hardpoints[CORNER::UpperBallJoint] - pointOnAxis;
+			momentDirection = currentCorner->Hardpoints[CORNER::UpperRearTubMount] - pointOnAxis;
 
 			// Given the above information, we can calculate the moment magnitude in the same manner
 			// as we did previously
-			MomentMagnitude = MomentArm.Cross(Force) * MomentDirection.Normalize();
+			momentMagnitude = momentArm.Cross(force) * momentDirection.Normalize();
 		}
-		else if (CurrentCorner->ActuationAttachment == CORNER::AttachmentUpright)
+		else if (currentCorner->ActuationAttachment == CORNER::AttachmentUpright)
 		{
 			// Identify the rotation axis and a point on that axis
-			PointOnAxis = CornerVectors[InstantCenter];
+			pointOnAxis = cornerVectors[InstantCenter];
 
 			// The moment arm is any vector from the instantaneous axis of rotation to the point
 			// where the force is being applied (the wheel center here).
-			MomentArm = CurrentCorner->Hardpoints[CORNER::WheelCenter] - PointOnAxis;
+			momentArm = currentCorner->Hardpoints[CORNER::WheelCenter] - pointOnAxis;
 
 			// The magnitude of the moment is determined by the cross product of the moment arm
 			// and the force vector, but then we also take the dot product with the axis direction.
 			// This reduces the total moment to account for the portion of it that is reacted through
 			// structure and does not actually contribute to the moment.
-			MomentDirection = CornerVectors[InstantAxisDirection];
-			MomentMagnitude = MomentArm.Cross(Force) * MomentDirection.Normalize();
+			momentDirection = cornerVectors[InstantAxisDirection];
+			momentMagnitude = momentArm.Cross(force) * momentDirection.Normalize();
 		}
 
 		// The rest of the procedure is identical regardless of the suspension configuration
 		// Resolve the moment into forces acting on the spring and shock
 
 		// Spring force
-		MomentArm = CurrentCorner->Hardpoints[CORNER::OutboardSpring] - VVASEMath::NearestPointOnAxis(
-			PointOnAxis, MomentDirection, CurrentCorner->Hardpoints[CORNER::OutboardSpring]);
-		Force = MomentDirection.Cross(MomentArm).Normalize() * MomentMagnitude / MomentArm.Length();
+		momentArm = currentCorner->Hardpoints[CORNER::OutboardSpring] - VVASEMath::NearestPointOnAxis(
+			pointOnAxis, momentDirection, currentCorner->Hardpoints[CORNER::OutboardSpring]);
+		force = momentDirection.Cross(momentArm).Normalize() * momentMagnitude / momentArm.Length();
 
 		// Determine the force required in the direction of the spring (like we did for the force
 		// through the push/pullrod)
-		ForceDirection = (CurrentCorner->Hardpoints[CORNER::InboardSpring]
-		- CurrentCorner->Hardpoints[CORNER::OutboardSpring]).Normalize();
-		Force = ForceDirection * Force.Length() / (Force.Normalize() * ForceDirection);
+		forceDirection = (currentCorner->Hardpoints[CORNER::InboardSpring]
+		- currentCorner->Hardpoints[CORNER::OutboardSpring]).Normalize();
+		force = forceDirection * force.Length() / (force.Normalize() * forceDirection);
 
 		// From the principle of virtual work we have these relationships:
-		//  VirtualWork = ForceAtWheelCenter * VirtualDisplacement1
+		//  VirtualWork = forceAtWheelCenter * VirtualDisplacement1
 		//  VirtualWork = ReactionAtSpring * VirtualDisplacement2
 		// From the first equation, we know VirtualWork is 1.0 * VirtualDisplacement1.z.
 		// We can choose 1.0 for VirtualDisplacement1.z, so now we have the following:
 		//  VirtualDisplacement2 = 1.0 / Magnitude(ReactionAtSpring);
 		// We add the sign of the dot product between the force and force direction to provide a means
 		// of identifying cases where the shock/spring move the "wrong" way (extend in jounce).
-		CornerDoubles[SpringInstallationRatio] = 1.0 / Force.Length()
-			* VVASEMath::Sign(Force.Normalize() * ForceDirection.Normalize());
+		cornerDoubles[SpringInstallationRatio] = 1.0 / force.Length()
+			* VVASEMath::Sign(force.Normalize() * forceDirection.Normalize());
 
 		// Shock force
-		MomentArm = CurrentCorner->Hardpoints[CORNER::OutboardShock] - VVASEMath::NearestPointOnAxis(
-			PointOnAxis, MomentDirection, CurrentCorner->Hardpoints[CORNER::OutboardShock]);
-		Force = MomentDirection.Cross(MomentArm).Normalize() * MomentMagnitude / MomentArm.Length();
+		momentArm = currentCorner->Hardpoints[CORNER::OutboardShock] - VVASEMath::NearestPointOnAxis(
+			pointOnAxis, momentDirection, currentCorner->Hardpoints[CORNER::OutboardShock]);
+		force = momentDirection.Cross(momentArm).Normalize() * momentMagnitude / momentArm.Length();
 
 		// Determine the force required in the direction of the shock
-		ForceDirection = (CurrentCorner->Hardpoints[CORNER::InboardShock]
-		- CurrentCorner->Hardpoints[CORNER::OutboardShock]).Normalize();
-		Force = ForceDirection * Force.Length() / (Force.Normalize() * ForceDirection);
-		CornerDoubles[ShockInstallationRatio] = 1.0 / Force.Length()
-			* VVASEMath::Sign(Force.Normalize() * ForceDirection.Normalize());
+		forceDirection = (currentCorner->Hardpoints[CORNER::InboardShock]
+		- currentCorner->Hardpoints[CORNER::OutboardShock]).Normalize();
+		force = forceDirection * force.Length() / (force.Normalize() * forceDirection);
+		cornerDoubles[ShockInstallationRatio] = 1.0 / force.Length()
+			* VVASEMath::Sign(force.Normalize() * forceDirection.Normalize());
 	}
 
 	// Side View Swing Arm Length [in]
 	// Find the plane that contains the wheel center and has the Y direction as a
 	// normal, and find the intersection of the Instant Axis and that plane. This
 	// vector's X-coordinate is the SVSA length.
-	Vector PlaneNormal(0.0, 1.0, 0.0);
-	Vector Intersection;
+	Vector planeNormal(0.0, 1.0, 0.0);
+	Vector intersection;
 
 	// Get the intersection of the Instant Center with this plane
-	Intersection = VVASEMath::IntersectWithPlane(PlaneNormal, CurrentCorner->Hardpoints[CORNER::WheelCenter],
-		CornerVectors[InstantAxisDirection], CornerVectors[InstantCenter]);
-	CornerDoubles[SideViewSwingArmLength] = fabs(Intersection.x);
+	intersection = VVASEMath::IntersectWithPlane(planeNormal, currentCorner->Hardpoints[CORNER::WheelCenter],
+		cornerVectors[InstantAxisDirection], cornerVectors[InstantCenter]);
+	cornerDoubles[SideViewSwingArmLength] = fabs(intersection.x);
 
 	// We'll need this information when calculating the anti-geometry down below:
-	double SideViewSwingArmHeight = Intersection.z;
+	double sideViewSwingArmHeight = intersection.z;
 
 	// Front View Swing Arm Length [in]
 	// The procedure is identical to finding the SVSA length, except the plane we intersect
 	// has the X-axis as a normal and we use the Y-coordinate as the length.
-	PlaneNormal.Set(1.0, 0.0, 0.0);
+	planeNormal.Set(1.0, 0.0, 0.0);
 
 	// Get the intersection of the Instant Center with this plane
-	Intersection = VVASEMath::IntersectWithPlane(PlaneNormal, CurrentCorner->Hardpoints[CORNER::WheelCenter],
-		CornerVectors[InstantAxisDirection], CornerVectors[InstantCenter]);
-	CornerDoubles[FrontViewSwingArmLength] = fabs(Intersection.y);
+	intersection = VVASEMath::IntersectWithPlane(planeNormal, currentCorner->Hardpoints[CORNER::WheelCenter],
+		cornerVectors[InstantAxisDirection], cornerVectors[InstantCenter]);
+	cornerDoubles[FrontViewSwingArmLength] = fabs(intersection.y);
 
 	// Anti-brake [%]
 	// Note that the equation changes if the brakes are inboard vs. outboard.  This
 	// is because the way the torques are reacted is different:  In the case of outboard
 	// brakes, the control arms are required to react some of the torque, whereas this
-	// is not required when the brakes are inboard and the torqe can be reacted directly
+	// is not required when the brakes are inboard and the torque can be reacted directly
 	// by the chassis.  The nomenclature for the anti-geometry comes from RCVD p. 617.
 	// NOTE:  We are required to know the sprung mass CG height and the wheelbase here.
 	//        we assume that the static wheelbase and CG height are still accurate here (FIXME!!!)
-	double Wheelbase = (CurrentCar->Suspension->RightRear.Hardpoints[CORNER::ContactPatch].x
-		- CurrentCar->Suspension->RightFront.Hardpoints[CORNER::ContactPatch].x
-		+ CurrentCar->Suspension->LeftRear.Hardpoints[CORNER::ContactPatch].x
-		- CurrentCar->Suspension->LeftFront.Hardpoints[CORNER::ContactPatch].x) / 2.0;
-	double CGHeight = CurrentCar->MassProperties->CenterOfGravity.z;
-	double ReactionPathAngleTangent;
+	double wheelbase = (currentCar->Suspension->RightRear.Hardpoints[CORNER::ContactPatch].x
+		- currentCar->Suspension->RightFront.Hardpoints[CORNER::ContactPatch].x
+		+ currentCar->Suspension->LeftRear.Hardpoints[CORNER::ContactPatch].x
+		- currentCar->Suspension->LeftFront.Hardpoints[CORNER::ContactPatch].x) / 2.0;
+	double cgHeight = currentCar->MassProperties->CenterOfGravity.z;
+	double reactionPathAngleTangent;
 
 	// Determine if we are talking about anti-dive (front) or anti-lift (rear)
-	if (IsAtFront)
+	if (isAtFront)
 	{
 		// Is the braking torque reacted directly by the chassis, or does it first
 		// travel through the control arms?
-		if (CurrentCar->Brakes->FrontBrakesInboard)
+		if (currentCar->Brakes->FrontBrakesInboard)
 		{
 			// Compute the tangent of the reaction path angle
-			ReactionPathAngleTangent = (SideViewSwingArmHeight -
-				CurrentCorner->Hardpoints[CORNER::WheelCenter].z) / CornerDoubles[SideViewSwingArmLength];
+			reactionPathAngleTangent = (sideViewSwingArmHeight -
+				currentCorner->Hardpoints[CORNER::WheelCenter].z) / cornerDoubles[SideViewSwingArmLength];
 
 			// Compute the anti-dive
-			CornerDoubles[AntiBrakePitch] = ReactionPathAngleTangent * Wheelbase / CGHeight
-				* CurrentCar->Brakes->PercentFrontBraking * 100.0;
+			cornerDoubles[AntiBrakePitch] = reactionPathAngleTangent * wheelbase / cgHeight
+				* currentCar->Brakes->PercentFrontBraking * 100.0;
 		}
 		else// Outboard brakes
 		{
 			// Compute the tangent of the reaction path angle
-			ReactionPathAngleTangent = SideViewSwingArmHeight / CornerDoubles[SideViewSwingArmLength];
+			reactionPathAngleTangent = sideViewSwingArmHeight / cornerDoubles[SideViewSwingArmLength];
 
 			// Compute the anti-dive
-			CornerDoubles[AntiBrakePitch] = ReactionPathAngleTangent / (CGHeight / Wheelbase
-				* CurrentCar->Brakes->PercentFrontBraking) * 100.0;
+			cornerDoubles[AntiBrakePitch] = reactionPathAngleTangent / (cgHeight / Wheelbase
+				* currentCar->Brakes->PercentFrontBraking) * 100.0;
 		}
 	}
 	else// Anti-lift (rear)
@@ -1034,7 +1032,7 @@ void KINEMATIC_OUTPUTS::UpdateCorner(const CORNER *OriginalCorner, const CORNER 
 }
 
 //==========================================================================
-// Class:			KINEMATIC_OUTPUTS
+// Class:			KinematicOutputs
 // Function:		GetCornerDoubleName
 //
 // Description:		Returns a string containing the name of the specified output.
@@ -1050,7 +1048,7 @@ void KINEMATIC_OUTPUTS::UpdateCorner(const CORNER *OriginalCorner, const CORNER 
 //		wxString containing the name of the specified output
 //
 //==========================================================================
-wxString KINEMATIC_OUTPUTS::GetCornerDoubleName(const CORNER_OUTPUTS_DOUBLE &_Output)
+wxString KinematicOutputs::GetCornerDoubleName(const CORNER_OUTPUTS_DOUBLE &_Output)
 {
 	// The return value
 	wxString Name;
@@ -1135,7 +1133,7 @@ wxString KINEMATIC_OUTPUTS::GetCornerDoubleName(const CORNER_OUTPUTS_DOUBLE &_Ou
 }
 
 //==========================================================================
-// Class:			KINEMATIC_OUTPUTS
+// Class:			KinematicOutputs
 // Function:		GetCornerVectorName
 //
 // Description:		Returns a string containing the name of the specified output.
@@ -1151,7 +1149,7 @@ wxString KINEMATIC_OUTPUTS::GetCornerDoubleName(const CORNER_OUTPUTS_DOUBLE &_Ou
 //		wxString containing the name of the specified output
 //
 //==========================================================================
-wxString KINEMATIC_OUTPUTS::GetCornerVectorName(const CORNER_OUTPUTS_Vector &_Output)
+wxString KinematicOutputs::GetCornerVectorName(const CORNER_OUTPUTS_Vector &_Output)
 {
 	// The return value
 	wxString Name;
@@ -1176,7 +1174,7 @@ wxString KINEMATIC_OUTPUTS::GetCornerVectorName(const CORNER_OUTPUTS_Vector &_Ou
 }
 
 //==========================================================================
-// Class:			KINEMATIC_OUTPUTS
+// Class:			KinematicOutputs
 // Function:		GetDoubleName
 //
 // Description:		Returns a string containing the name of the specified output.
@@ -1192,7 +1190,7 @@ wxString KINEMATIC_OUTPUTS::GetCornerVectorName(const CORNER_OUTPUTS_Vector &_Ou
 //		wxString containing the name of the specified output
 //
 //==========================================================================
-wxString KINEMATIC_OUTPUTS::GetDoubleName(const OUTPUTS_DOUBLE &_Output)
+wxString KinematicOutputs::GetDoubleName(const OUTPUTS_DOUBLE &_Output)
 {
 	// The return value
 	wxString Name;
@@ -1289,7 +1287,7 @@ wxString KINEMATIC_OUTPUTS::GetDoubleName(const OUTPUTS_DOUBLE &_Output)
 }
 
 //==========================================================================
-// Class:			KINEMATIC_OUTPUTS
+// Class:			KinematicOutputs
 // Function:		GetVectorName
 //
 // Description:		Returns a string containing the name of the specified output.
@@ -1305,7 +1303,7 @@ wxString KINEMATIC_OUTPUTS::GetDoubleName(const OUTPUTS_DOUBLE &_Output)
 //		wxString containing the name of the specified output
 //
 //==========================================================================
-wxString KINEMATIC_OUTPUTS::GetVectorName(const OUTPUTS_Vector &_Output)
+wxString KinematicOutputs::GetVectorName(const OUTPUTS_Vector &_Output)
 {
 	// The return value
 	wxString Name;
@@ -1354,7 +1352,7 @@ wxString KINEMATIC_OUTPUTS::GetVectorName(const OUTPUTS_Vector &_Output)
 }
 
 //==========================================================================
-// Class:			KINEMATIC_OUTPUTS
+// Class:			KinematicOutputs
 // Function:		GetOutputValue
 //
 // Description:		Returns the value of the output from the complete list of
@@ -1371,7 +1369,7 @@ wxString KINEMATIC_OUTPUTS::GetVectorName(const OUTPUTS_Vector &_Output)
 //		double specifying the value of the requested output
 //
 //==========================================================================
-double KINEMATIC_OUTPUTS::GetOutputValue(const OUTPUTS_COMPLETE &_Output) const
+double KinematicOutputs::GetOutputValue(const OUTPUTS_COMPLETE &_Output) const
 {
 	// The return value
 	double Value;
@@ -1510,7 +1508,7 @@ double KINEMATIC_OUTPUTS::GetOutputValue(const OUTPUTS_COMPLETE &_Output) const
 }
 
 //==========================================================================
-// Class:			KINEMATIC_OUTPUTS
+// Class:			KinematicOutputs
 // Function:		GetOutputUnitType
 //
 // Description:		Returns the unit type of the output from the complete
@@ -1527,7 +1525,7 @@ double KINEMATIC_OUTPUTS::GetOutputValue(const OUTPUTS_COMPLETE &_Output) const
 //		Convert::UnitType specifying the unit type of the requested output
 //
 //==========================================================================
-Convert::UnitType KINEMATIC_OUTPUTS::GetOutputUnitType(const OUTPUTS_COMPLETE &_Output)
+Convert::UnitType KinematicOutputs::GetOutputUnitType(const OUTPUTS_COMPLETE &_Output)
 {
 	// The value to return
 	Convert::UnitType UnitType;
@@ -1578,7 +1576,7 @@ Convert::UnitType KINEMATIC_OUTPUTS::GetOutputUnitType(const OUTPUTS_COMPLETE &_
 }
 
 //==========================================================================
-// Class:			KINEMATIC_OUTPUTS
+// Class:			KinematicOutputs
 // Function:		GetOutputName
 //
 // Description:		Returns the name of the output from the complete list of
@@ -1595,7 +1593,7 @@ Convert::UnitType KINEMATIC_OUTPUTS::GetOutputUnitType(const OUTPUTS_COMPLETE &_
 //		wxString specifying the name of the requested output
 //
 //==========================================================================
-wxString KINEMATIC_OUTPUTS::GetOutputName(const OUTPUTS_COMPLETE &_Output)
+wxString KinematicOutputs::GetOutputName(const OUTPUTS_COMPLETE &_Output)
 {
 	// The value to return
 	wxString Name;
@@ -1753,7 +1751,7 @@ wxString KINEMATIC_OUTPUTS::GetOutputName(const OUTPUTS_COMPLETE &_Output)
 }
 
 //==========================================================================
-// Class:			KINEMATIC_OUTPUTS
+// Class:			KinematicOutputs
 // Function:		GetCornerDoubleUnitType
 //
 // Description:		Returns a the type of units for the specified output.
@@ -1769,7 +1767,7 @@ wxString KINEMATIC_OUTPUTS::GetOutputName(const OUTPUTS_COMPLETE &_Output)
 //		Convert::UnitType describing the units of the specified output
 //
 //==========================================================================
-Convert::UnitType KINEMATIC_OUTPUTS::GetCornerDoubleUnitType(const CORNER_OUTPUTS_DOUBLE &_Output)
+Convert::UnitType KinematicOutputs::GetCornerDoubleUnitType(const CORNER_OUTPUTS_DOUBLE &_Output)
 {
 	// The return value
 	Convert::UnitType UnitType;
@@ -1816,7 +1814,7 @@ Convert::UnitType KINEMATIC_OUTPUTS::GetCornerDoubleUnitType(const CORNER_OUTPUT
 }
 
 //==========================================================================
-// Class:			KINEMATIC_OUTPUTS
+// Class:			KinematicOutputs
 // Function:		GetCornerVectorUnitType
 //
 // Description:		Returns a the type of units for the specified output.
@@ -1832,7 +1830,7 @@ Convert::UnitType KINEMATIC_OUTPUTS::GetCornerDoubleUnitType(const CORNER_OUTPUT
 //		Convert::UnitType describing the units of the specified output
 //
 //==========================================================================
-Convert::UnitType KINEMATIC_OUTPUTS::GetCornerVectorUnitType(const CORNER_OUTPUTS_Vector &_Output)
+Convert::UnitType KinematicOutputs::GetCornerVectorUnitType(const CORNER_OUTPUTS_Vector &_Output)
 {
 	// The return value
 	Convert::UnitType UnitType;
@@ -1860,7 +1858,7 @@ Convert::UnitType KINEMATIC_OUTPUTS::GetCornerVectorUnitType(const CORNER_OUTPUT
 }
 
 //==========================================================================
-// Class:			KINEMATIC_OUTPUTS
+// Class:			KinematicOutputs
 // Function:		GetDoubleUnitType
 //
 // Description:		Returns a the type of units for the specified output.
@@ -1876,7 +1874,7 @@ Convert::UnitType KINEMATIC_OUTPUTS::GetCornerVectorUnitType(const CORNER_OUTPUT
 //		Convert::UnitType describing the units of the specified output
 //
 //==========================================================================
-Convert::UnitType KINEMATIC_OUTPUTS::GetDoubleUnitType(const OUTPUTS_DOUBLE &_Output)
+Convert::UnitType KinematicOutputs::GetDoubleUnitType(const OUTPUTS_DOUBLE &_Output)
 {
 	// The return value
 	Convert::UnitType UnitType;
@@ -1926,7 +1924,7 @@ Convert::UnitType KINEMATIC_OUTPUTS::GetDoubleUnitType(const OUTPUTS_DOUBLE &_Ou
 }
 
 //==========================================================================
-// Class:			KINEMATIC_OUTPUTS
+// Class:			KinematicOutputs
 // Function:		GetVectorUnitType
 //
 // Description:		Returns a the type of units for the specified output.
@@ -1942,7 +1940,7 @@ Convert::UnitType KINEMATIC_OUTPUTS::GetDoubleUnitType(const OUTPUTS_DOUBLE &_Ou
 //		Convert::UnitType describing the units of the specified output
 //
 //==========================================================================
-Convert::UnitType KINEMATIC_OUTPUTS::GetVectorUnitType(const OUTPUTS_Vector &_Output)
+Convert::UnitType KinematicOutputs::GetVectorUnitType(const OUTPUTS_Vector &_Output)
 {
 	// The return value
 	Convert::UnitType UnitType;
@@ -1976,7 +1974,7 @@ Convert::UnitType KINEMATIC_OUTPUTS::GetVectorUnitType(const OUTPUTS_Vector &_Ou
 }
 
 //==========================================================================
-// Class:			KINEMATIC_OUTPUTS
+// Class:			KinematicOutputs
 // Function:		OutputsCompleteIndex
 //
 // Description:		Returns an index refering to the list of OUTPUTS_COMPLETE
@@ -1997,7 +1995,7 @@ Convert::UnitType KINEMATIC_OUTPUTS::GetVectorUnitType(const OUTPUTS_Vector &_Ou
 //		OUTPUTS_COMPLETE describing the index for the specified output
 //
 //==========================================================================
-KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE KINEMATIC_OUTPUTS::OutputsCompleteIndex(const CORNER::LOCATION &Location,
+KinematicOutputs::OUTPUTS_COMPLETE KinematicOutputs::OutputsCompleteIndex(const CORNER::LOCATION &Location,
 																			const CORNER_OUTPUTS_DOUBLE &CornerDouble,
 																			const CORNER_OUTPUTS_Vector &CornerVector,
 																			const OUTPUTS_DOUBLE &Double,
@@ -2011,37 +2009,37 @@ KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE KINEMATIC_OUTPUTS::OutputsCompleteIndex(cons
 	{
 	case CORNER::LocationLeftFront:
 		if (CornerDouble != NumberOfCornerOutputDoubles)
-			CompleteIndex = (KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE)(StartLeftFrontDoubles + CornerDouble);
+			CompleteIndex = (KinematicOutputs::OUTPUTS_COMPLETE)(StartLeftFrontDoubles + CornerDouble);
 		else
-			CompleteIndex = (KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE)(StartLeftFrontVectors + CornerVector * 3 + Axis);
+			CompleteIndex = (KinematicOutputs::OUTPUTS_COMPLETE)(StartLeftFrontVectors + CornerVector * 3 + Axis);
 		break;
 
 	case CORNER::LocationRightFront:
 		if (CornerDouble != NumberOfCornerOutputDoubles)
-			CompleteIndex = (KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE)(StartRightFrontDoubles + CornerDouble);
+			CompleteIndex = (KinematicOutputs::OUTPUTS_COMPLETE)(StartRightFrontDoubles + CornerDouble);
 		else
-			CompleteIndex = (KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE)(StartRightFrontVectors + CornerVector * 3 + Axis);
+			CompleteIndex = (KinematicOutputs::OUTPUTS_COMPLETE)(StartRightFrontVectors + CornerVector * 3 + Axis);
 		break;
 
 	case CORNER::LocationLeftRear:
 		if (CornerDouble != NumberOfCornerOutputDoubles)
-			CompleteIndex = (KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE)(StartLeftRearDoubles + CornerDouble);
+			CompleteIndex = (KinematicOutputs::OUTPUTS_COMPLETE)(StartLeftRearDoubles + CornerDouble);
 		else
-			CompleteIndex = (KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE)(StartLeftRearVectors + CornerVector * 3 + Axis);
+			CompleteIndex = (KinematicOutputs::OUTPUTS_COMPLETE)(StartLeftRearVectors + CornerVector * 3 + Axis);
 		break;
 
 	case CORNER::LocationRightRear:
 		if (CornerDouble != NumberOfCornerOutputDoubles)
-			CompleteIndex = (KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE)(StartRightRearDoubles + CornerDouble);
+			CompleteIndex = (KinematicOutputs::OUTPUTS_COMPLETE)(StartRightRearDoubles + CornerDouble);
 		else
-			CompleteIndex = (KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE)(StartRightRearVectors + CornerVector * 3 + Axis);
+			CompleteIndex = (KinematicOutputs::OUTPUTS_COMPLETE)(StartRightRearVectors + CornerVector * 3 + Axis);
 		break;
 
 	default:// Not a corner output
 		if (Double != NumberOfOutputDoubles)
-			CompleteIndex = (KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE)(StartDoubles + Double);
+			CompleteIndex = (KinematicOutputs::OUTPUTS_COMPLETE)(StartDoubles + Double);
 		else
-			CompleteIndex = (KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE)(StartVectors + vector * 3 + Axis);
+			CompleteIndex = (KinematicOutputs::OUTPUTS_COMPLETE)(StartVectors + vector * 3 + Axis);
 		break;
 	}
 

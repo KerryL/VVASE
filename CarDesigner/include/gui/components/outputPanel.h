@@ -13,8 +13,8 @@
 // Description:  Contains the class declaration for the OUTPUT_PANEL class.
 // History:
 
-#ifndef _OUTPUT_PANEL_CLASS_H_
-#define _OUTPUT_PANEL_CLASS_H_
+#ifndef _OUTPUT_PANEL_H_
+#define _OUTPUT_PANEL_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -78,4 +78,4 @@ protected:
 	DECLARE_EVENT_TABLE()
 };
 
-#endif// _OUTPUT_PANEL_CLASS_H_
+#endif// _OUTPUT_PANEL_H_

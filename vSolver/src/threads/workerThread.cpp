@@ -10,7 +10,7 @@
 // File:  workerThread.cpp
 // Created:  11/3/2009
 // Author:  K. Loux
-// Description:  Contains the class definition for the WORKER_THREAD class.  Derives
+// Description:  Contains the class definition for the WorkerThread class.  Derives
 //				 from wxWidgets thread classes.  Contains a process for checking a queue
 //				 for jobs, pulling jobs from the queue and executing them, and
 //				 communicating back to the main thread.
@@ -31,13 +31,13 @@
 #include "vUtilities/debugger.h"
 
 //==========================================================================
-// Class:			WORKER_THREAD
-// Function:		WORKER_THREAD
+// Class:			WorkerThread
+// Function:		WorkerThread
 //
-// Description:		Constructor for the WORKER_THREAD class.
+// Description:		Constructor for the WorkerThread class.
 //
 // Input Arguments:
-//		_JobQueue	= JOB_QUEUE*, pointing to the queue from which this
+//		_jobQueue	= JobQueue*, pointing to the queue from which this
 //					  thread will pull jobs
 //		_debugger	= Debugger& reference to the application's debugger object
 //		_Id			= int representing this thread's ID number
@@ -49,30 +49,30 @@
 //		None
 //
 //==========================================================================
-WORKER_THREAD::WORKER_THREAD(JOB_QUEUE* _JobQueue, Debugger &_debugger, int _Id)
-							 : debugger(_debugger), JobQueue(_JobQueue), Id(_Id)
+WorkerThread::WorkerThread(JobQueue* _jobQueue, Debugger &_debugger, int _id)
+							 : debugger(_debugger), jobQueue(_jobQueue), id(_id)
 {
 	// Make sure the job queue exists
-	assert(_JobQueue);
+	assert(_jobQueue);
 
 	// Create the thread object
 	wxThread::Create();
 
 	// Create the analysis object
-	KinematicAnalysis = new KINEMATICS(debugger);
+	kinematicAnalysis = new Kinematics(debugger);
 }
 
 //==========================================================================
-// Class:			WORKER_THREAD
-// Function:		WORKER_THREAD
+// Class:			WorkerThread
+// Function:		WorkerThread
 //
-// Description:		Constructor for the WORKER_THREAD class.
+// Description:		Constructor for the WorkerThread class.
 //
 // Input Arguments:
-//		_JobQueue	= JOB_QUEUE*, pointing to the queue from which this
+//		_jobQueue	= JobQueue*, pointing to the queue from which this
 //					  thread will pull jobs
-//		Debugger	= Debugger& reference to the application's debugger object
-//		_Id			= int representing this thread's ID number
+//		debugger	= Debugger& reference to the application's debugger object
+//		_id			= int representing this thread's ID number
 //
 // Output Arguments:
 //		None
@@ -81,15 +81,15 @@ WORKER_THREAD::WORKER_THREAD(JOB_QUEUE* _JobQueue, Debugger &_debugger, int _Id)
 //		None
 //
 //==========================================================================
-WORKER_THREAD::~WORKER_THREAD()
+WorkerThread::~WorkerThread()
 {
 	// Delete the analysis object
-	delete KinematicAnalysis;
-	KinematicAnalysis = NULL;
+	delete kinematicAnalysis;
+	kinematicAnalysis = NULL;
 }
 
 //==========================================================================
-// Class:			WORKER_THREAD
+// Class:			WorkerThread
 // Function:		Entry
 //
 // Description:		Main work loop for each thread.
@@ -104,12 +104,12 @@ WORKER_THREAD::~WORKER_THREAD()
 //		wxThread::ExitCode
 //
 //==========================================================================
-wxThread::ExitCode WORKER_THREAD::Entry(void)
+wxThread::ExitCode WorkerThread::Entry(void)
 {
-	THREAD_JOB::THREAD_COMMANDS Error;
+	ThreadJob::ThreadCommands error;
 
 	// Tell the main thread that we successfully started
-	JobQueue->Report(THREAD_JOB::COMMAND_THREAD_STARTED, Id);
+	jobQueue->Report(ThreadJob::CommandThreadStarted, id);
 
 	// Run the main loop (job handler) until it throws an exception
 	try
@@ -117,18 +117,18 @@ wxThread::ExitCode WORKER_THREAD::Entry(void)
 		while (true)
 			OnJob();
 	}
-	catch (THREAD_JOB::THREAD_COMMANDS& i)
+	catch (ThreadJob::ThreadCommands& i)
 	{
 		// Report the error
-		JobQueue->Report(Error = i, Id);
+		jobQueue->Report(error = i, id);
 	}
 
 	// Return the exit code
-	return (wxThread::ExitCode)Error;
+	return (wxThread::ExitCode)error;
 }
 
 //==========================================================================
-// Class:			WORKER_THREAD
+// Class:			WorkerThread
 // Function:		OnJob
 //
 // Description:		The function that process jobs as they enter the queue.
@@ -143,63 +143,64 @@ wxThread::ExitCode WORKER_THREAD::Entry(void)
 //		None
 //
 //==========================================================================
-void WORKER_THREAD::OnJob()
+void WorkerThread::OnJob()
 {
 	// Get a job from the queue
 	// If the queue is empty, this blocks the thread
-	THREAD_JOB Job = JobQueue->Pop();
+	ThreadJob job = jobQueue->Pop();
 
 	// Declare timing variables
-	wxDateTime Start;
+	wxDateTime start;
 
 	// Process each command in the appropriate way
-	switch(Job.Command)
+	switch(job.command)
 	{
-	case THREAD_JOB::COMMAND_THREAD_EXIT:
+	case ThreadJob::CommandThreadExit:
 		// Throw the exit command to confirm the quit
-		throw THREAD_JOB::COMMAND_THREAD_EXIT;
+		throw ThreadJob::CommandThreadExit;
 
-	case THREAD_JOB::COMMAND_THREAD_KINEMATICS_NORMAL:
-	case THREAD_JOB::COMMAND_THREAD_KINEMATICS_ITERATION:
-	case THREAD_JOB::COMMAND_THREAD_KINEMATICS_FOR_GA:
+	case ThreadJob::CommandThreadKinematicsNormal:
+	case ThreadJob::CommandThreadKinematicsIteration:
+	case ThreadJob::CommandThreadKinematicsGA:
 		// Do the kinematics calculations
-		KinematicAnalysis->SetInputs(static_cast<KINEMATICS_DATA*>(Job.Data)->KinematicInputs);
-		KinematicAnalysis->UpdateKinematics(static_cast<KINEMATICS_DATA*>(Job.Data)->OriginalCar,
-			static_cast<KINEMATICS_DATA*>(Job.Data)->WorkingCar, Job.Name);
+		kinematicAnalysis->SetInputs(static_cast<KinematicsData*>(job.data)->kinematicInputs);
+		kinematicAnalysis->UpdateKinematics(static_cast<KinematicsData*>(job.data)->originalCar,
+			static_cast<KinematicsData*>(job.data)->workingCar, job.name);
 
 		// Get the outputs
-		*(static_cast<KINEMATICS_DATA*>(Job.Data)->Output) = KinematicAnalysis->GetOutputs();
+		*(static_cast<KinematicsData*>(job.data)->output) = kinematicAnalysis->GetOutputs();
 
 		// Tell the main thread that we've done the job
-	    JobQueue->Report(Job.Command, Id, Job.Index);
+	    jobQueue->Report(job.command, id, job.index);
 		break;
 
-	case THREAD_JOB::COMMAND_THREAD_GENETIC_OPTIMIZATION:
+	case ThreadJob::CommandThreadGeneticOptimization:
 		// Store the current time for determining elapsed time
-		Start = wxDateTime::UNow();
+		start = wxDateTime::UNow();
 
 		// The genetic algorithm object MUST have been initialized prior to the call to this thread
 		// Run the GA object - this will only return after the analysis is complete for all generations,
 		// and the target object has been updated
-		static_cast<OPTIMIZATION_DATA*>(Job.Data)->GeneticAlgorithm->PerformOptimization();
+		static_cast<OptimizationData*>(job.data)->geneticAlgorithm->PerformOptimization();
 
 		// Determine elapsed time and print to the screen
-		debugger.Print(Debugger::PriorityVeryHigh, "Elapsed Time: %s", wxDateTime::UNow().Subtract(Start).Format().c_str());
+		debugger.Print(Debugger::PriorityVeryHigh, "Elapsed Time: %s",
+					 wxDateTime::UNow().Subtract(start).Format().c_str());
 
 		// Tell the main thread that we're done the job
-		JobQueue->Report(Job.Command, Id, Job.Index);
+		jobQueue->Report(job.command, id, job.index);
 		break;
 
-	case THREAD_JOB::COMMAND_THREAD_NULL:
+	case ThreadJob::CommandThreadNull:
 	default:
 		break;
 	}
 
 	// If the data variable is not NULL, delete it
-	if (Job.Data)
+	if (job.data)
 	{
-		delete Job.Data;
-		Job.Data = NULL;
+		delete job.data;
+		job.data = NULL;
 	}
 
 	return;

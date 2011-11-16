@@ -17,8 +17,8 @@
 //	11/22/2009	- Moved to vMath.lib, K. Loux.
 //	11/7/2011	- Corrected camelCase, K. Loux.
 
-#ifndef _COMPLEX_CLASS_H_
-#define _COMPLEX_CLASS_H_
+#ifndef _COMPLEX_H_
+#define _COMPLEX_H_
 
 using namespace std;
 
@@ -68,4 +68,4 @@ public:
 	static const Complex I;
 };
 
-#endif// _COMPLEX_CLASS_H_
+#endif// _COMPLEX_H_

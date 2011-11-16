@@ -13,8 +13,8 @@
 // Description:  First order high-pass digital filter.
 // History:
 
-#ifndef _HIGH_PASS_ORDER1_CLASS_H_
-#define _HIGH_PASS_ORDER1_CLASS_H_
+#ifndef _HIGH_PASS_ORDER1_H_
+#define _HIGH_PASS_ORDER1_H_
 
 // Local headers
 #include "vMath/signals/filters/filterBase.h"
@@ -34,4 +34,4 @@ public:
 	virtual double Apply(const double &_u);
 };
 
-#endif// _HIGH_PASS_ORDER1_CLASS_H_
+#endif// _HIGH_PASS_ORDER1_H_

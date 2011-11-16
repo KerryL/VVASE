@@ -17,8 +17,8 @@
 //				  removed PURPOSE enumeration, K. Loux.
 //	5/17/2009	- Removed VTK dependencies, K. Loux.
 
-#ifndef _Vector3D_CLASS_H_
-#define _Vector3D_CLASS_H_
+#ifndef _Vector3D_H_
+#define _Vector3D_H_
 
 // VVASE forward declarations
 class Vector;
@@ -49,4 +49,4 @@ private:
 	CONE *Tip;
 };
 
-#endif// _Vector3D_CLASS_H_
+#endif// _Vector3D_H_

@@ -10,7 +10,7 @@ _class
 // File:  jobQueue.cpp
 // Created:  11/3/2009
 // Author:  K. Loux
-// Description:  Contains the class definition for the JOB_QUEUE class.  This queue
+// Description:  Contains the class definition for the JobQueue class.  This queue
 //				 handles task priorities and is used to communicate from the main thread
 //				 to the worker threads (add tasks here to be completed by the workers).
 // History:
@@ -20,13 +20,13 @@ _class
 #include "vSolver/threads/threadEvent.h"
 
 //==========================================================================
-// Class:			JOB_QUEUE
-// Function:		JOB_QUEUE
+// Class:			JobQueue
+// Function:		JobQueue
 //
-// Description:		Constructor for the JOB_QUEUE class (default).
+// Description:		Constructor for the JobQueue class (default).
 //
 // Input Arguments:
-//		_Parent		= wxEventHandler* pointing to the main application object
+//		_parent		= wxEventHandler* pointing to the main application object
 //
 // Output Arguments:
 //		None
@@ -35,19 +35,19 @@ _class
 //		None
 //
 //==========================================================================
-JOB_QUEUE::JOB_QUEUE(wxEvtHandler *_Parent) : Parent(_Parent)
+JobQueue::JobQueue(wxEvtHandler *_parent) : parent(_parent)
 {
 }
 
 //==========================================================================
-// Class:			JOB_QUEUE
+// Class:			JobQueue
 // Function:		AddJob
 //
 // Description:		Adds a job to the queue
 //
 // Input Arguments:
-//		Job			= const THREAD_JOB& to be added to the queue
-//		Priority	= const JOB_PRIORITY& of the new job
+//		job			= const ThreadJob& to be added to the queue
+//		priority	= const JobPriority& of the new job
 //
 // Output Arguments:
 //		None
@@ -56,22 +56,22 @@ JOB_QUEUE::JOB_QUEUE(wxEvtHandler *_Parent) : Parent(_Parent)
 //		None
 //
 //==========================================================================
-void JOB_QUEUE::AddJob(const THREAD_JOB& Job, const JOB_PRIORITY& Priority)
+void JobQueue::AddJob(const ThreadJob& job, const JobPriority& priority)
 {
 	// Lock the queue (lock expires when this function returns)
-	wxMutexLocker lock(MutexQueue);
+	wxMutexLocker lock(mutexQueue);
 
 	// Add the job to the queue
-	Jobs.insert(std::pair<JOB_PRIORITY, THREAD_JOB>(Priority, Job));
+	jobs.insert(std::pair<JobPriority, ThreadJob>(priority, job));
 
 	// Increment the semaphore
-	QueueCount.Post();
+	queueCount.Post();
 
 	return;
 }
 
 //==========================================================================
-// Class:			JOB_QUEUE
+// Class:			JobQueue
 // Function:		Pop
 //
 // Description:		Pulls the next job from the queue.  Prioritization happens
@@ -85,33 +85,33 @@ void JOB_QUEUE::AddJob(const THREAD_JOB& Job, const JOB_PRIORITY& Priority)
 //		None
 //
 // Return Value:
-//		THREAD_JOB to be executed
+//		ThreadJob to be executed
 //
 //==========================================================================
-THREAD_JOB JOB_QUEUE::Pop()
+ThreadJob JobQueue::Pop()
 {
-	THREAD_JOB NextJob;
+	ThreadJob nextJob;
 
 	// Wait for the number of pending jobs to be positive
-	QueueCount.Wait();
+	queueCount.Wait();
 
 	// Lock the queue
-	MutexQueue.Lock();
+	mutexQueue.Lock();
 
 	// Get the first job from the queue (prioritization occurs automatically)
-	NextJob = Jobs.begin()->second;
+	nextJob = jobs.begin()->second;
 
 	// Remove the job from the queue
-	Jobs.erase(Jobs.begin());
+	jobs.erase(jobs.begin());
 
 	// Unlock the queue
-	MutexQueue.Unlock();
+	mutexQueue.Unlock();
 
-	return NextJob;
+	return nextJob;
 }
 
 //==========================================================================
-// Class:			JOB_QUEUE
+// Class:			JobQueue
 // Function:		Report
 //
 // Description:		Posts an event to the main thread.
@@ -129,7 +129,7 @@ THREAD_JOB JOB_QUEUE::Pop()
 //		None
 //
 //==========================================================================
-void JOB_QUEUE::Report(const THREAD_JOB::THREAD_COMMANDS& Command, int ThreadId, int ObjectID)
+void JobQueue::Report(const THREAD_JOB::THREAD_COMMANDS& Command, int ThreadId, int ObjectID)
 {
 	// Create event with the specified command
 	wxCommandEvent evt(EVT_THREAD, Command);
@@ -150,7 +150,7 @@ void JOB_QUEUE::Report(const THREAD_JOB::THREAD_COMMANDS& Command, int ThreadId,
 }
 
 //==========================================================================
-// Class:			JOB_QUEUE
+// Class:			JobQueue
 // Function:		PendingJobs
 //
 // Description:		Returns the number of pending jobs.
@@ -165,7 +165,7 @@ void JOB_QUEUE::Report(const THREAD_JOB::THREAD_COMMANDS& Command, int ThreadId,
 //		size_t indicating the number of pending jobs
 //
 //==========================================================================
-size_t JOB_QUEUE::PendingJobs()
+size_t JobQueue::PendingJobs()
 {
 	// Lock the queue while we read the size
 	wxMutexLocker lock(MutexQueue);

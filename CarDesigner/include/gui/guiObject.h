@@ -21,8 +21,8 @@
 //				  objects.
 //	5/19/2009	- Made abstract for base class for GUI_CAR and ITERATION, K. Loux.
 
-#ifndef _GUI_OBJECT_CLASS_H_
-#define _GUI_OBJECT_CLASS_H_
+#ifndef _GUI_OBJECT_H_
+#define _GUI_OBJECT_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -165,4 +165,4 @@ protected:
 	bool VerifyUniqueness(void);
 };
 
-#endif// _GUI_OBJECT_CLASS_H_
+#endif// _GUI_OBJECT_H_

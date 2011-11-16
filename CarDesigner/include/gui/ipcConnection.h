@@ -17,8 +17,8 @@
 //				 MSW and through TCP on other platforms.
 // History:
 
-#ifndef _IPC_CONNECTION_CLASS_H_
-#define _IPC_CONNECTION_CLASS_H_
+#ifndef _IPC_CONNECTION_H_
+#define _IPC_CONNECTION_H_
 
 // wxWidgets headers
 #include <wx/ipc.h>
@@ -46,4 +46,4 @@ public:
 	virtual bool OnDisconnect(void) { return true; };
 };
 
-#endif// _IPC_CONNECTION_CLASS_H_
+#endif// _IPC_CONNECTION_H_

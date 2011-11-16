@@ -15,8 +15,8 @@
 //	1/11/2010	- Moved from test class to GUI_OBJECT derived object for permanent
 //				  implementation.
 
-#ifndef _GENETIC_OPTIMIZATION_CLASS_H_
-#define _GENETIC_OPTIMIZATION_CLASS_H_
+#ifndef _GENETIC_OPTIMIZATION_H_
+#define _GENETIC_OPTIMIZATION_H_
 
 // VVASE headers
 #include "gui/guiObject.h"
@@ -94,4 +94,4 @@ private:
 	GA_OBJECT *GeneticAlgorithm;
 };
 
-#endif// _GENETIC_OPTIMIZATION_CLASS_H_
+#endif// _GENETIC_OPTIMIZATION_H_

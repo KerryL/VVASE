@@ -15,8 +15,8 @@
 //	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
-#ifndef _AERODYNAMICS_CLASS_H_
-#define _AERODYNAMICS_CLASS_H_
+#ifndef _AERODYNAMICS_H_
+#define _AERODYNAMICS_H_
 
 // Standard C++ headers
 #include <iosfwd>// forward declarations of fstream objects
@@ -62,4 +62,4 @@ private:
 	// FIXME:  Add functionality for non-linear look-up table (user option)
 };
 
-#endif// _AERODYNAMICS_CLASS_H_
+#endif// _AERODYNAMICS_H_

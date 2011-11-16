@@ -13,8 +13,8 @@
 // Description:  Base class (abstract) for digital filters.
 // History:
 
-#ifndef _FILTER_BASE_CLASS_H_
-#define _FILTER_BASE_CLASS_H_
+#ifndef _FILTER_BASE_H_
+#define _FILTER_BASE_H_
 
 // FIXME:  MSVC generates C4512
 
@@ -50,4 +50,4 @@ protected:
 	const double sampleRate;// [Hz]
 };
 
-#endif// _FILTER_BASE_CLASS_H_
+#endif// _FILTER_BASE_H_

@@ -14,8 +14,8 @@
 //				 to provide the opportunity to undo and redo.
 // History:
 
-#ifndef _UNDO_REDO_STACK_CLASS_H_
-#define _UNDO_REDO_STACK_CLASS_H_
+#ifndef _UNDO_REDO_STACK_H_
+#define _UNDO_REDO_STACK_H_
 
 // Standard C++ headers
 #include <stack>
@@ -119,4 +119,4 @@ private:
 	std::stack<OPERATION> RedoStack;
 };
 
-#endif// _UNDO_REDO_STACK_CLASS_H_
+#endif// _UNDO_REDO_STACK_H_

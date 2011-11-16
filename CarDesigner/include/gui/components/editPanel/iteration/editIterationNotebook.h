@@ -13,8 +13,8 @@
 // Description:  Contains the class declaration for the EDIT_ITERATION_NOTEBOOK class.
 // History:
 
-#ifndef _EDIT_ITERATION_NOTEBOOK_CLASS_H_
-#define _EDIT_ITERATION_NOTEBOOK_CLASS_H_
+#ifndef _EDIT_ITERATION_NOTEBOOK_H_
+#define _EDIT_ITERATION_NOTEBOOK_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -63,4 +63,4 @@ private:
 	EDIT_ITERATION_OPTIONS_PANEL *EditOptions;
 };
 
-#endif// _EDIT_ITERATION_NOTEBOOK_CLASS_H_
+#endif// _EDIT_ITERATION_NOTEBOOK_H_

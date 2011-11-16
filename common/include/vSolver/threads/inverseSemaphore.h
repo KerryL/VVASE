@@ -59,4 +59,4 @@ private:
 	volatile unsigned int count;
 };
 
-#endif// _INVERSE_SEMAPHORE_CLASS_H_
+#endif// _INVERSE_SEMAPHORE_H_

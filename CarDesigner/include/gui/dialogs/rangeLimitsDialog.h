@@ -13,8 +13,8 @@
 // Description:  Dialog box for entering a minimum and maximum value for an axis.
 // History:
 
-#ifndef _RANGE_LIMITS_DIALOG_CLASS_H_
-#define _RANGE_LIMITS_DIALOG_CLASS_H_
+#ifndef _RANGE_LIMITS_DIALOG_H_
+#define _RANGE_LIMITS_DIALOG_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -39,4 +39,4 @@ private:
 	DECLARE_EVENT_TABLE();
 };
 
-#endif// _RANGE_LIMITS_DIALOG_CLASS_H_
+#endif// _RANGE_LIMITS_DIALOG_H_

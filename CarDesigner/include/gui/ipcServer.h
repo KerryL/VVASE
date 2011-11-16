@@ -17,8 +17,8 @@
 //				 MSW and through TCP on other platforms.
 // History:
 
-#ifndef _IPC_SERVER_CLASS_H_
-#define _IPC_SERVER_CLASS_H_
+#ifndef _IPC_SERVER_H_
+#define _IPC_SERVER_H_
 
 // wxWidgets headers
 #include <wx/ipc.h>
@@ -51,4 +51,4 @@ private:
 	IPC_CONNECTION *Connection;
 };
 
-#endif// _IPC_SERVER_CLASS_H_
+#endif// _IPC_SERVER_H_

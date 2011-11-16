@@ -15,8 +15,8 @@
 //				 as well as OpenGL.
 // History:
 
-#ifndef _COLOR_CLASS_H_
-#define _COLOR_CLASS_H_
+#ifndef _COLOR_H_
+#define _COLOR_H_
 
 // wxWidgets forward declarations
 class wxString;
@@ -68,4 +68,4 @@ private:
 	void ValidateColor(void);
 };
 
-#endif// _COLOR_CLASS_H_
+#endif// _COLOR_H_

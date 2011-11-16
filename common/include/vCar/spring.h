@@ -15,8 +15,8 @@
 // History:
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
-#ifndef _SPRING_CLASS_H_
-#define _SPRING_CLASS_H_
+#ifndef _SPRING_H_
+#define _SPRING_H_
 
 class SPRING
 {
@@ -30,4 +30,4 @@ public:
 private:
 };
 
-#endif// _SPRING_CLASS_H_
+#endif// _SPRING_H_

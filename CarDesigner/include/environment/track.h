@@ -15,8 +15,8 @@
 //				 etc.).
 // History:
 
-#ifndef _TRACK_CLASS_H_
-#define _TRACK_CLASS_H_
+#ifndef _TRACK_H_
+#define _TRACK_H_
 
 class TRACK
 {
@@ -30,4 +30,4 @@ public:
 private:
 };
 
-#endif// _TRACK_CLASS_H_
+#endif// _TRACK_H_

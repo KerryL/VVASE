@@ -13,8 +13,8 @@
 // Description:  A dialog object for editing the contents of the APPEARANCE_OPTIONS object.
 // History:
 
-#ifndef _APPEARNACE_OPTIONS_DIALOG_CLASS_H_
-#define _APPEARNACE_OPTIONS_DIALOG_CLASS_H_
+#ifndef _APPEARNACE_OPTIONS_DIALOG_H_
+#define _APPEARNACE_OPTIONS_DIALOG_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -85,4 +85,4 @@ private:
 	DECLARE_EVENT_TABLE()
 };
 
-#endif// _APPEARNACE_OPTIONS_DIALOG_CLASS_H_
+#endif// _APPEARNACE_OPTIONS_DIALOG_H_

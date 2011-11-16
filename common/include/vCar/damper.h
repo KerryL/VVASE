@@ -16,8 +16,8 @@
 // History:
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
-#ifndef _DAMPER_CLASS_H_
-#define _DAMPER_CLASS_H_
+#ifndef _DAMPER_H_
+#define _DAMPER_H_
 
 class DAMPER
 {
@@ -31,4 +31,4 @@ public:
 private:
 };
 
-#endif// _DAMPER_CLASS_H_
+#endif// _DAMPER_H_

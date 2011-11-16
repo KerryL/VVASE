@@ -17,8 +17,8 @@
 // History:
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
-#ifndef _FUEL_CELL_CLASS_H_
-#define _FUEL_CELL_CLASS_H_
+#ifndef _FUEL_CELL_H_
+#define _FUEL_CELL_H_
 
 // VVASE headers
 #include "vMath/vector.h"
@@ -47,4 +47,4 @@ private:
 	Vector FuelCG;
 };
 
-#endif// _FUEL_CELL_CLASS_H_
+#endif// _FUEL_CELL_H_

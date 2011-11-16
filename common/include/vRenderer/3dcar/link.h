@@ -17,8 +17,8 @@
 //				  removed PURPOSE enumeration, K. Loux.
 //	5/17/2009	- Removed VTK dependencies, K. Loux.
 
-#ifndef _LINK_CLASS_H_
-#define _LINK_CLASS_H_
+#ifndef _LINK_H_
+#define _LINK_H_
 
 // VVASE forward declarations
 class Vector;
@@ -51,4 +51,4 @@ private:
 	SPHERE *EndPoint2;
 };
 
-#endif// _LINK_CLASS_H_
+#endif// _LINK_H_

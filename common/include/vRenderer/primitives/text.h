@@ -13,8 +13,8 @@
 // Description:  Derived from PRIMITVE, this class is used to draw text.
 // History:
 
-#ifndef _TEXT_CLASS_H_
-#define _TEXT_CLASS_H_
+#ifndef _TEXT_H_
+#define _TEXT_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -65,4 +65,4 @@ private:
 	double x, y;
 };
 
-#endif// _TEXT_CLASS_H_
+#endif// _TEXT_H_

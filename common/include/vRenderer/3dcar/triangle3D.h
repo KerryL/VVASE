@@ -17,8 +17,8 @@
 //				  removed PURPOSE enumeration, K. Loux.
 //	5/17/2009	- Removed VTK dependencies, K. Loux.
 
-#ifndef _TRIANGLE_CLASS_H_
-#define _TRIANGLE_CLASS_H_
+#ifndef _TRIANGLE_H_
+#define _TRIANGLE_H_
 
 // VVASE forward declarations
 class Vector;
@@ -46,4 +46,4 @@ private:
 	TRIANGLE *Triangle;
 };
 
-#endif// _TRIANGLE_CLASS_H_
+#endif// _TRIANGLE_H_

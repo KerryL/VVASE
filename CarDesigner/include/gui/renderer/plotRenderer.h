@@ -14,8 +14,8 @@
 //				 the screen.
 // History:
 
-#ifndef _PLOT_RENDERER_CLASS_H_
-#define _PLOT_RENDERER_CLASS_H_
+#ifndef _PLOT_RENDERER_H_
+#define _PLOT_RENDERER_H_
 
 // Local headers
 #include "vRenderer/renderWindow.h"
@@ -135,4 +135,4 @@ protected:
 	DECLARE_EVENT_TABLE()
 };
 
-#endif// _PLOT_RENDERER_CLASS_H_
+#endif// _PLOT_RENDERER_H_

@@ -13,8 +13,8 @@
 // Description:  Contains the class declaration for the EDIT_ITERATION_PLOTS_PANEL class.
 // History:
 
-#ifndef _EDIT_ITERATION_PLOTS_PANEL_CLASS_H_
-#define _EDIT_ITERATION_PLOTS_PANEL_CLASS_H_
+#ifndef _EDIT_ITERATION_PLOTS_PANEL_H_
+#define _EDIT_ITERATION_PLOTS_PANEL_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -68,4 +68,4 @@ private:
 	DECLARE_EVENT_TABLE();
 };
 
-#endif// _EDIT_ITERATION_PLOTS_PANEL_CLASS_H_
+#endif// _EDIT_ITERATION_PLOTS_PANEL_H_

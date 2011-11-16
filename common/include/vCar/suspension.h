@@ -22,8 +22,8 @@
 //	4/19/2009	- Made all of the Solve...() functions static, and made Debugger static, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
-#ifndef _SUSPENSION_CLASS_H_
-#define _SUSPENSION_CLASS_H_
+#ifndef _SUSPENSION_H_
+#define _SUSPENSION_H_
 
 // Standard C++ headers
 #include <iosfwd>// forward declarations of fstream objects
@@ -150,4 +150,4 @@ private:
 	static const Debugger *debugger;
 };
 
-#endif// _SUSPENSION_CLASS_H_
+#endif// _SUSPENSION_H_

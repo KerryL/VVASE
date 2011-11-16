@@ -17,8 +17,8 @@
 //				  class, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
-#ifndef _TIRE_CLASS_H_
-#define _TIRE_CLASS_H_
+#ifndef _TIRE_H_
+#define _TIRE_H_
 
 // Standard C++ headers
 #include <iosfwd>// forward declarations of fstream objects
@@ -85,4 +85,4 @@ private:
 	TIRE_MODEL ModelType;
 };
 
-#endif// _TIRE_CLASS_H_
+#endif// _TIRE_H_

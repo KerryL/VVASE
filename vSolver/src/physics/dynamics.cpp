@@ -179,7 +179,7 @@ void Dynamics::RunSimulation(void)
 		// Store the inputs and outputs in the time history queues
 
 		// Stop the timer and calculate the elapsed time.  Sleep for the correct amount of time
-		// to meet the deisred running frequency
+		// to meet the desired running frequency
 		wxMilliSleep(1000/*DESIRED_TIME_STEP_IN_MSEC*/ - timer.Time());
 	}
 

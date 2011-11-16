@@ -15,8 +15,8 @@
 // History:
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
-#ifndef _TIRESET_CLASS_H_
-#define _TIRESET_CLASS_H_
+#ifndef _TIRESET_H_
+#define _TIRESET_H_
 
 // Standard C++ headers
 #include <iosfwd>// forward declarations of fstream objects
@@ -55,4 +55,4 @@ private:
 	const Debugger &debugger;
 };
 
-#endif// _TIRESET_CLASS_H_
+#endif// _TIRESET_H_
