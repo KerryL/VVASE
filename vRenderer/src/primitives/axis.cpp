@@ -52,6 +52,8 @@ Axis::Axis(RenderWindow &_renderWindow) : Primitive(_renderWindow)
 	majorResolution = 1.0;
 	minorResolution = 1.0;
 
+	offsetFromWindowEdge = 75;// [pixles]
+
 	grid = false;
 
 	font = NULL;
@@ -81,24 +83,6 @@ Axis::~Axis()
 
 //==========================================================================
 // Class:			Axis
-// Function:		Constant Definitions
-//
-// Description:		Constants for Axis class are defined here.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-const unsigned int Axis::offsetFromWindowEdge = 75;// [pixels]
-
-//==========================================================================
-// Class:			Axis
 // Function:		GenerateGeometry
 //
 // Description:		Creates the OpenGL instructions to create this object in
@@ -116,8 +100,6 @@ const unsigned int Axis::offsetFromWindowEdge = 75;// [pixels]
 //==========================================================================
 void Axis::GenerateGeometry(void)
 {
-	// Use glLineWidth() and store it in member variable?
-
 	// Preliminary calculations
 	int axisLength, tick;
 	double outsideTick = 0.0, insideTick = 0.0;
@@ -246,7 +228,7 @@ void Axis::GenerateGeometry(void)
 		{
 			double fontOffsetFromWindowEdge = offsetFromWindowEdge / 3.0;
 
-			// Vertical axis need more space for the numbers
+			// Vertical axes need more space for the numbers
 			if (!IsHorizontal())
 				fontOffsetFromWindowEdge /= 2.0;
 
@@ -370,8 +352,6 @@ void Axis::GenerateGeometry(void)
 			// FIXME:  Warn the user
 		}
 	}
-
-	return;
 }
 
 //==========================================================================

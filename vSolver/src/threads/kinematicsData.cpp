@@ -74,7 +74,7 @@ KinematicsData::~KinematicsData()
 //					specified command.
 //
 // Input Arguments:
-//		command		= ThreadJob::ThreadCommands& to be checked
+//		command		= ThreadJob::ThreadCommand& to be checked
 //
 // Output Arguments:
 //		None
@@ -83,7 +83,7 @@ KinematicsData::~KinematicsData()
 //		None
 //
 //==========================================================================
-bool KinematicsData::OkForCommand(ThreadJob::ThreadCommands &command)
+bool KinematicsData::OkForCommand(ThreadJob::ThreadCommand &command)
 {
 	// Make sure the command is one of the expected types
 	return command == ThreadJob::CommandThreadKinematicsNormal ||

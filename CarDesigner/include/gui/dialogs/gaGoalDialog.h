@@ -28,21 +28,21 @@ class GA_GOAL_DIALOG : public wxDialog
 {
 public:
 	// Constructor
-	GA_GOAL_DIALOG(wxWindow *Parent, const Convert &_Converter, const KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE &_Output,
+	GA_GOAL_DIALOG(wxWindow *Parent, const Convert &_Converter, const KinematicOutputs::OutputsComplete &_Output,
 		const double &_DesiredValue, const double &_ExpectedDeviation, const double &_Importance,
-		const KINEMATICS::INPUTS &_BeforeInputs, const KINEMATICS::INPUTS &_AfterInputs,
+		const Kinematics::Inputs &_BeforeInputs, const Kinematics::Inputs &_AfterInputs,
 		wxWindowID Id, const wxPoint &Position, long Style = wxDEFAULT_DIALOG_STYLE);
 
 	// Destructor
 	~GA_GOAL_DIALOG();
 
 	// Private member accessors
-	KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE GetOutput(void) const { return Output; };
+	KinematicOutputs::OutputsComplete GetOutput(void) const { return Output; };
 	double GetDesiredValue(void) const { return DesiredValue; };
 	double GetExpectedDeviation(void) const { return ExpectedDeviation; };
 	double GetImportance(void) const { return Importance; };
-	KINEMATICS::INPUTS GetBeforeInputs(void) const { return BeforeInputs; };
-	KINEMATICS::INPUTS GetAfterInputs(void) const { return AfterInputs; };
+	Kinematics::Inputs GetBeforeInputs(void) const { return BeforeInputs; };
+	Kinematics::Inputs GetAfterInputs(void) const { return AfterInputs; };
 
 private:
 	// The object that handles the unit conversions between the input and output
@@ -80,14 +80,14 @@ private:
 	wxStaticText *AfterLabel;
 
 	// Values (populated when OK is clicked)
-	KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE Output;
+	KinematicOutputs::OutputsComplete Output;
 
 	double DesiredValue;
 	double ExpectedDeviation;
 	double Importance;
 
-	KINEMATICS::INPUTS BeforeInputs;
-	KINEMATICS::INPUTS AfterInputs;
+	Kinematics::Inputs BeforeInputs;
+	Kinematics::Inputs AfterInputs;
 
 	// Event handlers
 	virtual void OKClickEvent(wxCommandEvent &event);

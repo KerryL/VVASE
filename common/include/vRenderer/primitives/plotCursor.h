@@ -27,7 +27,8 @@ class PlotCursor : public Primitive
 {
 public:
 	// Constructor
-	PlotCursor(RenderWindow &_renderWindow, const Axis &_axis);
+	PlotCursor(RenderWindow &_renderWindow, const Axis &_axis,
+		const Axis &_oppositeAxis, const Axis &_perpendicularAxis);
 
 	// Mandatory overloads from PRIMITIVE - for creating geometry and testing the
 	// validity of this object's parameters
@@ -45,6 +46,8 @@ public:
 private:
 	// The axis we are associated with (perpendicular to)
 	const Axis &axis;
+	const Axis &oppositeAxis;
+	const Axis &perpendicularAxis;
 
 	// Current value where this object meets the axis
 	double value;

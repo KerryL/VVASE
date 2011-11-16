@@ -78,7 +78,7 @@ GA_OBJECT::GA_OBJECT(MAIN_FRAME &_MainFrame, GENETIC_OPTIMIZATION &_Optimization
 //==========================================================================
 GA_OBJECT::~GA_OBJECT()
 {
-	wxMutexLocker Lock(GSAMutex);
+	wxMutexLocker lock(gsaMutex);
 
 	// Delete this object's CAR members
 	int i;
@@ -146,35 +146,35 @@ void GA_OBJECT::SimulateGeneration(void)
 
 	// Start a bunch of jobs to evaluate all the different genomes at each different input condition
 	// Use a counter to keep track of the number of pending jobs
-	KINEMATICS_DATA *Data;
+	KinematicsData *Data;
 
 	// Initialize the semaphore
-	InverseSemaphore.Set(NumberOfCars);
+	inverseSemaphore.Set(NumberOfCars);
 
 	int i, j, temp(Optimization.GetIndex());
-	for (i = 0; i < PopulationSize; i++)
+	for (i = 0; i < populationSize; i++)
 	{
 		for (j = 0; j < InputList.GetCount(); j++)
 		{
 			// Set up the car according to the current genome
-			SetCarGenome(i * InputList.GetCount() + j, Genomes[CurrentGeneration][i]);
+			SetCarGenome(i * InputList.GetCount() + j, genomes[currentGeneration][i]);
 
 			// Create the data and the job to send to the thread pool
-			Data = new KINEMATICS_DATA(OriginalCarArray[i * InputList.GetCount() + j],
+			Data = new KinematicsData(OriginalCarArray[i * InputList.GetCount() + j],
 				WorkingCarArray[i * InputList.GetCount() + j], *InputList.GetObject(j),
 				KinematicOutputArray + i * InputList.GetCount() + j);
-			THREAD_JOB NewJob(THREAD_JOB::COMMAND_THREAD_KINEMATICS_FOR_GA, Data,
+			ThreadJob NewJob(ThreadJob::CommandThreadKinematicsGA, Data,
 				Optimization.GetCleanName(), temp);
 			MainFrame.AddJob(NewJob);
 		}
 	}
 
 	// Wait until the analyses are complete
-	InverseSemaphore.Wait();
+	inverseSemaphore.Wait();
 
 	// Determine fitnesses for every genome we just simulated
-	for (i = 0; i < PopulationSize; i++)
-		Fitnesses[CurrentGeneration][i] = DetermineFitness(&i);
+	for (i = 0; i < populationSize; i++)
+		fitnesses[currentGeneration][i] = DetermineFitness(&i);
 
 	return;
 }
@@ -284,7 +284,7 @@ double GA_OBJECT::DetermineFitness(const int *Citizen)
 void GA_OBJECT::SetUp(CAR *_TargetCar)
 {
 	// Ensure exclusive access to this object
-	GSAMutex.Lock();
+	gsaMutex.Lock();
 
 	// Initialize the run
 	int *PhenotypeSizes = new int[GeneList.GetCount()];
@@ -297,14 +297,14 @@ void GA_OBJECT::SetUp(CAR *_TargetCar)
 	TargetCar = _TargetCar;
 
 	// Release the mutex
-	GSAMutex.Unlock();
+	gsaMutex.Unlock();
 
 	// Initialize the algorithm
-	InitializeAlgorithm(PopulationSize, GenerationLimit, GeneList.GetCount(), PhenotypeSizes, true,
-		Crossover, Elitism, Mutation);
+	InitializeAlgorithm(populationSize, generationLimit, GeneList.GetCount(), PhenotypeSizes, true,
+		crossover, elitism, mutation);
 
 	// Ensure exlcusive access to this object (again)
-	wxMutexLocker Lock(GSAMutex);
+	wxMutexLocker lock(gsaMutex);
 
 	// Delete the dynamically allocated memory
 	delete [] PhenotypeSizes;
@@ -322,9 +322,9 @@ void GA_OBJECT::SetUp(CAR *_TargetCar)
 	delete [] WorkingCarArray;
 	delete [] KinematicOutputArray;
 
-	NumberOfCars = PopulationSize * InputList.GetCount();
+	NumberOfCars = populationSize * InputList.GetCount();
 
-	KinematicOutputArray = new KINEMATIC_OUTPUTS[NumberOfCars];
+	KinematicOutputArray = new KinematicOutputs[NumberOfCars];
 	OriginalCarArray = new CAR*[NumberOfCars];
 	WorkingCarArray = new CAR*[NumberOfCars];
 	for (i = 0; i < NumberOfCars; i++)
@@ -502,20 +502,20 @@ void GA_OBJECT::PerformAdditionalActions(void)
 	// Compute average fitness for this generation
 	double AverageFitness = 0.0;
 	int i;
-	for (i = 0; i < PopulationSize; i++)
-		AverageFitness += Fitnesses[CurrentGeneration][i];
-	AverageFitness /= (float)PopulationSize;
+	for (i = 0; i < populationSize; i++)
+		AverageFitness += fitnesses[currentGeneration][i];
+	AverageFitness /= (double)populationSize;
 
 	// Get maximum fitness for this generation
-	double MaximumFitness = Fitnesses[CurrentGeneration][0];
+	double MaximumFitness = fitnesses[currentGeneration][0];
 
 	// Display the average and best fitnesses
-	debugger.Print(Debugger::PriorityVeryHigh, "Completed Generation %i", CurrentGeneration + 1);
+	debugger.Print(Debugger::PriorityVeryHigh, "Completed Generation %i", currentGeneration + 1);
 	debugger.Print(Debugger::PriorityVeryHigh, "\tAverage Fitness:  %s", converter.FormatNumber(AverageFitness).c_str());
 	debugger.Print(Debugger::PriorityVeryHigh, "\tBest Fitness:     %s", converter.FormatNumber(MaximumFitness).c_str());
 
 	// Check to see if the simulation is still running
-	if (CurrentGeneration == GenerationLimit - 1)
+	if (currentGeneration == generationLimit - 1)
 		IsRunning = false;
 
 	return;
@@ -575,7 +575,7 @@ void GA_OBJECT::AddGene(const CORNER::HARDPOINTS &Hardpoint, const CORNER::HARDP
 // Description:		Adds a goal to the list of optimization criteria.
 //
 // Input Arguments:
-//		Output				= const KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE& specifying
+//		Output				= const KinematicOutputs::OutputsComplete& specifying
 //							  the output to optimize
 //		DesiredValue		= const double& specifying the desired value of the
 //							  output
@@ -583,9 +583,9 @@ void GA_OBJECT::AddGene(const CORNER::HARDPOINTS &Hardpoint, const CORNER::HARDP
 //							  the value
 //		Importance			= const double& specifying the relative importance
 //							  of this goal
-//		BeforeInputs		= const KINEMATICS::INPUTS& specifying the state
+//		BeforeInputs		= const Kinematics::Inputs& specifying the state
 //							  of the car
-//		AfterInputs			= const KINEMATICS::INPUTS& specifying the second state
+//		AfterInputs			= const Kinematics::Inputs& specifying the second state
 //							  of the car (if specified, the optimization is the
 //							  difference between the output at the first and
 //							  second state)
@@ -597,9 +597,9 @@ void GA_OBJECT::AddGene(const CORNER::HARDPOINTS &Hardpoint, const CORNER::HARDP
 //		None
 //
 //==========================================================================
-void GA_OBJECT::AddGoal(const KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE &Output, const double &DesiredValue,
-		const double &ExpectedDeviation, const double &Importance, const KINEMATICS::INPUTS &BeforeInputs,
-		const KINEMATICS::INPUTS &AfterInputs)
+void GA_OBJECT::AddGoal(const KinematicOutputs::OutputsComplete &Output, const double &DesiredValue,
+		const double &ExpectedDeviation, const double &Importance, const Kinematics::Inputs &BeforeInputs,
+		const Kinematics::Inputs &AfterInputs)
 {
 	// Create a new GOAL object
 	GOAL *NewGoal = new GOAL;
@@ -668,7 +668,7 @@ void GA_OBJECT::UpdateGene(const int &Index, const CORNER::HARDPOINTS &Hardpoint
 //
 // Input Arguments:
 //		Index				= const int& specifying the goal to update
-//		Output				= const KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE& specifying
+//		Output				= const KinematicOutputs::OutputsComplete& specifying
 //							  the output to optimize
 //		DesiredValue		= const double& specifying the desired value of the
 //							  output
@@ -676,9 +676,9 @@ void GA_OBJECT::UpdateGene(const int &Index, const CORNER::HARDPOINTS &Hardpoint
 //							  the value
 //		Importance			= const double& specifying the relative importance
 //							  of this goal
-//		BeforeInputs		= const KINEMATICS::INPUTS& specifying the state
+//		BeforeInputs		= const Kinematics::Inputs& specifying the state
 //							  of the car
-//		AfterInputs			= const KINEMATICS::INPUTS& specifying the second state
+//		AfterInputs			= const Kinematics::Inputs& specifying the second state
 //							  of the car (if specified, the optimization is the
 //							  difference between the output at the first and
 //							  second state)
@@ -690,9 +690,9 @@ void GA_OBJECT::UpdateGene(const int &Index, const CORNER::HARDPOINTS &Hardpoint
 //		None
 //
 //==========================================================================
-void GA_OBJECT::UpdateGoal(const int &Index, const KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE &Output, const double &DesiredValue,
-		const double &ExpectedDeviation, const double &Importance, const KINEMATICS::INPUTS &BeforeInputs,
-		const KINEMATICS::INPUTS &AfterInputs)
+void GA_OBJECT::UpdateGoal(const int &Index, const KinematicOutputs::OutputsComplete &Output, const double &DesiredValue,
+		const double &ExpectedDeviation, const double &Importance, const Kinematics::Inputs &BeforeInputs,
+		const Kinematics::Inputs &AfterInputs)
 {
 	// Copy the arguments to goal we're updating
 	GoalList[Index]->Output				= Output;
@@ -729,7 +729,7 @@ void GA_OBJECT::DetermineAllInputs(void)
 	// Clear out any existing inputs
 	InputList.Clear();
 
-	KINEMATICS::INPUTS *Input = new KINEMATICS::INPUTS;
+	Kinematics::Inputs *Input = new Kinematics::Inputs;
 	*Input = GoalList[0]->BeforeInputs;
 	InputList.Add(Input);
 
@@ -751,7 +751,7 @@ void GA_OBJECT::DetermineAllInputs(void)
 		if (NeedsToBeAdded)
 		{
 			// Since we're adding this to a managed list, we're allowed to reassign this pointer
-			Input = new KINEMATICS::INPUTS;
+			Input = new Kinematics::Inputs;
 			*Input = GoalList[i]->BeforeInputs;
 			InputList.Add(Input);
 		}
@@ -773,7 +773,7 @@ void GA_OBJECT::DetermineAllInputs(void)
 			if (NeedsToBeAdded)
 			{
 				// Since we're adding this to a managed list, we're allowed to reassign this pointer
-				Input = new KINEMATICS::INPUTS;
+				Input = new Kinematics::Inputs;
 				*Input = GoalList[i]->AfterInputs;
 				InputList.Add(Input);
 			}
@@ -802,10 +802,10 @@ void GA_OBJECT::DetermineAllInputs(void)
 void GA_OBJECT::UpdateTargetCar(void)
 {
 	// Ensure exclusive access to this object
-	wxMutexLocker Lock(GSAMutex);
+	wxMutexLocker lock(gsaMutex);
 
 	// Update the target car to match the best fit car we've got
-	*TargetCar = *OriginalCarArray[GenerationLimit - 1];
+	*TargetCar = *OriginalCarArray[generationLimit - 1];
 
 	return;
 }
@@ -888,7 +888,7 @@ GA_OBJECT::FILE_HEADER_INFO GA_OBJECT::ReadFileHeader(std::ifstream *InFile)
 bool GA_OBJECT::Write(wxString FileName)
 {
 	// Ensure exclusive access to this object
-	wxMutexLocker Lock(GSAMutex);
+	wxMutexLocker lock(gsaMutex);
 
 	// Open the specified file
 	std::ofstream OutFile(FileName.c_str(), ios::out | ios::binary);
@@ -901,11 +901,11 @@ bool GA_OBJECT::Write(wxString FileName)
 	WriteFileHeader(&OutFile);
 
 	// Write this object's data
-	OutFile.write((char*)&PopulationSize, sizeof(int));
-	OutFile.write((char*)&GenerationLimit, sizeof(int));
-	OutFile.write((char*)&Elitism, sizeof(double));
-	OutFile.write((char*)&Mutation, sizeof(double));
-	OutFile.write((char*)&Crossover, sizeof(int));
+	OutFile.write((char*)&populationSize, sizeof(int));
+	OutFile.write((char*)&generationLimit, sizeof(int));
+	OutFile.write((char*)&elitism, sizeof(double));
+	OutFile.write((char*)&mutation, sizeof(double));
+	OutFile.write((char*)&crossover, sizeof(int));
 
 	int i = GeneList.GetCount();
 	OutFile.write((char*)&i, sizeof(int));
@@ -942,7 +942,7 @@ bool GA_OBJECT::Write(wxString FileName)
 bool GA_OBJECT::Read(wxString FileName)
 {
 	// Ensure exclusive access to this object
-	wxMutexLocker Lock(GSAMutex);
+	wxMutexLocker lock(gsaMutex);
 
 	// Clear out current lists
 	GeneList.Clear();
@@ -969,11 +969,11 @@ bool GA_OBJECT::Read(wxString FileName)
 	}
 
 	// Read this object's data
-	InFile.read((char*)&PopulationSize, sizeof(int));
-	InFile.read((char*)&GenerationLimit, sizeof(int));
-	InFile.read((char*)&Elitism, sizeof(double));
-	InFile.read((char*)&Mutation, sizeof(double));
-	InFile.read((char*)&Crossover, sizeof(int));
+	InFile.read((char*)&populationSize, sizeof(int));
+	InFile.read((char*)&generationLimit, sizeof(int));
+	InFile.read((char*)&elitism, sizeof(double));
+	InFile.read((char*)&mutation, sizeof(double));
+	InFile.read((char*)&crossover, sizeof(int));
 
 	int TempCount, i;
 	GENE *TempGene;

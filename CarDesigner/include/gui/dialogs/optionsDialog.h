@@ -35,7 +35,7 @@ class OPTIONS_DIALOG : public wxDialog
 {
 public:
 	// Constructor
-	OPTIONS_DIALOG(MAIN_FRAME &_MainFrame, Convert &_Converter, KINEMATICS::INPUTS &_KinematicInputs,
+	OPTIONS_DIALOG(MAIN_FRAME &_MainFrame, Convert &_Converter, Kinematics::Inputs &_KinematicInputs,
 		wxWindowID Id, const wxPoint &Position, Debugger &_debugger, long Style = wxDEFAULT_DIALOG_STYLE);
 
 	// Destructor
@@ -49,7 +49,7 @@ private:
 	Convert &Converter;
 
 	// The object that contains the options for the kinematic analysis
-	KINEMATICS::INPUTS &KinematicInputs;
+	Kinematics::Inputs &KinematicInputs;
 
 	// The parent window
 	MAIN_FRAME &MainFrame;

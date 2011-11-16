@@ -59,8 +59,12 @@ public:
 	void AddCurve(wxString mathString);
 	void AddCurve(Dataset2D *data, wxString name);
 	void RemoveCurve(const unsigned int &i);
+
+	void SetXAxisGridText(wxString text);
 	
 	PlotRenderer* GetRenderer(void) { return renderer; };
+
+	inline unsigned int GetCurveCount(void) { return plotList.GetCount(); };
 
 private:
 	const Debugger &debugger;

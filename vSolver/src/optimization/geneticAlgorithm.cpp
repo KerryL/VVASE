@@ -23,10 +23,10 @@
 #include <ctime>
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM
-// Function:		GENETIC_ALGORITHM
+// Class:			GeneticAlgorithm
+// Function:		GeneticAlgorithm
 //
-// Description:		Constructor for the GENETIC_ALGORITHM class.
+// Description:		Constructor for the GeneticAlgorithm class.
 //
 // Input Arguments:
 //		None
@@ -38,34 +38,34 @@
 //		None
 //
 //==========================================================================
-GENETIC_ALGORITHM::GENETIC_ALGORITHM()
+GeneticAlgorithm::GeneticAlgorithm()
 {
 	// Ensure exlcusive access to this object
-	GSAMutex.Lock();
+	gsaMutex.Lock();
 
 	// Initialize the pointers
-	Genomes = NULL;
-	NumberOfPhenotypes = NULL;
-	Fitnesses = NULL;
+	genomes = NULL;
+	numberOfPhenotypes = NULL;
+	fitnesses = NULL;
 
 	// Initialize the number of generations
-	GenerationLimit = 0;
+	generationLimit = 0;
 
 	// Initialize the sorting method
-	SortingMethod = SortMerge;
+	sortingMethod = SortMerge;
 
 	// Release the mutex
-	GSAMutex.Unlock();
+	gsaMutex.Unlock();
 
 	// Initialize the class members to zero
 	InitializeAlgorithm(0, 0, 0, NULL, false, 0, 0.0, 0.0);
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM
-// Function:		~GENETIC_ALGORITHM
+// Class:			GeneticAlgorithm
+// Function:		~GeneticAlgorithm
 //
-// Description:		Destructor for the GENETIC_ALGORITHM class.
+// Description:		Destructor for the GeneticAlgorithm class.
 //
 // Input Arguments:
 //		None
@@ -77,23 +77,23 @@ GENETIC_ALGORITHM::GENETIC_ALGORITHM()
 //		None
 //
 //==========================================================================
-GENETIC_ALGORITHM::~GENETIC_ALGORITHM()
+GeneticAlgorithm::~GeneticAlgorithm()
 {
 	// Ensure exlcusive access to this object
-	wxMutexLocker Lock(GSAMutex);
+	wxMutexLocker lock(gsaMutex);
 
 	// Delete dynamically allocated memory
 	DeleteDynamicMemory();
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM
+// Class:			GeneticAlgorithm
 // Function:		SetPopulationSize
 //
 // Description:		Sets the population size for this algorithm.
 //
 // Input Arguments:
-//		_PopulationSize	= int specifying the number citizens
+//		_populationSize	= int specifying the number citizens
 //
 // Output Arguments:
 //		None
@@ -102,26 +102,26 @@ GENETIC_ALGORITHM::~GENETIC_ALGORITHM()
 //		None
 //
 //==========================================================================
-void GENETIC_ALGORITHM::SetPopulationSize(int _PopulationSize)
+void GeneticAlgorithm::SetPopulationSize(int _populationSize)
 {
 	// Ensure exlcusive access to this object
-	wxMutexLocker Lock(GSAMutex);
+	wxMutexLocker lock(gsaMutex);
 
 	// Make sure the data is OK, then do the assignment
-	if (_PopulationSize > 0)
-		PopulationSize = _PopulationSize;
+	if (_populationSize > 0)
+		populationSize = _populationSize;
 
 	return;
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM
+// Class:			GeneticAlgorithm
 // Function:		SetGenerationLimit
 //
 // Description:		Sets the generation limit for this algorithm.
 //
 // Input Arguments:
-//		_GenerationLimit	= int specifying the maximum number of generations
+//		_generationLimit	= int specifying the maximum number of generations
 //
 // Output Arguments:
 //		None
@@ -130,26 +130,26 @@ void GENETIC_ALGORITHM::SetPopulationSize(int _PopulationSize)
 //		None
 //
 //==========================================================================
-void GENETIC_ALGORITHM::SetGenerationLimit(int _GenerationLimit)
+void GeneticAlgorithm::SetGenerationLimit(int _generationLimit)
 {
 	// Ensure exlcusive access to this object
-	wxMutexLocker Lock(GSAMutex);
+	wxMutexLocker lock(gsaMutex);
 
 	// Make sure the data is OK, then do the assignment
-	if (_GenerationLimit > 0)
-		GenerationLimit = _GenerationLimit;
+	if (_generationLimit > 0)
+		generationLimit = _generationLimit;
 
 	return;
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM
+// Class:			GeneticAlgorithm
 // Function:		SetCrossoverPoint
 //
 // Description:		Sets the crossover point for this algorithm.
 //
 // Input Arguments:
-//		_Crossover	= int specifying the point to apply the crossover
+//		_crossover	= int specifying the point to apply the crossover
 //
 // Output Arguments:
 //		None
@@ -158,34 +158,34 @@ void GENETIC_ALGORITHM::SetGenerationLimit(int _GenerationLimit)
 //		None
 //
 //==========================================================================
-void GENETIC_ALGORITHM::SetCrossoverPoint(int _Crossover)
+void GeneticAlgorithm::SetCrossoverPoint(int _crossover)
 {
 	// Ensure exlcusive access to this object
-	wxMutexLocker Lock(GSAMutex);
+	wxMutexLocker lock(gsaMutex);
 
-	if (_Crossover < 0)
-		Crossover = 0;
+	if (_crossover < 0)
+		crossover = 0;
 	// We add the requirement that number of genes is greater than zero because
 	// this can be used to set the crossover point prior to the start of the
 	// optimization, in which case NumberOfGenes = 0.  We do want to allow the
 	// crossover to be set, however, because when we save an optimization to file,
 	// we need the crossover variable to store what the user wanted.
-	else if (_Crossover > NumberOfGenes && NumberOfGenes > 0)
-		Crossover = NumberOfGenes;
+	else if (_crossover > numberOfGenes && numberOfGenes > 0)
+		crossover = numberOfGenes;
 	else
-		Crossover = _Crossover;
+		crossover = _crossover;
 
 	return;
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM
+// Class:			GeneticAlgorithm
 // Function:		SetElitismPercentage
 //
 // Description:		Sets the elitism percentage for this algorithm.
 //
 // Input Arguments:
-//		_Elitism	= double specifying the new percentage to use for
+//		_elitism	= double specifying the new percentage to use for
 //					  elitism
 //
 // Output Arguments:
@@ -195,30 +195,30 @@ void GENETIC_ALGORITHM::SetCrossoverPoint(int _Crossover)
 //		None
 //
 //==========================================================================
-void GENETIC_ALGORITHM::SetElitismPercentage(double _Elitism)
+void GeneticAlgorithm::SetElitismPercentage(double _elitism)
 {
 	// Ensure exlcusive access to this object
-	wxMutexLocker Lock(GSAMutex);
+	wxMutexLocker lock(gsaMutex);
 
 	// Make sure the value is between 0 and 1
-	if (_Elitism < 0.0)
-		Elitism = 0.0;
-	else if (_Elitism > 1.0)
-		Elitism = 1.0;
+	if (_elitism < 0.0)
+		elitism = 0.0;
+	else if (_elitism > 1.0)
+		elitism = 1.0;
 	else
-		Elitism = _Elitism;
+		elitism = _elitism;
 
 	return;
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM
+// Class:			GeneticAlgorithm
 // Function:		SetMutationProbability
 //
 // Description:		Sets the mutation probability for the algorithm.
 //
 // Input Arguments:
-//		_Mutation	= double specifying the probability of mutation occuring
+//		_mutation	= double specifying the probability of mutation occuring
 //
 // Output Arguments:
 //		None
@@ -227,40 +227,40 @@ void GENETIC_ALGORITHM::SetElitismPercentage(double _Elitism)
 //		None
 //
 //==========================================================================
-void GENETIC_ALGORITHM::SetMutationProbability(double _Mutation)
+void GeneticAlgorithm::SetMutationProbability(double _mutation)
 {
 	// Ensure exlcusive access to this object
-	wxMutexLocker Lock(GSAMutex);
+	wxMutexLocker lock(gsaMutex);
 
 	// Make sure the value is between 0 and 1
-	if (_Mutation < 0.0)
-		Mutation = 0.0;
-	else if (_Mutation > 1.0)
-		Mutation = 1.0;
+	if (_mutation < 0.0)
+		mutation = 0.0;
+	else if (_mutation > 1.0)
+		mutation = 1.0;
 	else
-		Mutation = _Mutation;
+		mutation = _mutation;
 
 	return;
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM
+// Class:			GeneticAlgorithm
 // Function:		InitializeAlgorithm
 //
 // Description:		Initializes all of the variables used in the optimization.
 //
 // Input Arguments:
-//		_PopulationSize		= int specifying the number of objects in the population
-//		_GenerationLimit	= int specifying the maximum number of times to run
+//		_populationSize		= int specifying the number of objects in the population
+//		_generationLimit	= int specifying the maximum number of times to run
 //							  the loop
-//		_NumberOfGenes		= int specifying the number of genes for this optimization
-//		_NumberOfPhenotypes	= int* pointing to an array of integers that specify the
+//		_numberOfGenes		= int specifying the number of genes for this optimization
+//		_numberOfPhenotypes	= int* pointing to an array of integers that specify the
 //							  number of possible permutations for each gene
-//		_Minimize			= bool indiciating whether the fitness function should
+//		_minimize			= bool indiciating whether the fitness function should
 //							  be minimized or maximized
-//		_Crossover			= int specifying the crossover point (or the crossover scheme)
-//		_Elitism			= double specifying the elitism percentage
-//		_Mutation			= double specifying the chance of mutation occuring
+//		_crossover			= int specifying the crossover point (or the crossover scheme)
+//		_elitism			= double specifying the elitism percentage
+//		_mutation			= double specifying the chance of mutation occuring
 //
 // Output Arguments:
 //		None
@@ -269,66 +269,66 @@ void GENETIC_ALGORITHM::SetMutationProbability(double _Mutation)
 //		None
 //
 //==========================================================================
-void GENETIC_ALGORITHM::InitializeAlgorithm(int _PopulationSize, int _GenerationLimit,
-											int _NumberOfGenes, int *_NumberOfPhenotypes,
-											bool _Minimize, int _Crossover,
-											double _Elitism, double _Mutation)
+void GeneticAlgorithm::InitializeAlgorithm(int _populationSize, int _generationLimit,
+											int _numberOfGenes, int *_numberOfPhenotypes,
+											bool _minimize, int _crossover,
+											double _elitism, double _mutation)
 {
 	// Ensure exlcusive access to this object
-	GSAMutex.Lock();
+	gsaMutex.Lock();
 
 	// Delete dynamically allocated memory before we overwrite our existing sizes
 	DeleteDynamicMemory();
 
 	// Copy the values to the class members
-	PopulationSize	= _PopulationSize;
-	GenerationLimit	= _GenerationLimit;
-	NumberOfGenes	= _NumberOfGenes;
-	Minimize		= _Minimize;
+	populationSize	= _populationSize;
+	generationLimit	= _generationLimit;
+	numberOfGenes	= _numberOfGenes;
+	minimize		= _minimize;
 
 	// Release the mutex to avoid a deadlock in the following "Set" functions
-	GSAMutex.Unlock();
+	gsaMutex.Unlock();
 
 	// Use set functions to assign the rest to ensure the values are within range
-	SetCrossoverPoint(_Crossover);
-	SetElitismPercentage(_Elitism);
-	SetMutationProbability(_Mutation);
+	SetCrossoverPoint(_crossover);
+	SetElitismPercentage(_elitism);
+	SetMutationProbability(_mutation);
 
 	// Ensure exlcusive access to this object (again)
-	wxMutexLocker Lock(GSAMutex);
+	wxMutexLocker lock(gsaMutex);
 
 	// Initialize the current generation
-	CurrentGeneration = -1;
+	currentGeneration = -1;
 
 	// Handle the memory allocation
-	if (NumberOfGenes > 0 && _NumberOfPhenotypes)
+	if (numberOfGenes > 0 && _numberOfPhenotypes)
 	{
 		// Allocate memory for the number of phenotypes array
-		NumberOfPhenotypes = new int[NumberOfGenes];
+		numberOfPhenotypes = new int[numberOfGenes];
 
 		// Copy the phenotype array
 		int i;
-		for (i = 0; i < NumberOfGenes; i++)
-			NumberOfPhenotypes[i] = _NumberOfPhenotypes[i];
+		for (i = 0; i < numberOfGenes; i++)
+			numberOfPhenotypes[i] = _numberOfPhenotypes[i];
 
 		// If the number of generations is not zero and the population size is not zero,
 		// allocate memory for the genomes and fitnesses
-		if (GenerationLimit > 0 && PopulationSize > 0)
+		if (generationLimit > 0 && populationSize > 0)
 		{
 			// Allocate memory for the top level of pointers
-			Genomes = new int**[GenerationLimit];
-			Fitnesses = new double*[GenerationLimit];
+			genomes = new int**[generationLimit];
+			fitnesses = new double*[generationLimit];
 
 			// Allocate memory for the genomes and fitnesses within each generation
-			for (i = 0; i < GenerationLimit; i++)
+			for (i = 0; i < generationLimit; i++)
 			{
-				Genomes[i] = new int*[PopulationSize];
-				Fitnesses[i] = new double[PopulationSize];
+				genomes[i] = new int*[populationSize];
+				fitnesses[i] = new double[populationSize];
 
 				// Allocate the memory for each gene for each citizen
 				int j;
-				for (j = 0; j < PopulationSize; j++)
-					Genomes[i][j] = new int[NumberOfGenes];
+				for (j = 0; j < populationSize; j++)
+					genomes[i][j] = new int[numberOfGenes];
 			}
 		}
 	}
@@ -337,7 +337,7 @@ void GENETIC_ALGORITHM::InitializeAlgorithm(int _PopulationSize, int _Generation
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM
+// Class:			GeneticAlgorithm
 // Function:		SimulateGeneration
 //
 // Description:		Determines the fitnesses for the current population.
@@ -352,19 +352,19 @@ void GENETIC_ALGORITHM::InitializeAlgorithm(int _PopulationSize, int _Generation
 //		None
 //
 //==========================================================================
-void GENETIC_ALGORITHM::SimulateGeneration(void)
+void GeneticAlgorithm::SimulateGeneration(void)
 {
 	// Determine the fitness for each genome in this generation
-	int CurrentCitizen;
-	for (CurrentCitizen = 0; CurrentCitizen < PopulationSize; CurrentCitizen++)
-		Fitnesses[CurrentGeneration][CurrentCitizen] =
-			DetermineFitness(Genomes[CurrentGeneration][CurrentCitizen]);
+	int currentCitizen;
+	for (currentCitizen = 0; currentCitizen < populationSize; currentCitizen++)
+		fitnesses[currentGeneration][currentCitizen] =
+			DetermineFitness(genomes[currentGeneration][currentCitizen]);
 
 	return;
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM
+// Class:			GeneticAlgorithm
 // Function:		PerformOptimization
 //
 // Description:		The main run loop for the algorithm.
@@ -379,23 +379,23 @@ void GENETIC_ALGORITHM::SimulateGeneration(void)
 //		bool, returns true on success, false on failure
 //
 //==========================================================================
-bool GENETIC_ALGORITHM::PerformOptimization(void)
+bool GeneticAlgorithm::PerformOptimization(void)
 {
 	// Ensure exlcusive access to this object
-	wxMutexLocker Lock(GSAMutex);
+	wxMutexLocker lock(gsaMutex);
 
 	// Make sure everything we need has been defined
-	if (NumberOfGenes == 0 || !NumberOfPhenotypes || !Genomes)
+	if (numberOfGenes == 0 || !numberOfPhenotypes || !genomes)
 		return false;
 
 	// Create a local stop flag
-	bool StopFlag = false;
+	bool stopFlag = false;
 
 	// The main loop
-	while (!StopFlag && CurrentGeneration + 1 < GenerationLimit)
+	while (!stopFlag && currentGeneration + 1 < generationLimit)
 	{
 		// Increment the generation number
-		CurrentGeneration++;
+		currentGeneration++;
 
 		// Get the next generation's genomes
 		Breed();
@@ -414,7 +414,7 @@ bool GENETIC_ALGORITHM::PerformOptimization(void)
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM
+// Class:			GeneticAlgorithm
 // Function:		CreateFirstGeneration
 //
 // Description:		Randomly creates the first generation's genomes.
@@ -429,26 +429,26 @@ bool GENETIC_ALGORITHM::PerformOptimization(void)
 //		None
 //
 //==========================================================================
-void GENETIC_ALGORITHM::CreateFirstGeneration(void)
+void GeneticAlgorithm::CreateFirstGeneration(void)
 {
 	// Seed the random number generator
 	srand((unsigned int)time(NULL));
 
 	// For each citizen in the first generation, go through the process of creating a genome
-	int CurrentCitizen, CurrentGene;
-	for (CurrentCitizen = 0; CurrentCitizen < PopulationSize; CurrentCitizen++)
+	int currentCitizen, currentGene;
+	for (currentCitizen = 0; currentCitizen < populationSize; currentCitizen++)
 	{
 		// For each gene in the genome, get a random value that is within the range.
 		// (rand() % limit)  will give an integer between 0 and limit - 1.
-		for (CurrentGene = 0; CurrentGene < NumberOfGenes; CurrentGene++)
-			Genomes[0][CurrentCitizen][CurrentGene] = rand() % NumberOfPhenotypes[CurrentGene];
+		for (currentGene = 0; currentGene < numberOfGenes; currentGene++)
+			genomes[0][currentCitizen][currentGene] = rand() % numberOfPhenotypes[currentGene];
 	}
 
 	return;
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM
+// Class:			GeneticAlgorithm
 // Function:		Breed
 //
 // Description:		Breeds within the current generation to create the next
@@ -464,11 +464,11 @@ void GENETIC_ALGORITHM::CreateFirstGeneration(void)
 //		None
 //
 //==========================================================================
-void GENETIC_ALGORITHM::Breed(void)
+void GeneticAlgorithm::Breed(void)
 {
 	// If this is the first generation (CurrentGeneration == 0), then
 	// randomly create the first generation
-	if (CurrentGeneration == 0)
+	if (currentGeneration == 0)
 	{
 		CreateFirstGeneration();
 
@@ -476,37 +476,37 @@ void GENETIC_ALGORITHM::Breed(void)
 	}
 
 	// Perform the breeding
-	int i, GeneToMutate, RandomCrossover, NumberOfOffspring = 0;
-	bool SpawnTwoChildren;
-	while (NumberOfOffspring < PopulationSize)
+	int i, geneToMutate, randomCrossover, numberOfOffspring = 0;
+	bool spawnTwoChildren;
+	while (numberOfOffspring < populationSize)
 	{
 		// Look at elitism first - if we don't have the "elite" citizens in the new
 		// generation, grab them now
-		if (NumberOfOffspring < int(Elitism * PopulationSize))
+		if (numberOfOffspring < int(elitism * populationSize))
 		{
 			// Copy the genome from the previous generation
-			for (i = 0; i < NumberOfGenes; i++)
-				Genomes[CurrentGeneration][NumberOfOffspring][i] =
-					Genomes[CurrentGeneration - 1][NumberOfOffspring][i];
+			for (i = 0; i < numberOfGenes; i++)
+				genomes[currentGeneration][numberOfOffspring][i] =
+					genomes[currentGeneration - 1][numberOfOffspring][i];
 		}
 		else// Not a direct copy of a previous citizen
 		{
 			// If there is room for at least two more children in the new generation, spawn two children
-			if (PopulationSize - NumberOfOffspring > 1)
-				SpawnTwoChildren = true;
+			if (populationSize - numberOfOffspring > 1)
+				spawnTwoChildren = true;
 			else
-				SpawnTwoChildren = false;
+				spawnTwoChildren = false;
 
 			// TODO(Optional):  Make the chance to be selected as a parent related to the fitness
 			// i.e. more fit citizen get selected to mate more often
 
 			// The father is determined by the index, the mother is determined
 			// randomly (but must not match the father).  Find the mother.
-			int Mother = rand() % int(PopulationSize / 2.0);
-			if (NumberOfOffspring == 0 && NumberOfOffspring == Mother)
-				Mother += 1;
-			else if (NumberOfOffspring == Mother)
-				Mother -= 1;
+			int mother = rand() % int(populationSize / 2.0);
+			if (numberOfOffspring == 0 && numberOfOffspring == mother)
+				mother += 1;
+			else if (numberOfOffspring == mother)
+				mother -= 1;
 
 			// Determine what crossover scheme to use.  If Crossover is between 0 and NumberOfGenes,
 			// then all genes before that point come from one parent, and all genes after it come from
@@ -514,156 +514,156 @@ void GENETIC_ALGORITHM::Breed(void)
 			// point is greater than the NumberOfGenes, we randomly choose a crossover point every time
 			// we spawn a new offspring.  If we are not using a crossover point, each gene has an equal
 			// chance of coming from either parent.
-			if (Crossover == 0)// Not using a crossover point
+			if (crossover == 0)// Not using a crossover point
 			{
 				// Determine if we should spawn the opposite child as well
-				if (SpawnTwoChildren)
+				if (spawnTwoChildren)
 				{
 					// For each gene, roll the dice to see if the gene will come from the mother or father
-					for (i = 0; i < NumberOfGenes; i++)
+					for (i = 0; i < numberOfGenes; i++)
 					{
 						// If the roll is less than 50%, take the gene from the father
 						if (rand() % 2 == 0)
 						{
 							// The first child gets this gene from the father
-							Genomes[CurrentGeneration][NumberOfOffspring][i] =
-								Genomes[CurrentGeneration - 1][NumberOfOffspring][i];
+							genomes[currentGeneration][numberOfOffspring][i] =
+								genomes[currentGeneration - 1][numberOfOffspring][i];
 
 							// The second child gets this gene from the mother
-							Genomes[CurrentGeneration][NumberOfOffspring + 1][i] =
-								Genomes[CurrentGeneration - 1][Mother][i];
+							genomes[currentGeneration][numberOfOffspring + 1][i] =
+								genomes[currentGeneration - 1][mother][i];
 						}
 						else// This gene come from the mother
 						{
 							// The first child gets this gene from the mother
-							Genomes[CurrentGeneration][NumberOfOffspring][i] =
-								Genomes[CurrentGeneration - 1][Mother][i];
+							genomes[currentGeneration][numberOfOffspring][i] =
+								genomes[currentGeneration - 1][mother][i];
 
 							// The second child gets this gene from the father
-							Genomes[CurrentGeneration][NumberOfOffspring + 1][i] =
-								Genomes[CurrentGeneration - 1][NumberOfOffspring][i];
+							genomes[currentGeneration][numberOfOffspring + 1][i] =
+								genomes[currentGeneration - 1][numberOfOffspring][i];
 						}
 					}
 				}
 				else// Only spawn one child
 				{
 					// For each gene, roll the dice to see if the gene will come from the mother or father
-					for (i = 0; i < NumberOfGenes; i++)
+					for (i = 0; i < numberOfGenes; i++)
 					{
 						// If the roll is less than 50%, take the gene from the father
 						if (rand() % 2 == 0)
-							Genomes[CurrentGeneration][NumberOfOffspring][i] =
-								Genomes[CurrentGeneration - 1][NumberOfOffspring][i];
+							genomes[currentGeneration][numberOfOffspring][i] =
+								genomes[currentGeneration - 1][numberOfOffspring][i];
 						else// This gene come from the mother
-							Genomes[CurrentGeneration][NumberOfOffspring][i] =
-								Genomes[CurrentGeneration - 1][Mother][i];
+							genomes[currentGeneration][numberOfOffspring][i] =
+								genomes[currentGeneration - 1][mother][i];
 					}
 				}
 			}
-			else if (Crossover == NumberOfGenes)// Random crossover point
+			else if (crossover == numberOfGenes)// Random crossover point
 			{
 				// Determine the crossover point to use for this offspring
-				RandomCrossover = rand() % NumberOfGenes;
+				randomCrossover = rand() % numberOfGenes;
 
 				// For each gene, see if the gene will come from the mother or father
-				for (i = 0; i < NumberOfGenes; i++)
+				for (i = 0; i < numberOfGenes; i++)
 				{
 					// If the current gene is before the crossover point, it comes from the father
-					if (i < RandomCrossover)
-						Genomes[CurrentGeneration][NumberOfOffspring][i] =
-							Genomes[CurrentGeneration - 1][NumberOfOffspring][i];
+					if (i < randomCrossover)
+						genomes[currentGeneration][numberOfOffspring][i] =
+							genomes[currentGeneration - 1][numberOfOffspring][i];
 					else// The gene comes from the mother
-						Genomes[CurrentGeneration][NumberOfOffspring][i] =
-							Genomes[CurrentGeneration - 1][Mother][i];
+						genomes[currentGeneration][numberOfOffspring][i] =
+							genomes[currentGeneration - 1][mother][i];
 				}
 
 				// Determine if we should repeat for a second child
-				if (SpawnTwoChildren)
+				if (spawnTwoChildren)
 				{
 					// For each gene, see if the gene will come from the mother or father
-					for (i = 0; i < NumberOfGenes; i++)
+					for (i = 0; i < numberOfGenes; i++)
 					{
 						// If the current gene is before the crossover point, it comes from the father
-						if (i < RandomCrossover)
-							Genomes[CurrentGeneration][NumberOfOffspring + 1][i] =
-								Genomes[CurrentGeneration - 1][NumberOfOffspring][i];
+						if (i < randomCrossover)
+							genomes[currentGeneration][numberOfOffspring + 1][i] =
+								genomes[currentGeneration - 1][numberOfOffspring][i];
 						else// The gene comes from the mother
-							Genomes[CurrentGeneration][NumberOfOffspring + 1][i] =
-								Genomes[CurrentGeneration - 1][Mother][i];
+							genomes[currentGeneration][numberOfOffspring + 1][i] =
+								genomes[currentGeneration - 1][mother][i];
 					}
 				}
 			}
 			else// Using a static crossover point
 			{
 				// For each gene, see if the gene will come from the mother or father
-				for (i = 0; i < NumberOfGenes; i++)
+				for (i = 0; i < numberOfGenes; i++)
 				{
 					// If the current gene is before the crossover point, it comes from the father
-					if (i < Crossover)
-						Genomes[CurrentGeneration][NumberOfOffspring][i] =
-							Genomes[CurrentGeneration - 1][NumberOfOffspring][i];
+					if (i < crossover)
+						genomes[currentGeneration][numberOfOffspring][i] =
+							genomes[currentGeneration - 1][numberOfOffspring][i];
 					else// The gene comes from the mother
-						Genomes[CurrentGeneration][NumberOfOffspring][i] =
-							Genomes[CurrentGeneration - 1][Mother][i];
+						genomes[currentGeneration][numberOfOffspring][i] =
+							genomes[currentGeneration - 1][mother][i];
 				}
 
 				// Determine if we should repeat for a second child
-				if (SpawnTwoChildren)
+				if (spawnTwoChildren)
 				{
 					// For each gene, see if the gene will come from the mother or father
-					for (i = 0; i < NumberOfGenes; i++)
+					for (i = 0; i < numberOfGenes; i++)
 					{
 						// If the current gene is before the crossover point, it comes from the father
-						if (i < Crossover)
-							Genomes[CurrentGeneration][NumberOfOffspring + 1][i] =
-								Genomes[CurrentGeneration - 1][NumberOfOffspring][i];
+						if (i < crossover)
+							genomes[currentGeneration][numberOfOffspring + 1][i] =
+								genomes[currentGeneration - 1][numberOfOffspring][i];
 						else// The gene comes from the mother
-							Genomes[CurrentGeneration][NumberOfOffspring + 1][i] =
-								Genomes[CurrentGeneration - 1][Mother][i];
+							genomes[currentGeneration][numberOfOffspring + 1][i] =
+								genomes[currentGeneration - 1][mother][i];
 					}
 				}
 			}
 
 			// If mutations are active, determine whether or not a mutation occurs
-			if (Mutation > 0.0)
+			if (mutation > 0.0)
 			{
 				// Determine if a mutation occured
-				if (rand() % 100 + 1 < int(Mutation * 100.0))
+				if (rand() % 100 + 1 < int(mutation * 100.0))
 				{
 					// Mutate a random gene from this genome
-					GeneToMutate = rand() % NumberOfGenes;
-					Genomes[CurrentGeneration][NumberOfOffspring][GeneToMutate] =
-						rand() % NumberOfPhenotypes[GeneToMutate];
+					geneToMutate = rand() % numberOfGenes;
+					genomes[currentGeneration][numberOfOffspring][geneToMutate] =
+						rand() % numberOfPhenotypes[geneToMutate];
 				}
 
 				// If we had two children, check for another chance of mutation
-				if (SpawnTwoChildren)
+				if (spawnTwoChildren)
 				{
 					// Determine if the second child should be mutated as well
-					if (rand() % 100 + 1 < int(Mutation * 100.0))
+					if (rand() % 100 + 1 < int(mutation * 100.0))
 					{
 						// Mutate a random gene from the second child's genome
-						GeneToMutate = rand() % NumberOfGenes;
-						Genomes[CurrentGeneration][NumberOfOffspring + 1][GeneToMutate] =
-							rand() % NumberOfPhenotypes[GeneToMutate];
+						geneToMutate = rand() % numberOfGenes;
+						genomes[currentGeneration][numberOfOffspring + 1][geneToMutate] =
+							rand() % numberOfPhenotypes[geneToMutate];
 					}
 				}
 			}
 
 			// If we spawned two children, increment the number of offspring
-			if (SpawnTwoChildren)
-				NumberOfOffspring++;
+			if (spawnTwoChildren)
+				numberOfOffspring++;
 		}
 
 		// Increment the number of offspring
-		NumberOfOffspring++;
+		numberOfOffspring++;
 	}
 
 	return;
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM
+// Class:			GeneticAlgorithm
 // Function:		SortByFitness
 //
 // Description:		Sorts the specified generation by fitness.  The Minimize
@@ -680,22 +680,22 @@ void GENETIC_ALGORITHM::Breed(void)
 //		None
 //
 //==========================================================================
-void GENETIC_ALGORITHM::SortByFitness(void)
+void GeneticAlgorithm::SortByFitness(void)
 {
 	// Use the algorithm specified by the SortingMethod variable
-	switch (SortingMethod)
+	switch (sortingMethod)
 	{
 	case SortSelection:
-		SelectionSort(Fitnesses[CurrentGeneration], Genomes[CurrentGeneration], PopulationSize);
+		SelectionSort(fitnesses[currentGeneration], genomes[currentGeneration], populationSize);
 		break;
 
 	case SortQuicksort:
-		Quicksort(Fitnesses[CurrentGeneration], Genomes[CurrentGeneration], PopulationSize);
+		Quicksort(fitnesses[currentGeneration], genomes[currentGeneration], populationSize);
 		break;
 
 	case SortMerge:
 	default:
-		MergeSort(Fitnesses[CurrentGeneration], Genomes[CurrentGeneration], PopulationSize);
+		MergeSort(fitnesses[currentGeneration], genomes[currentGeneration], populationSize);
 		break;
 	}
 
@@ -703,7 +703,7 @@ void GENETIC_ALGORITHM::SortByFitness(void)
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM
+// Class:			GeneticAlgorithm
 // Function:		DeleteDynamicMemory
 //
 // Description:		Deletes dynamically allocated memory.
@@ -718,42 +718,40 @@ void GENETIC_ALGORITHM::SortByFitness(void)
 //		None
 //
 //==========================================================================
-void GENETIC_ALGORITHM::DeleteDynamicMemory(void)
+void GeneticAlgorithm::DeleteDynamicMemory(void)
 {
 	// Delete the old genomes and fitnesses (if they exist)
 	// Here we make the assumption that if and only if the genomes exist,
 	// everything else exists, too
 	int i, j;
-	if (Genomes)
+	if (genomes)
 	{
-		for (i = 0; i < GenerationLimit; i++)
+		for (i = 0; i < generationLimit; i++)
 		{
 			// Delete the genomes for each citizen in this generation
-			for (j = 0; j < PopulationSize; j++)
+			for (j = 0; j < populationSize; j++)
 			{
-				delete [] Genomes[i][j];
-				Genomes[i][j] = NULL;
+				delete [] genomes[i][j];
+				genomes[i][j] = NULL;
 			}
-			delete [] Genomes[i];
-			Genomes[i] = NULL;
+			delete [] genomes[i];
+			genomes[i] = NULL;
 
 			// Delete the fitnesses
-			delete [] Fitnesses[i];
-			Fitnesses[i] = NULL;
+			delete [] fitnesses[i];
+			fitnesses[i] = NULL;
 		}
-		delete [] Genomes;
-		delete [] Fitnesses;
+		delete [] genomes;
+		delete [] fitnesses;
 
 		// Delete the number of phenotypes
-		delete [] NumberOfPhenotypes;
-		NumberOfPhenotypes = NULL;
+		delete [] numberOfPhenotypes;
+		numberOfPhenotypes = NULL;
 	}
-
-	return;
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM
+// Class:			GeneticAlgorithm
 // Function:		PerformAdditionalActions
 //
 // Description:		Performs any additional actions required (to be overridden).
@@ -768,25 +766,24 @@ void GENETIC_ALGORITHM::DeleteDynamicMemory(void)
 //		None
 //
 //==========================================================================
-void GENETIC_ALGORITHM::PerformAdditionalActions(void)
+void GeneticAlgorithm::PerformAdditionalActions(void)
 {
-	return;
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM
+// Class:			GeneticAlgorithm
 // Function:		SelectionSort
 //
 // Description:		Sorts the fitnesses and genomes by fitness using a
 //					selection sort algorithm.
 //
 // Input Arguments:
-//		FitnessArray	= double* pointing to the list of values to sort
-//		GenomeArray		= int** pointing to the list of genomes - these
+//		fitnessArray	= double* pointing to the list of values to sort
+//		genomeArray		= int** pointing to the list of genomes - these
 //						  values are not used in the sorting process, but
 //						  they must be sorted along with the corresponding
 //						  fitness value
-//		ArraySize		= const int specifying the length of the array
+//		arraySize		= const int specifying the length of the array
 //
 // Output Arguments:
 //		None
@@ -795,64 +792,62 @@ void GENETIC_ALGORITHM::PerformAdditionalActions(void)
 //		None
 //
 //==========================================================================
-void GENETIC_ALGORITHM::SelectionSort(double *FitnessArray, int **GenomeArray,
-									  const int ArraySize)
+void GeneticAlgorithm::SelectionSort(double *fitnessArray, int **genomeArray,
+									  const int arraySize)
 {
 	// We will need to find the minimum or maximum value and swap it with
 	// the next element in the list.
-	int BestIndex, i, SwapGene;
-	double SwapFitness;
+	int bestIndex, i, swapGene;
+	double swapFitness;
 
 	// Repeat this procedure until the list is sorted
-	int SortIndex = 0;
-	while (SortIndex < ArraySize)
+	int sortIndex = 0;
+	while (sortIndex < arraySize)
 	{
-		// Initialize BestIndex
-		BestIndex = SortIndex;
+		// Initialize bestIndex
+		bestIndex = sortIndex;
 
 		// Go through the list and find the next best value
-		for (i = SortIndex; i < ArraySize; i ++)
+		for (i = sortIndex; i < arraySize; i ++)
 		{
 			// This depends on whether we're finding minimums or maximums
-			if ((FitnessArray[i] > FitnessArray[BestIndex] && !Minimize) ||
-				(FitnessArray[i] < FitnessArray[BestIndex] && Minimize))
-				BestIndex = i;
+			if ((fitnessArray[i] > fitnessArray[bestIndex] && !minimize) ||
+				(fitnessArray[i] < fitnessArray[bestIndex] && minimize))
+				bestIndex = i;
 		}
 
 		// Swap the next best value with the current element in the list
-		SwapFitness = FitnessArray[SortIndex];
-		FitnessArray[SortIndex] = FitnessArray[BestIndex];
-		FitnessArray[BestIndex] = SwapFitness;
+		swapFitness = fitnessArray[sortIndex];
+		fitnessArray[sortIndex] = fitnessArray[bestIndex];
+		fitnessArray[bestIndex] = swapFitness;
 
 		// Use a for loop to swap the genomes
-		for (i = 0; i < NumberOfGenes; i++)
+		for (i = 0; i < numberOfGenes; i++)
 		{
-			SwapGene = GenomeArray[SortIndex][i];
-			GenomeArray[SortIndex][i] = GenomeArray[BestIndex][i];
-			GenomeArray[BestIndex][i] = SwapGene;
+			swapGene = genomeArray[sortIndex][i];
+			genomeArray[sortIndex][i] = genomeArray[bestIndex][i];
+			genomeArray[bestIndex][i] = swapGene;
 		}
 
 		// Increment the sort index
-		SortIndex++;
+		sortIndex++;
 	}
-
-	return;
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM
+// Class:			GeneticAlgorithm
 // Function:		MergeSort
 //
 // Description:		Sorts the fitnesses and genomes by fitness using a
 //					merge sort algorithm.
 //
 // Input Arguments:
-//		FitnessArray	= double* pointing to the list of values to sort
-//		GenomeArray		= int** pointing to the list of genomes - these
+//		fitnessArray	= double* pointing to the list of values to sort
+//		genomeArray		= int** pointing to the list of genomes - these
 //						  values are not used in the sorting process, but
 //						  they must be sorted along with the corresponding
 //						  fitness value
-//		ArraySize		= const int specifying the length of the array
+//		arraySize		= const int specifying the length of the array
 //						  (can be different from PopulationSize in the case
 //						  of recursive calls)
 //
@@ -863,126 +858,124 @@ void GENETIC_ALGORITHM::SelectionSort(double *FitnessArray, int **GenomeArray,
 //		None
 //
 //==========================================================================
-void GENETIC_ALGORITHM::MergeSort(double *FitnessArray, int **GenomeArray,
-								  const int ArraySize)
+void GeneticAlgorithm::MergeSort(double *fitnessArray, int **genomeArray,
+								  const int arraySize)
 {
 	// If the length is 1 or less, it is already sorted
-	if (ArraySize <= 1)
+	if (arraySize <= 1)
 		return;
 
 	// Split the array in half, and recursively sort each half of the array
-	int FirstSize = ArraySize / 2;
-	int SecondSize = ArraySize - FirstSize;
-	double *SecondFitnessArray = FitnessArray + FirstSize;
-	int **SecondGenomeArray = GenomeArray + FirstSize;
-	MergeSort(FitnessArray, GenomeArray, FirstSize);
-	MergeSort(SecondFitnessArray, SecondGenomeArray, SecondSize);
+	int firstSize = arraySize / 2;
+	int secondSize = arraySize - firstSize;
+	double *secondFitnessArray = fitnessArray + firstSize;
+	int **secondGenomeArray = genomeArray + firstSize;
+	MergeSort(fitnessArray, genomeArray, firstSize);
+	MergeSort(secondFitnessArray, secondGenomeArray, secondSize);
 
 	// Create the result arrays
 	int i;
-	double *ResultFitness = new double[ArraySize];
-	int **ResultGenome = new int*[ArraySize];
-	for (i = 0; i < ArraySize; i++)
-		ResultGenome[i] = new int[NumberOfGenes];
+	double *resultFitness = new double[arraySize];
+	int **resultGenome = new int*[arraySize];
+	for (i = 0; i < arraySize; i++)
+		resultGenome[i] = new int[numberOfGenes];
 
 	// Merge the two halfs of the array back into one array
 	// with the same size as the original
-	int FirstIndex = 0;
-	int SecondIndex = 0;
-	while (FirstIndex < FirstSize && SecondIndex < SecondSize)
+	int firstIndex = 0;
+	int secondIndex = 0;
+	while (firstIndex < firstSize && secondIndex < secondSize)
 	{
 		// Now that both half arrays are sorted, we can compare and add
 		// one element at a time to rebuild the array
-		if ((FitnessArray[FirstIndex] > SecondFitnessArray[SecondIndex] && !Minimize) ||
-			(FitnessArray[FirstIndex] < SecondFitnessArray[SecondIndex] && Minimize))
+		if ((fitnessArray[firstIndex] > secondFitnessArray[secondIndex] && !minimize) ||
+			(fitnessArray[firstIndex] < secondFitnessArray[secondIndex] && minimize))
 		{
 			// Append the element from the first array to the result
-			ResultFitness[FirstIndex + SecondIndex] = FitnessArray[FirstIndex];
+			resultFitness[firstIndex + secondIndex] = fitnessArray[firstIndex];
 
 			// Use a loop to do the same for the genome
-			for (i = 0; i < NumberOfGenes; i++)
-				ResultGenome[FirstIndex + SecondIndex][i] = GenomeArray[FirstIndex][i];
+			for (i = 0; i < numberOfGenes; i++)
+				resultGenome[firstIndex + secondIndex][i] = genomeArray[firstIndex][i];
 
 			// Increment the first index
-			FirstIndex++;
+			firstIndex++;
 		}
 		else
 		{
 			// Append the element from the second array to the result
-			ResultFitness[FirstIndex + SecondIndex] = SecondFitnessArray[SecondIndex];
+			resultFitness[firstIndex + secondIndex] = secondFitnessArray[secondIndex];
 
 			// Use a loop to do the same for the genome
-			for (i = 0; i < NumberOfGenes; i++)
-				ResultGenome[FirstIndex + SecondIndex][i] = SecondGenomeArray[SecondIndex][i];
+			for (i = 0; i < numberOfGenes; i++)
+				resultGenome[firstIndex + secondIndex][i] = secondGenomeArray[secondIndex][i];
 
 			// Increment the second index
-			SecondIndex++;
+			secondIndex++;
 		}
 	}
 
 	// Clean up by appending the remaining items to the list
-	while (FirstIndex < FirstSize)
+	while (firstIndex < firstSize)
 	{
 		// Append the element from the first array to the result
-		ResultFitness[FirstIndex + SecondIndex] = FitnessArray[FirstIndex];
+		resultFitness[firstIndex + secondIndex] = fitnessArray[firstIndex];
 
 		// Use a loop to do the same for the genome
-		for (i = 0; i < NumberOfGenes; i++)
-			ResultGenome[FirstIndex + SecondIndex][i] = GenomeArray[FirstIndex][i];
+		for (i = 0; i < numberOfGenes; i++)
+			resultGenome[firstIndex + secondIndex][i] = genomeArray[firstIndex][i];
 
 		// Increment the first index
-		FirstIndex++;
+		firstIndex++;
 	}
-	while (SecondIndex < SecondSize)
+	while (secondIndex < secondSize)
 	{
 		// Append the element from the second array to the result
-		ResultFitness[FirstIndex + SecondIndex] = SecondFitnessArray[SecondIndex];
+		resultFitness[firstIndex + secondIndex] = secondFitnessArray[secondIndex];
 
 		// Use a loop to do the same for the genome
-		for (i = 0; i < NumberOfGenes; i++)
-			ResultGenome[FirstIndex + SecondIndex][i] = SecondGenomeArray[SecondIndex][i];
+		for (i = 0; i < numberOfGenes; i++)
+			resultGenome[firstIndex + secondIndex][i] = secondGenomeArray[secondIndex][i];
 
 		// Increment the second index
-		SecondIndex++;
+		secondIndex++;
 	}
 
 	// Assign the results to the input arrays
-	for (FirstIndex = 0; FirstIndex < ArraySize; FirstIndex++)
+	for (firstIndex = 0; firstIndex < arraySize; firstIndex++)
 	{
-		FitnessArray[FirstIndex] = ResultFitness[FirstIndex];
+		fitnessArray[firstIndex] = resultFitness[firstIndex];
 
-		for (i = 0; i < NumberOfGenes; i++)
-			GenomeArray[FirstIndex][i] = ResultGenome[FirstIndex][i];
+		for (i = 0; i < numberOfGenes; i++)
+			genomeArray[firstIndex][i] = resultGenome[firstIndex][i];
 	}
 
 	// Delete the result arrays
-	delete [] ResultFitness;
-	ResultFitness = NULL;
-	for (i = 0; i < ArraySize; i++)
+	delete [] resultFitness;
+	resultFitness = NULL;
+	for (i = 0; i < arraySize; i++)
 	{
-		delete [] ResultGenome[i];
-		ResultGenome[i] = NULL;
+		delete [] resultGenome[i];
+		resultGenome[i] = NULL;
 	}
-	delete [] ResultGenome;
-	ResultGenome = NULL;
-
-	return;
+	delete [] resultGenome;
+	resultGenome = NULL;
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM
+// Class:			GeneticAlgorithm
 // Function:		Quicksort
 //
 // Description:		Sorts the fitnesses and genomes by fitness using a
 //					quicksort algorithm.
 //
 // Input Arguments:
-//		FitnessArray	= double* pointing to the list of values to sort
-//		GenomeArray		= int** pointing to the list of genomes - these
+//		fitnessArray	= double* pointing to the list of values to sort
+//		genomeArray		= int** pointing to the list of genomes - these
 //						  values are not used in the sorting process, but
 //						  they must be sorted along with the corresponding
 //						  fitness value
-//		ArraySize		= const int specifying the length of the array
+//		arraySize		= const int specifying the length of the array
 //						  (can be different from PopulationSize in the case
 //						  of recursive calls)
 //
@@ -993,11 +986,11 @@ void GENETIC_ALGORITHM::MergeSort(double *FitnessArray, int **GenomeArray,
 //		None
 //
 //==========================================================================
-void GENETIC_ALGORITHM::Quicksort(double *FitnessArray, int **GenomeArray,
-								  const int ArraySize)
+void GeneticAlgorithm::Quicksort(double *fitnessArray, int **genomeArray,
+								  const int arraySize)
 {
 	// If there is nothing to sort, don't do anything
-	if (ArraySize <= 1)
+	if (arraySize <= 1)
 		return;
 
 	// Pick a random pivot
@@ -1006,66 +999,64 @@ void GENETIC_ALGORITHM::Quicksort(double *FitnessArray, int **GenomeArray,
 	// but we know our list will already be fairly random (toward the end... the
 	// beginning is a bad choice because of elitism) so we'll choose the last
 	// element in the array
-	int PivotLocation = ArraySize - 1;
-	double Pivot = FitnessArray[PivotLocation];
+	int pivotLocation = arraySize - 1;
+	double pivot = fitnessArray[pivotLocation];
 
 	// For swapping elements
-	double SwapFitness;
-	int *SwapGenome = new int[NumberOfGenes];
+	double swapFitness;
+	int *swapGenome = new int[numberOfGenes];
 
 	// Split the array into two groups:  Higher than pivot and lower than pivot
-	int SortedElements = 0;
-	int NumberOfTopElements = 0;
-	int SwapGene, i;
-	while (SortedElements < ArraySize)
+	int sortedElements = 0;
+	int numberOfTopElements = 0;
+	int swapGene, i;
+	while (sortedElements < arraySize)
 	{
 		// Check to see if the element is larger or smaller than the pivot
 		// and if we are sorting in ascending or descending order
-		if ((FitnessArray[SortedElements] > Pivot && !Minimize) ||
-			(FitnessArray[SortedElements] < Pivot && Minimize))
+		if ((fitnessArray[sortedElements] > pivot && !minimize) ||
+			(fitnessArray[sortedElements] < pivot && minimize))
 		{
 			// Swap this element with the next element toward the top of the list
-			SwapFitness = FitnessArray[NumberOfTopElements];
-			FitnessArray[NumberOfTopElements] = FitnessArray[SortedElements];
-			FitnessArray[SortedElements] = SwapFitness;
+			swapFitness = fitnessArray[numberOfTopElements];
+			fitnessArray[numberOfTopElements] = fitnessArray[sortedElements];
+			fitnessArray[sortedElements] = swapFitness;
 
 			// Also swap the genome
-			for (i = 0; i < NumberOfGenes; i++)
+			for (i = 0; i < numberOfGenes; i++)
 			{
-				SwapGene = GenomeArray[NumberOfTopElements][i];
-				GenomeArray[NumberOfTopElements][i] = GenomeArray[SortedElements][i];
-				GenomeArray[SortedElements][i] = SwapGene;
+				swapGene = genomeArray[numberOfTopElements][i];
+				genomeArray[numberOfTopElements][i] = genomeArray[sortedElements][i];
+				genomeArray[sortedElements][i] = swapGene;
 			}
 
 			// Increment the number of top elements
-			NumberOfTopElements++;
+			numberOfTopElements++;
 		}
 
 		// Increment the number of elements we've sorted
-		SortedElements++;
+		sortedElements++;
 	}
 
 	// Place our pivot in the right location (this is the last time the pivot will be moved)
-	SwapFitness = FitnessArray[NumberOfTopElements];
-	FitnessArray[NumberOfTopElements] = FitnessArray[ArraySize - 1];
-	FitnessArray[ArraySize - 1] = SwapFitness;
+	swapFitness = fitnessArray[numberOfTopElements];
+	fitnessArray[numberOfTopElements] = fitnessArray[arraySize - 1];
+	fitnessArray[arraySize - 1] = swapFitness;
 
 	// We must also place the genome in the right location
-	for (i = 0; i < NumberOfGenes; i++)
+	for (i = 0; i < numberOfGenes; i++)
 	{
-		SwapGene = GenomeArray[NumberOfTopElements][i];
-		GenomeArray[NumberOfTopElements][i] = GenomeArray[ArraySize - 1][i];
-		GenomeArray[ArraySize - 1][i] = SwapGene;
+		swapGene = genomeArray[numberOfTopElements][i];
+		genomeArray[numberOfTopElements][i] = genomeArray[arraySize - 1][i];
+		genomeArray[arraySize - 1][i] = swapGene;
 	}
 
 	// Call this recursively on the two new lists
-	Quicksort(FitnessArray, GenomeArray, NumberOfTopElements);
-	Quicksort(FitnessArray + NumberOfTopElements + 1, GenomeArray + NumberOfTopElements + 1,
-		ArraySize - NumberOfTopElements - 1);
+	Quicksort(fitnessArray, genomeArray, numberOfTopElements);
+	Quicksort(fitnessArray + numberOfTopElements + 1, genomeArray + numberOfTopElements + 1,
+		arraySize - numberOfTopElements - 1);
 
 	// Delete the swap genome
-	delete SwapGenome;
-	SwapGenome = NULL;
-
-	return;
+	delete swapGenome;
+	swapGenome = NULL;
 }

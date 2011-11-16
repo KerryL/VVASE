@@ -129,7 +129,7 @@ private:
 	void Quicksort(double *fitnessArray, int **genomeArray, const int arraySize);
 
 	// Flag that inidicates we should minimize fitness function rather than maximize it
-	bool Minimize;
+	bool minimize;
 
 	// Deletes all dynamically allocated memory
 	void DeleteDynamicMemory(void);

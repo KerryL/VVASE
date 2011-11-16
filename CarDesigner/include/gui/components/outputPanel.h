@@ -24,7 +24,7 @@
 class Debugger;
 class Convert;
 class CAR;
-class KINEMATIC_OUTPUTS;
+class KinematicOutputs;
 class MAIN_FRAME;
 
 class OUTPUT_PANEL : public wxPanel
@@ -38,7 +38,7 @@ public:
 	~OUTPUT_PANEL();
 
 	// Updates the information on the panel
-	void UpdateInformation(KINEMATIC_OUTPUTS Outputs, CAR &Car, int Index,
+	void UpdateInformation(KinematicOutputs Outputs, CAR &Car, int Index,
 		wxString Name);
 	void FinishUpdate(int _NumberOfDataColumns);
 

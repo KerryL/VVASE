@@ -29,7 +29,7 @@ class ThreadJob
 {
 public:
 	// Commands to send to worker thread
-	enum ThreadCommands
+	enum ThreadCommand
 	{
 		CommandThreadExit = -1,
 		CommandThreadNull =  0,
@@ -42,15 +42,15 @@ public:
 
 	// Constructors
 	ThreadJob();
-	ThreadJob(ThreadCommands _command);
-	ThreadJob(ThreadCommands _command, ThreadData *_data,
+	ThreadJob(ThreadCommand _command);
+	ThreadJob(ThreadCommand _command, ThreadData *_data,
 		const wxString &_name, int &_index);
 
 	// Destructor
 	~ThreadJob();
 
 	// The command to be sent
-	ThreadCommands command;
+	ThreadCommand command;
 
 	// Data to be sent to worker threads
 	ThreadData *data;

@@ -39,7 +39,7 @@ public:
 	GeneticAlgorithm *geneticAlgorithm;
 
 	// Mandatory overload from THREAD_DATA
-	bool OkForCommand(ThreadJob::ThreadCommands &command);
+	bool OkForCommand(ThreadJob::ThreadCommand &command);
 };
 
 #endif// _OPTIMIZATION_DATA_H_

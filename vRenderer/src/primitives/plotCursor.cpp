@@ -28,6 +28,8 @@
 // Input Arguments:
 //		_renderWindow	= RenderWindow&
 //		_axis			= Axis& with which we are associated
+//		_oppositeAxis	= Axis& across from _axis (with same orientation)
+//		_perpendicularAxis	= Axis& perpendicular to _axis (with opposite orientation)
 //
 // Output Arguments:
 //		None
@@ -36,7 +38,9 @@
 //		None
 //
 //==========================================================================
-PlotCursor::PlotCursor(RenderWindow &_renderWindow, const Axis &_axis) : Primitive(_renderWindow), axis(_axis)
+PlotCursor::PlotCursor(RenderWindow &_renderWindow, const Axis &_axis, const Axis &_oppositeAxis,
+	const Axis &_perpendicularAxis)
+	: Primitive(_renderWindow), axis(_axis), oppositeAxis(_oppositeAxis), perpendicularAxis(_perpendicularAxis)
 {
 	// Start out invisible
 	isVisible = false;
@@ -77,26 +81,24 @@ void PlotCursor::GenerateGeometry(void)
 
 	if (axis.IsHorizontal())
 	{
-		length = renderWindow.GetSize().GetHeight() - 2 * Axis::GetOffsetFromWindowEdge();
-		dimension = renderWindow.GetSize().GetWidth() - 2 * Axis::GetOffsetFromWindowEdge();
-		glVertex2i(locationAlongAxis, Axis::GetOffsetFromWindowEdge());
-		glVertex2i(locationAlongAxis, length + Axis::GetOffsetFromWindowEdge());
+		length = renderWindow.GetSize().GetHeight() - axis.GetOffsetFromWindowEdge() - oppositeAxis.GetOffsetFromWindowEdge();
+		dimension = renderWindow.GetSize().GetWidth() - axis.GetOffsetFromWindowEdge() - oppositeAxis.GetOffsetFromWindowEdge();
+		glVertex2i(locationAlongAxis, axis.GetOffsetFromWindowEdge());
+		glVertex2i(locationAlongAxis, length + axis.GetOffsetFromWindowEdge());
 	}
 	else
 	{
-		length = renderWindow.GetSize().GetWidth() - 2 * Axis::GetOffsetFromWindowEdge();
-		dimension = renderWindow.GetSize().GetHeight() - 2 * Axis::GetOffsetFromWindowEdge();
-		glVertex2i(Axis::GetOffsetFromWindowEdge(), locationAlongAxis);
-		glVertex2i(length + Axis::GetOffsetFromWindowEdge(), locationAlongAxis);
+		length = renderWindow.GetSize().GetWidth() - axis.GetOffsetFromWindowEdge() - oppositeAxis.GetOffsetFromWindowEdge();
+		dimension = renderWindow.GetSize().GetHeight() - axis.GetOffsetFromWindowEdge() - oppositeAxis.GetOffsetFromWindowEdge();
+		glVertex2i(axis.GetOffsetFromWindowEdge(), locationAlongAxis);
+		glVertex2i(length + axis.GetOffsetFromWindowEdge(), locationAlongAxis);
 	}
 
 	glEnd();
 
 	// Update the value of the cursor (required for accuracy when zoom changes, for example)
-	value = axis.GetMinimum() + double(locationAlongAxis - Axis::GetOffsetFromWindowEdge()) /
+	value = axis.GetMinimum() + double(locationAlongAxis - perpendicularAxis.GetOffsetFromWindowEdge()) /
 		(double)dimension * (axis.GetMaximum() - axis.GetMinimum());
-
-	return;
 }
 
 //==========================================================================
@@ -148,12 +150,12 @@ void PlotCursor::RescalePoint(unsigned int &point)
 {
 	int plotDimension;
 	if (axis.IsHorizontal())
-		plotDimension = renderWindow.GetSize().GetWidth() - 2 * Axis::GetOffsetFromWindowEdge();
+		plotDimension = renderWindow.GetSize().GetWidth() - axis.GetOffsetFromWindowEdge() - oppositeAxis.GetOffsetFromWindowEdge();
 	else
-		plotDimension = renderWindow.GetSize().GetHeight() - 2 * Axis::GetOffsetFromWindowEdge();
+		plotDimension = renderWindow.GetSize().GetHeight() - axis.GetOffsetFromWindowEdge() - oppositeAxis.GetOffsetFromWindowEdge();
 
 	// Do the scaling
-	point = Axis::GetOffsetFromWindowEdge() + (value - axis.GetMinimum()) /
+	point = perpendicularAxis.GetOffsetFromWindowEdge() + (value - axis.GetMinimum()) /
 		(axis.GetMaximum() - axis.GetMinimum()) * plotDimension;
 
 	return;

@@ -163,8 +163,8 @@ void PlotRenderer::CreateActors(void)
 
 	// Also create the zoom box and cursors, even though they aren't drawn yet
 	zoomBox = new ZoomBox(*this);
-	leftCursor = new PlotCursor(*this, *plot->GetXAxis());
-	rightCursor = new PlotCursor(*this, *plot->GetXAxis());
+	leftCursor = new PlotCursor(*this, *plot->GetBottomAxis(), *plot->GetTopAxis());
+	rightCursor = new PlotCursor(*this, *plot->GetBottomAxis(), *plot->GetTopAxis());
 
 	return;
 }
@@ -350,8 +350,8 @@ void PlotRenderer::OnMouseMoveEvent(wxMouseEvent &event)
 	else if (event.LeftIsDown())
 	{
 		// Determine size of plot within window and scale actions according to the scale of the plot window
-		int height = GetSize().GetHeight() - 2 * Axis::GetOffsetFromWindowEdge();
-		int width = GetSize().GetWidth() - 2 * Axis::GetOffsetFromWindowEdge();
+		int height = GetSize().GetHeight() - plot->GetBottomAxis()->GetOffsetFromWindowEdge() - plot->GetTopAxis()->GetOffsetFromWindowEdge();
+		int width = GetSize().GetWidth() - plot->GetLeftYAxis()->GetOffsetFromWindowEdge() - plot->GetRightYAxis()->GetOffsetFromWindowEdge();
 
 		// Adjust the axis limits
 		double xDelta = (plot->GetXMax() - plot->GetXMin()) * (event.GetX() - lastMousePosition[0]) / width;
@@ -417,20 +417,21 @@ void PlotRenderer::OnRightButtonUpEvent(wxMouseEvent &event)
 	if (!zoomBox->GetIsVisible())
 	{
 		// Determine the context
+		// FIXME:  Test this - gl may use upper left as reference instead of bottom left?
 		PlotPanel::PlotContext context;
 		unsigned int x = event.GetX();
 		unsigned int y = event.GetY();
-		if (x < Axis::GetOffsetFromWindowEdge() &&
-			y > Axis::GetOffsetFromWindowEdge() &&
-			y < GetSize().GetHeight() - Axis::GetOffsetFromWindowEdge())
+		if (x < plot->GetLeftYAxis()->GetOffsetFromWindowEdge() &&
+			y > plot->GetBottomAxis()->GetOffsetFromWindowEdge() &&
+			y < GetSize().GetHeight() - plot->GetTopAxis()->GetOffsetFromWindowEdge())
 			context = PlotPanel::plotContextLeftYAxis;
-		else if (x > GetSize().GetWidth() - Axis::GetOffsetFromWindowEdge() &&
-			y > Axis::GetOffsetFromWindowEdge() &&
-			y < GetSize().GetHeight() - Axis::GetOffsetFromWindowEdge())
+		else if (x > GetSize().GetWidth() - plot->GetRightYAxis()->GetOffsetFromWindowEdge() &&
+			y > plot->GetBottomAxis()->GetOffsetFromWindowEdge() &&
+			y < GetSize().GetHeight() - plot->GetTopAxis()->GetOffsetFromWindowEdge())
 			context = PlotPanel::plotContextRightYAxis;
-		else if (y > GetSize().GetHeight() - Axis::GetOffsetFromWindowEdge() &&
-			x > Axis::GetOffsetFromWindowEdge() &&
-			x < GetSize().GetWidth() - Axis::GetOffsetFromWindowEdge())
+		else if (y > GetSize().GetHeight() - plot->GetBottomAxis()->GetOffsetFromWindowEdge() &&
+			x > plot->GetLeftYAxis()->GetOffsetFromWindowEdge() &&
+			x < GetSize().GetWidth() - plot->GetRightYAxis()->GetOffsetFromWindowEdge())
 			context = PlotPanel::plotContextXAxis;
 		else
 			context = PlotPanel::plotContextPlotArea;
@@ -600,7 +601,7 @@ void PlotRenderer::SetGridOff()
 //==========================================================================
 bool PlotRenderer::GetBottomGrid(void) const
 {
-	return plot->GetXAxis()->GetGrid();
+	return plot->GetBottomAxis()->GetGrid();
 }
 
 //==========================================================================
@@ -1167,7 +1168,7 @@ void PlotRenderer::OnDoubleClickEvent(wxMouseEvent &event)
 {
 	unsigned int x = event.GetX();
 	unsigned int y = event.GetY();
-	unsigned int offset = Axis::GetOffsetFromWindowEdge();
+	unsigned int offset = plot->Get##Axis()->GetOffsetFromWindowEdge();
 
 	// If the click is within the plot area, move a cursor there and make it visible
 	if (x > offset && GetSize().GetWidth() - x > offset &&
@@ -1198,7 +1199,7 @@ void PlotRenderer::OnDoubleClickEvent(wxMouseEvent &event)
 	else
 	{
 		// Determine the context
-		PlotPanel::PlotContext context;
+		PlotPanel::PlotContext context;// FIXME:  Pull from other place where we do this??
 		if (x < Axis::GetOffsetFromWindowEdge() &&
 			y > Axis::GetOffsetFromWindowEdge() &&
 			y < GetSize().GetHeight() - Axis::GetOffsetFromWindowEdge())
@@ -1242,9 +1243,9 @@ void PlotRenderer::OnDoubleClickEvent(wxMouseEvent &event)
 //==========================================================================
 double PlotRenderer::GetCursorValue(const unsigned int &location)
 {
-	unsigned int width = GetSize().GetWidth() - 2 * Axis::GetOffsetFromWindowEdge();
-	return double(location - Axis::GetOffsetFromWindowEdge()) / (double)width *
-		(plot->GetXAxis()->GetMaximum() - plot->GetXAxis()->GetMinimum()) + plot->GetXAxis()->GetMinimum();
+	unsigned int width = GetSize().GetWidth() - plot->GetLeftYAxis()->GetOffsetFromWindowEdge() - plot->GetRightYAxis()->GetOffsetFromWindowEdge();
+	return double(location - plot->GetLeftYAxis()->GetOffsetFromWindowEdge()) / (double)width *
+		(plot->GetBottomAxis()->GetMaximum() - plot->GetBottomAxis()->GetMinimum()) + plot->GetBottomAxis()->GetMinimum();
 }
 
 //==========================================================================
@@ -1424,7 +1425,7 @@ void PlotRenderer::UpdateCursors(void)
 //==========================================================================
 double PlotRenderer::GetXMin(void) const
 {
-	return plot->GetXAxis()->GetMinimum();
+	return plot->GetBottomAxis()->GetMinimum();
 }
 
 //==========================================================================
@@ -1445,7 +1446,7 @@ double PlotRenderer::GetXMin(void) const
 //==========================================================================
 double PlotRenderer::GetXMax(void) const
 {
-	return plot->GetXAxis()->GetMaximum();
+	return plot->GetBottomAxis()->GetMaximum();
 }
 
 //==========================================================================

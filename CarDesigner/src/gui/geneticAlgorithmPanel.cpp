@@ -502,14 +502,14 @@ void GENETIC_ALGORITHM_PANEL::RemoveGeneButtonClickedEvent(wxCommandEvent& WXUNU
 void GENETIC_ALGORITHM_PANEL::AddGoalButtonClickedEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Set up the default kinematic inputs
-	KINEMATICS::INPUTS DefaultInputs = MainFrame.GetInputs();
-	DefaultInputs.Heave = 0.0;
-	DefaultInputs.Pitch = 0.0;
-	DefaultInputs.Roll = 0.0;
-	DefaultInputs.RackTravel = 0.0;
+	Kinematics::Inputs DefaultInputs = MainFrame.GetInputs();
+	DefaultInputs.heave = 0.0;
+	DefaultInputs.pitch = 0.0;
+	DefaultInputs.roll = 0.0;
+	DefaultInputs.rackTravel = 0.0;
 
 	// Create the dialog box with default goal properties
-	GA_GOAL_DIALOG GoalDialog(static_cast<wxWindow*>(&MainFrame), Converter, (KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE)0, 0.0,
+	GA_GOAL_DIALOG GoalDialog(static_cast<wxWindow*>(&MainFrame), Converter, (KinematicOutputs::OutputsComplete)0, 0.0,
 		0.0, 1.0, DefaultInputs, DefaultInputs, wxID_ANY, wxDefaultPosition);
 
 	// Display the dialog
@@ -907,7 +907,7 @@ void GENETIC_ALGORITHM_PANEL::UpdateGoalList(void)
 	int i, j;
 	for (i = 0; i < Optimization.GetAlgorithm().GetGoalCount(); i++)
 	{
-		GoalList->SetCellValue(i, 0, KINEMATIC_OUTPUTS::GetOutputName(Optimization.GetAlgorithm().GetGoal(i).Output));
+		GoalList->SetCellValue(i, 0, KinematicOutputs::GetOutputName(Optimization.GetAlgorithm().GetGoal(i).Output));
 		GoalList->SetCellValue(i, 1, GetInputString(Optimization.GetAlgorithm().GetGoal(i).BeforeInputs));
 		GoalList->SetCellValue(i, 2, GetInputString(Optimization.GetAlgorithm().GetGoal(i).AfterInputs,
 			&Optimization.GetAlgorithm().GetGoal(i).BeforeInputs));
@@ -917,10 +917,10 @@ void GENETIC_ALGORITHM_PANEL::UpdateGoalList(void)
 		// of this particular output
 		GoalList->SetCellValue(i, 3, Converter.FormatNumber(
 			Converter.ConvertTo(Optimization.GetAlgorithm().GetGoal(i).DesiredValue,
-			KINEMATIC_OUTPUTS::GetOutputUnitType(Optimization.GetAlgorithm().GetGoal(i).Output))));
+			KinematicOutputs::GetOutputUnitType(Optimization.GetAlgorithm().GetGoal(i).Output))));
 		GoalList->SetCellValue(i, 4, Converter.FormatNumber(
 			Converter.ConvertTo(Optimization.GetAlgorithm().GetGoal(i).ExpectedDeviation,
-			KINEMATIC_OUTPUTS::GetOutputUnitType(Optimization.GetAlgorithm().GetGoal(i).Output))));
+			KinematicOutputs::GetOutputUnitType(Optimization.GetAlgorithm().GetGoal(i).Output))));
 
 		// Make the cells read-only and center the text
 		for (j = 0; j < GoalList->GetCols(); j++)
@@ -1008,8 +1008,8 @@ void GENETIC_ALGORITHM_PANEL::IncrementStatusBars(void)
 //					displayed (i.e. euler rotations are not relevant here).
 //
 // Input Arguments:
-//		Inputs			= const KINEMATICS::INPUT& referring to the relevant inputs
-//		SecondInputs	= const KINEMATICS::INPUT* pointing to a second (optional)
+//		Inputs			= const Kinematics::Inputs& referring to the relevant inputs
+//		SecondInputs	= const Kinematics::Inputs* pointing to a second (optional)
 //						  set of inputs
 //
 // Output Arguments:
@@ -1019,8 +1019,8 @@ void GENETIC_ALGORITHM_PANEL::IncrementStatusBars(void)
 //		None
 //
 //==========================================================================
-wxString GENETIC_ALGORITHM_PANEL::GetInputString(const KINEMATICS::INPUTS &Inputs,
-												 const KINEMATICS::INPUTS *SecondInputs) const
+wxString GENETIC_ALGORITHM_PANEL::GetInputString(const Kinematics::Inputs &Inputs,
+												 const Kinematics::Inputs *SecondInputs) const
 {
 	wxString InputString;
 
@@ -1034,10 +1034,10 @@ wxString GENETIC_ALGORITHM_PANEL::GetInputString(const KINEMATICS::INPUTS &Input
 
 	// Create the string
 	InputString.Printf("P:%s, R:%s, H:%s, S:%s",
-		Converter.FormatNumber(Converter.ConvertAngle(Inputs.Pitch)).c_str(),
-		Converter.FormatNumber(Converter.ConvertAngle(Inputs.Roll)).c_str(),
-		Converter.FormatNumber(Converter.ConvertDistance(Inputs.Heave)).c_str(),
-		Converter.FormatNumber(Converter.ConvertDistance(Inputs.RackTravel)).c_str());
+		Converter.FormatNumber(Converter.ConvertAngle(Inputs.pitch)).c_str(),
+		Converter.FormatNumber(Converter.ConvertAngle(Inputs.roll)).c_str(),
+		Converter.FormatNumber(Converter.ConvertDistance(Inputs.heave)).c_str(),
+		Converter.FormatNumber(Converter.ConvertDistance(Inputs.rackTravel)).c_str());
 
 	// FIXME!!!:  This doesn't work if they are using steering wheel angle instead of rack travel!
 

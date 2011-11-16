@@ -47,7 +47,7 @@ ThreadJob::ThreadJob() : command(ThreadJob::CommandThreadNull), data(NULL)
 // Description:		Constructor for the ThreadJob class (basic).
 //
 // Input Arguments:
-//		_command		= ThreadCommands specifying the command type for this job
+//		_command		= ThreadCommand specifying the command type for this job
 //
 // Output Arguments:
 //		None
@@ -56,7 +56,7 @@ ThreadJob::ThreadJob() : command(ThreadJob::CommandThreadNull), data(NULL)
 //		None
 //
 //==========================================================================
-ThreadJob::ThreadJob(ThreadCommands _command) : command(_command), data(NULL)
+ThreadJob::ThreadJob(ThreadCommand _command) : command(_command), data(NULL)
 {
 	// Only permit certian types of jobs
 	assert(command == ThreadJob::CommandThreadExit ||
@@ -71,7 +71,7 @@ ThreadJob::ThreadJob(ThreadCommands _command) : command(_command), data(NULL)
 // Description:		Constructor for the ThreadJob class.
 //
 // Input Arguments:
-//		_command	= ThreadCommands specifying the command type for this job
+//		_command	= ThreadCommand specifying the command type for this job
 //		_name		= const wxString& Name of the car
 //		_index		= int& representing the object index for the associated object
 //					  in the MAIN_FRAME
@@ -83,7 +83,7 @@ ThreadJob::ThreadJob(ThreadCommands _command) : command(_command), data(NULL)
 //		None
 //
 //==========================================================================
-ThreadJob::ThreadJob(ThreadCommands _command, ThreadData *_data,
+ThreadJob::ThreadJob(ThreadCommand _command, ThreadData *_data,
 					   const wxString &_name, int &_index) : command(_command),
 					   data(_data), name(_name), index(_index)
 {

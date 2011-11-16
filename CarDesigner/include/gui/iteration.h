@@ -102,7 +102,7 @@ public:
 	// Enumeration picks up where the KINEMATIC_OUTPUTS class left off
 	enum PLOT_ID
 	{
-		Pitch = KINEMATIC_OUTPUTS::NumberOfOutputScalars,
+		Pitch = KinematicOutputs::NumberOfOutputScalars,
 		Roll,
 		Heave,
 		RackTravel,
@@ -190,7 +190,7 @@ private:
 
 	// The data for this analysis - we need one list of outputs for every car
 	// Every list of outputs has one entry for every point within our range
-	ManagedList<ManagedList< KINEMATIC_OUTPUTS> > OutputLists;
+	ManagedList<ManagedList< KinematicOutputs> > OutputLists;
 
 	// List of cars that are associated with this analysis
 	ObjectList<GUI_CAR> AssociatedCars;
@@ -233,7 +233,7 @@ private:
 	void ApplyPlotFormatting(void);
 
 	// For getting converted values
-	double ConvertValue(KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE _Output);
+	double ConvertValue(KinematicOutputs::OutputsComplete _output);
 
 	// File header information
 	struct FILE_HEADER_INFO
@@ -249,9 +249,9 @@ private:
 	static const int CurrentFileVersion;
 
 	// Synchronization object
-	INVERSE_SEMAPHORE InverseSemaphore;
+	InverseSemaphore inverseSemaphore;
 	// Flag indicating that this object's analyses are complete and another analysis can be started
-	bool AnalysesDisplayed;
+	bool AnalysesDisplayed;// FIXME:  I'd like to see these go away - are they needed?  Is there a cleaner way to handle it?
 	bool SecondAnalysisPending;
 
 	PlotPanel *plotPanel;

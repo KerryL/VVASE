@@ -45,7 +45,7 @@ public:
 	KinematicOutputs *output;
 
 	// Mandatory overload from THREAD_DATA
-	bool OkForCommand(ThreadJob::ThreadCommands &Command);
+	bool OkForCommand(ThreadJob::ThreadCommand &Command);
 };
 
 #endif// _KINEMATICS_DATA_H_

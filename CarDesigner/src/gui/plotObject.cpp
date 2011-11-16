@@ -277,8 +277,6 @@ void PlotObject::RemovePlot(const unsigned int &index)
 	// Remove it from the local list
 	plotList.Remove(index);
 	dataList.Remove(index);
-
-	return;
 }
 
 //==========================================================================
@@ -306,8 +304,6 @@ void PlotObject::AddCurve(const Dataset2D &data)
 	newPlot->BindToXAxis(axisBottom);
 	newPlot->BindToYAxis(axisLeft);
 	newPlot->SetData(&data);
-
-	return;
 }
 
 //==========================================================================
@@ -564,7 +560,7 @@ void PlotObject::FormatPlot(void)
 	titleObject->SetFont(titleFont);
 	titleObject->SetCentered(true);
 	titleObject->SetPosition(renderer.GetSize().GetWidth() / 2.0,
-		renderer.GetSize().GetHeight() - 75.0 / 2.0);// 75.0 is from OffsetFromWindowEdge in axis.cpp*/
+		renderer.GetSize().GetHeight() - axisTop->GetOffsetFromWindowEdge() / 2.0);
 
 	// Set the axis colors
 	Color color = Color::ColorBlack;
@@ -585,8 +581,6 @@ void PlotObject::FormatPlot(void)
 	axisRight->GenerateGeometry();
 	yRightMin = axisRight->GetMinimum();
 	yRightMax = axisRight->GetMaximum();
-
-	return;
 }
 
 //==========================================================================

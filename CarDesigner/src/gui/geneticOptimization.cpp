@@ -125,8 +125,8 @@ void GENETIC_OPTIMIZATION::BeginOptimization(void)
 
 	// Add a job for the genetic algorithm - this is the manager thread from which
 	// the analysis jobs are created
-	OPTIMIZATION_DATA *Data = new OPTIMIZATION_DATA(GeneticAlgorithm);
-	THREAD_JOB Job(THREAD_JOB::COMMAND_THREAD_GENETIC_OPTIMIZATION, Data,
+	OptimizationData *Data = new OptimizationData(GeneticAlgorithm);
+	ThreadJob Job(ThreadJob::CommandThreadGeneticOptimization, Data,
 		Name, Index);
 	MainFrame.AddJob(Job);
 

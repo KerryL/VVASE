@@ -44,7 +44,7 @@ class SWAYBAR3D;
 class TRIANGLE3D;
 class POINT3D;
 class Vector3D;
-class KINEMATIC_OUTPUTS;
+class KinematicOutputs;
 class APPEARANCE_OPTIONS;
 class GUI_CAR;
 class MAIN_FRAME;
@@ -59,7 +59,7 @@ public:
 	~CAR_RENDERER();
 
 	// Called to update the image on the screen
-	void UpdateDisplay(const KINEMATIC_OUTPUTS &Outputs);
+	void UpdateDisplay(const KinematicOutputs &outputs);
 
 	// For writing the rendered image to file
 	void WriteImageFile(wxString PathAndFileName);
@@ -84,7 +84,7 @@ private:
 
 	// The methods that perform the updating
 	void UpdateCarDisplay(void);
-	void UpdateKinematicsDisplay(KINEMATIC_OUTPUTS Outputs);
+	void UpdateKinematicsDisplay(KinematicOutputs Outputs);
 
 	// Pointers to the car objects that we are rendering
 	APPEARANCE_OPTIONS &AppearanceOptions;

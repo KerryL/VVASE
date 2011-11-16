@@ -51,13 +51,13 @@ class wxFileHistory;
 
 // VVASE forward declarations
 class CAR;
-class KINEMATIC_OUTPUTS;
+class KinematicOutputs;
 class MAIN_NOTEBOOK;
 class MAIN_TREE;
 class EDIT_PANEL;
 class OUTPUT_PANEL;
-class JOB_QUEUE;
-class THREAD_JOB;
+class JobQueue;
+class ThreadJob;
 
 // The main frame class
 class MAIN_FRAME : public wxFrame
@@ -119,10 +119,10 @@ public:
 	void UpdateOutputPanel(void);
 
 	// Add a job to the queue to be processed by a worker thread
-	void AddJob(THREAD_JOB &NewJob);
+	void AddJob(ThreadJob &NewJob);
 
 	// Returns the current inputs for the kinematics analysis
-	inline KINEMATICS::INPUTS GetInputs(void) const { return KinematicInputs; };
+	inline Kinematics::Inputs GetInputs(void) const { return KinematicInputs; };
 	inline bool GetUseRackTravel(void) const { return UseRackTravel; };
 	inline void SetUseRackTravel(bool _UseRackTravel) { UseRackTravel = _UseRackTravel; };
 
@@ -154,7 +154,7 @@ private:
 	wxFileHistory *RecentFileManager;
 
 	// This object manages the worker threads
-	JOB_QUEUE *JobQueue;
+	JobQueue *jobQueue;
 
 	// The actual number of active threads
 	unsigned short ActiveThreads;
@@ -202,7 +202,7 @@ private:
 	wxMenu *CreateIterationMenu(void);
 
 	// The input parameters for the kinematic analyses
-	KINEMATICS::INPUTS KinematicInputs;
+	Kinematics::Inputs KinematicInputs;
 	bool UseRackTravel;// if false, we use steering wheel angle
 
 	// Maximum number of recent files to store

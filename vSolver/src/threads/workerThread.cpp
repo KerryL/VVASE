@@ -106,7 +106,7 @@ WorkerThread::~WorkerThread()
 //==========================================================================
 wxThread::ExitCode WorkerThread::Entry(void)
 {
-	ThreadJob::ThreadCommands error;
+	ThreadJob::ThreadCommand error;
 
 	// Tell the main thread that we successfully started
 	jobQueue->Report(ThreadJob::CommandThreadStarted, id);
@@ -117,7 +117,7 @@ wxThread::ExitCode WorkerThread::Entry(void)
 		while (true)
 			OnJob();
 	}
-	catch (ThreadJob::ThreadCommands& i)
+	catch (ThreadJob::ThreadCommand& i)
 	{
 		// Report the error
 		jobQueue->Report(error = i, id);

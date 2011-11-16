@@ -141,7 +141,7 @@ void KinematicOutputs::InitializeAllOutputs(void)
 
 	// Whole-car Doubles
 	for (i = 0; i < NumberOfOutputDoubles; i++)
-		OutputsDouble[i] = VVASEMath::QNAN;
+		doubles[i] = VVASEMath::QNAN;
 
 	// Whole-car Vectors
 	for (i = 0; i < NumberOfOutputVectors; i++)
@@ -184,17 +184,17 @@ void KinematicOutputs::Update(const CAR *original, const SUSPENSION *current)
 	UpdateCorner(&original->Suspension->LeftRear, &current->LeftRear);
 
 	// Net Steer [rad]
-	OutputsDouble[FrontNetSteer] = rightFront[Steer] - leftFront[Steer];
-	OutputsDouble[RearNetSteer] = rightRear[Steer] - leftRear[Steer];
+	doubles[FrontNetSteer] = rightFront[Steer] - leftFront[Steer];
+	doubles[RearNetSteer] = rightRear[Steer] - leftRear[Steer];
 
 	// Net Scrub [in]
-	OutputsDouble[FrontNetScrub] = rightFront[Scrub] + leftFront[Scrub];
-	OutputsDouble[RearNetScrub] = rightRear[Scrub] + leftRear[Scrub];
+	doubles[FrontNetScrub] = rightFront[Scrub] + leftFront[Scrub];
+	doubles[RearNetScrub] = rightRear[Scrub] + leftRear[Scrub];
 
 	// ARB Twist [rad]
 	// Initialize the twist in case the car has no sway bars
-	OutputsDouble[FrontARBTwist] = 0.0;
-	OutputsDouble[RearARBTwist] = 0.0;
+	doubles[FrontARBTwist] = 0.0;
+	doubles[RearARBTwist] = 0.0;
 	Vector arm1Direction, arm2Direction;
 	Vector swayBarAxis;
 	if (current->FrontBarStyle == SUSPENSION::SwayBarUBar)
@@ -205,13 +205,13 @@ void KinematicOutputs::Update(const CAR *original, const SUSPENSION *current)
 
 		// The references for U-bar twist are the arms at the end of the bar
 		arm1Direction = VVASEMath::ProjectOntoPlane(current->RightFront.Hardpoints[CORNER::BarArmAtPivot] -
-			current->RightFront.Hardpoints[CORNER::InboardBarLink], SwayBarAxis);
+			current->RightFront.Hardpoints[CORNER::InboardBarLink], swayBarAxis);
 		arm2Direction = VVASEMath::ProjectOntoPlane(current->LeftFront.Hardpoints[CORNER::BarArmAtPivot] -
-			current->LeftFront.Hardpoints[CORNER::InboardBarLink], SwayBarAxis);
+			current->LeftFront.Hardpoints[CORNER::InboardBarLink], swayBarAxis);
 
 		// The angle between these vectors, when projected onto the plane that is normal
 		// to the swaybar axis is given by the dot product
-		OutputsDouble[FrontARBTwist] = acos((arm1Direction * arm2Direction) /
+		doubles[FrontARBTwist] = acos((arm1Direction * arm2Direction) /
 			(arm1Direction.Length() * arm2Direction.Length()));
 	}
 	else if (current->FrontBarStyle == SUSPENSION::SwayBarTBar)
@@ -237,7 +237,7 @@ void KinematicOutputs::Update(const CAR *original, const SUSPENSION *current)
 
 		// The angle between these vectors, when projected onto the plane that is normal
 		// to the swaybar axis is given by the dot product
-		OutputsDouble[RearARBTwist] = acos((arm1Direction * arm2Direction) /
+		doubles[RearARBTwist] = acos((arm1Direction * arm2Direction) /
 			(arm1Direction.Length() * arm2Direction.Length()));
 	}
 	else if (current->RearBarStyle == SUSPENSION::SwayBarTBar)
@@ -363,35 +363,35 @@ void KinematicOutputs::Update(const CAR *original, const SUSPENSION *current)
 	vectors[LeftPitchAxisDirection] *= -1.0;
 
 	// Front track at ground [in]
-	OutputsDouble[FrontTrackGround] = current->RightFront.Hardpoints[CORNER::ContactPatch].Distance(
+	doubles[FrontTrackGround] = current->RightFront.Hardpoints[CORNER::ContactPatch].Distance(
 		current->LeftFront.Hardpoints[CORNER::ContactPatch]);
 
 	// Rear track at ground [in]
-	OutputsDouble[RearTrackGround] = current->RightRear.Hardpoints[CORNER::ContactPatch].Distance(
+	doubles[RearTrackGround] = current->RightRear.Hardpoints[CORNER::ContactPatch].Distance(
 		current->LeftRear.Hardpoints[CORNER::ContactPatch]);
 
 	// Right wheelbase at ground [in]
-	OutputsDouble[RightWheelbaseGround] = current->RightFront.Hardpoints[CORNER::ContactPatch].Distance(
+	doubles[RightWheelbaseGround] = current->RightFront.Hardpoints[CORNER::ContactPatch].Distance(
 		current->RightRear.Hardpoints[CORNER::ContactPatch]);
 
 	// Left wheelbase at ground [in]
-	OutputsDouble[LeftWheelbaseGround] = current->LeftFront.Hardpoints[CORNER::ContactPatch].Distance(
+	doubles[LeftWheelbaseGround] = current->LeftFront.Hardpoints[CORNER::ContactPatch].Distance(
 		current->LeftRear.Hardpoints[CORNER::ContactPatch]);
 
 	// Front track at hub [in]
-	OutputsDouble[FrontTrackHub] = current->RightFront.Hardpoints[CORNER::WheelCenter].Distance(
+	doubles[FrontTrackHub] = current->RightFront.Hardpoints[CORNER::WheelCenter].Distance(
 		current->LeftFront.Hardpoints[CORNER::WheelCenter]);
 
 	// Rear track at hub [in]
-	OutputsDouble[RearTrackHub] = current->RightRear.Hardpoints[CORNER::WheelCenter].Distance(
+	doubles[RearTrackHub] = current->RightRear.Hardpoints[CORNER::WheelCenter].Distance(
 		current->LeftRear.Hardpoints[CORNER::WheelCenter]);
 
 	// Right wheelbase at hub [in]
-	OutputsDouble[RightWheelbaseHub] = current->RightFront.Hardpoints[CORNER::WheelCenter].Distance(
+	doubles[RightWheelbaseHub] = current->RightFront.Hardpoints[CORNER::WheelCenter].Distance(
 		current->RightRear.Hardpoints[CORNER::WheelCenter]);
 
 	// Left wheelbase at hub [in]
-	OutputsDouble[LeftWheelbaseHub] = current->LeftFront.Hardpoints[CORNER::WheelCenter].Distance(
+	doubles[LeftWheelbaseHub] = current->LeftFront.Hardpoints[CORNER::WheelCenter].Distance(
 		current->LeftRear.Hardpoints[CORNER::WheelCenter]);
 }
 
@@ -671,7 +671,7 @@ void KinematicOutputs::UpdateCorner(const CORNER *originalCorner, const CORNER *
 			// This reduces the total moment to account for the portion of it that is reacted through
 			// structure and does not actually contribute to the moment.
 			momentDirection = cornerVectors[InstantAxisDirection];
-			momentMagnitude = momentArm.Cross(Force) * momentDirection.Normalize();
+			momentMagnitude = momentArm.Cross(force) * momentDirection.Normalize();
 
 			// The force at the ball joint is determined by dividing the moment by a new moment arm,
 			// which is a vector from the axis of rotation to the ball joint (instead of the wheel
@@ -739,7 +739,7 @@ void KinematicOutputs::UpdateCorner(const CORNER *originalCorner, const CORNER *
 		pointOnAxis = currentCorner->Hardpoints[CORNER::BellCrankPivot1];
 		momentArm = currentCorner->Hardpoints[CORNER::InboardPushrod] - pointOnAxis;
 		momentDirection = currentCorner->Hardpoints[CORNER::BellCrankPivot2] - pointOnAxis;
-		momentMagnitude = momentArm.Cross(Force) * momentDirection.Normalize();
+		momentMagnitude = momentArm.Cross(force) * momentDirection.Normalize();
 
 		// Spring force
 		momentArm = currentCorner->Hardpoints[CORNER::OutboardSpring] - VVASEMath::NearestPointOnAxis(
@@ -970,7 +970,7 @@ void KinematicOutputs::UpdateCorner(const CORNER *originalCorner, const CORNER *
 			reactionPathAngleTangent = sideViewSwingArmHeight / cornerDoubles[SideViewSwingArmLength];
 
 			// Compute the anti-dive
-			cornerDoubles[AntiBrakePitch] = reactionPathAngleTangent / (cgHeight / Wheelbase
+			cornerDoubles[AntiBrakePitch] = reactionPathAngleTangent / (cgHeight / wheelbase
 				* currentCar->Brakes->PercentFrontBraking) * 100.0;
 		}
 	}
@@ -978,31 +978,31 @@ void KinematicOutputs::UpdateCorner(const CORNER *originalCorner, const CORNER *
 	{
 		// Is the braking torque reacted directly by the chassis, or does it first
 		// travel through the control arms?
-		if (CurrentCar->Brakes->RearBrakesInboard)
+		if (currentCar->Brakes->RearBrakesInboard)
 		{
 			// Compute the tangent of the reaction path angle
-			ReactionPathAngleTangent = (SideViewSwingArmHeight -
-				CurrentCorner->Hardpoints[CORNER::WheelCenter].z) / CornerDoubles[SideViewSwingArmLength];
+			reactionPathAngleTangent = (sideViewSwingArmHeight -
+				currentCorner->Hardpoints[CORNER::WheelCenter].z) / cornerDoubles[SideViewSwingArmLength];
 
 			// Compute the anti-lift
-			CornerDoubles[AntiBrakePitch] = ReactionPathAngleTangent * Wheelbase / CGHeight
-				* (1.0 - CurrentCar->Brakes->PercentFrontBraking) * 100.0;
+			cornerDoubles[AntiBrakePitch] = reactionPathAngleTangent * wheelbase / cgHeight
+				* (1.0 - currentCar->Brakes->PercentFrontBraking) * 100.0;
 		}
 		else// Outboard brakes
 		{
 			// Compute the tangent of the reaction path angle
-			ReactionPathAngleTangent = SideViewSwingArmHeight / CornerDoubles[SideViewSwingArmLength];
+			reactionPathAngleTangent = sideViewSwingArmHeight / cornerDoubles[SideViewSwingArmLength];
 
 			// Compute the anti-lift
-			CornerDoubles[AntiBrakePitch] = ReactionPathAngleTangent / (CGHeight / Wheelbase
-				* (1.0 - CurrentCar->Brakes->PercentFrontBraking)) * 100.0;
+			cornerDoubles[AntiBrakePitch] = reactionPathAngleTangent / (cgHeight / wheelbase
+				* (1.0 - currentCar->Brakes->PercentFrontBraking)) * 100.0;
 		}
 	}
 
 	// If the anti-brake geometry is undefined at this point, we had a divide by zero.  This
 	// is the same as zero percent anti-brake, so we will clean this up by setting it to zero.
-	if (VVASEMath::IsNaN(CornerDoubles[AntiBrakePitch]))
-		CornerDoubles[AntiBrakePitch] = 0.0;
+	if (VVASEMath::IsNaN(cornerDoubles[AntiBrakePitch]))
+		cornerDoubles[AntiBrakePitch] = 0.0;
 
 	// Anti-drive [%]
 	// If this end of the car doesn't deliver power to the ground, then it doesn't have
@@ -1010,22 +1010,22 @@ void KinematicOutputs::UpdateCorner(const CORNER *originalCorner, const CORNER *
 	// exist.
 	// FIXME:  Do we need a % front traction for use with AWD?
 	// FIXME:  This will change with independant vs. solid axle suspensions (currently we assume indepenant)
-	if (CurrentCar->Drivetrain->DriveType == DRIVETRAIN::DRIVE_ALL_WHEEL ||
-		(CurrentCar->Drivetrain->DriveType == DRIVETRAIN::DRIVE_FRONT_WHEEL && IsAtFront) ||
-		(CurrentCar->Drivetrain->DriveType == DRIVETRAIN::DRIVE_REAR_WHEEL && !IsAtFront))
+	if (currentCar->Drivetrain->DriveType == DRIVETRAIN::DRIVE_ALL_WHEEL ||
+		(currentCar->Drivetrain->DriveType == DRIVETRAIN::DRIVE_FRONT_WHEEL && isAtFront) ||
+		(currentCar->Drivetrain->DriveType == DRIVETRAIN::DRIVE_REAR_WHEEL && !isAtFront))
 	{
 		// Compute the tangent of the reaction path angle
-		ReactionPathAngleTangent = (SideViewSwingArmHeight -
-			CurrentCorner->Hardpoints[CORNER::WheelCenter].z) / CornerDoubles[SideViewSwingArmLength];
+		reactionPathAngleTangent = (sideViewSwingArmHeight -
+			currentCorner->Hardpoints[CORNER::WheelCenter].z) / cornerDoubles[SideViewSwingArmLength];
 
 		// Compute the anti-lift
-		CornerDoubles[AntiDrivePitch] = ReactionPathAngleTangent * Wheelbase / CGHeight * 100.0;
+		cornerDoubles[AntiDrivePitch] = reactionPathAngleTangent * wheelbase / cgHeight * 100.0;
 
 		// If the anti-drive geometry is undefined at this point, we had a divide by zero.
 		// This is the same as zero percent anti-drive, so we will clean this up by setting
 		// it to zero.
-		if (VVASEMath::IsNaN(CornerDoubles[AntiDrivePitch]))
-			CornerDoubles[AntiDrivePitch] = 0.0;
+		if (VVASEMath::IsNaN(cornerDoubles[AntiDrivePitch]))
+			cornerDoubles[AntiDrivePitch] = 0.0;
 	}
 
 	return;
@@ -1038,7 +1038,7 @@ void KinematicOutputs::UpdateCorner(const CORNER *originalCorner, const CORNER *
 // Description:		Returns a string containing the name of the specified output.
 //
 // Input Arguments:
-//		_Output	= const CORNER_OUTPUTS_DOUBLE& specifying the output in which we are
+//		_output	= const CornerOutputsDouble& specifying the output in which we are
 //				  interested
 //
 // Output Arguments:
@@ -1048,80 +1048,80 @@ void KinematicOutputs::UpdateCorner(const CORNER *originalCorner, const CORNER *
 //		wxString containing the name of the specified output
 //
 //==========================================================================
-wxString KinematicOutputs::GetCornerDoubleName(const CORNER_OUTPUTS_DOUBLE &_Output)
+wxString KinematicOutputs::GetCornerDoubleName(const CornerOutputsDouble &_output)
 {
 	// The return value
-	wxString Name;
+	wxString name;
 
 	// Return the name based on the specified output index
-	switch (_Output)
+	switch (_output)
 	{
 	case Caster:
-		Name = _T("Caster");
+		name = _T("Caster");
 		break;
 
 	case Camber:
-		Name = _T("Camber");
+		name = _T("Camber");
 		break;
 
 	case KPI:
-		Name = _T("KPI");
+		name = _T("KPI");
 		break;
 
 	case Steer:
-		Name = _T("Steer");
+		name = _T("Steer");
 		break;
 
 	case Spring:
-		Name = _T("Spring");
+		name = _T("Spring");
 		break;
 
 	case Shock:
-		Name = _T("Shock");
+		name = _T("Shock");
 		break;
 
 	case AxlePlunge:
-		Name = _T("Axle Plunge");
+		name = _T("Axle Plunge");
 		break;
 
 	case CasterTrail:
-		Name = _T("Caster Trail");
+		name = _T("Caster Trail");
 		break;
 
 	case ScrubRadius:
-		Name = _T("Scrub Radius");
+		name = _T("Scrub Radius");
 		break;
 
 	case Scrub:
-		Name = _T("Scrub");
+		name = _T("Scrub");
 		break;
 
 	case SpringInstallationRatio:
-		Name = _T("Spring Installation Ratio");
+		name = _T("Spring Installation Ratio");
 		break;
 
 	case ShockInstallationRatio:
-		Name = _T("Shock Installation Ratio");
+		name = _T("Shock Installation Ratio");
 		break;
 
 	case SpindleLength:
-		Name = _T("Spindle Length");
+		name = _T("Spindle Length");
 		break;
 
 	case SideViewSwingArmLength:
-		Name = _T("SVSA Length");
+		name = _T("SVSA Length");
 		break;
 
 	case FrontViewSwingArmLength:
-		Name = _T("FVSA Length");
+		name = _T("FVSA Length");
 		break;
 
 	case AntiBrakePitch:
-		Name = _T("Anti-Brake");
+		name = _T("Anti-Brake");
 		break;
 
 	case AntiDrivePitch:
-		Name = _T("Anti-Drive");
+		name = _T("Anti-Drive");
 		break;
 
 	default:
@@ -1129,7 +1129,7 @@ wxString KinematicOutputs::GetCornerDoubleName(const CORNER_OUTPUTS_DOUBLE &_Out
 		break;
 	}
 
-	return Name;
+	return name;
 }
 
 //==========================================================================
@@ -1139,7 +1139,7 @@ wxString KinematicOutputs::GetCornerDoubleName(const CORNER_OUTPUTS_DOUBLE &_Out
 // Description:		Returns a string containing the name of the specified output.
 //
 // Input Arguments:
-//		_Output	= const CORNER_OUTPUTS_Vector& specifying the output in which we are
+//		_output	= const CornerOutputsVector& specifying the output in which we are
 //				  interested
 //
 // Output Arguments:
@@ -1149,20 +1149,20 @@ wxString KinematicOutputs::GetCornerDoubleName(const CORNER_OUTPUTS_DOUBLE &_Out
 //		wxString containing the name of the specified output
 //
 //==========================================================================
-wxString KinematicOutputs::GetCornerVectorName(const CORNER_OUTPUTS_Vector &_Output)
+wxString KinematicOutputs::GetCornerVectorName(const CornerOutputsVector &_output)
 {
 	// The return value
-	wxString Name;
+	wxString name;
 
 	// Return the name based on the specified output index
-	switch (_Output)
+	switch (_output)
 	{
 	case InstantCenter:
-		Name = _T("Instant Center");
+		name = _T("Instant Center");
 		break;
 
 	case InstantAxisDirection:
-		Name = _T("Instant Axis Direction");
+		name = _T("Instant Axis Direction");
 		break;
 
 	default:
@@ -1170,7 +1170,7 @@ wxString KinematicOutputs::GetCornerVectorName(const CORNER_OUTPUTS_Vector &_Out
 		break;
 	}
 
-	return Name;
+	return name;
 }
 
 //==========================================================================
@@ -1180,7 +1180,7 @@ wxString KinematicOutputs::GetCornerVectorName(const CORNER_OUTPUTS_Vector &_Out
 // Description:		Returns a string containing the name of the specified output.
 //
 // Input Arguments:
-//		_Output	= const OUTPUTS_DOUBLE& specifying the output in which we are
+//		_output	= const OutputsDouble& specifying the output in which we are
 //				  interested
 //
 // Output Arguments:
@@ -1190,92 +1190,92 @@ wxString KinematicOutputs::GetCornerVectorName(const CORNER_OUTPUTS_Vector &_Out
 //		wxString containing the name of the specified output
 //
 //==========================================================================
-wxString KinematicOutputs::GetDoubleName(const OUTPUTS_DOUBLE &_Output)
+wxString KinematicOutputs::GetDoubleName(const OutputsDouble &_output)
 {
 	// The return value
-	wxString Name;
+	wxString name;
 
 	// Return the name based on the specified output index
-	switch (_Output)
+	switch (_output)
 	{
 	case FrontARBTwist:
-		Name = _T("Front ARB Twist");
+		name = _T("Front ARB Twist");
 		break;
 
 	case RearARBTwist:
-		Name = _T("Rear ARB Twist");
+		name = _T("Rear ARB Twist");
 		break;
 
 	case FrontThirdSpring:
-		Name = _T("Front Third Spring");
+		name = _T("Front Third Spring");
 		break;
 
 	case FrontThirdShock:
-		Name = _T("Front Third Shock");
+		name = _T("Front Third Shock");
 		break;
 
 	case RearThirdSpring:
-		Name = _T("Rear Third Spring");
+		name = _T("Rear Third Spring");
 		break;
 
 	case RearThirdShock:
-		Name = _T("Rear Third Shock");
+		name = _T("Rear Third Shock");
 		break;
 
 	case FrontNetSteer:
-		Name = _T("Front Net Steer");
+		name = _T("Front Net Steer");
 		break;
 
 	case RearNetSteer:
-		Name = _T("Rear Net Steer");
+		name = _T("Rear Net Steer");
 		break;
 
 	case FrontNetScrub:
-		Name = _T("Front Net Scrub");
+		name = _T("Front Net Scrub");
 		break;
 
 	case RearNetScrub:
-		Name = _T("Rear Net Scrub");
+		name = _T("Rear Net Scrub");
 		break;
 
 	case FrontARBMotionRatio:
-		Name = _T("Front ARB Motion Ratio");
+		name = _T("Front ARB Motion Ratio");
 		break;
 
 	case RearARBMotionRatio:
-		Name = _T("Rear ARB Motion Ratio");
+		name = _T("Rear ARB Motion Ratio");
 		break;
 
 	case FrontTrackGround:
-		Name = _T("Front Ground Track");
+		name = _T("Front Ground Track");
 		break;
 
 	case RearTrackGround:
-		Name = _T("Rear Ground Track");
+		name = _T("Rear Ground Track");
 		break;
 
 	case RightWheelbaseGround:
-		Name = _T("Right Ground Wheelbase");
+		name = _T("Right Ground Wheelbase");
 		break;
 
 	case LeftWheelbaseGround:
-		Name = _T("Left Ground Wheelbase");
+		name = _T("Left Ground Wheelbase");
 		break;
 
 	case FrontTrackHub:
-		Name = _T("Front Hub Track");
+		name = _T("Front Hub Track");
 		break;
 
 	case RearTrackHub:
-		Name = _T("Rear Hub Track");
+		name = _T("Rear Hub Track");
 		break;
 
 	case RightWheelbaseHub:
-		Name = _T("Right Hub Wheelbase");
+		name = _T("Right Hub Wheelbase");
 		break;
 
 	case LeftWheelbaseHub:
-		Name = _T("Left Hub Wheelbase");
+		name = _T("Left Hub Wheelbase");
 		break;
 
 	default:
@@ -1283,7 +1283,7 @@ wxString KinematicOutputs::GetDoubleName(const OUTPUTS_DOUBLE &_Output)
 		break;
 	}
 
-	return Name;
+	return name;
 }
 
 //==========================================================================
@@ -1293,7 +1293,7 @@ wxString KinematicOutputs::GetDoubleName(const OUTPUTS_DOUBLE &_Output)
 // Description:		Returns a string containing the name of the specified output.
 //
 // Input Arguments:
-//		_Output	= const OUTPUTS_Vector& specifying the output in which we are
+//		_output	= const OutputsVector& specifying the output in which we are
 //				  interested
 //
 // Output Arguments:
@@ -1303,44 +1303,44 @@ wxString KinematicOutputs::GetDoubleName(const OUTPUTS_DOUBLE &_Output)
 //		wxString containing the name of the specified output
 //
 //==========================================================================
-wxString KinematicOutputs::GetVectorName(const OUTPUTS_Vector &_Output)
+wxString KinematicOutputs::GetVectorName(const OutputsVector &_output)
 {
 	// The return value
-	wxString Name;
+	wxString name;
 
 	// Return the name based on the specified output index
-	switch (_Output)
+	switch (_output)
 	{
 	case FrontKinematicRC:
-		Name = _T("Front Kinematic Roll Center");
+		name = _T("Front Kinematic Roll Center");
 		break;
 
 	case RearKinematicRC:
-		Name = _T("Rear Kinematic Roll Center");
+		name = _T("Rear Kinematic Roll Center");
 		break;
 
 	case RightKinematicPC:
-		Name = _T("Right Kinematic Pitch Center");
+		name = _T("Right Kinematic Pitch Center");
 		break;
 
 	case LeftKinematicPC:
-		Name = _T("Left Kinematic Pitch Center");
+		name = _T("Left Kinematic Pitch Center");
 		break;
 
 	case FrontRollAxisDirection:
-		Name = _T("Front Roll Axis Direction");
+		name = _T("Front Roll Axis Direction");
 		break;
 
 	case RearRollAxisDirection:
-		Name = _T("Rear Roll Axis Direction");
+		name = _T("Rear Roll Axis Direction");
 		break;
 
 	case RightPitchAxisDirection:
-		Name = _T("Right Pitch Axis Direction");
+		name = _T("Right Pitch Axis Direction");
 		break;
 
 	case LeftPitchAxisDirection:
-		Name = _T("Left Pitch Axis Direction");
+		name = _T("Left Pitch Axis Direction");
 		break;
 
 	default:
@@ -1348,7 +1348,7 @@ wxString KinematicOutputs::GetVectorName(const OUTPUTS_Vector &_Output)
 		break;
 	}
 
-	return Name;
+	return name;
 }
 
 //==========================================================================
@@ -1359,7 +1359,7 @@ wxString KinematicOutputs::GetVectorName(const OUTPUTS_Vector &_Output)
 //					class outputs.
 //
 // Input Arguments:
-//		_Output	= const &OUTPUTS_COMPLETE specifying the output in which we are
+//		_output	= const &OutputsComplete specifying the output in which we are
 //				  interested
 //
 // Output Arguments:
@@ -1369,142 +1369,142 @@ wxString KinematicOutputs::GetVectorName(const OUTPUTS_Vector &_Output)
 //		double specifying the value of the requested output
 //
 //==========================================================================
-double KinematicOutputs::GetOutputValue(const OUTPUTS_COMPLETE &_Output) const
+double KinematicOutputs::GetOutputValue(const OutputsComplete &_output) const
 {
 	// The return value
-	double Value;
+	double value;
 
 	// Temporary Vector for extracting componenets
-	Vector Temp;
+	Vector temp;
 
-	// Temporary OUTPUTS_COMPLETE for math
-	OUTPUTS_COMPLETE NewOutputIndex;
+	// Temporary OutputsComplete for math
+	OutputsComplete newOutputIndex;
 
 	// Depending on the specified OUTPUTS_COMPLETE, choose which output to return
-	if (_Output <= EndRightFrontDoubles)
-		Value = RightFront[_Output - StartRightFrontDoubles];
-	else if (_Output <= EndRightFrontVectors)
+	if (_output <= EndRightFrontDoubles)
+		value = rightFront[_output - StartRightFrontDoubles];
+	else if (_output <= EndRightFrontVectors)
 	{
-		NewOutputIndex = OUTPUTS_COMPLETE(_Output - StartRightFrontVectors);
-		Temp = RightFrontVectors[int(NewOutputIndex / 3)];
+		newOutputIndex = OutputsComplete(_output - StartRightFrontVectors);
+		temp = rightFrontVectors[int(newOutputIndex / 3)];
 
 		// Choose the value based on the selected componenet
-		switch (NewOutputIndex % 3)
+		switch (newOutputIndex % 3)
 		{
 		case 0:
-			Value = Temp.x;
+			value = temp.x;
 			break;
 
 		case 1:
-			Value = Temp.y;
+			value = temp.y;
 			break;
 
 		case 2:
 		default:
-			Value = Temp.z;
+			value = temp.z;
 			break;
 		}
 	}
-	else if (_Output <= EndLeftFrontDoubles)
-		Value = LeftFront[_Output - StartLeftFrontDoubles];
-	else if (_Output <= EndLeftFrontVectors)
+	else if (_output <= EndLeftFrontDoubles)
+		value = leftFront[_output - StartLeftFrontDoubles];
+	else if (_output <= EndLeftFrontVectors)
 	{
-		NewOutputIndex = OUTPUTS_COMPLETE(_Output - StartLeftFrontVectors);
-		Temp = LeftFrontVectors[int(NewOutputIndex / 3)];
+		newOutputIndex = OutputsComplete(_output - StartLeftFrontVectors);
+		temp = leftFrontVectors[int(newOutputIndex / 3)];
 
 		// Choose the value based on the selected componenet
-		switch (NewOutputIndex % 3)
+		switch (newOutputIndex % 3)
 		{
 		case 0:
-			Value = Temp.x;
+			value = temp.x;
 			break;
 
 		case 1:
-			Value = Temp.y;
+			value = temp.y;
 			break;
 
 		case 2:
 		default:
-			Value = Temp.z;
+			value = temp.z;
 			break;
 		}
 	}
-	else if (_Output <= EndRightRearDoubles)
-		Value = RightRear[_Output - StartRightRearDoubles];
-	else if (_Output <= EndRightRearVectors)
+	else if (_output <= EndRightRearDoubles)
+		value = rightRear[_output - StartRightRearDoubles];
+	else if (_output <= EndRightRearVectors)
 	{
-		NewOutputIndex = OUTPUTS_COMPLETE(_Output - StartRightRearVectors);
-		Temp = RightRearVectors[int(NewOutputIndex / 3)];
+		newOutputIndex = OutputsComplete(_output - StartRightRearVectors);
+		temp = rightRearVectors[int(newOutputIndex / 3)];
 
 		// Choose the value based on the selected componenet
-		switch (NewOutputIndex % 3)
+		switch (newOutputIndex % 3)
 		{
 		case 0:
-			Value = Temp.x;
+			value = temp.x;
 			break;
 
 		case 1:
-			Value = Temp.y;
+			value = temp.y;
 			break;
 
 		case 2:
 		default:
-			Value = Temp.z;
+			value = temp.z;
 			break;
 		}
 	}
-	else if (_Output <= EndLeftRearDoubles)
-		Value = LeftRear[_Output - StartLeftRearDoubles];
-	else if (_Output <= EndLeftRearVectors)
+	else if (_output <= EndLeftRearDoubles)
+		value = leftRear[_output - StartLeftRearDoubles];
+	else if (_output <= EndLeftRearVectors)
 	{
-		NewOutputIndex = OUTPUTS_COMPLETE(_Output - StartLeftRearVectors);
-		Temp = LeftRearVectors[int(NewOutputIndex / 3)];
+		newOutputIndex = OutputsComplete(_output - StartLeftRearVectors);
+		temp = leftRearVectors[int(newOutputIndex / 3)];
 
 		// Choose the value based on the selected componenet
-		switch (NewOutputIndex % 3)
+		switch (newOutputIndex % 3)
 		{
 		case 0:
-			Value = Temp.x;
+			value = temp.x;
 			break;
 
 		case 1:
-			Value = Temp.y;
+			value = temp.y;
 			break;
 
 		case 2:
 		default:
-			Value = Temp.z;
+			value = temp.z;
 			break;
 		}
 	}
-	else if (_Output <= EndDoubles)
-		Value = Doubles[_Output - StartDoubles];
-	else if (_Output <= EndVectors)
+	else if (_output <= EndDoubles)
+		value = doubles[_output - StartDoubles];
+	else if (_output <= EndVectors)
 	{
-		NewOutputIndex = OUTPUTS_COMPLETE(_Output - StartVectors);
-		Temp = Vectors[int(NewOutputIndex / 3)];
+		newOutputIndex = OutputsComplete(_output - StartVectors);
+		temp = vectors[int(newOutputIndex / 3)];
 
 		// Choose the value based on the selected componenet
-		switch (NewOutputIndex % 3)
+		switch (newOutputIndex % 3)
 		{
 		case 0:
-			Value = Temp.x;
+			value = temp.x;
 			break;
 
 		case 1:
-			Value = Temp.y;
+			value = temp.y;
 			break;
 
 		case 2:
 		default:
-			Value = Temp.z;
+			value = temp.z;
 			break;
 		}
 	}
 	else
-		Value = 0.0;
+		value = 0.0;
 
-	return Value;
+	return value;
 }
 
 //==========================================================================
@@ -1515,7 +1515,7 @@ double KinematicOutputs::GetOutputValue(const OUTPUTS_COMPLETE &_Output) const
 //					list of class outputs.
 //
 // Input Arguments:
-//		_Output	= const &OUTPUTS_COMPLETE specifying the output in which we are
+//		_output	= const &OutputsComplete specifying the output in which we are
 //				  interested
 //
 // Output Arguments:
@@ -1525,54 +1525,54 @@ double KinematicOutputs::GetOutputValue(const OUTPUTS_COMPLETE &_Output) const
 //		Convert::UnitType specifying the unit type of the requested output
 //
 //==========================================================================
-Convert::UnitType KinematicOutputs::GetOutputUnitType(const OUTPUTS_COMPLETE &_Output)
+Convert::UnitType KinematicOutputs::GetOutputUnitType(const OutputsComplete &_output)
 {
 	// The value to return
-	Convert::UnitType UnitType;
+	Convert::UnitType unitType;
 
 	// For some simple math
-	OUTPUTS_COMPLETE NewOutputIndex;
+	OutputsComplete newOutputIndex;
 
 	// Depending on the specified Output, choose the units string
-	if (_Output <= EndRightFrontDoubles)
-		UnitType = GetCornerDoubleUnitType((CORNER_OUTPUTS_DOUBLE)(_Output - StartRightFrontDoubles));
-	else if (_Output <= EndRightFrontVectors)
+	if (_output <= EndRightFrontDoubles)
+		unitType = GetCornerDoubleUnitType((CornerOutputsDouble)(_output - StartRightFrontDoubles));
+	else if (_output <= EndRightFrontVectors)
 	{
-		NewOutputIndex = OUTPUTS_COMPLETE(_Output - StartRightFrontVectors);
-		UnitType = GetCornerVectorUnitType((CORNER_OUTPUTS_Vector)int(NewOutputIndex / 3));
+		newOutputIndex = OutputsComplete(_output - StartRightFrontVectors);
+		unitType = GetCornerVectorUnitType((CornerOutputsVector)int(newOutputIndex / 3));
 	}
-	else if (_Output <= EndLeftFrontDoubles)
-		UnitType = GetCornerDoubleUnitType((CORNER_OUTPUTS_DOUBLE)(_Output - StartLeftFrontDoubles));
-	else if (_Output <= EndLeftFrontVectors)
+	else if (_output <= EndLeftFrontDoubles)
+		unitType = GetCornerDoubleUnitType((CornerOutputsDouble)(_output - StartLeftFrontDoubles));
+	else if (_output <= EndLeftFrontVectors)
 	{
-		NewOutputIndex = OUTPUTS_COMPLETE(_Output - StartLeftFrontVectors);
-		UnitType = GetCornerVectorUnitType((CORNER_OUTPUTS_Vector)int(NewOutputIndex / 3));
+		newOutputIndex = OutputsComplete(_output - StartLeftFrontVectors);
+		unitType = GetCornerVectorUnitType((CornerOutputsVector)int(newOutputIndex / 3));
 	}
-	else if (_Output <= EndRightRearDoubles)
-		UnitType = GetCornerDoubleUnitType((CORNER_OUTPUTS_DOUBLE)(_Output - StartRightRearDoubles));
-	else if (_Output <= EndRightRearVectors)
+	else if (_output <= EndRightRearDoubles)
+		unitType = GetCornerDoubleUnitType((CornerOutputsDouble)(_output - StartRightRearDoubles));
+	else if (_output <= EndRightRearVectors)
 	{
-		NewOutputIndex = OUTPUTS_COMPLETE(_Output - StartRightRearVectors);
-		UnitType = GetCornerVectorUnitType((CORNER_OUTPUTS_Vector)int(NewOutputIndex / 3));
+		newOutputIndex = OutputsComplete(_output - StartRightRearVectors);
+		unitType = GetCornerVectorUnitType((CornerOutputsVector)int(newOutputIndex / 3));
 	}
-	else if (_Output <= EndLeftRearDoubles)
-		UnitType = GetCornerDoubleUnitType((CORNER_OUTPUTS_DOUBLE)(_Output - StartLeftRearDoubles));
-	else if (_Output <= EndLeftRearVectors)
+	else if (_output <= EndLeftRearDoubles)
+		unitType = GetCornerDoubleUnitType((CornerOutputsDouble)(_output - StartLeftRearDoubles));
+	else if (_output <= EndLeftRearVectors)
 	{
-		NewOutputIndex = OUTPUTS_COMPLETE(_Output - StartLeftRearVectors);
-		UnitType = GetCornerVectorUnitType((CORNER_OUTPUTS_Vector)int(NewOutputIndex / 3));
+		newOutputIndex = OutputsComplete(_output - StartLeftRearVectors);
+		unitType = GetCornerVectorUnitType((CornerOutputsVector)int(newOutputIndex / 3));
 	}
-	else if (_Output <= EndDoubles)
-		UnitType = GetDoubleUnitType((OUTPUTS_DOUBLE)(_Output - StartDoubles));
-	else if (_Output <= EndVectors)
+	else if (_output <= EndDoubles)
+		unitType = GetDoubleUnitType((OutputsDouble)(_output - StartDoubles));
+	else if (_output <= EndVectors)
 	{
-		NewOutputIndex = OUTPUTS_COMPLETE(_Output - StartVectors);
-		UnitType = GetVectorUnitType((OUTPUTS_Vector)int(NewOutputIndex / 3));
+		newOutputIndex = OutputsComplete(_output - StartVectors);
+		unitType = GetVectorUnitType((OutputsVector)int(newOutputIndex / 3));
 	}
 	else
-		UnitType = Convert::UnitTypeUnknown;
+		unitType = Convert::UnitTypeUnknown;
 
-	return UnitType;
+	return unitType;
 }
 
 //==========================================================================
@@ -1583,7 +1583,7 @@ Convert::UnitType KinematicOutputs::GetOutputUnitType(const OUTPUTS_COMPLETE &_O
 //					class outputs.
 //
 // Input Arguments:
-//		_Output	= const OUTPUTS_COMPLETE& specifying the output in which we are
+//		_output	= const OutputsComplete& specifying the output in which we are
 //				  interested
 //
 // Output Arguments:
@@ -1593,161 +1593,161 @@ Convert::UnitType KinematicOutputs::GetOutputUnitType(const OUTPUTS_COMPLETE &_O
 //		wxString specifying the name of the requested output
 //
 //==========================================================================
-wxString KinematicOutputs::GetOutputName(const OUTPUTS_COMPLETE &_Output)
+wxString KinematicOutputs::GetOutputName(const OutputsComplete &_output)
 {
 	// The value to return
-	wxString Name;
+	wxString name;
 
 	// For some simple math
-	OUTPUTS_COMPLETE NewOutputIndex;
+	OutputsComplete newOutputIndex;
 
 	// Depending on the specified PLOT_ID, choose the name of the string
 	// Vectors are a special case - depending on which component of the vector is chosen,
 	// we need to append a different string to the end of the Name
-	if (_Output <= EndRightFrontDoubles)
+	if (_output <= EndRightFrontDoubles)
 	{
-		Name = GetCornerDoubleName((CORNER_OUTPUTS_DOUBLE)(_Output - StartRightFrontDoubles));
-		Name.Prepend(_T("Right Front "));
+		name = GetCornerDoubleName((CornerOutputsDouble)(_output - StartRightFrontDoubles));
+		name.Prepend(_T("Right Front "));
 	}
-	else if (_Output <= EndRightFrontVectors)
+	else if (_output <= EndRightFrontVectors)
 	{
-		NewOutputIndex = OUTPUTS_COMPLETE((int)_Output - (int)StartRightFrontVectors);
-		Name = GetCornerVectorName((CORNER_OUTPUTS_Vector)int(NewOutputIndex / 3));
+		newOutputIndex = OutputsComplete((int)_output - (int)StartRightFrontVectors);
+		name = GetCornerVectorName((CornerOutputsVector)int(newOutputIndex / 3));
 
 		// Append the appropriate tag, depending on the specified component
-		switch (NewOutputIndex % 3)
+		switch (newOutputIndex % 3)
 		{
 		case 0:
-			Name.append(_T(" (X)"));
+			name.append(_T(" (X)"));
 			break;
 
 		case 1:
-			Name.append(_T(" (Y)"));
+			name.append(_T(" (Y)"));
 			break;
 
 		case 2:
 		default:
-			Name.append(_T(" (Z)"));
+			name.append(_T(" (Z)"));
 			break;
 		}
 
-		Name.Prepend(_T("Right Front "));
+		name.Prepend(_T("Right Front "));
 	}
-	else if (_Output <= EndLeftFrontDoubles)
+	else if (_output <= EndLeftFrontDoubles)
 	{
-		Name = GetCornerDoubleName((CORNER_OUTPUTS_DOUBLE)(_Output - StartLeftFrontDoubles));
-		Name.Prepend(_T("Left Front "));
+		name = GetCornerDoubleName((CornerOutputsDouble)(_output - StartLeftFrontDoubles));
+		name.Prepend(_T("Left Front "));
 	}
-	else if (_Output <= EndLeftFrontVectors)
+	else if (_output <= EndLeftFrontVectors)
 	{
-		NewOutputIndex = OUTPUTS_COMPLETE((int)_Output - (int)StartLeftFrontVectors);
-		Name = GetCornerVectorName((CORNER_OUTPUTS_Vector)int(NewOutputIndex / 3));
+		newOutputIndex = OutputsComplete((int)_output - (int)StartLeftFrontVectors);
+		name = GetCornerVectorName((CornerOutputsVector)int(newOutputIndex / 3));
 
 		// Append the appropriate tag, depending on the specified component
-		switch (NewOutputIndex % 3)
+		switch (newOutputIndex % 3)
 		{
 		case 0:
-			Name.append(_T(" (X)"));
+			name.append(_T(" (X)"));
 			break;
 
 		case 1:
-			Name.append(_T(" (Y)"));
+			name.append(_T(" (Y)"));
 			break;
 
 		case 2:
 		default:
-			Name.append(_T(" (Z)"));
+			name.append(_T(" (Z)"));
 			break;
 		}
 
-		Name.Prepend(_T("Left Front "));
+		name.Prepend(_T("Left Front "));
 	}
-	else if (_Output <= EndRightRearDoubles)
+	else if (_output <= EndRightRearDoubles)
 	{
-		Name = GetCornerDoubleName((CORNER_OUTPUTS_DOUBLE)(_Output - StartRightRearDoubles));
-		Name.Prepend(_T("Right Rear "));
+		name = GetCornerDoubleName((CornerOutputsDouble)(_output - StartRightRearDoubles));
+		name.Prepend(_T("Right Rear "));
 	}
-	else if (_Output <= EndRightRearVectors)
+	else if (_output <= EndRightRearVectors)
 	{
-		NewOutputIndex = OUTPUTS_COMPLETE((int)_Output - (int)StartRightRearVectors);
-		Name = GetCornerVectorName((CORNER_OUTPUTS_Vector)int(NewOutputIndex / 3));
+		newOutputIndex = OutputsComplete((int)_output - (int)StartRightRearVectors);
+		name = GetCornerVectorName((CornerOutputsVector)int(newOutputIndex / 3));
 
 		// Append the appropriate tag, depending on the specified component
-		switch (NewOutputIndex % 3)
+		switch (newOutputIndex % 3)
 		{
 		case 0:
-			Name.append(_T(" (X)"));
+			name.append(_T(" (X)"));
 			break;
 
 		case 1:
-			Name.append(_T(" (Y)"));
+			name.append(_T(" (Y)"));
 			break;
 
 		case 2:
 		default:
-			Name.append(_T(" (Z)"));
+			name.append(_T(" (Z)"));
 			break;
 		}
 
-		Name.Prepend(_T("Right Rear "));
+		name.Prepend(_T("Right Rear "));
 	}
-	else if (_Output <= EndLeftRearDoubles)
+	else if (_output <= EndLeftRearDoubles)
 	{
-		Name = GetCornerDoubleName((CORNER_OUTPUTS_DOUBLE)(_Output - StartLeftRearDoubles));
-		Name.Prepend(_T("Left Rear "));
+		name = GetCornerDoubleName((CornerOutputsDouble)(_output - StartLeftRearDoubles));
+		name.Prepend(_T("Left Rear "));
 	}
-	else if (_Output <= EndLeftRearVectors)
+	else if (_output <= EndLeftRearVectors)
 	{
-		NewOutputIndex = OUTPUTS_COMPLETE((int)_Output - (int)StartLeftRearVectors);
-		Name = GetCornerVectorName((CORNER_OUTPUTS_Vector)int(NewOutputIndex / 3));
+		newOutputIndex = OutputsComplete((int)_output - (int)StartLeftRearVectors);
+		name = GetCornerVectorName((CornerOutputsVector)int(newOutputIndex / 3));
 
 		// Append the appropriate tag, depending on the specified component
-		switch (NewOutputIndex % 3)
+		switch (newOutputIndex % 3)
 		{
 		case 0:
-			Name.append(_T(" (X)"));
+			name.append(_T(" (X)"));
 			break;
 
 		case 1:
-			Name.append(_T(" (Y)"));
+			name.append(_T(" (Y)"));
 			break;
 
 		case 2:
 		default:
-			Name.append(_T(" (Z)"));
+			name.append(_T(" (Z)"));
 			break;
 		}
 
-		Name.Prepend(_T("Left Rear "));
+		name.Prepend(_T("Left Rear "));
 	}
-	else if (_Output <= EndDoubles)
-		Name = GetDoubleName((OUTPUTS_DOUBLE)(_Output - StartDoubles));
-	else if (_Output <= EndVectors)
+	else if (_output <= EndDoubles)
+		name = GetDoubleName((OutputsDouble)(_output - StartDoubles));
+	else if (_output <= EndVectors)
 	{
-		NewOutputIndex = OUTPUTS_COMPLETE((int)_Output - (int)StartVectors);
-		Name = GetVectorName((OUTPUTS_Vector)int(NewOutputIndex / 3));
+		newOutputIndex = OutputsComplete((int)_output - (int)StartVectors);
+		name = GetVectorName((OutputsVector)int(newOutputIndex / 3));
 
 		// Append the appropriate tag, depending on the specified component
-		switch (NewOutputIndex % 3)
+		switch (newOutputIndex % 3)
 		{
 		case 0:
-			Name.append(_T(" (X)"));
+			name.append(_T(" (X)"));
 			break;
 
 		case 1:
-			Name.append(_T(" (Y)"));
+			name.append(_T(" (Y)"));
 			break;
 
 		case 2:
 		default:
-			Name.append(_T(" (Z)"));
+			name.append(_T(" (Z)"));
 			break;
 		}
 	}
 	else
-		Name = _T("Unrecognized name");
+		name = _T("Unrecognized name");
 
-	return Name;
+	return name;
 }
 
 //==========================================================================
@@ -1757,7 +1757,7 @@ wxString KinematicOutputs::GetOutputName(const OUTPUTS_COMPLETE &_Output)
 // Description:		Returns a the type of units for the specified output.
 //
 // Input Arguments:
-//		_Output	= const CORNER_OUTPUTS_DOUBLE& specifying the
+//		_output	= const CornerOutputsDouble& specifying the
 //				  output in which we are interested
 //
 // Output Arguments:
@@ -1767,20 +1767,20 @@ wxString KinematicOutputs::GetOutputName(const OUTPUTS_COMPLETE &_Output)
 //		Convert::UnitType describing the units of the specified output
 //
 //==========================================================================
-Convert::UnitType KinematicOutputs::GetCornerDoubleUnitType(const CORNER_OUTPUTS_DOUBLE &_Output)
+Convert::UnitType KinematicOutputs::GetCornerDoubleUnitType(const CornerOutputsDouble &_output)
 {
 	// The return value
-	Convert::UnitType UnitType;
+	Convert::UnitType unitType;
 
 	// Determine the units based on it's type
-	switch (_Output)
+	switch (_output)
 	{
 		// Angles
 	case Caster:
 	case Camber:
 	case KPI:
 	case Steer:
-		UnitType = Convert::UnitTypeAngle;
+		unitType = Convert::UnitTypeAngle;
 		break;
 
 		// Distances
@@ -1793,7 +1793,7 @@ Convert::UnitType KinematicOutputs::GetCornerDoubleUnitType(const CORNER_OUTPUTS
 	case SpindleLength:
 	case SideViewSwingArmLength:
 	case FrontViewSwingArmLength:
-		UnitType = Convert::UnitTypeDistance;
+		unitType = Convert::UnitTypeDistance;
 		break;
 
 		// Unitless
@@ -1801,16 +1801,16 @@ Convert::UnitType KinematicOutputs::GetCornerDoubleUnitType(const CORNER_OUTPUTS
 	case ShockInstallationRatio:
 	case AntiBrakePitch:
 	case AntiDrivePitch:
-		UnitType = Convert::UnitTypeUnitless;
+		unitType = Convert::UnitTypeUnitless;
 		break;
 
 		// Unknown
 	default:
-		UnitType = Convert::UnitTypeUnknown;
+		unitType = Convert::UnitTypeUnknown;
 		break;
 	}
 
-	return UnitType;
+	return unitType;
 }
 
 //==========================================================================
@@ -1820,7 +1820,7 @@ Convert::UnitType KinematicOutputs::GetCornerDoubleUnitType(const CORNER_OUTPUTS
 // Description:		Returns a the type of units for the specified output.
 //
 // Input Arguments:
-//		_Output	= const CORNER_OUTPUTS_Vector& specifying the
+//		_output	= const CornerOutputsVector& specifying the
 //				  output in which we are interested
 //
 // Output Arguments:
@@ -1830,31 +1830,31 @@ Convert::UnitType KinematicOutputs::GetCornerDoubleUnitType(const CORNER_OUTPUTS
 //		Convert::UnitType describing the units of the specified output
 //
 //==========================================================================
-Convert::UnitType KinematicOutputs::GetCornerVectorUnitType(const CORNER_OUTPUTS_Vector &_Output)
+Convert::UnitType KinematicOutputs::GetCornerVectorUnitType(const CornerOutputsVector &_output)
 {
 	// The return value
-	Convert::UnitType UnitType;
+	Convert::UnitType unitType;
 
 	// Determine the units based on it's type
-	switch (_Output)
+	switch (_output)
 	{
 		// Distances
 	case InstantCenter:
-		UnitType = Convert::UnitTypeDistance;
+		unitType = Convert::UnitTypeDistance;
 		break;
 
 		// Unitless (no conversion)
 	case InstantAxisDirection:
-		UnitType = Convert::UnitTypeUnitless;
+		unitType = Convert::UnitTypeUnitless;
 		break;
 
 		// Unknown
 	default:
-		UnitType = Convert::UnitTypeUnknown;
+		unitType = Convert::UnitTypeUnknown;
 		break;
 	}
 
-	return UnitType;
+	return unitType;
 }
 
 //==========================================================================
@@ -1864,7 +1864,7 @@ Convert::UnitType KinematicOutputs::GetCornerVectorUnitType(const CORNER_OUTPUTS
 // Description:		Returns a the type of units for the specified output.
 //
 // Input Arguments:
-//		_Output	= const OUTPUTS_DOUBLE& specifying the
+//		_output	= const OutputsDouble& specifying the
 //				  output in which we are interested
 //
 // Output Arguments:
@@ -1874,13 +1874,13 @@ Convert::UnitType KinematicOutputs::GetCornerVectorUnitType(const CORNER_OUTPUTS
 //		Convert::UnitType describing the units of the specified output
 //
 //==========================================================================
-Convert::UnitType KinematicOutputs::GetDoubleUnitType(const OUTPUTS_DOUBLE &_Output)
+Convert::UnitType KinematicOutputs::GetDoubleUnitType(const OutputsDouble &_output)
 {
 	// The return value
-	Convert::UnitType UnitType;
+	Convert::UnitType unitType;
 
 	// Determine the units based on it's type
-	switch (_Output)
+	switch (_output)
 	{
 		// Distances
 	case FrontThirdSpring:
@@ -1897,7 +1897,7 @@ Convert::UnitType KinematicOutputs::GetDoubleUnitType(const OUTPUTS_DOUBLE &_Out
 	case RearTrackHub:
 	case RightWheelbaseHub:
 	case LeftWheelbaseHub:
-		UnitType = Convert::UnitTypeDistance;
+		unitType = Convert::UnitTypeDistance;
 		break;
 
 		// Angles
@@ -1905,22 +1905,22 @@ Convert::UnitType KinematicOutputs::GetDoubleUnitType(const OUTPUTS_DOUBLE &_Out
 	case RearARBTwist:
 	case FrontNetSteer:
 	case RearNetSteer:
-		UnitType = Convert::UnitTypeAngle;
+		unitType = Convert::UnitTypeAngle;
 		break;
 
 		// Unitless (no conversion)
 	case FrontARBMotionRatio:
 	case RearARBMotionRatio:
-		UnitType = Convert::UnitTypeUnitless;
+		unitType = Convert::UnitTypeUnitless;
 		break;
 
 		// Unknown units
 	default:
-		UnitType = Convert::UnitTypeUnknown;
+		unitType = Convert::UnitTypeUnknown;
 		break;
 	}
 
-	return UnitType;
+	return unitType;
 }
 
 //==========================================================================
@@ -1930,7 +1930,7 @@ Convert::UnitType KinematicOutputs::GetDoubleUnitType(const OUTPUTS_DOUBLE &_Out
 // Description:		Returns a the type of units for the specified output.
 //
 // Input Arguments:
-//		_Output	= const OUTPUTS_Vector& specifying the
+//		_output	= const OutputsVector& specifying the
 //				  output in which we are interested
 //
 // Output Arguments:
@@ -1940,20 +1940,20 @@ Convert::UnitType KinematicOutputs::GetDoubleUnitType(const OUTPUTS_DOUBLE &_Out
 //		Convert::UnitType describing the units of the specified output
 //
 //==========================================================================
-Convert::UnitType KinematicOutputs::GetVectorUnitType(const OUTPUTS_Vector &_Output)
+Convert::UnitType KinematicOutputs::GetVectorUnitType(const OutputsVector &_output)
 {
 	// The return value
-	Convert::UnitType UnitType;
+	Convert::UnitType unitType;
 
 	// Determine the units based on it's type
-	switch (_Output)
+	switch (_output)
 	{
 		// Distances
 	case FrontKinematicRC:
 	case RearKinematicRC:
 	case RightKinematicPC:
 	case LeftKinematicPC:
-		UnitType = Convert::UnitTypeDistance;
+		unitType = Convert::UnitTypeDistance;
 		break;
 
 		// Unitless
@@ -1961,32 +1961,32 @@ Convert::UnitType KinematicOutputs::GetVectorUnitType(const OUTPUTS_Vector &_Out
 	case RearRollAxisDirection:
 	case RightPitchAxisDirection:
 	case LeftPitchAxisDirection:
-		UnitType = Convert::UnitTypeUnitless;
+		unitType = Convert::UnitTypeUnitless;
 		break;
 
 		// Unknown
 	default:
-		UnitType = Convert::UnitTypeUnknown;
+		unitType = Convert::UnitTypeUnknown;
 		break;
 	}
 
-	return UnitType;
+	return unitType;
 }
 
 //==========================================================================
 // Class:			KinematicOutputs
 // Function:		OutputsCompleteIndex
 //
-// Description:		Returns an index refering to the list of OUTPUTS_COMPLETE
+// Description:		Returns an index refering to the list of OutputsComplete
 //					for the specified output.
 //
 // Input Arguments:
-//		Location		= const &CORNER::Location specifying the relevant corner of the car
-//		CornerDouble	= const &CORNER_OUTPUTS_DOUBLE
-//		CornerVector	= const &CORNER_OUTPUTS_Vector
-//		Double			= const &OUTPUTS_DOUBLE
-//		vector			= const &OUTPUTS_Vector
-//		Axis			= const &Vector::Axis
+//		location		= const &CORNER::Location specifying the relevant corner of the car
+//		cornerDouble	= const &CornerOutputsDouble
+//		cornerVector	= const &CornerOutputsVector
+//		double			= const &OutputsDouble
+//		vector			= const &OutputsVector
+//		axis			= const &Vector::Axis
 //
 // Output Arguments:
 //		None
@@ -1995,53 +1995,53 @@ Convert::UnitType KinematicOutputs::GetVectorUnitType(const OUTPUTS_Vector &_Out
 //		OUTPUTS_COMPLETE describing the index for the specified output
 //
 //==========================================================================
-KinematicOutputs::OUTPUTS_COMPLETE KinematicOutputs::OutputsCompleteIndex(const CORNER::LOCATION &Location,
-																			const CORNER_OUTPUTS_DOUBLE &CornerDouble,
-																			const CORNER_OUTPUTS_Vector &CornerVector,
-																			const OUTPUTS_DOUBLE &Double,
-																			const OUTPUTS_Vector &vector,
-																			const Vector::Axis &Axis)
+KinematicOutputs::OutputsComplete KinematicOutputs::OutputsCompleteIndex(const CORNER::LOCATION &location,
+																			const CornerOutputsDouble &cornerDouble,
+																			const CornerOutputsVector &cornerVector,
+																			const OutputsDouble &midDouble,
+																			const OutputsVector &vector,
+																			const Vector::Axis &axis)
 {
-	OUTPUTS_COMPLETE CompleteIndex = NumberOfOutputScalars;
+	OutputsComplete completeIndex = NumberOfOutputScalars;
 
 	// Switch based on the corner
-	switch (Location)
+	switch (location)
 	{
 	case CORNER::LocationLeftFront:
-		if (CornerDouble != NumberOfCornerOutputDoubles)
-			CompleteIndex = (KinematicOutputs::OUTPUTS_COMPLETE)(StartLeftFrontDoubles + CornerDouble);
+		if (cornerDouble != NumberOfCornerOutputDoubles)
+			completeIndex = (KinematicOutputs::OutputsComplete)(StartLeftFrontDoubles + cornerDouble);
 		else
-			CompleteIndex = (KinematicOutputs::OUTPUTS_COMPLETE)(StartLeftFrontVectors + CornerVector * 3 + Axis);
+			completeIndex = (KinematicOutputs::OutputsComplete)(StartLeftFrontVectors + cornerVector * 3 + axis);
 		break;
 
 	case CORNER::LocationRightFront:
-		if (CornerDouble != NumberOfCornerOutputDoubles)
-			CompleteIndex = (KinematicOutputs::OUTPUTS_COMPLETE)(StartRightFrontDoubles + CornerDouble);
+		if (cornerDouble != NumberOfCornerOutputDoubles)
+			completeIndex = (KinematicOutputs::OutputsComplete)(StartRightFrontDoubles + cornerDouble);
 		else
-			CompleteIndex = (KinematicOutputs::OUTPUTS_COMPLETE)(StartRightFrontVectors + CornerVector * 3 + Axis);
+			completeIndex = (KinematicOutputs::OutputsComplete)(StartRightFrontVectors + cornerVector * 3 + axis);
 		break;
 
 	case CORNER::LocationLeftRear:
-		if (CornerDouble != NumberOfCornerOutputDoubles)
-			CompleteIndex = (KinematicOutputs::OUTPUTS_COMPLETE)(StartLeftRearDoubles + CornerDouble);
+		if (cornerDouble != NumberOfCornerOutputDoubles)
+			completeIndex = (KinematicOutputs::OutputsComplete)(StartLeftRearDoubles + cornerDouble);
 		else
-			CompleteIndex = (KinematicOutputs::OUTPUTS_COMPLETE)(StartLeftRearVectors + CornerVector * 3 + Axis);
+			completeIndex = (KinematicOutputs::OutputsComplete)(StartLeftRearVectors + cornerVector * 3 + axis);
 		break;
 
 	case CORNER::LocationRightRear:
-		if (CornerDouble != NumberOfCornerOutputDoubles)
-			CompleteIndex = (KinematicOutputs::OUTPUTS_COMPLETE)(StartRightRearDoubles + CornerDouble);
+		if (cornerDouble != NumberOfCornerOutputDoubles)
+			completeIndex = (KinematicOutputs::OutputsComplete)(StartRightRearDoubles + cornerDouble);
 		else
-			CompleteIndex = (KinematicOutputs::OUTPUTS_COMPLETE)(StartRightRearVectors + CornerVector * 3 + Axis);
+			completeIndex = (KinematicOutputs::OutputsComplete)(StartRightRearVectors + cornerVector * 3 + axis);
 		break;
 
 	default:// Not a corner output
-		if (Double != NumberOfOutputDoubles)
-			CompleteIndex = (KinematicOutputs::OUTPUTS_COMPLETE)(StartDoubles + Double);
+		if (midDouble != NumberOfOutputDoubles)
+			completeIndex = (KinematicOutputs::OutputsComplete)(StartDoubles + midDouble);
 		else
-			CompleteIndex = (KinematicOutputs::OUTPUTS_COMPLETE)(StartVectors + vector * 3 + Axis);
+			completeIndex = (KinematicOutputs::OutputsComplete)(StartVectors + vector * 3 + axis);
 		break;
 	}
 
-	return CompleteIndex;
+	return completeIndex;
 }

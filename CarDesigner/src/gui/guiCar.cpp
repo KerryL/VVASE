@@ -228,8 +228,8 @@ void GUI_CAR::UpdateData(void)
 	OriginalCar->ComputeWheelCenters();
 
 	// Re-run the kinematics to update the car's position
-	KINEMATICS_DATA *Data = new KINEMATICS_DATA(OriginalCar, WorkingCar, MainFrame.GetInputs(), &KinematicOutputs);
-	THREAD_JOB Job(THREAD_JOB::COMMAND_THREAD_KINEMATICS_NORMAL, Data, Name, Index);
+	KinematicsData *Data = new KinematicsData(OriginalCar, WorkingCar, MainFrame.GetInputs(), &kinematicOutputs);
+	ThreadJob Job(ThreadJob::CommandThreadKinematicsNormal, Data, Name, Index);
 	MainFrame.AddJob(Job);
 
 	return;
@@ -254,7 +254,7 @@ void GUI_CAR::UpdateData(void)
 void GUI_CAR::UpdateDisplay(void)
 {
 	// Update the display associated with this object
-	renderer->UpdateDisplay(KinematicOutputs);
+	renderer->UpdateDisplay(kinematicOutputs);
 
 	return;
 }
@@ -278,7 +278,7 @@ void GUI_CAR::UpdateDisplay(void)
 bool GUI_CAR::PerformSaveToFile(void)
 {
 	// Make sure we have exclusive access
-	wxMutexLocker Lock(OriginalCar->GetMutex());
+	wxMutexLocker lock(OriginalCar->GetMutex());
 
 	// Perform the save - the object we want to save is OriginalCar - this is the
 	// one that contains the information about the vehicle as it was input by the

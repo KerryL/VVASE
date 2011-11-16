@@ -38,7 +38,6 @@
 // VVASE forward declarations
 class CAR_RENDERER;
 class CAR;
-class KINEMATICS;
 class Debugger;
 class APPEARANCE_OPTIONS;
 
@@ -91,7 +90,7 @@ public:
 	wxTreeItemId Subsystems[NumberOfSubsystems];
 
 	// Returns a copy of the kinematic output data
-	KINEMATIC_OUTPUTS GetKinematicOutputs(void) { return KinematicOutputs; };
+	KinematicOutputs GetKinematicOutputs(void) { return kinematicOutputs; };
 
 private:
 	// The "real" object containing the original, unmodified information (not rolled, heaved, etc.)
@@ -111,7 +110,7 @@ private:
 	APPEARANCE_OPTIONS *AppearanceOptions;
 
 	// The object that stores the kinematics information for this car
-	KINEMATIC_OUTPUTS KinematicOutputs;
+	KinematicOutputs kinematicOutputs;
 
 	// The scene visible to the user representing this object
 	CAR_RENDERER *renderer;

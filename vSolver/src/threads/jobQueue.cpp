@@ -117,7 +117,7 @@ ThreadJob JobQueue::Pop()
 // Description:		Posts an event to the main thread.
 //
 // Input Arguments:
-//		Command		= const THREAD_COMMANDS& to report
+//		Command		= const ThreadCommand& to report
 //		Message		= const wxString& containing string information
 //		ThreadI		= int representing the thread's ID
 //		ObjectID	= int representing the object's ID
@@ -129,22 +129,22 @@ ThreadJob JobQueue::Pop()
 //		None
 //
 //==========================================================================
-void JobQueue::Report(const THREAD_JOB::THREAD_COMMANDS& Command, int ThreadId, int ObjectID)
+void JobQueue::Report(const ThreadJob::ThreadCommand& command, int threadId, int objectID)
 {
 	// Create event with the specified command
-	wxCommandEvent evt(EVT_THREAD, Command);
+	wxCommandEvent evt(EVT_THREAD, command);
 
 	// Set the thread ID
-	evt.SetId(ThreadId);
+	evt.SetId(threadId);
 
 	// The type of command that has completed is also important
-	evt.SetInt((int)Command);
+	evt.SetInt((int)command);
 
 	// The object's ID number gets passed back as well
-	evt.SetExtraLong(ObjectID);
+	evt.SetExtraLong(objectID);
 
 	// Add it to the parent's event queue
-	Parent->AddPendingEvent(evt);
+	parent->AddPendingEvent(evt);
 
 	return;
 }
@@ -168,7 +168,7 @@ void JobQueue::Report(const THREAD_JOB::THREAD_COMMANDS& Command, int ThreadId, 
 size_t JobQueue::PendingJobs()
 {
 	// Lock the queue while we read the size
-	wxMutexLocker lock(MutexQueue);
+	wxMutexLocker lock(mutexQueue);
 
-	return Jobs.size();
+	return jobs.size();
 }

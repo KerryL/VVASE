@@ -330,7 +330,7 @@ void ITERATION::UpdateData(void)
 
 	// Make sure the semaphore is cleared (this should be redundant,
 	// since we have the flags above, but is kept just in case)
-	while (InverseSemaphore.GetCount() > 0)
+	while (inverseSemaphore.GetCount() > 0)
 	{
 		// Just wait for the threads to finish up
 		wxSafeYield();
@@ -350,7 +350,7 @@ void ITERATION::UpdateData(void)
 	}
 
 	// Get the original values for the kinematic inputs that we will be changing
-	KINEMATICS::INPUTS KinematicInputs;
+	Kinematics::Inputs KinematicInputs;
 
 	// Determine the step size for each input
 	double PitchStep	= (Range.EndPitch - Range.StartPitch) / (NumberOfPoints - 1);// [rad]
@@ -382,10 +382,10 @@ void ITERATION::UpdateData(void)
 	OutputLists.Clear();
 
 	// Initialize the semaphore count
-	InverseSemaphore.Set(AssociatedCars.GetCount() * TotalPoints);
+	inverseSemaphore.Set(AssociatedCars.GetCount() * TotalPoints);
 
 	// Make sure the working cars are initialized
-	if (InverseSemaphore.GetCount() != (unsigned int)NumberOfWorkingCars)
+	if (inverseSemaphore.GetCount() != (unsigned int)NumberOfWorkingCars)
 	{
 		for (i = 0; i < NumberOfWorkingCars; i++)
 		{
@@ -393,7 +393,7 @@ void ITERATION::UpdateData(void)
 			WorkingCarArray[i] = NULL;
 		}
 		delete [] WorkingCarArray;
-		NumberOfWorkingCars = InverseSemaphore.GetCount();
+		NumberOfWorkingCars = inverseSemaphore.GetCount();
 		WorkingCarArray = new CAR*[NumberOfWorkingCars];
 		for (i = 0; i < NumberOfWorkingCars; i++)
 			WorkingCarArray[i] = new CAR(debugger);
@@ -404,7 +404,7 @@ void ITERATION::UpdateData(void)
 	for (CurrentCar = 0; CurrentCar < AssociatedCars.GetCount(); CurrentCar++)
 	{
 		// Create a list to store the outputs for this car
-		ManagedList<KINEMATIC_OUTPUTS> *CurrentList = new ManagedList<KINEMATIC_OUTPUTS>;
+		ManagedList<KinematicOutputs> *CurrentList = new ManagedList<KinematicOutputs>;
 
 		// Add this list to our list of lists (bit confusing?)
 		OutputLists.Add(CurrentList);
@@ -427,18 +427,18 @@ void ITERATION::UpdateData(void)
 			}
 
 			// Assign the inputs
-			KinematicInputs.Pitch = AxisValuesPitch[CurrentPoint];
-			KinematicInputs.Roll = AxisValuesRoll[CurrentPoint];
-			KinematicInputs.Heave = AxisValuesHeave[CurrentPoint];
-			KinematicInputs.RackTravel = AxisValuesRackTravel[CurrentPoint];
-			KinematicInputs.FirstRotation = MainFrame.GetInputs().FirstRotation;
-			KinematicInputs.CenterOfRotation = MainFrame.GetInputs().CenterOfRotation;
+			KinematicInputs.pitch = AxisValuesPitch[CurrentPoint];
+			KinematicInputs.roll = AxisValuesRoll[CurrentPoint];
+			KinematicInputs.heave = AxisValuesHeave[CurrentPoint];
+			KinematicInputs.rackTravel = AxisValuesRackTravel[CurrentPoint];
+			KinematicInputs.firstRotation = MainFrame.GetInputs().firstRotation;
+			KinematicInputs.centerOfRotation = MainFrame.GetInputs().centerOfRotation;
 
 			// Run The analysis
-			KINEMATIC_OUTPUTS *NewOutputs = new KINEMATIC_OUTPUTS;
-			KINEMATICS_DATA *Data = new KINEMATICS_DATA(&AssociatedCars[CurrentCar]->GetOriginalCar(),
+			KinematicOutputs *NewOutputs = new KinematicOutputs;
+			KinematicsData *Data = new KinematicsData(&AssociatedCars[CurrentCar]->GetOriginalCar(),
 				WorkingCarArray[CurrentCar * NumberOfPoints + CurrentPoint], KinematicInputs, NewOutputs);
-			THREAD_JOB Job(THREAD_JOB::COMMAND_THREAD_KINEMATICS_ITERATION, Data,
+			ThreadJob Job(ThreadJob::CommandThreadKinematicsIteration, Data,
 				AssociatedCars[CurrentCar]->GetCleanName() + _T(":") + Name, Index);
 			MainFrame.AddJob(Job);
 
@@ -481,12 +481,6 @@ void ITERATION::UpdateDisplay(void)
 		double *x, *y;
 		for (i = 0; i < NumberOfPlots; i++)
 		{
-			// Set the x-axis information if this is the first pass
-			if (i == 0)
-			{
-				// FIXME:  Implement
-			}
-
 			// Check to see if this plot is active
 			if (PlotActive[i])
 			{
@@ -501,13 +495,20 @@ void ITERATION::UpdateDisplay(void)
 					for (k = 0; k < (unsigned int)NumberOfPoints; k++)
 					{
 						x[k] = GetDataValue(j, k,
-								(PLOT_ID)(KINEMATIC_OUTPUTS::NumberOfOutputScalars + XAxisType));
+								(PLOT_ID)(KinematicOutputs::NumberOfOutputScalars + XAxisType));
 						y[k] = GetDataValue(j, k, (PLOT_ID)i);
 					}
 					
 					// Add the dataset to the plot
 					plotPanel->AddCurve(dataSet, AssociatedCars[j]->GetCleanName()
-						+ _T(", ") + GetPlotName((PLOT_ID)i));
+						+ _T(", ") + GetPlotName((PLOT_ID)i) + _T(" [") +
+						GetPlotUnits((PLOT_ID)i) + _T("]"));
+
+					// Set the x-axis information if this is the first pass
+					if (plotPanel->GetCurveCount() == 1)
+						plotPanel->SetXAxisGridText(
+						GetPlotName((PLOT_ID)(KinematicOutputs::NumberOfOutputScalars + XAxisType)) + _T(" [") +
+						GetPlotUnits((PLOT_ID)(KinematicOutputs::NumberOfOutputScalars + XAxisType)) + _T("]"));
 				}
 			}
 		}
@@ -883,8 +884,8 @@ void ITERATION::ApplyPlotFormatting(void)
 
 	if (AutoGenerateXLabel)
 		plotPanel->GetRenderer()->SetXLabel(
-		GetPlotName((PLOT_ID)(KINEMATIC_OUTPUTS::NumberOfOutputScalars + XAxisType)) + _T(" [")
-		+ GetPlotUnits((PLOT_ID)(KINEMATIC_OUTPUTS::NumberOfOutputScalars + XAxisType)) + _T("]"));
+		GetPlotName((PLOT_ID)(KinematicOutputs::NumberOfOutputScalars + XAxisType)) + _T(" [")
+		+ GetPlotUnits((PLOT_ID)(KinematicOutputs::NumberOfOutputScalars + XAxisType)) + _T("]"));
 	else
 		plotPanel->GetRenderer()->SetXLabel(XLabel);
 
@@ -1188,8 +1189,8 @@ double ITERATION::GetDataValue(int AssociatedCarIndex, int Point, PLOT_ID Id) co
 	// object to return
 	if (Id < Pitch)
 		Value = Converter.ConvertTo(OutputLists[AssociatedCarIndex]->GetObject(Point)->GetOutputValue(
-			(KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE)Id), KINEMATIC_OUTPUTS::GetOutputUnitType(
-			(KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE)Id));
+			(KinematicOutputs::OutputsComplete)Id), KinematicOutputs::GetOutputUnitType(
+			(KinematicOutputs::OutputsComplete)Id));
 	else if (Id == Pitch)
 		Value = Converter.ConvertAngle(AxisValuesPitch[Point]);
 	else if (Id == Roll)
@@ -1314,7 +1315,7 @@ wxString ITERATION::GetPlotName(PLOT_ID Id) const
 	// Vectors are a special case - depending on which component of the vector is chosen,
 	// we need to append a different string to the end of the Name
 	if (Id < Pitch)
-		Name = KINEMATIC_OUTPUTS::GetOutputName((KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE)Id);
+		Name = KinematicOutputs::GetOutputName((KinematicOutputs::OutputsComplete)Id);
 	else if (Id == Pitch)
 		Name = _T("Pitch");
 	else if (Id == Roll)
@@ -1352,7 +1353,7 @@ wxString ITERATION::GetPlotUnits(PLOT_ID Id) const
 
 	// Depending on the specified PLOT_ID, choose the units string
 	if (Id < Pitch)
-		Units = Converter.GetUnitType(KINEMATIC_OUTPUTS::GetOutputUnitType((KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE)Id));
+		Units = Converter.GetUnitType(KinematicOutputs::GetOutputUnitType((KinematicOutputs::OutputsComplete)Id));
 	else if (Id == Pitch || Id == Roll)
 		Units = Converter.GetUnitType(Convert::UnitTypeAngle);
 	else if (Id == Heave || Id == RackTravel)
@@ -1533,11 +1534,9 @@ void ITERATION::SetAutoAssociate(bool AutoAssociate)
 void ITERATION::MarkAnalysisComplete(void)
 {
 	// Post our semaphore
-	InverseSemaphore.Post();
+	inverseSemaphore.Post();
 
 	// If the current count is zero, update the display
-	if (InverseSemaphore.GetCount() == 0)
+	if (inverseSemaphore.GetCount() == 0)
 		UpdateDisplay();
-
-	return;
 }

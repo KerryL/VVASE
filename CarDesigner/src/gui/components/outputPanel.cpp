@@ -109,7 +109,7 @@ END_EVENT_TABLE()
 // Description:		Updates the information on this panel.
 //
 // Input Arguments:
-//		Outputs		= KINEMATIC_OUTPUTS containing the outputs we want to use
+//		Outputs		= KinematicOutputs containing the outputs we want to use
 //					  for the update
 //		Car			= CAR& pointing to the car with which these outputs are associated
 //		Index		= int specifying the data column to edit
@@ -122,7 +122,7 @@ END_EVENT_TABLE()
 //		None
 //
 //==========================================================================
-void OUTPUT_PANEL::UpdateInformation(KINEMATIC_OUTPUTS Outputs, CAR &Car,
+void OUTPUT_PANEL::UpdateInformation(KinematicOutputs Outputs, CAR &Car,
 									 int Index, wxString Name)
 {
 	// Begin batch edit of the grid
@@ -153,15 +153,15 @@ void OUTPUT_PANEL::UpdateInformation(KINEMATIC_OUTPUTS Outputs, CAR &Car,
 
 	// Update all of the values and unit labels
 	int i;
-	for (i = 0; i < KINEMATIC_OUTPUTS::NumberOfOutputScalars; i++)
+	for (i = 0; i < KinematicOutputs::NumberOfOutputScalars; i++)
 	{
 		// Convert and set the value
 		OutputsList->SetCellValue(i, Index, Converter.FormatNumber(Converter.ConvertTo(
-			Outputs.GetOutputValue((KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE)i),
-			KINEMATIC_OUTPUTS::GetOutputUnitType((KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE)i))));
+			Outputs.GetOutputValue((KinematicOutputs::OutputsComplete)i),
+			KinematicOutputs::GetOutputUnitType((KinematicOutputs::OutputsComplete)i))));
 
 		// If the current value is undefined, make sure the user knows it
-		if (VVASEMath::IsNaN(Outputs.GetOutputValue((KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE)i)))
+		if (VVASEMath::IsNaN(Outputs.GetOutputValue((KinematicOutputs::OutputsComplete)i)))
 		{
 			// Change the cell value "Undef." instead of #1.Q0
 			OutputsList->SetCellValue(i, Index, _T("Undef."));
@@ -192,80 +192,80 @@ void OUTPUT_PANEL::UpdateInformation(KINEMATIC_OUTPUTS Outputs, CAR &Car,
 	if (!Car.HasFrontHalfShafts())
 	{
 		// Change the cell's text
-		OutputsList->SetCellValue(KINEMATIC_OUTPUTS::StartRightFrontDoubles
-			+ KINEMATIC_OUTPUTS::AxlePlunge, Index, _T("N/A"));
-		OutputsList->SetCellValue(KINEMATIC_OUTPUTS::StartLeftFrontDoubles
-			+ KINEMATIC_OUTPUTS::AxlePlunge, Index, _T("N/A"));
+		OutputsList->SetCellValue(KinematicOutputs::StartRightFrontDoubles
+			+ KinematicOutputs::AxlePlunge, Index, _T("N/A"));
+		OutputsList->SetCellValue(KinematicOutputs::StartLeftFrontDoubles
+			+ KinematicOutputs::AxlePlunge, Index, _T("N/A"));
 	}
 
 	// Rear half shafts
 	if (!Car.HasRearHalfShafts())
 	{
 		// Change the cell's text
-		OutputsList->SetCellValue(KINEMATIC_OUTPUTS::StartRightRearDoubles
-			+ KINEMATIC_OUTPUTS::AxlePlunge, Index, _T("N/A"));
-		OutputsList->SetCellValue(KINEMATIC_OUTPUTS::StartLeftRearDoubles
-			+ KINEMATIC_OUTPUTS::AxlePlunge, Index, _T("N/A"));
+		OutputsList->SetCellValue(KinematicOutputs::StartRightRearDoubles
+			+ KinematicOutputs::AxlePlunge, Index, _T("N/A"));
+		OutputsList->SetCellValue(KinematicOutputs::StartLeftRearDoubles
+			+ KinematicOutputs::AxlePlunge, Index, _T("N/A"));
 	}
 
 	// Front anti-drive
 	if (Car.Drivetrain->DriveType == DRIVETRAIN::DRIVE_REAR_WHEEL)
 	{
 		// Change the cell's text
-		OutputsList->SetCellValue(KINEMATIC_OUTPUTS::StartRightFrontDoubles
-			+ KINEMATIC_OUTPUTS::AntiDrivePitch, Index, _T("N/A"));
-		OutputsList->SetCellValue(KINEMATIC_OUTPUTS::StartLeftFrontDoubles
-			+ KINEMATIC_OUTPUTS::AntiDrivePitch, Index, _T("N/A"));
+		OutputsList->SetCellValue(KinematicOutputs::StartRightFrontDoubles
+			+ KinematicOutputs::AntiDrivePitch, Index, _T("N/A"));
+		OutputsList->SetCellValue(KinematicOutputs::StartLeftFrontDoubles
+			+ KinematicOutputs::AntiDrivePitch, Index, _T("N/A"));
 	}
 
 	// Rear anti-drive
 	if (Car.Drivetrain->DriveType == DRIVETRAIN::DRIVE_FRONT_WHEEL)
 	{
 		// Change the cell's text
-		OutputsList->SetCellValue(KINEMATIC_OUTPUTS::StartRightRearDoubles
-			+ KINEMATIC_OUTPUTS::AntiDrivePitch, Index, _T("N/A"));
-		OutputsList->SetCellValue(KINEMATIC_OUTPUTS::StartLeftRearDoubles
-			+ KINEMATIC_OUTPUTS::AntiDrivePitch, Index, _T("N/A"));
+		OutputsList->SetCellValue(KinematicOutputs::StartRightRearDoubles
+			+ KinematicOutputs::AntiDrivePitch, Index, _T("N/A"));
+		OutputsList->SetCellValue(KinematicOutputs::StartLeftRearDoubles
+			+ KinematicOutputs::AntiDrivePitch, Index, _T("N/A"));
 	}
 
 	// Front third spring
 	if (!Car.Suspension->FrontHasThirdSpring)
 	{
 		// Change the cell's text
-		OutputsList->SetCellValue(KINEMATIC_OUTPUTS::StartDoubles
-			+ KINEMATIC_OUTPUTS::FrontThirdSpring, Index, _T("N/A"));
-		OutputsList->SetCellValue(KINEMATIC_OUTPUTS::StartDoubles
-			+ KINEMATIC_OUTPUTS::FrontThirdShock, Index, _T("N/A"));
+		OutputsList->SetCellValue(KinematicOutputs::StartDoubles
+			+ KinematicOutputs::FrontThirdSpring, Index, _T("N/A"));
+		OutputsList->SetCellValue(KinematicOutputs::StartDoubles
+			+ KinematicOutputs::FrontThirdShock, Index, _T("N/A"));
 	}
 
 	// Rear third spring
 	if (!Car.Suspension->RearHasThirdSpring)
 	{
 		// Change the cell's text
-		OutputsList->SetCellValue(KINEMATIC_OUTPUTS::StartDoubles
-			+ KINEMATIC_OUTPUTS::RearThirdSpring, Index, _T("N/A"));
-		OutputsList->SetCellValue(KINEMATIC_OUTPUTS::StartDoubles
-			+ KINEMATIC_OUTPUTS::RearThirdShock, Index, _T("N/A"));
+		OutputsList->SetCellValue(KinematicOutputs::StartDoubles
+			+ KinematicOutputs::RearThirdSpring, Index, _T("N/A"));
+		OutputsList->SetCellValue(KinematicOutputs::StartDoubles
+			+ KinematicOutputs::RearThirdShock, Index, _T("N/A"));
 	}
 
 	// Front sway bar
 	if (Car.Suspension->FrontBarStyle == SUSPENSION::SwayBarNone)
 	{
 		// Change the cell's text
-		OutputsList->SetCellValue(KINEMATIC_OUTPUTS::StartDoubles
-			+ KINEMATIC_OUTPUTS::FrontARBMotionRatio, Index, _T("N/A"));
-		OutputsList->SetCellValue(KINEMATIC_OUTPUTS::StartDoubles
-			+ KINEMATIC_OUTPUTS::FrontARBTwist, Index, _T("N/A"));
+		OutputsList->SetCellValue(KinematicOutputs::StartDoubles
+			+ KinematicOutputs::FrontARBMotionRatio, Index, _T("N/A"));
+		OutputsList->SetCellValue(KinematicOutputs::StartDoubles
+			+ KinematicOutputs::FrontARBTwist, Index, _T("N/A"));
 	}
 
 	// Rear sway bar
 	if (Car.Suspension->RearBarStyle == SUSPENSION::SwayBarNone)
 	{
 		// Change the cell's text
-		OutputsList->SetCellValue(KINEMATIC_OUTPUTS::StartDoubles
-			+ KINEMATIC_OUTPUTS::RearARBMotionRatio, Index, _T("N/A"));
-		OutputsList->SetCellValue(KINEMATIC_OUTPUTS::StartDoubles
-			+ KINEMATIC_OUTPUTS::RearARBTwist, Index, _T("N/A"));
+		OutputsList->SetCellValue(KinematicOutputs::StartDoubles
+			+ KinematicOutputs::RearARBMotionRatio, Index, _T("N/A"));
+		OutputsList->SetCellValue(KinematicOutputs::StartDoubles
+			+ KinematicOutputs::RearARBTwist, Index, _T("N/A"));
 	}
 
 	// Make sure the correct column is highlighted
@@ -315,11 +315,11 @@ void OUTPUT_PANEL::FinishUpdate(int _NumberOfDataColumns)
 	// Update all of the unit lables
 	wxString UnitString;
 	int i;
-	for (i = 0; i < KINEMATIC_OUTPUTS::NumberOfOutputScalars; i++)
+	for (i = 0; i < KinematicOutputs::NumberOfOutputScalars; i++)
 	{
 		// Set the unit label
-		UnitString.Printf("(%s)", Converter.GetUnitType(KINEMATIC_OUTPUTS::GetOutputUnitType(
-			(KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE)i)).c_str());
+		UnitString.Printf("(%s)", Converter.GetUnitType(KinematicOutputs::GetOutputUnitType(
+			(KinematicOutputs::OutputsComplete)i)).c_str());
 		OutputsList->SetCellValue(i, NumberOfDataColumns + 1, UnitString);
 	}
 
@@ -360,7 +360,7 @@ void OUTPUT_PANEL::CreateControls()
 
 	// Create the grid for the hard point entry
 	OutputsList = new wxGrid(this, wxID_ANY);
-	OutputsList->CreateGrid(KINEMATIC_OUTPUTS::NumberOfOutputScalars, 2, wxGrid::wxGridSelectRows);
+	OutputsList->CreateGrid(KinematicOutputs::NumberOfOutputScalars, 2, wxGrid::wxGridSelectRows);
 
 	// Begin a batch edit of the grid
 	OutputsList->BeginBatch();
@@ -381,7 +381,7 @@ void OUTPUT_PANEL::CreateControls()
 
 	// Do the processing that needs to be done for each row
 	int i;
-	for (i = 0; i < KINEMATIC_OUTPUTS::NumberOfOutputScalars; i++)
+	for (i = 0; i < KinematicOutputs::NumberOfOutputScalars; i++)
 	{
 		// Make all cells read-only
 		OutputsList->SetReadOnly(i, 0, true);
@@ -391,7 +391,7 @@ void OUTPUT_PANEL::CreateControls()
 		OutputsList->SetCellAlignment(i, 1, wxALIGN_CENTER, wxALIGN_TOP);
 
 		// Add the names of all of the points to the grid
-		OutputsList->SetCellValue(i, 0, KINEMATIC_OUTPUTS::GetOutputName((KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE)i));
+		OutputsList->SetCellValue(i, 0, KinematicOutputs::GetOutputName((KinematicOutputs::OutputsComplete)i));
 	}
 
 	// Don't let the user move or re-size the rows and columns
@@ -471,7 +471,7 @@ void OUTPUT_PANEL::HighlightColumn(wxString _Name)
 		else
 			Color.Set(220, 220, 220);
 
-		for (Row = 0; Row < KINEMATIC_OUTPUTS::NumberOfOutputScalars; Row++)
+		for (Row = 0; Row < KinematicOutputs::NumberOfOutputScalars; Row++)
 		{
 			// If the cell is "Undef.", leave it alone (it will be yellow).
 			// Otherwise, change it's color to the appropriate color

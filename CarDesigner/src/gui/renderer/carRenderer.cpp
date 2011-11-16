@@ -203,7 +203,7 @@ CAR_RENDERER::~CAR_RENDERER()
 //					of the class member DisplayCar.
 //
 // Input Arguments:
-//		Outputs	= const KINEMATIC_OUTPUTS& containing the locations of all of the
+//		outputs	= const KinematicOutputs& containing the locations of all of the
 //				  kinematic variables that this object displays in the scene
 //
 // Output Arguments:
@@ -213,7 +213,7 @@ CAR_RENDERER::~CAR_RENDERER()
 //		None
 //
 //==========================================================================
-void CAR_RENDERER::UpdateDisplay(const KINEMATIC_OUTPUTS &Outputs)
+void CAR_RENDERER::UpdateDisplay(const KinematicOutputs &outputs)
 {
 	// Set the background color
 	SetBackgroundColor(AppearanceOptions.GetColor(APPEARANCE_OPTIONS::ColorBackground));
@@ -222,7 +222,7 @@ void CAR_RENDERER::UpdateDisplay(const KINEMATIC_OUTPUTS &Outputs)
 	UpdateCarDisplay();
 
 	// Update the kinematic display
-	UpdateKinematicsDisplay(Outputs);
+	UpdateKinematicsDisplay(outputs);
 
 	// Render the image.  We need to reset the frustum every time we do this just in case
 	// the user zooms out very far, etc.
@@ -747,7 +747,7 @@ void CAR_RENDERER::UpdateCarDisplay(void)
 // Description:		Updates the displayed 3D kinematic objects
 //
 // Input Arguments:
-//		Outputs	= KINEMATIC_OUTPUTS containing the locations of all of the
+//		Outputs	= KinematicOutputs containing the locations of all of the
 //				  kinematic variables that this object displays in the scene
 //
 // Output Arguments:
@@ -757,121 +757,121 @@ void CAR_RENDERER::UpdateCarDisplay(void)
 //		None
 //
 //==========================================================================
-void CAR_RENDERER::UpdateKinematicsDisplay(KINEMATIC_OUTPUTS Outputs)
+void CAR_RENDERER::UpdateKinematicsDisplay(KinematicOutputs outputs)
 {
 	// Update the point objects
-	FrontRollCenter->Update(Outputs.Vectors[KINEMATIC_OUTPUTS::FrontKinematicRC],
+	FrontRollCenter->Update(outputs.vectors[KinematicOutputs::FrontKinematicRC],
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerPointDiameter),
 		AppearanceOptions.GetResolution(APPEARANCE_OPTIONS::ResolutionMarker),
 		AppearanceOptions.GetColor(APPEARANCE_OPTIONS::ColorRollMarker),
 		AppearanceOptions.GetVisibility(APPEARANCE_OPTIONS::VisibilityRollCenter));
-	RearRollCenter->Update(Outputs.Vectors[KINEMATIC_OUTPUTS::RearKinematicRC],
+	RearRollCenter->Update(outputs.vectors[KinematicOutputs::RearKinematicRC],
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerPointDiameter),
 		AppearanceOptions.GetResolution(APPEARANCE_OPTIONS::ResolutionMarker),
 		AppearanceOptions.GetColor(APPEARANCE_OPTIONS::ColorRollMarker),
 		AppearanceOptions.GetVisibility(APPEARANCE_OPTIONS::VisibilityRollCenter));
-	RightPitchCenter->Update(Outputs.Vectors[KINEMATIC_OUTPUTS::RightKinematicPC],
+	RightPitchCenter->Update(outputs.vectors[KinematicOutputs::RightKinematicPC],
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerPointDiameter),
 		AppearanceOptions.GetResolution(APPEARANCE_OPTIONS::ResolutionMarker),
 		AppearanceOptions.GetColor(APPEARANCE_OPTIONS::ColorPitchMarker),
 		AppearanceOptions.GetVisibility(APPEARANCE_OPTIONS::VisibilityPitchCenter));
-	LeftPitchCenter->Update(Outputs.Vectors[KINEMATIC_OUTPUTS::LeftKinematicPC],
+	LeftPitchCenter->Update(outputs.vectors[KinematicOutputs::LeftKinematicPC],
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerPointDiameter),
 		AppearanceOptions.GetResolution(APPEARANCE_OPTIONS::ResolutionMarker),
 		AppearanceOptions.GetColor(APPEARANCE_OPTIONS::ColorPitchMarker),
 		AppearanceOptions.GetVisibility(APPEARANCE_OPTIONS::VisibilityPitchCenter));
-	RightFrontInstantCenter->Update(Outputs.RightFrontVectors[KINEMATIC_OUTPUTS::InstantCenter],
+	RightFrontInstantCenter->Update(outputs.rightFrontVectors[KinematicOutputs::InstantCenter],
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerPointDiameter),
 		AppearanceOptions.GetResolution(APPEARANCE_OPTIONS::ResolutionMarker),
 		AppearanceOptions.GetColor(APPEARANCE_OPTIONS::ColorInstantMarker),
 		AppearanceOptions.GetVisibility(APPEARANCE_OPTIONS::VisibilityInstantCenter));
-	LeftFrontInstantCenter->Update(Outputs.LeftFrontVectors[KINEMATIC_OUTPUTS::InstantCenter],
+	LeftFrontInstantCenter->Update(outputs.leftFrontVectors[KinematicOutputs::InstantCenter],
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerPointDiameter),
 		AppearanceOptions.GetResolution(APPEARANCE_OPTIONS::ResolutionMarker),
 		AppearanceOptions.GetColor(APPEARANCE_OPTIONS::ColorInstantMarker),
 		AppearanceOptions.GetVisibility(APPEARANCE_OPTIONS::VisibilityInstantCenter));
-	RightRearInstantCenter->Update(Outputs.RightRearVectors[KINEMATIC_OUTPUTS::InstantCenter],
+	RightRearInstantCenter->Update(outputs.rightRearVectors[KinematicOutputs::InstantCenter],
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerPointDiameter),
 		AppearanceOptions.GetResolution(APPEARANCE_OPTIONS::ResolutionMarker),
 		AppearanceOptions.GetColor(APPEARANCE_OPTIONS::ColorInstantMarker),
 		AppearanceOptions.GetVisibility(APPEARANCE_OPTIONS::VisibilityInstantCenter));
-	LeftRearInstantCenter->Update(Outputs.LeftRearVectors[KINEMATIC_OUTPUTS::InstantCenter],
+	LeftRearInstantCenter->Update(outputs.leftRearVectors[KinematicOutputs::InstantCenter],
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerPointDiameter),
 		AppearanceOptions.GetResolution(APPEARANCE_OPTIONS::ResolutionMarker),
 		AppearanceOptions.GetColor(APPEARANCE_OPTIONS::ColorInstantMarker),
 		AppearanceOptions.GetVisibility(APPEARANCE_OPTIONS::VisibilityInstantCenter));
 
 	// Update the vector objects
-	FrontRollAxis->Update(Outputs.Vectors[KINEMATIC_OUTPUTS::FrontRollAxisDirection] *
+	FrontRollAxis->Update(outputs.vectors[KinematicOutputs::FrontRollAxisDirection] *
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerLength) +
-		Outputs.Vectors[KINEMATIC_OUTPUTS::FrontKinematicRC], Outputs.Vectors[KINEMATIC_OUTPUTS::FrontKinematicRC],
+		outputs.vectors[KinematicOutputs::FrontKinematicRC], outputs.vectors[KinematicOutputs::FrontKinematicRC],
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerShaftDiameter),
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerTipDiameter),
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerTipLength),
 		AppearanceOptions.GetResolution(APPEARANCE_OPTIONS::ResolutionMarker),
 		AppearanceOptions.GetColor(APPEARANCE_OPTIONS::ColorRollMarker),
 		AppearanceOptions.GetVisibility(APPEARANCE_OPTIONS::VisibilityRollAxis));
-	RearRollAxis->Update(Outputs.Vectors[KINEMATIC_OUTPUTS::RearRollAxisDirection] *
+	RearRollAxis->Update(outputs.vectors[KinematicOutputs::RearRollAxisDirection] *
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerLength) +
-		Outputs.Vectors[KINEMATIC_OUTPUTS::RearKinematicRC], Outputs.Vectors[KINEMATIC_OUTPUTS::RearKinematicRC],
+		outputs.vectors[KinematicOutputs::RearKinematicRC], outputs.vectors[KinematicOutputs::RearKinematicRC],
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerShaftDiameter),
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerTipDiameter),
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerTipLength),
 		AppearanceOptions.GetResolution(APPEARANCE_OPTIONS::ResolutionMarker),
 		AppearanceOptions.GetColor(APPEARANCE_OPTIONS::ColorRollMarker),
 		AppearanceOptions.GetVisibility(APPEARANCE_OPTIONS::VisibilityRollAxis));
-	RightPitchAxis->Update(Outputs.Vectors[KINEMATIC_OUTPUTS::RightPitchAxisDirection] *
+	RightPitchAxis->Update(outputs.vectors[KinematicOutputs::RightPitchAxisDirection] *
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerLength) +
-		Outputs.Vectors[KINEMATIC_OUTPUTS::RightKinematicPC], Outputs.Vectors[KINEMATIC_OUTPUTS::RightKinematicPC],
+		outputs.vectors[KinematicOutputs::RightKinematicPC], outputs.vectors[KinematicOutputs::RightKinematicPC],
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerShaftDiameter),
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerTipDiameter),
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerTipLength),
 		AppearanceOptions.GetResolution(APPEARANCE_OPTIONS::ResolutionMarker),
 		AppearanceOptions.GetColor(APPEARANCE_OPTIONS::ColorPitchMarker),
 		AppearanceOptions.GetVisibility(APPEARANCE_OPTIONS::VisibilityPitchAxis));
-	LeftPitchAxis->Update(Outputs.Vectors[KINEMATIC_OUTPUTS::LeftPitchAxisDirection] *
+	LeftPitchAxis->Update(outputs.vectors[KinematicOutputs::LeftPitchAxisDirection] *
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerLength) +
-		Outputs.Vectors[KINEMATIC_OUTPUTS::LeftKinematicPC], Outputs.Vectors[KINEMATIC_OUTPUTS::LeftKinematicPC],
+		outputs.vectors[KinematicOutputs::LeftKinematicPC], outputs.vectors[KinematicOutputs::LeftKinematicPC],
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerShaftDiameter),
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerTipDiameter),
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerTipLength),
 		AppearanceOptions.GetResolution(APPEARANCE_OPTIONS::ResolutionMarker),
 		AppearanceOptions.GetColor(APPEARANCE_OPTIONS::ColorPitchMarker),
 		AppearanceOptions.GetVisibility(APPEARANCE_OPTIONS::VisibilityPitchAxis));
-	RightFrontInstantAxis->Update(Outputs.RightFrontVectors[KINEMATIC_OUTPUTS::InstantAxisDirection] *
+	RightFrontInstantAxis->Update(outputs.rightFrontVectors[KinematicOutputs::InstantAxisDirection] *
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerLength) +
-		Outputs.RightFrontVectors[KINEMATIC_OUTPUTS::InstantCenter],
-		Outputs.RightFrontVectors[KINEMATIC_OUTPUTS::InstantCenter],
+		outputs.rightFrontVectors[KinematicOutputs::InstantCenter],
+		outputs.rightFrontVectors[KinematicOutputs::InstantCenter],
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerShaftDiameter),
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerTipDiameter),
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerTipLength),
 		AppearanceOptions.GetResolution(APPEARANCE_OPTIONS::ResolutionMarker),
 		AppearanceOptions.GetColor(APPEARANCE_OPTIONS::ColorInstantMarker),
 		AppearanceOptions.GetVisibility(APPEARANCE_OPTIONS::VisibilityInstantAxis));
-	LeftFrontInstantAxis->Update(Outputs.LeftFrontVectors[KINEMATIC_OUTPUTS::InstantAxisDirection] *
+	LeftFrontInstantAxis->Update(outputs.leftFrontVectors[KinematicOutputs::InstantAxisDirection] *
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerLength) +
-		Outputs.LeftFrontVectors[KINEMATIC_OUTPUTS::InstantCenter],
-		Outputs.LeftFrontVectors[KINEMATIC_OUTPUTS::InstantCenter],
+		outputs.leftFrontVectors[KinematicOutputs::InstantCenter],
+		outputs.leftFrontVectors[KinematicOutputs::InstantCenter],
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerShaftDiameter),
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerTipDiameter),
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerTipLength),
 		AppearanceOptions.GetResolution(APPEARANCE_OPTIONS::ResolutionMarker),
 		AppearanceOptions.GetColor(APPEARANCE_OPTIONS::ColorInstantMarker),
 		AppearanceOptions.GetVisibility(APPEARANCE_OPTIONS::VisibilityInstantAxis));
-	RightRearInstantAxis->Update(Outputs.RightRearVectors[KINEMATIC_OUTPUTS::InstantAxisDirection] *
+	RightRearInstantAxis->Update(outputs.rightRearVectors[KinematicOutputs::InstantAxisDirection] *
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerLength) +
-		Outputs.RightRearVectors[KINEMATIC_OUTPUTS::InstantCenter],
-		Outputs.RightRearVectors[KINEMATIC_OUTPUTS::InstantCenter],
+		outputs.rightRearVectors[KinematicOutputs::InstantCenter],
+		outputs.rightRearVectors[KinematicOutputs::InstantCenter],
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerShaftDiameter),
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerTipDiameter),
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerTipLength),
 		AppearanceOptions.GetResolution(APPEARANCE_OPTIONS::ResolutionMarker),
 		AppearanceOptions.GetColor(APPEARANCE_OPTIONS::ColorInstantMarker),
 		AppearanceOptions.GetVisibility(APPEARANCE_OPTIONS::VisibilityInstantAxis));
-	LeftRearInstantAxis->Update(Outputs.LeftRearVectors[KINEMATIC_OUTPUTS::InstantAxisDirection] *
+	LeftRearInstantAxis->Update(outputs.leftRearVectors[KinematicOutputs::InstantAxisDirection] *
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerLength) +
-		Outputs.LeftRearVectors[KINEMATIC_OUTPUTS::InstantCenter],
-		Outputs.LeftRearVectors[KINEMATIC_OUTPUTS::InstantCenter],
+		outputs.leftRearVectors[KinematicOutputs::InstantCenter],
+		outputs.leftRearVectors[KinematicOutputs::InstantCenter],
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerShaftDiameter),
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerTipDiameter),
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeMarkerTipLength),

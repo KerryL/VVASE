@@ -63,8 +63,8 @@ private:
 	void ResetStatusBars(void);
 
 	// Creates a string representing the input configuration
-	wxString GetInputString(const KINEMATICS::INPUTS &Inputs,
-		const KINEMATICS::INPUTS *SecondInputs = NULL) const;
+	wxString GetInputString(const Kinematics::Inputs &Inputs,
+		const Kinematics::Inputs *SecondInputs = NULL) const;
 
 	// Updates the GA object so it matches the current input parameters
 	bool UpdateGAParameters(const bool &ShowWarnings = true);

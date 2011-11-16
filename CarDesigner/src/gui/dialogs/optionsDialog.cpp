@@ -37,7 +37,7 @@
 // Input Arguments:
 //		_MainFrame			= MainFrame& pointing to the application's main window
 //		_Converter			= Convert& pointing to the application's converter object
-//		_KinematicInputs	= KINEMATICS::INPUTS& reference to the application's analysis options
+//		_KinematicInputs	= Kinematics::Inputs& reference to the application's analysis options
 //		Id					= wxWindowId for this object
 //		Position			= const wxPoint& where this object will be drawn
 //		_debugger			= Debugger& pointing to this application's debug
@@ -52,7 +52,7 @@
 //
 //==========================================================================
 OPTIONS_DIALOG::OPTIONS_DIALOG(MAIN_FRAME &_MainFrame, Convert &_Converter,
-							   KINEMATICS::INPUTS &_KinematicInputs, wxWindowID Id,
+							   Kinematics::Inputs &_KinematicInputs, wxWindowID Id,
 							   const wxPoint &Position, Debugger &_debugger, long Style)
 							   : wxDialog(&_MainFrame, Id, _T("Options"), Position, wxDefaultSize, Style),
 							   debugger(_debugger), Converter(_Converter), KinematicInputs(_KinematicInputs),
@@ -421,7 +421,7 @@ void OPTIONS_DIALOG::CreateControls(void)
 	wxBoxSizer *KinematicsTopSizer = new wxBoxSizer(wxVERTICAL);
 
 	// Specify the column widths
-	int inputColumnWidth = 50;
+	int inputColumnWidth = 50;// FIXME:  Don't use this method
 
 	// Create the kinematics page main sizer
 	wxBoxSizer *KinematicsSizer = new wxBoxSizer(wxVERTICAL);
@@ -437,13 +437,13 @@ void OPTIONS_DIALOG::CreateControls(void)
 	wxBoxSizer *CoRSizer = new wxBoxSizer(wxHORIZONTAL);
 	wxStaticText *CoRLabel = new wxStaticText(KinematicsPage, wxID_ANY, _T("Center Of Rotation"));
 	wxString ValueString;
-	ValueString.Printf("%0.3f", KinematicInputs.CenterOfRotation.x);
+	ValueString.Printf("%0.3f", KinematicInputs.centerOfRotation.x);
 	CenterOfRotationX = new wxTextCtrl(KinematicsPage, wxID_ANY, ValueString, wxDefaultPosition,
 		wxSize(inputColumnWidth, -1));
-	ValueString.Printf("%0.3f", KinematicInputs.CenterOfRotation.y);
+	ValueString.Printf("%0.3f", KinematicInputs.centerOfRotation.y);
 	CenterOfRotationY = new wxTextCtrl(KinematicsPage, wxID_ANY, ValueString, wxDefaultPosition,
 		wxSize(inputColumnWidth, -1));
-	ValueString.Printf("%0.3f", KinematicInputs.CenterOfRotation.z);
+	ValueString.Printf("%0.3f", KinematicInputs.centerOfRotation.z);
 	CenterOfRotationZ = new wxTextCtrl(KinematicsPage, wxID_ANY, ValueString, wxDefaultPosition,
 		wxSize(inputColumnWidth, -1));
 
@@ -472,7 +472,7 @@ void OPTIONS_DIALOG::CreateControls(void)
 		wxDefaultSize, OptionsArray, OptionsArray.GetCount(), wxRA_SPECIFY_ROWS);
 
 	// Make sure the correct radio button is selected
-	if (KinematicInputs.FirstRotation == Vector::AxisX)
+	if (KinematicInputs.firstRotation == Vector::AxisX)
 		RotationOrder->SetSelection(0);
 	else
 		RotationOrder->SetSelection(1);
@@ -608,7 +608,7 @@ void OPTIONS_DIALOG::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 		CenterOfRotationY->GetValue().ToDouble(&CenterOfRotation.y) &&
 		CenterOfRotationZ->GetValue().ToDouble(&CenterOfRotation.z))
 		// Convert the center of rotation and update the analysis object
-		KinematicInputs.CenterOfRotation = Converter.ConvertDistance(CenterOfRotation);
+		KinematicInputs.centerOfRotation = Converter.ConvertDistance(CenterOfRotation);
 	else
 		// Print a warning so the user knows the CoR was rejected
 		debugger.Print(_T("Warning!  Center of rotation is not a valid vector - using previous value"),
@@ -616,9 +616,9 @@ void OPTIONS_DIALOG::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 
 	// Set the order of rotations
 	if (RotationOrder->GetSelection() == 0)
-		KinematicInputs.FirstRotation = Vector::AxisX;
+		KinematicInputs.firstRotation = Vector::AxisX;
 	else
-		KinematicInputs.FirstRotation = Vector::AxisY;
+		KinematicInputs.firstRotation = Vector::AxisY;
 
 	// Set the steering input type
 	if (SteeringInputType->GetSelection() == 0)

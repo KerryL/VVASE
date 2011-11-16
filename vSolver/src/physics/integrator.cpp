@@ -298,7 +298,7 @@ void Integrator::Reset(void)
 void Integrator::SetIntegrationMethod(IntegrationMethod _integrationMethod)
 {
 	// Assign the integration method to our class member
-	IntegrationMethod = _integrationMethod;
+	integrationMethod = _integrationMethod;
 
 	// Determine the number of state derivatives we need to store
 	switch (integrationMethod)

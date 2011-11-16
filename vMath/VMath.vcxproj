@@ -13,6 +13,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{A3F16064-5210-4089-AB80-650922BB5365}</ProjectGuid>
     <RootNamespace>VMath</RootNamespace>
+    <ProjectName>vMath</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

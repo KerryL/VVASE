@@ -78,7 +78,7 @@ public:
 	void UpdateKinematics(const CAR* _OriginalCar, CAR* _WorkingCar, wxString Name);
 
 	// Private data accessors (GET)
-	inline KINEMATIC_OUTPUTS GetOutputs(void) { return outputs; };
+	inline KinematicOutputs GetOutputs(void) { return outputs; };
 	inline double GetPitch(void) { return inputs.pitch; };
 	inline double GetRoll(void) { return inputs.roll; };
 	inline double GetHeave(void) { return inputs.heave; };
@@ -98,7 +98,7 @@ private:
 	CAR *workingCar;// Pointer to working (manipulated) car data
 	SUSPENSION *localSuspension;// Suspension in which we move the points around
 
-	KINEMATIC_OUTPUTS outputs;// Where we store everything after we UpdateOutputs
+	KinematicOutputs outputs;// Where we store everything after we UpdateOutputs
 
 	// Kinematic solving routine for suspension points at each "corner" of the car
 	bool SolveCorner(CORNER &corner, const CORNER &original, 

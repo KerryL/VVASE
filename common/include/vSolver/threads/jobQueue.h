@@ -54,7 +54,7 @@ public:
 	ThreadJob Pop(void);
 
 	// Reports a message back to the main event handler
-	void Report(const ThreadJob::ThreadCommands& command, int threadId, int objectID = 0);
+	void Report(const ThreadJob::ThreadCommand& command, int threadId, int objectID = 0);
 
 	// Returns the number of pending jobs
 	size_t PendingJobs(void);

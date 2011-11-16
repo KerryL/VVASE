@@ -58,25 +58,26 @@ public:
 	};
 
 	// Set option methods
-	void SetOrientation(AxisOrientation _orientation) { orientation = _orientation; modified = true; };
-	void SetMinimum(double _minimum) { minimum = _minimum; modified = true; };
-	void SetMaximum(double _maximum) { maximum = _maximum; modified = true; };
-	void SetMajorResolution(double _majorResolution) { majorResolution = _majorResolution; modified = true; };
-	void SetMinorResolution(double _minorResolution) { minorResolution = _minorResolution; modified = true; };
-	void SetGrid(bool _grid) { grid = _grid; modified = true; };
+	void SetOrientation(const AxisOrientation &_orientation) { orientation = _orientation; modified = true; };
+	void SetMinimum(const double &_minimum) { minimum = _minimum; modified = true; };
+	void SetMaximum(const double &_maximum) { maximum = _maximum; modified = true; };
+	void SetMajorResolution(const double &_majorResolution) { majorResolution = _majorResolution; modified = true; };
+	void SetMinorResolution(const double &_minorResolution) { minorResolution = _minorResolution; modified = true; };
+	void SetGrid(const bool &_grid) { grid = _grid; modified = true; };
 	void SetLabel(wxString _label) { label = _label; modified = true; };
 	void SetFont(FTFont *_font) { font = _font; modified = true; };
-	void SetGridColor(Color _gridColor) { gridColor = _gridColor; modified = true; };
-	void SetTickStyle(TickStyle _tickStyle) { tickStyle = _tickStyle; modified = true; };
-	void SetTickSize(int _tickSize) { tickSize = _tickSize; modified = true; };
+	void SetGridColor(const Color &_gridColor) { gridColor = _gridColor; modified = true; };
+	void SetTickStyle(const TickStyle &_tickStyle) { tickStyle = _tickStyle; modified = true; };
+	void SetTickSize(const int &_tickSize) { tickSize = _tickSize; modified = true; };
+	void SetOffsetFromWindowEdge(const unsigned int &offset) { offsetFromWindowEdge = offset; modified = true; };
 
 	// Get option methods
-	double GetMinimum(void) const { return minimum; };
-	double GetMaximum(void) const { return maximum; };
+	inline double GetMinimum(void) const { return minimum; };
+	inline double GetMaximum(void) const { return maximum; };
 	bool IsHorizontal(void) const;
-	static unsigned int GetOffsetFromWindowEdge(void) { return offsetFromWindowEdge; };
-	bool GetGrid(void) const { return grid; };
-	Color GetGridColor(void) const { return gridColor; };
+	inline unsigned int GetOffsetFromWindowEdge(void) const { return offsetFromWindowEdge; };
+	inline bool GetGrid(void) const { return grid; };
+	inline Color GetGridColor(void) const { return gridColor; };
 
 private:
 	// This object's orientation
@@ -98,7 +99,7 @@ private:
 	// Color of the grid
 	Color gridColor;
 
-	static const unsigned int offsetFromWindowEdge;
+	unsigned int offsetFromWindowEdge;// [pixles]
 
 	// The axis label and font
 	wxString label;

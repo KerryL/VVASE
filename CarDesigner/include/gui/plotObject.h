@@ -91,7 +91,8 @@ public:
 	void SetAutoScaleLeft(void) { autoScaleLeftY = true; };
 	void SetAutoScaleRight(void) { autoScaleRightY = true; };
 
-	const Axis* GetXAxis(void) const { return axisBottom; };
+	const Axis* GetBottomAxis(void) const { return axisBottom; };
+	const Axis* GetTopAxis(void) const { return axisTop; };
 	const Axis* GetLeftYAxis(void) const { return axisLeft; };
 	const Axis* GetRightYAxis(void) const { return axisRight; };
 	bool GetGrid(void);

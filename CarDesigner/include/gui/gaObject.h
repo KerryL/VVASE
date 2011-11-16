@@ -32,7 +32,7 @@ class Debugger;
 class MAIN_FRAME;
 class GENETIC_OPTIMIZATION;
 
-class GA_OBJECT : public GENETIC_ALGORITHM
+class GA_OBJECT : public GeneticAlgorithm
 {
 public:
 	// Constructor
@@ -74,7 +74,7 @@ public:
 	struct GOAL
 	{
 		// The output associated with this goal
-		KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE Output;
+		KinematicOutputs::OutputsComplete Output;
 
 		// The desired value
 		double DesiredValue;
@@ -86,8 +86,8 @@ public:
 		// The conditions at which this goal is evaluated.  There are two sets of inputs
 		// here, so that a delta goal can be implemented (i.e. change in roll center height
 		// with ride).
-		KINEMATICS::INPUTS BeforeInputs;
-		KINEMATICS::INPUTS AfterInputs;
+		Kinematics::Inputs BeforeInputs;
+		Kinematics::Inputs AfterInputs;
 	};
 
 	// For changing what is being optimized
@@ -104,13 +104,13 @@ public:
 
 	// For creating the fitness function
 	void ClearAllGoals(void) { GoalList.Clear(); };
-	void AddGoal(const KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE &Output, const double &DesiredValue,
-		const double &ExpectedDeviation, const double &Importance, const KINEMATICS::INPUTS &BeforeInputs,
-		const KINEMATICS::INPUTS &AfterInputs);
+	void AddGoal(const KinematicOutputs::OutputsComplete &Output, const double &DesiredValue,
+		const double &ExpectedDeviation, const double &Importance, const Kinematics::Inputs &BeforeInputs,
+		const Kinematics::Inputs &AfterInputs);
 	void RemoveGoal(const int &Index) { GoalList.Remove(Index); };
-	void UpdateGoal(const int &Index, const KINEMATIC_OUTPUTS::OUTPUTS_COMPLETE &BeforeOutput, const double &DesiredValue,
-		const double &ExpectedDeviation, const double &Importance, const KINEMATICS::INPUTS &BeforeInputs,
-		const KINEMATICS::INPUTS &AfterInputs);
+	void UpdateGoal(const int &Index, const KinematicOutputs::OutputsComplete &BeforeOutput, const double &DesiredValue,
+		const double &ExpectedDeviation, const double &Importance, const Kinematics::Inputs &BeforeInputs,
+		const Kinematics::Inputs &AfterInputs);
 	int GetGoalCount(void) const { return GoalList.GetCount(); };
 	const GOAL &GetGoal(const int &Index) const { return *(GoalList[Index]); };
 
@@ -119,13 +119,13 @@ public:
 	bool Read(wxString FileName);
 
 	// Accessor for synchronization object
-	void MarkAnalysisComplete(void) { InverseSemaphore.Post(); };
+	void MarkAnalysisComplete(void) { inverseSemaphore.Post(); };
 
 	// Gets the number of analyses to be performed for each generation
-	int GetNumberOfInputs(void) const { wxMutexLocker Lock(GSAMutex); return InputList.GetCount(); };
+	int GetNumberOfInputs(void) const { wxMutexLocker lock(gsaMutex); return InputList.GetCount(); };
 
 	// Returns status of this object (running or not)
-	bool OptimizationIsRunning(void) const {  wxMutexLocker Lock(GSAMutex); return IsRunning; };
+	bool OptimizationIsRunning(void) const {  wxMutexLocker lock(gsaMutex); return IsRunning; };
 
 	// Returns the best car with the best fit genome
 	void UpdateTargetCar(void);
@@ -155,7 +155,7 @@ private:
 	// Array of cars with which the fitnesses are determined
 	CAR **WorkingCarArray;
 	CAR **OriginalCarArray;
-	KINEMATIC_OUTPUTS *KinematicOutputArray;
+	KinematicOutputs *KinematicOutputArray;
 	int NumberOfCars;
 
 	// Original car to be optimized (only one needed for reference)
@@ -168,7 +168,7 @@ private:
 	ManagedList<GOAL> GoalList;
 
 	// The different input configurations to be run
-	ManagedList<KINEMATICS::INPUTS> InputList;
+	ManagedList<Kinematics::Inputs> InputList;
 	void DetermineAllInputs(void);
 
 	// Converts a genome into a citizen
@@ -178,7 +178,7 @@ private:
 	bool IsRunning;
 
 	// Synchronization object allowing this thread to wait for analyses to be completed
-	INVERSE_SEMAPHORE InverseSemaphore;
+	InverseSemaphore inverseSemaphore;
 
 	// File header information
 	struct FILE_HEADER_INFO

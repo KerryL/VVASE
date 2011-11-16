@@ -104,8 +104,8 @@ Kinematics::~Kinematics()
 void Kinematics::UpdateKinematics(const CAR* _originalCar, CAR* _workingCar, wxString name)
 {
 	// Start the timer for this update
-	wxStopWatch Timer;
-	Timer.Start();
+	wxStopWatch timer;
+	timer.Start();
 
 	// Print the car's name to the debug window
 	debugger.Print(_T("UpdateKinematics() for ") + name, Debugger::PriorityMedium);
@@ -160,11 +160,11 @@ void Kinematics::UpdateKinematics(const CAR* _originalCar, CAR* _workingCar, wxS
 	{
 	case SUSPENSION::SwayBarUBar:
 		// Rotations
-		localSuspension->Hardpoints[SUSPENSION::FrontBarMidPoint].Rotate(Inputs.CenterOfRotation, Rotations,
-			Inputs.FirstRotation, SecondRotation);
+		localSuspension->Hardpoints[SUSPENSION::FrontBarMidPoint].Rotate(inputs.centerOfRotation, rotations,
+			inputs.firstRotation, secondRotation);
 
 		// Translations
-		localSuspension->Hardpoints[SUSPENSION::FrontBarMidPoint].z += Inputs.Heave;
+		localSuspension->Hardpoints[SUSPENSION::FrontBarMidPoint].z += inputs.heave;
 		break;
 
 	case SUSPENSION::SwayBarTBar:
@@ -621,7 +621,7 @@ bool Kinematics::SolveCorner(CORNER &corner, const CORNER &originalCorner,
 			{
 				// Print an error and switch the success boolean to indicate a failure
 				debugger.Print(_T("ERROR:  Failed to solve for outboard spring!"), Debugger::PriorityMedium);
-				Success = false;
+				success = false;
 			}
 
 			if (!SUSPENSION::SolveForPoint(corner.Hardpoints[CORNER::LowerBallJoint],

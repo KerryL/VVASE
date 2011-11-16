@@ -19,7 +19,7 @@
 //	1/28/2009	- Changed structure of GUI components so context menu creation for all
 //				  objects is handled by this class, K. Loux.
 //	2/10/2009	- Added EDIT_PANEL to application, K. Loux.
-//	2/17/2009	- Moved the KINEMATICS object for primary analysis into the GUI_CAR class.
+//	2/17/2009	- Moved the Kinematics object for primary analysis into the GUI_CAR class.
 //	6/7/2009	- Changed GetFilenameFromUser() to make use of wx functions for checking for file
 //				  existance and selecting multiple files to open, K. Loux.
 //	10/14/2010	- Added configuration file for storing application level options, K. Loux.
@@ -182,8 +182,8 @@ MAIN_FRAME::~MAIN_FRAME()
 	RecentFileManager = NULL;
 
 	// Delete the job queue object
-	delete JobQueue;
-	JobQueue = NULL;
+	delete jobQueue;
+	jobQueue = NULL;
 
 	// Remove all of the cars we're managing that haven't been closed
 	while (OpenObjectList.GetCount() > 0)
@@ -424,7 +424,7 @@ void MAIN_FRAME::SetProperties(void)
 void MAIN_FRAME::InitializeSolver(void)
 {
 	// Initialize the job queue
-	JobQueue = new JOB_QUEUE(GetEventHandler());
+	jobQueue = new JobQueue(GetEventHandler());
 
 	// Initialize thread-related variables
 	ActiveThreads = 0;
@@ -433,13 +433,13 @@ void MAIN_FRAME::InitializeSolver(void)
 
 	// Pass the debugger information objects that have a static pointer to the debugger
 	SUSPENSION::SetDebugger(debugger);
-	KINEMATIC_OUTPUTS::SetDebugger(debugger);
+	KinematicOutputs::SetDebugger(debugger);
 
 	// Zero out kinematic inputs
-	KinematicInputs.Pitch = 0.0;
-	KinematicInputs.Roll = 0.0;
-	KinematicInputs.Heave = 0.0;
-	KinematicInputs.RackTravel = 0.0;
+	KinematicInputs.pitch = 0.0;
+	KinematicInputs.roll = 0.0;
+	KinematicInputs.heave = 0.0;
+	KinematicInputs.rackTravel = 0.0;
 
 	return;
 }
@@ -481,7 +481,7 @@ void MAIN_FRAME::SetNumberOfThreads(unsigned int NewNumberOfThreads)
 			OpenJobCount++;
 
 			// These threads will delete themselves after an EXIT job
-			WORKER_THREAD *NewThread = new WORKER_THREAD(JobQueue, debugger, i);
+			WorkerThread *NewThread = new WorkerThread(jobQueue, debugger, i);
 			// FIXME:  If we want to set priority, this is where it needs to happen
 			NewThread->Run();
 		}
@@ -490,7 +490,7 @@ void MAIN_FRAME::SetNumberOfThreads(unsigned int NewNumberOfThreads)
 	{
 		// Kill the necessary number of threads
 		for (i = NumberOfThreads; i > NewNumberOfThreads; i--)
-			JobQueue->AddJob(THREAD_JOB(THREAD_JOB::COMMAND_THREAD_EXIT), JOB_QUEUE::PRIORITY_VERY_HIGH);
+			jobQueue->AddJob(ThreadJob(ThreadJob::CommandThreadExit), JobQueue::PriorityVeryHigh);
 	}
 
 	// Update the class member for the desired number of threads
@@ -1770,8 +1770,6 @@ void MAIN_FRAME::UpdateAnalysis(void)
 	for (i = 0; i < OpenObjectList.GetCount(); i++)
 		// Update the display (this performs the kinematic analysis)
 		OpenObjectList.GetObject(i)->UpdateData();
-
-	return;
 }
 
 //==========================================================================
@@ -1812,8 +1810,6 @@ void MAIN_FRAME::UpdateOutputPanel(void)
 
 	// Make sure the output panel doesn't have more data columns than there are cars
 	OutputPanel->FinishUpdate(CarCount);
-
-	return;
 }
 
 //==========================================================================
@@ -1823,7 +1819,7 @@ void MAIN_FRAME::UpdateOutputPanel(void)
 // Description:		Adds a job to the job queue to be handled by the thread pool.
 //
 // Input Arguments:
-//		NewJob	= THREAD_JOB& containg in the information about the new job to
+//		newJob	= ThreadJob& containg in the information about the new job to
 //				  be performed
 //
 // Output Arguments:
@@ -1833,18 +1829,16 @@ void MAIN_FRAME::UpdateOutputPanel(void)
 //		None
 //
 //==========================================================================
-void MAIN_FRAME::AddJob(THREAD_JOB &NewJob)
+void MAIN_FRAME::AddJob(ThreadJob &newJob)
 {
 	// Make sure we have a thread to handle the job
 	assert(ActiveThreads > 0);
 
 	// Add the job to the queue
-	JobQueue->AddJob(NewJob, JOB_QUEUE::PRIORITY_NORMAL);
+	jobQueue->AddJob(newJob, JobQueue::PriorityNormal);
 
 	// Increment the open job counter
 	OpenJobCount++;
-
-	return;
 }
 
 //==========================================================================
@@ -1879,13 +1873,11 @@ void MAIN_FRAME::KinematicToolbarPitchChangeEvent(wxCommandEvent& WXUNUSED(event
 		return;
 
 	// Set the value for the kinematic analysis object
-	KinematicInputs.Pitch = converter.ReadAngle(Value);
+	KinematicInputs.pitch = converter.ReadAngle(Value);
 
 	// Update the analysis
 	UpdateAnalysis();
 	UpdateOutputPanel();
-
-	return;
 }
 
 //==========================================================================
@@ -1920,13 +1912,11 @@ void MAIN_FRAME::KinematicToolbarRollChangeEvent(wxCommandEvent& WXUNUSED(event)
 		return;
 
 	// Set the value for the kinematic analysis object
-	KinematicInputs.Roll = converter.ReadAngle(Value);
+	KinematicInputs.roll = converter.ReadAngle(Value);
 
 	// Update the analysis
 	UpdateAnalysis();
 	UpdateOutputPanel();
-
-	return;
 }
 
 //==========================================================================
@@ -1961,13 +1951,11 @@ void MAIN_FRAME::KinematicToolbarHeaveChangeEvent(wxCommandEvent& WXUNUSED(event
 		return;
 
 	// Set the value for the kinematic analysis object
-	KinematicInputs.Heave = converter.ReadDistance(Value);
+	KinematicInputs.heave = converter.ReadDistance(Value);
 
 	// Update the analysis
 	UpdateAnalysis();
 	UpdateOutputPanel();
-
-	return;
 }
 
 //==========================================================================
@@ -2002,17 +1990,14 @@ void MAIN_FRAME::KinematicToolbarSteerChangeEvent(wxCommandEvent& WXUNUSED(event
 		return;
 
 	// Set the value for the kinematic analysis object depending on what the steering input represents
-	// FIXME:  What should be done if we're not using rack travel?  Problem is different steering ratios for different cars!
 	if (UseRackTravel)
-		KinematicInputs.RackTravel = converter.ReadDistance(Value);
+		KinematicInputs.rackTravel = converter.ReadDistance(Value);
 	else
-		KinematicInputs.RackTravel = converter.ReadAngle(Value) * 1.0;// * RackRatio;
+		KinematicInputs.rackTravel = converter.ReadAngle(Value) * 1.0;// * RackRatio;// FIXME:  Use rack ratio
 
 	// Update the analysis
 	UpdateAnalysis();
 	UpdateOutputPanel();
-
-	return;
 }
 
 //==========================================================================
@@ -2039,7 +2024,7 @@ void MAIN_FRAME::ThreadCompleteEvent(wxCommandEvent &event)
 	// Perform different operations depending on the type of job that has completed
 	switch (event.GetInt())
 	{
-	case THREAD_JOB::COMMAND_THREAD_EXIT:
+	case ThreadJob::CommandThreadExit:
 		// Decrement the number of active threads
 		ActiveThreads--;
 		debugger.Print(Debugger::PriorityLow, "Thread %i exited", event.GetId());
@@ -2053,13 +2038,13 @@ void MAIN_FRAME::ThreadCompleteEvent(wxCommandEvent &event)
 		}
 		break;
 
-	case THREAD_JOB::COMMAND_THREAD_STARTED:
+	case ThreadJob::CommandThreadStarted:
 		// Increment the number of active threads
 		ActiveThreads++;
 		debugger.Print(Debugger::PriorityLow, "Thread %i started", event.GetId());
 		break;
 
-	case THREAD_JOB::COMMAND_THREAD_KINEMATICS_NORMAL:
+	case ThreadJob::CommandThreadKinematicsNormal:
 		// Get the car count for this car (number of objects before this in the list that are also cars)
 		for (i = 0; i <= event.GetExtraLong(); i++)
 		{
@@ -2079,17 +2064,17 @@ void MAIN_FRAME::ThreadCompleteEvent(wxCommandEvent &event)
 		OpenObjectList[event.GetExtraLong()]->UpdateDisplay();
 		break;
 
-	case THREAD_JOB::COMMAND_THREAD_KINEMATICS_ITERATION:
+	case ThreadJob::CommandThreadKinematicsIteration:
 		// Decrement the semaphore for the current iteration
 		static_cast<ITERATION*>(OpenObjectList[event.GetExtraLong()])->MarkAnalysisComplete();
 		break;
 
-	case THREAD_JOB::COMMAND_THREAD_KINEMATICS_FOR_GA:
+	case ThreadJob::CommandThreadKinematicsGA:
 		// Tell the GA manager thread that an analysis is done (decrement the count of pending analyses)
 		static_cast<GENETIC_OPTIMIZATION*>(OpenObjectList[event.GetExtraLong()])->MarkAnalysisComplete();
 		break;
 
-	case THREAD_JOB::COMMAND_THREAD_GENETIC_OPTIMIZATION:
+	case ThreadJob::CommandThreadGeneticOptimization:
 		// Update the optimized car and mark the optimization object as complete
 		static_cast<GENETIC_OPTIMIZATION*>(OpenObjectList[event.GetExtraLong()])->CompleteOptimization();
 
@@ -2098,15 +2083,13 @@ void MAIN_FRAME::ThreadCompleteEvent(wxCommandEvent &event)
 		UpdateOutputPanel();
 		break;
 
-	case THREAD_JOB::COMMAND_THREAD_NULL:
+	case ThreadJob::CommandThreadNull:
 	default:
 		break;
 	}
 
 	// Decrement the job counter
 	OpenJobCount--;
-
-	return;
 }
 
 //==========================================================================
@@ -2220,8 +2203,6 @@ void MAIN_FRAME::RemoveObjectFromList(int Index)
 
 	// Update the output display
 	UpdateOutputPanel();
-
-	return;
 }
 
 //==========================================================================
@@ -2304,7 +2285,7 @@ void MAIN_FRAME::WindowCloseEvent(wxCloseEvent& WXUNUSED(event))
 	// Delete all of the threads in the thread pool
 	int i;
 	for (i = 0; i < ActiveThreads; i++)
-		JobQueue->AddJob(THREAD_JOB(THREAD_JOB::COMMAND_THREAD_EXIT), JOB_QUEUE::PRIORITY_VERY_HIGH);
+		jobQueue->AddJob(ThreadJob(ThreadJob::CommandThreadExit), JobQueue::PriorityVeryHigh);
 
 	return;
 }
@@ -2366,7 +2347,7 @@ bool MAIN_FRAME::CloseThisForm(void)
 	{
 		// Attempt to close each object
 		if (!OpenObjectList.GetObject(OpenObjectList.GetCount() - 1)->Close(false))
-			// If  the user cancelled, we should cancel here, too
+			// If  the user canceled, we should cancel here, too
 			return false;
 	}
 
@@ -2440,14 +2421,14 @@ void MAIN_FRAME::ReadConfiguration(void)
 	// Read KINEMATICS configuration from file
 	double TempDouble = 0.0;
 	ConfigurationFile->Read(_T("/Kinematics/CenterOfRotationX"), &TempDouble);
-	KinematicInputs.CenterOfRotation.x = TempDouble;
+	KinematicInputs.centerOfRotation.x = TempDouble;
 	TempDouble = 0.0;
 	ConfigurationFile->Read(_T("/Kinematics/CenterOfRotationY"), &TempDouble);
-	KinematicInputs.CenterOfRotation.y = TempDouble;
+	KinematicInputs.centerOfRotation.y = TempDouble;
 	TempDouble = 0.0;
 	ConfigurationFile->Read(_T("/Kinematics/CenterOfRotationZ"), &TempDouble);
-	KinematicInputs.CenterOfRotation.z = TempDouble;
-	KinematicInputs.FirstRotation = (Vector::Axis)ConfigurationFile->Read(
+	KinematicInputs.centerOfRotation.z = TempDouble;
+	KinematicInputs.firstRotation = (Vector::Axis)ConfigurationFile->Read(
 		_T("/Kinematics/FirstRotation"), 0l);
 	ConfigurationFile->Read(_T("/Kinematics/UseRackTravel"), &UseRackTravel, true);
 
@@ -2532,10 +2513,10 @@ void MAIN_FRAME::WriteConfiguration(void)
 	ConfigurationFile->Write(_T("/NumberFormat/UseSignificantDigits"), converter.GetUseSignificantDigits());
 
 	// Write KINEMATICS configuration to file
-	ConfigurationFile->Write(_T("/Kinematics/CenterOfRotationX"), KinematicInputs.CenterOfRotation.x);
-	ConfigurationFile->Write(_T("/Kinematics/CenterOfRotationY"), KinematicInputs.CenterOfRotation.y);
-	ConfigurationFile->Write(_T("/Kinematics/CenterOfRotationZ"), KinematicInputs.CenterOfRotation.z);
-	ConfigurationFile->Write(_T("/Kinematics/FirstRotation"), KinematicInputs.FirstRotation);
+	ConfigurationFile->Write(_T("/Kinematics/CenterOfRotationX"), KinematicInputs.centerOfRotation.x);
+	ConfigurationFile->Write(_T("/Kinematics/CenterOfRotationY"), KinematicInputs.centerOfRotation.y);
+	ConfigurationFile->Write(_T("/Kinematics/CenterOfRotationZ"), KinematicInputs.centerOfRotation.z);
+	ConfigurationFile->Write(_T("/Kinematics/FirstRotation"), KinematicInputs.firstRotation);
 	ConfigurationFile->Write(_T("/Kinematics/UseRackTravel"), UseRackTravel);
 
 	// Write DEBUGGING configuration to file
@@ -2921,7 +2902,7 @@ wxMenu *MAIN_FRAME::CreateIterationMenu(void)
 bool MAIN_FRAME::JobsPending(void) const
 {
 	// If there are any jobs in the queue, return false
-	if (JobQueue->PendingJobs() > 0)
+	if (jobQueue->PendingJobs() > 0)
 		return true;
 
 	// If there are any open jobs, return false

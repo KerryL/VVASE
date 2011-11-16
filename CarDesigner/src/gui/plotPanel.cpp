@@ -82,6 +82,7 @@ PlotPanel::PlotPanel(wxWindow *parent, const Debugger &_debugger) : wxPanel(pare
 //==========================================================================
 PlotPanel::~PlotPanel()
 {
+	ClearAllCurves();
 }
 
 //==========================================================================
@@ -406,8 +407,6 @@ void PlotPanel::CreatePlotContextMenu(const wxPoint &position, const PlotContext
 	// Delete the context menu object
 	delete contextMenu;
 	contextMenu = NULL;
-
-	return;
 }
 
 //==========================================================================
@@ -428,7 +427,31 @@ void PlotPanel::CreatePlotContextMenu(const wxPoint &position, const PlotContext
 //==========================================================================
 void PlotPanel::ContextWriteImageFile(wxCommandEvent &event)
 {
-	// FIXME:  Implement this (see DataPlotter code)
+	// FIXME:  Implement this (see DataPlotter code or RenderWindow code (car renderer?))
+}
+
+//==========================================================================
+// Class:			PlotPanel
+// Function:		SetXAxisGridText
+//
+// Description:		Sets the x-axis information in the grid.
+//
+// Input Arguments:
+//		text	= wxString
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotPanel::SetXAxisGridText(wxString text)
+{
+	if (!optionsGrid)
+		return;
+
+	optionsGrid->SetCellValue(0, 0, text);
 }
 
 //==========================================================================
@@ -452,8 +475,6 @@ void PlotPanel::ClearAllCurves(void)
 	// Remove the curves locally
 	while (plotList.GetCount() > 0)
 		RemoveCurve(0);
-
-	return;
 }
 
 //==========================================================================
@@ -505,8 +526,6 @@ void PlotPanel::AddCurve(wxString mathString)
 
 	// Then, add the new dataset to the plot
 	AddCurve(mathChannel, mathString.Upper());// FIXME:  Get better name from user
-
-	return;
 }
 
 //==========================================================================

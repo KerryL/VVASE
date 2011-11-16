@@ -357,14 +357,15 @@ bool GUI_OBJECT::IsThisObjectSelected(wxTreeItemId Selected) const
 //		None
 //
 // Return Value:
-//		CLOSE_RESPONSE
+//		bool
 //
 //==========================================================================
 bool GUI_OBJECT::Close(bool NotebookPageAlreadyClosed)
 {
 	// Ensure that there are no pending jobs - if there are, return false
-	if (MainFrame.JobsPending())
-		return false;
+	// FIXME:  Why is this? - Removed 11/16/2011, minimal testing performed
+	/*if (MainFrame.JobsPending())
+		return false;*/
 
 	// Check to see if this object has been modified without being saved
 	if (ModifiedSinceLastSave)
