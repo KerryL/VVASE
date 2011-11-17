@@ -39,32 +39,42 @@ RangeLimitsDialog::RangeLimitsDialog(wxWindow *parent, const double &min, const 
 {
 	// Create controls
 	wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
-	wxFlexGridSizer *mainSizer = new wxFlexGridSizer(2, 5, 5);
-	topSizer->Add(mainSizer, 0, wxALL, 5);
+	wxBoxSizer *mainSizer = new wxBoxSizer(wxVERTICAL);
+	topSizer->Add(mainSizer, 0, wxALL | wxEXPAND, 5);
+
+	wxFlexGridSizer *inputSizer = new wxFlexGridSizer(2, 5, 5);
+	mainSizer->Add(inputSizer, 0, wxEXPAND);
+	inputSizer->AddGrowableCol(1);
 
 	// Create the text boxes and their labels
 	wxString valueString;
 	wxStaticText *minLabel = new wxStaticText(this, wxID_ANY, _T("Minimum"));
 	valueString.Printf("%f", min);
 	minBox = new wxTextCtrl(this, wxID_ANY, valueString);
-	mainSizer->Add(minLabel);
-	mainSizer->Add(minBox);
+	inputSizer->Add(minLabel);
+	inputSizer->Add(minBox, 0, wxEXPAND);
 
 	wxStaticText *maxLabel = new wxStaticText(this, wxID_ANY, _T("Maximum"));
 	valueString.Printf("%f", max);
 	maxBox = new wxTextCtrl(this, wxID_ANY, valueString);
-	mainSizer->Add(maxLabel);
-	mainSizer->Add(maxBox);
+	inputSizer->Add(maxLabel);
+	inputSizer->Add(maxBox, 0, wxEXPAND);
+
+	mainSizer->AddSpacer(10);
 
 	// Create the dialog buttons
+	wxBoxSizer *buttonSizer = new wxBoxSizer(wxHORIZONTAL);
+	mainSizer->Add(buttonSizer, 0, wxALIGN_CENTER_HORIZONTAL);
 	wxButton *okButton = new wxButton(this, wxID_OK, _T("OK"));
 	okButton->SetDefault();
 	wxButton *cancelButton = new wxButton(this, wxID_CANCEL, _T("Cancel"));
-	mainSizer->Add(okButton, 0, wxALL, 5);
-	mainSizer->Add(cancelButton, 0, wxALL, 5);
+	buttonSizer->Add(okButton, 1, wxALL, 5);
+	buttonSizer->Add(cancelButton, 1, wxALL, 5);
 
 	// Set the sizer to this dialog
 	SetSizerAndFit(topSizer);
+
+	Center();
 }
 
 //==========================================================================

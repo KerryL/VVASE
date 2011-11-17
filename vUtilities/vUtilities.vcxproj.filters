@@ -39,6 +39,9 @@
     <ClInclude Include="..\common\include\vUtilities\wxRelatedUtilities.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\common\include\vUtilities\fontFinder.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\xlsxReader.cpp">
@@ -51,6 +54,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\wxRelatedUtilities.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fontFinder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

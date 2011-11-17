@@ -95,6 +95,8 @@ public:
 
 	void UpdateCursors(void);
 
+	const Debugger& GetDebugger(void) const { return debugger; };
+
 private:
 	// Debugger message printing utility
 	const Debugger &debugger;

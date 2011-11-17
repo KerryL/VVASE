@@ -22,11 +22,6 @@
 // Standard C++ headers
 #include <stdint.h>
 
-// Make sure one of the options was specified
-/*#if !defined(_VVASE_32_BIT_) && !defined(_VVASE_64_BIT_)
-#error "ERROR:  Must specify number of bits/byte!  Define '_VVASE_32_BIT_' or '_VVASE_64_BIT_'"
-#endif
-
 // 32-bit conversion functions
 #ifdef _VVASE_32_BIT_
 
@@ -38,6 +33,14 @@
 #endif*/
 
 // NOTE:  See wxPlatformInfo for run-time determination of OS address width
+
+#ifdef _VVASE_32_BIT_
+#define V_ULONG unsigned long
+#elif _VVASE_64_BIT_
+#define V_ULONG unsigned int
+#else
+#error "Must define preprocessor flags _VVASE_32_BIT_ or _VVASE_64_BIT_"
+#endif
 
 // Conversion to signed 32-bit integers
 inline int32_t ReadInt32(int64_t in)

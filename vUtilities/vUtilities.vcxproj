@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClInclude Include="..\common\include\vUtilities\convert.h" />
     <ClInclude Include="..\common\include\vUtilities\debugger.h" />
+    <ClInclude Include="..\common\include\vUtilities\fontFinder.h" />
     <ClInclude Include="..\common\include\vUtilities\machineDefinitions.h" />
     <ClInclude Include="..\common\include\vUtilities\managedList.h" />
     <ClInclude Include="..\common\include\vUtilities\objectList.h" />
@@ -23,6 +24,7 @@
   <ItemGroup>
     <ClCompile Include="src\convert.cpp" />
     <ClCompile Include="src\debugger.cpp" />
+    <ClCompile Include="src\fontFinder.cpp" />
     <ClCompile Include="src\wxRelatedUtilities.cpp" />
     <ClCompile Include="src\xlsxReader.cpp" />
   </ItemGroup>
@@ -58,7 +60,7 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <AdditionalIncludeDirectories>C:\lib\wxWidgets-2.8.11\lib\vc_dll\mswd;C:\lib\wxWidgets-2.8.11\include;C:\Documents and Settings\kloux\My Documents\Visual Studio 2010\Projects\CarDesigner\common\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>__WXMSW__;__WXDEBUG__;WXUSINGDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>__WXMSW__;__WXDEBUG__;WXUSINGDLL;_VVASE_64_BIT_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

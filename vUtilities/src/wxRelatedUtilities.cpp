@@ -13,6 +13,7 @@
 // Description:  Contains helper functions and wrappers for working with wxWidgets.
 // History:
 
+// Local headers
 #include "vUtilities/wxRelatedUtilities.h"
 
 //==========================================================================
@@ -53,7 +54,7 @@ void SetMinimumWidthFromContents(wxComboBox *control, unsigned int additional)
 // Class:			None
 // Function:		SafelyGetComboBoxSelection
 //
-// Description:		Returns the index of the selected combo box item
+// Description:		Returns the index of the selected combo box item.
 //
 // Input Arguments:
 //		control		= wxComboBox*

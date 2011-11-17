@@ -41,7 +41,6 @@
 #include <wx/stdpaths.h>
 #include <wx/filename.h>
 #include <wx/docview.h>
-#include <wx/fontenum.h>
 
 //#include <wx/platinfo.h>
 
@@ -70,7 +69,7 @@
 #include "vSolver/threads/workerThread.h"
 #include "vSolver/threads/threadEvent.h"
 #include "vMath/vector.h"
-#include "vUtilities/wxRelatedUtilities.h"
+#include "vUtilities/fontFinder.h"
 
 //==========================================================================
 // Class:			MAIN_FRAME
@@ -346,30 +345,36 @@ void MAIN_FRAME::SetProperties(void)
 	wxTextAttr OutputAttributes;
 	wxFont OutputFont;
 
-	// FIXME:  This is not portable!
-	/*wxArrayString fontList = wxFontEnumerator::GetFacenames(wxFONTENCODING_SYSTEM, true);
-	unsigned int j;
-	wxString temp;
-	for (j = 0; j < fontList.GetCount(); j++)
-		temp.Append(fontList[j] + _T("\n"));
-	wxMessageBox(temp);
-	FontFaceName = fontList[3];//*/
-	// Checkout wxFontMapper, too
-#ifdef __WXGTK__
+	// FIXME:  Give user the option of selecting a font?  Maybe in options dialog?  Then only do this if unset?
+	wxArrayString preferredFonts;
+	preferredFonts.Add(_T("Monospace"));// GTK preference
+	preferredFonts.Add(_T("Courier New"));// MSW preference
+	bool foundPreferredFont = FontFinder::GetFontFaceName(wxFONTENCODING_SYSTEM, preferredFonts, true, FontFaceName);
+
+/*#ifdef __WXGTK__
 	FontFaceName.assign("Monospace");
 #else
 	FontFaceName.assign("Courier New");
-#endif
-	OutputFont.SetPointSize(9);
-	OutputFont.SetFamily(wxFONTFAMILY_MODERN);
-	if (!OutputFont.SetFaceName(FontFaceName))
-		debugger.Print(_T("Error setting font face to ") + FontFaceName);
+#endif*/
 
-	OutputAttributes.SetFont(OutputFont);
-	if (!DebugPane->SetDefaultStyle(OutputAttributes))
-		debugger.Print(_T("Error setting font style"));
+	// As long as we have a font name to use, set the font
+	if (!FontFaceName.IsEmpty())
+	{
+		// Populate the wxFont object
+		OutputFont.SetPointSize(9);
+		OutputFont.SetFamily(wxFONTFAMILY_MODERN);
+		if (!OutputFont.SetFaceName(FontFaceName))
+			debugger.Print(_T("Error setting font face to ") + FontFaceName);
 
-	//debugger.Print(FontFaceName);
+		// Assign the font to the window
+		OutputAttributes.SetFont(OutputFont);
+		if (!DebugPane->SetDefaultStyle(OutputAttributes))
+			debugger.Print(_T("Error setting font style"));
+	}
+
+	// Tell the user if we're using a font we're unsure of
+	if (!foundPreferredFont)
+		debugger.Print(_T("Could not find preferred fixed-width font; using ") + FontFaceName);// FIXME:  If we make this a configuration option, tell the user here
 
 	// Also put the cursor at the bottom of the text, so the window scrolls automatically
 	// as it updates with text

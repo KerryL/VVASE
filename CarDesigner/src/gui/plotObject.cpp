@@ -26,6 +26,8 @@
 #include "vRenderer/primitives/text.h"
 #include "vMath/carMath.h"
 #include "vMath/dataset2D.h"
+#include "vUtilities/fontFinder.h"
+#include "vUtilities/debugger.h"
 
 //==========================================================================
 // Class:			PlotObject
@@ -70,25 +72,23 @@ PlotObject::PlotObject(PlotRenderer &_renderer) : renderer(_renderer)
 	axisRight->SetAxisAtMinEnd(axisBottom);
 	axisRight->SetOppositeAxis(axisLeft);
 
-	// Find the location of the fonts directory
-	wxString fontFile;
-	/*wxFont systemFont = wxSystemSettings::GetFont(wxSYS_SYSTEM_FONT);
-	wxMessageBox(systemFont.GetFaceName());
-	wxMessageBox(systemFont.GetNativeFontInfoDesc());
-	wxMessageBox(systemFont.GetNativeFontInfoUserDesc());
-	wxFontEnumerator
-	See stuff in mainFrame.cpp for setting output pane font*/
-#ifdef __WXMSW__
-	fontFile = wxGetOSDirectory() + _T("\\fonts\\arial.ttf");
-#elif defined __WXGTK__
-	// FIXME:  This probably isn't very portable...
-	//fontFile = _T("/usr/share/fonts/dejavu/DejaVuSans.ttf");// Fedora 13
-	fontFile = _T("/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf");// Ubuntu 11.10
-#else
-	// Unknown platform - warn the user
-#	warning "Unrecognized platform - unable to locate font files!"
-	fontFile = wxEmptyString;
-#endif
+	// Find the name of the font that we want to use
+	wxString fontFaceName;
+	wxArrayString preferredFonts;
+	preferredFonts.Add(_T("DejaVuSans"));// GTK preference
+	preferredFonts.Add(_T("Arial"));// MSW preference
+	bool foundPreferredFont = FontFinder::GetFontFaceName(wxFONTENCODING_SYSTEM, preferredFonts, false, fontFaceName);
+
+	// Tell the user if we're unsure of the font
+	if (!foundPreferredFont)
+		renderer.GetDebugger().Print(_T("Could not find preferred plot font; using ") + fontFaceName);
+
+	// Now the harder part - find the location of that font on the hard drive
+	wxString fontFile = FontFinder::GetFontPathAndFileName(fontFaceName);
+
+	wxString name;
+	if (FontFinder::GetFontName(fontFile, name))
+		wxMessageBox(name);// FIXME:  Remove after test
 
 	// Create the fonts
 	axisFont = new FTGLTextureFont(fontFile.c_str());
@@ -99,6 +99,8 @@ PlotObject::PlotObject(PlotRenderer &_renderer) : renderer(_renderer)
 	{
 		delete axisFont;
 		axisFont = NULL;
+
+		renderer.GetDebugger().Print(_T("Error loading axis font"));// FIXME:  If this is settable by some configuration option, tell the user here
 	}
 	else
 	{
@@ -110,6 +112,8 @@ PlotObject::PlotObject(PlotRenderer &_renderer) : renderer(_renderer)
 	{
 		delete titleFont;
 		titleFont = NULL;
+
+		renderer.GetDebugger().Print(_T("Error loading title font"));// FIXME:  If this is settable by some configuration option, tell the user here
 	}
 	else
 	{
