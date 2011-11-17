@@ -48,6 +48,7 @@ public:
 
 	double GetTextHeight(void) const;
 	double GetTextWidth(void) const;
+	wxString GetText(void) const { return text; };
 
 private:
 	// The angle at which this text is inclined

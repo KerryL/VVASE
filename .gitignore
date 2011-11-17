@@ -1,7 +1,10 @@
 /nbproject/private/
 /.lib/
 /.obj/
-/bin/
+
+# Linux binaries
+VVASE
+vvase.rc
 
 # MSVC++-specific ignores
 */Debug/

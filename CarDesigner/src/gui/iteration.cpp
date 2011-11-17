@@ -870,7 +870,7 @@ void ITERATION::ApplyPlotFormatting(void)
 				if (label.IsEmpty())
 					label.assign(GetPlotName((PLOT_ID)i) + _T(" [") + GetPlotUnits((PLOT_ID)i) + _T("]"));
 				else
-					label.assign(_T("Multipl Values"));
+					label.assign(_T("Multiple Values"));
 			}
 		}
 
@@ -889,7 +889,7 @@ void ITERATION::ApplyPlotFormatting(void)
 	else
 		plotPanel->GetRenderer()->SetXLabel(XLabel);
 
-	if (AutoGenerateXLabel)
+	if (GenerateTitleFromFileName)
 		plotPanel->GetRenderer()->SetTitle(GetCleanName());
 	else
 		plotPanel->GetRenderer()->SetTitle(Title);

@@ -331,6 +331,8 @@ void EDIT_ITERATION_OPTIONS_PANEL::SetAsDefaultClickedEvent(wxCommandEvent& WXUN
 	// Save the current settings to file
 	CurrentIteration->WriteDefaultsToConfig();
 
+	// FIXME:  Would be nice if this could save other plot options, like axis associativity, line colors, etc.
+
 	// Display a message to the user so they know the changes took effect
 	debugger.Print(_T("Current plot settings saved as default"), Debugger::PriorityHigh);
 

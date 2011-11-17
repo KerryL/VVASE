@@ -15,7 +15,6 @@
 
 // Main application icon (MUST be first alphabetically)
 ICON_ID_MAIN			ICON		"res\\icons\\aavase.ico"
-ICON_ID_MAIN2			ICON		"res\\icons\\3dplot.ico"
 
 // System tree icons
 ICON_ID_CAR				ICON		"res\\icons\\car.ico"
@@ -26,7 +25,9 @@ ICON_ID_ENGINE			ICON		"res\\icons\\engine.ico"
 ICON_ID_MASS_PROPS		ICON		"res\\icons\\mass_properties.ico"
 ICON_ID_SUSPENSION		ICON		"res\\icons\\suspension.ico"
 ICON_ID_TIRES			ICON		"res\\icons\\tires.ico"
+
 ICON_ID_ITERATION		ICON		"res\\icons\\iteration.ico"
+ICON_ID_OPTIMIZATION	ICON		"res\\icons\\optimization.ico"
 
 // wxWidgets definitions
 #define wxUSE_NO_MANIFEST 1

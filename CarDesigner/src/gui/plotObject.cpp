@@ -95,19 +95,24 @@ PlotObject::PlotObject(PlotRenderer &_renderer) : renderer(_renderer)
 	titleFont = new FTGLTextureFont(fontFile.c_str());
 
 	// Make sure the fonts loaded OK
-	if (axisFont->Error() || titleFont->Error())
+	if (axisFont->Error())
 	{
 		delete axisFont;
 		axisFont = NULL;
-
-		delete titleFont;
-		titleFont = NULL;
 	}
 	else
 	{
 		axisFont->FaceSize(12);
 		axisFont->CharMap(FT_ENCODING_UNICODE);
+	}
 
+	if (titleFont->Error())
+	{
+		delete titleFont;
+		titleFont = NULL;
+	}
+	else
+	{
 		titleFont->FaceSize(18);
 		titleFont->CharMap(FT_ENCODING_UNICODE);
 	}
@@ -341,6 +346,61 @@ void PlotObject::AddCurve(const Dataset2D &data)
 //==========================================================================
 void PlotObject::FormatPlot(void)
 {
+	// Perform the basic stuff first - we do this whether or not we have data to display
+	Axis::TickStyle tickStyle = Axis::TickStyleInside;
+
+	axisBottom->SetOrientation(Axis::OrientationBottom);
+	axisBottom->SetFont(axisFont);
+	axisBottom->SetTickStyle(tickStyle);
+	
+	if (axisBottom->GetLabel().IsEmpty())
+		axisBottom->SetOffsetFromWindowEdge(50);
+	else
+		axisBottom->SetOffsetFromWindowEdge(75);
+
+	axisTop->SetOrientation(Axis::OrientationTop);
+	axisTop->SetTickStyle(tickStyle);
+	
+	if (axisTop->GetLabel().IsEmpty())
+		axisTop->SetOffsetFromWindowEdge(50);
+	else
+		axisTop->SetOffsetFromWindowEdge(75);
+
+	if (!titleObject->GetText().IsEmpty())
+		axisTop->SetOffsetFromWindowEdge(axisTop->GetOffsetFromWindowEdge() + titleObject->GetTextHeight());
+
+	axisLeft->SetOrientation(Axis::OrientationLeft);
+	axisLeft->SetFont(axisFont);
+	axisLeft->SetTickStyle(tickStyle);
+	
+	if (axisLeft->GetLabel().IsEmpty())
+		axisLeft->SetOffsetFromWindowEdge(75);
+	else
+		axisLeft->SetOffsetFromWindowEdge(100);
+
+	axisRight->SetOrientation(Axis::OrientationRight);
+	axisRight->SetFont(axisFont);
+	axisRight->SetTickStyle(tickStyle);
+	
+	if (axisRight->GetLabel().IsEmpty())
+		axisRight->SetOffsetFromWindowEdge(75);
+	else
+		axisRight->SetOffsetFromWindowEdge(100);
+
+	// Set the title properties
+	titleObject->SetFont(titleFont);
+	titleObject->SetCentered(true);
+	titleObject->SetPosition(renderer.GetSize().GetWidth() / 2.0,
+		renderer.GetSize().GetHeight() - axisTop->GetOffsetFromWindowEdge() / 2.0);
+
+	// Set the axis colors
+	Color color = Color::ColorBlack;
+	axisBottom->SetColor(color);
+	axisTop->SetColor(color);
+	axisLeft->SetColor(color);
+	axisRight->SetColor(color);
+
+	// If we don't have any data, we don't want stop before getting into the details
 	if (dataList.GetCount() == 0)
 		return;
 
@@ -413,7 +473,7 @@ void PlotObject::FormatPlot(void)
 		yLeftMaxOriginal = yRightMaxOriginal;
 	}
 
-	// Apply limits
+	// Apply range limits
 
 	// Tell the curves they will need to be re-drawn
 	for (i = 0; i < (unsigned int)plotList.GetCount(); i++)
@@ -539,72 +599,26 @@ void PlotObject::FormatPlot(void)
 		yRightMaxOriginal = yRightMax;
 	}
 
-	// Apply the desired properties to each axis
-	Axis::TickStyle tickStyle = Axis::TickStyleInside;
-
-	axisBottom->SetOrientation(Axis::OrientationBottom);
+	// Apply the desired range and resolution to each axis
 	axisBottom->SetMinimum(xMin);
 	axisBottom->SetMaximum(xMax);
 	axisBottom->SetMinorResolution(xMinorResolution);
 	axisBottom->SetMajorResolution(xMajorResolution);
-	axisBottom->SetFont(axisFont);
-	axisBottom->SetTickStyle(tickStyle);
-	
-	if (axisBottom->GetLabel().IsEmpty())
-		axisBottom->SetOffsetFromWindowEdge(50);
-	else
-		axisBottom->SetOffsetFromWindowEdge(75);
 
-	axisTop->SetOrientation(Axis::OrientationTop);
 	axisTop->SetMinimum(xMin);
 	axisTop->SetMaximum(xMax);
 	axisTop->SetMinorResolution(xMinorResolution);
 	axisTop->SetMajorResolution(xMajorResolution);
-	axisTop->SetTickStyle(tickStyle);
 	
-	if (axisTop->GetLabel().IsEmpty())
-		axisTop->SetOffsetFromWindowEdge(75);
-	else
-		axisTop->SetOffsetFromWindowEdge(100);
-
-	axisLeft->SetOrientation(Axis::OrientationLeft);
 	axisLeft->SetMinimum(yLeftMin);
 	axisLeft->SetMaximum(yLeftMax);
 	axisLeft->SetMinorResolution(yLeftMinorResolution);
 	axisLeft->SetMajorResolution(yLeftMajorResolution);
-	axisLeft->SetFont(axisFont);
-	axisLeft->SetTickStyle(tickStyle);
 	
-	if (axisLeft->GetLabel().IsEmpty())
-		axisLeft->SetOffsetFromWindowEdge(75);
-	else
-		axisLeft->SetOffsetFromWindowEdge(100);
-
-	axisRight->SetOrientation(Axis::OrientationRight);
 	axisRight->SetMinimum(yRightMin);
 	axisRight->SetMaximum(yRightMax);
 	axisRight->SetMinorResolution(yRightMinorResolution);
 	axisRight->SetMajorResolution(yRightMajorResolution);
-	axisRight->SetFont(axisFont);
-	axisRight->SetTickStyle(tickStyle);
-	
-	if (axisRight->GetLabel().IsEmpty())
-		axisRight->SetOffsetFromWindowEdge(75);
-	else
-		axisRight->SetOffsetFromWindowEdge(100);
-
-	// Set the title properties
-	titleObject->SetFont(titleFont);
-	titleObject->SetCentered(true);
-	titleObject->SetPosition(renderer.GetSize().GetWidth() / 2.0,
-		renderer.GetSize().GetHeight() - axisTop->GetOffsetFromWindowEdge() / 2.0);
-
-	// Set the axis colors
-	Color color = Color::ColorBlack;
-	axisBottom->SetColor(color);
-	axisTop->SetColor(color);
-	axisLeft->SetColor(color);
-	axisRight->SetColor(color);
 
 	// Update the axis limits so they are exactly the same as what is displayed on screen
 	axisBottom->Draw();

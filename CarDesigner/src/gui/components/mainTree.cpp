@@ -57,7 +57,7 @@ MAIN_TREE::MAIN_TREE(MAIN_FRAME &_MainFrame, wxWindowID id, const wxPoint& pos,
 	int Size = 16;
 	IconList = new wxImageList(Size, Size, true, 1);
 
-	// No icons unless we're in windows
+	// Add icons to the list
 #ifdef __WXMSW__
 	IconHandle[CarIcon] = IconList->Add(wxIcon(_T("ICON_ID_CAR"),
 		wxBITMAP_TYPE_ICO_RESOURCE, Size, Size));
@@ -77,10 +77,21 @@ MAIN_TREE::MAIN_TREE(MAIN_FRAME &_MainFrame, wxWindowID id, const wxPoint& pos,
 		wxBITMAP_TYPE_ICO_RESOURCE, Size, Size));
 	IconHandle[IterationIcon] = IconList->Add(wxIcon(_T("ICON_ID_ITERATION"),
 		wxBITMAP_TYPE_ICO_RESOURCE, Size, Size));
-	IconHandle[OptimizationIcon] = IconList->Add(wxIcon(_T("ICON_ID_ITERATION"),// FIXME!!!
+	IconHandle[OptimizationIcon] = IconList->Add(wxIcon(_T("ICON_ID_OPTIMIZATION"),
 		wxBITMAP_TYPE_ICO_RESOURCE, Size, Size));
-#endif
+#elif __WXGTK__
 	// FIXME!!! Linux icons
+	IconHandle[CarIcon] = IconList->Add(wxIcon(_T("icons/car16.xpm"), wxBITMAP_TYPE_XPM));
+	IconHandle[AerodynamicsIcon] = IconList->Add(wxIcon(_T("icons/aerodynamics16.xpm"), wxBITMAP_TYPE_XPM));
+	IconHandle[BrakesIcon] = IconList->Add(wxIcon(_T("icons/brakes16.xpm"), wxBITMAP_TYPE_XPM));
+	IconHandle[DrivetrainIcon] = IconList->Add(wxIcon(_T("icons/drivetrain16.xpm"), wxBITMAP_TYPE_XPM));
+	IconHandle[EngineIcon] = IconList->Add(wxIcon(_T("icons/engine16.xpm"), wxBITMAP_TYPE_XPM));
+	IconHandle[MassPropertiesIcon] = IconList->Add(wxIcon(_T("icons/massProperties16.xpm"), wxBITMAP_TYPE_XPM));
+	IconHandle[SuspensionIcon] = IconList->Add(wxIcon(_T("icons/suspension16.xpm"), wxBITMAP_TYPE_XPM));
+	IconHandle[TiresIcon] = IconList->Add(wxIcon(_T("icons/tires16.xpm"), wxBITMAP_TYPE_XPM));
+	IconHandle[IterationIcon] = IconList->Add(wxIcon(_T("icons/iteration16.xpm"), wxBITMAP_TYPE_XPM));
+	IconHandle[OptimizationIcon] = IconList->Add(wxIcon(_T("icons/optimization16.xpm"), wxBITMAP_TYPE_XPM));
+#endif
 
 	// Assign the image list to the tree
 	AssignImageList(IconList);

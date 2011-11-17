@@ -44,7 +44,7 @@
 #include "vSolver/physics/kinematics.h"
 #include "gui/undoRedoStack.h"
 #include "gui/guiObject.h"	// Can't use a forward declaration here because
-							// ManagedList can't compile without a definition
+							// ManagedList<GUI_OBJECT> can't compile without a definition
 
 // wxWidgets forward declarations
 class wxFileHistory;

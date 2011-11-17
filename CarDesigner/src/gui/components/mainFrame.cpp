@@ -70,6 +70,7 @@
 #include "vSolver/threads/workerThread.h"
 #include "vSolver/threads/threadEvent.h"
 #include "vMath/vector.h"
+#include "vUtilities/wxRelatedUtilities.h"
 
 //==========================================================================
 // Class:			MAIN_FRAME
@@ -316,11 +317,19 @@ void MAIN_FRAME::SetProperties(void)
 	SetSize(1024, 768);
 	Center();
 
-	// Add the icon
+	// Add the icons
+	wxIconBundle bundle;
 #ifdef __WXMSW__
-    SetIcon(wxIcon(_T("ICON_ID_MAIN"), wxBITMAP_TYPE_ICO_RESOURCE, 16, 16));
-#endif
+	bundle.AddIcon(wxIcon(_T("ICON_ID_MAIN"), wxBITMAP_TYPE_ICO_RESOURCE, 16, 16));
+	bundle.AddIcon(wxIcon(_T("ICON_ID_MAIN"), wxBITMAP_TYPE_ICO_RESOURCE, 32, 32));
+	bundle.AddIcon(wxIcon(_T("ICON_ID_MAIN"), wxBITMAP_TYPE_ICO_RESOURCE, 48, 48));
+#elif __WXGTK__
 	// FIXME!!! Linux icons
+	bundle.AddIcon(wxIcon(_T("icons/aavase16.xpm"), wxBITMAP_TYPE_XPM));
+	bundle.AddIcon(wxIcon(_T("icons/aavase32.xpm"), wxBITMAP_TYPE_XPM));
+	bundle.AddIcon(wxIcon(_T("icons/aavase48.xpm"), wxBITMAP_TYPE_XPM));
+#endif
+	SetIcons(bundle);
 
 	// StatusBar properties
 	int StatusBarWidths[] = {-1, 100};
@@ -337,7 +346,7 @@ void MAIN_FRAME::SetProperties(void)
 	wxTextAttr OutputAttributes;
 	wxFont OutputFont;
 
-	// FIXME:  This is not necessarily portable!
+	// FIXME:  This is not portable!
 	/*wxArrayString fontList = wxFontEnumerator::GetFacenames(wxFONTENCODING_SYSTEM, true);
 	unsigned int j;
 	wxString temp;
