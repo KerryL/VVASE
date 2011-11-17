@@ -39,39 +39,29 @@ RangeLimitsDialog::RangeLimitsDialog(wxWindow *parent, const double &min, const 
 {
 	// Create controls
 	wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
-	wxBoxSizer *mainSizer = new wxBoxSizer(wxVERTICAL);
+	wxFlexGridSizer *mainSizer = new wxFlexGridSizer(2, 5, 5);
 	topSizer->Add(mainSizer, 0, wxALL, 5);
 
 	// Create the text boxes and their labels
-	int labelWidth = 50;
-	int textBoxWidth = 75;
 	wxString valueString;
-
-	wxBoxSizer *minSizer = new wxBoxSizer(wxHORIZONTAL);
-	mainSizer->Add(minSizer, 0, wxALL, 5);
-	wxStaticText *minLabel = new wxStaticText(this, wxID_ANY, _T("Minimum"), wxDefaultPosition, wxSize(labelWidth, -1));
+	wxStaticText *minLabel = new wxStaticText(this, wxID_ANY, _T("Minimum"));
 	valueString.Printf("%f", min);
-	minBox = new wxTextCtrl(this, wxID_ANY, valueString, wxDefaultPosition, wxSize(textBoxWidth, -1));
-	minSizer->Add(minLabel);
-	minSizer->Add(minBox);
+	minBox = new wxTextCtrl(this, wxID_ANY, valueString);
+	mainSizer->Add(minLabel);
+	mainSizer->Add(minBox);
 
-	wxBoxSizer *maxSizer = new wxBoxSizer(wxHORIZONTAL);
-	mainSizer->Add(maxSizer, 0, wxALL, 5);
-	wxStaticText *maxLabel = new wxStaticText(this, wxID_ANY, _T("Maximum"), wxDefaultPosition, wxSize(labelWidth, -1));
+	wxStaticText *maxLabel = new wxStaticText(this, wxID_ANY, _T("Maximum"));
 	valueString.Printf("%f", max);
-	maxBox = new wxTextCtrl(this, wxID_ANY, valueString, wxDefaultPosition, wxSize(textBoxWidth, -1));
-	maxSizer->Add(maxLabel);
-	maxSizer->Add(maxBox);
+	maxBox = new wxTextCtrl(this, wxID_ANY, valueString);
+	mainSizer->Add(maxLabel);
+	mainSizer->Add(maxBox);
 
 	// Create the dialog buttons
-	int buttonWidth = 50;
-	wxBoxSizer *buttonSizer = new wxBoxSizer(wxHORIZONTAL);
-	mainSizer->Add(buttonSizer, 0, wxALIGN_CENTER_HORIZONTAL);
-	wxButton *okButton = new wxButton(this, wxID_OK, _T("OK"), wxDefaultPosition, wxSize(buttonWidth, -1));
+	wxButton *okButton = new wxButton(this, wxID_OK, _T("OK"));
 	okButton->SetDefault();
-	wxButton *cancelButton = new wxButton(this, wxID_CANCEL, _T("Cancel"), wxDefaultPosition, wxSize(buttonWidth, -1));
-	buttonSizer->Add(okButton, 0, wxALL, 5);
-	buttonSizer->Add(cancelButton, 0, wxALL, 5);
+	wxButton *cancelButton = new wxButton(this, wxID_CANCEL, _T("Cancel"));
+	mainSizer->Add(okButton, 0, wxALL, 5);
+	mainSizer->Add(cancelButton, 0, wxALL, 5);
 
 	// Set the sizer to this dialog
 	SetSizerAndFit(topSizer);

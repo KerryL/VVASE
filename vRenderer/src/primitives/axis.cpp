@@ -10,7 +10,7 @@
 // File:  axis.cpp
 // Created:  5/2/2011
 // Author:  K. Loux
-// Description:  Derived from PRIMITIVE for creating axis objects on a plot.
+// Description:  Derived from Primitive for creating axis objects on a plot.
 // History:
 //	11/17/2010	- Fixed some bugs related to rendering of ticks and grid lines, K. Loux.
 
@@ -52,11 +52,15 @@ Axis::Axis(RenderWindow &_renderWindow) : Primitive(_renderWindow)
 	majorResolution = 1.0;
 	minorResolution = 1.0;
 
-	offsetFromWindowEdge = 75;// [pixles]
+	offsetFromWindowEdge = 75;// [pixels]
 
 	grid = false;
 
 	font = NULL;
+	
+	minAxis = NULL;
+	maxAxis = NULL;
+	oppositeAxis = NULL;
 
 	gridColor.Set(0.8, 0.8, 0.8, 1.0);
 }
@@ -125,7 +129,7 @@ void Axis::GenerateGeometry(void)
 	if (orientation == OrientationTop || orientation == OrientationRight)
 		sign = -1.0;
 
-	// Compute the MainAxisLocation (X for vertical axis, Y for horizontal axis)
+	// Compute the mainAxisLocation (X for vertical axis, Y for horizontal axis)
 	if (orientation == OrientationBottom || orientation == OrientationLeft)
 		mainAxisLocation = offsetFromWindowEdge;
 	else if (orientation == OrientationRight)
@@ -142,15 +146,19 @@ void Axis::GenerateGeometry(void)
 	// Draw the axis
 	if (IsHorizontal())
 	{
-		axisLength = renderWindow.GetSize().GetWidth() - 2 * offsetFromWindowEdge;
-		glVertex2i(offsetFromWindowEdge, mainAxisLocation);
-		glVertex2i(axisLength + offsetFromWindowEdge, mainAxisLocation);
+		axisLength = renderWindow.GetSize().GetWidth() -
+				minAxis->GetOffsetFromWindowEdge() - maxAxis->GetOffsetFromWindowEdge();
+		glVertex2i(minAxis->GetOffsetFromWindowEdge(), mainAxisLocation);
+		glVertex2i(renderWindow.GetSize().GetWidth()
+				- maxAxis->GetOffsetFromWindowEdge(), mainAxisLocation);
 	}
 	else
 	{
-		axisLength = renderWindow.GetSize().GetHeight() - 2 * offsetFromWindowEdge;
-		glVertex2i(mainAxisLocation, offsetFromWindowEdge);
-		glVertex2i(mainAxisLocation, axisLength + offsetFromWindowEdge);
+		axisLength = renderWindow.GetSize().GetHeight() -
+				minAxis->GetOffsetFromWindowEdge() - maxAxis->GetOffsetFromWindowEdge();
+		glVertex2i(mainAxisLocation, minAxis->GetOffsetFromWindowEdge());
+		glVertex2i(mainAxisLocation, renderWindow.GetSize().GetHeight() -
+				maxAxis->GetOffsetFromWindowEdge());
 	}
 
 	// Compute the spacing for grids and ticks
@@ -160,16 +168,17 @@ void Axis::GenerateGeometry(void)
 	// Draw the grids and tick marks
 	if (IsHorizontal())
 	{
-		// Draw the grid
-		if (grid)
+		// Draw the grid (and check to make sure the opposite axis pointer was provided)
+		if (grid && oppositeAxis)
 		{
 			glColor4d(gridColor.GetRed(), gridColor.GetGreen(), gridColor.GetBlue(), gridColor.GetAlpha());
 
 			for (tick = 0; tick < numberOfGridLines; tick++)
 			{
-				glVertex2i(offsetFromWindowEdge + (tick + 1) * gridSpacing, offsetFromWindowEdge);
-				glVertex2i(offsetFromWindowEdge + (tick + 1) * gridSpacing,
-					renderWindow.GetSize().GetHeight() - offsetFromWindowEdge);
+				glVertex2i(minAxis->GetOffsetFromWindowEdge() + (tick + 1) * gridSpacing,
+						offsetFromWindowEdge);
+				glVertex2i(minAxis->GetOffsetFromWindowEdge() + (tick + 1) * gridSpacing,
+					renderWindow.GetSize().GetHeight() - oppositeAxis->GetOffsetFromWindowEdge());
 			}
 
 			glColor4d(color.GetRed(), color.GetGreen(), color.GetBlue(), color.GetAlpha());
@@ -181,23 +190,25 @@ void Axis::GenerateGeometry(void)
 			// The first and last inside ticks do not need to be drawn, thus we start this loop with Tick = 1.
 			for (tick = 1; tick <= numberOfTicks; tick++)
 			{
-				glVertex2i(offsetFromWindowEdge + tick * tickSpacing, mainAxisLocation - tickSize * outsideTick * sign);
-				glVertex2i(offsetFromWindowEdge + tick * tickSpacing, mainAxisLocation + tickSize * insideTick * sign);
+				glVertex2i(minAxis->GetOffsetFromWindowEdge() + tick * tickSpacing,
+						mainAxisLocation - tickSize * outsideTick * sign);
+				glVertex2i(minAxis->GetOffsetFromWindowEdge() + tick * tickSpacing,
+						mainAxisLocation + tickSize * insideTick * sign);
 			}
 		}
 	}
 	else
 	{
 		// Draw the grid
-		if (grid)
+		if (grid && oppositeAxis)
 		{
 			glColor4d(gridColor.GetRed(), gridColor.GetGreen(), gridColor.GetBlue(), gridColor.GetAlpha());
 
 			for (tick = 0; tick < numberOfGridLines; tick++)
 			{
-				glVertex2i(offsetFromWindowEdge, offsetFromWindowEdge + (tick + 1) * gridSpacing);
-				glVertex2i(renderWindow.GetSize().GetWidth() - offsetFromWindowEdge,
-					offsetFromWindowEdge + (tick + 1) * gridSpacing);
+				glVertex2i(offsetFromWindowEdge, minAxis->GetOffsetFromWindowEdge() + (tick + 1) * gridSpacing);
+				glVertex2i(renderWindow.GetSize().GetWidth() - oppositeAxis->GetOffsetFromWindowEdge(),
+					minAxis->GetOffsetFromWindowEdge() + (tick + 1) * gridSpacing);
 			}
 
 			glColor4d(color.GetRed(), color.GetGreen(), color.GetBlue(), color.GetAlpha());
@@ -208,8 +219,10 @@ void Axis::GenerateGeometry(void)
 		{
 			for (tick = 1; tick <= numberOfTicks; tick++)
 			{
-				glVertex2i(mainAxisLocation - tickSize * outsideTick * sign, offsetFromWindowEdge + tick * tickSpacing);
-				glVertex2i(mainAxisLocation + tickSize * insideTick * sign, offsetFromWindowEdge + tick * tickSpacing);
+				glVertex2i(mainAxisLocation - tickSize * outsideTick * sign,
+						minAxis->GetOffsetFromWindowEdge() + tick * tickSpacing);
+				glVertex2i(mainAxisLocation + tickSize * insideTick * sign,
+						minAxis->GetOffsetFromWindowEdge() + tick * tickSpacing);
 			}
 		}
 	}
@@ -218,6 +231,7 @@ void Axis::GenerateGeometry(void)
 	glEnd();
 
 	// Add the text
+	// FIXME:  Should add something here to center text over the plot area, not the render window
 	if (font)
 	{
 		FTBBox boundingBox;
@@ -326,7 +340,7 @@ void Axis::GenerateGeometry(void)
 					else
 						yTranslation = renderWindow.GetSize().GetHeight() - valueOffsetFromEdge;
 
-					xTranslation = offsetFromWindowEdge + tick * gridSpacing -
+					xTranslation = minAxis->GetOffsetFromWindowEdge() + tick * gridSpacing -
 						(boundingBox.Upper().X() - boundingBox.Lower().X()) / 2.0;
 				}
 				else
@@ -336,7 +350,7 @@ void Axis::GenerateGeometry(void)
 					else
 						xTranslation = renderWindow.GetSize().GetWidth() - valueOffsetFromEdge;
 
-					yTranslation = offsetFromWindowEdge + tick * gridSpacing -
+					yTranslation = minAxis->GetOffsetFromWindowEdge() + tick * gridSpacing -
 						(boundingBox.Upper().Y() - boundingBox.Lower().Y()) / 2.0;
 				}
 
@@ -399,6 +413,10 @@ bool Axis::HasValidParameters(void)
 {
 	// Don't draw if any of the limits are not numbers
 	if (VVASEMath::IsNaN(minimum) || VVASEMath::IsNaN(maximum))
+		return false;
+	
+	// Make sure the pointers to the perpendicular axes have been provided
+	if (!minAxis || !maxAxis)
 		return false;
 
 	return true;

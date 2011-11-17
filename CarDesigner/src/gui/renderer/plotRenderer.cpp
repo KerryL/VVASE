@@ -34,7 +34,7 @@
 //
 // Input Arguments:
 //		_parent		= PlotPanel& reference to this object's parent window
-//		args		= int[] NOTE: Must contain WX_GL_DOUBLEBUFFER at minimum (BUG somewhere)
+//		args		= int[] NOTE: Must contain WX_GL_DOUBLEBUFFER at minimum (BUG somewhere - GTK only)
 //		id			= wxWindowID
 //		_debugger	= const Debugger&
 //
@@ -163,8 +163,8 @@ void PlotRenderer::CreateActors(void)
 
 	// Also create the zoom box and cursors, even though they aren't drawn yet
 	zoomBox = new ZoomBox(*this);
-	leftCursor = new PlotCursor(*this, *plot->GetBottomAxis(), *plot->GetTopAxis());
-	rightCursor = new PlotCursor(*this, *plot->GetBottomAxis(), *plot->GetTopAxis());
+	leftCursor = new PlotCursor(*this, *plot->GetBottomAxis());
+	rightCursor = new PlotCursor(*this, *plot->GetBottomAxis());
 
 	return;
 }
@@ -417,7 +417,6 @@ void PlotRenderer::OnRightButtonUpEvent(wxMouseEvent &event)
 	if (!zoomBox->GetIsVisible())
 	{
 		// Determine the context
-		// FIXME:  Test this - gl may use upper left as reference instead of bottom left?
 		PlotPanel::PlotContext context;
 		unsigned int x = event.GetX();
 		unsigned int y = event.GetY();
@@ -1168,11 +1167,12 @@ void PlotRenderer::OnDoubleClickEvent(wxMouseEvent &event)
 {
 	unsigned int x = event.GetX();
 	unsigned int y = event.GetY();
-	unsigned int offset = plot->Get##Axis()->GetOffsetFromWindowEdge();
 
 	// If the click is within the plot area, move a cursor there and make it visible
-	if (x > offset && GetSize().GetWidth() - x > offset &&
-		y > offset && GetSize().GetHeight() - y > offset)
+	if (x > plot->GetLeftYAxis()->GetOffsetFromWindowEdge() &&
+		x < GetSize().GetWidth() - plot->GetRightYAxis()->GetOffsetFromWindowEdge() &&
+		y > plot->GetBottomAxis()->GetOffsetFromWindowEdge() &&
+		y < GetSize().GetHeight() - plot->GetTopAxis()->GetOffsetFromWindowEdge())
 	{
 		double value = GetCursorValue(x);
 
@@ -1199,18 +1199,18 @@ void PlotRenderer::OnDoubleClickEvent(wxMouseEvent &event)
 	else
 	{
 		// Determine the context
-		PlotPanel::PlotContext context;// FIXME:  Pull from other place where we do this??
-		if (x < Axis::GetOffsetFromWindowEdge() &&
-			y > Axis::GetOffsetFromWindowEdge() &&
-			y < GetSize().GetHeight() - Axis::GetOffsetFromWindowEdge())
+		PlotPanel::PlotContext context;
+		if (x < plot->GetLeftYAxis()->GetOffsetFromWindowEdge() &&
+			y > plot->GetBottomAxis()->GetOffsetFromWindowEdge() &&
+			y < GetSize().GetHeight() - plot->GetTopAxis()->GetOffsetFromWindowEdge())
 			context = PlotPanel::plotContextLeftYAxis;
-		else if (x > GetSize().GetWidth() - Axis::GetOffsetFromWindowEdge() &&
-			y > Axis::GetOffsetFromWindowEdge() &&
-			y < GetSize().GetHeight() - Axis::GetOffsetFromWindowEdge())
+		else if (x > GetSize().GetWidth() - plot->GetRightYAxis()->GetOffsetFromWindowEdge() &&
+			y > plot->GetBottomAxis()->GetOffsetFromWindowEdge() &&
+			y < GetSize().GetHeight() - plot->GetTopAxis()->GetOffsetFromWindowEdge())
 			context = PlotPanel::plotContextRightYAxis;
-		else if (y > GetSize().GetHeight() - Axis::GetOffsetFromWindowEdge() &&
-			x > Axis::GetOffsetFromWindowEdge() &&
-			x < GetSize().GetWidth() - Axis::GetOffsetFromWindowEdge())
+		else if (y > GetSize().GetHeight() - plot->GetBottomAxis()->GetOffsetFromWindowEdge() &&
+			x > plot->GetLeftYAxis()->GetOffsetFromWindowEdge() &&
+			x < GetSize().GetWidth() - plot->GetRightYAxis()->GetOffsetFromWindowEdge())
 			context = PlotPanel::plotContextXAxis;
 		else
 			context = PlotPanel::plotContextPlotArea;
@@ -1401,8 +1401,9 @@ double PlotRenderer::GetRightCursorValue(void) const
 //==========================================================================
 void PlotRenderer::UpdateCursors(void)
 {
-	leftCursor->GenerateGeometry();
-	rightCursor->GenerateGeometry();
+	/*leftCursor->Draw();
+	rightCursor->Draw();*/
+	Refresh();
 
 	return;
 }

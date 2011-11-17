@@ -253,8 +253,8 @@ void CAR_RENDERER::UpdateCarDisplay(void)
 	Vector OriginalNormal;
 
 	// Get locks on the car's mutexes
-	wxMutexLocker DisplayLock(DisplayCar.GetMutex());
-	wxMutexLocker ReferenceLock(ReferenceCar.GetMutex());
+	wxMutexLocker displayLock(DisplayCar.GetMutex());
+	wxMutexLocker referenceLock(ReferenceCar.GetMutex());
 
 	// Update the origin
 	Origin->Update(AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeOriginShaftLength),

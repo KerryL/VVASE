@@ -52,6 +52,23 @@ PlotObject::PlotObject(PlotRenderer &_renderer) : renderer(_renderer)
 	axisLeft = new Axis(renderer);
 	axisRight = new Axis(renderer);
 	titleObject = new TextRendering(renderer);
+	
+	// Tell each axis how they relate to other axes
+	axisTop->SetAxisAtMaxEnd(axisRight);
+	axisTop->SetAxisAtMinEnd(axisLeft);
+	axisTop->SetOppositeAxis(axisBottom);
+	
+	axisBottom->SetAxisAtMaxEnd(axisRight);
+	axisBottom->SetAxisAtMinEnd(axisLeft);
+	axisBottom->SetOppositeAxis(axisTop);
+	
+	axisLeft->SetAxisAtMaxEnd(axisTop);
+	axisLeft->SetAxisAtMinEnd(axisBottom);
+	axisLeft->SetOppositeAxis(axisRight);
+	
+	axisRight->SetAxisAtMaxEnd(axisTop);
+	axisRight->SetAxisAtMinEnd(axisBottom);
+	axisRight->SetOppositeAxis(axisLeft);
 
 	// Find the location of the fonts directory
 	wxString fontFile;
@@ -532,6 +549,11 @@ void PlotObject::FormatPlot(void)
 	axisBottom->SetMajorResolution(xMajorResolution);
 	axisBottom->SetFont(axisFont);
 	axisBottom->SetTickStyle(tickStyle);
+	
+	if (axisBottom->GetLabel().IsEmpty())
+		axisBottom->SetOffsetFromWindowEdge(50);
+	else
+		axisBottom->SetOffsetFromWindowEdge(75);
 
 	axisTop->SetOrientation(Axis::OrientationTop);
 	axisTop->SetMinimum(xMin);
@@ -539,6 +561,11 @@ void PlotObject::FormatPlot(void)
 	axisTop->SetMinorResolution(xMinorResolution);
 	axisTop->SetMajorResolution(xMajorResolution);
 	axisTop->SetTickStyle(tickStyle);
+	
+	if (axisTop->GetLabel().IsEmpty())
+		axisTop->SetOffsetFromWindowEdge(75);
+	else
+		axisTop->SetOffsetFromWindowEdge(100);
 
 	axisLeft->SetOrientation(Axis::OrientationLeft);
 	axisLeft->SetMinimum(yLeftMin);
@@ -547,6 +574,11 @@ void PlotObject::FormatPlot(void)
 	axisLeft->SetMajorResolution(yLeftMajorResolution);
 	axisLeft->SetFont(axisFont);
 	axisLeft->SetTickStyle(tickStyle);
+	
+	if (axisLeft->GetLabel().IsEmpty())
+		axisLeft->SetOffsetFromWindowEdge(75);
+	else
+		axisLeft->SetOffsetFromWindowEdge(100);
 
 	axisRight->SetOrientation(Axis::OrientationRight);
 	axisRight->SetMinimum(yRightMin);
@@ -555,6 +587,11 @@ void PlotObject::FormatPlot(void)
 	axisRight->SetMajorResolution(yRightMajorResolution);
 	axisRight->SetFont(axisFont);
 	axisRight->SetTickStyle(tickStyle);
+	
+	if (axisRight->GetLabel().IsEmpty())
+		axisRight->SetOffsetFromWindowEdge(75);
+	else
+		axisRight->SetOffsetFromWindowEdge(100);
 
 	// Set the title properties
 	titleObject->SetFont(titleFont);
@@ -570,15 +607,15 @@ void PlotObject::FormatPlot(void)
 	axisRight->SetColor(color);
 
 	// Update the axis limits so they are exactly the same as what is displayed on screen
-	axisBottom->GenerateGeometry();
+	axisBottom->Draw();
 	xMin = axisBottom->GetMinimum();
 	xMax = axisBottom->GetMaximum();
 
-	axisLeft->GenerateGeometry();
+	axisLeft->Draw();
 	yLeftMin = axisLeft->GetMinimum();
 	yLeftMax = axisLeft->GetMaximum();
 
-	axisRight->GenerateGeometry();
+	axisRight->Draw();
 	yRightMin = axisRight->GetMinimum();
 	yRightMax = axisRight->GetMaximum();
 }

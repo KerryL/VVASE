@@ -70,6 +70,10 @@ public:
 	void SetTickStyle(const TickStyle &_tickStyle) { tickStyle = _tickStyle; modified = true; };
 	void SetTickSize(const int &_tickSize) { tickSize = _tickSize; modified = true; };
 	void SetOffsetFromWindowEdge(const unsigned int &offset) { offsetFromWindowEdge = offset; modified = true; };
+	
+	void SetAxisAtMinEnd(const Axis *min) { minAxis = min; modified = true; };
+	void SetAxisAtMaxEnd(const Axis *max) { maxAxis = max; modified = true; };
+	void SetOppositeAxis(const Axis *opposite) { oppositeAxis = opposite; modified = true; };
 
 	// Get option methods
 	inline double GetMinimum(void) const { return minimum; };
@@ -78,6 +82,12 @@ public:
 	inline unsigned int GetOffsetFromWindowEdge(void) const { return offsetFromWindowEdge; };
 	inline bool GetGrid(void) const { return grid; };
 	inline Color GetGridColor(void) const { return gridColor; };
+	
+	inline const Axis* GetAxisAtMinEnd(void) const { return minAxis; };
+	inline const Axis* GetAxisAtMaxEnd(void) const { return maxAxis; };
+	inline const Axis* GetOppositeAxis(void) const { return oppositeAxis; };
+	
+	inline wxString GetLabel(void) const { return label; };
 
 private:
 	// This object's orientation
@@ -99,7 +109,13 @@ private:
 	// Color of the grid
 	Color gridColor;
 
+	// Distance for edge of plot render window to the axis
 	unsigned int offsetFromWindowEdge;// [pixles]
+	
+	// Pointers to the axes at either end of this axis
+	const Axis *minAxis;
+	const Axis *maxAxis;
+	const Axis *oppositeAxis;
 
 	// The axis label and font
 	wxString label;

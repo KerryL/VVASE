@@ -89,24 +89,6 @@ PlotCurve::~PlotCurve()
 
 //==========================================================================
 // Class:			PlotCurve
-// Function:		Constant Declarations
-//
-// Description:		Declare class constants for the PlotCurve class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-const int PlotCurve::offsetFromWindowEdge = 75;
-
-//==========================================================================
-// Class:			PlotCurve
 // Function:		GenerateGeometry
 //
 // Description:		Creates the OpenGL instructions to create this object in
@@ -316,16 +298,20 @@ void PlotCurve::RescalePoint(const double *xyPoint, int *point)
 		return;
 
 	// Get the plot size
-	int plotHeight = renderWindow.GetSize().GetHeight() - 2 * offsetFromWindowEdge;
-	int plotWidth = renderWindow.GetSize().GetWidth() - 2 * offsetFromWindowEdge;
+	int plotHeight = renderWindow.GetSize().GetHeight() -
+		xAxis->GetOffsetFromWindowEdge() -
+		xAxis->GetOppositeAxis()->GetOffsetFromWindowEdge();
+	int plotWidth = renderWindow.GetSize().GetWidth() -
+		yAxis->GetOffsetFromWindowEdge() -
+		yAxis->GetOppositeAxis()->GetOffsetFromWindowEdge();
 
 	// Do the scaling
-	point[0] = offsetFromWindowEdge + (xyPoint[0] - xAxis->GetMinimum()) /
+	point[0] = xAxis->GetAxisAtMinEnd()->GetOffsetFromWindowEdge()
+		+ (xyPoint[0] - xAxis->GetMinimum()) /
 		(xAxis->GetMaximum() - xAxis->GetMinimum()) * plotWidth;
-	point[1] = offsetFromWindowEdge + (xyPoint[1]- yAxis->GetMinimum()) /
+	point[1] = xAxis->GetOffsetFromWindowEdge()
+		+ (xyPoint[1]- yAxis->GetMinimum()) /
 		(yAxis->GetMaximum() - yAxis->GetMinimum()) * plotHeight;
-
-	return;
 }
 
 //==========================================================================

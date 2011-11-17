@@ -206,7 +206,7 @@ void EDIT_PANEL::UpdateInformation(GUI_OBJECT *_CurrentObject)
 			CarMutex = &(static_cast<GUI_CAR*>(CurrentObject)->GetOriginalCar().GetMutex());
 
 			// Ensure exclusive access to the object during the update
-			wxMutexLocker Lock(*CarMutex);
+			wxMutexLocker lock(*CarMutex);
 
 			// Call the appropriate update function
 			// We check to see which one to call based on which object exists

@@ -116,7 +116,7 @@ void Kinematics::UpdateKinematics(const CAR* _originalCar, CAR* _workingCar, wxS
 
 	// Ensure exclusive access to the car objects
 	wxMutexLocker originalLock(originalCar->GetMutex());
-	wxMutexLocker workingLock(originalCar->GetMutex());
+	wxMutexLocker workingLock(workingCar->GetMutex());
 	
 	// Copy the information in the original car to the working car.  This minimizes rounding
 	// errors in the calculation of suspension points, and it also ensures that changes made

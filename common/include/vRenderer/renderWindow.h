@@ -130,7 +130,6 @@ private:
 	// Window events
 	void OnPaint(wxPaintEvent& event);
     void OnSize(wxSizeEvent& event);
-//    void OnEraseBackground(wxEraseEvent& event);
 	void OnEnterWindow(wxMouseEvent &event);
 	// End event handlers-------------------------------------------------
 	
