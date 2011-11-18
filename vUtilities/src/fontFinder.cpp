@@ -26,6 +26,7 @@
 
 // wxWidgets headers
 #include <wx/wx.h>
+#include <wx/dir.h>
 #include <wx/fontenum.h>
 
 // Local headers
@@ -33,38 +34,41 @@
 
 //==========================================================================
 // Class:			FontFinder
-// Function:		GetFontPathAndFileName
+// Function:		GetFontFileName
 //
 // Description:		Searches the local hard drive (intelligently) and returns
 //					the path and file name for a preferred font.
 //
 // Input Arguments:
-//		fontName	= const std::string& name of the desired font
+//		fontName	= const wxString& name of the desired font
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		std::string containing the path to the font file, or an empty string
+//		wxString containing the path to the font file, or an empty string
 //		if the font could not be located
 //
 //==========================================================================
-wxString FontFinder::GetFontPathAndFileName(const wxString &fontName)
+wxString FontFinder::GetFontFileName(const wxString &fontName)
 {
 	// We will need to search through all the font files on the system, open
 	// each one and get the name from file to know if we have the correct file
-	wxString path;
+	wxString fontDirectory;
+
+	// Search through the fonts directory, checking font names
+	// until we find the one we're looking for
 
 #ifdef __WXMSW__
-	// For Windows, search through the fonts directory, checking font names
-	// until we find the one we're looking for
-	// FIXME:  Implement this
-	path = wxGetOSDirectory() + _T("\\fonts\\arial.ttf");
+	// Get the normal MSW font directory (FIXME:  Test this under Win 7, too!)
+	fontDirectory = wxGetOSDirectory() + _T("\\Fonts\\");
 
 #elif defined __WXGTK__
-	// FIXME:  Implement this
-	//path = _T("/usr/share/fonts/dejavu/DejaVuSans.ttf");// Fedora 13
-	path = _T("/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf");// Ubuntu 11.10
+	//return _T("/usr/share/fonts/dejavu/DejaVuSans.ttf");// Fedora 13
+	//return _T("/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf");// Ubuntu 11.10
+
+	// Get the normal *nix font directory (FIXME:  Test this!)
+	fontDirectory = _T("/usr/share/fonts/");
 
 	// Code from ttf_name_extractor.cpp:
 	/*
@@ -89,7 +93,7 @@ wxString FontFinder::GetFontPathAndFileName(const wxString &fontName)
 		// Redirect stdout to pipes[1]
 		dup2(pipes[1], 1);
 		close(pipes[0]);
-		if (execl("/bin/find", "find", "/", "-iname", "*.ttf", NULL) == -1)
+		if (execl("/bin/find", "find", "/usr/share/fonts/", "-iname", "*.ttf", NULL) == -1)// FIXME:  Is this enough?  fonts may not necessarily be stored here?
 		{
 			std::cerr << "Error launching find command" << std::endl;
 			return 1;
@@ -117,10 +121,80 @@ wxString FontFinder::GetFontPathAndFileName(const wxString &fontName)
 #else
 	// Unknown platform - warn the user
 #	warning "Unrecognized platform - unable to locate font files!"
-	path = wxEmptyString
+	return wxEmptyString
 #endif
 
-	return path;
+	// Grab file names for all .ttf files in that directory
+	wxArrayString fontFiles;
+	wxDir::GetAllFiles(fontDirectory, &fontFiles, _T("*.ttf"), wxDIR_FILES | wxDIR_DIRS);
+
+	// Check the name of each file against our desired font face name
+	unsigned int i;
+	wxString nameFromFile;
+	for (i = 0; i < fontFiles.GetCount(); i++)
+	{
+		if (GetFontName(fontFiles[i], nameFromFile))
+		{
+			if (fontName.CmpNoCase(nameFromFile) == 0)
+				return fontFiles[i];
+		}
+	}
+
+	return wxEmptyString;
+}
+
+//==========================================================================
+// Class:			FontFinder
+// Function:		GetPreferredFontFileName
+//
+// Description:		Returns the file name for a best match for a font on the
+//					system when given a list of acceptable fonts.
+//
+// Input Arguments:
+//		encoding		= wxFontEncoding
+//		preferredFonts	= const wxArrayString& list of preferred font faces
+//		fixedWidth		= const bool&
+//
+// Output Arguments:
+//		fontFile		= wxString& containing the name of the best match
+//
+// Return Value:
+//		bool, true for found a match from the preferred list
+//
+//==========================================================================
+bool FontFinder::GetPreferredFontFileName(wxFontEncoding encoding,
+		const wxArrayString &preferredFonts, const bool &fixedWidth, wxString &fontFile)
+{
+	// Get a list of the fonts found on the system
+	wxArrayString fontList = wxFontEnumerator::GetFacenames(encoding, fixedWidth);
+
+	// See if any of the installed fonts matches our list of preferred fonts
+	unsigned int i, j;
+	for (i = 0; i < preferredFonts.GetCount(); i++)
+	{
+		for (j = 0; j < fontList.GetCount(); j++)
+		{
+			// If the system font matches
+			if (preferredFonts[i].CmpNoCase(fontList[j]) == 0)
+			{
+				// See if we can find the file for this font
+				fontFile = GetFontFileName(fontList[j]);
+				if (!fontFile.IsEmpty())
+					return true;
+			}
+		}
+	}
+
+	// We didn't find our preferred fonts, now let's just go down the list until we find ANY font file
+	for (i = 0; i < fontList.GetCount(); i++)
+	{
+		fontFile = GetFontFileName(fontList[i]);
+		if (!fontFile.IsEmpty())
+			return false;
+	}
+
+	// Nothing found - return false with empty fontFile
+	return false;
 }
 
 //==========================================================================
@@ -271,11 +345,16 @@ bool FontFinder::GetFontName(const wxString &fontFile, wxString &fontName)
 			char *nameBuffer = new char[ttRecord.stringLength];
 			fontStream.read(nameBuffer, ttRecord.stringLength);
 			fontName.assign(nameBuffer);
-//			fontName.resize(ttRecord.stringLength);// FIXME:  Sometimes this assigns a length to a string that should be empty?
+			// Apparent bug with setting the string length every time:
+			// When the string is empty, and we assign a length anyway, it is no
+			// longer emtpy, even though it contains no valid data.  As a workaround,
+			// we only assign the proper length if the string is not already empty
+			if (!fontName.IsEmpty())
+				fontName.resize(ttRecord.stringLength);
 			delete [] nameBuffer;
 
 			// Check to make sure the name isn't empty - if it is, continue searching
-			if (!fontName.Trim().IsEmpty())
+			if (!fontName.IsEmpty())
 				break;
 
 			fontStream.seekg(nPos, std::ios_base::beg);

@@ -46,6 +46,7 @@ public:
 	void SetVisibility(const bool &_isVisible);
 	void SetColor(const Color &_color);
 	Color GetColor(void) { return color; };
+	void SetModified(void) { modified = true; };// Forces a re-draw
 
 	bool GetIsVisible(void) const { return isVisible; };
 

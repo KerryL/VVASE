@@ -1397,8 +1397,8 @@ double PlotRenderer::GetRightCursorValue(void) const
 //==========================================================================
 void PlotRenderer::UpdateCursors(void)
 {
-	/*leftCursor->Draw();
-	rightCursor->Draw();*/
+	leftCursor->SetModified();
+	rightCursor->SetModified();
 	Refresh();
 
 	return;

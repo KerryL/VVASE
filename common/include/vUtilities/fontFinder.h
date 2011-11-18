@@ -31,7 +31,9 @@ public:
 		const bool &fixedWidth, wxString &fontName);
 
 	// Method for retrieving the path to a font .ttf file given only the file name
-	static wxString GetFontPathAndFileName(const wxString &fontName);
+	static wxString GetFontFileName(const wxString &fontName);
+	static bool GetPreferredFontFileName(wxFontEncoding encoding,
+		const wxArrayString &preferredFonts, const bool &fixedWidth, wxString &fontFile);
 
 	// Method for retrieving the font name from a specific font file
 	static bool GetFontName(const wxString &fontFile, wxString &fontName);
