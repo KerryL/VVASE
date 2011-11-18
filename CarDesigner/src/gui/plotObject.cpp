@@ -1152,7 +1152,7 @@ void PlotObject::SetXLabel(wxString text)
 
 //==========================================================================
 // Class:			PlotObject
-// Function:		SetXLabel
+// Function:		SetLeftYLabel
 //
 // Description:		Sets the left y-axis text.
 //
@@ -1173,7 +1173,7 @@ void PlotObject::SetLeftYLabel(wxString text)
 
 //==========================================================================
 // Class:			PlotObject
-// Function:		SetXLabel
+// Function:		SetRightYLabel
 //
 // Description:		Sets the title text.
 //

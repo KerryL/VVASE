@@ -71,10 +71,12 @@
 #include "vMath/vector.h"
 #include "vUtilities/fontFinder.h"
 
-// Icons
+// *nix Icons
+#ifdef __WXGTK__
 #include "../res/icons/aavase16.xpm"
 #include "../res/icons/aavase32.xpm"
 #include "../res/icons/aavase48.xpm"
+#endif
 
 //==========================================================================
 // Class:			MAIN_FRAME

@@ -446,11 +446,10 @@ void PlotRenderer::OnRightButtonUpEvent(wxMouseEvent &event)
 		abs(int(zoomBox->GetYAnchor() - zoomBox->GetYFloat())) > limit)
 	{
 		// Determine the new zoom range by interpolation
-		int offsetFromWindowEdge = 75;// [pixels]
-		int xCoordLeft = offsetFromWindowEdge;
-		int xCoordRight = GetSize().GetWidth() - offsetFromWindowEdge;
-		int yCoordBottom = offsetFromWindowEdge;
-		int yCoordTop = GetSize().GetHeight() - offsetFromWindowEdge;
+		int xCoordLeft = plot->GetLeftYAxis()->GetOffsetFromWindowEdge();
+		int xCoordRight = GetSize().GetWidth() - plot->GetRightYAxis()->GetOffsetFromWindowEdge();
+		int yCoordBottom = plot->GetBottomAxis()->GetOffsetFromWindowEdge();
+		int yCoordTop = GetSize().GetHeight() - plot->GetTopAxis()->GetOffsetFromWindowEdge();
 
 		int leftX;
 		int rightX;
@@ -1216,25 +1215,23 @@ void PlotRenderer::OnDoubleClickEvent(wxMouseEvent &event)
 	}
 
 	UpdateDisplay();
-
-	return;
 }
 
 //==========================================================================
 // Class:			PlotRenderer
-// Function:		OnDoubleClickEvent
+// Function:		GetCursorValue
 //
-// Description:		Handles double click events.  Allows user to change axis
-//					limits or create a cursor.
+// Description:		Gets the cursor value (plot units) given the position of
+//					the cursor (screen units).
 //
 // Input Arguments:
-//		event	= wxMouseEvent&
+//		location	= const unsigned int&
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		None
+//		double
 //
 //==========================================================================
 double PlotRenderer::GetCursorValue(const unsigned int &location)
