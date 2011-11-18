@@ -134,11 +134,8 @@ void GUI_OBJECT::Initialize(void)
 	int NormalIcon = -1;
 	int SelectedIcon = -1;
 
-	// No icons unless we're in windows
-#ifdef __WXMSW__
 	// Get the icon from the systems tree
 	NormalIcon = GetIconHandle();
-#endif
 
 	// Add a page to the notebook for this car
 	Notebook->AddPage(notebookTab, Name);

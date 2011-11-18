@@ -1,5 +1,5 @@
 /* XPM */
-static char * aero16_xpm[] = {
+static const char * aero16_xpm[] = {
 "16 16 127 2",
 "  	c None",
 ". 	c #C4C4FE",

@@ -165,8 +165,6 @@ void PlotRenderer::CreateActors(void)
 	zoomBox = new ZoomBox(*this);
 	leftCursor = new PlotCursor(*this, *plot->GetBottomAxis());
 	rightCursor = new PlotCursor(*this, *plot->GetBottomAxis());
-
-	return;
 }
 
 //==========================================================================
@@ -199,8 +197,6 @@ void PlotRenderer::OnSize(wxSizeEvent &event)
 
 	// Skip this event so the base class OnSize event fires, too
 	event.Skip();
-
-	return;
 }
 
 //==========================================================================

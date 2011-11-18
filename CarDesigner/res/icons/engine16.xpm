@@ -1,5 +1,5 @@
 /* XPM */
-static char * engine16_xpm[] = {
+static const char * engine16_xpm[] = {
 "16 16 172 2",
 "  	c None",
 ". 	c #B5B6B7",

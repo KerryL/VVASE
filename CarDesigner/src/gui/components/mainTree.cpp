@@ -13,7 +13,8 @@
 // Description:  Contains the class declaration for the MAIN_TREE class.
 // History:
 //	1/28/2009	- Changed structure of GUI components so context menu creation for all
-//				  objects is handled by the MAIN_FRAME class.
+//				  objects is handled by the MAIN_FRAME class, K. Loux.
+//	11/17/2011	- Added XPM icons for Linux, K. Loux.
 
 // wxWidgets headers
 #include <wx/menu.h>
@@ -26,6 +27,20 @@
 #include "gui/guiObject.h"
 #include "vUtilities/debugger.h"
 #include "gui/iteration.h"
+
+// Icons (only for GTK)
+#ifdef __WXGTK__
+#include "../res/icons/car16.xpm"
+#include "../res/icons/aerodynamics16.xpm"
+#include "../res/icons/brakes16.xpm"
+#include "../res/icons/drivetrain16.xpm"
+#include "../res/icons/engine16.xpm"
+#include "../res/icons/massProperties16.xpm"
+#include "../res/icons/suspension16.xpm"
+#include "../res/icons/tires16.xpm"
+#include "../res/icons/iteration16.xpm"
+#include "../res/icons/optimization16.xpm"
+#endif
 
 //==========================================================================
 // Class:			MAIN_TREE
@@ -80,17 +95,16 @@ MAIN_TREE::MAIN_TREE(MAIN_FRAME &_MainFrame, wxWindowID id, const wxPoint& pos,
 	IconHandle[OptimizationIcon] = IconList->Add(wxIcon(_T("ICON_ID_OPTIMIZATION"),
 		wxBITMAP_TYPE_ICO_RESOURCE, Size, Size));
 #elif __WXGTK__
-	// FIXME!!! Linux icons
-	IconHandle[CarIcon] = IconList->Add(wxIcon(_T("icons/car16.xpm"), wxBITMAP_TYPE_XPM));
-	IconHandle[AerodynamicsIcon] = IconList->Add(wxIcon(_T("icons/aerodynamics16.xpm"), wxBITMAP_TYPE_XPM));
-	IconHandle[BrakesIcon] = IconList->Add(wxIcon(_T("icons/brakes16.xpm"), wxBITMAP_TYPE_XPM));
-	IconHandle[DrivetrainIcon] = IconList->Add(wxIcon(_T("icons/drivetrain16.xpm"), wxBITMAP_TYPE_XPM));
-	IconHandle[EngineIcon] = IconList->Add(wxIcon(_T("icons/engine16.xpm"), wxBITMAP_TYPE_XPM));
-	IconHandle[MassPropertiesIcon] = IconList->Add(wxIcon(_T("icons/massProperties16.xpm"), wxBITMAP_TYPE_XPM));
-	IconHandle[SuspensionIcon] = IconList->Add(wxIcon(_T("icons/suspension16.xpm"), wxBITMAP_TYPE_XPM));
-	IconHandle[TiresIcon] = IconList->Add(wxIcon(_T("icons/tires16.xpm"), wxBITMAP_TYPE_XPM));
-	IconHandle[IterationIcon] = IconList->Add(wxIcon(_T("icons/iteration16.xpm"), wxBITMAP_TYPE_XPM));
-	IconHandle[OptimizationIcon] = IconList->Add(wxIcon(_T("icons/optimization16.xpm"), wxBITMAP_TYPE_XPM));
+	IconHandle[CarIcon] = IconList->Add(wxIcon(car16_xpm, wxBITMAP_TYPE_XPM));
+	IconHandle[AerodynamicsIcon] = IconList->Add(wxIcon(aero16_xpm, wxBITMAP_TYPE_XPM));
+	IconHandle[BrakesIcon] = IconList->Add(wxIcon(brakes16_xpm, wxBITMAP_TYPE_XPM));
+	IconHandle[DrivetrainIcon] = IconList->Add(wxIcon(drivetrain16_xpm, wxBITMAP_TYPE_XPM));
+	IconHandle[EngineIcon] = IconList->Add(wxIcon(engine16_xpm, wxBITMAP_TYPE_XPM));
+	IconHandle[MassPropertiesIcon] = IconList->Add(wxIcon(massProperties16_xpm, wxBITMAP_TYPE_XPM));
+	IconHandle[SuspensionIcon] = IconList->Add(wxIcon(suspension16_xpm, wxBITMAP_TYPE_XPM));
+	IconHandle[TiresIcon] = IconList->Add(wxIcon(tires16_xpm, wxBITMAP_TYPE_XPM));
+	IconHandle[IterationIcon] = IconList->Add(wxIcon(iteration16_xpm, wxBITMAP_TYPE_XPM));
+	IconHandle[OptimizationIcon] = IconList->Add(wxIcon(optimization16_xpm, wxBITMAP_TYPE_XPM));
 #endif
 
 	// Assign the image list to the tree

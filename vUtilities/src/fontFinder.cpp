@@ -271,11 +271,11 @@ bool FontFinder::GetFontName(const wxString &fontFile, wxString &fontName)
 			char *nameBuffer = new char[ttRecord.stringLength];
 			fontStream.read(nameBuffer, ttRecord.stringLength);
 			fontName.assign(nameBuffer);
-			fontName.resize(ttRecord.stringLength);
+//			fontName.resize(ttRecord.stringLength);// FIXME:  Sometimes this assigns a length to a string that should be empty?
 			delete [] nameBuffer;
 
 			// Check to make sure the name isn't empty - if it is, continue searching
-			if (!fontName.Trim().IsEmpty())// FIXME:  This isn't working!
+			if (!fontName.Trim().IsEmpty())
 				break;
 
 			fontStream.seekg(nPos, std::ios_base::beg);

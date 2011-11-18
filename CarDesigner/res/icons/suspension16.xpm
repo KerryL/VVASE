@@ -1,5 +1,5 @@
 /* XPM */
-static char * suspension16_xpm[] = {
+static const char * suspension16_xpm[] = {
 "16 16 87 1",
 " 	c None",
 ".	c #D6BE93",

@@ -1,5 +1,5 @@
 /* XPM */
-static char * massProperties16_xpm[] = {
+static const char * massProperties16_xpm[] = {
 "16 16 95 2",
 "  	c None",
 ". 	c #CDC4C4",

@@ -75,9 +75,10 @@ PlotObject::PlotObject(PlotRenderer &_renderer) : renderer(_renderer)
 	// Find the name of the font that we want to use
 	wxString fontFaceName;
 	wxArrayString preferredFonts;
-	preferredFonts.Add(_T("DejaVuSans"));// GTK preference
+	preferredFonts.Add(_T("DejaVu Sans"));// GTK preference
 	preferredFonts.Add(_T("Arial"));// MSW preference
-	bool foundPreferredFont = FontFinder::GetFontFaceName(wxFONTENCODING_SYSTEM, preferredFonts, false, fontFaceName);
+	bool foundPreferredFont = FontFinder::GetFontFaceName(wxFONTENCODING_SYSTEM,
+		preferredFonts, false, fontFaceName);
 
 	// Tell the user if we're unsure of the font
 	if (!foundPreferredFont)
@@ -85,10 +86,6 @@ PlotObject::PlotObject(PlotRenderer &_renderer) : renderer(_renderer)
 
 	// Now the harder part - find the location of that font on the hard drive
 	wxString fontFile = FontFinder::GetFontPathAndFileName(fontFaceName);
-
-	wxString name;
-	if (FontFinder::GetFontName(fontFile, name))
-		wxMessageBox(name);// FIXME:  Remove after test
 
 	// Create the fonts
 	axisFont = new FTGLTextureFont(fontFile.c_str());

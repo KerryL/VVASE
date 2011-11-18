@@ -1,5 +1,5 @@
 /* XPM */
-static char * drivetrain16_xpm[] = {
+static const char * drivetrain16_xpm[] = {
 "16 16 82 1",
 " 	c None",
 ".	c #F0E9E5",

@@ -78,7 +78,7 @@ GUI_CAR::GUI_CAR(MAIN_FRAME &_MainFrame, const Debugger &_debugger,
 	// Create the 3D output window
 #ifdef __WXGTK__
 	// Under GTK, we get a segmentation fault or X error on call to SwapBuffers in RenderWindow.
-	// Adding the double-buffer arugment fixes this.  Under windows, the double-buffer argument
+	// Adding the double-buffer argument fixes this.  Under windows, the double-buffer argument
 	// causes the colors to go funky.  So we have this #if.
 	int args[] = {WX_GL_DOUBLEBUFFER, 0};
 	renderer = new CAR_RENDERER(MainFrame, *this, args, debugger);
@@ -102,8 +102,6 @@ GUI_CAR::GUI_CAR(MAIN_FRAME &_MainFrame, const Debugger &_debugger,
 	int IconHandle = -1;
 	for (i = 0; i < GUI_CAR::NumberOfSubsystems; i++)
 	{
-		// No icons unless we're in windows
-#ifdef __WXMSW__
 		// Get the appropriate icon
 		switch (i)
 		{
@@ -139,7 +137,6 @@ GUI_CAR::GUI_CAR(MAIN_FRAME &_MainFrame, const Debugger &_debugger,
 			IconHandle = -1;
 			break;
 		}
-#endif
 
 		// Add the entry to the tree
 		Subsystems[i] = _MainFrame.GetSystemsTree()->AppendItem(TreeID,

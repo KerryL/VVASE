@@ -71,6 +71,11 @@
 #include "vMath/vector.h"
 #include "vUtilities/fontFinder.h"
 
+// Icons
+#include "../res/icons/aavase16.xpm"
+#include "../res/icons/aavase32.xpm"
+#include "../res/icons/aavase48.xpm"
+
 //==========================================================================
 // Class:			MAIN_FRAME
 // Function:		MAIN_FRAME
@@ -323,10 +328,9 @@ void MAIN_FRAME::SetProperties(void)
 	bundle.AddIcon(wxIcon(_T("ICON_ID_MAIN"), wxBITMAP_TYPE_ICO_RESOURCE, 32, 32));
 	bundle.AddIcon(wxIcon(_T("ICON_ID_MAIN"), wxBITMAP_TYPE_ICO_RESOURCE, 48, 48));
 #elif __WXGTK__
-	// FIXME!!! Linux icons
-	bundle.AddIcon(wxIcon(_T("icons/aavase16.xpm"), wxBITMAP_TYPE_XPM));
-	bundle.AddIcon(wxIcon(_T("icons/aavase32.xpm"), wxBITMAP_TYPE_XPM));
-	bundle.AddIcon(wxIcon(_T("icons/aavase48.xpm"), wxBITMAP_TYPE_XPM));
+	bundle.AddIcon(wxIcon(aavase16_xpm, wxBITMAP_TYPE_XPM));
+	bundle.AddIcon(wxIcon(aavase32_xpm, wxBITMAP_TYPE_XPM));
+	bundle.AddIcon(wxIcon(aavase48_xpm, wxBITMAP_TYPE_XPM));
 #endif
 	SetIcons(bundle);
 
@@ -350,12 +354,6 @@ void MAIN_FRAME::SetProperties(void)
 	preferredFonts.Add(_T("Monospace"));// GTK preference
 	preferredFonts.Add(_T("Courier New"));// MSW preference
 	bool foundPreferredFont = FontFinder::GetFontFaceName(wxFONTENCODING_SYSTEM, preferredFonts, true, FontFaceName);
-
-/*#ifdef __WXGTK__
-	FontFaceName.assign("Monospace");
-#else
-	FontFaceName.assign("Courier New");
-#endif*/
 
 	// As long as we have a font name to use, set the font
 	if (!FontFaceName.IsEmpty())

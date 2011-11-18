@@ -2,6 +2,44 @@
 <configurationDescriptor version="79">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <df name="CarDesigner" root=".">
+      <df name=".lib">
+      </df>
+      <df name=".obj">
+        <df name="src">
+          <df name="3dcar">
+          </df>
+          <df name="application">
+          </df>
+          <df name="environment">
+          </df>
+          <df name="gui">
+            <df name="components">
+              <df name="editPanel">
+                <df name="guiCar">
+                </df>
+                <df name="iteration">
+                </df>
+              </df>
+            </df>
+            <df name="dialogs">
+            </df>
+            <df name="renderer">
+            </df>
+          </df>
+          <df name="optimization">
+          </df>
+          <df name="physics">
+          </df>
+          <df name="primitives">
+          </df>
+          <df name="signals">
+            <df name="filters">
+            </df>
+          </df>
+          <df name="threads">
+          </df>
+        </df>
+      </df>
       <df name="bin">
       </df>
       <df name="CarDesigner">
@@ -237,6 +275,7 @@
           <df name="vUtilities">
             <in>convert.h</in>
             <in>debugger.h</in>
+            <in>fontFinder.h</in>
             <in>machineDefinitions.h</in>
             <in>managedList.h</in>
             <in>objectList.h</in>
@@ -351,6 +390,7 @@
         <df name="src">
           <in>convert.cpp</in>
           <in>debugger.cpp</in>
+          <in>fontFinder.cpp</in>
           <in>wxRelatedUtilities.cpp</in>
           <in>xlsxReader.cpp</in>
         </df>

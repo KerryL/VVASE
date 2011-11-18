@@ -23,7 +23,7 @@
 #include <stdint.h>
 
 // 32-bit conversion functions
-#ifdef _VVASE_32_BIT_
+/*#ifdef _VVASE_32_BIT_
 
 #endif
 
