@@ -64,59 +64,8 @@ wxString FontFinder::GetFontFileName(const wxString &fontName)
 	fontDirectory = wxGetOSDirectory() + _T("\\Fonts\\");
 
 #elif defined __WXGTK__
-	//return _T("/usr/share/fonts/dejavu/DejaVuSans.ttf");// Fedora 13
-	//return _T("/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf");// Ubuntu 11.10
-
-	// Get the normal *nix font directory (FIXME:  Test this!)
+	// Get the normal *nix font directory
 	fontDirectory = _T("/usr/share/fonts/");
-
-	// Code from ttf_name_extractor.cpp:
-	/*
-	// Set up pipes to catch system output
-	pid_t child;
-	int pipes[2];
-	if (pipe(pipes) != 0)
-	{
-		std::cerr << "Error - could not create pipes" << std::endl;
-		exit(1);
-	}
-
-	// Fork a new process
-	child = fork();
-	if (child < 0)
-	{
-		std::cerr << "Error - process failed to fork" << std::endl;
-		exit(1);
-	}
-	else if (child == 0)// Child process
-	{
-		// Redirect stdout to pipes[1]
-		dup2(pipes[1], 1);
-		close(pipes[0]);
-		if (execl("/bin/find", "find", "/usr/share/fonts/", "-iname", "*.ttf", NULL) == -1)// FIXME:  Is this enough?  fonts may not necessarily be stored here?
-		{
-			std::cerr << "Error launching find command" << std::endl;
-			return 1;
-		}
-	}
-	else// Parent process
-	{
-		dup2(pipes[0], 0);
-		close(pipes[1]);
-		setvbuf(stdout,(char*)NULL,_IONBF,0);
-		const int MaxLineLen(512);
-		char line[MaxLineLen];
-		std::string Path;
-		while (fgets(line, MaxLineLen, stdin) != NULL)
-		{
-			// Get the font name, display it, and reset for the next font
-			Path.assign(line);
-			Path = Path.substr(0, Path.length() - 1);// Remove newline at end of line
-			std::cout << GetFontName(Path) << "\t" << Path << std::endl;;
-		}
-		wait();
-	}
-	*/
 
 #else
 	// Unknown platform - warn the user

@@ -136,8 +136,6 @@ void PlotRenderer::UpdateDisplay(void)
 	// Update the plot
 	plot->Update();
 	Refresh();
-
-	return;
 }
 
 //==========================================================================
@@ -252,8 +250,6 @@ void PlotRenderer::OnMouseWheelEvent(wxMouseEvent &event)
 
 	// Update the plot display
 	UpdateDisplay();
-
-	return;
 }
 
 //==========================================================================
@@ -387,8 +383,6 @@ void PlotRenderer::OnMouseMoveEvent(wxMouseEvent &event)
 
 	// Update the display
 	UpdateDisplay();
-
-	return;
 }
 
 //==========================================================================
@@ -417,12 +411,12 @@ void PlotRenderer::OnRightButtonUpEvent(wxMouseEvent &event)
 		unsigned int x = event.GetX();
 		unsigned int y = event.GetY();
 		if (x < plot->GetLeftYAxis()->GetOffsetFromWindowEdge() &&
-			y > plot->GetBottomAxis()->GetOffsetFromWindowEdge() &&
-			y < GetSize().GetHeight() - plot->GetTopAxis()->GetOffsetFromWindowEdge())
+			y > plot->GetTopAxis()->GetOffsetFromWindowEdge() &&
+			y < GetSize().GetHeight() - plot->GetBottomAxis()->GetOffsetFromWindowEdge())
 			context = PlotPanel::plotContextLeftYAxis;
 		else if (x > GetSize().GetWidth() - plot->GetRightYAxis()->GetOffsetFromWindowEdge() &&
-			y > plot->GetBottomAxis()->GetOffsetFromWindowEdge() &&
-			y < GetSize().GetHeight() - plot->GetTopAxis()->GetOffsetFromWindowEdge())
+			y > plot->GetTopAxis()->GetOffsetFromWindowEdge() &&
+			y < GetSize().GetHeight() - plot->GetBottomAxis()->GetOffsetFromWindowEdge())
 			context = PlotPanel::plotContextRightYAxis;
 		else if (y > GetSize().GetHeight() - plot->GetBottomAxis()->GetOffsetFromWindowEdge() &&
 			x > plot->GetLeftYAxis()->GetOffsetFromWindowEdge() &&
@@ -446,6 +440,7 @@ void PlotRenderer::OnRightButtonUpEvent(wxMouseEvent &event)
 		abs(int(zoomBox->GetYAnchor() - zoomBox->GetYFloat())) > limit)
 	{
 		// Determine the new zoom range by interpolation
+		// Remember: OpenGL uses Bottom Left as origin, normal windows use Top Left as origin
 		int xCoordLeft = plot->GetLeftYAxis()->GetOffsetFromWindowEdge();
 		int xCoordRight = GetSize().GetWidth() - plot->GetRightYAxis()->GetOffsetFromWindowEdge();
 		int yCoordBottom = plot->GetBottomAxis()->GetOffsetFromWindowEdge();
@@ -504,8 +499,6 @@ void PlotRenderer::OnRightButtonUpEvent(wxMouseEvent &event)
 	}
 
 	UpdateDisplay();
-
-	return;
 }
 
 //==========================================================================
@@ -549,8 +542,6 @@ void PlotRenderer::SetGridOn(const bool &grid)
 {
 	plot->SetGrid(grid);
 	UpdateDisplay();
-
-	return;
 }
 
 //==========================================================================
@@ -573,8 +564,6 @@ void PlotRenderer::SetGridOff()
 {
 	plot->SetGrid(false);
 	UpdateDisplay();
-
-	return;
 }
 
 //==========================================================================
@@ -661,8 +650,6 @@ void PlotRenderer::SetBottomGrid(const bool &grid)
 	plot->SetXGrid(grid);
 
 	UpdateDisplay();
-
-	return;
 }
 
 //==========================================================================
@@ -686,8 +673,6 @@ void PlotRenderer::SetLeftGrid(const bool &grid)
 	plot->SetLeftYGrid(grid);
 
 	UpdateDisplay();
-
-	return;
 }
 
 //==========================================================================
@@ -711,8 +696,6 @@ void PlotRenderer::SetRightGrid(const bool &grid)
 	plot->SetRightYGrid(grid);
 
 	UpdateDisplay();
-
-	return;
 }
 
 //==========================================================================
@@ -743,8 +726,6 @@ void PlotRenderer::SetCurveProperties(const unsigned int &index, const Color &co
 {
 	plot->SetCurveProperties(index, color, visible, rightAxis, size);
 	UpdateDisplay();
-
-	return;
 }
 
 //==========================================================================
@@ -778,8 +759,6 @@ void PlotRenderer::SetXLimits(const double &min, const double &max)
 	}
 
 	UpdateDisplay();
-
-	return;
 }
 
 //==========================================================================
@@ -813,8 +792,6 @@ void PlotRenderer::SetLeftYLimits(const double &min, const double &max)
 	}
 
 	UpdateDisplay();
-
-	return;
 }
 
 //==========================================================================
@@ -848,8 +825,6 @@ void PlotRenderer::SetRightYLimits(const double &min, const double &max)
 	}
 
 	UpdateDisplay();
-
-	return;
 }
 
 //==========================================================================
@@ -871,8 +846,6 @@ void PlotRenderer::SetRightYLimits(const double &min, const double &max)
 void PlotRenderer::AddCurve(const Dataset2D &data)
 {
 	plot->AddCurve(data);
-
-	return;
 }
 
 //==========================================================================
@@ -894,8 +867,6 @@ void PlotRenderer::AddCurve(const Dataset2D &data)
 void PlotRenderer::RemoveAllCurves()
 {
 	plot->RemoveExistingPlots();
-
-	return;
 }
 
 //==========================================================================
@@ -917,8 +888,6 @@ void PlotRenderer::RemoveAllCurves()
 void PlotRenderer::RemoveCurve(const unsigned int& index)
 {
 	plot->RemovePlot(index);
-
-	return;
 }
 
 //==========================================================================
@@ -942,8 +911,6 @@ void PlotRenderer::AutoScale()
 	plot->ResetAutoScaling();
 
 	UpdateDisplay();
-
-	return;
 }
 
 //==========================================================================
@@ -967,8 +934,6 @@ void PlotRenderer::AutoScaleBottom()
 	plot->SetAutoScaleBottom();
 
 	UpdateDisplay();
-
-	return;
 }
 
 //==========================================================================
@@ -992,8 +957,6 @@ void PlotRenderer::AutoScaleLeft()
 	plot->SetAutoScaleLeft();
 
 	UpdateDisplay();
-
-	return;
 }
 
 //==========================================================================
@@ -1137,8 +1100,6 @@ void PlotRenderer::OnMouseLeaveWindowEvent(wxMouseEvent& WXUNUSED(event))
 	draggingRightCursor = false;
 
 	UpdateDisplay();
-
-	return;
 }
 
 //==========================================================================
@@ -1166,8 +1127,8 @@ void PlotRenderer::OnDoubleClickEvent(wxMouseEvent &event)
 	// If the click is within the plot area, move a cursor there and make it visible
 	if (x > plot->GetLeftYAxis()->GetOffsetFromWindowEdge() &&
 		x < GetSize().GetWidth() - plot->GetRightYAxis()->GetOffsetFromWindowEdge() &&
-		y > plot->GetBottomAxis()->GetOffsetFromWindowEdge() &&
-		y < GetSize().GetHeight() - plot->GetTopAxis()->GetOffsetFromWindowEdge())
+		y > plot->GetTopAxis()->GetOffsetFromWindowEdge() &&
+		y < GetSize().GetHeight() - plot->GetBottomAxis()->GetOffsetFromWindowEdge())
 	{
 		double value = GetCursorValue(x);
 
@@ -1196,12 +1157,12 @@ void PlotRenderer::OnDoubleClickEvent(wxMouseEvent &event)
 		// Determine the context
 		PlotPanel::PlotContext context;
 		if (x < plot->GetLeftYAxis()->GetOffsetFromWindowEdge() &&
-			y > plot->GetBottomAxis()->GetOffsetFromWindowEdge() &&
-			y < GetSize().GetHeight() - plot->GetTopAxis()->GetOffsetFromWindowEdge())
+			y > plot->GetTopAxis()->GetOffsetFromWindowEdge() &&
+			y < GetSize().GetHeight() - plot->GetBottomAxis()->GetOffsetFromWindowEdge())
 			context = PlotPanel::plotContextLeftYAxis;
 		else if (x > GetSize().GetWidth() - plot->GetRightYAxis()->GetOffsetFromWindowEdge() &&
-			y > plot->GetBottomAxis()->GetOffsetFromWindowEdge() &&
-			y < GetSize().GetHeight() - plot->GetTopAxis()->GetOffsetFromWindowEdge())
+			y > plot->GetTopAxis()->GetOffsetFromWindowEdge() &&
+			y < GetSize().GetHeight() - plot->GetBottomAxis()->GetOffsetFromWindowEdge())
 			context = PlotPanel::plotContextRightYAxis;
 		else if (y > GetSize().GetHeight() - plot->GetBottomAxis()->GetOffsetFromWindowEdge() &&
 			x > plot->GetLeftYAxis()->GetOffsetFromWindowEdge() &&
@@ -1264,8 +1225,6 @@ void PlotRenderer::OnLeftButtonDownEvent(wxMouseEvent &event)
 		draggingLeftCursor = true;
 	else if (rightCursor->IsUnder(event.GetX()))
 		draggingRightCursor = true;
-
-	return;
 }
 
 //==========================================================================
@@ -1288,8 +1247,6 @@ void PlotRenderer::OnLeftButtonUpEvent(wxMouseEvent& WXUNUSED(event))
 {
 	draggingLeftCursor = false;
 	draggingRightCursor = false;
-
-	return;
 }
 
 //==========================================================================
@@ -1394,11 +1351,15 @@ double PlotRenderer::GetRightCursorValue(void) const
 //==========================================================================
 void PlotRenderer::UpdateCursors(void)
 {
+	// Tell the cursors they need to recalculate
 	leftCursor->SetModified();
 	rightCursor->SetModified();
-	Refresh();
 
-	return;
+	// Calculations are performed on Draw
+	leftCursor->Draw();
+	rightCursor->Draw();
+
+	Refresh();
 }
 
 //==========================================================================
