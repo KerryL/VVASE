@@ -44,7 +44,7 @@
 // Input Arguments:
 //		parent		= wxWindow& reference to the owner of this object
 //		id			= wxWindowID to identify this window
-//		args		= int[] NOTE: Must contain WX_GL_DOUBLEBUFFER at minimum (BUG somewhere)
+//		args		= int[] NOTE: Under GTK, must contain WX_GL_DOUBLEBUFFER at minimum
 //		position	= const wxPoint& specifying this object's position
 //		size		= const wxSize& specifying this object's size
 //		style		= long specifying this object's style flags
@@ -262,8 +262,6 @@ void RenderWindow::OnSize(wxSizeEvent& event)
 
 	// This takes care of any change in aspect ratio
 	AutoSetFrustum();
-
-	return;
 }
 
 //==========================================================================
@@ -287,8 +285,6 @@ void RenderWindow::OnEnterWindow(wxMouseEvent &event)
 	// Bring focus to the render window
 	//SetFocus();
 	event.Skip();
-
-	return;
 }
 
 //==========================================================================
@@ -485,8 +481,6 @@ void RenderWindow::OnMouseWheelEvent(wxMouseEvent &event)
 {
 	// Perform a DOLLY interaction
 	PerformInteraction(interactionDollyWheel, event);
-
-	return;
 }
 
 //==========================================================================
@@ -563,8 +557,6 @@ void RenderWindow::OnMouseMoveEvent(wxMouseEvent &event)
 
 	// Store the last mouse position
 	StoreMousePosition(event);
-
-	return;
 }
 
 //==========================================================================
@@ -634,8 +626,6 @@ void RenderWindow::PerformInteraction(InteractionType interaction, wxMouseEvent 
 
 	// Update the view
 	Refresh();
-
-	return;
 }
 
 //==========================================================================
@@ -659,8 +649,6 @@ void RenderWindow::StoreMousePosition(wxMouseEvent &event)
 	// Store the current position in the last position variables
 	lastMousePosition[0] = event.GetX();
 	lastMousePosition[1] = event.GetY();
-
-	return;
 }
 
 //==========================================================================
@@ -683,8 +671,6 @@ void RenderWindow::OnMouseUpEvent(wxMouseEvent& WXUNUSED(event))
 {
 	// Reset the flag that indicates an interaction is in progress
 	isInteracting = false;
-
-	return;
 }
 
 //==========================================================================
@@ -750,8 +736,6 @@ void RenderWindow::DoRotate(wxMouseEvent &event)
 
 	// Translate back from the focal point
 	glTranslated(-focalPoint.x, -focalPoint.y, -focalPoint.z);
-
-	return;
 }
 
 //==========================================================================
@@ -794,8 +778,6 @@ void RenderWindow::DoWheelDolly(wxMouseEvent &event)
 	{
 		// FIXME:  Nothing here!
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -851,8 +833,6 @@ void RenderWindow::DoDragDolly(wxMouseEvent &event)
 	{
 		// FIXME:  Nothing here!
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -906,8 +886,6 @@ void RenderWindow::DoPan(wxMouseEvent &event)
 	{
 		// FIXME:  Nothing here!
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -966,8 +944,6 @@ void RenderWindow::SetCameraView(const Vector &position, const Vector &lookAt, c
 	focalPoint = lookAt;
 
 	UpdateTransformationMatricies();
-
-	return;
 }
 
 //==========================================================================
@@ -978,7 +954,7 @@ void RenderWindow::SetCameraView(const Vector &position, const Vector &lookAt, c
 //					(assumed to be in model coordinates) in view coordinates.
 //
 // Input Arguments:
-//		ModelVector	= const Vector& to be transformed
+//		modelVector	= const Vector& to be transformed
 //
 // Output Arguments:
 //		None
@@ -1042,17 +1018,15 @@ void RenderWindow::UpdateTransformationMatricies(void)
 	// Extract the orientation matrices
 	(*modelToView) = modelViewMatrix.GetSubMatrix(0, 0, 3, 3);
 	(*viewToModel) = (*modelToView);
-	viewToModel->GetTranspose();
+	*viewToModel = viewToModel->GetTranspose();
 
 	// Get the last column of the modelview matrix, which contains the translation information
 	cameraPosition.x = modelViewMatrix.GetElement(0, 3);
 	cameraPosition.y = modelViewMatrix.GetElement(1, 3);
 	cameraPosition.z = modelViewMatrix.GetElement(2, 3);
 
-	// Transfrom the camera position into model coordinates
+	// Transform the camera position into model coordinates
 	cameraPosition = TransformToModel(cameraPosition);
-
-	return;
 }
 
 //==========================================================================
@@ -1096,8 +1070,6 @@ void RenderWindow::AutoSetFrustum(void)
 
 	// Tell it that we're modified
 	modified = true;
-
-	return;
 }
 
 //==========================================================================
@@ -1113,7 +1085,7 @@ void RenderWindow::AutoSetFrustum(void)
 //		None
 //
 // Return Value:
-//		wxString contiainin the error description
+//		wxString containing the error description
 //
 //==========================================================================
 wxString RenderWindow::GetGLError(void) const
@@ -1231,7 +1203,7 @@ bool RenderWindow::WriteImageToFile(wxString pathAndFileName) const
 bool RenderWindow::IsThisRendererSelected(const Primitive *pickedObject) const
 {
 	// Iterate through the list of primitives in the scene
-	// If one of them has the same address as our argurment, return true
+	// If one of them has the same address as our argument, return true
 	int i;
 	for (i = 0; i < primitiveList.GetCount(); i++)
 	{
@@ -1281,8 +1253,6 @@ void RenderWindow::SortPrimitivesByAlpha(void)
 	// Clean up memory
 	delete [] order;
 	order = NULL;
-
-	return;
 }
 
 //==========================================================================
@@ -1311,8 +1281,6 @@ void RenderWindow::ConvertMatrixToGL(const Matrix& matrix, double gl[])
 		for (j = 0; j < matrix.GetNumberOfColumns(); j++)
 			gl[i * matrix.GetNumberOfColumns() + j] = matrix(j, i);
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -1340,6 +1308,4 @@ void RenderWindow::ConvertGLToMatrix(Matrix& matrix, const double gl[])
 		for (j = 0; j < matrix.GetNumberOfColumns(); j++)
 			matrix(j, i) = gl[i * matrix.GetNumberOfColumns() + j];
 	}
-
-	return;
 }

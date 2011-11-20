@@ -394,7 +394,7 @@ Matrix Matrix::GetSubMatrix(const unsigned int &startRow, const unsigned int &st
 //		None
 //
 // Return Value:
-//		Matrix, trasposed version of this
+//		Matrix, transposed version of this
 //
 //==========================================================================
 Matrix Matrix::GetTranspose(void) const

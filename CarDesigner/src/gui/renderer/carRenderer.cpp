@@ -65,7 +65,7 @@
 // Input Arguments:
 //		_MainFrame	= MAIN_FRAME& reference to the owner of this object
 //		_Car		= GUI_CAR& reference to the car that we are to render
-//		args		= int[] NOTE: Must contain WX_GL_DOUBLEBUFFER at minimum (BUG somewhere)
+//		args		= int[] NOTE: Under GTK, must contain WX_GL_DOUBLEBUFFER at minimum
 //		_debugger	= const Debugger&, reference to debug printing utility
 //
 // Output Arguments:

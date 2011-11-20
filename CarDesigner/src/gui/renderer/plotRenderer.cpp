@@ -34,7 +34,7 @@
 //
 // Input Arguments:
 //		_parent		= PlotPanel& reference to this object's parent window
-//		args		= int[] NOTE: Must contain WX_GL_DOUBLEBUFFER at minimum (BUG somewhere - GTK only)
+//		args		= int[] NOTE: Under GTK, must contain WX_GL_DOUBLEBUFFER at minimum
 //		id			= wxWindowID
 //		_debugger	= const Debugger&
 //
