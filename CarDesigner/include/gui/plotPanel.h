@@ -65,6 +65,8 @@ public:
 	PlotRenderer* GetRenderer(void) { return renderer; };
 
 	inline unsigned int GetCurveCount(void) { return plotList.GetCount(); };
+	
+	bool WriteImageToFile(wxString pathAndFileName);
 
 private:
 	const Debugger &debugger;

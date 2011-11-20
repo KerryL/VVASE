@@ -40,6 +40,7 @@
 #include "vMath/signals/filters/highPassOrder1.h"
 #include "vMath/signals/curveFit.h"
 #include "vUtilities/debugger.h"
+#include "gui/components/mainFrame.h"
 
 //==========================================================================
 // Class:			PlotPanel
@@ -427,7 +428,41 @@ void PlotPanel::CreatePlotContextMenu(const wxPoint &position, const PlotContext
 //==========================================================================
 void PlotPanel::ContextWriteImageFile(wxCommandEvent &event)
 {
-	// FIXME:  Implement this (see DataPlotter code or RenderWindow code (car renderer?))
+	// Get file name from user, then save to file with
+	wxArrayString pathAndFileName = static_cast<MAIN_FRAME*>(GetParent())->GetFileNameFromUser(
+			_T("Save Image File"), wxEmptyString, wxEmptyString,
+		_T("Bitmap Image (*.bmp)|*.bmp|JPEG Image (*.jpg)|*.jpg|PNG Image (*.png)|*.png|TIFF Image (*.tif)|*.tif"),
+		wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+	
+	// Make sure the user didn't cancel
+	if (pathAndFileName.IsEmpty())
+		return;
+	
+	if (WriteImageToFile(pathAndFileName[0]))
+		debugger.Print(Debugger::PriorityHigh, "Image file written to %s", pathAndFileName[0].c_str());
+	else
+		debugger.Print(_T("Image file NOT written!"), Debugger::PriorityHigh);
+}
+
+//==========================================================================
+// Class:			PlotPanel
+// Function:		WriteImageToFile
+//
+// Description:		Writes plot to image file.
+//
+// Input Arguments:
+//		pathAndFileName	= wxString
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		bool
+//
+//==========================================================================
+bool PlotPanel::WriteImageToFile(wxString pathAndFileName)
+{
+	return renderer->WriteImageToFile(pathAndFileName);
 }
 
 //==========================================================================

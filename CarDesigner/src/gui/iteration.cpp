@@ -17,7 +17,7 @@
 //	3/11/2009	- Finished implementation of enum/array style data members for KINEMATIC_OUTPUTS
 //				  class, K. Loux.
 //	5/19/2009	- Changed to derived class from GUI_OBJECT, K. Loux.
-//	10/18/2010	- Fixed bugs causing crash when new ITERATION is cancelled during creation, K. Loux.
+//	10/18/2010	- Fixed bugs causing crash when new ITERATION is canceled during creation, K. Loux.
 //	11/9/2010	- Added provisions for 3D plotting, K. Loux.
 //	11/16/2010	- Moved active plots selection and range inputs to edit panel, K. Loux.
 

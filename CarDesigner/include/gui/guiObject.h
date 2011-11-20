@@ -55,13 +55,12 @@ public:
 		TYPE_ITERATION,
 		TYPE_OPTIMIZATION,
 
-		TYPE_NONE				// Indicates an object doesn't exist
+		TYPE_NONE// Indicates an object doesn't exist
 	};
 
 	// Returns true of false depending on whether or not this item is selected in
 	// the systems tree
 	bool IsThisObjectSelected(wxTreeItemId Selected) const;
-	bool IsThisObjectSelected(Primitive *PickedObject) const;
 
 	// Initialization of these objects requires some calls to pure virtual functions, which
 	// causes problems.  To avoid this, we make all of those calls here, and call this from

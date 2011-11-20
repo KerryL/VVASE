@@ -33,6 +33,7 @@
 #include "gui/guiCar.h"
 #include "gui/iteration.h"
 #include "vRenderer/renderWindow.h"
+#include "gui/plotPanel.h"
 
 //==========================================================================
 // Class:			GUI_OBJECT
@@ -158,10 +159,8 @@ void GUI_OBJECT::Initialize(void)
 	// Set the flag indicating the initialization process is over
 	ObjectIsInitialized = true;
 
-	// Update the anaylsis for the new object
+	// Update the analysis for the new object
 	MainFrame.UpdateAnalysis();
-
-	return;
 }
 
 //==========================================================================
@@ -184,22 +183,6 @@ void GUI_OBJECT::Initialize(void)
 //==========================================================================
 void GUI_OBJECT::SetName(wxString _Name)
 {
-	// Remove the asterisks from both names, if they have one
-	// FIXME:  Why is this commented out?
-	/*wxString Asterisk('*');
-	wxString NewNameSansAsterisk, OldNameSansAsterisk;
-	if (Name.substr(Name.length() - 1, 1).compare(Asterisk) == 0)
-		OldNameSansAsterisk = Name.substr(0, Name.length() - 1);
-	else
-		OldNameSansAsterisk = Name;
-	if (_Name.substr(_Name.length() - 1, 1).compare(Asterisk) == 0)
-		NewNameSansAsterisk = _Name.substr(0, _Name.length() - 1);
-	else
-		NewNameSansAsterisk = _Name;
-
-	// Update the name in the output panel
-	MainFrame.GetOutputPanel()->UpdateName(OldNameSansAsterisk, NewNameSansAsterisk);*/
-
 	// Set the name for this object
 	Name = _Name;
 
@@ -209,15 +192,13 @@ void GUI_OBJECT::SetName(wxString _Name)
 
 	// Update the output panel to make sure names are up-to-date
 	MainFrame.UpdateOutputPanel();
-
-	return;
 }
 
 //==========================================================================
 // Class:			GUI_OBJECT
 // Function:		GetCleanName
 //
-// Description:		Retreives the name of the car.  Cleans up the name
+// Description:		Retrieves the name of the car.  Cleans up the name
 //					(removes asterisks indicating the file needs to be
 //					saved) if necessary.
 //
@@ -339,7 +320,7 @@ bool GUI_OBJECT::IsThisObjectSelected(wxTreeItemId Selected) const
 //
 // Description:		If the object has been modified with being saved, it asks
 //					the user if they want to save the object (with the option
-//					of cancelling), and if it has been saved it asks for
+//					of canceling), and if it has been saved it asks for
 //					confirmation to close.  If it was desired to close the
 //					object, the appropriate closing actions are executed.
 //
@@ -508,7 +489,7 @@ bool GUI_OBJECT::SaveToFile(bool SaveAsNewFileName)
 		// Assign the temporary variables to the class member
 		PathAndFileName = TempPathAndFileName.Item(0);
 
-		// Make sure the file name contains the extension - this is neccesary due to the following scenario:
+		// Make sure the file name contains the extension - this is necessary due to the following scenario:
 		// When doing "Save As...", if the default file name is modified (i.e. Rev 1 is changed to Rev 2),
 		// the extension is dropped.  This does not occur if the entire file name is changed.
 		wxString EndOfFileName;
@@ -558,57 +539,6 @@ bool GUI_OBJECT::SaveToFile(bool SaveAsNewFileName)
 	return true;
 }
 
-/*//==========================================================================
-// Class:			GUI_OBJECT
-// Function:		Render
-//
-// Description:		Calls the appropriate Update() method, depending on the
-//					type of this object.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-void GUI_OBJECT::Render(void)
-{
-	// Make sure our renderer pointer is valid
-	if (Renderer)
-		Renderer->Render();
-
-	return;
-}
-
-//==========================================================================
-// Class:			GUI_OBJECT
-// Function:		IsThisObjectSelected
-//
-// Description:		Assertains whether or not the selected item in the
-//					systems tree is an object associated with this object or
-//					not.
-//
-// Input Arguments:
-//		PickedObject	= Primitive* pointing to the selected actor on the active
-//						  notebook page
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		bool = true if the selected item is associated with this car, or
-//			   false otherwise
-//
-//==========================================================================
-bool GUI_OBJECT::IsThisObjectSelected(Primitive *PickedObject) const
-{
-	return Renderer->IsThisRendererSelected(PickedObject);
-}*/
-
 //==========================================================================
 // Class:			GUI_OBJECT
 // Function:		WriteImageToFile
@@ -629,11 +559,24 @@ bool GUI_OBJECT::IsThisObjectSelected(Primitive *PickedObject) const
 //==========================================================================
 bool GUI_OBJECT::WriteImageToFile(wxString PathAndFileName)
 {
-	// Ask the renderer to write the image to file
-	/*if (Renderer)
-		return Renderer->WriteImageToFile(PathAndFileName);
-	else*/
-		return false;
+	// Ask the renderer to write the image to file (if there is an image)
+	switch (GetType())
+	{
+		// Types that have a renderer
+	case TYPE_CAR:
+			return static_cast<RenderWindow*>(notebookTab)->WriteImageToFile(PathAndFileName);
+		break;
+		
+	case TYPE_ITERATION:
+			return static_cast<PlotPanel*>(notebookTab)->WriteImageToFile(PathAndFileName);
+		break;
+		
+		// Everything else
+	default:
+		break;
+	}
+	
+	return false;
 }
 
 //==========================================================================
@@ -688,7 +631,7 @@ wxString GUI_OBJECT::GetNameFromFileName(void)
 	PathDelimiter = '\\';
 #endif
 
-	// Disect the PathAndFileName to get just the name (also truncate the extension)
+	// Dissect the PathAndFileName to get just the name (also truncate the extension)
 	int StartOfFileName = PathAndFileName.Last(PathDelimiter) + 1;
 	int EndOfFileName = PathAndFileName.Last('.');
 	Name = PathAndFileName.Mid(StartOfFileName, EndOfFileName - StartOfFileName);
@@ -716,7 +659,7 @@ wxString GUI_OBJECT::GetNameFromFileName(void)
 //==========================================================================
 bool GUI_OBJECT::VerifyUniqueness(void)
 {
-	// Check the local path and filename against all those beinging managed by
+	// Check the local path and filename against all those being managed by
 	// the main frame
 	int i;
 	for (i = 0; i < MainFrame.GetObjectCount(); i++)

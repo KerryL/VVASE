@@ -1084,8 +1084,8 @@ void MAIN_FRAME::FileWriteImageFileEvent(wxCommandEvent& WXUNUSED(event))
 		return;
 
 	// Call the object's write image file method
-	if (OpenObjectList[ObjectOfInterestIndex]->WriteImageToFile(PathAndFileName.Item(0)))
-		debugger.Print(Debugger::PriorityMedium, "Image file written to %s!", PathAndFileName.Item(0).c_str());
+	if (OpenObjectList[ObjectOfInterestIndex]->WriteImageToFile(PathAndFileName[0]))
+		debugger.Print(Debugger::PriorityHigh, "Image file written to %s", PathAndFileName[0].c_str());
 	else
 		debugger.Print(_T("Image file NOT written!"), Debugger::PriorityHigh);
 }
