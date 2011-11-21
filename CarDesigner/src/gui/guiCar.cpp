@@ -252,8 +252,6 @@ void GUI_CAR::UpdateDisplay(void)
 {
 	// Update the display associated with this object
 	renderer->UpdateDisplay(kinematicOutputs);
-
-	return;
 }
 
 //==========================================================================

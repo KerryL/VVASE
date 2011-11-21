@@ -463,7 +463,7 @@ bool GUI_OBJECT::SaveToFile(bool SaveAsNewFileName)
 		FileTypeExtension.assign(_T("Optimization files (*.ga)|*.ga"));
 	else
 	{
-		// Fail on unkown type to avoid forgetting any types
+		// Fail on unknown type to avoid forgetting any types
 		assert(0);
 		return false;
 	}

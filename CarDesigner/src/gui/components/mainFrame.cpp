@@ -378,6 +378,7 @@ void MAIN_FRAME::SetProperties(void)
 
 	// Also put the cursor at the bottom of the text, so the window scrolls automatically
 	// as it updates with text
+	// NOTE:  This already works as desired under GTK, issue is with MSW
 	// FIXME:  This doesn't work!
 
 	// Add the application level entry to the SystemsTree (this one is hidden, but necessary)
