@@ -16,7 +16,7 @@
 
 // VVASE headers
 #include "vRenderer/primitives/quadrilateral.h"
-#include "vRenderer/3dcar/plane.h"
+#include "vRenderer/3dcar/plane3D.h"
 #include "vRenderer/color.h"
 #include "vMath/vector.h"
 

@@ -223,7 +223,7 @@
               <in>damper3D.h</in>
               <in>link.h</in>
               <in>origin.h</in>
-              <in>plane.h</in>
+              <in>plane3D.h</in>
               <in>point3D.h</in>
               <in>spring3D.h</in>
               <in>swaybar3D.h</in>
@@ -334,7 +334,7 @@
             <in>damper3D.cpp</in>
             <in>link.cpp</in>
             <in>origin.cpp</in>
-            <in>plane.cpp</in>
+            <in>plane3D.cpp</in>
             <in>point3D.cpp</in>
             <in>spring3D.cpp</in>
             <in>swaybar3D.cpp</in>

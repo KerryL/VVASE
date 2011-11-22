@@ -34,7 +34,7 @@
 #include "vRenderer/3dcar/triangle3D.h"
 #include "vRenderer/3dcar/damper3D.h"
 #include "vRenderer/3dcar/spring3D.h"
-#include "vRenderer/3dcar/plane.h"
+#include "vRenderer/3dcar/plane3D.h"
 #include "vRenderer/3dcar/point3D.h"
 #include "vRenderer/3dcar/origin.h"
 #include "vRenderer/3dcar/tire3D.h"
