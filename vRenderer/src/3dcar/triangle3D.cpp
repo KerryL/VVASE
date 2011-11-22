@@ -10,7 +10,7 @@
 // File:  triangle3D.cpp
 // Created:  1/5/2009
 // Author:  K. Loux
-// Description:  Contains class definition for the TRIANGLE3D class.  This is used for
+// Description:  Contains class definition for the Triangle3D class.  This is used for
 //				 bell cranks, uprights, etc.
 // History:
 //	5/17/2009	- Removed VTK dependencies, K. Loux.
@@ -24,14 +24,14 @@
 #include "vMath/carMath.h"
 
 //==========================================================================
-// Class:			TRIANGLE3D
-// Function:		TRIANGLE3D
+// Class:			Triangle3D
+// Function:		Triangle3D
 //
-// Description:		Constructor for the TRIANGLE3D class.  Performs the entire
+// Description:		Constructor for the Triangle3D class.  Performs the entire
 //					process necessary to add the object to the scene.
 //
 // Input Arguments:
-//		_Renderer	= &RenderWindow, pointer to rendering object
+//		_renderer	= &RenderWindow, pointer to rendering object
 //
 // Output Arguments:
 //		None
@@ -40,17 +40,17 @@
 //		None
 //
 //==========================================================================
-TRIANGLE3D::TRIANGLE3D(RenderWindow &_Renderer)
+Triangle3D::Triangle3D(RenderWindow &_renderer)
 {
 	// Create the objects
-	Triangle = new TRIANGLE(_Renderer);
+	triangle = new Triangle(_renderer);
 }
 
 //==========================================================================
-// Class:			TRIANGLE3D
-// Function:		~TRIANGLE3D
+// Class:			Triangle3D
+// Function:		~Triangle3D
 //
-// Description:		Destructor for the TRIANGLE3D class.
+// Description:		Destructor for the Triangle3D class.
 //
 // Input Arguments:
 //		None
@@ -62,12 +62,12 @@ TRIANGLE3D::TRIANGLE3D(RenderWindow &_Renderer)
 //		None
 //
 //==========================================================================
-TRIANGLE3D::~TRIANGLE3D()
+Triangle3D::~Triangle3D()
 {
 }
 
 //==========================================================================
-// Class:			TRIANGLE3D
+// Class:			Triangle3D
 // Function:		Update
 //
 // Description:		Updates the position, orientation, and size of the tire
@@ -75,11 +75,11 @@ TRIANGLE3D::~TRIANGLE3D()
 //					value, not reference like the first two Vectors.
 //
 // Input Arguments:
-//		Node1		= const Vector&, location of the first vertex
-//		Node2		= const Vector&, location of the second vertex
-//		Node3		= const Vector&, location of the third vertex
+//		node1		= const Vector&, location of the first vertex
+//		node2		= const Vector&, location of the second vertex
+//		node3		= const Vector&, location of the third vertex
 //		color		= const Color& specifying the color of this object
-//		Show		= bool, visibility flag
+//		show		= bool, visibility flag
 //
 // Output Arguments:
 //		None
@@ -88,34 +88,32 @@ TRIANGLE3D::~TRIANGLE3D()
 //		None
 //
 //==========================================================================
-void TRIANGLE3D::Update(const Vector &Node1, const Vector &Node2, const Vector &Node3,
-					  const Color &color, bool Show)
+void Triangle3D::Update(const Vector &node1, const Vector &node2, const Vector &node3,
+					  const Color &color, bool show)
 {
 	// Make sure all vector arguments are valid - if they are not,
 	// the object will not be made visible
-	if (VVASEMath::IsNaN(Node1) || VVASEMath::IsNaN(Node2) || VVASEMath::IsNaN(Node3))
-		Show = false;
+	if (VVASEMath::IsNaN(node1) || VVASEMath::IsNaN(node2) || VVASEMath::IsNaN(node3))
+		show = false;
 
 	// Set the visibility flag
-	Triangle->SetVisibility(Show);
+	triangle->SetVisibility(show);
 
 	// Make sure we want this to be visible before continuing
-	if (!Show)
+	if (!show)
 		return;
 
 	// Set this object's color
-	Triangle->SetColor(color);
+	triangle->SetColor(color);
 
 	// Set the locations of the points
-	Triangle->SetCorner1(Node1);
-	Triangle->SetCorner2(Node2);
-	Triangle->SetCorner3(Node3);
-
-	return;
+	triangle->SetCorner1(node1);
+	triangle->SetCorner2(node2);
+	triangle->SetCorner3(node3);
 }
 
 //==========================================================================
-// Class:			TRIANGLE3D
+// Class:			Triangle3D
 // Function:		ContainsThisActor
 //
 // Description:		Compares the argument with the actors that make up this
@@ -123,7 +121,7 @@ void TRIANGLE3D::Update(const Vector &Node1, const Vector &Node2, const Vector &
 //					object or not.
 //
 // Input Arguments:
-//		Actor	= const Primitive* to compare against this object's actors
+//		actor	= const Primitive* to compare against this object's actors
 //
 // Output Arguments:
 //		None
@@ -132,10 +130,10 @@ void TRIANGLE3D::Update(const Vector &Node1, const Vector &Node2, const Vector &
 //		bool representing whether or not the Actor was part of this object
 //
 //==========================================================================
-bool TRIANGLE3D::ContainsThisActor(const Primitive *Actor)
+bool Triangle3D::ContainsThisActor(const Primitive *actor)
 {
 	// Make the comparison
-	if (Triangle == Actor)
+	if (triangle == actor)
 		return true;
 	else
 		return false;

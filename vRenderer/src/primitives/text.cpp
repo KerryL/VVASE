@@ -28,7 +28,7 @@
 // Description:		Constructor for the TextRendering class.
 //
 // Input Arguments:
-//		_RenderWindow	= RENDER_WINDOW& reference to the object that owns this
+//		_renderWindow	= RenderWindow& reference to the object that owns this
 //
 // Output Arguments:
 //		None
@@ -110,8 +110,6 @@ void TextRendering::GenerateGeometry(void)
 			font->Render(text.c_str());
 		glPopMatrix();
 	}
-
-	return;
 }
 
 //==========================================================================

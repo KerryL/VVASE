@@ -24,35 +24,35 @@
 class RenderWindow;
 class Vector;
 class Color;
-class SPHERE;
-class CYLINDER;
+class Sphere;
+class Cylinder;
 class Primitive;
 
-class AARM
+class AArm
 {
 public:
 	// Constructor
-	AARM(RenderWindow &_Renderer);
+	AArm(RenderWindow &_renderer);
 
 	// Destructor
-	~AARM();
+	~AArm();
 
 	// Updates the actor with the new position and size for the a-arm
-	void Update(const Vector &End1, const Vector &Middle, const Vector &End2, const double &Diameter,
-		const int &Resolution, const Color &color, bool Show);
+	void Update(const Vector &end1, const Vector &middle, const Vector &end2, const double &diameter,
+		const int &resolution, const Color &color, bool show);
 
 	// Returns true if the passed reference is to an actor from this object
-	bool ContainsThisActor(const Primitive *Actor);
+	bool ContainsThisActor(const Primitive *actor);
 
 private:
 	// The members
-	CYLINDER *Member1;
-	CYLINDER *Member2;
+	Cylinder *member1;
+	Cylinder *member2;
 
 	// The points
-	SPHERE *EndPoint1;
-	SPHERE *MidPoint;
-	SPHERE *EndPoint2;
+	Sphere *endPoint1;
+	Sphere *midPoint;
+	Sphere *endPoint2;
 };
 
 #endif// _AARM_H_

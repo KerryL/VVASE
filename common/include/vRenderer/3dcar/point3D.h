@@ -10,7 +10,7 @@
 // File:  point3D.h
 // Created:  1/5/2009
 // Author:  K. Loux
-// Description:  Contains class declaration for the POINT3D class.
+// Description:  Contains class declaration for the Point3D class.
 // History:
 //	4/25/2009	- Changed Update() to include color argument in the form of wxColor and
 //				  removed PURPOSE enumeration, K. Loux.
@@ -22,24 +22,24 @@
 // VVASE forward declarations
 class Vector;
 class Color;
-class SPHERE;
+class Sphere;
 
-class POINT3D
+class Point3D
 {
 public:
 	// Constructor
-	POINT3D(RenderWindow &_Renderer);
+	Point3D(RenderWindow &_renderer);
 
 	// Destructor
-	~POINT3D();
+	~Point3D();
 
 	// Updates the 3D representation of the point on the screen
-	void Update(const Vector &Position, const double &Diameter, const int &Resolution,
-		const Color &color, bool Show);
+	void Update(const Vector &position, const double &diameter, const int &resolution,
+		const Color &color, bool show);
 
 private:
 	// The point actor
-	SPHERE *Point;
+	Sphere *point;
 };
 
 #endif// _POINT3D_H_

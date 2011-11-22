@@ -10,7 +10,7 @@
 // File:  tire3D.h
 // Created:  5/23/2008
 // Author:  K. Loux
-// Description:  Contains class declaration for the TIRE3D class.
+// Description:  Contains class declaration for the Tire3D class.
 // History:
 //	4/25/2009	- Changed Update() to include color argument in the form of wxColor, K. Loux.
 //	5/17/2009	- Removed VTK dependencies, K. Loux.
@@ -21,36 +21,36 @@
 // VVASE forward declarations
 class Vector;
 class Color;
-class CYLINDER;
-class DISK;
+class Cylinder;
+class Disk;
 
-class TIRE3D
+class Tire3D
 {
 public:
 	// Constructor
-	TIRE3D(RenderWindow &_Renderer);
+	Tire3D(RenderWindow &_renderer);
 
 	// Destructor
-	~TIRE3D();
+	~Tire3D();
 
 	// Updates the 3D representation of the tire on the screen
-	void Update(const Vector &ContactPatch, const Vector &Center, Vector OriginalNormal,
-		Vector TargetNormal, const double &Width, const double &InsideDiameter,
-		const int &Resolution, const Color &color, bool Show);
+	void Update(const Vector &contactPatch, const Vector &center, Vector originalNormal,
+		Vector targetNormal, const double &width, const double &insideDiameter,
+		const int &resolution, const Color &color, bool show);
 
 	// Returns true if the passed reference is to an actor from this object
-	bool ContainsThisActor(const Primitive *Actor);
+	bool ContainsThisActor(const Primitive *actor);
 
 private:
 	// The outer surface of the tire
-	CYLINDER *OuterSurface;
+	Cylinder *outerSurface;
 
 	// The inner surface of the tire
-	CYLINDER *InnerSurface;
+	Cylinder *innerSurface;
 
 	// The sidewalls
-	DISK *Sidewall1;
-	DISK *Sidewall2;
+	Disk *sidewall1;
+	Disk *sidewall2;
 };
 
 #endif// _TIRE3D_H_

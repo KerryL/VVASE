@@ -10,7 +10,7 @@
 // File:  quadrilateral.h
 // Created:  5/14/2009
 // Author:  K. Loux
-// Description:  Derived from PRIMITIVE for creating rectangular objects.
+// Description:  Derived from Primitive for creating rectangular objects.
 // History:
 
 #ifndef _QUADRILATERAL_H_
@@ -20,40 +20,40 @@
 #include "vRenderer/primitives/primitive.h"
 #include "vMath/vector.h"
 
-class QUADRILATERAL : public Primitive
+class Quadrilateral : public Primitive
 {
 public:
 	// Constructor
-	QUADRILATERAL(RenderWindow &_RenderWindow);
+	Quadrilateral(RenderWindow &_renderWindow);
 
 	// Destructor
-	~QUADRILATERAL();
+	~Quadrilateral();
 
-	// Mandatory overloads from PRIMITIVE - for creating geometry and testing the
+	// Mandatory overloads from Primitive - for creating geometry and testing the
 	// validity of this object's parameters
 	void GenerateGeometry(void);
 	bool HasValidParameters(void);
 
 	// Private data accessors
-	void SetNormal(const Vector &_Normal);
-	void SetCenter(const Vector &_Center);
-	void SetAxis(const Vector &_Axis);
-	void SetWidth(const double &_Width);
-	void SetLength(const double &_Length);
+	void SetNormal(const Vector &_normal);
+	void SetCenter(const Vector &_center);
+	void SetAxis(const Vector &_axis);
+	void SetWidth(const double &_width);
+	void SetLength(const double &_length);
 
 private:
 	// The normal direction for this object
-	Vector Normal;
+	Vector normal;
 
 	// The axis direction (specifies the direction for the length)
-	Vector Axis;
+	Vector axis;
 
 	// The location of the center of this object
-	Vector Center;
+	Vector center;
 
 	// The dimensions of the quad
-	double Width;
-	double Length;
+	double width;
+	double length;
 };
 
 #endif// _QUADRILATERAL_H_

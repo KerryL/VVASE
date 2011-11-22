@@ -83,7 +83,7 @@ CAR_RENDERER::CAR_RENDERER(MAIN_FRAME &_MainFrame, GUI_CAR &_Car, int args[],
 						   AppearanceOptions(_Car.GetAppearanceOptions()),
 						   DisplayCar(_Car.GetWorkingCar()), ReferenceCar(_Car.GetOriginalCar())
 {
-	// Create the objects neccessary to render the scene
+	// Create the objects necessary to render the scene
 	CreateActors();
 
 	// Initialize the helper orb to NOT active
@@ -118,7 +118,7 @@ CAR_RENDERER::~CAR_RENDERER()
 {
 	// Ideally, this stuff would be taken care of by adding these to some
 	// ManagedList, but for now we explicitly delete them one by one...
-	delete Origin;
+	delete origin;
 	delete GroundPlane;
 
 	delete RightFrontLowerAArm;
@@ -260,7 +260,7 @@ void CAR_RENDERER::UpdateCarDisplay(void)
 	wxMutexLocker referenceLock(ReferenceCar.GetMutex());
 
 	// Update the origin
-	Origin->Update(AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeOriginShaftLength),
+	origin->Update(AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeOriginShaftLength),
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeOriginShaftDiameter),
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeOriginTipLength),
 		AppearanceOptions.GetSize(APPEARANCE_OPTIONS::SizeOriginTipDiameter),
@@ -903,77 +903,77 @@ void CAR_RENDERER::UpdateKinematicsDisplay(KinematicOutputs outputs)
 void CAR_RENDERER::CreateActors(void)
 {
 	// Create the origin and ground plane
-	Origin = new ORIGIN(*this);
-	GroundPlane = new PLANE(*this);
+	origin = new Origin(*this);
+	GroundPlane = new Plane3D(*this);
 
 	// Right front corner
-	RightFrontLowerAArm = new AARM(*this);
-	RightFrontUpperAArm = new AARM(*this);
-	RightFrontPushrod = new LINK(*this);
-	RightFrontTieRod = new LINK(*this);
-	RightFrontTire = new TIRE3D(*this);
-	RightFrontDamper = new DAMPER3D(*this);
-	RightFrontSpring = new SPRING3D(*this);
-	RightFrontUpright = new TRIANGLE3D(*this);
-	RightFrontBellCrank = new TRIANGLE3D(*this);
-	RightFrontBarLink = new LINK(*this);
-	RightFrontHalfShaft = new LINK(*this);
+	RightFrontLowerAArm = new AArm(*this);
+	RightFrontUpperAArm = new AArm(*this);
+	RightFrontPushrod = new Link(*this);
+	RightFrontTieRod = new Link(*this);
+	RightFrontTire = new Tire3D(*this);
+	RightFrontDamper = new Damper3D(*this);
+	RightFrontSpring = new Spring3D(*this);
+	RightFrontUpright = new Triangle3D(*this);
+	RightFrontBellCrank = new Triangle3D(*this);
+	RightFrontBarLink = new Link(*this);
+	RightFrontHalfShaft = new Link(*this);
 
 	// Left front corner
-	LeftFrontLowerAArm = new AARM(*this);
-	LeftFrontUpperAArm = new AARM(*this);
-	LeftFrontPushrod = new LINK(*this);
-	LeftFrontTieRod = new LINK(*this);
-	LeftFrontTire = new TIRE3D(*this);
-	LeftFrontDamper = new DAMPER3D(*this);
-	LeftFrontSpring = new SPRING3D(*this);
-	LeftFrontUpright = new TRIANGLE3D(*this);
-	LeftFrontBellCrank = new TRIANGLE3D(*this);
-	LeftFrontBarLink = new LINK(*this);
-	LeftFrontHalfShaft = new LINK(*this);
+	LeftFrontLowerAArm = new AArm(*this);
+	LeftFrontUpperAArm = new AArm(*this);
+	LeftFrontPushrod = new Link(*this);
+	LeftFrontTieRod = new Link(*this);
+	LeftFrontTire = new Tire3D(*this);
+	LeftFrontDamper = new Damper3D(*this);
+	LeftFrontSpring = new Spring3D(*this);
+	LeftFrontUpright = new Triangle3D(*this);
+	LeftFrontBellCrank = new Triangle3D(*this);
+	LeftFrontBarLink = new Link(*this);
+	LeftFrontHalfShaft = new Link(*this);
 
 	// Right rear corner
-	RightRearLowerAArm = new AARM(*this);
-	RightRearUpperAArm = new AARM(*this);
-	RightRearPushrod = new LINK(*this);
-	RightRearTieRod = new LINK(*this);
-	RightRearTire = new TIRE3D(*this);
-	RightRearDamper = new DAMPER3D(*this);
-	RightRearSpring = new SPRING3D(*this);
-	RightRearUpright = new TRIANGLE3D(*this);
-	RightRearBellCrank = new TRIANGLE3D(*this);
-	RightRearBarLink = new LINK(*this);
-	RightRearHalfShaft = new LINK(*this);
+	RightRearLowerAArm = new AArm(*this);
+	RightRearUpperAArm = new AArm(*this);
+	RightRearPushrod = new Link(*this);
+	RightRearTieRod = new Link(*this);
+	RightRearTire = new Tire3D(*this);
+	RightRearDamper = new Damper3D(*this);
+	RightRearSpring = new Spring3D(*this);
+	RightRearUpright = new Triangle3D(*this);
+	RightRearBellCrank = new Triangle3D(*this);
+	RightRearBarLink = new Link(*this);
+	RightRearHalfShaft = new Link(*this);
 
 	// Left rear corner
-	LeftRearLowerAArm = new AARM(*this);
-	LeftRearUpperAArm = new AARM(*this);
-	LeftRearPushrod = new LINK(*this);
-	LeftRearTieRod = new LINK(*this);
-	LeftRearTire = new TIRE3D(*this);
-	LeftRearDamper = new DAMPER3D(*this);
-	LeftRearSpring = new SPRING3D(*this);
-	LeftRearUpright = new TRIANGLE3D(*this);
-	LeftRearBellCrank = new TRIANGLE3D(*this);
-	LeftRearBarLink = new LINK(*this);
-	LeftRearHalfShaft = new LINK(*this);
+	LeftRearLowerAArm = new AArm(*this);
+	LeftRearUpperAArm = new AArm(*this);
+	LeftRearPushrod = new Link(*this);
+	LeftRearTieRod = new Link(*this);
+	LeftRearTire = new Tire3D(*this);
+	LeftRearDamper = new Damper3D(*this);
+	LeftRearSpring = new Spring3D(*this);
+	LeftRearUpright = new Triangle3D(*this);
+	LeftRearBellCrank = new Triangle3D(*this);
+	LeftRearBarLink = new Link(*this);
+	LeftRearHalfShaft = new Link(*this);
 
 	// Front end
-	SteeringRack = new LINK(*this);
-	FrontSwayBar = new SWAYBAR3D(*this);
+	SteeringRack = new Link(*this);
+	FrontSwayBar = new Swaybar3D(*this);
 
 	// Rear end
-	RearSwayBar = new SWAYBAR3D(*this);
+	RearSwayBar = new Swaybar3D(*this);
 
 	// Kinematic display objects
-	FrontRollCenter = new POINT3D(*this);
-	RearRollCenter = new POINT3D(*this);
-	RightPitchCenter = new POINT3D(*this);
-	LeftPitchCenter = new POINT3D(*this);
-	RightFrontInstantCenter = new POINT3D(*this);
-	LeftFrontInstantCenter = new POINT3D(*this);
-	RightRearInstantCenter = new POINT3D(*this);
-	LeftRearInstantCenter = new POINT3D(*this);
+	FrontRollCenter = new Point3D(*this);
+	RearRollCenter = new Point3D(*this);
+	RightPitchCenter = new Point3D(*this);
+	LeftPitchCenter = new Point3D(*this);
+	RightFrontInstantCenter = new Point3D(*this);
+	LeftFrontInstantCenter = new Point3D(*this);
+	RightRearInstantCenter = new Point3D(*this);
+	LeftRearInstantCenter = new Point3D(*this);
 
 	FrontRollAxis = new Vector3D(*this);
 	RearRollAxis = new Vector3D(*this);
@@ -985,7 +985,7 @@ void CAR_RENDERER::CreateActors(void)
 	LeftRearInstantAxis = new Vector3D(*this);
 
 	// Helper orb
-	HelperOrb = new POINT3D(*this);
+	HelperOrb = new Point3D(*this);
 }
 
 //==========================================================================

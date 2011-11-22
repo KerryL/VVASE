@@ -10,7 +10,7 @@
 // File:  axis.h
 // Created:  5/2/2011
 // Author:  K. Loux
-// Description:  Derived from PRIMITVE, this class is used to draw plot axis.
+// Description:  Derived from Primitive, this class is used to draw plot axis.
 // History:
 
 #ifndef _AXIS_H_
@@ -34,7 +34,7 @@ public:
 	// Destructor
 	~Axis();
 
-	// Mandatory overloads from PRIMITIVE - for creating geometry and testing the
+	// Mandatory overloads from Primitive - for creating geometry and testing the
 	// validity of this object's parameters
 	void GenerateGeometry(void);
 	bool HasValidParameters(void);
@@ -110,7 +110,7 @@ private:
 	Color gridColor;
 
 	// Distance for edge of plot render window to the axis
-	unsigned int offsetFromWindowEdge;// [pixles]
+	unsigned int offsetFromWindowEdge;// [pixels]
 	
 	// Pointers to the axes at either end of this axis
 	const Axis *minAxis;

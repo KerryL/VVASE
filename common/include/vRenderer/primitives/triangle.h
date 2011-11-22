@@ -10,7 +10,7 @@
 // File:  triangle.h
 // Created:  5/14/2009
 // Author:  K. Loux
-// Description:  Derived from PRIMITIVE for creating triangular objects.
+// Description:  Derived from Primitve for creating triangular objects.
 // History:
 
 #ifndef _TRIANGLE_H_
@@ -20,30 +20,30 @@
 #include "vRenderer/primitives/primitive.h"
 #include "vMath/vector.h"
 
-class TRIANGLE : public Primitive
+class Triangle : public Primitive
 {
 public:
 	// Constructor
-	TRIANGLE(RenderWindow &_RenderWindow);
+	Triangle(RenderWindow &_renderWindow);
 
 	// Destructor
-	~TRIANGLE();
+	~Triangle();
 
-	// Mandatory overloads from PRIMITIVE - for creating geometry and testing the
+	// Mandatory overloads from Primitive - for creating geometry and testing the
 	// validity of this object's parameters
 	void GenerateGeometry(void);
 	bool HasValidParameters(void);
 
 	// Private data accessors
-	void SetCorner1(const Vector &_Corner1);
-	void SetCorner2(const Vector &_Corner2);
-	void SetCorner3(const Vector &_Corner3);
+	void SetCorner1(const Vector &_corner1);
+	void SetCorner2(const Vector &_corner2);
+	void SetCorner3(const Vector &_corner3);
 
 private:
 	// The locations of the triangle's corners
-	Vector Corner1;
-	Vector Corner2;
-	Vector Corner3;
+	Vector corner1;
+	Vector corner2;
+	Vector corner3;
 };
 
 #endif// _TRIANGLE_H_

@@ -10,7 +10,7 @@
 // File:  spring3D.h
 // Created:  1/5/2009
 // Author:  K. Loux
-// Description:  Contains class declaration for the SPRING3D class.
+// Description:  Contains class declaration for the Spring3D class.
 // History:
 //	4/25/2009	- Changed Update() to include color argument in the form of wxColor, K. Loux.
 //	5/17/2009	- Removed VTK dependencies, K. Loux.
@@ -21,32 +21,32 @@
 // VVASE forward declarations
 class Vector;
 class Color;
-class CYLINDER;
-class SPHERE;
+class Cylinder;
+class Sphere;
 
-class SPRING3D
+class Spring3D
 {
 public:
 	// Constructor
-	SPRING3D(RenderWindow &_Renderer);
+	Spring3D(RenderWindow &_renderer);
 
 	// Destructor
-	~SPRING3D();
+	~Spring3D();
 
 	// Updates the 3D representation of the spring on the screen
-	void Update(const Vector &End1, const Vector &End2, const double &Diameter,
-		const double &PointDiameter, const int &Resolution, const Color &color, bool Show);
+	void Update(const Vector &end1, const Vector &end2, const double &diameter,
+		const double &pointDiameter, const int &resolution, const Color &color, bool show);
 
 	// Returns true if the passed reference is to an actor from this object
-	bool ContainsThisActor(const Primitive *Actor);
+	bool ContainsThisActor(const Primitive *actor);
 
 private:
 	// The main body of the spring
-	CYLINDER *Spring;
+	Cylinder *spring;
 
 	// The end points
-	SPHERE *EndPoint1;
-	SPHERE *EndPoint2;
+	Sphere *endPoint1;
+	Sphere *endPoint2;
 };
 
 #endif// _SPRING3D_H_

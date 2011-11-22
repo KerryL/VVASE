@@ -10,7 +10,7 @@
 // File:  link.h
 // Created:  5/23/2008
 // Author:  K. Loux
-// Description:  Contains class declaration for the LINK class.  Links are
+// Description:  Contains class declaration for the Link class.  Links are
 //				 comprised of two spheres at the ends and are connected by a cylinder.
 // History:
 //	4/25/2009	- Changed Update() to include color argument in the form of wxColor and
@@ -23,32 +23,32 @@
 // VVASE forward declarations
 class Vector;
 class Color;
-class SPHERE;
-class CYLINDER;
+class Sphere;
+class Cylinder;
 
-class LINK
+class Link
 {
 public:
 	// Constructor
-	LINK(RenderWindow &_Renderer);
+	Link(RenderWindow &_renderer);
 
 	// Destructor
-	~LINK();
+	~Link();
 
 	// Update the position of the link in the render window
-	void Update(const Vector &End1, const Vector &End2, const double &Diameter, const int &Resolution,
-		const Color &color, bool Show);
+	void Update(const Vector &end1, const Vector &end2, const double &diameter, const int &resolution,
+		const Color &color, bool show);
 
 	// Returns true if the passed reference is to an actor from this object
-	bool ContainsThisActor(const Primitive *Actor);
+	bool ContainsThisActor(const Primitive *actor);
 
 private:
 	// The main body actor
-	CYLINDER *Member;
+	Cylinder *member;
 
 	// The end points
-	SPHERE *EndPoint1;
-	SPHERE *EndPoint2;
+	Sphere *endPoint1;
+	Sphere *endPoint2;
 };
 
 #endif// _LINK_H_

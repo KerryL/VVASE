@@ -10,7 +10,7 @@
 // File:  triangle.cpp
 // Created:  5/14/2009
 // Author:  K. Loux
-// Description:  Derived from PRIMITIVE for creating triangular objects.
+// Description:  Derived from Primitive for creating triangular objects.
 // History:
 
 // Local headers
@@ -19,13 +19,13 @@
 #include "vMath/carMath.h"
 
 //==========================================================================
-// Class:			TRIANGLE
-// Function:		TRIANGLE
+// Class:			Triangle
+// Function:		Triangle
 //
-// Description:		Constructor for the TRIANGLE class.
+// Description:		Constructor for the Triangle class.
 //
 // Input Arguments:
-//		_RenderWindow	= RenderWindow& pointing to the object that owns this
+//		_renderWindow	= RenderWindow& pointing to the object that owns this
 //
 // Output Arguments:
 //		None
@@ -34,19 +34,19 @@
 //		None
 //
 //==========================================================================
-TRIANGLE::TRIANGLE(RenderWindow &_RenderWindow) : Primitive(_RenderWindow)
+Triangle::Triangle(RenderWindow &_renderWindow) : Primitive(_renderWindow)
 {
 	// Initialize private data
-	Corner1.Set(0.0, 0.0, 0.0);
-	Corner2.Set(0.0, 0.0, 0.0);
-	Corner3.Set(0.0, 0.0, 0.0);
+	corner1.Set(0.0, 0.0, 0.0);
+	corner2.Set(0.0, 0.0, 0.0);
+	corner3.Set(0.0, 0.0, 0.0);
 }
 
 //==========================================================================
-// Class:			TRIANGLE
-// Function:		~TRIANGLE
+// Class:			Triangle
+// Function:		~Triangle
 //
-// Description:		Destructor for the TRIANGLE class.
+// Description:		Destructor for the Triangle class.
 //
 // Input Arguments:
 //		None
@@ -58,12 +58,12 @@ TRIANGLE::TRIANGLE(RenderWindow &_RenderWindow) : Primitive(_RenderWindow)
 //		None
 //
 //==========================================================================
-TRIANGLE::~TRIANGLE()
+Triangle::~Triangle()
 {
 }
 
 //==========================================================================
-// Class:			TRIANGLE
+// Class:			Triangle
 // Function:		GenerateGeometry
 //
 // Description:		Creates the OpenGL instructions to create this object in
@@ -79,30 +79,28 @@ TRIANGLE::~TRIANGLE()
 //		None
 //
 //==========================================================================
-void TRIANGLE::GenerateGeometry(void)
+void Triangle::GenerateGeometry(void)
 {
 	// Used as each triangle is created
-	Vector Normal = (Corner2 - Corner1).Cross(Corner3 - Corner1).Normalize();
+	Vector normal = (corner2 - corner1).Cross(corner3 - corner1).Normalize();
 
 	// Set the normal for the triangle
-	glNormal3d(Normal.x, Normal.y, Normal.z);
+	glNormal3d(normal.x, normal.y, normal.z);
 
 	// This is just one triangle
 	glBegin(GL_TRIANGLES);
 
-	// Add the three vertecies
-	glVertex3d(Corner1.x, Corner1.y, Corner1.z);
-	glVertex3d(Corner2.x, Corner2.y, Corner2.z);
-	glVertex3d(Corner3.x, Corner3.y, Corner3.z);
+	// Add the three vertices
+	glVertex3d(corner1.x, corner1.y, corner1.z);
+	glVertex3d(corner2.x, corner2.y, corner2.z);
+	glVertex3d(corner3.x, corner3.y, corner3.z);
 
 	// Complete the triangle
 	glEnd();
-
-	return;
 }
 
 //==========================================================================
-// Class:			TRIANGLE
+// Class:			Triangle
 // Function:		HasValidParameters
 //
 // Description:		Checks to see if the information about this object is
@@ -118,11 +116,11 @@ void TRIANGLE::GenerateGeometry(void)
 //		bool, true for OK to draw, false otherwise
 //
 //==========================================================================
-bool TRIANGLE::HasValidParameters(void)
+bool Triangle::HasValidParameters(void)
 {
 	// Triangles must have non-zero edge lengths
-	if (!VVASEMath::IsZero(Corner1.Distance(Corner2)) && !VVASEMath::IsZero(Corner1.Distance(Corner3))
-		&& !VVASEMath::IsZero(Corner2.Distance(Corner3)))
+	if (!VVASEMath::IsZero(corner1.Distance(corner2)) && !VVASEMath::IsZero(corner1.Distance(corner3))
+		&& !VVASEMath::IsZero(corner2.Distance(corner3)))
 		return true;
 
 	// Otherwise return false
@@ -130,13 +128,13 @@ bool TRIANGLE::HasValidParameters(void)
 }
 
 //==========================================================================
-// Class:			TRIANGLE
+// Class:			Triangle
 // Function:		SetCorner1
 //
 // Description:		Sets the location of the first corner of the triangle.
 //
 // Input Arguments:
-//		_Corner1	= const Vector&
+//		_corner1	= const Vector&
 //
 // Output Arguments:
 //		None
@@ -145,25 +143,23 @@ bool TRIANGLE::HasValidParameters(void)
 //		None
 //
 //==========================================================================
-void TRIANGLE::SetCorner1(const Vector &_Corner1)
+void Triangle::SetCorner1(const Vector &_corner1)
 {
 	// Set the corner location to the argument
-	Corner1 = _Corner1;
+	corner1 = _corner1;
 	
 	// Reset the modified flag
 	modified = true;
-
-	return;
 }
 
 //==========================================================================
-// Class:			TRIANGLE
+// Class:			Triangle
 // Function:		SetCorner2
 //
 // Description:		Sets the location of the second corner of the triangle.
 //
 // Input Arguments:
-//		_Corner2	= const Vector&
+//		_corner2	= const Vector&
 //
 // Output Arguments:
 //		None
@@ -172,25 +168,23 @@ void TRIANGLE::SetCorner1(const Vector &_Corner1)
 //		None
 //
 //==========================================================================
-void TRIANGLE::SetCorner2(const Vector &_Corner2)
+void Triangle::SetCorner2(const Vector &_corner2)
 {
 	// Set the corner location to the argument
-	Corner2 = _Corner2;
+	corner2 = _corner2;
 	
 	// Reset the modified flag
 	modified = true;
-
-	return;
 }
 
 //==========================================================================
-// Class:			TRIANGLE
+// Class:			Triangle
 // Function:		SetCorner3
 //
 // Description:		Sets the location of the third corner of the triangle.
 //
 // Input Arguments:
-//		_Corner3	= const Vector&
+//		_corner3	= const Vector&
 //
 // Output Arguments:
 //		None
@@ -199,13 +193,11 @@ void TRIANGLE::SetCorner2(const Vector &_Corner2)
 //		None
 //
 //==========================================================================
-void TRIANGLE::SetCorner3(const Vector &_Corner3)
+void Triangle::SetCorner3(const Vector &_corner3)
 {
 	// Set the corner location to the argument
-	Corner3 = _Corner3;
+	corner3 = _corner3;
 	
 	// Reset the modified flag
 	modified = true;
-
-	return;
 }

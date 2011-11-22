@@ -10,7 +10,7 @@
 // File:  aarm.cpp
 // Created:  5/23/2008
 // Author:  K. Loux
-// Description:  Contains class definition for the AARM class.
+// Description:  Contains class definition for the AArm class.
 // History:
 //	5/17/2009	- Removed VTK dependencies, K. Loux.
 
@@ -24,14 +24,14 @@
 #include "vMath/carMath.h"
 
 //==========================================================================
-// Class:			AARM
-// Function:		AARM
+// Class:			AArm
+// Function:		AArm
 //
-// Description:		Constructor for the AARM class.  Performs the entire
+// Description:		Constructor for the AArm class.  Performs the entire
 //					process necessary to add the object to the scene.
 //
 // Input Arguments:
-//		_Renderer	= RenderWindow&, pointer to rendering object
+//		_renderer	= RenderWindow&, pointer to rendering object
 //
 // Output Arguments:
 //		None
@@ -40,26 +40,26 @@
 //		None
 //
 //==========================================================================
-AARM::AARM(RenderWindow &_Renderer)
+AArm::AArm(RenderWindow &_renderer)
 {
 	// Create the actors
-	EndPoint1 = new SPHERE(_Renderer);
-	EndPoint2 = new SPHERE(_Renderer);
-	MidPoint = new SPHERE(_Renderer);
-	Member1 = new CYLINDER(_Renderer);
-	Member2 = new CYLINDER(_Renderer);
+	endPoint1 = new Sphere(_renderer);
+	endPoint2 = new Sphere(_renderer);
+	midPoint = new Sphere(_renderer);
+	member1 = new Cylinder(_renderer);
+	member2 = new Cylinder(_renderer);
 
 	// Set up the Actors
-	EndPoint1->SetColor(Color::ColorWhite);
-	MidPoint->SetColor(Color::ColorWhite);
-	EndPoint2->SetColor(Color::ColorWhite);
+	endPoint1->SetColor(Color::ColorWhite);
+	midPoint->SetColor(Color::ColorWhite);
+	endPoint2->SetColor(Color::ColorWhite);
 }
 
 //==========================================================================
-// Class:			AARM
-// Function:		~AARM
+// Class:			AArm
+// Function:		~AArm
 //
-// Description:		Destructor for the AARM class.
+// Description:		Destructor for the AArm class.
 //
 // Input Arguments:
 //		None
@@ -71,26 +71,26 @@ AARM::AARM(RenderWindow &_Renderer)
 //		None
 //
 //==========================================================================
-AARM::~AARM()
+AArm::~AArm()
 {
 }
 
 //==========================================================================
-// Class:			AARM
+// Class:			AArm
 // Function:		Update
 //
 // Description:		Updates the position and size of the a-arm in the scene
 //
 // Input Arguments:
-//		End1		= const Vector&, location of one end of the a-arm
-//		Middle		= const Vector&, location of the ball joint on the a-arm
-//		End2		= const Vector&, location of the other end of the a-arm
-//		Diameter	= const double& describing the size of the tubing representing
+//		end1		= const Vector&, location of one end of the a-arm
+//		middle		= const Vector&, location of the ball joint on the a-arm
+//		end2		= const Vector&, location of the other end of the a-arm
+//		diameter	= const double& describing the size of the tubing representing
 //					  the arm
-//		Resolution	= const integer& representing the number of planar sides to use
+//		resolution	= const integer& representing the number of planar sides to use
 //					  to represent the cylindrical members
 //		color		= const Color& describing the color to paint this object
-//		Show		= bool, visibility flag
+//		show		= bool, visibility flag
 //
 // Output Arguments:
 //		None
@@ -99,70 +99,68 @@ AARM::~AARM()
 //		None
 //
 //==========================================================================
-void AARM::Update(const Vector &End1, const Vector &Middle, const Vector &End2,
-				  const double &Diameter, const int &Resolution, const Color &color, bool Show)
+void AArm::Update(const Vector &end1, const Vector &middle, const Vector &end2,
+				  const double &diameter, const int &resolution, const Color &color, bool show)
 {
 	// Make sure all vector arguments are valid - if they are not,
 	// the object will not be made visible
-	if (VVASEMath::IsNaN(End1) || VVASEMath::IsNaN(Middle) || VVASEMath::IsNaN(End2))
-		Show = false;
+	if (VVASEMath::IsNaN(end1) || VVASEMath::IsNaN(middle) || VVASEMath::IsNaN(end2))
+		show = false;
 
 	// Make sure we want this tire to be visible
-	if (Show)
+	if (show)
 	{
 		// Set visibility ON
-		EndPoint1->SetVisibility(true);
-		MidPoint->SetVisibility(true);
-		EndPoint2->SetVisibility(true);
-		Member1->SetVisibility(true);
-		Member2->SetVisibility(true);
+		endPoint1->SetVisibility(true);
+		midPoint->SetVisibility(true);
+		endPoint2->SetVisibility(true);
+		member1->SetVisibility(true);
+		member2->SetVisibility(true);
 	}
 	else
 	{
 		// Set visibility OFF
-		EndPoint1->SetVisibility(false);
-		MidPoint->SetVisibility(false);
-		EndPoint2->SetVisibility(false);
-		Member1->SetVisibility(false);
-		Member2->SetVisibility(false);
+		endPoint1->SetVisibility(false);
+		midPoint->SetVisibility(false);
+		endPoint2->SetVisibility(false);
+		member1->SetVisibility(false);
+		member2->SetVisibility(false);
 
 		return;
 	}
 
 	// Set this object's color
-	Member1->SetColor(color);
-	Member2->SetColor(color);
+	member1->SetColor(color);
+	member2->SetColor(color);
 
 	// Set up the spheres
-	EndPoint1->SetRadius(Diameter / 2.0 * 1.1);// Make the points just a smidge larger than the members
-	MidPoint->SetRadius(Diameter / 2.0 * 1.1);
-	EndPoint2->SetRadius(Diameter / 2.0 * 1.1);
+	endPoint1->SetRadius(diameter / 2.0 * 1.1);// Make the points just a smidge larger than the members
+	midPoint->SetRadius(diameter / 2.0 * 1.1);
+	endPoint2->SetRadius(diameter / 2.0 * 1.1);
 
-	EndPoint1->SetResolution(Resolution);
-	MidPoint->SetResolution(Resolution);
-	EndPoint2->SetResolution(Resolution);
+	endPoint1->SetResolution(resolution);
+	midPoint->SetResolution(resolution);
+	endPoint2->SetResolution(resolution);
 
 	// Set up the CylinderSources
-	Member1->SetRadius(Diameter / 2.0);
-	Member1->SetEndPoint1(End1);
-	Member1->SetEndPoint2(Middle);
-	Member1->SetResolution(Resolution);
+	member1->SetRadius(diameter / 2.0);
+	member1->SetEndPoint1(end1);
+	member1->SetEndPoint2(middle);
+	member1->SetResolution(resolution);
 
-	Member2->SetRadius(Diameter / 2.0);
-	Member2->SetEndPoint1(End2);
-	Member2->SetEndPoint2(Middle);
-	Member2->SetResolution(Resolution);
+	member2->SetRadius(diameter / 2.0);
+	member2->SetEndPoint1(end2);
+	member2->SetEndPoint2(middle);
+	member2->SetResolution(resolution);
 
 	// Set the position of the spheres
-	EndPoint1->SetCenter(End1);
-	MidPoint->SetCenter(Middle);
-	EndPoint2->SetCenter(End2);
-
-	return;
+	endPoint1->SetCenter(end1);
+	midPoint->SetCenter(middle);
+	endPoint2->SetCenter(end2);
 }
 
 //==========================================================================
-// Class:			AARM
+// Class:			AArm
 // Function:		ContainsThisActor
 //
 // Description:		Compares the argument with the actors that make up this
@@ -170,7 +168,7 @@ void AARM::Update(const Vector &End1, const Vector &Middle, const Vector &End2,
 //					object or not.
 //
 // Input Arguments:
-//		Actor	= const Primitive* to compare against this object's actors
+//		actor	= const Primitive* to compare against this object's actors
 //
 // Output Arguments:
 //		None
@@ -179,14 +177,14 @@ void AARM::Update(const Vector &End1, const Vector &Middle, const Vector &End2,
 //		bool representing whether or not the Actor was part of this object
 //
 //==========================================================================
-bool AARM::ContainsThisActor(const Primitive *Actor)
+bool AArm::ContainsThisActor(const Primitive *actor)
 {
 	// Make the comparison
-	if (EndPoint1 == Actor ||
-		Member1 == Actor ||
-		MidPoint == Actor ||
-		Member2 == Actor ||
-		EndPoint2 == Actor)
+	if (endPoint1 == actor ||
+		member1 == actor ||
+		midPoint == actor ||
+		member2 == actor ||
+		endPoint2 == actor)
 		return true;
 	else
 		return false;

@@ -10,7 +10,7 @@
 // File:  cone.cpp
 // Created:  5/14/2009
 // Author:  K. Loux
-// Description:  Derived from PRIMITIVE for creating conical objects.
+// Description:  Derived from Primitive for creating conical objects.
 // History:
 //	6/2/2009	- modified GenerateGeometry() to make use of openGL matrices for positioning
 //				  and orienting the object, K.Loux.
@@ -22,13 +22,13 @@
 #include "vUtilities/convert.h"
 
 //==========================================================================
-// Class:			CONE
-// Function:		CONE
+// Class:			Cone
+// Function:		Cone
 //
-// Description:		Constructor for the CONE class.
+// Description:		Constructor for the Cone class.
 //
 // Input Arguments:
-//		_RenderWindow	= RenderWindow& reference to the object that owns this
+//		_renderWindow	= RenderWindow& reference to the object that owns this
 //
 // Output Arguments:
 //		None
@@ -37,21 +37,21 @@
 //		None
 //
 //==========================================================================
-CONE::CONE(RenderWindow &_RenderWindow) : Primitive(_RenderWindow)
+Cone::Cone(RenderWindow &_renderWindow) : Primitive(_renderWindow)
 {
 	// Initialize private data
-	DrawCaps = false;
-	Radius = 0.0;
-	Tip.Set(0.0,0.0,0.0);
-	BaseCenter.Set(0.0,0.0,0.0);
-	Resolution = 4;
+	drawCaps = false;
+	radius = 0.0;
+	tip.Set(0.0,0.0,0.0);
+	baseCenter.Set(0.0,0.0,0.0);
+	resolution = 4;
 }
 
 //==========================================================================
-// Class:			CONE
-// Function:		~CONE
+// Class:			Cone
+// Function:		~Cone
 //
-// Description:		Destructor for the CONE class.
+// Description:		Destructor for the Cone class.
 //
 // Input Arguments:
 //		None
@@ -63,12 +63,12 @@ CONE::CONE(RenderWindow &_RenderWindow) : Primitive(_RenderWindow)
 //		None
 //
 //==========================================================================
-CONE::~CONE()
+Cone::~Cone()
 {
 }
 
 //==========================================================================
-// Class:			CONE
+// Class:			Cone
 // Function:		GenerateGeometry
 //
 // Description:		Creates the OpenGL instructions to create this object in
@@ -84,44 +84,44 @@ CONE::~CONE()
 //		None
 //
 //==========================================================================
-void CONE::GenerateGeometry(void)
+void Cone::GenerateGeometry(void)
 {
 	// Resolution must be at least 3
-	if (Resolution < 3)
-		Resolution = 3;
+	if (resolution < 3)
+		resolution = 3;
 
 	// Determine the height of the cone
-	double HalfHeight = BaseCenter.Distance(Tip) / 2.0;
+	double halfHeight = baseCenter.Distance(tip) / 2.0;
 
 	// Determine the desired axis for the cone
-	Vector AxisDirection = (Tip - BaseCenter).Normalize();
+	Vector axisDirection = (tip - baseCenter).Normalize();
 
 	// Determine the center of the cone
-	Vector Center = BaseCenter + AxisDirection * HalfHeight;
+	Vector center = baseCenter + axisDirection * halfHeight;
 
 	// Our reference direction will be the X-axis direction
-	Vector ReferenceDirection(1.0, 0.0, 0.0);
+	Vector referenceDirection(1.0, 0.0, 0.0);
 
 	// Determine the angle and axis of rotation
-	Vector AxisOfRotation = ReferenceDirection.Cross(AxisDirection);
-	double Angle = acos(AxisDirection * ReferenceDirection);// [rad]
+	Vector axisOfRotation = referenceDirection.Cross(axisDirection);
+	double angle = acos(axisDirection * referenceDirection);// [rad]
 
 	// If the axis direction is opposite the reference direction, we need to rotate 180 degrees
-	if (VVASEMath::IsZero(AxisDirection + ReferenceDirection))
+	if (VVASEMath::IsZero(axisDirection + referenceDirection))
 	{
-		Angle = Convert::Pi;
-		AxisOfRotation.Set(0.0, 1.0, 0.0);
+		angle = Convert::Pi;
+		axisOfRotation.Set(0.0, 1.0, 0.0);
 	}
 
 	// Push the current matrix
 	glPushMatrix();
 
 		// Translate the current matrix
-		glTranslated(Center.x, Center.y, Center.z);
+		glTranslated(center.x, center.y, center.z);
 
 		// Rotate the current matrix, if the rotation axis is non-zero
-		if (!VVASEMath::IsZero(AxisOfRotation.Length()))
-			glRotated(Convert::RAD_TO_DEG(Angle), AxisOfRotation.x, AxisOfRotation.y, AxisOfRotation.z);
+		if (!VVASEMath::IsZero(axisOfRotation.Length()))
+			glRotated(Convert::RAD_TO_DEG(angle), axisOfRotation.x, axisOfRotation.y, axisOfRotation.z);
 
 		// Create the cone along the X-axis (must match the reference direction above)
 		// (the openGL matrices take care of correct position/orientation in hardware)
@@ -130,32 +130,32 @@ void CONE::GenerateGeometry(void)
 
 		// Set the first normal and the tip (center of the fan)
 		glNormal3d(1.0, 0.0, 0.0);
-		glVertex3d(HalfHeight, 0.0, 0.0);
+		glVertex3d(halfHeight, 0.0, 0.0);
 
 		// Loop to generate the triangles
 		int i;
-		Vector Point(-HalfHeight, 0.0, 0.0);
-		for (i = 0; i <= Resolution; i++)
+		Vector point(-halfHeight, 0.0, 0.0);
+		for (i = 0; i <= resolution; i++)
 		{
 			// Determine the angle to the current point
-			Angle = (double)i * 2.0 * Convert::Pi / (double)Resolution;
+			angle = (double)i * 2.0 * Convert::Pi / (double)resolution;
 
 			// Determine the Y and Z ordinates based on this angle and the radius
-			Point.y = Radius * cos(Angle);
-			Point.z = Radius * sin(Angle);
+			point.y = radius * cos(angle);
+			point.z = radius * sin(angle);
 
 			// Set the normal for the next two points
-			glNormal3d(0.0, Point.y / Radius, Point.z / Radius);
+			glNormal3d(0.0, point.y / radius, point.z / radius);
 
 			// Add the next point
-			glVertex3d(Point.x, Point.y, Point.z);
+			glVertex3d(point.x, point.y, point.z);
 		}
 
 		// End the triangle strip
 		glEnd();
 
 		// Draw the end cap, if it is enabled
-		if (DrawCaps)
+		if (drawCaps)
 		{
 			// Set the normal for the end cap
 			glNormal3d(-1.0, 0.0, 0.0);
@@ -164,17 +164,17 @@ void CONE::GenerateGeometry(void)
 			glBegin(GL_POLYGON);
 
 			// Draw a polygon at the base of the cone
-			for (i = 0; i <= Resolution; i++)
+			for (i = 0; i <= resolution; i++)
 			{
 				// Determine the angle to the current point
-				Angle = (double)i * 2.0 * Convert::Pi / (double)Resolution;
+				angle = (double)i * 2.0 * Convert::Pi / (double)resolution;
 
 				// Determine the Y and Z ordinates based on this angle and the radius
-				Point.y = Radius * cos(Angle);
-				Point.z = Radius * sin(Angle);
+				point.y = radius * cos(angle);
+				point.z = radius * sin(angle);
 
 				// Add the next point
-				glVertex3d(Point.x, Point.y, Point.z);
+				glVertex3d(point.x, point.y, point.z);
 			}
 
 			// End the polygon
@@ -183,12 +183,10 @@ void CONE::GenerateGeometry(void)
 
 	// Pop the matrix
 	glPopMatrix();
-
-	return;
 }
 
 //==========================================================================
-// Class:			CONE
+// Class:			Cone
 // Function:		HasValidParameters
 //
 // Description:		Checks to see if the information about this object is
@@ -204,10 +202,10 @@ void CONE::GenerateGeometry(void)
 //		bool, true for OK to draw, false otherwise
 //
 //==========================================================================
-bool CONE::HasValidParameters(void)
+bool Cone::HasValidParameters(void)
 {
 	// Cones must have a non-zero distance tip-to-base, and must have a positive radius
-	if (!VVASEMath::IsZero(Tip.Distance(BaseCenter)) && Radius > 0.0)
+	if (!VVASEMath::IsZero(tip.Distance(baseCenter)) && radius > 0.0)
 		return true;
 
 	// Otherwise return false
@@ -215,13 +213,13 @@ bool CONE::HasValidParameters(void)
 }
 
 //==========================================================================
-// Class:			CONE
+// Class:			Cone
 // Function:		SetResolution
 //
 // Description:		Sets the number of faces use to approximate the cone.
 //
 // Input Arguments:
-//		_Resolution	= const int&
+//		_resolution	= const int&
 //
 // Output Arguments:
 //		None
@@ -230,26 +228,24 @@ bool CONE::HasValidParameters(void)
 //		None
 //
 //==========================================================================
-void CONE::SetResolution(const int &_Resolution)
+void Cone::SetResolution(const int &_resolution)
 {
 	// Set the resolution to the argument
-	Resolution = _Resolution;
+	resolution = _resolution;
 	
 	// Reset the modified flag
 	modified = true;
-
-	return;
 }
 
 //==========================================================================
-// Class:			CONE
+// Class:			Cone
 // Function:		SetCapping
 //
 // Description:		Sets the flag indicating whether or not the cone should be
 //					capped on the base end.
 //
 // Input Arguments:
-//		_DrawCaps	= const bool&
+//		_drawCaps	= const bool&
 //
 // Output Arguments:
 //		None
@@ -258,25 +254,23 @@ void CONE::SetResolution(const int &_Resolution)
 //		None
 //
 //==========================================================================
-void CONE::SetCapping(const bool &_DrawCaps)
+void Cone::SetCapping(const bool &_drawCaps)
 {
 	// Set the capping flag to the argument
-	DrawCaps = _DrawCaps;
+	drawCaps = _drawCaps;
 	
 	// Reset the modified flag
 	modified = true;
-
-	return;
 }
 
 //==========================================================================
-// Class:			CONE
+// Class:			Cone
 // Function:		SetTip
 //
 // Description:		Sets the location of the tip of the cone.
 //
 // Input Arguments:
-//		_Tip	= const Vector&
+//		_tip	= const Vector&
 //
 // Output Arguments:
 //		None
@@ -285,25 +279,23 @@ void CONE::SetCapping(const bool &_DrawCaps)
 //		None
 //
 //==========================================================================
-void CONE::SetTip(const Vector &_Tip)
+void Cone::SetTip(const Vector &_tip)
 {
 	// Set the tip location to the argument
-	Tip = _Tip;
+	tip = _tip;
 	
 	// Reset the modified flag
 	modified = true;
-
-	return;
 }
 
 //==========================================================================
-// Class:			CONE
+// Class:			Cone
 // Function:		SetBaseCenter
 //
 // Description:		Sets the location of the center of the cone's base.
 //
 // Input Arguments:
-//		_BaseCenter	= const Vector&
+//		_baseCenter	= const Vector&
 //
 // Output Arguments:
 //		None
@@ -312,25 +304,23 @@ void CONE::SetTip(const Vector &_Tip)
 //		None
 //
 //==========================================================================
-void CONE::SetBaseCenter(const Vector &_BaseCenter)
+void Cone::SetBaseCenter(const Vector &_baseCenter)
 {
 	// Set the base location to the argument
-	BaseCenter = _BaseCenter;
+	baseCenter = _baseCenter;
 	
 	// Reset the modified flag
 	modified = true;
-
-	return;
 }
 
 //==========================================================================
-// Class:			CONE
+// Class:			Cone
 // Function:		SetRadius
 //
 // Description:		Sets the radius at the base of the cone.
 //
 // Input Arguments:
-//		_Radius	= const double&
+//		_radius	= const double&
 //
 // Output Arguments:
 //		None
@@ -339,13 +329,11 @@ void CONE::SetBaseCenter(const Vector &_BaseCenter)
 //		None
 //
 //==========================================================================
-void CONE::SetRadius(const double &_Radius)
+void Cone::SetRadius(const double &_radius)
 {
 	// Set the radius to the argument
-	Radius = _Radius;
+	radius = _radius;
 	
 	// Reset the modified flag
 	modified = true;
-
-	return;
 }

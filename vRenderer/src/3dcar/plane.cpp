@@ -7,10 +7,10 @@
 
 ===================================================================================*/
 
-// File:  plane.cpp
+// File:  plane3D.cpp
 // Created:  5/23/2008
 // Author:  K. Loux
-// Description:  Contains class definition for the PLANE class.
+// Description:  Contains class definition for the Plane3D class.
 // History:
 //	5/17/2009	- Removed VTK dependencies, K. Loux.
 
@@ -21,14 +21,14 @@
 #include "vMath/vector.h"
 
 //==========================================================================
-// Class:			PLANE
-// Function:		PLANE
+// Class:			Plane3D
+// Function:		Plane3D
 //
-// Description:		Constructor for the PLANE class.  Performs the entire
+// Description:		Constructor for the Plane3D class.  Performs the entire
 //					process necessary to add the object to the scene.
 //
 // Input Arguments:
-//		_Renderer	= RenderWindow&, pointer to rendering object
+//		_renderer	= RenderWindow&, pointer to rendering object
 //
 // Output Arguments:
 //		None
@@ -37,23 +37,23 @@
 //		None
 //
 //==========================================================================
-PLANE::PLANE(RenderWindow &_Renderer)
+Plane3D::Plane3D(RenderWindow &_renderer)
 {
 	// Create objects
-	Plane = new QUADRILATERAL(_Renderer);
+	plane = new Quadrilateral(_renderer);
 
 	// Set up the plane
-	Vector XAxis(1.0, 0.0, 0.0);
-	Vector Normal(0.0, 0.0, 1.0);
-	Plane->SetAxis(XAxis);
-	Plane->SetNormal(Normal);
+	Vector xAxis(1.0, 0.0, 0.0);
+	Vector normal(0.0, 0.0, 1.0);
+	plane->SetAxis(xAxis);
+	plane->SetNormal(normal);
 }
 
 //==========================================================================
-// Class:			PLANE
-// Function:		~PLANE
+// Class:			Plane3D
+// Function:		~Plane3D
 //
-// Description:		Destructor for the PLANE class.
+// Description:		Destructor for the Plane3D class.
 //
 // Input Arguments:
 //		None
@@ -65,23 +65,23 @@ PLANE::PLANE(RenderWindow &_Renderer)
 //		None
 //
 //==========================================================================
-PLANE::~PLANE()
+Plane3D::~Plane3D()
 {
 }
 
 //==========================================================================
-// Class:			PLANE
+// Class:			Plane3D
 // Function:		Update
 //
 // Description:		Updates the position and size of the plane in the scene
 //
 // Input Arguments:
-//		Length	= const double&, length of the plane in the x-direction
-//		Width	= const double&, length of the plane in the y-direction
-//		XOffset	= const double&, offset of the center of the plane in the
+//		length	= const double&, length of the plane in the x-direction
+//		width	= const double&, length of the plane in the y-direction
+//		xOffset	= const double&, offset of the center of the plane in the
 //				  x-direction
 //		color	= const Color& describing this object's color
-//		Show	= const bool&, visibility flag
+//		show	= const bool&, visibility flag
 //
 // Output Arguments:
 //		None
@@ -90,24 +90,22 @@ PLANE::~PLANE()
 //		None
 //
 //==========================================================================
-void PLANE::Update(const double &Length, const double &Width, const double &XOffset,
-				   const Color &color, const bool &Show)
+void Plane3D::Update(const double &length, const double &width, const double &xOffset,
+				   const Color &color, const bool &show)
 {
 	// Set the visibility flag
-	Plane->SetVisibility(Show);
+	plane->SetVisibility(show);
 
 	// Make sure we want this to be visible before continuing
-	if (!Show)
+	if (!show)
 		return;
 
 	// Set this object's color
-	Plane->SetColor(color);
+	plane->SetColor(color);
 
 	// Set the correct position and size of the plane
-	Vector Center(XOffset, 0.0, 0.0);
-	Plane->SetCenter(Center);
-	Plane->SetLength(Length);
-	Plane->SetWidth(Width);
-
-	return;
+	Vector center(xOffset, 0.0, 0.0);
+	plane->SetCenter(center);
+	plane->SetLength(length);
+	plane->SetWidth(width);
 }

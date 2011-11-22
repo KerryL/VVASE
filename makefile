@@ -15,6 +15,6 @@ all:
 	$(MAKE) -C CarDesigner all
 
 clean:
-	$(RM) -r $(OBJDIR) $(LIBOUTDIR) $(BINDIR)*
+	$(RM) -r $(OBJDIR) $(LIBOUTDIR) $(BINDIR)VVASE
 	set -e; for dir in $(PSLIB) ; do $(MAKE) -C $$dir clean; done
 	$(MAKE) -C CarDesigner clean

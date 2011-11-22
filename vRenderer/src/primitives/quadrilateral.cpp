@@ -10,7 +10,7 @@
 // File:  quadrilateral.cpp
 // Created:  5/14/2009
 // Author:  K. Loux
-// Description:  Derived from PRIMITIVE for creating rectangular objects.
+// Description:  Derived from Primitive for creating rectangular objects.
 // History:
 
 // Local headers
@@ -19,13 +19,13 @@
 #include "vMath/carMath.h"
 
 //==========================================================================
-// Class:			QUADRILATERAL
-// Function:		QUADRILATERAL
+// Class:			Quadrilateral
+// Function:		Quadrilateral
 //
-// Description:		Constructor for the QUADRILATERAL class.
+// Description:		Constructor for the Quadrilateral class.
 //
 // Input Arguments:
-//		_RenderWindow	= RenderWindow& pointing to the object that owns this
+//		_renderWindow	= RenderWindow& pointing to the object that owns this
 //
 // Output Arguments:
 //		None
@@ -34,20 +34,20 @@
 //		None
 //
 //==========================================================================
-QUADRILATERAL::QUADRILATERAL(RenderWindow &_RenderWindow) : Primitive(_RenderWindow)
+Quadrilateral::Quadrilateral(RenderWindow &_renderWindow) : Primitive(_renderWindow)
 {
 	// Initialize private data
-	Normal.Set(0.0, 0.0, 0.0);
-	Axis.Set(0.0, 0.0, 0.0);
-	Width = 0.0;
-	Length = 0.0;
+	normal.Set(0.0, 0.0, 0.0);
+	axis.Set(0.0, 0.0, 0.0);
+	width = 0.0;
+	length = 0.0;
 }
 
 //==========================================================================
-// Class:			QUADRILATERAL
-// Function:		~QUADRILATERAL
+// Class:			Quadrilateral
+// Function:		~Quadrilateral
 //
-// Description:		Destructor for the QUADRILATERAL class.
+// Description:		Destructor for the Quadrilateral class.
 //
 // Input Arguments:
 //		None
@@ -59,12 +59,12 @@ QUADRILATERAL::QUADRILATERAL(RenderWindow &_RenderWindow) : Primitive(_RenderWin
 //		None
 //
 //==========================================================================
-QUADRILATERAL::~QUADRILATERAL()
+Quadrilateral::~Quadrilateral()
 {
 }
 
 //==========================================================================
-// Class:			QUADRILATERAL
+// Class:			Quadrilateral
 // Function:		GenerateGeometry
 //
 // Description:		Creates the OpenGL instructions to create this object in
@@ -80,64 +80,62 @@ QUADRILATERAL::~QUADRILATERAL()
 //		None
 //
 //==========================================================================
-void QUADRILATERAL::GenerateGeometry(void)
+void Quadrilateral::GenerateGeometry(void)
 {
 	// Set the normal direction
-	glNormal3d(Normal.x, Normal.y, Normal.z);
+	glNormal3d(normal.x, normal.y, normal.z);
 
 	// We'll use a triangle strip to draw the quad
 	glBegin(GL_TRIANGLE_STRIP);
 
 	// Calculate the distance from the center to each corner
-	double HalfDiagonal = sqrt(Width * Width / 4.0 + Length * Length / 4.0);
+	double halfDiagonal = sqrt(width * width / 4.0 + length * length / 4.0);
 
 	// Calculate the angle between the axis and each diagonal
-	double DiagonalAngle = atan2(Width, Length);
+	double diagonalAngle = atan2(width, length);
 
 	// Force the axis direction to be perpendicular to the normal
-	Vector AxisDirection = Axis.Cross(Normal).Cross(Normal);
+	Vector axisDirection = axis.Cross(normal).Cross(normal);
 
 	// Compute the locations of the four corners of the quad
-	Vector Corner1 = Center + AxisDirection.Normalize() * HalfDiagonal;
-	Vector Corner2 = Center + AxisDirection.Normalize() * HalfDiagonal;
-	Vector Corner3 = Center - AxisDirection.Normalize() * HalfDiagonal;
-	Vector Corner4 = Center - AxisDirection.Normalize() * HalfDiagonal;
+	Vector corner1 = center + axisDirection.Normalize() * halfDiagonal;
+	Vector corner2 = center + axisDirection.Normalize() * halfDiagonal;
+	Vector corner3 = center - axisDirection.Normalize() * halfDiagonal;
+	Vector corner4 = center - axisDirection.Normalize() * halfDiagonal;
 
-	Corner1 -= Center;
-	Corner1.Rotate(DiagonalAngle, Normal);
-	Corner1 += Center;
+	corner1 -= center;
+	corner1.Rotate(diagonalAngle, normal);
+	corner1 += center;
 
-	Corner2 -= Center;
-	Corner2.Rotate(-DiagonalAngle, Normal);
-	Corner2 += Center;
+	corner2 -= center;
+	corner2.Rotate(-diagonalAngle, normal);
+	corner2 += center;
 
-	Corner3 -= Center;
-	Corner3.Rotate(DiagonalAngle, Normal);
-	Corner3 += Center;
+	corner3 -= center;
+	corner3.Rotate(diagonalAngle, normal);
+	corner3 += center;
 
-	Corner4 -= Center;
-	Corner4.Rotate(-DiagonalAngle, Normal);
-	Corner4 += Center;
+	corner4 -= center;
+	corner4.Rotate(-diagonalAngle, normal);
+	corner4 += center;
 
-	// Add the vertecies to create two triangles
+	// Add the vertices to create two triangles
 	// The order is 1, 4, 2, 3 because after the rotations, the corners are located
 	// as shown (here, the longer dimension is the length):
 	//  1 ---------- 4
 	//   |          |
 	//  2 ---------- 3
-	glVertex3d(Corner1.x, Corner1.y, Corner1.z);
-	glVertex3d(Corner4.x, Corner4.y, Corner4.z);
-	glVertex3d(Corner2.x, Corner2.y, Corner2.z);
-	glVertex3d(Corner3.x, Corner3.y, Corner3.z);
+	glVertex3d(corner1.x, corner1.y, corner1.z);
+	glVertex3d(corner4.x, corner4.y, corner4.z);
+	glVertex3d(corner2.x, corner2.y, corner2.z);
+	glVertex3d(corner3.x, corner3.y, corner3.z);
 
 	// Complete the triangle strip
 	glEnd();
-
-	return;
 }
 
 //==========================================================================
-// Class:			QUADRILATERAL
+// Class:			Quadrilateral
 // Function:		HasValidParameters
 //
 // Description:		Checks to see if the information about this object is
@@ -153,13 +151,13 @@ void QUADRILATERAL::GenerateGeometry(void)
 //		bool, true for OK to draw, false otherwise
 //
 //==========================================================================
-bool QUADRILATERAL::HasValidParameters(void)
+bool Quadrilateral::HasValidParameters(void)
 {
 	// Quads must have non-zero normal and axis vectors, non-zero dimensions,
 	// and non-parallel normal and axis directions
-	if (!VVASEMath::IsZero(Normal.Length()) && !VVASEMath::IsZero(Axis.Length()) &&
-		!VVASEMath::IsZero(fabs(Axis * Normal) / (Axis.Length() * Normal.Length()) - 1.0)
-		&& Width > 0.0 && Length > 0.0)
+	if (!VVASEMath::IsZero(normal.Length()) && !VVASEMath::IsZero(axis.Length()) &&
+		!VVASEMath::IsZero(fabs(axis * normal) / (axis.Length() * normal.Length()) - 1.0)
+		&& width > 0.0 && length > 0.0)
 		return true;
 
 	// Otherwise return false
@@ -167,13 +165,13 @@ bool QUADRILATERAL::HasValidParameters(void)
 }
 
 //==========================================================================
-// Class:			QUADRILATERAL
+// Class:			Quadrilateral
 // Function:		SetNormal
 //
 // Description:		Sets the rectangle's normal direction.
 //
 // Input Arguments:
-//		_Normal	= const Vector&
+//		_normal	= const Vector&
 //
 // Output Arguments:
 //		None
@@ -182,25 +180,23 @@ bool QUADRILATERAL::HasValidParameters(void)
 //		None
 //
 //==========================================================================
-void QUADRILATERAL::SetNormal(const Vector &_Normal)
+void Quadrilateral::SetNormal(const Vector &_normal)
 {
 	// Set the normal direction to the argument
-	Normal = _Normal;
+	normal = _normal;
 	
 	// Reset the modified flag
 	modified = true;
-
-	return;
 }
 
 //==========================================================================
-// Class:			QUADRILATERAL
+// Class:			Quadrilateral
 // Function:		SetCenter
 //
 // Description:		Sets the location of the center of the rectangle.
 //
 // Input Arguments:
-//		_Center	= const Vector&
+//		_center	= const Vector&
 //
 // Output Arguments:
 //		None
@@ -209,26 +205,24 @@ void QUADRILATERAL::SetNormal(const Vector &_Normal)
 //		None
 //
 //==========================================================================
-void QUADRILATERAL::SetCenter(const Vector &_Center)
+void Quadrilateral::SetCenter(const Vector &_center)
 {
 	// Set the center point to the argument
-	Center = _Center;
+	center = _center;
 	
 	// Reset the modified flag
 	modified = true;
-
-	return;
 }
 
 //==========================================================================
-// Class:			QUADRILATERAL
+// Class:			Quadrilateral
 // Function:		SetAxis
 //
 // Description:		Sets the rectangle's orientation (direction of length dimension).
 //					This vector must not be parallel to the normal direction.
 //
 // Input Arguments:
-//		_Axis	= const Vector&
+//		_axis	= const Vector&
 //
 // Output Arguments:
 //		None
@@ -237,26 +231,24 @@ void QUADRILATERAL::SetCenter(const Vector &_Center)
 //		None
 //
 //==========================================================================
-void QUADRILATERAL::SetAxis(const Vector &_Axis)
+void Quadrilateral::SetAxis(const Vector &_axis)
 {
 	// Set the axis direction to the argument
-	Axis = _Axis;
+	axis = _axis;
 	
 	// Reset the modified flag
 	modified = true;
-
-	return;
 }
 
 //==========================================================================
-// Class:			QUADRILATERAL
+// Class:			Quadrilateral
 // Function:		SetWidth
 //
 // Description:		Sets the width of the quadrilateral (perpendicular to
 //					the normal direction and to the axis).
 //
 // Input Arguments:
-//		_Width	= const double&
+//		_width	= const double&
 //
 // Output Arguments:
 //		None
@@ -265,25 +257,23 @@ void QUADRILATERAL::SetAxis(const Vector &_Axis)
 //		None
 //
 //==========================================================================
-void QUADRILATERAL::SetWidth(const double &_Width)
+void Quadrilateral::SetWidth(const double &_width)
 {
 	// Set the width to the argument
-	Width = _Width;
+	width = _width;
 	
 	// Reset the modified flag
 	modified = true;
-
-	return;
 }
 
 //==========================================================================
-// Class:			QUADRILATERAL
+// Class:			Quadrilateral
 // Function:		SetLength
 //
 // Description:		Sets the length (along the axis) of the quadrilateral.
 //
 // Input Arguments:
-//		_Length	= const double&
+//		_length	= const double&
 //
 // Output Arguments:
 //		None
@@ -292,13 +282,11 @@ void QUADRILATERAL::SetWidth(const double &_Width)
 //		None
 //
 //==========================================================================
-void QUADRILATERAL::SetLength(const double &_Length)
+void Quadrilateral::SetLength(const double &_length)
 {
 	// Set the length to the argument
-	Length = _Length;
+	length = _length;
 	
 	// Reset the modified flag
 	modified = true;
-
-	return;
 }

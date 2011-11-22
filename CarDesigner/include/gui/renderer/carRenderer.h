@@ -33,16 +33,16 @@ class wxString;
 // VVASE forward declarations
 class Debugger;
 class CAR;
-class AARM;
-class LINK;
-class ORIGIN;
-class PLANE;
-class TIRE3D;
-class DAMPER3D;
-class SPRING3D;
-class SWAYBAR3D;
-class TRIANGLE3D;
-class POINT3D;
+class AArm;
+class Link;
+class Origin;
+class Plane3D;
+class Tire3D;
+class Damper3D;
+class Spring3D;
+class Swaybar3D;
+class Triangle3D;
+class Point3D;
 class Vector3D;
 class KinematicOutputs;
 class APPEARANCE_OPTIONS;
@@ -93,81 +93,81 @@ private:
 
 	// The actors that we use to represent the car
 	// The origin marker and ground plane
-	ORIGIN *Origin;
-	PLANE *GroundPlane;
+	Origin *origin;
+	Plane3D *GroundPlane;
 
 	// Right front corner
-	AARM *RightFrontLowerAArm;
-	AARM *RightFrontUpperAArm;
-	LINK *RightFrontTieRod;
-	LINK *RightFrontPushrod;
-	TIRE3D *RightFrontTire;
-	DAMPER3D *RightFrontDamper;
-	SPRING3D *RightFrontSpring;
-	TRIANGLE3D *RightFrontUpright;
-	TRIANGLE3D *RightFrontBellCrank;
-	LINK *RightFrontBarLink;
-	LINK *RightFrontHalfShaft;
+	AArm *RightFrontLowerAArm;
+	AArm *RightFrontUpperAArm;
+	Link *RightFrontTieRod;
+	Link *RightFrontPushrod;
+	Tire3D *RightFrontTire;
+	Damper3D *RightFrontDamper;
+	Spring3D *RightFrontSpring;
+	Triangle3D *RightFrontUpright;
+	Triangle3D *RightFrontBellCrank;
+	Link *RightFrontBarLink;
+	Link *RightFrontHalfShaft;
 
 	// Left front corner
-	AARM *LeftFrontLowerAArm;
-	AARM *LeftFrontUpperAArm;
-	LINK *LeftFrontTieRod;
-	LINK *LeftFrontPushrod;
-	TIRE3D *LeftFrontTire;
-	DAMPER3D *LeftFrontDamper;
-	SPRING3D *LeftFrontSpring;
-	TRIANGLE3D *LeftFrontUpright;
-	TRIANGLE3D *LeftFrontBellCrank;
-	LINK *LeftFrontBarLink;
-	LINK *LeftFrontHalfShaft;
+	AArm *LeftFrontLowerAArm;
+	AArm *LeftFrontUpperAArm;
+	Link *LeftFrontTieRod;
+	Link *LeftFrontPushrod;
+	Tire3D *LeftFrontTire;
+	Damper3D *LeftFrontDamper;
+	Spring3D *LeftFrontSpring;
+	Triangle3D *LeftFrontUpright;
+	Triangle3D *LeftFrontBellCrank;
+	Link *LeftFrontBarLink;
+	Link *LeftFrontHalfShaft;
 
 	// Right rear corner
-	AARM *RightRearLowerAArm;
-	AARM *RightRearUpperAArm;
-	LINK *RightRearTieRod;
-	LINK *RightRearPushrod;
-	TIRE3D *RightRearTire;
-	DAMPER3D *RightRearDamper;
-	SPRING3D *RightRearSpring;
-	TRIANGLE3D *RightRearUpright;
-	TRIANGLE3D *RightRearBellCrank;
-	LINK *RightRearBarLink;
-	LINK *RightRearHalfShaft;
+	AArm *RightRearLowerAArm;
+	AArm *RightRearUpperAArm;
+	Link *RightRearTieRod;
+	Link *RightRearPushrod;
+	Tire3D *RightRearTire;
+	Damper3D *RightRearDamper;
+	Spring3D *RightRearSpring;
+	Triangle3D *RightRearUpright;
+	Triangle3D *RightRearBellCrank;
+	Link *RightRearBarLink;
+	Link *RightRearHalfShaft;
 
 	// Left rear corner
-	AARM *LeftRearLowerAArm;
-	AARM *LeftRearUpperAArm;
-	LINK *LeftRearTieRod;
-	LINK *LeftRearPushrod;
-	TIRE3D *LeftRearTire;
-	DAMPER3D *LeftRearDamper;
-	SPRING3D *LeftRearSpring;
-	TRIANGLE3D *LeftRearUpright;
-	TRIANGLE3D *LeftRearBellCrank;
-	LINK *LeftRearBarLink;
-	LINK *LeftRearHalfShaft;
+	AArm *LeftRearLowerAArm;
+	AArm *LeftRearUpperAArm;
+	Link *LeftRearTieRod;
+	Link *LeftRearPushrod;
+	Tire3D *LeftRearTire;
+	Damper3D *LeftRearDamper;
+	Spring3D *LeftRearSpring;
+	Triangle3D *LeftRearUpright;
+	Triangle3D *LeftRearBellCrank;
+	Link *LeftRearBarLink;
+	Link *LeftRearHalfShaft;
 
 	// Front end
-	LINK *SteeringRack;
-	SWAYBAR3D *FrontSwayBar;
-	SPRING3D *FrontThirdSpring;
-	DAMPER3D *FrontThirdDamper;
+	Link *SteeringRack;
+	Swaybar3D *FrontSwayBar;
+	Spring3D *FrontThirdSpring;
+	Damper3D *FrontThirdDamper;
 
 	// Rear end
-	SWAYBAR3D *RearSwayBar;
-	SPRING3D *RearThirdSpring;
-	DAMPER3D *RearThirdDamper;
+	Swaybar3D *RearSwayBar;
+	Spring3D *RearThirdSpring;
+	Damper3D *RearThirdDamper;
 
 	// Kinematic output visualization
-	POINT3D *FrontRollCenter;
-	POINT3D *RearRollCenter;
-	POINT3D *RightPitchCenter;
-	POINT3D *LeftPitchCenter;
-	POINT3D *RightFrontInstantCenter;
-	POINT3D *LeftFrontInstantCenter;
-	POINT3D *RightRearInstantCenter;
-	POINT3D *LeftRearInstantCenter;
+	Point3D *FrontRollCenter;
+	Point3D *RearRollCenter;
+	Point3D *RightPitchCenter;
+	Point3D *LeftPitchCenter;
+	Point3D *RightFrontInstantCenter;
+	Point3D *LeftFrontInstantCenter;
+	Point3D *RightRearInstantCenter;
+	Point3D *LeftRearInstantCenter;
 
 	Vector3D *FrontRollAxis;
 	Vector3D *RearRollAxis;
@@ -183,7 +183,7 @@ private:
 	CORNER::LOCATION HelperOrbLocation;
 	SUSPENSION::HARDPOINTS HelperOrbSuspensionPoint;
 	bool HelperOrbIsActive;
-	POINT3D *HelperOrb;
+	Point3D *HelperOrb;
 };
 
 #endif// _CAR_RENDERER_H_

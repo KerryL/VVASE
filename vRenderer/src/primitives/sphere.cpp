@@ -30,10 +30,10 @@
 #define ICOSOHEDRON
 
 //==========================================================================
-// Class:			SPHERE
-// Function:		SPHERE
+// Class:			Sphere
+// Function:		Sphere
 //
-// Description:		Constructor for the SPHERE class.
+// Description:		Constructor for the Sphere class.
 //
 // Input Arguments:
 //		_RenderWindow	= RenderWindow& pointing to the object that owns this
@@ -45,19 +45,19 @@
 //		None
 //
 //==========================================================================
-SPHERE::SPHERE(RenderWindow &_RenderWindow) : Primitive(_RenderWindow)
+Sphere::Sphere(RenderWindow &_renderWindow) : Primitive(_renderWindow)
 {
 	// Initialize the private data
-	Center.Set(0.0,0.0,0.0);
-	Radius = 0.0;
-	Resolution = 4;
+	center.Set(0.0,0.0,0.0);
+	radius = 0.0;
+	resolution = 4;
 }
 
 //==========================================================================
-// Class:			SPHERE
-// Function:		~SPHERE
+// Class:			Sphere
+// Function:		~Sphere
 //
-// Description:		Destructor for the SPHERE class.
+// Description:		Destructor for the Sphere class.
 //
 // Input Arguments:
 //		None
@@ -69,12 +69,12 @@ SPHERE::SPHERE(RenderWindow &_RenderWindow) : Primitive(_RenderWindow)
 //		None
 //
 //==========================================================================
-SPHERE::~SPHERE()
+Sphere::~Sphere()
 {
 }
 
 //==========================================================================
-// Class:			SPHERE
+// Class:			Sphere
 // Function:		GenerateGeometry
 //
 // Description:		Creates the OpenGL instructions to create this object in
@@ -90,95 +90,95 @@ SPHERE::~SPHERE()
 //		None
 //
 //==========================================================================
-void SPHERE::GenerateGeometry(void)
+void Sphere::GenerateGeometry(void)
 {
 	// Resolution must be at least 0
-	if (Resolution < 0)
-		Resolution = 0;
+	if (resolution < 0)
+		resolution = 0;
 
 #ifdef ICOSOHEDRON
 	// To avoid performance issues, don't let the resolution go above 2
-	if (Resolution > 2)
-		Resolution = 2;
+	if (resolution > 2)
+		resolution = 2;
 
-	// Find twelve vertecies that define an icosohedron cirumscribed within the sphere
+	// Find twelve vertices that define an icosohedron circumscribed within the sphere
 	double t = (1.0 + sqrt(5.0)) / 2.0;
 	double s = sqrt(1 + t * t);
-	Vector Vertex[12];
-	Vertex[0].Set(t, 1.0, 0.0);
-	Vertex[1].Set(-t, 1.0, 0.0);
-	Vertex[2].Set(t, -1.0, 0.0);
-	Vertex[3].Set(-t, -1.0, 0.0);
-	Vertex[4].Set(1.0, 0.0, t);
-	Vertex[5].Set(1.0, 0.0, -t);
-	Vertex[6].Set(-1, 0.0, t);
-	Vertex[7].Set(-1.0, 0.0, -t);
-	Vertex[8].Set(0.0, t, 1.0);
-	Vertex[9].Set(0.0, -t, 1.0);
-	Vertex[10].Set(0.0, t, -1.0);
-	Vertex[11].Set(0.0, -t, -1.0);
+	Vector vertex[12];
+	vertex[0].Set(t, 1.0, 0.0);
+	vertex[1].Set(-t, 1.0, 0.0);
+	vertex[2].Set(t, -1.0, 0.0);
+	vertex[3].Set(-t, -1.0, 0.0);
+	vertex[4].Set(1.0, 0.0, t);
+	vertex[5].Set(1.0, 0.0, -t);
+	vertex[6].Set(-1, 0.0, t);
+	vertex[7].Set(-1.0, 0.0, -t);
+	vertex[8].Set(0.0, t, 1.0);
+	vertex[9].Set(0.0, -t, 1.0);
+	vertex[10].Set(0.0, t, -1.0);
+	vertex[11].Set(0.0, -t, -1.0);
 
-	// Scale all of the vertecies up to make the radius correct
+	// Scale all of the vertices up to make the radius correct
 	// Also, include the s term that was not included above
 	int i;
 	for (i = 0; i < 12; i++)
-		Vertex[i] *= Radius / s;
+		vertex[i] *= radius / s;
 #else
 	// To avoid performance issues, don't let the resolution go above 3
-	if (Resolution > 3)
-		Resolution = 3;
+	if (resolution > 3)
+		resolution = 3;
 
-	// Find six vertecies that define an octohedron circumscribed within the sphere
-	Vector Top(0.0, 0.0, Radius), Bottom(0.0, 0.0, -Radius);
-	Vector Equator1(Radius, 0.0, 0.0), Equator2(0.0, Radius, 0.0);
-	Vector Equator3(-Radius, 0.0, 0.0), Equator4(0.0, -Radius, 0.0);
+	// Find six vertices that define an octohedron circumscribed within the sphere
+	Vector top(0.0, 0.0, radius), bottom(0.0, 0.0, -radius);
+	Vector equator1(radius, 0.0, 0.0), equator2(0.0, radius, 0.0);
+	Vector equator3(-radius, 0.0, 0.0), equator4(0.0, -radius, 0.0);
 #endif
 
 	// Push the current matrix
 	glPushMatrix();
 
 		// Translate the current matrix
-		glTranslated(Center.x, Center.y, Center.z);
+		glTranslated(center.x, center.y, center.z);
 
 		// Begin the triangles sequence
 		glBegin(GL_TRIANGLES);
 
 #ifdef ICOSOHEDRON
 		// Begin recursive subdivision of all twenty faces of the icosohedron
-		RecursiveSubdivision(Vertex[0], Vertex[8], Vertex[4], Resolution);
-		RecursiveSubdivision(Vertex[0], Vertex[5], Vertex[10], Resolution);
-		RecursiveSubdivision(Vertex[2], Vertex[4], Vertex[9], Resolution);
-		RecursiveSubdivision(Vertex[2], Vertex[11], Vertex[5], Resolution);
-		RecursiveSubdivision(Vertex[1], Vertex[6], Vertex[8], Resolution);
+		RecursiveSubdivision(vertex[0], vertex[8], vertex[4], resolution);
+		RecursiveSubdivision(vertex[0], vertex[5], vertex[10], resolution);
+		RecursiveSubdivision(vertex[2], vertex[4], vertex[9], resolution);
+		RecursiveSubdivision(vertex[2], vertex[11], vertex[5], resolution);
+		RecursiveSubdivision(vertex[1], vertex[6], vertex[8], resolution);
 
-		RecursiveSubdivision(Vertex[1], Vertex[10], Vertex[7], Resolution);
-		RecursiveSubdivision(Vertex[3], Vertex[9], Vertex[6], Resolution);
-		RecursiveSubdivision(Vertex[3], Vertex[7], Vertex[11], Resolution);
-		RecursiveSubdivision(Vertex[0], Vertex[10], Vertex[8], Resolution);
-		RecursiveSubdivision(Vertex[1], Vertex[8], Vertex[10], Resolution);
+		RecursiveSubdivision(vertex[1], vertex[10], vertex[7], resolution);
+		RecursiveSubdivision(vertex[3], vertex[9], vertex[6], resolution);
+		RecursiveSubdivision(vertex[3], vertex[7], vertex[11], resolution);
+		RecursiveSubdivision(vertex[0], vertex[10], vertex[8], resolution);
+		RecursiveSubdivision(vertex[1], vertex[8], vertex[10], resolution);
 
-		RecursiveSubdivision(Vertex[2], Vertex[9], Vertex[11], Resolution);
-		RecursiveSubdivision(Vertex[3], Vertex[11], Vertex[9], Resolution);
-		RecursiveSubdivision(Vertex[4], Vertex[2], Vertex[0], Resolution);
-		RecursiveSubdivision(Vertex[5], Vertex[0], Vertex[2], Resolution);
-		RecursiveSubdivision(Vertex[6], Vertex[1], Vertex[3], Resolution);
+		RecursiveSubdivision(vertex[2], vertex[9], vertex[11], resolution);
+		RecursiveSubdivision(vertex[3], vertex[11], vertex[9], resolution);
+		RecursiveSubdivision(vertex[4], vertex[2], vertex[0], resolution);
+		RecursiveSubdivision(vertex[5], vertex[0], vertex[2], resolution);
+		RecursiveSubdivision(vertex[6], vertex[1], vertex[3], resolution);
 
-		RecursiveSubdivision(Vertex[7], Vertex[3], Vertex[1], Resolution);
-		RecursiveSubdivision(Vertex[8], Vertex[6], Vertex[4], Resolution);
-		RecursiveSubdivision(Vertex[9], Vertex[4], Vertex[6], Resolution);
-		RecursiveSubdivision(Vertex[10], Vertex[5], Vertex[7], Resolution);
-		RecursiveSubdivision(Vertex[11], Vertex[7], Vertex[5], Resolution);
+		RecursiveSubdivision(vertex[7], vertex[3], vertex[1], resolution);
+		RecursiveSubdivision(vertex[8], vertex[6], vertex[4], resolution);
+		RecursiveSubdivision(vertex[9], vertex[4], vertex[6], resolution);
+		RecursiveSubdivision(vertex[10], vertex[5], vertex[7], resolution);
+		RecursiveSubdivision(vertex[11], vertex[7], vertex[5], resolution);
 #else
 		// Begin recursive subdivision of all eight faces of the octohedron
-		RecursiveSubdivision(Top, Equator1, Equator4, Resolution);
-		RecursiveSubdivision(Top, Equator2, Equator1, Resolution);
-		RecursiveSubdivision(Top, Equator3, Equator2, Resolution);
-		RecursiveSubdivision(Top, Equator4, Equator3, Resolution);
+		RecursiveSubdivision(top, equator1, equator4, resolution);
+		RecursiveSubdivision(top, equator2, equator1, resolution);
+		RecursiveSubdivision(top, equator3, equator2, resolution);
+		RecursiveSubdivision(top, equator4, equator3, resolution);
 
-		RecursiveSubdivision(Bottom, Equator1, Equator2, Resolution);
-		RecursiveSubdivision(Bottom, Equator2, Equator3, Resolution);
-		RecursiveSubdivision(Bottom, Equator3, Equator4, Resolution);
-		RecursiveSubdivision(Bottom, Equator4, Equator1, Resolution);
+		RecursiveSubdivision(bottom, equator1, equator2, resolution);
+		RecursiveSubdivision(bottom, equator2, equator3, resolution);
+		RecursiveSubdivision(bottom, equator3, equator4, resolution);
+		RecursiveSubdivision(bottom, equator4, equator1, resolution);
 #endif
 
 		// Complete the triangles
@@ -186,12 +186,10 @@ void SPHERE::GenerateGeometry(void)
 
 	// Pop the matrix
 	glPopMatrix();
-
-	return;
 }
 
 //==========================================================================
-// Class:			SPHERE
+// Class:			Sphere
 // Function:		RecursiveSubdivision
 //
 // Description:		Recursive method for sub-dividing a triangle into four
@@ -199,10 +197,10 @@ void SPHERE::GenerateGeometry(void)
 //					the final resolution of the sphere.
 //
 // Input Arguments:
-//		Corner1	= const Vector& specifying the first corner of the triangle
-//		Corner2	= const Vector& specifying the second corner of the triangle
-//		Corner3	= const Vector& specifying the third corner of the triangle
-//		Level	= int specifying remaining number of recursive calls
+//		corner1	= const Vector& specifying the first corner of the triangle
+//		corner2	= const Vector& specifying the second corner of the triangle
+//		corner3	= const Vector& specifying the third corner of the triangle
+//		level	= int specifying remaining number of recursive calls
 //
 // Output Arguments:
 //		None
@@ -211,16 +209,16 @@ void SPHERE::GenerateGeometry(void)
 //		bool, true for OK to draw, false otherwise
 //
 //==========================================================================
-void SPHERE::RecursiveSubdivision(const Vector &Corner1, const Vector &Corner2,
-								  const Vector &Corner3, int Level)
+void Sphere::RecursiveSubdivision(const Vector &corner1, const Vector &corner2,
+								  const Vector &corner3, int level)
 {
 	// If level is less than 1, add the triangle to the scene instead of
 	// continuing with the sub-division
-	if (Level < 1)
+	if (level < 1)
 	{
-		AddVertex(Corner1);
-		AddVertex(Corner2);
-		AddVertex(Corner3);
+		AddVertex(corner1);
+		AddVertex(corner2);
+		AddVertex(corner3);
 
 		return;
 	}
@@ -238,37 +236,35 @@ void SPHERE::RecursiveSubdivision(const Vector &Corner1, const Vector &Corner2,
 	    ------------
 	   Corner 2    Corner 3
 	-----------------------*/
-	Vector MidPoint1 = Corner1 + (Corner2 - Corner1).Normalize() * Corner1.Distance(Corner2) / 2.0;
-	Vector MidPoint2 = Corner1 + (Corner3 - Corner1).Normalize() * Corner1.Distance(Corner3) / 2.0;
-	Vector MidPoint3 = Corner3 + (Corner2 - Corner3).Normalize() * Corner3.Distance(Corner2) / 2.0;
+	Vector midPoint1 = corner1 + (corner2 - corner1).Normalize() * corner1.Distance(corner2) / 2.0;
+	Vector midPoint2 = corner1 + (corner3 - corner1).Normalize() * corner1.Distance(corner3) / 2.0;
+	Vector midPoint3 = corner3 + (corner2 - corner3).Normalize() * corner3.Distance(corner2) / 2.0;
 
 	// These locations now need to be normalized such that they lie at a
-	// distance Radius from the center
-	MidPoint1 = MidPoint1.Normalize() * Radius;
-	MidPoint2 = MidPoint2.Normalize() * Radius;
-	MidPoint3 = MidPoint3.Normalize() * Radius;
+	// distance of 'radius' from the center
+	midPoint1 = midPoint1.Normalize() * radius;
+	midPoint2 = midPoint2.Normalize() * radius;
+	midPoint3 = midPoint3.Normalize() * radius;
 
 	// Call this method for each of the four sub-triangles, with one less level
 	// Note that the order in which the points are supplied is important to make
 	// sure that the triangles are created in a consistent manner (clock-wise).
-	Level--;
-	RecursiveSubdivision(Corner1, MidPoint2, MidPoint1, Level);
-	RecursiveSubdivision(Corner2, MidPoint1, MidPoint3, Level);
-	RecursiveSubdivision(Corner3, MidPoint3, MidPoint2, Level);
-	RecursiveSubdivision(MidPoint1, MidPoint2, MidPoint3, Level);
-
-	return;
+	level--;
+	RecursiveSubdivision(corner1, midPoint2, midPoint1, level);
+	RecursiveSubdivision(corner2, midPoint1, midPoint3, level);
+	RecursiveSubdivision(corner3, midPoint3, midPoint2, level);
+	RecursiveSubdivision(midPoint1, midPoint2, midPoint3, level);
 }
 
 //==========================================================================
-// Class:			SPHERE
+// Class:			Sphere
 // Function:		AddVertex
 //
 // Description:		Computes and sets the normal vector, then adds the
 //					specified vertex to the OpenGL call list.
 //
 // Input Arguments:
-//		Vertex	= const Vector& to be added
+//		vertex	= const Vector& to be added
 //
 // Output Arguments:
 //		None
@@ -277,18 +273,18 @@ void SPHERE::RecursiveSubdivision(const Vector &Corner1, const Vector &Corner2,
 //		None
 //
 //==========================================================================
-void SPHERE::AddVertex(const Vector &Vertex)
+void Sphere::AddVertex(const Vector &vertex)
 {
 	// Compute and set the normal
-	Vector Normal = Vertex.Normalize();
-	glNormal3d(Normal.x, Normal.y, Normal.z);
+	Vector normal = vertex.Normalize();
+	glNormal3d(normal.x, normal.y, normal.z);
 
 	// Add the vertex
-	glVertex3d(Vertex.x, Vertex.y, Vertex.z);
+	glVertex3d(vertex.x, vertex.y, vertex.z);
 }
 
 //==========================================================================
-// Class:			SPHERE
+// Class:			Sphere
 // Function:		HasValidParameters
 //
 // Description:		Checks to see if the information about this object is
@@ -304,10 +300,10 @@ void SPHERE::AddVertex(const Vector &Vertex)
 //		bool, true for OK to draw, false otherwise
 //
 //==========================================================================
-bool SPHERE::HasValidParameters(void)
+bool Sphere::HasValidParameters(void)
 {
 	// Spheres must have a positive radius
-	if (Radius > 0.0)
+	if (radius > 0.0)
 		return true;
 
 	// Otherwise return false
@@ -315,13 +311,13 @@ bool SPHERE::HasValidParameters(void)
 }
 
 //==========================================================================
-// Class:			SPHERE
+// Class:			Sphere
 // Function:		SetResolution
 //
 // Description:		Sets the number of faces use to approximate the sphere.
 //
 // Input Arguments:
-//		_Resolution	= const int&
+//		_resolution	= const int&
 //
 // Output Arguments:
 //		None
@@ -330,25 +326,23 @@ bool SPHERE::HasValidParameters(void)
 //		None
 //
 //==========================================================================
-void SPHERE::SetResolution(const int &_Resolution)
+void Sphere::SetResolution(const int &_resolution)
 {
 	// Set the resolution to the argument
-	Resolution = _Resolution;
+	resolution = _resolution;
 	
 	// Reset the modified flag
 	modified = true;
-
-	return;
 }
 
 //==========================================================================
-// Class:			SPHERE
+// Class:			Sphere
 // Function:		SetCenter
 //
 // Description:		Sets the location of the center of the sphere.
 //
 // Input Arguments:
-//		_Center	= const Vector&
+//		_center	= const Vector&
 //
 // Output Arguments:
 //		None
@@ -357,25 +351,23 @@ void SPHERE::SetResolution(const int &_Resolution)
 //		None
 //
 //==========================================================================
-void SPHERE::SetCenter(const Vector &_Center)
+void Sphere::SetCenter(const Vector &_center)
 {
 	// Set the center point to the argument
-	Center = _Center;
+	center = _center;
 	
 	// Reset the modified flag
 	modified = true;
-
-	return;
 }
 
 //==========================================================================
-// Class:			SPHERE
+// Class:			Sphere
 // Function:		SetRadius
 //
 // Description:		Sets the radius at the base of the sphere.
 //
 // Input Arguments:
-//		_Radius	= const double&
+//		_radius	= const double&
 //
 // Output Arguments:
 //		None
@@ -384,13 +376,11 @@ void SPHERE::SetCenter(const Vector &_Center)
 //		None
 //
 //==========================================================================
-void SPHERE::SetRadius(const double &_Radius)
+void Sphere::SetRadius(const double &_radius)
 {
 	// Set the radius to the argument
-	Radius = _Radius;
+	radius = _radius;
 	
 	// Reset the modified flag
 	modified = true;
-
-	return;
 }

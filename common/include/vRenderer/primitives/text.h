@@ -10,7 +10,7 @@
 // File:  text.h
 // Created:  5/2/2011
 // Author:  K. Loux
-// Description:  Derived from PRIMITVE, this class is used to draw text.
+// Description:  Derived from Primitive, this class is used to draw text.
 // History:
 
 #ifndef _TEXT_H_
@@ -34,7 +34,7 @@ public:
 	// Destructor
 	~TextRendering();
 
-	// Mandatory overloads from PRIMITIVE - for creating geometry and testing the
+	// Mandatory overloads from Primitive - for creating geometry and testing the
 	// validity of this object's parameters
 	void GenerateGeometry(void);
 	bool HasValidParameters(void);

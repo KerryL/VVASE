@@ -10,7 +10,7 @@
 // File:  swaybar3D.cpp
 // Created:  1/11/2009
 // Author:  K. Loux
-// Description:  Contains class definition for the SWAYBAR3D class.
+// Description:  Contains class definition for the Swaybar3D class.
 // History:
 //	5/17/2009	- Removed VTK dependencies, K. Loux.
 
@@ -23,14 +23,14 @@
 #include "vMath/carMath.h"
 
 //==========================================================================
-// Class:			SWAYBAR3D
-// Function:		SWAYBAR3D
+// Class:			Swaybar3D
+// Function:		Swaybar3D
 //
-// Description:		Constructor for the SWAYBAR3D class.  Performs the entire
+// Description:		Constructor for the Swaybar3D class.  Performs the entire
 //					process necessary to add the object to the scene.
 //
 // Input Arguments:
-//		_Renderer	= RenderWindow&, pointer to rendering object
+//		_renderer	= RenderWindow&, pointer to rendering object
 //
 // Output Arguments:
 //		None
@@ -39,29 +39,29 @@
 //		None
 //
 //==========================================================================
-SWAYBAR3D::SWAYBAR3D(RenderWindow &_Renderer)
+Swaybar3D::Swaybar3D(RenderWindow &_renderer)
 {
 	// Create the objects
-	TorqueArm1 = new CYLINDER(_Renderer);
-	TorqueArm2 = new CYLINDER(_Renderer);
-	TorsionMember = new CYLINDER(_Renderer);
+	torqueArm1 = new Cylinder(_renderer);
+	torqueArm2 = new Cylinder(_renderer);
+	torsionMember = new Cylinder(_renderer);
 
 	// Set up the cylinders
-	TorqueArm1->SetCapping(true);
-	TorqueArm2->SetCapping(true);
-	TorsionMember->SetCapping(true);
+	torqueArm1->SetCapping(true);
+	torqueArm2->SetCapping(true);
+	torsionMember->SetCapping(true);
 
 	// Set the resolutions of the torque arms
 	// We set it to four to make it look like a rectangular prism
-	TorqueArm1->SetResolution(4);
-	TorqueArm2->SetResolution(4);
+	torqueArm1->SetResolution(4);
+	torqueArm2->SetResolution(4);
 }
 
 //==========================================================================
-// Class:			SWAYBAR3D
-// Function:		~SWAYBAR3D
+// Class:			Swaybar3D
+// Function:		~Swaybar3D
 //
-// Description:		Destructor for the SWAYBAR3D class.
+// Description:		Destructor for the Swaybar3D class.
 //
 // Input Arguments:
 //		None
@@ -73,12 +73,12 @@ SWAYBAR3D::SWAYBAR3D(RenderWindow &_Renderer)
 //		None
 //
 //==========================================================================
-SWAYBAR3D::~SWAYBAR3D()
+Swaybar3D::~Swaybar3D()
 {
 }
 
 //==========================================================================
-// Class:			SWAYBAR3D
+// Class:			Swaybar3D
 // Function:		Update
 //
 // Description:		Updates the position, orientation, and size of the tire
@@ -86,18 +86,18 @@ SWAYBAR3D::~SWAYBAR3D()
 //					value, not reference like the first two Vectors.
 //
 // Input Arguments:
-//		LeftLink				= const Vector&, point where link meets the left arm
-//		RightLink				= const Vector&, point where link meets the right arm
-//		TorsionMemberTopRight	= const Vector&, either the top OR the right end of the
+//		leftLink				= const Vector&, point where link meets the left arm
+//		rightLink				= const Vector&, point where link meets the right arm
+//		torsionMemberTopRight	= const Vector&, either the top OR the right end of the
 //								  sway bar (depends on bar style)
-//		TorsionMemberBottomLeft	= const Vector&, either the bottom OR the left end of the
+//		torsionMemberBottomLeft	= const Vector&, either the bottom OR the left end of the
 //								  sway bar (depends on bar style)
-//		BarStyle				= const SUSPENSION::BAR_STYLE& defining the type of swaybar
-//		Dimension				= const double& describing the size of the members
-//		Resolution				= const integer& representing the number of planar sides to use
+//		barStyle				= const SUSPENSION::BAR_STYLE& defining the type of swaybar
+//		dimension				= const double& describing the size of the members
+//		resolution				= const integer& representing the number of planar sides to use
 //								  to represent the cylinders
 //		color					= const Color& describing this object's color
-//		Show					= bool, visibility flag
+//		show					= bool, visibility flag
 //
 // Output Arguments:
 //		None
@@ -106,65 +106,65 @@ SWAYBAR3D::~SWAYBAR3D()
 //		None
 //
 //==========================================================================
-void SWAYBAR3D::Update(const Vector &RightLink, const Vector &LeftLink, const Vector &TorsionMemberTopRight,
-					   const Vector &TorsionMemberBottomLeft, const SUSPENSION::BAR_STYLE &BarStyle,
-					   const double &Dimension, const int &Resolution, const Color &color, bool Show)
+void Swaybar3D::Update(const Vector &rightLink, const Vector &leftLink, const Vector &torsionMemberTopRight,
+					   const Vector &torsionMemberBottomLeft, const SUSPENSION::BAR_STYLE &barStyle,
+					   const double &dimension, const int &resolution, const Color &color, bool show)
 {
 	// Make sure all vector arguments are valid - if they are not,
 	// the object will not be made visible
-	if (VVASEMath::IsNaN(RightLink) || VVASEMath::IsNaN(LeftLink) ||
-		VVASEMath::IsNaN(TorsionMemberTopRight) || VVASEMath::IsNaN(TorsionMemberBottomLeft))
-		Show = false;
+	if (VVASEMath::IsNaN(rightLink) || VVASEMath::IsNaN(leftLink) ||
+		VVASEMath::IsNaN(torsionMemberTopRight) || VVASEMath::IsNaN(torsionMemberBottomLeft))
+		show = false;
 
 	// Check to make sure the sway bar exists
-	if (BarStyle == SUSPENSION::SwayBarNone ||
-		BarStyle == SUSPENSION::SwayBarGeared)// FIXME:  Geared bars not yet implemented!
-		Show = false;
+	if (barStyle == SUSPENSION::SwayBarNone ||
+		barStyle == SUSPENSION::SwayBarGeared)// FIXME:  Geared bars not yet implemented!
+		show = false;
 
 	// Set the visibility flags
-	TorqueArm1->SetVisibility(Show);
-	TorqueArm2->SetVisibility(Show);
-	TorsionMember->SetVisibility(Show);
+	torqueArm1->SetVisibility(show);
+	torqueArm2->SetVisibility(show);
+	torsionMember->SetVisibility(show);
 
 	// Make sure we want this to be visible before continuing
-	if (!Show)
+	if (!show)
 		return;
 
 	// Set this object's color
-	TorqueArm1->SetColor(color);
-	TorqueArm2->SetColor(color);
-	TorsionMember->SetColor(color);
+	torqueArm1->SetColor(color);
+	torqueArm2->SetColor(color);
+	torsionMember->SetColor(color);
 
 	// Set the size of the source objects
-	TorqueArm1->SetRadius(Dimension / 2.0);
-	TorqueArm2->SetRadius(Dimension / 2.0);
-	TorsionMember->SetRadius(Dimension / 2.0);
+	torqueArm1->SetRadius(dimension / 2.0);
+	torqueArm2->SetRadius(dimension / 2.0);
+	torsionMember->SetRadius(dimension / 2.0);
 
 	// Set the resolution of the torsion member
-	TorsionMember->SetResolution(Resolution);
+	torsionMember->SetResolution(resolution);
 
 	// Position the torsion member
-	TorsionMember->SetEndPoint1(TorsionMemberBottomLeft);
-	TorsionMember->SetEndPoint2(TorsionMemberTopRight);
+	torsionMember->SetEndPoint1(torsionMemberBottomLeft);
+	torsionMember->SetEndPoint2(torsionMemberTopRight);
 
 	// Position the right torque arm
-	TorqueArm1->SetEndPoint1(TorsionMemberTopRight);
-	TorqueArm1->SetEndPoint2(RightLink);
+	torqueArm1->SetEndPoint1(torsionMemberTopRight);
+	torqueArm1->SetEndPoint2(rightLink);
 
 	// Position the left torque arm
-	TorqueArm2->SetEndPoint1(LeftLink);
+	torqueArm2->SetEndPoint1(leftLink);
 
 	// The geometry depends on what kind of swaybar it is
-	if (BarStyle == SUSPENSION::SwayBarUBar)
-		TorqueArm2->SetEndPoint2(TorsionMemberBottomLeft);
-	else// if (BarStyle == SUSPENSION::SwayBarTBar)
-		TorqueArm2->SetEndPoint2(TorsionMemberTopRight);
+	if (barStyle == SUSPENSION::SwayBarUBar)
+		torqueArm2->SetEndPoint2(torsionMemberBottomLeft);
+	else// if (barStyle == SUSPENSION::SwayBarTBar)
+		torqueArm2->SetEndPoint2(torsionMemberTopRight);
 
 	// FIXME:  Use real rectangular prisms
 }
 
 //==========================================================================
-// Class:			SWAYBAR3D
+// Class:			Swaybar3D
 // Function:		ContainsThisActor
 //
 // Description:		Compares the argument with the actors that make up this
@@ -172,7 +172,7 @@ void SWAYBAR3D::Update(const Vector &RightLink, const Vector &LeftLink, const Ve
 //					object or not.
 //
 // Input Arguments:
-//		Actor	= const Primitive* to compare against this object's actors
+//		actor	= const Primitive* to compare against this object's actors
 //
 // Output Arguments:
 //		None
@@ -181,12 +181,12 @@ void SWAYBAR3D::Update(const Vector &RightLink, const Vector &LeftLink, const Ve
 //		bool representing whether or not the Actor was part of this object
 //
 //==========================================================================
-bool SWAYBAR3D::ContainsThisActor(const Primitive *Actor)
+bool Swaybar3D::ContainsThisActor(const Primitive *actor)
 {
 	// Make the comparison
-	if (TorqueArm1 == Actor ||
-		TorqueArm2 == Actor ||
-		TorsionMember == Actor)
+	if (torqueArm1 == actor ||
+		torqueArm2 == actor ||
+		torsionMember == actor)
 		return true;
 	else
 		return false;

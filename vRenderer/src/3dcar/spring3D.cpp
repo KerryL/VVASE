@@ -10,7 +10,7 @@
 // File:  spring3D.cpp
 // Created:  1/5/2009
 // Author:  K. Loux
-// Description:  Contains class definition for the SPRING3D class.
+// Description:  Contains class definition for the Spring3D class.
 // History:
 //	5/17/2009	- Removed VTK dependencies, K. Loux.
 
@@ -24,14 +24,14 @@
 #include "vMath/carMath.h"
 
 //==========================================================================
-// Class:			SPRING3D
-// Function:		SPRING3D
+// Class:			Spring3D
+// Function:		Spring3D
 //
-// Description:		Constructor for the SPRING3D class.  Performs the entire
+// Description:		Constructor for the Spring3D class.  Performs the entire
 //					process necessary to add the object to the scene.
 //
 // Input Arguments:
-//		_Renderer	= RenderWindow&, pointer to rendering object
+//		_renderer	= RenderWindow&, pointer to rendering object
 //
 // Output Arguments:
 //		None
@@ -40,26 +40,26 @@
 //		None
 //
 //==========================================================================
-SPRING3D::SPRING3D(RenderWindow &_Renderer)
+Spring3D::Spring3D(RenderWindow &_renderer)
 {
 	// Create the objects
-	Spring = new CYLINDER(_Renderer);
-	EndPoint1 = new SPHERE(_Renderer);
-	EndPoint2 = new SPHERE(_Renderer);
+	spring = new Cylinder(_renderer);
+	endPoint1 = new Sphere(_renderer);
+	endPoint2 = new Sphere(_renderer);
 
 	// Set up the cylinder
-	Spring->SetCapping(false);
+	spring->SetCapping(false);
 
 	// Set up the spheres
-	EndPoint1->SetColor(Color::ColorWhite);
-	EndPoint2->SetColor(Color::ColorWhite);
+	endPoint1->SetColor(Color::ColorWhite);
+	endPoint2->SetColor(Color::ColorWhite);
 }
 
 //==========================================================================
-// Class:			SPRING3D
-// Function:		~SPRING3D
+// Class:			Spring3D
+// Function:		~Spring3D
 //
-// Description:		Destructor for the SPRING3D class.
+// Description:		Destructor for the Spring3D class.
 //
 // Input Arguments:
 //		None
@@ -71,26 +71,26 @@ SPRING3D::SPRING3D(RenderWindow &_Renderer)
 //		None
 //
 //==========================================================================
-SPRING3D::~SPRING3D()
+Spring3D::~Spring3D()
 {
 }
 
 //==========================================================================
-// Class:			SPRING3D
+// Class:			Spring3D
 // Function:		Update
 //
 // Description:		Updates the position, orientation, and size of the spring
 //					in the scene.
 //
 // Input Arguments:
-//		End1			= const Vector&, location of one end of the spring
-//		End2			= const Vector&, location of the other end of the spring
-//		Diameter		= const double& describing the width of the spring
-//		PointDiameter	= const double& describing diameter of the end point actors
-//		Resolution		= const integer& representing the number of planar sides to use
+//		end1			= const Vector&, location of one end of the spring
+//		end2			= const Vector&, location of the other end of the spring
+//		diameter		= const double& describing the width of the spring
+//		pointDiameter	= const double& describing diameter of the end point actors
+//		resolution		= const integer& representing the number of planar sides to use
 //						  to represent the cylinders
 //		color			= const Color& describing this object's color
-//		Show			= bool, visibility flag
+//		show			= bool, visibility flag
 //
 // Output Arguments:
 //		None
@@ -99,48 +99,46 @@ SPRING3D::~SPRING3D()
 //		None
 //
 //==========================================================================
-void SPRING3D::Update(const Vector &End1, const Vector &End2, const double &Diameter,
-					  const double &PointDiameter, const int &Resolution,
-					  const Color &color, bool Show)
+void Spring3D::Update(const Vector &end1, const Vector &end2, const double &diameter,
+					  const double &pointDiameter, const int &resolution,
+					  const Color &color, bool show)
 {
 	// Make sure all vector arguments are valid - if they are not,
 	// the object will not be made visible
-	if (VVASEMath::IsNaN(End1) || VVASEMath::IsNaN(End2))
-		Show = false;
+	if (VVASEMath::IsNaN(end1) || VVASEMath::IsNaN(end2))
+		show = false;
 
 	// Set the visibility flags
-	Spring->SetVisibility(Show);
-	EndPoint1->SetVisibility(Show);
-	EndPoint2->SetVisibility(Show);
+	spring->SetVisibility(show);
+	endPoint1->SetVisibility(show);
+	endPoint2->SetVisibility(show);
 
 	// Make sure we want this to be visible before continuing
-	if (!Show)
+	if (!show)
 		return;
 
 	// Set this object's color
-	Spring->SetColor(color);
+	spring->SetColor(color);
 
 	// Set the size and resolution of the CylinderSource
-	Spring->SetRadius(Diameter / 2.0);
-	Spring->SetResolution(Resolution);
+	spring->SetRadius(diameter / 2.0);
+	spring->SetResolution(resolution);
 
 	// Set the size and resolution of the end points
-	EndPoint1->SetRadius(PointDiameter / 2.0);
-	EndPoint1->SetResolution(Resolution);
-	EndPoint2->SetRadius(PointDiameter / 2.0);
-	EndPoint2->SetResolution(Resolution);
+	endPoint1->SetRadius(pointDiameter / 2.0);
+	endPoint1->SetResolution(resolution);
+	endPoint2->SetRadius(pointDiameter / 2.0);
+	endPoint2->SetResolution(resolution);
 
 	// Set the position of the actors
-	Spring->SetEndPoint1(End1);
-	Spring->SetEndPoint2(End2);
-	EndPoint1->SetCenter(End1);
-	EndPoint2->SetCenter(End2);
-
-	return;
+	spring->SetEndPoint1(end1);
+	spring->SetEndPoint2(end2);
+	endPoint1->SetCenter(end1);
+	endPoint2->SetCenter(end2);
 }
 
 //==========================================================================
-// Class:			SPRING3D
+// Class:			Spring3D
 // Function:		ContainsThisActor
 //
 // Description:		Compares the argument with the actors that make up this
@@ -148,21 +146,21 @@ void SPRING3D::Update(const Vector &End1, const Vector &End2, const double &Diam
 //					object or not.
 //
 // Input Arguments:
-//		Actor	= const Primitive* to compare against this object's actors
+//		actor	= const Primitive* to compare against this object's actors
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		bool representing whether or not the Actor was part of this object
+//		bool representing whether or not the actor was part of this object
 //
 //==========================================================================
-bool SPRING3D::ContainsThisActor(const Primitive *Actor)
+bool Spring3D::ContainsThisActor(const Primitive *actor)
 {
 	// Make the comparison
-	if (Spring == Actor ||
-		EndPoint1 == Actor ||
-		EndPoint2 == Actor)
+	if (spring == actor ||
+		endPoint1 == actor ||
+		endPoint2 == actor)
 		return true;
 	else
 		return false;

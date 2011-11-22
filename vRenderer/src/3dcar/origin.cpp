@@ -10,7 +10,7 @@
 // File:  origin.cpp
 // Created:  5/23/2008
 // Author:  K. Loux
-// Description:  Contains class definition for the ORIGIN class.
+// Description:  Contains class definition for the Origin class.
 // History:
 //	5/17/2009	- Removed VTK dependencies, K. Loux.
 
@@ -21,14 +21,14 @@
 #include "vMath/vector.h"
 
 //==========================================================================
-// Class:			ORIGIN
-// Function:		ORIGIN
+// Class:			Origin
+// Function:		Origin
 //
-// Description:		Constructor for the ORIGIN class.  Performs the entire
+// Description:		Constructor for the Origin class.  Performs the entire
 //					process necessary to add the object to the scene.
 //
 // Input Arguments:
-//		_Renderer	= RenderWindow&, pointer to rendering object
+//		_renderer	= RenderWindow&, pointer to rendering object
 //
 // Output Arguments:
 //		None
@@ -37,19 +37,19 @@
 //		None
 //
 //==========================================================================
-ORIGIN::ORIGIN(RenderWindow &_Renderer)
+Origin::Origin(RenderWindow &_renderer)
 {
 	// Create the objects
-	XDirection = new Vector3D(_Renderer);
-	YDirection = new Vector3D(_Renderer);
-	ZDirection = new Vector3D(_Renderer);
+	xDirection = new Vector3D(_renderer);
+	yDirection = new Vector3D(_renderer);
+	zDirection = new Vector3D(_renderer);
 }
 
 //==========================================================================
-// Class:			ORIGIN
-// Function:		~ORIGIN
+// Class:			Origin
+// Function:		~Origin
 //
-// Description:		Destructor for the ORIGIN class.
+// Description:		Destructor for the Origin class.
 //
 // Input Arguments:
 //		None
@@ -61,27 +61,27 @@ ORIGIN::ORIGIN(RenderWindow &_Renderer)
 //		None
 //
 //==========================================================================
-ORIGIN::~ORIGIN()
+Origin::~Origin()
 {
-	delete XDirection;
-	delete YDirection;
-	delete ZDirection;
+	delete xDirection;
+	delete yDirection;
+	delete zDirection;
 }
 
 //==========================================================================
-// Class:			ORIGIN
+// Class:			Origin
 // Function:		Update
 //
 // Description:		Updates the size of the origin marker
 //
 // Input Arguments:
-//		ShaftLength		= const double& describing the arrow length
-//		ShaftDiameter	= const double& describing the width of the arrow
-//		TipLength		= const double& descibing the length of the head
-//		TipDiameter		= const double& describing the width of the head
-//		Resolution		= const integer& specifying the number of sides to use to
+//		shaftLength		= const double& describing the arrow length
+//		shaftDiameter	= const double& describing the width of the arrow
+//		tipLength		= const double& describing the length of the head
+//		tipDiameter		= const double& describing the width of the head
+//		resolution		= const integer& specifying the number of sides to use to
 //						  approximate the cones and cylinders
-//		Show			= const bool&, visibility flag
+//		show			= const bool&, visibility flag
 //
 // Output Arguments:
 //		None
@@ -90,25 +90,23 @@ ORIGIN::~ORIGIN()
 //		None
 //
 //==========================================================================
-void ORIGIN::Update(const double &ShaftLength, const double &ShaftDiameter,
-					const double &TipLength, const double &TipDiameter, const int &Resolution,
-					const bool &Show)
+void Origin::Update(const double &shaftLength, const double &shaftDiameter,
+					const double &tipLength, const double &tipDiameter, const int &resolution,
+					const bool &show)
 {
 	// All of them start at the origin
-	Vector Origin(0.0, 0.0, 0.0);
-	Vector X(1.0, 0.0, 0.0);
-	Vector Y(0.0, 1.0, 0.0);
-	Vector Z(0.0, 0.0, 1.0);
+	Vector origin(0.0, 0.0, 0.0);
+	Vector x(1.0, 0.0, 0.0);
+	Vector y(0.0, 1.0, 0.0);
+	Vector z(0.0, 0.0, 1.0);
 
 	// Scale the vectors to meet the specified lengths
-	X *= TipLength + ShaftLength;
-	Y *= TipLength + ShaftLength;
-	Z *= TipLength + ShaftLength;
+	z *= tipLength + shaftLength;
+	y *= tipLength + shaftLength;
+	z *= tipLength + shaftLength;
 
 	// Call the update functions for each of the three vectors
-	XDirection->Update(X, Origin, ShaftDiameter, TipDiameter, TipLength, Resolution, Color::ColorRed, Show);
-	YDirection->Update(Y, Origin, ShaftDiameter, TipDiameter, TipLength, Resolution, Color::ColorGreen, Show);
-	ZDirection->Update(Z, Origin, ShaftDiameter, TipDiameter, TipLength, Resolution, Color::ColorBlue, Show);
-
-	return;
+	xDirection->Update(x, origin, shaftDiameter, tipDiameter, tipLength, resolution, Color::ColorRed, show);
+	yDirection->Update(y, origin, shaftDiameter, tipDiameter, tipLength, resolution, Color::ColorGreen, show);
+	zDirection->Update(z, origin, shaftDiameter, tipDiameter, tipLength, resolution, Color::ColorBlue, show);
 }

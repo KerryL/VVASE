@@ -17,36 +17,36 @@
 //				  removed PURPOSE enumeration, K. Loux.
 //	5/17/2009	- Removed VTK dependencies, K. Loux.
 
-#ifndef _Vector3D_H_
-#define _Vector3D_H_
+#ifndef _VECTOR3D_H_
+#define _VECTOR3D_H_
 
 // VVASE forward declarations
 class Vector;
 class Color;
-class CYLINDER;
-class CONE;
+class Cylinder;
+class Cone;
 class RenderWindow;
 
 class Vector3D
 {
 public:
 	// Constructor
-	Vector3D(RenderWindow &_Renderer);
+	Vector3D(RenderWindow &_renderer);
 
 	// Destructor
 	~Vector3D();
 
 	// Updates the object in the rendered scene
-	void Update(const Vector &_Tip, const Vector &_Tail, const double &ShaftDiameter,
-		const double &TipDiameter, double TipLength, const int &Resolution,
-		const Color &color, bool Show);
+	void Update(const Vector &_tip, const Vector &_tail, const double &shaftDiameter,
+		const double &tipDiameter, double tipLength, const int &resolution,
+		const Color &color, bool show);
 
 private:
 	// The shaft
-	CYLINDER *Shaft;
+	Cylinder *shaft;
 
 	// The tip
-	CONE *Tip;
+	Cone *tip;
 };
 
-#endif// _Vector3D_H_
+#endif// _VECTOR3D_H_

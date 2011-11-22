@@ -10,7 +10,7 @@
 // File:  disk.cpp
 // Created:  5/14/2009
 // Author:  K. Loux
-// Description:  Derived from PRIMITIVE for creating disk objects.
+// Description:  Derived from Primitive for creating disk objects.
 // History:
 //	6/3/2009	- Modified GenerateGeometry() to make use of openGL matrices for positioning
 //				  and orienting the object, K.Loux.
@@ -22,13 +22,13 @@
 #include "vUtilities/convert.h"
 
 //==========================================================================
-// Class:			DISK
-// Function:		DISK
+// Class:			Disk
+// Function:		Disk
 //
-// Description:		Constructor for the DISK class.
+// Description:		Constructor for the Disk class.
 //
 // Input Arguments:
-//		_RenderWindow	= RenderWindow* pointing to the object that owns this
+//		_renderWindow	= RenderWindow* pointing to the object that owns this
 //
 // Output Arguments:
 //		None
@@ -37,21 +37,21 @@
 //		None
 //
 //==========================================================================
-DISK::DISK(RenderWindow &_RenderWindow) : Primitive(_RenderWindow)
+Disk::Disk(RenderWindow &_renderWindow) : Primitive(_renderWindow)
 {
 	// Initialize private data
-	OuterRadius = 0.0;
-	InnerRadius = 0.0;
-	Center.Set(0.0, 0.0, 0.0);
-	Normal.Set(0.0, 0.0, 0.0);
-	Resolution = 4;
+	outerRadius = 0.0;
+	innerRadius = 0.0;
+	center.Set(0.0, 0.0, 0.0);
+	normal.Set(0.0, 0.0, 0.0);
+	resolution = 4;
 }
 
 //==========================================================================
-// Class:			DISK
-// Function:		~DISK
+// Class:			Disk
+// Function:		~Disk
 //
-// Description:		Destructor for the DISK class.
+// Description:		Destructor for the Disk class.
 //
 // Input Arguments:
 //		None
@@ -63,12 +63,12 @@ DISK::DISK(RenderWindow &_RenderWindow) : Primitive(_RenderWindow)
 //		None
 //
 //==========================================================================
-DISK::~DISK()
+Disk::~Disk()
 {
 }
 
 //==========================================================================
-// Class:			DISK
+// Class:			Disk
 // Function:		GenerateGeometry
 //
 // Description:		Creates the OpenGL instructions to create this object in
@@ -84,54 +84,54 @@ DISK::~DISK()
 //		None
 //
 //==========================================================================
-void DISK::GenerateGeometry(void)
+void Disk::GenerateGeometry(void)
 {
 	// Resolution must be at least 3
-	if (Resolution < 3)
-		Resolution = 3;
+	if (resolution < 3)
+		resolution = 3;
 
 	// Our reference direction will be the X-axis direction
-	Vector ReferenceDirection(1.0, 0.0, 0.0);
+	Vector referenceDirection(1.0, 0.0, 0.0);
 
 	// Determine the angle and axis of rotation
-	Vector AxisOfRotation = ReferenceDirection.Cross(Normal);
-	double Angle = acos(Normal * ReferenceDirection);// [rad]
+	Vector axisOfRotation = referenceDirection.Cross(normal);
+	double angle = acos(normal * referenceDirection);// [rad]
 
 	// Push the current matrix
 	glPushMatrix();
 
 		// Translate the current matrix
-		glTranslated(Center.x, Center.y, Center.z);
+		glTranslated(center.x, center.y, center.z);
 
 		// Rotate the current matrix, if the rotation axis is non-zero
-		if (!VVASEMath::IsZero(AxisOfRotation.Length()))
-			glRotated(Convert::RAD_TO_DEG(Angle), AxisOfRotation.x, AxisOfRotation.y, AxisOfRotation.z);
+		if (!VVASEMath::IsZero(axisOfRotation.Length()))
+			glRotated(Convert::RAD_TO_DEG(angle), axisOfRotation.x, axisOfRotation.y, axisOfRotation.z);
 
 		// Set the normal direction
-		glNormal3d(Normal.x, Normal.y, Normal.z);
+		glNormal3d(normal.x, normal.y, normal.z);
 
 		// We'll use a triangle strip to draw the disk
 		glBegin(GL_TRIANGLE_STRIP);
 
 		// Loop to generate the triangles
-		Vector InsidePoint(0.0, 0.0, 0.0);
-		Vector OutsidePoint(0.0, 0.0, 0.0);
+		Vector insidePoint(0.0, 0.0, 0.0);
+		Vector outsidePoint(0.0, 0.0, 0.0);
 		int i;
-		for (i = 0; i <= Resolution; i++)
+		for (i = 0; i <= resolution; i++)
 		{
 			// Determine the angle to the current set of points
-			Angle = (double)i * 2.0 * VVASEMath::Pi / (double)Resolution;
+			angle = (double)i * 2.0 * VVASEMath::Pi / (double)resolution;
 
 			// Determine the Y and Z ordinates based on this angle and the radii
-			OutsidePoint.y = OuterRadius * cos(Angle);
-			OutsidePoint.z = OuterRadius * sin(Angle);
+			outsidePoint.y = outerRadius * cos(angle);
+			outsidePoint.z = outerRadius * sin(angle);
 
-			InsidePoint.y = InnerRadius * cos(Angle);
-			InsidePoint.z = InnerRadius * sin(Angle);
+			insidePoint.y = innerRadius * cos(angle);
+			insidePoint.z = innerRadius * sin(angle);
 
 			// Add the next two points
-			glVertex3d(OutsidePoint.x, OutsidePoint.y, OutsidePoint.z);
-			glVertex3d(InsidePoint.x, InsidePoint.y, InsidePoint.z);
+			glVertex3d(outsidePoint.x, outsidePoint.y, outsidePoint.z);
+			glVertex3d(insidePoint.x, insidePoint.y, insidePoint.z);
 		}
 
 		// Complete the triangle strip
@@ -139,12 +139,10 @@ void DISK::GenerateGeometry(void)
 
 	// Pop the matrix
 	glPopMatrix();
-
-	return;
 }
 
 //==========================================================================
-// Class:			DISK
+// Class:			Disk
 // Function:		HasValidParameters
 //
 // Description:		Checks to see if the information about this object is
@@ -160,10 +158,10 @@ void DISK::GenerateGeometry(void)
 //		bool, true for OK to draw, false otherwise
 //
 //==========================================================================
-bool DISK::HasValidParameters(void)
+bool Disk::HasValidParameters(void)
 {
 	// Disks must have a positive
-	if (OuterRadius > 0.0 && !VVASEMath::IsZero(Normal.Length()))
+	if (outerRadius > 0.0 && !VVASEMath::IsZero(normal.Length()))
 		return true;
 
 	// Otherwise return false
@@ -171,13 +169,13 @@ bool DISK::HasValidParameters(void)
 }
 
 //==========================================================================
-// Class:			DISK
+// Class:			Disk
 // Function:		SetResolution
 //
 // Description:		Sets the number of faces use to approximate the disk.
 //
 // Input Arguments:
-//		_Resolution	= const int&
+//		_resolution	= const int&
 //
 // Output Arguments:
 //		None
@@ -186,25 +184,23 @@ bool DISK::HasValidParameters(void)
 //		None
 //
 //==========================================================================
-void DISK::SetResolution(const int &_Resolution)
+void Disk::SetResolution(const int &_resolution)
 {
 	// Set the resolution to the argument
-	Resolution = _Resolution;
+	resolution = _resolution;
 	
 	// Reset the modified flag
 	modified = true;
-
-	return;
 }
 
 //==========================================================================
-// Class:			DISK
+// Class:			Disk
 // Function:		SetOuterRadius
 //
 // Description:		Sets the outer radius of the disk.
 //
 // Input Arguments:
-//		_OuterRadius	= const double&
+//		_outerRadius	= const double&
 //
 // Output Arguments:
 //		None
@@ -213,25 +209,23 @@ void DISK::SetResolution(const int &_Resolution)
 //		None
 //
 //==========================================================================
-void DISK::SetOuterRadius(const double &_OuterRadius)
+void Disk::SetOuterRadius(const double &_outerRadius)
 {
 	// Set the outer radius to the argument
-	OuterRadius = _OuterRadius;
+	outerRadius = _outerRadius;
 	
 	// Reset the modified flag
 	modified = true;
-
-	return;
 }
 
 //==========================================================================
-// Class:			DISK
+// Class:			Disk
 // Function:		SetInnerRadius
 //
 // Description:		Sets the inner radius of the disk.
 //
 // Input Arguments:
-//		_InnerRadius	= const double&
+//		_innerRadius	= const double&
 //
 // Output Arguments:
 //		None
@@ -240,25 +234,23 @@ void DISK::SetOuterRadius(const double &_OuterRadius)
 //		None
 //
 //==========================================================================
-void DISK::SetInnerRadius(const double &_InnerRadius)
+void Disk::SetInnerRadius(const double &_innerRadius)
 {
 	// Set the inner radius to the argument
-	InnerRadius = _InnerRadius;
+	innerRadius = _innerRadius;
 	
 	// Reset the modified flag
 	modified = true;
-
-	return;
 }
 
 //==========================================================================
-// Class:			DISK
+// Class:			Disk
 // Function:		SetCenter
 //
 // Description:		Sets the location of the center of the disk.
 //
 // Input Arguments:
-//		_Center	= const Vector&
+//		_center	= const Vector&
 //
 // Output Arguments:
 //		None
@@ -267,25 +259,23 @@ void DISK::SetInnerRadius(const double &_InnerRadius)
 //		None
 //
 //==========================================================================
-void DISK::SetCenter(const Vector &_Center)
+void Disk::SetCenter(const Vector &_center)
 {
 	// Set the center point to the argument
-	Center = _Center;
+	center = _center;
 	
 	// Reset the modified flag
 	modified = true;
-
-	return;
 }
 
 //==========================================================================
-// Class:			DISK
+// Class:			Disk
 // Function:		SetNormal
 //
 // Description:		Sets the disk's normal direction.
 //
 // Input Arguments:
-//		_Normal	= const Vector&
+//		_normal	= const Vector&
 //
 // Output Arguments:
 //		None
@@ -294,13 +284,11 @@ void DISK::SetCenter(const Vector &_Center)
 //		None
 //
 //==========================================================================
-void DISK::SetNormal(const Vector &_Normal)
+void Disk::SetNormal(const Vector &_normal)
 {
 	// Set the normal vector to the argument
-	Normal = _Normal;
+	normal = _normal;
 	
 	// Reset the modified flag
 	modified = true;
-
-	return;
 }

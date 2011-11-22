@@ -10,7 +10,7 @@
 // File:  triangle3D.h
 // Created:  5/23/2008
 // Author:  K. Loux
-// Description:  Contains class declaration for the TRIANGLE3D class.  This is used for
+// Description:  Contains class declaration for the Triangle3D class.  This is used for
 //				 bell cranks, uprights, etc.
 // History:
 //	4/25/2009	- Changed Update() to include color argument in the form of wxColor and
@@ -23,27 +23,27 @@
 // VVASE forward declarations
 class Vector;
 class Color;
-class TRIANGLE;
+class Triangle;
 
-class TRIANGLE3D
+class Triangle3D
 {
 public:
 	// Constructor
-	TRIANGLE3D(RenderWindow &_Renderer);
+	Triangle3D(RenderWindow &_renderer);
 
 	// Destructor
-	~TRIANGLE3D();
+	~Triangle3D();
 
 	// Updates the 3D representation of the tire on the screen
-	void Update(const Vector &Node1, const Vector &Node2, const Vector &Node3,
-		const Color &color, bool Show);
+	void Update(const Vector &node1, const Vector &node2, const Vector &node3,
+		const Color &color, bool show);
 
 	// Returns true if the passed reference is to an actor from this object
-	bool ContainsThisActor(const Primitive *Actor);
+	bool ContainsThisActor(const Primitive *actor);
 
 private:
 	// The triangle actor
-	TRIANGLE *Triangle;
+	Triangle *triangle;
 };
 
 #endif// _TRIANGLE3D_H_

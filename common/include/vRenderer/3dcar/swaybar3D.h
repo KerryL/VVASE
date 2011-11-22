@@ -10,7 +10,7 @@
 // File:  swaybar3D.h
 // Created:  1/11/2009
 // Author:  K. Loux
-// Description:  Contains class declaration for the DAMPER3D class.
+// Description:  Contains class declaration for the Swaybar3D class.
 // History:
 //	4/25/2009	- Changed Update() to include color argument in the form of wxColor, K. Loux.
 //	5/17/2009	- Removed VTK dependencies, K. Loux.
@@ -24,32 +24,32 @@
 // VVASE forward declarations
 class Vector;
 class Color;
-class CYLINDER;
+class Cylinder;
 
-class SWAYBAR3D
+class Swaybar3D
 {
 public:
 	// Constructor
-	SWAYBAR3D(RenderWindow &_Renderer);
+	Swaybar3D(RenderWindow &_renderer);
 
 	// Destructor
-	~SWAYBAR3D();
+	~Swaybar3D();
 
 	// Updates the 3D representation of the sway bar on the screen
-	void Update(const Vector &RightLink, const Vector &LeftLink, const Vector &TorsionMemberTopRight,
-		const Vector &TorsionMemberBottomLeft, const SUSPENSION::BAR_STYLE &BarStyle,
-		const double &Dimension, const int &Resolution, const Color &color, bool Show);
+	void Update(const Vector &rightLink, const Vector &leftLink, const Vector &torsionMemberTopRight,
+		const Vector &torsionMemberBottomLeft, const SUSPENSION::BAR_STYLE &barStyle,
+		const double &dimension, const int &resolution, const Color &color, bool show);
 
 	// Returns true if the passed reference is to an actor from this object
-	bool ContainsThisActor(const Primitive *Actor);
+	bool ContainsThisActor(const Primitive *actor);
 
 private:
 	// The two torque arms
-	CYLINDER *TorqueArm1;
-	CYLINDER *TorqueArm2;
+	Cylinder *torqueArm1;
+	Cylinder *torqueArm2;
 
 	// The torsion member
-	CYLINDER *TorsionMember;
+	Cylinder *torsionMember;
 };
 
 #endif// _SWAYBAR3D_H_

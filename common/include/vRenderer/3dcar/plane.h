@@ -7,37 +7,37 @@
 
 ===================================================================================*/
 
-// File:  plane.h
+// File:  plane3D.h
 // Created:  5/23/2008
 // Author:  K. Loux
-// Description:  Contains class declaration for the PLANE class.
+// Description:  Contains class declaration for the Plane3D class.
 // History:
 //	4/25/2009	- Changed Update() to include color argument in the form of wxColor, K. Loux.
 //	5/17/2009	- Removed VTK dependencies, K. Loux.
 
-#ifndef _PLANE_H_
-#define _PLANE_H_
+#ifndef _PLANE3D_H_
+#define _PLANE3D_H_
 
 // VVASE forward declarations
 class Color;
-class QUADRILATERAL;
+class Quadrilateral;
 
-class PLANE
+class Plane3D
 {
 public:
 	// Constructor
-	PLANE(RenderWindow &_Renderer);
+	Plane3D(RenderWindow &_renderer);
 
 	// Destructor
-	~PLANE();
+	~Plane3D();
 
 	// Updates the object in the scene
-	void Update(const double &Length, const double &Width, const double &XOffset,
-		const Color &color, const bool &Show);
+	void Update(const double &length, const double &width, const double &xOffset,
+		const Color &color, const bool &show);
 
 private:
 	// The plane actor
-	QUADRILATERAL *Plane;
+	Quadrilateral *plane;
 };
 
-#endif// _PLANE_H_
+#endif// _PLANE3D_H_

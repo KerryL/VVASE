@@ -10,7 +10,7 @@
 // File:  damper3D.h
 // Created:  1/5/2009
 // Author:  K. Loux
-// Description:  Contains class declaration for the DAMPER3D class.
+// Description:  Contains class declaration for the Damper3D class.
 // History:
 //	4/25/2009	- Changed Update() to include color argument in the form of wxColor, K. Loux.
 //	5/17/2009	- Removed VTK dependencies, K. Loux.
@@ -21,36 +21,36 @@
 // VVASE forward declarations
 class Vector;
 class Color;
-class CYLINDER;
-class SPHERE;
+class Cylinder;
+class Sphere;
 
-class DAMPER3D
+class Damper3D
 {
 public:
 	// Constructor
-	DAMPER3D(RenderWindow &_Renderer);
+	Damper3D(RenderWindow &_renderer);
 
 	// Destructor
-	~DAMPER3D();
+	~Damper3D();
 
 	// Updates the 3D representation of the damper on the screen
-	void Update(const Vector &InboardEnd, const Vector &OutboardEnd, const double &BodyDiameter,
-		const double &ShaftDiameter, const double &BodyLength, const int &Resolution,
-		const Color &BodyColor, const Color &ShaftColor, bool Show);
+	void Update(const Vector &inboardEnd, const Vector &outboardEnd, const double &bodyDiameter,
+		const double &shaftDiameter, const double &bodyLength, const int &resolution,
+		const Color &bodyColor, const Color &shaftColor, bool show);
 
 	// Returns true if the passed reference is to an actor from this object
-	bool ContainsThisActor(const Primitive *Actor);
+	bool ContainsThisActor(const Primitive *actor);
 
 private:
 	// The damper body
-	CYLINDER *Body;
+	Cylinder *body;
 
 	// The shaft
-	CYLINDER *Shaft;
+	Cylinder *shaft;
 
 	// The end points
-	SPHERE *InboardEndPoint;
-	SPHERE *OutboardEndPoint;
+	Sphere *inboardEndPoint;
+	Sphere *outboardEndPoint;
 };
 
 #endif// _DAMPER3D_H_

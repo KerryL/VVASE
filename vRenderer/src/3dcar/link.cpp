@@ -10,7 +10,7 @@
 // File:  link.cpp
 // Created:  5/23/2008
 // Author:  K. Loux
-// Description:  Contains class definition for the LINK class.
+// Description:  Contains class definition for the Link class.
 // History:
 //	5/17/2009	- Removed VTK dependencies, K. Loux.
 
@@ -24,14 +24,14 @@
 #include "vMath/carMath.h"
 
 //==========================================================================
-// Class:			LINK
-// Function:		LINK
+// Class:			Link
+// Function:		Link
 //
-// Description:		Constructor for the LINK class.  Performs the entire
+// Description:		Constructor for the Link class.  Performs the entire
 //					process necessary to add the object to the scene.
 //
 // Input Arguments:
-//		_Renderer	= RenderWindow&, pointer to rendering object
+//		_renderer	= RenderWindow&, pointer to rendering object
 //
 // Output Arguments:
 //		None
@@ -40,23 +40,23 @@
 //		None
 //
 //==========================================================================
-LINK::LINK(RenderWindow &_Renderer)
+Link::Link(RenderWindow &_renderer)
 {
 	// Create the objects
-	Member = new CYLINDER(_Renderer);
-	EndPoint1 = new SPHERE(_Renderer);
-	EndPoint2 = new SPHERE(_Renderer);
+	member = new Cylinder(_renderer);
+	endPoint1 = new Sphere(_renderer);
+	endPoint2 = new Sphere(_renderer);
 
 	// Set up the Actors
-	EndPoint1->SetColor(Color::ColorWhite);
-	EndPoint2->SetColor(Color::ColorWhite);
+	endPoint1->SetColor(Color::ColorWhite);
+	endPoint2->SetColor(Color::ColorWhite);
 }
 
 //==========================================================================
-// Class:			LINK
-// Function:		~LINK
+// Class:			Link
+// Function:		~Link
 //
-// Description:		Destructor for the LINK class.
+// Description:		Destructor for the Link class.
 //
 // Input Arguments:
 //		None
@@ -68,25 +68,25 @@ LINK::LINK(RenderWindow &_Renderer)
 //		None
 //
 //==========================================================================
-LINK::~LINK()
+Link::~Link()
 {
 }
 
 //==========================================================================
-// Class:			LINK
+// Class:			Link
 // Function:		Update
 //
 // Description:		Updates the position and size of the link in the scene
 //
 // Input Arguments:
-//		End1		= const Vector&, location of one end of the a-arm
-//		End2		= const Vector&, location of the other end of the a-arm
-//		Radius		= const double& describing the size of the tubing representing
+//		end1		= const Vector&, location of one end of the a-arm
+//		end2		= const Vector&, location of the other end of the a-arm
+//		radius		= const double& describing the size of the tubing representing
 //					  the arm
-//		Resolution	= const integer& representing the number of planar sides to use
+//		resolution	= const integer& representing the number of planar sides to use
 //					  to represent the cylindrical members
 //		color		= const Color& describing this object's color
-//		Show		= bool, visibility flag
+//		show		= bool, visibility flag
 //
 // Output Arguments:
 //		None
@@ -95,47 +95,45 @@ LINK::~LINK()
 //		None
 //
 //==========================================================================
-void LINK::Update(const Vector &End1, const Vector &End2, const double &Diameter,
-				  const int &Resolution, const Color &color, bool Show)
+void Link::Update(const Vector &end1, const Vector &end2, const double &diameter,
+				  const int &resolution, const Color &color, bool show)
 {
 	// Make sure all vector arguments are valid - if they are not,
 	// the object will not be made visible
-	if (VVASEMath::IsNaN(End1) || VVASEMath::IsNaN(End2))
-		Show = false;
+	if (VVASEMath::IsNaN(end1) || VVASEMath::IsNaN(end2))
+		show = false;
 
 	// Set the visibility flag
-	Member->SetVisibility(Show);
-	EndPoint1->SetVisibility(Show);
-	EndPoint2->SetVisibility(Show);
+	member->SetVisibility(show);
+	endPoint1->SetVisibility(show);
+	endPoint2->SetVisibility(show);
 
 	// Make sure we want this to be visible before continuing
-	if (!Show)
+	if (!show)
 		return;
 
 	// Set this object's color
-	Member->SetColor(color);
+	member->SetColor(color);
 
 	// Set up the spheres
-	EndPoint1->SetRadius(Diameter / 2.0 * 1.1);// Make the points just a smidge larger than the members
-	EndPoint1->SetResolution(Resolution);
-	EndPoint2->SetRadius(Diameter / 2.0 * 1.1);// Make the points just a smidge larger than the members
-	EndPoint2->SetResolution(Resolution);
+	endPoint1->SetRadius(diameter / 2.0 * 1.1);// Make the points just a smidge larger than the members
+	endPoint1->SetResolution(resolution);
+	endPoint2->SetRadius(diameter / 2.0 * 1.1);// Make the points just a smidge larger than the members
+	endPoint2->SetResolution(resolution);
 
 	// Set up the cylinder
-	Member->SetRadius(Diameter / 2.0);
-	Member->SetResolution(Resolution);
+	member->SetRadius(diameter / 2.0);
+	member->SetResolution(resolution);
 
 	// Set the positions of the spheres and the cylinder
-	EndPoint1->SetCenter(End1);
-	EndPoint2->SetCenter(End2);
-	Member->SetEndPoint1(End1);
-	Member->SetEndPoint2(End2);
-
-	return;
+	endPoint1->SetCenter(end1);
+	endPoint2->SetCenter(end2);
+	member->SetEndPoint1(end1);
+	member->SetEndPoint2(end2);
 }
 
 //==========================================================================
-// Class:			LINK
+// Class:			Link
 // Function:		ContainsThisActor
 //
 // Description:		Compares the argument with the actors that make up this
@@ -143,7 +141,7 @@ void LINK::Update(const Vector &End1, const Vector &End2, const double &Diameter
 //					object or not.
 //
 // Input Arguments:
-//		Actor	= const Primitive* to compare against this object's actors
+//		actor	= const Primitive* to compare against this object's actors
 //
 // Output Arguments:
 //		None
@@ -152,12 +150,12 @@ void LINK::Update(const Vector &End1, const Vector &End2, const double &Diameter
 //		bool representing whether or not the Actor was part of this object
 //
 //==========================================================================
-bool LINK::ContainsThisActor(const Primitive *Actor)
+bool Link::ContainsThisActor(const Primitive *actor)
 {
 	// Make the comparison
-	if (EndPoint1 == Actor ||
-		EndPoint2 == Actor ||
-		Member == Actor)
+	if (endPoint1 == actor ||
+		endPoint2 == actor ||
+		member == actor)
 		return true;
 	else
 		return false;
