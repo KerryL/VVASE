@@ -27,38 +27,38 @@
 // vUtilities forward declarations
 class Debugger;
 
-class AERODYNAMICS
+class Aerodynamics
 {
 public:
 	// Constructor
-	AERODYNAMICS(const Debugger &_debugger);
-	AERODYNAMICS(const AERODYNAMICS &Aerodynamics);
+	Aerodynamics(const Debugger &_debugger);
+	Aerodynamics(const Aerodynamics &aerodynamics);
 
 	// Destructor
-	~AERODYNAMICS();
+	~Aerodynamics();
 
 	// File read/write functions
-	void Write(std::ofstream *OutFile) const;
-	void Read(std::ifstream *InFile, int FileVersion);
+	void Write(std::ofstream *outFile) const;
+	void Read(std::ifstream *inFile, int fileVersion);
 
 	// Functions that retrieve the aerodynamic forces and moments
 	Vector GetAeroForces(void) const;			// [lbf]
 	Vector GetAeroMoments(void) const;			// [in-lbf]
 
 	// Overloaded operators
-	AERODYNAMICS& operator = (const AERODYNAMICS &Aerodynamics);
+	Aerodynamics& operator = (const Aerodynamics &aerodynamics);
 
 private:
 	// Debugger message printing utility
 	const Debugger &debugger;
 
 	// Class properties
-	Vector CenterOfPressure;			// [in]
-	double ReferenceArea;				// [in^2]
-	double AirDensity;					// [slug/in^3]
-	double CoefficientOfDownforce;		// [-]
-	double CoefficientOfDrag;			// [-]
-	double CoefficientOfMoment;			// [-]
+	Vector centerOfPressure;			// [in]
+	double referenceArea;				// [in^2]
+	double airDensity;					// [slug/in^3]
+	double coefficientOfDownforce;		// [-]
+	double coefficientOfDrag;			// [-]
+	double coefficientOfMoment;			// [-]
 	// FIXME:  Add functionality for non-linear look-up table (user option)
 };
 

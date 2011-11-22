@@ -26,10 +26,10 @@
 // Input Arguments:
 //		Parent			= wxWindow&, reference to the main application window
 //		_Converter		= const Convert&, reference to conversion utility object
-//		_Hardpoint		= const CORNER::HARDPOINTS&
-//		_TiedTo			= const CORNER::HARDPOINTS&
+//		_Hardpoint		= const Corner::Hardpoints&
+//		_TiedTo			= const Corner::Hardpoints&
 //		_AxisDirection	= const Vector::Axis&
-//		_CornerLocation	= const CORNER::LOCATION&
+//		_CornerLocation	= const Corner::Location&
 //		_Minimum		= const double&
 //		_Maximum		= const double&
 //		_NumberOfValues	= const unsigned int&
@@ -44,9 +44,9 @@
 //		None
 //
 //==========================================================================
-GA_GENE_DIALOG::GA_GENE_DIALOG(wxWindow *Parent, const Convert &_Converter, const CORNER::HARDPOINTS &_Hardpoint,
-							   const CORNER::HARDPOINTS &_TiedTo, const Vector::Axis &_AxisDirection,
-							   const CORNER::LOCATION &_CornerLocation, const double &_Minimum, const double &_Maximum,
+GA_GENE_DIALOG::GA_GENE_DIALOG(wxWindow *Parent, const Convert &_Converter, const Corner::Hardpoints &_Hardpoint,
+							   const Corner::Hardpoints &_TiedTo, const Vector::Axis &_AxisDirection,
+							   const Corner::Location &_CornerLocation, const double &_Minimum, const double &_Maximum,
 							   const unsigned int &_NumberOfValues, wxWindowID Id, const wxPoint &Position, long Style) :
 							   wxDialog(Parent, Id, _T("Genetic Algorithm Gene"), Position, wxDefaultSize, Style),
 							   Converter(_Converter)
@@ -161,10 +161,10 @@ void GA_GENE_DIALOG::CreateControls(void)
 
 	// Add the static text and text controls to these sizers
 	// Hardpoints
-	for (i = 0; i < CORNER::NumberOfHardpoints; i++)
-		List.Add(CORNER::GetHardpointName((CORNER::HARDPOINTS)i));
+	for (i = 0; i < Corner::NumberOfHardpoints; i++)
+		List.Add(Corner::GetHardpointName((Corner::Hardpoints)i));
 	wxStaticText *HardpointLabel = new wxStaticText(this, wxID_STATIC, _T("Hardpoint"));
-	HardpointCombo = new wxComboBox(this, wxID_ANY, CORNER::GetHardpointName(Hardpoint), wxDefaultPosition,
+	HardpointCombo = new wxComboBox(this, wxID_ANY, Corner::GetHardpointName(Hardpoint), wxDefaultPosition,
 		wxDefaultSize, List, wxCB_READONLY);
 	SetMinimumWidthFromContents(HardpointCombo, additionalWidth);
 	inputAreaSizer->Add(HardpointLabel, 0, textSizerFlags);
@@ -175,7 +175,7 @@ void GA_GENE_DIALOG::CreateControls(void)
 	// Re-use the same list for this combo box
 	List.Insert(_T("None"), 0);
 	wxStaticText *TiedToLabel = new wxStaticText(this, wxID_STATIC, _T("Alternate With"));
-	TiedToCombo = new wxComboBox(this, wxID_ANY, CORNER::GetHardpointName(TiedTo), wxDefaultPosition,
+	TiedToCombo = new wxComboBox(this, wxID_ANY, Corner::GetHardpointName(TiedTo), wxDefaultPosition,
 		wxDefaultSize, List, wxCB_READONLY);
 	SetMinimumWidthFromContents(TiedToCombo, additionalWidth);
 	inputAreaSizer->Add(TiedToLabel, 0, textSizerFlags);
@@ -196,10 +196,10 @@ void GA_GENE_DIALOG::CreateControls(void)
 
 	// Corner Location
 	List.Clear();
-	for (i = 0; i < CORNER::NumberOfLocations; i++)
-		List.Add(CORNER::GetLocationName((CORNER::LOCATION)i));
+	for (i = 0; i < Corner::NumberOfLocations; i++)
+		List.Add(Corner::GetLocationName((Corner::Location)i));
 	wxStaticText *CornerLocationLabel = new wxStaticText(this, wxID_STATIC, _T("Corner Location"));
-	CornerLocationCombo = new wxComboBox(this, wxID_ANY, CORNER::GetLocationName(CornerLocation), wxDefaultPosition,
+	CornerLocationCombo = new wxComboBox(this, wxID_ANY, Corner::GetLocationName(CornerLocation), wxDefaultPosition,
 		wxDefaultSize, List, wxCB_READONLY);
 	SetMinimumWidthFromContents(CornerLocationCombo, additionalWidth);
 	inputAreaSizer->Add(CornerLocationLabel, 0, textSizerFlags);
@@ -320,13 +320,13 @@ void GA_GENE_DIALOG::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 	}
 
 	// Read the remaining items
-	Hardpoint = (CORNER::HARDPOINTS)HardpointCombo->GetCurrentSelection();
+	Hardpoint = (Corner::Hardpoints)HardpointCombo->GetCurrentSelection();
 	if (TiedToCombo->GetCurrentSelection() == 0)
-		TiedTo = (CORNER::HARDPOINTS)HardpointCombo->GetCurrentSelection();
+		TiedTo = (Corner::Hardpoints)HardpointCombo->GetCurrentSelection();
 	else
-		TiedTo = (CORNER::HARDPOINTS)(TiedToCombo->GetCurrentSelection() - 1);
+		TiedTo = (Corner::Hardpoints)(TiedToCombo->GetCurrentSelection() - 1);
 	AxisDirection = (Vector::Axis)AxisDirectionCombo->GetCurrentSelection();
-	CornerLocation = (CORNER::LOCATION)CornerLocationCombo->GetCurrentSelection();
+	CornerLocation = (Corner::Location)CornerLocationCombo->GetCurrentSelection();
 
 	// Convert the input values
 	Minimum = Converter.ReadDistance(Minimum);

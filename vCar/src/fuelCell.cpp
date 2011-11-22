@@ -10,7 +10,7 @@
 // File:  fuelCell.cpp
 // Created:  12/12/2008
 // Author:  K. Loux
-// Description:  Contains class definitions for FUEL_CELL class.  This is for
+// Description:  Contains class definitions for FuelCell class.  This is for
 //				 modeling a shift in weight and CG as fuel is burned.  Future
 //				 considerations include modeling fuel slosh for dynamic effects
 //				 as well as fuel pump starvation and out-of-gas engine stalling.
@@ -21,10 +21,10 @@
 #include "vCar/fuelCell.h"
 
 //==========================================================================
-// Class:			FUEL_CELL
-// Function:		FUEL_CELL
+// Class:			FuelCell
+// Function:		FuelCell
 //
-// Description:		Constructor for FUEL_CELL class.
+// Description:		Constructor for FuelCell class.
 //
 // Input Arguments:
 //		None
@@ -36,15 +36,15 @@
 //		None
 //
 //==========================================================================
-FUEL_CELL::FUEL_CELL()
+FuelCell::FuelCell()
 {
 }
 
 //==========================================================================
-// Class:			FUEL_CELL
-// Function:		~FUEL_CELL
+// Class:			FuelCell
+// Function:		~FuelCell
 //
-// Description:		Destructor for FUEL_CELL class.
+// Description:		Destructor for FuelCell class.
 //
 // Input Arguments:
 //		None
@@ -56,6 +56,6 @@ FUEL_CELL::FUEL_CELL()
 //		None
 //
 //==========================================================================
-FUEL_CELL::~FUEL_CELL()
+FuelCell::~FuelCell()
 {
 }

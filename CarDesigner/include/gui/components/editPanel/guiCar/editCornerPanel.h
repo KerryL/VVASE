@@ -30,7 +30,7 @@ class wxGridEvent;
 // VVASE forward declarations
 class Debugger;
 class Convert;
-class CORNER;
+class Corner;
 class EDIT_SUSPENSION_NOTEBOOK;
 class SuperGrid;
 
@@ -45,7 +45,7 @@ public:
 	~EDIT_CORNER_PANEL();
 
 	// Updates the information on the panel
-	void UpdateInformation(CORNER *_CurrentCorner, SUSPENSION::BAR_STYLE BarStyle, bool HasHalfShaft);
+	void UpdateInformation(Corner *_CurrentCorner, Suspension::BarStyle BarStyle, bool HasHalfShaft);
 
 private:
 	// Debugger message printing utility
@@ -58,7 +58,7 @@ private:
 	EDIT_SUSPENSION_NOTEBOOK &Parent;
 
 	// The corner with which we are currently associated
-	CORNER *CurrentCorner;
+	Corner *CurrentCorner;
 
 	// Creates the controls and positions everything within the panel
 	void CreateControls(void);

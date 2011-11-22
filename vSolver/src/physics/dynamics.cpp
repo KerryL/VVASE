@@ -46,7 +46,7 @@ Dynamics::Dynamics(const Debugger &_debugger) : debugger(_debugger)
 	integrator = new Integrator(Integrator::MethodAdamsBashforth3, 100.0, debugger);
 
 	// Create the driver
-	driver = new DRIVER(debugger);
+	driver = new Driver(debugger);
 }
 
 //==========================================================================
@@ -67,9 +67,11 @@ Dynamics::Dynamics(const Debugger &_debugger) : debugger(_debugger)
 //==========================================================================
 Dynamics::Dynamics(const Dynamics &dynamics) : debugger(dynamics.debugger)
 {
-	// Initialize the pointers
-	driver = NULL;
-	integrator = NULL;
+	// Create the integrator object
+	integrator = new Integrator(Integrator::MethodAdamsBashforth3, 100.0, debugger);
+
+	// Create the driver
+	driver = new Driver(debugger);
 
 	// Do the copy
 	*this = dynamics;
@@ -130,7 +132,7 @@ void Dynamics::ResetSimulation(void)
 //
 // Input Arguments:
 //		state	= State, current state of the vehicle
-//		inputs	= DRIVER::INPUTS representing the commands from the driver
+//		inputs	= Driver::Inputs representing the commands from the driver
 //
 // Output Arguments:
 //		None
@@ -139,7 +141,7 @@ void Dynamics::ResetSimulation(void)
 //		None
 //
 //==========================================================================
-void Dynamics::CalculateStateDerivative(State state, DRIVER::INPUTS inputs)
+void Dynamics::CalculateStateDerivative(State state, Driver::Inputs inputs)
 {
 }
 
@@ -229,8 +231,8 @@ Dynamics& Dynamics::operator = (const Dynamics &dynamics)
 	state			= dynamics.state;
 	stateDerivative	= dynamics.stateDerivative;
 
-	driver			= new DRIVER(*dynamics.driver);
-	integrator		= new Integrator(*dynamics.integrator);
+	*driver			= *dynamics.driver;
+	*integrator		= *dynamics.integrator;
 
 	return *this;
 }

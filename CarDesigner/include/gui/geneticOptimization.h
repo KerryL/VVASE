@@ -28,7 +28,6 @@
 
 // VVASE forward declarations
 class GUI_CAR;
-class CAR;
 class Debugger;
 class Convert;
 class GA_OBJECT;

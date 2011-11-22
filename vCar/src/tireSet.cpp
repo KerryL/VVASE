@@ -25,10 +25,10 @@
 #include "vUtilities/machineDefinitions.h"
 
 //==========================================================================
-// Class:			TIRE_SET
-// Function:		TIRE_SET
+// Class:			TireSet
+// Function:		TireSet
 //
-// Description:		Constructor for the TIRE_SET class.
+// Description:		Constructor for the TireSet class.
 //
 // Input Arguments:
 //		_debugger	= const Debugger& reference to applications debug printing utility
@@ -40,23 +40,23 @@
 //		None
 //
 //==========================================================================
-TIRE_SET::TIRE_SET(const Debugger &_debugger) : debugger(_debugger)
+TireSet::TireSet(const Debugger &_debugger) : debugger(_debugger)
 {
 	// Create four tires
-	RightFront = new TIRE(debugger);
-	LeftFront = new TIRE(debugger);
-	RightRear = new TIRE(debugger);
-	LeftRear = new TIRE(debugger);
+	rightFront = new Tire(debugger);
+	leftFront = new Tire(debugger);
+	rightRear = new Tire(debugger);
+	leftRear = new Tire(debugger);
 }
 
 //==========================================================================
-// Class:			TIRE_SET
-// Function:		TIRE_SET
+// Class:			TireSet
+// Function:		TireSet
 //
-// Description:		Copy constructor for the TIRE_SET class.
+// Description:		Copy constructor for the TireSet class.
 //
 // Input Arguments:
-//		TireSet	= const TIRE_SET& to be copied
+//		TireSet	= const TireSet& to be copied
 //
 // Output Arguments:
 //		None
@@ -65,22 +65,23 @@ TIRE_SET::TIRE_SET(const Debugger &_debugger) : debugger(_debugger)
 //		None
 //
 //==========================================================================
-TIRE_SET::TIRE_SET(const TIRE_SET &TireSet) : debugger(TireSet.debugger)
+TireSet::TireSet(const TireSet &tireSet) : debugger(tireSet.debugger)
 {
-	// Initialize the pointers
-	RightFront = NULL;
-	LeftFront = NULL;
-	RightRear = NULL;
-	LeftRear = NULL;
+	// Create four tires
+	rightFront = new Tire(debugger);
+	leftFront = new Tire(debugger);
+	rightRear = new Tire(debugger);
+	leftRear = new Tire(debugger);
 
-	*this = TireSet;
+	// Make the assignment
+	*this = tireSet;
 }
 
 //==========================================================================
-// Class:			TIRE_SET
-// Function:		~TIRE_SET
+// Class:			TireSet
+// Function:		~TireSet
 //
-// Description:		Destructor for the TIRE_SET class.
+// Description:		Destructor for the TireSet class.
 //
 // Input Arguments:
 //		None
@@ -92,29 +93,29 @@ TIRE_SET::TIRE_SET(const TIRE_SET &TireSet) : debugger(TireSet.debugger)
 //		None
 //
 //==========================================================================
-TIRE_SET::~TIRE_SET()
+TireSet::~TireSet()
 {
-	delete RightFront;
-	RightFront = NULL;
+	delete rightFront;
+	rightFront = NULL;
 
-	delete LeftFront;
-	LeftFront = NULL;
+	delete leftFront;
+	leftFront = NULL;
 
-	delete RightRear;
-	RightRear = NULL;
+	delete rightRear;
+	rightRear = NULL;
 
-	delete LeftRear;
-	LeftRear = NULL;
+	delete leftRear;
+	leftRear = NULL;
 }
 
 //==========================================================================
-// Class:			TIRE_SET
+// Class:			TireSet
 // Function:		Write
 //
 // Description:		Writes this tire set to file.
 //
 // Input Arguments:
-//		OutFile	= std::ofstream* point to the file stream to write to
+//		outFile	= std::ofstream* point to the file stream to write to
 //
 // Output Arguments:
 //		None
@@ -123,24 +124,24 @@ TIRE_SET::~TIRE_SET()
 //		None
 //
 //==========================================================================
-void TIRE_SET::Write(std::ofstream *OutFile) const
+void TireSet::Write(std::ofstream *outFile) const
 {
 	// Call the write functions for each of the four tires
-	RightFront->Write(OutFile);
-	LeftFront->Write(OutFile);
-	RightRear->Write(OutFile);
-	LeftRear->Write(OutFile);
+	rightFront->Write(outFile);
+	leftFront->Write(outFile);
+	rightRear->Write(outFile);
+	leftRear->Write(outFile);
 }
 
 //==========================================================================
-// Class:			TIRE_SET
+// Class:			TireSet
 // Function:		Read
 //
 // Description:		Read from file to fill this tire set.
 //
 // Input Arguments:
-//		InFile		= std::ifstream* pointing to the file stream to read from
-//		FileVersion	= int specifying which file version we're reading from
+//		inFile		= std::ifstream* pointing to the file stream to read from
+//		fileVersion	= int specifying which file version we're reading from
 //
 // Output Arguments:
 //		None
@@ -149,23 +150,23 @@ void TIRE_SET::Write(std::ofstream *OutFile) const
 //		None
 //
 //==========================================================================
-void TIRE_SET::Read(std::ifstream *InFile, int FileVersion)
+void TireSet::Read(std::ifstream *inFile, int fileVersion)
 {
 	// Call the read functions for each of the four tires
-	RightFront->Read(InFile, FileVersion);
-	LeftFront->Read(InFile, FileVersion);
-	RightRear->Read(InFile, FileVersion);
-	LeftRear->Read(InFile, FileVersion);
+	rightFront->Read(inFile, fileVersion);
+	leftFront->Read(inFile, fileVersion);
+	rightRear->Read(inFile, fileVersion);
+	leftRear->Read(inFile, fileVersion);
 }
 
 //==========================================================================
-// Class:			TIRE_SET
+// Class:			TireSet
 // Function:		operator=
 //
-// Description:		Assignment operator for the TIRE_SET class.
+// Description:		Assignment operator for the TireSet class.
 //
 // Input Arguments:
-//		TireSet	= TIRE_SET& to copy from
+//		tireSet	= TireSet& to copy from
 //
 // Output Arguments:
 //		None
@@ -174,17 +175,17 @@ void TIRE_SET::Read(std::ifstream *InFile, int FileVersion)
 //		None
 //
 //==========================================================================
-TIRE_SET& TIRE_SET::operator=(const TIRE_SET &TireSet)
+TireSet& TireSet::operator=(const TireSet &tireSet)
 {
 	// Check for self-assignment
-	if (this == &TireSet)
+	if (this == &tireSet)
 		return *this;
 
 	// Assign the tires
-	RightFront = new TIRE(*TireSet.RightFront);
-	LeftFront = new TIRE(*TireSet.LeftFront);
-	RightRear = new TIRE(*TireSet.RightRear);
-	LeftRear = new TIRE(*TireSet.LeftRear);
+	*rightFront = *tireSet.rightFront;
+	*leftFront = *tireSet.leftFront;
+	*rightRear = *tireSet.rightRear;
+	*leftRear = *tireSet.leftRear;
 
 	return *this;
 }

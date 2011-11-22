@@ -101,7 +101,7 @@ END_EVENT_TABLE();
 // Description:		Updates the information on this panel.
 //
 // Input Arguments:
-//		_CurrentBrakes	= BRAKES* pointing to the associated brakes
+//		_CurrentBrakes	= Brakes* pointing to the associated brakes
 //
 // Output Arguments:
 //		None
@@ -110,17 +110,17 @@ END_EVENT_TABLE();
 //		None
 //
 //==========================================================================
-void EDIT_BRAKES_PANEL::UpdateInformation(BRAKES *_CurrentBrakes)
+void EDIT_BRAKES_PANEL::UpdateInformation(Brakes *_CurrentBrakes)
 {
 	// Update the class member
 	CurrentBrakes = _CurrentBrakes;
 
 	// Update the check boxes
-	FrontBrakesInboard->SetValue(CurrentBrakes->FrontBrakesInboard);
-	RearBrakesInboard->SetValue(CurrentBrakes->RearBrakesInboard);
+	FrontBrakesInboard->SetValue(CurrentBrakes->frontBrakesInboard);
+	RearBrakesInboard->SetValue(CurrentBrakes->rearBrakesInboard);
 
 	// Update the text boxes
-	PercentFrontBraking->ChangeValue(Converter.FormatNumber(CurrentBrakes->PercentFrontBraking));
+	PercentFrontBraking->ChangeValue(Converter.FormatNumber(CurrentBrakes->percentFrontBraking));
 }
 
 //==========================================================================
@@ -216,7 +216,7 @@ void EDIT_BRAKES_PANEL::TextBoxEditEvent(wxCommandEvent &event)
 	case TextBoxPercentFrontBraking:
 		// Get the text box, the location to write it, and the units
 		TextBox = PercentFrontBraking;
-		DataLocation = &CurrentBrakes->PercentFrontBraking;
+		DataLocation = &CurrentBrakes->percentFrontBraking;
 		Units = Convert::UnitTypeUnitless;
 		MinValue = 0.0;
 		MaxValue = 1.0;
@@ -301,10 +301,10 @@ void EDIT_BRAKES_PANEL::CheckBoxChange(wxCommandEvent &event)
 		Parent.GetMainFrame().GetUndoRedoStack().AddOperation(
 			Parent.GetMainFrame().GetActiveIndex(),
 			UNDO_REDO_STACK::OPERATION::DATA_TYPE_BOOL,
-			&(CurrentBrakes->FrontBrakesInboard));
+			&(CurrentBrakes->frontBrakesInboard));
 
 		// Set the front brakes inboard flag to the value of the check box
-		CurrentBrakes->FrontBrakesInboard = event.IsChecked();
+		CurrentBrakes->frontBrakesInboard = event.IsChecked();
 		break;
 
 	case CheckBoxRearBrakesInboard:
@@ -312,10 +312,10 @@ void EDIT_BRAKES_PANEL::CheckBoxChange(wxCommandEvent &event)
 		Parent.GetMainFrame().GetUndoRedoStack().AddOperation(
 			Parent.GetMainFrame().GetActiveIndex(),
 			UNDO_REDO_STACK::OPERATION::DATA_TYPE_BOOL,
-			&(CurrentBrakes->RearBrakesInboard));
+			&(CurrentBrakes->rearBrakesInboard));
 
 		// Set the rear brakes inboard flag to the value of the check box
-		CurrentBrakes->RearBrakesInboard = event.IsChecked();
+		CurrentBrakes->rearBrakesInboard = event.IsChecked();
 		break;
 
 	default:

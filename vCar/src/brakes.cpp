@@ -24,10 +24,10 @@
 #include "vUtilities/machineDefinitions.h"
 
 //==========================================================================
-// Class:			BRAKES
-// Function:		BRAKES
+// Class:			Brakes
+// Function:		Brakes
 //
-// Description:		Constructor for the BRAKES class.
+// Description:		Constructor for the Brakes class.
 //
 // Input Arguments:
 //		_debugger	= const Debugger& reference to applications debug printing utility
@@ -39,21 +39,21 @@
 //		None
 //
 //==========================================================================
-BRAKES::BRAKES(const Debugger &_debugger) : debugger(_debugger)
+Brakes::Brakes(const Debugger &_debugger) : debugger(_debugger)
 {
 	// Initialize the class members
-	FrontBrakesInboard = false;
-	RearBrakesInboard = false;
+	frontBrakesInboard = false;
+	rearBrakesInboard = false;
 }
 
 //==========================================================================
-// Class:			BRAKES
-// Function:		BRAKES
+// Class:			Brakes
+// Function:		Brakes
 //
-// Description:		Copy constructor for the BRAKES class.
+// Description:		Copy constructor for the Brakes class.
 //
 // Input Arguments:
-//		Brakes	= const BRAKES& to copy to this object
+//		brakes	= const Brakes& to copy to this object
 //
 // Output Arguments:
 //		None
@@ -62,17 +62,17 @@ BRAKES::BRAKES(const Debugger &_debugger) : debugger(_debugger)
 //		None
 //
 //==========================================================================
-BRAKES::BRAKES(const BRAKES &Brakes) : debugger(Brakes.debugger)
+Brakes::Brakes(const Brakes &brakes) : debugger(brakes.debugger)
 {
 	// Do the copy
-	*this = Brakes;
+	*this = brakes;
 }
 
 //==========================================================================
-// Class:			BRAKES
-// Function:		~BRAKES
+// Class:			Brakes
+// Function:		~Brakes
 //
-// Description:		Destructor for the BRAKES class.
+// Description:		Destructor for the Brakes class.
 //
 // Input Arguments:
 //		None
@@ -84,18 +84,18 @@ BRAKES::BRAKES(const BRAKES &Brakes) : debugger(Brakes.debugger)
 //		None
 //
 //==========================================================================
-BRAKES::~BRAKES()
+Brakes::~Brakes()
 {
 }
 
 //==========================================================================
-// Class:			BRAKES
+// Class:			Brakes
 // Function:		Write
 //
 // Description:		Writes these brakes to file.
 //
 // Input Arguments:
-//		OutFile	= std::ofstream* pointing to the file stream to write to
+//		outFile	= std::ofstream* pointing to the file stream to write to
 //
 // Output Arguments:
 //		None
@@ -104,23 +104,23 @@ BRAKES::~BRAKES()
 //		None
 //
 //==========================================================================
-void BRAKES::Write(std::ofstream *OutFile) const
+void Brakes::Write(std::ofstream *outFile) const
 {
 	// Write this object to file
-	OutFile->write((char*)&PercentFrontBraking, sizeof(double));
-	OutFile->write((char*)&FrontBrakesInboard, sizeof(bool));
-	OutFile->write((char*)&RearBrakesInboard, sizeof(bool));
+	outFile->write((char*)&percentFrontBraking, sizeof(double));
+	outFile->write((char*)&frontBrakesInboard, sizeof(bool));
+	outFile->write((char*)&rearBrakesInboard, sizeof(bool));
 }
 
 //==========================================================================
-// Class:			BRAKES
+// Class:			Brakes
 // Function:		Read
 //
 // Description:		Read from file to fill these brakes.
 //
 // Input Arguments:
-//		InFile		= std::ifstream* pointing to the file stream to read from
-//		FileVersion	= int specifying which file version we're reading from
+//		inFile		= std::ifstream* pointing to the file stream to read from
+//		fileVersion	= int specifying which file version we're reading from
 //
 // Output Arguments:
 //		None
@@ -129,53 +129,53 @@ void BRAKES::Write(std::ofstream *OutFile) const
 //		None
 //
 //==========================================================================
-void BRAKES::Read(std::ifstream *InFile, int FileVersion)
+void Brakes::Read(std::ifstream *inFile, int fileVersion)
 {
 	// Read this object from file according to the file version we're using
-	if (FileVersion >= 0)// All versions
+	if (fileVersion >= 0)// All versions
 	{
-		InFile->read((char*)&PercentFrontBraking, sizeof(double));
-		InFile->read((char*)&FrontBrakesInboard, sizeof(bool));
-		InFile->read((char*)&RearBrakesInboard, sizeof(bool));
+		inFile->read((char*)&percentFrontBraking, sizeof(double));
+		inFile->read((char*)&frontBrakesInboard, sizeof(bool));
+		inFile->read((char*)&rearBrakesInboard, sizeof(bool));
 	}
 	else
 		assert(0);
 }
 
 //==========================================================================
-// Class:			BRAKES
+// Class:			Brakes
 // Function:		operator =
 //
-// Description:		Assignment operator for BRAKES class.
+// Description:		Assignment operator for Brakes class.
 //
 // Input Arguments:
-//		Brakes	= const BRAKES& to assign to this object
+//		brakes	= const Brakes& to assign to this object
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		BRAKES&, reference to this object
+//		Brakes&, reference to this object
 //
 //==========================================================================
-BRAKES& BRAKES::operator = (const BRAKES &Brakes)
+Brakes& Brakes::operator = (const Brakes &brakes)
 {
 	// Check for self-assignment
-	if (this == &Brakes)
+	if (this == &brakes)
 		return *this;
 
 	// Perform the assignment
-	NumberOfDisks		= Brakes.NumberOfDisks;
-	BrakeDiameter		= Brakes.BrakeDiameter;
-	PistonArea			= Brakes.PistonArea;
-	MasterCylinderArea	= Brakes.MasterCylinderArea;
-	PedalRatio			= Brakes.PedalRatio;
-	LinePressure		= Brakes.LinePressure;
-	BiasRatio			= Brakes.BiasRatio;
-	PercentFrontBraking	= Brakes.PercentFrontBraking;
+	numberOfDisks		= brakes.numberOfDisks;
+	brakeDiameter		= brakes.brakeDiameter;
+	pistonArea			= brakes.pistonArea;
+	masterCylinderArea	= brakes.masterCylinderArea;
+	pedalRatio			= brakes.pedalRatio;
+	linePressure		= brakes.linePressure;
+	biasRatio			= brakes.biasRatio;
+	percentFrontBraking	= brakes.percentFrontBraking;
 
-	FrontBrakesInboard	= Brakes.FrontBrakesInboard;
-	RearBrakesInboard	= Brakes.RearBrakesInboard;
+	frontBrakesInboard	= brakes.frontBrakesInboard;
+	rearBrakesInboard	= brakes.rearBrakesInboard;
 
 	return *this;
 }

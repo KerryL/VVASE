@@ -24,10 +24,10 @@
 #include "vUtilities/machineDefinitions.h"
 
 //==========================================================================
-// Class:			DIFFERENTIAL
-// Function:		DIFFERENTIAL
+// Class:			Differential
+// Function:		Differential
 //
-// Description:		Constructor for the DIFFERENTIAL class.
+// Description:		Constructor for the Differential class.
 //
 // Input Arguments:
 //		_debugger	= const Debugger& reference to applications debug printing utility
@@ -39,18 +39,18 @@
 //		None
 //
 //==========================================================================
-DIFFERENTIAL::DIFFERENTIAL(const Debugger &_debugger) : debugger(_debugger)
+Differential::Differential(const Debugger &_debugger) : debugger(_debugger)
 {
 }
 
 //==========================================================================
-// Class:			DIFFERENTIAL
-// Function:		DIFFERENTIAL
+// Class:			Differential
+// Function:		Differential
 //
-// Description:		Copy constructor for the DIFFERENTIAL class.
+// Description:		Copy constructor for the Differential class.
 //
 // Input Arguments:
-//		Differential	= const DIFFERENTIAL& to copy to this object
+//		differential	= const Differential& to copy to this object
 //
 // Output Arguments:
 //		None
@@ -59,17 +59,17 @@ DIFFERENTIAL::DIFFERENTIAL(const Debugger &_debugger) : debugger(_debugger)
 //		None
 //
 //==========================================================================
-DIFFERENTIAL::DIFFERENTIAL(const DIFFERENTIAL &Differential) : debugger(Differential.debugger)
+Differential::Differential(const Differential &differential) : debugger(differential.debugger)
 {
 	// Do the copy
-	*this = Differential;
+	*this = differential;
 }
 
 //==========================================================================
-// Class:			DIFFERENTIAL
-// Function:		~DIFFERENTIAL
+// Class:			Differential
+// Function:		~Differential
 //
-// Description:		Destructor for the DIFFERENTIAL class.
+// Description:		Destructor for the Differential class.
 //
 // Input Arguments:
 //		None
@@ -81,18 +81,18 @@ DIFFERENTIAL::DIFFERENTIAL(const DIFFERENTIAL &Differential) : debugger(Differen
 //		None
 //
 //==========================================================================
-DIFFERENTIAL::~DIFFERENTIAL()
+Differential::~Differential()
 {
 }
 
 //==========================================================================
-// Class:			DIFFERENTIAL
+// Class:			Differential
 // Function:		Write
 //
 // Description:		Writes this differential to file.
 //
 // Input Arguments:
-//		OutFile	= std::ofstream* pointing to the files stream to write to
+//		outFile	= std::ofstream* pointing to the files stream to write to
 //
 // Output Arguments:
 //		None
@@ -101,7 +101,7 @@ DIFFERENTIAL::~DIFFERENTIAL()
 //		None
 //
 //==========================================================================
-void DIFFERENTIAL::Write(std::ofstream *OutFile) const
+void Differential::Write(std::ofstream *outFile) const
 {
 	// FIXME:  MSCV generates C4100
 	// Write this object to file
@@ -109,14 +109,14 @@ void DIFFERENTIAL::Write(std::ofstream *OutFile) const
 }
 
 //==========================================================================
-// Class:			DIFFERENTIAL
+// Class:			Differential
 // Function:		Read
 //
 // Description:		Read from file to fill this differential.
 //
 // Input Arguments:
-//		InFile		= std::ifstream* pointing to the file stream to read from
-//		FileVersion	= int specifying which file version we're reading from
+//		inFile		= std::ifstream* pointing to the file stream to read from
+//		fileVersion	= int specifying which file version we're reading from
 //
 // Output Arguments:
 //		None
@@ -125,11 +125,11 @@ void DIFFERENTIAL::Write(std::ofstream *OutFile) const
 //		None
 //
 //==========================================================================
-void DIFFERENTIAL::Read(std::ifstream *InFile, int FileVersion)
+void Differential::Read(std::ifstream *inFile, int fileVersion)
 {
 	// FIXME:  MSCV generates C4100
 	// Read this object from file accoring to the file version we're using
-	if (FileVersion >= 0)// All versions
+	if (fileVersion >= 0)// All versions
 	{
 		// Not yet used
 	}
@@ -138,32 +138,32 @@ void DIFFERENTIAL::Read(std::ifstream *InFile, int FileVersion)
 }
 
 //==========================================================================
-// Class:			DIFFERENTIAL
+// Class:			Differential
 // Function:		operator =
 //
-// Description:		Assignment operator for DIFFERENTIAL class.
+// Description:		Assignment operator for Differential class.
 //
 // Input Arguments:
-//		Differential	= const DIFFERENTIAL& to assign to this object
+//		differential	= const Differential& to assign to this object
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		DIFFERENTIAL&, reference to this object
+//		Differential&, reference to this object
 //
 //==========================================================================
-DIFFERENTIAL& DIFFERENTIAL::operator = (const DIFFERENTIAL &Differential)
+Differential& Differential::operator = (const Differential &differential)
 {
 	// Check for self-assignment
-	if (this == &Differential)
+	if (this == &differential)
 		return *this;
 
 	// Perform the assignment
-	BiasRatio	= Differential.BiasRatio;
-	Preload		= Differential.Preload;
+	biasRatio	= differential.biasRatio;
+	preload		= differential.preload;
 
-	Style		= Differential.Style;
+	style		= differential.style;
 
 	return *this;
 }

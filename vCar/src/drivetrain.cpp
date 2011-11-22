@@ -30,10 +30,10 @@
 #include "vUtilities/machineDefinitions.h"
 
 //==========================================================================
-// Class:			DRIVETRAIN
-// Function:		DRIVETRAIN
+// Class:			Drivetrain
+// Function:		Drivetrain
 //
-// Description:		Constructor for the DRIVETRAIN class.
+// Description:		Constructor for the Drivetrain class.
 //
 // Input Arguments:
 //		_debugger	= const Debugger& reference to applications debug printing utility
@@ -45,28 +45,28 @@
 //		None
 //
 //==========================================================================
-DRIVETRAIN::DRIVETRAIN(const Debugger &_debugger) : debugger(_debugger)
+Drivetrain::Drivetrain(const Debugger &_debugger) : debugger(_debugger)
 {
-	// Initialize the number of gears to zero
-	NumberOfGears = 0;
-	GearRatio = NULL;
+	// Initialize the number of gears to one
+	gearRatio = NULL;
+	SetNumberOfGears(1);
 
 	// Allocate memory for the differential object
-	Differential = new DIFFERENTIAL(debugger);
+	differential = new Differential(debugger);
 
 	// Initialize this object
-	DriveType = DRIVE_REAR_WHEEL;
-	TransmissionInertia = 0.0;
+	driveType = DriveRearWheel;
+	transmissionInertia = 0.0;
 }
 
 //==========================================================================
-// Class:			DRIVETRAIN
-// Function:		DRIVETRAIN
+// Class:			Drivetrain
+// Function:		Drivetrain
 //
-// Description:		Copy constructor for the DRIVETRAIN class.
+// Description:		Copy constructor for the Drivetrain class.
 //
 // Input Arguments:
-//		Drivetrain	= const DRIVETRAIN&, object to be copied
+//		drivetrain	= const Drivetrain&, object to be copied
 //
 // Output Arguments:
 //		None
@@ -75,22 +75,23 @@ DRIVETRAIN::DRIVETRAIN(const Debugger &_debugger) : debugger(_debugger)
 //		None
 //
 //==========================================================================
-DRIVETRAIN::DRIVETRAIN(const DRIVETRAIN &Drivetrain) : debugger(Drivetrain.debugger)
+Drivetrain::Drivetrain(const Drivetrain &drivetrain) : debugger(drivetrain.debugger)
 {
-	// Initialize the pointers to NULL so we don't get an error when we try to
-	// delete them in the assignment operator method
-	GearRatio = NULL;
-	Differential = NULL;
+	// Initialize the gear ratio pointer
+	gearRatio = NULL;
+
+	// Allocate memory for the differential object
+	differential = new Differential(debugger);
 
 	// Do the copy
-	*this = Drivetrain;
+	*this = drivetrain;
 }
 
 //==========================================================================
-// Class:			DRIVETRAIN
-// Function:		~DRIVETRAIN
+// Class:			Drivetrain
+// Function:		~Drivetrain
 //
-// Description:		Destructor for the DRIVETRAIN class.
+// Description:		Destructor for the Drivetrain class.
 //
 // Input Arguments:
 //		None
@@ -102,18 +103,18 @@ DRIVETRAIN::DRIVETRAIN(const DRIVETRAIN &Drivetrain) : debugger(Drivetrain.debug
 //		None
 //
 //==========================================================================
-DRIVETRAIN::~DRIVETRAIN()
+Drivetrain::~Drivetrain()
 {
 	// Delete our dynamically allocated variables
-	delete [] GearRatio;
-	GearRatio = NULL;
+	delete [] gearRatio;
+	gearRatio = NULL;
 
-	delete Differential;
-	Differential = NULL;
+	delete differential;
+	differential = NULL;
 }
 
 //==========================================================================
-// Class:			DRIVETRAIN
+// Class:			Drivetrain
 // Function:		SetNumberOfGears
 //
 // Description:		Sets the number of gears we have available and allocates
@@ -129,10 +130,10 @@ DRIVETRAIN::~DRIVETRAIN()
 //		None
 //
 //==========================================================================
-void DRIVETRAIN::SetNumberOfGears(const short &NumGears)
+void Drivetrain::SetNumberOfGears(const short &numGears)
 {
 	// Make sure we have at least one gear
-	if (NumGears < 1)
+	if (numGears < 1)
 	{
 		debugger.Print(_T("ERROR:  Must have at least 1 gear!"));
 
@@ -140,23 +141,23 @@ void DRIVETRAIN::SetNumberOfGears(const short &NumGears)
 	}
 
 	// Set the number of gears
-	NumberOfGears = NumGears;
+	numberOfGears = numGears;
 
 	// Delete the old gear ratio array
-	delete [] GearRatio;
+	delete [] gearRatio;
 
 	// Dynamically allocate memory for GearRatio according to the number of gears we have
-	GearRatio = new double[NumGears];
+	gearRatio = new double[numGears];
 }
 
 //==========================================================================
-// Class:			DRIVETRAIN
+// Class:			Drivetrain
 // Function:		Write
 //
 // Description:		Writes this drivetrain to file.
 //
 // Input Arguments:
-//		OutFile	= std::ofstream* pointing to the files stream to write to
+//		outFile	= std::ofstream* pointing to the files stream to write to
 //
 // Output Arguments:
 //		None
@@ -165,31 +166,31 @@ void DRIVETRAIN::SetNumberOfGears(const short &NumGears)
 //		None
 //
 //==========================================================================
-void DRIVETRAIN::Write(std::ofstream *OutFile) const
+void Drivetrain::Write(std::ofstream *outFile) const
 {
 	// Write this object to file
 	// This is done item by item because NumberOfGears needs to be used to
 	// determine size of GearRatio.  Also, Differential needs to be handled
 	// separately.
-	OutFile->write((char*)&DriveType, sizeof(DRIVE_WHEELS));
-	OutFile->write((char*)&NumberOfGears, sizeof(short));
-	OutFile->write((char*)&TransmissionInertia, sizeof(double));
-	if (NumberOfGears > 0)
-		OutFile->write((char*)GearRatio, sizeof(double) * NumberOfGears);
+	outFile->write((char*)&driveType, sizeof(DriveWheels));
+	outFile->write((char*)&numberOfGears, sizeof(short));
+	outFile->write((char*)&transmissionInertia, sizeof(double));
+	if (numberOfGears > 0)
+		outFile->write((char*)gearRatio, sizeof(double) * numberOfGears);
 
 	// Write the differential
-	Differential->Write(OutFile);
+	differential->Write(outFile);
 }
 
 //==========================================================================
-// Class:			DRIVETRAIN
+// Class:			Drivetrain
 // Function:		Read
 //
 // Description:		Read from file to fill this drivetrain.
 //
 // Input Arguments:
-//		InFile		= std::ifstream* pointing to the file stream to read from
-//		FileVersion	= int specifying which file version we're reading from
+//		inFile		= std::ifstream* pointing to the file stream to read from
+//		fileVersion	= int specifying which file version we're reading from
 //
 // Output Arguments:
 //		None
@@ -198,33 +199,33 @@ void DRIVETRAIN::Write(std::ofstream *OutFile) const
 //		None
 //
 //==========================================================================
-void DRIVETRAIN::Read(std::ifstream *InFile, int FileVersion)
+void Drivetrain::Read(std::ifstream *inFile, int fileVersion)
 {
 	// Read this object from file - again, this is the same order as found
 	// in the Read() function.
-	InFile->read((char*)&DriveType, sizeof(DriveType));
-	InFile->read((char*)&NumberOfGears, sizeof(NumberOfGears));
-	InFile->read((char*)&TransmissionInertia, sizeof(TransmissionInertia));
+	inFile->read((char*)&driveType, sizeof(driveType));
+	inFile->read((char*)&numberOfGears, sizeof(numberOfGears));
+	inFile->read((char*)&transmissionInertia, sizeof(transmissionInertia));
 
 	// Re-allocate the memory for the NumberOfGears
-	if (NumberOfGears > 0)
+	if (numberOfGears > 0)
 	{
-		SetNumberOfGears(NumberOfGears);
-		InFile->read((char*)GearRatio, sizeof(double) * NumberOfGears);
+		SetNumberOfGears(numberOfGears);
+		inFile->read((char*)gearRatio, sizeof(double) * numberOfGears);
 	}
 
 	// Read the differential
-	Differential->Read(InFile, FileVersion);
+	differential->Read(inFile, fileVersion);
 }
 
 //==========================================================================
-// Class:			DRIVETRAIN
+// Class:			Drivetrain
 // Function:		GetDriveWheelsName
 //
 // Description:		Returns the name of the drivetrain type.
 //
 // Input Arguments:
-//		_DriveWheels	= const DRIVE_WHEELS& specifying the type of interest
+//		_driveWheels	= const DriveWheels& specifying the type of interest
 //
 // Output Arguments:
 //		None
@@ -233,19 +234,19 @@ void DRIVETRAIN::Read(std::ifstream *InFile, int FileVersion)
 //		wxString containing the name of the drive style
 //
 //==========================================================================
-wxString DRIVETRAIN::GetDriveWheelsName(const DRIVE_WHEELS &_DriveWheels)
+wxString Drivetrain::GetDriveWheelsName(const DriveWheels &_driveWheels)
 {
-	switch (_DriveWheels)
+	switch (_driveWheels)
 	{
-	case DRIVE_REAR_WHEEL:
+	case DriveRearWheel:
 		return _T("Rear Wheel Drive");
 		break;
 
-	case DRIVE_FRONT_WHEEL:
+	case DriveFrontWheel:
 		return _T("Front Wheel Drive");
 		break;
 
-	case DRIVE_ALL_WHEEL:
+	case DriveAllWheel:
 		return _T("All Wheel Drive");
 		break;
 
@@ -258,13 +259,13 @@ wxString DRIVETRAIN::GetDriveWheelsName(const DRIVE_WHEELS &_DriveWheels)
 }
 
 //==========================================================================
-// Class:			DRIVETRAIN
+// Class:			Drivetrain
 // Function:		operator=
 //
-// Description:		Assignment operator for DRIVETRAIN class.
+// Description:		Assignment operator for Drivetrain class.
 //
 // Input Arguments:
-//		Drivetrain	= const DRIVETRAIN& to copy from
+//		drivetrain	= const Drivetrain& to copy from
 //
 // Output Arguments:
 //		None
@@ -273,33 +274,27 @@ wxString DRIVETRAIN::GetDriveWheelsName(const DRIVE_WHEELS &_DriveWheels)
 //		None
 //
 //==========================================================================
-DRIVETRAIN& DRIVETRAIN::operator=(const DRIVETRAIN &Drivetrain)
+Drivetrain& Drivetrain::operator=(const Drivetrain &drivetrain)
 {
 	// Check for self-assignment
-	if (this == &Drivetrain)
+	if (this == &drivetrain)
 		return *this;
 
 	// Allocate memory for the gear ratios depending on the number of gears
-	NumberOfGears = Drivetrain.NumberOfGears;
+	SetNumberOfGears(numberOfGears);
 
-	delete GearRatio;
-	GearRatio = NULL;
-
-	if (NumberOfGears > 0)
+	if (numberOfGears > 0)
 	{
-		GearRatio = new double[NumberOfGears];
-		SetNumberOfGears(NumberOfGears);
 		int i;
-		for (i = 0; i < NumberOfGears; i++)
-			GearRatio[i] = Drivetrain.GearRatio[i];
+		for (i = 0; i < numberOfGears; i++)
+			gearRatio[i] = drivetrain.gearRatio[i];
 	}
 
 	// Copy the differential
-	delete Differential;
-	Differential = new DIFFERENTIAL(*Drivetrain.Differential);
+	*differential = *drivetrain.differential;
 
 	// Copy the drive type
-	DriveType = Drivetrain.DriveType;
+	driveType = drivetrain.driveType;
 
 	return *this;
 }

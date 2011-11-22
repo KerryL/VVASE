@@ -21,7 +21,7 @@
     <ClInclude Include="..\common\include\vCar\drivetrain.h" />
     <ClInclude Include="..\common\include\vCar\engine.h" />
     <ClInclude Include="..\common\include\vCar\fuelCell.h" />
-    <ClInclude Include="..\common\include\vCar\mass.h" />
+    <ClInclude Include="..\common\include\vCar\massProperties.h" />
     <ClInclude Include="..\common\include\vCar\spring.h" />
     <ClInclude Include="..\common\include\vCar\suspension.h" />
     <ClInclude Include="..\common\include\vCar\tire.h" />
@@ -38,7 +38,7 @@
     <ClCompile Include="src\drivetrain.cpp" />
     <ClCompile Include="src\engine.cpp" />
     <ClCompile Include="src\fuelCell.cpp" />
-    <ClCompile Include="src\mass.cpp" />
+    <ClCompile Include="src\massProperties.cpp" />
     <ClCompile Include="src\spring.cpp" />
     <ClCompile Include="src\suspension.cpp" />
     <ClCompile Include="src\tire.cpp" />

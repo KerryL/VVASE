@@ -112,7 +112,7 @@ void EDIT_SUSPENSION_NOTEBOOK::UpdateInformation(void)
 // Description:		Updates the information in this notebook.
 //
 // Input Arguments:
-//		_CurrentCar	= CAR* pointing to the currenly active object
+//		_CurrentCar	= Car* pointing to the currenly active object
 //
 // Output Arguments:
 //		None
@@ -121,7 +121,7 @@ void EDIT_SUSPENSION_NOTEBOOK::UpdateInformation(void)
 //		None
 //
 //==========================================================================
-void EDIT_SUSPENSION_NOTEBOOK::UpdateInformation(CAR *_CurrentCar)
+void EDIT_SUSPENSION_NOTEBOOK::UpdateInformation(Car *_CurrentCar)
 {
 	// Update the class member
 	CurrentCar = _CurrentCar;
@@ -141,7 +141,7 @@ void EDIT_SUSPENSION_NOTEBOOK::UpdateInformation(CAR *_CurrentCar)
 
 	// Check to see if the car is symmetric, and if the current number of pages is
 	// correct.
-	if (CurrentCar->Suspension->IsSymmetric)
+	if (CurrentCar->suspension->isSymmetric)
 	{
 		// A symmetric car only gets three pages
 		if (GetPageCount() > 3)
@@ -168,17 +168,17 @@ void EDIT_SUSPENSION_NOTEBOOK::UpdateInformation(CAR *_CurrentCar)
 	}
 
 	// Call the update functions for the pages, too
-	Suspension->UpdateInformation(CurrentCar->Suspension);
-	RightFront->UpdateInformation(&CurrentCar->Suspension->RightFront,
-		CurrentCar->Suspension->FrontBarStyle, CurrentCar->HasFrontHalfShafts());
+	Suspension->UpdateInformation(CurrentCar->suspension);
+	RightFront->UpdateInformation(&CurrentCar->suspension->rightFront,
+		CurrentCar->suspension->frontBarStyle, CurrentCar->HasFrontHalfShafts());
 	if (LeftFront)
-		LeftFront->UpdateInformation(&CurrentCar->Suspension->LeftFront,
-			CurrentCar->Suspension->FrontBarStyle, CurrentCar->HasFrontHalfShafts());
-	RightRear->UpdateInformation(&CurrentCar->Suspension->RightRear,
-		CurrentCar->Suspension->RearBarStyle, CurrentCar->HasRearHalfShafts());
+		LeftFront->UpdateInformation(&CurrentCar->suspension->leftFront,
+			CurrentCar->suspension->frontBarStyle, CurrentCar->HasFrontHalfShafts());
+	RightRear->UpdateInformation(&CurrentCar->suspension->rightRear,
+		CurrentCar->suspension->rearBarStyle, CurrentCar->HasRearHalfShafts());
 	if (LeftRear)
-		LeftRear->UpdateInformation(&CurrentCar->Suspension->LeftRear,
-			CurrentCar->Suspension->RearBarStyle, CurrentCar->HasRearHalfShafts());
+		LeftRear->UpdateInformation(&CurrentCar->suspension->leftRear,
+			CurrentCar->suspension->rearBarStyle, CurrentCar->HasRearHalfShafts());
 
 	// Also make sure we're symmetric if we're supposed to be
 	UpdateSymmetry();
@@ -240,44 +240,44 @@ void EDIT_SUSPENSION_NOTEBOOK::CreateControls(void)
 void EDIT_SUSPENSION_NOTEBOOK::UpdateSymmetry(void)
 {
 	// Check to make sure this car is symmetric
-	if (CurrentCar->Suspension->IsSymmetric)
+	if (CurrentCar->suspension->isSymmetric)
 	{
 		int i;
 
 		// Copy the front points
-		for (i = 0; i < CORNER::NumberOfHardpoints; i++)
+		for (i = 0; i < Corner::NumberOfHardpoints; i++)
 		{
 			// Copy the point
-			CurrentCar->Suspension->LeftFront.Hardpoints[i] = CurrentCar->Suspension->RightFront.Hardpoints[i];
+			CurrentCar->suspension->leftFront.hardpoints[i] = CurrentCar->suspension->rightFront.hardpoints[i];
 
 			// Flip the sign on the Y componenet
-			CurrentCar->Suspension->LeftFront.Hardpoints[i].y *= -1.0;
+			CurrentCar->suspension->leftFront.hardpoints[i].y *= -1.0;
 		}
 
 		// Copy the rear points
-		for (i = 0; i < CORNER::NumberOfHardpoints; i++)
+		for (i = 0; i < Corner::NumberOfHardpoints; i++)
 		{
 			// Copy the point
-			CurrentCar->Suspension->LeftRear.Hardpoints[i] = CurrentCar->Suspension->RightRear.Hardpoints[i];
+			CurrentCar->suspension->leftRear.hardpoints[i] = CurrentCar->suspension->rightRear.hardpoints[i];
 
 			// Flip the sign on the Y componenet
-			CurrentCar->Suspension->LeftRear.Hardpoints[i].y *= -1.0;
+			CurrentCar->suspension->leftRear.hardpoints[i].y *= -1.0;
 		}
 
 		// Copy the other information in the front
-		CurrentCar->Suspension->LeftFront.ActuationAttachment = CurrentCar->Suspension->RightFront.ActuationAttachment;
-		CurrentCar->Suspension->LeftFront.ActuationType = CurrentCar->Suspension->RightFront.ActuationType;
-		CurrentCar->Suspension->LeftFront.Damper = CurrentCar->Suspension->RightFront.Damper;
-		CurrentCar->Suspension->LeftFront.Spring = CurrentCar->Suspension->RightFront.Spring;
-		CurrentCar->Suspension->LeftFront.StaticCamber = CurrentCar->Suspension->RightFront.StaticCamber;
-		CurrentCar->Suspension->LeftFront.StaticToe = CurrentCar->Suspension->RightFront.StaticToe;
+		CurrentCar->suspension->leftFront.actuationAttachment = CurrentCar->suspension->rightFront.actuationAttachment;
+		CurrentCar->suspension->leftFront.actuationType = CurrentCar->suspension->rightFront.actuationType;
+		CurrentCar->suspension->leftFront.damper = CurrentCar->suspension->rightFront.damper;
+		CurrentCar->suspension->leftFront.spring = CurrentCar->suspension->rightFront.spring;
+		CurrentCar->suspension->leftFront.staticCamber = CurrentCar->suspension->rightFront.staticCamber;
+		CurrentCar->suspension->leftFront.staticToe = CurrentCar->suspension->rightFront.staticToe;
 
 		// Copy the other information in the rear
-		CurrentCar->Suspension->LeftRear.ActuationAttachment = CurrentCar->Suspension->RightRear.ActuationAttachment;
-		CurrentCar->Suspension->LeftRear.ActuationType = CurrentCar->Suspension->RightRear.ActuationType;
-		CurrentCar->Suspension->LeftRear.Damper = CurrentCar->Suspension->RightRear.Damper;
-		CurrentCar->Suspension->LeftRear.Spring = CurrentCar->Suspension->RightRear.Spring;
-		CurrentCar->Suspension->LeftRear.StaticCamber = CurrentCar->Suspension->RightRear.StaticCamber;
-		CurrentCar->Suspension->LeftRear.StaticToe = CurrentCar->Suspension->RightRear.StaticToe;
+		CurrentCar->suspension->leftRear.actuationAttachment = CurrentCar->suspension->rightRear.actuationAttachment;
+		CurrentCar->suspension->leftRear.actuationType = CurrentCar->suspension->rightRear.actuationType;
+		CurrentCar->suspension->leftRear.damper = CurrentCar->suspension->rightRear.damper;
+		CurrentCar->suspension->leftRear.spring = CurrentCar->suspension->rightRear.spring;
+		CurrentCar->suspension->leftRear.staticCamber = CurrentCar->suspension->rightRear.staticCamber;
+		CurrentCar->suspension->leftRear.staticToe = CurrentCar->suspension->rightRear.staticToe;
 	}
 }

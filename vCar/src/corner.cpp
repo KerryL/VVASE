@@ -30,13 +30,13 @@
 #include "vUtilities/machineDefinitions.h"
 
 //==========================================================================
-// Class:			CORNER
-// Function:		CORNER
+// Class:			Corner
+// Function:		Corner
 //
-// Description:		Constructor for the CORNER class.
+// Description:		Constructor for the Corner class.
 //
 // Input Arguments:
-//		_Location	= const LOCATION& describing which corner this object
+//		_location	= const Location& describing which corner this object
 //					  represents
 //		_debugger	= const Debugger& reference to the application's debug
 //					  printing utility
@@ -48,27 +48,27 @@
 //		None
 //
 //==========================================================================
-CORNER::CORNER(const LOCATION &_Location, const Debugger &_debugger)
-			   : Location(_Location), debugger(_debugger)
+Corner::Corner(const Location &_location, const Debugger &_debugger)
+			   : location(_location), debugger(_debugger)
 {
 	// Initialize the hardpoint locations
 	int i;
 	for (i = 0; i < NumberOfHardpoints; i++)
-		Hardpoints[i].Set(0.0, 0.0, 0.0);
+		hardpoints[i].Set(0.0, 0.0, 0.0);
 
 	// Initialize the other parameters, too
-	StaticCamber = 0.0;
-	StaticToe = 0.0;
-	ActuationAttachment = AttachmentLowerAArm;
-	ActuationType = ActuationPushPullrod;
+	staticCamber = 0.0;
+	staticToe = 0.0;
+	actuationAttachment = AttachmentLowerAArm;
+	actuationType = ActuationPushPullrod;
 	// FIXME!!! Spring and damper!
 }
 
 //==========================================================================
-// Class:			CORNER
-// Function:		~CORNER
+// Class:			Corner
+// Function:		~Corner
 //
-// Description:		Destructor for the CORNER class.
+// Description:		Destructor for the Corner class.
 //
 // Input Arguments:
 //		None
@@ -80,18 +80,18 @@ CORNER::CORNER(const LOCATION &_Location, const Debugger &_debugger)
 //		None
 //
 //==========================================================================
-CORNER::~CORNER()
+Corner::~Corner()
 {
 }
 
 //==========================================================================
-// Class:			CORNER
+// Class:			Corner
 // Function:		GetActuationAttachmentName
 //
 // Description:		Returns the name of the specified actuation attachment method.
 //
 // Input Arguments:
-//		_Attachment	= const ACTUATION_ATTACHMENT& of interest
+//		_attachment	= const ActuationAttachment& of interest
 //
 // Output Arguments:
 //		None
@@ -100,9 +100,9 @@ CORNER::~CORNER()
 //		wxString containg the name of the specified attachment method
 //
 //==========================================================================
-wxString CORNER::GetActuationAttachmentName(const ACTUATION_ATTACHMENT &_Attachment)
+wxString Corner::GetActuationAttachmentName(const ActuationAttachment &_attachment)
 {
-	switch (_Attachment)
+	switch (_attachment)
 	{
 	case AttachmentLowerAArm:
 		return _T("Lower A-Arm");
@@ -125,13 +125,13 @@ wxString CORNER::GetActuationAttachmentName(const ACTUATION_ATTACHMENT &_Attachm
 }
 
 //==========================================================================
-// Class:			CORNER
+// Class:			Corner
 // Function:		GetActuationTypeName
 //
 // Description:		Returns the name of the specified actuation type.
 //
 // Input Arguments:
-//		_Type	= const ACTUATION_TYPE& of interest
+//		_type	= const ActuationType& of interest
 //
 // Output Arguments:
 //		None
@@ -140,9 +140,9 @@ wxString CORNER::GetActuationAttachmentName(const ACTUATION_ATTACHMENT &_Attachm
 //		wxString containg the name of the specified actuation type
 //
 //==========================================================================
-wxString CORNER::GetActuationTypeName(const ACTUATION_TYPE &_Type)
+wxString Corner::GetActuationTypeName(const ActuationType &_type)
 {
-	switch (_Type)
+	switch (_type)
 	{
 	case ActuationPushPullrod:
 		return _T("Push/Pullrod");
@@ -161,13 +161,13 @@ wxString CORNER::GetActuationTypeName(const ACTUATION_TYPE &_Type)
 }
 
 //==========================================================================
-// Class:			CORNER
+// Class:			Corner
 // Function:		GetHardpointName
 //
 // Description:		Returns the name of the point.
 //
 // Input Arguments:
-//		Point	= const HARDPOINT&, specifying the point to retrieve
+//		point	= const Hardpoints&, specifying the point to retrieve
 //
 // Output Arguments:
 //		None
@@ -176,9 +176,9 @@ wxString CORNER::GetActuationTypeName(const ACTUATION_TYPE &_Type)
 //		wxString containing the name of the point
 //
 //==========================================================================
-wxString CORNER::GetHardpointName(const HARDPOINTS &Point)
+wxString Corner::GetHardpointName(const Hardpoints &point)
 {
-	switch (Point)
+	switch (point)
 	{
 	case LowerFrontTubMount:
 		return _T("Lower Front Tub Mount");
@@ -285,13 +285,13 @@ wxString CORNER::GetHardpointName(const HARDPOINTS &Point)
 }
 
 //==========================================================================
-// Class:			CORNER
+// Class:			Corner
 // Function:		GetLocationName
 //
 // Description:		Returns the name of the specified location.
 //
 // Input Arguments:
-//		_Location	= const LOCATION& of interest
+//		_location	= const Location& of interest
 //
 // Output Arguments:
 //		None
@@ -300,9 +300,9 @@ wxString CORNER::GetHardpointName(const HARDPOINTS &Point)
 //		wxString containg the name of the specified actuation type
 //
 //==========================================================================
-wxString CORNER::GetLocationName(const LOCATION &_Location)
+wxString Corner::GetLocationName(const Location &_location)
 {
-	switch (_Location)
+	switch (_location)
 	{
 	case LocationLeftFront:
 		return _T("Left Front");
@@ -329,14 +329,14 @@ wxString CORNER::GetLocationName(const LOCATION &_Location)
 }
 
 //==========================================================================
-// Class:			CORNER
+// Class:			Corner
 // Function:		ComputeWheelCenter
 //
 // Description:		Computes the location of the wheel center based on the
 //					static toe and camber.
 //
 // Input Arguments:
-//		TireDiameter	= const double& specifying the tire diameter at this corner
+//		tireDiameter	= const double& specifying the tire diameter at this corner
 //
 // Output Arguments:
 //		None
@@ -345,11 +345,11 @@ wxString CORNER::GetLocationName(const LOCATION &_Location)
 //		None
 //
 //==========================================================================
-void CORNER::ComputeWheelCenter(const double &TireDiameter)
+void Corner::ComputeWheelCenter(const double &tireDiameter)
 {
 	// Get the "unperturbed" wheel center from the diameter and the contact patch location
-	Hardpoints[WheelCenter] = Hardpoints[ContactPatch];
-	Hardpoints[WheelCenter].z = TireDiameter / 2.0;
+	hardpoints[WheelCenter] = hardpoints[ContactPatch];
+	hardpoints[WheelCenter].z = tireDiameter / 2.0;
 
 	// These next two operations have sign changes depending on which
 	// side of the car this corner is on:
@@ -357,28 +357,28 @@ void CORNER::ComputeWheelCenter(const double &TireDiameter)
 	//  Toe is always positive for toe out
 
 	// Rotate the wheel center about the X-axis for camber effects
-	double RotationAngle = StaticCamber;
-	if (Location == LocationRightFront || Location == LocationRightRear)
-		RotationAngle *= -1.0;
+	double rotationAngle = staticCamber;
+	if (location == LocationRightFront || location == LocationRightRear)
+		rotationAngle *= -1.0;
 
-	Hardpoints[WheelCenter].Rotate(Hardpoints[ContactPatch], RotationAngle, Vector::AxisX);
+	hardpoints[WheelCenter].Rotate(hardpoints[ContactPatch], rotationAngle, Vector::AxisX);
 
 	// Rotate the wheel center about the Z axis for toe effects
-	RotationAngle = StaticToe;
-	if (Location == LocationRightFront || Location == LocationRightRear)
-		RotationAngle *= -1.0;
+	rotationAngle = staticToe;
+	if (location == LocationRightFront || location == LocationRightRear)
+		rotationAngle *= -1.0;
 
-	Hardpoints[WheelCenter].Rotate(Hardpoints[ContactPatch], RotationAngle, Vector::AxisZ);
+	hardpoints[WheelCenter].Rotate(hardpoints[ContactPatch], rotationAngle, Vector::AxisZ);
 }
 
 //==========================================================================
-// Class:			CORNER
+// Class:			Corner
 // Function:		Write
 //
 // Description:		Writes this corner to file.
 //
 // Input Arguments:
-//		OutFile	= std::ofstream* pointing to the output stream
+//		outFile	= std::ofstream* pointing to the output stream
 //
 // Output Arguments:
 //		None
@@ -387,31 +387,31 @@ void CORNER::ComputeWheelCenter(const double &TireDiameter)
 //		None
 //
 //==========================================================================
-void CORNER::Write(std::ofstream *OutFile) const
+void Corner::Write(std::ofstream *outFile) const
 {
 	// Write the components that make up this object to file
-	OutFile->write((char*)&StaticCamber, sizeof(double));
-	OutFile->write((char*)&StaticToe, sizeof(double));
+	outFile->write((char*)&staticCamber, sizeof(double));
+	outFile->write((char*)&staticToe, sizeof(double));
 
 	// NOT YET USED!!!
-	/*SPRING Spring;
-	DAMPER Damper;*/
+	/*Spring spring;
+	Damper damper;*/
 
-	OutFile->write((char*)&ActuationAttachment, sizeof(ACTUATION_ATTACHMENT));
-	OutFile->write((char*)&ActuationType, sizeof(ACTUATION_TYPE));
-	OutFile->write((char*)&Location, sizeof(LOCATION));
-	OutFile->write((char*)Hardpoints, sizeof(Vector) * NumberOfHardpoints);
+	outFile->write((char*)&actuationAttachment, sizeof(ActuationAttachment));
+	outFile->write((char*)&actuationType, sizeof(ActuationType));
+	outFile->write((char*)&location, sizeof(Location));
+	outFile->write((char*)hardpoints, sizeof(Vector) * NumberOfHardpoints);
 }
 
 //==========================================================================
-// Class:			CORNER
+// Class:			Corner
 // Function:		Read
 //
 // Description:		Read from file to fill this corner.
 //
 // Input Arguments:
-//		InFile		= std::ifstream* pointing to the input stream
-//		FileVersion	= int specifying which file version we're reading from
+//		inFile		= std::ifstream* pointing to the input stream
+//		fileVersion	= int specifying which file version we're reading from
 //
 // Output Arguments:
 //		None
@@ -420,64 +420,64 @@ void CORNER::Write(std::ofstream *OutFile) const
 //		None
 //
 //==========================================================================
-void CORNER::Read(std::ifstream *InFile, int FileVersion)
+void Corner::Read(std::ifstream *inFile, int fileVersion)
 {
 	// Read this object from file accoring to the file version we're using
-	if (FileVersion >= 0)// All versions
+	if (fileVersion >= 0)// All versions
 	{
 		// Read the components that make up this object from file
-		InFile->read((char*)&StaticCamber, sizeof(double));
-		InFile->read((char*)&StaticToe, sizeof(double));
+		inFile->read((char*)&staticCamber, sizeof(double));
+		inFile->read((char*)&staticToe, sizeof(double));
 
 		// NOT YET USED!!!
-		/*SPRING Spring;
-		DAMPER Damper;*/
+		/*Spring spring;
+		Damper damper;*/
 
-		InFile->read((char*)&ActuationAttachment, sizeof(ACTUATION_ATTACHMENT));
-		InFile->read((char*)&ActuationType, sizeof(ACTUATION_TYPE));
-		InFile->read((char*)&Location, sizeof(LOCATION));
-		InFile->read((char*)Hardpoints, sizeof(Vector) * NumberOfHardpoints);
+		inFile->read((char*)&actuationAttachment, sizeof(ActuationAttachment));
+		inFile->read((char*)&actuationType, sizeof(ActuationType));
+		inFile->read((char*)&location, sizeof(Location));
+		inFile->read((char*)hardpoints, sizeof(Vector) * NumberOfHardpoints);
 	}
 	else
 		assert(0);
 }
 
 //==========================================================================
-// Class:			CORNER
+// Class:			Corner
 // Function:		operator=
 //
 // Description:		Assignment operator.  This is necessary due to the references
 //					contained within this object.
 //
 // Input Arguments:
-//		Corner	= const CORNER& to be copied
+//		corner	= const Corner& to be copied
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		CORNER&, reference to this
+//		Corner&, reference to this
 //
 //==========================================================================
-CORNER& CORNER::operator=(const CORNER& Corner)
+Corner& Corner::operator=(const Corner& corner)
 {
 	// Check for self assignment
-	if (this == &Corner)
+	if (this == &corner)
 		return *this;
 
 	// Copy settings
-	StaticCamber = Corner.StaticCamber;
-	StaticToe = Corner.StaticToe;
-	Spring = Corner.Spring;
-	Damper = Corner.Damper;
+	staticCamber = corner.staticCamber;
+	staticToe = corner.staticToe;
+	spring = corner.spring;
+	damper = corner.damper;
 
-	ActuationAttachment = Corner.ActuationAttachment;
-	ActuationType = Corner.ActuationType;
+	actuationAttachment = corner.actuationAttachment;
+	actuationType = corner.actuationType;
 
 	// Copy the hardpoints
 	int i;
 	for (i = 0; i < NumberOfHardpoints; i++)
-		Hardpoints[i] = Corner.Hardpoints[i];
+		hardpoints[i] = corner.hardpoints[i];
 
 	return *this;
 }

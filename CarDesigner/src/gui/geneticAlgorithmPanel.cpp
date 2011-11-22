@@ -367,8 +367,8 @@ void GENETIC_ALGORITHM_PANEL::CreateControls(void)
 void GENETIC_ALGORITHM_PANEL::AddGeneButtonClickedEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Create the dialog box with default gene properties
-	GA_GENE_DIALOG GeneDialog(static_cast<wxWindow*>(&MainFrame), Converter, (CORNER::HARDPOINTS)0,
-		(CORNER::HARDPOINTS)0, (Vector::Axis)0, (CORNER::LOCATION)0, 0.0, 1.0, 5, wxID_ANY, wxDefaultPosition);
+	GA_GENE_DIALOG GeneDialog(static_cast<wxWindow*>(&MainFrame), Converter, (Corner::Hardpoints)0,
+		(Corner::Hardpoints)0, (Vector::Axis)0, (Corner::Location)0, 0.0, 1.0, 5, wxID_ANY, wxDefaultPosition);
 
 	// Display the dialog
 	if (GeneDialog.ShowModal() == wxOK)
@@ -833,11 +833,11 @@ void GENETIC_ALGORITHM_PANEL::UpdateGeneList(void)
 	int i, j;
 	for (i = 0; i < Optimization.GetAlgorithm().GetGeneCount(); i++)
 	{
-		GeneList->SetCellValue(i, 0, CORNER::GetHardpointName(Optimization.GetAlgorithm().GetGene(i).Hardpoint));
+		GeneList->SetCellValue(i, 0, Corner::GetHardpointName(Optimization.GetAlgorithm().GetGene(i).Hardpoint));
 		if (Optimization.GetAlgorithm().GetGene(i).Hardpoint == Optimization.GetAlgorithm().GetGene(i).TiedTo)
 			GeneList->SetCellValue(i, 1, _T("None"));
 		else
-			GeneList->SetCellValue(i, 1, CORNER::GetHardpointName(Optimization.GetAlgorithm().GetGene(i).TiedTo));
+			GeneList->SetCellValue(i, 1, Corner::GetHardpointName(Optimization.GetAlgorithm().GetGene(i).TiedTo));
 		GeneList->SetCellValue(i, 2, Vector::GetAxisName(Optimization.GetAlgorithm().GetGene(i).Direction));
 		GeneList->SetCellValue(i, 3, Converter.FormatNumber(
 			Converter.ConvertDistance(Optimization.GetAlgorithm().GetGene(i).Minimum)));

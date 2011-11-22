@@ -10,7 +10,7 @@
 // File:  fuelCell.h
 // Created:  12/12/2008
 // Author:  K. Loux
-// Description:  Contains class declaration for FUEL_CELL class.  This is for
+// Description:  Contains class declaration for FuelCell class.  This is for
 //				 modeling a shift in weight and CG as fuel is burned.  Future
 //				 considerations include modeling fuel slosh for dynamic effects
 //				 as well as fuel pump starvation and out-of-gas engine stalling.
@@ -23,28 +23,28 @@
 // VVASE headers
 #include "vMath/vector.h"
 
-class FUEL_CELL
+class FuelCell
 {
 public:
 	// Constructor
-	FUEL_CELL();
+	FuelCell();
 
 	// Destructor
-	~FUEL_CELL();
+	~FuelCell();
 
 	// FIXME:  Need function to set/reset fuel parameters
 	// FIXME:  Need description of how fast fuel is burned (function of load and engine RPM?)
 
 	// Private data accessors
-	double GetFuelWeight(void) const { return FuelWeight; };
-	Vector GetFuelCG(void) const { return FuelCG; };
+	double GetFuelWeight(void) const { return fuelWeight; };
+	Vector GetFuelCG(void) const { return fuelCG; };
 
 private:
 	// Weight of fuel remaining
-	double FuelWeight;// [lbf]
+	double fuelWeight;// [lbf]
 
 	// CG of the fuel remaining
-	Vector FuelCG;
+	Vector fuelCG;
 };
 
 #endif// _FUEL_CELL_H_

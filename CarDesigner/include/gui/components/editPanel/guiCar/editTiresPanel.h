@@ -21,7 +21,7 @@
 
 // VVASE forward declarations
 class EDIT_PANEL;
-class TIRE_SET;
+class TireSet;
 
 class EDIT_TIRES_PANEL : public wxScrolledWindow
 {
@@ -34,7 +34,7 @@ public:
 	~EDIT_TIRES_PANEL();
 
 	// Updates the information in the display
-	void UpdateInformation(TIRE_SET *_TireSet);
+	void UpdateInformation(TireSet *_TireSet);
 
 private:
 	// Debugger message printing utility
@@ -47,7 +47,7 @@ private:
 	EDIT_PANEL &Parent;
 
 	// The corner with which we are currently associated
-	TIRE_SET *CurrentTireSet;
+	TireSet *CurrentTireSet;
 
 	// Creates the controls and positions everything within the panel
 	void CreateControls(void);

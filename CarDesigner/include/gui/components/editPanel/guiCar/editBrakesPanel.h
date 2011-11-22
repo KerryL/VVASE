@@ -21,7 +21,7 @@
 
 // VVASE forward declarations
 class EDIT_PANEL;
-class BRAKES;
+class Brakes;
 
 class EDIT_BRAKES_PANEL : public wxScrolledWindow
 {
@@ -34,7 +34,7 @@ public:
 	~EDIT_BRAKES_PANEL();
 
 	// Updates the information on the panel
-	void UpdateInformation(BRAKES *_CurrentBrakes);
+	void UpdateInformation(Brakes *_CurrentBrakes);
 
 private:
 	// Debugger message printing utility
@@ -47,7 +47,7 @@ private:
 	EDIT_PANEL &Parent;
 
 	// The data with which we are currently associated
-	BRAKES *CurrentBrakes;
+	Brakes *CurrentBrakes;
 
 	// Creates the controls and positions everything within the panel
 	void CreateControls(void);

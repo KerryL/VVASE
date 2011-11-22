@@ -18,14 +18,14 @@
 #ifndef _SPRING_H_
 #define _SPRING_H_
 
-class SPRING
+class Spring
 {
 public:
 	// Constructor
-	SPRING();
+	Spring();
 
 	// Destructor
-	~SPRING();
+	~Spring();
 
 private:
 };

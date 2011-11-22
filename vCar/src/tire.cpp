@@ -23,10 +23,10 @@
 #include "vUtilities/machineDefinitions.h"
 
 //==========================================================================
-// Class:			TIRE
-// Function:		TIRE
+// Class:			Tire
+// Function:		Tire
 //
-// Description:		Constructor for the TIRE class.
+// Description:		Constructor for the Tire class.
 //
 // Input Arguments:
 //		_debugger	= const Debugger& reference to applications debug printing utility
@@ -38,18 +38,18 @@
 //		None
 //
 //==========================================================================
-TIRE::TIRE(const Debugger &_debugger) : debugger(_debugger)
+Tire::Tire(const Debugger &_debugger) : debugger(_debugger)
 {
 }
 
 //==========================================================================
-// Class:			TIRE
-// Function:		TIRE
+// Class:			Tire
+// Function:		Tire
 //
-// Description:		Copy constructor for the TIRE class.
+// Description:		Copy constructor for the Tire class.
 //
 // Input Arguments:
-//		Tire	= const TIRE& to copy from
+//		Tire	= const Tire& to copy from
 //
 // Output Arguments:
 //		None
@@ -58,17 +58,17 @@ TIRE::TIRE(const Debugger &_debugger) : debugger(_debugger)
 //		None
 //
 //==========================================================================
-TIRE::TIRE(const TIRE &Tire) : debugger(Tire.debugger)
+Tire::Tire(const Tire &tire) : debugger(tire.debugger)
 {
 	// Copy from the Tire to this
-	*this = Tire;
+	*this = tire;
 }
 
 //==========================================================================
-// Class:			TIRE
-// Function:		~TIRE
+// Class:			Tire
+// Function:		~Tire
 //
-// Description:		Destructor for the TIRE class.
+// Description:		Destructor for the Tire class.
 //
 // Input Arguments:
 //		None
@@ -80,18 +80,18 @@ TIRE::TIRE(const TIRE &Tire) : debugger(Tire.debugger)
 //		None
 //
 //==========================================================================
-TIRE::~TIRE()
+Tire::~Tire()
 {
 }
 
 //==========================================================================
-// Class:			TIRE
+// Class:			Tire
 // Function:		Write
 //
 // Description:		Writes this tire to file.
 //
 // Input Arguments:
-//		OutFile	= std::ofstream* pointing to the output stream
+//		outFile	= std::ofstream* pointing to the output stream
 //
 // Output Arguments:
 //		None
@@ -100,23 +100,23 @@ TIRE::~TIRE()
 //		None
 //
 //==========================================================================
-void TIRE::Write(std::ofstream *OutFile) const
+void Tire::Write(std::ofstream *outFile) const
 {
 	// Write this object to file
-	OutFile->write((char*)&Diameter, sizeof(double));
-	OutFile->write((char*)&Width, sizeof(double));
-	OutFile->write((char*)&TirePressure, sizeof(double));
+	outFile->write((char*)&diameter, sizeof(double));
+	outFile->write((char*)&width, sizeof(double));
+	outFile->write((char*)&tirePressure, sizeof(double));
 }
 
 //==========================================================================
-// Class:			TIRE
+// Class:			Tire
 // Function:		Read
 //
 // Description:		Read from file to fill this tire.
 //
 // Input Arguments:
-//		InFile		= std::ifstream* pointing to the input stream
-//		FileVersion	= int specifying the file version we're reading from
+//		inFile		= std::ifstream* pointing to the input stream
+//		fileVersion	= int specifying the file version we're reading from
 //
 // Output Arguments:
 //		None
@@ -125,45 +125,45 @@ void TIRE::Write(std::ofstream *OutFile) const
 //		None
 //
 //==========================================================================
-void TIRE::Read(std::ifstream *InFile, int FileVersion)
+void Tire::Read(std::ifstream *inFile, int fileVersion)
 {
 	// Read this object from file accoring to the file version we're using
-	if (FileVersion >= 0)// All versions
+	if (fileVersion >= 0)// All versions
 	{
-		InFile->read((char*)&Diameter, sizeof(double));
-		InFile->read((char*)&Width, sizeof(double));
-		InFile->read((char*)&TirePressure, sizeof(double));
+		inFile->read((char*)&diameter, sizeof(double));
+		inFile->read((char*)&width, sizeof(double));
+		inFile->read((char*)&tirePressure, sizeof(double));
 	}
 	else
 		assert(0);
 }
 
 //==========================================================================
-// Class:			TIRE
+// Class:			Tire
 // Function:		operator=
 //
-// Description:		Assignment operator for the TIRE class.
+// Description:		Assignment operator for the Tire class.
 //
 // Input Arguments:
-//		Tire	= const TIRE& to assign to this
+//		tire	= const Tire& to assign to this
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		TIRE& reference to this
+//		Tire& reference to this
 //
 //==========================================================================
-TIRE& TIRE::operator = (const TIRE &Tire)
+Tire& Tire::operator = (const Tire &tire)
 {
 	// Check for self-assignment
-	if (this == &Tire)
+	if (this == &tire)
 		return *this;
 
 	// Copy the information to this
-	Diameter		= Tire.Diameter;
-	Width			= Tire.Width;
-	TirePressure	= Tire.TirePressure;
+	diameter		= tire.diameter;
+	width			= tire.width;
+	tirePressure	= tire.tirePressure;
 
 	return *this;
 }

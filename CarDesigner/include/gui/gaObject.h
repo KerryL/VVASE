@@ -27,7 +27,7 @@
 
 // VVASE forward declarations
 class GUI_CAR;
-class CAR;
+class Car;
 class Debugger;
 class MAIN_FRAME;
 class GENETIC_OPTIMIZATION;
@@ -43,19 +43,19 @@ public:
 	~GA_OBJECT();
 
 	// Sets up for the run
-	void SetUp(CAR *_TargetCar);
+	void SetUp(Car *_TargetCar);
 
 	// For storing the information about the genes
 	struct GENE
 	{
 		// The value to be altered
-		CORNER::HARDPOINTS Hardpoint;
+		Corner::Hardpoints Hardpoint;
 
 		// A variable that will always be set to the same value as Variable (optional)
-		CORNER::HARDPOINTS TiedTo;
+		Corner::Hardpoints TiedTo;
 
 		// The corner containing these points
-		CORNER::LOCATION Location;
+		Corner::Location Location;
 
 		// The component of the hardpoint to optimitze
 		Vector::Axis Direction;
@@ -92,12 +92,12 @@ public:
 
 	// For changing what is being optimized
 	void ClearAllGenes(void) { GeneList.Clear(); };
-	void AddGene(const CORNER::HARDPOINTS &Hardpoint, const CORNER::HARDPOINTS &TiedTo,
-		const CORNER::LOCATION &Location, const Vector::Axis &Direction, const double &Minimum,
+	void AddGene(const Corner::Hardpoints &Hardpoint, const Corner::Hardpoints &TiedTo,
+		const Corner::Location &Location, const Vector::Axis &Direction, const double &Minimum,
 		const double &Maximum, const int &NumberOfValues);
 	void RemoveGene(const int &Index) { GeneList.Remove(Index); };
-	void UpdateGene(const int &Index, const CORNER::HARDPOINTS &Hardpoint, const CORNER::HARDPOINTS &TiedTo,
-		const CORNER::LOCATION &Location, const Vector::Axis &Direction, const double &Minimum,
+	void UpdateGene(const int &Index, const Corner::Hardpoints &Hardpoint, const Corner::Hardpoints &TiedTo,
+		const Corner::Location &Location, const Vector::Axis &Direction, const double &Minimum,
 		const double &Maximum, const int &NumberOfValues);
 	int GetGeneCount(void) const { return GeneList.GetCount(); };
 	const GENE &GetGene(const int &Index) const { return *(GeneList[Index]); };
@@ -153,13 +153,13 @@ private:
 	void SimulateGeneration(void);
 
 	// Array of cars with which the fitnesses are determined
-	CAR **WorkingCarArray;
-	CAR **OriginalCarArray;
+	Car **WorkingCarArray;
+	Car **OriginalCarArray;
 	KinematicOutputs *KinematicOutputArray;
 	int NumberOfCars;
 
 	// Original car to be optimized (only one needed for reference)
-	CAR *TargetCar;
+	Car *TargetCar;
 
 	// The list of genes that we're optimizing
 	ManagedList<GENE> GeneList;

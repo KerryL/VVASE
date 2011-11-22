@@ -113,7 +113,7 @@ END_EVENT_TABLE();
 // Description:		Updates the information on this panel.
 //
 // Input Arguments:
-//		_CurrentTireSet	= TIRE_SET* pointing to the associated tire set
+//		_CurrentTireSet	= TireSet* pointing to the associated tire set
 //
 // Output Arguments:
 //		None
@@ -122,7 +122,7 @@ END_EVENT_TABLE();
 //		None
 //
 //==========================================================================
-void EDIT_TIRES_PANEL::UpdateInformation(TIRE_SET *_CurrentTireSet)
+void EDIT_TIRES_PANEL::UpdateInformation(TireSet *_CurrentTireSet)
 {
 	// Update the class member
 	CurrentTireSet = _CurrentTireSet;
@@ -131,24 +131,24 @@ void EDIT_TIRES_PANEL::UpdateInformation(TIRE_SET *_CurrentTireSet)
 
 	// Update the text boxes
 	RightFrontTireDiameter->ChangeValue(Converter.FormatNumber(Converter.ConvertDistance(
-		CurrentTireSet->RightFront->Diameter)));
+		CurrentTireSet->rightFront->diameter)));
 	RightFrontTireWidth->ChangeValue(Converter.FormatNumber(Converter.ConvertDistance(
-		CurrentTireSet->RightFront->Width)));
+		CurrentTireSet->rightFront->width)));
 
 	LeftFrontTireDiameter->ChangeValue(Converter.FormatNumber(Converter.ConvertDistance(
-		CurrentTireSet->LeftFront->Diameter)));
+		CurrentTireSet->leftFront->diameter)));
 	LeftFrontTireWidth->ChangeValue(Converter.FormatNumber(Converter.ConvertDistance(
-		CurrentTireSet->LeftFront->Width)));
+		CurrentTireSet->leftFront->width)));
 
 	RightRearTireDiameter->ChangeValue(Converter.FormatNumber(Converter.ConvertDistance(
-		CurrentTireSet->RightRear->Diameter)));
+		CurrentTireSet->rightRear->diameter)));
 	RightRearTireWidth->ChangeValue(Converter.FormatNumber(Converter.ConvertDistance(
-		CurrentTireSet->RightRear->Width)));
+		CurrentTireSet->rightRear->width)));
 
 	LeftRearTireDiameter->ChangeValue(Converter.FormatNumber(Converter.ConvertDistance(
-		CurrentTireSet->LeftRear->Diameter)));
+		CurrentTireSet->leftRear->diameter)));
 	LeftRearTireWidth->ChangeValue(Converter.FormatNumber(Converter.ConvertDistance(
-		CurrentTireSet->LeftRear->Width)));
+		CurrentTireSet->leftRear->width)));
 
 	// And their units
 	RightFrontDiameterUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UnitTypeDistance));
@@ -360,14 +360,14 @@ void EDIT_TIRES_PANEL::RightFrontTireDiameterChangeEvent(wxCommandEvent &event)
 	Parent.GetMainFrame().GetUndoRedoStack().AddOperation(
 		Parent.GetMainFrame().GetActiveIndex(),
 		UNDO_REDO_STACK::OPERATION::DATA_TYPE_DOUBLE,
-		&(CurrentTireSet->RightFront->Diameter));
+		&(CurrentTireSet->rightFront->diameter));
 
 	// Get a lock on the car
 	wxMutex *Mutex = Parent.GetCurrentMutex();
 	Mutex->Lock();
 
 	// Update the tire object
-	CurrentTireSet->RightFront->Diameter = Converter.ReadDistance(Value);
+	CurrentTireSet->rightFront->diameter = Converter.ReadDistance(Value);
 
 	// Unlock the car
 	Mutex->Unlock();
@@ -414,14 +414,14 @@ void EDIT_TIRES_PANEL::RightFrontTireWidthChangeEvent(wxCommandEvent &event)
 	Parent.GetMainFrame().GetUndoRedoStack().AddOperation(
 		Parent.GetMainFrame().GetActiveIndex(),
 		UNDO_REDO_STACK::OPERATION::DATA_TYPE_DOUBLE,
-		&(CurrentTireSet->RightFront->Width));
+		&(CurrentTireSet->rightFront->width));
 
 	// Get a lock on the car
 	wxMutex *Mutex = Parent.GetCurrentMutex();
 	Mutex->Lock();
 
 	// Update the tire object
-	CurrentTireSet->RightFront->Width = Converter.ReadDistance(Value);
+	CurrentTireSet->rightFront->width = Converter.ReadDistance(Value);
 
 	// Unlock the car
 	Mutex->Unlock();
@@ -468,14 +468,14 @@ void EDIT_TIRES_PANEL::LeftFrontTireDiameterChangeEvent(wxCommandEvent &event)
 	Parent.GetMainFrame().GetUndoRedoStack().AddOperation(
 		Parent.GetMainFrame().GetActiveIndex(),
 		UNDO_REDO_STACK::OPERATION::DATA_TYPE_DOUBLE,
-		&(CurrentTireSet->LeftFront->Diameter));
+		&(CurrentTireSet->leftFront->diameter));
 
 	// Get a lock on the car
 	wxMutex *Mutex = Parent.GetCurrentMutex();
 	Mutex->Lock();
 
 	// Update the tire object
-	CurrentTireSet->LeftFront->Diameter = Converter.ReadDistance(Value);
+	CurrentTireSet->leftFront->diameter = Converter.ReadDistance(Value);
 
 	// Unlock the car
 	Mutex->Unlock();
@@ -522,14 +522,14 @@ void EDIT_TIRES_PANEL::LeftFrontTireWidthChangeEvent(wxCommandEvent &event)
 	Parent.GetMainFrame().GetUndoRedoStack().AddOperation(
 		Parent.GetMainFrame().GetActiveIndex(),
 		UNDO_REDO_STACK::OPERATION::DATA_TYPE_DOUBLE,
-		&(CurrentTireSet->LeftFront->Width));
+		&(CurrentTireSet->leftFront->width));
 
 	// Get a lock on the car
 	wxMutex *Mutex = Parent.GetCurrentMutex();
 	Mutex->Lock();
 
 	// Update the tire object
-	CurrentTireSet->LeftFront->Width = Converter.ReadDistance(Value);
+	CurrentTireSet->leftFront->width = Converter.ReadDistance(Value);
 
 	// Unlock the car
 	Mutex->Unlock();
@@ -576,14 +576,14 @@ void EDIT_TIRES_PANEL::RightRearTireDiameterChangeEvent(wxCommandEvent &event)
 	Parent.GetMainFrame().GetUndoRedoStack().AddOperation(
 		Parent.GetMainFrame().GetActiveIndex(),
 		UNDO_REDO_STACK::OPERATION::DATA_TYPE_DOUBLE,
-		&(CurrentTireSet->RightRear->Diameter));
+		&(CurrentTireSet->rightRear->diameter));
 
 	// Get a lock on the car
 	wxMutex *Mutex = Parent.GetCurrentMutex();
 	Mutex->Lock();
 
 	// Update the tire object
-	CurrentTireSet->RightRear->Diameter = Converter.ReadDistance(Value);
+	CurrentTireSet->rightRear->diameter = Converter.ReadDistance(Value);
 
 	// Unlock the car
 	Mutex->Unlock();
@@ -630,14 +630,14 @@ void EDIT_TIRES_PANEL::RightRearTireWidthChangeEvent(wxCommandEvent &event)
 	Parent.GetMainFrame().GetUndoRedoStack().AddOperation(
 		Parent.GetMainFrame().GetActiveIndex(),
 		UNDO_REDO_STACK::OPERATION::DATA_TYPE_DOUBLE,
-		&(CurrentTireSet->RightRear->Width));
+		&(CurrentTireSet->rightRear->width));
 
 	// Get a lock on the car
 	wxMutex *Mutex = Parent.GetCurrentMutex();
 	Mutex->Lock();
 
 	// Update the tire object
-	CurrentTireSet->RightRear->Width = Converter.ReadDistance(Value);
+	CurrentTireSet->rightRear->width = Converter.ReadDistance(Value);
 
 	// Unlock the car
 	Mutex->Unlock();
@@ -684,14 +684,14 @@ void EDIT_TIRES_PANEL::LeftRearTireDiameterChangeEvent(wxCommandEvent &event)
 	Parent.GetMainFrame().GetUndoRedoStack().AddOperation(
 		Parent.GetMainFrame().GetActiveIndex(),
 		UNDO_REDO_STACK::OPERATION::DATA_TYPE_DOUBLE,
-		&(CurrentTireSet->LeftRear->Diameter));
+		&(CurrentTireSet->leftRear->diameter));
 
 	// Get a lock on the car
 	wxMutex *Mutex = Parent.GetCurrentMutex();
 	Mutex->Lock();
 
 	// Update the tire object
-	CurrentTireSet->LeftRear->Diameter = Converter.ReadDistance(Value);
+	CurrentTireSet->leftRear->diameter = Converter.ReadDistance(Value);
 
 	// Unlock the car
 	Mutex->Unlock();
@@ -738,14 +738,14 @@ void EDIT_TIRES_PANEL::LeftRearTireWidthChangeEvent(wxCommandEvent &event)
 	Parent.GetMainFrame().GetUndoRedoStack().AddOperation(
 		Parent.GetMainFrame().GetActiveIndex(),
 		UNDO_REDO_STACK::OPERATION::DATA_TYPE_DOUBLE,
-		&(CurrentTireSet->LeftRear->Width));
+		&(CurrentTireSet->leftRear->width));
 
 	// Get a lock on the car
 	wxMutex *Mutex = Parent.GetCurrentMutex();
 	Mutex->Lock();
 
 	// Update the tire object
-	CurrentTireSet->LeftRear->Width = Converter.ReadDistance(Value);
+	CurrentTireSet->leftRear->width = Converter.ReadDistance(Value);
 
 	// Unlock the car
 	Mutex->Unlock();

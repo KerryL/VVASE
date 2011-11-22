@@ -212,7 +212,7 @@ void EDIT_PANEL::UpdateInformation(GUI_OBJECT *_CurrentObject)
 			{
 			}
 			else if (EditBrakes)
-				EditBrakes->UpdateInformation(static_cast<GUI_CAR*>(CurrentObject)->GetOriginalCar().Brakes);
+				EditBrakes->UpdateInformation(static_cast<GUI_CAR*>(CurrentObject)->GetOriginalCar().brakes);
 			else if (EditDifferential)
 			{
 			}
@@ -223,13 +223,13 @@ void EDIT_PANEL::UpdateInformation(GUI_OBJECT *_CurrentObject)
 			{
 			}
 			else if (EditMass)
-				EditMass->UpdateInformation(static_cast<GUI_CAR*>(CurrentObject)->GetOriginalCar().MassProperties);
+				EditMass->UpdateInformation(static_cast<GUI_CAR*>(CurrentObject)->GetOriginalCar().massProperties);
 			else if (EditSuspension)
 				// Update the suspension notebook
 				EditSuspension->UpdateInformation(&static_cast<GUI_CAR*>(CurrentObject)->GetOriginalCar());
 			else if (EditTires)
 				// Update the tires panel
-				EditTires->UpdateInformation(static_cast<GUI_CAR*>(CurrentObject)->GetOriginalCar().Tires);
+				EditTires->UpdateInformation(static_cast<GUI_CAR*>(CurrentObject)->GetOriginalCar().tires);
 		}
 
 		break;

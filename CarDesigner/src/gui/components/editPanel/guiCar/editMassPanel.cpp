@@ -16,7 +16,7 @@
 // History:
 
 // CarDesigner headers
-#include "vCar/mass.h"
+#include "vCar/massProperties.h"
 #include "gui/renderer/carRenderer.h"
 #include "gui/guiCar.h"
 #include "gui/components/mainFrame.h"
@@ -103,7 +103,7 @@ END_EVENT_TABLE();
 // Description:		Updates the information on this panel.
 //
 // Input Arguments:
-//		_CurrentMassProperties	= MASS_PROPERTIES* pointing to the associated
+//		_CurrentMassProperties	= MassProperties* pointing to the associated
 //								  mass properties
 //
 // Output Arguments:
@@ -113,32 +113,32 @@ END_EVENT_TABLE();
 //		None
 //
 //==========================================================================
-void EDIT_MASS_PANEL::UpdateInformation(MASS_PROPERTIES *_CurrentMassProperties)
+void EDIT_MASS_PANEL::UpdateInformation(MassProperties *_CurrentMassProperties)
 {
 	// Update the class member
 	CurrentMassProperties = _CurrentMassProperties;
 
 	// Update the mass
-	Mass->ChangeValue(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->Mass)));
+	Mass->ChangeValue(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->mass)));
 
 	// Update the inertia
-	Ixx->ChangeValue(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->Ixx)));
-	Iyy->ChangeValue(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->Iyy)));
-	Izz->ChangeValue(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->Izz)));
-	Ixy->ChangeValue(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->Ixy)));
-	Iyx->SetLabel(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->Ixy)));
-	Ixz->ChangeValue(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->Ixz)));
-	Izx->SetLabel(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->Ixz)));
-	Iyz->ChangeValue(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->Iyz)));
-	Izy->SetLabel(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->Iyz)));
+	Ixx->ChangeValue(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->ixx)));
+	Iyy->ChangeValue(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->iyy)));
+	Izz->ChangeValue(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->izz)));
+	Ixy->ChangeValue(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->ixy)));
+	Iyx->SetLabel(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->ixy)));
+	Ixz->ChangeValue(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->ixz)));
+	Izx->SetLabel(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->ixz)));
+	Iyz->ChangeValue(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->iyz)));
+	Izy->SetLabel(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->iyz)));
 
 	// Update the center of gravity
 	CenterOfGravityX->ChangeValue(Converter.FormatNumber(
-		Converter.ConvertDistance(CurrentMassProperties->CenterOfGravity.x)));
+		Converter.ConvertDistance(CurrentMassProperties->centerOfGravity.x)));
 	CenterOfGravityY->ChangeValue(Converter.FormatNumber(
-		Converter.ConvertDistance(CurrentMassProperties->CenterOfGravity.y)));
+		Converter.ConvertDistance(CurrentMassProperties->centerOfGravity.y)));
 	CenterOfGravityZ->ChangeValue(Converter.FormatNumber(
-		Converter.ConvertDistance(CurrentMassProperties->CenterOfGravity.z)));
+		Converter.ConvertDistance(CurrentMassProperties->centerOfGravity.z)));
 
 	// Update the units
 	InertiaUnitsLabel->SetLabel('(' + Converter.GetUnitType(Convert::UnitTypeInertia) + ')');
@@ -321,70 +321,70 @@ void EDIT_MASS_PANEL::TextBoxEditEvent(wxCommandEvent &event)
 	case TextBoxIxx:
 		// Get the text box, the location to write it, and the units
 		TextBox = Ixx;
-		DataLocation = &CurrentMassProperties->Ixx;
+		DataLocation = &CurrentMassProperties->ixx;
 		Units = Convert::UnitTypeInertia;
 		break;
 
 	case TextBoxIyy:
 		// Get the new data, the location to write it, and the units
 		TextBox = Iyy;
-		DataLocation = &CurrentMassProperties->Iyy;
+		DataLocation = &CurrentMassProperties->iyy;
 		Units = Convert::UnitTypeInertia;
 		break;
 
 	case TextBoxIzz:
 		// Get the new data, the location to write it, and the units
 		TextBox = Izz;
-		DataLocation = &CurrentMassProperties->Izz;
+		DataLocation = &CurrentMassProperties->izz;
 		Units = Convert::UnitTypeInertia;
 		break;
 
 	case TextBoxIxy:
 		// Get the new data, the location to write it, and the units
 		TextBox = Ixy;
-		DataLocation = &CurrentMassProperties->Ixy;
+		DataLocation = &CurrentMassProperties->ixy;
 		Units = Convert::UnitTypeInertia;
 		break;
 
 	case TextBoxIxz:
 		// Get the new data, the location to write it, and the units
 		TextBox = Ixz;
-		DataLocation = &CurrentMassProperties->Ixz;
+		DataLocation = &CurrentMassProperties->ixz;
 		Units = Convert::UnitTypeInertia;
 		break;
 
 	case TextBoxIyz:
 		// Get the new data, the location to write it, and the units
 		TextBox = Iyz;
-		DataLocation = &CurrentMassProperties->Iyz;
+		DataLocation = &CurrentMassProperties->iyz;
 		Units = Convert::UnitTypeInertia;
 		break;
 
 	case TextBoxMass:
 		// Get the new data, the location to write it, and the units
 		TextBox = Mass;
-		DataLocation = &CurrentMassProperties->Mass;
+		DataLocation = &CurrentMassProperties->mass;
 		Units = Convert::UnitTypeMass;
 		break;
 
 	case TextBoxCenterOfGravityX:
 		// Get the new data, the location to write it, and the units
 		TextBox = CenterOfGravityX;
-		DataLocation = &CurrentMassProperties->CenterOfGravity.x;
+		DataLocation = &CurrentMassProperties->centerOfGravity.x;
 		Units = Convert::UnitTypeDistance;
 		break;
 
 	case TextBoxCenterOfGravityY:
 		// Get the new data, the location to write it, and the units
 		TextBox = CenterOfGravityY;
-		DataLocation = &CurrentMassProperties->CenterOfGravity.y;
+		DataLocation = &CurrentMassProperties->centerOfGravity.y;
 		Units = Convert::UnitTypeDistance;
 		break;
 
 	case TextBoxCenterOfGravityZ:
 		// Get the new data, the location to write it, and the units
 		TextBox = CenterOfGravityZ;
-		DataLocation = &CurrentMassProperties->CenterOfGravity.z;
+		DataLocation = &CurrentMassProperties->centerOfGravity.z;
 		Units = Convert::UnitTypeDistance;
 		break;
 
@@ -424,9 +424,9 @@ void EDIT_MASS_PANEL::TextBoxEditEvent(wxCommandEvent &event)
 
 	// If one of the off-diagonal inertias was updated, we need to change the
 	// corresponding value on the lower side of the diagonal
-	Iyx->SetLabel(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->Ixy)));
-	Izx->SetLabel(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->Ixz)));
-	Izy->SetLabel(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->Iyz)));
+	Iyx->SetLabel(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->ixy)));
+	Izx->SetLabel(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->ixz)));
+	Izy->SetLabel(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->iyz)));
 
 	event.Skip();
 }

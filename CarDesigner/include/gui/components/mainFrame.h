@@ -50,7 +50,6 @@
 class wxFileHistory;
 
 // VVASE forward declarations
-class CAR;
 class KinematicOutputs;
 class MAIN_NOTEBOOK;
 class MAIN_TREE;

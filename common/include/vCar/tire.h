@@ -27,41 +27,41 @@
 #include "vMath/vector.h"
 #include "vUtilities/debugger.h"
 
-class TIRE
+class Tire
 {
 public:
 	// Constructor
-	TIRE(const Debugger &_debugger);
-	TIRE(const TIRE &Tire);
+	Tire(const Debugger &_debugger);
+	Tire(const Tire &tire);
 
 	// Destructor
-	~TIRE();
+	~Tire();
 
 	// File read/write functions
-	void Write(std::ofstream *OutFile) const;
-	void Read(std::ifstream *InFile, int FileVersion);
+	void Write(std::ofstream *outFile) const;
+	void Read(std::ifstream *inFile, int fileVersion);
 
 	// Enumeration describing the tire models we support
-	enum TIRE_MODEL
+	enum TireModel
 	{
-		PACEJKA_96,
-		MRA_NON_DIMENSIONAL,
-		LUGRE
+		Pacejka96,
+		MRANonDimensional,
+		Lugre
 	};
 
 	// The functions that calculate the tire's forces and moments
-	Vector GetTireForces(const double &NormalLoad, const double &SlipAngle,
-		const double &SlipRatio, const double &LocalMu);// [lbf]
-	Vector GetTireMoments(const double &NormalLoad, const double &SlipAngle,
-		const double &SlipRatio, const double &LocalMu);// [in-lbf]
+	Vector GetTireForces(const double &normalLoad, const double &slipAngle,
+		const double &slipRatio, const double &localMu);// [lbf]
+	Vector GetTireMoments(const double &normalLoad, const double &slipAngle,
+		const double &slipRatio, const double &localMu);// [in-lbf]
 
 	// Tire characteristics
-	double Diameter;			// [in] (unloaded)
-	double Width;				// [in]
-	double TirePressure;		// [psi]
+	double diameter;			// [in] (unloaded)
+	double width;				// [in]
+	double tirePressure;		// [psi]
 
 	// Operators
-	TIRE& operator = (const TIRE &Tire);
+	Tire& operator = (const Tire &tire);
 
 private:
 	// Debugger message printing utility
@@ -72,17 +72,17 @@ private:
 	// Variations in the Radt/Milliken Tire Model, by Kasprzak and Milliken.  This is an
 	// expansion of the MRA tire model to include asymmetric tire data.
 	// Ideal tire model:  temperature dependant, dynamic, works for combined slips
-	double Bright;
-	double Cright;
-	double Dright;
-	double Eright;
-	double Bleft;
-	double Cleft;
-	double Dleft;
-	double Eleft;
+	double bright;
+	double cright;
+	double dright;
+	double eright;
+	double bleft;
+	double cleft;
+	double dleft;
+	double eleft;
 
 	// Model type
-	TIRE_MODEL ModelType;
+	TireModel modelType;
 };
 
 #endif// _TIRE_H_

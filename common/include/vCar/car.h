@@ -64,28 +64,28 @@
 class wxString;
 
 // vCar forward declarations
-class AERODYNAMICS;
-class BRAKES;
+class Aerodynamics;
+class Brakes;
 class Debugger;
-class DRIVETRAIN;
-class ENGINE;
-class MASS_PROPERTIES;
-class SUSPENSION;
-class TIRE_SET;
+class Drivetrain;
+class Engine;
+class MassProperties;
+class Suspension;
+class TireSet;
 
-class CAR
+class Car
 {
 public:
 	// Constructor
-	CAR(const Debugger &_debugger);
-	CAR(const CAR &Car);
+	Car(const Debugger &_debugger);
+	Car(const Car &car);
 
 	// Destructor
-	~CAR();
+	~Car();
 
 	// Utility methods
-	bool SaveCarToFile(wxString FileName, std::ofstream *_OutFile = NULL) const;
-	bool LoadCarFromFile(wxString FileName, std::ifstream *_InFile = NULL, int *FileVersion = NULL);
+	bool SaveCarToFile(wxString fileName, std::ofstream *_outFile = NULL) const;
+	bool LoadCarFromFile(wxString fileName, std::ifstream *_inFile = NULL, int *fileVersion = NULL);
 
 	// Computes the wheel center locations - to be done prior to each analysis
 	void ComputeWheelCenters(void);
@@ -95,42 +95,42 @@ public:
 	bool HasRearHalfShafts(void) const;
 
 	// This class contains dynamically allocated memory - overload the assigment operator
-	CAR& operator = (const CAR &Car);
+	Car& operator = (const Car &car);
 
 	// These properties are modifiable ONLY by the user... this program
 	// can only reference these properties, any changes (i.e. locations of
 	// suspension hardpoints during dynamic analysis) will be applied to a
 	// DUPLICATE set of properties to avoid loosing the original data
-	AERODYNAMICS *Aerodynamics;
-	BRAKES *Brakes;
-	DRIVETRAIN *Drivetrain;
-	ENGINE *Engine;
-	MASS_PROPERTIES *MassProperties;
-	SUSPENSION *Suspension;
-	TIRE_SET *Tires;
+	Aerodynamics *aerodynamics;
+	Brakes *brakes;
+	Drivetrain *drivetrain;
+	Engine *engine;
+	MassProperties *massProperties;
+	Suspension *suspension;
+	TireSet *tires;
 
 	// Mutex accessor
-	wxMutex &GetMutex(void) const { return CarMutex; };
+	wxMutex &GetMutex(void) const { return carMutex; };
 
 private:
 	// Debugger message printing utility
 	const Debugger &debugger;
 
 	// File header information
-	struct FILE_HEADER_INFO
+	struct FileHeaderInfo
 	{
-		int FileVersion;
+		int fileVersion;
 	};
 
 	// Writes and reads the file header information for saved cars
-	void WriteFileHeader(std::ofstream *OutFile) const;
-	FILE_HEADER_INFO ReadFileHeader(std::ifstream *InFile) const;
+	void WriteFileHeader(std::ofstream *outFile) const;
+	FileHeaderInfo ReadFileHeader(std::ifstream *inFile) const;
 
 	// Our current file verstion
-	static const int CurrentFileVersion;
+	static const int currentFileVersion;
 
 	// Syncronization object
-	mutable wxMutex CarMutex;
+	mutable wxMutex carMutex;
 };
 
 #endif// _CAR_H_

@@ -28,7 +28,7 @@
 #include "vSolver/physics/kinematicOutputs.h"
 
 // VVASE forward declarations
-class CAR;
+class Car;
 
 class Kinematics
 {
@@ -75,7 +75,7 @@ public:
 	inline void SetInputs(Inputs _inputs) { inputs = _inputs; };
 
 	// Main work function for this class
-	void UpdateKinematics(const CAR* _OriginalCar, CAR* _WorkingCar, wxString Name);
+	void UpdateKinematics(const Car* _OriginalCar, Car* _WorkingCar, wxString Name);
 
 	// Private data accessors (GET)
 	inline KinematicOutputs GetOutputs(void) { return outputs; };
@@ -94,14 +94,14 @@ private:
 	// The inputs to the kinematic solver
 	Inputs inputs;
 
-	const CAR *originalCar;// Pointer to original car data
-	CAR *workingCar;// Pointer to working (manipulated) car data
-	SUSPENSION *localSuspension;// Suspension in which we move the points around
+	const Car *originalCar;// Pointer to original car data
+	Car *workingCar;// Pointer to working (manipulated) car data
+	Suspension *localSuspension;// Suspension in which we move the points around
 
 	KinematicOutputs outputs;// Where we store everything after we UpdateOutputs
 
 	// Kinematic solving routine for suspension points at each "corner" of the car
-	bool SolveCorner(CORNER &corner, const CORNER &original, 
+	bool SolveCorner(Corner &corner, const Corner &original, 
 		const Vector &rotations, const Vector::Axis &secondRotation);
 
 	// Performs all of the output value calculations (angles, distances, centers, etc.)

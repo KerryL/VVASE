@@ -24,10 +24,10 @@
 #include "vUtilities/machineDefinitions.h"
 
 //==========================================================================
-// Class:			AERODYNAMICS
-// Function:		AERODYNAMICS
+// Class:			Aerodynamics
+// Function:		Aerodynamics
 //
-// Description:		Constructor for the AERODYNAMICS class.
+// Description:		Constructor for the Aerodynamics class.
 //
 // Input Arguments:
 //		_debugger	= const Debugger& reference to applications debug printing utility
@@ -39,18 +39,18 @@
 //		None
 //
 //==========================================================================
-AERODYNAMICS::AERODYNAMICS(const Debugger &_debugger) : debugger(_debugger)
+Aerodynamics::Aerodynamics(const Debugger &_debugger) : debugger(_debugger)
 {
 }
 
 //==========================================================================
-// Class:			AERODYNAMICS
-// Function:		AERODYNAMICS
+// Class:			Aerodynamics
+// Function:		Aerodynamics
 //
-// Description:		Copy constructor for the AERODYNAMICS class.
+// Description:		Copy constructor for the Aerodynamics class.
 //
 // Input Arguments:
-//		Aerodynamics	= const AERODYNAMICS& to copy to this object
+//		Aerodynamics	= const Aerodynamics& to copy to this object
 //
 // Output Arguments:
 //		None
@@ -59,17 +59,17 @@ AERODYNAMICS::AERODYNAMICS(const Debugger &_debugger) : debugger(_debugger)
 //		None
 //
 //==========================================================================
-AERODYNAMICS::AERODYNAMICS(const AERODYNAMICS &Aerodynamics) : debugger(Aerodynamics.debugger)
+Aerodynamics::Aerodynamics(const Aerodynamics &aerodynamics) : debugger(aerodynamics.debugger)
 {
 	// Do the copy
-	*this = Aerodynamics;
+	*this = aerodynamics;
 }
 
 //==========================================================================
-// Class:			AERODYNAMICS
-// Function:		~AERODYNAMICS
+// Class:			Aerodynamics
+// Function:		~Aerodynamics
 //
-// Description:		Destructor for the AERODYNAMICS class.
+// Description:		Destructor for the Aerodynamics class.
 //
 // Input Arguments:
 //		None
@@ -81,18 +81,18 @@ AERODYNAMICS::AERODYNAMICS(const AERODYNAMICS &Aerodynamics) : debugger(Aerodyna
 //		None
 //
 //==========================================================================
-AERODYNAMICS::~AERODYNAMICS()
+Aerodynamics::~Aerodynamics()
 {
 }
 
 //==========================================================================
-// Class:			AERODYNAMICS
+// Class:			Aerodynamics
 // Function:		Write
 //
 // Description:		Writes these aerodynamics to file.
 //
 // Input Arguments:
-//		OutFile	= std::ofstream* pointing to the output stream
+//		outFile	= std::ofstream* pointing to the output stream
 //
 // Output Arguments:
 //		None
@@ -101,7 +101,7 @@ AERODYNAMICS::~AERODYNAMICS()
 //		None
 //
 //==========================================================================
-void AERODYNAMICS::Write(std::ofstream *OutFile) const
+void Aerodynamics::Write(std::ofstream *outFile) const
 {
 	// FIXME:  MSCV generates C4100
 	// Write this object to file
@@ -109,14 +109,14 @@ void AERODYNAMICS::Write(std::ofstream *OutFile) const
 }
 
 //==========================================================================
-// Class:			AERODYNAMICS
+// Class:			Aerodynamics
 // Function:		Read
 //
 // Description:		Read from file to fill this aerodynamics.
 //
 // Input Arguments:
-//		InFile		= std::ifstream* pointing to the input stream
-//		FileVersion	= int specifying what file version we're reading from
+//		inFile		= std::ifstream* pointing to the input stream
+//		fileVersion	= int specifying what file version we're reading from
 //
 // Output Arguments:
 //		None
@@ -125,11 +125,11 @@ void AERODYNAMICS::Write(std::ofstream *OutFile) const
 //		None
 //
 //==========================================================================
-void AERODYNAMICS::Read(std::ifstream *InFile, int FileVersion)
+void Aerodynamics::Read(std::ifstream *inFile, int fileVersion)
 {
 	// FIXME:  MSCV generates C4100
 	// Read this object from file according to the file version we're using
-	if (FileVersion >= 0)// All versions
+	if (fileVersion >= 0)// All versions
 	{
 		// Not yet used yet
 	}
@@ -138,34 +138,34 @@ void AERODYNAMICS::Read(std::ifstream *InFile, int FileVersion)
 }
 
 //==========================================================================
-// Class:			AERODYNAMICS
+// Class:			Aerodynamics
 // Function:		operator =
 //
-// Description:		Assignment operator for AERODYNAMICS class.
+// Description:		Assignment operator for Aerodynamics class.
 //
 // Input Arguments:
-//		Aerodynamics	= const AERODYNAMICS& to assign to this object
+//		aerodynamics	= const Aerodynamics& to assign to this object
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		AERODYNAMICS&, reference to this object
+//		Aerodynamics&, reference to this object
 //
 //==========================================================================
-AERODYNAMICS& AERODYNAMICS::operator = (const AERODYNAMICS &Aerodynamics)
+Aerodynamics& Aerodynamics::operator = (const Aerodynamics &aerodynamics)
 {
 	// Check for self-assignment
-	if (this == &Aerodynamics)
+	if (this == &aerodynamics)
 		return *this;
 
 	// Perform the assignment
-	CenterOfPressure		= Aerodynamics.CenterOfPressure;
-	ReferenceArea			= Aerodynamics.ReferenceArea;
-	AirDensity				= Aerodynamics.AirDensity;
-	CoefficientOfDownforce	= Aerodynamics.CoefficientOfDownforce;
-	CoefficientOfDrag		= Aerodynamics.CoefficientOfDrag;
-	CoefficientOfMoment		= Aerodynamics.CoefficientOfMoment;
+	centerOfPressure		= aerodynamics.centerOfPressure;
+	referenceArea			= aerodynamics.referenceArea;
+	airDensity				= aerodynamics.airDensity;
+	coefficientOfDownforce	= aerodynamics.coefficientOfDownforce;
+	coefficientOfDrag		= aerodynamics.coefficientOfDrag;
+	coefficientOfMoment		= aerodynamics.coefficientOfMoment;
 
 	return *this;
 }

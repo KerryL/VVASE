@@ -270,7 +270,7 @@ double GA_OBJECT::DetermineFitness(const int *Citizen)
 // Description:		Calls the parent class's initialization routine.
 //
 // Input Arguments:
-//		_TargetCar	= CAR* pointing to the object to optimize
+//		_TargetCar	= Car* pointing to the object to optimize
 //
 // Output Arguments:
 //		None
@@ -279,7 +279,7 @@ double GA_OBJECT::DetermineFitness(const int *Citizen)
 //		None
 //
 //==========================================================================
-void GA_OBJECT::SetUp(CAR *_TargetCar)
+void GA_OBJECT::SetUp(Car *_TargetCar)
 {
 	// Ensure exclusive access to this object
 	gsaMutex.Lock();
@@ -323,12 +323,12 @@ void GA_OBJECT::SetUp(CAR *_TargetCar)
 	NumberOfCars = populationSize * InputList.GetCount();
 
 	KinematicOutputArray = new KinematicOutputs[NumberOfCars];
-	OriginalCarArray = new CAR*[NumberOfCars];
-	WorkingCarArray = new CAR*[NumberOfCars];
+	OriginalCarArray = new Car*[NumberOfCars];
+	WorkingCarArray = new Car*[NumberOfCars];
 	for (i = 0; i < NumberOfCars; i++)
 	{
-		OriginalCarArray[i] = new CAR(debugger);
-		WorkingCarArray[i] = new CAR(debugger);
+		OriginalCarArray[i] = new Car(debugger);
+		WorkingCarArray[i] = new Car(debugger);
 	}
 }
 
@@ -354,8 +354,8 @@ void GA_OBJECT::SetCarGenome(int CarIndex, const int *CurrentGenome)
 	int i;
 
 	// Change the appropriate values to make this new car match the CurrentGenome
-	CORNER *CurrentCorner;
-	CORNER *OppositeCorner;
+	Corner *CurrentCorner;
+	Corner *OppositeCorner;
 
 	// Get locks on all the cars we're manipulating
 	wxMutexLocker TargetLocker(TargetCar->GetMutex());
@@ -372,104 +372,104 @@ void GA_OBJECT::SetCarGenome(int CarIndex, const int *CurrentGenome)
 		CurrentGene = GeneList.GetObject(i);
 
 		// Set the current and opposite corners
-		if (CurrentGene->Location == CORNER::LocationLeftFront)
+		if (CurrentGene->Location == Corner::LocationLeftFront)
 		{
-			CurrentCorner = &OriginalCarArray[CarIndex]->Suspension->LeftFront;
-			OppositeCorner = &OriginalCarArray[CarIndex]->Suspension->RightFront;
+			CurrentCorner = &OriginalCarArray[CarIndex]->suspension->leftFront;
+			OppositeCorner = &OriginalCarArray[CarIndex]->suspension->rightFront;
 		}
-		else if (CurrentGene->Location == CORNER::LocationRightFront)
+		else if (CurrentGene->Location == Corner::LocationRightFront)
 		{
-			CurrentCorner = &OriginalCarArray[CarIndex]->Suspension->RightFront;
-			OppositeCorner = &OriginalCarArray[CarIndex]->Suspension->LeftFront;
+			CurrentCorner = &OriginalCarArray[CarIndex]->suspension->rightFront;
+			OppositeCorner = &OriginalCarArray[CarIndex]->suspension->leftFront;
 		}
-		else if (CurrentGene->Location == CORNER::LocationLeftRear)
+		else if (CurrentGene->Location == Corner::LocationLeftRear)
 		{
-			CurrentCorner = &OriginalCarArray[CarIndex]->Suspension->LeftRear;
-			OppositeCorner = &OriginalCarArray[CarIndex]->Suspension->RightRear;
+			CurrentCorner = &OriginalCarArray[CarIndex]->suspension->leftRear;
+			OppositeCorner = &OriginalCarArray[CarIndex]->suspension->rightRear;
 		}
 		else
 		{
-			CurrentCorner = &OriginalCarArray[CarIndex]->Suspension->RightRear;
-			OppositeCorner = &OriginalCarArray[CarIndex]->Suspension->LeftRear;
+			CurrentCorner = &OriginalCarArray[CarIndex]->suspension->rightRear;
+			OppositeCorner = &OriginalCarArray[CarIndex]->suspension->leftRear;
 		}
 
 		// Determine which component of the vector to vary
 		if (CurrentGene->Direction == Vector::AxisX)
 		{
 			// Set the appropriate variable to the value that corresponds to this phenotype
-			CurrentCorner->Hardpoints[CurrentGene->Hardpoint].x = CurrentGene->Minimum +
+			CurrentCorner->hardpoints[CurrentGene->Hardpoint].x = CurrentGene->Minimum +
 				double(CurrentGene->NumberOfValues - CurrentGenome[i] - 1)
 				* (CurrentGene->Maximum - CurrentGene->Minimum) / double(CurrentGene->NumberOfValues - 1);
 
 			// If there is a tied-to variable specified, update that as well
-			if (CurrentGene->TiedTo != CORNER::NumberOfHardpoints)
-				CurrentCorner->Hardpoints[CurrentGene->TiedTo].x =
-					CurrentCorner->Hardpoints[CurrentGene->Hardpoint].x;
+			if (CurrentGene->TiedTo != Corner::NumberOfHardpoints)
+				CurrentCorner->hardpoints[CurrentGene->TiedTo].x =
+					CurrentCorner->hardpoints[CurrentGene->Hardpoint].x;
 
 			// If the suspension is symmetric, also update the point on the opposite corner
-			if (TargetCar->Suspension->IsSymmetric)
+			if (TargetCar->suspension->isSymmetric)
 			{
 				// Copy the values from one side to the other
-				OppositeCorner->Hardpoints[CurrentGene->Hardpoint].x =
-					CurrentCorner->Hardpoints[CurrentGene->Hardpoint].x;
+				OppositeCorner->hardpoints[CurrentGene->Hardpoint].x =
+					CurrentCorner->hardpoints[CurrentGene->Hardpoint].x;
 
 				// If there was a tied-to variable specified, we must update that on
 				// the other side of the car, too
-				if (CurrentGene->TiedTo != CORNER::NumberOfHardpoints)
-					OppositeCorner->Hardpoints[CurrentGene->TiedTo].x =
-						OppositeCorner->Hardpoints[CurrentGene->Hardpoint].x;
+				if (CurrentGene->TiedTo != Corner::NumberOfHardpoints)
+					OppositeCorner->hardpoints[CurrentGene->TiedTo].x =
+						OppositeCorner->hardpoints[CurrentGene->Hardpoint].x;
 			}
 		}
 		else if (CurrentGene->Direction == Vector::AxisY)
 		{
 			// Set the appropriate variable to the value that corresponds to this phenotype
-			CurrentCorner->Hardpoints[CurrentGene->Hardpoint].y = CurrentGene->Minimum +
+			CurrentCorner->hardpoints[CurrentGene->Hardpoint].y = CurrentGene->Minimum +
 				double(CurrentGene->NumberOfValues - CurrentGenome[i] - 1)
 				* (CurrentGene->Maximum - CurrentGene->Minimum) / double(CurrentGene->NumberOfValues - 1);
 
 			// If there is a tied-to variable specified, update that as well
-			if (CurrentGene->TiedTo != CORNER::NumberOfHardpoints)
-				CurrentCorner->Hardpoints[CurrentGene->TiedTo].y =
-					CurrentCorner->Hardpoints[CurrentGene->Hardpoint].y;
+			if (CurrentGene->TiedTo != Corner::NumberOfHardpoints)
+				CurrentCorner->hardpoints[CurrentGene->TiedTo].y =
+					CurrentCorner->hardpoints[CurrentGene->Hardpoint].y;
 
 			// If the suspension is symmetric, also update the point on the opposite corner
-			if (TargetCar->Suspension->IsSymmetric)
+			if (TargetCar->suspension->isSymmetric)
 			{
 				// Copy the values from one side to the other (Note Y is flipped)
-				OppositeCorner->Hardpoints[CurrentGene->Hardpoint].y =
-					-CurrentCorner->Hardpoints[CurrentGene->Hardpoint].y;
+				OppositeCorner->hardpoints[CurrentGene->Hardpoint].y =
+					-CurrentCorner->hardpoints[CurrentGene->Hardpoint].y;
 
 				// If there was a tied-to variable specified, we must update that on
 				// the other side of the car, too
-				if (CurrentGene->TiedTo != CORNER::NumberOfHardpoints)
-					OppositeCorner->Hardpoints[CurrentGene->TiedTo].y =
-						OppositeCorner->Hardpoints[CurrentGene->Hardpoint].y;
+				if (CurrentGene->TiedTo != Corner::NumberOfHardpoints)
+					OppositeCorner->hardpoints[CurrentGene->TiedTo].y =
+						OppositeCorner->hardpoints[CurrentGene->Hardpoint].y;
 			}
 		}
 		else// Vector::AxisZ
 		{
 			// Set the appropriate variable to the value that corresponds to this phenotype
-			CurrentCorner->Hardpoints[CurrentGene->Hardpoint].z = CurrentGene->Minimum +
+			CurrentCorner->hardpoints[CurrentGene->Hardpoint].z = CurrentGene->Minimum +
 				double(CurrentGene->NumberOfValues - CurrentGenome[i] - 1)
 				* (CurrentGene->Maximum - CurrentGene->Minimum) / double(CurrentGene->NumberOfValues - 1);
 
 			// If there is a tied-to variable specified, update that as well
-			if (CurrentGene->TiedTo != CORNER::NumberOfHardpoints)
-				CurrentCorner->Hardpoints[CurrentGene->TiedTo].z =
-					CurrentCorner->Hardpoints[CurrentGene->Hardpoint].z;
+			if (CurrentGene->TiedTo != Corner::NumberOfHardpoints)
+				CurrentCorner->hardpoints[CurrentGene->TiedTo].z =
+					CurrentCorner->hardpoints[CurrentGene->Hardpoint].z;
 
 			// If the suspension is symmetric, also update the point on the opposite corner
-			if (TargetCar->Suspension->IsSymmetric)
+			if (TargetCar->suspension->isSymmetric)
 			{
 				// Copy the values from one side to the other
-				OppositeCorner->Hardpoints[CurrentGene->Hardpoint].z =
-					CurrentCorner->Hardpoints[CurrentGene->Hardpoint].z;
+				OppositeCorner->hardpoints[CurrentGene->Hardpoint].z =
+					CurrentCorner->hardpoints[CurrentGene->Hardpoint].z;
 
 				// If there was a tied-to variable specified, we must update that on
 				// the other side of the car, too
-				if (CurrentGene->TiedTo != CORNER::NumberOfHardpoints)
-					OppositeCorner->Hardpoints[CurrentGene->TiedTo].z =
-						OppositeCorner->Hardpoints[CurrentGene->Hardpoint].z;
+				if (CurrentGene->TiedTo != Corner::NumberOfHardpoints)
+					OppositeCorner->hardpoints[CurrentGene->TiedTo].z =
+						OppositeCorner->hardpoints[CurrentGene->Hardpoint].z;
 			}
 		}
 	}
@@ -520,10 +520,10 @@ void GA_OBJECT::PerformAdditionalActions(void)
 // Description:		Adds a gene to the list to be optimized.
 //
 // Input Arguments:
-//		Variable		= const CORNER::HARDPOINTS& specifying to the value to be changed
-//		TiedTo			= const CORNER::HARDPOINTS& specifying to a value that will always equal
+//		Variable		= const Corner::Hardpoints& specifying to the value to be changed
+//		TiedTo			= const Corner::Hardpoints& specifying to a value that will always equal
 //						  Variable
-//		Location		= const CORNER::LOCATION& specifying the associated corner
+//		Location		= const Corner::Location& specifying the associated corner
 //		Direction		= const Vector::Axis& specifying the component of the hardpoint
 //						  to optimize
 //		Minimum			= const double& minimum value for this gene
@@ -538,8 +538,8 @@ void GA_OBJECT::PerformAdditionalActions(void)
 //		None
 //
 //==========================================================================
-void GA_OBJECT::AddGene(const CORNER::HARDPOINTS &Hardpoint, const CORNER::HARDPOINTS &TiedTo,
-						const CORNER::LOCATION &Location, const Vector::Axis &Direction,
+void GA_OBJECT::AddGene(const Corner::Hardpoints &Hardpoint, const Corner::Hardpoints &TiedTo,
+						const Corner::Location &Location, const Vector::Axis &Direction,
 						const double &Minimum, const double &Maximum, const int &NumberOfValues)
 {
 	// Create a new GENE object
@@ -614,10 +614,10 @@ void GA_OBJECT::AddGoal(const KinematicOutputs::OutputsComplete &Output, const d
 //
 // Input Arguments:
 //		Index			= const int& specifying the goal to update
-//		Hardpoint		= const CORNER::HARDPOINTS& specifying to the value to be changed
-//		TiedTo			= const CORNER::HARDPOINTS& specifying to a value that will always equal
+//		Hardpoint		= const Corner::Hardpoints& specifying to the value to be changed
+//		TiedTo			= const Corner::Hardpoints& specifying to a value that will always equal
 //						  Variable
-//		Location		= const CORNER::LOCATION& specifying the associated corner
+//		Location		= const Corner::Location& specifying the associated corner
 //		Direction		= const Vector::Axis& specifying the component of the hardpoint
 //						  to optimize
 //		Minimum			= const double& minimum value for this gene
@@ -632,8 +632,8 @@ void GA_OBJECT::AddGoal(const KinematicOutputs::OutputsComplete &Output, const d
 //		None
 //
 //==========================================================================
-void GA_OBJECT::UpdateGene(const int &Index, const CORNER::HARDPOINTS &Hardpoint, const CORNER::HARDPOINTS &TiedTo,
-						const CORNER::LOCATION &Location, const Vector::Axis &Direction,
+void GA_OBJECT::UpdateGene(const int &Index, const Corner::Hardpoints &Hardpoint, const Corner::Hardpoints &TiedTo,
+						const Corner::Location &Location, const Vector::Axis &Direction,
 						const double &Minimum, const double &Maximum, const int &NumberOfValues)
 {
 	// Copy the arguments to the gene we're updating

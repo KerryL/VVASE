@@ -27,8 +27,8 @@ class GA_GENE_DIALOG : public wxDialog
 {
 public:
 	// Constructor
-	GA_GENE_DIALOG(wxWindow *Parent, const Convert &_Converter, const CORNER::HARDPOINTS &_Hardpoint,
-		const CORNER::HARDPOINTS &_TiedTo, const Vector::Axis &_AxisDirection, const CORNER::LOCATION &_CornerLocation,
+	GA_GENE_DIALOG(wxWindow *Parent, const Convert &_Converter, const Corner::Hardpoints &_Hardpoint,
+		const Corner::Hardpoints &_TiedTo, const Vector::Axis &_AxisDirection, const Corner::Location &_CornerLocation,
 		const double &_Minimum, const double &_Maximum, const unsigned int &_NumberOfValues,
 		wxWindowID Id, const wxPoint &Position, long Style = wxDEFAULT_DIALOG_STYLE);
 
@@ -36,10 +36,10 @@ public:
 	~GA_GENE_DIALOG();
 
 	// Private data accessors
-	CORNER::HARDPOINTS GetHardpoint(void) const { return Hardpoint; };
-	CORNER::HARDPOINTS GetTiedTo(void) const { return TiedTo; };
+	Corner::Hardpoints GetHardpoint(void) const { return Hardpoint; };
+	Corner::Hardpoints GetTiedTo(void) const { return TiedTo; };
 	Vector::Axis GetAxisDirection(void) const { return AxisDirection; };
-	CORNER::LOCATION GetCornerLocation(void) const { return CornerLocation; };
+	Corner::Location GetCornerLocation(void) const { return CornerLocation; };
 	double GetMinimum(void) const { return Minimum; };
 	double GetMaximum(void) const { return Maximum; };
 	unsigned long GetNumberOfValues(void) const { return NumberOfValues; };
@@ -64,10 +64,10 @@ private:
 	wxStaticText *Resolution;
 
 	// Values (populated when OK is clicked)
-	CORNER::HARDPOINTS Hardpoint;
-	CORNER::HARDPOINTS TiedTo;
+	Corner::Hardpoints Hardpoint;
+	Corner::Hardpoints TiedTo;
 	Vector::Axis AxisDirection;
-	CORNER::LOCATION CornerLocation;
+	Corner::Location CornerLocation;
 	double Minimum;
 	double Maximum;
 	unsigned long NumberOfValues;

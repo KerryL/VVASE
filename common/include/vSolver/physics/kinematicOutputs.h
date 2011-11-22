@@ -33,9 +33,9 @@
 #include "vCar/corner.h"
 
 // VVASE forward declarations
-class CAR;
+class Car;
 class Debugger;
-class SUSPENSION;
+class Suspension;
 
 class KinematicOutputs
 {
@@ -50,7 +50,7 @@ public:
 	static inline void SetDebugger(const Debugger &_debugger) { debugger = &_debugger; };
 
 	// Updates the kinematic variables associated with the current SUSPENSION
-	void Update(const CAR *original, const SUSPENSION *current);
+	void Update(const Car *original, const Suspension *current);
 
 	// Enumeration for double outputs that get computed for every corner
 	enum CornerOutputsDouble
@@ -181,7 +181,7 @@ public:
 	};
 
 	// For converting from an output + location to OUTPUTS_COMPLETE
-	static OutputsComplete OutputsCompleteIndex(const CORNER::LOCATION &location,
+	static OutputsComplete OutputsCompleteIndex(const Corner::Location &location,
 		const CornerOutputsDouble &cornerDouble, const CornerOutputsVector &cornerVector,
 		const OutputsDouble &midDouble, const OutputsVector &vector, const Vector::Axis &axis);
 
@@ -202,10 +202,10 @@ private:
 	static const Debugger *debugger;
 
 	// The currently associated car object
-	const CAR *currentCar;
+	const Car *currentCar;
 
 	// Updates the outputs associated with the associated corner
-	void UpdateCorner(const CORNER *originalCorner, const CORNER *currentCorner);
+	void UpdateCorner(const Corner *originalCorner, const Corner *currentCorner);
 
 	// For retrieving names of the outputs
 	static wxString GetCornerDoubleName(const CornerOutputsDouble &_output);

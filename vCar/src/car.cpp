@@ -32,7 +32,7 @@
 #include "vCar/car.h"
 #include "vCar/drivetrain.h"
 #include "vCar/engine.h"
-#include "vCar/mass.h"
+#include "vCar/massProperties.h"
 #include "vCar/suspension.h"
 #include "vCar/tire.h"
 #include "vCar/tireSet.h"
@@ -45,10 +45,10 @@
 #include <fstream>
 
 //==========================================================================
-// Class:			CAR
-// Function:		CAR
+// Class:			Car
+// Function:		Car
 //
-// Description:		Constructor for the CAR class.  Creates a set of default
+// Description:		Constructor for the Car class.  Creates a set of default
 //					parameters for the object.
 //
 // Input Arguments:
@@ -61,165 +61,165 @@
 //		None
 //
 //==========================================================================
-CAR::CAR(const Debugger &_debugger) : debugger(_debugger)
+Car::Car(const Debugger &_debugger) : debugger(_debugger)
 {
-	// Dynamically allocate memory for these classes
-	Suspension = new SUSPENSION(debugger);
-	Drivetrain = new DRIVETRAIN(debugger);
-	Brakes = new BRAKES(debugger);
-	Aerodynamics = new AERODYNAMICS(debugger);
-	Engine = new ENGINE(debugger);
-	MassProperties = new MASS_PROPERTIES(debugger);
-	Tires = new TIRE_SET(debugger);
+	// Dynamically allocate memory for these objects
+	suspension = new Suspension(debugger);
+	drivetrain = new Drivetrain(debugger);
+	brakes = new Brakes(debugger);
+	aerodynamics = new Aerodynamics(debugger);
+	engine = new Engine(debugger);
+	massProperties = new MassProperties(debugger);
+	tires = new TireSet(debugger);
 
 	// Test suspension
-	Suspension->FrontBarStyle = SUSPENSION::SwayBarUBar;
-	Suspension->IsSymmetric = true;
+	suspension->frontBarStyle = Suspension::SwayBarUBar;
+	suspension->isSymmetric = true;
 
-	Suspension->RightFront.Hardpoints[CORNER::ContactPatch].Set(0.0, 21.875, 0.0);
-	Suspension->LeftFront.Hardpoints[CORNER::ContactPatch].Set(0.0, -21.875, 0.0);
-	Suspension->RightRear.Hardpoints[CORNER::ContactPatch].Set(66.5, 20.0, 0.0);
-	Suspension->LeftRear.Hardpoints[CORNER::ContactPatch].Set(66.5, -20.0, 0.0);
+	suspension->rightFront.hardpoints[Corner::ContactPatch].Set(0.0, 21.875, 0.0);
+	suspension->leftFront.hardpoints[Corner::ContactPatch].Set(0.0, -21.875, 0.0);
+	suspension->rightRear.hardpoints[Corner::ContactPatch].Set(66.5, 20.0, 0.0);
+	suspension->leftRear.hardpoints[Corner::ContactPatch].Set(66.5, -20.0, 0.0);
 
-	Suspension->RightFront.Hardpoints[CORNER::LowerFrontTubMount].Set(-6.893, 3.0, 5.0);
-	Suspension->LeftFront.Hardpoints[CORNER::LowerFrontTubMount].Set(-6.893, -3.0, 5.0);
-	Suspension->RightRear.Hardpoints[CORNER::LowerFrontTubMount].Set(62.5, 3.2, 5.0);
-	Suspension->LeftRear.Hardpoints[CORNER::LowerFrontTubMount].Set(62.5, -3.2, 5.0);
+	suspension->rightFront.hardpoints[Corner::LowerFrontTubMount].Set(-6.893, 3.0, 5.0);
+	suspension->leftFront.hardpoints[Corner::LowerFrontTubMount].Set(-6.893, -3.0, 5.0);
+	suspension->rightRear.hardpoints[Corner::LowerFrontTubMount].Set(62.5, 3.2, 5.0);
+	suspension->leftRear.hardpoints[Corner::LowerFrontTubMount].Set(62.5, -3.2, 5.0);
 
-	Suspension->RightFront.Hardpoints[CORNER::LowerRearTubMount].Set(5.107, 3.0, 5.0);
-	Suspension->LeftFront.Hardpoints[CORNER::LowerRearTubMount].Set(5.107, -3.0, 5.0);
-	Suspension->RightRear.Hardpoints[CORNER::LowerRearTubMount].Set(72.5, 3.2, 5.0);
-	Suspension->LeftRear.Hardpoints[CORNER::LowerRearTubMount].Set(72.5, -3.2, 5.0);
+	suspension->rightFront.hardpoints[Corner::LowerRearTubMount].Set(5.107, 3.0, 5.0);
+	suspension->leftFront.hardpoints[Corner::LowerRearTubMount].Set(5.107, -3.0, 5.0);
+	suspension->rightRear.hardpoints[Corner::LowerRearTubMount].Set(72.5, 3.2, 5.0);
+	suspension->leftRear.hardpoints[Corner::LowerRearTubMount].Set(72.5, -3.2, 5.0);
 
-	Suspension->RightFront.Hardpoints[CORNER::LowerBallJoint].Set(0.168, 19.8, 5.0);
-	Suspension->LeftFront.Hardpoints[CORNER::LowerBallJoint].Set(0.168, -19.8, 5.0);
-	Suspension->RightRear.Hardpoints[CORNER::LowerBallJoint].Set(66.213, 20.35, 5.125);
-	Suspension->LeftRear.Hardpoints[CORNER::LowerBallJoint].Set(66.213, -20.35, 5.125);
+	suspension->rightFront.hardpoints[Corner::LowerBallJoint].Set(0.168, 19.8, 5.0);
+	suspension->leftFront.hardpoints[Corner::LowerBallJoint].Set(0.168, -19.8, 5.0);
+	suspension->rightRear.hardpoints[Corner::LowerBallJoint].Set(66.213, 20.35, 5.125);
+	suspension->leftRear.hardpoints[Corner::LowerBallJoint].Set(66.213, -20.35, 5.125);
 
-	Suspension->RightFront.Hardpoints[CORNER::UpperFrontTubMount].Set(0.893, 7.0, 13.75);
-	Suspension->LeftFront.Hardpoints[CORNER::UpperFrontTubMount].Set(0.893, -7.0, 13.75);
-	Suspension->RightRear.Hardpoints[CORNER::UpperFrontTubMount].Set(59.159, 5.0, 12.67);
-	Suspension->LeftRear.Hardpoints[CORNER::UpperFrontTubMount].Set(59.159, -5.0, 12.67);
+	suspension->rightFront.hardpoints[Corner::UpperFrontTubMount].Set(0.893, 7.0, 13.75);
+	suspension->leftFront.hardpoints[Corner::UpperFrontTubMount].Set(0.893, -7.0, 13.75);
+	suspension->rightRear.hardpoints[Corner::UpperFrontTubMount].Set(59.159, 5.0, 12.67);
+	suspension->leftRear.hardpoints[Corner::UpperFrontTubMount].Set(59.159, -5.0, 12.67);
 
-	Suspension->RightFront.Hardpoints[CORNER::UpperRearTubMount].Set(9.393, 7.0, 13.75);
-	Suspension->LeftFront.Hardpoints[CORNER::UpperRearTubMount].Set(9.393, -7.0, 13.75);
-	Suspension->RightRear.Hardpoints[CORNER::UpperRearTubMount].Set(73.659, 5.0, 12.67);
-	Suspension->LeftRear.Hardpoints[CORNER::UpperRearTubMount].Set(73.659, -5.0, 12.67);
+	suspension->rightFront.hardpoints[Corner::UpperRearTubMount].Set(9.393, 7.0, 13.75);
+	suspension->leftFront.hardpoints[Corner::UpperRearTubMount].Set(9.393, -7.0, 13.75);
+	suspension->rightRear.hardpoints[Corner::UpperRearTubMount].Set(73.659, 5.0, 12.67);
+	suspension->leftRear.hardpoints[Corner::UpperRearTubMount].Set(73.659, -5.0, 12.67);
 
-	Suspension->RightFront.Hardpoints[CORNER::UpperBallJoint].Set(0.893, 19.0, 15.25);
-	Suspension->LeftFront.Hardpoints[CORNER::UpperBallJoint].Set(0.893, -19.0, 15.25);
-	Suspension->RightRear.Hardpoints[CORNER::UpperBallJoint].Set(63.5, 18.025, 14.75);
-	Suspension->LeftRear.Hardpoints[CORNER::UpperBallJoint].Set(63.5, -18.025, 14.75);
+	suspension->rightFront.hardpoints[Corner::UpperBallJoint].Set(0.893, 19.0, 15.25);
+	suspension->leftFront.hardpoints[Corner::UpperBallJoint].Set(0.893, -19.0, 15.25);
+	suspension->rightRear.hardpoints[Corner::UpperBallJoint].Set(63.5, 18.025, 14.75);
+	suspension->leftRear.hardpoints[Corner::UpperBallJoint].Set(63.5, -18.025, 14.75);
 
-	Suspension->RightFront.Hardpoints[CORNER::InboardTieRod].Set(-0.482, 7.0, 13.75);
-	Suspension->LeftFront.Hardpoints[CORNER::InboardTieRod].Set(-0.482, -7.0, 13.75);
-	Suspension->RightRear.Hardpoints[CORNER::InboardTieRod].Set(74.925, 5.0, 12.67);
-	Suspension->LeftRear.Hardpoints[CORNER::InboardTieRod].Set(74.925, -5.0, 12.67);
+	suspension->rightFront.hardpoints[Corner::InboardTieRod].Set(-0.482, 7.0, 13.75);
+	suspension->leftFront.hardpoints[Corner::InboardTieRod].Set(-0.482, -7.0, 13.75);
+	suspension->rightRear.hardpoints[Corner::InboardTieRod].Set(74.925, 5.0, 12.67);
+	suspension->leftRear.hardpoints[Corner::InboardTieRod].Set(74.925, -5.0, 12.67);
 
-	Suspension->RightFront.Hardpoints[CORNER::OutboardTieRod].Set(-0.896, 19.893, 15.36);
-	Suspension->LeftFront.Hardpoints[CORNER::OutboardTieRod].Set(-0.896, -19.893, 15.36);
-	Suspension->RightRear.Hardpoints[CORNER::OutboardTieRod].Set(69.5, 18.025, 14.75);
-	Suspension->LeftRear.Hardpoints[CORNER::OutboardTieRod].Set(69.5, -18.025, 14.75);
+	suspension->rightFront.hardpoints[Corner::OutboardTieRod].Set(-0.896, 19.893, 15.36);
+	suspension->leftFront.hardpoints[Corner::OutboardTieRod].Set(-0.896, -19.893, 15.36);
+	suspension->rightRear.hardpoints[Corner::OutboardTieRod].Set(69.5, 18.025, 14.75);
+	suspension->leftRear.hardpoints[Corner::OutboardTieRod].Set(69.5, -18.025, 14.75);
 
-	Suspension->RightFront.Hardpoints[CORNER::BellCrankPivot1].Set(-0.482, 8.063, 17.625);
-	Suspension->LeftFront.Hardpoints[CORNER::BellCrankPivot1].Set(-0.482, -8.063, 17.625);
-	Suspension->RightRear.Hardpoints[CORNER::BellCrankPivot1].Set(62.75, 3.986, 13.255);
-	Suspension->LeftRear.Hardpoints[CORNER::BellCrankPivot1].Set(62.75, -3.986, 13.255);
+	suspension->rightFront.hardpoints[Corner::BellCrankPivot1].Set(-0.482, 8.063, 17.625);
+	suspension->leftFront.hardpoints[Corner::BellCrankPivot1].Set(-0.482, -8.063, 17.625);
+	suspension->rightRear.hardpoints[Corner::BellCrankPivot1].Set(62.75, 3.986, 13.255);
+	suspension->leftRear.hardpoints[Corner::BellCrankPivot1].Set(62.75, -3.986, 13.255);
 
-	Suspension->RightFront.Hardpoints[CORNER::BellCrankPivot2].Set(-0.482, 6.438, 16.161);
-	Suspension->LeftFront.Hardpoints[CORNER::BellCrankPivot2].Set(-0.482, -6.438, 16.161);
-	Suspension->RightRear.Hardpoints[CORNER::BellCrankPivot2].Set(62.75, 4.986, 14.987);
-	Suspension->LeftRear.Hardpoints[CORNER::BellCrankPivot2].Set(62.75, -4.986, 14.987);
+	suspension->rightFront.hardpoints[Corner::BellCrankPivot2].Set(-0.482, 6.438, 16.161);
+	suspension->leftFront.hardpoints[Corner::BellCrankPivot2].Set(-0.482, -6.438, 16.161);
+	suspension->rightRear.hardpoints[Corner::BellCrankPivot2].Set(62.75, 4.986, 14.987);
+	suspension->leftRear.hardpoints[Corner::BellCrankPivot2].Set(62.75, -4.986, 14.987);
 
-	Suspension->RightFront.Hardpoints[CORNER::InboardPushrod].Set(2.768, 7.0, 16.75);
-	Suspension->LeftFront.Hardpoints[CORNER::InboardPushrod].Set(2.768, -7.0, 16.75);
-	Suspension->RightRear.Hardpoints[CORNER::InboardPushrod].Set(61.31, 4.849, 13.918);
-	Suspension->LeftRear.Hardpoints[CORNER::InboardPushrod].Set(61.31, -4.849, 13.918);
+	suspension->rightFront.hardpoints[Corner::InboardPushrod].Set(2.768, 7.0, 16.75);
+	suspension->leftFront.hardpoints[Corner::InboardPushrod].Set(2.768, -7.0, 16.75);
+	suspension->rightRear.hardpoints[Corner::InboardPushrod].Set(61.31, 4.849, 13.918);
+	suspension->leftRear.hardpoints[Corner::InboardPushrod].Set(61.31, -4.849, 13.918);
 
-	Suspension->RightFront.Hardpoints[CORNER::OutboardPushrod].Set(0.107, 17.813, 5.625);
-	Suspension->LeftFront.Hardpoints[CORNER::OutboardPushrod].Set(0.107, -17.813, 5.625);
-	Suspension->RightRear.Hardpoints[CORNER::OutboardPushrod].Set(65.0, 17.86, 6.1);
-	Suspension->LeftRear.Hardpoints[CORNER::OutboardPushrod].Set(65.0, -17.86, 6.1);
+	suspension->rightFront.hardpoints[Corner::OutboardPushrod].Set(0.107, 17.813, 5.625);
+	suspension->leftFront.hardpoints[Corner::OutboardPushrod].Set(0.107, -17.813, 5.625);
+	suspension->rightRear.hardpoints[Corner::OutboardPushrod].Set(65.0, 17.86, 6.1);
+	suspension->leftRear.hardpoints[Corner::OutboardPushrod].Set(65.0, -17.86, 6.1);
 
-	Suspension->RightFront.Hardpoints[CORNER::InboardShock].Set(-9.232, 4.75, 18.75);
-	Suspension->LeftFront.Hardpoints[CORNER::InboardShock].Set(-9.232, -4.75, 18.75);
-	Suspension->RightRear.Hardpoints[CORNER::InboardShock].Set(72.25, 1.455, 15.871);
-	Suspension->LeftRear.Hardpoints[CORNER::InboardShock].Set(72.25, -1.455, 15.871);
+	suspension->rightFront.hardpoints[Corner::InboardShock].Set(-9.232, 4.75, 18.75);
+	suspension->leftFront.hardpoints[Corner::InboardShock].Set(-9.232, -4.75, 18.75);
+	suspension->rightRear.hardpoints[Corner::InboardShock].Set(72.25, 1.455, 15.871);
+	suspension->leftRear.hardpoints[Corner::InboardShock].Set(72.25, -1.455, 15.871);
 
-	Suspension->RightFront.Hardpoints[CORNER::InboardSpring].Set(-9.232, 4.75, 18.75);
-	Suspension->LeftFront.Hardpoints[CORNER::InboardSpring].Set(-9.232, -4.75, 18.75);
-	Suspension->RightRear.Hardpoints[CORNER::InboardSpring].Set(72.25, 1.455, 15.871);
-	Suspension->LeftRear.Hardpoints[CORNER::InboardSpring].Set(72.25, -1.455, 15.871);
+	suspension->rightFront.hardpoints[Corner::InboardSpring].Set(-9.232, 4.75, 18.75);
+	suspension->leftFront.hardpoints[Corner::InboardSpring].Set(-9.232, -4.75, 18.75);
+	suspension->rightRear.hardpoints[Corner::InboardSpring].Set(72.25, 1.455, 15.871);
+	suspension->leftRear.hardpoints[Corner::InboardSpring].Set(72.25, -1.455, 15.871);
 
-	Suspension->RightFront.Hardpoints[CORNER::OutboardShock].Set(-1.232, 3.375, 19.5);
-	Suspension->LeftFront.Hardpoints[CORNER::OutboardShock].Set(-1.232, -3.375, 19.5);
-	Suspension->RightRear.Hardpoints[CORNER::OutboardShock].Set(62.75, 1.455, 15.871);
-	Suspension->LeftRear.Hardpoints[CORNER::OutboardShock].Set(62.75, -1.455, 15.871);
+	suspension->rightFront.hardpoints[Corner::OutboardShock].Set(-1.232, 3.375, 19.5);
+	suspension->leftFront.hardpoints[Corner::OutboardShock].Set(-1.232, -3.375, 19.5);
+	suspension->rightRear.hardpoints[Corner::OutboardShock].Set(62.75, 1.455, 15.871);
+	suspension->leftRear.hardpoints[Corner::OutboardShock].Set(62.75, -1.455, 15.871);
 
-	Suspension->RightFront.Hardpoints[CORNER::OutboardSpring].Set(-1.232, 3.375, 19.5);
-	Suspension->LeftFront.Hardpoints[CORNER::OutboardSpring].Set(-1.232, -3.375, 19.5);
-	Suspension->RightRear.Hardpoints[CORNER::OutboardSpring].Set(62.75, 1.455, 15.871);
-	Suspension->LeftRear.Hardpoints[CORNER::OutboardSpring].Set(62.75, -1.455, 15.871);
+	suspension->rightFront.hardpoints[Corner::OutboardSpring].Set(-1.232, 3.375, 19.5);
+	suspension->leftFront.hardpoints[Corner::OutboardSpring].Set(-1.232, -3.375, 19.5);
+	suspension->rightRear.hardpoints[Corner::OutboardSpring].Set(62.75, 1.455, 15.871);
+	suspension->leftRear.hardpoints[Corner::OutboardSpring].Set(62.75, -1.455, 15.871);
 
-	Suspension->RightFront.Hardpoints[CORNER::BarArmAtPivot].Set(4.518, 5.0, 15.0);
-	Suspension->LeftFront.Hardpoints[CORNER::BarArmAtPivot].Set(4.518, -5.0, 15.0);
-	Suspension->RightRear.Hardpoints[CORNER::BarArmAtPivot].Set(0.0, 0.0, 0.0);
-	Suspension->LeftRear.Hardpoints[CORNER::BarArmAtPivot].Set(0.0, 0.0, 0.0);
+	suspension->rightFront.hardpoints[Corner::BarArmAtPivot].Set(4.518, 5.0, 15.0);
+	suspension->leftFront.hardpoints[Corner::BarArmAtPivot].Set(4.518, -5.0, 15.0);
+	suspension->rightRear.hardpoints[Corner::BarArmAtPivot].Set(0.0, 0.0, 0.0);
+	suspension->leftRear.hardpoints[Corner::BarArmAtPivot].Set(0.0, 0.0, 0.0);
 
-	Suspension->Hardpoints[SUSPENSION::FrontBarMidPoint].Set(4.518, 0.0, 15.0);
-	Suspension->Hardpoints[SUSPENSION::RearBarMidPoint].Set(0.0, 0.0, 0.0);
+	suspension->hardpoints[Suspension::FrontBarMidPoint].Set(4.518, 0.0, 15.0);
+	suspension->hardpoints[Suspension::RearBarMidPoint].Set(0.0, 0.0, 0.0);
 
-	Suspension->RightFront.Hardpoints[CORNER::InboardBarLink].Set(4.518, 5.0, 19.0);
-	Suspension->LeftFront.Hardpoints[CORNER::InboardBarLink].Set(4.518, -5.0, 19.0);
-	Suspension->RightRear.Hardpoints[CORNER::InboardBarLink].Set(0.0, 0.0, 0.0);
-	Suspension->LeftRear.Hardpoints[CORNER::InboardBarLink].Set(0.0, 0.0, 0.0);
+	suspension->rightFront.hardpoints[Corner::InboardBarLink].Set(4.518, 5.0, 19.0);
+	suspension->leftFront.hardpoints[Corner::InboardBarLink].Set(4.518, -5.0, 19.0);
+	suspension->rightRear.hardpoints[Corner::InboardBarLink].Set(0.0, 0.0, 0.0);
+	suspension->leftRear.hardpoints[Corner::InboardBarLink].Set(0.0, 0.0, 0.0);
 
-	Suspension->RightFront.Hardpoints[CORNER::OutboardBarLink].Set(-1.232, 5.0, 19.0);
-	Suspension->LeftFront.Hardpoints[CORNER::OutboardBarLink].Set(-1.232, -5.0, 19.0);
-	Suspension->RightRear.Hardpoints[CORNER::OutboardBarLink].Set(0.0, 0.0, 0.0);
-	Suspension->LeftRear.Hardpoints[CORNER::OutboardBarLink].Set(0.0, 0.0, 0.0);
+	suspension->rightFront.hardpoints[Corner::OutboardBarLink].Set(-1.232, 5.0, 19.0);
+	suspension->leftFront.hardpoints[Corner::OutboardBarLink].Set(-1.232, -5.0, 19.0);
+	suspension->rightRear.hardpoints[Corner::OutboardBarLink].Set(0.0, 0.0, 0.0);
+	suspension->leftRear.hardpoints[Corner::OutboardBarLink].Set(0.0, 0.0, 0.0);
 
-	Suspension->RightRear.Hardpoints[CORNER::InboardHalfShaft].Set(66.5, 7.0, 9.75);
-	Suspension->LeftRear.Hardpoints[CORNER::InboardHalfShaft].Set(66.5, -7.0, 9.75);
-	Suspension->RightRear.Hardpoints[CORNER::OutboardHalfShaft].Set(66.5, 20.0, 10.25);
-	Suspension->LeftRear.Hardpoints[CORNER::OutboardHalfShaft].Set(66.5, -20.0, 10.25);
+	suspension->rightRear.hardpoints[Corner::InboardHalfShaft].Set(66.5, 7.0, 9.75);
+	suspension->leftRear.hardpoints[Corner::InboardHalfShaft].Set(66.5, -7.0, 9.75);
+	suspension->rightRear.hardpoints[Corner::OutboardHalfShaft].Set(66.5, 20.0, 10.25);
+	suspension->leftRear.hardpoints[Corner::OutboardHalfShaft].Set(66.5, -20.0, 10.25);
 
-	Suspension->RackRatio = 0.8 * 2.0 / 3.14159;// [in/rad]
+	suspension->rackRatio = 0.8 * 2.0 / 3.14159;// [in/rad]
 
 	// Test tires
-	Tires->RightFront->Diameter = 20.5;
-	Tires->RightFront->Width = 7.0;
+	tires->rightFront->diameter = 20.5;
+	tires->rightFront->width = 7.0;
 
-	Tires->LeftFront->Diameter = 20.5;
-	Tires->LeftFront->Width = 7.0;
+	tires->leftFront->diameter = 20.5;
+	tires->leftFront->width = 7.0;
 
-	Tires->RightRear->Diameter = 20.5;
-	Tires->RightRear->Width = 7.0;
+	tires->rightRear->diameter = 20.5;
+	tires->rightRear->width = 7.0;
 
-	Tires->LeftRear->Diameter = 20.5;
-	Tires->LeftRear->Width = 7.0;
+	tires->leftRear->diameter = 20.5;
+	tires->leftRear->width = 7.0;
 
 	// Test brakes
-	Brakes->RearBrakesInboard = true;
-	Brakes->PercentFrontBraking = 0.667;
+	brakes->rearBrakesInboard = true;
+	brakes->percentFrontBraking = 0.667;
 
 	// Test mass properties
-	MassProperties->CenterOfGravity.Set(34.0, 0.0, 8.75);
-	MassProperties->Mass = 520.0 / 32.174;
+	massProperties->centerOfGravity.Set(34.0, 0.0, 8.75);
+	massProperties->mass = 520.0 / 32.174;
 }
 
 //==========================================================================
-// Class:			CAR
-// Function:		CAR
+// Class:			Car
+// Function:		Car
 //
-// Description:		Copy Constructor for the CAR class.  This call the copy
+// Description:		Copy Constructor for the Car class.  This call the copy
 //					constructors for all of the subsystems as well.  This
 //					DOES NOT allocate memory for this car.  Correct usage is
 //					something like:
-//						CAR NewCar = new CAR(OldCar);
+//						Car NewCar = new Car(OldCar);
 //
 // Input Arguments:
-//		Car	= const &CAR that is to be copied
+//		car	= const &Car that is to be copied
 //
 // Output Arguments:
 //		None
@@ -228,26 +228,26 @@ CAR::CAR(const Debugger &_debugger) : debugger(_debugger)
 //		None
 //
 //==========================================================================
-CAR::CAR(const CAR &Car) : debugger(Car.debugger)
+Car::Car(const Car &car) : debugger(car.debugger)
 {
-	// Initialize the pointers
-	Suspension		= NULL;
-	Drivetrain		= NULL;
-	Brakes			= NULL;
-	Aerodynamics	= NULL;
-	Engine			= NULL;
-	MassProperties	= NULL;
-	Tires			= NULL;
+	// Dynamically allocate memory for these objects
+	suspension = new Suspension(debugger);
+	drivetrain = new Drivetrain(debugger);
+	brakes = new Brakes(debugger);
+	aerodynamics = new Aerodynamics(debugger);
+	engine = new Engine(debugger);
+	massProperties = new MassProperties(debugger);
+	tires = new TireSet(debugger);
 
 	// Do the copy
-	*this = Car;
+	*this = car;
 }
 
 //==========================================================================
-// Class:			CAR
-// Function:		~CAR
+// Class:			Car
+// Function:		~Car
 //
-// Description:		Destructor for the CAR class.
+// Description:		Destructor for the Car class.
 //
 // Input Arguments:
 //		None
@@ -259,36 +259,36 @@ CAR::CAR(const CAR &Car) : debugger(Car.debugger)
 //		None
 //
 //==========================================================================
-CAR::~CAR()
+Car::~Car()
 {
 	// Delete our dynamically allocated variables
-	delete Suspension;
-	Suspension = NULL;
+	delete suspension;
+	suspension = NULL;
 
-	delete Drivetrain;
-	Drivetrain = NULL;
+	delete drivetrain;
+	drivetrain = NULL;
 
-	delete Brakes;
-	Brakes = NULL;
+	delete brakes;
+	brakes = NULL;
 
-	delete Aerodynamics;
-	Aerodynamics = NULL;
+	delete aerodynamics;
+	aerodynamics = NULL;
 
-	delete Engine;
-	Engine = NULL;
+	delete engine;
+	engine = NULL;
 
-	delete MassProperties;
-	MassProperties = NULL;
+	delete massProperties;
+	massProperties = NULL;
 
-	delete Tires;
-	Tires = NULL;
+	delete tires;
+	tires = NULL;
 }
 
 //==========================================================================
-// Class:			CAR
+// Class:			Car
 // Function:		Constant definitions
 //
-// Description:		Constant definitions for the CAR class.
+// Description:		Constant definitions for the Car class.
 //
 // Input Arguments:
 //		None
@@ -300,19 +300,19 @@ CAR::~CAR()
 //		None
 //
 //==========================================================================
-//const int CAR::CurrentFileVersion = 0;// OBSOLETE 4/25/2009 - Added APPEARANCE_OPTIONS
-//const int CAR::CurrentFileVersion = 1;// OBSOLETE 8/17/2009 - Fixed ENGINE::Write()
-const int CAR::CurrentFileVersion = 2;
+//const int Car::currentFileVersion = 0;// OBSOLETE 4/25/2009 - Added APPEARANCE_OPTIONS
+//const int Car::currentFileVersion = 1;// OBSOLETE 8/17/2009 - Fixed ENGINE::Write()
+const int Car::currentFileVersion = 2;
 
 //==========================================================================
-// Class:			CAR
+// Class:			Car
 // Function:		SaveCarToFile
 //
 // Description:		Calls all of the sub-system Write() functions.
 //
 // Input Arguments:
-//		FileName	= wxString specifying the location to write to
-//		_OutFile	= std::ofstream* used to allow writing of the appearance options in
+//		fileName	= wxString specifying the location to write to
+//		_outFile	= std::ofstream* used to allow writing of the appearance options in
 //					  an external function
 //
 // Output Arguments:
@@ -322,109 +322,109 @@ const int CAR::CurrentFileVersion = 2;
 //		returns true for successful write, false otherwise
 //
 //==========================================================================
-bool CAR::SaveCarToFile(wxString FileName, std::ofstream *_OutFile) const
+bool Car::SaveCarToFile(wxString fileName, std::ofstream *_outFile) const
 {
 	// Open the specified file
-	std::ofstream OutFile(FileName.c_str(), ios::out | ios::binary);
+	std::ofstream outFile(fileName.c_str(), ios::out | ios::binary);
 
 	// Make sure the file was opened OK
-	if (!OutFile.is_open() || !OutFile.good())
+	if (!outFile.is_open() || !outFile.good())
 		return false;
 
 	// Write the file header information
-	WriteFileHeader(&OutFile);
+	WriteFileHeader(&outFile);
 
 	// Call the write functions for each sub-system class
 	// NOTE:  The order that these calls are made must be identical to the
 	// order of the Read() calls in LoadCarFromFile().
-	Aerodynamics->Write(&OutFile);
-	Brakes->Write(&OutFile);
-	Drivetrain->Write(&OutFile);
-	Engine->Write(&OutFile);
-	MassProperties->Write(&OutFile);
-	Suspension->Write(&OutFile);
-	Tires->Write(&OutFile);
+	aerodynamics->Write(&outFile);
+	brakes->Write(&outFile);
+	drivetrain->Write(&outFile);
+	engine->Write(&outFile);
+	massProperties->Write(&outFile);
+	suspension->Write(&outFile);
+	tires->Write(&outFile);
 
 	// If we're saving the options (done elsewhere), open the additional file
-	if (_OutFile != NULL)
+	if (_outFile != NULL)
 	{
-		_OutFile->open(FileName.c_str(), ios::out | ios::binary);
-		_OutFile->seekp(OutFile.tellp());
+		_outFile->open(fileName.c_str(), ios::out | ios::binary);
+		_outFile->seekp(outFile.tellp());
 	}
 
 	// Close the local version of the file
-	OutFile.close();
+	outFile.close();
 
 	return true;
 }
 
 //==========================================================================
-// Class:			CAR
+// Class:			Car
 // Function:		LoadCarFromFile
 //
 // Description:		Calls the Read() functions for each sub-system class.
 //
 // Input Arguments:
-//		FileName	= wxString specifying the location to read from
-//		_InFile		= std::ifstream* used to allow reading of the appearance options in
+//		fileName	= wxString specifying the location to read from
+//		_inFile		= std::ifstream* used to allow reading of the appearance options in
 //					  an external function
 //
 // Output Arguments:
-//		FileVersion	= int* specifying the version of the file we're reading from
+//		fileVersion	= int* specifying the version of the file we're reading from
 //
 // Return Value:
 //		None
 //
 //==========================================================================
-bool CAR::LoadCarFromFile(wxString FileName, std::ifstream *_InFile, int *FileVersion)
+bool Car::LoadCarFromFile(wxString fileName, std::ifstream *_inFile, int *fileVersion)
 {
 	// Open the specified file
-	std::ifstream InFile(FileName.c_str(), ios::in | ios::binary);
+	std::ifstream inFile(fileName.c_str(), ios::in | ios::binary);
 
 	// Make sure the file was opened OK
-	if (!InFile.is_open() || !InFile.good())
+	if (!inFile.is_open() || !inFile.good())
 		return false;
 
 	// Read the file header information
-	FILE_HEADER_INFO Header = ReadFileHeader(&InFile);
+	FileHeaderInfo header = ReadFileHeader(&inFile);
 
 	// Check to make sure the version matches
-	if (Header.FileVersion != CurrentFileVersion)
+	if (header.fileVersion != currentFileVersion)
 		debugger.Print(_T("Warning:  Opening file with out-of-date file format."),
 			Debugger::PriorityHigh);
 
 	// Call the read function for each sub-system class
 	// NOTE:  The order that these Read() calls are made must match the order
 	// of the Write() calls in SaveCarToFile().
-	Aerodynamics->Read(&InFile, Header.FileVersion);
-	Brakes->Read(&InFile, Header.FileVersion);
-	Drivetrain->Read(&InFile, Header.FileVersion);
-	Engine->Read(&InFile, Header.FileVersion);
-	MassProperties->Read(&InFile, Header.FileVersion);
-	Suspension->Read(&InFile, Header.FileVersion);
-	Tires->Read(&InFile, Header.FileVersion);
+	aerodynamics->Read(&inFile, header.fileVersion);
+	brakes->Read(&inFile, header.fileVersion);
+	drivetrain->Read(&inFile, header.fileVersion);
+	engine->Read(&inFile, header.fileVersion);
+	massProperties->Read(&inFile, header.fileVersion);
+	suspension->Read(&inFile, header.fileVersion);
+	tires->Read(&inFile, header.fileVersion);
 
 	// If we're reading the options (done elsewhere), open the additional file
-	if (InFile != NULL)
+	if (inFile != NULL)
 	{
-		_InFile->open(FileName.c_str(), ios::in | ios::binary);
-		_InFile->seekg(InFile.tellg());
-		*FileVersion = Header.FileVersion;
+		_inFile->open(fileName.c_str(), ios::in | ios::binary);
+		_inFile->seekg(inFile.tellg());
+		*fileVersion = header.fileVersion;
 	}
 	else
-		InFile.close();
+		inFile.close();
 
 	return true;
 }
 
 //==========================================================================
-// Class:			CAR
+// Class:			Car
 // Function:		WriteFileHeader
 //
 // Description:		Writes the file header information to the file stream.
 //
 // Input Arguments:
-//		OutFile	= ofstream* to write to
+//		outFile	= ofstream* to write to
 //
 // Output Arguments:
 //		None
@@ -433,49 +433,49 @@ bool CAR::LoadCarFromFile(wxString FileName, std::ifstream *_InFile, int *FileVe
 //		None
 //
 //==========================================================================
-void CAR::WriteFileHeader(std::ofstream *OutFile) const
+void Car::WriteFileHeader(std::ofstream *outFile) const
 {
 	// Set up the header information
-	FILE_HEADER_INFO Header;
-	Header.FileVersion = CurrentFileVersion;
+	FileHeaderInfo header;
+	header.fileVersion = currentFileVersion;
 
 	// Set the write pointer to the start of the file
-	OutFile->seekp(0);
+	outFile->seekp(0);
 
 	// Write the header
-	OutFile->write((char*)&Header, sizeof(FILE_HEADER_INFO));
+	outFile->write((char*)&header, sizeof(FileHeaderInfo));
 }
 
 //==========================================================================
-// Class:			CAR
+// Class:			Car
 // Function:		ReadFileHeader
 //
 // Description:		Reads the file header information from the file stream.
 //
 // Input Arguments:
-//		InFile	= ifstream* to read from
+//		inFile	= ifstream* to read from
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		FILE_HEADER_INFO as read from the specified file
+//		FileHeaderInfo as read from the specified file
 //
 //==========================================================================
-CAR::FILE_HEADER_INFO CAR::ReadFileHeader(std::ifstream *InFile) const
+Car::FileHeaderInfo Car::ReadFileHeader(std::ifstream *inFile) const
 {
 	// Set get pointer to the start of the file
-	InFile->seekg(0);
+	inFile->seekg(0);
 
 	// Read the header struct
-	char Buffer[sizeof(FILE_HEADER_INFO)];
-	InFile->read((char*)Buffer, sizeof(FILE_HEADER_INFO));
+	char buffer[sizeof(FileHeaderInfo)];
+	inFile->read((char*)buffer, sizeof(FileHeaderInfo));
 
-	return *reinterpret_cast<FILE_HEADER_INFO*>(Buffer);
+	return *reinterpret_cast<FileHeaderInfo*>(buffer);
 }
 
 //==========================================================================
-// Class:			CAR
+// Class:			Car
 // Function:		ComputeWheelCenters
 //
 // Description:		Calls the suspension method that computes the wheel center
@@ -491,15 +491,15 @@ CAR::FILE_HEADER_INFO CAR::ReadFileHeader(std::ifstream *InFile) const
 //		None
 //
 //==========================================================================
-void CAR::ComputeWheelCenters(void)
+void Car::ComputeWheelCenters(void)
 {
 	// Call the compute method with the correct tire diameters
-	Suspension->ComputeWheelCenters(Tires->RightFront->Diameter, Tires->LeftFront->Diameter,
-		Tires->RightRear->Diameter, Tires->LeftRear->Diameter);
+	suspension->ComputeWheelCenters(tires->rightFront->diameter, tires->leftFront->diameter,
+		tires->rightRear->diameter, tires->leftRear->diameter);
 }
 
 //==========================================================================
-// Class:			CAR
+// Class:			Car
 // Function:		HasFrontHalfShafts
 //
 // Description:		Determines whether or not this car has front half shafts.
@@ -515,20 +515,20 @@ void CAR::ComputeWheelCenters(void)
 //		bool, true if the car is AWD, FWD, or has inboard front brakes
 //
 //==========================================================================
-bool CAR::HasFrontHalfShafts(void) const
+bool Car::HasFrontHalfShafts(void) const
 {
 	// If the car is all wheel drive, front wheel drive, or has inboard front
 	// brakes, this car has front half shafts
-	if (Drivetrain->DriveType == DRIVETRAIN::DRIVE_ALL_WHEEL ||
-		Drivetrain->DriveType == DRIVETRAIN::DRIVE_FRONT_WHEEL ||
-		Brakes->FrontBrakesInboard)
+	if (drivetrain->driveType == Drivetrain::DriveAllWheel ||
+		drivetrain->driveType == Drivetrain::DriveFrontWheel ||
+		brakes->frontBrakesInboard)
 		return true;
 
 	return false;
 }
 
 //==========================================================================
-// Class:			CAR
+// Class:			Car
 // Function:		HasRearHalfShafts
 //
 // Description:		Determines whether or not this car has rear half shafts.
@@ -544,65 +544,48 @@ bool CAR::HasFrontHalfShafts(void) const
 //		bool, true if the car is AWD, RWD, or has inboard rear brakes
 //
 //==========================================================================
-bool CAR::HasRearHalfShafts(void) const
+bool Car::HasRearHalfShafts(void) const
 {
 	// If the car is all wheel drive, front wheel drive, or has inboard front
 	// brakes, this car has front half shafts
-	if (Drivetrain->DriveType == DRIVETRAIN::DRIVE_ALL_WHEEL ||
-		Drivetrain->DriveType == DRIVETRAIN::DRIVE_REAR_WHEEL ||
-		Brakes->RearBrakesInboard)
+	if (drivetrain->driveType == Drivetrain::DriveAllWheel ||
+		drivetrain->driveType == Drivetrain::DriveRearWheel ||
+		brakes->rearBrakesInboard)
 		return true;
 
 	return false;
 }
 
 //==========================================================================
-// Class:			CAR
+// Class:			Car
 // Function:		operator=
 //
-// Description:		Assignment operator for the CAR class.
+// Description:		Assignment operator for the Car class.
 //
 // Input Arguments:
-//		Car	= const CAR& to assign to this
+//		car	= const Car& to assign to this
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		CAR& reference to this
+//		Car& reference to this
 //
 //==========================================================================
-CAR& CAR::operator=(const CAR &Car)
+Car& Car::operator=(const Car &car)
 {
 	// Check for self-assignment
-	if (this == &Car)
+	if (this == &car)
 		return *this;
 
-	// Delete existing class members
-	delete Suspension;
-	delete Drivetrain;
-	delete Brakes;
-	delete Aerodynamics;
-	delete Engine;
-	delete MassProperties;
-	delete Tires;
-
-	Suspension		= NULL;
-	Drivetrain		= NULL;
-	Brakes			= NULL;
-	Aerodynamics	= NULL;
-	Engine			= NULL;
-	MassProperties	= NULL;
-	Tires			= NULL;
-
 	// Do the copy
-	Suspension		= new SUSPENSION(*Car.Suspension);
-	Drivetrain		= new DRIVETRAIN(*Car.Drivetrain);
-	Brakes			= new BRAKES(*Car.Brakes);
-	Aerodynamics	= new AERODYNAMICS(*Car.Aerodynamics);
-	Engine			= new ENGINE(*Car.Engine);
-	MassProperties	= new MASS_PROPERTIES(*Car.MassProperties);
-	Tires			= new TIRE_SET(*Car.Tires);
+	*suspension		= *car.suspension;
+	*drivetrain		= *car.drivetrain;
+	*brakes			= *car.brakes;
+	*aerodynamics	= *car.aerodynamics;
+	*engine			= *car.engine;
+	*massProperties	= *car.massProperties;
+	*tires			= *car.tires;
 
 	return *this;
 }

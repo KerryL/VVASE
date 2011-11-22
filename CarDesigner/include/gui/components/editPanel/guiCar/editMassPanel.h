@@ -21,7 +21,7 @@
 
 // VVASE forward declarations
 class EDIT_PANEL;
-class MASS_PROPERTIES;
+class MassProperties;
 
 class EDIT_MASS_PANEL : public wxScrolledWindow
 {
@@ -34,7 +34,7 @@ public:
 	~EDIT_MASS_PANEL();
 
 	// Updates the information on the panel
-	void UpdateInformation(MASS_PROPERTIES *_CurrentMassProperties);
+	void UpdateInformation(MassProperties *_CurrentMassProperties);
 
 private:
 	// Debugger message printing utility
@@ -47,7 +47,7 @@ private:
 	EDIT_PANEL &Parent;
 
 	// The data with which we are currently associated
-	MASS_PROPERTIES *CurrentMassProperties;
+	MassProperties *CurrentMassProperties;
 
 	// Creates the controls and positions everything within the panel
 	void CreateControls(void);

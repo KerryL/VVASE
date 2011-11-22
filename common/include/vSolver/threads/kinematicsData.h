@@ -25,22 +25,21 @@
 #include "vSolver/physics/kinematics.h"
 
 // VVASE forward declarations
-class CAR;
-class KINEMATIC_OUTPUTS;
+class Car;
 
 class KinematicsData : public ThreadData
 {
 public:
 	// Constructor
-	KinematicsData(const CAR *_originalCar, CAR *_workingCar,
+	KinematicsData(const Car *_originalCar, Car *_workingCar,
 		Kinematics::Inputs _kinematicInputs, KinematicOutputs *_output);
 
 	// Destructor
 	~KinematicsData();
 
 	// Data required to perform kinematic analyses (for GUI_CAR or ITERATION objects)
-	const CAR *originalCar;
-	CAR *workingCar;
+	const Car *originalCar;
+	Car *workingCar;
 	Kinematics::Inputs kinematicInputs;
 	KinematicOutputs *output;
 

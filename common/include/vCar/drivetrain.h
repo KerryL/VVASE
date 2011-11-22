@@ -31,66 +31,66 @@
 class Debugger;
 
 // vCar forward declarations
-class DIFFERENTIAL;
+class Differential;
 
-class DRIVETRAIN
+class Drivetrain
 {
 public:
 	// Constructor
-	DRIVETRAIN(const Debugger &_debugger);
-	DRIVETRAIN(const DRIVETRAIN &Drivetrain);
+	Drivetrain(const Debugger &_debugger);
+	Drivetrain(const Drivetrain &drivetrain);
 
 	// Destructor
-	~DRIVETRAIN();
+	~Drivetrain();
 
 	// File read/write functions
-	void Write(std::ofstream *OutFile) const;
-	void Read(std::ifstream *InFile, int FileVersion);
+	void Write(std::ofstream *outFile) const;
+	void Read(std::ifstream *inFile, int fileVersion);
 
 	// The selected gear
 	short Gear;
 
 	// Retreives the outputs for this class
-	double OutputTorque(const double &InputTorque) const;	// [in-lbf]
-	double OutputSpeed(const double &InputSpeed) const;		// [rad/sec]
+	double OutputTorque(const double &inputTorque) const;	// [in-lbf]
+	double OutputSpeed(const double &inputSpeed) const;		// [rad/sec]
 
 	// Enumeration that describe the wheels driven by this drivetrain
-	enum DRIVE_WHEELS
+	enum DriveWheels
 	{
-		DRIVE_REAR_WHEEL,
-		DRIVE_FRONT_WHEEL,
-		DRIVE_ALL_WHEEL,
+		DriveRearWheel,
+		DriveFrontWheel,
+		DriveAllWheel,
 
 		NumberOfDriveTypes
 	};
 
-	static wxString GetDriveWheelsName(const DRIVE_WHEELS &_DriveWheels);
+	static wxString GetDriveWheelsName(const DriveWheels &_driveWheels);
 
 	// The value describing the wheels driven by this drivetrain
-	DRIVE_WHEELS DriveType;
+	DriveWheels driveType;
 
 	// Sets the number of gears available with this drivetrain
-	void SetNumberOfGears(const short &NumGears);
+	void SetNumberOfGears(const short &numGears);
 
 	// Operators
-	DRIVETRAIN& operator = (const DRIVETRAIN &Drivetrain);
+	Drivetrain& operator = (const Drivetrain &drivetrain);
 
 private:
 	// Debugger message printing utility
 	const Debugger &debugger;
 
 	// The differential for this drivetrain
-	DIFFERENTIAL *Differential;
+	Differential *differential;
 
 	// The number of gears available
-	short NumberOfGears;
+	short numberOfGears;
 
 	// The inertia for the rotating components in the drivetrain
-	double TransmissionInertia;					// [slug-ft^2] (w.r.t. high speed side)
+	double transmissionInertia;					// [slug-ft^2] (w.r.t. high speed side)
 
 	// Array of gear ratios for each gear (not including final
 	// drive - that is in the DIFFERENTIAL object)
-	double *GearRatio;							// [-]
+	double *gearRatio;							// [-]
 
 	// Clutch stuff in here, too?
 };

@@ -10,7 +10,7 @@
 // File:  damper.cpp
 // Created:  1/3/2009
 // Author:  K. Loux
-// Description:  Contains class definition for DAMPER class.  This class contains
+// Description:  Contains class definition for Damper class.  This class contains
 //				 the information and methods required to model a non-linear viscous
 //				 damper.
 // History:
@@ -20,10 +20,10 @@
 #include "vCar/damper.h"
 
 //==========================================================================
-// Class:			DAMPER
-// Function:		DAMPER
+// Class:			Damper
+// Function:		Damper
 //
-// Description:		Constructor for DAMPER class.
+// Description:		Constructor for Damper class.
 //
 // Input Arguments:
 //		None
@@ -35,15 +35,15 @@
 //		None
 //
 //==========================================================================
-DAMPER::DAMPER()
+Damper::Damper()
 {
 }
 
 //==========================================================================
-// Class:			DAMPER
-// Function:		~DAMPER
+// Class:			Damper
+// Function:		~Damper
 //
-// Description:		Destructor for DAMPER class.
+// Description:		Destructor for Damper class.
 //
 // Input Arguments:
 //		None
@@ -55,6 +55,6 @@ DAMPER::DAMPER()
 //		None
 //
 //==========================================================================
-DAMPER::~DAMPER()
+Damper::~Damper()
 {
 }

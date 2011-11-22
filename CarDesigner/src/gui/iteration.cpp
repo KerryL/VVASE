@@ -388,9 +388,9 @@ void ITERATION::UpdateData(void)
 		}
 		delete [] WorkingCarArray;
 		NumberOfWorkingCars = inverseSemaphore.GetCount();
-		WorkingCarArray = new CAR*[NumberOfWorkingCars];
+		WorkingCarArray = new Car*[NumberOfWorkingCars];
 		for (i = 0; i < NumberOfWorkingCars; i++)
-			WorkingCarArray[i] = new CAR(debugger);
+			WorkingCarArray[i] = new Car(debugger);
 	}
 
 	// Go through car-by-car

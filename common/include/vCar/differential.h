@@ -26,48 +26,50 @@
 // vUtilities forward declarations
 class Debugger;
 
-class DIFFERENTIAL
+class Differential
 {
 public:
 	// Constructor
-	DIFFERENTIAL(const Debugger &_debugger);
-	DIFFERENTIAL(const DIFFERENTIAL &Differential);
+	Differential(const Debugger &_debugger);
+	Differential(const Differential &differential);
 
 	// Destructor
-	~DIFFERENTIAL();
+	~Differential();
 
 	// File read/write functions
-	void Write(std::ofstream *OutFile) const;
-	void Read(std::ifstream *InFile, int FileVersion);
+	void Write(std::ofstream *outFile) const;
+	void Read(std::ifstream *inFile, int fileVersion);
 
 	// Retrieves the output torque on each side of the differential
-	double GetTorque1(const double &InputTorque) const;// Front or right
-	double GetToruqe2(const double &InputTorque) const;// Rear or left
+	double GetTorque1(const double &inputTorque) const;// Front or right
+	double GetToruqe2(const double &inputTorque) const;// Rear or left
 
 	// Enumeration describing the different differentials that can be modeled
-	enum DIFFERENTIAL_STYLE
+	enum DifferentialStyle
 	{
-		TORSION_TYPE_1,
-		TORSION_TYPE_2,
-		SALISBURY,
-		LOCKED,
-		OPEN,
-		CAM_AND_PAWL
+		TorsionType1,
+		TorsionType2,
+		Salisbury,
+		Locked,
+		Open,
+		CamAndPawl,
+
+		NumberOfStyles
 	};
 
 	// Overloaded operators
-	DIFFERENTIAL& operator = (const DIFFERENTIAL &Differential);
+	Differential& operator = (const Differential &differential);
 
 private:
 	// Debugger message printing utility
 	const Debugger &debugger;
 
 	// The parameters that describe the differential physics
-	double BiasRatio;		// [-]
-	double Preload;			// [lbf]
+	double biasRatio;		// [-]
+	double preload;			// [lbf]
 
 	// The style differential modeled by this object
-	DIFFERENTIAL_STYLE Style;
+	DifferentialStyle style;
 };
 
 #endif// _DIFFERENTIAL_H_

@@ -32,7 +32,7 @@
 #include "vCar/brakes.h"
 #include "vCar/drivetrain.h"
 #include "vCar/engine.h"
-#include "vCar/mass.h"
+#include "vCar/massProperties.h"
 #include "vCar/suspension.h"
 #include "vCar/tire.h"
 #include "gui/renderer/carRenderer.h"
@@ -69,8 +69,8 @@ GUI_CAR::GUI_CAR(MAIN_FRAME &_MainFrame, const Debugger &_debugger,
 				 : GUI_OBJECT(_MainFrame, _debugger, _PathAndFileName)
 {
 	// Allocate memory for the original and working cars
-	OriginalCar = new CAR(debugger);
-	WorkingCar = new CAR(*OriginalCar);
+	OriginalCar = new Car(debugger);
+	WorkingCar = new Car(*OriginalCar);
 
 	// Create the appearance options object
 	AppearanceOptions = new APPEARANCE_OPTIONS(MainFrame, *this, debugger);

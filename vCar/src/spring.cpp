@@ -10,7 +10,7 @@
 // File:  spring.cpp
 // Created:  1/3/2009
 // Author:  K. Loux
-// Description:  Contains class definition for SPRING class.  This class contains
+// Description:  Contains class definition for Spring class.  This class contains
 //				 the information and methods required to model a non-linear spring.
 // History:
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
@@ -19,10 +19,10 @@
 #include "vCar/spring.h"
 
 //==========================================================================
-// Class:			SPRING
-// Function:		SPRING
+// Class:			Spring
+// Function:		Spring
 //
-// Description:		Constructor for SPRING class.
+// Description:		Constructor for Spring class.
 //
 // Input Arguments:
 //		None
@@ -34,15 +34,15 @@
 //		None
 //
 //==========================================================================
-SPRING::SPRING()
+Spring::Spring()
 {
 }
 
 //==========================================================================
-// Class:			SPRING
-// Function:		~SPRING
+// Class:			Spring
+// Function:		~Spring
 //
-// Description:		Destructor for SPRING class.
+// Description:		Destructor for Spring class.
 //
 // Input Arguments:
 //		None
@@ -54,6 +54,6 @@ SPRING::SPRING()
 //		None
 //
 //==========================================================================
-SPRING::~SPRING()
+Spring::~Spring()
 {
 }

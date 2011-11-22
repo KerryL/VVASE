@@ -23,7 +23,7 @@
 // VVASE forward declarations
 class Debugger;
 class Convert;
-class CAR;
+class Car;
 class KinematicOutputs;
 class MAIN_FRAME;
 
@@ -38,7 +38,7 @@ public:
 	~OUTPUT_PANEL();
 
 	// Updates the information on the panel
-	void UpdateInformation(KinematicOutputs Outputs, CAR &Car, int Index,
+	void UpdateInformation(KinematicOutputs Outputs, Car &car, int Index,
 		wxString Name);
 	void FinishUpdate(int _NumberOfDataColumns);
 

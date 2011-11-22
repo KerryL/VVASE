@@ -26,7 +26,7 @@ class wxCheckBox;
 
 // VVASE forward declarations
 class Debugger;
-class CAR;
+class Car;
 class EDIT_PANEL;
 class EDIT_CORNER_PANEL;
 class EDIT_SUSPENSION_PANEL;
@@ -45,7 +45,7 @@ public:
 	inline EDIT_PANEL &GetParent() { return Parent; };
 
 	// Updates the information on the panel
-	void UpdateInformation(CAR *_CurrentCar);
+	void UpdateInformation(Car *_CurrentCar);
 	void UpdateInformation(void);
 
 	// Keeps the sides of the car identical for symmetric suspensions
@@ -59,7 +59,7 @@ private:
 	EDIT_PANEL &Parent;
 
 	// The object with which we are currently associated
-	CAR *CurrentCar;
+	Car *CurrentCar;
 
 	// Creates the controls and positions everything within the panel
 	void CreateControls(void);

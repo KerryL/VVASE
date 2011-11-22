@@ -443,7 +443,7 @@ void MAIN_FRAME::InitializeSolver(void)
 	NumberOfThreads = 0;
 
 	// Pass the debugger information objects that have a static pointer to the debugger
-	SUSPENSION::SetDebugger(debugger);
+	Suspension::SetDebugger(debugger);
 	KinematicOutputs::SetDebugger(debugger);
 
 	// Zero out kinematic inputs

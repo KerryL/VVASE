@@ -37,7 +37,7 @@
 
 // VVASE forward declarations
 class CAR_RENDERER;
-class CAR;
+class Car;
 class Debugger;
 class APPEARANCE_OPTIONS;
 
@@ -62,8 +62,8 @@ public:
 	void UpdateDisplay(void);
 
 	// Private member accessors
-	inline CAR &GetOriginalCar(void) { return *OriginalCar; };
-	inline CAR &GetWorkingCar(void) { return *WorkingCar; };
+	inline Car &GetOriginalCar(void) { return *OriginalCar; };
+	inline Car &GetWorkingCar(void) { return *WorkingCar; };
 	inline APPEARANCE_OPTIONS &GetAppearanceOptions(void) { return *AppearanceOptions; };
 
 	// Returns this object's type
@@ -94,10 +94,10 @@ public:
 
 private:
 	// The "real" object containing the original, unmodified information (not rolled, heaved, etc.)
-	CAR *OriginalCar;
+	Car *OriginalCar;
 
 	// Reference to the object that we manipulate as we do our analyses
-	CAR *WorkingCar;
+	Car *WorkingCar;
 
 	// Performs the saving and loading to/from file (mandatory overloads)
 	bool PerformLoadFromFile(void);

@@ -10,7 +10,7 @@
 // File:  tireSet.h
 // Created:  3/9/2008
 // Author:  K. Loux
-// Description:  Contains class declaration for TIRE_SET class.  This class contains a set
+// Description:  Contains class declaration for TireSet class.  This class contains a set
 //				 of four tires.  Required to manage dynamic memory allocation of a set of tires.
 // History:
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
@@ -22,33 +22,33 @@
 #include <iosfwd>// forward declarations of fstream objects
 
 // vCar forward declarations
-class TIRE;
+class Tire;
 
 // vUtilities forward declarations
 class Debugger;
 
-class TIRE_SET
+class TireSet
 {
 public:
 	// Constructor
-	TIRE_SET(const Debugger &_debugger);
-	TIRE_SET(const TIRE_SET &TireSet);
+	TireSet(const Debugger &_debugger);
+	TireSet(const TireSet &tireSet);
 
 	// Destructor
-	~TIRE_SET();
+	~TireSet();
 
 	// File read/write functions
-	void Write(std::ofstream *OutFile) const;
-	void Read(std::ifstream *InFile, int FileVersion);
+	void Write(std::ofstream *outFile) const;
+	void Read(std::ifstream *inFile, int fileVersion);
 
 	// The four tires
-	TIRE *RightFront;
-	TIRE *LeftFront;
-	TIRE *RightRear;
-	TIRE *LeftRear;
+	Tire *rightFront;
+	Tire *leftFront;
+	Tire *rightRear;
+	Tire *leftRear;
 
 	// This class contains dynamically allocated memory - overload the assigment operator
-	TIRE_SET& operator = (const TIRE_SET &TireSet);
+	TireSet& operator = (const TireSet &tireSet);
 
 private:
 	// Debugger message printing utility

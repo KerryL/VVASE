@@ -24,11 +24,10 @@
 // Description:		Constructor for the KinematicsData class.
 //
 // Input Arguments:
-//		_command	= ThreadCommands specifying the command type for this job
-//		_data		= KinematicsData* containing any additional data about the job
-//		_name		= const wxString& Name of the car
-//		_index		= int& representing the object index for the associated object
-//					  in the MAIN_FRAME
+//		_originalCar		= const Car*
+//		_workingCar			= Car*
+//		_kinematicInputs	= Kinematics::Inputs
+//		_output				= KinematicOutputs*
 //
 // Output Arguments:
 //		None
@@ -37,7 +36,7 @@
 //		None
 //
 //==========================================================================
-KinematicsData::KinematicsData(const CAR *_originalCar, CAR *_workingCar,
+KinematicsData::KinematicsData(const Car *_originalCar, Car *_workingCar,
 								 Kinematics::Inputs _kinematicInputs,
 								 KinematicOutputs *_output) : ThreadData(),
 								 originalCar(_originalCar),

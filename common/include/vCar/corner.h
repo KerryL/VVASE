@@ -32,11 +32,11 @@
 // VVASE forward declarations
 class Debugger;
 
-class CORNER
+class Corner
 {
 public:
 	// Enumeration describing the physical location of the corner on the car
-	enum LOCATION
+	enum Location
 	{
 		LocationRightFront,
 		LocationLeftFront,
@@ -47,21 +47,21 @@ public:
 	};
 
 	// Constructor
-	CORNER(const LOCATION &_Location, const Debugger &_debugger);
+	Corner(const Location &_location, const Debugger &_debugger);
 
 	// Destructor
-	~CORNER();
+	~Corner();
 
 	// File read/write functions
-	void Write(std::ofstream *OutFile) const;
-	void Read(std::ifstream *InFile, int FileVersion);
+	void Write(std::ofstream *outFile) const;
+	void Read(std::ifstream *inFile, int fileVersion);
 
 	// Calculates the wheel center location based on static toe and camber
-	void ComputeWheelCenter(const double &TireDiameter);
+	void ComputeWheelCenter(const double &tireDiameter);
 
 	// Enumeration that describes the different suspension actuation types
 	// we can model
-	enum ACTUATION_ATTACHMENT
+	enum ActuationAttachment
 	{
 		AttachmentLowerAArm,
 		AttachmentUpperAArm,
@@ -71,7 +71,7 @@ public:
 	};
 
 	// Enumeration for actuation type
-	enum ACTUATION_TYPE
+	enum ActuationType
 	{
 		ActuationPushPullrod,
 		ActuationOutboard,
@@ -80,7 +80,7 @@ public:
 	};
 
 	// Enumberation for suspension hardpoints
-	enum HARDPOINTS
+	enum Hardpoints
 	{
 		LowerFrontTubMount,
 		LowerRearTubMount,
@@ -106,11 +106,11 @@ public:
 		GearEndBarShaft,		// Gear style bars only
 
 		// Drivetrain geometery
-		// These were previously a member of the DRIVETRAIN class, but there were
+		// These were previously a member of the Drivetrain class, but there were
 		// some heap allocation problems (crashes and memory leaks as a result of
-		// trying to delete the dynamic GearRatio variable) due to creating new CAR
-		// objects for STATIC_ANALYSIS.  Puting these here allows us to declare only
-		// new SUSPENSION objects instead of whole cars, which fixes the memory
+		// trying to delete the dynamic GearRatio variable) due to creating new Car
+		// objects for Kinematics.  Puting these here allows us to declare only
+		// new Suspension objects instead of whole cars, which fixes the memory
 		// problem and makes some of the code more concise and neater.
 		OutboardHalfShaft,
 		InboardHalfShaft,
@@ -119,33 +119,33 @@ public:
 	};
 
 	// For getting the names of the elements of this class
-	static wxString GetHardpointName(const HARDPOINTS &Point);
-	static wxString GetActuationAttachmentName(const ACTUATION_ATTACHMENT &_Attachment);
-	static wxString GetActuationTypeName(const ACTUATION_TYPE &_Type);
-	static wxString GetLocationName(const LOCATION &_Location);
+	static wxString GetHardpointName(const Hardpoints &point);
+	static wxString GetActuationAttachmentName(const ActuationAttachment &_attachment);
+	static wxString GetActuationTypeName(const ActuationType &_type);
+	static wxString GetLocationName(const Location &_location);
 
 	// Suspension parameters
-	double StaticCamber;			// [rad] - positive top away from the center car
-	double StaticToe;				// [rad] - positive front away the center of the car
-	SPRING Spring;
-	DAMPER Damper;
+	double staticCamber;			// [rad] - positive top away from the center car
+	double staticToe;				// [rad] - positive front away the center of the car
+	Spring spring;
+	Damper damper;
 	// Bump stops (with non-linear rates?)
 	// Droop limiters
 
 	// Defines how the shock/spring is actuated for this CORNER
-	ACTUATION_ATTACHMENT ActuationAttachment;
+	ActuationAttachment actuationAttachment;
 
 	// Defines what kind of actuation we have for this CORNER
-	ACTUATION_TYPE ActuationType;
+	ActuationType actuationType;
 
 	// The location of this corner on the car
-	const LOCATION Location;
+	const Location location;
 
 	// The actual hardpoint locations
-	Vector Hardpoints[NumberOfHardpoints];
+	Vector hardpoints[NumberOfHardpoints];
 
 	// Operators
-	CORNER& operator=(const CORNER& Corner);
+	Corner& operator=(const Corner& corner);
 
 private:
 	// Debugger message printing utility

@@ -24,33 +24,33 @@
 // vUtilites forward declarations
 class Debugger;
 
-class ENGINE
+class Engine
 {
 public:
 	// Constructor
-	ENGINE(const Debugger &_debugger);
-	ENGINE(const ENGINE &Engine);
+	Engine(const Debugger &_debugger);
+	Engine(const Engine &engine);
 
 	// Destructor
-	~ENGINE();
+	~Engine();
 
 	// File read/write functions
-	void Write(std::ofstream *OutFile) const;
-	void Read(std::ifstream *InFile, int FileVersion);
+	void Write(std::ofstream *outFile) const;
+	void Read(std::ifstream *inFile, int fileVersion);
 
 	// Get the outputs from this portion of the simulation
-	double GetEngineSpeed(void) { return CrankshaftSpeed; };// [rad/sec]
-	double TorqueOutput(const double &EngineSpeed, const double &ThrottlePosition);// [in-lb]
+	double GetEngineSpeed(void) { return crankshaftSpeed; };// [rad/sec]
+	double TorqueOutput(const double &engineSpeed, const double &throttlePosition);// [in-lb]
 
 	// Overloaded operators
-	ENGINE& operator = (const ENGINE &Engine);
+	Engine& operator = (const Engine &engine);
 
 private:
 	// Debugger message printing utility
 	const Debugger &debugger;
 
 	// The crankshaft speed
-	double CrankshaftSpeed;// [rad/sec]
+	double crankshaftSpeed;// [rad/sec]
 };
 
 #endif// _ENGINE_H_

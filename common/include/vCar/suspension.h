@@ -10,9 +10,9 @@
 // File:  suspension.h
 // Created:  11/3/2007
 // Author:  K. Loux
-// Description:  Contains class declaration for SUSPENSION class.
+// Description:  Contains class declaration for Suspension class.
 // History:
-//	2/24/2008	- Moved half shaft points into here from DRIVETRAIN object, K. Loux.
+//	2/24/2008	- Moved half shaft points into here from Drivetrain object, K. Loux.
 //	2/25/2008	- Named BAR_STYLE and ACTUATION_STYLE enums, K. Loux.
 //	3/9/2008	- Moved enumerations inside class structure and changed the structure of the
 //				  Debugger class, K. Loux.
@@ -36,29 +36,29 @@
 #include "vUtilities/wheelSetStructures.h"
 #include "vUtilities/debugger.h"
 
-class SUSPENSION
+class Suspension
 {
 public:
 	// Constructor
-	SUSPENSION(const Debugger &_debugger);
+	Suspension(const Debugger &_debugger);
 
 	// Destructor
-	~SUSPENSION();
+	~Suspension();
 
 	// For assigning the debugger pointer
 	// (MUST be called before calling other static member functions!)
 	inline static void SetDebugger(const Debugger &_debugger) { debugger = &_debugger; };
 
 	// File read/write functions
-	void Write(std::ofstream *OutFile) const;
-	void Read(std::ifstream *InFile, int FileVersion);
+	void Write(std::ofstream *outFile) const;
+	void Read(std::ifstream *inFile, int fileVersion);
 
 	// Calls the methods that calculate the wheel center location at each corner
-	void ComputeWheelCenters(const double &RFTireDiameter, const double &LFTireDiameter,
-		const double &RRTireDiameter, const double &LRTireDiameter);
+	void ComputeWheelCenters(const double &rfTireDiameter, const double &lfTireDiameter,
+		const double &rrTireDiameter, const double &lrTireDiameter);
 
 	// Enumeration describing the available sway bar models
-	enum BAR_STYLE
+	enum BarStyle
 	{
 		SwayBarNone,
 		SwayBarUBar,
@@ -69,7 +69,7 @@ public:
 	};
 
 	// Enumeration describing the available sway bar attachment points
-	enum BAR_ATTACHMENT
+	enum BarAttachment
 	{
 		BarAttachmentBellcrank,
 		BarAttachmentLowerAArm,
@@ -80,7 +80,7 @@ public:
 	};
 
 	// Enumeration for all of the hardpoints included in this class
-	enum HARDPOINTS
+	enum Hardpoints
 	{
 		FrontBarMidPoint,			// U-bar and T-bar only
 		FrontThirdSpringInboard,
@@ -98,52 +98,52 @@ public:
 	};
 
 	// For getting the name of the elements of this class
-	static wxString GetHardpointName(const HARDPOINTS &Point);
-	static wxString GetBarStyleName(const BAR_STYLE &_BarStyle);
-	static wxString GetBarAttachmentname(const BAR_ATTACHMENT &_BarAttachment);
+	static wxString GetHardpointName(const Hardpoints &point);
+	static wxString GetBarStyleName(const BarStyle &_barStyle);
+	static wxString GetBarAttachmentname(const BarAttachment &_barAttachment);
 
 	// Suspension hardpoints
-	CORNER RightFront;
-	CORNER LeftFront;
-	CORNER RightRear;
-	CORNER LeftRear;
+	Corner rightFront;
+	Corner leftFront;
+	Corner rightRear;
+	Corner leftRear;
 
 	// The hardpoints that are not within the corner
-	Vector Hardpoints[NumberOfHardpoints];
+	Vector hardpoints[NumberOfHardpoints];
 
 	// Suspension parameters
-	FrontRearDouble BarRate;			// [in-lb/rad]
-	double RackRatio;					// (inches rack travel) / (radians at steering wheel)
+	FrontRearDouble barRate;			// [in-lb/rad]
+	double rackRatio;					// (inches rack travel) / (radians at steering wheel)
 
 	// Flags and styles
-	bool IsSymmetric;
-	BAR_STYLE FrontBarStyle;
-	BAR_STYLE RearBarStyle;
-	BAR_ATTACHMENT FrontBarAttachment;
-	BAR_ATTACHMENT RearBarAttachment;
-	bool FrontHasThirdSpring;
-	bool RearHasThirdSpring;
+	bool isSymmetric;
+	BarStyle frontBarStyle;
+	BarStyle rearBarStyle;
+	BarAttachment frontBarAttachment;
+	BarAttachment rearBarAttachment;
+	bool frontHasThirdSpring;
+	bool rearHasThirdSpring;
 
 	// Third spring and damper objects
-	SPRING FrontThirdSpring;
-	SPRING RearThirdSpring;
-	DAMPER FrontThirdDamper;
-	DAMPER RearThirdDamper;
+	Spring frontThirdSpring;
+	Spring rearThirdSpring;
+	Damper frontThirdDamper;
+	Damper rearThirdDamper;
 
 	// Kinematic solvers
-	static bool SolveForPoint(const Vector &Center1, const Vector &Center2, const Vector &Center3,
-		const Vector &OriginalCenter1, const Vector &OriginalCenter2, const Vector &OriginalCenter3,
-		const Vector &Original, Vector &Current);
-	static bool SolveForXY(const Vector &Center1, const Vector &Center2, const Vector &OriginalCenter1,
-		const Vector &OriginalCenter2, const Vector &Original, Vector &Current);
-	static bool SolveForContactPatch(const Vector &WheelCenter, const Vector &WheelPlaneNormal,
-		const double &TireRadius, Vector &Output);
+	static bool SolveForPoint(const Vector &center1, const Vector &center2, const Vector &center3,
+		const Vector &originalCenter1, const Vector &originalCenter2, const Vector &originalCenter3,
+		const Vector &original, Vector &current);
+	static bool SolveForXY(const Vector &center1, const Vector &center2, const Vector &originalCenter1,
+		const Vector &originalCenter2, const Vector &original, Vector &current);
+	static bool SolveForContactPatch(const Vector &wheelCenter, const Vector &wheelPlaneNormal,
+		const double &tireRadius, Vector &output);
 
 	// Other functions
-	void MoveSteeringRack(const double &Travel);
+	void MoveSteeringRack(const double &travel);
 
 	// Operators
-	SUSPENSION& operator=(const SUSPENSION& Suspension);
+	Suspension& operator=(const Suspension& suspension);
 
 private:
 	// Debugger message printing utility

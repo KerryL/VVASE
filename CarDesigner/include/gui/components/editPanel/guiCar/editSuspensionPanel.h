@@ -25,7 +25,7 @@ class wxGridEvent;
 
 // VVASE forward declarations
 class Debugger;
-class SUSPENSION;
+class Suspension;
 class Convert;
 class Vector;
 class SuperGrid;
@@ -42,7 +42,7 @@ public:
 	~EDIT_SUSPENSION_PANEL();
 
 	// Updates the information on the panel
-	void UpdateInformation(SUSPENSION *_CurrentSuspension);
+	void UpdateInformation(Suspension *_CurrentSuspension);
 	void UpdateInformation(void);
 
 private:
@@ -56,7 +56,7 @@ private:
 	EDIT_SUSPENSION_NOTEBOOK &Parent;
 
 	// The suspension with which we are currently associated
-	SUSPENSION *CurrentSuspension;
+	Suspension *CurrentSuspension;
 
 	// Creates the controls and positions everything within the panel
 	void CreateControls(void);

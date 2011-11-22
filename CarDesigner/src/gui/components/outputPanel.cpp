@@ -111,7 +111,7 @@ END_EVENT_TABLE()
 // Input Arguments:
 //		Outputs		= KinematicOutputs containing the outputs we want to use
 //					  for the update
-//		Car			= CAR& pointing to the car with which these outputs are associated
+//		car			= Car& pointing to the car with which these outputs are associated
 //		Index		= int specifying the data column to edit
 //		Name		= wxString specifying the name of the car
 //
@@ -122,7 +122,7 @@ END_EVENT_TABLE()
 //		None
 //
 //==========================================================================
-void OUTPUT_PANEL::UpdateInformation(KinematicOutputs Outputs, CAR &Car,
+void OUTPUT_PANEL::UpdateInformation(KinematicOutputs Outputs, Car &car,
 									 int Index, wxString Name)
 {
 	// Begin batch edit of the grid
@@ -186,10 +186,10 @@ void OUTPUT_PANEL::UpdateInformation(KinematicOutputs Outputs, CAR &Car,
 	// white - otherwise it might appear to be "Undef." instead of "N/A".
 
 	// Get a lock on the car's mutex
-	wxMutexLocker lock(Car.GetMutex());
+	wxMutexLocker lock(car.GetMutex());
 
 	// Front half shafts
-	if (!Car.HasFrontHalfShafts())
+	if (!car.HasFrontHalfShafts())
 	{
 		// Change the cell's text
 		OutputsList->SetCellValue(KinematicOutputs::StartRightFrontDoubles
@@ -199,7 +199,7 @@ void OUTPUT_PANEL::UpdateInformation(KinematicOutputs Outputs, CAR &Car,
 	}
 
 	// Rear half shafts
-	if (!Car.HasRearHalfShafts())
+	if (!car.HasRearHalfShafts())
 	{
 		// Change the cell's text
 		OutputsList->SetCellValue(KinematicOutputs::StartRightRearDoubles
@@ -209,7 +209,7 @@ void OUTPUT_PANEL::UpdateInformation(KinematicOutputs Outputs, CAR &Car,
 	}
 
 	// Front anti-drive
-	if (Car.Drivetrain->DriveType == DRIVETRAIN::DRIVE_REAR_WHEEL)
+	if (car.drivetrain->driveType == Drivetrain::DriveRearWheel)
 	{
 		// Change the cell's text
 		OutputsList->SetCellValue(KinematicOutputs::StartRightFrontDoubles
@@ -219,7 +219,7 @@ void OUTPUT_PANEL::UpdateInformation(KinematicOutputs Outputs, CAR &Car,
 	}
 
 	// Rear anti-drive
-	if (Car.Drivetrain->DriveType == DRIVETRAIN::DRIVE_FRONT_WHEEL)
+	if (car.drivetrain->driveType == Drivetrain::DriveFrontWheel)
 	{
 		// Change the cell's text
 		OutputsList->SetCellValue(KinematicOutputs::StartRightRearDoubles
@@ -229,7 +229,7 @@ void OUTPUT_PANEL::UpdateInformation(KinematicOutputs Outputs, CAR &Car,
 	}
 
 	// Front third spring
-	if (!Car.Suspension->FrontHasThirdSpring)
+	if (!car.suspension->frontHasThirdSpring)
 	{
 		// Change the cell's text
 		OutputsList->SetCellValue(KinematicOutputs::StartDoubles
@@ -239,7 +239,7 @@ void OUTPUT_PANEL::UpdateInformation(KinematicOutputs Outputs, CAR &Car,
 	}
 
 	// Rear third spring
-	if (!Car.Suspension->RearHasThirdSpring)
+	if (!car.suspension->rearHasThirdSpring)
 	{
 		// Change the cell's text
 		OutputsList->SetCellValue(KinematicOutputs::StartDoubles
@@ -249,7 +249,7 @@ void OUTPUT_PANEL::UpdateInformation(KinematicOutputs Outputs, CAR &Car,
 	}
 
 	// Front sway bar
-	if (Car.Suspension->FrontBarStyle == SUSPENSION::SwayBarNone)
+	if (car.suspension->frontBarStyle == Suspension::SwayBarNone)
 	{
 		// Change the cell's text
 		OutputsList->SetCellValue(KinematicOutputs::StartDoubles
@@ -259,7 +259,7 @@ void OUTPUT_PANEL::UpdateInformation(KinematicOutputs Outputs, CAR &Car,
 	}
 
 	// Rear sway bar
-	if (Car.Suspension->RearBarStyle == SUSPENSION::SwayBarNone)
+	if (car.suspension->rearBarStyle == Suspension::SwayBarNone)
 	{
 		// Change the cell's text
 		OutputsList->SetCellValue(KinematicOutputs::StartDoubles

@@ -10,7 +10,7 @@
 // File:  suspension.cpp
 // Created:  11/3/2007
 // Author:  K. Loux
-// Description:  Contains class functionality for suspension class.
+// Description:  Contains class functionality for Suspension class.
 // History:
 //	2/17/2008	- Made SolveForPoint and SolveForXY use newly found analytical solution
 //				  for intersection of three spheres problem, K. Loux.
@@ -36,10 +36,10 @@
 #include "vUtilities/machineDefinitions.h"
 
 //==========================================================================
-// Class:			SUSPENSION
-// Function:		SUSPENSION
+// Class:			Suspension
+// Function:		Suspension
 //
-// Description:		Constructor for the SUSPENSION class.
+// Description:		Constructor for the Suspension class.
 //
 // Input Arguments:
 //		_debugger	= const Debugger& reference to applications debug printing utility
@@ -51,36 +51,36 @@
 //		None
 //
 //==========================================================================
-SUSPENSION::SUSPENSION(const Debugger &_debugger)
-					   : RightFront(CORNER::LocationRightFront, _debugger),
-					   LeftFront(CORNER::LocationLeftFront, _debugger),
-					   RightRear(CORNER::LocationRightRear, _debugger),
-					   LeftRear(CORNER::LocationLeftRear, _debugger)
+Suspension::Suspension(const Debugger &_debugger)
+					   : rightFront(Corner::LocationRightFront, _debugger),
+					   leftFront(Corner::LocationLeftFront, _debugger),
+					   rightRear(Corner::LocationRightRear, _debugger),
+					   leftRear(Corner::LocationLeftRear, _debugger)
 {
 	// Initialize the hardpoints within this object as well
 	int i;
 	for (i = 0; i < NumberOfHardpoints; i++)
-		Hardpoints[i].Set(0.0, 0.0, 0.0);
+		hardpoints[i].Set(0.0, 0.0, 0.0);
 
 	// Initialize the other suspension parameters
-	BarRate.front = 0.0;
-	BarRate.rear = 0.0;
-	RackRatio = 1.0;
-	IsSymmetric = false;
-	FrontBarStyle = SwayBarNone;
-	RearBarStyle = SwayBarNone;
-	FrontBarAttachment = BarAttachmentBellcrank;
-	RearBarAttachment = BarAttachmentBellcrank;
-	FrontHasThirdSpring = false;
-	RearHasThirdSpring = false;
+	barRate.front = 0.0;
+	barRate.rear = 0.0;
+	rackRatio = 1.0;
+	isSymmetric = false;
+	frontBarStyle = SwayBarNone;
+	rearBarStyle = SwayBarNone;
+	frontBarAttachment = BarAttachmentBellcrank;
+	rearBarAttachment = BarAttachmentBellcrank;
+	frontHasThirdSpring = false;
+	rearHasThirdSpring = false;
 	// FIXME:  Third springs and dampers!
 }
 
 //==========================================================================
-// Class:			SUSPENSION
-// Function:		~SUSPENSION
+// Class:			Suspension
+// Function:		~Suspension
 //
-// Description:		Destructor for the SUSPENSION class.
+// Description:		Destructor for the Suspension class.
 //
 // Input Arguments:
 //		None
@@ -92,15 +92,15 @@ SUSPENSION::SUSPENSION(const Debugger &_debugger)
 //		None
 //
 //==========================================================================
-SUSPENSION::~SUSPENSION()
+Suspension::~Suspension()
 {
 }
 
 //==========================================================================
-// Class:			SUSPENSION
+// Class:			Suspension
 // Function:		Constant Declarations
 //
-// Description:		Constant declarations for the SUSPENSION class.
+// Description:		Constant declarations for the Suspension class.
 //
 // Input Arguments:
 //		None
@@ -112,10 +112,10 @@ SUSPENSION::~SUSPENSION()
 //		None
 //
 //==========================================================================
-const Debugger *SUSPENSION::debugger = NULL;
+const Debugger *Suspension::debugger = NULL;
 
 //==========================================================================
-// Class:			SUSPENSION
+// Class:			Suspension
 // Function:		SolveForPoint
 //
 // Description:		This function performs the calculations required to
@@ -129,46 +129,46 @@ const Debugger *SUSPENSION::debugger = NULL;
 //					is returned.
 //
 // Input Arguments:
-//		Center1			= const Vector& specifying the center of the first sphere
-//		Center2			= const Vector& specifying the center of the second sphere
-//		Center3			= const Vector& specifying the center of the third sphere
-//		OriginalCenter1	= const Vector& specifying the original center of the
+//		center1			= const Vector& specifying the center of the first sphere
+//		center2			= const Vector& specifying the center of the second sphere
+//		center3			= const Vector& specifying the center of the third sphere
+//		originalCenter1	= const Vector& specifying the original center of the
 //						  first sphere
-//		OriginalCenter2	= const Vector& specifying the original center of the
+//		originalCenter2	= const Vector& specifying the original center of the
 //						  second sphere
-//		OriginalCenter3	= const Vector& specifying the original center of the
+//		originalCenter3	= const Vector& specifying the original center of the
 //						  third sphere
-//		Original		= const Vector& specifying the original location of the point
+//		original		= const Vector& specifying the original location of the point
 //						  we are solving for
 //
 // Output Arguments:
-//		Current	= Vector& specifying the result of the intersection of
+//		current	= Vector& specifying the result of the intersection of
 //				  three spheres algorithm
 //
 // Return Value:
 //		bool, true for success, false for error
 //		
 //==========================================================================
-bool SUSPENSION::SolveForPoint(const Vector &Center1, const Vector &Center2, const Vector &Center3,
-							   const Vector &OriginalCenter1, const Vector &OriginalCenter2,
-							   const Vector &OriginalCenter3, const Vector &Original, Vector &Current)
+bool Suspension::SolveForPoint(const Vector &center1, const Vector &center2, const Vector &center3,
+							   const Vector &originalCenter1, const Vector &originalCenter2,
+							   const Vector &originalCenter3, const Vector &original, Vector &current)
 {
 	// Compute the circle radii
-	double R1 = OriginalCenter1.Distance(Original);
-	double R2 = OriginalCenter2.Distance(Original);
-	double R3 = OriginalCenter3.Distance(Original);
+	double r1 = originalCenter1.Distance(original);
+	double r2 = originalCenter2.Distance(original);
+	double r3 = originalCenter3.Distance(original);
 
 	// Check for the existence of a solution
-	if (Center1.Distance(Center2) > R1 + R2 || Center1.Distance(Center3) > R1 + R3 ||
-		Center2.Distance(Center3) > R2 + R3)
+	if (center1.Distance(center2) > r1 + r2 || center1.Distance(center3) > r1 + r3 ||
+		center2.Distance(center3) > r2 + r3)
 	{
 		debugger->Print(_T("Error (SolveForPoint): Center distance exceeds sum of radii"), Debugger::PriorityLow);
 
 		return false;
 	}
-	else if (Center1.Distance(Center2) + min(R1, R2) < max(R1, R2) ||
-		Center1.Distance(Center3) + min(R1, R3) < max(R1, R3) ||
-		Center2.Distance(Center3) + min(R2, R3) < max(R2, R3))
+	else if (center1.Distance(center2) + min(r1, r2) < max(r1, r2) ||
+		center1.Distance(center3) + min(r1, r3) < max(r1, r3) ||
+		center2.Distance(center3) + min(r2, r3) < max(r2, r3))
 	{
 		debugger->Print(_T("Error (SolveForPoint): Center distance and smaller radius less than larger radius"),
 			Debugger::PriorityLow);
@@ -191,29 +191,29 @@ bool SUSPENSION::SolveForPoint(const Vector &Center1, const Vector &Center2, con
 	//		line determined in step 3.
 
 	// Declare our plane constants
-	double A1, B1, C1, D1, A2, B2, C2, D2;
+	double a1, b1, c1, d1, a2, b2, c2, d2;
 
 	// Step 1 (Plane defined by intersection of spheres 1 and 2)
-	A1 = Center1.x - Center2.x;
-	B1 = Center1.y - Center2.y;
-	C1 = Center1.z - Center2.z;
-	D1 = (pow(Center2.Length(), 2) - pow(Center1.Length(), 2) - R2 * R2 + R1 * R1) / 2.0;
+	a1 = center1.x - center2.x;
+	b1 = center1.y - center2.y;
+	c1 = center1.z - center2.z;
+	d1 = (pow(center2.Length(), 2) - pow(center1.Length(), 2) - r2 * r2 + r1 * r1) / 2.0;
 
 	// Step 2 (Plane defined by intersection of spheres 1 and 3)
-	A2 = Center1.x - Center3.x;
-	B2 = Center1.y - Center3.y;
-	C2 = Center1.z - Center3.z;
-	D2 = (pow(Center3.Length(), 2) - pow(Center1.Length(), 2) - R3 * R3 + R1 * R1) / 2.0;
+	a2 = center1.x - center3.x;
+	b2 = center1.y - center3.y;
+	c2 = center1.z - center3.z;
+	d2 = (pow(center3.Length(), 2) - pow(center1.Length(), 2) - r3 * r3 + r1 * r1) / 2.0;
 
 	// Step 3 (Line defined by intersection of planes from steps 1 and 2)
 	// The if..else stuff avoid numerical instabilities - we'll choose the denominators
 	// farthest from zero for all divisions (denominators are below):
-	double den1 = B1 * C2 - B2 * C1;
-	double den2 = A1 * C2 - A2 * C1;
-	double den3 = A1 * B2 - A2 * B1;
+	double den1 = b1 * c2 - b2 * c1;
+	double den2 = a1 * c2 - a2 * c1;
+	double den3 = a1 * b2 - a2 * b1;
 
 	// Let's declare our answers now
-	Vector Solution1, Solution2;
+	Vector solution1, solution2;
 
 	// And our quadratic equation coefficients
 	double a, b, c;
@@ -221,269 +221,269 @@ bool SUSPENSION::SolveForPoint(const Vector &Center1, const Vector &Center2, con
 	// In which order do we want to solve for the components of the points?
 	if (max(max(fabs(den1), fabs(den2)), fabs(den3)) == fabs(den1))
 	{
-		if (max(max(max(fabs(C1), fabs(C2)), fabs(B1)), fabs(B2)) == fabs(C1))
+		if (max(max(max(fabs(c1), fabs(c2)), fabs(b1)), fabs(b2)) == fabs(c1))
 		{
 			// Solve X first (use first set of plane coefficients)
-			double myx = (A2 * C1 - A1 * C2) / den1;
-			double byx = (C1 * D2 - C2 * D1) / den1;
+			double myx = (a2 * c1 - a1 * c2) / den1;
+			double byx = (c1 * d2 - c2 * d1) / den1;
 			
-			a = 1.0 + myx * myx + pow(A1 + B1 * myx, 2) / (C1 * C1);
-			b = 2.0 * (myx * (byx - Center1.y) - Center1.x + (A1 + B1 * myx) / C1
-				* ((B1 * byx + D1) / C1 + Center1.z));
-			c = Center1.x * Center1.x + pow(byx - Center1.y, 2) - R1 * R1
-				+ pow((B1 * byx + D1) / C1 + Center1.z, 2);
+			a = 1.0 + myx * myx + pow(a1 + b1 * myx, 2) / (c1 * c1);
+			b = 2.0 * (myx * (byx - center1.y) - center1.x + (a1 + b1 * myx) / c1
+				* ((b1 * byx + d1) / c1 + center1.z));
+			c = center1.x * center1.x + pow(byx - center1.y, 2) - r1 * r1
+				+ pow((b1 * byx + d1) / c1 + center1.z, 2);
 			// First solution
-			Solution1.x = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution1.x = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Second solution
-			Solution2.x = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution2.x = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Solve Y next
-			Solution1.y = Solution1.x * myx + byx;
-			Solution2.y = Solution2.x * myx + byx;
+			solution1.y = solution1.x * myx + byx;
+			solution2.y = solution2.x * myx + byx;
 			// Solve Z last
-			Solution1.z = (-A1 * Solution1.x - B1 * Solution1.y - D1) / C1;
-			Solution2.z = (-A1 * Solution2.x - B1 * Solution2.y - D1) / C1;
+			solution1.z = (-a1 * solution1.x - b1 * solution1.y - d1) / c1;
+			solution2.z = (-a1 * solution2.x - b1 * solution2.y - d1) / c1;
 		}
-		else if (max(max(max(fabs(C1), fabs(C2)), fabs(B1)), fabs(B2)) == fabs(C2))
+		else if (max(max(max(fabs(c1), fabs(c2)), fabs(b1)), fabs(b2)) == fabs(c2))
 		{
 			// Solve X first (use second set of plane coefficients)
-			double myx = (A2 * C1 - A1 * C2) / den1;
-			double byx = (C1 * D2 - C2 * D1) / den1;
-			a = 1.0 + myx * myx + pow(A2 + B2 * myx, 2) / (C2 * C2);
-			b = 2.0 * (myx * (byx - Center1.y) - Center1.x + (A2 + B2 * myx) / C2
-				* ((B2 * byx + D2) / C2 + Center1.z));
-			c = Center1.x * Center1.x + pow(byx - Center1.y, 2) - R1 * R1
-				+ pow((B2 * byx + D2) / C2 + Center1.z, 2);
+			double myx = (a2 * c1 - a1 * c2) / den1;
+			double byx = (c1 * d2 - c2 * d1) / den1;
+			a = 1.0 + myx * myx + pow(a2 + b2 * myx, 2) / (c2 * c2);
+			b = 2.0 * (myx * (byx - center1.y) - center1.x + (a2 + b2 * myx) / c2
+				* ((b2 * byx + d2) / c2 + center1.z));
+			c = center1.x * center1.x + pow(byx - center1.y, 2) - r1 * r1
+				+ pow((b2 * byx + d2) / c2 + center1.z, 2);
 			// First solution
-			Solution1.x = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution1.x = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Second solution
-			Solution2.x = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution2.x = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Solve Y next
-			Solution1.y = Solution1.x * myx + byx;
-			Solution2.y = Solution2.x * myx + byx;
+			solution1.y = solution1.x * myx + byx;
+			solution2.y = solution2.x * myx + byx;
 			// Solve Z last
-			Solution1.z = (-A2 * Solution1.x - B2 * Solution1.y - D2) / C2;
-			Solution2.z = (-A2 * Solution2.x - B2 * Solution2.y - D2) / C2;
+			solution1.z = (-a2 * solution1.x - b2 * solution1.y - d2) / c2;
+			solution2.z = (-a2 * solution2.x - b2 * solution2.y - d2) / c2;
 		}
-		else if (max(max(max(fabs(C1), fabs(C2)), fabs(B1)), fabs(B2)) == fabs(B1))
+		else if (max(max(max(fabs(c1), fabs(c2)), fabs(b1)), fabs(b2)) == fabs(b1))
 		{
 			// Solve X first (use first set of plane coefficients)
-			double mzx = (A1 * B2 - A2 * B1) / den1;
-			double bzx = (B2 * D1 - B1 * D2) / den1;
-			a = 1.0 + mzx * mzx + pow(A1 + C1 * mzx, 2) / (B1 * B1);
-			b = 2.0 * (mzx * (bzx - Center1.z) - Center1.x + (A1 + C1 * mzx) / B1
-				* ((C1 * bzx + D1) / B1 + Center1.y));
-			c = Center1.x * Center1.x + pow(bzx - Center1.z, 2) - R1 * R1
-				+ pow((C1 * bzx + D1) / B1 + Center1.y, 2);
+			double mzx = (a1 * b2 - a2 * b1) / den1;
+			double bzx = (b2 * d1 - b1 * d2) / den1;
+			a = 1.0 + mzx * mzx + pow(a1 + c1 * mzx, 2) / (b1 * b1);
+			b = 2.0 * (mzx * (bzx - center1.z) - center1.x + (a1 + c1 * mzx) / b1
+				* ((c1 * bzx + d1) / b1 + center1.y));
+			c = center1.x * center1.x + pow(bzx - center1.z, 2) - r1 * r1
+				+ pow((c1 * bzx + d1) / b1 + center1.y, 2);
 			// First solution
-			Solution1.x = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution1.x = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Second solution
-			Solution2.x = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution2.x = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Solve Z next
-			Solution1.z = Solution1.x * mzx + bzx;
-			Solution2.z = Solution2.x * mzx + bzx;
+			solution1.z = solution1.x * mzx + bzx;
+			solution2.z = solution2.x * mzx + bzx;
 			// Solve Y last
-			Solution1.y = (-A1 * Solution1.x - C1 * Solution1.z - D1) / B1;
-			Solution2.y = (-A1 * Solution2.x - C1 * Solution2.z - D1) / B1;
+			solution1.y = (-a1 * solution1.x - c1 * solution1.z - d1) / b1;
+			solution2.y = (-a1 * solution2.x - c1 * solution2.z - d1) / b1;
 		}
-		else// if (max(max(max(fabs(C1), fabs(C2)), fabs(B1)), fabs(B2)) == fabs(B2))
+		else// if (max(max(max(fabs(c1), fabs(c2)), fabs(b1)), fabs(b2)) == fabs(b2))
 		{
 			// Solve X first (use second set of plane coefficients)
-			double mzx = (A1 * B2 - A2 * B1) / den1;
-			double bzx = (B2 * D1 - B1 * D2) / den1;
-			a = 1.0 + mzx * mzx + pow(A2 + C2 * mzx, 2) / (B2 * B2);
-			b = 2.0 * (mzx * (bzx - Center1.z) - Center1.x + (A2 + C2 * mzx) / B2
-				* ((C2 * bzx + D2) / B2 + Center1.y));
-			c = Center1.x * Center1.x + pow(bzx - Center1.z, 2) - R1 * R1
-				+ pow((C2 * bzx + D2) / B2 + Center1.y, 2);
+			double mzx = (a1 * b2 - a2 * b1) / den1;
+			double bzx = (b2 * d1 - b1 * d2) / den1;
+			a = 1.0 + mzx * mzx + pow(a2 + c2 * mzx, 2) / (b2 * b2);
+			b = 2.0 * (mzx * (bzx - center1.z) - center1.x + (a2 + c2 * mzx) / b2
+				* ((c2 * bzx + d2) / b2 + center1.y));
+			c = center1.x * center1.x + pow(bzx - center1.z, 2) - r1 * r1
+				+ pow((c2 * bzx + d2) / b2 + center1.y, 2);
 			// First solution
-			Solution1.x = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution1.x = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Second solution
-			Solution2.x = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution2.x = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Solve Z next
-			Solution1.z = Solution1.x * mzx + bzx;
-			Solution2.z = Solution2.x * mzx + bzx;
+			solution1.z = solution1.x * mzx + bzx;
+			solution2.z = solution2.x * mzx + bzx;
 			// Solve Y last
-			Solution1.y = (-A2 * Solution1.x - C2 * Solution1.z - D2) / B2;
-			Solution2.y = (-A2 * Solution2.x - C2 * Solution2.z - D2) / B2;
+			solution1.y = (-a2 * solution1.x - c2 * solution1.z - d2) / b2;
+			solution2.y = (-a2 * solution2.x - c2 * solution2.z - d2) / b2;
 		}
 	}
 	else if (max(max(fabs(den1), fabs(den2)), fabs(den3)) == fabs(den2))
 	{
-		if (max(max(max(fabs(A1), fabs(A2)), fabs(C1)), fabs(C2)) == fabs(A1))
+		if (max(max(max(fabs(a1), fabs(a2)), fabs(c1)), fabs(c2)) == fabs(a1))
 		{
 			// Solve Y first (use first set of plane coefficients)
-			double mzy = (A2 * B1 - A1 * B2) / den2;
-			double bzy = (A2 * D1 - A1 * D2) / den2;
-			a = 1 + mzy * mzy + pow(B1 + C1 * mzy, 2) / (A1 * A1);
-			b = 2 * (mzy * (bzy - Center1.z) - Center1.y + (B1 + C1 * mzy) / A1
-				* ((C1 * bzy + D1) / A1 + Center1.x));
-			c = Center1.y * Center1.y + pow(bzy - Center1.z, 2) - R1 * R1
-				+ pow((C1 * bzy + D1) / A1 + Center1.x, 2);
+			double mzy = (a2 * b1 - a1 * b2) / den2;
+			double bzy = (a2 * d1 - a1 * d2) / den2;
+			a = 1 + mzy * mzy + pow(b1 + c1 * mzy, 2) / (a1 * a1);
+			b = 2 * (mzy * (bzy - center1.z) - center1.y + (b1 + c1 * mzy) / a1
+				* ((c1 * bzy + d1) / a1 + center1.x));
+			c = center1.y * center1.y + pow(bzy - center1.z, 2) - r1 * r1
+				+ pow((c1 * bzy + d1) / a1 + center1.x, 2);
 			// First solution
-			Solution1.y = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution1.y = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Second solution
-			Solution2.y = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution2.y = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Solve Z next
-			Solution1.z = Solution1.y * mzy + bzy;
-			Solution2.z = Solution2.y * mzy + bzy;
+			solution1.z = solution1.y * mzy + bzy;
+			solution2.z = solution2.y * mzy + bzy;
 			// Solve X last
-			Solution1.x = (-B1 * Solution1.y - C1 * Solution1.z - D1) / A1;
-			Solution2.x = (-B1 * Solution2.y - C1 * Solution2.z - D1) / A1;
+			solution1.x = (-b1 * solution1.y - c1 * solution1.z - d1) / a1;
+			solution2.x = (-b1 * solution2.y - c1 * solution2.z - d1) / a1;
 		}
-		else if (max(max(max(fabs(A1), fabs(A2)), fabs(C1)), fabs(C2)) == fabs(A2))
+		else if (max(max(max(fabs(a1), fabs(a2)), fabs(c1)), fabs(c2)) == fabs(a2))
 		{
 			// Solve Y first (use second set of plane coefficients)
-			double mzy = (A2 * B1 - A1 * B2) / den2;
-			double bzy = (A2 * D1 - A1 * D2) / den2;
-			a = 1 + mzy * mzy + pow(B2 + C2 * mzy, 2) / (A2 * A2);
-			b = 2 * (mzy * (bzy - Center1.z) - Center1.y + (B2 + C2 * mzy) / A2
-				* ((C2 * bzy + D2) / A2 + Center1.x));
-			c = Center1.y * Center1.y + pow(bzy - Center1.z, 2) - R1 * R1
-				+ pow((C2 * bzy + D2) / A2 + Center1.x, 2);
+			double mzy = (a2 * b1 - a1 * b2) / den2;
+			double bzy = (a2 * d1 - a1 * d2) / den2;
+			a = 1 + mzy * mzy + pow(b2 + c2 * mzy, 2) / (a2 * a2);
+			b = 2 * (mzy * (bzy - center1.z) - center1.y + (b2 + c2 * mzy) / a2
+				* ((c2 * bzy + d2) / a2 + center1.x));
+			c = center1.y * center1.y + pow(bzy - center1.z, 2) - r1 * r1
+				+ pow((c2 * bzy + d2) / a2 + center1.x, 2);
 			// First solution
-			Solution1.y = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution1.y = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Second solution
-			Solution2.y = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution2.y = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Solve Z next
-			Solution1.z = Solution1.y * mzy + bzy;
-			Solution2.z = Solution2.y * mzy + bzy;
+			solution1.z = solution1.y * mzy + bzy;
+			solution2.z = solution2.y * mzy + bzy;
 			// Solve X last
-			Solution1.x = (-B2 * Solution1.y - C2 * Solution1.z - D2) / A2;
-			Solution2.x = (-B2 * Solution2.y - C2 * Solution2.z - D2) / A2;
+			solution1.x = (-b2 * solution1.y - c2 * solution1.z - d2) / a2;
+			solution2.x = (-b2 * solution2.y - c2 * solution2.z - d2) / a2;
 		}
-		else if (max(max(max(fabs(A1), fabs(A2)), fabs(C1)), fabs(C2)) == fabs(C1))
+		else if (max(max(max(fabs(a1), fabs(a2)), fabs(c1)), fabs(c2)) == fabs(c1))
 		{
 			// Solve Y first (use first set of plane coefficients)
-			double mxy = (B2 * C1 - B1 * C2) / den2;
-			double bxy = (C1 * D2 - C2 * D1) / den2;
-			a = 1 + mxy * mxy + pow(B1 + A1 * mxy, 2) / (C1 * C1);
-			b = 2 * (mxy * (bxy - Center1.x) - Center1.y + (B1 + A1 * mxy) / C1
-				* ((A1 * bxy + D1) / C1 + Center1.z));
-			c = Center1.y * Center1.y + pow(bxy - Center1.x, 2) - R1 * R1
-				+ pow((A1 * bxy + D1) / C1 + Center1.z, 2);
+			double mxy = (b2 * c1 - b1 * c2) / den2;
+			double bxy = (c1 * d2 - c2 * d1) / den2;
+			a = 1 + mxy * mxy + pow(b1 + a1 * mxy, 2) / (c1 * c1);
+			b = 2 * (mxy * (bxy - center1.x) - center1.y + (b1 + a1 * mxy) / c1
+				* ((a1 * bxy + d1) / c1 + center1.z));
+			c = center1.y * center1.y + pow(bxy - center1.x, 2) - r1 * r1
+				+ pow((a1 * bxy + d1) / c1 + center1.z, 2);
 			// First solution
-			Solution1.y = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution1.y = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Second solution
-			Solution2.y = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution2.y = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Solve X next
-			Solution1.x = Solution1.y * mxy + bxy;
-			Solution2.x = Solution2.y * mxy + bxy;
+			solution1.x = solution1.y * mxy + bxy;
+			solution2.x = solution2.y * mxy + bxy;
 			// Solve Z last
-			Solution1.z = (-A1 * Solution1.x - B1 * Solution1.y - D1) / C1;
-			Solution2.z = (-A1 * Solution2.x - B1 * Solution2.y - D1) / C1;
+			solution1.z = (-a1 * solution1.x - b1 * solution1.y - d1) / c1;
+			solution2.z = (-a1 * solution2.x - b1 * solution2.y - d1) / c1;
 		}
-		else// if (max(max(max(fabs(A1), fabs(A2)), fabs(C1)), fabs(C2)) == fabs(C2))
+		else// if (max(max(max(fabs(a1), fabs(a2)), fabs(c1)), fabs(c2)) == fabs(c2))
 		{
 			// Solve Y first (use second set of plane coefficients)
-			double mxy = (B2 * C1 - B1 * C2) / den2;
-			double bxy = (C1 * D2 - C2 * D1) / den2;
-			a = 1 + mxy * mxy + pow(B2 + A2 * mxy, 2) / (C2 * C2);
-			b = 2 * (mxy * (bxy - Center1.x) - Center1.y + (B2 + A2 * mxy) / C2
-				* ((A2 * bxy + D2) / C2 + Center1.z));
-			c = Center1.y * Center1.y + pow(bxy - Center1.x, 2) - R1 * R1
-				+ pow((A2 * bxy + D2) / C2 + Center1.z, 2);
+			double mxy = (b2 * c1 - b1 * c2) / den2;
+			double bxy = (c1 * d2 - c2 * d1) / den2;
+			a = 1 + mxy * mxy + pow(b2 + a2 * mxy, 2) / (c2 * c2);
+			b = 2 * (mxy * (bxy - center1.x) - center1.y + (b2 + a2 * mxy) / c2
+				* ((a2 * bxy + d2) / c2 + center1.z));
+			c = center1.y * center1.y + pow(bxy - center1.x, 2) - r1 * r1
+				+ pow((a2 * bxy + d2) / c2 + center1.z, 2);
 			// First solution
-			Solution1.y = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution1.y = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Second solution
-			Solution2.y = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution2.y = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Solve X next
-			Solution1.x = Solution1.y * mxy + bxy;
-			Solution2.x = Solution2.y * mxy + bxy;
+			solution1.x = solution1.y * mxy + bxy;
+			solution2.x = solution2.y * mxy + bxy;
 			// Solve Z last
-			Solution1.z = (-A2 * Solution1.x - B2 * Solution1.y - D2) / C2;
-			Solution2.z = (-A2 * Solution2.x - B2 * Solution2.y - D2) / C2;
+			solution1.z = (-a2 * solution1.x - b2 * solution1.y - d2) / c2;
+			solution2.z = (-a2 * solution2.x - b2 * solution2.y - d2) / c2;
 		}
 	}
 	else// if (max(max(fabs(den1), fabs(den2)), fabs(den3)) == fabs(den3))
 	{
-		if (max(max(max(fabs(A1), fabs(A2)), fabs(B1)), fabs(B2)) == fabs(A1))
+		if (max(max(max(fabs(a1), fabs(a2)), fabs(b1)), fabs(b2)) == fabs(a1))
 		{
 			// Solve Z first (use first set of plane coefficients)
-			double myz = (A2 * C1 - A1 * C2) / den3;
-			double byz = (A2 * D1 - A1 * D2) / den3;
-			a = 1 + myz * myz + pow(C1 + B1 * myz, 2) / (A1 * A1);
-			b = 2 * (myz * (byz - Center1.y) - Center1.z + (C1 + B1 * myz) / A1
-				* ((B1 * byz + D1) / A1 + Center1.x));
-			c = Center1.z * Center1.z + pow(byz - Center1.y, 2) - R1 * R1
-				+ pow((B1 * byz + D1) / A1 + Center1.x, 2);
+			double myz = (a2 * c1 - a1 * c2) / den3;
+			double byz = (a2 * d1 - a1 * d2) / den3;
+			a = 1 + myz * myz + pow(c1 + b1 * myz, 2) / (a1 * a1);
+			b = 2 * (myz * (byz - center1.y) - center1.z + (c1 + b1 * myz) / a1
+				* ((b1 * byz + d1) / a1 + center1.x));
+			c = center1.z * center1.z + pow(byz - center1.y, 2) - r1 * r1
+				+ pow((b1 * byz + d1) / a1 + center1.x, 2);
 			// First solution
-			Solution1.z = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution1.z = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Second solution
-			Solution2.z = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution2.z = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Solve Y next
-			Solution1.y = Solution1.z * myz + byz;
-			Solution2.y = Solution2.z * myz + byz;
+			solution1.y = solution1.z * myz + byz;
+			solution2.y = solution2.z * myz + byz;
 			// Solve X last
-			Solution1.x = (-B1 * Solution1.y - C1 * Solution1.z - D1) / A1;
-			Solution2.x = (-B1 * Solution2.y - C1 * Solution2.z - D1) / A1;
+			solution1.x = (-b1 * solution1.y - c1 * solution1.z - d1) / a1;
+			solution2.x = (-b1 * solution2.y - c1 * solution2.z - d1) / a1;
 		}
-		else if (max(max(max(fabs(A1), fabs(A2)), fabs(B1)), fabs(B2)) == fabs(A2))
+		else if (max(max(max(fabs(a1), fabs(a2)), fabs(b1)), fabs(b2)) == fabs(a2))
 		{
 			// Solve Z first (use second set of plane coefficients)
-			double myz = (A2 * C1 - A1 * C2) / den3;
-			double byz = (A2 * D1 - A1 * D2) / den3;
-			a = 1 + myz * myz + pow(C2 + B2 * myz, 2) / (A2 * A2);
-			b = 2 * (myz * (byz - Center1.y) - Center1.z + (C2 + B2 * myz) / A2
-				* ((B2 * byz + D2) / A2 + Center1.x));
-			c = Center1.z * Center1.z + pow(byz - Center1.y, 2) - R1 * R1
-				+ pow((B2 * byz + D2) / A2 + Center1.x, 2);
+			double myz = (a2 * c1 - a1 * c2) / den3;
+			double byz = (a2 * d1 - a1 * d2) / den3;
+			a = 1 + myz * myz + pow(c2 + b2 * myz, 2) / (a2 * a2);
+			b = 2 * (myz * (byz - center1.y) - center1.z + (c2 + b2 * myz) / a2
+				* ((b2 * byz + d2) / a2 + center1.x));
+			c = center1.z * center1.z + pow(byz - center1.y, 2) - r1 * r1
+				+ pow((b2 * byz + d2) / a2 + center1.x, 2);
 			// First solution
-			Solution1.z = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution1.z = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Second solution
-			Solution2.z = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution2.z = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Solve Y next
-			Solution1.y = Solution1.z * myz + byz;
-			Solution2.y = Solution2.z * myz + byz;
+			solution1.y = solution1.z * myz + byz;
+			solution2.y = solution2.z * myz + byz;
 			// Solve X last
-			Solution1.x = (-B2 * Solution1.y - C2 * Solution1.z - D2) / A2;
-			Solution2.x = (-B2 * Solution2.y - C2 * Solution2.z - D2) / A2;
+			solution1.x = (-b2 * solution1.y - c2 * solution1.z - d2) / a2;
+			solution2.x = (-b2 * solution2.y - c2 * solution2.z - d2) / a2;
 		}
-		else if (max(max(max(fabs(A1), fabs(A2)), fabs(B1)), fabs(B2)) == fabs(B1))
+		else if (max(max(max(fabs(a1), fabs(a2)), fabs(b1)), fabs(b2)) == fabs(b1))
 		{
 			// Solve Z first (use first set of plane coefficients)
-			double mxz = (B1 * C2 - B2 * C1) / den3;
-			double bxz = (B1 * D2 - B2 * D1) / den3;
-			a = 1 + mxz * mxz + pow(C1 + A1 * mxz, 2) / (B1 * B1);
-			b = 2 * (mxz * (bxz - Center1.x) - Center1.z + (C1 + A1 * mxz) / B1
-				* ((A1 * bxz + D1) / B1 + Center1.y));
-			c = Center1.z * Center1.z + pow(bxz - Center1.x, 2) - R1 * R1
-				+ pow((A1 * bxz + D1) / B1 + Center1.y, 2);
+			double mxz = (b1 * c2 - b2 * c1) / den3;
+			double bxz = (b1 * d2 - b2 * d1) / den3;
+			a = 1 + mxz * mxz + pow(c1 + a1 * mxz, 2) / (b1 * b1);
+			b = 2 * (mxz * (bxz - center1.x) - center1.z + (c1 + a1 * mxz) / b1
+				* ((a1 * bxz + d1) / b1 + center1.y));
+			c = center1.z * center1.z + pow(bxz - center1.x, 2) - r1 * r1
+				+ pow((a1 * bxz + d1) / b1 + center1.y, 2);
 			// First solution
-			Solution1.z = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution1.z = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Second solution
-			Solution2.z = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution2.z = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Solve X next
-			Solution1.x = Solution1.z * mxz + bxz;
-			Solution2.x = Solution2.z * mxz + bxz;
+			solution1.x = solution1.z * mxz + bxz;
+			solution2.x = solution2.z * mxz + bxz;
 			// Solve Y last
-			Solution1.y = (-A1 * Solution1.x - C1 * Solution1.z - D1) / B1;
-			Solution2.y = (-A1 * Solution2.x - C1 * Solution2.z - D1) / B1;
+			solution1.y = (-a1 * solution1.x - c1 * solution1.z - d1) / b1;
+			solution2.y = (-a1 * solution2.x - c1 * solution2.z - d1) / b1;
 		}
-		else// if (max(max(max(fabs(A1), fabs(A2)), fabs(B1)), fabs(B2)) == fabs(B2))
+		else// if (max(max(max(fabs(a1), fabs(a2)), fabs(b1)), fabs(b2)) == fabs(b2))
 		{
 			// Solve Z first (use second set of plane coefficients)
-			double mxz = (B1 * C2 - B2 * C1) / den3;
-			double bxz = (B1 * D2 - B2 * D1) / den3;
-			a = 1 + mxz * mxz + pow(C2 + A2 * mxz, 2) / (B2 * B2);
-			b = 2 * (mxz * (bxz - Center1.x) - Center1.z + (C2 + A2 * mxz) / B2
-				* ((A2 * bxz + D2) / B2 + Center1.y));
-			c = Center1.z * Center1.z + pow(bxz - Center1.x, 2) - R1 * R1
-				+ pow((A2 * bxz + D2) / B2 + Center1.y, 2);
+			double mxz = (b1 * c2 - b2 * c1) / den3;
+			double bxz = (b1 * d2 - b2 * d1) / den3;
+			a = 1 + mxz * mxz + pow(c2 + a2 * mxz, 2) / (b2 * b2);
+			b = 2 * (mxz * (bxz - center1.x) - center1.z + (c2 + a2 * mxz) / b2
+				* ((a2 * bxz + d2) / b2 + center1.y));
+			c = center1.z * center1.z + pow(bxz - center1.x, 2) - r1 * r1
+				+ pow((a2 * bxz + d2) / b2 + center1.y, 2);
 			// First solution
-			Solution1.z = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution1.z = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Second solution
-			Solution2.z = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution2.z = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Solve X next
-			Solution1.x = Solution1.z * mxz + bxz;
-			Solution2.x = Solution2.z * mxz + bxz;
+			solution1.x = solution1.z * mxz + bxz;
+			solution2.x = solution2.z * mxz + bxz;
 			// Solve Y last
-			Solution1.y = (-A2 * Solution1.x - C2 * Solution1.z - D2) / B2;
-			Solution2.y = (-A2 * Solution2.x - C2 * Solution2.z - D2) / B2;
+			solution1.y = (-a2 * solution1.x - c2 * solution1.z - d2) / b2;
+			solution2.y = (-a2 * solution2.x - c2 * solution2.z - d2) / b2;
 		}
 	}
 
 	// Make sure the solution is valid
-	if (Solution1 != Solution1 || Solution2 != Solution2)
+	if (solution1 != solution1 || solution2 != solution2)
 	{
 		debugger->Print(_T("Error (SolveForPoint): Invalid solution"), Debugger::PriorityLow);
 
@@ -498,29 +498,29 @@ bool SUSPENSION::SolveForPoint(const Vector &Center1, const Vector &Center2, con
 	// of the solutions is on.
 
 	// Get the plane normals
-	Vector OriginalNormal = VVASEMath::GetPlaneNormal(OriginalCenter1, OriginalCenter2, OriginalCenter3);
-	Vector NewNormal = VVASEMath::GetPlaneNormal(Center1, Center2, Center3);
+	Vector originalNormal = VVASEMath::GetPlaneNormal(originalCenter1, originalCenter2, originalCenter3);
+	Vector newNormal = VVASEMath::GetPlaneNormal(center1, center2, center3);
 
 	// Get a vector from the location of the point to some point in the plane
-	Vector OriginalVectorToPlane = OriginalCenter1 - Original;
-	Vector NewVectorToPlane = Center1 - Solution1;
+	Vector originalVectorToPlane = originalCenter1 - original;
+	Vector newVectorToPlane = center1 - solution1;
 
 	// The dot products of the normal and the vector to the plane will give an indication
 	// of which side of the plane the point is on
-	double OriginalSide = OriginalNormal * OriginalVectorToPlane;
-	double NewSide = NewNormal * NewVectorToPlane;
+	double originalSide = originalNormal * originalVectorToPlane;
+	double newSide = newNormal * newVectorToPlane;
 
 	// We can compare the sign of the original side with the new side to choose the correct solution
-	if ((NewSide > 0 && OriginalSide > 0) || (NewSide < 0 && OriginalSide < 0))
-		Current = Solution1;
+	if ((newSide > 0 && originalSide > 0) || (newSide < 0 && originalSide < 0))
+		current = solution1;
 	else
-		Current = Solution2;
+		current = solution2;
 
 	return true;
 }
 
 //==========================================================================
-// Class:			SUSPENSION
+// Class:			Suspension
 // Function:		MoveSteeringRack
 //
 // Description:		This function moves the two inboard points that
@@ -528,7 +528,7 @@ bool SUSPENSION::SolveForPoint(const Vector &Center1, const Vector &Center2, con
 //					inches.  Positive travel moves the rack to the right.
 //
 // Input Arguments:
-//		Travel	= const double& specifying the distance to move the steering rack [in]
+//		travel	= const double& specifying the distance to move the steering rack [in]
 //
 // Output Arguments:
 //		None
@@ -537,16 +537,16 @@ bool SUSPENSION::SolveForPoint(const Vector &Center1, const Vector &Center2, con
 //		None
 //		
 //==========================================================================
-void SUSPENSION::MoveSteeringRack(const double &Travel)
+void Suspension::MoveSteeringRack(const double &travel)
 {
 	// The two front inboard tie-rod locations will define the axis along which the
 	// rack will slide.  Both points get moved by Travel in the same direction.
 	// Here we'll use a parametric equation of the line in 3-space for convenience.
 
 	double t = 1.0;// Parametric parameter
-	Vector Slope;
+	Vector slope;
 
-	Slope = RightFront.Hardpoints[CORNER::InboardTieRod] - LeftFront.Hardpoints[CORNER::InboardTieRod];
+	slope = rightFront.hardpoints[Corner::InboardTieRod] - leftFront.hardpoints[Corner::InboardTieRod];
 
 	// We need to calibrate t to the distance between the rack ends so we know how
 	// much t we need to move the rack ends by Travel.  Using the left end as the
@@ -559,19 +559,19 @@ void SUSPENSION::MoveSteeringRack(const double &Travel)
 
 	// We can normalize t to the distance between the ends of the rack and we'll
 	// have t with units [1/in].
-	t /= RightFront.Hardpoints[CORNER::InboardTieRod].Distance(LeftFront.Hardpoints[CORNER::InboardTieRod]);
+	t /= rightFront.hardpoints[Corner::InboardTieRod].Distance(leftFront.hardpoints[Corner::InboardTieRod]);
 
 	// Now we multiply by how far we actually want the rack to move...
-	t *= Travel;// t is now unitless again
+	t *= travel;// t is now unitless again
 
 	// And we're ready to move the rack.  Since the slope and t calibration are the
 	// same for both points, we can just use each point as their own reference points.
-	LeftFront.Hardpoints[CORNER::InboardTieRod] += Slope * t;
-	RightFront.Hardpoints[CORNER::InboardTieRod] += Slope * t;
+	leftFront.hardpoints[Corner::InboardTieRod] += slope * t;
+	rightFront.hardpoints[Corner::InboardTieRod] += slope * t;
 }
 
 //==========================================================================
-// Class:			SUSPENSION
+// Class:			Suspension
 // Function:		SolveForXY
 //
 // Description:		This is a modification of the solver for the rest of
@@ -581,38 +581,38 @@ void SUSPENSION::MoveSteeringRack(const double &Travel)
 //					the event of an error, the original value is returned.
 //
 // Input Arguments:
-//		Center1			= const Vector& specifying the center of the first sphere
-//		Center2			= const Vector& specifying the center of the second sphere
-//		OriginalCenter1	= const Vector& specifying the original center of the
+//		center1			= const Vector& specifying the center of the first sphere
+//		center2			= const Vector& specifying the center of the second sphere
+//		originalCenter1	= const Vector& specifying the original center of the
 //						  first sphere
-//		OriginalCenter2	= const Vector& specifying the original center of the
+//		originalCenter2	= const Vector& specifying the original center of the
 //						  second sphere
-//		Original		= const Vector& specifying the original location of the point
+//		original		= const Vector& specifying the original location of the point
 //						  we are solving for
 //
 // Output Arguments:
-//		Current	= Vector& specifying the result of the intersection of
+//		current	= Vector& specifying the result of the intersection of
 //				  three spheres algorithm
 //
 // Return Value:
 //		bool, true for success, false for error
 //		
 //==========================================================================
-bool SUSPENSION::SolveForXY(const Vector &Center1, const Vector &Center2, const Vector &OriginalCenter1,
-							const Vector &OriginalCenter2, const Vector &Original, Vector &Current)
+bool Suspension::SolveForXY(const Vector &center1, const Vector &center2, const Vector &originalCenter1,
+							const Vector &originalCenter2, const Vector &original, Vector &current)
 {
 	// Compute the circle radii
-	double R1 = OriginalCenter1.Distance(Original);
-	double R2 = OriginalCenter2.Distance(Original);
+	double r1 = originalCenter1.Distance(original);
+	double r2 = originalCenter2.Distance(original);
 
 	// Check for the existence of a solution
-	if (Center1.Distance(Center2) > R1 + R2)
+	if (center1.Distance(center2) > r1 + r2)
 	{
 		debugger->Print(_T("Error (SolveForXY): Center distance exceeds sum of radii"), Debugger::PriorityLow);
 
 		return false;
 	}
-	else if (Center1.Distance(Center2) + min(R1, R2) < max(R1, R2))
+	else if (center1.Distance(center2) + min(r1, r2) < max(r1, r2))
 	{
 		debugger->Print(_T("Error (SolveForXY): Center distance and smaller radius less than larger radius"),
 			Debugger::PriorityLow);
@@ -621,160 +621,160 @@ bool SUSPENSION::SolveForXY(const Vector &Center1, const Vector &Center2, const 
 	}
 
 	// Declare our plane constants
-	double A1, B1, C1, D1;
+	double a1, b1, c1, d1;
 
 	// Step 1 (Plane defined by intersection of spheres 1 and 2)
-	A1 = Center1.x - Center2.x;
-	B1 = Center1.y - Center2.y;
-	C1 = Center1.z - Center2.z;
-	D1 = (pow(Center2.Length(), 2) - pow(Center1.Length(), 2) - R2 * R2 + R1 * R1) / 2.0;
+	a1 = center1.x - center2.x;
+	b1 = center1.y - center2.y;
+	c1 = center1.z - center2.z;
+	d1 = (pow(center2.Length(), 2) - pow(center1.Length(), 2) - r2 * r2 + r1 * r1) / 2.0;
 
 	// Step 2 (Line defined by intersection of planes from steps 1 and <0 0 1>)
 	// The if..else stuff avoid numerical instabilities - we'll choose the denominators
 	// farthest from zero for all divisions.
 
 	// Let's declare our answers now
-	Vector Solution1, Solution2;
+	Vector solution1, solution2;
 
 	// And our quadratic equation coefficients
 	double a, b, c;
 
 	// In which order do we want to solve for the components of the points?
 	// TODO:  This code can probably be leaned out, but it works fine...
-	if (max(fabs(B1), fabs(A1)) == fabs(B1))
+	if (max(fabs(b1), fabs(a1)) == fabs(b1))
 	{
-		if (max(max(fabs(C1), fabs(1.0)), fabs(B1)) == fabs(C1))
+		if (max(max(fabs(c1), fabs(1.0)), fabs(b1)) == fabs(c1))
 		{
 			// Solve X first (use first set of plane coefficients)
-			double myx = -A1 / B1;
-			double byx = -(C1 * Current.z + D1) / B1;
+			double myx = -a1 / b1;
+			double byx = -(c1 * current.z + d1) / b1;
 			
-			a = 1.0 + myx * myx + pow(A1 + B1 * myx, 2) / (C1 * C1);
-			b = 2.0 * (myx * (byx - Center1.y) - Center1.x + (A1 + B1 * myx) / C1
-				* ((B1 * byx + D1) / C1 + Center1.z));
-			c = Center1.x * Center1.x + pow(byx - Center1.y, 2) - R1 * R1
-				+ pow((B1 * byx + D1) / C1 + Center1.z, 2);
+			a = 1.0 + myx * myx + pow(a1 + b1 * myx, 2) / (c1 * c1);
+			b = 2.0 * (myx * (byx - center1.y) - center1.x + (a1 + b1 * myx) / c1
+				* ((b1 * byx + d1) / c1 + center1.z));
+			c = center1.x * center1.x + pow(byx - center1.y, 2) - r1 * r1
+				+ pow((b1 * byx + d1) / c1 + center1.z, 2);
 			// First solution
-			Solution1.x = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution1.x = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Second solution
-			Solution2.x = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution2.x = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Solve Y next
-			Solution1.y = Solution1.x * myx + byx;
-			Solution2.y = Solution2.x * myx + byx;
+			solution1.y = solution1.x * myx + byx;
+			solution2.y = solution2.x * myx + byx;
 			// Solve Z last
-			Solution1.z = (-A1 * Solution1.x - B1 * Solution1.y - D1) / C1;
-			Solution2.z = (-A1 * Solution2.x - B1 * Solution2.y - D1) / C1;
+			solution1.z = (-a1 * solution1.x - b1 * solution1.y - d1) / c1;
+			solution2.z = (-a1 * solution2.x - b1 * solution2.y - d1) / c1;
 		}
-		else if (max(max(fabs(C1), fabs(1.0)), fabs(B1)) == fabs(1.0))
+		else if (max(max(fabs(c1), fabs(1.0)), fabs(b1)) == fabs(1.0))
 		{
 			// Solve X first (use second set of plane coefficients)
 			double myx = 0.0;
-			double byx = -C1 * Current.z / B1;
+			double byx = -c1 * current.z / b1;
 			a = 1.0 + myx * myx;
-			b = 2.0 * (myx * (byx - Center1.y) - Center1.x);
-			c = Center1.x * Center1.x + pow(byx - Center1.y, 2) - R1 * R1
-				+ pow(Center1.z - Current.z, 2);
+			b = 2.0 * (myx * (byx - center1.y) - center1.x);
+			c = center1.x * center1.x + pow(byx - center1.y, 2) - r1 * r1
+				+ pow(center1.z - current.z, 2);
 			// First solution
-			Solution1.x = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution1.x = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Second solution
-			Solution2.x = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution2.x = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Solve Y next
-			Solution1.y = Solution1.x * myx + byx;
-			Solution2.y = Solution2.x * myx + byx;
+			solution1.y = solution1.x * myx + byx;
+			solution2.y = solution2.x * myx + byx;
 			// Solve Z last
-			Solution1.z = Current.z;
-			Solution2.z = Current.z;
+			solution1.z = current.z;
+			solution2.z = current.z;
 		}
-		else// if (max(max(fabs(C1), fabs(1.0)), fabs(B1)) == fabs(B1))
+		else// if (max(max(fabs(c1), fabs(1.0)), fabs(b1)) == fabs(b1))
 		{
 			// Solve X first (use first set of plane coefficients)
 			double mzx = 0.0;
-			double bzx = Current.z;
-			a = 1.0 + mzx * mzx + pow(A1 + C1 * mzx, 2) / (B1 * B1);
-			b = 2.0 * (mzx * (bzx - Center1.z) - Center1.x + (A1 + C1 * mzx) / B1
-				* ((C1 * bzx + D1) / B1 + Center1.y));
-			c = Center1.x * Center1.x + pow(bzx - Center1.z, 2) - R1 * R1
-				+ pow((C1 * bzx + D1) / B1 + Center1.y, 2);
+			double bzx = current.z;
+			a = 1.0 + mzx * mzx + pow(a1 + c1 * mzx, 2) / (b1 * b1);
+			b = 2.0 * (mzx * (bzx - center1.z) - center1.x + (a1 + c1 * mzx) / b1
+				* ((c1 * bzx + d1) / b1 + center1.y));
+			c = center1.x * center1.x + pow(bzx - center1.z, 2) - r1 * r1
+				+ pow((c1 * bzx + d1) / b1 + center1.y, 2);
 			// First solution
-			Solution1.x = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution1.x = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Second solution
-			Solution2.x = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution2.x = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Solve Z next
-			Solution1.z = Solution1.x * mzx + bzx;
-			Solution2.z = Solution2.x * mzx + bzx;
+			solution1.z = solution1.x * mzx + bzx;
+			solution2.z = solution2.x * mzx + bzx;
 			// Solve Y last
-			Solution1.y = (-A1 * Solution1.x - C1 * Solution1.z - D1) / B1;
-			Solution2.y = (-A1 * Solution2.x - C1 * Solution2.z - D1) / B1;
+			solution1.y = (-a1 * solution1.x - c1 * solution1.z - d1) / b1;
+			solution2.y = (-a1 * solution2.x - c1 * solution2.z - d1) / b1;
 		}
 	}
-	else// if (max(fabs(B1), fabs(A1)) == fabs(den2))
+	else// if (max(fabs(b1), fabs(a1)) == fabs(den2))
 	{
-		if (max(max(fabs(A1), fabs(C1)), fabs(1.0)) == fabs(A1))
+		if (max(max(fabs(a1), fabs(c1)), fabs(1.0)) == fabs(a1))
 		{
 			// Solve Y first (use first set of plane coefficients)
 			double mzy = 0.0;
-			double bzy = Current.z;
-			a = 1 + mzy * mzy + pow(B1 + C1 * mzy, 2) / (A1 * A1);
-			b = 2 * (mzy * (bzy - Center1.z) - Center1.y + (B1 + C1 * mzy) / A1
-				* ((C1 * bzy + D1) / A1 + Center1.x));
-			c = Center1.y * Center1.y + pow(bzy - Center1.z, 2) - R1 * R1
-				+ pow((C1 * bzy + D1) / A1 + Center1.x, 2);
+			double bzy = current.z;
+			a = 1 + mzy * mzy + pow(b1 + c1 * mzy, 2) / (a1 * a1);
+			b = 2 * (mzy * (bzy - center1.z) - center1.y + (b1 + c1 * mzy) / a1
+				* ((c1 * bzy + d1) / a1 + center1.x));
+			c = center1.y * center1.y + pow(bzy - center1.z, 2) - r1 * r1
+				+ pow((c1 * bzy + d1) / a1 + center1.x, 2);
 			// First solution
-			Solution1.y = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution1.y = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Second solution
-			Solution2.y = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution2.y = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Solve Z next
-			Solution1.z = Solution1.y * mzy + bzy;
-			Solution2.z = Solution2.y * mzy + bzy;
+			solution1.z = solution1.y * mzy + bzy;
+			solution2.z = solution2.y * mzy + bzy;
 			// Solve X last
-			Solution1.x = (-B1 * Solution1.y - C1 * Solution1.z - D1) / A1;
-			Solution2.x = (-B1 * Solution2.y - C1 * Solution2.z - D1) / A1;
+			solution1.x = (-b1 * solution1.y - c1 * solution1.z - d1) / a1;
+			solution2.x = (-b1 * solution2.y - c1 * solution2.z - d1) / a1;
 		}
-		else if (max(max(fabs(A1), fabs(C1)), fabs(1.0)) == fabs(C1))
+		else if (max(max(fabs(a1), fabs(c1)), fabs(1.0)) == fabs(c1))
 		{
 			// Solve Y first (use first set of plane coefficients)
-			double mxy = -B1 / A1;
-			double bxy = -(C1 * Current.z + D1) / A1;
-			a = 1 + mxy * mxy + pow(B1 + A1 * mxy, 2) / (C1 * C1);
-			b = 2 * (mxy * (bxy - Center1.x) - Center1.y + (B1 + A1 * mxy) / C1
-				* ((A1 * bxy + D1) / C1 + Center1.z));
-			c = Center1.y * Center1.y + pow(bxy - Center1.x, 2) - R1 * R1
-				+ pow((A1 * bxy + D1) / C1 + Center1.z, 2);
+			double mxy = -b1 / a1;
+			double bxy = -(c1 * current.z + d1) / a1;
+			a = 1 + mxy * mxy + pow(b1 + a1 * mxy, 2) / (c1 * c1);
+			b = 2 * (mxy * (bxy - center1.x) - center1.y + (b1 + a1 * mxy) / c1
+				* ((a1 * bxy + d1) / c1 + center1.z));
+			c = center1.y * center1.y + pow(bxy - center1.x, 2) - r1 * r1
+				+ pow((a1 * bxy + d1) / c1 + center1.z, 2);
 			// First solution
-			Solution1.y = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution1.y = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Second solution
-			Solution2.y = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution2.y = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Solve X next
-			Solution1.x = Solution1.y * mxy + bxy;
-			Solution2.x = Solution2.y * mxy + bxy;
+			solution1.x = solution1.y * mxy + bxy;
+			solution2.x = solution2.y * mxy + bxy;
 			// Solve Z last
-			Solution1.z = (-A1 * Solution1.x - B1 * Solution1.y - D1) / C1;
-			Solution2.z = (-A1 * Solution2.x - B1 * Solution2.y - D1) / C1;
+			solution1.z = (-a1 * solution1.x - b1 * solution1.y - d1) / c1;
+			solution2.z = (-a1 * solution2.x - b1 * solution2.y - d1) / c1;
 		}
-		else// if (max(max(fabs(A1), fabs(C1)), fabs(1.0)) == fabs(1.0))
+		else// if (max(max(fabs(a1), fabs(c1)), fabs(1.0)) == fabs(1.0))
 		{
 			// Solve Y first (use second set of plane coefficients)
-			double mxy = -B1 / A1;
-			double bxy = -(C1 * Current.z + D1) / A1;
+			double mxy = -b1 / a1;
+			double bxy = -(c1 * current.z + d1) / a1;
 			a = 1 + mxy * mxy;
-			b = 2 * (mxy * (bxy - Center1.x) - Center1.y);
-			c = Center1.y * Center1.y + pow(bxy - Center1.x, 2) - R1 * R1
-				+ pow(Center1.z - Current.z, 2);
+			b = 2 * (mxy * (bxy - center1.x) - center1.y);
+			c = center1.y * center1.y + pow(bxy - center1.x, 2) - r1 * r1
+				+ pow(center1.z - current.z, 2);
 			// First solution
-			Solution1.y = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution1.y = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Second solution
-			Solution2.y = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
+			solution2.y = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
 			// Solve X next
-			Solution1.x = Solution1.y * mxy + bxy;
-			Solution2.x = Solution2.y * mxy + bxy;
+			solution1.x = solution1.y * mxy + bxy;
+			solution2.x = solution2.y * mxy + bxy;
 			// Solve Z last
-			Solution1.z = Current.z;
-			Solution2.z = Current.z;
+			solution1.z = current.z;
+			solution2.z = current.z;
 		}
 	}
 
 	// Make sure the solution is valid
-	if (Solution1 != Solution1 || Solution2 != Solution2)
+	if (solution1 != solution1 || solution2 != solution2)
 	{
 		debugger->Print(_T("Error (SolveForXY): Invalid solution"), Debugger::PriorityLow);
 
@@ -789,33 +789,33 @@ bool SUSPENSION::SolveForXY(const Vector &Center1, const Vector &Center2, const 
 	// point was on, and which side of the new plane either one of the solutions is on.
 
 	// Get the plane normals
-	Vector PointInPlane = OriginalCenter1;
-	PointInPlane.z = 0.0;
-	Vector OriginalNormal = (OriginalCenter1 - OriginalCenter2).Cross(OriginalCenter1 - PointInPlane);
-	PointInPlane = Center1;
-	PointInPlane.z = 0.0;
-	Vector NewNormal = (Center1 - Center2).Cross(Center1 - PointInPlane);
+	Vector pointInPlane = originalCenter1;
+	pointInPlane.z = 0.0;
+	Vector originalNormal = (originalCenter1 - originalCenter2).Cross(originalCenter1 - pointInPlane);
+	pointInPlane = center1;
+	pointInPlane.z = 0.0;
+	Vector newNormal = (center1 - center2).Cross(center1 - pointInPlane);
 
 	// Get a vector from the location of the point to some point in the plane
-	Vector OriginalVectorToPlane = OriginalCenter1 - Original;
-	Vector NewVectorToPlane = Center1 - Solution1;
+	Vector originalVectorToPlane = originalCenter1 - original;
+	Vector newVectorToPlane = center1 - solution1;
 
 	// The dot products of the normal and the vector to the plane will give an indication
 	// of which side of the plane the point is on
-	double OriginalSide = OriginalNormal * OriginalVectorToPlane;
-	double NewSide = NewNormal * NewVectorToPlane;
+	double originalSide = originalNormal * originalVectorToPlane;
+	double newSide = newNormal * newVectorToPlane;
 
 	// We can compare the sign of the original side with the new side to choose the correct solution
-	if ((NewSide > 0 && OriginalSide > 0) || (NewSide < 0 && OriginalSide < 0))
-		Current = Solution1;
+	if ((newSide > 0 && originalSide > 0) || (newSide < 0 && originalSide < 0))
+		current = solution1;
 	else
-		Current = Solution2;
+		current = solution2;
 
 	return true;
 }
 
 //==========================================================================
-// Class:			SUSPENSION
+// Class:			Suspension
 // Function:		SolveForContactPatch
 //
 // Description:		This function solves for the circle created by the
@@ -827,22 +827,22 @@ bool SUSPENSION::SolveForXY(const Vector &Center1, const Vector &Center2, const 
 //					the event of an error, a zero length vector is returned.
 //
 // Input Arguments:
-//		WheelCenter			= const Vector& specifying the center of the wheel
-//		WheelPlaneNormal	= const Vector& specifying the orientation of the wheel
-//		TireRadius			= const double& specifying the loaded radius of the tire
+//		wheelCenter			= const Vector& specifying the center of the wheel
+//		wheelPlaneNormal	= const Vector& specifying the orientation of the wheel
+//		tireRadius			= const double& specifying the loaded radius of the tire
 //
 // Output Arguments:
-//		Output	= Vector& specifying the location of the center of the tire's
+//		output	= Vector& specifying the location of the center of the tire's
 //				  contact patch
 //
 // Return Value:
 //		bool, true for success, false for error
 //		
 //==========================================================================
-bool SUSPENSION::SolveForContactPatch(const Vector &WheelCenter, const Vector &WheelPlaneNormal,
-									  const double &TireRadius, Vector &Output)
+bool Suspension::SolveForContactPatch(const Vector &wheelCenter, const Vector &wheelPlaneNormal,
+									  const double &tireRadius, Vector &output)
 {
-	Vector MinimumZPoint;
+	Vector minimumZPoint;
 
 	// Equation for sphere as described above:
 	// (x - WheelCenter.x)^2 + (y - WheelCenter.y)^2 + (z - WheelCenter.z)^2 - TireRadius^2 = 0
@@ -857,55 +857,55 @@ bool SUSPENSION::SolveForContactPatch(const Vector &WheelCenter, const Vector &W
 	// the circle we originally set out to find -> z(x) and y(x, z).  To find our minimum Z point, we
 	// differentiate z(x) and set equal to zero.  This gives us x as a function of the inputs to
 	// SolveForContactPatch only.
-	MinimumZPoint.x = (WheelCenter.x * (pow(WheelPlaneNormal.x, 4) + 2 * pow(WheelPlaneNormal.x, 2)
-		* pow(WheelPlaneNormal.y, 2) + pow(WheelPlaneNormal.y, 4) + pow(WheelPlaneNormal.x, 2)
-		* pow(WheelPlaneNormal.z, 2) + pow(WheelPlaneNormal.y, 2) * pow(WheelPlaneNormal.z, 2))
-		- sqrt(pow(TireRadius * WheelPlaneNormal.x * WheelPlaneNormal.z, 2)	* (pow(WheelPlaneNormal.x, 4)
-		+ 2 * pow(WheelPlaneNormal.x, 2) * pow(WheelPlaneNormal.y, 2) + pow(WheelPlaneNormal.y, 4)
-		+ pow(WheelPlaneNormal.x * WheelPlaneNormal.z, 2) + pow(WheelPlaneNormal.y * WheelPlaneNormal.z, 2))))
-		/ (pow(WheelPlaneNormal.x, 4) + 2 * pow(WheelPlaneNormal.x * WheelPlaneNormal.y, 2)
-		+ pow(WheelPlaneNormal.y, 4) + pow(WheelPlaneNormal.x * WheelPlaneNormal.z, 2)
-		+ pow(WheelPlaneNormal.y * WheelPlaneNormal.z, 2));
+	minimumZPoint.x = (wheelCenter.x * (pow(wheelPlaneNormal.x, 4) + 2 * pow(wheelPlaneNormal.x, 2)
+		* pow(wheelPlaneNormal.y, 2) + pow(wheelPlaneNormal.y, 4) + pow(wheelPlaneNormal.x, 2)
+		* pow(wheelPlaneNormal.z, 2) + pow(wheelPlaneNormal.y, 2) * pow(wheelPlaneNormal.z, 2))
+		- sqrt(pow(tireRadius * wheelPlaneNormal.x * wheelPlaneNormal.z, 2)	* (pow(wheelPlaneNormal.x, 4)
+		+ 2 * pow(wheelPlaneNormal.x, 2) * pow(wheelPlaneNormal.y, 2) + pow(wheelPlaneNormal.y, 4)
+		+ pow(wheelPlaneNormal.x * wheelPlaneNormal.z, 2) + pow(wheelPlaneNormal.y * wheelPlaneNormal.z, 2))))
+		/ (pow(wheelPlaneNormal.x, 4) + 2 * pow(wheelPlaneNormal.x * wheelPlaneNormal.y, 2)
+		+ pow(wheelPlaneNormal.y, 4) + pow(wheelPlaneNormal.x * wheelPlaneNormal.z, 2)
+		+ pow(wheelPlaneNormal.y * wheelPlaneNormal.z, 2));
 
 	// Now we can plug back into our equations for Y and Z.  For Z, we'll solve the quadratic with
 	// the quadratic equation.  Since A is always positive, we know we'll always want the minus
 	// solution when we're looking for the minimum.
-	double A, B, C;
-	A = 1 + pow(WheelPlaneNormal.z / WheelPlaneNormal.y, 2);
-	B = 2 * (WheelPlaneNormal.z / WheelPlaneNormal.y * WheelCenter.y - WheelCenter.z - WheelPlaneNormal.z
-		/ pow(WheelPlaneNormal.y, 2) * (WheelCenter * WheelPlaneNormal - WheelPlaneNormal.x * MinimumZPoint.x));
-	C = pow(MinimumZPoint.x - WheelCenter.x, 2) + pow(WheelCenter * WheelPlaneNormal - WheelPlaneNormal.x
-		* MinimumZPoint.x, 2) / pow(WheelPlaneNormal.y, 2) - 2 * WheelCenter.y / WheelPlaneNormal.y
-		* (WheelCenter * WheelPlaneNormal - WheelPlaneNormal.x * MinimumZPoint.x) + pow(WheelCenter.y, 2)
-		+ pow(WheelCenter.z, 2) - pow(TireRadius, 2);
-	MinimumZPoint.z = (-B - sqrt(B * B - 4 * A * C)) / (2 * A);
-	MinimumZPoint.y = (WheelCenter * WheelPlaneNormal - MinimumZPoint.x * WheelPlaneNormal.x
-		- MinimumZPoint.z * WheelPlaneNormal.z) / WheelPlaneNormal.y;
+	double a, b, c;
+	a = 1 + pow(wheelPlaneNormal.z / wheelPlaneNormal.y, 2);
+	b = 2 * (wheelPlaneNormal.z / wheelPlaneNormal.y * wheelCenter.y - wheelCenter.z - wheelPlaneNormal.z
+		/ pow(wheelPlaneNormal.y, 2) * (wheelCenter * wheelPlaneNormal - wheelPlaneNormal.x * minimumZPoint.x));
+	c = pow(minimumZPoint.x - wheelCenter.x, 2) + pow(wheelCenter * wheelPlaneNormal - wheelPlaneNormal.x
+		* minimumZPoint.x, 2) / pow(wheelPlaneNormal.y, 2) - 2 * wheelCenter.y / wheelPlaneNormal.y
+		* (wheelCenter * wheelPlaneNormal - wheelPlaneNormal.x * minimumZPoint.x) + pow(wheelCenter.y, 2)
+		+ pow(wheelCenter.z, 2) - pow(tireRadius, 2);
+	minimumZPoint.z = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
+	minimumZPoint.y = (wheelCenter * wheelPlaneNormal - minimumZPoint.x * wheelPlaneNormal.x
+		- minimumZPoint.z * wheelPlaneNormal.z) / wheelPlaneNormal.y;
 
 	// Check to make sure the solution is valid
-	if (MinimumZPoint != MinimumZPoint)
+	if (minimumZPoint != minimumZPoint)
 	{
 		// Return a zero-length vector
-		Output.Set(0.0, 0.0, 0.0);
+		output.Set(0.0, 0.0, 0.0);
 		debugger->Print(_T("Error (SolveForContactPatch):  Invalid solution"), Debugger::PriorityLow);
 
 		return false;
 	}
 
 	// Assign the solution
-	Output = MinimumZPoint;
+	output = minimumZPoint;
 
 	return true;
 }
 
 //==========================================================================
-// Class:			SUSPENSION
+// Class:			Suspension
 // Function:		Write
 //
 // Description:		Writes this suspension to file.
 //
 // Input Arguments:
-//		OutFile	= std::ofstream* pointing to the output stream
+//		outFile	= std::ofstream* pointing to the output stream
 //
 // Output Arguments:
 //		None
@@ -914,38 +914,38 @@ bool SUSPENSION::SolveForContactPatch(const Vector &WheelCenter, const Vector &W
 //		None
 //
 //==========================================================================
-void SUSPENSION::Write(std::ofstream *OutFile) const
+void Suspension::Write(std::ofstream *outFile) const
 {
 	// Write the components that make up this object to file
-	RightFront.Write(OutFile);
-	LeftFront.Write(OutFile);
-	RightRear.Write(OutFile);
-	LeftRear.Write(OutFile);
+	rightFront.Write(outFile);
+	leftFront.Write(outFile);
+	rightRear.Write(outFile);
+	leftRear.Write(outFile);
 
-	OutFile->write((char*)Hardpoints, sizeof(Vector) * NumberOfHardpoints);
+	outFile->write((char*)hardpoints, sizeof(Vector) * NumberOfHardpoints);
 
-	OutFile->write((char*)&BarRate, sizeof(FrontRearDouble));
-	OutFile->write((char*)&RackRatio, sizeof(double));
+	outFile->write((char*)&barRate, sizeof(FrontRearDouble));
+	outFile->write((char*)&rackRatio, sizeof(double));
 
 	// Flags and styles
-	OutFile->write((char*)&IsSymmetric, sizeof(bool));
-	OutFile->write((char*)&FrontBarStyle, sizeof(BAR_STYLE));
-	OutFile->write((char*)&RearBarStyle, sizeof(BAR_STYLE));
-	OutFile->write((char*)&FrontBarAttachment, sizeof(BAR_ATTACHMENT));
-	OutFile->write((char*)&RearBarAttachment, sizeof(BAR_ATTACHMENT));
-	OutFile->write((char*)&FrontHasThirdSpring, sizeof(bool));
-	OutFile->write((char*)&RearHasThirdSpring, sizeof(bool));
+	outFile->write((char*)&isSymmetric, sizeof(bool));
+	outFile->write((char*)&frontBarStyle, sizeof(BarStyle));
+	outFile->write((char*)&rearBarStyle, sizeof(BarStyle));
+	outFile->write((char*)&frontBarAttachment, sizeof(BarAttachment));
+	outFile->write((char*)&rearBarAttachment, sizeof(BarAttachment));
+	outFile->write((char*)&frontHasThirdSpring, sizeof(bool));
+	outFile->write((char*)&rearHasThirdSpring, sizeof(bool));
 }
 
 //==========================================================================
-// Class:			SUSPENSION
+// Class:			Suspension
 // Function:		Read
 //
 // Description:		Read from file to fill this suspension.
 //
 // Input Arguments:
-//		InFile		= std::ifstream* pointing to the input stream
-//		FileVersion	= int specifying which file version we're reading from
+//		inFile		= std::ifstream* pointing to the input stream
+//		fileVersion	= int specifying which file version we're reading from
 //
 // Output Arguments:
 //		None
@@ -954,27 +954,27 @@ void SUSPENSION::Write(std::ofstream *OutFile) const
 //		None
 //
 //==========================================================================
-void SUSPENSION::Read(std::ifstream *InFile, int FileVersion)
+void Suspension::Read(std::ifstream *inFile, int fileVersion)
 {
 	// Read the components that make up this object from file
-	RightFront.Read(InFile, FileVersion);
-	LeftFront.Read(InFile, FileVersion);
-	RightRear.Read(InFile, FileVersion);
-	LeftRear.Read(InFile, FileVersion);
+	rightFront.Read(inFile, fileVersion);
+	leftFront.Read(inFile, fileVersion);
+	rightRear.Read(inFile, fileVersion);
+	leftRear.Read(inFile, fileVersion);
 
-	InFile->read((char*)Hardpoints, sizeof(Vector) * NumberOfHardpoints);
+	inFile->read((char*)hardpoints, sizeof(Vector) * NumberOfHardpoints);
 
-	InFile->read((char*)&BarRate, sizeof(FrontRearDouble));
-	InFile->read((char*)&RackRatio, sizeof(double));
+	inFile->read((char*)&barRate, sizeof(FrontRearDouble));
+	inFile->read((char*)&rackRatio, sizeof(double));
 
 	// Flags and styles
-	InFile->read((char*)&IsSymmetric, sizeof(bool));
-	InFile->read((char*)&FrontBarStyle, sizeof(BAR_STYLE));
-	InFile->read((char*)&RearBarStyle, sizeof(BAR_STYLE));
-	InFile->read((char*)&FrontBarAttachment, sizeof(BAR_ATTACHMENT));
-	InFile->read((char*)&RearBarAttachment, sizeof(BAR_ATTACHMENT));
-	InFile->read((char*)&FrontHasThirdSpring, sizeof(bool));
-	InFile->read((char*)&RearHasThirdSpring, sizeof(bool));
+	inFile->read((char*)&isSymmetric, sizeof(bool));
+	inFile->read((char*)&frontBarStyle, sizeof(BarStyle));
+	inFile->read((char*)&rearBarStyle, sizeof(BarStyle));
+	inFile->read((char*)&frontBarAttachment, sizeof(BarAttachment));
+	inFile->read((char*)&rearBarAttachment, sizeof(BarAttachment));
+	inFile->read((char*)&frontHasThirdSpring, sizeof(bool));
+	inFile->read((char*)&rearHasThirdSpring, sizeof(bool));
 
 	// Third spring and damper objects
 	// NOT YET USED!!!
@@ -985,13 +985,13 @@ void SUSPENSION::Read(std::ifstream *InFile, int FileVersion)
 }
 
 //==========================================================================
-// Class:			SUSPENSION
+// Class:			Suspension
 // Function:		GetBarStyleName
 //
 // Description:		Returns the name of the sway bar style.
 //
 // Input Arguments:
-//		_BarStyle	= const BAR_STYLE& of interest
+//		_barStyle	= const BarStyle& of interest
 //
 // Output Arguments:
 //		None
@@ -1000,9 +1000,9 @@ void SUSPENSION::Read(std::ifstream *InFile, int FileVersion)
 //		wxString containing the name of the bar style
 //
 //==========================================================================
-wxString SUSPENSION::GetBarStyleName(const BAR_STYLE &_BarStyle)
+wxString Suspension::GetBarStyleName(const BarStyle &_barStyle)
 {
-	switch (_BarStyle)
+	switch (_barStyle)
 	{
 	case SwayBarNone:
 		return _T("None");
@@ -1029,13 +1029,13 @@ wxString SUSPENSION::GetBarStyleName(const BAR_STYLE &_BarStyle)
 }
 
 //==========================================================================
-// Class:			SUSPENSION
+// Class:			Suspension
 // Function:		GetHardpointName
 //
 // Description:		Returns the name of the point.
 //
 // Input Arguments:
-//		Point	= const HARDPOINTS&, specifying the point to retrieve
+//		point	= const Hardpoints&, specifying the point to retrieve
 //
 // Output Arguments:
 //		None
@@ -1044,9 +1044,9 @@ wxString SUSPENSION::GetBarStyleName(const BAR_STYLE &_BarStyle)
 //		wxString containing the name of the point
 //
 //==========================================================================
-wxString SUSPENSION::GetHardpointName(const HARDPOINTS& Point)
+wxString Suspension::GetHardpointName(const Hardpoints& point)
 {
-	switch (Point)
+	switch (point)
 	{
 	case FrontBarMidPoint:
 		return _T("Front Bar Mid-Point");
@@ -1097,13 +1097,13 @@ wxString SUSPENSION::GetHardpointName(const HARDPOINTS& Point)
 }
 
 //==========================================================================
-// Class:			SUSPENSION
+// Class:			Suspension
 // Function:		GetBarAttachmentname
 //
 // Description:		Returns the name of the bar attachment method.
 //
 // Input Arguments:
-//		_BarAttachment	= const BAR_ATTACHMENT&, specifying the type of attachment
+//		_barAttachment	= const BarAttachment&, specifying the type of attachment
 //
 // Output Arguments:
 //		None
@@ -1112,9 +1112,9 @@ wxString SUSPENSION::GetHardpointName(const HARDPOINTS& Point)
 //		wxString containing the name of the attachment method
 //
 //==========================================================================
-wxString SUSPENSION::GetBarAttachmentname(const BAR_ATTACHMENT &_BarAttachment)
+wxString Suspension::GetBarAttachmentname(const BarAttachment &_barAttachment)
 {
-	switch (_BarAttachment)
+	switch (_barAttachment)
 	{
 	case BarAttachmentBellcrank:
 		return _T("Bellcrank");
@@ -1141,17 +1141,17 @@ wxString SUSPENSION::GetBarAttachmentname(const BAR_ATTACHMENT &_BarAttachment)
 }
 
 //==========================================================================
-// Class:			SUSPENSION
+// Class:			Suspension
 // Function:		ComputeWheelCenters
 //
 // Description:		Calls the methods at each corner that compute the wheel
 //					center location.
 //
 // Input Arguments:
-//		RFTireDiameter	= const double& specifying the diameter of the right front tire
-//		LFTireDiameter	= const double& specifying the diameter of the left front tire
-//		RRTireDiameter	= const double& specifying the diameter of the right rear tire
-//		LRTireDiameter	= const double& specifying the diameter of the left rear tire
+//		rfTireDiameter	= const double& specifying the diameter of the right front tire
+//		lfTireDiameter	= const double& specifying the diameter of the left front tire
+//		rrTireDiameter	= const double& specifying the diameter of the right rear tire
+//		lrTireDiameter	= const double& specifying the diameter of the left rear tire
 //
 // Output Arguments:
 //		None
@@ -1160,68 +1160,68 @@ wxString SUSPENSION::GetBarAttachmentname(const BAR_ATTACHMENT &_BarAttachment)
 //		None
 //
 //==========================================================================
-void SUSPENSION::ComputeWheelCenters(const double &RFTireDiameter, const double &LFTireDiameter,
-									 const double &RRTireDiameter, const double &LRTireDiameter)
+void Suspension::ComputeWheelCenters(const double &rfTireDiameter, const double &lfTireDiameter,
+									 const double &rrTireDiameter, const double &lrTireDiameter)
 {
 	// Call the methods for each corner
-	RightFront.ComputeWheelCenter(RFTireDiameter);
-	LeftFront.ComputeWheelCenter(LFTireDiameter);
-	RightRear.ComputeWheelCenter(RRTireDiameter);
-	LeftRear.ComputeWheelCenter(LRTireDiameter);
+	rightFront.ComputeWheelCenter(rfTireDiameter);
+	leftFront.ComputeWheelCenter(lfTireDiameter);
+	rightRear.ComputeWheelCenter(rrTireDiameter);
+	leftRear.ComputeWheelCenter(lrTireDiameter);
 }
 
 //==========================================================================
-// Class:			SUSPENSION
+// Class:			Suspension
 // Function:		operator=
 //
 // Description:		Overloaded assignment operator.  This is necessary due to
 //					the references that this class contains.
 //
 // Input Arguments:
-//		Suspension	= const SUSPENSION& to be assigned to this
+//		suspension	= const Suspension& to be assigned to this
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		SUSPENSION&, reference to this
+//		Suspension&, reference to this
 //
 //==========================================================================
-SUSPENSION& SUSPENSION::operator=(const SUSPENSION& Suspension)
+Suspension& Suspension::operator=(const Suspension& suspension)
 {
 	// Check for self assignment
-	if (this == &Suspension)
+	if (this == &suspension)
 		return *this;
 
 	// Copy the corners
-	RightFront = Suspension.RightFront;
-	LeftFront = Suspension.LeftFront;
-	RightRear = Suspension.RightRear;
-	LeftRear = Suspension.LeftRear;
+	rightFront = suspension.rightFront;
+	leftFront = suspension.leftFront;
+	rightRear = suspension.rightRear;
+	leftRear = suspension.leftRear;
 
 	// Copy the hardpoints
 	int i;
 	for (i = 0; i < NumberOfHardpoints; i++)
-		Hardpoints[i] = Suspension.Hardpoints[i];
+		hardpoints[i] = suspension.hardpoints[i];
 
 	// Suspension parameters
-	BarRate = Suspension.BarRate;
-	RackRatio = Suspension.RackRatio;
+	barRate = suspension.barRate;
+	rackRatio = suspension.rackRatio;
 
 	// Flags and styles
-	IsSymmetric = Suspension.IsSymmetric;
-	FrontBarStyle = Suspension.FrontBarStyle;
-	RearBarStyle = Suspension.RearBarStyle;
-	FrontBarAttachment = Suspension.FrontBarAttachment;
-	RearBarAttachment = Suspension.RearBarAttachment;
-	FrontHasThirdSpring = Suspension.FrontHasThirdSpring;
-	RearHasThirdSpring = Suspension.RearHasThirdSpring;
+	isSymmetric = suspension.isSymmetric;
+	frontBarStyle = suspension.frontBarStyle;
+	rearBarStyle = suspension.rearBarStyle;
+	frontBarAttachment = suspension.frontBarAttachment;
+	rearBarAttachment = suspension.rearBarAttachment;
+	frontHasThirdSpring = suspension.frontHasThirdSpring;
+	rearHasThirdSpring = suspension.rearHasThirdSpring;
 
 	// Third spring and damper objects
-	FrontThirdSpring = Suspension.FrontThirdSpring;
-	RearThirdSpring = Suspension.RearThirdSpring;
-	FrontThirdDamper = Suspension.FrontThirdDamper;
-	RearThirdDamper = Suspension.RearThirdDamper;
+	frontThirdSpring = suspension.frontThirdSpring;
+	rearThirdSpring = suspension.rearThirdSpring;
+	frontThirdDamper = suspension.frontThirdDamper;
+	rearThirdDamper = suspension.rearThirdDamper;
 
 	return *this;
 }

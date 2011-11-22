@@ -92,7 +92,7 @@ Swaybar3D::~Swaybar3D()
 //								  sway bar (depends on bar style)
 //		torsionMemberBottomLeft	= const Vector&, either the bottom OR the left end of the
 //								  sway bar (depends on bar style)
-//		barStyle				= const SUSPENSION::BAR_STYLE& defining the type of swaybar
+//		barStyle				= const Suspension::BarStyle& defining the type of swaybar
 //		dimension				= const double& describing the size of the members
 //		resolution				= const integer& representing the number of planar sides to use
 //								  to represent the cylinders
@@ -107,7 +107,7 @@ Swaybar3D::~Swaybar3D()
 //
 //==========================================================================
 void Swaybar3D::Update(const Vector &rightLink, const Vector &leftLink, const Vector &torsionMemberTopRight,
-					   const Vector &torsionMemberBottomLeft, const SUSPENSION::BAR_STYLE &barStyle,
+					   const Vector &torsionMemberBottomLeft, const Suspension::BarStyle &barStyle,
 					   const double &dimension, const int &resolution, const Color &color, bool show)
 {
 	// Make sure all vector arguments are valid - if they are not,
@@ -117,8 +117,8 @@ void Swaybar3D::Update(const Vector &rightLink, const Vector &leftLink, const Ve
 		show = false;
 
 	// Check to make sure the sway bar exists
-	if (barStyle == SUSPENSION::SwayBarNone ||
-		barStyle == SUSPENSION::SwayBarGeared)// FIXME:  Geared bars not yet implemented!
+	if (barStyle == Suspension::SwayBarNone ||
+		barStyle == Suspension::SwayBarGeared)// FIXME:  Geared bars not yet implemented!
 		show = false;
 
 	// Set the visibility flags
@@ -155,7 +155,7 @@ void Swaybar3D::Update(const Vector &rightLink, const Vector &leftLink, const Ve
 	torqueArm2->SetEndPoint1(leftLink);
 
 	// The geometry depends on what kind of swaybar it is
-	if (barStyle == SUSPENSION::SwayBarUBar)
+	if (barStyle == Suspension::SwayBarUBar)
 		torqueArm2->SetEndPoint2(torsionMemberBottomLeft);
 	else// if (barStyle == SUSPENSION::SwayBarTBar)
 		torqueArm2->SetEndPoint2(torsionMemberTopRight);

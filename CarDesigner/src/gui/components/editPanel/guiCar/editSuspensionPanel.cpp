@@ -142,7 +142,7 @@ void EDIT_SUSPENSION_PANEL::UpdateInformation(void)
 // Description:		Updates the information on this panel.
 //
 // Input Arguments:
-//		_CurrentSuspension	= SUSPENSION* pointing to the associated suspension
+//		_CurrentSuspension	= Suspension* pointing to the associated suspension
 //
 // Output Arguments:
 //		None
@@ -151,19 +151,19 @@ void EDIT_SUSPENSION_PANEL::UpdateInformation(void)
 //		None
 //
 //==========================================================================
-void EDIT_SUSPENSION_PANEL::UpdateInformation(SUSPENSION *_CurrentSuspension)
+void EDIT_SUSPENSION_PANEL::UpdateInformation(Suspension *_CurrentSuspension)
 {
 	// Update the class members
 	CurrentSuspension = _CurrentSuspension;
 
 	// Update the check boxes
-	IsSymmetric->SetValue(CurrentSuspension->IsSymmetric);
-	FrontHasThirdSpring->SetValue(CurrentSuspension->FrontHasThirdSpring);
-	RearHasThirdSpring->SetValue(CurrentSuspension->RearHasThirdSpring);
+	IsSymmetric->SetValue(CurrentSuspension->isSymmetric);
+	FrontHasThirdSpring->SetValue(CurrentSuspension->frontHasThirdSpring);
+	RearHasThirdSpring->SetValue(CurrentSuspension->rearHasThirdSpring);
 
 	// Update the combo boxes
-	FrontBarStyle->SetSelection(CurrentSuspension->FrontBarStyle);
-	RearBarStyle->SetSelection(CurrentSuspension->RearBarStyle);
+	FrontBarStyle->SetSelection(CurrentSuspension->frontBarStyle);
+	RearBarStyle->SetSelection(CurrentSuspension->rearBarStyle);
 
 	// Begin batch edit of the grid
 	Hardpoints->BeginBatch();
@@ -177,58 +177,58 @@ void EDIT_SUSPENSION_PANEL::UpdateInformation(SUSPENSION *_CurrentSuspension)
 
 	// Hide or show rows according to this object's configuration
 	// Front third spring
-	if (CurrentSuspension->FrontHasThirdSpring)
+	if (CurrentSuspension->frontHasThirdSpring)
 	{
-		Hardpoints->SetRowHeight(SUSPENSION::FrontThirdShockInboard + 1, Hardpoints->GetRowHeight(0));
-		Hardpoints->SetRowHeight(SUSPENSION::FrontThirdShockOutboard + 1, Hardpoints->GetRowHeight(0));
-		Hardpoints->SetRowHeight(SUSPENSION::FrontThirdSpringInboard + 1, Hardpoints->GetRowHeight(0));
-		Hardpoints->SetRowHeight(SUSPENSION::FrontThirdSpringOutboard + 1, Hardpoints->GetRowHeight(0));
+		Hardpoints->SetRowHeight(Suspension::FrontThirdShockInboard + 1, Hardpoints->GetRowHeight(0));
+		Hardpoints->SetRowHeight(Suspension::FrontThirdShockOutboard + 1, Hardpoints->GetRowHeight(0));
+		Hardpoints->SetRowHeight(Suspension::FrontThirdSpringInboard + 1, Hardpoints->GetRowHeight(0));
+		Hardpoints->SetRowHeight(Suspension::FrontThirdSpringOutboard + 1, Hardpoints->GetRowHeight(0));
 	}
 	else
 	{
-		Hardpoints->SetRowHeight(SUSPENSION::FrontThirdShockInboard + 1, 0);
-		Hardpoints->SetRowHeight(SUSPENSION::FrontThirdShockOutboard + 1, 0);
-		Hardpoints->SetRowHeight(SUSPENSION::FrontThirdSpringInboard + 1, 0);
-		Hardpoints->SetRowHeight(SUSPENSION::FrontThirdSpringOutboard + 1, 0);
+		Hardpoints->SetRowHeight(Suspension::FrontThirdShockInboard + 1, 0);
+		Hardpoints->SetRowHeight(Suspension::FrontThirdShockOutboard + 1, 0);
+		Hardpoints->SetRowHeight(Suspension::FrontThirdSpringInboard + 1, 0);
+		Hardpoints->SetRowHeight(Suspension::FrontThirdSpringOutboard + 1, 0);
 	}
 
 	// Rear third spring
-	if (CurrentSuspension->RearHasThirdSpring)
+	if (CurrentSuspension->rearHasThirdSpring)
 	{
-		Hardpoints->SetRowHeight(SUSPENSION::RearThirdShockInboard + 1, Hardpoints->GetRowHeight(0));
-		Hardpoints->SetRowHeight(SUSPENSION::RearThirdShockOutboard + 1, Hardpoints->GetRowHeight(0));
-		Hardpoints->SetRowHeight(SUSPENSION::RearThirdSpringInboard + 1, Hardpoints->GetRowHeight(0));
-		Hardpoints->SetRowHeight(SUSPENSION::RearThirdSpringOutboard + 1, Hardpoints->GetRowHeight(0));
+		Hardpoints->SetRowHeight(Suspension::RearThirdShockInboard + 1, Hardpoints->GetRowHeight(0));
+		Hardpoints->SetRowHeight(Suspension::RearThirdShockOutboard + 1, Hardpoints->GetRowHeight(0));
+		Hardpoints->SetRowHeight(Suspension::RearThirdSpringInboard + 1, Hardpoints->GetRowHeight(0));
+		Hardpoints->SetRowHeight(Suspension::RearThirdSpringOutboard + 1, Hardpoints->GetRowHeight(0));
 	}
 	else
 	{
-		Hardpoints->SetRowHeight(SUSPENSION::RearThirdShockInboard + 1, 0);
-		Hardpoints->SetRowHeight(SUSPENSION::RearThirdShockOutboard + 1, 0);
-		Hardpoints->SetRowHeight(SUSPENSION::RearThirdSpringInboard + 1, 0);
-		Hardpoints->SetRowHeight(SUSPENSION::RearThirdSpringOutboard + 1, 0);
+		Hardpoints->SetRowHeight(Suspension::RearThirdShockInboard + 1, 0);
+		Hardpoints->SetRowHeight(Suspension::RearThirdShockOutboard + 1, 0);
+		Hardpoints->SetRowHeight(Suspension::RearThirdSpringInboard + 1, 0);
+		Hardpoints->SetRowHeight(Suspension::RearThirdSpringOutboard + 1, 0);
 	}
 
 	// Front sway bar
-	if (CurrentSuspension->FrontBarStyle == SUSPENSION::SwayBarUBar ||
-		CurrentSuspension->FrontBarStyle == SUSPENSION::SwayBarTBar)
-		Hardpoints->SetRowHeight(SUSPENSION::FrontBarMidPoint + 1, Hardpoints->GetRowHeight(0));
+	if (CurrentSuspension->frontBarStyle == Suspension::SwayBarUBar ||
+		CurrentSuspension->frontBarStyle == Suspension::SwayBarTBar)
+		Hardpoints->SetRowHeight(Suspension::FrontBarMidPoint + 1, Hardpoints->GetRowHeight(0));
 	else
-		Hardpoints->SetRowHeight(SUSPENSION::FrontBarMidPoint + 1, 0);
+		Hardpoints->SetRowHeight(Suspension::FrontBarMidPoint + 1, 0);
 
 	// Rear swaybar
-	if (CurrentSuspension->RearBarStyle == SUSPENSION::SwayBarUBar ||
-		CurrentSuspension->RearBarStyle == SUSPENSION::SwayBarTBar)
-		Hardpoints->SetRowHeight(SUSPENSION::RearBarMidPoint + 1, Hardpoints->GetRowHeight(0));
+	if (CurrentSuspension->rearBarStyle == Suspension::SwayBarUBar ||
+		CurrentSuspension->rearBarStyle == Suspension::SwayBarTBar)
+		Hardpoints->SetRowHeight(Suspension::RearBarMidPoint + 1, Hardpoints->GetRowHeight(0));
 	else
-		Hardpoints->SetRowHeight(SUSPENSION::RearBarMidPoint + 1, 0);
+		Hardpoints->SetRowHeight(Suspension::RearBarMidPoint + 1, 0);
 
 	// Update the values of all of the points
 	Vector Point;
 	int i;
-	for (i = 0; i < SUSPENSION::NumberOfHardpoints; i++)
+	for (i = 0; i < Suspension::NumberOfHardpoints; i++)
 	{
 		// Get the location of this hardpoint (don't forget to convert it!)
-		Point = Converter.ConvertDistance(CurrentSuspension->Hardpoints[i]);
+		Point = Converter.ConvertDistance(CurrentSuspension->hardpoints[i]);
 
 		// Set the X value
 		Hardpoints->SetCellValue(i + 1, 1, Converter.FormatNumber(Point.x));
@@ -282,7 +282,7 @@ void EDIT_SUSPENSION_PANEL::CreateControls()
 
 	// Create the grid for the hard point entry
 	Hardpoints = new SuperGrid(this, wxID_ANY);
-	Hardpoints->CreateGrid(SUSPENSION::NumberOfHardpoints + 1, 4, wxGrid::wxGridSelectRows);
+	Hardpoints->CreateGrid(Suspension::NumberOfHardpoints + 1, 4, wxGrid::wxGridSelectRows);
 
 	// Begin a batch edit of the grid
 	Hardpoints->BeginBatch();
@@ -293,7 +293,7 @@ void EDIT_SUSPENSION_PANEL::CreateControls()
 		Hardpoints->SetReadOnly(0, i, true);
 
 	// Do the processing that needs to be done for each row
-	for (i = 0; i < SUSPENSION::NumberOfHardpoints; i++)
+	for (i = 0; i < Suspension::NumberOfHardpoints; i++)
 	{
 		// Make the first column read-only
 		Hardpoints->SetReadOnly(i + 1, 0, true);
@@ -304,7 +304,7 @@ void EDIT_SUSPENSION_PANEL::CreateControls()
 		Hardpoints->SetCellAlignment(i + 1, 3, wxALIGN_RIGHT, wxALIGN_TOP);
 
 		// Add the names of all of the points to the grid
-		Hardpoints->SetCellValue(i + 1, 0, SUSPENSION::GetHardpointName((SUSPENSION::HARDPOINTS)i));
+		Hardpoints->SetCellValue(i + 1, 0, Suspension::GetHardpointName((Suspension::Hardpoints)i));
 	}
 
 	// Hide the label column and set the size for the label row
@@ -360,8 +360,8 @@ void EDIT_SUSPENSION_PANEL::CreateControls()
 	// Front bar style
 	wxArrayString Choices;
 	Choices.Clear();
-	for (i = 0; i < SUSPENSION::NumberOfBarStyles; i++)
-		Choices.Add(SUSPENSION::GetBarStyleName((SUSPENSION::BAR_STYLE)i));
+	for (i = 0; i < Suspension::NumberOfBarStyles; i++)
+		Choices.Add(Suspension::GetBarStyleName((Suspension::BarStyle)i));
 
 	wxFlexGridSizer *comboSizer = new wxFlexGridSizer(2, 3, 3);
 	comboSizer->SetFlexibleDirection(wxHORIZONTAL);
@@ -437,7 +437,7 @@ void EDIT_SUSPENSION_PANEL::SelectCellEvent(wxGridEvent &event)
 
 		// Set the position of the helper orb
 		static_cast<CAR_RENDERER*>(Parent.GetParent().GetCurrentObject()->GetNotebookTab())->SetHelperOrbPosition(
-			CORNER::NumberOfHardpoints, CORNER::LocationRightFront, (SUSPENSION::HARDPOINTS)(event.GetRow() - 1));
+			Corner::NumberOfHardpoints, Corner::LocationRightFront, (Suspension::Hardpoints)(event.GetRow() - 1));
 
 		// Update the display
 		Parent.GetParent().GetCurrentObject()->UpdateDisplay();
@@ -494,9 +494,9 @@ void EDIT_SUSPENSION_PANEL::GridCellChangedEvent(wxGridEvent &event)
 			Parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
 				Parent.GetParent().GetMainFrame().GetActiveIndex(),
 				UNDO_REDO_STACK::OPERATION::DATA_TYPE_DOUBLE,
-				&(CurrentSuspension->Hardpoints[event.GetRow() - 1].x));
+				&(CurrentSuspension->hardpoints[event.GetRow() - 1].x));
 
-			CurrentSuspension->Hardpoints[event.GetRow() - 1].x = Converter.ReadDistance(Value);
+			CurrentSuspension->hardpoints[event.GetRow() - 1].x = Converter.ReadDistance(Value);
 		}
 		else if (event.GetCol() == 2)// Y
 		{
@@ -504,9 +504,9 @@ void EDIT_SUSPENSION_PANEL::GridCellChangedEvent(wxGridEvent &event)
 			Parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
 				Parent.GetParent().GetMainFrame().GetActiveIndex(),
 				UNDO_REDO_STACK::OPERATION::DATA_TYPE_DOUBLE,
-				&(CurrentSuspension->Hardpoints[event.GetRow() - 1].y));
+				&(CurrentSuspension->hardpoints[event.GetRow() - 1].y));
 
-			CurrentSuspension->Hardpoints[event.GetRow() - 1].y = Converter.ReadDistance(Value);
+			CurrentSuspension->hardpoints[event.GetRow() - 1].y = Converter.ReadDistance(Value);
 		}
 		else// Z
 		{
@@ -514,9 +514,9 @@ void EDIT_SUSPENSION_PANEL::GridCellChangedEvent(wxGridEvent &event)
 			Parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
 				Parent.GetParent().GetMainFrame().GetActiveIndex(),
 				UNDO_REDO_STACK::OPERATION::DATA_TYPE_DOUBLE,
-				&(CurrentSuspension->Hardpoints[event.GetRow() - 1].z));
+				&(CurrentSuspension->hardpoints[event.GetRow() - 1].z));
 
-			CurrentSuspension->Hardpoints[event.GetRow() - 1].z = Converter.ReadDistance(Value);
+			CurrentSuspension->hardpoints[event.GetRow() - 1].z = Converter.ReadDistance(Value);
 		}
 
 		// Unlock the car
@@ -527,7 +527,7 @@ void EDIT_SUSPENSION_PANEL::GridCellChangedEvent(wxGridEvent &event)
 
 		// Set the position of the helper orb
 		static_cast<CAR_RENDERER*>(Parent.GetParent().GetCurrentObject()->GetNotebookTab())->SetHelperOrbPosition(
-			CORNER::NumberOfHardpoints, CORNER::LocationRightFront, (SUSPENSION::HARDPOINTS)(event.GetRow() - 1));
+			Corner::NumberOfHardpoints, Corner::LocationRightFront, (Suspension::Hardpoints)(event.GetRow() - 1));
 
 		// Update the display and the kinematic outputs
 		Parent.GetParent().GetMainFrame().UpdateAnalysis();
@@ -559,14 +559,14 @@ void EDIT_SUSPENSION_PANEL::SymmetricCheckboxEvent(wxCommandEvent &event)
 	Parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
 		Parent.GetParent().GetMainFrame().GetActiveIndex(),
 		UNDO_REDO_STACK::OPERATION::DATA_TYPE_BOOL,
-		&(CurrentSuspension->IsSymmetric));
+		&(CurrentSuspension->isSymmetric));
 
 	// Get a lock on the car
 	wxMutex *Mutex = Parent.GetParent().GetCurrentMutex();
 	Mutex->Lock();
 
 	// Set the value of the symmetry flag to the value of this checkbox
-	CurrentSuspension->IsSymmetric = event.IsChecked();
+	CurrentSuspension->isSymmetric = event.IsChecked();
 
 	// Unlock the car
 	Mutex->Unlock();
@@ -613,14 +613,14 @@ void EDIT_SUSPENSION_PANEL::FrontThirdCheckboxEvent(wxCommandEvent &event)
 	Parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
 		Parent.GetParent().GetMainFrame().GetActiveIndex(),
 		UNDO_REDO_STACK::OPERATION::DATA_TYPE_BOOL,
-		&(CurrentSuspension->FrontHasThirdSpring));
+		&(CurrentSuspension->frontHasThirdSpring));
 
 	// Get a lock on the car
 	wxMutex *Mutex = Parent.GetParent().GetCurrentMutex();
 	Mutex->Lock();
 
 	// Set the value of the front third spring flag to the value of this checkbox
-	CurrentSuspension->FrontHasThirdSpring = event.IsChecked();
+	CurrentSuspension->frontHasThirdSpring = event.IsChecked();
 
 	// Unlock the car
 	Mutex->Unlock();
@@ -661,14 +661,14 @@ void EDIT_SUSPENSION_PANEL::RearThirdCheckboxEvent(wxCommandEvent &event)
 	Parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
 		Parent.GetParent().GetMainFrame().GetActiveIndex(),
 		UNDO_REDO_STACK::OPERATION::DATA_TYPE_BOOL,
-		&(CurrentSuspension->RearHasThirdSpring));
+		&(CurrentSuspension->rearHasThirdSpring));
 
 	// Get a lock on the car
 	wxMutex *Mutex = Parent.GetParent().GetCurrentMutex();
 	Mutex->Lock();
 
 	// Set the value of the rear third spring flag to the value of this checkbox
-	CurrentSuspension->RearHasThirdSpring = event.IsChecked();
+	CurrentSuspension->rearHasThirdSpring = event.IsChecked();
 
 	// Unlock the car
 	Mutex->Unlock();
@@ -708,14 +708,14 @@ void EDIT_SUSPENSION_PANEL::FrontBarStyleChangeEvent(wxCommandEvent &event)
 	Parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
 		Parent.GetParent().GetMainFrame().GetActiveIndex(),
 		UNDO_REDO_STACK::OPERATION::DATA_TYPE_INTEGER,
-		&(CurrentSuspension->FrontBarStyle));
+		&(CurrentSuspension->frontBarStyle));
 
 	// Get a lock on the car
 	wxMutex *Mutex = Parent.GetParent().GetCurrentMutex();
 	Mutex->Lock();
 
 	// Set the value of the front bar style flag to the value of this checkbox
-	CurrentSuspension->FrontBarStyle = (SUSPENSION::BAR_STYLE)event.GetSelection();
+	CurrentSuspension->frontBarStyle = (Suspension::BarStyle)event.GetSelection();
 
 	// Unlock the car
 	Mutex->Unlock();
@@ -753,14 +753,14 @@ void EDIT_SUSPENSION_PANEL::RearBarStyleChangeEvent(wxCommandEvent &event)
 	Parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
 		Parent.GetParent().GetMainFrame().GetActiveIndex(),
 		UNDO_REDO_STACK::OPERATION::DATA_TYPE_INTEGER,
-		&(CurrentSuspension->RearBarStyle));
+		&(CurrentSuspension->rearBarStyle));
 
 	// Get a lock on the car
 	wxMutex *Mutex = Parent.GetParent().GetCurrentMutex();
 	Mutex->Lock();
 
 	// Set the value of the rear bar style flag to the value of this checkbox
-	CurrentSuspension->RearBarStyle = (SUSPENSION::BAR_STYLE)event.GetSelection();
+	CurrentSuspension->rearBarStyle = (Suspension::BarStyle)event.GetSelection();
 
 	// Unlock the car
 	Mutex->Unlock();

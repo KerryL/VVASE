@@ -19,14 +19,14 @@
 #ifndef _DAMPER_H_
 #define _DAMPER_H_
 
-class DAMPER
+class Damper
 {
 public:
 	// Constructor
-	DAMPER();
+	Damper();
 
 	// Destructor
-	~DAMPER();
+	~Damper();
 
 private:
 };

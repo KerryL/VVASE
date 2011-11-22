@@ -21,18 +21,18 @@
 // vUtilities forward declarations
 class Debugger;
 
-class DRIVER
+class Driver
 {
 public:
 	// Constructor
-	DRIVER(const Debugger &_debugger);
-	DRIVER(const DRIVER &Driver);
+	Driver(const Debugger &_debugger);
+	Driver(const Driver &driver);
 
 	// Destructor
-	~DRIVER();
+	~Driver();
 
 	// The driver input structure
-	struct INPUTS
+	struct Inputs
 	{
 		double Throttle;// [%]
 		double BrakePedalForce;// [lbf]
@@ -45,17 +45,17 @@ public:
 	void CalculateInputs(void);
 
 	// Retreives the calculated inputs
-	INPUTS GetInputs(void) { return DriverInputs; };
+	Inputs GetInputs(void) { return driverInputs; };
 
 	// Overloaded operators
-	DRIVER& operator = (const DRIVER &Driver);
+	Driver& operator = (const Driver &driver);
 
 private:
 	// Debugger message printing utility
 	const Debugger &debugger;
 
 	// The driver's inputs
-	INPUTS DriverInputs;
+	Inputs driverInputs;
 };
 
 #endif// _DRIVER_H_

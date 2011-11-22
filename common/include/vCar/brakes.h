@@ -27,40 +27,40 @@
 // CarDesigner forward declarations
 class Debugger;
 
-class BRAKES
+class Brakes
 {
 public:
 	// Constructor
-	BRAKES(const Debugger &_debugger);
-	BRAKES(const BRAKES &Brakes);
+	Brakes(const Debugger &_debugger);
+	Brakes(const Brakes &brakes);
 
 	// Destructor
-	~BRAKES();
+	~Brakes();
 
 	// File read/write functions
-	void Write(std::ofstream *OutFile) const;
-	void Read(std::ifstream *InFile, int FileVersion);
+	void Write(std::ofstream *outFile) const;
+	void Read(std::ifstream *inFile, int fileVersion);
 
 	// Get the braking torque at each wheel as a function of pedal force
-	WheelSet GetBrakingTorque(const double &PedalForce) const;	// [in-lbf]
+	WheelSet GetBrakingTorque(const double &pedalForce) const;	// [in-lbf]
 
 	// Class properties
-	FrontRearInteger NumberOfDisks;
-	WheelSet BrakeDiameter;						// [in] - This is effective diameter, twice the moment arm
-	WheelSet PistonArea;							// [in^2]
-	FrontRearDouble MasterCylinderArea;			// [in^2]
-	double PedalRatio;								// [-]
-	FrontRearDouble LinePressure;					// [psi]
-	double BiasRatio;								// [-]			Front/Rear
-	double PercentFrontBraking;						// [-]
+	FrontRearInteger numberOfDisks;
+	WheelSet brakeDiameter;						// [in] - This is effective diameter, twice the moment arm
+	WheelSet pistonArea;							// [in^2]
+	FrontRearDouble masterCylinderArea;			// [in^2]
+	double pedalRatio;								// [-]
+	FrontRearDouble linePressure;					// [psi]
+	double biasRatio;								// [-]			Front/Rear
+	double percentFrontBraking;						// [-]
 	// FIXME:  Make temperature dependant with thermal and cooling model (include aerodynamics?)
 
 	// Important for determining anti-geometry (see RCVD p. 168)
-	bool FrontBrakesInboard;
-	bool RearBrakesInboard;
+	bool frontBrakesInboard;
+	bool rearBrakesInboard;
 
 	// Overloaded operators
-	BRAKES& operator = (const BRAKES &Brakes);
+	Brakes& operator = (const Brakes &brakes);
 
 private:
 	// Debugger message printing utility

@@ -20,10 +20,10 @@
 #include "vUtilities/debugger.h"
 
 //==========================================================================
-// Class:			DRIVER
-// Function:		DRIVER
+// Class:			Driver
+// Function:		Driver
 //
-// Description:		Constructor for the DRIVER class.
+// Description:		Constructor for the Driver class.
 //
 // Input Arguments:
 //		_debugger	= const Debugger& reference to applications debug printing utility
@@ -35,18 +35,18 @@
 //		None
 //
 //==========================================================================
-DRIVER::DRIVER(const Debugger &_debugger) : debugger(_debugger)
+Driver::Driver(const Debugger &_debugger) : debugger(_debugger)
 {
 }
 
 //==========================================================================
-// Class:			DRIVER
-// Function:		DRIVER
+// Class:			Driver
+// Function:		Driver
 //
-// Description:		Copy constructor for the DRIVER class.
+// Description:		Copy constructor for the Driver class.
 //
 // Input Arguments:
-//		Driver	= const DRIVER& to copy to this object
+//		driver	= const Driver& to copy to this object
 //
 // Output Arguments:
 //		None
@@ -55,15 +55,15 @@ DRIVER::DRIVER(const Debugger &_debugger) : debugger(_debugger)
 //		None
 //
 //==========================================================================
-DRIVER::DRIVER(const DRIVER &Driver) : debugger(Driver.debugger)
+Driver::Driver(const Driver &driver) : debugger(driver.debugger)
 {
 	// Do the copy
-	*this = Driver;
+	*this = driver;
 }
 
 //==========================================================================
-// Class:			DRIVER
-// Function:		~DRIVER
+// Class:			Driver
+// Function:		~Driver
 //
 // Description:		Destructor
 //
@@ -77,12 +77,12 @@ DRIVER::DRIVER(const DRIVER &Driver) : debugger(Driver.debugger)
 //		None
 //
 //==========================================================================
-DRIVER::~DRIVER()
+Driver::~Driver()
 {
 }
 
 //==========================================================================
-// Class:			DRIVER
+// Class:			Driver
 // Function:		CalculateInputs
 //
 // Description:		Solves for the driver inputs
@@ -97,34 +97,34 @@ DRIVER::~DRIVER()
 //		None
 //
 //==========================================================================
-void DRIVER::CalculateInputs(void)
+void Driver::CalculateInputs(void)
 {
 }
 
 //==========================================================================
-// Class:			DRIVER
+// Class:			Driver
 // Function:		operator =
 //
-// Description:		Assignment operator for DRIVER class.
+// Description:		Assignment operator for Driver class.
 //
 // Input Arguments:
-//		Driver	= const DRIVER& to assign to this object
+//		driver	= const Driver& to assign to this object
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		DRIVER&, reference to this object
+//		Driver&, reference to this object
 //
 //==========================================================================
-DRIVER& DRIVER::operator = (const DRIVER &Driver)
+Driver& Driver::operator = (const Driver &driver)
 {
 	// Check for self-assignment
-	if (this == &Driver)
+	if (this == &driver)
 		return *this;
 
 	// Perform the assignment
-	DriverInputs = Driver.DriverInputs;
+	driverInputs = driver.driverInputs;
 
 	return *this;
 }

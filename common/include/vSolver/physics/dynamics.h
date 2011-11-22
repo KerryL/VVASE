@@ -68,11 +68,11 @@ private:
 	State stateDerivative;
 
 	// The driver inputs
-	DRIVER *driver;
+	Driver *driver;
 
 	// The integrator
 	Integrator *integrator;
-	void CalculateStateDerivative(State state, DRIVER::INPUTS inputs);
+	void CalculateStateDerivative(State state, Driver::Inputs inputs);
 
 	// Time history of inputs and outputs (store in a queue or a linked list?)
 };

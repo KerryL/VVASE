@@ -32,7 +32,7 @@ class wxString;
 
 // VVASE forward declarations
 class Debugger;
-class CAR;
+class Car;
 class AArm;
 class Link;
 class Origin;
@@ -68,8 +68,8 @@ public:
 	bool IsThisCarSelected(const Primitive *PickedActor, const GUI_OBJECT::ITEM_TYPE *ObjectType) const;
 
 	// For accessing the helper orb
-	void SetHelperOrbPosition(const CORNER::HARDPOINTS &CornerPoint, const CORNER::LOCATION &Location,
-		const SUSPENSION::HARDPOINTS &SuspensionPoint);
+	void SetHelperOrbPosition(const Corner::Hardpoints &cornerPoint, const Corner::Location &location,
+		const Suspension::Hardpoints &suspensionPoint);
 	inline void DeactivateHelperOrb(void) { HelperOrbIsActive = false; };
 
 private:
@@ -88,8 +88,8 @@ private:
 
 	// Pointers to the car objects that we are rendering
 	APPEARANCE_OPTIONS &AppearanceOptions;
-	CAR &DisplayCar;
-	const CAR &ReferenceCar;// Required for correct representation of the tires - see UpdateDisplay()
+	Car &DisplayCar;
+	const Car &ReferenceCar;// Required for correct representation of the tires - see UpdateDisplay()
 
 	// The actors that we use to represent the car
 	// The origin marker and ground plane
@@ -179,9 +179,9 @@ private:
 	Vector3D *LeftRearInstantAxis;
 
 	// Helper orb
-	CORNER::HARDPOINTS HelperOrbCornerPoint;
-	CORNER::LOCATION HelperOrbLocation;
-	SUSPENSION::HARDPOINTS HelperOrbSuspensionPoint;
+	Corner::Hardpoints HelperOrbCornerPoint;
+	Corner::Location HelperOrbLocation;
+	Suspension::Hardpoints HelperOrbSuspensionPoint;
 	bool HelperOrbIsActive;
 	Point3D *HelperOrb;
 };

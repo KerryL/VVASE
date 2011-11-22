@@ -24,10 +24,10 @@
 #include "vUtilities/machineDefinitions.h"
 
 //==========================================================================
-// Class:			ENGINE
-// Function:		ENGINE
+// Class:			Engine
+// Function:		Engine
 //
-// Description:		Constructor for the ENGINE class.
+// Description:		Constructor for the Engine class.
 //
 // Input Arguments:
 //		_debugger	= const Debugger& reference to applications debug printing utility
@@ -39,20 +39,20 @@
 //		None
 //
 //==========================================================================
-ENGINE::ENGINE(const Debugger &_debugger) : debugger(_debugger)
+Engine::Engine(const Debugger &_debugger) : debugger(_debugger)
 {
 	// Initialize this object
-	CrankshaftSpeed = 0.0;
+	crankshaftSpeed = 0.0;
 }
 
 //==========================================================================
-// Class:			ENGINE
-// Function:		ENGINE
+// Class:			Engine
+// Function:		Engine
 //
-// Description:		Copy constructor for the ENGINE class.
+// Description:		Copy constructor for the Engine class.
 //
 // Input Arguments:
-//		Engine	= const ENGINE& to copy to this object
+//		engine	= const Engine& to copy to this object
 //
 // Output Arguments:
 //		None
@@ -61,17 +61,17 @@ ENGINE::ENGINE(const Debugger &_debugger) : debugger(_debugger)
 //		None
 //
 //==========================================================================
-ENGINE::ENGINE(const ENGINE &Engine) : debugger(Engine.debugger)
+Engine::Engine(const Engine &engine) : debugger(engine.debugger)
 {
 	// Do the copy
-	*this = Engine;
+	*this = engine;
 }
 
 //==========================================================================
-// Class:			ENGINE
-// Function:		~ENGINE
+// Class:			Engine
+// Function:		~Engine
 //
-// Description:		Destructor for the ENGINE class.
+// Description:		Destructor for the Engine class.
 //
 // Input Arguments:
 //		None
@@ -83,18 +83,18 @@ ENGINE::ENGINE(const ENGINE &Engine) : debugger(Engine.debugger)
 //		None
 //
 //==========================================================================
-ENGINE::~ENGINE()
+Engine::~Engine()
 {
 }
 
 //==========================================================================
-// Class:			ENGINE
+// Class:			Engine
 // Function:		Write
 //
 // Description:		Writes this engine to file.
 //
 // Input Arguments:
-//		OutFile	= std::ofstream* pointing to the output stream
+//		outFile	= std::ofstream* pointing to the output stream
 //
 // Output Arguments:
 //		None
@@ -103,21 +103,21 @@ ENGINE::~ENGINE()
 //		None
 //
 //==========================================================================
-void ENGINE::Write(std::ofstream *OutFile) const
+void Engine::Write(std::ofstream *outFile) const
 {
 	// Write this object to file
-	OutFile->write((char*)&CrankshaftSpeed, sizeof(double));
+	outFile->write((char*)&crankshaftSpeed, sizeof(double));
 }
 
 //==========================================================================
-// Class:			ENGINE
+// Class:			Engine
 // Function:		Read
 //
 // Description:		Read from file to fill this engine.
 //
 // Input Arguments:
-//		InFile		= std::ifstream* pointing to the input stream
-//		FileVersion	= int specifying which file version we're reading from
+//		inFile		= std::ifstream* pointing to the input stream
+//		fileVersion	= int specifying which file version we're reading from
 //
 // Output Arguments:
 //		None
@@ -126,41 +126,41 @@ void ENGINE::Write(std::ofstream *OutFile) const
 //		None
 //
 //==========================================================================
-void ENGINE::Read(std::ifstream *InFile, int FileVersion)
+void Engine::Read(std::ifstream *inFile, int fileVersion)
 {
 	// Read this object from file according to the file version we're using
-	if (FileVersion >= 0)// All versions
+	if (fileVersion >= 0)// All versions
 	{
-		InFile->read((char*)&CrankshaftSpeed, sizeof(double));
+		inFile->read((char*)&crankshaftSpeed, sizeof(double));
 	}
 	else
 		assert(0);
 }
 
 //==========================================================================
-// Class:			ENGINE
+// Class:			Engine
 // Function:		operator =
 //
-// Description:		Assignment operator for ENGINE class.
+// Description:		Assignment operator for Engine class.
 //
 // Input Arguments:
-//		Engine	= const ENGINE& to assign to this object
+//		engine	= const Engine& to assign to this object
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		ENGINE&, reference to this object
+//		Engine&, reference to this object
 //
 //==========================================================================
-ENGINE& ENGINE::operator = (const ENGINE &Engine)
+Engine& Engine::operator = (const Engine &engine)
 {
 	// Check for self-assignment
-	if (this == &Engine)
+	if (this == &engine)
 		return *this;
 
 	// Perform the assignment
-	CrankshaftSpeed	= Engine.CrankshaftSpeed;
+	crankshaftSpeed	= engine.crankshaftSpeed;
 
 	return *this;
 }

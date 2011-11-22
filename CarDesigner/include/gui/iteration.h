@@ -36,7 +36,7 @@
 // VVASE forward declarations
 class Debugger;
 class Convert;
-class CAR;
+class Car;
 class PlotPanel;
 
 class ITERATION : public GUI_OBJECT
@@ -196,7 +196,7 @@ private:
 	ObjectList<GUI_CAR> AssociatedCars;
 
 	// Array of working cars to use for the analyses
-	CAR **WorkingCarArray;
+	Car **WorkingCarArray;
 	int NumberOfWorkingCars;
 
 	// This array holds the values against which the data can be plotted
