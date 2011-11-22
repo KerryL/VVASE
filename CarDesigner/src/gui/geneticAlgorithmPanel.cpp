@@ -344,8 +344,6 @@ void GENETIC_ALGORITHM_PANEL::CreateControls(void)
 
 	// Assign the top level sizer to the dialog
 	SetSizer(TopSizer);
-
-	return;
 }
 
 //==========================================================================
@@ -385,8 +383,6 @@ void GENETIC_ALGORITHM_PANEL::AddGeneButtonClickedEvent(wxCommandEvent& WXUNUSED
 		// Mark the optimization as modified
 		Optimization.SetModified();
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -435,8 +431,6 @@ void GENETIC_ALGORITHM_PANEL::EditGeneButtonClickedEvent(wxCommandEvent& WXUNUSE
 		// Mark the optimization as modified
 		Optimization.SetModified();
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -477,8 +471,6 @@ void GENETIC_ALGORITHM_PANEL::RemoveGeneButtonClickedEvent(wxCommandEvent& WXUNU
 
 	// Mark the optimization as modified
 	Optimization.SetModified();
-
-	return;
 }
 
 //==========================================================================
@@ -526,8 +518,6 @@ void GENETIC_ALGORITHM_PANEL::AddGoalButtonClickedEvent(wxCommandEvent& WXUNUSED
 		// Mark the optimization as modified
 		Optimization.SetModified();
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -576,8 +566,6 @@ void GENETIC_ALGORITHM_PANEL::EditGoalButtonClickedEvent(wxCommandEvent& WXUNUSE
 		// Mark the optimization as modified
 		Optimization.SetModified();
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -618,8 +606,6 @@ void GENETIC_ALGORITHM_PANEL::RemoveGoalButtonClickedEvent(wxCommandEvent& WXUNU
 
 	// Mark the optimization as modified
 	Optimization.SetModified();
-
-	return;
 }
 
 //==========================================================================
@@ -721,8 +707,6 @@ void GENETIC_ALGORITHM_PANEL::StartStopOptimizationClickedEvent(wxCommandEvent& 
 		// FIXME:  Capture event when GA starts to do this!!!
 		//StartStopOptimization->SetLabel(_T("Stop Optimization"));
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -777,8 +761,6 @@ void GENETIC_ALGORITHM_PANEL::UpdateSelectableCars(void)
 		// Handle the error if the original car is now gone
 		// FIXME!!!
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -818,8 +800,6 @@ void GENETIC_ALGORITHM_PANEL::UpdateInformation(void)
 	UpdateGeneList();
 	UpdateGoalList();
 	UpdateSelectableCars();
-
-	return;
 }
 
 //==========================================================================
@@ -873,8 +853,6 @@ void GENETIC_ALGORITHM_PANEL::UpdateGeneList(void)
 			GeneList->SetCellAlignment(wxALIGN_CENTER, i, j);
 		}
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -929,8 +907,6 @@ void GENETIC_ALGORITHM_PANEL::UpdateGoalList(void)
 			GoalList->SetCellAlignment(wxALIGN_CENTER, i, j);
 		}
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -964,8 +940,6 @@ void GENETIC_ALGORITHM_PANEL::ResetStatusBars(void)
 	// Set the progress values to zero
 	GenerationProgress->SetValue(0);
 	OverallProgress->SetValue(0);
-
-	return;
 }
 
 //==========================================================================
@@ -995,8 +969,6 @@ void GENETIC_ALGORITHM_PANEL::IncrementStatusBars(void)
 	// Add one to the status of both status bars
 	GenerationProgress->SetValue(GenerationProgress->GetValue() + 1);
 	OverallProgress->SetValue(OverallProgress->GetValue() + 1);
-
-	return;
 }
 
 //==========================================================================
@@ -1066,8 +1038,6 @@ void GENETIC_ALGORITHM_PANEL::GeneListSelectCellEvent(wxGridEvent &event)
 {
 	// Select the proper row
 	GeneList->SelectRow(event.GetRow(), event.ControlDown());
-
-	return;
 }
 
 //==========================================================================
@@ -1092,8 +1062,6 @@ void GENETIC_ALGORITHM_PANEL::GoalListSelectCellEvent(wxGridEvent &event)
 {
 	// Select the proper row
 	GoalList->SelectRow(event.GetRow(), event.ControlDown());
-
-	return;
 }
 
 //==========================================================================
@@ -1130,8 +1098,6 @@ void GENETIC_ALGORITHM_PANEL::TextBoxChangeEvent(wxCommandEvent &event)
 
 	// Mark the optimization as modified
 	Optimization.SetModified();
-
-	return;
 }
 
 //==========================================================================

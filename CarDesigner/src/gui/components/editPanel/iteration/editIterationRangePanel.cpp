@@ -121,8 +121,6 @@ void EDIT_ITERATION_RANGE_PANEL::UpdateInformation(void)
 	if (CurrentIteration)
 		// Call the method that performs the update
 		UpdateInformation(CurrentIteration);
-
-	return;
 }
 
 //==========================================================================
@@ -164,8 +162,6 @@ void EDIT_ITERATION_RANGE_PANEL::UpdateInformation(ITERATION *_CurrentIteration)
 	wxString Temp;
 	Temp.Printf("%i", CurrentIteration->GetNumberOfPoints());
 	NumberOfPointsInput->ChangeValue(Temp);
-
-	return;
 }
 
 //==========================================================================
@@ -275,8 +271,6 @@ void EDIT_ITERATION_RANGE_PANEL::CreateControls()
 
 	// Assign the top level sizer to the panel
 	SetSizer(TopSizer);
-
-	return;
 }
 
 //==========================================================================
@@ -338,6 +332,4 @@ void EDIT_ITERATION_RANGE_PANEL::RangeTextBoxChangeEvent(wxCommandEvent& WXUNUSE
 
 	// Update the display
 	CurrentIteration->UpdateData();
-
-	return;
 }

@@ -183,8 +183,6 @@ void PlotObject::Update(void)
 	dynamic_cast<PlotPanel*>(renderer.GetParent())->UpdateCursorValues(
 		renderer.GetLeftCursorVisible(), renderer.GetRightCursorVisible(),
 		renderer.GetLeftCursorValue(), renderer.GetRightCursorValue());
-
-	return;
 }
 
 //==========================================================================
@@ -206,8 +204,6 @@ void PlotObject::Update(void)
 void PlotObject::SetXGrid(const bool &gridOn)
 {
 	axisBottom->SetGrid(gridOn);
-
-	return;
 }
 
 //==========================================================================
@@ -229,8 +225,6 @@ void PlotObject::SetXGrid(const bool &gridOn)
 void PlotObject::SetLeftYGrid(const bool &gridOn)
 {
 	axisLeft->SetGrid(gridOn);
-
-	return;
 }
 
 //==========================================================================
@@ -252,8 +246,6 @@ void PlotObject::SetLeftYGrid(const bool &gridOn)
 void PlotObject::SetRightYGrid(const bool &gridOn)
 {
 	axisRight->SetGrid(gridOn);
-
-	return;
 }
 
 //==========================================================================
@@ -277,8 +269,6 @@ void PlotObject::RemoveExistingPlots(void)
 	// Remove all existing plots from the list
 	while (plotList.GetCount() > 0)
 		RemovePlot(0);
-
-	return;
 }
 
 //==========================================================================
@@ -777,8 +767,6 @@ void PlotObject::SetXMin(const double &_xMin)
 		xMin = _xMin;
 		autoScaleX = false;
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -824,8 +812,6 @@ void PlotObject::SetXMax(const double &_xMax)
 		xMax = _xMax;
 		autoScaleX = false;
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -871,8 +857,6 @@ void PlotObject::SetLeftYMin(const double &_yMin)
 		yLeftMin = _yMin;
 		autoScaleLeftY = false;
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -918,8 +902,6 @@ void PlotObject::SetLeftYMax(const double &_yMax)
 		yLeftMax = _yMax;
 		autoScaleLeftY = false;
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -965,8 +947,6 @@ void PlotObject::SetRightYMin(const double &_yMin)
 		yRightMin = _yMin;
 		autoScaleRightY = false;
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -1012,8 +992,6 @@ void PlotObject::SetRightYMax(const double &_yMax)
 		yRightMax = _yMax;
 		autoScaleRightY = false;
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -1038,8 +1016,6 @@ void PlotObject::ResetAutoScaling(void)
 	autoScaleX = true;
 	autoScaleLeftY = true;
 	autoScaleRightY = true;
-
-	return;
 }
 
 //==========================================================================
@@ -1073,8 +1049,6 @@ void PlotObject::SetCurveProperties(const unsigned int &index, const Color &colo
 		plotList[index]->BindToYAxis(axisRight);
 	else
 		plotList[index]->BindToYAxis(axisLeft);
-
-	return;
 }
 
 //==========================================================================
@@ -1101,8 +1075,6 @@ void PlotObject::SetGrid(const bool &gridOn)
 	// These axis default to off, but can be specifically turned on via a right-click
 	axisTop->SetGrid(false);
 	axisRight->SetGrid(false);
-
-	return;
 }
 
 //==========================================================================

@@ -601,8 +601,6 @@ void GUI_OBJECT::SelectThisObjectInTree(void)
 	if (TreeID.IsOk())
 		// Select this object's tree item
 		SystemsTree->SelectItem(TreeID);
-
-	return;
 }
 
 //==========================================================================

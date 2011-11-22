@@ -98,8 +98,6 @@ void EDIT_ITERATION_NOTEBOOK::UpdateInformation(void)
 	if (CurrentIteration)
 		// Call the method that performs the update
 		UpdateInformation(CurrentIteration);
-
-	return;
 }
 
 //==========================================================================
@@ -140,8 +138,6 @@ void EDIT_ITERATION_NOTEBOOK::UpdateInformation(ITERATION *_CurrentIteration)
 	EditRange->UpdateInformation(CurrentIteration);
 	EditPlots->UpdateInformation(CurrentIteration);
 	EditOptions->UpdateInformation(CurrentIteration);
-
-	return;
 }
 
 //==========================================================================
@@ -174,6 +170,4 @@ void EDIT_ITERATION_NOTEBOOK::CreateControls(void)
 	AddPage(EditRange, _T("Range"));
 	AddPage(EditPlots, _T("Active Plots"));
 	AddPage(EditOptions, _T("Options"));
-
-	return;
 }

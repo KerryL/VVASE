@@ -110,8 +110,6 @@ void Debugger::SetDebugLevel(const DebugLevel &level)
 
 	// Set the class member as specified
 	debugLevel = level;
-
-	return;
 }
 
 //==========================================================================
@@ -137,8 +135,6 @@ void Debugger::SetTargetOutput(wxEvtHandler *_parent)
 
 	// Set the event handler
 	parent = _parent;
-
-	return;
 }
 
 //==========================================================================
@@ -196,8 +192,6 @@ void Debugger::Print(const wxString &info, DebugLevel level) const
 			// Write the message
 			std::cout << info << std::endl;
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -243,6 +237,4 @@ void Debugger::Print(const DebugLevel &level, const char *format, ...) const
 
 	// Print the formatted message at the specified level
 	Print(_T(output), level);
-
-	return;
 }

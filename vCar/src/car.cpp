@@ -444,8 +444,6 @@ void CAR::WriteFileHeader(std::ofstream *OutFile) const
 
 	// Write the header
 	OutFile->write((char*)&Header, sizeof(FILE_HEADER_INFO));
-
-	return;
 }
 
 //==========================================================================
@@ -498,8 +496,6 @@ void CAR::ComputeWheelCenters(void)
 	// Call the compute method with the correct tire diameters
 	Suspension->ComputeWheelCenters(Tires->RightFront->Diameter, Tires->LeftFront->Diameter,
 		Tires->RightRear->Diameter, Tires->LeftRear->Diameter);
-
-	return;
 }
 
 //==========================================================================

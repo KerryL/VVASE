@@ -36,9 +36,6 @@
     <ClInclude Include="..\common\include\vRenderer\3dcar\origin.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\include\vRenderer\3dcar\plane.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\common\include\vRenderer\3dcar\point3D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -90,6 +87,9 @@
     <ClInclude Include="..\common\include\vRenderer\primitives\triangle.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\common\include\vRenderer\3dcar\plane3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\renderWindow.cpp">
@@ -111,9 +111,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\3dcar\origin.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\3dcar\plane.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\3dcar\point3D.cpp">
@@ -165,6 +162,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\primitives\triangle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3dcar\plane3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

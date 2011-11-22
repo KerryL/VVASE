@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2011
+                         Copyright Kerry R. Loux 2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -23,7 +23,6 @@
 //	4/17/2009	- Renamed ROTATION_AXIS enumeration to AXIS, K. Loux
 //	11/22/2009	- Moved to vMath.lib, K. Loux.
 //	11/1/2010	- Removed non-const Normalize(), K. Loux.
-//	11/7/2011	- Corrected camelCase, K. Loux.
 
 #ifndef _Vector_CLASSS_H_
 #define _Vector_CLASSS_H_
@@ -43,9 +42,10 @@ using namespace std;
 class Vector
 {
 public:
-	// Constructor
+	// Constructors
 	Vector();
 	Vector(const double &_x, const double &_y, const double &_z);
+	Vector(const Vector &v);
 
 	// Destructor
 	~Vector();

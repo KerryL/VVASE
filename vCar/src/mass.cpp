@@ -404,8 +404,6 @@ void MASS_PROPERTIES::Write(std::ofstream *OutFile) const
 	OutFile->write((char*)&CenterOfGravity, sizeof(Vector));
 	OutFile->write((char*)&UnsprungMass, sizeof(WheelSet));
 	OutFile->write((char*)&WheelInertias, sizeof(VectorSet));
-
-	return;
 }
 
 //==========================================================================
@@ -443,8 +441,6 @@ void MASS_PROPERTIES::Read(std::ifstream *InFile, int FileVersion)
 	}
 	else
 		assert(0);
-
-	return;
 }
 
 //==========================================================================

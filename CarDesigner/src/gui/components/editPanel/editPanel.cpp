@@ -132,8 +132,6 @@ void EDIT_PANEL::UpdateInformation(void)
 	if (CurrentObject)
 		// Call the method that performs the update
 		UpdateInformation(CurrentObject);
-
-	return;
 }
 
 //==========================================================================
@@ -250,8 +248,6 @@ void EDIT_PANEL::UpdateInformation(GUI_OBJECT *_CurrentObject)
 		assert(0);
 		break;
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -355,8 +351,6 @@ void EDIT_PANEL::CreateControls(bool IgnoreSystemsTree)
 
 	// Update the sizer
 	Sizer->Layout();
-
-	return;
 }
 
 //==========================================================================
@@ -423,6 +417,4 @@ void EDIT_PANEL::DeleteAllControls(void)
 			CurrentObject->UpdateDisplay();
 		}
 	}
-
-	return;
 }

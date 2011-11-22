@@ -147,8 +147,6 @@ void EDIT_MASS_PANEL::UpdateInformation(MASS_PROPERTIES *_CurrentMassProperties)
 
 	// Update sizers
 	Layout();
-
-	return;
 }
 
 //==========================================================================
@@ -288,8 +286,6 @@ void EDIT_MASS_PANEL::CreateControls()
 
 	// Assign the top level sizer to the dialog
 	SetSizer(TopSizer);
-
-	return;
 }
 
 //==========================================================================
@@ -433,6 +429,4 @@ void EDIT_MASS_PANEL::TextBoxEditEvent(wxCommandEvent &event)
 	Izy->SetLabel(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->Iyz)));
 
 	event.Skip();
-
-	return;
 }

@@ -270,8 +270,6 @@ void OUTPUT_PANEL::UpdateInformation(KinematicOutputs Outputs, CAR &Car,
 
 	// Make sure the correct column is highlighted
 	HighlightColumn(MainFrame.GetObjectByIndex(MainFrame.GetActiveIndex())->GetCleanName());
-
-	return;
 }
 
 //==========================================================================
@@ -329,8 +327,6 @@ void OUTPUT_PANEL::FinishUpdate(int _NumberOfDataColumns)
 	// Force a re-paint of this pane - for some reason this doesn't happen automatically
 	Refresh();
 	Update();
-
-	return;
 }
 
 //==========================================================================
@@ -408,8 +404,6 @@ void OUTPUT_PANEL::CreateControls()
 
 	// Assign the top level sizer to the panel
 	SetSizer(TopSizer);
-
-	return;
 }
 
 //==========================================================================
@@ -433,8 +427,6 @@ void OUTPUT_PANEL::ColumnResizeEvent(wxGridSizeEvent& WXUNUSED(event))
 	// Force a re-paint of the grid
 	OutputsList->Refresh();
 	OutputsList->Update();
-
-	return;
 }
 
 //==========================================================================
@@ -486,6 +478,4 @@ void OUTPUT_PANEL::HighlightColumn(wxString _Name)
 	// For some reason, this doesn't happen automatically
 	Refresh();
 	Update();
-
-	return;
 }

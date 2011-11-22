@@ -568,8 +568,6 @@ void SUSPENSION::MoveSteeringRack(const double &Travel)
 	// same for both points, we can just use each point as their own reference points.
 	LeftFront.Hardpoints[CORNER::InboardTieRod] += Slope * t;
 	RightFront.Hardpoints[CORNER::InboardTieRod] += Slope * t;
-
-	return;
 }
 
 //==========================================================================
@@ -937,8 +935,6 @@ void SUSPENSION::Write(std::ofstream *OutFile) const
 	OutFile->write((char*)&RearBarAttachment, sizeof(BAR_ATTACHMENT));
 	OutFile->write((char*)&FrontHasThirdSpring, sizeof(bool));
 	OutFile->write((char*)&RearHasThirdSpring, sizeof(bool));
-
-	return;
 }
 
 //==========================================================================
@@ -986,8 +982,6 @@ void SUSPENSION::Read(std::ifstream *InFile, int FileVersion)
 	SPRING RearThirdSpring;
 	DAMPER FrontThirdDamper;
 	DAMPER RearThirdDamper;*/
-
-	return;
 }
 
 //==========================================================================
@@ -1174,8 +1168,6 @@ void SUSPENSION::ComputeWheelCenters(const double &RFTireDiameter, const double 
 	LeftFront.ComputeWheelCenter(LFTireDiameter);
 	RightRear.ComputeWheelCenter(RRTireDiameter);
 	LeftRear.ComputeWheelCenter(LRTireDiameter);
-
-	return;
 }
 
 //==========================================================================

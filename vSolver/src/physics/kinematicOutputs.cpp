@@ -1027,8 +1027,6 @@ void KinematicOutputs::UpdateCorner(const CORNER *originalCorner, const CORNER *
 		if (VVASEMath::IsNaN(cornerDoubles[AntiDrivePitch]))
 			cornerDoubles[AntiDrivePitch] = 0.0;
 	}
-
-	return;
 }
 
 //==========================================================================

@@ -106,8 +106,6 @@ void TIRE::Write(std::ofstream *OutFile) const
 	OutFile->write((char*)&Diameter, sizeof(double));
 	OutFile->write((char*)&Width, sizeof(double));
 	OutFile->write((char*)&TirePressure, sizeof(double));
-
-	return;
 }
 
 //==========================================================================
@@ -138,8 +136,6 @@ void TIRE::Read(std::ifstream *InFile, int FileVersion)
 	}
 	else
 		assert(0);
-
-	return;
 }
 
 //==========================================================================

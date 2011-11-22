@@ -16,14 +16,13 @@
 #ifndef _FILTER_BASE_H_
 #define _FILTER_BASE_H_
 
-// FIXME:  MSVC generates C4512
-
 class FilterBase
 {
 public:
 	// Constructor
 	// NOTE:  Constructor MUST initialize the filter parameters a and b, and the input/output vectors y and u
 	FilterBase(const double &_sampleRate);
+	FilterBase(const FilterBase &f);
 
 	// Desctructor
 	virtual ~FilterBase();
@@ -39,6 +38,9 @@ public:
 
 	// Returns latest filtered data
 	double GetFilteredValue(void) const { return y[0]; };
+
+	// Assignment operator (avoids MSVC Warning C4512)
+	FilterBase& operator = (const FilterBase &f);
 
 protected:
 	// Filter coefficients

@@ -578,8 +578,6 @@ void OPTIONS_DIALOG::CreateControls(void)
 
 	// Assign the top level sizer to the dialog
 	SetSizer(TopSizer);
-
-	return;
 }
 
 //==========================================================================
@@ -676,8 +674,6 @@ void OPTIONS_DIALOG::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 		SetReturnCode(wxOK);
 		Show(false);
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -706,6 +702,4 @@ void OPTIONS_DIALOG::CancelClickEvent(wxCommandEvent& WXUNUSED(event))
 		SetReturnCode(wxID_CANCEL);
 		Show(false);
 	}
-
-	return;
 }

@@ -199,8 +199,6 @@ void ITERATION::AddCar(GUI_CAR *ToAdd)
 
 	// Add the car to the list
 	AssociatedCars.Add(ToAdd);
-
-	return;
 }
 
 //==========================================================================
@@ -245,8 +243,6 @@ void ITERATION::RemoveCar(GUI_CAR *ToRemove)
 
 	// Remove the car itself
 	AssociatedCars.Remove(IndexToRemove);
-
-	return;
 }
 
 //==========================================================================
@@ -270,8 +266,6 @@ void ITERATION::RemoveAllCars(void)
 {
 	// Remove all entries from the lists
 	ClearAllLists();
-
-	return;
 }
 
 //==========================================================================
@@ -446,8 +440,6 @@ void ITERATION::UpdateData(void)
 			CurrentList->Add(NewOutputs);
 		}
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -526,8 +518,6 @@ void ITERATION::UpdateDisplay(void)
 	// If we have a second analysis pending, handle it now
 	if (SecondAnalysisPending)
 		UpdateData();
-
-	return;
 }
 
 //==========================================================================
@@ -560,8 +550,6 @@ void ITERATION::ClearAllLists(void)
 
 	// Remove the list of associated cars
 	AssociatedCars.Clear();
-
-	return;
 }
 
 //==========================================================================
@@ -770,8 +758,6 @@ void ITERATION::ReadDefaultsFromConfig(void)
 	// Delete file object
 	delete ConfigurationFile;
 	ConfigurationFile = NULL;
-
-	return;
 }
 
 //==========================================================================
@@ -837,8 +823,6 @@ void ITERATION::WriteDefaultsToConfig(void) const
 	// Delete file object
 	delete ConfigurationFile;
 	ConfigurationFile = NULL;
-
-	return;
 }
 
 //==========================================================================
@@ -940,8 +924,6 @@ void ITERATION::SetRange(const ITERATION::RANGE &_Range)
 
 	// Set the "this item has changed" flag
 	SetModified();
-
-	return;
 }
 
 //==========================================================================
@@ -969,8 +951,6 @@ void ITERATION::SetNumberOfPoints(const int &_NumberOfPoints)
 
 	// Set the "this item has changed" flag
 	SetModified();
-
-	return;
 }
 
 //==========================================================================
@@ -1001,8 +981,6 @@ void ITERATION::SetActivePlot(PLOT_ID PlotID, const bool &Active)
 
 	// Sets the "this object has changed" flag
 	SetModified();
-
-	return;
 }
 
 //==========================================================================
@@ -1039,8 +1017,6 @@ void ITERATION::UpdateAutoAssociate(void)
 		if (MainFrame.GetObjectByIndex(i)->GetType() == GUI_OBJECT::TYPE_CAR)
 			AddCar(static_cast<GUI_CAR*>(MainFrame.GetObjectByIndex(i)));
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -1120,8 +1096,6 @@ void ITERATION::ShowAssociatedCarsDialog(void)
 
 	// Update the analyses
 	UpdateData();
-
-	return;
 }
 
 //==========================================================================
@@ -1286,8 +1260,6 @@ void ITERATION::ExportDataToFile(wxString PathAndFileName) const
 
 	// Close the file
 	ExportFile.close();
-
-	return;
 }
 
 //==========================================================================
@@ -1391,8 +1363,6 @@ void ITERATION::WriteFileHeader(std::ofstream *OutFile)
 
 	// Write the header
 	OutFile->write((char*)&Header, sizeof(FILE_HEADER_INFO));
-
-	return;
 }
 
 //==========================================================================
@@ -1449,8 +1419,6 @@ void ITERATION::SetXAxisType(AXIS_TYPE _XAxisType)
 
 	// Update the iteration
 	UpdateDisplay();
-
-	return;
 }
 
 //==========================================================================
@@ -1479,8 +1447,6 @@ void ITERATION::SetYAxisType(AXIS_TYPE _YAxisType)
 
 	// Update the iteration
 	UpdateDisplay();
-
-	return;
 }
 
 //==========================================================================
@@ -1510,8 +1476,6 @@ void ITERATION::SetAutoAssociate(bool AutoAssociate)
 
 	// Update this object
 	UpdateDisplay();
-
-	return;
 }
 
 //==========================================================================

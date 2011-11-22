@@ -281,8 +281,6 @@ void GA_GENE_DIALOG::CreateControls(void)
 
 	// Assign the top level sizer to the dialog
 	SetSizer(TopSizer);
-
-	return;
 }
 
 //==========================================================================
@@ -342,8 +340,6 @@ void GA_GENE_DIALOG::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 		SetReturnCode(wxOK);
 		Show(false);
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -372,8 +368,6 @@ void GA_GENE_DIALOG::CancelClickEvent(wxCommandEvent& WXUNUSED(event))
 		SetReturnCode(wxID_CANCEL);
 		Show(false);
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -413,6 +407,4 @@ void GA_GENE_DIALOG::TextChangeEvent(wxCommandEvent& WXUNUSED(event))
 	// Set the text
 	Resolution->SetLabel(Converter.FormatNumber(
 		Converter.ConvertDistance(fabs(Max - Min) / double(ValueCount - 1))));
-
-	return;
 }

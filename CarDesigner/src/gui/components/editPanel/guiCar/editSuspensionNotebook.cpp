@@ -103,8 +103,6 @@ void EDIT_SUSPENSION_NOTEBOOK::UpdateInformation(void)
 	if (CurrentCar)
 		// Call the method that performs the update
 		UpdateInformation(CurrentCar);
-
-	return;
 }
 
 //==========================================================================
@@ -184,8 +182,6 @@ void EDIT_SUSPENSION_NOTEBOOK::UpdateInformation(CAR *_CurrentCar)
 
 	// Also make sure we're symmetric if we're supposed to be
 	UpdateSymmetry();
-
-	return;
 }
 
 //==========================================================================
@@ -222,8 +218,6 @@ void EDIT_SUSPENSION_NOTEBOOK::CreateControls(void)
 	AddPage(LeftFront, _T("LF"));
 	AddPage(RightRear, _T("RR"));
 	AddPage(LeftRear, _T("LR"));
-
-	return;
 }
 
 //==========================================================================
@@ -286,6 +280,4 @@ void EDIT_SUSPENSION_NOTEBOOK::UpdateSymmetry(void)
 		CurrentCar->Suspension->LeftRear.StaticCamber = CurrentCar->Suspension->RightRear.StaticCamber;
 		CurrentCar->Suspension->LeftRear.StaticToe = CurrentCar->Suspension->RightRear.StaticToe;
 	}
-
-	return;
 }

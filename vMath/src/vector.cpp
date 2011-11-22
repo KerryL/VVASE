@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2011
+                         Copyright Kerry R. Loux 2011
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -20,7 +20,6 @@
 //	4/11/2009	- Changed all functions to take addresses of and use const, K. Loux.
 //	4/17/2009	- Renamed ROTATION_Axis enumeration to Axis, K. Loux
 //	6/15/2009	- Corrected function signatures for overloaded operators, K. Loux.
-//	11/22/2009	- Moved to vMath.lib, K. Loux.
 //	11/7/2011	- Corrected camelCase, K. Loux.
 
 // wxWidgets headers
@@ -74,6 +73,28 @@ Vector::Vector(const double &_x, const double &_y, const double &_z)
 	x = _x;
 	y = _y;
 	z = _z;
+}
+
+//==========================================================================
+// Class:			Vector
+// Function:		Vector
+//
+// Description:		Copy constructor for the Vector class.
+//
+// Input Arguments:
+//		v	= const Vector& to be copied
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+Vector::Vector(const Vector &v)
+{
+	// Copy from the argument to this
+	*this = v;
 }
 
 //==========================================================================
@@ -194,8 +215,6 @@ void Vector::Rotate (const Vector &cor, const Vector &rotations,
 
 	// Now we can apply the rotations and translate the vector back
 	*this = rotationMatrix * temp + cor;
-
-	return;
 }
 
 //==========================================================================
@@ -227,8 +246,6 @@ void Vector::Rotate(const Vector &cor, const double &angle, const Axis &about)
 
 	// Translate the vector back to its original position
 	*this = translatedVector + cor;
-
-	return;
 }
 
 //==========================================================================
@@ -273,8 +290,6 @@ void Vector::Rotate(const double &angle, const Axis &about)
 
 	// Now we can apply the rotations
 	*this = rotationMatrix * *this;
-
-	return;
 }
 
 //==========================================================================
@@ -326,8 +341,6 @@ void Vector::Rotate(const double &angle, const Vector &rotationAxis)
 
 	// Apply the rotation
 	*this = rotationMatrix * *this;
-
-	return;
 }
 
 //==========================================================================
@@ -495,8 +508,6 @@ void Vector::Set(const double &_x, const double &_y, const double &_z)
 	x = _x;
 	y = _y;
 	z = _z;
-
-	return;
 }
 
 //==========================================================================

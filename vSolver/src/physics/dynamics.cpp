@@ -193,8 +193,6 @@ void Dynamics::RunSimulation(void)
 
 		// Store the inputs and outputs in the time history queues
 	}
-
-	return;
 }
 
 //==========================================================================

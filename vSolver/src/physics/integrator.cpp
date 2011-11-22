@@ -247,8 +247,6 @@ void Integrator::Reset(State initialConditions)
 {
 	// Initialize the integration step variable
 	integrationStep = 0;
-
-	return;
 }
 
 //==========================================================================
@@ -273,8 +271,6 @@ void Integrator::Reset(void)
 
 	// Reset the integrator with these zero initial conditions
 	Reset(initialConditions);
-
-	return;
 }
 
 //==========================================================================
@@ -324,8 +320,6 @@ void Integrator::SetIntegrationMethod(IntegrationMethod _integrationMethod)
 	delete [] oldStateDerivatives;
 	oldStateDerivatives = new State[numberOfStoredDerivatives];
 	Reset();
-
-	return;
 }
 
 //==========================================================================
@@ -349,8 +343,6 @@ void Integrator::SetFrequency(double _frequency)
 {
 	// Assign the frequency to the class member
 	frequency = _frequency;
-
-	return;
 }
 
 //==========================================================================

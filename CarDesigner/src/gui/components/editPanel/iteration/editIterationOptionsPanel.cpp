@@ -121,8 +121,6 @@ void EDIT_ITERATION_OPTIONS_PANEL::UpdateInformation(void)
 	if (CurrentIteration)
 		// Call the method that performs the update
 		UpdateInformation(CurrentIteration);
-
-	return;
 }
 
 //==========================================================================
@@ -164,8 +162,6 @@ void EDIT_ITERATION_OPTIONS_PANEL::UpdateInformation(ITERATION *_CurrentIteratio
 	TitleText->Enable(!AutoTitle->GetValue());
 	XLabelText->Enable(!AutoLabelXAxis->GetValue());
 	ZLabelText->Enable(!AutoLabelZAxis->GetValue());
-
-	return;
 }
 
 //==========================================================================
@@ -306,8 +302,6 @@ void EDIT_ITERATION_OPTIONS_PANEL::OptionsTextBoxEvent(wxCommandEvent& WXUNUSED(
 
 	// Update the display
 	CurrentIteration->UpdateDisplay();
-
-	return;
 }
 
 //==========================================================================
@@ -335,6 +329,4 @@ void EDIT_ITERATION_OPTIONS_PANEL::SetAsDefaultClickedEvent(wxCommandEvent& WXUN
 
 	// Display a message to the user so they know the changes took effect
 	debugger.Print(_T("Current plot settings saved as default"), Debugger::PriorityHigh);
-
-	return;
 }

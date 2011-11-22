@@ -147,8 +147,6 @@ void DRIVETRAIN::SetNumberOfGears(const short &NumGears)
 
 	// Dynamically allocate memory for GearRatio according to the number of gears we have
 	GearRatio = new double[NumGears];
-
-	return;
 }
 
 //==========================================================================
@@ -181,8 +179,6 @@ void DRIVETRAIN::Write(std::ofstream *OutFile) const
 
 	// Write the differential
 	Differential->Write(OutFile);
-
-	return;
 }
 
 //==========================================================================
@@ -219,8 +215,6 @@ void DRIVETRAIN::Read(std::ifstream *InFile, int FileVersion)
 
 	// Read the differential
 	Differential->Read(InFile, FileVersion);
-
-	return;
 }
 
 //==========================================================================

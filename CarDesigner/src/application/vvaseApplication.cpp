@@ -190,6 +190,4 @@ void VVASEApp::DeleteDynamicMemory(void)
 	// Delete the data exchange server
 	delete DataExchangeServer;
 	DataExchangeServer = NULL;
-
-	return;
 }

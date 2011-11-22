@@ -107,8 +107,6 @@ void ENGINE::Write(std::ofstream *OutFile) const
 {
 	// Write this object to file
 	OutFile->write((char*)&CrankshaftSpeed, sizeof(double));
-
-	return;
 }
 
 //==========================================================================
@@ -137,8 +135,6 @@ void ENGINE::Read(std::ifstream *InFile, int FileVersion)
 	}
 	else
 		assert(0);
-
-	return;
 }
 
 //==========================================================================

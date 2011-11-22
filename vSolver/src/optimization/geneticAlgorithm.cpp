@@ -110,8 +110,6 @@ void GeneticAlgorithm::SetPopulationSize(int _populationSize)
 	// Make sure the data is OK, then do the assignment
 	if (_populationSize > 0)
 		populationSize = _populationSize;
-
-	return;
 }
 
 //==========================================================================
@@ -138,8 +136,6 @@ void GeneticAlgorithm::SetGenerationLimit(int _generationLimit)
 	// Make sure the data is OK, then do the assignment
 	if (_generationLimit > 0)
 		generationLimit = _generationLimit;
-
-	return;
 }
 
 //==========================================================================
@@ -174,8 +170,6 @@ void GeneticAlgorithm::SetCrossoverPoint(int _crossover)
 		crossover = numberOfGenes;
 	else
 		crossover = _crossover;
-
-	return;
 }
 
 //==========================================================================
@@ -207,8 +201,6 @@ void GeneticAlgorithm::SetElitismPercentage(double _elitism)
 		elitism = 1.0;
 	else
 		elitism = _elitism;
-
-	return;
 }
 
 //==========================================================================
@@ -239,8 +231,6 @@ void GeneticAlgorithm::SetMutationProbability(double _mutation)
 		mutation = 1.0;
 	else
 		mutation = _mutation;
-
-	return;
 }
 
 //==========================================================================
@@ -332,8 +322,6 @@ void GeneticAlgorithm::InitializeAlgorithm(int _populationSize, int _generationL
 			}
 		}
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -359,8 +347,6 @@ void GeneticAlgorithm::SimulateGeneration(void)
 	for (currentCitizen = 0; currentCitizen < populationSize; currentCitizen++)
 		fitnesses[currentGeneration][currentCitizen] =
 			DetermineFitness(genomes[currentGeneration][currentCitizen]);
-
-	return;
 }
 
 //==========================================================================
@@ -443,8 +429,6 @@ void GeneticAlgorithm::CreateFirstGeneration(void)
 		for (currentGene = 0; currentGene < numberOfGenes; currentGene++)
 			genomes[0][currentCitizen][currentGene] = rand() % numberOfPhenotypes[currentGene];
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -658,8 +642,6 @@ void GeneticAlgorithm::Breed(void)
 		// Increment the number of offspring
 		numberOfOffspring++;
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -698,8 +680,6 @@ void GeneticAlgorithm::SortByFitness(void)
 		MergeSort(fitnesses[currentGeneration], genomes[currentGeneration], populationSize);
 		break;
 	}
-
-	return;
 }
 
 //==========================================================================

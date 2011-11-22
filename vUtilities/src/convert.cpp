@@ -692,8 +692,6 @@ void Convert::SetAngleUnits(UnitsOfAngle Units)
 {
 	// Set the default angle units
 	defaultAngleUnits = Units;
-
-	return;
 }
 
 //==========================================================================
@@ -717,8 +715,6 @@ void Convert::SetDistanceUnits(UnitsOfDistance Units)
 {
 	// Set the default distance units
 	defaultDistanceUnits = Units;
-
-	return;
 }
 
 //==========================================================================
@@ -742,8 +738,6 @@ void Convert::SetAreaUnits(UnitsOfArea Units)
 {
 	// Set the default area units
 	defaultAreaUnits = Units;
-
-	return;
 }
 
 //==========================================================================
@@ -767,8 +761,6 @@ void Convert::SetForceUnits(UnitsOfForce Units)
 {
 	// Set the default force units
 	defaultForceUnits = Units;
-
-	return;
 }
 
 //==========================================================================
@@ -792,8 +784,6 @@ void Convert::SetPressureUnits(UnitsOfPressure Units)
 {
 	// Set the default pressure units
 	defaultPressureUnits = Units;
-
-	return;
 }
 
 //==========================================================================
@@ -817,8 +807,6 @@ void Convert::SetMomentUnits(UnitsOfMoment Units)
 {
 	// Set the default moment units
 	defaultMomentUnits = Units;
-
-	return;
 }
 
 //==========================================================================
@@ -842,8 +830,6 @@ void Convert::SetMassUnits(UnitsOfMass Units)
 {
 	// Set the default mass units
 	defaultMassUnits = Units;
-
-	return;
 }
 
 //==========================================================================
@@ -867,8 +853,6 @@ void Convert::SetVelocityUnits(UnitsOfVelocity Units)
 {
 	// Set the default velocity units
 	defaultVelocityUnits = Units;
-
-	return;
 }
 
 //==========================================================================
@@ -891,8 +875,6 @@ void Convert::SetVelocityUnits(UnitsOfVelocity Units)
 void Convert::SetAccelerationUnits(UnitsOfAcceleration Units)
 {
 	defaultAccelerationUnits = Units;
-
-	return;
 }
 
 //==========================================================================
@@ -916,8 +898,6 @@ void Convert::SetInertiaUnits(UnitsOfInertia Units)
 {
 	// Set the default inertia units
 	defaultInertiaUnits = Units;
-
-	return;
 }
 
 //==========================================================================
@@ -941,8 +921,6 @@ void Convert::SetDensityUnits(UnitsOfDensity Units)
 {
 	// Set the default density units
 	defaultDensityUnits = Units;
-
-	return;
 }
 
 //==========================================================================
@@ -966,8 +944,6 @@ void Convert::SetPowerUnits(UnitsOfPower Units)
 {
 	// Set the default power units
 	defaultPowerUnits = Units;
-
-	return;
 }
 
 //==========================================================================
@@ -991,8 +967,6 @@ void Convert::SetEnergyUnits(UnitsOfEnergy Units)
 {
 	// Set the default energy units
 	defaultEnergyUnits = Units;
-
-	return;
 }
 
 //==========================================================================
@@ -1016,8 +990,6 @@ void Convert::SetTemperatureUnits(UnitsOfTemperature Units)
 {
 	// Set the default temperature units
 	defaultTemperatureUnits = Units;
-
-	return;
 }
 
 //==========================================================================
@@ -3385,6 +3357,4 @@ void Convert::SetNumberOfDigits(int _numberOfDigits)
 	else
 		// Assign the value
 		numberOfDigits = _numberOfDigits;
-
-	return;
 }

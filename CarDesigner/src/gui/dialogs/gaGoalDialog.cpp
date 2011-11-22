@@ -317,8 +317,6 @@ void GA_GOAL_DIALOG::CreateControls(void)
 	// Set the checkbox as appropriate for this goal.  This will handle showing/hiding the
 	// controls and labeling the desired value as appropriate.
 	FormatDialogDifference();
-
-	return;
 }
 
 //==========================================================================
@@ -403,8 +401,6 @@ void GA_GOAL_DIALOG::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 		SetReturnCode(wxOK);
 		Show(false);
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -433,8 +429,6 @@ void GA_GOAL_DIALOG::CancelClickEvent(wxCommandEvent& WXUNUSED(event))
 		SetReturnCode(wxID_CANCEL);
 		Show(false);
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -460,8 +454,6 @@ void GA_GOAL_DIALOG::OnCheckEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Update the dialog depending on the value of the checkbox
 	FormatDialogDifference();
-
-	return;
 }
 
 //==========================================================================
@@ -488,8 +480,6 @@ void GA_GOAL_DIALOG::OnOutputChangeEvent(wxCommandEvent &event)
 		KinematicOutputs::GetOutputUnitType((KinematicOutputs::OutputsComplete)event.GetSelection())));
 	DeviationUnitsLabel->SetLabel(Converter.GetUnitType(
 		KinematicOutputs::GetOutputUnitType((KinematicOutputs::OutputsComplete)event.GetSelection())));
-
-	return;
 }
 
 //==========================================================================
@@ -542,6 +532,4 @@ void GA_GOAL_DIALOG::FormatDialogDifference(void)
 	// Update the appearance of this dialog
 	this->GetSizer()->SetSizeHints(this);
 	this->GetSizer()->Layout();
-
-	return;
 }

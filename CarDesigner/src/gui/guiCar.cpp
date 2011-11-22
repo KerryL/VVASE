@@ -228,8 +228,6 @@ void GUI_CAR::UpdateData(void)
 	KinematicsData *Data = new KinematicsData(OriginalCar, WorkingCar, MainFrame.GetInputs(), &kinematicOutputs);
 	ThreadJob Job(ThreadJob::CommandThreadKinematicsNormal, Data, Name, Index);
 	MainFrame.AddJob(Job);
-
-	return;
 }
 
 //==========================================================================

@@ -181,8 +181,6 @@ void MAIN_TREE::PerformSelection(bool IsActivated)
 	// Make the notebook tab for the selected car come to the front, which
 	// will in turn make that car active.
 	MainFrame.SetActiveIndex(GetSelectedObjectIndex(), IsActivated);
-
-	return;
 }
 
 //==========================================================================
@@ -261,8 +259,6 @@ void MAIN_TREE::SelectionChangeEvent(wxTreeEvent &event)
 	PerformSelection(ChangeTab);
 
 	event.Skip();
-
-	return;
 }
 
 //==========================================================================
@@ -303,8 +299,6 @@ void MAIN_TREE::ItemRightClickEvent(wxTreeEvent &event)
 	MainFrame.CreateContextMenu(Index, MenuPosition);
 
 	event.Skip();
-
-	return;
 }
 
 //==========================================================================
@@ -329,8 +323,6 @@ void MAIN_TREE::ItemActivatedEvent(wxTreeEvent &event)
 	PerformSelection(true);
 
 	event.Skip();
-
-	return;
 }
 
 //==========================================================================

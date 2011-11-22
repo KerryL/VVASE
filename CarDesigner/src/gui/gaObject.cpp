@@ -175,8 +175,6 @@ void GA_OBJECT::SimulateGeneration(void)
 	// Determine fitnesses for every genome we just simulated
 	for (i = 0; i < populationSize; i++)
 		fitnesses[currentGeneration][i] = DetermineFitness(&i);
-
-	return;
 }
 
 //==========================================================================
@@ -332,8 +330,6 @@ void GA_OBJECT::SetUp(CAR *_TargetCar)
 		OriginalCarArray[i] = new CAR(debugger);
 		WorkingCarArray[i] = new CAR(debugger);
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -477,8 +473,6 @@ void GA_OBJECT::SetCarGenome(int CarIndex, const int *CurrentGenome)
 			}
 		}
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -517,8 +511,6 @@ void GA_OBJECT::PerformAdditionalActions(void)
 	// Check to see if the simulation is still running
 	if (currentGeneration == generationLimit - 1)
 		IsRunning = false;
-
-	return;
 }
 
 //==========================================================================
@@ -564,8 +556,6 @@ void GA_OBJECT::AddGene(const CORNER::HARDPOINTS &Hardpoint, const CORNER::HARDP
 
 	// Add the gene to the list
 	GeneList.Add(NewGene);
-
-	return;
 }
 
 //==========================================================================
@@ -614,8 +604,6 @@ void GA_OBJECT::AddGoal(const KinematicOutputs::OutputsComplete &Output, const d
 
 	// Add the goal to the list
 	GoalList.Add(NewGoal);
-
-	return;
 }
 
 //==========================================================================
@@ -656,8 +644,6 @@ void GA_OBJECT::UpdateGene(const int &Index, const CORNER::HARDPOINTS &Hardpoint
 	GeneList[Index]->Minimum		= Minimum;
 	GeneList[Index]->Maximum		= Maximum;
 	GeneList[Index]->NumberOfValues	= NumberOfValues;
-
-	return;
 }
 
 //==========================================================================
@@ -701,8 +687,6 @@ void GA_OBJECT::UpdateGoal(const int &Index, const KinematicOutputs::OutputsComp
 	GoalList[Index]->Importance			= Importance;
 	GoalList[Index]->BeforeInputs		= BeforeInputs;
 	GoalList[Index]->AfterInputs		= AfterInputs;
-
-	return;
 }
 
 
@@ -779,8 +763,6 @@ void GA_OBJECT::DetermineAllInputs(void)
 			}
 		}
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -806,8 +788,6 @@ void GA_OBJECT::UpdateTargetCar(void)
 
 	// Update the target car to match the best fit car we've got
 	*TargetCar = *OriginalCarArray[generationLimit - 1];
-
-	return;
 }
 
 //==========================================================================
@@ -837,8 +817,6 @@ void GA_OBJECT::WriteFileHeader(std::ofstream *OutFile)
 
 	// Write the header
 	OutFile->write((char*)&Header, sizeof(FILE_HEADER_INFO));
-
-	return;
 }
 
 //==========================================================================

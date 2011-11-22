@@ -110,8 +110,6 @@ void BRAKES::Write(std::ofstream *OutFile) const
 	OutFile->write((char*)&PercentFrontBraking, sizeof(double));
 	OutFile->write((char*)&FrontBrakesInboard, sizeof(bool));
 	OutFile->write((char*)&RearBrakesInboard, sizeof(bool));
-
-	return;
 }
 
 //==========================================================================
@@ -142,8 +140,6 @@ void BRAKES::Read(std::ifstream *InFile, int FileVersion)
 	}
 	else
 		assert(0);
-
-	return;
 }
 
 //==========================================================================

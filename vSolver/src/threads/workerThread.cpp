@@ -202,6 +202,4 @@ void WorkerThread::OnJob()
 		delete job.data;
 		job.data = NULL;
 	}
-
-	return;
 }

@@ -130,8 +130,6 @@ void TIRE_SET::Write(std::ofstream *OutFile) const
 	LeftFront->Write(OutFile);
 	RightRear->Write(OutFile);
 	LeftRear->Write(OutFile);
-
-	return;
 }
 
 //==========================================================================
@@ -158,8 +156,6 @@ void TIRE_SET::Read(std::ifstream *InFile, int FileVersion)
 	LeftFront->Read(InFile, FileVersion);
 	RightRear->Read(InFile, FileVersion);
 	LeftRear->Read(InFile, FileVersion);
-
-	return;
 }
 
 //==========================================================================

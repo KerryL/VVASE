@@ -382,8 +382,6 @@ void EDIT_TIRES_PANEL::RightFrontTireDiameterChangeEvent(wxCommandEvent &event)
 	Parent.GetMainFrame().UpdateAnalysis();
 
 	event.Skip();
-
-	return;
 }
 
 //==========================================================================
@@ -438,8 +436,6 @@ void EDIT_TIRES_PANEL::RightFrontTireWidthChangeEvent(wxCommandEvent &event)
 	Parent.GetMainFrame().UpdateAnalysis();
 
 	event.Skip();
-
-	return;
 }
 
 //==========================================================================
@@ -494,8 +490,6 @@ void EDIT_TIRES_PANEL::LeftFrontTireDiameterChangeEvent(wxCommandEvent &event)
 	Parent.GetMainFrame().UpdateAnalysis();
 
 	event.Skip();
-
-	return;
 }
 
 //==========================================================================
@@ -550,8 +544,6 @@ void EDIT_TIRES_PANEL::LeftFrontTireWidthChangeEvent(wxCommandEvent &event)
 	Parent.GetMainFrame().UpdateAnalysis();
 
 	event.Skip();
-
-	return;
 }
 
 //==========================================================================
@@ -606,8 +598,6 @@ void EDIT_TIRES_PANEL::RightRearTireDiameterChangeEvent(wxCommandEvent &event)
 	Parent.GetMainFrame().UpdateAnalysis();
 
 	event.Skip();
-
-	return;
 }
 
 //==========================================================================
@@ -662,8 +652,6 @@ void EDIT_TIRES_PANEL::RightRearTireWidthChangeEvent(wxCommandEvent &event)
 	Parent.GetMainFrame().UpdateAnalysis();
 
 	event.Skip();
-
-	return;
 }
 
 //==========================================================================
@@ -718,8 +706,6 @@ void EDIT_TIRES_PANEL::LeftRearTireDiameterChangeEvent(wxCommandEvent &event)
 	Parent.GetMainFrame().UpdateAnalysis();
 
 	event.Skip();
-
-	return;
 }
 
 //==========================================================================
@@ -774,6 +760,4 @@ void EDIT_TIRES_PANEL::LeftRearTireWidthChangeEvent(wxCommandEvent &event)
 	Parent.GetMainFrame().UpdateAnalysis();
 
 	event.Skip();
-
-	return;
 }

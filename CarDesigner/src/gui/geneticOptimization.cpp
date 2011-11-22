@@ -129,8 +129,6 @@ void GENETIC_OPTIMIZATION::BeginOptimization(void)
 	ThreadJob Job(ThreadJob::CommandThreadGeneticOptimization, Data,
 		Name, Index);
 	MainFrame.AddJob(Job);
-
-	return;
 }
 
 //==========================================================================
@@ -151,7 +149,6 @@ void GENETIC_OPTIMIZATION::BeginOptimization(void)
 //==========================================================================
 void GENETIC_OPTIMIZATION::HaltOptimization(void)
 {
-	return;
 }
 
 //==========================================================================
@@ -223,8 +220,6 @@ void GENETIC_OPTIMIZATION::MarkAnalysisComplete(void)
 	// Also tell the panel that we've completed an analysis - this is what
 	// makes the status bars fill in
 	GAPanel->IncrementStatusBars();
-
-	return;
 }
 
 //==========================================================================
@@ -276,8 +271,6 @@ void GENETIC_OPTIMIZATION::CompleteOptimization(void)
 
 	// Mark the target car as modified
 	CarToOptimize->SetModified();
-
-	return;
 }
 
 //==========================================================================
@@ -304,8 +297,6 @@ void GENETIC_OPTIMIZATION::SetCarToOptimize(GUI_CAR *_CarToOptimize)
 
 	// Do the assignment
 	CarToOptimize = _CarToOptimize;
-
-	return;
 }
 
 //==========================================================================
@@ -328,8 +319,6 @@ void GENETIC_OPTIMIZATION::UpdateDisplay(void)
 {
 	// Update the display
 	GAPanel->UpdateInformation();
-
-	return;
 }
 
 //==========================================================================
@@ -360,6 +349,4 @@ void GENETIC_OPTIMIZATION::UpdateData(void)
 
 	// Update the display
 	GAPanel->UpdateInformation();
-
-	return;
 }

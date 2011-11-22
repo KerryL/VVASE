@@ -369,8 +369,6 @@ void CORNER::ComputeWheelCenter(const double &TireDiameter)
 		RotationAngle *= -1.0;
 
 	Hardpoints[WheelCenter].Rotate(Hardpoints[ContactPatch], RotationAngle, Vector::AxisZ);
-
-	return;
 }
 
 //==========================================================================
@@ -403,8 +401,6 @@ void CORNER::Write(std::ofstream *OutFile) const
 	OutFile->write((char*)&ActuationType, sizeof(ACTUATION_TYPE));
 	OutFile->write((char*)&Location, sizeof(LOCATION));
 	OutFile->write((char*)Hardpoints, sizeof(Vector) * NumberOfHardpoints);
-
-	return;
 }
 
 //==========================================================================
@@ -444,8 +440,6 @@ void CORNER::Read(std::ifstream *InFile, int FileVersion)
 	}
 	else
 		assert(0);
-
-	return;
 }
 
 //==========================================================================

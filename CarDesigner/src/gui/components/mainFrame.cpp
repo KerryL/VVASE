@@ -294,8 +294,6 @@ void MAIN_FRAME::DoLayout(void)
 
 	// Configure the output panel to show units
 	OutputPanel->FinishUpdate(0);
-
-	return;
 }
 
 //==========================================================================
@@ -416,8 +414,6 @@ void MAIN_FRAME::SetProperties(void)
 
 	// Allow draging-and-dropping of files onto this window to open them
 	SetDropTarget(dynamic_cast<wxDropTarget*>(new DropTarget(*this)));
-
-	return;
 }
 
 //==========================================================================
@@ -455,8 +451,6 @@ void MAIN_FRAME::InitializeSolver(void)
 	KinematicInputs.roll = 0.0;
 	KinematicInputs.heave = 0.0;
 	KinematicInputs.rackTravel = 0.0;
-
-	return;
 }
 
 //==========================================================================
@@ -510,8 +504,6 @@ void MAIN_FRAME::SetNumberOfThreads(unsigned int NewNumberOfThreads)
 
 	// Update the class member for the desired number of threads
 	NumberOfThreads = NewNumberOfThreads;
-
-	return;
 }
 
 //==========================================================================
@@ -607,8 +599,6 @@ void MAIN_FRAME::CreateMenuBar(void)
 
 	// Now make it official
 	SetMenuBar(MenuBar);
-
-	return;
 }
 
 //==========================================================================
@@ -686,8 +676,6 @@ void MAIN_FRAME::CreateKinematicAnalysisToolbar(void)
 	Manager.AddPane(KinematicToolbar, wxAuiPaneInfo().Name(_T("KinematicToolbar")).
 		Caption(_T("Kinematic Analysis")).ToolbarPane().Top().Row(1).Position(1).
 		LeftDockable(false).RightDockable(false));
-
-	return;
 }
 
 //==========================================================================
@@ -788,8 +776,6 @@ void MAIN_FRAME::FileNewCarEvent(wxCommandEvent& WXUNUSED(event))
 
 	// Make the new object active
 	SetActiveIndex(TempObject->GetIndex());
-
-	return;
 }
 
 //==========================================================================
@@ -819,8 +805,6 @@ void MAIN_FRAME::FileNewIterationEvent(wxCommandEvent& WXUNUSED(event))
 		SetActiveIndex(TempObject->GetIndex());
 	else
 		RemoveObjectFromList(TempObject->GetIndex());
-
-	return;
 }
 
 //==========================================================================
@@ -848,7 +832,6 @@ void MAIN_FRAME::FileNewOptimizationEvent(wxCommandEvent& WXUNUSED(event))
 	// Make the new object active
 	SetActiveIndex(TempObject->GetIndex());
 
-	return;
 }
 
 //==========================================================================
@@ -890,8 +873,6 @@ void MAIN_FRAME::FileOpenEvent(wxCommandEvent& WXUNUSED(event))
 	unsigned int File;
 	for (File = 0; File < PathsAndFileNames.GetCount(); File++)
 		LoadFile(PathsAndFileNames[File]);
-
-	return;
 }
 
 //==========================================================================
@@ -1049,8 +1030,6 @@ void MAIN_FRAME::FileOpenAllRecentEvent(wxCommandEvent& WXUNUSED(event))
 	unsigned int i;
 	for (i = 0; i < RecentFileManager->GetCount(); i++)
 		LoadFile(RecentFileManager->GetHistoryFile(i));
-
-	return;
 }
 
 //==========================================================================
@@ -1114,8 +1093,6 @@ void MAIN_FRAME::FileExitEvent(wxCommandEvent& WXUNUSED(event))
 	// which is called when the form tries to close.  If we put our own
 	// code here, the user is asked for confirmation twice.
 	Close(true);
-
-	return;
 }
 
 //==========================================================================
@@ -1149,8 +1126,6 @@ void MAIN_FRAME::OtherMenuClickEvents(wxCommandEvent &event)
 
 	// Attempt to load the specified file
 	LoadFile(RecentFileManager->GetHistoryFile(event.GetId() - IdMenuFileRecentStart));
-
-	return;
 }
 
 //==========================================================================
@@ -1173,8 +1148,6 @@ void MAIN_FRAME::EditUndoEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Undo the last operation
 	UndoRedo.Undo();
-
-	return;
 }
 
 //==========================================================================
@@ -1197,8 +1170,6 @@ void MAIN_FRAME::EditRedoEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Redo the last undone operation
 	UndoRedo.Redo();
-
-	return;
 }
 
 //==========================================================================
@@ -1290,8 +1261,6 @@ void MAIN_FRAME::CarAppearanceOptionsEvent(wxCommandEvent& WXUNUSED(event))
 	// Show the appearance options dialog for the car
 	static_cast<GUI_CAR*>(OpenObjectList[ObjectOfInterestIndex])
 		->GetAppearanceOptions().ShowAppearanceOptionsDialog();
-
-	return;
 }
 
 //==========================================================================
@@ -1319,8 +1288,6 @@ void MAIN_FRAME::IterationShowAssociatedCarsClickEvent(wxCommandEvent& WXUNUSED(
 
 	// Call the ShowAssociatedCarsDialog() method
 	static_cast<ITERATION*>(OpenObjectList[ObjectOfInterestIndex])->ShowAssociatedCarsDialog();
-
-	return;
 }
 
 //==========================================================================
@@ -1352,8 +1319,6 @@ void MAIN_FRAME::IterationAssociatedWithAllCarsClickEvent(wxCommandEvent &event)
 		static_cast<ITERATION*>(OpenObjectList.GetObject(ObjectOfInterestIndex))->SetAutoAssociate(true);
 	else
 		static_cast<ITERATION*>(OpenObjectList.GetObject(ObjectOfInterestIndex))->SetAutoAssociate(false);
-
-	return;
 }
 
 //==========================================================================
@@ -1391,8 +1356,6 @@ void MAIN_FRAME::IterationExportDataToFileClickEvent(wxCommandEvent& WXUNUSED(ev
 	// Call the ExportDataToFile() method
 	static_cast<ITERATION*>(OpenObjectList.GetObject(ObjectOfInterestIndex))
 		->ExportDataToFile(PathAndFileName.Item(0));
-
-	return;
 }
 
 //==========================================================================
@@ -1428,8 +1391,6 @@ void MAIN_FRAME::IterationXAxisPitchClickEvent(wxCommandEvent& WXUNUSED(event))
 		MenuBar->Check(IdMenuIterationXAxisHeave, false);
 		MenuBar->Check(IdMenuIterationXAxisRackTravel, false);
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -1465,8 +1426,6 @@ void MAIN_FRAME::IterationXAxisRollClickEvent(wxCommandEvent& WXUNUSED(event))
 		MenuBar->Check(IdMenuIterationXAxisHeave, false);
 		MenuBar->Check(IdMenuIterationXAxisRackTravel, false);
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -1502,8 +1461,6 @@ void MAIN_FRAME::IterationXAxisHeaveClickEvent(wxCommandEvent& WXUNUSED(event))
 		MenuBar->Check(IdMenuIterationXAxisRoll, false);
 		MenuBar->Check(IdMenuIterationXAxisRackTravel, false);
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -1539,8 +1496,6 @@ void MAIN_FRAME::IterationXAxisRackTravelClickEvent(wxCommandEvent& WXUNUSED(eve
 		MenuBar->Check(IdMenuIterationXAxisRoll, false);
 		MenuBar->Check(IdMenuIterationXAxisHeave, false);
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -1572,8 +1527,6 @@ void MAIN_FRAME::ViewToolbarsKinematicEvent(wxCommandEvent &event)
 		delete KinematicToolbar;
 		KinematicToolbar = NULL;
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -1617,8 +1570,6 @@ void MAIN_FRAME::ViewClearOutputEvent(wxCommandEvent& WXUNUSED(event))
 void MAIN_FRAME::ToolsDoEEvent(wxCommandEvent &event)
 {
 	event.Skip();
-
-	return;
 }
 
 //==========================================================================
@@ -1640,8 +1591,6 @@ void MAIN_FRAME::ToolsDoEEvent(wxCommandEvent &event)
 void MAIN_FRAME::ToolsDynamicEvent(wxCommandEvent &event)
 {
 	event.Skip();
-
-	return;
 }
 
 //==========================================================================
@@ -1682,8 +1631,6 @@ void MAIN_FRAME::ToolsOptionsEvent(wxCommandEvent& WXUNUSED(event))
 		if (OpenObjectList.GetCount() > 0)
 			OpenObjectList.GetObject(ActiveIndex)->UpdateData();
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -1724,8 +1671,6 @@ void MAIN_FRAME::HelpManualEvent(wxCommandEvent& WXUNUSED(event))
 		if (wxExecute(OpenPDFManualCommand) == 0)
 			debugger.Print(_T("ERROR:  Could not find 'VVASE Manual.pdf'!"));// FIXME:  Use ManualFileName
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -2253,8 +2198,6 @@ void MAIN_FRAME::SetNotebookPage(int Index)
 		// in FormatPlot() (Z values are NaN)
 		//OpenObjectList[ActiveIndex]->UpdateDisplay();
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -2301,8 +2244,6 @@ void MAIN_FRAME::WindowCloseEvent(wxCloseEvent& WXUNUSED(event))
 	int i;
 	for (i = 0; i < ActiveThreads; i++)
 		jobQueue->AddJob(ThreadJob(ThreadJob::CommandThreadExit), JobQueue::PriorityVeryHigh);
-
-	return;
 }
 
 //==========================================================================
@@ -2331,8 +2272,6 @@ void MAIN_FRAME::OnSizeEvent(wxSizeEvent& WXUNUSED(event))
 	for (i = 0; i < OpenObjectList.GetCount(); i++)
 		OpenObjectList[i]->UpdateDisplay();*/
 	// FIXME:  This is out-of-phase with the actualy re-sizing!
-
-	return;
 }
 
 //==========================================================================
@@ -2479,8 +2418,6 @@ void MAIN_FRAME::ReadConfiguration(void)
 	// Delete file object
 	delete ConfigurationFile;
 	ConfigurationFile = NULL;
-
-	return;
 }
 
 //==========================================================================
@@ -2554,8 +2491,6 @@ void MAIN_FRAME::WriteConfiguration(void)
 	// Delete file object
 	delete ConfigurationFile;
 	ConfigurationFile = NULL;
-
-	return;
 }
 
 //==========================================================================
@@ -2707,8 +2642,6 @@ void MAIN_FRAME::SetActiveIndex(int Index, bool SelectNotebookTab)
 
 	// Update the object specific menus
 	UpdateActiveObjectMenu();
-
-	return;
 }
 
 //==========================================================================
@@ -2791,8 +2724,6 @@ void MAIN_FRAME::CreateContextMenu(int ObjectIndex, wxPoint Position, bool Allow
 	// The event handlers for whatever was clicked get called here
 	// Reset the object index to the active object index
 	ObjectOfInterestIndex = ActiveIndex;
-
-	return;
 }
 
 //==========================================================================
@@ -3055,8 +2986,6 @@ void MAIN_FRAME::AddFileToHistory(wxString PathAndFileName)
 {
 	// Add the file to the manager
 	RecentFileManager->AddFileToHistory(PathAndFileName);
-
-	return;
 }
 
 //==========================================================================
@@ -3089,6 +3018,4 @@ void MAIN_FRAME::RemoveFileFromHistory(wxString PathAndFileName)
 			break;
 		}
 	}
-
-	return;
 }

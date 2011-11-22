@@ -287,8 +287,6 @@ void PlotPanel::ContextRemoveCurveEvent(wxCommandEvent& WXUNUSED(event))
 	}
 
 	renderer->UpdateDisplay();
-
-	return;
 }
 
 //==========================================================================
@@ -343,8 +341,6 @@ void PlotPanel::CreateGridContextMenu(const wxPoint &position, const unsigned in
 	// Delete the context menu object
 	delete contextMenu;
 	contextMenu = NULL;
-
-	return;
 }
 
 //==========================================================================
@@ -426,7 +422,7 @@ void PlotPanel::CreatePlotContextMenu(const wxPoint &position, const PlotContext
 //		None
 //
 //==========================================================================
-void PlotPanel::ContextWriteImageFile(wxCommandEvent &event)
+void PlotPanel::ContextWriteImageFile(wxCommandEvent& WXUNUSED(event))
 {
 	// Get file name from user, then save to file with
 	wxArrayString pathAndFileName = static_cast<MAIN_FRAME*>(GetParent())->GetFileNameFromUser(
@@ -673,8 +669,6 @@ void PlotPanel::AddCurve(Dataset2D *data, wxString name)
 
 	// Resize to prevent scrollbars and hidden values in the grid control
 	//topSizer->Layout();
-
-	return;
 }
 
 //==========================================================================
@@ -709,8 +703,6 @@ void PlotPanel::RemoveCurve(const unsigned int &i)
 
 	// And remove from our local list (calls destructor for the dataset)
 	plotList.Remove(i);
-
-	return;
 }
 
 //==========================================================================
@@ -734,8 +726,6 @@ void PlotPanel::GridRightClickEvent(wxGridEvent &event)
 {
 	optionsGrid->SelectRow(event.GetRow());
 	CreateGridContextMenu(event.GetPosition() + optionsGrid->GetPosition(), event.GetRow());
-
-	return;
 }
 
 //==========================================================================
@@ -786,8 +776,6 @@ void PlotPanel::GridDoubleClickEvent(wxGridEvent &event)
 			!optionsGrid->GetCellValue(row, colVisible).IsEmpty(),
 			!optionsGrid->GetCellValue(row, colRightAxis).IsEmpty(), size);
     }
-
-	return;
 }
 
 //==========================================================================
@@ -856,8 +844,6 @@ void PlotPanel::GridLeftClickEvent(wxGridEvent &event)
 	renderer->SetCurveProperties(row - 1, color,
 		!optionsGrid->GetCellValue(row, colVisible).IsEmpty(),
 		!optionsGrid->GetCellValue(row, colRightAxis).IsEmpty(), size);
-
-	return;
 }
 
 //==========================================================================
@@ -912,8 +898,6 @@ void PlotPanel::GridCellChangeEvent(wxGridEvent &event)
 void PlotPanel::ContextAddMathChannelEvent(wxCommandEvent& WXUNUSED(event))
 {
 	DisplayMathChannelDialog();
-
-	return;
 }
 
 //==========================================================================
@@ -941,8 +925,6 @@ void PlotPanel::ContextPlotDerivativeEvent(wxCommandEvent& WXUNUSED(event))
 
 	wxString name = _T("d/dt(") + optionsGrid->GetCellValue(row, colName) + _T(")");
 	AddCurve(newData, name);
-
-	return;
 }
 
 //==========================================================================
@@ -970,8 +952,6 @@ void PlotPanel::ContextPlotIntegralEvent(wxCommandEvent& WXUNUSED(event))
 
 	wxString name = _T("integral(") + optionsGrid->GetCellValue(row, colName) + _T(")");
 	AddCurve(newData, name);
-
-	return;
 }
 
 //==========================================================================
@@ -999,8 +979,6 @@ void PlotPanel::ContextPlotRMSEvent(wxCommandEvent& WXUNUSED(event))
 
 	wxString name = _T("RMS(") + optionsGrid->GetCellValue(row, colName) + _T(")");
 	AddCurve(newData, name);
-
-	return;
 }
 
 //==========================================================================
@@ -1037,8 +1015,6 @@ void PlotPanel::ContextPlotFFTEvent(wxCommandEvent& WXUNUSED(event))
 
 	wxString name = _T("FFT(") + optionsGrid->GetCellValue(row, colName) + _T(")");
 	AddCurve(newData, name);
-
-	return;
 }
 
 //==========================================================================
@@ -1092,8 +1068,6 @@ void PlotPanel::ContextFilterLowPassEvent(wxCommandEvent& WXUNUSED(event))
 
 	wxString name = cutoffString.Trim() + _T(" Hz low-pass(") + optionsGrid->GetCellValue(row, colName) + _T(")");
 	AddCurve(newData, name);
-
-	return;
 }
 
 //==========================================================================
@@ -1147,8 +1121,6 @@ void PlotPanel::ContextFilterHighPassEvent(wxCommandEvent& WXUNUSED(event))
 
 	wxString name = cutoffString.Trim() + _T(" Hz high-pass(") + optionsGrid->GetCellValue(row, colName) + _T(")");
 	AddCurve(newData, name);
-
-	return;
 }
 
 //==========================================================================
@@ -1217,8 +1189,6 @@ void PlotPanel::ContextFitCurve(wxCommandEvent& WXUNUSED(event))
 
 	// Free the coefficient data
 	delete [] fitData.coefficients;
-
-	return;
 }
 
 //==========================================================================
@@ -1245,8 +1215,6 @@ void PlotPanel::ContextToggleGridlines(wxCommandEvent& WXUNUSED(event))
 		renderer->SetGridOn();
 
 	renderer->UpdateDisplay();
-
-	return;
 }
 
 //==========================================================================
@@ -1269,8 +1237,6 @@ void PlotPanel::ContextAutoScale(wxCommandEvent& WXUNUSED(event))
 {
 	renderer->AutoScale();
 	renderer->UpdateDisplay();
-
-	return;
 }
 
 //==========================================================================
@@ -1375,8 +1341,6 @@ void PlotPanel::UpdateCursorValues(const bool &leftVisible, const bool &rightVis
 			optionsGrid->SetCellValue(i, colDifference, wxEmptyString);
 		}
 	}
-
-	return;
 }
 
 //==========================================================================
@@ -1406,8 +1370,6 @@ void PlotPanel::DisplayMathChannelDialog(wxString defaultInput)
 	message.Append(_T("    Use () to specify order of operations"));
 
 	AddCurve(::wxGetTextFromUser(message, _T("Specify Math Channel"), defaultInput, this));
-
-	return;
 }
 
 //==========================================================================
@@ -1494,8 +1456,6 @@ void PlotPanel::DisplayAxisRangeDialog(const PlotContext &axis)
 	}
 
 	renderer->UpdateDisplay();
-
-	return;
 }
 
 //==========================================================================
@@ -1517,8 +1477,6 @@ void PlotPanel::DisplayAxisRangeDialog(const PlotContext &axis)
 void PlotPanel::ContextToggleGridlinesBottom(wxCommandEvent& WXUNUSED(event))
 {
 	renderer->SetBottomGrid(!renderer->GetBottomGrid());
-
-	return;
 }
 
 //==========================================================================
@@ -1540,8 +1498,6 @@ void PlotPanel::ContextToggleGridlinesBottom(wxCommandEvent& WXUNUSED(event))
 void PlotPanel::ContextAutoScaleBottom(wxCommandEvent& WXUNUSED(event))
 {
 	renderer->AutoScaleBottom();
-
-	return;
 }
 
 //==========================================================================
@@ -1563,8 +1519,6 @@ void PlotPanel::ContextAutoScaleBottom(wxCommandEvent& WXUNUSED(event))
 void PlotPanel::ContextSetRangeBottom(wxCommandEvent& WXUNUSED(event))
 {
 	DisplayAxisRangeDialog(plotContextXAxis);
-
-	return;
 }
 
 //==========================================================================
@@ -1586,8 +1540,6 @@ void PlotPanel::ContextSetRangeBottom(wxCommandEvent& WXUNUSED(event))
 void PlotPanel::ContextToggleGridlinesLeft(wxCommandEvent& WXUNUSED(event))
 {
 	renderer->SetLeftGrid(!renderer->GetLeftGrid());
-
-	return;
 }
 
 //==========================================================================
@@ -1609,8 +1561,6 @@ void PlotPanel::ContextToggleGridlinesLeft(wxCommandEvent& WXUNUSED(event))
 void PlotPanel::ContextAutoScaleLeft(wxCommandEvent& WXUNUSED(event))
 {
 	renderer->AutoScaleLeft();
-
-	return;
 }
 
 //==========================================================================
@@ -1632,8 +1582,6 @@ void PlotPanel::ContextAutoScaleLeft(wxCommandEvent& WXUNUSED(event))
 void PlotPanel::ContextSetRangeLeft(wxCommandEvent& WXUNUSED(event))
 {
 	DisplayAxisRangeDialog(plotContextLeftYAxis);
-
-	return;
 }
 
 //==========================================================================
@@ -1655,8 +1603,6 @@ void PlotPanel::ContextSetRangeLeft(wxCommandEvent& WXUNUSED(event))
 void PlotPanel::ContextToggleGridlinesRight(wxCommandEvent& WXUNUSED(event))
 {
 	renderer->SetRightGrid(!renderer->GetRightGrid());
-
-	return;
 }
 
 //==========================================================================
@@ -1678,8 +1624,6 @@ void PlotPanel::ContextToggleGridlinesRight(wxCommandEvent& WXUNUSED(event))
 void PlotPanel::ContextAutoScaleRight(wxCommandEvent& WXUNUSED(event))
 {
 	renderer->AutoScaleRight();
-
-	return;
 }
 
 //==========================================================================
@@ -1701,8 +1645,6 @@ void PlotPanel::ContextAutoScaleRight(wxCommandEvent& WXUNUSED(event))
 void PlotPanel::ContextSetRangeRight(wxCommandEvent& WXUNUSED(event))
 {
 	DisplayAxisRangeDialog(plotContextRightYAxis);
-
-	return;
 }
 
 //==========================================================================

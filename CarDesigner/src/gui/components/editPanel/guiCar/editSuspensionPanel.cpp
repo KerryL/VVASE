@@ -133,8 +133,6 @@ void EDIT_SUSPENSION_PANEL::UpdateInformation(void)
 	if (CurrentSuspension)
 		// Call the method that performs the update
 		UpdateInformation(CurrentSuspension);
-
-	return;
 }
 
 //==========================================================================
@@ -252,8 +250,6 @@ void EDIT_SUSPENSION_PANEL::UpdateInformation(SUSPENSION *_CurrentSuspension)
 	Layout();
 
 	// FIXME:  Need way to turn grid scrollbars off
-
-	return;
 }
 
 //==========================================================================
@@ -405,8 +401,6 @@ void EDIT_SUSPENSION_PANEL::CreateControls()
 
 	// Initialize the last row selected variable
 	LastRowSelected = -1;
-
-	return;
 }
 
 //==========================================================================
@@ -456,8 +450,6 @@ void EDIT_SUSPENSION_PANEL::SelectCellEvent(wxGridEvent &event)
 		LastRowSelected = -1;
 
 	event.Skip();
-
-	return;
 }
 
 //==========================================================================
@@ -543,8 +535,6 @@ void EDIT_SUSPENSION_PANEL::GridCellChangedEvent(wxGridEvent &event)
 	}
 
 	event.Skip();
-
-	return;
 }
 
 //==========================================================================
@@ -598,8 +588,6 @@ void EDIT_SUSPENSION_PANEL::SymmetricCheckboxEvent(wxCommandEvent &event)
 	// Update the display and the kinematic outputs
 	TempCurrentObject->GetMainFrame().UpdateAnalysis();
 	TempCurrentObject->GetMainFrame().UpdateOutputPanel();
-
-	return;
 }
 
 //==========================================================================
@@ -648,8 +636,6 @@ void EDIT_SUSPENSION_PANEL::FrontThirdCheckboxEvent(wxCommandEvent &event)
 	Parent.GetParent().GetMainFrame().UpdateOutputPanel();
 
 	event.Skip();
-
-	return;
 }
 
 //==========================================================================
@@ -698,8 +684,6 @@ void EDIT_SUSPENSION_PANEL::RearThirdCheckboxEvent(wxCommandEvent &event)
 	Parent.GetParent().GetMainFrame().UpdateOutputPanel();
 
 	event.Skip();
-
-	return;
 }
 
 //==========================================================================
@@ -745,8 +729,6 @@ void EDIT_SUSPENSION_PANEL::FrontBarStyleChangeEvent(wxCommandEvent &event)
 	// Update the display and the kinematic outputs
 	Parent.GetParent().GetMainFrame().UpdateAnalysis();
 	Parent.GetParent().GetMainFrame().UpdateOutputPanel();
-
-	return;
 }
 
 //==========================================================================
@@ -792,6 +774,4 @@ void EDIT_SUSPENSION_PANEL::RearBarStyleChangeEvent(wxCommandEvent &event)
 	// Update the display and the kinematic outputs
 	Parent.GetParent().GetMainFrame().UpdateAnalysis();
 	Parent.GetParent().GetMainFrame().UpdateOutputPanel();
-
-	return;
 }

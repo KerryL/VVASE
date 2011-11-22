@@ -121,8 +121,6 @@ void EDIT_BRAKES_PANEL::UpdateInformation(BRAKES *_CurrentBrakes)
 
 	// Update the text boxes
 	PercentFrontBraking->ChangeValue(Converter.FormatNumber(CurrentBrakes->PercentFrontBraking));
-
-	return;
 }
 
 //==========================================================================
@@ -180,8 +178,6 @@ void EDIT_BRAKES_PANEL::CreateControls()
 
 	// Assign the top level sizer to the dialog
 	SetSizer(TopSizer);
-
-	return;
 }
 
 //==========================================================================
@@ -273,8 +269,6 @@ void EDIT_BRAKES_PANEL::TextBoxEditEvent(wxCommandEvent &event)
 	Parent.GetMainFrame().UpdateOutputPanel();
 
 	event.Skip();
-
-	return;
 }
 
 //==========================================================================
@@ -339,6 +333,4 @@ void EDIT_BRAKES_PANEL::CheckBoxChange(wxCommandEvent &event)
 	// Update the display and the kinematic outputs
 	Parent.GetMainFrame().UpdateAnalysis();
 	Parent.GetMainFrame().UpdateOutputPanel();
-
-	return;
 }

@@ -15,7 +15,7 @@
     <ClInclude Include="..\common\include\vRenderer\3dcar\damper3D.h" />
     <ClInclude Include="..\common\include\vRenderer\3dcar\link.h" />
     <ClInclude Include="..\common\include\vRenderer\3dcar\origin.h" />
-    <ClInclude Include="..\common\include\vRenderer\3dcar\plane.h" />
+    <ClInclude Include="..\common\include\vRenderer\3dcar\plane3D.h" />
     <ClInclude Include="..\common\include\vRenderer\3dcar\point3D.h" />
     <ClInclude Include="..\common\include\vRenderer\3dcar\spring3D.h" />
     <ClInclude Include="..\common\include\vRenderer\3dcar\swaybar3D.h" />
@@ -42,7 +42,7 @@
     <ClCompile Include="src\3dcar\damper3D.cpp" />
     <ClCompile Include="src\3dcar\link.cpp" />
     <ClCompile Include="src\3dcar\origin.cpp" />
-    <ClCompile Include="src\3dcar\plane.cpp" />
+    <ClCompile Include="src\3dcar\plane3D.cpp" />
     <ClCompile Include="src\3dcar\point3D.cpp" />
     <ClCompile Include="src\3dcar\spring3D.cpp" />
     <ClCompile Include="src\3dcar\swaybar3D.cpp" />

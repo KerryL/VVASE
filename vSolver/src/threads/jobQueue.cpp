@@ -66,8 +66,6 @@ void JobQueue::AddJob(const ThreadJob& job, const JobPriority& priority)
 
 	// Increment the semaphore
 	queueCount.Post();
-
-	return;
 }
 
 //==========================================================================
@@ -145,8 +143,6 @@ void JobQueue::Report(const ThreadJob::ThreadCommand& command, int threadId, int
 
 	// Add it to the parent's event queue
 	parent->AddPendingEvent(evt);
-
-	return;
 }
 
 //==========================================================================

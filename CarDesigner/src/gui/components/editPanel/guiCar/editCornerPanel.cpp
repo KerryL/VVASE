@@ -231,8 +231,6 @@ void EDIT_CORNER_PANEL::UpdateInformation(CORNER *_CurrentCorner,
 	Layout();
 
 	// FIXME:  Need way to turn grid scrollbars off
-
-	return;
 }
 
 //==========================================================================
@@ -413,8 +411,6 @@ void EDIT_CORNER_PANEL::CreateControls()
 
 	// Initialize the last row selected variable
 	LastRowSelected = -1;
-
-	return;
 }
 
 //==========================================================================
@@ -464,8 +460,6 @@ void EDIT_CORNER_PANEL::SelectCellEvent(wxGridEvent &event)
 		LastRowSelected = -1;
 
 	event.Skip();
-
-	return;
 }
 
 //==========================================================================
@@ -567,8 +561,6 @@ void EDIT_CORNER_PANEL::GridCellChangedEvent(wxGridEvent &event)
 	}
 
 	event.Skip();
-
-	return;
 }
 
 //==========================================================================
@@ -616,8 +608,6 @@ void EDIT_CORNER_PANEL::ActuationAttachmentChangeEvent(wxCommandEvent &event)
 	Parent.GetParent().GetMainFrame().UpdateOutputPanel();
 
 	event.Skip();
-
-	return;
 }
 
 //==========================================================================
@@ -730,8 +720,6 @@ void EDIT_CORNER_PANEL::StaticCamberChangeEvent(wxCommandEvent &event)
 	Parent.GetParent().GetMainFrame().UpdateOutputPanel();
 
 	event.Skip();
-
-	return;
 }
 
 //==========================================================================
@@ -794,6 +782,4 @@ void EDIT_CORNER_PANEL::StaticToeChangeEvent(wxCommandEvent &event)
 	Parent.GetParent().GetMainFrame().UpdateOutputPanel();
 
 	event.Skip();
-
-	return;
 }

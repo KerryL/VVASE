@@ -92,8 +92,6 @@ void IPC_SERVER::Disconnect(void)
 		delete Connection;
 		Connection = NULL;
 	}
-	
-	return;
 }
 
 //==========================================================================

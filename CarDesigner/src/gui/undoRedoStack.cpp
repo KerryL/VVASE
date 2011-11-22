@@ -106,8 +106,6 @@ void UNDO_REDO_STACK::AddOperation(int Index,
 
 	// Add the operation to the undo stack
 	UndoStack.push(LastOperation);
-
-	return;
 }
 
 //==========================================================================
@@ -212,8 +210,6 @@ void UNDO_REDO_STACK::Undo(void)
 	// If there are no more operations in the undo stack, disable the undo menu item
 	if (UndoStack.empty())
 		MainFrame.DisableUndo();
-
-	return;
 }
 
 //==========================================================================
@@ -253,8 +249,6 @@ void UNDO_REDO_STACK::Redo(void)
 	// If there are no more operations to redo, disable the redo menu item
 	if (RedoStack.empty())
 		MainFrame.DisableRedo();
-
-	return;
 }
 
 //==========================================================================
@@ -326,8 +320,6 @@ void UNDO_REDO_STACK::ApplyOperation(OPERATION &Operation)
 
 	// Update the GUI screens
 	Update();
-
-	return;
 }
 
 //==========================================================================
@@ -352,8 +344,6 @@ void UNDO_REDO_STACK::Update(void) const
 	MainFrame.UpdateAnalysis();
 	MainFrame.UpdateOutputPanel();
 	MainFrame.GetEditPanel()->UpdateInformation();
-
-	return;
 }
 
 //==========================================================================
@@ -382,8 +372,6 @@ void UNDO_REDO_STACK::ClearStacks(void)
 	// Clear the redo stack
 	while (!RedoStack.empty())
 		RedoStack.pop();
-
-	return;
 }
 
 //==========================================================================
@@ -446,8 +434,6 @@ void UNDO_REDO_STACK::RemoveGuiObjectFromStack(int Index)
 		MainFrame.DisableUndo();
 	if (RedoStack.empty())
 		MainFrame.DisableRedo();
-
-	return;
 }
 
 //==========================================================================

@@ -127,8 +127,6 @@ void MAIN_NOTEBOOK::NotebookPageClose_Event(wxAuiNotebookEvent &event)
 	// wants to close the object.
 	if (!ClickedObject->Close(true))
 		event.Veto();
-
-	return;
 }
 
 //==========================================================================
@@ -152,8 +150,6 @@ void MAIN_NOTEBOOK::NotebookPageChanged_Event(wxAuiNotebookEvent& WXUNUSED(event
 {
 	// Tell the main application what car we've just selected
 	MainFrame.SetActiveIndex(GetSelection());
-
-	return;
 }
 
 //==========================================================================
@@ -188,6 +184,4 @@ void MAIN_NOTEBOOK::NotebookTabRightClick_Event(wxAuiNotebookEvent &event)
 
 	// Create and display the context menu
 	MainFrame.CreateContextMenu(event.GetSelection(), MousePosition);
-
-	return;
 }

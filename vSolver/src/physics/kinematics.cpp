@@ -244,8 +244,6 @@ void Kinematics::UpdateKinematics(const CAR* _originalCar, CAR* _workingCar, wxS
 	// Print the time to the output pane
 	debugger.Print(Debugger::PriorityLow, "Finished UpdateKinematcs() for %s in %0.3f sec",
 		name.c_str(), totalTime / 1000.0);
-
-	return;
 }
 
 //==========================================================================

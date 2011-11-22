@@ -117,8 +117,6 @@ void IPC_CLIENT::Disconnect(void)
 		delete Connection;
 		Connection = NULL;
 	}
-	
-	return;
 }
 
 //==========================================================================

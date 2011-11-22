@@ -106,8 +106,6 @@ void AERODYNAMICS::Write(std::ofstream *OutFile) const
 	// FIXME:  MSCV generates C4100
 	// Write this object to file
 	// Not yet used
-
-	return;
 }
 
 //==========================================================================
@@ -137,8 +135,6 @@ void AERODYNAMICS::Read(std::ifstream *InFile, int FileVersion)
 	}
 	else
 		assert(0);
-
-	return;
 }
 
 //==========================================================================

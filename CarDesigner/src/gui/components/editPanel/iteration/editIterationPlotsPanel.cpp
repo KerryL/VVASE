@@ -119,8 +119,6 @@ void EDIT_ITERATION_PLOTS_PANEL::UpdateInformation(void)
 	if (CurrentIteration)
 		// Call the method that performs the update
 		UpdateInformation(CurrentIteration);
-
-	return;
 }
 
 //==========================================================================
@@ -152,8 +150,6 @@ void EDIT_ITERATION_PLOTS_PANEL::UpdateInformation(ITERATION *_CurrentIteration)
 	unsigned int i;
 	for (i = 0; i < ITERATION::NumberOfPlots; i++)
 		PlotListCheckBox->Check(i, CurrentIteration->GetActivePlot((ITERATION::PLOT_ID)i));
-
-	return;
 }
 
 //==========================================================================
@@ -198,8 +194,6 @@ void EDIT_ITERATION_PLOTS_PANEL::CreateControls()
 
 	// Assign the top level sizer to the panel
 	SetSizer(TopSizer);
-
-	return;
 }
 
 //==========================================================================
@@ -226,6 +220,4 @@ void EDIT_ITERATION_PLOTS_PANEL::PlotSelectionChangeEvent(wxCommandEvent &event)
 
 	// Update the dispaly
 	CurrentIteration->UpdateDisplay();
-
-	return;
 }
