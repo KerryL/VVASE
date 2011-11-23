@@ -425,7 +425,7 @@ void PlotPanel::CreatePlotContextMenu(const wxPoint &position, const PlotContext
 void PlotPanel::ContextWriteImageFile(wxCommandEvent& WXUNUSED(event))
 {
 	// Get file name from user, then save to file with
-	wxArrayString pathAndFileName = static_cast<MAIN_FRAME*>(GetParent())->GetFileNameFromUser(
+	wxArrayString pathAndFileName = static_cast<MainFrame*>(GetParent())->GetFileNameFromUser(
 			_T("Save Image File"), wxEmptyString, wxEmptyString,
 		_T("Bitmap Image (*.bmp)|*.bmp|JPEG Image (*.jpg)|*.jpg|PNG Image (*.png)|*.png|TIFF Image (*.tif)|*.tif"),
 		wxFD_SAVE | wxFD_OVERWRITE_PROMPT);

@@ -30,50 +30,50 @@
 #ifndef _ATMOSPHERE_H_
 #define _ATMOSPHERE_H_
 
-class ATMOSPHERE
+class Atmosphere
 {
 public:
 	// Constructor
-	ATMOSPHERE();
+	Atmosphere();
 
 	// Destructor
-	~ATMOSPHERE();
+	~Atmosphere();
 
 	// This strucutre contains all of the data that changes with
 	// weather conditions, and affects things like aerodynamic
 	// forces and engine output.
-	struct CONDITIONS
+	struct Conditions
 	{
 		// Air density
-		double Density;// [slug/in^3]
+		double density;// [slug/in^3]
 
 		// Air pressure
-		double Pressure;// [psi]
+		double pressure;// [psi]
 
 		// Air temperature
-		double Temperature;// [deg R]
+		double temperature;// [deg R]
 
 		// Dynamic (absolute) viscosity of air (usually denoted by mu)
-		double Viscosity;// [psi-sec]
+		double viscosity;// [psi-sec]
 	};
 
 	// Set and retrieve the parameters for the day
-	void SetConditions(CONDITIONS _CurrentDay);
-	CONDITIONS GetConditions(void) { return CurrentDay; };
+	void SetConditions(Conditions _currentDay);
+	Conditions GetConditions(void) { return currentDay; };
 
 	// Overload for GetConditions - adjusts for not being at sea level
-	CONDITIONS GetConditions(double Altitude);
+	Conditions GetConditions(double altitude);
 
 	// Some pre-defined conditions (from coldest to warmest)
-	static const CONDITIONS ColdDay;
-	static const CONDITIONS PolarDay;
-	static const CONDITIONS StandardDay;
-	static const CONDITIONS TropicDay;
-	static const CONDITIONS HotDay;
+	static const Conditions coldDay;
+	static const Conditions polarDay;
+	static const Conditions standardDay;
+	static const Conditions tropicDay;
+	static const Conditions hotDay;
 
 private:
 	// Today's conditions
-	CONDITIONS CurrentDay;
+	Conditions currentDay;
 };
 
 #endif// _ATMOSPHERE_H_

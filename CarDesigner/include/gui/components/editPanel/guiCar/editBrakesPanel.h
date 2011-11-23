@@ -10,7 +10,7 @@
 // File:  editBrakesPanel.h
 // Created:  2/19/2009
 // Author:  K. Loux
-// Description:  Contains the class declaration for the EDIT_BRAKES_PANEL class.
+// Description:  Contains the class declaration for the EditBrakesPanel class.
 // History:
 
 #ifndef _EDIT_BRAKES_PANEL_CLASS_
@@ -20,40 +20,40 @@
 #include <wx/wx.h>
 
 // VVASE forward declarations
-class EDIT_PANEL;
+class EditPanel;
 class Brakes;
 
-class EDIT_BRAKES_PANEL : public wxScrolledWindow
+class EditBrakesPanel : public wxScrolledWindow
 {
 public:
 	// Constructor
-	EDIT_BRAKES_PANEL(EDIT_PANEL &_Parent, wxWindowID id, const wxPoint& pos,
+	EditBrakesPanel(EditPanel &_parent, wxWindowID id, const wxPoint& pos,
 		const wxSize& size, const Debugger &_debugger);
 
 	// Destructor
-	~EDIT_BRAKES_PANEL();
+	~EditBrakesPanel();
 
 	// Updates the information on the panel
-	void UpdateInformation(Brakes *_CurrentBrakes);
+	void UpdateInformation(Brakes *_currentBrakes);
 
 private:
 	// Debugger message printing utility
 	const Debugger &debugger;
 
 	// The application's converter
-	const Convert &Converter;
+	const Convert &converter;
 
 	// The parent panel
-	EDIT_PANEL &Parent;
+	EditPanel &parent;
 
 	// The data with which we are currently associated
-	Brakes *CurrentBrakes;
+	Brakes *currentBrakes;
 
 	// Creates the controls and positions everything within the panel
 	void CreateControls(void);
 
 	// Event IDs
-	enum EDIT_BRAKES_EVENT_ID
+	enum EditBrakesEventIds
 	{
 		TextBoxPercentFrontBraking = 600 + wxID_HIGHEST,
 		
@@ -67,11 +67,11 @@ private:
 	// End event handlers-------------------------------------------------
 
 	// The text box controls
-	wxTextCtrl *PercentFrontBraking;
+	wxTextCtrl *percentFrontBraking;
 
 	// The check boxes
-	wxCheckBox *FrontBrakesInboard;
-	wxCheckBox *RearBrakesInboard;
+	wxCheckBox *frontBrakesInboard;
+	wxCheckBox *rearBrakesInboard;
 
 	// For the event table
 	DECLARE_EVENT_TABLE();

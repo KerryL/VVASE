@@ -10,13 +10,13 @@
 // File:  guiObject.cpp
 // Created:  6/5/2008
 // Author:  K. Loux
-// Description:  Contains class definition for GUI_OBJECT class.  This aids with GUI functionality for the
+// Description:  Contains class definition for GuiObject class.  This aids with GUI functionality for the
 //				 by serving as a link between all of the GUI components and the CAR object.
 // History:
-//	1/24/2009	- Major application structure change - MAIN_FRAME uses GUI_OBJECT instead of
-//				  GUI_CAR.  GUI_OBJECT changed to only contain either GUI_CAR or ITERATION
+//	1/24/2009	- Major application structure change - MainFrame uses GuiObject instead of
+//				  GuiCar.  GuiObject changed to only contain either GuiCar or Iteration
 //				  objects (or others, in future), K. Loux.
-//	5/19/2009	- Made abstract for base class for GUI_CAR and ITERATION, K. Loux.
+//	5/19/2009	- Made abstract for base class for GuiCar and Iteration, K. Loux.
 
 // Windows headers (this is still portable to Linux systems...)
 #include <sys/stat.h>
@@ -36,20 +36,20 @@
 #include "gui/plotPanel.h"
 
 //==========================================================================
-// Class:			GUI_OBJECT
-// Function:		GUI_OBJECT
+// Class:			GuiObject
+// Function:		GuiObject
 //
-// Description:		Constructor for the GUI_OBJECT class.  If specified,
+// Description:		Constructor for the GuiObject class.  If specified,
 //					it adds the object to the SystemsTree and it creates a
 //					link between this object and the data that it represents,
 //					depending on the object's type.
 //
 // Input Arguments:
-//		_MainFrame			= MAIN_FRAME& pointing to the main frame for
+//		_mainFrame			= MainFrame& pointing to the main frame for
 //							  this application
 //		_debugger			= const Debugger& reference to the debug message printing
 //							  utility
-//		_PathAndFileName	= wxString specifying the location to load this
+//		_pathAndFileName	= wxString specifying the location to load this
 //							  object from
 //
 // Output Arguments:
@@ -59,38 +59,38 @@
 //		None
 //
 //==========================================================================
-GUI_OBJECT::GUI_OBJECT(MAIN_FRAME &_MainFrame, const Debugger &_debugger,
-					   wxString _PathAndFileName) : debugger(_debugger), MainFrame(_MainFrame)
+GuiObject::GuiObject(MainFrame &_mainFrame, const Debugger &_debugger,
+					   wxString _pathAndFileName) : debugger(_debugger), mainFrame(_mainFrame)
 {
 	// Make sure we know that loading is not complete
-	ObjectIsInitialized = false;
+	objectIsInitialized = false;
 
 	// Assign the arguments to the class members
-	PathAndFileName	= _PathAndFileName;
+	pathAndFileName	= _pathAndFileName;
 
-	// Get the pointers to the other gui components from MainFrame
-	Notebook		= MainFrame.GetNotebook();
-	SystemsTree		= MainFrame.GetSystemsTree();
+	// Get the pointers to the other gui components from mainFrame
+	notebook		= mainFrame.GetNotebook();
+	systemsTree		= mainFrame.GetSystemsTree();
 
 	// We initialize this to true - if we load an object from file we set it to false later
-	ModifiedSinceLastSave = true;
+	modifiedSinceLastSave = true;
 
 	// Check to see if we are loading an object from file
-	if (!_PathAndFileName.IsEmpty())
+	if (!_pathAndFileName.IsEmpty())
 	{
 		// Set the modified flag to false (we're loading a car that's already saved)
-		ModifiedSinceLastSave = false;
+		modifiedSinceLastSave = false;
 
 		// Set the path to our class level variable
-		PathAndFileName = _PathAndFileName;
+		pathAndFileName = _pathAndFileName;
 	}
 }
 
 //==========================================================================
-// Class:			GUI_OBJECT
-// Function:		~GUI_OBJECT
+// Class:			GuiObject
+// Function:		~GuiObject
 //
-// Description:		Destructor for the GUI_OBJECT class.  Removes the object
+// Description:		Destructor for the GuiObject class.  Removes the object
 //					from the SystemsTree.
 //
 // Input Arguments:
@@ -103,17 +103,17 @@ GUI_OBJECT::GUI_OBJECT(MAIN_FRAME &_MainFrame, const Debugger &_debugger,
 //		None
 //
 //==========================================================================
-GUI_OBJECT::~GUI_OBJECT()
+GuiObject::~GuiObject()
 {
-	// Remove the entry from the SystemsTree - IMPORTANT - the order that the GUI_OBJECTs
+	// Remove the entry from the SystemsTree - IMPORTANT - the order that the GuiObjects
 	// are deleted becomes important here.  You can't delete the parent of a group until
 	// all of its children are deleted.
-	if (TreeID.IsOk())
-		SystemsTree->Delete(TreeID);
+	if (treeID.IsOk())
+		systemsTree->Delete(treeID);
 }
 
 //==========================================================================
-// Class:			GUI_OBJECT
+// Class:			GuiObject
 // Function:		Initialize
 //
 // Description:		Contains calls to pure virtual functions and other initialization
@@ -129,42 +129,42 @@ GUI_OBJECT::~GUI_OBJECT()
 //		None
 //
 //==========================================================================
-void GUI_OBJECT::Initialize(void)
+void GuiObject::Initialize(void)
 {
 	// Declare the icon variables
-	int NormalIcon = -1;
-	int SelectedIcon = -1;
+	int normalIcon = -1;
+	int selectedIcon = -1;
 
 	// Get the icon from the systems tree
-	NormalIcon = GetIconHandle();
+	normalIcon = GetIconHandle();
 
 	// Add a page to the notebook for this car
-	Notebook->AddPage(notebookTab, Name);
+	notebook->AddPage(notebookTab, name);
 
 	// Add the entry to the SystemsTree
-	TreeID = SystemsTree->AppendItem(SystemsTree->GetRootItem(), Name, NormalIcon, SelectedIcon);
+	treeID = systemsTree->AppendItem(systemsTree->GetRootItem(), name, normalIcon, selectedIcon);
 
 	// If our path variable isn't empty, try to open the file
-	if (!PathAndFileName.IsEmpty())
+	if (!pathAndFileName.IsEmpty())
 	{
 		// Make sure that when we load the file, we don't have any errors
 		if (!LoadFromFile())
 		{
 			// Prevent this object from being loaded
-			Notebook->DeletePage(Index);
+			notebook->DeletePage(index);
 			return;
 		}
 	}
 
 	// Set the flag indicating the initialization process is over
-	ObjectIsInitialized = true;
+	objectIsInitialized = true;
 
 	// Update the analysis for the new object
-	MainFrame.UpdateAnalysis();
+	mainFrame.UpdateAnalysis();
 }
 
 //==========================================================================
-// Class:			GUI_OBJECT
+// Class:			GuiObject
 // Function:		SetName
 //
 // Description:		Sets the name of the object.  Depending on the object's
@@ -172,7 +172,7 @@ void GUI_OBJECT::Initialize(void)
 //					result of the change.
 //
 // Input Arguments:
-//		_Name	= wxString specifying the object's new name
+//		_name	= wxString specifying the object's new name
 //
 // Output Arguments:
 //		None
@@ -181,21 +181,21 @@ void GUI_OBJECT::Initialize(void)
 //		None
 //
 //==========================================================================
-void GUI_OBJECT::SetName(wxString _Name)
+void GuiObject::SetName(wxString _name)
 {
 	// Set the name for this object
-	Name = _Name;
+	name = _name;
 
 	// Update the names in the SystemsTree and the Notebook
-	SystemsTree->SetItemText(TreeID, Name);
-	Notebook->SetPageText(Index, Name);
+	systemsTree->SetItemText(treeID, name);
+	notebook->SetPageText(index, name);
 
 	// Update the output panel to make sure names are up-to-date
-	MainFrame.UpdateOutputPanel();
+	mainFrame.UpdateOutputPanel();
 }
 
 //==========================================================================
-// Class:			GUI_OBJECT
+// Class:			GuiObject
 // Function:		GetCleanName
 //
 // Description:		Retrieves the name of the car.  Cleans up the name
@@ -212,22 +212,22 @@ void GUI_OBJECT::SetName(wxString _Name)
 //		wxString representing the cleaned-up name of the object
 //
 //==========================================================================
-wxString GUI_OBJECT::GetCleanName(void) const
+wxString GuiObject::GetCleanName(void) const
 {
 	// If the file has been modified, and it contains an asterisk, remove the
 	// asterisk and return the name
-	if (ModifiedSinceLastSave)
+	if (modifiedSinceLastSave)
 	{
-		if (Name.substr(Name.length() - 1, 1) == '*')
-			return Name.substr(0, Name.length() - 1);
+		if (name.substr(name.length() - 1, 1) == '*')
+			return name.substr(0, name.length() - 1);
 	}
 
 	// If we haven't returned yet, return the whole name
-	return Name;
+	return name;
 }
 
 //==========================================================================
-// Class:			GUI_OBJECT
+// Class:			GuiObject
 // Function:		SetModified
 //
 // Description:		Sets a flag indicating that the object has been modified.
@@ -244,30 +244,30 @@ wxString GUI_OBJECT::GetCleanName(void) const
 //		None
 //
 //==========================================================================
-void GUI_OBJECT::SetModified(void)
+void GuiObject::SetModified(void)
 {
 	// Set the flag
-	ModifiedSinceLastSave = true;
+	modifiedSinceLastSave = true;
 
 	// If we haven't been saved, add the asterisk
-	if (!PathAndFileName.IsEmpty())
+	if (!pathAndFileName.IsEmpty())
 	{
 		// Make sure we don't already have an asterisk
-		wxString Asterisk('*');
-		if (Name.substr(Name.length() - 1,1).compare(Asterisk) != 0)
-			SetName(Name + Asterisk);
+		wxString asterisk('*');
+		if (name.substr(name.length() - 1,1).compare(asterisk) != 0)
+			SetName(name + asterisk);
 	}
 }
 
 //==========================================================================
-// Class:			GUI_OBJECT
+// Class:			GuiObject
 // Function:		IsThisObjectSelected
 //
 // Description:		Compares the tree item ID for this object with the ID
 //					passed to this function.
 //
 // Input Arguments:
-//		Selected	= wxTreeItemId to compare with this object's TreeID
+//		selected	= wxTreeItemId to compare with this object's TreeID
 //
 // Output Arguments:
 //		None
@@ -276,33 +276,33 @@ void GUI_OBJECT::SetModified(void)
 //		bool, true if the passed item matches this object
 //
 //==========================================================================
-bool GUI_OBJECT::IsThisObjectSelected(wxTreeItemId Selected) const
+bool GuiObject::IsThisObjectSelected(wxTreeItemId selected) const
 {
 	// Make sure we are being passes a valid tree item id
-	if (!Selected.IsOk())
+	if (!selected.IsOk())
 		return false;
 
 	// Compare the argument with this object's tree item ID
-	if (Selected == TreeID)
+	if (selected == treeID)
 		return true;
 
 	// Also compare this object's children
 	int i;
 	switch (GetType())
 	{
-	case TYPE_CAR:
-		for (i = 0; i < GUI_CAR::NumberOfSubsystems; i++)
+	case TypeCar:
+		for (i = 0; i < GuiCar::NumberOfSubsystems; i++)
 		{
-			if (Selected == static_cast<const GUI_CAR*>(this)->Subsystems[i])
+			if (selected == static_cast<const GuiCar*>(this)->subsystems[i])
 				return true;
 		}
 
 		break;
 
 	// Unused types
-	case GUI_OBJECT::TYPE_ITERATION:
-	case GUI_OBJECT::TYPE_OPTIMIZATION:
-	case GUI_OBJECT::TYPE_NONE:
+	case GuiObject::TypeIteration:
+	case GuiObject::TypeOptimization:
+	case GuiObject::TypeNone:
 		break;
 
 	// Fail on unknown types to avoid forgetting any types
@@ -315,7 +315,7 @@ bool GUI_OBJECT::IsThisObjectSelected(wxTreeItemId Selected) const
 }
 
 //==========================================================================
-// Class:			GUI_OBJECT
+// Class:			GuiObject
 // Function:		Close
 //
 // Description:		If the object has been modified with being saved, it asks
@@ -325,7 +325,7 @@ bool GUI_OBJECT::IsThisObjectSelected(wxTreeItemId Selected) const
 //					object, the appropriate closing actions are executed.
 //
 // Input Arguments:
-//		NotebookPageAlreadyClosed	= bool to prevent memory corruption,
+//		notebookPageAlreadyClosed	= bool to prevent memory corruption,
 //									  if this function is called as a
 //									  result of a notebook page closing,
 //									  we shouldn't try to close the page
@@ -338,21 +338,21 @@ bool GUI_OBJECT::IsThisObjectSelected(wxTreeItemId Selected) const
 //		bool
 //
 //==========================================================================
-bool GUI_OBJECT::Close(bool NotebookPageAlreadyClosed)
+bool GuiObject::Close(bool notebookPageAlreadyClosed)
 {
 	// Ensure that there are no pending jobs - if there are, return false
 	// FIXME:  Why is this? - Removed 11/16/2011, minimal testing performed
-	/*if (MainFrame.JobsPending())
+	/*if (mainFrame.JobsPending())
 		return false;*/
 
 	// Check to see if this object has been modified without being saved
-	if (ModifiedSinceLastSave)
+	if (modifiedSinceLastSave)
 	{
 		// Display the message box
-		int Response = wxMessageBox(Name + _T(" has not been saved.  Would you like to save")
-			+ _T(" before closing?"), MainFrame.GetName(), wxYES_NO | wxCANCEL, &MainFrame);
+		int response = wxMessageBox(name + _T(" has not been saved.  Would you like to save")
+			+ _T(" before closing?"), mainFrame.GetName(), wxYES_NO | wxCANCEL, &mainFrame);
 
-		if (Response == wxYES)
+		if (response == wxYES)
 		{
 			// Call the object's save method
 			if (!SaveToFile())
@@ -361,7 +361,7 @@ bool GUI_OBJECT::Close(bool NotebookPageAlreadyClosed)
 				// time.
 				return false;
 		}
-		else if (Response == wxCANCEL)
+		else if (response == wxCANCEL)
 			// Return false to signify that the car was not closed
 			return false;
 	}
@@ -370,20 +370,20 @@ bool GUI_OBJECT::Close(bool NotebookPageAlreadyClosed)
 
 	// Close the corrsponding notebook page (only if this function is NOT being called
 	// due to a notebook page closing...) (MUST be done BEFORE object is removed from list)
-	if (!NotebookPageAlreadyClosed)
-		Notebook->DeletePage(Index);
+	if (!notebookPageAlreadyClosed)
+		notebook->DeletePage(index);
 
 	// Remove any undo/redo actions associated with this object
-	MainFrame.GetUndoRedoStack().RemoveGuiObjectFromStack(Index);
+	mainFrame.GetUndoRedoStack().RemoveGuiObjectFromStack(index);
 
-	// Delete this GUI_OBJECT
-	MainFrame.RemoveObjectFromList(Index);
+	// Delete this GuiObject
+	mainFrame.RemoveObjectFromList(index);
 
 	return true;
 }
 
 //==========================================================================
-// Class:			GUI_OBJECT
+// Class:			GuiObject
 // Function:		LoadFromFile
 //
 // Description:		Loads this object from a location on the hard disk.
@@ -398,15 +398,15 @@ bool GUI_OBJECT::Close(bool NotebookPageAlreadyClosed)
 //		bool, true for success
 //
 //==========================================================================
-bool GUI_OBJECT::LoadFromFile(void)
+bool GuiObject::LoadFromFile(void)
 {
 	// Perform the load and check for errors
 	if (!PerformLoadFromFile())
 	{
-		debugger.Print(_T("ERROR:  Could not read from file '") + PathAndFileName + _T("'!"));
+		debugger.Print(_T("ERROR:  Could not read from file '") + pathAndFileName + _T("'!"));
 
 		// Remove this file from the recent history list
-		MainFrame.RemoveFileFromHistory(PathAndFileName);
+		mainFrame.RemoveFileFromHistory(pathAndFileName);
 
 		return false;
 	}
@@ -414,7 +414,7 @@ bool GUI_OBJECT::LoadFromFile(void)
 	// Make sure the desired file isn't already open - if it is, return false
 	if (!VerifyUniqueness())
 	{
-		debugger.Print(_T("Object at '") + PathAndFileName +
+		debugger.Print(_T("Object at '") + pathAndFileName +
 			_T("' already open!"), Debugger::PriorityMedium);
 
 		return false;
@@ -424,16 +424,16 @@ bool GUI_OBJECT::LoadFromFile(void)
 	SetName(GetNameFromFileName());
 
 	// Print a message to let the user know we successfully loaded the file
-	debugger.Print(_T("File loaded from '") + PathAndFileName + _T("'!"), Debugger::PriorityMedium);
+	debugger.Print(_T("File loaded from '") + pathAndFileName + _T("'!"), Debugger::PriorityMedium);
 
 	// Add file to the recent history list
-	MainFrame.AddFileToHistory(PathAndFileName);
+	mainFrame.AddFileToHistory(pathAndFileName);
 
 	return true;
 }
 
 //==========================================================================
-// Class:			GUI_OBJECT
+// Class:			GuiObject
 // Function:		SaveToFile
 //
 // Description:		Displays all of the necessary dialogs and calls the
@@ -441,7 +441,7 @@ bool GUI_OBJECT::LoadFromFile(void)
 //					type.
 //
 // Input Arguments:
-//		SaveAsNewFileName	= bool specifying whether or not we want to
+//		saveAsNewFileName	= bool specifying whether or not we want to
 //							  save with a new file name
 //
 // Output Arguments:
@@ -451,16 +451,16 @@ bool GUI_OBJECT::LoadFromFile(void)
 //		bool, true for success
 //
 //==========================================================================
-bool GUI_OBJECT::SaveToFile(bool SaveAsNewFileName)
+bool GuiObject::SaveToFile(bool saveAsNewFileName)
 {
 	// Get the file extension
-	wxString FileTypeExtension;
-	if (GetType() == TYPE_CAR)
-		FileTypeExtension.assign(_T("Car files (*.car)|*.car"));
-	else if (GetType() == TYPE_ITERATION)
-		FileTypeExtension.assign(_T("Iteration files (*.iteration)|*.iteration"));
-	else if (GetType() == TYPE_OPTIMIZATION)
-		FileTypeExtension.assign(_T("Optimization files (*.ga)|*.ga"));
+	wxString fileTypeExtension;
+	if (GetType() == TypeCar)
+		fileTypeExtension.assign(_T("Car files (*.car)|*.car"));
+	else if (GetType() == TypeIteration)
+		fileTypeExtension.assign(_T("Iteration files (*.iteration)|*.iteration"));
+	else if (GetType() == TypeOptimization)
+		fileTypeExtension.assign(_T("Optimization files (*.ga)|*.ga"));
 	else
 	{
 		// Fail on unknown type to avoid forgetting any types
@@ -470,77 +470,71 @@ bool GUI_OBJECT::SaveToFile(bool SaveAsNewFileName)
 
 	// Check to see if we're saving with our existing file name (if we have one) or
 	// if we're saving with a new name/path
-	if (PathAndFileName.IsEmpty() || SaveAsNewFileName)
+	if (pathAndFileName.IsEmpty() || saveAsNewFileName)
 	{
-		wxString DefaultFileName = GetCleanName();
-/*#ifdef __WXGTK__
-		if (GetType() == TYPE_CAR)
-			DefaultFileName.append(".car");
-		else if (GetType() == TYPE_ITERATION)
-			DefaultFileName.append(".iteration");
-#endif*/// FIXME:  Do we still need this???
-		wxArrayString TempPathAndFileName = MainFrame.GetFileNameFromUser(_T("Save As"),
-			wxEmptyString, DefaultFileName, FileTypeExtension, wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+		wxString defaultFileName = GetCleanName();
+		wxArrayString tempPathAndFileName = mainFrame.GetFileNameFromUser(_T("Save As"),
+			wxEmptyString, defaultFileName, fileTypeExtension, wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 
 		// Make sure the user didn't cancel
-		if (TempPathAndFileName.IsEmpty())
+		if (tempPathAndFileName.IsEmpty())
 			return false;
 
 		// Assign the temporary variables to the class member
-		PathAndFileName = TempPathAndFileName.Item(0);
+		pathAndFileName = tempPathAndFileName.Item(0);
 
 		// Make sure the file name contains the extension - this is necessary due to the following scenario:
 		// When doing "Save As...", if the default file name is modified (i.e. Rev 1 is changed to Rev 2),
 		// the extension is dropped.  This does not occur if the entire file name is changed.
-		wxString EndOfFileName;
-		if (GetType() == TYPE_CAR)
-			EndOfFileName.assign(_T(".car"));
-		else if (GetType() == TYPE_ITERATION)
-			EndOfFileName.assign(_T(".iteration"));
-		else if (GetType() == TYPE_OPTIMIZATION)
-			EndOfFileName.assign(_T(".ga"));
+		wxString endOfFileName;
+		if (GetType() == TypeCar)
+			endOfFileName.assign(_T(".car"));
+		else if (GetType() == TypeIteration)
+			endOfFileName.assign(_T(".iteration"));
+		else if (GetType() == TypeOptimization)
+			endOfFileName.assign(_T(".ga"));
 		else
 			// Make sure we're not forgetting any types
 			assert(0);
 
-		if (EndOfFileName.CmpNoCase(PathAndFileName.substr(PathAndFileName.length() - EndOfFileName.length(),
-			PathAndFileName.length())) != 0)
-			PathAndFileName.append(EndOfFileName);
+		if (endOfFileName.CmpNoCase(pathAndFileName.substr(pathAndFileName.length() - endOfFileName.length(),
+			pathAndFileName.length())) != 0)
+			pathAndFileName.append(endOfFileName);
 
 		// Set the name for the object
 		SetName(GetNameFromFileName());
 
-		// Add this file to the list of recent files in the MainFrame
-		MainFrame.AddFileToHistory(PathAndFileName);
+		// Add this file to the list of recent files in the mainFrame
+		mainFrame.AddFileToHistory(pathAndFileName);
 	}
-	else if (ModifiedSinceLastSave)
+	else if (modifiedSinceLastSave)
 		// If this is true (and we haven't been saved yet) the display
 		// name has an asterisk which we need to remove
-		SetName(Name.substr(0, Name.length() - 1));
+		SetName(name.substr(0, name.length() - 1));
 
 	// Perform the save and check for errors
 	if (!PerformSaveToFile())
 	{
-		debugger.Print(_T("ERROR:  Could not save file to '") + PathAndFileName + _T("'!"));
+		debugger.Print(_T("ERROR:  Could not save file to '") + pathAndFileName + _T("'!"));
 
 		return false;
 	}
 
 	// Set the flag to let us know we've been saved recently
-	ModifiedSinceLastSave = false;
+	modifiedSinceLastSave = false;
 
 	// Print a message to let the user know we successfully saved the file
-	debugger.Print(_T("File saved to '") + PathAndFileName + _T("'!"), Debugger::PriorityMedium);
+	debugger.Print(_T("File saved to '") + pathAndFileName + _T("'!"), Debugger::PriorityMedium);
 
 	// Remove this object from the undo/redo stacks
-	MainFrame.GetUndoRedoStack().RemoveGuiObjectFromStack(Index);
+	mainFrame.GetUndoRedoStack().RemoveGuiObjectFromStack(index);
 
 	// Return true if we get to the end (true = car was saved)
 	return true;
 }
 
 //==========================================================================
-// Class:			GUI_OBJECT
+// Class:			GuiObject
 // Function:		WriteImageToFile
 //
 // Description:		Displays a dialog asking the user to specify a file name
@@ -548,7 +542,7 @@ bool GUI_OBJECT::SaveToFile(bool SaveAsNewFileName)
 //					contents of the render window.
 //
 // Input Arguments:
-//		PathAndFileName	= wxString specifying where the file should be saved
+//		pathAndFileName	= wxString specifying where the file should be saved
 //
 // Output Arguments:
 //		None
@@ -557,18 +551,18 @@ bool GUI_OBJECT::SaveToFile(bool SaveAsNewFileName)
 //		bool, true for success, false otherwise
 //
 //==========================================================================
-bool GUI_OBJECT::WriteImageToFile(wxString PathAndFileName)
+bool GuiObject::WriteImageToFile(wxString pathAndFileName)
 {
 	// Ask the renderer to write the image to file (if there is an image)
 	switch (GetType())
 	{
 		// Types that have a renderer
-	case TYPE_CAR:
-			return static_cast<RenderWindow*>(notebookTab)->WriteImageToFile(PathAndFileName);
+	case TypeCar:
+			return static_cast<RenderWindow*>(notebookTab)->WriteImageToFile(pathAndFileName);
 		break;
 		
-	case TYPE_ITERATION:
-			return static_cast<PlotPanel*>(notebookTab)->WriteImageToFile(PathAndFileName);
+	case TypeIteration:
+			return static_cast<PlotPanel*>(notebookTab)->WriteImageToFile(pathAndFileName);
 		break;
 		
 		// Everything else
@@ -580,7 +574,7 @@ bool GUI_OBJECT::WriteImageToFile(wxString PathAndFileName)
 }
 
 //==========================================================================
-// Class:			GUI_OBJECT
+// Class:			GuiObject
 // Function:		SelectThisObjectInTree
 //
 // Description:		Selects the root item for this object in the systems tree.
@@ -595,16 +589,16 @@ bool GUI_OBJECT::WriteImageToFile(wxString PathAndFileName)
 //		None
 //
 //==========================================================================
-void GUI_OBJECT::SelectThisObjectInTree(void)
+void GuiObject::SelectThisObjectInTree(void)
 {
 	// Make sure the tree ID is valid
-	if (TreeID.IsOk())
+	if (treeID.IsOk())
 		// Select this object's tree item
-		SystemsTree->SelectItem(TreeID);
+		systemsTree->SelectItem(treeID);
 }
 
 //==========================================================================
-// Class:			GUI_OBJECT
+// Class:			GuiObject
 // Function:		GetNameFromFileName
 //
 // Description:		Strips down the path and file name (must be set before
@@ -620,25 +614,25 @@ void GUI_OBJECT::SelectThisObjectInTree(void)
 //		wxString containing the stripped-down name
 //
 //==========================================================================
-wxString GUI_OBJECT::GetNameFromFileName(void)
+wxString GuiObject::GetNameFromFileName(void)
 {
-	wxChar PathDelimiter;
+	wxChar pathDelimiter;
 #ifdef __WXGTK__
-	PathDelimiter = '/';
+	pathDelimiter = '/';
 #else
-	PathDelimiter = '\\';
+	pathDelimiter = '\\';
 #endif
 
 	// Dissect the PathAndFileName to get just the name (also truncate the extension)
-	int StartOfFileName = PathAndFileName.Last(PathDelimiter) + 1;
-	int EndOfFileName = PathAndFileName.Last('.');
-	Name = PathAndFileName.Mid(StartOfFileName, EndOfFileName - StartOfFileName);
+	int startOfFileName = pathAndFileName.Last(pathDelimiter) + 1;
+	int endOfFileName = pathAndFileName.Last('.');
+	name = pathAndFileName.Mid(startOfFileName, endOfFileName - startOfFileName);
 
-	return Name;
+	return name;
 }
 
 //==========================================================================
-// Class:			GUI_OBJECT
+// Class:			GuiObject
 // Function:		VerifyUniqueness
 //
 // Description:		Checks to make sure no other open object has the same
@@ -655,18 +649,18 @@ wxString GUI_OBJECT::GetNameFromFileName(void)
 //		wxString containing the stripped-down name
 //
 //==========================================================================
-bool GUI_OBJECT::VerifyUniqueness(void)
+bool GuiObject::VerifyUniqueness(void)
 {
 	// Check the local path and filename against all those being managed by
 	// the main frame
 	int i;
-	for (i = 0; i < MainFrame.GetObjectCount(); i++)
+	for (i = 0; i < mainFrame.GetObjectCount(); i++)
 	{
-		if (MainFrame.GetObjectByIndex(i)->PathAndFileName.CompareTo(
-			PathAndFileName) == 0 && i != Index)
+		if (mainFrame.GetObjectByIndex(i)->pathAndFileName.CompareTo(
+			pathAndFileName) == 0 && i != index)
 		{
 			// Set focus to the existing object and return false
-			MainFrame.SetActiveIndex(i);// FIXME:  This doesn't work
+			mainFrame.SetActiveIndex(i);// FIXME:  This doesn't work
 			return false;
 		}
 	}

@@ -14,10 +14,10 @@
 //				 and is associated with a 2D plot on which it can draw the outputs
 //				 as a function of ride, roll, heave, and steer.
 // History:
-//	3/11/2009	- Finished implementation of enum/array style data members for KINEMATIC_OUTPUTS
+//	3/11/2009	- Finished implementation of enum/array style data members for KinematicOutputs
 //				  class, K. Loux.
-//	5/19/2009	- Changed to derived class from GUI_OBJECT, K. Loux.
-//	10/18/2010	- Fixed bugs causing crash when new ITERATION is canceled during creation, K. Loux.
+//	5/19/2009	- Changed to derived class from GuiObject, K. Loux.
+//	10/18/2010	- Fixed bugs causing crash when new Iteration is canceled during creation, K. Loux.
 //	11/9/2010	- Added provisions for 3D plotting, K. Loux.
 //	11/16/2010	- Moved active plots selection and range inputs to edit panel, K. Loux.
 
@@ -45,16 +45,16 @@
 #include "gui/renderer/plotRenderer.h"
 
 //==========================================================================
-// Class:			ITERATION
-// Function:		ITERATION
+// Class:			Iteration
+// Function:		Iteration
 //
-// Description:		Constructor for the ITERATION class.
+// Description:		Constructor for the Iteration class.
 //
 // Input Arguments:
-//		_MainFrame			= MAIN_FRAME& reference to main application window
+//		_mainFrame			= MainFrame& reference to main application window
 //		_debugger			= const Debugger& reference to the application's debug
 //							  message printing utility
-//		_PathAndFileName	= wxString containing the location of this object on
+//		_pathAndFileName	= wxString containing the location of this object on
 //							  the hard disk
 //
 // Output Arguments:
@@ -64,58 +64,58 @@
 //		None
 //
 //==========================================================================
-ITERATION::ITERATION(MAIN_FRAME &_MainFrame, const Debugger &_debugger,
-					 wxString _PathAndFileName)
-					 : GUI_OBJECT(_MainFrame, _debugger, _PathAndFileName),
-					 Converter(_MainFrame.GetConverter())
+Iteration::Iteration(MainFrame &_mainFrame, const Debugger &_debugger,
+					 wxString _pathAndFileName)
+					 : GuiObject(_mainFrame, _debugger, _pathAndFileName),
+					 converter(_mainFrame.GetConverter())
 {
 	// Initialize our list of plots to OFF
 	int i;
 	for (i = 0; i < NumberOfPlots; i++)
-		PlotActive[i] = false;
+		plotActive[i] = false;
 
 	// Read default settings from config file
 	// Do this prior to initialization so saved files overwrite these defaults
 	ReadDefaultsFromConfig();
 
 	// Initialize the pointers to the X-axis data
-	AxisValuesPitch = NULL;
-	AxisValuesRoll = NULL;
-	AxisValuesHeave = NULL;
-	AxisValuesRackTravel = NULL;
+	axisValuesPitch = NULL;
+	axisValuesRoll = NULL;
+	axisValuesHeave = NULL;
+	axisValuesRackTravel = NULL;
 
 	// Unless we know anything different, assume we want to associate ourselves with
 	// all of the open car objects
-	AssociatedWithAllOpenCars = true;
+	associatedWithAllOpenCars = true;
 
 	// Initialize our "are we caught up" flags
-	AnalysesDisplayed = true;
-	SecondAnalysisPending = false;
+	analysesDisplayed = true;
+	secondAnalysisPending = false;
 
 	// Initialize the working car variables
-	WorkingCarArray = NULL;
-	NumberOfWorkingCars = 0;
+	workingCarArray = NULL;
+	numberOfWorkingCars = 0;
 
 	// Create the renderer
-	plotPanel = new PlotPanel(dynamic_cast<wxWindow*>(&MainFrame), debugger);
+	plotPanel = new PlotPanel(dynamic_cast<wxWindow*>(&mainFrame), debugger);
 	notebookTab = dynamic_cast<wxWindow*>(plotPanel);
 
-	// Get an index for this item and add it to the list in the MainFrame
+	// Get an index for this item and add it to the list in the mainFrame
 	// MUST be included BEFORE the naming, which must come BEFORE the call to Initialize
-	Index = MainFrame.AddObjectToList(this);
+	index = mainFrame.AddObjectToList(this);
 
 	// Create the name based on the index
-	Name.Printf("Unsaved Iteration %i", Index + 1);
+	name.Printf("Unsaved Iteration %i", index + 1);
 
 	// Complete initialization of this object
 	Initialize();
 }
 
 //==========================================================================
-// Class:			ITERATION
-// Function:		~ITERATION
+// Class:			Iteration
+// Function:		~Iteration
 //
-// Description:		Destructor for the ITERATION class.
+// Description:		Destructor for the Iteration class.
 //
 // Input Arguments:
 //		None
@@ -127,40 +127,40 @@ ITERATION::ITERATION(MAIN_FRAME &_MainFrame, const Debugger &_debugger,
 //		None
 //
 //==========================================================================
-ITERATION::~ITERATION()
+Iteration::~Iteration()
 {
 	// Clear out the lists
 	ClearAllLists();
 
 	// Delete the X-axis values
-	delete [] AxisValuesPitch;
-	AxisValuesPitch = NULL;
+	delete [] axisValuesPitch;
+	axisValuesPitch = NULL;
 
-	delete [] AxisValuesRoll;
-	AxisValuesRoll = NULL;
+	delete [] axisValuesRoll;
+	axisValuesRoll = NULL;
 
-	delete [] AxisValuesHeave;
-	AxisValuesHeave = NULL;
+	delete [] axisValuesHeave;
+	axisValuesHeave = NULL;
 
-	delete [] AxisValuesRackTravel;
-	AxisValuesRackTravel = NULL;
+	delete [] axisValuesRackTravel;
+	axisValuesRackTravel = NULL;
 
 	// Delete the working car array
 	int i;
-	for (i = 0; i < NumberOfWorkingCars; i++)
+	for (i = 0; i < numberOfWorkingCars; i++)
 	{
-		delete WorkingCarArray[i];
-		WorkingCarArray[i] = NULL;
+		delete workingCarArray[i];
+		workingCarArray[i] = NULL;
 	}
-	delete [] WorkingCarArray;
-	WorkingCarArray = NULL;
+	delete [] workingCarArray;
+	workingCarArray = NULL;
 }
 
 //==========================================================================
-// Class:			ITERATION
+// Class:			Iteration
 // Function:		Constant declarations
 //
-// Description:		Where constants for the ITERATION class are delcared.
+// Description:		Where constants for the Iteration class are delcared.
 //
 // Input Arguments:
 //		None
@@ -172,17 +172,17 @@ ITERATION::~ITERATION()
 //		None
 //
 //==========================================================================
-//const int ITERATION::CurrentFileVersion = 0;// OBSOLETE 11/17/2010 - Added alternative title and axis labels, etc.
-const int ITERATION::CurrentFileVersion = 1;
+//const int Iteration::currentFileVersion = 0;// OBSOLETE 11/17/2010 - Added alternative title and axis labels, etc.
+const int Iteration::currentFileVersion = 1;
 
 //==========================================================================
-// Class:			ITERATION
+// Class:			Iteration
 // Function:		AddCar
 //
 // Description:		Adds the passed car to the list for the analysis.
 //
 // Input Arguments:
-//		ToAdd	= GUI_CAR* pointing to the car to add
+//		toAdd	= GuiCar* pointing to the car to add
 //
 // Output Arguments:
 //		None
@@ -191,24 +191,24 @@ const int ITERATION::CurrentFileVersion = 1;
 //		None
 //
 //==========================================================================
-void ITERATION::AddCar(GUI_CAR *ToAdd)
+void Iteration::AddCar(GuiCar *toAdd)
 {
 	// Make sure we have a valid pointer
-	if (ToAdd == NULL)
+	if (toAdd == NULL)
 		return;
 
 	// Add the car to the list
-	AssociatedCars.Add(ToAdd);
+	associatedCars.Add(toAdd);
 }
 
 //==========================================================================
-// Class:			ITERATION
+// Class:			Iteration
 // Function:		RemoveCar
 //
 // Description:		Removes the car at the passed address from the analysis.
 //
 // Input Arguments:
-//		ToRemove	= GUI_CAR* pointing to the car to be removed
+//		toRemove	= GuiCar* pointing to the car to be removed
 //
 // Output Arguments:
 //		None
@@ -217,36 +217,36 @@ void ITERATION::AddCar(GUI_CAR *ToAdd)
 //		None
 //
 //==========================================================================
-void ITERATION::RemoveCar(GUI_CAR *ToRemove)
+void Iteration::RemoveCar(GuiCar *toRemove)
 {
 	// Make sure we have a valid pointer
-	if (ToRemove == NULL)
+	if (toRemove == NULL)
 		return;
 
 	// Find the car to be removed
-	int IndexToRemove;
-	for (IndexToRemove = 0; IndexToRemove < AssociatedCars.GetCount(); IndexToRemove++)
+	int indexToRemove;
+	for (indexToRemove = 0; indexToRemove < associatedCars.GetCount(); indexToRemove++)
 	{
 		// Check to see if the pointer in the argument matches the pointer
 		// in the list
-		if (AssociatedCars[IndexToRemove] == ToRemove)
+		if (associatedCars[indexToRemove] == toRemove)
 			break;
 	}
 
 	// Make sure we found a car
-	if (IndexToRemove == AssociatedCars.GetCount())
+	if (indexToRemove == associatedCars.GetCount())
 		return;
 
 	// Remove the outputs associated with the car
-	OutputLists[IndexToRemove]->Clear();
-	OutputLists.Remove(IndexToRemove);
+	outputLists[indexToRemove]->Clear();
+	outputLists.Remove(indexToRemove);
 
 	// Remove the car itself
-	AssociatedCars.Remove(IndexToRemove);
+	associatedCars.Remove(indexToRemove);
 }
 
 //==========================================================================
-// Class:			ITERATION
+// Class:			Iteration
 // Function:		RemoveAllCars
 //
 // Description:		Resets this object back to a state representative of
@@ -262,14 +262,14 @@ void ITERATION::RemoveCar(GUI_CAR *ToRemove)
 //		None
 //
 //==========================================================================
-void ITERATION::RemoveAllCars(void)
+void Iteration::RemoveAllCars(void)
 {
 	// Remove all entries from the lists
 	ClearAllLists();
 }
 
 //==========================================================================
-// Class:			ITERATION
+// Class:			Iteration
 // Function:		GetIconHandle
 //
 // Description:		Gets the icon handle from the systems tree.
@@ -284,14 +284,14 @@ void ITERATION::RemoveAllCars(void)
 //		integer specifying the icon handle
 //
 //==========================================================================
-int ITERATION::GetIconHandle(void) const
+int Iteration::GetIconHandle(void) const
 {
 	// Return the proper icon handle
-	return SystemsTree->GetIconHandle(MAIN_TREE::IterationIcon);
+	return systemsTree->GetIconHandle(MainTree::IterationIcon);
 }
 
 //==========================================================================
-// Class:			ITERATION
+// Class:			Iteration
 // Function:		UpdateData
 //
 // Description:		Updates the iteration outputs for all of the cars for
@@ -307,20 +307,20 @@ int ITERATION::GetIconHandle(void) const
 //		None
 //
 //==========================================================================
-void ITERATION::UpdateData(void)
+void Iteration::UpdateData(void)
 {
 	// Make sure we are in a state from which we can handle this analysis
-	if (!AnalysesDisplayed)
+	if (!analysesDisplayed)
 	{
 		// If we are not in an acceptable state, toggle the flag indicating that we
 		// need an update, but do not proceed any further.
-		SecondAnalysisPending = true;
+		secondAnalysisPending = true;
 		return;
 	}
 
 	// Reset the flags controlling access to this method
-	AnalysesDisplayed = false;
-	SecondAnalysisPending = false;
+	analysesDisplayed = false;
+	secondAnalysisPending = false;
 
 	// Make sure the semaphore is cleared (this should be redundant,
 	// since we have the flags above, but is kept just in case)
@@ -335,7 +335,7 @@ void ITERATION::UpdateData(void)
 	UpdateAutoAssociate();
 
 	// If we don't have any associated cars, then don't do anything
-	if (AssociatedCars.GetCount() == 0)
+	if (associatedCars.GetCount() == 0)
 	{
 		// Just update the plot to make it look pretty
 		UpdateDisplay();
@@ -344,75 +344,75 @@ void ITERATION::UpdateData(void)
 	}
 
 	// Get the original values for the kinematic inputs that we will be changing
-	Kinematics::Inputs KinematicInputs;
+	Kinematics::Inputs kinematicInputs;
 
 	// Determine the step size for each input
-	double PitchStep	= (Range.EndPitch - Range.StartPitch) / (NumberOfPoints - 1);// [rad]
-	double RollStep		= (Range.EndRoll - Range.StartRoll) / (NumberOfPoints - 1);// [rad]
-	double HeaveStep	= (Range.EndHeave - Range.StartHeave) / (NumberOfPoints - 1);// [in]
-	double RackStep		= (Range.EndRackTravel - Range.StartRackTravel) / (NumberOfPoints - 1);// [in]
+	double pitchStep	= (range.endPitch - range.startPitch) / (numberOfPoints - 1);// [rad]
+	double rollStep		= (range.endRoll - range.startRoll) / (numberOfPoints - 1);// [rad]
+	double heaveStep	= (range.endHeave - range.startHeave) / (numberOfPoints - 1);// [in]
+	double rackStep		= (range.endRackTravel - range.startRackTravel) / (numberOfPoints - 1);// [in]
 
 	// Delete the X-axis variables
-	delete [] AxisValuesPitch;
-	delete [] AxisValuesRoll;
-	delete [] AxisValuesHeave;
-	delete [] AxisValuesRackTravel;
+	delete [] axisValuesPitch;
+	delete [] axisValuesRoll;
+	delete [] axisValuesHeave;
+	delete [] axisValuesRackTravel;
 
 	// Determine the number of points required to store data in the case of 3D plots
-	int TotalPoints = NumberOfPoints;
-	if (YAxisType != AxisTypeUnused)
-		TotalPoints *= NumberOfPoints;
+	int totalPoints = numberOfPoints;
+	if (yAxisType != AxisTypeUnused)
+		totalPoints *= numberOfPoints;
 
 	// Re-create the arrays with the appropriate number of points
-	AxisValuesPitch			= new double[TotalPoints];
-	AxisValuesRoll			= new double[TotalPoints];
-	AxisValuesHeave			= new double[TotalPoints];
-	AxisValuesRackTravel	= new double[TotalPoints];
+	axisValuesPitch			= new double[totalPoints];
+	axisValuesRoll			= new double[totalPoints];
+	axisValuesHeave			= new double[totalPoints];
+	axisValuesRackTravel	= new double[totalPoints];
 
 	// Clear out and re-allocate our output lists
 	int i;
-	for (i = 0; i < OutputLists.GetCount(); i++)
-		OutputLists[i]->Clear();
-	OutputLists.Clear();
+	for (i = 0; i < outputLists.GetCount(); i++)
+		outputLists[i]->Clear();
+	outputLists.Clear();
 
 	// Initialize the semaphore count
-	inverseSemaphore.Set(AssociatedCars.GetCount() * TotalPoints);
+	inverseSemaphore.Set(associatedCars.GetCount() * totalPoints);
 
 	// Make sure the working cars are initialized
-	if (inverseSemaphore.GetCount() != (unsigned int)NumberOfWorkingCars)
+	if (inverseSemaphore.GetCount() != (unsigned int)numberOfWorkingCars)
 	{
-		for (i = 0; i < NumberOfWorkingCars; i++)
+		for (i = 0; i < numberOfWorkingCars; i++)
 		{
-			delete WorkingCarArray[i];
-			WorkingCarArray[i] = NULL;
+			delete workingCarArray[i];
+			workingCarArray[i] = NULL;
 		}
-		delete [] WorkingCarArray;
-		NumberOfWorkingCars = inverseSemaphore.GetCount();
-		WorkingCarArray = new Car*[NumberOfWorkingCars];
-		for (i = 0; i < NumberOfWorkingCars; i++)
-			WorkingCarArray[i] = new Car(debugger);
+		delete [] workingCarArray;
+		numberOfWorkingCars = inverseSemaphore.GetCount();
+		workingCarArray = new Car*[numberOfWorkingCars];
+		for (i = 0; i < numberOfWorkingCars; i++)
+			workingCarArray[i] = new Car(debugger);
 	}
 
 	// Go through car-by-car
-	int CurrentCar, CurrentPoint;
-	for (CurrentCar = 0; CurrentCar < AssociatedCars.GetCount(); CurrentCar++)
+	int currentCar, currentPoint;
+	for (currentCar = 0; currentCar < associatedCars.GetCount(); currentCar++)
 	{
 		// Create a list to store the outputs for this car
-		ManagedList<KinematicOutputs> *CurrentList = new ManagedList<KinematicOutputs>;
+		ManagedList<KinematicOutputs> *currentList = new ManagedList<KinematicOutputs>;
 
 		// Add this list to our list of lists (bit confusing?)
-		OutputLists.Add(CurrentList);
+		outputLists.Add(currentList);
 
 		// Run the analysis for each point through the range
-		for (CurrentPoint = 0; CurrentPoint < TotalPoints; CurrentPoint++)
+		for (currentPoint = 0; currentPoint < totalPoints; currentPoint++)
 		{
 			// Add the current position of the car to the array for the plot's X-axis
-			if (YAxisType == AxisTypeUnused)
+			if (yAxisType == AxisTypeUnused)
 			{
-				AxisValuesPitch[CurrentPoint]		= Range.StartPitch + PitchStep * CurrentPoint;
-				AxisValuesRoll[CurrentPoint]		= Range.StartRoll + RollStep * CurrentPoint;
-				AxisValuesHeave[CurrentPoint]		= Range.StartHeave + HeaveStep * CurrentPoint;
-				AxisValuesRackTravel[CurrentPoint]	= Range.StartRackTravel + RackStep * CurrentPoint;
+				axisValuesPitch[currentPoint]		= range.startPitch + pitchStep * currentPoint;
+				axisValuesRoll[currentPoint]		= range.startRoll + rollStep * currentPoint;
+				axisValuesHeave[currentPoint]		= range.startHeave + heaveStep * currentPoint;
+				axisValuesRackTravel[currentPoint]	= range.startRackTravel + rackStep * currentPoint;
 			}
 			else
 			{
@@ -421,29 +421,29 @@ void ITERATION::UpdateData(void)
 			}
 
 			// Assign the inputs
-			KinematicInputs.pitch = AxisValuesPitch[CurrentPoint];
-			KinematicInputs.roll = AxisValuesRoll[CurrentPoint];
-			KinematicInputs.heave = AxisValuesHeave[CurrentPoint];
-			KinematicInputs.rackTravel = AxisValuesRackTravel[CurrentPoint];
-			KinematicInputs.firstRotation = MainFrame.GetInputs().firstRotation;
-			KinematicInputs.centerOfRotation = MainFrame.GetInputs().centerOfRotation;
+			kinematicInputs.pitch = axisValuesPitch[currentPoint];
+			kinematicInputs.roll = axisValuesRoll[currentPoint];
+			kinematicInputs.heave = axisValuesHeave[currentPoint];
+			kinematicInputs.rackTravel = axisValuesRackTravel[currentPoint];
+			kinematicInputs.firstRotation = mainFrame.GetInputs().firstRotation;
+			kinematicInputs.centerOfRotation = mainFrame.GetInputs().centerOfRotation;
 
 			// Run The analysis
-			KinematicOutputs *NewOutputs = new KinematicOutputs;
-			KinematicsData *Data = new KinematicsData(&AssociatedCars[CurrentCar]->GetOriginalCar(),
-				WorkingCarArray[CurrentCar * NumberOfPoints + CurrentPoint], KinematicInputs, NewOutputs);
-			ThreadJob Job(ThreadJob::CommandThreadKinematicsIteration, Data,
-				AssociatedCars[CurrentCar]->GetCleanName() + _T(":") + Name, Index);
-			MainFrame.AddJob(Job);
+			KinematicOutputs *newOutputs = new KinematicOutputs;
+			KinematicsData *data = new KinematicsData(&associatedCars[currentCar]->GetOriginalCar(),
+				workingCarArray[currentCar * numberOfPoints + currentPoint], kinematicInputs, newOutputs);
+			ThreadJob job(ThreadJob::CommandThreadKinematicsIteration, data,
+				associatedCars[currentCar]->GetCleanName() + _T(":") + name, index);
+			mainFrame.AddJob(job);
 
 			// Add the outputs to the iteration's list
-			CurrentList->Add(NewOutputs);
+			currentList->Add(newOutputs);
 		}
 	}
 }
 
 //==========================================================================
-// Class:			ITERATION
+// Class:			Iteration
 // Function:		UpdateDisplay
 //
 // Description:		Updates the visual display of this object.
@@ -458,7 +458,7 @@ void ITERATION::UpdateData(void)
 //		None
 //
 //==========================================================================
-void ITERATION::UpdateDisplay(void)
+void Iteration::UpdateDisplay(void)
 {
 	// Make sure the renderer exists so we don't do this until after we're fully created
 	if (plotPanel)
@@ -474,33 +474,33 @@ void ITERATION::UpdateDisplay(void)
 		for (i = 0; i < NumberOfPlots; i++)
 		{
 			// Check to see if this plot is active
-			if (PlotActive[i])
+			if (plotActive[i])
 			{
-				for (j = 0; j < (unsigned int)AssociatedCars.GetCount(); j++)
+				for (j = 0; j < (unsigned int)associatedCars.GetCount(); j++)
 				{
 					// Create the dataset
-					dataSet = new Dataset2D(NumberOfPoints);
+					dataSet = new Dataset2D(numberOfPoints);
 					x = dataSet->GetXPointer();
 					y = dataSet->GetYPointer();
 					
 					// Populate all values
-					for (k = 0; k < (unsigned int)NumberOfPoints; k++)
+					for (k = 0; k < (unsigned int)numberOfPoints; k++)
 					{
 						x[k] = GetDataValue(j, k,
-								(PLOT_ID)(KinematicOutputs::NumberOfOutputScalars + XAxisType));
-						y[k] = GetDataValue(j, k, (PLOT_ID)i);
+								(PlotID)(KinematicOutputs::NumberOfOutputScalars + xAxisType));
+						y[k] = GetDataValue(j, k, (PlotID)i);
 					}
 					
 					// Add the dataset to the plot
-					plotPanel->AddCurve(dataSet, AssociatedCars[j]->GetCleanName()
-						+ _T(", ") + GetPlotName((PLOT_ID)i) + _T(" [") +
-						GetPlotUnits((PLOT_ID)i) + _T("]"));
+					plotPanel->AddCurve(dataSet, associatedCars[j]->GetCleanName()
+						+ _T(", ") + GetPlotName((PlotID)i) + _T(" [") +
+						GetPlotUnits((PlotID)i) + _T("]"));
 
 					// Set the x-axis information if this is the first pass
 					if (plotPanel->GetCurveCount() == 1)
 						plotPanel->SetXAxisGridText(
-						GetPlotName((PLOT_ID)(KinematicOutputs::NumberOfOutputScalars + XAxisType)) + _T(" [") +
-						GetPlotUnits((PLOT_ID)(KinematicOutputs::NumberOfOutputScalars + XAxisType)) + _T("]"));
+						GetPlotName((PlotID)(KinematicOutputs::NumberOfOutputScalars + xAxisType)) + _T(" [") +
+						GetPlotUnits((PlotID)(KinematicOutputs::NumberOfOutputScalars + xAxisType)) + _T("]"));
 				}
 			}
 		}
@@ -513,15 +513,15 @@ void ITERATION::UpdateDisplay(void)
 	}
 
 	// Reset the "are we caught up?" flag
-	AnalysesDisplayed = true;
+	analysesDisplayed = true;
 
 	// If we have a second analysis pending, handle it now
-	if (SecondAnalysisPending)
+	if (secondAnalysisPending)
 		UpdateData();
 }
 
 //==========================================================================
-// Class:			ITERATION
+// Class:			Iteration
 // Function:		ClearAllLists
 //
 // Description:		Updates the iteration outputs for all of the cars for
@@ -537,23 +537,23 @@ void ITERATION::UpdateDisplay(void)
 //		None
 //
 //==========================================================================
-void ITERATION::ClearAllLists(void)
+void Iteration::ClearAllLists(void)
 {
 	// Clear out all of our lists
-	int CurrentList;
-	for (CurrentList = 0; CurrentList < OutputLists.GetCount(); CurrentList++)
+	int currentList;
+	for (currentList = 0; currentList < outputLists.GetCount(); currentList++)
 		// Remove all of the sub-lists
-		OutputLists[CurrentList]->Clear();
+		outputLists[currentList]->Clear();
 
 	// Remove the parent list
-	OutputLists.Clear();
+	outputLists.Clear();
 
 	// Remove the list of associated cars
-	AssociatedCars.Clear();
+	associatedCars.Clear();
 }
 
 //==========================================================================
-// Class:			ITERATION
+// Class:			Iteration
 // Function:		PerformSaveToFile
 //
 // Description:		Saves this object to file.
@@ -568,44 +568,44 @@ void ITERATION::ClearAllLists(void)
 //		bool, true for success
 //
 //==========================================================================
-bool ITERATION::PerformSaveToFile(void)
+bool Iteration::PerformSaveToFile(void)
 {
 	// Open the specified file
-	std::ofstream OutFile(PathAndFileName.c_str(), ios::out | ios::binary);
+	std::ofstream outFile(pathAndFileName.c_str(), ios::out | ios::binary);
 
 	// Make sure the file was opened OK
-	if (!OutFile.is_open() || !OutFile.good())
+	if (!outFile.is_open() || !outFile.good())
 		return false;
 
 	// Write the file header information
-	WriteFileHeader(&OutFile);
+	WriteFileHeader(&outFile);
 
 	// Write this object's data
-	OutFile.write((char*)&AssociatedWithAllOpenCars, sizeof(bool));
-	OutFile.write((char*)PlotActive, sizeof(bool) * NumberOfPlots);
-	OutFile.write((char*)&NumberOfPoints, sizeof(int));
-	OutFile.write((char*)&Range, sizeof(RANGE));
-	OutFile.write((char*)&XAxisType, sizeof(AXIS_TYPE));
+	outFile.write((char*)&associatedWithAllOpenCars, sizeof(bool));
+	outFile.write((char*)plotActive, sizeof(bool) * NumberOfPlots);
+	outFile.write((char*)&numberOfPoints, sizeof(int));
+	outFile.write((char*)&range, sizeof(Range));
+	outFile.write((char*)&xAxisType, sizeof(AxisType));
 
 	// Added for file version 1 on 11/17/2010
-	OutFile.write((char*)&YAxisType, sizeof(AXIS_TYPE));
-	OutFile.write((char*)&GenerateTitleFromFileName, sizeof(bool));
-	OutFile.write(Title.c_str(), (Title.Len() + 1) * sizeof(char));
-	OutFile.write((char*)&AutoGenerateXLabel, sizeof(bool));
-	OutFile.write(XLabel.c_str(), (XLabel.Len() + 1) * sizeof(char));
-	OutFile.write((char*)&AutoGenerateZLabel, sizeof(bool));
-	OutFile.write(ZLabel.c_str(), (ZLabel.Len() + 1) * sizeof(char));
+	outFile.write((char*)&yAxisType, sizeof(AxisType));
+	outFile.write((char*)&generateTitleFromFileName, sizeof(bool));
+	outFile.write(title.c_str(), (title.Len() + 1) * sizeof(char));
+	outFile.write((char*)&autoGenerateXLabel, sizeof(bool));
+	outFile.write(xLabel.c_str(), (xLabel.Len() + 1) * sizeof(char));
+	outFile.write((char*)&autoGenerateZLabel, sizeof(bool));
+	outFile.write(zLabel.c_str(), (zLabel.Len() + 1) * sizeof(char));
 	bool temp(plotPanel->GetRenderer()->GetGridOn());
-	OutFile.write((char*)&temp, sizeof(bool));
+	outFile.write((char*)&temp, sizeof(bool));
 
 	// Close the file
-	OutFile.close();
+	outFile.close();
 
 	return true;
 }
 
 //==========================================================================
-// Class:			ITERATION
+// Class:			Iteration
 // Function:		PerformLoadFromFile
 //
 // Description:		Loads this object from file.
@@ -620,74 +620,74 @@ bool ITERATION::PerformSaveToFile(void)
 //		bool, true for success
 //
 //==========================================================================
-bool ITERATION::PerformLoadFromFile(void)
+bool Iteration::PerformLoadFromFile(void)
 {
 	// Open the specified file
-	std::ifstream InFile(PathAndFileName.c_str(), ios::in | ios::binary);
+	std::ifstream inFile(pathAndFileName.c_str(), ios::in | ios::binary);
 
 	// Make sure the file was opened OK
-	if (!InFile.is_open() || !InFile.good())
+	if (!inFile.is_open() || !inFile.good())
 		return false;
 
 	// Read the file header information
-	FILE_HEADER_INFO Header = ReadFileHeader(&InFile);
+	FileHeaderInfo header = ReadFileHeader(&inFile);
 
 	// Check to make sure the version matches
-	if (Header.FileVersion > CurrentFileVersion)
+	if (header.fileVersion > currentFileVersion)
 	{
 		debugger.Print(_T("ERROR:  Unrecognized file version - unable to open file!"));
-		InFile.close();
+		inFile.close();
 
 		return false;
 	}
-	else if (Header.FileVersion != CurrentFileVersion)
+	else if (header.fileVersion != currentFileVersion)
 		debugger.Print(_T("Warning:  Opening out-of-date file version."));
 
 	// Read this object's data
-	InFile.read((char*)&AssociatedWithAllOpenCars, sizeof(bool));
-	InFile.read((char*)PlotActive, sizeof(bool) * NumberOfPlots);
-	InFile.read((char*)&NumberOfPoints, sizeof(int));
-	InFile.read((char*)&Range, sizeof(RANGE));
-	InFile.read((char*)&XAxisType, sizeof(AXIS_TYPE));
+	inFile.read((char*)&associatedWithAllOpenCars, sizeof(bool));
+	inFile.read((char*)plotActive, sizeof(bool) * NumberOfPlots);
+	inFile.read((char*)&numberOfPoints, sizeof(int));
+	inFile.read((char*)&range, sizeof(Range));
+	inFile.read((char*)&xAxisType, sizeof(AxisType));
 
 	// Stop here if we don't have file version 1 or newer; allow defaults to be used for
 	// remaining parameters (as set in constructor)
-	if (Header.FileVersion < 1)
+	if (header.fileVersion < 1)
 	{
-		InFile.close();
+		inFile.close();
 		return true;
 	}
 
 	// New as of file version 1
-	InFile.read((char*)&YAxisType, sizeof(AXIS_TYPE));
-	InFile.read((char*)&GenerateTitleFromFileName, sizeof(bool));
-	char OneChar;
-	Title.Empty();
-	while (InFile.read(&OneChar, sizeof(char)), OneChar != '\0')
-		Title.Append(OneChar);
-	InFile.read((char*)&AutoGenerateXLabel, sizeof(bool));
-	XLabel.Empty();
-	while (InFile.read(&OneChar, sizeof(char)), OneChar != '\0')
-		XLabel.Append(OneChar);
-	InFile.read((char*)&AutoGenerateZLabel, sizeof(bool));
-	ZLabel.Empty();
-	while (InFile.read(&OneChar, sizeof(char)), OneChar != '\0')
-		ZLabel.Append(OneChar);
+	inFile.read((char*)&yAxisType, sizeof(AxisType));
+	inFile.read((char*)&generateTitleFromFileName, sizeof(bool));
+	char oneChar;
+	title.Empty();
+	while (inFile.read(&oneChar, sizeof(char)), oneChar != '\0')
+		title.Append(oneChar);
+	inFile.read((char*)&autoGenerateXLabel, sizeof(bool));
+	xLabel.Empty();
+	while (inFile.read(&oneChar, sizeof(char)), oneChar != '\0')
+		xLabel.Append(oneChar);
+	inFile.read((char*)&autoGenerateZLabel, sizeof(bool));
+	zLabel.Empty();
+	while (inFile.read(&oneChar, sizeof(char)), oneChar != '\0')
+		zLabel.Append(oneChar);
 	bool temp;
-	InFile.read((char*)&temp, sizeof(bool));
+	inFile.read((char*)&temp, sizeof(bool));
 	if (temp)
 		plotPanel->GetRenderer()->SetGridOn();
 	else
 		plotPanel->GetRenderer()->SetGridOff();
 
 	// Close the file
-	InFile.close();
+	inFile.close();
 
 	return true;
 }
 
 //==========================================================================
-// Class:			ITERATION
+// Class:			Iteration
 // Function:		ReadDefaultsFromConfig
 //
 // Description:		Read the default iteration settings from the config file.
@@ -702,53 +702,53 @@ bool ITERATION::PerformLoadFromFile(void)
 //		None
 //
 //==========================================================================
-void ITERATION::ReadDefaultsFromConfig(void)
+void Iteration::ReadDefaultsFromConfig(void)
 {
 	// Create a configuration file object
-	wxFileConfig *ConfigurationFile = new wxFileConfig(_T(""), _T(""),
-		wxFileName(wxStandardPaths::Get().GetExecutablePath()).GetPathWithSep() + MainFrame.PathToConfigFile, _T(""),
+	wxFileConfig *configurationFile = new wxFileConfig(_T(""), _T(""),
+		wxFileName(wxStandardPaths::Get().GetExecutablePath()).GetPathWithSep() + mainFrame.pathToConfigFile, _T(""),
 		wxCONFIG_USE_RELATIVE_PATH);
 
 	// Attempt to read from the config file; set the defaults if the value isn't found
-	ConfigurationFile->Read(_T("/Iteration/GenerateTitleFromFileName"), &GenerateTitleFromFileName, true);
-	ConfigurationFile->Read(_T("/Iteration/Title"), &Title, wxEmptyString);
-	ConfigurationFile->Read(_T("/Iteration/AutoGenerateXLabel"), &AutoGenerateXLabel, true);
-	ConfigurationFile->Read(_T("/Iteration/XLabel"), &XLabel, wxEmptyString);
-	ConfigurationFile->Read(_T("/Iteration/AutoGenerateZLabel"), &AutoGenerateZLabel, true);
-	ConfigurationFile->Read(_T("/Iteration/ZLabel"), &ZLabel, wxEmptyString);
-	ConfigurationFile->Read(_T("/Iteration/ShowGridLines"), &ShowGridLines, false);
+	configurationFile->Read(_T("/Iteration/GenerateTitleFromFileName"), &generateTitleFromFileName, true);
+	configurationFile->Read(_T("/Iteration/Title"), &title, wxEmptyString);
+	configurationFile->Read(_T("/Iteration/AutoGenerateXLabel"), &autoGenerateXLabel, true);
+	configurationFile->Read(_T("/Iteration/XLabel"), &xLabel, wxEmptyString);
+	configurationFile->Read(_T("/Iteration/AutoGenerateZLabel"), &autoGenerateZLabel, true);
+	configurationFile->Read(_T("/Iteration/ZLabel"), &zLabel, wxEmptyString);
+	configurationFile->Read(_T("/Iteration/ShowGridLines"), &showGridLines, false);
 
-	ConfigurationFile->Read(_T("/Iteration/StartPitch"), &Range.StartPitch, 0.0);
-	ConfigurationFile->Read(_T("/Iteration/StartRoll"), &Range.StartRoll, 0.0);
-	ConfigurationFile->Read(_T("/Iteration/StartHeave"), &Range.StartHeave, 0.0);
-	ConfigurationFile->Read(_T("/Iteration/StartRackTravel"), &Range.StartRackTravel, 0.0);
+	configurationFile->Read(_T("/Iteration/StartPitch"), &range.startPitch, 0.0);
+	configurationFile->Read(_T("/Iteration/StartRoll"), &range.startRoll, 0.0);
+	configurationFile->Read(_T("/Iteration/StartHeave"), &range.startHeave, 0.0);
+	configurationFile->Read(_T("/Iteration/StartRackTravel"), &range.startRackTravel, 0.0);
 
-	ConfigurationFile->Read(_T("/Iteration/EndPitch"), &Range.EndPitch, 0.0);
-	ConfigurationFile->Read(_T("/Iteration/EndRoll"), &Range.EndRoll, 0.0);
-	ConfigurationFile->Read(_T("/Iteration/EndHeave"), &Range.EndHeave, 0.0);
-	ConfigurationFile->Read(_T("/Iteration/EndRackTravel"), &Range.EndRackTravel, 0.0);
+	configurationFile->Read(_T("/Iteration/EndPitch"), &range.endPitch, 0.0);
+	configurationFile->Read(_T("/Iteration/EndRoll"), &range.endRoll, 0.0);
+	configurationFile->Read(_T("/Iteration/EndHeave"), &range.endHeave, 0.0);
+	configurationFile->Read(_T("/Iteration/EndRackTravel"), &range.endRackTravel, 0.0);
 
-	ConfigurationFile->Read(_T("/Iteration/NumberOfPoints"), &NumberOfPoints, 10);
+	configurationFile->Read(_T("/Iteration/NumberOfPoints"), &numberOfPoints, 10);
 
-	ConfigurationFile->Read(_T("/Iteration/XAxisType"), (int*)&XAxisType, (int)AxisTypeUnused);
-	ConfigurationFile->Read(_T("/Iteration/YAxisType"), (int*)&YAxisType, (int)AxisTypeUnused);
+	configurationFile->Read(_T("/Iteration/XAxisType"), (int*)&xAxisType, (int)AxisTypeUnused);
+	configurationFile->Read(_T("/Iteration/YAxisType"), (int*)&yAxisType, (int)AxisTypeUnused);
 
-	wxString ActivePlotString;
-	ConfigurationFile->Read(_T("Iteration/ActivePlots"), &ActivePlotString, wxEmptyString);
+	wxString activePlotString;
+	configurationFile->Read(_T("Iteration/ActivePlots"), &activePlotString, wxEmptyString);
 
 	// Process the empty plot string to turn it into booleans
-	if (ActivePlotString.Len() > 0)
+	if (activePlotString.Len() > 0)
 	{
 		size_t i(0), lasti(0);
-		unsigned long PlotIndex;
-		while (i = ActivePlotString.find(_T(';'), i + 1), i != std::string::npos)
+		unsigned long plotIndex;
+		while (i = activePlotString.find(_T(';'), i + 1), i != std::string::npos)
 		{
 			// Convert the string to a number
-			if (ActivePlotString.SubString(lasti, i - 1).ToULong(&PlotIndex))
+			if (activePlotString.SubString(lasti, i - 1).ToULong(&plotIndex))
 			{
 				// Make sure the number isn't greater than the size of the array
-				if (PlotIndex < NumberOfPlots)
-					PlotActive[PlotIndex] = true;
+				if (plotIndex < NumberOfPlots)
+					plotActive[plotIndex] = true;
 			}
 
 			lasti = i + 1;
@@ -756,12 +756,12 @@ void ITERATION::ReadDefaultsFromConfig(void)
 	}
 
 	// Delete file object
-	delete ConfigurationFile;
-	ConfigurationFile = NULL;
+	delete configurationFile;
+	configurationFile = NULL;
 }
 
 //==========================================================================
-// Class:			ITERATION
+// Class:			Iteration
 // Function:		WriteDefaultsToConfig
 //
 // Description:		Writes the current iteration settings to the config file.
@@ -776,63 +776,63 @@ void ITERATION::ReadDefaultsFromConfig(void)
 //		None
 //
 //==========================================================================
-void ITERATION::WriteDefaultsToConfig(void) const
+void Iteration::WriteDefaultsToConfig(void) const
 {
 	// Create a configuration file object
-	wxFileConfig *ConfigurationFile = new wxFileConfig(_T(""), _T(""),
-		wxFileName(wxStandardPaths::Get().GetExecutablePath()).GetPathWithSep() + MainFrame.PathToConfigFile, _T(""),
+	wxFileConfig *configurationFile = new wxFileConfig(_T(""), _T(""),
+		wxFileName(wxStandardPaths::Get().GetExecutablePath()).GetPathWithSep() + mainFrame.pathToConfigFile, _T(""),
 		wxCONFIG_USE_RELATIVE_PATH);
 
 	// Write to the config file
-	ConfigurationFile->Write(_T("/Iteration/GenerateTitleFromFileName"), GenerateTitleFromFileName);
-	ConfigurationFile->Write(_T("/Iteration/Title"), Title);
-	ConfigurationFile->Write(_T("/Iteration/AutoGenerateXLabel"), AutoGenerateXLabel);
-	ConfigurationFile->Write(_T("/Iteration/XLabel"), XLabel);
-	ConfigurationFile->Write(_T("/Iteration/AutoGenerateZLabel"), AutoGenerateZLabel);
-	ConfigurationFile->Write(_T("/Iteration/ZLabel"), ZLabel);
-	ConfigurationFile->Write(_T("/Iteration/ShowGridLines"), ShowGridLines);
+	configurationFile->Write(_T("/Iteration/GenerateTitleFromFileName"), generateTitleFromFileName);
+	configurationFile->Write(_T("/Iteration/Title"), title);
+	configurationFile->Write(_T("/Iteration/AutoGenerateXLabel"), autoGenerateXLabel);
+	configurationFile->Write(_T("/Iteration/XLabel"), xLabel);
+	configurationFile->Write(_T("/Iteration/AutoGenerateZLabel"), autoGenerateZLabel);
+	configurationFile->Write(_T("/Iteration/ZLabel"), zLabel);
+	configurationFile->Write(_T("/Iteration/ShowGridLines"), showGridLines);
 
-	ConfigurationFile->Write(_T("/Iteration/StartPitch"), Range.StartPitch);
-	ConfigurationFile->Write(_T("/Iteration/StartRoll"), Range.StartRoll);
-	ConfigurationFile->Write(_T("/Iteration/StartHeave"), Range.StartHeave);
-	ConfigurationFile->Write(_T("/Iteration/StartRackTravel"), Range.StartRackTravel);
+	configurationFile->Write(_T("/Iteration/StartPitch"), range.startPitch);
+	configurationFile->Write(_T("/Iteration/StartRoll"), range.startRoll);
+	configurationFile->Write(_T("/Iteration/StartHeave"), range.startHeave);
+	configurationFile->Write(_T("/Iteration/StartRackTravel"), range.startRackTravel);
 
-	ConfigurationFile->Write(_T("/Iteration/EndPitch"), Range.EndPitch);
-	ConfigurationFile->Write(_T("/Iteration/EndRoll"), Range.EndRoll);
-	ConfigurationFile->Write(_T("/Iteration/EndHeave"), Range.EndHeave);
-	ConfigurationFile->Write(_T("/Iteration/EndRackTravel"), Range.EndRackTravel);
+	configurationFile->Write(_T("/Iteration/EndPitch"), range.endPitch);
+	configurationFile->Write(_T("/Iteration/EndRoll"), range.endRoll);
+	configurationFile->Write(_T("/Iteration/EndHeave"), range.endHeave);
+	configurationFile->Write(_T("/Iteration/EndRackTravel"), range.endRackTravel);
 
-	ConfigurationFile->Write(_T("/Iteration/NumberOfPoints"), NumberOfPoints);
+	configurationFile->Write(_T("/Iteration/NumberOfPoints"), numberOfPoints);
 
-	ConfigurationFile->Write(_T("/Iteration/XAxisType"), (int)XAxisType);
-	ConfigurationFile->Write(_T("/Iteration/YAxisType"), (int)YAxisType);
+	configurationFile->Write(_T("/Iteration/XAxisType"), (int)xAxisType);
+	configurationFile->Write(_T("/Iteration/YAxisType"), (int)yAxisType);
 
 	// Encode the active plots into a string that can be saved into the configuration file
-	wxString ActivePlotString(wxEmptyString), Temp;
+	wxString activePlotString(wxEmptyString), temp;
 	int i;
 	for (i = 0; i < NumberOfPlots; i++)
 	{
-		if (PlotActive[i])
+		if (plotActive[i])
 		{
-			Temp.Printf("%i;", i);
-			ActivePlotString += Temp;
+			temp.Printf("%i;", i);
+			activePlotString += temp;
 		}
 	}
-	ConfigurationFile->Write(_T("Iteration/ActivePlots"), ActivePlotString);
+	configurationFile->Write(_T("Iteration/ActivePlots"), activePlotString);
 
 	// Delete file object
-	delete ConfigurationFile;
-	ConfigurationFile = NULL;
+	delete configurationFile;
+	configurationFile = NULL;
 }
 
 //==========================================================================
-// Class:			ITERATION
-// Function:		SetRange
+// Class:			Iteration
+// Function:		ApplyPlotFormatting
 //
-// Description:		Sets this object's range to the specified values.
+// Description:		Applies formatting (names, etc.) to plot curves.
 //
 // Input Arguments:
-//		_Range	= const ITERATION::RANGE& specifying the desired range
+//		None
 //
 // Output Arguments:
 //		None
@@ -841,18 +841,18 @@ void ITERATION::WriteDefaultsToConfig(void) const
 //		None
 //
 //==========================================================================
-void ITERATION::ApplyPlotFormatting(void)
+void Iteration::ApplyPlotFormatting(void)
 {
-	if (AutoGenerateZLabel)
+	if (autoGenerateZLabel)
 	{
 		unsigned int i;
 		wxString label;
 		for (i = 0; i < NumberOfPlots; i++)
 		{
-			if (PlotActive[i])
+			if (plotActive[i])
 			{
 				if (label.IsEmpty())
-					label.assign(GetPlotName((PLOT_ID)i) + _T(" [") + GetPlotUnits((PLOT_ID)i) + _T("]"));
+					label.assign(GetPlotName((PlotID)i) + _T(" [") + GetPlotUnits((PlotID)i) + _T("]"));
 				else
 					label.assign(_T("Multiple Values"));
 			}
@@ -861,34 +861,34 @@ void ITERATION::ApplyPlotFormatting(void)
 		plotPanel->GetRenderer()->SetLeftYLabel(label);
 	}
 	else
-		plotPanel->GetRenderer()->SetLeftYLabel(ZLabel);
+		plotPanel->GetRenderer()->SetLeftYLabel(zLabel);
 
 	// FIXME:  Implement dual labels
 	//plotPanel->GetRenderer()->SetRightYLabel();
 
-	if (AutoGenerateXLabel)
+	if (autoGenerateXLabel)
 		plotPanel->GetRenderer()->SetXLabel(
-		GetPlotName((PLOT_ID)(KinematicOutputs::NumberOfOutputScalars + XAxisType)) + _T(" [")
-		+ GetPlotUnits((PLOT_ID)(KinematicOutputs::NumberOfOutputScalars + XAxisType)) + _T("]"));
+		GetPlotName((PlotID)(KinematicOutputs::NumberOfOutputScalars + xAxisType)) + _T(" [")
+		+ GetPlotUnits((PlotID)(KinematicOutputs::NumberOfOutputScalars + xAxisType)) + _T("]"));
 	else
-		plotPanel->GetRenderer()->SetXLabel(XLabel);
+		plotPanel->GetRenderer()->SetXLabel(xLabel);
 
-	if (GenerateTitleFromFileName)
+	if (generateTitleFromFileName)
 		plotPanel->GetRenderer()->SetTitle(GetCleanName());
 	else
-		plotPanel->GetRenderer()->SetTitle(Title);
+		plotPanel->GetRenderer()->SetTitle(title);
 
-	plotPanel->GetRenderer()->SetGridOn(ShowGridLines);
+	plotPanel->GetRenderer()->SetGridOn(showGridLines);
 }
 
 //==========================================================================
-// Class:			ITERATION
+// Class:			Iteration
 // Function:		SetRange
 //
 // Description:		Sets this object's range to the specified values.
 //
 // Input Arguments:
-//		_Range	= const ITERATION::RANGE& specifying the desired range
+//		_range	= const Iteration::Range& specifying the desired range
 //
 // Output Arguments:
 //		None
@@ -897,27 +897,27 @@ void ITERATION::ApplyPlotFormatting(void)
 //		None
 //
 //==========================================================================
-void ITERATION::SetRange(const ITERATION::RANGE &_Range)
+void Iteration::SetRange(const Iteration::Range &_range)
 {
 	// Assign the passed range to the class member
-	Range = _Range;
+	range = _range;
 
 	// Make sure the chosen X-axis type is not for a parameter with zero range
 	// This is based on the priority Roll->Steer->Heave->Pitch.
-	if ((XAxisType == ITERATION::AxisTypeRoll && VVASEMath::IsZero(Range.StartRoll - Range.EndRoll)) ||
-		(XAxisType == ITERATION::AxisTypeRackTravel && VVASEMath::IsZero(Range.StartRackTravel - Range.EndRackTravel)) ||
-		(XAxisType == ITERATION::AxisTypeHeave && VVASEMath::IsZero(Range.StartHeave - Range.EndHeave)) ||
-		(XAxisType == ITERATION::AxisTypePitch && VVASEMath::IsZero(Range.StartPitch - Range.EndPitch)) ||
-		XAxisType == ITERATION::AxisTypeUnused)
+	if ((xAxisType == Iteration::AxisTypeRoll && VVASEMath::IsZero(range.startRoll - range.endRoll)) ||
+		(xAxisType == Iteration::AxisTypeRackTravel && VVASEMath::IsZero(range.startRackTravel - range.endRackTravel)) ||
+		(xAxisType == Iteration::AxisTypeHeave && VVASEMath::IsZero(range.startHeave - range.endHeave)) ||
+		(xAxisType == Iteration::AxisTypePitch && VVASEMath::IsZero(range.startPitch - range.endPitch)) ||
+		xAxisType == Iteration::AxisTypeUnused)
 	{
-		if (fabs(Range.StartRoll - Range.EndRoll) > 0.0)
-			XAxisType = AxisTypeRoll;
-		else if (fabs(Range.StartRackTravel - Range.EndRackTravel) > 0.0)
-			XAxisType = AxisTypeRackTravel;
-		else if (fabs(Range.StartHeave - Range.EndHeave) > 0.0)
-			XAxisType = AxisTypeHeave;
-		else if (fabs(Range.StartPitch - Range.EndPitch) > 0.0)
-			XAxisType = AxisTypePitch;
+		if (fabs(range.startRoll - range.endRoll) > 0.0)
+			xAxisType = AxisTypeRoll;
+		else if (fabs(range.startRackTravel - range.endRackTravel) > 0.0)
+			xAxisType = AxisTypeRackTravel;
+		else if (fabs(range.startHeave - range.endHeave) > 0.0)
+			xAxisType = AxisTypeHeave;
+		else if (fabs(range.startPitch - range.endPitch) > 0.0)
+			xAxisType = AxisTypePitch;
 	}
 
 	// FIXME:  Determine if also have a Y-axis!
@@ -927,14 +927,14 @@ void ITERATION::SetRange(const ITERATION::RANGE &_Range)
 }
 
 //==========================================================================
-// Class:			ITERATION
+// Class:			Iteration
 // Function:		SetNumberOfPoints
 //
 // Description:		Sets the number of points used to generate the plots for
 //					this object.
 //
 // Input Arguments:
-//		_NumberOfPoints	= const int& reference to number of points to use
+//		_numberOfPoints	= const int& reference to number of points to use
 //
 // Output Arguments:
 //		None
@@ -943,26 +943,26 @@ void ITERATION::SetRange(const ITERATION::RANGE &_Range)
 //		None
 //
 //==========================================================================
-void ITERATION::SetNumberOfPoints(const int &_NumberOfPoints)
+void Iteration::SetNumberOfPoints(const int &_numberOfPoints)
 {
 	// Make sure the value is at least 2, then make the assignment
-	if (_NumberOfPoints >= 2)
-		NumberOfPoints = _NumberOfPoints;
+	if (_numberOfPoints >= 2)
+		numberOfPoints = _numberOfPoints;
 
 	// Set the "this item has changed" flag
 	SetModified();
 }
 
 //==========================================================================
-// Class:			ITERATION
+// Class:			Iteration
 // Function:		SetActivePlot
 //
 // Description:		Sets the flag indicating whether the specified plot is
 //					active or not.
 //
 // Input Arguments:
-//		PlotID	=	ITERATION::PLOT_ID specifying the plot we're intersted in
-//		Active	=	const bool& true for plot is shown, false otherwise
+//		plotID	=	Iteration::PlotID specifying the plot we're intersted in
+//		active	=	const bool& true for plot is shown, false otherwise
 //
 // Output Arguments:
 //		None
@@ -971,20 +971,20 @@ void ITERATION::SetNumberOfPoints(const int &_NumberOfPoints)
 //		None
 //
 //==========================================================================
-void ITERATION::SetActivePlot(PLOT_ID PlotID, const bool &Active)
+void Iteration::SetActivePlot(PlotID plotID, const bool &active)
 {
 	// Make sure the plot ID is valid
-	assert(PlotID < NumberOfPlots);
+	assert(plotID < NumberOfPlots);
 
 	// Set the status for the specified plot
-	PlotActive[PlotID] = Active;
+	plotActive[plotID] = active;
 
 	// Sets the "this object has changed" flag
 	SetModified();
 }
 
 //==========================================================================
-// Class:			ITERATION
+// Class:			Iteration
 // Function:		UpdateAutoAssociate
 //
 // Description:		Updates the list of associated cars, if auto-associated
@@ -1000,28 +1000,28 @@ void ITERATION::SetActivePlot(PLOT_ID PlotID, const bool &Active)
 //		None
 //
 //==========================================================================
-void ITERATION::UpdateAutoAssociate(void)
+void Iteration::UpdateAutoAssociate(void)
 {
 	// Make sure auto-associate is on
-	if (!AssociatedWithAllOpenCars)
+	if (!associatedWithAllOpenCars)
 		return;
 
 	// Clear our list of cars
 	ClearAllLists();
 
-	// Go through the list of open objects in MainFrame, and add all TYPE_CAR objects
+	// Go through the list of open objects in mainFrame, and add all TypeCar objects
 	// to the list
 	int i;
-	for (i = 0; i < MainFrame.GetObjectCount(); i++)
+	for (i = 0; i < mainFrame.GetObjectCount(); i++)
 	{
-		if (MainFrame.GetObjectByIndex(i)->GetType() == GUI_OBJECT::TYPE_CAR)
-			AddCar(static_cast<GUI_CAR*>(MainFrame.GetObjectByIndex(i)));
+		if (mainFrame.GetObjectByIndex(i)->GetType() == GuiObject::TypeCar)
+			AddCar(static_cast<GuiCar*>(mainFrame.GetObjectByIndex(i)));
 	}
 }
 
 //==========================================================================
-// Class:			ITERATION
-// Function:		ShowAssociatedCarsDialog
+// Class:			Iteration
+// Function:		ShowassociatedCarsDialog
 //
 // Description:		Allows the user to update the list of associated cars.
 //
@@ -1035,28 +1035,28 @@ void ITERATION::UpdateAutoAssociate(void)
 //		None
 //
 //==========================================================================
-void ITERATION::ShowAssociatedCarsDialog(void)
+void Iteration::ShowAssociatedCarsDialog(void)
 {
 	// Call the auto-associate update function
 	UpdateAutoAssociate();
 
-	// Set up the list of cars in MainFrame
-	wxArrayString Choices;
-	ObjectList<GUI_CAR> OpenCars;
+	// Set up the list of cars in mainFrame
+	wxArrayString choices;
+	ObjectList<GuiCar> openCars;
 	int i;
-	for (i = 0; i < MainFrame.GetObjectCount(); i++)
+	for (i = 0; i < mainFrame.GetObjectCount(); i++)
 	{
 		// If the object is a car, add the name to our list of choices, and
 		// add the car itself to our list of cars
-		if (MainFrame.GetObjectByIndex(i)->GetType() == GUI_OBJECT::TYPE_CAR)
+		if (mainFrame.GetObjectByIndex(i)->GetType() == GuiObject::TypeCar)
 		{
-			Choices.Add(MainFrame.GetObjectByIndex(i)->GetCleanName());
-			OpenCars.Add(static_cast<GUI_CAR*>(MainFrame.GetObjectByIndex(i)));
+			choices.Add(mainFrame.GetObjectByIndex(i)->GetCleanName());
+			openCars.Add(static_cast<GuiCar*>(mainFrame.GetObjectByIndex(i)));
 		}
 	}
 
 	// Make sure there is at least one car open
-	if (OpenCars.GetCount() == 0)
+	if (openCars.GetCount() == 0)
 	{
 		debugger.Print(_T("ERROR:  Cannot display dialog - no open cars!"), Debugger::PriorityHigh);
 		return;
@@ -1064,22 +1064,22 @@ void ITERATION::ShowAssociatedCarsDialog(void)
 
 	// Initialize the selections - this array contains the indeces of the
 	// items that are selected
-    wxArrayInt Selections;
-	for (i = 0; i < OpenCars.GetCount(); i++)
+    wxArrayInt selections;
+	for (i = 0; i < openCars.GetCount(); i++)
 	{
 		// If the item is associated with this iteration, add its index to the array
-		if (AssociatedWithCar(OpenCars[i]))
-			Selections.Add(i);
+		if (AssociatedWithCar(openCars[i]))
+			selections.Add(i);
 	}
 
 	// Display the dialog
-	bool SelectionsMade = wxGetMultipleChoices(Selections, _T("Select the cars to associate with this iteration:"),
-		_T("Associated Cars"), Choices, &MainFrame);
+	bool selectionsMade = wxGetMultipleChoices(selections, _T("Select the cars to associate with this iteration:"),
+		_T("Associated Cars"), choices, &mainFrame);
 
 	// Check to make sure the user didn't cancel
-	if (!SelectionsMade)
+	if (!selectionsMade)
 	{
-		OpenCars.Clear();
+		openCars.Clear();
 		return;
 	}
 
@@ -1087,26 +1087,26 @@ void ITERATION::ShowAssociatedCarsDialog(void)
 	ClearAllLists();
 
 	// Go through the indices that were selected and add them to our list
-	for (i = 0; i < (signed int)Selections.GetCount(); i++)
-		AddCar(OpenCars.GetObject(Selections[i]));
+	for (i = 0; i < (signed int)selections.GetCount(); i++)
+		AddCar(openCars.GetObject(selections[i]));
 
 	// If not all of the cars in the list are selected, make sure we're not auto-associating
-	if (OpenCars.GetCount() != AssociatedCars.GetCount())
-		AssociatedWithAllOpenCars = false;
+	if (openCars.GetCount() != associatedCars.GetCount())
+		associatedWithAllOpenCars = false;
 
 	// Update the analyses
 	UpdateData();
 }
 
 //==========================================================================
-// Class:			ITERATION
+// Class:			Iteration
 // Function:		AssociatedWithCar
 //
 // Description:		Checks to see if the specified car is associated with
 //					this object.
 //
 // Input Arguments:
-//		Test	= GUI_CAR* with which we are comparing our list
+//		test	= GuiCar* with which we are comparing our list
 //
 // Output Arguments:
 //		None
@@ -1115,14 +1115,14 @@ void ITERATION::ShowAssociatedCarsDialog(void)
 //		bool, true if the argument matches a car in our list
 //
 //==========================================================================
-bool ITERATION::AssociatedWithCar(GUI_CAR *Test) const
+bool Iteration::AssociatedWithCar(GuiCar *test) const
 {
 	// Go through our list of associated cars, and see if Test points to any of
 	// those cars
 	int i;
-	for (i = 0; i < AssociatedCars.GetCount(); i++)
+	for (i = 0; i < associatedCars.GetCount(); i++)
 	{
-		if (AssociatedCars[i] == Test)
+		if (associatedCars[i] == test)
 			return true;
 	}
 
@@ -1130,16 +1130,16 @@ bool ITERATION::AssociatedWithCar(GUI_CAR *Test) const
 }
 
 //==========================================================================
-// Class:			ITERATION
+// Class:			Iteration
 // Function:		GetDataValue
 //
 // Description:		Accesses the output data for the specified car and the
 //					specified curve.
 //
 // Input Arguments:
-//		AssociatedCarIndex	= integer specifying the car whose output is requested
-//		Point				= integer specifying the point whose output is requested
-//		Id					= PLOT_ID specifying what data we are interested in
+//		associatedCarIndex	= integer specifying the car whose output is requested
+//		point				= integer specifying the point whose output is requested
+//		id					= PlotID specifying what data we are interested in
 //
 // Output Arguments:
 //		None
@@ -1148,46 +1148,46 @@ bool ITERATION::AssociatedWithCar(GUI_CAR *Test) const
 //		double, the value of the requested point, converted to user units
 //
 //==========================================================================
-double ITERATION::GetDataValue(int AssociatedCarIndex, int Point, PLOT_ID Id) const
+double Iteration::GetDataValue(int associatedCarIndex, int point, PlotID id) const
 {
 	// The value to return
-	double Value = 0.0;
-	Vector Temp;
+	double value = 0.0;
+	Vector temp;
 
 	// Make sure the arguments are valid
-	if (AssociatedCarIndex >= AssociatedCars.GetCount() ||
-		Point > NumberOfPoints || Id > NumberOfPlots)
-		return Value;
+	if (associatedCarIndex >= associatedCars.GetCount() ||
+		point > numberOfPoints || id > NumberOfPlots)
+		return value;
 
 	// Depending on the specified PLOT_ID, choose which member of the KINEMATIC_OUTPUTS
 	// object to return
-	if (Id < Pitch)
-		Value = Converter.ConvertTo(OutputLists[AssociatedCarIndex]->GetObject(Point)->GetOutputValue(
-			(KinematicOutputs::OutputsComplete)Id), KinematicOutputs::GetOutputUnitType(
-			(KinematicOutputs::OutputsComplete)Id));
-	else if (Id == Pitch)
-		Value = Converter.ConvertAngle(AxisValuesPitch[Point]);
-	else if (Id == Roll)
-		Value = Converter.ConvertAngle(AxisValuesRoll[Point]);
-	else if (Id == Heave)
-		Value = Converter.ConvertDistance(AxisValuesHeave[Point]);
-	else if (Id == RackTravel)
-		Value = Converter.ConvertDistance(AxisValuesRackTravel[Point]);
+	if (id < Pitch)
+		value = converter.ConvertTo(outputLists[associatedCarIndex]->GetObject(point)->GetOutputValue(
+			(KinematicOutputs::OutputsComplete)id), KinematicOutputs::GetOutputUnitType(
+			(KinematicOutputs::OutputsComplete)id));
+	else if (id == Pitch)
+		value = converter.ConvertAngle(axisValuesPitch[point]);
+	else if (id == Roll)
+		value = converter.ConvertAngle(axisValuesRoll[point]);
+	else if (id == Heave)
+		value = converter.ConvertDistance(axisValuesHeave[point]);
+	else if (id == RackTravel)
+		value = converter.ConvertDistance(axisValuesRackTravel[point]);
 	else
-		Value = 0.0;
+		value = 0.0;
 
-	return Value;
+	return value;
 }
 
 //==========================================================================
-// Class:			ITERATION
+// Class:			Iteration
 // Function:		ExportDataToFile
 //
 // Description:		Exports the data for this object to a comma or tab-delimited
 //					text file.
 //
 // Input Arguments:
-//		PathAndFileName	= wxString pointing to the location where the file is
+//		pathAndFileName	= wxString pointing to the location where the file is
 //						  to be saved
 //
 // Output Arguments:
@@ -1197,17 +1197,17 @@ double ITERATION::GetDataValue(int AssociatedCarIndex, int Point, PLOT_ID Id) co
 //		None
 //
 //==========================================================================
-void ITERATION::ExportDataToFile(wxString PathAndFileName) const
+void Iteration::ExportDataToFile(wxString pathAndFileName) const
 {
 	// Determine what type of delimiter to use
-	wxString Extension(PathAndFileName.substr(PathAndFileName.find_last_of('.') + 1));
-	wxChar Delimiter;
-	if (Extension.Cmp(_T("txt")) == 0)
+	wxString extension(pathAndFileName.substr(pathAndFileName.find_last_of('.') + 1));
+	wxChar delimiter;
+	if (extension.Cmp(_T("txt")) == 0)
 		// Tab delimited
-		Delimiter = '\t';
-	else if (Extension.Cmp(_T("csv")) == 0)
+		delimiter = '\t';
+	else if (extension.Cmp(_T("csv")) == 0)
 		// Comma separated values
-		Delimiter = ',';
+		delimiter = ',';
 	else
 	{
 		// Unrecognized file extension
@@ -1217,12 +1217,12 @@ void ITERATION::ExportDataToFile(wxString PathAndFileName) const
 	}
 
 	// Perform the save - open the file
-	ofstream ExportFile(PathAndFileName.c_str(), ios::out);
+	ofstream exportFile(pathAndFileName.c_str(), ios::out);
 
 	// Warn the user if the file could not be opened failed
-	if (!ExportFile.is_open() || !ExportFile.good())
+	if (!exportFile.is_open() || !exportFile.good())
 	{
-		debugger.Print(_T("ERROR:  Could not export data to '") + PathAndFileName + _T("'!"));
+		debugger.Print(_T("ERROR:  Could not export data to '") + pathAndFileName + _T("'!"));
 
 		return;
 	}
@@ -1230,46 +1230,46 @@ void ITERATION::ExportDataToFile(wxString PathAndFileName) const
 	// Write the information
 	// The column headings consist of three rows:  Plot Name, Units, Car Name
 	// After the third row, we start writing the data
-	int CurrentCar, CurrentPlot, Row;
-	int NumberOfHeadingRows = 3;
-	for (Row = 0; Row < NumberOfPoints + NumberOfHeadingRows; Row++)
+	int currentCar, currentPlot, row;
+	int numberOfHeadingRows = 3;
+	for (row = 0; row < numberOfPoints + numberOfHeadingRows; row++)
 	{
-		for (CurrentCar = 0; CurrentCar < AssociatedCars.GetCount(); CurrentCar++)
+		for (currentCar = 0; currentCar < associatedCars.GetCount(); currentCar++)
 		{
-			for (CurrentPlot = 0; CurrentPlot < NumberOfPlots; CurrentPlot++)
+			for (currentPlot = 0; currentPlot < NumberOfPlots; currentPlot++)
 			{
-				if (Row == 0)
+				if (row == 0)
 					// Write the name of the current column
-					ExportFile << GetPlotName((PLOT_ID)CurrentPlot) << Delimiter;
-				else if (Row == 1)
+					exportFile << GetPlotName((PlotID)currentPlot) << delimiter;
+				else if (row == 1)
 					// Write the units for this column
-					ExportFile << "(" << GetPlotUnits((PLOT_ID)CurrentPlot) << ")" << Delimiter;
-				else if (Row == 2)
+					exportFile << "(" << GetPlotUnits((PlotID)currentPlot) << ")" << delimiter;
+				else if (row == 2)
 					// Write the name of the current car
-					ExportFile << AssociatedCars[CurrentCar]->GetCleanName() << Delimiter;
+					exportFile << associatedCars[currentCar]->GetCleanName() << delimiter;
 				else
 					// Write the data for the current plot
-					ExportFile << GetDataValue(CurrentCar, Row - NumberOfHeadingRows, (PLOT_ID)CurrentPlot)
-						<< Delimiter;
+					exportFile << GetDataValue(currentCar, row - numberOfHeadingRows, (PlotID)currentPlot)
+						<< delimiter;
 			}
 		}
 
 		// Add a new line at the end of every row
-		ExportFile << endl;
+		exportFile << endl;
 	}
 
 	// Close the file
-	ExportFile.close();
+	exportFile.close();
 }
 
 //==========================================================================
-// Class:			ITERATION
+// Class:			Iteration
 // Function:		GetPlotName
 //
 // Description:		Returns a string containing the name of the specified plot.
 //
 // Input Arguments:
-//		Id	= PLOT_ID specifying the plot we are interested in
+//		id	= PlotID specifying the plot we are interested in
 //
 // Output Arguments:
 //		None
@@ -1278,38 +1278,38 @@ void ITERATION::ExportDataToFile(wxString PathAndFileName) const
 //		wxString containing the name of the plot
 //
 //==========================================================================
-wxString ITERATION::GetPlotName(PLOT_ID Id) const
+wxString Iteration::GetPlotName(PlotID id) const
 {
 	// The value to return
-	wxString Name;
+	wxString name;
 
 	// Depending on the specified PLOT_ID, choose the name of the string
 	// Vectors are a special case - depending on which component of the vector is chosen,
 	// we need to append a different string to the end of the Name
-	if (Id < Pitch)
-		Name = KinematicOutputs::GetOutputName((KinematicOutputs::OutputsComplete)Id);
-	else if (Id == Pitch)
-		Name = _T("Pitch");
-	else if (Id == Roll)
-		Name = _T("Roll");
-	else if (Id == Heave)
-		Name = _T("Heave");
-	else if (Id == RackTravel)
-		Name = _T("Rack Travel");
+	if (id < Pitch)
+		name = KinematicOutputs::GetOutputName((KinematicOutputs::OutputsComplete)id);
+	else if (id == Pitch)
+		name = _T("Pitch");
+	else if (id == Roll)
+		name = _T("Roll");
+	else if (id == Heave)
+		name = _T("Heave");
+	else if (id == RackTravel)
+		name = _T("Rack Travel");
 	else
-		Name = _T("Unrecognized name");
+		name = _T("Unrecognized name");
 
-	return Name;
+	return name;
 }
 
 //==========================================================================
-// Class:			ITERATION
+// Class:			Iteration
 // Function:		GetPlotUnits
 //
 // Description:		Returns a string containing the units of the specified plot.
 //
 // Input Arguments:
-//		Id	= PLOT_ID specifying the plot we are interested in
+//		id	= PlotID specifying the plot we are interested in
 //
 // Output Arguments:
 //		None
@@ -1318,32 +1318,32 @@ wxString ITERATION::GetPlotName(PLOT_ID Id) const
 //		wxString containing the units of the plot
 //
 //==========================================================================
-wxString ITERATION::GetPlotUnits(PLOT_ID Id) const
+wxString Iteration::GetPlotUnits(PlotID id) const
 {
 	// The value to return
-	wxString Units;
+	wxString units;
 
 	// Depending on the specified PLOT_ID, choose the units string
-	if (Id < Pitch)
-		Units = Converter.GetUnitType(KinematicOutputs::GetOutputUnitType((KinematicOutputs::OutputsComplete)Id));
-	else if (Id == Pitch || Id == Roll)
-		Units = Converter.GetUnitType(Convert::UnitTypeAngle);
-	else if (Id == Heave || Id == RackTravel)
-		Units = Converter.GetUnitType(Convert::UnitTypeDistance);
+	if (id < Pitch)
+		units = converter.GetUnitType(KinematicOutputs::GetOutputUnitType((KinematicOutputs::OutputsComplete)id));
+	else if (id == Pitch || id == Roll)
+		units = converter.GetUnitType(Convert::UnitTypeAngle);
+	else if (id == Heave || id == RackTravel)
+		units = converter.GetUnitType(Convert::UnitTypeDistance);
 	else
-		Units = _T("Unrecognized units");
+		units = _T("Unrecognized units");
 
-	return Units;
+	return units;
 }
 
 //==========================================================================
-// Class:			ITERATION
+// Class:			Iteration
 // Function:		WriteFileHeader
 //
 // Description:		Writes the file header to the specified output stream.
 //
 // Input Arguments:
-//		OutFile	= std::ofstream* to write to
+//		outFile	= std::ofstream* to write to
 //
 // Output Arguments:
 //		None
@@ -1352,55 +1352,55 @@ wxString ITERATION::GetPlotUnits(PLOT_ID Id) const
 //		None
 //
 //==========================================================================
-void ITERATION::WriteFileHeader(std::ofstream *OutFile)
+void Iteration::WriteFileHeader(std::ofstream *outFile)
 {
 	// Set up the header information
-	FILE_HEADER_INFO Header;
-	Header.FileVersion = CurrentFileVersion;
+	FileHeaderInfo header;
+	header.fileVersion = currentFileVersion;
 
 	// Set the write pointer to the start of the file
-	OutFile->seekp(0);
+	outFile->seekp(0);
 
 	// Write the header
-	OutFile->write((char*)&Header, sizeof(FILE_HEADER_INFO));
+	outFile->write((char*)&header, sizeof(FileHeaderInfo));
 }
 
 //==========================================================================
-// Class:			ITERATION
+// Class:			Iteration
 // Function:		ReadFileHeader
 //
 // Description:		Reads the file header information from the specified input stream.
 //
 // Input Arguments:
-//		InFile	= std::ifstream* to read from
+//		inFile	= std::ifstream* to read from
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		FILE_HEADER_INFO containing the header information
+//		FileHeaderInfo containing the header information
 //
 //==========================================================================
-ITERATION::FILE_HEADER_INFO ITERATION::ReadFileHeader(std::ifstream *InFile)
+Iteration::FileHeaderInfo Iteration::ReadFileHeader(std::ifstream *inFile)
 {
 	// Set get pointer to the start of the file
-	InFile->seekg(0);
+	inFile->seekg(0);
 
 	// Read the header struct
-	char Buffer[sizeof(FILE_HEADER_INFO)];
-	InFile->read((char*)Buffer, sizeof(FILE_HEADER_INFO));
+	char buffer[sizeof(FileHeaderInfo)];
+	inFile->read((char*)buffer, sizeof(FileHeaderInfo));
 
-	return *reinterpret_cast<FILE_HEADER_INFO*>(Buffer);
+	return *reinterpret_cast<FileHeaderInfo*>(buffer);
 }
 
 //==========================================================================
-// Class:			ITERATION
+// Class:			Iteration
 // Function:		SetXAxisType
 //
 // Description:		Sets the X axis to the specified quantity.
 //
 // Input Arguments:
-//		_XAxisType	= AXIS_TYPE to plot against
+//		_xAxisType	= AxisType to plot against
 //
 // Output Arguments:
 //		None
@@ -1409,10 +1409,10 @@ ITERATION::FILE_HEADER_INFO ITERATION::ReadFileHeader(std::ifstream *InFile)
 //		None
 //
 //==========================================================================
-void ITERATION::SetXAxisType(AXIS_TYPE _XAxisType)
+void Iteration::SetXAxisType(AxisType _xAxisType)
 {
-	// Set the XAxisType
-	XAxisType = _XAxisType;
+	// Set the xAxisType
+	xAxisType = _xAxisType;
 
 	// Set the "this item has changed" flag
 	SetModified();
@@ -1422,13 +1422,13 @@ void ITERATION::SetXAxisType(AXIS_TYPE _XAxisType)
 }
 
 //==========================================================================
-// Class:			ITERATION
+// Class:			Iteration
 // Function:		SetYAxisType
 //
 // Description:		Sets the Y axis to the specified quantity.
 //
 // Input Arguments:
-//		_YAxisType	= AXIS_TYPE to plot against
+//		_yAxisType	= AxisType to plot against
 //
 // Output Arguments:
 //		None
@@ -1437,10 +1437,10 @@ void ITERATION::SetXAxisType(AXIS_TYPE _XAxisType)
 //		None
 //
 //==========================================================================
-void ITERATION::SetYAxisType(AXIS_TYPE _YAxisType)
+void Iteration::SetYAxisType(AxisType _yAxisType)
 {
-	// Set the YAxisType
-	YAxisType = _YAxisType;
+	// Set the yAxisType
+	yAxisType = _yAxisType;
 
 	// Set the "this item has changed" flag
 	SetModified();
@@ -1450,13 +1450,13 @@ void ITERATION::SetYAxisType(AXIS_TYPE _YAxisType)
 }
 
 //==========================================================================
-// Class:			ITERATION
+// Class:			Iteration
 // Function:		SetAutoAssociate
 //
 // Description:		Sets the auto-associate with all cars flag.
 //
 // Input Arguments:
-//		AutoAssociate	= bool describing whether the flag should be set to
+//		autoAssociate	= bool describing whether the flag should be set to
 //						  true or false
 //
 // Output Arguments:
@@ -1466,10 +1466,10 @@ void ITERATION::SetYAxisType(AXIS_TYPE _YAxisType)
 //		None
 //
 //==========================================================================
-void ITERATION::SetAutoAssociate(bool AutoAssociate)
+void Iteration::SetAutoAssociate(bool autoAssociate)
 {
 	// Update the auto-associate flag
-	AssociatedWithAllOpenCars = AutoAssociate;
+	associatedWithAllOpenCars = autoAssociate;
 
 	// Set the "this item has changed" flag
 	SetModified();
@@ -1479,7 +1479,7 @@ void ITERATION::SetAutoAssociate(bool AutoAssociate)
 }
 
 //==========================================================================
-// Class:			ITERATION
+// Class:			Iteration
 // Function:		MarkAnalysisComplete
 //
 // Description:		To be called after one of this object's kinematics analyses
@@ -1495,7 +1495,7 @@ void ITERATION::SetAutoAssociate(bool AutoAssociate)
 //		None
 //
 //==========================================================================
-void ITERATION::MarkAnalysisComplete(void)
+void Iteration::MarkAnalysisComplete(void)
 {
 	// Post our semaphore
 	inverseSemaphore.Post();

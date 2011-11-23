@@ -25,10 +25,10 @@
 #include "application/vvaseApplication.h"
 
 //==========================================================================
-// Class:			IPC_SERVER
-// Function:		IPC_SERVER
+// Class:			IPCServer
+// Function:		IPCServer
 //
-// Description:		Constructor for IPC_SERVER class.
+// Description:		Constructor for IPCServer class.
 //
 // Input Arguments:
 //		None
@@ -40,17 +40,17 @@
 //		None
 //
 //==========================================================================
-IPC_SERVER::IPC_SERVER() : wxServer()
+IPCServer::IPCServer() : wxServer()
 {
 	// Initialize the connection poiner to NULL
-	Connection = NULL;
+	connection = NULL;
 }
 
 //==========================================================================
-// Class:			IPC_SERVER
-// Function:		~IPC_SERVER
+// Class:			IPCServer
+// Function:		~IPCServer
 //
-// Description:		Destructor for IPC_SERVER class.
+// Description:		Destructor for IPCServer class.
 //
 // Input Arguments:
 //		None
@@ -62,14 +62,14 @@ IPC_SERVER::IPC_SERVER() : wxServer()
 //		None
 //
 //==========================================================================
-IPC_SERVER::~IPC_SERVER()
+IPCServer::~IPCServer()
 {
 	// Kill the current connection
 	Disconnect();
 }
 
 //==========================================================================
-// Class:			IPC_SERVER
+// Class:			IPCServer
 // Function:		Disconnect
 //
 // Description:		Kills the current connection.
@@ -84,18 +84,18 @@ IPC_SERVER::~IPC_SERVER()
 //		None
 //
 //==========================================================================
-void IPC_SERVER::Disconnect(void)
+void IPCServer::Disconnect(void)
 {
-	if (Connection)
+	if (connection)
 	{
-		Connection->Disconnect();
-		delete Connection;
-		Connection = NULL;
+		connection->Disconnect();
+		delete connection;
+		connection = NULL;
 	}
 }
 
 //==========================================================================
-// Class:			IPC_SERVER
+// Class:			IPCServer
 // Function:		OnAcceptConnection
 //
 // Description:		Responds to new connections.
@@ -110,15 +110,15 @@ void IPC_SERVER::Disconnect(void)
 //		None
 //
 //==========================================================================
-wxConnectionBase *IPC_SERVER::OnAcceptConnection(const wxString& topic)
+wxConnectionBase *IPCServer::OnAcceptConnection(const wxString& topic)
 {
 	// Check to see if we recognize the topic
-	if (topic.CompareTo(VVASEApp::ConnectionTopic) == 0)
+	if (topic.CompareTo(VVASEApp::connectionTopic) == 0)
     {
 		// Create and return a new connection
-        Connection = new IPC_CONNECTION();
+        connection = new IPCConnection();
 		
-        return Connection;
+        return connection;
     }
 	
 	// We don't recognize the topic

@@ -21,22 +21,22 @@
 
 // VVASE forward declarations
 class Debugger;
-class ITERATION;
+class Iteration;
 class Convert;
-class EDIT_ITERATION_NOTEBOOK;
+class EditIterationNotebook;
 
-class EDIT_ITERATION_OPTIONS_PANEL : public wxScrolledWindow
+class EditIterationOptionsPanel : public wxScrolledWindow
 {
 public:
 	// Constructor
-	EDIT_ITERATION_OPTIONS_PANEL(EDIT_ITERATION_NOTEBOOK &_Parent, wxWindowID id, const wxPoint& pos,
+	EditIterationOptionsPanel(EditIterationNotebook &_parent, wxWindowID id, const wxPoint& pos,
 		const wxSize& size, const Debugger &_debugger);
 
 	// Destructor
-	~EDIT_ITERATION_OPTIONS_PANEL();
+	~EditIterationOptionsPanel();
 
 	// Updates the information on the panel
-	void UpdateInformation(ITERATION *_CurrentIteration);
+	void UpdateInformation(Iteration *_currentIteration);
 	void UpdateInformation(void);
 
 private:
@@ -44,28 +44,28 @@ private:
 	const Debugger &debugger;
 
 	// The parent panel
-	EDIT_ITERATION_NOTEBOOK &Parent;
+	EditIterationNotebook &parent;
 
 	// The iteration with which we are currently associated
-	ITERATION *CurrentIteration;
+	Iteration *currentIteration;
 
 	// Creates the controls and positions everything within the panel
 	void CreateControls(void);
 
 	// Controls on this panel
-	wxCheckBox *ShowGridLines;
-	wxCheckBox *AutoLabelXAxis;
-	wxCheckBox *AutoLabelZAxis;
-	wxCheckBox *AutoTitle;
+	wxCheckBox *showGridLines;
+	wxCheckBox *autoLabelXAxis;
+	wxCheckBox *autoLabelZAxis;
+	wxCheckBox *autoTitle;
 
-	wxTextCtrl *TitleText;
-	wxTextCtrl *XLabelText;
-	wxTextCtrl *ZLabelText;
+	wxTextCtrl *titleText;
+	wxTextCtrl *xLabelText;
+	wxTextCtrl *zLabelText;
 
-	wxButton *SetAsDefault;
+	wxButton *setAsDefault;
 
 	// Enumeration for event IDs
-	enum EDIT_ITERATION_OPTIONS_EVENT_ID
+	enum EditIterationOptionsEventIds
 	{
 		CheckBoxIterationOptions = 900 + wxID_HIGHEST,
 		TextBoxIterationOptions,

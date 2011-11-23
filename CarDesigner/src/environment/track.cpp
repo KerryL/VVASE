@@ -10,7 +10,7 @@
 // File:  track.cpp
 // Created:  12/12/2008
 // Author:  K. Loux
-// Description:  Contains class definitions for TRACK class.  This is used to
+// Description:  Contains class definitions for Track class.  This is used to
 //				 describe the road surface (temperature, coefficient of friction,
 //				 etc.).
 // History:
@@ -19,10 +19,10 @@
 #include "environment/track.h"
 
 //==========================================================================
-// Class:			TRACK
-// Function:		TRACK
+// Class:			Track
+// Function:		Track
 //
-// Description:		Constructor for TRACK class.
+// Description:		Constructor for Track class.
 //
 // Input Arguments:
 //		None
@@ -34,15 +34,15 @@
 //		None
 //
 //==========================================================================
-TRACK::TRACK()
+Track::Track()
 {
 }
 
 //==========================================================================
-// Class:			TRACK
-// Function:		~TRACK
+// Class:			Track
+// Function:		~Track
 //
-// Description:		Destructor for TRACK class.
+// Description:		Destructor for Track class.
 //
 // Input Arguments:
 //		None
@@ -54,6 +54,6 @@ TRACK::TRACK()
 //		None
 //
 //==========================================================================
-TRACK::~TRACK()
+Track::~Track()
 {
 }

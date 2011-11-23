@@ -24,24 +24,24 @@
 
 // VVASE forward declarations
 class Debugger;
-class MAIN_FRAME;
+class MainFrame;
 
-class MAIN_NOTEBOOK : public wxAuiNotebook
+class MainNotebook : public wxAuiNotebook
 {
 public:
 	// Constructor
-	MAIN_NOTEBOOK(MAIN_FRAME &_Parent, wxWindowID id, const wxPoint& pos,
+	MainNotebook(MainFrame &_parent, wxWindowID id, const wxPoint& pos,
 		const wxSize& size, long style, const Debugger &_debugger);
 
 	// Destructor
-	~MAIN_NOTEBOOK();
+	~MainNotebook();
 
 private:
 	// Debugger message printing utility
 	const Debugger &debugger;
 
 	// The frame that owns this notebook
-	MAIN_FRAME &MainFrame;
+	MainFrame &mainFrame;
 
 	// Event handlers-----------------------------------------------------
 	// Notebook events

@@ -26,106 +26,106 @@
 #include "vSolver/threads/inverseSemaphore.h"
 
 // VVASE forward declarations
-class GUI_CAR;
+class GuiCar;
 class Car;
 class Debugger;
-class MAIN_FRAME;
-class GENETIC_OPTIMIZATION;
+class MainFrame;
+class GeneticOptimization;
 
-class GA_OBJECT : public GeneticAlgorithm
+class GAObject : public GeneticAlgorithm
 {
 public:
 	// Constructor
-	GA_OBJECT(MAIN_FRAME &_MainFrame, GENETIC_OPTIMIZATION &_Optimization,
+	GAObject(MainFrame &_mainFrame, GeneticOptimization &_optimization,
 		const Convert &_converter, const Debugger &_debugger);
 
 	// Destructor
-	~GA_OBJECT();
+	~GAObject();
 
 	// Sets up for the run
-	void SetUp(Car *_TargetCar);
+	void SetUp(Car *_targetCar);
 
 	// For storing the information about the genes
-	struct GENE
+	struct Gene
 	{
 		// The value to be altered
-		Corner::Hardpoints Hardpoint;
+		Corner::Hardpoints hardpoint;
 
 		// A variable that will always be set to the same value as Variable (optional)
-		Corner::Hardpoints TiedTo;
+		Corner::Hardpoints tiedTo;
 
 		// The corner containing these points
-		Corner::Location Location;
+		Corner::Location location;
 
 		// The component of the hardpoint to optimitze
-		Vector::Axis Direction;
+		Vector::Axis direction;
 
 		// The minimum value for the gene
-		double Minimum;
+		double minimum;
 
 		// The maximum value for the gene
-		double Maximum;
+		double maximum;
 
 		// The number of possible values (including the min and max) for the gene
-		int NumberOfValues;
+		int numberOfValues;
 	};
 
 	// The structure that represents our goals
-	struct GOAL
+	struct Goal
 	{
 		// The output associated with this goal
-		KinematicOutputs::OutputsComplete Output;
+		KinematicOutputs::OutputsComplete output;
 
 		// The desired value
-		double DesiredValue;
+		double desiredValue;
 
 		// The values used to compute the weight for this output
-		double ExpectedDeviation;
-		double Importance;
+		double expectedDeviation;
+		double importance;
 
 		// The conditions at which this goal is evaluated.  There are two sets of inputs
 		// here, so that a delta goal can be implemented (i.e. change in roll center height
 		// with ride).
-		Kinematics::Inputs BeforeInputs;
-		Kinematics::Inputs AfterInputs;
+		Kinematics::Inputs beforeInputs;
+		Kinematics::Inputs afterInputs;
 	};
 
 	// For changing what is being optimized
-	void ClearAllGenes(void) { GeneList.Clear(); };
-	void AddGene(const Corner::Hardpoints &Hardpoint, const Corner::Hardpoints &TiedTo,
-		const Corner::Location &Location, const Vector::Axis &Direction, const double &Minimum,
-		const double &Maximum, const int &NumberOfValues);
-	void RemoveGene(const int &Index) { GeneList.Remove(Index); };
-	void UpdateGene(const int &Index, const Corner::Hardpoints &Hardpoint, const Corner::Hardpoints &TiedTo,
-		const Corner::Location &Location, const Vector::Axis &Direction, const double &Minimum,
-		const double &Maximum, const int &NumberOfValues);
-	int GetGeneCount(void) const { return GeneList.GetCount(); };
-	const GENE &GetGene(const int &Index) const { return *(GeneList[Index]); };
+	void ClearAllGenes(void) { geneList.Clear(); };
+	void AddGene(const Corner::Hardpoints &hardpoint, const Corner::Hardpoints &tiedTo,
+		const Corner::Location &location, const Vector::Axis &direction, const double &minimum,
+		const double &maximum, const int &numberOfValues);
+	void RemoveGene(const int &index) { geneList.Remove(index); };
+	void UpdateGene(const int &index, const Corner::Hardpoints &hardpoint, const Corner::Hardpoints &tiedTo,
+		const Corner::Location &location, const Vector::Axis &direction, const double &minimum,
+		const double &maximum, const int &numberOfValues);
+	int GetGeneCount(void) const { return geneList.GetCount(); };
+	const Gene &GetGene(const int &index) const { return *(geneList[index]); };
 
 	// For creating the fitness function
-	void ClearAllGoals(void) { GoalList.Clear(); };
-	void AddGoal(const KinematicOutputs::OutputsComplete &Output, const double &DesiredValue,
-		const double &ExpectedDeviation, const double &Importance, const Kinematics::Inputs &BeforeInputs,
-		const Kinematics::Inputs &AfterInputs);
-	void RemoveGoal(const int &Index) { GoalList.Remove(Index); };
-	void UpdateGoal(const int &Index, const KinematicOutputs::OutputsComplete &BeforeOutput, const double &DesiredValue,
-		const double &ExpectedDeviation, const double &Importance, const Kinematics::Inputs &BeforeInputs,
-		const Kinematics::Inputs &AfterInputs);
-	int GetGoalCount(void) const { return GoalList.GetCount(); };
-	const GOAL &GetGoal(const int &Index) const { return *(GoalList[Index]); };
+	void ClearAllGoals(void) { goalList.Clear(); };
+	void AddGoal(const KinematicOutputs::OutputsComplete &output, const double &desiredValue,
+		const double &expectedDeviation, const double &importance, const Kinematics::Inputs &beforeInputs,
+		const Kinematics::Inputs &afterInputs);
+	void RemoveGoal(const int &index) { goalList.Remove(index); };
+	void UpdateGoal(const int &index, const KinematicOutputs::OutputsComplete &beforeOutput, const double &desiredValue,
+		const double &expectedDeviation, const double &importance, const Kinematics::Inputs &beforeInputs,
+		const Kinematics::Inputs &afterInputs);
+	int GetGoalCount(void) const { return goalList.GetCount(); };
+	const Goal &GetGoal(const int &index) const { return *(goalList[index]); };
 
 	// File I/O
-	bool Write(wxString FileName);
-	bool Read(wxString FileName);
+	bool Write(wxString fileName);
+	bool Read(wxString fileName);
 
 	// Accessor for synchronization object
 	void MarkAnalysisComplete(void) { inverseSemaphore.Post(); };
 
 	// Gets the number of analyses to be performed for each generation
-	int GetNumberOfInputs(void) const { wxMutexLocker lock(gsaMutex); return InputList.GetCount(); };
+	int GetNumberOfInputs(void) const { wxMutexLocker lock(gsaMutex); return inputList.GetCount(); };
 
 	// Returns status of this object (running or not)
-	bool OptimizationIsRunning(void) const {  wxMutexLocker lock(gsaMutex); return IsRunning; };
+	bool OptimizationIsRunning(void) const {  wxMutexLocker lock(gsaMutex); return isRunning; };
 
 	// Returns the best car with the best fit genome
 	void UpdateTargetCar(void);
@@ -138,13 +138,13 @@ private:
 	const Convert &converter;
 
 	// Main application object
-	MAIN_FRAME &MainFrame;
+	MainFrame &mainFrame;
 
 	// The object that owns this optimization
-	GENETIC_OPTIMIZATION &Optimization;
+	GeneticOptimization &optimization;
 
 	// Mandatory override of fitness function
-	double DetermineFitness(const int *Citizen);
+	double DetermineFitness(const int *citizen);
 
 	// Optional override to display results every step
 	void PerformAdditionalActions(void);
@@ -153,45 +153,45 @@ private:
 	void SimulateGeneration(void);
 
 	// Array of cars with which the fitnesses are determined
-	Car **WorkingCarArray;
-	Car **OriginalCarArray;
-	KinematicOutputs *KinematicOutputArray;
-	int NumberOfCars;
+	Car **workingCarArray;
+	Car **originalCarArray;
+	KinematicOutputs *kinematicOutputArray;
+	int numberOfCars;
 
 	// Original car to be optimized (only one needed for reference)
-	Car *TargetCar;
+	Car *targetCar;
 
 	// The list of genes that we're optimizing
-	ManagedList<GENE> GeneList;
+	ManagedList<Gene> geneList;
 
 	// The list of goal's we're optimizing to
-	ManagedList<GOAL> GoalList;
+	ManagedList<Goal> goalList;
 
 	// The different input configurations to be run
-	ManagedList<Kinematics::Inputs> InputList;
+	ManagedList<Kinematics::Inputs> inputList;
 	void DetermineAllInputs(void);
 
 	// Converts a genome into a citizen
-	void SetCarGenome(int CarIndex, const int *CurrentGenome);
+	void SetCarGenome(int carIndex, const int *currentGenome);
 
 	// Flag for whether or not the optimization is running
-	bool IsRunning;
+	bool isRunning;
 
 	// Synchronization object allowing this thread to wait for analyses to be completed
 	InverseSemaphore inverseSemaphore;
 
 	// File header information
-	struct FILE_HEADER_INFO
+	struct FileHeaderInfo
 	{
-		int FileVersion;
+		int fileVersion;
 	};
 
 	// Writes and reads the file header information for saved cars
-	void WriteFileHeader(std::ofstream *OutFile);
-	FILE_HEADER_INFO ReadFileHeader(std::ifstream *InFile);
+	void WriteFileHeader(std::ofstream *outFile);
+	FileHeaderInfo ReadFileHeader(std::ifstream *inFile);
 
 	// Our current file version
-	static const int CurrentFileVersion;
+	static const int currentFileVersion;
 };
 
 #endif// _GA_OBJECT_H_

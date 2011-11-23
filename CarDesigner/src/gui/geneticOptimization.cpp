@@ -12,7 +12,7 @@
 // Author:  K. Loux
 // Description:  This is a GUI interface for the genetic algorithm optimization.
 // History:
-//	1/11/2010	- Moved from test class to GUI_OBJECT derived object for permanent
+//	1/11/2010	- Moved from test class to GuiObject derived object for permanent
 //				  implementation.
 
 // CarDesigner headers
@@ -32,16 +32,16 @@
 #include "vMath/carMath.h"
 
 //==========================================================================
-// Class:			GENETIC_OPTIMIZATION
-// Function:		GENETIC_OPTIMIZATION
+// Class:			GeneticOptimization
+// Function:		GeneticOptimization
 //
-// Description:		Constructor for GENETIC_OPTIMIZATION class.
+// Description:		Constructor for GeneticOptimization class.
 //
 // Input Arguments:
-//		_MainFrame			= MAIN_FRAME& reference to main application object
+//		_mainFrame			= MainFrame& reference to main application object
 //		_debugger			= const Debugger& reference to the debug printing utility
-//		Converter			= const Convert& reference to application's conversion utility
-//		_PathAndFileName	= wxString containing this objects location on the disk,
+//		converter			= const Convert& reference to application's conversion utility
+//		_pathAndFileName	= wxString containing this objects location on the disk,
 //							  if we are to load from file
 //
 // Output Arguments:
@@ -51,37 +51,37 @@
 //		None
 //
 //==========================================================================
-GENETIC_OPTIMIZATION::GENETIC_OPTIMIZATION(MAIN_FRAME &_MainFrame, const Debugger &_debugger,
-										   const Convert &Converter,
-										   wxString _PathAndFileName) : GUI_OBJECT(_MainFrame, _debugger,
-										   _PathAndFileName), debugger(_debugger)
+GeneticOptimization::GeneticOptimization(MainFrame &_mainFrame, const Debugger &_debugger,
+										   const Convert &converter,
+										   wxString _pathAndFileName) : GuiObject(_mainFrame, _debugger,
+										   _pathAndFileName), debugger(_debugger)
 {
 	// Create the genetic algorithm
-	GeneticAlgorithm = new GA_OBJECT(_MainFrame, *this, Converter, debugger);
+	geneticAlgorithm = new GAObject(_mainFrame, *this, converter, debugger);
 
-	// Get an index for this item and add it to the list in the MainFrame
+	// Get an index for this item and add it to the list in the mainFrame
 	// MUST be included BEFORE the naming, which must come BEFORE the call to Initialize
-	Index = MainFrame.AddObjectToList(this);
+	index = mainFrame.AddObjectToList(this);
 
 	// Create the name based on the index
-	Name.Printf("Unsaved Optimization %i", Index + 1);
+	name.Printf("Unsaved Optimization %i", index + 1);
 
 	// Create the panel containing the algorithm's controls
-	GAPanel = new GENETIC_ALGORITHM_PANEL(_MainFrame, *this);
-	notebookTab = reinterpret_cast<wxWindow*>(GAPanel);
+	gaPanel = new GeneticAlgorithmPanel(_mainFrame, *this);
+	notebookTab = reinterpret_cast<wxWindow*>(gaPanel);
 
 	// Initialize the car to optimize
-	CarToOptimize = NULL;
+	carToOptimize = NULL;
 
 	// Complete initialization of this object
 	Initialize();
 }
 
 //==========================================================================
-// Class:			GENETIC_OPTIMIZATION
-// Function:		~GENETIC_OPTIMIZATION
+// Class:			GeneticOptimization
+// Function:		~GeneticOptimization
 //
-// Description:		Destructor for GENETIC_OPTIMIZATION class.
+// Description:		Destructor for GeneticOptimization class.
 //
 // Input Arguments:
 //		None
@@ -93,15 +93,15 @@ GENETIC_OPTIMIZATION::GENETIC_OPTIMIZATION(MAIN_FRAME &_MainFrame, const Debugge
 //		None
 //
 //==========================================================================
-GENETIC_OPTIMIZATION::~GENETIC_OPTIMIZATION()
+GeneticOptimization::~GeneticOptimization()
 {
 	// Delete the genetic algorithm object
-	delete GeneticAlgorithm;
-	GeneticAlgorithm = NULL;
+	delete geneticAlgorithm;
+	geneticAlgorithm = NULL;
 }
 
 //==========================================================================
-// Class:			GENETIC_OPTIMIZATION
+// Class:			GeneticOptimization
 // Function:		BeginOptimization
 //
 // Description:		Spawns the GA thread.
@@ -116,23 +116,23 @@ GENETIC_OPTIMIZATION::~GENETIC_OPTIMIZATION()
 //		None
 //
 //==========================================================================
-void GENETIC_OPTIMIZATION::BeginOptimization(void)
+void GeneticOptimization::BeginOptimization(void)
 {
 	// Make sure we have a car to optimize and genes and goals
-	assert(CarToOptimize);
-	assert(GeneticAlgorithm->GetGeneCount());
-	assert(GeneticAlgorithm->GetGoalCount());
+	assert(carToOptimize);
+	assert(geneticAlgorithm->GetGeneCount());
+	assert(geneticAlgorithm->GetGoalCount());
 
 	// Add a job for the genetic algorithm - this is the manager thread from which
 	// the analysis jobs are created
-	OptimizationData *Data = new OptimizationData(GeneticAlgorithm);
-	ThreadJob Job(ThreadJob::CommandThreadGeneticOptimization, Data,
-		Name, Index);
-	MainFrame.AddJob(Job);
+	OptimizationData *data = new OptimizationData(geneticAlgorithm);
+	ThreadJob job(ThreadJob::CommandThreadGeneticOptimization, data,
+		name, index);
+	mainFrame.AddJob(job);
 }
 
 //==========================================================================
-// Class:			GENETIC_OPTIMIZATION
+// Class:			GeneticOptimization
 // Function:		HaltOptimization
 //
 // Description:		Stops the GA thread.
@@ -147,12 +147,12 @@ void GENETIC_OPTIMIZATION::BeginOptimization(void)
 //		None
 //
 //==========================================================================
-void GENETIC_OPTIMIZATION::HaltOptimization(void)
+void GeneticOptimization::HaltOptimization(void)
 {
 }
 
 //==========================================================================
-// Class:			GENETIC_OPTIMIZATION
+// Class:			GeneticOptimization
 // Function:		PerformLoadFromFile
 //
 // Description:		Loads this object's data from file.
@@ -167,16 +167,16 @@ void GENETIC_OPTIMIZATION::HaltOptimization(void)
 //		None
 //
 //==========================================================================
-bool GENETIC_OPTIMIZATION::PerformLoadFromFile(void)
+bool GeneticOptimization::PerformLoadFromFile(void)
 {
 	// Perform the load
-	bool LoadSuccessful = GeneticAlgorithm->Read(PathAndFileName);
+	bool loadSuccessful = geneticAlgorithm->Read(pathAndFileName);
 
-	return LoadSuccessful;
+	return loadSuccessful;
 }
 
 //==========================================================================
-// Class:			GENETIC_OPTIMIZATION
+// Class:			GeneticOptimization
 // Function:		PerformSaveToFile
 //
 // Description:		Saves this object's data to file.
@@ -191,13 +191,13 @@ bool GENETIC_OPTIMIZATION::PerformLoadFromFile(void)
 //		None
 //
 //==========================================================================
-bool GENETIC_OPTIMIZATION::PerformSaveToFile(void)
+bool GeneticOptimization::PerformSaveToFile(void)
 {
-	return GeneticAlgorithm->Write(PathAndFileName);
+	return geneticAlgorithm->Write(pathAndFileName);
 }
 
 //==========================================================================
-// Class:			GENETIC_OPTIMIZATION
+// Class:			GeneticOptimization
 // Function:		MarkAnalysisComplete
 //
 // Description:		Decrements the counter of outstanding analyses.
@@ -212,18 +212,18 @@ bool GENETIC_OPTIMIZATION::PerformSaveToFile(void)
 //		None
 //
 //==========================================================================
-void GENETIC_OPTIMIZATION::MarkAnalysisComplete(void)
+void GeneticOptimization::MarkAnalysisComplete(void)
 {
 	// Tell the algorithm that we've completed an analysis
-	GeneticAlgorithm->MarkAnalysisComplete();
+	geneticAlgorithm->MarkAnalysisComplete();
 
 	// Also tell the panel that we've completed an analysis - this is what
 	// makes the status bars fill in
-	GAPanel->IncrementStatusBars();
+	gaPanel->IncrementStatusBars();
 }
 
 //==========================================================================
-// Class:			GENETIC_OPTIMIZATION
+// Class:			GeneticOptimization
 // Function:		GetIconHandle
 //
 // Description:		Returns the handle for this object's entry in the SystemsTree.
@@ -238,14 +238,14 @@ void GENETIC_OPTIMIZATION::MarkAnalysisComplete(void)
 //		None
 //
 //==========================================================================
-int GENETIC_OPTIMIZATION::GetIconHandle(void) const
+int GeneticOptimization::GetIconHandle(void) const
 {
 	// Return the proper icon handle
-	return SystemsTree->GetIconHandle(MAIN_TREE::OptimizationIcon);
+	return systemsTree->GetIconHandle(MainTree::OptimizationIcon);
 }
 
 //==========================================================================
-// Class:			GENETIC_OPTIMIZATION
+// Class:			GeneticOptimization
 // Function:		CompleteOptimization
 //
 // Description:		Performs the post-optimization tasks, such as updating
@@ -261,27 +261,27 @@ int GENETIC_OPTIMIZATION::GetIconHandle(void) const
 //		None
 //
 //==========================================================================
-void GENETIC_OPTIMIZATION::CompleteOptimization(void)
+void GeneticOptimization::CompleteOptimization(void)
 {
 	// Set the text on the start/stop optimization button back to "Start GA"
 	// FIXME!!!
 
 	// Update the selected car to reflect the optimization
-	GeneticAlgorithm->UpdateTargetCar();
+	geneticAlgorithm->UpdateTargetCar();
 
 	// Mark the target car as modified
-	CarToOptimize->SetModified();
+	carToOptimize->SetModified();
 }
 
 //==========================================================================
-// Class:			GENETIC_OPTIMIZATION
+// Class:			GeneticOptimization
 // Function:		SetCarToOptimize
 //
 // Description:		Sets the pointer for the car to optimized to the address
 //					specified.
 //
 // Input Arguments:
-//		None
+//		_carToOptimize	= GuiCar* to be optimized
 //
 // Output Arguments:
 //		None
@@ -290,17 +290,17 @@ void GENETIC_OPTIMIZATION::CompleteOptimization(void)
 //		None
 //
 //==========================================================================
-void GENETIC_OPTIMIZATION::SetCarToOptimize(GUI_CAR *_CarToOptimize)
+void GeneticOptimization::SetCarToOptimize(GuiCar *_carToOptimize)
 {
 	// Make sure the car exists
-	assert(_CarToOptimize);
+	assert(_carToOptimize);
 
 	// Do the assignment
-	CarToOptimize = _CarToOptimize;
+	carToOptimize = _carToOptimize;
 }
 
 //==========================================================================
-// Class:			GENETIC_OPTIMIZATION
+// Class:			GeneticOptimization
 // Function:		UpdateDisplay
 //
 // Description:		Updates the display of the panel representing this object.
@@ -315,14 +315,14 @@ void GENETIC_OPTIMIZATION::SetCarToOptimize(GUI_CAR *_CarToOptimize)
 //		None
 //
 //==========================================================================
-void GENETIC_OPTIMIZATION::UpdateDisplay(void)
+void GeneticOptimization::UpdateDisplay(void)
 {
 	// Update the display
-	GAPanel->UpdateInformation();
+	gaPanel->UpdateInformation();
 }
 
 //==========================================================================
-// Class:			GENETIC_OPTIMIZATION
+// Class:			GeneticOptimization
 // Function:		UpdateData
 //
 // Description:		Updates the display of the panel representing this object.
@@ -338,15 +338,15 @@ void GENETIC_OPTIMIZATION::UpdateDisplay(void)
 //		None
 //
 //==========================================================================
-void GENETIC_OPTIMIZATION::UpdateData(void)
+void GeneticOptimization::UpdateData(void)
 {
 	// This is called at various points during the load process due to different
 	// GUI screens being created and their requests for data.  This can result in
 	// errors.  To combat this, we check to make sure we're done loading before
 	// we continue.
-	if (!ObjectIsInitialized)
+	if (!objectIsInitialized)
 		return;
 
 	// Update the display
-	GAPanel->UpdateInformation();
+	gaPanel->UpdateInformation();
 }

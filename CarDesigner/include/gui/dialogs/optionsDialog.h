@@ -28,31 +28,31 @@ class wxRadioBox;
 
 // VVASE forward declarations
 class Convert;
-class MAIN_FRAME;
+class MainFrame;
 class Debugger;
 
-class OPTIONS_DIALOG : public wxDialog
+class OptionsDialog : public wxDialog
 {
 public:
 	// Constructor
-	OPTIONS_DIALOG(MAIN_FRAME &_MainFrame, Convert &_Converter, Kinematics::Inputs &_KinematicInputs,
-		wxWindowID Id, const wxPoint &Position, Debugger &_debugger, long Style = wxDEFAULT_DIALOG_STYLE);
+	OptionsDialog(MainFrame &_mainFrame, Convert &_converter, Kinematics::Inputs &_kinematicInputs,
+		wxWindowID id, const wxPoint &position, Debugger &_debugger, long style = wxDEFAULT_DIALOG_STYLE);
 
 	// Destructor
-	~OPTIONS_DIALOG();
+	~OptionsDialog();
 
 private:
 	// Debugger printing utility
 	Debugger &debugger;
 
 	// The object that handles the unit conversions between the input and output
-	Convert &Converter;
+	Convert &converter;
 
 	// The object that contains the options for the kinematic analysis
-	Kinematics::Inputs &KinematicInputs;
+	Kinematics::Inputs &kinematicInputs;
 
 	// The parent window
-	MAIN_FRAME &MainFrame;
+	MainFrame &mainFrame;
 
 	// Sets up the size and position of this dialog and its contents
 	void CreateControls(void);
@@ -64,43 +64,43 @@ private:
 
 	// The controls
 	// Main notebook
-	wxNotebook *Notebook;
+	wxNotebook *notebook;
 
 	// UNITS page
-	wxPanel *UnitsPage;
-	wxComboBox *UnitOfAngle;
-	wxComboBox *UnitOfDistance;
-	wxComboBox *UnitOfArea;
-	wxComboBox *UnitOfForce;
-	wxComboBox *UnitOfPressure;
-	wxComboBox *UnitOfMoment;
-	wxComboBox *UnitOfMass;
-	wxComboBox *UnitOfVelocity;
-	wxComboBox *UnitOfAcceleration;
-	wxComboBox *UnitOfInertia;
-	wxComboBox *UnitOfDensity;
-	wxComboBox *UnitOfPower;
-	wxComboBox *UnitOfEnergy;
-	wxComboBox *UnitOfTemperature;
+	wxPanel *unitsPage;
+	wxComboBox *unitOfAngle;
+	wxComboBox *unitOfDistance;
+	wxComboBox *unitOfArea;
+	wxComboBox *unitOfForce;
+	wxComboBox *unitOfPressure;
+	wxComboBox *unitOfMoment;
+	wxComboBox *unitOfMass;
+	wxComboBox *unitOfVelocity;
+	wxComboBox *unitOfAcceleration;
+	wxComboBox *unitOfInertia;
+	wxComboBox *unitOfDensity;
+	wxComboBox *unitOfPower;
+	wxComboBox *unitOfEnergy;
+	wxComboBox *unitOfTemperature;
 
 	// DIGITS page
-	wxPanel *DigitsPage;
-	wxComboBox *NumberOfDigits;
-	wxCheckBox *UseSignificantDigits;
-	wxCheckBox *UseScientificNotation;
+	wxPanel *digitsPage;
+	wxComboBox *numberOfDigits;
+	wxCheckBox *useSignificantDigits;
+	wxCheckBox *useScientificNotation;
 
 	// KINEMATIC ANALYSIS page
-	wxPanel *KinematicsPage;
-	wxRadioBox *RotationOrder;
-	wxRadioBox *SteeringInputType;
-	wxTextCtrl *CenterOfRotationX;
-	wxTextCtrl *CenterOfRotationY;
-	wxTextCtrl *CenterOfRotationZ;
-	wxTextCtrl *SimultaneousThreads;
+	wxPanel *kinematicsPage;
+	wxRadioBox *rotationOrder;
+	wxRadioBox *steeringInputType;
+	wxTextCtrl *centerOfRotationX;
+	wxTextCtrl *centerOfRotationY;
+	wxTextCtrl *centerOfRotationZ;
+	wxTextCtrl *simultaneousThreads;
 
 	// DEBUG page
-	wxPanel *DebuggerPage;
-	wxRadioBox *DebugLevel;
+	wxPanel *debuggerPage;
+	wxRadioBox *debugLevel;
 
 	// The event table
 	DECLARE_EVENT_TABLE()

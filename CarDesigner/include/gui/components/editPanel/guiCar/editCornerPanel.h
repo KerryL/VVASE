@@ -31,43 +31,43 @@ class wxGridEvent;
 class Debugger;
 class Convert;
 class Corner;
-class EDIT_SUSPENSION_NOTEBOOK;
+class EditSuspensionNotebook;
 class SuperGrid;
 
-class EDIT_CORNER_PANEL : public wxScrolledWindow
+class EditCornerPanel : public wxScrolledWindow
 {
 public:
 	// Constructor
-	EDIT_CORNER_PANEL(EDIT_SUSPENSION_NOTEBOOK &_Parent, wxWindowID id, const wxPoint& pos,
+	EditCornerPanel(EditSuspensionNotebook &_parent, wxWindowID id, const wxPoint& pos,
 		const wxSize& size, const Debugger &_debugger);
 
 	// Destructor
-	~EDIT_CORNER_PANEL();
+	~EditCornerPanel();
 
 	// Updates the information on the panel
-	void UpdateInformation(Corner *_CurrentCorner, Suspension::BarStyle BarStyle, bool HasHalfShaft);
+	void UpdateInformation(Corner *_currentCorner, Suspension::BarStyle barStyle, bool hasHalfShaft);
 
 private:
 	// Debugger message printing utility
 	const Debugger &debugger;
 
 	// The application's converter
-	const Convert &Converter;
+	const Convert &converter;
 
 	// The parent panel
-	EDIT_SUSPENSION_NOTEBOOK &Parent;
+	EditSuspensionNotebook &parent;
 
 	// The corner with which we are currently associated
-	Corner *CurrentCorner;
+	Corner *currentCorner;
 
 	// Creates the controls and positions everything within the panel
 	void CreateControls(void);
 
 	// This helps avoid unnecessary function calls to update the screen
-	int LastRowSelected;
+	int lastRowSelected;
 
 	// Event IDs
-	enum EDIT_CORNER_EVENT_ID
+	enum EditCornerEventIds
 	{
 		ComboBoxActuationAttachment = 200 + wxID_HIGHEST,
 		ComboBoxActuationType,
@@ -86,17 +86,17 @@ private:
 	// End event handlers-------------------------------------------------
 
 	// The pushrod attachment options (and 'do we want a pushrod?')
-	wxComboBox *ActuationAttachment;
-	wxComboBox *ActuationType;
+	wxComboBox *actuationAttachment;
+	wxComboBox *actuationType;
 
 	// The text-entry control
-	SuperGrid *Hardpoints;
+	SuperGrid *hardpoints;
 
 	// The controls for the static-setup options
-	wxTextCtrl *StaticCamber;
-	wxTextCtrl *StaticToe;
-	wxStaticText *CamberUnitsLabel;
-	wxStaticText *ToeUnitsLabel;
+	wxTextCtrl *staticCamber;
+	wxTextCtrl *staticToe;
+	wxStaticText *camberUnitsLabel;
+	wxStaticText *toeUnitsLabel;
 
 	// For the event table
 	DECLARE_EVENT_TABLE();

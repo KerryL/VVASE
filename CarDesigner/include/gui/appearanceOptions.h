@@ -18,8 +18,8 @@
 #define _APPEARANCE_OPTIONS_H_
 
 // CarDesigner forward declarations
-class MAIN_FRAME;
-class GUI_CAR;
+class MainFrame;
+class GuiCar;
 class Debugger;
 
 // Standard C++ headers
@@ -28,20 +28,20 @@ class Debugger;
 // CarDesigner headers
 #include "vRenderer/color.h"
 
-class APPEARANCE_OPTIONS
+class AppearanceOptions
 {
 public:
 	// Constructor
-	APPEARANCE_OPTIONS(MAIN_FRAME &_MainFrame, GUI_CAR &_Owner, const Debugger &_debugger);
+	AppearanceOptions(MainFrame &_mainFrame, GuiCar &_owner, const Debugger &_debugger);
 
 	// Destructor
-	~APPEARANCE_OPTIONS();
+	~AppearanceOptions();
 
 	// Displays a dialog for editing these options
 	void ShowAppearanceOptionsDialog(void);
 
 	// Actor colors
-	enum OBJECT_COLOR
+	enum ObjectColor
 	{
 		ColorBackground,
 		ColorGroundPlane,
@@ -66,14 +66,14 @@ public:
 	};
 
 	// The strings that describe the color options
-	static wxString GetColorString(OBJECT_COLOR _Color);
+	static wxString GetColorString(ObjectColor _color);
 
 	// For accessing the visibility options
-	inline void SetColor(OBJECT_COLOR _color, Color ColorValue) { color[_color] = ColorValue; };
-	inline Color GetColor(OBJECT_COLOR _color) const { return color[_color]; };
+	inline void SetColor(ObjectColor _color, Color colorValue) { color[_color] = colorValue; };
+	inline Color GetColor(ObjectColor _color) const { return color[_color]; };
 
 	// Visibility options
-	enum OBJECT_VISIBILITY
+	enum ObjectVisibility
 	{
 		VisibilityOrigin,
 		VisibilityGroundPlane,
@@ -100,14 +100,14 @@ public:
 	};
 
 	// The strings that describe the visibility options
-	static wxString GetVisibilityString(OBJECT_VISIBILITY _Visibility);
+	static wxString GetVisibilityString(ObjectVisibility _visibility);
 
 	// For accessing the visibility options
-	inline void SetVisibility(OBJECT_VISIBILITY _Visibility, bool VisibilityValue) { Visibility[_Visibility] = VisibilityValue; };
-	inline bool GetVisibility(OBJECT_VISIBILITY _Visibility) const { return Visibility[_Visibility]; };
+	inline void SetVisibility(ObjectVisibility _visibility, bool visibilityValue) { visibility[_visibility] = visibilityValue; };
+	inline bool GetVisibility(ObjectVisibility _visibility) const { return visibility[_visibility]; };
 
 	// Actor sizes
-	enum OBJECT_SIZE
+	enum ObjectSize
 	{
 		SizeOriginShaftDiameter,
 		SizeOriginShaftLength,
@@ -134,14 +134,14 @@ public:
 	};
 
 	// The strings that describe the visibility options
-	static wxString GetSizeString(OBJECT_SIZE _Visibility);
+	static wxString GetSizeString(ObjectSize _visibility);
 
 	// For accessing the visibility options
-	inline void SetSize(OBJECT_SIZE _Size, double SizeValue) { Size[_Size] = fabs(SizeValue); };
-	inline double GetSize(OBJECT_SIZE _Size) const { return Size[_Size]; };
+	inline void SetSize(ObjectSize _size, double sizeValue) { size[_size] = fabs(sizeValue); };
+	inline double GetSize(ObjectSize _size) const { return size[_size]; };
 
 	// Actor resolution (for round objects)
-	enum OBJECT_RESOLUTION
+	enum ObjectResolution
 	{
 		ResolutionOrigin,
 		ResolutionAArm,
@@ -156,31 +156,31 @@ public:
 	};
 
 	// The strings that describe the visibility options
-	static wxString GetResolutionString(OBJECT_RESOLUTION _Visibility);
+	static wxString GetResolutionString(ObjectResolution _visibility);
 
 	// For accessing the visibility options
-	inline void SetResolution(OBJECT_RESOLUTION _Resolution, int ResolutionValue) { Resolution[_Resolution] = ResolutionValue > 3 ? ResolutionValue : 3; };
-	inline int GetResolution(OBJECT_RESOLUTION _Resolution) const { return Resolution[_Resolution]; };
+	inline void SetResolution(ObjectResolution _resolution, int resolutionValue) { resolution[_resolution] = resolutionValue > 3 ? resolutionValue : 3; };
+	inline int GetResolution(ObjectResolution _resolution) const { return resolution[_resolution]; };
 
 	// File I/O methods
-	void Write(std::ofstream *OutFile);
-	void Read(std::ifstream *InFile, int FileVersion);
+	void Write(std::ofstream *outFile);
+	void Read(std::ifstream *inFile, int fileVersion);
 
 private:
 	// The debug printing utility
 	const Debugger &debugger;
 
 	// The main application window
-	MAIN_FRAME &MainFrame;
+	MainFrame &mainFrame;
 
 	// The owner of these attributes
-	GUI_CAR &Owner;
+	GuiCar &owner;
 
 	// This object's data
 	Color color[ColorCount];
-	bool Visibility[VisibilityCount];
-	double Size[SizeCount];
-	int Resolution[ResolutionCount];
+	bool visibility[VisibilityCount];
+	double size[SizeCount];
+	int resolution[ResolutionCount];
 };
 
 #endif// _APPEARANCE_OPTIONS_H_

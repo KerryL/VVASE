@@ -45,9 +45,9 @@ IMPLEMENT_APP(VVASEApp);
 //		None
 //
 //==========================================================================
-const wxString VVASEApp::HostName = _T("localhost");
-const wxString VVASEApp::ServiceName = _T("/tmp/VVASE_DDE");
-const wxString VVASEApp::ConnectionTopic = _T("VVASE: Open File");
+const wxString VVASEApp::hostName = _T("localhost");
+const wxString VVASEApp::serviceName = _T("/tmp/VVASE_DDE");
+const wxString VVASEApp::connectionTopic = _T("VVASE: Open File");
 
 //==========================================================================
 // Class:			VVASEApp
@@ -72,29 +72,29 @@ bool VVASEApp::OnInit()
 	SetVendorName(_T("Kerry Loux"));
 
 	// Create the single instance checker
-	SingleInstanceChecker = new wxSingleInstanceChecker(GetAppName() + _T(":") + wxGetUserId());
+	singleInstanceChecker = new wxSingleInstanceChecker(GetAppName() + _T(":") + wxGetUserId());
 
 	// Initialize the dynamic exchange server to NULL
-	DataExchangeServer = NULL;
+	dataExchangeServer = NULL;
 
 	// If we have command line arguments (assume they are file names) and
 	// another instance of this application is already running - pass the
 	// filenames to the other application
-	if (VVASEApp::argc > 1 && SingleInstanceChecker->IsAnotherRunning())
+	if (VVASEApp::argc > 1 && singleInstanceChecker->IsAnotherRunning())
 	{
 		// Another instance is already active - pass the file name to that instance to open
 		// Create a client object to connect to the server
-		IPC_CLIENT Client;
-		if (Client.Connect(HostName, ServiceName, ConnectionTopic))
+		IPCClient client;
+		if (client.Connect(hostName, serviceName, connectionTopic))
 		{
 			// Send the file names to the server
 			int i;
 			for (i = 1; i < argc; i++)
 				// Don't bother checking for whether the poke was successfully recieved or not
-				Client.GetConnection()->Poke(_T(argv[i]), NULL);
+				client.GetConnection()->Poke(_T(argv[i]), NULL);
 		}
 
-		Client.Disconnect();
+		client.Disconnect();
 
 		DeleteDynamicMemory();
 		return false;
@@ -102,23 +102,23 @@ bool VVASEApp::OnInit()
 
 	// Proceed with actions for a "normal" execution - display the main form, etc.
 	// Create the MainFrame object - this is the parent for all VVASE objects
-	MainFrame = new MAIN_FRAME();
+	mainFrame = new MainFrame();
 
 	// Make sure the MainFrame was successfully created
-	if (MainFrame == NULL)
+	if (mainFrame == NULL)
 		return false;
 
 	// Make the window visible
-	MainFrame->Show();
+	mainFrame->Show();
 
 	// Bring the window to the top
-	SetTopWindow(MainFrame);
+	SetTopWindow(mainFrame);
 
 	// If we had any command line arguments (file to open), open them now
 	if (argc > 1)
 	{
 		// Wait for the main frame to finish initialization
-		while (MainFrame->JobsPending())
+		while (mainFrame->JobsPending())
 		{
 			wxSafeYield();
 			wxMilliSleep(50);
@@ -127,16 +127,16 @@ bool VVASEApp::OnInit()
 		// Load all of the files
 		int i;
 		for (i = 1; i < argc; i++)
-			MainFrame->LoadFile(argv[i]);
+			mainFrame->LoadFile(argv[i]);
 	}
 	
 	// Start the data exchange server
-	DataExchangeServer = new IPC_SERVER();
-	if (!DataExchangeServer->Create(ServiceName))
+	dataExchangeServer = new IPCServer();
+	if (!dataExchangeServer->Create(serviceName))
 	{
 		// Server creation failed - delete the server object
-		delete DataExchangeServer;
-		DataExchangeServer = NULL;
+		delete dataExchangeServer;
+		dataExchangeServer = NULL;
 	}
 
 	return true;
@@ -184,10 +184,10 @@ int VVASEApp::OnExit()
 void VVASEApp::DeleteDynamicMemory(void)
 {
 	// Delete the single instance checker
-	delete SingleInstanceChecker;
-	SingleInstanceChecker = NULL;
+	delete singleInstanceChecker;
+	singleInstanceChecker = NULL;
 	
 	// Delete the data exchange server
-	delete DataExchangeServer;
-	DataExchangeServer = NULL;
+	delete dataExchangeServer;
+	dataExchangeServer = NULL;
 }

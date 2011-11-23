@@ -21,21 +21,21 @@
 #include <wx/dnd.h>
 
 // VVASE forward declarations
-class MAIN_FRAME;
+class MainFrame;
 
 // The main class declaration
 class DropTarget : public wxFileDropTarget
 {
 public:
 	// Constructor
-	DropTarget(MAIN_FRAME &_MainFrame);
+	DropTarget(MainFrame &_mainFrame);
 
 	// Destructor
 	~DropTarget();
 
 private:
 	// Reference to main frame
-	MAIN_FRAME &MainFrame;
+	MainFrame &mainFrame;
 
 	// Required override of virtual OnDropFiles handler
 	virtual bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString &filenames);

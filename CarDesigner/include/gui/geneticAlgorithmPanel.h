@@ -26,18 +26,18 @@ class wxGridEvent;
 class wxGauge;
 
 // VVASE forward declarations
-class MAIN_FRAME;
+class MainFrame;
 class Convert;
-class GENETIC_OPTIMIZATION;
+class GeneticOptimization;
 
-class GENETIC_ALGORITHM_PANEL : public wxScrolledWindow
+class GeneticAlgorithmPanel : public wxScrolledWindow
 {
 public:
 	// Constructor
-	GENETIC_ALGORITHM_PANEL(MAIN_FRAME &_MainFrame, GENETIC_OPTIMIZATION &_Optimization);
+	GeneticAlgorithmPanel(MainFrame &_mainFrame, GeneticOptimization &_optimization);
 
 	// Destructor
-	~GENETIC_ALGORITHM_PANEL();
+	~GeneticAlgorithmPanel();
 
 	// Updates the GA parameters
 	void UpdateInformation(void);
@@ -47,13 +47,13 @@ public:
 
 private:
 	// Application's converter object
-	const Convert &Converter;
+	const Convert &converter;
 
 	// The optimization object that we represent
-	GENETIC_OPTIMIZATION &Optimization;
+	GeneticOptimization &optimization;
 
 	// The main application object
-	MAIN_FRAME &MainFrame;
+	MainFrame &mainFrame;
 
 	// Updates various parts of the panel's display
 	void UpdateSelectableCars(void);
@@ -63,40 +63,40 @@ private:
 	void ResetStatusBars(void);
 
 	// Creates a string representing the input configuration
-	wxString GetInputString(const Kinematics::Inputs &Inputs,
-		const Kinematics::Inputs *SecondInputs = NULL) const;
+	wxString GetInputString(const Kinematics::Inputs &inputs,
+		const Kinematics::Inputs *secondInputs = NULL) const;
 
 	// Updates the GA object so it matches the current input parameters
-	bool UpdateGAParameters(const bool &ShowWarnings = true);
+	bool UpdateGAParameters(const bool &showWarnings = true);
 
 	// Method for creating the controls
 	void CreateControls(void);
 
 	// Controls
-	wxButton *AddGene;
-	wxButton *EditGene;
-	wxButton *RemoveGene;
-	wxButton *AddGoal;
-	wxButton *EditGoal;
-	wxButton *RemoveGoal;
-	wxButton *StartStopOptimization;
+	wxButton *addGene;
+	wxButton *editGene;
+	wxButton *removeGene;
+	wxButton *addGoal;
+	wxButton *editGoal;
+	wxButton *removeGoal;
+	wxButton *startStopOptimization;
 
-	wxComboBox *SelectedCar;
+	wxComboBox *selectedCar;
 
-	wxGrid *GeneList;
-	wxGrid *GoalList;
+	wxGrid *geneList;
+	wxGrid *goalList;
 
-	wxGauge *GenerationProgress;
-	wxGauge *OverallProgress;
+	wxGauge *generationProgress;
+	wxGauge *overallProgress;
 
-	wxTextCtrl *PopulationSize;
-	wxTextCtrl *GenerationLimit;
-	wxTextCtrl *ElitismFraction;
-	wxTextCtrl *CrossoverPoint;
-	wxTextCtrl *MutationProbability;
+	wxTextCtrl *populationSize;
+	wxTextCtrl *generationLimit;
+	wxTextCtrl *elitismFraction;
+	wxTextCtrl *crossoverPoint;
+	wxTextCtrl *mutationProbability;
 
 	// Event IDs
-	enum BUTTON_EVENT_ID
+	enum ButtonEventId
 	{
 		IdAddGene = wxID_HIGHEST + 1200,
 		IdRemoveGene,

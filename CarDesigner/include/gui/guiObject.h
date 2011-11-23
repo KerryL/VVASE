@@ -29,38 +29,38 @@
 #include <wx/treebase.h>
 
 // CarDesigner forward declarations
-class GUI_CAR;
-class ITERATION;
-class MAIN_TREE;
-class MAIN_NOTEBOOK;
-class MAIN_FRAME;
+class GuiCar;
+class Iteration;
+class MainTree;
+class MainNotebook;
+class MainFrame;
 class Debugger;
 class RenderWindow;
 class Primitive;
 
-class GUI_OBJECT
+class GuiObject
 {
 public:
 	// Constructor
-	GUI_OBJECT(MAIN_FRAME &_MainFrame, const Debugger &_debugger,
-		wxString _PathAndFileName = wxEmptyString);
+	GuiObject(MainFrame &_mainFrame, const Debugger &_debugger,
+		wxString _pathAndFileName = wxEmptyString);
 
 	// Destructor
-	virtual ~GUI_OBJECT();
+	virtual ~GuiObject();
 
 	// Possible types of data contained in a GUI_OBJECT
-	enum ITEM_TYPE
+	enum ItemType
 	{
-		TYPE_CAR,
-		TYPE_ITERATION,
-		TYPE_OPTIMIZATION,
+		TypeCar,
+		TypeIteration,
+		TypeOptimization,
 
-		TYPE_NONE// Indicates an object doesn't exist
+		TypeNone// Indicates an object doesn't exist
 	};
 
 	// Returns true of false depending on whether or not this item is selected in
 	// the systems tree
-	bool IsThisObjectSelected(wxTreeItemId Selected) const;
+	bool IsThisObjectSelected(wxTreeItemId selected) const;
 
 	// Initialization of these objects requires some calls to pure virtual functions, which
 	// causes problems.  To avoid this, we make all of those calls here, and call this from
@@ -68,38 +68,38 @@ public:
 	void Initialize(void);
 
 	// Checks to see if the object has been saved, asks for user confirmation, etc.
-	bool Close(bool NotebookPageAlreadyClosed = false);
+	bool Close(bool notebookPageAlreadyClosed = false);
 
 	// Gets/sets a flag to let us know if the object has changed since it was last saved
-	inline bool GetModified(void) const { return ModifiedSinceLastSave; };
+	inline bool GetModified(void) const { return modifiedSinceLastSave; };
 	void SetModified(void);
 
 	// Returns the object that draws this on the screen
 	inline wxWindow *GetNotebookTab(void) const { return notebookTab; };
 
 	// Generates an image file of the render window contents
-	bool WriteImageToFile(wxString PathAndFileName);
+	bool WriteImageToFile(wxString pathAndFileName);
 
 	// Private data accessors
-	inline wxTreeItemId GetTreeItemId(void) const { return TreeID; };
+	inline wxTreeItemId GetTreeItemId(void) const { return treeID; };
 
 	// Returns this object's type (mandatory overload)
-	virtual ITEM_TYPE GetType(void) const = 0;
+	virtual ItemType GetType(void) const = 0;
 
 	// Return pointers to the main GUI components of this application
-	inline MAIN_FRAME& GetMainFrame(void) const { return MainFrame; };
+	inline MainFrame& GetMainFrame(void) const { return mainFrame; };
 
 	// Gets/sets the index for this object
-	inline int GetIndex(void) const { return Index; };
-	inline void SetIndex(int _Index) { Index = _Index; };
+	inline int GetIndex(void) const { return index; };
+	inline void SetIndex(int _index) { index = _index; };
 
 	// Gets/sets the name for this object
-	wxString GetName(void) const { return Name; };
+	wxString GetName(void) const { return name; };
 	wxString GetCleanName(void) const;
-	void SetName(wxString _Name);
+	void SetName(wxString _name);
 
 	// Calls the write methods for the data associated with this object
-	bool SaveToFile(bool SaveAsNewFileName = false);
+	bool SaveToFile(bool saveAsNewFileName = false);
 
 	// Calls the update function for the data associated with this object
 	// This method (usually) creates a job for a worker thread
@@ -113,14 +113,14 @@ public:
 	void SelectThisObjectInTree(void);
 
 	// Returns the status of this object
-	bool IsInitialized(void) { return ObjectIsInitialized; };
+	bool IsInitialized(void) { return objectIsInitialized; };
 
 protected:
 	// Debugger message printing utility
 	const Debugger &debugger;
 
 	// The objects name (for display purposes)
-	wxString Name;
+	wxString name;
 
 	// Performs the saving and loading to/from file
 	virtual bool PerformLoadFromFile(void) = 0;
@@ -130,7 +130,7 @@ protected:
 	bool LoadFromFile(void);
 
 	// Flag indicating whether or not the initialization routine is complete
-	bool ObjectIsInitialized;
+	bool objectIsInitialized;
 
 	// Strips down file names and paths to get the object name
 	wxString GetNameFromFileName(void);
@@ -140,25 +140,25 @@ protected:
 
 	// The object's index
 	// (associated with the list in the MAIN_FRAME object and the MAIN_NOTEBOOK's pages)
-	int Index;
+	int index;
 
 	// For referencing this object in the SystemsTree
-	wxTreeItemId TreeID;
+	wxTreeItemId treeID;
 
 	// Pointers to the main GUI components for this application
-	MAIN_TREE *SystemsTree;
-	MAIN_FRAME &MainFrame;
-	MAIN_NOTEBOOK *Notebook;
+	MainTree *systemsTree;
+	MainFrame &mainFrame;
+	MainNotebook *notebook;
 
 	// The object to be added to the notebook
 	wxWindow *notebookTab;
 
 	// Flag indicating whether or not this object has been modified since it was last saved
-	bool ModifiedSinceLastSave;
+	bool modifiedSinceLastSave;
 
 	// The path and filename pointing to the location of this object
 	// on the hard disk (or wxEmptyString if this hasn't been saved)
-	wxString PathAndFileName;
+	wxString pathAndFileName;
 
 	// Verifies that no other open object has the same filename
 	bool VerifyUniqueness(void);

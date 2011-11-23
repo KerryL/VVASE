@@ -24,7 +24,7 @@
 // Description:		Constructor for DropTarget class.
 //
 // Input Arguments:
-//		_MainFrame	= &MAIN_FRAME, reference to main application window
+//		_mainFrame	= &MainFrame, reference to main application window
 //
 // Output Arguments:
 //		None
@@ -33,7 +33,7 @@
 //		None
 //
 //==========================================================================
-DropTarget::DropTarget(MAIN_FRAME &_MainFrame) : MainFrame(_MainFrame)
+DropTarget::DropTarget(MainFrame &_mainFrame) : mainFrame(_mainFrame)
 {
 }
 
@@ -82,7 +82,7 @@ bool DropTarget::OnDropFiles(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
 	// Load each file
 	unsigned int i;
 	for (i = 0; i < filenames.Count(); i++)
-		MainFrame.LoadFile(filenames[i]);
+		mainFrame.LoadFile(filenames[i]);
 
 	return true;
 }

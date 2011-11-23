@@ -39,37 +39,37 @@ class Convert;
 class Car;
 class PlotPanel;
 
-class ITERATION : public GUI_OBJECT
+class Iteration : public GuiObject
 {
 public:
 	// Constructor
-	ITERATION(MAIN_FRAME &_MainFrame, const Debugger &_debugger,
-		wxString _PathAndFileName = wxEmptyString);
+	Iteration(MainFrame &_mainFrame, const Debugger &_debugger,
+		wxString _pathAndFileName = wxEmptyString);
 
 	// Destructor
-	~ITERATION();
+	~Iteration();
 
 	// Structure that defines the starting and stopping points for
 	// this analysis
-	struct RANGE
+	struct Range
 	{
-		double StartPitch;		// [rad]
-		double StartRoll;		// [rad]
-		double StartHeave;		// [in]
-		double StartRackTravel;	// [in]
-		double EndPitch;		// [rad]
-		double EndRoll;			// [rad]
-		double EndHeave;		// [in]
-		double EndRackTravel;	// [in]
+		double startPitch;		// [rad]
+		double startRoll;		// [rad]
+		double startHeave;		// [in]
+		double startRackTravel;	// [in]
+		double endPitch;		// [rad]
+		double endRoll;			// [rad]
+		double endHeave;		// [in]
+		double endRackTravel;	// [in]
 	};
 
 	// For getting/setting the number of points in between the start and stop
-	inline int GetNumberOfPoints(void) const { return NumberOfPoints; };
-	void SetNumberOfPoints(const int &_NumberOfPoints);
+	inline int GetNumberOfPoints(void) const { return numberOfPoints; };
+	void SetNumberOfPoints(const int &_numberOfPoints);
 
 	// For associating/disassociating cars with this analysis
-	void AddCar(GUI_CAR *ToAdd);
-	void RemoveCar(GUI_CAR *ToRemove);
+	void AddCar(GuiCar *toAdd);
+	void RemoveCar(GuiCar *toRemove);
 	void RemoveAllCars(void);
 
 	// Runs the kinematic analysis for all associated cars (mandatory overload)
@@ -79,28 +79,28 @@ public:
 	void UpdateDisplay(void);
 
 	// Accessors for the range object
-	inline ITERATION::RANGE GetRange(void) const { return Range; };
-	void SetRange(const ITERATION::RANGE &_Range);
+	inline Iteration::Range GetRange(void) const { return range; };
+	void SetRange(const Iteration::Range &_range);
 
 	// For exporting the data to a comma or tab delimited text file
-	void ExportDataToFile(wxString PathAndFileName) const;
+	void ExportDataToFile(wxString pathAndFileName) const;
 
 	// Sets/gets the auto-association flag
-	void SetAutoAssociate(bool AutoAssociate);
-	inline bool GetAutoAssociate(void) const { return AssociatedWithAllOpenCars; };
+	void SetAutoAssociate(bool autoAssociate);
+	inline bool GetAutoAssociate(void) const { return associatedWithAllOpenCars; };
 
 	// Displays a dialog showing all of the open cars, and allows the user to select them
 	void ShowAssociatedCarsDialog(void);
 
 	// Returns the number of associated cars
-	inline int GetAssociatedCarCount(void) const { return AssociatedCars.GetCount(); };
+	inline int GetAssociatedCarCount(void) const { return associatedCars.GetCount(); };
 
 	// Returns this object's type (mandatory overload)
-	ITEM_TYPE GetType(void) const { return TYPE_ITERATION; };
+	ItemType GetType(void) const { return TypeIteration; };
 
 	// This is the list of possible plots that we can display
 	// Enumeration picks up where the KINEMATIC_OUTPUTS class left off
-	enum PLOT_ID
+	enum PlotID
 	{
 		Pitch = KinematicOutputs::NumberOfOutputScalars,
 		Roll,
@@ -111,11 +111,11 @@ public:
 	};
 
 	// These are the accessors for getting/setting what plots are shown
-	inline bool GetActivePlot(PLOT_ID PlotID) const { return PlotActive[PlotID]; };
-	void SetActivePlot(PLOT_ID PlotID, const bool &Active);
+	inline bool GetActivePlot(PlotID plotID) const { return plotActive[plotID]; };
+	void SetActivePlot(PlotID plotID, const bool &active);
 
 	// For specifying the dependant variable
-	enum AXIS_TYPE
+	enum AxisType
 	{
 		AxisTypePitch,
 		AxisTypeRoll,
@@ -126,39 +126,39 @@ public:
 	};
 
 	// For accessing the X-Axis data
-	inline AXIS_TYPE GetXAxisType(void) const { return XAxisType; };
-	void SetXAxisType(AXIS_TYPE _XAxisType);
+	inline AxisType GetXAxisType(void) const { return xAxisType; };
+	void SetXAxisType(AxisType _xAxisType);
 
 	// For accessing the Y-Axis data
-	inline AXIS_TYPE GetYAxisType(void) const { return YAxisType; };
-	void SetYAxisType(AXIS_TYPE _YAxisType);
+	inline AxisType GetYAxisType(void) const { return yAxisType; };
+	void SetYAxisType(AxisType _yAxisType);
 
 	// For accessing the Z-Axis data
-	double GetDataValue(int AssociatedCarIndex, int Point, PLOT_ID Id) const;
+	double GetDataValue(int associatedCarIndex, int point, PlotID id) const;
 
 	// Decrements the number of pending jobs for this object
 	void MarkAnalysisComplete(void);
 
 	// For retrieving the strings associated with the plots and their units
-	wxString GetPlotName(PLOT_ID Id) const;
-	wxString GetPlotUnits(PLOT_ID Id) const;
+	wxString GetPlotName(PlotID id) const;
+	wxString GetPlotUnits(PlotID id) const;
 
 	// Accessors for plot display objects
-	void SetAutoGenerateTitle(const bool &_GenerateTitleFromFileName) { GenerateTitleFromFileName = _GenerateTitleFromFileName; };
-	void SetTitle(const wxString &_Title) { Title = _Title; };
-	void SetAutoGenerateXLabel(const bool &_AutoGenerateXLabel) { AutoGenerateXLabel = _AutoGenerateXLabel; };
-	void SetXLabel(const wxString &_XLabel) { XLabel = _XLabel; };
-	void SetAutoGenerateZLabel(const bool &_AutoGenerateZLabel) { AutoGenerateZLabel = _AutoGenerateZLabel; };
-	void SetZLabel(const wxString &_ZLabel) { ZLabel = _ZLabel; };
-	void SetShowGridLines(const bool &_ShowGridLines) { ShowGridLines = _ShowGridLines; };
+	void SetAutoGenerateTitle(const bool &_generateTitleFromFileName) { generateTitleFromFileName = _generateTitleFromFileName; };
+	void SetTitle(const wxString &_title) { title = _title; };
+	void SetAutoGenerateXLabel(const bool &_autoGenerateXLabel) { autoGenerateXLabel = _autoGenerateXLabel; };
+	void SetXLabel(const wxString &_xLabel) { xLabel = _xLabel; };
+	void SetAutoGenerateZLabel(const bool &_autoGenerateZLabel) { autoGenerateZLabel = _autoGenerateZLabel; };
+	void SetZLabel(const wxString &_zLabel) { zLabel = _zLabel; };
+	void SetShowGridLines(const bool &_showGridLines) { showGridLines = _showGridLines; };
 
-	bool GetAutoGenerateTitle(void) const { return GenerateTitleFromFileName; };
-	wxString GetTitle(void) const { return Title; };
-	bool GetAutoGenerateXLabel(void) const { return AutoGenerateXLabel; };
-	wxString GetXLabel(void) const { return XLabel; };
-	bool GetAutoGenerateZLabel(void) const { return AutoGenerateZLabel; };
-	wxString GetZLabel(void) const { return ZLabel; };
-	bool GetShowGridLines(void) const { return ShowGridLines; };
+	bool GetAutoGenerateTitle(void) const { return generateTitleFromFileName; };
+	wxString GetTitle(void) const { return title; };
+	bool GetAutoGenerateXLabel(void) const { return autoGenerateXLabel; };
+	wxString GetXLabel(void) const { return xLabel; };
+	bool GetAutoGenerateZLabel(void) const { return autoGenerateZLabel; };
+	wxString GetZLabel(void) const { return zLabel; };
+	bool GetShowGridLines(void) const { return showGridLines; };
 
 	// Methods for reading and writing default configuration settings
 	void ReadDefaultsFromConfig(void);
@@ -166,14 +166,14 @@ public:
 
 private:
 	// The application's conversion object
-	const Convert &Converter;
+	const Convert &converter;
 
 	// This object's start and stop points
-	RANGE Range;
+	Range range;
 
 	// The number of points at which the analysis will be performed
 	// (per axis for iterations with multiple independent variables)
-	int NumberOfPoints;
+	int numberOfPoints;
 
 	// Gets the icon handle for this object's icon
 	int GetIconHandle(void) const;
@@ -186,48 +186,48 @@ private:
 	void UpdateAutoAssociate(void);
 
 	// Checks to see if the specified car is one with which this object is associated
-	bool AssociatedWithCar(GUI_CAR *Test) const;
+	bool AssociatedWithCar(GuiCar *test) const;
 
 	// The data for this analysis - we need one list of outputs for every car
 	// Every list of outputs has one entry for every point within our range
-	ManagedList<ManagedList< KinematicOutputs> > OutputLists;
+	ManagedList<ManagedList< KinematicOutputs> > outputLists;
 
 	// List of cars that are associated with this analysis
-	ObjectList<GUI_CAR> AssociatedCars;
+	ObjectList<GuiCar> associatedCars;
 
 	// Array of working cars to use for the analyses
-	Car **WorkingCarArray;
-	int NumberOfWorkingCars;
+	Car **workingCarArray;
+	int numberOfWorkingCars;
 
 	// This array holds the values against which the data can be plotted
 	// (user gets to choose what the X axis should be)
-	double *AxisValuesPitch;//		[rad]
-	double *AxisValuesRoll;//		[rad]
-	double *AxisValuesHeave;//		[in]
-	double *AxisValuesRackTravel;//	[in]
+	double *axisValuesPitch;//		[rad]
+	double *axisValuesRoll;//		[rad]
+	double *axisValuesHeave;//		[in]
+	double *axisValuesRackTravel;//	[in]
 
 	// Specifies the independent variables for the plot
-	AXIS_TYPE XAxisType;
-	AXIS_TYPE YAxisType;
+	AxisType xAxisType;
+	AxisType yAxisType;
 
 	// Clears out all of the lists
 	void ClearAllLists(void);
 
 	// Flag indicating whether or not this object should automatically associate
 	// with all open GUI_CAR objects
-	bool AssociatedWithAllOpenCars;
+	bool associatedWithAllOpenCars;
 
 	// The flags indicating what plots are active
-	bool PlotActive[NumberOfPlots];
+	bool plotActive[NumberOfPlots];
 
 	// Plot display objects
-	bool GenerateTitleFromFileName;
-	wxString Title;
-	bool AutoGenerateXLabel;
-	wxString XLabel;
-	bool AutoGenerateZLabel;
-	wxString ZLabel;
-	bool ShowGridLines;
+	bool generateTitleFromFileName;
+	wxString title;
+	bool autoGenerateXLabel;
+	wxString xLabel;
+	bool autoGenerateZLabel;
+	wxString zLabel;
+	bool showGridLines;
 
 	// Applies user-defined plot settings
 	void ApplyPlotFormatting(void);
@@ -236,23 +236,23 @@ private:
 	double ConvertValue(KinematicOutputs::OutputsComplete _output);
 
 	// File header information
-	struct FILE_HEADER_INFO
+	struct FileHeaderInfo
 	{
-		int FileVersion;
+		int fileVersion;
 	};
 
 	// Writes and reads the file header information for saved cars
-	void WriteFileHeader(std::ofstream *OutFile);
-	FILE_HEADER_INFO ReadFileHeader(std::ifstream *InFile);
+	void WriteFileHeader(std::ofstream *outFile);
+	FileHeaderInfo ReadFileHeader(std::ifstream *inFile);
 
 	// Our current file version
-	static const int CurrentFileVersion;
+	static const int currentFileVersion;
 
 	// Synchronization object
 	InverseSemaphore inverseSemaphore;
 	// Flag indicating that this object's analyses are complete and another analysis can be started
-	bool AnalysesDisplayed;// FIXME:  I'd like to see these go away - are they needed?  Is there a cleaner way to handle it?
-	bool SecondAnalysisPending;
+	bool analysesDisplayed;// FIXME:  I'd like to see these go away - are they needed?  Is there a cleaner way to handle it?
+	bool secondAnalysisPending;
 
 	PlotPanel *plotPanel;
 };

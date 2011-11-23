@@ -20,40 +20,40 @@
 #include <wx/wx.h>
 
 // VVASE forward declarations
-class EDIT_PANEL;
+class EditPanel;
 class MassProperties;
 
-class EDIT_MASS_PANEL : public wxScrolledWindow
+class EditMassPanel : public wxScrolledWindow
 {
 public:
 	// Constructor
-	EDIT_MASS_PANEL(EDIT_PANEL &_Parent, wxWindowID id, const wxPoint& pos,
+	EditMassPanel(EditPanel &_Parent, wxWindowID id, const wxPoint& pos,
 		const wxSize& size, const Debugger &_debugger);
 
 	// Destructor
-	~EDIT_MASS_PANEL();
+	~EditMassPanel();
 
 	// Updates the information on the panel
-	void UpdateInformation(MassProperties *_CurrentMassProperties);
+	void UpdateInformation(MassProperties *_currentMassProperties);
 
 private:
 	// Debugger message printing utility
 	const Debugger &debugger;
 
 	// The application's converter
-	const Convert &Converter;
+	const Convert &converter;
 
 	// The parent panel
-	EDIT_PANEL &Parent;
+	EditPanel &parent;
 
 	// The data with which we are currently associated
-	MassProperties *CurrentMassProperties;
+	MassProperties *currentMassProperties;
 
 	// Creates the controls and positions everything within the panel
 	void CreateControls(void);
 
 	// Event IDs
-	enum EDIT_MASS_PROPERTIES_EVENT_ID
+	enum EditMassPropertiesEventIds
 	{
 		TextBoxIxx = 400 + wxID_HIGHEST,
 		TextBoxIyy,
@@ -73,26 +73,26 @@ private:
 	// End event handlers-------------------------------------------------
 
 	// The text box controls
-	wxTextCtrl *Ixx;
-	wxTextCtrl *Iyy;
-	wxTextCtrl *Izz;
-	wxTextCtrl *Ixy;
-	wxTextCtrl *Ixz;
-	wxTextCtrl *Iyz;
+	wxTextCtrl *ixx;
+	wxTextCtrl *iyy;
+	wxTextCtrl *izz;
+	wxTextCtrl *ixy;
+	wxTextCtrl *ixz;
+	wxTextCtrl *iyz;
 
-	wxTextCtrl *Mass;
-	wxTextCtrl *CenterOfGravityX;
-	wxTextCtrl *CenterOfGravityY;
-	wxTextCtrl *CenterOfGravityZ;
+	wxTextCtrl *mass;
+	wxTextCtrl *centerOfGravityX;
+	wxTextCtrl *centerOfGravityY;
+	wxTextCtrl *centerOfGravityZ;
 
 	// The static text controls
-	wxStaticText *InertiaUnitsLabel;
-	wxStaticText *MassUnitsLabel;
-	wxStaticText *CoGUnitsLabel;
+	wxStaticText *inertiaUnitsLabel;
+	wxStaticText *massUnitsLabel;
+	wxStaticText *cogUnitsLabel;
 
-	wxStaticText *Iyx;
-	wxStaticText *Izx;
-	wxStaticText *Izy;
+	wxStaticText *iyx;
+	wxStaticText *izx;
+	wxStaticText *izy;
 
 	// For the event table
 	DECLARE_EVENT_TABLE();

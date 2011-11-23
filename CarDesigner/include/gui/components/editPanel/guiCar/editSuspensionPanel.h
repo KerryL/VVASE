@@ -29,20 +29,20 @@ class Suspension;
 class Convert;
 class Vector;
 class SuperGrid;
-class EDIT_SUSPENSION_NOTEBOOK;
+class EditSuspensionNotebook;
 
-class EDIT_SUSPENSION_PANEL : public wxScrolledWindow
+class EditSuspensionPanel : public wxScrolledWindow
 {
 public:
 	// Constructor
-	EDIT_SUSPENSION_PANEL(EDIT_SUSPENSION_NOTEBOOK &_Parent, wxWindowID id, const wxPoint& pos,
+	EditSuspensionPanel(EditSuspensionNotebook &_parent, wxWindowID id, const wxPoint& pos,
 		const wxSize& size, const Debugger &_debugger);
 
 	// Destructor
-	~EDIT_SUSPENSION_PANEL();
+	~EditSuspensionPanel();
 
 	// Updates the information on the panel
-	void UpdateInformation(Suspension *_CurrentSuspension);
+	void UpdateInformation(Suspension *_currentSuspension);
 	void UpdateInformation(void);
 
 private:
@@ -50,22 +50,22 @@ private:
 	const Debugger &debugger;
 
 	// The application's converter
-	const Convert &Converter;
+	const Convert &converter;
 
 	// The parent panel
-	EDIT_SUSPENSION_NOTEBOOK &Parent;
+	EditSuspensionNotebook &parent;
 
 	// The suspension with which we are currently associated
-	Suspension *CurrentSuspension;
+	Suspension *currentSuspension;
 
 	// Creates the controls and positions everything within the panel
 	void CreateControls(void);
 
 	// This helps avoid unnecessary function calls to update the screen
-	int LastRowSelected;
+	int lastRowSelected;
 
 	// Enumeration for event IDs
-	enum EDIT_SUSPENSION_GENERAL_EVENT_ID
+	enum EditSuspensionEventId
 	{
 		CheckBoxIsSymmetric = 300 + wxID_HIGHEST,
 		CheckBoxFrontHasThirdSpring,
@@ -86,16 +86,16 @@ private:
 	// End event handlers-------------------------------------------------
 
 	// The text-entry control
-	SuperGrid *Hardpoints;
+	SuperGrid *hardpoints;
 
 	// Checkboxes
-	wxCheckBox *IsSymmetric;
-	wxCheckBox *FrontHasThirdSpring;
-	wxCheckBox *RearHasThirdSpring;
+	wxCheckBox *isSymmetric;
+	wxCheckBox *frontHasThirdSpring;
+	wxCheckBox *rearHasThirdSpring;
 
 	// Style drop-down menus
-	wxComboBox *FrontBarStyle;
-	wxComboBox *RearBarStyle;
+	wxComboBox *frontBarStyle;
+	wxComboBox *rearBarStyle;
 
 	// For the event table
 	DECLARE_EVENT_TABLE();

@@ -28,86 +28,86 @@ class wxCombo;
 class wxCheckBox;
 
 // VVASE forward declarations
-class MAIN_FRAME;
-class MAIN_TREE;
+class MainFrame;
+class MainTree;
 class Debugger;
-class EDIT_AERODYNAMICS_PANEL;
-class EDIT_BRAKES_PANEL;
-class EDIT_DIFFERENTIAL_PANEL;
-class EDIT_DRIVETRAIN_PANEL;
-class EDIT_ENGINE_PANEL;
-class EDIT_MASS_PANEL;
-class EDIT_SUSPENSION_NOTEBOOK;
-class EDIT_TIRES_PANEL;
-class EDIT_ITERATION_NOTEBOOK;
+class EditAerodynamicsPanel;
+class EditBrakesPanel;
+class EditDifferentialPanel;
+class EditDrivetrainPanel;
+class EditEnginePanel;
+class EditMassPanel;
+class EditSuspensionNotebook;
+class EditTiresPanel;
+class EditIterationNotebook;
 
-class EDIT_PANEL : public wxPanel
+class EditPanel : public wxPanel
 {
 public:
 	// Constructor
-	EDIT_PANEL(MAIN_FRAME &_MainFrame, wxWindowID id, const wxPoint& pos,
+	EditPanel(MainFrame &_mainFrame, wxWindowID id, const wxPoint& pos,
 		const wxSize& size, const Debugger &_debugger);
 
 	// Destructor
-	~EDIT_PANEL();
+	~EditPanel();
 
 	// Updates the information on the panel
-	void UpdateInformation(GUI_OBJECT *_CurrentObject);
+	void UpdateInformation(GuiObject *_currentObject);
 	void UpdateInformation(void);
 
 	// Retrieves this object's parent
-	inline MAIN_FRAME &GetMainFrame(void) { return MainFrame; };
+	inline MainFrame &GetMainFrame(void) { return mainFrame; };
 
 	// Retrieves the current object
-	inline GUI_OBJECT *GetCurrentObject(void) { return CurrentObject; };
+	inline GuiObject *GetCurrentObject(void) { return currentObject; };
 
 	// Accessor for the current car's mutex object
-	wxMutex *GetCurrentMutex(void) { return CarMutex; };
+	wxMutex *GetCurrentMutex(void) { return carMutex; };
 
 private:
 	// Debugger message printing utility
 	const Debugger &debugger;
 
 	// The parent window
-	MAIN_FRAME &MainFrame;
+	MainFrame &mainFrame;
 
 	// The systems tree
-	MAIN_TREE *SystemsTree;
+	MainTree *systemsTree;
 
 	// The object with which we are currently associated
-	GUI_OBJECT *CurrentObject;
+	GuiObject *currentObject;
 
 	// Creates the controls and positions everything within the panel
-	void CreateControls(bool IgnoreSystemsTree);
+	void CreateControls(bool ignoreSystemsTree);
 
 	// Deletes all of the controls
 	void DeleteAllControls(void);
 
 	// The type of object this panel is currently representing
-	GUI_OBJECT::ITEM_TYPE CurrentType;
+	GuiObject::ItemType currentType;
 
 	// Tree item ID for the current selection
-	wxTreeItemId CurrentTreeID;
+	wxTreeItemId currentTreeID;
 
 	// The various edit panels we need to display
 	// GUI_CAR
-	EDIT_AERODYNAMICS_PANEL		*EditAerodynamics;
-	EDIT_BRAKES_PANEL			*EditBrakes;
-	EDIT_DIFFERENTIAL_PANEL		*EditDifferential;
-	EDIT_DRIVETRAIN_PANEL		*EditDrivetrain;
-	EDIT_ENGINE_PANEL			*EditEngine;
-	EDIT_MASS_PANEL				*EditMass;
-	EDIT_SUSPENSION_NOTEBOOK	*EditSuspension;
-	EDIT_TIRES_PANEL			*EditTires;
+	EditAerodyanmicPanel	*editAerodynamics;
+	EditBrakesPanel			*editBrakes;
+	EditDifferentialPanel	*editDifferential;
+	EditDrivetrainPanel		*editDrivetrain;
+	EditEnginePanel			*editEngine;
+	EditMassPanel			*editMass;
+	EditSuspensionNotebook	*editSuspension;
+	EditTiresPanel			*editTires;
 
 	// ITERATION
-	EDIT_ITERATION_NOTEBOOK		*EditIteration;
+	EditIterationNotebook		*editIteration;
 
 	// The sizer containing the panels
-	wxBoxSizer *Sizer;
+	wxBoxSizer *sizer;
 
 	// Syncronization object for modifying cars
-	wxMutex *CarMutex;
+	wxMutex *carMutex;
 };
 
 #endif// _EDIT_PANEL_H_

@@ -11,10 +11,10 @@
 // Created:  4/4/2008
 // Author:  K. Loux
 // Description:  Contains the class functionality (event handlers, etc.) for the
-//				 MAIN_NOTEBOOK class.  Derived from wxAuiNotebook.
+//				 MainNotebook class.  Derived from wxAuiNotebook.
 // History:
 //	1/28/2009	- Changed structure of GUI components so context menu creation for all
-//				  objects is handled by the MAIN_FRAME class.
+//				  objects is handled by the MainFrame class.
 
 // CarDesigner headers
 #include "gui/components/mainNotebook.h"
@@ -26,13 +26,13 @@
 #include <wx/utils.h>
 
 //==========================================================================
-// Class:			MAIN_NOTEBOOK
-// Function:		MAIN_NOTEBOOK
+// Class:			MainNotebook
+// Function:		MainNotebook
 //
-// Description:		Constructor for the MAIN_NOTEBOOK class.
+// Description:		Constructor for the MainNotebook class.
 //
 // Input Arguments:
-//		_MainFrame	= MAIN_FRAME&, reference to this object's owner
+//		_mainFrame	= MainFrame&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
@@ -46,19 +46,19 @@
 //		None
 //
 //==========================================================================
-MAIN_NOTEBOOK::MAIN_NOTEBOOK(MAIN_FRAME &_MainFrame, wxWindowID id, const wxPoint& pos,
+MainNotebook::MainNotebook(MainFrame &_mainFrame, wxWindowID id, const wxPoint& pos,
 							 const wxSize& size, long style, const Debugger &_debugger)
-							 : wxAuiNotebook(&_MainFrame, id, pos, size, style),
-							 debugger(_debugger), MainFrame(_MainFrame)
+							 : wxAuiNotebook(&_mainFrame, id, pos, size, style),
+							 debugger(_debugger), mainFrame(_mainFrame)
 {
 	SetArtProvider(new wxAuiSimpleTabArt);
 }
 
 //==========================================================================
-// Class:			MAIN_NOTEBOOK
-// Function:		~MAIN_NOTEBOOK
+// Class:			MainNotebook
+// Function:		~MainNotebook
 //
-// Description:		Destructor for the MAIN_NOTEBOOK class.
+// Description:		Destructor for the MainNotebook class.
 //
 // Input Arguments:
 //		None
@@ -70,12 +70,12 @@ MAIN_NOTEBOOK::MAIN_NOTEBOOK(MAIN_FRAME &_MainFrame, wxWindowID id, const wxPoin
 //		None
 //
 //==========================================================================
-MAIN_NOTEBOOK::~MAIN_NOTEBOOK()
+MainNotebook::~MainNotebook()
 {
 }
 
 //==========================================================================
-// Class:			MAIN_NOTEBOOK
+// Class:			MainNotebook
 // Function:		Event Table
 //
 // Description:		Links the GUI events with event handling functions.
@@ -90,14 +90,14 @@ MAIN_NOTEBOOK::~MAIN_NOTEBOOK()
 //		None
 //
 //==========================================================================
-BEGIN_EVENT_TABLE(MAIN_NOTEBOOK, wxAuiNotebook)
-	EVT_AUINOTEBOOK_PAGE_CLOSE(wxID_ANY,		MAIN_NOTEBOOK::NotebookPageClose_Event)
-	EVT_AUINOTEBOOK_PAGE_CHANGED(wxID_ANY,		MAIN_NOTEBOOK::NotebookPageChanged_Event)
-	EVT_AUINOTEBOOK_TAB_RIGHT_UP(wxID_ANY,		MAIN_NOTEBOOK::NotebookTabRightClick_Event)
+BEGIN_EVENT_TABLE(MainNotebook, wxAuiNotebook)
+	EVT_AUINOTEBOOK_PAGE_CLOSE(wxID_ANY,		MainNotebook::NotebookPageClose_Event)
+	EVT_AUINOTEBOOK_PAGE_CHANGED(wxID_ANY,		MainNotebook::NotebookPageChanged_Event)
+	EVT_AUINOTEBOOK_TAB_RIGHT_UP(wxID_ANY,		MainNotebook::NotebookTabRightClick_Event)
 END_EVENT_TABLE();
 
 //==========================================================================
-// Class:			MAIN_NOTEBOOK
+// Class:			MainNotebook
 // Function:		NotebookPageClose_Event
 //
 // Description:		Calls the close method for the object associated with the
@@ -114,23 +114,23 @@ END_EVENT_TABLE();
 //		None
 //
 //==========================================================================
-void MAIN_NOTEBOOK::NotebookPageClose_Event(wxAuiNotebookEvent &event)
+void MainNotebook::NotebookPageClose_Event(wxAuiNotebookEvent &event)
 {
 	// Determine the object that was just clicked on
-	GUI_OBJECT *ClickedObject = MainFrame.GetObjectByIndex(event.GetSelection());
+	GuiObject *clickedObject = mainFrame.GetObjectByIndex(event.GetSelection());
 
 	// Make sure the selection is valid
-	if (ClickedObject == NULL)
+	if (clickedObject == NULL)
 		return;
 
 	// Call the close function to make sure everything is saved and the user actually
 	// wants to close the object.
-	if (!ClickedObject->Close(true))
+	if (!clickedObject->Close(true))
 		event.Veto();
 }
 
 //==========================================================================
-// Class:			MAIN_NOTEBOOK
+// Class:			MainNotebook
 // Function:		NotebookPageChanged_Event
 //
 // Description:		Sets the ActiveCarIndex to the car associated with the
@@ -146,14 +146,14 @@ void MAIN_NOTEBOOK::NotebookPageClose_Event(wxAuiNotebookEvent &event)
 //		None
 //
 //==========================================================================
-void MAIN_NOTEBOOK::NotebookPageChanged_Event(wxAuiNotebookEvent& WXUNUSED(event))
+void MainNotebook::NotebookPageChanged_Event(wxAuiNotebookEvent& WXUNUSED(event))
 {
 	// Tell the main application what car we've just selected
-	MainFrame.SetActiveIndex(GetSelection());
+	mainFrame.SetActiveIndex(GetSelection());
 }
 
 //==========================================================================
-// Class:			MAIN_NOTEBOOK
+// Class:			MainNotebook
 // Function:		NotebookTabRightClick_Event
 //
 // Description:		Pops-up a menu containing actions that can be performed
@@ -169,19 +169,19 @@ void MAIN_NOTEBOOK::NotebookPageChanged_Event(wxAuiNotebookEvent& WXUNUSED(event
 //		None
 //
 //==========================================================================
-void MAIN_NOTEBOOK::NotebookTabRightClick_Event(wxAuiNotebookEvent &event)
+void MainNotebook::NotebookTabRightClick_Event(wxAuiNotebookEvent &event)
 {
 	// Determine the position of the mouse (this is in screen coords)
-	wxPoint MousePosition = wxGetMousePosition();
+	wxPoint mousePosition = wxGetMousePosition();
 
 	// Subtract the location of the top left corner of the window from the
 	// mouse position to get the mouse position w.r.t. this notebook.
-	MousePosition -= GetScreenPosition();
+	mousePosition -= GetScreenPosition();
 
 	// To generate a context menu in the correct position, we need to convert
-	// the position to client coordinates w.r.t. MainFrame.
-	MousePosition += GetPosition();
+	// the position to client coordinates w.r.t. mainFrame.
+	mousePosition += GetPosition();
 
 	// Create and display the context menu
-	MainFrame.CreateContextMenu(event.GetSelection(), MousePosition);
+	mainFrame.CreateContextMenu(event.GetSelection(), mousePosition);
 }

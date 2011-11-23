@@ -21,22 +21,22 @@
 
 // VVASE forward declarations
 class Debugger;
-class ITERATION;
+class Iteration;
 class Convert;
-class EDIT_ITERATION_NOTEBOOK;
+class EditIterationNotebook;
 
-class EDIT_ITERATION_RANGE_PANEL : public wxScrolledWindow
+class EditIterationRangePanel : public wxScrolledWindow
 {
 public:
 	// Constructor
-	EDIT_ITERATION_RANGE_PANEL(EDIT_ITERATION_NOTEBOOK &_Parent, wxWindowID id, const wxPoint& pos,
+	EditIterationRangePanel(EditIterationNotebook &_parent, wxWindowID id, const wxPoint& pos,
 		const wxSize& size, const Debugger &_debugger);
 
 	// Destructor
-	~EDIT_ITERATION_RANGE_PANEL();
+	~EditIterationRangePanel();
 
 	// Updates the information on the panel
-	void UpdateInformation(ITERATION *_CurrentIteration);
+	void UpdateInformation(Iteration *_currentIteration);
 	void UpdateInformation(void);
 
 private:
@@ -44,30 +44,30 @@ private:
 	const Debugger &debugger;
 
 	// The application's converter
-	const Convert &Converter;
+	const Convert &converter;
 
 	// The parent panel
-	EDIT_ITERATION_NOTEBOOK &Parent;
+	EditIterationNotebook &parent;
 
 	// The iteration with which we are currently associated
-	ITERATION *CurrentIteration;
+	Iteration *currentIteration;
 
 	// Creates the controls and positions everything within the panel
 	void CreateControls(void);
 
 	// The text boxes
-	wxTextCtrl *StartPitchInput;
-	wxTextCtrl *StartRollInput;
-	wxTextCtrl *StartHeaveInput;
-	wxTextCtrl *StartSteerInput;
-	wxTextCtrl *EndPitchInput;
-	wxTextCtrl *EndRollInput;
-	wxTextCtrl *EndHeaveInput;
-	wxTextCtrl *EndSteerInput;
-	wxTextCtrl *NumberOfPointsInput;
+	wxTextCtrl *startPitchInput;
+	wxTextCtrl *startRollInput;
+	wxTextCtrl *startHeaveInput;
+	wxTextCtrl *startSteerInput;
+	wxTextCtrl *endPitchInput;
+	wxTextCtrl *endRollInput;
+	wxTextCtrl *endHeaveInput;
+	wxTextCtrl *endSteerInput;
+	wxTextCtrl *numberOfPointsInput;
 
 	// Enumeration for event IDs
-	enum EDIT_ITERATION_OPTIONS_EVENT_ID
+	enum EditIterationRangePanelEventIds
 	{
 		RangeTextBox = wxID_HIGHEST + 1300
 	};

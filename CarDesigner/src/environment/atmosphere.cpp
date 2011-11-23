@@ -10,7 +10,7 @@
 // File:  atmosphere.cpp
 // Created:  12/12/2008
 // Author:  K. Loux
-// Description:  Contains class definitions for ATMOSPHERE class.  This is intended
+// Description:  Contains class definitions for Atmosphere class.  This is intended
 //				 for use with aerodynamic models and engine models (through SAE
 //				 standard conversion from HP to SAE HP).  Although for most sims,
 //				 a single number describing the air density and maybe another for
@@ -25,10 +25,10 @@
 #include "environment/atmosphere.h"
 
 //==========================================================================
-// Class:			ATMOSPHERE
-// Function:		ATMOSPHERE
+// Class:			Atmosphere
+// Function:		Atmosphere
 //
-// Description:		Constructor for ATMOSPHERE class.
+// Description:		Constructor for Atmosphere class.
 //
 // Input Arguments:
 //		None
@@ -40,17 +40,17 @@
 //		None
 //
 //==========================================================================
-ATMOSPHERE::ATMOSPHERE()
+Atmosphere::Atmosphere()
 {
 	// Initialize today's conditions to Standard Day conditions
-	CurrentDay = StandardDay;
+	currentDay = standardDay;
 }
 
 //==========================================================================
-// Class:			ATMOSPHERE
-// Function:		~ATMOSPHERE
+// Class:			Atmosphere
+// Function:		~Atmosphere
 //
-// Description:		Destructor for ATMOSPHERE class.
+// Description:		Destructor for Atmosphere class.
 //
 // Input Arguments:
 //		None
@@ -62,15 +62,15 @@ ATMOSPHERE::ATMOSPHERE()
 //		None
 //
 //==========================================================================
-ATMOSPHERE::~ATMOSPHERE()
+Atmosphere::~Atmosphere()
 {
 }
 
 //==========================================================================
-// Class:			ATMOSPHERE
+// Class:			Atmosphere
 // Function:		Constant Definitions
 //
-// Description:		Defines class level constants for ATMOSPHERE class.  All
+// Description:		Defines class level constants for Atmosphere class.  All
 //					of these are defined by ???? at ???? and describe
 //					conditions at sea level.
 //
@@ -84,7 +84,7 @@ ATMOSPHERE::~ATMOSPHERE()
 //		None
 //
 //==========================================================================
-const ATMOSPHERE::CONDITIONS ATMOSPHERE::ColdDay =
+const Atmosphere::Conditions Atmosphere::coldDay =
 {
 	0.0,	// [slug/in^3]  FIXME!!!
 	0.0,	// [psi]
@@ -92,7 +92,7 @@ const ATMOSPHERE::CONDITIONS ATMOSPHERE::ColdDay =
 	0.0		// [psi-sec]
 };
 
-const ATMOSPHERE::CONDITIONS ATMOSPHERE::PolarDay =
+const Atmosphere::Conditions Atmosphere::polarDay =
 {
 	0.0,	// [slug/in^3]  FIXME!!!
 	0.0,	// [psi]
@@ -100,7 +100,7 @@ const ATMOSPHERE::CONDITIONS ATMOSPHERE::PolarDay =
 	0.0		// [psi-sec]
 };
 
-const ATMOSPHERE::CONDITIONS ATMOSPHERE::StandardDay =
+const Atmosphere::Conditions Atmosphere::standardDay =
 {
 	1.376e-6,	// [slug/in^3]
 	14.696,		// [psi]
@@ -108,7 +108,7 @@ const ATMOSPHERE::CONDITIONS ATMOSPHERE::StandardDay =
 	2.514e-9	// [psi-sec]
 };
 
-const ATMOSPHERE::CONDITIONS ATMOSPHERE::TropicDay =
+const Atmosphere::Conditions Atmosphere::tropicDay =
 {
 	0.0,	// [slug/in^3]  FIXME!!!
 	0.0,	// [psi]
@@ -116,7 +116,7 @@ const ATMOSPHERE::CONDITIONS ATMOSPHERE::TropicDay =
 	0.0		// [psi-sec]
 };
 
-const ATMOSPHERE::CONDITIONS ATMOSPHERE::HotDay =
+const Atmosphere::Conditions Atmosphere::hotDay =
 {
 	0.0,	// [slug/in^3]  FIXME!!!
 	0.0,	// [psi]
@@ -125,13 +125,13 @@ const ATMOSPHERE::CONDITIONS ATMOSPHERE::HotDay =
 };
 
 //==========================================================================
-// Class:			ATMOSPHERE
+// Class:			Atmosphere
 // Function:		SetConditions
 //
 // Description:		Sets today's conditions according to the passed argument.
 //
 // Input Arguments:
-//		_CurrentDay	= CONDITIONS describing the current day's conditions
+//		_currentDay	= Conditions describing the current day's conditions
 //
 // Output Arguments:
 //		None
@@ -140,37 +140,37 @@ const ATMOSPHERE::CONDITIONS ATMOSPHERE::HotDay =
 //		None
 //
 //==========================================================================
-void ATMOSPHERE::SetConditions(ATMOSPHERE::CONDITIONS _CurrentDay)
+void Atmosphere::SetConditions(Atmosphere::Conditions _currentDay)
 {
 	// Set the current conditions
-	CurrentDay = _CurrentDay;
+	currentDay = _currentDay;
 }
 
 //==========================================================================
-// Class:			ATMOSPHERE
+// Class:			Atmosphere
 // Function:		GetConditions
 //
 // Description:		Gets the conditions for the current day, adjusted for
 //					non-sea-level altitudes.
 //
 // Input Arguments:
-//		Altitude	= double describing current height above sea level [ft]
+//		altitude	= double describing current height above sea level [ft]
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		CONDITIONS describing the conditions at the current altitude
+//		Conditions describing the conditions at the current altitude
 //
 //==========================================================================
-ATMOSPHERE::CONDITIONS ATMOSPHERE::GetConditions(double Altitude)
+Atmosphere::Conditions Atmosphere::GetConditions(double altitude)
 {
 	// FIXME:  implement the atmosphere!!!
 	// For now, just return the current day's conditions at sea level
-	return CurrentDay;
+	return currentDay;
 }
 
-/* FORTRAN CODE FOR STANDARD ATMOSPHERE
+/* FORTRAN CODE FOR STANDARD Atmosphere
 From:  http://www.pdas.com/atmos.htm
 !+
 SUBROUTINE Atmosphere(alt, sigma, delta, theta)

@@ -10,7 +10,7 @@
 // File:  editDrivetrainPanel.cpp
 // Created:  2/10/2009
 // Author:  K. Loux
-// Description:  Contains the class definition for the EDIT_DRIVETRAIN_PANEL class.  This
+// Description:  Contains the class definition for the EditDrivetrainPanel class.  This
 //				 class is used to edit the hard points on a particular corner of the
 //				 car.
 // History:
@@ -26,13 +26,13 @@
 #include "vMath/vector.h"
 
 //==========================================================================
-// Class:			EDIT_DRIVETRAIN_PANEL
-// Function:		EDIT_DRIVETRAIN_PANEL
+// Class:			EditDrivetrainPanel
+// Function:		EditDrivetrainPanel
 //
-// Description:		Constructor for EDIT_DRIVETRAIN_PANEL class.
+// Description:		Constructor for EditDrivetrainPanel class.
 //
 // Input Arguments:
-//		_Parent		= EDIT_PANEL&, reference to this object's owner
+//		_parent		= EditPanel&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
@@ -45,18 +45,18 @@
 //		None
 //
 //==========================================================================
-EDIT_DRIVETRAIN_PANEL::EDIT_DRIVETRAIN_PANEL(EDIT_PANEL* _Parent, wxWindowID id,
+EditDrivetrainPanel::EditDrivetrainPanel(EditPanel* _parent, wxWindowID id,
 										   const wxPoint& pos, const wxSize& size,
-										   const Debugger &_debugger) : wxPanel(_Parent, id,
+										   const Debugger &_debugger) : wxPanel(_parent, id,
 										   pos, size), debugger(_debugger)
 {
 }
 
 //==========================================================================
-// Class:			EDIT_DRIVETRAIN_PANEL
-// Function:		EDIT_DRIVETRAIN_PANEL
+// Class:			EditDrivetrainPanel
+// Function:		EditDrivetrainPanel
 //
-// Description:		Destructor for EDIT_DRIVETRAIN_PANEL class.
+// Description:		Destructor for EditDrivetrainPanel class.
 //
 // Input Arguments:
 //		None
@@ -68,6 +68,6 @@ EDIT_DRIVETRAIN_PANEL::EDIT_DRIVETRAIN_PANEL(EDIT_PANEL* _Parent, wxWindowID id,
 //		None
 //
 //==========================================================================
-EDIT_DRIVETRAIN_PANEL::~EDIT_DRIVETRAIN_PANEL()
+EditDrivetrainPanel::~EditDrivetrainPanel()
 {
 }

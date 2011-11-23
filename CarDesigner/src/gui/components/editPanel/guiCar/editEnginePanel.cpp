@@ -10,7 +10,7 @@
 // File:  editEnginePanel.cpp
 // Created:  2/10/2009
 // Author:  K. Loux
-// Description:  Contains the class definition for the EDIT_ENGINE_PANEL class.  This
+// Description:  Contains the class definition for the EditEnginePanel class.  This
 //				 class is used to edit the hard points on a particular corner of the
 //				 car.
 // History:
@@ -26,13 +26,13 @@
 #include "vMath/vector.h"
 
 //==========================================================================
-// Class:			EDIT_ENGINE_PANEL
-// Function:		EDIT_ENGINE_PANEL
+// Class:			EditEnginePanel
+// Function:		EditEnginePanel
 //
-// Description:		Constructor for EDIT_ENGINE_PANEL class.
+// Description:		Constructor for EditEnginePanel class.
 //
 // Input Arguments:
-//		_Parent		= EDIT_PANEL&, reference to this object's owner
+//		_parent		= EditPanel&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
@@ -45,18 +45,18 @@
 //		None
 //
 //==========================================================================
-EDIT_ENGINE_PANEL::EDIT_ENGINE_PANEL(EDIT_PANEL* _Parent, wxWindowID id,
+EditEnginePanel::EditEnginePanel(EditPanel* _parent, wxWindowID id,
 										   const wxPoint& pos, const wxSize& size,
-										   const Debugger &_debugger) : wxPanel(_Parent, id,
+										   const Debugger &_debugger) : wxPanel(_parent, id,
 										   pos, size), debugger(_debugger)
 {
 }
 
 //==========================================================================
-// Class:			EDIT_ENGINE_PANEL
-// Function:		EDIT_ENGINE_PANEL
+// Class:			EditEnginePanel
+// Function:		EditEnginePanel
 //
-// Description:		Destructor for EDIT_ENGINE_PANEL class.
+// Description:		Destructor for EditEnginePanel class.
 //
 // Input Arguments:
 //		None
@@ -68,6 +68,6 @@ EDIT_ENGINE_PANEL::EDIT_ENGINE_PANEL(EDIT_PANEL* _Parent, wxWindowID id,
 //		None
 //
 //==========================================================================
-EDIT_ENGINE_PANEL::~EDIT_ENGINE_PANEL()
+EditEnginePanel::~EditEnginePanel()
 {
 }

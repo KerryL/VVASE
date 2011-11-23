@@ -24,10 +24,10 @@
 #include "gui/ipcConnection.h"
 
 //==========================================================================
-// Class:			IPC_CLIENT
-// Function:		IPC_CLIENT
+// Class:			IPCClient
+// Function:		IPCClient
 //
-// Description:		Constructor for IPC_CLIENT class.
+// Description:		Constructor for IPCClient class.
 //
 // Input Arguments:
 //		None
@@ -39,17 +39,17 @@
 //		None
 //
 //==========================================================================
-IPC_CLIENT::IPC_CLIENT() : wxClient()
+IPCClient::IPCClient() : wxClient()
 {
 	// Initialize the connection poiner to NULL
-	Connection = NULL;
+	connection = NULL;
 }
 
 //==========================================================================
-// Class:			IPC_CLIENT
-// Function:		~IPC_CLIENT
+// Class:			IPCClient
+// Function:		~IPCClient
 //
-// Description:		Destructor for IPC_CLIENT class.
+// Description:		Destructor for IPCClient class.
 //
 // Input Arguments:
 //		None
@@ -61,23 +61,23 @@ IPC_CLIENT::IPC_CLIENT() : wxClient()
 //		None
 //
 //==========================================================================
-IPC_CLIENT::~IPC_CLIENT()
+IPCClient::~IPCClient()
 {
 	// Disconnect from the server
 	Disconnect();
 }
 
 //==========================================================================
-// Class:			IPC_CLIENT
+// Class:			IPCClient
 // Function:		Connect
 //
 // Description:		Attempts to connect to the specified service on the
 //					specified host.
 //
 // Input Arguments:
-//		Host	= const wxString& specifying the host to which we want to connect
-//		Service	= const wxString& specifying the name of the service
-//		Topic	= const wxString&
+//		host	= const wxString& specifying the host to which we want to connect
+//		service	= const wxString& specifying the name of the service
+//		topic	= const wxString&
 //
 // Output Arguments:
 //		None
@@ -86,15 +86,15 @@ IPC_CLIENT::~IPC_CLIENT()
 //		bool, true for connection made, false otherwise
 //
 //==========================================================================
-bool IPC_CLIENT::Connect(const wxString &Host, const wxString &Service, const wxString &Topic)
+bool IPCClient::Connect(const wxString &host, const wxString &service, const wxString &topic)
 {
 	// Attempt to make a connection to the specified host
-	Connection = (IPC_CONNECTION*)MakeConnection(Host, Service, Topic);
-	return Connection != NULL;
+	connection = (IPCConnection*)MakeConnection(host, service, topic);
+	return connection != NULL;
 }
 
 //==========================================================================
-// Class:			IPC_CLIENT
+// Class:			IPCClient
 // Function:		Disconnect
 //
 // Description:		Kills the current connection.
@@ -109,18 +109,18 @@ bool IPC_CLIENT::Connect(const wxString &Host, const wxString &Service, const wx
 //		None
 //
 //==========================================================================
-void IPC_CLIENT::Disconnect(void)
+void IPCClient::Disconnect(void)
 {
-	if (Connection)
+	if (connection)
 	{
-		Connection->Disconnect();
-		delete Connection;
-		Connection = NULL;
+		connection->Disconnect();
+		delete connection;
+		connection = NULL;
 	}
 }
 
 //==========================================================================
-// Class:			IPC_CLIENT
+// Class:			IPCClient
 // Function:		OnMakeConnection
 //
 // Description:		Overridden method for responding to successful connections.
@@ -135,7 +135,7 @@ void IPC_CLIENT::Disconnect(void)
 //		wxConnectionBase* pointing to the new connection object
 //
 //==========================================================================
-wxConnectionBase *IPC_CLIENT::OnMakeConnection(void)
+wxConnectionBase *IPCClient::OnMakeConnection(void)
 {
-	return new IPC_CONNECTION();
+	return new IPCConnection();
 }

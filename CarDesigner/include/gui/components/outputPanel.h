@@ -25,44 +25,44 @@ class Debugger;
 class Convert;
 class Car;
 class KinematicOutputs;
-class MAIN_FRAME;
+class MainFrame;
 
-class OUTPUT_PANEL : public wxPanel
+class OutputPanel : public wxPanel
 {
 public:
 	// Constructor
-	OUTPUT_PANEL(MAIN_FRAME &_MainFrame, wxWindowID id, const wxPoint &pos,
+	OutputPanel(MainFrame &_mainFrame, wxWindowID id, const wxPoint &pos,
 		const wxSize &size, const Debugger &_debugger);
 
 	// Destructor
-	~OUTPUT_PANEL();
+	~OutputPanel();
 
 	// Updates the information on the panel
-	void UpdateInformation(KinematicOutputs Outputs, Car &car, int Index,
-		wxString Name);
-	void FinishUpdate(int _NumberOfDataColumns);
+	void UpdateInformation(KinematicOutputs outputs, Car &car, int index,
+		wxString name);
+	void FinishUpdate(int _numberOfDataColumns);
 
 	// For highlighting the column that corresponds to the active car
-	void HighlightColumn(wxString _Name);
+	void HighlightColumn(wxString _name);
 
 private:
 	// Debugger message printing utility
 	const Debugger &debugger;
 
 	// The application's converter object
-	const Convert &Converter;
+	const Convert &converter;
 
 	// Creates the controls and positions everything within the panel
 	void CreateControls(void);
 
 	// Pointer to the main application window
-	MAIN_FRAME &MainFrame;
+	MainFrame &mainFrame;
 
 	// The number of data columns we currently have
-	int NumberOfDataColumns;
+	int numberOfDataColumns;
 
 	// The event IDs
-	enum EVENT_ID
+	enum EventId
 	{
 		IdOutputGrid = wxID_HIGHEST + 1100
 	};
@@ -72,7 +72,7 @@ private:
 	// End event handlers-------------------------------------------------
 
 	// The text-entry control
-	wxGrid *OutputsList;
+	wxGrid *outputsList;
 
 protected:
 	DECLARE_EVENT_TABLE()

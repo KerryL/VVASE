@@ -30,14 +30,14 @@
 #include "vCar/corner.h"
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM_PANEL
-// Function:		GENETIC_ALGORITHM_PANEL
+// Class:			GeneticAlgorithmPanel
+// Function:		GeneticAlgorithmPanel
 //
-// Description:		Constructor for the GENETIC_ALGORITHM_PANEL class.
+// Description:		Constructor for the GeneticAlgorithmPanel class.
 //
 // Input Arguments:
-//		_MainFrame		= MAIN_FRAME&, reference to the main application window
-//		_Optimization	= GENETIC_OPTIMIZATION&, reference to the object that we represent
+//		_mainFrame		= MainFrame&, reference to the main application window
+//		_optimization	= GeneticOptimization&, reference to the object that we represent
 //
 // Output Arguments:
 //		None
@@ -46,25 +46,25 @@
 //		None
 //
 //==========================================================================
-GENETIC_ALGORITHM_PANEL::GENETIC_ALGORITHM_PANEL(MAIN_FRAME &_MainFrame,
-												 GENETIC_OPTIMIZATION &_Optimization)
-												 : wxScrolledWindow(&_MainFrame),
-												 Converter(_MainFrame.GetConverter()),
-												 Optimization(_Optimization), MainFrame(_MainFrame)
+GeneticAlgorithmPanel::GeneticAlgorithmPanel(MainFrame &_mainFrame,
+												 GeneticOptimization &_optimization)
+												 : wxScrolledWindow(&_mainFrame),
+												 converter(_mainFrame.GetConverter()),
+												 optimization(_optimization), mainFrame(_mainFrame)
 {
 	// Initialize the overall progress control pointer
 	// (This is used as in indication that the panel is completely built)
-	OverallProgress = NULL;
+	overallProgress = NULL;
 
 	// Create the controls
 	CreateControls();
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM_PANEL
-// Function:		GENETIC_ALGORITHM_PANEL
+// Class:			GeneticAlgorithmPanel
+// Function:		GeneticAlgorithmPanel
 //
-// Description:		Destructor for the GENETIC_ALGORITHM_PANEL class.
+// Description:		Destructor for the GeneticAlgorithmPanel class.
 //
 // Input Arguments:
 //		None
@@ -76,12 +76,12 @@ GENETIC_ALGORITHM_PANEL::GENETIC_ALGORITHM_PANEL(MAIN_FRAME &_MainFrame,
 //		None
 //
 //==========================================================================
-GENETIC_ALGORITHM_PANEL::~GENETIC_ALGORITHM_PANEL()
+GeneticAlgorithmPanel::~GeneticAlgorithmPanel()
 {
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM_PANEL
+// Class:			GeneticAlgorithmPanel
 // Function:		Event Table
 //
 // Description:		Links GUI events with event handler functions.
@@ -96,22 +96,22 @@ GENETIC_ALGORITHM_PANEL::~GENETIC_ALGORITHM_PANEL()
 //		None
 //
 //==========================================================================
-BEGIN_EVENT_TABLE(GENETIC_ALGORITHM_PANEL, wxPanel)
+BEGIN_EVENT_TABLE(GeneticAlgorithmPanel, wxPanel)
 	// Buttons
-	EVT_BUTTON(IdAddGene,					GENETIC_ALGORITHM_PANEL::AddGeneButtonClickedEvent)
-	EVT_BUTTON(IdEditGene,					GENETIC_ALGORITHM_PANEL::EditGeneButtonClickedEvent)
-	EVT_BUTTON(IdRemoveGene,				GENETIC_ALGORITHM_PANEL::RemoveGeneButtonClickedEvent)
-	EVT_BUTTON(IdAddGoal,					GENETIC_ALGORITHM_PANEL::AddGoalButtonClickedEvent)
-	EVT_BUTTON(IdEditGoal,					GENETIC_ALGORITHM_PANEL::EditGoalButtonClickedEvent)
-	EVT_BUTTON(IdRemoveGoal,				GENETIC_ALGORITHM_PANEL::RemoveGoalButtonClickedEvent)
-	EVT_BUTTON(IdStartStopOptimization,		GENETIC_ALGORITHM_PANEL::StartStopOptimizationClickedEvent)
-	EVT_GRID_CMD_SELECT_CELL(IdGeneList,	GENETIC_ALGORITHM_PANEL::GeneListSelectCellEvent)
-	EVT_GRID_CMD_SELECT_CELL(IdGoalList,	GENETIC_ALGORITHM_PANEL::GoalListSelectCellEvent)
-	EVT_TEXT(wxID_ANY,						GENETIC_ALGORITHM_PANEL::TextBoxChangeEvent)
+	EVT_BUTTON(IdAddGene,					GeneticAlgorithmPanel::AddGeneButtonClickedEvent)
+	EVT_BUTTON(IdEditGene,					GeneticAlgorithmPanel::EditGeneButtonClickedEvent)
+	EVT_BUTTON(IdRemoveGene,				GeneticAlgorithmPanel::RemoveGeneButtonClickedEvent)
+	EVT_BUTTON(IdAddGoal,					GeneticAlgorithmPanel::AddGoalButtonClickedEvent)
+	EVT_BUTTON(IdEditGoal,					GeneticAlgorithmPanel::EditGoalButtonClickedEvent)
+	EVT_BUTTON(IdRemoveGoal,				GeneticAlgorithmPanel::RemoveGoalButtonClickedEvent)
+	EVT_BUTTON(IdStartStopOptimization,		GeneticAlgorithmPanel::StartStopOptimizationClickedEvent)
+	EVT_GRID_CMD_SELECT_CELL(IdGeneList,	GeneticAlgorithmPanel::GeneListSelectCellEvent)
+	EVT_GRID_CMD_SELECT_CELL(IdGoalList,	GeneticAlgorithmPanel::GoalListSelectCellEvent)
+	EVT_TEXT(wxID_ANY,						GeneticAlgorithmPanel::TextBoxChangeEvent)
 END_EVENT_TABLE();
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM_PANEL
+// Class:			GeneticAlgorithmPanel
 // Function:		CreateControls
 //
 // Description:		Creates the controls for this dialog.
@@ -126,17 +126,17 @@ END_EVENT_TABLE();
 //		None
 //
 //==========================================================================
-void GENETIC_ALGORITHM_PANEL::CreateControls(void)
+void GeneticAlgorithmPanel::CreateControls(void)
 {
 	// Enable scrolling
 	SetScrollRate(1, 1);
 
 	// Top-level sizer
-	wxBoxSizer *TopSizer = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
 
 	// Second sizer gives more space around the controls
-	wxBoxSizer *MainSizer = new wxBoxSizer(wxVERTICAL);
-	TopSizer->Add(MainSizer, 1, wxALIGN_LEFT | wxGROW | wxALL, 5);
+	wxBoxSizer *mainSizer = new wxBoxSizer(wxVERTICAL);
+	topSizer->Add(mainSizer, 1, wxALIGN_LEFT | wxGROW | wxALL, 5);
 	
 	// Set the sizer flags
 	int labelSizerFlags = wxALIGN_CENTER_VERTICAL;
@@ -144,214 +144,214 @@ void GENETIC_ALGORITHM_PANEL::CreateControls(void)
 	int padding(2);
 
 	// Create a sizer at the top to contain the GA parameters and the start/stop button
-	wxFlexGridSizer *UpperSizer = new wxFlexGridSizer(3, padding, padding);
-	UpperSizer->SetFlexibleDirection(wxHORIZONTAL);
-	MainSizer->Add(UpperSizer, 0, wxALL | wxGROW, 5);
+	wxFlexGridSizer *upperSizer = new wxFlexGridSizer(3, padding, padding);
+	upperSizer->SetFlexibleDirection(wxHORIZONTAL);
+	mainSizer->Add(upperSizer, 0, wxALL | wxGROW, 5);
 
 	// Population size
-	wxStaticText *PopulationLabel = new wxStaticText(this, wxID_ANY, _T("Population Size"));
-	PopulationSize = new wxTextCtrl(this, wxID_ANY, _T("500"));
-	UpperSizer->Add(PopulationLabel, 0, labelSizerFlags);
-	UpperSizer->Add(PopulationSize, 0, inputSizerFlags);
+	wxStaticText *populationLabel = new wxStaticText(this, wxID_ANY, _T("Population Size"));
+	populationSize = new wxTextCtrl(this, wxID_ANY, _T("500"));
+	upperSizer->Add(populationLabel, 0, labelSizerFlags);
+	upperSizer->Add(populationSize, 0, inputSizerFlags);
 	
 	// Start/stop button
-	StartStopOptimization = new wxButton(this, IdStartStopOptimization, _T("Start GA"));
-	UpperSizer->Add(StartStopOptimization, 0, wxALIGN_LEFT);
+	startStopOptimization = new wxButton(this, IdStartStopOptimization, _T("Start GA"));
+	upperSizer->Add(startStopOptimization, 0, wxALIGN_LEFT);
 
 	// Generation limit
-	wxStaticText *GenerationLimitLabel = new wxStaticText(this, wxID_ANY, _T("Generation Limit"));
-	GenerationLimit = new wxTextCtrl(this, wxID_ANY, _T("20"));
-	UpperSizer->Add(GenerationLimitLabel, 0, labelSizerFlags);
-	UpperSizer->Add(GenerationLimit, 0, inputSizerFlags);
-	UpperSizer->AddSpacer(-1);
+	wxStaticText *generationLimitLabel = new wxStaticText(this, wxID_ANY, _T("Generation Limit"));
+	generationLimit = new wxTextCtrl(this, wxID_ANY, _T("20"));
+	upperSizer->Add(generationLimitLabel, 0, labelSizerFlags);
+	upperSizer->Add(generationLimit, 0, inputSizerFlags);
+	upperSizer->AddSpacer(-1);
 
 	// Elitism percentage
-	wxStaticText *ElitismLabel = new wxStaticText(this, wxID_ANY, _T("Elitism Fraction"));
-	ElitismFraction = new wxTextCtrl(this, wxID_ANY, _T("0.05"));
-	UpperSizer->Add(ElitismLabel, 0, labelSizerFlags);
-	UpperSizer->Add(ElitismFraction, 0, inputSizerFlags);
-	UpperSizer->AddSpacer(-1);
+	wxStaticText *elitismLabel = new wxStaticText(this, wxID_ANY, _T("Elitism Fraction"));
+	elitismFraction = new wxTextCtrl(this, wxID_ANY, _T("0.05"));
+	upperSizer->Add(elitismLabel, 0, labelSizerFlags);
+	upperSizer->Add(elitismFraction, 0, inputSizerFlags);
+	upperSizer->AddSpacer(-1);
 
 	// Mutation probability
-	wxStaticText *MutationLabel = new wxStaticText(this, wxID_ANY, _T("Mutation Probability"));
-	MutationProbability = new wxTextCtrl(this, wxID_ANY, _T("0.01"));
-	UpperSizer->Add(MutationLabel, 0, labelSizerFlags);
-	UpperSizer->Add(MutationProbability, 0, inputSizerFlags);
-	UpperSizer->AddSpacer(-1);
+	wxStaticText *mutationLabel = new wxStaticText(this, wxID_ANY, _T("Mutation Probability"));
+	mutationProbability = new wxTextCtrl(this, wxID_ANY, _T("0.01"));
+	upperSizer->Add(mutationLabel, 0, labelSizerFlags);
+	upperSizer->Add(mutationProbability, 0, inputSizerFlags);
+	upperSizer->AddSpacer(-1);
 
 	// Crossover point
-	wxStaticText *CrossoverLabel = new wxStaticText(this, wxID_ANY, _T("Crossover Point"));
-	CrossoverPoint = new wxTextCtrl(this, wxID_ANY, _T("0"));
-	UpperSizer->Add(CrossoverLabel, 0, labelSizerFlags);
-	UpperSizer->Add(CrossoverPoint, 0, inputSizerFlags);
-	UpperSizer->AddSpacer(-1);
+	wxStaticText *crossoverLabel = new wxStaticText(this, wxID_ANY, _T("Crossover Point"));
+	crossoverPoint = new wxTextCtrl(this, wxID_ANY, _T("0"));
+	upperSizer->Add(crossoverLabel, 0, labelSizerFlags);
+	upperSizer->Add(crossoverPoint, 0, inputSizerFlags);
+	upperSizer->AddSpacer(-1);
 
 	// Selection drop down box
-	wxStaticText *SelectionLabel = new wxStaticText(this, wxID_ANY, _T("Car to Optimize"));
-	SelectedCar = new wxComboBox(this, IdSelectCar, wxEmptyString, wxDefaultPosition,
+	wxStaticText *selectionLabel = new wxStaticText(this, wxID_ANY, _T("Car to Optimize"));
+	selectedCar = new wxComboBox(this, IdSelectCar, wxEmptyString, wxDefaultPosition,
 		wxDefaultSize, 0, NULL, wxCB_READONLY);
-	UpperSizer->Add(SelectionLabel, 0, labelSizerFlags);
-	UpperSizer->Add(SelectedCar, 0, inputSizerFlags);
+	upperSizer->Add(selectionLabel, 0, labelSizerFlags);
+	upperSizer->Add(selectedCar, 0, inputSizerFlags);
 
 	// Gene list
 	wxFlexGridSizer *geneGoalSizer = new wxFlexGridSizer(2, 3, 3);
-	MainSizer->Add(geneGoalSizer, 1, wxGROW | wxALL, 5);
-	GeneList = new wxGrid(this, IdGeneList);
-	GeneList->CreateGrid(1, 6, wxGrid::wxGridSelectRows);
+	mainSizer->Add(geneGoalSizer, 1, wxGROW | wxALL, 5);
+	geneList = new wxGrid(this, IdGeneList);
+	geneList->CreateGrid(1, 6, wxGrid::wxGridSelectRows);
 
 	// Begin a batch edit of the grid
-	GeneList->BeginBatch();
+	geneList->BeginBatch();
 
 	// Make all cells read-only and center the text
 	int i, j;
-	for (i = 0; i < GeneList->GetNumberRows(); i++)
+	for (i = 0; i < geneList->GetNumberRows(); i++)
 	{
-		for (j = 0; j < GeneList->GetNumberCols(); j++)
+		for (j = 0; j < geneList->GetNumberCols(); j++)
 		{
-			GeneList->SetReadOnly(i, j, true);
-			GeneList->SetCellAlignment(wxALIGN_CENTER, i, j);
+			geneList->SetReadOnly(i, j, true);
+			geneList->SetCellAlignment(wxALIGN_CENTER, i, j);
 		}
 	}
 
 	// Hide the label column and set the size for the label row
-	GeneList->SetRowLabelSize(0);
-	GeneList->SetColLabelSize(GeneList->GetRowSize(0));
+	geneList->SetRowLabelSize(0);
+	geneList->SetColLabelSize(geneList->GetRowSize(0));
 
 	// Add the grid to the sizer
-	geneGoalSizer->Add(GeneList, 1, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALIGN_TOP);
+	geneGoalSizer->Add(geneList, 1, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALIGN_TOP);
 
 	// Set the column headings
-	GeneList->SetColLabelValue(0, _T("Hardpoint"));
-	GeneList->SetColLabelValue(1, _T("Alternate With"));
-	GeneList->SetColLabelValue(2, _T("Axis Direction"));
-	GeneList->SetColLabelValue(3, _T("Minimum"));
-	GeneList->SetColLabelValue(4, _T("Maximum"));
-	GeneList->SetColLabelValue(5, _T("Number Of Values"));
+	geneList->SetColLabelValue(0, _T("Hardpoint"));
+	geneList->SetColLabelValue(1, _T("Alternate With"));
+	geneList->SetColLabelValue(2, _T("Axis Direction"));
+	geneList->SetColLabelValue(3, _T("Minimum"));
+	geneList->SetColLabelValue(4, _T("Maximum"));
+	geneList->SetColLabelValue(5, _T("Number Of Values"));
 
 	// Assign rights for the user move or re-size the rows or move the columns
-	GeneList->EnableDragColMove(false);
-	GeneList->EnableDragColSize(true);
-	GeneList->EnableDragGridSize(false);
-	GeneList->EnableDragRowSize(false);
+	geneList->EnableDragColMove(false);
+	geneList->EnableDragColSize(true);
+	geneList->EnableDragGridSize(false);
+	geneList->EnableDragRowSize(false);
 
 	// Auto-size the grid columns
 	// FIXME:  This doesn't work the way we would like - it just sizes to column headings, not column contents
 	// Workaround is below
-	GeneList->AutoSizeColumns(false);
+	geneList->AutoSizeColumns(false);
 
 	// Assign column widths
 	// FIXME:  We would rather use auto-size (this is workaround for above)
-	GeneList->SetColumnWidth(0, 140);
-	GeneList->SetColumnWidth(1, 140);
+	geneList->SetColumnWidth(0, 140);
+	geneList->SetColumnWidth(1, 140);
 	// Default size (after auto-size) is OK for the remaining columns
 
 	// End the batch mode edit and re-paint the control
-	GeneList->EndBatch();
+	geneList->EndBatch();
 
 	// Add/Edit/Remove Gene buttons
-	wxBoxSizer *GeneButtonSizer = new wxBoxSizer(wxVERTICAL);
-	geneGoalSizer->Add(GeneButtonSizer, 0, wxALIGN_LEFT);
-	AddGene = new wxButton(this, IdAddGene, _T("Add Gene"));
-	EditGene = new wxButton(this, IdEditGene, _T("Edit Gene"));
-	RemoveGene = new wxButton(this, IdRemoveGene, _T("Remove Gene"));
-	GeneButtonSizer->Add(AddGene, 0, wxEXPAND);
-	GeneButtonSizer->Add(EditGene, 0, wxEXPAND);
-	GeneButtonSizer->Add(RemoveGene, 0, wxEXPAND);
+	wxBoxSizer *geneButtonSizer = new wxBoxSizer(wxVERTICAL);
+	geneGoalSizer->Add(geneButtonSizer, 0, wxALIGN_LEFT);
+	addGene = new wxButton(this, IdAddGene, _T("Add Gene"));
+	editGene = new wxButton(this, IdEditGene, _T("Edit Gene"));
+	removeGene = new wxButton(this, IdRemoveGene, _T("Remove Gene"));
+	geneButtonSizer->Add(addGene, 0, wxEXPAND);
+	geneButtonSizer->Add(editGene, 0, wxEXPAND);
+	geneButtonSizer->Add(removeGene, 0, wxEXPAND);
 
 	// Goal list
-	GoalList = new wxGrid(this, IdGoalList);
-	GoalList->CreateGrid(1, 6, wxGrid::wxGridSelectRows);
+	goalList = new wxGrid(this, IdGoalList);
+	goalList->CreateGrid(1, 6, wxGrid::wxGridSelectRows);
 
 	// Begin a batch edit of the grid
-	GoalList->BeginBatch();
+	goalList->BeginBatch();
 
 	// Make all cells read-only
-	for (i = 0; i < GoalList->GetNumberRows(); i++)
+	for (i = 0; i < goalList->GetNumberRows(); i++)
 	{
-		for (j = 0; j < GoalList->GetNumberCols(); j++)
+		for (j = 0; j < goalList->GetNumberCols(); j++)
 		{
-			GoalList->SetReadOnly(i, j, true);
-			GoalList->SetCellAlignment(wxALIGN_CENTER, i, j);
+			goalList->SetReadOnly(i, j, true);
+			goalList->SetCellAlignment(wxALIGN_CENTER, i, j);
 		}
 	}
 
 	// Hide the label column and set the size for the label row
-	GoalList->SetRowLabelSize(0);
-	GoalList->SetColLabelSize(GoalList->GetRowSize(0));
+	goalList->SetRowLabelSize(0);
+	goalList->SetColLabelSize(goalList->GetRowSize(0));
 
 	// Add the grid to the sizer
-	geneGoalSizer->Add(GoalList, 0, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALIGN_TOP);
+	geneGoalSizer->Add(goalList, 0, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALIGN_TOP);
 
 	// Set the column headings
-	GoalList->SetColLabelValue(0, _T("Output"));
-	GoalList->SetColLabelValue(1, _T("State 1 Inputs"));
-	GoalList->SetColLabelValue(2, _T("State 2 Inputs"));
-	GoalList->SetColLabelValue(3, _T("Desired Value"));
-	GoalList->SetColLabelValue(4, _T("Expected Deviation"));
-	GoalList->SetColLabelValue(5, _T("Importance"));
+	goalList->SetColLabelValue(0, _T("Output"));
+	goalList->SetColLabelValue(1, _T("State 1 Inputs"));
+	goalList->SetColLabelValue(2, _T("State 2 Inputs"));
+	goalList->SetColLabelValue(3, _T("Desired Value"));
+	goalList->SetColLabelValue(4, _T("Expected Deviation"));
+	goalList->SetColLabelValue(5, _T("Importance"));
 
 	// Assign rights for the user move or re-size the rows or move the columns
-	GoalList->EnableDragColMove(false);
-	GoalList->EnableDragColSize(true);
-	GoalList->EnableDragGridSize(false);
-	GoalList->EnableDragRowSize(false);
+	goalList->EnableDragColMove(false);
+	goalList->EnableDragColSize(true);
+	goalList->EnableDragGridSize(false);
+	goalList->EnableDragRowSize(false);
 
 	// Auto-size the grid columns
 	// FIXME:  This doesn't work the way we would like - it just sizes to column headings, not column contents
 	// Workaround is below
-	GoalList->AutoSizeColumns(false);
+	goalList->AutoSizeColumns(false);
 
 	// Assign column widths
 	// FIXME:  We would rather do this automatically (this is workaround for above)
-	GoalList->SetColumnWidth(0, 190);
-	GoalList->SetColumnWidth(1, 220);
-	GoalList->SetColumnWidth(2, 220);
+	goalList->SetColumnWidth(0, 190);
+	goalList->SetColumnWidth(1, 220);
+	goalList->SetColumnWidth(2, 220);
 	// Default size (after auto-size) is OK for the remaining columns
 
 	// End the batch mode edit and re-paint the control
-	GoalList->EndBatch();
+	goalList->EndBatch();
 
 	// Add/Edit/Remove Goal buttons
-	wxBoxSizer *GoalButtonSizer = new wxBoxSizer(wxVERTICAL);
-	geneGoalSizer->Add(GoalButtonSizer, 0, wxALIGN_LEFT);
-	AddGoal = new wxButton(this, IdAddGoal, _T("Add Goal"));
-	EditGoal = new wxButton(this, IdEditGoal, _T("Edit Goal"));
-	RemoveGoal = new wxButton(this, IdRemoveGoal, _T("Remove Goal"));
-	GoalButtonSizer->Add(AddGoal, 0, wxEXPAND);
-	GoalButtonSizer->Add(EditGoal, 0, wxEXPAND);
-	GoalButtonSizer->Add(RemoveGoal, 0, wxEXPAND);
+	wxBoxSizer *goalButtonSizer = new wxBoxSizer(wxVERTICAL);
+	geneGoalSizer->Add(goalButtonSizer, 0, wxALIGN_LEFT);
+	addGoal = new wxButton(this, IdAddGoal, _T("Add Goal"));
+	editGoal = new wxButton(this, IdEditGoal, _T("Edit Goal"));
+	removeGoal = new wxButton(this, IdRemoveGoal, _T("Remove Goal"));
+	goalButtonSizer->Add(addGoal, 0, wxEXPAND);
+	goalButtonSizer->Add(editGoal, 0, wxEXPAND);
+	goalButtonSizer->Add(removeGoal, 0, wxEXPAND);
 
 	geneGoalSizer->AddGrowableRow(0, 1);
 	geneGoalSizer->AddGrowableRow(1, 1);
 
 	// Progress bars
-	wxFlexGridSizer *ProgressSizer = new wxFlexGridSizer(2, 2, 5);
-	ProgressSizer->SetFlexibleDirection(wxHORIZONTAL);
-	MainSizer->Add(ProgressSizer, 0, wxALL | wxEXPAND | wxALIGN_BOTTOM, 5);
-	ProgressSizer->AddGrowableCol(1);
+	wxFlexGridSizer *progressSizer = new wxFlexGridSizer(2, 2, 5);
+	progressSizer->SetFlexibleDirection(wxHORIZONTAL);
+	mainSizer->Add(progressSizer, 0, wxALL | wxEXPAND | wxALIGN_BOTTOM, 5);
+	progressSizer->AddGrowableCol(1);
 
-	wxStaticText *GenerationProgressLabel = new wxStaticText(this, wxID_ANY, _T("Current Generation"));
-	GenerationProgress = new wxGauge(this, wxID_ANY, 100, wxDefaultPosition,
-		wxSize(-1, GenerationProgressLabel->GetSize().GetHeight()), wxGA_HORIZONTAL | wxGA_SMOOTH);
-	ProgressSizer->Add(GenerationProgressLabel, 0, wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL);
-	ProgressSizer->Add(GenerationProgress, 0, wxEXPAND);
+	wxStaticText *generationProgressLabel = new wxStaticText(this, wxID_ANY, _T("Current Generation"));
+	generationProgress = new wxGauge(this, wxID_ANY, 100, wxDefaultPosition,
+		wxSize(-1, generationProgressLabel->GetSize().GetHeight()), wxGA_HORIZONTAL | wxGA_SMOOTH);
+	progressSizer->Add(generationProgressLabel, 0, wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL);
+	progressSizer->Add(generationProgress, 0, wxEXPAND);
 
-	wxStaticText *OverallProgressLabel = new wxStaticText(this, wxID_ANY, _T("Overall"));
-	OverallProgress = new wxGauge(this, wxID_ANY, 100, wxDefaultPosition,
-		wxSize(-1, OverallProgressLabel->GetSize().GetHeight()), wxGA_HORIZONTAL | wxGA_SMOOTH);
-	ProgressSizer->Add(OverallProgressLabel, 0, wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL);
-	ProgressSizer->Add(OverallProgress, 0, wxEXPAND);
+	wxStaticText *overallProgressLabel = new wxStaticText(this, wxID_ANY, _T("Overall"));
+	overallProgress = new wxGauge(this, wxID_ANY, 100, wxDefaultPosition,
+		wxSize(-1, overallProgressLabel->GetSize().GetHeight()), wxGA_HORIZONTAL | wxGA_SMOOTH);
+	progressSizer->Add(overallProgressLabel, 0, wxALIGN_LEFT | wxALIGN_CENTER_VERTICAL);
+	progressSizer->Add(overallProgress, 0, wxEXPAND);
 
 	// Assign the top level sizer to the dialog
-	SetSizer(TopSizer);
+	SetSizer(topSizer);
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM_PANEL
+// Class:			GeneticAlgorithmPanel
 // Function:		AddGeneButtonClickedEvent
 //
 // Description:		Event handler for the Add Gene button.  Displays the
-//					GA_GENE_DIALOG to allow the user to create the gene
+//					GAGeneDialog to allow the user to create the gene
 //					they wish to add.
 //
 // Input Arguments:
@@ -364,33 +364,33 @@ void GENETIC_ALGORITHM_PANEL::CreateControls(void)
 //		None
 //
 //==========================================================================
-void GENETIC_ALGORITHM_PANEL::AddGeneButtonClickedEvent(wxCommandEvent& WXUNUSED(event))
+void GeneticAlgorithmPanel::AddGeneButtonClickedEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Create the dialog box with default gene properties
-	GA_GENE_DIALOG GeneDialog(static_cast<wxWindow*>(&MainFrame), Converter, (Corner::Hardpoints)0,
+	GAGeneDialog geneDialog(static_cast<wxWindow*>(&mainFrame), converter, (Corner::Hardpoints)0,
 		(Corner::Hardpoints)0, (Vector::Axis)0, (Corner::Location)0, 0.0, 1.0, 5, wxID_ANY, wxDefaultPosition);
 
 	// Display the dialog
-	if (GeneDialog.ShowModal() == wxOK)
+	if (geneDialog.ShowModal() == wxOK)
 	{
 		// Create the new gene and add it to the list
-		Optimization.GetAlgorithm().AddGene(GeneDialog.GetHardpoint(), GeneDialog.GetTiedTo(), GeneDialog.GetCornerLocation(),
-			GeneDialog.GetAxisDirection(), GeneDialog.GetMinimum(), GeneDialog.GetMaximum(), GeneDialog.GetNumberOfValues());
+		optimization.GetAlgorithm().AddGene(geneDialog.GetHardpoint(), geneDialog.GetTiedTo(), geneDialog.GetCornerLocation(),
+			geneDialog.GetAxisDirection(), geneDialog.GetMinimum(), geneDialog.GetMaximum(), geneDialog.GetNumberOfValues());
 
 		// Update the display for the gene
 		UpdateGeneList();
 
 		// Mark the optimization as modified
-		Optimization.SetModified();
+		optimization.SetModified();
 	}
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM_PANEL
+// Class:			GeneticAlgorithmPanel
 // Function:		EditGeneButtonClickedEvent
 //
 // Description:		Event handler for the Edit Gene button.  Displays the
-//					GA_GENE_DIALOG to allow the user to edit the gene
+//					GAGeneDialog to allow the user to edit the gene
 //					they selected.
 //
 // Input Arguments:
@@ -403,38 +403,38 @@ void GENETIC_ALGORITHM_PANEL::AddGeneButtonClickedEvent(wxCommandEvent& WXUNUSED
 //		None
 //
 //==========================================================================
-void GENETIC_ALGORITHM_PANEL::EditGeneButtonClickedEvent(wxCommandEvent& WXUNUSED(event))
+void GeneticAlgorithmPanel::EditGeneButtonClickedEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Make sure exactly ONE row is selected
-	if (!GeneList->IsSelection() || GeneList->GetSelectedRows().GetCount() != 1)
+	if (!geneList->IsSelection() || geneList->GetSelectedRows().GetCount() != 1)
 		return;
 
 	// Get the selected gene
-	GA_OBJECT::GENE GeneToEdit = Optimization.GetAlgorithm().GetGene(GeneList->GetSelectedRows()[0]);
+	GAObject::Gene geneToEdit = optimization.GetAlgorithm().GetGene(geneList->GetSelectedRows()[0]);
 
 	// Create the dialog box with properties corresponding to the selected gene
-	GA_GENE_DIALOG GeneDialog(static_cast<wxWindow*>(&MainFrame), Converter, GeneToEdit.Hardpoint,
-		GeneToEdit.TiedTo, GeneToEdit.Direction, GeneToEdit.Location, GeneToEdit.Minimum, GeneToEdit.Maximum,
-		GeneToEdit.NumberOfValues, wxID_ANY, wxDefaultPosition);
+	GAGeneDialog geneDialog(static_cast<wxWindow*>(&mainFrame), converter, geneToEdit.hardpoint,
+		geneToEdit.tiedTo, geneToEdit.direction, geneToEdit.location, geneToEdit.minimum, geneToEdit.maximum,
+		geneToEdit.numberOfValues, wxID_ANY, wxDefaultPosition);
 
 	// Display the dialog
-	if (GeneDialog.ShowModal() == wxOK)
+	if (geneDialog.ShowModal() == wxOK)
 	{
 		// Update the gene
-		Optimization.GetAlgorithm().UpdateGene(GeneList->GetSelectedRows()[0], GeneDialog.GetHardpoint(),
-			GeneDialog.GetTiedTo(), GeneDialog.GetCornerLocation(), GeneDialog.GetAxisDirection(),
-			GeneDialog.GetMinimum(), GeneDialog.GetMaximum(), GeneDialog.GetNumberOfValues());
+		optimization.GetAlgorithm().UpdateGene(geneList->GetSelectedRows()[0], geneDialog.GetHardpoint(),
+			geneDialog.GetTiedTo(), geneDialog.GetCornerLocation(), geneDialog.GetAxisDirection(),
+			geneDialog.GetMinimum(), geneDialog.GetMaximum(), geneDialog.GetNumberOfValues());
 
 		// Update the display for the gene
 		UpdateGeneList();
 
 		// Mark the optimization as modified
-		Optimization.SetModified();
+		optimization.SetModified();
 	}
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM_PANEL
+// Class:			GeneticAlgorithmPanel
 // Function:		RemoveGeneButtonClickedEvent
 //
 // Description:		Event handler for the Remove Gene button.  Removes the
@@ -450,35 +450,35 @@ void GENETIC_ALGORITHM_PANEL::EditGeneButtonClickedEvent(wxCommandEvent& WXUNUSE
 //		None
 //
 //==========================================================================
-void GENETIC_ALGORITHM_PANEL::RemoveGeneButtonClickedEvent(wxCommandEvent& WXUNUSED(event))
+void GeneticAlgorithmPanel::RemoveGeneButtonClickedEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Make sure a row is selected
-	if (!GeneList->IsSelection())
+	if (!geneList->IsSelection())
 		return;
 
 	// Make sure a gene exists (there is an empty row when the grid is first created -
 	// clicking on it and trying to remove it would crash us)
-	if (Optimization.GetAlgorithm().GetGeneCount() == 0)
+	if (optimization.GetAlgorithm().GetGeneCount() == 0)
 		return;
 
 	// Remove the selected gene(s)
 	unsigned int i;
-	for (i = 0; i < GeneList->GetSelectedRows().GetCount(); i++)
-		Optimization.GetAlgorithm().RemoveGene(GeneList->GetSelectedRows()[i]);
+	for (i = 0; i < geneList->GetSelectedRows().GetCount(); i++)
+		optimization.GetAlgorithm().RemoveGene(geneList->GetSelectedRows()[i]);
 
 	// Update the list
 	UpdateGeneList();
 
 	// Mark the optimization as modified
-	Optimization.SetModified();
+	optimization.SetModified();
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM_PANEL
+// Class:			GeneticAlgorithmPanel
 // Function:		AddGoalButtonClickedEvent
 //
 // Description:		Event handler for the Add Goal button.  Displays the
-//					GA_GOAL_DIALOG to allow the user to create the goal
+//					GAGoalDialog to allow the user to create the goal
 //					they wish to add.
 //
 // Input Arguments:
@@ -491,41 +491,41 @@ void GENETIC_ALGORITHM_PANEL::RemoveGeneButtonClickedEvent(wxCommandEvent& WXUNU
 //		None
 //
 //==========================================================================
-void GENETIC_ALGORITHM_PANEL::AddGoalButtonClickedEvent(wxCommandEvent& WXUNUSED(event))
+void GeneticAlgorithmPanel::AddGoalButtonClickedEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Set up the default kinematic inputs
-	Kinematics::Inputs DefaultInputs = MainFrame.GetInputs();
-	DefaultInputs.heave = 0.0;
-	DefaultInputs.pitch = 0.0;
-	DefaultInputs.roll = 0.0;
-	DefaultInputs.rackTravel = 0.0;
+	Kinematics::Inputs defaultInputs = mainFrame.GetInputs();
+	defaultInputs.heave = 0.0;
+	defaultInputs.pitch = 0.0;
+	defaultInputs.roll = 0.0;
+	defaultInputs.rackTravel = 0.0;
 
 	// Create the dialog box with default goal properties
-	GA_GOAL_DIALOG GoalDialog(static_cast<wxWindow*>(&MainFrame), Converter, (KinematicOutputs::OutputsComplete)0, 0.0,
-		0.0, 1.0, DefaultInputs, DefaultInputs, wxID_ANY, wxDefaultPosition);
+	GAGoalDialog goalDialog(static_cast<wxWindow*>(&mainFrame), converter, (KinematicOutputs::OutputsComplete)0, 0.0,
+		0.0, 1.0, defaultInputs, defaultInputs, wxID_ANY, wxDefaultPosition);
 
 	// Display the dialog
-	if (GoalDialog.ShowModal() == wxOK)
+	if (goalDialog.ShowModal() == wxOK)
 	{
 		// Create the new goal and add it to the list
-		Optimization.GetAlgorithm().AddGoal(GoalDialog.GetOutput(), GoalDialog.GetDesiredValue(),
-			GoalDialog.GetExpectedDeviation(), GoalDialog.GetImportance(), GoalDialog.GetBeforeInputs(),
-			GoalDialog.GetAfterInputs());
+		optimization.GetAlgorithm().AddGoal(goalDialog.GetOutput(), goalDialog.GetDesiredValue(),
+			goalDialog.GetExpectedDeviation(), goalDialog.GetImportance(), goalDialog.GetBeforeInputs(),
+			goalDialog.GetAfterInputs());
 
 		// Update the display for the goal
 		UpdateGoalList();
 
 		// Mark the optimization as modified
-		Optimization.SetModified();
+		optimization.SetModified();
 	}
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM_PANEL
+// Class:			GeneticAlgorithmPanel
 // Function:		EditGoalButtonClickedEvent
 //
 // Description:		Event handler for the Edit Goal button.  Displays the
-//					GA_GOAL_DIALOG to allow the user to edit the goal
+//					GAGoalDialog to allow the user to edit the goal
 //					they selected.
 //
 // Input Arguments:
@@ -538,38 +538,38 @@ void GENETIC_ALGORITHM_PANEL::AddGoalButtonClickedEvent(wxCommandEvent& WXUNUSED
 //		None
 //
 //==========================================================================
-void GENETIC_ALGORITHM_PANEL::EditGoalButtonClickedEvent(wxCommandEvent& WXUNUSED(event))
+void GeneticAlgorithmPanel::EditGoalButtonClickedEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Make sure exactly ONE row is selected
-	if (!GoalList->IsSelection() || GoalList->GetSelectedRows().GetCount() != 1)
+	if (!goalList->IsSelection() || goalList->GetSelectedRows().GetCount() != 1)
 		return;
 
 	// Get the selected goal
-	GA_OBJECT::GOAL GoalToEdit = Optimization.GetAlgorithm().GetGoal(GoalList->GetSelectedRows()[0]);
+	GAObject::Goal goalToEdit = optimization.GetAlgorithm().GetGoal(goalList->GetSelectedRows()[0]);
 
 	// Create the dialog box with properties corresponding to the selected goal
-	GA_GOAL_DIALOG GoalDialog(static_cast<wxWindow*>(&MainFrame), Converter, GoalToEdit.Output, GoalToEdit.DesiredValue,
-		GoalToEdit.ExpectedDeviation, GoalToEdit.Importance, GoalToEdit.BeforeInputs, GoalToEdit.AfterInputs,
+	GAGoalDialog goalDialog(static_cast<wxWindow*>(&mainFrame), converter, goalToEdit.output, goalToEdit.desiredValue,
+		goalToEdit.expectedDeviation, goalToEdit.importance, goalToEdit.beforeInputs, goalToEdit.afterInputs,
 		wxID_ANY, wxDefaultPosition);
 
 	// Display the dialog
-	if (GoalDialog.ShowModal() == wxOK)
+	if (goalDialog.ShowModal() == wxOK)
 	{
 		// Create the new goal and add it to the list
-		Optimization.GetAlgorithm().UpdateGoal(GoalList->GetSelectedRows()[0], GoalDialog.GetOutput(),
-			GoalDialog.GetDesiredValue(), GoalDialog.GetExpectedDeviation(), GoalDialog.GetImportance(),
-			GoalDialog.GetBeforeInputs(), GoalDialog.GetAfterInputs());
+		optimization.GetAlgorithm().UpdateGoal(goalList->GetSelectedRows()[0], goalDialog.GetOutput(),
+			goalDialog.GetDesiredValue(), goalDialog.GetExpectedDeviation(), goalDialog.GetImportance(),
+			goalDialog.GetBeforeInputs(), goalDialog.GetAfterInputs());
 
 		// Update the display for the goal
 		UpdateGoalList();
 
 		// Mark the optimization as modified
-		Optimization.SetModified();
+		optimization.SetModified();
 	}
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM_PANEL
+// Class:			GeneticAlgorithmPanel
 // Function:		RemoveGoalButtonClickedEvent
 //
 // Description:		Event handler for the Remove Goal button.  Removes the
@@ -585,31 +585,31 @@ void GENETIC_ALGORITHM_PANEL::EditGoalButtonClickedEvent(wxCommandEvent& WXUNUSE
 //		None
 //
 //==========================================================================
-void GENETIC_ALGORITHM_PANEL::RemoveGoalButtonClickedEvent(wxCommandEvent& WXUNUSED(event))
+void GeneticAlgorithmPanel::RemoveGoalButtonClickedEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Make sure a row is selected
-	if (!GoalList->IsSelection())
+	if (!goalList->IsSelection())
 		return;
 
 	// Make sure a goal exists (there is an empty row when the grid is first created -
 	// clicking on it and trying to remove it would crash us)
-	if (Optimization.GetAlgorithm().GetGoalCount() == 0)
+	if (optimization.GetAlgorithm().GetGoalCount() == 0)
 		return;
 
 	// Remove the selected goal(s)
 	unsigned int i;
-	for (i = 0; i < GoalList->GetSelectedRows().GetCount(); i++)
-		Optimization.GetAlgorithm().RemoveGoal(GoalList->GetSelectedRows()[i]);
+	for (i = 0; i < goalList->GetSelectedRows().GetCount(); i++)
+		optimization.GetAlgorithm().RemoveGoal(goalList->GetSelectedRows()[i]);
 
 	// Update the list
 	UpdateGoalList();
 
 	// Mark the optimization as modified
-	Optimization.SetModified();
+	optimization.SetModified();
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM_PANEL
+// Class:			GeneticAlgorithmPanel
 // Function:		StartStopOptimizationClickedEvent
 //
 // Description:		Event handler for the Start/Stop optimization button.
@@ -625,13 +625,13 @@ void GENETIC_ALGORITHM_PANEL::RemoveGoalButtonClickedEvent(wxCommandEvent& WXUNU
 //		None
 //
 //==========================================================================
-void GENETIC_ALGORITHM_PANEL::StartStopOptimizationClickedEvent(wxCommandEvent& WXUNUSED(event))
+void GeneticAlgorithmPanel::StartStopOptimizationClickedEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Determine if we should be starting or stopping the optimization
-	if (Optimization.GetAlgorithm().OptimizationIsRunning())
+	if (optimization.GetAlgorithm().OptimizationIsRunning())
 	{
 		// Stop the optimization
-		Optimization.HaltOptimization();
+		optimization.HaltOptimization();
 
 		// Change the caption on the button
 		// FIXME:  Capture event when GA ends to do this!!!
@@ -644,7 +644,7 @@ void GENETIC_ALGORITHM_PANEL::StartStopOptimizationClickedEvent(wxCommandEvent& 
 			return;
 
 		// Make sure a car is selected
-		if (SelectedCar->GetValue().IsEmpty())
+		if (selectedCar->GetValue().IsEmpty())
 		{
 			// Display a message box to warn the user
 			wxMessageBox(_T("ERROR:  No car selected to optimize!"), _T("No Selected Car"),
@@ -654,8 +654,8 @@ void GENETIC_ALGORITHM_PANEL::StartStopOptimizationClickedEvent(wxCommandEvent& 
 		}
 
 		// Make sure we have some genes and goals defined
-		if (Optimization.GetAlgorithm().GetGeneCount() == 0 ||
-			Optimization.GetAlgorithm().GetGoalCount() == 0)
+		if (optimization.GetAlgorithm().GetGeneCount() == 0 ||
+			optimization.GetAlgorithm().GetGoalCount() == 0)
 		{
 			// Display a message box to warn the user
 			wxMessageBox(_T("ERROR:  Optimization requires at least one gene and one goal!"), _T("Goal and Gene Required"),
@@ -666,17 +666,17 @@ void GENETIC_ALGORITHM_PANEL::StartStopOptimizationClickedEvent(wxCommandEvent& 
 
 		// Assign our car to optimize
 		// This is necessary for handling GUI interaction and displays
-		int i(0), CarIndex(-1);
-		for (i = 0; i < MainFrame.GetObjectCount(); i++)
+		int i(0), carIndex(-1);
+		for (i = 0; i < mainFrame.GetObjectCount(); i++)
 		{
 			// If the object with index i is a car, check to see if it is the selected car
-			if (MainFrame.GetObjectByIndex(i)->GetType() == GUI_OBJECT::TYPE_CAR)
+			if (mainFrame.GetObjectByIndex(i)->GetType() == GuiObject::TypeCar)
 			{
-				CarIndex++;
+				carIndex++;
 
 				// FIXME:  Under GTK, GetSelection only returns the correct index if the combobox has focus?
 				// This is the reason for the #ifdef __WXGTK__ below
-				if (CarIndex == SelectedCar->GetSelection())
+				if (carIndex == selectedCar->GetSelection())
 					break;
 			}
 		}
@@ -684,24 +684,24 @@ void GENETIC_ALGORITHM_PANEL::StartStopOptimizationClickedEvent(wxCommandEvent& 
 #ifdef __WXGTK__
 		// FIXME:  Under GTK, GetSelection only works the first time (while it has focus?)
 		// See note above
-		if (i > MainFrame.GetObjectCount())
+		if (i > mainFrame.GetObjectCount())
 		{
 			wxMessageBox(_T("Error identifying associated car!  Please re-select."));
 			return;
 		}
 #endif
 
-		Optimization.SetCarToOptimize(static_cast<GUI_CAR*>(MainFrame.GetObjectByIndex(i)));
+		optimization.SetCarToOptimize(static_cast<GuiCar*>(mainFrame.GetObjectByIndex(i)));
 
 		// Set the parameters for the analysis
-		Optimization.GetAlgorithm().SetUp(&(Optimization.GetCarToOptimize()->GetOriginalCar()));
+		optimization.GetAlgorithm().SetUp(&(optimization.GetCarToOptimize()->GetOriginalCar()));
 
 		// Reset the status bars (must occur after algorithm is SetUp() so we know
 		// how many analyses to expect
 		ResetStatusBars();
 
 		// Start the analysis
-		Optimization.BeginOptimization();
+		optimization.BeginOptimization();
 
 		// Change the caption on the button
 		// FIXME:  Capture event when GA starts to do this!!!
@@ -710,7 +710,7 @@ void GENETIC_ALGORITHM_PANEL::StartStopOptimizationClickedEvent(wxCommandEvent& 
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM_PANEL
+// Class:			GeneticAlgorithmPanel
 // Function:		UpdateSelectableCars
 //
 // Description:		Updates the list of cars available for optimization.
@@ -726,36 +726,36 @@ void GENETIC_ALGORITHM_PANEL::StartStopOptimizationClickedEvent(wxCommandEvent& 
 //		None
 //
 //==========================================================================
-void GENETIC_ALGORITHM_PANEL::UpdateSelectableCars(void)
+void GeneticAlgorithmPanel::UpdateSelectableCars(void)
 {
 	// NOTE:  If cars are opened or closed, this should follow the associated car, even though
 	// we may need to change the index to do so
 	// Check iterations for this behavior, too!
 
 	// Store the current name
-	wxString CurrentName = SelectedCar->GetValue();
+	wxString currentName = selectedCar->GetValue();
 
-	bool FoundOriginalCar(false);
-	if (CurrentName.IsEmpty())
-		FoundOriginalCar = true;
+	bool foundOriginalCar(false);
+	if (currentName.IsEmpty())
+		foundOriginalCar = true;
 
 	// Clear out the list and re-populate it with the currenly open cars
-	SelectedCar->Clear();
+	selectedCar->Clear();
 	int i;
-	for (i = 0; i < MainFrame.GetObjectCount(); i++)
+	for (i = 0; i < mainFrame.GetObjectCount(); i++)
 	{
 		// If the current object is a car, add it to the list
-		if (MainFrame.GetObjectByIndex(i)->GetType() == GUI_OBJECT::TYPE_CAR)
+		if (mainFrame.GetObjectByIndex(i)->GetType() == GuiObject::TypeCar)
 		{
-			SelectedCar->Append(MainFrame.GetObjectByIndex(i)->GetCleanName());
-			if (CurrentName.Cmp(MainFrame.GetObjectByIndex(i)->GetCleanName()) == 0)
-				FoundOriginalCar = true;
+			selectedCar->Append(mainFrame.GetObjectByIndex(i)->GetCleanName());
+			if (currentName.Cmp(mainFrame.GetObjectByIndex(i)->GetCleanName()) == 0)
+				foundOriginalCar = true;
 		}
 	}
 
 	// Re-selecte the originally selected car
-	if (FoundOriginalCar)
-		SelectedCar->SetValue(CurrentName);
+	if (foundOriginalCar)
+		selectedCar->SetValue(currentName);
 	else
 	{
 		// Handle the error if the original car is now gone
@@ -764,7 +764,7 @@ void GENETIC_ALGORITHM_PANEL::UpdateSelectableCars(void)
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM_PANEL
+// Class:			GeneticAlgorithmPanel
 // Function:		UpdateInformation
 //
 // Description:		Updates the parameters associated with optimization.  This
@@ -780,21 +780,21 @@ void GENETIC_ALGORITHM_PANEL::UpdateSelectableCars(void)
 //		None
 //
 //==========================================================================
-void GENETIC_ALGORITHM_PANEL::UpdateInformation(void)
+void GeneticAlgorithmPanel::UpdateInformation(void)
 {
 	// Get the GA object from the gui's optimization object
-	wxString Temp;
+	wxString temp;
 
 	// Update parameters
-	Temp.Printf("%i", Optimization.GetAlgorithm().GetPopulationSize());
-	PopulationSize->ChangeValue(Temp);
-	Temp.Printf("%i", Optimization.GetAlgorithm().GetGenerationLimit());
-	GenerationLimit->ChangeValue(Temp);
-	ElitismFraction->ChangeValue(Converter.FormatNumber(Optimization.GetAlgorithm().GetElitismPercentage()));
-	MutationProbability->ChangeValue(Converter.FormatNumber(Optimization.GetAlgorithm().GetMutationProbability()));
+	temp.Printf("%i", optimization.GetAlgorithm().GetPopulationSize());
+	populationSize->ChangeValue(temp);
+	temp.Printf("%i", optimization.GetAlgorithm().GetGenerationLimit());
+	generationLimit->ChangeValue(temp);
+	elitismFraction->ChangeValue(converter.FormatNumber(optimization.GetAlgorithm().GetElitismPercentage()));
+	mutationProbability->ChangeValue(converter.FormatNumber(optimization.GetAlgorithm().GetMutationProbability()));
 	
-	Temp.Printf("%i", Optimization.GetAlgorithm().GetCrossoverPoint());
-	CrossoverPoint->ChangeValue(Temp);
+	temp.Printf("%i", optimization.GetAlgorithm().GetCrossoverPoint());
+	crossoverPoint->ChangeValue(temp);
 
 	// Update the rest of the panel
 	UpdateGeneList();
@@ -803,11 +803,11 @@ void GENETIC_ALGORITHM_PANEL::UpdateInformation(void)
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM_PANEL
+// Class:			GeneticAlgorithmPanel
 // Function:		UpdateGeneList
 //
 // Description:		Updates the gene list to match the genes present in the
-//					associated GA_OBJECT.
+//					associated GAObject.
 //
 // Input Arguments:
 //		None
@@ -819,44 +819,44 @@ void GENETIC_ALGORITHM_PANEL::UpdateInformation(void)
 //		None
 //
 //==========================================================================
-void GENETIC_ALGORITHM_PANEL::UpdateGeneList(void)
+void GeneticAlgorithmPanel::UpdateGeneList(void)
 {
 	// Make sure we have the correct number of rows
-	if (GeneList->GetRows() > Optimization.GetAlgorithm().GetGeneCount()
-		&& Optimization.GetAlgorithm().GetGeneCount() > 1)
-		GeneList->DeleteRows(0, GeneList->GetRows() - Optimization.GetAlgorithm().GetGeneCount(), false);
-	else if (GeneList->GetRows() < Optimization.GetAlgorithm().GetGeneCount())
-		GeneList->InsertRows(0, Optimization.GetAlgorithm().GetGeneCount() - GeneList->GetRows(), false);
+	if (geneList->GetRows() > optimization.GetAlgorithm().GetGeneCount()
+		&& optimization.GetAlgorithm().GetGeneCount() > 1)
+		geneList->DeleteRows(0, geneList->GetRows() - optimization.GetAlgorithm().GetGeneCount(), false);
+	else if (geneList->GetRows() < optimization.GetAlgorithm().GetGeneCount())
+		geneList->InsertRows(0, optimization.GetAlgorithm().GetGeneCount() - geneList->GetRows(), false);
 
 	// Go through row-by-row and populate the cells with the correct information
-	wxString Temp;
+	wxString temp;
 	int i, j;
-	for (i = 0; i < Optimization.GetAlgorithm().GetGeneCount(); i++)
+	for (i = 0; i < optimization.GetAlgorithm().GetGeneCount(); i++)
 	{
-		GeneList->SetCellValue(i, 0, Corner::GetHardpointName(Optimization.GetAlgorithm().GetGene(i).Hardpoint));
-		if (Optimization.GetAlgorithm().GetGene(i).Hardpoint == Optimization.GetAlgorithm().GetGene(i).TiedTo)
-			GeneList->SetCellValue(i, 1, _T("None"));
+		geneList->SetCellValue(i, 0, Corner::GetHardpointName(optimization.GetAlgorithm().GetGene(i).hardpoint));
+		if (optimization.GetAlgorithm().GetGene(i).hardpoint == optimization.GetAlgorithm().GetGene(i).tiedTo)
+			geneList->SetCellValue(i, 1, _T("None"));
 		else
-			GeneList->SetCellValue(i, 1, Corner::GetHardpointName(Optimization.GetAlgorithm().GetGene(i).TiedTo));
-		GeneList->SetCellValue(i, 2, Vector::GetAxisName(Optimization.GetAlgorithm().GetGene(i).Direction));
-		GeneList->SetCellValue(i, 3, Converter.FormatNumber(
-			Converter.ConvertDistance(Optimization.GetAlgorithm().GetGene(i).Minimum)));
-		GeneList->SetCellValue(i, 4, Converter.FormatNumber(
-			Converter.ConvertDistance(Optimization.GetAlgorithm().GetGene(i).Maximum)));
-		Temp.Printf("%i", Optimization.GetAlgorithm().GetGene(i).NumberOfValues);
-		GeneList->SetCellValue(i, 5, Temp);
+			geneList->SetCellValue(i, 1, Corner::GetHardpointName(optimization.GetAlgorithm().GetGene(i).tiedTo));
+		geneList->SetCellValue(i, 2, Vector::GetAxisName(optimization.GetAlgorithm().GetGene(i).direction));
+		geneList->SetCellValue(i, 3, converter.FormatNumber(
+			converter.ConvertDistance(optimization.GetAlgorithm().GetGene(i).minimum)));
+		geneList->SetCellValue(i, 4, converter.FormatNumber(
+			converter.ConvertDistance(optimization.GetAlgorithm().GetGene(i).maximum)));
+		temp.Printf("%i", optimization.GetAlgorithm().GetGene(i).numberOfValues);
+		geneList->SetCellValue(i, 5, temp);
 
 		// Make the cells read-only and center the text
-		for (j = 0; j < GeneList->GetCols(); j++)
+		for (j = 0; j < geneList->GetCols(); j++)
 		{
-			GeneList->SetReadOnly(i, j, true);
-			GeneList->SetCellAlignment(wxALIGN_CENTER, i, j);
+			geneList->SetReadOnly(i, j, true);
+			geneList->SetCellAlignment(wxALIGN_CENTER, i, j);
 		}
 	}
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM_PANEL
+// Class:			GeneticAlgorithmPanel
 // Function:		UpdateGoalList
 //
 // Description:		Updates the goal list to match the goals present in the
@@ -872,45 +872,45 @@ void GENETIC_ALGORITHM_PANEL::UpdateGeneList(void)
 //		None
 //
 //==========================================================================
-void GENETIC_ALGORITHM_PANEL::UpdateGoalList(void)
+void GeneticAlgorithmPanel::UpdateGoalList(void)
 {
 	// Make sure we have the correct number of rows
-	if (GoalList->GetRows() > Optimization.GetAlgorithm().GetGoalCount()
-		&& Optimization.GetAlgorithm().GetGoalCount() > 1)
-		GoalList->DeleteRows(0, GoalList->GetRows() - Optimization.GetAlgorithm().GetGoalCount(), false);
-	else if (GoalList->GetRows() < Optimization.GetAlgorithm().GetGoalCount())
-		GoalList->InsertRows(0, Optimization.GetAlgorithm().GetGoalCount() - GoalList->GetRows(), false);
+	if (goalList->GetRows() > optimization.GetAlgorithm().GetGoalCount()
+		&& optimization.GetAlgorithm().GetGoalCount() > 1)
+		goalList->DeleteRows(0, goalList->GetRows() - optimization.GetAlgorithm().GetGoalCount(), false);
+	else if (goalList->GetRows() < optimization.GetAlgorithm().GetGoalCount())
+		goalList->InsertRows(0, optimization.GetAlgorithm().GetGoalCount() - goalList->GetRows(), false);
 
 	// Go through row-by-row and populate the cells with the correct information
 	int i, j;
-	for (i = 0; i < Optimization.GetAlgorithm().GetGoalCount(); i++)
+	for (i = 0; i < optimization.GetAlgorithm().GetGoalCount(); i++)
 	{
-		GoalList->SetCellValue(i, 0, KinematicOutputs::GetOutputName(Optimization.GetAlgorithm().GetGoal(i).Output));
-		GoalList->SetCellValue(i, 1, GetInputString(Optimization.GetAlgorithm().GetGoal(i).BeforeInputs));
-		GoalList->SetCellValue(i, 2, GetInputString(Optimization.GetAlgorithm().GetGoal(i).AfterInputs,
-			&Optimization.GetAlgorithm().GetGoal(i).BeforeInputs));
-		GoalList->SetCellValue(i, 5, Converter.FormatNumber(Optimization.GetAlgorithm().GetGoal(i).Importance));
+		goalList->SetCellValue(i, 0, KinematicOutputs::GetOutputName(optimization.GetAlgorithm().GetGoal(i).output));
+		goalList->SetCellValue(i, 1, GetInputString(optimization.GetAlgorithm().GetGoal(i).beforeInputs));
+		goalList->SetCellValue(i, 2, GetInputString(optimization.GetAlgorithm().GetGoal(i).afterInputs,
+			&optimization.GetAlgorithm().GetGoal(i).beforeInputs));
+		goalList->SetCellValue(i, 5, converter.FormatNumber(optimization.GetAlgorithm().GetGoal(i).importance));
 
 		// Here, we make sure we perform the appropriate conversion, depending on the units
 		// of this particular output
-		GoalList->SetCellValue(i, 3, Converter.FormatNumber(
-			Converter.ConvertTo(Optimization.GetAlgorithm().GetGoal(i).DesiredValue,
-			KinematicOutputs::GetOutputUnitType(Optimization.GetAlgorithm().GetGoal(i).Output))));
-		GoalList->SetCellValue(i, 4, Converter.FormatNumber(
-			Converter.ConvertTo(Optimization.GetAlgorithm().GetGoal(i).ExpectedDeviation,
-			KinematicOutputs::GetOutputUnitType(Optimization.GetAlgorithm().GetGoal(i).Output))));
+		goalList->SetCellValue(i, 3, converter.FormatNumber(
+			converter.ConvertTo(optimization.GetAlgorithm().GetGoal(i).desiredValue,
+			KinematicOutputs::GetOutputUnitType(optimization.GetAlgorithm().GetGoal(i).output))));
+		goalList->SetCellValue(i, 4, converter.FormatNumber(
+			converter.ConvertTo(optimization.GetAlgorithm().GetGoal(i).expectedDeviation,
+			KinematicOutputs::GetOutputUnitType(optimization.GetAlgorithm().GetGoal(i).output))));
 
 		// Make the cells read-only and center the text
-		for (j = 0; j < GoalList->GetCols(); j++)
+		for (j = 0; j < goalList->GetCols(); j++)
 		{
-			GoalList->SetReadOnly(i, j, true);
-			GoalList->SetCellAlignment(wxALIGN_CENTER, i, j);
+			goalList->SetReadOnly(i, j, true);
+			goalList->SetCellAlignment(wxALIGN_CENTER, i, j);
 		}
 	}
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM_PANEL
+// Class:			GeneticAlgorithmPanel
 // Function:		ResetStatusBars
 //
 // Description:		Resets status bars to zero progress and sets range so that
@@ -926,24 +926,24 @@ void GENETIC_ALGORITHM_PANEL::UpdateGoalList(void)
 //		None
 //
 //==========================================================================
-void GENETIC_ALGORITHM_PANEL::ResetStatusBars(void)
+void GeneticAlgorithmPanel::ResetStatusBars(void)
 {
 	// Set the range for the progress bars
 	// The progress bars get updated every time an analysis completes, so
 	// the range should be initialized so that it reaches 100% only when
 	// the last analysis is complete.
-	GenerationProgress->SetRange(Optimization.GetAlgorithm().GetPopulationSize()
-		* Optimization.GetAlgorithm().GetNumberOfInputs());
-	OverallProgress->SetRange(GenerationProgress->GetRange()
-		* Optimization.GetAlgorithm().GetGenerationLimit());
+	generationProgress->SetRange(optimization.GetAlgorithm().GetPopulationSize()
+		* optimization.GetAlgorithm().GetNumberOfInputs());
+	overallProgress->SetRange(generationProgress->GetRange()
+		* optimization.GetAlgorithm().GetGenerationLimit());
 
 	// Set the progress values to zero
-	GenerationProgress->SetValue(0);
-	OverallProgress->SetValue(0);
+	generationProgress->SetValue(0);
+	overallProgress->SetValue(0);
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM_PANEL
+// Class:			GeneticAlgorithmPanel
 // Function:		IncrementStatusBars
 //
 // Description:		Increments the level of completion of both status bars.
@@ -960,19 +960,19 @@ void GENETIC_ALGORITHM_PANEL::ResetStatusBars(void)
 //		None
 //
 //==========================================================================
-void GENETIC_ALGORITHM_PANEL::IncrementStatusBars(void)
+void GeneticAlgorithmPanel::IncrementStatusBars(void)
 {
 	// If the generation progress bar is already full, reset it to zero
-	if (GenerationProgress->GetValue() == GenerationProgress->GetRange())
-		GenerationProgress->SetValue(0);
+	if (generationProgress->GetValue() == generationProgress->GetRange())
+		generationProgress->SetValue(0);
 
 	// Add one to the status of both status bars
-	GenerationProgress->SetValue(GenerationProgress->GetValue() + 1);
-	OverallProgress->SetValue(OverallProgress->GetValue() + 1);
+	generationProgress->SetValue(generationProgress->GetValue() + 1);
+	overallProgress->SetValue(overallProgress->GetValue() + 1);
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM_PANEL
+// Class:			GeneticAlgorithmPanel
 // Function:		GetInputString
 //
 // Description:		Returns a human-readable string representing the passed
@@ -980,8 +980,8 @@ void GENETIC_ALGORITHM_PANEL::IncrementStatusBars(void)
 //					displayed (i.e. euler rotations are not relevant here).
 //
 // Input Arguments:
-//		Inputs			= const Kinematics::Inputs& referring to the relevant inputs
-//		SecondInputs	= const Kinematics::Inputs* pointing to a second (optional)
+//		inputs			= const Kinematics::Inputs& referring to the relevant inputs
+//		secondInputs	= const Kinematics::Inputs* pointing to a second (optional)
 //						  set of inputs
 //
 // Output Arguments:
@@ -991,33 +991,33 @@ void GENETIC_ALGORITHM_PANEL::IncrementStatusBars(void)
 //		None
 //
 //==========================================================================
-wxString GENETIC_ALGORITHM_PANEL::GetInputString(const Kinematics::Inputs &Inputs,
-												 const Kinematics::Inputs *SecondInputs) const
+wxString GeneticAlgorithmPanel::GetInputString(const Kinematics::Inputs &inputs,
+												 const Kinematics::Inputs *secondInputs) const
 {
-	wxString InputString;
+	wxString inputString;
 
 	// If the second set of inputs exists, make sure they don't match the first
-	if (SecondInputs)
+	if (secondInputs)
 	{
 		// If the first set of inputs matches the second, return nothing
-		if (Inputs == *SecondInputs)
+		if (inputs == *secondInputs)
 			return _T("None");
 	}
 
 	// Create the string
-	InputString.Printf("P:%s, R:%s, H:%s, S:%s",
-		Converter.FormatNumber(Converter.ConvertAngle(Inputs.pitch)).c_str(),
-		Converter.FormatNumber(Converter.ConvertAngle(Inputs.roll)).c_str(),
-		Converter.FormatNumber(Converter.ConvertDistance(Inputs.heave)).c_str(),
-		Converter.FormatNumber(Converter.ConvertDistance(Inputs.rackTravel)).c_str());
+	inputString.Printf("P:%s, R:%s, H:%s, S:%s",
+		converter.FormatNumber(converter.ConvertAngle(inputs.pitch)).c_str(),
+		converter.FormatNumber(converter.ConvertAngle(inputs.roll)).c_str(),
+		converter.FormatNumber(converter.ConvertDistance(inputs.heave)).c_str(),
+		converter.FormatNumber(converter.ConvertDistance(inputs.rackTravel)).c_str());
 
 	// FIXME!!!:  This doesn't work if they are using steering wheel angle instead of rack travel!
 
-	return InputString;
+	return inputString;
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM_PANEL
+// Class:			GeneticAlgorithmPanel
 // Function:		GeneListSelectCellEvent
 //
 // Description:		Event handler for cells being selected.  The purpose of
@@ -1034,14 +1034,14 @@ wxString GENETIC_ALGORITHM_PANEL::GetInputString(const Kinematics::Inputs &Input
 //		None
 //
 //==========================================================================
-void GENETIC_ALGORITHM_PANEL::GeneListSelectCellEvent(wxGridEvent &event)
+void GeneticAlgorithmPanel::GeneListSelectCellEvent(wxGridEvent &event)
 {
 	// Select the proper row
-	GeneList->SelectRow(event.GetRow(), event.ControlDown());
+	geneList->SelectRow(event.GetRow(), event.ControlDown());
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM_PANEL
+// Class:			GeneticAlgorithmPanel
 // Function:		GoalListSelectCellEvent
 //
 // Description:		Event handler for cells being selected.  The purpose of
@@ -1058,14 +1058,14 @@ void GENETIC_ALGORITHM_PANEL::GeneListSelectCellEvent(wxGridEvent &event)
 //		None
 //
 //==========================================================================
-void GENETIC_ALGORITHM_PANEL::GoalListSelectCellEvent(wxGridEvent &event)
+void GeneticAlgorithmPanel::GoalListSelectCellEvent(wxGridEvent &event)
 {
 	// Select the proper row
-	GoalList->SelectRow(event.GetRow(), event.ControlDown());
+	goalList->SelectRow(event.GetRow(), event.ControlDown());
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM_PANEL
+// Class:			GeneticAlgorithmPanel
 // Function:		TextBoxChangeEvent
 //
 // Description:		Event handler for text boxes changing.  Sets the flag
@@ -1083,10 +1083,10 @@ void GENETIC_ALGORITHM_PANEL::GoalListSelectCellEvent(wxGridEvent &event)
 //		None
 //
 //==========================================================================
-void GENETIC_ALGORITHM_PANEL::TextBoxChangeEvent(wxCommandEvent &event)
+void GeneticAlgorithmPanel::TextBoxChangeEvent(wxCommandEvent &event)
 {
 	// Don't do this until we're done loading
-	if (!OverallProgress)
+	if (!overallProgress)
 		return;
 
 	// Don't do this for combobox events
@@ -1097,17 +1097,17 @@ void GENETIC_ALGORITHM_PANEL::TextBoxChangeEvent(wxCommandEvent &event)
 	UpdateGAParameters(false);
 
 	// Mark the optimization as modified
-	Optimization.SetModified();
+	optimization.SetModified();
 }
 
 //==========================================================================
-// Class:			GENETIC_ALGORITHM_PANEL
+// Class:			GeneticAlgorithmPanel
 // Function:		UpdateGAParameters
 //
 // Description:		Updates the 
 //
 // Input Arguments:
-//		ShowWarnings	= const bool& indicating whether or not to show warning
+//		showWarnings	= const bool& indicating whether or not to show warning
 //						  dialog boxes
 //
 // Output Arguments:
@@ -1117,115 +1117,115 @@ void GENETIC_ALGORITHM_PANEL::TextBoxChangeEvent(wxCommandEvent &event)
 //		bool indicating whether or not all of the parameters were valid
 //
 //==========================================================================
-bool GENETIC_ALGORITHM_PANEL::UpdateGAParameters(const bool &ShowWarnings)
+bool GeneticAlgorithmPanel::UpdateGAParameters(const bool &showWarnings)
 {
 	// Check to see if the inputs are OK
-	double TempDouble;
-	long TempLong;
-	if (!PopulationSize->GetValue().ToLong(&TempLong))
+	double tempDouble;
+	long tempLong;
+	if (!populationSize->GetValue().ToLong(&tempLong))
 	{
 		// Display a message box to warn the user
-		if (ShowWarnings)
+		if (showWarnings)
 			wxMessageBox(_T("ERROR:  Population size must be a valid integer number!"), _T("Invalid Parameter"),
 				wxOK | wxICON_ERROR, this);
 
 		return false;
 	}
-	else if (TempLong <= 0)
+	else if (tempLong <= 0)
 	{
 		// Display a message box to warn the user
-		if (ShowWarnings)
+		if (showWarnings)
 			wxMessageBox(_T("ERROR:  Population size must be a positive number!"), _T("Invalid Parameter"),
 				wxOK | wxICON_ERROR, this);
 
 		return false;
 	}
 	else
-		Optimization.GetAlgorithm().SetPopulationSize(TempLong);
+		optimization.GetAlgorithm().SetPopulationSize(tempLong);
 
-	if (!GenerationLimit->GetValue().ToLong(&TempLong))
+	if (!generationLimit->GetValue().ToLong(&tempLong))
 	{
 		// Display a message box to warn the user
-		if (ShowWarnings)
+		if (showWarnings)
 			wxMessageBox(_T("ERROR:  Generation limit must be a valid integer number!"), _T("Invalid Parameter"),
 				wxOK | wxICON_ERROR, this);
 
 		return false;
 	}
-	else if (TempLong <= 0)
+	else if (tempLong <= 0)
 	{
 		// Display a message box to warn the user
-		if (ShowWarnings)
+		if (showWarnings)
 			wxMessageBox(_T("ERROR:  Generation limit must be a positive number!"), _T("Invalid Parameter"),
 				wxOK | wxICON_ERROR, this);
 
 		return false;
 	}
 	else
-		Optimization.GetAlgorithm().SetGenerationLimit(TempLong);
+		optimization.GetAlgorithm().SetGenerationLimit(tempLong);
 
-	if (!CrossoverPoint->GetValue().ToLong(&TempLong))
+	if (!crossoverPoint->GetValue().ToLong(&tempLong))
 	{
 		// Display a message box to warn the user
-		if (ShowWarnings)
+		if (showWarnings)
 			wxMessageBox(_T("ERROR:  Crossover point must be a valid integer number!"), _T("Invalid Parameter"),
 				wxOK | wxICON_ERROR, this);
 
 		return false;
 	}
-	else if (TempLong < 0)
+	else if (tempLong < 0)
 	{
 		// Display a message box to warn the user
-		if (ShowWarnings)
+		if (showWarnings)
 			wxMessageBox(_T("ERROR:  Crossover point must be non-negative!"), _T("Invalid Parameter"),
 				wxOK | wxICON_ERROR, this);
 
 		return false;
 	}
 	else
-		Optimization.GetAlgorithm().SetCrossoverPoint(TempLong);
+		optimization.GetAlgorithm().SetCrossoverPoint(tempLong);
 
-	if (!ElitismFraction->GetValue().ToDouble(&TempDouble))
+	if (!elitismFraction->GetValue().ToDouble(&tempDouble))
 	{
 		// Display a message box to warn the user
-		if (ShowWarnings)
+		if (showWarnings)
 			wxMessageBox(_T("ERROR:  Elitism fraction must be a valid number!"), _T("Invalid Parameter"),
 				wxOK | wxICON_ERROR, this);
 
 		return false;
 	}
-	else if (TempDouble < 0.0)
+	else if (tempDouble < 0.0)
 	{
 		// Display a message box to warn the user
-		if (ShowWarnings)
+		if (showWarnings)
 			wxMessageBox(_T("ERROR:  Elitism fraction must be non-negative!"), _T("Invalid Parameter"),
 				wxOK | wxICON_ERROR, this);
 
 		return false;
 	}
 	else
-		Optimization.GetAlgorithm().SetElitismPercentage(TempDouble);
+		optimization.GetAlgorithm().SetElitismPercentage(tempDouble);
 
-	if (!MutationProbability->GetValue().ToDouble(&TempDouble))
+	if (!mutationProbability->GetValue().ToDouble(&tempDouble))
 	{
 		// Display a message box to warn the user
-		if (ShowWarnings)
+		if (showWarnings)
 			wxMessageBox(_T("ERROR:  Mutation probability must be a valid number!"), _T("Invalid Parameter"),
 				wxOK | wxICON_ERROR, this);
 
 		return false;
 	}
-	else if (TempDouble < 0.0)
+	else if (tempDouble < 0.0)
 	{
 		// Display a message box to warn the user
-		if (ShowWarnings)
+		if (showWarnings)
 			wxMessageBox(_T("ERROR:  Mutation probability must be non-negative!"), _T("Invalid Parameter"),
 				wxOK | wxICON_ERROR, this);
 
 		return false;
 	}
 	else
-		Optimization.GetAlgorithm().SetMutationProbability(TempDouble);
+		optimization.GetAlgorithm().SetMutationProbability(tempDouble);
 
 	return true;
 }

@@ -22,31 +22,31 @@
 #include "vUtilities/convert.h"
 
 // CarDesigner forward declarations
-class MAIN_FRAME;
+class MainFrame;
 
-class GA_GOAL_DIALOG : public wxDialog
+class GAGoalDialog : public wxDialog
 {
 public:
 	// Constructor
-	GA_GOAL_DIALOG(wxWindow *Parent, const Convert &_Converter, const KinematicOutputs::OutputsComplete &_Output,
-		const double &_DesiredValue, const double &_ExpectedDeviation, const double &_Importance,
-		const Kinematics::Inputs &_BeforeInputs, const Kinematics::Inputs &_AfterInputs,
-		wxWindowID Id, const wxPoint &Position, long Style = wxDEFAULT_DIALOG_STYLE);
+	GAGoalDialog(wxWindow *parent, const Convert &_converter, const KinematicOutputs::OutputsComplete &_output,
+		const double &_desiredValue, const double &_expectedDeviation, const double &_importance,
+		const Kinematics::Inputs &_beforeInputs, const Kinematics::Inputs &_afterInputs,
+		wxWindowID id, const wxPoint &position, long style = wxDEFAULT_DIALOG_STYLE);
 
 	// Destructor
-	~GA_GOAL_DIALOG();
+	~GAGoalDialog();
 
 	// Private member accessors
-	KinematicOutputs::OutputsComplete GetOutput(void) const { return Output; };
-	double GetDesiredValue(void) const { return DesiredValue; };
-	double GetExpectedDeviation(void) const { return ExpectedDeviation; };
-	double GetImportance(void) const { return Importance; };
-	Kinematics::Inputs GetBeforeInputs(void) const { return BeforeInputs; };
-	Kinematics::Inputs GetAfterInputs(void) const { return AfterInputs; };
+	KinematicOutputs::OutputsComplete GetOutput(void) const { return output; };
+	double GetDesiredValue(void) const { return desiredValue; };
+	double GetExpectedDeviation(void) const { return expectedDeviation; };
+	double GetImportance(void) const { return importance; };
+	Kinematics::Inputs GetBeforeInputs(void) const { return beforeInputs; };
+	Kinematics::Inputs GetAfterInputs(void) const { return afterInputs; };
 
 private:
 	// The object that handles the unit conversions between the input and output
-	const Convert &Converter;
+	const Convert &converter;
 
 	// Method for creating controls
 	void CreateControls(void);
@@ -55,39 +55,39 @@ private:
 	void FormatDialogDifference(void);
 
 	// Controls
-	wxComboBox *OutputCombo;
+	wxComboBox *outputCombo;
 
-	wxTextCtrl *BeforePitchText;
-	wxTextCtrl *BeforeRollText;
-	wxTextCtrl *BeforeHeaveText;
-	wxTextCtrl *BeforeSteerText;
+	wxTextCtrl *beforePitchText;
+	wxTextCtrl *beforeRollText;
+	wxTextCtrl *beforeHeaveText;
+	wxTextCtrl *beforeSteerText;
 
-	wxTextCtrl *AfterPitchText;
-	wxTextCtrl *AfterRollText;
-	wxTextCtrl *AfterHeaveText;
-	wxTextCtrl *AfterSteerText;
+	wxTextCtrl *afterPitchText;
+	wxTextCtrl *afterRollText;
+	wxTextCtrl *afterHeaveText;
+	wxTextCtrl *afterSteerText;
 
-	wxTextCtrl *DesiredValueText;
-	wxTextCtrl *DeviationText;
-	wxTextCtrl *ImportanceText;
+	wxTextCtrl *desiredValueText;
+	wxTextCtrl *deviationText;
+	wxTextCtrl *importanceText;
 
-	wxCheckBox *Difference;
+	wxCheckBox *difference;
 
-	wxStaticText *DesiredValueLabel;
-	wxStaticText *DesiredValueUnitsLabel;
-	wxStaticText *DeviationUnitsLabel;
-	wxStaticText *BeforeLabel;
-	wxStaticText *AfterLabel;
+	wxStaticText *desiredValueLabel;
+	wxStaticText *desiredValueUnitsLabel;
+	wxStaticText *deviationUnitsLabel;
+	wxStaticText *beforeLabel;
+	wxStaticText *afterLabel;
 
 	// Values (populated when OK is clicked)
-	KinematicOutputs::OutputsComplete Output;
+	KinematicOutputs::OutputsComplete output;
 
-	double DesiredValue;
-	double ExpectedDeviation;
-	double Importance;
+	double desiredValue;
+	double expectedDeviation;
+	double importance;
 
-	Kinematics::Inputs BeforeInputs;
-	Kinematics::Inputs AfterInputs;
+	Kinematics::Inputs beforeInputs;
+	Kinematics::Inputs afterInputs;
 
 	// Event handlers
 	virtual void OKClickEvent(wxCommandEvent &event);

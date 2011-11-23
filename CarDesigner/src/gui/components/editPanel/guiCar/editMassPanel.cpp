@@ -10,7 +10,7 @@
 // File:  editMassPanel.cpp
 // Created:  2/10/2009
 // Author:  K. Loux
-// Description:  Contains the class definition for the EDIT_MASS_PANEL class.  This
+// Description:  Contains the class definition for the EditMassPanel class.  This
 //				 class is used to edit the hard points on a particular corner of the
 //				 car.
 // History:
@@ -26,10 +26,10 @@
 #include "vMath/vector.h"
 
 //==========================================================================
-// Class:			EDIT_MASS_PANEL
-// Function:		EDIT_MASS_PANEL
+// Class:			EditMassPanel
+// Function:		EditMassPanel
 //
-// Description:		Constructor for EDIT_MASS_PANEL class.
+// Description:		Constructor for EditMassPanel class.
 //
 // Input Arguments:
 //		_Parent		= EDIT_PANEL&, reference to this object's owner
@@ -45,7 +45,7 @@
 //		None
 //
 //==========================================================================
-EDIT_MASS_PANEL::EDIT_MASS_PANEL(EDIT_PANEL &_Parent, wxWindowID id,
+EditMassPanel::EditMassPanel(EDIT_PANEL &_Parent, wxWindowID id,
 								 const wxPoint& pos, const wxSize& size,
 								 const Debugger &_debugger) : wxScrolledWindow(&_Parent, id, pos, size),
 								 debugger(_debugger),
@@ -57,10 +57,10 @@ EDIT_MASS_PANEL::EDIT_MASS_PANEL(EDIT_PANEL &_Parent, wxWindowID id,
 }
 
 //==========================================================================
-// Class:			EDIT_MASS_PANEL
-// Function:		EDIT_MASS_PANEL
+// Class:			EditMassPanel
+// Function:		EditMassPanel
 //
-// Description:		Destructor for EDIT_MASS_PANEL class.
+// Description:		Destructor for EditMassPanel class.
 //
 // Input Arguments:
 //		None
@@ -72,12 +72,12 @@ EDIT_MASS_PANEL::EDIT_MASS_PANEL(EDIT_PANEL &_Parent, wxWindowID id,
 //		None
 //
 //==========================================================================
-EDIT_MASS_PANEL::~EDIT_MASS_PANEL()
+EditMassPanel::~EditMassPanel()
 {
 }
 
 //==========================================================================
-// Class:			EDIT_MASS_PANEL
+// Class:			EditMassPanel
 // Function:		Event Table
 //
 // Description:		Links GUI events with event handler functions.
@@ -92,12 +92,12 @@ EDIT_MASS_PANEL::~EDIT_MASS_PANEL()
 //		None
 //
 //==========================================================================
-BEGIN_EVENT_TABLE(EDIT_MASS_PANEL, wxPanel)
-	EVT_TEXT(wxID_ANY,	EDIT_MASS_PANEL::TextBoxEditEvent)
+BEGIN_EVENT_TABLE(EditMassPanel, wxPanel)
+	EVT_TEXT(wxID_ANY,	EditMassPanel::TextBoxEditEvent)
 END_EVENT_TABLE();
 
 //==========================================================================
-// Class:			EDIT_MASS_PANEL
+// Class:			EditMassPanel
 // Function:		UpdateInformation
 //
 // Description:		Updates the information on this panel.
@@ -113,7 +113,7 @@ END_EVENT_TABLE();
 //		None
 //
 //==========================================================================
-void EDIT_MASS_PANEL::UpdateInformation(MassProperties *_CurrentMassProperties)
+void EditMassPanel::UpdateInformation(MassProperties *_CurrentMassProperties)
 {
 	// Update the class member
 	CurrentMassProperties = _CurrentMassProperties;
@@ -150,7 +150,7 @@ void EDIT_MASS_PANEL::UpdateInformation(MassProperties *_CurrentMassProperties)
 }
 
 //==========================================================================
-// Class:			EDIT_MASS_PANEL
+// Class:			EditMassPanel
 // Function:		CreateControls
 //
 // Description:		Creates the controls for this panel.
@@ -165,7 +165,7 @@ void EDIT_MASS_PANEL::UpdateInformation(MassProperties *_CurrentMassProperties)
 //		None
 //
 //==========================================================================
-void EDIT_MASS_PANEL::CreateControls()
+void EditMassPanel::CreateControls()
 {
 	// Enable scrolling
 	SetScrollRate(1, 1);
@@ -289,7 +289,7 @@ void EDIT_MASS_PANEL::CreateControls()
 }
 
 //==========================================================================
-// Class:			EDIT_MASS_PANEL
+// Class:			EditMassPanel
 // Function:		TextBoxEditEvent
 //
 // Description:		Event that fires when any text box changes.
@@ -304,7 +304,7 @@ void EDIT_MASS_PANEL::CreateControls()
 //		None
 //
 //==========================================================================
-void EDIT_MASS_PANEL::TextBoxEditEvent(wxCommandEvent &event)
+void EditMassPanel::TextBoxEditEvent(wxCommandEvent &event)
 {
 	// The place where the data will be written
 	double *DataLocation = NULL;

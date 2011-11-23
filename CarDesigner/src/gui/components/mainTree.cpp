@@ -10,7 +10,7 @@
 // File:  mainTree.cpp
 // Created:  6/14/2008
 // Author:  K. Loux
-// Description:  Contains the class declaration for the MAIN_TREE class.
+// Description:  Contains the class declaration for the MainTree class.
 // History:
 //	1/28/2009	- Changed structure of GUI components so context menu creation for all
 //				  objects is handled by the MAIN_FRAME class, K. Loux.
@@ -43,16 +43,16 @@
 #endif
 
 //==========================================================================
-// Class:			MAIN_TREE
-// Function:		MAIN_TREE
+// Class:			MainTree
+// Function:		MainTree
 //
-// Description:		Constructor for MAIN_TREE class.
+// Description:		Constructor for MainTree class.
 //
 // Input Arguments:
-//		_MainFrame	= MAIN_FRAME&, reference to this object's owner
+//		_mainFrame	= MainFrame&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
-//		size		= wxSize& for passing to parent class's constructor
+//		_size		= wxSize& for passing to parent class's constructor
 //		style		= long for passing to parent class's constructor
 //		_debugger	= const Debugger& reference to applications debug printing utility
 //
@@ -63,59 +63,59 @@
 //		None
 //
 //==========================================================================
-MAIN_TREE::MAIN_TREE(MAIN_FRAME &_MainFrame, wxWindowID id, const wxPoint& pos,
-					 const wxSize& size, long style, const Debugger &_debugger)
-					 : wxTreeCtrl(&_MainFrame, id, pos, size, style),
-					 debugger(_debugger), MainFrame(_MainFrame)
+MainTree::MainTree(MainFrame &_mainFrame, wxWindowID id, const wxPoint& pos,
+					 const wxSize& _size, long style, const Debugger &_debugger)
+					 : wxTreeCtrl(&_mainFrame, id, pos, _size, style),
+					 debugger(_debugger), mainFrame(_mainFrame)
 {
 	// Set up the image list for tree item icons
-	int Size = 16;
-	IconList = new wxImageList(Size, Size, true, 1);
+	int size = 16;
+	iconList = new wxImageList(size, size, true, 1);
 
 	// Add icons to the list
 #ifdef __WXMSW__
-	IconHandle[CarIcon] = IconList->Add(wxIcon(_T("ICON_ID_CAR"),
-		wxBITMAP_TYPE_ICO_RESOURCE, Size, Size));
-	IconHandle[AerodynamicsIcon] = IconList->Add(wxIcon(_T("ICON_ID_AERODYNAMICS"),
-		wxBITMAP_TYPE_ICO_RESOURCE, Size, Size));
-	IconHandle[BrakesIcon] = IconList->Add(wxIcon(_T("ICON_ID_BRAKES"),
-		wxBITMAP_TYPE_ICO_RESOURCE, Size, Size));
-	IconHandle[DrivetrainIcon] = IconList->Add(wxIcon(_T("ICON_ID_DRIVETRAIN"),
-		wxBITMAP_TYPE_ICO_RESOURCE, Size, Size));
-	IconHandle[EngineIcon] = IconList->Add(wxIcon(_T("ICON_ID_ENGINE"),
-		wxBITMAP_TYPE_ICO_RESOURCE, Size, Size));
-	IconHandle[MassPropertiesIcon] = IconList->Add(wxIcon(_T("ICON_ID_MASS_PROPS"),
-		wxBITMAP_TYPE_ICO_RESOURCE, Size, Size));
-	IconHandle[SuspensionIcon] = IconList->Add(wxIcon(_T("ICON_ID_SUSPENSION"),
-		wxBITMAP_TYPE_ICO_RESOURCE, Size, Size));
-	IconHandle[TiresIcon] = IconList->Add(wxIcon(_T("ICON_ID_TIRES"),
-		wxBITMAP_TYPE_ICO_RESOURCE, Size, Size));
-	IconHandle[IterationIcon] = IconList->Add(wxIcon(_T("ICON_ID_ITERATION"),
-		wxBITMAP_TYPE_ICO_RESOURCE, Size, Size));
-	IconHandle[OptimizationIcon] = IconList->Add(wxIcon(_T("ICON_ID_OPTIMIZATION"),
-		wxBITMAP_TYPE_ICO_RESOURCE, Size, Size));
+	iconHandle[CarIcon] = iconList->Add(wxIcon(_T("ICON_ID_CAR"),
+		wxBITMAP_TYPE_ICO_RESOURCE, size, size));
+	iconHandle[AerodynamicsIcon] = iconList->Add(wxIcon(_T("ICON_ID_AERODYNAMICS"),
+		wxBITMAP_TYPE_ICO_RESOURCE, size, size));
+	iconHandle[BrakesIcon] = iconList->Add(wxIcon(_T("ICON_ID_BRAKES"),
+		wxBITMAP_TYPE_ICO_RESOURCE, size, size));
+	iconHandle[DrivetrainIcon] = iconList->Add(wxIcon(_T("ICON_ID_DRIVETRAIN"),
+		wxBITMAP_TYPE_ICO_RESOURCE, size, size));
+	iconHandle[EngineIcon] = iconList->Add(wxIcon(_T("ICON_ID_ENGINE"),
+		wxBITMAP_TYPE_ICO_RESOURCE, size, size));
+	iconHandle[MassPropertiesIcon] = iconList->Add(wxIcon(_T("ICON_ID_MASS_PROPS"),
+		wxBITMAP_TYPE_ICO_RESOURCE, size, size));
+	iconHandle[SuspensionIcon] = iconList->Add(wxIcon(_T("ICON_ID_SUSPENSION"),
+		wxBITMAP_TYPE_ICO_RESOURCE, size, size));
+	iconHandle[TiresIcon] = iconList->Add(wxIcon(_T("ICON_ID_TIRES"),
+		wxBITMAP_TYPE_ICO_RESOURCE, size, size));
+	iconHandle[IterationIcon] = iconList->Add(wxIcon(_T("ICON_ID_ITERATION"),
+		wxBITMAP_TYPE_ICO_RESOURCE, size, size));
+	iconHandle[OptimizationIcon] = iconList->Add(wxIcon(_T("ICON_ID_OPTIMIZATION"),
+		wxBITMAP_TYPE_ICO_RESOURCE, size, size));
 #elif __WXGTK__
-	IconHandle[CarIcon] = IconList->Add(wxIcon(car16_xpm, wxBITMAP_TYPE_XPM));
-	IconHandle[AerodynamicsIcon] = IconList->Add(wxIcon(aero16_xpm, wxBITMAP_TYPE_XPM));
-	IconHandle[BrakesIcon] = IconList->Add(wxIcon(brakes16_xpm, wxBITMAP_TYPE_XPM));
-	IconHandle[DrivetrainIcon] = IconList->Add(wxIcon(drivetrain16_xpm, wxBITMAP_TYPE_XPM));
-	IconHandle[EngineIcon] = IconList->Add(wxIcon(engine16_xpm, wxBITMAP_TYPE_XPM));
-	IconHandle[MassPropertiesIcon] = IconList->Add(wxIcon(massProperties16_xpm, wxBITMAP_TYPE_XPM));
-	IconHandle[SuspensionIcon] = IconList->Add(wxIcon(suspension16_xpm, wxBITMAP_TYPE_XPM));
-	IconHandle[TiresIcon] = IconList->Add(wxIcon(tires16_xpm, wxBITMAP_TYPE_XPM));
-	IconHandle[IterationIcon] = IconList->Add(wxIcon(iteration16_xpm, wxBITMAP_TYPE_XPM));
-	IconHandle[OptimizationIcon] = IconList->Add(wxIcon(optimization16_xpm, wxBITMAP_TYPE_XPM));
+	iconHandle[CarIcon] = iconList->Add(wxIcon(car16_xpm, wxBITMAP_TYPE_XPM));
+	iconHandle[AerodynamicsIcon] = iconList->Add(wxIcon(aero16_xpm, wxBITMAP_TYPE_XPM));
+	iconHandle[BrakesIcon] = iconList->Add(wxIcon(brakes16_xpm, wxBITMAP_TYPE_XPM));
+	iconHandle[DrivetrainIcon] = iconList->Add(wxIcon(drivetrain16_xpm, wxBITMAP_TYPE_XPM));
+	iconHandle[EngineIcon] = iconList->Add(wxIcon(engine16_xpm, wxBITMAP_TYPE_XPM));
+	iconHandle[MassPropertiesIcon] = iconList->Add(wxIcon(massProperties16_xpm, wxBITMAP_TYPE_XPM));
+	iconHandle[SuspensionIcon] = iconList->Add(wxIcon(suspension16_xpm, wxBITMAP_TYPE_XPM));
+	iconHandle[TiresIcon] = iconList->Add(wxIcon(tires16_xpm, wxBITMAP_TYPE_XPM));
+	iconHandle[IterationIcon] = iconList->Add(wxIcon(iteration16_xpm, wxBITMAP_TYPE_XPM));
+	iconHandle[OptimizationIcon] = iconList->Add(wxIcon(optimization16_xpm, wxBITMAP_TYPE_XPM));
 #endif
 
 	// Assign the image list to the tree
-	AssignImageList(IconList);
+	AssignImageList(iconList);
 }
 
 //==========================================================================
-// Class:			MAIN_TREE
-// Function:		~MAIN_TREE
+// Class:			MainTree
+// Function:		~MainTree
 //
-// Description:		Destructor for the MAIN_TREE class.
+// Description:		Destructor for the MainTree class.
 //
 // Input Arguments:
 //		None
@@ -127,10 +127,10 @@ MAIN_TREE::MAIN_TREE(MAIN_FRAME &_MainFrame, wxWindowID id, const wxPoint& pos,
 //		None
 //
 //==========================================================================
-MAIN_TREE::~MAIN_TREE()
+MainTree::~MainTree()
 {
 	// Clear out the icon list
-	IconList->RemoveAll();
+	iconList->RemoveAll();
 
 	// DO NOT delete IconList here - when we make the AssignImageList call
 	// in the constructor, we give the tree control ownership of the list,
@@ -138,7 +138,7 @@ MAIN_TREE::~MAIN_TREE()
 }
 
 //==========================================================================
-// Class:			MAIN_TREE
+// Class:			MainTree
 // Function:		Event Table
 //
 // Description:		Links the GUI  events with the event handling functions.
@@ -153,20 +153,20 @@ MAIN_TREE::~MAIN_TREE()
 //		None
 //
 //==========================================================================
-BEGIN_EVENT_TABLE(MAIN_TREE, wxTreeCtrl)
-	EVT_TREE_SEL_CHANGED(wxID_ANY,				MAIN_TREE::SelectionChangeEvent)
-	EVT_TREE_ITEM_RIGHT_CLICK(wxID_ANY,			MAIN_TREE::ItemRightClickEvent)
-	EVT_TREE_ITEM_ACTIVATED(wxID_ANY,			MAIN_TREE::ItemActivatedEvent)
+BEGIN_EVENT_TABLE(MainTree, wxTreeCtrl)
+	EVT_TREE_SEL_CHANGED(wxID_ANY,				MainTree::SelectionChangeEvent)
+	EVT_TREE_ITEM_RIGHT_CLICK(wxID_ANY,			MainTree::ItemRightClickEvent)
+	EVT_TREE_ITEM_ACTIVATED(wxID_ANY,			MainTree::ItemActivatedEvent)
 END_EVENT_TABLE();
 
 //==========================================================================
-// Class:			MAIN_TREE
+// Class:			MainTree
 // Function:		SelectionChangeEvent
 //
 // Description:		Makes the selected car active.
 //
 // Input Arguments:
-//		IsActivated	= bool indicated whether this is firing on selection change
+//		isActivated	= bool indicated whether this is firing on selection change
 //					  or activated event
 //
 // Output Arguments:
@@ -176,15 +176,15 @@ END_EVENT_TABLE();
 //		None
 //
 //==========================================================================
-void MAIN_TREE::PerformSelection(bool IsActivated)
+void MainTree::PerformSelection(bool isActivated)
 {
 	// Make the notebook tab for the selected car come to the front, which
 	// will in turn make that car active.
-	MainFrame.SetActiveIndex(GetSelectedObjectIndex(), IsActivated);
+	mainFrame.SetActiveIndex(GetSelectedObjectIndex(), isActivated);
 }
 
 //==========================================================================
-// Class:			MAIN_TREE
+// Class:			MainTree
 // Function:		GetSelectedObjectIndex
 //
 // Description:		Gets the application's object index for the selected object.
@@ -199,14 +199,14 @@ void MAIN_TREE::PerformSelection(bool IsActivated)
 //		int representing object's index
 //
 //==========================================================================
-int MAIN_TREE::GetSelectedObjectIndex(void)
+int MainTree::GetSelectedObjectIndex(void)
 {
 	// Determine the object that corresponds to the selected item
 	int Index;
-	for (Index = 0; Index < MainFrame.GetObjectCount(); Index++)
+	for (Index = 0; Index < mainFrame.GetObjectCount(); Index++)
 	{
 		// Check to see if the object with index Index is the owner of the selected item
-		if (MainFrame.GetObjectByIndex(Index)->IsThisObjectSelected(GetSelection()))
+		if (mainFrame.GetObjectByIndex(Index)->IsThisObjectSelected(GetSelection()))
 			break;
 	}
 
@@ -214,7 +214,7 @@ int MAIN_TREE::GetSelectedObjectIndex(void)
 }
 
 //==========================================================================
-// Class:			MAIN_TREE
+// Class:			MainTree
 // Function:		SelectionChangeEvent
 //
 // Description:		Makes the selected car active.
@@ -229,40 +229,40 @@ int MAIN_TREE::GetSelectedObjectIndex(void)
 //		None
 //
 //==========================================================================
-void MAIN_TREE::SelectionChangeEvent(wxTreeEvent &event)
+void MainTree::SelectionChangeEvent(wxTreeEvent &event)
 {
 	// Prevent this event from firing just because we deleted a car
-	if (MainFrame.ObjectIsBeingDeleted())
+	if (mainFrame.ObjectIsBeingDeleted())
 		return;
 
 	// Determine if we should change the tab, or just update the edit panel
-	bool ChangeTab = true;
+	bool changeTab = true;
 	
 	// Make sure the selected object index is still valid - we had some problems
 	// under GTK where this event fires following an object being deleted and
 	// attempts to GetObjectByIndex with an invalid index
 
-	if (GetSelectedObjectIndex() < MainFrame.GetObjectCount())
+	if (GetSelectedObjectIndex() < mainFrame.GetObjectCount())
 	{
 		// If the current type is not the same as the previous type and the current
 		// type is a car, do not update the tab
 		// Also, if the current selection is the same as the previous selection,
 		// do not update the tab
-		if ((MainFrame.GetObjectByIndex(GetSelectedObjectIndex())->GetType() !=
-				MainFrame.GetObjectByIndex(MainFrame.GetActiveIndex())->GetType() &&
-				MainFrame.GetObjectByIndex(GetSelectedObjectIndex())->GetType() == GUI_OBJECT::TYPE_CAR) ||
-				GetSelectedObjectIndex() == MainFrame.GetActiveIndex())
-			ChangeTab = false;
+		if ((mainFrame.GetObjectByIndex(GetSelectedObjectIndex())->GetType() !=
+				mainFrame.GetObjectByIndex(mainFrame.GetActiveIndex())->GetType() &&
+				mainFrame.GetObjectByIndex(GetSelectedObjectIndex())->GetType() == GuiObject::TypeCar) ||
+				GetSelectedObjectIndex() == mainFrame.GetActiveIndex())
+			changeTab = false;
 	}
 
 	// Perform the appropriate actions
-	PerformSelection(ChangeTab);
+	PerformSelection(changeTab);
 
 	event.Skip();
 }
 
 //==========================================================================
-// Class:			MAIN_TREE
+// Class:			MainTree
 // Function:		ItemRightClickEvent
 //
 // Description:		Creates a pop-up menu for the selected item.  Menu
@@ -278,31 +278,31 @@ void MAIN_TREE::SelectionChangeEvent(wxTreeEvent &event)
 //		None
 //
 //==========================================================================
-void MAIN_TREE::ItemRightClickEvent(wxTreeEvent &event)
+void MainTree::ItemRightClickEvent(wxTreeEvent &event)
 {
 	// Iterate through the objects to get the GUI_OBJECT associated with the item
 	// that was right clicked.
-	int Index;
-	for (Index = 0; Index < MainFrame.GetObjectCount(); Index++)
+	int index;
+	for (index = 0; index < mainFrame.GetObjectCount(); index++)
 	{
 		// Check to see if the selected tree item belongs to the car with this index
-		if (MainFrame.GetObjectByIndex(Index)->IsThisObjectSelected(event.GetItem()))
+		if (mainFrame.GetObjectByIndex(index)->IsThisObjectSelected(event.GetItem()))
 			break;
 	}
 
 	// The point we get from the event is in client coordinates w.r.t. SystemsTree.
 	// To generate a context menu in the correct position, we need to convert this to client
 	// coordinates w.r.t. MainFrame.
-	wxPoint MenuPosition = event.GetPoint() + GetPosition();
+	wxPoint menuPosition = event.GetPoint() + GetPosition();
 
 	// Create and display the context menu
-	MainFrame.CreateContextMenu(Index, MenuPosition);
+	mainFrame.CreateContextMenu(index, menuPosition);
 
 	event.Skip();
 }
 
 //==========================================================================
-// Class:			MAIN_TREE
+// Class:			MainTree
 // Function:		ItemActivatedEvent
 //
 // Description:		Sets the active index to the current itemm
@@ -317,7 +317,7 @@ void MAIN_TREE::ItemRightClickEvent(wxTreeEvent &event)
 //		None
 //
 //==========================================================================
-void MAIN_TREE::ItemActivatedEvent(wxTreeEvent &event)
+void MainTree::ItemActivatedEvent(wxTreeEvent &event)
 {
 	// Perform the appropriate actions
 	PerformSelection(true);
@@ -326,7 +326,7 @@ void MAIN_TREE::ItemActivatedEvent(wxTreeEvent &event)
 }
 
 //==========================================================================
-// Class:			MAIN_TREE
+// Class:			MainTree
 // Function:		GetSelectedItem
 //
 // Description:		Retrieves the selected item.
@@ -335,26 +335,26 @@ void MAIN_TREE::ItemActivatedEvent(wxTreeEvent &event)
 //		None
 //
 // Output Arguments:
-//		SelectedItem	= wxTreeItemId* of the selected item
+//		selectedItem	= wxTreeItemId* of the selected item
 //
 // Return Value:
-//		*GUI_OBJECT = pointer to selected GUI_OBJECT, or NULL if no item is
+//		*GuiObject = pointer to selected GuiObject, or NULL if no item is
 //					  selected
 //
 //==========================================================================
-GUI_OBJECT *MAIN_TREE::GetSelectedItem(wxTreeItemId *SelectedItem)
+GuiObject *MainTree::GetSelectedItem(wxTreeItemId *selectedItem)
 {
 	// Assign the output arguement (if we were passed a valid pointer)
-	if (SelectedItem)
-		*SelectedItem = GetSelection();
+	if (selectedItem)
+		*selectedItem = GetSelection();
 
 	// Iterate through the open objects
-	int Index;
-	for (Index = 0; Index < MainFrame.GetObjectCount(); Index++)
+	int index;
+	for (index = 0; index < mainFrame.GetObjectCount(); index++)
 	{
 		// Check to see if the selected tree item belongs to the object with this index
-		if (MainFrame.GetObjectByIndex(Index)->IsThisObjectSelected(GetSelection()))
-			return MainFrame.GetObjectByIndex(Index);
+		if (mainFrame.GetObjectByIndex(index)->IsThisObjectSelected(GetSelection()))
+			return mainFrame.GetObjectByIndex(index);
 	}
 
 	// No matches - return NULL
@@ -362,14 +362,14 @@ GUI_OBJECT *MAIN_TREE::GetSelectedItem(wxTreeItemId *SelectedItem)
 }
 
 //==========================================================================
-// Class:			MAIN_TREE
+// Class:			MainTree
 // Function:		GetItemType
 //
 // Description:		Returns the number of items below the root the specified
 //					child is.  Used for determining the type of a child item.
 //
 // Input Arguments:
-//		ItemId	= wxTreeItemId
+//		itemId	= wxTreeItemId
 //
 // Output Arguments:
 //		None
@@ -378,35 +378,35 @@ GUI_OBJECT *MAIN_TREE::GetSelectedItem(wxTreeItemId *SelectedItem)
 //		integer specifying the type of the selected item
 //
 //==========================================================================
-int MAIN_TREE::GetItemType(wxTreeItemId ItemId)
+int MainTree::GetItemType(wxTreeItemId itemId)
 {
 	// Iterate through the open objects
-	int Index;
-	for (Index = 0; Index < MainFrame.GetObjectCount(); Index++)
+	int index;
+	for (index = 0; index < mainFrame.GetObjectCount(); index++)
 	{
 		// Check to see if the selected tree item belongs to the object with this index
-		if (MainFrame.GetObjectByIndex(Index)->IsThisObjectSelected(GetSelection()))
+		if (mainFrame.GetObjectByIndex(index)->IsThisObjectSelected(GetSelection()))
 		{
-			GUI_OBJECT *SelectedObject = MainFrame.GetObjectByIndex(Index);
+			GuiObject *selectedObject = mainFrame.GetObjectByIndex(index);
 
 			// Now check each tree item ID for that object with the specified tree item ID
 			// Each type has different children, so we need to first identify the type
 			int i;
-			switch (SelectedObject->GetType())
+			switch (selectedObject->GetType())
 			{
-			case GUI_OBJECT::TYPE_CAR:
-				for (i = 0; i < GUI_CAR::NumberOfSubsystems; i++)
+			case GuiObject::TypeCar:
+				for (i = 0; i < GuiCar::NumberOfSubsystems; i++)
 				{
 					// If the ID matches, return this index
-					if (ItemId == static_cast<GUI_CAR*>(SelectedObject)->Subsystems[i])
+					if (itemId == static_cast<GuiCar*>(selectedObject)->subsystems[i])
 						return i;
 				}
 				break;
 
 			// Unused types
-			case GUI_OBJECT::TYPE_ITERATION:
-			case GUI_OBJECT::TYPE_OPTIMIZATION:
-			case GUI_OBJECT::TYPE_NONE:
+			case GuiObject::TypeIteration:
+			case GuiObject::TypeOptimization:
+			case GuiObject::TypeNone:
 				break;
 
 			// Fail on unknown types to avoid forgetting any types

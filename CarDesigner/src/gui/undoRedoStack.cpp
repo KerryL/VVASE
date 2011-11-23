@@ -20,13 +20,13 @@
 #include "gui/components/editPanel/editPanel.h"
 
 //==========================================================================
-// Class:			UNDO_REDO_STACK
-// Function:		UNDO_REDO_STACK
+// Class:			UndoRedoStack
+// Function:		UndoRedoStack
 //
-// Description:		Constructor for the UNDO_REDO_STACK class.
+// Description:		Constructor for the UndoRedoStack class.
 //
 // Input Arguments:
-//		_MainFrame	= &MAIN_FRAME, reference to the main frame object
+//		_mainFrame	= &MainFrame, reference to the main frame object
 //
 // Output Arguments:
 //		None
@@ -35,15 +35,15 @@
 //		None
 //
 //==========================================================================
-UNDO_REDO_STACK::UNDO_REDO_STACK(MAIN_FRAME &_MainFrame) : MainFrame(_MainFrame)
+UndoRedoStack::UndoRedoStack(MainFrame &_mainFrame) : mainFrame(_mainFrame)
 {
 }
 
 //==========================================================================
-// Class:			UNDO_REDO_STACK
-// Function:		~UNDO_REDO_STACK
+// Class:			UndoRedoStack
+// Function:		~UndoRedoStack
 //
-// Description:		Destructor for the UNDO_REDO_STACK class.
+// Description:		Destructor for the UndoRedoStack class.
 //
 // Input Arguments:
 //		None
@@ -55,27 +55,27 @@ UNDO_REDO_STACK::UNDO_REDO_STACK(MAIN_FRAME &_MainFrame) : MainFrame(_MainFrame)
 //		None
 //
 //==========================================================================
-UNDO_REDO_STACK::~UNDO_REDO_STACK()
+UndoRedoStack::~UndoRedoStack()
 {
 }
 
 //==========================================================================
-// Class:			UNDO_REDO_STACK
+// Class:			UndoRedoStack
 // Function:		AddOperation
 //
 // Description:		Adds an operation to the undo stack.  Operations must be
 //					added before the change is committed.  In other words,
 //					the only correct calling sequence is:
 //						1.  Do all verification that operation is desired/correct
-//						2.  Call UNDO_REDO_STACK::AddOperation()
+//						2.  Call UndoRedoStack::AddOperation()
 //						3.  Perform the operation
 //
 // Input Arguments:
-//		Index		= int specifying which GUI_OBJECT the operation is
+//		index		= int specifying which GuiObject the operation is
 //					  associated with
-//		DataType	= OPERATION::OPERATION_DATA_TYPE describing what kind of
+//		dataType	= Operation::OperationDataType describing what kind of
 //					  data to store
-//		Location	= *void, pointing to the location of the unchanged (but
+//		location	= *void, pointing to the location of the unchanged (but
 //					  to soon be changed) data
 //
 // Output Arguments:
@@ -85,31 +85,31 @@ UNDO_REDO_STACK::~UNDO_REDO_STACK()
 //		None
 //
 //==========================================================================
-void UNDO_REDO_STACK::AddOperation(int Index,
-								   UNDO_REDO_STACK::OPERATION::OPERATION_DATA_TYPE DataType,
-								   void *Location)
+void UndoRedoStack::AddOperation(int index,
+								   UndoRedoStack::Operation::OperationDataType dataType,
+								   void *location)
 {
 	// Clear the redo stack
-	while (!RedoStack.empty())
-		RedoStack.pop();
+	while (!redoStack.empty())
+		redoStack.pop();
 
 	// Enable the undo menu item and disable the redo menu item
-	MainFrame.EnableUndo();
-	MainFrame.DisableRedo();
+	mainFrame.EnableUndo();
+	mainFrame.DisableRedo();
 
-	// Create an OPERATION object and populate it
-	UNDO_REDO_STACK::OPERATION LastOperation;
-	LastOperation.DataType = DataType;
-	LastOperation.GuiObjectIndex = Index;
-	LastOperation.DataLocation = Location;
-	LastOperation = UpdateValue(LastOperation);
+	// Create an Operation object and populate it
+	UndoRedoStack::Operation lastOperation;
+	lastOperation.dataType = dataType;
+	lastOperation.guiObjectIndex = index;
+	lastOperation.dataLocation = location;
+	lastOperation = UpdateValue(lastOperation);
 
 	// Add the operation to the undo stack
-	UndoStack.push(LastOperation);
+	undoStack.push(lastOperation);
 }
 
 //==========================================================================
-// Class:			UNDO_REDO_STACK
+// Class:			UndoRedoStack
 // Function:		UpdateValue
 //
 // Description:		Updates the OldValue for the specified operation.  To be
@@ -117,53 +117,53 @@ void UNDO_REDO_STACK::AddOperation(int Index,
 //					between stacks.
 //
 // Input Arguments:
-//		Operation	= OPERATION to consider
+//		Operation	= Operation to consider
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		OPERATION after change has been applied
+//		Operation after change has been applied
 //
 //==========================================================================
-UNDO_REDO_STACK::OPERATION UNDO_REDO_STACK::UpdateValue(OPERATION Operation)
+UndoRedoStack::Operation UndoRedoStack::UpdateValue(Operation Operation)
 {
-	switch (Operation.DataType)
+	switch (Operation.dataType)
 	{
-	case OPERATION::DATA_TYPE_BOOL:
-		Operation.OldValue.Boolean = *(bool*)Operation.DataLocation;
+	case Operation::DataTypeBool:
+		Operation.oldValue.boolean = *(bool*)Operation.dataLocation;
 		break;
 
-	case OPERATION::DATA_TYPE_SHORT:
-		Operation.OldValue.ShortInteger = *(short*)Operation.DataLocation;
+	case Operation::DataTypeShort:
+		Operation.oldValue.shortInteger = *(short*)Operation.dataLocation;
 		break;
 
-	case OPERATION::DATA_TYPE_INTEGER:
-		Operation.OldValue.Integer = *(int*)Operation.DataLocation;
+	case Operation::DataTypeInteger:
+		Operation.oldValue.integer = *(int*)Operation.dataLocation;
 		break;
 
-	case OPERATION::DATA_TYPE_LONG:
-		Operation.OldValue.LongInteger = *(long*)Operation.DataLocation;
+	case Operation::DataTypeLong:
+		Operation.oldValue.longInteger = *(long*)Operation.dataLocation;
 		break;
 
-	case OPERATION::DATA_TYPE_FLOAT:
-		Operation.OldValue.Float = *(float*)Operation.DataLocation;
+	case Operation::DataTypeFloat:
+		Operation.oldValue.singlePrecision = *(float*)Operation.dataLocation;
 		break;
 
-	case OPERATION::DATA_TYPE_DOUBLE:
-		Operation.OldValue.Double = *(double*)Operation.DataLocation;
+	case Operation::DataTypeDouble:
+		Operation.oldValue.doublePrecision = *(double*)Operation.dataLocation;
 		break;
 
-	/*case OPERATION::DATA_TYPE_GA_GENE_ADD:
-	case OPERATION::DATA_TYPE_GA_GENE_MODIFY:
-	case OPERATION::DATA_TYPE_GA_GENE_DELETE:
-		Operation.OldValue.GeneData = *(OPERATION::OPERATION_DATA::GENE_DATA*)Operation.DataLocation;
+	/*case Operation::DATA_TYPE_GA_GENE_ADD:
+	case Operation::DATA_TYPE_GA_GENE_MODIFY:
+	case Operation::DATA_TYPE_GA_GENE_DELETE:
+		Operation.oldValue.GeneData = *(Operation::Operation_DATA::GENE_DATA*)Operation.dataLocation;
 		break;
 
-	case OPERATION::DATA_TYPE_GA_GOAL_ADD:
-	case OPERATION::DATA_TYPE_GA_GOAL_MODIFY:
-	case OPERATION::DATA_TYPE_GA_GOAL_DELETE:
-		Operation.OldValue.GoalData = *(OPERATION::OPERATION_DATA::GOAL_DATA*)Operation.DataLocation;
+	case Operation::DATA_TYPE_GA_GOAL_ADD:
+	case Operation::DATA_TYPE_GA_GOAL_MODIFY:
+	case Operation::DATA_TYPE_GA_GOAL_DELETE:
+		Operation.oldValue.GoalData = *(Operation::Operation_DATA::GOAL_DATA*)Operation.dataLocation;
 		break;*/
 
 	default:
@@ -174,7 +174,7 @@ UNDO_REDO_STACK::OPERATION UNDO_REDO_STACK::UpdateValue(OPERATION Operation)
 }
 
 //==========================================================================
-// Class:			UNDO_REDO_STACK
+// Class:			UndoRedoStack
 // Function:		Undo
 //
 // Description:		Undoes the last logged operation.
@@ -189,31 +189,31 @@ UNDO_REDO_STACK::OPERATION UNDO_REDO_STACK::UpdateValue(OPERATION Operation)
 //		None
 //
 //==========================================================================
-void UNDO_REDO_STACK::Undo(void)
+void UndoRedoStack::Undo(void)
 {
 	// Make sure the undo stack isn't empty
-	if (UndoStack.empty())
+	if (undoStack.empty())
 		return;
 
 	// Enable the redo menu item
-	MainFrame.EnableRedo();
+	mainFrame.EnableRedo();
 
-	// Update the value stored in the OPERATION and add it to the redo stack
-	RedoStack.push(UpdateValue(UndoStack.top()));
+	// Update the value stored in the Operation and add it to the redo stack
+	redoStack.push(UpdateValue(undoStack.top()));
 
 	// Undo the last operation
-	ApplyOperation(UndoStack.top());
+	ApplyOperation(undoStack.top());
 
 	// Remove the operation from the undo stack
-	UndoStack.pop();
+	undoStack.pop();
 
 	// If there are no more operations in the undo stack, disable the undo menu item
-	if (UndoStack.empty())
-		MainFrame.DisableUndo();
+	if (undoStack.empty())
+		mainFrame.DisableUndo();
 }
 
 //==========================================================================
-// Class:			UNDO_REDO_STACK
+// Class:			UndoRedoStack
 // Function:		Redo
 //
 // Description:		Re-performs the most recently undone operation.
@@ -228,37 +228,37 @@ void UNDO_REDO_STACK::Undo(void)
 //		None
 //
 //==========================================================================
-void UNDO_REDO_STACK::Redo(void)
+void UndoRedoStack::Redo(void)
 {
 	// Make sure the redo stack isn't empty
-	if (RedoStack.empty())
+	if (redoStack.empty())
 		return;
 
 	// Enable the undo menu item
-	MainFrame.EnableUndo();
+	mainFrame.EnableUndo();
 
-	// Update the value stored in the OPERATION and add it to the undo stack
-	UndoStack.push(UpdateValue(RedoStack.top()));
+	// Update the value stored in the Operation and add it to the undo stack
+	undoStack.push(UpdateValue(redoStack.top()));
 
 	// Redo the last undone operation
-	ApplyOperation(RedoStack.top());
+	ApplyOperation(redoStack.top());
 
 	// Remove the operation from the redo stack
-	RedoStack.pop();
+	redoStack.pop();
 
 	// If there are no more operations to redo, disable the redo menu item
-	if (RedoStack.empty())
-		MainFrame.DisableRedo();
+	if (redoStack.empty())
+		mainFrame.DisableRedo();
 }
 
 //==========================================================================
-// Class:			UNDO_REDO_STACK
+// Class:			UndoRedoStack
 // Function:		ApplyOperation
 //
 // Description:		Applies the specified operation.
 //
 // Input Arguments:
-//		Operation = &OPERATION to apply
+//		operation = &Operation to apply
 //
 // Output Arguments:
 //		None
@@ -267,51 +267,51 @@ void UNDO_REDO_STACK::Redo(void)
 //		None
 //
 //==========================================================================
-void UNDO_REDO_STACK::ApplyOperation(OPERATION &Operation)
+void UndoRedoStack::ApplyOperation(Operation &operation)
 {
 	// Apply the value
-	switch (Operation.DataType)
+	switch (operation.dataType)
 	{
-	case OPERATION::DATA_TYPE_BOOL:
-		*(bool*)Operation.DataLocation = Operation.OldValue.Boolean;
+	case Operation::DataTypeBool:
+		*(bool*)operation.dataLocation = operation.oldValue.boolean;
 		break;
 
-	case OPERATION::DATA_TYPE_SHORT:
-		*(short*)Operation.DataLocation = Operation.OldValue.ShortInteger;
+	case Operation::DataTypeShort:
+		*(short*)operation.dataLocation = operation.oldValue.shortInteger;
 		break;
 
-	case OPERATION::DATA_TYPE_INTEGER:
-		*(int*)Operation.DataLocation = Operation.OldValue.Integer;
+	case Operation::DataTypeInteger:
+		*(int*)operation.dataLocation = operation.oldValue.integer;
 		break;
 
-	case OPERATION::DATA_TYPE_LONG:
-		*(long*)Operation.DataLocation = Operation.OldValue.LongInteger;
+	case Operation::DataTypeLong:
+		*(long*)operation.dataLocation = operation.oldValue.longInteger;
 		break;
 
-	case OPERATION::DATA_TYPE_FLOAT:
-		*(float*)Operation.DataLocation = Operation.OldValue.Float;
+	case Operation::DataTypeFloat:
+		*(float*)operation.dataLocation = operation.oldValue.singlePrecision;
 		break;
 
-	case OPERATION::DATA_TYPE_DOUBLE:
-		*(double*)Operation.DataLocation = Operation.OldValue.Double;
+	case Operation::DataTypeDouble:
+		*(double*)operation.dataLocation = operation.oldValue.doublePrecision;
 		break;
 
-	case OPERATION::DATA_TYPE_GA_GENE_ADD:
+	case Operation::DataTypeGAGeneAdd:
 		break;
 
-	case OPERATION::DATA_TYPE_GA_GENE_MODIFY:
+	case Operation::DataTypeGAGeneModify:
 		break;
 
-	case OPERATION::DATA_TYPE_GA_GENE_DELETE:
+	case Operation::DataTypeGAGeneDelete:
 		break;
 
-	case OPERATION::DATA_TYPE_GA_GOAL_ADD:
+	case Operation::DataTypeGAGoalAdd:
 		break;
 
-	case OPERATION::DATA_TYPE_GA_GOAL_MODIFY:
+	case Operation::DataTypeGAGoalModify:
 		break;
 
-	case OPERATION::DATA_TYPE_GA_GOAL_DELETE:
+	case Operation::DataTypeGAGoalDelete:
 		break;
 
 	default:
@@ -323,7 +323,7 @@ void UNDO_REDO_STACK::ApplyOperation(OPERATION &Operation)
 }
 
 //==========================================================================
-// Class:			UNDO_REDO_STACK
+// Class:			UndoRedoStack
 // Function:		Update
 //
 // Description:		Updates the screen following an undo/redo.
@@ -338,16 +338,16 @@ void UNDO_REDO_STACK::ApplyOperation(OPERATION &Operation)
 //		None
 //
 //==========================================================================
-void UNDO_REDO_STACK::Update(void) const
+void UndoRedoStack::Update(void) const
 {
 	// Update all areas of the GUI screen
-	MainFrame.UpdateAnalysis();
-	MainFrame.UpdateOutputPanel();
-	MainFrame.GetEditPanel()->UpdateInformation();
+	mainFrame.UpdateAnalysis();
+	mainFrame.UpdateOutputPanel();
+	mainFrame.GetEditPanel()->UpdateInformation();
 }
 
 //==========================================================================
-// Class:			UNDO_REDO_STACK
+// Class:			UndoRedoStack
 // Function:		ClearStacks
 //
 // Description:		Clears the undo/redo stacks.  To be called after an operation
@@ -363,26 +363,26 @@ void UNDO_REDO_STACK::Update(void) const
 //		None
 //
 //==========================================================================
-void UNDO_REDO_STACK::ClearStacks(void)
+void UndoRedoStack::ClearStacks(void)
 {
 	// Clear the undo stack
-	while (!UndoStack.empty())
-		UndoStack.pop();
+	while (!undoStack.empty())
+		undoStack.pop();
 
 	// Clear the redo stack
-	while (!RedoStack.empty())
-		RedoStack.pop();
+	while (!redoStack.empty())
+		redoStack.pop();
 }
 
 //==========================================================================
-// Class:			UNDO_REDO_STACK
+// Class:			UndoRedoStack
 // Function:		RemoveGuiObjectFromStack
 //
 // Description:		Removes operations associated with the specified GUI_OBJECT
 //					from the stack.  To be called when objects are closed or saved.
 //
 // Input Arguments:
-//		Index	= int specifying which GUI_OJBECT to eliminate
+//		index	= int specifying which GUI_OJBECT to eliminate
 //
 // Output Arguments:
 //		None
@@ -391,60 +391,59 @@ void UNDO_REDO_STACK::ClearStacks(void)
 //		None
 //
 //==========================================================================
-void UNDO_REDO_STACK::RemoveGuiObjectFromStack(int Index)
+void UndoRedoStack::RemoveGuiObjectFromStack(int index)
 {
 	// Create temporary stacks
-	std::stack<UNDO_REDO_STACK::OPERATION> TempUndo;
-	std::stack<UNDO_REDO_STACK::OPERATION> TempRedo;
+	std::stack<UndoRedoStack::Operation> tempUndo;
+	std::stack<UndoRedoStack::Operation> tempRedo;
 
 	// Pop from the class stacks and push into temporary stacks until the
 	// class stacks are empty
 	// Only push the operations in the temporary stack if they are not
 	// associated with the specified Index
-	while (!UndoStack.empty())
+	while (!undoStack.empty())
 	{
-		if (UndoStack.top().GuiObjectIndex != Index)
-			TempUndo.push(UndoStack.top());
-		UndoStack.pop();
+		if (undoStack.top().guiObjectIndex != index)
+			tempUndo.push(undoStack.top());
+		undoStack.pop();
 	}
 
-	while (!RedoStack.empty())
+	while (!redoStack.empty())
 	{
-		if (RedoStack.top().GuiObjectIndex != Index)
-			TempRedo.push(RedoStack.top());
-		RedoStack.pop();
+		if (redoStack.top().guiObjectIndex != index)
+			tempRedo.push(redoStack.top());
+		redoStack.pop();
 	}
 
 	// Pop rom the temporary stacks as we push back into the class stacks
-	while (!TempUndo.empty())
+	while (!tempUndo.empty())
 	{
-		UndoStack.push(TempUndo.top());
-		TempUndo.pop();
+		undoStack.push(tempUndo.top());
+		tempUndo.pop();
 	}
 
-	while (!TempRedo.empty())
+	while (!tempRedo.empty())
 	{
-		RedoStack.push(TempRedo.top());
-		TempRedo.pop();
+		redoStack.push(tempRedo.top());
+		tempRedo.pop();
 	}
 
 	// Check to see if either stack is empty, and enable/disable the associated
 	// menu items as necessary
-	if (UndoStack.empty())
-		MainFrame.DisableUndo();
-	if (RedoStack.empty())
-		MainFrame.DisableRedo();
+	if (undoStack.empty())
+		mainFrame.DisableUndo();
+	if (redoStack.empty())
+		mainFrame.DisableRedo();
 }
 
 //==========================================================================
-// Class:			UNDO_REDO_STACK
+// Class:			UndoRedoStack
 // Function:		operator=
 //
-// Description:		Removes operations associated with the specified GUI_OBJECT
-//					from the stack.  To be called when objects are closed or saved.
+// Description:		Assignment operator for UndoRedoStack.
 //
 // Input Arguments:
-//		Index	= int specifying which GUI_OJBECT to eliminate
+//		undoRedo	= const UndoRedoStack& to assign to this
 //
 // Output Arguments:
 //		None
@@ -453,19 +452,19 @@ void UNDO_REDO_STACK::RemoveGuiObjectFromStack(int Index)
 //		None
 //
 //==========================================================================
-UNDO_REDO_STACK& UNDO_REDO_STACK::operator = (const UNDO_REDO_STACK &UndoRedo)
+UndoRedoStack& UndoRedoStack::operator = (const UndoRedoStack &undoRedo)
 {
 	// Check for self assignment
-	if (this == &UndoRedo)
+	if (this == &undoRedo)
 		return *this;
 
 	// Clear out existing data in this object
 	ClearStacks();
 
 	// Assign class members to argument
-	//MainFrame = UndoRedo.MainFrame;// Since there is only one MainFrame, we can assume it's the same
-	UndoStack = UndoRedo.UndoStack;
-	RedoStack = UndoRedo.RedoStack;
+	//mainFrame = undoRedo.mainFrame;// Since there is only one MainFrame, we can assume it's the same
+	undoStack = undoRedo.undoStack;
+	redoStack = undoRedo.redoStack;
 
 	return *this;
 }

@@ -10,7 +10,7 @@
 // File:  editIterationPlotsPanel.h
 // Created:  11/14/2010
 // Author:  K. Loux
-// Description:  Contains the class declaration for the EDIT_ITERATION_PLOTS_PANEL class.
+// Description:  Contains the class declaration for the EditIterationPlotsPanel class.
 // History:
 
 #ifndef _EDIT_ITERATION_PLOTS_PANEL_H_
@@ -21,21 +21,21 @@
 
 // VVASE forward declarations
 class Debugger;
-class ITERATION;
-class EDIT_ITERATION_NOTEBOOK;
+class Iteration;
+class EditIterationNotebook;
 
-class EDIT_ITERATION_PLOTS_PANEL : public wxPanel
+class EditIterationPlotsPanel : public wxPanel
 {
 public:
 	// Constructor
-	EDIT_ITERATION_PLOTS_PANEL(EDIT_ITERATION_NOTEBOOK &_Parent, wxWindowID id, const wxPoint& pos,
+	EditIterationPlotsPanel(EditIterationNotebook &_parent, wxWindowID id, const wxPoint& pos,
 		const wxSize& size, const Debugger &_debugger);
 
 	// Destructor
-	~EDIT_ITERATION_PLOTS_PANEL();
+	~EditIterationPlotsPanel();
 
 	// Updates the information on the panel
-	void UpdateInformation(ITERATION *_CurrentIteration);
+	void UpdateInformation(Iteration *_currentIteration);
 	void UpdateInformation(void);
 
 private:
@@ -43,19 +43,19 @@ private:
 	const Debugger &debugger;
 
 	// The parent panel
-	EDIT_ITERATION_NOTEBOOK &Parent;
+	EditIterationNotebook &parent;
 
 	// The iteration with which we are currently associated
-	ITERATION *CurrentIteration;
+	Iteration *currentIteration;
 
 	// Creates the controls and positions everything within the panel
 	void CreateControls(void);
 
 	// The controls on this panel
-	wxCheckListBox *PlotListCheckBox;
+	wxCheckListBox *plotListCheckBox;
 
 	// Enumeration for event IDs
-	enum EDIT_ITERATION_OPTIONS_EVENT_ID
+	enum EditIterationPlotsPanelEventIds
 	{
 		PlotSelectionCheckList = 800 + wxID_HIGHEST
 	};

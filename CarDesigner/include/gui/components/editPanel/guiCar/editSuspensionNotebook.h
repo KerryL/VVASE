@@ -27,25 +27,25 @@ class wxCheckBox;
 // VVASE forward declarations
 class Debugger;
 class Car;
-class EDIT_PANEL;
-class EDIT_CORNER_PANEL;
-class EDIT_SUSPENSION_PANEL;
+class EditPanel;
+class EditCornerPanel;
+class EditSuspensionPanel;
 
-class EDIT_SUSPENSION_NOTEBOOK : public wxNotebook
+class EditSuspensionNotebook : public wxNotebook
 {
 public:
 	// Constructor
-	EDIT_SUSPENSION_NOTEBOOK(EDIT_PANEL &_Parent, wxWindowID id, const wxPoint& pos,
+	EditSuspensionNotebook(EditPanel &_parent, wxWindowID id, const wxPoint& pos,
 		const wxSize& size, long style, const Debugger &_debugger);
 
 	// Destructor
-	~EDIT_SUSPENSION_NOTEBOOK();
+	~EditSuspensionNotebook();
 
 	// Returns access to this object's parent
-	inline EDIT_PANEL &GetParent() { return Parent; };
+	inline EditPanel &GetParent() { return parent; };
 
 	// Updates the information on the panel
-	void UpdateInformation(Car *_CurrentCar);
+	void UpdateInformation(Car *_currentCar);
 	void UpdateInformation(void);
 
 	// Keeps the sides of the car identical for symmetric suspensions
@@ -56,20 +56,20 @@ private:
 	const Debugger &debugger;
 
 	// The parent window
-	EDIT_PANEL &Parent;
+	EditPanel &parent;
 
 	// The object with which we are currently associated
-	Car *CurrentCar;
+	Car *currentCar;
 
 	// Creates the controls and positions everything within the panel
 	void CreateControls(void);
 
 	// The different notebook tabs
-	EDIT_SUSPENSION_PANEL *Suspension;
-	EDIT_CORNER_PANEL *RightFront;
-	EDIT_CORNER_PANEL *LeftFront;
-	EDIT_CORNER_PANEL *RightRear;
-	EDIT_CORNER_PANEL *LeftRear;
+	EditSuspensionPanel *suspension;
+	EditCornerPanel *rightFront;
+	EditCornerPanel *leftFront;
+	EditCornerPanel *rightRear;
+	EditCornerPanel *leftRear;
 };
 
 #endif// _EDIT_SUSPENSION_NOTEBOOK_H_

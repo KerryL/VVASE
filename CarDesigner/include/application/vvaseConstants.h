@@ -24,10 +24,10 @@
 #include <wx/wx.h>
 
 // The current version number
-static const wxString CarDesignerVersion = "0.11a";
+static const wxString carDesignerVersion = "0.11a";
 
 // The application name
-static const wxString CarDesignerName = "VVASE";
-static const wxString CarDesignerLongName = "Virtual Vehicle Analysis and Simulation Environment";
+static const wxString carDesignerName = "VVASE";
+static const wxString carDesignerLongName = "Virtual Vehicle Analysis and Simulation Environment";
 
 #endif// _VVASE_CONSTANTS_H_

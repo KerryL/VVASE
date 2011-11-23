@@ -36,23 +36,23 @@
 #include "vSolver/physics/kinematicOutputs.h"
 
 // VVASE forward declarations
-class CAR_RENDERER;
+class CarRenderer;
 class Car;
 class Debugger;
-class APPEARANCE_OPTIONS;
+class AppearanceOptions;
 
 // wxWidgets forward declarations
 class wxTreeItemId;
 
-class GUI_CAR : public GUI_OBJECT
+class GuiCar : public GuiObject
 {
 public:
 	// Constructor
-	GUI_CAR(MAIN_FRAME &_MainFrame, const Debugger &_debugger,
-		wxString _PathAndFileName = wxEmptyString);
+	GuiCar(MainFrame &_mainFrame, const Debugger &_debugger,
+		wxString _pathAndFileName = wxEmptyString);
 
 	// Destructor
-	~GUI_CAR();
+	~GuiCar();
 
 	// To be called after either the WorkingCar or the OriginalCar
 	// has changed to update the analysis data (mandatory overload)
@@ -62,15 +62,15 @@ public:
 	void UpdateDisplay(void);
 
 	// Private member accessors
-	inline Car &GetOriginalCar(void) { return *OriginalCar; };
-	inline Car &GetWorkingCar(void) { return *WorkingCar; };
-	inline APPEARANCE_OPTIONS &GetAppearanceOptions(void) { return *AppearanceOptions; };
+	inline Car &GetOriginalCar(void) { return *originalCar; };
+	inline Car &GetWorkingCar(void) { return *workingCar; };
+	inline AppearanceOptions &GetAppearanceOptions(void) { return *appearanceOptions; };
 
 	// Returns this object's type
-	ITEM_TYPE GetType(void) const { return TYPE_CAR; };
+	ItemType GetType(void) const { return TypeCar; };
 
 	// Enumeration for the subsystems that appear in the systems tree under this car
-	enum SUBSYSTEMS
+	enum Subsystems
 	{
 		SubsystemAerodynamics,
 		SubsystemBrakes,
@@ -84,20 +84,20 @@ public:
 	};
 
 	// For naming the subsystems
-	static wxString GetSubsystemName(SUBSYSTEMS Subsystem);
+	static wxString GetSubsystemName(Subsystems subsystem);
 
 	// The tree IDs associated with each subsystem object
-	wxTreeItemId Subsystems[NumberOfSubsystems];
+	wxTreeItemId subsystems[NumberOfSubsystems];
 
 	// Returns a copy of the kinematic output data
 	KinematicOutputs GetKinematicOutputs(void) { return kinematicOutputs; };
 
 private:
 	// The "real" object containing the original, unmodified information (not rolled, heaved, etc.)
-	Car *OriginalCar;
+	Car *originalCar;
 
 	// Reference to the object that we manipulate as we do our analyses
-	Car *WorkingCar;
+	Car *workingCar;
 
 	// Performs the saving and loading to/from file (mandatory overloads)
 	bool PerformLoadFromFile(void);
@@ -107,13 +107,13 @@ private:
 	int GetIconHandle(void) const;
 
 	// Reference to the options that affect this object's appearance
-	APPEARANCE_OPTIONS *AppearanceOptions;
+	AppearanceOptions *appearanceOptions;
 
 	// The object that stores the kinematics information for this car
 	KinematicOutputs kinematicOutputs;
 
 	// The scene visible to the user representing this object
-	CAR_RENDERER *renderer;
+	CarRenderer *renderer;
 };
 
 #endif// _GUI_CAR_H_

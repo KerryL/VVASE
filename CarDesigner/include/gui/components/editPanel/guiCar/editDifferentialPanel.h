@@ -10,7 +10,7 @@
 // File:  editDifferentialPanel.h
 // Created:  2/19/2009
 // Author:  K. Loux
-// Description:  Contains the class declaration for the EDIT_DIFFERENTIAL_PANEL class.
+// Description:  Contains the class declaration for the EditDifferentialPanel class.
 // History:
 
 #ifndef _EDIT_DIFFERENTIAL_PANEL_H_
@@ -20,17 +20,17 @@
 #include <wx/wx.h>
 
 // VVASE forward declarations
-class EDIT_PANEL;
+class EditPanel;
 
-class EDIT_DIFFERENTIAL_PANEL : public wxPanel
+class EditDifferentialPanel : public wxPanel
 {
 public:
 	// Constructor
-	EDIT_DIFFERENTIAL_PANEL(EDIT_PANEL* _Parent, wxWindowID id, const wxPoint& pos,
+	EditDifferentialPanel(EditPanel* _parent, wxWindowID id, const wxPoint& pos,
 		const wxSize& size, const Debugger &_debugger);
 
 	// Destructor
-	~EDIT_DIFFERENTIAL_PANEL();
+	~EditDifferentialPanel();
 
 private:
 	// Debugger message printing utility

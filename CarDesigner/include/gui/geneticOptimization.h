@@ -27,25 +27,25 @@
 #include "vSolver/physics/kinematics.h"
 
 // VVASE forward declarations
-class GUI_CAR;
+class GuiCar;
 class Debugger;
 class Convert;
-class GA_OBJECT;
-class MAIN_FRAME;
-class GENETIC_ALGORITHM_PANEL;
+class GAObject;
+class MainFrame;
+class GeneticAlgorithmPanel;
 
-class GENETIC_OPTIMIZATION : public GUI_OBJECT
+class GeneticOptimization : public GuiObject
 {
 public:
 	// Constructor
-	GENETIC_OPTIMIZATION(MAIN_FRAME &_MainFrame, const Debugger &_debugger, const Convert &Converter,
-		wxString _PathAndFileName = wxEmptyString);
+	GeneticOptimization(MainFrame &_mainFrame, const Debugger &_debugger, const Convert &converter,
+		wxString _pathAndFileName = wxEmptyString);
 
 	// Destructor
-	~GENETIC_OPTIMIZATION();
+	~GeneticOptimization();
 
 	// Mandatory overload
-	ITEM_TYPE GetType(void) const { return GUI_OBJECT::TYPE_OPTIMIZATION; };
+	ItemType GetType(void) const { return TypeOptimization; };
 
 	// Mandatory overloads
 	void UpdateData(void);
@@ -63,14 +63,14 @@ public:
 	void CompleteOptimization(void);
 
 	// Accessor for the GA panel object
-	GENETIC_ALGORITHM_PANEL *GetGAPanel(void) { return GAPanel; };
+	GeneticAlgorithmPanel *GetGAPanel(void) { return gaPanel; };
 
 	// Accessor for the GA object itself
-	GA_OBJECT &GetAlgorithm(void) { return *GeneticAlgorithm; };
+	GAObject &GetAlgorithm(void) { return *geneticAlgorithm; };
 
 	// Accessors for the car to optimize
-	GUI_CAR *GetCarToOptimize(void) { return CarToOptimize; };
-	void SetCarToOptimize(GUI_CAR *_CarToOptimize);
+	GuiCar *GetCarToOptimize(void) { return carToOptimize; };
+	void SetCarToOptimize(GuiCar *_carToOptimize);
 
 private:
 	// Debugger printing utility
@@ -84,13 +84,13 @@ private:
 	bool PerformSaveToFile(void);
 
 	// The panel that appears in the main notebook
-	GENETIC_ALGORITHM_PANEL *GAPanel;
+	GeneticAlgorithmPanel *gaPanel;
 
 	// The object we're working with
-	GUI_CAR *CarToOptimize;
+	GuiCar *carToOptimize;
 
 	// The genetic algorithm object (actually, this is our special wrapper)
-	GA_OBJECT *GeneticAlgorithm;
+	GAObject *geneticAlgorithm;
 };
 
 #endif// _GENETIC_OPTIMIZATION_H_

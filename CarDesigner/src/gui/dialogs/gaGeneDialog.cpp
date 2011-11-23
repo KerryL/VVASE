@@ -18,24 +18,24 @@
 #include "vUtilities/wxRelatedUtilities.h"
 
 //==========================================================================
-// Class:			GA_GENE_DIALOG
-// Function:		GA_GENE_DIALOG
+// Class:			GAGeneDialog
+// Function:		GAGeneDialog
 //
-// Description:		Constructor for the GA_GENE_DIALOG class.
+// Description:		Constructor for the GAGeneDialog class.
 //
 // Input Arguments:
-//		Parent			= wxWindow&, reference to the main application window
-//		_Converter		= const Convert&, reference to conversion utility object
-//		_Hardpoint		= const Corner::Hardpoints&
-//		_TiedTo			= const Corner::Hardpoints&
-//		_AxisDirection	= const Vector::Axis&
-//		_CornerLocation	= const Corner::Location&
-//		_Minimum		= const double&
-//		_Maximum		= const double&
-//		_NumberOfValues	= const unsigned int&
-//		Id				= wxWindowID
-//		Position		= const wxPoint&
-//		Style			= long
+//		parent			= wxWindow&, reference to the main application window
+//		_converter		= const Convert&, reference to conversion utility object
+//		_hardpoint		= const Corner::Hardpoints&
+//		_tiedTo			= const Corner::Hardpoints&
+//		_axisDirection	= const Vector::Axis&
+//		_cornerLocation	= const Corner::Location&
+//		_minimum		= const double&
+//		_maximum		= const double&
+//		_numberOfValues	= const unsigned int&
+//		id				= wxWindowID
+//		position		= const wxPoint&
+//		style			= long
 //
 // Output Arguments:
 //		None
@@ -44,24 +44,24 @@
 //		None
 //
 //==========================================================================
-GA_GENE_DIALOG::GA_GENE_DIALOG(wxWindow *Parent, const Convert &_Converter, const Corner::Hardpoints &_Hardpoint,
-							   const Corner::Hardpoints &_TiedTo, const Vector::Axis &_AxisDirection,
-							   const Corner::Location &_CornerLocation, const double &_Minimum, const double &_Maximum,
-							   const unsigned int &_NumberOfValues, wxWindowID Id, const wxPoint &Position, long Style) :
-							   wxDialog(Parent, Id, _T("Genetic Algorithm Gene"), Position, wxDefaultSize, Style),
-							   Converter(_Converter)
+GAGeneDialog::GAGeneDialog(wxWindow *parent, const Convert &_converter, const Corner::Hardpoints &_hardpoint,
+							   const Corner::Hardpoints &_tiedTo, const Vector::Axis &_axisDirection,
+							   const Corner::Location &_cornerLocation, const double &_minimum, const double &_maximum,
+							   const unsigned int &_numberOfValues, wxWindowID id, const wxPoint &position, long style) :
+							   wxDialog(parent, id, _T("Genetic Algorithm Gene"), position, wxDefaultSize, style),
+							   converter(_converter)
 {
 	// Assign local members
-	Hardpoint = _Hardpoint;
-	TiedTo = _TiedTo;
-	AxisDirection = _AxisDirection;
-	CornerLocation = _CornerLocation;
-	Minimum = _Minimum;
-	Maximum = _Maximum;
-	NumberOfValues = _NumberOfValues;
+	hardpoint = _hardpoint;
+	tiedTo = _tiedTo;
+	axisDirection = _axisDirection;
+	cornerLocation = _cornerLocation;
+	minimum = _minimum;
+	maximum = _maximum;
+	numberOfValues = _numberOfValues;
 
 	// Initialize the resolution pointer
-	Resolution = NULL;
+	resolution = NULL;
 
 	// Create the controls
 	CreateControls();
@@ -71,10 +71,10 @@ GA_GENE_DIALOG::GA_GENE_DIALOG(wxWindow *Parent, const Convert &_Converter, cons
 }
 
 //==========================================================================
-// Class:			GA_GENE_DIALOG
-// Function:		~GA_GENE_DIALOG
+// Class:			GAGeneDialog
+// Function:		~GAGeneDialog
 //
-// Description:		Destructor for the GA_GENE_DIALOG class.
+// Description:		Destructor for the GAGeneDialog class.
 //
 // Input Arguments:
 //		None
@@ -86,12 +86,12 @@ GA_GENE_DIALOG::GA_GENE_DIALOG(wxWindow *Parent, const Convert &_Converter, cons
 //		None
 //
 //==========================================================================
-GA_GENE_DIALOG::~GA_GENE_DIALOG()
+GAGeneDialog::~GAGeneDialog()
 {
 }
 
 //==========================================================================
-// Class:			GA_GENE_DIALOG
+// Class:			GAGeneDialog
 // Function:		Event Table
 //
 // Description:		Links GUI events with event handler functions.
@@ -106,14 +106,14 @@ GA_GENE_DIALOG::~GA_GENE_DIALOG()
 //		None
 //
 //==========================================================================
-BEGIN_EVENT_TABLE(GA_GENE_DIALOG, wxDialog)
-	EVT_BUTTON(wxID_OK,			GA_GENE_DIALOG::OKClickEvent)
-	EVT_BUTTON(wxID_CANCEL,		GA_GENE_DIALOG::CancelClickEvent)
-	EVT_TEXT(wxID_ANY,			GA_GENE_DIALOG::TextChangeEvent)
+BEGIN_EVENT_TABLE(GAGeneDialog, wxDialog)
+	EVT_BUTTON(wxID_OK,			GAGeneDialog::OKClickEvent)
+	EVT_BUTTON(wxID_CANCEL,		GAGeneDialog::CancelClickEvent)
+	EVT_TEXT(wxID_ANY,			GAGeneDialog::TextChangeEvent)
 END_EVENT_TABLE()
 
 //==========================================================================
-// Class:			GA_GENE_DIALOG
+// Class:			GAGeneDialog
 // Function:		CreateControls
 //
 // Description:		Creates the controls that populate this dialog.  Also fills
@@ -129,19 +129,19 @@ END_EVENT_TABLE()
 //		None
 //
 //==========================================================================
-void GA_GENE_DIALOG::CreateControls(void)
+void GAGeneDialog::CreateControls(void)
 {
 	// Top-level sizer
-	wxBoxSizer *TopSizer = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
 
 	// Second sizer gives more space around the controls
-	wxBoxSizer *MainSizer = new wxBoxSizer(wxVERTICAL);
-	TopSizer->Add(MainSizer, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
+	wxBoxSizer *mainSizer = new wxBoxSizer(wxVERTICAL);
+	topSizer->Add(mainSizer, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
 
 	// Create a sizer to contain the inputs
 	wxFlexGridSizer *inputAreaSizer = new wxFlexGridSizer(3, 5, 5);
 	inputAreaSizer->SetFlexibleDirection(wxHORIZONTAL);
-	MainSizer->Add(inputAreaSizer, 0, wxALL, 5);
+	mainSizer->Add(inputAreaSizer, 0, wxALL, 5);
 
 	// Specify the sizer flags for all controls in the grid here
 	int textSizerFlags = wxALIGN_CENTER_VERTICAL;
@@ -157,53 +157,53 @@ void GA_GENE_DIALOG::CreateControls(void)
 
 	// Set up the column widths
 	int i;
-	wxArrayString List;
+	wxArrayString list;
 
 	// Add the static text and text controls to these sizers
 	// Hardpoints
 	for (i = 0; i < Corner::NumberOfHardpoints; i++)
-		List.Add(Corner::GetHardpointName((Corner::Hardpoints)i));
-	wxStaticText *HardpointLabel = new wxStaticText(this, wxID_STATIC, _T("Hardpoint"));
-	HardpointCombo = new wxComboBox(this, wxID_ANY, Corner::GetHardpointName(Hardpoint), wxDefaultPosition,
-		wxDefaultSize, List, wxCB_READONLY);
-	SetMinimumWidthFromContents(HardpointCombo, additionalWidth);
-	inputAreaSizer->Add(HardpointLabel, 0, textSizerFlags);
-	inputAreaSizer->Add(HardpointCombo, 0, comboSizerFlags);
+		list.Add(Corner::GetHardpointName((Corner::Hardpoints)i));
+	wxStaticText *hardpointLabel = new wxStaticText(this, wxID_STATIC, _T("Hardpoint"));
+	hardpointCombo = new wxComboBox(this, wxID_ANY, Corner::GetHardpointName(hardpoint), wxDefaultPosition,
+		wxDefaultSize, list, wxCB_READONLY);
+	SetMinimumWidthFromContents(hardpointCombo, additionalWidth);
+	inputAreaSizer->Add(hardpointLabel, 0, textSizerFlags);
+	inputAreaSizer->Add(hardpointCombo, 0, comboSizerFlags);
 	inputAreaSizer->AddSpacer(-1);
 
 	// Tied To
 	// Re-use the same list for this combo box
-	List.Insert(_T("None"), 0);
-	wxStaticText *TiedToLabel = new wxStaticText(this, wxID_STATIC, _T("Alternate With"));
-	TiedToCombo = new wxComboBox(this, wxID_ANY, Corner::GetHardpointName(TiedTo), wxDefaultPosition,
-		wxDefaultSize, List, wxCB_READONLY);
-	SetMinimumWidthFromContents(TiedToCombo, additionalWidth);
-	inputAreaSizer->Add(TiedToLabel, 0, textSizerFlags);
-	inputAreaSizer->Add(TiedToCombo, 0, comboSizerFlags);
+	list.Insert(_T("None"), 0);
+	wxStaticText *tiedToLabel = new wxStaticText(this, wxID_STATIC, _T("Alternate With"));
+	tiedToCombo = new wxComboBox(this, wxID_ANY, Corner::GetHardpointName(tiedTo), wxDefaultPosition,
+		wxDefaultSize, list, wxCB_READONLY);
+	SetMinimumWidthFromContents(tiedToCombo, additionalWidth);
+	inputAreaSizer->Add(tiedToLabel, 0, textSizerFlags);
+	inputAreaSizer->Add(tiedToCombo, 0, comboSizerFlags);
 	inputAreaSizer->AddSpacer(-1);
 
 	// Axis Direction
-	List.Clear();
+	list.Clear();
 	for (i = 0; i < 3; i++)
-		List.Add(Vector::GetAxisName((Vector::Axis)i));
-	wxStaticText *AxisDirectionLabel = new wxStaticText(this, wxID_STATIC, _T("Axis Direction"));
-	AxisDirectionCombo = new wxComboBox(this, wxID_ANY, Vector::GetAxisName(AxisDirection), wxDefaultPosition,
-		wxDefaultSize, List, wxCB_READONLY);
-	SetMinimumWidthFromContents(AxisDirectionCombo, additionalWidth);
-	inputAreaSizer->Add(AxisDirectionLabel, 0, textSizerFlags);
-	inputAreaSizer->Add(AxisDirectionCombo, 0, comboSizerFlags);
+		list.Add(Vector::GetAxisName((Vector::Axis)i));
+	wxStaticText *axisDirectionLabel = new wxStaticText(this, wxID_STATIC, _T("Axis Direction"));
+	axisDirectionCombo = new wxComboBox(this, wxID_ANY, Vector::GetAxisName(axisDirection), wxDefaultPosition,
+		wxDefaultSize, list, wxCB_READONLY);
+	SetMinimumWidthFromContents(axisDirectionCombo, additionalWidth);
+	inputAreaSizer->Add(axisDirectionLabel, 0, textSizerFlags);
+	inputAreaSizer->Add(axisDirectionCombo, 0, comboSizerFlags);
 	inputAreaSizer->AddSpacer(-1);
 
 	// Corner Location
-	List.Clear();
+	list.Clear();
 	for (i = 0; i < Corner::NumberOfLocations; i++)
-		List.Add(Corner::GetLocationName((Corner::Location)i));
-	wxStaticText *CornerLocationLabel = new wxStaticText(this, wxID_STATIC, _T("Corner Location"));
-	CornerLocationCombo = new wxComboBox(this, wxID_ANY, Corner::GetLocationName(CornerLocation), wxDefaultPosition,
-		wxDefaultSize, List, wxCB_READONLY);
-	SetMinimumWidthFromContents(CornerLocationCombo, additionalWidth);
-	inputAreaSizer->Add(CornerLocationLabel, 0, textSizerFlags);
-	inputAreaSizer->Add(CornerLocationCombo, 0, comboSizerFlags);
+		list.Add(Corner::GetLocationName((Corner::Location)i));
+	wxStaticText *cornerLocationLabel = new wxStaticText(this, wxID_STATIC, _T("Corner Location"));
+	cornerLocationCombo = new wxComboBox(this, wxID_ANY, Corner::GetLocationName(cornerLocation), wxDefaultPosition,
+		wxDefaultSize, list, wxCB_READONLY);
+	SetMinimumWidthFromContents(cornerLocationCombo, additionalWidth);
+	inputAreaSizer->Add(cornerLocationLabel, 0, textSizerFlags);
+	inputAreaSizer->Add(cornerLocationCombo, 0, comboSizerFlags);
 	inputAreaSizer->AddSpacer(-1);
 
 #ifdef __WXGTK__
@@ -211,80 +211,80 @@ void GA_GENE_DIALOG::CreateControls(void)
 	// we set a default value when we construct the controls.  This causes errors when getting the
 	// selection and attempting to assign it to a gene.  To combat this effect, we set the selection
 	// manually here.
-	HardpointCombo->SetSelection((int)Hardpoint);
-	TiedToCombo->SetSelection((int)TiedTo + 1);
-	AxisDirectionCombo->SetSelection((int)AxisDirection);
-	CornerLocationCombo->SetSelection((int)CornerLocation);
+	hardpointCombo->SetSelection((int)hardpoint);
+	tiedToCombo->SetSelection((int)tiedTo + 1);
+	axisDirectionCombo->SetSelection((int)axisDirection);
+	cornerLocationCombo->SetSelection((int)cornerLocation);
 #endif
 
 	// If the main hardpoint and the alternate are the same, select index zero on the alternate box
-	if (HardpointCombo->GetSelection() == TiedToCombo->GetSelection() - 1)
-		TiedToCombo->SetSelection(0);
+	if (hardpointCombo->GetSelection() == tiedToCombo->GetSelection() - 1)
+		tiedToCombo->SetSelection(0);
 
 	// Minimum
-	wxStaticText *MinimumLabel = new wxStaticText(this, wxID_STATIC, _T("Minimum"));
-	MinimumText = new wxTextCtrl(this, wxID_ANY, Converter.FormatNumber(Converter.ConvertDistance(Minimum)));
-	wxStaticText *MinimumUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		Converter.GetUnitType(Convert::UnitTypeDistance), wxDefaultPosition, wxDefaultSize, 0);
-	inputAreaSizer->Add(MinimumLabel, 0, textSizerFlags);
-	inputAreaSizer->Add(MinimumText, 0, comboSizerFlags);
-	inputAreaSizer->Add(MinimumUnitsLabel, 0, textSizerFlags);
+	wxStaticText *minimumLabel = new wxStaticText(this, wxID_STATIC, _T("Minimum"));
+	minimumText = new wxTextCtrl(this, wxID_ANY, converter.FormatNumber(converter.ConvertDistance(minimum)));
+	wxStaticText *minimumUnitsLabel = new wxStaticText(this, wxID_STATIC,
+		converter.GetUnitType(Convert::UnitTypeDistance), wxDefaultPosition, wxDefaultSize, 0);
+	inputAreaSizer->Add(minimumLabel, 0, textSizerFlags);
+	inputAreaSizer->Add(minimumText, 0, comboSizerFlags);
+	inputAreaSizer->Add(minimumUnitsLabel, 0, textSizerFlags);
 
 	// Maximum
-	wxStaticText *MaximumLabel = new wxStaticText(this, wxID_STATIC, _T("Maximum"));
-	MaximumText = new wxTextCtrl(this, wxID_ANY, Converter.FormatNumber(Converter.ConvertDistance(Maximum)));
-	wxStaticText *MaximumUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		Converter.GetUnitType(Convert::UnitTypeDistance), wxDefaultPosition, wxDefaultSize, 0);
-	inputAreaSizer->Add(MaximumLabel, 0, textSizerFlags);
-	inputAreaSizer->Add(MaximumText, 0, comboSizerFlags);
-	inputAreaSizer->Add(MaximumUnitsLabel, 0, textSizerFlags);
+	wxStaticText *maximumLabel = new wxStaticText(this, wxID_STATIC, _T("Maximum"));
+	maximumText = new wxTextCtrl(this, wxID_ANY, converter.FormatNumber(converter.ConvertDistance(maximum)));
+	wxStaticText *maximumUnitsLabel = new wxStaticText(this, wxID_STATIC,
+		converter.GetUnitType(Convert::UnitTypeDistance), wxDefaultPosition, wxDefaultSize, 0);
+	inputAreaSizer->Add(maximumLabel, 0, textSizerFlags);
+	inputAreaSizer->Add(maximumText, 0, comboSizerFlags);
+	inputAreaSizer->Add(maximumUnitsLabel, 0, textSizerFlags);
 
 	// Number of values
-	wxStaticText *NumberOfValuesLabel = new wxStaticText(this, wxID_STATIC, _T("Number of Values"));
-	NumberOfValuesText = new wxTextCtrl(this, wxID_ANY, wxEmptyString);
-	inputAreaSizer->Add(NumberOfValuesLabel, 0, textSizerFlags);
-	inputAreaSizer->Add(NumberOfValuesText, 0, comboSizerFlags);
+	wxStaticText *numberOfValuesLabel = new wxStaticText(this, wxID_STATIC, _T("Number of Values"));
+	numberOfValuesText = new wxTextCtrl(this, wxID_ANY, wxEmptyString);
+	inputAreaSizer->Add(numberOfValuesLabel, 0, textSizerFlags);
+	inputAreaSizer->Add(numberOfValuesText, 0, comboSizerFlags);
 	inputAreaSizer->AddSpacer(-1);
 
 	// Resolution
-	wxStaticText *ResolutionLabel = new wxStaticText(this, wxID_STATIC, _T("Resolution"));
-	Resolution = new wxStaticText(this, wxID_ANY, wxEmptyString);
-	wxStaticText *ResolutionUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		Converter.GetUnitType(Convert::UnitTypeDistance), wxDefaultPosition, wxDefaultSize, 0);
-	inputAreaSizer->Add(ResolutionLabel, 0, textSizerFlags);
-	inputAreaSizer->Add(Resolution, 0, textSizerFlags);
-	inputAreaSizer->Add(ResolutionUnitsLabel, 0, textSizerFlags);
+	wxStaticText *resolutionLabel = new wxStaticText(this, wxID_STATIC, _T("Resolution"));
+	resolution = new wxStaticText(this, wxID_ANY, wxEmptyString);
+	wxStaticText *resolutionUnitsLabel = new wxStaticText(this, wxID_STATIC,
+		converter.GetUnitType(Convert::UnitTypeDistance), wxDefaultPosition, wxDefaultSize, 0);
+	inputAreaSizer->Add(resolutionLabel, 0, textSizerFlags);
+	inputAreaSizer->Add(resolution, 0, textSizerFlags);
+	inputAreaSizer->Add(resolutionUnitsLabel, 0, textSizerFlags);
 
 	// This is set as a separate event to cause the resolution to update
-	wxString Temp;
-	Temp.Printf("%lu", NumberOfValues);
-	NumberOfValuesText->SetValue(Temp);
+	wxString temp;
+	temp.Printf("%lu", numberOfValues);
+	numberOfValuesText->SetValue(temp);
 
 	// Add a spacer between the text controls and the buttons
-	MainSizer->AddSpacer(15);
+	mainSizer->AddSpacer(15);
 
 	// Create another sizer for the buttons at the bottom and add the buttons
-	wxBoxSizer *ButtonsSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxButton *OKButton = new wxButton(this, wxID_OK, _T("OK"),
+	wxBoxSizer *buttonsSizer = new wxBoxSizer(wxHORIZONTAL);
+	wxButton *okButton = new wxButton(this, wxID_OK, _T("OK"),
 		wxDefaultPosition, wxDefaultSize, 0);
-	wxButton *CancelButton = new wxButton(this, wxID_CANCEL, _T("Cancel"),
+	wxButton *cancelButton = new wxButton(this, wxID_CANCEL, _T("Cancel"),
 		wxDefaultPosition, wxDefaultSize, 0);
-	ButtonsSizer->Add(OKButton, 0, wxALL, 5);
-	ButtonsSizer->Add(CancelButton, 0, wxALL, 5);
-	MainSizer->Add(ButtonsSizer, 0, wxALIGN_CENTER_HORIZONTAL);
+	buttonsSizer->Add(okButton, 0, wxALL, 5);
+	buttonsSizer->Add(cancelButton, 0, wxALL, 5);
+	mainSizer->Add(buttonsSizer, 0, wxALIGN_CENTER_HORIZONTAL);
 
 	// Make the OK button default
-	OKButton->SetDefault();
+	okButton->SetDefault();
 
 	// Tell the dialog to auto-adjust it's size
-	TopSizer->SetSizeHints(this);
+	topSizer->SetSizeHints(this);
 
 	// Assign the top level sizer to the dialog
-	SetSizer(TopSizer);
+	SetSizer(topSizer);
 }
 
 //==========================================================================
-// Class:			GA_GENE_DIALOG
+// Class:			GAGeneDialog
 // Function:		OKClickEvent
 //
 // Description:		Handles the OK button clicked events.
@@ -299,12 +299,12 @@ void GA_GENE_DIALOG::CreateControls(void)
 //		None
 //
 //==========================================================================
-void GA_GENE_DIALOG::OKClickEvent(wxCommandEvent& WXUNUSED(event))
+void GAGeneDialog::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Update the class members with the data currently displayed in the dialog controls
-	if (!MinimumText->GetValue().ToDouble(&Minimum) ||
-		!MaximumText->GetValue().ToDouble(&Maximum) ||
-		!NumberOfValuesText->GetValue().ToULong(&NumberOfValues))
+	if (!minimumText->GetValue().ToDouble(&minimum) ||
+		!maximumText->GetValue().ToDouble(&maximum) ||
+		!numberOfValuesText->GetValue().ToULong(&numberOfValues))
 	{
 		wxMessageBox(_T("ERROR:  All values must be numeric!"), _T("Error Reading Data"),
 			wxOK | wxICON_ERROR, this);
@@ -312,7 +312,7 @@ void GA_GENE_DIALOG::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 	}
 
 	// Make sure the number of values is greater than 1
-	if (NumberOfValues <= 1)
+	if (numberOfValues <= 1)
 	{
 		wxMessageBox(_T("ERROR:  Number of values must be greater than one!"), _T("Error Reading Data"),
 			wxOK | wxICON_ERROR, this);
@@ -320,17 +320,17 @@ void GA_GENE_DIALOG::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 	}
 
 	// Read the remaining items
-	Hardpoint = (Corner::Hardpoints)HardpointCombo->GetCurrentSelection();
-	if (TiedToCombo->GetCurrentSelection() == 0)
-		TiedTo = (Corner::Hardpoints)HardpointCombo->GetCurrentSelection();
+	hardpoint = (Corner::Hardpoints)hardpointCombo->GetCurrentSelection();
+	if (tiedToCombo->GetCurrentSelection() == 0)
+		tiedTo = (Corner::Hardpoints)hardpointCombo->GetCurrentSelection();
 	else
-		TiedTo = (Corner::Hardpoints)(TiedToCombo->GetCurrentSelection() - 1);
-	AxisDirection = (Vector::Axis)AxisDirectionCombo->GetCurrentSelection();
-	CornerLocation = (Corner::Location)CornerLocationCombo->GetCurrentSelection();
+		tiedTo = (Corner::Hardpoints)(tiedToCombo->GetCurrentSelection() - 1);
+	axisDirection = (Vector::Axis)axisDirectionCombo->GetCurrentSelection();
+	cornerLocation = (Corner::Location)cornerLocationCombo->GetCurrentSelection();
 
 	// Convert the input values
-	Minimum = Converter.ReadDistance(Minimum);
-	Maximum = Converter.ReadDistance(Maximum);
+	minimum = converter.ReadDistance(minimum);
+	maximum = converter.ReadDistance(maximum);
 
 	// The way we handle this changes depending on how this form was displayed
 	if (IsModal())
@@ -343,7 +343,7 @@ void GA_GENE_DIALOG::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 }
 
 //==========================================================================
-// Class:			GA_GENE_DIALOG
+// Class:			GAGeneDialog
 // Function:		CancelClickEvent
 //
 // Description:		Handles the Cancel button clicked event.
@@ -358,7 +358,7 @@ void GA_GENE_DIALOG::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 //		None
 //
 //==========================================================================
-void GA_GENE_DIALOG::CancelClickEvent(wxCommandEvent& WXUNUSED(event))
+void GAGeneDialog::CancelClickEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// The way we handle this changes depending on how this form was displayed
 	if (IsModal())
@@ -371,7 +371,7 @@ void GA_GENE_DIALOG::CancelClickEvent(wxCommandEvent& WXUNUSED(event))
 }
 
 //==========================================================================
-// Class:			GA_GENE_DIALOG
+// Class:			GAGeneDialog
 // Function:		NumberOfValuesChangeEvent
 //
 // Description:		Updates the resolution display as the number of values changes.
@@ -386,18 +386,18 @@ void GA_GENE_DIALOG::CancelClickEvent(wxCommandEvent& WXUNUSED(event))
 //		None
 //
 //==========================================================================
-void GA_GENE_DIALOG::TextChangeEvent(wxCommandEvent& WXUNUSED(event))
+void GAGeneDialog::TextChangeEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Make sure the resolution label exists
-	if (!Resolution)
+	if (!resolution)
 		return;
 
 	// Get the input values
 	double Min(0.0), Max(0.0);
 	unsigned long ValueCount(0);
-	if (!MinimumText->GetValue().ToDouble(&Min) ||
-		!MaximumText->GetValue().ToDouble(&Max) ||
-		!NumberOfValuesText->GetValue().ToULong(&ValueCount))
+	if (!minimumText->GetValue().ToDouble(&Min) ||
+		!maximumText->GetValue().ToDouble(&Max) ||
+		!numberOfValuesText->GetValue().ToULong(&ValueCount))
 		return;
 
 	// Make sure the data is valid
@@ -405,6 +405,6 @@ void GA_GENE_DIALOG::TextChangeEvent(wxCommandEvent& WXUNUSED(event))
 		return;
 
 	// Set the text
-	Resolution->SetLabel(Converter.FormatNumber(
-		Converter.ConvertDistance(fabs(Max - Min) / double(ValueCount - 1))));
+	resolution->SetLabel(converter.FormatNumber(
+		converter.ConvertDistance(fabs(Max - Min) / double(ValueCount - 1))));
 }

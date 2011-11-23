@@ -21,56 +21,56 @@
 #include "vUtilities/convert.h"
 
 // CarDesigner forward declarations
-class MAIN_FRAME;
+class MainFrame;
 
-class GA_GENE_DIALOG : public wxDialog
+class GAGeneDialog : public wxDialog
 {
 public:
 	// Constructor
-	GA_GENE_DIALOG(wxWindow *Parent, const Convert &_Converter, const Corner::Hardpoints &_Hardpoint,
-		const Corner::Hardpoints &_TiedTo, const Vector::Axis &_AxisDirection, const Corner::Location &_CornerLocation,
-		const double &_Minimum, const double &_Maximum, const unsigned int &_NumberOfValues,
-		wxWindowID Id, const wxPoint &Position, long Style = wxDEFAULT_DIALOG_STYLE);
+	GAGeneDialog(wxWindow *parent, const Convert &_converter, const Corner::Hardpoints &_hardpoint,
+		const Corner::Hardpoints &_tiedTo, const Vector::Axis &_axisDirection, const Corner::Location &_cornerLocation,
+		const double &_minimum, const double &_maximum, const unsigned int &_numberOfValues,
+		wxWindowID id, const wxPoint &position, long style = wxDEFAULT_DIALOG_STYLE);
 
 	// Destructor
-	~GA_GENE_DIALOG();
+	~GAGeneDialog();
 
 	// Private data accessors
-	Corner::Hardpoints GetHardpoint(void) const { return Hardpoint; };
-	Corner::Hardpoints GetTiedTo(void) const { return TiedTo; };
-	Vector::Axis GetAxisDirection(void) const { return AxisDirection; };
-	Corner::Location GetCornerLocation(void) const { return CornerLocation; };
-	double GetMinimum(void) const { return Minimum; };
-	double GetMaximum(void) const { return Maximum; };
-	unsigned long GetNumberOfValues(void) const { return NumberOfValues; };
+	Corner::Hardpoints GetHardpoint(void) const { return hardpoint; };
+	Corner::Hardpoints GetTiedTo(void) const { return tiedTo; };
+	Vector::Axis GetAxisDirection(void) const { return axisDirection; };
+	Corner::Location GetCornerLocation(void) const { return cornerLocation; };
+	double GetMinimum(void) const { return minimum; };
+	double GetMaximum(void) const { return maximum; };
+	unsigned long GetNumberOfValues(void) const { return numberOfValues; };
 
 private:
 	// The object that handles the unit conversions between the input and output
-	const Convert &Converter;
+	const Convert &converter;
 
 	// Method for creating controls
 	void CreateControls(void);
 
 	// Controls
-	wxComboBox *HardpointCombo;
-	wxComboBox *TiedToCombo;
-	wxComboBox *AxisDirectionCombo;
-	wxComboBox *CornerLocationCombo;
+	wxComboBox *hardpointCombo;
+	wxComboBox *tiedToCombo;
+	wxComboBox *axisDirectionCombo;
+	wxComboBox *cornerLocationCombo;
 
-	wxTextCtrl *MinimumText;
-	wxTextCtrl *MaximumText;
-	wxTextCtrl *NumberOfValuesText;
+	wxTextCtrl *minimumText;
+	wxTextCtrl *maximumText;
+	wxTextCtrl *numberOfValuesText;
 
-	wxStaticText *Resolution;
+	wxStaticText *resolution;
 
 	// Values (populated when OK is clicked)
-	Corner::Hardpoints Hardpoint;
-	Corner::Hardpoints TiedTo;
-	Vector::Axis AxisDirection;
-	Corner::Location CornerLocation;
-	double Minimum;
-	double Maximum;
-	unsigned long NumberOfValues;
+	Corner::Hardpoints hardpoint;
+	Corner::Hardpoints tiedTo;
+	Vector::Axis axisDirection;
+	Corner::Location cornerLocation;
+	double minimum;
+	double maximum;
+	unsigned long numberOfValues;
 
 	// Event handlers
 	virtual void OKClickEvent(wxCommandEvent &event);

@@ -10,7 +10,7 @@
 // File:  editBrakesPanel.cpp
 // Created:  2/10/2009
 // Author:  K. Loux
-// Description:  Contains the class definition for the EDIT_BRAKES_PANEL class.
+// Description:  Contains the class definition for the EditBrakesPanel class.
 // History:
 
 // CarDesigner headers
@@ -23,13 +23,13 @@
 #include "vMath/vector.h"
 
 //==========================================================================
-// Class:			EDIT_BRAKES_PANEL
-// Function:		EDIT_BRAKES_PANEL
+// Class:			EditBrakesPanel
+// Function:		EditBrakesPanel
 //
-// Description:		Constructor for EDIT_BRAKES_PANEL class.
+// Description:		Constructor for EditBrakesPanel class.
 //
 // Input Arguments:
-//		_Parent		= EDIT_PANEL&, reference to this object's owner
+//		_parent		= EditPanel&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
@@ -42,22 +42,22 @@
 //		None
 //
 //==========================================================================
-EDIT_BRAKES_PANEL::EDIT_BRAKES_PANEL(EDIT_PANEL &_Parent, wxWindowID id,
+EditBrakesPanel::EditBrakesPanel(EditPanel &_parent, wxWindowID id,
 									 const wxPoint& pos, const wxSize& size,
 									 const Debugger &_debugger) :
-									 wxScrolledWindow(&_Parent, id, pos, size), debugger(_debugger),
-									 Converter(_Parent.GetMainFrame().GetConverter()),
-									 Parent(_Parent)
+									 wxScrolledWindow(&_parent, id, pos, size), debugger(_debugger),
+									 converter(_parent.GetMainFrame().GetConverter()),
+									 parent(_parent)
 {
 	// Create the controls
 	CreateControls();
 }
 
 //==========================================================================
-// Class:			EDIT_BRAKES_PANEL
-// Function:		EDIT_BRAKES_PANEL
+// Class:			EditBrakesPanel
+// Function:		EditBrakesPanel
 //
-// Description:		Destructor for EDIT_BRAKES_PANEL class.
+// Description:		Destructor for EditBrakesPanel class.
 //
 // Input Arguments:
 //		None
@@ -69,12 +69,12 @@ EDIT_BRAKES_PANEL::EDIT_BRAKES_PANEL(EDIT_PANEL &_Parent, wxWindowID id,
 //		None
 //
 //==========================================================================
-EDIT_BRAKES_PANEL::~EDIT_BRAKES_PANEL()
+EditBrakesPanel::~EditBrakesPanel()
 {
 }
 
 //==========================================================================
-// Class:			EDIT_BRAKES_PANEL
+// Class:			EditBrakesPanel
 // Function:		Event Table
 //
 // Description:		Links GUI events with event handler functions.
@@ -89,13 +89,13 @@ EDIT_BRAKES_PANEL::~EDIT_BRAKES_PANEL()
 //		None
 //
 //==========================================================================
-BEGIN_EVENT_TABLE(EDIT_BRAKES_PANEL, wxPanel)
-	EVT_TEXT(wxID_ANY,		EDIT_BRAKES_PANEL::TextBoxEditEvent)
-	EVT_CHECKBOX(wxID_ANY,	EDIT_BRAKES_PANEL::CheckBoxChange)
+BEGIN_EVENT_TABLE(EditBrakesPanel, wxPanel)
+	EVT_TEXT(wxID_ANY,		EditBrakesPanel::TextBoxEditEvent)
+	EVT_CHECKBOX(wxID_ANY,	EditBrakesPanel::CheckBoxChange)
 END_EVENT_TABLE();
 
 //==========================================================================
-// Class:			EDIT_BRAKES_PANEL
+// Class:			EditBrakesPanel
 // Function:		UpdateInformation
 //
 // Description:		Updates the information on this panel.
@@ -110,21 +110,21 @@ END_EVENT_TABLE();
 //		None
 //
 //==========================================================================
-void EDIT_BRAKES_PANEL::UpdateInformation(Brakes *_CurrentBrakes)
+void EditBrakesPanel::UpdateInformation(Brakes *_currentBrakes)
 {
 	// Update the class member
-	CurrentBrakes = _CurrentBrakes;
+	currentBrakes = _currentBrakes;
 
 	// Update the check boxes
-	FrontBrakesInboard->SetValue(CurrentBrakes->frontBrakesInboard);
-	RearBrakesInboard->SetValue(CurrentBrakes->rearBrakesInboard);
+	frontBrakesInboard->SetValue(currentBrakes->frontBrakesInboard);
+	rearBrakesInboard->SetValue(currentBrakes->rearBrakesInboard);
 
 	// Update the text boxes
-	PercentFrontBraking->ChangeValue(Converter.FormatNumber(CurrentBrakes->percentFrontBraking));
+	percentFrontBraking->ChangeValue(converter.FormatNumber(currentBrakes->percentFrontBraking));
 }
 
 //==========================================================================
-// Class:			EDIT_BRAKES_PANEL
+// Class:			EditBrakesPanel
 // Function:		CreateControls
 //
 // Description:		Creates the controls for this panel.
@@ -139,49 +139,49 @@ void EDIT_BRAKES_PANEL::UpdateInformation(Brakes *_CurrentBrakes)
 //		None
 //
 //==========================================================================
-void EDIT_BRAKES_PANEL::CreateControls()
+void EditBrakesPanel::CreateControls()
 {
 	// Enable scrolling
 	SetScrollRate(1, 1);
 
 	// Top-level sizer
-	wxBoxSizer *TopSizer = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
 
 	// Second sizer gives more space around the controls
-	wxBoxSizer *MainSizer = new wxBoxSizer(wxVERTICAL);
-	TopSizer->Add(MainSizer, 1, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALL, 5);
+	wxBoxSizer *mainSizer = new wxBoxSizer(wxVERTICAL);
+	topSizer->Add(mainSizer, 1, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALL, 5);
 	
 	int cellPadding(3);
 
 	// Create the check boxes
-	FrontBrakesInboard = new wxCheckBox(this, CheckBoxFrontBrakesInboard, _T("Front Brakes Inboard"));
-	MainSizer->Add(FrontBrakesInboard, 0, wxALIGN_LEFT | wxALL, cellPadding);
+	frontBrakesInboard = new wxCheckBox(this, CheckBoxFrontBrakesInboard, _T("Front Brakes Inboard"));
+	mainSizer->Add(frontBrakesInboard, 0, wxALIGN_LEFT | wxALL, cellPadding);
 
-	RearBrakesInboard = new wxCheckBox(this, CheckBoxRearBrakesInboard, _T("Rear Brakes Inboard"));
-	MainSizer->Add(RearBrakesInboard, 0, wxALIGN_LEFT | wxALL, cellPadding);
+	rearBrakesInboard = new wxCheckBox(this, CheckBoxRearBrakesInboard, _T("Rear Brakes Inboard"));
+	mainSizer->Add(rearBrakesInboard, 0, wxALIGN_LEFT | wxALL, cellPadding);
 
 	// Create the text input boxes
-	wxBoxSizer *PercentFrontSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText *PercentFrontBrakingLabel = new wxStaticText(this, wxID_ANY, _T("Percent Front Braking"));
-	PercentFrontBraking = new wxTextCtrl(this, TextBoxPercentFrontBraking);
-	PercentFrontSizer->Add(PercentFrontBrakingLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, cellPadding);
-	PercentFrontSizer->Add(PercentFrontBraking, 0, wxALL | wxEXPAND, cellPadding);
+	wxBoxSizer *percentFrontSizer = new wxBoxSizer(wxHORIZONTAL);
+	wxStaticText *percentFrontBrakingLabel = new wxStaticText(this, wxID_ANY, _T("Percent Front Braking"));
+	percentFrontBraking = new wxTextCtrl(this, TextBoxPercentFrontBraking);
+	percentFrontSizer->Add(percentFrontBrakingLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, cellPadding);
+	percentFrontSizer->Add(percentFrontBraking, 0, wxALL | wxEXPAND, cellPadding);
 
 	// Set text box minimum size based on formatted text to appear in the box
 	int minWidth;
-	GetTextExtent(Converter.FormatNumber(-10.000), &minWidth, NULL);
-	PercentFrontBraking->SetMinSize(wxSize(minWidth, -1));
+	GetTextExtent(converter.FormatNumber(-10.000), &minWidth, NULL);
+	percentFrontBraking->SetMinSize(wxSize(minWidth, -1));
 
 	// Add the sizers to the main sizer
-	MainSizer->AddSpacer(10);
-	MainSizer->Add(PercentFrontSizer, 0, wxEXPAND);
+	mainSizer->AddSpacer(10);
+	mainSizer->Add(percentFrontSizer, 0, wxEXPAND);
 
 	// Assign the top level sizer to the dialog
-	SetSizer(TopSizer);
+	SetSizer(topSizer);
 }
 
 //==========================================================================
-// Class:			EDIT_BRAKES_PANEL
+// Class:			EditBrakesPanel
 // Function:		TextBoxEditEvent
 //
 // Description:		Event that fires when any text box changes.
@@ -196,30 +196,30 @@ void EDIT_BRAKES_PANEL::CreateControls()
 //		None
 //
 //==========================================================================
-void EDIT_BRAKES_PANEL::TextBoxEditEvent(wxCommandEvent &event)
+void EditBrakesPanel::TextBoxEditEvent(wxCommandEvent &event)
 {
 	// The place where the data will be written
-	double *DataLocation = NULL;
+	double *dataLocation = NULL;
 
 	// The limits for the data
-	double MinValue, MaxValue;
+	double minValue, maxValue;
 
 	// We also need to know what kind of data we're retrieving
-	Convert::UnitType Units;
+	Convert::UnitType units;
 
 	// A pointer to the text box
-	wxTextCtrl *TextBox = NULL;
+	wxTextCtrl *textBox = NULL;
 
 	// Take different action depending on the event ID
 	switch (event.GetId())
 	{
 	case TextBoxPercentFrontBraking:
 		// Get the text box, the location to write it, and the units
-		TextBox = PercentFrontBraking;
-		DataLocation = &CurrentBrakes->percentFrontBraking;
-		Units = Convert::UnitTypeUnitless;
-		MinValue = 0.0;
-		MaxValue = 1.0;
+		textBox = percentFrontBraking;
+		dataLocation = &currentBrakes->percentFrontBraking;
+		units = Convert::UnitTypeUnitless;
+		minValue = 0.0;
+		maxValue = 1.0;
 		break;
 
 	default:
@@ -229,50 +229,50 @@ void EDIT_BRAKES_PANEL::TextBoxEditEvent(wxCommandEvent &event)
 	}
 
 	// Make sure the value is numeric
-	wxString ValueString = TextBox->GetValue();
-	double Value;
-	if (!ValueString.ToDouble(&Value))
+	wxString valueString = textBox->GetValue();
+	double value;
+	if (!valueString.ToDouble(&value))
 	{
 		// Restore the previous value
-		Value = *DataLocation;
+		value = *dataLocation;
 
 		return;
 	}
 
 	// Add the operation to the undo/redo stack
-	Parent.GetMainFrame().GetUndoRedoStack().AddOperation(
-		Parent.GetMainFrame().GetActiveIndex(),
-		UNDO_REDO_STACK::OPERATION::DATA_TYPE_DOUBLE,
-		DataLocation);
+	parent.GetMainFrame().GetUndoRedoStack().AddOperation(
+		parent.GetMainFrame().GetActiveIndex(),
+		UndoRedoStack::Operation::DataTypeDouble,
+		dataLocation);
 
 	// Get a lock on the car
-	wxMutex *Mutex = Parent.GetCurrentMutex();
-	Mutex->Lock();
+	wxMutex *mutex = parent.GetCurrentMutex();
+	mutex->Lock();
 
 	// Update the brakes object
-	*DataLocation = Converter.Read(Value, Units);
+	*dataLocation = converter.Read(value, units);
 
 	// Check the limits on the data value
-	if (*DataLocation > MaxValue)
-		*DataLocation = MaxValue;
-	else if (*DataLocation < MinValue)
-		*DataLocation = MinValue;
+	if (*dataLocation > maxValue)
+		*dataLocation = maxValue;
+	else if (*dataLocation < minValue)
+		*dataLocation = minValue;
 
 	// Unlock the car
-	Mutex->Unlock();
+	mutex->Unlock();
 
 	// Tell the car object that it was modified
-	Parent.GetCurrentObject()->SetModified();
+	parent.GetCurrentObject()->SetModified();
 
 	// Update the display and the kinematic outputs
-	Parent.GetMainFrame().UpdateAnalysis();
-	Parent.GetMainFrame().UpdateOutputPanel();
+	parent.GetMainFrame().UpdateAnalysis();
+	parent.GetMainFrame().UpdateOutputPanel();
 
 	event.Skip();
 }
 
 //==========================================================================
-// Class:			EDIT_BRAKES_PANEL
+// Class:			EditBrakesPanel
 // Function:		CheckBoxChange
 //
 // Description:		Event that fires when any check box changes.
@@ -287,35 +287,35 @@ void EDIT_BRAKES_PANEL::TextBoxEditEvent(wxCommandEvent &event)
 //		None
 //
 //==========================================================================
-void EDIT_BRAKES_PANEL::CheckBoxChange(wxCommandEvent &event)
+void EditBrakesPanel::CheckBoxChange(wxCommandEvent &event)
 {
 	// Get a lock on the car
-	wxMutex *Mutex = Parent.GetCurrentMutex();
-	Mutex->Lock();
+	wxMutex *mutex = parent.GetCurrentMutex();
+	mutex->Lock();
 
 	// Take different action depending on the event ID
 	switch (event.GetId())
 	{
 	case CheckBoxFrontBrakesInboard:
 		// Add the operation to the undo/redo stack
-		Parent.GetMainFrame().GetUndoRedoStack().AddOperation(
-			Parent.GetMainFrame().GetActiveIndex(),
-			UNDO_REDO_STACK::OPERATION::DATA_TYPE_BOOL,
-			&(CurrentBrakes->frontBrakesInboard));
+		parent.GetMainFrame().GetUndoRedoStack().AddOperation(
+			parent.GetMainFrame().GetActiveIndex(),
+			UndoRedoStack::Operation::DataTypeBool,
+			&(currentBrakes->frontBrakesInboard));
 
 		// Set the front brakes inboard flag to the value of the check box
-		CurrentBrakes->frontBrakesInboard = event.IsChecked();
+		currentBrakes->frontBrakesInboard = event.IsChecked();
 		break;
 
 	case CheckBoxRearBrakesInboard:
 		// Add the operation to the undo/redo stack
-		Parent.GetMainFrame().GetUndoRedoStack().AddOperation(
-			Parent.GetMainFrame().GetActiveIndex(),
-			UNDO_REDO_STACK::OPERATION::DATA_TYPE_BOOL,
-			&(CurrentBrakes->rearBrakesInboard));
+		parent.GetMainFrame().GetUndoRedoStack().AddOperation(
+			parent.GetMainFrame().GetActiveIndex(),
+			UndoRedoStack::Operation::DataTypeBool,
+			&(currentBrakes->rearBrakesInboard));
 
 		// Set the rear brakes inboard flag to the value of the check box
-		CurrentBrakes->rearBrakesInboard = event.IsChecked();
+		currentBrakes->rearBrakesInboard = event.IsChecked();
 		break;
 
 	default:
@@ -325,12 +325,12 @@ void EDIT_BRAKES_PANEL::CheckBoxChange(wxCommandEvent &event)
 	}
 
 	// Unlock the car
-	Mutex->Unlock();
+	mutex->Unlock();
 
 	// Tell the car object that it was modified
-	Parent.GetCurrentObject()->SetModified();
+	parent.GetCurrentObject()->SetModified();
 
 	// Update the display and the kinematic outputs
-	Parent.GetMainFrame().UpdateAnalysis();
-	Parent.GetMainFrame().UpdateOutputPanel();
+	parent.GetMainFrame().UpdateAnalysis();
+	parent.GetMainFrame().UpdateOutputPanel();
 }

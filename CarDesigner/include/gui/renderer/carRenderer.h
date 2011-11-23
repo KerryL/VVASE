@@ -45,145 +45,145 @@ class Triangle3D;
 class Point3D;
 class Vector3D;
 class KinematicOutputs;
-class APPEARANCE_OPTIONS;
-class GUI_CAR;
-class MAIN_FRAME;
+class AppearanceOptions;
+class GuiCar;
+class MainFrame;
 
-class CAR_RENDERER : public RenderWindow
+class CarRenderer : public RenderWindow
 {
 public:
 	// Constructor
-	CAR_RENDERER(MAIN_FRAME &_MainFrame, GUI_CAR &_Car, int args[], const Debugger &_debugger);
+	CarRenderer(MainFrame &_mainFrame, GuiCar &_car, int args[], const Debugger &_debugger);
 
 	// Destructor
-	~CAR_RENDERER();
+	~CarRenderer();
 
 	// Called to update the image on the screen
 	void UpdateDisplay(const KinematicOutputs &outputs);
 
 	// For writing the rendered image to file
-	void WriteImageFile(wxString PathAndFileName);
+	void WriteImageFile(wxString pathAndFileName);
 
 	// Returns the type of the selected item, or -1 for no selection
-	bool IsThisCarSelected(const Primitive *PickedActor, const GUI_OBJECT::ITEM_TYPE *ObjectType) const;
+	bool IsThisCarSelected(const Primitive *pickedActor, const GuiObject::ItemType *objectType) const;
 
 	// For accessing the helper orb
 	void SetHelperOrbPosition(const Corner::Hardpoints &cornerPoint, const Corner::Location &location,
 		const Suspension::Hardpoints &suspensionPoint);
-	inline void DeactivateHelperOrb(void) { HelperOrbIsActive = false; };
+	inline void DeactivateHelperOrb(void) { helperOrbIsActive = false; };
 
 private:
 	// Debugger message printing utility
 	const Debugger &debugger;
 
 	// For context menus
-	MAIN_FRAME &MainFrame;
+	MainFrame &mainFrame;
 
 	// Called from the CAR_RENDERER constructor only in order to initialize the display
 	void CreateActors(void);
 
 	// The methods that perform the updating
 	void UpdateCarDisplay(void);
-	void UpdateKinematicsDisplay(KinematicOutputs Outputs);
+	void UpdateKinematicsDisplay(KinematicOutputs oOutputs);
 
 	// Pointers to the car objects that we are rendering
-	APPEARANCE_OPTIONS &AppearanceOptions;
-	Car &DisplayCar;
-	const Car &ReferenceCar;// Required for correct representation of the tires - see UpdateDisplay()
+	AppearanceOptions &appearanceOptions;
+	Car &displayCar;
+	const Car &referenceCar;// Required for correct representation of the tires - see UpdateDisplay()
 
 	// The actors that we use to represent the car
 	// The origin marker and ground plane
 	Origin *origin;
-	Plane3D *GroundPlane;
+	Plane3D *groundPlane;
 
 	// Right front corner
-	AArm *RightFrontLowerAArm;
-	AArm *RightFrontUpperAArm;
-	Link *RightFrontTieRod;
-	Link *RightFrontPushrod;
-	Tire3D *RightFrontTire;
-	Damper3D *RightFrontDamper;
-	Spring3D *RightFrontSpring;
-	Triangle3D *RightFrontUpright;
-	Triangle3D *RightFrontBellCrank;
-	Link *RightFrontBarLink;
-	Link *RightFrontHalfShaft;
+	AArm *rightFrontLowerAArm;
+	AArm *rightFrontUpperAArm;
+	Link *rightFrontTieRod;
+	Link *rightFrontPushrod;
+	Tire3D *rightFrontTire;
+	Damper3D *rightFrontDamper;
+	Spring3D *rightFrontSpring;
+	Triangle3D *rightFrontUpright;
+	Triangle3D *rightFrontBellCrank;
+	Link *rightFrontBarLink;
+	Link *rightFrontHalfShaft;
 
 	// Left front corner
-	AArm *LeftFrontLowerAArm;
-	AArm *LeftFrontUpperAArm;
-	Link *LeftFrontTieRod;
-	Link *LeftFrontPushrod;
-	Tire3D *LeftFrontTire;
-	Damper3D *LeftFrontDamper;
-	Spring3D *LeftFrontSpring;
-	Triangle3D *LeftFrontUpright;
-	Triangle3D *LeftFrontBellCrank;
-	Link *LeftFrontBarLink;
-	Link *LeftFrontHalfShaft;
+	AArm *leftFrontLowerAArm;
+	AArm *leftFrontUpperAArm;
+	Link *leftFrontTieRod;
+	Link *leftFrontPushrod;
+	Tire3D *leftFrontTire;
+	Damper3D *leftFrontDamper;
+	Spring3D *leftFrontSpring;
+	Triangle3D *leftFrontUpright;
+	Triangle3D *leftFrontBellCrank;
+	Link *leftFrontBarLink;
+	Link *leftFrontHalfShaft;
 
 	// Right rear corner
-	AArm *RightRearLowerAArm;
-	AArm *RightRearUpperAArm;
-	Link *RightRearTieRod;
-	Link *RightRearPushrod;
-	Tire3D *RightRearTire;
-	Damper3D *RightRearDamper;
-	Spring3D *RightRearSpring;
-	Triangle3D *RightRearUpright;
-	Triangle3D *RightRearBellCrank;
-	Link *RightRearBarLink;
-	Link *RightRearHalfShaft;
+	AArm *rightRearLowerAArm;
+	AArm *rightRearUpperAArm;
+	Link *rightRearTieRod;
+	Link *rightRearPushrod;
+	Tire3D *rightRearTire;
+	Damper3D *rightRearDamper;
+	Spring3D *rightRearSpring;
+	Triangle3D *rightRearUpright;
+	Triangle3D *rightRearBellCrank;
+	Link *rightRearBarLink;
+	Link *rightRearHalfShaft;
 
 	// Left rear corner
-	AArm *LeftRearLowerAArm;
-	AArm *LeftRearUpperAArm;
-	Link *LeftRearTieRod;
-	Link *LeftRearPushrod;
-	Tire3D *LeftRearTire;
-	Damper3D *LeftRearDamper;
-	Spring3D *LeftRearSpring;
-	Triangle3D *LeftRearUpright;
-	Triangle3D *LeftRearBellCrank;
-	Link *LeftRearBarLink;
-	Link *LeftRearHalfShaft;
+	AArm *leftRearLowerAArm;
+	AArm *leftRearUpperAArm;
+	Link *leftRearTieRod;
+	Link *leftRearPushrod;
+	Tire3D *leftRearTire;
+	Damper3D *leftRearDamper;
+	Spring3D *leftRearSpring;
+	Triangle3D *leftRearUpright;
+	Triangle3D *leftRearBellCrank;
+	Link *leftRearBarLink;
+	Link *leftRearHalfShaft;
 
 	// Front end
-	Link *SteeringRack;
-	Swaybar3D *FrontSwayBar;
-	Spring3D *FrontThirdSpring;
-	Damper3D *FrontThirdDamper;
+	Link *steeringRack;
+	Swaybar3D *frontSwayBar;
+	Spring3D *frontThirdSpring;
+	Damper3D *frontThirdDamper;
 
 	// Rear end
-	Swaybar3D *RearSwayBar;
-	Spring3D *RearThirdSpring;
-	Damper3D *RearThirdDamper;
+	Swaybar3D *rearSwayBar;
+	Spring3D *rearThirdSpring;
+	Damper3D *rearThirdDamper;
 
 	// Kinematic output visualization
-	Point3D *FrontRollCenter;
-	Point3D *RearRollCenter;
-	Point3D *RightPitchCenter;
-	Point3D *LeftPitchCenter;
-	Point3D *RightFrontInstantCenter;
-	Point3D *LeftFrontInstantCenter;
-	Point3D *RightRearInstantCenter;
-	Point3D *LeftRearInstantCenter;
+	Point3D *frontRollCenter;
+	Point3D *rearRollCenter;
+	Point3D *rightPitchCenter;
+	Point3D *leftPitchCenter;
+	Point3D *rightFrontInstantCenter;
+	Point3D *leftFrontInstantCenter;
+	Point3D *rightRearInstantCenter;
+	Point3D *leftRearInstantCenter;
 
-	Vector3D *FrontRollAxis;
-	Vector3D *RearRollAxis;
-	Vector3D *RightPitchAxis;
-	Vector3D *LeftPitchAxis;
-	Vector3D *RightFrontInstantAxis;
-	Vector3D *LeftFrontInstantAxis;
-	Vector3D *RightRearInstantAxis;
-	Vector3D *LeftRearInstantAxis;
+	Vector3D *frontRollAxis;
+	Vector3D *rearRollAxis;
+	Vector3D *rightPitchAxis;
+	Vector3D *leftPitchAxis;
+	Vector3D *rightFrontInstantAxis;
+	Vector3D *leftFrontInstantAxis;
+	Vector3D *rightRearInstantAxis;
+	Vector3D *leftRearInstantAxis;
 
 	// Helper orb
-	Corner::Hardpoints HelperOrbCornerPoint;
-	Corner::Location HelperOrbLocation;
-	Suspension::Hardpoints HelperOrbSuspensionPoint;
-	bool HelperOrbIsActive;
-	Point3D *HelperOrb;
+	Corner::Hardpoints helperOrbCornerPoint;
+	Corner::Location helperOrbLocation;
+	Suspension::Hardpoints helperOrbSuspensionPoint;
+	bool helperOrbIsActive;
+	Point3D *helperOrb;
 };
 
 #endif// _CAR_RENDERER_H_

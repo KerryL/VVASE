@@ -24,14 +24,14 @@
 #include <wx/ipc.h>
 
 // Connection class declaration
-class IPC_CONNECTION : public wxConnection
+class IPCConnection : public wxConnection
 {
 public:
 	// Constructor
-	IPC_CONNECTION();
+	IPCConnection();
 
 	// Destructor
-	~IPC_CONNECTION();
+	~IPCConnection();
 	
 	// Client sends data to the server via wxConnection::Poke()
 	

@@ -26,30 +26,10 @@
 #include "application/vvaseApplication.h"
 
 //==========================================================================
-// Class:			IPC_CONNECTION
-// Function:		IPC_CONNECTION
+// Class:			IPCConnection
+// Function:		IPCConnection
 //
-// Description:		Constructor for the IPC_CONNECTION class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-IPC_CONNECTION::IPC_CONNECTION() : wxConnection()
-{
-}
-
-//==========================================================================
-// Class:			IPC_CONNECTION
-// Function:		~IPC_CONNECTION
-//
-// Description:		Destructor for the IPC_CONNECTION class.
+// Description:		Constructor for the IPCConnection class.
 //
 // Input Arguments:
 //		None
@@ -61,12 +41,32 @@ IPC_CONNECTION::IPC_CONNECTION() : wxConnection()
 //		None
 //
 //==========================================================================
-IPC_CONNECTION::~IPC_CONNECTION()
+IPCConnection::IPCConnection() : wxConnection()
 {
 }
 
 //==========================================================================
-// Class:			IPC_CONNECTION
+// Class:			IPCConnection
+// Function:		~IPCConnection
+//
+// Description:		Destructor for the IPCConnection class.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+IPCConnection::~IPCConnection()
+{
+}
+
+//==========================================================================
+// Class:			IPCConnection
 // Function:		OnPoke
 //
 // Description:		Handled by the server object.  Responds to data sent by
@@ -84,11 +84,11 @@ IPC_CONNECTION::~IPC_CONNECTION()
 //		None
 //
 //==========================================================================
-bool IPC_CONNECTION::OnPoke(const wxString &topic, const wxString &item, wxChar* WXUNUSED(data),
+bool IPCConnection::OnPoke(const wxString &topic, const wxString &item, wxChar* WXUNUSED(data),
 							int WXUNUSED(size), wxIPCFormat WXUNUSED(format))
 {
 	// Make sure we recognize the topic
-	if (topic.CompareTo(VVASEApp::ConnectionTopic) == 0)
+	if (topic.CompareTo(VVASEApp::connectionTopic) == 0)
 		// Tell the main frame to load the file
 		return wxGetApp().GetMainFrame()->LoadFile(item);
 

@@ -10,7 +10,7 @@
 // File:  editSuspensionNotebook.cpp
 // Created:  2/19/2009
 // Author:  K. Loux
-// Description:  Contains the class definition for the EDIT_SUSPENSION_NOTEBOOK class.
+// Description:  Contains the class definition for the EditSuspensionNotebook class.
 //				 This class is used to edit the car parameters.  Different panels
 //				 are displayed for editing different sub-systems.
 // History:
@@ -29,14 +29,14 @@
 #include "vUtilities/debugger.h"
 
 //==========================================================================
-// Class:			EDIT_SUSPENSION_NOTEBOOK
-// Function:		EDIT_SUSPENSION_NOTEBOOK
+// Class:			EditSuspensionNotebook
+// Function:		EditSuspensionNotebook
 //
-// Description:		Constructor for EDIT_SUSPENSION_NOTEBOOK class.  Initializes
+// Description:		Constructor for EditSuspensionNotebook class.  Initializes
 //					the form and creates the controls, etc.
 //
 // Input Arguments:
-//		_Parent		= EDIT_PANEL&, reference to this object's owner
+//		_parent		= EditPanel&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
@@ -50,21 +50,21 @@
 //		None
 //
 //==========================================================================
-EDIT_SUSPENSION_NOTEBOOK::EDIT_SUSPENSION_NOTEBOOK(EDIT_PANEL &_Parent, wxWindowID id,
+EditSuspensionNotebook::EditSuspensionNotebook(EditPanel &_parent, wxWindowID id,
 												 const wxPoint& pos, const wxSize& size,
 												 long style, const Debugger &_debugger)
-												 : wxNotebook(&_Parent, id, pos, size, style),
-												 debugger(_debugger), Parent(_Parent)
+												 : wxNotebook(&_parent, id, pos, size, style),
+												 debugger(_debugger), parent(_parent)
 {
 	// Initialize the 'Current' class members
-	CurrentCar = NULL;
+	currentCar = NULL;
 }
 
 //==========================================================================
-// Class:			EDIT_SUSPENSION_NOTEBOOK
-// Function:		~EDIT_SUSPENSION_NOTEBOOK
+// Class:			EditSuspensionNotebook
+// Function:		~EditSuspensionNotebook
 //
-// Description:		Destructor for EDIT_SUSPENSION_NOTEBOOK class.
+// Description:		Destructor for EditSuspensionNotebook class.
 //
 // Input Arguments:
 //		None
@@ -76,12 +76,12 @@ EDIT_SUSPENSION_NOTEBOOK::EDIT_SUSPENSION_NOTEBOOK(EDIT_PANEL &_Parent, wxWindow
 //		None
 //
 //==========================================================================
-EDIT_SUSPENSION_NOTEBOOK::~EDIT_SUSPENSION_NOTEBOOK()
+EditSuspensionNotebook::~EditSuspensionNotebook()
 {
 }
 
 //==========================================================================
-// Class:			EDIT_SUSPENSION_NOTEBOOK
+// Class:			EditSuspensionNotebook
 // Function:		UpdateInformation
 //
 // Description:		Updates the information in this notebook for the current
@@ -97,22 +97,22 @@ EDIT_SUSPENSION_NOTEBOOK::~EDIT_SUSPENSION_NOTEBOOK()
 //		None
 //
 //==========================================================================
-void EDIT_SUSPENSION_NOTEBOOK::UpdateInformation(void)
+void EditSuspensionNotebook::UpdateInformation(void)
 {
 	// Make sure the object has already been assigned
-	if (CurrentCar)
+	if (currentCar)
 		// Call the method that performs the update
-		UpdateInformation(CurrentCar);
+		UpdateInformation(currentCar);
 }
 
 //==========================================================================
-// Class:			EDIT_SUSPENSION_NOTEBOOK
+// Class:			EditSuspensionNotebook
 // Function:		UpdateInformation
 //
 // Description:		Updates the information in this notebook.
 //
 // Input Arguments:
-//		_CurrentCar	= Car* pointing to the currenly active object
+//		_currentCar	= Car* pointing to the currenly active object
 //
 // Output Arguments:
 //		None
@@ -121,13 +121,13 @@ void EDIT_SUSPENSION_NOTEBOOK::UpdateInformation(void)
 //		None
 //
 //==========================================================================
-void EDIT_SUSPENSION_NOTEBOOK::UpdateInformation(Car *_CurrentCar)
+void EditSuspensionNotebook::UpdateInformation(Car *_currentCar)
 {
 	// Update the class member
-	CurrentCar = _CurrentCar;
+	currentCar = _currentCar;
 
 	// If the current object is NULL, we no longer have an object to represent
-	if (!CurrentCar)
+	if (!currentCar)
 	{
 		// Delete all the notebook pages
 		DeleteAllPages();
@@ -141,7 +141,7 @@ void EDIT_SUSPENSION_NOTEBOOK::UpdateInformation(Car *_CurrentCar)
 
 	// Check to see if the car is symmetric, and if the current number of pages is
 	// correct.
-	if (CurrentCar->suspension->isSymmetric)
+	if (currentCar->suspension->isSymmetric)
 	{
 		// A symmetric car only gets three pages
 		if (GetPageCount() > 3)
@@ -151,8 +151,8 @@ void EDIT_SUSPENSION_NOTEBOOK::UpdateInformation(Car *_CurrentCar)
 			DeletePage(2);
 
 			// Set the left side pointers to NULL
-			LeftFront = NULL;
-			LeftRear = NULL;
+			leftFront = NULL;
+			leftRear = NULL;
 
 			// Rename the tabs
 			SetPageText(1, _T("Front"));
@@ -168,24 +168,24 @@ void EDIT_SUSPENSION_NOTEBOOK::UpdateInformation(Car *_CurrentCar)
 	}
 
 	// Call the update functions for the pages, too
-	Suspension->UpdateInformation(CurrentCar->suspension);
-	RightFront->UpdateInformation(&CurrentCar->suspension->rightFront,
-		CurrentCar->suspension->frontBarStyle, CurrentCar->HasFrontHalfShafts());
-	if (LeftFront)
-		LeftFront->UpdateInformation(&CurrentCar->suspension->leftFront,
-			CurrentCar->suspension->frontBarStyle, CurrentCar->HasFrontHalfShafts());
-	RightRear->UpdateInformation(&CurrentCar->suspension->rightRear,
-		CurrentCar->suspension->rearBarStyle, CurrentCar->HasRearHalfShafts());
-	if (LeftRear)
-		LeftRear->UpdateInformation(&CurrentCar->suspension->leftRear,
-			CurrentCar->suspension->rearBarStyle, CurrentCar->HasRearHalfShafts());
+	suspension->UpdateInformation(currentCar->suspension);
+	rightFront->UpdateInformation(&currentCar->suspension->rightFront,
+		currentCar->suspension->frontBarStyle, currentCar->HasFrontHalfShafts());
+	if (leftFront)
+		leftFront->UpdateInformation(&currentCar->suspension->leftFront,
+			currentCar->suspension->frontBarStyle, currentCar->HasFrontHalfShafts());
+	rightRear->UpdateInformation(&currentCar->suspension->rightRear,
+		currentCar->suspension->rearBarStyle, currentCar->HasRearHalfShafts());
+	if (leftRear)
+		leftRear->UpdateInformation(&currentCar->suspension->leftRear,
+			currentCar->suspension->rearBarStyle, currentCar->HasRearHalfShafts());
 
 	// Also make sure we're symmetric if we're supposed to be
 	UpdateSymmetry();
 }
 
 //==========================================================================
-// Class:			EDIT_SUSPENSION_NOTEBOOK
+// Class:			EditSuspensionNotebook
 // Function:		CreateControls
 //
 // Description:		Creates the controls for this notebook.
@@ -200,28 +200,28 @@ void EDIT_SUSPENSION_NOTEBOOK::UpdateInformation(Car *_CurrentCar)
 //		None
 //
 //==========================================================================
-void EDIT_SUSPENSION_NOTEBOOK::CreateControls(void)
+void EditSuspensionNotebook::CreateControls(void)
 {
 	// Delete the existing pages before we create the new ones
 	DeleteAllPages();
 
 	// Create the notebook pages
-	Suspension = new EDIT_SUSPENSION_PANEL(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
-	RightFront = new EDIT_CORNER_PANEL(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
-	LeftFront = new EDIT_CORNER_PANEL(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
-	RightRear = new EDIT_CORNER_PANEL(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
-	LeftRear = new EDIT_CORNER_PANEL(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
+	suspension = new EditSuspensionPanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
+	rightFront = new EditCornerPanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
+	leftFront = new EditCornerPanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
+	rightRear = new EditCornerPanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
+	leftRear = new EditCornerPanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
 
 	// Add them to the notebook
-	AddPage(Suspension, _T("General"));
-	AddPage(RightFront, _T("RF"));
-	AddPage(LeftFront, _T("LF"));
-	AddPage(RightRear, _T("RR"));
-	AddPage(LeftRear, _T("LR"));
+	AddPage(suspension, _T("General"));
+	AddPage(rightFront, _T("RF"));
+	AddPage(leftFront, _T("LF"));
+	AddPage(rightRear, _T("RR"));
+	AddPage(leftRear, _T("LR"));
 }
 
 //==========================================================================
-// Class:			EDIT_SUSPENSION_NOTEBOOK
+// Class:			EditSuspensionNotebook
 // Function:		UpdateSymmetry
 //
 // Description:		Goes through all of the corner point and ensures symmetry
@@ -237,10 +237,10 @@ void EDIT_SUSPENSION_NOTEBOOK::CreateControls(void)
 //		None
 //
 //==========================================================================
-void EDIT_SUSPENSION_NOTEBOOK::UpdateSymmetry(void)
+void EditSuspensionNotebook::UpdateSymmetry(void)
 {
 	// Check to make sure this car is symmetric
-	if (CurrentCar->suspension->isSymmetric)
+	if (currentCar->suspension->isSymmetric)
 	{
 		int i;
 
@@ -248,36 +248,36 @@ void EDIT_SUSPENSION_NOTEBOOK::UpdateSymmetry(void)
 		for (i = 0; i < Corner::NumberOfHardpoints; i++)
 		{
 			// Copy the point
-			CurrentCar->suspension->leftFront.hardpoints[i] = CurrentCar->suspension->rightFront.hardpoints[i];
+			currentCar->suspension->leftFront.hardpoints[i] = currentCar->suspension->rightFront.hardpoints[i];
 
 			// Flip the sign on the Y componenet
-			CurrentCar->suspension->leftFront.hardpoints[i].y *= -1.0;
+			currentCar->suspension->leftFront.hardpoints[i].y *= -1.0;
 		}
 
 		// Copy the rear points
 		for (i = 0; i < Corner::NumberOfHardpoints; i++)
 		{
 			// Copy the point
-			CurrentCar->suspension->leftRear.hardpoints[i] = CurrentCar->suspension->rightRear.hardpoints[i];
+			currentCar->suspension->leftRear.hardpoints[i] = currentCar->suspension->rightRear.hardpoints[i];
 
 			// Flip the sign on the Y componenet
-			CurrentCar->suspension->leftRear.hardpoints[i].y *= -1.0;
+			currentCar->suspension->leftRear.hardpoints[i].y *= -1.0;
 		}
 
 		// Copy the other information in the front
-		CurrentCar->suspension->leftFront.actuationAttachment = CurrentCar->suspension->rightFront.actuationAttachment;
-		CurrentCar->suspension->leftFront.actuationType = CurrentCar->suspension->rightFront.actuationType;
-		CurrentCar->suspension->leftFront.damper = CurrentCar->suspension->rightFront.damper;
-		CurrentCar->suspension->leftFront.spring = CurrentCar->suspension->rightFront.spring;
-		CurrentCar->suspension->leftFront.staticCamber = CurrentCar->suspension->rightFront.staticCamber;
-		CurrentCar->suspension->leftFront.staticToe = CurrentCar->suspension->rightFront.staticToe;
+		currentCar->suspension->leftFront.actuationAttachment = currentCar->suspension->rightFront.actuationAttachment;
+		currentCar->suspension->leftFront.actuationType = currentCar->suspension->rightFront.actuationType;
+		currentCar->suspension->leftFront.damper = currentCar->suspension->rightFront.damper;
+		currentCar->suspension->leftFront.spring = currentCar->suspension->rightFront.spring;
+		currentCar->suspension->leftFront.staticCamber = currentCar->suspension->rightFront.staticCamber;
+		currentCar->suspension->leftFront.staticToe = currentCar->suspension->rightFront.staticToe;
 
 		// Copy the other information in the rear
-		CurrentCar->suspension->leftRear.actuationAttachment = CurrentCar->suspension->rightRear.actuationAttachment;
-		CurrentCar->suspension->leftRear.actuationType = CurrentCar->suspension->rightRear.actuationType;
-		CurrentCar->suspension->leftRear.damper = CurrentCar->suspension->rightRear.damper;
-		CurrentCar->suspension->leftRear.spring = CurrentCar->suspension->rightRear.spring;
-		CurrentCar->suspension->leftRear.staticCamber = CurrentCar->suspension->rightRear.staticCamber;
-		CurrentCar->suspension->leftRear.staticToe = CurrentCar->suspension->rightRear.staticToe;
+		currentCar->suspension->leftRear.actuationAttachment = currentCar->suspension->rightRear.actuationAttachment;
+		currentCar->suspension->leftRear.actuationType = currentCar->suspension->rightRear.actuationType;
+		currentCar->suspension->leftRear.damper = currentCar->suspension->rightRear.damper;
+		currentCar->suspension->leftRear.spring = currentCar->suspension->rightRear.spring;
+		currentCar->suspension->leftRear.staticCamber = currentCar->suspension->rightRear.staticCamber;
+		currentCar->suspension->leftRear.staticToe = currentCar->suspension->rightRear.staticToe;
 	}
 }

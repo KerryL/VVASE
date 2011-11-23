@@ -24,30 +24,30 @@
 
 // VVASE forward declarations
 class Debugger;
-class MAIN_FRAME;
-class GUI_OBJECT;
+class MainFrame;
+class GuiObject;
 
-class MAIN_TREE : public wxTreeCtrl
+class MainTree : public wxTreeCtrl
 {
 public:
 	// Constructor
-	MAIN_TREE(MAIN_FRAME &_Parent, wxWindowID id, const wxPoint &pos,
-		const wxSize &size, long style, const Debugger &_debugger);
+	MainTree(MainFrame &_parent, wxWindowID id, const wxPoint &pos,
+		const wxSize &_size, long style, const Debugger &_debugger);
 
 	// Destructor
-	~MAIN_TREE();
+	~MainTree();
 
 	// Returns a poionter to the selected GUI_OBJECT, or NULL if none is selected
-	GUI_OBJECT *GetSelectedItem(wxTreeItemId *SelectedItem);
+	GuiObject *GetSelectedItem(wxTreeItemId *selectedItem);
 
 	// Returns the number of items below the root for the specified item
 	// Can be used for getting the type of a child item
-	int GetItemType(wxTreeItemId ItemId);
+	int GetItemType(wxTreeItemId itemId);
 
 	// Returns a pointer to this object's owner
-	inline MAIN_FRAME& GetMainFrame(void) { return MainFrame; };
+	inline MainFrame& GetMainFrame(void) { return mainFrame; };
 
-	enum ICON_HANDLE
+	enum IconHandle
 	{
 		CarIcon,
 		AerodynamicsIcon,
@@ -66,14 +66,14 @@ public:
 	};
 
 	// For assigning icons, we need to give other objects access to the indeces
-	int GetIconHandle(ICON_HANDLE Id) { return IconHandle[Id]; };
+	int GetIconHandle(IconHandle id) { return iconHandle[id]; };
 
 private:
 	// Debugger message utility object
 	const Debugger &debugger;
 
 	// Pointer to this object's owner
-	MAIN_FRAME &MainFrame;
+	MainFrame &mainFrame;
 
 	// Event handlers-----------------------------------------------------
 	// Tree events
@@ -83,16 +83,16 @@ private:
 	// End event handlers-------------------------------------------------
 
 	// Handles selection logic when the selection changes or an item is activated
-	void PerformSelection(bool IsActivated);
+	void PerformSelection(bool isActivated);
 
 	// Determines the application's index number for the currently selected item
 	int GetSelectedObjectIndex(void);
 
 	// The image list for storing tree item icons
-	wxImageList *IconList;
+	wxImageList *iconList;
 
 	// These are for storing the icon indeces as we add them to the image list
-	int IconHandle[NumberOfIcons];
+	int iconHandle[NumberOfIcons];
 
 	// For the event table
 	DECLARE_EVENT_TABLE();

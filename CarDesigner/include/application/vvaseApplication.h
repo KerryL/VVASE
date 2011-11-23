@@ -25,7 +25,7 @@ class wxSingleInstanceChecker;
 class wxServer;
 
 // VVASE forward declarations
-class MAIN_FRAME;
+class MainFrame;
 
 // The application class
 class VVASEApp : public wxApp
@@ -36,23 +36,23 @@ public:
 	int OnExit();
 
 	// Private data accessor
-	MAIN_FRAME *GetMainFrame(void) { return MainFrame; };
+	MainFrame *GetMainFrame(void) { return mainFrame; };
 
 	// Constants required for generating data exchange objects
-	static const wxString HostName;
-	static const wxString ServiceName;
-	static const wxString ConnectionTopic;
+	static const wxString hostName;
+	static const wxString serviceName;
+	static const wxString connectionTopic;
 
 private:
 	// The main class for the VVASE application - this object is the parent
 	// for all other VVASE objects
-	MAIN_FRAME *MainFrame;
+	MainFrame *mainFrame;
 
 	// To see if there is already another instance open
-	wxSingleInstanceChecker *SingleInstanceChecker;
+	wxSingleInstanceChecker *singleInstanceChecker;
 
 	// Server object to pass data between instances of this application
-	wxServer *DataExchangeServer;
+	wxServer *dataExchangeServer;
 
 	// Deletes dynamic memory
 	void DeleteDynamicMemory(void);

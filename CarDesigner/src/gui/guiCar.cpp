@@ -13,12 +13,12 @@
 // Description:  A high-level car object.  This class defines the interaction between
 //				 the GUI and the actual CAR class.
 // History:
-//	1/24/2009	- Major application structure change - MAIN_FRAME uses GUI_OBJECT instead of
-//				  GUI_CAR.  GUI_OBJECT changed to only contain either GUI_CAR or ITERATION
+//	1/24/2009	- Major application structure change - MainFrame uses GuiObject instead of
+//				  GuiCar.  GuiObject changed to only contain either GuiCar or Iteration
 //				  objects.
-//	2/17/2009	- Moved the KINEMATICS object into this class so we can update the 3D car
+//	2/17/2009	- Moved the Kinematics object into this class so we can update the 3D car
 //				  more easily.
-//	5/19/2009	- Changed to derived class from GUI_OBJECT, K. Loux.
+//	5/19/2009	- Changed to derived class from GuiObject, K. Loux.
 
 // Standard C++ headers
 #include <fstream>
@@ -46,15 +46,15 @@
 #include "vSolver/threads/kinematicsData.h"
 
 //==========================================================================
-// Class:			GUI_CAR
-// Function:		GUI_CAR
+// Class:			GuiCar
+// Function:		GuiCar
 //
-// Description:		Constructor for the GUI_CAR class.
+// Description:		Constructor for the GuiCar class.
 //
 // Input Arguments:
-//		_MainFrame			= MAIN_FRAME&, reference to the main application window
+//		_mainFrame			= MainFrame&, reference to the main application window
 //		_debugger			= const Debugger&, reference to debugger utility object
-//		_PathAndFileName	= wxString containing the location of this object
+//		_pathAndFileName	= wxString containing the location of this object
 //							  on the hard disk
 //
 // Output Arguments:
@@ -64,16 +64,16 @@
 //		None
 //
 //==========================================================================
-GUI_CAR::GUI_CAR(MAIN_FRAME &_MainFrame, const Debugger &_debugger,
-				 wxString _PathAndFileName)
-				 : GUI_OBJECT(_MainFrame, _debugger, _PathAndFileName)
+GuiCar::GuiCar(MainFrame &_mainFrame, const Debugger &_debugger,
+				 wxString _pathAndFileName)
+				 : GuiObject(_mainFrame, _debugger, _pathAndFileName)
 {
 	// Allocate memory for the original and working cars
-	OriginalCar = new Car(debugger);
-	WorkingCar = new Car(*OriginalCar);
+	originalCar = new Car(debugger);
+	workingCar = new Car(*originalCar);
 
 	// Create the appearance options object
-	AppearanceOptions = new APPEARANCE_OPTIONS(MainFrame, *this, debugger);
+	appearanceOptions = new AppearanceOptions(mainFrame, *this, debugger);
 
 	// Create the 3D output window
 #ifdef __WXGTK__
@@ -81,74 +81,74 @@ GUI_CAR::GUI_CAR(MAIN_FRAME &_MainFrame, const Debugger &_debugger,
 	// Adding the double-buffer argument fixes this.  Under windows, the double-buffer argument
 	// causes the colors to go funky.  So we have this #if.
 	int args[] = {WX_GL_DOUBLEBUFFER, 0};
-	renderer = new CAR_RENDERER(MainFrame, *this, args, debugger);
+	renderer = new CarRenderer(mainFrame, *this, args, debugger);
 #else
-	renderer = new CAR_RENDERER(MainFrame, *this, NULL, debugger);
+	renderer = new CarRenderer(mainFrame, *this, NULL, debugger);
 #endif
 	notebookTab = reinterpret_cast<wxWindow*>(renderer);
 
-	// Get an index for this item and add it to the list in the MainFrame
+	// Get an index for this item and add it to the list in the mainFrame
 	// MUST be included BEFORE the naming, which must come BEFORE the call to Initialize
-	Index = MainFrame.AddObjectToList(this);
+	index = mainFrame.AddObjectToList(this);
 
 	// Create the name based on the index
-	Name.Printf("Unsaved Car %i", Index + 1);
+	name.Printf("Unsaved Car %i", index + 1);
 
 	// Complete initialization of this object before creating sub-system icons
 	Initialize();
 
 	// Add the children to the systems tree
 	int i;
-	int IconHandle = -1;
-	for (i = 0; i < GUI_CAR::NumberOfSubsystems; i++)
+	int iconHandle = -1;
+	for (i = 0; i < GuiCar::NumberOfSubsystems; i++)
 	{
 		// Get the appropriate icon
 		switch (i)
 		{
-		case GUI_CAR::SubsystemAerodynamics:
-			IconHandle = _MainFrame.GetSystemsTree()->GetIconHandle(MAIN_TREE::AerodynamicsIcon);
+		case GuiCar::SubsystemAerodynamics:
+			iconHandle = _mainFrame.GetSystemsTree()->GetIconHandle(MainTree::AerodynamicsIcon);
 			break;
 
-		case GUI_CAR::SubsystemBrakes:
-			IconHandle = _MainFrame.GetSystemsTree()->GetIconHandle(MAIN_TREE::BrakesIcon);
+		case GuiCar::SubsystemBrakes:
+			iconHandle = _mainFrame.GetSystemsTree()->GetIconHandle(MainTree::BrakesIcon);
 			break;
 
-		case GUI_CAR::SubsystemDrivetrain:
-			IconHandle = _MainFrame.GetSystemsTree()->GetIconHandle(MAIN_TREE::DrivetrainIcon);
+		case GuiCar::SubsystemDrivetrain:
+			iconHandle = _mainFrame.GetSystemsTree()->GetIconHandle(MainTree::DrivetrainIcon);
 			break;
 
-		case GUI_CAR::SubsystemEngine:
-			IconHandle = _MainFrame.GetSystemsTree()->GetIconHandle(MAIN_TREE::EngineIcon);
+		case GuiCar::SubsystemEngine:
+			iconHandle = _mainFrame.GetSystemsTree()->GetIconHandle(MainTree::EngineIcon);
 			break;
 
-		case GUI_CAR::SubsystemMassProperties:
-			IconHandle = _MainFrame.GetSystemsTree()->GetIconHandle(MAIN_TREE::MassPropertiesIcon);
+		case GuiCar::SubsystemMassProperties:
+			iconHandle = _mainFrame.GetSystemsTree()->GetIconHandle(MainTree::MassPropertiesIcon);
 			break;
 
-		case GUI_CAR::SubsystemSuspension:
-			IconHandle = _MainFrame.GetSystemsTree()->GetIconHandle(MAIN_TREE::SuspensionIcon);
+		case GuiCar::SubsystemSuspension:
+			iconHandle = _mainFrame.GetSystemsTree()->GetIconHandle(MainTree::SuspensionIcon);
 			break;
 
-		case GUI_CAR::SubsystemTires:
-			IconHandle = _MainFrame.GetSystemsTree()->GetIconHandle(MAIN_TREE::TiresIcon);
+		case GuiCar::SubsystemTires:
+			iconHandle = _mainFrame.GetSystemsTree()->GetIconHandle(MainTree::TiresIcon);
 			break;
 
 		default:
-			IconHandle = -1;
+			iconHandle = -1;
 			break;
 		}
 
 		// Add the entry to the tree
-		Subsystems[i] = _MainFrame.GetSystemsTree()->AppendItem(TreeID,
-			GetSubsystemName((SUBSYSTEMS)i), IconHandle, IconHandle);
+		subsystems[i] = _mainFrame.GetSystemsTree()->AppendItem(treeID,
+			GetSubsystemName((Subsystems)i), iconHandle, iconHandle);
 	}
 }
 
 //==========================================================================
-// Class:			GUI_CAR
-// Function:		~GUI_CAR
+// Class:			GuiCar
+// Function:		~GuiCar
 //
-// Description:		Destructor for the GUI_CAR class.
+// Description:		Destructor for the GuiCar class.
 //
 // Input Arguments:
 //		None
@@ -160,22 +160,22 @@ GUI_CAR::GUI_CAR(MAIN_FRAME &_MainFrame, const Debugger &_debugger,
 //		None
 //
 //==========================================================================
-GUI_CAR::~GUI_CAR()
+GuiCar::~GuiCar()
 {
 	// Delete the car objects
-	delete OriginalCar;
-	OriginalCar = NULL;
+	delete originalCar;
+	originalCar = NULL;
 
-	delete WorkingCar;
-	WorkingCar = NULL;
+	delete workingCar;
+	workingCar = NULL;
 
 	// Delete the appearance options
-	delete AppearanceOptions;
-	AppearanceOptions = NULL;
+	delete appearanceOptions;
+	appearanceOptions = NULL;
 }
 
 //==========================================================================
-// Class:			GUI_CAR
+// Class:			GuiCar
 // Function:		GetIconHandle
 //
 // Description:		Gets the icon handle from the systems tree.
@@ -190,14 +190,14 @@ GUI_CAR::~GUI_CAR()
 //		integer specifying the icon handle
 //
 //==========================================================================
-int GUI_CAR::GetIconHandle(void) const
+int GuiCar::GetIconHandle(void) const
 {
 	// Return the proper icon handle
-	return SystemsTree->GetIconHandle(MAIN_TREE::CarIcon);
+	return systemsTree->GetIconHandle(MainTree::CarIcon);
 }
 
 //==========================================================================
-// Class:			GUI_CAR
+// Class:			GuiCar
 // Function:		UpdateData
 //
 // Description:		Updates the 3D display models.
@@ -212,26 +212,26 @@ int GUI_CAR::GetIconHandle(void) const
 //		None
 //
 //==========================================================================
-void GUI_CAR::UpdateData(void)
+void GuiCar::UpdateData(void)
 {
 	// This is called at various points during the load process due to different
 	// GUI screens being created and their requests for data.  This can result in
 	// errors.  To combat this, we check to make sure we're done loading before
 	// we continue.
-	if (!ObjectIsInitialized)
+	if (!objectIsInitialized)
 		return;
 
 	// Update the wheel centers
-	OriginalCar->ComputeWheelCenters();
+	originalCar->ComputeWheelCenters();
 
 	// Re-run the kinematics to update the car's position
-	KinematicsData *Data = new KinematicsData(OriginalCar, WorkingCar, MainFrame.GetInputs(), &kinematicOutputs);
-	ThreadJob Job(ThreadJob::CommandThreadKinematicsNormal, Data, Name, Index);
-	MainFrame.AddJob(Job);
+	KinematicsData *data = new KinematicsData(originalCar, workingCar, mainFrame.GetInputs(), &kinematicOutputs);
+	ThreadJob job(ThreadJob::CommandThreadKinematicsNormal, data, name, index);
+	mainFrame.AddJob(job);
 }
 
 //==========================================================================
-// Class:			GUI_CAR
+// Class:			GuiCar
 // Function:		UpdateDisplay
 //
 // Description:		Updates the visual display of this object.
@@ -246,14 +246,14 @@ void GUI_CAR::UpdateData(void)
 //		None
 //
 //==========================================================================
-void GUI_CAR::UpdateDisplay(void)
+void GuiCar::UpdateDisplay(void)
 {
 	// Update the display associated with this object
 	renderer->UpdateDisplay(kinematicOutputs);
 }
 
 //==========================================================================
-// Class:			GUI_CAR
+// Class:			GuiCar
 // Function:		PerformSaveToFile
 //
 // Description:		Saves the car object to file.
@@ -268,29 +268,29 @@ void GUI_CAR::UpdateDisplay(void)
 //		bool, true for car was saved, false for car was not saved
 //
 //==========================================================================
-bool GUI_CAR::PerformSaveToFile(void)
+bool GuiCar::PerformSaveToFile(void)
 {
 	// Make sure we have exclusive access
-	wxMutexLocker lock(OriginalCar->GetMutex());
+	wxMutexLocker lock(originalCar->GetMutex());
 
 	// Perform the save - the object we want to save is OriginalCar - this is the
 	// one that contains the information about the vehicle as it was input by the
 	// user.
-	std::ofstream OutFile;
-	bool SaveSuccessful(OriginalCar->SaveCarToFile(PathAndFileName, &OutFile));
+	std::ofstream outFile;
+	bool saveSuccessful(originalCar->SaveCarToFile(pathAndFileName, &outFile));
 
 	// Also write the appearance options after checking to make sure that OutFile was properly opened
-	if (OutFile.is_open() && OutFile.good())
+	if (outFile.is_open() && outFile.good())
 	{
-		AppearanceOptions->Write(&OutFile);
-		OutFile.close();
+		appearanceOptions->Write(&outFile);
+		outFile.close();
 	}
 
-	return SaveSuccessful;
+	return saveSuccessful;
 }
 
 //==========================================================================
-// Class:			GUI_CAR
+// Class:			GuiCar
 // Function:		PerformLoadFromFile
 //
 // Description:		Loads the car object from file.
@@ -305,36 +305,36 @@ bool GUI_CAR::PerformSaveToFile(void)
 //		bool, true for successful load, false otherwise
 //
 //==========================================================================
-bool GUI_CAR::PerformLoadFromFile(void)
+bool GuiCar::PerformLoadFromFile(void)
 {
-	std::ifstream InFile;
-	int FileVersion;
+	std::ifstream inFile;
+	int fileVersion;
 
 	// Make sure we have exclusive access
-	wxMutexLocker Lock(OriginalCar->GetMutex());
+	wxMutexLocker lock(originalCar->GetMutex());
 
 	// Open the car
-	bool LoadSuccessful(OriginalCar->LoadCarFromFile(PathAndFileName, &InFile, &FileVersion));
+	bool loadSuccessful(originalCar->LoadCarFromFile(pathAndFileName, &inFile, &fileVersion));
 
 	// Also load the appearance options after checking to make sure InFile was correctly opened
-	if (InFile.is_open() && InFile.good())
+	if (inFile.is_open() && inFile.good())
 	{
-		AppearanceOptions->Read(&InFile, FileVersion);
-		InFile.close();
+		appearanceOptions->Read(&inFile, fileVersion);
+		inFile.close();
 	}
 
-	return LoadSuccessful;
+	return loadSuccessful;
 }
 
 //==========================================================================
-// Class:			GUI_CAR
+// Class:			GuiCar
 // Function:		GetSubsystemName
 //
 // Description:		Returns a string containing the name of the specifyied
 //					subsystem.
 //
 // Input Arguments:
-//		Subsystem	= SUBSYSTEM specifying the type of subsystem in which
+//		subsystem	= Subsystems specifying the type of subsystem in which
 //					  we are interested
 //
 // Output Arguments:
@@ -344,9 +344,9 @@ bool GUI_CAR::PerformLoadFromFile(void)
 //		wxString containing the name of the subsystem
 //
 //==========================================================================
-wxString GUI_CAR::GetSubsystemName(SUBSYSTEMS Subsystem)
+wxString GuiCar::GetSubsystemName(Subsystems subsystem)
 {
-	switch (Subsystem)
+	switch (subsystem)
 	{
 	case SubsystemAerodynamics:
 		return _T("Aerodynamics");

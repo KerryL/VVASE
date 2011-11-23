@@ -10,7 +10,7 @@
 // File:  editDifferentialPanel.cpp
 // Created:  2/10/2009
 // Author:  K. Loux
-// Description:  Contains the class definition for the EDIT_DIFFERENTIAL_PANEL class.  This
+// Description:  Contains the class definition for the EditDifferentialPanel class.  This
 //				 class is used to edit the hard points on a particular corner of the
 //				 car.
 // History:
@@ -25,13 +25,13 @@
 #include "vMath/vector.h"
 
 //==========================================================================
-// Class:			EDIT_DIFFERENTIAL_PANEL
-// Function:		EDIT_DIFFERENTIAL_PANEL
+// Class:			EditDifferentialPanel
+// Function:		EditDifferentialPanel
 //
-// Description:		Constructor for EDIT_DIFFERENTIAL_PANEL class.
+// Description:		Constructor for EditDifferentialPanel class.
 //
 // Input Arguments:
-//		_Parent		= EDIT_PANEL&, referenc to this object's owner
+//		_parent		= EditPanel&, referenc to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
@@ -44,18 +44,18 @@
 //		None
 //
 //==========================================================================
-EDIT_DIFFERENTIAL_PANEL::EDIT_DIFFERENTIAL_PANEL(EDIT_PANEL* _Parent, wxWindowID id,
+EditDifferentialPanel::EditDifferentialPanel(EditPanel* _parent, wxWindowID id,
 										   const wxPoint& pos, const wxSize& size,
-										   const Debugger &_debugger) : wxPanel(_Parent, id,
+										   const Debugger &_debugger) : wxPanel(_parent, id,
 										   pos, size), debugger(_debugger)
 {
 }
 
 //==========================================================================
-// Class:			EDIT_DIFFERENTIAL_PANEL
-// Function:		EDIT_DIFFERENTIAL_PANEL
+// Class:			EditDifferentialPanel
+// Function:		EditDifferentialPanel
 //
-// Description:		Destructor for EDIT_DIFFERENTIAL_PANEL class.
+// Description:		Destructor for EditDifferentialPanel class.
 //
 // Input Arguments:
 //		None
@@ -67,6 +67,6 @@ EDIT_DIFFERENTIAL_PANEL::EDIT_DIFFERENTIAL_PANEL(EDIT_PANEL* _Parent, wxWindowID
 //		None
 //
 //==========================================================================
-EDIT_DIFFERENTIAL_PANEL::~EDIT_DIFFERENTIAL_PANEL()
+EditDifferentialPanel::~EditDifferentialPanel()
 {
 }

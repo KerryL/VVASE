@@ -27,20 +27,20 @@ class wxGridEvent;
 class wxNotebook;
 
 // VVASE forward declarations
-class MAIN_FRAME;
+class MainFrame;
 class SuperGrid;
 class Convert;
 class Color;
 
-class APPEARANCE_OPTIONS_DIALOG : public wxDialog
+class AppearanceOptionsDialog : public wxDialog
 {
 public:
 	// Constructor
-	APPEARANCE_OPTIONS_DIALOG(MAIN_FRAME &MainFrame, APPEARANCE_OPTIONS *_Options,
-		wxWindowID Id, const wxPoint &Position, long Style = wxDEFAULT_DIALOG_STYLE);
+	AppearanceOptionsDialog(MainFrame &mainFrame, AppearanceOptions *_options,
+		wxWindowID id, const wxPoint &position, long style = wxDEFAULT_DIALOG_STYLE);
 
 	// Destructor
-	~APPEARANCE_OPTIONS_DIALOG();
+	~AppearanceOptionsDialog();
 
 private:
 	// Sets up the size and position of this dialog and its contents
@@ -50,13 +50,13 @@ private:
 	const Convert &converter;
 
 	// The object to edit
-	APPEARANCE_OPTIONS *Options;
+	AppearanceOptions *options;
 
 	// A copy of the color array
-	Color ColorOptions[APPEARANCE_OPTIONS::ColorCount];
+	Color colorOptions[AppearanceOptions::ColorCount];
 
 	// The event IDs
-	enum EVENT_ID
+	enum EventId
 	{
 		IdColorGrid = wxID_HIGHEST + 700,
 	};
@@ -69,17 +69,17 @@ private:
 	// End event handlers-------------------------------------------------
 
 	// The controls
-	wxNotebook *Notebook;
+	wxNotebook *notebook;
 
-	wxPanel *ColorPanel;
-	wxPanel *VisibilityPanel;
-	wxPanel *SizePanel;
-	wxPanel *ResolutionPanel;
+	wxPanel *colorPanel;
+	wxPanel *visibilityPanel;
+	wxPanel *sizePanel;
+	wxPanel *resolutionPanel;
 
-	SuperGrid *ColorGrid;
-	wxCheckListBox *VisibilityList;
-	SuperGrid *SizeGrid;
-	SuperGrid *ResolutionGrid;
+	SuperGrid *colorGrid;
+	wxCheckListBox *visibilityList;
+	SuperGrid *sizeGrid;
+	SuperGrid *resolutionGrid;
 
 	// The event table
 	DECLARE_EVENT_TABLE()

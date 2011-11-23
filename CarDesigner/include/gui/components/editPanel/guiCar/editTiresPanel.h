@@ -20,40 +20,40 @@
 #include <wx/wx.h>
 
 // VVASE forward declarations
-class EDIT_PANEL;
+class EditPanel;
 class TireSet;
 
-class EDIT_TIRES_PANEL : public wxScrolledWindow
+class EditTiresPanel : public wxScrolledWindow
 {
 public:
 	// Constructor
-	EDIT_TIRES_PANEL(EDIT_PANEL &_Parent, wxWindowID id, const wxPoint& pos,
+	EditTiresPanel(EditPanel &_parent, wxWindowID id, const wxPoint& pos,
 		const wxSize& size, const Debugger &_debugger);
 
 	// Destructor
-	~EDIT_TIRES_PANEL();
+	~EditTiresPanel();
 
 	// Updates the information in the display
-	void UpdateInformation(TireSet *_TireSet);
+	void UpdateInformation(TireSet *_tireSet);
 
 private:
 	// Debugger message printing utility
 	const Debugger &debugger;
 
 	// The application's converter
-	const Convert &Converter;
+	const Convert &converter;
 
 	// The parent panel
-	EDIT_PANEL &Parent;
+	EditPanel &parent;
 
 	// The corner with which we are currently associated
-	TireSet *CurrentTireSet;
+	TireSet *currentTireSet;
 
 	// Creates the controls and positions everything within the panel
 	void CreateControls(void);
 
 	// Event IDs
-	enum EDIT_CORNER_EVENT_ID
+	enum EditTiresEventIds
 	{
 		TextBoxRightFrontTireDiameter = 500 + wxID_HIGHEST,
 		TextBoxRightFrontTireWidth,
@@ -83,25 +83,25 @@ private:
 	// End event handlers-------------------------------------------------
 
 	// The controls for the static-setup options
-	wxTextCtrl *RightFrontTireDiameter;
-	wxTextCtrl *RightFrontTireWidth;
-	wxStaticText *RightFrontDiameterUnitsLabel;
-	wxStaticText *RightFrontWidthUnitsLabel;
+	wxTextCtrl *rightFrontTireDiameter;
+	wxTextCtrl *rightFrontTireWidth;
+	wxStaticText *rightFrontDiameterUnitsLabel;
+	wxStaticText *rightFrontWidthUnitsLabel;
 
-	wxTextCtrl *LeftFrontTireDiameter;
-	wxTextCtrl *LeftFrontTireWidth;
-	wxStaticText *LeftFrontDiameterUnitsLabel;
-	wxStaticText *LeftFrontWidthUnitsLabel;
+	wxTextCtrl *leftFrontTireDiameter;
+	wxTextCtrl *leftFrontTireWidth;
+	wxStaticText *leftFrontDiameterUnitsLabel;
+	wxStaticText *leftFrontWidthUnitsLabel;
 
-	wxTextCtrl *RightRearTireDiameter;
-	wxTextCtrl *RightRearTireWidth;
-	wxStaticText *RightRearDiameterUnitsLabel;
-	wxStaticText *RightRearWidthUnitsLabel;
+	wxTextCtrl *rightRearTireDiameter;
+	wxTextCtrl *rightRearTireWidth;
+	wxStaticText *rightRearDiameterUnitsLabel;
+	wxStaticText *rightRearWidthUnitsLabel;
 
-	wxTextCtrl *LeftRearTireDiameter;
-	wxTextCtrl *LeftRearTireWidth;
-	wxStaticText *LeftRearDiameterUnitsLabel;
-	wxStaticText *LeftRearWidthUnitsLabel;
+	wxTextCtrl *leftRearTireDiameter;
+	wxTextCtrl *leftRearTireWidth;
+	wxStaticText *leftRearDiameterUnitsLabel;
+	wxStaticText *leftRearWidthUnitsLabel;
 
 	// For the event table
 	DECLARE_EVENT_TABLE();

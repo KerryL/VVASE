@@ -24,99 +24,99 @@
 #include "gui/gaObject.h"
 
 // VVASE forward declarations
-class MAIN_FRAME;
+class MainFrame;
 
 // The undo/redo stack class
-class UNDO_REDO_STACK
+class UndoRedoStack
 {
 public:
 	// Constructor
-	UNDO_REDO_STACK(MAIN_FRAME &_MainFrame);
+	UndoRedoStack(MainFrame &_mainFrame);
 
 	// Destructor
-	~UNDO_REDO_STACK();
+	~UndoRedoStack();
 
 	// Data object for storing undo/redo information
 	// Must be defined before some public functions are defined
-	struct OPERATION
+	struct Operation
 	{
 		// Data type
-		enum OPERATION_DATA_TYPE
+		enum OperationDataType
 		{
-			DATA_TYPE_BOOL,
-			DATA_TYPE_SHORT,
-			DATA_TYPE_INTEGER,
-			DATA_TYPE_LONG,
-			DATA_TYPE_FLOAT,
-			DATA_TYPE_DOUBLE,
-			DATA_TYPE_GA_GENE_ADD,
-			DATA_TYPE_GA_GENE_MODIFY,
-			DATA_TYPE_GA_GENE_DELETE,
-			DATA_TYPE_GA_GOAL_ADD,
-			DATA_TYPE_GA_GOAL_MODIFY,
-			DATA_TYPE_GA_GOAL_DELETE
-		} DataType;
+			DataTypeBool,
+			DataTypeShort,
+			DataTypeInteger,
+			DataTypeLong,
+			DataTypeFloat,
+			DataTypeDouble,
+			DataTypeGAGeneAdd,
+			DataTypeGAGeneModify,
+			DataTypeGAGeneDelete,
+			DataTypeGAGoalAdd,
+			DataTypeGAGoalModify,
+			DataTypeGAGoalDelete
+		} dataType;
 
 		// Pointer to changed data
-		void *DataLocation;
+		void *dataLocation;
 
 		// Old data value
-		union OPERATION_DATA
+		union OperationData
 		{
-			bool Boolean;
-			short ShortInteger;
-			int Integer;
-			long LongInteger;
-			float Float;
-			double Double;
+			bool boolean;
+			short shortInteger;
+			int integer;
+			long longInteger;
+			float singlePrecision;
+			double doublePrecision;
 
-			struct GENE_DATA
+			struct GeneData
 			{
-				GA_OBJECT *Optimization;
-				GA_OBJECT::GENE Gene;
-			} GeneData;
+				GAObject *optimization;
+				GAObject::Gene gene;
+			} geneData;
 
-			// FIXME:  Can't do goals because KINEMATICS::INPUTS containts a Vector, which has a user-defined constructor
-			/*struct GOAL_DATA
+			// FIXME:  Can't do goals because Kinematics::Inputs containts a Vector, which has a user-defined constructor
+			/*struct GoalData
 			{
-				GA_OBJECT *Optimization;
-				GA_OBJECT::GOAL Goal;
+				GAObject *optimization;
+				GAObject::Goal goal;
 			} GoalData;*/
 
-		} OldValue;
+		} oldValue;
 
 		// Associated GUI_OBJECT
-		int GuiObjectIndex;
+		int guiObjectIndex;
 	};
 
 	// Methods for maintaining the stacks
-	void AddOperation(int Index,
-		UNDO_REDO_STACK::OPERATION::OPERATION_DATA_TYPE DataType, void *Location);
+	void AddOperation(int index,
+		UndoRedoStack::Operation::OperationDataType dataType, void *location);
 	void Undo(void);
 	void Redo(void);
 	void ClearStacks(void);
-	void RemoveGuiObjectFromStack(int Index);
+	void RemoveGuiObjectFromStack(int index);
 
 	// Operator overloads (explicitly overloaded due to warning C4512
 	// caused by reference to MAIN_FRAME)
-	UNDO_REDO_STACK& operator = (const UNDO_REDO_STACK &UndoRedo);
+	UndoRedoStack& operator = (const UndoRedoStack &undoRedo);
 
 private:
 	// Main frame reference
-	MAIN_FRAME &MainFrame;
+	MainFrame &mainFrame;
 
 	// Method for applying changes (either undo or redo)
-	void ApplyOperation(OPERATION &Operation);
+	void ApplyOperation(Operation &operation);
 
 	// Method for getting data from location associated with the OPERATION
-	OPERATION UpdateValue(OPERATION Operation);
+	Operation UpdateValue(Operation operation);
 
 	// Method for updating the application as a result of a undo/redo
 	void Update(void) const;
 
 	// The stacks
-	std::stack<OPERATION> UndoStack;
-	std::stack<OPERATION> RedoStack;
+	std::stack<Operation> undoStack;
+	std::stack<Operation> redoStack;
 };
 
 #endif// _UNDO_REDO_STACK_H_

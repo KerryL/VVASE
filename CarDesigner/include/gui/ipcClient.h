@@ -24,32 +24,32 @@
 #include <wx/ipc.h>
 
 // VVASE forward declarations
-class IPC_CONNECTION;
+class IPCConnection;
 
 // Client class declaration
-class IPC_CLIENT : public wxClient
+class IPCClient : public wxClient
 {
 public:
 	// Constructor
-	IPC_CLIENT();
+	IPCClient();
 	
 	// Destructor
-	~IPC_CLIENT();
+	~IPCClient();
 	
 	// Connection handling functions
-	bool Connect(const wxString &Host, const wxString &Service, const wxString &Topic);
+	bool Connect(const wxString &host, const wxString &service, const wxString &topic);
 	void Disconnect(void);
 	
 	// Overridden method for handling connection initializations
 	wxConnectionBase *OnMakeConnection(void);
 	
 	// Accessors
-	bool IsConnected(void) const { return Connection != NULL; };
-	IPC_CONNECTION *GetConnection(void) { return Connection; };
+	bool IsConnected(void) const { return connection != NULL; };
+	IPCConnection *GetConnection(void) { return connection; };
 	
 private:
 	// The connection object
-	IPC_CONNECTION *Connection;
+	IPCConnection *connection;
 };
 
 #endif// _VVASE_IPC_CLIENT_H_

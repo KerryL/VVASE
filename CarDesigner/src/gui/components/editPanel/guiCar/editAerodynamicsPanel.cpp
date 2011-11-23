@@ -10,7 +10,7 @@
 // File:  editAerodynamicsPanel.cpp
 // Created:  2/10/2009
 // Author:  K. Loux
-// Description:  Contains the class definition for the EDIT_AERODYNAMICS_PANEL class.
+// Description:  Contains the class definition for the EditAerodynamicsPanel class.
 // History:
 
 // CarDesigner headers
@@ -24,13 +24,13 @@
 #include "vMath/vector.h"
 
 //==========================================================================
-// Class:			EDIT_AERODYNAMICS_PANEL
-// Function:		EDIT_AERODYNAMICS_PANEL
+// Class:			EditAerodynamicsPanel
+// Function:		EditAerodynamicsPanel
 //
-// Description:		Constructor for EDIT_AERODYNAMICS_PANEL class.
+// Description:		Constructor for EditAerodynamicsPanel class.
 //
 // Input Arguments:
-//		_Parent		= EDIT_PANEL&, reference to this object's owner
+//		_parent		= EditPanel&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint* for passing to parent class's constructor
 //		size		= wxSize* for passing to parent class's constructor
@@ -43,18 +43,18 @@
 //		None
 //
 //==========================================================================
-EDIT_AERODYNAMICS_PANEL::EDIT_AERODYNAMICS_PANEL(EDIT_PANEL* _Parent, wxWindowID id,
+EditAerodynamicsPanel::EditAerodynamicsPanel(EditPanel* _parent, wxWindowID id,
 										   const wxPoint& pos, const wxSize& size,
-										   const Debugger &_debugger) : wxPanel(_Parent, id,
+										   const Debugger &_debugger) : wxPanel(_parent, id,
 										   pos, size), debugger(_debugger)
 {
 }
 
 //==========================================================================
-// Class:			EDIT_AERODYNAMICS_PANEL
-// Function:		EDIT_AERODYNAMICS_PANEL
+// Class:			EditAerodynamicsPanel
+// Function:		EditAerodynamicsPanel
 //
-// Description:		Destructor for EDIT_AERODYNAMICS_PANEL class.
+// Description:		Destructor for EditAerodynamicsPanel class.
 //
 // Input Arguments:
 //		None
@@ -66,6 +66,6 @@ EDIT_AERODYNAMICS_PANEL::EDIT_AERODYNAMICS_PANEL(EDIT_PANEL* _Parent, wxWindowID
 //		None
 //
 //==========================================================================
-EDIT_AERODYNAMICS_PANEL::~EDIT_AERODYNAMICS_PANEL()
+EditAerodynamicsPanel::~EditAerodynamicsPanel()
 {
 }

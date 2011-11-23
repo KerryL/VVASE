@@ -20,17 +20,17 @@
 #include <wx/wx.h>
 
 // VVASE forward declarations
-class EDIT_PANEL;
+class EditPanel;
 
-class EDIT_ENGINE_PANEL : public wxPanel
+class EditEnginePanel : public wxPanel
 {
 public:
 	// Constructor
-	EDIT_ENGINE_PANEL(EDIT_PANEL* _Parent, wxWindowID id, const wxPoint& pos,
+	EditEnginePanel(EditPanel* _parent, wxWindowID id, const wxPoint& pos,
 		const wxSize& size, const Debugger &_debugger);
 
 	// Destructor
-	~EDIT_ENGINE_PANEL();
+	~EditEnginePanel();
 
 private:
 	// Debugger message printing utility

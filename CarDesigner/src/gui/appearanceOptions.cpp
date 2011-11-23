@@ -26,14 +26,14 @@
 #include "gui/guiCar.h"
 
 //==========================================================================
-// Class:			APPEARANCE_OPTIONS
-// Function:		APPEARANCE_OPTIONS
+// Class:			AppearanceOptions
+// Function:		AppearanceOptions
 //
-// Description:		Constructor for APPEARANCE_OPTIONS class.
+// Description:		Constructor for AppearanceOptions class.
 //
 // Input Arguments:
-//		_MainFrame	= MAIN_FRAME&, reference to main application object
-//		_Owner		= GUI_CAR&, reference to owner of this object
+//		_mainFrame	= MainFrame&, reference to main application object
+//		_owner		= GuiCar&, reference to owner of this object
 //		_debugger	= const Debugger&, reference to debug printing utility
 //
 // Output Arguments:
@@ -43,9 +43,9 @@
 //		None
 //
 //==========================================================================
-APPEARANCE_OPTIONS::APPEARANCE_OPTIONS(MAIN_FRAME &_MainFrame, GUI_CAR &_Owner,
+AppearanceOptions::AppearanceOptions(MainFrame &_mainFrame, GuiCar &_owner,
 									   const Debugger &_debugger) : debugger(_debugger),
-									   MainFrame(_MainFrame), Owner(_Owner)
+									   mainFrame(_mainFrame), owner(_owner)
 {
 	// FIXME:  Read all of these from registry???
 
@@ -70,46 +70,46 @@ APPEARANCE_OPTIONS::APPEARANCE_OPTIONS(MAIN_FRAME &_MainFrame, GUI_CAR &_Owner,
 	// Assign default visibility flags
 	int i;
 	for (i = 0; i < VisibilityCount; i++)
-		Visibility[i] = true;
+		visibility[i] = true;
 
 	// Assign default sizes
-	Size[SizeOriginShaftDiameter] = 0.6;
-	Size[SizeOriginShaftLength] = 4.0;
-	Size[SizeOriginTipDiameter] = 1.0;
-	Size[SizeOriginTipLength] = 1.0;
-	Size[SizeAArmDiameter] = 0.625;
-	Size[SizeSwayBarLinkDiameter] = 0.38;
-	Size[SizeSwayBarDiameter] = 0.625;
-	Size[SizeDamperShaftDiameter] = 0.38;
-	Size[SizeDamperBodyDiameter] = 1.75;
-	Size[SizeDamperBodyLength] = 5.0;
-	Size[SizeSpringDiameter] = 2.25;
-	Size[SizeSpringEndPointDiameter] = 0.42;
-	Size[SizeHalfShaftDiameter] = 1.0;
-	Size[SizeTireInsideDiameter] = 14.0;
-	Size[SizeMarkerPointDiameter] = 2.0;
-	Size[SizeMarkerShaftDiameter] = 0.75;
-	Size[SizeMarkerTipDiameter] = 1.25;
-	Size[SizeMarkerLength] = 20.0;
-	Size[SizeMarkerTipLength] = 1.5;
-	Size[SizeHelperOrbDiameter] = 3.0;
+	size[SizeOriginShaftDiameter] = 0.6;
+	size[SizeOriginShaftLength] = 4.0;
+	size[SizeOriginTipDiameter] = 1.0;
+	size[SizeOriginTipLength] = 1.0;
+	size[SizeAArmDiameter] = 0.625;
+	size[SizeSwayBarLinkDiameter] = 0.38;
+	size[SizeSwayBarDiameter] = 0.625;
+	size[SizeDamperShaftDiameter] = 0.38;
+	size[SizeDamperBodyDiameter] = 1.75;
+	size[SizeDamperBodyLength] = 5.0;
+	size[SizeSpringDiameter] = 2.25;
+	size[SizeSpringEndPointDiameter] = 0.42;
+	size[SizeHalfShaftDiameter] = 1.0;
+	size[SizeTireInsideDiameter] = 14.0;
+	size[SizeMarkerPointDiameter] = 2.0;
+	size[SizeMarkerShaftDiameter] = 0.75;
+	size[SizeMarkerTipDiameter] = 1.25;
+	size[SizeMarkerLength] = 20.0;
+	size[SizeMarkerTipLength] = 1.5;
+	size[SizeHelperOrbDiameter] = 3.0;
 
 	// Assign default resolutions
-	Resolution[ResolutionOrigin] = 20;
-	Resolution[ResolutionAArm] = 25;
-	Resolution[ResolutionTire] = 50;
-	Resolution[ResolutionSpringDamper] = 35;
-	Resolution[ResolutionSwayBar] = 25;
-	Resolution[ResolutionHalfShaft] = 30;
-	Resolution[ResolutionMarker] = 30;
-	Resolution[ResolutionHelperOrb] = 35;
+	resolution[ResolutionOrigin] = 20;
+	resolution[ResolutionAArm] = 25;
+	resolution[ResolutionTire] = 50;
+	resolution[ResolutionSpringDamper] = 35;
+	resolution[ResolutionSwayBar] = 25;
+	resolution[ResolutionHalfShaft] = 30;
+	resolution[ResolutionMarker] = 30;
+	resolution[ResolutionHelperOrb] = 35;
 }
 
 //==========================================================================
-// Class:			APPEARANCE_OPTIONS
-// Function:		~APPEARANCE_OPTIONS
+// Class:			AppearanceOptions
+// Function:		~AppearanceOptions
 //
-// Description:		Destructor for APPEARANCE_OPTIONS class.
+// Description:		Destructor for AppearanceOptions class.
 //
 // Input Arguments:
 //		None
@@ -121,18 +121,18 @@ APPEARANCE_OPTIONS::APPEARANCE_OPTIONS(MAIN_FRAME &_MainFrame, GUI_CAR &_Owner,
 //		None
 //
 //==========================================================================
-APPEARANCE_OPTIONS::~APPEARANCE_OPTIONS()
+AppearanceOptions::~AppearanceOptions()
 {
 }
 
 //==========================================================================
-// Class:			APPEARANCE_OPTIONS
+// Class:			AppearanceOptions
 // Function:		GetVisibilityString
 //
 // Description:		Retrieves a string describing the specified visibility option.
 //
 // Input Arguments:
-//		_Visibility	= OBJECT_VISIBILITY in which we are interested
+//		_visibility	= ObjectVisibility in which we are interested
 //
 // Output Arguments:
 //		None
@@ -141,84 +141,84 @@ APPEARANCE_OPTIONS::~APPEARANCE_OPTIONS()
 //		wxString containing the describing string
 //
 //==========================================================================
-wxString APPEARANCE_OPTIONS::GetVisibilityString(OBJECT_VISIBILITY _Visibility)
+wxString AppearanceOptions::GetVisibilityString(ObjectVisibility _visibility)
 {
 	// Return value
-	wxString VisibilityString;
+	wxString visibilityString;
 
 	// Depending on the Type, return the appropriate string
-	switch (_Visibility)
+	switch (_visibility)
 	{
 	case VisibilityOrigin:
-		VisibilityString = _T("Origin");
+		visibilityString = _T("Origin");
 		break;
 
 	case VisibilityGroundPlane:
-		VisibilityString = _T("Ground Plane");
+		visibilityString = _T("Ground Plane");
 		break;
 
 	case VisibilityHelperOrb:
-		VisibilityString = _T("Helper Orb");
+		visibilityString = _T("Helper Orb");
 		break;
 
 	case VisibilityAArm:
-		VisibilityString = _T("A-Arms");
+		visibilityString = _T("A-Arms");
 		break;
 
 	case VisibilityTieRod:
-		VisibilityString = _T("Tie Rods");
+		visibilityString = _T("Tie Rods");
 		break;
 
 	case VisibilityUpright:
-		VisibilityString = _T("Uprights");
+		visibilityString = _T("Uprights");
 		break;
 
 	case VisibilityPushrod:
-		VisibilityString = _T("Pushrods");
+		visibilityString = _T("Pushrods");
 		break;
 
 	case VisibilitySwayBar:
-		VisibilityString = _T("Sway Bars");
+		visibilityString = _T("Sway Bars");
 		break;
 
 	case VisibilityHalfShaft:
-		VisibilityString = _T("Half Shafts");
+		visibilityString = _T("Half Shafts");
 		break;
 
 	case VisibilityTire:
-		VisibilityString = _T("Tires");
+		visibilityString = _T("Tires");
 		break;
 
 	case VisibilityDamper:
-		VisibilityString = _T("Dampers");
+		visibilityString = _T("Dampers");
 		break;
 
 	case VisibilitySpring:
-		VisibilityString = _T("Springs");
+		visibilityString = _T("Springs");
 		break;
 
 	case VisibilityRollCenter:
-		VisibilityString = _T("Roll Centers");
+		visibilityString = _T("Roll Centers");
 		break;
 
 	case VisibilityPitchCenter:
-		VisibilityString = _T("Pitch Centers");
+		visibilityString = _T("Pitch Centers");
 		break;
 
 	case VisibilityInstantCenter:
-		VisibilityString = _T("Instant Centers");
+		visibilityString = _T("Instant Centers");
 		break;
 
 	case VisibilityRollAxis:
-		VisibilityString = _T("Roll Axis");
+		visibilityString = _T("Roll Axis");
 		break;
 
 	case VisibilityPitchAxis:
-		VisibilityString = _T("Pitch Axis");
+		visibilityString = _T("Pitch Axis");
 		break;
 
 	case VisibilityInstantAxis:
-		VisibilityString = _T("Instant Axis");
+		visibilityString = _T("Instant Axis");
 		break;
 
 	default:
@@ -226,11 +226,11 @@ wxString APPEARANCE_OPTIONS::GetVisibilityString(OBJECT_VISIBILITY _Visibility)
 		break;
 	}
 
-	return VisibilityString;
+	return visibilityString;
 }
 
 //==========================================================================
-// Class:			APPEARANCE_OPTIONS
+// Class:			AppearanceOptions
 // Function:		ShowAppearanceOptionsDialog
 //
 // Description:		Displays a dialog box that allows the user to change the
@@ -246,32 +246,32 @@ wxString APPEARANCE_OPTIONS::GetVisibilityString(OBJECT_VISIBILITY _Visibility)
 //		None
 //
 //==========================================================================
-void APPEARANCE_OPTIONS::ShowAppearanceOptionsDialog(void)
+void AppearanceOptions::ShowAppearanceOptionsDialog(void)
 {
 	// Create the dialog box
-	APPEARANCE_OPTIONS_DIALOG OptionsDialog(MainFrame, this, wxID_ANY, wxDefaultPosition);
+	AppearanceOptionsDialog optionsDialog(mainFrame, this, wxID_ANY, wxDefaultPosition);
 
 	// Display the dialog
-	if (OptionsDialog.ShowModal() == wxOK)
+	if (optionsDialog.ShowModal() == wxOK)
 	{
 		// FIXME:  Write the updated options to the registry as defaults?
 
 		// Update the display
-		Owner.UpdateDisplay();
+		owner.UpdateDisplay();
 
 		// Tell the owner that it was modified
-		Owner.SetModified();
+		owner.SetModified();
 	}
 }
 
 //==========================================================================
-// Class:			APPEARANCE_OPTIONS
+// Class:			AppearanceOptions
 // Function:		GetColorString
 //
 // Description:		Retrieves a string describing the specified color option.
 //
 // Input Arguments:
-//		_color	= OBJECT_COLOR in which we are intersted
+//		_color	= ObjectColor in which we are intersted
 //
 // Output Arguments:
 //		None
@@ -280,76 +280,76 @@ void APPEARANCE_OPTIONS::ShowAppearanceOptionsDialog(void)
 //		wxString containing the describing string
 //
 //==========================================================================
-wxString APPEARANCE_OPTIONS::GetColorString(OBJECT_COLOR _color)
+wxString AppearanceOptions::GetColorString(ObjectColor _color)
 {
 	// The return value
-	wxString ColorString;
+	wxString colorString;
 
 	// Return the appropriate string
 	switch (_color)
 	{
 	case ColorBackground:
-		ColorString.assign(_T("Background"));
+		colorString.assign(_T("Background"));
 		break;
 
 	case ColorGroundPlane:
-		ColorString.assign(_T("Ground Plane"));
+		colorString.assign(_T("Ground Plane"));
 		break;
 
 	case ColorHelperOrb:
-		ColorString.assign(_T("Helper Orb"));
+		colorString.assign(_T("Helper Orb"));
 		break;
 
 	case ColorAArm:
-		ColorString.assign(_T("A-Arms"));
+		colorString.assign(_T("A-Arms"));
 		break;
 
 	case ColorTieRod:
-		ColorString.assign(_T("Tie-Rods"));
+		colorString.assign(_T("Tie-Rods"));
 		break;
 
 	case ColorUpright:
-		ColorString.assign(_T("Uprights"));
+		colorString.assign(_T("Uprights"));
 		break;
 
 	case ColorPushrod:
-		ColorString.assign(_T("Pushrods"));
+		colorString.assign(_T("Pushrods"));
 		break;
 
 	case ColorSwayBar:
-		ColorString.assign(_T("Sway-Bars"));
+		colorString.assign(_T("Sway-Bars"));
 		break;
 
 	case ColorHalfShaft:
-		ColorString.assign(_T("Half Shafts"));
+		colorString.assign(_T("Half Shafts"));
 		break;
 
 	case ColorTire:
-		ColorString.assign(_T("Tires"));
+		colorString.assign(_T("Tires"));
 		break;
 
 	case ColorDamperBody:
-		ColorString.assign(_T("Damper Bodies"));
+		colorString.assign(_T("Damper Bodies"));
 		break;
 
 	case ColorDamperShaft:
-		ColorString.assign(_T("Damper Shafts"));
+		colorString.assign(_T("Damper Shafts"));
 		break;
 
 	case ColorSpring:
-		ColorString.assign(_T("Springs"));
+		colorString.assign(_T("Springs"));
 		break;
 
 	case ColorRollMarker:
-		ColorString.assign(_T("Roll Center Markers"));
+		colorString.assign(_T("Roll Center Markers"));
 		break;
 
 	case ColorPitchMarker:
-		ColorString.assign(_T("Pitch Center Markers"));
+		colorString.assign(_T("Pitch Center Markers"));
 		break;
 
 	case ColorInstantMarker:
-		ColorString.assign(_T("Instant Center Markers"));
+		colorString.assign(_T("Instant Center Markers"));
 		break;
 
 	default:
@@ -357,17 +357,17 @@ wxString APPEARANCE_OPTIONS::GetColorString(OBJECT_COLOR _color)
 		break;
 	}
 
-	return ColorString;
+	return colorString;
 }
 
 //==========================================================================
-// Class:			APPEARANCE_OPTIONS
+// Class:			AppearanceOptions
 // Function:		GetSizeString
 //
 // Description:		Retrieves a string describing the specified size option.
 //
 // Input Arguments:
-//		_Size	= OBJECT_SIZE in which we are interested
+//		_size	= ObjectSize in which we are interested
 //
 // Output Arguments:
 //		None
@@ -376,92 +376,92 @@ wxString APPEARANCE_OPTIONS::GetColorString(OBJECT_COLOR _color)
 //		wxString containing the describing string
 //
 //==========================================================================
-wxString APPEARANCE_OPTIONS::GetSizeString(OBJECT_SIZE _Size)
+wxString AppearanceOptions::GetSizeString(ObjectSize _size)
 {
 	// The return value
-	wxString SizeString;
+	wxString sizeString;
 
 	// Return the appropriate string
-	switch (_Size)
+	switch (_size)
 	{
 	case SizeOriginShaftDiameter:
-		SizeString.assign(_T("Origin Marker Shaft Diameter"));
+		sizeString.assign(_T("Origin Marker Shaft Diameter"));
 		break;
 
 	case SizeOriginShaftLength:
-		SizeString.assign(_T("Origin Markr Shaft Length"));
+		sizeString.assign(_T("Origin Markr Shaft Length"));
 		break;
 
 	case SizeOriginTipDiameter:
-		SizeString.assign(_T("Origin Marker Tip Diameter"));
+		sizeString.assign(_T("Origin Marker Tip Diameter"));
 		break;
 
 	case SizeOriginTipLength:
-		SizeString.assign(_T("Origin Marker Tip Length"));
+		sizeString.assign(_T("Origin Marker Tip Length"));
 		break;
 
 	case SizeAArmDiameter:
-		SizeString.assign(_T("A-Arm Diameter"));
+		sizeString.assign(_T("A-Arm Diameter"));
 		break;
 
 	case SizeSwayBarLinkDiameter:
-		SizeString.assign(_T("Sway-Bar Link Diameter"));
+		sizeString.assign(_T("Sway-Bar Link Diameter"));
 		break;
 
 	case SizeSwayBarDiameter:
-		SizeString.assign(_T("Sway-Bar Diameter"));
+		sizeString.assign(_T("Sway-Bar Diameter"));
 		break;
 
 	case SizeDamperShaftDiameter:
-		SizeString.assign(_T("Damper Shaft Diameter"));
+		sizeString.assign(_T("Damper Shaft Diameter"));
 		break;
 
 	case SizeDamperBodyDiameter:
-		SizeString.assign(_T("Damper Body Diameter"));
+		sizeString.assign(_T("Damper Body Diameter"));
 		break;
 
 	case SizeDamperBodyLength:
-		SizeString.assign(_T("Damper Body Length"));
+		sizeString.assign(_T("Damper Body Length"));
 		break;
 
 	case SizeSpringDiameter:
-		SizeString.assign(_T("Spring Diameter"));
+		sizeString.assign(_T("Spring Diameter"));
 		break;
 
 	case SizeSpringEndPointDiameter:
-		SizeString.assign(_T("Spring End-Point Diameter"));
+		sizeString.assign(_T("Spring End-Point Diameter"));
 		break;
 
 	case SizeHalfShaftDiameter:
-		SizeString.assign(_T("Half Shaft Diameter"));
+		sizeString.assign(_T("Half Shaft Diameter"));
 		break;
 
 	case SizeTireInsideDiameter:
-		SizeString.assign(_T("Tire Inside Diameter"));
+		sizeString.assign(_T("Tire Inside Diameter"));
 		break;
 
 	case SizeMarkerPointDiameter:
-		SizeString.assign(_T("Marker Point Diameter"));
+		sizeString.assign(_T("Marker Point Diameter"));
 		break;
 
 	case SizeMarkerShaftDiameter:
-		SizeString.assign(_T("Marker Shaft Diameter"));
+		sizeString.assign(_T("Marker Shaft Diameter"));
 		break;
 
 	case SizeMarkerTipDiameter:
-		SizeString.assign(_T("Marker Tip Diameter"));
+		sizeString.assign(_T("Marker Tip Diameter"));
 		break;
 
 	case SizeMarkerLength:
-		SizeString.assign(_T("Marker Length"));
+		sizeString.assign(_T("Marker Length"));
 		break;
 
 	case SizeMarkerTipLength:
-		SizeString.assign(_T("Marker Tip Length"));
+		sizeString.assign(_T("Marker Tip Length"));
 		break;
 
 	case SizeHelperOrbDiameter:
-		SizeString.assign(_T("Helper Orb Diameter"));
+		sizeString.assign(_T("Helper Orb Diameter"));
 		break;
 
 	default:
@@ -469,17 +469,17 @@ wxString APPEARANCE_OPTIONS::GetSizeString(OBJECT_SIZE _Size)
 		break;
 	}
 
-	return SizeString;
+	return sizeString;
 }
 
 //==========================================================================
-// Class:			APPEARANCE_OPTIONS
+// Class:			AppearanceOptions
 // Function:		GetResolutionString
 //
 // Description:		Retrieves a string describing the specified resolution option.
 //
 // Input Arguments:
-//		_Resolution	= OBJECT_RESOLUTION in which we are intersted
+//		_resolution	= ObjectResolution in which we are intersted
 //
 // Output Arguments:
 //		None
@@ -488,44 +488,44 @@ wxString APPEARANCE_OPTIONS::GetSizeString(OBJECT_SIZE _Size)
 //		wxString containing the describing string
 //
 //==========================================================================
-wxString APPEARANCE_OPTIONS::GetResolutionString(OBJECT_RESOLUTION _Resolution)
+wxString AppearanceOptions::GetResolutionString(ObjectResolution _resolution)
 {
 	// The return value
-	wxString ResolutionString;
+	wxString resolutionString;
 
 	// Return the appropriate string
-	switch (_Resolution)
+	switch (_resolution)
 	{
 	case ResolutionOrigin:
-		ResolutionString.assign(_T("Origin Markers"));
+		resolutionString.assign(_T("Origin Markers"));
 		break;
 
 	case ResolutionAArm:
-		ResolutionString.assign(_T("A-Arms"));
+		resolutionString.assign(_T("A-Arms"));
 		break;
 
 	case ResolutionTire:
-		ResolutionString.assign(_T("Tires"));
+		resolutionString.assign(_T("Tires"));
 		break;
 
 	case ResolutionSpringDamper:
-		ResolutionString.assign(_T("Spring/Dampers"));
+		resolutionString.assign(_T("Spring/Dampers"));
 		break;
 
 	case ResolutionSwayBar:
-		ResolutionString.assign(_T("Sway-Bars"));
+		resolutionString.assign(_T("Sway-Bars"));
 		break;
 
 	case ResolutionHalfShaft:
-		ResolutionString.assign(_T("Half-Shafts"));
+		resolutionString.assign(_T("Half-Shafts"));
 		break;
 
 	case ResolutionMarker:
-		ResolutionString.assign(_T("Marker Points"));
+		resolutionString.assign(_T("Marker Points"));
 		break;
 
 	case ResolutionHelperOrb:
-		ResolutionString.assign(_T("Helper Orb"));
+		resolutionString.assign(_T("Helper Orb"));
 		break;
 
 	default:
@@ -533,17 +533,17 @@ wxString APPEARANCE_OPTIONS::GetResolutionString(OBJECT_RESOLUTION _Resolution)
 		break;
 	}
 
-	return ResolutionString;
+	return resolutionString;
 }
 
 //==========================================================================
-// Class:			APPEARANCE_OPTIONS
+// Class:			AppearanceOptions
 // Function:		Write
 //
 // Description:		Writes these options to file.
 //
 // Input Arguments:
-//		OutFile	= std::ofstream* pointing to the file stream to write to
+//		outFile	= std::ofstream* pointing to the file stream to write to
 //
 // Output Arguments:
 //		None
@@ -552,30 +552,30 @@ wxString APPEARANCE_OPTIONS::GetResolutionString(OBJECT_RESOLUTION _Resolution)
 //		None
 //
 //==========================================================================
-void APPEARANCE_OPTIONS::Write(std::ofstream *OutFile)
+void AppearanceOptions::Write(std::ofstream *outFile)
 {
 	// Write the visibility flags to the stream
-	OutFile->write((char*)Visibility, VisibilityCount * sizeof(bool));
+	outFile->write((char*)visibility, VisibilityCount * sizeof(bool));
 
 	// Write the sizes to the stream
-	OutFile->write((char*)Size, SizeCount * sizeof(double));
+	outFile->write((char*)size, SizeCount * sizeof(double));
 
 	// Write the colors to the stream
-	OutFile->write((char*)color, ColorCount * sizeof(Color));
+	outFile->write((char*)color, ColorCount * sizeof(Color));
 
 	// Write the resolutions to the stream
-	OutFile->write((char*)Resolution, ResolutionCount * sizeof(int));
+	outFile->write((char*)resolution, ResolutionCount * sizeof(int));
 }
 
 //==========================================================================
-// Class:			APPEARANCE_OPTIONS
+// Class:			AppearanceOptions
 // Function:		Read
 //
 // Description:		Read from file to fill these options.
 //
 // Input Arguments:
-//		InFile		= std::ifstream* pointing to the file stream to read from
-//		FileVersion	= int specifying the file version we're reading from
+//		inFile		= std::ifstream* pointing to the file stream to read from
+//		fileVersion	= int specifying the file version we're reading from
 //
 // Output Arguments:
 //		None
@@ -584,21 +584,21 @@ void APPEARANCE_OPTIONS::Write(std::ofstream *OutFile)
 //		None
 //
 //==========================================================================
-void APPEARANCE_OPTIONS::Read(std::ifstream *InFile, int FileVersion)
+void AppearanceOptions::Read(std::ifstream *inFile, int fileVersion)
 {
 	// These options were new in file version 1
-	if (FileVersion < 1)
+	if (fileVersion < 1)
 		return;// At some point, it may be necessary to keep track of the size of this object with every file version
 
 	// Read the visibility flags from the stream
-	InFile->read((char*)Visibility, VisibilityCount * sizeof(bool));
+	inFile->read((char*)visibility, VisibilityCount * sizeof(bool));
 
 	// Read the sizes from the stream
-	InFile->read((char*)Size, SizeCount * sizeof(double));
+	inFile->read((char*)size, SizeCount * sizeof(double));
 
 	// Read the colors from the stream
-	InFile->read((char*)color, ColorCount * sizeof(Color));
+	inFile->read((char*)color, ColorCount * sizeof(Color));
 
 	// Read the resolutions from the stream
-	InFile->read((char*)Resolution, ResolutionCount * sizeof(int));
+	inFile->read((char*)resolution, ResolutionCount * sizeof(int));
 }

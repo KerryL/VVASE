@@ -130,7 +130,7 @@ void EDIT_ITERATION_RANGE_PANEL::UpdateInformation(void)
 // Description:		Updates the information on this panel.
 //
 // Input Arguments:
-//		_CurrentIteration	= ITERATION* pointing to the associated iteration
+//		_CurrentIteration	= Iteration* pointing to the associated iteration
 //
 // Output Arguments:
 //		None
@@ -139,7 +139,7 @@ void EDIT_ITERATION_RANGE_PANEL::UpdateInformation(void)
 //		None
 //
 //==========================================================================
-void EDIT_ITERATION_RANGE_PANEL::UpdateInformation(ITERATION *_CurrentIteration)
+void EDIT_ITERATION_RANGE_PANEL::UpdateInformation(Iteration *_CurrentIteration)
 {
 	// Update the class members
 	CurrentIteration = _CurrentIteration;

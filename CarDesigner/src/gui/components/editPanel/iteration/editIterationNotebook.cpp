@@ -10,7 +10,7 @@
 // File:  editIterationNotebook.cpp
 // Created:  11/14/2010
 // Author:  K. Loux
-// Description:  Contains the class definition for the EDIT_ITERATION_NOTEBOOK class.
+// Description:  Contains the class definition for the EditIterationNotebook class.
 // History:
 
 // VVASE headers
@@ -24,14 +24,14 @@
 #include "vUtilities/debugger.h"
 
 //==========================================================================
-// Class:			EDIT_ITERATION_NOTEBOOK
-// Function:		EDIT_ITERATION_NOTEBOOK
+// Class:			EditIterationNotebook
+// Function:		EditIterationNotebook
 //
-// Description:		Constructor for EDIT_ITERATION_NOTEBOOK class.  Initializes
+// Description:		Constructor for EditIterationNotebook class.  Initializes
 //					the form and creates the controls, etc.
 //
 // Input Arguments:
-//		_Parent		= EDIT_PANEL&, reference to this object's owner
+//		_parent		= EditPanel&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
@@ -45,21 +45,21 @@
 //		None
 //
 //==========================================================================
-EDIT_ITERATION_NOTEBOOK::EDIT_ITERATION_NOTEBOOK(EDIT_PANEL &_Parent, wxWindowID id,
+EditIterationNotebook::EditIterationNotebook(EditPanel &_parent, wxWindowID id,
 												 const wxPoint& pos, const wxSize& size,
 												 long style, const Debugger &_debugger)
-												 : wxNotebook(&_Parent, id, pos, size, style),
-												 debugger(_debugger), Parent(_Parent)
+												 : wxNotebook(&_parent, id, pos, size, style),
+												 debugger(_debugger), parent(_parent)
 {
 	// Initialize the 'Current' class members
-	CurrentIteration = NULL;
+	currentIteration = NULL;
 }
 
 //==========================================================================
-// Class:			EDIT_ITERATION_NOTEBOOK
-// Function:		~EDIT_ITERATION_NOTEBOOK
+// Class:			EditIterationNotebook
+// Function:		~EditIterationNotebook
 //
-// Description:		Destructor for EDIT_ITERATION_NOTEBOOK class.
+// Description:		Destructor for EditIterationNotebook class.
 //
 // Input Arguments:
 //		None
@@ -71,12 +71,12 @@ EDIT_ITERATION_NOTEBOOK::EDIT_ITERATION_NOTEBOOK(EDIT_PANEL &_Parent, wxWindowID
 //		None
 //
 //==========================================================================
-EDIT_ITERATION_NOTEBOOK::~EDIT_ITERATION_NOTEBOOK()
+EditIterationNotebook::~EditIterationNotebook()
 {
 }
 
 //==========================================================================
-// Class:			EDIT_ITERATION_NOTEBOOK
+// Class:			EditIterationNotebook
 // Function:		UpdateInformation
 //
 // Description:		Updates the information in this notebook for the current
@@ -92,22 +92,22 @@ EDIT_ITERATION_NOTEBOOK::~EDIT_ITERATION_NOTEBOOK()
 //		None
 //
 //==========================================================================
-void EDIT_ITERATION_NOTEBOOK::UpdateInformation(void)
+void EditIterationNotebook::UpdateInformation(void)
 {
 	// Make sure the object has already been assigned
-	if (CurrentIteration)
+	if (currentIteration)
 		// Call the method that performs the update
-		UpdateInformation(CurrentIteration);
+		UpdateInformation(currentIteration);
 }
 
 //==========================================================================
-// Class:			EDIT_ITERATION_NOTEBOOK
+// Class:			EditIterationNotebook
 // Function:		UpdateInformation
 //
 // Description:		Updates the information in this notebook.
 //
 // Input Arguments:
-//		_CurrentIteration	= ITERATION* pointing to the currenly active object
+//		_currentIteration	= Iteration* pointing to the currenly active object
 //
 // Output Arguments:
 //		None
@@ -116,13 +116,13 @@ void EDIT_ITERATION_NOTEBOOK::UpdateInformation(void)
 //		None
 //
 //==========================================================================
-void EDIT_ITERATION_NOTEBOOK::UpdateInformation(ITERATION *_CurrentIteration)
+void EditIterationNotebook::UpdateInformation(Iteration *_currentIteration)
 {
 	// Update the class member
-	CurrentIteration = _CurrentIteration;
+	currentIteration = _currentIteration;
 
 	// If the current object is NULL, we no longer have an object to represent
-	if (!CurrentIteration)
+	if (!currentIteration)
 	{
 		// Delete all the notebook pages
 		DeleteAllPages();
@@ -135,13 +135,13 @@ void EDIT_ITERATION_NOTEBOOK::UpdateInformation(ITERATION *_CurrentIteration)
 		CreateControls();
 
 	// Call the update functions for the pages, too
-	EditRange->UpdateInformation(CurrentIteration);
-	EditPlots->UpdateInformation(CurrentIteration);
-	EditOptions->UpdateInformation(CurrentIteration);
+	editRange->UpdateInformation(currentIteration);
+	editPlots->UpdateInformation(currentIteration);
+	editOptions->UpdateInformation(currentIteration);
 }
 
 //==========================================================================
-// Class:			EDIT_ITERATION_NOTEBOOK
+// Class:			EditIterationNotebook
 // Function:		CreateControls
 //
 // Description:		Creates the controls for this notebook.
@@ -156,18 +156,18 @@ void EDIT_ITERATION_NOTEBOOK::UpdateInformation(ITERATION *_CurrentIteration)
 //		None
 //
 //==========================================================================
-void EDIT_ITERATION_NOTEBOOK::CreateControls(void)
+void EditIterationNotebook::CreateControls(void)
 {
 	// Delete the existing pages before we create the new ones
 	DeleteAllPages();
 
 	// Create the notebook pages
-	EditRange = new EDIT_ITERATION_RANGE_PANEL(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
-	EditPlots = new EDIT_ITERATION_PLOTS_PANEL(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
-	EditOptions = new EDIT_ITERATION_OPTIONS_PANEL(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
+	editRange = new EditIterationRangePanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
+	editPlots = new EditIterationPlotsPanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
+	editOptions = new EditIterationOptionsPanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
 
 	// Add them to the notebook
-	AddPage(EditRange, _T("Range"));
-	AddPage(EditPlots, _T("Active Plots"));
-	AddPage(EditOptions, _T("Options"));
+	AddPage(editRange, _T("Range"));
+	AddPage(editPlots, _T("Active Plots"));
+	AddPage(editOptions, _T("Options"));
 }
