@@ -10,7 +10,7 @@
 // File:  editCornerPanel.cpp
 // Created:  2/10/2009
 // Author:  K. Loux
-// Description:  Contains the class definition for the EDIT_CORNER_PANEL class.  This
+// Description:  Contains the class definition for the EditCornerPanel class.  This
 //				 class is used to edit the hard points on a particular corner of the
 //				 car.
 // History:
@@ -32,14 +32,14 @@
 #include "vMath/vector.h"
 
 //==========================================================================
-// Class:			EDIT_CORNER_PANEL
-// Function:		EDIT_CORNER_PANEL
+// Class:			EditCornerPanel
+// Function:		EditCornerPanel
 //
-// Description:		Constructor for EDIT_CORNER_PANEL class.  Initializes the form
+// Description:		Constructor for EditCornerPanel class.  Initializes the form
 //					and creates the controls, etc.
 //
 // Input Arguments:
-//		_Parent		= EDIT_SUSPENSION_NOTEBOOK&, reference to this object's owner
+//		_parent		= EditSuspensionNotebook&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
@@ -52,22 +52,22 @@
 //		None
 //
 //==========================================================================
-EDIT_CORNER_PANEL::EDIT_CORNER_PANEL(EDIT_SUSPENSION_NOTEBOOK & _Parent, wxWindowID id,
+EditCornerPanel::EditCornerPanel(EditSuspensionNotebook & _parent, wxWindowID id,
 									 const wxPoint& pos, const wxSize& size,
-									 const Debugger &_debugger) : wxScrolledWindow(&_Parent, id, pos, size),
+									 const Debugger &_debugger) : wxScrolledWindow(&_parent, id, pos, size),
 									 debugger(_debugger),
-									 Converter(_Parent.GetParent().GetMainFrame().GetConverter()),
-									 Parent(_Parent)
+									 converter(_parent.GetParent().GetMainFrame().Getconverter()),
+									 parent(_parent)
 {
 	// Create the controls
 	CreateControls();
 }
 
 //==========================================================================
-// Class:			EDIT_CORNER_PANEL
-// Function:		~EDIT_CORNER_PANEL
+// Class:			EditCornerPanel
+// Function:		~EditCornerPanel
 //
-// Description:		Destructor for EDIT_CORNER_PANEL class.
+// Description:		Destructor for EditCornerPanel class.
 //
 // Input Arguments:
 //		None
@@ -79,12 +79,12 @@ EDIT_CORNER_PANEL::EDIT_CORNER_PANEL(EDIT_SUSPENSION_NOTEBOOK & _Parent, wxWindo
 //		None
 //
 //==========================================================================
-EDIT_CORNER_PANEL::~EDIT_CORNER_PANEL()
+EditCornerPanel::~EditCornerPanel()
 {
 }
 
 //==========================================================================
-// Class:			EDIT_CORNER_PANEL
+// Class:			EditCornerPanel
 // Function:		Event Table
 //
 // Description:		Links GUI events with event handler functions.
@@ -99,27 +99,27 @@ EDIT_CORNER_PANEL::~EDIT_CORNER_PANEL()
 //		None
 //
 //==========================================================================
-BEGIN_EVENT_TABLE(EDIT_CORNER_PANEL, wxPanel)
-	EVT_GRID_SELECT_CELL(						EDIT_CORNER_PANEL::SelectCellEvent)
-	EVT_GRID_CELL_CHANGE(						EDIT_CORNER_PANEL::GridCellChangedEvent)
-	EVT_COMBOBOX(ComboBoxActuationAttachment,	EDIT_CORNER_PANEL::ActuationAttachmentChangeEvent)
-	EVT_COMBOBOX(ComboBoxActuationType,			EDIT_CORNER_PANEL::ActuationTypeChangeEvent)
-	EVT_TEXT(TextBoxStaticCamber,				EDIT_CORNER_PANEL::StaticCamberChangeEvent)
-	EVT_TEXT(TextBoxStaticToe,					EDIT_CORNER_PANEL::StaticToeChangeEvent)
-	//EVT_SIZE(									EDIT_CORNER_PANEL::OnSize)
+BEGIN_EVENT_TABLE(EditCornerPanel, wxPanel)
+	EVT_GRID_SELECT_CELL(						EditCornerPanel::SelectCellEvent)
+	EVT_GRID_CELL_CHANGE(						EditCornerPanel::GridCellChangedEvent)
+	EVT_COMBOBOX(ComboBoxActuationAttachment,	EditCornerPanel::ActuationAttachmentChangeEvent)
+	EVT_COMBOBOX(ComboBoxActuationType,			EditCornerPanel::ActuationTypeChangeEvent)
+	EVT_TEXT(TextBoxStaticCamber,				EditCornerPanel::StaticCamberChangeEvent)
+	EVT_TEXT(TextBoxStaticToe,					EditCornerPanel::StaticToeChangeEvent)
+	//EVT_SIZE(									EditCornerPanel::OnSize)
 END_EVENT_TABLE();
 
 //==========================================================================
-// Class:			EDIT_CORNER_PANEL
+// Class:			EditCornerPanel
 // Function:		UpdateInformation
 //
 // Description:		Updates the information on this panel.
 //
 // Input Arguments:
-//		_CurrentCorner	= Corner* pointing to the associated corner
-//		BarStyle		= Suspension::BarStyle describing what kind of sway bar
+//		_currentCorner	= Corner* pointing to the associated corner
+//		barStyle		= Suspension::BarStyle describing what kind of sway bar
 //						  is at this end of the car
-//		HasHalfShaft	= bool, true if this corner gets a half shaft
+//		hasHalfShaft	= bool, true if this corner gets a half shaft
 //
 // Output Arguments:
 //		None
@@ -128,104 +128,104 @@ END_EVENT_TABLE();
 //		None
 //
 //==========================================================================
-void EDIT_CORNER_PANEL::UpdateInformation(Corner *_CurrentCorner,
-										  Suspension::BarStyle BarStyle, bool HasHalfShaft)
+void EditCornerPanel::UpdateInformation(Corner *_currentCorner,
+										  Suspension::BarStyle barStyle, bool hasHalfShaft)
 {
 	// Update the class member
-	CurrentCorner = _CurrentCorner;
+	currentCorner = _currentCorner;
 
 	// Update the combo boxes
-	ActuationType->SetSelection(CurrentCorner->actuationType);
-	ActuationAttachment->SetSelection(CurrentCorner->actuationAttachment);
+	actuationType->SetSelection(currentCorner->actuationType);
+	actuationAttachment->SetSelection(currentCorner->actuationAttachment);
 
 	// Update the static toe and camber
-	StaticCamber->ChangeValue(Converter.FormatNumber(Converter.ConvertAngle(CurrentCorner->staticCamber)));
-	StaticToe->ChangeValue(Converter.FormatNumber(Converter.ConvertAngle(CurrentCorner->staticToe)));
+	staticCamber->ChangeValue(converter.FormatNumber(converter.ConvertAngle(currentCorner->staticCamber)));
+	staticToe->ChangeValue(converter.FormatNumber(converter.ConvertAngle(currentCorner->staticToe)));
 
 	// And their units
-	CamberUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UnitTypeAngle));
-	ToeUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UnitTypeAngle));
+	camberUnitsLabel->SetLabel(converter.GetUnitType(Convert::UnitTypeAngle));
+	toeUnitsLabel->SetLabel(converter.GetUnitType(Convert::UnitTypeAngle));
 
 	// Begin batch edit of the grid
-	Hardpoints->BeginBatch();
+	hardpoints->BeginBatch();
 
 	// Update the unit labels
-	wxString UnitString;
-	UnitString.Printf("(%s)", Converter.GetUnitType(Convert::UnitTypeDistance).c_str());
-	Hardpoints->SetCellValue(0, 1, UnitString);
-	Hardpoints->SetCellValue(0, 2, UnitString);
-	Hardpoints->SetCellValue(0, 3, UnitString);
+	wxString unitString;
+	unitString.Printf("(%s)", converter.GetUnitType(Convert::UnitTypeDistance).c_str());
+	hardpoints->SetCellValue(0, 1, unitString);
+	hardpoints->SetCellValue(0, 2, unitString);
+	hardpoints->SetCellValue(0, 3, unitString);
 
 	// Hide or show rows according to this object's configuration
 	// Geared sway bar
-	if (BarStyle == Suspension::SwayBarGeared)
-		Hardpoints->SetRowHeight(Corner::GearEndBarShaft + 1, Hardpoints->GetRowHeight(0));
+	if (barStyle == Suspension::SwayBarGeared)
+		hardpoints->SetRowHeight(Corner::GearEndBarShaft + 1, hardpoints->GetRowHeight(0));
 	else
-		Hardpoints->SetRowHeight(Corner::GearEndBarShaft + 1, 0);
+		hardpoints->SetRowHeight(Corner::GearEndBarShaft + 1, 0);
 
-	if (BarStyle == Suspension::SwayBarNone)
+	if (barStyle == Suspension::SwayBarNone)
 	{
-		Hardpoints->SetRowHeight(Corner::OutboardBarLink + 1, 0);
-		Hardpoints->SetRowHeight(Corner::InboardBarLink + 1, 0);
-		Hardpoints->SetRowHeight(Corner::BarArmAtPivot + 1, 0);
+		hardpoints->SetRowHeight(Corner::OutboardBarLink + 1, 0);
+		hardpoints->SetRowHeight(Corner::InboardBarLink + 1, 0);
+		hardpoints->SetRowHeight(Corner::BarArmAtPivot + 1, 0);
 	}
 	else
 	{
-		Hardpoints->SetRowHeight(Corner::OutboardBarLink + 1, Hardpoints->GetRowHeight(0));
-		Hardpoints->SetRowHeight(Corner::InboardBarLink + 1, Hardpoints->GetRowHeight(0));
-		Hardpoints->SetRowHeight(Corner::BarArmAtPivot + 1, Hardpoints->GetRowHeight(0));
+		hardpoints->SetRowHeight(Corner::OutboardBarLink + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowHeight(Corner::InboardBarLink + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowHeight(Corner::BarArmAtPivot + 1, hardpoints->GetRowHeight(0));
 	}
 
 	// Half shaft
-	if (HasHalfShaft)
+	if (hasHalfShaft)
 	{
 		// Show the half shaft points
-		Hardpoints->SetRowHeight(Corner::InboardHalfShaft + 1, Hardpoints->GetRowHeight(0));
-		Hardpoints->SetRowHeight(Corner::OutboardHalfShaft + 1, Hardpoints->GetRowHeight(0));
+		hardpoints->SetRowHeight(Corner::InboardHalfShaft + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowHeight(Corner::OutboardHalfShaft + 1, hardpoints->GetRowHeight(0));
 	}
 	else
 	{
 		// Hide the half shaft points
-		Hardpoints->SetRowHeight(Corner::InboardHalfShaft + 1, 0);
-		Hardpoints->SetRowHeight(Corner::OutboardHalfShaft + 1, 0);
+		hardpoints->SetRowHeight(Corner::InboardHalfShaft + 1, 0);
+		hardpoints->SetRowHeight(Corner::OutboardHalfShaft + 1, 0);
 	}
 
 	// Outboard springs/shocks vs. pushrod actuated springs/shocks
-	if (CurrentCorner->actuationType == Corner::ActuationPushPullrod)
+	if (currentCorner->actuationType == Corner::ActuationPushPullrod)
 	{
-		Hardpoints->SetRowHeight(Corner::InboardPushrod + 1, Hardpoints->GetRowHeight(0));
-		Hardpoints->SetRowHeight(Corner::OutboardPushrod + 1, Hardpoints->GetRowHeight(0));
-		Hardpoints->SetRowHeight(Corner::BellCrankPivot1 + 1, Hardpoints->GetRowHeight(0));
-		Hardpoints->SetRowHeight(Corner::BellCrankPivot2 + 1, Hardpoints->GetRowHeight(0));
+		hardpoints->SetRowHeight(Corner::InboardPushrod + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowHeight(Corner::OutboardPushrod + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowHeight(Corner::BellCrankPivot1 + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowHeight(Corner::BellCrankPivot2 + 1, hardpoints->GetRowHeight(0));
 	}
-	else if (CurrentCorner->actuationType == Corner::ActuationOutboard)
+	else if (currentCorner->actuationType == Corner::ActuationOutboard)
 	{
-		Hardpoints->SetRowHeight(Corner::InboardPushrod + 1, 0);
-		Hardpoints->SetRowHeight(Corner::OutboardPushrod + 1, 0);
-		Hardpoints->SetRowHeight(Corner::BellCrankPivot1 + 1, 0);
-		Hardpoints->SetRowHeight(Corner::BellCrankPivot2 + 1, 0);
+		hardpoints->SetRowHeight(Corner::InboardPushrod + 1, 0);
+		hardpoints->SetRowHeight(Corner::OutboardPushrod + 1, 0);
+		hardpoints->SetRowHeight(Corner::BellCrankPivot1 + 1, 0);
+		hardpoints->SetRowHeight(Corner::BellCrankPivot2 + 1, 0);
 	}
 
 	// Update the values of all of the points
-	Vector Point;
+	Vector point;
 	int i;
-	for (i = 0; i < Corner::NumberOfHardpoints; i++)
+	for (i = 0; i < Corner::NumberOfhardpoints; i++)
 	{
 		// Get the location of this hardpoint (don't forget to convert it!)
-		Point = Converter.ConvertDistance(CurrentCorner->hardpoints[i]);
+		point = converter.ConvertDistance(currentCorner->hardpoints[i]);
 
 		// Set the X value
-		Hardpoints->SetCellValue(i + 1, 1, Converter.FormatNumber(Point.x));
+		hardpoints->SetCellValue(i + 1, 1, converter.FormatNumber(Point.x));
 
 		// Set the Y value
-		Hardpoints->SetCellValue(i + 1, 2, Converter.FormatNumber(Point.y));
+		hardpoints->SetCellValue(i + 1, 2, converter.FormatNumber(Point.y));
 
 		// Set the Z value
-		Hardpoints->SetCellValue(i + 1, 3, Converter.FormatNumber(Point.z));
+		hardpoints->SetCellValue(i + 1, 3, converter.FormatNumber(Point.z));
 	}
 
 	// End batch edit of the grid
-	Hardpoints->EndBatch();
+	hardpoints->EndBatch();
 
 	// Resize the sizers in case hardpoint rows were hidden or shown
 	Layout();
@@ -234,7 +234,7 @@ void EDIT_CORNER_PANEL::UpdateInformation(Corner *_CurrentCorner,
 }
 
 //==========================================================================
-// Class:			EDIT_CORNER_PANEL
+// Class:			EditCornerPanel
 // Function:		CreateControls
 //
 // Description:		Creates the controls for this panel.
@@ -249,89 +249,89 @@ void EDIT_CORNER_PANEL::UpdateInformation(Corner *_CurrentCorner,
 //		None
 //
 //==========================================================================
-void EDIT_CORNER_PANEL::CreateControls()
+void EditCornerPanel::CreateControls()
 {
 	// Enable scrollbars
 	SetScrollRate(1, 1);
 
 	// Top-level sizer
-	wxBoxSizer *TopSizer = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
 
 	// Second sizer gives more space around the controls
-	wxFlexGridSizer *MainSizer = new wxFlexGridSizer(1, 2, 2);
-	TopSizer->Add(MainSizer, 0, wxGROW | wxALL, 5);
+	wxFlexGridSizer *mainSizer = new wxFlexGridSizer(1, 2, 2);
+	topSizer->Add(mainSizer, 0, wxGROW | wxALL, 5);
 
 	// Create the grid for the hard point entry
-	Hardpoints = new SuperGrid(this, wxID_ANY);
-	Hardpoints->CreateGrid(Corner::NumberOfHardpoints + 1, 4, wxGrid::wxGridSelectRows);
+	hardpoints = new SuperGrid(this, wxID_ANY);
+	hardpoints->CreateGrid(Corner::NumberOfhardpoints + 1, 4, wxGrid::wxGridSelectRows);
 
 	// Begin a batch edit of the grid
-	Hardpoints->BeginBatch();
+	hardpoints->BeginBatch();
 
 	// Make make the heading row read-only
 	int i;
-	for (i = 0; i < Hardpoints->GetNumberCols(); i++)
-		Hardpoints->SetReadOnly(0, i, true);
+	for (i = 0; i < hardpoints->GetNumberCols(); i++)
+		hardpoints->SetReadOnly(0, i, true);
 
 	// Hide the label column and set the size for the label row
-	Hardpoints->SetRowLabelSize(0);
-	Hardpoints->SetColLabelSize(Hardpoints->GetRowSize(0));
+	hardpoints->SetRowLabelSize(0);
+	hardpoints->SetColLabelSize(hardpoints->GetRowSize(0));
 
 	// To enable hiding of the non-label rows, we need to set the minimum height to zero
-	Hardpoints->SetRowMinimalAcceptableHeight(0);
+	hardpoints->SetRowMinimalAcceptableHeight(0);
 
 	// We never want the wheel center to be visible
-	Hardpoints->SetRowHeight(Corner::WheelCenter + 1, 0);
+	hardpoints->SetRowHeight(Corner::WheelCenter + 1, 0);
 
 	// Add the grid to the sizer
-	MainSizer->Add(Hardpoints, 0, wxALIGN_TOP | wxEXPAND);
-	MainSizer->AddGrowableCol(0);
+	mainSizer->Add(hardpoints, 0, wxALIGN_TOP | wxEXPAND);
+	mainSizer->AddGrowableCol(0);
 
 	// Set the column headings
-	Hardpoints->SetColLabelValue(0, _T("Hardpoint"));
-	Hardpoints->SetColLabelValue(1, _T("X"));
-	Hardpoints->SetColLabelValue(2, _T("Y"));
-	Hardpoints->SetColLabelValue(3, _T("Z"));
+	hardpoints->SetColLabelValue(0, _T("Hardpoint"));
+	hardpoints->SetColLabelValue(1, _T("X"));
+	hardpoints->SetColLabelValue(2, _T("Y"));
+	hardpoints->SetColLabelValue(3, _T("Z"));
 
 	// Center the cells for the column headings
-	for (i = 0; i < Hardpoints->GetNumberCols(); i++)
+	for (i = 0; i < hardpoints->GetNumberCols(); i++)
 		// Center the contents
-		Hardpoints->SetCellAlignment(0, i, wxALIGN_CENTER, wxALIGN_TOP);
+		hardpoints->SetCellAlignment(0, i, wxALIGN_CENTER, wxALIGN_TOP);
 
 	// Do the processing that needs to be done for each row
-	for (i = 0; i < Corner::NumberOfHardpoints; i++)
+	for (i = 0; i < Corner::NumberOfhardpoints; i++)
 	{
 		// Make the first column read-only
-		Hardpoints->SetReadOnly(i + 1, 0, true);
+		hardpoints->SetReadOnly(i + 1, 0, true);
 
 		// Set the alignment for all of the cells that contain numbers to the right
-		Hardpoints->SetCellAlignment(i + 1, 1, wxALIGN_RIGHT, wxALIGN_TOP);
-		Hardpoints->SetCellAlignment(i + 1, 2, wxALIGN_RIGHT, wxALIGN_TOP);
-		Hardpoints->SetCellAlignment(i + 1, 3, wxALIGN_RIGHT, wxALIGN_TOP);
+		hardpoints->SetCellAlignment(i + 1, 1, wxALIGN_RIGHT, wxALIGN_TOP);
+		hardpoints->SetCellAlignment(i + 1, 2, wxALIGN_RIGHT, wxALIGN_TOP);
+		hardpoints->SetCellAlignment(i + 1, 3, wxALIGN_RIGHT, wxALIGN_TOP);
 
 		// Add the names of all of the points to the grid
-		Hardpoints->SetCellValue(i + 1, 0, Corner::GetHardpointName((Corner::Hardpoints)i));
+		hardpoints->SetCellValue(i + 1, 0, Corner::GetHardpointName((Corner::hardpoints)i));
 	}
 	
 	// Size the columns
 	// The X, Y, and Z columns should be big enough to fit 80.0 as formatted
 	// by the converter.  First column is stretchable
-	Hardpoints->SetCellValue(3, 3, Converter.FormatNumber(80.0));
-	Hardpoints->AutoSizeColumn(3);
-	Hardpoints->SetColumnWidth(1, Hardpoints->GetColSize(3));
-	Hardpoints->SetColumnWidth(2, Hardpoints->GetColSize(3));
+	hardpoints->SetCellValue(3, 3, converter.FormatNumber(80.0));
+	hardpoints->AutoSizeColumn(3);
+	hardpoints->SetColumnWidth(1, hardpoints->GetColSize(3));
+	hardpoints->SetColumnWidth(2, hardpoints->GetColSize(3));
 	// The value we just put in cell (3,3) will get overwritten with a call to
 	// UpdateInformation()
-	Hardpoints->AutoStretchColumn(0);
+	hardpoints->AutoStretchColumn(0);
 
 	// Don't let the user move or re-size the rows or move the columns
-	Hardpoints->EnableDragColMove(false);
-	Hardpoints->EnableDragColSize(true);
-	Hardpoints->EnableDragGridSize(false);
-	Hardpoints->EnableDragRowSize(false);
+	hardpoints->EnableDragColMove(false);
+	hardpoints->EnableDragColSize(true);
+	hardpoints->EnableDragGridSize(false);
+	hardpoints->EnableDragRowSize(false);
 
 	// End the batch mode edit and re-paint the control
-	Hardpoints->EndBatch();
+	hardpoints->EndBatch();
 
 	// When setting the control width, we need to account for the width of the
 	// "expand" button, etc., so we specify that here
@@ -347,74 +347,74 @@ void EDIT_CORNER_PANEL::CreateControls()
 
 	// Create the combo-boxes
 	// Actuation type
-	wxArrayString Choices;
-	Choices.Clear();
+	wxArrayString choices;
+	choices.Clear();
 	for (i = 0; i < Corner::NumberOfActuationTypes; i++)
-		Choices.Add(Corner::GetActuationTypeName((Corner::ActuationType)i));
+		choices.Add(Corner::GetActuationTypeName((Corner::ActuationType)i));
 	
-	wxStaticText *ActuationTypeLabel = new wxStaticText(this, wxID_ANY,
+	wxStaticText *actuationTypeLabel = new wxStaticText(this, wxID_ANY,
 		_T("Actuation Type"));
-	ActuationType = new wxComboBox(this, ComboBoxActuationType, wxEmptyString, wxDefaultPosition,
-		wxDefaultSize, Choices, wxCB_READONLY);
-	SetMinimumWidthFromContents(ActuationType, additionalWidth);
+	actuationType = new wxComboBox(this, ComboBoxActuationType, wxEmptyString, wxDefaultPosition,
+		wxDefaultSize, choices, wxCB_READONLY);
+	SetMinimumWidthFromContents(actuationType, additionalWidth);
 
-	lowerInputSizer->Add(ActuationTypeLabel, 0, wxALIGN_CENTER_VERTICAL);
-	lowerInputSizer->Add(ActuationType, 0, wxEXPAND);
+	lowerInputSizer->Add(actuationTypeLabel, 0, wxALIGN_CENTER_VERTICAL);
+	lowerInputSizer->Add(actuationType, 0, wxEXPAND);
 	lowerInputSizer->AddSpacer(-1);
 
 	// Actuation attachment
-	Choices.Clear();
+	choices.Clear();
 	for (i = 0; i < Corner::NumberOfAttachments; i++)
-		Choices.Add(Corner::GetActuationAttachmentName((Corner::ActuationAttachment)i));
+		choices.Add(Corner::GetActuationAttachmentName((Corner::ActuationAttachment)i));
 
-	wxStaticText *AttachmentLabel = new wxStaticText(this, wxID_ANY,
+	wxStaticText *attachmentLabel = new wxStaticText(this, wxID_ANY,
 		_T("Actuation Attachment"));
-	ActuationAttachment = new wxComboBox(this, ComboBoxActuationAttachment, wxEmptyString, wxDefaultPosition,
-		wxDefaultSize, Choices, wxCB_READONLY);
-	SetMinimumWidthFromContents(ActuationAttachment, additionalWidth);
+	actuationAttachment = new wxComboBox(this, ComboBoxActuationAttachment, wxEmptyString, wxDefaultPosition,
+		wxDefaultSize, choices, wxCB_READONLY);
+	SetMinimumWidthFromContents(actuationAttachment, additionalWidth);
 
-	lowerInputSizer->Add(AttachmentLabel, 0, wxALIGN_CENTER_VERTICAL);
-	lowerInputSizer->Add(ActuationAttachment, 0, wxEXPAND);
+	lowerInputSizer->Add(attachmentLabel, 0, wxALIGN_CENTER_VERTICAL);
+	lowerInputSizer->Add(actuationAttachment, 0, wxEXPAND);
 	lowerInputSizer->AddSpacer(-1);
 
 	// Create the text controls
 	// Camber angle
-	wxStaticText *CamberLabel = new wxStaticText(this, wxID_ANY, _T("Static Camber"));
-	CamberUnitsLabel = new wxStaticText(this, wxID_ANY,
+	wxStaticText *camberLabel = new wxStaticText(this, wxID_ANY, _T("Static Camber"));
+	camberUnitsLabel = new wxStaticText(this, wxID_ANY,
 		wxEmptyString, wxDefaultPosition);
-	StaticCamber = new wxTextCtrl(this, TextBoxStaticCamber);
+	staticCamber = new wxTextCtrl(this, TextBoxStaticCamber);
 
-	lowerInputSizer->Add(CamberLabel, 0, wxALIGN_CENTER_VERTICAL);
-	lowerInputSizer->Add(StaticCamber, 0, wxEXPAND);
-	lowerInputSizer->Add(CamberUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
+	lowerInputSizer->Add(camberLabel, 0, wxALIGN_CENTER_VERTICAL);
+	lowerInputSizer->Add(staticCamber, 0, wxEXPAND);
+	lowerInputSizer->Add(camberUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 
 	// Toe angle
-	wxStaticText *ToeLabel = new wxStaticText(this, wxID_ANY,
+	wxStaticText *toeLabel = new wxStaticText(this, wxID_ANY,
 		_T("Static Toe"));
-	ToeUnitsLabel = new wxStaticText(this, wxID_ANY,
+	toeUnitsLabel = new wxStaticText(this, wxID_ANY,
 		wxEmptyString, wxDefaultPosition);
-	StaticToe = new wxTextCtrl(this, TextBoxStaticToe);
+	staticToe = new wxTextCtrl(this, TextBoxStaticToe);
 
-	lowerInputSizer->Add(ToeLabel, 0, wxALIGN_CENTER_VERTICAL);
-	lowerInputSizer->Add(StaticToe, 0, wxEXPAND);
-	lowerInputSizer->Add(ToeUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
+	lowerInputSizer->Add(toeLabel, 0, wxALIGN_CENTER_VERTICAL);
+	lowerInputSizer->Add(staticToe, 0, wxEXPAND);
+	lowerInputSizer->Add(toeUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 	
 	// Choose text box min width based on a formatted number in the appropriate units
-	StaticCamber->SetMinSize(wxSize(Converter.ConvertAngle(-3.0), -1));
-	StaticToe->SetMinSize(wxSize(Converter.ConvertAngle(-3.0), -1));
+	staticCamber->SetMinSize(wxSize(converter.ConvertAngle(-3.0), -1));
+	staticToe->SetMinSize(wxSize(converter.ConvertAngle(-3.0), -1));
 
-	MainSizer->AddGrowableRow(0);
-	MainSizer->AddGrowableRow(1);
+	mainSizer->AddGrowableRow(0);
+	mainSizer->AddGrowableRow(1);
 
 	// Assign the top level sizer to the dialog
-	SetSizerAndFit(TopSizer);
+	SetSizerAndFit(topSizer);
 
 	// Initialize the last row selected variable
-	LastRowSelected = -1;
+	lastRowSelected = -1;
 }
 
 //==========================================================================
-// Class:			EDIT_CORNER_PANEL
+// Class:			EditCornerPanel
 // Function:		SelectCellEvent
 //
 // Description:		Event that fires when a cell is clicked.  Highlights the
@@ -430,13 +430,13 @@ void EDIT_CORNER_PANEL::CreateControls()
 //		None
 //
 //==========================================================================
-void EDIT_CORNER_PANEL::SelectCellEvent(wxGridEvent &event)
+void EditCornerPanel::SelectCellEvent(wxGridEvent &event)
 {
 	// Make sure the selection happened in a valid row
 	if (event.GetRow() > 0)
 	{
 		// Test to see if this row is the same as the previously selected row
-		if (LastRowSelected == event.GetRow())
+		if (lastRowSelected == event.GetRow())
 		{
 			// If the new row is the same as the old one, don't do anything.  This
 			// helps save some unnecessary calls to drawing functions.
@@ -446,24 +446,24 @@ void EDIT_CORNER_PANEL::SelectCellEvent(wxGridEvent &event)
 		}
 
 		// Set the position of the helper orb
-		static_cast<CAR_RENDERER*>(Parent.GetParent().GetCurrentObject()->GetNotebookTab())->SetHelperOrbPosition(
-			(Corner::Hardpoints)(event.GetRow() - 1), CurrentCorner->location, Suspension::NumberOfHardpoints);
+		static_cast<CarRenderer*>(parent.GetParent().GetCurrentObject()->GetNotebookTab())->SetHelperOrbPosition(
+			(Corner::hardpoints)(event.GetRow() - 1), currentCorner->location, Suspension::NumberOfhardpoints);
 
 		// Update the analyses
-		Parent.GetParent().GetCurrentObject()->UpdateData();
+		parent.GetParent().GetCurrentObject()->UpdateData();
 
 		// Update the last row selected variable
-		LastRowSelected = event.GetRow();
+		lastRowSelected = event.GetRow();
 	}
 	else
 		// Reset the last row selected variable
-		LastRowSelected = -1;
+		lastRowSelected = -1;
 
 	event.Skip();
 }
 
 //==========================================================================
-// Class:			EDIT_CORNER_PANEL
+// Class:			EditCornerPanel
 // Function:		GridCellChangedEvent
 //
 // Description:		Event that fires when a cell is changed.  Updates the
@@ -479,34 +479,34 @@ void EDIT_CORNER_PANEL::SelectCellEvent(wxGridEvent &event)
 //		None
 //
 //==========================================================================
-void EDIT_CORNER_PANEL::GridCellChangedEvent(wxGridEvent &event)
+void EditCornerPanel::GridCellChangedEvent(wxGridEvent &event)
 {
 	// Make sure the row is a valid row
 	if (event.GetRow() > 0)
 	{
 		// Get a lock on the car
-		wxMutex *Mutex = Parent.GetParent().GetCurrentMutex();
-		Mutex->Lock();
+		wxMutex *mutex = parent.GetParent().GetCurrentMutex();
+		mutex->Lock();
 
 		// For reading/writing values we use a string
-		wxString ValueString;
+		wxString valueString;
 
 		// If this is a contact patch, don't allow modification of the Z location
 		if (event.GetCol() == 3 && event.GetRow() - 1 == Corner::ContactPatch)
 		{
 			// Reset to zero
-			ValueString.Printf("%0.3f", 0.0);
-			Hardpoints->SetCellValue(event.GetRow(), event.GetCol(), ValueString);
+			valueString.Printf("%0.3f", 0.0);
+			hardpoints->SetCellValue(event.GetRow(), event.GetCol(), valueString);
 
 			return;
 		}
 
 		// Get the new value
-		ValueString = Hardpoints->GetCellValue(event.GetRow(), event.GetCol());
-		double Value;
+		valueString = hardpoints->GetCellValue(event.GetRow(), event.GetCol());
+		double value;
 
 		// Make sure the value is numeric
-		if (!ValueString.ToDouble(&Value))
+		if (!valueString.ToDouble(&value))
 			// The value is non-numeric - don't do anything
 			return;
 
@@ -514,57 +514,57 @@ void EDIT_CORNER_PANEL::GridCellChangedEvent(wxGridEvent &event)
 		if (event.GetCol() == 1)// X
 		{
 			// Add the operation to the undo/redo stack
-			Parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
-				Parent.GetParent().GetMainFrame().GetActiveIndex(),
-				UNDO_REDO_STACK::OPERATION::DATA_TYPE_DOUBLE,
-				&(CurrentCorner->hardpoints[event.GetRow() - 1].x));
+			parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
+				parent.GetParent().GetMainFrame().GetActiveIndex(),
+				UndoRedoStack::Operation::DataTypeDouble,
+				&(currentCorner->hardpoints[event.GetRow() - 1].x));
 
-			CurrentCorner->hardpoints[event.GetRow() - 1].x = Converter.ReadDistance(Value);
+			currentCorner->hardpoints[event.GetRow() - 1].x = converter.ReadDistance(Value);
 		}
 		else if (event.GetCol() == 2)// Y
 		{
 			// Add the operation to the undo/redo stack
-			Parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
-				Parent.GetParent().GetMainFrame().GetActiveIndex(),
-				UNDO_REDO_STACK::OPERATION::DATA_TYPE_DOUBLE,
-				&(CurrentCorner->hardpoints[event.GetRow() - 1].y));
+			parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
+				parent.GetParent().GetMainFrame().GetActiveIndex(),
+				UndoRedoStack::Operation::DataTypeDouble,
+				&(currentCorner->hardpoints[event.GetRow() - 1].y));
 
-			CurrentCorner->hardpoints[event.GetRow() - 1].y = Converter.ReadDistance(Value);
+			currentCorner->hardpoints[event.GetRow() - 1].y = converter.ReadDistance(Value);
 		}
 		else// Z
 		{
 			// Add the operation to the undo/redo stack
-			Parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
-				Parent.GetParent().GetMainFrame().GetActiveIndex(),
-				UNDO_REDO_STACK::OPERATION::DATA_TYPE_DOUBLE,
-				&(CurrentCorner->hardpoints[event.GetRow() - 1].z));
+			parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
+				parent.GetParent().GetMainFrame().GetActiveIndex(),
+				UndoRedoStack::Operation::DataTypeDouble,
+				&(currentCorner->hardpoints[event.GetRow() - 1].z));
 
-			CurrentCorner->hardpoints[event.GetRow() - 1].z = Converter.ReadDistance(Value);
+			currentCorner->hardpoints[event.GetRow() - 1].z = converter.ReadDistance(Value);
 		}
 
 		// Call the UpdateSymmetry method in case this is a symmetric suspension
-		Parent.UpdateSymmetry();
+		parent.UpdateSymmetry();
 		
 		// Unlock the car
-		Mutex->Unlock();
+		mutex->Unlock();
 
 		// Tell the car object that it was modified
-		Parent.GetParent().GetCurrentObject()->SetModified();
+		parent.GetParent().GetCurrentObject()->SetModified();
 
 		// Set the position of the helper orb
-		static_cast<CAR_RENDERER*>(Parent.GetParent().GetCurrentObject()->GetNotebookTab())->SetHelperOrbPosition(
-			(Corner::Hardpoints)(event.GetRow() - 1), CurrentCorner->location, Suspension::NumberOfHardpoints);
+		static_cast<CarRenderer*>(parent.GetParent().GetCurrentObject()->GetNotebookTab())->SetHelperOrbPosition(
+			(Corner::hardpoints)(event.GetRow() - 1), currentCorner->location, Suspension::NumberOfhardpoints);
 
 		// Update the display and the kinematic outputs
-		Parent.GetParent().GetMainFrame().UpdateAnalysis();
-		Parent.GetParent().GetMainFrame().UpdateOutputPanel();
+		parent.GetParent().GetMainFrame().UpdateAnalysis();
+		parent.GetParent().GetMainFrame().UpdateOutputPanel();
 	}
 
 	event.Skip();
 }
 
 //==========================================================================
-// Class:			EDIT_CORNER_PANEL
+// Class:			EditCornerPanel
 // Function:		ActuationAttachmentChangeEvent
 //
 // Description:		Event that fires when the actuation attachment changes.
@@ -579,39 +579,39 @@ void EDIT_CORNER_PANEL::GridCellChangedEvent(wxGridEvent &event)
 //		None
 //
 //==========================================================================
-void EDIT_CORNER_PANEL::ActuationAttachmentChangeEvent(wxCommandEvent &event)
+void EditCornerPanel::ActuationAttachmentChangeEvent(wxCommandEvent &event)
 {
 	// Add the operation to the undo/redo stack
-	Parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
-		Parent.GetParent().GetMainFrame().GetActiveIndex(),
-		UNDO_REDO_STACK::OPERATION::DATA_TYPE_INTEGER,
-		&(CurrentCorner->actuationAttachment));
+	parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
+		parent.GetParent().GetMainFrame().GetActiveIndex(),
+		UndoRedoStack::Operation::DataTypeInteger,
+		&(currentCorner->actuationAttachment));
 
 	// Get a lock on the car
-	wxMutex *Mutex = Parent.GetParent().GetCurrentMutex();
-	Mutex->Lock();
+	wxMutex *mutex = parent.GetParent().GetCurrentMutex();
+	mutex->Lock();
 
 	// Set the value of the actuation attachment enum to the value of this combobox
-	CurrentCorner->actuationAttachment = (Corner::ActuationAttachment)event.GetSelection();
+	currentCorner->actuationAttachment = (Corner::ActuationAttachment)event.GetSelection();
 
 	// Call the UpdateSymmetry method in case this is a symmetric suspension
-	Parent.UpdateSymmetry();
+	parent.UpdateSymmetry();
 	
 	// Unlock the car
-	Mutex->Unlock();
+	mutex->Unlock();
 
 	// Tell the car object that it was modified
-	Parent.GetParent().GetCurrentObject()->SetModified();
+	parent.GetParent().GetCurrentObject()->SetModified();
 
 	// Update the display and the kinematic outputs
-	Parent.GetParent().GetMainFrame().UpdateAnalysis();
-	Parent.GetParent().GetMainFrame().UpdateOutputPanel();
+	parent.GetParent().GetMainFrame().UpdateAnalysis();
+	parent.GetParent().GetMainFrame().UpdateOutputPanel();
 
 	event.Skip();
 }
 
 //==========================================================================
-// Class:			EDIT_CORNER_PANEL
+// Class:			EditCornerPanel
 // Function:		ActuationTypeChangeEvent
 //
 // Description:		Event that fires when the actuation type changes.
@@ -626,42 +626,42 @@ void EDIT_CORNER_PANEL::ActuationAttachmentChangeEvent(wxCommandEvent &event)
 //		None
 //
 //==========================================================================
-void EDIT_CORNER_PANEL::ActuationTypeChangeEvent(wxCommandEvent &event)
+void EditCornerPanel::ActuationTypeChangeEvent(wxCommandEvent &event)
 {
 	// Add the operation to the undo/redo stack
-	Parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
-		Parent.GetParent().GetMainFrame().GetActiveIndex(),
-		UNDO_REDO_STACK::OPERATION::DATA_TYPE_INTEGER,
-		&(CurrentCorner->actuationType));
+	parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
+		parent.GetParent().GetMainFrame().GetActiveIndex(),
+		UndoRedoStack::Operation::DataTypeInteger,
+		&(currentCorner->actuationType));
 
 	// Get a lock on the car
-	wxMutex *Mutex = Parent.GetParent().GetCurrentMutex();
-	Mutex->Lock();
+	wxMutex *mutex = parent.GetParent().GetCurrentMutex();
+	mutex->Lock();
 
 	// Set the value of the actuation attachment enum to the value of this combobox
-	CurrentCorner->actuationType = (Corner::ActuationType)event.GetSelection();
+	currentCorner->actuationType = (Corner::ActuationType)event.GetSelection();
 
 	// Call the UpdateSymmetry method in case this is a symmetric suspension
-	Parent.UpdateSymmetry();
+	parent.UpdateSymmetry();
 	
 	// Unlock the car
-	Mutex->Unlock();
+	mutex->Unlock();
 
 	// Tell the car object that it was modified
-	Parent.GetParent().GetCurrentObject()->SetModified();
+	parent.GetParent().GetCurrentObject()->SetModified();
 
 	// Update the display and the kinematic outputs
-	Parent.GetParent().GetMainFrame().UpdateAnalysis();
-	Parent.GetParent().GetMainFrame().UpdateOutputPanel();
+	parent.GetParent().GetMainFrame().UpdateAnalysis();
+	parent.GetParent().GetMainFrame().UpdateOutputPanel();
 
 	// Update this panel in case the editable hardpoints changed
-	Parent.UpdateInformation();
+	parent.UpdateInformation();
 
 	event.Skip();
 }
 
 //==========================================================================
-// Class:			EDIT_CORNER_PANEL
+// Class:			EditCornerPanel
 // Function:		StaticCamberChangeEvent
 //
 // Description:		Event that fires when the static camber changes.
@@ -676,54 +676,54 @@ void EDIT_CORNER_PANEL::ActuationTypeChangeEvent(wxCommandEvent &event)
 //		None
 //
 //==========================================================================
-void EDIT_CORNER_PANEL::StaticCamberChangeEvent(wxCommandEvent &event)
+void EditCornerPanel::StaticCamberChangeEvent(wxCommandEvent &event)
 {
 	// Get the new value
-	wxString ValueString = StaticCamber->GetValue();
-	double Value;
+	wxString valueString = staticCamber->GetValue();
+	double value;
 
 	// Make sure the value is numeric
-	if (!ValueString.ToDouble(&Value))
+	if (!valueString.ToDouble(&value))
 	{
 		// Restore the previous value
-		Value = CurrentCorner->staticCamber;
-		ValueString.Printf("%0.3f", Converter.ConvertAngle(Value));
-		StaticCamber->SetValue(ValueString);
+		value = currentCorner->staticCamber;
+		valueString.Printf("%0.3f", converter.ConvertAngle(Value));
+		staticCamber->SetValue(ValueString);
 
 		return;
 	}
 
 	// Add the operation to the undo/redo stack
-	Parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
-		Parent.GetParent().GetMainFrame().GetActiveIndex(),
-		UNDO_REDO_STACK::OPERATION::DATA_TYPE_DOUBLE,
-		&(CurrentCorner->staticCamber));
+	parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
+		parent.GetParent().GetMainFrame().GetActiveIndex(),
+		UndoRedoStack::Operation::DataTypeDouble,
+		&(currentCorner->staticCamber));
 
 	// Get a lock on the car
-	wxMutex *Mutex = Parent.GetParent().GetCurrentMutex();
-	Mutex->Lock();
+	wxMutex *mutex = parent.GetParent().GetCurrentMutex();
+	mutex->Lock();
 
 	// Update the corner object
-	CurrentCorner->staticCamber = Converter.ReadAngle(Value);
+	currentCorner->staticCamber = converter.ReadAngle(Value);
 
 	// Call the UpdateSymmetry method in case this is a symmetric suspension
-	Parent.UpdateSymmetry();
+	parent.UpdateSymmetry();
 	
 	// Unlock the car
-	Mutex->Unlock();
+	mutex->Unlock();
 
 	// Tell the car object that it was modified
-	Parent.GetParent().GetCurrentObject()->SetModified();
+	parent.GetParent().GetCurrentObject()->SetModified();
 
 	// Update the display and the kinematic outputs
-	Parent.GetParent().GetMainFrame().UpdateAnalysis();
-	Parent.GetParent().GetMainFrame().UpdateOutputPanel();
+	parent.GetParent().GetMainFrame().UpdateAnalysis();
+	parent.GetParent().GetMainFrame().UpdateOutputPanel();
 
 	event.Skip();
 }
 
 //==========================================================================
-// Class:			EDIT_CORNER_PANEL
+// Class:			EditCornerPanel
 // Function:		StaticToeChangeEvent
 //
 // Description:		Event that fires when the static toe changes.
@@ -738,48 +738,48 @@ void EDIT_CORNER_PANEL::StaticCamberChangeEvent(wxCommandEvent &event)
 //		None
 //
 //==========================================================================
-void EDIT_CORNER_PANEL::StaticToeChangeEvent(wxCommandEvent &event)
+void EditCornerPanel::StaticToeChangeEvent(wxCommandEvent &event)
 {
 	// Get the new value
-	wxString ValueString = StaticToe->GetValue();
-	double Value;
+	wxString valueString = staticToe->GetValue();
+	double value;
 
 	// Make sure the value is numeric
-	if (!ValueString.ToDouble(&Value))
+	if (!valueString.ToDouble(&value))
 	{
 		// Restore the previous value
-		Value = CurrentCorner->staticToe;
-		ValueString.Printf("%0.3f", Converter.ConvertAngle(Value));
-		StaticToe->SetValue(ValueString);
+		value = currentCorner->staticToe;
+		valueString.Printf("%0.3f", converter.ConvertAngle(Value));
+		staticToe->SetValue(valueString);
 
 		return;
 	}
 
 	// Add the operation to the undo/redo stack
-	Parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
-		Parent.GetParent().GetMainFrame().GetActiveIndex(),
-		UNDO_REDO_STACK::OPERATION::DATA_TYPE_DOUBLE,
-		&(CurrentCorner->staticToe));
+	parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
+		parent.GetParent().GetMainFrame().GetActiveIndex(),
+		UndoRedoStack::Operation::DataTypeDouble,
+		&(currentCorner->staticToe));
 
 	// Get a lock on the car
-	wxMutex *Mutex = Parent.GetParent().GetCurrentMutex();
-	Mutex->Lock();
+	wxMutex *mutex = parent.GetParent().GetCurrentMutex();
+	mutex->Lock();
 
 	// Update the corner object
-	CurrentCorner->staticToe = Converter.ReadAngle(Value);
+	currentCorner->staticToe = converter.ReadAngle(Value);
 
 	// Call the UpdateSymmetry method in case this is a symmetric suspension
-	Parent.UpdateSymmetry();
+	parent.UpdateSymmetry();
 	
 	// Unlock the car
-	Mutex->Unlock();
+	mutex->Unlock();
 
 	// Tell the car object that it was modified
-	Parent.GetParent().GetCurrentObject()->SetModified();
+	parent.GetParent().GetCurrentObject()->SetModified();
 
 	// Update the display and the kinematic outputs
-	Parent.GetParent().GetMainFrame().UpdateAnalysis();
-	Parent.GetParent().GetMainFrame().UpdateOutputPanel();
+	parent.GetParent().GetMainFrame().UpdateAnalysis();
+	parent.GetParent().GetMainFrame().UpdateOutputPanel();
 
 	event.Skip();
 }

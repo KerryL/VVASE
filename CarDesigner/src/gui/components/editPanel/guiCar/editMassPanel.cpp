@@ -32,7 +32,7 @@
 // Description:		Constructor for EditMassPanel class.
 //
 // Input Arguments:
-//		_Parent		= EDIT_PANEL&, reference to this object's owner
+//		_parent		= EditPanel&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
@@ -45,12 +45,12 @@
 //		None
 //
 //==========================================================================
-EditMassPanel::EditMassPanel(EDIT_PANEL &_Parent, wxWindowID id,
+EditMassPanel::EditMassPanel(EditPanel &_parent, wxWindowID id,
 								 const wxPoint& pos, const wxSize& size,
-								 const Debugger &_debugger) : wxScrolledWindow(&_Parent, id, pos, size),
+								 const Debugger &_debugger) : wxScrolledWindow(&_parent, id, pos, size),
 								 debugger(_debugger),
-								 Converter(_Parent.GetMainFrame().GetConverter()),
-								 Parent(_Parent)
+								 converter(_parent.GetMainFrame().GetConverter()),
+								 parent(_parent)
 {
 	// Create the controls
 	CreateControls();
@@ -103,7 +103,7 @@ END_EVENT_TABLE();
 // Description:		Updates the information on this panel.
 //
 // Input Arguments:
-//		_CurrentMassProperties	= MassProperties* pointing to the associated
+//		_currentMassProperties	= MassProperties* pointing to the associated
 //								  mass properties
 //
 // Output Arguments:
@@ -113,37 +113,37 @@ END_EVENT_TABLE();
 //		None
 //
 //==========================================================================
-void EditMassPanel::UpdateInformation(MassProperties *_CurrentMassProperties)
+void EditMassPanel::UpdateInformation(MassProperties *_currentMassProperties)
 {
 	// Update the class member
-	CurrentMassProperties = _CurrentMassProperties;
+	currentMassProperties = _currentMassProperties;
 
 	// Update the mass
-	Mass->ChangeValue(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->mass)));
+	mass->ChangeValue(converter.FormatNumber(converter.ConvertMass(currentMassProperties->mass)));
 
 	// Update the inertia
-	Ixx->ChangeValue(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->ixx)));
-	Iyy->ChangeValue(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->iyy)));
-	Izz->ChangeValue(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->izz)));
-	Ixy->ChangeValue(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->ixy)));
-	Iyx->SetLabel(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->ixy)));
-	Ixz->ChangeValue(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->ixz)));
-	Izx->SetLabel(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->ixz)));
-	Iyz->ChangeValue(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->iyz)));
-	Izy->SetLabel(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->iyz)));
+	ixx->ChangeValue(converter.FormatNumber(converter.ConvertMass(currentMassProperties->ixx)));
+	iyy->ChangeValue(converter.FormatNumber(converter.ConvertMass(currentMassProperties->iyy)));
+	izz->ChangeValue(converter.FormatNumber(converter.ConvertMass(currentMassProperties->izz)));
+	ixy->ChangeValue(converter.FormatNumber(converter.ConvertMass(currentMassProperties->ixy)));
+	iyx->SetLabel(converter.FormatNumber(converter.ConvertMass(currentMassProperties->ixy)));
+	ixz->ChangeValue(converter.FormatNumber(converter.ConvertMass(currentMassProperties->ixz)));
+	izx->SetLabel(converter.FormatNumber(converter.ConvertMass(currentMassProperties->ixz)));
+	iyz->ChangeValue(converter.FormatNumber(converter.ConvertMass(currentMassProperties->iyz)));
+	izy->SetLabel(converter.FormatNumber(converter.ConvertMass(currentMassProperties->iyz)));
 
 	// Update the center of gravity
-	CenterOfGravityX->ChangeValue(Converter.FormatNumber(
-		Converter.ConvertDistance(CurrentMassProperties->centerOfGravity.x)));
-	CenterOfGravityY->ChangeValue(Converter.FormatNumber(
-		Converter.ConvertDistance(CurrentMassProperties->centerOfGravity.y)));
-	CenterOfGravityZ->ChangeValue(Converter.FormatNumber(
-		Converter.ConvertDistance(CurrentMassProperties->centerOfGravity.z)));
+	centerOfGravityX->ChangeValue(converter.FormatNumber(
+		converter.ConvertDistance(currentMassProperties->centerOfGravity.x)));
+	centerOfGravityY->ChangeValue(converter.FormatNumber(
+		converter.ConvertDistance(currentMassProperties->centerOfGravity.y)));
+	centerOfGravityZ->ChangeValue(converter.FormatNumber(
+		converter.ConvertDistance(currentMassProperties->centerOfGravity.z)));
 
 	// Update the units
-	InertiaUnitsLabel->SetLabel('(' + Converter.GetUnitType(Convert::UnitTypeInertia) + ')');
-	MassUnitsLabel->SetLabel('(' + Converter.GetUnitType(Convert::UnitTypeMass) + ')');
-	CoGUnitsLabel->SetLabel('(' + Converter.GetUnitType(Convert::UnitTypeDistance) + ')');
+	inertiaUnitsLabel->SetLabel('(' + converter.GetUnitType(Convert::UnitTypeInertia) + ')');
+	massUnitsLabel->SetLabel('(' + converter.GetUnitType(Convert::UnitTypeMass) + ')');
+	cogUnitsLabel->SetLabel('(' + converter.GetUnitType(Convert::UnitTypeDistance) + ')');
 
 	// Update sizers
 	Layout();
@@ -171,56 +171,56 @@ void EditMassPanel::CreateControls()
 	SetScrollRate(1, 1);
 	
 	// Top-level sizer
-	wxBoxSizer *TopSizer = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
 
 	// Second sizer gives more space around the controls
-	wxBoxSizer *MainSizer = new wxBoxSizer(wxVERTICAL);
-	TopSizer->Add(MainSizer, 1, wxGROW | wxALL, 5);
+	wxBoxSizer *mainSizer = new wxBoxSizer(wxVERTICAL);
+	topSizer->Add(mainSizer, 1, wxGROW | wxALL, 5);
 
 	// Create the inertia inputs
-	wxBoxSizer *InertiaSizer = new wxBoxSizer(wxVERTICAL);
-	wxStaticText *InertiaCaption = new wxStaticText(this, wxID_ANY,
+	wxBoxSizer *inertiaSizer = new wxBoxSizer(wxVERTICAL);
+	wxStaticText *inertiaCaption = new wxStaticText(this, wxID_ANY,
 		_T("Sprung Mass Inertia Tensor (w.r.t. CG)"));
-	InertiaUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
+	inertiaUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
 
-	InertiaSizer->Add(InertiaCaption, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
-	InertiaSizer->Add(InertiaUnitsLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 2);
+	inertiaSizer->Add(inertiaCaption, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
+	inertiaSizer->Add(inertiaUnitsLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 2);
 
 	// Create sizer of input section
 	wxFlexGridSizer *inertiaInputSizer = new wxFlexGridSizer(5, 3, 3);
 
 	// Create the text boxes
-	Ixx = new wxTextCtrl(this, TextBoxIxx);
-	Iyy = new wxTextCtrl(this, TextBoxIyy);
-	Izz = new wxTextCtrl(this, TextBoxIzz);
-	Ixy = new wxTextCtrl(this, TextBoxIxy);
-	Ixz = new wxTextCtrl(this, TextBoxIxz);
-	Iyz = new wxTextCtrl(this, TextBoxIyz);
+	ixx = new wxTextCtrl(this, TextBoxIxx);
+	iyy = new wxTextCtrl(this, TextBoxIyy);
+	izz = new wxTextCtrl(this, TextBoxIzz);
+	ixy = new wxTextCtrl(this, TextBoxIxy);
+	ixz = new wxTextCtrl(this, TextBoxIxz);
+	iyz = new wxTextCtrl(this, TextBoxIyz);
 
 	// Create the static text controls
-	Iyx = new wxStaticText(this, wxID_ANY, wxEmptyString);
-	Izx = new wxStaticText(this, wxID_ANY, wxEmptyString);
-	Izy = new wxStaticText(this, wxID_ANY, wxEmptyString);
+	iyx = new wxStaticText(this, wxID_ANY, wxEmptyString);
+	izx = new wxStaticText(this, wxID_ANY, wxEmptyString);
+	izy = new wxStaticText(this, wxID_ANY, wxEmptyString);
 
 	// First row
 	inertiaInputSizer->AddSpacer(-1);
-	inertiaInputSizer->Add(Ixx, 0, wxEXPAND);
-	inertiaInputSizer->Add(Ixy, 0, wxEXPAND);
-	inertiaInputSizer->Add(Ixz, 0, wxEXPAND);
+	inertiaInputSizer->Add(ixx, 0, wxEXPAND);
+	inertiaInputSizer->Add(ixy, 0, wxEXPAND);
+	inertiaInputSizer->Add(ixz, 0, wxEXPAND);
 	inertiaInputSizer->AddSpacer(-1);
 
 	// Second row
 	inertiaInputSizer->AddSpacer(-1);
-	inertiaInputSizer->Add(Iyx, 0, wxALIGN_CENTER_VERTICAL);
-	inertiaInputSizer->Add(Iyy, 0, wxEXPAND);
-	inertiaInputSizer->Add(Iyz, 0, wxEXPAND);
+	inertiaInputSizer->Add(iyx, 0, wxALIGN_CENTER_VERTICAL);
+	inertiaInputSizer->Add(iyy, 0, wxEXPAND);
+	inertiaInputSizer->Add(iyz, 0, wxEXPAND);
 	inertiaInputSizer->AddSpacer(-1);
 
 	// Third row
 	inertiaInputSizer->AddSpacer(-1);
-	inertiaInputSizer->Add(Izx, 0, wxALIGN_CENTER_VERTICAL);
-	inertiaInputSizer->Add(Izy, 0, wxALIGN_CENTER_VERTICAL);
-	inertiaInputSizer->Add(Izz, 0, wxEXPAND);
+	inertiaInputSizer->Add(izx, 0, wxALIGN_CENTER_VERTICAL);
+	inertiaInputSizer->Add(izy, 0, wxALIGN_CENTER_VERTICAL);
+	inertiaInputSizer->Add(izz, 0, wxEXPAND);
 	inertiaInputSizer->AddSpacer(-1);
 	
 	// Blank row for space
@@ -232,28 +232,28 @@ void EditMassPanel::CreateControls()
 	inertiaInputSizer->AddSpacer(spaceSize);
 
 	// Create the mass input
-	wxStaticText *MassLabel = new wxStaticText(this, wxID_ANY, _T("Mass"));
-	Mass = new wxTextCtrl(this, TextBoxMass);
-	MassUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
+	wxStaticText *massLabel = new wxStaticText(this, wxID_ANY, _T("Mass"));
+	mass = new wxTextCtrl(this, TextBoxMass);
+	massUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
 
-	inertiaInputSizer->Add(MassLabel, 0, wxALIGN_CENTER_VERTICAL);
-	inertiaInputSizer->Add(Mass, 0, wxEXPAND);
-	inertiaInputSizer->Add(MassUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
+	inertiaInputSizer->Add(massLabel, 0, wxALIGN_CENTER_VERTICAL);
+	inertiaInputSizer->Add(mass, 0, wxEXPAND);
+	inertiaInputSizer->Add(massUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 	inertiaInputSizer->AddSpacer(-1);
 	inertiaInputSizer->AddSpacer(-1);
 
 	// Create the center of gravity inputs
-	wxStaticText *CoGLabel = new wxStaticText(this, wxID_ANY, _T("CG"));
-	CenterOfGravityX = new wxTextCtrl(this, TextBoxCenterOfGravityX);
-	CenterOfGravityY = new wxTextCtrl(this, TextBoxCenterOfGravityY);
-	CenterOfGravityZ = new wxTextCtrl(this, TextBoxCenterOfGravityZ);
-	CoGUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
+	wxStaticText *cogLabel = new wxStaticText(this, wxID_ANY, _T("CG"));
+	centerOfGravityX = new wxTextCtrl(this, TextBoxcenterOfGravityX);
+	centerOfGravityY = new wxTextCtrl(this, TextBoxcenterOfGravityY);
+	centerOfGravityZ = new wxTextCtrl(this, TextBoxcenterOfGravityZ);
+	cogUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
 
-	inertiaInputSizer->Add(CoGLabel, 0, wxALIGN_CENTER_VERTICAL);
-	inertiaInputSizer->Add(CenterOfGravityX, 0, wxEXPAND);
-	inertiaInputSizer->Add(CenterOfGravityY, 0, wxEXPAND);
-	inertiaInputSizer->Add(CenterOfGravityZ, 0, wxEXPAND);
-	inertiaInputSizer->Add(CoGUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
+	inertiaInputSizer->Add(cogLabel, 0, wxALIGN_CENTER_VERTICAL);
+	inertiaInputSizer->Add(centerOfGravityX, 0, wxEXPAND);
+	inertiaInputSizer->Add(centerOfGravityY, 0, wxEXPAND);
+	inertiaInputSizer->Add(centerOfGravityZ, 0, wxEXPAND);
+	inertiaInputSizer->Add(cogUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 	
 	// Make the middle columns growable
 	inertiaInputSizer->AddGrowableCol(1, 1);
@@ -261,31 +261,31 @@ void EditMassPanel::CreateControls()
 	inertiaInputSizer->AddGrowableCol(3, 1);
 
 	// Add the sizers to the main sizer
-	MainSizer->Add(InertiaSizer);
-	MainSizer->Add(inertiaInputSizer, 1, wxEXPAND);
+	mainSizer->Add(inertiaSizer);
+	mainSizer->Add(inertiaInputSizer, 1, wxEXPAND);
 
 	// Set the text box minimum widths
 	// Use reasonable values in default units for an average car, add a negative sign, and format
 	// as requested to calculate the proper widths
 	int minInertiaWidth, minMassWidth, minDistanceWidth, minWidth;
-	GetTextExtent(Converter.FormatNumber(Converter.ConvertInertia(-850000.0)), &minInertiaWidth, NULL);
-	GetTextExtent(Converter.FormatNumber(Converter.ConvertMass(-8000.0)), &minMassWidth, NULL);
-	GetTextExtent(Converter.FormatNumber(Converter.ConvertDistance(-200.0)), &minDistanceWidth, NULL);
+	GetTextExtent(converter.FormatNumber(converter.ConvertInertia(-850000.0)), &minInertiaWidth, NULL);
+	GetTextExtent(converter.FormatNumber(converter.ConvertMass(-8000.0)), &minMassWidth, NULL);
+	GetTextExtent(converter.FormatNumber(converter.ConvertDistance(-200.0)), &minDistanceWidth, NULL);
 	minWidth = std::max(minInertiaWidth, std::max(minMassWidth, minDistanceWidth));
 
-	Ixx->SetMinSize(wxSize(minWidth, -1));
-	Iyy->SetMinSize(wxSize(minWidth, -1));
-	Izz->SetMinSize(wxSize(minWidth, -1));
-	Ixy->SetMinSize(wxSize(minWidth, -1));
-	Ixz->SetMinSize(wxSize(minWidth, -1));
-	Iyz->SetMinSize(wxSize(minWidth, -1));
-	Mass->SetMinSize(wxSize(minWidth, -1));
-	CenterOfGravityX->SetMinSize(wxSize(minWidth, -1));
-	CenterOfGravityY->SetMinSize(wxSize(minWidth, -1));
-	CenterOfGravityZ->SetMinSize(wxSize(minWidth, -1));
+	ixx->SetMinSize(wxSize(minWidth, -1));
+	iyy->SetMinSize(wxSize(minWidth, -1));
+	izz->SetMinSize(wxSize(minWidth, -1));
+	ixy->SetMinSize(wxSize(minWidth, -1));
+	ixz->SetMinSize(wxSize(minWidth, -1));
+	iyz->SetMinSize(wxSize(minWidth, -1));
+	mass->SetMinSize(wxSize(minWidth, -1));
+	centerOfGravityX->SetMinSize(wxSize(minWidth, -1));
+	centerOfGravityY->SetMinSize(wxSize(minWidth, -1));
+	centerOfGravityZ->SetMinSize(wxSize(minWidth, -1));
 
 	// Assign the top level sizer to the dialog
-	SetSizer(TopSizer);
+	SetSizer(topSizer);
 }
 
 //==========================================================================
@@ -307,85 +307,85 @@ void EditMassPanel::CreateControls()
 void EditMassPanel::TextBoxEditEvent(wxCommandEvent &event)
 {
 	// The place where the data will be written
-	double *DataLocation = NULL;
+	double *dataLocation = NULL;
 
 	// We also need to know what kind of data we're retrieving
-	Convert::UnitType Units;
+	Convert::UnitType units;
 
 	// A pointer to the text box
-	wxTextCtrl *TextBox = NULL;
+	wxTextCtrl *textBox = NULL;
 
 	// Take different action depending on the event ID
 	switch (event.GetId())
 	{
 	case TextBoxIxx:
 		// Get the text box, the location to write it, and the units
-		TextBox = Ixx;
-		DataLocation = &CurrentMassProperties->ixx;
-		Units = Convert::UnitTypeInertia;
+		textBox = ixx;
+		dataLocation = &currentMassProperties->ixx;
+		units = Convert::UnitTypeInertia;
 		break;
 
 	case TextBoxIyy:
 		// Get the new data, the location to write it, and the units
-		TextBox = Iyy;
-		DataLocation = &CurrentMassProperties->iyy;
-		Units = Convert::UnitTypeInertia;
+		textBox = iyy;
+		dataLocation = &currentMassProperties->iyy;
+		units = Convert::UnitTypeInertia;
 		break;
 
 	case TextBoxIzz:
 		// Get the new data, the location to write it, and the units
-		TextBox = Izz;
-		DataLocation = &CurrentMassProperties->izz;
-		Units = Convert::UnitTypeInertia;
+		textBox = izz;
+		dataLocation = &currentMassProperties->izz;
+		units = Convert::UnitTypeInertia;
 		break;
 
 	case TextBoxIxy:
 		// Get the new data, the location to write it, and the units
-		TextBox = Ixy;
-		DataLocation = &CurrentMassProperties->ixy;
-		Units = Convert::UnitTypeInertia;
+		textBox = ixy;
+		dataLocation = &currentMassProperties->ixy;
+		units = Convert::UnitTypeInertia;
 		break;
 
 	case TextBoxIxz:
 		// Get the new data, the location to write it, and the units
-		TextBox = Ixz;
-		DataLocation = &CurrentMassProperties->ixz;
-		Units = Convert::UnitTypeInertia;
+		textBox = ixz;
+		dataLocation = &currentMassProperties->ixz;
+		units = Convert::UnitTypeInertia;
 		break;
 
 	case TextBoxIyz:
 		// Get the new data, the location to write it, and the units
-		TextBox = Iyz;
-		DataLocation = &CurrentMassProperties->iyz;
-		Units = Convert::UnitTypeInertia;
+		textBox = iyz;
+		dataLocation = &currentMassProperties->iyz;
+		units = Convert::UnitTypeInertia;
 		break;
 
 	case TextBoxMass:
 		// Get the new data, the location to write it, and the units
-		TextBox = Mass;
-		DataLocation = &CurrentMassProperties->mass;
-		Units = Convert::UnitTypeMass;
+		textBox = mass;
+		dataLocation = &currentMassProperties->mass;
+		units = Convert::UnitTypeMass;
 		break;
 
-	case TextBoxCenterOfGravityX:
+	case TextBoxcenterOfGravityX:
 		// Get the new data, the location to write it, and the units
-		TextBox = CenterOfGravityX;
-		DataLocation = &CurrentMassProperties->centerOfGravity.x;
-		Units = Convert::UnitTypeDistance;
+		textBox = centerOfGravityX;
+		dataLocation = &currentMassProperties->centerOfGravity.x;
+		units = Convert::UnitTypeDistance;
 		break;
 
-	case TextBoxCenterOfGravityY:
+	case TextBoxcenterOfGravityY:
 		// Get the new data, the location to write it, and the units
-		TextBox = CenterOfGravityY;
-		DataLocation = &CurrentMassProperties->centerOfGravity.y;
-		Units = Convert::UnitTypeDistance;
+		textBox = centerOfGravityY;
+		dataLocation = &currentMassProperties->centerOfGravity.y;
+		units = Convert::UnitTypeDistance;
 		break;
 
-	case TextBoxCenterOfGravityZ:
+	case TextBoxcenterOfGravityZ:
 		// Get the new data, the location to write it, and the units
-		TextBox = CenterOfGravityZ;
-		DataLocation = &CurrentMassProperties->centerOfGravity.z;
-		Units = Convert::UnitTypeDistance;
+		textBox = centerOfGravityZ;
+		dataLocation = &currentMassProperties->centerOfGravity.z;
+		units = Convert::UnitTypeDistance;
 		break;
 
 	default:
@@ -395,38 +395,38 @@ void EditMassPanel::TextBoxEditEvent(wxCommandEvent &event)
 	}
 
 	// Make sure the value is numeric
-	wxString ValueString = TextBox->GetValue();
-	double Value;
-	if (!ValueString.ToDouble(&Value))
+	wxString valueString = textBox->GetValue();
+	double value;
+	if (!valueString.ToDouble(&value))
 		return;
 
 	// Add the operation to the undo/redo stack
-	Parent.GetMainFrame().GetUndoRedoStack().AddOperation(
-		Parent.GetMainFrame().GetActiveIndex(),
-		UNDO_REDO_STACK::OPERATION::DATA_TYPE_DOUBLE,
-		DataLocation);
+	parent.GetMainFrame().GetUndoRedoStack().AddOperation(
+		parent.GetMainFrame().GetActiveIndex(),
+		UndoRedoStack::Operation::DataTypeDouble,
+		dataLocation);
 
 	// Get a lock on the car
-	wxMutex *Mutex = Parent.GetCurrentMutex();
-	Mutex->Lock();
+	wxMutex *mutex = parent.GetCurrentMutex();
+	mutex->Lock();
 
 	// Update the mass properties object
-	*DataLocation = Converter.Read(Value, Units);
+	*dataLocation = converter.Read(Value, Units);
 
 	// Unlock the car
-	Mutex->Unlock();
+	mutex->Unlock();
 
 	// Tell the car object that it was modified
-	Parent.GetCurrentObject()->SetModified();
+	parent.GetCurrentObject()->SetModified();
 
 	// Update the display and the kinematic outputs
-	Parent.GetMainFrame().UpdateAnalysis();
+	parent.GetMainFrame().UpdateAnalysis();
 
 	// If one of the off-diagonal inertias was updated, we need to change the
 	// corresponding value on the lower side of the diagonal
-	Iyx->SetLabel(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->ixy)));
-	Izx->SetLabel(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->ixz)));
-	Izy->SetLabel(Converter.FormatNumber(Converter.ConvertMass(CurrentMassProperties->iyz)));
+	iyx->SetLabel(converter.FormatNumber(converter.ConvertMass(currentMassProperties->ixy)));
+	izx->SetLabel(converter.FormatNumber(converter.ConvertMass(currentMassProperties->ixz)));
+	izy->SetLabel(converter.FormatNumber(converter.ConvertMass(currentMassProperties->iyz)));
 
 	event.Skip();
 }

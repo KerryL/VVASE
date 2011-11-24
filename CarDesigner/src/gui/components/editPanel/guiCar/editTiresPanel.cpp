@@ -10,7 +10,7 @@
 // File:  editTiresPanel.cpp
 // Created:  2/10/2009
 // Author:  K. Loux
-// Description:  Contains the class definition for the EDIT_TIRES_PANEL class.  This
+// Description:  Contains the class definition for the EditTiresPanel class.  This
 //				 class is used to edit the hard points on a particular corner of the
 //				 car.
 // History:
@@ -27,13 +27,13 @@
 #include "vMath/vector.h"
 
 //==========================================================================
-// Class:			EDIT_TIRES_PANEL
-// Function:		EDIT_TIRES_PANEL
+// Class:			EditTiresPanel
+// Function:		EditTiresPanel
 //
-// Description:		Constructor for EDIT_TIRES_PANEL class.
+// Description:		Constructor for EditTiresPanel class.
 //
 // Input Arguments:
-//		_Parent		= EDIT_PANEL&, reference to this object's owner
+//		_parent		= EditPanel&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
@@ -46,13 +46,13 @@
 //		None
 //
 //==========================================================================
-EDIT_TIRES_PANEL::EDIT_TIRES_PANEL(EDIT_PANEL &_Parent, wxWindowID id,
+EditTiresPanel::EditTiresPanel(EditPanel &_parent, wxWindowID id,
 								   const wxPoint& pos, const wxSize& size,
 								   const Debugger &_debugger)
-								   : wxScrolledWindow(&_Parent, id, pos, size),
+								   : wxScrolledWindow(&_parent, id, pos, size),
 								   debugger(_debugger),
-								   Converter(_Parent.GetMainFrame().GetConverter()),
-								   Parent(_Parent)
+								   converter(_parent.GetMainFrame().GetConverter()),
+								   parent(_parent)
 										   
 {
 	// Create the controls
@@ -60,10 +60,10 @@ EDIT_TIRES_PANEL::EDIT_TIRES_PANEL(EDIT_PANEL &_Parent, wxWindowID id,
 }
 
 //==========================================================================
-// Class:			EDIT_TIRES_PANEL
-// Function:		EDIT_TIRES_PANEL
+// Class:			EditTiresPanel
+// Function:		EditTiresPanel
 //
-// Description:		Destructor for EDIT_TIRES_PANEL class.
+// Description:		Destructor for EditTiresPanel class.
 //
 // Input Arguments:
 //		None
@@ -75,12 +75,12 @@ EDIT_TIRES_PANEL::EDIT_TIRES_PANEL(EDIT_PANEL &_Parent, wxWindowID id,
 //		None
 //
 //==========================================================================
-EDIT_TIRES_PANEL::~EDIT_TIRES_PANEL()
+EditTiresPanel::~EditTiresPanel()
 {
 }
 
 //==========================================================================
-// Class:			EDIT_TIRES_PANEL
+// Class:			EditTiresPanel
 // Function:		Event Table
 //
 // Description:		Links GUI events with event handler functions.
@@ -95,25 +95,25 @@ EDIT_TIRES_PANEL::~EDIT_TIRES_PANEL()
 //		None
 //
 //==========================================================================
-BEGIN_EVENT_TABLE(EDIT_TIRES_PANEL, wxPanel)
-	EVT_TEXT(TextBoxRightFrontTireDiameter,		EDIT_TIRES_PANEL::RightFrontTireDiameterChangeEvent)
-	EVT_TEXT(TextBoxRightFrontTireWidth,		EDIT_TIRES_PANEL::RightFrontTireWidthChangeEvent)
-	EVT_TEXT(TextBoxLeftFrontTireDiameter,		EDIT_TIRES_PANEL::LeftFrontTireDiameterChangeEvent)
-	EVT_TEXT(TextBoxLeftFrontTireWidth,			EDIT_TIRES_PANEL::LeftFrontTireWidthChangeEvent)
-	EVT_TEXT(TextBoxRightRearTireDiameter,		EDIT_TIRES_PANEL::RightRearTireDiameterChangeEvent)
-	EVT_TEXT(TextBoxRightRearTireWidth,			EDIT_TIRES_PANEL::RightRearTireWidthChangeEvent)
-	EVT_TEXT(TextBoxLeftRearTireDiameter,		EDIT_TIRES_PANEL::LeftRearTireDiameterChangeEvent)
-	EVT_TEXT(TextBoxLeftRearTireWidth,			EDIT_TIRES_PANEL::LeftRearTireWidthChangeEvent)
+BEGIN_EVENT_TABLE(EditTiresPanel, wxPanel)
+	EVT_TEXT(TextBoxRightFrontTireDiameter,		EditTiresPanel::RightFrontTireDiameterChangeEvent)
+	EVT_TEXT(TextBoxRightFrontTireWidth,		EditTiresPanel::RightFrontTireWidthChangeEvent)
+	EVT_TEXT(TextBoxLeftFrontTireDiameter,		EditTiresPanel::LeftFrontTireDiameterChangeEvent)
+	EVT_TEXT(TextBoxLeftFrontTireWidth,			EditTiresPanel::LeftFrontTireWidthChangeEvent)
+	EVT_TEXT(TextBoxRightRearTireDiameter,		EditTiresPanel::RightRearTireDiameterChangeEvent)
+	EVT_TEXT(TextBoxRightRearTireWidth,			EditTiresPanel::RightRearTireWidthChangeEvent)
+	EVT_TEXT(TextBoxLeftRearTireDiameter,		EditTiresPanel::LeftRearTireDiameterChangeEvent)
+	EVT_TEXT(TextBoxLeftRearTireWidth,			EditTiresPanel::LeftRearTireWidthChangeEvent)
 END_EVENT_TABLE();
 
 //==========================================================================
-// Class:			EDIT_TIRES_PANEL
+// Class:			EditTiresPanel
 // Function:		UpdateInformation
 //
 // Description:		Updates the information on this panel.
 //
 // Input Arguments:
-//		_CurrentTireSet	= TireSet* pointing to the associated tire set
+//		_currentTireSet	= TireSet* pointing to the associated tire set
 //
 // Output Arguments:
 //		None
@@ -122,56 +122,56 @@ END_EVENT_TABLE();
 //		None
 //
 //==========================================================================
-void EDIT_TIRES_PANEL::UpdateInformation(TireSet *_CurrentTireSet)
+void EditTiresPanel::UpdateInformation(TireSet *_currentTireSet)
 {
 	// Update the class member
-	CurrentTireSet = _CurrentTireSet;
+	currentTireSet = _currentTireSet;
 
 	// FIXME:  Handle symmetry
 
 	// Update the text boxes
-	RightFrontTireDiameter->ChangeValue(Converter.FormatNumber(Converter.ConvertDistance(
-		CurrentTireSet->rightFront->diameter)));
-	RightFrontTireWidth->ChangeValue(Converter.FormatNumber(Converter.ConvertDistance(
-		CurrentTireSet->rightFront->width)));
+	rightFrontTireDiameter->ChangeValue(converter.FormatNumber(converter.ConvertDistance(
+		currentTireSet->rightFront->diameter)));
+	rightFrontTireWidth->ChangeValue(converter.FormatNumber(converter.ConvertDistance(
+		currentTireSet->rightFront->width)));
 
-	LeftFrontTireDiameter->ChangeValue(Converter.FormatNumber(Converter.ConvertDistance(
-		CurrentTireSet->leftFront->diameter)));
-	LeftFrontTireWidth->ChangeValue(Converter.FormatNumber(Converter.ConvertDistance(
-		CurrentTireSet->leftFront->width)));
+	leftFrontTireDiameter->ChangeValue(converter.FormatNumber(converter.ConvertDistance(
+		currentTireSet->leftFront->diameter)));
+	leftFrontTireWidth->ChangeValue(converter.FormatNumber(converter.ConvertDistance(
+		currentTireSet->leftFront->width)));
 
-	RightRearTireDiameter->ChangeValue(Converter.FormatNumber(Converter.ConvertDistance(
-		CurrentTireSet->rightRear->diameter)));
-	RightRearTireWidth->ChangeValue(Converter.FormatNumber(Converter.ConvertDistance(
-		CurrentTireSet->rightRear->width)));
+	rightRearTireDiameter->ChangeValue(converter.FormatNumber(converter.ConvertDistance(
+		currentTireSet->rightRear->diameter)));
+	rightRearTireWidth->ChangeValue(converter.FormatNumber(converter.ConvertDistance(
+		currentTireSet->rightRear->width)));
 
-	LeftRearTireDiameter->ChangeValue(Converter.FormatNumber(Converter.ConvertDistance(
-		CurrentTireSet->leftRear->diameter)));
-	LeftRearTireWidth->ChangeValue(Converter.FormatNumber(Converter.ConvertDistance(
-		CurrentTireSet->leftRear->width)));
+	leftRearTireDiameter->ChangeValue(converter.FormatNumber(converter.ConvertDistance(
+		currentTireSet->leftRear->diameter)));
+	leftRearTireWidth->ChangeValue(converter.FormatNumber(converter.ConvertDistance(
+		currentTireSet->leftRear->width)));
 
 	// And their units
-	RightFrontDiameterUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UnitTypeDistance));
-	RightFrontWidthUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UnitTypeDistance));
+	rightFrontDiameterUnitsLabel->SetLabel(converter.GetUnitType(Convert::UnitTypeDistance));
+	rightFrontWidthUnitsLabel->SetLabel(converter.GetUnitType(Convert::UnitTypeDistance));
 
-	LeftFrontDiameterUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UnitTypeDistance));
-	LeftFrontWidthUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UnitTypeDistance));
+	leftFrontDiameterUnitsLabel->SetLabel(converter.GetUnitType(Convert::UnitTypeDistance));
+	leftFrontWidthUnitsLabel->SetLabel(converter.GetUnitType(Convert::UnitTypeDistance));
 
-	RightRearDiameterUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UnitTypeDistance));
-	RightRearWidthUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UnitTypeDistance));
+	rightRearDiameterUnitsLabel->SetLabel(converter.GetUnitType(Convert::UnitTypeDistance));
+	rightRearWidthUnitsLabel->SetLabel(converter.GetUnitType(Convert::UnitTypeDistance));
 
-	LeftRearDiameterUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UnitTypeDistance));
-	LeftRearWidthUnitsLabel->SetLabel(Converter.GetUnitType(Convert::UnitTypeDistance));
+	leftRearDiameterUnitsLabel->SetLabel(converter.GetUnitType(Convert::UnitTypeDistance));
+	leftRearWidthUnitsLabel->SetLabel(converter.GetUnitType(Convert::UnitTypeDistance));
 
 	// Update the sizers
 	/*int minWidth;
-	GetTextExtent(LeftRearWidthUnitsLabel->GetLabel(), &minWidth, NULL);
-	LeftRearWidthUnitsLabel->SetMinSize(wxSize(minWidth, -1));
+	GetTextExtent(leftRearWidthUnitsLabel->GetLabel(), &minWidth, NULL);
+	leftRearWidthUnitsLabel->SetMinSize(wxSize(minWidth, -1));
 	Layout();*/
 }
 
 //==========================================================================
-// Class:			EDIT_TIRES_PANEL
+// Class:			EditTiresPanel
 // Function:		CreateControls
 //
 // Description:		Creates the controls for this panel.
@@ -186,152 +186,152 @@ void EDIT_TIRES_PANEL::UpdateInformation(TireSet *_CurrentTireSet)
 //		None
 //
 //==========================================================================
-void EDIT_TIRES_PANEL::CreateControls()
+void EditTiresPanel::CreateControls()
 {
 	// Enable scrolling
 	SetScrollRate(1, 1);
 
 	// Top-level sizer
-	wxBoxSizer *TopSizer = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
 
 	// Second sizer gives more space around the controls
-	wxFlexGridSizer *MainSizer = new wxFlexGridSizer(3, 5, 5);
-	TopSizer->Add(MainSizer, 1, wxALL | wxEXPAND, 5);
+	wxFlexGridSizer *mainSizer = new wxFlexGridSizer(3, 5, 5);
+	topSizer->Add(mainSizer, 1, wxALL | wxEXPAND, 5);
 
 	// Spacing between each wheel
 	int spacing(10);
 
 	// Create the text controls
 	// Right front
-	wxStaticText *RightFrontLabel = new wxStaticText(this, wxID_ANY, _T("Right Front"));
-	MainSizer->Add(RightFrontLabel, wxALIGN_CENTER_VERTICAL);
-	MainSizer->AddSpacer(-1);
-	MainSizer->AddSpacer(-1);
+	wxStaticText *rightFrontLabel = new wxStaticText(this, wxID_ANY, _T("Right Front"));
+	mainSizer->Add(rightFrontLabel, wxALIGN_CENTER_VERTICAL);
+	mainSizer->AddSpacer(-1);
+	mainSizer->AddSpacer(-1);
 
 	// Diameter
-	wxStaticText *RightFrontDiameterLabel = new wxStaticText(this, wxID_ANY, _T("Diameter"));
-	RightFrontDiameterUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
-	RightFrontTireDiameter = new wxTextCtrl(this, TextBoxRightFrontTireDiameter);
+	wxStaticText *rightFrontDiameterLabel = new wxStaticText(this, wxID_ANY, _T("Diameter"));
+	rightFrontDiameterUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
+	rightFrontTireDiameter = new wxTextCtrl(this, TextBoxRightFrontTireDiameter);
 
-	MainSizer->Add(RightFrontDiameterLabel, 0, wxALIGN_CENTER_VERTICAL);
-	MainSizer->Add(RightFrontTireDiameter, 0, wxEXPAND);
-	MainSizer->Add(RightFrontDiameterUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
+	mainSizer->Add(rightFrontDiameterLabel, 0, wxALIGN_CENTER_VERTICAL);
+	mainSizer->Add(rightFrontTireDiameter, 0, wxEXPAND);
+	mainSizer->Add(rightFrontDiameterUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 
 	// Width
-	wxStaticText *RightFrontWidthLabel = new wxStaticText(this, wxID_ANY, _T("Width"));
-	RightFrontWidthUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
-	RightFrontTireWidth = new wxTextCtrl(this, TextBoxRightFrontTireWidth);
+	wxStaticText *rightFrontWidthLabel = new wxStaticText(this, wxID_ANY, _T("Width"));
+	rightFrontWidthUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
+	rightFrontTireWidth = new wxTextCtrl(this, TextBoxRightFrontTireWidth);
 
-	MainSizer->Add(RightFrontWidthLabel, 0, wxALIGN_CENTER_VERTICAL);
-	MainSizer->Add(RightFrontTireWidth, 0, wxEXPAND);
-	MainSizer->Add(RightFrontWidthUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
+	mainSizer->Add(rightFrontWidthLabel, 0, wxALIGN_CENTER_VERTICAL);
+	mainSizer->Add(rightFrontTireWidth, 0, wxEXPAND);
+	mainSizer->Add(rightFrontWidthUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 
 	// Add space before the next corner
-	MainSizer->AddSpacer(spacing);
-	MainSizer->AddSpacer(spacing);
-	MainSizer->AddSpacer(spacing);
+	mainSizer->AddSpacer(spacing);
+	ainSizer->AddSpacer(spacing);
+	mainSizer->AddSpacer(spacing);
 
 	// Left front
-	wxStaticText *LeftFrontLabel = new wxStaticText(this, wxID_ANY, _T("Left Front"));
-	MainSizer->Add(LeftFrontLabel, wxALIGN_CENTER_VERTICAL);
-	MainSizer->AddSpacer(-1);
-	MainSizer->AddSpacer(-1);
+	wxStaticText *leftFrontLabel = new wxStaticText(this, wxID_ANY, _T("Left Front"));
+	mainSizer->Add(leftFrontLabel, wxALIGN_CENTER_VERTICAL);
+	mainSizer->AddSpacer(-1);
+	mainSizer->AddSpacer(-1);
 
 	// Diameter
-	wxStaticText *LeftFrontDiameterLabel = new wxStaticText(this, wxID_ANY, _T("Diameter"));
-	LeftFrontDiameterUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
-	LeftFrontTireDiameter = new wxTextCtrl(this, TextBoxLeftFrontTireDiameter);
+	wxStaticText *leftFrontDiameterLabel = new wxStaticText(this, wxID_ANY, _T("Diameter"));
+	leftFrontDiameterUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
+	leftFrontTireDiameter = new wxTextCtrl(this, TextBoxLeftFrontTireDiameter);
 
-	MainSizer->Add(LeftFrontDiameterLabel, 0, wxALIGN_CENTER_VERTICAL);
-	MainSizer->Add(LeftFrontTireDiameter, 0, wxEXPAND);
-	MainSizer->Add(LeftFrontDiameterUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
+	mainSizer->Add(leftFrontDiameterLabel, 0, wxALIGN_CENTER_VERTICAL);
+	mainSizer->Add(leftFrontTireDiameter, 0, wxEXPAND);
+	mainSizer->Add(leftFrontDiameterUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 
 	// Width
-	wxStaticText *LeftFrontWidthLabel = new wxStaticText(this, wxID_ANY, _T("Width"));
-	LeftFrontWidthUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
-	LeftFrontTireWidth = new wxTextCtrl(this, TextBoxLeftFrontTireWidth);
+	wxStaticText *leftFrontWidthLabel = new wxStaticText(this, wxID_ANY, _T("Width"));
+	leftFrontWidthUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
+	leftFrontTireWidth = new wxTextCtrl(this, TextBoxLeftFrontTireWidth);
 
-	MainSizer->Add(LeftFrontWidthLabel, 0, wxALIGN_CENTER_VERTICAL);
-	MainSizer->Add(LeftFrontTireWidth, 0, wxEXPAND);
-	MainSizer->Add(LeftFrontWidthUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
+	mainSizer->Add(leftFrontWidthLabel, 0, wxALIGN_CENTER_VERTICAL);
+	mainSizer->Add(leftFrontTireWidth, 0, wxEXPAND);
+	mainSizer->Add(leftFrontWidthUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 
 	// Add space before the next corner
-	MainSizer->AddSpacer(spacing);
-	MainSizer->AddSpacer(spacing);
-	MainSizer->AddSpacer(spacing);
+	mainSizer->AddSpacer(spacing);
+	mainSizer->AddSpacer(spacing);
+	mainSizer->AddSpacer(spacing);
 
 	// Right rear
-	wxStaticText *RightRearLabel = new wxStaticText(this, wxID_ANY, _T("Right Rear"));
-	MainSizer->Add(RightRearLabel, wxALIGN_CENTER_VERTICAL);
-	MainSizer->AddSpacer(-1);
-	MainSizer->AddSpacer(-1);
+	wxStaticText *rightRearLabel = new wxStaticText(this, wxID_ANY, _T("Right Rear"));
+	mainSizer->Add(rightRearLabel, wxALIGN_CENTER_VERTICAL);
+	mainSizer->AddSpacer(-1);
+	mainSizer->AddSpacer(-1);
 
 	// Diameter
-	wxStaticText *RightRearDiameterLabel = new wxStaticText(this, wxID_ANY, _T("Diameter"));
-	RightRearDiameterUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
-	RightRearTireDiameter = new wxTextCtrl(this, TextBoxRightRearTireDiameter);
+	wxStaticText *rightRearDiameterLabel = new wxStaticText(this, wxID_ANY, _T("Diameter"));
+	rightRearDiameterUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
+	rightRearTireDiameter = new wxTextCtrl(this, TextBoxRightRearTireDiameter);
 
-	MainSizer->Add(RightRearDiameterLabel, 0, wxALIGN_CENTER_VERTICAL);
-	MainSizer->Add(RightRearTireDiameter, 0, wxEXPAND);
-	MainSizer->Add(RightRearDiameterUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
+	mainSizer->Add(rightRearDiameterLabel, 0, wxALIGN_CENTER_VERTICAL);
+	mainSizer->Add(rightRearTireDiameter, 0, wxEXPAND);
+	mainSizer->Add(rightRearDiameterUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 
 	// Width
-	wxStaticText *RightRearWidthLabel = new wxStaticText(this, wxID_ANY, _T("Width"));
-	RightRearWidthUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
-	RightRearTireWidth = new wxTextCtrl(this, TextBoxRightRearTireWidth);
+	wxStaticText *rightRearWidthLabel = new wxStaticText(this, wxID_ANY, _T("Width"));
+	rightRearWidthUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
+	rightRearTireWidth = new wxTextCtrl(this, TextBoxRightRearTireWidth);
 
-	MainSizer->Add(RightRearWidthLabel, 0, wxALIGN_CENTER_VERTICAL);
-	MainSizer->Add(RightRearTireWidth, 0, wxEXPAND);
-	MainSizer->Add(RightRearWidthUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
+	mainSizer->Add(rightRearWidthLabel, 0, wxALIGN_CENTER_VERTICAL);
+	mainSizer->Add(rightRearTireWidth, 0, wxEXPAND);
+	mainSizer->Add(rightRearWidthUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 
 	// Add space before the next corner
-	MainSizer->AddSpacer(spacing);
-	MainSizer->AddSpacer(spacing);
-	MainSizer->AddSpacer(spacing);
+	mainSizer->AddSpacer(spacing);
+	mainSizer->AddSpacer(spacing);
+	mainSizer->AddSpacer(spacing);
 
 	// Left rear
-	wxStaticText *LeftRearLabel = new wxStaticText(this, wxID_ANY, _T("Left Rear"));
-	MainSizer->Add(LeftRearLabel, wxALIGN_CENTER_VERTICAL);
-	MainSizer->AddSpacer(-1);
-	MainSizer->AddSpacer(-1);
+	wxStaticText *leftRearLabel = new wxStaticText(this, wxID_ANY, _T("Left Rear"));
+	mainSizer->Add(leftRearLabel, wxALIGN_CENTER_VERTICAL);
+	mainSizer->AddSpacer(-1);
+	mainSizer->AddSpacer(-1);
 
 	// Diameter
-	wxStaticText *LeftRearDiameterLabel = new wxStaticText(this, wxID_ANY, _T("Diameter"));
-	LeftRearDiameterUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
-	LeftRearTireDiameter = new wxTextCtrl(this, TextBoxLeftRearTireDiameter);
+	wxStaticText *leftRearDiameterLabel = new wxStaticText(this, wxID_ANY, _T("Diameter"));
+	leftRearDiameterUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
+	leftRearTireDiameter = new wxTextCtrl(this, TextBoxLeftRearTireDiameter);
 
-	MainSizer->Add(LeftRearDiameterLabel, 0, wxALIGN_CENTER_VERTICAL);
-	MainSizer->Add(LeftRearTireDiameter, 0, wxEXPAND);
-	MainSizer->Add(LeftRearDiameterUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
+	mainSizer->Add(leftRearDiameterLabel, 0, wxALIGN_CENTER_VERTICAL);
+	mainSizer->Add(leftRearTireDiameter, 0, wxEXPAND);
+	mainSizer->Add(leftRearDiameterUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 
 	// Width
-	wxStaticText *LeftRearWidthLabel = new wxStaticText(this, wxID_ANY, _T("Width"));
-	LeftRearWidthUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
-	LeftRearTireWidth = new wxTextCtrl(this, TextBoxLeftRearTireWidth);
+	wxStaticText *leftRearWidthLabel = new wxStaticText(this, wxID_ANY, _T("Width"));
+	leftRearWidthUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
+	leftRearTireWidth = new wxTextCtrl(this, TextBoxLeftRearTireWidth);
 
-	MainSizer->Add(LeftRearWidthLabel, 0, wxALIGN_CENTER_VERTICAL);
-	MainSizer->Add(LeftRearTireWidth, 0, wxEXPAND);
-	MainSizer->Add(LeftRearWidthUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
+	mainSizer->Add(leftRearWidthLabel, 0, wxALIGN_CENTER_VERTICAL);
+	mainSizer->Add(leftRearTireWidth, 0, wxEXPAND);
+	mainSizer->Add(leftRearWidthUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 
 	// Adjust text box minimum size
 	// Use number larger than actual anticipated value for these boxes to determine appropriate size
 	int minWidth;
-	GetTextExtent(Converter.FormatNumber(Converter.ConvertDistance(-400.0)), &minWidth, NULL);
-	RightFrontTireDiameter->SetMinSize(wxSize(minWidth, -1));
-	RightFrontTireWidth->SetMinSize(wxSize(minWidth, -1));
-	LeftFrontTireDiameter->SetMinSize(wxSize(minWidth, -1));
-	LeftFrontTireWidth->SetMinSize(wxSize(minWidth, -1));
-	RightRearTireDiameter->SetMinSize(wxSize(minWidth, -1));
-	RightRearTireWidth->SetMinSize(wxSize(minWidth, -1));
-	LeftRearTireDiameter->SetMinSize(wxSize(minWidth, -1));
-	LeftRearTireWidth->SetMinSize(wxSize(minWidth, -1));
+	GetTextExtent(converter.FormatNumber(converter.ConvertDistance(-400.0)), &minWidth, NULL);
+	rightFrontTireDiameter->SetMinSize(wxSize(minWidth, -1));
+	rightFrontTireWidth->SetMinSize(wxSize(minWidth, -1));
+	leftFrontTireDiameter->SetMinSize(wxSize(minWidth, -1));
+	leftFrontTireWidth->SetMinSize(wxSize(minWidth, -1));
+	rightRearTireDiameter->SetMinSize(wxSize(minWidth, -1));
+	rightRearTireWidth->SetMinSize(wxSize(minWidth, -1));
+	leftRearTireDiameter->SetMinSize(wxSize(minWidth, -1));
+	leftRearTireWidth->SetMinSize(wxSize(minWidth, -1));
 
 	// Assign the top level sizer to the dialog
-	SetSizer(TopSizer);
+	SetSizer(topSizer);
 }
 
 //==========================================================================
-// Class:			EDIT_TIRES_PANEL
+// Class:			EditTiresPanel
 // Function:		RightFrontTireDiameterChangeEvent
 //
 // Description:		Event that fires when the right front tire diameter changes.
@@ -346,46 +346,46 @@ void EDIT_TIRES_PANEL::CreateControls()
 //		None
 //
 //==========================================================================
-void EDIT_TIRES_PANEL::RightFrontTireDiameterChangeEvent(wxCommandEvent &event)
+void EditTiresPanel::RightFrontTireDiameterChangeEvent(wxCommandEvent &event)
 {
 	// Get the new value
-	wxString ValueString = RightFrontTireDiameter->GetValue();
-	double Value;
+	wxString valueString = rightFrontTireDiameter->GetValue();
+	double value;
 
 	// Make sure the value is numeric
-	if (!ValueString.ToDouble(&Value))
+	if (!valueString.ToDouble(&value))
 		return;
 
 	// Add the operation to the undo/redo stack
-	Parent.GetMainFrame().GetUndoRedoStack().AddOperation(
-		Parent.GetMainFrame().GetActiveIndex(),
-		UNDO_REDO_STACK::OPERATION::DATA_TYPE_DOUBLE,
-		&(CurrentTireSet->rightFront->diameter));
+	parent.GetMainFrame().GetUndoRedoStack().AddOperation(
+		parent.GetMainFrame().GetActiveIndex(),
+		UndoRedoStack::Operation::DataTypeDouble,
+		&(currentTireSet->rightFront->diameter));
 
 	// Get a lock on the car
-	wxMutex *Mutex = Parent.GetCurrentMutex();
-	Mutex->Lock();
+	wxMutex *mutex = parent.GetCurrentMutex();
+	mutex->Lock();
 
 	// Update the tire object
-	CurrentTireSet->rightFront->diameter = Converter.ReadDistance(Value);
+	currentTireSet->rightFront->diameter = converter.ReadDistance(value);
 
 	// Unlock the car
-	Mutex->Unlock();
+	mutex->Unlock();
 
 	// Call the UpdateSymmetry method in case this is a symmetric suspension
-	//Parent.UpdateSymmetry();// FIXME:  What if this is symmetric?
+	//parent.UpdateSymmetry();// FIXME:  What if this is symmetric?
 
 	// Tell the car object that it was modified
-	Parent.GetCurrentObject()->SetModified();
+	parent.GetCurrentObject()->SetModified();
 
 	// Update the display and the kinematic outputs
-	Parent.GetMainFrame().UpdateAnalysis();
+	parent.GetMainFrame().UpdateAnalysis();
 
 	event.Skip();
 }
 
 //==========================================================================
-// Class:			EDIT_TIRES_PANEL
+// Class:			EditTiresPanel
 // Function:		RightFrontTireWidthChangeEvent
 //
 // Description:		Event that fires when the right front tire width changes.
@@ -400,46 +400,46 @@ void EDIT_TIRES_PANEL::RightFrontTireDiameterChangeEvent(wxCommandEvent &event)
 //		None
 //
 //==========================================================================
-void EDIT_TIRES_PANEL::RightFrontTireWidthChangeEvent(wxCommandEvent &event)
+void EditTiresPanel::RightFrontTireWidthChangeEvent(wxCommandEvent &event)
 {
 	// Get the new value
-	wxString ValueString = RightFrontTireWidth->GetValue();
-	double Value;
+	wxString valueString = rightFrontTireWidth->GetValue();
+	double value;
 
 	// Make sure the value is numeric
-	if (!ValueString.ToDouble(&Value))
+	if (!valueString.ToDouble(&value))
 		return;
 
 	// Add the operation to the undo/redo stack
-	Parent.GetMainFrame().GetUndoRedoStack().AddOperation(
-		Parent.GetMainFrame().GetActiveIndex(),
-		UNDO_REDO_STACK::OPERATION::DATA_TYPE_DOUBLE,
-		&(CurrentTireSet->rightFront->width));
+	parent.GetMainFrame().GetUndoRedoStack().AddOperation(
+		parent.GetMainFrame().GetActiveIndex(),
+		UndoRedoStack::Operation::DataTypeDouble,
+		&(currentTireSet->rightFront->width));
 
 	// Get a lock on the car
-	wxMutex *Mutex = Parent.GetCurrentMutex();
-	Mutex->Lock();
+	wxMutex *mutex = parent.GetCurrentMutex();
+	mutex->Lock();
 
 	// Update the tire object
-	CurrentTireSet->rightFront->width = Converter.ReadDistance(Value);
+	currentTireSet->rightFront->width = converter.ReadDistance(value);
 
 	// Unlock the car
-	Mutex->Unlock();
+	mutex->Unlock();
 
 	// Call the UpdateSymmetry method in case this is a symmetric suspension
-	//Parent.UpdateSymmetry();// FIXME:  What if this is symmetric?
+	//parent.UpdateSymmetry();// FIXME:  What if this is symmetric?
 
 	// Tell the car object that it was modified
-	Parent.GetCurrentObject()->SetModified();
+	parent.GetCurrentObject()->SetModified();
 
 	// Update the display and the kinematic outputs
-	Parent.GetMainFrame().UpdateAnalysis();
+	parent.GetMainFrame().UpdateAnalysis();
 
 	event.Skip();
 }
 
 //==========================================================================
-// Class:			EDIT_TIRES_PANEL
+// Class:			EditTiresPanel
 // Function:		LeftFrontTireDiameterChangeEvent
 //
 // Description:		Event that fires when the left front tire diameter changes.
@@ -454,46 +454,46 @@ void EDIT_TIRES_PANEL::RightFrontTireWidthChangeEvent(wxCommandEvent &event)
 //		None
 //
 //==========================================================================
-void EDIT_TIRES_PANEL::LeftFrontTireDiameterChangeEvent(wxCommandEvent &event)
+void EditTiresPanel::LeftFrontTireDiameterChangeEvent(wxCommandEvent &event)
 {
 	// Get the new value
-	wxString ValueString = LeftFrontTireDiameter->GetValue();
-	double Value;
+	wxString valueString = leftFrontTireDiameter->GetValue();
+	double value;
 
 	// Make sure the value is numeric
-	if (!ValueString.ToDouble(&Value))
+	if (!valueString.ToDouble(&value))
 		return;
 
 	// Add the operation to the undo/redo stack
-	Parent.GetMainFrame().GetUndoRedoStack().AddOperation(
-		Parent.GetMainFrame().GetActiveIndex(),
-		UNDO_REDO_STACK::OPERATION::DATA_TYPE_DOUBLE,
-		&(CurrentTireSet->leftFront->diameter));
+	parent.GetMainFrame().GetUndoRedoStack().AddOperation(
+		parent.GetMainFrame().GetActiveIndex(),
+		UndoRedoStack::Operation::DataTypeDouble,
+		&(currentTireSet->leftFront->diameter));
 
 	// Get a lock on the car
-	wxMutex *Mutex = Parent.GetCurrentMutex();
-	Mutex->Lock();
+	wxMutex *mutex = parent.GetCurrentMutex();
+	mutex->Lock();
 
 	// Update the tire object
-	CurrentTireSet->leftFront->diameter = Converter.ReadDistance(Value);
+	currentTireSet->leftFront->diameter = converter.ReadDistance(value);
 
 	// Unlock the car
-	Mutex->Unlock();
+	mutex->Unlock();
 
 	// Call the UpdateSymmetry method in case this is a symmetric suspension
-	//Parent.UpdateSymmetry();// FIXME:  What if this is symmetric?
+	//parent.UpdateSymmetry();// FIXME:  What if this is symmetric?
 
 	// Tell the car object that it was modified
-	Parent.GetCurrentObject()->SetModified();
+	parent.GetCurrentObject()->SetModified();
 
 	// Update the display and the kinematic outputs
-	Parent.GetMainFrame().UpdateAnalysis();
+	parent.GetMainFrame().UpdateAnalysis();
 
 	event.Skip();
 }
 
 //==========================================================================
-// Class:			EDIT_TIRES_PANEL
+// Class:			EditTiresPanel
 // Function:		LeftFrontTireWidthChangeEvent
 //
 // Description:		Event that fires when the left front tire width changes.
@@ -508,46 +508,46 @@ void EDIT_TIRES_PANEL::LeftFrontTireDiameterChangeEvent(wxCommandEvent &event)
 //		None
 //
 //==========================================================================
-void EDIT_TIRES_PANEL::LeftFrontTireWidthChangeEvent(wxCommandEvent &event)
+void EditTiresPanel::LeftFrontTireWidthChangeEvent(wxCommandEvent &event)
 {
 	// Get the new value
-	wxString ValueString = LeftFrontTireWidth->GetValue();
-	double Value;
+	wxString valueString = LeftFrontTireWidth->GetValue();
+	double value;
 
 	// Make sure the value is numeric
-	if (!ValueString.ToDouble(&Value))
+	if (!valueString.ToDouble(&value))
 		return;
 
 	// Add the operation to the undo/redo stack
-	Parent.GetMainFrame().GetUndoRedoStack().AddOperation(
-		Parent.GetMainFrame().GetActiveIndex(),
-		UNDO_REDO_STACK::OPERATION::DATA_TYPE_DOUBLE,
-		&(CurrentTireSet->leftFront->width));
+	parent.GetMainFrame().GetUndoRedoStack().AddOperation(
+		parent.GetMainFrame().GetActiveIndex(),
+		UndoRedoStack::Operation::DataTypeDouble,
+		&(currentTireSet->leftFront->width));
 
 	// Get a lock on the car
-	wxMutex *Mutex = Parent.GetCurrentMutex();
-	Mutex->Lock();
+	wxMutex *mutex = parent.GetCurrentMutex();
+	mutex->Lock();
 
 	// Update the tire object
-	CurrentTireSet->leftFront->width = Converter.ReadDistance(Value);
+	currentTireSet->leftFront->width = converter.ReadDistance(value);
 
 	// Unlock the car
-	Mutex->Unlock();
+	mutex->Unlock();
 
 	// Call the UpdateSymmetry method in case this is a symmetric suspension
-	//Parent.UpdateSymmetry();// FIXME:  What if this is symmetric?
+	//parent.UpdateSymmetry();// FIXME:  What if this is symmetric?
 
 	// Tell the car object that it was modified
-	Parent.GetCurrentObject()->SetModified();
+	parent.GetCurrentObject()->SetModified();
 
 	// Update the display and the kinematic outputs
-	Parent.GetMainFrame().UpdateAnalysis();
+	parent.GetMainFrame().UpdateAnalysis();
 
 	event.Skip();
 }
 
 //==========================================================================
-// Class:			EDIT_TIRES_PANEL
+// Class:			EditTiresPanel
 // Function:		RightRearTireDiameterChangeEvent
 //
 // Description:		Event that fires when the right rear tire diameter changes.
@@ -562,46 +562,46 @@ void EDIT_TIRES_PANEL::LeftFrontTireWidthChangeEvent(wxCommandEvent &event)
 //		None
 //
 //==========================================================================
-void EDIT_TIRES_PANEL::RightRearTireDiameterChangeEvent(wxCommandEvent &event)
+void EditTiresPanel::RightRearTireDiameterChangeEvent(wxCommandEvent &event)
 {
 	// Get the new value
-	wxString ValueString = RightRearTireDiameter->GetValue();
-	double Value;
+	wxString valueString = rightRearTireDiameter->GetValue();
+	double value;
 
 	// Make sure the value is numeric
 	if (!ValueString.ToDouble(&Value))
 		return;
 
 	// Add the operation to the undo/redo stack
-	Parent.GetMainFrame().GetUndoRedoStack().AddOperation(
-		Parent.GetMainFrame().GetActiveIndex(),
-		UNDO_REDO_STACK::OPERATION::DATA_TYPE_DOUBLE,
-		&(CurrentTireSet->rightRear->diameter));
+	parent.GetMainFrame().GetUndoRedoStack().AddOperation(
+		parent.GetMainFrame().GetActiveIndex(),
+		UndoRedoStack::Operation::DataTypeDouble,
+		&(currentTireSet->rightRear->diameter));
 
 	// Get a lock on the car
-	wxMutex *Mutex = Parent.GetCurrentMutex();
-	Mutex->Lock();
+	wxMutex *mutex = parent.GetCurrentMutex();
+	mutex->Lock();
 
 	// Update the tire object
-	CurrentTireSet->rightRear->diameter = Converter.ReadDistance(Value);
+	currentTireSet->rightRear->diameter = converter.ReadDistance(value);
 
 	// Unlock the car
-	Mutex->Unlock();
+	mutex->Unlock();
 
 	// Call the UpdateSymmetry method in case this is a symmetric suspension
-	//Parent.UpdateSymmetry();// FIXME:  What if this is symmetric?
+	//parent.UpdateSymmetry();// FIXME:  What if this is symmetric?
 
 	// Tell the car object that it was modified
-	Parent.GetCurrentObject()->SetModified();
+	parent.GetCurrentObject()->SetModified();
 
 	// Update the display and the kinematic outputs
-	Parent.GetMainFrame().UpdateAnalysis();
+	parent.GetMainFrame().UpdateAnalysis();
 
 	event.Skip();
 }
 
 //==========================================================================
-// Class:			EDIT_TIRES_PANEL
+// Class:			EditTiresPanel
 // Function:		RightRearTireWidthChangeEvent
 //
 // Description:		Event that fires when the right rear tire width changes.
@@ -616,46 +616,46 @@ void EDIT_TIRES_PANEL::RightRearTireDiameterChangeEvent(wxCommandEvent &event)
 //		None
 //
 //==========================================================================
-void EDIT_TIRES_PANEL::RightRearTireWidthChangeEvent(wxCommandEvent &event)
+void EditTiresPanel::RightRearTireWidthChangeEvent(wxCommandEvent &event)
 {
 	// Get the new value
-	wxString ValueString = RightRearTireWidth->GetValue();
-	double Value;
+	wxString valueString = rightRearTireWidth->GetValue();
+	double value;
 
 	// Make sure the value is numeric
-	if (!ValueString.ToDouble(&Value))
+	if (!valueString.ToDouble(&value))
 		return;
 
 	// Add the operation to the undo/redo stack
-	Parent.GetMainFrame().GetUndoRedoStack().AddOperation(
-		Parent.GetMainFrame().GetActiveIndex(),
-		UNDO_REDO_STACK::OPERATION::DATA_TYPE_DOUBLE,
-		&(CurrentTireSet->rightRear->width));
+	parent.GetMainFrame().GetUndoRedoStack().AddOperation(
+		parent.GetMainFrame().GetActiveIndex(),
+		UndoRedoStack::Operation::DataTypeDouble,
+		&(currentTireSet->rightRear->width));
 
 	// Get a lock on the car
-	wxMutex *Mutex = Parent.GetCurrentMutex();
-	Mutex->Lock();
+	wxMutex *mutex = parent.GetCurrentMutex();
+	mutex->Lock();
 
 	// Update the tire object
-	CurrentTireSet->rightRear->width = Converter.ReadDistance(Value);
+	currentTireSet->rightRear->width = converter.ReadDistance(value);
 
 	// Unlock the car
-	Mutex->Unlock();
+	mutex->Unlock();
 
 	// Call the UpdateSymmetry method in case this is a symmetric suspension
-	//Parent.UpdateSymmetry();// FIXME:  What if this is symmetric?
+	//parent.UpdateSymmetry();// FIXME:  What if this is symmetric?
 
 	// Tell the car object that it was modified
-	Parent.GetCurrentObject()->SetModified();
+	parent.GetCurrentObject()->SetModified();
 
 	// Update the display and the kinematic outputs
-	Parent.GetMainFrame().UpdateAnalysis();
+	parent.GetMainFrame().UpdateAnalysis();
 
 	event.Skip();
 }
 
 //==========================================================================
-// Class:			EDIT_TIRES_PANEL
+// Class:			EditTiresPanel
 // Function:		LeftRearTireDiameterChangeEvent
 //
 // Description:		Event that fires when the left rear tire diameter changes.
@@ -670,46 +670,46 @@ void EDIT_TIRES_PANEL::RightRearTireWidthChangeEvent(wxCommandEvent &event)
 //		None
 //
 //==========================================================================
-void EDIT_TIRES_PANEL::LeftRearTireDiameterChangeEvent(wxCommandEvent &event)
+void EditTiresPanel::LeftRearTireDiameterChangeEvent(wxCommandEvent &event)
 {
 	// Get the new value
-	wxString ValueString = LeftRearTireDiameter->GetValue();
-	double Value;
+	wxString valueString = leftRearTireDiameter->GetValue();
+	double value;
 
 	// Make sure the value is numeric
-	if (!ValueString.ToDouble(&Value))
+	if (!valueString.ToDouble(&value))
 		return;
 
 	// Add the operation to the undo/redo stack
-	Parent.GetMainFrame().GetUndoRedoStack().AddOperation(
-		Parent.GetMainFrame().GetActiveIndex(),
-		UNDO_REDO_STACK::OPERATION::DATA_TYPE_DOUBLE,
-		&(CurrentTireSet->leftRear->diameter));
+	parent.GetMainFrame().GetUndoRedoStack().AddOperation(
+		parent.GetMainFrame().GetActiveIndex(),
+		UndoRedoStack::Operation::DataTypeDouble,
+		&(currentTireSet->leftRear->diameter));
 
 	// Get a lock on the car
-	wxMutex *Mutex = Parent.GetCurrentMutex();
-	Mutex->Lock();
+	wxMutex *mutex = parent.GetCurrentMutex();
+	mutex->Lock();
 
 	// Update the tire object
-	CurrentTireSet->leftRear->diameter = Converter.ReadDistance(Value);
+	currentTireSet->leftRear->diameter = converter.ReadDistance(value);
 
 	// Unlock the car
-	Mutex->Unlock();
+	mutex->Unlock();
 
 	// Call the UpdateSymmetry method in case this is a symmetric suspension
-	//Parent.UpdateSymmetry();// FIXME:  What if this is symmetric?
+	//parent.UpdateSymmetry();// FIXME:  What if this is symmetric?
 
 	// Tell the car object that it was modified
-	Parent.GetCurrentObject()->SetModified();
+	parent.GetCurrentObject()->SetModified();
 
 	// Update the display and the kinematic outputs
-	Parent.GetMainFrame().UpdateAnalysis();
+	parent.GetMainFrame().UpdateAnalysis();
 
 	event.Skip();
 }
 
 //==========================================================================
-// Class:			EDIT_TIRES_PANEL
+// Class:			EditTiresPanel
 // Function:		LeftRearTireWidthChangeEvent
 //
 // Description:		Event that fires when the left rear tire width changes.
@@ -724,40 +724,40 @@ void EDIT_TIRES_PANEL::LeftRearTireDiameterChangeEvent(wxCommandEvent &event)
 //		None
 //
 //==========================================================================
-void EDIT_TIRES_PANEL::LeftRearTireWidthChangeEvent(wxCommandEvent &event)
+void EditTiresPanel::LeftRearTireWidthChangeEvent(wxCommandEvent &event)
 {
 	// Get the new value
-	wxString ValueString = LeftRearTireWidth->GetValue();
-	double Value;
+	wxString valueString = leftRearTireWidth->GetValue();
+	double value;
 
 	// Make sure the value is numeric
-	if (!ValueString.ToDouble(&Value))
+	if (!valueString.ToDouble(&value))
 		return;
 
 	// Add the operation to the undo/redo stack
-	Parent.GetMainFrame().GetUndoRedoStack().AddOperation(
-		Parent.GetMainFrame().GetActiveIndex(),
-		UNDO_REDO_STACK::OPERATION::DATA_TYPE_DOUBLE,
-		&(CurrentTireSet->leftRear->width));
+	parent.GetMainFrame().GetUndoRedoStack().AddOperation(
+		parent.GetMainFrame().GetActiveIndex(),
+		UndoRedoStack::Operation::DataTypeDouble,
+		&(currentTireSet->leftRear->width));
 
 	// Get a lock on the car
-	wxMutex *Mutex = Parent.GetCurrentMutex();
-	Mutex->Lock();
+	wxMutex *mutex = parent.GetCurrentMutex();
+	mutex->Lock();
 
 	// Update the tire object
-	CurrentTireSet->leftRear->width = Converter.ReadDistance(Value);
+	currentTireSet->leftRear->width = converter.ReadDistance(value);
 
 	// Unlock the car
-	Mutex->Unlock();
+	mutex->Unlock();
 
 	// Call the UpdateSymmetry method in case this is a symmetric suspension
-	//Parent.UpdateSymmetry();// FIXME:  What if this is symmetric?
+	//parent.UpdateSymmetry();// FIXME:  What if this is symmetric?
 
 	// Tell the car object that it was modified
-	Parent.GetCurrentObject()->SetModified();
+	parent.GetCurrentObject()->SetModified();
 
 	// Update the display and the kinematic outputs
-	Parent.GetMainFrame().UpdateAnalysis();
+	parent.GetMainFrame().UpdateAnalysis();
 
 	event.Skip();
 }
