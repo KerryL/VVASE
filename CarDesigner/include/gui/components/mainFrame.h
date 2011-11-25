@@ -94,7 +94,7 @@ public:
 	// Accessor to reference to other gui components
 	inline MainTree *GetSystemsTree(void) const { return systemsTree; };
 	inline MainNotebook *GetNotebook(void) const { return notebook; };
-	inline EDIT_PANEL *GetEditPanel(void) const { return editPanel; };
+	inline EditPanel *GetEditPanel(void) const { return editPanel; };
 
 	// Adds/removes files to/from the recent history list
 	void AddFileToHistory(wxString pathAndFileName);

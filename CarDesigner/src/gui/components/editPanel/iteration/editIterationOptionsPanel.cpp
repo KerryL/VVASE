@@ -46,7 +46,7 @@
 EditIterationOptionsPanel::EditIterationOptionsPanel(EditIterationNotebook &_parent,
 													 wxWindowID id, const wxPoint& pos,
 													 const wxSize& size, const Debugger &_debugger) :
-													 wxScrolledWindow(&_Parent, id, pos, size), debugger(_debugger),
+													 wxScrolledWindow(&_parent, id, pos, size), debugger(_debugger),
 													 parent(_parent)
 {
 	// Initialize the current object variable

@@ -244,9 +244,9 @@ void EditMassPanel::CreateControls()
 
 	// Create the center of gravity inputs
 	wxStaticText *cogLabel = new wxStaticText(this, wxID_ANY, _T("CG"));
-	centerOfGravityX = new wxTextCtrl(this, TextBoxcenterOfGravityX);
-	centerOfGravityY = new wxTextCtrl(this, TextBoxcenterOfGravityY);
-	centerOfGravityZ = new wxTextCtrl(this, TextBoxcenterOfGravityZ);
+	centerOfGravityX = new wxTextCtrl(this, TextBoxCenterOfGravityX);
+	centerOfGravityY = new wxTextCtrl(this, TextBoxCenterOfGravityY);
+	centerOfGravityZ = new wxTextCtrl(this, TextBoxCenterOfGravityZ);
 	cogUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
 
 	inertiaInputSizer->Add(cogLabel, 0, wxALIGN_CENTER_VERTICAL);
@@ -367,21 +367,21 @@ void EditMassPanel::TextBoxEditEvent(wxCommandEvent &event)
 		units = Convert::UnitTypeMass;
 		break;
 
-	case TextBoxcenterOfGravityX:
+	case TextBoxCenterOfGravityX:
 		// Get the new data, the location to write it, and the units
 		textBox = centerOfGravityX;
 		dataLocation = &currentMassProperties->centerOfGravity.x;
 		units = Convert::UnitTypeDistance;
 		break;
 
-	case TextBoxcenterOfGravityY:
+	case TextBoxCenterOfGravityY:
 		// Get the new data, the location to write it, and the units
 		textBox = centerOfGravityY;
 		dataLocation = &currentMassProperties->centerOfGravity.y;
 		units = Convert::UnitTypeDistance;
 		break;
 
-	case TextBoxcenterOfGravityZ:
+	case TextBoxCenterOfGravityZ:
 		// Get the new data, the location to write it, and the units
 		textBox = centerOfGravityZ;
 		dataLocation = &currentMassProperties->centerOfGravity.z;
@@ -411,7 +411,7 @@ void EditMassPanel::TextBoxEditEvent(wxCommandEvent &event)
 	mutex->Lock();
 
 	// Update the mass properties object
-	*dataLocation = converter.Read(Value, Units);
+	*dataLocation = converter.Read(value, units);
 
 	// Unlock the car
 	mutex->Unlock();

@@ -228,7 +228,7 @@ void EditTiresPanel::CreateControls()
 
 	// Add space before the next corner
 	mainSizer->AddSpacer(spacing);
-	ainSizer->AddSpacer(spacing);
+	mainSizer->AddSpacer(spacing);
 	mainSizer->AddSpacer(spacing);
 
 	// Left front
@@ -511,7 +511,7 @@ void EditTiresPanel::LeftFrontTireDiameterChangeEvent(wxCommandEvent &event)
 void EditTiresPanel::LeftFrontTireWidthChangeEvent(wxCommandEvent &event)
 {
 	// Get the new value
-	wxString valueString = LeftFrontTireWidth->GetValue();
+	wxString valueString = leftFrontTireWidth->GetValue();
 	double value;
 
 	// Make sure the value is numeric
@@ -569,7 +569,7 @@ void EditTiresPanel::RightRearTireDiameterChangeEvent(wxCommandEvent &event)
 	double value;
 
 	// Make sure the value is numeric
-	if (!ValueString.ToDouble(&Value))
+	if (!valueString.ToDouble(&value))
 		return;
 
 	// Add the operation to the undo/redo stack

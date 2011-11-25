@@ -159,7 +159,7 @@ void EditSuspensionPanel::UpdateInformation(Suspension *_currentSuspension)
 	// Update the check boxes
 	isSymmetric->SetValue(currentSuspension->isSymmetric);
 	frontHasThirdSpring->SetValue(currentSuspension->frontHasThirdSpring);
-	rearHasThirdSpring->SetValue(CcurrentSuspension->rearHasThirdSpring);
+	rearHasThirdSpring->SetValue(currentSuspension->rearHasThirdSpring);
 
 	// Update the combo boxes
 	frontBarStyle->SetSelection(currentSuspension->frontBarStyle);

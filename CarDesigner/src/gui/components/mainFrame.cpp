@@ -111,7 +111,7 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxEmptyString, wxDefaultPositio
 		debugger);
 
 	// Create the EditPanel
-	editPanel = new EDIT_PANEL(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
+	editPanel = new EditPanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
 
 	// Create the OutputPanel
 	outputPanel = new OutputPanel(*this, wxID_ANY, wxDefaultPosition, wxSize(350, -1), debugger);
@@ -251,8 +251,8 @@ void MainFrame::DoLayout(void)
 	manager.AddPane(debugPane, wxAuiPaneInfo().Name(_T("Debug Pane")).Bottom().Caption(_T("Output")));
 	// For some reason, these get reversed under Linux
 #ifdef __WXGTK__
-	manager.AddPane(EditPanel, wxAuiPaneInfo().Name(_T("Edit Panel")).Left().Caption(_T("Edit Sub-Systems")));
-	manager.AddPane(SystemsTree, wxAuiPaneInfo().Name(_T("Systems Tree")).Left().Caption(_T("Systems Tree")));
+	manager.AddPane(editPanel, wxAuiPaneInfo().Name(_T("Edit Panel")).Left().Caption(_T("Edit Sub-Systems")));
+	manager.AddPane(systemsTree, wxAuiPaneInfo().Name(_T("Systems Tree")).Left().Caption(_T("Systems Tree")));
 #else
 	manager.AddPane(systemsTree, wxAuiPaneInfo().Name(_T("Systems Tree")).Left().Caption(_T("Systems Tree")));
 	manager.AddPane(editPanel, wxAuiPaneInfo().Name(_T("Edit Panel")).Left().Caption(_T("Edit Sub-Systems")));

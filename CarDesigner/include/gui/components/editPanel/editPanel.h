@@ -91,7 +91,7 @@ private:
 
 	// The various edit panels we need to display
 	// GUI_CAR
-	EditAerodyanmicPanel	*editAerodynamics;
+	EditAerodynamicsPanel	*editAerodynamics;
 	EditBrakesPanel			*editBrakes;
 	EditDifferentialPanel	*editDifferential;
 	EditDrivetrainPanel		*editDrivetrain;

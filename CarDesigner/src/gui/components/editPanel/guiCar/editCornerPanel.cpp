@@ -56,7 +56,7 @@ EditCornerPanel::EditCornerPanel(EditSuspensionNotebook & _parent, wxWindowID id
 									 const wxPoint& pos, const wxSize& size,
 									 const Debugger &_debugger) : wxScrolledWindow(&_parent, id, pos, size),
 									 debugger(_debugger),
-									 converter(_parent.GetParent().GetMainFrame().Getconverter()),
+									 converter(_parent.GetParent().GetMainFrame().GetConverter()),
 									 parent(_parent)
 {
 	// Create the controls
@@ -209,19 +209,19 @@ void EditCornerPanel::UpdateInformation(Corner *_currentCorner,
 	// Update the values of all of the points
 	Vector point;
 	int i;
-	for (i = 0; i < Corner::NumberOfhardpoints; i++)
+	for (i = 0; i < Corner::NumberOfHardpoints; i++)
 	{
 		// Get the location of this hardpoint (don't forget to convert it!)
 		point = converter.ConvertDistance(currentCorner->hardpoints[i]);
 
 		// Set the X value
-		hardpoints->SetCellValue(i + 1, 1, converter.FormatNumber(Point.x));
+		hardpoints->SetCellValue(i + 1, 1, converter.FormatNumber(point.x));
 
 		// Set the Y value
-		hardpoints->SetCellValue(i + 1, 2, converter.FormatNumber(Point.y));
+		hardpoints->SetCellValue(i + 1, 2, converter.FormatNumber(point.y));
 
 		// Set the Z value
-		hardpoints->SetCellValue(i + 1, 3, converter.FormatNumber(Point.z));
+		hardpoints->SetCellValue(i + 1, 3, converter.FormatNumber(point.z));
 	}
 
 	// End batch edit of the grid
@@ -263,7 +263,7 @@ void EditCornerPanel::CreateControls()
 
 	// Create the grid for the hard point entry
 	hardpoints = new SuperGrid(this, wxID_ANY);
-	hardpoints->CreateGrid(Corner::NumberOfhardpoints + 1, 4, wxGrid::wxGridSelectRows);
+	hardpoints->CreateGrid(Corner::NumberOfHardpoints + 1, 4, wxGrid::wxGridSelectRows);
 
 	// Begin a batch edit of the grid
 	hardpoints->BeginBatch();
@@ -299,7 +299,7 @@ void EditCornerPanel::CreateControls()
 		hardpoints->SetCellAlignment(0, i, wxALIGN_CENTER, wxALIGN_TOP);
 
 	// Do the processing that needs to be done for each row
-	for (i = 0; i < Corner::NumberOfhardpoints; i++)
+	for (i = 0; i < Corner::NumberOfHardpoints; i++)
 	{
 		// Make the first column read-only
 		hardpoints->SetReadOnly(i + 1, 0, true);
@@ -310,7 +310,7 @@ void EditCornerPanel::CreateControls()
 		hardpoints->SetCellAlignment(i + 1, 3, wxALIGN_RIGHT, wxALIGN_TOP);
 
 		// Add the names of all of the points to the grid
-		hardpoints->SetCellValue(i + 1, 0, Corner::GetHardpointName((Corner::hardpoints)i));
+		hardpoints->SetCellValue(i + 1, 0, Corner::GetHardpointName((Corner::Hardpoints)i));
 	}
 	
 	// Size the columns
@@ -343,7 +343,7 @@ void EditCornerPanel::CreateControls()
 	
 	wxFlexGridSizer *lowerInputSizer = new wxFlexGridSizer(3, 3, 3);
 	lowerInputSizer->SetFlexibleDirection(wxHORIZONTAL);
-	MainSizer->Add(lowerInputSizer, 0, wxALIGN_BOTTOM);
+	mainSizer->Add(lowerInputSizer, 0, wxALIGN_BOTTOM);
 
 	// Create the combo-boxes
 	// Actuation type
@@ -447,7 +447,7 @@ void EditCornerPanel::SelectCellEvent(wxGridEvent &event)
 
 		// Set the position of the helper orb
 		static_cast<CarRenderer*>(parent.GetParent().GetCurrentObject()->GetNotebookTab())->SetHelperOrbPosition(
-			(Corner::hardpoints)(event.GetRow() - 1), currentCorner->location, Suspension::NumberOfhardpoints);
+			(Corner::Hardpoints)(event.GetRow() - 1), currentCorner->location, Suspension::NumberOfHardpoints);
 
 		// Update the analyses
 		parent.GetParent().GetCurrentObject()->UpdateData();
@@ -519,7 +519,7 @@ void EditCornerPanel::GridCellChangedEvent(wxGridEvent &event)
 				UndoRedoStack::Operation::DataTypeDouble,
 				&(currentCorner->hardpoints[event.GetRow() - 1].x));
 
-			currentCorner->hardpoints[event.GetRow() - 1].x = converter.ReadDistance(Value);
+			currentCorner->hardpoints[event.GetRow() - 1].x = converter.ReadDistance(value);
 		}
 		else if (event.GetCol() == 2)// Y
 		{
@@ -529,7 +529,7 @@ void EditCornerPanel::GridCellChangedEvent(wxGridEvent &event)
 				UndoRedoStack::Operation::DataTypeDouble,
 				&(currentCorner->hardpoints[event.GetRow() - 1].y));
 
-			currentCorner->hardpoints[event.GetRow() - 1].y = converter.ReadDistance(Value);
+			currentCorner->hardpoints[event.GetRow() - 1].y = converter.ReadDistance(value);
 		}
 		else// Z
 		{
@@ -539,7 +539,7 @@ void EditCornerPanel::GridCellChangedEvent(wxGridEvent &event)
 				UndoRedoStack::Operation::DataTypeDouble,
 				&(currentCorner->hardpoints[event.GetRow() - 1].z));
 
-			currentCorner->hardpoints[event.GetRow() - 1].z = converter.ReadDistance(Value);
+			currentCorner->hardpoints[event.GetRow() - 1].z = converter.ReadDistance(value);
 		}
 
 		// Call the UpdateSymmetry method in case this is a symmetric suspension
@@ -553,7 +553,7 @@ void EditCornerPanel::GridCellChangedEvent(wxGridEvent &event)
 
 		// Set the position of the helper orb
 		static_cast<CarRenderer*>(parent.GetParent().GetCurrentObject()->GetNotebookTab())->SetHelperOrbPosition(
-			(Corner::hardpoints)(event.GetRow() - 1), currentCorner->location, Suspension::NumberOfhardpoints);
+			(Corner::Hardpoints)(event.GetRow() - 1), currentCorner->location, Suspension::NumberOfHardpoints);
 
 		// Update the display and the kinematic outputs
 		parent.GetParent().GetMainFrame().UpdateAnalysis();
@@ -687,8 +687,8 @@ void EditCornerPanel::StaticCamberChangeEvent(wxCommandEvent &event)
 	{
 		// Restore the previous value
 		value = currentCorner->staticCamber;
-		valueString.Printf("%0.3f", converter.ConvertAngle(Value));
-		staticCamber->SetValue(ValueString);
+		valueString.Printf("%0.3f", converter.ConvertAngle(value));
+		staticCamber->SetValue(valueString);
 
 		return;
 	}
@@ -704,7 +704,7 @@ void EditCornerPanel::StaticCamberChangeEvent(wxCommandEvent &event)
 	mutex->Lock();
 
 	// Update the corner object
-	currentCorner->staticCamber = converter.ReadAngle(Value);
+	currentCorner->staticCamber = converter.ReadAngle(value);
 
 	// Call the UpdateSymmetry method in case this is a symmetric suspension
 	parent.UpdateSymmetry();
@@ -749,7 +749,7 @@ void EditCornerPanel::StaticToeChangeEvent(wxCommandEvent &event)
 	{
 		// Restore the previous value
 		value = currentCorner->staticToe;
-		valueString.Printf("%0.3f", converter.ConvertAngle(Value));
+		valueString.Printf("%0.3f", converter.ConvertAngle(value));
 		staticToe->SetValue(valueString);
 
 		return;
@@ -766,7 +766,7 @@ void EditCornerPanel::StaticToeChangeEvent(wxCommandEvent &event)
 	mutex->Lock();
 
 	// Update the corner object
-	currentCorner->staticToe = converter.ReadAngle(Value);
+	currentCorner->staticToe = converter.ReadAngle(value);
 
 	// Call the UpdateSymmetry method in case this is a symmetric suspension
 	parent.UpdateSymmetry();

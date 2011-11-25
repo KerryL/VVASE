@@ -46,7 +46,7 @@
 EditIterationRangePanel::EditIterationRangePanel(EditIterationNotebook &_parent,
 												 wxWindowID id, const wxPoint& pos,
 												 const wxSize& size, const Debugger &_debugger) :
-												 wxScrolledWindow(&_Parent, id, pos, size), debugger(_debugger),
+												 wxScrolledWindow(&_parent, id, pos, size), debugger(_debugger),
 												 converter(_parent.GetParent().GetMainFrame().GetConverter()),
 												 parent(_parent)
 {
@@ -192,13 +192,13 @@ void EditIterationRangePanel::CreateControls()
 
 	// Second sizer gives more space around the controls
 	wxFlexGridSizer *mainSizer = new wxFlexGridSizer(4, 5, 5);
-	topSizer->Add(MainSizer, 0, wxEXPAND | wxALL, 5);
+	topSizer->Add(mainSizer, 0, wxEXPAND | wxALL, 5);
 
 	// Add the text to this sizer
 	mainSizer->AddSpacer(-1);
 	mainSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Start")), 0,
 		wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL);
-	mainSizer->Add(new wxStaticText(this, wxID_STATIC, _T("End"), 0,
+	mainSizer->Add(new wxStaticText(this, wxID_STATIC, _T("End")), 0,
 		wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL);
 	mainSizer->AddSpacer(-1);
 
@@ -231,7 +231,7 @@ void EditIterationRangePanel::CreateControls()
 	// Heave
 	startHeaveInput = new wxTextCtrl(this, RangeTextBox);
 	endHeaveInput = new wxTextCtrl(this, RangeTextBox);
-	wxStaticText *HeaveUnitsText = new wxStaticText(this, wxID_STATIC,
+	wxStaticText *heaveUnitsText = new wxStaticText(this, wxID_STATIC,
 		converter.GetUnitType(Convert::UnitTypeDistance));
 	mainSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Heave")),
 		0, wxALIGN_CENTER_VERTICAL);
