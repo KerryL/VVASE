@@ -65,6 +65,14 @@ private:
 	wxTextCtrl *endHeaveInput;
 	wxTextCtrl *endSteerInput;
 	wxTextCtrl *numberOfPointsInput;
+	
+	// The unit labels
+	wxStaticText *pitchUnitsLabel;
+	wxStaticText *rollUnitsLabel;
+	wxStaticText *heaveUnitsLabel;
+	wxStaticText *steerUnitsLabel;
+	
+	wxStaticText *steerInputLabel;
 
 	// Enumeration for event IDs
 	enum EditIterationRangePanelEventIds

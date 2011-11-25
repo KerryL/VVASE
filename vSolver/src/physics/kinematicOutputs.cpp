@@ -1009,7 +1009,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 	// anti-drive geometry.  Only if the longitudinal forces are present does anti-geometry
 	// exist.
 	// FIXME:  Do we need a % front traction for use with AWD?
-	// FIXME:  This will change with independant vs. solid axle suspensions (currently we assume indepenant)
+	// FIXME:  This will change with independent vs. solid axle suspensions (currently we assume indepenant)
 	if (currentCar->drivetrain->driveType == Drivetrain::DriveAllWheel ||
 		(currentCar->drivetrain->driveType == Drivetrain::DriveFrontWheel && isAtFront) ||
 		(currentCar->drivetrain->driveType == Drivetrain::DriveRearWheel && !isAtFront))

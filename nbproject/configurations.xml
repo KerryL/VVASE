@@ -6,38 +6,6 @@
       </df>
       <df name=".obj">
         <df name="src">
-          <df name="3dcar">
-          </df>
-          <df name="application">
-          </df>
-          <df name="environment">
-          </df>
-          <df name="gui">
-            <df name="components">
-              <df name="editPanel">
-                <df name="guiCar">
-                </df>
-                <df name="iteration">
-                </df>
-              </df>
-            </df>
-            <df name="dialogs">
-            </df>
-            <df name="renderer">
-            </df>
-          </df>
-          <df name="optimization">
-          </df>
-          <df name="physics">
-          </df>
-          <df name="primitives">
-          </df>
-          <df name="signals">
-            <df name="filters">
-            </df>
-          </df>
-          <df name="threads">
-          </df>
         </df>
       </df>
       <df name="bin">
@@ -190,7 +158,7 @@
             <in>drivetrain.h</in>
             <in>engine.h</in>
             <in>fuelCell.h</in>
-            <in>mass.h</in>
+            <in>massProperties.h</in>
             <in>spring.h</in>
             <in>suspension.h</in>
             <in>tire.h</in>
@@ -297,7 +265,7 @@
           <in>drivetrain.cpp</in>
           <in>engine.cpp</in>
           <in>fuelCell.cpp</in>
-          <in>mass.cpp</in>
+          <in>massProperties.cpp</in>
           <in>spring.cpp</in>
           <in>suspension.cpp</in>
           <in>tire.cpp</in>

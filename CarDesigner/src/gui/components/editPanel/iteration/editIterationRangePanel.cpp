@@ -159,11 +159,27 @@ void EditIterationRangePanel::UpdateInformation(Iteration *_currentIteration)
 	endHeaveInput->ChangeValue(converter.FormatNumber(converter.ConvertDistance(currentIteration->GetRange().endHeave)));
 	endSteerInput->ChangeValue(converter.FormatNumber(converter.ConvertDistance(currentIteration->GetRange().endRackTravel)));
 
-	// FIXME:  If unit change, they are not updated here!
+	// Update the unit labels
+	pitchUnitsLabel->SetLabel(converter.GetUnitType(Convert::UnitTypeAngle));
+	rollUnitsLabel->SetLabel(converter.GetUnitType(Convert::UnitTypeAngle));
+	heaveUnitsLabel->SetLabel(converter.GetUnitType(Convert::UnitTypeDistance));
+	if (currentIteration->GetMainFrame().GetUseRackTravel())
+	{
+		steerUnitsLabel->SetLabel(converter.GetUnitType(Convert::UnitTypeDistance));
+		steerInputLabel->SetLabel(_T("Rack Travel"));
+	}
+	else
+	{
+		steerUnitsLabel->SetLabel(converter.GetUnitType(Convert::UnitTypeAngle));
+		steerInputLabel->SetLabel(_T("Steering Wheel Angle"));
+	}
 
 	wxString temp;
 	temp.Printf("%i", currentIteration->GetNumberOfPoints());
 	numberOfPointsInput->ChangeValue(temp);
+	
+	// We do this in case columns widths changed (method of steering input)
+	Layout();
 }
 
 //==========================================================================
@@ -209,46 +225,47 @@ void EditIterationRangePanel::CreateControls()
 
 	startPitchInput = new wxTextCtrl(this, RangeTextBox);
 	endPitchInput = new wxTextCtrl(this, RangeTextBox);
-	wxStaticText *pitchUnitsText = new wxStaticText(this, wxID_STATIC,
-		converter.GetUnitType(Convert::UnitTypeAngle));
+	pitchUnitsLabel = new wxStaticText(this, wxID_STATIC,
+		wxEmptyString);
 	mainSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Pitch")),
 		0, wxALIGN_CENTER_VERTICAL);
 	mainSizer->Add(startPitchInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
 	mainSizer->Add(endPitchInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
-	mainSizer->Add(pitchUnitsText, 0, wxALIGN_CENTER_VERTICAL);
+	mainSizer->Add(pitchUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 
 	// Roll
 	startRollInput = new wxTextCtrl(this, RangeTextBox);
 	endRollInput = new wxTextCtrl(this, RangeTextBox);
-	wxStaticText *rollUnitsText = new wxStaticText(this, wxID_STATIC,
-		converter.GetUnitType(Convert::UnitTypeAngle));
+	rollUnitsLabel = new wxStaticText(this, wxID_STATIC,
+		wxEmptyString);
 	mainSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Roll")),
 		0, wxALIGN_CENTER_VERTICAL);
 	mainSizer->Add(startRollInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
 	mainSizer->Add(endRollInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
-	mainSizer->Add(rollUnitsText, 0, wxALIGN_CENTER_VERTICAL);
+	mainSizer->Add(rollUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 
 	// Heave
 	startHeaveInput = new wxTextCtrl(this, RangeTextBox);
 	endHeaveInput = new wxTextCtrl(this, RangeTextBox);
-	wxStaticText *heaveUnitsText = new wxStaticText(this, wxID_STATIC,
-		converter.GetUnitType(Convert::UnitTypeDistance));
+	heaveUnitsLabel = new wxStaticText(this, wxID_STATIC,
+		wxEmptyString);
 	mainSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Heave")),
 		0, wxALIGN_CENTER_VERTICAL);
 	mainSizer->Add(startHeaveInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
 	mainSizer->Add(endHeaveInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
-	mainSizer->Add(heaveUnitsText, 0, wxALIGN_CENTER_VERTICAL);
+	mainSizer->Add(heaveUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 
 	// Steer
+	// Assign to "Steering Wheel Angle" first, since it is longer
+	steerInputLabel = new wxStaticText(this, wxID_STATIC, _T("Steering Wheel Angle"));
 	startSteerInput = new wxTextCtrl(this, RangeTextBox);
 	endSteerInput = new wxTextCtrl(this, RangeTextBox);
-	wxStaticText *steerUnitsText = new wxStaticText(this, wxID_STATIC,
-		converter.GetUnitType(Convert::UnitTypeDistance));
-	mainSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Rack Travel")),
-		0, wxALIGN_CENTER_VERTICAL);
+	steerUnitsLabel = new wxStaticText(this, wxID_STATIC,
+		wxEmptyString);
+	mainSizer->Add(steerInputLabel, 0, wxALIGN_CENTER_VERTICAL);
 	mainSizer->Add(startSteerInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
 	mainSizer->Add(endSteerInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
-	mainSizer->Add(steerUnitsText, 0, wxALIGN_CENTER_VERTICAL);
+	mainSizer->Add(steerUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 
 	// Add a sizer for the number of points input
 	numberOfPointsInput = new wxTextCtrl(this, RangeTextBox);
