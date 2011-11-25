@@ -10,7 +10,7 @@
 // File:  editIterationOptionsPanel.cpp
 // Created:  11/14/2010
 // Author:  K. Loux
-// Description:  Contains the class definition for the EDIT_ITERATION_OPTIONS_PANEL
+// Description:  Contains the class definition for the EditIterationOptionsPanel
 //				 class.
 // History:
 
@@ -23,14 +23,14 @@
 #include "vUtilities/convert.h"
 
 //==========================================================================
-// Class:			EDIT_ITERATION_OPTIONS_PANEL
-// Function:		EDIT_ITERATION_OPTIONS_PANEL
+// Class:			EditIterationOptionsPanel
+// Function:		EditIterationOptionsPanel
 //
-// Description:		Constructor for EDIT_ITERATION_OPTIONS_PANEL class.  Initializes the form
+// Description:		Constructor for EditIterationOptionsPanel class.  Initializes the form
 //					and creates the controls, etc.
 //
 // Input Arguments:
-//		_Parent		= EDIT_ITERATION_NOTEBOOK&, reference to this object's owner
+//		_parent		= EditIterationNotebook&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
@@ -43,24 +43,24 @@
 //		None
 //
 //==========================================================================
-EDIT_ITERATION_OPTIONS_PANEL::EDIT_ITERATION_OPTIONS_PANEL(EDIT_ITERATION_NOTEBOOK &_Parent,
-														   wxWindowID id, const wxPoint& pos,
-														   const wxSize& size, const Debugger &_debugger) :
-														   wxScrolledWindow(&_Parent, id, pos, size), debugger(_debugger),
-														   Parent(_Parent)
+EditIterationOptionsPanel::EditIterationOptionsPanel(EditIterationNotebook &_parent,
+													 wxWindowID id, const wxPoint& pos,
+													 const wxSize& size, const Debugger &_debugger) :
+													 wxScrolledWindow(&_Parent, id, pos, size), debugger(_debugger),
+													 parent(_parent)
 {
 	// Initialize the current object variable
-	CurrentIteration = NULL;
+	currentIteration = NULL;
 
 	// Create the controls
 	CreateControls();
 }
 
 //==========================================================================
-// Class:			EDIT_ITERATION_OPTIONS_PANEL
-// Function:		~EDIT_ITERATION_OPTIONS_PANEL
+// Class:			EditIterationOptionsPanel
+// Function:		~EditIterationOptionsPanel
 //
-// Description:		Destructor for EDIT_ITERATION_OPTIONS_PANEL class.
+// Description:		Destructor for EditIterationOptionsPanel class.
 //
 // Input Arguments:
 //		None
@@ -72,12 +72,12 @@ EDIT_ITERATION_OPTIONS_PANEL::EDIT_ITERATION_OPTIONS_PANEL(EDIT_ITERATION_NOTEBO
 //		None
 //
 //==========================================================================
-EDIT_ITERATION_OPTIONS_PANEL::~EDIT_ITERATION_OPTIONS_PANEL()
+EditIterationOptionsPanel::~EditIterationOptionsPanel()
 {
 }
 
 //==========================================================================
-// Class:			EDIT_ITERATION_OPTIONS_PANEL
+// Class:			EditIterationOptionsPanel
 // Function:		Event Table
 //
 // Description:		Links GUI events with event handler functions.
@@ -92,14 +92,14 @@ EDIT_ITERATION_OPTIONS_PANEL::~EDIT_ITERATION_OPTIONS_PANEL()
 //		None
 //
 //==========================================================================
-BEGIN_EVENT_TABLE(EDIT_ITERATION_OPTIONS_PANEL, wxPanel)
-	EVT_CHECKBOX(CheckBoxIterationOptions,	EDIT_ITERATION_OPTIONS_PANEL::OptionsCheckBoxEvent)
-	EVT_TEXT(TextBoxIterationOptions,		EDIT_ITERATION_OPTIONS_PANEL::OptionsTextBoxEvent)
-	EVT_BUTTON(ButtonSetAsDefault,			EDIT_ITERATION_OPTIONS_PANEL::SetAsDefaultClickedEvent)
+BEGIN_EVENT_TABLE(EditIterationOptionsPanel, wxPanel)
+	EVT_CHECKBOX(CheckBoxIterationOptions,	EditIterationOptionsPanel::OptionsCheckBoxEvent)
+	EVT_TEXT(TextBoxIterationOptions,		EditIterationOptionsPanel::OptionsTextBoxEvent)
+	EVT_BUTTON(ButtonSetAsDefault,			EditIterationOptionsPanel::SetAsDefaultClickedEvent)
 END_EVENT_TABLE();
 
 //==========================================================================
-// Class:			EDIT_ITERATION_OPTIONS_PANEL
+// Class:			EditIterationOptionsPanel
 // Function:		UpdateInformation
 //
 // Description:		Updates the information on this panel, if the associated
@@ -115,22 +115,22 @@ END_EVENT_TABLE();
 //		None
 //
 //==========================================================================
-void EDIT_ITERATION_OPTIONS_PANEL::UpdateInformation(void)
+void EditIterationOptionsPanel::UpdateInformation(void)
 {
 	// Make sure the suspension object exists
-	if (CurrentIteration)
+	if (currentIteration)
 		// Call the method that performs the update
-		UpdateInformation(CurrentIteration);
+		UpdateInformation(currentIteration);
 }
 
 //==========================================================================
-// Class:			EDIT_ITERATION_OPTIONS_PANEL
+// Class:			EditIterationOptionsPanel
 // Function:		UpdateInformation
 //
 // Description:		Updates the information on this panel.
 //
 // Input Arguments:
-//		_CurrentIteration	= ITERATION* pointing to the associated iteration
+//		_currentIteration	= Iteration* pointing to the associated iteration
 //
 // Output Arguments:
 //		None
@@ -139,33 +139,33 @@ void EDIT_ITERATION_OPTIONS_PANEL::UpdateInformation(void)
 //		None
 //
 //==========================================================================
-void EDIT_ITERATION_OPTIONS_PANEL::UpdateInformation(ITERATION *_CurrentIteration)
+void EditIterationOptionsPanel::UpdateInformation(Iteration *_currentIteration)
 {
 	// Update the class members
-	CurrentIteration = _CurrentIteration;
+	currentIteration = _currentIteration;
 
 	// Make sure the iteration is valid
-	if (!CurrentIteration)
+	if (!currentIteration)
 		return;
 
 	// Update the controls
 	// We also enable/disable the label text boxes depending on the state of the checkbox
-	AutoTitle->SetValue(CurrentIteration->GetAutoGenerateTitle());
-	AutoLabelXAxis->SetValue(CurrentIteration->GetAutoGenerateXLabel());
-	AutoLabelZAxis->SetValue(CurrentIteration->GetAutoGenerateZLabel());
-	ShowGridLines->SetValue(CurrentIteration->GetShowGridLines());
+	autoTitle->SetValue(currentIteration->GetAutoGenerateTitle());
+	autoLabelXAxis->SetValue(currentIteration->GetAutoGenerateXLabel());
+	autoLabelZAxis->SetValue(currentIteration->GetAutoGenerateZLabel());
+	showGridLines->SetValue(currentIteration->GetShowGridLines());
 
-	TitleText->ChangeValue(CurrentIteration->GetTitle());
-	XLabelText->ChangeValue(CurrentIteration->GetXLabel());
-	ZLabelText->ChangeValue(CurrentIteration->GetZLabel());
+	titleText->ChangeValue(currentIteration->GetTitle());
+	xLabelText->ChangeValue(currentIteration->GetXLabel());
+	zLabelText->ChangeValue(currentIteration->GetZLabel());
 
-	TitleText->Enable(!AutoTitle->GetValue());
-	XLabelText->Enable(!AutoLabelXAxis->GetValue());
-	ZLabelText->Enable(!AutoLabelZAxis->GetValue());
+	titleText->Enable(!autoTitle->GetValue());
+	xLabelText->Enable(!autoLabelXAxis->GetValue());
+	zLabelText->Enable(!autoLabelZAxis->GetValue());
 }
 
 //==========================================================================
-// Class:			EDIT_ITERATION_OPTIONS_PANEL
+// Class:			EditIterationOptionsPanel
 // Function:		CreateControls
 //
 // Description:		Creates the controls for this panel.
@@ -180,60 +180,60 @@ void EDIT_ITERATION_OPTIONS_PANEL::UpdateInformation(ITERATION *_CurrentIteratio
 //		None
 //
 //==========================================================================
-void EDIT_ITERATION_OPTIONS_PANEL::CreateControls()
+void EditIterationOptionsPanel::CreateControls()
 {
 	// Enable scrolling
 	SetScrollRate(1, 1);
 
 	// Top-level sizer
-	wxBoxSizer *TopSizer = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
 
 	// Second sizer gives more space around the controls
-	wxBoxSizer *MainSizer = new wxBoxSizer(wxVERTICAL);
-	TopSizer->Add(MainSizer, 1, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALL, 5);
+	wxBoxSizer *mainSizer = new wxBoxSizer(wxVERTICAL);
+	topSizer->Add(mainSizer, 1, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALL, 5);
 
 	int cellPadding(3);
 
 	// Creat the checkboxes
-	ShowGridLines = new wxCheckBox(this, CheckBoxIterationOptions, _T("Show Grid Lines"));
-	AutoLabelXAxis = new wxCheckBox(this, CheckBoxIterationOptions, _T("Automatic"));
-	AutoLabelZAxis = new wxCheckBox(this, CheckBoxIterationOptions, _T("Automatic"));
-	AutoTitle = new wxCheckBox(this, CheckBoxIterationOptions, _T("From File Name"));
+	showGridLines = new wxCheckBox(this, CheckBoxIterationOptions, _T("Show Grid Lines"));
+	autoLabelXAxis = new wxCheckBox(this, CheckBoxIterationOptions, _T("Automatic"));
+	autoLabelZAxis = new wxCheckBox(this, CheckBoxIterationOptions, _T("Automatic"));
+	autoTitle = new wxCheckBox(this, CheckBoxIterationOptions, _T("From File Name"));
 
-	TitleText = new wxTextCtrl(this, TextBoxIterationOptions);
-	XLabelText = new wxTextCtrl(this, TextBoxIterationOptions);
-	ZLabelText = new wxTextCtrl(this, TextBoxIterationOptions);
+	titleText = new wxTextCtrl(this, TextBoxIterationOptions);
+	xLabelText = new wxTextCtrl(this, TextBoxIterationOptions);
+	zLabelText = new wxTextCtrl(this, TextBoxIterationOptions);
 
-	SetAsDefault = new wxButton(this, ButtonSetAsDefault, _T("Set As Default Properties"));
+	setAsDefault = new wxButton(this, ButtonSetAsDefault, _T("Set As Default Properties"));
 
 	// Add the controls to the sizer (and create the necessary labels)
-	MainSizer->Add(new wxStaticText(this, wxID_ANY, _T("Plot Title")));
-	MainSizer->Add(AutoTitle, 0, wxALL, cellPadding);
-	MainSizer->Add(TitleText, 0, wxALL | wxGROW, cellPadding);
-	MainSizer->AddSpacer(2 * cellPadding);
+	mainSizer->Add(new wxStaticText(this, wxID_ANY, _T("Plot Title")));
+	mainSizer->Add(autoTitle, 0, wxALL, cellPadding);
+	mainSizer->Add(titleText, 0, wxALL | wxGROW, cellPadding);
+	mainSizer->AddSpacer(2 * cellPadding);
 
-	MainSizer->Add(new wxStaticText(this, wxID_ANY, _T("X-Axis Label")));
-	MainSizer->Add(AutoLabelXAxis, 0, wxALL, cellPadding);
-	MainSizer->Add(XLabelText, 0, wxALL | wxGROW, cellPadding);
-	MainSizer->AddSpacer(2 * cellPadding);
+	mainSizer->Add(new wxStaticText(this, wxID_ANY, _T("X-Axis Label")));
+	mainSizer->Add(autoLabelXAxis, 0, wxALL, cellPadding);
+	mainSizer->Add(xLabelText, 0, wxALL | wxGROW, cellPadding);
+	mainSizer->AddSpacer(2 * cellPadding);
 
-	MainSizer->Add(new wxStaticText(this, wxID_ANY, _T("Y-Axis Label")));
-	MainSizer->Add(AutoLabelZAxis, 0, wxALL, cellPadding);
-	MainSizer->Add(ZLabelText, 0, wxALL | wxGROW, cellPadding);
-	MainSizer->AddSpacer(4 * cellPadding);
+	mainSizer->Add(new wxStaticText(this, wxID_ANY, _T("Y-Axis Label")));
+	mainSizer->Add(autoLabelZAxis, 0, wxALL, cellPadding);
+	mainSizer->Add(zLabelText, 0, wxALL | wxGROW, cellPadding);
+	mainSizer->AddSpacer(4 * cellPadding);
 
-	MainSizer->Add(ShowGridLines, 0, wxALL, cellPadding);
+	mainSizer->Add(showGridLines, 0, wxALL, cellPadding);
 
-	MainSizer->AddStretchSpacer();
+	mainSizer->AddStretchSpacer();
 
-	MainSizer->Add(SetAsDefault, 0, wxALIGN_CENTER_HORIZONTAL | wxALL | wxALIGN_BOTTOM, cellPadding);
+	mainSizer->Add(setAsDefault, 0, wxALIGN_CENTER_HORIZONTAL | wxALL | wxALIGN_BOTTOM, cellPadding);
 
 	// Assign the top level sizer to the panel
-	SetSizer(TopSizer);
+	SetSizer(topSizer);
 }
 
 //==========================================================================
-// Class:			EDIT_ITERATION_OPTIONS_PANEL
+// Class:			EditIterationOptionsPanel
 // Function:		OptionsCheckBoxEvent
 //
 // Description:		Event handler for when checkboxes are toggled.
@@ -248,28 +248,28 @@ void EDIT_ITERATION_OPTIONS_PANEL::CreateControls()
 //		None
 //
 //==========================================================================
-void EDIT_ITERATION_OPTIONS_PANEL::OptionsCheckBoxEvent(wxCommandEvent& WXUNUSED(event))
+void EditIterationOptionsPanel::OptionsCheckBoxEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Set all of the checkbox-type parameters
-	CurrentIteration->SetAutoGenerateTitle(AutoTitle->GetValue());
-	CurrentIteration->SetAutoGenerateXLabel(AutoLabelXAxis->GetValue());
-	CurrentIteration->SetAutoGenerateZLabel(AutoLabelZAxis->GetValue());
-	CurrentIteration->SetShowGridLines(ShowGridLines->GetValue());
+	currentIteration->SetAutoGenerateTitle(autoTitle->GetValue());
+	currentIteration->SetAutoGenerateXLabel(autoLabelXAxis->GetValue());
+	currentIteration->SetAutoGenerateZLabel(autoLabelZAxis->GetValue());
+	currentIteration->SetShowGridLines(showGridLines->GetValue());
 
 	// Enable/disable the text boxes depending on the state of the checkboxes
-	TitleText->Enable(!AutoTitle->GetValue());
-	XLabelText->Enable(!AutoLabelXAxis->GetValue());
-	ZLabelText->Enable(!AutoLabelZAxis->GetValue());
+	titleText->Enable(!autoTitle->GetValue());
+	xLabelText->Enable(!autoLabelXAxis->GetValue());
+	zLabelText->Enable(!autoLabelZAxis->GetValue());
 
 	// Set the modified flag
-	CurrentIteration->SetModified();
+	currentIteration->SetModified();
 
 	// Update the display
-	CurrentIteration->UpdateDisplay();
+	currentIteration->UpdateDisplay();
 }
 
 //==========================================================================
-// Class:			EDIT_ITERATION_OPTIONS_PANEL
+// Class:			EditIterationOptionsPanel
 // Function:		OptionsTextBoxEvent
 //
 // Description:		Event handler for when text boxes are edited.
@@ -284,28 +284,28 @@ void EDIT_ITERATION_OPTIONS_PANEL::OptionsCheckBoxEvent(wxCommandEvent& WXUNUSED
 //		None
 //
 //==========================================================================
-void EDIT_ITERATION_OPTIONS_PANEL::OptionsTextBoxEvent(wxCommandEvent& WXUNUSED(event))
+void EditIterationOptionsPanel::OptionsTextBoxEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Make sure all values are valid ASCII (or we might crash FTGL)
-	if (!TitleText->GetValue().IsAscii() ||
-		!XLabelText->GetValue().IsAscii() ||
-		!ZLabelText->GetValue().IsAscii())
+	if (!titleText->GetValue().IsAscii() ||
+		!xLabelText->GetValue().IsAscii() ||
+		!zLabelText->GetValue().IsAscii())
 		return;
 
 	// Set all of the text box-type parameters
-	CurrentIteration->SetTitle(TitleText->GetValue());
-	CurrentIteration->SetXLabel(XLabelText->GetValue());
-	CurrentIteration->SetZLabel(ZLabelText->GetValue());
+	currentIteration->SetTitle(titleText->GetValue());
+	currentIteration->SetXLabel(xLabelText->GetValue());
+	currentIteration->SetZLabel(zLabelText->GetValue());
 
 	// Set the modified flag
-	CurrentIteration->SetModified();
+	currentIteration->SetModified();
 
 	// Update the display
-	CurrentIteration->UpdateDisplay();
+	currentIteration->UpdateDisplay();
 }
 
 //==========================================================================
-// Class:			EDIT_ITERATION_OPTIONS_PANEL
+// Class:			EditIterationOptionsPanel
 // Function:		SetAsDefaultClickedEvent
 //
 // Description:		Event handler for when the Set As Default button is clicked.
@@ -320,10 +320,10 @@ void EDIT_ITERATION_OPTIONS_PANEL::OptionsTextBoxEvent(wxCommandEvent& WXUNUSED(
 //		None
 //
 //==========================================================================
-void EDIT_ITERATION_OPTIONS_PANEL::SetAsDefaultClickedEvent(wxCommandEvent& WXUNUSED(event))
+void EditIterationOptionsPanel::SetAsDefaultClickedEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Save the current settings to file
-	CurrentIteration->WriteDefaultsToConfig();
+	currentIteration->WriteDefaultsToConfig();
 
 	// FIXME:  Would be nice if this could save other plot options, like axis associativity, line colors, etc.
 

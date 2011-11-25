@@ -10,7 +10,7 @@
 // File:  editIterationRangePanel.cpp
 // Created:  11/14/2010
 // Author:  K. Loux
-// Description:  Contains the class definition for the EDIT_ITERATION_RANGE_PANEL
+// Description:  Contains the class definition for the EditIterationRangePanel
 //				 class.
 // History:
 
@@ -23,14 +23,14 @@
 #include "vUtilities/convert.h"
 
 //==========================================================================
-// Class:			EDIT_ITERATION_RANGE_PANEL
-// Function:		EDIT_ITERATION_RANGE_PANEL
+// Class:			EditIterationRangePanel
+// Function:		EditIterationRangePanel
 //
-// Description:		Constructor for EDIT_ITERATION_RANGE_PANEL class.  Initializes the form
+// Description:		Constructor for EditIterationRangePanel class.  Initializes the form
 //					and creates the controls, etc.
 //
 // Input Arguments:
-//		_Parent		= EDIT_ITERATION_NOTEBOOK&, reference to this object's owner
+//		_parent		= EditIterationNotebook&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
@@ -43,25 +43,25 @@
 //		None
 //
 //==========================================================================
-EDIT_ITERATION_RANGE_PANEL::EDIT_ITERATION_RANGE_PANEL(EDIT_ITERATION_NOTEBOOK &_Parent,
-													   wxWindowID id, const wxPoint& pos,
-													   const wxSize& size, const Debugger &_debugger) :
-													   wxScrolledWindow(&_Parent, id, pos, size), debugger(_debugger),
-													   Converter(_Parent.GetParent().GetMainFrame().GetConverter()),
-													   Parent(_Parent)
+EditIterationRangePanel::EditIterationRangePanel(EditIterationNotebook &_parent,
+												 wxWindowID id, const wxPoint& pos,
+												 const wxSize& size, const Debugger &_debugger) :
+												 wxScrolledWindow(&_Parent, id, pos, size), debugger(_debugger),
+												 converter(_parent.GetParent().GetMainFrame().GetConverter()),
+												 parent(_parent)
 {
 	// Initialize the current object variable
-	CurrentIteration = NULL;
+	currentIteration = NULL;
 
 	// Create the controls
 	CreateControls();
 }
 
 //==========================================================================
-// Class:			EDIT_ITERATION_RANGE_PANEL
-// Function:		~EDIT_ITERATION_RANGE_PANEL
+// Class:			EditIterationRangePanel
+// Function:		~EditIterationRangePanel
 //
-// Description:		Destructor for EDIT_ITERATION_RANGE_PANEL class.
+// Description:		Destructor for EditIterationRangePanel class.
 //
 // Input Arguments:
 //		None
@@ -73,12 +73,12 @@ EDIT_ITERATION_RANGE_PANEL::EDIT_ITERATION_RANGE_PANEL(EDIT_ITERATION_NOTEBOOK &
 //		None
 //
 //==========================================================================
-EDIT_ITERATION_RANGE_PANEL::~EDIT_ITERATION_RANGE_PANEL()
+EditIterationRangePanel::~EditIterationRangePanel()
 {
 }
 
 //==========================================================================
-// Class:			EDIT_ITERATION_RANGE_PANEL
+// Class:			EditIterationRangePanel
 // Function:		Event Table
 //
 // Description:		Links GUI events with event handler functions.
@@ -93,13 +93,13 @@ EDIT_ITERATION_RANGE_PANEL::~EDIT_ITERATION_RANGE_PANEL()
 //		None
 //
 //==========================================================================
-BEGIN_EVENT_TABLE(EDIT_ITERATION_RANGE_PANEL, wxPanel)
-	EVT_TEXT(RangeTextBox,	EDIT_ITERATION_RANGE_PANEL::RangeTextBoxChangeEvent)
-	EVT_TEXT(RangeTextBox,	EDIT_ITERATION_RANGE_PANEL::RangeTextBoxChangeEvent)
+BEGIN_EVENT_TABLE(EditIterationRangePanel, wxPanel)
+	EVT_TEXT(RangeTextBox,	EditIterationRangePanel::RangeTextBoxChangeEvent)
+	EVT_TEXT(RangeTextBox,	EditIterationRangePanel::RangeTextBoxChangeEvent)
 END_EVENT_TABLE();
 
 //==========================================================================
-// Class:			EDIT_ITERATION_RANGE_PANEL
+// Class:			EditIterationRangePanel
 // Function:		UpdateInformation
 //
 // Description:		Updates the information on this panel, if the associated
@@ -115,22 +115,22 @@ END_EVENT_TABLE();
 //		None
 //
 //==========================================================================
-void EDIT_ITERATION_RANGE_PANEL::UpdateInformation(void)
+void EditIterationRangePanel::UpdateInformation(void)
 {
 	// Make sure the suspension object exists
-	if (CurrentIteration)
+	if (currentIteration)
 		// Call the method that performs the update
-		UpdateInformation(CurrentIteration);
+		UpdateInformation(currentIteration);
 }
 
 //==========================================================================
-// Class:			EDIT_ITERATION_RANGE_PANEL
+// Class:			EditIterationRangePanel
 // Function:		UpdateInformation
 //
 // Description:		Updates the information on this panel.
 //
 // Input Arguments:
-//		_CurrentIteration	= Iteration* pointing to the associated iteration
+//		_currentIteration	= Iteration* pointing to the associated iteration
 //
 // Output Arguments:
 //		None
@@ -139,33 +139,35 @@ void EDIT_ITERATION_RANGE_PANEL::UpdateInformation(void)
 //		None
 //
 //==========================================================================
-void EDIT_ITERATION_RANGE_PANEL::UpdateInformation(Iteration *_CurrentIteration)
+void EditIterationRangePanel::UpdateInformation(Iteration *_currentIteration)
 {
 	// Update the class members
-	CurrentIteration = _CurrentIteration;
+	currentIteration = _currentIteration;
 
 	// Make sure the iteration object exists
-	if (!CurrentIteration)
+	if (!currentIteration)
 		return;
 
 	// Update the values of our Range and NumberOfPoints to the text boxes
 	// Don't forget to convert the range values to the user specified units!
-	StartPitchInput->ChangeValue(Converter.FormatNumber(Converter.ConvertAngle(CurrentIteration->GetRange().StartPitch)));
-	StartRollInput->ChangeValue(Converter.FormatNumber(Converter.ConvertAngle(CurrentIteration->GetRange().StartRoll)));
-	StartHeaveInput->ChangeValue(Converter.FormatNumber(Converter.ConvertDistance(CurrentIteration->GetRange().StartHeave)));
-	StartSteerInput->ChangeValue(Converter.FormatNumber(Converter.ConvertDistance(CurrentIteration->GetRange().StartRackTravel)));
-	EndPitchInput->ChangeValue(Converter.FormatNumber(Converter.ConvertAngle(CurrentIteration->GetRange().EndPitch)));
-	EndRollInput->ChangeValue(Converter.FormatNumber(Converter.ConvertAngle(CurrentIteration->GetRange().EndRoll)));
-	EndHeaveInput->ChangeValue(Converter.FormatNumber(Converter.ConvertDistance(CurrentIteration->GetRange().EndHeave)));
-	EndSteerInput->ChangeValue(Converter.FormatNumber(Converter.ConvertDistance(CurrentIteration->GetRange().EndRackTravel)));
+	startPitchInput->ChangeValue(converter.FormatNumber(converter.ConvertAngle(currentIteration->GetRange().startPitch)));
+	startRollInput->ChangeValue(converter.FormatNumber(converter.ConvertAngle(currentIteration->GetRange().startRoll)));
+	startHeaveInput->ChangeValue(converter.FormatNumber(converter.ConvertDistance(currentIteration->GetRange().startHeave)));
+	startSteerInput->ChangeValue(converter.FormatNumber(converter.ConvertDistance(currentIteration->GetRange().startRackTravel)));
+	endPitchInput->ChangeValue(converter.FormatNumber(converter.ConvertAngle(currentIteration->GetRange().endPitch)));
+	endRollInput->ChangeValue(converter.FormatNumber(converter.ConvertAngle(currentIteration->GetRange().endRoll)));
+	endHeaveInput->ChangeValue(converter.FormatNumber(converter.ConvertDistance(currentIteration->GetRange().endHeave)));
+	endSteerInput->ChangeValue(converter.FormatNumber(converter.ConvertDistance(currentIteration->GetRange().endRackTravel)));
 
-	wxString Temp;
-	Temp.Printf("%i", CurrentIteration->GetNumberOfPoints());
-	NumberOfPointsInput->ChangeValue(Temp);
+	// FIXME:  If unit change, they are not updated here!
+
+	wxString temp;
+	temp.Printf("%i", currentIteration->GetNumberOfPoints());
+	numberOfPointsInput->ChangeValue(temp);
 }
 
 //==========================================================================
-// Class:			EDIT_ITERATION_RANGE_PANEL
+// Class:			EditIterationRangePanel
 // Function:		CreateControls
 //
 // Description:		Creates the controls for this panel.
@@ -180,101 +182,101 @@ void EDIT_ITERATION_RANGE_PANEL::UpdateInformation(Iteration *_CurrentIteration)
 //		None
 //
 //==========================================================================
-void EDIT_ITERATION_RANGE_PANEL::CreateControls()
+void EditIterationRangePanel::CreateControls()
 {
 	// Enable scrolling
 	SetScrollRate(1, 1);
 
 	// Top-level sizer
-	wxBoxSizer *TopSizer = new wxBoxSizer(wxVERTICAL);
+	wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
 
 	// Second sizer gives more space around the controls
-	wxFlexGridSizer *MainSizer = new wxFlexGridSizer(4, 5, 5);
-	TopSizer->Add(MainSizer, 0, wxEXPAND | wxALL, 5);
+	wxFlexGridSizer *mainSizer = new wxFlexGridSizer(4, 5, 5);
+	topSizer->Add(MainSizer, 0, wxEXPAND | wxALL, 5);
 
 	// Add the text to this sizer
-	wxStaticText *TextStart = new wxStaticText(this, wxID_STATIC, _T("Start"));
-	wxStaticText *TextEnd = new wxStaticText(this, wxID_STATIC, _T("End"));
-	MainSizer->AddSpacer(-1);
-	MainSizer->Add(TextStart, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL);
-	MainSizer->Add(TextEnd, 0, wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL);
-	MainSizer->AddSpacer(-1);
+	mainSizer->AddSpacer(-1);
+	mainSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Start")), 0,
+		wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL);
+	mainSizer->Add(new wxStaticText(this, wxID_STATIC, _T("End"), 0,
+		wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL);
+	mainSizer->AddSpacer(-1);
 
 	// Add the static text and text controls to these sizers
 	// Pitch
 	int textBoxWidth;
-	GetTextExtent(Converter.FormatNumber(-888.0), &textBoxWidth, NULL);
+	GetTextExtent(converter.FormatNumber(-888.0), &textBoxWidth, NULL);
 
-	wxStaticText *PitchLabelText = new wxStaticText(this, wxID_STATIC, _T("Pitch"));
-	StartPitchInput = new wxTextCtrl(this, RangeTextBox);
-	EndPitchInput = new wxTextCtrl(this, RangeTextBox);
-	wxStaticText *PitchUnitsText = new wxStaticText(this, wxID_STATIC,
-		Converter.GetUnitType(Convert::UnitTypeAngle));
-	MainSizer->Add(PitchLabelText, 0, wxALIGN_CENTER_VERTICAL);
-	MainSizer->Add(StartPitchInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
-	MainSizer->Add(EndPitchInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
-	MainSizer->Add(PitchUnitsText, 0, wxALIGN_CENTER_VERTICAL);
+	startPitchInput = new wxTextCtrl(this, RangeTextBox);
+	endPitchInput = new wxTextCtrl(this, RangeTextBox);
+	wxStaticText *pitchUnitsText = new wxStaticText(this, wxID_STATIC,
+		converter.GetUnitType(Convert::UnitTypeAngle));
+	mainSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Pitch")),
+		0, wxALIGN_CENTER_VERTICAL);
+	mainSizer->Add(startPitchInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
+	mainSizer->Add(endPitchInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
+	mainSizer->Add(pitchUnitsText, 0, wxALIGN_CENTER_VERTICAL);
 
 	// Roll
-	wxStaticText *RollLabelText = new wxStaticText(this, wxID_STATIC, _T("Roll"));
-	StartRollInput = new wxTextCtrl(this, RangeTextBox);
-	EndRollInput = new wxTextCtrl(this, RangeTextBox);
-	wxStaticText *RollUnitsText = new wxStaticText(this, wxID_STATIC,
-		Converter.GetUnitType(Convert::UnitTypeAngle));
-	MainSizer->Add(RollLabelText, 0, wxALIGN_CENTER_VERTICAL);
-	MainSizer->Add(StartRollInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
-	MainSizer->Add(EndRollInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
-	MainSizer->Add(RollUnitsText, 0, wxALIGN_CENTER_VERTICAL);
+	startRollInput = new wxTextCtrl(this, RangeTextBox);
+	endRollInput = new wxTextCtrl(this, RangeTextBox);
+	wxStaticText *rollUnitsText = new wxStaticText(this, wxID_STATIC,
+		converter.GetUnitType(Convert::UnitTypeAngle));
+	mainSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Roll")),
+		0, wxALIGN_CENTER_VERTICAL);
+	mainSizer->Add(startRollInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
+	mainSizer->Add(endRollInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
+	mainSizer->Add(rollUnitsText, 0, wxALIGN_CENTER_VERTICAL);
 
 	// Heave
-	wxStaticText *HeaveLabelText = new wxStaticText(this, wxID_STATIC, _T("Heave"));
-	StartHeaveInput = new wxTextCtrl(this, RangeTextBox);
-	EndHeaveInput = new wxTextCtrl(this, RangeTextBox);
+	startHeaveInput = new wxTextCtrl(this, RangeTextBox);
+	endHeaveInput = new wxTextCtrl(this, RangeTextBox);
 	wxStaticText *HeaveUnitsText = new wxStaticText(this, wxID_STATIC,
-		Converter.GetUnitType(Convert::UnitTypeDistance));
-	MainSizer->Add(HeaveLabelText, 0, wxALIGN_CENTER_VERTICAL);
-	MainSizer->Add(StartHeaveInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
-	MainSizer->Add(EndHeaveInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
-	MainSizer->Add(HeaveUnitsText, 0, wxALIGN_CENTER_VERTICAL);
+		converter.GetUnitType(Convert::UnitTypeDistance));
+	mainSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Heave")),
+		0, wxALIGN_CENTER_VERTICAL);
+	mainSizer->Add(startHeaveInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
+	mainSizer->Add(endHeaveInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
+	mainSizer->Add(heaveUnitsText, 0, wxALIGN_CENTER_VERTICAL);
 
 	// Steer
-	wxStaticText *SteerLabelText = new wxStaticText(this, wxID_STATIC, _T("Rack Travel"));
-	StartSteerInput = new wxTextCtrl(this, RangeTextBox);
-	EndSteerInput = new wxTextCtrl(this, RangeTextBox);
-	wxStaticText *SteerUnitsText = new wxStaticText(this, wxID_STATIC,
-		Converter.GetUnitType(Convert::UnitTypeDistance));
-	MainSizer->Add(SteerLabelText, 0, wxALIGN_CENTER_VERTICAL);
-	MainSizer->Add(StartSteerInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
-	MainSizer->Add(EndSteerInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
-	MainSizer->Add(SteerUnitsText, 0, wxALIGN_CENTER_VERTICAL);
+	startSteerInput = new wxTextCtrl(this, RangeTextBox);
+	endSteerInput = new wxTextCtrl(this, RangeTextBox);
+	wxStaticText *steerUnitsText = new wxStaticText(this, wxID_STATIC,
+		converter.GetUnitType(Convert::UnitTypeDistance));
+	mainSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Rack Travel")),
+		0, wxALIGN_CENTER_VERTICAL);
+	mainSizer->Add(startSteerInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
+	mainSizer->Add(endSteerInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
+	mainSizer->Add(steerUnitsText, 0, wxALIGN_CENTER_VERTICAL);
 
 	// Add a sizer for the number of points input
-	wxStaticText *NumberOfPointsLabel = new wxStaticText(this, wxID_STATIC, _T("Number of points"));
-	NumberOfPointsInput = new wxTextCtrl(this, RangeTextBox);
-	MainSizer->Add(NumberOfPointsLabel, 0, wxALIGN_CENTER_VERTICAL);
-	MainSizer->Add(NumberOfPointsInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
+	numberOfPointsInput = new wxTextCtrl(this, RangeTextBox);
+	mainSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Number of points")),
+		0, wxALIGN_CENTER_VERTICAL);
+	mainSizer->Add(numberOfPointsInput, 0, wxALIGN_CENTER_VERTICAL | wxEXPAND);
 
 	// Set minimum widths for text controls
-	StartPitchInput->SetMinSize(wxSize(textBoxWidth, -1));
-	StartRollInput->SetMinSize(wxSize(textBoxWidth, -1));
-	StartHeaveInput->SetMinSize(wxSize(textBoxWidth, -1));
-	StartSteerInput->SetMinSize(wxSize(textBoxWidth, -1));
-	EndPitchInput->SetMinSize(wxSize(textBoxWidth, -1));
-	EndRollInput->SetMinSize(wxSize(textBoxWidth, -1));
-	EndHeaveInput->SetMinSize(wxSize(textBoxWidth, -1));
-	EndSteerInput->SetMinSize(wxSize(textBoxWidth, -1));
-	NumberOfPointsInput->SetMinSize(wxSize(textBoxWidth, -1));
+	startPitchInput->SetMinSize(wxSize(textBoxWidth, -1));
+	startRollInput->SetMinSize(wxSize(textBoxWidth, -1));
+	startHeaveInput->SetMinSize(wxSize(textBoxWidth, -1));
+	startSteerInput->SetMinSize(wxSize(textBoxWidth, -1));
+	endPitchInput->SetMinSize(wxSize(textBoxWidth, -1));
+	endRollInput->SetMinSize(wxSize(textBoxWidth, -1));
+	endHeaveInput->SetMinSize(wxSize(textBoxWidth, -1));
+	endSteerInput->SetMinSize(wxSize(textBoxWidth, -1));
+	numberOfPointsInput->SetMinSize(wxSize(textBoxWidth, -1));
 
 	// Make the middle two columns the same width
-	MainSizer->AddGrowableCol(1, 1);
-	MainSizer->AddGrowableCol(2, 1);
+	mainSizer->AddGrowableCol(1, 1);
+	mainSizer->AddGrowableCol(2, 1);
 
 	// Assign the top level sizer to the panel
-	SetSizer(TopSizer);
+	SetSizer(topSizer);
 }
 
 //==========================================================================
-// Class:			EDIT_ITERATION_RANGE_PANEL
+// Class:			EditIterationRangePanel
 // Function:		RangeTextBoxChangeEvent
 //
 // Description:		Event handler for any text box change on this panel.
@@ -289,47 +291,47 @@ void EDIT_ITERATION_RANGE_PANEL::CreateControls()
 //		None
 //
 //==========================================================================
-void EDIT_ITERATION_RANGE_PANEL::RangeTextBoxChangeEvent(wxCommandEvent& WXUNUSED(event))
+void EditIterationRangePanel::RangeTextBoxChangeEvent(wxCommandEvent& WXUNUSED(event))
 {
-	ITERATION::RANGE Range;
-	unsigned long NumberOfPoints(0);
+	Iteration::Range range;
+	unsigned long numberOfPoints(0);
 
 	// Make sure all of the values are numeric as we assign them to our
 	// Range variable
-	if (!StartPitchInput->GetValue().ToDouble(&Range.StartPitch) ||
-		!StartRollInput->GetValue().ToDouble(&Range.StartRoll) ||
-		!StartHeaveInput->GetValue().ToDouble(&Range.StartHeave) ||
-		!StartSteerInput->GetValue().ToDouble(&Range.StartRackTravel) ||
-		!EndPitchInput->GetValue().ToDouble(&Range.EndPitch) ||
-		!EndRollInput->GetValue().ToDouble(&Range.EndRoll) ||
-		!EndHeaveInput->GetValue().ToDouble(&Range.EndHeave) ||
-		!EndSteerInput->GetValue().ToDouble(&Range.EndRackTravel) ||
-		!NumberOfPointsInput->GetValue().ToULong(&NumberOfPoints))
+	if (!startPitchInput->GetValue().ToDouble(&range.startPitch) ||
+		!startRollInput->GetValue().ToDouble(&range.startRoll) ||
+		!startHeaveInput->GetValue().ToDouble(&range.startHeave) ||
+		!startSteerInput->GetValue().ToDouble(&range.startRackTravel) ||
+		!endPitchInput->GetValue().ToDouble(&range.endPitch) ||
+		!endRollInput->GetValue().ToDouble(&range.endRoll) ||
+		!endHeaveInput->GetValue().ToDouble(&range.endHeave) ||
+		!endSteerInput->GetValue().ToDouble(&range.endRackTravel) ||
+		!numberOfPointsInput->GetValue().ToULong(&numberOfPoints))
 	{
 		// Data is not valid - wait for the user to correct it before proceeding
 		return;
 	}
 
 	// Convert the range from the user specified units
-	Range.StartPitch = Converter.ReadAngle(Range.StartPitch);
-	Range.StartRoll = Converter.ReadAngle(Range.StartRoll);
-	Range.StartHeave = Converter.ReadDistance(Range.StartHeave);
-	Range.StartRackTravel = Converter.ReadDistance(Range.StartRackTravel);
-	Range.EndPitch = Converter.ReadAngle(Range.EndPitch);
-	Range.EndRoll = Converter.ReadAngle(Range.EndRoll);
-	Range.EndHeave = Converter.ReadDistance(Range.EndHeave);
-	Range.EndRackTravel = Converter.ReadDistance(Range.EndRackTravel);
+	range.startPitch = converter.ReadAngle(range.startPitch);
+	range.startRoll = converter.ReadAngle(range.startRoll);
+	range.startHeave = converter.ReadDistance(range.startHeave);
+	range.startRackTravel = converter.ReadDistance(range.startRackTravel);
+	range.endPitch = converter.ReadAngle(range.endPitch);
+	range.endRoll = converter.ReadAngle(range.endRoll);
+	range.endHeave = converter.ReadDistance(range.endHeave);
+	range.endRackTravel = converter.ReadDistance(range.endRackTravel);
 
 	// Update the iteration's range and number of points
-	CurrentIteration->SetRange(Range);
+	currentIteration->SetRange(range);
 
 	// Make sure the number of points is at least 2
-	if (NumberOfPoints < 2)
+	if (numberOfPoints < 2)
 		return;
 
 	// Update the iteration's number of points
-	CurrentIteration->SetNumberOfPoints(NumberOfPoints);
+	currentIteration->SetNumberOfPoints(numberOfPoints);
 
 	// Update the display
-	CurrentIteration->UpdateData();
+	currentIteration->UpdateData();
 }
