@@ -10,7 +10,7 @@
 // File:  optionsDialog.h
 // Created:  2/9/2009
 // Author:  K. Loux
-// Description:  Contains the declaration for the OPTION_DIALOG class.
+// Description:  Contains the declaration for the OptionsDialog class.
 // History:
 
 #ifndef _OPTIONS_DIALOG_H_
@@ -56,10 +56,19 @@ private:
 
 	// Sets up the size and position of this dialog and its contents
 	void CreateControls(void);
+	
+	// Event IDs
+	enum OptionsDialogEventIds
+	{
+		ChangeOutputFontButton = 1500 + wxID_HIGHEST,
+		ChangePlotFontButton
+	};
 
 	// Event handlers-----------------------------------------------------
 	void OKClickEvent(wxCommandEvent &event);
 	void CancelClickEvent(wxCommandEvent &event);
+	void ChangeOutputFontClickEvent(wxCommandEvent &event);
+	void ChangePlotFontClickEvent(wxCommandEvent &event);
 	// End event handlers-------------------------------------------------
 
 	// The controls
@@ -101,6 +110,13 @@ private:
 	// DEBUG page
 	wxPanel *debuggerPage;
 	wxRadioBox *debugLevel;
+	
+	// FONTS page
+	wxPanel *fontPage;
+	wxStaticText *outputFontLabel;
+	wxStaticText *plotFontLabel;
+	wxFont outputFont;
+	wxFont plotFont;
 
 	// The event table
 	DECLARE_EVENT_TABLE()

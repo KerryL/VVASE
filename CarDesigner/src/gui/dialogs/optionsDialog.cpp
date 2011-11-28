@@ -10,7 +10,7 @@
 // File:  optionsDialog.cpp
 // Created:  2/9/2009
 // Author:  K. Loux
-// Description:  Contains the definition for the OPTION_DIALOG class.
+// Description:  Contains the definition for the OptionsDialog class.
 // History:
 //	3/24/2009	- Added Kinematics tab, K. Loux.
 
@@ -21,6 +21,7 @@
 #include <wx/sizer.h>
 #include <wx/notebook.h>
 #include <wx/radiobox.h>
+#include <wx/fontdlg.h>
 
 // CarDesigner headers
 #include "gui/dialogs/optionsDialog.h"
@@ -102,8 +103,10 @@ OptionsDialog::~OptionsDialog()
 //
 //==========================================================================
 BEGIN_EVENT_TABLE(OptionsDialog, wxDialog)
-	EVT_BUTTON(wxID_OK,		OptionsDialog::OKClickEvent)
-	EVT_BUTTON(wxID_CANCEL,	OptionsDialog::CancelClickEvent)
+	EVT_BUTTON(wxID_OK,					OptionsDialog::OKClickEvent)
+	EVT_BUTTON(wxID_CANCEL,				OptionsDialog::CancelClickEvent)
+	EVT_BUTTON(ChangeOutputFontButton,	OptionsDialog::ChangeOutputFontClickEvent)
+	EVT_BUTTON(ChangePlotFontButton,	OptionsDialog::ChangePlotFontClickEvent)
 END_EVENT_TABLE();
 
 //==========================================================================
@@ -420,44 +423,36 @@ void OptionsDialog::CreateControls(void)
 	// Use another outer sizer to create more room for the controls
 	wxBoxSizer *kinematicsTopSizer = new wxBoxSizer(wxVERTICAL);
 
-	// Specify the column widths
-	int inputColumnWidth = 50;// FIXME:  Don't use this method (not cross-platform friendly)
-
 	// Create the kinematics page main sizer
 	wxBoxSizer *kinematicsSizer = new wxBoxSizer(wxVERTICAL);
 	kinematicsTopSizer->Add(kinematicsSizer, 0,
 		wxALIGN_TOP | wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
 
-	// Create the center of rotation labels
-	wxStaticText *xLabel = new wxStaticText(kinematicsPage, wxID_ANY, _T("X"));
-	wxStaticText *yLabel = new wxStaticText(kinematicsPage, wxID_ANY, _T("Y"));
-	wxStaticText *zLabel = new wxStaticText(kinematicsPage, wxID_ANY, _T("Z"));
-
 	// Create the center of rotation inputs
 	wxBoxSizer *corSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText *corLabel = new wxStaticText(kinematicsPage, wxID_ANY, _T("Center Of Rotation"));
 	wxString valueString;
 	valueString.Printf("%0.3f", kinematicInputs.centerOfRotation.x);
-	centerOfRotationX = new wxTextCtrl(kinematicsPage, wxID_ANY, valueString, wxDefaultPosition,
-		wxSize(inputColumnWidth, -1));
+	centerOfRotationX = new wxTextCtrl(kinematicsPage, wxID_ANY, valueString);
 	valueString.Printf("%0.3f", kinematicInputs.centerOfRotation.y);
-	centerOfRotationY = new wxTextCtrl(kinematicsPage, wxID_ANY, valueString, wxDefaultPosition,
-		wxSize(inputColumnWidth, -1));
+	centerOfRotationY = new wxTextCtrl(kinematicsPage, wxID_ANY, valueString);
 	valueString.Printf("%0.3f", kinematicInputs.centerOfRotation.z);
-	centerOfRotationZ = new wxTextCtrl(kinematicsPage, wxID_ANY, valueString, wxDefaultPosition,
-		wxSize(inputColumnWidth, -1));
+	centerOfRotationZ = new wxTextCtrl(kinematicsPage, wxID_ANY, valueString);
 
 	// Create the center of rotation units label
 	wxStaticText *corUnits = new wxStaticText(kinematicsPage, wxID_ANY, _T("(") + 
 		converter.GetUnitType(Convert::UnitTypeDistance) + _T(")"));
 
 	// Add the controls to the spacer
-	corSizer->Add(corLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	corSizer->Add(xLabel, 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 5);
+	corSizer->Add(new wxStaticText(kinematicsPage, wxID_ANY,
+		_T("Center Of Rotation")), 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+	corSizer->Add(new wxStaticText(kinematicsPage, wxID_ANY, _T("X")),
+		0, wxALIGN_CENTER_VERTICAL | wxLEFT, 5);
 	corSizer->Add(centerOfRotationX, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	corSizer->Add(yLabel, 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 5);
+	corSizer->Add(new wxStaticText(kinematicsPage, wxID_ANY, _T("Y")),
+		0, wxALIGN_CENTER_VERTICAL | wxLEFT, 5);
 	corSizer->Add(centerOfRotationY, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
-	corSizer->Add(zLabel, 0, wxALIGN_CENTER_VERTICAL | wxLEFT, 5);
+	corSizer->Add(new wxStaticText(kinematicsPage, wxID_ANY, _T("Z")),
+		0, wxALIGN_CENTER_VERTICAL | wxLEFT, 5);
 	corSizer->Add(centerOfRotationZ, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 	corSizer->Add(corUnits, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 
@@ -498,12 +493,11 @@ void OptionsDialog::CreateControls(void)
 
 	// Create the "Number of Threads" text box
 	wxBoxSizer *numberOfThreadsSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxStaticText *numberOfThreadsLabel = new wxStaticText(kinematicsPage,
-		wxID_ANY, _T("Number of Simultaneous Threads to Execute"));
 	valueString.Printf("%i", mainFrame.GetNumberOfThreads());
-	simultaneousThreads = new wxTextCtrl(kinematicsPage, wxID_ANY, valueString,
-		wxDefaultPosition, wxSize(inputColumnWidth, -1));
-	numberOfThreadsSizer->Add(numberOfThreadsLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
+	simultaneousThreads = new wxTextCtrl(kinematicsPage, wxID_ANY, valueString);
+	numberOfThreadsSizer->Add(new wxStaticText(kinematicsPage, wxID_ANY,
+		_T("Number of Simultaneous Threads to Execute")), 0,
+		wxALIGN_CENTER_VERTICAL | wxALL, 5);
 	numberOfThreadsSizer->Add(simultaneousThreads, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 
 	// Add the sizers to the MainSizer
@@ -556,18 +550,62 @@ void OptionsDialog::CreateControls(void)
 
 	// Set the debug page's sizer
 	debuggerPage->SetSizerAndFit(debuggerTopSizer);
+	
+	// Add the fonts page
+	fontPage = new wxPanel(notebook);
+	notebook->AddPage(fontPage, _T("Fonts"));
+
+	// Use another outer sizer to create more room for the controls
+	wxBoxSizer *fontsTopSizer = new wxBoxSizer(wxVERTICAL);
+
+	// Create the kinematics page main sizer
+	wxFlexGridSizer *fontsSizer = new wxFlexGridSizer(3, 10, 10);
+	fontsTopSizer->Add(fontsSizer, 0,
+		wxALIGN_TOP | wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
+	
+	// Get the plot objects from the main frame
+	outputFont = mainFrame.GetOutputFont();
+	plotFont = mainFrame.GetPlotFont();
+
+	if (outputFont.IsOk())
+	{
+		outputFontLabel = new wxStaticText(fontPage, wxID_ANY, outputFont.GetFaceName());
+		outputFontLabel->SetFont(outputFont);
+	}
+	else
+		outputFontLabel = new wxStaticText(fontPage, wxID_ANY, _T("Not Set"));
+	
+	if (plotFont.IsOk())
+	{
+		plotFontLabel = new wxStaticText(fontPage, wxID_ANY, plotFont.GetFaceName());
+		plotFontLabel->SetFont(plotFont);
+	}
+	else
+		plotFontLabel = new wxStaticText(fontPage, wxID_ANY, _T("Not Set"));
+	
+	// Add the controls to the MainSizer
+	fontsSizer->Add(new wxStaticText(fontPage, wxID_ANY, _T("Output Font")),
+		0, wxALIGN_CENTER_VERTICAL);
+	fontsSizer->Add(outputFontLabel, 0, wxALIGN_CENTER_VERTICAL);
+	fontsSizer->Add(new wxButton(fontPage, ChangeOutputFontButton,
+		_T("Change...")), 0, wxALIGN_CENTER_VERTICAL);
+	fontsSizer->Add(new wxStaticText(fontPage, wxID_ANY, _T("Plot Font")),
+		0, wxALIGN_CENTER_VERTICAL);
+	fontsSizer->Add(plotFontLabel, 0, wxALIGN_CENTER_VERTICAL);
+	fontsSizer->Add(new wxButton(fontPage, ChangePlotFontButton,
+		_T("Change...")), 0, wxALIGN_CENTER_VERTICAL);
+
+	// Set the debug page's sizer
+	fontPage->SetSizerAndFit(fontsTopSizer);
 
 	// Add a spacer between the notebook and the buttons
 	mainSizer->AddSpacer(10);
 
 	// Create another sizer for the buttons at the bottom and add the buttons
 	wxBoxSizer *buttonsSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxButton *okButton = new wxButton(this, wxID_OK, _T("OK"),
-		wxDefaultPosition, wxDefaultSize, 0);
-	wxButton *cancelButton = new wxButton(this, wxID_CANCEL, _T("Cancel"),
-		wxDefaultPosition, wxDefaultSize, 0);
+	wxButton *okButton = new wxButton(this, wxID_OK, _T("OK"));
 	buttonsSizer->Add(okButton, 0, wxALL, 5);
-	buttonsSizer->Add(cancelButton, 0, wxALL, 5);
+	buttonsSizer->Add(new wxButton(this, wxID_CANCEL, _T("Cancel")), 0, wxALL, 5);
 	mainSizer->Add(buttonsSizer, 0, wxALIGN_CENTER_HORIZONTAL);
 
 	// Make the OK button default
@@ -665,6 +703,10 @@ void OptionsDialog::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 		debugger.SetDebugLevel(Debugger::PriorityHigh);
 	else
 		debugger.SetDebugLevel(Debugger::PriorityVeryHigh);
+	
+	// Update the fonts
+	mainFrame.SetOutputFont(outputFont);
+	mainFrame.SetPlotFont(plotFont);
 
 	// The way we handle this changes depending on how this form was displayed
 	if (IsModal())
@@ -702,4 +744,66 @@ void OptionsDialog::CancelClickEvent(wxCommandEvent& WXUNUSED(event))
 		SetReturnCode(wxID_CANCEL);
 		Show(false);
 	}
+}
+
+//==========================================================================
+// Class:			OptionsDialog
+// Function:		ChangeOutputFontClickEvent
+//
+// Description:		Handles the "change output font" button clicked event.
+//
+// Input Arguments:
+//		event	= wxCommandEvent&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void OptionsDialog::ChangeOutputFontClickEvent(wxCommandEvent& WXUNUSED(event))
+{
+	// Display the font selection dialog
+	// If user selected a new font, update the font labels and the class members
+	wxFont tempFont = wxGetFontFromUser(this, outputFont, _T("Select Output Font"));
+	if (tempFont.IsOk())
+	{
+		outputFont = tempFont;
+		outputFontLabel->SetFont(outputFont);
+		outputFontLabel->SetLabel(outputFont.GetFaceName());
+	}
+	
+	// FIXME:  Re-size sizers in case font name changed length
+}
+
+//==========================================================================
+// Class:			OptionsDialog
+// Function:		ChangePlotFontClickEvent
+//
+// Description:		Handles the "change plot font" button clicked event.
+//
+// Input Arguments:
+//		event	= wxCommandEvent&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void OptionsDialog::ChangePlotFontClickEvent(wxCommandEvent& WXUNUSED(event))
+{
+	// Display the font selection dialog
+	// If user selected a new font, update the font labels and the class members
+	wxFont tempFont = wxGetFontFromUser(this, plotFont, _T("Select Plot Font"));
+	if (tempFont.IsOk())
+	{
+		plotFont = tempFont;
+		plotFontLabel->SetFont(plotFont);
+		plotFontLabel->SetLabel(plotFont.GetFaceName());
+	}
+	
+	// FIXME:  Re-size sizers in case font name changed length
 }

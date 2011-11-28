@@ -28,7 +28,8 @@
 #include "vMath/dataset2D.h"
 #include "vUtilities/fontFinder.h"
 #include "vUtilities/debugger.h"
-
+#include "gui/components/mainFrame.h"
+#include <fstream>
 //==========================================================================
 // Class:			PlotObject
 // Function:		PlotObject
@@ -72,24 +73,46 @@ PlotObject::PlotObject(PlotRenderer &_renderer) : renderer(_renderer)
 	axisRight->SetAxisAtMinEnd(axisBottom);
 	axisRight->SetOppositeAxis(axisLeft);
 
-	// Find the name of the font that we want to use
-	// FIXME:  Write this to config file so we don't have to do this every time?
+	// Figure out which font to use - if there was one specified in the config
+	// file, we're done, otherwise look for some preferred fonts
+	wxFont plotFont = static_cast<MainFrame*>(renderer.GetParent())->GetPlotFont();
 	wxString fontFile;
-	wxArrayString preferredFonts;
-
-	preferredFonts.Add(_T("DejaVu Sans"));// GTK preference
-	preferredFonts.Add(_T("Arial"));// MSW preference
-
-	bool foundFont = FontFinder::GetPreferredFontFileName(wxFONTENCODING_SYSTEM,
-		preferredFonts, false, fontFile);
-
-	// Tell the user if we're unsure of the font
-	if (!foundFont)
+	
+	if (plotFont.IsOk())
 	{
-		if (!fontFile.IsEmpty())
-			renderer.GetDebugger().Print(_T("Could not find preferred plot font; using ") + fontFile);
+		fontFile = FontFinder::GetFontFileName(plotFont.GetFaceName());
+		if (fontFile.IsEmpty())
+			renderer.GetDebugger().Print(_T("Could not find font file for ")
+				+ plotFont.GetFaceName());
+	}
+	else// Try to find a good font on the system
+	{
+		wxArrayString preferredFonts;
+
+		preferredFonts.Add(_T("DejaVu Sans"));// GTK preference
+		preferredFonts.Add(_T("Arial"));// MSW preference
+
+		bool foundFont = FontFinder::GetPreferredFontFileName(wxFONTENCODING_SYSTEM,
+			preferredFonts, false, fontFile);
+
+		// Tell the user if we're unsure of the font
+		if (!foundFont)
+		{
+			if (!fontFile.IsEmpty())
+				renderer.GetDebugger().Print(_T("Could not find preferred plot font; using ") + fontFile);
+			else
+				renderer.GetDebugger().Print(_T("Could not find any *.ttf files - cannot generate plot fonts"));
+		}
 		else
-			renderer.GetDebugger().Print(_T("Could not find any *.ttf files - cannot generate plot fonts"));
+		{
+			// Store what we found in the MainFrame configuration
+			wxString fontName;
+			if (FontFinder::GetFontName(fontFile, fontName))
+			{
+				if (plotFont.SetFaceName(fontName))
+					static_cast<MainFrame*>(renderer.GetParent())->SetPlotFont(plotFont);
+			}
+		}
 	}
 
 	// Create the fonts
@@ -102,7 +125,8 @@ PlotObject::PlotObject(PlotRenderer &_renderer) : renderer(_renderer)
 		delete axisFont;
 		axisFont = NULL;
 
-		renderer.GetDebugger().Print(_T("Error loading axis font"));// FIXME:  If this is settable by some configuration option, tell the user here
+		renderer.GetDebugger().Print(
+			_T("Error loading axis font.  Specify a font in Tools->Options->Fonts to correct."));
 	}
 	else
 	{
@@ -115,7 +139,8 @@ PlotObject::PlotObject(PlotRenderer &_renderer) : renderer(_renderer)
 		delete titleFont;
 		titleFont = NULL;
 
-		renderer.GetDebugger().Print(_T("Error loading title font"));// FIXME:  If this is settable by some configuration option, tell the user here
+		renderer.GetDebugger().Print(
+			_T("Error loading title font.  Specify a font in Tools->Options->Fonts to correct."));
 	}
 	else
 	{

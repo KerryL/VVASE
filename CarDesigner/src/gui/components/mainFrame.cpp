@@ -14,11 +14,11 @@
 //				 MainFrame class.  Uses wxWidgets for the GUI components.
 // History:
 //	1/24/2009	- Major application structure change - MainFrame uses GuiObject instead of
-//				  GUI_CAR.  GuiObject changed to only contain either GUI_CAR or ITERATION
+//				  GUI_CAR.  GuiObject changed to only contain either GuiCar or Iteration
 //				  objects, K. Loux.
 //	1/28/2009	- Changed structure of GUI components so context menu creation for all
 //				  objects is handled by this class, K. Loux.
-//	2/10/2009	- Added EDIT_PANEL to application, K. Loux.
+//	2/10/2009	- Added EditPanel to application, K. Loux.
 //	2/17/2009	- Moved the Kinematics object for primary analysis into the GUI_CAR class.
 //	6/7/2009	- Changed GetFilenameFromUser() to make use of wx functions for checking for file
 //				  existance and selecting multiple files to open, K. Loux.
@@ -130,13 +130,9 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxEmptyString, wxDefaultPositio
 	CreateKinematicAnalysisToolbar();
 
 	// These need to be in this order - otherwise the centering doesn't work (resize first)
-	SetProperties();
 	DoLayout();
 	InitializeSolver();
-
-	// Load user preferences - done after SetProperties(), etc. because this will overwrite defaults
-	// if a setup was previously saved
-	ReadConfiguration();
+	SetProperties();// Includes reading configuration file
 
 	// Initialize the object management variables
 	activeIndex = -1;
@@ -158,11 +154,11 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxEmptyString, wxDefaultPositio
 	debugger.Print(Debugger::PriorityVeryHigh, "sizeof(int): %i", sizeof(int));
 	debugger.Print(Debugger::PriorityVeryHigh, "sizeof(long): %i", sizeof(long));
 	debugger.Print(Debugger::PriorityVeryHigh, "sizeof(bool): %i", sizeof(bool));
-	debugger.Print(Debugger::PriorityVeryHigh, "sizeof(DRIVETRAIN::DRIVE_WHEELS): %i",
-		sizeof(DRIVETRAIN::DRIVE_WHEELS));
+	debugger.Print(Debugger::PriorityVeryHigh, "sizeof(Drivetrain::DriveWheels): %i",
+		sizeof(Drivetrain::DriveWheels));
 	debugger.Print(Debugger::PriorityVeryHigh, "sizeof(Vector): %i", sizeof(Vector));
-	debugger.Print(Debugger::PriorityVeryHigh, "sizeof(Vector_SET): %i", sizeof(Vector_SET));
-	debugger.Print(Debugger::PriorityVeryHigh, "sizeof(WHEEL_SET): %i", sizeof(WHEEL_SET));//*/
+	debugger.Print(Debugger::PriorityVeryHigh, "sizeof(VectorSet): %i", sizeof(VectorSet));
+	debugger.Print(Debugger::PriorityVeryHigh, "sizeof(WheelSet): %i", sizeof(WheelSet));//*/
 }
 
 //==========================================================================
@@ -344,41 +340,6 @@ void MainFrame::SetProperties(void)
 	debugger.SetTargetOutput(debugPane);
 	debugger.SetDebugLevel(Debugger::PriorityHigh);
 
-	// OutputPane properties
-	wxString fontFaceName;
-	wxTextAttr outputAttributes;
-	wxFont outputFont;
-
-	// FIXME:  Give user the option of selecting a font?  Maybe in options dialog?  Then only do this if unset?
-	wxArrayString preferredFonts;
-	preferredFonts.Add(_T("Monospace"));// GTK preference
-	preferredFonts.Add(_T("Courier New"));// MSW preference
-	bool foundPreferredFont = FontFinder::GetFontFaceName(wxFONTENCODING_SYSTEM, preferredFonts, true, fontFaceName);
-
-	// As long as we have a font name to use, set the font
-	if (!fontFaceName.IsEmpty())
-	{
-		// Populate the wxFont object
-		outputFont.SetPointSize(9);
-		outputFont.SetFamily(wxFONTFAMILY_MODERN);
-		if (!outputFont.SetFaceName(fontFaceName))
-			debugger.Print(_T("Error setting font face to ") + fontFaceName);
-
-		// Assign the font to the window
-		outputAttributes.SetFont(outputFont);
-		if (!debugPane->SetDefaultStyle(outputAttributes))
-			debugger.Print(_T("Error setting font style"));
-	}
-
-	// Tell the user if we're using a font we're unsure of
-	if (!foundPreferredFont)
-		debugger.Print(_T("Could not find preferred fixed-width font; using ") + fontFaceName);// FIXME:  If we make this a configuration option, tell the user here
-
-	// Also put the cursor at the bottom of the text, so the window scrolls automatically
-	// as it updates with text
-	// NOTE:  This already works as desired under GTK, issue is with MSW
-	// FIXME:  This doesn't work!
-
 	// Add the application level entry to the SystemsTree (this one is hidden, but necessary)
 	systemsTree->AddRoot(_T("Application Level"), -1, -1);
 
@@ -411,8 +372,50 @@ void MainFrame::SetProperties(void)
 	converter.SetPowerUnits(Convert::HORSEPOWER);
 	converter.SetEnergyUnits(Convert::BRITISH_THERMAL_UNIT);
 	converter.SetTemperatureUnits(Convert::FAHRENHEIT);
+	
+	// Read defaults from config file, if it exists
+	ReadConfiguration();
+	
+	// OutputPane properties
+	wxString fontFaceName;
+	
+	// Check to see if we read the font preference from the config file
+	if (outputFont.IsNull() || !outputFont.IsOk())
+	{
+		wxArrayString preferredFonts;
+		preferredFonts.Add(_T("Monospace"));// GTK preference
+		preferredFonts.Add(_T("Courier New"));// MSW preference
+		bool foundPreferredFont = FontFinder::GetFontFaceName(
+			wxFONTENCODING_SYSTEM, preferredFonts, true, fontFaceName);
 
-	// Allow draging-and-dropping of files onto this window to open them
+		// As long as we have a font name to use, set the font
+		if (!fontFaceName.IsEmpty())
+		{
+			// Populate the wxFont object
+			outputFont.SetPointSize(9);
+			outputFont.SetFamily(wxFONTFAMILY_MODERN);
+			if (!outputFont.SetFaceName(fontFaceName))
+				debugger.Print(_T("Error setting font face to ") + fontFaceName);
+		}
+		
+		// Tell the user if we're using a font we're unsure of
+		if (!foundPreferredFont)
+		{
+			debugger.Print(_T("Could not find preferred fixed-width font; using ")
+				+ fontFaceName);
+			debugger.Print(_T("This can be changed in Tools->Options->Fonts"));
+		}
+	}
+
+	// Set the font
+	SetOutputFont(outputFont);
+
+	// Also put the cursor at the bottom of the text, so the window scrolls automatically
+	// as it updates with text
+	// NOTE:  This already works as desired under GTK, issue is with MSW
+	// FIXME:  This doesn't work!
+
+	// Allow dragging-and-dropping of files onto this window to open them
 	SetDropTarget(dynamic_cast<wxDropTarget*>(new DropTarget(*this)));
 }
 
@@ -504,6 +507,62 @@ void MainFrame::SetNumberOfThreads(unsigned int newNumberOfThreads)
 
 	// Update the class member for the desired number of threads
 	numberOfThreads = newNumberOfThreads;
+}
+
+//==========================================================================
+// Class:			MainFrame
+// Function:		SetNumberOfThreads
+//
+// Description:		Sets the font to use for text output and assigns it to
+//					the panel.
+//
+// Input Arguments:
+//		font	= const wxFont&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void MainFrame::SetOutputFont(const wxFont& font)
+{
+	if (!font.IsNull() && font.IsOk())
+	{
+		outputFont = font;
+		
+		// Assign the font to the window
+		wxTextAttr outputAttributes;
+		outputAttributes.SetFont(outputFont);
+		if (!debugPane->SetDefaultStyle(outputAttributes))
+			debugger.Print(_T("Error setting font style"));
+	}
+}
+
+//==========================================================================
+// Class:			MainFrame
+// Function:		SetPlotFont
+//
+// Description:		Sets the font to use for plots.
+//
+// Input Arguments:
+//		font	= const wxFont&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void MainFrame::SetPlotFont(const wxFont& font)
+{
+	if (!font.IsNull() && font.IsOk())
+		plotFont = font;
+	/*else
+		debugger.Print(_T("Error setting plot font"));*/// Sometimes we just want
+	// this to sort out whether or not the font is valid without telling the user.
 }
 
 //==========================================================================
@@ -2411,6 +2470,13 @@ void MainFrame::ReadConfiguration(void)
 
 	// Read SOLVER configuration from file
 	SetNumberOfThreads(configurationFile->Read(_T("/SOLVER/NumberOfThreads"), wxThread::GetCPUCount() * 2));
+	
+	// Read FONT configuration from file
+	wxFont font;
+	font.SetNativeFontInfo(configurationFile->Read(_T("/FONTS/OutputFont"), wxEmptyString));
+	SetOutputFont(font);
+	font.SetNativeFontInfo(configurationFile->Read(_T("/FONTS/PlotFont"), wxEmptyString));
+	SetPlotFont(font);
 
 	// Read recent file history
 	recentFileManager->Load(*configurationFile);
@@ -2484,6 +2550,14 @@ void MainFrame::WriteConfiguration(void)
 
 	// Write SOLVER configuration to file
 	configurationFile->Write(_T("/SOLVER/NumberOfThreads"), numberOfThreads);
+	
+	// Write FONTS configuration to file
+	if (outputFont.IsOk())
+		configurationFile->Write(_T("/FONTS/OutputFont"),
+			outputFont.GetNativeFontInfoDesc());
+	if (plotFont.IsOk())
+		configurationFile->Write(_T("/FONTS/PlotFont"),
+			plotFont.GetNativeFontInfoDesc());
 
 	// Write recent file history
 	recentFileManager->Save(*configurationFile);

@@ -10,7 +10,7 @@
 // File:  mainFrame.h
 // Created:  3/7/2008
 // Author:  K. Loux
-// Description:  Contains the class declaration for the MAIN_FRAME class.  Uses wxWidgets
+// Description:  Contains the class declaration for the MainFrame class.  Uses wxWidgets
 //				 for the GUI components.  Also contains the application class definition
 //				 and functionality at the bottom of this file (minimal).
 // History:
@@ -140,6 +140,12 @@ public:
 	void EnableRedo(void) { menuBar->FindItem(IdMenuEditRedo)->Enable(true); };
 	void DisableUndo(void) { menuBar->FindItem(IdMenuEditUndo)->Enable(false); };
 	void DisableRedo(void) { menuBar->FindItem(IdMenuEditRedo)->Enable(false); };
+	
+	const wxFont& GetOutputFont(void) { return outputFont; };
+	wxFont GetPlotFont(void) { return plotFont; };
+	
+	void SetOutputFont(const wxFont &font);
+	void SetPlotFont(const wxFont &font);
 
 private:
 	// The form object manager - this controls docking, sub-frame locations, etc.
@@ -176,7 +182,7 @@ private:
 	// Sets the notebook page with index Index to be the top page
 	void SetNotebookPage(int index);
 
-	// For object management we need an index specifying the acitve car
+	// For object management we need an index specifying the active car
 	int activeIndex;
 
 	// Flag set to true during the deletion process
@@ -341,6 +347,10 @@ private:
 
 	// The undo/redo object
 	UndoRedoStack undoRedo;
+	
+	// The font objects
+	wxFont outputFont;
+	wxFont plotFont;
 
 	// For the event table
 	DECLARE_EVENT_TABLE();
