@@ -379,7 +379,7 @@ void MainFrame::SetProperties(void)
 	// OutputPane properties
 	wxString fontFaceName;
 	
-	// Check to see if we read the font preference from the config file
+	// Check to see if we read the output font preference from the config file
 	if (outputFont.IsNull() || !outputFont.IsOk())
 	{
 		wxArrayString preferredFonts;
@@ -409,6 +409,38 @@ void MainFrame::SetProperties(void)
 
 	// Set the font
 	SetOutputFont(outputFont);
+
+	// Check the plot font
+	if (plotFont.IsNull() || !plotFont.IsOk())
+	{
+		wxArrayString preferredFonts;
+
+		preferredFonts.Add(_T("DejaVu Sans"));// GTK preference
+		preferredFonts.Add(_T("Arial"));// MSW preference
+
+		wxString fontFile;
+		bool foundFont = FontFinder::GetPreferredFontFileName(wxFONTENCODING_SYSTEM,
+			preferredFonts, false, fontFile);
+
+		// Tell the user if we're unsure of the font
+		if (!foundFont)
+		{
+			if (!fontFile.IsEmpty())
+				debugger.Print(_T("Could not find preferred plot font; using ") + fontFile);
+			else
+				debugger.Print(_T("Could not find any *.ttf files - cannot generate plot fonts"));
+		}
+		else
+		{
+			// Store what we found in the MainFrame configuration
+			wxString fontName;
+			if (FontFinder::GetFontName(fontFile, fontName))
+			{
+				if (plotFont.SetFaceName(fontName))
+					SetPlotFont(plotFont);
+			}
+		}
+	}
 
 	// Also put the cursor at the bottom of the text, so the window scrolls automatically
 	// as it updates with text

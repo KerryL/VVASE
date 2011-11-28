@@ -75,44 +75,15 @@ PlotObject::PlotObject(PlotRenderer &_renderer) : renderer(_renderer)
 
 	// Figure out which font to use - if there was one specified in the config
 	// file, we're done, otherwise look for some preferred fonts
-	wxFont plotFont = static_cast<MainFrame*>(renderer.GetParent())->GetPlotFont();
+	wxFont plotFont = renderer.GetMainFrame().GetPlotFont();
 	wxString fontFile;
-	
+
 	if (plotFont.IsOk())
 	{
 		fontFile = FontFinder::GetFontFileName(plotFont.GetFaceName());
 		if (fontFile.IsEmpty())
 			renderer.GetDebugger().Print(_T("Could not find font file for ")
 				+ plotFont.GetFaceName());
-	}
-	else// Try to find a good font on the system
-	{
-		wxArrayString preferredFonts;
-
-		preferredFonts.Add(_T("DejaVu Sans"));// GTK preference
-		preferredFonts.Add(_T("Arial"));// MSW preference
-
-		bool foundFont = FontFinder::GetPreferredFontFileName(wxFONTENCODING_SYSTEM,
-			preferredFonts, false, fontFile);
-
-		// Tell the user if we're unsure of the font
-		if (!foundFont)
-		{
-			if (!fontFile.IsEmpty())
-				renderer.GetDebugger().Print(_T("Could not find preferred plot font; using ") + fontFile);
-			else
-				renderer.GetDebugger().Print(_T("Could not find any *.ttf files - cannot generate plot fonts"));
-		}
-		else
-		{
-			// Store what we found in the MainFrame configuration
-			wxString fontName;
-			if (FontFinder::GetFontName(fontFile, fontName))
-			{
-				if (plotFont.SetFaceName(fontName))
-					static_cast<MainFrame*>(renderer.GetParent())->SetPlotFont(plotFont);
-			}
-		}
 	}
 
 	// Create the fonts

@@ -30,12 +30,13 @@ class PlotCursor;
 class PlotObject;
 class Debugger;
 class PlotPanel;
+class MainFrame;
 
 class PlotRenderer : public RenderWindow
 {
 public:
 	// Constructor
-	PlotRenderer(PlotPanel &_parent, wxWindowID id, int args[], const Debugger &_debugger);
+	PlotRenderer(PlotPanel &_parent, wxWindowID id, int args[], MainFrame &_mainFrame, const Debugger &_debugger);
 
 	// Destructor
 	~PlotRenderer();
@@ -96,10 +97,14 @@ public:
 	void UpdateCursors(void);
 
 	const Debugger& GetDebugger(void) const { return debugger; };
+	MainFrame &GetMainFrame(void) { return mainFrame; };
 
 private:
 	// Debugger message printing utility
 	const Debugger &debugger;
+
+	// Reference to the MainFrame object
+	MainFrame &mainFrame;
 
 	// Called from the PlotRenderer constructor only in order to initialize the display
 	void CreateActors(void);

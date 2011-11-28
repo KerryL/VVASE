@@ -118,9 +118,9 @@ void PlotPanel::CreateControls(void)
 	// Adding the double-buffer arugment fixes this.  Under windows, the double-buffer argument
 	// causes the colors to go funky.  So we have this #if.
 	int args[] = {WX_GL_DOUBLEBUFFER, 0};
-	renderer = new PlotRenderer(*this, wxID_ANY, args, debugger);
+	renderer = new PlotRenderer(*this, wxID_ANY, args, *static_cast<MainFrame*>(GetParent()), debugger);
 #else
-	renderer = new PlotRenderer(*this, wxID_ANY, NULL, debugger);
+	renderer = new PlotRenderer(*this, wxID_ANY, NULL, *static_cast<MainFrame*>(GetParent()), debugger);
 #endif
 	renderer->SetGridOn();
 	mainSizer->Add(renderer, 1, wxEXPAND);

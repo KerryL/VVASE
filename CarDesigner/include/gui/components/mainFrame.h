@@ -19,13 +19,13 @@
 //  5/13/2008	- Added variables and functions to the class for managing GUI_CAR objects.
 //				  Functionality includes maintaining a list of open objects to prevent
 //				  memory leaks, K. Loux.
-//	1/24/2009	- Major application structure change - MAIN_FRAME uses GUI_OBJECT instead of
-//				  GUI_CAR.  GUI_OBJECT changed to only contain either GUI_CAR or ITERATION
+//	1/24/2009	- Major application structure change - MainFrame uses GuiObject instead of
+//				  GuiCar.  GuiObject changed to only contain either GuiCar or Iteration
 //				  objects, K. Loux.
 //	1/28/2009	- Changed structure of GUI components so context menu creation for all
 //				  objects is handled by this class, K. Loux.
-//	2/10/2009	- Added EDIT_PANEL to application, K. Loux.
-//	3/24/2009	- Created one, application level KINEMATICS object, K. Loux.
+//	2/10/2009	- Added EditPanel to application, K. Loux.
+//	3/24/2009	- Created one, application level Kinematics object, K. Loux.
 //	6/7/2009	- Changed GetFilenameFromUser() to make use of wx functions for checking for file
 //				  existence and selecting multiple files to open, K. Loux.
 //	10/18/2010	- Added undo/redo stack object, K. Loux.
@@ -142,7 +142,7 @@ public:
 	void DisableRedo(void) { menuBar->FindItem(IdMenuEditRedo)->Enable(false); };
 	
 	const wxFont& GetOutputFont(void) { return outputFont; };
-	wxFont GetPlotFont(void) { return plotFont; };
+	const wxFont& GetPlotFont(void) { return plotFont; };
 	
 	void SetOutputFont(const wxFont &font);
 	void SetPlotFont(const wxFont &font);
