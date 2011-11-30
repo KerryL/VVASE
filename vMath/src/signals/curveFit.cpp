@@ -81,7 +81,7 @@ CurveFit::PolynomialFit CurveFit::DoPolynomialFit(const Dataset2D &data, const u
 
 	ComputeRSquared(data, fit);
 
-	// FIXME:  Highjacked for matrix testing
+	// NOTE:  Highjacked for matrix testing
 	// Example from wikipedia SVD article
 	/*Matrix M(4,5);
 	M(0,0) = 1.0;

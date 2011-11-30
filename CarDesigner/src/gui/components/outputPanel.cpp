@@ -26,6 +26,7 @@
 #include "vSolver/physics/kinematicOutputs.h"
 #include "vUtilities/debugger.h"
 #include "vUtilities/convert.h"
+#include "gui/superGrid.h"
 #include "vMath/carMath.h"
 
 //==========================================================================
@@ -355,7 +356,7 @@ void OutputPanel::CreateControls()
 	topSizer->Add(mainSizer, 1, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALL, 1);
 
 	// Create the grid for the hard point entry
-	outputsList = new wxGrid(this, wxID_ANY);
+	outputsList = new SuperGrid(this, wxID_ANY);
 	outputsList->CreateGrid(KinematicOutputs::NumberOfOutputScalars, 2, wxGrid::wxGridSelectRows);
 
 	// Begin a batch edit of the grid

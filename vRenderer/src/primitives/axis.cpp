@@ -231,7 +231,6 @@ void Axis::GenerateGeometry(void)
 	glEnd();
 
 	// Add the text
-	// FIXME:  Should add something here to center text over the plot area, not the render window
 	if (font)
 	{
 		FTBBox boundingBox;
@@ -272,8 +271,11 @@ void Axis::GenerateGeometry(void)
 			default:
 				assert(0);
 				yTranslation = 0.0;// To avoid MSVC++ compiler warning C4701
-				break;
 			}
+			
+			// We want the text centered over the plot area, not the entire window
+			int plotAreaOffset = (minAxis->GetOffsetFromWindowEdge()
+					- maxAxis->GetOffsetFromWindowEdge()) / 2;
 
 			glPushMatrix();
 				glLoadIdentity();
@@ -283,12 +285,12 @@ void Axis::GenerateGeometry(void)
 
 				if (IsHorizontal())
 					glTranslated((renderWindow.GetSize().GetWidth() + boundingBox.Lower().X()
-						- boundingBox.Upper().X()) / 2.0, yTranslation, 0.0);
+						- boundingBox.Upper().X()) / 2.0 + plotAreaOffset, yTranslation, 0.0);
 				else
 				{
 					glRotated(90.0, 0.0, 0.0, 1.0);
 					glTranslated((boundingBox.Lower().X() - boundingBox.Upper().X()
-						+ renderWindow.GetSize().GetHeight()) / 2.0, -yTranslation, 0.0);
+						+ renderWindow.GetSize().GetHeight()) / 2.0 + plotAreaOffset, -yTranslation, 0.0);
 				}
 
 				font->Render(label.c_str());

@@ -10,7 +10,7 @@
 // File:  outputPanel.h
 // Created:  3/15/2009
 // Author:  K. Loux
-// Description:  Contains the class declaration for the OUTPUT_PANEL class.
+// Description:  Contains the class declaration for the OutputPanel class.
 // History:
 
 #ifndef _OUTPUT_PANEL_H_
@@ -26,6 +26,7 @@ class Convert;
 class Car;
 class KinematicOutputs;
 class MainFrame;
+class SuperGrid;
 
 class OutputPanel : public wxPanel
 {
@@ -72,7 +73,7 @@ private:
 	// End event handlers-------------------------------------------------
 
 	// The text-entry control
-	wxGrid *outputsList;
+	SuperGrid *outputsList;
 
 protected:
 	DECLARE_EVENT_TABLE()

@@ -28,7 +28,7 @@ public:
 	// Sets the specified column to automatically fill up the remaining space in the grid
 	void AutoStretchColumn(const int &col);
 
-	// Adjust the height of the control to match the height of the sum of the columns
+	// Adjust the height of the control to match the height of the sum of the rows
 	void FitHeight(void);
 
 private:
