@@ -28,6 +28,7 @@
 #include "gui/gaObject.h"
 #include "vSolver/physics/kinematicOutputs.h"
 #include "vCar/corner.h"
+#include "vUtilities/wxRelatedUtilities.h"
 
 //==========================================================================
 // Class:			GeneticAlgorithmPanel
@@ -674,22 +675,18 @@ void GeneticAlgorithmPanel::StartStopOptimizationClickedEvent(wxCommandEvent& WX
 			{
 				carIndex++;
 
-				// FIXME:  Under GTK, GetSelection only returns the correct index if the combobox has focus?
-				// This is the reason for the #ifdef __WXGTK__ below
-				if (carIndex == selectedCar->GetSelection())
+				// If the index matches the selection, we're done
+				if (carIndex == SafelyGetComboBoxSelection(selectedCar))
 					break;
 			}
 		}
 
-#ifdef __WXGTK__
-		// FIXME:  Under GTK, GetSelection only works the first time (while it has focus?)
-		// See note above
+		// Verify that the selection is valid
 		if (i > mainFrame.GetObjectCount())
 		{
 			wxMessageBox(_T("Error identifying associated car!  Please re-select."));
 			return;
 		}
-#endif
 
 		optimization.SetCarToOptimize(static_cast<GuiCar*>(mainFrame.GetObjectByIndex(i)));
 
