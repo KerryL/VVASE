@@ -14,7 +14,7 @@
 //				 MainFrame class.  Uses wxWidgets for the GUI components.
 // History:
 //	1/24/2009	- Major application structure change - MainFrame uses GuiObject instead of
-//				  GUI_CAR.  GuiObject changed to only contain either GuiCar or Iteration
+//				  GuiCar.  GuiObject changed to only contain either GuiCar or Iteration
 //				  objects, K. Loux.
 //	1/28/2009	- Changed structure of GUI components so context menu creation for all
 //				  objects is handled by this class, K. Loux.
@@ -140,13 +140,14 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxEmptyString, wxDefaultPositio
 
 	debugger.Print(carDesignerName + _T(" Initialized!"));
 
+	// Some machine information
 	/*debugger.Print(wxPlatformInfo::Get().GetArchName());
 	debugger.Print(wxPlatformInfo::Get().GetEndiannessName());
 
 	debugger.Print(wxGetOsDescription());
 	wxString temp;
 	temp.Printf("%i cores", wxThread::GetCPUCount());
-	debugger.Print(temp);*/
+	debugger.Print(temp);//*/
 
 	// Some debugging information
 	/*debugger.Print(Debugger::PriorityVeryHigh, "sizeof(double): %i", sizeof(double));
@@ -2621,7 +2622,7 @@ void MainFrame::UpdateActiveObjectMenu(void)
 	// Try to get a handle to object specific menus
 	int carMenuIndex = menuBar->FindMenu(_T("Car"));
 	int iterationMenuIndex = menuBar->FindMenu(_T("Iteration"));
-	int gaMenuIndex = menuBar->FindMenu(_T("GA"));
+	//int gaMenuIndex = menuBar->FindMenu(_T("GA"));
 
 	// Store the type of the active object
 	GuiObject::ItemType activeType;
@@ -2670,19 +2671,14 @@ void MainFrame::UpdateActiveObjectMenu(void)
 	// Unused cases
 	case GuiObject::TypeNone:
 	case GuiObject::TypeOptimization:
-		break;
-
-	// Fail on unknown types to prevent forgetting any
 	default:
 		// Remove all menus
 		if (carMenuIndex != wxNOT_FOUND)
-			menuBar->Remove(carMenuIndex);
+			delete menuBar->Remove(carMenuIndex);
 		else if (iterationMenuIndex != wxNOT_FOUND)
-			menuBar->Remove(iterationMenuIndex);
-		else if (gaMenuIndex != wxNOT_FOUND)
-			menuBar->Remove(gaMenuIndex);
-
-		break;
+			delete menuBar->Remove(iterationMenuIndex);
+		/*else if (gaMenuIndex != wxNOT_FOUND)
+			delete menuBar->Remove(gaMenuIndex);*/
 	}
 }
 

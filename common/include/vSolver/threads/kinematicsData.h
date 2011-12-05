@@ -10,7 +10,7 @@
 // File:  kinematicsData.h
 // Created:  1/12/2009
 // Author:  K. Loux
-// Description:  Contains the class declaration for the KINEMATICS_DATA class.  This contains
+// Description:  Contains the class declaration for the KinematicsData class.  This contains
 //				 information required to complete kinematics analyses and return the outputs.
 // History:
 
@@ -37,13 +37,13 @@ public:
 	// Destructor
 	~KinematicsData();
 
-	// Data required to perform kinematic analyses (for GUI_CAR or ITERATION objects)
+	// Data required to perform kinematic analyses (for GuiCar or Iteration objects)
 	const Car *originalCar;
 	Car *workingCar;
 	Kinematics::Inputs kinematicInputs;
 	KinematicOutputs *output;
 
-	// Mandatory overload from THREAD_DATA
+	// Mandatory overload from ThreadData
 	bool OkForCommand(ThreadJob::ThreadCommand &Command);
 };
 

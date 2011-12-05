@@ -298,10 +298,10 @@ void GAObject::SetUp(Car *_targetCar)
 	gsaMutex.Unlock();
 
 	// Initialize the algorithm
-	InitializeAlgorithm(populationSize, generationLimit, geneList.GetCount(), phenotypeSizes, true,
-		crossover, elitism, mutation);
+	InitializeAlgorithm(populationSize, generationLimit, geneList.GetCount(),
+		phenotypeSizes, true, crossover, elitism, mutation);
 
-	// Ensure exlcusive access to this object (again)
+	// Ensure exclusive access to this object (again)
 	wxMutexLocker lock(gsaMutex);
 
 	// Delete the dynamically allocated memory

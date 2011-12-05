@@ -10,7 +10,7 @@
 // File:  optimizationData.h
 // Created:  1/12/2009
 // Author:  K. Loux
-// Description:  Contains the class declaration for the OPTIMIZATION_DATA class.  This contains
+// Description:  Contains the class declaration for the OptimizationData class.  This contains
 //				 information required to conduct genetic optimizations.
 // History:
 
@@ -35,10 +35,10 @@ public:
 	// Destructor
 	~OptimizationData();
 
-	// Data required to perform genetic optimizations (for GENETIC_OPTIMIZATION objects)
+	// Data required to perform genetic optimizations (for GeneticOptimization objects)
 	GeneticAlgorithm *geneticAlgorithm;
 
-	// Mandatory overload from THREAD_DATA
+	// Mandatory overload from ThreadData
 	bool OkForCommand(ThreadJob::ThreadCommand &command);
 };
 

@@ -1365,6 +1365,11 @@ void PlotRenderer::UpdateCursors(void)
 	// Tell the cursors they need to recalculate
 	leftCursor->SetModified();
 	rightCursor->SetModified();
+	
+	// Added this to try to eliminate memory leak on glCallList in Draw() - didn't help
+	if (!GetContext() || !IsShownOnScreen())
+		return;
+	SetCurrent();
 
 	// Calculations are performed on Draw
 	leftCursor->Draw();

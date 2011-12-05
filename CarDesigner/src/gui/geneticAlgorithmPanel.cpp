@@ -736,7 +736,7 @@ void GeneticAlgorithmPanel::UpdateSelectableCars(void)
 	if (currentName.IsEmpty())
 		foundOriginalCar = true;
 
-	// Clear out the list and re-populate it with the currenly open cars
+	// Clear out the list and re-populate it with the currently open cars
 	selectedCar->Clear();
 	int i;
 	for (i = 0; i < mainFrame.GetObjectCount(); i++)
@@ -750,7 +750,7 @@ void GeneticAlgorithmPanel::UpdateSelectableCars(void)
 		}
 	}
 
-	// Re-selecte the originally selected car
+	// Re-select the originally selected car
 	if (foundOriginalCar)
 		selectedCar->SetValue(currentName);
 	else
@@ -857,7 +857,7 @@ void GeneticAlgorithmPanel::UpdateGeneList(void)
 // Function:		UpdateGoalList
 //
 // Description:		Updates the goal list to match the goals present in the
-//					associated GA_OBJECT.
+//					associated GAObject.
 //
 // Input Arguments:
 //		None
@@ -974,7 +974,7 @@ void GeneticAlgorithmPanel::IncrementStatusBars(void)
 //
 // Description:		Returns a human-readable string representing the passed
 //					input conditions.  Only GA modifiable conditions are
-//					displayed (i.e. euler rotations are not relevant here).
+//					displayed (i.e. Euler rotations are not relevant here).
 //
 // Input Arguments:
 //		inputs			= const Kinematics::Inputs& referring to the relevant inputs

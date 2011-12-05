@@ -611,6 +611,12 @@ void PlotObject::FormatPlot(void)
 	axisRight->SetMaximum(yRightMax);
 	axisRight->SetMinorResolution(yRightMinorResolution);
 	axisRight->SetMajorResolution(yRightMajorResolution);
+	
+	// Before we start calling Draw(), we need to set current
+	// Added this to try to eliminate memory leak on glCallList in Draw() - didn't help
+	if (!renderer.GetContext() || !renderer.IsShownOnScreen())
+		return;
+	renderer.SetCurrent();
 
 	// Update the axis limits so they are exactly the same as what is displayed on screen
 	axisBottom->Draw();

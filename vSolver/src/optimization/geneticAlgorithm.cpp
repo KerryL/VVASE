@@ -246,11 +246,11 @@ void GeneticAlgorithm::SetMutationProbability(double _mutation)
 //		_numberOfGenes		= int specifying the number of genes for this optimization
 //		_numberOfPhenotypes	= int* pointing to an array of integers that specify the
 //							  number of possible permutations for each gene
-//		_minimize			= bool indiciating whether the fitness function should
+//		_minimize			= bool indicating whether the fitness function should
 //							  be minimized or maximized
 //		_crossover			= int specifying the crossover point (or the crossover scheme)
 //		_elitism			= double specifying the elitism percentage
-//		_mutation			= double specifying the chance of mutation occuring
+//		_mutation			= double specifying the chance of mutation occurring
 //
 // Output Arguments:
 //		None
@@ -264,7 +264,7 @@ void GeneticAlgorithm::InitializeAlgorithm(int _populationSize, int _generationL
 											bool _minimize, int _crossover,
 											double _elitism, double _mutation)
 {
-	// Ensure exlcusive access to this object
+	// Ensure exclusive access to this object
 	gsaMutex.Lock();
 
 	// Delete dynamically allocated memory before we overwrite our existing sizes
@@ -284,7 +284,7 @@ void GeneticAlgorithm::InitializeAlgorithm(int _populationSize, int _generationL
 	SetElitismPercentage(_elitism);
 	SetMutationProbability(_mutation);
 
-	// Ensure exlcusive access to this object (again)
+	// Ensure exclusive access to this object (again)
 	wxMutexLocker lock(gsaMutex);
 
 	// Initialize the current generation
@@ -367,7 +367,7 @@ void GeneticAlgorithm::SimulateGeneration(void)
 //==========================================================================
 bool GeneticAlgorithm::PerformOptimization(void)
 {
-	// Ensure exlcusive access to this object
+	// Ensure exclusive access to this object
 	wxMutexLocker lock(gsaMutex);
 
 	// Make sure everything we need has been defined
