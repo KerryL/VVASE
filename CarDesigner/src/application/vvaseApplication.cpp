@@ -25,6 +25,7 @@
 #include "gui/ipcClient.h"
 #include "gui/ipcServer.h"
 #include "gui/ipcConnection.h"
+#include "vUtilities/debugLog.h"
 
 // Implement the application (have wxWidgets set up the appropriate entry points, etc.)
 IMPLEMENT_APP(VVASEApp);
@@ -161,6 +162,7 @@ bool VVASEApp::OnInit()
 int VVASEApp::OnExit()
 {
 	DeleteDynamicMemory();
+	DebugLog::Kill();
 
 	return 0;
 }

@@ -7,6 +7,9 @@
 VVASE
 vvase.rc
 
+# Other VVASE-specific logs
+VVASEdebug.log
+
 # MSVC++-specific ignores
 */Debug/
 /Debug/

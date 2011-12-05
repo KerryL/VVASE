@@ -14,12 +14,12 @@
 //				 most of the functionality of the suspension kinematics end of things
 //				 will be.
 // History:
-//	2/24/2008	- Made major changes to class when DRIVETRAIN object was removed.  Removed
+//	2/24/2008	- Made major changes to class when Drivetrain object was removed.  Removed
 //				  all dynamic memory allocation from constructor, K. Loux.
 //	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
 //	3/15/2008	- Finished contact patch line search algorithm, K. Loux.
 //	3/23/2008	- Changed units for class members and functions from degrees to radians and
-//				  renamed class from Kinematics.  Also introduce OUTPUTS class and Corner class
+//				  renamed class from Kinematics.  Also introduce Outputs class and Corner class
 //				  (major restructuring of kinematic solvers), K. Loux.
 //	3/24/2009	- Moved (physical location) to physics folder, K. Loux.
 //	4/19/2009	- Added threading for SolveCorner(), K. Loux.
@@ -37,6 +37,7 @@
 #include "vCar/suspension.h"
 #include "vMath/carMath.h"
 #include "vUtilities/wheelSetStructures.h"
+//#include "vUtilities/debugLog.h"
 
 //==========================================================================
 // Class:			Kinematics

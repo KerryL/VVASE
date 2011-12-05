@@ -29,6 +29,7 @@
 #include "vSolver/optimization/geneticAlgorithm.h"
 #include "vCar/car.h"
 #include "vUtilities/debugger.h"
+#include "vUtilities/debugLog.h"
 
 //==========================================================================
 // Class:			WorkerThread
@@ -163,12 +164,18 @@ void WorkerThread::OnJob()
 	case ThreadJob::CommandThreadKinematicsIteration:
 	case ThreadJob::CommandThreadKinematicsGA:
 		// Do the kinematics calculations
+		DebugLog::GetInstance()->Log(_T("SetInputs - Start"), 1);
 		kinematicAnalysis->SetInputs(static_cast<KinematicsData*>(job.data)->kinematicInputs);
+		DebugLog::GetInstance()->Log(_T("SetInputs - End"), -1);
+		DebugLog::GetInstance()->Log(_T("UpdateKinematics - Start"), 1);
 		kinematicAnalysis->UpdateKinematics(static_cast<KinematicsData*>(job.data)->originalCar,
 			static_cast<KinematicsData*>(job.data)->workingCar, job.name);
+		DebugLog::GetInstance()->Log(_T("UpdateKinematics - End"), -1);
 
 		// Get the outputs
+		DebugLog::GetInstance()->Log(_T("GetOutputs - Start"), 1);
 		*(static_cast<KinematicsData*>(job.data)->output) = kinematicAnalysis->GetOutputs();
+		DebugLog::GetInstance()->Log(_T("GetOutputs - End"), -1);
 
 		// Tell the main thread that we've done the job
 	    jobQueue->Report(job.command, id, job.index);
@@ -181,7 +188,9 @@ void WorkerThread::OnJob()
 		// The genetic algorithm object MUST have been initialized prior to the call to this thread
 		// Run the GA object - this will only return after the analysis is complete for all generations,
 		// and the target object has been updated
+		DebugLog::GetInstance()->Log(_T("Optimization - Start"), 1);
 		static_cast<OptimizationData*>(job.data)->geneticAlgorithm->PerformOptimization();
+		DebugLog::GetInstance()->Log(_T("Optimization - End"), -1);
 
 		// Determine elapsed time and print to the screen
 		debugger.Print(Debugger::PriorityVeryHigh, "Elapsed Time: %s",

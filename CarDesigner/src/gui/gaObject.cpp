@@ -126,7 +126,7 @@ const int GAObject::currentFileVersion = 0;
 // Class:			GAObject
 // Function:		SimulateGeneration
 //
-// Description:		Overriden method from GENETIC_ALGORITHM that allows the
+// Description:		Overriden method from GeneticAlgorithm that allows the
 //					use of threading.
 //
 // Input Arguments:
