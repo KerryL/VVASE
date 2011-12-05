@@ -24,6 +24,7 @@
 #include "vSolver/physics/kinematics.h"
 #include "vSolver/optimization/geneticAlgorithm.h"
 #include "vSolver/threads/inverseSemaphore.h"
+#include "vUtilities/debugLog.h"
 
 // VVASE forward declarations
 class GuiCar;
@@ -122,10 +123,10 @@ public:
 	void MarkAnalysisComplete(void) { inverseSemaphore.Post(); };
 
 	// Gets the number of analyses to be performed for each generation
-	int GetNumberOfInputs(void) const { wxMutexLocker lock(gsaMutex); return inputList.GetCount(); };
+	int GetNumberOfInputs(void) const { wxMutexLocker lock(gsaMutex); DebugLog::GetInstance()->Log(_T("GAObject::GetNumberOfInputs()")); return inputList.GetCount(); };
 
 	// Returns status of this object (running or not)
-	bool OptimizationIsRunning(void) const {  wxMutexLocker lock(gsaMutex); return isRunning; };
+	bool OptimizationIsRunning(void) const {  wxMutexLocker lock(gsaMutex); DebugLog::GetInstance()->Log(_T("GAObject::OptimizationIsRunning()")); return isRunning; };
 
 	// Returns the best car with the best fit genome
 	void UpdateTargetCar(void);

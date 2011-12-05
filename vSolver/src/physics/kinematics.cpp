@@ -37,7 +37,7 @@
 #include "vCar/suspension.h"
 #include "vMath/carMath.h"
 #include "vUtilities/wheelSetStructures.h"
-//#include "vUtilities/debugLog.h"
+#include "vUtilities/debugLog.h"
 
 //==========================================================================
 // Class:			Kinematics
@@ -116,8 +116,11 @@ void Kinematics::UpdateKinematics(const Car* _originalCar, Car* _workingCar, wxS
 	workingCar = _workingCar;
 
 	// Ensure exclusive access to the car objects
-	wxMutexLocker originalLock(originalCar->GetMutex());
+	// NOTE:  Always lock working car first, then lock original car (consistency required to prevent deadlocks)
 	wxMutexLocker workingLock(workingCar->GetMutex());
+	DebugLog::GetInstance()->Log(_T("Kinematics::UpdateKinematics (workingLock)"));
+	wxMutexLocker originalLock(originalCar->GetMutex());
+	DebugLog::GetInstance()->Log(_T("Kinematics::UpdateKinematics (originalLock)"));
 	
 	// Copy the information in the original car to the working car.  This minimizes rounding
 	// errors in the calculation of suspension points, and it also ensures that changes made

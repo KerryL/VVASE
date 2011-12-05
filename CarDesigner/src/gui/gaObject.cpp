@@ -79,6 +79,7 @@ GAObject::GAObject(MainFrame &_mainFrame, GeneticOptimization &_optimization, co
 GAObject::~GAObject()
 {
 	wxMutexLocker lock(gsaMutex);
+	DebugLog::GetInstance()->Log(_T("GAObject::~GAObject()"));
 
 	// Delete this object's CAR members
 	int i;
@@ -283,6 +284,7 @@ void GAObject::SetUp(Car *_targetCar)
 {
 	// Ensure exclusive access to this object
 	gsaMutex.Lock();
+	DebugLog::GetInstance()->Log(_T("GAObject::SetUp (lock)"));
 
 	// Initialize the run
 	int *phenotypeSizes = new int[geneList.GetCount()];
@@ -295,6 +297,7 @@ void GAObject::SetUp(Car *_targetCar)
 	targetCar = _targetCar;
 
 	// Release the mutex
+	DebugLog::GetInstance()->Log(_T("GAObject::SetUp (unlock)"));
 	gsaMutex.Unlock();
 
 	// Initialize the algorithm
@@ -303,6 +306,7 @@ void GAObject::SetUp(Car *_targetCar)
 
 	// Ensure exclusive access to this object (again)
 	wxMutexLocker lock(gsaMutex);
+	DebugLog::GetInstance()->Log(_T("GAObject::SetUp (locker)"));
 
 	// Delete the dynamically allocated memory
 	delete [] phenotypeSizes;
@@ -358,8 +362,11 @@ void GAObject::SetCarGenome(int carIndex, const int *currentGenome)
 	Corner *oppositeCorner;
 
 	// Get locks on all the cars we're manipulating
+	// NOTE:  Always lock working car first, then lock original car (consistency required to prevent deadlocks)
 	wxMutexLocker targetLocker(targetCar->GetMutex());
+	DebugLog::GetInstance()->Log(_T("GAObject::SetCarGenome (targetLocker)"));
 	wxMutexLocker originalLocker(originalCarArray[carIndex]->GetMutex());
+	DebugLog::GetInstance()->Log(_T("GAObject::SetCarGenome (originalLocker)"));
 
 	// Set the original and working cars equal to the target car
 	*originalCarArray[carIndex] = *targetCar;
@@ -785,6 +792,7 @@ void GAObject::UpdateTargetCar(void)
 {
 	// Ensure exclusive access to this object
 	wxMutexLocker lock(gsaMutex);
+	DebugLog::GetInstance()->Log(_T("GAObject::UpdateTargetCar (locker)"));
 
 	// Update the target car to match the best fit car we've got
 	*targetCar = *originalCarArray[generationLimit - 1];

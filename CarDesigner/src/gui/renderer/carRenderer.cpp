@@ -54,6 +54,7 @@
 #include "gui/components/mainFrame.h"
 #include "vSolver/physics/kinematicOutputs.h"
 #include "vMath/matrix.h"
+#include "vUtilities/debugLog.h"
 
 //==========================================================================
 // Class:			CarRenderer
@@ -256,8 +257,11 @@ void CarRenderer::UpdateCarDisplay(void)
 	Vector originalNormal;
 
 	// Get locks on the car's mutexes
+	// NOTE:  Always lock working car first, then lock original car (consistency required to prevent deadlocks)
 	wxMutexLocker displayLock(displayCar.GetMutex());
+	DebugLog::GetInstance()->Log("CarRenderer::UpdateCarDisplay (displayLock)", 0);
 	wxMutexLocker referenceLock(referenceCar.GetMutex());
+	DebugLog::GetInstance()->Log("CarRenderer::UpdateCarDisplay (referenceLock)", 0);
 
 	// Update the origin
 	origin->Update(appearanceOptions.GetSize(AppearanceOptions::SizeOriginShaftLength),

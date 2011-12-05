@@ -17,6 +17,7 @@
 
 // Local headers
 #include "vSolver/optimization/geneticAlgorithm.h"
+#include "vUtilities/debugLog.h"
 
 // Standard C++ headers
 #include <cstdlib>
@@ -42,6 +43,7 @@ GeneticAlgorithm::GeneticAlgorithm()
 {
 	// Ensure exlcusive access to this object
 	gsaMutex.Lock();
+	DebugLog::GetInstance()->Log(_T("GeneticAlgorithm::GeneticAlgorithm() (lock)"));
 
 	// Initialize the pointers
 	genomes = NULL;
@@ -55,6 +57,7 @@ GeneticAlgorithm::GeneticAlgorithm()
 	sortingMethod = SortMerge;
 
 	// Release the mutex
+	DebugLog::GetInstance()->Log(_T("GeneticAlgorithm::GeneticAlgorithm() (unlock)"));
 	gsaMutex.Unlock();
 
 	// Initialize the class members to zero
@@ -79,9 +82,6 @@ GeneticAlgorithm::GeneticAlgorithm()
 //==========================================================================
 GeneticAlgorithm::~GeneticAlgorithm()
 {
-	// Ensure exlcusive access to this object
-	wxMutexLocker lock(gsaMutex);
-
 	// Delete dynamically allocated memory
 	DeleteDynamicMemory();
 }
@@ -104,6 +104,9 @@ GeneticAlgorithm::~GeneticAlgorithm()
 //==========================================================================
 void GeneticAlgorithm::SetPopulationSize(int _populationSize)
 {
+	// Any time this changes, we need to delete any previously allocated memory first
+	DeleteDynamicMemory();
+
 	// Ensure exlcusive access to this object
 	wxMutexLocker lock(gsaMutex);
 
@@ -130,6 +133,9 @@ void GeneticAlgorithm::SetPopulationSize(int _populationSize)
 //==========================================================================
 void GeneticAlgorithm::SetGenerationLimit(int _generationLimit)
 {
+	// Any time this changes, we need to delete any previously allocated memory first
+	DeleteDynamicMemory();
+
 	// Ensure exlcusive access to this object
 	wxMutexLocker lock(gsaMutex);
 
@@ -264,11 +270,12 @@ void GeneticAlgorithm::InitializeAlgorithm(int _populationSize, int _generationL
 											bool _minimize, int _crossover,
 											double _elitism, double _mutation)
 {
-	// Ensure exclusive access to this object
-	gsaMutex.Lock();
-
 	// Delete dynamically allocated memory before we overwrite our existing sizes
 	DeleteDynamicMemory();
+
+	// Ensure exclusive access to this object
+	gsaMutex.Lock();
+	DebugLog::GetInstance()->Log(_T("GeneticAlgorithm::InitializeAlgorithm (lock)"));
 
 	// Copy the values to the class members
 	populationSize	= _populationSize;
@@ -277,6 +284,7 @@ void GeneticAlgorithm::InitializeAlgorithm(int _populationSize, int _generationL
 	minimize		= _minimize;
 
 	// Release the mutex to avoid a deadlock in the following "Set" functions
+	DebugLog::GetInstance()->Log(_T("GeneticAlgorithm::InitializeAlgorithm (unlock)"));
 	gsaMutex.Unlock();
 
 	// Use set functions to assign the rest to ensure the values are within range
@@ -286,6 +294,7 @@ void GeneticAlgorithm::InitializeAlgorithm(int _populationSize, int _generationL
 
 	// Ensure exclusive access to this object (again)
 	wxMutexLocker lock(gsaMutex);
+	DebugLog::GetInstance()->Log(_T("GeneticAlgorithm::InitializeAlgorithm (locker)"));
 
 	// Initialize the current generation
 	currentGeneration = -1;
@@ -369,6 +378,7 @@ bool GeneticAlgorithm::PerformOptimization(void)
 {
 	// Ensure exclusive access to this object
 	wxMutexLocker lock(gsaMutex);
+	DebugLog::GetInstance()->Log(_T("GeneticAlgorithm::PerformOptimization (locker)"));
 
 	// Make sure everything we need has been defined
 	if (numberOfGenes == 0 || !numberOfPhenotypes || !genomes)
@@ -700,6 +710,9 @@ void GeneticAlgorithm::SortByFitness(void)
 //==========================================================================
 void GeneticAlgorithm::DeleteDynamicMemory(void)
 {
+	wxMutexLocker lock(gsaMutex);
+	DebugLog::GetInstance()->Log(_T("GeneticAlgorithm::DeleteDynamicMemory (locker)"));
+
 	// Delete the old genomes and fitnesses (if they exist)
 	// Here we make the assumption that if and only if the genomes exist,
 	// everything else exists, too
@@ -722,7 +735,9 @@ void GeneticAlgorithm::DeleteDynamicMemory(void)
 			fitnesses[i] = NULL;
 		}
 		delete [] genomes;
+		genomes = NULL;
 		delete [] fitnesses;
+		fitnesses = NULL;
 
 		// Delete the number of phenotypes
 		delete [] numberOfPhenotypes;

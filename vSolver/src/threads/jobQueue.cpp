@@ -18,6 +18,7 @@ _class
 // VVASE headers
 #include "vSolver/threads/jobQueue.h"
 #include "vSolver/threads/threadEvent.h"
+#include "vUtilities/debugLog.h"
 
 //==========================================================================
 // Class:			JobQueue
@@ -60,6 +61,7 @@ void JobQueue::AddJob(const ThreadJob& job, const JobPriority& priority)
 {
 	// Lock the queue (lock expires when this function returns)
 	wxMutexLocker lock(mutexQueue);
+	DebugLog::GetInstance()->Log(_T("JobQueue::AddJob (locker)"));
 
 	// Add the job to the queue
 	jobs.insert(std::pair<JobPriority, ThreadJob>(priority, job));
@@ -95,6 +97,7 @@ ThreadJob JobQueue::Pop()
 
 	// Lock the queue
 	mutexQueue.Lock();
+	DebugLog::GetInstance()->Log(_T("JobQueue::Pop (lock)"));
 
 	// Get the first job from the queue (prioritization occurs automatically)
 	nextJob = jobs.begin()->second;
@@ -103,6 +106,7 @@ ThreadJob JobQueue::Pop()
 	jobs.erase(jobs.begin());
 
 	// Unlock the queue
+	DebugLog::GetInstance()->Log(_T("JobQueue::Pop (unlock)"));
 	mutexQueue.Unlock();
 
 	return nextJob;
@@ -165,6 +169,7 @@ size_t JobQueue::PendingJobs()
 {
 	// Lock the queue while we read the size
 	wxMutexLocker lock(mutexQueue);
+	DebugLog::GetInstance()->Log(_T("JobQueue::PendingJobs (locker)"));
 
 	return jobs.size();
 }

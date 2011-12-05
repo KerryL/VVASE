@@ -20,6 +20,7 @@
 
 // Local headers
 #include "vSolver/threads/inverseSemaphore.h"
+#include "vUtilities/debugLog.h"
 
 //==========================================================================
 // Class:			InverseSemaphore
@@ -84,6 +85,7 @@ InverseSemaphore::InverseSemaphoreError InverseSemaphore::Post(void)
 {
 	// Lock the mutex
 	wxMutexLocker lock(countMutex);
+	DebugLog::GetInstance()->Log(_T("InverseSemaphore::Post (locker)"));
 
 	// Make sure we acquired the lock
 	if (!lock.IsOk())
@@ -119,6 +121,7 @@ InverseSemaphore::InverseSemaphoreError InverseSemaphore::Set(unsigned int _coun
 {
 	// Lock the mutex
 	wxMutexLocker lock(countMutex);
+	DebugLog::GetInstance()->Log(_T("InverseSemaphore::Set (locker)"));
 
 	// Make sure the lock was successfully acquired
 	if (!lock.IsOk())

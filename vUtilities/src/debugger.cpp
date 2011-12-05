@@ -32,6 +32,7 @@
 // VVASE headers
 #include "vUtilities/debugger.h"
 #include "vSolver/threads/threadEvent.h"
+#include "vUtilities/debugLog.h"
 
 // Define the EVT_DEBUG event type
 DEFINE_LOCAL_EVENT_TYPE(EVT_DEBUG)
@@ -162,6 +163,7 @@ void Debugger::Print(const wxString &info, DebugLevel level) const
 {
 	// Ensure exclusive access to this object
 	wxMutexLocker lock(debugMutex);
+	DebugLog::GetInstance()->Log(_T("Debugger::Print (locker)"));
 
 	// Lower debug level -> higher priority
 	// Show messages having a debug level higher than or equal to the set debug level

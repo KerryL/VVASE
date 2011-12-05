@@ -188,6 +188,7 @@ void OutputPanel::UpdateInformation(KinematicOutputs outputs, Car &car,
 
 	// Get a lock on the car's mutex
 	wxMutexLocker lock(car.GetMutex());
+	DebugLog::GetInstance()->Log(_T("OutputPanel::UpdateInformation (locker)"));
 
 	// Front half shafts
 	if (!car.HasFrontHalfShafts())
