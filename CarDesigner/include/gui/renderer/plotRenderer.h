@@ -28,7 +28,6 @@ class Dataset2D;
 class ZoomBox;
 class PlotCursor;
 class PlotObject;
-class Debugger;
 class PlotPanel;
 class MainFrame;
 
@@ -36,7 +35,7 @@ class PlotRenderer : public RenderWindow
 {
 public:
 	// Constructor
-	PlotRenderer(PlotPanel &_parent, wxWindowID id, int args[], MainFrame &_mainFrame, const Debugger &_debugger);
+	PlotRenderer(PlotPanel &_parent, wxWindowID id, int args[], MainFrame &_mainFrame);
 
 	// Destructor
 	~PlotRenderer();
@@ -96,13 +95,9 @@ public:
 
 	void UpdateCursors(void);
 
-	const Debugger& GetDebugger(void) const { return debugger; };
 	MainFrame &GetMainFrame(void) { return mainFrame; };
 
 private:
-	// Debugger message printing utility
-	const Debugger &debugger;
-
 	// Reference to the MainFrame object
 	MainFrame &mainFrame;
 

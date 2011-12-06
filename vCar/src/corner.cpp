@@ -38,8 +38,6 @@
 // Input Arguments:
 //		_location	= const Location& describing which corner this object
 //					  represents
-//		_debugger	= const Debugger& reference to the application's debug
-//					  printing utility
 //
 // Output Arguments:
 //		None
@@ -48,8 +46,8 @@
 //		None
 //
 //==========================================================================
-Corner::Corner(const Location &_location, const Debugger &_debugger)
-			   : location(_location), debugger(_debugger)
+Corner::Corner(const Location &_location)
+			   : location(_location)
 {
 	// Initialize the hardpoint locations
 	int i;

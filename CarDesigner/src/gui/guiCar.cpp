@@ -53,7 +53,6 @@
 //
 // Input Arguments:
 //		_mainFrame			= MainFrame&, reference to the main application window
-//		_debugger			= const Debugger&, reference to debugger utility object
 //		_pathAndFileName	= wxString containing the location of this object
 //							  on the hard disk
 //
@@ -64,16 +63,15 @@
 //		None
 //
 //==========================================================================
-GuiCar::GuiCar(MainFrame &_mainFrame, const Debugger &_debugger,
-				 wxString _pathAndFileName)
-				 : GuiObject(_mainFrame, _debugger, _pathAndFileName)
+GuiCar::GuiCar(MainFrame &_mainFrame, wxString _pathAndFileName)
+				 : GuiObject(_mainFrame, _pathAndFileName)
 {
 	// Allocate memory for the original and working cars
-	originalCar = new Car(debugger);
+	originalCar = new Car();
 	workingCar = new Car(*originalCar);
 
 	// Create the appearance options object
-	appearanceOptions = new AppearanceOptions(mainFrame, *this, debugger);
+	appearanceOptions = new AppearanceOptions(mainFrame, *this);
 
 	// Create the 3D output window
 #ifdef __WXGTK__
@@ -81,9 +79,9 @@ GuiCar::GuiCar(MainFrame &_mainFrame, const Debugger &_debugger,
 	// Adding the double-buffer argument fixes this.  Under windows, the double-buffer argument
 	// causes the colors to go funky.  So we have this #if.
 	int args[] = {WX_GL_DOUBLEBUFFER, 0};
-	renderer = new CarRenderer(mainFrame, *this, args, debugger);
+	renderer = new CarRenderer(mainFrame, *this, args);
 #else
-	renderer = new CarRenderer(mainFrame, *this, NULL, debugger);
+	renderer = new CarRenderer(mainFrame, *this, NULL);
 #endif
 	notebookTab = reinterpret_cast<wxWindow*>(renderer);
 

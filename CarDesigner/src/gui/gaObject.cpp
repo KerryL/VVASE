@@ -27,6 +27,7 @@
 #include "vCar/suspension.h"
 #include "vMath/carMath.h"
 #include "vUtilities/convert.h"
+#include "vUtilities/debugger.h"
 #include "vUtilities/machineDefinitions.h"
 
 //==========================================================================
@@ -39,7 +40,6 @@
 //		_mainFrame		= MainFrame& reference to the main application object
 //		_optimization	= GeneticOptimization pointing to this object's owner
 //		_converter		= const Convert& reference to application's conversion utility
-//		_debugger		= const Debugger& reference to the debug printing utility
 //
 // Output Arguments:
 //		None
@@ -48,9 +48,9 @@
 //		None
 //
 //==========================================================================
-GAObject::GAObject(MainFrame &_mainFrame, GeneticOptimization &_optimization, const Convert &_converter,
-					 const Debugger &_debugger) : debugger(_debugger), converter(_converter),
-					 mainFrame(_mainFrame), optimization(_optimization)
+GAObject::GAObject(MainFrame &_mainFrame, GeneticOptimization &_optimization,
+				   const Convert &_converter) : converter(_converter),
+				   mainFrame(_mainFrame), optimization(_optimization)
 {
 	// Initialize class members
 	workingCarArray = NULL;
@@ -331,8 +331,8 @@ void GAObject::SetUp(Car *_targetCar)
 	workingCarArray = new Car*[numberOfCars];
 	for (i = 0; i < numberOfCars; i++)
 	{
-		originalCarArray[i] = new Car(debugger);
-		workingCarArray[i] = new Car(debugger);
+		originalCarArray[i] = new Car();
+		workingCarArray[i] = new Car();
 	}
 }
 
@@ -511,9 +511,9 @@ void GAObject::PerformAdditionalActions(void)
 	double maximumFitness = fitnesses[currentGeneration][0];
 
 	// Display the average and best fitnesses
-	debugger.Print(Debugger::PriorityVeryHigh, "Completed Generation %i", currentGeneration + 1);
-	debugger.Print(Debugger::PriorityVeryHigh, "\tAverage Fitness:  %s", converter.FormatNumber(averageFitness).c_str());
-	debugger.Print(Debugger::PriorityVeryHigh, "\tBest Fitness:     %s", converter.FormatNumber(maximumFitness).c_str());
+	Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "Completed Generation %i", currentGeneration + 1);
+	Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "\tAverage Fitness:  %s", converter.FormatNumber(averageFitness).c_str());
+	Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "\tBest Fitness:     %s", converter.FormatNumber(maximumFitness).c_str());
 
 	// Check to see if the simulation is still running
 	if (currentGeneration == generationLimit - 1)
@@ -947,7 +947,7 @@ bool GAObject::Read(wxString fileName)
 	// Check to make sure the version matches
 	if (header.fileVersion != currentFileVersion)
 	{
-		debugger.Print(_T("ERROR:  Incompatible file versions - could not open file!"));
+		Debugger::GetInstance().Print(_T("ERROR:  Incompatible file versions - could not open file!"));
 
 		inFile.close();
 

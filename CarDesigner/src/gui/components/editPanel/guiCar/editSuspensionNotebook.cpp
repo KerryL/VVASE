@@ -41,7 +41,6 @@
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
 //		style		= long for passing to parent class's constructor
-//		_debugger	= const Debugger& reference to applications debug printing utility
 //
 // Output Arguments:
 //		None
@@ -52,9 +51,9 @@
 //==========================================================================
 EditSuspensionNotebook::EditSuspensionNotebook(EditPanel &_parent, wxWindowID id,
 												 const wxPoint& pos, const wxSize& size,
-												 long style, const Debugger &_debugger)
+												 long style)
 												 : wxNotebook(&_parent, id, pos, size, style),
-												 debugger(_debugger), parent(_parent)
+												 parent(_parent)
 {
 	// Initialize the 'Current' class members
 	currentCar = NULL;
@@ -206,11 +205,11 @@ void EditSuspensionNotebook::CreateControls(void)
 	DeleteAllPages();
 
 	// Create the notebook pages
-	suspension = new EditSuspensionPanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
-	rightFront = new EditCornerPanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
-	leftFront = new EditCornerPanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
-	rightRear = new EditCornerPanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
-	leftRear = new EditCornerPanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
+	suspension = new EditSuspensionPanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
+	rightFront = new EditCornerPanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
+	leftFront = new EditCornerPanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
+	rightRear = new EditCornerPanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
+	leftRear = new EditCornerPanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
 
 	// Add them to the notebook
 	AddPage(suspension, _T("General"));

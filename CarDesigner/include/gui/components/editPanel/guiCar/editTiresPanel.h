@@ -10,7 +10,7 @@
 // File:  editTiresPanel.h
 // Created:  2/19/2009
 // Author:  K. Loux
-// Description:  Contains the class declaration for the EDIT_TIRES_PANEL class.
+// Description:  Contains the class declaration for the EditTiresPanel class.
 // History:
 
 #ifndef _EDIT_TIRES_PANEL_H_
@@ -28,7 +28,7 @@ class EditTiresPanel : public wxScrolledWindow
 public:
 	// Constructor
 	EditTiresPanel(EditPanel &_parent, wxWindowID id, const wxPoint& pos,
-		const wxSize& size, const Debugger &_debugger);
+		const wxSize& size);
 
 	// Destructor
 	~EditTiresPanel();
@@ -37,12 +37,6 @@ public:
 	void UpdateInformation(TireSet *_tireSet);
 
 private:
-	// Debugger message printing utility
-	const Debugger &debugger;
-
-	// The application's converter
-	const Convert &converter;
-
 	// The parent panel
 	EditPanel &parent;
 

@@ -30,7 +30,7 @@
 // Description:		Constructor for the Brakes class.
 //
 // Input Arguments:
-//		_debugger	= const Debugger& reference to applications debug printing utility
+//		None
 //
 // Output Arguments:
 //		None
@@ -39,7 +39,7 @@
 //		None
 //
 //==========================================================================
-Brakes::Brakes(const Debugger &_debugger) : debugger(_debugger)
+Brakes::Brakes()
 {
 	// Initialize the class members
 	frontBrakesInboard = false;
@@ -62,7 +62,7 @@ Brakes::Brakes(const Debugger &_debugger) : debugger(_debugger)
 //		None
 //
 //==========================================================================
-Brakes::Brakes(const Brakes &brakes) : debugger(brakes.debugger)
+Brakes::Brakes(const Brakes &brakes)
 {
 	// Do the copy
 	*this = brakes;

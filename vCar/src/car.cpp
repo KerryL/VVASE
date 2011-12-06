@@ -52,7 +52,7 @@
 //					parameters for the object.
 //
 // Input Arguments:
-//		_debugger	= const Debugger& reference to applications debug printing utility
+//		None
 //
 // Output Arguments:
 //		None
@@ -61,16 +61,16 @@
 //		None
 //
 //==========================================================================
-Car::Car(const Debugger &_debugger) : debugger(_debugger)
+Car::Car()
 {
 	// Dynamically allocate memory for these objects
-	suspension = new Suspension(debugger);
-	drivetrain = new Drivetrain(debugger);
-	brakes = new Brakes(debugger);
-	aerodynamics = new Aerodynamics(debugger);
-	engine = new Engine(debugger);
-	massProperties = new MassProperties(debugger);
-	tires = new TireSet(debugger);
+	suspension = new Suspension();
+	drivetrain = new Drivetrain();
+	brakes = new Brakes();
+	aerodynamics = new Aerodynamics();
+	engine = new Engine();
+	massProperties = new MassProperties();
+	tires = new TireSet();
 
 	// Test suspension
 	suspension->frontBarStyle = Suspension::SwayBarUBar;
@@ -228,16 +228,16 @@ Car::Car(const Debugger &_debugger) : debugger(_debugger)
 //		None
 //
 //==========================================================================
-Car::Car(const Car &car) : debugger(car.debugger)
+Car::Car(const Car &car)
 {
 	// Dynamically allocate memory for these objects
-	suspension = new Suspension(debugger);
-	drivetrain = new Drivetrain(debugger);
-	brakes = new Brakes(debugger);
-	aerodynamics = new Aerodynamics(debugger);
-	engine = new Engine(debugger);
-	massProperties = new MassProperties(debugger);
-	tires = new TireSet(debugger);
+	suspension = new Suspension();
+	drivetrain = new Drivetrain();
+	brakes = new Brakes();
+	aerodynamics = new Aerodynamics();
+	engine = new Engine();
+	massProperties = new MassProperties();
+	tires = new TireSet();
 
 	// Do the copy
 	*this = car;
@@ -390,7 +390,7 @@ bool Car::LoadCarFromFile(wxString fileName, std::ifstream *_inFile, int *fileVe
 
 	// Check to make sure the version matches
 	if (header.fileVersion != currentFileVersion)
-		debugger.Print(_T("Warning:  Opening file with out-of-date file format."),
+		Debugger::GetInstance().Print(_T("Warning:  Opening file with out-of-date file format."),
 			Debugger::PriorityHigh);
 
 	// Call the read function for each sub-system class

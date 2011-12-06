@@ -22,24 +22,22 @@
 // wxWidgets headers
 #include <wx/thread.h>
 
+// Local headers
+#include "vSolver/physics/kinematics.h"
+
 // VVASE forward declarations
 class JobQueue;
-class Kinematics;
-class Debugger;
 
 class WorkerThread : public wxThread
 {
 public:
 	// Constructor
-	WorkerThread(JobQueue* _jobQueue, Debugger &_debugger, int _id = wxID_ANY);
+	WorkerThread(JobQueue* _jobQueue, int _id = wxID_ANY);
 
 	// Destructor
 	~WorkerThread();
 
 private:
-	// Debugging object
-	Debugger &debugger;
-
 	// The queue of jobs to be completed
 	JobQueue* jobQueue;
 
@@ -53,7 +51,7 @@ private:
 	virtual void OnJob(void);
 
 	// The objects that do the number crunching
-	Kinematics *kinematicAnalysis;
+	Kinematics kinematicAnalysis;
 };
 
 #endif// _WORKER_THREAD_H_

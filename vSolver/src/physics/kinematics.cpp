@@ -38,6 +38,7 @@
 #include "vMath/carMath.h"
 #include "vUtilities/wheelSetStructures.h"
 #include "vUtilities/debugLog.h"
+#include "vUtilities/debugger.h"
 
 //==========================================================================
 // Class:			Kinematics
@@ -46,7 +47,7 @@
 // Description:		Constructor for Kinematics class.
 //
 // Input Arguments:
-//		_debugger	= const Debugger&, reference to the debug message printing utility
+//		None
 //
 // Output Arguments:
 //		None
@@ -55,7 +56,7 @@
 //		None
 //
 //==========================================================================
-Kinematics::Kinematics(const Debugger &_debugger) : debugger(_debugger)
+Kinematics::Kinematics()
 {
 	// Initialize the other pointers to zero
 	originalCar = NULL;
@@ -109,7 +110,7 @@ void Kinematics::UpdateKinematics(const Car* _originalCar, Car* _workingCar, wxS
 	timer.Start();
 
 	// Print the car's name to the debug window
-	debugger.Print(_T("UpdateKinematics() for ") + name, Debugger::PriorityMedium);
+	Debugger::GetInstance().Print(_T("UpdateKinematics() for ") + name, Debugger::PriorityMedium);
 
 	// Get the original and working cars
 	originalCar = _originalCar;// This one is for reference and won't be changed by this class
@@ -153,7 +154,8 @@ void Kinematics::UpdateKinematics(const Car* _originalCar, Car* _workingCar, wxS
 	}
 	else
 	{
-		debugger.Print(_T("ERROR (UpdateKinematics):  Unable to determine order of Euler rotations"));
+		Debugger::GetInstance().Print(
+			_T("ERROR (UpdateKinematics):  Unable to determine order of Euler rotations"));
 		return;
 	}
 
@@ -227,16 +229,16 @@ void Kinematics::UpdateKinematics(const Car* _originalCar, Car* _workingCar, wxS
 	}
 
 	if (!SolveCorner(localSuspension->rightFront, originalCar->suspension->rightFront, rotations, secondRotation))
-		debugger.Print(_T("ERROR:  Problem solving right front corner!  Increase debug level for more information."),
+		Debugger::GetInstance().Print(_T("ERROR:  Problem solving right front corner!  Increase debug level for more information."),
 			Debugger::PriorityHigh);
 	if (!SolveCorner(localSuspension->leftFront, originalCar->suspension->leftFront, rotations, secondRotation))
-		debugger.Print(_T("ERROR:  Problem solving left front corner!  Increase debug level for more information."),
+		Debugger::GetInstance().Print(_T("ERROR:  Problem solving left front corner!  Increase debug level for more information."),
 			Debugger::PriorityHigh);
 	if (!SolveCorner(localSuspension->rightRear, originalCar->suspension->rightRear, rotations, secondRotation))
-		debugger.Print(_T("ERROR:  Problem solving right rear corner!  Increase debug level for more information."),
+		Debugger::GetInstance().Print(_T("ERROR:  Problem solving right rear corner!  Increase debug level for more information."),
 			Debugger::PriorityHigh);
 	if (!SolveCorner(localSuspension->leftRear, originalCar->suspension->leftRear, rotations, secondRotation))
-		debugger.Print(_T("ERROR:  Problem solving left rear corner!  Increase debug level for more information."),
+		Debugger::GetInstance().Print(_T("ERROR:  Problem solving left rear corner!  Increase debug level for more information."),
 			Debugger::PriorityHigh);
 
 	// Now the hardpoints have been moved and located - let's look at the outputs
@@ -246,7 +248,7 @@ void Kinematics::UpdateKinematics(const Car* _originalCar, Car* _workingCar, wxS
 	long totalTime = timer.Time();
 
 	// Print the time to the output pane
-	debugger.Print(Debugger::PriorityLow, "Finished UpdateKinematcs() for %s in %0.3f sec",
+	Debugger::GetInstance().Print(Debugger::PriorityLow, "Finished UpdateKinematcs() for %s in %0.3f sec",
 		name.c_str(), totalTime / 1000.0);
 }
 
@@ -355,7 +357,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 			corner.hardpoints[Corner::LowerBallJoint]))
 		{
 			// Print an error and switch the success boolean to indicate a failure
-			debugger.Print(_T("ERROR:  Failed to solve for lower ball joint!"), Debugger::PriorityMedium);
+			Debugger::GetInstance().Print(_T("ERROR:  Failed to solve for lower ball joint!"), Debugger::PriorityMedium);
 			success = false;
 		}
 
@@ -366,7 +368,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 			corner.hardpoints[Corner::UpperBallJoint]))
 		{
 			// Print an error and switch the success boolean to indicate a failure
-			debugger.Print(_T("ERROR:  Failed to solve for upper ball joint!"), Debugger::PriorityMedium);
+			Debugger::GetInstance().Print(_T("ERROR:  Failed to solve for upper ball joint!"), Debugger::PriorityMedium);
 			success = false;
 		}
 
@@ -377,7 +379,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 			corner.hardpoints[Corner::OutboardTieRod]))
 		{
 			// Print an error and switch the success boolean to indicate a failure
-			debugger.Print(_T("ERROR:  Failed to solve for outboard tie rod!"), Debugger::PriorityMedium);
+			Debugger::GetInstance().Print(_T("ERROR:  Failed to solve for outboard tie rod!"), Debugger::PriorityMedium);
 			success = false;
 		}
 
@@ -388,7 +390,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 			corner.hardpoints[Corner::WheelCenter]))
 		{
 			// Print an error and switch the success boolean to indicate a failure
-			debugger.Print(_T("ERROR:  Failed to solve for wheel center!"), Debugger::PriorityMedium);
+			Debugger::GetInstance().Print(_T("ERROR:  Failed to solve for wheel center!"), Debugger::PriorityMedium);
 			success = false;
 		}
 
@@ -453,7 +455,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 	if ((fabs(corner.hardpoints[Corner::ContactPatch].z) > tolerance))
 	{
 		// Print an error and switch the success boolean to indicate a failure
-		debugger.Print(_T("Warning (SolveCorner):  Contact patch location did not converge"),
+		Debugger::GetInstance().Print(_T("Warning (SolveCorner):  Contact patch location did not converge"),
 			Debugger::PriorityMedium);
 		success = false;
 	}
@@ -470,7 +472,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 				corner.hardpoints[Corner::OutboardPushrod]))
 			{
 				// Print an error and switch the success boolean to indicate a failure
-				debugger.Print(_T("ERROR:  Failed to solve for outboard pushrod!"), Debugger::PriorityMedium);
+				Debugger::GetInstance().Print(_T("ERROR:  Failed to solve for outboard pushrod!"), Debugger::PriorityMedium);
 				success = false;
 			}
 		}
@@ -483,7 +485,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 				corner.hardpoints[Corner::OutboardPushrod]))
 			{
 				// Print an error and switch the success boolean to indicate a failure
-				debugger.Print(_T("ERROR:  Failed to solve for outboard pullrod!"), Debugger::PriorityMedium);
+				Debugger::GetInstance().Print(_T("ERROR:  Failed to solve for outboard pullrod!"), Debugger::PriorityMedium);
 				success = false;
 			}
 		}
@@ -496,7 +498,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 				corner.hardpoints[Corner::OutboardPushrod]))
 			{
 				// Print an error and switch the success boolean to indicate a failure
-				debugger.Print(_T("ERROR:  Failed to solve for outboard push/pullrod!"), Debugger::PriorityMedium);
+				Debugger::GetInstance().Print(_T("ERROR:  Failed to solve for outboard push/pullrod!"), Debugger::PriorityMedium);
 				success = false;
 			}
 		}
@@ -509,7 +511,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 			corner.hardpoints[Corner::InboardPushrod]))
 		{
 			// Print an error and switch the success boolean to indicate a failure
-			debugger.Print(_T("ERROR:  Failed to solve for inboard push/pullrod!"), Debugger::PriorityMedium);
+			Debugger::GetInstance().Print(_T("ERROR:  Failed to solve for inboard push/pullrod!"), Debugger::PriorityMedium);
 			success = false;
 		}
 
@@ -521,7 +523,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 			corner.hardpoints[Corner::OutboardShock]))
 		{
 			// Print an error and switch the success boolean to indicate a failure
-			debugger.Print(_T("ERROR:  Failed to solve for outboard shock!"), Debugger::PriorityMedium);
+			Debugger::GetInstance().Print(_T("ERROR:  Failed to solve for outboard shock!"), Debugger::PriorityMedium);
 			success = false;
 		}
 
@@ -533,7 +535,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 			corner.hardpoints[Corner::OutboardSpring]))
 		{
 			// Print an error and switch the success boolean to indicate a failure
-			debugger.Print(_T("ERROR:  Failed to solve for outboard spring!"), Debugger::PriorityMedium);
+			Debugger::GetInstance().Print(_T("ERROR:  Failed to solve for outboard spring!"), Debugger::PriorityMedium);
 			success = false;
 		}
 
@@ -548,7 +550,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 				corner.hardpoints[Corner::OutboardBarLink]))
 			{
 				// Print an error and switch the success boolean to indicate a failure
-				debugger.Print(_T("ERROR:  Failed to solve for outboard swaybar!"), Debugger::PriorityMedium);
+				Debugger::GetInstance().Print(_T("ERROR:  Failed to solve for outboard swaybar!"), Debugger::PriorityMedium);
 				success = false;
 			}
 		}
@@ -563,7 +565,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 				corner.hardpoints[Corner::InboardBarLink]))
 			{
 				// Print an error and switch the success boolean to indicate a failure
-				debugger.Print(_T("ERROR:  Failed to solve for inboard U-bar (front)!"), Debugger::PriorityMedium);
+				Debugger::GetInstance().Print(_T("ERROR:  Failed to solve for inboard U-bar (front)!"), Debugger::PriorityMedium);
 				success = false;
 			}
 		}
@@ -576,13 +578,13 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 				corner.hardpoints[Corner::InboardBarLink]))
 			{
 				// Print an error and switch the success boolean to indicate a failure
-				debugger.Print(_T("ERROR:  Failed to solve for inboard U-bar (rear)!"), Debugger::PriorityMedium);
+				Debugger::GetInstance().Print(_T("ERROR:  Failed to solve for inboard U-bar (rear)!"), Debugger::PriorityMedium);
 				success = false;
 			}
 		}
 		else if (localSuspension->frontBarStyle == Suspension::SwayBarTBar && isAtFront)
 		{
-			debugger.Print(_T("  T-Bar Front"), Debugger::PriorityHigh);
+			Debugger::GetInstance().Print(_T("  T-Bar Front"), Debugger::PriorityHigh);
 			// FIXME:  Need to accommodate T-bars
 			// Need to solve for InboardBarLink
 			// Two of the three points needed are: BarMidPoint and OutboardBarLink
@@ -591,8 +593,8 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 		}
 		else if (localSuspension->rearBarStyle == Suspension::SwayBarTBar && !isAtFront)
 		{
-			debugger.Print(_T("  T-Bar Rear"), Debugger::PriorityHigh);
-			// FIXME:  Need to accomodate T-bars
+			Debugger::GetInstance().Print(_T("  T-Bar Rear"), Debugger::PriorityHigh);
+			// FIXME:  Need to accommodate T-bars
 		}
 		else if ((localSuspension->frontBarStyle == Suspension::SwayBarGeared && isAtFront) ||
 			(localSuspension->rearBarStyle == Suspension::SwayBarGeared && !isAtFront))
@@ -604,7 +606,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 				corner.hardpoints[Corner::InboardBarLink]))
 			{
 				// Print an error and switch the success boolean to indicate a failure
-				debugger.Print(_T("ERROR:  Failed to solve for geared bar!"), Debugger::PriorityMedium);
+				Debugger::GetInstance().Print(_T("ERROR:  Failed to solve for geared bar!"), Debugger::PriorityMedium);
 				success = false;
 			}
 		}
@@ -622,7 +624,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 				corner.hardpoints[Corner::OutboardSpring]))
 			{
 				// Print an error and switch the success boolean to indicate a failure
-				debugger.Print(_T("ERROR:  Failed to solve for outboard spring!"), Debugger::PriorityMedium);
+				Debugger::GetInstance().Print(_T("ERROR:  Failed to solve for outboard spring!"), Debugger::PriorityMedium);
 				success = false;
 			}
 
@@ -633,7 +635,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 				corner.hardpoints[Corner::OutboardShock]))
 			{
 				// Print an error and switch the success boolean to indicate a failure
-				debugger.Print(_T("ERROR:  Failed to solve for outboard shock!"), Debugger::PriorityMedium);
+				Debugger::GetInstance().Print(_T("ERROR:  Failed to solve for outboard shock!"), Debugger::PriorityMedium);
 				success = false;
 			}
 		}
@@ -646,7 +648,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 				corner.hardpoints[Corner::OutboardSpring]))
 			{
 				// Print an error and switch the success boolean to indicate a failure
-				debugger.Print(_T("ERROR:  Failed to solve for outboard spring!"), Debugger::PriorityMedium);
+				Debugger::GetInstance().Print(_T("ERROR:  Failed to solve for outboard spring!"), Debugger::PriorityMedium);
 				success = false;
 			}
 
@@ -657,7 +659,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 				corner.hardpoints[Corner::OutboardShock]))
 			{
 				// Print an error and switch the success boolean to indicate a failure
-				debugger.Print(_T("ERROR:  Failed to solve for outboard shock!"), Debugger::PriorityMedium);
+				Debugger::GetInstance().Print(_T("ERROR:  Failed to solve for outboard shock!"), Debugger::PriorityMedium);
 				success = false;
 			}
 		}
@@ -670,7 +672,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 				corner.hardpoints[Corner::OutboardSpring]))
 			{
 				// Print an error and switch the success boolean to indicate a failure
-				debugger.Print(_T("ERROR:  Failed to solve for outboard spring!"), Debugger::PriorityMedium);
+				Debugger::GetInstance().Print(_T("ERROR:  Failed to solve for outboard spring!"), Debugger::PriorityMedium);
 				success = false;
 			}
 
@@ -681,7 +683,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 				corner.hardpoints[Corner::OutboardShock]))
 			{
 				// Print an error and switch the success boolean to indicate a failure
-				debugger.Print(_T("ERROR:  Failed to solve for outboard shock!"), Debugger::PriorityMedium);
+				Debugger::GetInstance().Print(_T("ERROR:  Failed to solve for outboard shock!"), Debugger::PriorityMedium);
 				success = false;
 			}
 		}
@@ -698,7 +700,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 			corner.hardpoints[Corner::OutboardHalfShaft]))
 		{
 			// Print an error and switch the success boolean to indicate a failure
-			debugger.Print(_T("ERROR:  Failed to solve for outboard half shaft!"), Debugger::PriorityMedium);
+			Debugger::GetInstance().Print(_T("ERROR:  Failed to solve for outboard half shaft!"), Debugger::PriorityMedium);
 			success = false;
 		}
 	}

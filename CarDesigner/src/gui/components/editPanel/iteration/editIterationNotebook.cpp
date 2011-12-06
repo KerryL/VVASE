@@ -36,7 +36,6 @@
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
 //		style		= long for passing to parent class's constructor
-//		_debugger	= const Debugger& reference to applications debug printing utility
 //
 // Output Arguments:
 //		None
@@ -47,9 +46,9 @@
 //==========================================================================
 EditIterationNotebook::EditIterationNotebook(EditPanel &_parent, wxWindowID id,
 												 const wxPoint& pos, const wxSize& size,
-												 long style, const Debugger &_debugger)
+												 long style)
 												 : wxNotebook(&_parent, id, pos, size, style),
-												 debugger(_debugger), parent(_parent)
+												 parent(_parent)
 {
 	// Initialize the 'Current' class members
 	currentIteration = NULL;
@@ -162,9 +161,9 @@ void EditIterationNotebook::CreateControls(void)
 	DeleteAllPages();
 
 	// Create the notebook pages
-	editRange = new EditIterationRangePanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
-	editPlots = new EditIterationPlotsPanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
-	editOptions = new EditIterationOptionsPanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
+	editRange = new EditIterationRangePanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
+	editPlots = new EditIterationPlotsPanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
+	editOptions = new EditIterationOptionsPanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
 
 	// Add them to the notebook
 	AddPage(editRange, _T("Range"));

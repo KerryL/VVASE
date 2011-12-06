@@ -48,7 +48,6 @@
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
-//		_debugger	= const Debugger& reference to applications debug printing utility
 //
 // Output Arguments:
 //		None
@@ -58,9 +57,8 @@
 //
 //==========================================================================
 EditPanel::EditPanel(MainFrame &_mainFrame, wxWindowID id, const wxPoint& pos,
-					   const wxSize& size, const Debugger &_debugger) :
-					   wxPanel(&_mainFrame, id, pos, size), debugger(_debugger),
-					   mainFrame(_mainFrame)
+					   const wxSize& size) :
+					   wxPanel(&_mainFrame, id, pos, size), mainFrame(_mainFrame)
 {
 	// Get the systems tree
 	systemsTree = mainFrame.GetSystemsTree();
@@ -287,7 +285,7 @@ void EditPanel::CreateControls(bool ignoreSystemsTree)
 			{
 				// Create the brakes panel
 				editBrakes = new EditBrakesPanel(*this, wxID_ANY,
-					wxDefaultPosition, wxDefaultSize, debugger);
+					wxDefaultPosition, wxDefaultSize);
 
 				// Add the brakes panel to the sizer
 				sizer->Add(editBrakes, 1, wxEXPAND);
@@ -302,7 +300,7 @@ void EditPanel::CreateControls(bool ignoreSystemsTree)
 			{
 				// Create the mass properties panel
 				editMass = new EditMassPanel(*this, wxID_ANY,
-					wxDefaultPosition, wxDefaultSize, debugger);
+					wxDefaultPosition, wxDefaultSize);
 
 				// Add the mass panel to the sizer
 				sizer->Add(editMass, 1, wxEXPAND);
@@ -311,7 +309,7 @@ void EditPanel::CreateControls(bool ignoreSystemsTree)
 			{
 				// Create the suspension notebook
 				editSuspension = new EditSuspensionNotebook(*this, wxID_ANY,
-					wxDefaultPosition, wxDefaultSize, wxNB_BOTTOM, debugger);
+					wxDefaultPosition, wxDefaultSize, wxNB_BOTTOM);
 
 				// Add the suspension to the sizer
 				sizer->Add(editSuspension, 1, wxEXPAND);
@@ -320,7 +318,7 @@ void EditPanel::CreateControls(bool ignoreSystemsTree)
 			{
 				// Create the tires panel
 				editTires = new EditTiresPanel(*this, wxID_ANY,
-					wxDefaultPosition, wxDefaultSize, debugger);
+					wxDefaultPosition, wxDefaultSize);
 
 				// Add the tire set to the sizer
 				sizer->Add(editTires, 1, wxEXPAND);
@@ -332,7 +330,7 @@ void EditPanel::CreateControls(bool ignoreSystemsTree)
 	case GuiObject::TypeIteration:
 		// Create the iteration panel
 		editIteration = new EditIterationNotebook(*this, wxID_ANY,
-			wxDefaultPosition, wxDefaultSize, wxNB_BOTTOM, debugger);
+			wxDefaultPosition, wxDefaultSize, wxNB_BOTTOM);
 
 		// Add the iteration panel to the sizer
 		sizer->Add(editIteration, 1, wxEXPAND);

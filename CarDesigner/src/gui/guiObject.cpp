@@ -34,6 +34,7 @@
 #include "gui/iteration.h"
 #include "vRenderer/renderWindow.h"
 #include "gui/plotPanel.h"
+#include "vUtilities/debugger.h"
 
 //==========================================================================
 // Class:			GuiObject
@@ -47,8 +48,6 @@
 // Input Arguments:
 //		_mainFrame			= MainFrame& pointing to the main frame for
 //							  this application
-//		_debugger			= const Debugger& reference to the debug message printing
-//							  utility
 //		_pathAndFileName	= wxString specifying the location to load this
 //							  object from
 //
@@ -59,8 +58,8 @@
 //		None
 //
 //==========================================================================
-GuiObject::GuiObject(MainFrame &_mainFrame, const Debugger &_debugger,
-					   wxString _pathAndFileName) : debugger(_debugger), mainFrame(_mainFrame)
+GuiObject::GuiObject(MainFrame &_mainFrame,
+					   wxString _pathAndFileName) : mainFrame(_mainFrame)
 {
 	// Make sure we know that loading is not complete
 	objectIsInitialized = false;
@@ -403,7 +402,7 @@ bool GuiObject::LoadFromFile(void)
 	// Perform the load and check for errors
 	if (!PerformLoadFromFile())
 	{
-		debugger.Print(_T("ERROR:  Could not read from file '") + pathAndFileName + _T("'!"));
+		Debugger::GetInstance().Print(_T("ERROR:  Could not read from file '") + pathAndFileName + _T("'!"));
 
 		// Remove this file from the recent history list
 		mainFrame.RemoveFileFromHistory(pathAndFileName);
@@ -414,7 +413,7 @@ bool GuiObject::LoadFromFile(void)
 	// Make sure the desired file isn't already open - if it is, return false
 	if (!VerifyUniqueness())
 	{
-		debugger.Print(_T("Object at '") + pathAndFileName +
+		Debugger::GetInstance().Print(_T("Object at '") + pathAndFileName +
 			_T("' already open!"), Debugger::PriorityMedium);
 
 		return false;
@@ -424,7 +423,7 @@ bool GuiObject::LoadFromFile(void)
 	SetName(GetNameFromFileName());
 
 	// Print a message to let the user know we successfully loaded the file
-	debugger.Print(_T("File loaded from '") + pathAndFileName + _T("'!"), Debugger::PriorityMedium);
+	Debugger::GetInstance().Print(_T("File loaded from '") + pathAndFileName + _T("'!"), Debugger::PriorityMedium);
 
 	// Add file to the recent history list
 	mainFrame.AddFileToHistory(pathAndFileName);
@@ -515,7 +514,7 @@ bool GuiObject::SaveToFile(bool saveAsNewFileName)
 	// Perform the save and check for errors
 	if (!PerformSaveToFile())
 	{
-		debugger.Print(_T("ERROR:  Could not save file to '") + pathAndFileName + _T("'!"));
+		Debugger::GetInstance().Print(_T("ERROR:  Could not save file to '") + pathAndFileName + _T("'!"));
 
 		return false;
 	}
@@ -524,7 +523,7 @@ bool GuiObject::SaveToFile(bool saveAsNewFileName)
 	modifiedSinceLastSave = false;
 
 	// Print a message to let the user know we successfully saved the file
-	debugger.Print(_T("File saved to '") + pathAndFileName + _T("'!"), Debugger::PriorityMedium);
+	Debugger::GetInstance().Print(_T("File saved to '") + pathAndFileName + _T("'!"), Debugger::PriorityMedium);
 
 	// Remove this object from the undo/redo stacks
 	mainFrame.GetUndoRedoStack().RemoveGuiObjectFromStack(index);

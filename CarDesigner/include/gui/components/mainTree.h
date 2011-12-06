@@ -23,7 +23,6 @@
 #include <wx/treectrl.h>
 
 // VVASE forward declarations
-class Debugger;
 class MainFrame;
 class GuiObject;
 
@@ -32,7 +31,7 @@ class MainTree : public wxTreeCtrl
 public:
 	// Constructor
 	MainTree(MainFrame &_parent, wxWindowID id, const wxPoint &pos,
-		const wxSize &_size, long style, const Debugger &_debugger);
+		const wxSize &_size, long style);
 
 	// Destructor
 	~MainTree();
@@ -69,9 +68,6 @@ public:
 	int GetIconHandle(IconHandle id) { return iconHandle[id]; };
 
 private:
-	// Debugger message utility object
-	const Debugger &debugger;
-
 	// Pointer to this object's owner
 	MainFrame &mainFrame;
 

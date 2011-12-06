@@ -10,7 +10,7 @@
 // File:  car.h
 // Created:  11/2/2007
 // Author:  K. Loux
-// Description:  Contains class declaration for CAR class.
+// Description:  Contains class declaration for Car class.
 // History:
 //	3/9/2008	- Changed structure of Debugger class, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
@@ -34,10 +34,10 @@
 //  (4) Global pitch of sprung mass
 //  (5) Global roll of sprung mass
 //  (6) Global heading of sprung mass
-//  (7) Right front shock displacement (needs modification to be compatable with monoshock)
-//  (8) Left front shock displacement (needs modification to be compatable with monoshock)
-//  (9) Right rear shock displacement (needs modification to be compatable with monoshock)
-// (10) Left rear shock displacement (needs modification to be compatable with monoshock)
+//  (7) Right front shock displacement (needs modification to be compatible with monoshock)
+//  (8) Left front shock displacement (needs modification to be compatible with monoshock)
+//  (9) Right rear shock displacement (needs modification to be compatible with monoshock)
+// (10) Left rear shock displacement (needs modification to be compatible with monoshock)
 // (11) Right front wheel rotation rate
 // (12) Left front wheel rotation rate
 // (13) Right rear wheel rotation rate
@@ -66,7 +66,6 @@ class wxString;
 // vCar forward declarations
 class Aerodynamics;
 class Brakes;
-class Debugger;
 class Drivetrain;
 class Engine;
 class MassProperties;
@@ -77,7 +76,7 @@ class Car
 {
 public:
 	// Constructor
-	Car(const Debugger &_debugger);
+	Car();
 	Car(const Car &car);
 
 	// Destructor
@@ -94,7 +93,7 @@ public:
 	bool HasFrontHalfShafts(void) const;
 	bool HasRearHalfShafts(void) const;
 
-	// This class contains dynamically allocated memory - overload the assigment operator
+	// This class contains dynamically allocated memory - overload the assignment operator
 	Car& operator = (const Car &car);
 
 	// These properties are modifiable ONLY by the user... this program
@@ -113,9 +112,6 @@ public:
 	wxMutex &GetMutex(void) const { return carMutex; };
 
 private:
-	// Debugger message printing utility
-	const Debugger &debugger;
-
 	// File header information
 	struct FileHeaderInfo
 	{
@@ -126,10 +122,10 @@ private:
 	void WriteFileHeader(std::ofstream *outFile) const;
 	FileHeaderInfo ReadFileHeader(std::ifstream *inFile) const;
 
-	// Our current file verstion
+	// Our current file version
 	static const int currentFileVersion;
 
-	// Syncronization object
+	// Synchronization object
 	mutable wxMutex carMutex;
 };
 

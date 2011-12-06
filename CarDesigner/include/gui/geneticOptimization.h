@@ -28,8 +28,6 @@
 
 // VVASE forward declarations
 class GuiCar;
-class Debugger;
-class Convert;
 class GAObject;
 class MainFrame;
 class GeneticAlgorithmPanel;
@@ -38,7 +36,7 @@ class GeneticOptimization : public GuiObject
 {
 public:
 	// Constructor
-	GeneticOptimization(MainFrame &_mainFrame, const Debugger &_debugger, const Convert &converter,
+	GeneticOptimization(MainFrame &_mainFrame,
 		wxString _pathAndFileName = wxEmptyString);
 
 	// Destructor
@@ -73,9 +71,6 @@ public:
 	void SetCarToOptimize(GuiCar *_carToOptimize);
 
 private:
-	// Debugger printing utility
-	const Debugger &debugger;
-
 	// Gets the icon handle for this object's icon
 	int GetIconHandle(void) const;
 

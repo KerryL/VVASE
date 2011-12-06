@@ -21,14 +21,11 @@
 // Standard C++ headers
 #include <iosfwd>// forward declarations of fstream objects
 
-// vUtilites forward declarations
-class Debugger;
-
 class Engine
 {
 public:
 	// Constructor
-	Engine(const Debugger &_debugger);
+	Engine();
 	Engine(const Engine &engine);
 
 	// Destructor
@@ -46,9 +43,6 @@ public:
 	Engine& operator = (const Engine &engine);
 
 private:
-	// Debugger message printing utility
-	const Debugger &debugger;
-
 	// The crankshaft speed
 	double crankshaftSpeed;// [rad/sec]
 };

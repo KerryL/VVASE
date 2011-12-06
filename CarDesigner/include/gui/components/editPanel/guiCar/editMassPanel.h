@@ -10,7 +10,7 @@
 // File:  editMassPanel.h
 // Created:  2/19/2009
 // Author:  K. Loux
-// Description:  Contains the class declaration for the EDIT_MASS_PANEL class.
+// Description:  Contains the class declaration for the EditMassPanel class.
 // History:
 
 #ifndef _EDIT_MASS_PANEL_H_
@@ -28,7 +28,7 @@ class EditMassPanel : public wxScrolledWindow
 public:
 	// Constructor
 	EditMassPanel(EditPanel &_Parent, wxWindowID id, const wxPoint& pos,
-		const wxSize& size, const Debugger &_debugger);
+		const wxSize& size);
 
 	// Destructor
 	~EditMassPanel();
@@ -37,12 +37,6 @@ public:
 	void UpdateInformation(MassProperties *_currentMassProperties);
 
 private:
-	// Debugger message printing utility
-	const Debugger &debugger;
-
-	// The application's converter
-	const Convert &converter;
-
 	// The parent panel
 	EditPanel &parent;
 

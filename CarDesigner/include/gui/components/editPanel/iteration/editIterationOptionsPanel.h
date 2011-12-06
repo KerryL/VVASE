@@ -20,7 +20,6 @@
 #include <wx/wx.h>
 
 // VVASE forward declarations
-class Debugger;
 class Iteration;
 class Convert;
 class EditIterationNotebook;
@@ -29,8 +28,8 @@ class EditIterationOptionsPanel : public wxScrolledWindow
 {
 public:
 	// Constructor
-	EditIterationOptionsPanel(EditIterationNotebook &_parent, wxWindowID id, const wxPoint& pos,
-		const wxSize& size, const Debugger &_debugger);
+	EditIterationOptionsPanel(EditIterationNotebook &_parent, wxWindowID id,
+		const wxPoint& pos, const wxSize& size);
 
 	// Destructor
 	~EditIterationOptionsPanel();
@@ -40,9 +39,6 @@ public:
 	void UpdateInformation(void);
 
 private:
-	// Debugger message printing utility
-	const Debugger &debugger;
-
 	// The parent panel
 	EditIterationNotebook &parent;
 

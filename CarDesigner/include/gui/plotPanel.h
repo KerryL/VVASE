@@ -29,13 +29,12 @@ class wxGridEvent;
 
 // Local forward declarations
 class PlotRenderer;
-class Debugger;
 
 class PlotPanel : public wxPanel
 {
 public:
 	// Constructor
-	PlotPanel(wxWindow *parent, const Debugger &_debugger);
+	PlotPanel(wxWindow *parent);
 
 	// Destructor
 	virtual ~PlotPanel();
@@ -69,8 +68,6 @@ public:
 	bool WriteImageToFile(wxString pathAndFileName);
 
 private:
-	const Debugger &debugger;
-
 	// Main panel object
 	PlotRenderer *renderer;
 

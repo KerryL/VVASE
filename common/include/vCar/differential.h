@@ -23,14 +23,11 @@
 // Standard C++ headers
 #include <iosfwd>// forward declarations of fstream objects
 
-// vUtilities forward declarations
-class Debugger;
-
 class Differential
 {
 public:
 	// Constructor
-	Differential(const Debugger &_debugger);
+	Differential();
 	Differential(const Differential &differential);
 
 	// Destructor
@@ -61,9 +58,6 @@ public:
 	Differential& operator = (const Differential &differential);
 
 private:
-	// Debugger message printing utility
-	const Debugger &debugger;
-
 	// The parameters that describe the differential physics
 	double biasRatio;		// [-]
 	double preload;			// [lbf]

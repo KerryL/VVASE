@@ -54,7 +54,6 @@
 //		pos			= wxPoint& for passing to parent class's constructor
 //		_size		= wxSize& for passing to parent class's constructor
 //		style		= long for passing to parent class's constructor
-//		_debugger	= const Debugger& reference to applications debug printing utility
 //
 // Output Arguments:
 //		None
@@ -64,9 +63,9 @@
 //
 //==========================================================================
 MainTree::MainTree(MainFrame &_mainFrame, wxWindowID id, const wxPoint& pos,
-					 const wxSize& _size, long style, const Debugger &_debugger)
+					 const wxSize& _size, long style)
 					 : wxTreeCtrl(&_mainFrame, id, pos, _size, style),
-					 debugger(_debugger), mainFrame(_mainFrame)
+					 mainFrame(_mainFrame)
 {
 	// Set up the image list for tree item icons
 	int size = 16;

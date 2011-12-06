@@ -78,9 +78,9 @@ Convert::Convert()
 
 //==========================================================================
 // Class:			Convert
-// Function:		~Convert
+// Function:		Kill
 //
-// Description:		Destructor for the Convert class.
+// Description:		Deletes this object.
 //
 // Input Arguments:
 //		None
@@ -92,8 +92,37 @@ Convert::Convert()
 //		None
 //
 //==========================================================================
-Convert::~Convert()
+void Convert::Kill()
 {
+	if (convertInstance)
+	{
+		delete convertInstance;
+		convertInstance = NULL;
+	}
+}
+
+//==========================================================================
+// Class:			Convert
+// Function:		GetInstance
+//
+// Description:		Returns a reference to this object.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+Convert& Convert::GetInstance(void)
+{
+	if (!convertInstance)
+		convertInstance = new Convert();
+	
+	return *convertInstance;
 }
 
 //==========================================================================
@@ -114,6 +143,7 @@ Convert::~Convert()
 //==========================================================================
 const double Convert::Pi = 3.141592653589793238462643;
 const double Convert::G = 386.088582677;// [in/sec^2]
+Convert* Convert::convertInstance = NULL;
 
 //==========================================================================
 // Class:			Convert

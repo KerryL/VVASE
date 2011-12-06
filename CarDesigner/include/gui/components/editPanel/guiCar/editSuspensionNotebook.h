@@ -25,7 +25,6 @@ class wxCombo;
 class wxCheckBox;
 
 // VVASE forward declarations
-class Debugger;
 class Car;
 class EditPanel;
 class EditCornerPanel;
@@ -36,7 +35,7 @@ class EditSuspensionNotebook : public wxNotebook
 public:
 	// Constructor
 	EditSuspensionNotebook(EditPanel &_parent, wxWindowID id, const wxPoint& pos,
-		const wxSize& size, long style, const Debugger &_debugger);
+		const wxSize& size, long style);
 
 	// Destructor
 	~EditSuspensionNotebook();
@@ -52,9 +51,6 @@ public:
 	void UpdateSymmetry(void);
 
 private:
-	// Debugger message printing utility
-	const Debugger &debugger;
-
 	// The parent window
 	EditPanel &parent;
 

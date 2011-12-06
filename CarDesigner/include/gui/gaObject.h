@@ -29,7 +29,6 @@
 // VVASE forward declarations
 class GuiCar;
 class Car;
-class Debugger;
 class MainFrame;
 class GeneticOptimization;
 
@@ -37,8 +36,7 @@ class GAObject : public GeneticAlgorithm
 {
 public:
 	// Constructor
-	GAObject(MainFrame &_mainFrame, GeneticOptimization &_optimization,
-		const Convert &_converter, const Debugger &_debugger);
+	GAObject(MainFrame &_mainFrame, GeneticOptimization &_optimization);
 
 	// Destructor
 	~GAObject();
@@ -132,12 +130,6 @@ public:
 	void UpdateTargetCar(void);
 
 private:
-	// Debugger printing utility
-	const Debugger &debugger;
-
-	// Application's unit converter
-	const Convert &converter;
-
 	// Main application object
 	MainFrame &mainFrame;
 

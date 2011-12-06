@@ -50,7 +50,6 @@
 GeneticAlgorithmPanel::GeneticAlgorithmPanel(MainFrame &_mainFrame,
 												 GeneticOptimization &_optimization)
 												 : wxScrolledWindow(&_mainFrame),
-												 converter(_mainFrame.GetConverter()),
 												 optimization(_optimization), mainFrame(_mainFrame)
 {
 	// Initialize the overall progress control pointer
@@ -368,7 +367,7 @@ void GeneticAlgorithmPanel::CreateControls(void)
 void GeneticAlgorithmPanel::AddGeneButtonClickedEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Create the dialog box with default gene properties
-	GAGeneDialog geneDialog(static_cast<wxWindow*>(&mainFrame), converter, (Corner::Hardpoints)0,
+	GAGeneDialog geneDialog(static_cast<wxWindow*>(&mainFrame), (Corner::Hardpoints)0,
 		(Corner::Hardpoints)0, (Vector::Axis)0, (Corner::Location)0, 0.0, 1.0, 5, wxID_ANY, wxDefaultPosition);
 
 	// Display the dialog
@@ -414,7 +413,7 @@ void GeneticAlgorithmPanel::EditGeneButtonClickedEvent(wxCommandEvent& WXUNUSED(
 	GAObject::Gene geneToEdit = optimization.GetAlgorithm().GetGene(geneList->GetSelectedRows()[0]);
 
 	// Create the dialog box with properties corresponding to the selected gene
-	GAGeneDialog geneDialog(static_cast<wxWindow*>(&mainFrame), converter, geneToEdit.hardpoint,
+	GAGeneDialog geneDialog(static_cast<wxWindow*>(&mainFrame), geneToEdit.hardpoint,
 		geneToEdit.tiedTo, geneToEdit.direction, geneToEdit.location, geneToEdit.minimum, geneToEdit.maximum,
 		geneToEdit.numberOfValues, wxID_ANY, wxDefaultPosition);
 
@@ -502,7 +501,7 @@ void GeneticAlgorithmPanel::AddGoalButtonClickedEvent(wxCommandEvent& WXUNUSED(e
 	defaultInputs.rackTravel = 0.0;
 
 	// Create the dialog box with default goal properties
-	GAGoalDialog goalDialog(static_cast<wxWindow*>(&mainFrame), converter, (KinematicOutputs::OutputsComplete)0, 0.0,
+	GAGoalDialog goalDialog(static_cast<wxWindow*>(&mainFrame), (KinematicOutputs::OutputsComplete)0, 0.0,
 		0.0, 1.0, defaultInputs, defaultInputs, wxID_ANY, wxDefaultPosition);
 
 	// Display the dialog
@@ -549,7 +548,7 @@ void GeneticAlgorithmPanel::EditGoalButtonClickedEvent(wxCommandEvent& WXUNUSED(
 	GAObject::Goal goalToEdit = optimization.GetAlgorithm().GetGoal(goalList->GetSelectedRows()[0]);
 
 	// Create the dialog box with properties corresponding to the selected goal
-	GAGoalDialog goalDialog(static_cast<wxWindow*>(&mainFrame), converter, goalToEdit.output, goalToEdit.desiredValue,
+	GAGoalDialog goalDialog(static_cast<wxWindow*>(&mainFrame), goalToEdit.output, goalToEdit.desiredValue,
 		goalToEdit.expectedDeviation, goalToEdit.importance, goalToEdit.beforeInputs, goalToEdit.afterInputs,
 		wxID_ANY, wxDefaultPosition);
 
@@ -787,8 +786,10 @@ void GeneticAlgorithmPanel::UpdateInformation(void)
 	populationSize->ChangeValue(temp);
 	temp.Printf("%i", optimization.GetAlgorithm().GetGenerationLimit());
 	generationLimit->ChangeValue(temp);
-	elitismFraction->ChangeValue(converter.FormatNumber(optimization.GetAlgorithm().GetElitismPercentage()));
-	mutationProbability->ChangeValue(converter.FormatNumber(optimization.GetAlgorithm().GetMutationProbability()));
+	elitismFraction->ChangeValue(Convert::GetInstance().FormatNumber(
+		optimization.GetAlgorithm().GetElitismPercentage()));
+	mutationProbability->ChangeValue(Convert::GetInstance().FormatNumber(
+		optimization.GetAlgorithm().GetMutationProbability()));
 	
 	temp.Printf("%i", optimization.GetAlgorithm().GetCrossoverPoint());
 	crossoverPoint->ChangeValue(temp);
@@ -836,10 +837,10 @@ void GeneticAlgorithmPanel::UpdateGeneList(void)
 		else
 			geneList->SetCellValue(i, 1, Corner::GetHardpointName(optimization.GetAlgorithm().GetGene(i).tiedTo));
 		geneList->SetCellValue(i, 2, Vector::GetAxisName(optimization.GetAlgorithm().GetGene(i).direction));
-		geneList->SetCellValue(i, 3, converter.FormatNumber(
-			converter.ConvertDistance(optimization.GetAlgorithm().GetGene(i).minimum)));
-		geneList->SetCellValue(i, 4, converter.FormatNumber(
-			converter.ConvertDistance(optimization.GetAlgorithm().GetGene(i).maximum)));
+		geneList->SetCellValue(i, 3, Convert::GetInstance().FormatNumber(
+			Convert::GetInstance().ConvertDistance(optimization.GetAlgorithm().GetGene(i).minimum)));
+		geneList->SetCellValue(i, 4, Convert::GetInstance().FormatNumber(
+			Convert::GetInstance().ConvertDistance(optimization.GetAlgorithm().GetGene(i).maximum)));
 		temp.Printf("%i", optimization.GetAlgorithm().GetGene(i).numberOfValues);
 		geneList->SetCellValue(i, 5, temp);
 
@@ -886,15 +887,16 @@ void GeneticAlgorithmPanel::UpdateGoalList(void)
 		goalList->SetCellValue(i, 1, GetInputString(optimization.GetAlgorithm().GetGoal(i).beforeInputs));
 		goalList->SetCellValue(i, 2, GetInputString(optimization.GetAlgorithm().GetGoal(i).afterInputs,
 			&optimization.GetAlgorithm().GetGoal(i).beforeInputs));
-		goalList->SetCellValue(i, 5, converter.FormatNumber(optimization.GetAlgorithm().GetGoal(i).importance));
+		goalList->SetCellValue(i, 5, Convert::GetInstance().FormatNumber(
+			optimization.GetAlgorithm().GetGoal(i).importance));
 
 		// Here, we make sure we perform the appropriate conversion, depending on the units
 		// of this particular output
-		goalList->SetCellValue(i, 3, converter.FormatNumber(
-			converter.ConvertTo(optimization.GetAlgorithm().GetGoal(i).desiredValue,
+		goalList->SetCellValue(i, 3, Convert::GetInstance().FormatNumber(
+			Convert::GetInstance().ConvertTo(optimization.GetAlgorithm().GetGoal(i).desiredValue,
 			KinematicOutputs::GetOutputUnitType(optimization.GetAlgorithm().GetGoal(i).output))));
-		goalList->SetCellValue(i, 4, converter.FormatNumber(
-			converter.ConvertTo(optimization.GetAlgorithm().GetGoal(i).expectedDeviation,
+		goalList->SetCellValue(i, 4, Convert::GetInstance().FormatNumber(
+			Convert::GetInstance().ConvertTo(optimization.GetAlgorithm().GetGoal(i).expectedDeviation,
 			KinematicOutputs::GetOutputUnitType(optimization.GetAlgorithm().GetGoal(i).output))));
 
 		// Make the cells read-only and center the text
@@ -1003,10 +1005,14 @@ wxString GeneticAlgorithmPanel::GetInputString(const Kinematics::Inputs &inputs,
 
 	// Create the string
 	inputString.Printf("P:%s, R:%s, H:%s, S:%s",
-		converter.FormatNumber(converter.ConvertAngle(inputs.pitch)).c_str(),
-		converter.FormatNumber(converter.ConvertAngle(inputs.roll)).c_str(),
-		converter.FormatNumber(converter.ConvertDistance(inputs.heave)).c_str(),
-		converter.FormatNumber(converter.ConvertDistance(inputs.rackTravel)).c_str());
+		Convert::GetInstance().FormatNumber(
+			Convert::GetInstance().ConvertAngle(inputs.pitch)).c_str(),
+		Convert::GetInstance().FormatNumber(
+			Convert::GetInstance().ConvertAngle(inputs.roll)).c_str(),
+		Convert::GetInstance().FormatNumber(
+			Convert::GetInstance().ConvertDistance(inputs.heave)).c_str(),
+		Convert::GetInstance().FormatNumber(
+			Convert::GetInstance().ConvertDistance(inputs.rackTravel)).c_str());
 
 	// FIXME!!!:  This doesn't work if they are using steering wheel angle instead of rack travel!
 

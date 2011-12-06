@@ -13,7 +13,7 @@
 // Description:  Contains class declaration for Suspension class.
 // History:
 //	2/24/2008	- Moved half shaft points into here from Drivetrain object, K. Loux.
-//	2/25/2008	- Named BAR_STYLE and ACTUATION_STYLE enums, K. Loux.
+//	2/25/2008	- Named BarStyle and ActuationStyle enums, K. Loux.
 //	3/9/2008	- Moved enumerations inside class structure and changed the structure of the
 //				  Debugger class, K. Loux.
 //	3/23/2008	- Changed units for class members and functions from degrees to radians, K. Loux.
@@ -34,20 +34,15 @@
 #include "vCar/damper.h"
 #include "vMath/vector.h"
 #include "vUtilities/wheelSetStructures.h"
-#include "vUtilities/debugger.h"
 
 class Suspension
 {
 public:
 	// Constructor
-	Suspension(const Debugger &_debugger);
+	Suspension();
 
 	// Destructor
 	~Suspension();
-
-	// For assigning the debugger pointer
-	// (MUST be called before calling other static member functions!)
-	inline static void SetDebugger(const Debugger &_debugger) { debugger = &_debugger; };
 
 	// File read/write functions
 	void Write(std::ofstream *outFile) const;
@@ -144,10 +139,6 @@ public:
 
 	// Operators
 	Suspension& operator=(const Suspension& suspension);
-
-private:
-	// Debugger message printing utility
-	static const Debugger *debugger;
 };
 
 #endif// _SUSPENSION_H_

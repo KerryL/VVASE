@@ -10,7 +10,7 @@
 // File:  brakes.h
 // Created:  11/6/2007
 // Author:  K. Loux
-// Description:  Contains class declaration for BRAKES class (disk brakes only).
+// Description:  Contains class declaration for Brakes class (disk brakes only).
 // History:
 //	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
@@ -24,14 +24,11 @@
 // vUtilities headers
 #include "vUtilities/wheelSetStructures.h"
 
-// CarDesigner forward declarations
-class Debugger;
-
 class Brakes
 {
 public:
 	// Constructor
-	Brakes(const Debugger &_debugger);
+	Brakes();
 	Brakes(const Brakes &brakes);
 
 	// Destructor
@@ -61,10 +58,6 @@ public:
 
 	// Overloaded operators
 	Brakes& operator = (const Brakes &brakes);
-
-private:
-	// Debugger message printing utility
-	const Debugger &debugger;
 };
 
 #endif// _BRAKES_H_

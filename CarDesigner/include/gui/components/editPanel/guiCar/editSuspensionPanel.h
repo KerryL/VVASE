@@ -10,7 +10,7 @@
 // File:  editSuspensionPanel.h
 // Created:  2/10/2009
 // Author:  K. Loux
-// Description:  Contains the class declaration for the EDIT_SUSPENSION_PANEL class.
+// Description:  Contains the class declaration for the EditSuspensionPanel class.
 // History:
 
 #ifndef _EDIT_SUSPENSION_PANEL_H_
@@ -24,9 +24,7 @@ class wxCombo;
 class wxGridEvent;
 
 // VVASE forward declarations
-class Debugger;
 class Suspension;
-class Convert;
 class Vector;
 class SuperGrid;
 class EditSuspensionNotebook;
@@ -35,8 +33,8 @@ class EditSuspensionPanel : public wxScrolledWindow
 {
 public:
 	// Constructor
-	EditSuspensionPanel(EditSuspensionNotebook &_parent, wxWindowID id, const wxPoint& pos,
-		const wxSize& size, const Debugger &_debugger);
+	EditSuspensionPanel(EditSuspensionNotebook &_parent, wxWindowID id,
+		const wxPoint& pos, const wxSize& size);
 
 	// Destructor
 	~EditSuspensionPanel();
@@ -46,12 +44,6 @@ public:
 	void UpdateInformation(void);
 
 private:
-	// Debugger message printing utility
-	const Debugger &debugger;
-
-	// The application's converter
-	const Convert &converter;
-
 	// The parent panel
 	EditSuspensionNotebook &parent;
 

@@ -27,27 +27,19 @@ class wxNotebook;
 class wxRadioBox;
 
 // VVASE forward declarations
-class Convert;
 class MainFrame;
-class Debugger;
 
 class OptionsDialog : public wxDialog
 {
 public:
 	// Constructor
-	OptionsDialog(MainFrame &_mainFrame, Convert &_converter, Kinematics::Inputs &_kinematicInputs,
-		wxWindowID id, const wxPoint &position, Debugger &_debugger, long style = wxDEFAULT_DIALOG_STYLE);
+	OptionsDialog(MainFrame &_mainFrame, Kinematics::Inputs &_kinematicInputs,
+		wxWindowID id, const wxPoint &position, long style = wxDEFAULT_DIALOG_STYLE);
 
 	// Destructor
 	~OptionsDialog();
 
 private:
-	// Debugger printing utility
-	Debugger &debugger;
-
-	// The object that handles the unit conversions between the input and output
-	Convert &converter;
-
 	// The object that contains the options for the kinematic analysis
 	Kinematics::Inputs &kinematicInputs;
 

@@ -33,7 +33,6 @@
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
-//		_debugger	= const Debugger& reference to applications debug printing utility
 //
 // Output Arguments:
 //		None
@@ -43,10 +42,8 @@
 //
 //==========================================================================
 EditBrakesPanel::EditBrakesPanel(EditPanel &_parent, wxWindowID id,
-									 const wxPoint& pos, const wxSize& size,
-									 const Debugger &_debugger) :
-									 wxScrolledWindow(&_parent, id, pos, size), debugger(_debugger),
-									 converter(_parent.GetMainFrame().GetConverter()),
+									 const wxPoint& pos, const wxSize& size) :
+									 wxScrolledWindow(&_parent, id, pos, size),
 									 parent(_parent)
 {
 	// Create the controls
@@ -120,7 +117,8 @@ void EditBrakesPanel::UpdateInformation(Brakes *_currentBrakes)
 	rearBrakesInboard->SetValue(currentBrakes->rearBrakesInboard);
 
 	// Update the text boxes
-	percentFrontBraking->ChangeValue(converter.FormatNumber(currentBrakes->percentFrontBraking));
+	percentFrontBraking->ChangeValue(Convert::GetInstance().FormatNumber(
+		currentBrakes->percentFrontBraking));
 }
 
 //==========================================================================
@@ -169,7 +167,7 @@ void EditBrakesPanel::CreateControls()
 
 	// Set text box minimum size based on formatted text to appear in the box
 	int minWidth;
-	GetTextExtent(converter.FormatNumber(-10.000), &minWidth, NULL);
+	GetTextExtent(Convert::GetInstance().FormatNumber(-10.000), &minWidth, NULL);
 	percentFrontBraking->SetMinSize(wxSize(minWidth, -1));
 
 	// Add the sizers to the main sizer
@@ -250,7 +248,7 @@ void EditBrakesPanel::TextBoxEditEvent(wxCommandEvent &event)
 	mutex->Lock();
 
 	// Update the brakes object
-	*dataLocation = converter.Read(value, units);
+	*dataLocation = Convert::GetInstance().Read(value, units);
 
 	// Check the limits on the data value
 	if (*dataLocation > maxValue)

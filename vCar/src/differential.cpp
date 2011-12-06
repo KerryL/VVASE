@@ -30,7 +30,7 @@
 // Description:		Constructor for the Differential class.
 //
 // Input Arguments:
-//		_debugger	= const Debugger& reference to applications debug printing utility
+//		None
 //
 // Output Arguments:
 //		None
@@ -39,7 +39,7 @@
 //		None
 //
 //==========================================================================
-Differential::Differential(const Debugger &_debugger) : debugger(_debugger)
+Differential::Differential()
 {
 }
 
@@ -59,7 +59,7 @@ Differential::Differential(const Debugger &_debugger) : debugger(_debugger)
 //		None
 //
 //==========================================================================
-Differential::Differential(const Differential &differential) : debugger(differential.debugger)
+Differential::Differential(const Differential &differential)
 {
 	// Do the copy
 	*this = differential;

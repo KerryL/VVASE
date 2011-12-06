@@ -34,7 +34,6 @@
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
-//		_debugger	= const Debugger& reference to applications debug printing utility
 //
 // Output Arguments:
 //		None
@@ -45,9 +44,8 @@
 //==========================================================================
 EditIterationRangePanel::EditIterationRangePanel(EditIterationNotebook &_parent,
 												 wxWindowID id, const wxPoint& pos,
-												 const wxSize& size, const Debugger &_debugger) :
-												 wxScrolledWindow(&_parent, id, pos, size), debugger(_debugger),
-												 converter(_parent.GetParent().GetMainFrame().GetConverter()),
+												 const wxSize& size) :
+												 wxScrolledWindow(&_parent, id, pos, size),
 												 parent(_parent)
 {
 	// Initialize the current object variable
@@ -150,27 +148,27 @@ void EditIterationRangePanel::UpdateInformation(Iteration *_currentIteration)
 
 	// Update the values of our Range and NumberOfPoints to the text boxes
 	// Don't forget to convert the range values to the user specified units!
-	startPitchInput->ChangeValue(converter.FormatNumber(converter.ConvertAngle(currentIteration->GetRange().startPitch)));
-	startRollInput->ChangeValue(converter.FormatNumber(converter.ConvertAngle(currentIteration->GetRange().startRoll)));
-	startHeaveInput->ChangeValue(converter.FormatNumber(converter.ConvertDistance(currentIteration->GetRange().startHeave)));
-	startSteerInput->ChangeValue(converter.FormatNumber(converter.ConvertDistance(currentIteration->GetRange().startRackTravel)));
-	endPitchInput->ChangeValue(converter.FormatNumber(converter.ConvertAngle(currentIteration->GetRange().endPitch)));
-	endRollInput->ChangeValue(converter.FormatNumber(converter.ConvertAngle(currentIteration->GetRange().endRoll)));
-	endHeaveInput->ChangeValue(converter.FormatNumber(converter.ConvertDistance(currentIteration->GetRange().endHeave)));
-	endSteerInput->ChangeValue(converter.FormatNumber(converter.ConvertDistance(currentIteration->GetRange().endRackTravel)));
+	startPitchInput->ChangeValue(Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertAngle(currentIteration->GetRange().startPitch)));
+	startRollInput->ChangeValue(Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertAngle(currentIteration->GetRange().startRoll)));
+	startHeaveInput->ChangeValue(Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(currentIteration->GetRange().startHeave)));
+	startSteerInput->ChangeValue(Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(currentIteration->GetRange().startRackTravel)));
+	endPitchInput->ChangeValue(Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertAngle(currentIteration->GetRange().endPitch)));
+	endRollInput->ChangeValue(Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertAngle(currentIteration->GetRange().endRoll)));
+	endHeaveInput->ChangeValue(Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(currentIteration->GetRange().endHeave)));
+	endSteerInput->ChangeValue(Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(currentIteration->GetRange().endRackTravel)));
 
 	// Update the unit labels
-	pitchUnitsLabel->SetLabel(converter.GetUnitType(Convert::UnitTypeAngle));
-	rollUnitsLabel->SetLabel(converter.GetUnitType(Convert::UnitTypeAngle));
-	heaveUnitsLabel->SetLabel(converter.GetUnitType(Convert::UnitTypeDistance));
+	pitchUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(Convert::UnitTypeAngle));
+	rollUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(Convert::UnitTypeAngle));
+	heaveUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance));
 	if (currentIteration->GetMainFrame().GetUseRackTravel())
 	{
-		steerUnitsLabel->SetLabel(converter.GetUnitType(Convert::UnitTypeDistance));
+		steerUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance));
 		steerInputLabel->SetLabel(_T("Rack Travel"));
 	}
 	else
 	{
-		steerUnitsLabel->SetLabel(converter.GetUnitType(Convert::UnitTypeAngle));
+		steerUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(Convert::UnitTypeAngle));
 		steerInputLabel->SetLabel(_T("Steering Wheel Angle"));
 	}
 
@@ -221,7 +219,7 @@ void EditIterationRangePanel::CreateControls()
 	// Add the static text and text controls to these sizers
 	// Pitch
 	int textBoxWidth;
-	GetTextExtent(converter.FormatNumber(-888.0), &textBoxWidth, NULL);
+	GetTextExtent(Convert::GetInstance().FormatNumber(-888.0), &textBoxWidth, NULL);
 
 	startPitchInput = new wxTextCtrl(this, RangeTextBox);
 	endPitchInput = new wxTextCtrl(this, RangeTextBox);
@@ -330,14 +328,14 @@ void EditIterationRangePanel::RangeTextBoxChangeEvent(wxCommandEvent& WXUNUSED(e
 	}
 
 	// Convert the range from the user specified units
-	range.startPitch = converter.ReadAngle(range.startPitch);
-	range.startRoll = converter.ReadAngle(range.startRoll);
-	range.startHeave = converter.ReadDistance(range.startHeave);
-	range.startRackTravel = converter.ReadDistance(range.startRackTravel);
-	range.endPitch = converter.ReadAngle(range.endPitch);
-	range.endRoll = converter.ReadAngle(range.endRoll);
-	range.endHeave = converter.ReadDistance(range.endHeave);
-	range.endRackTravel = converter.ReadDistance(range.endRackTravel);
+	range.startPitch = Convert::GetInstance().ReadAngle(range.startPitch);
+	range.startRoll = Convert::GetInstance().ReadAngle(range.startRoll);
+	range.startHeave = Convert::GetInstance().ReadDistance(range.startHeave);
+	range.startRackTravel = Convert::GetInstance().ReadDistance(range.startRackTravel);
+	range.endPitch = Convert::GetInstance().ReadAngle(range.endPitch);
+	range.endRoll = Convert::GetInstance().ReadAngle(range.endRoll);
+	range.endHeave = Convert::GetInstance().ReadDistance(range.endHeave);
+	range.endRackTravel = Convert::GetInstance().ReadDistance(range.endRackTravel);
 
 	// Update the iteration's range and number of points
 	currentIteration->SetRange(range);

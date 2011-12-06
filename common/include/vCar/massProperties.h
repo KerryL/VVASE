@@ -26,14 +26,11 @@
 #include "vMath/vector.h"
 #include "vUtilities/wheelSetStructures.h"
 
-// VVASE forward declarations
-class Debugger;
-
 class MassProperties
 {
 public:
 	// Constructors
-	MassProperties(const Debugger &_debugger);
+	MassProperties();
 	MassProperties(const MassProperties &massProperties);
 
 	// Destructor
@@ -64,10 +61,6 @@ public:
 
 	// Overloaded operators
 	MassProperties& operator = (const MassProperties &massProperties);
-
-private:
-	// Debugger message printing utility
-	const Debugger &debugger;
 };
 
 #endif// _MASS_H_

@@ -10,10 +10,10 @@
 // File:  drivetrain.h
 // Created:  11/3/2007
 // Author:  K. Loux
-// Description:  Contains class declaration for DRIVETRAIN class (transmission).
+// Description:  Contains class declaration for Drivetrain class (transmission).
 // History:
-//	2/24/2008	- Moved half shaft points from here into SUSPENSION object, K. Loux.
-//	2/25/2008	- Named DRIVE_WHEELS enum, K. Loux.
+//	2/24/2008	- Moved half shaft points from here into Suspension object, K. Loux.
+//	2/25/2008	- Named DriveWheels enum, K. Loux.
 //	3/9/2008	- Moved enumerations inside class structure and changed the structure of the
 //				  Debugger class, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
@@ -27,17 +27,14 @@
 // wxWidgets headers
 #include <wx/wx.h>
 
-// vUtilities forward declarations
-class Debugger;
-
-// vCar forward declarations
+// Local forward declarations
 class Differential;
 
 class Drivetrain
 {
 public:
 	// Constructor
-	Drivetrain(const Debugger &_debugger);
+	Drivetrain();
 	Drivetrain(const Drivetrain &drivetrain);
 
 	// Destructor
@@ -76,9 +73,6 @@ public:
 	Drivetrain& operator = (const Drivetrain &drivetrain);
 
 private:
-	// Debugger message printing utility
-	const Debugger &debugger;
-
 	// The differential for this drivetrain
 	Differential *differential;
 
@@ -89,7 +83,7 @@ private:
 	double transmissionInertia;					// [slug-ft^2] (w.r.t. high speed side)
 
 	// Array of gear ratios for each gear (not including final
-	// drive - that is in the DIFFERENTIAL object)
+	// drive - that is in the Differential object)
 	double *gearRatio;							// [-]
 
 	// Clutch stuff in here, too?

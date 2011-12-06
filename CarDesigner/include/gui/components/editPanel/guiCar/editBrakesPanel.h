@@ -28,7 +28,7 @@ class EditBrakesPanel : public wxScrolledWindow
 public:
 	// Constructor
 	EditBrakesPanel(EditPanel &_parent, wxWindowID id, const wxPoint& pos,
-		const wxSize& size, const Debugger &_debugger);
+		const wxSize& size);
 
 	// Destructor
 	~EditBrakesPanel();
@@ -37,12 +37,6 @@ public:
 	void UpdateInformation(Brakes *_currentBrakes);
 
 private:
-	// Debugger message printing utility
-	const Debugger &debugger;
-
-	// The application's converter
-	const Convert &converter;
-
 	// The parent panel
 	EditPanel &parent;
 

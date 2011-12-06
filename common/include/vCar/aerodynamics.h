@@ -10,7 +10,7 @@
 // File:  aerodynamics.h
 // Created:  11/3/2007
 // Author:  K. Loux
-// Description:  Contains class declaration for aerodynamics class.
+// Description:  Contains class declaration for Aerodynamics class.
 // History:
 //	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
@@ -24,14 +24,11 @@
 // vMath headers
 #include "vMath/vector.h"
 
-// vUtilities forward declarations
-class Debugger;
-
 class Aerodynamics
 {
 public:
 	// Constructor
-	Aerodynamics(const Debugger &_debugger);
+	Aerodynamics();
 	Aerodynamics(const Aerodynamics &aerodynamics);
 
 	// Destructor
@@ -49,9 +46,6 @@ public:
 	Aerodynamics& operator = (const Aerodynamics &aerodynamics);
 
 private:
-	// Debugger message printing utility
-	const Debugger &debugger;
-
 	// Class properties
 	Vector centerOfPressure;			// [in]
 	double referenceArea;				// [in^2]

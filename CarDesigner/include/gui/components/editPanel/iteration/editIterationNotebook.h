@@ -20,7 +20,6 @@
 #include <wx/wx.h>
 
 // VVASE forward declarations
-class Debugger;
 class Iteration;
 class EditPanel;
 class EditIterationRangePanel;
@@ -32,7 +31,7 @@ class EditIterationNotebook : public wxNotebook
 public:
 	// Constructor
 	EditIterationNotebook(EditPanel &_parent, wxWindowID id, const wxPoint& pos,
-		const wxSize& size, long style, const Debugger &_debugger);
+		const wxSize& size, long style);
 
 	// Destructor
 	~EditIterationNotebook();
@@ -45,9 +44,6 @@ public:
 	void UpdateInformation(void);
 
 private:
-	// Debugger message printing utility
-	const Debugger &debugger;
-
 	// The parent window
 	EditPanel &parent;
 

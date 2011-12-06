@@ -67,7 +67,6 @@
 //		_mainFrame	= MainFrame& reference to the owner of this object
 //		_car		= GuiCar& reference to the car that we are to render
 //		args		= int[] NOTE: Under GTK, must contain WX_GL_DOUBLEBUFFER at minimum
-//		_debugger	= const Debugger&, reference to debug printing utility
 //
 // Output Arguments:
 //		None
@@ -76,11 +75,10 @@
 //		None
 //
 //==========================================================================
-CarRenderer::CarRenderer(MainFrame &_mainFrame, GuiCar &_car, int args[],
-						   const Debugger &_debugger)
+CarRenderer::CarRenderer(MainFrame &_mainFrame, GuiCar &_car, int args[])
 						   : RenderWindow(_mainFrame, wxID_ANY, args, wxDefaultPosition,
 						   wxDefaultSize, wxWANTS_CHARS | wxNO_FULL_REPAINT_ON_RESIZE),
-						   debugger(_debugger), mainFrame(_mainFrame),
+						   mainFrame(_mainFrame),
 						   appearanceOptions(_car.GetAppearanceOptions()),
 						   displayCar(_car.GetWorkingCar()), referenceCar(_car.GetOriginalCar())
 {

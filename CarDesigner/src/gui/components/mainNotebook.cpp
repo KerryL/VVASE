@@ -37,7 +37,6 @@
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
 //		style		= long for passing to parent class's constructor
-//		_debugger	= const Debugger& reference to applications debug printing utility
 //
 // Output Arguments:
 //		None
@@ -47,9 +46,9 @@
 //
 //==========================================================================
 MainNotebook::MainNotebook(MainFrame &_mainFrame, wxWindowID id, const wxPoint& pos,
-							 const wxSize& size, long style, const Debugger &_debugger)
+							 const wxSize& size, long style)
 							 : wxAuiNotebook(&_mainFrame, id, pos, size, style),
-							 debugger(_debugger), mainFrame(_mainFrame)
+							 mainFrame(_mainFrame)
 {
 	SetArtProvider(new wxAuiSimpleTabArt);
 }

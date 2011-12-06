@@ -10,7 +10,7 @@
 // File:  editIterationRangePanel.h
 // Created:  11/14/2010
 // Author:  K. Loux
-// Description:  Contains the class declaration for the EDIT_ITERATION_RANGE_PANEL class.
+// Description:  Contains the class declaration for the EditIterationPanel class.
 // History:
 
 #ifndef _EDIT_ITERATION_RANGE_PANEL_H_
@@ -20,17 +20,15 @@
 #include <wx/wx.h>
 
 // VVASE forward declarations
-class Debugger;
 class Iteration;
-class Convert;
 class EditIterationNotebook;
 
 class EditIterationRangePanel : public wxScrolledWindow
 {
 public:
 	// Constructor
-	EditIterationRangePanel(EditIterationNotebook &_parent, wxWindowID id, const wxPoint& pos,
-		const wxSize& size, const Debugger &_debugger);
+	EditIterationRangePanel(EditIterationNotebook &_parent, wxWindowID id,
+		const wxPoint& pos, const wxSize& size);
 
 	// Destructor
 	~EditIterationRangePanel();
@@ -40,12 +38,6 @@ public:
 	void UpdateInformation(void);
 
 private:
-	// Debugger message printing utility
-	const Debugger &debugger;
-
-	// The application's converter
-	const Convert &converter;
-
 	// The parent panel
 	EditIterationNotebook &parent;
 

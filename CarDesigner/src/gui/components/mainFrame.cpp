@@ -70,6 +70,7 @@
 #include "vSolver/threads/threadEvent.h"
 #include "vMath/vector.h"
 #include "vUtilities/fontFinder.h"
+#include "vUtilities/debugger.h"
 
 // *nix Icons
 #ifdef __WXGTK__
@@ -102,19 +103,18 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxEmptyString, wxDefaultPositio
 	// Create the SystemsTree
 	systemsTree = new MainTree(*this, wxID_ANY, wxDefaultPosition, wxSize(320, 384),
 		wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT | wxTR_DEFAULT_STYLE | wxSUNKEN_BORDER
-		| wxTR_HIDE_ROOT, debugger);
+		| wxTR_HIDE_ROOT);
 
 	// Create the Notebook
 	notebook = new MainNotebook(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
 		wxAUI_NB_TOP | wxAUI_NB_TAB_SPLIT | wxAUI_NB_TAB_MOVE |
-		wxAUI_NB_SCROLL_BUTTONS | wxAUI_NB_CLOSE_ON_ALL_TABS | wxAUI_NB_WINDOWLIST_BUTTON,
-		debugger);
+		wxAUI_NB_SCROLL_BUTTONS | wxAUI_NB_CLOSE_ON_ALL_TABS | wxAUI_NB_WINDOWLIST_BUTTON);
 
 	// Create the EditPanel
-	editPanel = new EditPanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize, debugger);
+	editPanel = new EditPanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
 
 	// Create the OutputPanel
-	outputPanel = new OutputPanel(*this, wxID_ANY, wxDefaultPosition, wxSize(350, -1), debugger);
+	outputPanel = new OutputPanel(*this, wxID_ANY, wxDefaultPosition, wxSize(350, -1));
 
 	// Create the OutputPane
 	debugPane = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
@@ -138,28 +138,28 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxEmptyString, wxDefaultPositio
 	activeIndex = -1;
 	beingDeleted = false;
 
-	debugger.Print(carDesignerName + _T(" Initialized!"));
+	Debugger::GetInstance().Print(carDesignerName + _T(" Initialized!"));
 
 	// Some machine information
-	/*debugger.Print(wxPlatformInfo::Get().GetArchName());
-	debugger.Print(wxPlatformInfo::Get().GetEndiannessName());
+	/*Debugger::GetInstance().Print(wxPlatformInfo::Get().GetArchName());
+	Debugger::GetInstance().Print(wxPlatformInfo::Get().GetEndiannessName());
 
-	debugger.Print(wxGetOsDescription());
+	Debugger::GetInstance().Print(wxGetOsDescription());
 	wxString temp;
 	temp.Printf("%i cores", wxThread::GetCPUCount());
-	debugger.Print(temp);//*/
+	Debugger::GetInstance().Print(temp);//*/
 
 	// Some debugging information
-	/*debugger.Print(Debugger::PriorityVeryHigh, "sizeof(double): %i", sizeof(double));
-	debugger.Print(Debugger::PriorityVeryHigh, "sizeof(short): %i", sizeof(short));
-	debugger.Print(Debugger::PriorityVeryHigh, "sizeof(int): %i", sizeof(int));
-	debugger.Print(Debugger::PriorityVeryHigh, "sizeof(long): %i", sizeof(long));
-	debugger.Print(Debugger::PriorityVeryHigh, "sizeof(bool): %i", sizeof(bool));
-	debugger.Print(Debugger::PriorityVeryHigh, "sizeof(Drivetrain::DriveWheels): %i",
+	/*Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "sizeof(double): %i", sizeof(double));
+	Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "sizeof(short): %i", sizeof(short));
+	Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "sizeof(int): %i", sizeof(int));
+	Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "sizeof(long): %i", sizeof(long));
+	Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "sizeof(bool): %i", sizeof(bool));
+	Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "sizeof(Drivetrain::DriveWheels): %i",
 		sizeof(Drivetrain::DriveWheels));
-	debugger.Print(Debugger::PriorityVeryHigh, "sizeof(Vector): %i", sizeof(Vector));
-	debugger.Print(Debugger::PriorityVeryHigh, "sizeof(VectorSet): %i", sizeof(VectorSet));
-	debugger.Print(Debugger::PriorityVeryHigh, "sizeof(WheelSet): %i", sizeof(WheelSet));//*/
+	Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "sizeof(Vector): %i", sizeof(Vector));
+	Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "sizeof(VectorSet): %i", sizeof(VectorSet));
+	Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "sizeof(WheelSet): %i", sizeof(WheelSet));//*/
 }
 
 //==========================================================================
@@ -193,7 +193,7 @@ MainFrame::~MainFrame()
 	while (openObjectList.GetCount() > 0)
 		RemoveObjectFromList(0);
 
-	// Deinitialize the manager
+	// De-initialize the manager
 	manager.UnInit();
 }
 
@@ -338,8 +338,8 @@ void MainFrame::SetProperties(void)
 	statusBar->SetStatusText(wxEmptyString, 1);
 
 	// Set up the debugger
-	debugger.SetTargetOutput(debugPane);
-	debugger.SetDebugLevel(Debugger::PriorityHigh);
+	Debugger::GetInstance().SetTargetOutput(debugPane);
+	Debugger::GetInstance().SetDebugLevel(Debugger::PriorityHigh);
 
 	// Add the application level entry to the SystemsTree (this one is hidden, but necessary)
 	systemsTree->AddRoot(_T("Application Level"), -1, -1);
@@ -359,20 +359,19 @@ void MainFrame::SetProperties(void)
 	menuBar->FindItem(IdMenuToolsDynamic)->Enable(false);
 
 	// Set up the unit converter
-	converter.SetAngleUnits(Convert::DEGREES);
-	converter.SetDistanceUnits(Convert::INCH);
-	converter.SetAreaUnits(Convert::INCH_SQUARED);
-	converter.SetForceUnits(Convert::POUND_FORCE);
-	converter.SetPressureUnits(Convert::POUND_FORCE_PER_SQUARE_INCH);
-	converter.SetMomentUnits(Convert::FOOT_POUND_FORCE);
-	converter.SetMassUnits(Convert::SLUG);
-	converter.SetVelocityUnits(Convert::INCHES_PER_SECOND);
-	converter.SetAccelerationUnits(Convert::INCHES_PER_SECOND_SQUARED);
-	converter.SetInertiaUnits(Convert::SLUG_INCHES_SQUARED);
-	converter.SetDensityUnits(Convert::SLUGS_PER_INCH_CUBED);
-	converter.SetPowerUnits(Convert::HORSEPOWER);
-	converter.SetEnergyUnits(Convert::BRITISH_THERMAL_UNIT);
-	converter.SetTemperatureUnits(Convert::FAHRENHEIT);
+	Convert::GetInstance().SetDistanceUnits(Convert::INCH);
+	Convert::GetInstance().SetAreaUnits(Convert::INCH_SQUARED);
+	Convert::GetInstance().SetForceUnits(Convert::POUND_FORCE);
+	Convert::GetInstance().SetPressureUnits(Convert::POUND_FORCE_PER_SQUARE_INCH);
+	Convert::GetInstance().SetMomentUnits(Convert::FOOT_POUND_FORCE);
+	Convert::GetInstance().SetMassUnits(Convert::SLUG);
+	Convert::GetInstance().SetVelocityUnits(Convert::INCHES_PER_SECOND);
+	Convert::GetInstance().SetAccelerationUnits(Convert::INCHES_PER_SECOND_SQUARED);
+	Convert::GetInstance().SetInertiaUnits(Convert::SLUG_INCHES_SQUARED);
+	Convert::GetInstance().SetDensityUnits(Convert::SLUGS_PER_INCH_CUBED);
+	Convert::GetInstance().SetPowerUnits(Convert::HORSEPOWER);
+	Convert::GetInstance().SetEnergyUnits(Convert::BRITISH_THERMAL_UNIT);
+	Convert::GetInstance().SetTemperatureUnits(Convert::FAHRENHEIT);
 	
 	// Read defaults from config file, if it exists
 	ReadConfiguration();
@@ -396,15 +395,15 @@ void MainFrame::SetProperties(void)
 			outputFont.SetPointSize(9);
 			outputFont.SetFamily(wxFONTFAMILY_MODERN);
 			if (!outputFont.SetFaceName(fontFaceName))
-				debugger.Print(_T("Error setting font face to ") + fontFaceName);
+				Debugger::GetInstance().Print(_T("Error setting font face to ") + fontFaceName);
 		}
 		
 		// Tell the user if we're using a font we're unsure of
 		if (!foundPreferredFont)
 		{
-			debugger.Print(_T("Could not find preferred fixed-width font; using ")
+			Debugger::GetInstance().Print(_T("Could not find preferred fixed-width font; using ")
 				+ fontFaceName);
-			debugger.Print(_T("This can be changed in Tools->Options->Fonts"));
+			Debugger::GetInstance().Print(_T("This can be changed in Tools->Options->Fonts"));
 		}
 	}
 
@@ -427,9 +426,9 @@ void MainFrame::SetProperties(void)
 		if (!foundFont)
 		{
 			if (!fontFile.IsEmpty())
-				debugger.Print(_T("Could not find preferred plot font; using ") + fontFile);
+				Debugger::GetInstance().Print(_T("Could not find preferred plot font; using ") + fontFile);
 			else
-				debugger.Print(_T("Could not find any *.ttf files - cannot generate plot fonts"));
+				Debugger::GetInstance().Print(_T("Could not find any *.ttf files - cannot generate plot fonts"));
 		}
 		else
 		{
@@ -478,10 +477,6 @@ void MainFrame::InitializeSolver(void)
 	openJobCount = 0;
 	numberOfThreads = 0;
 
-	// Pass the debugger information objects that have a static pointer to the debugger
-	Suspension::SetDebugger(debugger);
-	KinematicOutputs::SetDebugger(debugger);
-
 	// Zero out kinematic inputs
 	kinematicInputs.pitch = 0.0;
 	kinematicInputs.roll = 0.0;
@@ -526,7 +521,7 @@ void MainFrame::SetNumberOfThreads(unsigned int newNumberOfThreads)
 			openJobCount++;
 
 			// These threads will delete themselves after an EXIT job
-			WorkerThread *newThread = new WorkerThread(jobQueue, debugger, i);
+			WorkerThread *newThread = new WorkerThread(jobQueue, i);
 			// FIXME:  If we want to set priority, this is where it needs to happen
 			newThread->Run();
 		}
@@ -569,7 +564,7 @@ void MainFrame::SetOutputFont(const wxFont& font)
 		wxTextAttr outputAttributes;
 		outputAttributes.SetFont(outputFont);
 		if (!debugPane->SetDefaultStyle(outputAttributes))
-			debugger.Print(_T("Error setting font style"));
+			Debugger::GetInstance().Print(_T("Error setting font style"));
 	}
 }
 
@@ -594,7 +589,7 @@ void MainFrame::SetPlotFont(const wxFont& font)
 	if (!font.IsNull() && font.IsOk())
 		plotFont = font;
 	/*else
-		debugger.Print(_T("Error setting plot font"));*/// Sometimes we just want
+		Debugger::GetInstance().Print(_T("Error setting plot font"));*/// Sometimes we just want
 	// this to sort out whether or not the font is valid without telling the user.
 }
 
@@ -864,7 +859,7 @@ END_EVENT_TABLE();
 void MainFrame::FileNewCarEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Create a new GuiObject with type TypeCar
-	GuiObject *tempObject = new GuiCar(*this, debugger);
+	GuiObject *tempObject = new GuiCar(*this);
 
 	// Make the new object active
 	SetActiveIndex(tempObject->GetIndex());
@@ -890,7 +885,7 @@ void MainFrame::FileNewCarEvent(wxCommandEvent& WXUNUSED(event))
 void MainFrame::FileNewIterationEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Create a new GuiObject with type TypeIteration
-	GuiObject *tempObject = new Iteration(*this, debugger);
+	GuiObject *tempObject = new Iteration(*this);
 
 	// Make the new object active or remove it from the list (user canceled)
 	if (tempObject->IsInitialized())
@@ -919,7 +914,7 @@ void MainFrame::FileNewIterationEvent(wxCommandEvent& WXUNUSED(event))
 void MainFrame::FileNewOptimizationEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Create a new GuiObject with type TypeOptimization
-	GuiObject *tempObject = new GeneticOptimization(*this, debugger, converter);
+	GuiObject *tempObject = new GeneticOptimization(*this);
 
 	// Make the new object active
 	SetActiveIndex(tempObject->GetIndex());
@@ -1157,9 +1152,9 @@ void MainFrame::FileWriteImageFileEvent(wxCommandEvent& WXUNUSED(event))
 
 	// Call the object's write image file method
 	if (openObjectList[objectOfInterestIndex]->WriteImageToFile(pathAndFileName[0]))
-		debugger.Print(Debugger::PriorityHigh, "Image file written to %s", pathAndFileName[0].c_str());
+		Debugger::GetInstance().Print(Debugger::PriorityHigh, "Image file written to %s", pathAndFileName[0].c_str());
 	else
-		debugger.Print(_T("Image file NOT written!"), Debugger::PriorityHigh);
+		Debugger::GetInstance().Print(_T("Image file NOT written!"), Debugger::PriorityHigh);
 }
 
 //==========================================================================
@@ -1705,7 +1700,7 @@ void MainFrame::ToolsDynamicEvent(wxCommandEvent &event)
 void MainFrame::ToolsOptionsEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Create the dialog box
-	OptionsDialog optionsDialog(*this, converter, kinematicInputs, wxID_ANY, wxDefaultPosition, debugger);
+	OptionsDialog optionsDialog(*this, kinematicInputs, wxID_ANY, wxDefaultPosition);
 
 	// Display the dialog
 	if (optionsDialog.ShowModal() == wxOK)
@@ -1757,11 +1752,11 @@ void MainFrame::HelpManualEvent(wxCommandEvent& WXUNUSED(event))
 	wxFileType *pdfFileType = mimeManager.GetFileTypeFromExtension(_T("pdf"));
 	if (!pdfFileType->GetOpenCommand(&openPDFManualCommand,
 		wxFileType::MessageParameters(manualFileName)))
-		debugger.Print(_T("ERROR:  Could not determine how to open .pdf files!"));
+		Debugger::GetInstance().Print(_T("ERROR:  Could not determine how to open .pdf files!"));
 	else
 	{
 		if (wxExecute(openPDFManualCommand) == 0)
-			debugger.Print(_T("ERROR:  Could not find 'VVASE Manual.pdf'!"));// FIXME:  Use manualFileName
+			Debugger::GetInstance().Print(_T("ERROR:  Could not find 'VVASE Manual.pdf'!"));// FIXME:  Use manualFileName
 	}
 }
 
@@ -1925,7 +1920,7 @@ void MainFrame::KinematicToolbarPitchChangeEvent(wxCommandEvent& WXUNUSED(event)
 		return;
 
 	// Set the value for the kinematic analysis object
-	kinematicInputs.pitch = converter.ReadAngle(value);
+	kinematicInputs.pitch = Convert::GetInstance().ReadAngle(value);
 
 	// Update the analysis
 	UpdateAnalysis();
@@ -1964,7 +1959,7 @@ void MainFrame::KinematicToolbarRollChangeEvent(wxCommandEvent& WXUNUSED(event))
 		return;
 
 	// Set the value for the kinematic analysis object
-	kinematicInputs.roll = converter.ReadAngle(value);
+	kinematicInputs.roll = Convert::GetInstance().ReadAngle(value);
 
 	// Update the analysis
 	UpdateAnalysis();
@@ -2003,7 +1998,7 @@ void MainFrame::KinematicToolbarHeaveChangeEvent(wxCommandEvent& WXUNUSED(event)
 		return;
 
 	// Set the value for the kinematic analysis object
-	kinematicInputs.heave = converter.ReadDistance(value);
+	kinematicInputs.heave = Convert::GetInstance().ReadDistance(value);
 
 	// Update the analysis
 	UpdateAnalysis();
@@ -2043,9 +2038,9 @@ void MainFrame::KinematicToolbarSteerChangeEvent(wxCommandEvent& WXUNUSED(event)
 
 	// Set the value for the kinematic analysis object depending on what the steering input represents
 	if (useRackTravel)
-		kinematicInputs.rackTravel = converter.ReadDistance(value);
+		kinematicInputs.rackTravel = Convert::GetInstance().ReadDistance(value);
 	else
-		kinematicInputs.rackTravel = converter.ReadAngle(value) * 1.0;// * RackRatio;// FIXME:  Use rack ratio
+		kinematicInputs.rackTravel = Convert::GetInstance().ReadAngle(value) * 1.0;// * RackRatio;// FIXME:  Use rack ratio
 
 	// Update the analysis
 	UpdateAnalysis();
@@ -2079,7 +2074,7 @@ void MainFrame::ThreadCompleteEvent(wxCommandEvent &event)
 	case ThreadJob::CommandThreadExit:
 		// Decrement the number of active threads
 		activeThreads--;
-		debugger.Print(Debugger::PriorityLow, "Thread %i exited", event.GetId());
+		Debugger::GetInstance().Print(Debugger::PriorityLow, "Thread %i exited", event.GetId());
 
 		// If there are no more active threads, it is now safe to kill this window
 		if (activeThreads == 0)
@@ -2093,7 +2088,7 @@ void MainFrame::ThreadCompleteEvent(wxCommandEvent &event)
 	case ThreadJob::CommandThreadStarted:
 		// Increment the number of active threads
 		activeThreads++;
-		debugger.Print(Debugger::PriorityLow, "Thread %i started", event.GetId());
+		Debugger::GetInstance().Print(Debugger::PriorityLow, "Thread %i started", event.GetId());
 		break;
 
 	case ThreadJob::CommandThreadKinematicsNormal:
@@ -2167,7 +2162,7 @@ void MainFrame::DebugMessageEvent(wxCommandEvent &event)
 
 #ifdef _DEBUG_TO_FILE_
 	// Useful for cases where the application crashes and text can no longer be viewed in the output pane
-	// FIXME:  Make this part of the debugger class?
+	// FIXME:  Make this part of the Debugger class?
 	std::ofstream file("debug.txt", std::ios::app);
 	file << event.GetString();
 	file.close();
@@ -2183,7 +2178,7 @@ void MainFrame::DebugMessageEvent(wxCommandEvent &event)
 //					a new GuiObject.  The usual syntax and calling
 //					sequence looks something like this (it is also important
 //					to assign the index back to the GuiObject for future use):
-//						GuiObject *NewObject = new GuiObject(this, debugger);
+//						GuiObject *NewObject = new GuiObject(this);
 //						 NewObject->SetIndex(AddObjectToList(NewObject));
 //
 // Input Arguments:
@@ -2198,7 +2193,7 @@ void MainFrame::DebugMessageEvent(wxCommandEvent &event)
 //==========================================================================
 int MainFrame::AddObjectToList(GuiObject *objectToAdd)
 {
-	// Add the object to the list (must be done before the menu persmissions are updated)
+	// Add the object to the list (must be done before the menu permissions are updated)
 	return openObjectList.Add(objectToAdd);
 }
 
@@ -2229,7 +2224,7 @@ void MainFrame::RemoveObjectFromList(int index)
 	// Delete the specified object from the list
 	openObjectList.Remove(index);
 
-	// Reset the cars' indicies and check to see what types we have available
+	// Reset the cars' indices and check to see what types we have available
 	// Also refresh the car's displays
 	int i;
 	for (i = 0; i < openObjectList.GetCount(); i++)
@@ -2286,7 +2281,7 @@ void MainFrame::SetNotebookPage(int index)
 		// Update the active object's display
 		// (haven't identified the root cause, but sometimes the car disappears if this isn't done)
 		// FIXME:  This works as a workaround for disappearing cars/plots as happens sometimes, but
-		// casues intermittent crashes (access violations) for cars and always crashes new iterations
+		// causes intermittent crashes (access violations) for cars and always crashes new iterations
 		// in FormatPlot() (Z values are NaN)
 		//openObjectList[ActiveIndex]->UpdateDisplay();
 	}
@@ -2426,43 +2421,43 @@ void MainFrame::ReadConfiguration(void)
 		wxCONFIG_USE_RELATIVE_PATH);
 
 	// Read UNITS configuration from file
-	converter.SetAccelerationUnits(Convert::UnitsOfAcceleration(
+	Convert::GetInstance().SetAccelerationUnits(Convert::UnitsOfAcceleration(
 		configurationFile->Read(_T("/Units/Acceleration"), 0l)));
-	converter.SetAngleUnits(Convert::UnitsOfAngle(
+	Convert::GetInstance().SetAngleUnits(Convert::UnitsOfAngle(
 		configurationFile->Read(_T("/Units/Angle"), 1l)));
-	converter.SetAreaUnits(Convert::UnitsOfArea(
+	Convert::GetInstance().SetAreaUnits(Convert::UnitsOfArea(
 		configurationFile->Read(_T("/Units/Area"), 0l)));
-	converter.SetDensityUnits(Convert::UnitsOfDensity(
+	Convert::GetInstance().SetDensityUnits(Convert::UnitsOfDensity(
 		configurationFile->Read(_T("/Units/Density"), 0l)));
-	converter.SetDistanceUnits(Convert::UnitsOfDistance(
+	Convert::GetInstance().SetDistanceUnits(Convert::UnitsOfDistance(
 		configurationFile->Read(_T("/Units/Distance"), 0l)));
-	converter.SetEnergyUnits(Convert::UnitsOfEnergy(
+	Convert::GetInstance().SetEnergyUnits(Convert::UnitsOfEnergy(
 		configurationFile->Read(_T("/Units/Energy"), 0l)));
-	converter.SetForceUnits(Convert::UnitsOfForce(
+	Convert::GetInstance().SetForceUnits(Convert::UnitsOfForce(
 		configurationFile->Read(_T("/Units/Force"), 0l)));
-	converter.SetInertiaUnits(Convert::UnitsOfInertia(
+	Convert::GetInstance().SetInertiaUnits(Convert::UnitsOfInertia(
 		configurationFile->Read(_T("/Units/Inertia"), 0l)));
-	converter.SetMassUnits(Convert::UnitsOfMass(
+	Convert::GetInstance().SetMassUnits(Convert::UnitsOfMass(
 		configurationFile->Read(_T("/Units/Mass"), 0l)));
-	converter.SetMomentUnits(Convert::UnitsOfMoment(
+	Convert::GetInstance().SetMomentUnits(Convert::UnitsOfMoment(
 		configurationFile->Read(_T("/Units/Moment"), 0l)));
-	converter.SetPowerUnits(Convert::UnitsOfPower(
+	Convert::GetInstance().SetPowerUnits(Convert::UnitsOfPower(
 		configurationFile->Read(_T("/Units/Power"), 0l)));
-	converter.SetPressureUnits(Convert::UnitsOfPressure(
+	Convert::GetInstance().SetPressureUnits(Convert::UnitsOfPressure(
 		configurationFile->Read(_T("/Units/Pressure"), 0l)));
-	converter.SetTemperatureUnits(Convert::UnitsOfTemperature(
+	Convert::GetInstance().SetTemperatureUnits(Convert::UnitsOfTemperature(
 		configurationFile->Read(_T("/Units/Temperature"), 0l)));
-	converter.SetVelocityUnits(Convert::UnitsOfVelocity(
+	Convert::GetInstance().SetVelocityUnits(Convert::UnitsOfVelocity(
 		configurationFile->Read(_T("/Units/Velocity"), 0l)));
 
 	// Read NUMBER FORMAT configuration from file
-	converter.SetNumberOfDigits(configurationFile->Read(_T("/NumberFormat/NumberOfDigits"), 3l));
-	bool tempBool = converter.GetUseScientificNotation();
+	Convert::GetInstance().SetNumberOfDigits(configurationFile->Read(_T("/NumberFormat/NumberOfDigits"), 3l));
+	bool tempBool = Convert::GetInstance().GetUseScientificNotation();
 	configurationFile->Read(_T("/NumberFormat/UseScientificNotation"), &tempBool);
-	converter.SetUseScientificNotation(tempBool);
-	tempBool = converter.GetUseSignificantDigits();
+	Convert::GetInstance().SetUseScientificNotation(tempBool);
+	tempBool = Convert::GetInstance().GetUseSignificantDigits();
 	configurationFile->Read(_T("/NumberFormat/UseSignificantDigits"), &tempBool);
-	converter.SetUseSignificantDigits(tempBool);
+	Convert::GetInstance().SetUseSignificantDigits(tempBool);
 
 	// Read KINEMATICS configuration from file
 	double tempDouble = 0.0;
@@ -2479,7 +2474,7 @@ void MainFrame::ReadConfiguration(void)
 	configurationFile->Read(_T("/Kinematics/UseRackTravel"), &useRackTravel, true);
 
 	// Read DEBUGGING configuration from file
-	debugger.SetDebugLevel(Debugger::DebugLevel(configurationFile->Read(_T("/Debugging/DebugLevel"), 1l)));
+	Debugger::GetInstance().SetDebugLevel(Debugger::DebugLevel(configurationFile->Read(_T("/Debugging/DebugLevel"), 1l)));
 
 	// Read GUI configuration from file
 	wxString layoutString;
@@ -2543,25 +2538,25 @@ void MainFrame::WriteConfiguration(void)
 		wxCONFIG_USE_RELATIVE_PATH);
 
 	// Write UNITS configuration to file
-	configurationFile->Write(_T("/Units/Acceleration"), converter.GetAccelerationUnits());
-	configurationFile->Write(_T("/Units/Angle"), converter.GetAngleUnits());
-	configurationFile->Write(_T("/Units/Area"), converter.GetAreaUnits());
-	configurationFile->Write(_T("/Units/Density"), converter.GetDensityUnits());
-	configurationFile->Write(_T("/Units/Distance"), converter.GetDistanceUnits());
-	configurationFile->Write(_T("/Units/Energy"), converter.GetEnergyUnits());
-	configurationFile->Write(_T("/Units/Force"), converter.GetForceUnits());
-	configurationFile->Write(_T("/Units/Inertia"), converter.GetInertiaUnits());
-	configurationFile->Write(_T("/Units/Mass"), converter.GetMassUnits());
-	configurationFile->Write(_T("/Units/Moment"), converter.GetMomentUnits());
-	configurationFile->Write(_T("/Units/Power"), converter.GetPowerUnits());
-	configurationFile->Write(_T("/Units/Pressure"), converter.GetPressureUnits());
-	configurationFile->Write(_T("/Units/Temperature"), converter.GetTemperatureUnits());
-	configurationFile->Write(_T("/Units/Velocity"), converter.GetVelocityUnits());
+	configurationFile->Write(_T("/Units/Acceleration"), Convert::GetInstance().GetAccelerationUnits());
+	configurationFile->Write(_T("/Units/Angle"), Convert::GetInstance().GetAngleUnits());
+	configurationFile->Write(_T("/Units/Area"), Convert::GetInstance().GetAreaUnits());
+	configurationFile->Write(_T("/Units/Density"), Convert::GetInstance().GetDensityUnits());
+	configurationFile->Write(_T("/Units/Distance"), Convert::GetInstance().GetDistanceUnits());
+	configurationFile->Write(_T("/Units/Energy"), Convert::GetInstance().GetEnergyUnits());
+	configurationFile->Write(_T("/Units/Force"), Convert::GetInstance().GetForceUnits());
+	configurationFile->Write(_T("/Units/Inertia"), Convert::GetInstance().GetInertiaUnits());
+	configurationFile->Write(_T("/Units/Mass"), Convert::GetInstance().GetMassUnits());
+	configurationFile->Write(_T("/Units/Moment"), Convert::GetInstance().GetMomentUnits());
+	configurationFile->Write(_T("/Units/Power"), Convert::GetInstance().GetPowerUnits());
+	configurationFile->Write(_T("/Units/Pressure"), Convert::GetInstance().GetPressureUnits());
+	configurationFile->Write(_T("/Units/Temperature"), Convert::GetInstance().GetTemperatureUnits());
+	configurationFile->Write(_T("/Units/Velocity"), Convert::GetInstance().GetVelocityUnits());
 
 	// Write NUMBER FORMAT configuration to file
-	configurationFile->Write(_T("/NumberFormat/NumberOfDigits"), converter.GetNumberOfDigits());
-	configurationFile->Write(_T("/NumberFormat/UseScientificNotation"), converter.GetUseScientificNotation());
-	configurationFile->Write(_T("/NumberFormat/UseSignificantDigits"), converter.GetUseSignificantDigits());
+	configurationFile->Write(_T("/NumberFormat/NumberOfDigits"), Convert::GetInstance().GetNumberOfDigits());
+	configurationFile->Write(_T("/NumberFormat/UseScientificNotation"), Convert::GetInstance().GetUseScientificNotation());
+	configurationFile->Write(_T("/NumberFormat/UseSignificantDigits"), Convert::GetInstance().GetUseSignificantDigits());
 
 	// Write KINEMATICS configuration to file
 	configurationFile->Write(_T("/Kinematics/CenterOfRotationX"), kinematicInputs.centerOfRotation.x);
@@ -2571,7 +2566,7 @@ void MainFrame::WriteConfiguration(void)
 	configurationFile->Write(_T("/Kinematics/UseRackTravel"), useRackTravel);
 
 	// Write DEBUGGING configuration to file
-	configurationFile->Write(_T("/Debugging/DebugLevel"), debugger.GetDebugLevel());
+	configurationFile->Write(_T("/Debugging/DebugLevel"), Debugger::GetInstance().GetDebugLevel());
 
 	// Write GUI configuration to file
 	configurationFile->Write(_T("/GUI/LayoutString"), manager.SavePerspective());
@@ -3044,20 +3039,20 @@ bool MainFrame::LoadFile(wxString pathAndFileName)
 
 	// Create the appropriate object
 	if (fileExtension.CmpNoCase("car") == 0)
-		tempObject = new GuiCar(*this, debugger, pathAndFileName);
+		tempObject = new GuiCar(*this, pathAndFileName);
 	else if (fileExtension.CmpNoCase("iteration") == 0)
-		tempObject = new Iteration(*this, debugger, pathAndFileName);
+		tempObject = new Iteration(*this, pathAndFileName);
 	else if (fileExtension.CmpNoCase("ga") == 0)
-		tempObject = new GeneticOptimization(*this, debugger, converter, pathAndFileName);
+		tempObject = new GeneticOptimization(*this, pathAndFileName);
 	else
 	{
 		// Print error message to screen
-		debugger.Print(_T("ERROR:  Unrecognized file extension: '") + fileExtension + _T("'"));
+		Debugger::GetInstance().Print(_T("ERROR:  Unrecognized file extension: '") + fileExtension + _T("'"));
 		return false;
 	}
 
 	// If the object is not initialized, remove it from the list
-	// (user cancelled or errors occured)
+	// (user canceled or errors occurred)
 	if (!tempObject->IsInitialized())
 	{
 		RemoveObjectFromList(tempObject->GetIndex());

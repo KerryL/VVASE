@@ -18,7 +18,6 @@
 
 // CarDesigner headers
 #include "vCar/corner.h"
-#include "vUtilities/convert.h"
 
 // CarDesigner forward declarations
 class MainFrame;
@@ -27,7 +26,7 @@ class GAGeneDialog : public wxDialog
 {
 public:
 	// Constructor
-	GAGeneDialog(wxWindow *parent, const Convert &_converter, const Corner::Hardpoints &_hardpoint,
+	GAGeneDialog(wxWindow *parent, const Corner::Hardpoints &_hardpoint,
 		const Corner::Hardpoints &_tiedTo, const Vector::Axis &_axisDirection, const Corner::Location &_cornerLocation,
 		const double &_minimum, const double &_maximum, const unsigned int &_numberOfValues,
 		wxWindowID id, const wxPoint &position, long style = wxDEFAULT_DIALOG_STYLE);
@@ -45,9 +44,6 @@ public:
 	unsigned long GetNumberOfValues(void) const { return numberOfValues; };
 
 private:
-	// The object that handles the unit conversions between the input and output
-	const Convert &converter;
-
 	// Method for creating controls
 	void CreateControls(void);
 

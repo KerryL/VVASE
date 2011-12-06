@@ -14,9 +14,9 @@
 //				 and is associated with a plot on which it can draw the outputs
 //				 as a function of ride, roll, heave, and steer.
 // History:
-//	3/11/2009	- Finished implementation of enum/array style data members for KINEMATIC_OUTPUTS
+//	3/11/2009	- Finished implementation of enum/array style data members for KinematicOutputs
 //				  class, K. Loux.
-//	5/19/2009	- Changed to derived class from GUI_OBJECT, K. Loux.
+//	5/19/2009	- Changed to derived class from GuiObject, K. Loux.
 //	11/9/2010	- Added provisions for 3D plotting, K. Loux.
 //	11/16/2010	- Moved active plots selection and range inputs to edit panel, K. Loux.
 
@@ -34,8 +34,6 @@
 #include "vSolver/threads/inverseSemaphore.h"
 
 // VVASE forward declarations
-class Debugger;
-class Convert;
 class Car;
 class PlotPanel;
 
@@ -43,8 +41,7 @@ class Iteration : public GuiObject
 {
 public:
 	// Constructor
-	Iteration(MainFrame &_mainFrame, const Debugger &_debugger,
-		wxString _pathAndFileName = wxEmptyString);
+	Iteration(MainFrame &_mainFrame, wxString _pathAndFileName = wxEmptyString);
 
 	// Destructor
 	~Iteration();
@@ -165,9 +162,6 @@ public:
 	void WriteDefaultsToConfig(void) const;
 
 private:
-	// The application's conversion object
-	const Convert &converter;
-
 	// This object's start and stop points
 	Range range;
 

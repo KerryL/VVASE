@@ -10,7 +10,7 @@
 // File:  corner.h
 // Created:  3/23/2008
 // Author:  K. Loux
-// Description:  Contains class declaration for CORNER class.  This class contains
+// Description:  Contains class declaration for Corner class.  This class contains
 //				 the suspension information for one corner of the car (four instances
 //				 are required to describe the entire suspension).
 // History:
@@ -29,9 +29,6 @@
 #include "vCar/damper.h"
 #include "vMath/vector.h"
 
-// VVASE forward declarations
-class Debugger;
-
 class Corner
 {
 public:
@@ -47,7 +44,7 @@ public:
 	};
 
 	// Constructor
-	Corner(const Location &_location, const Debugger &_debugger);
+	Corner(const Location &_location);
 
 	// Destructor
 	~Corner();
@@ -146,10 +143,6 @@ public:
 
 	// Operators
 	Corner& operator=(const Corner& corner);
-
-private:
-	// Debugger message printing utility
-	const Debugger &debugger;
 };
 
 #endif// _CORNER_H_

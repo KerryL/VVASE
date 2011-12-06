@@ -51,7 +51,6 @@
 //
 // Input Arguments:
 //		parent		= wxWindow*
-//		_debugger	= const Debugger&
 //
 // Output Arguments:
 //		None
@@ -60,7 +59,7 @@
 //		None
 //
 //==========================================================================
-PlotPanel::PlotPanel(wxWindow *parent, const Debugger &_debugger) : wxPanel(parent), debugger(_debugger)
+PlotPanel::PlotPanel(wxWindow *parent) : wxPanel(parent)
 {
 	CreateControls();
 }
@@ -115,12 +114,12 @@ void PlotPanel::CreateControls(void)
 	optionsGrid = NULL;// To avoid crashing in UpdateCursors
 #ifdef __WXGTK__
 	// Under GTK, we get a segmentation fault or X error on call to SwapBuffers in RenderWindow.
-	// Adding the double-buffer arugment fixes this.  Under windows, the double-buffer argument
+	// Adding the double-buffer argument fixes this.  Under windows, the double-buffer argument
 	// causes the colors to go funky.  So we have this #if.
 	int args[] = {WX_GL_DOUBLEBUFFER, 0};
-	renderer = new PlotRenderer(*this, wxID_ANY, args, *static_cast<MainFrame*>(GetParent()), debugger);
+	renderer = new PlotRenderer(*this, wxID_ANY, args, *static_cast<MainFrame*>(GetParent()));
 #else
-	renderer = new PlotRenderer(*this, wxID_ANY, NULL, *static_cast<MainFrame*>(GetParent()), debugger);
+	renderer = new PlotRenderer(*this, wxID_ANY, NULL, *static_cast<MainFrame*>(GetParent()));
 #endif
 	renderer->SetGridOn();
 	mainSizer->Add(renderer, 1, wxEXPAND);
@@ -435,9 +434,9 @@ void PlotPanel::ContextWriteImageFile(wxCommandEvent& WXUNUSED(event))
 		return;
 	
 	if (WriteImageToFile(pathAndFileName[0]))
-		debugger.Print(Debugger::PriorityHigh, "Image file written to %s", pathAndFileName[0].c_str());
+		Debugger::GetInstance().Print(Debugger::PriorityHigh, "Image file written to %s", pathAndFileName[0].c_str());
 	else
-		debugger.Print(_T("Image file NOT written!"), Debugger::PriorityHigh);
+		Debugger::GetInstance().Print(_T("Image file NOT written!"), Debugger::PriorityHigh);
 }
 
 //==========================================================================

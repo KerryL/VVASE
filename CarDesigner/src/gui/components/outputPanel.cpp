@@ -41,7 +41,6 @@
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
-//		_debugger	= const Debugger& reference to applications debug printing utility
 //
 // Output Arguments:
 //		None
@@ -51,9 +50,8 @@
 //
 //==========================================================================
 OutputPanel::OutputPanel(MainFrame &_mainFrame, wxWindowID id, const wxPoint &pos,
-						   const wxSize &size, const Debugger &_debugger)
+						   const wxSize &size)
 						   : wxPanel(&_mainFrame, id, pos, size),
-						   debugger(_debugger), converter(_mainFrame.GetConverter()),
 						   mainFrame(_mainFrame)
 {
 	// Create the controls
@@ -136,7 +134,7 @@ void OutputPanel::UpdateInformation(KinematicOutputs outputs, Car &car,
 		if (!outputsList->InsertCols(index))
 		{
 			// Add column failed - print warning and return
-			debugger.Print(_T("Warning (OutputPanel::UpdateInformation):  InsertCols failed!"),
+			Debugger::GetInstance().Print(_T("Warning (OutputPanel::UpdateInformation):  InsertCols failed!"),
 				Debugger::PriorityMedium);
 
 			return;
@@ -157,7 +155,8 @@ void OutputPanel::UpdateInformation(KinematicOutputs outputs, Car &car,
 	for (i = 0; i < KinematicOutputs::NumberOfOutputScalars; i++)
 	{
 		// Convert and set the value
-		outputsList->SetCellValue(i, index, converter.FormatNumber(converter.ConvertTo(
+		outputsList->SetCellValue(i, index, Convert::GetInstance().FormatNumber(
+			Convert::GetInstance().ConvertTo(
 			outputs.GetOutputValue((KinematicOutputs::OutputsComplete)i),
 			KinematicOutputs::GetOutputUnitType((KinematicOutputs::OutputsComplete)i))));
 
@@ -300,7 +299,7 @@ void OutputPanel::FinishUpdate(int _numberOfDataColumns)
 		if (!outputsList->DeleteCols(_numberOfDataColumns + 1, numberOfDataColumns - _numberOfDataColumns))
 		{
 			// Delete columns failed - display warning and return
-			debugger.Print(_T("Warning (OutputPanel::FinishUpdate):  DeleteCols failed!"), Debugger::PriorityMedium);
+			Debugger::GetInstance().Print(_T("Warning (OutputPanel::FinishUpdate):  DeleteCols failed!"), Debugger::PriorityMedium);
 
 			return;
 		}
@@ -312,13 +311,13 @@ void OutputPanel::FinishUpdate(int _numberOfDataColumns)
 	// Update the column heading for the units column
 	outputsList->SetColLabelValue(numberOfDataColumns + 1, _T("Units"));
 
-	// Update all of the unit lables
+	// Update all of the unit labels
 	wxString unitString;
 	int i;
 	for (i = 0; i < KinematicOutputs::NumberOfOutputScalars; i++)
 	{
 		// Set the unit label
-		unitString.Printf("(%s)", converter.GetUnitType(KinematicOutputs::GetOutputUnitType(
+		unitString.Printf("(%s)", Convert::GetInstance().GetUnitType(KinematicOutputs::GetOutputUnitType(
 			(KinematicOutputs::OutputsComplete)i)).c_str());
 		outputsList->SetCellValue(i, numberOfDataColumns + 1, unitString);
 	}

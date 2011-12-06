@@ -31,7 +31,7 @@
 // Description:		Constructor for the TireSet class.
 //
 // Input Arguments:
-//		_debugger	= const Debugger& reference to applications debug printing utility
+//		None
 //
 // Output Arguments:
 //		None
@@ -40,13 +40,13 @@
 //		None
 //
 //==========================================================================
-TireSet::TireSet(const Debugger &_debugger) : debugger(_debugger)
+TireSet::TireSet()
 {
 	// Create four tires
-	rightFront = new Tire(debugger);
-	leftFront = new Tire(debugger);
-	rightRear = new Tire(debugger);
-	leftRear = new Tire(debugger);
+	rightFront = new Tire();
+	leftFront = new Tire();
+	rightRear = new Tire();
+	leftRear = new Tire();
 }
 
 //==========================================================================
@@ -65,13 +65,13 @@ TireSet::TireSet(const Debugger &_debugger) : debugger(_debugger)
 //		None
 //
 //==========================================================================
-TireSet::TireSet(const TireSet &tireSet) : debugger(tireSet.debugger)
+TireSet::TireSet(const TireSet &tireSet)
 {
 	// Create four tires
-	rightFront = new Tire(debugger);
-	leftFront = new Tire(debugger);
-	rightRear = new Tire(debugger);
-	leftRear = new Tire(debugger);
+	rightFront = new Tire();
+	leftFront = new Tire();
+	rightRear = new Tire();
+	leftRear = new Tire();
 
 	// Make the assignment
 	*this = tireSet;

@@ -16,7 +16,7 @@
 // History:
 //	3/9/2008	- Changed the structure of the Debugger class so one object can debug the
 //				  entire application and we can print the outputs to OutputPane, K. Loux.
-//  5/13/2008	- Added variables and functions to the class for managing GUI_CAR objects.
+//  5/13/2008	- Added variables and functions to the class for managing GuiCar objects.
 //				  Functionality includes maintaining a list of open objects to prevent
 //				  memory leaks, K. Loux.
 //	1/24/2009	- Major application structure change - MainFrame uses GuiObject instead of
@@ -38,13 +38,11 @@
 #include <wx/aui/aui.h>
 
 // VVASE headers
-#include "vUtilities/convert.h"
-#include "vUtilities/debugger.h"
 #include "vUtilities/managedList.h"
 #include "vSolver/physics/kinematics.h"
 #include "gui/undoRedoStack.h"
 #include "gui/guiObject.h"	// Can't use a forward declaration here because
-							// ManagedList<GUI_OBJECT> can't compile without a definition
+							// ManagedList<GuiObject> can't compile without a definition
 
 // wxWidgets forward declarations
 class wxFileHistory;
@@ -85,13 +83,10 @@ public:
 	void SetActiveIndex(int index, bool selectNotebookTab = true);
 	inline int GetActiveIndex(void) const { return activeIndex; };
 
-	// Returns a pointer to the converter object
-	inline const Convert& GetConverter(void) const { return converter; };
-
 	// Accessor to deletion flag
 	inline bool ObjectIsBeingDeleted(void) const { return beingDeleted; };
 
-	// Accessor to reference to other gui components
+	// Accessor to reference to other GUI components
 	inline MainTree *GetSystemsTree(void) const { return systemsTree; };
 	inline MainNotebook *GetNotebook(void) const { return notebook; };
 	inline EditPanel *GetEditPanel(void) const { return editPanel; };
@@ -150,10 +145,6 @@ public:
 private:
 	// The form object manager - this controls docking, sub-frame locations, etc.
 	wxAuiManager manager;
-
-	// Utility objects
-	Convert converter;
-	Debugger debugger;
 
 	// Object to manage recently viewed file list
 	wxFileHistory *recentFileManager;

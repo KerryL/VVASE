@@ -10,13 +10,13 @@
 // File:  kinematics.h
 // Created:  11/3/2007
 // Author:  K. Loux
-// Description:  Contains class declaration for the KINEMATICS class.
+// Description:  Contains class declaration for the Kinematics class.
 // History:
-//	2/24/2008	- Changed Static from type CAR to SUSPENSION.  Removed DRIVETRAIN object, K. Loux.
-//	3/9/2008	- Changed structure of Debugger class and added input quantities to STATIC_OUTPUTS
+//	2/24/2008	- Changed Static from type Car to Suspension.  Removed Drivetrain object, K. Loux.
+//	3/9/2008	- Changed structure of Debugger class and added input quantities to StaticOutputs
 //				  structure, K. Loux.
 //	3/23/2008	- Changed units for class members and functions from degrees to radians and
-//				  renamed class from KINEMATICS.  Also introduce OUTPUTS class and CORNER class
+//				  renamed class from Kinematics.  Also introduce Outputs class and CCORNERorner class
 //				  (major restructuring of kinematic solvers), K. Loux.
 //	3/24/2009	- Moved (physical location) to physics folder, K. Loux.
 //	4/13/2009	- Added boost::threads for SolveCorner(), K. Loux.
@@ -34,7 +34,7 @@ class Kinematics
 {
 public:
 	// Constructor
-	Kinematics(const Debugger &_debugger);
+	Kinematics();
 
 	// Destructor
 	~Kinematics();
@@ -88,9 +88,6 @@ public:
 	inline Inputs GetInputs(void) { return inputs; };
 
 private:
-	// Debugger message printing utility
-	const Debugger &debugger;
-
 	// The inputs to the kinematic solver
 	Inputs inputs;
 

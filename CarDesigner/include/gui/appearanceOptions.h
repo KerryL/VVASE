@@ -17,22 +17,21 @@
 #ifndef _APPEARANCE_OPTIONS_H_
 #define _APPEARANCE_OPTIONS_H_
 
-// CarDesigner forward declarations
-class MainFrame;
-class GuiCar;
-class Debugger;
-
 // Standard C++ headers
 #include <iosfwd>// for forward declarations of fstream objects
 
 // CarDesigner headers
 #include "vRenderer/color.h"
 
+// CarDesigner forward declarations
+class MainFrame;
+class GuiCar;
+
 class AppearanceOptions
 {
 public:
 	// Constructor
-	AppearanceOptions(MainFrame &_mainFrame, GuiCar &_owner, const Debugger &_debugger);
+	AppearanceOptions(MainFrame &_mainFrame, GuiCar &_owner);
 
 	// Destructor
 	~AppearanceOptions();
@@ -167,9 +166,6 @@ public:
 	void Read(std::ifstream *inFile, int fileVersion);
 
 private:
-	// The debug printing utility
-	const Debugger &debugger;
-
 	// The main application window
 	MainFrame &mainFrame;
 

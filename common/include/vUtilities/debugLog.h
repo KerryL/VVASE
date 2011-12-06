@@ -66,7 +66,7 @@ private:
 #else
 	// Include inline, non-functioning versions of all above public methods here
 	static inline DebugLog* GetInstance(void) { return NULL; };
-	static void Kill(void) { };
+	static inline void Kill(void) { };
 	static inline void SetTarget(const LogTarget &target) { };
 	static inline void Log(wxString message, int _indent = 0) { };
 #endif

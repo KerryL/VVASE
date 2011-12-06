@@ -39,8 +39,6 @@
 //
 // Input Arguments:
 //		_mainFrame			= MainFrame& reference to main application object
-//		_debugger			= const Debugger& reference to the debug printing utility
-//		converter			= const Convert& reference to application's conversion utility
 //		_pathAndFileName	= wxString containing this objects location on the disk,
 //							  if we are to load from file
 //
@@ -51,13 +49,12 @@
 //		None
 //
 //==========================================================================
-GeneticOptimization::GeneticOptimization(MainFrame &_mainFrame, const Debugger &_debugger,
-										   const Convert &converter,
-										   wxString _pathAndFileName) : GuiObject(_mainFrame, _debugger,
-										   _pathAndFileName), debugger(_debugger)
+GeneticOptimization::GeneticOptimization(MainFrame &_mainFrame, 
+										   wxString _pathAndFileName) : GuiObject(_mainFrame,
+										   _pathAndFileName)
 {
 	// Create the genetic algorithm
-	geneticAlgorithm = new GAObject(_mainFrame, *this, converter, debugger);
+	geneticAlgorithm = new GAObject(_mainFrame, *this);
 
 	// Get an index for this item and add it to the list in the mainFrame
 	// MUST be included BEFORE the naming, which must come BEFORE the call to Initialize

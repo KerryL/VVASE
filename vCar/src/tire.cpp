@@ -17,6 +17,7 @@
 
 // Standard C++ headers
 #include <fstream>
+#include <assert.h>
 
 // VVASE headers
 #include "vCar/tire.h"
@@ -29,7 +30,7 @@
 // Description:		Constructor for the Tire class.
 //
 // Input Arguments:
-//		_debugger	= const Debugger& reference to applications debug printing utility
+//		None
 //
 // Output Arguments:
 //		None
@@ -38,7 +39,7 @@
 //		None
 //
 //==========================================================================
-Tire::Tire(const Debugger &_debugger) : debugger(_debugger)
+Tire::Tire()
 {
 }
 
@@ -58,7 +59,7 @@ Tire::Tire(const Debugger &_debugger) : debugger(_debugger)
 //		None
 //
 //==========================================================================
-Tire::Tire(const Tire &tire) : debugger(tire.debugger)
+Tire::Tire(const Tire &tire)
 {
 	// Copy from the Tire to this
 	*this = tire;
@@ -135,7 +136,7 @@ void Tire::Read(std::ifstream *inFile, int fileVersion)
 		inFile->read((char*)&tirePressure, sizeof(double));
 	}
 	else
-		assert(0);
+		assert(false);
 }
 
 //==========================================================================

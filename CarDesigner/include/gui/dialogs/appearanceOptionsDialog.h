@@ -10,7 +10,7 @@
 // File:  appearanceOptionsDialog.h
 // Created:  4/23/2009
 // Author:  K. Loux
-// Description:  A dialog object for editing the contents of the APPEARANCE_OPTIONS object.
+// Description:  A dialog object for editing the contents of the AppearanceOptions object.
 // History:
 
 #ifndef _APPEARNACE_OPTIONS_DIALOG_H_
@@ -29,7 +29,6 @@ class wxNotebook;
 // VVASE forward declarations
 class MainFrame;
 class SuperGrid;
-class Convert;
 class Color;
 
 class AppearanceOptionsDialog : public wxDialog
@@ -45,9 +44,6 @@ public:
 private:
 	// Sets up the size and position of this dialog and its contents
 	void CreateControls(void);
-
-	// The object that handles the unit conversions between the input and output
-	const Convert &converter;
 
 	// The object to edit
 	AppearanceOptions *options;

@@ -13,7 +13,7 @@
 // Description:  Contains class declaration for Debugger.  This is a simple class that
 //				 prints information to a wxTextCtrl.  This cleans up the rest of the program.
 // History:
-//	3/5/2008	- Transformed from function to class and added DEBUG_LEVEL, K. Loux
+//	3/5/2008	- Transformed from function to class and added DebugLevel, K. Loux
 //	3/8/2008	- Modified to use wxString instead of char *, K. Loux
 //	3/9/2008	- Changed the structure of this class to allow one object at a high level
 //				  with pointers passed downstream.  Also moved the enumerations inside the
@@ -22,6 +22,7 @@
 //	11/22/2009	- Moved to vUtilities.lib, K. Loux.
 //	12/20/2009	- Modified for thread-safe operation, K. Loux.
 //	11/7/2011	- Corrected camelCase, K. Loux.
+//	12/5/2011	- Made this object a singleton, K. Loux.
 
 #ifndef _DEBUG_H_
 #define _DEBUG_H_
@@ -40,12 +41,10 @@ DECLARE_LOCAL_EVENT_TYPE(EVT_DEBUG, -1)
 class Debugger
 {
 public:
-	// Constructor
-	Debugger();
-
-	// Destructor
-	~Debugger();
-
+	// In lieu of a constructor/destructor
+	static Debugger& GetInstance(void);
+	static void Kill(void);
+	
 	// This enumeration describes how many debug messages we want to print
 	enum DebugLevel
 	{
@@ -55,11 +54,11 @@ public:
 		PriorityLow			// Anything else we might want to print (usually for debugging - function calls, etc.)
 	};
 
-	// Prints the message to the output pane, if the DEBUG_LEVEL is high enough
+	// Prints the message to the output pane, if the DebugLevel is high enough
 	void Print(const wxString &info, DebugLevel level = PriorityVeryHigh) const;
 	void Print(const DebugLevel &level, const char *format, ...) const;
 
-	// Sets the desired DEBUG_LEVEL
+	// Sets the desired DebugLevel
 	void SetDebugLevel(const DebugLevel &level);
 
 	// Returns the current debug level
@@ -69,6 +68,16 @@ public:
 	void SetTargetOutput(wxEvtHandler *_parent);
 
 private:
+	// For singletons, the constructors and assignment operators are private
+	Debugger();
+	Debugger(const Debugger& d) { };
+	Debugger& operator=(const Debugger &d) { return *this; };
+
+	// Destructor
+	~Debugger();
+	
+	static Debugger *debuggerInstance;
+	
 	// The limit for how important a message must be to be printed
 	DebugLevel debugLevel;
 

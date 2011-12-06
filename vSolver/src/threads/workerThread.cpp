@@ -40,7 +40,6 @@
 // Input Arguments:
 //		_jobQueue	= JobQueue*, pointing to the queue from which this
 //					  thread will pull jobs
-//		_debugger	= Debugger& reference to the application's debugger object
 //		_Id			= int representing this thread's ID number
 //
 // Output Arguments:
@@ -50,30 +49,24 @@
 //		None
 //
 //==========================================================================
-WorkerThread::WorkerThread(JobQueue* _jobQueue, Debugger &_debugger, int _id)
-							 : debugger(_debugger), jobQueue(_jobQueue), id(_id)
+WorkerThread::WorkerThread(JobQueue* _jobQueue, int _id)
+							 : jobQueue(_jobQueue), id(_id)
 {
 	// Make sure the job queue exists
 	assert(_jobQueue);
 
 	// Create the thread object
 	wxThread::Create();
-
-	// Create the analysis object
-	kinematicAnalysis = new Kinematics(debugger);
 }
 
 //==========================================================================
 // Class:			WorkerThread
-// Function:		WorkerThread
+// Function:		~WorkerThread
 //
-// Description:		Constructor for the WorkerThread class.
+// Description:		Destructor for the WorkerThread class.
 //
 // Input Arguments:
-//		_jobQueue	= JobQueue*, pointing to the queue from which this
-//					  thread will pull jobs
-//		debugger	= Debugger& reference to the application's debugger object
-//		_id			= int representing this thread's ID number
+//		None
 //
 // Output Arguments:
 //		None
@@ -84,9 +77,6 @@ WorkerThread::WorkerThread(JobQueue* _jobQueue, Debugger &_debugger, int _id)
 //==========================================================================
 WorkerThread::~WorkerThread()
 {
-	// Delete the analysis object
-	delete kinematicAnalysis;
-	kinematicAnalysis = NULL;
 }
 
 //==========================================================================
@@ -165,16 +155,16 @@ void WorkerThread::OnJob()
 	case ThreadJob::CommandThreadKinematicsGA:
 		// Do the kinematics calculations
 		DebugLog::GetInstance()->Log(_T("SetInputs - Start"), 1);
-		kinematicAnalysis->SetInputs(static_cast<KinematicsData*>(job.data)->kinematicInputs);
+		kinematicAnalysis.SetInputs(static_cast<KinematicsData*>(job.data)->kinematicInputs);
 		DebugLog::GetInstance()->Log(_T("SetInputs - End"), -1);
 		DebugLog::GetInstance()->Log(_T("UpdateKinematics - Start"), 1);
-		kinematicAnalysis->UpdateKinematics(static_cast<KinematicsData*>(job.data)->originalCar,
+		kinematicAnalysis.UpdateKinematics(static_cast<KinematicsData*>(job.data)->originalCar,
 			static_cast<KinematicsData*>(job.data)->workingCar, job.name);
 		DebugLog::GetInstance()->Log(_T("UpdateKinematics - End"), -1);
 
 		// Get the outputs
 		DebugLog::GetInstance()->Log(_T("GetOutputs - Start"), 1);
-		*(static_cast<KinematicsData*>(job.data)->output) = kinematicAnalysis->GetOutputs();
+		*(static_cast<KinematicsData*>(job.data)->output) = kinematicAnalysis.GetOutputs();
 		DebugLog::GetInstance()->Log(_T("GetOutputs - End"), -1);
 
 		// Tell the main thread that we've done the job
@@ -193,7 +183,7 @@ void WorkerThread::OnJob()
 		DebugLog::GetInstance()->Log(_T("Optimization - End"), -1);
 
 		// Determine elapsed time and print to the screen
-		debugger.Print(Debugger::PriorityVeryHigh, "Elapsed Time: %s",
+		Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "Elapsed Time: %s",
 					 wxDateTime::UNow().Subtract(start).Format().c_str());
 
 		// Tell the main thread that we're done the job

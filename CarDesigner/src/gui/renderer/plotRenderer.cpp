@@ -36,7 +36,6 @@
 //		args		= int[] NOTE: Under GTK, must contain WX_GL_DOUBLEBUFFER at minimum
 //		id			= wxWindowID
 //		_mainFrame	= MainFrame&
-//		_debugger	= const Debugger&
 //
 // Output Arguments:
 //		None
@@ -46,10 +45,9 @@
 //
 //==========================================================================
 PlotRenderer::PlotRenderer(PlotPanel &_parent, wxWindowID id, int args[],
-						   MainFrame &_mainFrame, const Debugger &_debugger)
+						   MainFrame &_mainFrame)
 						   : RenderWindow(_parent, id, args, wxDefaultPosition,
-						   wxDefaultSize), debugger(_debugger), mainFrame(_mainFrame),
-						   parent(_parent)
+						   wxDefaultSize), mainFrame(_mainFrame), parent(_parent)
 {
 	// Create the actors
 	CreateActors();

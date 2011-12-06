@@ -23,7 +23,6 @@
 #include <wx/aui/aui.h>
 
 // VVASE forward declarations
-class Debugger;
 class MainFrame;
 
 class MainNotebook : public wxAuiNotebook
@@ -31,15 +30,12 @@ class MainNotebook : public wxAuiNotebook
 public:
 	// Constructor
 	MainNotebook(MainFrame &_parent, wxWindowID id, const wxPoint& pos,
-		const wxSize& size, long style, const Debugger &_debugger);
+		const wxSize& size, long style);
 
 	// Destructor
 	~MainNotebook();
 
 private:
-	// Debugger message printing utility
-	const Debugger &debugger;
-
 	// The frame that owns this notebook
 	MainFrame &mainFrame;
 

@@ -10,7 +10,7 @@
 // File:  drivetrain.cpp
 // Created:  11/3/2007
 // Author:  K. Loux
-// Description:  Contains class functionality for drivetrain class.
+// Description:  Contains class functionality for Drivetrain class.
 // History:
 //	2/24/2008	- Fixed SetNumberOfGears and added delete[] in destructor, K. Loux.
 //	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
@@ -36,7 +36,7 @@
 // Description:		Constructor for the Drivetrain class.
 //
 // Input Arguments:
-//		_debugger	= const Debugger& reference to applications debug printing utility
+//		None
 //
 // Output Arguments:
 //		None
@@ -45,14 +45,14 @@
 //		None
 //
 //==========================================================================
-Drivetrain::Drivetrain(const Debugger &_debugger) : debugger(_debugger)
+Drivetrain::Drivetrain()
 {
 	// Initialize the number of gears to one
 	gearRatio = NULL;
 	SetNumberOfGears(1);
 
 	// Allocate memory for the differential object
-	differential = new Differential(debugger);
+	differential = new Differential();
 
 	// Initialize this object
 	driveType = DriveRearWheel;
@@ -75,13 +75,13 @@ Drivetrain::Drivetrain(const Debugger &_debugger) : debugger(_debugger)
 //		None
 //
 //==========================================================================
-Drivetrain::Drivetrain(const Drivetrain &drivetrain) : debugger(drivetrain.debugger)
+Drivetrain::Drivetrain(const Drivetrain &drivetrain)
 {
 	// Initialize the gear ratio pointer
 	gearRatio = NULL;
 
 	// Allocate memory for the differential object
-	differential = new Differential(debugger);
+	differential = new Differential();
 
 	// Do the copy
 	*this = drivetrain;
@@ -135,7 +135,7 @@ void Drivetrain::SetNumberOfGears(const short &numGears)
 	// Make sure we have at least one gear
 	if (numGears < 1)
 	{
-		debugger.Print(_T("ERROR:  Must have at least 1 gear!"));
+		Debugger::GetInstance().Print(_T("ERROR:  Must have at least 1 gear!"));
 
 		return;
 	}

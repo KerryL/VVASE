@@ -52,8 +52,6 @@
 //
 // Input Arguments:
 //		_mainFrame			= MainFrame& reference to main application window
-//		_debugger			= const Debugger& reference to the application's debug
-//							  message printing utility
 //		_pathAndFileName	= wxString containing the location of this object on
 //							  the hard disk
 //
@@ -64,10 +62,8 @@
 //		None
 //
 //==========================================================================
-Iteration::Iteration(MainFrame &_mainFrame, const Debugger &_debugger,
-					 wxString _pathAndFileName)
-					 : GuiObject(_mainFrame, _debugger, _pathAndFileName),
-					 converter(_mainFrame.GetConverter())
+Iteration::Iteration(MainFrame &_mainFrame, wxString _pathAndFileName)
+					 : GuiObject(_mainFrame, _pathAndFileName)
 {
 	// Initialize our list of plots to OFF
 	int i;
@@ -97,7 +93,7 @@ Iteration::Iteration(MainFrame &_mainFrame, const Debugger &_debugger,
 	numberOfWorkingCars = 0;
 
 	// Create the renderer
-	plotPanel = new PlotPanel(dynamic_cast<wxWindow*>(&mainFrame), debugger);
+	plotPanel = new PlotPanel(dynamic_cast<wxWindow*>(&mainFrame));
 	notebookTab = dynamic_cast<wxWindow*>(plotPanel);
 
 	// Get an index for this item and add it to the list in the mainFrame
@@ -390,7 +386,7 @@ void Iteration::UpdateData(void)
 		numberOfWorkingCars = inverseSemaphore.GetCount();
 		workingCarArray = new Car*[numberOfWorkingCars];
 		for (i = 0; i < numberOfWorkingCars; i++)
-			workingCarArray[i] = new Car(debugger);
+			workingCarArray[i] = new Car();
 	}
 
 	// Go through car-by-car
@@ -635,13 +631,13 @@ bool Iteration::PerformLoadFromFile(void)
 	// Check to make sure the version matches
 	if (header.fileVersion > currentFileVersion)
 	{
-		debugger.Print(_T("ERROR:  Unrecognized file version - unable to open file!"));
+		Debugger::GetInstance().Print(_T("ERROR:  Unrecognized file version - unable to open file!"));
 		inFile.close();
 
 		return false;
 	}
 	else if (header.fileVersion != currentFileVersion)
-		debugger.Print(_T("Warning:  Opening out-of-date file version."));
+		Debugger::GetInstance().Print(_T("Warning:  Opening out-of-date file version."));
 
 	// Read this object's data
 	inFile.read((char*)&associatedWithAllOpenCars, sizeof(bool));
@@ -1058,7 +1054,7 @@ void Iteration::ShowAssociatedCarsDialog(void)
 	// Make sure there is at least one car open
 	if (openCars.GetCount() == 0)
 	{
-		debugger.Print(_T("ERROR:  Cannot display dialog - no open cars!"), Debugger::PriorityHigh);
+		Debugger::GetInstance().Print(_T("ERROR:  Cannot display dialog - no open cars!"), Debugger::PriorityHigh);
 		return;
 	}
 
@@ -1162,17 +1158,17 @@ double Iteration::GetDataValue(int associatedCarIndex, int point, PlotID id) con
 	// Depending on the specified PLOT_ID, choose which member of the KINEMATIC_OUTPUTS
 	// object to return
 	if (id < Pitch)
-		value = converter.ConvertTo(outputLists[associatedCarIndex]->GetObject(point)->GetOutputValue(
+		value = Convert::GetInstance().ConvertTo(outputLists[associatedCarIndex]->GetObject(point)->GetOutputValue(
 			(KinematicOutputs::OutputsComplete)id), KinematicOutputs::GetOutputUnitType(
 			(KinematicOutputs::OutputsComplete)id));
 	else if (id == Pitch)
-		value = converter.ConvertAngle(axisValuesPitch[point]);
+		value = Convert::GetInstance().ConvertAngle(axisValuesPitch[point]);
 	else if (id == Roll)
-		value = converter.ConvertAngle(axisValuesRoll[point]);
+		value = Convert::GetInstance().ConvertAngle(axisValuesRoll[point]);
 	else if (id == Heave)
-		value = converter.ConvertDistance(axisValuesHeave[point]);
+		value = Convert::GetInstance().ConvertDistance(axisValuesHeave[point]);
 	else if (id == RackTravel)
-		value = converter.ConvertDistance(axisValuesRackTravel[point]);
+		value = Convert::GetInstance().ConvertDistance(axisValuesRackTravel[point]);
 	else
 		value = 0.0;
 
@@ -1211,7 +1207,7 @@ void Iteration::ExportDataToFile(wxString pathAndFileName) const
 	else
 	{
 		// Unrecognized file extension
-		debugger.Print(_T("ERROR:  Could not export data!  Unable to determine delimiter choice!"));
+		Debugger::GetInstance().Print(_T("ERROR:  Could not export data!  Unable to determine delimiter choice!"));
 
 		return;
 	}
@@ -1222,7 +1218,7 @@ void Iteration::ExportDataToFile(wxString pathAndFileName) const
 	// Warn the user if the file could not be opened failed
 	if (!exportFile.is_open() || !exportFile.good())
 	{
-		debugger.Print(_T("ERROR:  Could not export data to '") + pathAndFileName + _T("'!"));
+		Debugger::GetInstance().Print(_T("ERROR:  Could not export data to '") + pathAndFileName + _T("'!"));
 
 		return;
 	}
@@ -1325,11 +1321,12 @@ wxString Iteration::GetPlotUnits(PlotID id) const
 
 	// Depending on the specified PLOT_ID, choose the units string
 	if (id < Pitch)
-		units = converter.GetUnitType(KinematicOutputs::GetOutputUnitType((KinematicOutputs::OutputsComplete)id));
+		units = Convert::GetInstance().GetUnitType(
+			KinematicOutputs::GetOutputUnitType((KinematicOutputs::OutputsComplete)id));
 	else if (id == Pitch || id == Roll)
-		units = converter.GetUnitType(Convert::UnitTypeAngle);
+		units = Convert::GetInstance().GetUnitType(Convert::UnitTypeAngle);
 	else if (id == Heave || id == RackTravel)
-		units = converter.GetUnitType(Convert::UnitTypeDistance);
+		units = Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance);
 	else
 		units = _T("Unrecognized units");
 

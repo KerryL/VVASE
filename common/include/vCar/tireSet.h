@@ -21,17 +21,14 @@
 // Standard C++ headers
 #include <iosfwd>// forward declarations of fstream objects
 
-// vCar forward declarations
+// Local forward declarations
 class Tire;
-
-// vUtilities forward declarations
-class Debugger;
 
 class TireSet
 {
 public:
 	// Constructor
-	TireSet(const Debugger &_debugger);
+	TireSet();
 	TireSet(const TireSet &tireSet);
 
 	// Destructor
@@ -47,12 +44,8 @@ public:
 	Tire *rightRear;
 	Tire *leftRear;
 
-	// This class contains dynamically allocated memory - overload the assigment operator
+	// This class contains dynamically allocated memory - overload the assignment operator
 	TireSet& operator = (const TireSet &tireSet);
-
-private:
-	// Debugger message printing utility
-	const Debugger &debugger;
 };
 
 #endif// _TIRESET_H_

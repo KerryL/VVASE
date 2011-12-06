@@ -21,6 +21,7 @@
 #include "gui/components/editPanel/iteration/editIterationOptionsPanel.h"
 #include "gui/components/editPanel/iteration/editIterationNotebook.h"
 #include "vUtilities/convert.h"
+#include "vUtilities/debugger.h"
 
 //==========================================================================
 // Class:			EditIterationOptionsPanel
@@ -34,7 +35,6 @@
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
-//		_debugger	= const Debugger& reference to applications debug printing utility
 //
 // Output Arguments:
 //		None
@@ -45,8 +45,8 @@
 //==========================================================================
 EditIterationOptionsPanel::EditIterationOptionsPanel(EditIterationNotebook &_parent,
 													 wxWindowID id, const wxPoint& pos,
-													 const wxSize& size, const Debugger &_debugger) :
-													 wxScrolledWindow(&_parent, id, pos, size), debugger(_debugger),
+													 const wxSize& size) :
+													 wxScrolledWindow(&_parent, id, pos, size),
 													 parent(_parent)
 {
 	// Initialize the current object variable
@@ -328,5 +328,6 @@ void EditIterationOptionsPanel::SetAsDefaultClickedEvent(wxCommandEvent& WXUNUSE
 	// FIXME:  Would be nice if this could save other plot options, like axis associativity, line colors, etc.
 
 	// Display a message to the user so they know the changes took effect
-	debugger.Print(_T("Current plot settings saved as default"), Debugger::PriorityHigh);
+	Debugger::GetInstance().Print(
+		_T("Current plot settings saved as default"), Debugger::PriorityHigh);
 }

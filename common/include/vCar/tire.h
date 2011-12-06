@@ -25,13 +25,12 @@
 
 // VVASE headers
 #include "vMath/vector.h"
-#include "vUtilities/debugger.h"
 
 class Tire
 {
 public:
 	// Constructor
-	Tire(const Debugger &_debugger);
+	Tire();
 	Tire(const Tire &tire);
 
 	// Destructor
@@ -64,9 +63,6 @@ public:
 	Tire& operator = (const Tire &tire);
 
 private:
-	// Debugger message printing utility
-	const Debugger &debugger;
-
 	// FIXME:  Eventually, add support for a selection of tire models
 	// These parameters come from SAE Paper # 2006-01-1968, Tire Asymmetries and Pressure
 	// Variations in the Radt/Milliken Tire Model, by Kasprzak and Milliken.  This is an

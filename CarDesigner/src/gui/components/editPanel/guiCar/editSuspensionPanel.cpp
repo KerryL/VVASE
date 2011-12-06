@@ -43,7 +43,6 @@
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
-//		_debugger	= const Debugger& reference to applications debug printing utility
 //
 // Output Arguments:
 //		None
@@ -53,11 +52,8 @@
 //
 //==========================================================================
 EditSuspensionPanel::EditSuspensionPanel(EditSuspensionNotebook &_parent, wxWindowID id,
-											 const wxPoint& pos, const wxSize& size,
-											 const Debugger &_debugger) :
+											 const wxPoint& pos, const wxSize& size) :
 											 wxScrolledWindow(&_parent, id, pos, size),
-											 debugger(_debugger),
-											 converter(_parent.GetParent().GetMainFrame().GetConverter()),
 											 parent(_parent)
 {
 	// Create the controls
@@ -170,7 +166,7 @@ void EditSuspensionPanel::UpdateInformation(Suspension *_currentSuspension)
 
 	// Update the unit labels
 	wxString UnitString;
-	UnitString.Printf("(%s)", converter.GetUnitType(Convert::UnitTypeDistance).c_str());
+	UnitString.Printf("(%s)", Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance).c_str());
 	hardpoints->SetCellValue(0, 1, UnitString);
 	hardpoints->SetCellValue(0, 2, UnitString);
 	hardpoints->SetCellValue(0, 3, UnitString);
@@ -228,16 +224,16 @@ void EditSuspensionPanel::UpdateInformation(Suspension *_currentSuspension)
 	for (i = 0; i < Suspension::NumberOfHardpoints; i++)
 	{
 		// Get the location of this hardpoint (don't forget to convert it!)
-		point = converter.ConvertDistance(currentSuspension->hardpoints[i]);
+		point = Convert::GetInstance().ConvertDistance(currentSuspension->hardpoints[i]);
 
 		// Set the X value
-		hardpoints->SetCellValue(i + 1, 1, converter.FormatNumber(point.x));
+		hardpoints->SetCellValue(i + 1, 1, Convert::GetInstance().FormatNumber(point.x));
 
 		// Set the Y value
-		hardpoints->SetCellValue(i + 1, 2, converter.FormatNumber(point.y));
+		hardpoints->SetCellValue(i + 1, 2, Convert::GetInstance().FormatNumber(point.y));
 
 		// Set the Z value
-		hardpoints->SetCellValue(i + 1, 3, converter.FormatNumber(point.z));
+		hardpoints->SetCellValue(i + 1, 3, Convert::GetInstance().FormatNumber(point.z));
 	}
 
 	// Adjust the height of the grid based on the number of rows
@@ -332,7 +328,7 @@ void EditSuspensionPanel::CreateControls()
 	// Size the columns
 	// The X, Y, and Z columns should be big enough to fit 80.0 as formatted
 	// by the converter.  First column is stretchable
-	hardpoints->SetCellValue(3, 3, converter.FormatNumber(80.0));
+	hardpoints->SetCellValue(3, 3, Convert::GetInstance().FormatNumber(80.0));
 	hardpoints->AutoSizeColumn(3);
 	hardpoints->SetColumnWidth(1, hardpoints->GetColSize(3));
 	hardpoints->SetColumnWidth(2, hardpoints->GetColSize(3));
@@ -496,7 +492,7 @@ void EditSuspensionPanel::GridCellChangedEvent(wxGridEvent &event)
 				UndoRedoStack::Operation::DataTypeDouble,
 				&(currentSuspension->hardpoints[event.GetRow() - 1].x));
 
-			currentSuspension->hardpoints[event.GetRow() - 1].x = converter.ReadDistance(value);
+			currentSuspension->hardpoints[event.GetRow() - 1].x = Convert::GetInstance().ReadDistance(value);
 		}
 		else if (event.GetCol() == 2)// Y
 		{
@@ -506,7 +502,7 @@ void EditSuspensionPanel::GridCellChangedEvent(wxGridEvent &event)
 				UndoRedoStack::Operation::DataTypeDouble,
 				&(currentSuspension->hardpoints[event.GetRow() - 1].y));
 
-			currentSuspension->hardpoints[event.GetRow() - 1].y = converter.ReadDistance(value);
+			currentSuspension->hardpoints[event.GetRow() - 1].y = Convert::GetInstance().ReadDistance(value);
 		}
 		else// Z
 		{
@@ -516,7 +512,7 @@ void EditSuspensionPanel::GridCellChangedEvent(wxGridEvent &event)
 				UndoRedoStack::Operation::DataTypeDouble,
 				&(currentSuspension->hardpoints[event.GetRow() - 1].z));
 
-			currentSuspension->hardpoints[event.GetRow() - 1].z = converter.ReadDistance(value);
+			currentSuspension->hardpoints[event.GetRow() - 1].z = Convert::GetInstance().ReadDistance(value);
 		}
 
 		// Unlock the car

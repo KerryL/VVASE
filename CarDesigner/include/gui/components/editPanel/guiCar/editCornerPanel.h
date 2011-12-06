@@ -10,7 +10,7 @@
 // File:  editCornerPanel.h
 // Created:  2/10/2009
 // Author:  K. Loux
-// Description:  Contains the class declaration for the EDIT_CORNER_PANEL class.
+// Description:  Contains the class declaration for the EditCornerPanel class.
 // History:
 
 #ifndef _EDIT_CORNER_PANEL_H_
@@ -28,8 +28,6 @@ class wxCombo;
 class wxGridEvent;
 
 // VVASE forward declarations
-class Debugger;
-class Convert;
 class Corner;
 class EditSuspensionNotebook;
 class SuperGrid;
@@ -38,22 +36,17 @@ class EditCornerPanel : public wxScrolledWindow
 {
 public:
 	// Constructor
-	EditCornerPanel(EditSuspensionNotebook &_parent, wxWindowID id, const wxPoint& pos,
-		const wxSize& size, const Debugger &_debugger);
+	EditCornerPanel(EditSuspensionNotebook &_parent, wxWindowID id,
+		const wxPoint& pos, const wxSize& size);
 
 	// Destructor
 	~EditCornerPanel();
 
 	// Updates the information on the panel
-	void UpdateInformation(Corner *_currentCorner, Suspension::BarStyle barStyle, bool hasHalfShaft);
+	void UpdateInformation(Corner *_currentCorner, Suspension::BarStyle barStyle,
+		bool hasHalfShaft);
 
 private:
-	// Debugger message printing utility
-	const Debugger &debugger;
-
-	// The application's converter
-	const Convert &converter;
-
 	// The parent panel
 	EditSuspensionNotebook &parent;
 

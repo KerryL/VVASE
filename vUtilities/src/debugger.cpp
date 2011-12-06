@@ -13,7 +13,7 @@
 // Description:  A simple class that prints information to a log file.  Just
 //				 to clean up the rest of the program.
 // History:
-//	3/5/2008	- Transformed from function to class and added DEBUG_LEVEL, K. Loux.
+//	3/5/2008	- Transformed from function to class and added DebugLevel, K. Loux.
 //	3/8/2008	- Modified to use the wxWidgets class wxString instead of char *, K. Loux.
 //	3/9/2008	- Changed the structure of the Debugger class to handle the entire application
 //				  with one object, and to print the output to a wxTextCtl object, K. Loux.
@@ -21,8 +21,9 @@
 //	11/22/2009	- Moved to vUtilities.lib, K. Loux.
 //	12/20/2009	- Modified for thread-safe operation, K. Loux.
 //	11/7/2011	- Corrected camelCase, K. Loux.
+//	12/5/2011	- Made this object a singleton, K. Loux.
 
-// Standard C headers
+// Standard C++ headers
 #include <stdarg.h>
 #include <iostream>
 
@@ -90,6 +91,74 @@ Debugger::~Debugger()
 
 //==========================================================================
 // Class:			Debugger
+// Function:		Initialization of static members
+//
+// Description:		Required for singleton operation.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+Debugger* Debugger::debuggerInstance = NULL;
+
+//==========================================================================
+// Class:			Debugger
+// Function:		GetInstance
+//
+// Description:		Returns a reference to this.  Creates object if it doesn't
+//					already exist.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		Debugger&, reference to this object
+//
+//==========================================================================
+Debugger& Debugger::GetInstance(void)
+{
+	if (!debuggerInstance)
+		debuggerInstance = new Debugger();
+	
+	return *debuggerInstance;
+}
+
+//==========================================================================
+// Class:			Debugger
+// Function:		Kill
+//
+// Description:		Deletes the instance of this class, if it exists.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void Debugger::Kill(void)
+{
+	if (debuggerInstance)
+	{
+		delete debuggerInstance;
+		debuggerInstance = NULL;
+	}
+}
+
+//==========================================================================
+// Class:			Debugger
 // Function:		SetDebugLevel
 //
 // Description:		Sets the debug level to the specified level
@@ -106,7 +175,7 @@ Debugger::~Debugger()
 //==========================================================================
 void Debugger::SetDebugLevel(const DebugLevel &level)
 {
-	// Ensure exlusive access to this object
+	// Ensure exclusive access to this object
 	wxMutexLocker lock(debugMutex);
 
 	// Set the class member as specified
@@ -227,7 +296,7 @@ void Debugger::Print(const DebugLevel &level, const char *format, ...) const
 #ifdef __WIN32__
 	if (vsnprintf_s((char*)output, sizeof(output), sizeof(output), format, args) == -1)
 #else
-	if (vsnprintf((char*)output, sizeof(output), format, args) == 1)
+	if (vsnprintf((char*)output, sizeof(output), format, args) == -1)
 #endif
 	{
 		// Warn about message truncation

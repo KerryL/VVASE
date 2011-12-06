@@ -17,10 +17,10 @@
 
 // Standard C++ headers
 #include <fstream>
+#include <assert.h>
 
 // VVASE headers
 #include "vCar/engine.h"
-#include "vUtilities/debugger.h"
 #include "vUtilities/machineDefinitions.h"
 
 //==========================================================================
@@ -30,7 +30,7 @@
 // Description:		Constructor for the Engine class.
 //
 // Input Arguments:
-//		_debugger	= const Debugger& reference to applications debug printing utility
+//		None
 //
 // Output Arguments:
 //		None
@@ -39,7 +39,7 @@
 //		None
 //
 //==========================================================================
-Engine::Engine(const Debugger &_debugger) : debugger(_debugger)
+Engine::Engine()
 {
 	// Initialize this object
 	crankshaftSpeed = 0.0;
@@ -61,7 +61,7 @@ Engine::Engine(const Debugger &_debugger) : debugger(_debugger)
 //		None
 //
 //==========================================================================
-Engine::Engine(const Engine &engine) : debugger(engine.debugger)
+Engine::Engine(const Engine &engine)
 {
 	// Do the copy
 	*this = engine;
@@ -134,7 +134,7 @@ void Engine::Read(std::ifstream *inFile, int fileVersion)
 		inFile->read((char*)&crankshaftSpeed, sizeof(double));
 	}
 	else
-		assert(0);
+		assert(false);
 }
 
 //==========================================================================

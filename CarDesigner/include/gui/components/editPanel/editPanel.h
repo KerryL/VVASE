@@ -30,7 +30,6 @@ class wxCheckBox;
 // VVASE forward declarations
 class MainFrame;
 class MainTree;
-class Debugger;
 class EditAerodynamicsPanel;
 class EditBrakesPanel;
 class EditDifferentialPanel;
@@ -46,7 +45,7 @@ class EditPanel : public wxPanel
 public:
 	// Constructor
 	EditPanel(MainFrame &_mainFrame, wxWindowID id, const wxPoint& pos,
-		const wxSize& size, const Debugger &_debugger);
+		const wxSize& size);
 
 	// Destructor
 	~EditPanel();
@@ -65,9 +64,6 @@ public:
 	wxMutex *GetCurrentMutex(void) { return carMutex; };
 
 private:
-	// Debugger message printing utility
-	const Debugger &debugger;
-
 	// The parent window
 	MainFrame &mainFrame;
 

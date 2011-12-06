@@ -19,11 +19,12 @@
 // History:
 //	3/22/2008	- Created "default" units and functions to set them to eliminate the need
 //				  to include two arguments when calling a conversion function, K. Loux.
-//	7/27/2008	- Made several class members static members and moved UNIT_TYPE from
-//				  TREE_ITEM, K. Loux.
+//	7/27/2008	- Made several class members static members and moved UnitType from
+//				  TreeItem, K. Loux.
 //	5/2/2009	- Added const flag to conversion member functions, K. Loux.
 //	11/22/2009	- Moved to vUtilities.lib, K. Loux.
 //	11/7/2011	- Corrected camelCase, K. Loux.
+//	12/5/2011	- Changed to singleton, K. Loux.
 
 // Our "standard" units will be defined below.  All calculations will be done with
 // these units, and this converter will be called to convert to/from anything else.
@@ -56,11 +57,9 @@ class Vector;
 class Convert
 {
 public:
-	// Constructor
-	Convert();
-
-	// Destructor
-	~Convert();
+	// Singleton methods
+	static Convert &GetInstance(void);
+	static void Kill(void);
 
 	// Constants
 	static const double Pi;
@@ -480,6 +479,13 @@ public:
 	inline bool GetUseScientificNotation(void) const { return useScientificNotation; };
 
 private:
+	// For singletons, these are private
+	Convert();
+	Convert(const Convert &c) { };
+	Convert& operator=(const Convert &c) { return *this; };
+	
+	static Convert *convertInstance;
+	
 	// Default units
 	UnitsOfAngle defaultAngleUnits;
 	UnitsOfDistance defaultDistanceUnits;

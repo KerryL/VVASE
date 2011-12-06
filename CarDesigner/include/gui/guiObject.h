@@ -34,7 +34,6 @@ class Iteration;
 class MainTree;
 class MainNotebook;
 class MainFrame;
-class Debugger;
 class RenderWindow;
 class Primitive;
 
@@ -42,8 +41,7 @@ class GuiObject
 {
 public:
 	// Constructor
-	GuiObject(MainFrame &_mainFrame, const Debugger &_debugger,
-		wxString _pathAndFileName = wxEmptyString);
+	GuiObject(MainFrame &_mainFrame, wxString _pathAndFileName = wxEmptyString);
 
 	// Destructor
 	virtual ~GuiObject();
@@ -116,9 +114,6 @@ public:
 	bool IsInitialized(void) { return objectIsInitialized; };
 
 protected:
-	// Debugger message printing utility
-	const Debugger &debugger;
-
 	// The objects name (for display purposes)
 	wxString name;
 

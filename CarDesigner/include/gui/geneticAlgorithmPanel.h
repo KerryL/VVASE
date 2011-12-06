@@ -27,7 +27,6 @@ class wxGauge;
 
 // VVASE forward declarations
 class MainFrame;
-class Convert;
 class GeneticOptimization;
 
 class GeneticAlgorithmPanel : public wxScrolledWindow
@@ -46,9 +45,6 @@ public:
 	void IncrementStatusBars(void);
 
 private:
-	// Application's converter object
-	const Convert &converter;
-
 	// The optimization object that we represent
 	GeneticOptimization &optimization;
 

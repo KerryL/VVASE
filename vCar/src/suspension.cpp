@@ -34,6 +34,7 @@
 #include "vCar/suspension.h"
 #include "vMath/carMath.h"
 #include "vUtilities/machineDefinitions.h"
+#include "vUtilities/debugger.h"
 
 //==========================================================================
 // Class:			Suspension
@@ -42,7 +43,7 @@
 // Description:		Constructor for the Suspension class.
 //
 // Input Arguments:
-//		_debugger	= const Debugger& reference to applications debug printing utility
+//		None
 //
 // Output Arguments:
 //		None
@@ -51,11 +52,11 @@
 //		None
 //
 //==========================================================================
-Suspension::Suspension(const Debugger &_debugger)
-					   : rightFront(Corner::LocationRightFront, _debugger),
-					   leftFront(Corner::LocationLeftFront, _debugger),
-					   rightRear(Corner::LocationRightRear, _debugger),
-					   leftRear(Corner::LocationLeftRear, _debugger)
+Suspension::Suspension()
+					   : rightFront(Corner::LocationRightFront),
+					   leftFront(Corner::LocationLeftFront),
+					   rightRear(Corner::LocationRightRear),
+					   leftRear(Corner::LocationLeftRear)
 {
 	// Initialize the hardpoints within this object as well
 	int i;
@@ -95,24 +96,6 @@ Suspension::Suspension(const Debugger &_debugger)
 Suspension::~Suspension()
 {
 }
-
-//==========================================================================
-// Class:			Suspension
-// Function:		Constant Declarations
-//
-// Description:		Constant declarations for the Suspension class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-const Debugger *Suspension::debugger = NULL;
 
 //==========================================================================
 // Class:			Suspension
@@ -162,7 +145,7 @@ bool Suspension::SolveForPoint(const Vector &center1, const Vector &center2, con
 	if (center1.Distance(center2) > r1 + r2 || center1.Distance(center3) > r1 + r3 ||
 		center2.Distance(center3) > r2 + r3)
 	{
-		debugger->Print(_T("Error (SolveForPoint): Center distance exceeds sum of radii"), Debugger::PriorityLow);
+		Debugger::GetInstance().Print(_T("Error (SolveForPoint): Center distance exceeds sum of radii"), Debugger::PriorityLow);
 
 		return false;
 	}
@@ -170,7 +153,7 @@ bool Suspension::SolveForPoint(const Vector &center1, const Vector &center2, con
 		center1.Distance(center3) + min(r1, r3) < max(r1, r3) ||
 		center2.Distance(center3) + min(r2, r3) < max(r2, r3))
 	{
-		debugger->Print(_T("Error (SolveForPoint): Center distance and smaller radius less than larger radius"),
+		Debugger::GetInstance().Print(_T("Error (SolveForPoint): Center distance and smaller radius less than larger radius"),
 			Debugger::PriorityLow);
 
 		return false;
@@ -485,7 +468,7 @@ bool Suspension::SolveForPoint(const Vector &center1, const Vector &center2, con
 	// Make sure the solution is valid
 	if (solution1 != solution1 || solution2 != solution2)
 	{
-		debugger->Print(_T("Error (SolveForPoint): Invalid solution"), Debugger::PriorityLow);
+		Debugger::GetInstance().Print(_T("Error (SolveForPoint): Invalid solution"), Debugger::PriorityLow);
 
 		return false;
 	}
@@ -608,13 +591,13 @@ bool Suspension::SolveForXY(const Vector &center1, const Vector &center2, const 
 	// Check for the existence of a solution
 	if (center1.Distance(center2) > r1 + r2)
 	{
-		debugger->Print(_T("Error (SolveForXY): Center distance exceeds sum of radii"), Debugger::PriorityLow);
+		Debugger::GetInstance().Print(_T("Error (SolveForXY): Center distance exceeds sum of radii"), Debugger::PriorityLow);
 
 		return false;
 	}
 	else if (center1.Distance(center2) + min(r1, r2) < max(r1, r2))
 	{
-		debugger->Print(_T("Error (SolveForXY): Center distance and smaller radius less than larger radius"),
+		Debugger::GetInstance().Print(_T("Error (SolveForXY): Center distance and smaller radius less than larger radius"),
 			Debugger::PriorityLow);
 
 		return false;
@@ -776,7 +759,7 @@ bool Suspension::SolveForXY(const Vector &center1, const Vector &center2, const 
 	// Make sure the solution is valid
 	if (solution1 != solution1 || solution2 != solution2)
 	{
-		debugger->Print(_T("Error (SolveForXY): Invalid solution"), Debugger::PriorityLow);
+		Debugger::GetInstance().Print(_T("Error (SolveForXY): Invalid solution"), Debugger::PriorityLow);
 
 		return false;
 	}
@@ -887,7 +870,7 @@ bool Suspension::SolveForContactPatch(const Vector &wheelCenter, const Vector &w
 	{
 		// Return a zero-length vector
 		output.Set(0.0, 0.0, 0.0);
-		debugger->Print(_T("Error (SolveForContactPatch):  Invalid solution"), Debugger::PriorityLow);
+		Debugger::GetInstance().Print(_T("Error (SolveForContactPatch):  Invalid solution"), Debugger::PriorityLow);
 
 		return false;
 	}
@@ -978,10 +961,10 @@ void Suspension::Read(std::ifstream *inFile, int fileVersion)
 
 	// Third spring and damper objects
 	// NOT YET USED!!!
-	/*SPRING FrontThirdSpring;
-	SPRING RearThirdSpring;
-	DAMPER FrontThirdDamper;
-	DAMPER RearThirdDamper;*/
+	/*Spring FrontThirdSpring;
+	Spring RearThirdSpring;
+	Damper FrontThirdDamper;
+	Damper RearThirdDamper;*/
 }
 
 //==========================================================================

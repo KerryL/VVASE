@@ -54,8 +54,7 @@ AppearanceOptionsDialog::AppearanceOptionsDialog(MainFrame &mainFrame,
 													 wxWindowID id, const wxPoint &position,
 													 long style) : wxDialog(&mainFrame, id,
 													 _T("Appearance Options"), position,
-													 wxDefaultSize, style),
-													 converter(mainFrame.GetConverter())
+													 wxDefaultSize, style)
 {
 	// Assign the pointer to the options object
 	options = _options;
@@ -195,7 +194,7 @@ void AppearanceOptionsDialog::CreateControls(void)
 		colorGrid->SetCellBackgroundColour(i, 1, colorOptions[i].ToWxColor());
 
 		// Set the transparency values
-		colorGrid->SetCellValue(i, 2, converter.FormatNumber(colorOptions[i].GetAlpha()));
+		colorGrid->SetCellValue(i, 2, Convert::GetInstance().FormatNumber(colorOptions[i].GetAlpha()));
 	}
 
 	// Automatically size the columns
@@ -229,7 +228,7 @@ void AppearanceOptionsDialog::CreateControls(void)
 		_T("Choose the visible objects:"));
 	visibilitySizer->Add(visibilityPrompt, 0, wxALL | wxEXPAND, 5);
 
-	// The selections array contains the indicies of the items that are selected
+	// The selections array contains the indices of the items that are selected
 	// which is used to initialize the list in the list box
 	wxArrayString choices;
 	for (i = 0; i < AppearanceOptions::VisibilityCount; i++)
@@ -240,7 +239,7 @@ void AppearanceOptionsDialog::CreateControls(void)
 	visibilityList = new wxCheckListBox(visibilityPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, choices);
 	visibilitySizer->Add(visibilityList, 0, wxALIGN_CENTER_HORIZONTAL | wxEXPAND | wxALL | wxALIGN_TOP, 5);
 
-	// Go through the list and check the boxes of the items that are currenly visible
+	// Go through the list and check the boxes of the items that are currently visible
 	for (i = 0; i < AppearanceOptions::VisibilityCount; i++)
 		visibilityList->Check(i, options->GetVisibility((AppearanceOptions::ObjectVisibility)i));
 
@@ -260,7 +259,7 @@ void AppearanceOptionsDialog::CreateControls(void)
 
 	// Add the text across the top of the page
 	wxStaticText *sizePrompt = new wxStaticText(sizePanel, wxID_STATIC,
-		_T("Edit the object sizes (units are ") + converter.GetUnitType(Convert::UnitTypeDistance)
+		_T("Edit the object sizes (units are ") + Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance)
 		+ _T("):"));
 	sizeSizer->Add(sizePrompt, 0, wxALL, 5);
 
@@ -297,7 +296,7 @@ void AppearanceOptionsDialog::CreateControls(void)
 			(AppearanceOptions::ObjectSize)i));
 
 		// Set the values of all of the data cells
-		sizeGrid->SetCellValue(i, 1, converter.FormatNumber(converter.ConvertDistance(
+		sizeGrid->SetCellValue(i, 1, Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(
 			options->GetSize((AppearanceOptions::ObjectSize)i))));
 	}
 
@@ -450,7 +449,7 @@ void AppearanceOptionsDialog::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 	{
 		// Size must be a valid number
 		if (sizeGrid->GetCellValue(i, 1).ToDouble(&sizeValue))
-			options->SetSize((AppearanceOptions::ObjectSize)i, converter.ReadDistance(sizeValue));
+			options->SetSize((AppearanceOptions::ObjectSize)i, Convert::GetInstance().ReadDistance(sizeValue));
 	}
 
 	// Update the resolutions
@@ -568,11 +567,11 @@ void AppearanceOptionsDialog::AlphaChangeEvent(wxGridEvent &event)
 	if (colorGrid->GetCellValue(event.GetRow(), event.GetCol()).ToDouble(&tempAlpha))
 	{
 		if (tempAlpha > 1.0)
-			colorGrid->SetCellValue(event.GetRow(), event.GetCol(), converter.FormatNumber(1.0));
+			colorGrid->SetCellValue(event.GetRow(), event.GetCol(), Convert::GetInstance().FormatNumber(1.0));
 		else if (tempAlpha < 0.0)
-			colorGrid->SetCellValue(event.GetRow(), event.GetCol(), converter.FormatNumber(0.0));
+			colorGrid->SetCellValue(event.GetRow(), event.GetCol(), Convert::GetInstance().FormatNumber(0.0));
 	}
 	else
 		colorGrid->SetCellValue(event.GetRow(), event.GetCol(),
-		converter.FormatNumber(colorOptions[event.GetRow()].GetAlpha()));
+		Convert::GetInstance().FormatNumber(colorOptions[event.GetRow()].GetAlpha()));
 }

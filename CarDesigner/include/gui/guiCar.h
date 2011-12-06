@@ -13,17 +13,17 @@
 // Description:  A high-level car object.  This class defines the interaction between
 //				 the GUI and the actual CAR class.
 // History:
-//	7/27/2008	- Switched to an array of TREE_ITEMs with an enum for their indices instead
-//				  of using a new TREE_ITEM for every entry.  This simplifies everything except
+//	7/27/2008	- Switched to an array of TreeItems with an enum for their indices instead
+//				  of using a new TreeItem for every entry.  This simplifies everything except
 //				  the creation of the items, which doesn't get any more complicated,  K. Loux.
-//	8/18/2008	- Changed name of TREE_ITEM class to GUI_OBJECT, K. Loux.
-//	1/24/2009	- Major application structure change - MAIN_FRAME uses GUI_OBJECT instead of
-//				  GUI_CAR.  GUI_OBJECT changed to only contain either GUI_CAR or ITERATION
+//	8/18/2008	- Changed name of TreeItem class to GuiObject, K. Loux.
+//	1/24/2009	- Major application structure change - MainFrame uses GuiObject instead of
+//				  GuICar.  GuiObject changed to only contain either GuiCar or Iteration
 //				  objects, K. Loux.
-//	2/17/2009	- Moved the KINEMATICS object into this class so we can update the 3D car
+//	2/17/2009	- Moved the Kinematics object into this class so we can update the 3D car
 //				  more easily, K. Loux.
 //	2/18/2009	- Added subsystems to allow subsystems to appear in the systems tree, K. Loux.
-//	5/19/2009	- Changed to derived class from GUI_OBJECT, K. Loux.
+//	5/19/2009	- Changed to derived class from GuiObject, K. Loux.
 
 #ifndef _GUI_CAR_H_
 #define _GUI_CAR_H_
@@ -38,7 +38,6 @@
 // VVASE forward declarations
 class CarRenderer;
 class Car;
-class Debugger;
 class AppearanceOptions;
 
 // wxWidgets forward declarations
@@ -48,8 +47,7 @@ class GuiCar : public GuiObject
 {
 public:
 	// Constructor
-	GuiCar(MainFrame &_mainFrame, const Debugger &_debugger,
-		wxString _pathAndFileName = wxEmptyString);
+	GuiCar(MainFrame &_mainFrame, wxString _pathAndFileName = wxEmptyString);
 
 	// Destructor
 	~GuiCar();

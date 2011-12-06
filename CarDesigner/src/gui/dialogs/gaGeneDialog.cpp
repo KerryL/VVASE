@@ -25,7 +25,6 @@
 //
 // Input Arguments:
 //		parent			= wxWindow&, reference to the main application window
-//		_converter		= const Convert&, reference to conversion utility object
 //		_hardpoint		= const Corner::Hardpoints&
 //		_tiedTo			= const Corner::Hardpoints&
 //		_axisDirection	= const Vector::Axis&
@@ -44,12 +43,11 @@
 //		None
 //
 //==========================================================================
-GAGeneDialog::GAGeneDialog(wxWindow *parent, const Convert &_converter, const Corner::Hardpoints &_hardpoint,
+GAGeneDialog::GAGeneDialog(wxWindow *parent, const Corner::Hardpoints &_hardpoint,
 							   const Corner::Hardpoints &_tiedTo, const Vector::Axis &_axisDirection,
 							   const Corner::Location &_cornerLocation, const double &_minimum, const double &_maximum,
 							   const unsigned int &_numberOfValues, wxWindowID id, const wxPoint &position, long style) :
-							   wxDialog(parent, id, _T("Genetic Algorithm Gene"), position, wxDefaultSize, style),
-							   converter(_converter)
+							   wxDialog(parent, id, _T("Genetic Algorithm Gene"), position, wxDefaultSize, style)
 {
 	// Assign local members
 	hardpoint = _hardpoint;

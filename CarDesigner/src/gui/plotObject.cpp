@@ -82,7 +82,7 @@ PlotObject::PlotObject(PlotRenderer &_renderer) : renderer(_renderer)
 	{
 		fontFile = FontFinder::GetFontFileName(plotFont.GetFaceName());
 		if (fontFile.IsEmpty())
-			renderer.GetDebugger().Print(_T("Could not find font file for ")
+			Debugger::GetInstance().Print(_T("Could not find font file for ")
 				+ plotFont.GetFaceName());
 	}
 
@@ -96,7 +96,7 @@ PlotObject::PlotObject(PlotRenderer &_renderer) : renderer(_renderer)
 		delete axisFont;
 		axisFont = NULL;
 
-		renderer.GetDebugger().Print(
+		Debugger::GetInstance().Print(
 			_T("Error loading axis font.  Specify a font in Tools->Options->Fonts to correct."));
 	}
 	else
@@ -110,7 +110,7 @@ PlotObject::PlotObject(PlotRenderer &_renderer) : renderer(_renderer)
 		delete titleFont;
 		titleFont = NULL;
 
-		renderer.GetDebugger().Print(
+		Debugger::GetInstance().Print(
 			_T("Error loading title font.  Specify a font in Tools->Options->Fonts to correct."));
 	}
 	else

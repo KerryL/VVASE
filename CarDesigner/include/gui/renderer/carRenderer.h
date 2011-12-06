@@ -31,7 +31,6 @@
 class wxString;
 
 // VVASE forward declarations
-class Debugger;
 class Car;
 class AArm;
 class Link;
@@ -53,7 +52,7 @@ class CarRenderer : public RenderWindow
 {
 public:
 	// Constructor
-	CarRenderer(MainFrame &_mainFrame, GuiCar &_car, int args[], const Debugger &_debugger);
+	CarRenderer(MainFrame &_mainFrame, GuiCar &_car, int args[]);
 
 	// Destructor
 	~CarRenderer();
@@ -73,13 +72,10 @@ public:
 	inline void DeactivateHelperOrb(void) { helperOrbIsActive = false; };
 
 private:
-	// Debugger message printing utility
-	const Debugger &debugger;
-
 	// For context menus
 	MainFrame &mainFrame;
 
-	// Called from the CAR_RENDERER constructor only in order to initialize the display
+	// Called from the CarRenderer constructor only in order to initialize the display
 	void CreateActors(void);
 
 	// The methods that perform the updating

@@ -30,7 +30,7 @@
 // Description:		Constructor for the Aerodynamics class.
 //
 // Input Arguments:
-//		_debugger	= const Debugger& reference to applications debug printing utility
+//		None
 //
 // Output Arguments:
 //		None
@@ -39,7 +39,7 @@
 //		None
 //
 //==========================================================================
-Aerodynamics::Aerodynamics(const Debugger &_debugger) : debugger(_debugger)
+Aerodynamics::Aerodynamics()
 {
 }
 
@@ -59,7 +59,7 @@ Aerodynamics::Aerodynamics(const Debugger &_debugger) : debugger(_debugger)
 //		None
 //
 //==========================================================================
-Aerodynamics::Aerodynamics(const Aerodynamics &aerodynamics) : debugger(aerodynamics.debugger)
+Aerodynamics::Aerodynamics(const Aerodynamics &aerodynamics)
 {
 	// Do the copy
 	*this = aerodynamics;

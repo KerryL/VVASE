@@ -37,7 +37,6 @@
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
-//		_debugger	= const Debugger& reference to applications debug printing utility
 //
 // Output Arguments:
 //		None
@@ -47,11 +46,8 @@
 //
 //==========================================================================
 EditTiresPanel::EditTiresPanel(EditPanel &_parent, wxWindowID id,
-								   const wxPoint& pos, const wxSize& size,
-								   const Debugger &_debugger)
+								   const wxPoint& pos, const wxSize& size)
 								   : wxScrolledWindow(&_parent, id, pos, size),
-								   debugger(_debugger),
-								   converter(_parent.GetMainFrame().GetConverter()),
 								   parent(_parent)
 										   
 {
@@ -130,38 +126,38 @@ void EditTiresPanel::UpdateInformation(TireSet *_currentTireSet)
 	// FIXME:  Handle symmetry
 
 	// Update the text boxes
-	rightFrontTireDiameter->ChangeValue(converter.FormatNumber(converter.ConvertDistance(
+	rightFrontTireDiameter->ChangeValue(Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(
 		currentTireSet->rightFront->diameter)));
-	rightFrontTireWidth->ChangeValue(converter.FormatNumber(converter.ConvertDistance(
+	rightFrontTireWidth->ChangeValue(Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(
 		currentTireSet->rightFront->width)));
 
-	leftFrontTireDiameter->ChangeValue(converter.FormatNumber(converter.ConvertDistance(
+	leftFrontTireDiameter->ChangeValue(Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(
 		currentTireSet->leftFront->diameter)));
-	leftFrontTireWidth->ChangeValue(converter.FormatNumber(converter.ConvertDistance(
+	leftFrontTireWidth->ChangeValue(Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(
 		currentTireSet->leftFront->width)));
 
-	rightRearTireDiameter->ChangeValue(converter.FormatNumber(converter.ConvertDistance(
+	rightRearTireDiameter->ChangeValue(Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(
 		currentTireSet->rightRear->diameter)));
-	rightRearTireWidth->ChangeValue(converter.FormatNumber(converter.ConvertDistance(
+	rightRearTireWidth->ChangeValue(Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(
 		currentTireSet->rightRear->width)));
 
-	leftRearTireDiameter->ChangeValue(converter.FormatNumber(converter.ConvertDistance(
+	leftRearTireDiameter->ChangeValue(Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(
 		currentTireSet->leftRear->diameter)));
-	leftRearTireWidth->ChangeValue(converter.FormatNumber(converter.ConvertDistance(
+	leftRearTireWidth->ChangeValue(Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(
 		currentTireSet->leftRear->width)));
 
 	// And their units
-	rightFrontDiameterUnitsLabel->SetLabel(converter.GetUnitType(Convert::UnitTypeDistance));
-	rightFrontWidthUnitsLabel->SetLabel(converter.GetUnitType(Convert::UnitTypeDistance));
+	rightFrontDiameterUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance));
+	rightFrontWidthUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance));
 
-	leftFrontDiameterUnitsLabel->SetLabel(converter.GetUnitType(Convert::UnitTypeDistance));
-	leftFrontWidthUnitsLabel->SetLabel(converter.GetUnitType(Convert::UnitTypeDistance));
+	leftFrontDiameterUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance));
+	leftFrontWidthUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance));
 
-	rightRearDiameterUnitsLabel->SetLabel(converter.GetUnitType(Convert::UnitTypeDistance));
-	rightRearWidthUnitsLabel->SetLabel(converter.GetUnitType(Convert::UnitTypeDistance));
+	rightRearDiameterUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance));
+	rightRearWidthUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance));
 
-	leftRearDiameterUnitsLabel->SetLabel(converter.GetUnitType(Convert::UnitTypeDistance));
-	leftRearWidthUnitsLabel->SetLabel(converter.GetUnitType(Convert::UnitTypeDistance));
+	leftRearDiameterUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance));
+	leftRearWidthUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance));
 
 	// Update the sizers
 	/*int minWidth;
@@ -316,7 +312,7 @@ void EditTiresPanel::CreateControls()
 	// Adjust text box minimum size
 	// Use number larger than actual anticipated value for these boxes to determine appropriate size
 	int minWidth;
-	GetTextExtent(converter.FormatNumber(converter.ConvertDistance(-400.0)), &minWidth, NULL);
+	GetTextExtent(Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(-400.0)), &minWidth, NULL);
 	rightFrontTireDiameter->SetMinSize(wxSize(minWidth, -1));
 	rightFrontTireWidth->SetMinSize(wxSize(minWidth, -1));
 	leftFrontTireDiameter->SetMinSize(wxSize(minWidth, -1));
@@ -367,7 +363,7 @@ void EditTiresPanel::RightFrontTireDiameterChangeEvent(wxCommandEvent &event)
 	mutex->Lock();
 
 	// Update the tire object
-	currentTireSet->rightFront->diameter = converter.ReadDistance(value);
+	currentTireSet->rightFront->diameter = Convert::GetInstance().ReadDistance(value);
 
 	// Unlock the car
 	mutex->Unlock();
@@ -421,7 +417,7 @@ void EditTiresPanel::RightFrontTireWidthChangeEvent(wxCommandEvent &event)
 	mutex->Lock();
 
 	// Update the tire object
-	currentTireSet->rightFront->width = converter.ReadDistance(value);
+	currentTireSet->rightFront->width = Convert::GetInstance().ReadDistance(value);
 
 	// Unlock the car
 	mutex->Unlock();
@@ -475,7 +471,7 @@ void EditTiresPanel::LeftFrontTireDiameterChangeEvent(wxCommandEvent &event)
 	mutex->Lock();
 
 	// Update the tire object
-	currentTireSet->leftFront->diameter = converter.ReadDistance(value);
+	currentTireSet->leftFront->diameter = Convert::GetInstance().ReadDistance(value);
 
 	// Unlock the car
 	mutex->Unlock();
@@ -529,7 +525,7 @@ void EditTiresPanel::LeftFrontTireWidthChangeEvent(wxCommandEvent &event)
 	mutex->Lock();
 
 	// Update the tire object
-	currentTireSet->leftFront->width = converter.ReadDistance(value);
+	currentTireSet->leftFront->width = Convert::GetInstance().ReadDistance(value);
 
 	// Unlock the car
 	mutex->Unlock();
@@ -583,7 +579,7 @@ void EditTiresPanel::RightRearTireDiameterChangeEvent(wxCommandEvent &event)
 	mutex->Lock();
 
 	// Update the tire object
-	currentTireSet->rightRear->diameter = converter.ReadDistance(value);
+	currentTireSet->rightRear->diameter = Convert::GetInstance().ReadDistance(value);
 
 	// Unlock the car
 	mutex->Unlock();
@@ -637,7 +633,7 @@ void EditTiresPanel::RightRearTireWidthChangeEvent(wxCommandEvent &event)
 	mutex->Lock();
 
 	// Update the tire object
-	currentTireSet->rightRear->width = converter.ReadDistance(value);
+	currentTireSet->rightRear->width = Convert::GetInstance().ReadDistance(value);
 
 	// Unlock the car
 	mutex->Unlock();
@@ -691,7 +687,7 @@ void EditTiresPanel::LeftRearTireDiameterChangeEvent(wxCommandEvent &event)
 	mutex->Lock();
 
 	// Update the tire object
-	currentTireSet->leftRear->diameter = converter.ReadDistance(value);
+	currentTireSet->leftRear->diameter = Convert::GetInstance().ReadDistance(value);
 
 	// Unlock the car
 	mutex->Unlock();
@@ -745,7 +741,7 @@ void EditTiresPanel::LeftRearTireWidthChangeEvent(wxCommandEvent &event)
 	mutex->Lock();
 
 	// Update the tire object
-	currentTireSet->leftRear->width = converter.ReadDistance(value);
+	currentTireSet->leftRear->width = Convert::GetInstance().ReadDistance(value);
 
 	// Unlock the car
 	mutex->Unlock();

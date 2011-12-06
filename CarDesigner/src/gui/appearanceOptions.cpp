@@ -34,7 +34,6 @@
 // Input Arguments:
 //		_mainFrame	= MainFrame&, reference to main application object
 //		_owner		= GuiCar&, reference to owner of this object
-//		_debugger	= const Debugger&, reference to debug printing utility
 //
 // Output Arguments:
 //		None
@@ -43,8 +42,7 @@
 //		None
 //
 //==========================================================================
-AppearanceOptions::AppearanceOptions(MainFrame &_mainFrame, GuiCar &_owner,
-									   const Debugger &_debugger) : debugger(_debugger),
+AppearanceOptions::AppearanceOptions(MainFrame &_mainFrame, GuiCar &_owner) :
 									   mainFrame(_mainFrame), owner(_owner)
 {
 	// FIXME:  Read all of these from registry???

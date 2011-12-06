@@ -21,8 +21,6 @@
 #include <wx/grid.h>
 
 // VVASE forward declarations
-class Debugger;
-class Convert;
 class Car;
 class KinematicOutputs;
 class MainFrame;
@@ -33,7 +31,7 @@ class OutputPanel : public wxPanel
 public:
 	// Constructor
 	OutputPanel(MainFrame &_mainFrame, wxWindowID id, const wxPoint &pos,
-		const wxSize &size, const Debugger &_debugger);
+		const wxSize &size);
 
 	// Destructor
 	~OutputPanel();
@@ -47,12 +45,6 @@ public:
 	void HighlightColumn(wxString _name);
 
 private:
-	// Debugger message printing utility
-	const Debugger &debugger;
-
-	// The application's converter object
-	const Convert &converter;
-
 	// Creates the controls and positions everything within the panel
 	void CreateControls(void);
 

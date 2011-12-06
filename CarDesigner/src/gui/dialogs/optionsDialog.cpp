@@ -27,6 +27,7 @@
 #include "gui/dialogs/optionsDialog.h"
 #include "gui/components/mainFrame.h"
 #include "vUtilities/convert.h"
+#include "vUtilities/debugger.h"
 #include "vUtilities/wxRelatedUtilities.h"
 
 //==========================================================================
@@ -41,8 +42,6 @@
 //		_kinematicInputs	= Kinematics::Inputs& reference to the application's analysis options
 //		id					= wxWindowId for this object
 //		position			= const wxPoint& where this object will be drawn
-//		_debugger			= Debugger& pointing to this application's debug
-//							  printing utility
 //		style				= long defining the style for this dialog
 //
 // Output Arguments:
@@ -54,9 +53,9 @@
 //==========================================================================
 OptionsDialog::OptionsDialog(MainFrame &_mainFrame, Convert &_converter,
 							   Kinematics::Inputs &_kinematicInputs, wxWindowID id,
-							   const wxPoint &position, Debugger &_debugger, long style)
+							   const wxPoint &position, long style)
 							   : wxDialog(&_mainFrame, id, _T("Options"), position, wxDefaultSize, style),
-							   debugger(_debugger), converter(_converter), kinematicInputs(_kinematicInputs),
+							   converter(_converter), kinematicInputs(_kinematicInputs),
 							   mainFrame(_mainFrame)
 {
 	// Set up the form's layout
@@ -533,11 +532,11 @@ void OptionsDialog::CreateControls(void)
 		wxDefaultSize, optionsArray, optionsArray.GetCount(), wxRA_SPECIFY_ROWS);
 
 	// Make sure the correct radio button is selected
-	if(debugger.GetDebugLevel() == Debugger::PriorityLow)
+	if(Debugger::GetInstance().GetDebugLevel() == Debugger::PriorityLow)
 		debugLevel->SetSelection(0);
-	else if(debugger.GetDebugLevel() == Debugger::PriorityMedium)
+	else if(Debugger::GetInstance().GetDebugLevel() == Debugger::PriorityMedium)
 		debugLevel->SetSelection(1);
-	else if(debugger.GetDebugLevel() == Debugger::PriorityHigh)
+	else if(Debugger::GetInstance().GetDebugLevel() == Debugger::PriorityHigh)
 		debugLevel->SetSelection(2);
 	else// Debugger::PriorityVeryHigh
 		debugLevel->SetSelection(3);
@@ -647,7 +646,7 @@ void OptionsDialog::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 		kinematicInputs.centerOfRotation = converter.ConvertDistance(centerOfRotation);
 	else
 		// Print a warning so the user knows the CoR was rejected
-		debugger.Print(_T("Warning!  Center of rotation is not a valid vector - using previous value"),
+		Debugger::GetInstance().Print(_T("Warning!  Center of rotation is not a valid vector - using previous value"),
 			Debugger::PriorityHigh);
 
 	// Set the order of rotations
@@ -667,7 +666,7 @@ void OptionsDialog::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 	if (simultaneousThreads->GetValue().ToLong(&numberOfThreads) && numberOfThreads > 0)
 		mainFrame.SetNumberOfThreads(numberOfThreads);
 	else
-		debugger.Print(Debugger::PriorityHigh,
+		Debugger::GetInstance().Print(Debugger::PriorityHigh,
 			"Warning!  Specified number of threads is not valid (must be a number greater than zero) - using previous value of %i",
 			mainFrame.GetNumberOfThreads());
 
@@ -696,13 +695,13 @@ void OptionsDialog::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 
 	// Update the debug level
 	if (debugLevel->GetSelection() == 0)
-		debugger.SetDebugLevel(Debugger::PriorityLow);
+		Debugger::GetInstance().SetDebugLevel(Debugger::PriorityLow);
 	else if (debugLevel->GetSelection() == 1)
-		debugger.SetDebugLevel(Debugger::PriorityMedium);
+		Debugger::GetInstance().SetDebugLevel(Debugger::PriorityMedium);
 	else if (debugLevel->GetSelection() == 2)
-		debugger.SetDebugLevel(Debugger::PriorityHigh);
+		Debugger::GetInstance().SetDebugLevel(Debugger::PriorityHigh);
 	else
-		debugger.SetDebugLevel(Debugger::PriorityVeryHigh);
+		Debugger::GetInstance().SetDebugLevel(Debugger::PriorityVeryHigh);
 	
 	// Update the fonts
 	mainFrame.SetOutputFont(outputFont);
