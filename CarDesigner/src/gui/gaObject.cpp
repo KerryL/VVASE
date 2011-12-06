@@ -39,7 +39,6 @@
 // Input Arguments:
 //		_mainFrame		= MainFrame& reference to the main application object
 //		_optimization	= GeneticOptimization pointing to this object's owner
-//		_converter		= const Convert& reference to application's conversion utility
 //
 // Output Arguments:
 //		None
@@ -48,8 +47,7 @@
 //		None
 //
 //==========================================================================
-GAObject::GAObject(MainFrame &_mainFrame, GeneticOptimization &_optimization,
-				   const Convert &_converter) : converter(_converter),
+GAObject::GAObject(MainFrame &_mainFrame, GeneticOptimization &_optimization) :
 				   mainFrame(_mainFrame), optimization(_optimization)
 {
 	// Initialize class members
@@ -512,8 +510,10 @@ void GAObject::PerformAdditionalActions(void)
 
 	// Display the average and best fitnesses
 	Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "Completed Generation %i", currentGeneration + 1);
-	Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "\tAverage Fitness:  %s", converter.FormatNumber(averageFitness).c_str());
-	Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "\tBest Fitness:     %s", converter.FormatNumber(maximumFitness).c_str());
+	Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "\tAverage Fitness:  %s",
+		Convert::GetInstance().FormatNumber(averageFitness).c_str());
+	Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "\tBest Fitness:     %s",
+		Convert::GetInstance().FormatNumber(maximumFitness).c_str());
 
 	// Check to see if the simulation is still running
 	if (currentGeneration == generationLimit - 1)

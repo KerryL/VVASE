@@ -19,6 +19,7 @@
 // CarDesigner headers
 #include "gui/dialogs/gaGoalDialog.h"
 #include "vUtilities/wxRelatedUtilities.h"
+#include "vUtilities/convert.h"
 
 //==========================================================================
 // Class:			GAGoalDialog
@@ -28,7 +29,6 @@
 //
 // Input Arguments:
 //		parent				= wxWindow&, reference to the main application window
-//		_converter			= const Convert&, reference to conversion utility object
 //		_output				= const KinematicOutputs::OutputsComplete&
 //		_desiredValue		= const double&
 //		_expectedDeviation	= const double&
@@ -46,12 +46,11 @@
 //		None
 //
 //==========================================================================
-GAGoalDialog::GAGoalDialog(wxWindow *parent, const Convert &_converter, const KinematicOutputs::OutputsComplete &_output,
+GAGoalDialog::GAGoalDialog(wxWindow *parent, const KinematicOutputs::OutputsComplete &_output,
 							   const double &_desiredValue, const double &_expectedDeviation, const double &_importance,
 							   const Kinematics::Inputs &_beforeInputs, const Kinematics::Inputs &_afterInputs,
 							   wxWindowID id, const wxPoint &position, long style) :
-							   wxDialog(parent, id, _T("Genetic Algorithm Goal"), position, wxDefaultSize, style),
-							   converter(_converter)
+							   wxDialog(parent, id, _T("Genetic Algorithm Goal"), position, wxDefaultSize, style)
 {
 	// Assign local members
 	output = _output;
@@ -116,7 +115,7 @@ END_EVENT_TABLE()
 // Function:		CreateControls
 //
 // Description:		Creates the controls that populate this dialog.  Also fills
-//					controls with approprite data (passed via constructor).
+//					controls with appropriate data (passed via constructor).
 //
 // Input Arguments:
 //		None
@@ -196,11 +195,11 @@ void GAGoalDialog::CreateControls(void)
 	// Pitch inputs
 	wxStaticText *pitchLabel = new wxStaticText(this, wxID_STATIC, _T("Pitch"));
 	beforePitchText = new wxTextCtrl(this, wxID_ANY,
-		converter.FormatNumber(converter.ConvertAngle(beforeInputs.pitch)));
+		Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertAngle(beforeInputs.pitch)));
 	afterPitchText = new wxTextCtrl(this, wxID_ANY,
-		converter.FormatNumber(converter.ConvertAngle(afterInputs.pitch)));
+		Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertAngle(afterInputs.pitch)));
 	wxStaticText *pitchUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		converter.GetUnitType(Convert::UnitTypeAngle));
+		Convert::GetInstance().GetUnitType(Convert::UnitTypeAngle));
 	inputAreaSizer->Add(pitchLabel, wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
 	inputAreaSizer->Add(beforePitchText, wxGBPosition(row, 2), wxGBSpan(), inputSizerFlags);
 	inputAreaSizer->Add(afterPitchText, wxGBPosition(row, 3), wxGBSpan(), inputSizerFlags);
@@ -210,11 +209,11 @@ void GAGoalDialog::CreateControls(void)
 	// Roll inputs
 	wxStaticText *rollLabel = new wxStaticText(this, wxID_STATIC, _T("Roll"));
 	beforeRollText = new wxTextCtrl(this, wxID_ANY,
-		converter.FormatNumber(converter.ConvertAngle(beforeInputs.roll)));
+		Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertAngle(beforeInputs.roll)));
 	afterRollText = new wxTextCtrl(this, wxID_ANY,
-		converter.FormatNumber(converter.ConvertAngle(afterInputs.roll)));
+		Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertAngle(afterInputs.roll)));
 	wxStaticText *rollUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		converter.GetUnitType(Convert::UnitTypeAngle));
+		Convert::GetInstance().GetUnitType(Convert::UnitTypeAngle));
 	inputAreaSizer->Add(rollLabel, wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
 	inputAreaSizer->Add(beforeRollText, wxGBPosition(row, 2), wxGBSpan(), inputSizerFlags);
 	inputAreaSizer->Add(afterRollText, wxGBPosition(row, 3), wxGBSpan(), inputSizerFlags);
@@ -224,11 +223,11 @@ void GAGoalDialog::CreateControls(void)
 	// Heave inputs
 	wxStaticText *heaveLabel = new wxStaticText(this, wxID_STATIC, _T("Heave"));
 	beforeHeaveText = new wxTextCtrl(this, wxID_ANY,
-		converter.FormatNumber(converter.ConvertDistance(beforeInputs.heave)));
+		Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(beforeInputs.heave)));
 	afterHeaveText = new wxTextCtrl(this, wxID_ANY,
-		converter.FormatNumber(converter.ConvertDistance(afterInputs.heave)));
+		Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(afterInputs.heave)));
 	wxStaticText *heaveUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		converter.GetUnitType(Convert::UnitTypeDistance));
+		Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance));
 	inputAreaSizer->Add(heaveLabel, wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
 	inputAreaSizer->Add(beforeHeaveText, wxGBPosition(row, 2), wxGBSpan(), inputSizerFlags);
 	inputAreaSizer->Add(afterHeaveText, wxGBPosition(row, 3), wxGBSpan(), inputSizerFlags);
@@ -238,11 +237,11 @@ void GAGoalDialog::CreateControls(void)
 	// Steer inputs
 	wxStaticText *steerLabel = new wxStaticText(this, wxID_STATIC, _T("Rack Travel"));
 	beforeSteerText = new wxTextCtrl(this, wxID_ANY,
-		converter.FormatNumber(converter.ConvertDistance(beforeInputs.rackTravel)));
+		Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(beforeInputs.rackTravel)));
 	afterSteerText = new wxTextCtrl(this, wxID_ANY,
-		converter.FormatNumber(converter.ConvertDistance(afterInputs.rackTravel)));
+		Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(afterInputs.rackTravel)));
 	wxStaticText *steerUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		converter.GetUnitType(Convert::UnitTypeDistance));
+		Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance));
 	inputAreaSizer->Add(steerLabel, wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
 	inputAreaSizer->Add(beforeSteerText, wxGBPosition(row, 2), wxGBSpan(), inputSizerFlags);
 	inputAreaSizer->Add(afterSteerText, wxGBPosition(row, 3), wxGBSpan(), inputSizerFlags);
@@ -251,10 +250,11 @@ void GAGoalDialog::CreateControls(void)
 
 	// Desired value
 	desiredValueLabel = new wxStaticText(this, wxID_STATIC, _T("Desired Value"));
-	desiredValueText = new wxTextCtrl(this, wxID_ANY, converter.FormatNumber(converter.ConvertTo(desiredValue,
+	desiredValueText = new wxTextCtrl(this, wxID_ANY, Convert::GetInstance().FormatNumber(
+		Convert::GetInstance().ConvertTo(desiredValue,
 		KinematicOutputs::GetOutputUnitType(output))));
 	desiredValueUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		converter.GetUnitType(KinematicOutputs::GetOutputUnitType(output)));
+		Convert::GetInstance().GetUnitType(KinematicOutputs::GetOutputUnitType(output)));
 	inputAreaSizer->Add(desiredValueLabel, wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
 	inputAreaSizer->Add(desiredValueText, wxGBPosition(row, 2), wxGBSpan(1, 2), inputSizerFlags);
 	inputAreaSizer->Add(desiredValueUnitsLabel, wxGBPosition(row, 4), wxGBSpan(), textSizerFlags);
@@ -262,10 +262,11 @@ void GAGoalDialog::CreateControls(void)
 
 	// Expected deviation
 	wxStaticText *deviationLabel = new wxStaticText(this, wxID_STATIC, _T("Expected Deviation"));
-	deviationText = new wxTextCtrl(this, wxID_ANY, converter.FormatNumber(converter.ConvertTo(expectedDeviation,
+	deviationText = new wxTextCtrl(this, wxID_ANY, Convert::GetInstance().FormatNumber(
+		Convert::GetInstance().ConvertTo(expectedDeviation,
 		KinematicOutputs::GetOutputUnitType(output))));
 	deviationUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		converter.GetUnitType(KinematicOutputs::GetOutputUnitType(output)));
+		Convert::GetInstance().GetUnitType(KinematicOutputs::GetOutputUnitType(output)));
 	inputAreaSizer->Add(deviationLabel, wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
 	inputAreaSizer->Add(deviationText, wxGBPosition(row, 2), wxGBSpan(1, 2), inputSizerFlags);
 	inputAreaSizer->Add(deviationUnitsLabel, wxGBPosition(row, 4), wxGBSpan(), textSizerFlags);
@@ -273,7 +274,7 @@ void GAGoalDialog::CreateControls(void)
 
 	// Importance
 	wxStaticText *importanceLabel = new wxStaticText(this, wxID_STATIC, _T("Relative Importance"));
-	importanceText = new wxTextCtrl(this, wxID_ANY, converter.FormatNumber(importance));
+	importanceText = new wxTextCtrl(this, wxID_ANY, Convert::GetInstance().FormatNumber(importance));
 	inputAreaSizer->Add(importanceLabel, wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
 	inputAreaSizer->Add(importanceText, wxGBPosition(row, 2), wxGBSpan(1, 2), inputSizerFlags);
 	row++;
@@ -368,7 +369,7 @@ void GAGoalDialog::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 	// Expected deviation cannot be zero
 	if (expectedDeviation == 0.0)
 	{
-		wxMessageBox(_T("ERROR:  Expected deviaiton cannot be zero!"), _T("Error Validating Data"),
+		wxMessageBox(_T("ERROR:  Expected deviation cannot be zero!"), _T("Error Validating Data"),
 			wxOK | wxICON_ERROR, this);
 		return;
 	}
@@ -376,19 +377,19 @@ void GAGoalDialog::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 	output = (KinematicOutputs::OutputsComplete)outputCombo->GetCurrentSelection();
 
 	// Convert the input values
-	desiredValue = converter.Read(desiredValue, KinematicOutputs::GetOutputUnitType(output));
-	expectedDeviation = converter.Read(expectedDeviation, KinematicOutputs::GetOutputUnitType(output));
-	beforeInputs.pitch = converter.ReadAngle(beforeInputs.pitch);
-	beforeInputs.roll = converter.ReadAngle(beforeInputs.roll);
-	beforeInputs.heave = converter.ReadDistance(beforeInputs.heave);
-	beforeInputs.rackTravel = converter.ReadDistance(beforeInputs.rackTravel);
+	desiredValue = Convert::GetInstance().Read(desiredValue, KinematicOutputs::GetOutputUnitType(output));
+	expectedDeviation = Convert::GetInstance().Read(expectedDeviation, KinematicOutputs::GetOutputUnitType(output));
+	beforeInputs.pitch = Convert::GetInstance().ReadAngle(beforeInputs.pitch);
+	beforeInputs.roll = Convert::GetInstance().ReadAngle(beforeInputs.roll);
+	beforeInputs.heave = Convert::GetInstance().ReadDistance(beforeInputs.heave);
+	beforeInputs.rackTravel = Convert::GetInstance().ReadDistance(beforeInputs.rackTravel);
 
 	if (difference->IsChecked())
 	{
-		afterInputs.pitch = converter.ReadAngle(afterInputs.pitch);
-		afterInputs.roll = converter.ReadAngle(afterInputs.roll);
-		afterInputs.heave = converter.ReadDistance(afterInputs.heave);
-		afterInputs.rackTravel = converter.ReadDistance(afterInputs.rackTravel);
+		afterInputs.pitch = Convert::GetInstance().ReadAngle(afterInputs.pitch);
+		afterInputs.roll = Convert::GetInstance().ReadAngle(afterInputs.roll);
+		afterInputs.heave = Convert::GetInstance().ReadDistance(afterInputs.heave);
+		afterInputs.rackTravel = Convert::GetInstance().ReadDistance(afterInputs.rackTravel);
 	}
 	else
 		afterInputs = beforeInputs;
@@ -476,9 +477,9 @@ void GAGoalDialog::OnCheckEvent(wxCommandEvent& WXUNUSED(event))
 void GAGoalDialog::OnOutputChangeEvent(wxCommandEvent &event)
 {
 	// Update the units labels for the desired value and expected deviation
-	desiredValueUnitsLabel->SetLabel(converter.GetUnitType(
+	desiredValueUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(
 		KinematicOutputs::GetOutputUnitType((KinematicOutputs::OutputsComplete)event.GetSelection())));
-	deviationUnitsLabel->SetLabel(converter.GetUnitType(
+	deviationUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(
 		KinematicOutputs::GetOutputUnitType((KinematicOutputs::OutputsComplete)event.GetSelection())));
 }
 

@@ -38,7 +38,6 @@
 //
 // Input Arguments:
 //		_mainFrame			= MainFrame& pointing to the application's main window
-//		_converter			= Convert& pointing to the application's converter object
 //		_kinematicInputs	= Kinematics::Inputs& reference to the application's analysis options
 //		id					= wxWindowId for this object
 //		position			= const wxPoint& where this object will be drawn
@@ -51,12 +50,10 @@
 //		None
 //
 //==========================================================================
-OptionsDialog::OptionsDialog(MainFrame &_mainFrame, Convert &_converter,
-							   Kinematics::Inputs &_kinematicInputs, wxWindowID id,
-							   const wxPoint &position, long style)
-							   : wxDialog(&_mainFrame, id, _T("Options"), position, wxDefaultSize, style),
-							   converter(_converter), kinematicInputs(_kinematicInputs),
-							   mainFrame(_mainFrame)
+OptionsDialog::OptionsDialog(MainFrame &_mainFrame, Kinematics::Inputs &_kinematicInputs,
+							 wxWindowID id, const wxPoint &position, long style)
+							 : wxDialog(&_mainFrame, id, _T("Options"), position, wxDefaultSize, style),
+							 kinematicInputs(_kinematicInputs), mainFrame(_mainFrame)
 {
 	// Set up the form's layout
 	CreateControls();
@@ -186,10 +183,10 @@ void OptionsDialog::CreateControls(void)
 	// Angle
 	choices.Clear();
 	for (i = 0; i < Convert::NUMBER_OF_ANGLE_UNITS; i++)
-		choices.Add(converter.GetUnits((Convert::UnitsOfAngle)i));
+		choices.Add(Convert::GetInstance().GetUnits((Convert::UnitsOfAngle)i));
 
 	wxStaticText *angleLabelText = new wxStaticText(unitsPage, wxID_STATIC, _T("Units of angle"));
-	unitOfAngle = new wxComboBox(unitsPage, wxID_ANY, converter.GetUnitType(Convert::UnitTypeAngle),
+	unitOfAngle = new wxComboBox(unitsPage, wxID_ANY, Convert::GetInstance().GetUnitType(Convert::UnitTypeAngle),
 		wxDefaultPosition, wxDefaultSize, choices, wxCB_READONLY);
 	SetMinimumWidthFromContents(unitOfAngle, additionalWidth);
 	unitSelectionSizer->Add(angleLabelText, 0, labelFlags);
@@ -199,10 +196,10 @@ void OptionsDialog::CreateControls(void)
 	// Distance
 	choices.Clear();
 	for (i = 0; i < Convert::NUMBER_OF_DISTANCE_UNITS; i++)
-		choices.Add(converter.GetUnits((Convert::UnitsOfDistance)i));
+		choices.Add(Convert::GetInstance().GetUnits((Convert::UnitsOfDistance)i));
 
 	wxStaticText *DistanceLabelText = new wxStaticText(unitsPage, wxID_STATIC, _T("Units of distance"));
-	unitOfDistance = new wxComboBox(unitsPage, wxID_ANY, converter.GetUnitType(Convert::UnitTypeDistance),
+	unitOfDistance = new wxComboBox(unitsPage, wxID_ANY, Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance),
 		wxDefaultPosition, wxDefaultSize, choices, wxCB_READONLY);
 	SetMinimumWidthFromContents(unitOfDistance, additionalWidth);
 	unitSelectionSizer->Add(DistanceLabelText, 0, labelFlags);
@@ -211,10 +208,10 @@ void OptionsDialog::CreateControls(void)
 	// Area
 	choices.Clear();
 	for (i = 0; i < Convert::NUMBER_OF_AREA_UNITS; i++)
-		choices.Add(converter.GetUnits((Convert::UnitsOfArea)i));
+		choices.Add(Convert::GetInstance().GetUnits((Convert::UnitsOfArea)i));
 
 	wxStaticText *AreaLabelText = new wxStaticText(unitsPage, wxID_STATIC, _T("Units of area"));
-	unitOfArea = new wxComboBox(unitsPage, wxID_ANY, converter.GetUnitType(Convert::UnitTypeArea),
+	unitOfArea = new wxComboBox(unitsPage, wxID_ANY, Convert::GetInstance().GetUnitType(Convert::UnitTypeArea),
 		wxDefaultPosition, wxDefaultSize, choices, wxCB_READONLY);
 	SetMinimumWidthFromContents(unitOfArea, additionalWidth);
 	unitSelectionSizer->Add(AreaLabelText, 0, labelFlags);
@@ -224,10 +221,10 @@ void OptionsDialog::CreateControls(void)
 	// Force
 	choices.Clear();
 	for (i = 0; i < Convert::NUMBER_OF_FORCE_UNITS; i++)
-		choices.Add(converter.GetUnits((Convert::UnitsOfForce)i));
+		choices.Add(Convert::GetInstance().GetUnits((Convert::UnitsOfForce)i));
 
 	wxStaticText *ForceLabelText = new wxStaticText(unitsPage, wxID_STATIC, _T("Units of force"));
-	unitOfForce = new wxComboBox(unitsPage, wxID_ANY, converter.GetUnitType(Convert::UnitTypeForce),
+	unitOfForce = new wxComboBox(unitsPage, wxID_ANY, Convert::GetInstance().GetUnitType(Convert::UnitTypeForce),
 		wxDefaultPosition, wxDefaultSize, choices, wxCB_READONLY);
 	SetMinimumWidthFromContents(unitOfForce, additionalWidth);
 	unitSelectionSizer->Add(ForceLabelText, 0, labelFlags);
@@ -236,10 +233,10 @@ void OptionsDialog::CreateControls(void)
 	// Pressure
 	choices.Clear();
 	for (i = 0; i < Convert::NUMBER_OF_PRESSURE_UNITS; i++)
-		choices.Add(converter.GetUnits((Convert::UnitsOfPressure)i));
+		choices.Add(Convert::GetInstance().GetUnits((Convert::UnitsOfPressure)i));
 
 	wxStaticText *PressureLabelText = new wxStaticText(unitsPage, wxID_STATIC, _T("Units of pressure"));
-	unitOfPressure = new wxComboBox(unitsPage, wxID_ANY, converter.GetUnitType(Convert::UnitTypePressure),
+	unitOfPressure = new wxComboBox(unitsPage, wxID_ANY, Convert::GetInstance().GetUnitType(Convert::UnitTypePressure),
 		wxDefaultPosition, wxDefaultSize, choices, wxCB_READONLY);
 	SetMinimumWidthFromContents(unitOfPressure, additionalWidth);
 	unitSelectionSizer->Add(PressureLabelText, 0, labelFlags);
@@ -249,10 +246,10 @@ void OptionsDialog::CreateControls(void)
 	// Moment
 	choices.Clear();
 	for (i = 0; i < Convert::NUMBER_OF_MOMENT_UNITS; i++)
-		choices.Add(converter.GetUnits((Convert::UnitsOfMoment)i));
+		choices.Add(Convert::GetInstance().GetUnits((Convert::UnitsOfMoment)i));
 
 	wxStaticText *MomentLabelText = new wxStaticText(unitsPage, wxID_STATIC, _T("Units of moment"));
-	unitOfMoment = new wxComboBox(unitsPage, wxID_ANY, converter.GetUnitType(Convert::UnitTypeMoment),
+	unitOfMoment = new wxComboBox(unitsPage, wxID_ANY, Convert::GetInstance().GetUnitType(Convert::UnitTypeMoment),
 		wxDefaultPosition, wxDefaultSize, choices, wxCB_READONLY);
 	SetMinimumWidthFromContents(unitOfMoment, additionalWidth);
 	unitSelectionSizer->Add(MomentLabelText, 0, labelFlags);
@@ -261,10 +258,10 @@ void OptionsDialog::CreateControls(void)
 	// Mass
 	choices.Clear();
 	for (i = 0; i < Convert::NUMBER_OF_MASS_UNITS; i++)
-		choices.Add(converter.GetUnits((Convert::UnitsOfMass)i));
+		choices.Add(Convert::GetInstance().GetUnits((Convert::UnitsOfMass)i));
 
 	wxStaticText *MassLabelText = new wxStaticText(unitsPage, wxID_STATIC, _T("Units of mass"));
-	unitOfMass = new wxComboBox(unitsPage, wxID_ANY, converter.GetUnitType(Convert::UnitTypeMass),
+	unitOfMass = new wxComboBox(unitsPage, wxID_ANY, Convert::GetInstance().GetUnitType(Convert::UnitTypeMass),
 		wxDefaultPosition, wxDefaultSize, choices, wxCB_READONLY);
 	SetMinimumWidthFromContents(unitOfMass, additionalWidth);
 	unitSelectionSizer->Add(MassLabelText, 0, labelFlags);
@@ -274,10 +271,10 @@ void OptionsDialog::CreateControls(void)
 	// Velocity
 	choices.Clear();
 	for (i = 0; i < Convert::NUMBER_OF_VELOCITY_UNITS; i++)
-		choices.Add(converter.GetUnits((Convert::UnitsOfVelocity)i));
+		choices.Add(Convert::GetInstance().GetUnits((Convert::UnitsOfVelocity)i));
 
 	wxStaticText *VelocityLabelText = new wxStaticText(unitsPage, wxID_STATIC, _T("Units of velocity"));
-	unitOfVelocity = new wxComboBox(unitsPage, wxID_ANY, converter.GetUnitType(Convert::UnitTypeVelocity),
+	unitOfVelocity = new wxComboBox(unitsPage, wxID_ANY, Convert::GetInstance().GetUnitType(Convert::UnitTypeVelocity),
 		wxDefaultPosition, wxDefaultSize, choices, wxCB_READONLY);
 	SetMinimumWidthFromContents(unitOfVelocity, additionalWidth);
 	unitSelectionSizer->Add(VelocityLabelText, 0, labelFlags);
@@ -286,10 +283,10 @@ void OptionsDialog::CreateControls(void)
 	// Acceleration
 	choices.Clear();
 	for (i = 0; i < Convert::NUMBER_OF_ACCELERATION_UNITS; i++)
-		choices.Add(converter.GetUnits((Convert::UnitsOfAcceleration)i));
+		choices.Add(Convert::GetInstance().GetUnits((Convert::UnitsOfAcceleration)i));
 
 	wxStaticText *AccelerationLabelText = new wxStaticText(unitsPage, wxID_STATIC, _T("Units of acceleration"));
-	unitOfAcceleration = new wxComboBox(unitsPage, wxID_ANY, converter.GetUnitType(Convert::UnitTypeAcceleration),
+	unitOfAcceleration = new wxComboBox(unitsPage, wxID_ANY, Convert::GetInstance().GetUnitType(Convert::UnitTypeAcceleration),
 		wxDefaultPosition, wxDefaultSize, choices, wxCB_READONLY);
 	SetMinimumWidthFromContents(unitOfAcceleration, additionalWidth);
 	unitSelectionSizer->Add(AccelerationLabelText, 0, labelFlags);
@@ -299,10 +296,10 @@ void OptionsDialog::CreateControls(void)
 	// Inertia
 	choices.Clear();
 	for (i = 0; i < Convert::NUMBER_OF_INERTIA_UNITS; i++)
-		choices.Add(converter.GetUnits((Convert::UnitsOfInertia)i));
+		choices.Add(Convert::GetInstance().GetUnits((Convert::UnitsOfInertia)i));
 
 	wxStaticText *InertiaLabelText = new wxStaticText(unitsPage, wxID_STATIC, _T("Units of inertia"));
-	unitOfInertia = new wxComboBox(unitsPage, wxID_ANY, converter.GetUnitType(Convert::UnitTypeInertia),
+	unitOfInertia = new wxComboBox(unitsPage, wxID_ANY, Convert::GetInstance().GetUnitType(Convert::UnitTypeInertia),
 		wxDefaultPosition, wxDefaultSize, choices, wxCB_READONLY);
 	SetMinimumWidthFromContents(unitOfInertia, additionalWidth);
 	unitSelectionSizer->Add(InertiaLabelText, 0, labelFlags);
@@ -311,10 +308,10 @@ void OptionsDialog::CreateControls(void)
 	// Density
 	choices.Clear();
 	for (i = 0; i < Convert::NUMBER_OF_DENSITY_UNITS; i++)
-		choices.Add(converter.GetUnits((Convert::UnitsOfDensity)i));
+		choices.Add(Convert::GetInstance().GetUnits((Convert::UnitsOfDensity)i));
 
 	wxStaticText *DensityLabelText = new wxStaticText(unitsPage, wxID_STATIC, _T("Units of density"));
-	unitOfDensity = new wxComboBox(unitsPage, wxID_ANY, converter.GetUnitType(Convert::UnitTypeDensity),
+	unitOfDensity = new wxComboBox(unitsPage, wxID_ANY, Convert::GetInstance().GetUnitType(Convert::UnitTypeDensity),
 		wxDefaultPosition, wxDefaultSize, choices, wxCB_READONLY);
 	SetMinimumWidthFromContents(unitOfDensity, additionalWidth);
 	unitSelectionSizer->Add(DensityLabelText, 0, labelFlags);
@@ -324,10 +321,10 @@ void OptionsDialog::CreateControls(void)
 	// Power
 	choices.Clear();
 	for (i = 0; i < Convert::NUMBER_OF_POWER_UNITS; i++)
-		choices.Add(converter.GetUnits((Convert::UnitsOfPower)i));
+		choices.Add(Convert::GetInstance().GetUnits((Convert::UnitsOfPower)i));
 
 	wxStaticText *PowerLabelText = new wxStaticText(unitsPage, wxID_STATIC, _T("Units of power"));
-	unitOfPower = new wxComboBox(unitsPage, wxID_ANY, converter.GetUnitType(Convert::UnitTypePower),
+	unitOfPower = new wxComboBox(unitsPage, wxID_ANY, Convert::GetInstance().GetUnitType(Convert::UnitTypePower),
 		wxDefaultPosition, wxDefaultSize, choices, wxCB_READONLY);
 	SetMinimumWidthFromContents(unitOfPower, additionalWidth);
 	unitSelectionSizer->Add(PowerLabelText, 0, labelFlags);
@@ -336,10 +333,10 @@ void OptionsDialog::CreateControls(void)
 	// Energy
 	choices.Clear();
 	for (i = 0; i < Convert::NUMBER_OF_ENERGY_UNITS; i++)
-		choices.Add(converter.GetUnits((Convert::UnitsOfEnergy)i));
+		choices.Add(Convert::GetInstance().GetUnits((Convert::UnitsOfEnergy)i));
 
 	wxStaticText *EnergyLabelText = new wxStaticText(unitsPage, wxID_STATIC, _T("Units of energy"));
-	unitOfEnergy = new wxComboBox(unitsPage, wxID_ANY, converter.GetUnitType(Convert::UnitTypeEnergy),
+	unitOfEnergy = new wxComboBox(unitsPage, wxID_ANY, Convert::GetInstance().GetUnitType(Convert::UnitTypeEnergy),
 		wxDefaultPosition, wxDefaultSize, choices, wxCB_READONLY);
 	SetMinimumWidthFromContents(unitOfEnergy, additionalWidth);
 	unitSelectionSizer->Add(EnergyLabelText, 0, labelFlags);
@@ -349,10 +346,10 @@ void OptionsDialog::CreateControls(void)
 	// Temperature
 	choices.Clear();
 	for (i = 0; i < Convert::NUMBER_OF_TEMPERATURE_UNITS; i++)
-		choices.Add(converter.GetUnits((Convert::UnitsOfTemperature)i));
+		choices.Add(Convert::GetInstance().GetUnits((Convert::UnitsOfTemperature)i));
 
 	wxStaticText *TemperatureLabelText = new wxStaticText(unitsPage, wxID_STATIC, _T("Units of temperature"));
-	unitOfTemperature = new wxComboBox(unitsPage, wxID_ANY, converter.GetUnitType(Convert::UnitTypeTemperature),
+	unitOfTemperature = new wxComboBox(unitsPage, wxID_ANY, Convert::GetInstance().GetUnitType(Convert::UnitTypeTemperature),
 		wxDefaultPosition, wxDefaultSize, choices, wxCB_READONLY);
 	SetMinimumWidthFromContents(unitOfTemperature, additionalWidth);
 	unitSelectionSizer->Add(TemperatureLabelText, 0, labelFlags);
@@ -385,7 +382,7 @@ void OptionsDialog::CreateControls(void)
 		numberString.Printf("%i", i);
 		choices.Add(numberString);
 	}
-	numberString.Printf("%i", converter.GetNumberOfDigits());
+	numberString.Printf("%i", Convert::GetInstance().GetNumberOfDigits());
 	numberOfDigits = new wxComboBox(digitsPage, wxID_ANY, numberString,
 		wxDefaultPosition, wxDefaultSize, choices, wxCB_READONLY);
 
@@ -405,8 +402,8 @@ void OptionsDialog::CreateControls(void)
 		_T("Use scientific notation"));
 
 	// Set the initial value of the checkboxes to match the properties of the converter object
-	useSignificantDigits->SetValue(converter.GetUseSignificantDigits());
-	useScientificNotation->SetValue(converter.GetUseScientificNotation());
+	useSignificantDigits->SetValue(Convert::GetInstance().GetUseSignificantDigits());
+	useScientificNotation->SetValue(Convert::GetInstance().GetUseScientificNotation());
 
 	// Add the checkboxes to the control
 	digitsSizer->Add(useSignificantDigits, 0, wxALIGN_LEFT | wxALL, 5);
@@ -439,7 +436,7 @@ void OptionsDialog::CreateControls(void)
 
 	// Create the center of rotation units label
 	wxStaticText *corUnits = new wxStaticText(kinematicsPage, wxID_ANY, _T("(") + 
-		converter.GetUnitType(Convert::UnitTypeDistance) + _T(")"));
+		Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance) + _T(")"));
 
 	// Add the controls to the spacer
 	corSizer->Add(new wxStaticText(kinematicsPage, wxID_ANY,
@@ -643,7 +640,7 @@ void OptionsDialog::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 		centerOfRotationY->GetValue().ToDouble(&centerOfRotation.y) &&
 		centerOfRotationZ->GetValue().ToDouble(&centerOfRotation.z))
 		// Convert the center of rotation and update the analysis object
-		kinematicInputs.centerOfRotation = converter.ConvertDistance(centerOfRotation);
+		kinematicInputs.centerOfRotation = Convert::GetInstance().ConvertDistance(centerOfRotation);
 	else
 		// Print a warning so the user knows the CoR was rejected
 		Debugger::GetInstance().Print(_T("Warning!  Center of rotation is not a valid vector - using previous value"),
@@ -673,25 +670,25 @@ void OptionsDialog::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 	// Update the default units for the converter object
 	// NOTE:  This section MUST come after the center of rotation is updated in order for
 	// the units label on the center of rotation input to have been correct
-	converter.SetAngleUnits((Convert::UnitsOfAngle)SafelyGetComboBoxSelection(unitOfAngle));
-	converter.SetDistanceUnits((Convert::UnitsOfDistance)SafelyGetComboBoxSelection(unitOfDistance));
-	converter.SetForceUnits((Convert::UnitsOfForce)SafelyGetComboBoxSelection(unitOfForce));
-	converter.SetAreaUnits((Convert::UnitsOfArea)SafelyGetComboBoxSelection(unitOfArea));
-	converter.SetPressureUnits((Convert::UnitsOfPressure)SafelyGetComboBoxSelection(unitOfPressure));
-	converter.SetMomentUnits((Convert::UnitsOfMoment)SafelyGetComboBoxSelection(unitOfMoment));
-	converter.SetMassUnits((Convert::UnitsOfMass)SafelyGetComboBoxSelection(unitOfMass));
-	converter.SetVelocityUnits((Convert::UnitsOfVelocity)SafelyGetComboBoxSelection(unitOfVelocity));
-	converter.SetAccelerationUnits((Convert::UnitsOfAcceleration)SafelyGetComboBoxSelection(unitOfAcceleration));
-	converter.SetInertiaUnits((Convert::UnitsOfInertia)SafelyGetComboBoxSelection(unitOfInertia));
-	converter.SetDensityUnits((Convert::UnitsOfDensity)SafelyGetComboBoxSelection(unitOfDensity));
-	converter.SetPowerUnits((Convert::UnitsOfPower)SafelyGetComboBoxSelection(unitOfPower));
-	converter.SetEnergyUnits((Convert::UnitsOfEnergy)SafelyGetComboBoxSelection(unitOfEnergy));
-	converter.SetTemperatureUnits((Convert::UnitsOfTemperature)SafelyGetComboBoxSelection(unitOfTemperature));
+	Convert::GetInstance().SetAngleUnits((Convert::UnitsOfAngle)SafelyGetComboBoxSelection(unitOfAngle));
+	Convert::GetInstance().SetDistanceUnits((Convert::UnitsOfDistance)SafelyGetComboBoxSelection(unitOfDistance));
+	Convert::GetInstance().SetForceUnits((Convert::UnitsOfForce)SafelyGetComboBoxSelection(unitOfForce));
+	Convert::GetInstance().SetAreaUnits((Convert::UnitsOfArea)SafelyGetComboBoxSelection(unitOfArea));
+	Convert::GetInstance().SetPressureUnits((Convert::UnitsOfPressure)SafelyGetComboBoxSelection(unitOfPressure));
+	Convert::GetInstance().SetMomentUnits((Convert::UnitsOfMoment)SafelyGetComboBoxSelection(unitOfMoment));
+	Convert::GetInstance().SetMassUnits((Convert::UnitsOfMass)SafelyGetComboBoxSelection(unitOfMass));
+	Convert::GetInstance().SetVelocityUnits((Convert::UnitsOfVelocity)SafelyGetComboBoxSelection(unitOfVelocity));
+	Convert::GetInstance().SetAccelerationUnits((Convert::UnitsOfAcceleration)SafelyGetComboBoxSelection(unitOfAcceleration));
+	Convert::GetInstance().SetInertiaUnits((Convert::UnitsOfInertia)SafelyGetComboBoxSelection(unitOfInertia));
+	Convert::GetInstance().SetDensityUnits((Convert::UnitsOfDensity)SafelyGetComboBoxSelection(unitOfDensity));
+	Convert::GetInstance().SetPowerUnits((Convert::UnitsOfPower)SafelyGetComboBoxSelection(unitOfPower));
+	Convert::GetInstance().SetEnergyUnits((Convert::UnitsOfEnergy)SafelyGetComboBoxSelection(unitOfEnergy));
+	Convert::GetInstance().SetTemperatureUnits((Convert::UnitsOfTemperature)SafelyGetComboBoxSelection(unitOfTemperature));
 
 	// Update the number of digits and the rules for formatting numbers
-	converter.SetNumberOfDigits(SafelyGetComboBoxSelection(numberOfDigits));
-	converter.SetUseSignificantDigits(useSignificantDigits->GetValue());
-	converter.SetUseScientificNotation(useScientificNotation->GetValue());
+	Convert::GetInstance().SetNumberOfDigits(SafelyGetComboBoxSelection(numberOfDigits));
+	Convert::GetInstance().SetUseSignificantDigits(useSignificantDigits->GetValue());
+	Convert::GetInstance().SetUseScientificNotation(useScientificNotation->GetValue());
 
 	// Update the debug level
 	if (debugLevel->GetSelection() == 0)

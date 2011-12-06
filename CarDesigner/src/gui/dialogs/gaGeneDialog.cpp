@@ -16,6 +16,7 @@
 // CarDesigner headers
 #include "gui/dialogs/gaGeneDialog.h"
 #include "vUtilities/wxRelatedUtilities.h"
+#include "vUtilities/convert.h"
 
 //==========================================================================
 // Class:			GAGeneDialog
@@ -221,18 +222,20 @@ void GAGeneDialog::CreateControls(void)
 
 	// Minimum
 	wxStaticText *minimumLabel = new wxStaticText(this, wxID_STATIC, _T("Minimum"));
-	minimumText = new wxTextCtrl(this, wxID_ANY, converter.FormatNumber(converter.ConvertDistance(minimum)));
+	minimumText = new wxTextCtrl(this, wxID_ANY, Convert::GetInstance().FormatNumber(
+		Convert::GetInstance().ConvertDistance(minimum)));
 	wxStaticText *minimumUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		converter.GetUnitType(Convert::UnitTypeDistance), wxDefaultPosition, wxDefaultSize, 0);
+		Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance), wxDefaultPosition, wxDefaultSize, 0);
 	inputAreaSizer->Add(minimumLabel, 0, textSizerFlags);
 	inputAreaSizer->Add(minimumText, 0, comboSizerFlags);
 	inputAreaSizer->Add(minimumUnitsLabel, 0, textSizerFlags);
 
 	// Maximum
 	wxStaticText *maximumLabel = new wxStaticText(this, wxID_STATIC, _T("Maximum"));
-	maximumText = new wxTextCtrl(this, wxID_ANY, converter.FormatNumber(converter.ConvertDistance(maximum)));
+	maximumText = new wxTextCtrl(this, wxID_ANY, Convert::GetInstance().FormatNumber(
+		Convert::GetInstance().ConvertDistance(maximum)));
 	wxStaticText *maximumUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		converter.GetUnitType(Convert::UnitTypeDistance), wxDefaultPosition, wxDefaultSize, 0);
+		Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance), wxDefaultPosition, wxDefaultSize, 0);
 	inputAreaSizer->Add(maximumLabel, 0, textSizerFlags);
 	inputAreaSizer->Add(maximumText, 0, comboSizerFlags);
 	inputAreaSizer->Add(maximumUnitsLabel, 0, textSizerFlags);
@@ -248,7 +251,7 @@ void GAGeneDialog::CreateControls(void)
 	wxStaticText *resolutionLabel = new wxStaticText(this, wxID_STATIC, _T("Resolution"));
 	resolution = new wxStaticText(this, wxID_ANY, wxEmptyString);
 	wxStaticText *resolutionUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		converter.GetUnitType(Convert::UnitTypeDistance), wxDefaultPosition, wxDefaultSize, 0);
+		Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance), wxDefaultPosition, wxDefaultSize, 0);
 	inputAreaSizer->Add(resolutionLabel, 0, textSizerFlags);
 	inputAreaSizer->Add(resolution, 0, textSizerFlags);
 	inputAreaSizer->Add(resolutionUnitsLabel, 0, textSizerFlags);
@@ -327,8 +330,8 @@ void GAGeneDialog::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 	cornerLocation = (Corner::Location)cornerLocationCombo->GetCurrentSelection();
 
 	// Convert the input values
-	minimum = converter.ReadDistance(minimum);
-	maximum = converter.ReadDistance(maximum);
+	minimum = Convert::GetInstance().ReadDistance(minimum);
+	maximum = Convert::GetInstance().ReadDistance(maximum);
 
 	// The way we handle this changes depending on how this form was displayed
 	if (IsModal())
@@ -403,6 +406,6 @@ void GAGeneDialog::TextChangeEvent(wxCommandEvent& WXUNUSED(event))
 		return;
 
 	// Set the text
-	resolution->SetLabel(converter.FormatNumber(
-		converter.ConvertDistance(fabs(Max - Min) / double(ValueCount - 1))));
+	resolution->SetLabel(Convert::GetInstance().FormatNumber(
+		Convert::GetInstance().ConvertDistance(fabs(Max - Min) / double(ValueCount - 1))));
 }
