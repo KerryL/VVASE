@@ -35,6 +35,11 @@
 class wxString;
 class wxTextCtrl;
 
+// Disable compiler warnings for unreferenced formal parameters in MSW
+#ifdef __WXMSW__
+#pragma warning(disable:4100)
+#endif
+
 // Declaration of the EVT_DEBUG event
 DECLARE_LOCAL_EVENT_TYPE(EVT_DEBUG, -1)
 

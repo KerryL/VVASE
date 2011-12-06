@@ -51,6 +51,11 @@
 #ifndef _CONVERT_H_
 #define _CONVERT_H_
 
+// Disable compiler warnings for unreferenced formal parameters in MSW
+#ifdef __WXMSW__
+#pragma warning(disable:4100)
+#endif
+
 // CarDesigner forward declarations
 class Vector;
 

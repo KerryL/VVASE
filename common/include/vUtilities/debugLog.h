@@ -28,7 +28,9 @@
 #endif
 
 // Comment out this flag for release builds
+#ifdef __WXDEBUG__
 #define USE_DEBUG_LOG
+#endif
 
 class DebugLog
 {
