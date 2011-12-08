@@ -628,6 +628,8 @@ void GeneticAlgorithmPanel::RemoveGoalButtonClickedEvent(wxCommandEvent& WXUNUSE
 void GeneticAlgorithmPanel::StartStopOptimizationClickedEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Determine if we should be starting or stopping the optimization
+	// FIXME:  This can't be called while the optimization is running or the main
+	// thread hangs (and thus the whole app hangs because events cannot be processed)
 	if (optimization.GetAlgorithm().OptimizationIsRunning())
 	{
 		// Stop the optimization
