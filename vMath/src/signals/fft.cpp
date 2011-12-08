@@ -123,12 +123,12 @@ Dataset2D FastFourierTransform::Compute(const Dataset2D &data)
 		c1 = sqrt((1.0 + c1) / 2.0);
 	}
 
-	double magnitude, frequency;// FIXME:  What does this do?  these aren't used? gcc compiler warning
+	//double magnitude, frequency;
 	for (i = 0; i < fft.GetNumberOfPoints(); i++)
 	{
 		// Break out into magnitude (Y) and frequency (X)
-		magnitude = 2.0 / fftPoints * temp.GetYData(i);
-		frequency = 1.0 / (data.GetXData(1) - data.GetXData(0)) / fftPoints;
+		/*magnitude = 2.0 / fftPoints * temp.GetYData(i);
+		frequency = 1.0 / (data.GetXData(1) - data.GetXData(0)) / fftPoints;*/
 		fft.GetYPointer()[i] = 2.0 / fftPoints * sqrt(
 			temp.GetXData(i) * temp.GetXData(i) + temp.GetYData(i) * temp.GetYData(i));
 		fft.GetXPointer()[i] = i * sampleRate / fftPoints;
