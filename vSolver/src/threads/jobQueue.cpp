@@ -1,7 +1,7 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2011
-_class
+
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
 

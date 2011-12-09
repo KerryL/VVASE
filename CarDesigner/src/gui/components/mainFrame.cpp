@@ -2234,8 +2234,8 @@ void MainFrame::RemoveObjectFromList(int index)
 
 		// Update the data and displays - data first, because in some cases data is
 		// dependent on other open objects, and we may have just closed one
-		openObjectList[i]->UpdateData();
-		openObjectList[i]->UpdateDisplay();
+		openObjectList[i]->UpdateData();// FIXME:  Check thread safety of these calls
+		openObjectList[i]->UpdateDisplay();// FIXME:  Check thread safety of these calls
 	}
 
 	// Reset the deletion status flag

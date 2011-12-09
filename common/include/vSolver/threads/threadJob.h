@@ -10,7 +10,7 @@
 // File:  threadJob.h
 // Created:  11/3/2009
 // Author:  K. Loux
-// Description:  Contains the class declaration for the THREAD_JOB class.  This is the
+// Description:  Contains the class declaration for the ThreadJob class.  This is the
 //				 class containing information that is stored in the job queue, i.e. this
 //				 class is used for communication from the GUI thread to the worker threads
 //				 (in that direction only - reverse communication is handled with events).
@@ -54,7 +54,7 @@ public:
 
 	// Data to be sent to worker threads
 	ThreadData *data;
-	wxString name;
+	wxString name;// FIXME:  Does this create issues with thread safety?
 	int index;
 };
 

@@ -74,7 +74,7 @@ ThreadJob::ThreadJob(ThreadCommand _command) : command(_command), data(NULL)
 //		_command	= ThreadCommand specifying the command type for this job
 //		_name		= const wxString& Name of the car
 //		_index		= int& representing the object index for the associated object
-//					  in the MAIN_FRAME
+//					  in the MainFrame
 //
 // Output Arguments:
 //		None
