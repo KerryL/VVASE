@@ -28,9 +28,11 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="VVASE.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="VVASE.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -41,22 +43,22 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>__WXMSW__;__WXDEBUG__;WXUSINGDLL;_VVASE_64_BIT_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PreprocessorDefinitions>__WXMSW__;__WXDEBUG__;WXUSINGDLL;FTGL_LIBRARY_STATIC;_VVASE_64_BIT_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>C:\lib\freetype-2.4.4\include;C:\lib\ftgl-2.1.3~rc5\src;C:\lib\wxWidgets-2.8.11\lib\vc_dll\mswd;C:\lib\wxWidgets-2.8.11\include;C:\Documents and Settings\kloux\My Documents\Visual Studio 2010\Projects\CarDesigner\CarDesigner\include;C:\Documents and Settings\kloux\My Documents\Visual Studio 2010\Projects\CarDesigner\common\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(FREETYPE)\include;$(FTGL)\src;$(WXWIN)\lib\vc_dll\mswd;$(WXWIN)\include;.\CarDesigner\include;.\common\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>C:\lib\ftgl-2.1.3~rc5\msvc\Build;C:\lib\freetype-2.4.4\objs\win32\vc2008;C:\Documents and Settings\kloux\My Documents\Visual Studio 2010\Projects\CarDesigner\Debug;C:\lib\wxWidgets-2.8.11\lib\vc_dll;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>vSolver.lib;vMath.lib;vUtilities.lib;vCar.lib;vRenderer.lib;wxbase28d.lib;wxmsw28d_aui.lib;wxmsw28d_adv.lib;wxbase28d_xml.lib;wxmsw28d_core.lib;wxmsw28d_gl.lib;wxzlibd.lib;wxpngd.lib;wxtiffd.lib;wxjpegd.lib;opengl32.lib;freetype244MT_D.lib;ftgl_D.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(FREETYPE)\objs\win32\vc2010;$(FTGL)\msvc\Build;$(WXWIN)\lib\vc_dll;.\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>vSolver.lib;vMath.lib;vUtilities.lib;vCar.lib;vRenderer.lib;wxbase28d.lib;wxmsw28d_aui.lib;wxmsw28d_adv.lib;wxbase28d_xml.lib;wxmsw28d_core.lib;wxmsw28d_gl.lib;wxzlibd.lib;wxpngd.lib;wxtiffd.lib;wxjpegd.lib;opengl32.lib;ftgl_static_D.lib;freetype248MT_D.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>C:\Documents and Settings\kloux\My Documents\Visual Studio 2010\Projects\CarDesigner\CarDesigner;C:\lib\wxWidgets-2.8.11\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(WXWIN)\include;.\CarDesigner;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

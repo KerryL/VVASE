@@ -19,7 +19,7 @@
 
 // Standard C++ headers
 #include <cstdlib>
-#include <assert.h>
+#include <cassert>
 
 // VVASE headers
 #include "vMath/carMath.h"

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual C++ Express 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VVASE", "VVASE.vcxproj", "{9D135EE8-3615-CC7D-C18E-1F53A5B6C377}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "VVASE", "VVASE.vcxproj", "{8862C034-B53F-733A-BFDC-6D927C8899C8}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "vUtilities", "vUtilities\vUtilities.vcxproj", "{7EA8AC69-6FEA-4FD8-8810-239A27B0377E}"
 EndProject
@@ -19,10 +19,10 @@ Global
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9D135EE8-3615-CC7D-C18E-1F53A5B6C377}.Debug|Win32.ActiveCfg = Debug|Win32
-		{9D135EE8-3615-CC7D-C18E-1F53A5B6C377}.Debug|Win32.Build.0 = Debug|Win32
-		{9D135EE8-3615-CC7D-C18E-1F53A5B6C377}.Release|Win32.ActiveCfg = Release|Win32
-		{9D135EE8-3615-CC7D-C18E-1F53A5B6C377}.Release|Win32.Build.0 = Release|Win32
+		{8862C034-B53F-733A-BFDC-6D927C8899C8}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8862C034-B53F-733A-BFDC-6D927C8899C8}.Debug|Win32.Build.0 = Debug|Win32
+		{8862C034-B53F-733A-BFDC-6D927C8899C8}.Release|Win32.ActiveCfg = Release|Win32
+		{8862C034-B53F-733A-BFDC-6D927C8899C8}.Release|Win32.Build.0 = Release|Win32
 		{7EA8AC69-6FEA-4FD8-8810-239A27B0377E}.Debug|Win32.ActiveCfg = Debug|Win32
 		{7EA8AC69-6FEA-4FD8-8810-239A27B0377E}.Debug|Win32.Build.0 = Debug|Win32
 		{7EA8AC69-6FEA-4FD8-8810-239A27B0377E}.Release|Win32.ActiveCfg = Release|Win32

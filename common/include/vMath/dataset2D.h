@@ -17,7 +17,7 @@
 #define _DATASET_H_
 
 // Standard C++ headers
-#include <assert.h>
+#include <cassert>
 
 // wxWidgets forward declarations
 class wxString;

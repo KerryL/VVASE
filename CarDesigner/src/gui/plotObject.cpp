@@ -29,7 +29,7 @@
 #include "vUtilities/fontFinder.h"
 #include "vUtilities/debugger.h"
 #include "gui/components/mainFrame.h"
-#include <fstream>
+
 //==========================================================================
 // Class:			PlotObject
 // Function:		PlotObject

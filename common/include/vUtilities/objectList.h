@@ -21,7 +21,7 @@
 
 // Standard C++ headers
 #include <cstdlib>
-#include <assert.h>
+#include <cassert>
 
 template <class T>
 class ObjectList
