@@ -45,45 +45,45 @@
 // Conversion to signed 32-bit integers
 inline int32_t ReadInt32(int64_t in)
 {
-	return in;
+	return (int32_t)in;
 }
 
 inline int32_t ReadInt32(int32_t in)
 {
-	return in;
+	return (int32_t)in;
 }
 
 // Conversion to unsigned 32-bit integers
 inline uint32_t ReadUInt32(uint64_t in)
 {
-	return in;
+	return (uint32_t)in;
 }
 
 inline uint32_t ReadUInt32(uint32_t in)
 {
-	return in;
+	return (uint32_t)in;
 }
 
 // Conversion to signed 64-bit integers
 inline int64_t ReadInt64(int64_t in)
 {
-	return in;
+	return (int64_t)in;
 }
 
 inline int64_t ReadInt64(int32_t in)
 {
-	return in;
+	return (int64_t)in;
 }
 
 // Conversion to unsigned 64-bit integers
 inline uint64_t ReadUInt64(uint64_t in)
 {
-	return in;
+	return (uint64_t)in;
 }
 
 inline uint64_t ReadUInt64(uint32_t in)
 {
-	return in;
+	return (uint64_t)in;
 }
 
 #endif// _MACHINE_DEFS_H_
