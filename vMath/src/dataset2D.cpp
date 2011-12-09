@@ -16,10 +16,10 @@
 // Standard C++ headers
 #include <fstream>
 #include <utility>
-#include <assert.h>
+#include <cassert>
 
 // Standard C++ headers
-#include <assert.h>
+#include <cassert>
 
 // wxWidgets headers
 #include <wx/wx.h>

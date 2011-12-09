@@ -17,7 +17,7 @@
 
 // Standard C++ headers
 #include <fstream>
-#include <assert.h>
+#include <cassert>
 
 // VVASE headers
 #include "vCar/tire.h"

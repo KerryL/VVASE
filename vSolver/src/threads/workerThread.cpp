@@ -17,7 +17,7 @@
 // History:
 
 // Standard C++ headers
-#include <assert.h>
+#include <cassert>
 
 // VVASE headers
 #include "vSolver/threads/workerThread.h"
