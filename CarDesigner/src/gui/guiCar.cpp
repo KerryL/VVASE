@@ -11,7 +11,7 @@
 // Created:  4/15/2008
 // Author:  K. Loux
 // Description:  A high-level car object.  This class defines the interaction between
-//				 the GUI and the actual CAR class.
+//				 the user and the Car class.
 // History:
 //	1/24/2009	- Major application structure change - MainFrame uses GuiObject instead of
 //				  GuiCar.  GuiObject changed to only contain either GuiCar or Iteration

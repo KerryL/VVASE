@@ -217,6 +217,6 @@ void EditIterationPlotsPanel::PlotSelectionChangeEvent(wxCommandEvent &event)
 	currentIteration->SetActivePlot((Iteration::PlotID)event.GetInt(),
 		plotListCheckBox->IsChecked(event.GetInt()));
 
-	// Update the dispaly
+	// Update the display
 	currentIteration->UpdateDisplay();
 }

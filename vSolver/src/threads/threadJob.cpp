@@ -94,6 +94,31 @@ ThreadJob::ThreadJob(ThreadCommand _command, ThreadData *_data,
 
 //==========================================================================
 // Class:			ThreadJob
+// Function:		ThreadJob
+//
+// Description:		Copy constructor for the ThreadJob class.
+//
+// Input Arguments:
+//		threadJob	= const ThreadJob& to copy to this object
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+ThreadJob::ThreadJob(const ThreadJob &threadJob)
+{
+	// Initialize the pointer to the data
+	data = NULL;
+	
+	// Copy to this object
+	*this = threadJob;
+}
+
+//==========================================================================
+// Class:			ThreadJob
 // Function:		~ThreadJob
 //
 // Description:		Destructor for the ThreadJob class.
@@ -110,4 +135,33 @@ ThreadJob::ThreadJob(ThreadCommand _command, ThreadData *_data,
 //==========================================================================
 ThreadJob::~ThreadJob()
 {
+}
+
+//==========================================================================
+// Class:			ThreadJob
+// Function:		operator=
+//
+// Description:		Assignment operator.
+//
+// Input Arguments:
+//		job	= const ThreadJob& to assign to this
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		ThreadJob& reference to this
+//
+//==========================================================================
+ThreadJob& ThreadJob::operator=(const ThreadJob &job)
+{
+	// Check for self-assignment
+	if (this == &job)
+		return *this;
+	
+	// Do the copy
+	command = job.command;
+	index = job.index;
+	name = job.name.c_str();// Force deep copy for thread-safety
+	data = job.data;
 }

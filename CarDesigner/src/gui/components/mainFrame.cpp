@@ -1823,7 +1823,7 @@ void MainFrame::UpdateAnalysis(void)
 // Class:			MainFrame
 // Function:		UpdateOutputPanel
 //
-// Description:		Updates the output dispaly with the information currently
+// Description:		Updates the output display with the information currently
 //					in each car object.
 //
 // Input Arguments:
@@ -1866,7 +1866,7 @@ void MainFrame::UpdateOutputPanel(void)
 // Description:		Adds a job to the job queue to be handled by the thread pool.
 //
 // Input Arguments:
-//		newJob	= ThreadJob& containg in the information about the new job to
+//		newJob	= ThreadJob& containing in the information about the new job to
 //				  be performed
 //
 // Output Arguments:
@@ -2234,8 +2234,8 @@ void MainFrame::RemoveObjectFromList(int index)
 
 		// Update the data and displays - data first, because in some cases data is
 		// dependent on other open objects, and we may have just closed one
-		openObjectList[i]->UpdateData();// FIXME:  Check thread safety of these calls
-		openObjectList[i]->UpdateDisplay();// FIXME:  Check thread safety of these calls
+		openObjectList[i]->UpdateData();// FIXME:  This spawns threads (or multiple threads) - what happens when we close and multiple objects are deleted one after another?
+		openObjectList[i]->UpdateDisplay();
 	}
 
 	// Reset the deletion status flag

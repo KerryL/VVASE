@@ -42,6 +42,7 @@ public:
 
 	// Constructors
 	ThreadJob();
+	ThreadJob(const ThreadJob &threadJob);// For thread safety
 	ThreadJob(ThreadCommand _command);
 	ThreadJob(ThreadCommand _command, ThreadData *_data,
 		const wxString &_name, int &_index);
@@ -54,8 +55,11 @@ public:
 
 	// Data to be sent to worker threads
 	ThreadData *data;
-	wxString name;// FIXME:  Does this create issues with thread safety?
+	wxString name;
 	int index;
+	
+	// Operators
+	ThreadJob& operator=(const ThreadJob &job);// For thread safety
 };
 
 #endif// _THREAD_JOB_H_
