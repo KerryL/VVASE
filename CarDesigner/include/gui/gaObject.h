@@ -26,17 +26,19 @@
 #include "vSolver/threads/inverseSemaphore.h"
 #include "vUtilities/debugLog.h"
 
+// wxWidgets forward declarations
+class wxEvtHandler;
+
 // VVASE forward declarations
 class GuiCar;
 class Car;
-class MainFrame;
 class GeneticOptimization;
 
 class GAObject : public GeneticAlgorithm
 {
 public:
 	// Constructor
-	GAObject(MainFrame &_mainFrame, GeneticOptimization &_optimization);
+	GAObject(wxEvtHandler *_parent, GeneticOptimization &_optimization);
 
 	// Destructor
 	~GAObject();
@@ -56,7 +58,7 @@ public:
 		// The corner containing these points
 		Corner::Location location;
 
-		// The component of the hardpoint to optimitze
+		// The component of the hardpoint to optimize
 		Vector::Axis direction;
 
 		// The minimum value for the gene
@@ -131,7 +133,7 @@ public:
 
 private:
 	// Main application object
-	MainFrame &mainFrame;
+	wxEvtHandler *parent;
 
 	// The object that owns this optimization
 	GeneticOptimization &optimization;

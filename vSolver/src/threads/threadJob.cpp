@@ -58,7 +58,7 @@ ThreadJob::ThreadJob() : command(ThreadJob::CommandThreadNull), data(NULL)
 //==========================================================================
 ThreadJob::ThreadJob(ThreadCommand _command) : command(_command), data(NULL)
 {
-	// Only permit certian types of jobs
+	// Only permit certain types of jobs
 	assert(command == ThreadJob::CommandThreadExit ||
 		command == ThreadJob::CommandThreadStarted ||
 		command == ThreadJob::CommandThreadNull);
@@ -85,7 +85,7 @@ ThreadJob::ThreadJob(ThreadCommand _command) : command(_command), data(NULL)
 //==========================================================================
 ThreadJob::ThreadJob(ThreadCommand _command, ThreadData *_data,
 					   const wxString &_name, int &_index) : command(_command),
-					   data(_data), name(_name), index(_index)
+					   data(_data), name(_name.c_str()), index(_index)
 {
 	// Make sure the correct data was passed to this job
 	assert(data);
@@ -164,4 +164,6 @@ ThreadJob& ThreadJob::operator=(const ThreadJob &job)
 	index = job.index;
 	name = job.name.c_str();// Force deep copy for thread-safety
 	data = job.data;
+	
+	return *this;
 }

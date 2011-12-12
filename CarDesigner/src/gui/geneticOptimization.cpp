@@ -54,7 +54,7 @@ GeneticOptimization::GeneticOptimization(MainFrame &_mainFrame,
 										   _pathAndFileName)
 {
 	// Create the genetic algorithm
-	geneticAlgorithm = new GAObject(_mainFrame, *this);
+	geneticAlgorithm = new GAObject(_mainFrame.GetEventHandler(), *this);
 
 	// Get an index for this item and add it to the list in the mainFrame
 	// MUST be included BEFORE the naming, which must come BEFORE the call to Initialize

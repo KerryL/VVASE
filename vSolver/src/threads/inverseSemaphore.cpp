@@ -155,13 +155,20 @@ InverseSemaphore::InverseSemaphoreError InverseSemaphore::Set(unsigned int _coun
 //==========================================================================
 InverseSemaphore::InverseSemaphoreError InverseSemaphore::Wait(void)
 {
+	countMutex.Lock();
+	unsigned int testCount(count);
+	countMutex.Unlock();
+	
 	// Wait for the count to return to zero
-	while (count > 0)
+	while (testCount > 0)
 	{
 		// Wait and yield to other threads
 		// FIXME:  Should we sleep and yield or do nothing? (currently sleeping and yielding)
 		wxSafeYield();
 		wxMilliSleep(50);
+		countMutex.Lock();
+		testCount = count;
+		countMutex.Unlock();
 	}
 
 	return ErrorNone;

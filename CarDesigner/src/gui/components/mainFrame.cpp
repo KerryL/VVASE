@@ -836,6 +836,7 @@ BEGIN_EVENT_TABLE(MainFrame, wxFrame)
 
 	// Threads
 	EVT_COMMAND(wxID_ANY, EVT_THREAD,			MainFrame::ThreadCompleteEvent)
+	EVT_COMMAND(wxID_ANY, EVT_ADD_JOB,			MainFrame::AddJobEvent)
 	EVT_COMMAND(wxID_ANY, EVT_DEBUG,			MainFrame::DebugMessageEvent)
 END_EVENT_TABLE();
 
@@ -2137,6 +2138,35 @@ void MainFrame::ThreadCompleteEvent(wxCommandEvent &event)
 
 	// Decrement the job counter
 	openJobCount--;
+}
+
+//==========================================================================
+// Class:			MainFrame
+// Function:		AddJobEvent
+//
+// Description:		Event for adding jobs to the job queue - event used so
+//					other threads can add jobs to the queue.
+//
+// Input Arguments:
+//		event	= &wxCommandEvent
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void MainFrame::AddJobEvent(wxCommandEvent &event)
+{
+	ThreadJob *job = static_cast<ThreadJob*>(event.GetClientData());
+	if (job)
+	{
+		AddJob(*job);
+		delete job;
+	}
+	else
+		Debugger::GetInstance().Print(_T("Could not process request for thread job"));
 }
 
 //==========================================================================

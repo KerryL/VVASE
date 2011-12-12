@@ -316,6 +316,7 @@ private:
 
 	// Threads
 	void ThreadCompleteEvent(wxCommandEvent &event);
+	void AddJobEvent(wxCommandEvent &event);
 	void DebugMessageEvent(wxCommandEvent &event);
 	// End event handlers-------------------------------------------------
 

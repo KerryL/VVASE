@@ -55,7 +55,7 @@ private:
 	// This object's synchronization
 	wxMutex countMutex;
 
-	// The remining count before the calling thread is freed
+	// The remaining count before the calling thread is freed
 	volatile unsigned int count;
 };
 

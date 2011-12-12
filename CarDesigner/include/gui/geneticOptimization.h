@@ -12,7 +12,7 @@
 // Author:  K. Loux
 // Description:  This is a GUI interface for the genetic algorithm optimization.
 // History:
-//	1/11/2010	- Moved from test class to GUI_OBJECT derived object for permanent
+//	1/11/2010	- Moved from test class to GuiObject derived object for permanent
 //				  implementation.
 
 #ifndef _GENETIC_OPTIMIZATION_H_

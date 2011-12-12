@@ -20,3 +20,7 @@
 
 // Define the EVT_THREAD event type
 DEFINE_LOCAL_EVENT_TYPE(EVT_THREAD)
+
+
+// Define the EVT_ADD_JOB event type
+DEFINE_LOCAL_EVENT_TYPE(EVT_ADD_JOB)

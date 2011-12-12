@@ -372,6 +372,7 @@ void Iteration::UpdateData(void)
 	outputLists.Clear();
 
 	// Initialize the semaphore count
+	// FIXME:  Check return value to ensure no errors!
 	inverseSemaphore.Set(associatedCars.GetCount() * totalPoints);
 
 	// Make sure the working cars are initialized
@@ -457,7 +458,7 @@ void Iteration::UpdateData(void)
 void Iteration::UpdateDisplay(void)
 {
 	// Make sure the renderer exists so we don't do this until after we're fully created
-	if (plotPanel)
+	if (plotPanel && inverseSemaphore.GetCount() == 0)// Also, don't update if jobs are pending
 	{
 		// Clear out existing data from the plot
 		plotPanel->ClearAllCurves();
@@ -1495,6 +1496,7 @@ void Iteration::SetAutoAssociate(bool autoAssociate)
 void Iteration::MarkAnalysisComplete(void)
 {
 	// Post our semaphore
+	// FIXME:  Check return value to ensure no error!
 	inverseSemaphore.Post();
 
 	// If the current count is zero, update the display

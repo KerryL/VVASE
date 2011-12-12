@@ -16,13 +16,16 @@
 // Standard C++ headers
 #include <fstream>
 
+// wxWidgets headers
+#include <wx/wx.h>
+
 // CarDesigner headers
 #include "gui/gaObject.h"
 #include "gui/geneticOptimization.h"
-#include "gui/components/mainFrame.h"
 #include "vSolver/physics/kinematics.h"
 #include "vSolver/physics/kinematicOutputs.h"
 #include "vSolver/threads/kinematicsData.h"
+#include "vSolver/threads/threadEvent.h"
 #include "vCar/car.h"
 #include "vCar/suspension.h"
 #include "vMath/carMath.h"
@@ -37,7 +40,7 @@
 // Description:		Constructor for GAObject class.
 //
 // Input Arguments:
-//		_mainFrame		= MainFrame& reference to the main application object
+//		_parent			= wxEvtHandler* reference to the main event queue
 //		_optimization	= GeneticOptimization pointing to this object's owner
 //
 // Output Arguments:
@@ -47,8 +50,8 @@
 //		None
 //
 //==========================================================================
-GAObject::GAObject(MainFrame &_mainFrame, GeneticOptimization &_optimization) :
-				   mainFrame(_mainFrame), optimization(_optimization)
+GAObject::GAObject(wxEvtHandler *_parent, GeneticOptimization &_optimization) :
+				  optimization(_optimization)
 {
 	// Initialize class members
 	workingCarArray = NULL;
@@ -56,6 +59,8 @@ GAObject::GAObject(MainFrame &_mainFrame, GeneticOptimization &_optimization) :
 	numberOfCars = 0;
 	kinematicOutputArray = NULL;
 	isRunning = false;
+	
+	parent = _parent;
 }
 
 //==========================================================================
@@ -148,6 +153,7 @@ void GAObject::SimulateGeneration(void)
 	KinematicsData *data;
 
 	// Initialize the semaphore
+	// FIXME:  Check return value to ensure no errors!
 	inverseSemaphore.Set(numberOfCars);
 
 	int i, j, temp(optimization.GetIndex());
@@ -162,9 +168,15 @@ void GAObject::SimulateGeneration(void)
 			data = new KinematicsData(originalCarArray[i * inputList.GetCount() + j],
 				workingCarArray[i * inputList.GetCount() + j], *inputList.GetObject(j),
 				kinematicOutputArray + i * inputList.GetCount() + j);
-			ThreadJob newJob(ThreadJob::CommandThreadKinematicsGA, data,
+			ThreadJob *newJob = new ThreadJob(ThreadJob::CommandThreadKinematicsGA, data,
 				optimization.GetCleanName(), temp);
-			mainFrame.AddJob(newJob);
+			
+			// Create a add job event
+			wxCommandEvent evt(EVT_ADD_JOB, 0);
+			evt.SetClientData(newJob);
+
+			// Add it to the parent's event queue
+			parent->AddPendingEvent(evt);
 		}
 	}
 
