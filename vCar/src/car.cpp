@@ -12,7 +12,7 @@
 // Author:  K. Loux
 // Description:  Contains class functionality for car class.
 // History:
-//	2/24/2008	- Changed half shaft points from DRIVETRAIN to SUSPENSION objects, K. Loux.
+//	2/24/2008	- Changed half shaft points from Drivetrain to Suspension objects, K. Loux.
 //	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
 //	4/25/2009	- Added appearance options to write/read methods, incrementented file version
 //				  to version 1, K. Loux.
@@ -577,6 +577,10 @@ Car& Car::operator=(const Car &car)
 	// Check for self-assignment
 	if (this == &car)
 		return *this;
+	
+	// Ensure exclusive access to both cars
+	wxMutexLocker argLocker(car.carMutex);
+	wxMutexLocker localLocker(carMutex);
 
 	// Do the copy
 	*suspension		= *car.suspension;

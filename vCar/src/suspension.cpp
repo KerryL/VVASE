@@ -832,7 +832,7 @@ bool Suspension::SolveForContactPatch(const Vector &wheelCenter, const Vector &w
 	// Equation for plane as described above:
 	// x * WheelPlaneNormal.x + y * WheelPlaneNormal.y + z * WheelPlaneNormal.z - WheelCenter * WheelPlaneNormal = 0
 	// Solving the plane equation for y yields an equation for y in terms of x and z.
-	// y was chosen here, because WheelPlaneNormal is least likely to have a zero Y componenet,
+	// y was chosen here, because WheelPlaneNormal is least likely to have a zero Y component,
 	// versus X or Z.
 	// y(x, z) = (x * WheelPlaneNormal.x + z * WheelPlaneNormal.z - WheelCenter * WheelPlaneNormal) / WheelPlaneNormal.y
 	// Next, we substitute this equation for y back into the sphere equation, leaving us with a
