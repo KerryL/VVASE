@@ -32,6 +32,7 @@
 #include "vUtilities/convert.h"
 #include "vUtilities/debugger.h"
 #include "vUtilities/machineDefinitions.h"
+#include "vSolver/threads/jobQueue.h"
 
 //==========================================================================
 // Class:			GAObject
@@ -40,7 +41,7 @@
 // Description:		Constructor for GAObject class.
 //
 // Input Arguments:
-//		_parent			= wxEvtHandler* reference to the main event queue
+//		_queue			= JobQueue& reference to the job queue
 //		_optimization	= GeneticOptimization pointing to this object's owner
 //
 // Output Arguments:
@@ -50,8 +51,8 @@
 //		None
 //
 //==========================================================================
-GAObject::GAObject(wxEvtHandler *_parent, GeneticOptimization &_optimization) :
-				  optimization(_optimization)
+GAObject::GAObject(JobQueue &_queue, GeneticOptimization &_optimization) :
+				  queue(_queue), optimization(_optimization)
 {
 	// Initialize class members
 	workingCarArray = NULL;
@@ -59,8 +60,6 @@ GAObject::GAObject(wxEvtHandler *_parent, GeneticOptimization &_optimization) :
 	numberOfCars = 0;
 	kinematicOutputArray = NULL;
 	isRunning = false;
-	
-	parent = _parent;
 }
 
 //==========================================================================
@@ -168,15 +167,9 @@ void GAObject::SimulateGeneration(void)
 			data = new KinematicsData(originalCarArray[i * inputList.GetCount() + j],
 				workingCarArray[i * inputList.GetCount() + j], *inputList.GetObject(j),
 				kinematicOutputArray + i * inputList.GetCount() + j);
-			ThreadJob *newJob = new ThreadJob(ThreadJob::CommandThreadKinematicsGA, data,
+			ThreadJob newJob(ThreadJob::CommandThreadKinematicsGA, data,
 				optimization.GetCleanName(), temp);
-			
-			// Create a add job event
-			wxCommandEvent evt(EVT_ADD_JOB, 0);
-			evt.SetClientData(newJob);
-
-			// Add it to the parent's event queue
-			parent->AddPendingEvent(evt);
+			queue.AddJob(newJob);
 		}
 	}
 

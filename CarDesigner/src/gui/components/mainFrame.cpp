@@ -21,7 +21,7 @@
 //	2/10/2009	- Added EditPanel to application, K. Loux.
 //	2/17/2009	- Moved the Kinematics object for primary analysis into the GUI_CAR class.
 //	6/7/2009	- Changed GetFilenameFromUser() to make use of wx functions for checking for file
-//				  existance and selecting multiple files to open, K. Loux.
+//				  existence and selecting multiple files to open, K. Loux.
 //	10/14/2010	- Added configuration file for storing application level options, K. Loux.
 //	11/28/2010	- Added number of threads to configuration file, K. Loux.
 
@@ -836,7 +836,6 @@ BEGIN_EVENT_TABLE(MainFrame, wxFrame)
 
 	// Threads
 	EVT_COMMAND(wxID_ANY, EVT_THREAD,			MainFrame::ThreadCompleteEvent)
-	EVT_COMMAND(wxID_ANY, EVT_ADD_JOB,			MainFrame::AddJobEvent)
 	EVT_COMMAND(wxID_ANY, EVT_DEBUG,			MainFrame::DebugMessageEvent)
 END_EVENT_TABLE();
 
@@ -2138,35 +2137,6 @@ void MainFrame::ThreadCompleteEvent(wxCommandEvent &event)
 
 	// Decrement the job counter
 	openJobCount--;
-}
-
-//==========================================================================
-// Class:			MainFrame
-// Function:		AddJobEvent
-//
-// Description:		Event for adding jobs to the job queue - event used so
-//					other threads can add jobs to the queue.
-//
-// Input Arguments:
-//		event	= &wxCommandEvent
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-void MainFrame::AddJobEvent(wxCommandEvent &event)
-{
-	ThreadJob *job = static_cast<ThreadJob*>(event.GetClientData());
-	if (job)
-	{
-		AddJob(*job);
-		delete job;
-	}
-	else
-		Debugger::GetInstance().Print(_T("Could not process request for thread job"));
 }
 
 //==========================================================================

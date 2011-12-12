@@ -24,7 +24,4 @@
 // Declaration of the EVT_THREAD event
 DECLARE_LOCAL_EVENT_TYPE(EVT_THREAD, -1)
 
-// Declaration of the EVT_ADD_JOB event type
-DECLARE_LOCAL_EVENT_TYPE(EVT_ADD_JOB, -1)
-
 #endif// _THREAD_EVENT_H_

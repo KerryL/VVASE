@@ -457,8 +457,12 @@ void Iteration::UpdateData(void)
 //==========================================================================
 void Iteration::UpdateDisplay(void)
 {
+	// Make sure we have no more analyses waiting
+	if (inverseSemaphore.GetCount() != 0)
+		return;
+	
 	// Make sure the renderer exists so we don't do this until after we're fully created
-	if (plotPanel && inverseSemaphore.GetCount() == 0)// Also, don't update if jobs are pending
+	if (plotPanel)
 	{
 		// Clear out existing data from the plot
 		plotPanel->ClearAllCurves();

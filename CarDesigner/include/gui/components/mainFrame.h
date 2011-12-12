@@ -114,6 +114,7 @@ public:
 
 	// Add a job to the queue to be processed by a worker thread
 	void AddJob(ThreadJob &newJob);
+	JobQueue& GetJobQueue(void) { return *jobQueue; };
 
 	// Returns the current inputs for the kinematics analysis
 	inline Kinematics::Inputs GetInputs(void) const { return kinematicInputs; };
@@ -316,7 +317,6 @@ private:
 
 	// Threads
 	void ThreadCompleteEvent(wxCommandEvent &event);
-	void AddJobEvent(wxCommandEvent &event);
 	void DebugMessageEvent(wxCommandEvent &event);
 	// End event handlers-------------------------------------------------
 

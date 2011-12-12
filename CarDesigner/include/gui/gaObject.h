@@ -26,10 +26,8 @@
 #include "vSolver/threads/inverseSemaphore.h"
 #include "vUtilities/debugLog.h"
 
-// wxWidgets forward declarations
-class wxEvtHandler;
-
 // VVASE forward declarations
+class JobQueue;
 class GuiCar;
 class Car;
 class GeneticOptimization;
@@ -38,7 +36,7 @@ class GAObject : public GeneticAlgorithm
 {
 public:
 	// Constructor
-	GAObject(wxEvtHandler *_parent, GeneticOptimization &_optimization);
+	GAObject(JobQueue &_queue, GeneticOptimization &_optimization);
 
 	// Destructor
 	~GAObject();
@@ -133,7 +131,7 @@ public:
 
 private:
 	// Main application object
-	wxEvtHandler *parent;
+	JobQueue &queue;
 
 	// The object that owns this optimization
 	GeneticOptimization &optimization;
