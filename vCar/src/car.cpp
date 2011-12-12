@@ -577,10 +577,6 @@ Car& Car::operator=(const Car &car)
 	// Check for self-assignment
 	if (this == &car)
 		return *this;
-	
-	// Ensure exclusive access to both cars
-	wxMutexLocker argLocker(car.carMutex);
-	wxMutexLocker localLocker(carMutex);
 
 	// Do the copy
 	*suspension		= *car.suspension;

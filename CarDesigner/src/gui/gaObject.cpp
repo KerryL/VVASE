@@ -800,6 +800,7 @@ void GAObject::UpdateTargetCar(void)
 	DebugLog::GetInstance()->Log(_T("GAObject::UpdateTargetCar (locker)"));
 
 	// Update the target car to match the best fit car we've got
+	wxMutexLocker carLock(targetCar->GetMutex());
 	*targetCar = *originalCarArray[generationLimit - 1];
 }
 
