@@ -17,6 +17,7 @@
 #include "gui/dialogs/gaGeneDialog.h"
 #include "vUtilities/wxRelatedUtilities.h"
 #include "vUtilities/convert.h"
+#include "vUtilities/dataValidator.h"
 
 //==========================================================================
 // Class:			GAGeneDialog
@@ -221,40 +222,36 @@ void GAGeneDialog::CreateControls(void)
 		tiedToCombo->SetSelection(0);
 
 	// Minimum
-	wxStaticText *minimumLabel = new wxStaticText(this, wxID_STATIC, _T("Minimum"));
-	minimumText = new wxTextCtrl(this, wxID_ANY, Convert::GetInstance().FormatNumber(
-		Convert::GetInstance().ConvertDistance(minimum)));
-	wxStaticText *minimumUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance), wxDefaultPosition, wxDefaultSize, 0);
-	inputAreaSizer->Add(minimumLabel, 0, textSizerFlags);
+	minimumText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+		wxDefaultSize, 0, DataValidator(Convert::UnitTypeDistance, &minimum));
+	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Minimum")), 0, textSizerFlags);
 	inputAreaSizer->Add(minimumText, 0, comboSizerFlags);
-	inputAreaSizer->Add(minimumUnitsLabel, 0, textSizerFlags);
+	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC,
+		Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance),
+		wxDefaultPosition, wxDefaultSize, 0), 0, textSizerFlags);
 
 	// Maximum
-	wxStaticText *maximumLabel = new wxStaticText(this, wxID_STATIC, _T("Maximum"));
-	maximumText = new wxTextCtrl(this, wxID_ANY, Convert::GetInstance().FormatNumber(
-		Convert::GetInstance().ConvertDistance(maximum)));
-	wxStaticText *maximumUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance), wxDefaultPosition, wxDefaultSize, 0);
-	inputAreaSizer->Add(maximumLabel, 0, textSizerFlags);
+	maximumText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+		wxDefaultSize, 0, DataValidator(Convert::UnitTypeDistance, &maximum));
+	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Maximum")), 0, textSizerFlags);
 	inputAreaSizer->Add(maximumText, 0, comboSizerFlags);
-	inputAreaSizer->Add(maximumUnitsLabel, 0, textSizerFlags);
+	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC,
+		Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance),
+		wxDefaultPosition, wxDefaultSize, 0), 0, textSizerFlags);
 
 	// Number of values
-	wxStaticText *numberOfValuesLabel = new wxStaticText(this, wxID_STATIC, _T("Number of Values"));
-	numberOfValuesText = new wxTextCtrl(this, wxID_ANY, wxEmptyString);
-	inputAreaSizer->Add(numberOfValuesLabel, 0, textSizerFlags);
+	numberOfValuesText = new wxTextCtrl(this, wxID_ANY, wxEmptyString);// FIXME:  Use integer validator
+	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Number of Values")), 0, textSizerFlags);
 	inputAreaSizer->Add(numberOfValuesText, 0, comboSizerFlags);
 	inputAreaSizer->AddSpacer(-1);
 
 	// Resolution
-	wxStaticText *resolutionLabel = new wxStaticText(this, wxID_STATIC, _T("Resolution"));
 	resolution = new wxStaticText(this, wxID_ANY, wxEmptyString);
-	wxStaticText *resolutionUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance), wxDefaultPosition, wxDefaultSize, 0);
-	inputAreaSizer->Add(resolutionLabel, 0, textSizerFlags);
+	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Resolution")), 0, textSizerFlags);
 	inputAreaSizer->Add(resolution, 0, textSizerFlags);
-	inputAreaSizer->Add(resolutionUnitsLabel, 0, textSizerFlags);
+	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC,
+		Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance),
+		wxDefaultPosition, wxDefaultSize, 0), 0, textSizerFlags);
 
 	// This is set as a separate event to cause the resolution to update
 	wxString temp;
@@ -302,6 +299,7 @@ void GAGeneDialog::CreateControls(void)
 //==========================================================================
 void GAGeneDialog::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 {
+	// FIXME:  Can this be simplified because we're using validators?
 	// Update the class members with the data currently displayed in the dialog controls
 	if (!minimumText->GetValue().ToDouble(&minimum) ||
 		!maximumText->GetValue().ToDouble(&maximum) ||

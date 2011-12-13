@@ -119,7 +119,12 @@ private:
 	virtual void StartStopOptimizationClickedEvent(wxCommandEvent &event);
 	virtual void GeneListSelectCellEvent(wxGridEvent &event);
 	virtual void GoalListSelectCellEvent(wxGridEvent &event);
+	virtual void GeneGridDoubleClickedEvent(wxGridEvent &event);
+	virtual void GoalGridDoubleClickedEvent(wxGridEvent &event);
 	virtual void TextBoxChangeEvent(wxCommandEvent &event);
+
+	void EditSelectedGene(void);
+	void EditSelectedGoal(void);
 
 	// For the event table
 	DECLARE_EVENT_TABLE();

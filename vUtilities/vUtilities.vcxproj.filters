@@ -45,6 +45,9 @@
     <ClInclude Include="..\common\include\vUtilities\debugLog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\common\include\vUtilities\dataValidator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\xlsxReader.cpp">
@@ -63,6 +66,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\debugLog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dataValidator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

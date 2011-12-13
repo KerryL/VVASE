@@ -28,19 +28,39 @@
 class DataValidator : public wxTextValidator
 {
 public:
+	// Types of numeric validation
+	enum NumberClass
+	{
+		ClassAll,// No restrictions (other than being a number)
+		ClassPositive,
+		ClassStrictlyPositive,
+		ClassNegative,
+		ClassStrictlyNegative,
+		ClassInclusiveRange,
+		ClassExclusiveRange
+	};
+
 	// Constructors
-	DataValidator(const Convert::UnitType &_unit, double *_valPtr = NULL);
+	DataValidator(const Convert::UnitType &_unit, double *_valPtr = NULL,
+		const NumberClass &_numberClass = ClassAll);
+	DataValidator(const Convert::UnitType &_unit, const double &_min,
+		const double &_max, double *_valPtr = NULL, const NumberClass &_numberClass = ClassInclusiveRange);
 	DataValidator(const DataValidator &dv);
 	
 	// Destructor
 	virtual ~DataValidator() {};
 	
 	// Clone
-	virtual DataValidator* Clone(void);
+	virtual DataValidator* Clone(void) const { return new DataValidator(*this); };
 	
 	// Mandatory overloads for validators
 	virtual bool TransferToWindow(void);
 	virtual bool TransferFromWindow(void);
+
+	virtual bool Validate(wxWindow *parent);
+
+	// Functions specific to our custom validator
+	void SetUnitType(const Convert::UnitType &_unit) { unit = _unit; };
 
 private:
 	// The type of data we're validating
@@ -48,6 +68,11 @@ private:
 	
 	// Reference to the data we're protecting
 	double *valPtr;
+	double m_value;
+
+	// Additional limits to place on the value
+	NumberClass numberClass;
+	double min, max;
 	
 	// Operators
 	DataValidator& operator=(const DataValidator& dv);

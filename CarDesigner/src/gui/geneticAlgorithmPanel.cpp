@@ -98,16 +98,18 @@ GeneticAlgorithmPanel::~GeneticAlgorithmPanel()
 //==========================================================================
 BEGIN_EVENT_TABLE(GeneticAlgorithmPanel, wxPanel)
 	// Buttons
-	EVT_BUTTON(IdAddGene,					GeneticAlgorithmPanel::AddGeneButtonClickedEvent)
-	EVT_BUTTON(IdEditGene,					GeneticAlgorithmPanel::EditGeneButtonClickedEvent)
-	EVT_BUTTON(IdRemoveGene,				GeneticAlgorithmPanel::RemoveGeneButtonClickedEvent)
-	EVT_BUTTON(IdAddGoal,					GeneticAlgorithmPanel::AddGoalButtonClickedEvent)
-	EVT_BUTTON(IdEditGoal,					GeneticAlgorithmPanel::EditGoalButtonClickedEvent)
-	EVT_BUTTON(IdRemoveGoal,				GeneticAlgorithmPanel::RemoveGoalButtonClickedEvent)
-	EVT_BUTTON(IdStartStopOptimization,		GeneticAlgorithmPanel::StartStopOptimizationClickedEvent)
-	EVT_GRID_CMD_SELECT_CELL(IdGeneList,	GeneticAlgorithmPanel::GeneListSelectCellEvent)
-	EVT_GRID_CMD_SELECT_CELL(IdGoalList,	GeneticAlgorithmPanel::GoalListSelectCellEvent)
-	EVT_TEXT(wxID_ANY,						GeneticAlgorithmPanel::TextBoxChangeEvent)
+	EVT_BUTTON(IdAddGene,						GeneticAlgorithmPanel::AddGeneButtonClickedEvent)
+	EVT_BUTTON(IdEditGene,						GeneticAlgorithmPanel::EditGeneButtonClickedEvent)
+	EVT_BUTTON(IdRemoveGene,					GeneticAlgorithmPanel::RemoveGeneButtonClickedEvent)
+	EVT_BUTTON(IdAddGoal,						GeneticAlgorithmPanel::AddGoalButtonClickedEvent)
+	EVT_BUTTON(IdEditGoal,						GeneticAlgorithmPanel::EditGoalButtonClickedEvent)
+	EVT_BUTTON(IdRemoveGoal,					GeneticAlgorithmPanel::RemoveGoalButtonClickedEvent)
+	EVT_BUTTON(IdStartStopOptimization,			GeneticAlgorithmPanel::StartStopOptimizationClickedEvent)
+	EVT_GRID_CMD_SELECT_CELL(IdGeneList,		GeneticAlgorithmPanel::GeneListSelectCellEvent)
+	EVT_GRID_CMD_SELECT_CELL(IdGoalList,		GeneticAlgorithmPanel::GoalListSelectCellEvent)
+	EVT_GRID_CMD_CELL_LEFT_DCLICK(IdGeneList,	GeneticAlgorithmPanel::GeneGridDoubleClickedEvent)
+	EVT_GRID_CMD_CELL_LEFT_DCLICK(IdGoalList,	GeneticAlgorithmPanel::GoalGridDoubleClickedEvent)
+	EVT_TEXT(wxID_ANY,							GeneticAlgorithmPanel::TextBoxChangeEvent)
 END_EVENT_TABLE();
 
 //==========================================================================
@@ -405,32 +407,9 @@ void GeneticAlgorithmPanel::AddGeneButtonClickedEvent(wxCommandEvent& WXUNUSED(e
 //==========================================================================
 void GeneticAlgorithmPanel::EditGeneButtonClickedEvent(wxCommandEvent& WXUNUSED(event))
 {
-	// Make sure exactly ONE row is selected
-	if (!geneList->IsSelection() || geneList->GetSelectedRows().GetCount() != 1)
-		return;
-
-	// Get the selected gene
-	GAObject::Gene geneToEdit = optimization.GetAlgorithm().GetGene(geneList->GetSelectedRows()[0]);
-
-	// Create the dialog box with properties corresponding to the selected gene
-	GAGeneDialog geneDialog(static_cast<wxWindow*>(&mainFrame), geneToEdit.hardpoint,
-		geneToEdit.tiedTo, geneToEdit.direction, geneToEdit.location, geneToEdit.minimum, geneToEdit.maximum,
-		geneToEdit.numberOfValues, wxID_ANY, wxDefaultPosition);
-
-	// Display the dialog
-	if (geneDialog.ShowModal() == wxOK)
-	{
-		// Update the gene
-		optimization.GetAlgorithm().UpdateGene(geneList->GetSelectedRows()[0], geneDialog.GetHardpoint(),
-			geneDialog.GetTiedTo(), geneDialog.GetCornerLocation(), geneDialog.GetAxisDirection(),
-			geneDialog.GetMinimum(), geneDialog.GetMaximum(), geneDialog.GetNumberOfValues());
-
-		// Update the display for the gene
-		UpdateGeneList();
-
-		// Mark the optimization as modified
-		optimization.SetModified();
-	}
+	// Make sure only one row is selected before displaying the dialog
+	if (geneList->IsSelection() && geneList->GetSelectedRows().GetCount() == 1)
+		EditSelectedGene();
 }
 
 //==========================================================================
@@ -541,31 +520,8 @@ void GeneticAlgorithmPanel::AddGoalButtonClickedEvent(wxCommandEvent& WXUNUSED(e
 void GeneticAlgorithmPanel::EditGoalButtonClickedEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Make sure exactly ONE row is selected
-	if (!goalList->IsSelection() || goalList->GetSelectedRows().GetCount() != 1)
-		return;
-
-	// Get the selected goal
-	GAObject::Goal goalToEdit = optimization.GetAlgorithm().GetGoal(goalList->GetSelectedRows()[0]);
-
-	// Create the dialog box with properties corresponding to the selected goal
-	GAGoalDialog goalDialog(static_cast<wxWindow*>(&mainFrame), goalToEdit.output, goalToEdit.desiredValue,
-		goalToEdit.expectedDeviation, goalToEdit.importance, goalToEdit.beforeInputs, goalToEdit.afterInputs,
-		wxID_ANY, wxDefaultPosition);
-
-	// Display the dialog
-	if (goalDialog.ShowModal() == wxOK)
-	{
-		// Create the new goal and add it to the list
-		optimization.GetAlgorithm().UpdateGoal(goalList->GetSelectedRows()[0], goalDialog.GetOutput(),
-			goalDialog.GetDesiredValue(), goalDialog.GetExpectedDeviation(), goalDialog.GetImportance(),
-			goalDialog.GetBeforeInputs(), goalDialog.GetAfterInputs());
-
-		// Update the display for the goal
-		UpdateGoalList();
-
-		// Mark the optimization as modified
-		optimization.SetModified();
-	}
+	if (goalList->IsSelection() && goalList->GetSelectedRows().GetCount() == 1)
+		EditSelectedGoal();
 }
 
 //==========================================================================
@@ -606,6 +562,90 @@ void GeneticAlgorithmPanel::RemoveGoalButtonClickedEvent(wxCommandEvent& WXUNUSE
 
 	// Mark the optimization as modified
 	optimization.SetModified();
+}
+
+//==========================================================================
+// Class:			GeneticAlgorithmPanel
+// Function:		EditSelectedGene
+//
+// Description:		Displays a dialog to allow editing the selected gene.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void GeneticAlgorithmPanel::EditSelectedGene(void)
+{
+	// Get the selected gene
+	GAObject::Gene geneToEdit = optimization.GetAlgorithm().GetGene(geneList->GetSelectedRows()[0]);
+
+	// Create the dialog box with properties corresponding to the selected gene
+	GAGeneDialog geneDialog(static_cast<wxWindow*>(&mainFrame), geneToEdit.hardpoint,
+		geneToEdit.tiedTo, geneToEdit.direction, geneToEdit.location, geneToEdit.minimum, geneToEdit.maximum,
+		geneToEdit.numberOfValues, wxID_ANY, wxDefaultPosition);
+
+	// Display the dialog
+	if (geneDialog.ShowModal() == wxOK)
+	{
+		// Update the gene
+		optimization.GetAlgorithm().UpdateGene(geneList->GetSelectedRows()[0], geneDialog.GetHardpoint(),
+			geneDialog.GetTiedTo(), geneDialog.GetCornerLocation(), geneDialog.GetAxisDirection(),
+			geneDialog.GetMinimum(), geneDialog.GetMaximum(), geneDialog.GetNumberOfValues());
+
+		// Update the display for the gene
+		UpdateGeneList();
+
+		// Mark the optimization as modified
+		optimization.SetModified();
+	}
+}
+
+//==========================================================================
+// Class:			GeneticAlgorithmPanel
+// Function:		EditSelectedGoal
+//
+// Description:		Displays a dialog to allow editing the selected goal.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void GeneticAlgorithmPanel::EditSelectedGoal(void)
+{
+	// Get the selected goal
+	GAObject::Goal goalToEdit = optimization.GetAlgorithm().GetGoal(goalList->GetSelectedRows()[0]);
+
+	// Create the dialog box with properties corresponding to the selected goal
+	GAGoalDialog goalDialog(static_cast<wxWindow*>(&mainFrame), goalToEdit.output, goalToEdit.desiredValue,
+		goalToEdit.expectedDeviation, goalToEdit.importance, goalToEdit.beforeInputs, goalToEdit.afterInputs,
+		wxID_ANY, wxDefaultPosition);
+
+	// Display the dialog
+	if (goalDialog.ShowModal() == wxOK)
+	{
+		// Create the new goal and add it to the list
+		optimization.GetAlgorithm().UpdateGoal(goalList->GetSelectedRows()[0], goalDialog.GetOutput(),
+			goalDialog.GetDesiredValue(), goalDialog.GetExpectedDeviation(), goalDialog.GetImportance(),
+			goalDialog.GetBeforeInputs(), goalDialog.GetAfterInputs());
+
+		// Update the display for the goal
+		UpdateGoalList();
+
+		// Mark the optimization as modified
+		optimization.SetModified();
+	}
 }
 
 //==========================================================================
@@ -1067,6 +1107,52 @@ void GeneticAlgorithmPanel::GoalListSelectCellEvent(wxGridEvent &event)
 {
 	// Select the proper row
 	goalList->SelectRow(event.GetRow(), event.ControlDown());
+}
+
+//==========================================================================
+// Class:			GeneticAlgorithmPanel
+// Function:		GeneGridDoubleClickedEvent
+//
+// Description:		Event handler for double clicking on a gene list row.
+//
+// Input Arguments:
+//		event	= wxGridEvent&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void GeneticAlgorithmPanel::GeneGridDoubleClickedEvent(wxGridEvent& WXUNUSED(event))
+{
+	// Make sure only one row is selected before displaying the dialog
+	if (geneList->IsSelection() && geneList->GetSelectedRows().GetCount() == 1)
+		EditSelectedGene();
+}
+
+//==========================================================================
+// Class:			GeneticAlgorithmPanel
+// Function:		GoalGridDoubleClickedEvent
+//
+// Description:		Event handler for double clicking on a goal list row.
+//
+// Input Arguments:
+//		event	= wxGridEvent&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void GeneticAlgorithmPanel::GoalGridDoubleClickedEvent(wxGridEvent& WXUNUSED(event))
+{
+	// Make sure only one row is selected before displaying the dialog
+	if (goalList->IsSelection() && geneList->GetSelectedRows().GetCount() == 1)
+		EditSelectedGoal();
 }
 
 //==========================================================================
