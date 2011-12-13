@@ -163,9 +163,7 @@ InverseSemaphore::InverseSemaphoreError InverseSemaphore::Wait(void)
 	while (testCount > 0)
 	{
 		// Wait and yield to other threads
-		// FIXME:  Should we sleep and yield or do nothing? (currently sleeping and yielding)
-		wxSafeYield();
-		wxMilliSleep(50);
+		wxThread::Sleep(100);
 		countMutex.Lock();
 		testCount = count;
 		countMutex.Unlock();

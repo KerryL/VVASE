@@ -87,6 +87,7 @@ Iteration::Iteration(MainFrame &_mainFrame, wxString _pathAndFileName)
 	// Initialize our "are we caught up" flags
 	analysesDisplayed = true;
 	secondAnalysisPending = false;
+	pendingAnalysisCount = 0;
 
 	// Initialize the working car variables
 	workingCarArray = NULL;
@@ -318,9 +319,8 @@ void Iteration::UpdateData(void)
 	analysesDisplayed = false;
 	secondAnalysisPending = false;
 
-	// Make sure the semaphore is cleared (this should be redundant,
-	// since we have the flags above, but is kept just in case)
-	while (inverseSemaphore.GetCount() > 0)
+	// Make sure we have no more analyses pending
+	while (pendingAnalysisCount > 0)
 	{
 		// Just wait for the threads to finish up
 		wxSafeYield();
@@ -373,10 +373,10 @@ void Iteration::UpdateData(void)
 
 	// Initialize the semaphore count
 	// FIXME:  Check return value to ensure no errors!
-	inverseSemaphore.Set(associatedCars.GetCount() * totalPoints);
+	pendingAnalysisCount = associatedCars.GetCount() * totalPoints;
 
 	// Make sure the working cars are initialized
-	if (inverseSemaphore.GetCount() != (unsigned int)numberOfWorkingCars)
+	if (pendingAnalysisCount != (unsigned int)numberOfWorkingCars)
 	{
 		for (i = 0; i < numberOfWorkingCars; i++)
 		{
@@ -384,7 +384,7 @@ void Iteration::UpdateData(void)
 			workingCarArray[i] = NULL;
 		}
 		delete [] workingCarArray;
-		numberOfWorkingCars = inverseSemaphore.GetCount();
+		numberOfWorkingCars = pendingAnalysisCount;
 		workingCarArray = new Car*[numberOfWorkingCars];
 		for (i = 0; i < numberOfWorkingCars; i++)
 			workingCarArray[i] = new Car();
@@ -458,7 +458,7 @@ void Iteration::UpdateData(void)
 void Iteration::UpdateDisplay(void)
 {
 	// Make sure we have no more analyses waiting
-	if (inverseSemaphore.GetCount() != 0)
+	if (pendingAnalysisCount != 0)
 		return;
 	
 	// Make sure the renderer exists so we don't do this until after we're fully created
@@ -1499,11 +1499,12 @@ void Iteration::SetAutoAssociate(bool autoAssociate)
 //==========================================================================
 void Iteration::MarkAnalysisComplete(void)
 {
-	// Post our semaphore
-	// FIXME:  Check return value to ensure no error!
-	inverseSemaphore.Post();
+	assert(pendingAnalysisCount > 0);
+	
+	// Decrement the counter
+	pendingAnalysisCount--;
 
 	// If the current count is zero, update the display
-	if (inverseSemaphore.GetCount() == 0)
+	if (pendingAnalysisCount == 0)
 		UpdateDisplay();
 }

@@ -243,7 +243,8 @@ private:
 	static const int currentFileVersion;
 
 	// Synchronization object
-	InverseSemaphore inverseSemaphore;
+	unsigned int pendingAnalysisCount;
+	
 	// Flag indicating that this object's analyses are complete and another analysis can be started
 	bool analysesDisplayed;// FIXME:  I'd like to see these go away - are they needed?  Is there a cleaner way to handle it?
 	bool secondAnalysisPending;

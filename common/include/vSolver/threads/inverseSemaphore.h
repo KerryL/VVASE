@@ -56,7 +56,7 @@ private:
 	wxMutex countMutex;
 
 	// The remaining count before the calling thread is freed
-	volatile unsigned int count;
+	unsigned int count;
 };
 
 #endif// _INVERSE_SEMAPHORE_H_

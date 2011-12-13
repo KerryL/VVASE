@@ -27,9 +27,10 @@
 #pragma warning(disable:4100)
 #endif
 
-// Comment out this flag for release builds
+// Remove this flag for release builds
 #ifdef __WXDEBUG__
-#define USE_DEBUG_LOG
+// Or comment it out to disable for debug builds
+//#define USE_DEBUG_LOG
 #endif
 
 class DebugLog

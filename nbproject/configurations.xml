@@ -13,18 +13,6 @@
           <df name="environment">
           </df>
           <df name="gui">
-            <df name="components">
-              <df name="editPanel">
-                <df name="guiCar">
-                </df>
-                <df name="iteration">
-                </df>
-              </df>
-            </df>
-            <df name="dialogs">
-            </df>
-            <df name="renderer">
-            </df>
           </df>
           <df name="optimization">
           </df>
