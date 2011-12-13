@@ -339,20 +339,20 @@ public:
 	wxString GetUnitType(UnitType unitType) const;
 
 	// For getting the unit enumeration associated with each type of units
-	UnitsOfAngle GetAngleUnits() const { return defaultAngleUnits; };
-	UnitsOfDistance GetDistanceUnits() const { return defaultDistanceUnits; };
-	UnitsOfArea GetAreaUnits() const { return defaultAreaUnits; };
-	UnitsOfForce GetForceUnits() const { return defaultForceUnits; };
-	UnitsOfPressure GetPressureUnits() const { return defaultPressureUnits; };
-	UnitsOfMoment GetMomentUnits() const { return defaultMomentUnits; };
-	UnitsOfMass GetMassUnits() const { return defaultMassUnits; };
-	UnitsOfVelocity GetVelocityUnits() const { return defaultVelocityUnits; };
-	UnitsOfAcceleration GetAccelerationUnits() const { return defaultAccelerationUnits; };
-	UnitsOfInertia GetInertiaUnits() const { return defaultInertiaUnits; };
-	UnitsOfDensity GetDensityUnits() const { return defaultDensityUnits; };
-	UnitsOfPower GetPowerUnits() const { return defaultPowerUnits; };
-	UnitsOfEnergy GetEnergyUnits() const { return defaultEnergyUnits; };
-	UnitsOfTemperature GetTemperatureUnits() const { return defaultTemperatureUnits; };
+	UnitsOfAngle GetAngleUnits(void) const { return defaultAngleUnits; };
+	UnitsOfDistance GetDistanceUnits(void) const { return defaultDistanceUnits; };
+	UnitsOfArea GetAreaUnits(void) const { return defaultAreaUnits; };
+	UnitsOfForce GetForceUnits(void) const { return defaultForceUnits; };
+	UnitsOfPressure GetPressureUnits(void) const { return defaultPressureUnits; };
+	UnitsOfMoment GetMomentUnits(void) const { return defaultMomentUnits; };
+	UnitsOfMass GetMassUnits(void) const { return defaultMassUnits; };
+	UnitsOfVelocity GetVelocityUnits(void) const { return defaultVelocityUnits; };
+	UnitsOfAcceleration GetAccelerationUnits(void) const { return defaultAccelerationUnits; };
+	UnitsOfInertia GetInertiaUnits(void) const { return defaultInertiaUnits; };
+	UnitsOfDensity GetDensityUnits(void) const { return defaultDensityUnits; };
+	UnitsOfPower GetPowerUnits(void) const { return defaultPowerUnits; };
+	UnitsOfEnergy GetEnergyUnits(void) const { return defaultEnergyUnits; };
+	UnitsOfTemperature GetTemperatureUnits(void) const { return defaultTemperatureUnits; };
 
 	// For getting the strings associated with each type of units
 	wxString GetUnits(UnitsOfAngle units) const;
