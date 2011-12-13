@@ -29,11 +29,11 @@ class DataValidator : public wxTextValidator
 {
 public:
 	// Constructors
-	DataValidator(Convert::UnitType _unit, double *_valPtr = NULL);
+	DataValidator(const Convert::UnitType &_unit, double *_valPtr = NULL);
 	DataValidator(const DataValidator &dv);
 	
 	// Destructor
-	virtual ~DataValidator();
+	virtual ~DataValidator() {};
 	
 	// Clone
 	virtual DataValidator* Clone(void);
@@ -41,9 +41,6 @@ public:
 	// Mandatory overloads for validators
 	virtual bool TransferToWindow(void);
 	virtual bool TransferFromWindow(void);
-	
-	// Operators
-	DataValidator& operator=(const DataValidator& dv);
 
 private:
 	// The type of data we're validating
@@ -51,6 +48,9 @@ private:
 	
 	// Reference to the data we're protecting
 	double *valPtr;
+	
+	// Operators
+	DataValidator& operator=(const DataValidator& dv);
 };
 
 #endif// _DATA_VALIDATOR_H_

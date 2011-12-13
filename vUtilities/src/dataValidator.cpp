@@ -106,9 +106,14 @@ DataValidator* DataValidator::Clone(void)
 //==========================================================================
 bool DataValidator::TransferToWindow(void)
 {
+	if (!CheckValidator())
+		return false;
+	
 	if (valPtr)
 	{
-		 = Convert::GetInstance().ConvertTo(*valPtr, unit);
+		static_cast<wxTextCtrl*>(m_validatorWindow)->SetValue(
+			Convert::GetInstance().FormatNumber(
+			Convert::GetInstance().ConvertTo(*valPtr, unit)));
 	}
 	
 	return true;
@@ -132,8 +137,15 @@ bool DataValidator::TransferToWindow(void)
 //==========================================================================
 bool DataValidator::TransferFromWindow(void)
 {
+	if (!CheckValidator())
+		return false;
+	
 	if (valPtr)
 	{
+		double value;
+		if (!static_cast<wxTextCtrl*>(m_validatorWindow)->GetValue().ToDouble(&value))
+			return false;
+		
 		*valPtr = Convert::GetInstance().Read(value, unit);
 	}
 	
