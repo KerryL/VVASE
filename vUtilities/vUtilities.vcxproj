@@ -16,6 +16,7 @@
     <ClInclude Include="..\common\include\vUtilities\debugger.h" />
     <ClInclude Include="..\common\include\vUtilities\debugLog.h" />
     <ClInclude Include="..\common\include\vUtilities\fontFinder.h" />
+    <ClInclude Include="..\common\include\vUtilities\integerValidator.h" />
     <ClInclude Include="..\common\include\vUtilities\machineDefinitions.h" />
     <ClInclude Include="..\common\include\vUtilities\managedList.h" />
     <ClInclude Include="..\common\include\vUtilities\objectList.h" />
@@ -29,6 +30,7 @@
     <ClCompile Include="src\debugger.cpp" />
     <ClCompile Include="src\debugLog.cpp" />
     <ClCompile Include="src\fontFinder.cpp" />
+    <ClCompile Include="src\integerValidator.cpp" />
     <ClCompile Include="src\wxRelatedUtilities.cpp" />
     <ClCompile Include="src\xlsxReader.cpp" />
   </ItemGroup>

@@ -10,13 +10,13 @@
 // File:  kinematicOutputs.h
 // Created:  3/23/2008
 // Author:  K. Loux
-// Description:  Contains class declaration for KINEMATIC_OUTPUTS class.  This class does the
+// Description:  Contains class declaration for KinematicOutputs class.  This class does the
 //				 calculations for all of the kinematic simulation outputs.  That includes any
 //				 kind of wheel angle/orientation, chassis attitude, spring/shock positions, but
 //				 doesn't include any thing that requires forces to calculate (force-based roll
 //				 center, etc.).
 // History:
-//	3/24/2008	- Created CORNER_OUTPUTS structure, K. Loux.
+//	3/24/2008	- Created CornerOutputs structure, K. Loux.
 //	2/23/2009	- Changed to enum/array style for outputs instead of individually declared variables
 //				  for each output, K. Loux.
 //	3/11/2009	- Finished implementation of enum/array style data members, K. Loux.
@@ -49,7 +49,7 @@ public:
 	// Sets the pointer to the Debugger object
 	static inline void SetDebugger(const Debugger &_debugger) { debugger = &_debugger; };
 
-	// Updates the kinematic variables associated with the current SUSPENSION
+	// Updates the kinematic variables associated with the current Suspension
 	void Update(const Car *original, const Suspension *current);
 
 	// Enumeration for double outputs that get computed for every corner
@@ -180,18 +180,18 @@ public:
 		NumberOfOutputScalars// Called "scalars" because each vector component is treated as one output
 	};
 
-	// For converting from an output + location to OUTPUTS_COMPLETE
+	// For converting from an output + location to OutputsComplete
 	static OutputsComplete OutputsCompleteIndex(const Corner::Location &location,
 		const CornerOutputsDouble &cornerDouble, const CornerOutputsVector &cornerVector,
 		const OutputsDouble &midDouble, const OutputsVector &vector, const Vector::Axis &axis);
 
-	// For accessing an output via the OUTPUTS_COMPLETE list
+	// For accessing an output via the OutputsComplete list
 	double GetOutputValue(const OutputsComplete &_output) const;
 
 	// For determining unit type of the outputs
 	static Convert::UnitType GetOutputUnitType(const OutputsComplete &_output);
 
-	// For determining the name of an output from the OUTPUTS_COMPLETE list
+	// For determining the name of an output from the OutputsComplete list
 	static wxString GetOutputName(const OutputsComplete &_output);
 
 	// Mutex accessor

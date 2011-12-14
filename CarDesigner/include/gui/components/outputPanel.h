@@ -30,8 +30,8 @@ class OutputPanel : public wxPanel
 {
 public:
 	// Constructor
-	OutputPanel(MainFrame &_mainFrame, wxWindowID id, const wxPoint &pos,
-		const wxSize &size);
+	OutputPanel(MainFrame &_mainFrame, wxWindowID id = wxID_ANY, const wxPoint &pos = wxDefaultPosition,
+		const wxSize &size = wxDefaultSize);
 
 	// Destructor
 	~OutputPanel();

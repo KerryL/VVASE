@@ -37,7 +37,9 @@ public:
 		ClassNegative,
 		ClassStrictlyNegative,
 		ClassInclusiveRange,
-		ClassExclusiveRange
+		ClassExclusiveRange,
+
+		ClassCount
 	};
 
 	// Constructors

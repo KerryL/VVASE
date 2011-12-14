@@ -26,9 +26,10 @@
 // Description:		Constructor for the DataValidator class.
 //
 // Input Arguments:
-//		_unit	= const Convert::UnitType& specifying the type of data we
-//				  represent
-//		_valPtr	= double* pointer to the data we represent
+//		_unit			= const Convert::UnitType& specifying the type of data we
+//						  represent
+//		_valPtr			= double* pointer to the data we represent
+//		_numberClass	= const NumberClass& specifying additional limits
 //
 // Output Arguments:
 //		None
@@ -203,6 +204,8 @@ bool DataValidator::Validate(wxWindow *parent)
 	if (!static_cast<wxTextCtrl*>(m_validatorWindow)->GetValue().ToDouble(&value))
 		return false;
 
+	assert(numberClass >= ClassAll && numberClass < ClassCount);
+
 	switch (numberClass)
 	{
 	default:
@@ -267,7 +270,18 @@ DataValidator& DataValidator::operator=(const DataValidator& dv)
 	
 	// Make the assignments
 	unit = dv.unit;
-	valPtr = dv.valPtr;
+
+	numberClass = dv.numberClass;
+
+	min = dv.min;
+	max = dv.max;
+
+	m_value = dv.m_value;
+
+	if (dv.valPtr == &dv.m_value)
+		valPtr = &m_value;
+	else
+		valPtr = dv.valPtr;
 	
 	return *this;
 }

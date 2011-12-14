@@ -481,7 +481,7 @@ void GeneticAlgorithmPanel::AddGoalButtonClickedEvent(wxCommandEvent& WXUNUSED(e
 
 	// Create the dialog box with default goal properties
 	GAGoalDialog goalDialog(static_cast<wxWindow*>(&mainFrame), (KinematicOutputs::OutputsComplete)0, 0.0,
-		0.0, 1.0, defaultInputs, defaultInputs, wxID_ANY, wxDefaultPosition);
+		1.0, 1.0, defaultInputs, defaultInputs, wxID_ANY, wxDefaultPosition);
 
 	// Display the dialog
 	if (goalDialog.ShowModal() == wxOK)

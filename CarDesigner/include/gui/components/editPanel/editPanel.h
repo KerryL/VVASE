@@ -44,8 +44,8 @@ class EditPanel : public wxPanel
 {
 public:
 	// Constructor
-	EditPanel(MainFrame &_mainFrame, wxWindowID id, const wxPoint& pos,
-		const wxSize& size);
+	EditPanel(MainFrame &_mainFrame, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
+		const wxSize& size = wxDefaultSize);
 
 	// Destructor
 	~EditPanel();

@@ -263,12 +263,9 @@ void GAGeneDialog::CreateControls(void)
 
 	// Create another sizer for the buttons at the bottom and add the buttons
 	wxBoxSizer *buttonsSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxButton *okButton = new wxButton(this, wxID_OK, _T("OK"),
-		wxDefaultPosition, wxDefaultSize, 0);
-	wxButton *cancelButton = new wxButton(this, wxID_CANCEL, _T("Cancel"),
-		wxDefaultPosition, wxDefaultSize, 0);
+	wxButton *okButton = new wxButton(this, wxID_OK, _T("OK"));
 	buttonsSizer->Add(okButton, 0, wxALL, 5);
-	buttonsSizer->Add(cancelButton, 0, wxALL, 5);
+	buttonsSizer->Add(new wxButton(this, wxID_CANCEL, _T("Cancel")), 0, wxALL, 5);
 	mainSizer->Add(buttonsSizer, 0, wxALIGN_CENTER_HORIZONTAL);
 
 	// Make the OK button default
@@ -299,10 +296,8 @@ void GAGeneDialog::CreateControls(void)
 //==========================================================================
 void GAGeneDialog::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 {
-	// FIXME:  Can this be simplified because we're using validators?
 	// Update the class members with the data currently displayed in the dialog controls
-	if (!minimumText->GetValue().ToDouble(&minimum) ||
-		!maximumText->GetValue().ToDouble(&maximum) ||
+	if (!Validate() || !TransferDataFromWindow() ||
 		!numberOfValuesText->GetValue().ToULong(&numberOfValues))
 	{
 		wxMessageBox(_T("ERROR:  All values must be numeric!"), _T("Error Reading Data"),

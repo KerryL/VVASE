@@ -20,6 +20,7 @@
 #include "gui/dialogs/gaGoalDialog.h"
 #include "vUtilities/wxRelatedUtilities.h"
 #include "vUtilities/convert.h"
+#include "vUtilities/dataValidator.h"
 
 //==========================================================================
 // Class:			GAGoalDialog
@@ -160,11 +161,10 @@ void GAGoalDialog::CreateControls(void)
 	wxArrayString list;
 	for (i = 0; i < KinematicOutputs::NumberOfOutputScalars; i++)
 		list.Add(KinematicOutputs::GetOutputName((KinematicOutputs::OutputsComplete)i));
-	wxStaticText *outputLabel = new wxStaticText(this, wxID_STATIC, _T("Output Parameter"));
 	outputCombo = new wxComboBox(this, wxID_ANY, KinematicOutputs::GetOutputName(output), wxDefaultPosition,
 		wxDefaultSize, list, wxCB_READONLY);
 	SetMinimumWidthFromContents(outputCombo, additionalWidth);
-	inputAreaSizer->Add(outputLabel, wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
+	inputAreaSizer->Add( new wxStaticText(this, wxID_STATIC, _T("Output Parameter")), wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
 	inputAreaSizer->Add(outputCombo, wxGBPosition(row, 2), wxGBSpan(1, 3), inputSizerFlags);
 	row++;
 
@@ -193,66 +193,67 @@ void GAGoalDialog::CreateControls(void)
 	row++;
 
 	// Pitch inputs
-	wxStaticText *pitchLabel = new wxStaticText(this, wxID_STATIC, _T("Pitch"));
-	beforePitchText = new wxTextCtrl(this, wxID_ANY,
-		Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertAngle(beforeInputs.pitch)));
-	afterPitchText = new wxTextCtrl(this, wxID_ANY,
-		Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertAngle(afterInputs.pitch)));
+	wxStaticText *pitchLabel = new wxStaticText(this, wxID_STATIC, _T("Pitch"));// FIXME:  Can we get rid of this?
+	beforePitchText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+		wxDefaultSize, 0, DataValidator(Convert::UnitTypeAngle, &beforeInputs.pitch));
+	afterPitchText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+		wxDefaultSize, 0, DataValidator(Convert::UnitTypeAngle, &afterInputs.pitch));
 	wxStaticText *pitchUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		Convert::GetInstance().GetUnitType(Convert::UnitTypeAngle));
-	inputAreaSizer->Add(pitchLabel, wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
+		Convert::GetInstance().GetUnitType(Convert::UnitTypeAngle));// FIXME:  Can we get rid of this?
+	inputAreaSizer->Add(pitchLabel,
+		wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
 	inputAreaSizer->Add(beforePitchText, wxGBPosition(row, 2), wxGBSpan(), inputSizerFlags);
 	inputAreaSizer->Add(afterPitchText, wxGBPosition(row, 3), wxGBSpan(), inputSizerFlags);
-	inputAreaSizer->Add(pitchUnitsLabel, wxGBPosition(row, 4), wxGBSpan(), textSizerFlags);
+	inputAreaSizer->Add(pitchUnitsLabel,
+		wxGBPosition(row, 4), wxGBSpan(), textSizerFlags);
 	row++;
 
 	// Roll inputs
-	wxStaticText *rollLabel = new wxStaticText(this, wxID_STATIC, _T("Roll"));
-	beforeRollText = new wxTextCtrl(this, wxID_ANY,
-		Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertAngle(beforeInputs.roll)));
-	afterRollText = new wxTextCtrl(this, wxID_ANY,
-		Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertAngle(afterInputs.roll)));
-	wxStaticText *rollUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		Convert::GetInstance().GetUnitType(Convert::UnitTypeAngle));
-	inputAreaSizer->Add(rollLabel, wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
+	beforeRollText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+		wxDefaultSize, 0, DataValidator(Convert::UnitTypeAngle, &beforeInputs.roll));
+	afterRollText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+		wxDefaultSize, 0, DataValidator(Convert::UnitTypeAngle, &afterInputs.roll));
+	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Roll")),
+		wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
 	inputAreaSizer->Add(beforeRollText, wxGBPosition(row, 2), wxGBSpan(), inputSizerFlags);
 	inputAreaSizer->Add(afterRollText, wxGBPosition(row, 3), wxGBSpan(), inputSizerFlags);
-	inputAreaSizer->Add(rollUnitsLabel, wxGBPosition(row, 4), wxGBSpan(), textSizerFlags);
+	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC,
+		Convert::GetInstance().GetUnitType(Convert::UnitTypeAngle)),
+		wxGBPosition(row, 4), wxGBSpan(), textSizerFlags);
 	row++;
 
 	// Heave inputs
-	wxStaticText *heaveLabel = new wxStaticText(this, wxID_STATIC, _T("Heave"));
-	beforeHeaveText = new wxTextCtrl(this, wxID_ANY,
-		Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(beforeInputs.heave)));
-	afterHeaveText = new wxTextCtrl(this, wxID_ANY,
-		Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(afterInputs.heave)));
-	wxStaticText *heaveUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance));
-	inputAreaSizer->Add(heaveLabel, wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
+	beforeHeaveText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+		wxDefaultSize, 0, DataValidator(Convert::UnitTypeDistance, &beforeInputs.heave));
+	afterHeaveText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+		wxDefaultSize, 0, DataValidator(Convert::UnitTypeDistance, &afterInputs.heave));
+	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Heave")),
+		wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
 	inputAreaSizer->Add(beforeHeaveText, wxGBPosition(row, 2), wxGBSpan(), inputSizerFlags);
 	inputAreaSizer->Add(afterHeaveText, wxGBPosition(row, 3), wxGBSpan(), inputSizerFlags);
-	inputAreaSizer->Add(heaveUnitsLabel, wxGBPosition(row, 4), wxGBSpan(), textSizerFlags);
+	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC,
+		Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance)),
+		wxGBPosition(row, 4), wxGBSpan(), textSizerFlags);
 	row++;
 
 	// Steer inputs
-	wxStaticText *steerLabel = new wxStaticText(this, wxID_STATIC, _T("Rack Travel"));
-	beforeSteerText = new wxTextCtrl(this, wxID_ANY,
-		Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(beforeInputs.rackTravel)));
-	afterSteerText = new wxTextCtrl(this, wxID_ANY,
-		Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(afterInputs.rackTravel)));
-	wxStaticText *steerUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance));
-	inputAreaSizer->Add(steerLabel, wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
+	beforeSteerText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+		wxDefaultSize, 0, DataValidator(Convert::UnitTypeDistance, &beforeInputs.rackTravel));// FIXME:  Handle rack travel and wheel angle!
+	afterSteerText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+		wxDefaultSize, 0, DataValidator(Convert::UnitTypeDistance, &afterInputs.rackTravel));// FIXME:  Handle rack travel and wheel angle!
+	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Rack Travel")),
+		wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);// FIXME:  Handle rack travel and wheel angle!
 	inputAreaSizer->Add(beforeSteerText, wxGBPosition(row, 2), wxGBSpan(), inputSizerFlags);
 	inputAreaSizer->Add(afterSteerText, wxGBPosition(row, 3), wxGBSpan(), inputSizerFlags);
-	inputAreaSizer->Add(steerUnitsLabel, wxGBPosition(row, 4), wxGBSpan(), textSizerFlags);
+	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC,
+		Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance)),// FIXME:  Handle rack travel and wheel angle!
+		wxGBPosition(row, 4), wxGBSpan(), textSizerFlags);
 	row++;
 
 	// Desired value
 	desiredValueLabel = new wxStaticText(this, wxID_STATIC, _T("Desired Value"));
-	desiredValueText = new wxTextCtrl(this, wxID_ANY, Convert::GetInstance().FormatNumber(
-		Convert::GetInstance().ConvertTo(desiredValue,
-		KinematicOutputs::GetOutputUnitType(output))));
+	desiredValueText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+		wxDefaultSize, 0, DataValidator(KinematicOutputs::GetOutputUnitType(output), &desiredValue));
 	desiredValueUnitsLabel = new wxStaticText(this, wxID_STATIC,
 		Convert::GetInstance().GetUnitType(KinematicOutputs::GetOutputUnitType(output)));
 	inputAreaSizer->Add(desiredValueLabel, wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
@@ -261,21 +262,19 @@ void GAGoalDialog::CreateControls(void)
 	row++;
 
 	// Expected deviation
-	wxStaticText *deviationLabel = new wxStaticText(this, wxID_STATIC, _T("Expected Deviation"));
-	deviationText = new wxTextCtrl(this, wxID_ANY, Convert::GetInstance().FormatNumber(
-		Convert::GetInstance().ConvertTo(expectedDeviation,
-		KinematicOutputs::GetOutputUnitType(output))));
+	deviationText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+		wxDefaultSize, 0, DataValidator(KinematicOutputs::GetOutputUnitType(output), &expectedDeviation, DataValidator::ClassStrictlyPositive));
 	deviationUnitsLabel = new wxStaticText(this, wxID_STATIC,
 		Convert::GetInstance().GetUnitType(KinematicOutputs::GetOutputUnitType(output)));
-	inputAreaSizer->Add(deviationLabel, wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
+	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Expected Deviation")), wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
 	inputAreaSizer->Add(deviationText, wxGBPosition(row, 2), wxGBSpan(1, 2), inputSizerFlags);
 	inputAreaSizer->Add(deviationUnitsLabel, wxGBPosition(row, 4), wxGBSpan(), textSizerFlags);
 	row++;
 
 	// Importance
-	wxStaticText *importanceLabel = new wxStaticText(this, wxID_STATIC, _T("Relative Importance"));
-	importanceText = new wxTextCtrl(this, wxID_ANY, Convert::GetInstance().FormatNumber(importance));
-	inputAreaSizer->Add(importanceLabel, wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
+	importanceText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+		wxDefaultSize, 0, DataValidator(Convert::UnitTypeUnitless, &importance));
+	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Relative Importance")), wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
 	inputAreaSizer->Add(importanceText, wxGBPosition(row, 2), wxGBSpan(1, 2), inputSizerFlags);
 	row++;
 
@@ -300,10 +299,8 @@ void GAGoalDialog::CreateControls(void)
 	wxBoxSizer *buttonsSizer = new wxBoxSizer(wxHORIZONTAL);
 	wxButton *okButton = new wxButton(this, wxID_OK, _T("OK"),
 		wxDefaultPosition, wxDefaultSize, 0);
-	wxButton *cancelButton = new wxButton(this, wxID_CANCEL, _T("Cancel"),
-		wxDefaultPosition, wxDefaultSize, 0);
 	buttonsSizer->Add(okButton, 0, wxALL, 5);
-	buttonsSizer->Add(cancelButton, 0, wxALL, 5);
+	buttonsSizer->Add(new wxButton(this, wxID_CANCEL, _T("Cancel")), 0, wxALL, 5);
 	mainSizer->Add(buttonsSizer, 0, wxALIGN_CENTER_HORIZONTAL);
 
 	// Make the OK button default
@@ -336,62 +333,34 @@ void GAGoalDialog::CreateControls(void)
 //		None
 //
 //==========================================================================
-void GAGoalDialog::OKClickEvent(wxCommandEvent& WXUNUSED(event))
+void GAGoalDialog::OKClickEvent(wxCommandEvent& event)
 {
-	// Update the class members with the data currently displayed in the dialog controls
-	if (!desiredValueText->GetValue().ToDouble(&desiredValue) ||
-		!deviationText->GetValue().ToDouble(&expectedDeviation) ||
-		!importanceText->GetValue().ToDouble(&importance) ||
-		!beforeHeaveText->GetValue().ToDouble(&beforeInputs.heave) ||
-		!beforePitchText->GetValue().ToDouble(&beforeInputs.pitch) ||
-		!beforeRollText->GetValue().ToDouble(&beforeInputs.roll) ||
-		!beforeSteerText->GetValue().ToDouble(&beforeInputs.rackTravel))
+	// If we don't need to check both sets of inputs, make sure we can ignore the second set
+	if (!difference->IsChecked())
 	{
-		wxMessageBox(_T("ERROR:  All values must be numeric!"), _T("Error Validating Data"),
-			wxOK | wxICON_ERROR, this);
+		afterHeaveText->ChangeValue(beforeHeaveText->GetValue());
+		afterPitchText->ChangeValue(beforePitchText->GetValue());
+		afterRollText->ChangeValue(beforeRollText->GetValue());
+		afterSteerText->ChangeValue(beforeSteerText->GetValue());
+	}
+
+	// Update the class members with the data currently displayed in the dialog controls
+	if (!Validate())
+	{
+		wxMessageBox(_T("ERROR:  Expected deviation must be greater than zero!"),
+			_T("Error Validating Data"), wxOK | wxICON_ERROR, this);
 		return;
 	}
-
-	// Check the after inputs separately, because we may not actually read them
-	if (difference->IsChecked())
+	if (!TransferDataFromWindow())
 	{
-		if (!afterHeaveText->GetValue().ToDouble(&afterInputs.heave) ||
-			!afterPitchText->GetValue().ToDouble(&afterInputs.pitch) ||
-			!afterRollText->GetValue().ToDouble(&afterInputs.roll) ||
-			!afterSteerText->GetValue().ToDouble(&afterInputs.rackTravel))
-		{
-			wxMessageBox(_T("ERROR:  All values must be numeric!"), _T("Error Validating Data"),
-				wxOK | wxICON_ERROR, this);
-			return;
-		}
-	}
-
-	// Expected deviation cannot be zero
-	if (expectedDeviation == 0.0)
-	{
-		wxMessageBox(_T("ERROR:  Expected deviation cannot be zero!"), _T("Error Validating Data"),
-			wxOK | wxICON_ERROR, this);
+		wxMessageBox(_T("ERROR:  All values must be numeric!"),
+			_T("Error Validating Data"), wxOK | wxICON_ERROR, this);
 		return;
 	}
 
 	output = (KinematicOutputs::OutputsComplete)outputCombo->GetCurrentSelection();
 
-	// Convert the input values
-	desiredValue = Convert::GetInstance().Read(desiredValue, KinematicOutputs::GetOutputUnitType(output));
-	expectedDeviation = Convert::GetInstance().Read(expectedDeviation, KinematicOutputs::GetOutputUnitType(output));
-	beforeInputs.pitch = Convert::GetInstance().ReadAngle(beforeInputs.pitch);
-	beforeInputs.roll = Convert::GetInstance().ReadAngle(beforeInputs.roll);
-	beforeInputs.heave = Convert::GetInstance().ReadDistance(beforeInputs.heave);
-	beforeInputs.rackTravel = Convert::GetInstance().ReadDistance(beforeInputs.rackTravel);
-
-	if (difference->IsChecked())
-	{
-		afterInputs.pitch = Convert::GetInstance().ReadAngle(afterInputs.pitch);
-		afterInputs.roll = Convert::GetInstance().ReadAngle(afterInputs.roll);
-		afterInputs.heave = Convert::GetInstance().ReadDistance(afterInputs.heave);
-		afterInputs.rackTravel = Convert::GetInstance().ReadDistance(afterInputs.rackTravel);
-	}
-	else
+	if (!difference->IsChecked())
 		afterInputs = beforeInputs;
 
 	// The way we handle this changes depending on how this form was displayed
@@ -477,10 +446,14 @@ void GAGoalDialog::OnCheckEvent(wxCommandEvent& WXUNUSED(event))
 void GAGoalDialog::OnOutputChangeEvent(wxCommandEvent &event)
 {
 	// Update the units labels for the desired value and expected deviation
-	desiredValueUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(
-		KinematicOutputs::GetOutputUnitType((KinematicOutputs::OutputsComplete)event.GetSelection())));
-	deviationUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(
-		KinematicOutputs::GetOutputUnitType((KinematicOutputs::OutputsComplete)event.GetSelection())));
+	Convert::UnitType units = KinematicOutputs::GetOutputUnitType(
+		(KinematicOutputs::OutputsComplete)event.GetSelection());
+
+	desiredValueUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(units));
+	static_cast<DataValidator*>(desiredValueText->GetValidator())->SetUnitType(units);
+
+	deviationUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(units));
+	static_cast<DataValidator*>(deviationText->GetValidator())->SetUnitType(units);
 }
 
 //==========================================================================

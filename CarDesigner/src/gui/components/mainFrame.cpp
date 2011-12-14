@@ -111,7 +111,7 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxEmptyString, wxDefaultPositio
 		wxAUI_NB_SCROLL_BUTTONS | wxAUI_NB_CLOSE_ON_ALL_TABS | wxAUI_NB_WINDOWLIST_BUTTON);
 
 	// Create the EditPanel
-	editPanel = new EditPanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
+	editPanel = new EditPanel(*this);
 
 	// Create the OutputPanel
 	outputPanel = new OutputPanel(*this, wxID_ANY, wxDefaultPosition, wxSize(350, -1));
@@ -266,9 +266,9 @@ void MainFrame::DoLayout(void)
 	=============================================================
 	|Toolbars													|
 	|-----------------------------------------------------------|
-	| Systems	| Notebook								|		|
+	| Systems	| Main Notebook							|		|
 	| Tree		|										|Output	|
-	|			|										|Panel	|
+	|			|										|List	|
 	|			|										|		|
 	|			|										|		|
 	|			|										|		|
@@ -279,7 +279,7 @@ void MainFrame::DoLayout(void)
 	|			|										|		|
 	|			|										|		|
 	|			|-----------------------------------------------|
-	|			| Output Pane									|
+	|			| Debug Pane									|
 	|			|												|
 	|			|												|
 	|			|												|
@@ -314,8 +314,6 @@ void MainFrame::SetProperties(void)
 	// MainFrame properties
 	SetTitle(carDesignerName);
 	SetName(carDesignerName);
-	SetSize(1024, 768);
-	Center();
 
 	// Add the icons
 	wxIconBundle bundle;
@@ -2473,10 +2471,10 @@ void MainFrame::ReadConfiguration(void)
 	wxString layoutString;
 	if (configurationFile->Read(_T("/GUI/LayoutString"), &layoutString))
 		manager.LoadPerspective(layoutString);
-	tempBool = false;
-	if (configurationFile->Read(_T("/GUI/IsMaximized"), &tempBool))
-		Maximize(tempBool);
-	else// FIXME:  This doesn't work as expected under GTK (needs testing under MSW)
+	configurationFile->Read(_T("/GUI/IsMaximized"), &tempBool, false);
+	if (tempBool)
+		Maximize();
+	else// FIXME:  This doesn't work as expected under GTK (is fine under MSW)
 	{
 		SetSize(configurationFile->Read(_T("/GUI/SizeX"), 1024l),
 			configurationFile->Read(_T("/GUI/SizeY"), 768l));
