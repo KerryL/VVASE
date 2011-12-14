@@ -123,7 +123,6 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxEmptyString, wxDefaultPositio
 
 	// Create additional objects
 	CreateMenuBar();
-	statusBar = CreateStatusBar(2, 0);
 
 	// Add the toolbars
 	kinematicToolbar = NULL;
@@ -330,12 +329,6 @@ void MainFrame::SetProperties(void)
 	bundle.AddIcon(wxIcon(aavase48_xpm, wxBITMAP_TYPE_XPM));
 #endif
 	SetIcons(bundle);
-
-	// StatusBar properties
-	int statusBarWidths[] = {-1, 100};
-	statusBar->SetStatusWidths(2, statusBarWidths);
-	statusBar->SetStatusText(_T("Ready"), 0);
-	statusBar->SetStatusText(wxEmptyString, 1);
 
 	// Set up the debugger
 	Debugger::GetInstance().SetTargetOutput(debugPane);
@@ -1427,7 +1420,7 @@ void MainFrame::IterationAssociatedWithAllCarsClickEvent(wxCommandEvent &event)
 //==========================================================================
 void MainFrame::IterationExportDataToFileClickEvent(wxCommandEvent& WXUNUSED(event))
 {
-	// Make sure the object is TYPE_ITERATION
+	// Make sure the object is TypeIteration
 	if (openObjectList.GetObject(objectOfInterestIndex)->GetType() != GuiObject::TypeIteration)
 		return;
 
@@ -2481,8 +2474,7 @@ void MainFrame::ReadConfiguration(void)
 	if (configurationFile->Read(_T("/GUI/LayoutString"), &layoutString))
 		manager.LoadPerspective(layoutString);
 	tempBool = false;
-	configurationFile->Read(_T("/GUI/IsMaximized"), &tempBool);
-	if (tempBool)
+	if (configurationFile->Read(_T("/GUI/IsMaximized"), &tempBool))
 		Maximize(tempBool);
 	else
 	{

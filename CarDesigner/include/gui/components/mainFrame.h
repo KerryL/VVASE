@@ -327,9 +327,8 @@ private:
 	OutputPanel *outputPanel;
 	wxTextCtrl *debugPane;
 
-	// The menu and status bars
+	// The menu bar
 	wxMenuBar *menuBar;
-	wxStatusBar *statusBar;
 
 	// Toolbars
 	wxToolBar *kinematicToolbar;

@@ -8,6 +8,14 @@
         <df name="src">
           <df name="3dcar">
           </df>
+          <df name="application">
+          </df>
+          <df name="environment">
+          </df>
+          <df name="gui">
+            <df name="components">
+            </df>
+          </df>
           <df name="optimization">
           </df>
           <df name="physics">
