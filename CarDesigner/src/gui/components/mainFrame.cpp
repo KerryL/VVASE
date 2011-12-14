@@ -2476,7 +2476,7 @@ void MainFrame::ReadConfiguration(void)
 	tempBool = false;
 	if (configurationFile->Read(_T("/GUI/IsMaximized"), &tempBool))
 		Maximize(tempBool);
-	else
+	else// FIXME:  This doesn't work as expected under GTK (needs testing under MSW)
 	{
 		SetSize(configurationFile->Read(_T("/GUI/SizeX"), 1024l),
 			configurationFile->Read(_T("/GUI/SizeY"), 768l));

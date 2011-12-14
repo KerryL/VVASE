@@ -11,7 +11,7 @@
 // Created:  6/5/2008
 // Author:  K. Loux
 // Description:  Contains class definition for GuiObject class.  This aids with GUI functionality for the
-//				 by serving as a link between all of the GUI components and the CAR object.
+//				 by serving as a link between all of the GUI components and the Car object.
 // History:
 //	1/24/2009	- Major application structure change - MainFrame uses GuiObject instead of
 //				  GuiCar.  GuiObject changed to only contain either GuiCar or Iteration
