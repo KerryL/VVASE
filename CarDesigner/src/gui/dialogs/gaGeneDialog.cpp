@@ -18,6 +18,7 @@
 #include "vUtilities/wxRelatedUtilities.h"
 #include "vUtilities/convert.h"
 #include "vUtilities/dataValidator.h"
+#include "vUtilities/integerValidator.h"
 
 //==========================================================================
 // Class:			GAGeneDialog
@@ -240,7 +241,8 @@ void GAGeneDialog::CreateControls(void)
 		wxDefaultPosition, wxDefaultSize, 0), 0, textSizerFlags);
 
 	// Number of values
-	numberOfValuesText = new wxTextCtrl(this, wxID_ANY, wxEmptyString);// FIXME:  Use integer validator
+	numberOfValuesText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+		wxDefaultSize, 0, IntegerValidator(2, &numberOfValues, IntegerValidator::ClassMinimumInclusive));
 	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Number of Values")), 0, textSizerFlags);
 	inputAreaSizer->Add(numberOfValuesText, 0, comboSizerFlags);
 	inputAreaSizer->AddSpacer(-1);
@@ -252,11 +254,6 @@ void GAGeneDialog::CreateControls(void)
 	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC,
 		Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance),
 		wxDefaultPosition, wxDefaultSize, 0), 0, textSizerFlags);
-
-	// This is set as a separate event to cause the resolution to update
-	wxString temp;
-	temp.Printf("%lu", numberOfValues);
-	numberOfValuesText->SetValue(temp);
 
 	// Add a spacer between the text controls and the buttons
 	mainSizer->AddSpacer(15);
@@ -297,19 +294,10 @@ void GAGeneDialog::CreateControls(void)
 void GAGeneDialog::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Update the class members with the data currently displayed in the dialog controls
-	if (!Validate() || !TransferDataFromWindow() ||
-		!numberOfValuesText->GetValue().ToULong(&numberOfValues))
+	if (!Validate() || !TransferDataFromWindow())
 	{
-		wxMessageBox(_T("ERROR:  All values must be numeric!"), _T("Error Reading Data"),
-			wxOK | wxICON_ERROR, this);
-		return;
-	}
-
-	// Make sure the number of values is greater than 1
-	if (numberOfValues <= 1)
-	{
-		wxMessageBox(_T("ERROR:  Number of values must be greater than one!"), _T("Error Reading Data"),
-			wxOK | wxICON_ERROR, this);
+		wxMessageBox(_T("ERROR:  All values must be numeric!\nNumber of values must be at least two."),
+			_T("Error Reading Data"), wxOK | wxICON_ERROR, this);
 		return;
 	}
 
@@ -321,10 +309,6 @@ void GAGeneDialog::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 		tiedTo = (Corner::Hardpoints)(tiedToCombo->GetCurrentSelection() - 1);
 	axisDirection = (Vector::Axis)axisDirectionCombo->GetCurrentSelection();
 	cornerLocation = (Corner::Location)cornerLocationCombo->GetCurrentSelection();
-
-	// Convert the input values
-	minimum = Convert::GetInstance().ReadDistance(minimum);
-	maximum = Convert::GetInstance().ReadDistance(maximum);
 
 	// The way we handle this changes depending on how this form was displayed
 	if (IsModal())
@@ -387,18 +371,18 @@ void GAGeneDialog::TextChangeEvent(wxCommandEvent& WXUNUSED(event))
 		return;
 
 	// Get the input values
-	double Min(0.0), Max(0.0);
-	unsigned long ValueCount(0);
-	if (!minimumText->GetValue().ToDouble(&Min) ||
-		!maximumText->GetValue().ToDouble(&Max) ||
-		!numberOfValuesText->GetValue().ToULong(&ValueCount))
+	double min(0.0), max(0.0);
+	unsigned long valueCount(0);
+	if (!minimumText->GetValue().ToDouble(&min) ||
+		!maximumText->GetValue().ToDouble(&max) ||
+		!numberOfValuesText->GetValue().ToULong(&valueCount))
 		return;
 
 	// Make sure the data is valid
-	if (ValueCount <= 1)
+	if (valueCount <= 1)
 		return;
 
 	// Set the text
 	resolution->SetLabel(Convert::GetInstance().FormatNumber(
-		Convert::GetInstance().ConvertDistance(fabs(Max - Min) / double(ValueCount - 1))));
+		Convert::GetInstance().ConvertDistance(fabs(max - min) / double(valueCount - 1))));
 }

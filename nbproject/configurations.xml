@@ -8,14 +8,6 @@
         <df name="src">
           <df name="3dcar">
           </df>
-          <df name="application">
-          </df>
-          <df name="environment">
-          </df>
-          <df name="gui">
-            <df name="components">
-            </df>
-          </df>
           <df name="optimization">
           </df>
           <df name="physics">
@@ -268,6 +260,7 @@
             <in>debugLog.h</in>
             <in>debugger.h</in>
             <in>fontFinder.h</in>
+            <in>integerValidator.h</in>
             <in>machineDefinitions.h</in>
             <in>managedList.h</in>
             <in>objectList.h</in>
@@ -385,6 +378,7 @@
           <in>debugLog.cpp</in>
           <in>debugger.cpp</in>
           <in>fontFinder.cpp</in>
+          <in>integerValidator.cpp</in>
           <in>wxRelatedUtilities.cpp</in>
           <in>xlsxReader.cpp</in>
         </df>
