@@ -45,7 +45,7 @@ public:
 	IntegerValidator(int *_valPtr = NULL, const NumberClass &_numberClass = ClassAll);
 	IntegerValidator(const int &_min, const int &_max, int *_valPtr = NULL,
 		const NumberClass &_numberClass = ClassInclusiveRange);
-	IntegerValidator(unsigned int *_valPtr = NULL, const NumberClass &_numberClass = ClassAll);
+	IntegerValidator(unsigned int *_valPtr, const NumberClass &_numberClass = ClassAll);
 	IntegerValidator(const unsigned int &_min, const unsigned int &_max,
 		unsigned int *_valPtr = NULL, const NumberClass &_numberClass = ClassInclusiveRange);
 	IntegerValidator(const IntegerValidator &dv);

@@ -15,7 +15,7 @@
 //				 angle/orientation, chassis attitude, spring/shock positions, but doesn't include
 //				 any thing that requires forces to calculate (force-based roll center, etc.).
 // History:
-//	3/24/2008	- Created Corner_OUTPUTS structure, K. Loux.
+//	3/24/2008	- Created CornerOutputs structure, K. Loux.
 //	2/16/2009	- Changed Corner and Suspension to use enumeration style array of points instead
 //				  of having each point declared individually, K. Loux.
 //	2/26/2009	- Fixed calculation in steer and camber angles.  Also added effects of static camber

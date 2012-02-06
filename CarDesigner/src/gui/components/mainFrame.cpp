@@ -2984,8 +2984,13 @@ wxArrayString MainFrame::GetFileNameFromUser(wxString dialogTitle, wxString defa
 	// Set the dialog to display center screen at the user's home directory
 	dialog.CenterOnParent();
 
+	// FIXME:  For debugging the error below
+	//void* a = &objectOfInterestIndex;
+	// Workaround for error below
+	unsigned int temp = objectOfInterestIndex;
+
 	// Display the dialog and make sure the user clicked OK
-	if (dialog.ShowModal() == wxID_OK)
+	if (dialog.ShowModal() == wxID_OK)// FIXME:  This changes the objectOfInterestIndex, which screws stuff up - why is that?
 	{
 		// If this was an open dialog, we want to get all of the selected paths,
 		// otherwise, just get the one selected path
@@ -2994,6 +2999,9 @@ wxArrayString MainFrame::GetFileNameFromUser(wxString dialogTitle, wxString defa
 		else
 			pathsAndFileNames.Add(dialog.GetPath());
 	}
+
+	// Part of above workaround
+	SetActiveIndex(temp);
 
 	// Return the path and file name
 	return pathsAndFileNames;
