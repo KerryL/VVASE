@@ -38,7 +38,10 @@
 IntegerValidator::IntegerValidator(int *_valPtr, const NumberClass &_numberClass)
 							: wxTextValidator(wxFILTER_NUMERIC)
 {
-	assert(_numberClass != ClassInclusiveRange && _numberClass != ClassExclusiveRange);
+	// Must use the proper constructor for the desired class of validation
+	assert(_numberClass != ClassRangeInclusive && _numberClass != ClassRangeExclusive);
+	assert(_numberClass != ClassMinimumInclusive && _numberClass != ClassMinimumExclusive);
+	assert(_numberClass != ClassMaximumInclusive && _numberClass != ClassMaximumExclusive);
 
 	// Assign to the class members
 	if (_valPtr)
@@ -72,8 +75,9 @@ IntegerValidator::IntegerValidator(int *_valPtr, const NumberClass &_numberClass
 IntegerValidator::IntegerValidator(const int &_min, const int &_max,
 								   int *_valPtr, const NumberClass &_numberClass)
 {
+	// Must use the proper constructor for the desired class of validation
+	assert(_numberClass == ClassRangeInclusive || _numberClass == ClassRangeExclusive);
 	assert(_min < _max);
-	assert(_numberClass == ClassInclusiveRange || _numberClass == ClassExclusiveRange);
 
 	// Assign to the class members
 	if (_valPtr)
@@ -84,6 +88,41 @@ IntegerValidator::IntegerValidator(const int &_min, const int &_max,
 	numberClass = _numberClass;
 	min = _min;
 	max = _max;
+}
+
+//==========================================================================
+// Class:			IntegerValidator
+// Function:		IntegerValidator
+//
+// Description:		Constructor for the IntegerValidator class.
+//
+// Input Arguments:
+//		_limit			= const int&
+//		_valPtr			= int* pointer to the data we represent
+//		_numberClass	= const NumberClass&, specifying additional limits to enforce
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+IntegerValidator::IntegerValidator(const int &_limit, int *_valPtr,
+		const NumberClass &_numberClass)
+{
+	// Must use the proper constructor for the desired class of validation
+	assert(_numberClass == ClassMinimumInclusive || _numberClass == ClassMinimumExclusive ||
+		_numberClass == ClassMaximumInclusive || _numberClass == ClassMaximumExclusive);
+
+	// Assign to the class members
+	if (_valPtr)
+		valPtr = _valPtr;
+	else
+		valPtr = &m_value;
+	uValPtr = NULL;
+	numberClass = _numberClass;
+	limit = _limit;
 }
 
 //==========================================================================
@@ -106,7 +145,11 @@ IntegerValidator::IntegerValidator(const int &_min, const int &_max,
 IntegerValidator::IntegerValidator(unsigned int *_valPtr, const NumberClass &_numberClass)
 							: wxTextValidator(wxFILTER_NUMERIC)
 {
-	assert(_numberClass != ClassInclusiveRange && _numberClass != ClassExclusiveRange);
+	// Must use the proper constructor for the desired class of validation
+	assert(_numberClass != ClassRangeInclusive && _numberClass != ClassRangeExclusive);
+	assert(_numberClass != ClassMinimumInclusive && _numberClass != ClassMinimumExclusive);
+	assert(_numberClass != ClassMaximumInclusive && _numberClass != ClassMaximumExclusive);
+	assert(_numberClass != ClassNegative && _numberClass != ClassStrictlyNegative);
 
 	// Assign to the class members
 	if (_valPtr)
@@ -140,8 +183,9 @@ IntegerValidator::IntegerValidator(unsigned int *_valPtr, const NumberClass &_nu
 IntegerValidator::IntegerValidator(const unsigned int &_min, const unsigned int &_max,
 								   unsigned int *_valPtr, const NumberClass &_numberClass)
 {
+	// Must use the proper constructor for the desired class of validation
+	assert(_numberClass == ClassRangeInclusive || _numberClass == ClassRangeExclusive);
 	assert(_min < _max);
-	assert(_numberClass == ClassInclusiveRange || _numberClass == ClassExclusiveRange);
 
 	// Assign to the class members
 	if (_valPtr)
@@ -152,6 +196,41 @@ IntegerValidator::IntegerValidator(const unsigned int &_min, const unsigned int 
 	numberClass = _numberClass;
 	umin = _min;
 	umax = _max;
+}
+
+//==========================================================================
+// Class:			IntegerValidator
+// Function:		IntegerValidator
+//
+// Description:		Constructor for the IntegerValidator class (unsigned).
+//
+// Input Arguments:
+//		_limit			= const unsigned int&
+//		_valPtr			= unsigned int* pointer to the data we represent
+//		_numberClass	= const NumberClass&, specifying additional limits to enforce
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+IntegerValidator::IntegerValidator(const unsigned int &_limit, unsigned int *_valPtr,
+		const NumberClass &_numberClass)
+{
+	// Must use the proper constructor for the desired class of validation
+	assert(_numberClass == ClassMinimumInclusive || _numberClass == ClassMinimumExclusive ||
+		_numberClass == ClassMaximumInclusive || _numberClass == ClassMaximumExclusive);
+
+	// Assign to the class members
+	if (_valPtr)
+		uValPtr = _valPtr;
+	else
+		uValPtr = &m_uvalue;
+	valPtr = NULL;
+	numberClass = _numberClass;
+	ulimit = _limit;
 }
 
 //==========================================================================
@@ -273,49 +352,131 @@ bool IntegerValidator::Validate(wxWindow *parent)
 {
 	if (!CheckValidator())
 		return false;
-	// FIXME:  This needs work!
-	long value;
-	long uValue;
-	if (!static_cast<wxTextCtrl*>(m_validatorWindow)->GetValue().ToLong(&value))
-		return false;
-
+	
 	assert(numberClass >= ClassAll && numberClass < ClassCount);
 
-	switch (numberClass)
+	if (valPtr)
 	{
-	default:
-	case ClassAll:
-		break;
-
-	case ClassPositive:
-		if (value < 0.0)
+		long value;
+		if (!static_cast<wxTextCtrl*>(m_validatorWindow)->GetValue().ToLong(&value))
 			return false;
-		break;
 
-	case ClassStrictlyPositive:
-		if (value <= 0.0)
-			return false;
-		break;
+		switch (numberClass)
+		{
+		default:
+		case ClassAll:
+			break;
 
-	case ClassNegative:
-		if (value > 0.0)
-			return false;
-		break;
+		case ClassPositive:
+			if (value < 0)
+				return false;
+			break;
 
-	case ClassStrictlyNegative:
-		if (value >= 0.0)
-			return false;
-		break;
+		case ClassStrictlyPositive:
+			if (value <= 0)
+				return false;
+			break;
 
-	case ClassInclusiveRange:
-		if (value < min || value > max)
-			return false;
-		break;
+		case ClassNegative:
+			if (value > 0)
+				return false;
+			break;
 
-	case ClassExclusiveRange:
-		if (value <= min || value >= max)
+		case ClassStrictlyNegative:
+			if (value >= 0)
+				return false;
+			break;
+
+		case ClassRangeInclusive:
+			if (value < min || value > max)
+				return false;
+			break;
+
+		case ClassRangeExclusive:
+			if (value <= min || value >= max)
+				return false;
+			break;
+			
+		case ClassMinimumInclusive:
+			if (value < limit)
+				return false;
+			break;
+			
+		case ClassMinimumExclusive:
+			if (value <= limit)
+				return false;
+			break;
+			
+		case ClassMaximumInclusive:
+			if (value > limit)
+				return false;
+			break;
+			
+		case ClassMaximumExclusive:
+			if (value >= limit)
+				return false;
+			break;
+		}
+	}
+	else if (uValPtr)
+	{
+		long temp;
+		if (!static_cast<wxTextCtrl*>(m_validatorWindow)->GetValue().ToLong(&temp))
 			return false;
-		break;
+		
+		// Make sure our number is actually positive
+		if (temp < 0)
+			return false;
+		
+		unsigned long value(temp);
+
+		switch (numberClass)
+		{
+		default:
+		case ClassPositive:
+		case ClassAll:
+			break;
+
+		case ClassStrictlyPositive:
+			if (value == 0)
+				return false;
+			break;
+
+		case ClassNegative:
+			if (value > 0)
+				return false;
+			break;
+
+		case ClassRangeInclusive:
+			if (value < umin || value > umax)
+				return false;
+			break;
+
+		case ClassRangeExclusive:
+			if (value <= umin || value >= umax)
+				return false;
+			break;
+			
+		case ClassMinimumInclusive:
+			if (value < ulimit)
+				return false;
+			break;
+			
+		case ClassMinimumExclusive:
+			if (value <= ulimit)
+				return false;
+			break;
+			
+		case ClassMaximumInclusive:
+			if (value > ulimit)
+				return false;
+			break;
+			
+		case ClassMaximumExclusive:
+			if (value >= ulimit)
+				return false;
+			break;
+		}
 	}
 
 	return true;
@@ -353,6 +514,9 @@ IntegerValidator& IntegerValidator::operator=(const IntegerValidator& dv)
 	max = dv.max;
 	umin = dv.umin;
 	umax = dv.umax;
+	
+	limit = dv.limit;
+	ulimit = dv.ulimit;
 
 	m_value = dv.m_value;
 	m_uvalue = dv.m_uvalue;

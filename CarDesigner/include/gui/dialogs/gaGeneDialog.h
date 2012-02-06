@@ -66,7 +66,7 @@ private:
 	Corner::Location cornerLocation;
 	double minimum;
 	double maximum;
-	unsigned long numberOfValues;
+	unsigned int numberOfValues;
 
 	// Event handlers
 	virtual void OKClickEvent(wxCommandEvent &event);

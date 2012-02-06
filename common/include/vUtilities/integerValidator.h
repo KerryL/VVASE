@@ -35,8 +35,12 @@ public:
 		ClassStrictlyPositive,
 		ClassNegative,
 		ClassStrictlyNegative,
-		ClassInclusiveRange,
-		ClassExclusiveRange,
+		ClassRangeInclusive,
+		ClassRangeExclusive,
+		ClassMinimumInclusive,
+		ClassMaximumInclusive,
+		ClassMinimumExclusive,
+		ClassMaximumExclusive,
 
 		ClassCount
 	};
@@ -44,10 +48,14 @@ public:
 	// Constructors
 	IntegerValidator(int *_valPtr = NULL, const NumberClass &_numberClass = ClassAll);
 	IntegerValidator(const int &_min, const int &_max, int *_valPtr = NULL,
-		const NumberClass &_numberClass = ClassInclusiveRange);
+		const NumberClass &_numberClass = ClassRangeInclusive);
 	IntegerValidator(unsigned int *_valPtr, const NumberClass &_numberClass = ClassAll);
+	IntegerValidator(const int &_limit, int *_valPtr = NULL,
+		const NumberClass &_numberClass = ClassMinimumInclusive);
 	IntegerValidator(const unsigned int &_min, const unsigned int &_max,
-		unsigned int *_valPtr = NULL, const NumberClass &_numberClass = ClassInclusiveRange);
+		unsigned int *_valPtr = NULL, const NumberClass &_numberClass = ClassRangeInclusive);
+	IntegerValidator(const unsigned int &_limit, int unsigned *_valPtr = NULL,
+		const NumberClass &_numberClass = ClassMinimumInclusive);
 	IntegerValidator(const IntegerValidator &dv);
 	
 	// Destructor
@@ -73,8 +81,8 @@ private:
 
 	// Additional limits to place on the value
 	NumberClass numberClass;
-	int min, max;
-	unsigned int umin, umax;
+	int min, max, limit;
+	unsigned int umin, umax, ulimit;
 	
 	// Operators
 	IntegerValidator& operator=(const IntegerValidator& dv);
