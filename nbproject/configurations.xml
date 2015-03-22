@@ -2,26 +2,6 @@
 <configurationDescriptor version="79">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <df name="CarDesigner" root=".">
-      <df name=".lib">
-      </df>
-      <df name=".obj">
-        <df name="src">
-          <df name="3dcar">
-          </df>
-          <df name="optimization">
-          </df>
-          <df name="physics">
-          </df>
-          <df name="primitives">
-          </df>
-          <df name="signals">
-            <df name="filters">
-            </df>
-          </df>
-          <df name="threads">
-          </df>
-        </df>
-      </df>
       <df name="bin">
       </df>
       <df name="CarDesigner">
@@ -92,6 +72,38 @@
         </df>
         <df name="res">
           <df name="icons">
+            <in>aavase16.xpm</in>
+            <in>aavase32.xpm</in>
+            <in>aavase48.xpm</in>
+            <in>aerodynamics16.xpm</in>
+            <in>aerodynamics32.xpm</in>
+            <in>aerodynamics48.xpm</in>
+            <in>brakes16.xpm</in>
+            <in>brakes32.xpm</in>
+            <in>brakes48.xpm</in>
+            <in>car16.xpm</in>
+            <in>car32.xpm</in>
+            <in>car48.xpm</in>
+            <in>drivetrain16.xpm</in>
+            <in>drivetrain32.xpm</in>
+            <in>drivetrain48.xpm</in>
+            <in>engine16.xpm</in>
+            <in>engine32.xpm</in>
+            <in>engine48.xpm</in>
+            <in>iteration16.xpm</in>
+            <in>iteration32.xpm</in>
+            <in>massProperties16.xpm</in>
+            <in>massProperties32.xpm</in>
+            <in>massProperties48.xpm</in>
+            <in>optimization16.xpm</in>
+            <in>optimization32.xpm</in>
+            <in>optimization48.xpm</in>
+            <in>suspension16.xpm</in>
+            <in>suspension32.xpm</in>
+            <in>suspension48.xpm</in>
+            <in>tires16.xpm</in>
+            <in>tires32.xpm</in>
+            <in>tires48.xpm</in>
           </df>
         </df>
         <df name="src">

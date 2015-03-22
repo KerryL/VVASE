@@ -96,7 +96,7 @@ wxString ExpressionTree::Solve(wxString expression, Dataset2D &solvedData, const
 //==========================================================================
 wxString ExpressionTree::Parenthesize(wxString expression, wxString &errorString) const
 {
-	// Without parentheses, everthing is evaluated left-to-right, so we need (as a minimum)
+	// Without parentheses, everything is evaluated left-to-right, so we need (as a minimum)
 	// to add parentheses around multiplication and division
 
 	// Check for a parentheses imbalance
@@ -197,7 +197,7 @@ wxString ExpressionTree::Parenthesize(wxString expression, wxString &errorString
 		if (insertAt == -2)
 			insertAt = nextMorD - 1;
 
-		// Find the next multiplcation or division
+		// Find the next multiplication or division
 		if (insertAt + 2 < (int)expression.Len())
 			nextMorD = expression.find(targetOperator, insertAt + 2);
 		else
@@ -519,7 +519,7 @@ ExpressionTree::Node ExpressionTree::EvaluateNextNode(wxString &expression, wxSt
 							node.set *= node.dValue;
 						else// "/"
 						{
-							// Can't hande this case
+							// Can't handle this case
 							errorString = _T("Cannot divide a number by a dataset!");
 							return node;
 						}

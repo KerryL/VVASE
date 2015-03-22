@@ -49,7 +49,7 @@ AR = ar rcs
 RANLIB = ranlib
 
 # Compiler flags
-CFLAGS = -g -Wall $(INCDIRS) `wx-config --cppflags` `freetype-config --cflags` -DwxUSE_GUI=1 -D_VVASE_64_BIT_ -I./include
+CFLAGS = -g -Wall $(INCDIRS) `wx-config --cppflags` `freetype-config --cflags` -DwxUSE_GUI=1 -D_VVASE_64_BIT_ -I./include -Wno-unused-local-typedefs
 
 # Linker flags
 LDFLAGS = $(LIBDIRS) $(LIBS) `wx-config --libs` `freetype-config --libs`
