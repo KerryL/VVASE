@@ -883,7 +883,7 @@ bool GAObject::Write(wxString fileName)
 	wxMutexLocker lock(gsaMutex);
 
 	// Open the specified file
-	std::ofstream outFile(fileName.c_str(), ios::out | ios::binary);
+	std::ofstream outFile(fileName.mb_str(), ios::out | ios::binary);
 
 	// Make sure the file was opened OK
 	if (!outFile.is_open() || !outFile.good())
@@ -941,7 +941,7 @@ bool GAObject::Read(wxString fileName)
 	goalList.Clear();
 
 	// Open the specified file
-	std::ifstream inFile(fileName.c_str(), ios::in | ios::binary);
+	std::ifstream inFile(fileName.mb_str(), ios::in | ios::binary);
 
 	// Make sure the file was opened OK
 	if (!inFile.is_open() || !inFile.good())

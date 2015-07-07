@@ -183,7 +183,7 @@ void Dataset2D::ExportDataToFile(wxString pathAndFileName) const
 		return;
 
 	// Perform the save - open the file
-	std::ofstream exportFile(pathAndFileName.c_str(), std::ios::out);
+	std::ofstream exportFile(pathAndFileName.mb_str(), std::ios::out);
 
 	// Warn the user if the file could not be opened failed
 	if (!exportFile.is_open() || !exportFile.good())

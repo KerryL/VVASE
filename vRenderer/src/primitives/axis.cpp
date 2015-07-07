@@ -281,7 +281,7 @@ void Axis::GenerateGeometry(void)
 				glLoadIdentity();
 
 				// Get the real bounding box
-				boundingBox = font->BBox(label.c_str());
+				boundingBox = font->BBox(label.mb_str());
 
 				if (IsHorizontal())
 					glTranslated((renderWindow.GetSize().GetWidth() + boundingBox.Lower().X()
@@ -293,7 +293,7 @@ void Axis::GenerateGeometry(void)
 						+ renderWindow.GetSize().GetHeight()) / 2.0 + plotAreaOffset, -yTranslation, 0.0);
 				}
 
-				font->Render(label.c_str());
+				font->Render(label.mb_str());
 			glPopMatrix();
 		}
 
@@ -333,7 +333,7 @@ void Axis::GenerateGeometry(void)
 				glLoadIdentity();
 
 				// Get the real bounding box
-				boundingBox = font->BBox(valueLabel);
+				boundingBox = font->BBox(valueLabel.mb_str());
 
 				if (IsHorizontal())
 				{
@@ -358,7 +358,7 @@ void Axis::GenerateGeometry(void)
 
 				glTranslated(xTranslation, yTranslation, 0.0);
 
-				font->Render(valueLabel);
+				font->Render(valueLabel.mb_str());
 			glPopMatrix();
 		}
 

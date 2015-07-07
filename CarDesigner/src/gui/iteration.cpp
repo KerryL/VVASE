@@ -572,7 +572,7 @@ void Iteration::ClearAllLists(void)
 bool Iteration::PerformSaveToFile(void)
 {
 	// Open the specified file
-	std::ofstream outFile(pathAndFileName.c_str(), ios::out | ios::binary);
+	std::ofstream outFile(pathAndFileName.mb_str(), ios::out | ios::binary);
 
 	// Make sure the file was opened OK
 	if (!outFile.is_open() || !outFile.good())
@@ -624,7 +624,7 @@ bool Iteration::PerformSaveToFile(void)
 bool Iteration::PerformLoadFromFile(void)
 {
 	// Open the specified file
-	std::ifstream inFile(pathAndFileName.c_str(), ios::in | ios::binary);
+	std::ifstream inFile(pathAndFileName.mb_str(), ios::in | ios::binary);
 
 	// Make sure the file was opened OK
 	if (!inFile.is_open() || !inFile.good())
@@ -1075,7 +1075,7 @@ void Iteration::ShowAssociatedCarsDialog(void)
 
 	// Display the dialog
 	bool selectionsMade = wxGetMultipleChoices(selections, _T("Select the cars to associate with this iteration:"),
-		_T("Associated Cars"), choices, &mainFrame);
+		_T("Associated Cars"), choices, &mainFrame) > 0;
 
 	// Check to make sure the user didn't cancel
 	if (!selectionsMade)
@@ -1218,7 +1218,7 @@ void Iteration::ExportDataToFile(wxString pathAndFileName) const
 	}
 
 	// Perform the save - open the file
-	ofstream exportFile(pathAndFileName.c_str(), ios::out);
+	ofstream exportFile(pathAndFileName.mb_str(), ios::out);
 
 	// Warn the user if the file could not be opened failed
 	if (!exportFile.is_open() || !exportFile.good())

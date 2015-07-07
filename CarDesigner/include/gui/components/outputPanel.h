@@ -68,7 +68,7 @@ private:
 	SuperGrid *outputsList;
 
 protected:
-	DECLARE_EVENT_TABLE()
+	//DECLARE_EVENT_TABLE()
 };
 
 #endif// _OUTPUT_PANEL_H_

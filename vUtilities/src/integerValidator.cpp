@@ -15,6 +15,9 @@
 // History:
 //	12/13/2011	- Created and debugged, K. Loux.
 
+// wxWidgets headers
+#include <wx/wx.h>
+
 // Local headers
 #include "vUtilities/integerValidator.h"
 
@@ -274,8 +277,8 @@ IntegerValidator::IntegerValidator(const IntegerValidator& dv)
 //==========================================================================
 bool IntegerValidator::TransferToWindow(void)
 {
-	if (!CheckValidator())
-		return false;
+	/*if (!CheckValidator())
+		return false;*/
 	
 	if (valPtr)
 	{
@@ -311,8 +314,8 @@ bool IntegerValidator::TransferToWindow(void)
 //==========================================================================
 bool IntegerValidator::TransferFromWindow(void)
 {
-	if (!CheckValidator())
-		return false;
+	/*if (!CheckValidator())
+		return false;*/
 	
 	if (valPtr)
 	{
@@ -350,8 +353,8 @@ bool IntegerValidator::TransferFromWindow(void)
 //==========================================================================
 bool IntegerValidator::Validate(wxWindow *parent)
 {
-	if (!CheckValidator())
-		return false;
+	/*if (!CheckValidator())
+		return false;*/
 	
 	assert(numberClass >= ClassAll && numberClass < ClassCount);
 

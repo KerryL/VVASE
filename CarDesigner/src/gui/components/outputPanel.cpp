@@ -97,9 +97,9 @@ OutputPanel::~OutputPanel()
 //		None
 //
 //==========================================================================
-BEGIN_EVENT_TABLE(OutputPanel, wxPanel)
+/*BEGIN_EVENT_TABLE(OutputPanel, wxPanel)
 	EVT_SIZE(OutputPanel::OnSize)
-END_EVENT_TABLE()
+END_EVENT_TABLE()*/
 
 //==========================================================================
 // Class:			OutputPanel

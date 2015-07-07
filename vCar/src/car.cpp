@@ -325,7 +325,7 @@ const int Car::currentFileVersion = 2;
 bool Car::SaveCarToFile(wxString fileName, std::ofstream *_outFile) const
 {
 	// Open the specified file
-	std::ofstream outFile(fileName.c_str(), ios::out | ios::binary);
+	std::ofstream outFile(fileName.mb_str(), ios::out | ios::binary);
 
 	// Make sure the file was opened OK
 	if (!outFile.is_open() || !outFile.good())
@@ -348,7 +348,7 @@ bool Car::SaveCarToFile(wxString fileName, std::ofstream *_outFile) const
 	// If we're saving the options (done elsewhere), open the additional file
 	if (_outFile != NULL)
 	{
-		_outFile->open(fileName.c_str(), ios::out | ios::binary);
+		_outFile->open(fileName.mb_str(), ios::out | ios::binary);
 		_outFile->seekp(outFile.tellp());
 	}
 
@@ -379,7 +379,7 @@ bool Car::SaveCarToFile(wxString fileName, std::ofstream *_outFile) const
 bool Car::LoadCarFromFile(wxString fileName, std::ifstream *_inFile, int *fileVersion)
 {
 	// Open the specified file
-	std::ifstream inFile(fileName.c_str(), ios::in | ios::binary);
+	std::ifstream inFile(fileName.mb_str(), ios::in | ios::binary);
 
 	// Make sure the file was opened OK
 	if (!inFile.is_open() || !inFile.good())
@@ -407,7 +407,7 @@ bool Car::LoadCarFromFile(wxString fileName, std::ifstream *_inFile, int *fileVe
 	// If we're reading the options (done elsewhere), open the additional file
 	if (inFile != NULL)
 	{
-		_inFile->open(fileName.c_str(), ios::in | ios::binary);
+		_inFile->open(fileName.mb_str(), ios::in | ios::binary);
 		_inFile->seekg(inFile.tellg());
 		*fileVersion = header.fileVersion;
 	}

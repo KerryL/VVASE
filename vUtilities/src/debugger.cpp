@@ -307,5 +307,5 @@ void Debugger::Print(const DebugLevel &level, const char *format, ...) const
 	va_end(args);
 
 	// Print the formatted message at the specified level
-	Print(_T(output), level);
+	Print(output, level);
 }

@@ -16,6 +16,9 @@
 // History:
 //	12/12/2011	- Created and debugged, K. Loux.
 
+// wxWidgets headers
+#include <wx/wx.h>
+
 // Local headers
 #include "vUtilities/dataValidator.h"
 
@@ -133,8 +136,8 @@ DataValidator::DataValidator(const DataValidator& dv)
 //==========================================================================
 bool DataValidator::TransferToWindow(void)
 {
-	if (!CheckValidator())
-		return false;
+	/*if (!CheckValidator())
+		return false;*/
 	
 	if (valPtr)
 	{
@@ -164,8 +167,8 @@ bool DataValidator::TransferToWindow(void)
 //==========================================================================
 bool DataValidator::TransferFromWindow(void)
 {
-	if (!CheckValidator())
-		return false;
+	/*if (!CheckValidator())
+		return false;*/
 	
 	if (valPtr)
 	{
@@ -197,8 +200,8 @@ bool DataValidator::TransferFromWindow(void)
 //==========================================================================
 bool DataValidator::Validate(wxWindow *parent)
 {
-	if (!CheckValidator())
-		return false;
+	/*if (!CheckValidator())
+		return false;*/
 
 	double value;
 	if (!static_cast<wxTextCtrl*>(m_validatorWindow)->GetValue().ToDouble(&value))

@@ -2528,20 +2528,20 @@ void MainFrame::WriteConfiguration(void)
 		wxCONFIG_USE_RELATIVE_PATH);
 
 	// Write UNITS configuration to file
-	configurationFile->Write(_T("/Units/Acceleration"), Convert::GetInstance().GetAccelerationUnits());
-	configurationFile->Write(_T("/Units/Angle"), Convert::GetInstance().GetAngleUnits());
-	configurationFile->Write(_T("/Units/Area"), Convert::GetInstance().GetAreaUnits());
-	configurationFile->Write(_T("/Units/Density"), Convert::GetInstance().GetDensityUnits());
-	configurationFile->Write(_T("/Units/Distance"), Convert::GetInstance().GetDistanceUnits());
-	configurationFile->Write(_T("/Units/Energy"), Convert::GetInstance().GetEnergyUnits());
-	configurationFile->Write(_T("/Units/Force"), Convert::GetInstance().GetForceUnits());
-	configurationFile->Write(_T("/Units/Inertia"), Convert::GetInstance().GetInertiaUnits());
-	configurationFile->Write(_T("/Units/Mass"), Convert::GetInstance().GetMassUnits());
-	configurationFile->Write(_T("/Units/Moment"), Convert::GetInstance().GetMomentUnits());
-	configurationFile->Write(_T("/Units/Power"), Convert::GetInstance().GetPowerUnits());
-	configurationFile->Write(_T("/Units/Pressure"), Convert::GetInstance().GetPressureUnits());
-	configurationFile->Write(_T("/Units/Temperature"), Convert::GetInstance().GetTemperatureUnits());
-	configurationFile->Write(_T("/Units/Velocity"), Convert::GetInstance().GetVelocityUnits());
+	configurationFile->Write(_T("/Units/Acceleration"), (int)Convert::GetInstance().GetAccelerationUnits());
+	configurationFile->Write(_T("/Units/Angle"), (int)Convert::GetInstance().GetAngleUnits());
+	configurationFile->Write(_T("/Units/Area"), (int)Convert::GetInstance().GetAreaUnits());
+	configurationFile->Write(_T("/Units/Density"), (int)Convert::GetInstance().GetDensityUnits());
+	configurationFile->Write(_T("/Units/Distance"), (int)Convert::GetInstance().GetDistanceUnits());
+	configurationFile->Write(_T("/Units/Energy"), (int)Convert::GetInstance().GetEnergyUnits());
+	configurationFile->Write(_T("/Units/Force"), (int)Convert::GetInstance().GetForceUnits());
+	configurationFile->Write(_T("/Units/Inertia"), (int)Convert::GetInstance().GetInertiaUnits());
+	configurationFile->Write(_T("/Units/Mass"), (int)Convert::GetInstance().GetMassUnits());
+	configurationFile->Write(_T("/Units/Moment"), (int)Convert::GetInstance().GetMomentUnits());
+	configurationFile->Write(_T("/Units/Power"), (int)Convert::GetInstance().GetPowerUnits());
+	configurationFile->Write(_T("/Units/Pressure"), (int)Convert::GetInstance().GetPressureUnits());
+	configurationFile->Write(_T("/Units/Temperature"), (int)Convert::GetInstance().GetTemperatureUnits());
+	configurationFile->Write(_T("/Units/Velocity"), (int)Convert::GetInstance().GetVelocityUnits());
 
 	// Write NUMBER FORMAT configuration to file
 	configurationFile->Write(_T("/NumberFormat/NumberOfDigits"), Convert::GetInstance().GetNumberOfDigits());
@@ -2552,11 +2552,11 @@ void MainFrame::WriteConfiguration(void)
 	configurationFile->Write(_T("/Kinematics/CenterOfRotationX"), kinematicInputs.centerOfRotation.x);
 	configurationFile->Write(_T("/Kinematics/CenterOfRotationY"), kinematicInputs.centerOfRotation.y);
 	configurationFile->Write(_T("/Kinematics/CenterOfRotationZ"), kinematicInputs.centerOfRotation.z);
-	configurationFile->Write(_T("/Kinematics/FirstRotation"), kinematicInputs.firstRotation);
+	configurationFile->Write(_T("/Kinematics/FirstRotation"), (int)kinematicInputs.firstRotation);
 	configurationFile->Write(_T("/Kinematics/UseRackTravel"), useRackTravel);
 
 	// Write DEBUGGING configuration to file
-	configurationFile->Write(_T("/Debugging/DebugLevel"), Debugger::GetInstance().GetDebugLevel());
+	configurationFile->Write(_T("/Debugging/DebugLevel"), (int)Debugger::GetInstance().GetDebugLevel());
 
 	// Write GUI configuration to file
 	configurationFile->Write(_T("/GUI/LayoutString"), manager.SavePerspective());
