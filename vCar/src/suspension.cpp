@@ -883,6 +883,43 @@ bool Suspension::SolveForContactPatch(const Vector &wheelCenter, const Vector &w
 
 //==========================================================================
 // Class:			Suspension
+// Function:		SolveInboardTBarPoints
+//
+// Description:		Solves for three points across the top of the "T" that must
+//					be found simultaneously.
+//
+// Input Arguments:
+//		
+//
+// Output Arguments:
+//		
+//
+// Return Value:
+//		bool, true for success, false for error
+//		
+//==========================================================================
+bool Suspension::SolveInboardTBarPoints(const Vector &leftOutboard,
+	const Vector &rightOutboard, const Vector &centerPivot,
+	const Vector &pivotAxisPoint,
+	const Vector &originalLeftOutboard, const Vector &originalRightOutboard,
+	const Vector &originalCenterPivot,const Vector &originalLeftInboard,
+	const Vector &originalRightInboard,
+	Vector &leftInboard, Vector &rightInboard)
+{
+	/*double leftTopLength = ();
+	double rightTopLength = ();*/
+
+	// Method is:
+	// 1.  Define cirlce from bar pivot at frame to "T" intersection (about bar rotation axis)
+	// 2.  Define spheres for bar pivot at frame to "T" ends
+	// 3.  Define spheres for outboard to inboard bar links (center at outboard bar link)
+	// 4.  Find circles defined by intersections of spheres defined in steps 2 and 3
+	// 5.  Find point on circle in step 1 that satisfied BOTH distance from this circle to step 4 circle AND line through this point from step 4 circle to other step 4 circle is 2x first distance
+	return false;
+}
+
+//==========================================================================
+// Class:			Suspension
 // Function:		Write
 //
 // Description:		Writes this suspension to file.

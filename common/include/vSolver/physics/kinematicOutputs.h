@@ -34,7 +34,6 @@
 
 // VVASE forward declarations
 class Car;
-class Debugger;
 class Suspension;
 
 class KinematicOutputs
@@ -45,9 +44,6 @@ public:
 
 	// Destructor
 	~KinematicOutputs();
-
-	// Sets the pointer to the Debugger object
-	static inline void SetDebugger(const Debugger &_debugger) { debugger = &_debugger; };
 
 	// Updates the kinematic variables associated with the current Suspension
 	void Update(const Car *original, const Suspension *current);
@@ -198,9 +194,6 @@ public:
 	//wxMutex &GetMutex(void) const { return kinematicOutputsMutex; };
 
 private:
-	// Debugger message printing utility
-	static const Debugger *debugger;
-
 	// The currently associated car object
 	const Car *currentCar;
 

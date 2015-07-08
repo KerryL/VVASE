@@ -84,24 +84,6 @@ KinematicOutputs::~KinematicOutputs()
 
 //==========================================================================
 // Class:			KinematicOutputs
-// Function:		Constant Declarations
-//
-// Description:		Constant declarations for KinematicOutputs class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-const Debugger *KinematicOutputs::debugger = NULL;
-
-//==========================================================================
-// Class:			KinematicOutputs
 // Function:		InitializeAllOutputs
 //
 // Description:		Initializes all outputs to QNAN.
@@ -195,10 +177,28 @@ void KinematicOutputs::Update(const Car *original, const Suspension *current)
 	// Initialize the twist in case the car has no sway bars
 	doubles[FrontARBTwist] = 0.0;
 	doubles[RearARBTwist] = 0.0;
+	double originalSwayBarAngle;
 	Vector arm1Direction, arm2Direction;
 	Vector swayBarAxis;
 	if (current->frontBarStyle == Suspension::SwayBarUBar)
 	{
+		// First, for the original configuration of the suspension
+		// Project these directions onto the plane whose normal is the sway bar axis
+		swayBarAxis = original->suspension->rightFront.hardpoints[Corner::BarArmAtPivot] -
+			original->suspension->leftFront.hardpoints[Corner::BarArmAtPivot];
+
+		// The references for U-bar twist are the arms at the end of the bar
+		arm1Direction = VVASEMath::ProjectOntoPlane(original->suspension->rightFront.hardpoints[Corner::BarArmAtPivot] -
+			original->suspension->rightFront.hardpoints[Corner::InboardBarLink], swayBarAxis);
+		arm2Direction = VVASEMath::ProjectOntoPlane(original->suspension->leftFront.hardpoints[Corner::BarArmAtPivot] -
+			original->suspension->leftFront.hardpoints[Corner::InboardBarLink], swayBarAxis);
+
+		// The angle between these vectors, when projected onto the plane that is normal
+		// to the swaybar axis is given by the dot product
+		originalSwayBarAngle = acos(VVASEMath::Clamp((arm1Direction * arm2Direction) /
+			(arm1Direction.Length() * arm2Direction.Length()), -1.0, 1.0));
+
+		// And again as it sits now
 		// Project these directions onto the plane whose normal is the sway bar axis
 		swayBarAxis = current->rightFront.hardpoints[Corner::BarArmAtPivot] -
 			current->leftFront.hardpoints[Corner::BarArmAtPivot];
@@ -211,8 +211,8 @@ void KinematicOutputs::Update(const Car *original, const Suspension *current)
 
 		// The angle between these vectors, when projected onto the plane that is normal
 		// to the swaybar axis is given by the dot product
-		doubles[FrontARBTwist] = acos((arm1Direction * arm2Direction) /
-			(arm1Direction.Length() * arm2Direction.Length()));
+		doubles[FrontARBTwist] = acos(VVASEMath::Clamp((arm1Direction * arm2Direction) /
+			(arm1Direction.Length() * arm2Direction.Length()), -1.0, 1.0));
 	}
 	else if (current->frontBarStyle == Suspension::SwayBarTBar)
 	{
@@ -279,7 +279,7 @@ void KinematicOutputs::Update(const Car *original, const Suspension *current)
 	if (!VVASEMath::GetIntersectionOfTwoPlanes(rightPlaneNormal, current->rightFront.hardpoints[Corner::ContactPatch],
 		leftPlaneNormal, current->leftFront.hardpoints[Corner::ContactPatch],
 		vectors[FrontRollAxisDirection], vectors[FrontKinematicRC]))
-		debugger->Print(_T("Warning (KinematicOutputs::Update):  Front Kinematic Roll Center is undefined"),
+		Debugger::GetInstance().Print(_T("Warning (KinematicOutputs::Update):  Front Kinematic Roll Center is undefined"),
 			Debugger::PriorityHigh);
 	else
 		// We now have the axis direction and a point on the axis, but we want a specific
@@ -301,7 +301,7 @@ void KinematicOutputs::Update(const Car *original, const Suspension *current)
 	if (!VVASEMath::GetIntersectionOfTwoPlanes(rightPlaneNormal, current->rightRear.hardpoints[Corner::ContactPatch],
 		leftPlaneNormal, current->leftRear.hardpoints[Corner::ContactPatch],
 		vectors[RearRollAxisDirection], vectors[RearKinematicRC]))
-		debugger->Print(_T("Warning (KinematicOutputs::Update):  Rear Kinematic Roll Center is undefined"),
+		Debugger::GetInstance().Print(_T("Warning (KinematicOutputs::Update):  Rear Kinematic Roll Center is undefined"),
 			Debugger::PriorityHigh);
 	else
 		// Just like we did on for the front, intersect this vector with the wheel plane
@@ -328,7 +328,7 @@ void KinematicOutputs::Update(const Car *original, const Suspension *current)
 	if (!VVASEMath::GetIntersectionOfTwoPlanes(frontPlaneNormal, current->rightFront.hardpoints[Corner::ContactPatch],
 		rearPlaneNormal, current->rightRear.hardpoints[Corner::ContactPatch],
 		vectors[RightPitchAxisDirection], vectors[RightKinematicPC]))
-		debugger->Print(_T("Warning (KinematicOutputs::Update):  Right Kinematic Pitch Center is undefined"),
+		Debugger::GetInstance().Print(_T("Warning (KinematicOutputs::Update):  Right Kinematic Pitch Center is undefined"),
 			Debugger::PriorityHigh);
 	else
 		// We now have the axis direction and a point on the axis, but we want a specific
@@ -350,7 +350,7 @@ void KinematicOutputs::Update(const Car *original, const Suspension *current)
 	if (!VVASEMath::GetIntersectionOfTwoPlanes(frontPlaneNormal, current->leftFront.hardpoints[Corner::ContactPatch],
 		rearPlaneNormal, current->leftRear.hardpoints[Corner::ContactPatch],
 		vectors[LeftPitchAxisDirection], vectors[LeftKinematicPC]))
-		debugger->Print(_T("Warning (KinematicOutputs::Update):  Left Kinematic Pitch Center is undefined"),
+		Debugger::GetInstance().Print(_T("Warning (KinematicOutputs::Update):  Left Kinematic Pitch Center is undefined"),
 			Debugger::PriorityHigh);
 	else
 		// Just like we did for the right side, intersect this vector with the wheel plane
@@ -451,7 +451,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 	else
 	{
 		// Not one of our recognized locations!!!
-		debugger->Print(_T("ERROR:  Corner location not recognized!"), Debugger::PriorityHigh);
+		Debugger::GetInstance().Print(_T("ERROR:  Corner location not recognized!"), Debugger::PriorityHigh);
 		return;
 	}
 
@@ -569,7 +569,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 	if (!VVASEMath::GetIntersectionOfTwoPlanes(upperPlaneNormal, currentCorner->hardpoints[Corner::UpperBallJoint],
 		lowerPlaneNormal, currentCorner->hardpoints[Corner::LowerBallJoint], 
 		cornerVectors[InstantAxisDirection], cornerVectors[InstantCenter]))
-		debugger->Print(_T("Warning (KinematicOutputs::UpdateCorner):  Instant Center is undefined"),
+		Debugger::GetInstance().Print(_T("Warning (KinematicOutputs::UpdateCorner):  Instant Center is undefined"),
 			Debugger::PriorityHigh);
 	else
 	{

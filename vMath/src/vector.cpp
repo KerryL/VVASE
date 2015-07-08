@@ -805,3 +805,8 @@ bool Vector::operator != (const Vector &v) const
 {
 	return !(*this == v);
 }
+
+Vector operator*(const double &d, const Vector &v)
+{
+	return v * d;
+}

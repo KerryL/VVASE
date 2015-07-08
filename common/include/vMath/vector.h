@@ -107,6 +107,8 @@ public:
 	bool operator == (const Vector &vector) const;
 	bool operator != (const Vector &vector) const;
 	friend ostream& operator << (ostream &writeOut, const Vector &v);
+
+	friend Vector operator*(const double &d, const Vector &v);
 };
 
 #endif// _Vector_CLASSS_H_

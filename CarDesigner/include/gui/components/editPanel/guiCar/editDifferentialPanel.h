@@ -21,6 +21,7 @@
 
 // VVASE forward declarations
 class EditPanel;
+class Debugger;
 
 class EditDifferentialPanel : public wxPanel
 {

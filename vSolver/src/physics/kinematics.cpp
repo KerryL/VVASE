@@ -165,6 +165,10 @@ void Kinematics::UpdateKinematics(const Car* _originalCar, Car* _workingCar, wxS
 	switch (localSuspension->frontBarStyle)
 	{
 	case Suspension::SwayBarUBar:
+		localSuspension->hardpoints[Suspension::FrontBarMidPoint] =
+			0.5 * (localSuspension->leftFront.hardpoints[Corner::BarArmAtPivot]
+			+ localSuspension->rightFront.hardpoints[Corner::BarArmAtPivot]);
+
 		// Rotations
 		localSuspension->hardpoints[Suspension::FrontBarMidPoint].Rotate(inputs.centerOfRotation, rotations,
 			inputs.firstRotation, secondRotation);
@@ -185,6 +189,10 @@ void Kinematics::UpdateKinematics(const Car* _originalCar, Car* _workingCar, wxS
 	switch (localSuspension->rearBarStyle)
 	{
 	case Suspension::SwayBarUBar:
+		localSuspension->hardpoints[Suspension::RearBarMidPoint] =
+			0.5 * (localSuspension->leftRear.hardpoints[Corner::BarArmAtPivot]
+			+ localSuspension->rightRear.hardpoints[Corner::BarArmAtPivot]);
+
 		// Rotations
 		localSuspension->hardpoints[Suspension::RearBarMidPoint].Rotate(inputs.centerOfRotation,
 			rotations, inputs.firstRotation, secondRotation);
@@ -240,6 +248,41 @@ void Kinematics::UpdateKinematics(const Car* _originalCar, Car* _workingCar, wxS
 	if (!SolveCorner(localSuspension->leftRear, originalCar->suspension->leftRear, rotations, secondRotation))
 		Debugger::GetInstance().Print(_T("ERROR:  Problem solving left rear corner!  Increase debug level for more information."),
 			Debugger::PriorityHigh);
+
+	// Some things need to be solved AFTER all other corners
+	if (localSuspension->frontBarStyle == Suspension::SwayBarTBar)
+	{
+		/*Vector pivotAxisPoint = originalCar->suspension->hardpoints[Suspension::] + Vector(0.0, 1.0, 0.0);
+
+		// Rotations
+		pivotAxisPoint.Rotate(inputs.centerOfRotation, rotations, inputs.firstRotation, secondRotation);
+
+		// Translations
+		pivotAxisPoint.z += inputs.heave;
+
+		if (!Suspension::SolveInboardTBarPoints(
+			localSuspension->leftFront.hardpoints[Corner::OutboardBarLink],
+			localSuspension->rightFront.hardpoints[Corner::OutboardBarLink],
+			//localSuspension->hardpoints[Suspension::FrontBarMidPoint],//center pivot
+			pivotAxisPoint,
+			localSuspension->leftFront.hardpoints[Corner::OutboardBarLink],
+			localSuspension->rightFront.hardpoints[Corner::OutboardBarLink],
+			// original center pivot
+			originalCar->suspension->leftFront.hardpoints[Corner::InboardBarLink],
+			originalCar->suspension->rightFront.hardpoints[Corner::InboardBarLink],
+			localSuspension->leftFront.hardpoints[Corner::InboardBarLink],
+			localSuspension->rightFront.hardpoints[Corner::InboardBarLink]))
+		{
+			// Print an error and switch the success boolean to indicate a failure
+			Debugger::GetInstance().Print(_T("ERROR:  Failed to solve for inboard T-bar (front)!"), Debugger::PriorityMedium);
+		}*/
+	}
+
+	if (localSuspension->rearBarStyle == Suspension::SwayBarTBar)
+	{
+		Debugger::GetInstance().Print(_T("  T-Bar Rear"), Debugger::PriorityHigh);
+		// FIXME:  Need to accommodate T-bars
+	}
 
 	// Now the hardpoints have been moved and located - let's look at the outputs
 	outputs.Update(originalCar, localSuspension);
@@ -558,10 +601,13 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 		// Sway Bars Inboard
 		if (localSuspension->frontBarStyle == Suspension::SwayBarUBar && isAtFront)
 		{
+			Vector originalBarMidpoint = 0.5 *
+				(originalCar->suspension->leftFront.hardpoints[Corner::BarArmAtPivot]
+				+ originalCar->suspension->rightFront.hardpoints[Corner::BarArmAtPivot]);
 			if (!Suspension::SolveForPoint(corner.hardpoints[Corner::BarArmAtPivot],
-				corner.hardpoints[Corner::OutboardBarLink], localSuspension->hardpoints[Suspension::FrontBarMidPoint],// FIXME:  Do we really need the midpoint?
+				corner.hardpoints[Corner::OutboardBarLink], localSuspension->hardpoints[Suspension::FrontBarMidPoint],
 				originalCorner.hardpoints[Corner::BarArmAtPivot], originalCorner.hardpoints[Corner::OutboardBarLink],
-				originalCar->suspension->hardpoints[Suspension::FrontBarMidPoint], originalCorner.hardpoints[Corner::InboardBarLink],
+				originalBarMidpoint, originalCorner.hardpoints[Corner::InboardBarLink],
 				corner.hardpoints[Corner::InboardBarLink]))
 			{
 				// Print an error and switch the success boolean to indicate a failure
@@ -571,10 +617,13 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 		}
 		else if (localSuspension->rearBarStyle == Suspension::SwayBarUBar && !isAtFront)
 		{
+			Vector originalBarMidpoint = 0.5 *
+				(originalCar->suspension->leftRear.hardpoints[Corner::BarArmAtPivot]
+				+ originalCar->suspension->rightRear.hardpoints[Corner::BarArmAtPivot]);
 			if (!Suspension::SolveForPoint(corner.hardpoints[Corner::BarArmAtPivot],
 				corner.hardpoints[Corner::OutboardBarLink], localSuspension->hardpoints[Suspension::RearBarMidPoint],
 				originalCorner.hardpoints[Corner::BarArmAtPivot], originalCorner.hardpoints[Corner::OutboardBarLink],
-				originalCar->suspension->hardpoints[Suspension::RearBarMidPoint], originalCorner.hardpoints[Corner::InboardBarLink],
+				originalBarMidpoint, originalCorner.hardpoints[Corner::InboardBarLink],
 				corner.hardpoints[Corner::InboardBarLink]))
 			{
 				// Print an error and switch the success boolean to indicate a failure
@@ -582,20 +631,26 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 				success = false;
 			}
 		}
-		else if (localSuspension->frontBarStyle == Suspension::SwayBarTBar && isAtFront)
+		// T-bars are solved after all corners are solved
+	/*	else if (localSuspension->frontBarStyle == Suspension::SwayBarTBar && isAtFront)
 		{
-			Debugger::GetInstance().Print(_T("  T-Bar Front"), Debugger::PriorityHigh);
-			// FIXME:  Need to accommodate T-bars
-			// Need to solve for InboardBarLink
-			// Two of the three points needed are: BarMidPoint and OutboardBarLink
-			// What is the third point?
-			// Maybe the solution is actually the intersection of two circles and a torus?
+			if (!Suspension::SolveInboardTBarPoints(corner.hardpoints[Corner::BarArmAtPivot]
+				corner.hardpoints[Corner::BarArmAtPivot],
+				corner.hardpoints[Corner::OutboardBarLink], localSuspension->hardpoints[Suspension::RearBarMidPoint],
+				originalCorner.hardpoints[Corner::BarArmAtPivot], originalCorner.hardpoints[Corner::OutboardBarLink],
+				originalCar->suspension->hardpoints[Suspension::RearBarMidPoint], originalCorner.hardpoints[Corner::InboardBarLink],
+				corner.hardpoints[Corner::InboardBarLink]))
+			{
+				// Print an error and switch the success boolean to indicate a failure
+				Debugger::GetInstance().Print(_T("ERROR:  Failed to solve for inboard T-bar (front)!"), Debugger::PriorityMedium);
+				success = false;
+			}
 		}
 		else if (localSuspension->rearBarStyle == Suspension::SwayBarTBar && !isAtFront)
 		{
 			Debugger::GetInstance().Print(_T("  T-Bar Rear"), Debugger::PriorityHigh);
 			// FIXME:  Need to accommodate T-bars
-		}
+		}*/
 		else if ((localSuspension->frontBarStyle == Suspension::SwayBarGeared && isAtFront) ||
 			(localSuspension->rearBarStyle == Suspension::SwayBarGeared && !isAtFront))
 		{

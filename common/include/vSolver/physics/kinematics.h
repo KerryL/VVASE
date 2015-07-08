@@ -98,7 +98,7 @@ private:
 	KinematicOutputs outputs;// Where we store everything after we UpdateOutputs
 
 	// Kinematic solving routine for suspension points at each "corner" of the car
-	bool SolveCorner(Corner &corner, const Corner &original, 
+	bool SolveCorner(Corner &corner, const Corner &original,
 		const Vector &rotations, const Vector::Axis &secondRotation);
 
 	// Performs all of the output value calculations (angles, distances, centers, etc.)

@@ -371,16 +371,8 @@ Vector VVASEMath::NearestPointInPlane(const Vector &pointInPlane, const Vector &
 //==========================================================================
 Vector VVASEMath::ProjectOntoPlane(const Vector &vectorToProject, const Vector &planeNormal)
 {
-	// Create the projection matrix
-	/*Matrix projectionMatrix(3, 3);
-	projectionMatrix.MakeIdentity();
-	projectionMatrix -= planeNormal.OuterProduct(planeNormal);
-
-	// Do the projection
-	Vector projectedVector = vectorToProject - planeNormal * (vectorToProject * planeNormal);*/
-
-	// Above method is equally valid, but this uses much less overhead
-	return vectorToProject - planeNormal * (vectorToProject * planeNormal);
+	Vector normalComponent = vectorToProject * planeNormal * planeNormal.Normalize();
+	return vectorToProject - normalComponent;
 }
 
 //==========================================================================
