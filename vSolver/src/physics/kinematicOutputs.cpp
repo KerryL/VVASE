@@ -225,7 +225,24 @@ void KinematicOutputs::Update(const Car *original, const Suspension *current)
 
 	if (current->rearBarStyle == Suspension::SwayBarUBar)
 	{
-		// Project these directions onto the plane whose normal is the swaybar axis
+		// First, for the original configuration of the suspension
+		// Project these directions onto the plane whose normal is the sway bar axis
+		swayBarAxis = original->suspension->rightRear.hardpoints[Corner::BarArmAtPivot] -
+			original->suspension->leftRear.hardpoints[Corner::BarArmAtPivot];
+
+		// The references for U-bar twist are the arms at the end of the bar
+		arm1Direction = VVASEMath::ProjectOntoPlane(original->suspension->rightRear.hardpoints[Corner::BarArmAtPivot] -
+			original->suspension->rightRear.hardpoints[Corner::InboardBarLink], swayBarAxis);
+		arm2Direction = VVASEMath::ProjectOntoPlane(original->suspension->leftRear.hardpoints[Corner::BarArmAtPivot] -
+			original->suspension->leftRear.hardpoints[Corner::InboardBarLink], swayBarAxis);
+
+		// The angle between these vectors, when projected onto the plane that is normal
+		// to the swaybar axis is given by the dot product
+		originalSwayBarAngle = acos(VVASEMath::Clamp((arm1Direction * arm2Direction) /
+			(arm1Direction.Length() * arm2Direction.Length()), -1.0, 1.0));
+
+		// And again as it sits now
+		// Project these directions onto the plane whose normal is the sway bar axis
 		swayBarAxis = current->rightRear.hardpoints[Corner::BarArmAtPivot] -
 			current->leftRear.hardpoints[Corner::BarArmAtPivot];
 
@@ -237,8 +254,8 @@ void KinematicOutputs::Update(const Car *original, const Suspension *current)
 
 		// The angle between these vectors, when projected onto the plane that is normal
 		// to the swaybar axis is given by the dot product
-		doubles[RearARBTwist] = acos((arm1Direction * arm2Direction) /
-			(arm1Direction.Length() * arm2Direction.Length()));
+		doubles[RearARBTwist] = acos(VVASEMath::Clamp((arm1Direction * arm2Direction) /
+			(arm1Direction.Length() * arm2Direction.Length()), -1.0, 1.0));
 	}
 	else if (current->rearBarStyle == Suspension::SwayBarTBar)
 	{

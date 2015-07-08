@@ -252,22 +252,14 @@ void Kinematics::UpdateKinematics(const Car* _originalCar, Car* _workingCar, wxS
 	// Some things need to be solved AFTER all other corners
 	if (localSuspension->frontBarStyle == Suspension::SwayBarTBar)
 	{
-		/*Vector pivotAxisPoint = originalCar->suspension->hardpoints[Suspension::] + Vector(0.0, 1.0, 0.0);
-
-		// Rotations
-		pivotAxisPoint.Rotate(inputs.centerOfRotation, rotations, inputs.firstRotation, secondRotation);
-
-		// Translations
-		pivotAxisPoint.z += inputs.heave;
-
 		if (!Suspension::SolveInboardTBarPoints(
 			localSuspension->leftFront.hardpoints[Corner::OutboardBarLink],
 			localSuspension->rightFront.hardpoints[Corner::OutboardBarLink],
-			//localSuspension->hardpoints[Suspension::FrontBarMidPoint],//center pivot
-			pivotAxisPoint,
+			localSuspension->hardpoints[Suspension::FrontBarMidPoint],
 			localSuspension->leftFront.hardpoints[Corner::OutboardBarLink],
 			localSuspension->rightFront.hardpoints[Corner::OutboardBarLink],
-			// original center pivot
+			originalCar->suspension->hardpoints[Suspension::FrontBarMidPoint],
+			localSuspension->leftFront.hardpoints[Corner::BarArmAtPivot],// FIXME:  Shouldn't have dual-purpose points like this (leftFront BarArmAtPivot is being used to define pivot axis)
 			originalCar->suspension->leftFront.hardpoints[Corner::InboardBarLink],
 			originalCar->suspension->rightFront.hardpoints[Corner::InboardBarLink],
 			localSuspension->leftFront.hardpoints[Corner::InboardBarLink],
@@ -275,13 +267,27 @@ void Kinematics::UpdateKinematics(const Car* _originalCar, Car* _workingCar, wxS
 		{
 			// Print an error and switch the success boolean to indicate a failure
 			Debugger::GetInstance().Print(_T("ERROR:  Failed to solve for inboard T-bar (front)!"), Debugger::PriorityMedium);
-		}*/
+		}
 	}
 
 	if (localSuspension->rearBarStyle == Suspension::SwayBarTBar)
 	{
-		Debugger::GetInstance().Print(_T("  T-Bar Rear"), Debugger::PriorityHigh);
-		// FIXME:  Need to accommodate T-bars
+		if (!Suspension::SolveInboardTBarPoints(
+			localSuspension->leftRear.hardpoints[Corner::OutboardBarLink],
+			localSuspension->rightRear.hardpoints[Corner::OutboardBarLink],
+			localSuspension->hardpoints[Suspension::RearBarMidPoint],
+			localSuspension->leftRear.hardpoints[Corner::OutboardBarLink],
+			localSuspension->rightRear.hardpoints[Corner::OutboardBarLink],
+			originalCar->suspension->hardpoints[Suspension::RearBarMidPoint],
+			localSuspension->leftRear.hardpoints[Corner::BarArmAtPivot],// FIXME:  Shouldn't have dual-purpose points like this (leftRear BarArmAtPivot is being used to define pivot axis)
+			originalCar->suspension->leftRear.hardpoints[Corner::InboardBarLink],
+			originalCar->suspension->rightRear.hardpoints[Corner::InboardBarLink],
+			localSuspension->leftRear.hardpoints[Corner::InboardBarLink],
+			localSuspension->rightRear.hardpoints[Corner::InboardBarLink]))
+		{
+			// Print an error and switch the success boolean to indicate a failure
+			Debugger::GetInstance().Print(_T("ERROR:  Failed to solve for inboard T-bar (rear)!"), Debugger::PriorityMedium);
+		}
 	}
 
 	// Now the hardpoints have been moved and located - let's look at the outputs

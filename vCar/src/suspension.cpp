@@ -900,14 +900,38 @@ bool Suspension::SolveForContactPatch(const Vector &wheelCenter, const Vector &w
 //==========================================================================
 bool Suspension::SolveInboardTBarPoints(const Vector &leftOutboard,
 	const Vector &rightOutboard, const Vector &centerPivot,
-	const Vector &pivotAxisPoint,
 	const Vector &originalLeftOutboard, const Vector &originalRightOutboard,
-	const Vector &originalCenterPivot,const Vector &originalLeftInboard,
-	const Vector &originalRightInboard,
+	const Vector &originalCenterPivot, const Vector &originalPivotAxisPoint,
+	const Vector &originalLeftInboard, const Vector &originalRightInboard,
 	Vector &leftInboard, Vector &rightInboard)
 {
-	/*double leftTopLength = ();
-	double rightTopLength = ();*/
+	// on the left
+	// sphere1 -> center = leftOutboard, R = leftOutboard - leftInboard
+	// sphere2 -> center = centerPivot, R = centerPivot - leftInboard
+	// intersection of sphere1 and sphere2 give circle1
+
+	// on the right
+	// sphere1 -> center = rightOutboard, R = rightOutboard - rightInboard
+	// sphere2 -> center = centerPivot, R = centerPivot - rightInboard
+	// intersection of sphere1 and sphere2 give circle2
+
+	// in the center
+	// plane1 -> normal = centerPivot - pivotAxisPoint
+	// point1 -> where line (leftInboard - rightInboard) intersects plane1
+	// circle3 -> center = centerPivot, normal = centerPivot - pivotAxisPoint, R = (centerPivot - point1).Length()
+
+	// solution satisfies:
+	// - pLeft lies on circle1
+	// - pRight lies on circle2
+	// - pCenter lies on circle3
+	// - pLeft, pRight and pCenter are colinear
+	// - distance from pLeft to pCenter and pRight to pCenter match originals
+
+	Vector stemPlaneNormal = (originalCenterPivot - originalPivotAxisPoint).Normalize();
+	Vector topMidPoint = VVASEMath::IntersectWithPlane(stemPlaneNormal, centerPivot,
+		originalLeftInboard - originalRightInboard, originalLeftInboard);
+	double leftTopLength = (originalLeftInboard - topMidPoint).Length();
+	double rightTopLength = (originalRightInboard - topMidPoint).Length();
 
 	// Method is:
 	// 1.  Define cirlce from bar pivot at frame to "T" intersection (about bar rotation axis)
@@ -1069,7 +1093,7 @@ wxString Suspension::GetHardpointName(const Hardpoints& point)
 	switch (point)
 	{
 	case FrontBarMidPoint:
-		return _T("Front Bar Mid-Point");
+		return _T("Front Bar Pivot");
 		break;
 
 	case FrontThirdSpringInboard:
@@ -1089,7 +1113,7 @@ wxString Suspension::GetHardpointName(const Hardpoints& point)
 		break;
 
 	case RearBarMidPoint:
-		return _T("Rear Bar Mid-Point");
+		return _T("Rear Bar Pivot");
 		break;
 
 	case RearThirdSpringInboard:

@@ -92,6 +92,7 @@ Swaybar3D::~Swaybar3D()
 //								  sway bar (depends on bar style)
 //		torsionMemberBottomLeft	= const Vector&, either the bottom OR the left end of the
 //								  sway bar (depends on bar style)
+//		midPoint				= const Vector&, pivot point for T-bars (not used for other bars)
 //		barStyle				= const Suspension::BarStyle& defining the type of swaybar
 //		dimension				= const double& describing the size of the members
 //		resolution				= const integer& representing the number of planar sides to use
@@ -107,8 +108,9 @@ Swaybar3D::~Swaybar3D()
 //
 //==========================================================================
 void Swaybar3D::Update(const Vector &rightLink, const Vector &leftLink, const Vector &torsionMemberTopRight,
-					   const Vector &torsionMemberBottomLeft, const Suspension::BarStyle &barStyle,
-					   const double &dimension, const int &resolution, const Color &color, bool show)
+					   const Vector &torsionMemberBottomLeft,  const Vector &midPoint,
+					   const Suspension::BarStyle &barStyle, const double &dimension,
+					   const int &resolution, const Color &color, bool show)
 {
 	// Make sure all vector arguments are valid - if they are not,
 	// the object will not be made visible
@@ -143,24 +145,37 @@ void Swaybar3D::Update(const Vector &rightLink, const Vector &leftLink, const Ve
 	// Set the resolution of the torsion member
 	torsionMember->SetResolution(resolution);
 
-	// Position the torsion member
-	torsionMember->SetEndPoint1(torsionMemberBottomLeft);
-	torsionMember->SetEndPoint2(torsionMemberTopRight);
-
-	// Position the right torque arm
-	torqueArm1->SetEndPoint1(torsionMemberTopRight);
-	torqueArm1->SetEndPoint2(rightLink);
-
-	// Position the left torque arm
-	torqueArm2->SetEndPoint1(leftLink);
-
-	// The geometry depends on what kind of swaybar it is
 	if (barStyle == Suspension::SwayBarUBar)
-		torqueArm2->SetEndPoint2(torsionMemberBottomLeft);
-	else// if (barStyle == SUSPENSION::SwayBarTBar)
-		torqueArm2->SetEndPoint2(torsionMemberTopRight);
+	{
+		// Position the torsion member
+		torsionMember->SetEndPoint1(torsionMemberBottomLeft);
+		torsionMember->SetEndPoint2(torsionMemberTopRight);
 
-	// FIXME:  Use real rectangular prisms
+		// Position the right torque arm
+		torqueArm1->SetEndPoint1(torsionMemberTopRight);
+		torqueArm1->SetEndPoint2(rightLink);
+
+		// Position the left torque arm
+		torqueArm2->SetEndPoint1(leftLink);
+		torqueArm2->SetEndPoint2(torsionMemberBottomLeft);
+	}
+	else if (barStyle == Suspension::SwayBarTBar)
+	{
+		// FIXME:  Shouldn't have dual-purpose points like this (torsionMemberTopRight is being used to define pivot axis)
+		Vector stemPlaneNormal = (midPoint - torsionMemberTopRight).Normalize();
+		Vector topMidPoint = VVASEMath::IntersectWithPlane(stemPlaneNormal, midPoint,
+			rightLink - leftLink, leftLink);
+
+		// Position the torsion member
+		torsionMember->SetEndPoint1(midPoint);
+		torsionMember->SetEndPoint2(topMidPoint);
+
+		torqueArm1->SetEndPoint1(rightLink);
+		torqueArm1->SetEndPoint2(leftLink);
+
+		// Position the left torque arm
+		torqueArm2->SetVisibility(false);
+	}
 }
 
 //==========================================================================

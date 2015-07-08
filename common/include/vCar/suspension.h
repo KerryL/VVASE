@@ -134,9 +134,9 @@ public:
 	static bool SolveForContactPatch(const Vector &wheelCenter, const Vector &wheelPlaneNormal,
 		const double &tireRadius, Vector &output);
 	static bool SolveInboardTBarPoints(const Vector &leftOutboard, const Vector &rightOutboard,
-		const Vector &centerPivot, const Vector &pivotAxisPoint,
+		const Vector &centerPivot,
 		const Vector &originalLeftOutboard, const Vector &originalRightOutboard,
-		const Vector &originalCenterPivot,
+		const Vector &originalCenterPivot, const Vector &originalPivotAxisPoint,
 		const Vector &originalLeftInboard, const Vector &originalRightInboard,
 		Vector &leftInboard, Vector &rightInboard);
 

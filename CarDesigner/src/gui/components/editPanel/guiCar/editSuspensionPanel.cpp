@@ -206,17 +206,15 @@ void EditSuspensionPanel::UpdateInformation(Suspension *_currentSuspension)
 
 	// Front sway bar
 	// Removed bar mid points from list - this should be automatically calculated by VVASE
-	/*if (currentSuspension->frontBarStyle == Suspension::SwayBarUBar ||
-		currentSuspension->frontBarStyle == Suspension::SwayBarTBar)
+	if (currentSuspension->frontBarStyle == Suspension::SwayBarTBar)
 		hardpoints->SetRowHeight(Suspension::FrontBarMidPoint + 1, hardpoints->GetRowHeight(0));
-	else*/
+	else
 		hardpoints->SetRowHeight(Suspension::FrontBarMidPoint + 1, 0);
 
 	// Rear swaybar
-	/*if (currentSuspension->rearBarStyle == Suspension::SwayBarUBar ||
-		currentSuspension->rearBarStyle == Suspension::SwayBarTBar)
+	if (currentSuspension->rearBarStyle == Suspension::SwayBarTBar)
 		hardpoints->SetRowHeight(Suspension::RearBarMidPoint + 1, hardpoints->GetRowHeight(0));
-	else*/
+	else
 		hardpoints->SetRowHeight(Suspension::RearBarMidPoint + 1, 0);
 
 	// Update the values of all of the points

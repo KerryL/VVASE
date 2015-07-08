@@ -399,25 +399,20 @@ Vector VVASEMath::ProjectOntoPlane(const Vector &vectorToProject, const Vector &
 Vector VVASEMath::IntersectWithPlane(const Vector &planeNormal, const Vector &pointOnPlane,
 									 Vector axisDirection, const Vector &pointOnAxis)
 {
-	// The return vector
-	Vector intersection(QNAN, QNAN, QNAN);
-
 	// Determine what will be used as the denominator to calculate the parameter
 	// in our parametric equation
 	double denominator = planeNormal * axisDirection;
 
 	// Make sure this isn't zero (if it is, then there is no solution!)
 	if (IsZero(denominator))
-		return intersection;
+		return Vector(QNAN, QNAN, QNAN);;
 
 	// If we didn't return yet, then a solution does exist.  Determine the paramter
-	// in the parametric equation of the line: P = PointOnAxis + t * AxisDirection.Normalize()
+	// in the parametric equation of the line: P = PointOnAxis + t * AxisDirection
 	double t = planeNormal * (pointOnPlane - pointOnAxis) / denominator;
 
 	// Use the parametric equation to find the point
-	intersection = pointOnAxis + axisDirection.Normalize() * t;
-
-	return intersection;
+	return pointOnAxis + axisDirection * t;
 }
 
 //==========================================================================
