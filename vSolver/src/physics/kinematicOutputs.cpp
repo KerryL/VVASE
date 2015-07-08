@@ -212,11 +212,51 @@ void KinematicOutputs::Update(const Car *original, const Suspension *current)
 		// The angle between these vectors, when projected onto the plane that is normal
 		// to the swaybar axis is given by the dot product
 		doubles[FrontARBTwist] = acos(VVASEMath::Clamp((arm1Direction * arm2Direction) /
-			(arm1Direction.Length() * arm2Direction.Length()), -1.0, 1.0));
+			(arm1Direction.Length() * arm2Direction.Length()), -1.0, 1.0)) - originalSwayBarAngle;
 	}
 	else if (current->frontBarStyle == Suspension::SwayBarTBar)
 	{
-		// FIXME!!!
+		// First, for the original configuration of the suspension
+		Vector stemPlaneNormal = (original->suspension->hardpoints[Suspension::FrontBarMidPoint]
+			- original->suspension->leftFront.hardpoints[Corner::BarArmAtPivot]).Normalize();// FIXME:  This is dual-use point
+		Vector topMidPoint = VVASEMath::IntersectWithPlane(stemPlaneNormal,
+			original->suspension->rightFront.hardpoints[Corner::BarArmAtPivot],
+			original->suspension->leftFront.hardpoints[Corner::InboardBarLink]
+				- original->suspension->rightFront.hardpoints[Corner::InboardBarLink],
+			original->suspension->leftFront.hardpoints[Corner::InboardBarLink]);
+
+		// Project these directions onto the plane whose normal is the sway bar axis
+		swayBarAxis = original->suspension->hardpoints[Suspension::FrontBarMidPoint] - topMidPoint;
+
+		// The references for T-bar twist are the bar pivot axis and the top arm
+		arm1Direction = VVASEMath::ProjectOntoPlane(topMidPoint -
+			original->suspension->rightFront.hardpoints[Corner::InboardBarLink], swayBarAxis);
+
+		// The angle between these vectors, when projected onto the plane that is normal
+		// to the swaybar axis is given by the dot product
+		originalSwayBarAngle = acos(VVASEMath::Clamp((arm1Direction * stemPlaneNormal) /
+			(arm1Direction.Length() * stemPlaneNormal.Length()), -1.0, 1.0));
+
+		// And again as it sits now
+		stemPlaneNormal = (current->hardpoints[Suspension::FrontBarMidPoint]
+			- current->leftFront.hardpoints[Corner::BarArmAtPivot]).Normalize();// FIXME:  This is dual-use point
+		topMidPoint = VVASEMath::IntersectWithPlane(stemPlaneNormal,
+			current->rightFront.hardpoints[Corner::BarArmAtPivot],
+			current->leftFront.hardpoints[Corner::InboardBarLink]
+				- current->rightFront.hardpoints[Corner::InboardBarLink],
+			current->leftFront.hardpoints[Corner::InboardBarLink]);
+
+		// Project these directions onto the plane whose normal is the sway bar axis
+		swayBarAxis = current->hardpoints[Suspension::FrontBarMidPoint] - topMidPoint;
+
+		// The references for T-bar twist are the bar pivot axis and the top arm
+		arm1Direction = VVASEMath::ProjectOntoPlane(topMidPoint -
+			current->rightFront.hardpoints[Corner::InboardBarLink], swayBarAxis);
+
+		// The angle between these vectors, when projected onto the plane that is normal
+		// to the swaybar axis is given by the dot product
+		doubles[FrontARBTwist] = acos(VVASEMath::Clamp((arm1Direction * stemPlaneNormal) /
+			(arm1Direction.Length() * stemPlaneNormal.Length()), -1.0, 1.0)) - originalSwayBarAngle;
 	}
 	else if (current->frontBarStyle == Suspension::SwayBarGeared)
 	{
@@ -255,11 +295,51 @@ void KinematicOutputs::Update(const Car *original, const Suspension *current)
 		// The angle between these vectors, when projected onto the plane that is normal
 		// to the swaybar axis is given by the dot product
 		doubles[RearARBTwist] = acos(VVASEMath::Clamp((arm1Direction * arm2Direction) /
-			(arm1Direction.Length() * arm2Direction.Length()), -1.0, 1.0));
+			(arm1Direction.Length() * arm2Direction.Length()), -1.0, 1.0)) - originalSwayBarAngle;
 	}
 	else if (current->rearBarStyle == Suspension::SwayBarTBar)
 	{
-		// FIXME!!!
+		// First, for the original configuration of the suspension
+		Vector stemPlaneNormal = (original->suspension->hardpoints[Suspension::RearBarMidPoint]
+			- original->suspension->leftRear.hardpoints[Corner::BarArmAtPivot]).Normalize();// FIXME:  This is dual-use point
+		Vector topMidPoint = VVASEMath::IntersectWithPlane(stemPlaneNormal,
+			original->suspension->rightRear.hardpoints[Corner::BarArmAtPivot],
+			original->suspension->leftRear.hardpoints[Corner::InboardBarLink]
+				- original->suspension->rightRear.hardpoints[Corner::InboardBarLink],
+			original->suspension->leftRear.hardpoints[Corner::InboardBarLink]);
+
+		// Project these directions onto the plane whose normal is the sway bar axis
+		swayBarAxis = original->suspension->hardpoints[Suspension::RearBarMidPoint] - topMidPoint;
+
+		// The references for T-bar twist are the bar pivot axis and the top arm
+		arm1Direction = VVASEMath::ProjectOntoPlane(topMidPoint -
+			original->suspension->rightRear.hardpoints[Corner::InboardBarLink], swayBarAxis);
+
+		// The angle between these vectors, when projected onto the plane that is normal
+		// to the swaybar axis is given by the dot product
+		originalSwayBarAngle = acos(VVASEMath::Clamp((arm1Direction * stemPlaneNormal) /
+			(arm1Direction.Length() * stemPlaneNormal.Length()), -1.0, 1.0));
+
+		// And again as it sits now
+		stemPlaneNormal = (current->hardpoints[Suspension::RearBarMidPoint]
+			- current->leftRear.hardpoints[Corner::BarArmAtPivot]).Normalize();// FIXME:  This is dual-use point
+		topMidPoint = VVASEMath::IntersectWithPlane(stemPlaneNormal,
+			current->rightRear.hardpoints[Corner::BarArmAtPivot],
+			current->leftRear.hardpoints[Corner::InboardBarLink]
+				- current->rightRear.hardpoints[Corner::InboardBarLink],
+			current->leftRear.hardpoints[Corner::InboardBarLink]);
+
+		// Project these directions onto the plane whose normal is the sway bar axis
+		swayBarAxis = current->hardpoints[Suspension::RearBarMidPoint] - topMidPoint;
+
+		// The references for T-bar twist are the bar pivot axis and the top arm
+		arm1Direction = VVASEMath::ProjectOntoPlane(topMidPoint -
+			current->rightRear.hardpoints[Corner::InboardBarLink], swayBarAxis);
+
+		// The angle between these vectors, when projected onto the plane that is normal
+		// to the swaybar axis is given by the dot product
+		doubles[RearARBTwist] = acos(VVASEMath::Clamp((arm1Direction * stemPlaneNormal) /
+			(arm1Direction.Length() * stemPlaneNormal.Length()), -1.0, 1.0)) - originalSwayBarAngle;
 	}
 	else if (current->rearBarStyle == Suspension::SwayBarGeared)
 	{

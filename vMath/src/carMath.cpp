@@ -405,7 +405,7 @@ Vector VVASEMath::IntersectWithPlane(const Vector &planeNormal, const Vector &po
 
 	// Make sure this isn't zero (if it is, then there is no solution!)
 	if (IsZero(denominator))
-		return Vector(QNAN, QNAN, QNAN);;
+		return Vector(QNAN, QNAN, QNAN);
 
 	// If we didn't return yet, then a solution does exist.  Determine the paramter
 	// in the parametric equation of the line: P = PointOnAxis + t * AxisDirection

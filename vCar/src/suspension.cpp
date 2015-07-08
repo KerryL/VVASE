@@ -905,20 +905,55 @@ bool Suspension::SolveInboardTBarPoints(const Vector &leftOutboard,
 	const Vector &originalLeftInboard, const Vector &originalRightInboard,
 	Vector &leftInboard, Vector &rightInboard)
 {
+	// We'll use parametric version of 3D circle equation
+	// Additional parameters a and b are orthogonal to each other and circle plane normal
+	// a and b have length equal to circle radius
+	Vector normal;
+	double angle, f, g;// f, g and angle are for law of cosines calcs
+
+	Vector leftCenter, leftA, leftB;
 	// on the left
 	// sphere1 -> center = leftOutboard, R = leftOutboard - leftInboard
 	// sphere2 -> center = centerPivot, R = centerPivot - leftInboard
-	// intersection of sphere1 and sphere2 give circle1
+	// circle1 -> intersection of sphere1 and sphere2
+	normal = (leftOutboard - centerPivot);
+	if ((leftOutboard - centerPivot).Length() > normal.Length())
+	{
+		Debugger::GetInstance().Print(_T("Error (SolveInboardTBarPoints): Center distance exceeds sum of left radii"), Debugger::PriorityLow);
+		return false;
+	}
+	f = (originalLeftOutboard - originalLeftInboard).Length();
+	g = (originalCenterPivot - originalLeftInboard).Length();
+	angle = acos((f * f + normal.Length() * normal.Length() - g * g) * 0.5 / f / normal.Length());
+	leftCenter = f * cos(angle) * normal.Normalize();
+	leftA = ;
+	leftB = ;
 
+	Vector rightCenter, rightA, rightB;
 	// on the right
 	// sphere1 -> center = rightOutboard, R = rightOutboard - rightInboard
 	// sphere2 -> center = centerPivot, R = centerPivot - rightInboard
-	// intersection of sphere1 and sphere2 give circle2
+	// circle2 -> intersection of sphere1 and sphere2
+	normal = (rightOutboard - centerPivot);
+	if ((rightOutboard - centerPivot).Length() > normal.Length())
+	{
+		Debugger::GetInstance().Print(_T("Error (SolveInboardTBarPoints): Center distance exceeds sum of right radii"), Debugger::PriorityLow);
+		return false;
+	}
+	f = (originalRightOutboard - originalRightInboard).Length();
+	g = (originalCenterPivot - originalRightInboard).Length();
+	angle = acos((f * f + normal.Length() * normal.Length() - g * g) * 0.5 / f / normal.Length());
+	rightCenter = f * cos(angle) * normal.Normalize();
+	rightA = ;
+	rightB = ;
 
+	Vector centerA, centerB;
 	// in the center
 	// plane1 -> normal = centerPivot - pivotAxisPoint
 	// point1 -> where line (leftInboard - rightInboard) intersects plane1
 	// circle3 -> center = centerPivot, normal = centerPivot - pivotAxisPoint, R = (centerPivot - point1).Length()
+	centerA = ;
+	centerB = ;
 
 	// solution satisfies:
 	// - pLeft lies on circle1
@@ -933,12 +968,64 @@ bool Suspension::SolveInboardTBarPoints(const Vector &leftOutboard,
 	double leftTopLength = (originalLeftInboard - topMidPoint).Length();
 	double rightTopLength = (originalRightInboard - topMidPoint).Length();
 
-	// Method is:
-	// 1.  Define cirlce from bar pivot at frame to "T" intersection (about bar rotation axis)
-	// 2.  Define spheres for bar pivot at frame to "T" ends
-	// 3.  Define spheres for outboard to inboard bar links (center at outboard bar link)
-	// 4.  Find circles defined by intersections of spheres defined in steps 2 and 3
-	// 5.  Find point on circle in step 1 that satisfied BOTH distance from this circle to step 4 circle AND line through this point from step 4 circle to other step 4 circle is 2x first distance
+	// It's possible that a closed-form solution exists, but let's try an iterative method
+	unsigned int i(0);
+	const unsigned int limit(100);
+	const double epsilon(1.0e-12);
+	double error(epsilon * 10.0), double jacobian[3];
+	double tl, tc, tr;// parameteric variables for the three points
+	Vector left, right, center;
+	double sizeSq;
+
+	// TODO:  Initialize parameteric variables such that result aligns with original point locations
+	tl = ;
+	tr = ;
+	tc = ;
+
+	while (i < limit && error > epsilon)
+	{
+		left = leftCenter + leftA * cos(tl) + leftB * sin(tl);
+		right = rightCenter + rightA * cos(tr) + rightB * sin(tr);
+		center = centerPivot + centerA * cos(tc) + centerB * sin(tc);
+
+		error = fabs((left - center).Length() - leftTopLength);
+		error += fabs((right - center).Length() - rightTopLength);
+		error += fabs((left - right).Length() - leftTopLength - rightTopLength);
+
+		// Compute jacobian
+		left = leftCenter + leftA * cos(tl + epsilon) + leftB * sin(tl + epsilon);
+		jacobian[0] = (error - fabs((left - center).Length() - leftTopLength) -
+			fabs((right - center).Length() - rightTopLength) -
+			fabs((left - right).Length() - leftTopLength - rightTopLength)) / epsilon;
+		left = leftCenter + leftA * cos(tl) + leftB * sin(tl);
+
+		right = rightCenter + rightA * cos(tr + epsilon) + rightB * sin(tr + epsilon);
+		jacobian[1] = (error - fabs((left - center).Length() - leftTopLength) -
+			fabs((right - center).Length() - rightTopLength) -
+			fabs((left - right).Length() - leftTopLength - rightTopLength)) / epsilon;
+		right = rightCenter + rightA * cos(tr) + rightB * sin(tr);
+
+		center = centerPivot + centerA * cos(tc + epsilon) + centerB * sin(tc + epsilon);
+		jacobian[2] = (error - fabs((left - center).Length() - leftTopLength) -
+			fabs((right - center).Length() - rightTopLength) -
+			fabs((left - right).Length() - leftTopLength - rightTopLength)) / epsilon;
+		center = centerPivot + centerA * cos(tc) + centerB * sin(tc);
+
+		// Compute next guess
+		sizeSq = jacobian[0] * jacobian[0] + jacobian[1] * jacobian[1] + jacobian[2] * jacobian[2];
+		tl -= jacobian[0] / sizeSq * tl;
+		tr -= jacobian[1] / sizeSq * tr;
+		tc -= jacobian[2] / sizeSq * tc;
+
+		i++;
+	}
+
+	if (i == limit)
+		Debugger::GetInstance().Print(_T("Warning:  Iteration limit reached (SolveInboardTBarPoints)"), Debugger::PriorityMedium);
+
+	rightInboard = right;
+	leftInboard = left;
+
 	return false;
 }
 
