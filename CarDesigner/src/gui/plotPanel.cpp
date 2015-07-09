@@ -551,6 +551,7 @@ void PlotPanel::AddCurve(wxString mathString)
 		::wxMessageBox(_T("Could not solve expression:\n\n") + errors, _T("Error Solving Expression"));
 
 		DisplayMathChannelDialog(mathString);
+		delete mathChannel;
 		return;
 	}
 
