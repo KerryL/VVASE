@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!-- This is an xml template example.  The values specified here are
+default values and are only used upon creation of a new object using
+this template. -->
+<SUSPENSION name="Push/pullrod corner">
+	<!-- Solver first finds all hardpoints with onFrame set to true, and applies
+	desired rotations/translations to these points.  Then, it determines the order
+	in which the remaining points must be solved (based on types and specified
+	references) and solves for the remaining points. -->
+	<HARDPOINT name="Lower Tub Mount, Front" type="onFrame" value="[0 0 0]" />
+	<HARDPOINT name="Lower Tub Mount, Rear" type="onFrame" value="[0 0 0]" />
+	<HARDPOINT name="Upper Tub Mount, Front" type="onFrame" value="[0 0 0]" />
+	<HARDPOINT name="Upper Tub Mount, Rear" type="onFrame" value="[0 0 0]" />
+	<HARDPOINT name="Lower Ball Joint" type="relative" value="[0 0 0]">
+		<REFERENCE name="Contact Patch" />
+		<REFERENCE name="Lower Tub Mount, Front" />
+		<REFERENCE name="Lower Tub Mount, Rear" />
+	</HARDPOINT>
+	<HARDPOINT name="Upper Ball Joint" type="relative" value="[0 0 0]">
+		<REFERENCE name="Lower Ball Joint" />
+		<REFERENCE name="Upper Tub Mount, Front" />
+		<REFERENCE name="Upper Tub Mount, Rear" />
+	</HARDPOINT>
+	<HARDPOINT name="Contact Patch" type="fixedZ" value="[0 0 0]"><!-- special name; must have on at each corner -->
+		<REFERENCE name="Lower Tub Mount, Front" />
+		<REFERENCE name="Lower Tub Mount, Rear" />
+	</HARDPOINT>
+	<HARDPOINT name="Push/Pullrod, Outboard" type="relative" value="[0 0 0]">
+		<REFERENCE name="Lower Ball Joint" />
+		<REFERENCE name="Lower Tub Mount, Front" />
+		<REFERENCE name="Lower Tub Mount, Rear" />
+	</HARDPOINT>
+	<HARDPOINT name="Push/Pullrod, Inboard" type="relative" value="[0 0 0]">
+		<REFERENCE name="Push/Pullrod, Outboard" />
+		<REFERENCE name="Bellcrank Pivot 1" />
+		<REFERENCE name="Bellcrank Pivot 2" />
+	</HARDPOINT>
+	<HARDPOINT name="Bellcrank Pivot 1" type="onFrame" value="[0 0 0]" />
+	<HARDPOINT name="Bellcrank Pivot 2" type="onFrame" value="[0 0 0]" />
+	<HARDPOINT name="Damper, Inboard" type="onFrame" value="[0 0 0]" />
+	<HARDPOINT name="Spring, Inboard" type="onFrame" value="[0 0 0]" />
+	<HARDPOINT name="Shock Pot, Inboard" type="onFrame" value="[0 0 0]" />
+	<HARDPOINT name="Damper, Outboard" type="relative" value="[0 0 0]">
+		<REFERENCE name="Push/Pullrod, Inboard" />
+		<REFERENCE name="Bellcrank Pivot 1" />
+		<REFERENCE name="Bellcrank Pivot 2" />
+	</HARDPOINT>
+	<HARDPOINT name="Spring, Outboard" type="relative" value="[0 0 0]">
+		<REFERENCE name="Push/Pullrod, Inboard" />
+		<REFERENCE name="Bellcrank Pivot 1" />
+		<REFERENCE name="Bellcrank Pivot 2" />
+	</HARDPOINT>
+	<HARDPOINT name="Shock Pot, Outboard" type="relative" value="[0 0 0]">
+		<REFERENCE name="Push/Pullrod, Inboard" />
+		<REFERENCE name="Bellcrank Pivot 1" />
+		<REFERENCE name="Bellcrank Pivot 2" />
+	</HARDPOINT>
+	<!-- Define all outputs in which you are interested here - these will be
+	displayed numerically and available for plotting and optimization -->
+	<OUTPUT />
+</SUSPENSION>

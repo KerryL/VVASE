@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!-- This is an xml template example.  The values specified here are
+default values and are only used upon creation of a new object using
+this template. -->
+<SUSPENSION name="Pull/pullrod swaybar options">
+	<OPTION_LIST name="Swaybars">
+		<OPTION name="None" />
+		<OPTION name="U-bar">
+			<INCLUDE file="ubar.template" />
+		</OPTION>
+		<OPTION name="T-bar">
+			<INCLUDE file="tbar.template" />
+		</OPTION>
+	</OPTION>
+</SUSPENSION>

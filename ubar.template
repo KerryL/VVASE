@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!-- This is an xml template example.  The values specified here are
+default values and are only used upon creation of a new object using
+this template. -->
+<SUSPENSION name="U-bar">
+	<HARDPOINT name="Swaybar Link, Outboard" type="relative" value="[0 0 0]" corner="both">
+		<REFERENCE name="Push/Pullrod, Inboard" />
+		<REFERENCE name="Bellcrank Pivot 1" />
+		<REFERENCE name="Bellcrank Pivot 2" />
+	</HARDPOINT>
+	<HARDPOINT name="Swaybar Link, Inboard" type="relative" value="[0 0 0]" corner="both">
+		<REFERENCE name="Swaybar Link, Outboard" />
+		<REFERENCE name="Swaybar Arm At Pivot" corner="left" />
+		<REFERENCE name="Swaybar Arm At Pivot" corner="right" />
+	</HARDPOINT>
+	<HARDPOINT name="Swaybar Arm At Pivot" type="onFrame" value="[0 0 0]" corner="both">
+		<REFERENCE name="Push/Pullrod, Inboard" />
+		<REFERENCE name="Bellcrank Pivot 1" />
+		<REFERENCE name="Bellcrank Pivot 2" />
+	</HARDPOINT>
+</SUSPENSION>

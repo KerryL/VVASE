@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!-- This is an xml template example.  The values specified here are
+default values and are only used upon creation of a new object using
+this template. -->
+<CAR name="Formula car template">
+	<DESCRIPTION value="Formula style car template; push/pull rod suspension front and rear" />
+	<SUSPENSION>
+		<INCLUDE file="push pull end.template" as="front" />
+		<INCLUDE file="driven push pull end.template" as="rear" />
+	</SUSPENSION>
+</CAR>

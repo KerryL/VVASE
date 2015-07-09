@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!-- This is an xml template example.  The values specified here are
+default values and are only used upon creation of a new object using
+this template. -->
+<SUSPENSION name="Push/pullrod end">
+	<DESCRIPTION value="Push/pull rod suspension with several swaybar options" />
+	<!-- If the same template is used for left and right sides, option
+	is automatically generated for symmetric suspension -->
+	<INCLUDE file="push pull corner.template" as="left" />
+	<INCLUDE file="push pull corner.template" as="right" />
+	<INCLUDE file="push pull swaybars.template" />
+</SUSPENSION>

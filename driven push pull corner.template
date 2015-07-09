@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!-- This is an xml template example.  The values specified here are
+default values and are only used upon creation of a new object using
+this template. -->
+<SUSPENSION name="Driven push/pullrod corner">
+	<INCLUDE file="push pull corner.template" />
+	<HARDPOINT name="Halfshaft, Inboard" type="onFrame" value="[0 0 0]" />
+	<HARDPOINT name="Halfshaft, Outboard" type="relative" value="[0 0 0]">
+		<REFERENCE name="Upper Ball Joint" />
+		<REFERENCE name="Lower Ball Joint" />
+		<REFERENCE name="Toe Link, Outboard" />
+	</HARDPOINT>
+</SUSPENSION>
