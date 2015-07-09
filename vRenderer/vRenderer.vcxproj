@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClInclude Include="..\common\include\vRenderer\3dcar\aarm.h" />
     <ClInclude Include="..\common\include\vRenderer\3dcar\damper3D.h" />
+    <ClInclude Include="..\common\include\vRenderer\3dcar\debugShape.h" />
     <ClInclude Include="..\common\include\vRenderer\3dcar\link.h" />
     <ClInclude Include="..\common\include\vRenderer\3dcar\origin.h" />
     <ClInclude Include="..\common\include\vRenderer\3dcar\plane3D.h" />
@@ -40,6 +41,7 @@
   <ItemGroup>
     <ClCompile Include="src\3dcar\aarm.cpp" />
     <ClCompile Include="src\3dcar\damper3D.cpp" />
+    <ClCompile Include="src\3dcar\debugShape.cpp" />
     <ClCompile Include="src\3dcar\link.cpp" />
     <ClCompile Include="src\3dcar\origin.cpp" />
     <ClCompile Include="src\3dcar\plane3D.cpp" />

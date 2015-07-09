@@ -48,9 +48,6 @@ class AppearanceOptions;
 class GuiCar;
 class MainFrame;
 
-class Disk;
-class Sphere;
-
 class CarRenderer : public RenderWindow
 {
 public:
@@ -157,15 +154,6 @@ private:
 	Swaybar3D *rearSwayBar;
 	Spring3D *rearThirdSpring;
 	Damper3D *rearThirdDamper;
-
-	Point3D *dbgCenter1;
-	Point3D *dbgCenter2;
-	Point3D *dbgCenter3;
-	Disk *dbgCircle1;
-	Disk *dbgCircle2;
-	Disk *dbgCircle3;
-	Sphere *dbgSphere1;
-	Sphere *dbgSphere2;
 
 	// Kinematic output visualization
 	Point3D *frontRollCenter;

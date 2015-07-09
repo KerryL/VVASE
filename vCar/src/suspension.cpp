@@ -37,6 +37,8 @@
 #include "vUtilities/machineDefinitions.h"
 #include "vUtilities/debugger.h"
 
+#include "vRenderer/3dcar/debugShape.h"
+
 //==========================================================================
 // Class:			Suspension
 // Function:		Suspension
@@ -974,20 +976,6 @@ double Suspension::OptimizeCircleParameter(const Vector &center, const Vector &a
 	return bestT;
 }
 
-Vector Suspension::dbcCenter1;
-Vector Suspension::dbcNormal1;
-Vector Suspension::dbcCenter2;
-Vector Suspension::dbcNormal2;
-Vector Suspension::dbcCenter3;
-Vector Suspension::dbcNormal3;
-double Suspension::dbcRadius1;
-double Suspension::dbcRadius2;
-double Suspension::dbcRadius3;
-Vector Suspension::dbsCenter1;
-Vector Suspension::dbsCenter2;
-double Suspension::dbsRadius1;
-double Suspension::dbsRadius2;
-
 //==========================================================================
 // Class:			Suspension
 // Function:		SolveInboardTBarPoints
@@ -1039,13 +1027,12 @@ bool Suspension::SolveInboardTBarPoints(const Vector &leftOutboard,
 	leftB = leftA.Cross(normal);
 	leftA = leftA.Normalize() * radius;
 	leftB = leftB.Normalize() * radius;
-	dbcCenter1 = leftCenter;
-	dbcNormal1 = normal;
-	dbcRadius1 = radius;
-	dbsCenter1 = leftOutboard;
-	dbsRadius1 = (originalLeftOutboard - originalLeftInboard).Length();
-	dbsCenter2 = centerPivot;
-	dbsRadius2 = (originalCenterPivot - originalLeftInboard).Length();
+
+/*#ifdef USE_DEBUG_SHAPE
+	DebugShape::Get()->SetSphere1(leftOutboard, (originalLeftOutboard - originalLeftInboard).Length());
+	DebugShape::Get()->SetSphere2(centerPivot, (originalCenterPivot - originalLeftInboard).Length());
+	//DebugShape::Get()->SetSphere3(rightOutboard, (originalRightOutboard - originalRightInboard).Length());
+#endif*/
 
 	Vector rightCenter, rightA, rightB;
 	// on the right
@@ -1067,9 +1054,6 @@ bool Suspension::SolveInboardTBarPoints(const Vector &leftOutboard,
 	rightB = rightA.Cross(normal);
 	rightA = rightA.Normalize() * radius;
 	rightB = rightB.Normalize() * radius;
-	dbcCenter2 = rightCenter;
-	dbcNormal2 = normal;
-	dbcRadius2 = radius;
 
 	Vector centerA, centerB;
 	// in the center
@@ -1085,9 +1069,12 @@ bool Suspension::SolveInboardTBarPoints(const Vector &leftOutboard,
 	centerB = centerA.Cross(normal);
 	centerA = centerA.Normalize() * radius;
 	centerB = centerB.Normalize() * radius;
-	dbcCenter3 = centerPivot;
-	dbcNormal3 = normal;
-	dbcRadius3 = radius;
+
+/*#ifdef USE_DEBUG_SHAPE
+	DebugShape::Get()->SetDisk1(leftCenter, leftA.Cross(leftB), leftA.Length(), leftA.Length() * 0.9);
+	DebugShape::Get()->SetDisk2(rightCenter, rightA.Cross(rightB), rightA.Length(), rightA.Length() * 0.9);
+	DebugShape::Get()->SetDisk3(centerPivot, centerA.Cross(centerB), centerA.Length(), centerA.Length() * 0.9);
+#endif*/
 
 	// solution satisfies:
 	// - pLeft lies on circle1
@@ -1103,57 +1090,51 @@ bool Suspension::SolveInboardTBarPoints(const Vector &leftOutboard,
 	unsigned int i(0);
 	const unsigned int limit(100);
 	const double epsilon(1.0e-8);
-	Vector error(epsilon, epsilon, epsilon);
-	Matrix jacobian(3,3), eMat(3,1);
-	double tl, tc, tr;// parameteric variables for the three points
+	Matrix error(3, 1, epsilon, epsilon, epsilon);
+	Matrix jacobian(3,3);
+	Matrix guess(3,1);// parameteric variables for the three points
 	Vector left, right, center;
-	//double sizeSq;
 	Matrix delta;
 
 	// Initialize parameteric variables such that result aligns as best
 	// as possible with original point locations
-	tl = OptimizeCircleParameter(leftCenter, leftA, leftB, originalLeftInboard);
-	tr = OptimizeCircleParameter(rightCenter, rightA, rightB, originalRightInboard);
-	tc = OptimizeCircleParameter(centerPivot, centerA, centerB, originalTopMidPoint);
+	guess(0,0) = OptimizeCircleParameter(leftCenter, leftA, leftB, originalLeftInboard);
+	guess(1,0) = OptimizeCircleParameter(rightCenter, rightA, rightB, originalRightInboard);
+	guess(2,0) = OptimizeCircleParameter(centerPivot, centerA, centerB, originalTopMidPoint);
 
-	while (i < limit && error.Length() > epsilon)
+	while (i < limit && fabs(error(0,0)) + fabs(error(1,0)) + fabs(error(2,0)) > epsilon)
 	{
-		left = leftCenter + leftA * cos(tl) + leftB * sin(tl);
-		right = rightCenter + rightA * cos(tr) + rightB * sin(tr);
-		center = centerPivot + centerA * cos(tc) + centerB * sin(tc);
+		left = leftCenter + leftA * cos(guess(0,0)) + leftB * sin(guess(0,0));
+		right = rightCenter + rightA * cos(guess(1,0)) + rightB * sin(guess(1,0));
+		center = centerPivot + centerA * cos(guess(2,0)) + centerB * sin(guess(2,0));
 
-		error.x = (left - center).Length() - leftTopLength;
-		error.y = (right - center).Length() - rightTopLength;
-		error.z = (left - right).Length() - leftTopLength - rightTopLength;
-		//Debugger::GetInstance().Print(Debugger::PriorityHigh, "i = %u; error = %f; guess = [%f, %f, %f]", i, error, tl, tr, tc);
+		error(0,0) = (left - center).Length() - leftTopLength;
+		error(1,0) = (right - center).Length() - rightTopLength;
+		error(2,0) = (left - right).Length() - leftTopLength - rightTopLength;
+		//Debugger::GetInstance().Print(Debugger::PriorityLow, "i = %u; error = \n%s;\nguess = \n%s", i, error.Print().ToUTF8().data(), guess.Print().ToUTF8().data());
 
 		// Compute jacobian
-		left = leftCenter + leftA * cos(tl + epsilon) + leftB * sin(tl + epsilon);
-		jacobian(0,0) = ((left - center).Length() - leftTopLength - error.x) / epsilon;
-		jacobian(1,0) = ((right - center).Length() - rightTopLength - error.y) / epsilon;
-		jacobian(2,0) = ((left - right).Length() - leftTopLength - rightTopLength - error.z) / epsilon;
-		left = leftCenter + leftA * cos(tl) + leftB * sin(tl);
+		left = leftCenter + leftA * cos(guess(0,0) + epsilon) + leftB * sin(guess(0,0) + epsilon);
+		jacobian(0,0) = ((left - center).Length() - leftTopLength - error(0,0)) / epsilon;
+		jacobian(1,0) = ((right - center).Length() - rightTopLength - error(1,0)) / epsilon;
+		jacobian(2,0) = ((left - right).Length() - leftTopLength - rightTopLength - error(2,0)) / epsilon;
+		left = leftCenter + leftA * cos(guess(0,0)) + leftB * sin(guess(0,0));
 
-		right = rightCenter + rightA * cos(tr + epsilon) + rightB * sin(tr + epsilon);
-		jacobian(0,1) = ((left - center).Length() - leftTopLength - error.x) / epsilon;
-		jacobian(1,1) = ((right - center).Length() - rightTopLength - error.y) / epsilon;
-		jacobian(2,1) = ((left - right).Length() - leftTopLength - rightTopLength - error.z) / epsilon;
-		right = rightCenter + rightA * cos(tr) + rightB * sin(tr);
+		right = rightCenter + rightA * cos(guess(1,0) + epsilon) + rightB * sin(guess(1,0) + epsilon);
+		jacobian(0,1) = ((left - center).Length() - leftTopLength - error(0,0)) / epsilon;
+		jacobian(1,1) = ((right - center).Length() - rightTopLength - error(1,0)) / epsilon;
+		jacobian(2,1) = ((left - right).Length() - leftTopLength - rightTopLength - error(2,0)) / epsilon;
+		right = rightCenter + rightA * cos(guess(1,0)) + rightB * sin(guess(1,0));
 
-		center = centerPivot + centerA * cos(tc + epsilon) + centerB * sin(tc + epsilon);
-		jacobian(0,2) = ((left - center).Length() - leftTopLength - error.x) / epsilon;
-		jacobian(1,2) = ((right - center).Length() - rightTopLength - error.y) / epsilon;
-		jacobian(2,2) = ((left - right).Length() - leftTopLength - rightTopLength - error.z) / epsilon;
-		center = centerPivot + centerA * cos(tc) + centerB * sin(tc);
+		center = centerPivot + centerA * cos(guess(2,0) + epsilon) + centerB * sin(guess(2,0) + epsilon);
+		jacobian(0,2) = ((left - center).Length() - leftTopLength - error(0,0)) / epsilon;
+		jacobian(1,2) = ((right - center).Length() - rightTopLength - error(1,0)) / epsilon;
+		jacobian(2,2) = ((left - right).Length() - leftTopLength - rightTopLength - error(2,0)) / epsilon;
+		center = centerPivot + centerA * cos(guess(2,0)) + centerB * sin(guess(2,0));
 
 		// Compute next guess
-		eMat(0,0) = error.x;
-		eMat(1,0) = error.y;
-		eMat(2,0) = error.z;
-		delta = jacobian.LeftDivide(eMat);
-		tl -= delta(0,0);
-		tr -= delta(1,0);
-		tc -= delta(2,0);
+		delta = jacobian.LeftDivide(error);
+		guess -= delta;
 
 		i++;
 	}
@@ -1163,6 +1144,12 @@ bool Suspension::SolveInboardTBarPoints(const Vector &leftOutboard,
 
 	rightInboard = right;
 	leftInboard = left;
+
+/*#ifdef USE_DEBUG_SHAPE
+	DebugShape::Get()->SetPoint1(left);
+	DebugShape::Get()->SetPoint2(right);
+	DebugShape::Get()->SetPoint3(center);
+#endif*/
 
 	// Check constraints
 	if (!VVASEMath::IsZero((left - center).Length() - leftTopLength, epsilon))

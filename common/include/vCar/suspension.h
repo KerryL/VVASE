@@ -146,48 +146,10 @@ public:
 	// Operators
 	Suspension& operator=(const Suspension& suspension);
 
-	void GetDebugCircle1(Vector &center, Vector &normal, double &radius) const
-	{
-		center = dbcCenter1;
-		normal = dbcNormal1;
-		radius = dbcRadius1;
-	}
-	void GetDebugCircle2(Vector &center, Vector &normal, double &radius) const
-	{
-		center = dbcCenter2;
-		normal = dbcNormal2;
-		radius = dbcRadius2;
-	}
-
-	void GetDebugCircle3(Vector &center, Vector &normal, double &radius) const
-	{
-		center = dbcCenter3;
-		normal = dbcNormal3;
-		radius = dbcRadius3;
-	}
-
-	void GetDebugSphere1(Vector &center, double &radius) const
-	{
-		center = dbsCenter1;
-		radius = dbsRadius1;
-	}
-
-	void GetDebugSphere2(Vector &center, double &radius) const
-	{
-		center = dbsCenter2;
-		radius = dbsRadius2;
-	}
-
 private:
 	static Vector FindPerpendicularVector(const Vector &v);
 	static double OptimizeCircleParameter(const Vector &center, const Vector &a,
 		const Vector &b, const Vector &target);
-	static Vector dbcCenter1, dbcNormal1;
-	static Vector dbcCenter2, dbcNormal2;
-	static Vector dbcCenter3, dbcNormal3;
-	static Vector dbsCenter1, dbsCenter2;
-	static double dbcRadius1, dbcRadius2, dbcRadius3;
-	static double dbsRadius1, dbsRadius2;
 };
 
 #endif// _SUSPENSION_H_

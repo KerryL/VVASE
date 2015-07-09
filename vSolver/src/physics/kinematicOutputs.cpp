@@ -218,9 +218,9 @@ void KinematicOutputs::Update(const Car *original, const Suspension *current)
 	{
 		// First, for the original configuration of the suspension
 		Vector stemPlaneNormal = (original->suspension->hardpoints[Suspension::FrontBarMidPoint]
-			- original->suspension->leftFront.hardpoints[Corner::BarArmAtPivot]).Normalize();// FIXME:  This is dual-use point
+			- original->suspension->leftFront.hardpoints[Corner::BarArmAtPivot]);// FIXME:  This is dual-use point
 		Vector topMidPoint = VVASEMath::IntersectWithPlane(stemPlaneNormal,
-			original->suspension->rightFront.hardpoints[Corner::BarArmAtPivot],
+			original->suspension->hardpoints[Suspension::FrontBarMidPoint],
 			original->suspension->leftFront.hardpoints[Corner::InboardBarLink]
 				- original->suspension->rightFront.hardpoints[Corner::InboardBarLink],
 			original->suspension->leftFront.hardpoints[Corner::InboardBarLink]);
@@ -239,9 +239,9 @@ void KinematicOutputs::Update(const Car *original, const Suspension *current)
 
 		// And again as it sits now
 		stemPlaneNormal = (current->hardpoints[Suspension::FrontBarMidPoint]
-			- current->leftFront.hardpoints[Corner::BarArmAtPivot]).Normalize();// FIXME:  This is dual-use point
+			- current->leftFront.hardpoints[Corner::BarArmAtPivot]);// FIXME:  This is dual-use point
 		topMidPoint = VVASEMath::IntersectWithPlane(stemPlaneNormal,
-			current->rightFront.hardpoints[Corner::BarArmAtPivot],
+			current->hardpoints[Suspension::FrontBarMidPoint],
 			current->leftFront.hardpoints[Corner::InboardBarLink]
 				- current->rightFront.hardpoints[Corner::InboardBarLink],
 			current->leftFront.hardpoints[Corner::InboardBarLink]);
@@ -301,9 +301,9 @@ void KinematicOutputs::Update(const Car *original, const Suspension *current)
 	{
 		// First, for the original configuration of the suspension
 		Vector stemPlaneNormal = (original->suspension->hardpoints[Suspension::RearBarMidPoint]
-			- original->suspension->leftRear.hardpoints[Corner::BarArmAtPivot]).Normalize();// FIXME:  This is dual-use point
+			- original->suspension->leftRear.hardpoints[Corner::BarArmAtPivot]);// FIXME:  This is dual-use point
 		Vector topMidPoint = VVASEMath::IntersectWithPlane(stemPlaneNormal,
-			original->suspension->rightRear.hardpoints[Corner::BarArmAtPivot],
+			original->suspension->hardpoints[Suspension::RearBarMidPoint],
 			original->suspension->leftRear.hardpoints[Corner::InboardBarLink]
 				- original->suspension->rightRear.hardpoints[Corner::InboardBarLink],
 			original->suspension->leftRear.hardpoints[Corner::InboardBarLink]);
@@ -312,8 +312,8 @@ void KinematicOutputs::Update(const Car *original, const Suspension *current)
 		swayBarAxis = original->suspension->hardpoints[Suspension::RearBarMidPoint] - topMidPoint;
 
 		// The references for T-bar twist are the bar pivot axis and the top arm
-		arm1Direction = VVASEMath::ProjectOntoPlane(topMidPoint -
-			original->suspension->rightRear.hardpoints[Corner::InboardBarLink], swayBarAxis);
+		arm1Direction = VVASEMath::ProjectOntoPlane(
+			original->suspension->rightRear.hardpoints[Corner::InboardBarLink] - topMidPoint, swayBarAxis);
 
 		// The angle between these vectors, when projected onto the plane that is normal
 		// to the swaybar axis is given by the dot product
@@ -322,9 +322,9 @@ void KinematicOutputs::Update(const Car *original, const Suspension *current)
 
 		// And again as it sits now
 		stemPlaneNormal = (current->hardpoints[Suspension::RearBarMidPoint]
-			- current->leftRear.hardpoints[Corner::BarArmAtPivot]).Normalize();// FIXME:  This is dual-use point
+			- current->leftRear.hardpoints[Corner::BarArmAtPivot]);// FIXME:  This is dual-use point
 		topMidPoint = VVASEMath::IntersectWithPlane(stemPlaneNormal,
-			current->rightRear.hardpoints[Corner::BarArmAtPivot],
+			current->hardpoints[Suspension::RearBarMidPoint],
 			current->leftRear.hardpoints[Corner::InboardBarLink]
 				- current->rightRear.hardpoints[Corner::InboardBarLink],
 			current->leftRear.hardpoints[Corner::InboardBarLink]);
@@ -333,8 +333,8 @@ void KinematicOutputs::Update(const Car *original, const Suspension *current)
 		swayBarAxis = current->hardpoints[Suspension::RearBarMidPoint] - topMidPoint;
 
 		// The references for T-bar twist are the bar pivot axis and the top arm
-		arm1Direction = VVASEMath::ProjectOntoPlane(topMidPoint -
-			current->rightRear.hardpoints[Corner::InboardBarLink], swayBarAxis);
+		arm1Direction = VVASEMath::ProjectOntoPlane(
+			current->rightRear.hardpoints[Corner::InboardBarLink] - topMidPoint, swayBarAxis);
 
 		// The angle between these vectors, when projected onto the plane that is normal
 		// to the swaybar axis is given by the dot product

@@ -169,6 +169,9 @@ void Kinematics::UpdateKinematics(const Car* _originalCar, Car* _workingCar, wxS
 			0.5 * (localSuspension->leftFront.hardpoints[Corner::BarArmAtPivot]
 			+ localSuspension->rightFront.hardpoints[Corner::BarArmAtPivot]);
 
+			// Fall through
+
+	case Suspension::SwayBarTBar:
 		// Rotations
 		localSuspension->hardpoints[Suspension::FrontBarMidPoint].Rotate(inputs.centerOfRotation, rotations,
 			inputs.firstRotation, secondRotation);
@@ -177,7 +180,6 @@ void Kinematics::UpdateKinematics(const Car* _originalCar, Car* _workingCar, wxS
 		localSuspension->hardpoints[Suspension::FrontBarMidPoint].z += inputs.heave;
 		break;
 
-	case Suspension::SwayBarTBar:
 	case Suspension::SwayBarGeared:
 	case Suspension::SwayBarNone:
 	default:
@@ -193,6 +195,9 @@ void Kinematics::UpdateKinematics(const Car* _originalCar, Car* _workingCar, wxS
 			0.5 * (localSuspension->leftRear.hardpoints[Corner::BarArmAtPivot]
 			+ localSuspension->rightRear.hardpoints[Corner::BarArmAtPivot]);
 
+			// Fall through
+
+	case Suspension::SwayBarTBar:
 		// Rotations
 		localSuspension->hardpoints[Suspension::RearBarMidPoint].Rotate(inputs.centerOfRotation,
 			rotations, inputs.firstRotation, secondRotation);
@@ -201,7 +206,6 @@ void Kinematics::UpdateKinematics(const Car* _originalCar, Car* _workingCar, wxS
 		localSuspension->hardpoints[Suspension::RearBarMidPoint].z += inputs.heave;
 		break;
 
-	case Suspension::SwayBarTBar:
 	case Suspension::SwayBarGeared:
 	case Suspension::SwayBarNone:
 	default:
