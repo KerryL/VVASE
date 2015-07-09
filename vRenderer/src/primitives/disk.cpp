@@ -287,7 +287,7 @@ void Disk::SetCenter(const Vector &_center)
 void Disk::SetNormal(const Vector &_normal)
 {
 	// Set the normal vector to the argument
-	normal = _normal;
+	normal = _normal.Normalize();
 	
 	// Reset the modified flag
 	modified = true;

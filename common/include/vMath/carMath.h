@@ -44,8 +44,8 @@ namespace VVASEMath
 									const Vector &pointOnPlane2, Vector &axisDirection, Vector &pointOnAxis);
 
 	// For determining if a number is close enough to zero to regard as zero
-	bool IsZero(const double &n);
-	bool IsZero(const Vector &v);
+	bool IsZero(const double &n, const double &eps = NearlyZero);
+	bool IsZero(const Vector &v, const double &eps = NearlyZero);
 
 	// Checks to see if a value is not a number
 	bool IsNaN(const double &n);

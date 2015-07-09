@@ -199,9 +199,9 @@ bool VVASEMath::GetIntersectionOfTwoPlanes(const Vector &normal1, const Vector &
 //		bool, true if the number is less than NEARLY_ZERO
 //
 //==========================================================================
-bool VVASEMath::IsZero(const double &n)
+bool VVASEMath::IsZero(const double &n, const double &eps)
 {
-	if (fabs(n) < NearlyZero)
+	if (fabs(n) < eps)
 		return true;
 	else
 		return false;
@@ -224,10 +224,10 @@ bool VVASEMath::IsZero(const double &n)
 //		bool, true if the magnitude is less than NEARLY_ZERO
 //
 //==========================================================================
-bool VVASEMath::IsZero(const Vector &v)
+bool VVASEMath::IsZero(const Vector &v, const double &eps)
 {
 	// Check each component of the vector
-	if (v.Length() < NearlyZero)
+	if (v.Length() < eps)
 		return true;
 
 	return false;

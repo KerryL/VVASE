@@ -56,6 +56,9 @@
 #include "vMath/matrix.h"
 #include "vUtilities/debugLog.h"
 
+#include "vRenderer/primitives/disk.h"
+#include "vRenderer/primitives/sphere.h"
+
 //==========================================================================
 // Class:			CarRenderer
 // Function:		CarRenderer
@@ -192,6 +195,10 @@ CarRenderer::~CarRenderer()
 	delete leftRearInstantAxis;
 
 	delete helperOrb;
+
+	delete dbgCenter1;
+	delete dbgCenter2;
+	delete dbgCenter3;
 }
 
 //==========================================================================
@@ -726,6 +733,52 @@ void CarRenderer::UpdateCarDisplay(void)
 		appearanceOptions.GetColor(AppearanceOptions::ColorSwayBar),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilitySwayBar));
 
+	Vector center, normal;
+	double radius;
+	displayCar.suspension->GetDebugCircle1(center, normal, radius);
+	dbgCenter1->Update(center, 1.5, appearanceOptions.GetResolution(AppearanceOptions::ResolutionHelperOrb), Color::ColorCyan, true);
+	dbgCircle1->SetCenter(center);
+	dbgCircle1->SetColor(Color::ColorCyan);
+	dbgCircle1->SetNormal(normal);
+	dbgCircle1->SetInnerRadius(radius * 0.95);
+	dbgCircle1->SetOuterRadius(radius);
+	dbgCircle1->SetVisibility(true);
+	dbgCircle1->SetResolution(52);
+
+	displayCar.suspension->GetDebugCircle2(center, normal, radius);
+	dbgCenter2->Update(center, 1.5, appearanceOptions.GetResolution(AppearanceOptions::ResolutionHelperOrb), Color::ColorMagenta, true);
+	dbgCircle2->SetCenter(center);
+	dbgCircle2->SetColor(Color::ColorMagenta);
+	dbgCircle2->SetNormal(normal);
+	dbgCircle2->SetInnerRadius(radius * 0.95);
+	dbgCircle2->SetOuterRadius(radius);
+	dbgCircle2->SetVisibility(true);
+	dbgCircle2->SetResolution(52);
+
+	displayCar.suspension->GetDebugCircle3(center, normal, radius);
+	dbgCenter3->Update(center, 1.5, appearanceOptions.GetResolution(AppearanceOptions::ResolutionHelperOrb), Color::ColorYellow, true);
+	dbgCircle3->SetCenter(center);
+	dbgCircle3->SetColor(Color::ColorYellow);
+	dbgCircle3->SetNormal(normal);
+	dbgCircle3->SetInnerRadius(radius * 0.95);
+	dbgCircle3->SetOuterRadius(radius);
+	dbgCircle3->SetVisibility(true);
+	dbgCircle3->SetResolution(52);
+
+	displayCar.suspension->GetDebugSphere1(center, radius);
+	dbgSphere1->SetCenter(center);
+	dbgSphere1->SetRadius(radius);
+	dbgSphere1->SetVisibility(true);
+	dbgSphere1->SetResolution(4);
+	dbgSphere1->SetColor(Color(0.5, 0.0, 0.5, 0.5));
+
+	displayCar.suspension->GetDebugSphere2(center, radius);
+	dbgSphere2->SetCenter(center);
+	dbgSphere2->SetRadius(radius);
+	dbgSphere2->SetVisibility(true);
+	dbgSphere2->SetResolution(4);
+	dbgSphere2->SetColor(Color(0.0, 0.5, 0.5, 0.5));
+
 	// Update the helper orb
 	// Determine which of the location variables is valid
 	Vector helperOrbPosition(0.0, 0.0, 0.0);
@@ -989,6 +1042,15 @@ void CarRenderer::CreateActors(void)
 	leftFrontInstantAxis = new Vector3D(*this);
 	rightRearInstantAxis = new Vector3D(*this);
 	leftRearInstantAxis = new Vector3D(*this);
+
+	dbgCenter1 = new Point3D(*this);
+	dbgCenter2 = new Point3D(*this);
+	dbgCenter3 = new Point3D(*this);
+	dbgCircle1 = new Disk(*this);
+	dbgCircle2 = new Disk(*this);
+	dbgCircle3 = new Disk(*this);
+	dbgSphere1 = new Sphere(*this);
+	dbgSphere2 = new Sphere(*this);
 
 	// Helper orb
 	helperOrb = new Point3D(*this);

@@ -256,10 +256,11 @@ void Kinematics::UpdateKinematics(const Car* _originalCar, Car* _workingCar, wxS
 			localSuspension->leftFront.hardpoints[Corner::OutboardBarLink],
 			localSuspension->rightFront.hardpoints[Corner::OutboardBarLink],
 			localSuspension->hardpoints[Suspension::FrontBarMidPoint],
-			localSuspension->leftFront.hardpoints[Corner::OutboardBarLink],
-			localSuspension->rightFront.hardpoints[Corner::OutboardBarLink],
+			localSuspension->leftFront.hardpoints[Corner::BarArmAtPivot],// FIXME:  Shouldn't have dual-purpose points like this (leftRear BarArmAtPivot is being used to define pivot axis)
+			originalCar->suspension->leftFront.hardpoints[Corner::OutboardBarLink],
+			originalCar->suspension->rightFront.hardpoints[Corner::OutboardBarLink],
 			originalCar->suspension->hardpoints[Suspension::FrontBarMidPoint],
-			localSuspension->leftFront.hardpoints[Corner::BarArmAtPivot],// FIXME:  Shouldn't have dual-purpose points like this (leftFront BarArmAtPivot is being used to define pivot axis)
+			originalCar->suspension->leftFront.hardpoints[Corner::BarArmAtPivot],// FIXME:  Shouldn't have dual-purpose points like this (leftFront BarArmAtPivot is being used to define pivot axis)
 			originalCar->suspension->leftFront.hardpoints[Corner::InboardBarLink],
 			originalCar->suspension->rightFront.hardpoints[Corner::InboardBarLink],
 			localSuspension->leftFront.hardpoints[Corner::InboardBarLink],
@@ -276,10 +277,11 @@ void Kinematics::UpdateKinematics(const Car* _originalCar, Car* _workingCar, wxS
 			localSuspension->leftRear.hardpoints[Corner::OutboardBarLink],
 			localSuspension->rightRear.hardpoints[Corner::OutboardBarLink],
 			localSuspension->hardpoints[Suspension::RearBarMidPoint],
-			localSuspension->leftRear.hardpoints[Corner::OutboardBarLink],
-			localSuspension->rightRear.hardpoints[Corner::OutboardBarLink],
-			originalCar->suspension->hardpoints[Suspension::RearBarMidPoint],
 			localSuspension->leftRear.hardpoints[Corner::BarArmAtPivot],// FIXME:  Shouldn't have dual-purpose points like this (leftRear BarArmAtPivot is being used to define pivot axis)
+			originalCar->suspension->leftRear.hardpoints[Corner::OutboardBarLink],
+			originalCar->suspension->rightRear.hardpoints[Corner::OutboardBarLink],
+			originalCar->suspension->hardpoints[Suspension::RearBarMidPoint],
+			originalCar->suspension->leftRear.hardpoints[Corner::BarArmAtPivot],// FIXME:  Shouldn't have dual-purpose points like this (leftRear BarArmAtPivot is being used to define pivot axis)
 			originalCar->suspension->leftRear.hardpoints[Corner::InboardBarLink],
 			originalCar->suspension->rightRear.hardpoints[Corner::InboardBarLink],
 			localSuspension->leftRear.hardpoints[Corner::InboardBarLink],
@@ -298,7 +300,7 @@ void Kinematics::UpdateKinematics(const Car* _originalCar, Car* _workingCar, wxS
 
 	// Print the time to the output pane
 	Debugger::GetInstance().Print(Debugger::PriorityLow, "Finished UpdateKinematcs() for %s in %0.3f sec",
-		name.c_str(), totalTime / 1000.0);
+		name.ToUTF8().data(), totalTime / 1000.0);
 }
 
 //==========================================================================
