@@ -21,15 +21,33 @@ this template. -->
 		<REFERENCE name="Upper Tub Mount, Front" />
 		<REFERENCE name="Upper Tub Mount, Rear" />
 	</HARDPOINT>
-	<HARDPOINT name="Contact Patch" type="fixedZ" value="[0 0 0]"><!-- special name; must have on at each corner -->
+	<HARDPOINT name="Contact Patch" type="fixedZ" value="[0 0 0]">
 		<REFERENCE name="Lower Tub Mount, Front" />
 		<REFERENCE name="Lower Tub Mount, Rear" />
 	</HARDPOINT>
-	<HARDPOINT name="Push/Pullrod, Outboard" type="relative" value="[0 0 0]">
-		<REFERENCE name="Lower Ball Joint" />
-		<REFERENCE name="Lower Tub Mount, Front" />
-		<REFERENCE name="Lower Tub Mount, Rear" />
-	</HARDPOINT>
+	<OPTION_LIST name="Attachment">
+		<OPTION name="Lower Control Arm">
+			<HARDPOINT name="Push/Pullrod, Outboard" type="relative" value="[0 0 0]">
+				<REFERENCE name="Lower Ball Joint" />
+				<REFERENCE name="Lower Tub Mount, Front" />
+				<REFERENCE name="Lower Tub Mount, Rear" />
+			</HARDPOINT>
+		</OPTION>
+		<OPTION name="Upper Control Arm">
+			<HARDPOINT name="Push/Pullrod, Outboard" type="relative" value="[0 0 0]">
+				<REFERENCE name="Upper Ball Joint" />
+				<REFERENCE name="Upper Tub Mount, Front" />
+				<REFERENCE name="Upper Tub Mount, Rear" />
+			</HARDPOINT>
+		</OPTION>
+		<OPTION name="Upright">
+			<HARDPOINT name="Push/Pullrod, Outboard" type="relative" value="[0 0 0]">
+				<REFERENCE name="Lower Ball Joint" />
+				<REFERENCE name="Upper Ball Joint" />
+				<REFERENCE name="Toe Link, Outboard" />
+			</HARDPOINT>
+		</OPTION>
+	</OPTION_LIST>
 	<HARDPOINT name="Push/Pullrod, Inboard" type="relative" value="[0 0 0]">
 		<REFERENCE name="Push/Pullrod, Outboard" />
 		<REFERENCE name="Bellcrank Pivot 1" />
@@ -55,6 +73,19 @@ this template. -->
 		<REFERENCE name="Bellcrank Pivot 1" />
 		<REFERENCE name="Bellcrank Pivot 2" />
 	</HARDPOINT>
+	<HARDPOINT name="Toe Link, Inboard" type="steerable" value="[0 0 0]" axis="[0 0 0]" />
+	<HARDPOINT name="Toe Link, Outboard" type="relative" value="[0 0 0]">
+		<REFERENCE name="Lower Ball Joint" />
+		<REFERENCE name="Upper Ball Joint" />
+		<REFERENCE name="Toe Link, Inboard" />
+	</HARDPOINT>
+	<WHEEL>
+		<REFERENCE name="Lower Ball Joint" />
+		<REFERENCE name="Upper Ball Joint" />
+		<REFERENCE name="Toe Link, Outboard" />
+		<GROUND name="Contact Patch" />
+	</WHEEL>
+	<!-- TODO:  Other info like toe, camber - where do we include that? -->
 	<!-- Define all outputs in which you are interested here - these will be
 	displayed numerically and available for plotting and optimization -->
 	<OUTPUT />

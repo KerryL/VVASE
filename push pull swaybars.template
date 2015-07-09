@@ -11,5 +11,5 @@ this template. -->
 		<OPTION name="T-bar">
 			<INCLUDE file="tbar.template" />
 		</OPTION>
-	</OPTION>
+	</OPTION_LIST>
 </SUSPENSION>
