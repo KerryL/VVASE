@@ -228,6 +228,10 @@ wxString Convert::GetUnitType(UnitType unitType) const
 		unitString.assign(GetUnits(defaultTemperatureUnits));
 		break;
 
+	case UnitTypeAnglePerDistance:
+		unitString.assign(GetUnits(defaultAngleUnits) + _T("/") + GetUnits(defaultDistanceUnits));
+		break;
+
 	default:
 		assert(0);
 		break;
@@ -3196,6 +3200,9 @@ double Convert::ConvertTo(double n, UnitType type) const
 	case UnitTypeTemperature:
 		returnValue = ConvertTemperature(n);
 		break;
+	case UnitTypeAnglePerDistance:
+		returnValue = ConvertAngle(1.0 / ConvertDistance(1.0 / n));
+		break;
 	default:
 		assert(0);
 		returnValue = 0.0;// To avoid MSVC++ compiler warning C4701
@@ -3273,6 +3280,9 @@ double Convert::Read(double n, UnitType type) const
 		break;
 	case UnitTypeTemperature:
 		returnValue = ReadTemperature(n);
+		break;
+	case UnitTypeAnglePerDistance:
+		returnValue = ReadAngle(1.0 / ReadDistance(1.0 / n));
 		break;
 	default:
 		assert(0);

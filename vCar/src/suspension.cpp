@@ -1133,7 +1133,11 @@ bool Suspension::SolveInboardTBarPoints(const Vector &leftOutboard,
 		center = centerPivot + centerA * cos(guess(2,0)) + centerB * sin(guess(2,0));
 
 		// Compute next guess
-		delta = jacobian.LeftDivide(error);
+		if (!jacobian.LeftDivide(error, delta))
+		{
+			Debugger::GetInstance().Print("Error:  Failed to invert jacobian", Debugger::PriorityLow);
+			return false;
+		}
 		guess -= delta;
 
 		i++;

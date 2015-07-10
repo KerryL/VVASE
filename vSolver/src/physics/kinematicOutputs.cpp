@@ -694,6 +694,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 	//  ratio, but the shock motion ratio is computed using the same process.
 
 	// Spring Installation Ratio [inches Spring/inches Wheel]
+	// ARB Installation Ratio [rad bar twist/inches Wheel]
 	// First, we need to apply a force to the wheel center, and determine the portion of
 	// the force that is reacted through the control arm.
 	// Note that this procedure varies slightly depending on what component the pushrod is
@@ -871,6 +872,9 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 		force = forceDirection * force.Length() / (force.Normalize() * forceDirection);
 		cornerDoubles[ShockInstallationRatio] = 1.0 / force.Length()
 			* VVASEMath::Sign(force.Normalize() * forceDirection.Normalize());
+
+		// TODO
+		cornerDoubles[ARBInstallationRatio] = -1.0;
 	}
 	else if (currentCorner->actuationType == Corner::ActuationOutboard)
 	{
@@ -1004,6 +1008,9 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 		force = forceDirection * force.Length() / (force.Normalize() * forceDirection);
 		cornerDoubles[ShockInstallationRatio] = 1.0 / force.Length()
 			* VVASEMath::Sign(force.Normalize() * forceDirection.Normalize());
+
+		// TODO
+		cornerDoubles[ARBInstallationRatio] = -1.0;
 	}
 
 	// Side View Swing Arm Length [in]
@@ -1106,7 +1113,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 	// anti-drive geometry.  Only if the longitudinal forces are present does anti-geometry
 	// exist.
 	// FIXME:  Do we need a % front traction for use with AWD?
-	// FIXME:  This will change with independent vs. solid axle suspensions (currently we assume indepenant)
+	// FIXME:  This will change with independent vs. solid axle suspensions (currently we assume independent)
 	if (currentCar->drivetrain->driveType == Drivetrain::DriveAllWheel ||
 		(currentCar->drivetrain->driveType == Drivetrain::DriveFrontWheel && isAtFront) ||
 		(currentCar->drivetrain->driveType == Drivetrain::DriveRearWheel && !isAtFront))
@@ -1197,6 +1204,10 @@ wxString KinematicOutputs::GetCornerDoubleName(const CornerOutputsDouble &_outpu
 
 	case ShockInstallationRatio:
 		name = _T("Shock Installation Ratio");
+		break;
+
+	case ARBInstallationRatio:
+		name = _T("ARB Installation Ratio");
 		break;
 
 	case SpindleLength:
@@ -1331,14 +1342,6 @@ wxString KinematicOutputs::GetDoubleName(const OutputsDouble &_output)
 
 	case RearNetScrub:
 		name = _T("Rear Net Scrub");
-		break;
-
-	case FrontARBMotionRatio:
-		name = _T("Front ARB Motion Ratio");
-		break;
-
-	case RearARBMotionRatio:
-		name = _T("Rear ARB Motion Ratio");
 		break;
 
 	case FrontTrackGround:
@@ -1899,6 +1902,11 @@ Convert::UnitType KinematicOutputs::GetCornerDoubleUnitType(const CornerOutputsD
 		unitType = Convert::UnitTypeUnitless;
 		break;
 
+		// Angles per Displacement
+	case ARBInstallationRatio:
+		unitType = Convert::UnitTypeAnglePerDistance;
+		break;
+
 		// Unknown
 	default:
 		unitType = Convert::UnitTypeUnknown;
@@ -2001,12 +2009,6 @@ Convert::UnitType KinematicOutputs::GetDoubleUnitType(const OutputsDouble &_outp
 	case FrontNetSteer:
 	case RearNetSteer:
 		unitType = Convert::UnitTypeAngle;
-		break;
-
-		// Unitless (no conversion)
-	case FrontARBMotionRatio:
-	case RearARBMotionRatio:
-		unitType = Convert::UnitTypeUnitless;
 		break;
 
 		// Unknown units
