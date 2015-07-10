@@ -19,7 +19,6 @@
     <ClInclude Include="..\common\include\vUtilities\integerValidator.h" />
     <ClInclude Include="..\common\include\vUtilities\machineDefinitions.h" />
     <ClInclude Include="..\common\include\vUtilities\managedList.h" />
-    <ClInclude Include="..\common\include\vUtilities\objectList.h" />
     <ClInclude Include="..\common\include\vUtilities\wheelSetStructures.h" />
     <ClInclude Include="..\common\include\vUtilities\wxRelatedUtilities.h" />
     <ClInclude Include="..\common\include\vUtilities\xlsxReader.h" />

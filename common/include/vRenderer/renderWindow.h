@@ -44,7 +44,7 @@ public:
 	virtual ~RenderWindow();
 
 	// Sets up all of the open GL parameters
-    void Initialize();
+	void Initialize();
 
 	// Sets up the camera
 	void SetCameraView(const Vector &position, const Vector &lookAt, const Vector &upDirection);
@@ -85,11 +85,19 @@ public:
 
 	// Writes the current image to file
 	bool WriteImageToFile(wxString pathAndFileName) const;
+	wxImage GetImage(void) const;
 
 	// Determines if a particular primitive is in the scene owned by this object
 	bool IsThisRendererSelected(const Primitive *pickedObject) const;
+	
+	void ShiftForExactPixelization() const;
 
 private:
+	wxGLContext *context;
+	wxGLContext* GetContext(void);
+	
+	static const double exactPixelShift;
+
 	// Flags describing the options for this object's functionality
 	bool wireFrame;
 	bool viewOrthogonal;
@@ -129,20 +137,20 @@ private:
 
 	// Window events
 	void OnPaint(wxPaintEvent& event);
-    void OnSize(wxSizeEvent& event);
+	void OnSize(wxSizeEvent& event);
 	void OnEnterWindow(wxMouseEvent &event);
 	// End event handlers-------------------------------------------------
-	
+
 	// The main render method - re-draws the scene
-    void Render();
+	void Render();
 
 	// The type of interaction to perform
 	enum InteractionType
 	{
-		interactionDollyDrag,// zoom
-		interactionDollyWheel,// zoom
-		interactionPan,// translate
-		interactionRotate
+		InteractionDollyDrag,// zoom
+		InteractionDollyWheel,// zoom
+		InteractionPan,// translate
+		InteractionRotate
 	};
 
 	// Performs the computations and transformations associated with the specified interaction
@@ -171,13 +179,15 @@ private:
 	// transparent objects are at the end
 	void SortPrimitivesByAlpha(void);
 
+	void SortPrimitivesByDrawOrder();
+
 protected:
 	// Flag indicating whether or not this is a 3D rendering
 	bool view3D;
 
 	// Flag indicating whether or not we need to re-initialize this object
 	bool modified;
-	
+
 	// The list of objects to create in this scene
 	ManagedList<Primitive> primitiveList;
 
@@ -187,11 +197,20 @@ protected:
 	// Stores the last mouse position variables
 	void StoreMousePosition(wxMouseEvent &event);
 
+	bool Determine2DInteraction(const wxMouseEvent &event, InteractionType &interaction) const;
+	bool Determine3DInteraction(const wxMouseEvent &event, InteractionType &interaction) const;
+
 	// Flag indicating whether or not we should select a new focal point for the interactions
 	bool isInteracting;
 
 	static void ConvertMatrixToGL(const Matrix& matrix, double gl[]);
 	static void ConvertGLToMatrix(Matrix& matrix, const double gl[]);
+
+	void Initialize2D(void) const;
+	void Initialize3D(void) const;
+
+	Matrix Generate2DProjectionMatrix(void) const;
+	Matrix Generate3DProjectionMatrix(void) const;
 
 	// For the event table
 	DECLARE_EVENT_TABLE()

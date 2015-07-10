@@ -175,7 +175,7 @@ wxString XlsxReader::GetSheetName(const unsigned int &sheet) const
 unsigned int XlsxReader::GetSelectedSheet(void) const
 {
 	// Check each sheet until we find the selected one
-	int i;
+	unsigned int i;
 	for (i = 0; i < worksheets.GetCount(); i++)
 	{
 		if (SheetIsSelected(*worksheets[i]))
@@ -318,9 +318,9 @@ bool XlsxReader::Initialize(void)
 			wxString idString;
 			while (sheetNode)
 			{
-				idString = sheetNode->GetPropVal(_T("r:id"), _T("-1"));
+				idString = sheetNode->GetAttribute(_T("r:id"), _T("-1"));
 				idString.Mid(3, idString.Length() - 3).ToULong(&sheetId);
-				std::pair<wxString, unsigned int> sheetData(sheetNode->GetPropVal(_T("name"), _T("")), sheetId);
+				std::pair<wxString, unsigned int> sheetData(sheetNode->GetAttribute(_T("name")), sheetId);
 				sheets.push_back(sheetData);
 
 				// Get the next sheet
@@ -414,7 +414,7 @@ wxString XlsxReader::GetDimensionString(const wxXmlDocument &sheetDocument) cons
 	{
 		// Does this node contain sheet information?
 		if (node->GetName().CompareTo(_T("dimension")) == 0)
-			return node->GetPropVal(_T("ref"), _T(""));
+			return node->GetAttribute(_T("ref"));
 
 		// Get the next child
 		node = node->GetNext();
@@ -454,10 +454,10 @@ bool XlsxReader::SheetIsSelected(const wxXmlDocument &sheetDocument) const
 			{
 				if (viewNode->GetName().CompareTo(_T("sheetView")) == 0)
 				{
-					if (viewNode->HasProp(_T("tabSelected")))
+					if (viewNode->HasAttribute(_T("tabSelected")))
 					{
 						long Selected = 0;
-						viewNode->GetPropVal(_T("tabSelected"), _T("")).ToLong(&Selected);
+						viewNode->GetAttribute(_T("tabSelected")).ToLong(&Selected);
 						return Selected == 1;
 					}
 				}
@@ -646,7 +646,7 @@ wxString XlsxReader::GetCellData(const unsigned int &sheet,
 				if (rowNode->GetName().CompareTo(_T("row")) == 0)
 				{
 					// Is this the row we're looking for
-					if (rowNode->GetPropVal(_T("r"), _T("")).CompareTo(rowString) == 0)
+					if (rowNode->GetAttribute(_T("r")).CompareTo(rowString) == 0)
 					{
 						// Now parse the columns
 						wxXmlNode *columnNode = rowNode->GetChildren();
@@ -654,13 +654,13 @@ wxString XlsxReader::GetCellData(const unsigned int &sheet,
 						while (columnNode)
 						{
 							// Is this the column we're looking for?
-							if (columnNode->GetPropVal(_T("r"), _T("")).CompareTo(cellString) == 0)
+							if (columnNode->GetAttribute(_T("r")).CompareTo(cellString) == 0)
 							{
 								// Is the value numeric?
-								if (columnNode->HasProp(_T("t")))
+								if (columnNode->HasAttribute(_T("t")))
 								{
 									// Check to see if we know what kind of data this is
-									if (columnNode->GetPropVal(_T("t"), _T("")).CompareTo(_T("s")) == 0)// String
+									if (columnNode->GetAttribute(_T("t")).CompareTo(_T("s")) == 0)// String
 									{
 										// The cell is numeric, but we can still handle this - return a string containing the value
 										wxXmlNode *valueNode = columnNode->GetChildren();
@@ -757,7 +757,7 @@ double XlsxReader::GetNumericCellData(const unsigned int &sheet,
 				if (rowNode->GetName().CompareTo(_T("row")) == 0)
 				{
 					// Is this the row we're looking for
-					if (rowNode->GetPropVal(_T("r"), _T("")).CompareTo(rowString) == 0)
+					if (rowNode->GetAttribute(_T("r")).CompareTo(rowString) == 0)
 					{
 						// Now parse the columns
 						wxXmlNode *columnNode = rowNode->GetChildren();
@@ -765,10 +765,10 @@ double XlsxReader::GetNumericCellData(const unsigned int &sheet,
 						while (columnNode)
 						{
 							// Is this the column we're looking for?
-							if (columnNode->GetPropVal(_T("r"), _T("")).CompareTo(cellString) == 0)
+							if (columnNode->GetAttribute(_T("r")).CompareTo(cellString) == 0)
 							{
 								// Is the value numeric?
-								if (columnNode->HasProp(_T("t")))
+								if (columnNode->HasAttribute(_T("t")))
 									// Value is NOT numeric - return QNaN
 									return std::numeric_limits<double>::quiet_NaN();
 
@@ -852,7 +852,7 @@ bool XlsxReader::CellIsNumeric(const unsigned int &sheet,
 				if (rowNode->GetName().CompareTo(_T("row")) == 0)
 				{
 					// Is this the row we're looking for
-					if (rowNode->GetPropVal(_T("r"), _T("")).CompareTo(rowString) == 0)
+					if (rowNode->GetAttribute(_T("r")).CompareTo(rowString) == 0)
 					{
 						// Now parse the columns
 						wxXmlNode *columnNode = rowNode->GetChildren();
@@ -860,10 +860,10 @@ bool XlsxReader::CellIsNumeric(const unsigned int &sheet,
 						while (columnNode)
 						{
 							// Is this the column we're looking for?
-							if (columnNode->GetPropVal(_T("r"), _T("")).CompareTo(cellString) == 0)
+							if (columnNode->GetAttribute(_T("r")).CompareTo(cellString) == 0)
 							{
 								// Is the value numeric?
-								if (columnNode->HasProp(_T("t")))
+								if (columnNode->HasAttribute(_T("t")))
 									return false;
 								else
 									return true;

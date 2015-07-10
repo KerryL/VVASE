@@ -30,9 +30,6 @@
     <ClInclude Include="..\common\include\vUtilities\managedList.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\common\include\vUtilities\objectList.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\common\include\vUtilities\wheelSetStructures.h">
       <Filter>Header Files</Filter>
     </ClInclude>

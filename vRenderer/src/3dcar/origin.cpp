@@ -101,7 +101,7 @@ void Origin::Update(const double &shaftLength, const double &shaftDiameter,
 	Vector z(0.0, 0.0, 1.0);
 
 	// Scale the vectors to meet the specified lengths
-	z *= tipLength + shaftLength;
+	x *= tipLength + shaftLength;
 	y *= tipLength + shaftLength;
 	z *= tipLength + shaftLength;
 

@@ -1079,7 +1079,7 @@ bool Suspension::SolveInboardTBarPoints(const Vector &leftOutboard,
 	Matrix error(3, 1, epsilon, epsilon, epsilon);
 	Matrix jacobian(3,3);
 	Matrix guess(3,1);// parameteric variables for the three points
-	Vector left, right, center;
+	Vector left(0.0, 0.0, 0.0), right(0.0, 0.0, 0.0), center(0.0, 0.0, 0.0);
 	Matrix delta;
 
 	// Initialize parameteric variables such that result aligns as best

@@ -33,6 +33,23 @@
 #include "vMath/matrix.h"
 #include "vMath/vector.h"
 #include "vMath/carMath.h"
+//==========================================================================
+// Class:			RenderWindow
+// Function:		Constant declarations
+//
+// Description:		Constant declarations for RenderWindow class.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+const double RenderWindow::exactPixelShift(0.375);
 
 //==========================================================================
 // Class:			RenderWindow
@@ -58,35 +75,28 @@
 //==========================================================================
 RenderWindow::RenderWindow(wxWindow &parent, wxWindowID id, int args[],
     const wxPoint& position, const wxSize& size, long style) : wxGLCanvas(
-	&parent, id, position, size, style | wxFULL_REPAINT_ON_RESIZE, wxEmptyString,
-	args)
+	&parent, id, args, position, size, style | wxFULL_REPAINT_ON_RESIZE)
 {
-	// Initialize the private data
+	context = NULL;
+
 	wireFrame = false;
 	view3D = true;
 	viewOrthogonal = false;
 
-	// Initialize the frustum parameters
 	AutoSetFrustum();
 
-	// Initialize the transformation matrices
 	modelToView = new Matrix(3, 3);
 	modelToView->MakeIdentity();
 
 	viewToModel = new Matrix(3, 3);
 	viewToModel->MakeIdentity();
 
-	// Initialize the camera position
 	cameraPosition.Set(0.0, 0.0, 0.0);
-
-	// Initialize the focal point parameters
 	focalPoint.Set(0.0, 0.0, 0.0);
 	isInteracting = false;
-	
-	// To avoid flashing on MSW
-	SetBackgroundStyle(wxBG_STYLE_CUSTOM);
 
-	// Initialize the openGL settings first time we try to render
+	SetBackgroundStyle(wxBG_STYLE_CUSTOM);// To avoid flashing under MSW
+
 	modified = true;
 }
 
@@ -109,15 +119,16 @@ RenderWindow::RenderWindow(wxWindow &parent, wxWindowID id, int args[],
 //==========================================================================
 RenderWindow::~RenderWindow()
 {
-	// Clear out the list of primitives
 	primitiveList.Clear();
 
-	// Delete the transformation matrices
 	delete modelToView;
 	modelToView = NULL;
 
 	delete viewToModel;
 	viewToModel = NULL;
+
+	delete GetContext();
+	context = NULL;
 }
 
 //==========================================================================
@@ -152,6 +163,30 @@ END_EVENT_TABLE()
 
 //==========================================================================
 // Class:			RenderWindow
+// Function:		GetContext
+//
+// Description:		Gets (or creates, if it doesn't yet exist) the GL context.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		wxGLContext*
+//
+//==========================================================================
+wxGLContext* RenderWindow::GetContext(void)
+{
+	if (!context)
+		context = new wxGLContext(this);
+
+	return context;
+}
+
+//==========================================================================
+// Class:			RenderWindow
 // Function:		Render
 //
 // Description:		Updates the scene with all of this object's options and
@@ -172,36 +207,32 @@ void RenderWindow::Render()
 	if (!GetContext() || !IsShownOnScreen())
 		return;
 
-	SetCurrent();
-    wxPaintDC(this);
+	SetCurrent(*context);
+	wxPaintDC(this);
 
-	// If modified, re-initialize
 	if (modified)
 		Initialize();
 
-	// Background color
 	glClearColor((float)backgroundColor.GetRed(), (float)backgroundColor.GetGreen(),
 		(float)backgroundColor.GetBlue(), (float)backgroundColor.GetAlpha());
 
-	// Clear color and depth buffers
 	if (view3D)
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	else
 		glClear(GL_COLOR_BUFFER_BIT);
 
-	// Set the matrix mode to modelview
 	glMatrixMode(GL_MODELVIEW);
 
 	// Sort the primitives by Color.GetAlpha to ensure that transparent objects are rendered last
 	if (!view3D)// For 3D views, we need to render back-to-front
 		SortPrimitivesByAlpha();
 
-	// Draw all of the primitives
-	int i;
+	SortPrimitivesByDrawOrder();
+
+	unsigned int i;
 	for (i = 0; i < primitiveList.GetCount(); i++)
 		primitiveList[i]->Draw();
 
-	// Swap the buffers to update the image
 	SwapBuffers();
 }
 
@@ -224,7 +255,6 @@ void RenderWindow::Render()
 //==========================================================================
 void RenderWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
-	// Render the scene
     Render();
 }
 
@@ -235,7 +265,7 @@ void RenderWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
 // Description:		Event handler for the window re-size event.
 //
 // Input Arguments:
-//		event	= wxSizeEvent&
+//		event	= wxSizeEvent& (unused)
 //
 // Output Arguments:
 //		None
@@ -244,18 +274,15 @@ void RenderWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
 //		None
 //
 //==========================================================================
-void RenderWindow::OnSize(wxSizeEvent& event)
+void RenderWindow::OnSize(wxSizeEvent& WXUNUSED(event))
 {
-    // This is also necessary to update the context on some platforms
-    wxGLCanvas::OnSize(event);
-
     // set GL viewport (not called by wxGLCanvas::OnSize on all platforms...)
-    int w, h;
-    GetClientSize(&w, &h);
+	int w, h;
+	GetClientSize(&w, &h);
 
 	if (GetContext() && IsShownOnScreen())
 	{
-		SetCurrent();
+		SetCurrent(*context);
 		glViewport(0, 0, (GLint) w, (GLint) h);
 	}
 	Refresh();
@@ -282,7 +309,6 @@ void RenderWindow::OnSize(wxSizeEvent& event)
 //==========================================================================
 void RenderWindow::OnEnterWindow(wxMouseEvent &event)
 {
-	// Bring focus to the render window
 	//SetFocus();
 	event.Skip();
 }
@@ -306,23 +332,19 @@ void RenderWindow::OnEnterWindow(wxMouseEvent &event)
 //==========================================================================
 bool RenderWindow::RemoveActor(Primitive *toRemove)
 {
-	// Make sure the argument is valid
 	if (!toRemove)
 		return false;
 
-	// Check every entry in the primitives list to see if it matches the argument
-	int i;
+	unsigned int i;
 	for (i = 0; i < primitiveList.GetCount(); i++)
 	{
 		if (toRemove == primitiveList[i])
 		{
-			// Found a match!  Remove it and return true
 			primitiveList.Remove(i);
 			return true;
 		}
 	}
 
-	// If we haven't returned yet, return false
 	return false;
 }
 
@@ -345,111 +367,25 @@ bool RenderWindow::RemoveActor(Primitive *toRemove)
 //==========================================================================
 void RenderWindow::Initialize()
 {
-	// Set the openGL parameters depending on whether or not we're in 3D mode
+	Matrix projectionMatrix;
 	if (view3D)
 	{
-		// Turn Z-buffering on
-		glEnable(GL_DEPTH_TEST);
-		glDepthMask(GL_TRUE);
-
-		// Z-buffer settings?  FIXME  figure out what these do
-		glClearDepth(1.0);
-		glDepthFunc(GL_LEQUAL);
-
-		// Turn lighting on
-		glEnable(GL_LIGHTING);
-		glEnable(GL_LIGHT0);
-
-		// Smooth shading for nice-looking object
-		glShadeModel(GL_SMOOTH);
-
-		// Disable alpha blending (this is enabled as-needed when rendering objects)
-		//glDisable(GL_BLEND);// FIXME:  Must leave this on?
-
-		// Enable anti-aliasing for polygons
-		glEnable(GL_POLYGON_SMOOTH);
-		glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
-		
-		// FIXME:  I think this used to work without these next two lines, but
-		// somehow they're needed now?
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-		// FIXME:  Note in opengl.org samples, 9.2 Polygon Antialising
-		// destination alpha is required for this algorithm to work?
+		Initialize3D();
+		projectionMatrix = Generate3DProjectionMatrix();
 	}
-	else// 2D
+	else
 	{
-		// Disable Z-buffering, but allow testing
-		//glEnable(GL_DEPTH_TEST);// FIXME:  Can't uncomment this line or the app fails to paint on any target machine (don't know why)
-		glDepthMask(GL_FALSE);
-
-		// Turn lighting off
-		glDisable(GL_LIGHTING);
-		glDisable(GL_LIGHT0);
-
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-
-		// Displacement trick for exact pixelization
-		glTranslated(0.375, 0.375, 0.0);
-
-		// Enable the parameters required for anti-aliasing of lines
-		glEnable(GL_LINE_SMOOTH);
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+		Initialize2D();
+		projectionMatrix = Generate2DProjectionMatrix();
 	}
 
-	// Turn colors on
 	glEnable(GL_COLOR_MATERIAL);
 
-	// Check to see if we're drawing with polygons or wireframe
 	if (wireFrame)
-		// Wireframe mode
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	else
-		// Polygon mode
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-	// Set the viewing projection matrix
-	Matrix projectionMatrix(4, 4);
-	if (view3D)
-	{
-		double halfHeight = tan(verticalFOV) * nearClip;
-		if (viewOrthogonal)
-		{
-			// Set up the elements for the orthogonal projection matrix (parallel projection)
-			projectionMatrix.SetElement(0, 0, 1.0 / (aspectRatio * halfHeight));
-			projectionMatrix.SetElement(1, 1, 1.0 / halfHeight);
-			projectionMatrix.SetElement(2, 2, 2.0 / (nearClip - farClip));
-			projectionMatrix.SetElement(2, 3, (nearClip + farClip) / (nearClip - farClip));
-			//ProjectionMatrix.SetElement(3, 2, -1.0);// Removing this line does not give you a true orthographic projection, but it is necessary for dollying
-			projectionMatrix.SetElement(3, 3, 1.0);
-		}
-		else
-		{
-			// Set up the elements for the perspective projection matrix
-			projectionMatrix.SetElement(0, 0, nearClip / (aspectRatio * halfHeight));
-			projectionMatrix.SetElement(1, 1, nearClip / halfHeight);
-			projectionMatrix.SetElement(2, 2, (nearClip + farClip) / (nearClip - farClip));
-			projectionMatrix.SetElement(2, 3, 2.0 * farClip * nearClip / (nearClip - farClip));
-			projectionMatrix.SetElement(3, 2, -1.0);
-		}
-	}
-	else
-	{
-		// Set up an orthogonal 2D projection matrix (this puts (0,0) at the lower left-hand corner of the window)
-		projectionMatrix.SetElement(0, 0, 2.0 / GetSize().GetWidth());
-		projectionMatrix.SetElement(1, 1, 2.0 / GetSize().GetHeight());
-		projectionMatrix.SetElement(2, 2, -2.0);
-		projectionMatrix.SetElement(0, 3, -1.0);
-		projectionMatrix.SetElement(1, 3, -1.0);
-		projectionMatrix.SetElement(2, 3, -1.0);
-		projectionMatrix.SetElement(3, 3, 1.0);
-	}
-
-	// Assign the matrix
 	glMatrixMode(GL_PROJECTION);
 
 	// Convert from double** to double* where rows are appended to create the single vector representing the matrix
@@ -457,7 +393,6 @@ void RenderWindow::Initialize()
 	ConvertMatrixToGL(projectionMatrix, glMatrix);
 	glLoadMatrixd(glMatrix);
 
-	// Reset the modified flag
 	modified = false;
 }
 
@@ -479,8 +414,7 @@ void RenderWindow::Initialize()
 //==========================================================================
 void RenderWindow::OnMouseWheelEvent(wxMouseEvent &event)
 {
-	// Perform a DOLLY interaction
-	PerformInteraction(interactionDollyWheel, event);
+	PerformInteraction(InteractionDollyWheel, event);
 }
 
 //==========================================================================
@@ -503,59 +437,31 @@ void RenderWindow::OnMouseWheelEvent(wxMouseEvent &event)
 //==========================================================================
 void RenderWindow::OnMouseMoveEvent(wxMouseEvent &event)
 {
-	// Don't perform and actions if this isn't a dragging event
 	if (!event.Dragging())
 	{
 		StoreMousePosition(event);
 		return;
 	}
 
-	// Determine the type of interaction to use
 	InteractionType interaction;
-
-	// Check to see if this should be using 2D or 3D interactions
 	if (view3D)
 	{
-		// PAN:  Left mouse button + Shift OR Right mouse button
-		if ((event.LeftIsDown() && event.ShiftDown()) || event.RightIsDown())
-			interaction = interactionPan;
-
-		// DOLLY:  Left mouse button + Ctrl OR Left mouse button + Alt OR Middle mouse button
-		else if ((event.LeftIsDown() && (event.CmdDown() || event.AltDown()))
-			|| event.MiddleIsDown())
-			interaction = interactionDollyDrag;
-
-		// ROTATE:  Left mouse button (includes with any buttons not caught above)
-		else if (event.LeftIsDown())
-			interaction = interactionRotate;
-
-		else// Not recognized
+		if (!Determine3DInteraction(event, interaction))
 		{
 			StoreMousePosition(event);
 			return;
 		}
 	}
-	else// 2D Interaction
+	else
 	{
-		// DOLLY:  Left mouse button + Ctrl OR Left mouse button + Alt OR Middle mouse button
-		if ((event.LeftIsDown() && event.ShiftDown()) || event.RightIsDown())
-			interaction = interactionDollyDrag;
-
-		// PAN:  Left mouse button (includes with any buttons not caught above)
-		else if (event.LeftIsDown())
-			interaction = interactionPan;
-
-		else// Not recognized
+		if (!Determine2DInteraction(event, interaction))
 		{
 			StoreMousePosition(event);
 			return;
 		}
 	}
 
-	// Perform the interaction
 	PerformInteraction(interaction, event);
-
-	// Store the last mouse position
 	StoreMousePosition(event);
 }
 
@@ -564,6 +470,8 @@ void RenderWindow::OnMouseMoveEvent(wxMouseEvent &event)
 // Function:		PerformInteraction
 //
 // Description:		Performs the specified interaction.
+//					NOTE:  Modifying the modelview matrix moves the scene
+//					relative to the eyepoint in the scene's coordinate system!
 //
 // Input Arguments:
 //		interaction	= InteractionType specifying which type of motion to create
@@ -578,53 +486,28 @@ void RenderWindow::OnMouseMoveEvent(wxMouseEvent &event)
 //==========================================================================
 void RenderWindow::PerformInteraction(InteractionType interaction, wxMouseEvent &event)
 {
-	// Make this the current open GL window
-	SetCurrent();
-
-	// Update the transformation matrices
+	SetCurrent(*GetContext());
 	UpdateTransformationMatricies();
-
-	// Set the matrix mode to the modelview matrix
 	glMatrixMode(GL_MODELVIEW);
 
-	// If we haven't started interacting yet, find the focal point for this interaction
 	if (!isInteracting)
 	{
-		// Get the new focal point
-		// FIXME:  Get focal point
+		// TODO:  Get focal point in order to perform interactions around the cursor
 		//FocalPoint.Set(0.0, 0.0, 0.0);
 
 		// Don't re-compute the focal point until the next interaction
 		isInteracting = true;
 	}
 
-	// Modifying the modelview matrix moves the scene relative to
-	// the eyepoint in the scene's coordinate system!!!
-
-	// Depending on the type of interaction, perform different actions
-	switch (interaction)
-	{
-	case interactionDollyWheel:
+	if (interaction == InteractionDollyWheel)
 		DoWheelDolly(event);
-		break;
-
-	case interactionDollyDrag:
+	else if (interaction == InteractionDollyDrag)
 		DoDragDolly(event);
-		break;
-
-	case interactionPan:
+	else if (interaction == InteractionPan)
 		DoPan(event);
-		break;
-
-	case interactionRotate:
+	else if (interaction == InteractionRotate)
 		DoRotate(event);
-		break;
 
-	default:
-		break;
-	}
-
-	// Update the view
 	Refresh();
 }
 
@@ -692,17 +575,14 @@ void RenderWindow::OnMouseUpEvent(wxMouseEvent& WXUNUSED(event))
 //==========================================================================
 void RenderWindow::DoRotate(wxMouseEvent &event)
 {
-	// Don't continue if we are not using 3D interactions
 	if (!view3D)
 		return;
 
-	// Convert up and normal vectors from openGL coordinates to model coordinates
 	Vector upDirection(0.0, 1.0, 0.0), normal(0.0, 0.0, 1.0), leftDirection;
 	upDirection = TransformToModel(upDirection);
 	normal = TransformToModel(normal);
 	leftDirection = normal.Cross(upDirection);
 
-	// Get a vector that represents the mouse position relative to the center of the screen
 	Vector mouseVector = upDirection * double(GetSize().GetHeight() / 2 - event.GetY())
 		+ leftDirection * double(GetSize().GetWidth() / 2 - event.GetX());
 	Vector lastMouseVector = upDirection * double(GetSize().GetHeight() / 2 - lastMousePosition[1])
@@ -711,30 +591,21 @@ void RenderWindow::DoRotate(wxMouseEvent &event)
 	// Get a vector that represents the mouse motion (projected onto a plane with the camera
 	// position as a normal)
 	Vector mouseMotion = mouseVector - lastMouseVector;
-
-	// Find the axis of rotation
 	Vector axisOfRotation = normal.Cross(mouseMotion);
 
-	// Preliminary calculations
 	long xDistance = GetSize().GetWidth() / 2 - event.GetX();
 	long yDistance = GetSize().GetHeight() / 2 - event.GetY();
 	long lastXDistance = GetSize().GetWidth() / 2 - lastMousePosition[0];
 	long lastYDistance = GetSize().GetHeight() / 2 - lastMousePosition[1];
 
 	// The angle is determined by how much the mouse moved.  800 pixels of movement will result in
-	// a full 360 degrees rotation of the car.
-	// FIXME:  Add adjustable rotation sensitivity (actually, all of the interactions can be adjustable)
+	// a full 360 degrees rotation.
+	// TODO:  Add user-adjustable rotation sensitivity (actually, all of the interactions can be adjustable)
 	double angle = sqrt(fabs(double((xDistance - lastXDistance) * (xDistance - lastXDistance))
 		+ double((yDistance - lastYDistance) * (yDistance - lastYDistance)))) / 800.0 * 360.0;// [deg]
 
-	// Translate to the focal point before performing the rotation to make the focal point
-	// the center of rotation
 	glTranslated(focalPoint.x, focalPoint.y, focalPoint.z);
-
-	// Perform the rotation
 	glRotated(angle, axisOfRotation.x, axisOfRotation.y, axisOfRotation.z);
-
-	// Translate back from the focal point
 	glTranslated(-focalPoint.x, -focalPoint.y, -focalPoint.z);
 }
 
@@ -762,7 +633,7 @@ void RenderWindow::DoWheelDolly(wxMouseEvent &event)
 		// Always dolly a constant distance
 		double dollyDistance = 0.05;
 
-		// FIXME:  Adjust the dolly distance so it is slower closer to the focal point and slower farther away
+		// TODO:  Adjust the dolly distance so it is slower closer to the focal point and slower farther away
 
 		// Get the normal direction (along which we will translate)
 		Vector normal(0.0, 0.0, 1.0);
@@ -776,7 +647,7 @@ void RenderWindow::DoWheelDolly(wxMouseEvent &event)
 	}
 	else
 	{
-		// FIXME:  Nothing here!
+		// Nothing here!
 	}
 }
 
@@ -798,10 +669,8 @@ void RenderWindow::DoWheelDolly(wxMouseEvent &event)
 //==========================================================================
 void RenderWindow::DoDragDolly(wxMouseEvent &event)
 {
-	// Handle 3D dollying differently from 2D dollying
 	if (view3D)
 	{
-		// Always dolly a constant distance
 		double dollyDistance = 0.1;
 
 		// Convert up and normal vectors from openGL coordinates to model coordinates
@@ -820,18 +689,13 @@ void RenderWindow::DoDragDolly(wxMouseEvent &event)
 		// position as a normal)
 		Vector mouseMotion = mouseVector - lastMouseVector;
 
-		// Transform mouse motion to open GL coordinates
 		mouseMotion = TransformToView(mouseMotion);
-
-		// Apply the dolly distance and flip the distance depending on whether we're wheeling in or out
 		normal *= dollyDistance * mouseMotion.y;
-
-		// Apply the translation
 		glTranslated(normal.x, normal.y, normal.z);
 	}
 	else
 	{
-		// FIXME:  Nothing here!
+		// Nothing here!
 	}
 }
 
@@ -884,7 +748,7 @@ void RenderWindow::DoPan(wxMouseEvent &event)
 	}
 	else
 	{
-		// FIXME:  Nothing here!
+		// Nothing here!
 	}
 }
 
@@ -909,13 +773,9 @@ void RenderWindow::DoPan(wxMouseEvent &event)
 //==========================================================================
 void RenderWindow::SetCameraView(const Vector &position, const Vector &lookAt, const Vector &upDirection)
 {
-	// Make this the current open GL window, but only if the parent window is visible
-	SetCurrent();
+	SetCurrent(*GetContext());
 
-	// Set the matrix mode to the modelview matrix
 	glMatrixMode(GL_MODELVIEW);
-
-	// Load an identity matrix
 	glLoadIdentity();
 
 	// Compute the MODELVIEW matrix
@@ -931,16 +791,12 @@ void RenderWindow::SetCameraView(const Vector &position, const Vector &lookAt, c
 									 -f.x, -f.y, -f.z, 0.0,
 									 0.0, 0.0, 0.0, 1.0);
 
-		// Assign it to the open GL modelview matrix
 		double glMatrix[16];
 		ConvertMatrixToGL(modelViewMatrix, glMatrix);
 		glLoadMatrixd(glMatrix);
 	}
 
-	// Apply the translation
 	glTranslated(-position.x, -position.y, -position.z);
-
-	// Set the focal point
 	focalPoint = lookAt;
 
 	UpdateTransformationMatricies();
@@ -1064,7 +920,7 @@ void RenderWindow::AutoSetFrustum(void)
 	verticalFOV = 20.0 * VVASEMath::Pi / 180.0;
 
 	// Set the clipping plane distances to something reasonable
-	// FIXME:  Should this be smarter (distance between camera and focal point?)
+	// TODO:  Make this be smarter, or user-adjustable (distance between camera and focal point)
 	nearClip = 5.0;
 	farClip = 500.0;
 
@@ -1090,45 +946,24 @@ void RenderWindow::AutoSetFrustum(void)
 //==========================================================================
 wxString RenderWindow::GetGLError(void) const
 {
-	wxString ErrorString;
-	int Error = glGetError();
+	int error = glGetError();
 
-	switch (Error)
-	{
-	case GL_NO_ERROR:
-		ErrorString.assign(_T("No errors"));
-		break;
+	if (error == GL_NO_ERROR)
+		return _T("No errors");
+	else if (error == GL_INVALID_ENUM)
+		return _T("Invalid enumeration");
+	else if (error == GL_INVALID_VALUE)
+		return _T("Invalid value");
+	else if (error == GL_INVALID_OPERATION)
+		return _T("Invalid operation");
+	else if (error == GL_STACK_OVERFLOW)
+		return _T("Stack overflow");
+	else if (error == GL_STACK_UNDERFLOW)
+		return _T("Stack underflow");
+	else if (error == GL_OUT_OF_MEMORY)
+		return _T("Out of memory");
 
-	case GL_INVALID_ENUM:
-		ErrorString.assign(_T("Invalid enumeration"));
-		break;
-
-	case GL_INVALID_VALUE:
-		ErrorString.assign(_T("Invalid value"));
-		break;
-
-	case GL_INVALID_OPERATION:
-		ErrorString.assign(_T("Invalid operation"));
-		break;
-
-	case GL_STACK_OVERFLOW:
-		ErrorString.assign(_T("Stack overflow"));
-		break;
-
-	case GL_STACK_UNDERFLOW:
-		ErrorString.assign(_T("Stack underflow"));
-		break;
-
-	case GL_OUT_OF_MEMORY:
-		ErrorString.assign(_T("Out of memory"));
-		break;
-
-	default:
-		ErrorString.assign(_T("Unrecognized error"));
-		break;
-	}
-
-	return ErrorString;
+	return _T("Unrecognized error");
 }
 
 //==========================================================================
@@ -1183,6 +1018,40 @@ bool RenderWindow::WriteImageToFile(wxString pathAndFileName) const
 
 //==========================================================================
 // Class:			RenderWindow
+// Function:		GetImage
+//
+// Description:		Returns an image object representing the contents of the
+//					window.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		wxImage
+//
+//==========================================================================
+wxImage RenderWindow::GetImage(void) const
+{
+	unsigned int height = GetSize().GetHeight();
+	unsigned int width = GetSize().GetWidth();
+
+	GLubyte *imageBuffer = (GLubyte*)malloc(width * height * sizeof(GLubyte) * 3);
+	glPixelStorei(GL_PACK_ALIGNMENT, 1);
+	glReadPixels(0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, imageBuffer);
+
+	wxImage newImage(width, height, imageBuffer, true);
+	newImage = newImage.Mirror(false);
+
+	free(imageBuffer);
+
+	return newImage;
+}
+
+//==========================================================================
+// Class:			RenderWindow
 // Function:		IsThisRendererSelected
 //
 // Description:		Writes the contents of the render window to file.  Various
@@ -1190,7 +1059,7 @@ bool RenderWindow::WriteImageToFile(wxString pathAndFileName) const
 //					extension.
 //
 // Input Arguments:
-//		pickedObject	= const PRIMITIVE* pointing to the selected primitive
+//		pickedObject	= const Primitive* pointing to the selected primitive
 //
 // Output Arguments:
 //		None
@@ -1204,7 +1073,7 @@ bool RenderWindow::IsThisRendererSelected(const Primitive *pickedObject) const
 {
 	// Iterate through the list of primitives in the scene
 	// If one of them has the same address as our argument, return true
-	int i;
+	unsigned int i;
 	for (i = 0; i < primitiveList.GetCount(); i++)
 	{
 		if (primitiveList[i] == pickedObject)
@@ -1233,26 +1102,50 @@ bool RenderWindow::IsThisRendererSelected(const Primitive *pickedObject) const
 //==========================================================================
 void RenderWindow::SortPrimitivesByAlpha(void)
 {
-	// Check to see if re-ordering is necessary
-	int i;
-	std::vector< ListItem > primitiveOrder;
+	unsigned int i;
+	std::vector<ListItem> primitiveOrder;
 	for (i = 0; i < primitiveList.GetCount(); i++)
-		primitiveOrder.insert(primitiveOrder.end(), ListItem(primitiveList[i]->GetColor().GetAlpha(), i));
+		primitiveOrder.push_back(ListItem(primitiveList[i]->GetColor().GetAlpha(), i));
 
-	// Do the sorting with the standard libraries method
 	std::stable_sort(primitiveOrder.begin(), primitiveOrder.end());
 
-	// Convert from the list to an array
-	int *order = new int[primitiveList.GetCount()];
-	for (i = 0; i < primitiveList.GetCount(); i++)
-		order[i] = primitiveOrder[i].i;
+	std::vector<unsigned int> order;
+	for (i = 0; i < primitiveOrder.size(); i++)
+		order.push_back(primitiveOrder[i].i);
 
-	// Re-order the list
 	primitiveList.ReorderObjects(order);
+}
 
-	// Clean up memory
-	delete [] order;
-	order = NULL;
+//==========================================================================
+// Class:			RenderWindow
+// Function:		SortPrimitivesByDrawOrder
+//
+// Description:		Sorts the PrimitiveList by draw order.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void RenderWindow::SortPrimitivesByDrawOrder()
+{
+	unsigned int i;
+	std::vector<ListItem> primitiveOrder;
+	for (i = 0; i < primitiveList.GetCount(); i++)
+		primitiveOrder.push_back(ListItem(primitiveList[i]->GetDrawOrder(), i));
+
+	std::stable_sort(primitiveOrder.begin(), primitiveOrder.end());
+
+	std::vector<unsigned int> order;
+	for (i = 0; i < primitiveOrder.size(); i++)
+		order.push_back(primitiveOrder[i].i);
+
+	primitiveList.ReorderObjects(order);
 }
 
 //==========================================================================
@@ -1308,4 +1201,251 @@ void RenderWindow::ConvertGLToMatrix(Matrix& matrix, const double gl[])
 		for (j = 0; j < matrix.GetNumberOfColumns(); j++)
 			matrix(j, i) = gl[i * matrix.GetNumberOfColumns() + j];
 	}
+}
+
+//==========================================================================
+// Class:			RenderWindow
+// Function:		Initialize2D
+//
+// Description:		Configures openGL for drawing 2D scenes.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void RenderWindow::Initialize2D(void) const
+{
+	// Disable Z-buffering, but allow testing
+	//glEnable(GL_DEPTH_TEST);// NOTE:  Can't uncomment this line or the app fails to paint on any target machine (don't know why)
+	glDepthMask(GL_FALSE);
+
+	// Turn lighting off
+	glDisable(GL_LIGHTING);
+	glDisable(GL_LIGHT0);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	ShiftForExactPixelization();
+
+	// Enable the parameters required for anti-aliasing of lines
+	glEnable(GL_LINE_SMOOTH);
+	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
+//==========================================================================
+// Class:			RenderWindow
+// Function:		Initialize3D
+//
+// Description:		Configures openGL for drawing 3D scenes.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void RenderWindow::Initialize3D(void) const
+{
+	// Turn Z-buffering on
+	glEnable(GL_DEPTH_TEST);
+	glDepthMask(GL_TRUE);
+
+	// Z-buffer settings
+	glClearDepth(1.0);
+	glDepthFunc(GL_LEQUAL);
+
+	// Turn lighting on
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+
+	// Smooth shading for nice-looking object
+	glShadeModel(GL_SMOOTH);
+
+	// Don't disable this:  required for anti-aliasing
+	// Disable alpha blending (this is enabled as-needed when rendering objects)
+	//glDisable(GL_BLEND);
+
+	// Enable anti-aliasing for polygons
+	glEnable(GL_POLYGON_SMOOTH);
+	glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
+//==========================================================================
+// Class:			RenderWindow
+// Function:		Generate2DProjectionMatrix
+//
+// Description:		Returns projection matrix for 2D scenes.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		Matrix
+//
+//==========================================================================
+Matrix RenderWindow::Generate2DProjectionMatrix(void) const
+{
+	// Set up an orthogonal 2D projection matrix (this puts (0,0) at the lower left-hand corner of the window)
+	Matrix projectionMatrix(4, 4);
+	projectionMatrix.SetElement(0, 0, 2.0 / GetSize().GetWidth());
+	projectionMatrix.SetElement(1, 1, 2.0 / GetSize().GetHeight());
+	projectionMatrix.SetElement(2, 2, -2.0);
+	projectionMatrix.SetElement(0, 3, -1.0);
+	projectionMatrix.SetElement(1, 3, -1.0);
+	projectionMatrix.SetElement(2, 3, -1.0);
+	projectionMatrix.SetElement(3, 3, 1.0);
+
+	return projectionMatrix;
+}
+
+//==========================================================================
+// Class:			RenderWindow
+// Function:		Generate3DProjectionMatrix
+//
+// Description:		Returns projection matrix for 3D scenes.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		Matrix
+//
+//==========================================================================
+Matrix RenderWindow::Generate3DProjectionMatrix(void) const
+{
+	Matrix projectionMatrix(4, 4);
+	double halfHeight = tan(verticalFOV) * nearClip;
+	if (viewOrthogonal)
+	{
+		// Set up the elements for the orthogonal projection matrix (parallel projection)
+		projectionMatrix.SetElement(0, 0, 1.0 / (aspectRatio * halfHeight));
+		projectionMatrix.SetElement(1, 1, 1.0 / halfHeight);
+		projectionMatrix.SetElement(2, 2, 2.0 / (nearClip - farClip));
+		projectionMatrix.SetElement(2, 3, (nearClip + farClip) / (nearClip - farClip));
+		//ProjectionMatrix.SetElement(3, 2, -1.0);// Removing this line does not give you a true orthographic projection, but it is necessary for dollying
+		projectionMatrix.SetElement(3, 3, 1.0);
+	}
+	else
+	{
+		// Set up the elements for the perspective projection matrix
+		projectionMatrix.SetElement(0, 0, nearClip / (aspectRatio * halfHeight));
+		projectionMatrix.SetElement(1, 1, nearClip / halfHeight);
+		projectionMatrix.SetElement(2, 2, (nearClip + farClip) / (nearClip - farClip));
+		projectionMatrix.SetElement(2, 3, 2.0 * farClip * nearClip / (nearClip - farClip));
+		projectionMatrix.SetElement(3, 2, -1.0);
+	}
+
+	return projectionMatrix;
+}
+
+//==========================================================================
+// Class:			RenderWindow
+// Function:		Determine2DInteraction
+//
+// Description:		Determines type of 2D interaction (if any).
+//
+// Input Arguments:
+//		event		= wxMouseEvent&
+//
+// Output Arguments:
+//		interaction	= InteractionType&
+//
+// Return Value:
+//		bool
+//
+//==========================================================================
+bool RenderWindow::Determine2DInteraction(const wxMouseEvent &event, InteractionType &interaction) const
+{
+	// DOLLY:  Left mouse button + Ctrl OR Left mouse button + Alt OR Middle mouse button
+	if ((event.LeftIsDown() && event.ShiftDown()) || event.RightIsDown())
+		interaction = InteractionDollyDrag;
+
+	// PAN:  Left mouse button (includes with any buttons not caught above)
+	else if (event.LeftIsDown())
+		interaction = InteractionPan;
+
+	else
+		return false;
+
+	return true;
+}
+
+//==========================================================================
+// Class:			RenderWindow
+// Function:		Determine3DInteraction
+//
+// Description:		Determines type of 3D interaction (if any).
+//
+// Input Arguments:
+//		event		= wxMouseEvent&
+//
+// Output Arguments:
+//		interaction	= InteractionType&
+//
+// Return Value:
+//		bool
+//
+//==========================================================================
+bool RenderWindow::Determine3DInteraction(const wxMouseEvent &event, InteractionType &interaction) const
+{
+	// PAN:  Left mouse button + Shift OR Right mouse button
+	if ((event.LeftIsDown() && event.ShiftDown()) || event.RightIsDown())
+		interaction = InteractionPan;
+
+	// DOLLY:  Left mouse button + Ctrl OR Left mouse button + Alt OR Middle mouse button
+	else if ((event.LeftIsDown() && (event.CmdDown() || event.AltDown()))
+		|| event.MiddleIsDown())
+		interaction = InteractionDollyDrag;
+
+	// ROTATE:  Left mouse button (includes with any buttons not caught above)
+	else if (event.LeftIsDown())
+		interaction = InteractionRotate;
+
+	else
+		return false;
+
+	return true;
+}
+
+//==========================================================================
+// Class:			RenderWindow
+// Function:		ShiftForExactPixelization
+//
+// Description:		Applies shift trick to enabled exact pixelization.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void RenderWindow::ShiftForExactPixelization() const
+{
+	glTranslated(exactPixelShift, exactPixelShift, 0.0);
 }

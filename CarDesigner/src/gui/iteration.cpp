@@ -195,7 +195,7 @@ void Iteration::AddCar(GuiCar *toAdd)
 		return;
 
 	// Add the car to the list
-	associatedCars.Add(toAdd);
+	associatedCars.push_back(toAdd);
 }
 
 //==========================================================================
@@ -221,8 +221,8 @@ void Iteration::RemoveCar(GuiCar *toRemove)
 		return;
 
 	// Find the car to be removed
-	int indexToRemove;
-	for (indexToRemove = 0; indexToRemove < associatedCars.GetCount(); indexToRemove++)
+	unsigned int indexToRemove;
+	for (indexToRemove = 0; indexToRemove < associatedCars.size(); indexToRemove++)
 	{
 		// Check to see if the pointer in the argument matches the pointer
 		// in the list
@@ -231,7 +231,7 @@ void Iteration::RemoveCar(GuiCar *toRemove)
 	}
 
 	// Make sure we found a car
-	if (indexToRemove == associatedCars.GetCount())
+	if (indexToRemove == associatedCars.size())
 		return;
 
 	// Remove the outputs associated with the car
@@ -239,7 +239,7 @@ void Iteration::RemoveCar(GuiCar *toRemove)
 	outputLists.Remove(indexToRemove);
 
 	// Remove the car itself
-	associatedCars.Remove(indexToRemove);
+	associatedCars.erase(associatedCars.begin() + indexToRemove);
 }
 
 //==========================================================================
@@ -331,7 +331,7 @@ void Iteration::UpdateData(void)
 	UpdateAutoAssociate();
 
 	// If we don't have any associated cars, then don't do anything
-	if (associatedCars.GetCount() == 0)
+	if (associatedCars.size() == 0)
 	{
 		// Just update the plot to make it look pretty
 		UpdateDisplay();
@@ -355,7 +355,7 @@ void Iteration::UpdateData(void)
 	delete [] axisValuesRackTravel;
 
 	// Determine the number of points required to store data in the case of 3D plots
-	int totalPoints = numberOfPoints;
+	unsigned int totalPoints = numberOfPoints;
 	if (yAxisType != AxisTypeUnused)
 		totalPoints *= numberOfPoints;
 
@@ -366,18 +366,19 @@ void Iteration::UpdateData(void)
 	axisValuesRackTravel	= new double[totalPoints];
 
 	// Clear out and re-allocate our output lists
-	int i;
+	unsigned int i;
 	for (i = 0; i < outputLists.GetCount(); i++)
 		outputLists[i]->Clear();
 	outputLists.Clear();
 
 	// Initialize the semaphore count
 	// FIXME:  Check return value to ensure no errors!
-	pendingAnalysisCount = associatedCars.GetCount() * totalPoints;
+	pendingAnalysisCount = associatedCars.size() * totalPoints;
 
 	// Make sure the working cars are initialized
 	if (pendingAnalysisCount != (unsigned int)numberOfWorkingCars)
 	{
+		int i;
 		for (i = 0; i < numberOfWorkingCars; i++)
 		{
 			delete workingCarArray[i];
@@ -391,8 +392,8 @@ void Iteration::UpdateData(void)
 	}
 
 	// Go through car-by-car
-	int currentCar, currentPoint;
-	for (currentCar = 0; currentCar < associatedCars.GetCount(); currentCar++)
+	unsigned int currentCar, currentPoint;
+	for (currentCar = 0; currentCar < associatedCars.size(); currentCar++)
 	{
 		// Create a list to store the outputs for this car
 		ManagedList<KinematicOutputs> *currentList = new ManagedList<KinematicOutputs>;
@@ -477,7 +478,7 @@ void Iteration::UpdateDisplay(void)
 			// Check to see if this plot is active
 			if (plotActive[i])
 			{
-				for (j = 0; j < (unsigned int)associatedCars.GetCount(); j++)
+				for (j = 0; j < (unsigned int)associatedCars.size(); j++)
 				{
 					// Create the dataset
 					dataSet = new Dataset2D(numberOfPoints);
@@ -541,7 +542,7 @@ void Iteration::UpdateDisplay(void)
 void Iteration::ClearAllLists(void)
 {
 	// Clear out all of our lists
-	int currentList;
+	unsigned int currentList;
 	for (currentList = 0; currentList < outputLists.GetCount(); currentList++)
 		// Remove all of the sub-lists
 		outputLists[currentList]->Clear();
@@ -550,7 +551,7 @@ void Iteration::ClearAllLists(void)
 	outputLists.Clear();
 
 	// Remove the list of associated cars
-	associatedCars.Clear();
+	associatedCars.clear();
 }
 
 //==========================================================================
@@ -729,7 +730,7 @@ void Iteration::ReadDefaultsFromConfig(void)
 	configurationFile->Read(_T("/Iteration/EndHeave"), &range.endHeave, 0.0);
 	configurationFile->Read(_T("/Iteration/EndRackTravel"), &range.endRackTravel, 0.0);
 
-	configurationFile->Read(_T("/Iteration/NumberOfPoints"), &numberOfPoints, 10);
+	configurationFile->Read(_T("/Iteration/NumberOfPoints"), (int*)&numberOfPoints, 10);
 
 	configurationFile->Read(_T("/Iteration/XAxisType"), (int*)&xAxisType, (int)AxisTypeUnused);
 	configurationFile->Read(_T("/Iteration/YAxisType"), (int*)&yAxisType, (int)AxisTypeUnused);
@@ -1043,7 +1044,7 @@ void Iteration::ShowAssociatedCarsDialog(void)
 
 	// Set up the list of cars in mainFrame
 	wxArrayString choices;
-	ObjectList<GuiCar> openCars;
+	std::vector<GuiCar*> openCars;
 	int i;
 	for (i = 0; i < mainFrame.GetObjectCount(); i++)
 	{
@@ -1052,12 +1053,12 @@ void Iteration::ShowAssociatedCarsDialog(void)
 		if (mainFrame.GetObjectByIndex(i)->GetType() == GuiObject::TypeCar)
 		{
 			choices.Add(mainFrame.GetObjectByIndex(i)->GetCleanName());
-			openCars.Add(static_cast<GuiCar*>(mainFrame.GetObjectByIndex(i)));
+			openCars.push_back(static_cast<GuiCar*>(mainFrame.GetObjectByIndex(i)));
 		}
 	}
 
 	// Make sure there is at least one car open
-	if (openCars.GetCount() == 0)
+	if (openCars.size() == 0)
 	{
 		Debugger::GetInstance().Print(_T("ERROR:  Cannot display dialog - no open cars!"), Debugger::PriorityHigh);
 		return;
@@ -1066,7 +1067,7 @@ void Iteration::ShowAssociatedCarsDialog(void)
 	// Initialize the selections - this array contains the indeces of the
 	// items that are selected
     wxArrayInt selections;
-	for (i = 0; i < openCars.GetCount(); i++)
+	for (i = 0; i < (int)openCars.size(); i++)
 	{
 		// If the item is associated with this iteration, add its index to the array
 		if (AssociatedWithCar(openCars[i]))
@@ -1080,7 +1081,7 @@ void Iteration::ShowAssociatedCarsDialog(void)
 	// Check to make sure the user didn't cancel
 	if (!selectionsMade)
 	{
-		openCars.Clear();
+		openCars.clear();
 		return;
 	}
 
@@ -1089,10 +1090,10 @@ void Iteration::ShowAssociatedCarsDialog(void)
 
 	// Go through the indices that were selected and add them to our list
 	for (i = 0; i < (signed int)selections.GetCount(); i++)
-		AddCar(openCars.GetObject(selections[i]));
+		AddCar(openCars[selections[i]]);
 
 	// If not all of the cars in the list are selected, make sure we're not auto-associating
-	if (openCars.GetCount() != associatedCars.GetCount())
+	if (openCars.size() != associatedCars.size())
 		associatedWithAllOpenCars = false;
 
 	// Update the analyses
@@ -1120,8 +1121,8 @@ bool Iteration::AssociatedWithCar(GuiCar *test) const
 {
 	// Go through our list of associated cars, and see if Test points to any of
 	// those cars
-	int i;
-	for (i = 0; i < associatedCars.GetCount(); i++)
+	unsigned int i;
+	for (i = 0; i < associatedCars.size(); i++)
 	{
 		if (associatedCars[i] == test)
 			return true;
@@ -1156,14 +1157,14 @@ double Iteration::GetDataValue(int associatedCarIndex, int point, PlotID id) con
 	Vector temp;
 
 	// Make sure the arguments are valid
-	if (associatedCarIndex >= associatedCars.GetCount() ||
-		point > numberOfPoints || id > NumberOfPlots)
+	if (associatedCarIndex >= (int)associatedCars.size() ||
+		point > (int)numberOfPoints || id > NumberOfPlots)
 		return value;
 
 	// Depending on the specified PLOT_ID, choose which member of the KINEMATIC_OUTPUTS
 	// object to return
 	if (id < Pitch)
-		value = Convert::GetInstance().ConvertTo(outputLists[associatedCarIndex]->GetObject(point)->GetOutputValue(
+		value = Convert::GetInstance().ConvertTo(outputLists[associatedCarIndex]->operator[](point)->GetOutputValue(
 			(KinematicOutputs::OutputsComplete)id), KinematicOutputs::GetOutputUnitType(
 			(KinematicOutputs::OutputsComplete)id));
 	else if (id == Pitch)
@@ -1235,15 +1236,15 @@ void Iteration::ExportDataToFile(wxString pathAndFileName) const
 	// Write the information
 	// The column headings consist of three rows:  Plot Name, Units, Car Name
 	// After the third row, we start writing the data
-	int currentCar, currentPlot, row;
-	int numberOfHeadingRows = 3;
+	unsigned int currentCar, currentPlot, row;
+	const unsigned int numberOfHeadingRows = 3;
 	for (row = 0; row < numberOfPoints + numberOfHeadingRows; row++)
 	{
-		for (currentCar = 0; currentCar < associatedCars.GetCount(); currentCar++)
+		for (currentCar = 0; currentCar < associatedCars.size(); currentCar++)
 		{
 			for (currentPlot = 0; currentPlot < NumberOfPlots; currentPlot++)
 			{
-				if (!plotActive[currentPlot] && currentPlot != (int)xAxisType + KinematicOutputs::NumberOfOutputScalars)
+				if (!plotActive[currentPlot] && currentPlot != (unsigned int)xAxisType + KinematicOutputs::NumberOfOutputScalars)
 					continue;
 
 				if (row == 0)

@@ -21,3 +21,4 @@ VVASEdebug.log
 *.user
 *.suo
 /vUtilities/.obj/
+*.bak
