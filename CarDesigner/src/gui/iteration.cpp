@@ -1074,12 +1074,8 @@ void Iteration::ShowAssociatedCarsDialog(void)
 			selections.Add(i);
 	}
 
-	// Display the dialog
-	bool selectionsMade = wxGetMultipleChoices(selections, _T("Select the cars to associate with this iteration:"),
-		_T("Associated Cars"), choices, &mainFrame) > 0;
-
-	// Check to make sure the user didn't cancel
-	if (!selectionsMade)
+	if (wxGetSelectedChoices(selections, _T("Select the cars to associate with this iteration:"),
+		_T("Associated Cars"), choices, &mainFrame) <= 0)
 	{
 		openCars.clear();
 		return;

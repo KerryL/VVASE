@@ -1270,6 +1270,7 @@ void RenderWindow::Initialize3D(void) const
 	// Turn lighting on
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
+	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 
 	// Smooth shading for nice-looking object
 	glShadeModel(GL_SMOOTH);
