@@ -938,6 +938,7 @@ Vector Suspension::FindPerpendicularVector(const Vector &v)
 	return a;
 }
 
+// This is coarse, but it's good enough
 double Suspension::OptimizeCircleParameter(const Vector &center, const Vector &a,
 	const Vector &b, const Vector &target)
 {
@@ -957,21 +958,6 @@ double Suspension::OptimizeCircleParameter(const Vector &center, const Vector &a
 			bestError = (target - p).Length();
 		}
 	}
-
-	/*i = 0;
-	const unsigned int limit(100);
-	const double epsilon(1.0e-12);
-	t = bestT;
-	while (i < limit && bestError > epsilon)
-	{
-		t = step * i;
-		p = center + a * cos(t) + b * sin(t);
-		if (bestT < 0.0 || (target - p).Length() < bestError)
-		{
-			bestT = t;
-			bestError = (target - p).Length();
-		}
-	}*/
 
 	return bestT;
 }

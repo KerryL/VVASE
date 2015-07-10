@@ -230,7 +230,7 @@ int MainTree::GetSelectedObjectIndex(void)
 //==========================================================================
 void MainTree::SelectionChangeEvent(wxTreeEvent &event)
 {
-	// Prevent this event from firing just because we deleted a car
+	// Prevent this event from firing just because we deleted a car or lost focus
 	if (mainFrame.ObjectIsBeingDeleted())
 		return;
 

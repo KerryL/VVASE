@@ -1431,7 +1431,6 @@ void MainFrame::IterationExportDataToFileClickEvent(wxCommandEvent& WXUNUSED(eve
 	if (pathAndFileName.IsEmpty())
 		return;
 
-	// Call the ExportDataToFile() method
 	static_cast<Iteration*>(openObjectList.GetObject(objectOfInterestIndex))
 		->ExportDataToFile(pathAndFileName.Item(0));
 }
@@ -2974,6 +2973,9 @@ bool MainFrame::JobsPending(void) const
 wxArrayString MainFrame::GetFileNameFromUser(wxString dialogTitle, wxString defaultDirectory,
 										 wxString defaultFileName, wxString wildcard, long style)
 {
+	// Work-around for weird bug where this method causes tree item selection change event to fire
+	beingDeleted = true;
+
 	// Initialize the return variable
 	wxArrayString pathsAndFileNames;
 
@@ -2994,6 +2996,9 @@ wxArrayString MainFrame::GetFileNameFromUser(wxString dialogTitle, wxString defa
 		else
 			pathsAndFileNames.Add(dialog.GetPath());
 	}
+
+	// Work-around for weird bug where this method causes tree item selection change event to fire
+	beingDeleted = false;
 
 	// Return the path and file name
 	return pathsAndFileNames;

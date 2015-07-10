@@ -1218,7 +1218,11 @@ void Iteration::ExportDataToFile(wxString pathAndFileName) const
 	}
 
 	// Perform the save - open the file
+#ifdef UNICODE
+	wofstream exportFile(pathAndFileName.mb_str(), ios::out);
+#else
 	ofstream exportFile(pathAndFileName.mb_str(), ios::out);
+#endif
 
 	// Warn the user if the file could not be opened failed
 	if (!exportFile.is_open() || !exportFile.good())
@@ -1239,6 +1243,9 @@ void Iteration::ExportDataToFile(wxString pathAndFileName) const
 		{
 			for (currentPlot = 0; currentPlot < NumberOfPlots; currentPlot++)
 			{
+				if (!plotActive[currentPlot] && currentPlot != (int)xAxisType + KinematicOutputs::NumberOfOutputScalars)
+					continue;
+
 				if (row == 0)
 					// Write the name of the current column
 					exportFile << GetPlotName((PlotID)currentPlot) << delimiter;
