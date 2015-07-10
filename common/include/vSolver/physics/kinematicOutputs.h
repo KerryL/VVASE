@@ -194,7 +194,8 @@ public:
 
 private:
 	// The currently associated car object
-	const Car *currentCar;
+	const Car *originalCar;
+	const Suspension *currentSuspension;
 
 	// Updates the outputs associated with the associated corner
 	void UpdateCorner(const Corner *originalCorner, const Corner *currentCorner);
