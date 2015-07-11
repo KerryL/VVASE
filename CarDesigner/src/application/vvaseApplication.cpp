@@ -94,7 +94,11 @@ bool VVASEApp::OnInit()
 			int i;
 			for (i = 1; i < argc; i++)
 				// Don't bother checking for whether the poke was successfully recieved or not
+#ifdef __WXGTK__
+				client.GetConnection()->Poke(argv[i], NULL);
+#else
 				client.GetConnection()->Poke(argv[i], (const char *)NULL);
+#endif
 		}
 
 		client.Disconnect();
