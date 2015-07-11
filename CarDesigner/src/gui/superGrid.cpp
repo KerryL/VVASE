@@ -118,8 +118,11 @@ void SuperGrid::OnSize(wxSizeEvent& event)
 
 		// Calculate and set the correct width for the remaining columns
 		int colWidth = (GetClientSize().GetWidth() - fixedWidth - GetRowLabelSize() - 1) / stretchColumns.Count();
-		for (j = 0; j < stretchColumns.Count(); j++)
-			SetColSize(stretchColumns[j], colWidth);
+		if (colWidth > 0)
+		{
+			for (j = 0; j < stretchColumns.Count(); j++)
+				SetColSize(stretchColumns[j], colWidth);
+		}
 	}
 	
 	Refresh();
