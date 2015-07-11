@@ -153,10 +153,9 @@ void KinematicOutputs::InitializeAllOutputs(void)
 //==========================================================================
 void KinematicOutputs::Update(const Car *original, const Suspension *current)
 {
-	// Copy the car pointer to our class variable
-	currentCar = original;
+	originalCar = original;
+	currentSuspension = current;
 
-	// Re-initialize all outputs before doing the computations
 	InitializeAllOutputs();
 
 	// Update each corner's outputs
@@ -639,7 +638,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 		originalCorner->hardpoints[Corner::ContactPatch].y);
 
 	// Axle Plunge [in] - positive is shortened
-	if ((currentCar->HasFrontHalfShafts() && isAtFront) || (currentCar->HasRearHalfShafts() && !isAtFront))
+	if ((originalCar->HasFrontHalfShafts() && isAtFront) || (originalCar->HasRearHalfShafts() && !isAtFront))
 		cornerDoubles[AxlePlunge] =
 			originalCorner->hardpoints[Corner::InboardHalfShaft].Distance(
 			originalCorner->hardpoints[Corner::OutboardHalfShaft]) -
@@ -694,6 +693,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 	//  ratio, but the shock motion ratio is computed using the same process.
 
 	// Spring Installation Ratio [inches Spring/inches Wheel]
+	// ARB Installation Ratio [rad bar twist/inches Wheel]
 	// First, we need to apply a force to the wheel center, and determine the portion of
 	// the force that is reacted through the control arm.
 	// Note that this procedure varies slightly depending on what component the pushrod is
@@ -846,7 +846,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 		// Determine the force required in the direction of the spring (like we did for the force
 		// through the push/pullrod)
 		forceDirection = (currentCorner->hardpoints[Corner::InboardSpring]
-		- currentCorner->hardpoints[Corner::OutboardSpring]).Normalize();
+			- currentCorner->hardpoints[Corner::OutboardSpring]).Normalize();
 		force = forceDirection * force.Length() / (force.Normalize() * forceDirection);
 
 		// From the principle of virtual work we have these relationships:
@@ -867,10 +867,96 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 
 		// Determine the force required in the direction of the shock
 		forceDirection = (currentCorner->hardpoints[Corner::InboardShock]
-		- currentCorner->hardpoints[Corner::OutboardShock]).Normalize();
+			- currentCorner->hardpoints[Corner::OutboardShock]).Normalize();
 		force = forceDirection * force.Length() / (force.Normalize() * forceDirection);
 		cornerDoubles[ShockInstallationRatio] = 1.0 / force.Length()
 			* VVASEMath::Sign(force.Normalize() * forceDirection.Normalize());
+
+		// ARB link force
+		if (((originalCorner->location == Corner::LocationLeftFront ||
+			originalCorner->location == Corner::LocationRightFront) &&
+			originalCar->suspension->frontBarStyle != Suspension::SwayBarNone) ||
+			(originalCorner->location == Corner::LocationLeftRear ||
+			originalCorner->location == Corner::LocationRightRear) &&
+			originalCar->suspension->rearBarStyle != Suspension::SwayBarNone)
+		{
+			momentArm = currentCorner->hardpoints[Corner::OutboardBarLink] - VVASEMath::NearestPointOnAxis(
+				pointOnAxis, momentDirection, currentCorner->hardpoints[Corner::OutboardBarLink]);
+			force = momentDirection.Cross(momentArm).Normalize() * momentMagnitude / momentArm.Length();
+
+			// Determine the force required in the direction of the link
+			forceDirection = (currentCorner->hardpoints[Corner::InboardBarLink]
+				- currentCorner->hardpoints[Corner::OutboardBarLink]).Normalize();
+			force = forceDirection * force.Length() / (force.Normalize() * forceDirection);
+
+			// Different procedures for U-bars and T-bars
+			if (((originalCorner->location == Corner::LocationLeftFront ||
+				originalCorner->location == Corner::LocationRightFront) &&
+				originalCar->suspension->frontBarStyle == Suspension::SwayBarUBar) ||
+				(originalCorner->location == Corner::LocationLeftRear ||
+				originalCorner->location == Corner::LocationRightRear) &&
+				originalCar->suspension->rearBarStyle == Suspension::SwayBarUBar)
+			{
+				if (currentCorner->location == Corner::LocationLeftFront ||
+					currentCorner->location == Corner::LocationRightFront)
+					momentDirection = currentCorner->hardpoints[Corner::BarArmAtPivot] - currentSuspension->hardpoints[Suspension::FrontBarMidPoint];
+				else
+					momentDirection = currentCorner->hardpoints[Corner::BarArmAtPivot] - currentSuspension->hardpoints[Suspension::RearBarMidPoint];
+
+				momentArm = currentCorner->hardpoints[Corner::InboardBarLink] - VVASEMath::NearestPointOnAxis(
+					currentCorner->hardpoints[Corner::BarArmAtPivot], momentDirection, currentCorner->hardpoints[Corner::InboardBarLink]);
+			}
+			else if (((originalCorner->location == Corner::LocationLeftFront ||
+				originalCorner->location == Corner::LocationRightFront) &&
+				originalCar->suspension->frontBarStyle == Suspension::SwayBarTBar) ||
+				(originalCorner->location == Corner::LocationLeftRear ||
+				originalCorner->location == Corner::LocationRightRear) &&
+				originalCar->suspension->rearBarStyle == Suspension::SwayBarTBar)
+			{
+				Vector normal, pivot, oppositeInboard;
+				if (currentCorner->location == Corner::LocationLeftFront ||
+					currentCorner->location == Corner::LocationRightFront)
+				{
+					pivot = currentSuspension->hardpoints[Suspension::FrontBarMidPoint];
+					normal = currentCorner->hardpoints[Corner::BarArmAtPivot] - pivot;// TODO:  Using bar arm as pivot incorrectly
+
+					if (currentCorner->location == Corner::LocationLeftFront)
+						oppositeInboard = currentSuspension->rightFront.hardpoints[Corner::InboardBarLink];
+					else
+						oppositeInboard = currentSuspension->leftFront.hardpoints[Corner::InboardBarLink];
+				}
+				else
+				{
+					pivot = currentSuspension->hardpoints[Suspension::RearBarMidPoint];
+					normal = currentCorner->hardpoints[Corner::BarArmAtPivot] - pivot;// TODO:  Using bar arm as pivot incorrectly
+
+					if (currentCorner->location == Corner::LocationLeftRear)
+						oppositeInboard = currentSuspension->rightRear.hardpoints[Corner::InboardBarLink];
+					else
+						oppositeInboard = currentSuspension->leftRear.hardpoints[Corner::InboardBarLink];
+				}
+
+				Vector topMidPoint = VVASEMath::IntersectWithPlane(normal, pivot,
+					currentCorner->hardpoints[Corner::InboardBarLink] - oppositeInboard,
+					currentCorner->hardpoints[Corner::InboardBarLink]);
+
+				momentDirection = pivot - topMidPoint;
+				momentArm = topMidPoint - currentCorner->hardpoints[Corner::InboardBarLink];
+			}
+
+			// Torque at bar
+			// Force is not perpendicular to momentDirection - some portion of force goes into strain energy in the strucutre
+			// What value of the bar torque results in the required magnitude of the force in the link?
+			forceDirection = momentDirection.Cross(momentArm).Normalize();
+			force = forceDirection * force.Length() / (force.Normalize() * forceDirection);
+			Vector torque = momentArm.Cross(force);
+			
+			// At this point, torque is the bar torque (in inch-lbf) in response to the unit force at the wheel (in lbf)
+			// If the wheel moves by amount dx, then the bar moves by amount dTheta
+			// By the principle of virtual work, dW = F * dx = T * dTheta => dTheta / dx = F / T
+			//assert(VVASEMath::IsZero(torque.Cross(momentDirection).Length(), 1.0e-10));
+			cornerDoubles[ARBInstallationRatio] = 1.0 / torque.Length();
+		}
 	}
 	else if (currentCorner->actuationType == Corner::ActuationOutboard)
 	{
@@ -979,7 +1065,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 		// Determine the force required in the direction of the spring (like we did for the force
 		// through the push/pullrod)
 		forceDirection = (currentCorner->hardpoints[Corner::InboardSpring]
-		- currentCorner->hardpoints[Corner::OutboardSpring]).Normalize();
+			- currentCorner->hardpoints[Corner::OutboardSpring]).Normalize();
 		force = forceDirection * force.Length() / (force.Normalize() * forceDirection);
 
 		// From the principle of virtual work we have these relationships:
@@ -1000,10 +1086,14 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 
 		// Determine the force required in the direction of the shock
 		forceDirection = (currentCorner->hardpoints[Corner::InboardShock]
-		- currentCorner->hardpoints[Corner::OutboardShock]).Normalize();
+			- currentCorner->hardpoints[Corner::OutboardShock]).Normalize();
 		force = forceDirection * force.Length() / (force.Normalize() * forceDirection);
 		cornerDoubles[ShockInstallationRatio] = 1.0 / force.Length()
 			* VVASEMath::Sign(force.Normalize() * forceDirection.Normalize());
+
+		// TODO:  Need to specify attachment options for sway bars with outboard spring/damper
+		// Also, should consider handling rocker arms
+		//cornerDoubles[ARBInstallationRatio] = -1.0;
 	}
 
 	// Side View Swing Arm Length [in]
@@ -1039,11 +1129,11 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 	// by the chassis.  The nomenclature for the anti-geometry comes from RCVD p. 617.
 	// NOTE:  We are required to know the sprung mass CG height and the wheelbase here.
 	//        we assume that the static wheelbase and CG height are still accurate here (FIXME!!!)
-	double wheelbase = (currentCar->suspension->rightRear.hardpoints[Corner::ContactPatch].x
-		- currentCar->suspension->rightFront.hardpoints[Corner::ContactPatch].x
-		+ currentCar->suspension->leftRear.hardpoints[Corner::ContactPatch].x
-		- currentCar->suspension->leftFront.hardpoints[Corner::ContactPatch].x) / 2.0;
-	double cgHeight = currentCar->massProperties->centerOfGravity.z;
+	double wheelbase = (currentSuspension->rightRear.hardpoints[Corner::ContactPatch].x
+		- currentSuspension->rightFront.hardpoints[Corner::ContactPatch].x
+		+ currentSuspension->leftRear.hardpoints[Corner::ContactPatch].x
+		- currentSuspension->leftFront.hardpoints[Corner::ContactPatch].x) / 2.0;
+	double cgHeight = originalCar->massProperties->centerOfGravity.z;
 	double reactionPathAngleTangent;
 
 	// Determine if we are talking about anti-dive (front) or anti-lift (rear)
@@ -1051,7 +1141,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 	{
 		// Is the braking torque reacted directly by the chassis, or does it first
 		// travel through the control arms?
-		if (currentCar->brakes->frontBrakesInboard)
+		if (originalCar->brakes->frontBrakesInboard)
 		{
 			// Compute the tangent of the reaction path angle
 			reactionPathAngleTangent = (sideViewSwingArmHeight -
@@ -1059,7 +1149,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 
 			// Compute the anti-dive
 			cornerDoubles[AntiBrakePitch] = reactionPathAngleTangent * wheelbase / cgHeight
-				* currentCar->brakes->percentFrontBraking * 100.0;
+				* originalCar->brakes->percentFrontBraking * 100.0;
 		}
 		else// Outboard brakes
 		{
@@ -1068,14 +1158,14 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 
 			// Compute the anti-dive
 			cornerDoubles[AntiBrakePitch] = reactionPathAngleTangent / (cgHeight / wheelbase
-				* currentCar->brakes->percentFrontBraking) * 100.0;
+				* originalCar->brakes->percentFrontBraking) * 100.0;
 		}
 	}
 	else// Anti-lift (rear)
 	{
 		// Is the braking torque reacted directly by the chassis, or does it first
 		// travel through the control arms?
-		if (currentCar->brakes->rearBrakesInboard)
+		if (originalCar->brakes->rearBrakesInboard)
 		{
 			// Compute the tangent of the reaction path angle
 			reactionPathAngleTangent = (sideViewSwingArmHeight -
@@ -1083,7 +1173,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 
 			// Compute the anti-lift
 			cornerDoubles[AntiBrakePitch] = reactionPathAngleTangent * wheelbase / cgHeight
-				* (1.0 - currentCar->brakes->percentFrontBraking) * 100.0;
+				* (1.0 - originalCar->brakes->percentFrontBraking) * 100.0;
 		}
 		else// Outboard brakes
 		{
@@ -1092,7 +1182,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 
 			// Compute the anti-lift
 			cornerDoubles[AntiBrakePitch] = reactionPathAngleTangent / (cgHeight / wheelbase
-				* (1.0 - currentCar->brakes->percentFrontBraking)) * 100.0;
+				* (1.0 - originalCar->brakes->percentFrontBraking)) * 100.0;
 		}
 	}
 
@@ -1106,10 +1196,10 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 	// anti-drive geometry.  Only if the longitudinal forces are present does anti-geometry
 	// exist.
 	// FIXME:  Do we need a % front traction for use with AWD?
-	// FIXME:  This will change with independent vs. solid axle suspensions (currently we assume indepenant)
-	if (currentCar->drivetrain->driveType == Drivetrain::DriveAllWheel ||
-		(currentCar->drivetrain->driveType == Drivetrain::DriveFrontWheel && isAtFront) ||
-		(currentCar->drivetrain->driveType == Drivetrain::DriveRearWheel && !isAtFront))
+	// FIXME:  This will change with independent vs. solid axle suspensions (currently we assume independent)
+	if (originalCar->drivetrain->driveType == Drivetrain::DriveAllWheel ||
+		(originalCar->drivetrain->driveType == Drivetrain::DriveFrontWheel && isAtFront) ||
+		(originalCar->drivetrain->driveType == Drivetrain::DriveRearWheel && !isAtFront))
 	{
 		// Compute the tangent of the reaction path angle
 		reactionPathAngleTangent = (sideViewSwingArmHeight -
@@ -1197,6 +1287,10 @@ wxString KinematicOutputs::GetCornerDoubleName(const CornerOutputsDouble &_outpu
 
 	case ShockInstallationRatio:
 		name = _T("Shock Installation Ratio");
+		break;
+
+	case ARBInstallationRatio:
+		name = _T("ARB Installation Ratio");
 		break;
 
 	case SpindleLength:
@@ -1331,14 +1425,6 @@ wxString KinematicOutputs::GetDoubleName(const OutputsDouble &_output)
 
 	case RearNetScrub:
 		name = _T("Rear Net Scrub");
-		break;
-
-	case FrontARBMotionRatio:
-		name = _T("Front ARB Motion Ratio");
-		break;
-
-	case RearARBMotionRatio:
-		name = _T("Rear ARB Motion Ratio");
 		break;
 
 	case FrontTrackGround:
@@ -1899,6 +1985,11 @@ Convert::UnitType KinematicOutputs::GetCornerDoubleUnitType(const CornerOutputsD
 		unitType = Convert::UnitTypeUnitless;
 		break;
 
+		// Angles per Displacement
+	case ARBInstallationRatio:
+		unitType = Convert::UnitTypeAnglePerDistance;
+		break;
+
 		// Unknown
 	default:
 		unitType = Convert::UnitTypeUnknown;
@@ -2001,12 +2092,6 @@ Convert::UnitType KinematicOutputs::GetDoubleUnitType(const OutputsDouble &_outp
 	case FrontNetSteer:
 	case RearNetSteer:
 		unitType = Convert::UnitTypeAngle;
-		break;
-
-		// Unitless (no conversion)
-	case FrontARBMotionRatio:
-	case RearARBMotionRatio:
-		unitType = Convert::UnitTypeUnitless;
 		break;
 
 		// Unknown units

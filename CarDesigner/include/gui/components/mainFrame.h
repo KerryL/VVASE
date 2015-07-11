@@ -77,7 +77,7 @@ public:
 	int AddObjectToList(GuiObject *objectToAdd);
 	void RemoveObjectFromList(int index);
 	inline int GetObjectCount(void) const { return openObjectList.GetCount(); };
-	inline GuiObject *GetObjectByIndex(int index) const { return openObjectList.GetObject(index); };
+	inline GuiObject *GetObjectByIndex(int index) const { return openObjectList[index]; };
 
 	// Controls the object that is currently "active"
 	void SetActiveIndex(int index, bool selectNotebookTab = true);

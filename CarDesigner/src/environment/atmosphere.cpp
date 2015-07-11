@@ -163,7 +163,7 @@ void Atmosphere::SetConditions(Atmosphere::Conditions _currentDay)
 //		Conditions describing the conditions at the current altitude
 //
 //==========================================================================
-Atmosphere::Conditions Atmosphere::GetConditions(double altitude)
+Atmosphere::Conditions Atmosphere::GetConditions(double /*altitude*/)
 {
 	// FIXME:  implement the atmosphere!!!
 	// For now, just return the current day's conditions at sea level

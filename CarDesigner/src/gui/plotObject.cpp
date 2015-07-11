@@ -263,7 +263,7 @@ void PlotObject::SetRightYGrid(const bool &gridOn)
 void PlotObject::RemoveExistingPlots(void)
 {
 	// Remove all existing plots from the list
-	while (plotList.GetCount() > 0)
+	while (plotList.size() > 0)
 		RemovePlot(0);
 }
 
@@ -289,8 +289,8 @@ void PlotObject::RemovePlot(const unsigned int &index)
 	renderer.RemoveActor(plotList[index]);
 
 	// Remove it from the local list
-	plotList.Remove(index);
-	dataList.Remove(index);
+	plotList.erase(plotList.begin() + index);
+	dataList.erase(dataList.begin() + index);
 }
 
 //==========================================================================
@@ -312,8 +312,8 @@ void PlotObject::RemovePlot(const unsigned int &index)
 void PlotObject::AddCurve(const Dataset2D &data)
 {
 	PlotCurve *newPlot = new PlotCurve(renderer);
-	plotList.Add(newPlot);
-	dataList.Add(&data);
+	plotList.push_back(newPlot);
+	dataList.push_back(&data);
 
 	newPlot->BindToXAxis(axisBottom);
 	newPlot->BindToYAxis(axisLeft);
@@ -393,7 +393,7 @@ void PlotObject::FormatPlot(void)
 	axisRight->SetColor(color);
 
 	// If we don't have any data, we don't want stop before getting into the details
-	if (dataList.GetCount() == 0)
+	if (dataList.size() == 0)
 		return;
 
 	// Determine "Original" values by parsing data associated with each axis
@@ -401,7 +401,7 @@ void PlotObject::FormatPlot(void)
 	bool rightFound = false;
 	unsigned int i, j;
 	Axis *yAxis;
-	for (i = 0; i < (unsigned int)dataList.GetCount(); i++)
+	for (i = 0; i < (unsigned int)dataList.size(); i++)
 	{
 		// If this plot is not visible, ignore it
 		if (!plotList[i]->GetIsVisible())
@@ -468,7 +468,7 @@ void PlotObject::FormatPlot(void)
 	// Apply range limits
 
 	// Tell the curves they will need to be re-drawn
-	for (i = 0; i < (unsigned int)plotList.GetCount(); i++)
+	for (i = 0; i < (unsigned int)plotList.size(); i++)
 		plotList[i]->SetModified();
 
 	// If the axes mins and maxes are equal, stretch the range to make the plot display
@@ -611,12 +611,6 @@ void PlotObject::FormatPlot(void)
 	axisRight->SetMaximum(yRightMax);
 	axisRight->SetMinorResolution(yRightMinorResolution);
 	axisRight->SetMajorResolution(yRightMajorResolution);
-	
-	// Before we start calling Draw(), we need to set current
-	// Added this to try to eliminate memory leak on glCallList in Draw() - didn't help
-	if (!renderer.GetContext() || !renderer.IsShownOnScreen())
-		return;
-	renderer.SetCurrent();
 
 	// Update the axis limits so they are exactly the same as what is displayed on screen
 	axisBottom->Draw();

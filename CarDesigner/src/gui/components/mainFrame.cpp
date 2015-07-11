@@ -996,7 +996,7 @@ void MainFrame::FileCloseEvent(wxCommandEvent& WXUNUSED(event))
 void MainFrame::FileCloseAllEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Close all of the objects
-	int indexToDelete = 0;
+	unsigned int indexToDelete = 0;
 	while (openObjectList.GetCount() > indexToDelete)
 	{
 		// If the user chooses not to close a particular object, we need to
@@ -1074,7 +1074,7 @@ void MainFrame::FileSaveAsEvent(wxCommandEvent& WXUNUSED(event))
 void MainFrame::FileSaveAllEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Save all of the objects
-	int indexToSave = 0;
+	unsigned int indexToSave = 0;
 	while (openObjectList.GetCount() > indexToSave)
 	{
 		// Save the object with index IndexToSave
@@ -1388,15 +1388,15 @@ void MainFrame::IterationShowAssociatedCarsClickEvent(wxCommandEvent& WXUNUSED(e
 void MainFrame::IterationAssociatedWithAllCarsClickEvent(wxCommandEvent &event)
 {
 	// Make sure the object is TypeIteration
-	if (openObjectList.GetObject(objectOfInterestIndex)->GetType() != GuiObject::TypeIteration)
+	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::TypeIteration)
 		return;
 
 	// If this object is checked, set the auto-associate flag to true, otherwise
 	// set it to false
 	if (event.IsChecked())
-		static_cast<Iteration*>(openObjectList.GetObject(objectOfInterestIndex))->SetAutoAssociate(true);
+		static_cast<Iteration*>(openObjectList[objectOfInterestIndex])->SetAutoAssociate(true);
 	else
-		static_cast<Iteration*>(openObjectList.GetObject(objectOfInterestIndex))->SetAutoAssociate(false);
+		static_cast<Iteration*>(openObjectList[objectOfInterestIndex])->SetAutoAssociate(false);
 }
 
 //==========================================================================
@@ -1419,7 +1419,7 @@ void MainFrame::IterationAssociatedWithAllCarsClickEvent(wxCommandEvent &event)
 void MainFrame::IterationExportDataToFileClickEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Make sure the object is TypeIteration
-	if (openObjectList.GetObject(objectOfInterestIndex)->GetType() != GuiObject::TypeIteration)
+	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::TypeIteration)
 		return;
 
 	// Get the file name to export to
@@ -1431,8 +1431,7 @@ void MainFrame::IterationExportDataToFileClickEvent(wxCommandEvent& WXUNUSED(eve
 	if (pathAndFileName.IsEmpty())
 		return;
 
-	// Call the ExportDataToFile() method
-	static_cast<Iteration*>(openObjectList.GetObject(objectOfInterestIndex))
+	static_cast<Iteration*>(openObjectList[objectOfInterestIndex])
 		->ExportDataToFile(pathAndFileName.Item(0));
 }
 
@@ -1455,11 +1454,11 @@ void MainFrame::IterationExportDataToFileClickEvent(wxCommandEvent& WXUNUSED(eve
 void MainFrame::IterationXAxisPitchClickEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Make sure the object is TypeIteration
-	if (openObjectList.GetObject(objectOfInterestIndex)->GetType() != GuiObject::TypeIteration)
+	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::TypeIteration)
 		return;
 
 	// Set the X axis to pitch
-	static_cast<Iteration*>(openObjectList.GetObject(objectOfInterestIndex))
+	static_cast<Iteration*>(openObjectList[objectOfInterestIndex])
 		->SetXAxisType(Iteration::AxisTypePitch);
 
 	// Uncheck all other X axis options
@@ -1490,11 +1489,11 @@ void MainFrame::IterationXAxisPitchClickEvent(wxCommandEvent& WXUNUSED(event))
 void MainFrame::IterationXAxisRollClickEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Make sure the object is TypeIteration
-	if (openObjectList.GetObject(objectOfInterestIndex)->GetType() != GuiObject::TypeIteration)
+	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::TypeIteration)
 		return;
 
 	// Set the X axis to roll
-	static_cast<Iteration*>(openObjectList.GetObject(objectOfInterestIndex))
+	static_cast<Iteration*>(openObjectList[objectOfInterestIndex])
 		->SetXAxisType(Iteration::AxisTypeRoll);
 
 	// Uncheck all other X axis options
@@ -1525,11 +1524,11 @@ void MainFrame::IterationXAxisRollClickEvent(wxCommandEvent& WXUNUSED(event))
 void MainFrame::IterationXAxisHeaveClickEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Make sure the object is TypeIteration
-	if (openObjectList.GetObject(objectOfInterestIndex)->GetType() != GuiObject::TypeIteration)
+	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::TypeIteration)
 		return;
 
 	// Set the X axis to heave
-	static_cast<Iteration*>(openObjectList.GetObject(objectOfInterestIndex))
+	static_cast<Iteration*>(openObjectList[objectOfInterestIndex])
 		->SetXAxisType(Iteration::AxisTypeHeave);
 
 	// Uncheck all other X axis options
@@ -1560,11 +1559,11 @@ void MainFrame::IterationXAxisHeaveClickEvent(wxCommandEvent& WXUNUSED(event))
 void MainFrame::IterationXAxisRackTravelClickEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Make sure the object is TypeIteration
-	if (openObjectList.GetObject(objectOfInterestIndex)->GetType() != GuiObject::TypeIteration)
+	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::TypeIteration)
 		return;
 
 	// Set the X axis to rack travel
-	static_cast<Iteration*>(openObjectList.GetObject(objectOfInterestIndex))
+	static_cast<Iteration*>(openObjectList[objectOfInterestIndex])
 		->SetXAxisType(Iteration::AxisTypeRackTravel);
 
 	// Uncheck all other X axis options
@@ -1707,7 +1706,7 @@ void MainFrame::ToolsOptionsEvent(wxCommandEvent& WXUNUSED(event))
 
 		// Make sure we have an object to update before we try to update it
 		if (openObjectList.GetCount() > 0)
-			openObjectList.GetObject(activeIndex)->UpdateData();
+			openObjectList[activeIndex]->UpdateData();
 	}
 }
 
@@ -1804,10 +1803,10 @@ readme.txt file for licensing and other information."));
 void MainFrame::UpdateAnalysis(void)
 {
 	// For every object we've got open, call the update display method
-	int i;
+	unsigned int i;
 	for (i = 0; i < openObjectList.GetCount(); i++)
 		// Update the display (this performs the kinematic analysis)
-		openObjectList.GetObject(i)->UpdateData();
+		openObjectList[i]->UpdateData();
 }
 
 //==========================================================================
@@ -1830,19 +1829,19 @@ void MainFrame::UpdateAnalysis(void)
 void MainFrame::UpdateOutputPanel(void)
 {
 	// For every object we've got open, call the update display method
-	int i, carCount = 0;
+	unsigned int i, carCount = 0;
 	for (i = 0; i < openObjectList.GetCount(); i++)
 	{
 		// Update the kinematics information (ONLY if this is a car)
-		if (openObjectList.GetObject(i)->GetType() == GuiObject::TypeCar)
+		if (openObjectList[i]->GetType() == GuiObject::TypeCar)
 		{
 			// Increment the number of cars we have
 			carCount++;
 
 			// Update the information for this car
-			outputPanel->UpdateInformation(static_cast<GuiCar*>(openObjectList.GetObject(i))->GetKinematicOutputs(),
-				static_cast<GuiCar*>(openObjectList.GetObject(i))->GetWorkingCar(),
-				carCount, openObjectList.GetObject(i)->GetCleanName());
+			outputPanel->UpdateInformation(static_cast<GuiCar*>(openObjectList[i])->GetKinematicOutputs(),
+				static_cast<GuiCar*>(openObjectList[i])->GetWorkingCar(),
+				carCount, openObjectList[i]->GetCleanName());
 		}
 	}
 
@@ -2088,14 +2087,14 @@ void MainFrame::ThreadCompleteEvent(wxCommandEvent &event)
 		{
 			// Iterate through the open objects up to the selected object, and if it is a car,
 			// increment the car count
-			if (openObjectList.GetObject(i)->GetType() == GuiObject::TypeCar)
+			if (openObjectList[i]->GetType() == GuiObject::TypeCar)
 				carCount++;
 		}
 
 		// Update the information for this car
-		outputPanel->UpdateInformation(static_cast<GuiCar*>(openObjectList.GetObject(
-			event.GetExtraLong()))->GetKinematicOutputs(),
-			static_cast<GuiCar*>(openObjectList.GetObject(event.GetExtraLong()))->GetWorkingCar(),
+		outputPanel->UpdateInformation(static_cast<GuiCar*>(openObjectList[
+			event.GetExtraLong()])->GetKinematicOutputs(),
+			static_cast<GuiCar*>(openObjectList[event.GetExtraLong()])->GetWorkingCar(),
 			carCount, openObjectList[event.GetExtraLong()]->GetCleanName());
 
 		// Call the 3D display update method
@@ -2217,7 +2216,7 @@ void MainFrame::RemoveObjectFromList(int index)
 
 	// Reset the cars' indices and check to see what types we have available
 	// Also refresh the car's displays
-	int i;
+	unsigned int i;
 	for (i = 0; i < openObjectList.GetCount(); i++)
 	{
 		// Re-set the index
@@ -2378,7 +2377,7 @@ bool MainFrame::CloseThisForm(void)
 	while (openObjectList.GetCount() > 0)
 	{
 		// Attempt to close each object
-		if (!openObjectList.GetObject(openObjectList.GetCount() - 1)->Close(false))
+		if (!openObjectList[openObjectList.GetCount() - 1]->Close(false))
 			// If  the user canceled, we should cancel here, too
 			return false;
 	}
@@ -2705,10 +2704,10 @@ void MainFrame::SetActiveIndex(int index, bool selectNotebookTab)
 	if (activeIndex >= 0)
 	{
 		// Highlight the column in the output panel that corresponds to this car
-		outputPanel->HighlightColumn(openObjectList.GetObject(activeIndex)->GetCleanName());
+		outputPanel->HighlightColumn(openObjectList[activeIndex]->GetCleanName());
 
 		// Update the EditPanel
-		editPanel->UpdateInformation(openObjectList.GetObject(activeIndex));
+		editPanel->UpdateInformation(openObjectList[activeIndex]);
 	}
 	else
 		editPanel->UpdateInformation(NULL);
@@ -2722,9 +2721,9 @@ void MainFrame::SetActiveIndex(int index, bool selectNotebookTab)
 	if (selectedId.IsOk() && activeIndex >= 0)
 	{
 		// Check to see if the ID belongs to our active object
-		if (!openObjectList.GetObject(activeIndex)->IsThisObjectSelected(selectedId))
+		if (!openObjectList[activeIndex]->IsThisObjectSelected(selectedId))
 			// If it does not, then select the root item for the newly active object
-			openObjectList.GetObject(activeIndex)->SelectThisObjectInTree();
+			openObjectList[activeIndex]->SelectThisObjectInTree();
 	}
 
 	// Update the object specific menus
@@ -2765,7 +2764,7 @@ void MainFrame::CreateContextMenu(int objectIndex, wxPoint position, bool allowC
 	wxMenu *contextMenu(NULL);
 
 	// Depending on the type of the item, we might want additional options (or none at all)
-	switch (openObjectList.GetObject(objectIndex)->GetType())
+	switch (openObjectList[objectIndex]->GetType())
 	{
 	case GuiObject::TypeCar:
 		contextMenu = CreateCarMenu();
@@ -2789,7 +2788,7 @@ void MainFrame::CreateContextMenu(int objectIndex, wxPoint position, bool allowC
 	// Start building the context menu
 
 	// Genetic algorithms do not have image files
-	if (openObjectList.GetObject(objectIndex)->GetType() != GuiObject::TypeOptimization)
+	if (openObjectList[objectIndex]->GetType() != GuiObject::TypeOptimization)
 	{
 		contextMenu->PrependSeparator();
 		contextMenu->Prepend(IdMenuFileWriteImageFile, _T("&Write Image File"));
@@ -2860,7 +2859,7 @@ wxMenu *MainFrame::CreateIterationMenu(void)
 	wxMenu *mnuIteration = new wxMenu();
 
 	// Make sure the active object is a TYPE_ITERATION object
-	if (openObjectList.GetObject(activeIndex)->GetType() != GuiObject::TypeIteration)
+	if (openObjectList[activeIndex]->GetType() != GuiObject::TypeIteration)
 		return mnuIteration;
 
 	// Allocate the sub-menus
@@ -2883,10 +2882,10 @@ wxMenu *MainFrame::CreateIterationMenu(void)
 	mnuIteration->AppendSubMenu(xAxisMenu, _T("Set X-Axis"));
 
 	// Determine which items need to be checked
-	if (static_cast<Iteration*>(openObjectList.GetObject(activeIndex))->GetAutoAssociate())
+	if (static_cast<Iteration*>(openObjectList[activeIndex])->GetAutoAssociate())
 		associatedCarsMenu->Check(IdMenuIterationAssociatedWithAllCars, true);
 
-	switch (static_cast<Iteration*>(openObjectList.GetObject(activeIndex))->GetXAxisType())
+	switch (static_cast<Iteration*>(openObjectList[activeIndex])->GetXAxisType())
 	{
 	case Iteration::AxisTypePitch:
 		xAxisMenu->Check(IdMenuIterationXAxisPitch, true);
@@ -2974,6 +2973,9 @@ bool MainFrame::JobsPending(void) const
 wxArrayString MainFrame::GetFileNameFromUser(wxString dialogTitle, wxString defaultDirectory,
 										 wxString defaultFileName, wxString wildcard, long style)
 {
+	// Work-around for weird bug where this method causes tree item selection change event to fire
+	beingDeleted = true;
+
 	// Initialize the return variable
 	wxArrayString pathsAndFileNames;
 
@@ -2994,6 +2996,9 @@ wxArrayString MainFrame::GetFileNameFromUser(wxString dialogTitle, wxString defa
 		else
 			pathsAndFileNames.Add(dialog.GetPath());
 	}
+
+	// Work-around for weird bug where this method causes tree item selection change event to fire
+	beingDeleted = false;
 
 	// Return the path and file name
 	return pathsAndFileNames;

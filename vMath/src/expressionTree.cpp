@@ -368,8 +368,8 @@ ExpressionTree::Node ExpressionTree::EvaluateNextNode(wxString &expression, wxSt
 					}
 
 					Dataset2D newSet;
-					long set;
-					if (expression.Mid(i + 1, end - i - 1).ToLong(&set))
+					unsigned long set;
+					if (expression.Mid(i + 1, end - i - 1).ToULong(&set))
 					{
 						if (set >= 0 && set <= list.GetCount())
 							newSet = GetSetFromList(set) * -1.0;
@@ -471,7 +471,7 @@ ExpressionTree::Node ExpressionTree::EvaluateNextNode(wxString &expression, wxSt
 			// At a dataset identifier
 			else if (expression.Mid(0, 1).CmpNoCase(_T("[")) == 0)
 			{
-				long i;
+				unsigned long i;
 				Dataset2D newSet;
 				int end = expression.Find(_T("]"));
 				if (end == wxNOT_FOUND)
@@ -480,7 +480,7 @@ ExpressionTree::Node ExpressionTree::EvaluateNextNode(wxString &expression, wxSt
 					return node;
 				}
 
-				if (expression.Mid(1, end - 1).ToLong(&i))
+				if (expression.Mid(1, end - 1).ToULong(&i))
 				{
 					if (i >= 0 && i <= list.GetCount())
 						newSet = GetSetFromList(i);

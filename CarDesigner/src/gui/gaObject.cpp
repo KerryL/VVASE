@@ -84,7 +84,7 @@ GAObject::~GAObject()
 	DebugLog::GetInstance()->Log(_T("GAObject::~GAObject()"));
 
 	// Delete this object's CAR members
-	int i;
+	unsigned int i;
 	for (i = 0; i < numberOfCars; i++)
 	{
 		delete originalCarArray[i];
@@ -155,7 +155,8 @@ void GAObject::SimulateGeneration(void)
 	// FIXME:  Check return value to ensure no errors!
 	inverseSemaphore.Set(numberOfCars);
 
-	int i, j, temp(optimization.GetIndex());
+	int i, temp(optimization.GetIndex());
+	unsigned int j;
 	for (i = 0; i < populationSize; i++)
 	{
 		for (j = 0; j < inputList.GetCount(); j++)
@@ -165,7 +166,7 @@ void GAObject::SimulateGeneration(void)
 
 			// Create the data and the job to send to the thread pool
 			data = new KinematicsData(originalCarArray[i * inputList.GetCount() + j],
-				workingCarArray[i * inputList.GetCount() + j], *inputList.GetObject(j),
+				workingCarArray[i * inputList.GetCount() + j], *inputList[j],
 				kinematicOutputArray + i * inputList.GetCount() + j);
 			ThreadJob newJob(ThreadJob::CommandThreadKinematicsGA, data,
 				optimization.GetCleanName(), temp);
@@ -208,7 +209,7 @@ double GAObject::DetermineFitness(const int *citizen)
 	// index.
 
 	// Get the outputs of interest from each analysis that was conducted
-	int i, j, k;
+	unsigned int i, j, k;
 	double fitness(0.0);
 	for (i = 0; i < inputList.GetCount(); i++)
 	{
@@ -291,9 +292,9 @@ void GAObject::SetUp(Car *_targetCar)
 
 	// Initialize the run
 	int *phenotypeSizes = new int[geneList.GetCount()];
-	int i;
+	unsigned int i;
 	for (i = 0; i < geneList.GetCount(); i++)
-		phenotypeSizes[i] = geneList.GetObject(i)->numberOfValues;
+		phenotypeSizes[i] = geneList[i]->numberOfValues;
 
 	// Store the target car pointer
 	assert(_targetCar);
@@ -358,8 +359,6 @@ void GAObject::SetUp(Car *_targetCar)
 //==========================================================================
 void GAObject::SetCarGenome(int carIndex, const int *currentGenome)
 {
-	int i;
-
 	// Change the appropriate values to make this new car match the CurrentGenome
 	Corner *currentCorner;
 	Corner *oppositeCorner;
@@ -376,10 +375,11 @@ void GAObject::SetCarGenome(int carIndex, const int *currentGenome)
 
 	// Go through all of the genes, and adjust the variables to match the current genome
 	Gene *currentGene;
+	unsigned int i;
 	for (i = 0; i < geneList.GetCount(); i++)
 	{
 		// Get the current gene
-		currentGene = geneList.GetObject(i);
+		currentGene = geneList[i];
 
 		// Set the current and opposite corners
 		if (currentGene->location == Corner::LocationLeftFront)
@@ -730,7 +730,7 @@ void GAObject::DetermineAllInputs(void)
 	inputList.Add(input);
 
 	// Go through all of the goals
-	int i, j;
+	unsigned int i, j;
 	for (i = 0; i < goalList.GetCount(); i++)
 	{
 		// Compare the before input with all of the inputs in the list
@@ -899,7 +899,7 @@ bool GAObject::Write(wxString fileName)
 	outFile.write((char*)&mutation, sizeof(double));
 	outFile.write((char*)&crossover, sizeof(int));
 
-	int i = geneList.GetCount();
+	unsigned int i = geneList.GetCount();
 	outFile.write((char*)&i, sizeof(int));
 	for (i = 0; i < geneList.GetCount(); i++)
 		outFile.write((char*)geneList[i], sizeof(Gene));

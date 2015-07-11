@@ -46,15 +46,15 @@ public:
 	};
 
 	// Constructors
-	IntegerValidator(int *_valPtr = NULL, const NumberClass &_numberClass = ClassAll);
-	IntegerValidator(const int &_min, const int &_max, int *_valPtr = NULL,
+	IntegerValidator(int *_valPtr, const NumberClass &_numberClass = ClassAll);
+	IntegerValidator(const int &_min, const int &_max, int *_valPtr,
 		const NumberClass &_numberClass = ClassRangeInclusive);
-	IntegerValidator(const int &_limit, int *_valPtr = NULL,
+	IntegerValidator(const int &_limit, int *_valPtr,
 		const NumberClass &_numberClass = ClassMinimumInclusive);
-	IntegerValidator(unsigned int *_valPtr = NULL, const NumberClass &_numberClass = ClassAll);
+	IntegerValidator(unsigned int *_valPtr, const NumberClass &_numberClass = ClassAll);
 	IntegerValidator(const unsigned int &_min, const unsigned int &_max,
-		unsigned int *_valPtr = NULL, const NumberClass &_numberClass = ClassRangeInclusive);
-	IntegerValidator(const unsigned int &_limit, int unsigned *_valPtr = NULL,
+		unsigned int *_valPtr, const NumberClass &_numberClass = ClassRangeInclusive);
+	IntegerValidator(const unsigned int &_limit, int unsigned *_valPtr,
 		const NumberClass &_numberClass = ClassMinimumInclusive);
 	IntegerValidator(const IntegerValidator &dv);
 	

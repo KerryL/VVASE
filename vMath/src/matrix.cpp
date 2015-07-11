@@ -415,16 +415,16 @@ Matrix Matrix::GetTranspose(void) const
 //					Same as A^-1 * b.
 //
 // Input Arguments:
-//		b	= const Matrix& vector to divide this into
+//		b	= const Matrix& vector to divide this int
 //
 // Output Arguments:
-//		None
+//		x	= Matrix& result of the division (x in the above example)
 //
 // Return Value:
-//		Matrix result of the division (x in the above example)
+//		bool, true for success, false otherwise
 //
 //==========================================================================
-Matrix Matrix::LeftDivide(const Matrix &b) const
+bool Matrix::LeftDivide(const Matrix& b, Matrix &x) const
 {
 	// Normal equations solution (not very robust?)
 	//return GetInverse() * b;
@@ -435,12 +435,10 @@ Matrix Matrix::LeftDivide(const Matrix &b) const
 	Matrix w;
 
 	if (!GetSingularValueDecomposition(u, v, w))
-	{
-		// FIXME:  Generate an error?
-		return *this;
-	}
+		return false;
 
-	return v * w.GetDiagonalInverse().GetTranspose() * u.GetTranspose() * b;
+	x = v * w.GetDiagonalInverse().GetTranspose() * u.GetTranspose() * b;
+	return true;
 }
 
 //==========================================================================
@@ -1503,7 +1501,10 @@ bool Matrix::GetSingularValueDecomposition(Matrix &u, Matrix &v, Matrix &w) cons
 
 			// Print an error if we've hit the iteration limit
 			if (its == its_limit - 1)
+			{
+				delete [] rv1;
 				return false;
+			}
 
 			x = w.elements[l][l];
 			nm = k - 1;

@@ -63,6 +63,7 @@ public:
 		Scrub,						// [in]
 		SpringInstallationRatio,	// [in Spring/in Wheel]
 		ShockInstallationRatio,		// [in Shock/in Wheel]
+		ARBInstallationRatio,		// [rad Bar/in Wheel] (assumes opposite side stays fixed)
 		SpindleLength,				// [in]
 		SideViewSwingArmLength,		// [in]
 		FrontViewSwingArmLength,	// [in]
@@ -94,8 +95,6 @@ public:
 		RearNetSteer,				// [rad]
 		FrontNetScrub,				// [in]
 		RearNetScrub,				// [in]
-		FrontARBMotionRatio,		// [rad/in]
-		RearARBMotionRatio,			// [rad/in]
 		FrontTrackGround,			// [in]
 		RearTrackGround,			// [in]
 		RightWheelbaseGround,		// [in]
@@ -195,7 +194,8 @@ public:
 
 private:
 	// The currently associated car object
-	const Car *currentCar;
+	const Car *originalCar;
+	const Suspension *currentSuspension;
 
 	// Updates the outputs associated with the associated corner
 	void UpdateCorner(const Corner *originalCorner, const Corner *currentCorner);

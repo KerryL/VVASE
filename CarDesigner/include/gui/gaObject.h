@@ -149,7 +149,7 @@ private:
 	Car **workingCarArray;
 	Car **originalCarArray;
 	KinematicOutputs *kinematicOutputArray;
-	int numberOfCars;
+	unsigned int numberOfCars;
 
 	// Original car to be optimized (only one needed for reference)
 	Car *targetCar;

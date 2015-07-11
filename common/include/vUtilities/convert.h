@@ -332,7 +332,8 @@ public:
 		UnitTypeDensity,
 		UnitTypePower,
 		UnitTypeEnergy,
-		UnitTypeTemperature
+		UnitTypeTemperature,
+		UnitTypeAnglePerDistance
 	};
 
 	// For displaying the user defined units of a specific type

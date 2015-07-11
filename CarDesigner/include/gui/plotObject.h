@@ -19,8 +19,8 @@
 // wxWidgets headers
 #include <wx/wx.h>
 
-// Local headers
-#include "vUtilities/objectList.h"
+// Standard C++ headers
+#include <vector>
 
 // Local forward declarations
 class PlotRenderer;
@@ -124,8 +124,8 @@ private:
 	bool autoScaleRightY;
 
 	// The actual plot objects
-	ObjectList<PlotCurve> plotList;
-	ObjectList<const Dataset2D> dataList;
+	std::vector<PlotCurve*> plotList;
+	std::vector<const Dataset2D*> dataList;
 
 	// Handles all of the formatting for the plot
 	void FormatPlot(void);

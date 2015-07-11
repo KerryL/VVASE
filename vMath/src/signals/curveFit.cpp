@@ -73,7 +73,8 @@ CurveFit::PolynomialFit CurveFit::DoPolynomialFit(const Dataset2D &data, const u
 			A(i,j+1) = data.GetXData(i) * A(i,j) / maxX;
 	}
 
-	Matrix coefficients(A.LeftDivide(b));
+	Matrix coefficients;
+	A.LeftDivide(b, coefficients);
 
 	// Assign the coefficients to our PolynomialFit data
 	for (i = 0; i <= order; i++)

@@ -938,6 +938,7 @@ Vector Suspension::FindPerpendicularVector(const Vector &v)
 	return a;
 }
 
+// This is coarse, but it's good enough
 double Suspension::OptimizeCircleParameter(const Vector &center, const Vector &a,
 	const Vector &b, const Vector &target)
 {
@@ -957,21 +958,6 @@ double Suspension::OptimizeCircleParameter(const Vector &center, const Vector &a
 			bestError = (target - p).Length();
 		}
 	}
-
-	/*i = 0;
-	const unsigned int limit(100);
-	const double epsilon(1.0e-12);
-	t = bestT;
-	while (i < limit && bestError > epsilon)
-	{
-		t = step * i;
-		p = center + a * cos(t) + b * sin(t);
-		if (bestT < 0.0 || (target - p).Length() < bestError)
-		{
-			bestT = t;
-			bestError = (target - p).Length();
-		}
-	}*/
 
 	return bestT;
 }
@@ -1093,7 +1079,7 @@ bool Suspension::SolveInboardTBarPoints(const Vector &leftOutboard,
 	Matrix error(3, 1, epsilon, epsilon, epsilon);
 	Matrix jacobian(3,3);
 	Matrix guess(3,1);// parameteric variables for the three points
-	Vector left, right, center;
+	Vector left(0.0, 0.0, 0.0), right(0.0, 0.0, 0.0), center(0.0, 0.0, 0.0);
 	Matrix delta;
 
 	// Initialize parameteric variables such that result aligns as best
@@ -1133,7 +1119,11 @@ bool Suspension::SolveInboardTBarPoints(const Vector &leftOutboard,
 		center = centerPivot + centerA * cos(guess(2,0)) + centerB * sin(guess(2,0));
 
 		// Compute next guess
-		delta = jacobian.LeftDivide(error);
+		if (!jacobian.LeftDivide(error, delta))
+		{
+			Debugger::GetInstance().Print("Error:  Failed to invert jacobian", Debugger::PriorityLow);
+			return false;
+		}
 		guess -= delta;
 
 		i++;

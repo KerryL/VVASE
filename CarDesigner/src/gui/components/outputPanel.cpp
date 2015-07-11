@@ -253,8 +253,10 @@ void OutputPanel::UpdateInformation(KinematicOutputs outputs, Car &car,
 	if (car.suspension->frontBarStyle == Suspension::SwayBarNone)
 	{
 		// Change the cell's text
-		outputsList->SetCellValue(KinematicOutputs::StartDoubles
-			+ KinematicOutputs::FrontARBMotionRatio, index, _T("N/A"));
+		outputsList->SetCellValue(KinematicOutputs::StartLeftFrontDoubles
+			+ KinematicOutputs::ARBInstallationRatio, index, _T("N/A"));
+		outputsList->SetCellValue(KinematicOutputs::StartRightFrontDoubles
+			+ KinematicOutputs::ARBInstallationRatio, index, _T("N/A"));
 		outputsList->SetCellValue(KinematicOutputs::StartDoubles
 			+ KinematicOutputs::FrontARBTwist, index, _T("N/A"));
 	}
@@ -263,8 +265,10 @@ void OutputPanel::UpdateInformation(KinematicOutputs outputs, Car &car,
 	if (car.suspension->rearBarStyle == Suspension::SwayBarNone)
 	{
 		// Change the cell's text
-		outputsList->SetCellValue(KinematicOutputs::StartDoubles
-			+ KinematicOutputs::RearARBMotionRatio, index, _T("N/A"));
+		outputsList->SetCellValue(KinematicOutputs::StartLeftRearDoubles
+			+ KinematicOutputs::ARBInstallationRatio, index, _T("N/A"));
+		outputsList->SetCellValue(KinematicOutputs::StartRightRearDoubles
+			+ KinematicOutputs::ARBInstallationRatio, index, _T("N/A"));
 		outputsList->SetCellValue(KinematicOutputs::StartDoubles
 			+ KinematicOutputs::RearARBTwist, index, _T("N/A"));
 	}

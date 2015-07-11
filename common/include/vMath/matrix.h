@@ -91,7 +91,7 @@ public:
 	Matrix GetPsuedoInverse(void) const;
 	Matrix GetDiagonalInverse(void) const;
 
-	Matrix LeftDivide(const Matrix& b) const;// x = A \ b
+	bool LeftDivide(const Matrix& b, Matrix &x) const;// x = A \ b
 	Matrix GetRowReduced(void) const;
 	unsigned int GetRank(void) const;
 

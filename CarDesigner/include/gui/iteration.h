@@ -90,7 +90,7 @@ public:
 	void ShowAssociatedCarsDialog(void);
 
 	// Returns the number of associated cars
-	inline int GetAssociatedCarCount(void) const { return associatedCars.GetCount(); };
+	inline int GetAssociatedCarCount(void) const { return associatedCars.size(); };
 
 	// Returns this object's type (mandatory overload)
 	ItemType GetType(void) const { return TypeIteration; };
@@ -167,7 +167,7 @@ private:
 
 	// The number of points at which the analysis will be performed
 	// (per axis for iterations with multiple independent variables)
-	int numberOfPoints;
+	unsigned int numberOfPoints;
 
 	// Gets the icon handle for this object's icon
 	int GetIconHandle(void) const;
@@ -187,7 +187,7 @@ private:
 	ManagedList<ManagedList< KinematicOutputs> > outputLists;
 
 	// List of cars that are associated with this analysis
-	ObjectList<GuiCar> associatedCars;
+	std::vector<GuiCar*> associatedCars;
 
 	// Array of working cars to use for the analyses
 	Car **workingCarArray;
