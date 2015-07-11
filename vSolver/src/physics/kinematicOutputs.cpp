@@ -876,9 +876,9 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 		if (((originalCorner->location == Corner::LocationLeftFront ||
 			originalCorner->location == Corner::LocationRightFront) &&
 			originalCar->suspension->frontBarStyle != Suspension::SwayBarNone) ||
-			(originalCorner->location == Corner::LocationLeftRear ||
+			((originalCorner->location == Corner::LocationLeftRear ||
 			originalCorner->location == Corner::LocationRightRear) &&
-			originalCar->suspension->rearBarStyle != Suspension::SwayBarNone)
+			originalCar->suspension->rearBarStyle != Suspension::SwayBarNone))
 		{
 			momentArm = currentCorner->hardpoints[Corner::OutboardBarLink] - VVASEMath::NearestPointOnAxis(
 				pointOnAxis, momentDirection, currentCorner->hardpoints[Corner::OutboardBarLink]);
@@ -893,9 +893,9 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 			if (((originalCorner->location == Corner::LocationLeftFront ||
 				originalCorner->location == Corner::LocationRightFront) &&
 				originalCar->suspension->frontBarStyle == Suspension::SwayBarUBar) ||
-				(originalCorner->location == Corner::LocationLeftRear ||
+				((originalCorner->location == Corner::LocationLeftRear ||
 				originalCorner->location == Corner::LocationRightRear) &&
-				originalCar->suspension->rearBarStyle == Suspension::SwayBarUBar)
+				originalCar->suspension->rearBarStyle == Suspension::SwayBarUBar))
 			{
 				if (currentCorner->location == Corner::LocationLeftFront ||
 					currentCorner->location == Corner::LocationRightFront)
@@ -909,9 +909,9 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 			else if (((originalCorner->location == Corner::LocationLeftFront ||
 				originalCorner->location == Corner::LocationRightFront) &&
 				originalCar->suspension->frontBarStyle == Suspension::SwayBarTBar) ||
-				(originalCorner->location == Corner::LocationLeftRear ||
+				((originalCorner->location == Corner::LocationLeftRear ||
 				originalCorner->location == Corner::LocationRightRear) &&
-				originalCar->suspension->rearBarStyle == Suspension::SwayBarTBar)
+				originalCar->suspension->rearBarStyle == Suspension::SwayBarTBar))
 			{
 				Vector normal, pivot, oppositeInboard;
 				if (currentCorner->location == Corner::LocationLeftFront ||

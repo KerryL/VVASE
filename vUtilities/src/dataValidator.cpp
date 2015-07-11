@@ -42,8 +42,7 @@
 //
 //==========================================================================
 DataValidator::DataValidator(const Convert::UnitType &_unit, double *_valPtr,
-							const NumberClass &_numberClass)
-							: wxTextValidator(wxFILTER_NUMERIC)
+	const NumberClass &_numberClass) : wxTextValidator(wxFILTER_NUMERIC)
 {
 	assert(_numberClass != ClassInclusiveRange && _numberClass != ClassExclusiveRange);
 
@@ -80,6 +79,7 @@ DataValidator::DataValidator(const Convert::UnitType &_unit, double *_valPtr,
 //==========================================================================
 DataValidator::DataValidator(const Convert::UnitType &_unit, const double &_min,
 		const double &_max, double *_valPtr, const NumberClass &_numberClass)
+		: wxTextValidator(wxFILTER_NUMERIC)
 {
 	assert(_min < _max);
 	assert(_numberClass == ClassInclusiveRange || _numberClass == ClassExclusiveRange);
@@ -111,7 +111,7 @@ DataValidator::DataValidator(const Convert::UnitType &_unit, const double &_min,
 //		None
 //
 //==========================================================================
-DataValidator::DataValidator(const DataValidator& dv)
+DataValidator::DataValidator(const DataValidator& dv) : wxTextValidator(wxFILTER_NUMERIC)
 {
 	// Make the assignment
 	*this = dv;
@@ -198,7 +198,7 @@ bool DataValidator::TransferFromWindow(void)
 //		bool, true for success, false otherwise
 //
 //==========================================================================
-bool DataValidator::Validate(wxWindow *parent)
+bool DataValidator::Validate(wxWindow */*parent*/)
 {
 	/*if (!CheckValidator())
 		return false;*/

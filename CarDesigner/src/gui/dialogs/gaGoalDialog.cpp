@@ -333,7 +333,7 @@ void GAGoalDialog::CreateControls(void)
 //		None
 //
 //==========================================================================
-void GAGoalDialog::OKClickEvent(wxCommandEvent& event)
+void GAGoalDialog::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// If we don't need to check both sets of inputs, make sure we can ignore the second set
 	if (!difference->IsChecked())

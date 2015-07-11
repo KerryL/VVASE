@@ -65,20 +65,21 @@ private:
 	// Log file name
 	const static wxString logFileName;
 
-// The optimize-me-out implementation
+// The not-implementation
 #else
 	// Include inline, non-functioning versions of all above public methods here
 	static inline DebugLog* GetInstance(void) { return NULL; };
 	static inline void Kill(void) { };
-	static inline void SetTarget(const LogTarget &target) { };
-	static inline void Log(wxString message, int _indent = 0) { };
+	static inline void SetTarget(const LogTarget &/*target*/) { };
+	static inline void Log(wxString /*message*/) { };
+	static inline void Log(wxString /*message*/, int /*indent*/) { };
 #endif
 
 private:
 	// These are private for singletons
 	DebugLog(void) { Log(_T("\n")); };// Always start with a newline
-	DebugLog(const DebugLog &log) { };
-	DebugLog& operator= (const DebugLog &log) { return *this; };
+	DebugLog(const DebugLog &/*log*/) { };
+	DebugLog& operator= (const DebugLog &/*log*/) { return *this; };
 };
 
 #endif// _DEBUG_LOG_H_

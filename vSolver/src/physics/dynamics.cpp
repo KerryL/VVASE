@@ -141,7 +141,7 @@ void Dynamics::ResetSimulation(void)
 //		None
 //
 //==========================================================================
-void Dynamics::CalculateStateDerivative(State state, Driver::Inputs inputs)
+void Dynamics::CalculateStateDerivative(State /*state*/, Driver::Inputs /*inputs*/)
 {
 }
 

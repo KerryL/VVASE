@@ -8,13 +8,13 @@ include makefile.inc
 .PHONY: all clean
 
 all:
-	$(MKDIR) $(OBJDIR)
-	$(MKDIR) $(BINDIR)
-	$(MKDIR) $(LIBOUTDIR)
+	$(MKDIR) $(TOP_OBJDIR)
+	$(MKDIR) $(TOP_BINDIR)
+	$(MKDIR) $(TOP_LIBOUTDIR)
 	set -e; for dir in $(PSLIB) ; do $(MAKE) -C $$dir all; done
 	$(MAKE) -C CarDesigner all
 
 clean:
-	$(RM) -r $(OBJDIR) $(LIBOUTDIR) $(BINDIR)VVASE
+	$(RM) -r $(TOP_OBJDIR) $(TOP_LIBOUTDIR) $(TOP_BINDIR)VVASE
 	set -e; for dir in $(PSLIB) ; do $(MAKE) -C $$dir clean; done
 	$(MAKE) -C CarDesigner clean

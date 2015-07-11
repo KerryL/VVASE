@@ -243,7 +243,7 @@ State Integrator::DoAdamsBashforthThirdOrder(void)
 //		None
 //
 //==========================================================================
-void Integrator::Reset(State initialConditions)
+void Integrator::Reset(State /*initialConditions*/)
 {
 	// Initialize the integration step variable
 	integrationStep = 0;

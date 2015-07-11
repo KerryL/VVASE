@@ -75,8 +75,8 @@ public:
 private:
 	// For singletons, the constructors and assignment operators are private
 	Debugger();
-	Debugger(const Debugger& d) { };
-	Debugger& operator=(const Debugger &d) { return *this; };
+	Debugger(const Debugger& /*d*/) { };
+	Debugger& operator=(const Debugger &/*d*/) { return *this; };
 
 	// Destructor
 	~Debugger();

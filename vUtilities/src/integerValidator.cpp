@@ -39,7 +39,7 @@
 //
 //==========================================================================
 IntegerValidator::IntegerValidator(int *_valPtr, const NumberClass &_numberClass)
-							: wxTextValidator(wxFILTER_NUMERIC)
+	: wxTextValidator(wxFILTER_NUMERIC)
 {
 	// Must use the proper constructor for the desired class of validation
 	assert(_numberClass != ClassRangeInclusive && _numberClass != ClassRangeExclusive);
@@ -77,6 +77,7 @@ IntegerValidator::IntegerValidator(int *_valPtr, const NumberClass &_numberClass
 //==========================================================================
 IntegerValidator::IntegerValidator(const int &_min, const int &_max,
 								   int *_valPtr, const NumberClass &_numberClass)
+	: wxTextValidator(wxFILTER_NUMERIC)
 {
 	// Must use the proper constructor for the desired class of validation
 	assert(_numberClass == ClassRangeInclusive || _numberClass == ClassRangeExclusive);
@@ -112,7 +113,7 @@ IntegerValidator::IntegerValidator(const int &_min, const int &_max,
 //
 //==========================================================================
 IntegerValidator::IntegerValidator(const int &_limit, int *_valPtr,
-		const NumberClass &_numberClass)
+	const NumberClass &_numberClass) : wxTextValidator(wxFILTER_NUMERIC)
 {
 	// Must use the proper constructor for the desired class of validation
 	assert(_numberClass == ClassMinimumInclusive || _numberClass == ClassMinimumExclusive ||
@@ -146,7 +147,7 @@ IntegerValidator::IntegerValidator(const int &_limit, int *_valPtr,
 //
 //==========================================================================
 IntegerValidator::IntegerValidator(unsigned int *_valPtr, const NumberClass &_numberClass)
-							: wxTextValidator(wxFILTER_NUMERIC)
+	: wxTextValidator(wxFILTER_NUMERIC)
 {
 	// Must use the proper constructor for the desired class of validation
 	assert(_numberClass != ClassRangeInclusive && _numberClass != ClassRangeExclusive);
@@ -184,7 +185,8 @@ IntegerValidator::IntegerValidator(unsigned int *_valPtr, const NumberClass &_nu
 //
 //==========================================================================
 IntegerValidator::IntegerValidator(const unsigned int &_min, const unsigned int &_max,
-								   unsigned int *_valPtr, const NumberClass &_numberClass)
+	unsigned int *_valPtr, const NumberClass &_numberClass)
+	: wxTextValidator(wxFILTER_NUMERIC)
 {
 	// Must use the proper constructor for the desired class of validation
 	assert(_numberClass == ClassRangeInclusive || _numberClass == ClassRangeExclusive);
@@ -220,7 +222,7 @@ IntegerValidator::IntegerValidator(const unsigned int &_min, const unsigned int 
 //
 //==========================================================================
 IntegerValidator::IntegerValidator(const unsigned int &_limit, unsigned int *_valPtr,
-		const NumberClass &_numberClass)
+	const NumberClass &_numberClass) : wxTextValidator(wxFILTER_NUMERIC)
 {
 	// Must use the proper constructor for the desired class of validation
 	assert(_numberClass == ClassMinimumInclusive || _numberClass == ClassMinimumExclusive ||
@@ -253,6 +255,7 @@ IntegerValidator::IntegerValidator(const unsigned int &_limit, unsigned int *_va
 //
 //==========================================================================
 IntegerValidator::IntegerValidator(const IntegerValidator& dv)
+	: wxTextValidator(wxFILTER_NUMERIC)
 {
 	// Make the assignment
 	*this = dv;
@@ -351,7 +354,7 @@ bool IntegerValidator::TransferFromWindow(void)
 //		bool, true for success, false otherwise
 //
 //==========================================================================
-bool IntegerValidator::Validate(wxWindow *parent)
+bool IntegerValidator::Validate(wxWindow */*parent*/)
 {
 	/*if (!CheckValidator())
 		return false;*/

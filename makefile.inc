@@ -7,7 +7,7 @@
 # DO NOT include the -I prefix to these paths - it will
 # be added automatically
 INCDIRS_TEMP = \
-	$(PWD)/common/include
+	$(CURDIR)/../common/include
 
 INCDIRS = $(addprefix -I,$(INCDIRS_TEMP))
 
@@ -53,13 +53,16 @@ CFLAGS = -g -Wall -Wextra $(INCDIRS) -I./include `wx-config --version=3.0 --cppf
 LDFLAGS = $(LIBDIRS) $(LIBS) `wx-config --version=3.0 --libs all` `pkg-config --libs ftgl,gl`
 
 # Object file output directory
-OBJDIR = $(CURDIR)/../.obj/
+TOP_OBJDIR = .obj/
+OBJDIR = $(CURDIR)/../$(TOP_OBJDIR)
 
 # Binary file output directory
-BINDIR = $(CURDIR)/../bin/
+TOP_BINDIR = bin/
+BINDIR = $(CURDIR)/../$(TOP_BINDIR)
 
 # Library output directory
-LIBOUTDIR = $(CURDIR)/../.lib/
+TOP_LIBOUTDIR = .lib/
+LIBOUTDIR = $(CURDIR)/../$(TOP_LIBOUTDIR)
 
 # Method for creating directories
 MKDIR = mkdir -p

@@ -487,8 +487,8 @@ public:
 private:
 	// For singletons, these are private
 	Convert();
-	Convert(const Convert &c) { };
-	Convert& operator=(const Convert &c) { return *this; };
+	Convert(const Convert &/*c*/) { };
+	Convert& operator=(const Convert &/*c*/) { return *this; };
 	
 	static Convert *convertInstance;
 	

@@ -371,7 +371,7 @@ ExpressionTree::Node ExpressionTree::EvaluateNextNode(wxString &expression, wxSt
 					unsigned long set;
 					if (expression.Mid(i + 1, end - i - 1).ToULong(&set))
 					{
-						if (set >= 0 && set <= list.GetCount())
+						if (set <= list.GetCount())
 							newSet = GetSetFromList(set) * -1.0;
 						else
 						{
@@ -482,7 +482,7 @@ ExpressionTree::Node ExpressionTree::EvaluateNextNode(wxString &expression, wxSt
 
 				if (expression.Mid(1, end - 1).ToULong(&i))
 				{
-					if (i >= 0 && i <= list.GetCount())
+					if (i <= list.GetCount())
 						newSet = GetSetFromList(i);
 					else
 					{
