@@ -327,7 +327,6 @@ void Iteration::UpdateData(void)
 		wxMilliSleep(50);
 	}
 
-	// Call the UpdateAutoAssociate method
 	UpdateAutoAssociate();
 
 	// If we don't have any associated cars, then don't do anything
