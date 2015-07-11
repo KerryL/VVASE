@@ -94,16 +94,16 @@ MainTree::MainTree(MainFrame &_mainFrame, wxWindowID id, const wxPoint& pos,
 	iconHandle[OptimizationIcon] = iconList->Add(wxIcon(_T("ICON_ID_OPTIMIZATION"),
 		wxBITMAP_TYPE_ICO_RESOURCE, size, size));
 #elif __WXGTK__
-	iconHandle[CarIcon] = iconList->Add(wxIcon(car16_xpm, wxBITMAP_TYPE_XPM));
-	iconHandle[AerodynamicsIcon] = iconList->Add(wxIcon(aero16_xpm, wxBITMAP_TYPE_XPM));
-	iconHandle[BrakesIcon] = iconList->Add(wxIcon(brakes16_xpm, wxBITMAP_TYPE_XPM));
-	iconHandle[DrivetrainIcon] = iconList->Add(wxIcon(drivetrain16_xpm, wxBITMAP_TYPE_XPM));
-	iconHandle[EngineIcon] = iconList->Add(wxIcon(engine16_xpm, wxBITMAP_TYPE_XPM));
-	iconHandle[MassPropertiesIcon] = iconList->Add(wxIcon(massProperties16_xpm, wxBITMAP_TYPE_XPM));
-	iconHandle[SuspensionIcon] = iconList->Add(wxIcon(suspension16_xpm, wxBITMAP_TYPE_XPM));
-	iconHandle[TiresIcon] = iconList->Add(wxIcon(tires16_xpm, wxBITMAP_TYPE_XPM));
-	iconHandle[IterationIcon] = iconList->Add(wxIcon(iteration16_xpm, wxBITMAP_TYPE_XPM));
-	iconHandle[OptimizationIcon] = iconList->Add(wxIcon(optimization16_xpm, wxBITMAP_TYPE_XPM));
+	iconHandle[CarIcon] = iconList->Add(wxIcon(car16_xpm));
+	iconHandle[AerodynamicsIcon] = iconList->Add(wxIcon(aero16_xpm));
+	iconHandle[BrakesIcon] = iconList->Add(wxIcon(brakes16_xpm));
+	iconHandle[DrivetrainIcon] = iconList->Add(wxIcon(drivetrain16_xpm));
+	iconHandle[EngineIcon] = iconList->Add(wxIcon(engine16_xpm));
+	iconHandle[MassPropertiesIcon] = iconList->Add(wxIcon(massProperties16_xpm));
+	iconHandle[SuspensionIcon] = iconList->Add(wxIcon(suspension16_xpm));
+	iconHandle[TiresIcon] = iconList->Add(wxIcon(tires16_xpm));
+	iconHandle[IterationIcon] = iconList->Add(wxIcon(iteration16_xpm));
+	iconHandle[OptimizationIcon] = iconList->Add(wxIcon(optimization16_xpm));
 #endif
 
 	// Assign the image list to the tree

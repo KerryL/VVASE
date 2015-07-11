@@ -31,7 +31,7 @@ OBJS = $(addprefix $(OBJDIR),$(SRC:.cpp=.o))
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
-	$(CC) $(OBJS) $(LDFLAGS) -L$(LIBOUTDIR) $(addprefix -l,$(PSLIB)) -o $(BINDIR)$@
+	$(CC) $(OBJS) -L$(LIBOUTDIR) $(addprefix -l,$(PSLIB)) $(LDFLAGS) -o $(BINDIR)$@
 
 $(OBJDIR)%.o: %.cpp
 	$(MKDIR) $(dir $@)

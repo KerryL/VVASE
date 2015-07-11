@@ -7,8 +7,7 @@
 # DO NOT include the -I prefix to these paths - it will
 # be added automatically
 INCDIRS_TEMP = \
-	$(PWD)/common/include \
-	$(FTGLINC)
+	$(PWD)/common/include
 
 INCDIRS = $(addprefix -I,$(INCDIRS_TEMP))
 
@@ -24,8 +23,7 @@ LIBDIRS = $(addprefix -L,$(LIBDIRS_TEMP))
 # DO NOT include the -l prefix to these libraries - it
 # will be added automatically
 LIBS_TEMP = \
-	ftgl \
-	wx_gtk2d_gl-2.8
+	
 
 LIBS = $(addprefix -l,$(LIBS_TEMP))
 
@@ -49,19 +47,19 @@ AR = ar rcs
 RANLIB = ranlib
 
 # Compiler flags
-CFLAGS = -g -Wall $(INCDIRS) `wx-config --cppflags` `freetype-config --cflags` -DwxUSE_GUI=1 -D_VVASE_64_BIT_ -I./include -Wno-unused-local-typedefs
+CFLAGS = -g -Wall -Wextra $(INCDIRS) -I./include `wx-config --version=3.0 --cppflags` `pkg-config --cflags ftgl,gl` -DwxUSE_GUI=1 -D_VVASE_64_BIT_ -Wno-unused-local-typedefs
 
 # Linker flags
-LDFLAGS = $(LIBDIRS) $(LIBS) `wx-config --libs` `freetype-config --libs`
+LDFLAGS = $(LIBDIRS) $(LIBS) `wx-config --version=3.0 --libs all` `pkg-config --libs ftgl,gl`
 
 # Object file output directory
-OBJDIR = $(PWD)/.obj/
+OBJDIR = $(CURDIR)/../.obj/
 
 # Binary file output directory
-BINDIR = $(PWD)/bin/
+BINDIR = $(CURDIR)/../bin/
 
 # Library output directory
-LIBOUTDIR = $(PWD)/.lib/
+LIBOUTDIR = $(CURDIR)/../.lib/
 
 # Method for creating directories
 MKDIR = mkdir -p

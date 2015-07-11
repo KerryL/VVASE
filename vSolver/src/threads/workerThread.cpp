@@ -184,7 +184,7 @@ void WorkerThread::OnJob()
 
 		// Determine elapsed time and print to the screen
 		Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "Elapsed Time: %s",
-					 wxDateTime::UNow().Subtract(start).Format().c_str());
+					 wxDateTime::UNow().Subtract(start).Format().ToUTF8().data());
 
 		// Tell the main thread that we're done the job
 		jobQueue->Report(job.command, id, job.index);

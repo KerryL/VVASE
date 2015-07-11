@@ -40,11 +40,11 @@ public:
 
 	// Private data accessors
 	unsigned int Add(T *toAdd);
-	virtual void Remove(const unsigned int &index);
+	void Remove(const unsigned int &index);
 	inline unsigned int GetCount(void) const { return list.size(); };
 
 	// Removes all objects from the list
-	virtual void Clear(void);
+	void Clear(void);
 
 	// Re-organizes the data in the list
 	void ReorderObjects(const std::vector<unsigned int> &order);

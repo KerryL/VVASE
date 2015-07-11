@@ -322,9 +322,9 @@ void MainFrame::SetProperties(void)
 	bundle.AddIcon(wxIcon(_T("ICON_ID_MAIN"), wxBITMAP_TYPE_ICO_RESOURCE, 32, 32));
 	bundle.AddIcon(wxIcon(_T("ICON_ID_MAIN"), wxBITMAP_TYPE_ICO_RESOURCE, 48, 48));
 #elif __WXGTK__
-	bundle.AddIcon(wxIcon(aavase16_xpm, wxBITMAP_TYPE_XPM));
-	bundle.AddIcon(wxIcon(aavase32_xpm, wxBITMAP_TYPE_XPM));
-	bundle.AddIcon(wxIcon(aavase48_xpm, wxBITMAP_TYPE_XPM));
+	bundle.AddIcon(wxIcon(aavase16_xpm));
+	bundle.AddIcon(wxIcon(aavase32_xpm));
+	bundle.AddIcon(wxIcon(aavase48_xpm));
 #endif
 	SetIcons(bundle);
 
@@ -1143,7 +1143,7 @@ void MainFrame::FileWriteImageFileEvent(wxCommandEvent& WXUNUSED(event))
 
 	// Call the object's write image file method
 	if (openObjectList[objectOfInterestIndex]->WriteImageToFile(pathAndFileName[0]))
-		Debugger::GetInstance().Print(Debugger::PriorityHigh, "Image file written to %s", pathAndFileName[0].c_str());
+		Debugger::GetInstance().Print(Debugger::PriorityHigh, "Image file written to %s", pathAndFileName[0].ToUTF8().data());
 	else
 		Debugger::GetInstance().Print(_T("Image file NOT written!"), Debugger::PriorityHigh);
 }

@@ -516,9 +516,9 @@ void GAObject::PerformAdditionalActions(void)
 	// Display the average and best fitnesses
 	Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "Completed Generation %i", currentGeneration + 1);
 	Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "\tAverage Fitness:  %s",
-		Convert::GetInstance().FormatNumber(averageFitness).c_str());
+		Convert::GetInstance().FormatNumber(averageFitness).ToUTF8().data());
 	Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "\tBest Fitness:     %s",
-		Convert::GetInstance().FormatNumber(maximumFitness).c_str());
+		Convert::GetInstance().FormatNumber(maximumFitness).ToUTF8().data());
 
 	// Check to see if the simulation is still running
 	if (currentGeneration == generationLimit - 1)
