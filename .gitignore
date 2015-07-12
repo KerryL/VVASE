@@ -22,3 +22,4 @@ VVASEdebug.log
 *.suo
 /vUtilities/.obj/
 *.bak
+*.swp
