@@ -192,6 +192,8 @@ void OptionsDialog::CreateControls(void)
 	unitSelectionSizer->Add(angleLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfAngle, 0, unitFlags);
 	unitSelectionSizer->AddSpacer(middleSpaceWidth);
+	// Work-around for value not being set properly if initial string contains exponent (ANSI build)
+	unitOfAngle->ChangeValue(Convert::GetInstance().GetUnitType(Convert::UnitTypeAngle));
 
 	// Distance
 	choices.Clear();
@@ -204,6 +206,8 @@ void OptionsDialog::CreateControls(void)
 	SetMinimumWidthFromContents(unitOfDistance, additionalWidth);
 	unitSelectionSizer->Add(DistanceLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfDistance, 0, unitFlags);
+	// Work-around for value not being set properly if initial string contains exponent (ANSI build)
+	unitOfDistance->ChangeValue(Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance));
 
 	// Area
 	choices.Clear();
@@ -217,6 +221,8 @@ void OptionsDialog::CreateControls(void)
 	unitSelectionSizer->Add(AreaLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfArea, 0, unitFlags);
 	unitSelectionSizer->AddSpacer(middleSpaceWidth);
+	// Work-around for value not being set properly if initial string contains exponent (ANSI build)
+	unitOfArea->ChangeValue(Convert::GetInstance().GetUnitType(Convert::UnitTypeArea));
 
 	// Force
 	choices.Clear();
@@ -229,6 +235,7 @@ void OptionsDialog::CreateControls(void)
 	SetMinimumWidthFromContents(unitOfForce, additionalWidth);
 	unitSelectionSizer->Add(ForceLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfForce, 0, unitFlags);
+	unitOfForce->ChangeValue(Convert::GetInstance().GetUnitType(Convert::UnitTypeForce));
 
 	// Pressure
 	choices.Clear();
@@ -242,6 +249,7 @@ void OptionsDialog::CreateControls(void)
 	unitSelectionSizer->Add(PressureLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfPressure, 0, unitFlags);
 	unitSelectionSizer->AddSpacer(middleSpaceWidth);
+	unitOfPressure->ChangeValue(Convert::GetInstance().GetUnitType(Convert::UnitTypePressure));
 
 	// Moment
 	choices.Clear();
@@ -254,6 +262,7 @@ void OptionsDialog::CreateControls(void)
 	SetMinimumWidthFromContents(unitOfMoment, additionalWidth);
 	unitSelectionSizer->Add(MomentLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfMoment, 0, unitFlags);
+	unitOfMoment->ChangeValue(Convert::GetInstance().GetUnitType(Convert::UnitTypeMoment));
 
 	// Mass
 	choices.Clear();
@@ -267,6 +276,7 @@ void OptionsDialog::CreateControls(void)
 	unitSelectionSizer->Add(MassLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfMass, 0, unitFlags);
 	unitSelectionSizer->AddSpacer(middleSpaceWidth);
+	unitOfMass->ChangeValue(Convert::GetInstance().GetUnitType(Convert::UnitTypeMass));
 
 	// Velocity
 	choices.Clear();
@@ -279,6 +289,7 @@ void OptionsDialog::CreateControls(void)
 	SetMinimumWidthFromContents(unitOfVelocity, additionalWidth);
 	unitSelectionSizer->Add(VelocityLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfVelocity, 0, unitFlags);
+	unitOfVelocity->ChangeValue(Convert::GetInstance().GetUnitType(Convert::UnitTypeVelocity));
 
 	// Acceleration
 	choices.Clear();
@@ -292,6 +303,7 @@ void OptionsDialog::CreateControls(void)
 	unitSelectionSizer->Add(AccelerationLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfAcceleration, 0, unitFlags);
 	unitSelectionSizer->AddSpacer(middleSpaceWidth);
+	unitOfAcceleration->ChangeValue(Convert::GetInstance().GetUnitType(Convert::UnitTypeAcceleration));
 
 	// Inertia
 	choices.Clear();
@@ -304,6 +316,7 @@ void OptionsDialog::CreateControls(void)
 	SetMinimumWidthFromContents(unitOfInertia, additionalWidth);
 	unitSelectionSizer->Add(InertiaLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfInertia, 0, unitFlags);
+	unitOfInertia->ChangeValue(Convert::GetInstance().GetUnitType(Convert::UnitTypeInertia));
 
 	// Density
 	choices.Clear();
@@ -317,6 +330,7 @@ void OptionsDialog::CreateControls(void)
 	unitSelectionSizer->Add(DensityLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfDensity, 0, unitFlags);
 	unitSelectionSizer->AddSpacer(middleSpaceWidth);
+	unitOfDensity->ChangeValue(Convert::GetInstance().GetUnitType(Convert::UnitTypeDensity));
 
 	// Power
 	choices.Clear();
@@ -329,6 +343,7 @@ void OptionsDialog::CreateControls(void)
 	SetMinimumWidthFromContents(unitOfPower, additionalWidth);
 	unitSelectionSizer->Add(PowerLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfPower, 0, unitFlags);
+	unitOfPower->ChangeValue(Convert::GetInstance().GetUnitType(Convert::UnitTypePower));
 
 	// Energy
 	choices.Clear();
@@ -342,6 +357,7 @@ void OptionsDialog::CreateControls(void)
 	unitSelectionSizer->Add(EnergyLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfEnergy, 0, unitFlags);
 	unitSelectionSizer->AddSpacer(middleSpaceWidth);
+	unitOfEnergy->ChangeValue(Convert::GetInstance().GetUnitType(Convert::UnitTypeEnergy));
 
 	// Temperature
 	choices.Clear();
@@ -354,6 +370,7 @@ void OptionsDialog::CreateControls(void)
 	SetMinimumWidthFromContents(unitOfTemperature, additionalWidth);
 	unitSelectionSizer->Add(TemperatureLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfTemperature, 0, unitFlags);
+	unitOfTemperature->ChangeValue(Convert::GetInstance().GetUnitType(Convert::UnitTypeTemperature));
 
 	// Set the unit page's sizer
 	unitsPage->SetSizer(unitsTopSizer);

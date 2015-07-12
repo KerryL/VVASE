@@ -80,7 +80,7 @@ int SafelyGetComboBoxSelection(wxComboBox *control)
 		unsigned int i;
 		for (i = 0; i < control->GetCount(); i++)
 		{
-			if (control->GetString(i).compare(control->GetValue()) == 0)
+			if (control->GetString(i).IsSameAs(control->GetValue()))
 			{
 				selection = i;
 				break;
