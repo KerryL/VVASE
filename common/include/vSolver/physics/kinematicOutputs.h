@@ -29,7 +29,7 @@
 
 // VVASE headers
 #include "vMath/vector.h"
-#include "vUtilities/convert.h"
+#include "vUtilities/unitConverter.h"
 #include "vCar/corner.h"
 
 // VVASE forward declarations
@@ -184,7 +184,7 @@ public:
 	double GetOutputValue(const OutputsComplete &_output) const;
 
 	// For determining unit type of the outputs
-	static Convert::UnitType GetOutputUnitType(const OutputsComplete &_output);
+	static UnitConverter::UnitType GetOutputUnitType(const OutputsComplete &_output);
 
 	// For determining the name of an output from the OutputsComplete list
 	static wxString GetOutputName(const OutputsComplete &_output);
@@ -207,10 +207,10 @@ private:
 	static wxString GetVectorName(const OutputsVector &_output);
 
 	// For retrieving units of the outputs
-	static Convert::UnitType GetCornerDoubleUnitType(const CornerOutputsDouble &_output);
-	static Convert::UnitType GetCornerVectorUnitType(const CornerOutputsVector &_output);
-	static Convert::UnitType GetDoubleUnitType(const OutputsDouble &_output);
-	static Convert::UnitType GetVectorUnitType(const OutputsVector &_output);
+	static UnitConverter::UnitType GetCornerDoubleUnitType(const CornerOutputsDouble &_output);
+	static UnitConverter::UnitType GetCornerVectorUnitType(const CornerOutputsVector &_output);
+	static UnitConverter::UnitType GetDoubleUnitType(const OutputsDouble &_output);
+	static UnitConverter::UnitType GetVectorUnitType(const OutputsVector &_output);
 
 	// Initializes all outputs to QNAN
 	void InitializeAllOutputs(void);

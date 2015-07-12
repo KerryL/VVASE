@@ -20,7 +20,7 @@
 #include "gui/components/editPanel/editPanel.h"
 #include "gui/components/editPanel/iteration/editIterationRangePanel.h"
 #include "gui/components/editPanel/iteration/editIterationNotebook.h"
-#include "vUtilities/convert.h"
+#include "vUtilities/unitConverter.h"
 
 //==========================================================================
 // Class:			EditIterationRangePanel
@@ -148,27 +148,27 @@ void EditIterationRangePanel::UpdateInformation(Iteration *_currentIteration)
 
 	// Update the values of our Range and NumberOfPoints to the text boxes
 	// Don't forget to convert the range values to the user specified units!
-	startPitchInput->ChangeValue(Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertAngle(currentIteration->GetRange().startPitch)));
-	startRollInput->ChangeValue(Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertAngle(currentIteration->GetRange().startRoll)));
-	startHeaveInput->ChangeValue(Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(currentIteration->GetRange().startHeave)));
-	startSteerInput->ChangeValue(Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(currentIteration->GetRange().startRackTravel)));
-	endPitchInput->ChangeValue(Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertAngle(currentIteration->GetRange().endPitch)));
-	endRollInput->ChangeValue(Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertAngle(currentIteration->GetRange().endRoll)));
-	endHeaveInput->ChangeValue(Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(currentIteration->GetRange().endHeave)));
-	endSteerInput->ChangeValue(Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(currentIteration->GetRange().endRackTravel)));
+	startPitchInput->ChangeValue(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertAngleOutput(currentIteration->GetRange().startPitch)));
+	startRollInput->ChangeValue(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertAngleOutput(currentIteration->GetRange().startRoll)));
+	startHeaveInput->ChangeValue(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertDistanceOutput(currentIteration->GetRange().startHeave)));
+	startSteerInput->ChangeValue(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertDistanceOutput(currentIteration->GetRange().startRackTravel)));
+	endPitchInput->ChangeValue(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertAngleOutput(currentIteration->GetRange().endPitch)));
+	endRollInput->ChangeValue(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertAngleOutput(currentIteration->GetRange().endRoll)));
+	endHeaveInput->ChangeValue(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertDistanceOutput(currentIteration->GetRange().endHeave)));
+	endSteerInput->ChangeValue(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertDistanceOutput(currentIteration->GetRange().endRackTravel)));
 
 	// Update the unit labels
-	pitchUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(Convert::UnitTypeAngle));
-	rollUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(Convert::UnitTypeAngle));
-	heaveUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance));
+	pitchUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeAngle));
+	rollUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeAngle));
+	heaveUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance));
 	if (currentIteration->GetMainFrame().GetUseRackTravel())
 	{
-		steerUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance));
+		steerUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance));
 		steerInputLabel->SetLabel(_T("Rack Travel"));
 	}
 	else
 	{
-		steerUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(Convert::UnitTypeAngle));
+		steerUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeAngle));
 		steerInputLabel->SetLabel(_T("Steering Wheel Angle"));
 	}
 
@@ -219,7 +219,7 @@ void EditIterationRangePanel::CreateControls()
 	// Add the static text and text controls to these sizers
 	// Pitch
 	int textBoxWidth;
-	GetTextExtent(Convert::GetInstance().FormatNumber(-888.0), &textBoxWidth, NULL);
+	GetTextExtent(UnitConverter::GetInstance().FormatNumber(-888.0), &textBoxWidth, NULL);
 
 	startPitchInput = new wxTextCtrl(this, RangeTextBox);
 	endPitchInput = new wxTextCtrl(this, RangeTextBox);
@@ -328,14 +328,14 @@ void EditIterationRangePanel::RangeTextBoxChangeEvent(wxCommandEvent& WXUNUSED(e
 	}
 
 	// Convert the range from the user specified units
-	range.startPitch = Convert::GetInstance().ReadAngle(range.startPitch);
-	range.startRoll = Convert::GetInstance().ReadAngle(range.startRoll);
-	range.startHeave = Convert::GetInstance().ReadDistance(range.startHeave);
-	range.startRackTravel = Convert::GetInstance().ReadDistance(range.startRackTravel);
-	range.endPitch = Convert::GetInstance().ReadAngle(range.endPitch);
-	range.endRoll = Convert::GetInstance().ReadAngle(range.endRoll);
-	range.endHeave = Convert::GetInstance().ReadDistance(range.endHeave);
-	range.endRackTravel = Convert::GetInstance().ReadDistance(range.endRackTravel);
+	range.startPitch = UnitConverter::GetInstance().ConvertAngleInput(range.startPitch);
+	range.startRoll = UnitConverter::GetInstance().ConvertAngleInput(range.startRoll);
+	range.startHeave = UnitConverter::GetInstance().ConvertDistanceInput(range.startHeave);
+	range.startRackTravel = UnitConverter::GetInstance().ConvertDistanceInput(range.startRackTravel);
+	range.endPitch = UnitConverter::GetInstance().ConvertAngleInput(range.endPitch);
+	range.endRoll = UnitConverter::GetInstance().ConvertAngleInput(range.endRoll);
+	range.endHeave = UnitConverter::GetInstance().ConvertDistanceInput(range.endHeave);
+	range.endRackTravel = UnitConverter::GetInstance().ConvertDistanceInput(range.endRackTravel);
 
 	// Update the iteration's range and number of points
 	currentIteration->SetRange(range);

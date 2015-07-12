@@ -20,7 +20,7 @@
 #include "gui/components/editPanel/editPanel.h"
 #include "gui/components/editPanel/iteration/editIterationOptionsPanel.h"
 #include "gui/components/editPanel/iteration/editIterationNotebook.h"
-#include "vUtilities/convert.h"
+#include "vUtilities/unitConverter.h"
 #include "vUtilities/debugger.h"
 
 //==========================================================================

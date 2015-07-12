@@ -29,7 +29,7 @@
 // Description:		Constructor for the DataValidator class.
 //
 // Input Arguments:
-//		_unit			= const Convert::UnitType& specifying the type of data we
+//		_unit			= const UnitConverter::UnitType& specifying the type of data we
 //						  represent
 //		_valPtr			= double* pointer to the data we represent
 //		_numberClass	= const NumberClass& specifying additional limits
@@ -41,7 +41,7 @@
 //		None
 //
 //==========================================================================
-DataValidator::DataValidator(const Convert::UnitType &_unit, double *_valPtr,
+DataValidator::DataValidator(const UnitConverter::UnitType &_unit, double *_valPtr,
 	const NumberClass &_numberClass) : wxTextValidator(wxFILTER_NUMERIC)
 {
 	assert(_numberClass != ClassInclusiveRange && _numberClass != ClassExclusiveRange);
@@ -63,7 +63,7 @@ DataValidator::DataValidator(const Convert::UnitType &_unit, double *_valPtr,
 //					enforcing numeric ranges.
 //
 // Input Arguments:
-//		_unit			= const Convert::UnitType& specifying the type of data we
+//		_unit			= const UnitConverter::UnitType& specifying the type of data we
 //						  represent
 //		_min			= const double&, minimum acceptable value for the data
 //		_max			= const double&, maximum acceptable value for the data
@@ -77,7 +77,7 @@ DataValidator::DataValidator(const Convert::UnitType &_unit, double *_valPtr,
 //		None
 //
 //==========================================================================
-DataValidator::DataValidator(const Convert::UnitType &_unit, const double &_min,
+DataValidator::DataValidator(const UnitConverter::UnitType &_unit, const double &_min,
 		const double &_max, double *_valPtr, const NumberClass &_numberClass)
 		: wxTextValidator(wxFILTER_NUMERIC)
 {
@@ -142,8 +142,8 @@ bool DataValidator::TransferToWindow(void)
 	if (valPtr)
 	{
 		static_cast<wxTextCtrl*>(m_validatorWindow)->SetValue(
-			Convert::GetInstance().FormatNumber(
-			Convert::GetInstance().ConvertTo(*valPtr, unit)));
+			UnitConverter::GetInstance().FormatNumber(
+			UnitConverter::GetInstance().ConvertOutput(*valPtr, unit)));
 	}
 	
 	return true;
@@ -176,7 +176,7 @@ bool DataValidator::TransferFromWindow(void)
 		if (!static_cast<wxTextCtrl*>(m_validatorWindow)->GetValue().ToDouble(&value))
 			return false;
 		
-		*valPtr = Convert::GetInstance().Read(value, unit);
+		*valPtr = UnitConverter::GetInstance().ConvertInput(value, unit);
 	}
 	
 	return true;

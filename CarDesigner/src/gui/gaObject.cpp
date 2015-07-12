@@ -29,7 +29,7 @@
 #include "vCar/car.h"
 #include "vCar/suspension.h"
 #include "vMath/carMath.h"
-#include "vUtilities/convert.h"
+#include "vUtilities/unitConverter.h"
 #include "vUtilities/debugger.h"
 #include "vUtilities/machineDefinitions.h"
 #include "vSolver/threads/jobQueue.h"
@@ -516,9 +516,9 @@ void GAObject::PerformAdditionalActions(void)
 	// Display the average and best fitnesses
 	Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "Completed Generation %i", currentGeneration + 1);
 	Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "\tAverage Fitness:  %s",
-		Convert::GetInstance().FormatNumber(averageFitness).ToUTF8().data());
+		UnitConverter::GetInstance().FormatNumber(averageFitness).ToUTF8().data());
 	Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "\tBest Fitness:     %s",
-		Convert::GetInstance().FormatNumber(maximumFitness).ToUTF8().data());
+		UnitConverter::GetInstance().FormatNumber(maximumFitness).ToUTF8().data());
 
 	// Check to see if the simulation is still running
 	if (currentGeneration == generationLimit - 1)

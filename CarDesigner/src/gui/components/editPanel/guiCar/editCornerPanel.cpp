@@ -27,7 +27,7 @@
 #include "gui/components/editPanel/editPanel.h"
 #include "gui/components/editPanel/guiCar/editCornerPanel.h"
 #include "gui/components/editPanel/guiCar/editSuspensionNotebook.h"
-#include "vUtilities/convert.h"
+#include "vUtilities/unitConverter.h"
 #include "vUtilities/wxRelatedUtilities.h"
 #include "vMath/vector.h"
 
@@ -136,21 +136,21 @@ void EditCornerPanel::UpdateInformation(Corner *_currentCorner,
 	actuationAttachment->SetSelection(currentCorner->actuationAttachment);
 
 	// Update the static toe and camber
-	staticCamber->ChangeValue(Convert::GetInstance().FormatNumber(
-		Convert::GetInstance().ConvertAngle(currentCorner->staticCamber)));
-	staticToe->ChangeValue(Convert::GetInstance().FormatNumber(
-		Convert::GetInstance().ConvertAngle(currentCorner->staticToe)));
+	staticCamber->ChangeValue(UnitConverter::GetInstance().FormatNumber(
+		UnitConverter::GetInstance().ConvertAngleOutput(currentCorner->staticCamber)));
+	staticToe->ChangeValue(UnitConverter::GetInstance().FormatNumber(
+		UnitConverter::GetInstance().ConvertAngleOutput(currentCorner->staticToe)));
 
 	// And their units
-	camberUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(Convert::UnitTypeAngle));
-	toeUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(Convert::UnitTypeAngle));
+	camberUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeAngle));
+	toeUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeAngle));
 
 	// Begin batch edit of the grid
 	hardpoints->BeginBatch();
 
 	// Update the unit labels
 	wxString unitString;
-	unitString.Printf("(%s)", Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance).c_str());
+	unitString.Printf("(%s)", UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance).c_str());
 	hardpoints->SetCellValue(0, 1, unitString);
 	hardpoints->SetCellValue(0, 2, unitString);
 	hardpoints->SetCellValue(0, 3, unitString);
@@ -211,16 +211,16 @@ void EditCornerPanel::UpdateInformation(Corner *_currentCorner,
 	for (i = 0; i < Corner::NumberOfHardpoints; i++)
 	{
 		// Get the location of this hardpoint (don't forget to convert it!)
-		point = Convert::GetInstance().ConvertDistance(currentCorner->hardpoints[i]);
+		point = UnitConverter::GetInstance().ConvertDistanceOutput(currentCorner->hardpoints[i]);
 
 		// Set the X value
-		hardpoints->SetCellValue(i + 1, 1, Convert::GetInstance().FormatNumber(point.x));
+		hardpoints->SetCellValue(i + 1, 1, UnitConverter::GetInstance().FormatNumber(point.x));
 
 		// Set the Y value
-		hardpoints->SetCellValue(i + 1, 2, Convert::GetInstance().FormatNumber(point.y));
+		hardpoints->SetCellValue(i + 1, 2, UnitConverter::GetInstance().FormatNumber(point.y));
 
 		// Set the Z value
-		hardpoints->SetCellValue(i + 1, 3, Convert::GetInstance().FormatNumber(point.z));
+		hardpoints->SetCellValue(i + 1, 3, UnitConverter::GetInstance().FormatNumber(point.z));
 	}
 
 	// End batch edit of the grid
@@ -315,7 +315,7 @@ void EditCornerPanel::CreateControls()
 	// Size the columns
 	// The X, Y, and Z columns should be big enough to fit 80.0 as formatted
 	// by the converter.  First column is stretchable
-	hardpoints->SetCellValue(3, 3, Convert::GetInstance().FormatNumber(80.0));
+	hardpoints->SetCellValue(3, 3, UnitConverter::GetInstance().FormatNumber(80.0));
 	hardpoints->AutoSizeColumn(3);
 	hardpoints->SetColumnWidth(1, hardpoints->GetColSize(3));
 	hardpoints->SetColumnWidth(2, hardpoints->GetColSize(3));
@@ -399,8 +399,8 @@ void EditCornerPanel::CreateControls()
 	lowerInputSizer->Add(toeUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 	
 	// Choose text box min width based on a formatted number in the appropriate units
-	staticCamber->SetMinSize(wxSize(Convert::GetInstance().ConvertAngle(-3.0), -1));
-	staticToe->SetMinSize(wxSize(Convert::GetInstance().ConvertAngle(-3.0), -1));
+	staticCamber->SetMinSize(wxSize(UnitConverter::GetInstance().ConvertAngleOutput(-3.0), -1));
+	staticToe->SetMinSize(wxSize(UnitConverter::GetInstance().ConvertAngleOutput(-3.0), -1));
 
 	mainSizer->AddGrowableRow(0);
 	mainSizer->AddGrowableRow(1);
@@ -519,7 +519,7 @@ void EditCornerPanel::GridCellChangedEvent(wxGridEvent &event)
 				&(currentCorner->hardpoints[event.GetRow() - 1].x));
 
 			currentCorner->hardpoints[event.GetRow() - 1].x =
-				Convert::GetInstance().ReadDistance(value);
+				UnitConverter::GetInstance().ConvertDistanceInput(value);
 		}
 		else if (event.GetCol() == 2)// Y
 		{
@@ -530,7 +530,7 @@ void EditCornerPanel::GridCellChangedEvent(wxGridEvent &event)
 				&(currentCorner->hardpoints[event.GetRow() - 1].y));
 
 			currentCorner->hardpoints[event.GetRow() - 1].y =
-				Convert::GetInstance().ReadDistance(value);
+				UnitConverter::GetInstance().ConvertDistanceInput(value);
 		}
 		else// Z
 		{
@@ -541,16 +541,12 @@ void EditCornerPanel::GridCellChangedEvent(wxGridEvent &event)
 				&(currentCorner->hardpoints[event.GetRow() - 1].z));
 
 			currentCorner->hardpoints[event.GetRow() - 1].z =
-				Convert::GetInstance().ReadDistance(value);
+				UnitConverter::GetInstance().ConvertDistanceInput(value);
 		}
-
-		// Call the UpdateSymmetry method in case this is a symmetric suspension
-		parent.UpdateSymmetry();
 		
-		// Unlock the car
+		parent.UpdateSymmetry();
 		mutex->Unlock();
 
-		// Tell the car object that it was modified
 		parent.GetParent().GetCurrentObject()->SetModified();
 
 		// Set the position of the helper orb
@@ -689,7 +685,7 @@ void EditCornerPanel::StaticCamberChangeEvent(wxCommandEvent &event)
 	{
 		// Restore the previous value
 		value = currentCorner->staticCamber;
-		valueString.Printf("%0.3f", Convert::GetInstance().ConvertAngle(value));
+		valueString.Printf("%0.3f", UnitConverter::GetInstance().ConvertAngleOutput(value));
 		staticCamber->SetValue(valueString);
 
 		return;
@@ -701,20 +697,14 @@ void EditCornerPanel::StaticCamberChangeEvent(wxCommandEvent &event)
 		UndoRedoStack::Operation::DataTypeDouble,
 		&(currentCorner->staticCamber));
 
-	// Get a lock on the car
 	wxMutex *mutex = parent.GetParent().GetCurrentMutex();
 	mutex->Lock();
 
-	// Update the corner object
-	currentCorner->staticCamber = Convert::GetInstance().ReadAngle(value);
-
-	// Call the UpdateSymmetry method in case this is a symmetric suspension
+	currentCorner->staticCamber = UnitConverter::GetInstance().ConvertAngleInput(value);
 	parent.UpdateSymmetry();
 	
-	// Unlock the car
 	mutex->Unlock();
 
-	// Tell the car object that it was modified
 	parent.GetParent().GetCurrentObject()->SetModified();
 
 	// Update the display and the kinematic outputs
@@ -751,7 +741,7 @@ void EditCornerPanel::StaticToeChangeEvent(wxCommandEvent &event)
 	{
 		// Restore the previous value
 		value = currentCorner->staticToe;
-		valueString.Printf("%0.3f", Convert::GetInstance().ConvertAngle(value));
+		valueString.Printf("%0.3f", UnitConverter::GetInstance().ConvertAngleOutput(value));
 		staticToe->SetValue(valueString);
 
 		return;
@@ -763,17 +753,15 @@ void EditCornerPanel::StaticToeChangeEvent(wxCommandEvent &event)
 		UndoRedoStack::Operation::DataTypeDouble,
 		&(currentCorner->staticToe));
 
-	// Get a lock on the car
 	wxMutex *mutex = parent.GetParent().GetCurrentMutex();
 	mutex->Lock();
 
 	// Update the corner object
-	currentCorner->staticToe = Convert::GetInstance().ReadAngle(value);
+	currentCorner->staticToe = UnitConverter::GetInstance().ConvertAngleInput(value);
 
 	// Call the UpdateSymmetry method in case this is a symmetric suspension
 	parent.UpdateSymmetry();
 	
-	// Unlock the car
 	mutex->Unlock();
 
 	// Tell the car object that it was modified

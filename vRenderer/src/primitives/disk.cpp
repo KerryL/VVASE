@@ -19,7 +19,7 @@
 #include "vRenderer/primitives/disk.h"
 #include "vRenderer/renderWindow.h"
 #include "vMath/carMath.h"
-#include "vUtilities/convert.h"
+#include "vUtilities/unitConverter.h"
 
 //==========================================================================
 // Class:			Disk
@@ -105,7 +105,7 @@ void Disk::GenerateGeometry(void)
 
 		// Rotate the current matrix, if the rotation axis is non-zero
 		if (!VVASEMath::IsZero(axisOfRotation.Length()))
-			glRotated(Convert::RAD_TO_DEG(angle), axisOfRotation.x, axisOfRotation.y, axisOfRotation.z);
+			glRotated(UnitConverter::RAD_TO_DEG(angle), axisOfRotation.x, axisOfRotation.y, axisOfRotation.z);
 
 		// Set the normal direction
 		glNormal3d(normal.x, normal.y, normal.z);

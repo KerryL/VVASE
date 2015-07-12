@@ -27,7 +27,7 @@
 #include "gui/ipcConnection.h"
 #include "vUtilities/debugLog.h"
 #include "vUtilities/debugger.h"
-#include "vUtilities/convert.h"
+#include "vUtilities/unitConverter.h"
 
 // Implement the application (have wxWidgets set up the appropriate entry points, etc.)
 IMPLEMENT_APP(VVASEApp);
@@ -166,7 +166,6 @@ int VVASEApp::OnExit()
 	DeleteDynamicMemory();
 	DebugLog::Kill();
 	Debugger::Kill();
-	Convert::Kill();
 
 	return 0;
 }

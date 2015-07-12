@@ -23,7 +23,7 @@
 #include <wx/valtext.h>
 
 // Local headers
-#include "vUtilities/convert.h"
+#include "vUtilities/unitConverter.h"
 
 class DataValidator : public wxTextValidator
 {
@@ -43,9 +43,9 @@ public:
 	};
 
 	// Constructors
-	DataValidator(const Convert::UnitType &_unit, double *_valPtr = NULL,
+	DataValidator(const UnitConverter::UnitType &_unit, double *_valPtr = NULL,
 		const NumberClass &_numberClass = ClassAll);
-	DataValidator(const Convert::UnitType &_unit, const double &_min,
+	DataValidator(const UnitConverter::UnitType &_unit, const double &_min,
 		const double &_max, double *_valPtr = NULL, const NumberClass &_numberClass = ClassInclusiveRange);
 	DataValidator(const DataValidator &dv);
 	
@@ -62,11 +62,10 @@ public:
 	virtual bool Validate(wxWindow *parent);
 
 	// Functions specific to our custom validator
-	void SetUnitType(const Convert::UnitType &_unit) { unit = _unit; };
+	void SetUnitType(const UnitConverter::UnitType &_unit) { unit = _unit; };
 
 private:
-	// The type of data we're validating
-	Convert::UnitType unit;
+	UnitConverter::UnitType unit;
 	
 	// Reference to the data we're protecting
 	double *valPtr;

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Session Name="/home/kerry/Projects/CarDesigner/VVASE.workspace">
+  <int Value="3" Name="m_selectedTab"/>
+  <wxString Value="/home/kerry/Projects/CarDesigner/VVASE.workspace" Name="m_workspaceName"/>
+  <TabInfoArray Name="TabInfoArray">
+    <TabInfo>
+      <wxString Value="/home/kerry/Projects/RigidBodyDynamics/src/dynamics/inverseDynamics.cpp" Name="FileName"/>
+      <int Value="47" Name="FirstVisibleLine"/>
+      <int Value="63" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="/home/kerry/Projects/RigidBodyDynamics/src/dynamics/loopConstraints.cpp" Name="FileName"/>
+      <int Value="148" Name="FirstVisibleLine"/>
+      <int Value="149" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="/home/kerry/Projects/RigidBodyDynamics/src/test/integration/dynamics/dynamicsTest.cpp" Name="FileName"/>
+      <int Value="394" Name="FirstVisibleLine"/>
+      <int Value="395" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="/home/kerry/Projects/RigidBodyDynamics/src/test/integration/threads/threadPoolTest.cpp" Name="FileName"/>
+      <int Value="62" Name="FirstVisibleLine"/>
+      <int Value="73" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="/home/kerry/Projects/RigidBodyDynamics/src/test/include/fakeWorkerThread.h" Name="FileName"/>
+      <int Value="51" Name="FirstVisibleLine"/>
+      <int Value="65" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="/home/kerry/Projects/RigidBodyDynamics/src/threads/threadPool.cpp" Name="FileName"/>
+      <int Value="99" Name="FirstVisibleLine"/>
+      <int Value="103" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="/home/kerry/Projects/RigidBodyDynamics/src/threads/workerThread.cpp" Name="FileName"/>
+      <int Value="6" Name="FirstVisibleLine"/>
+      <int Value="7" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+    </TabInfo>
+  </TabInfoArray>
+  <SerializedObject Name="m_breakpoints">
+    <long Value="1" Name="Count"/>
+    <SerializedObject Name="Breakpoint0">
+      <wxString Value="/home/kerry/Projects/RigidBodyDynamics/src/test/integration/utilities/expressionTree/expressionTreeTest.cpp" Name="file"/>
+      <int Value="129" Name="lineno"/>
+      <wxString Value="" Name="function_name"/>
+      <wxString Value="" Name="memory_address"/>
+      <int Value="1" Name="bp_type"/>
+      <int Value="0" Name="watchpoint_type"/>
+      <wxString Value="" Name="watchpt_data"/>
+      <CData Name="commandlist"/>
+      <bool Value="0" Name="regex"/>
+      <bool Value="0" Name="is_temp"/>
+      <bool Value="1" Name="is_enabled"/>
+      <int Value="0" Name="ignore_number"/>
+      <wxString Value="" Name="conditions"/>
+      <int Value="0" Name="origin"/>
+    </SerializedObject>
+  </SerializedObject>
+</Session>

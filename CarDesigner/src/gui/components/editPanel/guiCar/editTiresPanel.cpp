@@ -23,7 +23,7 @@
 #include "gui/components/mainFrame.h"
 #include "gui/components/editPanel/editPanel.h"
 #include "gui/components/editPanel/guiCar/editTiresPanel.h"
-#include "vUtilities/convert.h"
+#include "vUtilities/unitConverter.h"
 #include "vMath/vector.h"
 
 //==========================================================================
@@ -126,38 +126,38 @@ void EditTiresPanel::UpdateInformation(TireSet *_currentTireSet)
 	// FIXME:  Handle symmetry
 
 	// Update the text boxes
-	rightFrontTireDiameter->ChangeValue(Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(
+	rightFrontTireDiameter->ChangeValue(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertDistanceOutput(
 		currentTireSet->rightFront->diameter)));
-	rightFrontTireWidth->ChangeValue(Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(
+	rightFrontTireWidth->ChangeValue(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertDistanceOutput(
 		currentTireSet->rightFront->width)));
 
-	leftFrontTireDiameter->ChangeValue(Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(
+	leftFrontTireDiameter->ChangeValue(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertDistanceOutput(
 		currentTireSet->leftFront->diameter)));
-	leftFrontTireWidth->ChangeValue(Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(
+	leftFrontTireWidth->ChangeValue(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertDistanceOutput(
 		currentTireSet->leftFront->width)));
 
-	rightRearTireDiameter->ChangeValue(Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(
+	rightRearTireDiameter->ChangeValue(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertDistanceOutput(
 		currentTireSet->rightRear->diameter)));
-	rightRearTireWidth->ChangeValue(Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(
+	rightRearTireWidth->ChangeValue(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertDistanceOutput(
 		currentTireSet->rightRear->width)));
 
-	leftRearTireDiameter->ChangeValue(Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(
+	leftRearTireDiameter->ChangeValue(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertDistanceOutput(
 		currentTireSet->leftRear->diameter)));
-	leftRearTireWidth->ChangeValue(Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(
+	leftRearTireWidth->ChangeValue(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertDistanceOutput(
 		currentTireSet->leftRear->width)));
 
 	// And their units
-	rightFrontDiameterUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance));
-	rightFrontWidthUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance));
+	rightFrontDiameterUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance));
+	rightFrontWidthUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance));
 
-	leftFrontDiameterUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance));
-	leftFrontWidthUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance));
+	leftFrontDiameterUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance));
+	leftFrontWidthUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance));
 
-	rightRearDiameterUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance));
-	rightRearWidthUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance));
+	rightRearDiameterUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance));
+	rightRearWidthUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance));
 
-	leftRearDiameterUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance));
-	leftRearWidthUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance));
+	leftRearDiameterUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance));
+	leftRearWidthUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance));
 
 	// Update the sizers
 	/*int minWidth;
@@ -312,7 +312,7 @@ void EditTiresPanel::CreateControls()
 	// Adjust text box minimum size
 	// Use number larger than actual anticipated value for these boxes to determine appropriate size
 	int minWidth;
-	GetTextExtent(Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(-400.0)), &minWidth, NULL);
+	GetTextExtent(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertDistanceOutput(-400.0)), &minWidth, NULL);
 	rightFrontTireDiameter->SetMinSize(wxSize(minWidth, -1));
 	rightFrontTireWidth->SetMinSize(wxSize(minWidth, -1));
 	leftFrontTireDiameter->SetMinSize(wxSize(minWidth, -1));
@@ -358,14 +358,9 @@ void EditTiresPanel::RightFrontTireDiameterChangeEvent(wxCommandEvent &event)
 		UndoRedoStack::Operation::DataTypeDouble,
 		&(currentTireSet->rightFront->diameter));
 
-	// Get a lock on the car
 	wxMutex *mutex = parent.GetCurrentMutex();
 	mutex->Lock();
-
-	// Update the tire object
-	currentTireSet->rightFront->diameter = Convert::GetInstance().ReadDistance(value);
-
-	// Unlock the car
+	currentTireSet->rightFront->diameter = UnitConverter::GetInstance().ConvertDistanceInput(value);
 	mutex->Unlock();
 
 	// Call the UpdateSymmetry method in case this is a symmetric suspension
@@ -412,14 +407,9 @@ void EditTiresPanel::RightFrontTireWidthChangeEvent(wxCommandEvent &event)
 		UndoRedoStack::Operation::DataTypeDouble,
 		&(currentTireSet->rightFront->width));
 
-	// Get a lock on the car
 	wxMutex *mutex = parent.GetCurrentMutex();
 	mutex->Lock();
-
-	// Update the tire object
-	currentTireSet->rightFront->width = Convert::GetInstance().ReadDistance(value);
-
-	// Unlock the car
+	currentTireSet->rightFront->width = UnitConverter::GetInstance().ConvertDistanceInput(value);
 	mutex->Unlock();
 
 	// Call the UpdateSymmetry method in case this is a symmetric suspension
@@ -466,14 +456,9 @@ void EditTiresPanel::LeftFrontTireDiameterChangeEvent(wxCommandEvent &event)
 		UndoRedoStack::Operation::DataTypeDouble,
 		&(currentTireSet->leftFront->diameter));
 
-	// Get a lock on the car
 	wxMutex *mutex = parent.GetCurrentMutex();
 	mutex->Lock();
-
-	// Update the tire object
-	currentTireSet->leftFront->diameter = Convert::GetInstance().ReadDistance(value);
-
-	// Unlock the car
+	currentTireSet->leftFront->diameter = UnitConverter::GetInstance().ConvertDistanceInput(value);
 	mutex->Unlock();
 
 	// Call the UpdateSymmetry method in case this is a symmetric suspension
@@ -520,14 +505,9 @@ void EditTiresPanel::LeftFrontTireWidthChangeEvent(wxCommandEvent &event)
 		UndoRedoStack::Operation::DataTypeDouble,
 		&(currentTireSet->leftFront->width));
 
-	// Get a lock on the car
 	wxMutex *mutex = parent.GetCurrentMutex();
 	mutex->Lock();
-
-	// Update the tire object
-	currentTireSet->leftFront->width = Convert::GetInstance().ReadDistance(value);
-
-	// Unlock the car
+	currentTireSet->leftFront->width = UnitConverter::GetInstance().ConvertDistanceInput(value);
 	mutex->Unlock();
 
 	// Call the UpdateSymmetry method in case this is a symmetric suspension
@@ -579,7 +559,7 @@ void EditTiresPanel::RightRearTireDiameterChangeEvent(wxCommandEvent &event)
 	mutex->Lock();
 
 	// Update the tire object
-	currentTireSet->rightRear->diameter = Convert::GetInstance().ReadDistance(value);
+	currentTireSet->rightRear->diameter = UnitConverter::GetInstance().ConvertDistanceInput(value);
 
 	// Unlock the car
 	mutex->Unlock();
@@ -628,23 +608,15 @@ void EditTiresPanel::RightRearTireWidthChangeEvent(wxCommandEvent &event)
 		UndoRedoStack::Operation::DataTypeDouble,
 		&(currentTireSet->rightRear->width));
 
-	// Get a lock on the car
 	wxMutex *mutex = parent.GetCurrentMutex();
 	mutex->Lock();
-
-	// Update the tire object
-	currentTireSet->rightRear->width = Convert::GetInstance().ReadDistance(value);
-
-	// Unlock the car
+	currentTireSet->rightRear->width = UnitConverter::GetInstance().ConvertDistanceInput(value);
 	mutex->Unlock();
 
 	// Call the UpdateSymmetry method in case this is a symmetric suspension
 	//parent.UpdateSymmetry();// FIXME:  What if this is symmetric?
 
-	// Tell the car object that it was modified
 	parent.GetCurrentObject()->SetModified();
-
-	// Update the display and the kinematic outputs
 	parent.GetMainFrame().UpdateAnalysis();
 
 	event.Skip();
@@ -687,7 +659,7 @@ void EditTiresPanel::LeftRearTireDiameterChangeEvent(wxCommandEvent &event)
 	mutex->Lock();
 
 	// Update the tire object
-	currentTireSet->leftRear->diameter = Convert::GetInstance().ReadDistance(value);
+	currentTireSet->leftRear->diameter = UnitConverter::GetInstance().ConvertDistanceInput(value);
 
 	// Unlock the car
 	mutex->Unlock();
@@ -741,7 +713,7 @@ void EditTiresPanel::LeftRearTireWidthChangeEvent(wxCommandEvent &event)
 	mutex->Lock();
 
 	// Update the tire object
-	currentTireSet->leftRear->width = Convert::GetInstance().ReadDistance(value);
+	currentTireSet->leftRear->width = UnitConverter::GetInstance().ConvertDistanceInput(value);
 
 	// Unlock the car
 	mutex->Unlock();

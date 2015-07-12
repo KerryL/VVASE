@@ -348,26 +348,9 @@ void MainFrame::SetProperties(void)
 	menuBar->FindItem(IdMenuEditPaste)->Enable(false);
 	menuBar->FindItem(IdMenuToolsDoE)->Enable(false);
 	menuBar->FindItem(IdMenuToolsDynamic)->Enable(false);
-
-	// Set up the unit converter
-	Convert::GetInstance().SetDistanceUnits(Convert::INCH);
-	Convert::GetInstance().SetAreaUnits(Convert::INCH_SQUARED);
-	Convert::GetInstance().SetForceUnits(Convert::POUND_FORCE);
-	Convert::GetInstance().SetPressureUnits(Convert::POUND_FORCE_PER_SQUARE_INCH);
-	Convert::GetInstance().SetMomentUnits(Convert::FOOT_POUND_FORCE);
-	Convert::GetInstance().SetMassUnits(Convert::SLUG);
-	Convert::GetInstance().SetVelocityUnits(Convert::INCHES_PER_SECOND);
-	Convert::GetInstance().SetAccelerationUnits(Convert::INCHES_PER_SECOND_SQUARED);
-	Convert::GetInstance().SetInertiaUnits(Convert::SLUG_INCHES_SQUARED);
-	Convert::GetInstance().SetDensityUnits(Convert::SLUGS_PER_INCH_CUBED);
-	Convert::GetInstance().SetPowerUnits(Convert::HORSEPOWER);
-	Convert::GetInstance().SetEnergyUnits(Convert::BRITISH_THERMAL_UNIT);
-	Convert::GetInstance().SetTemperatureUnits(Convert::FAHRENHEIT);
 	
-	// Read defaults from config file, if it exists
 	ReadConfiguration();
-	
-	// OutputPane properties
+
 	wxString fontFaceName;
 	
 	// Check to see if we read the output font preference from the config file
@@ -1910,7 +1893,7 @@ void MainFrame::KinematicToolbarPitchChangeEvent(wxCommandEvent& WXUNUSED(event)
 		return;
 
 	// Set the value for the kinematic analysis object
-	kinematicInputs.pitch = Convert::GetInstance().ReadAngle(value);
+	kinematicInputs.pitch = UnitConverter::GetInstance().ConvertAngleInput(value);
 
 	// Update the analysis
 	UpdateAnalysis();
@@ -1949,7 +1932,7 @@ void MainFrame::KinematicToolbarRollChangeEvent(wxCommandEvent& WXUNUSED(event))
 		return;
 
 	// Set the value for the kinematic analysis object
-	kinematicInputs.roll = Convert::GetInstance().ReadAngle(value);
+	kinematicInputs.roll = UnitConverter::GetInstance().ConvertAngleInput(value);
 
 	// Update the analysis
 	UpdateAnalysis();
@@ -1988,7 +1971,7 @@ void MainFrame::KinematicToolbarHeaveChangeEvent(wxCommandEvent& WXUNUSED(event)
 		return;
 
 	// Set the value for the kinematic analysis object
-	kinematicInputs.heave = Convert::GetInstance().ReadDistance(value);
+	kinematicInputs.heave = UnitConverter::GetInstance().ConvertDistanceInput(value);
 
 	// Update the analysis
 	UpdateAnalysis();
@@ -2028,9 +2011,9 @@ void MainFrame::KinematicToolbarSteerChangeEvent(wxCommandEvent& WXUNUSED(event)
 
 	// Set the value for the kinematic analysis object depending on what the steering input represents
 	if (useRackTravel)
-		kinematicInputs.rackTravel = Convert::GetInstance().ReadDistance(value);
+		kinematicInputs.rackTravel = UnitConverter::GetInstance().ConvertDistanceInput(value);
 	else
-		kinematicInputs.rackTravel = Convert::GetInstance().ReadAngle(value) * 1.0;// * RackRatio;// FIXME:  Use rack ratio
+		kinematicInputs.rackTravel = UnitConverter::GetInstance().ConvertAngleInput(value) * 1.0;// * RackRatio;// FIXME:  Use rack ratio
 
 	// Update the analysis
 	UpdateAnalysis();
@@ -2411,43 +2394,43 @@ void MainFrame::ReadConfiguration(void)
 		wxCONFIG_USE_RELATIVE_PATH);
 
 	// Read UNITS configuration from file
-	Convert::GetInstance().SetAccelerationUnits(Convert::UnitsOfAcceleration(
+	UnitConverter::GetInstance().SetAccelerationUnits(UnitConverter::UnitsOfAcceleration(
 		configurationFile->Read(_T("/Units/Acceleration"), 0l)));
-	Convert::GetInstance().SetAngleUnits(Convert::UnitsOfAngle(
+	UnitConverter::GetInstance().SetAngleUnits(UnitConverter::UnitsOfAngle(
 		configurationFile->Read(_T("/Units/Angle"), 1l)));
-	Convert::GetInstance().SetAreaUnits(Convert::UnitsOfArea(
+	UnitConverter::GetInstance().SetAreaUnits(UnitConverter::UnitsOfArea(
 		configurationFile->Read(_T("/Units/Area"), 0l)));
-	Convert::GetInstance().SetDensityUnits(Convert::UnitsOfDensity(
+	UnitConverter::GetInstance().SetDensityUnits(UnitConverter::UnitsOfDensity(
 		configurationFile->Read(_T("/Units/Density"), 0l)));
-	Convert::GetInstance().SetDistanceUnits(Convert::UnitsOfDistance(
+	UnitConverter::GetInstance().SetDistanceUnits(UnitConverter::UnitsOfDistance(
 		configurationFile->Read(_T("/Units/Distance"), 0l)));
-	Convert::GetInstance().SetEnergyUnits(Convert::UnitsOfEnergy(
+	UnitConverter::GetInstance().SetEnergyUnits(UnitConverter::UnitsOfEnergy(
 		configurationFile->Read(_T("/Units/Energy"), 0l)));
-	Convert::GetInstance().SetForceUnits(Convert::UnitsOfForce(
+	UnitConverter::GetInstance().SetForceUnits(UnitConverter::UnitsOfForce(
 		configurationFile->Read(_T("/Units/Force"), 0l)));
-	Convert::GetInstance().SetInertiaUnits(Convert::UnitsOfInertia(
+	UnitConverter::GetInstance().SetInertiaUnits(UnitConverter::UnitsOfInertia(
 		configurationFile->Read(_T("/Units/Inertia"), 0l)));
-	Convert::GetInstance().SetMassUnits(Convert::UnitsOfMass(
+	UnitConverter::GetInstance().SetMassUnits(UnitConverter::UnitsOfMass(
 		configurationFile->Read(_T("/Units/Mass"), 0l)));
-	Convert::GetInstance().SetMomentUnits(Convert::UnitsOfMoment(
+	UnitConverter::GetInstance().SetMomentUnits(UnitConverter::UnitsOfMoment(
 		configurationFile->Read(_T("/Units/Moment"), 0l)));
-	Convert::GetInstance().SetPowerUnits(Convert::UnitsOfPower(
+	UnitConverter::GetInstance().SetPowerUnits(UnitConverter::UnitsOfPower(
 		configurationFile->Read(_T("/Units/Power"), 0l)));
-	Convert::GetInstance().SetPressureUnits(Convert::UnitsOfPressure(
+	UnitConverter::GetInstance().SetPressureUnits(UnitConverter::UnitsOfPressure(
 		configurationFile->Read(_T("/Units/Pressure"), 0l)));
-	Convert::GetInstance().SetTemperatureUnits(Convert::UnitsOfTemperature(
+	UnitConverter::GetInstance().SetTemperatureUnits(UnitConverter::UnitsOfTemperature(
 		configurationFile->Read(_T("/Units/Temperature"), 0l)));
-	Convert::GetInstance().SetVelocityUnits(Convert::UnitsOfVelocity(
+	UnitConverter::GetInstance().SetVelocityUnits(UnitConverter::UnitsOfVelocity(
 		configurationFile->Read(_T("/Units/Velocity"), 0l)));
 
 	// Read NUMBER FORMAT configuration from file
-	Convert::GetInstance().SetNumberOfDigits(configurationFile->Read(_T("/NumberFormat/NumberOfDigits"), 3l));
-	bool tempBool = Convert::GetInstance().GetUseScientificNotation();
+	UnitConverter::GetInstance().SetNumberOfDigits(configurationFile->Read(_T("/NumberFormat/NumberOfDigits"), 3l));
+	bool tempBool = UnitConverter::GetInstance().GetUseScientificNotation();
 	configurationFile->Read(_T("/NumberFormat/UseScientificNotation"), &tempBool);
-	Convert::GetInstance().SetUseScientificNotation(tempBool);
-	tempBool = Convert::GetInstance().GetUseSignificantDigits();
+	UnitConverter::GetInstance().SetUseScientificNotation(tempBool);
+	tempBool = UnitConverter::GetInstance().GetUseSignificantDigits();
 	configurationFile->Read(_T("/NumberFormat/UseSignificantDigits"), &tempBool);
-	Convert::GetInstance().SetUseSignificantDigits(tempBool);
+	UnitConverter::GetInstance().SetUseSignificantDigits(tempBool);
 
 	// Read KINEMATICS configuration from file
 	double tempDouble = 0.0;
@@ -2527,25 +2510,25 @@ void MainFrame::WriteConfiguration(void)
 		wxCONFIG_USE_RELATIVE_PATH);
 
 	// Write UNITS configuration to file
-	configurationFile->Write(_T("/Units/Acceleration"), (int)Convert::GetInstance().GetAccelerationUnits());
-	configurationFile->Write(_T("/Units/Angle"), (int)Convert::GetInstance().GetAngleUnits());
-	configurationFile->Write(_T("/Units/Area"), (int)Convert::GetInstance().GetAreaUnits());
-	configurationFile->Write(_T("/Units/Density"), (int)Convert::GetInstance().GetDensityUnits());
-	configurationFile->Write(_T("/Units/Distance"), (int)Convert::GetInstance().GetDistanceUnits());
-	configurationFile->Write(_T("/Units/Energy"), (int)Convert::GetInstance().GetEnergyUnits());
-	configurationFile->Write(_T("/Units/Force"), (int)Convert::GetInstance().GetForceUnits());
-	configurationFile->Write(_T("/Units/Inertia"), (int)Convert::GetInstance().GetInertiaUnits());
-	configurationFile->Write(_T("/Units/Mass"), (int)Convert::GetInstance().GetMassUnits());
-	configurationFile->Write(_T("/Units/Moment"), (int)Convert::GetInstance().GetMomentUnits());
-	configurationFile->Write(_T("/Units/Power"), (int)Convert::GetInstance().GetPowerUnits());
-	configurationFile->Write(_T("/Units/Pressure"), (int)Convert::GetInstance().GetPressureUnits());
-	configurationFile->Write(_T("/Units/Temperature"), (int)Convert::GetInstance().GetTemperatureUnits());
-	configurationFile->Write(_T("/Units/Velocity"), (int)Convert::GetInstance().GetVelocityUnits());
+	configurationFile->Write(_T("/Units/Acceleration"), (int)UnitConverter::GetInstance().GetAccelerationUnits());
+	configurationFile->Write(_T("/Units/Angle"), (int)UnitConverter::GetInstance().GetAngleUnits());
+	configurationFile->Write(_T("/Units/Area"), (int)UnitConverter::GetInstance().GetAreaUnits());
+	configurationFile->Write(_T("/Units/Density"), (int)UnitConverter::GetInstance().GetDensityUnits());
+	configurationFile->Write(_T("/Units/Distance"), (int)UnitConverter::GetInstance().GetDistanceUnits());
+	configurationFile->Write(_T("/Units/Energy"), (int)UnitConverter::GetInstance().GetEnergyUnits());
+	configurationFile->Write(_T("/Units/Force"), (int)UnitConverter::GetInstance().GetForceUnits());
+	configurationFile->Write(_T("/Units/Inertia"), (int)UnitConverter::GetInstance().GetInertiaUnits());
+	configurationFile->Write(_T("/Units/Mass"), (int)UnitConverter::GetInstance().GetMassUnits());
+	configurationFile->Write(_T("/Units/Moment"), (int)UnitConverter::GetInstance().GetMomentUnits());
+	configurationFile->Write(_T("/Units/Power"), (int)UnitConverter::GetInstance().GetPowerUnits());
+	configurationFile->Write(_T("/Units/Pressure"), (int)UnitConverter::GetInstance().GetPressureUnits());
+	configurationFile->Write(_T("/Units/Temperature"), (int)UnitConverter::GetInstance().GetTemperatureUnits());
+	configurationFile->Write(_T("/Units/Velocity"), (int)UnitConverter::GetInstance().GetVelocityUnits());
 
 	// Write NUMBER FORMAT configuration to file
-	configurationFile->Write(_T("/NumberFormat/NumberOfDigits"), Convert::GetInstance().GetNumberOfDigits());
-	configurationFile->Write(_T("/NumberFormat/UseScientificNotation"), Convert::GetInstance().GetUseScientificNotation());
-	configurationFile->Write(_T("/NumberFormat/UseSignificantDigits"), Convert::GetInstance().GetUseSignificantDigits());
+	configurationFile->Write(_T("/NumberFormat/NumberOfDigits"), UnitConverter::GetInstance().GetNumberOfDigits());
+	configurationFile->Write(_T("/NumberFormat/UseScientificNotation"), UnitConverter::GetInstance().GetUseScientificNotation());
+	configurationFile->Write(_T("/NumberFormat/UseSignificantDigits"), UnitConverter::GetInstance().GetUseSignificantDigits());
 
 	// Write KINEMATICS configuration to file
 	configurationFile->Write(_T("/Kinematics/CenterOfRotationX"), kinematicInputs.centerOfRotation.x);

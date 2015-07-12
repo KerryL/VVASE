@@ -828,9 +828,9 @@ void GeneticAlgorithmPanel::UpdateInformation(void)
 	populationSize->ChangeValue(temp);
 	temp.Printf("%i", optimization.GetAlgorithm().GetGenerationLimit());
 	generationLimit->ChangeValue(temp);
-	elitismFraction->ChangeValue(Convert::GetInstance().FormatNumber(
+	elitismFraction->ChangeValue(UnitConverter::GetInstance().FormatNumber(
 		optimization.GetAlgorithm().GetElitismPercentage()));
-	mutationProbability->ChangeValue(Convert::GetInstance().FormatNumber(
+	mutationProbability->ChangeValue(UnitConverter::GetInstance().FormatNumber(
 		optimization.GetAlgorithm().GetMutationProbability()));
 	
 	temp.Printf("%i", optimization.GetAlgorithm().GetCrossoverPoint());
@@ -879,10 +879,10 @@ void GeneticAlgorithmPanel::UpdateGeneList(void)
 		else
 			geneList->SetCellValue(i, 1, Corner::GetHardpointName(optimization.GetAlgorithm().GetGene(i).tiedTo));
 		geneList->SetCellValue(i, 2, Vector::GetAxisName(optimization.GetAlgorithm().GetGene(i).direction));
-		geneList->SetCellValue(i, 3, Convert::GetInstance().FormatNumber(
-			Convert::GetInstance().ConvertDistance(optimization.GetAlgorithm().GetGene(i).minimum)));
-		geneList->SetCellValue(i, 4, Convert::GetInstance().FormatNumber(
-			Convert::GetInstance().ConvertDistance(optimization.GetAlgorithm().GetGene(i).maximum)));
+		geneList->SetCellValue(i, 3, UnitConverter::GetInstance().FormatNumber(
+			UnitConverter::GetInstance().ConvertDistanceOutput(optimization.GetAlgorithm().GetGene(i).minimum)));
+		geneList->SetCellValue(i, 4, UnitConverter::GetInstance().FormatNumber(
+			UnitConverter::GetInstance().ConvertDistanceOutput(optimization.GetAlgorithm().GetGene(i).maximum)));
 		temp.Printf("%i", optimization.GetAlgorithm().GetGene(i).numberOfValues);
 		geneList->SetCellValue(i, 5, temp);
 
@@ -929,16 +929,16 @@ void GeneticAlgorithmPanel::UpdateGoalList(void)
 		goalList->SetCellValue(i, 1, GetInputString(optimization.GetAlgorithm().GetGoal(i).beforeInputs));
 		goalList->SetCellValue(i, 2, GetInputString(optimization.GetAlgorithm().GetGoal(i).afterInputs,
 			&optimization.GetAlgorithm().GetGoal(i).beforeInputs));
-		goalList->SetCellValue(i, 5, Convert::GetInstance().FormatNumber(
+		goalList->SetCellValue(i, 5, UnitConverter::GetInstance().FormatNumber(
 			optimization.GetAlgorithm().GetGoal(i).importance));
 
 		// Here, we make sure we perform the appropriate conversion, depending on the units
 		// of this particular output
-		goalList->SetCellValue(i, 3, Convert::GetInstance().FormatNumber(
-			Convert::GetInstance().ConvertTo(optimization.GetAlgorithm().GetGoal(i).desiredValue,
+		goalList->SetCellValue(i, 3, UnitConverter::GetInstance().FormatNumber(
+			UnitConverter::GetInstance().ConvertOutput(optimization.GetAlgorithm().GetGoal(i).desiredValue,
 			KinematicOutputs::GetOutputUnitType(optimization.GetAlgorithm().GetGoal(i).output))));
-		goalList->SetCellValue(i, 4, Convert::GetInstance().FormatNumber(
-			Convert::GetInstance().ConvertTo(optimization.GetAlgorithm().GetGoal(i).expectedDeviation,
+		goalList->SetCellValue(i, 4, UnitConverter::GetInstance().FormatNumber(
+			UnitConverter::GetInstance().ConvertOutput(optimization.GetAlgorithm().GetGoal(i).expectedDeviation,
 			KinematicOutputs::GetOutputUnitType(optimization.GetAlgorithm().GetGoal(i).output))));
 
 		// Make the cells read-only and center the text
@@ -1045,16 +1045,15 @@ wxString GeneticAlgorithmPanel::GetInputString(const Kinematics::Inputs &inputs,
 			return _T("None");
 	}
 
-	// Create the string
 	inputString.Printf("P:%s, R:%s, H:%s, S:%s",
-		Convert::GetInstance().FormatNumber(
-			Convert::GetInstance().ConvertAngle(inputs.pitch)).c_str(),
-		Convert::GetInstance().FormatNumber(
-			Convert::GetInstance().ConvertAngle(inputs.roll)).c_str(),
-		Convert::GetInstance().FormatNumber(
-			Convert::GetInstance().ConvertDistance(inputs.heave)).c_str(),
-		Convert::GetInstance().FormatNumber(
-			Convert::GetInstance().ConvertDistance(inputs.rackTravel)).c_str());
+		UnitConverter::GetInstance().FormatNumber(
+			UnitConverter::GetInstance().ConvertAngleOutput(inputs.pitch)).c_str(),
+		UnitConverter::GetInstance().FormatNumber(
+			UnitConverter::GetInstance().ConvertAngleOutput(inputs.roll)).c_str(),
+		UnitConverter::GetInstance().FormatNumber(
+			UnitConverter::GetInstance().ConvertDistanceOutput(inputs.heave)).c_str(),
+		UnitConverter::GetInstance().FormatNumber(
+			UnitConverter::GetInstance().ConvertDistanceOutput(inputs.rackTravel)).c_str());
 
 	// FIXME!!!:  This doesn't work if they are using steering wheel angle instead of rack travel!
 

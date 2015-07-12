@@ -23,7 +23,7 @@
 // Local headers
 #include "vRenderer/primitives/sphere.h"
 #include "vRenderer/renderWindow.h"
-#include "vUtilities/convert.h"
+#include "vUtilities/unitConverter.h"
 
 // For choosing between an octohedron (8 sides) or a icosohedron (20 sides) as the base polygon
 // for the recursive subdivision to create the sphere.

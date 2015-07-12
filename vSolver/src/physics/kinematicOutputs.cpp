@@ -1703,13 +1703,13 @@ double KinematicOutputs::GetOutputValue(const OutputsComplete &_output) const
 //		None
 //
 // Return Value:
-//		Convert::UnitType specifying the unit type of the requested output
+//		UnitConverter::UnitType specifying the unit type of the requested output
 //
 //==========================================================================
-Convert::UnitType KinematicOutputs::GetOutputUnitType(const OutputsComplete &_output)
+UnitConverter::UnitType KinematicOutputs::GetOutputUnitType(const OutputsComplete &_output)
 {
 	// The value to return
-	Convert::UnitType unitType;
+	UnitConverter::UnitType unitType;
 
 	// For some simple math
 	OutputsComplete newOutputIndex;
@@ -1751,7 +1751,7 @@ Convert::UnitType KinematicOutputs::GetOutputUnitType(const OutputsComplete &_ou
 		unitType = GetVectorUnitType((OutputsVector)int(newOutputIndex / 3));
 	}
 	else
-		unitType = Convert::UnitTypeUnknown;
+		unitType = UnitConverter::UnitTypeUnknown;
 
 	return unitType;
 }
@@ -1945,13 +1945,12 @@ wxString KinematicOutputs::GetOutputName(const OutputsComplete &_output)
 //		None
 //
 // Return Value:
-//		Convert::UnitType describing the units of the specified output
+//		UnitConverter::UnitType describing the units of the specified output
 //
 //==========================================================================
-Convert::UnitType KinematicOutputs::GetCornerDoubleUnitType(const CornerOutputsDouble &_output)
+UnitConverter::UnitType KinematicOutputs::GetCornerDoubleUnitType(const CornerOutputsDouble &_output)
 {
-	// The return value
-	Convert::UnitType unitType;
+	UnitConverter::UnitType unitType;
 
 	// Determine the units based on it's type
 	switch (_output)
@@ -1961,7 +1960,7 @@ Convert::UnitType KinematicOutputs::GetCornerDoubleUnitType(const CornerOutputsD
 	case Camber:
 	case KPI:
 	case Steer:
-		unitType = Convert::UnitTypeAngle;
+		unitType = UnitConverter::UnitTypeAngle;
 		break;
 
 		// Distances
@@ -1974,7 +1973,7 @@ Convert::UnitType KinematicOutputs::GetCornerDoubleUnitType(const CornerOutputsD
 	case SpindleLength:
 	case SideViewSwingArmLength:
 	case FrontViewSwingArmLength:
-		unitType = Convert::UnitTypeDistance;
+		unitType = UnitConverter::UnitTypeDistance;
 		break;
 
 		// Unitless
@@ -1982,17 +1981,17 @@ Convert::UnitType KinematicOutputs::GetCornerDoubleUnitType(const CornerOutputsD
 	case ShockInstallationRatio:
 	case AntiBrakePitch:
 	case AntiDrivePitch:
-		unitType = Convert::UnitTypeUnitless;
+		unitType = UnitConverter::UnitTypeUnitless;
 		break;
 
 		// Angles per Displacement
 	case ARBInstallationRatio:
-		unitType = Convert::UnitTypeAnglePerDistance;
+		unitType = UnitConverter::UnitTypeAnglePerDistance;
 		break;
 
 		// Unknown
 	default:
-		unitType = Convert::UnitTypeUnknown;
+		unitType = UnitConverter::UnitTypeUnknown;
 		break;
 	}
 
@@ -2013,30 +2012,29 @@ Convert::UnitType KinematicOutputs::GetCornerDoubleUnitType(const CornerOutputsD
 //		None
 //
 // Return Value:
-//		Convert::UnitType describing the units of the specified output
+//		UnitConverter::UnitType describing the units of the specified output
 //
 //==========================================================================
-Convert::UnitType KinematicOutputs::GetCornerVectorUnitType(const CornerOutputsVector &_output)
+UnitConverter::UnitType KinematicOutputs::GetCornerVectorUnitType(const CornerOutputsVector &_output)
 {
-	// The return value
-	Convert::UnitType unitType;
+	UnitConverter::UnitType unitType;
 
 	// Determine the units based on it's type
 	switch (_output)
 	{
 		// Distances
 	case InstantCenter:
-		unitType = Convert::UnitTypeDistance;
+		unitType = UnitConverter::UnitTypeDistance;
 		break;
 
 		// Unitless (no conversion)
 	case InstantAxisDirection:
-		unitType = Convert::UnitTypeUnitless;
+		unitType = UnitConverter::UnitTypeUnitless;
 		break;
 
 		// Unknown
 	default:
-		unitType = Convert::UnitTypeUnknown;
+		unitType = UnitConverter::UnitTypeUnknown;
 		break;
 	}
 
@@ -2057,13 +2055,12 @@ Convert::UnitType KinematicOutputs::GetCornerVectorUnitType(const CornerOutputsV
 //		None
 //
 // Return Value:
-//		Convert::UnitType describing the units of the specified output
+//		UnitConverter::UnitType describing the units of the specified output
 //
 //==========================================================================
-Convert::UnitType KinematicOutputs::GetDoubleUnitType(const OutputsDouble &_output)
+UnitConverter::UnitType KinematicOutputs::GetDoubleUnitType(const OutputsDouble &_output)
 {
-	// The return value
-	Convert::UnitType unitType;
+	UnitConverter::UnitType unitType;
 
 	// Determine the units based on it's type
 	switch (_output)
@@ -2083,7 +2080,7 @@ Convert::UnitType KinematicOutputs::GetDoubleUnitType(const OutputsDouble &_outp
 	case RearTrackHub:
 	case RightWheelbaseHub:
 	case LeftWheelbaseHub:
-		unitType = Convert::UnitTypeDistance;
+		unitType = UnitConverter::UnitTypeDistance;
 		break;
 
 		// Angles
@@ -2091,12 +2088,12 @@ Convert::UnitType KinematicOutputs::GetDoubleUnitType(const OutputsDouble &_outp
 	case RearARBTwist:
 	case FrontNetSteer:
 	case RearNetSteer:
-		unitType = Convert::UnitTypeAngle;
+		unitType = UnitConverter::UnitTypeAngle;
 		break;
 
 		// Unknown units
 	default:
-		unitType = Convert::UnitTypeUnknown;
+		unitType = UnitConverter::UnitTypeUnknown;
 		break;
 	}
 
@@ -2117,13 +2114,12 @@ Convert::UnitType KinematicOutputs::GetDoubleUnitType(const OutputsDouble &_outp
 //		None
 //
 // Return Value:
-//		Convert::UnitType describing the units of the specified output
+//		UnitConverter::UnitType describing the units of the specified output
 //
 //==========================================================================
-Convert::UnitType KinematicOutputs::GetVectorUnitType(const OutputsVector &_output)
+UnitConverter::UnitType KinematicOutputs::GetVectorUnitType(const OutputsVector &_output)
 {
-	// The return value
-	Convert::UnitType unitType;
+	UnitConverter::UnitType unitType;
 
 	// Determine the units based on it's type
 	switch (_output)
@@ -2133,7 +2129,7 @@ Convert::UnitType KinematicOutputs::GetVectorUnitType(const OutputsVector &_outp
 	case RearKinematicRC:
 	case RightKinematicPC:
 	case LeftKinematicPC:
-		unitType = Convert::UnitTypeDistance;
+		unitType = UnitConverter::UnitTypeDistance;
 		break;
 
 		// Unitless
@@ -2141,12 +2137,12 @@ Convert::UnitType KinematicOutputs::GetVectorUnitType(const OutputsVector &_outp
 	case RearRollAxisDirection:
 	case RightPitchAxisDirection:
 	case LeftPitchAxisDirection:
-		unitType = Convert::UnitTypeUnitless;
+		unitType = UnitConverter::UnitTypeUnitless;
 		break;
 
 		// Unknown
 	default:
-		unitType = Convert::UnitTypeUnknown;
+		unitType = UnitConverter::UnitTypeUnknown;
 		break;
 	}
 

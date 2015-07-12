@@ -19,7 +19,7 @@
 #include "vRenderer/primitives/cone.h"
 #include "vRenderer/renderWindow.h"
 #include "vMath/carMath.h"
-#include "vUtilities/convert.h"
+#include "vUtilities/unitConverter.h"
 
 //==========================================================================
 // Class:			Cone
@@ -109,7 +109,7 @@ void Cone::GenerateGeometry(void)
 	// If the axis direction is opposite the reference direction, we need to rotate 180 degrees
 	if (VVASEMath::IsZero(axisDirection + referenceDirection))
 	{
-		angle = Convert::Pi;
+		angle = UnitConverter::Pi;
 		axisOfRotation.Set(0.0, 1.0, 0.0);
 	}
 
@@ -121,7 +121,7 @@ void Cone::GenerateGeometry(void)
 
 		// Rotate the current matrix, if the rotation axis is non-zero
 		if (!VVASEMath::IsZero(axisOfRotation.Length()))
-			glRotated(Convert::RAD_TO_DEG(angle), axisOfRotation.x, axisOfRotation.y, axisOfRotation.z);
+			glRotated(UnitConverter::RAD_TO_DEG(angle), axisOfRotation.x, axisOfRotation.y, axisOfRotation.z);
 
 		// Create the cone along the X-axis (must match the reference direction above)
 		// (the openGL matrices take care of correct position/orientation in hardware)
@@ -138,7 +138,7 @@ void Cone::GenerateGeometry(void)
 		for (i = 0; i <= resolution; i++)
 		{
 			// Determine the angle to the current point
-			angle = (double)i * 2.0 * Convert::Pi / (double)resolution;
+			angle = (double)i * 2.0 * UnitConverter::Pi / (double)resolution;
 
 			// Determine the Y and Z ordinates based on this angle and the radius
 			point.y = radius * cos(angle);
@@ -167,7 +167,7 @@ void Cone::GenerateGeometry(void)
 			for (i = 0; i <= resolution; i++)
 			{
 				// Determine the angle to the current point
-				angle = (double)i * 2.0 * Convert::Pi / (double)resolution;
+				angle = (double)i * 2.0 * UnitConverter::Pi / (double)resolution;
 
 				// Determine the Y and Z ordinates based on this angle and the radius
 				point.y = radius * cos(angle);

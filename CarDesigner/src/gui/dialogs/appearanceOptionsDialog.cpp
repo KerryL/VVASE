@@ -27,7 +27,7 @@
 #include "gui/components/mainFrame.h"
 #include "gui/superGrid.h"
 #include "vRenderer/color.h"
-#include "vUtilities/convert.h"
+#include "vUtilities/unitConverter.h"
 
 //==========================================================================
 // Class:			AppearanceOptionsDialog
@@ -194,7 +194,7 @@ void AppearanceOptionsDialog::CreateControls(void)
 		colorGrid->SetCellBackgroundColour(i, 1, colorOptions[i].ToWxColor());
 
 		// Set the transparency values
-		colorGrid->SetCellValue(i, 2, Convert::GetInstance().FormatNumber(colorOptions[i].GetAlpha()));
+		colorGrid->SetCellValue(i, 2, UnitConverter::GetInstance().FormatNumber(colorOptions[i].GetAlpha()));
 	}
 
 	// Automatically size the columns
@@ -259,7 +259,7 @@ void AppearanceOptionsDialog::CreateControls(void)
 
 	// Add the text across the top of the page
 	wxStaticText *sizePrompt = new wxStaticText(sizePanel, wxID_STATIC,
-		_T("Edit the object sizes (units are ") + Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance)
+		_T("Edit the object sizes (units are ") + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance)
 		+ _T("):"));
 	sizeSizer->Add(sizePrompt, 0, wxALL, 5);
 
@@ -296,7 +296,7 @@ void AppearanceOptionsDialog::CreateControls(void)
 			(AppearanceOptions::ObjectSize)i));
 
 		// Set the values of all of the data cells
-		sizeGrid->SetCellValue(i, 1, Convert::GetInstance().FormatNumber(Convert::GetInstance().ConvertDistance(
+		sizeGrid->SetCellValue(i, 1, UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertDistanceOutput(
 			options->GetSize((AppearanceOptions::ObjectSize)i))));
 	}
 
@@ -449,7 +449,7 @@ void AppearanceOptionsDialog::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 	{
 		// Size must be a valid number
 		if (sizeGrid->GetCellValue(i, 1).ToDouble(&sizeValue))
-			options->SetSize((AppearanceOptions::ObjectSize)i, Convert::GetInstance().ReadDistance(sizeValue));
+			options->SetSize((AppearanceOptions::ObjectSize)i, UnitConverter::GetInstance().ConvertDistanceInput(sizeValue));
 	}
 
 	// Update the resolutions
@@ -567,11 +567,11 @@ void AppearanceOptionsDialog::AlphaChangeEvent(wxGridEvent &event)
 	if (colorGrid->GetCellValue(event.GetRow(), event.GetCol()).ToDouble(&tempAlpha))
 	{
 		if (tempAlpha > 1.0)
-			colorGrid->SetCellValue(event.GetRow(), event.GetCol(), Convert::GetInstance().FormatNumber(1.0));
+			colorGrid->SetCellValue(event.GetRow(), event.GetCol(), UnitConverter::GetInstance().FormatNumber(1.0));
 		else if (tempAlpha < 0.0)
-			colorGrid->SetCellValue(event.GetRow(), event.GetCol(), Convert::GetInstance().FormatNumber(0.0));
+			colorGrid->SetCellValue(event.GetRow(), event.GetCol(), UnitConverter::GetInstance().FormatNumber(0.0));
 	}
 	else
 		colorGrid->SetCellValue(event.GetRow(), event.GetCol(),
-		Convert::GetInstance().FormatNumber(colorOptions[event.GetRow()].GetAlpha()));
+		UnitConverter::GetInstance().FormatNumber(colorOptions[event.GetRow()].GetAlpha()));
 }

@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="utf-8"?>
+<CodeLite_Project Name="vvaseGUI" InternalType="Console">
+  <VirtualDirectory Name="vCar">
+    <VirtualDirectory Name="src">
+      <File Name="../vCar/src/drivetrain.cpp"/>
+      <File Name="../vCar/src/differential.cpp"/>
+      <File Name="../vCar/src/car.cpp"/>
+      <File Name="../vCar/src/engine.cpp"/>
+      <File Name="../vCar/src/damper.cpp"/>
+      <File Name="../vCar/src/tireSet.cpp"/>
+      <File Name="../vCar/src/aerodynamics.cpp"/>
+      <File Name="../vCar/src/spring.cpp"/>
+      <File Name="../vCar/src/fuelCell.cpp"/>
+      <File Name="../vCar/src/corner.cpp"/>
+      <File Name="../vCar/src/suspension.cpp"/>
+      <File Name="../vCar/src/massProperties.cpp"/>
+      <File Name="../vCar/src/driver.cpp"/>
+      <File Name="../vCar/src/tire.cpp"/>
+      <File Name="../vCar/src/brakes.cpp"/>
+    </VirtualDirectory>
+  </VirtualDirectory>
+  <VirtualDirectory Name="vUtilities">
+    <VirtualDirectory Name="src">
+      <File Name="../vUtilities/src/debugLog.cpp"/>
+      <File Name="../vUtilities/src/integerValidator.cpp"/>
+      <File Name="../vUtilities/src/fontFinder.cpp"/>
+      <File Name="../vUtilities/src/dataValidator.cpp"/>
+      <File Name="../vUtilities/src/debugger.cpp"/>
+      <File Name="../vUtilities/src/wxRelatedUtilities.cpp"/>
+      <File Name="../vUtilities/src/xlsxReader.cpp"/>
+      <File Name="../vUtilities/src/unitConverter.cpp"/>
+    </VirtualDirectory>
+  </VirtualDirectory>
+  <VirtualDirectory Name="vSolver">
+    <VirtualDirectory Name="src">
+      <VirtualDirectory Name="physics">
+        <File Name="../vSolver/src/physics/dynamics.cpp"/>
+        <File Name="../vSolver/src/physics/kinematics.cpp"/>
+        <File Name="../vSolver/src/physics/state.cpp"/>
+        <File Name="../vSolver/src/physics/millikenAnalysis.cpp"/>
+        <File Name="../vSolver/src/physics/shakerRig.cpp"/>
+        <File Name="../vSolver/src/physics/integrator.cpp"/>
+        <File Name="../vSolver/src/physics/kinematicOutputs.cpp"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="threads">
+        <File Name="../vSolver/src/threads/jobQueue.cpp"/>
+        <File Name="../vSolver/src/threads/optimizationData.cpp"/>
+        <File Name="../vSolver/src/threads/kinematicsData.cpp"/>
+        <File Name="../vSolver/src/threads/workerThread.cpp"/>
+        <File Name="../vSolver/src/threads/inverseSemaphore.cpp"/>
+        <File Name="../vSolver/src/threads/threadJob.cpp"/>
+        <File Name="../vSolver/src/threads/threadEvent.cpp"/>
+        <File Name="../vSolver/src/threads/threadData.cpp"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="optimization">
+        <File Name="../vSolver/src/optimization/geneticAlgorithm.cpp"/>
+      </VirtualDirectory>
+    </VirtualDirectory>
+  </VirtualDirectory>
+  <VirtualDirectory Name="common">
+    <VirtualDirectory Name="include">
+      <VirtualDirectory Name="vSolver">
+        <VirtualDirectory Name="physics">
+          <File Name="../common/include/vSolver/physics/kinematics.h"/>
+          <File Name="../common/include/vSolver/physics/dynamics.h"/>
+          <File Name="../common/include/vSolver/physics/shakerRig.h"/>
+          <File Name="../common/include/vSolver/physics/kinematicOutputs.h"/>
+          <File Name="../common/include/vSolver/physics/state.h"/>
+          <File Name="../common/include/vSolver/physics/integrator.h"/>
+          <File Name="../common/include/vSolver/physics/millikenAnalysis.h"/>
+        </VirtualDirectory>
+        <VirtualDirectory Name="threads">
+          <File Name="../common/include/vSolver/threads/threadJob.h"/>
+          <File Name="../common/include/vSolver/threads/jobQueue.h"/>
+          <File Name="../common/include/vSolver/threads/threadData.h"/>
+          <File Name="../common/include/vSolver/threads/kinematicsData.h"/>
+          <File Name="../common/include/vSolver/threads/threadEvent.h"/>
+          <File Name="../common/include/vSolver/threads/inverseSemaphore.h"/>
+          <File Name="../common/include/vSolver/threads/workerThread.h"/>
+          <File Name="../common/include/vSolver/threads/optimizationData.h"/>
+        </VirtualDirectory>
+        <VirtualDirectory Name="optimization">
+          <File Name="../common/include/vSolver/optimization/geneticAlgorithm.h"/>
+        </VirtualDirectory>
+      </VirtualDirectory>
+      <VirtualDirectory Name="vMath">
+        <VirtualDirectory Name="signals">
+          <VirtualDirectory Name="filters">
+            <File Name="../common/include/vMath/signals/filters/highPassOrder1.h"/>
+            <File Name="../common/include/vMath/signals/filters/lowPassOrder1.h"/>
+            <File Name="../common/include/vMath/signals/filters/filterBase.h"/>
+            <File Name="../common/include/vMath/signals/filters/lowPassOrder2.h"/>
+          </VirtualDirectory>
+          <File Name="../common/include/vMath/signals/integral.h"/>
+          <File Name="../common/include/vMath/signals/rms.h"/>
+          <File Name="../common/include/vMath/signals/curveFit.h"/>
+          <File Name="../common/include/vMath/signals/derivative.h"/>
+          <File Name="../common/include/vMath/signals/fft.h"/>
+        </VirtualDirectory>
+        <File Name="../common/include/vMath/complex.h"/>
+        <File Name="../common/include/vMath/carMath.h"/>
+        <File Name="../common/include/vMath/expressionTree.h"/>
+        <File Name="../common/include/vMath/dataset2D.h"/>
+        <File Name="../common/include/vMath/matrix.h"/>
+        <File Name="../common/include/vMath/vector.h"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="vRenderer">
+        <VirtualDirectory Name="3dcar">
+          <File Name="../common/include/vRenderer/3dcar/vector3D.h"/>
+          <File Name="../common/include/vRenderer/3dcar/debugShape.h"/>
+          <File Name="../common/include/vRenderer/3dcar/spring3D.h"/>
+          <File Name="../common/include/vRenderer/3dcar/tire3D.h"/>
+          <File Name="../common/include/vRenderer/3dcar/damper3D.h"/>
+          <File Name="../common/include/vRenderer/3dcar/triangle3D.h"/>
+          <File Name="../common/include/vRenderer/3dcar/origin.h"/>
+          <File Name="../common/include/vRenderer/3dcar/aarm.h"/>
+          <File Name="../common/include/vRenderer/3dcar/point3D.h"/>
+          <File Name="../common/include/vRenderer/3dcar/swaybar3D.h"/>
+          <File Name="../common/include/vRenderer/3dcar/plane3D.h"/>
+          <File Name="../common/include/vRenderer/3dcar/link.h"/>
+        </VirtualDirectory>
+        <VirtualDirectory Name="primitives">
+          <File Name="../common/include/vRenderer/primitives/sphere.h"/>
+          <File Name="../common/include/vRenderer/primitives/axis.h"/>
+          <File Name="../common/include/vRenderer/primitives/triangle.h"/>
+          <File Name="../common/include/vRenderer/primitives/quadrilateral.h"/>
+          <File Name="../common/include/vRenderer/primitives/disk.h"/>
+          <File Name="../common/include/vRenderer/primitives/text.h"/>
+          <File Name="../common/include/vRenderer/primitives/plotCurve.h"/>
+          <File Name="../common/include/vRenderer/primitives/plotCursor.h"/>
+          <File Name="../common/include/vRenderer/primitives/primitive.h"/>
+          <File Name="../common/include/vRenderer/primitives/cylinder.h"/>
+          <File Name="../common/include/vRenderer/primitives/cone.h"/>
+          <File Name="../common/include/vRenderer/primitives/zoomBox.h"/>
+        </VirtualDirectory>
+        <File Name="../common/include/vRenderer/color.h"/>
+        <File Name="../common/include/vRenderer/renderWindow.h"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="vUtilities">
+        <File Name="../common/include/vUtilities/debugger.h"/>
+        <File Name="../common/include/vUtilities/xlsxReader.h"/>
+        <File Name="../common/include/vUtilities/wheelSetStructures.h"/>
+        <File Name="../common/include/vUtilities/dataValidator.h"/>
+        <File Name="../common/include/vUtilities/wxRelatedUtilities.h"/>
+        <File Name="../common/include/vUtilities/managedList.h"/>
+        <File Name="../common/include/vUtilities/machineDefinitions.h"/>
+        <File Name="../common/include/vUtilities/integerValidator.h"/>
+        <File Name="../common/include/vUtilities/fontFinder.h"/>
+        <File Name="../common/include/vUtilities/debugLog.h"/>
+        <File Name="../common/include/vUtilities/unitConverter.h"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="vCar">
+        <File Name="../common/include/vCar/brakes.h"/>
+        <File Name="../common/include/vCar/drivetrain.h"/>
+        <File Name="../common/include/vCar/aerodynamics.h"/>
+        <File Name="../common/include/vCar/massProperties.h"/>
+        <File Name="../common/include/vCar/tireSet.h"/>
+        <File Name="../common/include/vCar/suspension.h"/>
+        <File Name="../common/include/vCar/fuelCell.h"/>
+        <File Name="../common/include/vCar/corner.h"/>
+        <File Name="../common/include/vCar/damper.h"/>
+        <File Name="../common/include/vCar/driver.h"/>
+        <File Name="../common/include/vCar/tire.h"/>
+        <File Name="../common/include/vCar/spring.h"/>
+        <File Name="../common/include/vCar/car.h"/>
+        <File Name="../common/include/vCar/differential.h"/>
+        <File Name="../common/include/vCar/engine.h"/>
+      </VirtualDirectory>
+    </VirtualDirectory>
+  </VirtualDirectory>
+  <VirtualDirectory Name="CarDesigner">
+    <VirtualDirectory Name="include">
+      <VirtualDirectory Name="gui">
+        <VirtualDirectory Name="components">
+          <VirtualDirectory Name="editPanel">
+            <VirtualDirectory Name="guiCar">
+              <File Name="include/gui/components/editPanel/guiCar/editAerodynamicsPanel.h"/>
+              <File Name="include/gui/components/editPanel/guiCar/editMassPanel.h"/>
+              <File Name="include/gui/components/editPanel/guiCar/editCornerPanel.h"/>
+              <File Name="include/gui/components/editPanel/guiCar/editBrakesPanel.h"/>
+              <File Name="include/gui/components/editPanel/guiCar/editDrivetrainPanel.h"/>
+              <File Name="include/gui/components/editPanel/guiCar/editDifferentialPanel.h"/>
+              <File Name="include/gui/components/editPanel/guiCar/editSuspensionPanel.h"/>
+              <File Name="include/gui/components/editPanel/guiCar/editSuspensionNotebook.h"/>
+              <File Name="include/gui/components/editPanel/guiCar/editTiresPanel.h"/>
+              <File Name="include/gui/components/editPanel/guiCar/editEnginePanel.h"/>
+            </VirtualDirectory>
+            <VirtualDirectory Name="iteration">
+              <File Name="include/gui/components/editPanel/iteration/editIterationPlotsPanel.h"/>
+              <File Name="include/gui/components/editPanel/iteration/editIterationOptionsPanel.h"/>
+              <File Name="include/gui/components/editPanel/iteration/editIterationRangePanel.h"/>
+              <File Name="include/gui/components/editPanel/iteration/editIterationNotebook.h"/>
+            </VirtualDirectory>
+            <File Name="include/gui/components/editPanel/editPanel.h"/>
+          </VirtualDirectory>
+          <File Name="include/gui/components/mainFrame.h"/>
+          <File Name="include/gui/components/outputPanel.h"/>
+          <File Name="include/gui/components/mainNotebook.h"/>
+          <File Name="include/gui/components/mainTree.h"/>
+        </VirtualDirectory>
+        <VirtualDirectory Name="dialogs">
+          <File Name="include/gui/dialogs/gaGeneDialog.h"/>
+          <File Name="include/gui/dialogs/gaGoalDialog.h"/>
+          <File Name="include/gui/dialogs/optionsDialog.h"/>
+          <File Name="include/gui/dialogs/rangeLimitsDialog.h"/>
+          <File Name="include/gui/dialogs/appearanceOptionsDialog.h"/>
+        </VirtualDirectory>
+        <VirtualDirectory Name="renderer">
+          <File Name="include/gui/renderer/plotRenderer.h"/>
+          <File Name="include/gui/renderer/carRenderer.h"/>
+        </VirtualDirectory>
+        <File Name="include/gui/guiObject.h"/>
+        <File Name="include/gui/plotPanel.h"/>
+        <File Name="include/gui/ipcClient.h"/>
+        <File Name="include/gui/ipcServer.h"/>
+        <File Name="include/gui/guiCar.h"/>
+        <File Name="include/gui/plotObject.h"/>
+        <File Name="include/gui/appearanceOptions.h"/>
+        <File Name="include/gui/geneticAlgorithmPanel.h"/>
+        <File Name="include/gui/superGrid.h"/>
+        <File Name="include/gui/undoRedoStack.h"/>
+        <File Name="include/gui/geneticOptimization.h"/>
+        <File Name="include/gui/gaObject.h"/>
+        <File Name="include/gui/dropTarget.h"/>
+        <File Name="include/gui/iteration.h"/>
+        <File Name="include/gui/ipcConnection.h"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="application">
+        <File Name="include/application/vvaseApplication.h"/>
+        <File Name="include/application/vvaseConstants.h"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="environment">
+        <File Name="include/environment/track.h"/>
+        <File Name="include/environment/atmosphere.h"/>
+      </VirtualDirectory>
+    </VirtualDirectory>
+    <VirtualDirectory Name="src">
+      <VirtualDirectory Name="gui">
+        <VirtualDirectory Name="components">
+          <VirtualDirectory Name="editPanel">
+            <VirtualDirectory Name="guiCar">
+              <File Name="src/gui/components/editPanel/guiCar/editBrakesPanel.cpp"/>
+              <File Name="src/gui/components/editPanel/guiCar/editTiresPanel.cpp"/>
+              <File Name="src/gui/components/editPanel/guiCar/editSuspensionPanel.cpp"/>
+              <File Name="src/gui/components/editPanel/guiCar/editCornerPanel.cpp"/>
+              <File Name="src/gui/components/editPanel/guiCar/editEnginePanel.cpp"/>
+              <File Name="src/gui/components/editPanel/guiCar/editDrivetrainPanel.cpp"/>
+              <File Name="src/gui/components/editPanel/guiCar/editMassPanel.cpp"/>
+              <File Name="src/gui/components/editPanel/guiCar/editSuspensionNotebook.cpp"/>
+              <File Name="src/gui/components/editPanel/guiCar/editDifferentialPanel.cpp"/>
+              <File Name="src/gui/components/editPanel/guiCar/editAerodynamicsPanel.cpp"/>
+            </VirtualDirectory>
+            <VirtualDirectory Name="iteration">
+              <File Name="src/gui/components/editPanel/iteration/editIterationOptionsPanel.cpp"/>
+              <File Name="src/gui/components/editPanel/iteration/editIterationRangePanel.cpp"/>
+              <File Name="src/gui/components/editPanel/iteration/editIterationNotebook.cpp"/>
+              <File Name="src/gui/components/editPanel/iteration/editIterationPlotsPanel.cpp"/>
+            </VirtualDirectory>
+            <File Name="src/gui/components/editPanel/editPanel.cpp"/>
+          </VirtualDirectory>
+          <File Name="src/gui/components/mainTree.cpp"/>
+          <File Name="src/gui/components/outputPanel.cpp"/>
+          <File Name="src/gui/components/mainFrame.cpp"/>
+          <File Name="src/gui/components/mainNotebook.cpp"/>
+        </VirtualDirectory>
+        <VirtualDirectory Name="dialogs">
+          <File Name="src/gui/dialogs/optionsDialog.cpp"/>
+          <File Name="src/gui/dialogs/gaGeneDialog.cpp"/>
+          <File Name="src/gui/dialogs/gaGoalDialog.cpp"/>
+          <File Name="src/gui/dialogs/appearanceOptionsDialog.cpp"/>
+          <File Name="src/gui/dialogs/rangeLimitsDialog.cpp"/>
+        </VirtualDirectory>
+        <VirtualDirectory Name="renderer">
+          <File Name="src/gui/renderer/carRenderer.cpp"/>
+          <File Name="src/gui/renderer/plotRenderer.cpp"/>
+        </VirtualDirectory>
+        <File Name="src/gui/geneticAlgorithmPanel.cpp"/>
+        <File Name="src/gui/undoRedoStack.cpp"/>
+        <File Name="src/gui/dropTarget.cpp"/>
+        <File Name="src/gui/guiObject.cpp"/>
+        <File Name="src/gui/ipcClient.cpp"/>
+        <File Name="src/gui/ipcServer.cpp"/>
+        <File Name="src/gui/iteration.cpp"/>
+        <File Name="src/gui/ipcConnection.cpp"/>
+        <File Name="src/gui/gaObject.cpp"/>
+        <File Name="src/gui/superGrid.cpp"/>
+        <File Name="src/gui/plotPanel.cpp"/>
+        <File Name="src/gui/geneticOptimization.cpp"/>
+        <File Name="src/gui/appearanceOptions.cpp"/>
+        <File Name="src/gui/plotObject.cpp"/>
+        <File Name="src/gui/guiCar.cpp"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="application">
+        <File Name="src/application/vvaseApplication.cpp"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="environment">
+        <File Name="src/environment/track.cpp"/>
+        <File Name="src/environment/atmosphere.cpp"/>
+      </VirtualDirectory>
+    </VirtualDirectory>
+  </VirtualDirectory>
+  <VirtualDirectory Name="vMath">
+    <VirtualDirectory Name="src">
+      <VirtualDirectory Name="signals">
+        <VirtualDirectory Name="filters">
+          <File Name="../vMath/src/signals/filters/lowPassOrder1.cpp"/>
+          <File Name="../vMath/src/signals/filters/filterBase.cpp"/>
+          <File Name="../vMath/src/signals/filters/highPassOrder1.cpp"/>
+          <File Name="../vMath/src/signals/filters/lowPassOrder2.cpp"/>
+        </VirtualDirectory>
+        <File Name="../vMath/src/signals/fft.cpp"/>
+        <File Name="../vMath/src/signals/curveFit.cpp"/>
+        <File Name="../vMath/src/signals/derivative.cpp"/>
+        <File Name="../vMath/src/signals/integral.cpp"/>
+        <File Name="../vMath/src/signals/rms.cpp"/>
+      </VirtualDirectory>
+      <File Name="../vMath/src/carMath.cpp"/>
+      <File Name="../vMath/src/dataset2D.cpp"/>
+      <File Name="../vMath/src/complex.cpp"/>
+      <File Name="../vMath/src/expressionTree.cpp"/>
+      <File Name="../vMath/src/vector.cpp"/>
+      <File Name="../vMath/src/matrix.cpp"/>
+    </VirtualDirectory>
+  </VirtualDirectory>
+  <VirtualDirectory Name="vRenderer">
+    <VirtualDirectory Name="src">
+      <VirtualDirectory Name="3dcar">
+        <File Name="../vRenderer/src/3dcar/tire3D.cpp"/>
+        <File Name="../vRenderer/src/3dcar/damper3D.cpp"/>
+        <File Name="../vRenderer/src/3dcar/swaybar3D.cpp"/>
+        <File Name="../vRenderer/src/3dcar/origin.cpp"/>
+        <File Name="../vRenderer/src/3dcar/debugShape.cpp"/>
+        <File Name="../vRenderer/src/3dcar/point3D.cpp"/>
+        <File Name="../vRenderer/src/3dcar/vector3D.cpp"/>
+        <File Name="../vRenderer/src/3dcar/plane3D.cpp"/>
+        <File Name="../vRenderer/src/3dcar/spring3D.cpp"/>
+        <File Name="../vRenderer/src/3dcar/link.cpp"/>
+        <File Name="../vRenderer/src/3dcar/aarm.cpp"/>
+        <File Name="../vRenderer/src/3dcar/triangle3D.cpp"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="primitives">
+        <File Name="../vRenderer/src/primitives/axis.cpp"/>
+        <File Name="../vRenderer/src/primitives/plotCurve.cpp"/>
+        <File Name="../vRenderer/src/primitives/plotCursor.cpp"/>
+        <File Name="../vRenderer/src/primitives/zoomBox.cpp"/>
+        <File Name="../vRenderer/src/primitives/triangle.cpp"/>
+        <File Name="../vRenderer/src/primitives/cylinder.cpp"/>
+        <File Name="../vRenderer/src/primitives/sphere.cpp"/>
+        <File Name="../vRenderer/src/primitives/quadrilateral.cpp"/>
+        <File Name="../vRenderer/src/primitives/text.cpp"/>
+        <File Name="../vRenderer/src/primitives/cone.cpp"/>
+        <File Name="../vRenderer/src/primitives/disk.cpp"/>
+        <File Name="../vRenderer/src/primitives/primitive.cpp"/>
+      </VirtualDirectory>
+      <File Name="../vRenderer/src/color.cpp"/>
+      <File Name="../vRenderer/src/renderWindow.cpp"/>
+    </VirtualDirectory>
+  </VirtualDirectory>
+  <Description/>
+  <Dependencies/>
+  <Settings Type="Executable">
+    <GlobalSettings>
+      <Compiler Options="">
+        <IncludePath Value="."/>
+      </Compiler>
+      <Linker Options="">
+        <LibraryPath Value="."/>
+      </Linker>
+      <ResourceCompiler Options=""/>
+    </GlobalSettings>
+    <Configuration Name="Debug" CompilerType="cobra" DebuggerType="" Type="" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
+      <Compiler Options="-debug" Required="yes" PreCompiledHeader="">
+        <IncludePath Value="."/>
+      </Compiler>
+      <Linker Options="" Required="yes"/>
+      <ResourceCompiler Options="" Required="no"/>
+      <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="." Command="./$(ProjectName)" CommandArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes"/>
+      <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;"/>
+      <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="">
+        <PostConnectCommands/>
+        <StartupCommands/>
+      </Debugger>
+      <PreBuild/>
+      <PostBuild/>
+      <CustomBuild Enabled="no">
+        <RebuildCommand/>
+        <CleanCommand/>
+        <BuildCommand/>
+        <PreprocessFileCommand/>
+        <SingleFileCommand/>
+        <MakefileGenerationCommand/>
+        <ThirdPartyToolName>None</ThirdPartyToolName>
+        <WorkingDirectory/>
+      </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild/>
+        <CustomPreBuild/>
+      </AdditionalRules>
+    </Configuration>
+    <Configuration Name="Release" CompilerType="cobra" DebuggerType="" Type="" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
+      <Compiler Options="-turbo" Required="yes" PreCompiledHeader="">
+        <IncludePath Value="."/>
+      </Compiler>
+      <Linker Options="" Required="yes"/>
+      <ResourceCompiler Options="" Required="no"/>
+      <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Release" Command="./$(ProjectName)" CommandArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes"/>
+      <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;"/>
+      <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="">
+        <PostConnectCommands/>
+        <StartupCommands/>
+      </Debugger>
+      <PreBuild/>
+      <PostBuild/>
+      <CustomBuild Enabled="no">
+        <RebuildCommand/>
+        <CleanCommand/>
+        <BuildCommand/>
+        <PreprocessFileCommand/>
+        <SingleFileCommand/>
+        <MakefileGenerationCommand/>
+        <ThirdPartyToolName>None</ThirdPartyToolName>
+        <WorkingDirectory/>
+      </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild/>
+        <CustomPreBuild/>
+      </AdditionalRules>
+    </Configuration>
+  </Settings>
+  <VirtualDirectory Name="src">
+    <File Name="main.cobra"/>
+  </VirtualDirectory>
+</CodeLite_Project>

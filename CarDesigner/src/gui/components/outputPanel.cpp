@@ -25,7 +25,7 @@
 #include "vCar/suspension.h"
 #include "vSolver/physics/kinematicOutputs.h"
 #include "vUtilities/debugger.h"
-#include "vUtilities/convert.h"
+#include "vUtilities/unitConverter.h"
 #include "gui/superGrid.h"
 #include "vMath/carMath.h"
 
@@ -155,8 +155,8 @@ void OutputPanel::UpdateInformation(KinematicOutputs outputs, Car &car,
 	for (i = 0; i < KinematicOutputs::NumberOfOutputScalars; i++)
 	{
 		// Convert and set the value
-		outputsList->SetCellValue(i, index, Convert::GetInstance().FormatNumber(
-			Convert::GetInstance().ConvertTo(
+		outputsList->SetCellValue(i, index, UnitConverter::GetInstance().FormatNumber(
+			UnitConverter::GetInstance().ConvertOutput(
 			outputs.GetOutputValue((KinematicOutputs::OutputsComplete)i),
 			KinematicOutputs::GetOutputUnitType((KinematicOutputs::OutputsComplete)i))));
 
@@ -312,7 +312,6 @@ void OutputPanel::FinishUpdate(int _numberOfDataColumns)
 		numberOfDataColumns--;
 	}
 
-	// Update the column heading for the units column
 	outputsList->SetColLabelValue(numberOfDataColumns + 1, _T("Units"));
 
 	// Update all of the unit labels
@@ -320,8 +319,7 @@ void OutputPanel::FinishUpdate(int _numberOfDataColumns)
 	int i;
 	for (i = 0; i < KinematicOutputs::NumberOfOutputScalars; i++)
 	{
-		// Set the unit label
-		unitString.Printf("(%s)", Convert::GetInstance().GetUnitType(KinematicOutputs::GetOutputUnitType(
+		unitString.Printf("(%s)", UnitConverter::GetInstance().GetUnitType(KinematicOutputs::GetOutputUnitType(
 			(KinematicOutputs::OutputsComplete)i)).c_str());
 		outputsList->SetCellValue(i, numberOfDataColumns + 1, unitString);
 	}

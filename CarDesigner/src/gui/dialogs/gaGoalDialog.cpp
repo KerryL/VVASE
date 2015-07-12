@@ -19,7 +19,7 @@
 // CarDesigner headers
 #include "gui/dialogs/gaGoalDialog.h"
 #include "vUtilities/wxRelatedUtilities.h"
-#include "vUtilities/convert.h"
+#include "vUtilities/unitConverter.h"
 #include "vUtilities/dataValidator.h"
 
 //==========================================================================
@@ -195,11 +195,11 @@ void GAGoalDialog::CreateControls(void)
 	// Pitch inputs
 	wxStaticText *pitchLabel = new wxStaticText(this, wxID_STATIC, _T("Pitch"));// FIXME:  Can we get rid of this?
 	beforePitchText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		wxDefaultSize, 0, DataValidator(Convert::UnitTypeAngle, &beforeInputs.pitch));
+		wxDefaultSize, 0, DataValidator(UnitConverter::UnitTypeAngle, &beforeInputs.pitch));
 	afterPitchText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		wxDefaultSize, 0, DataValidator(Convert::UnitTypeAngle, &afterInputs.pitch));
+		wxDefaultSize, 0, DataValidator(UnitConverter::UnitTypeAngle, &afterInputs.pitch));
 	wxStaticText *pitchUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		Convert::GetInstance().GetUnitType(Convert::UnitTypeAngle));// FIXME:  Can we get rid of this?
+		UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeAngle));// FIXME:  Can we get rid of this?
 	inputAreaSizer->Add(pitchLabel,
 		wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
 	inputAreaSizer->Add(beforePitchText, wxGBPosition(row, 2), wxGBSpan(), inputSizerFlags);
@@ -210,43 +210,43 @@ void GAGoalDialog::CreateControls(void)
 
 	// Roll inputs
 	beforeRollText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		wxDefaultSize, 0, DataValidator(Convert::UnitTypeAngle, &beforeInputs.roll));
+		wxDefaultSize, 0, DataValidator(UnitConverter::UnitTypeAngle, &beforeInputs.roll));
 	afterRollText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		wxDefaultSize, 0, DataValidator(Convert::UnitTypeAngle, &afterInputs.roll));
+		wxDefaultSize, 0, DataValidator(UnitConverter::UnitTypeAngle, &afterInputs.roll));
 	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Roll")),
 		wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
 	inputAreaSizer->Add(beforeRollText, wxGBPosition(row, 2), wxGBSpan(), inputSizerFlags);
 	inputAreaSizer->Add(afterRollText, wxGBPosition(row, 3), wxGBSpan(), inputSizerFlags);
 	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC,
-		Convert::GetInstance().GetUnitType(Convert::UnitTypeAngle)),
+UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeAngle)),
 		wxGBPosition(row, 4), wxGBSpan(), textSizerFlags);
 	row++;
 
 	// Heave inputs
 	beforeHeaveText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		wxDefaultSize, 0, DataValidator(Convert::UnitTypeDistance, &beforeInputs.heave));
+		wxDefaultSize, 0, DataValidator(UnitConverter::UnitTypeDistance, &beforeInputs.heave));
 	afterHeaveText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		wxDefaultSize, 0, DataValidator(Convert::UnitTypeDistance, &afterInputs.heave));
+		wxDefaultSize, 0, DataValidator(UnitConverter::UnitTypeDistance, &afterInputs.heave));
 	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Heave")),
 		wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
 	inputAreaSizer->Add(beforeHeaveText, wxGBPosition(row, 2), wxGBSpan(), inputSizerFlags);
 	inputAreaSizer->Add(afterHeaveText, wxGBPosition(row, 3), wxGBSpan(), inputSizerFlags);
 	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC,
-		Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance)),
+		UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance)),
 		wxGBPosition(row, 4), wxGBSpan(), textSizerFlags);
 	row++;
 
 	// Steer inputs
 	beforeSteerText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		wxDefaultSize, 0, DataValidator(Convert::UnitTypeDistance, &beforeInputs.rackTravel));// FIXME:  Handle rack travel and wheel angle!
+		wxDefaultSize, 0, DataValidator(UnitConverter::UnitTypeDistance, &beforeInputs.rackTravel));// FIXME:  Handle rack travel and wheel angle!
 	afterSteerText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		wxDefaultSize, 0, DataValidator(Convert::UnitTypeDistance, &afterInputs.rackTravel));// FIXME:  Handle rack travel and wheel angle!
+		wxDefaultSize, 0, DataValidator(UnitConverter::UnitTypeDistance, &afterInputs.rackTravel));// FIXME:  Handle rack travel and wheel angle!
 	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Rack Travel")),
 		wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);// FIXME:  Handle rack travel and wheel angle!
 	inputAreaSizer->Add(beforeSteerText, wxGBPosition(row, 2), wxGBSpan(), inputSizerFlags);
 	inputAreaSizer->Add(afterSteerText, wxGBPosition(row, 3), wxGBSpan(), inputSizerFlags);
 	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC,
-		Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance)),// FIXME:  Handle rack travel and wheel angle!
+		UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance)),// FIXME:  Handle rack travel and wheel angle!
 		wxGBPosition(row, 4), wxGBSpan(), textSizerFlags);
 	row++;
 
@@ -255,7 +255,7 @@ void GAGoalDialog::CreateControls(void)
 	desiredValueText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
 		wxDefaultSize, 0, DataValidator(KinematicOutputs::GetOutputUnitType(output), &desiredValue));
 	desiredValueUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		Convert::GetInstance().GetUnitType(KinematicOutputs::GetOutputUnitType(output)));
+		UnitConverter::GetInstance().GetUnitType(KinematicOutputs::GetOutputUnitType(output)));
 	inputAreaSizer->Add(desiredValueLabel, wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
 	inputAreaSizer->Add(desiredValueText, wxGBPosition(row, 2), wxGBSpan(1, 2), inputSizerFlags);
 	inputAreaSizer->Add(desiredValueUnitsLabel, wxGBPosition(row, 4), wxGBSpan(), textSizerFlags);
@@ -265,7 +265,7 @@ void GAGoalDialog::CreateControls(void)
 	deviationText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
 		wxDefaultSize, 0, DataValidator(KinematicOutputs::GetOutputUnitType(output), &expectedDeviation, DataValidator::ClassStrictlyPositive));
 	deviationUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		Convert::GetInstance().GetUnitType(KinematicOutputs::GetOutputUnitType(output)));
+		UnitConverter::GetInstance().GetUnitType(KinematicOutputs::GetOutputUnitType(output)));
 	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Expected Deviation")), wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
 	inputAreaSizer->Add(deviationText, wxGBPosition(row, 2), wxGBSpan(1, 2), inputSizerFlags);
 	inputAreaSizer->Add(deviationUnitsLabel, wxGBPosition(row, 4), wxGBSpan(), textSizerFlags);
@@ -273,7 +273,7 @@ void GAGoalDialog::CreateControls(void)
 
 	// Importance
 	importanceText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		wxDefaultSize, 0, DataValidator(Convert::UnitTypeUnitless, &importance));
+		wxDefaultSize, 0, DataValidator(UnitConverter::UnitTypeUnitless, &importance));
 	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Relative Importance")), wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
 	inputAreaSizer->Add(importanceText, wxGBPosition(row, 2), wxGBSpan(1, 2), inputSizerFlags);
 	row++;
@@ -446,13 +446,13 @@ void GAGoalDialog::OnCheckEvent(wxCommandEvent& WXUNUSED(event))
 void GAGoalDialog::OnOutputChangeEvent(wxCommandEvent &event)
 {
 	// Update the units labels for the desired value and expected deviation
-	Convert::UnitType units = KinematicOutputs::GetOutputUnitType(
+	UnitConverter::UnitType units = KinematicOutputs::GetOutputUnitType(
 		(KinematicOutputs::OutputsComplete)event.GetSelection());
 
-	desiredValueUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(units));
+	desiredValueUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(units));
 	static_cast<DataValidator*>(desiredValueText->GetValidator())->SetUnitType(units);
 
-	deviationUnitsLabel->SetLabel(Convert::GetInstance().GetUnitType(units));
+	deviationUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(units));
 	static_cast<DataValidator*>(deviationText->GetValidator())->SetUnitType(units);
 }
 

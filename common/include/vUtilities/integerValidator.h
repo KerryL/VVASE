@@ -22,7 +22,7 @@
 #include <wx/valtext.h>
 
 // Local headers
-#include "vUtilities/convert.h"
+#include "vUtilities/unitConverter.h"
 
 class IntegerValidator : public wxTextValidator
 {

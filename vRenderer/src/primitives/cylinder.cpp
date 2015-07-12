@@ -19,7 +19,7 @@
 #include "vRenderer/primitives/cylinder.h"
 #include "vRenderer/renderWindow.h"
 #include "vMath/carMath.h"
-#include "vUtilities/convert.h"
+#include "vUtilities/unitConverter.h"
 
 //==========================================================================
 // Class:			Cylinder
@@ -114,7 +114,7 @@ void Cylinder::GenerateGeometry(void)
 
 		// Rotate the current matrix, if the rotation axis is non-zero
 		if (!VVASEMath::IsZero(axisOfRotation.Length()))
-			glRotated(Convert::RAD_TO_DEG(angle), axisOfRotation.x, axisOfRotation.y, axisOfRotation.z);
+			glRotated(UnitConverter::RAD_TO_DEG(angle), axisOfRotation.x, axisOfRotation.y, axisOfRotation.z);
 
 		// Create the cylinder along the X-axis (must match the reference direction above)
 		// (the openGL matrices take care of correct position/orientation in hardware)

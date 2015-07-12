@@ -19,7 +19,7 @@
 #include "gui/components/mainFrame.h"
 #include "gui/components/editPanel/editPanel.h"
 #include "gui/components/editPanel/guiCar/editBrakesPanel.h"
-#include "vUtilities/convert.h"
+#include "vUtilities/unitConverter.h"
 #include "vMath/vector.h"
 
 //==========================================================================
@@ -117,7 +117,7 @@ void EditBrakesPanel::UpdateInformation(Brakes *_currentBrakes)
 	rearBrakesInboard->SetValue(currentBrakes->rearBrakesInboard);
 
 	// Update the text boxes
-	percentFrontBraking->ChangeValue(Convert::GetInstance().FormatNumber(
+	percentFrontBraking->ChangeValue(UnitConverter::GetInstance().FormatNumber(
 		currentBrakes->percentFrontBraking));
 }
 
@@ -167,7 +167,7 @@ void EditBrakesPanel::CreateControls()
 
 	// Set text box minimum size based on formatted text to appear in the box
 	int minWidth;
-	GetTextExtent(Convert::GetInstance().FormatNumber(-10.000), &minWidth, NULL);
+	GetTextExtent(UnitConverter::GetInstance().FormatNumber(-10.000), &minWidth, NULL);
 	percentFrontBraking->SetMinSize(wxSize(minWidth, -1));
 
 	// Add the sizers to the main sizer
@@ -203,7 +203,7 @@ void EditBrakesPanel::TextBoxEditEvent(wxCommandEvent &event)
 	double minValue, maxValue;
 
 	// We also need to know what kind of data we're retrieving
-	Convert::UnitType units;
+	UnitConverter::UnitType units;
 
 	// A pointer to the text box
 	wxTextCtrl *textBox = NULL;
@@ -215,7 +215,7 @@ void EditBrakesPanel::TextBoxEditEvent(wxCommandEvent &event)
 		// Get the text box, the location to write it, and the units
 		textBox = percentFrontBraking;
 		dataLocation = &currentBrakes->percentFrontBraking;
-		units = Convert::UnitTypeUnitless;
+		units = UnitConverter::UnitTypeUnitless;
 		minValue = 0.0;
 		maxValue = 1.0;
 		break;
@@ -248,7 +248,7 @@ void EditBrakesPanel::TextBoxEditEvent(wxCommandEvent &event)
 	mutex->Lock();
 
 	// Update the brakes object
-	*dataLocation = Convert::GetInstance().Read(value, units);
+	*dataLocation = UnitConverter::GetInstance().ConvertInput(value, units);
 
 	// Check the limits on the data value
 	if (*dataLocation > maxValue)

@@ -33,7 +33,7 @@
 // VVASE headers
 #include "gui/iteration.h"
 #include "vUtilities/debugger.h"
-#include "vUtilities/convert.h"
+#include "vUtilities/unitConverter.h"
 #include "vSolver/threads/threadJob.h"
 #include "vSolver/threads/kinematicsData.h"
 #include "vCar/car.h"
@@ -1159,17 +1159,17 @@ double Iteration::GetDataValue(int associatedCarIndex, int point, PlotID id) con
 	// Depending on the specified PLOT_ID, choose which member of the KINEMATIC_OUTPUTS
 	// object to return
 	if (id < Pitch)
-		value = Convert::GetInstance().ConvertTo(outputLists[associatedCarIndex]->operator[](point)->GetOutputValue(
+		value = UnitConverter::GetInstance().ConvertOutput(outputLists[associatedCarIndex]->operator[](point)->GetOutputValue(
 			(KinematicOutputs::OutputsComplete)id), KinematicOutputs::GetOutputUnitType(
 			(KinematicOutputs::OutputsComplete)id));
 	else if (id == Pitch)
-		value = Convert::GetInstance().ConvertAngle(axisValuesPitch[point]);
+		value = UnitConverter::GetInstance().ConvertAngleOutput(axisValuesPitch[point]);
 	else if (id == Roll)
-		value = Convert::GetInstance().ConvertAngle(axisValuesRoll[point]);
+		value = UnitConverter::GetInstance().ConvertAngleOutput(axisValuesRoll[point]);
 	else if (id == Heave)
-		value = Convert::GetInstance().ConvertDistance(axisValuesHeave[point]);
+		value = UnitConverter::GetInstance().ConvertDistanceOutput(axisValuesHeave[point]);
 	else if (id == RackTravel)
-		value = Convert::GetInstance().ConvertDistance(axisValuesRackTravel[point]);
+		value = UnitConverter::GetInstance().ConvertDistanceOutput(axisValuesRackTravel[point]);
 	else
 		value = 0.0;
 
@@ -1200,14 +1200,11 @@ void Iteration::ExportDataToFile(wxString pathAndFileName) const
 	wxString extension(pathAndFileName.substr(pathAndFileName.find_last_of('.') + 1));
 	wxChar delimiter;
 	if (extension.Cmp(_T("txt")) == 0)
-		// Tab delimited
 		delimiter = '\t';
 	else if (extension.Cmp(_T("csv")) == 0)
-		// Comma separated values
 		delimiter = ',';
 	else
 	{
-		// Unrecognized file extension
 		Debugger::GetInstance().Print(_T("ERROR:  Could not export data!  Unable to determine delimiter choice!"));
 
 		return;
@@ -1329,12 +1326,12 @@ wxString Iteration::GetPlotUnits(PlotID id) const
 
 	// Depending on the specified PLOT_ID, choose the units string
 	if (id < Pitch)
-		units = Convert::GetInstance().GetUnitType(
+		units = UnitConverter::GetInstance().GetUnitType(
 			KinematicOutputs::GetOutputUnitType((KinematicOutputs::OutputsComplete)id));
 	else if (id == Pitch || id == Roll)
-		units = Convert::GetInstance().GetUnitType(Convert::UnitTypeAngle);
+		units = UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeAngle);
 	else if (id == Heave || id == RackTravel)
-		units = Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance);
+		units = UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance);
 	else
 		units = _T("Unrecognized units");
 

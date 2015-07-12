@@ -16,7 +16,7 @@
 // CarDesigner headers
 #include "gui/dialogs/gaGeneDialog.h"
 #include "vUtilities/wxRelatedUtilities.h"
-#include "vUtilities/convert.h"
+#include "vUtilities/unitConverter.h"
 #include "vUtilities/dataValidator.h"
 #include "vUtilities/integerValidator.h"
 
@@ -224,20 +224,20 @@ void GAGeneDialog::CreateControls(void)
 
 	// Minimum
 	minimumText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		wxDefaultSize, 0, DataValidator(Convert::UnitTypeDistance, &minimum));
+		wxDefaultSize, 0, DataValidator(UnitConverter::UnitTypeDistance, &minimum));
 	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Minimum")), 0, textSizerFlags);
 	inputAreaSizer->Add(minimumText, 0, comboSizerFlags);
 	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC,
-		Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance),
+		UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance),
 		wxDefaultPosition, wxDefaultSize, 0), 0, textSizerFlags);
 
 	// Maximum
 	maximumText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		wxDefaultSize, 0, DataValidator(Convert::UnitTypeDistance, &maximum));
+		wxDefaultSize, 0, DataValidator(UnitConverter::UnitTypeDistance, &maximum));
 	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Maximum")), 0, textSizerFlags);
 	inputAreaSizer->Add(maximumText, 0, comboSizerFlags);
 	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC,
-		Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance),
+		UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance),
 		wxDefaultPosition, wxDefaultSize, 0), 0, textSizerFlags);
 
 	// Number of values
@@ -252,7 +252,7 @@ void GAGeneDialog::CreateControls(void)
 	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Resolution")), 0, textSizerFlags);
 	inputAreaSizer->Add(resolution, 0, textSizerFlags);
 	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC,
-		Convert::GetInstance().GetUnitType(Convert::UnitTypeDistance),
+		UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance),
 		wxDefaultPosition, wxDefaultSize, 0), 0, textSizerFlags);
 
 	// Add a spacer between the text controls and the buttons
@@ -383,6 +383,6 @@ void GAGeneDialog::TextChangeEvent(wxCommandEvent& WXUNUSED(event))
 		return;
 
 	// Set the text
-	resolution->SetLabel(Convert::GetInstance().FormatNumber(
-		Convert::GetInstance().ConvertDistance(fabs(max - min) / double(valueCount - 1))));
+	resolution->SetLabel(UnitConverter::GetInstance().FormatNumber(
+		UnitConverter::GetInstance().ConvertDistanceOutput(fabs(max - min) / double(valueCount - 1))));
 }
