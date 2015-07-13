@@ -226,9 +226,10 @@ void RenderWindow::Render()
 	glMatrixMode(GL_MODELVIEW);
 
 	// Sort the primitives by Color.GetAlpha to ensure that transparent objects are rendered last
-	if (!view3D)// For 3D views, we need to render back-to-front
-		SortPrimitivesByAlpha();
+	SortPrimitivesByAlpha();
 
+	// Generally, all objects will have the same draw order and this won't do anything,
+	// but for some cases we do want to override the draw order just before rendering
 	SortPrimitivesByDrawOrder();
 
 	unsigned int i;
@@ -1078,7 +1079,7 @@ void RenderWindow::SortPrimitivesByAlpha(void)
 	for (i = 0; i < primitiveList.GetCount(); i++)
 		primitiveOrder.push_back(ListItem(primitiveList[i]->GetColor().GetAlpha(), i));
 
-	std::stable_sort(primitiveOrder.begin(), primitiveOrder.end());
+	std::stable_sort(primitiveOrder.rbegin(), primitiveOrder.rend());
 
 	std::vector<unsigned int> order;
 	for (i = 0; i < primitiveOrder.size(); i++)
