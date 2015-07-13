@@ -11,25 +11,23 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\common\include\vUtilities\convert.h" />
     <ClInclude Include="..\common\include\vUtilities\dataValidator.h" />
     <ClInclude Include="..\common\include\vUtilities\debugger.h" />
     <ClInclude Include="..\common\include\vUtilities\debugLog.h" />
     <ClInclude Include="..\common\include\vUtilities\fontFinder.h" />
-    <ClInclude Include="..\common\include\vUtilities\integerValidator.h" />
     <ClInclude Include="..\common\include\vUtilities\machineDefinitions.h" />
     <ClInclude Include="..\common\include\vUtilities\managedList.h" />
+    <ClInclude Include="..\common\include\vUtilities\unitConverter.h" />
     <ClInclude Include="..\common\include\vUtilities\wheelSetStructures.h" />
     <ClInclude Include="..\common\include\vUtilities\wxRelatedUtilities.h" />
     <ClInclude Include="..\common\include\vUtilities\xlsxReader.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\convert.cpp" />
     <ClCompile Include="src\dataValidator.cpp" />
     <ClCompile Include="src\debugger.cpp" />
     <ClCompile Include="src\debugLog.cpp" />
     <ClCompile Include="src\fontFinder.cpp" />
-    <ClCompile Include="src\integerValidator.cpp" />
+    <ClCompile Include="src\unitConverter.cpp" />
     <ClCompile Include="src\wxRelatedUtilities.cpp" />
     <ClCompile Include="src\xlsxReader.cpp" />
   </ItemGroup>

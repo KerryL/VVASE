@@ -38,20 +38,12 @@ public:
 	AppearanceOptionsDialog(MainFrame &mainFrame, AppearanceOptions *_options,
 		wxWindowID id, const wxPoint &position, long style = wxDEFAULT_DIALOG_STYLE);
 
-	// Destructor
-	~AppearanceOptionsDialog();
-
 private:
-	// Sets up the size and position of this dialog and its contents
 	void CreateControls(void);
 
-	// The object to edit
 	AppearanceOptions *options;
-
-	// A copy of the color array
 	Color colorOptions[AppearanceOptions::ColorCount];
 
-	// The event IDs
 	enum EventId
 	{
 		IdColorGrid = wxID_HIGHEST + 700,

@@ -20,6 +20,7 @@
 #include "gui/components/editPanel/editPanel.h"
 #include "gui/components/editPanel/guiCar/editBrakesPanel.h"
 #include "vUtilities/unitConverter.h"
+#include "vUtilities/dataValidator.h"
 #include "vMath/vector.h"
 
 //==========================================================================
@@ -41,12 +42,10 @@
 //		None
 //
 //==========================================================================
-EditBrakesPanel::EditBrakesPanel(EditPanel &_parent, wxWindowID id,
-									 const wxPoint& pos, const wxSize& size) :
-									 wxScrolledWindow(&_parent, id, pos, size),
-									 parent(_parent)
+EditBrakesPanel::EditBrakesPanel(EditPanel &parent, wxWindowID id,
+	const wxPoint& pos, const wxSize& size) : wxScrolledWindow(&parent, id,
+	pos, size), parent(parent)
 {
-	// Create the controls
 	CreateControls();
 }
 
@@ -107,16 +106,13 @@ END_EVENT_TABLE();
 //		None
 //
 //==========================================================================
-void EditBrakesPanel::UpdateInformation(Brakes *_currentBrakes)
+void EditBrakesPanel::UpdateInformation(Brakes *currentBrakes)
 {
-	// Update the class member
-	currentBrakes = _currentBrakes;
+	this->currentBrakes = currentBrakes;
 
-	// Update the check boxes
 	frontBrakesInboard->SetValue(currentBrakes->frontBrakesInboard);
 	rearBrakesInboard->SetValue(currentBrakes->rearBrakesInboard);
 
-	// Update the text boxes
 	percentFrontBraking->ChangeValue(UnitConverter::GetInstance().FormatNumber(
 		currentBrakes->percentFrontBraking));
 }
@@ -142,7 +138,6 @@ void EditBrakesPanel::CreateControls()
 	// Enable scrolling
 	SetScrollRate(1, 1);
 
-	// Top-level sizer
 	wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
 
 	// Second sizer gives more space around the controls
@@ -161,7 +156,8 @@ void EditBrakesPanel::CreateControls()
 	// Create the text input boxes
 	wxBoxSizer *percentFrontSizer = new wxBoxSizer(wxHORIZONTAL);
 	wxStaticText *percentFrontBrakingLabel = new wxStaticText(this, wxID_ANY, _T("Percent Front Braking"));
-	percentFrontBraking = new wxTextCtrl(this, TextBoxPercentFrontBraking);
+	percentFrontBraking = new wxTextCtrl(this, TextBoxPercentFrontBraking);//, wxEmptyString, wxDefaultPosition, wxDefaultSize, 0L, UnitValidator());
+	// TODO:  Need design change, I think - should pass object we're associated with in constructor so we can use it here
 	percentFrontSizer->Add(percentFrontBrakingLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, cellPadding);
 	percentFrontSizer->Add(percentFrontBraking, 0, wxALL | wxEXPAND, cellPadding);
 
@@ -170,11 +166,9 @@ void EditBrakesPanel::CreateControls()
 	GetTextExtent(UnitConverter::GetInstance().FormatNumber(-10.000), &minWidth, NULL);
 	percentFrontBraking->SetMinSize(wxSize(minWidth, -1));
 
-	// Add the sizers to the main sizer
 	mainSizer->AddSpacer(10);
 	mainSizer->Add(percentFrontSizer, 0, wxEXPAND);
 
-	// Assign the top level sizer to the dialog
 	SetSizer(topSizer);
 }
 
@@ -237,17 +231,13 @@ void EditBrakesPanel::TextBoxEditEvent(wxCommandEvent &event)
 		return;
 	}
 
-	// Add the operation to the undo/redo stack
 	parent.GetMainFrame().GetUndoRedoStack().AddOperation(
 		parent.GetMainFrame().GetActiveIndex(),
 		UndoRedoStack::Operation::DataTypeDouble,
 		dataLocation);
 
-	// Get a lock on the car
 	wxMutex *mutex = parent.GetCurrentMutex();
 	mutex->Lock();
-
-	// Update the brakes object
 	*dataLocation = UnitConverter::GetInstance().ConvertInput(value, units);
 
 	// Check the limits on the data value
@@ -256,13 +246,9 @@ void EditBrakesPanel::TextBoxEditEvent(wxCommandEvent &event)
 	else if (*dataLocation < minValue)
 		*dataLocation = minValue;
 
-	// Unlock the car
 	mutex->Unlock();
 
-	// Tell the car object that it was modified
 	parent.GetCurrentObject()->SetModified();
-
-	// Update the display and the kinematic outputs
 	parent.GetMainFrame().UpdateAnalysis();
 	parent.GetMainFrame().UpdateOutputPanel();
 

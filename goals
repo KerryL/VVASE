@@ -1,0 +1,28 @@
+Goals for re-write:
+-------------------
+- Use templates to define cars (more flexibility to handle arbitrary geometries)
+	- Also define outputs this way?
+- Better code design
+	- Looser coupling
+	- Better use of objects
+	- Easier to test
+	- De-couple library from GUI
+	- Re-organize file structure and combine into a single library
+	- Better unit conversion design (easier to add unit/types of units)
+	- Less buggy threading
+	- Less buggy UI updates
+	- Use DataPlotter
+- Automated code testing
+- Support future features
+	- Dynamic simulation
+		- Shaker rig
+		- LTS
+		- MMM (quasi-steady state)
+	- DOE?
+	- Data playback
+	- GGV
+	- Forces analysis
+- Better UI design
+	- Hide vehicle options in context menus (or dialogs accessed from context menus) and file menus
+	- More options (perspective vs. orthographic projections, etc.)
+- Documentation

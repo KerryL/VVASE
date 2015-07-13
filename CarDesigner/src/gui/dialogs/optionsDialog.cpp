@@ -192,8 +192,10 @@ void OptionsDialog::CreateControls(void)
 	unitSelectionSizer->Add(angleLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfAngle, 0, unitFlags);
 	unitSelectionSizer->AddSpacer(middleSpaceWidth);
-	// Work-around for value not being set properly if initial string contains exponent (ANSI build)
+	// Work-around for value not being set properly if initial string contains exponent (GTK ANSI build)
+#if defined(__WXGTK__) && !defined(_UNICODE)
 	unitOfAngle->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeAngle));
+#endif
 
 	// Distance
 	choices.Clear();
@@ -206,8 +208,10 @@ void OptionsDialog::CreateControls(void)
 	SetMinimumWidthFromContents(unitOfDistance, additionalWidth);
 	unitSelectionSizer->Add(DistanceLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfDistance, 0, unitFlags);
-	// Work-around for value not being set properly if initial string contains exponent (ANSI build)
+	// Work-around for value not being set properly if initial string contains exponent (GTK ANSI build)
+#if defined(__WXGTK__) && !defined(_UNICODE)
 	unitOfDistance->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance));
+#endif
 
 	// Area
 	choices.Clear();
@@ -221,8 +225,10 @@ void OptionsDialog::CreateControls(void)
 	unitSelectionSizer->Add(AreaLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfArea, 0, unitFlags);
 	unitSelectionSizer->AddSpacer(middleSpaceWidth);
-	// Work-around for value not being set properly if initial string contains exponent (ANSI build)
+	// Work-around for value not being set properly if initial string contains exponent (GTK ANSI build)
+#if defined(__WXGTK__) && !defined(_UNICODE)
 	unitOfArea->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeArea));
+#endif
 
 	// Force
 	choices.Clear();
@@ -235,8 +241,10 @@ void OptionsDialog::CreateControls(void)
 	SetMinimumWidthFromContents(unitOfForce, additionalWidth);
 	unitSelectionSizer->Add(ForceLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfForce, 0, unitFlags);
-	// Work-around for value not being set properly if initial string contains exponent (ANSI build)
+	// Work-around for value not being set properly if initial string contains exponent (GTK ANSI build)
+#if defined(__WXGTK__) && !defined(_UNICODE)
 	unitOfForce->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeForce));
+#endif
 
 	// Pressure
 	choices.Clear();
@@ -250,8 +258,10 @@ void OptionsDialog::CreateControls(void)
 	unitSelectionSizer->Add(PressureLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfPressure, 0, unitFlags);
 	unitSelectionSizer->AddSpacer(middleSpaceWidth);
-	// Work-around for value not being set properly if initial string contains exponent (ANSI build)
+	// Work-around for value not being set properly if initial string contains exponent (GTK ANSI build)
+#if defined(__WXGTK__) && !defined(_UNICODE)
 	unitOfPressure->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypePressure));
+#endif
 
 	// Moment
 	choices.Clear();
@@ -264,8 +274,10 @@ void OptionsDialog::CreateControls(void)
 	SetMinimumWidthFromContents(unitOfMoment, additionalWidth);
 	unitSelectionSizer->Add(MomentLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfMoment, 0, unitFlags);
-	// Work-around for value not being set properly if initial string contains exponent (ANSI build)
+	// Work-around for value not being set properly if initial string contains exponent (GTK ANSI build)
+#if defined(__WXGTK__) && !defined(_UNICODE)
 	unitOfMoment->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeMoment));
+#endif
 
 	// Mass
 	choices.Clear();
@@ -279,8 +291,10 @@ void OptionsDialog::CreateControls(void)
 	unitSelectionSizer->Add(MassLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfMass, 0, unitFlags);
 	unitSelectionSizer->AddSpacer(middleSpaceWidth);
-	// Work-around for value not being set properly if initial string contains exponent (ANSI build)
+	// Work-around for value not being set properly if initial string contains exponent (GTK ANSI build)
+#if defined(__WXGTK__) && !defined(_UNICODE)
 	unitOfMass->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeMass));
+#endif
 
 	// Velocity
 	choices.Clear();
@@ -293,8 +307,10 @@ void OptionsDialog::CreateControls(void)
 	SetMinimumWidthFromContents(unitOfVelocity, additionalWidth);
 	unitSelectionSizer->Add(VelocityLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfVelocity, 0, unitFlags);
-	// Work-around for value not being set properly if initial string contains exponent (ANSI build)
+	// Work-around for value not being set properly if initial string contains exponent (GTK ANSI build)
+#if defined(__WXGTK__) && !defined(_UNICODE)
 	unitOfVelocity->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeVelocity));
+#endif
 
 	// Acceleration
 	choices.Clear();
@@ -308,8 +324,10 @@ void OptionsDialog::CreateControls(void)
 	unitSelectionSizer->Add(AccelerationLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfAcceleration, 0, unitFlags);
 	unitSelectionSizer->AddSpacer(middleSpaceWidth);
-	// Work-around for value not being set properly if initial string contains exponent (ANSI build)
+	// Work-around for value not being set properly if initial string contains exponent (GTK ANSI build)
+#if defined(__WXGTK__) && !defined(_UNICODE)
 	unitOfAcceleration->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeAcceleration));
+#endif
 
 	// Inertia
 	choices.Clear();
@@ -322,8 +340,10 @@ void OptionsDialog::CreateControls(void)
 	SetMinimumWidthFromContents(unitOfInertia, additionalWidth);
 	unitSelectionSizer->Add(InertiaLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfInertia, 0, unitFlags);
-	// Work-around for value not being set properly if initial string contains exponent (ANSI build)
+	// Work-around for value not being set properly if initial string contains exponent (GTK ANSI build)
+#if defined(__WXGTK__) && !defined(_UNICODE)
 	unitOfInertia->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeInertia));
+#endif
 
 	// Density
 	choices.Clear();
@@ -337,8 +357,10 @@ void OptionsDialog::CreateControls(void)
 	unitSelectionSizer->Add(DensityLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfDensity, 0, unitFlags);
 	unitSelectionSizer->AddSpacer(middleSpaceWidth);
-	// Work-around for value not being set properly if initial string contains exponent (ANSI build)
+	// Work-around for value not being set properly if initial string contains exponent (GTK ANSI build)
+#if defined(__WXGTK__) && !defined(_UNICODE)
 	unitOfDensity->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDensity));
+#endif
 
 	// Power
 	choices.Clear();
@@ -351,8 +373,10 @@ void OptionsDialog::CreateControls(void)
 	SetMinimumWidthFromContents(unitOfPower, additionalWidth);
 	unitSelectionSizer->Add(PowerLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfPower, 0, unitFlags);
-	// Work-around for value not being set properly if initial string contains exponent (ANSI build)
+	// Work-around for value not being set properly if initial string contains exponent (GTK ANSI build)
+#if defined(__WXGTK__) && !defined(_UNICODE)
 	unitOfPower->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypePower));
+#endif
 
 	// Energy
 	choices.Clear();
@@ -366,8 +390,10 @@ void OptionsDialog::CreateControls(void)
 	unitSelectionSizer->Add(EnergyLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfEnergy, 0, unitFlags);
 	unitSelectionSizer->AddSpacer(middleSpaceWidth);
-	// Work-around for value not being set properly if initial string contains exponent (ANSI build)
+	// Work-around for value not being set properly if initial string contains exponent (GTK ANSI build)
+#if defined(__WXGTK__) && !defined(_UNICODE)
 	unitOfEnergy->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeEnergy));
+#endif
 
 	// Temperature
 	choices.Clear();
@@ -380,8 +406,10 @@ void OptionsDialog::CreateControls(void)
 	SetMinimumWidthFromContents(unitOfTemperature, additionalWidth);
 	unitSelectionSizer->Add(TemperatureLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfTemperature, 0, unitFlags);
-	// Work-around for value not being set properly if initial string contains exponent (ANSI build)
+	// Work-around for value not being set properly if initial string contains exponent (GTK ANSI build)
+#if defined(__WXGTK__) && !defined(_UNICODE)
 	unitOfTemperature->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeTemperature));
+#endif
 
 	// Set the unit page's sizer
 	unitsPage->SetSizer(unitsTopSizer);

@@ -128,7 +128,6 @@ END_EVENT_TABLE();
 void EditCornerPanel::UpdateInformation(Corner *_currentCorner,
 										  Suspension::BarStyle barStyle, bool hasHalfShaft)
 {
-	// Update the class member
 	currentCorner = _currentCorner;
 
 	// Update the combo boxes
@@ -145,7 +144,6 @@ void EditCornerPanel::UpdateInformation(Corner *_currentCorner,
 	camberUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeAngle));
 	toeUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeAngle));
 
-	// Begin batch edit of the grid
 	hardpoints->BeginBatch();
 
 	// Update the unit labels
@@ -223,10 +221,7 @@ void EditCornerPanel::UpdateInformation(Corner *_currentCorner,
 		hardpoints->SetCellValue(i + 1, 3, UnitConverter::GetInstance().FormatNumber(point.z));
 	}
 
-	// End batch edit of the grid
 	hardpoints->EndBatch();
-
-	// Resize the sizers in case hardpoint rows were hidden or shown
 	Layout();
 
 	// FIXME:  Need way to turn grid scrollbars off
@@ -253,7 +248,6 @@ void EditCornerPanel::CreateControls()
 	// Enable scrollbars
 	SetScrollRate(1, 1);
 
-	// Top-level sizer
 	wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
 
 	// Second sizer gives more space around the controls
@@ -264,10 +258,7 @@ void EditCornerPanel::CreateControls()
 	hardpoints = new SuperGrid(this, wxID_ANY);
 	hardpoints->CreateGrid(Corner::NumberOfHardpoints + 1, 4, wxGrid::wxGridSelectRows);
 
-	// Begin a batch edit of the grid
 	hardpoints->BeginBatch();
-
-	// Make make the heading row read-only
 	int i;
 	for (i = 0; i < hardpoints->GetNumberCols(); i++)
 		hardpoints->SetReadOnly(0, i, true);
@@ -323,13 +314,11 @@ void EditCornerPanel::CreateControls()
 	// UpdateInformation()
 	hardpoints->AutoStretchColumn(0);
 
-	// Don't let the user move or re-size the rows or move the columns
 	hardpoints->EnableDragColMove(false);
 	hardpoints->EnableDragColSize(true);
 	hardpoints->EnableDragGridSize(false);
 	hardpoints->EnableDragRowSize(false);
 
-	// End the batch mode edit and re-paint the control
 	hardpoints->EndBatch();
 
 	// When setting the control width, we need to account for the width of the

@@ -314,78 +314,66 @@ void EditMassPanel::CreateControls()
 void EditMassPanel::TextBoxEditEvent(wxCommandEvent &event)
 {
 	double *dataLocation = NULL;
-
 	UnitConverter::UnitType units;
-
 	wxTextCtrl *textBox = NULL;
 
 	switch (event.GetId())
 	{
 	case TextBoxIxx:
-		// Get the text box, the location to write it, and the units
 		textBox = ixx;
 		dataLocation = &currentMassProperties->ixx;
 		units = UnitConverter::UnitTypeInertia;
 		break;
 
 	case TextBoxIyy:
-		// Get the new data, the location to write it, and the units
 		textBox = iyy;
 		dataLocation = &currentMassProperties->iyy;
 		units = UnitConverter::UnitTypeInertia;
 		break;
 
 	case TextBoxIzz:
-		// Get the new data, the location to write it, and the units
 		textBox = izz;
 		dataLocation = &currentMassProperties->izz;
 		units = UnitConverter::UnitTypeInertia;
 		break;
 
 	case TextBoxIxy:
-		// Get the new data, the location to write it, and the units
 		textBox = ixy;
 		dataLocation = &currentMassProperties->ixy;
 		units = UnitConverter::UnitTypeInertia;
 		break;
 
 	case TextBoxIxz:
-		// Get the new data, the location to write it, and the units
 		textBox = ixz;
 		dataLocation = &currentMassProperties->ixz;
 		units = UnitConverter::UnitTypeInertia;
 		break;
 
 	case TextBoxIyz:
-		// Get the new data, the location to write it, and the units
 		textBox = iyz;
 		dataLocation = &currentMassProperties->iyz;
 		units = UnitConverter::UnitTypeInertia;
 		break;
 
 	case TextBoxMass:
-		// Get the new data, the location to write it, and the units
 		textBox = mass;
 		dataLocation = &currentMassProperties->mass;
 		units = UnitConverter::UnitTypeMass;
 		break;
 
 	case TextBoxCenterOfGravityX:
-		// Get the new data, the location to write it, and the units
 		textBox = centerOfGravityX;
 		dataLocation = &currentMassProperties->centerOfGravity.x;
 		units = UnitConverter::UnitTypeDistance;
 		break;
 
 	case TextBoxCenterOfGravityY:
-		// Get the new data, the location to write it, and the units
 		textBox = centerOfGravityY;
 		dataLocation = &currentMassProperties->centerOfGravity.y;
 		units = UnitConverter::UnitTypeDistance;
 		break;
 
 	case TextBoxCenterOfGravityZ:
-		// Get the new data, the location to write it, and the units
 		textBox = centerOfGravityZ;
 		dataLocation = &currentMassProperties->centerOfGravity.z;
 		units = UnitConverter::UnitTypeDistance;
@@ -403,26 +391,17 @@ void EditMassPanel::TextBoxEditEvent(wxCommandEvent &event)
 	if (!valueString.ToDouble(&value))
 		return;
 
-	// Add the operation to the undo/redo stack
 	parent.GetMainFrame().GetUndoRedoStack().AddOperation(
 		parent.GetMainFrame().GetActiveIndex(),
 		UndoRedoStack::Operation::DataTypeDouble,
 		dataLocation);
 
-	// Get a lock on the car
 	wxMutex *mutex = parent.GetCurrentMutex();
 	mutex->Lock();
-
-	// Update the mass properties object
 	*dataLocation = UnitConverter::GetInstance().ConvertInput(value, units);
-
-	// Unlock the car
 	mutex->Unlock();
 
-	// Tell the car object that it was modified
 	parent.GetCurrentObject()->SetModified();
-
-	// Update the display and the kinematic outputs
 	parent.GetMainFrame().UpdateAnalysis();
 
 	// If one of the off-diagonal inertias was updated, we need to change the

@@ -101,9 +101,8 @@ Differential::~Differential()
 //		None
 //
 //==========================================================================
-void Differential::Write(std::ofstream */*outFile*/) const
+void Differential::Write(std::ofstream * /*outFile*/) const
 {
-	// FIXME:  MSCV generates C4100
 	// Write this object to file
 	// Not yet used
 }
@@ -125,9 +124,8 @@ void Differential::Write(std::ofstream */*outFile*/) const
 //		None
 //
 //==========================================================================
-void Differential::Read(std::ifstream */*inFile*/, int fileVersion)
+void Differential::Read(std::ifstream * /*inFile*/, int fileVersion)
 {
-	// FIXME:  MSCV generates C4100
 	// Read this object from file accoring to the file version we're using
 	if (fileVersion >= 0)// All versions
 	{

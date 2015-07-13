@@ -1156,7 +1156,7 @@ double Iteration::GetDataValue(int associatedCarIndex, int point, PlotID id) con
 		point > (int)numberOfPoints || id > NumberOfPlots)
 		return value;
 
-	// Depending on the specified PLOT_ID, choose which member of the KINEMATIC_OUTPUTS
+	// Depending on the specified PlotID, choose which member of the KinematicOutputs
 	// object to return
 	if (id < Pitch)
 		value = UnitConverter::GetInstance().ConvertOutput(outputLists[associatedCarIndex]->operator[](point)->GetOutputValue(

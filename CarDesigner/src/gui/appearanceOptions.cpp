@@ -42,85 +42,65 @@
 //		None
 //
 //==========================================================================
-AppearanceOptions::AppearanceOptions(MainFrame &_mainFrame, GuiCar &_owner) :
-									   mainFrame(_mainFrame), owner(_owner)
+AppearanceOptions::AppearanceOptions(MainFrame &mainFrame, GuiCar &owner)
+	: mainFrame(mainFrame), owner(owner)
 {
 	// FIXME:  Read all of these from registry???
 
 	// Assign default colors
-	color[ColorBackground].Set(0.4, 0.4, 0.9);// Bluish Gray
-	color[ColorGroundPlane].Set(0.5, 0.5, 0.5, 0.8);// Gray (translucent)
-	color[ColorHelperOrb].Set(1.0, 0.0, 0.0, 0.5);// Red (translucent)
-	color[ColorAArm].Set(0.0, 0.0, 1.0);// Blue
-	color[ColorTieRod].Set(0.2, 0.8, 0.2);// Green
-	color[ColorUpright].Set(1.0, 0.0, 1.0);// Magenta
-	color[ColorPushrod].Set(1.0, 1.0, 0.0);// Yellow
-	color[ColorSwayBar].Set(1.0, 0.0, 0.0);// Red
-	color[ColorHalfShaft].Set(0.3, 0.2, 0.2);// Brown
-	color[ColorTire].Set(0.0, 0.0, 0.0, 0.4);// Black (translucent)
-	color[ColorDamperBody].Set(1.0, 1.0, 0.0);// Yellow
-	color[ColorDamperShaft].Set(0.5, 0.5, 0.5);// Gray
-	color[ColorSpring].Set(1.0, 0.5, 0.0, 0.7);// Orange (translucent)
-	color[ColorRollMarker].Set(0.0, 1.0, 0.0);// Green
-	color[ColorPitchMarker].Set(1.0, 0.0, 0.0);// Red
-	color[ColorInstantMarker].Set(1.0, 1.0, 0.0);// Yellow
+	colorOptions[ColorBackground].Set(0.4, 0.4, 0.9);// Bluish Gray
+	colorOptions[ColorGroundPlane].Set(0.5, 0.5, 0.5, 0.8);// Gray (translucent)
+	colorOptions[ColorHelperOrb].Set(1.0, 0.0, 0.0, 0.5);// Red (translucent)
+	colorOptions[ColorAArm].Set(0.0, 0.0, 1.0);// Blue
+	colorOptions[ColorTieRod].Set(0.2, 0.8, 0.2);// Green
+	colorOptions[ColorUpright].Set(1.0, 0.0, 1.0);// Magenta
+	colorOptions[ColorPushrod].Set(1.0, 1.0, 0.0);// Yellow
+	colorOptions[ColorSwayBar].Set(1.0, 0.0, 0.0);// Red
+	colorOptions[ColorHalfShaft].Set(0.3, 0.2, 0.2);// Brown
+	colorOptions[ColorTire].Set(0.0, 0.0, 0.0, 0.4);// Black (translucent)
+	colorOptions[ColorDamperBody].Set(1.0, 1.0, 0.0);// Yellow
+	colorOptions[ColorDamperShaft].Set(0.5, 0.5, 0.5);// Gray
+	colorOptions[ColorSpring].Set(1.0, 0.5, 0.0, 0.7);// Orange (translucent)
+	colorOptions[ColorRollMarker].Set(0.0, 1.0, 0.0);// Green
+	colorOptions[ColorPitchMarker].Set(1.0, 0.0, 0.0);// Red
+	colorOptions[ColorInstantMarker].Set(1.0, 1.0, 0.0);// Yellow
 
 	// Assign default visibility flags
 	int i;
 	for (i = 0; i < VisibilityCount; i++)
-		visibility[i] = true;
+		visibilityOptions[i] = true;
 
 	// Assign default sizes
-	size[SizeOriginShaftDiameter] = 0.6;
-	size[SizeOriginShaftLength] = 4.0;
-	size[SizeOriginTipDiameter] = 1.0;
-	size[SizeOriginTipLength] = 1.0;
-	size[SizeAArmDiameter] = 0.625;
-	size[SizeSwayBarLinkDiameter] = 0.38;
-	size[SizeSwayBarDiameter] = 0.625;
-	size[SizeDamperShaftDiameter] = 0.38;
-	size[SizeDamperBodyDiameter] = 1.75;
-	size[SizeDamperBodyLength] = 5.0;
-	size[SizeSpringDiameter] = 2.25;
-	size[SizeSpringEndPointDiameter] = 0.42;
-	size[SizeHalfShaftDiameter] = 1.0;
-	size[SizeTireInsideDiameter] = 14.0;
-	size[SizeMarkerPointDiameter] = 2.0;
-	size[SizeMarkerShaftDiameter] = 0.75;
-	size[SizeMarkerTipDiameter] = 1.25;
-	size[SizeMarkerLength] = 20.0;
-	size[SizeMarkerTipLength] = 1.5;
-	size[SizeHelperOrbDiameter] = 3.0;
+	sizeOptions[SizeOriginShaftDiameter] = 0.6;
+	sizeOptions[SizeOriginShaftLength] = 4.0;
+	sizeOptions[SizeOriginTipDiameter] = 1.0;
+	sizeOptions[SizeOriginTipLength] = 1.0;
+	sizeOptions[SizeAArmDiameter] = 0.625;
+	sizeOptions[SizeSwayBarLinkDiameter] = 0.38;
+	sizeOptions[SizeSwayBarDiameter] = 0.625;
+	sizeOptions[SizeDamperShaftDiameter] = 0.38;
+	sizeOptions[SizeDamperBodyDiameter] = 1.75;
+	sizeOptions[SizeDamperBodyLength] = 5.0;
+	sizeOptions[SizeSpringDiameter] = 2.25;
+	sizeOptions[SizeSpringEndPointDiameter] = 0.42;
+	sizeOptions[SizeHalfShaftDiameter] = 1.0;
+	sizeOptions[SizeTireInsideDiameter] = 14.0;
+	sizeOptions[SizeMarkerPointDiameter] = 2.0;
+	sizeOptions[SizeMarkerShaftDiameter] = 0.75;
+	sizeOptions[SizeMarkerTipDiameter] = 1.25;
+	sizeOptions[SizeMarkerLength] = 20.0;
+	sizeOptions[SizeMarkerTipLength] = 1.5;
+	sizeOptions[SizeHelperOrbDiameter] = 3.0;
 
 	// Assign default resolutions
-	resolution[ResolutionOrigin] = 20;
-	resolution[ResolutionAArm] = 25;
-	resolution[ResolutionTire] = 50;
-	resolution[ResolutionSpringDamper] = 35;
-	resolution[ResolutionSwayBar] = 25;
-	resolution[ResolutionHalfShaft] = 30;
-	resolution[ResolutionMarker] = 30;
-	resolution[ResolutionHelperOrb] = 35;
-}
-
-//==========================================================================
-// Class:			AppearanceOptions
-// Function:		~AppearanceOptions
-//
-// Description:		Destructor for AppearanceOptions class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-AppearanceOptions::~AppearanceOptions()
-{
+	resolutionOptions[ResolutionOrigin] = 20;
+	resolutionOptions[ResolutionAArm] = 25;
+	resolutionOptions[ResolutionTire] = 50;
+	resolutionOptions[ResolutionSpringDamper] = 35;
+	resolutionOptions[ResolutionSwayBar] = 25;
+	resolutionOptions[ResolutionHalfShaft] = 30;
+	resolutionOptions[ResolutionMarker] = 30;
+	resolutionOptions[ResolutionHelperOrb] = 35;
 }
 
 //==========================================================================
@@ -130,7 +110,7 @@ AppearanceOptions::~AppearanceOptions()
 // Description:		Retrieves a string describing the specified visibility option.
 //
 // Input Arguments:
-//		_visibility	= ObjectVisibility in which we are interested
+//		item	= const ObjectVisibility& in which we are interested
 //
 // Output Arguments:
 //		None
@@ -139,13 +119,11 @@ AppearanceOptions::~AppearanceOptions()
 //		wxString containing the describing string
 //
 //==========================================================================
-wxString AppearanceOptions::GetVisibilityString(ObjectVisibility _visibility)
+wxString AppearanceOptions::GetVisibilityString(const ObjectVisibility& item)
 {
-	// Return value
 	wxString visibilityString;
 
-	// Depending on the Type, return the appropriate string
-	switch (_visibility)
+	switch (item)
 	{
 	case VisibilityOrigin:
 		visibilityString = _T("Origin");
@@ -246,18 +224,12 @@ wxString AppearanceOptions::GetVisibilityString(ObjectVisibility _visibility)
 //==========================================================================
 void AppearanceOptions::ShowAppearanceOptionsDialog(void)
 {
-	// Create the dialog box
 	AppearanceOptionsDialog optionsDialog(mainFrame, this, wxID_ANY, wxDefaultPosition);
 
-	// Display the dialog
 	if (optionsDialog.ShowModal() == wxOK)
 	{
 		// FIXME:  Write the updated options to the registry as defaults?
-
-		// Update the display
 		owner.UpdateDisplay();
-
-		// Tell the owner that it was modified
 		owner.SetModified();
 	}
 }
@@ -269,7 +241,7 @@ void AppearanceOptions::ShowAppearanceOptionsDialog(void)
 // Description:		Retrieves a string describing the specified color option.
 //
 // Input Arguments:
-//		_color	= ObjectColor in which we are intersted
+//		item	= const ObjectColor& in which we are intersted
 //
 // Output Arguments:
 //		None
@@ -278,13 +250,11 @@ void AppearanceOptions::ShowAppearanceOptionsDialog(void)
 //		wxString containing the describing string
 //
 //==========================================================================
-wxString AppearanceOptions::GetColorString(ObjectColor _color)
+wxString AppearanceOptions::GetColorString(const ObjectColor& item)
 {
-	// The return value
 	wxString colorString;
 
-	// Return the appropriate string
-	switch (_color)
+	switch (item)
 	{
 	case ColorBackground:
 		colorString.assign(_T("Background"));
@@ -365,7 +335,7 @@ wxString AppearanceOptions::GetColorString(ObjectColor _color)
 // Description:		Retrieves a string describing the specified size option.
 //
 // Input Arguments:
-//		_size	= ObjectSize in which we are interested
+//		item	= const ObjectSize& in which we are interested
 //
 // Output Arguments:
 //		None
@@ -374,13 +344,11 @@ wxString AppearanceOptions::GetColorString(ObjectColor _color)
 //		wxString containing the describing string
 //
 //==========================================================================
-wxString AppearanceOptions::GetSizeString(ObjectSize _size)
+wxString AppearanceOptions::GetSizeString(const ObjectSize& item)
 {
-	// The return value
 	wxString sizeString;
 
-	// Return the appropriate string
-	switch (_size)
+	switch (item)
 	{
 	case SizeOriginShaftDiameter:
 		sizeString.assign(_T("Origin Marker Shaft Diameter"));
@@ -477,7 +445,7 @@ wxString AppearanceOptions::GetSizeString(ObjectSize _size)
 // Description:		Retrieves a string describing the specified resolution option.
 //
 // Input Arguments:
-//		_resolution	= ObjectResolution in which we are intersted
+//		item	= const ObjectResolution& in which we are intersted
 //
 // Output Arguments:
 //		None
@@ -486,13 +454,11 @@ wxString AppearanceOptions::GetSizeString(ObjectSize _size)
 //		wxString containing the describing string
 //
 //==========================================================================
-wxString AppearanceOptions::GetResolutionString(ObjectResolution _resolution)
+wxString AppearanceOptions::GetResolutionString(const ObjectResolution& item)
 {
-	// The return value
 	wxString resolutionString;
 
-	// Return the appropriate string
-	switch (_resolution)
+	switch (item)
 	{
 	case ResolutionOrigin:
 		resolutionString.assign(_T("Origin Markers"));
@@ -552,17 +518,10 @@ wxString AppearanceOptions::GetResolutionString(ObjectResolution _resolution)
 //==========================================================================
 void AppearanceOptions::Write(std::ofstream *outFile)
 {
-	// Write the visibility flags to the stream
-	outFile->write((char*)visibility, VisibilityCount * sizeof(bool));
-
-	// Write the sizes to the stream
-	outFile->write((char*)size, SizeCount * sizeof(double));
-
-	// Write the colors to the stream
-	outFile->write((char*)color, ColorCount * sizeof(Color));
-
-	// Write the resolutions to the stream
-	outFile->write((char*)resolution, ResolutionCount * sizeof(int));
+	outFile->write((char*)visibilityOptions, VisibilityCount * sizeof(bool));
+	outFile->write((char*)sizeOptions, SizeCount * sizeof(double));
+	outFile->write((char*)colorOptions, ColorCount * sizeof(Color));
+	outFile->write((char*)resolutionOptions, ResolutionCount * sizeof(int));
 }
 
 //==========================================================================
@@ -588,15 +547,8 @@ void AppearanceOptions::Read(std::ifstream *inFile, int fileVersion)
 	if (fileVersion < 1)
 		return;// At some point, it may be necessary to keep track of the size of this object with every file version
 
-	// Read the visibility flags from the stream
-	inFile->read((char*)visibility, VisibilityCount * sizeof(bool));
-
-	// Read the sizes from the stream
-	inFile->read((char*)size, SizeCount * sizeof(double));
-
-	// Read the colors from the stream
-	inFile->read((char*)color, ColorCount * sizeof(Color));
-
-	// Read the resolutions from the stream
-	inFile->read((char*)resolution, ResolutionCount * sizeof(int));
+	inFile->read((char*)visibilityOptions, VisibilityCount * sizeof(bool));
+	inFile->read((char*)sizeOptions, SizeCount * sizeof(double));
+	inFile->read((char*)colorOptions, ColorCount * sizeof(Color));
+	inFile->read((char*)resolutionOptions, ResolutionCount * sizeof(int));
 }

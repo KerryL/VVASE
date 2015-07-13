@@ -31,10 +31,7 @@ class AppearanceOptions
 {
 public:
 	// Constructor
-	AppearanceOptions(MainFrame &_mainFrame, GuiCar &_owner);
-
-	// Destructor
-	~AppearanceOptions();
+	AppearanceOptions(MainFrame &mainFrame, GuiCar &owner);
 
 	// Displays a dialog for editing these options
 	void ShowAppearanceOptionsDialog(void);
@@ -65,11 +62,11 @@ public:
 	};
 
 	// The strings that describe the color options
-	static wxString GetColorString(ObjectColor _color);
+	static wxString GetColorString(const ObjectColor& item);
 
-	// For accessing the visibility options
-	inline void SetColor(ObjectColor _color, Color colorValue) { color[_color] = colorValue; };
-	inline Color GetColor(ObjectColor _color) const { return color[_color]; };
+	// For accessing the color options
+	inline void SetColor(const ObjectColor& item, const Color& value) { colorOptions[item] = value; }
+	inline Color GetColor(const ObjectColor& item) const { return colorOptions[item]; }
 
 	// Visibility options
 	enum ObjectVisibility
@@ -99,11 +96,11 @@ public:
 	};
 
 	// The strings that describe the visibility options
-	static wxString GetVisibilityString(ObjectVisibility _visibility);
+	static wxString GetVisibilityString(const ObjectVisibility& item);
 
 	// For accessing the visibility options
-	inline void SetVisibility(ObjectVisibility _visibility, bool visibilityValue) { visibility[_visibility] = visibilityValue; };
-	inline bool GetVisibility(ObjectVisibility _visibility) const { return visibility[_visibility]; };
+	inline void SetVisibility(const ObjectVisibility& item, const bool& value) { visibilityOptions[item] = value; }
+	inline bool GetVisibility(const ObjectVisibility& item) const { return visibilityOptions[item]; }
 
 	// Actor sizes
 	enum ObjectSize
@@ -132,12 +129,12 @@ public:
 		SizeCount
 	};
 
-	// The strings that describe the visibility options
-	static wxString GetSizeString(ObjectSize _visibility);
+	// The strings that describe the size options
+	static wxString GetSizeString(const ObjectSize& item);
 
 	// For accessing the visibility options
-	inline void SetSize(ObjectSize _size, double sizeValue) { size[_size] = fabs(sizeValue); };
-	inline double GetSize(ObjectSize _size) const { return size[_size]; };
+	inline void SetSize(const ObjectSize& item, const double& value) { sizeOptions[item] = fabs(value); }
+	inline double GetSize(const ObjectSize& item) const { return sizeOptions[item]; }
 
 	// Actor resolution (for round objects)
 	enum ObjectResolution
@@ -155,28 +152,28 @@ public:
 	};
 
 	// The strings that describe the visibility options
-	static wxString GetResolutionString(ObjectResolution _visibility);
+	static wxString GetResolutionString(const ObjectResolution& item);
 
 	// For accessing the visibility options
-	inline void SetResolution(ObjectResolution _resolution, int resolutionValue) { resolution[_resolution] = resolutionValue > 3 ? resolutionValue : 3; };
-	inline int GetResolution(ObjectResolution _resolution) const { return resolution[_resolution]; };
+	inline void SetResolution(const ObjectResolution& item, const int& value) { resolutionOptions[item] = value > 3 ? value : 3; }
+	inline int GetResolution(const ObjectResolution& item) const { return resolutionOptions[item]; }
 
 	// File I/O methods
 	void Write(std::ofstream *outFile);
 	void Read(std::ifstream *inFile, int fileVersion);
 
-private:
-	// The main application window
-	MainFrame &mainFrame;
+	bool* GetVisibilityPointer() { return visibilityOptions; }
+	double* GetSizePointer() { return sizeOptions; }
+	unsigned int* GetResolutionPointer() { return resolutionOptions; }
 
-	// The owner of these attributes
+private:
+	MainFrame &mainFrame;
 	GuiCar &owner;
 
-	// This object's data
-	Color color[ColorCount];
-	bool visibility[VisibilityCount];
-	double size[SizeCount];
-	int resolution[ResolutionCount];
+	Color colorOptions[ColorCount];
+	bool visibilityOptions[VisibilityCount];
+	double sizeOptions[SizeCount];
+	unsigned int resolutionOptions[ResolutionCount];
 };
 
 #endif// _APPEARANCE_OPTIONS_H_

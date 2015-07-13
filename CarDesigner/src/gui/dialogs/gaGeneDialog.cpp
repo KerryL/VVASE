@@ -18,7 +18,6 @@
 #include "vUtilities/wxRelatedUtilities.h"
 #include "vUtilities/unitConverter.h"
 #include "vUtilities/dataValidator.h"
-#include "vUtilities/integerValidator.h"
 
 //==========================================================================
 // Class:			GAGeneDialog
@@ -224,7 +223,7 @@ void GAGeneDialog::CreateControls(void)
 
 	// Minimum
 	minimumText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		wxDefaultSize, 0, DataValidator(UnitConverter::UnitTypeDistance, &minimum));
+		wxDefaultSize, 0, UnitValidator(minimum, UnitConverter::UnitTypeDistance));
 	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Minimum")), 0, textSizerFlags);
 	inputAreaSizer->Add(minimumText, 0, comboSizerFlags);
 	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC,
@@ -233,7 +232,7 @@ void GAGeneDialog::CreateControls(void)
 
 	// Maximum
 	maximumText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		wxDefaultSize, 0, DataValidator(UnitConverter::UnitTypeDistance, &maximum));
+		wxDefaultSize, 0, UnitValidator(maximum, UnitConverter::UnitTypeDistance));
 	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Maximum")), 0, textSizerFlags);
 	inputAreaSizer->Add(maximumText, 0, comboSizerFlags);
 	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC,
@@ -242,7 +241,7 @@ void GAGeneDialog::CreateControls(void)
 
 	// Number of values
 	numberOfValuesText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		wxDefaultSize, 0, IntegerValidator(2, &numberOfValues, IntegerValidator::ClassMinimumInclusive));
+		wxDefaultSize, 0, UnsignedValidator(numberOfValues, 2, 0, UnsignedValidator::ClassMinimumInclusive));
 	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Number of Values")), 0, textSizerFlags);
 	inputAreaSizer->Add(numberOfValuesText, 0, comboSizerFlags);
 	inputAreaSizer->AddSpacer(-1);
