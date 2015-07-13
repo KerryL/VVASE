@@ -125,9 +125,7 @@ END_EVENT_TABLE();
 //==========================================================================
 void EditSuspensionPanel::UpdateInformation(void)
 {
-	// Make sure the suspension object exists
 	if (currentSuspension)
-		// Call the method that performs the update
 		UpdateInformation(currentSuspension);
 }
 
@@ -147,23 +145,19 @@ void EditSuspensionPanel::UpdateInformation(void)
 //		None
 //
 //==========================================================================
-void EditSuspensionPanel::UpdateInformation(Suspension *_currentSuspension)
+void EditSuspensionPanel::UpdateInformation(Suspension *currentSuspension)
 {
-	// Update the class members
-	currentSuspension = _currentSuspension;
+	this->currentSuspension = currentSuspension;
 
-	// Update the check boxes
 	isSymmetric->SetValue(currentSuspension->isSymmetric);
 	frontHasThirdSpring->SetValue(currentSuspension->frontHasThirdSpring);
 	rearHasThirdSpring->SetValue(currentSuspension->rearHasThirdSpring);
 
-	// Update the combo boxes
 	frontBarStyle->SetSelection(currentSuspension->frontBarStyle);
 	rearBarStyle->SetSelection(currentSuspension->rearBarStyle);
 
 	hardpoints->BeginBatch();
 
-	// Update the unit labels
 	wxString unitString;
 	unitString.Printf("(%s)", UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance).c_str());
 	hardpoints->SetCellValue(0, 1, unitString);

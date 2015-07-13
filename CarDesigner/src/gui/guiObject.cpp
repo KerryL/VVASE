@@ -245,13 +245,10 @@ wxString GuiObject::GetCleanName(void) const
 //==========================================================================
 void GuiObject::SetModified(void)
 {
-	// Set the flag
 	modifiedSinceLastSave = true;
 
-	// If we haven't been saved, add the asterisk
 	if (!pathAndFileName.IsEmpty())
 	{
-		// Make sure we don't already have an asterisk
 		wxString asterisk('*');
 		if (name.substr(name.length() - 1,1).compare(asterisk) != 0)
 			SetName(name + asterisk);
@@ -277,7 +274,6 @@ void GuiObject::SetModified(void)
 //==========================================================================
 bool GuiObject::IsThisObjectSelected(wxTreeItemId selected) const
 {
-	// Make sure we are being passes a valid tree item id
 	if (!selected.IsOk())
 		return false;
 

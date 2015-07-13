@@ -56,7 +56,6 @@ EditCornerPanel::EditCornerPanel(EditSuspensionNotebook & _parent, wxWindowID id
 									 wxScrolledWindow(&_parent, id, pos, size),
 									 parent(_parent)
 {
-	// Create the controls
 	CreateControls();
 }
 
@@ -125,10 +124,10 @@ END_EVENT_TABLE();
 //		None
 //
 //==========================================================================
-void EditCornerPanel::UpdateInformation(Corner *_currentCorner,
+void EditCornerPanel::UpdateInformation(Corner *currentCorner,
 										  Suspension::BarStyle barStyle, bool hasHalfShaft)
 {
-	currentCorner = _currentCorner;
+	this->currentCorner = currentCorner;
 
 	// Update the combo boxes
 	actuationType->SetSelection(currentCorner->actuationType);
@@ -217,17 +216,18 @@ void EditCornerPanel::UpdateInformation(Corner *_currentCorner,
 		// Get the location of this hardpoint (don't forget to convert it!)
 		point = UnitConverter::GetInstance().ConvertDistanceOutput(currentCorner->hardpoints[i]);
 
-		// Set the X value
 		hardpoints->SetCellValue(i + 1, 1, UnitConverter::GetInstance().FormatNumber(point.x));
-
-		// Set the Y value
 		hardpoints->SetCellValue(i + 1, 2, UnitConverter::GetInstance().FormatNumber(point.y));
-
-		// Set the Z value
 		hardpoints->SetCellValue(i + 1, 3, UnitConverter::GetInstance().FormatNumber(point.z));
 	}
 
 	hardpoints->EndBatch();
+	
+	// Bug in GTK - without this yeild, the dialog does not update correctly and
+	// we end up with overlapped controls
+#ifdef __WXGTK__
+	wxYield();
+#endif
 	Layout();
 
 	// FIXME:  Need way to turn grid scrollbars off

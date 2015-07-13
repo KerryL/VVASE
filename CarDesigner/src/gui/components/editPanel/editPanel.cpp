@@ -60,14 +60,11 @@ EditPanel::EditPanel(MainFrame &_mainFrame, wxWindowID id, const wxPoint& pos,
 					   const wxSize& size) :
 					   wxPanel(&_mainFrame, id, pos, size), mainFrame(_mainFrame)
 {
-	// Get the systems tree
 	systemsTree = mainFrame.GetSystemsTree();
 
-	// Initialize the 'Current' class members
 	currentType = GuiObject::TypeNone;
 	currentObject = NULL;
 
-	// Initialize all of the control pointers to NULL
 	editAerodynamics = NULL;
 	editBrakes = NULL;
 	editDifferential = NULL;
@@ -79,10 +76,8 @@ EditPanel::EditPanel(MainFrame &_mainFrame, wxWindowID id, const wxPoint& pos,
 
 	editIteration = NULL;
 
-	// Initialize the mutex pointer to NULL
 	carMutex = NULL;
 
-	// Create and set the sizer for this panel
 	sizer = new wxBoxSizer(wxVERTICAL);
 	SetSizer(sizer);
 }
@@ -126,9 +121,7 @@ EditPanel::~EditPanel()
 //==========================================================================
 void EditPanel::UpdateInformation(void)
 {
-	// Make sure the object has already been assigned
 	if (currentObject)
-		// Call the method that performs the update
 		UpdateInformation(currentObject);
 }
 
@@ -139,7 +132,7 @@ void EditPanel::UpdateInformation(void)
 // Description:		Updates the information in this notebook.
 //
 // Input Arguments:
-//		_currentObject	= GuiObject* pointing to the currenly active object
+//		currentObject	= GuiObject* pointing to the currenly active object
 //
 // Output Arguments:
 //		None
@@ -148,34 +141,25 @@ void EditPanel::UpdateInformation(void)
 //		None
 //
 //==========================================================================
-void EditPanel::UpdateInformation(GuiObject *_currentObject)
+void EditPanel::UpdateInformation(GuiObject *currentObject)
 {
-	// Update the class member
-	currentObject = _currentObject;
+	this->currentObject = currentObject;
 
-	// If the current object is NULL, we no longer have an object to represent
 	if (!currentObject)
 	{
-		// Set CurrentType to None
 		currentType = GuiObject::TypeNone;
-
-		// Delete all of the controls and set the pointers to NULL
 		DeleteAllControls();
-
 		return;
 	}
 
-	// Set the mutex pointer to NULL
 	carMutex = NULL;
 
-	// Check to see if the item selected in the tree control is associated with this
 	bool ignoreSystemsTree = true;
 	wxTreeItemId tempTreeID;
 	if (systemsTree->GetSelectedItem(&tempTreeID) == currentObject)
 	{
 		// The object was a match, but let's make sure the tree item ID is valid
 		if (tempTreeID.IsOk())
-			// The SystemsTree has a valid item selected - don't ignore it
 			ignoreSystemsTree = false;
 	}
 
@@ -183,29 +167,18 @@ void EditPanel::UpdateInformation(GuiObject *_currentObject)
 	// we need to delete the existing pages
 	if (currentType != currentObject->GetType() || (!ignoreSystemsTree && tempTreeID != currentTreeID))
 	{
-		// Assign the current type to this object
 		currentType = currentObject->GetType();
-
-		// Assign the current tree item ID to this object
 		currentTreeID = tempTreeID;
-
-		// Create the controls
 		CreateControls(ignoreSystemsTree);
 	}
 
-	// Take different actions depending on the object's type
 	switch (currentType)
 	{
 	case GuiObject::TypeCar:
 		{
-			// Get a pointer to the car's mutex
 			carMutex = &(static_cast<GuiCar*>(currentObject)->GetOriginalCar().GetMutex());
-
-			// Ensure exclusive access to the object during the update
 			wxMutexLocker lock(*carMutex);
 
-			// Call the appropriate update function
-			// We check to see which one to call based on which object exists
 			if (editAerodynamics)
 			{
 			}
@@ -223,10 +196,8 @@ void EditPanel::UpdateInformation(GuiObject *_currentObject)
 			else if (editMass)
 				editMass->UpdateInformation(static_cast<GuiCar*>(currentObject)->GetOriginalCar().massProperties);
 			else if (editSuspension)
-				// Update the suspension notebook
 				editSuspension->UpdateInformation(&static_cast<GuiCar*>(currentObject)->GetOriginalCar());
 			else if (editTires)
-				// Update the tires panel
 				editTires->UpdateInformation(static_cast<GuiCar*>(currentObject)->GetOriginalCar().tires);
 		}
 
@@ -236,7 +207,6 @@ void EditPanel::UpdateInformation(GuiObject *_currentObject)
 		editIteration->UpdateInformation(static_cast<Iteration*>(currentObject));
 		break;
 
-	// Unused cases
 	case GuiObject::TypeOptimization:
 	case GuiObject::TypeNone:
 		break;
@@ -246,6 +216,8 @@ void EditPanel::UpdateInformation(GuiObject *_currentObject)
 		assert(0);
 		break;
 	}
+	
+	Layout();
 }
 
 //==========================================================================
@@ -267,10 +239,8 @@ void EditPanel::UpdateInformation(GuiObject *_currentObject)
 //==========================================================================
 void EditPanel::CreateControls(bool ignoreSystemsTree)
 {
-	// Delete any existing panels/notebooks
 	DeleteAllControls();
 
-	// Add different pages depending on the object's type
 	switch (currentType)
 	{
 	case GuiObject::TypeCar:
@@ -283,11 +253,8 @@ void EditPanel::CreateControls(bool ignoreSystemsTree)
 			}
 			else if (systemsTree->GetItemType(currentTreeID) == GuiCar::SubsystemBrakes)
 			{
-				// Create the brakes panel
 				editBrakes = new EditBrakesPanel(*this, wxID_ANY,
 					wxDefaultPosition, wxDefaultSize);
-
-				// Add the brakes panel to the sizer
 				sizer->Add(editBrakes, 1, wxEXPAND);
 			}
 			else if (systemsTree->GetItemType(currentTreeID) == GuiCar::SubsystemDrivetrain)
@@ -298,29 +265,20 @@ void EditPanel::CreateControls(bool ignoreSystemsTree)
 			}
 			else if (systemsTree->GetItemType(currentTreeID) == GuiCar::SubsystemMassProperties)
 			{
-				// Create the mass properties panel
 				editMass = new EditMassPanel(*this, wxID_ANY,
 					wxDefaultPosition, wxDefaultSize);
-
-				// Add the mass panel to the sizer
 				sizer->Add(editMass, 1, wxEXPAND);
 			}
 			else if (systemsTree->GetItemType(currentTreeID) == GuiCar::SubsystemSuspension)
 			{
-				// Create the suspension notebook
 				editSuspension = new EditSuspensionNotebook(*this, wxID_ANY,
 					wxDefaultPosition, wxDefaultSize, wxNB_BOTTOM);
-
-				// Add the suspension to the sizer
 				sizer->Add(editSuspension, 1, wxEXPAND);
 			}
 			else if (systemsTree->GetItemType(currentTreeID) == GuiCar::SubsystemTires)
 			{
-				// Create the tires panel
 				editTires = new EditTiresPanel(*this, wxID_ANY,
 					wxDefaultPosition, wxDefaultSize);
-
-				// Add the tire set to the sizer
 				sizer->Add(editTires, 1, wxEXPAND);
 			}
 		}
@@ -328,11 +286,9 @@ void EditPanel::CreateControls(bool ignoreSystemsTree)
 		break;
 
 	case GuiObject::TypeIteration:
-		// Create the iteration panel
 		editIteration = new EditIterationNotebook(*this, wxID_ANY,
 			wxDefaultPosition, wxDefaultSize, wxNB_BOTTOM);
 
-		// Add the iteration panel to the sizer
 		sizer->Add(editIteration, 1, wxEXPAND);
 		break;
 
@@ -341,13 +297,11 @@ void EditPanel::CreateControls(bool ignoreSystemsTree)
 	case GuiObject::TypeNone:
 		break;
 
-	// Fail on unknown cases to prevent forgetting any
 	default:
 		assert(0);
 		break;
 	}
 
-	// Update the sizer
 	sizer->Layout();
 }
 
@@ -376,7 +330,6 @@ void EditPanel::DeleteAllControls(void)
 		sizer->Remove(0);
 	sizer->Layout();
 
-	// Delete all of the controls
 	delete editAerodynamics;
 	delete editBrakes;
 	delete editDifferential;
@@ -405,13 +358,9 @@ void EditPanel::DeleteAllControls(void)
 	// the suspension page.
 	if (currentObject)
 	{
-		// This is only necessary if the current object is TYPE_CAR
 		if (currentObject->GetType() == GuiObject::TypeCar)
 		{
-			// Deactive the helper orb
 			static_cast<CarRenderer*>(currentObject->GetNotebookTab())->DeactivateHelperOrb();
-
-			// Update the visual display
 			currentObject->UpdateDisplay();
 		}
 	}
