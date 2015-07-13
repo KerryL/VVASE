@@ -1147,7 +1147,6 @@ bool Iteration::AssociatedWithCar(GuiCar *test) const
 //==========================================================================
 double Iteration::GetDataValue(int associatedCarIndex, int point, PlotID id) const
 {
-	// The value to return
 	double value = 0.0;
 	Vector temp;
 
@@ -1159,7 +1158,7 @@ double Iteration::GetDataValue(int associatedCarIndex, int point, PlotID id) con
 	// Depending on the specified PlotID, choose which member of the KinematicOutputs
 	// object to return
 	if (id < Pitch)
-		value = UnitConverter::GetInstance().ConvertOutput(outputLists[associatedCarIndex]->operator[](point)->GetOutputValue(
+		value = UnitConverter::GetInstance().ConvertOutput((*outputLists[associatedCarIndex])[point]->GetOutputValue(
 			(KinematicOutputs::OutputsComplete)id), KinematicOutputs::GetOutputUnitType(
 			(KinematicOutputs::OutputsComplete)id));
 	else if (id == Pitch)

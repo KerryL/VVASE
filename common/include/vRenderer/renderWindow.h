@@ -52,10 +52,10 @@ public:
 	// Transforms between the model coordinate system and the view (openGL) coordinate system
 	Vector TransformToView(const Vector &modelVector) const;
 	Vector TransformToModel(const Vector &viewVector) const;
-	Vector GetCameraPosition(void) const;
+	Vector GetCameraPosition() const;
 
 	// Sets the viewing frustum to match the current size of the window
-	void AutoSetFrustum(void);
+	void AutoSetFrustum();
 
 	// Adds actors to the primitives list
 	inline void AddActor(Primitive *toAdd) { primitiveList.Add(toAdd); modified = true; };
@@ -64,28 +64,28 @@ public:
 	bool RemoveActor(Primitive *toRemove);
 
 	// Private data accessors
-	inline void SetWireFrame(bool _wireFrame) { wireFrame = _wireFrame; modified = true; };
-	inline void SetViewOrthogonal(bool _viewOrthogonal) { viewOrthogonal = _viewOrthogonal; modified = true; };
+	inline void SetWireFrame(const bool& wireFrame) { this->wireFrame = wireFrame; modified = true; };
+	inline void SetViewOrthogonal(const bool& viewOrthogonal) { this->viewOrthogonal = viewOrthogonal; modified = true; };
 
-	inline void SetVerticalFOV(double _verticalFOV) { verticalFOV = _verticalFOV; modified = true; };
-	inline void SetAspectRatio(double _aspectRatio) { aspectRatio = _aspectRatio; modified = true; };
-	inline void SetNearClip(double _nearClip) { nearClip = _nearClip; modified = true; };
-	inline void SetFarClip(double _farClip) { farClip = _farClip; modified = true; };
-	inline void SetView3D(bool _view3D) { view3D = _view3D; modified = true; };
+	inline void SetTopMinusBottom(const double& topMinusBottom) { this->topMinusBottom = topMinusBottom; modified = true; };
+	inline void SetAspectRatio(const double& aspectRatio) { this->aspectRatio = aspectRatio; modified = true; };
+	inline void SetNearClip(const double& nearClip) { this->nearClip = nearClip; modified = true; };
+	inline void SetFarClip(const double& farClip) { this->farClip = farClip; modified = true; };
+	inline void SetView3D(const bool& view3D) { this->view3D = view3D; modified = true; };
 
-	inline void SetBackgroundColor(Color _backgroundColor) { backgroundColor = _backgroundColor; modified = true; };
-	inline Color GetBackgroundColor(void) { return backgroundColor; };
+	inline void SetBackgroundColor(const Color& backgroundColor) { this->backgroundColor = backgroundColor; modified = true; };
+	inline Color GetBackgroundColor() { return backgroundColor; };
 
-	inline bool GetWireFrame(void) const { return wireFrame; };
-	inline bool GetViewOrthogonal(void) const { return viewOrthogonal; };
-	inline bool GetView3D(void) const { return view3D; };
+	inline bool GetWireFrame() const { return wireFrame; };
+	inline bool GetViewOrthogonal() const { return viewOrthogonal; };
+	inline bool GetView3D() const { return view3D; };
 
 	// Returns a string containing any OpenGL errors
-	wxString GetGLError(void) const;
+	wxString GetGLError() const;
 
 	// Writes the current image to file
 	bool WriteImageToFile(wxString pathAndFileName) const;
-	wxImage GetImage(void) const;
+	wxImage GetImage() const;
 
 	// Determines if a particular primitive is in the scene owned by this object
 	bool IsThisRendererSelected(const Primitive *pickedObject) const;
@@ -94,7 +94,7 @@ public:
 
 private:
 	wxGLContext *context;
-	wxGLContext* GetContext(void);
+	wxGLContext* GetContext();
 	
 	static const double exactPixelShift;
 
@@ -103,10 +103,15 @@ private:
 	bool viewOrthogonal;
 
 	// The parameters that describe the viewing frustum
-	double verticalFOV;
+	double topMinusBottom;// in model-space units
 	double aspectRatio;
 	double nearClip;
 	double farClip;
+
+	static const double topMinusBottomMin;
+	static const double topMinusBottomMax;
+
+	double ComputeVerticalHalfAngle(const double &topMinusBottom) const;
 
 	// The background color
 	Color backgroundColor;

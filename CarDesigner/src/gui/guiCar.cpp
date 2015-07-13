@@ -82,7 +82,8 @@ GuiCar::GuiCar(MainFrame &_mainFrame, wxString _pathAndFileName)
 	renderer = new CarRenderer(mainFrame, *this, args);
 #else
 	renderer = new CarRenderer(mainFrame, *this, NULL);
-#endif
+#endif// TODO:  See DataPlotter for fix...
+
 	notebookTab = reinterpret_cast<wxWindow*>(renderer);
 
 	// Get an index for this item and add it to the list in the mainFrame

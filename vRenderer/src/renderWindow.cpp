@@ -50,6 +50,8 @@
 //
 //==========================================================================
 const double RenderWindow::exactPixelShift(0.375);
+const double RenderWindow::topMinusBottomMin(100.0);
+const double RenderWindow::topMinusBottomMax(500.0);
 
 //==========================================================================
 // Class:			RenderWindow
@@ -630,20 +632,9 @@ void RenderWindow::DoWheelDolly(wxMouseEvent &event)
 	// Handle 3D dollying differently than 2D dollying
 	if (view3D)
 	{
-		// Always dolly a constant distance
-		double dollyDistance = 0.05;
-
-		// TODO:  Adjust the dolly distance so it is slower closer to the focal point and slower farther away
-
-		// Get the normal direction (along which we will translate)
-		Vector normal(0.0, 0.0, 1.0);
-		normal = TransformToModel(normal);
-
-		// Apply the dolly distance and flip the distance depending on whether we're wheeling in or out
-		normal *= dollyDistance * event.GetWheelRotation();
-
-		// Apply the translation
-		glTranslated(normal.x, normal.y, normal.z);
+		const double dollyFactor(0.05);
+		const double nominalWheelRotation(120.0);
+		SetTopMinusBottom(topMinusBottom * (1.0 + event.GetWheelRotation() / nominalWheelRotation * dollyFactor));
 	}
 	else
 	{
@@ -671,27 +662,9 @@ void RenderWindow::DoDragDolly(wxMouseEvent &event)
 {
 	if (view3D)
 	{
-		double dollyDistance = 0.1;
-
-		// Convert up and normal vectors from openGL coordinates to model coordinates
-		Vector upDirection(0.0, 1.0, 0.0), normal(0.0, 0.0, 1.0), leftDirection;
-		upDirection = TransformToModel(upDirection);
-		normal = TransformToModel(normal);
-		leftDirection = normal.Cross(upDirection);
-
-		// Get a vector that represents the mouse position relative to the center of the screen
-		Vector mouseVector = upDirection * double(GetSize().GetHeight() / 2 - event.GetY())
-			+ leftDirection * double(GetSize().GetWidth() / 2 - event.GetX());
-		Vector lastMouseVector = upDirection * double(GetSize().GetHeight() / 2 - lastMousePosition[1])
-			+ leftDirection * double(GetSize().GetWidth() / 2 - lastMousePosition[0]);
-
-		// Get a vector that represents the mouse motion (projected onto a plane with the camera
-		// position as a normal)
-		Vector mouseMotion = mouseVector - lastMouseVector;
-
-		mouseMotion = TransformToView(mouseMotion);
-		normal *= dollyDistance * mouseMotion.y;
-		glTranslated(normal.x, normal.y, normal.z);
+		const double dollyFactor(0.05);
+		double deltaMouse = lastMousePosition[1] - event.GetY();
+		SetTopMinusBottom(topMinusBottom * (1.0 + deltaMouse * dollyFactor));
 	}
 	else
 	{
@@ -910,21 +883,19 @@ void RenderWindow::AutoSetFrustum(void)
 		return;
 	}
 
-	// Get this window's size
-	wxSize WindowSize = GetSize();
+	wxSize windowSize = GetSize();
+	aspectRatio = (double)windowSize.GetWidth() / (double)windowSize.GetHeight();
 
-	// Set the aspect ratio to match this window's size
-	aspectRatio = (double)WindowSize.GetWidth() / (double)WindowSize.GetHeight();
-
-	// Set the vertical FOV
-	verticalFOV = 20.0 * VVASEMath::Pi / 180.0;
+	// Make some assumptions to compute the horizontal viewing range
+	// The car's wheelbase plus a tire diameter is roughly the longest dimension we need to show on-screen at one time
+	// We'll assume this is generally less than 150 inches
+	topMinusBottom = 150.0;
 
 	// Set the clipping plane distances to something reasonable
 	// TODO:  Make this be smarter, or user-adjustable (distance between camera and focal point)
 	nearClip = 5.0;
 	farClip = 500.0;
 
-	// Tell it that we're modified
 	modified = true;
 }
 
@@ -1337,28 +1308,52 @@ Matrix RenderWindow::Generate2DProjectionMatrix(void) const
 Matrix RenderWindow::Generate3DProjectionMatrix(void) const
 {
 	Matrix projectionMatrix(4, 4);
-	double halfHeight = tan(verticalFOV) * nearClip;
 	if (viewOrthogonal)
 	{
-		// Set up the elements for the orthogonal projection matrix (parallel projection)
-		projectionMatrix.SetElement(0, 0, 1.0 / (aspectRatio * halfHeight));
-		projectionMatrix.SetElement(1, 1, 1.0 / halfHeight);
+		double rightMinusLeft(topMinusBottom * aspectRatio);
+		projectionMatrix.SetElement(0, 0, 2.0 / rightMinusLeft);
+		projectionMatrix.SetElement(1, 1, 2.0 / topMinusBottom);
 		projectionMatrix.SetElement(2, 2, 2.0 / (nearClip - farClip));
-		projectionMatrix.SetElement(2, 3, (nearClip + farClip) / (nearClip - farClip));
-		//ProjectionMatrix.SetElement(3, 2, -1.0);// Removing this line does not give you a true orthographic projection, but it is necessary for dollying
 		projectionMatrix.SetElement(3, 3, 1.0);
+		// For symmetric frustums, elements (0,3) and (1,3) are zero
+		projectionMatrix.SetElement(2, 3, (nearClip + farClip) / (nearClip - farClip));
 	}
 	else
 	{
-		// Set up the elements for the perspective projection matrix
-		projectionMatrix.SetElement(0, 0, nearClip / (aspectRatio * halfHeight));
-		projectionMatrix.SetElement(1, 1, nearClip / halfHeight);
+		double f(1.0 / tan(ComputeVerticalHalfAngle(topMinusBottom)));
+		projectionMatrix.SetElement(0, 0, f / aspectRatio);
+		projectionMatrix.SetElement(1, 1, f);
 		projectionMatrix.SetElement(2, 2, (nearClip + farClip) / (nearClip - farClip));
 		projectionMatrix.SetElement(2, 3, 2.0 * farClip * nearClip / (nearClip - farClip));
 		projectionMatrix.SetElement(3, 2, -1.0);
 	}
 
 	return projectionMatrix;
+}
+
+//==========================================================================
+// Class:			RenderWindow
+// Function:		ComputeVerticalHalfAngle
+//
+// Description:		Computes the vertical half angle for use in projection matrix
+//					calculation.
+//
+// Input Arguments:
+//		topMinusBottom	= const double&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		double
+//
+//==========================================================================
+double RenderWindow::ComputeVerticalHalfAngle(const double &topMinusBottom) const
+{
+	// TODO:  This could use a little work to make the rate of dollying more linear
+	const double fovPerInch(20.0 / 150.0);// 20 deg per 150 inches - just picked something that looks nice
+	const double epsilon(1.0e-6);
+	return std::max(std::min(M_PI * 0.5, 0.5 * fovPerInch * topMinusBottom * M_PI / 180.0), epsilon);
 }
 
 //==========================================================================
