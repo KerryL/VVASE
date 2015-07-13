@@ -41,7 +41,6 @@
 //==========================================================================
 Engine::Engine()
 {
-	// Initialize this object
 	crankshaftSpeed = 0.0;
 }
 
@@ -63,7 +62,6 @@ Engine::Engine()
 //==========================================================================
 Engine::Engine(const Engine &engine)
 {
-	// Do the copy
 	*this = engine;
 }
 
@@ -105,7 +103,6 @@ Engine::~Engine()
 //==========================================================================
 void Engine::Write(std::ofstream *outFile) const
 {
-	// Write this object to file
 	outFile->write((char*)&crankshaftSpeed, sizeof(double));
 }
 
@@ -159,7 +156,6 @@ Engine& Engine::operator = (const Engine &engine)
 	if (this == &engine)
 		return *this;
 
-	// Perform the assignment
 	crankshaftSpeed	= engine.crankshaftSpeed;
 
 	return *this;

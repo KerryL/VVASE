@@ -78,7 +78,6 @@ MassProperties::MassProperties()
 //==========================================================================
 MassProperties::MassProperties(const MassProperties &massProperties)
 {
-	// Do the copy
 	*this = massProperties;
 }
 

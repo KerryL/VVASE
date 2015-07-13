@@ -61,7 +61,6 @@ Tire::Tire()
 //==========================================================================
 Tire::Tire(const Tire &tire)
 {
-	// Copy from the Tire to this
 	*this = tire;
 }
 

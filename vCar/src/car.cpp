@@ -239,7 +239,6 @@ Car::Car(const Car &car)
 	massProperties = new MassProperties();
 	tires = new TireSet();
 
-	// Do the copy
 	*this = car;
 }
 
@@ -302,7 +301,8 @@ Car::~Car()
 //==========================================================================
 //const int Car::currentFileVersion = 0;// OBSOLETE 4/25/2009 - Added APPEARANCE_OPTIONS
 //const int Car::currentFileVersion = 1;// OBSOLETE 8/17/2009 - Fixed ENGINE::Write()
-const int Car::currentFileVersion = 2;
+//const int Car::currentFileVersion = 2;// OBSOLETE 7/13/2015 - Added Front/RearBarPivotAxis to Suspension
+const int Car::currentFileVersion = 3;
 
 //==========================================================================
 // Class:			Car
@@ -326,12 +326,9 @@ bool Car::SaveCarToFile(wxString fileName, std::ofstream *_outFile) const
 {
 	// Open the specified file
 	std::ofstream outFile(fileName.mb_str(), ios::out | ios::binary);
-
-	// Make sure the file was opened OK
 	if (!outFile.is_open() || !outFile.good())
 		return false;
 
-	// Write the file header information
 	WriteFileHeader(&outFile);
 
 	// Call the write functions for each sub-system class
@@ -352,7 +349,6 @@ bool Car::SaveCarToFile(wxString fileName, std::ofstream *_outFile) const
 		_outFile->seekp(outFile.tellp());
 	}
 
-	// Close the local version of the file
 	outFile.close();
 
 	return true;
@@ -378,14 +374,10 @@ bool Car::SaveCarToFile(wxString fileName, std::ofstream *_outFile) const
 //==========================================================================
 bool Car::LoadCarFromFile(wxString fileName, std::ifstream *_inFile, int *fileVersion)
 {
-	// Open the specified file
 	std::ifstream inFile(fileName.mb_str(), ios::in | ios::binary);
-
-	// Make sure the file was opened OK
 	if (!inFile.is_open() || !inFile.good())
 		return false;
 
-	// Read the file header information
 	FileHeaderInfo header = ReadFileHeader(&inFile);
 
 	// Check to make sure the version matches

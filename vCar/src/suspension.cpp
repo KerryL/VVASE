@@ -1227,7 +1227,18 @@ void Suspension::Read(std::ifstream *inFile, int fileVersion)
 	rightRear.Read(inFile, fileVersion);
 	leftRear.Read(inFile, fileVersion);
 
-	inFile->read((char*)hardpoints, sizeof(Vector) * NumberOfHardpoints);
+	if (fileVersion < 3)
+	{
+		inFile->read((char*)hardpoints, sizeof(Vector) * FrontBarPivotAxis);
+		hardpoints[FrontBarPivotAxis] = Vector(0.0, 0.0, 0.0);
+		inFile->read((char*)hardpoints + sizeof(Vector) * (FrontBarPivotAxis + 1),
+			sizeof(Vector) * (RearBarPivotAxis - FrontBarPivotAxis - 1));
+		hardpoints[RearBarPivotAxis] = Vector(0.0, 0.0, 0.0);
+		inFile->read((char*)hardpoints + sizeof(Vector) * (RearBarPivotAxis + 1),
+			sizeof(Vector) * (NumberOfHardpoints - RearBarPivotAxis - 1));
+	}
+	else
+		inFile->read((char*)hardpoints, sizeof(Vector) * NumberOfHardpoints);
 
 	inFile->read((char*)&barRate, sizeof(FrontRearDouble));
 	inFile->read((char*)&rackRatio, sizeof(double));
@@ -1256,7 +1267,7 @@ void Suspension::Read(std::ifstream *inFile, int fileVersion)
 // Description:		Returns the name of the sway bar style.
 //
 // Input Arguments:
-//		_barStyle	= const BarStyle& of interest
+//		barStyle	= const BarStyle& of interest
 //
 // Output Arguments:
 //		None
@@ -1265,9 +1276,9 @@ void Suspension::Read(std::ifstream *inFile, int fileVersion)
 //		wxString containing the name of the bar style
 //
 //==========================================================================
-wxString Suspension::GetBarStyleName(const BarStyle &_barStyle)
+wxString Suspension::GetBarStyleName(const BarStyle &barStyle)
 {
-	switch (_barStyle)
+	switch (barStyle)
 	{
 	case SwayBarNone:
 		return _T("None");
@@ -1317,6 +1328,10 @@ wxString Suspension::GetHardpointName(const Hardpoints& point)
 		return _T("Front Bar Pivot");
 		break;
 
+	case FrontBarPivotAxis:
+		return _T("Front Bar Pivot Axis");
+		break;
+
 	case FrontThirdSpringInboard:
 		return _T("Front Third Spring Inboard");
 		break;
@@ -1335,6 +1350,10 @@ wxString Suspension::GetHardpointName(const Hardpoints& point)
 
 	case RearBarMidPoint:
 		return _T("Rear Bar Pivot");
+		break;
+
+	case RearBarPivotAxis:
+		return _T("Rear Bar Pivot Axis");
 		break;
 
 	case RearThirdSpringInboard:
@@ -1368,7 +1387,7 @@ wxString Suspension::GetHardpointName(const Hardpoints& point)
 // Description:		Returns the name of the bar attachment method.
 //
 // Input Arguments:
-//		_barAttachment	= const BarAttachment&, specifying the type of attachment
+//		barAttachment	= const BarAttachment&, specifying the type of attachment
 //
 // Output Arguments:
 //		None
@@ -1377,9 +1396,9 @@ wxString Suspension::GetHardpointName(const Hardpoints& point)
 //		wxString containing the name of the attachment method
 //
 //==========================================================================
-wxString Suspension::GetBarAttachmentname(const BarAttachment &_barAttachment)
+wxString Suspension::GetBarAttachmentname(const BarAttachment &barAttachment)
 {
-	switch (_barAttachment)
+	switch (barAttachment)
 	{
 	case BarAttachmentBellcrank:
 		return _T("Bellcrank");

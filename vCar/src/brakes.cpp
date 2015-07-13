@@ -64,7 +64,6 @@ Brakes::Brakes()
 //==========================================================================
 Brakes::Brakes(const Brakes &brakes)
 {
-	// Do the copy
 	*this = brakes;
 }
 
@@ -106,7 +105,6 @@ Brakes::~Brakes()
 //==========================================================================
 void Brakes::Write(std::ofstream *outFile) const
 {
-	// Write this object to file
 	outFile->write((char*)&percentFrontBraking, sizeof(double));
 	outFile->write((char*)&frontBrakesInboard, sizeof(bool));
 	outFile->write((char*)&rearBrakesInboard, sizeof(bool));
@@ -164,7 +162,6 @@ Brakes& Brakes::operator = (const Brakes &brakes)
 	if (this == &brakes)
 		return *this;
 
-	// Perform the assignment
 	numberOfDisks		= brakes.numberOfDisks;
 	brakeDiameter		= brakes.brakeDiameter;
 	pistonArea			= brakes.pistonArea;

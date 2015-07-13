@@ -57,7 +57,6 @@ Driver::Driver(const Debugger &_debugger) : debugger(_debugger)
 //==========================================================================
 Driver::Driver(const Driver &driver) : debugger(driver.debugger)
 {
-	// Do the copy
 	*this = driver;
 }
 
@@ -123,7 +122,6 @@ Driver& Driver::operator = (const Driver &driver)
 	if (this == &driver)
 		return *this;
 
-	// Perform the assignment
 	driverInputs = driver.driverInputs;
 
 	return *this;

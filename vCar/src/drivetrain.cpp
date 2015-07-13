@@ -47,14 +47,11 @@
 //==========================================================================
 Drivetrain::Drivetrain()
 {
-	// Initialize the number of gears to one
 	gearRatio = NULL;
 	SetNumberOfGears(1);
 
-	// Allocate memory for the differential object
 	differential = new Differential();
 
-	// Initialize this object
 	driveType = DriveRearWheel;
 	transmissionInertia = 0.0;
 }
@@ -77,13 +74,8 @@ Drivetrain::Drivetrain()
 //==========================================================================
 Drivetrain::Drivetrain(const Drivetrain &drivetrain)
 {
-	// Initialize the gear ratio pointer
 	gearRatio = NULL;
-
-	// Allocate memory for the differential object
 	differential = new Differential();
-
-	// Do the copy
 	*this = drivetrain;
 }
 
@@ -105,7 +97,6 @@ Drivetrain::Drivetrain(const Drivetrain &drivetrain)
 //==========================================================================
 Drivetrain::~Drivetrain()
 {
-	// Delete our dynamically allocated variables
 	delete [] gearRatio;
 	gearRatio = NULL;
 
@@ -140,10 +131,7 @@ void Drivetrain::SetNumberOfGears(const short &numGears)
 		return;
 	}
 
-	// Set the number of gears
 	numberOfGears = numGears;
-
-	// Delete the old gear ratio array
 	delete [] gearRatio;
 
 	// Dynamically allocate memory for GearRatio according to the number of gears we have
@@ -290,10 +278,7 @@ Drivetrain& Drivetrain::operator=(const Drivetrain &drivetrain)
 			gearRatio[i] = drivetrain.gearRatio[i];
 	}
 
-	// Copy the differential
 	*differential = *drivetrain.differential;
-
-	// Copy the drive type
 	driveType = drivetrain.driveType;
 
 	return *this;

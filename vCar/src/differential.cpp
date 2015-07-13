@@ -61,7 +61,6 @@ Differential::Differential()
 //==========================================================================
 Differential::Differential(const Differential &differential)
 {
-	// Do the copy
 	*this = differential;
 }
 
@@ -157,7 +156,6 @@ Differential& Differential::operator = (const Differential &differential)
 	if (this == &differential)
 		return *this;
 
-	// Perform the assignment
 	biasRatio	= differential.biasRatio;
 	preload		= differential.preload;
 

@@ -161,7 +161,6 @@ void EditSuspensionPanel::UpdateInformation(Suspension *_currentSuspension)
 	frontBarStyle->SetSelection(currentSuspension->frontBarStyle);
 	rearBarStyle->SetSelection(currentSuspension->rearBarStyle);
 
-	// Begin batch edit of the grid
 	hardpoints->BeginBatch();
 
 	// Update the unit labels
@@ -207,41 +206,42 @@ void EditSuspensionPanel::UpdateInformation(Suspension *_currentSuspension)
 	// Front sway bar
 	// Removed bar mid points from list - this should be automatically calculated by VVASE
 	if (currentSuspension->frontBarStyle == Suspension::SwayBarTBar)
+	{
 		hardpoints->SetRowHeight(Suspension::FrontBarMidPoint + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowHeight(Suspension::FrontBarPivotAxis + 1, hardpoints->GetRowHeight(0));
+	}
 	else
+	{
 		hardpoints->SetRowHeight(Suspension::FrontBarMidPoint + 1, 0);
+		hardpoints->SetRowHeight(Suspension::FrontBarPivotAxis + 1, 0);
+	}
 
 	// Rear swaybar
 	if (currentSuspension->rearBarStyle == Suspension::SwayBarTBar)
+	{
 		hardpoints->SetRowHeight(Suspension::RearBarMidPoint + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowHeight(Suspension::RearBarPivotAxis + 1, hardpoints->GetRowHeight(0));
+	}
 	else
+	{
 		hardpoints->SetRowHeight(Suspension::RearBarMidPoint + 1, 0);
+		hardpoints->SetRowHeight(Suspension::RearBarPivotAxis + 1, 0);
+	}
 
 	// Update the values of all of the points
 	Vector point;
 	int i;
 	for (i = 0; i < Suspension::NumberOfHardpoints; i++)
 	{
-		// Get the location of this hardpoint (don't forget to convert it!)
 		point = UnitConverter::GetInstance().ConvertDistanceOutput(currentSuspension->hardpoints[i]);
 
-		// Set the X value
 		hardpoints->SetCellValue(i + 1, 1, UnitConverter::GetInstance().FormatNumber(point.x));
-
-		// Set the Y value
 		hardpoints->SetCellValue(i + 1, 2, UnitConverter::GetInstance().FormatNumber(point.y));
-
-		// Set the Z value
 		hardpoints->SetCellValue(i + 1, 3, UnitConverter::GetInstance().FormatNumber(point.z));
 	}
 
-	// Adjust the height of the grid based on the number of rows
 	hardpoints->FitHeight();
-
-	// End batch edit of the grid
 	hardpoints->EndBatch();
-
-	// Resize the sizers in case hardpoint rows were hidden or shown
 	Layout();
 
 	// FIXME:  Need way to turn grid scrollbars off

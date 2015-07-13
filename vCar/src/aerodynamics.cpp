@@ -61,7 +61,6 @@ Aerodynamics::Aerodynamics()
 //==========================================================================
 Aerodynamics::Aerodynamics(const Aerodynamics &aerodynamics)
 {
-	// Do the copy
 	*this = aerodynamics;
 }
 
@@ -157,7 +156,6 @@ Aerodynamics& Aerodynamics::operator = (const Aerodynamics &aerodynamics)
 	if (this == &aerodynamics)
 		return *this;
 
-	// Perform the assignment
 	centerOfPressure		= aerodynamics.centerOfPressure;
 	referenceArea			= aerodynamics.referenceArea;
 	airDensity				= aerodynamics.airDensity;

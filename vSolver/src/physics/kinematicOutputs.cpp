@@ -217,7 +217,7 @@ void KinematicOutputs::Update(const Car *original, const Suspension *current)
 	{
 		// First, for the original configuration of the suspension
 		Vector stemPlaneNormal = (original->suspension->hardpoints[Suspension::FrontBarMidPoint]
-			- original->suspension->leftFront.hardpoints[Corner::BarArmAtPivot]);// FIXME:  This is dual-use point
+			- original->suspension->hardpoints[Suspension::FrontBarPivotAxis]);
 		Vector topMidPoint = VVASEMath::IntersectWithPlane(stemPlaneNormal,
 			original->suspension->hardpoints[Suspension::FrontBarMidPoint],
 			original->suspension->leftFront.hardpoints[Corner::InboardBarLink]
@@ -238,7 +238,7 @@ void KinematicOutputs::Update(const Car *original, const Suspension *current)
 
 		// And again as it sits now
 		stemPlaneNormal = (current->hardpoints[Suspension::FrontBarMidPoint]
-			- current->leftFront.hardpoints[Corner::BarArmAtPivot]);// FIXME:  This is dual-use point
+			- current->hardpoints[Suspension::RearBarPivotAxis]);
 		topMidPoint = VVASEMath::IntersectWithPlane(stemPlaneNormal,
 			current->hardpoints[Suspension::FrontBarMidPoint],
 			current->leftFront.hardpoints[Corner::InboardBarLink]
@@ -300,7 +300,7 @@ void KinematicOutputs::Update(const Car *original, const Suspension *current)
 	{
 		// First, for the original configuration of the suspension
 		Vector stemPlaneNormal = (original->suspension->hardpoints[Suspension::RearBarMidPoint]
-			- original->suspension->leftRear.hardpoints[Corner::BarArmAtPivot]);// FIXME:  This is dual-use point
+			- original->suspension->hardpoints[Suspension::RearBarPivotAxis]);
 		Vector topMidPoint = VVASEMath::IntersectWithPlane(stemPlaneNormal,
 			original->suspension->hardpoints[Suspension::RearBarMidPoint],
 			original->suspension->leftRear.hardpoints[Corner::InboardBarLink]
@@ -321,7 +321,7 @@ void KinematicOutputs::Update(const Car *original, const Suspension *current)
 
 		// And again as it sits now
 		stemPlaneNormal = (current->hardpoints[Suspension::RearBarMidPoint]
-			- current->leftRear.hardpoints[Corner::BarArmAtPivot]);// FIXME:  This is dual-use point
+			- current->hardpoints[Suspension::RearBarPivotAxis]);
 		topMidPoint = VVASEMath::IntersectWithPlane(stemPlaneNormal,
 			current->hardpoints[Suspension::RearBarMidPoint],
 			current->leftRear.hardpoints[Corner::InboardBarLink]

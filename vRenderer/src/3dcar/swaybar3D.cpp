@@ -93,6 +93,7 @@ Swaybar3D::~Swaybar3D()
 //		torsionMemberBottomLeft	= const Vector&, either the bottom OR the left end of the
 //								  sway bar (depends on bar style)
 //		midPoint				= const Vector&, pivot point for T-bars (not used for other bars)
+//		axisPivot				= const Vector&, defines pivot axis for T-bars (not used for other bars)
 //		barStyle				= const Suspension::BarStyle& defining the type of swaybar
 //		dimension				= const double& describing the size of the members
 //		resolution				= const integer& representing the number of planar sides to use
@@ -108,7 +109,7 @@ Swaybar3D::~Swaybar3D()
 //
 //==========================================================================
 void Swaybar3D::Update(const Vector &rightLink, const Vector &leftLink, const Vector &torsionMemberTopRight,
-					   const Vector &torsionMemberBottomLeft,  const Vector &midPoint,
+					   const Vector &torsionMemberBottomLeft,  const Vector &midPoint, const Vector &axisPivot,
 					   const Suspension::BarStyle &barStyle, const double &dimension,
 					   const int &resolution, const Color &color, bool show)
 {
@@ -161,8 +162,7 @@ void Swaybar3D::Update(const Vector &rightLink, const Vector &leftLink, const Ve
 	}
 	else if (barStyle == Suspension::SwayBarTBar)
 	{
-		// FIXME:  Shouldn't have dual-purpose points like this (torsionMemberTopRight is being used to define pivot axis)
-		Vector stemPlaneNormal = (midPoint - torsionMemberTopRight).Normalize();
+		Vector stemPlaneNormal = (midPoint - axisPivot).Normalize();
 		Vector topMidPoint = VVASEMath::IntersectWithPlane(stemPlaneNormal, midPoint,
 			rightLink - leftLink, leftLink);
 

@@ -166,6 +166,12 @@ void EditCornerPanel::UpdateInformation(Corner *_currentCorner,
 		hardpoints->SetRowHeight(Corner::InboardBarLink + 1, 0);
 		hardpoints->SetRowHeight(Corner::BarArmAtPivot + 1, 0);
 	}
+	else if (barStyle == Suspension::SwayBarTBar)
+	{
+		hardpoints->SetRowHeight(Corner::OutboardBarLink + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowHeight(Corner::InboardBarLink + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowHeight(Corner::BarArmAtPivot + 1, 0);
+	}
 	else
 	{
 		hardpoints->SetRowHeight(Corner::OutboardBarLink + 1, hardpoints->GetRowHeight(0));

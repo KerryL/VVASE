@@ -78,12 +78,14 @@ public:
 	enum Hardpoints
 	{
 		FrontBarMidPoint,			// U-bar and T-bar only
+		FrontBarPivotAxis,			// T-bar only
 		FrontThirdSpringInboard,
 		FrontThirdSpringOutboard,
 		FrontThirdShockInboard,
 		FrontThirdShockOutboard,
 
 		RearBarMidPoint,			// U-bar and T-bar only
+		RearBarPivotAxis,			// T-bar only
 		RearThirdSpringInboard,
 		RearThirdSpringOutboard,
 		RearThirdShockInboard,
@@ -94,8 +96,8 @@ public:
 
 	// For getting the name of the elements of this class
 	static wxString GetHardpointName(const Hardpoints &point);
-	static wxString GetBarStyleName(const BarStyle &_barStyle);
-	static wxString GetBarAttachmentname(const BarAttachment &_barAttachment);
+	static wxString GetBarStyleName(const BarStyle &barStyle);
+	static wxString GetBarAttachmentname(const BarAttachment &barAttachment);
 
 	// Suspension hardpoints
 	Corner rightFront;
