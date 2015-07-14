@@ -29,6 +29,7 @@
 #include "vUtilities/unitConverter.h"
 #include "vUtilities/debugger.h"
 #include "vUtilities/wxRelatedUtilities.h"
+#include "vUtilities/dataValidator.h"
 
 //==========================================================================
 // Class:			OptionsDialog
@@ -55,10 +56,7 @@ OptionsDialog::OptionsDialog(MainFrame &_mainFrame, Kinematics::Inputs &_kinemat
 							 : wxDialog(&_mainFrame, id, _T("Options"), position, wxDefaultSize, style),
 							 kinematicInputs(_kinematicInputs), mainFrame(_mainFrame)
 {
-	// Set up the form's layout
 	CreateControls();
-
-	// Center the dialog on the screen
 	Center();
 }
 
@@ -123,7 +121,6 @@ END_EVENT_TABLE();
 //==========================================================================
 void OptionsDialog::CreateControls(void)
 {
-	// Top-level sizer
 	wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
 
 	// Second sizer gives more space around the controls
@@ -411,7 +408,6 @@ void OptionsDialog::CreateControls(void)
 	unitOfTemperature->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeTemperature));
 #endif
 
-	// Set the unit page's sizer
 	unitsPage->SetSizer(unitsTopSizer);
 
 	// Add the Digits page
@@ -482,13 +478,15 @@ void OptionsDialog::CreateControls(void)
 
 	// Create the center of rotation inputs
 	wxBoxSizer *corSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxString valueString;
-	valueString.Printf("%0.3f", kinematicInputs.centerOfRotation.x);
-	centerOfRotationX = new wxTextCtrl(kinematicsPage, wxID_ANY, valueString);
-	valueString.Printf("%0.3f", kinematicInputs.centerOfRotation.y);
-	centerOfRotationY = new wxTextCtrl(kinematicsPage, wxID_ANY, valueString);
-	valueString.Printf("%0.3f", kinematicInputs.centerOfRotation.z);
-	centerOfRotationZ = new wxTextCtrl(kinematicsPage, wxID_ANY, valueString);
+	centerOfRotationX = new wxTextCtrl(kinematicsPage, wxID_ANY, wxEmptyString,
+		wxDefaultPosition, wxDefaultSize, 0, UnitValidator(
+		kinematicInputs.centerOfRotation.x, UnitConverter::UnitTypeDistance));
+	centerOfRotationY = new wxTextCtrl(kinematicsPage, wxID_ANY, wxEmptyString,
+		wxDefaultPosition, wxDefaultSize, 0, UnitValidator(
+		kinematicInputs.centerOfRotation.y, UnitConverter::UnitTypeDistance));
+	centerOfRotationZ = new wxTextCtrl(kinematicsPage, wxID_ANY, wxEmptyString,
+		wxDefaultPosition, wxDefaultSize, 0, UnitValidator(
+		kinematicInputs.centerOfRotation.z, UnitConverter::UnitTypeDistance));
 
 	// Create the center of rotation units label
 	wxStaticText *corUnits = new wxStaticText(kinematicsPage, wxID_ANY, _T("(") + 
@@ -545,6 +543,7 @@ void OptionsDialog::CreateControls(void)
 
 	// Create the "Number of Threads" text box
 	wxBoxSizer *numberOfThreadsSizer = new wxBoxSizer(wxHORIZONTAL);
+	wxString valueString;// TODO:  Use UnsignedValidator
 	valueString.Printf("%i", mainFrame.GetNumberOfThreads());
 	simultaneousThreads = new wxTextCtrl(kinematicsPage, wxID_ANY, valueString);
 	numberOfThreadsSizer->Add(new wxStaticText(kinematicsPage, wxID_ANY,
@@ -594,13 +593,10 @@ void OptionsDialog::CreateControls(void)
 	else// Debugger::PriorityVeryHigh
 		debugLevel->SetSelection(3);
 		
-	// Add the radio box to the sizer
 	debugLevelsSizer->Add(debugLevel, 0, wxALL, 5);
 
-	// Add the sizers to the MainSizer
 	debuggerSizer->Add(debugLevelsSizer, 0, wxALIGN_CENTER_HORIZONTAL);
 
-	// Set the debug page's sizer
 	debuggerPage->SetSizerAndFit(debuggerTopSizer);
 	
 	// Add the fonts page
@@ -660,13 +656,9 @@ void OptionsDialog::CreateControls(void)
 	buttonsSizer->Add(new wxButton(this, wxID_CANCEL, _T("Cancel")), 0, wxALL, 5);
 	mainSizer->Add(buttonsSizer, 0, wxALIGN_CENTER_HORIZONTAL);
 
-	// Make the OK button default
 	okButton->SetDefault();
-
-	// Tell the dialog to auto-adjust it's size
 	topSizer->SetSizeHints(this);
 
-	// Assign the top level sizer to the dialog
 	SetSizer(topSizer);
 }
 
@@ -688,19 +680,21 @@ void OptionsDialog::CreateControls(void)
 //==========================================================================
 void OptionsDialog::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 {
+	if (!Validate() || !TransferDataFromWindow())
+		return;
+	
 	// Update the center of rotation for the kinematic analysis object
 	// It is important that this is done before the converter is updated!
 	// FIXME:  This should use a textvalidator and it will be much cleaner
-	Vector centerOfRotation;
+	/*Vector centerOfRotation;
 	if (centerOfRotationX->GetValue().ToDouble(&centerOfRotation.x) &&
 		centerOfRotationY->GetValue().ToDouble(&centerOfRotation.y) &&
 		centerOfRotationZ->GetValue().ToDouble(&centerOfRotation.z))
 		// Convert the center of rotation and update the analysis object
-		kinematicInputs.centerOfRotation = UnitConverter::GetInstance().ConvertDistanceOutput(centerOfRotation);
+		kinematicInputs.centerOfRotation = UnitConverter::GetInstance().ConvertDistanceInput(centerOfRotation);
 	else
-		// Print a warning so the user knows the CoR was rejected
 		Debugger::GetInstance().Print(_T("Warning!  Center of rotation is not a valid vector - using previous value"),
-			Debugger::PriorityHigh);
+			Debugger::PriorityHigh);*/
 
 	// Set the order of rotations
 	if (rotationOrder->GetSelection() == 0)

@@ -51,7 +51,6 @@ GAGeneDialog::GAGeneDialog(wxWindow *parent, const Corner::Hardpoints &_hardpoin
 							   const unsigned int &_numberOfValues, wxWindowID id, const wxPoint &position, long style) :
 							   wxDialog(parent, id, _T("Genetic Algorithm Gene"), position, wxDefaultSize, style)
 {
-	// Assign local members
 	hardpoint = _hardpoint;
 	tiedTo = _tiedTo;
 	axisDirection = _axisDirection;
@@ -60,13 +59,9 @@ GAGeneDialog::GAGeneDialog(wxWindow *parent, const Corner::Hardpoints &_hardpoin
 	maximum = _maximum;
 	numberOfValues = _numberOfValues;
 
-	// Initialize the resolution pointer
 	resolution = NULL;
 
-	// Create the controls
 	CreateControls();
-
-	// Center the dialog on screen
 	Center();
 }
 
