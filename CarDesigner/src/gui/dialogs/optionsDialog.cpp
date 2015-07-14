@@ -38,8 +38,8 @@
 // Description:		Constructor for OptionsDialog class.
 //
 // Input Arguments:
-//		_mainFrame			= MainFrame& pointing to the application's main window
-//		_kinematicInputs	= Kinematics::Inputs& reference to the application's analysis options
+//		mainFrame			= MainFrame& pointing to the application's main window
+//		kinematicInputs	= Kinematics::Inputs& reference to the application's analysis options
 //		id					= wxWindowId for this object
 //		position			= const wxPoint& where this object will be drawn
 //		style				= long defining the style for this dialog
@@ -51,11 +51,12 @@
 //		None
 //
 //==========================================================================
-OptionsDialog::OptionsDialog(MainFrame &_mainFrame, Kinematics::Inputs &_kinematicInputs,
-							 wxWindowID id, const wxPoint &position, long style)
-							 : wxDialog(&_mainFrame, id, _T("Options"), position, wxDefaultSize, style),
-							 kinematicInputs(_kinematicInputs), mainFrame(_mainFrame)
+OptionsDialog::OptionsDialog(MainFrame &mainFrame, Kinematics::Inputs &kinematicInputs,
+	wxWindowID id, const wxPoint &position, long style) : wxDialog(&mainFrame, id,
+	_T("Options"), position, wxDefaultSize, style),
+	kinematicInputs(kinematicInputs), mainFrame(mainFrame)
 {
+	SetExtraStyle(wxWS_EX_VALIDATE_RECURSIVELY);
 	CreateControls();
 	Center();
 }
@@ -457,18 +458,13 @@ void OptionsDialog::CreateControls(void)
 	useSignificantDigits->SetValue(UnitConverter::GetInstance().GetUseSignificantDigits());
 	useScientificNotation->SetValue(UnitConverter::GetInstance().GetUseScientificNotation());
 
-	// Add the checkboxes to the control
 	digitsSizer->Add(useSignificantDigits, 0, wxALIGN_LEFT | wxALL, 5);
 	digitsSizer->Add(useScientificNotation, 0, wxALIGN_LEFT | wxALL, 5);
 
-	// Set the digits page's sizer
 	digitsPage->SetSizerAndFit(digitsTopSizer);
 
-	// Add the Kinematic Analysis page
 	kinematicsPage = new wxPanel(notebook);
 	notebook->AddPage(kinematicsPage, _T("Kinematics"));
-
-	// Use another outer sizer to create more room for the controls
 	wxBoxSizer *kinematicsTopSizer = new wxBoxSizer(wxVERTICAL);
 
 	// Create the kinematics page main sizer
@@ -522,7 +518,6 @@ void OptionsDialog::CreateControls(void)
 	else
 		rotationOrder->SetSelection(1);
 		
-	// Add the radio box to the sizer
 	radioOptionsSizer->Add(rotationOrder, 0, wxALL, 5);
 
 	// Add the radio box for the steering input type
@@ -538,7 +533,6 @@ void OptionsDialog::CreateControls(void)
 	else
 		steeringInputType->SetSelection(1);
 		
-	// Add the radio box to the sizer
 	radioOptionsSizer->Add(steeringInputType, 0, wxALL, 5);
 
 	// Create the "Number of Threads" text box
@@ -682,33 +676,17 @@ void OptionsDialog::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 {
 	if (!Validate() || !TransferDataFromWindow())
 		return;
-	
-	// Update the center of rotation for the kinematic analysis object
-	// It is important that this is done before the converter is updated!
-	// FIXME:  This should use a textvalidator and it will be much cleaner
-	/*Vector centerOfRotation;
-	if (centerOfRotationX->GetValue().ToDouble(&centerOfRotation.x) &&
-		centerOfRotationY->GetValue().ToDouble(&centerOfRotation.y) &&
-		centerOfRotationZ->GetValue().ToDouble(&centerOfRotation.z))
-		// Convert the center of rotation and update the analysis object
-		kinematicInputs.centerOfRotation = UnitConverter::GetInstance().ConvertDistanceInput(centerOfRotation);
-	else
-		Debugger::GetInstance().Print(_T("Warning!  Center of rotation is not a valid vector - using previous value"),
-			Debugger::PriorityHigh);*/
 
-	// Set the order of rotations
 	if (rotationOrder->GetSelection() == 0)
 		kinematicInputs.firstRotation = Vector::AxisX;
 	else
 		kinematicInputs.firstRotation = Vector::AxisY;
 
-	// Set the steering input type
 	if (steeringInputType->GetSelection() == 0)
 		mainFrame.SetUseRackTravel(true);
 	else
 		mainFrame.SetUseRackTravel(false);
 
-	// Set the number of threads to use in the solver
 	long numberOfThreads(0);
 	if (simultaneousThreads->GetValue().ToLong(&numberOfThreads) && numberOfThreads > 0)
 		mainFrame.SetNumberOfThreads(numberOfThreads);
@@ -735,12 +713,10 @@ void OptionsDialog::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 	UnitConverter::GetInstance().SetEnergyUnits((UnitConverter::UnitsOfEnergy)SafelyGetComboBoxSelection(unitOfEnergy));
 	UnitConverter::GetInstance().SetTemperatureUnits((UnitConverter::UnitsOfTemperature)SafelyGetComboBoxSelection(unitOfTemperature));
 
-	// Update the number of digits and the rules for formatting numbers
 	UnitConverter::GetInstance().SetNumberOfDigits(SafelyGetComboBoxSelection(numberOfDigits));
 	UnitConverter::GetInstance().SetUseSignificantDigits(useSignificantDigits->GetValue());
 	UnitConverter::GetInstance().SetUseScientificNotation(useScientificNotation->GetValue());
 
-	// Update the debug level
 	if (debugLevel->GetSelection() == 0)
 		Debugger::GetInstance().SetDebugLevel(Debugger::PriorityLow);
 	else if (debugLevel->GetSelection() == 1)
@@ -749,12 +725,10 @@ void OptionsDialog::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 		Debugger::GetInstance().SetDebugLevel(Debugger::PriorityHigh);
 	else
 		Debugger::GetInstance().SetDebugLevel(Debugger::PriorityVeryHigh);
-	
-	// Update the fonts
+
 	mainFrame.SetOutputFont(outputFont);
 	mainFrame.SetPlotFont(plotFont);
 
-	// The way we handle this changes depending on how this form was displayed
 	if (IsModal())
 		EndModal(wxOK);
 	else

@@ -53,7 +53,6 @@ GAGoalDialog::GAGoalDialog(wxWindow *parent, const KinematicOutputs::OutputsComp
 							   wxWindowID id, const wxPoint &position, long style) :
 							   wxDialog(parent, id, _T("Genetic Algorithm Goal"), position, wxDefaultSize, style)
 {
-	// Assign local members
 	output = _output;
 	desiredValue = _desiredValue;
 	expectedDeviation = _expectedDeviation;
@@ -61,10 +60,8 @@ GAGoalDialog::GAGoalDialog(wxWindow *parent, const KinematicOutputs::OutputsComp
 	beforeInputs = _beforeInputs;
 	afterInputs = _afterInputs;
 
-	// Create the controls
+	SetExtraStyle(wxWS_EX_VALIDATE_RECURSIVELY);
 	CreateControls();
-
-	// Center the dialog on screen
 	Center();
 }
 

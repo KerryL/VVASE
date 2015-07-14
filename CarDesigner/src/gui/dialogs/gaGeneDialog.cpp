@@ -61,6 +61,7 @@ GAGeneDialog::GAGeneDialog(wxWindow *parent, const Corner::Hardpoints &_hardpoin
 
 	resolution = NULL;
 
+	SetExtraStyle(wxWS_EX_VALIDATE_RECURSIVELY);
 	CreateControls();
 	Center();
 }
@@ -126,7 +127,6 @@ END_EVENT_TABLE()
 //==========================================================================
 void GAGeneDialog::CreateControls(void)
 {
-	// Top-level sizer
 	wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
 
 	// Second sizer gives more space around the controls
@@ -287,7 +287,6 @@ void GAGeneDialog::CreateControls(void)
 //==========================================================================
 void GAGeneDialog::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 {
-	// Update the class members with the data currently displayed in the dialog controls
 	if (!Validate() || !TransferDataFromWindow())
 	{
 		wxMessageBox(_T("ERROR:  All values must be numeric!\nNumber of values must be at least two."),

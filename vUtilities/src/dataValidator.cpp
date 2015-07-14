@@ -21,7 +21,7 @@
 
 //==========================================================================
 // Class:			DataValidator
-// Function:		DoTransferToWindow
+// Function:		TransferToWindow
 //
 // Description:		Converts the referenced data to the user-specified type
 //					and sends it to the window.
@@ -37,7 +37,7 @@
 //
 //==========================================================================
 template<>
-bool DataValidator<double>::DoTransferToWindow()
+bool DataValidator<double>::TransferToWindow()
 {
 	dynamic_cast<wxTextEntry*>(m_validatorWindow)->SetValue(
 		UnitConverter::GetInstance().FormatNumber(
@@ -48,7 +48,7 @@ bool DataValidator<double>::DoTransferToWindow()
 
 //==========================================================================
 // Class:			DataValidator
-// Function:		DoTransferFromWindow
+// Function:		TransferFromWindow
 //
 // Description:		Reads from the control and converts to our internal units.
 //
@@ -63,7 +63,7 @@ bool DataValidator<double>::DoTransferToWindow()
 //
 //==========================================================================
 template<>
-bool DataValidator<double>::DoTransferFromWindow()
+bool DataValidator<double>::TransferFromWindow()
 {
 	double value;
 	if (!dynamic_cast<wxTextEntry*>(m_validatorWindow)->GetValue().ToDouble(&value))

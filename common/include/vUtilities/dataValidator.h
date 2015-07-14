@@ -12,9 +12,9 @@
 // Author:  K. Loux
 // Description:  Class derived from wxTextValidator, used for converting to/from
 //				 the various default units in the Convert class.  Also handles
-//				 UndoRedoStack entries.
-// History:
-//	12/12/2011	- Created and debugged, K. Loux.
+//				 UndoRedoStack entries.  NOTE:  When dialog controls are not direct
+//				 children of the dialog, the dialog must call
+//				 SetExtraStyle(wxWS_EX_VALIDATE_RECURSIVELY) in the constructor.
 
 #ifndef DATA_VALIDATOR_H_
 #define DATA_VALIDATOR_H_
@@ -56,36 +56,43 @@ public:
 	DataValidator(T &data,  const T &min, const T &max,
 		const NumberClass &numberClass = ClassInclusiveRange,
 		const UnitConverter::UnitType &unit = UnitConverter::UnitTypeUnitless);
+
+	virtual wxObject* Clone() const;// Mandatory for children of wxValidator
 	
 	// Destructor
 	virtual ~DataValidator() {}
 	
 	// Mandatory overloads for validators
-	virtual bool TransferToWindow() { return DoTransferToWindow(); }
-	virtual bool TransferFromWindow() { return DoTransferFromWindow(); }
-	virtual bool Validate(wxWindow *parent) { return DoValidate(parent); }
+	virtual bool TransferToWindow();
+	virtual bool TransferFromWindow();
+	virtual bool Validate(wxWindow *parent);
 
 	void SetUnitType(const UnitConverter::UnitType& unit) { this->unit = unit; }
 
 private:
 	UnitConverter::UnitType unit;
-	
-	// Reference to the data we're protecting
 	T &data;
 
 	// Additional limits to place on the value
 	const NumberClass numberClass;
 	const T min, max;
-
-	// These are separated from the mandatory overloads above in order to allow specialization
-	bool DoTransferToWindow();
-	bool DoTransferFromWindow();
-	bool DoValidate(wxWindow *parent);
 };
 
+// Commonly used types
 typedef DataValidator<double> UnitValidator;
 typedef DataValidator<int> IntegerValidator;
 typedef DataValidator<unsigned int> UnsignedValidator;
+
+// Forward declarations of specializations
+// (specialization must be defined in .cpp file)
+template<>
+virtual bool UnitValidator::TransferToWindow();
+template<>
+virtual bool UnitValidator::TransferFromWindow();
+/*template<class T>
+virtual bool DataValidator<T>::TransferToWindow();
+template<class T>
+virtual bool DataValidator<T>::TransferFromWindow();*/
 
 //==========================================================================
 // Class:			DataValidator
@@ -143,12 +150,33 @@ DataValidator<T>::DataValidator(T &data, const T &min, const T &max,
 	numberClass(numberClass), min(min), max(max)
 {
 	assert(min < max || (numberClass != ClassInclusiveRange && numberClass != ClassExclusiveRange));
-	assert(numberClass == ClassInclusiveRange || numberClass == ClassExclusiveRange);
 }
 
 //==========================================================================
 // Class:			DataValidator
-// Function:		DoTransferToWindow
+// Function:		Clone
+//
+// Description:		Returns identical copy of this object.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+template<class T>
+wxObject* DataValidator<T>::Clone() const
+{
+	return new DataValidator<T>(data, min, max, numberClass, unit);
+}
+
+//==========================================================================
+// Class:			DataValidator
+// Function:		TransferToWindow
 //
 // Description:		Converts the referenced data to the user-specified type
 //					and sends it to the window.
@@ -164,7 +192,7 @@ DataValidator<T>::DataValidator(T &data, const T &min, const T &max,
 //
 //==========================================================================
 template<class T>
-bool DataValidator<T>::DoTransferToWindow()
+bool DataValidator<T>::TransferToWindow()
 {
 	wxString value;
 	value << data;
@@ -175,7 +203,7 @@ bool DataValidator<T>::DoTransferToWindow()
 
 //==========================================================================
 // Class:			DataValidator
-// Function:		DoTransferFromWindow
+// Function:		TransferFromWindow
 //
 // Description:		Reads from the control and converts to our internal units.
 //
@@ -190,13 +218,12 @@ bool DataValidator<T>::DoTransferToWindow()
 //
 //==========================================================================
 template<class T>
-bool DataValidator<T>::DoTransferFromWindow()
+bool DataValidator<T>::TransferFromWindow()
 {
-	T value;
 	std::istringstream ss;
 
 	ss.str(dynamic_cast<wxTextEntry*>(m_validatorWindow)->GetValue().ToUTF8().data());
-	if ((ss >> value).fail())
+	if ((ss >> data).fail())
 		return false;
 	
 	return true;
@@ -204,7 +231,7 @@ bool DataValidator<T>::DoTransferFromWindow()
 
 //==========================================================================
 // Class:			DataValidator
-// Function:		DoValidate
+// Function:		Validate
 //
 // Description:		Checks to see if the control's contents are valid.
 //
@@ -219,7 +246,7 @@ bool DataValidator<T>::DoTransferFromWindow()
 //
 //==========================================================================
 template<class T>
-bool DataValidator<T>::DoValidate(wxWindow * /*parent*/)
+bool DataValidator<T>::Validate(wxWindow * /*parent*/)
 	// TODO:  This method should generate message boxes explaining the errors
 {
 	T value;
