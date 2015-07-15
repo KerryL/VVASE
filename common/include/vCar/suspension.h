@@ -123,36 +123,7 @@ public:
 	Damper frontThirdDamper;
 	Damper rearThirdDamper;
 
-	// Kinematic solvers
-	static bool SolveForPoint(const Vector &center1, const Vector &center2, const Vector &center3,
-		const Vector &originalCenter1, const Vector &originalCenter2, const Vector &originalCenter3,
-		const Vector &original, Vector &current);
-	static bool SolveForPoint(const Corner::Hardpoints &target, const Corner::Hardpoints& reference1,
-		const Corner::Hardpoints& reference2, const Corner::Hardpoints& reference3,
-		const Corner& originalCorner, Corner& currentCorner);
-	static bool SolveForXY(const Corner::Hardpoints &target, const Corner::Hardpoints& reference1,
-		const Corner::Hardpoints& reference2, const Corner& originalCorner, Corner& currentCorner);
-	static bool SolveForContactPatch(const Vector &wheelCenter, const Vector &wheelPlaneNormal,
-		const double &tireRadius, Vector &output);
-	static bool SolveInboardTBarPoints(const Vector &leftOutboard, const Vector &rightOutboard,
-		const Vector &centerPivot, const Vector &pivotAxisPoint,
-		const Vector &originalLeftOutboard, const Vector &originalRightOutboard,
-		const Vector &originalCenterPivot, const Vector &originalPivotAxisPoint,
-		const Vector &originalLeftInboard, const Vector &originalRightInboard,
-		Vector &leftInboard, Vector &rightInboard);
-
-	// Other functions
-	void MoveSteeringRack(const double &travel);
-
 	Suspension& operator=(const Suspension& suspension);
-
-private:
-	static Vector FindPerpendicularVector(const Vector &v);
-	static double OptimizeCircleParameter(const Vector &center, const Vector &a,
-		const Vector &b, const Vector &target);
-
-	static bool SolveForXY(const Vector &center1, const Vector &center2, const Vector &originalCenter1,
-		const Vector &originalCenter2, const Vector &original, Vector &current);
 };
 
 #endif// SUSPENSION_H_
