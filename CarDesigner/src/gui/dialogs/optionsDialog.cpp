@@ -691,9 +691,9 @@ void OptionsDialog::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 	if (simultaneousThreads->GetValue().ToLong(&numberOfThreads) && numberOfThreads > 0)
 		mainFrame.SetNumberOfThreads(numberOfThreads);
 	else
-		Debugger::GetInstance().Print(Debugger::PriorityHigh,
-			"Warning!  Specified number of threads is not valid (must be a number greater than zero) - using previous value of %i",
-			mainFrame.GetNumberOfThreads());
+		Debugger::GetInstance() <<
+			"Warning!  Specified number of threads is not valid (must be a number greater than zero) - using previous value of "
+			 << mainFrame.GetNumberOfThreads() << Debugger::PriorityHigh;
 
 	// Update the default units for the converter object
 	// NOTE:  This section MUST come after the center of rotation is updated in order for

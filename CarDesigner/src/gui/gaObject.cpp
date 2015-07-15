@@ -503,24 +503,20 @@ void GAObject::SetCarGenome(int carIndex, const int *currentGenome)
 //==========================================================================
 void GAObject::PerformAdditionalActions(void)
 {
-	// Compute average fitness for this generation
 	double averageFitness = 0.0;
 	int i;
 	for (i = 0; i < populationSize; i++)
 		averageFitness += fitnesses[currentGeneration][i];
 	averageFitness /= (double)populationSize;
 
-	// Get maximum fitness for this generation
 	double maximumFitness = fitnesses[currentGeneration][0];
 
-	// Display the average and best fitnesses
-	Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "Completed Generation %i", currentGeneration + 1);
-	Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "\tAverage Fitness:  %s",
-		UnitConverter::GetInstance().FormatNumber(averageFitness).ToUTF8().data());
-	Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "\tBest Fitness:     %s",
-		UnitConverter::GetInstance().FormatNumber(maximumFitness).ToUTF8().data());
+	Debugger::GetInstance() << "Completed Generation " << currentGeneration + 1 << Debugger::PriorityVeryHigh;
+	Debugger::GetInstance() << "\tAverage Fitness:  " <<
+		UnitConverter::GetInstance().FormatNumber(averageFitness) << Debugger::PriorityVeryHigh;
+	Debugger::GetInstance() << "\tBest Fitness:     " <<
+		UnitConverter::GetInstance().FormatNumber(maximumFitness) << Debugger::PriorityVeryHigh;
 
-	// Check to see if the simulation is still running
 	if (currentGeneration == generationLimit - 1)
 		isRunning = false;
 }
@@ -554,10 +550,8 @@ void GAObject::AddGene(const Corner::Hardpoints &hardpoint, const Corner::Hardpo
 						const Corner::Location &location, const Vector::Axis &direction,
 						const double &minimum, const double &maximum, const int &numberOfValues)
 {
-	// Create a new GENE object
 	Gene *newGene = new Gene;
 
-	// Copy the arguments to the new gene
 	newGene->hardpoint		= hardpoint;
 	newGene->tiedTo			= tiedTo;
 	newGene->location		= location;
@@ -566,7 +560,6 @@ void GAObject::AddGene(const Corner::Hardpoints &hardpoint, const Corner::Hardpo
 	newGene->maximum		= maximum;
 	newGene->numberOfValues	= numberOfValues;
 
-	// Add the gene to the list
 	geneList.Add(newGene);
 }
 
@@ -603,10 +596,8 @@ void GAObject::AddGoal(const KinematicOutputs::OutputsComplete &output, const do
 		const double &expectedDeviation, const double &importance, const Kinematics::Inputs &beforeInputs,
 		const Kinematics::Inputs &afterInputs)
 {
-	// Create a new GOAL object
 	Goal *newGoal = new Goal;
 
-	// Copy the arguments to the new goal
 	newGoal->output				= output;
 	newGoal->desiredValue		= desiredValue;
 	newGoal->expectedDeviation	= expectedDeviation;
@@ -614,7 +605,6 @@ void GAObject::AddGoal(const KinematicOutputs::OutputsComplete &output, const do
 	newGoal->beforeInputs		= beforeInputs;
 	newGoal->afterInputs		= afterInputs;
 
-	// Add the goal to the list
 	goalList.Add(newGoal);
 }
 
@@ -648,7 +638,6 @@ void GAObject::UpdateGene(const int &index, const Corner::Hardpoints &hardpoint,
 						const Corner::Location &location, const Vector::Axis &direction,
 						const double &minimum, const double &maximum, const int &numberOfValues)
 {
-	// Copy the arguments to the gene we're updating
 	geneList[index]->hardpoint		= hardpoint;
 	geneList[index]->tiedTo			= tiedTo;
 	geneList[index]->location		= location;
@@ -692,7 +681,6 @@ void GAObject::UpdateGoal(const int &index, const KinematicOutputs::OutputsCompl
 		const double &expectedDeviation, const double &importance, const Kinematics::Inputs &beforeInputs,
 		const Kinematics::Inputs &afterInputs)
 {
-	// Copy the arguments to goal we're updating
 	goalList[index]->output				= output;
 	goalList[index]->desiredValue		= desiredValue;
 	goalList[index]->expectedDeviation	= expectedDeviation;
@@ -722,14 +710,12 @@ void GAObject::UpdateGoal(const int &index, const KinematicOutputs::OutputsCompl
 //==========================================================================
 void GAObject::DetermineAllInputs(void)
 {
-	// Clear out any existing inputs
 	inputList.Clear();
 
 	Kinematics::Inputs *input = new Kinematics::Inputs;
 	*input = goalList[0]->beforeInputs;
 	inputList.Add(input);
 
-	// Go through all of the goals
 	unsigned int i, j;
 	for (i = 0; i < goalList.GetCount(); i++)
 	{
@@ -795,11 +781,9 @@ void GAObject::DetermineAllInputs(void)
 //==========================================================================
 void GAObject::UpdateTargetCar(void)
 {
-	// Ensure exclusive access to this object
 	wxMutexLocker lock(gsaMutex);
 	DebugLog::GetInstance()->Log(_T("GAObject::UpdateTargetCar (locker)"));
 
-	// Update the target car to match the best fit car we've got
 	wxMutexLocker carLock(targetCar->GetMutex());
 	*targetCar = *originalCarArray[generationLimit - 1];
 }
@@ -822,14 +806,9 @@ void GAObject::UpdateTargetCar(void)
 //==========================================================================
 void GAObject::WriteFileHeader(std::ofstream *outFile)
 {
-	// Set up the header information
 	FileHeaderInfo header;
 	header.fileVersion = currentFileVersion;
-
-	// Set the write pointer to the start of the file
 	outFile->seekp(0);
-
-	// Write the header
 	outFile->write((char*)&header, sizeof(FileHeaderInfo));
 }
 
@@ -933,30 +912,21 @@ bool GAObject::Write(wxString fileName)
 //==========================================================================
 bool GAObject::Read(wxString fileName)
 {
-	// Ensure exclusive access to this object
 	wxMutexLocker lock(gsaMutex);
 
-	// Clear out current lists
 	geneList.Clear();
 	goalList.Clear();
 
-	// Open the specified file
 	std::ifstream inFile(fileName.mb_str(), ios::in | ios::binary);
-
-	// Make sure the file was opened OK
 	if (!inFile.is_open() || !inFile.good())
 		return false;
 
-	// Read the file header information
 	FileHeaderInfo header = ReadFileHeader(&inFile);
 
-	// Check to make sure the version matches
 	if (header.fileVersion != currentFileVersion)
 	{
-		Debugger::GetInstance().Print(_T("ERROR:  Incompatible file versions - could not open file!"));
-
+		Debugger::GetInstance() << "ERROR:  Incompatible file versions - could not open file!" << Debugger::PriorityHigh;
 		inFile.close();
-
 		return false;
 	}
 
@@ -986,7 +956,6 @@ bool GAObject::Read(wxString fileName)
 		goalList.Add(tempGoal);
 	}
 
-	// Close the file
 	inFile.close();
 
 	return true;

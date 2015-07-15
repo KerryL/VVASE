@@ -350,8 +350,7 @@ void KinematicOutputs::Update(const Car *original, const Suspension *current)
 	if (!VVASEMath::GetIntersectionOfTwoPlanes(rightPlaneNormal, current->rightFront.hardpoints[Corner::ContactPatch],
 		leftPlaneNormal, current->leftFront.hardpoints[Corner::ContactPatch],
 		vectors[FrontRollAxisDirection], vectors[FrontKinematicRC]))
-		Debugger::GetInstance().Print(_T("Warning (KinematicOutputs::Update):  Front Kinematic Roll Center is undefined"),
-			Debugger::PriorityHigh);
+		Debugger::GetInstance() << "Warning (KinematicOutputs::Update):  Front Kinematic Roll Center is undefined" << Debugger::PriorityHigh;
 	else
 		// We now have the axis direction and a point on the axis, but we want a specific
 		// point on the axis.  To do that, we determine the place where this vector passes through
@@ -372,8 +371,7 @@ void KinematicOutputs::Update(const Car *original, const Suspension *current)
 	if (!VVASEMath::GetIntersectionOfTwoPlanes(rightPlaneNormal, current->rightRear.hardpoints[Corner::ContactPatch],
 		leftPlaneNormal, current->leftRear.hardpoints[Corner::ContactPatch],
 		vectors[RearRollAxisDirection], vectors[RearKinematicRC]))
-		Debugger::GetInstance().Print(_T("Warning (KinematicOutputs::Update):  Rear Kinematic Roll Center is undefined"),
-			Debugger::PriorityHigh);
+		Debugger::GetInstance() << "Warning (KinematicOutputs::Update):  Rear Kinematic Roll Center is undefined" << Debugger::PriorityHigh;
 	else
 		// Just like we did on for the front, intersect this vector with the wheel plane
 		vectors[RearKinematicRC] = VVASEMath::IntersectWithPlane(planeNormal,
@@ -399,8 +397,7 @@ void KinematicOutputs::Update(const Car *original, const Suspension *current)
 	if (!VVASEMath::GetIntersectionOfTwoPlanes(frontPlaneNormal, current->rightFront.hardpoints[Corner::ContactPatch],
 		rearPlaneNormal, current->rightRear.hardpoints[Corner::ContactPatch],
 		vectors[RightPitchAxisDirection], vectors[RightKinematicPC]))
-		Debugger::GetInstance().Print(_T("Warning (KinematicOutputs::Update):  Right Kinematic Pitch Center is undefined"),
-			Debugger::PriorityHigh);
+		Debugger::GetInstance() << "Warning (KinematicOutputs::Update):  Right Kinematic Pitch Center is undefined" << Debugger::PriorityHigh;
 	else
 		// We now have the axis direction and a point on the axis, but we want a specific
 		// point on the axis.  To do that, we determine the place where this vector passes through
@@ -421,8 +418,7 @@ void KinematicOutputs::Update(const Car *original, const Suspension *current)
 	if (!VVASEMath::GetIntersectionOfTwoPlanes(frontPlaneNormal, current->leftFront.hardpoints[Corner::ContactPatch],
 		rearPlaneNormal, current->leftRear.hardpoints[Corner::ContactPatch],
 		vectors[LeftPitchAxisDirection], vectors[LeftKinematicPC]))
-		Debugger::GetInstance().Print(_T("Warning (KinematicOutputs::Update):  Left Kinematic Pitch Center is undefined"),
-			Debugger::PriorityHigh);
+		Debugger::GetInstance() << "Warning (KinematicOutputs::Update):  Left Kinematic Pitch Center is undefined" << Debugger::PriorityHigh;
 	else
 		// Just like we did for the right side, intersect this vector with the wheel plane
 		vectors[LeftKinematicPC] = VVASEMath::IntersectWithPlane(planeNormal,
@@ -522,7 +518,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 	else
 	{
 		// Not one of our recognized locations!!!
-		Debugger::GetInstance().Print(_T("ERROR:  Corner location not recognized!"), Debugger::PriorityHigh);
+		Debugger::GetInstance() << "ERROR:  Corner location not recognized!" << Debugger::PriorityHigh;
 		return;
 	}
 
@@ -640,8 +636,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 	if (!VVASEMath::GetIntersectionOfTwoPlanes(upperPlaneNormal, currentCorner->hardpoints[Corner::UpperBallJoint],
 		lowerPlaneNormal, currentCorner->hardpoints[Corner::LowerBallJoint], 
 		cornerVectors[InstantAxisDirection], cornerVectors[InstantCenter]))
-		Debugger::GetInstance().Print(_T("Warning (KinematicOutputs::UpdateCorner):  Instant Center is undefined"),
-			Debugger::PriorityHigh);
+		Debugger::GetInstance() << "Warning (KinematicOutputs::UpdateCorner):  Instant Center is undefined" << Debugger::PriorityHigh;
 	else
 	{
 		// We now have the axis direction and a point on the axis, but we want a specific

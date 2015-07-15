@@ -98,33 +98,25 @@
 //==========================================================================
 MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxEmptyString, wxDefaultPosition,
 								   wxDefaultSize, wxDEFAULT_FRAME_STYLE),
-								   /*MaxRecentFiles(9), */undoRedo(*this)
+								   /*maxRecentFiles(9), */undoRedo(*this)
 {
-	// Create the SystemsTree
 	systemsTree = new MainTree(*this, wxID_ANY, wxDefaultPosition, wxSize(320, 384),
 		wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT | wxTR_DEFAULT_STYLE | wxSUNKEN_BORDER
 		| wxTR_HIDE_ROOT);
 
-	// Create the Notebook
 	notebook = new MainNotebook(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
 		wxAUI_NB_TOP | wxAUI_NB_TAB_SPLIT | wxAUI_NB_TAB_MOVE |
 		wxAUI_NB_SCROLL_BUTTONS | wxAUI_NB_CLOSE_ON_ALL_TABS | wxAUI_NB_WINDOWLIST_BUTTON);
 
-	// Create the EditPanel
 	editPanel = new EditPanel(*this);
-
-	// Create the OutputPanel
 	outputPanel = new OutputPanel(*this, wxID_ANY, wxDefaultPosition, wxSize(350, -1));
 
-	// Create the OutputPane
 	debugPane = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
 		wxSize(-1, 350), wxTE_PROCESS_TAB | wxTE_MULTILINE | wxHSCROLL | wxTE_READONLY
 		| wxTE_RICH);
 
-	// Create additional objects
 	CreateMenuBar();
 
-	// Add the toolbars
 	kinematicToolbar = NULL;
 	CreateKinematicAnalysisToolbar();
 
@@ -133,11 +125,10 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxEmptyString, wxDefaultPositio
 	InitializeSolver();
 	SetProperties();// Includes reading configuration file
 
-	// Initialize the object management variables
 	activeIndex = -1;
 	beingDeleted = false;
 
-	Debugger::GetInstance().Print(carDesignerName + _T(" Initialized!"));
+	Debugger::GetInstance() << carDesignerName << " Initialized!" << Debugger::PriorityHigh;
 
 	// Some machine information
 	/*Debugger::GetInstance().Print(wxPlatformInfo::Get().GetArchName());
@@ -362,29 +353,24 @@ void MainFrame::SetProperties(void)
 		bool foundPreferredFont = FontFinder::GetFontFaceName(
 			wxFONTENCODING_SYSTEM, preferredFonts, true, fontFaceName);
 
-		// As long as we have a font name to use, set the font
 		if (!fontFaceName.IsEmpty())
 		{
 			// Populate the wxFont object
 			outputFont.SetPointSize(9);
 			outputFont.SetFamily(wxFONTFAMILY_MODERN);
 			if (!outputFont.SetFaceName(fontFaceName))
-				Debugger::GetInstance().Print(_T("Error setting font face to ") + fontFaceName);
+				Debugger::GetInstance() << "Error setting font face to " << fontFaceName << Debugger::PriorityHigh;
 		}
 		
-		// Tell the user if we're using a font we're unsure of
 		if (!foundPreferredFont)
 		{
-			Debugger::GetInstance().Print(_T("Could not find preferred fixed-width font; using ")
-				+ fontFaceName);
-			Debugger::GetInstance().Print(_T("This can be changed in Tools->Options->Fonts"));
+			Debugger::GetInstance() << "Could not find preferred fixed-width font; using " << fontFaceName << Debugger::PriorityHigh;
+			Debugger::GetInstance() << "This can be changed in Tools->Options->Fonts" << Debugger::PriorityHigh;
 		}
 	}
 
-	// Set the font
 	SetOutputFont(outputFont);
 
-	// Check the plot font
 	if (plotFont.IsNull() || !plotFont.IsOk())
 	{
 		wxArrayString preferredFonts;
@@ -400,9 +386,9 @@ void MainFrame::SetProperties(void)
 		if (!foundFont)
 		{
 			if (!fontFile.IsEmpty())
-				Debugger::GetInstance().Print(_T("Could not find preferred plot font; using ") + fontFile);
+				Debugger::GetInstance() << "Could not find preferred plot font; using " << fontFile << Debugger::PriorityHigh;
 			else
-				Debugger::GetInstance().Print(_T("Could not find any *.ttf files - cannot generate plot fonts"));
+				Debugger::GetInstance() << "Could not find any *.ttf files - cannot generate plot fonts" << Debugger::PriorityHigh;
 		}
 		else
 		{
@@ -538,7 +524,7 @@ void MainFrame::SetOutputFont(const wxFont& font)
 		wxTextAttr outputAttributes;
 		outputAttributes.SetFont(outputFont);
 		if (!debugPane->SetDefaultStyle(outputAttributes))
-			Debugger::GetInstance().Print(_T("Error setting font style"));
+			Debugger::GetInstance() << "Error setting font style" << Debugger::PriorityHigh;
 	}
 }
 
@@ -1126,9 +1112,9 @@ void MainFrame::FileWriteImageFileEvent(wxCommandEvent& WXUNUSED(event))
 
 	// Call the object's write image file method
 	if (openObjectList[objectOfInterestIndex]->WriteImageToFile(pathAndFileName[0]))
-		Debugger::GetInstance().Print(Debugger::PriorityHigh, "Image file written to %s", pathAndFileName[0].ToUTF8().data());
+		Debugger::GetInstance() << "Image file written to %s", pathAndFileName[0] << Debugger::PriorityHigh;
 	else
-		Debugger::GetInstance().Print(_T("Image file NOT written!"), Debugger::PriorityHigh);
+		Debugger::GetInstance() << "Image file NOT written!" << Debugger::PriorityHigh;
 }
 
 //==========================================================================
@@ -1725,11 +1711,11 @@ void MainFrame::HelpManualEvent(wxCommandEvent& WXUNUSED(event))
 	wxFileType *pdfFileType = mimeManager.GetFileTypeFromExtension(_T("pdf"));
 	if (!pdfFileType->GetOpenCommand(&openPDFManualCommand,
 		wxFileType::MessageParameters(manualFileName)))
-		Debugger::GetInstance().Print(_T("ERROR:  Could not determine how to open .pdf files!"));
+		Debugger::GetInstance() << "ERROR:  Could not determine how to open .pdf files!" << Debugger::PriorityHigh;
 	else
 	{
 		if (wxExecute(openPDFManualCommand) == 0)
-			Debugger::GetInstance().Print(_T("ERROR:  Could not find 'VVASE Manual.pdf'!"));// FIXME:  Use manualFileName
+			Debugger::GetInstance() << "ERROR:  Could not find '" << manualFileName << "'!" << Debugger::PriorityHigh;
 	}
 }
 
@@ -2047,7 +2033,7 @@ void MainFrame::ThreadCompleteEvent(wxCommandEvent &event)
 	case ThreadJob::CommandThreadExit:
 		// Decrement the number of active threads
 		activeThreads--;
-		Debugger::GetInstance().Print(Debugger::PriorityLow, "Thread %i exited", event.GetId());
+		Debugger::GetInstance() << "Thread " << event.GetId() << " exited" << Debugger::PriorityLow;
 
 		// If there are no more active threads, it is now safe to kill this window
 		if (activeThreads == 0)
@@ -2061,7 +2047,7 @@ void MainFrame::ThreadCompleteEvent(wxCommandEvent &event)
 	case ThreadJob::CommandThreadStarted:
 		// Increment the number of active threads
 		activeThreads++;
-		Debugger::GetInstance().Print(Debugger::PriorityLow, "Thread %i started", event.GetId());
+		Debugger::GetInstance() << "Thread " << event.GetId() << " started" << Debugger::PriorityLow;
 		break;
 
 	case ThreadJob::CommandThreadKinematicsNormal:
@@ -3024,8 +3010,7 @@ bool MainFrame::LoadFile(wxString pathAndFileName)
 		tempObject = new GeneticOptimization(*this, pathAndFileName);
 	else
 	{
-		// Print error message to screen
-		Debugger::GetInstance().Print(_T("ERROR:  Unrecognized file extension: '") + fileExtension + _T("'"));
+		Debugger::GetInstance() << "ERROR:  Unrecognized file extension: '" << fileExtension << "'" << Debugger::PriorityHigh;
 		return false;
 	}
 

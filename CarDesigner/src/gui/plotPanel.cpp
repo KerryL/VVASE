@@ -434,9 +434,9 @@ void PlotPanel::ContextWriteImageFile(wxCommandEvent& WXUNUSED(event))
 		return;
 	
 	if (WriteImageToFile(pathAndFileName[0]))
-		Debugger::GetInstance().Print(Debugger::PriorityHigh, "Image file written to %s", pathAndFileName[0].ToUTF8().data());
+		Debugger::GetInstance() << "Image file written to" << pathAndFileName[0] << Debugger::PriorityHigh;
 	else
-		Debugger::GetInstance().Print(_T("Image file NOT written!"), Debugger::PriorityHigh);
+		Debugger::GetInstance() << "Image file NOT written!" << Debugger::PriorityHigh;
 }
 
 //==========================================================================

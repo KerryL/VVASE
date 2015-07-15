@@ -24,8 +24,12 @@
 //	11/7/2011	- Corrected camelCase, K. Loux.
 //	12/5/2011	- Made this object a singleton, K. Loux.
 
-#ifndef _DEBUG_H_
-#define _DEBUG_H_
+#ifndef DEBUG_H_
+#define DEBUG_H_
+
+// Standard C++ headers
+#include <iostream>
+#include <sstream>
 
 // wxWidgets headers
 #include <wx/event.h>
@@ -35,15 +39,10 @@
 class wxString;
 class wxTextCtrl;
 
-// Disable compiler warnings for unreferenced formal parameters in MSW
-#ifdef __WXMSW__
-#pragma warning(disable:4100)
-#endif
-
 // Declaration of the EVT_DEBUG event
 DECLARE_LOCAL_EVENT_TYPE(EVT_DEBUG, -1)
 
-class Debugger
+class Debugger : public std::ostream
 {
 public:
 	// In lieu of a constructor/destructor
@@ -59,39 +58,34 @@ public:
 		PriorityLow			// Anything else we might want to print (usually for debugging - function calls, etc.)
 	};
 
-	// Prints the message to the output pane, if the DebugLevel is high enough
-	void Print(const wxString &info, DebugLevel level = PriorityVeryHigh) const;
-	void Print(const DebugLevel &level, const char *format, ...) const;
+	friend std::ostream& operator<<(std::ostream &os, const Debugger::DebugLevel& level);
 
-	// Sets the desired DebugLevel
 	void SetDebugLevel(const DebugLevel &level);
-
-	// Returns the current debug level
-	inline DebugLevel GetDebugLevel(void) const { wxMutexLocker lock(debugMutex); return debugLevel; };
-
-	// Sets the event handler instead to which events are posted
-	void SetTargetOutput(wxEvtHandler *_parent);
+	inline DebugLevel GetDebugLevel(void) const { wxMutexLocker lock(debugMutex); return debugLevel; }
+	void SetTargetOutput(wxEvtHandler *parent);
 
 private:
 	// For singletons, the constructors and assignment operators are private
 	Debugger();
-	Debugger(const Debugger& /*d*/) { };
-	Debugger& operator=(const Debugger &/*d*/) { return *this; };
-
-	// Destructor
-	~Debugger();
+	virtual ~Debugger();
 	
 	static Debugger *debuggerInstance;
 	
-	// The limit for how important a message must be to be printed
 	DebugLevel debugLevel;
-
-	// For thread-safe debugging, we can give this a pointer to an event
-	// queue and have it post there
 	wxEvtHandler *parent;
-
-	// Synchronization object
 	mutable wxMutex debugMutex;
+
+	class DebuggerStreamBuffer : public std::stringbuf
+	{
+	public:
+		DebuggerStreamBuffer(Debugger &log) : log(log) {}
+
+	protected:
+		virtual int sync();
+
+	private:
+		Debugger &log;
+	} buffer;
 };
 
-#endif// _DEBUG_H_
+#endif// DEBUG_H_

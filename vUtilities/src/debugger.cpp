@@ -55,15 +55,11 @@ DEFINE_LOCAL_EVENT_TYPE(EVT_DEBUG)
 //		None
 //
 //==========================================================================
-Debugger::Debugger()
+Debugger::Debugger() : std::ostream(&buffer), buffer(*this)
 {
-	// Ensure exclusive access to this object
 	wxMutexLocker lock(debugMutex);
 
-	// Set a default debug level
 	debugLevel = PriorityHigh;
-
-	// Initialize the output target to NULL
 	parent = NULL;
 }
 
@@ -85,7 +81,6 @@ Debugger::Debugger()
 //==========================================================================
 Debugger::~Debugger()
 {
-	// Ensure exclusive access to this object
 	wxMutexLocker lock(debugMutex);
 }
 
@@ -175,10 +170,7 @@ void Debugger::Kill(void)
 //==========================================================================
 void Debugger::SetDebugLevel(const DebugLevel &level)
 {
-	// Ensure exclusive access to this object
 	wxMutexLocker lock(debugMutex);
-
-	// Set the class member as specified
 	debugLevel = level;
 }
 
@@ -189,7 +181,7 @@ void Debugger::SetDebugLevel(const DebugLevel &level)
 // Description:		Assigns the event handler for event posting.
 //
 // Input Arguments:
-//		_parent	= *wxEvtHandler to which the events are sent.
+//		parent	= *wxEvtHandler to which the events are sent.
 //
 // Output Arguments:
 //		None
@@ -198,114 +190,85 @@ void Debugger::SetDebugLevel(const DebugLevel &level)
 //		None
 //
 //==========================================================================
-void Debugger::SetTargetOutput(wxEvtHandler *_parent)
+void Debugger::SetTargetOutput(wxEvtHandler *parent)
 {
-	// Ensure exclusive access to this object
 	wxMutexLocker lock(debugMutex);
-
-	// Set the event handler
-	parent = _parent;
+	this->parent = parent;
 }
 
 //==========================================================================
-// Class:			Debugger
-// Function:		Print
+// Class:			Debugger::DebuggerStreamBuffer
+// Function:		sync
 //
-// Description:		This function writes the specified text to the wxTextCtrl
-//					associated with this object, but ONLY if the debug level
-//					of the message is greater than the debug level of this
-//					object.  An end-of-line character is appended at the end
-//					of every Print call.
+// Description:		Handles endl calls - only purpose is to enforce use of
+//					debug level flags instead of std::endl.
 //
 // Input Arguments:
-//		info	= const wxString& to be printed
-//		level	= DebugLevel of this message
+//		None
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		None
+//		int
 //
 //==========================================================================
-void Debugger::Print(const wxString &info, DebugLevel level) const
+int Debugger::DebuggerStreamBuffer::sync()
 {
-	// Ensure exclusive access to this object
-	wxMutexLocker lock(debugMutex);
-	DebugLog::GetInstance()->Log(_T("Debugger::Print (locker)"));
+	assert(false && "Use Debugger::DebugLevel flags instead of std::endl");
+	return 0;
+}
+
+//==========================================================================
+// Class:			Debugger (friend)
+// Function:		operator<<
+//
+// Description:		Special overload for handling DebugLevel flags.  These are
+//					interpreted as endl calls or simply flush the buffer,
+//					depending on debug level.
+//
+// Input Arguments:
+//		os		= std::ostream &os
+//		level	= const Debugger::DebugLevel&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		std::ostream&
+//
+//==========================================================================
+std::ostream& operator<<(std::ostream &os, const Debugger::DebugLevel& level)
+{
+	assert(typeid(Debugger&) == typeid(os));
+	Debugger& debugger(dynamic_cast<Debugger&>(os));
+	wxMutexLocker lock(debugger.debugMutex);
 
 	// Lower debug level -> higher priority
 	// Show messages having a debug level higher than or equal to the set debug level
-	if (int(level) <= int(debugLevel))
+	if (int(level) <= int(debugger.debugLevel))
 	{
 		// If the event handler is assigned, then use it
-		if (parent != NULL)
+		if (debugger.parent != NULL)
 		{
-			// Create a debug event
 			wxCommandEvent evt(EVT_DEBUG, 0);
-
-			// The priority of the message
 			evt.SetInt(level);
 
 			// Format the message
-			wxString message(info);
-			if (level == PriorityVeryHigh)
+			wxString message(debugger.buffer.str());
+			if (level == Debugger::PriorityVeryHigh)
 				message.Prepend(_T("      "));
 			message.append(_T("\n"));
 
-			// The text of the message
 			evt.SetString(message);
-
-			// Add it to the parent's event queue
-			parent->AddPendingEvent(evt);
+			debugger.parent->AddPendingEvent(evt);
 		}
 		else// Send the output to the terminal
-			// Write the message
-			std::cout << info << std::endl;
-	}
-}
-
-//==========================================================================
-// Class:			Debugger
-// Function:		Print
-//
-// Description:		Variable argument version of Print().  This formats the
-//					input string and calls the other overload of Print().
-//
-// Input Arguments:
-//		level	= const DebugLevel& of this message
-//		format	= const char* to be formatted
-//		...		= additional arguments depending on the format
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-void Debugger::Print(const DebugLevel &level, const char *format, ...) const
-{
-	// Get the variable arguments from the function call
-	char output[512];
-	va_list args;
-	va_start(args, format);
-
-	// Format the arguments into a string - use the secure version of vsnprintf if
-	// it is available
-#ifdef __WIN32__
-	if (vsnprintf_s((char*)output, sizeof(output), sizeof(output), format, args) == -1)
-#else
-	if (vsnprintf((char*)output, sizeof(output), format, args) == -1)
-#endif
-	{
-		// Warn about message truncation
-		Print(_T("Warning:  Debugger message truncated!"), level);
+			std::cout << debugger.buffer.str() << std::endl;
+		// TODO:  Modify this to be like CombinedLogger and output to multiple sources?  other std::ostreams?
+		// Then could make another ostream for writing to wxTextCtrl
 	}
 
-	// End the variable argument macro
-	va_end(args);
-
-	// Print the formatted message at the specified level
-	Print(output, level);
+	debugger.buffer.str("");
+	return os;
 }

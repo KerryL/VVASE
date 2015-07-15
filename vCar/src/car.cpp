@@ -382,8 +382,7 @@ bool Car::LoadCarFromFile(wxString fileName, std::ifstream *_inFile, int *fileVe
 
 	// Check to make sure the version matches
 	if (header.fileVersion != currentFileVersion)
-		Debugger::GetInstance().Print(_T("Warning:  Opening file with out-of-date file format."),
-			Debugger::PriorityHigh);
+		Debugger::GetInstance() << "Warning:  Opening file with out-of-date file format." << Debugger::PriorityHigh;
 
 	// Call the read function for each sub-system class
 	// NOTE:  The order that these Read() calls are made must match the order

@@ -636,13 +636,13 @@ bool Iteration::PerformLoadFromFile(void)
 	// Check to make sure the version matches
 	if (header.fileVersion > currentFileVersion)
 	{
-		Debugger::GetInstance().Print(_T("ERROR:  Unrecognized file version - unable to open file!"));
+		Debugger::GetInstance() << "ERROR:  Unrecognized file version - unable to open file!" << Debugger::PriorityHigh;
 		inFile.close();
 
 		return false;
 	}
 	else if (header.fileVersion != currentFileVersion)
-		Debugger::GetInstance().Print(_T("Warning:  Opening out-of-date file version."));
+		Debugger::GetInstance() << "Warning:  Opening out-of-date file version." << Debugger::PriorityHigh;
 
 	// Read this object's data
 	inFile.read((char*)&associatedWithAllOpenCars, sizeof(bool));
@@ -1059,7 +1059,7 @@ void Iteration::ShowAssociatedCarsDialog(void)
 	// Make sure there is at least one car open
 	if (openCars.size() == 0)
 	{
-		Debugger::GetInstance().Print(_T("ERROR:  Cannot display dialog - no open cars!"), Debugger::PriorityHigh);
+		Debugger::GetInstance() << "ERROR:  Cannot display dialog - no open cars!" << Debugger::PriorityHigh;
 		return;
 	}
 
@@ -1204,8 +1204,7 @@ void Iteration::ExportDataToFile(wxString pathAndFileName) const
 		delimiter = ',';
 	else
 	{
-		Debugger::GetInstance().Print(_T("ERROR:  Could not export data!  Unable to determine delimiter choice!"));
-
+		Debugger::GetInstance() << "ERROR:  Could not export data!  Unable to determine delimiter choice!" << Debugger::PriorityHigh;
 		return;
 	}
 
@@ -1219,8 +1218,7 @@ void Iteration::ExportDataToFile(wxString pathAndFileName) const
 	// Warn the user if the file could not be opened failed
 	if (!exportFile.is_open() || !exportFile.good())
 	{
-		Debugger::GetInstance().Print(_T("ERROR:  Could not export data to '") + pathAndFileName + _T("'!"));
-
+		Debugger::GetInstance() << "ERROR:  Could not export data to '" <<  pathAndFileName << "'!" << Debugger::PriorityHigh;
 		return;
 	}
 
@@ -1239,26 +1237,20 @@ void Iteration::ExportDataToFile(wxString pathAndFileName) const
 					continue;
 
 				if (row == 0)
-					// Write the name of the current column
 					exportFile << GetPlotName((PlotID)currentPlot) << delimiter;
 				else if (row == 1)
-					// Write the units for this column
 					exportFile << "(" << GetPlotUnits((PlotID)currentPlot) << ")" << delimiter;
 				else if (row == 2)
-					// Write the name of the current car
 					exportFile << associatedCars[currentCar]->GetCleanName() << delimiter;
 				else
-					// Write the data for the current plot
 					exportFile << GetDataValue(currentCar, row - numberOfHeadingRows, (PlotID)currentPlot)
 						<< delimiter;
 			}
 		}
 
-		// Add a new line at the end of every row
 		exportFile << endl;
 	}
 
-	// Close the file
 	exportFile.close();
 }
 
@@ -1280,7 +1272,6 @@ void Iteration::ExportDataToFile(wxString pathAndFileName) const
 //==========================================================================
 wxString Iteration::GetPlotName(PlotID id) const
 {
-	// The value to return
 	wxString name;
 
 	// Depending on the specified PLOT_ID, choose the name of the string
