@@ -41,6 +41,7 @@
 #include "vUtilities/debugger.h"
 #include "vMath/matrix.h"
 #include "vRenderer/3dcar/debugShape.h"
+#include "vMath/geometryMath.h"
 
 //==========================================================================
 // Class:			Kinematics
@@ -718,336 +719,27 @@ bool Kinematics::SolveForPoint(const Vector &center1, const Vector &center2,
 	const Vector &originalCenter2, const Vector &originalCenter3,
 	const Vector &original, Vector &current)
 {
-	// Compute the circle radii
-	double r1 = originalCenter1.Distance(original);
-	double r2 = originalCenter2.Distance(original);
-	double r3 = originalCenter3.Distance(original);
+	GeometryMath::Sphere s1;
+	GeometryMath::Sphere s2;
+	GeometryMath::Sphere s3;
 
-	// Check for the existence of a solution
-	if (center1.Distance(center2) > r1 + r2 || center1.Distance(center3) > r1 + r3 ||
-		center2.Distance(center3) > r2 + r3)
+	s1.center = center1;
+	s1.radius = originalCenter1.Distance(original);
+	s2.center = center2;
+	s2.radius = originalCenter2.Distance(original);
+	s3.center = center3;
+	s3.radius = originalCenter3.Distance(original);
+
+	Vector intersections[2];
+	if (!GeometryMath::FindThreeSpheresIntersection(s1, s2, s3, intersections))
 	{
-		Debugger::GetInstance() << "Error (SolveForPoint): Center distance exceeds sum of radii" << Debugger::PriorityLow;
+		Debugger::GetInstance() << "Error (SolveForPoint):  Solution does not exist" << Debugger::PriorityLow;
 		return false;
 	}
-	else if (center1.Distance(center2) + min(r1, r2) < max(r1, r2) ||
-		center1.Distance(center3) + min(r1, r3) < max(r1, r3) ||
-		center2.Distance(center3) + min(r2, r3) < max(r2, r3))
+
+	if (intersections[0] != intersections[0] || intersections[1] != intersections[1])
 	{
-		Debugger::GetInstance() << "Error (SolveForPoint): Center distance and smaller radius less than larger radius" << Debugger::PriorityLow;
-		return false;
-	}
-
-	// The method:
-	//  1.	The intersection of two spheres creates a circle.  That circle lies on a plane.
-	//		Determine this plane for any two spheres. This plane is determined by subtracting
-	//		the equations of two spheres.  This is different from (better than) substitution,
-	//		because this will ensure that the higher order terms drop out.
-	//  2.	Determine the same plane as in step 1 for a different set of two spheres.
-	//  3.	Find the line created by the intersection of the planes found in steps 1 and 2.
-	//		Lines only have one degree of freedom, so this will be two equations in the same
-	//		variable.
-	//  4.  The intersection of the line and any sphere will yield two points (unless the
-	//		spheres don't intersect or they intersect at only one point).  These points are
-	//		the solutions.  Here, we employ the quadratic equation and the equation of the
-	//		line determined in step 3.
-
-	// Declare our plane constants
-	double a1, b1, c1, d1, a2, b2, c2, d2;
-
-	// Step 1 (Plane defined by intersection of spheres 1 and 2)
-	a1 = center1.x - center2.x;
-	b1 = center1.y - center2.y;
-	c1 = center1.z - center2.z;
-	d1 = (pow(center2.Length(), 2) - pow(center1.Length(), 2) - r2 * r2 + r1 * r1) / 2.0;
-
-	// Step 2 (Plane defined by intersection of spheres 1 and 3)
-	a2 = center1.x - center3.x;
-	b2 = center1.y - center3.y;
-	c2 = center1.z - center3.z;
-	d2 = (pow(center3.Length(), 2) - pow(center1.Length(), 2) - r3 * r3 + r1 * r1) / 2.0;
-
-	// Step 3 (Line defined by intersection of planes from steps 1 and 2)
-	// The if..else stuff avoid numerical instabilities - we'll choose the denominators
-	// farthest from zero for all divisions (denominators are below):
-	double den1 = b1 * c2 - b2 * c1;
-	double den2 = a1 * c2 - a2 * c1;
-	double den3 = a1 * b2 - a2 * b1;
-
-	// Let's declare our answers now
-	Vector solution1, solution2;
-
-	// And our quadratic equation coefficients
-	double a, b, c;
-
-	// In which order do we want to solve for the components of the points?
-	if (max(max(fabs(den1), fabs(den2)), fabs(den3)) == fabs(den1))
-	{
-		if (max(max(max(fabs(c1), fabs(c2)), fabs(b1)), fabs(b2)) == fabs(c1))
-		{
-			// Solve X first (use first set of plane coefficients)
-			double myx = (a2 * c1 - a1 * c2) / den1;
-			double byx = (c1 * d2 - c2 * d1) / den1;
-			
-			a = 1.0 + myx * myx + pow(a1 + b1 * myx, 2) / (c1 * c1);
-			b = 2.0 * (myx * (byx - center1.y) - center1.x + (a1 + b1 * myx) / c1
-				* ((b1 * byx + d1) / c1 + center1.z));
-			c = center1.x * center1.x + pow(byx - center1.y, 2) - r1 * r1
-				+ pow((b1 * byx + d1) / c1 + center1.z, 2);
-			// First solution
-			solution1.x = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Second solution
-			solution2.x = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Solve Y next
-			solution1.y = solution1.x * myx + byx;
-			solution2.y = solution2.x * myx + byx;
-			// Solve Z last
-			solution1.z = (-a1 * solution1.x - b1 * solution1.y - d1) / c1;
-			solution2.z = (-a1 * solution2.x - b1 * solution2.y - d1) / c1;
-		}
-		else if (max(max(max(fabs(c1), fabs(c2)), fabs(b1)), fabs(b2)) == fabs(c2))
-		{
-			// Solve X first (use second set of plane coefficients)
-			double myx = (a2 * c1 - a1 * c2) / den1;
-			double byx = (c1 * d2 - c2 * d1) / den1;
-			a = 1.0 + myx * myx + pow(a2 + b2 * myx, 2) / (c2 * c2);
-			b = 2.0 * (myx * (byx - center1.y) - center1.x + (a2 + b2 * myx) / c2
-				* ((b2 * byx + d2) / c2 + center1.z));
-			c = center1.x * center1.x + pow(byx - center1.y, 2) - r1 * r1
-				+ pow((b2 * byx + d2) / c2 + center1.z, 2);
-			// First solution
-			solution1.x = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Second solution
-			solution2.x = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Solve Y next
-			solution1.y = solution1.x * myx + byx;
-			solution2.y = solution2.x * myx + byx;
-			// Solve Z last
-			solution1.z = (-a2 * solution1.x - b2 * solution1.y - d2) / c2;
-			solution2.z = (-a2 * solution2.x - b2 * solution2.y - d2) / c2;
-		}
-		else if (max(max(max(fabs(c1), fabs(c2)), fabs(b1)), fabs(b2)) == fabs(b1))
-		{
-			// Solve X first (use first set of plane coefficients)
-			double mzx = (a1 * b2 - a2 * b1) / den1;
-			double bzx = (b2 * d1 - b1 * d2) / den1;
-			a = 1.0 + mzx * mzx + pow(a1 + c1 * mzx, 2) / (b1 * b1);
-			b = 2.0 * (mzx * (bzx - center1.z) - center1.x + (a1 + c1 * mzx) / b1
-				* ((c1 * bzx + d1) / b1 + center1.y));
-			c = center1.x * center1.x + pow(bzx - center1.z, 2) - r1 * r1
-				+ pow((c1 * bzx + d1) / b1 + center1.y, 2);
-			// First solution
-			solution1.x = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Second solution
-			solution2.x = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Solve Z next
-			solution1.z = solution1.x * mzx + bzx;
-			solution2.z = solution2.x * mzx + bzx;
-			// Solve Y last
-			solution1.y = (-a1 * solution1.x - c1 * solution1.z - d1) / b1;
-			solution2.y = (-a1 * solution2.x - c1 * solution2.z - d1) / b1;
-		}
-		else// if (max(max(max(fabs(c1), fabs(c2)), fabs(b1)), fabs(b2)) == fabs(b2))
-		{
-			// Solve X first (use second set of plane coefficients)
-			double mzx = (a1 * b2 - a2 * b1) / den1;
-			double bzx = (b2 * d1 - b1 * d2) / den1;
-			a = 1.0 + mzx * mzx + pow(a2 + c2 * mzx, 2) / (b2 * b2);
-			b = 2.0 * (mzx * (bzx - center1.z) - center1.x + (a2 + c2 * mzx) / b2
-				* ((c2 * bzx + d2) / b2 + center1.y));
-			c = center1.x * center1.x + pow(bzx - center1.z, 2) - r1 * r1
-				+ pow((c2 * bzx + d2) / b2 + center1.y, 2);
-			// First solution
-			solution1.x = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Second solution
-			solution2.x = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Solve Z next
-			solution1.z = solution1.x * mzx + bzx;
-			solution2.z = solution2.x * mzx + bzx;
-			// Solve Y last
-			solution1.y = (-a2 * solution1.x - c2 * solution1.z - d2) / b2;
-			solution2.y = (-a2 * solution2.x - c2 * solution2.z - d2) / b2;
-		}
-	}
-	else if (max(max(fabs(den1), fabs(den2)), fabs(den3)) == fabs(den2))
-	{
-		if (max(max(max(fabs(a1), fabs(a2)), fabs(c1)), fabs(c2)) == fabs(a1))
-		{
-			// Solve Y first (use first set of plane coefficients)
-			double mzy = (a2 * b1 - a1 * b2) / den2;
-			double bzy = (a2 * d1 - a1 * d2) / den2;
-			a = 1 + mzy * mzy + pow(b1 + c1 * mzy, 2) / (a1 * a1);
-			b = 2 * (mzy * (bzy - center1.z) - center1.y + (b1 + c1 * mzy) / a1
-				* ((c1 * bzy + d1) / a1 + center1.x));
-			c = center1.y * center1.y + pow(bzy - center1.z, 2) - r1 * r1
-				+ pow((c1 * bzy + d1) / a1 + center1.x, 2);
-			// First solution
-			solution1.y = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Second solution
-			solution2.y = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Solve Z next
-			solution1.z = solution1.y * mzy + bzy;
-			solution2.z = solution2.y * mzy + bzy;
-			// Solve X last
-			solution1.x = (-b1 * solution1.y - c1 * solution1.z - d1) / a1;
-			solution2.x = (-b1 * solution2.y - c1 * solution2.z - d1) / a1;
-		}
-		else if (max(max(max(fabs(a1), fabs(a2)), fabs(c1)), fabs(c2)) == fabs(a2))
-		{
-			// Solve Y first (use second set of plane coefficients)
-			double mzy = (a2 * b1 - a1 * b2) / den2;
-			double bzy = (a2 * d1 - a1 * d2) / den2;
-			a = 1 + mzy * mzy + pow(b2 + c2 * mzy, 2) / (a2 * a2);
-			b = 2 * (mzy * (bzy - center1.z) - center1.y + (b2 + c2 * mzy) / a2
-				* ((c2 * bzy + d2) / a2 + center1.x));
-			c = center1.y * center1.y + pow(bzy - center1.z, 2) - r1 * r1
-				+ pow((c2 * bzy + d2) / a2 + center1.x, 2);
-			// First solution
-			solution1.y = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Second solution
-			solution2.y = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Solve Z next
-			solution1.z = solution1.y * mzy + bzy;
-			solution2.z = solution2.y * mzy + bzy;
-			// Solve X last
-			solution1.x = (-b2 * solution1.y - c2 * solution1.z - d2) / a2;
-			solution2.x = (-b2 * solution2.y - c2 * solution2.z - d2) / a2;
-		}
-		else if (max(max(max(fabs(a1), fabs(a2)), fabs(c1)), fabs(c2)) == fabs(c1))
-		{
-			// Solve Y first (use first set of plane coefficients)
-			double mxy = (b2 * c1 - b1 * c2) / den2;
-			double bxy = (c1 * d2 - c2 * d1) / den2;
-			a = 1 + mxy * mxy + pow(b1 + a1 * mxy, 2) / (c1 * c1);
-			b = 2 * (mxy * (bxy - center1.x) - center1.y + (b1 + a1 * mxy) / c1
-				* ((a1 * bxy + d1) / c1 + center1.z));
-			c = center1.y * center1.y + pow(bxy - center1.x, 2) - r1 * r1
-				+ pow((a1 * bxy + d1) / c1 + center1.z, 2);
-			// First solution
-			solution1.y = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Second solution
-			solution2.y = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Solve X next
-			solution1.x = solution1.y * mxy + bxy;
-			solution2.x = solution2.y * mxy + bxy;
-			// Solve Z last
-			solution1.z = (-a1 * solution1.x - b1 * solution1.y - d1) / c1;
-			solution2.z = (-a1 * solution2.x - b1 * solution2.y - d1) / c1;
-		}
-		else// if (max(max(max(fabs(a1), fabs(a2)), fabs(c1)), fabs(c2)) == fabs(c2))
-		{
-			// Solve Y first (use second set of plane coefficients)
-			double mxy = (b2 * c1 - b1 * c2) / den2;
-			double bxy = (c1 * d2 - c2 * d1) / den2;
-			a = 1 + mxy * mxy + pow(b2 + a2 * mxy, 2) / (c2 * c2);
-			b = 2 * (mxy * (bxy - center1.x) - center1.y + (b2 + a2 * mxy) / c2
-				* ((a2 * bxy + d2) / c2 + center1.z));
-			c = center1.y * center1.y + pow(bxy - center1.x, 2) - r1 * r1
-				+ pow((a2 * bxy + d2) / c2 + center1.z, 2);
-			// First solution
-			solution1.y = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Second solution
-			solution2.y = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Solve X next
-			solution1.x = solution1.y * mxy + bxy;
-			solution2.x = solution2.y * mxy + bxy;
-			// Solve Z last
-			solution1.z = (-a2 * solution1.x - b2 * solution1.y - d2) / c2;
-			solution2.z = (-a2 * solution2.x - b2 * solution2.y - d2) / c2;
-		}
-	}
-	else// if (max(max(fabs(den1), fabs(den2)), fabs(den3)) == fabs(den3))
-	{
-		if (max(max(max(fabs(a1), fabs(a2)), fabs(b1)), fabs(b2)) == fabs(a1))
-		{
-			// Solve Z first (use first set of plane coefficients)
-			double myz = (a2 * c1 - a1 * c2) / den3;
-			double byz = (a2 * d1 - a1 * d2) / den3;
-			a = 1 + myz * myz + pow(c1 + b1 * myz, 2) / (a1 * a1);
-			b = 2 * (myz * (byz - center1.y) - center1.z + (c1 + b1 * myz) / a1
-				* ((b1 * byz + d1) / a1 + center1.x));
-			c = center1.z * center1.z + pow(byz - center1.y, 2) - r1 * r1
-				+ pow((b1 * byz + d1) / a1 + center1.x, 2);
-			// First solution
-			solution1.z = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Second solution
-			solution2.z = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Solve Y next
-			solution1.y = solution1.z * myz + byz;
-			solution2.y = solution2.z * myz + byz;
-			// Solve X last
-			solution1.x = (-b1 * solution1.y - c1 * solution1.z - d1) / a1;
-			solution2.x = (-b1 * solution2.y - c1 * solution2.z - d1) / a1;
-		}
-		else if (max(max(max(fabs(a1), fabs(a2)), fabs(b1)), fabs(b2)) == fabs(a2))
-		{
-			// Solve Z first (use second set of plane coefficients)
-			double myz = (a2 * c1 - a1 * c2) / den3;
-			double byz = (a2 * d1 - a1 * d2) / den3;
-			a = 1 + myz * myz + pow(c2 + b2 * myz, 2) / (a2 * a2);
-			b = 2 * (myz * (byz - center1.y) - center1.z + (c2 + b2 * myz) / a2
-				* ((b2 * byz + d2) / a2 + center1.x));
-			c = center1.z * center1.z + pow(byz - center1.y, 2) - r1 * r1
-				+ pow((b2 * byz + d2) / a2 + center1.x, 2);
-			// First solution
-			solution1.z = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Second solution
-			solution2.z = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Solve Y next
-			solution1.y = solution1.z * myz + byz;
-			solution2.y = solution2.z * myz + byz;
-			// Solve X last
-			solution1.x = (-b2 * solution1.y - c2 * solution1.z - d2) / a2;
-			solution2.x = (-b2 * solution2.y - c2 * solution2.z - d2) / a2;
-		}
-		else if (max(max(max(fabs(a1), fabs(a2)), fabs(b1)), fabs(b2)) == fabs(b1))
-		{
-			// Solve Z first (use first set of plane coefficients)
-			double mxz = (b1 * c2 - b2 * c1) / den3;
-			double bxz = (b1 * d2 - b2 * d1) / den3;
-			a = 1 + mxz * mxz + pow(c1 + a1 * mxz, 2) / (b1 * b1);
-			b = 2 * (mxz * (bxz - center1.x) - center1.z + (c1 + a1 * mxz) / b1
-				* ((a1 * bxz + d1) / b1 + center1.y));
-			c = center1.z * center1.z + pow(bxz - center1.x, 2) - r1 * r1
-				+ pow((a1 * bxz + d1) / b1 + center1.y, 2);
-			// First solution
-			solution1.z = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Second solution
-			solution2.z = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Solve X next
-			solution1.x = solution1.z * mxz + bxz;
-			solution2.x = solution2.z * mxz + bxz;
-			// Solve Y last
-			solution1.y = (-a1 * solution1.x - c1 * solution1.z - d1) / b1;
-			solution2.y = (-a1 * solution2.x - c1 * solution2.z - d1) / b1;
-		}
-		else// if (max(max(max(fabs(a1), fabs(a2)), fabs(b1)), fabs(b2)) == fabs(b2))
-		{
-			// Solve Z first (use second set of plane coefficients)
-			double mxz = (b1 * c2 - b2 * c1) / den3;
-			double bxz = (b1 * d2 - b2 * d1) / den3;
-			a = 1 + mxz * mxz + pow(c2 + a2 * mxz, 2) / (b2 * b2);
-			b = 2 * (mxz * (bxz - center1.x) - center1.z + (c2 + a2 * mxz) / b2
-				* ((a2 * bxz + d2) / b2 + center1.y));
-			c = center1.z * center1.z + pow(bxz - center1.x, 2) - r1 * r1
-				+ pow((a2 * bxz + d2) / b2 + center1.y, 2);
-			// First solution
-			solution1.z = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Second solution
-			solution2.z = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Solve X next
-			solution1.x = solution1.z * mxz + bxz;
-			solution2.x = solution2.z * mxz + bxz;
-			// Solve Y last
-			solution1.y = (-a2 * solution1.x - c2 * solution1.z - d2) / b2;
-			solution2.y = (-a2 * solution2.x - c2 * solution2.z - d2) / b2;
-		}
-	}
-
-	// Make sure the solution is valid
-	if (solution1 != solution1 || solution2 != solution2)
-	{
-		Debugger::GetInstance() << "Error (SolveForPoint): Invalid solution" << Debugger::PriorityLow;
+		Debugger::GetInstance() << "Error (SolveForPoint):  Invalid solution" << Debugger::PriorityLow;
 		return false;
 	}
 
@@ -1064,7 +756,7 @@ bool Kinematics::SolveForPoint(const Vector &center1, const Vector &center2,
 
 	// Get a vector from the location of the point to some point in the plane
 	Vector originalVectorToPlane = originalCenter1 - original;
-	Vector newVectorToPlane = center1 - solution1;
+	Vector newVectorToPlane = center1 - intersections[0];
 
 	// The dot products of the normal and the vector to the plane will give an indication
 	// of which side of the plane the point is on
@@ -1073,9 +765,9 @@ bool Kinematics::SolveForPoint(const Vector &center1, const Vector &center2,
 
 	// We can compare the sign of the original side with the new side to choose the correct solution
 	if ((newSide > 0 && originalSide > 0) || (newSide < 0 && originalSide < 0))
-		current = solution1;
+		current = intersections[0];
 	else
-		current = solution2;
+		current = intersections[1];
 
 	return true;
 }
@@ -1170,7 +862,7 @@ bool Kinematics::SolveForXY(const Corner::Hardpoints &target,
 //
 // Description:		This is a modification of the solver for the rest of
 //					the suspension hardpoints.  Here, the Z component of
-//					Original is assumed to be correct and is never modified.
+//					current is assumed to be correct and is never modified.
 //					Otherwise, it works the same way as SolveForPoint.  In
 //					the event of an error, the original value is returned.
 //
@@ -1196,182 +888,35 @@ bool Kinematics::SolveForXY(const Vector &center1, const Vector &center2,
 	const Vector &originalCenter1, const Vector &originalCenter2,
 	const Vector &original, Vector &current)
 {
-	// Compute the circle radii
-	double r1 = originalCenter1.Distance(original);
-	double r2 = originalCenter2.Distance(original);
+	GeometryMath::Sphere s1;
+	GeometryMath::Sphere s2;
+	s1.center = center1;
+	s1.radius = originalCenter1.Distance(original);
+	s2.center = center2;
+	s2.radius = originalCenter2.Distance(original);
 
-	// Check for the existence of a solution
-	if (center1.Distance(center2) > r1 + r2)
+	GeometryMath::Plane p1;
+	p1.point = current;
+	p1.normal = Vector(0.0, 0.0, 1.0);
+
+	GeometryMath::Plane p2 = GeometryMath::FindSphereSphereIntersectionPlane(s1, s2);
+	GeometryMath::Axis a;
+	if (!GeometryMath::FindPlanePlaneIntersection(p1, p2, a))
 	{
-		Debugger::GetInstance() << "Error (SolveForXY): Center distance exceeds sum of radii" << Debugger::PriorityLow;
-
+		Debugger::GetInstance() << "Error (SolveForXY):  Solution does not exist" << Debugger::PriorityLow;
 		return false;
 	}
-	else if (center1.Distance(center2) + min(r1, r2) < max(r1, r2))
-	{
-		Debugger::GetInstance() << "Error (SolveForXY): Center distance and smaller radius less than larger radius" <<
-			Debugger::PriorityLow;
 
+	Vector intersections[2];
+	if (!GeometryMath::FindAxisSphereIntersections(a, s1, intersections))
+	{
+		Debugger::GetInstance() << "Error (SolveForXY):  Solution does not exist" << Debugger::PriorityLow;
 		return false;
 	}
 
-	// Declare our plane constants
-	double a1, b1, c1, d1;
-
-	// Step 1 (Plane defined by intersection of spheres 1 and 2)
-	a1 = center1.x - center2.x;
-	b1 = center1.y - center2.y;
-	c1 = center1.z - center2.z;
-	d1 = (pow(center2.Length(), 2) - pow(center1.Length(), 2) - r2 * r2 + r1 * r1) / 2.0;
-
-	// Step 2 (Line defined by intersection of planes from steps 1 and <0 0 1>)
-	// The if..else stuff avoid numerical instabilities - we'll choose the denominators
-	// farthest from zero for all divisions.
-
-	// Let's declare our answers now
-	Vector solution1, solution2;
-
-	// And our quadratic equation coefficients
-	double a, b, c;
-
-	// In which order do we want to solve for the components of the points?
-	// TODO:  This code can probably be leaned out, but it works fine...
-	if (max(fabs(b1), fabs(a1)) == fabs(b1))
+	if (intersections[0] != intersections[0] || intersections[1] != intersections[1])
 	{
-		if (max(max(fabs(c1), fabs(1.0)), fabs(b1)) == fabs(c1))
-		{
-			// Solve X first (use first set of plane coefficients)
-			double myx = -a1 / b1;
-			double byx = -(c1 * current.z + d1) / b1;
-			
-			a = 1.0 + myx * myx + pow(a1 + b1 * myx, 2) / (c1 * c1);
-			b = 2.0 * (myx * (byx - center1.y) - center1.x + (a1 + b1 * myx) / c1
-				* ((b1 * byx + d1) / c1 + center1.z));
-			c = center1.x * center1.x + pow(byx - center1.y, 2) - r1 * r1
-				+ pow((b1 * byx + d1) / c1 + center1.z, 2);
-			// First solution
-			solution1.x = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Second solution
-			solution2.x = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Solve Y next
-			solution1.y = solution1.x * myx + byx;
-			solution2.y = solution2.x * myx + byx;
-			// Solve Z last
-			solution1.z = (-a1 * solution1.x - b1 * solution1.y - d1) / c1;
-			solution2.z = (-a1 * solution2.x - b1 * solution2.y - d1) / c1;
-		}
-		else if (max(max(fabs(c1), fabs(1.0)), fabs(b1)) == fabs(1.0))
-		{
-			// Solve X first (use second set of plane coefficients)
-			double myx = 0.0;
-			double byx = -c1 * current.z / b1;
-			a = 1.0 + myx * myx;
-			b = 2.0 * (myx * (byx - center1.y) - center1.x);
-			c = center1.x * center1.x + pow(byx - center1.y, 2) - r1 * r1
-				+ pow(center1.z - current.z, 2);
-			// First solution
-			solution1.x = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Second solution
-			solution2.x = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Solve Y next
-			solution1.y = solution1.x * myx + byx;
-			solution2.y = solution2.x * myx + byx;
-			// Solve Z last
-			solution1.z = current.z;
-			solution2.z = current.z;
-		}
-		else// if (max(max(fabs(c1), fabs(1.0)), fabs(b1)) == fabs(b1))
-		{
-			// Solve X first (use first set of plane coefficients)
-			double mzx = 0.0;
-			double bzx = current.z;
-			a = 1.0 + mzx * mzx + pow(a1 + c1 * mzx, 2) / (b1 * b1);
-			b = 2.0 * (mzx * (bzx - center1.z) - center1.x + (a1 + c1 * mzx) / b1
-				* ((c1 * bzx + d1) / b1 + center1.y));
-			c = center1.x * center1.x + pow(bzx - center1.z, 2) - r1 * r1
-				+ pow((c1 * bzx + d1) / b1 + center1.y, 2);
-			// First solution
-			solution1.x = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Second solution
-			solution2.x = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Solve Z next
-			solution1.z = solution1.x * mzx + bzx;
-			solution2.z = solution2.x * mzx + bzx;
-			// Solve Y last
-			solution1.y = (-a1 * solution1.x - c1 * solution1.z - d1) / b1;
-			solution2.y = (-a1 * solution2.x - c1 * solution2.z - d1) / b1;
-		}
-	}
-	else// if (max(fabs(b1), fabs(a1)) == fabs(den2))
-	{
-		if (max(max(fabs(a1), fabs(c1)), fabs(1.0)) == fabs(a1))
-		{
-			// Solve Y first (use first set of plane coefficients)
-			double mzy = 0.0;
-			double bzy = current.z;
-			a = 1 + mzy * mzy + pow(b1 + c1 * mzy, 2) / (a1 * a1);
-			b = 2 * (mzy * (bzy - center1.z) - center1.y + (b1 + c1 * mzy) / a1
-				* ((c1 * bzy + d1) / a1 + center1.x));
-			c = center1.y * center1.y + pow(bzy - center1.z, 2) - r1 * r1
-				+ pow((c1 * bzy + d1) / a1 + center1.x, 2);
-			// First solution
-			solution1.y = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Second solution
-			solution2.y = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Solve Z next
-			solution1.z = solution1.y * mzy + bzy;
-			solution2.z = solution2.y * mzy + bzy;
-			// Solve X last
-			solution1.x = (-b1 * solution1.y - c1 * solution1.z - d1) / a1;
-			solution2.x = (-b1 * solution2.y - c1 * solution2.z - d1) / a1;
-		}
-		else if (max(max(fabs(a1), fabs(c1)), fabs(1.0)) == fabs(c1))
-		{
-			// Solve Y first (use first set of plane coefficients)
-			double mxy = -b1 / a1;
-			double bxy = -(c1 * current.z + d1) / a1;
-			a = 1 + mxy * mxy + pow(b1 + a1 * mxy, 2) / (c1 * c1);
-			b = 2 * (mxy * (bxy - center1.x) - center1.y + (b1 + a1 * mxy) / c1
-				* ((a1 * bxy + d1) / c1 + center1.z));
-			c = center1.y * center1.y + pow(bxy - center1.x, 2) - r1 * r1
-				+ pow((a1 * bxy + d1) / c1 + center1.z, 2);
-			// First solution
-			solution1.y = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Second solution
-			solution2.y = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Solve X next
-			solution1.x = solution1.y * mxy + bxy;
-			solution2.x = solution2.y * mxy + bxy;
-			// Solve Z last
-			solution1.z = (-a1 * solution1.x - b1 * solution1.y - d1) / c1;
-			solution2.z = (-a1 * solution2.x - b1 * solution2.y - d1) / c1;
-		}
-		else// if (max(max(fabs(a1), fabs(c1)), fabs(1.0)) == fabs(1.0))
-		{
-			// Solve Y first (use second set of plane coefficients)
-			double mxy = -b1 / a1;
-			double bxy = -(c1 * current.z + d1) / a1;
-			a = 1 + mxy * mxy;
-			b = 2 * (mxy * (bxy - center1.x) - center1.y);
-			c = center1.y * center1.y + pow(bxy - center1.x, 2) - r1 * r1
-				+ pow(center1.z - current.z, 2);
-			// First solution
-			solution1.y = (-b + sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Second solution
-			solution2.y = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
-			// Solve X next
-			solution1.x = solution1.y * mxy + bxy;
-			solution2.x = solution2.y * mxy + bxy;
-			// Solve Z last
-			solution1.z = current.z;
-			solution2.z = current.z;
-		}
-	}
-
-	// Make sure the solution is valid
-	if (solution1 != solution1 || solution2 != solution2)
-	{
-		Debugger::GetInstance() << "Error (SolveForXY): Invalid solution" << Debugger::PriorityLow;
+		Debugger::GetInstance() << "Error (SolveForXY):  Invalid solution" << Debugger::PriorityLow;
 		return false;
 	}
 
@@ -1392,7 +937,7 @@ bool Kinematics::SolveForXY(const Vector &center1, const Vector &center2,
 
 	// Get a vector from the location of the point to some point in the plane
 	Vector originalVectorToPlane = originalCenter1 - original;
-	Vector newVectorToPlane = center1 - solution1;
+	Vector newVectorToPlane = center1 - intersections[0];
 
 	// The dot products of the normal and the vector to the plane will give an indication
 	// of which side of the plane the point is on
@@ -1401,9 +946,9 @@ bool Kinematics::SolveForXY(const Vector &center1, const Vector &center2,
 
 	// We can compare the sign of the original side with the new side to choose the correct solution
 	if ((newSide > 0 && originalSide > 0) || (newSide < 0 && originalSide < 0))
-		current = solution1;
+		current = intersections[0];
 	else
-		current = solution2;
+		current = intersections[1];
 
 	return true;
 }
