@@ -64,26 +64,6 @@ Corner::Corner(const Location &_location)
 
 //==========================================================================
 // Class:			Corner
-// Function:		~Corner
-//
-// Description:		Destructor for the Corner class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Corner::~Corner()
-{
-}
-
-//==========================================================================
-// Class:			Corner
 // Function:		GetActuationAttachmentName
 //
 // Description:		Returns the name of the specified actuation attachment method.
@@ -129,7 +109,7 @@ wxString Corner::GetActuationAttachmentName(const ActuationAttachment &_attachme
 // Description:		Returns the name of the specified actuation type.
 //
 // Input Arguments:
-//		_type	= const ActuationType& of interest
+//		type	= const ActuationType& of interest
 //
 // Output Arguments:
 //		None
@@ -138,16 +118,16 @@ wxString Corner::GetActuationAttachmentName(const ActuationAttachment &_attachme
 //		wxString containg the name of the specified actuation type
 //
 //==========================================================================
-wxString Corner::GetActuationTypeName(const ActuationType &_type)
+wxString Corner::GetActuationTypeName(const ActuationType &type)
 {
-	switch (_type)
+	switch (type)
 	{
 	case ActuationPushPullrod:
 		return _T("Push/Pullrod");
 		break;
 
-	case ActuationOutboard:
-		return _T("Outboard");
+	case ActuationOutboardRockerArm:
+		return _T("Outboard/Rocker Arm");
 		break;
 
 	default:
@@ -238,12 +218,12 @@ wxString Corner::GetHardpointName(const Hardpoints &point)
 		return _T("Inboard Spring");
 		break;
 
-	case OutboardShock:
-		return _T("Outboard Shock");
+	case OutboardDamper:
+		return _T("Outboard Damper");
 		break;
 
-	case InboardShock:
-		return _T("Inboard Shock");
+	case InboardDamper:
+		return _T("Inboard Damper");
 		break;
 
 	case ContactPatch:

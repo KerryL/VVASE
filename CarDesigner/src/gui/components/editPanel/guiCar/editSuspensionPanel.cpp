@@ -168,15 +168,15 @@ void EditSuspensionPanel::UpdateInformation(Suspension *currentSuspension)
 	// Front third spring
 	if (currentSuspension->frontHasThirdSpring)
 	{
-		hardpoints->SetRowHeight(Suspension::FrontThirdShockInboard + 1, hardpoints->GetRowHeight(0));
-		hardpoints->SetRowHeight(Suspension::FrontThirdShockOutboard + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowHeight(Suspension::FrontThirdDamperInboard + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowHeight(Suspension::FrontThirdDamperOutboard + 1, hardpoints->GetRowHeight(0));
 		hardpoints->SetRowHeight(Suspension::FrontThirdSpringInboard + 1, hardpoints->GetRowHeight(0));
 		hardpoints->SetRowHeight(Suspension::FrontThirdSpringOutboard + 1, hardpoints->GetRowHeight(0));
 	}
 	else
 	{
-		hardpoints->SetRowHeight(Suspension::FrontThirdShockInboard + 1, 0);
-		hardpoints->SetRowHeight(Suspension::FrontThirdShockOutboard + 1, 0);
+		hardpoints->SetRowHeight(Suspension::FrontThirdDamperInboard + 1, 0);
+		hardpoints->SetRowHeight(Suspension::FrontThirdDamperOutboard + 1, 0);
 		hardpoints->SetRowHeight(Suspension::FrontThirdSpringInboard + 1, 0);
 		hardpoints->SetRowHeight(Suspension::FrontThirdSpringOutboard + 1, 0);
 	}
@@ -184,15 +184,15 @@ void EditSuspensionPanel::UpdateInformation(Suspension *currentSuspension)
 	// Rear third spring
 	if (currentSuspension->rearHasThirdSpring)
 	{
-		hardpoints->SetRowHeight(Suspension::RearThirdShockInboard + 1, hardpoints->GetRowHeight(0));
-		hardpoints->SetRowHeight(Suspension::RearThirdShockOutboard + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowHeight(Suspension::RearThirdDamperInboard + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowHeight(Suspension::RearThirdDamperOutboard + 1, hardpoints->GetRowHeight(0));
 		hardpoints->SetRowHeight(Suspension::RearThirdSpringInboard + 1, hardpoints->GetRowHeight(0));
 		hardpoints->SetRowHeight(Suspension::RearThirdSpringOutboard + 1, hardpoints->GetRowHeight(0));
 	}
 	else
 	{
-		hardpoints->SetRowHeight(Suspension::RearThirdShockInboard + 1, 0);
-		hardpoints->SetRowHeight(Suspension::RearThirdShockOutboard + 1, 0);
+		hardpoints->SetRowHeight(Suspension::RearThirdDamperInboard + 1, 0);
+		hardpoints->SetRowHeight(Suspension::RearThirdDamperOutboard + 1, 0);
 		hardpoints->SetRowHeight(Suspension::RearThirdSpringInboard + 1, 0);
 		hardpoints->SetRowHeight(Suspension::RearThirdSpringOutboard + 1, 0);
 	}

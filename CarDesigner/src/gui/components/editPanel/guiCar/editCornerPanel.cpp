@@ -200,7 +200,7 @@ void EditCornerPanel::UpdateInformation(Corner *currentCorner,
 		hardpoints->SetRowHeight(Corner::BellCrankPivot1 + 1, hardpoints->GetRowHeight(0));
 		hardpoints->SetRowHeight(Corner::BellCrankPivot2 + 1, hardpoints->GetRowHeight(0));
 	}
-	else if (currentCorner->actuationType == Corner::ActuationOutboard)
+	else if (currentCorner->actuationType == Corner::ActuationOutboardRockerArm)
 	{
 		hardpoints->SetRowHeight(Corner::InboardPushrod + 1, 0);
 		hardpoints->SetRowHeight(Corner::OutboardPushrod + 1, 0);

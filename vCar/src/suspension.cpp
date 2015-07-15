@@ -251,12 +251,12 @@ wxString Suspension::GetHardpointName(const Hardpoints& point)
 		return _T("Front Third Spring Outboard");
 		break;
 
-	case FrontThirdShockInboard:
-		return _T("Front Third Shock Inboard");
+	case FrontThirdDamperInboard:
+		return _T("Front Third Damper Inboard");
 		break;
 
-	case FrontThirdShockOutboard:
-		return _T("Front Third Shock Outboard");
+	case FrontThirdDamperOutboard:
+		return _T("Front Third Damper Outboard");
 		break;
 
 	case RearBarMidPoint:
@@ -275,12 +275,12 @@ wxString Suspension::GetHardpointName(const Hardpoints& point)
 		return _T("Rear Third Spring Outboard");
 		break;
 
-	case RearThirdShockInboard:
-		return _T("Rear Third Shock Inboard");
+	case RearThirdDamperInboard:
+		return _T("Rear Third Damper Inboard");
 		break;
 
-	case RearThirdShockOutboard:
-		return _T("Rear Third Shock Outboard");
+	case RearThirdDamperOutboard:
+		return _T("Rear Third Damper Outboard");
 		break;
 
 	default:

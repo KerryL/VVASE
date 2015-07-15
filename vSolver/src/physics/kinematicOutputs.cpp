@@ -627,11 +627,11 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 		currentCorner->hardpoints[Corner::InboardSpring].Distance(
 		currentCorner->hardpoints[Corner::OutboardSpring]);
 
-	// Shock Displacement [in] - positive is compression
-	cornerDoubles[Shock] = originalCorner->hardpoints[Corner::InboardShock].Distance(
-		originalCorner->hardpoints[Corner::OutboardShock]) -
-		currentCorner->hardpoints[Corner::InboardShock].Distance(
-		currentCorner->hardpoints[Corner::OutboardShock]);
+	// Damper Displacement [in] - positive is compression
+	cornerDoubles[Shock] = originalCorner->hardpoints[Corner::InboardDamper].Distance(
+		originalCorner->hardpoints[Corner::OutboardDamper]) -
+		currentCorner->hardpoints[Corner::InboardDamper].Distance(
+		currentCorner->hardpoints[Corner::OutboardDamper]);
 
 	// Scrub [in]
 	cornerDoubles[Scrub] = sign * (currentCorner->hardpoints[Corner::ContactPatch].y -
@@ -861,13 +861,13 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 			* VVASEMath::Sign(force.Normalize() * forceDirection.Normalize());
 
 		// Shock force
-		momentArm = currentCorner->hardpoints[Corner::OutboardShock] - VVASEMath::NearestPointOnAxis(
-			pointOnAxis, momentDirection, currentCorner->hardpoints[Corner::OutboardShock]);
+		momentArm = currentCorner->hardpoints[Corner::OutboardDamper] - VVASEMath::NearestPointOnAxis(
+			pointOnAxis, momentDirection, currentCorner->hardpoints[Corner::OutboardDamper]);
 		force = momentDirection.Cross(momentArm).Normalize() * momentMagnitude / momentArm.Length();
 
-		// Determine the force required in the direction of the shock
-		forceDirection = (currentCorner->hardpoints[Corner::InboardShock]
-			- currentCorner->hardpoints[Corner::OutboardShock]).Normalize();
+		// Determine the force required in the direction of the damper
+		forceDirection = (currentCorner->hardpoints[Corner::InboardDamper]
+			- currentCorner->hardpoints[Corner::OutboardDamper]).Normalize();
 		force = forceDirection * force.Length() / (force.Normalize() * forceDirection);
 		cornerDoubles[ShockInstallationRatio] = 1.0 / force.Length()
 			* VVASEMath::Sign(force.Normalize() * forceDirection.Normalize());
@@ -958,7 +958,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 			cornerDoubles[ARBInstallationRatio] = 1.0 / torque.Length();
 		}
 	}
-	else if (currentCorner->actuationType == Corner::ActuationOutboard)
+	else if (currentCorner->actuationType == Corner::ActuationOutboardRockerArm)
 	{
 		// This part is identical to the beginning of the previous section,
 		// but the spring/shock take the place of the pushrod, so the installation
@@ -1080,13 +1080,13 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 			* VVASEMath::Sign(force.Normalize() * forceDirection.Normalize());
 
 		// Shock force
-		momentArm = currentCorner->hardpoints[Corner::OutboardShock] - VVASEMath::NearestPointOnAxis(
-			pointOnAxis, momentDirection, currentCorner->hardpoints[Corner::OutboardShock]);
+		momentArm = currentCorner->hardpoints[Corner::OutboardDamper] - VVASEMath::NearestPointOnAxis(
+			pointOnAxis, momentDirection, currentCorner->hardpoints[Corner::OutboardDamper]);
 		force = momentDirection.Cross(momentArm).Normalize() * momentMagnitude / momentArm.Length();
 
-		// Determine the force required in the direction of the shock
-		forceDirection = (currentCorner->hardpoints[Corner::InboardShock]
-			- currentCorner->hardpoints[Corner::OutboardShock]).Normalize();
+		// Determine the force required in the direction of the damper
+		forceDirection = (currentCorner->hardpoints[Corner::InboardDamper]
+			- currentCorner->hardpoints[Corner::OutboardDamper]).Normalize();
 		force = forceDirection * force.Length() / (force.Normalize() * forceDirection);
 		cornerDoubles[ShockInstallationRatio] = 1.0 / force.Length()
 			* VVASEMath::Sign(force.Normalize() * forceDirection.Normalize());

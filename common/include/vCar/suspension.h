@@ -77,15 +77,15 @@ public:
 		FrontBarPivotAxis,			// T-bar only
 		FrontThirdSpringInboard,
 		FrontThirdSpringOutboard,
-		FrontThirdShockInboard,
-		FrontThirdShockOutboard,
+		FrontThirdDamperInboard,
+		FrontThirdDamperOutboard,
 
 		RearBarMidPoint,			// U-bar and T-bar only
 		RearBarPivotAxis,			// T-bar only
 		RearThirdSpringInboard,
 		RearThirdSpringOutboard,
-		RearThirdShockInboard,
-		RearThirdShockOutboard,
+		RearThirdDamperInboard,
+		RearThirdDamperOutboard,
 
 		NumberOfHardpoints
 	};

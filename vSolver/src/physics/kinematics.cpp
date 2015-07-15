@@ -137,7 +137,7 @@ void Kinematics::UpdateKinematics(const Car* _originalCar, Car* _workingCar, wxS
 		return;
 	}
 
-	// Solve the chassis-mounted points for left-right common items (3rd springs/shocks, sway bars)
+	// Solve the chassis-mounted points for left-right common items (3rd springs/dampers, sway bars)
 	// Front sway bars
 	// NOTE:  This is only for points that are NOT in the Corner class
 	switch (localSuspension->frontBarStyle)
@@ -203,12 +203,12 @@ void Kinematics::UpdateKinematics(const Car* _originalCar, Car* _workingCar, wxS
 		// Rotations
 		localSuspension->hardpoints[Suspension::FrontThirdSpringInboard].Rotate(inputs.centerOfRotation,
 			rotations, inputs.firstRotation, secondRotation);
-		localSuspension->hardpoints[Suspension::FrontThirdShockInboard].Rotate(inputs.centerOfRotation,
+		localSuspension->hardpoints[Suspension::FrontThirdDamperInboard].Rotate(inputs.centerOfRotation,
 			rotations, inputs.firstRotation, secondRotation);
 
 		// Translations
 		localSuspension->hardpoints[Suspension::FrontThirdSpringInboard].z += inputs.heave;
-		localSuspension->hardpoints[Suspension::FrontThirdShockInboard].z += inputs.heave;
+		localSuspension->hardpoints[Suspension::FrontThirdDamperInboard].z += inputs.heave;
 	}
 
 	if (localSuspension->rearHasThirdSpring)
@@ -216,12 +216,12 @@ void Kinematics::UpdateKinematics(const Car* _originalCar, Car* _workingCar, wxS
 		// Rotations
 		localSuspension->hardpoints[Suspension::RearThirdSpringInboard].Rotate(inputs.centerOfRotation,
 			rotations, inputs.firstRotation, secondRotation);
-		localSuspension->hardpoints[Suspension::RearThirdShockInboard].Rotate(inputs.centerOfRotation,
+		localSuspension->hardpoints[Suspension::RearThirdDamperInboard].Rotate(inputs.centerOfRotation,
 			rotations, inputs.firstRotation, secondRotation);
 
 		// Translations
 		localSuspension->hardpoints[Suspension::RearThirdSpringInboard].z += inputs.heave;
-		localSuspension->hardpoints[Suspension::RearThirdShockInboard].z += inputs.heave;
+		localSuspension->hardpoints[Suspension::RearThirdDamperInboard].z += inputs.heave;
 	}
 
 	if (!SolveCorner(localSuspension->rightFront, originalCar->suspension->rightFront, rotations, secondRotation))
@@ -292,7 +292,7 @@ void Kinematics::UpdateKinematics(const Car* _originalCar, Car* _workingCar, wxS
 //
 // Description:		This solves for the locations of all of the suspension
 //					nodes that exist at each corner of the car.  This includes
-//					Everything from the contact patch up to the shock and
+//					Everything from the contact patch up to the damper and
 //					spring end-points.
 //
 // Input Arguments:
@@ -331,7 +331,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 		rotations, inputs.firstRotation, secondRotation);
 	corner.hardpoints[Corner::InboardSpring].Rotate(inputs.centerOfRotation,
 		rotations, inputs.firstRotation, secondRotation);
-	corner.hardpoints[Corner::InboardShock].Rotate(inputs.centerOfRotation,
+	corner.hardpoints[Corner::InboardDamper].Rotate(inputs.centerOfRotation,
 		rotations, inputs.firstRotation, secondRotation);
 	corner.hardpoints[Corner::InboardTieRod].Rotate(inputs.centerOfRotation,
 		rotations, inputs.firstRotation, secondRotation);
@@ -343,7 +343,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 	corner.hardpoints[Corner::UpperRearTubMount].z += inputs.heave;
 	corner.hardpoints[Corner::BarArmAtPivot].z += inputs.heave;
 	corner.hardpoints[Corner::InboardSpring].z += inputs.heave;
-	corner.hardpoints[Corner::InboardShock].z += inputs.heave;
+	corner.hardpoints[Corner::InboardDamper].z += inputs.heave;
 	corner.hardpoints[Corner::InboardTieRod].z += inputs.heave;
 
 	// Depending on the type of actuation, we might have to move some additional points, as well
@@ -475,7 +475,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 		success = false;
 	}
 
-	// Outboard shock/spring actuators
+	// Outboard spring/damper actuators
 	if (corner.actuationType == Corner::ActuationPushPullrod)
 	{
 		if (corner.actuationAttachment == Corner::AttachmentLowerAArm)
@@ -514,11 +514,11 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 			success = false;
 		}
 
-		// Outboard Shocks
-		if (!SolveForPoint(Corner::OutboardShock, Corner::BellCrankPivot1,
+		// Outboard Dampers
+		if (!SolveForPoint(Corner::OutboardDamper, Corner::BellCrankPivot1,
 			Corner::BellCrankPivot2, Corner::InboardPushrod, originalCorner, corner))
 		{
-			Debugger::GetInstance().Print(_T("ERROR:  Failed to solve for outboard shock!"), Debugger::PriorityMedium);
+			Debugger::GetInstance().Print(_T("ERROR:  Failed to solve for outboard damper!"), Debugger::PriorityMedium);
 			success = false;
 		}
 
@@ -584,7 +584,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 			}
 		}
 	}
-	else if (corner.actuationType == Corner::ActuationOutboard)// Outboard spring/shock units  - no pushrod/bell crank
+	else if (corner.actuationType == Corner::ActuationOutboardRockerArm)// Outboard spring/damper units  - no pushrod/bell crank
 	{
 		if (corner.actuationAttachment == Corner::AttachmentLowerAArm)
 		{
@@ -595,10 +595,10 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 				success = false;
 			}
 
-			if (!SolveForPoint(Corner::OutboardShock, Corner::LowerBallJoint,
+			if (!SolveForPoint(Corner::OutboardDamper, Corner::LowerBallJoint,
 				Corner::LowerFrontTubMount, Corner::LowerRearTubMount, originalCorner, corner))
 			{
-				Debugger::GetInstance().Print(_T("ERROR:  Failed to solve for outboard shock!"), Debugger::PriorityMedium);
+				Debugger::GetInstance().Print(_T("ERROR:  Failed to solve for outboard damper!"), Debugger::PriorityMedium);
 				success = false;
 			}
 		}
@@ -611,10 +611,10 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 				success = false;
 			}
 
-			if (!SolveForPoint(Corner::OutboardShock, Corner::UpperBallJoint,
+			if (!SolveForPoint(Corner::OutboardDamper, Corner::UpperBallJoint,
 				Corner::UpperFrontTubMount, Corner::UpperRearTubMount, originalCorner, corner))
 			{
-				Debugger::GetInstance().Print(_T("ERROR:  Failed to solve for outboard shock!"), Debugger::PriorityMedium);
+				Debugger::GetInstance().Print(_T("ERROR:  Failed to solve for outboard damper!"), Debugger::PriorityMedium);
 				success = false;
 			}
 		}
@@ -627,10 +627,10 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 				success = false;
 			}
 
-			if (!SolveForPoint(Corner::OutboardShock, Corner::UpperBallJoint,
+			if (!SolveForPoint(Corner::OutboardDamper, Corner::UpperBallJoint,
 				Corner::LowerBallJoint, Corner::OutboardTieRod, originalCorner, corner))
 			{
-				Debugger::GetInstance().Print(_T("ERROR:  Failed to solve for outboard shock!"), Debugger::PriorityMedium);
+				Debugger::GetInstance().Print(_T("ERROR:  Failed to solve for outboard damper!"), Debugger::PriorityMedium);
 				success = false;
 			}
 		}
