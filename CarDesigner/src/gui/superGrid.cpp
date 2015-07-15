@@ -34,6 +34,7 @@
 //==========================================================================
 SuperGrid::SuperGrid(wxWindow *parent, wxWindowID id) : wxGrid(parent, id)
 {
+	SetTabBehaviour(Tab_Wrap);
 }
 
 //==========================================================================
