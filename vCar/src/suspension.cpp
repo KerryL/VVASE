@@ -80,24 +80,14 @@ Suspension::Suspension()
 	// FIXME:  Third springs and dampers!
 }
 
-//==========================================================================
-// Class:			Suspension
-// Function:		~Suspension
-//
-// Description:		Destructor for the Suspension class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Suspension::~Suspension()
+bool Suspension::SolveForPoint(const Corner::Hardpoints &target, const Corner::Hardpoints& reference1,
+	const Corner::Hardpoints& reference2, const Corner::Hardpoints& reference3,
+	const Corner& originalCorner, Corner& currentCorner)
 {
+	return SolveForPoint(currentCorner.hardpoints[reference1], currentCorner.hardpoints[reference2],
+		currentCorner.hardpoints[reference3], originalCorner.hardpoints[reference1],
+		originalCorner.hardpoints[reference2], originalCorner.hardpoints[reference3],
+		originalCorner.hardpoints[target], currentCorner.hardpoints[target]);
 }
 
 //==========================================================================
@@ -554,6 +544,37 @@ void Suspension::MoveSteeringRack(const double &travel)
 	// same for both points, we can just use each point as their own reference points.
 	leftFront.hardpoints[Corner::InboardTieRod] += slope * t;
 	rightFront.hardpoints[Corner::InboardTieRod] += slope * t;
+}
+
+//==========================================================================
+// Class:			Suspension
+// Function:		SolveForXY
+//
+// Description:		Easier-to-call method to interface between Kinematics and
+//					the actual solving method.
+//
+// Input Arguments:
+//		target			= const Corner::Hardpoints&
+//		reference1		= const Corner::Hardpoints&
+//		reference2		= const Corner::Hardpoints&
+//		originalCorner	= const Corner&
+//		currentCorner	= const Corner&
+//
+// Output Arguments:
+//		current	= Vector& specifying the result of the intersection of
+//				  three spheres algorithm
+//
+// Return Value:
+//		bool, true for success, false for error
+//		
+//==========================================================================
+bool Suspension::SolveForXY(const Corner::Hardpoints &target,
+	const Corner::Hardpoints& reference1, const Corner::Hardpoints& reference2,
+	const Corner& originalCorner, Corner& currentCorner)
+{
+	return SolveForXY(currentCorner.hardpoints[reference1], currentCorner.hardpoints[reference2],
+		originalCorner.hardpoints[reference1], originalCorner.hardpoints[reference2],
+		originalCorner.hardpoints[target], currentCorner.hardpoints[target]);
 }
 
 //==========================================================================

@@ -33,11 +33,7 @@ class Car;
 class Kinematics
 {
 public:
-	// Constructor
 	Kinematics();
-
-	// Destructor
-	~Kinematics();
 
 	// Definition for the inputs to the kinematics solver
 	struct Inputs
@@ -88,20 +84,17 @@ public:
 	inline Inputs GetInputs(void) { return inputs; };
 
 private:
-	// The inputs to the kinematic solver
 	Inputs inputs;
 
-	const Car *originalCar;// Pointer to original car data
-	Car *workingCar;// Pointer to working (manipulated) car data
-	Suspension *localSuspension;// Suspension in which we move the points around
+	const Car *originalCar;
+	Car *workingCar;
+	Suspension *localSuspension;
 
-	KinematicOutputs outputs;// Where we store everything after we UpdateOutputs
+	KinematicOutputs outputs;
 
-	// Kinematic solving routine for suspension points at each "corner" of the car
 	bool SolveCorner(Corner &corner, const Corner &original,
 		const Vector &rotations, const Vector::Axis &secondRotation);
 
-	// Performs all of the output value calculations (angles, distances, centers, etc.)
 	void UpdateOutputs(void);
 };
 

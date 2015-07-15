@@ -22,8 +22,8 @@
 //	4/19/2009	- Made all of the Solve...() functions static, and made Debugger static, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
-#ifndef _SUSPENSION_H_
-#define _SUSPENSION_H_
+#ifndef SUSPENSION_H_
+#define SUSPENSION_H_
 
 // Standard C++ headers
 #include <iosfwd>// forward declarations of fstream objects
@@ -38,11 +38,7 @@
 class Suspension
 {
 public:
-	// Constructor
 	Suspension();
-
-	// Destructor
-	~Suspension();
 
 	// File read/write functions
 	void Write(std::ofstream *outFile) const;
@@ -131,8 +127,11 @@ public:
 	static bool SolveForPoint(const Vector &center1, const Vector &center2, const Vector &center3,
 		const Vector &originalCenter1, const Vector &originalCenter2, const Vector &originalCenter3,
 		const Vector &original, Vector &current);
-	static bool SolveForXY(const Vector &center1, const Vector &center2, const Vector &originalCenter1,
-		const Vector &originalCenter2, const Vector &original, Vector &current);
+	static bool SolveForPoint(const Corner::Hardpoints &target, const Corner::Hardpoints& reference1,
+		const Corner::Hardpoints& reference2, const Corner::Hardpoints& reference3,
+		const Corner& originalCorner, Corner& currentCorner);
+	static bool SolveForXY(const Corner::Hardpoints &target, const Corner::Hardpoints& reference1,
+		const Corner::Hardpoints& reference2, const Corner& originalCorner, Corner& currentCorner);
 	static bool SolveForContactPatch(const Vector &wheelCenter, const Vector &wheelPlaneNormal,
 		const double &tireRadius, Vector &output);
 	static bool SolveInboardTBarPoints(const Vector &leftOutboard, const Vector &rightOutboard,
@@ -145,13 +144,15 @@ public:
 	// Other functions
 	void MoveSteeringRack(const double &travel);
 
-	// Operators
 	Suspension& operator=(const Suspension& suspension);
 
 private:
 	static Vector FindPerpendicularVector(const Vector &v);
 	static double OptimizeCircleParameter(const Vector &center, const Vector &a,
 		const Vector &b, const Vector &target);
+
+	static bool SolveForXY(const Vector &center1, const Vector &center2, const Vector &originalCenter1,
+		const Vector &originalCenter2, const Vector &original, Vector &current);
 };
 
-#endif// _SUSPENSION_H_
+#endif// SUSPENSION_H_

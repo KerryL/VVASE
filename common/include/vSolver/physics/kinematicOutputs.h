@@ -193,7 +193,6 @@ public:
 	//wxMutex &GetMutex(void) const { return kinematicOutputsMutex; };
 
 private:
-	// The currently associated car object
 	const Car *originalCar;
 	const Suspension *currentSuspension;
 
@@ -212,7 +211,6 @@ private:
 	static UnitConverter::UnitType GetDoubleUnitType(const OutputsDouble &_output);
 	static UnitConverter::UnitType GetVectorUnitType(const OutputsVector &_output);
 
-	// Initializes all outputs to QNAN
 	void InitializeAllOutputs(void);
 };
 
