@@ -37,8 +37,8 @@
 // Description:		Constructor for the GeneticAlgorithmPanel class.
 //
 // Input Arguments:
-//		_mainFrame		= MainFrame&, reference to the main application window
-//		_optimization	= GeneticOptimization&, reference to the object that we represent
+//		mainFrame		= MainFrame&, reference to the main application window
+//		optimization	= GeneticOptimization&, reference to the object that we represent
 //
 // Output Arguments:
 //		None
@@ -47,16 +47,13 @@
 //		None
 //
 //==========================================================================
-GeneticAlgorithmPanel::GeneticAlgorithmPanel(MainFrame &_mainFrame,
-												 GeneticOptimization &_optimization)
-												 : wxScrolledWindow(&_mainFrame),
-												 optimization(_optimization), mainFrame(_mainFrame)
+GeneticAlgorithmPanel::GeneticAlgorithmPanel(MainFrame &mainFrame,
+	GeneticOptimization &optimization) : wxScrolledWindow(&mainFrame),
+	optimization(optimization), mainFrame(mainFrame)
 {
-	// Initialize the overall progress control pointer
-	// (This is used as in indication that the panel is completely built)
+	// This is used as in indication that the panel is completely built
 	overallProgress = NULL;
 
-	// Create the controls
 	CreateControls();
 }
 
@@ -133,7 +130,6 @@ void GeneticAlgorithmPanel::CreateControls(void)
 	// Enable scrolling
 	SetScrollRate(1, 1);
 
-	// Top-level sizer
 	wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
 
 	// Second sizer gives more space around the controls
@@ -624,15 +620,12 @@ void GeneticAlgorithmPanel::EditSelectedGene(void)
 //==========================================================================
 void GeneticAlgorithmPanel::EditSelectedGoal(void)
 {
-	// Get the selected goal
 	GAObject::Goal goalToEdit = optimization.GetAlgorithm().GetGoal(goalList->GetSelectedRows()[0]);
 
-	// Create the dialog box with properties corresponding to the selected goal
 	GAGoalDialog goalDialog(static_cast<wxWindow*>(&mainFrame), goalToEdit.output, goalToEdit.desiredValue,
 		goalToEdit.expectedDeviation, goalToEdit.importance, goalToEdit.beforeInputs, goalToEdit.afterInputs,
 		wxID_ANY, wxDefaultPosition);
 
-	// Display the dialog
 	if (goalDialog.ShowModal() == wxOK)
 	{
 		// Create the new goal and add it to the list
@@ -640,10 +633,7 @@ void GeneticAlgorithmPanel::EditSelectedGoal(void)
 			goalDialog.GetDesiredValue(), goalDialog.GetExpectedDeviation(), goalDialog.GetImportance(),
 			goalDialog.GetBeforeInputs(), goalDialog.GetAfterInputs());
 
-		// Update the display for the goal
 		UpdateGoalList();
-
-		// Mark the optimization as modified
 		optimization.SetModified();
 	}
 }
@@ -672,7 +662,6 @@ void GeneticAlgorithmPanel::StartStopOptimizationClickedEvent(wxCommandEvent& WX
 	// thread hangs (and thus the whole app hangs because events cannot be processed)
 	if (optimization.GetAlgorithm().OptimizationIsRunning())
 	{
-		// Stop the optimization
 		optimization.HaltOptimization();
 
 		// Change the caption on the button
@@ -681,14 +670,11 @@ void GeneticAlgorithmPanel::StartStopOptimizationClickedEvent(wxCommandEvent& WX
 	}
 	else
 	{
-		// Make sure all of our parameters are valid
 		if (!UpdateGAParameters())
 			return;
 
-		// Make sure a car is selected
 		if (selectedCar->GetValue().IsEmpty())
 		{
-			// Display a message box to warn the user
 			wxMessageBox(_T("ERROR:  No car selected to optimize!"), _T("No Selected Car"),
 				wxOK | wxICON_ERROR, this);
 
@@ -699,9 +685,8 @@ void GeneticAlgorithmPanel::StartStopOptimizationClickedEvent(wxCommandEvent& WX
 		if (optimization.GetAlgorithm().GetGeneCount() == 0 ||
 			optimization.GetAlgorithm().GetGoalCount() == 0)
 		{
-			// Display a message box to warn the user
-			wxMessageBox(_T("ERROR:  Optimization requires at least one gene and one goal!"), _T("Goal and Gene Required"),
-				wxOK | wxICON_ERROR, this);
+			wxMessageBox(_T("ERROR:  Optimization requires at least one gene and one goal!"),
+				_T("Goal and Gene Required"), wxOK | wxICON_ERROR, this);
 
 			return;
 		}
@@ -716,7 +701,6 @@ void GeneticAlgorithmPanel::StartStopOptimizationClickedEvent(wxCommandEvent& WX
 			{
 				carIndex++;
 
-				// If the index matches the selection, we're done
 				if (carIndex == SafelyGetComboBoxSelection(selectedCar))
 					break;
 			}
@@ -738,7 +722,6 @@ void GeneticAlgorithmPanel::StartStopOptimizationClickedEvent(wxCommandEvent& WX
 		// how many analyses to expect
 		ResetStatusBars();
 
-		// Start the analysis
 		optimization.BeginOptimization();
 
 		// Change the caption on the button
@@ -770,7 +753,6 @@ void GeneticAlgorithmPanel::UpdateSelectableCars(void)
 	// we may need to change the index to do so
 	// Check iterations for this behavior, too!
 
-	// Store the current name
 	wxString currentName = selectedCar->GetValue();
 
 	bool foundOriginalCar(false);
@@ -820,7 +802,6 @@ void GeneticAlgorithmPanel::UpdateSelectableCars(void)
 //==========================================================================
 void GeneticAlgorithmPanel::UpdateInformation(void)
 {
-	// Get the GA object from the gui's optimization object
 	wxString temp;
 
 	// Update parameters
@@ -1126,7 +1107,6 @@ void GeneticAlgorithmPanel::GoalListSelectCellEvent(wxGridEvent &event)
 //==========================================================================
 void GeneticAlgorithmPanel::GeneGridDoubleClickedEvent(wxGridEvent& WXUNUSED(event))
 {
-	// Make sure only one row is selected before displaying the dialog
 	if (geneList->IsSelection() && geneList->GetSelectedRows().GetCount() == 1)
 		EditSelectedGene();
 }
@@ -1149,8 +1129,7 @@ void GeneticAlgorithmPanel::GeneGridDoubleClickedEvent(wxGridEvent& WXUNUSED(eve
 //==========================================================================
 void GeneticAlgorithmPanel::GoalGridDoubleClickedEvent(wxGridEvent& WXUNUSED(event))
 {
-	// Make sure only one row is selected before displaying the dialog
-	if (goalList->IsSelection() && geneList->GetSelectedRows().GetCount() == 1)
+	if (goalList->IsSelection() && goalList->GetSelectedRows().GetCount() == 1)
 		EditSelectedGoal();
 }
 
@@ -1175,18 +1154,13 @@ void GeneticAlgorithmPanel::GoalGridDoubleClickedEvent(wxGridEvent& WXUNUSED(eve
 //==========================================================================
 void GeneticAlgorithmPanel::TextBoxChangeEvent(wxCommandEvent &event)
 {
-	// Don't do this until we're done loading
 	if (!overallProgress)
 		return;
 
-	// Don't do this for combobox events
 	if (event.GetId() == IdSelectCar)
 		return;
 
-	// Update the GA object to match the current inputs
 	UpdateGAParameters(false);
-
-	// Mark the optimization as modified
 	optimization.SetModified();
 }
 

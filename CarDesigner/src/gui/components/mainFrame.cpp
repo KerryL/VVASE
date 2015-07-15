@@ -97,8 +97,7 @@
 //
 //==========================================================================
 MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxEmptyString, wxDefaultPosition,
-								   wxDefaultSize, wxDEFAULT_FRAME_STYLE),
-								   /*maxRecentFiles(9), */undoRedo(*this)
+	wxDefaultSize, wxDEFAULT_FRAME_STYLE), /*maxRecentFiles(9), */undoRedo(*this)
 {
 	systemsTree = new MainTree(*this, wxID_ANY, wxDefaultPosition, wxSize(320, 384),
 		wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT | wxTR_DEFAULT_STYLE | wxSUNKEN_BORDER
@@ -818,10 +817,7 @@ END_EVENT_TABLE();
 //==========================================================================
 void MainFrame::FileNewCarEvent(wxCommandEvent& WXUNUSED(event))
 {
-	// Create a new GuiObject with type TypeCar
 	GuiObject *tempObject = new GuiCar(*this);
-
-	// Make the new object active
 	SetActiveIndex(tempObject->GetIndex());
 }
 
@@ -844,10 +840,7 @@ void MainFrame::FileNewCarEvent(wxCommandEvent& WXUNUSED(event))
 //==========================================================================
 void MainFrame::FileNewIterationEvent(wxCommandEvent& WXUNUSED(event))
 {
-	// Create a new GuiObject with type TypeIteration
 	GuiObject *tempObject = new Iteration(*this);
-
-	// Make the new object active or remove it from the list (user canceled)
 	if (tempObject->IsInitialized())
 		SetActiveIndex(tempObject->GetIndex());
 	else
@@ -873,12 +866,8 @@ void MainFrame::FileNewIterationEvent(wxCommandEvent& WXUNUSED(event))
 //==========================================================================
 void MainFrame::FileNewOptimizationEvent(wxCommandEvent& WXUNUSED(event))
 {
-	// Create a new GuiObject with type TypeOptimization
 	GuiObject *tempObject = new GeneticOptimization(*this);
-
-	// Make the new object active
 	SetActiveIndex(tempObject->GetIndex());
-
 }
 
 //==========================================================================
