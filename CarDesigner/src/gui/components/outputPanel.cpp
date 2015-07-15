@@ -236,7 +236,7 @@ void OutputPanel::UpdateInformation(KinematicOutputs outputs, Car &car,
 		outputsList->SetCellValue(KinematicOutputs::StartDoubles
 			+ KinematicOutputs::FrontThirdSpring, index, _T("N/A"));
 		outputsList->SetCellValue(KinematicOutputs::StartDoubles
-			+ KinematicOutputs::FrontThirdShock, index, _T("N/A"));
+			+ KinematicOutputs::FrontThirdDamper, index, _T("N/A"));
 	}
 
 	// Rear third spring
@@ -246,7 +246,7 @@ void OutputPanel::UpdateInformation(KinematicOutputs outputs, Car &car,
 		outputsList->SetCellValue(KinematicOutputs::StartDoubles
 			+ KinematicOutputs::RearThirdSpring, index, _T("N/A"));
 		outputsList->SetCellValue(KinematicOutputs::StartDoubles
-			+ KinematicOutputs::RearThirdShock, index, _T("N/A"));
+			+ KinematicOutputs::RearThirdDamper, index, _T("N/A"));
 	}
 
 	// Front sway bar
