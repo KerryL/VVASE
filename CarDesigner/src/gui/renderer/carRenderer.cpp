@@ -315,7 +315,7 @@ void CarRenderer::UpdateCarDisplay(void)
 	// Right front corner
 	// Determine whether or not the bellcranks and pushrods should be drawn for this corner
 	bool ShowBellCranksPushrods = true;
-	if (displayCar.suspension->rightFront.actuationType == Corner::ActuationOutboard ||
+	if (displayCar.suspension->rightFront.actuationType == Corner::ActuationOutboardRockerArm ||
 		!appearanceOptions.GetVisibility(AppearanceOptions::VisibilityPushrod))
 		ShowBellCranksPushrods = false;
 
@@ -366,8 +366,8 @@ void CarRenderer::UpdateCarDisplay(void)
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionTire),
 		appearanceOptions.GetColor(AppearanceOptions::ColorTire),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityTire));
-	rightFrontDamper->Update(displayCar.suspension->rightFront.hardpoints[Corner::OutboardShock],
-		displayCar.suspension->rightFront.hardpoints[Corner::InboardShock],
+	rightFrontDamper->Update(displayCar.suspension->rightFront.hardpoints[Corner::OutboardDamper],
+		displayCar.suspension->rightFront.hardpoints[Corner::InboardDamper],
 		appearanceOptions.GetSize(AppearanceOptions::SizeDamperBodyDiameter),
 		appearanceOptions.GetSize(AppearanceOptions::SizeDamperShaftDiameter),
 		appearanceOptions.GetSize(AppearanceOptions::SizeDamperBodyLength),
@@ -387,7 +387,7 @@ void CarRenderer::UpdateCarDisplay(void)
 		displayCar.suspension->rightFront.hardpoints[Corner::OutboardTieRod],
 		appearanceOptions.GetColor(AppearanceOptions::ColorUpright),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityUpright));
-	rightFrontBellCrank->Update(displayCar.suspension->rightFront.hardpoints[Corner::OutboardShock],
+	rightFrontBellCrank->Update(displayCar.suspension->rightFront.hardpoints[Corner::OutboardDamper],
 		displayCar.suspension->rightFront.hardpoints[Corner::InboardPushrod],
 		VVASEMath::NearestPointOnAxis(displayCar.suspension->rightFront.hardpoints[Corner::BellCrankPivot1],
 		displayCar.suspension->rightFront.hardpoints[Corner::BellCrankPivot2] -
@@ -411,7 +411,7 @@ void CarRenderer::UpdateCarDisplay(void)
 	// left front corner
 	// Determine whether or not the bellcranks and pushrods should be drawn for this corner
 	ShowBellCranksPushrods = true;
-	if (displayCar.suspension->leftFront.actuationType == Corner::ActuationOutboard ||
+	if (displayCar.suspension->leftFront.actuationType == Corner::ActuationOutboardRockerArm ||
 		!appearanceOptions.GetVisibility(AppearanceOptions::VisibilityPushrod))
 		ShowBellCranksPushrods = false;
 
@@ -461,8 +461,8 @@ void CarRenderer::UpdateCarDisplay(void)
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionTire),
 		appearanceOptions.GetColor(AppearanceOptions::ColorTire),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityTire));
-	leftFrontDamper->Update(displayCar.suspension->leftFront.hardpoints[Corner::OutboardShock],
-		displayCar.suspension->leftFront.hardpoints[Corner::InboardShock],
+	leftFrontDamper->Update(displayCar.suspension->leftFront.hardpoints[Corner::OutboardDamper],
+		displayCar.suspension->leftFront.hardpoints[Corner::InboardDamper],
 		appearanceOptions.GetSize(AppearanceOptions::SizeDamperBodyDiameter),
 		appearanceOptions.GetSize(AppearanceOptions::SizeDamperShaftDiameter),
 		appearanceOptions.GetSize(AppearanceOptions::SizeDamperBodyLength),
@@ -482,7 +482,7 @@ void CarRenderer::UpdateCarDisplay(void)
 		displayCar.suspension->leftFront.hardpoints[Corner::OutboardTieRod],
 		appearanceOptions.GetColor(AppearanceOptions::ColorUpright),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityUpright));
-	leftFrontBellCrank->Update(displayCar.suspension->leftFront.hardpoints[Corner::OutboardShock],
+	leftFrontBellCrank->Update(displayCar.suspension->leftFront.hardpoints[Corner::OutboardDamper],
 		displayCar.suspension->leftFront.hardpoints[Corner::InboardPushrod],
 		VVASEMath::NearestPointOnAxis(displayCar.suspension->leftFront.hardpoints[Corner::BellCrankPivot1],
 		displayCar.suspension->leftFront.hardpoints[Corner::BellCrankPivot2] -
@@ -513,7 +513,7 @@ void CarRenderer::UpdateCarDisplay(void)
 	// right rear corner
 	// Determine whether or not the bellcranks and pushrods should be drawn for this corner
 	ShowBellCranksPushrods = true;
-	if (displayCar.suspension->rightRear.actuationType == Corner::ActuationOutboard ||
+	if (displayCar.suspension->rightRear.actuationType == Corner::ActuationOutboardRockerArm ||
 		!appearanceOptions.GetVisibility(AppearanceOptions::VisibilityPushrod))
 		ShowBellCranksPushrods = false;
 
@@ -564,8 +564,8 @@ void CarRenderer::UpdateCarDisplay(void)
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionTire),
 		appearanceOptions.GetColor(AppearanceOptions::ColorTire),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityTire));
-	rightRearDamper->Update(displayCar.suspension->rightRear.hardpoints[Corner::OutboardShock],
-		displayCar.suspension->rightRear.hardpoints[Corner::InboardShock],
+	rightRearDamper->Update(displayCar.suspension->rightRear.hardpoints[Corner::OutboardDamper],
+		displayCar.suspension->rightRear.hardpoints[Corner::InboardDamper],
 		appearanceOptions.GetSize(AppearanceOptions::SizeDamperBodyDiameter),
 		appearanceOptions.GetSize(AppearanceOptions::SizeDamperShaftDiameter),
 		appearanceOptions.GetSize(AppearanceOptions::SizeDamperBodyLength),
@@ -585,7 +585,7 @@ void CarRenderer::UpdateCarDisplay(void)
 		displayCar.suspension->rightRear.hardpoints[Corner::OutboardTieRod],
 		appearanceOptions.GetColor(AppearanceOptions::ColorUpright),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityUpright));
-	rightRearBellCrank->Update(displayCar.suspension->rightRear.hardpoints[Corner::OutboardShock],
+	rightRearBellCrank->Update(displayCar.suspension->rightRear.hardpoints[Corner::OutboardDamper],
 		displayCar.suspension->rightRear.hardpoints[Corner::InboardPushrod],
 		VVASEMath::NearestPointOnAxis(displayCar.suspension->rightRear.hardpoints[Corner::BellCrankPivot1],
 		displayCar.suspension->rightRear.hardpoints[Corner::BellCrankPivot2] -
@@ -609,7 +609,7 @@ void CarRenderer::UpdateCarDisplay(void)
 	// left rear corner
 	// Determine whether or not the bellcranks and pushrods should be drawn for this corner
 	ShowBellCranksPushrods = true;
-	if (displayCar.suspension->leftRear.actuationType == Corner::ActuationOutboard ||
+	if (displayCar.suspension->leftRear.actuationType == Corner::ActuationOutboardRockerArm ||
 		!appearanceOptions.GetVisibility(AppearanceOptions::VisibilityPushrod))
 		ShowBellCranksPushrods = false;
 
@@ -659,8 +659,8 @@ void CarRenderer::UpdateCarDisplay(void)
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionTire),
 		appearanceOptions.GetColor(AppearanceOptions::ColorTire),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityTire));
-	leftRearDamper->Update(displayCar.suspension->leftRear.hardpoints[Corner::OutboardShock],
-		displayCar.suspension->leftRear.hardpoints[Corner::InboardShock],
+	leftRearDamper->Update(displayCar.suspension->leftRear.hardpoints[Corner::OutboardDamper],
+		displayCar.suspension->leftRear.hardpoints[Corner::InboardDamper],
 		appearanceOptions.GetSize(AppearanceOptions::SizeDamperBodyDiameter),
 		appearanceOptions.GetSize(AppearanceOptions::SizeDamperShaftDiameter),
 		appearanceOptions.GetSize(AppearanceOptions::SizeDamperBodyLength),
@@ -680,7 +680,7 @@ void CarRenderer::UpdateCarDisplay(void)
 		displayCar.suspension->leftRear.hardpoints[Corner::OutboardTieRod],
 		appearanceOptions.GetColor(AppearanceOptions::ColorUpright),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityUpright));
-	leftRearBellCrank->Update(displayCar.suspension->leftRear.hardpoints[Corner::OutboardShock],
+	leftRearBellCrank->Update(displayCar.suspension->leftRear.hardpoints[Corner::OutboardDamper],
 		displayCar.suspension->leftRear.hardpoints[Corner::InboardPushrod],
 		VVASEMath::NearestPointOnAxis(displayCar.suspension->leftRear.hardpoints[Corner::BellCrankPivot1],
 		displayCar.suspension->leftRear.hardpoints[Corner::BellCrankPivot2] -

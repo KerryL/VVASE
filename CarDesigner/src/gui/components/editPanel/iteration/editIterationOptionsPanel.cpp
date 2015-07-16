@@ -328,6 +328,5 @@ void EditIterationOptionsPanel::SetAsDefaultClickedEvent(wxCommandEvent& WXUNUSE
 	// FIXME:  Would be nice if this could save other plot options, like axis associativity, line colors, etc.
 
 	// Display a message to the user so they know the changes took effect
-	Debugger::GetInstance().Print(
-		_T("Current plot settings saved as default"), Debugger::PriorityHigh);
+	Debugger::GetInstance() << "Current plot settings saved as default" << Debugger::PriorityHigh;
 }

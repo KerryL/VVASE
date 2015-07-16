@@ -134,8 +134,8 @@ void OutputPanel::UpdateInformation(KinematicOutputs outputs, Car &car,
 		if (!outputsList->InsertCols(index))
 		{
 			// Add column failed - print warning and return
-			Debugger::GetInstance().Print(_T("Warning (OutputPanel::UpdateInformation):  InsertCols failed!"),
-				Debugger::PriorityMedium);
+			Debugger::GetInstance() << "Warning (OutputPanel::UpdateInformation):  InsertCols failed!"
+				<< Debugger::PriorityMedium;
 
 			return;
 		}
@@ -236,7 +236,7 @@ void OutputPanel::UpdateInformation(KinematicOutputs outputs, Car &car,
 		outputsList->SetCellValue(KinematicOutputs::StartDoubles
 			+ KinematicOutputs::FrontThirdSpring, index, _T("N/A"));
 		outputsList->SetCellValue(KinematicOutputs::StartDoubles
-			+ KinematicOutputs::FrontThirdShock, index, _T("N/A"));
+			+ KinematicOutputs::FrontThirdDamper, index, _T("N/A"));
 	}
 
 	// Rear third spring
@@ -246,7 +246,7 @@ void OutputPanel::UpdateInformation(KinematicOutputs outputs, Car &car,
 		outputsList->SetCellValue(KinematicOutputs::StartDoubles
 			+ KinematicOutputs::RearThirdSpring, index, _T("N/A"));
 		outputsList->SetCellValue(KinematicOutputs::StartDoubles
-			+ KinematicOutputs::RearThirdShock, index, _T("N/A"));
+			+ KinematicOutputs::RearThirdDamper, index, _T("N/A"));
 	}
 
 	// Front sway bar
@@ -302,9 +302,7 @@ void OutputPanel::FinishUpdate(int _numberOfDataColumns)
 		// Delete the unnecessary columns
 		if (!outputsList->DeleteCols(_numberOfDataColumns + 1, numberOfDataColumns - _numberOfDataColumns))
 		{
-			// Delete columns failed - display warning and return
-			Debugger::GetInstance().Print(_T("Warning (OutputPanel::FinishUpdate):  DeleteCols failed!"), Debugger::PriorityMedium);
-
+			Debugger::GetInstance() << "Warning (OutputPanel::FinishUpdate):  DeleteCols failed!" << Debugger::PriorityMedium;
 			return;
 		}
 

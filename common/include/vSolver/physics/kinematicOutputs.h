@@ -12,7 +12,7 @@
 // Author:  K. Loux
 // Description:  Contains class declaration for KinematicOutputs class.  This class does the
 //				 calculations for all of the kinematic simulation outputs.  That includes any
-//				 kind of wheel angle/orientation, chassis attitude, spring/shock positions, but
+//				 kind of wheel angle/orientation, chassis attitude, spring/damper positions, but
 //				 doesn't include any thing that requires forces to calculate (force-based roll
 //				 center, etc.).
 // History:
@@ -21,8 +21,8 @@
 //				  for each output, K. Loux.
 //	3/11/2009	- Finished implementation of enum/array style data members, K. Loux.
 
-#ifndef _KINEMATIC_OUTPUTS_H_
-#define _KINEMATIC_OUTPUTS_H_
+#ifndef KINEMATIC_OUTPUTS_H_
+#define KINEMATIC_OUTPUTS_H_
 
 // wxWidgets headers
 #include <wx/thread.h>
@@ -39,11 +39,7 @@ class Suspension;
 class KinematicOutputs
 {
 public:
-	// Constructor
 	KinematicOutputs();
-
-	// Destructor
-	~KinematicOutputs();
 
 	// Updates the kinematic variables associated with the current Suspension
 	void Update(const Car *original, const Suspension *current);
@@ -56,13 +52,13 @@ public:
 		KPI,						// [rad]
 		Steer,						// [rad]
 		Spring,						// [in]
-		Shock,						// [in]
+		Damper,						// [in]
 		AxlePlunge,					// [in]
 		CasterTrail,				// [in]
 		ScrubRadius,				// [in]
 		Scrub,						// [in]
 		SpringInstallationRatio,	// [in Spring/in Wheel]
-		ShockInstallationRatio,		// [in Shock/in Wheel]
+		DamperInstallationRatio,	// [in Damper/in Wheel]
 		ARBInstallationRatio,		// [rad Bar/in Wheel] (assumes opposite side stays fixed)
 		SpindleLength,				// [in]
 		SideViewSwingArmLength,		// [in]
@@ -88,9 +84,9 @@ public:
 		FrontARBTwist,				// [rad]
 		RearARBTwist,				// [rad]
 		FrontThirdSpring,			// [in]
-		FrontThirdShock,			// [in]
+		FrontThirdDamper,			// [in]
 		RearThirdSpring,			// [in]
-		RearThirdShock,				// [in]
+		RearThirdDamper,			// [in]
 		FrontNetSteer,				// [rad]
 		RearNetSteer,				// [rad]
 		FrontNetScrub,				// [in]
@@ -193,7 +189,6 @@ public:
 	//wxMutex &GetMutex(void) const { return kinematicOutputsMutex; };
 
 private:
-	// The currently associated car object
 	const Car *originalCar;
 	const Suspension *currentSuspension;
 
@@ -212,8 +207,7 @@ private:
 	static UnitConverter::UnitType GetDoubleUnitType(const OutputsDouble &_output);
 	static UnitConverter::UnitType GetVectorUnitType(const OutputsVector &_output);
 
-	// Initializes all outputs to QNAN
 	void InitializeAllOutputs(void);
 };
 
-#endif// _KINEMATIC_OUTPUTS_H_
+#endif// KINEMATIC_OUTPUTS_H_

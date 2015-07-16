@@ -82,8 +82,7 @@ PlotObject::PlotObject(PlotRenderer &_renderer) : renderer(_renderer)
 	{
 		fontFile = FontFinder::GetFontFileName(plotFont.GetFaceName());
 		if (fontFile.IsEmpty())
-			Debugger::GetInstance().Print(_T("Could not find font file for ")
-				+ plotFont.GetFaceName());
+			Debugger::GetInstance() << "Could not find font file for " << plotFont.GetFaceName();
 	}
 
 	// Create the fonts
@@ -96,8 +95,7 @@ PlotObject::PlotObject(PlotRenderer &_renderer) : renderer(_renderer)
 		delete axisFont;
 		axisFont = NULL;
 
-		Debugger::GetInstance().Print(
-			_T("Error loading axis font.  Specify a font in Tools->Options->Fonts to correct."));
+		Debugger::GetInstance() << "Error loading axis font.  Specify a font in Tools->Options->Fonts to correct." << Debugger::PriorityHigh;
 	}
 	else
 	{
@@ -110,8 +108,7 @@ PlotObject::PlotObject(PlotRenderer &_renderer) : renderer(_renderer)
 		delete titleFont;
 		titleFont = NULL;
 
-		Debugger::GetInstance().Print(
-			_T("Error loading title font.  Specify a font in Tools->Options->Fonts to correct."));
+		Debugger::GetInstance() << "Error loading title font.  Specify a font in Tools->Options->Fonts to correct." << Debugger::PriorityHigh;
 	}
 	else
 	{
@@ -119,10 +116,7 @@ PlotObject::PlotObject(PlotRenderer &_renderer) : renderer(_renderer)
 		titleFont->CharMap(FT_ENCODING_UNICODE);
 	}
 
-	// Initialize auto-scaling to true
 	ResetAutoScaling();
-
-	// Set the background color (establish the default)
 	renderer.SetBackgroundColor(Color::ColorWhite);
 }
 

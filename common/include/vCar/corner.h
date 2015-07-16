@@ -18,8 +18,8 @@
 //				  point declared individually, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
-#ifndef _CORNER_H_
-#define _CORNER_H_
+#ifndef CORNER_H_
+#define CORNER_H_
 
 // Standard C++ headers
 #include <iosfwd>// forward declarations of fstream objects
@@ -44,10 +44,7 @@ public:
 	};
 
 	// Constructor
-	Corner(const Location &_location);
-
-	// Destructor
-	~Corner();
+	Corner(const Location &location);
 
 	// File read/write functions
 	void Write(std::ofstream *outFile) const;
@@ -71,7 +68,7 @@ public:
 	enum ActuationType
 	{
 		ActuationPushPullrod,
-		ActuationOutboard,
+		ActuationOutboardRockerArm,
 
 		NumberOfActuationTypes
 	};
@@ -93,8 +90,8 @@ public:
 		BellCrankPivot2,
 		OutboardSpring,
 		InboardSpring,
-		OutboardShock,
-		InboardShock,
+		OutboardDamper,
+		InboardDamper,
 		ContactPatch,
 		WheelCenter,			// Not accessable to the user - this value is calcualted
 		OutboardBarLink,
@@ -129,20 +126,12 @@ public:
 	// Bump stops (with non-linear rates?)
 	// Droop limiters
 
-	// Defines how the shock/spring is actuated for this CORNER
 	ActuationAttachment actuationAttachment;
-
-	// Defines what kind of actuation we have for this CORNER
 	ActuationType actuationType;
-
-	// The location of this corner on the car
 	const Location location;
-
-	// The actual hardpoint locations
 	Vector hardpoints[NumberOfHardpoints];
 
-	// Operators
 	Corner& operator=(const Corner& corner);
 };
 
-#endif// _CORNER_H_
+#endif// CORNER_H_

@@ -127,8 +127,8 @@ bool MassProperties::IsValidInertiaTensor(void) const
 
 	if (!GetPrincipleInertias(&principleInertias))
 	{
-		Debugger::GetInstance().Print(_T("Warning (IsValidInertiaTensor):  Failed to compute principle moments of inertia"),
-			Debugger::PriorityHigh);
+		Debugger::GetInstance() << "Warning (IsValidInertiaTensor):  Failed to compute principle moments of inertia"
+			<< Debugger::PriorityHigh;
 		return false;
 	}
 
@@ -250,7 +250,7 @@ bool MassProperties::GetPrincipleInertias(Vector *principleInertias, Vector *ixx
 		if (ixxDirection->z != 1.0)
 		{
 			// No free pivots, null vector is the only solution
-			Debugger::GetInstance().Print(_T("Error (GetPrincipleInertias): NULL principle direction"));
+			Debugger::GetInstance() << "Error (GetPrincipleInertias): NULL principle direction" << Debugger::PriorityHigh;
 			return false;
 		}
 		else if (ixxDirection->y != 1.0)
@@ -271,7 +271,7 @@ bool MassProperties::GetPrincipleInertias(Vector *principleInertias, Vector *ixx
 		else
 		{
 			// No fixed pivots, all vectors are solutions
-			Debugger::GetInstance().Print(_T("Error (GetPrincipleInertias): No limits on principle direction"));
+			Debugger::GetInstance() << "Error (GetPrincipleInertias): No limits on principle direction" << Debugger::PriorityHigh;
 			return false;
 		}
 
@@ -295,7 +295,7 @@ bool MassProperties::GetPrincipleInertias(Vector *principleInertias, Vector *ixx
 		if (iyyDirection->z != 1.0)
 		{
 			// No free pivots, null vector is the only solution
-			Debugger::GetInstance().Print(_T("Error (GetPrincipleInertias): NULL principle direction"));
+			Debugger::GetInstance() << "Error (GetPrincipleInertias): NULL principle direction" << Debugger::PriorityHigh;
 			return false;
 		}
 		else if (iyyDirection->y != 1.0)
@@ -316,7 +316,7 @@ bool MassProperties::GetPrincipleInertias(Vector *principleInertias, Vector *ixx
 		else
 		{
 			// No fixed pivots, all vectors are solutions
-			Debugger::GetInstance().Print(_T("Error (GetPrincipleInertias): No limits on principle direction"));
+			Debugger::GetInstance() << "Error (GetPrincipleInertias): No limits on principle direction" << Debugger::PriorityHigh;
 			return false;
 		}
 
@@ -340,7 +340,7 @@ bool MassProperties::GetPrincipleInertias(Vector *principleInertias, Vector *ixx
 		if (izzDirection->z != 1.0)
 		{
 			// No free pivots, null vector is the only solution
-			Debugger::GetInstance().Print(_T("Error (GetPrincipleInertias): NULL principle direction"));
+			Debugger::GetInstance() << "Error (GetPrincipleInertias): NULL principle direction" << Debugger::PriorityHigh;
 			return false;
 		}
 		else if (izzDirection->y != 1.0)
@@ -361,7 +361,7 @@ bool MassProperties::GetPrincipleInertias(Vector *principleInertias, Vector *ixx
 		else
 		{
 			// No fixed pivots, all vectors are solutions
-			Debugger::GetInstance().Print(_T("Error (GetPrincipleInertias): No limits on principle direction"));
+			Debugger::GetInstance() << "Error (GetPrincipleInertias): No limits on principle direction" << Debugger::PriorityHigh;
 			return false;
 		}
 

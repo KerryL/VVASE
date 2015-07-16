@@ -126,15 +126,12 @@ void Drivetrain::SetNumberOfGears(const short &numGears)
 	// Make sure we have at least one gear
 	if (numGears < 1)
 	{
-		Debugger::GetInstance().Print(_T("ERROR:  Must have at least 1 gear!"));
-
+		Debugger::GetInstance() << "ERROR:  Must have at least 1 gear!" << Debugger::PriorityHigh;
 		return;
 	}
 
 	numberOfGears = numGears;
 	delete [] gearRatio;
-
-	// Dynamically allocate memory for GearRatio according to the number of gears we have
 	gearRatio = new double[numGears];
 }
 

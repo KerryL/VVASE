@@ -395,33 +395,23 @@ bool GuiObject::Close(bool notebookPageAlreadyClosed)
 //==========================================================================
 bool GuiObject::LoadFromFile(void)
 {
-	// Perform the load and check for errors
 	if (!PerformLoadFromFile())
 	{
-		Debugger::GetInstance().Print(_T("ERROR:  Could not read from file '") + pathAndFileName + _T("'!"));
-
-		// Remove this file from the recent history list
+		Debugger::GetInstance() << "ERROR:  Could not read from file '" << pathAndFileName << "'!" << Debugger::PriorityHigh;
 		mainFrame.RemoveFileFromHistory(pathAndFileName);
-
 		return false;
 	}
 
 	// Make sure the desired file isn't already open - if it is, return false
 	if (!VerifyUniqueness())
 	{
-		Debugger::GetInstance().Print(_T("Object at '") + pathAndFileName +
-			_T("' already open!"), Debugger::PriorityMedium);
-
+		Debugger::GetInstance() << "Object at '" << pathAndFileName << "' already open!" << Debugger::PriorityMedium;
 		return false;
 	}
 
-	// Call SetName to ensure all tabs, tree items, etc. are re-named
 	SetName(GetNameFromFileName());
+	Debugger::GetInstance() << "File loaded from '" << pathAndFileName << "'!" << Debugger::PriorityMedium;
 
-	// Print a message to let the user know we successfully loaded the file
-	Debugger::GetInstance().Print(_T("File loaded from '") + pathAndFileName + _T("'!"), Debugger::PriorityMedium);
-
-	// Add file to the recent history list
 	mainFrame.AddFileToHistory(pathAndFileName);
 
 	return true;
@@ -507,24 +497,18 @@ bool GuiObject::SaveToFile(bool saveAsNewFileName)
 		// name has an asterisk which we need to remove
 		SetName(name.substr(0, name.length() - 1));
 
-	// Perform the save and check for errors
 	if (!PerformSaveToFile())
 	{
-		Debugger::GetInstance().Print(_T("ERROR:  Could not save file to '") + pathAndFileName + _T("'!"));
-
+		Debugger::GetInstance() << "ERROR:  Could not save file to '" << pathAndFileName << "'!" << Debugger::PriorityHigh;
 		return false;
 	}
 
-	// Set the flag to let us know we've been saved recently
 	modifiedSinceLastSave = false;
 
-	// Print a message to let the user know we successfully saved the file
-	Debugger::GetInstance().Print(_T("File saved to '") + pathAndFileName + _T("'!"), Debugger::PriorityMedium);
+	Debugger::GetInstance() << "File saved to '" << pathAndFileName << "'!" << Debugger::PriorityMedium;
 
-	// Remove this object from the undo/redo stacks
 	mainFrame.GetUndoRedoStack().RemoveGuiObjectFromStack(index);
 
-	// Return true if we get to the end (true = car was saved)
 	return true;
 }
 

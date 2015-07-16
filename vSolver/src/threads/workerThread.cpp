@@ -183,8 +183,8 @@ void WorkerThread::OnJob()
 		DebugLog::GetInstance()->Log(_T("Optimization - End"), -1);
 
 		// Determine elapsed time and print to the screen
-		Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "Elapsed Time: %s",
-					 wxDateTime::UNow().Subtract(start).Format().ToUTF8().data());
+		Debugger::GetInstance() << "Elapsed Time: %s"
+			<< wxDateTime::UNow().Subtract(start).Format() << Debugger::PriorityVeryHigh;
 
 		// Tell the main thread that we're done the job
 		jobQueue->Report(job.command, id, job.index);

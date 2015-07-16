@@ -79,6 +79,7 @@
     <ClInclude Include="..\common\include\vMath\complex.h" />
     <ClInclude Include="..\common\include\vMath\dataset2D.h" />
     <ClInclude Include="..\common\include\vMath\expressionTree.h" />
+    <ClInclude Include="..\common\include\vMath\geometryMath.h" />
     <ClInclude Include="..\common\include\vMath\matrix.h" />
     <ClInclude Include="..\common\include\vMath\signals\curveFit.h" />
     <ClInclude Include="..\common\include\vMath\signals\derivative.h" />
@@ -96,6 +97,7 @@
     <ClCompile Include="src\complex.cpp" />
     <ClCompile Include="src\dataset2D.cpp" />
     <ClCompile Include="src\expressionTree.cpp" />
+    <ClCompile Include="src\geometryMath.cpp" />
     <ClCompile Include="src\matrix.cpp" />
     <ClCompile Include="src\signals\curveFit.cpp" />
     <ClCompile Include="src\signals\derivative.cpp" />

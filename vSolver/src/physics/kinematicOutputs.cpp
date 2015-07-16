@@ -64,26 +64,6 @@ KinematicOutputs::KinematicOutputs()
 
 //==========================================================================
 // Class:			KinematicOutputs
-// Function:		~KinematicOutputs
-//
-// Description:		Destructor for KinematicOutputs class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-KinematicOutputs::~KinematicOutputs()
-{
-}
-
-//==========================================================================
-// Class:			KinematicOutputs
 // Function:		InitializeAllOutputs
 //
 // Description:		Initializes all outputs to QNAN.
@@ -100,10 +80,8 @@ KinematicOutputs::~KinematicOutputs()
 //==========================================================================
 void KinematicOutputs::InitializeAllOutputs(void)
 {
-	// Initialize all outputs to QNAN
 	int i;
 
-	// Corner Doubles
 	for (i = 0; i < NumberOfCornerOutputDoubles; i++)
 	{
 		rightFront[i] = VVASEMath::QNAN;
@@ -112,7 +90,6 @@ void KinematicOutputs::InitializeAllOutputs(void)
 		leftRear[i] = VVASEMath::QNAN;
 	}
 
-	// Corner Vectors
 	for (i = 0; i< NumberOfCornerOutputVectors; i++)
 	{
 		rightFrontVectors[i].Set(VVASEMath::QNAN, VVASEMath::QNAN, VVASEMath::QNAN);
@@ -121,11 +98,9 @@ void KinematicOutputs::InitializeAllOutputs(void)
 		leftRearVectors[i].Set(VVASEMath::QNAN, VVASEMath::QNAN, VVASEMath::QNAN);
 	}
 
-	// Whole-car Doubles
 	for (i = 0; i < NumberOfOutputDoubles; i++)
 		doubles[i] = VVASEMath::QNAN;
 
-	// Whole-car Vectors
 	for (i = 0; i < NumberOfOutputVectors; i++)
 		vectors[i].Set(VVASEMath::QNAN, VVASEMath::QNAN, VVASEMath::QNAN);
 }
@@ -375,8 +350,7 @@ void KinematicOutputs::Update(const Car *original, const Suspension *current)
 	if (!VVASEMath::GetIntersectionOfTwoPlanes(rightPlaneNormal, current->rightFront.hardpoints[Corner::ContactPatch],
 		leftPlaneNormal, current->leftFront.hardpoints[Corner::ContactPatch],
 		vectors[FrontRollAxisDirection], vectors[FrontKinematicRC]))
-		Debugger::GetInstance().Print(_T("Warning (KinematicOutputs::Update):  Front Kinematic Roll Center is undefined"),
-			Debugger::PriorityHigh);
+		Debugger::GetInstance() << "Warning (KinematicOutputs::Update):  Front Kinematic Roll Center is undefined" << Debugger::PriorityHigh;
 	else
 		// We now have the axis direction and a point on the axis, but we want a specific
 		// point on the axis.  To do that, we determine the place where this vector passes through
@@ -397,8 +371,7 @@ void KinematicOutputs::Update(const Car *original, const Suspension *current)
 	if (!VVASEMath::GetIntersectionOfTwoPlanes(rightPlaneNormal, current->rightRear.hardpoints[Corner::ContactPatch],
 		leftPlaneNormal, current->leftRear.hardpoints[Corner::ContactPatch],
 		vectors[RearRollAxisDirection], vectors[RearKinematicRC]))
-		Debugger::GetInstance().Print(_T("Warning (KinematicOutputs::Update):  Rear Kinematic Roll Center is undefined"),
-			Debugger::PriorityHigh);
+		Debugger::GetInstance() << "Warning (KinematicOutputs::Update):  Rear Kinematic Roll Center is undefined" << Debugger::PriorityHigh;
 	else
 		// Just like we did on for the front, intersect this vector with the wheel plane
 		vectors[RearKinematicRC] = VVASEMath::IntersectWithPlane(planeNormal,
@@ -424,8 +397,7 @@ void KinematicOutputs::Update(const Car *original, const Suspension *current)
 	if (!VVASEMath::GetIntersectionOfTwoPlanes(frontPlaneNormal, current->rightFront.hardpoints[Corner::ContactPatch],
 		rearPlaneNormal, current->rightRear.hardpoints[Corner::ContactPatch],
 		vectors[RightPitchAxisDirection], vectors[RightKinematicPC]))
-		Debugger::GetInstance().Print(_T("Warning (KinematicOutputs::Update):  Right Kinematic Pitch Center is undefined"),
-			Debugger::PriorityHigh);
+		Debugger::GetInstance() << "Warning (KinematicOutputs::Update):  Right Kinematic Pitch Center is undefined" << Debugger::PriorityHigh;
 	else
 		// We now have the axis direction and a point on the axis, but we want a specific
 		// point on the axis.  To do that, we determine the place where this vector passes through
@@ -446,8 +418,7 @@ void KinematicOutputs::Update(const Car *original, const Suspension *current)
 	if (!VVASEMath::GetIntersectionOfTwoPlanes(frontPlaneNormal, current->leftFront.hardpoints[Corner::ContactPatch],
 		rearPlaneNormal, current->leftRear.hardpoints[Corner::ContactPatch],
 		vectors[LeftPitchAxisDirection], vectors[LeftKinematicPC]))
-		Debugger::GetInstance().Print(_T("Warning (KinematicOutputs::Update):  Left Kinematic Pitch Center is undefined"),
-			Debugger::PriorityHigh);
+		Debugger::GetInstance() << "Warning (KinematicOutputs::Update):  Left Kinematic Pitch Center is undefined" << Debugger::PriorityHigh;
 	else
 		// Just like we did for the right side, intersect this vector with the wheel plane
 		vectors[LeftKinematicPC] = VVASEMath::IntersectWithPlane(planeNormal,
@@ -547,7 +518,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 	else
 	{
 		// Not one of our recognized locations!!!
-		Debugger::GetInstance().Print(_T("ERROR:  Corner location not recognized!"), Debugger::PriorityHigh);
+		Debugger::GetInstance() << "ERROR:  Corner location not recognized!" << Debugger::PriorityHigh;
 		return;
 	}
 
@@ -627,11 +598,11 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 		currentCorner->hardpoints[Corner::InboardSpring].Distance(
 		currentCorner->hardpoints[Corner::OutboardSpring]);
 
-	// Shock Displacement [in] - positive is compression
-	cornerDoubles[Shock] = originalCorner->hardpoints[Corner::InboardShock].Distance(
-		originalCorner->hardpoints[Corner::OutboardShock]) -
-		currentCorner->hardpoints[Corner::InboardShock].Distance(
-		currentCorner->hardpoints[Corner::OutboardShock]);
+	// Damper Displacement [in] - positive is compression
+	cornerDoubles[Damper] = originalCorner->hardpoints[Corner::InboardDamper].Distance(
+		originalCorner->hardpoints[Corner::OutboardDamper]) -
+		currentCorner->hardpoints[Corner::InboardDamper].Distance(
+		currentCorner->hardpoints[Corner::OutboardDamper]);
 
 	// Scrub [in]
 	cornerDoubles[Scrub] = sign * (currentCorner->hardpoints[Corner::ContactPatch].y -
@@ -665,8 +636,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 	if (!VVASEMath::GetIntersectionOfTwoPlanes(upperPlaneNormal, currentCorner->hardpoints[Corner::UpperBallJoint],
 		lowerPlaneNormal, currentCorner->hardpoints[Corner::LowerBallJoint], 
 		cornerVectors[InstantAxisDirection], cornerVectors[InstantCenter]))
-		Debugger::GetInstance().Print(_T("Warning (KinematicOutputs::UpdateCorner):  Instant Center is undefined"),
-			Debugger::PriorityHigh);
+		Debugger::GetInstance() << "Warning (KinematicOutputs::UpdateCorner):  Instant Center is undefined" << Debugger::PriorityHigh;
 	else
 	{
 		// We now have the axis direction and a point on the axis, but we want a specific
@@ -861,15 +831,15 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 			* VVASEMath::Sign(force.Normalize() * forceDirection.Normalize());
 
 		// Shock force
-		momentArm = currentCorner->hardpoints[Corner::OutboardShock] - VVASEMath::NearestPointOnAxis(
-			pointOnAxis, momentDirection, currentCorner->hardpoints[Corner::OutboardShock]);
+		momentArm = currentCorner->hardpoints[Corner::OutboardDamper] - VVASEMath::NearestPointOnAxis(
+			pointOnAxis, momentDirection, currentCorner->hardpoints[Corner::OutboardDamper]);
 		force = momentDirection.Cross(momentArm).Normalize() * momentMagnitude / momentArm.Length();
 
-		// Determine the force required in the direction of the shock
-		forceDirection = (currentCorner->hardpoints[Corner::InboardShock]
-			- currentCorner->hardpoints[Corner::OutboardShock]).Normalize();
+		// Determine the force required in the direction of the damper
+		forceDirection = (currentCorner->hardpoints[Corner::InboardDamper]
+			- currentCorner->hardpoints[Corner::OutboardDamper]).Normalize();
 		force = forceDirection * force.Length() / (force.Normalize() * forceDirection);
-		cornerDoubles[ShockInstallationRatio] = 1.0 / force.Length()
+		cornerDoubles[DamperInstallationRatio] = 1.0 / force.Length()
 			* VVASEMath::Sign(force.Normalize() * forceDirection.Normalize());
 
 		// ARB link force
@@ -958,7 +928,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 			cornerDoubles[ARBInstallationRatio] = 1.0 / torque.Length();
 		}
 	}
-	else if (currentCorner->actuationType == Corner::ActuationOutboard)
+	else if (currentCorner->actuationType == Corner::ActuationOutboardRockerArm)
 	{
 		// This part is identical to the beginning of the previous section,
 		// but the spring/shock take the place of the pushrod, so the installation
@@ -1080,15 +1050,15 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 			* VVASEMath::Sign(force.Normalize() * forceDirection.Normalize());
 
 		// Shock force
-		momentArm = currentCorner->hardpoints[Corner::OutboardShock] - VVASEMath::NearestPointOnAxis(
-			pointOnAxis, momentDirection, currentCorner->hardpoints[Corner::OutboardShock]);
+		momentArm = currentCorner->hardpoints[Corner::OutboardDamper] - VVASEMath::NearestPointOnAxis(
+			pointOnAxis, momentDirection, currentCorner->hardpoints[Corner::OutboardDamper]);
 		force = momentDirection.Cross(momentArm).Normalize() * momentMagnitude / momentArm.Length();
 
-		// Determine the force required in the direction of the shock
-		forceDirection = (currentCorner->hardpoints[Corner::InboardShock]
-			- currentCorner->hardpoints[Corner::OutboardShock]).Normalize();
+		// Determine the force required in the direction of the damper
+		forceDirection = (currentCorner->hardpoints[Corner::InboardDamper]
+			- currentCorner->hardpoints[Corner::OutboardDamper]).Normalize();
 		force = forceDirection * force.Length() / (force.Normalize() * forceDirection);
-		cornerDoubles[ShockInstallationRatio] = 1.0 / force.Length()
+		cornerDoubles[DamperInstallationRatio] = 1.0 / force.Length()
 			* VVASEMath::Sign(force.Normalize() * forceDirection.Normalize());
 
 		// TODO:  Need to specify attachment options for sway bars with outboard spring/damper
@@ -1261,8 +1231,8 @@ wxString KinematicOutputs::GetCornerDoubleName(const CornerOutputsDouble &_outpu
 		name = _T("Spring");
 		break;
 
-	case Shock:
-		name = _T("Shock");
+	case Damper:
+		name = _T("Damper");
 		break;
 
 	case AxlePlunge:
@@ -1285,8 +1255,8 @@ wxString KinematicOutputs::GetCornerDoubleName(const CornerOutputsDouble &_outpu
 		name = _T("Spring Installation Ratio");
 		break;
 
-	case ShockInstallationRatio:
-		name = _T("Shock Installation Ratio");
+	case DamperInstallationRatio:
+		name = _T("Damper Installation Ratio");
 		break;
 
 	case ARBInstallationRatio:
@@ -1399,16 +1369,16 @@ wxString KinematicOutputs::GetDoubleName(const OutputsDouble &_output)
 		name = _T("Front Third Spring");
 		break;
 
-	case FrontThirdShock:
-		name = _T("Front Third Shock");
+	case FrontThirdDamper:
+		name = _T("Front Third Damper");
 		break;
 
 	case RearThirdSpring:
 		name = _T("Rear Third Spring");
 		break;
 
-	case RearThirdShock:
-		name = _T("Rear Third Shock");
+	case RearThirdDamper:
+		name = _T("Rear Third Damper");
 		break;
 
 	case FrontNetSteer:
@@ -1965,7 +1935,7 @@ UnitConverter::UnitType KinematicOutputs::GetCornerDoubleUnitType(const CornerOu
 
 		// Distances
 	case Spring:
-	case Shock:
+	case Damper:
 	case AxlePlunge:
 	case CasterTrail:
 	case ScrubRadius:
@@ -1978,7 +1948,7 @@ UnitConverter::UnitType KinematicOutputs::GetCornerDoubleUnitType(const CornerOu
 
 		// Unitless
 	case SpringInstallationRatio:
-	case ShockInstallationRatio:
+	case DamperInstallationRatio:
 	case AntiBrakePitch:
 	case AntiDrivePitch:
 		unitType = UnitConverter::UnitTypeUnitless;
@@ -2067,9 +2037,9 @@ UnitConverter::UnitType KinematicOutputs::GetDoubleUnitType(const OutputsDouble 
 	{
 		// Distances
 	case FrontThirdSpring:
-	case FrontThirdShock:
+	case FrontThirdDamper:
 	case RearThirdSpring:
-	case RearThirdShock:
+	case RearThirdDamper:
 	case FrontNetScrub:
 	case RearNetScrub:
 	case FrontTrackGround:

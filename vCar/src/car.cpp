@@ -141,20 +141,20 @@ Car::Car()
 	suspension->rightRear.hardpoints[Corner::OutboardPushrod].Set(65.0, 17.86, 6.1);
 	suspension->leftRear.hardpoints[Corner::OutboardPushrod].Set(65.0, -17.86, 6.1);
 
-	suspension->rightFront.hardpoints[Corner::InboardShock].Set(-9.232, 4.75, 18.75);
-	suspension->leftFront.hardpoints[Corner::InboardShock].Set(-9.232, -4.75, 18.75);
-	suspension->rightRear.hardpoints[Corner::InboardShock].Set(72.25, 1.455, 15.871);
-	suspension->leftRear.hardpoints[Corner::InboardShock].Set(72.25, -1.455, 15.871);
+	suspension->rightFront.hardpoints[Corner::InboardDamper].Set(-9.232, 4.75, 18.75);
+	suspension->leftFront.hardpoints[Corner::InboardDamper].Set(-9.232, -4.75, 18.75);
+	suspension->rightRear.hardpoints[Corner::InboardDamper].Set(72.25, 1.455, 15.871);
+	suspension->leftRear.hardpoints[Corner::InboardDamper].Set(72.25, -1.455, 15.871);
 
 	suspension->rightFront.hardpoints[Corner::InboardSpring].Set(-9.232, 4.75, 18.75);
 	suspension->leftFront.hardpoints[Corner::InboardSpring].Set(-9.232, -4.75, 18.75);
 	suspension->rightRear.hardpoints[Corner::InboardSpring].Set(72.25, 1.455, 15.871);
 	suspension->leftRear.hardpoints[Corner::InboardSpring].Set(72.25, -1.455, 15.871);
 
-	suspension->rightFront.hardpoints[Corner::OutboardShock].Set(-1.232, 3.375, 19.5);
-	suspension->leftFront.hardpoints[Corner::OutboardShock].Set(-1.232, -3.375, 19.5);
-	suspension->rightRear.hardpoints[Corner::OutboardShock].Set(62.75, 1.455, 15.871);
-	suspension->leftRear.hardpoints[Corner::OutboardShock].Set(62.75, -1.455, 15.871);
+	suspension->rightFront.hardpoints[Corner::OutboardDamper].Set(-1.232, 3.375, 19.5);
+	suspension->leftFront.hardpoints[Corner::OutboardDamper].Set(-1.232, -3.375, 19.5);
+	suspension->rightRear.hardpoints[Corner::OutboardDamper].Set(62.75, 1.455, 15.871);
+	suspension->leftRear.hardpoints[Corner::OutboardDamper].Set(62.75, -1.455, 15.871);
 
 	suspension->rightFront.hardpoints[Corner::OutboardSpring].Set(-1.232, 3.375, 19.5);
 	suspension->leftFront.hardpoints[Corner::OutboardSpring].Set(-1.232, -3.375, 19.5);
@@ -382,8 +382,7 @@ bool Car::LoadCarFromFile(wxString fileName, std::ifstream *_inFile, int *fileVe
 
 	// Check to make sure the version matches
 	if (header.fileVersion != currentFileVersion)
-		Debugger::GetInstance().Print(_T("Warning:  Opening file with out-of-date file format."),
-			Debugger::PriorityHigh);
+		Debugger::GetInstance() << "Warning:  Opening file with out-of-date file format." << Debugger::PriorityHigh;
 
 	// Call the read function for each sub-system class
 	// NOTE:  The order that these Read() calls are made must match the order
