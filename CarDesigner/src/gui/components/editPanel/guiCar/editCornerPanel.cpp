@@ -51,10 +51,9 @@
 //		None
 //
 //==========================================================================
-EditCornerPanel::EditCornerPanel(EditSuspensionNotebook & _parent, wxWindowID id,
-									 const wxPoint& pos, const wxSize& size) :
-									 wxScrolledWindow(&_parent, id, pos, size),
-									 parent(_parent)
+EditCornerPanel::EditCornerPanel(EditSuspensionNotebook & _parent,
+	wxWindowID id, const wxPoint& pos, const wxSize& size)
+	: wxScrolledWindow(&_parent, id, pos, size), parent(_parent)
 {
 	CreateControls();
 }
@@ -112,7 +111,7 @@ END_EVENT_TABLE();
 // Description:		Updates the information on this panel.
 //
 // Input Arguments:
-//		_currentCorner	= Corner* pointing to the associated corner
+//		currentCorner	= Corner* pointing to the associated corner
 //		barStyle		= Suspension::BarStyle describing what kind of sway bar
 //						  is at this end of the car
 //		hasHalfShaft	= bool, true if this corner gets a half shaft
@@ -125,7 +124,7 @@ END_EVENT_TABLE();
 //
 //==========================================================================
 void EditCornerPanel::UpdateInformation(Corner *currentCorner,
-										  Suspension::BarStyle barStyle, bool hasHalfShaft)
+	Suspension::BarStyle barStyle, bool hasHalfShaft)
 {
 	this->currentCorner = currentCorner;
 

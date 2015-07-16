@@ -96,13 +96,11 @@ void SuperGrid::AutoStretchColumn(const int &col)
 //==========================================================================
 void SuperGrid::OnSize(wxSizeEvent& event)
 {
-	// Check to see if we have any columns that we'd like to auto-stretch
 	if (stretchColumns.Count() > 0)
 	{
 		int i;
 		unsigned int j;
 		int fixedWidth(0);
-		// Go through all of the columns
 		for (i = 0; i < m_numCols; i++)
 		{
 			// Check to see if that column is in the "stretch me" list
@@ -126,8 +124,6 @@ void SuperGrid::OnSize(wxSizeEvent& event)
 	}
 	
 	Refresh();
-
-	// Skip this event to the let the default handler also work
 	event.Skip();
 }
 
