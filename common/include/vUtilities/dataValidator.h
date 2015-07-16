@@ -86,13 +86,9 @@ typedef DataValidator<unsigned int> UnsignedValidator;
 // Forward declarations of specializations
 // (specialization must be defined in .cpp file)
 template<>
-virtual bool UnitValidator::TransferToWindow();
+bool UnitValidator::TransferToWindow();
 template<>
-virtual bool UnitValidator::TransferFromWindow();
-/*template<class T>
-virtual bool DataValidator<T>::TransferToWindow();
-template<class T>
-virtual bool DataValidator<T>::TransferFromWindow();*/
+bool UnitValidator::TransferFromWindow();
 
 //==========================================================================
 // Class:			DataValidator
