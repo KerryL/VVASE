@@ -144,7 +144,7 @@ void SuperGrid::OnSize(wxSizeEvent& event)
 //		None
 //
 //==========================================================================
-void SuperGrid::FitHeight(void)
+void SuperGrid::FitHeight()
 {
 	unsigned int height(GetColLabelSize() + GetNumberRows());
 	int i;

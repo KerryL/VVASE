@@ -17,8 +17,8 @@
 //	11/23/2009	- Renamed from cardesigner_constants.cpp and incremented version to 0.8b, K. Loux.
 //	4/11/2010	- Incremented version to 0.9b, K. Loux.
 
-#ifndef _VVASE_CONSTANTS_H_
-#define _VVASE_CONSTANTS_H_
+#ifndef VVASE_CONSTANTS_H_
+#define VVASE_CONSTANTS_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -30,4 +30,4 @@ static const wxString carDesignerVersion = "0.11a";
 static const wxString carDesignerName = "VVASE";
 static const wxString carDesignerLongName = "Virtual Vehicle Analysis and Simulation Environment";
 
-#endif// _VVASE_CONSTANTS_H_
+#endif// VVASE_CONSTANTS_H_

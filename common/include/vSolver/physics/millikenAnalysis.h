@@ -14,8 +14,8 @@
 //				 Method analysis) class.  See RCVD for more information.
 // History:
 
-#ifndef _MILLIKEN_ANALYSIS_H_
-#define _MILLIKEN_ANALYSIS_H_
+#ifndef MILLIKEN_ANALYSIS_H_
+#define MILLIKEN_ANALYSIS_H_
 
 // CarDesigner forward declarations
 class Debugger;
@@ -23,11 +23,8 @@ class Debugger;
 class MillikenAnalysis
 {
 public:
-	// Constructor
-	MillikenAnalysis(const Debugger &_debugger);
+	MillikenAnalysis(const Debugger &debugger);
 	MillikenAnalysis(const MillikenAnalysis &millikenAnalysis);
-
-	// Destructor
 	~MillikenAnalysis();
 
 	// Overloaded operators
@@ -38,4 +35,4 @@ private:
 	const Debugger &debugger;
 };
 
-#endif// _MILLIKEN_ANALYSIS_H_
+#endif// MILLIKEN_ANALYSIS_H_

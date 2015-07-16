@@ -36,7 +36,7 @@
 //		None
 //
 //==========================================================================
-JobQueue::JobQueue(wxEvtHandler *_parent) : parent(_parent)
+JobQueue::JobQueue(wxEvtHandler *parent) : parent(parent)
 {
 }
 

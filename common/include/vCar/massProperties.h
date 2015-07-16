@@ -16,8 +16,8 @@
 //  3/29/2008	- Added IsValidInertiaTensor function, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
-#ifndef _MASS_H_
-#define _MASS_H_
+#ifndef MASS_H_
+#define MASS_H_
 
 // Standard C++ headers
 #include <iosfwd>// forward declarations of fstream objects
@@ -29,11 +29,8 @@
 class MassProperties
 {
 public:
-	// Constructors
 	MassProperties();
 	MassProperties(const MassProperties &massProperties);
-
-	// Destructor
 	~MassProperties();
 
 	// File read/write functions
@@ -53,14 +50,13 @@ public:
 	VectorSet wheelInertias;		// [slug-in^2]
 
 	// To check the values that the user inputs
-	bool IsValidInertiaTensor(void) const;
+	bool IsValidInertiaTensor() const;
 
 	// Get the principle moments of inertia for this object
 	bool GetPrincipleInertias(Vector *principleInertias, Vector *ixxDirection = NULL,
 							  Vector *iyyDirection = NULL, Vector *izzDirection = NULL) const;
 
-	// Overloaded operators
-	MassProperties& operator = (const MassProperties &massProperties);
+	MassProperties& operator=(const MassProperties &massProperties);
 };
 
-#endif// _MASS_H_
+#endif// MASS_H_

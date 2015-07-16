@@ -30,7 +30,7 @@
 //					process necessary to add the object to the scene.
 //
 // Input Arguments:
-//		_renderer	= RenderWindow&, pointer to rendering object
+//		renderer	= RenderWindow&, pointer to rendering object
 //
 // Output Arguments:
 //		None
@@ -39,19 +39,16 @@
 //		None
 //
 //==========================================================================
-Swaybar3D::Swaybar3D(RenderWindow &_renderer)
+Swaybar3D::Swaybar3D(RenderWindow &renderer)
 {
-	// Create the objects
-	torqueArm1 = new Cylinder(_renderer);
-	torqueArm2 = new Cylinder(_renderer);
-	torsionMember = new Cylinder(_renderer);
+	torqueArm1 = new Cylinder(renderer);
+	torqueArm2 = new Cylinder(renderer);
+	torsionMember = new Cylinder(renderer);
 
-	// Set up the cylinders
 	torqueArm1->SetCapping(true);
 	torqueArm2->SetCapping(true);
 	torsionMember->SetCapping(true);
 
-	// Set the resolutions of the torque arms
 	// We set it to four to make it look like a rectangular prism
 	torqueArm1->SetResolution(4);
 	torqueArm2->SetResolution(4);

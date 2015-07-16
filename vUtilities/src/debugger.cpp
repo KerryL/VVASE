@@ -119,7 +119,7 @@ Debugger* Debugger::debuggerInstance = NULL;
 //		Debugger&, reference to this object
 //
 //==========================================================================
-Debugger& Debugger::GetInstance(void)
+Debugger& Debugger::GetInstance()
 {
 	if (!debuggerInstance)
 		debuggerInstance = new Debugger();
@@ -143,7 +143,7 @@ Debugger& Debugger::GetInstance(void)
 //		None
 //
 //==========================================================================
-void Debugger::Kill(void)
+void Debugger::Kill()
 {
 	if (debuggerInstance)
 	{

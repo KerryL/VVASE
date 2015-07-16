@@ -17,20 +17,16 @@
 //				 MSW and through TCP on other platforms.
 // History:
 
-#ifndef _IPC_CONNECTION_H_
-#define _IPC_CONNECTION_H_
+#ifndef IPC_CONNECTION_H_
+#define IPC_CONNECTION_H_
 
 // wxWidgets headers
 #include <wx/ipc.h>
 
-// Connection class declaration
 class IPCConnection : public wxConnection
 {
 public:
-	// Constructor
 	IPCConnection();
-
-	// Destructor
 	~IPCConnection();
 	
 	// Client sends data to the server via wxConnection::Poke()
@@ -43,7 +39,7 @@ public:
 	// Only reason to override this method is so this class, the derived class, knows
 	// that the connection is no longer available.  See wxWidgets docmentation for
 	// more detail.
-	virtual bool OnDisconnect(void) { return true; };
+	virtual bool OnDisconnect() { return true; }
 };
 
-#endif// _IPC_CONNECTION_H_
+#endif// IPC_CONNECTION_H_

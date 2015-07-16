@@ -14,8 +14,8 @@
 // History:
 //	11/23/2009	- Renamed from cardesignerapp_class.h, K. Loux.
 
-#ifndef _VVASEAPP_H_
-#define _VVASEAPP_H_
+#ifndef VVASEAPP_H_
+#define VVASEAPP_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -27,7 +27,6 @@ class wxServer;
 // VVASE forward declarations
 class MainFrame;
 
-// The application class
 class VVASEApp : public wxApp
 {
 public:
@@ -35,8 +34,7 @@ public:
 	bool OnInit();
 	int OnExit();
 
-	// Private data accessor
-	MainFrame *GetMainFrame(void) { return mainFrame; };
+	MainFrame *GetMainFrame() { return mainFrame; }
 
 	// Constants required for generating data exchange objects
 	static const wxString hostName;
@@ -54,11 +52,10 @@ private:
 	// Server object to pass data between instances of this application
 	wxServer *dataExchangeServer;
 
-	// Deletes dynamic memory
-	void DeleteDynamicMemory(void);
+	void DeleteDynamicMemory();
 };
 
 // Declare the application object (have wxWidgets create the wxGetApp() function)
 DECLARE_APP(VVASEApp);
 
-#endif// _VVASEAPP_H_
+#endif// VVASEAPP_H_

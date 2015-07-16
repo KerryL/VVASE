@@ -13,37 +13,29 @@
 // Description:  Base class (abstract) for digital filters.
 // History:
 
-#ifndef _FILTER_BASE_H_
-#define _FILTER_BASE_H_
+#ifndef FILTER_BASE_H_
+#define FILTER_BASE_H_
 
 class FilterBase
 {
 public:
-	// Constructor
 	// NOTE:  Constructor MUST initialize the filter parameters a and b, and the input/output vectors y and u
-	FilterBase(const double &_sampleRate);
+	FilterBase(const double &sampleRate);
 	FilterBase(const FilterBase &f);
-
-	// Desctructor
 	virtual ~FilterBase();
 
-	// Resets all internal variables to initialize the filter to the specified value
 	virtual void Initialize(const double &initialValue) = 0;
 
-	// Main method for filtering incoming data
-	virtual double Apply(const double &_u) = 0;
+	virtual double Apply(const double &in) = 0;
 
-	// Returns latest raw data
-	double GetRawValue(void) const { return u[0]; };
+	double GetRawValue() const { return u[0]; };
 
-	// Returns latest filtered data
-	double GetFilteredValue(void) const { return y[0]; };
+	double GetFilteredValue() const { return y[0]; };
 
 	// Assignment operator (avoids MSVC Warning C4512)
 	FilterBase& operator = (const FilterBase &f);
 
 protected:
-	// Filter coefficients
 	double *a;
 	double *b;
 	double *y;
@@ -52,4 +44,4 @@ protected:
 	const double sampleRate;// [Hz]
 };
 
-#endif// _FILTER_BASE_H_
+#endif// FILTER_BASE_H_

@@ -51,8 +51,8 @@
 // use quarternions.  This will be valid unless it becomes some kind of computer game (driving
 // off of cliffs or ramps?).
 
-#ifndef _CAR_H_
-#define _CAR_H_
+#ifndef CAR_H_
+#define CAR_H_
 
 // Standard C++ headers
 #include <iosfwd>// for forward declarations of fstream objects
@@ -75,23 +75,19 @@ class TireSet;
 class Car
 {
 public:
-	// Constructor
 	Car();
 	Car(const Car &car);
-
-	// Destructor
 	~Car();
 
 	// Utility methods
-	bool SaveCarToFile(wxString fileName, std::ofstream *_outFile = NULL) const;
-	bool LoadCarFromFile(wxString fileName, std::ifstream *_inFile = NULL, int *fileVersion = NULL);
+	bool SaveCarToFile(wxString fileName, std::ofstream *outFile = NULL) const;
+	bool LoadCarFromFile(wxString fileName, std::ifstream *inFile = NULL, int *fileVersion = NULL);
 
-	// Computes the wheel center locations - to be done prior to each analysis
-	void ComputeWheelCenters(void);
+	void ComputeWheelCenters();
 
 	// For ease of determining whether or not a car has certain features
-	bool HasFrontHalfShafts(void) const;
-	bool HasRearHalfShafts(void) const;
+	bool HasFrontHalfShafts() const;
+	bool HasRearHalfShafts() const;
 
 	// This class contains dynamically allocated memory - overload the assignment operator
 	Car& operator = (const Car &car);
@@ -108,8 +104,7 @@ public:
 	Suspension *suspension;
 	TireSet *tires;
 
-	// Mutex accessor
-	wxMutex &GetMutex(void) const { return carMutex; };
+	wxMutex &GetMutex() const { return carMutex; };
 
 private:
 	// File header information
@@ -122,11 +117,8 @@ private:
 	void WriteFileHeader(std::ofstream *outFile) const;
 	FileHeaderInfo ReadFileHeader(std::ifstream *inFile) const;
 
-	// Our current file version
 	static const int currentFileVersion;
-
-	// Synchronization object
 	mutable wxMutex carMutex;
 };
 
-#endif// _CAR_H_
+#endif// CAR_H_

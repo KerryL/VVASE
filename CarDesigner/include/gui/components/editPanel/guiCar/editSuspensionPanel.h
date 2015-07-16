@@ -13,8 +13,8 @@
 // Description:  Contains the class declaration for the EditSuspensionPanel class.
 // History:
 
-#ifndef _EDIT_SUSPENSION_PANEL_H_
-#define _EDIT_SUSPENSION_PANEL_H_
+#ifndef EDIT_SUSPENSION_PANEL_H_
+#define EDIT_SUSPENSION_PANEL_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -32,26 +32,19 @@ class EditSuspensionNotebook;
 class EditSuspensionPanel : public wxScrolledWindow
 {
 public:
-	// Constructor
-	EditSuspensionPanel(EditSuspensionNotebook &_parent, wxWindowID id,
+	EditSuspensionPanel(EditSuspensionNotebook &parent, wxWindowID id,
 		const wxPoint& pos, const wxSize& size);
-
-	// Destructor
 	~EditSuspensionPanel();
 
-	// Updates the information on the panel
-	void UpdateInformation(Suspension *_currentSuspension);
-	void UpdateInformation(void);
+	void UpdateInformation(Suspension *currentSuspension);
+	void UpdateInformation();
 
 private:
-	// The parent panel
 	EditSuspensionNotebook &parent;
 
-	// The suspension with which we are currently associated
 	Suspension *currentSuspension;
 
-	// Creates the controls and positions everything within the panel
-	void CreateControls(void);
+	void CreateControls();
 
 	// This helps avoid unnecessary function calls to update the screen
 	int lastRowSelected;
@@ -77,7 +70,6 @@ private:
 	void RearBarStyleChangeEvent(wxCommandEvent &event);
 	// End event handlers-------------------------------------------------
 
-	// The text-entry control
 	SuperGrid *hardpoints;
 
 	// Checkboxes
@@ -89,8 +81,7 @@ private:
 	wxComboBox *frontBarStyle;
 	wxComboBox *rearBarStyle;
 
-	// For the event table
 	DECLARE_EVENT_TABLE();
 };
 
-#endif// _EDIT_SUSPENSION_PANEL_H_
+#endif// EDIT_SUSPENSION_PANEL_H_

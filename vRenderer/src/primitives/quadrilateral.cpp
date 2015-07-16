@@ -25,7 +25,7 @@
 // Description:		Constructor for the Quadrilateral class.
 //
 // Input Arguments:
-//		_renderWindow	= RenderWindow& pointing to the object that owns this
+//		renderWindow	= RenderWindow& pointing to the object that owns this
 //
 // Output Arguments:
 //		None
@@ -34,9 +34,8 @@
 //		None
 //
 //==========================================================================
-Quadrilateral::Quadrilateral(RenderWindow &_renderWindow) : Primitive(_renderWindow)
+Quadrilateral::Quadrilateral(RenderWindow &renderWindow) : Primitive(renderWindow)
 {
-	// Initialize private data
 	normal.Set(0.0, 0.0, 0.0);
 	axis.Set(0.0, 0.0, 0.0);
 	width = 0.0;
@@ -80,7 +79,7 @@ Quadrilateral::~Quadrilateral()
 //		None
 //
 //==========================================================================
-void Quadrilateral::GenerateGeometry(void)
+void Quadrilateral::GenerateGeometry()
 {
 	// Set the normal direction
 	glNormal3d(normal.x, normal.y, normal.z);
@@ -151,7 +150,7 @@ void Quadrilateral::GenerateGeometry(void)
 //		bool, true for OK to draw, false otherwise
 //
 //==========================================================================
-bool Quadrilateral::HasValidParameters(void)
+bool Quadrilateral::HasValidParameters()
 {
 	// Quads must have non-zero normal and axis vectors, non-zero dimensions,
 	// and non-parallel normal and axis directions
@@ -180,12 +179,9 @@ bool Quadrilateral::HasValidParameters(void)
 //		None
 //
 //==========================================================================
-void Quadrilateral::SetNormal(const Vector &_normal)
+void Quadrilateral::SetNormal(const Vector &normal)
 {
-	// Set the normal direction to the argument
-	normal = _normal;
-	
-	// Reset the modified flag
+	this->normal = normal;
 	modified = true;
 }
 
@@ -196,7 +192,7 @@ void Quadrilateral::SetNormal(const Vector &_normal)
 // Description:		Sets the location of the center of the rectangle.
 //
 // Input Arguments:
-//		_center	= const Vector&
+//		center	= const Vector&
 //
 // Output Arguments:
 //		None
@@ -205,12 +201,9 @@ void Quadrilateral::SetNormal(const Vector &_normal)
 //		None
 //
 //==========================================================================
-void Quadrilateral::SetCenter(const Vector &_center)
+void Quadrilateral::SetCenter(const Vector &center)
 {
-	// Set the center point to the argument
-	center = _center;
-	
-	// Reset the modified flag
+	this->center = center;
 	modified = true;
 }
 
@@ -222,7 +215,7 @@ void Quadrilateral::SetCenter(const Vector &_center)
 //					This vector must not be parallel to the normal direction.
 //
 // Input Arguments:
-//		_axis	= const Vector&
+//		axis	= const Vector&
 //
 // Output Arguments:
 //		None
@@ -231,12 +224,9 @@ void Quadrilateral::SetCenter(const Vector &_center)
 //		None
 //
 //==========================================================================
-void Quadrilateral::SetAxis(const Vector &_axis)
+void Quadrilateral::SetAxis(const Vector &axis)
 {
-	// Set the axis direction to the argument
-	axis = _axis;
-	
-	// Reset the modified flag
+	this->axis = axis;
 	modified = true;
 }
 
@@ -248,7 +238,7 @@ void Quadrilateral::SetAxis(const Vector &_axis)
 //					the normal direction and to the axis).
 //
 // Input Arguments:
-//		_width	= const double&
+//		width	= const double&
 //
 // Output Arguments:
 //		None
@@ -257,12 +247,9 @@ void Quadrilateral::SetAxis(const Vector &_axis)
 //		None
 //
 //==========================================================================
-void Quadrilateral::SetWidth(const double &_width)
+void Quadrilateral::SetWidth(const double &width)
 {
-	// Set the width to the argument
-	width = _width;
-	
-	// Reset the modified flag
+	this->width = width;
 	modified = true;
 }
 
@@ -282,11 +269,8 @@ void Quadrilateral::SetWidth(const double &_width)
 //		None
 //
 //==========================================================================
-void Quadrilateral::SetLength(const double &_length)
+void Quadrilateral::SetLength(const double &length)
 {
-	// Set the length to the argument
-	length = _length;
-	
-	// Reset the modified flag
+	this->length = length;
 	modified = true;
 }

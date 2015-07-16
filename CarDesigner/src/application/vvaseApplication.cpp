@@ -186,7 +186,7 @@ int VVASEApp::OnExit()
 //		None
 //
 //==========================================================================
-void VVASEApp::DeleteDynamicMemory(void)
+void VVASEApp::DeleteDynamicMemory()
 {
 	// Delete the single instance checker
 	delete singleInstanceChecker;

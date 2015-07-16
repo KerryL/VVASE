@@ -25,8 +25,8 @@
 //	2/18/2009	- Added subsystems to allow subsystems to appear in the systems tree, K. Loux.
 //	5/19/2009	- Changed to derived class from GuiObject, K. Loux.
 
-#ifndef _GUI_CAR_H_
-#define _GUI_CAR_H_
+#ifndef GUI_CAR_H_
+#define GUI_CAR_H_
 
 // wxWidgets headers
 #include <wx/treebase.h>
@@ -46,26 +46,20 @@ class wxTreeItemId;
 class GuiCar : public GuiObject
 {
 public:
-	// Constructor
-	GuiCar(MainFrame &_mainFrame, wxString _pathAndFileName = wxEmptyString);
-
-	// Destructor
+	GuiCar(MainFrame &mainFrame, wxString pathAndFileName = wxEmptyString);
 	~GuiCar();
 
 	// To be called after either the WorkingCar or the OriginalCar
 	// has changed to update the analysis data (mandatory overload)
-	void UpdateData(void);
-
-	// Updates the displays associated with this object
-	void UpdateDisplay(void);
+	void UpdateData();
+	void UpdateDisplay();
 
 	// Private member accessors
-	inline Car &GetOriginalCar(void) { return *originalCar; };
-	inline Car &GetWorkingCar(void) { return *workingCar; };
-	inline AppearanceOptions &GetAppearanceOptions(void) { return *appearanceOptions; };
+	inline Car &GetOriginalCar() { return *originalCar; }
+	inline Car &GetWorkingCar() { return *workingCar; }
+	inline AppearanceOptions &GetAppearanceOptions() { return *appearanceOptions; }
 
-	// Returns this object's type
-	ItemType GetType(void) const { return TypeCar; };
+	ItemType GetType() const { return TypeCar; }
 
 	// Enumeration for the subsystems that appear in the systems tree under this car
 	enum Subsystems
@@ -81,14 +75,13 @@ public:
 		NumberOfSubsystems
 	};
 
-	// For naming the subsystems
 	static wxString GetSubsystemName(Subsystems subsystem);
 
 	// The tree IDs associated with each subsystem object
 	wxTreeItemId subsystems[NumberOfSubsystems];
 
 	// Returns a copy of the kinematic output data
-	KinematicOutputs GetKinematicOutputs(void) { return kinematicOutputs; };
+	KinematicOutputs GetKinematicOutputs() { return kinematicOutputs; }
 
 private:
 	// The "real" object containing the original, unmodified information (not rolled, heaved, etc.)
@@ -98,11 +91,10 @@ private:
 	Car *workingCar;
 
 	// Performs the saving and loading to/from file (mandatory overloads)
-	bool PerformLoadFromFile(void);
-	bool PerformSaveToFile(void);
+	bool PerformLoadFromFile();
+	bool PerformSaveToFile();
 
-	// Gets the icon handle for this object's icon
-	int GetIconHandle(void) const;
+	int GetIconHandle() const;
 
 	// Reference to the options that affect this object's appearance
 	AppearanceOptions *appearanceOptions;
@@ -114,4 +106,4 @@ private:
 	CarRenderer *renderer;
 };
 
-#endif// _GUI_CAR_H_
+#endif// GUI_CAR_H_

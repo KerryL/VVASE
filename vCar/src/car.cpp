@@ -312,7 +312,7 @@ const int Car::currentFileVersion = 3;
 //
 // Input Arguments:
 //		fileName	= wxString specifying the location to write to
-//		_outFile	= std::ofstream* used to allow writing of the appearance options in
+//		poutFile	= std::ofstream* used to allow writing of the appearance options in
 //					  an external function
 //
 // Output Arguments:
@@ -322,7 +322,7 @@ const int Car::currentFileVersion = 3;
 //		returns true for successful write, false otherwise
 //
 //==========================================================================
-bool Car::SaveCarToFile(wxString fileName, std::ofstream *_outFile) const
+bool Car::SaveCarToFile(wxString fileName, std::ofstream *poutFile) const
 {
 	// Open the specified file
 	std::ofstream outFile(fileName.mb_str(), ios::out | ios::binary);
@@ -343,10 +343,10 @@ bool Car::SaveCarToFile(wxString fileName, std::ofstream *_outFile) const
 	tires->Write(&outFile);
 
 	// If we're saving the options (done elsewhere), open the additional file
-	if (_outFile != NULL)
+	if (poutFile != NULL)
 	{
-		_outFile->open(fileName.mb_str(), ios::out | ios::binary);
-		_outFile->seekp(outFile.tellp());
+		poutFile->open(fileName.mb_str(), ios::out | ios::binary);
+		poutFile->seekp(outFile.tellp());
 	}
 
 	outFile.close();
@@ -362,7 +362,7 @@ bool Car::SaveCarToFile(wxString fileName, std::ofstream *_outFile) const
 //
 // Input Arguments:
 //		fileName	= wxString specifying the location to read from
-//		_inFile		= std::ifstream* used to allow reading of the appearance options in
+//		pinFile		= std::ifstream* used to allow reading of the appearance options in
 //					  an external function
 //
 // Output Arguments:
@@ -372,7 +372,7 @@ bool Car::SaveCarToFile(wxString fileName, std::ofstream *_outFile) const
 //		None
 //
 //==========================================================================
-bool Car::LoadCarFromFile(wxString fileName, std::ifstream *_inFile, int *fileVersion)
+bool Car::LoadCarFromFile(wxString fileName, std::ifstream *pinFile, int *fileVersion)
 {
 	std::ifstream inFile(fileName.mb_str(), ios::in | ios::binary);
 	if (!inFile.is_open() || !inFile.good())
@@ -396,10 +396,10 @@ bool Car::LoadCarFromFile(wxString fileName, std::ifstream *_inFile, int *fileVe
 	tires->Read(&inFile, header.fileVersion);
 
 	// If we're reading the options (done elsewhere), open the additional file
-	if (inFile != NULL)
+	if (pinFile != NULL)
 	{
-		_inFile->open(fileName.mb_str(), ios::in | ios::binary);
-		_inFile->seekg(inFile.tellg());
+		pinFile->open(fileName.mb_str(), ios::in | ios::binary);
+		pinFile->seekg(inFile.tellg());
 		*fileVersion = header.fileVersion;
 	}
 	else
@@ -482,7 +482,7 @@ Car::FileHeaderInfo Car::ReadFileHeader(std::ifstream *inFile) const
 //		None
 //
 //==========================================================================
-void Car::ComputeWheelCenters(void)
+void Car::ComputeWheelCenters()
 {
 	// Call the compute method with the correct tire diameters
 	suspension->ComputeWheelCenters(tires->rightFront->diameter, tires->leftFront->diameter,
@@ -506,7 +506,7 @@ void Car::ComputeWheelCenters(void)
 //		bool, true if the car is AWD, FWD, or has inboard front brakes
 //
 //==========================================================================
-bool Car::HasFrontHalfShafts(void) const
+bool Car::HasFrontHalfShafts() const
 {
 	// If the car is all wheel drive, front wheel drive, or has inboard front
 	// brakes, this car has front half shafts
@@ -535,7 +535,7 @@ bool Car::HasFrontHalfShafts(void) const
 //		bool, true if the car is AWD, RWD, or has inboard rear brakes
 //
 //==========================================================================
-bool Car::HasRearHalfShafts(void) const
+bool Car::HasRearHalfShafts() const
 {
 	// If the car is all wheel drive, front wheel drive, or has inboard front
 	// brakes, this car has front half shafts

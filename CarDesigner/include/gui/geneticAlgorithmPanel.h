@@ -14,6 +14,9 @@
 //				 the parameters, genes and goals of a genetic algorithm.
 // History:
 
+#ifndef GENETIC_ALGORITHM_PANEL_H_
+#define GENETIC_ALGORITHM_PANEL_H_
+
 // wxWidgets headers
 #include <wx/wx.h>
 
@@ -32,31 +35,24 @@ class GeneticOptimization;
 class GeneticAlgorithmPanel : public wxScrolledWindow
 {
 public:
-	// Constructor
-	GeneticAlgorithmPanel(MainFrame &_mainFrame, GeneticOptimization &_optimization);
-
-	// Destructor
+	GeneticAlgorithmPanel(MainFrame &mainFrame, GeneticOptimization &optimization);
 	~GeneticAlgorithmPanel();
 
-	// Updates the GA parameters
-	void UpdateInformation(void);
-
-	// Updates the status bar display
-	void IncrementStatusBars(void);
+	void UpdateInformation();
+	void IncrementStatusBars();
 
 private:
 	// The optimization object that we represent
 	GeneticOptimization &optimization;
 
-	// The main application object
 	MainFrame &mainFrame;
 
 	// Updates various parts of the panel's display
-	void UpdateSelectableCars(void);
-	void UpdateGeneList(void);
-	void UpdateGoalList(void);
+	void UpdateSelectableCars();
+	void UpdateGeneList();
+	void UpdateGoalList();
 
-	void ResetStatusBars(void);
+	void ResetStatusBars();
 
 	// Creates a string representing the input configuration
 	wxString GetInputString(const Kinematics::Inputs &inputs,
@@ -66,7 +62,7 @@ private:
 	bool UpdateGAParameters(const bool &showWarnings = true);
 
 	// Method for creating the controls
-	void CreateControls(void);
+	void CreateControls();
 
 	// Controls
 	wxButton *addGene;
@@ -91,7 +87,6 @@ private:
 	wxTextCtrl *crossoverPoint;
 	wxTextCtrl *mutationProbability;
 
-	// Event IDs
 	enum ButtonEventId
 	{
 		IdAddGene = wxID_HIGHEST + 1200,
@@ -123,9 +118,10 @@ private:
 	virtual void GoalGridDoubleClickedEvent(wxGridEvent &event);
 	virtual void TextBoxChangeEvent(wxCommandEvent &event);
 
-	void EditSelectedGene(void);
-	void EditSelectedGoal(void);
+	void EditSelectedGene();
+	void EditSelectedGoal();
 
-	// For the event table
 	DECLARE_EVENT_TABLE();
 };
+
+#endif// GENETIC_ALGORITHM_PANEL_H_

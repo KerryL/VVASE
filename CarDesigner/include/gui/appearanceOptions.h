@@ -14,8 +14,8 @@
 //				 render window.
 // History:
 
-#ifndef _APPEARANCE_OPTIONS_H_
-#define _APPEARANCE_OPTIONS_H_
+#ifndef APPEARANCE_OPTIONS_H_
+#define APPEARANCE_OPTIONS_H_
 
 // Standard C++ headers
 #include <iosfwd>// for forward declarations of fstream objects
@@ -33,10 +33,8 @@ public:
 	// Constructor
 	AppearanceOptions(MainFrame &mainFrame, GuiCar &owner);
 
-	// Displays a dialog for editing these options
-	void ShowAppearanceOptionsDialog(void);
+	void ShowAppearanceOptionsDialog();
 
-	// Actor colors
 	enum ObjectColor
 	{
 		ColorBackground,
@@ -102,7 +100,6 @@ public:
 	inline void SetVisibility(const ObjectVisibility& item, const bool& value) { visibilityOptions[item] = value; }
 	inline bool GetVisibility(const ObjectVisibility& item) const { return visibilityOptions[item]; }
 
-	// Actor sizes
 	enum ObjectSize
 	{
 		SizeOriginShaftDiameter,
@@ -158,7 +155,6 @@ public:
 	inline void SetResolution(const ObjectResolution& item, const int& value) { resolutionOptions[item] = value > 3 ? value : 3; }
 	inline int GetResolution(const ObjectResolution& item) const { return resolutionOptions[item]; }
 
-	// File I/O methods
 	void Write(std::ofstream *outFile);
 	void Read(std::ifstream *inFile, int fileVersion);
 
@@ -176,4 +172,4 @@ private:
 	unsigned int resolutionOptions[ResolutionCount];
 };
 
-#endif// _APPEARANCE_OPTIONS_H_
+#endif// APPEARANCE_OPTIONS_H_

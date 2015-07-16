@@ -32,7 +32,7 @@
 // Description:		Constructor for EditMassPanel class.
 //
 // Input Arguments:
-//		_parent		= EditPanel&, reference to this object's owner
+//		parent		= EditPanel&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
@@ -44,12 +44,11 @@
 //		None
 //
 //==========================================================================
-EditMassPanel::EditMassPanel(EditPanel &_parent, wxWindowID id,
-								 const wxPoint& pos, const wxSize& size) :
-								 wxScrolledWindow(&_parent, id, pos, size),
-								 parent(_parent)
+EditMassPanel::EditMassPanel(EditPanel &parent, wxWindowID id,
+	const wxPoint& pos, const wxSize& size)
+	: wxScrolledWindow(&parent, id, pos, size), parent(parent)
 {
-	// Create the controls
+
 	CreateControls();
 }
 
@@ -110,10 +109,9 @@ END_EVENT_TABLE();
 //		None
 //
 //==========================================================================
-void EditMassPanel::UpdateInformation(MassProperties *_currentMassProperties)
+void EditMassPanel::UpdateInformation(MassProperties *currentMassProperties)
 {
-	// Update the class member
-	currentMassProperties = _currentMassProperties;
+	this->currentMassProperties = currentMassProperties;
 
 	// Update the mass
 	mass->ChangeValue(UnitConverter::GetInstance().FormatNumber(

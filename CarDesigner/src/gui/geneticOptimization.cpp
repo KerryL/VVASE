@@ -38,8 +38,8 @@
 // Description:		Constructor for GeneticOptimization class.
 //
 // Input Arguments:
-//		_mainFrame			= MainFrame& reference to main application object
-//		_pathAndFileName	= wxString containing this objects location on the disk,
+//		mainFrame			= MainFrame& reference to main application object
+//		pathAndFileName	= wxString containing this objects location on the disk,
 //							  if we are to load from file
 //
 // Output Arguments:
@@ -49,28 +49,23 @@
 //		None
 //
 //==========================================================================
-GeneticOptimization::GeneticOptimization(MainFrame &_mainFrame, 
-										   wxString _pathAndFileName) : GuiObject(_mainFrame,
-										   _pathAndFileName)
+GeneticOptimization::GeneticOptimization(MainFrame &mainFrame,
+	wxString pathAndFileName) : GuiObject(mainFrame, pathAndFileName)
 {
-	// Create the genetic algorithm
-	geneticAlgorithm = new GAObject(_mainFrame.GetJobQueue(), *this);
+	geneticAlgorithm = new GAObject(mainFrame.GetJobQueue(), *this);
 
 	// Get an index for this item and add it to the list in the mainFrame
 	// MUST be included BEFORE the naming, which must come BEFORE the call to Initialize
 	index = mainFrame.AddObjectToList(this);
 
-	// Create the name based on the index
 	name.Printf("Unsaved Optimization %i", index + 1);
 
 	// Create the panel containing the algorithm's controls
-	gaPanel = new GeneticAlgorithmPanel(_mainFrame, *this);
+	gaPanel = new GeneticAlgorithmPanel(mainFrame, *this);
 	notebookTab = reinterpret_cast<wxWindow*>(gaPanel);
 
-	// Initialize the car to optimize
 	carToOptimize = NULL;
 
-	// Complete initialization of this object
 	Initialize();
 }
 
@@ -113,7 +108,7 @@ GeneticOptimization::~GeneticOptimization()
 //		None
 //
 //==========================================================================
-void GeneticOptimization::BeginOptimization(void)
+void GeneticOptimization::BeginOptimization()
 {
 	// Make sure we have a car to optimize and genes and goals
 	assert(carToOptimize);
@@ -144,7 +139,7 @@ void GeneticOptimization::BeginOptimization(void)
 //		None
 //
 //==========================================================================
-void GeneticOptimization::HaltOptimization(void)
+void GeneticOptimization::HaltOptimization()
 {
 }
 
@@ -164,7 +159,7 @@ void GeneticOptimization::HaltOptimization(void)
 //		None
 //
 //==========================================================================
-bool GeneticOptimization::PerformLoadFromFile(void)
+bool GeneticOptimization::PerformLoadFromFile()
 {
 	// Perform the load
 	bool loadSuccessful = geneticAlgorithm->Read(pathAndFileName);
@@ -188,7 +183,7 @@ bool GeneticOptimization::PerformLoadFromFile(void)
 //		None
 //
 //==========================================================================
-bool GeneticOptimization::PerformSaveToFile(void)
+bool GeneticOptimization::PerformSaveToFile()
 {
 	return geneticAlgorithm->Write(pathAndFileName);
 }
@@ -209,7 +204,7 @@ bool GeneticOptimization::PerformSaveToFile(void)
 //		None
 //
 //==========================================================================
-void GeneticOptimization::MarkAnalysisComplete(void)
+void GeneticOptimization::MarkAnalysisComplete()
 {
 	// Tell the algorithm that we've completed an analysis
 	geneticAlgorithm->MarkAnalysisComplete();
@@ -235,7 +230,7 @@ void GeneticOptimization::MarkAnalysisComplete(void)
 //		None
 //
 //==========================================================================
-int GeneticOptimization::GetIconHandle(void) const
+int GeneticOptimization::GetIconHandle() const
 {
 	// Return the proper icon handle
 	return systemsTree->GetIconHandle(MainTree::OptimizationIcon);
@@ -258,7 +253,7 @@ int GeneticOptimization::GetIconHandle(void) const
 //		None
 //
 //==========================================================================
-void GeneticOptimization::CompleteOptimization(void)
+void GeneticOptimization::CompleteOptimization()
 {
 	// Set the text on the start/stop optimization button back to "Start GA"
 	// FIXME!!!
@@ -287,13 +282,10 @@ void GeneticOptimization::CompleteOptimization(void)
 //		None
 //
 //==========================================================================
-void GeneticOptimization::SetCarToOptimize(GuiCar *_carToOptimize)
+void GeneticOptimization::SetCarToOptimize(GuiCar *carToOptimize)
 {
-	// Make sure the car exists
-	assert(_carToOptimize);
-
-	// Do the assignment
-	carToOptimize = _carToOptimize;
+	assert(carToOptimize);// TODO:  Pass reference instead?
+	this->carToOptimize = carToOptimize;
 }
 
 //==========================================================================
@@ -312,7 +304,7 @@ void GeneticOptimization::SetCarToOptimize(GuiCar *_carToOptimize)
 //		None
 //
 //==========================================================================
-void GeneticOptimization::UpdateDisplay(void)
+void GeneticOptimization::UpdateDisplay()
 {
 	// Update the display
 	gaPanel->UpdateInformation();
@@ -335,7 +327,7 @@ void GeneticOptimization::UpdateDisplay(void)
 //		None
 //
 //==========================================================================
-void GeneticOptimization::UpdateData(void)
+void GeneticOptimization::UpdateData()
 {
 	// This is called at various points during the load process due to different
 	// GUI screens being created and their requests for data.  This can result in

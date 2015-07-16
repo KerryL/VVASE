@@ -14,8 +14,8 @@
 //				 when the user drags-and-drops them onto the main window.
 // History:
 
-#ifndef _DROP_TARGET_H_
-#define _DROP_TARGET_H_
+#ifndef DROP_TARGET_H_
+#define DROP_TARGET_H_
 
 // wxWidgets headers
 #include <wx/dnd.h>
@@ -27,18 +27,14 @@ class MainFrame;
 class DropTarget : public wxFileDropTarget
 {
 public:
-	// Constructor
-	DropTarget(MainFrame &_mainFrame);
-
-	// Destructor
+	DropTarget(MainFrame &mainFrame);
 	~DropTarget();
 
 private:
-	// Reference to main frame
 	MainFrame &mainFrame;
 
 	// Required override of virtual OnDropFiles handler
 	virtual bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString &filenames);
 };
 
-#endif//  _DROP_TARGET_H_
+#endif// DROP_TARGET_H_

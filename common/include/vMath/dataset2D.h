@@ -13,8 +13,8 @@
 // Description:  Container for x and y-data series for plotting.
 // History:
 
-#ifndef _DATASET_H_
-#define _DATASET_H_
+#ifndef DATASET_H_
+#define DATASET_H_
 
 // Standard C++ headers
 #include <cassert>
@@ -25,24 +25,22 @@ class wxString;
 class Dataset2D
 {
 public:
-	// Constructors
 	Dataset2D();
 	Dataset2D(const Dataset2D& target);
-	Dataset2D(const unsigned int &_numberOfPoints);
+	Dataset2D(const unsigned int &numberOfPoints);
 
-	// Destructor
 	~Dataset2D();
 
 	// For exporting the data to a comma or tab delimited text file
 	void ExportDataToFile(wxString pathAndFileName) const;
 
-	void Resize(const unsigned int &_numberOfPoints);
+	void Resize(const unsigned int &numberOfPoints);
 
-	unsigned int GetNumberOfPoints(void) const { return numberOfPoints; };
-	double *GetXPointer(void) { return xData; };
-	double *GetYPointer(void) { return yData; };
-	double GetXData(const unsigned int &i) const { assert(i < numberOfPoints); return xData[i]; };
-	double GetYData(const unsigned int &i) const { assert(i < numberOfPoints); return yData[i]; };
+	unsigned int GetNumberOfPoints() const { return numberOfPoints; }
+	double *GetXPointer() { return xData; }
+	double *GetYPointer() { return yData; }
+	double GetXData(const unsigned int &i) const { assert(i < numberOfPoints); return xData[i]; }
+	double GetYData(const unsigned int &i) const { assert(i < numberOfPoints); return yData[i]; }
 
 	Dataset2D& MultiplyXData(const double &target);
 	bool GetYAt(double &x) const;
@@ -71,11 +69,9 @@ public:
 	const Dataset2D operator/(const double &target) const;
 
 private:
-	// The number of points contained within this object
 	unsigned int numberOfPoints;
 
-	// The data
 	double *xData, *yData;
 };
 
-#endif// _DATASET_H_
+#endif// DATASET_H_

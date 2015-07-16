@@ -15,8 +15,8 @@
 //	4/25/2009	- Changed Update() to include color argument in the form of wxColor, K. Loux.
 //	5/17/2009	- Removed VTK dependencies, K. Loux.
 
-#ifndef _SWAYBAR3D_H_
-#define _SWAYBAR3D_H_
+#ifndef SWAYBAR3D_H_
+#define SWAYBAR3D_H_
 
 // VVASE headers
 #include "vCar/suspension.h"
@@ -29,10 +29,7 @@ class Cylinder;
 class Swaybar3D
 {
 public:
-	// Constructor
-	Swaybar3D(RenderWindow &_renderer);
-
-	// Destructor
+	Swaybar3D(RenderWindow &renderer);
 	~Swaybar3D();
 
 	// Updates the 3D representation of the sway bar on the screen
@@ -45,12 +42,10 @@ public:
 	bool ContainsThisActor(const Primitive *actor);
 
 private:
-	// The two torque arms
 	Cylinder *torqueArm1;
 	Cylinder *torqueArm2;
 
-	// The torsion member
 	Cylinder *torsionMember;
 };
 
-#endif// _SWAYBAR3D_H_
+#endif// SWAYBAR3D_H_

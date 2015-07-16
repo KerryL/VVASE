@@ -30,12 +30,12 @@
 //
 // Input Arguments:
 //		parent				= wxWindow&, reference to the main application window
-//		_output				= const KinematicOutputs::OutputsComplete&
-//		_desiredValue		= const double&
-//		_expectedDeviation	= const double&
-//		_importance			= const double&
-//		_beforeInputs		= const Kinematics::Inputs&
-//		_afterInputs		= const Kinematics::Inputs&
+//		output				= const KinematicOutputs::OutputsComplete&
+//		desiredValue		= const double&
+//		expectedDeviation	= const double&
+//		importance			= const double&
+//		beforeInputs		= const Kinematics::Inputs&
+//		afterInputs			= const Kinematics::Inputs&
 //		id					= wxWindowID
 //		position			= const wxPoint&
 //		style				= long
@@ -47,18 +47,18 @@
 //		None
 //
 //==========================================================================
-GAGoalDialog::GAGoalDialog(wxWindow *parent, const KinematicOutputs::OutputsComplete &_output,
-							   const double &_desiredValue, const double &_expectedDeviation, const double &_importance,
-							   const Kinematics::Inputs &_beforeInputs, const Kinematics::Inputs &_afterInputs,
-							   wxWindowID id, const wxPoint &position, long style) :
-							   wxDialog(parent, id, _T("Genetic Algorithm Goal"), position, wxDefaultSize, style)
+GAGoalDialog::GAGoalDialog(wxWindow *parent, const KinematicOutputs::OutputsComplete &output,
+	const double &desiredValue, const double &expectedDeviation,
+	const double &importance, const Kinematics::Inputs &beforeInputs,
+	const Kinematics::Inputs &afterInputs, wxWindowID id, const wxPoint &position,
+	long style) : wxDialog(parent, id, _T("Genetic Algorithm Goal"), position, wxDefaultSize, style)
 {
-	output = _output;
-	desiredValue = _desiredValue;
-	expectedDeviation = _expectedDeviation;
-	importance = _importance;
-	beforeInputs = _beforeInputs;
-	afterInputs = _afterInputs;
+	this->output = output;
+	this->desiredValue = desiredValue;
+	this->expectedDeviation = expectedDeviation;
+	this->importance = importance;
+	this->beforeInputs = beforeInputs;
+	this->afterInputs = afterInputs;
 
 	SetExtraStyle(wxWS_EX_VALIDATE_RECURSIVELY);
 	CreateControls();
@@ -125,7 +125,7 @@ END_EVENT_TABLE()
 //		None
 //
 //==========================================================================
-void GAGoalDialog::CreateControls(void)
+void GAGoalDialog::CreateControls()
 {
 	// Top-level sizer
 	wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
@@ -471,7 +471,7 @@ void GAGoalDialog::OnOutputChangeEvent(wxCommandEvent &event)
 //		None
 //
 //==========================================================================
-void GAGoalDialog::FormatDialogDifference(void)
+void GAGoalDialog::FormatDialogDifference()
 {
 	// Hide or display the second set of KINEMATICS::INPUTS controls
 	if (difference->IsChecked())

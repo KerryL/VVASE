@@ -26,7 +26,7 @@
 // Description:		Constructor for the Driver class.
 //
 // Input Arguments:
-//		_debugger	= const Debugger& reference to applications debug printing utility
+//		debugger	= const Debugger& reference to applications debug printing utility
 //
 // Output Arguments:
 //		None
@@ -35,7 +35,7 @@
 //		None
 //
 //==========================================================================
-Driver::Driver(const Debugger &_debugger) : debugger(_debugger)
+Driver::Driver(const Debugger &debugger) : debugger(debugger)
 {
 }
 
@@ -96,7 +96,7 @@ Driver::~Driver()
 //		None
 //
 //==========================================================================
-void Driver::CalculateInputs(void)
+void Driver::CalculateInputs()
 {
 }
 

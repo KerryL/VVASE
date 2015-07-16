@@ -13,8 +13,8 @@
 // Description:  First order low-pass digital filter.
 // History:
 
-#ifndef _LOW_PASS_ORDER1_H_
-#define _LOW_PASS_ORDER1_H_
+#ifndef LOW_PASS_ORDER1_H_
+#define LOW_PASS_ORDER1_H_
 
 // Local headers
 #include "vMath/signals/filters/filterBase.h"
@@ -32,10 +32,10 @@ public:
 	virtual void Initialize(const double &initialValue);
 
 	// Main method for filtering incoming data
-	virtual double Apply(const double &_u);
+	virtual double Apply(const double &in);
 
 	// Operators
-	LowPassFirstOrderFilter& operator = (const LowPassFirstOrderFilter &f);
+	LowPassFirstOrderFilter& operator=(const LowPassFirstOrderFilter &f);
 };
 
-#endif// _LOW_PASS_ORDER1_H_
+#endif// LOW_PASS_ORDER1_H_

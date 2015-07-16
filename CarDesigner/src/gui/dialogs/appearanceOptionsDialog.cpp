@@ -50,24 +50,18 @@
 //
 //==========================================================================
 AppearanceOptionsDialog::AppearanceOptionsDialog(MainFrame &mainFrame,
-													 AppearanceOptions *_options,
-													 wxWindowID id, const wxPoint &position,
-													 long style) : wxDialog(&mainFrame, id,
-													 _T("Appearance Options"), position,
-													 wxDefaultSize, style)
+	AppearanceOptions *options, wxWindowID id, const wxPoint &position,
+	long style) : wxDialog(&mainFrame, id, _T("Appearance Options"), position,
+	wxDefaultSize, style)
 {
-	// Assign the pointer to the options object
-	options = _options;
+	this->options = options;
 
 	// Copy the colors into our local color array
 	int i;
 	for (i = 0; i < AppearanceOptions::ColorCount; i++)
 		colorOptions[i] = options->GetColor((AppearanceOptions::ObjectColor)i);
 
-	// Create the controls
 	CreateControls();
-
-	// Center the dialog on the screen
 	Center();
 }
 
@@ -110,7 +104,7 @@ END_EVENT_TABLE();
 //		None
 //
 //==========================================================================
-void AppearanceOptionsDialog::CreateControls(void)
+void AppearanceOptionsDialog::CreateControls()
 {
 	wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
 

@@ -31,7 +31,7 @@
 //					process necessary to add the object to the scene.
 //
 // Input Arguments:
-//		_renderer	= &RenderWindow, pointer to rendering object
+//		renderer	= &RenderWindow, pointer to rendering object
 //
 // Output Arguments:
 //		None
@@ -40,10 +40,9 @@
 //		None
 //
 //==========================================================================
-Triangle3D::Triangle3D(RenderWindow &_renderer)
+Triangle3D::Triangle3D(RenderWindow &renderer)
 {
-	// Create the objects
-	triangle = new Triangle(_renderer);
+	triangle = new Triangle(renderer);
 }
 
 //==========================================================================

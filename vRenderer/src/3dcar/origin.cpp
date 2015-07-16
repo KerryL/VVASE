@@ -37,12 +37,11 @@
 //		None
 //
 //==========================================================================
-Origin::Origin(RenderWindow &_renderer)
+Origin::Origin(RenderWindow &renderer)
 {
-	// Create the objects
-	xDirection = new Vector3D(_renderer);
-	yDirection = new Vector3D(_renderer);
-	zDirection = new Vector3D(_renderer);
+	xDirection = new Vector3D(renderer);
+	yDirection = new Vector3D(renderer);
+	zDirection = new Vector3D(renderer);
 }
 
 //==========================================================================

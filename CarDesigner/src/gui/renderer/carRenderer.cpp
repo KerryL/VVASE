@@ -65,8 +65,8 @@
 //					renderer and sets up the canvas.
 //
 // Input Arguments:
-//		_mainFrame	= MainFrame& reference to the owner of this object
-//		_car		= GuiCar& reference to the car that we are to render
+//		mainFrame	= MainFrame& reference to the owner of this object
+//		car			= GuiCar& reference to the car that we are to render
 //		args		= int[] NOTE: Under GTK, must contain WX_GL_DOUBLEBUFFER at minimum
 //
 // Output Arguments:
@@ -76,14 +76,12 @@
 //		None
 //
 //==========================================================================
-CarRenderer::CarRenderer(MainFrame &_mainFrame, GuiCar &_car, int args[])
-						   : RenderWindow(_mainFrame, wxID_ANY, args, wxDefaultPosition,
-						   wxDefaultSize, wxWANTS_CHARS | wxNO_FULL_REPAINT_ON_RESIZE),
-						   mainFrame(_mainFrame),
-						   appearanceOptions(_car.GetAppearanceOptions()),
-						   displayCar(_car.GetWorkingCar()), referenceCar(_car.GetOriginalCar())
+CarRenderer::CarRenderer(MainFrame &mainFrame, GuiCar &car, int args[])
+	: RenderWindow(mainFrame, wxID_ANY, args, wxDefaultPosition, wxDefaultSize,
+	wxWANTS_CHARS | wxNO_FULL_REPAINT_ON_RESIZE), mainFrame(mainFrame),
+	appearanceOptions(car.GetAppearanceOptions()), displayCar(car.GetWorkingCar()),
+	referenceCar(car.GetOriginalCar())
 {
-	// Create the objects necessary to render the scene
 	CreateActors();
 
 	// Initialize the helper orb to NOT active
@@ -253,7 +251,7 @@ void CarRenderer::UpdateDisplay(const KinematicOutputs &outputs)
 //		None
 //
 //==========================================================================
-void CarRenderer::UpdateCarDisplay(void)
+void CarRenderer::UpdateCarDisplay()
 {
 	// For drawing the tire
 	Vector targetNormal;
@@ -913,7 +911,7 @@ void CarRenderer::UpdateKinematicsDisplay(KinematicOutputs outputs)
 //		None
 //
 //==========================================================================
-void CarRenderer::CreateActors(void)
+void CarRenderer::CreateActors()
 {
 	// Create the origin and ground plane
 	origin = new Origin(*this);

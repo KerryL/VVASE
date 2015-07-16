@@ -17,8 +17,8 @@
 //				  removed PURPOSE enumeration, K. Loux.
 //	5/17/2009	- Removed VTK dependencies, K. Loux.
 
-#ifndef _LINK_H_
-#define _LINK_H_
+#ifndef LINK_H_
+#define LINK_H_
 
 // VVASE forward declarations
 class Vector;
@@ -29,10 +29,7 @@ class Cylinder;
 class Link
 {
 public:
-	// Constructor
-	Link(RenderWindow &_renderer);
-
-	// Destructor
+	Link(RenderWindow &renderer);
 	~Link();
 
 	// Update the position of the link in the render window
@@ -43,12 +40,10 @@ public:
 	bool ContainsThisActor(const Primitive *actor);
 
 private:
-	// The main body actor
 	Cylinder *member;
 
-	// The end points
 	Sphere *endPoint1;
 	Sphere *endPoint2;
 };
 
-#endif// _LINK_H_
+#endif// LINK_H_

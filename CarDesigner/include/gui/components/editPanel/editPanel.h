@@ -13,8 +13,8 @@
 // Description:  Contains the class declaration for the EDIT_PANEL class.
 // History:
 
-#ifndef _EDIT_PANEL_H_
-#define _EDIT_PANEL_H_
+#ifndef EDIT_PANEL_H_
+#define EDIT_PANEL_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -43,46 +43,30 @@ class EditIterationNotebook;
 class EditPanel : public wxPanel
 {
 public:
-	// Constructor
-	EditPanel(MainFrame &_mainFrame, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
+	EditPanel(MainFrame &mainFrame, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
 		const wxSize& size = wxDefaultSize);
-
-	// Destructor
 	~EditPanel();
 
 	// Updates the information on the panel
-	void UpdateInformation(GuiObject *_currentObject);
-	void UpdateInformation(void);
+	void UpdateInformation(GuiObject *currentObject);
+	void UpdateInformation();
 
-	// Retrieves this object's parent
-	inline MainFrame &GetMainFrame(void) { return mainFrame; };
-
-	// Retrieves the current object
-	inline GuiObject *GetCurrentObject(void) { return currentObject; };
-
-	// Accessor for the current car's mutex object
-	wxMutex *GetCurrentMutex(void) { return carMutex; };
+	inline MainFrame &GetMainFrame() { return mainFrame; }
+	inline GuiObject *GetCurrentObject() { return currentObject; }
+	wxMutex *GetCurrentMutex() { return carMutex; }
 
 private:
-	// The parent window
 	MainFrame &mainFrame;
-
-	// The systems tree
 	MainTree *systemsTree;
 
-	// The object with which we are currently associated
 	GuiObject *currentObject;
 
-	// Creates the controls and positions everything within the panel
 	void CreateControls(bool ignoreSystemsTree);
 
-	// Deletes all of the controls
-	void DeleteAllControls(void);
+	void DeleteAllControls();
 
-	// The type of object this panel is currently representing
 	GuiObject::ItemType currentType;
 
-	// Tree item ID for the current selection
 	wxTreeItemId currentTreeID;
 
 	// The various edit panels we need to display
@@ -99,11 +83,9 @@ private:
 	// ITERATION
 	EditIterationNotebook		*editIteration;
 
-	// The sizer containing the panels
 	wxBoxSizer *sizer;
 
-	// Syncronization object for modifying cars
 	wxMutex *carMutex;
 };
 
-#endif// _EDIT_PANEL_H_
+#endif// EDIT_PANEL_H_

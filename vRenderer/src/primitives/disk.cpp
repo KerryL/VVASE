@@ -37,9 +37,8 @@
 //		None
 //
 //==========================================================================
-Disk::Disk(RenderWindow &_renderWindow) : Primitive(_renderWindow)
+Disk::Disk(RenderWindow &renderWindow) : Primitive(renderWindow)
 {
-	// Initialize private data
 	outerRadius = 0.0;
 	innerRadius = 0.0;
 	center.Set(0.0, 0.0, 0.0);
@@ -84,9 +83,8 @@ Disk::~Disk()
 //		None
 //
 //==========================================================================
-void Disk::GenerateGeometry(void)
+void Disk::GenerateGeometry()
 {
-	// Resolution must be at least 3
 	if (resolution < 3)
 		resolution = 3;
 
@@ -97,7 +95,6 @@ void Disk::GenerateGeometry(void)
 	Vector axisOfRotation = referenceDirection.Cross(normal);
 	double angle = acos(normal * referenceDirection);// [rad]
 
-	// Push the current matrix
 	glPushMatrix();
 
 		// Translate the current matrix
@@ -134,10 +131,8 @@ void Disk::GenerateGeometry(void)
 			glVertex3d(insidePoint.x, insidePoint.y, insidePoint.z);
 		}
 
-		// Complete the triangle strip
 		glEnd();
 
-	// Pop the matrix
 	glPopMatrix();
 }
 
@@ -158,13 +153,11 @@ void Disk::GenerateGeometry(void)
 //		bool, true for OK to draw, false otherwise
 //
 //==========================================================================
-bool Disk::HasValidParameters(void)
+bool Disk::HasValidParameters()
 {
-	// Disks must have a positive
 	if (outerRadius > 0.0 && !VVASEMath::IsZero(normal.Length()))
 		return true;
 
-	// Otherwise return false
 	return false;
 }
 
@@ -175,7 +168,7 @@ bool Disk::HasValidParameters(void)
 // Description:		Sets the number of faces use to approximate the disk.
 //
 // Input Arguments:
-//		_resolution	= const int&
+//		resolution	= const int&
 //
 // Output Arguments:
 //		None
@@ -184,12 +177,9 @@ bool Disk::HasValidParameters(void)
 //		None
 //
 //==========================================================================
-void Disk::SetResolution(const int &_resolution)
+void Disk::SetResolution(const int &resolution)
 {
-	// Set the resolution to the argument
-	resolution = _resolution;
-	
-	// Reset the modified flag
+	this->resolution = resolution;
 	modified = true;
 }
 
@@ -200,7 +190,7 @@ void Disk::SetResolution(const int &_resolution)
 // Description:		Sets the outer radius of the disk.
 //
 // Input Arguments:
-//		_outerRadius	= const double&
+//		outerRadius	= const double&
 //
 // Output Arguments:
 //		None
@@ -209,12 +199,9 @@ void Disk::SetResolution(const int &_resolution)
 //		None
 //
 //==========================================================================
-void Disk::SetOuterRadius(const double &_outerRadius)
+void Disk::SetOuterRadius(const double &outerRadius)
 {
-	// Set the outer radius to the argument
-	outerRadius = _outerRadius;
-	
-	// Reset the modified flag
+	this->outerRadius = outerRadius;
 	modified = true;
 }
 
@@ -225,7 +212,7 @@ void Disk::SetOuterRadius(const double &_outerRadius)
 // Description:		Sets the inner radius of the disk.
 //
 // Input Arguments:
-//		_innerRadius	= const double&
+//		innerRadius	= const double&
 //
 // Output Arguments:
 //		None
@@ -234,12 +221,9 @@ void Disk::SetOuterRadius(const double &_outerRadius)
 //		None
 //
 //==========================================================================
-void Disk::SetInnerRadius(const double &_innerRadius)
+void Disk::SetInnerRadius(const double &innerRadius)
 {
-	// Set the inner radius to the argument
-	innerRadius = _innerRadius;
-	
-	// Reset the modified flag
+	this->innerRadius = innerRadius;
 	modified = true;
 }
 
@@ -250,7 +234,7 @@ void Disk::SetInnerRadius(const double &_innerRadius)
 // Description:		Sets the location of the center of the disk.
 //
 // Input Arguments:
-//		_center	= const Vector&
+//		center	= const Vector&
 //
 // Output Arguments:
 //		None
@@ -259,12 +243,9 @@ void Disk::SetInnerRadius(const double &_innerRadius)
 //		None
 //
 //==========================================================================
-void Disk::SetCenter(const Vector &_center)
+void Disk::SetCenter(const Vector &center)
 {
-	// Set the center point to the argument
-	center = _center;
-	
-	// Reset the modified flag
+	this->center = center;
 	modified = true;
 }
 
@@ -275,7 +256,7 @@ void Disk::SetCenter(const Vector &_center)
 // Description:		Sets the disk's normal direction.
 //
 // Input Arguments:
-//		_normal	= const Vector&
+//		normal	= const Vector&
 //
 // Output Arguments:
 //		None
@@ -284,11 +265,8 @@ void Disk::SetCenter(const Vector &_center)
 //		None
 //
 //==========================================================================
-void Disk::SetNormal(const Vector &_normal)
+void Disk::SetNormal(const Vector &normal)
 {
-	// Set the normal vector to the argument
-	normal = _normal.Normalize();
-	
-	// Reset the modified flag
+	this->normal = normal.Normalize();
 	modified = true;
 }

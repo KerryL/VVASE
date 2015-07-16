@@ -13,8 +13,8 @@
 // Description:  Contains the class declaration for the OutputPanel class.
 // History:
 
-#ifndef _OUTPUT_PANEL_H_
-#define _OUTPUT_PANEL_H_
+#ifndef OUTPUT_PANEL_H_
+#define OUTPUT_PANEL_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -29,32 +29,24 @@ class SuperGrid;
 class OutputPanel : public wxPanel
 {
 public:
-	// Constructor
-	OutputPanel(MainFrame &_mainFrame, wxWindowID id = wxID_ANY, const wxPoint &pos = wxDefaultPosition,
+	OutputPanel(MainFrame &mainFrame, wxWindowID id = wxID_ANY, const wxPoint &pos = wxDefaultPosition,
 		const wxSize &size = wxDefaultSize);
-
-	// Destructor
 	~OutputPanel();
 
-	// Updates the information on the panel
 	void UpdateInformation(KinematicOutputs outputs, Car &car, int index,
 		wxString name);
-	void FinishUpdate(int _numberOfDataColumns);
+	void FinishUpdate(int numberOfDataColumns);
 
 	// For highlighting the column that corresponds to the active car
-	void HighlightColumn(wxString _name);
+	void HighlightColumn(wxString name);
 
 private:
-	// Creates the controls and positions everything within the panel
-	void CreateControls(void);
+	void CreateControls();
 
-	// Pointer to the main application window
 	MainFrame &mainFrame;
 
-	// The number of data columns we currently have
 	int numberOfDataColumns;
 
-	// The event IDs
 	enum EventId
 	{
 		IdOutputGrid = wxID_HIGHEST + 1100
@@ -64,11 +56,10 @@ private:
 	void ColumnResizeEvent(wxGridSizeEvent &event);
 	// End event handlers-------------------------------------------------
 
-	// The text-entry control
 	SuperGrid *outputsList;
 
 protected:
 	//DECLARE_EVENT_TABLE()
 };
 
-#endif// _OUTPUT_PANEL_H_
+#endif// OUTPUT_PANEL_H_

@@ -18,8 +18,8 @@
 //				  Debugger class, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
-#ifndef _DRIVETRAIN_H_
-#define _DRIVETRAIN_H_
+#ifndef DRIVETRAIN_H_
+#define DRIVETRAIN_H_
 
 // Standard C++ headers
 #include <iosfwd>// forward declarations of fstream objects
@@ -33,19 +33,15 @@ class Differential;
 class Drivetrain
 {
 public:
-	// Constructor
 	Drivetrain();
 	Drivetrain(const Drivetrain &drivetrain);
-
-	// Destructor
 	~Drivetrain();
 
 	// File read/write functions
 	void Write(std::ofstream *outFile) const;
 	void Read(std::ifstream *inFile, int fileVersion);
 
-	// The selected gear
-	short Gear;
+	short gear;
 
 	// Retreives the outputs for this class
 	double OutputTorque(const double &inputTorque) const;	// [in-lbf]
@@ -61,7 +57,7 @@ public:
 		NumberOfDriveTypes
 	};
 
-	static wxString GetDriveWheelsName(const DriveWheels &_driveWheels);
+	static wxString GetDriveWheelsName(const DriveWheels &driveWheels);
 
 	// The value describing the wheels driven by this drivetrain
 	DriveWheels driveType;
@@ -69,14 +65,11 @@ public:
 	// Sets the number of gears available with this drivetrain
 	void SetNumberOfGears(const short &numGears);
 
-	// Operators
-	Drivetrain& operator = (const Drivetrain &drivetrain);
+	Drivetrain& operator=(const Drivetrain &drivetrain);
 
 private:
-	// The differential for this drivetrain
 	Differential *differential;
 
-	// The number of gears available
 	short numberOfGears;
 
 	// The inertia for the rotating components in the drivetrain
@@ -89,4 +82,4 @@ private:
 	// Clutch stuff in here, too?
 };
 
-#endif// _DRIVETRAIN_H_
+#endif// DRIVETRAIN_H_

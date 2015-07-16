@@ -15,8 +15,8 @@
 //	1/28/2009	- Changed structure of GUI components so context menu creation for all
 //				  objects is handled by the MAIN_FRAME class.
 
-#ifndef _MAIN_NOTEBOOK_H_
-#define _MAIN_NOTEBOOK_H_
+#ifndef MAIN_NOTEBOOK_H_
+#define MAIN_NOTEBOOK_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -28,15 +28,11 @@ class MainFrame;
 class MainNotebook : public wxAuiNotebook
 {
 public:
-	// Constructor
-	MainNotebook(MainFrame &_parent, wxWindowID id, const wxPoint& pos,
+	MainNotebook(MainFrame &parent, wxWindowID id, const wxPoint& pos,
 		const wxSize& size, long style);
-
-	// Destructor
 	~MainNotebook();
 
 private:
-	// The frame that owns this notebook
 	MainFrame &mainFrame;
 
 	// Event handlers-----------------------------------------------------
@@ -46,8 +42,7 @@ private:
 	void NotebookTabRightClick_Event(wxAuiNotebookEvent &event);
 	// End event handlers-------------------------------------------------
 
-	// Assigns event handlers for specified events
 	DECLARE_EVENT_TABLE();
 };
 
-#endif// _MAIN_NOTEBOOK_H_
+#endif// MAIN_NOTEBOOK_H_

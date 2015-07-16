@@ -13,8 +13,8 @@
 // Description:  Contains the class declaration for the EDIT_ENGINE_PANEL class.
 // History:
 
-#ifndef _EDIT_ENGINE_PANEL_H_
-#define _EDIT_ENGINE_PANEL_H_
+#ifndef EDIT_ENGINE_PANEL_H_
+#define EDIT_ENGINE_PANEL_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -26,19 +26,14 @@ class Debugger;
 class EditEnginePanel : public wxPanel
 {
 public:
-	// Constructor
-	EditEnginePanel(EditPanel* _parent, wxWindowID id, const wxPoint& pos,
-		const wxSize& size, const Debugger &_debugger);
-
-	// Destructor
+	EditEnginePanel(EditPanel* parent, wxWindowID id, const wxPoint& pos,
+		const wxSize& size, const Debugger &debugger);
 	~EditEnginePanel();
 
 private:
-	// Debugger message printing utility
 	const Debugger &debugger;
 
-	// Creates the controls and positions everything within the panel
-	void CreateControls(void);
+	void CreateControls();
 };
 
-#endif// _EDIT_ENGINE_PANEL_H_
+#endif// EDIT_ENGINE_PANEL_H_

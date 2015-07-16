@@ -37,7 +37,7 @@
 // Description:		Constructor for PlotObject class.
 //
 // Input Arguments:
-//		_renderer	= PlotRenderer& reference to the object that handles the
+//		renderer	= PlotRenderer& reference to the object that handles the
 //					  drawing operations
 //
 // Output Arguments:
@@ -47,7 +47,7 @@
 //		None
 //
 //==========================================================================
-PlotObject::PlotObject(PlotRenderer &_renderer) : renderer(_renderer)
+PlotObject::PlotObject(PlotRenderer &renderer) : renderer(renderer)
 {
 	// Create the actors
 	axisTop = new Axis(renderer);
@@ -162,7 +162,7 @@ PlotObject::~PlotObject()
 //		None
 //
 //==========================================================================
-void PlotObject::Update(void)
+void PlotObject::Update()
 {
 	// Format the plot
 	FormatPlot();
@@ -254,7 +254,7 @@ void PlotObject::SetRightYGrid(const bool &gridOn)
 //		None
 //
 //==========================================================================
-void PlotObject::RemoveExistingPlots(void)
+void PlotObject::RemoveExistingPlots()
 {
 	// Remove all existing plots from the list
 	while (plotList.size() > 0)
@@ -330,7 +330,7 @@ void PlotObject::AddCurve(const Dataset2D &data)
 //		None
 //
 //==========================================================================
-void PlotObject::FormatPlot(void)
+void PlotObject::FormatPlot()
 {
 	// Perform the basic stuff first - we do this whether or not we have data to display
 	Axis::TickStyle tickStyle = Axis::TickStyleInside;
@@ -721,7 +721,7 @@ double PlotObject::AutoScaleAxis(double &min, double &max, int maxTicks, const b
 // Description:		Sets the lower X limit.
 //
 // Input Arguments:
-//		_xMin	= const double& describing desired minimum X limit
+//		xMin	= const double& describing desired minimum X limit
 //
 // Output Arguments:
 //		None
@@ -730,31 +730,31 @@ double PlotObject::AutoScaleAxis(double &min, double &max, int maxTicks, const b
 //		None
 //
 //==========================================================================
-void PlotObject::SetXMin(const double &_xMin)
+void PlotObject::SetXMin(const double &xMin)
 {
 	// Make sure the limit is within the bounds of the original
-	/*if (_xMin <= xMinOriginal)
+	/*if (xMin <= xMinOriginal)
 	{
 		xMin = xMinOriginal;
 
 		// If the opposite limit is also at the original value, enable auto-scaling again
-		if (xMax == xMaxOriginal)
+		if (this->xMax == xMaxOriginal)
 			autoScaleX = true;
 
 		return;
 	}
 	
 	// Make the assignment and disable auto-scaling
-	xMin = _xMin;
+	this->xMin = xMin;
 	autoScaleX = false;*/
 
 	// If the both limits are at the original value, enable auto-scaling again
-	if (xMax == xMaxOriginal && _xMin == xMinOriginal)
+	if (xMax == xMaxOriginal && xMin == xMinOriginal)
 		autoScaleX = true;
 	else
 	{
 		// Make the assignment and disable auto-scaling
-		xMin = _xMin;
+		this->xMin = xMin;
 		autoScaleX = false;
 	}
 }
@@ -766,7 +766,7 @@ void PlotObject::SetXMin(const double &_xMin)
 // Description:		Sets the upper X limit.
 //
 // Input Arguments:
-//		_xMax	= const double& describing desired maximum X limit
+//		xMax	= const double& describing desired maximum X limit
 //
 // Output Arguments:
 //		None
@@ -775,7 +775,7 @@ void PlotObject::SetXMin(const double &_xMin)
 //		None
 //
 //==========================================================================
-void PlotObject::SetXMax(const double &_xMax)
+void PlotObject::SetXMax(const double &xMax)
 {
 	// Make sure the limit is within the bounds of the original
 	/*if (_xMax >= xMaxOriginal)
@@ -790,16 +790,16 @@ void PlotObject::SetXMax(const double &_xMax)
 	}
 
 	// Make the assignment and disable auto-scaling
-	xMax = _xMax;
+	this->xMax = xMax;
 	autoScaleX = false;*/
 
 	// If the both limits are at the original value, enable auto-scaling again
-	if (xMin == xMinOriginal && _xMax == xMaxOriginal)
+	if (xMin == xMinOriginal && xMax == xMaxOriginal)
 		autoScaleX = true;
 	else
 	{
 		// Make the assignment and disable auto-scaling
-		xMax = _xMax;
+		this->xMax = xMax;
 		autoScaleX = false;
 	}
 }
@@ -811,7 +811,7 @@ void PlotObject::SetXMax(const double &_xMax)
 // Description:		Sets the lower Y limit.
 //
 // Input Arguments:
-//		_yMin	= const double& describing desired minimum Y limit
+//		yMin	= const double& describing desired minimum Y limit
 //
 // Output Arguments:
 //		None
@@ -820,7 +820,7 @@ void PlotObject::SetXMax(const double &_xMax)
 //		None
 //
 //==========================================================================
-void PlotObject::SetLeftYMin(const double &_yMin)
+void PlotObject::SetLeftYMin(const double &yMin)
 {
 	// Make sure the limit is within the bounds of the original
 	/*if (_yMin <= yLeftMinOriginal)
@@ -835,16 +835,16 @@ void PlotObject::SetLeftYMin(const double &_yMin)
 	}
 
 	// Make the assignment and disable auto-scaling
-	yLeftMin = _yMin;
+	yLeftMin = yMin;
 	autoScaleLeftY = false;*/
 
 	// If the both limits are at the original value, enable auto-scaling again
-	if (yLeftMax == yLeftMaxOriginal && _yMin == yLeftMinOriginal)
+	if (yLeftMax == yLeftMaxOriginal && yMin == yLeftMinOriginal)
 		autoScaleLeftY = true;
 	else
 	{
 		// Make the assignment and disable auto-scaling
-		yLeftMin = _yMin;
+		yLeftMin = yMin;
 		autoScaleLeftY = false;
 	}
 }
@@ -856,7 +856,7 @@ void PlotObject::SetLeftYMin(const double &_yMin)
 // Description:		Sets the upper Y limit.
 //
 // Input Arguments:
-//		_yMax	= const double& describing desired maximum Y limit
+//		yMax	= const double& describing desired maximum Y limit
 //
 // Output Arguments:
 //		None
@@ -865,7 +865,7 @@ void PlotObject::SetLeftYMin(const double &_yMin)
 //		None
 //
 //==========================================================================
-void PlotObject::SetLeftYMax(const double &_yMax)
+void PlotObject::SetLeftYMax(const double &yMax)
 {
 	// Make sure the limit is within the bounds of the original
 	/*if (_yMax >= yLeftMaxOriginal)
@@ -880,16 +880,16 @@ void PlotObject::SetLeftYMax(const double &_yMax)
 	}
 
 	// Make the assignment and disable auto-scaling
-	yLeftMax = _yMax;
+	yLeftMax = yMax;
 	autoScaleLeftY = false;*/
 
 	// If the both limits are at the original value, enable auto-scaling again
-	if (yLeftMin == yLeftMinOriginal && _yMax == yLeftMaxOriginal)
+	if (yLeftMin == yLeftMinOriginal && yMax == yLeftMaxOriginal)
 		autoScaleLeftY = true;
 	else
 	{
 		// Make the assignment and disable auto-scaling
-		yLeftMax = _yMax;
+		yLeftMax = yMax;
 		autoScaleLeftY = false;
 	}
 }
@@ -901,7 +901,7 @@ void PlotObject::SetLeftYMax(const double &_yMax)
 // Description:		Sets the lower Y limit.
 //
 // Input Arguments:
-//		_yMin	= const double& describing desired minimum Y limit
+//		yMin	= const double& describing desired minimum Y limit
 //
 // Output Arguments:
 //		None
@@ -910,7 +910,7 @@ void PlotObject::SetLeftYMax(const double &_yMax)
 //		None
 //
 //==========================================================================
-void PlotObject::SetRightYMin(const double &_yMin)
+void PlotObject::SetRightYMin(const double &yMin)
 {
 	// Make sure the limit is within the bounds of the original
 	/*if (_yMin <= yRightMinOriginal)
@@ -925,16 +925,16 @@ void PlotObject::SetRightYMin(const double &_yMin)
 	}
 
 	// Make the assignment and disable auto-scaling
-	yRightMin = _yMin;
+	yRightMin = yMin;
 	autoScaleRightY = false;*/
 
 	// If the both limits are at the original value, enable auto-scaling again
-	if (yRightMax == yRightMaxOriginal && _yMin == yRightMinOriginal)
+	if (yRightMax == yRightMaxOriginal && yMin == yRightMinOriginal)
 		autoScaleRightY = true;
 	else
 	{
 		// Make the assignment and disable auto-scaling
-		yRightMin = _yMin;
+		yRightMin = yMin;
 		autoScaleRightY = false;
 	}
 }
@@ -955,7 +955,7 @@ void PlotObject::SetRightYMin(const double &_yMin)
 //		None
 //
 //==========================================================================
-void PlotObject::SetRightYMax(const double &_yMax)
+void PlotObject::SetRightYMax(const double &yMax)
 {
 	// Make sure the limit is within the bounds of the original
 	/*if (_yMax >= yRightMaxOriginal)
@@ -970,16 +970,16 @@ void PlotObject::SetRightYMax(const double &_yMax)
 	}
 
 	// Make the assignment and disable auto-scaling
-	yRightMax = _yMax;
+	yRightMax = yMax;
 	autoScaleRightY = false;*/
 
 	// If the both limits are at the original value, enable auto-scaling again
-	if (yRightMin == yRightMinOriginal && _yMax == yRightMaxOriginal)
+	if (yRightMin == yRightMinOriginal && yMax == yRightMaxOriginal)
 		autoScaleRightY = true;
 	else
 	{
 		// Make the assignment and disable auto-scaling
-		yRightMax = _yMax;
+		yRightMax = yMax;
 		autoScaleRightY = false;
 	}
 }
@@ -1000,7 +1000,7 @@ void PlotObject::SetRightYMax(const double &_yMax)
 //		None
 //
 //==========================================================================
-void PlotObject::ResetAutoScaling(void)
+void PlotObject::ResetAutoScaling()
 {
 	// Enable auto-scaling for all axes
 	autoScaleX = true;
@@ -1083,7 +1083,7 @@ void PlotObject::SetGrid(const bool &gridOn)
 //		None
 //
 //==========================================================================
-bool PlotObject::GetGrid(void)
+bool PlotObject::GetGrid()
 {
 	if (axisBottom == NULL)
 		return false;
@@ -1215,7 +1215,7 @@ void PlotObject::SetGridColor(const Color &color)
 //		None
 //
 //==========================================================================
-Color PlotObject::GetGridColor(void) const
+Color PlotObject::GetGridColor() const
 {
 	return axisBottom->GetGridColor();
 }

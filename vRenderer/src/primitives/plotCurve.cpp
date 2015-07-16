@@ -27,7 +27,7 @@
 // Description:		Constructor for the PLOT_CURVE class.
 //
 // Input Arguments:
-//		_RenderWindow	= RenderWindow* pointing to the object that owns this
+//		renderWindow	= RenderWindow* pointing to the object that owns this
 //
 // Output Arguments:
 //		None
@@ -36,7 +36,7 @@
 //		None
 //
 //==========================================================================
-PlotCurve::PlotCurve(RenderWindow &_renderWindow) : Primitive(_renderWindow)
+PlotCurve::PlotCurve(RenderWindow &renderWindow) : Primitive(renderWindow)
 {
 	xAxis = NULL;
 	yAxis = NULL;
@@ -103,7 +103,7 @@ PlotCurve::~PlotCurve()
 //		None
 //
 //==========================================================================
-void PlotCurve::GenerateGeometry(void)
+void PlotCurve::GenerateGeometry()
 {
 	// Set the line width
 	glLineWidth((float)size);
@@ -433,7 +433,7 @@ void PlotCurve::RescalePoint(const double *xyPoint, int *point)
 //		bool, true for OK to draw, false otherwise
 //
 //==========================================================================
-bool PlotCurve::HasValidParameters(void)
+bool PlotCurve::HasValidParameters()
 {
 	if (xAxis != NULL && yAxis != NULL && data->GetNumberOfPoints() > 1)
 	{
@@ -479,7 +479,7 @@ PlotCurve& PlotCurve::operator = (const PlotCurve &plotCurve)
 // Description:		Assigns data to the curve.
 //
 // Input Arguments:
-//		_data	= const Dataset2D* to plot
+//		data	= const Dataset2D* to plot
 //
 // Output Arguments:
 //		None
@@ -488,8 +488,8 @@ PlotCurve& PlotCurve::operator = (const PlotCurve &plotCurve)
 //		None
 //
 //==========================================================================
-void PlotCurve::SetData(const Dataset2D *_data)
+void PlotCurve::SetData(const Dataset2D *data)
 {
-	data = _data;
+	this->data = data;
 	modified = true;
 }

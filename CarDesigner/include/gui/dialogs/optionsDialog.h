@@ -13,8 +13,8 @@
 // Description:  Contains the declaration for the OptionsDialog class.
 // History:
 
-#ifndef _OPTIONS_DIALOG_H_
-#define _OPTIONS_DIALOG_H_
+#ifndef OPTIONS_DIALOG_H_
+#define OPTIONS_DIALOG_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -32,24 +32,17 @@ class MainFrame;
 class OptionsDialog : public wxDialog
 {
 public:
-	// Constructor
-	OptionsDialog(MainFrame &_mainFrame, Kinematics::Inputs &_kinematicInputs,
+	OptionsDialog(MainFrame &mainFrame, Kinematics::Inputs &kinematicInputs,
 		wxWindowID id, const wxPoint &position, long style = wxDEFAULT_DIALOG_STYLE);
-
-	// Destructor
 	~OptionsDialog();
 
 private:
-	// The object that contains the options for the kinematic analysis
 	Kinematics::Inputs &kinematicInputs;
-
-	// The parent window
 	MainFrame &mainFrame;
 
 	// Sets up the size and position of this dialog and its contents
-	void CreateControls(void);
+	void CreateControls();
 	
-	// Event IDs
 	enum OptionsDialogEventIds
 	{
 		ChangeOutputFontButton = 1500 + wxID_HIGHEST,
@@ -110,8 +103,7 @@ private:
 	wxFont outputFont;
 	wxFont plotFont;
 
-	// The event table
 	DECLARE_EVENT_TABLE()
 };
 
-#endif// _OPTIONS_DIALOG_H_
+#endif// OPTIONS_DIALOG_H_

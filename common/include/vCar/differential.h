@@ -17,8 +17,8 @@
 //				  inside the class body, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
-#ifndef _DIFFERENTIAL_H_
-#define _DIFFERENTIAL_H_
+#ifndef DIFFERENTIAL_H_
+#define DIFFERENTIAL_H_
 
 // Standard C++ headers
 #include <iosfwd>// forward declarations of fstream objects
@@ -26,11 +26,8 @@
 class Differential
 {
 public:
-	// Constructor
 	Differential();
 	Differential(const Differential &differential);
-
-	// Destructor
 	~Differential();
 
 	// File read/write functions
@@ -66,4 +63,4 @@ private:
 	DifferentialStyle style;
 };
 
-#endif// _DIFFERENTIAL_H_
+#endif// DIFFERENTIAL_H_

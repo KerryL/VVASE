@@ -15,8 +15,8 @@
 //	1/11/2010	- Moved from test class to GuiObject derived object for permanent
 //				  implementation.
 
-#ifndef _GENETIC_OPTIMIZATION_H_
-#define _GENETIC_OPTIMIZATION_H_
+#ifndef GENETIC_OPTIMIZATION_H_
+#define GENETIC_OPTIMIZATION_H_
 
 // VVASE headers
 #include "gui/guiObject.h"
@@ -36,47 +36,46 @@ class GeneticOptimization : public GuiObject
 {
 public:
 	// Constructor
-	GeneticOptimization(MainFrame &_mainFrame,
-		wxString _pathAndFileName = wxEmptyString);
+	GeneticOptimization(MainFrame &mainFrame,
+		wxString pathAndFileName = wxEmptyString);
 
 	// Destructor
 	~GeneticOptimization();
 
 	// Mandatory overload
-	ItemType GetType(void) const { return TypeOptimization; };
+	ItemType GetType() const { return TypeOptimization; }
 
 	// Mandatory overloads
-	void UpdateData(void);
-	void UpdateDisplay(void);
+	void UpdateData();
+	void UpdateDisplay();
 
 	// Controls for the optimization process
-	void BeginOptimization(void);
-	void HaltOptimization(void);
+	void BeginOptimization();
+	void HaltOptimization();
 
 	// Decrements outstanding analysis counter
-	void MarkAnalysisComplete(void);
+	void MarkAnalysisComplete();
 
 	// Performs the post-optimization tasks, such as updating the interface and
 	// updating the optimized car to match the best fit genome
-	void CompleteOptimization(void);
+	void CompleteOptimization();
 
 	// Accessor for the GA panel object
-	GeneticAlgorithmPanel *GetGAPanel(void) { return gaPanel; };
+	GeneticAlgorithmPanel *GetGAPanel() { return gaPanel; }
 
 	// Accessor for the GA object itself
-	GAObject &GetAlgorithm(void) { return *geneticAlgorithm; };
+	GAObject &GetAlgorithm() { return *geneticAlgorithm; }
 
 	// Accessors for the car to optimize
-	GuiCar *GetCarToOptimize(void) { return carToOptimize; };
-	void SetCarToOptimize(GuiCar *_carToOptimize);
+	GuiCar *GetCarToOptimize() { return carToOptimize; }
+	void SetCarToOptimize(GuiCar *carToOptimize);
 
 private:
-	// Gets the icon handle for this object's icon
-	int GetIconHandle(void) const;
+	int GetIconHandle() const;
 
 	// File I/O (required overloads)
-	bool PerformLoadFromFile(void);
-	bool PerformSaveToFile(void);
+	bool PerformLoadFromFile();
+	bool PerformSaveToFile();
 
 	// The panel that appears in the main notebook
 	GeneticAlgorithmPanel *gaPanel;
@@ -88,4 +87,4 @@ private:
 	GAObject *geneticAlgorithm;
 };
 
-#endif// _GENETIC_OPTIMIZATION_H_
+#endif// GENETIC_OPTIMIZATION_H_

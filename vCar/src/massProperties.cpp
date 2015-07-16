@@ -118,7 +118,7 @@ MassProperties::~MassProperties()
 //		bool, true for valid properties, false for impossible properties
 //
 //==========================================================================
-bool MassProperties::IsValidInertiaTensor(void) const
+bool MassProperties::IsValidInertiaTensor() const
 {
 	Vector principleInertias;
 	/*Vector ixxDirection;

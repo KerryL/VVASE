@@ -51,8 +51,8 @@
 // Description:		Constructor for the Iteration class.
 //
 // Input Arguments:
-//		_mainFrame			= MainFrame& reference to main application window
-//		_pathAndFileName	= wxString containing the location of this object on
+//		mainFrame			= MainFrame& reference to main application window
+//		pathAndFileName	= wxString containing the location of this object on
 //							  the hard disk
 //
 // Output Arguments:
@@ -62,8 +62,8 @@
 //		None
 //
 //==========================================================================
-Iteration::Iteration(MainFrame &_mainFrame, wxString _pathAndFileName)
-					 : GuiObject(_mainFrame, _pathAndFileName)
+Iteration::Iteration(MainFrame &mainFrame, wxString pathAndFileName)
+	: GuiObject(mainFrame, pathAndFileName)
 {
 	// Initialize our list of plots to OFF
 	int i;
@@ -259,7 +259,7 @@ void Iteration::RemoveCar(GuiCar *toRemove)
 //		None
 //
 //==========================================================================
-void Iteration::RemoveAllCars(void)
+void Iteration::RemoveAllCars()
 {
 	// Remove all entries from the lists
 	ClearAllLists();
@@ -281,7 +281,7 @@ void Iteration::RemoveAllCars(void)
 //		integer specifying the icon handle
 //
 //==========================================================================
-int Iteration::GetIconHandle(void) const
+int Iteration::GetIconHandle() const
 {
 	// Return the proper icon handle
 	return systemsTree->GetIconHandle(MainTree::IterationIcon);
@@ -304,7 +304,7 @@ int Iteration::GetIconHandle(void) const
 //		None
 //
 //==========================================================================
-void Iteration::UpdateData(void)
+void Iteration::UpdateData()
 {
 	// Make sure we are in a state from which we can handle this analysis
 	if (!analysesDisplayed)
@@ -455,7 +455,7 @@ void Iteration::UpdateData(void)
 //		None
 //
 //==========================================================================
-void Iteration::UpdateDisplay(void)
+void Iteration::UpdateDisplay()
 {
 	// Make sure we have no more analyses waiting
 	if (pendingAnalysisCount != 0)
@@ -538,7 +538,7 @@ void Iteration::UpdateDisplay(void)
 //		None
 //
 //==========================================================================
-void Iteration::ClearAllLists(void)
+void Iteration::ClearAllLists()
 {
 	// Clear out all of our lists
 	unsigned int currentList;
@@ -569,7 +569,7 @@ void Iteration::ClearAllLists(void)
 //		bool, true for success
 //
 //==========================================================================
-bool Iteration::PerformSaveToFile(void)
+bool Iteration::PerformSaveToFile()
 {
 	// Open the specified file
 	std::ofstream outFile(pathAndFileName.mb_str(), ios::out | ios::binary);
@@ -621,7 +621,7 @@ bool Iteration::PerformSaveToFile(void)
 //		bool, true for success
 //
 //==========================================================================
-bool Iteration::PerformLoadFromFile(void)
+bool Iteration::PerformLoadFromFile()
 {
 	// Open the specified file
 	std::ifstream inFile(pathAndFileName.mb_str(), ios::in | ios::binary);
@@ -703,7 +703,7 @@ bool Iteration::PerformLoadFromFile(void)
 //		None
 //
 //==========================================================================
-void Iteration::ReadDefaultsFromConfig(void)
+void Iteration::ReadDefaultsFromConfig()
 {
 	// Create a configuration file object
 	wxFileConfig *configurationFile = new wxFileConfig(_T(""), _T(""),
@@ -777,7 +777,7 @@ void Iteration::ReadDefaultsFromConfig(void)
 //		None
 //
 //==========================================================================
-void Iteration::WriteDefaultsToConfig(void) const
+void Iteration::WriteDefaultsToConfig() const
 {
 	// Create a configuration file object
 	wxFileConfig *configurationFile = new wxFileConfig(_T(""), _T(""),
@@ -842,7 +842,7 @@ void Iteration::WriteDefaultsToConfig(void) const
 //		None
 //
 //==========================================================================
-void Iteration::ApplyPlotFormatting(void)
+void Iteration::ApplyPlotFormatting()
 {
 	if (autoGenerateZLabel)
 	{
@@ -898,10 +898,9 @@ void Iteration::ApplyPlotFormatting(void)
 //		None
 //
 //==========================================================================
-void Iteration::SetRange(const Iteration::Range &_range)
+void Iteration::SetRange(const Iteration::Range &range)
 {
-	// Assign the passed range to the class member
-	range = _range;
+	this->range = range;
 
 	// Make sure the chosen X-axis type is not for a parameter with zero range
 	// This is based on the priority Roll->Steer->Heave->Pitch.
@@ -944,13 +943,11 @@ void Iteration::SetRange(const Iteration::Range &_range)
 //		None
 //
 //==========================================================================
-void Iteration::SetNumberOfPoints(const int &_numberOfPoints)
+void Iteration::SetNumberOfPoints(const int &numberOfPoints)
 {
-	// Make sure the value is at least 2, then make the assignment
-	if (_numberOfPoints >= 2)
-		numberOfPoints = _numberOfPoints;
+	if (numberOfPoints >= 2)
+		this->numberOfPoints = numberOfPoints;
 
-	// Set the "this item has changed" flag
 	SetModified();
 }
 
@@ -1001,7 +998,7 @@ void Iteration::SetActivePlot(PlotID plotID, const bool &active)
 //		None
 //
 //==========================================================================
-void Iteration::UpdateAutoAssociate(void)
+void Iteration::UpdateAutoAssociate()
 {
 	// Make sure auto-associate is on
 	if (!associatedWithAllOpenCars)
@@ -1036,7 +1033,7 @@ void Iteration::UpdateAutoAssociate(void)
 //		None
 //
 //==========================================================================
-void Iteration::ShowAssociatedCarsDialog(void)
+void Iteration::ShowAssociatedCarsDialog()
 {
 	// Call the auto-associate update function
 	UpdateAutoAssociate();
@@ -1392,7 +1389,7 @@ Iteration::FileHeaderInfo Iteration::ReadFileHeader(std::ifstream *inFile)
 // Description:		Sets the X axis to the specified quantity.
 //
 // Input Arguments:
-//		_xAxisType	= AxisType to plot against
+//		xAxisType	= AxisType to plot against
 //
 // Output Arguments:
 //		None
@@ -1401,15 +1398,11 @@ Iteration::FileHeaderInfo Iteration::ReadFileHeader(std::ifstream *inFile)
 //		None
 //
 //==========================================================================
-void Iteration::SetXAxisType(AxisType _xAxisType)
+void Iteration::SetXAxisType(AxisType xAxisType)
 {
-	// Set the xAxisType
-	xAxisType = _xAxisType;
+	this->xAxisType = xAxisType;
 
-	// Set the "this item has changed" flag
 	SetModified();
-
-	// Update the iteration
 	UpdateDisplay();
 }
 
@@ -1420,7 +1413,7 @@ void Iteration::SetXAxisType(AxisType _xAxisType)
 // Description:		Sets the Y axis to the specified quantity.
 //
 // Input Arguments:
-//		_yAxisType	= AxisType to plot against
+//		yAxisType	= AxisType to plot against
 //
 // Output Arguments:
 //		None
@@ -1429,15 +1422,11 @@ void Iteration::SetXAxisType(AxisType _xAxisType)
 //		None
 //
 //==========================================================================
-void Iteration::SetYAxisType(AxisType _yAxisType)
+void Iteration::SetYAxisType(AxisType yAxisType)
 {
-	// Set the yAxisType
-	yAxisType = _yAxisType;
+	this->yAxisType = yAxisType;
 
-	// Set the "this item has changed" flag
 	SetModified();
-
-	// Update the iteration
 	UpdateDisplay();
 }
 
@@ -1460,7 +1449,6 @@ void Iteration::SetYAxisType(AxisType _yAxisType)
 //==========================================================================
 void Iteration::SetAutoAssociate(bool autoAssociate)
 {
-	// Update the auto-associate flag
 	associatedWithAllOpenCars = autoAssociate;
 
 	// Set the "this item has changed" flag
@@ -1487,7 +1475,7 @@ void Iteration::SetAutoAssociate(bool autoAssociate)
 //		None
 //
 //==========================================================================
-void Iteration::MarkAnalysisComplete(void)
+void Iteration::MarkAnalysisComplete()
 {
 	assert(pendingAnalysisCount > 0);
 	

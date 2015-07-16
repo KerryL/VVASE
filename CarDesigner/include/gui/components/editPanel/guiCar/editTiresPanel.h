@@ -13,8 +13,8 @@
 // Description:  Contains the class declaration for the EditTiresPanel class.
 // History:
 
-#ifndef _EDIT_TIRES_PANEL_H_
-#define _EDIT_TIRES_PANEL_H_
+#ifndef EDIT_TIRES_PANEL_H_
+#define EDIT_TIRES_PANEL_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -26,25 +26,18 @@ class TireSet;
 class EditTiresPanel : public wxScrolledWindow
 {
 public:
-	// Constructor
-	EditTiresPanel(EditPanel &_parent, wxWindowID id, const wxPoint& pos,
+	EditTiresPanel(EditPanel &parent, wxWindowID id, const wxPoint& pos,
 		const wxSize& size);
-
-	// Destructor
 	~EditTiresPanel();
 
-	// Updates the information in the display
-	void UpdateInformation(TireSet *_tireSet);
+	void UpdateInformation(TireSet *tireSet);
 
 private:
-	// The parent panel
 	EditPanel &parent;
 
-	// The corner with which we are currently associated
 	TireSet *currentTireSet;
 
-	// Creates the controls and positions everything within the panel
-	void CreateControls(void);
+	void CreateControls();
 
 	// Event IDs
 	enum EditTiresEventIds
@@ -97,8 +90,7 @@ private:
 	wxStaticText *leftRearDiameterUnitsLabel;
 	wxStaticText *leftRearWidthUnitsLabel;
 
-	// For the event table
 	DECLARE_EVENT_TABLE();
 };
 
-#endif// _EDIT_TIRES_PANEL_H_
+#endif// EDIT_TIRES_PANEL_H_

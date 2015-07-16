@@ -36,7 +36,7 @@
 // Description:		Constructor for the Corner class.
 //
 // Input Arguments:
-//		_location	= const Location& describing which corner this object
+//		location	= const Location& describing which corner this object
 //					  represents
 //
 // Output Arguments:
@@ -46,15 +46,12 @@
 //		None
 //
 //==========================================================================
-Corner::Corner(const Location &_location)
-			   : location(_location)
+Corner::Corner(const Location &location) : location(location)
 {
-	// Initialize the hardpoint locations
 	int i;
 	for (i = 0; i < NumberOfHardpoints; i++)
 		hardpoints[i].Set(0.0, 0.0, 0.0);
 
-	// Initialize the other parameters, too
 	staticCamber = 0.0;
 	staticToe = 0.0;
 	actuationAttachment = AttachmentLowerAArm;
@@ -69,7 +66,7 @@ Corner::Corner(const Location &_location)
 // Description:		Returns the name of the specified actuation attachment method.
 //
 // Input Arguments:
-//		_attachment	= const ActuationAttachment& of interest
+//		attachment	= const ActuationAttachment& of interest
 //
 // Output Arguments:
 //		None
@@ -78,9 +75,9 @@ Corner::Corner(const Location &_location)
 //		wxString containg the name of the specified attachment method
 //
 //==========================================================================
-wxString Corner::GetActuationAttachmentName(const ActuationAttachment &_attachment)
+wxString Corner::GetActuationAttachmentName(const ActuationAttachment &attachment)
 {
-	switch (_attachment)
+	switch (attachment)
 	{
 	case AttachmentLowerAArm:
 		return _T("Lower A-Arm");
@@ -269,7 +266,7 @@ wxString Corner::GetHardpointName(const Hardpoints &point)
 // Description:		Returns the name of the specified location.
 //
 // Input Arguments:
-//		_location	= const Location& of interest
+//		location	= const Location& of interest
 //
 // Output Arguments:
 //		None
@@ -278,9 +275,9 @@ wxString Corner::GetHardpointName(const Hardpoints &point)
 //		wxString containg the name of the specified actuation type
 //
 //==========================================================================
-wxString Corner::GetLocationName(const Location &_location)
+wxString Corner::GetLocationName(const Location &location)
 {
-	switch (_location)
+	switch (location)
 	{
 	case LocationLeftFront:
 		return _T("Left Front");

@@ -219,9 +219,9 @@ void Drivetrain::Read(std::ifstream *inFile, int fileVersion)
 //		wxString containing the name of the drive style
 //
 //==========================================================================
-wxString Drivetrain::GetDriveWheelsName(const DriveWheels &_driveWheels)
+wxString Drivetrain::GetDriveWheelsName(const DriveWheels &driveWheels)
 {
-	switch (_driveWheels)
+	switch (driveWheels)
 	{
 	case DriveRearWheel:
 		return _T("Rear Wheel Drive");

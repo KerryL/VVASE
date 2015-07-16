@@ -28,7 +28,7 @@
 // Description:		Constructor for the Cone class.
 //
 // Input Arguments:
-//		_renderWindow	= RenderWindow& reference to the object that owns this
+//		renderWindow	= RenderWindow& reference to the object that owns this
 //
 // Output Arguments:
 //		None
@@ -37,13 +37,12 @@
 //		None
 //
 //==========================================================================
-Cone::Cone(RenderWindow &_renderWindow) : Primitive(_renderWindow)
+Cone::Cone(RenderWindow &renderWindow) : Primitive(renderWindow)
 {
-	// Initialize private data
 	drawCaps = false;
 	radius = 0.0;
-	tip.Set(0.0,0.0,0.0);
-	baseCenter.Set(0.0,0.0,0.0);
+	tip.Set(0.0, 0.0, 0.0);
+	baseCenter.Set(0.0, 0.0, 0.0);
 	resolution = 4;
 }
 
@@ -84,7 +83,7 @@ Cone::~Cone()
 //		None
 //
 //==========================================================================
-void Cone::GenerateGeometry(void)
+void Cone::GenerateGeometry()
 {
 	// Resolution must be at least 3
 	if (resolution < 3)
@@ -202,7 +201,7 @@ void Cone::GenerateGeometry(void)
 //		bool, true for OK to draw, false otherwise
 //
 //==========================================================================
-bool Cone::HasValidParameters(void)
+bool Cone::HasValidParameters()
 {
 	// Cones must have a non-zero distance tip-to-base, and must have a positive radius
 	if (!VVASEMath::IsZero(tip.Distance(baseCenter)) && radius > 0.0)
@@ -228,12 +227,9 @@ bool Cone::HasValidParameters(void)
 //		None
 //
 //==========================================================================
-void Cone::SetResolution(const int &_resolution)
+void Cone::SetResolution(const int &resolution)
 {
-	// Set the resolution to the argument
-	resolution = _resolution;
-	
-	// Reset the modified flag
+	this->resolution = resolution;
 	modified = true;
 }
 
@@ -245,7 +241,7 @@ void Cone::SetResolution(const int &_resolution)
 //					capped on the base end.
 //
 // Input Arguments:
-//		_drawCaps	= const bool&
+//		drawCaps	= const bool&
 //
 // Output Arguments:
 //		None
@@ -254,12 +250,9 @@ void Cone::SetResolution(const int &_resolution)
 //		None
 //
 //==========================================================================
-void Cone::SetCapping(const bool &_drawCaps)
+void Cone::SetCapping(const bool &drawCaps)
 {
-	// Set the capping flag to the argument
-	drawCaps = _drawCaps;
-	
-	// Reset the modified flag
+	this->drawCaps = drawCaps;
 	modified = true;
 }
 
@@ -279,12 +272,9 @@ void Cone::SetCapping(const bool &_drawCaps)
 //		None
 //
 //==========================================================================
-void Cone::SetTip(const Vector &_tip)
+void Cone::SetTip(const Vector &tip)
 {
-	// Set the tip location to the argument
-	tip = _tip;
-	
-	// Reset the modified flag
+	this->tip = tip;
 	modified = true;
 }
 
@@ -304,12 +294,9 @@ void Cone::SetTip(const Vector &_tip)
 //		None
 //
 //==========================================================================
-void Cone::SetBaseCenter(const Vector &_baseCenter)
+void Cone::SetBaseCenter(const Vector &baseCenter)
 {
-	// Set the base location to the argument
-	baseCenter = _baseCenter;
-	
-	// Reset the modified flag
+	this->baseCenter = baseCenter;
 	modified = true;
 }
 
@@ -320,7 +307,7 @@ void Cone::SetBaseCenter(const Vector &_baseCenter)
 // Description:		Sets the radius at the base of the cone.
 //
 // Input Arguments:
-//		_radius	= const double&
+//		radius	= const double&
 //
 // Output Arguments:
 //		None
@@ -329,11 +316,8 @@ void Cone::SetBaseCenter(const Vector &_baseCenter)
 //		None
 //
 //==========================================================================
-void Cone::SetRadius(const double &_radius)
+void Cone::SetRadius(const double &radius)
 {
-	// Set the radius to the argument
-	radius = _radius;
-	
-	// Reset the modified flag
+	this->radius = radius;
 	modified = true;
 }

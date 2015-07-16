@@ -45,10 +45,9 @@
 //		None
 //
 //==========================================================================
-EditEnginePanel::EditEnginePanel(EditPanel* _parent, wxWindowID id,
-										   const wxPoint& pos, const wxSize& size,
-										   const Debugger &_debugger) : wxPanel(_parent, id,
-										   pos, size), debugger(_debugger)
+EditEnginePanel::EditEnginePanel(EditPanel* parent, wxWindowID id,
+	const wxPoint& pos, const wxSize& size, const Debugger &debugger)
+	: wxPanel(parent, id, pos, size), debugger(debugger)
 {
 }
 

@@ -13,8 +13,8 @@
 // Description:  Contains class declaration for INTEGRATOR class.
 // History:
 
-#ifndef _INTEGRATOR_H_
-#define _INTEGRATOR_H_
+#ifndef INTEGRATOR_H_
+#define INTEGRATOR_H_
 
 // VVASE headers
 #include "vSolver/physics/state.h"
@@ -34,38 +34,31 @@ public:
 		MethodAdamsBashforth3
 	};
 
-	// Constructor
-	Integrator(const IntegrationMethod &_integrationMethod, const double &_frequency,
-		const Debugger &_debugger);
+	Integrator(const IntegrationMethod &integrationMethod, const double &frequency,
+		const Debugger &debugger);
 	Integrator(const Integrator &integrator);
-
-	// Destructor
 	~Integrator();
 
-	// Calculates the state at the next time step
-	State ComputeNewState(void);
+	State ComputeNewState();
 
 	// Sets the integration method to use
-	void SetIntegrationMethod(IntegrationMethod _integrationMethod);
+	void SetIntegrationMethod(IntegrationMethod integrationMethod);
 
 	// Sets the simulation frequency
-	void SetFrequency(double _frequency);
+	void SetFrequency(double frequency);
 
 	// Reset functions for initializing the simulation
 	void Reset(State initialConditions);
-	void Reset(void);// Zero initial conditions
+	void Reset();// Zero initial conditions
 
-	// Overloaded operators
-	Integrator& operator = (const Integrator &integrator);
+	Integrator& operator=(const Integrator &integrator);
 
 private:
-	// Debugger message printing utility
 	const Debugger &debugger;
 
 	// The integration method for this class
 	IntegrationMethod integrationMethod;
 
-	// The simulation frequency
 	double frequency;// [Hz]
 
 	// Used for calculating future time steps.  Array size depends on integration method.
@@ -74,14 +67,13 @@ private:
 	// The size of the above array (depends on integration method)
 	int numberOfStoredDerivatives;
 
-	// The current step number
 	int integrationStep;
 
 	// The integration functions - one for each item in INTEGRATION_METHOD
-	State DoEulerSemiImplicit(void);
-	State DoRungeKuttaSecondOrder(void);
-	State DoRungeKuttaFourthOrder(void);
-	State DoAdamsBashforthThirdOrder(void);
+	State DoEulerSemiImplicit();
+	State DoRungeKuttaSecondOrder();
+	State DoRungeKuttaFourthOrder();
+	State DoAdamsBashforthThirdOrder();
 };
 
-#endif// _INTEGRATOR_H_
+#endif// INTEGRATOR_H_

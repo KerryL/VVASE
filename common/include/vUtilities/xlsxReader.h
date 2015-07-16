@@ -15,8 +15,8 @@
 // History:
 //	11/7/2011	- Corrected camelCase, K. Loux.XlsxReader
 
-#ifndef _XLSX_READER_H_
-#define _XLSX_READER_H_
+#ifndef XLSX_READER_H_
+#define XLSX_READER_H_
 
 // Standard C++ headers
 #include <utility>
@@ -38,20 +38,20 @@ class XlsxReader
 {
 public:
 	// Constructor
-	XlsxReader(const wxString &_pathAndFileName);
+	XlsxReader(const wxString &pathAndFileName);
 
 	// Destructor
 	~XlsxReader();
 
 	// For checking to make sure it opened OK
-	bool IsOk(void) const { return isOkFlag; };
+	bool IsOk() const { return isOkFlag; }
 
 	// Functions for accessing file data
-	unsigned int GetNumberOfSheets(void) const { return sheets.size(); };
+	unsigned int GetNumberOfSheets() const { return sheets.size(); }
 	unsigned int GetNumberOfColumns(const unsigned int &sheet) const;
 	unsigned int GetNumberOfRows(const unsigned int &sheet) const;
 	wxString GetSheetName(const unsigned int &sheet) const;
-	unsigned int GetSelectedSheet(void) const;
+	unsigned int GetSelectedSheet() const;
 	wxString GetCellData(const unsigned int &sheet,
 		const unsigned int &row, const unsigned int &column) const;
 	double GetNumericCellData(const unsigned int &sheet,
@@ -60,16 +60,15 @@ public:
 		const unsigned int &row, const unsigned int &column) const;
 
 private:
-	// Path and file name
 	wxString pathAndFileName;
 
 	// Objects for initial access and unzipping of the files
-	wxZipInputStream *OpenFile(void) const;
+	wxZipInputStream *OpenFile() const;
 	wxZipEntry *GetEntry(wxZipInputStream &zipStream, const wxString &entryString) const;
 	bool LoadSheet(const unsigned int &sheet);
 
 	// Functions and objects required for object initialization
-	bool Initialize(void);
+	bool Initialize();
 	wxString GetDimensionString(const wxXmlDocument &sheetDocument) const;
 	bool SheetIsSelected(const wxXmlDocument &sheetDocument) const;
 	unsigned int ParseForRowCount(const wxString &dimensionString) const;
@@ -87,8 +86,7 @@ private:
 	ManagedList<wxXmlDocument> worksheets;
 	std::vector<std::pair<wxString, unsigned int> > sheets;
 
-	// Flag indicating status of this object
 	bool isOkFlag;
 };
 
-#endif// _XLS_READER_H_
+#endif// XLS_READER_H_

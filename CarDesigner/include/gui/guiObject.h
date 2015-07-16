@@ -21,8 +21,8 @@
 //				  objects.
 //	5/19/2009	- Made abstract for base class for GUI_CAR and ITERATION, K. Loux.
 
-#ifndef _GUI_OBJECT_H_
-#define _GUI_OBJECT_H_
+#ifndef GUI_OBJECT_H_
+#define GUI_OBJECT_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -40,13 +40,10 @@ class Primitive;
 class GuiObject
 {
 public:
-	// Constructor
-	GuiObject(MainFrame &_mainFrame, wxString _pathAndFileName = wxEmptyString);
-
-	// Destructor
+	GuiObject(MainFrame &mainFrame, wxString pathAndFileName = wxEmptyString);
 	virtual ~GuiObject();
 
-	// Possible types of data contained in a GUI_OBJECT
+	// Possible types of data contained in a GuiObject
 	enum ItemType
 	{
 		TypeCar,
@@ -63,75 +60,72 @@ public:
 	// Initialization of these objects requires some calls to pure virtual functions, which
 	// causes problems.  To avoid this, we make all of those calls here, and call this from
 	// the derived object's constructors.
-	void Initialize(void);
+	void Initialize();
 
 	// Checks to see if the object has been saved, asks for user confirmation, etc.
 	bool Close(bool notebookPageAlreadyClosed = false);
 
 	// Gets/sets a flag to let us know if the object has changed since it was last saved
-	inline bool GetModified(void) const { return modifiedSinceLastSave; };
-	void SetModified(void);
+	inline bool GetModified() const { return modifiedSinceLastSave; };
+	void SetModified();
 
 	// Returns the object that draws this on the screen
-	inline wxWindow *GetNotebookTab(void) const { return notebookTab; };
+	inline wxWindow *GetNotebookTab() const { return notebookTab; }
 
 	// Generates an image file of the render window contents
 	bool WriteImageToFile(wxString pathAndFileName);
 
 	// Private data accessors
-	inline wxTreeItemId GetTreeItemId(void) const { return treeID; };
+	inline wxTreeItemId GetTreeItemId() const { return treeID; }
 
 	// Returns this object's type (mandatory overload)
-	virtual ItemType GetType(void) const = 0;
+	virtual ItemType GetType() const = 0;
 
 	// Return pointers to the main GUI components of this application
-	inline MainFrame& GetMainFrame(void) const { return mainFrame; };
+	inline MainFrame& GetMainFrame() const { return mainFrame; }
 
 	// Gets/sets the index for this object
-	inline int GetIndex(void) const { return index; };
-	inline void SetIndex(int _index) { index = _index; };
+	inline int GetIndex() const { return index; }
+	inline void SetIndex(int index) { this->index = index; }
 
 	// Gets/sets the name for this object
-	wxString GetName(void) const { return name; };
-	wxString GetCleanName(void) const;
-	void SetName(wxString _name);
+	wxString GetName() const { return name; }
+	wxString GetCleanName() const;
+	void SetName(wxString name);
 
 	// Calls the write methods for the data associated with this object
 	bool SaveToFile(bool saveAsNewFileName = false);
 
 	// Calls the update function for the data associated with this object
 	// This method (usually) creates a job for a worker thread
-	virtual void UpdateData(void) = 0;
+	virtual void UpdateData() = 0;
 
 	// Call the update function for the display associated with this object
 	// This method does not create worker thread jobs
-	virtual void UpdateDisplay(void) = 0;
+	virtual void UpdateDisplay() = 0;
 
-	// Forces this object's tree item to be selected in the systems tree
-	void SelectThisObjectInTree(void);
-
-	// Returns the status of this object
-	bool IsInitialized(void) { return objectIsInitialized; };
+	void SelectThisObjectInTree();
+	bool IsInitialized() { return objectIsInitialized; }
 
 protected:
 	// The objects name (for display purposes)
 	wxString name;
 
 	// Performs the saving and loading to/from file
-	virtual bool PerformLoadFromFile(void) = 0;
-	virtual bool PerformSaveToFile(void) = 0;
+	virtual bool PerformLoadFromFile() = 0;
+	virtual bool PerformSaveToFile() = 0;
 
 	// Calls the read methods for the data associated with this object
-	bool LoadFromFile(void);
+	bool LoadFromFile();
 
 	// Flag indicating whether or not the initialization routine is complete
 	bool objectIsInitialized;
 
 	// Strips down file names and paths to get the object name
-	wxString GetNameFromFileName(void);
+	wxString GetNameFromFileName();
 
 	// Gets the proper index for this object's icon in the systems tree
-	virtual int GetIconHandle(void) const = 0;
+	virtual int GetIconHandle() const = 0;
 
 	// The object's index
 	// (associated with the list in the MAIN_FRAME object and the MAIN_NOTEBOOK's pages)
@@ -156,7 +150,7 @@ protected:
 	wxString pathAndFileName;
 
 	// Verifies that no other open object has the same filename
-	bool VerifyUniqueness(void);
+	bool VerifyUniqueness();
 };
 
-#endif// _GUI_OBJECT_H_
+#endif// GUI_OBJECT_H_

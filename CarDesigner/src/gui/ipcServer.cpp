@@ -84,7 +84,7 @@ IPCServer::~IPCServer()
 //		None
 //
 //==========================================================================
-void IPCServer::Disconnect(void)
+void IPCServer::Disconnect()
 {
 	if (connection)
 	{

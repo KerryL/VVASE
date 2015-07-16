@@ -26,8 +26,8 @@
 // Description:		Constructor for the PlotCursor class.
 //
 // Input Arguments:
-//		_renderWindow	= RenderWindow&
-//		_axis			= Axis& with which we are associated
+//		renderWindow	= RenderWindow&
+//		axis			= Axis& with which we are associated
 //
 // Output Arguments:
 //		None
@@ -36,12 +36,10 @@
 //		None
 //
 //==========================================================================
-PlotCursor::PlotCursor(RenderWindow &_renderWindow, const Axis &_axis)
-	: Primitive(_renderWindow), axis(_axis)
+PlotCursor::PlotCursor(RenderWindow &renderWindow, const Axis &axis)
+	: Primitive(renderWindow), axis(axis)
 {
-	// Start out invisible
 	isVisible = false;
-
 	color = Color::ColorBlack;
 }
 
@@ -61,7 +59,7 @@ PlotCursor::PlotCursor(RenderWindow &_renderWindow, const Axis &_axis)
 //		None
 //
 //==========================================================================
-void PlotCursor::GenerateGeometry(void)
+void PlotCursor::GenerateGeometry()
 {
 	// The on-screen representation of the cursor is just a line, either horizontal
 	// or vertical, whichever the axis we're associated with is not
@@ -119,7 +117,7 @@ void PlotCursor::GenerateGeometry(void)
 //		None
 //
 //==========================================================================
-bool PlotCursor::HasValidParameters(void)
+bool PlotCursor::HasValidParameters()
 {
 	// Make sure the value is within the axis limits
 	if (value >= axis.GetMinimum() && value <= axis.GetMaximum() &&
@@ -205,7 +203,7 @@ bool PlotCursor::IsUnder(const unsigned int &pixel)
 // Description:		Sets the x-value where the cursor should appear on the plot.
 //
 // Input Arguments:
-//		_value	= const double& value to set
+//		value	= const double& value to set
 //
 // Output Arguments:
 //		None
@@ -214,9 +212,9 @@ bool PlotCursor::IsUnder(const unsigned int &pixel)
 //		None
 //
 //==========================================================================
-void PlotCursor::SetValue(const double& _value)
+void PlotCursor::SetValue(const double& value)
 {
-	value = _value;
+	this->value = value;
 	RescalePoint(locationAlongAxis);
 	modified = true;
 }

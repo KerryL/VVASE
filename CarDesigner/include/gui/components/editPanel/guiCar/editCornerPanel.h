@@ -13,8 +13,8 @@
 // Description:  Contains the class declaration for the EditCornerPanel class.
 // History:
 
-#ifndef _EDIT_CORNER_PANEL_H_
-#define _EDIT_CORNER_PANEL_H_
+#ifndef EDIT_CORNER_PANEL_H_
+#define EDIT_CORNER_PANEL_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -36,14 +36,14 @@ class EditCornerPanel : public wxScrolledWindow
 {
 public:
 	// Constructor
-	EditCornerPanel(EditSuspensionNotebook &_parent, wxWindowID id,
+	EditCornerPanel(EditSuspensionNotebook &parent, wxWindowID id,
 		const wxPoint& pos, const wxSize& size);
 
 	// Destructor
 	~EditCornerPanel();
 
 	// Updates the information on the panel
-	void UpdateInformation(Corner *_currentCorner, Suspension::BarStyle barStyle,
+	void UpdateInformation(Corner *currentCorner, Suspension::BarStyle barStyle,
 		bool hasHalfShaft);
 
 private:
@@ -54,7 +54,7 @@ private:
 	Corner *currentCorner;
 
 	// Creates the controls and positions everything within the panel
-	void CreateControls(void);
+	void CreateControls();
 
 	// This helps avoid unnecessary function calls to update the screen
 	int lastRowSelected;
@@ -95,4 +95,4 @@ private:
 	DECLARE_EVENT_TABLE();
 };
 
-#endif// _EDIT_CORNER_PANEL_H_
+#endif// EDIT_CORNER_PANEL_H_

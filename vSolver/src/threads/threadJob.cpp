@@ -47,7 +47,7 @@ ThreadJob::ThreadJob() : command(ThreadJob::CommandThreadNull), data(NULL)
 // Description:		Constructor for the ThreadJob class (basic).
 //
 // Input Arguments:
-//		_command		= ThreadCommand specifying the command type for this job
+//		command		= ThreadCommand specifying the command type for this job
 //
 // Output Arguments:
 //		None
@@ -56,7 +56,7 @@ ThreadJob::ThreadJob() : command(ThreadJob::CommandThreadNull), data(NULL)
 //		None
 //
 //==========================================================================
-ThreadJob::ThreadJob(ThreadCommand _command) : command(_command), data(NULL)
+ThreadJob::ThreadJob(ThreadCommand command) : command(command), data(NULL)
 {
 	// Only permit certain types of jobs
 	assert(command == ThreadJob::CommandThreadExit ||
@@ -71,10 +71,10 @@ ThreadJob::ThreadJob(ThreadCommand _command) : command(_command), data(NULL)
 // Description:		Constructor for the ThreadJob class.
 //
 // Input Arguments:
-//		_command	= ThreadCommand specifying the command type for this job
-//		_name		= const wxString& Name of the car
-//		_index		= int& representing the object index for the associated object
-//					  in the MainFrame
+//		command	= ThreadCommand specifying the command type for this job
+//		name	= const wxString& Name of the car
+//		index	= int& representing the object index for the associated object
+//				  in the MainFrame
 //
 // Output Arguments:
 //		None
@@ -83,11 +83,10 @@ ThreadJob::ThreadJob(ThreadCommand _command) : command(_command), data(NULL)
 //		None
 //
 //==========================================================================
-ThreadJob::ThreadJob(ThreadCommand _command, ThreadData *_data,
-					   const wxString &_name, int &_index) : command(_command),
-					   data(_data), name(_name.c_str()), index(_index)
+ThreadJob::ThreadJob(ThreadCommand command, ThreadData *data,
+	const wxString &name, int &index) : command(command), data(data),
+	name(name.c_str()), index(index)
 {
-	// Make sure the correct data was passed to this job
 	assert(data);
 	assert(data->OkForCommand(command));
 }
@@ -110,10 +109,7 @@ ThreadJob::ThreadJob(ThreadCommand _command, ThreadData *_data,
 //==========================================================================
 ThreadJob::ThreadJob(const ThreadJob &threadJob)
 {
-	// Initialize the pointer to the data
 	data = NULL;
-	
-	// Copy to this object
 	*this = threadJob;
 }
 

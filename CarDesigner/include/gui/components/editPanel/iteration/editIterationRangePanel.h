@@ -13,8 +13,8 @@
 // Description:  Contains the class declaration for the EditIterationPanel class.
 // History:
 
-#ifndef _EDIT_ITERATION_RANGE_PANEL_H_
-#define _EDIT_ITERATION_RANGE_PANEL_H_
+#ifndef EDIT_ITERATION_RANGE_PANEL_H_
+#define EDIT_ITERATION_RANGE_PANEL_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -26,26 +26,18 @@ class EditIterationNotebook;
 class EditIterationRangePanel : public wxScrolledWindow
 {
 public:
-	// Constructor
-	EditIterationRangePanel(EditIterationNotebook &_parent, wxWindowID id,
+	EditIterationRangePanel(EditIterationNotebook &parent, wxWindowID id,
 		const wxPoint& pos, const wxSize& size);
-
-	// Destructor
 	~EditIterationRangePanel();
 
-	// Updates the information on the panel
-	void UpdateInformation(Iteration *_currentIteration);
-	void UpdateInformation(void);
+	void UpdateInformation(Iteration *currentIteration);
+	void UpdateInformation();
 
 private:
-	// The parent panel
 	EditIterationNotebook &parent;
 
-	// The iteration with which we are currently associated
 	Iteration *currentIteration;
-
-	// Creates the controls and positions everything within the panel
-	void CreateControls(void);
+	void CreateControls();
 
 	// The text boxes
 	wxTextCtrl *startPitchInput;
@@ -66,7 +58,6 @@ private:
 	
 	wxStaticText *steerInputLabel;
 
-	// Enumeration for event IDs
 	enum EditIterationRangePanelEventIds
 	{
 		RangeTextBox = wxID_HIGHEST + 1300
@@ -76,8 +67,7 @@ private:
 	void RangeTextBoxChangeEvent(wxCommandEvent &event);
 	// End event handlers-------------------------------------------------
 
-	// For the event table
 	DECLARE_EVENT_TABLE();
 };
 
-#endif// _EDIT_ITERATION_RANGE_PANEL_H_
+#endif// EDIT_ITERATION_RANGE_PANEL_H_

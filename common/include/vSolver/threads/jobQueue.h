@@ -15,8 +15,8 @@
 //				 to the worker threads (add tasks here to be completed by the workers).
 // History:
 
-#ifndef _JOB_QUEUE_H_
-#define _JOB_QUEUE_H_
+#ifndef JOB_QUEUE_H_
+#define JOB_QUEUE_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -44,26 +44,20 @@ public:
 		PriorityIdle
 	};
 
-	// Constructor
-	JobQueue(wxEvtHandler *_parent);
+	JobQueue(wxEvtHandler *parent);
 
-	// Adds a job to the queue
 	void AddJob(const ThreadJob& job, const JobPriority& priority = PriorityNormal);
 
-	// Pulls a job from the queue to be completed
-	ThreadJob Pop(void);
+	ThreadJob Pop();
 
 	// Reports a message back to the main event handler
 	void Report(const ThreadJob::ThreadCommand& command, int threadId, int objectID = 0);
 
-	// Returns the number of pending jobs
-	size_t PendingJobs(void);
+	size_t PendingJobs();
 
-	// Returns a pointer to the event handler
-	wxEvtHandler *GetParent(void) { return parent; };
+	wxEvtHandler *GetParent() { return parent; }
 
 private:
-	// The main thread's event handler
     wxEvtHandler *parent;
 
 	// Use of a multimap allow prioritization - lower keys come first, jobs with equal keys are appended
@@ -74,4 +68,4 @@ private:
     wxSemaphore queueCount;
 };
 
-#endif// _JOB_QUEUE_H_
+#endif// JOB_QUEUE_H_

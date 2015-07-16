@@ -14,8 +14,8 @@
 //				 information required to conduct genetic optimizations.
 // History:
 
-#ifndef _OPTIMIZATION_DATA_H_
-#define _OPTIMIZATION_DATA_H_
+#ifndef OPTIMIZATION_DATA_H_
+#define OPTIMIZATION_DATA_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -29,10 +29,7 @@ class GeneticAlgorithm;
 class OptimizationData : public ThreadData
 {
 public:
-	// Constructor
-	OptimizationData(GeneticAlgorithm *_geneticAlgorithm);
-
-	// Destructor
+	OptimizationData(GeneticAlgorithm *geneticAlgorithm);
 	~OptimizationData();
 
 	// Data required to perform genetic optimizations (for GeneticOptimization objects)
@@ -42,4 +39,4 @@ public:
 	bool OkForCommand(ThreadJob::ThreadCommand &command);
 };
 
-#endif// _OPTIMIZATION_DATA_H_
+#endif// OPTIMIZATION_DATA_H_

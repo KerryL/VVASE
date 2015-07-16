@@ -15,8 +15,8 @@
 //	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
-#ifndef _DRIVER_H_
-#define _DRIVER_H_
+#ifndef DRIVER_H_
+#define DRIVER_H_
 
 // vUtilities forward declarations
 class Debugger;
@@ -24,11 +24,8 @@ class Debugger;
 class Driver
 {
 public:
-	// Constructor
-	Driver(const Debugger &_debugger);
+	Driver(const Debugger &debugger);
 	Driver(const Driver &driver);
-
-	// Destructor
 	~Driver();
 
 	// The driver input structure
@@ -42,20 +39,17 @@ public:
 	};
 
 	// Issues the command to calculate the driver inputs
-	void CalculateInputs(void);
+	void CalculateInputs();
 
 	// Retreives the calculated inputs
-	Inputs GetInputs(void) { return driverInputs; };
+	Inputs GetInputs() { return driverInputs; };
 
-	// Overloaded operators
-	Driver& operator = (const Driver &driver);
+	Driver& operator=(const Driver &driver);
 
 private:
-	// Debugger message printing utility
 	const Debugger &debugger;
 
-	// The driver's inputs
 	Inputs driverInputs;
 };
 
-#endif// _DRIVER_H_
+#endif// DRIVER_H_

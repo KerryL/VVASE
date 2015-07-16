@@ -49,10 +49,10 @@
 // Description:		Constructor for MainTree class.
 //
 // Input Arguments:
-//		_mainFrame	= MainFrame&, reference to this object's owner
+//		mainFrame	= MainFrame&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
-//		_size		= wxSize& for passing to parent class's constructor
+//		size		= wxSize& for passing to parent class's constructor
 //		style		= long for passing to parent class's constructor
 //
 // Output Arguments:
@@ -62,37 +62,36 @@
 //		None
 //
 //==========================================================================
-MainTree::MainTree(MainFrame &_mainFrame, wxWindowID id, const wxPoint& pos,
-					 const wxSize& _size, long style)
-					 : wxTreeCtrl(&_mainFrame, id, pos, _size, style),
-					 mainFrame(_mainFrame)
+MainTree::MainTree(MainFrame &mainFrame, wxWindowID id, const wxPoint& pos,
+	const wxSize& size, long style) : wxTreeCtrl(&mainFrame, id, pos, size, style),
+	mainFrame(mainFrame)
 {
 	// Set up the image list for tree item icons
-	int size = 16;
-	iconList = new wxImageList(size, size, true, 1);
+	int iconSize = 16;
+	iconList = new wxImageList(iconSize, iconSize, true, 1);
 
 	// Add icons to the list
 #ifdef __WXMSW__
 	iconHandle[CarIcon] = iconList->Add(wxIcon(_T("ICON_ID_CAR"),
-		wxBITMAP_TYPE_ICO_RESOURCE, size, size));
+		wxBITMAP_TYPE_ICO_RESOURCE, iconSize, iconSize));
 	iconHandle[AerodynamicsIcon] = iconList->Add(wxIcon(_T("ICON_ID_AERODYNAMICS"),
-		wxBITMAP_TYPE_ICO_RESOURCE, size, size));
+		wxBITMAP_TYPE_ICO_RESOURCE, iconSize, iconSize));
 	iconHandle[BrakesIcon] = iconList->Add(wxIcon(_T("ICON_ID_BRAKES"),
-		wxBITMAP_TYPE_ICO_RESOURCE, size, size));
+		wxBITMAP_TYPE_ICO_RESOURCE, iconSize, iconSize));
 	iconHandle[DrivetrainIcon] = iconList->Add(wxIcon(_T("ICON_ID_DRIVETRAIN"),
-		wxBITMAP_TYPE_ICO_RESOURCE, size, size));
+		wxBITMAP_TYPE_ICO_RESOURCE, iconSize, iconSize));
 	iconHandle[EngineIcon] = iconList->Add(wxIcon(_T("ICON_ID_ENGINE"),
-		wxBITMAP_TYPE_ICO_RESOURCE, size, size));
+		wxBITMAP_TYPE_ICO_RESOURCE, iconSize, iconSize));
 	iconHandle[MassPropertiesIcon] = iconList->Add(wxIcon(_T("ICON_ID_MASS_PROPS"),
-		wxBITMAP_TYPE_ICO_RESOURCE, size, size));
+		wxBITMAP_TYPE_ICO_RESOURCE, iconSize, iconSize));
 	iconHandle[SuspensionIcon] = iconList->Add(wxIcon(_T("ICON_ID_SUSPENSION"),
-		wxBITMAP_TYPE_ICO_RESOURCE, size, size));
+		wxBITMAP_TYPE_ICO_RESOURCE, iconSize, iconSize));
 	iconHandle[TiresIcon] = iconList->Add(wxIcon(_T("ICON_ID_TIRES"),
-		wxBITMAP_TYPE_ICO_RESOURCE, size, size));
+		wxBITMAP_TYPE_ICO_RESOURCE, iconSize, iconSize));
 	iconHandle[IterationIcon] = iconList->Add(wxIcon(_T("ICON_ID_ITERATION"),
-		wxBITMAP_TYPE_ICO_RESOURCE, size, size));
+		wxBITMAP_TYPE_ICO_RESOURCE, iconSize, iconSize));
 	iconHandle[OptimizationIcon] = iconList->Add(wxIcon(_T("ICON_ID_OPTIMIZATION"),
-		wxBITMAP_TYPE_ICO_RESOURCE, size, size));
+		wxBITMAP_TYPE_ICO_RESOURCE, iconSize, iconSize));
 #elif __WXGTK__
 	iconHandle[CarIcon] = iconList->Add(wxIcon(car16_xpm));
 	iconHandle[AerodynamicsIcon] = iconList->Add(wxIcon(aero16_xpm));
@@ -106,7 +105,6 @@ MainTree::MainTree(MainFrame &_mainFrame, wxWindowID id, const wxPoint& pos,
 	iconHandle[OptimizationIcon] = iconList->Add(wxIcon(optimization16_xpm));
 #endif
 
-	// Assign the image list to the tree
 	AssignImageList(iconList);
 }
 
@@ -198,7 +196,7 @@ void MainTree::PerformSelection(bool isActivated)
 //		int representing object's index
 //
 //==========================================================================
-int MainTree::GetSelectedObjectIndex(void)
+int MainTree::GetSelectedObjectIndex()
 {
 	// Determine the object that corresponds to the selected item
 	int Index;

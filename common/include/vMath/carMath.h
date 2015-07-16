@@ -67,7 +67,7 @@ namespace VVASEMath
 
 	double Clamp(const double &n, const double &lowerLimit, const double &upperLimit);
 
-	double RangeToPlusMinusPi(const double &_angle);
+	double RangeToPlusMinusPi(double angle);
 
 	double Sign(const double &n);
 }

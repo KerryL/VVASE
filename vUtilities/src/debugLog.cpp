@@ -60,7 +60,7 @@ const wxString DebugLog::logFileName = _T("VVASEdebug.log");
 //		DebugLog* pointing to this object
 //
 //==========================================================================
-DebugLog* DebugLog::GetInstance(void)
+DebugLog* DebugLog::GetInstance()
 {
 	if (!logInstance)
 		logInstance = new DebugLog();
@@ -75,7 +75,7 @@ DebugLog* DebugLog::GetInstance(void)
 // Description:		Sets the output target for this object.
 //
 // Input Arguments:
-//		_target	= const LogTarget&
+//		target	= const LogTarget&
 //
 // Output Arguments:
 //		None
@@ -84,10 +84,10 @@ DebugLog* DebugLog::GetInstance(void)
 //		None
 //
 //==========================================================================
-void DebugLog::SetTarget(const LogTarget &_target)
+void DebugLog::SetTarget(const LogTarget &target)
 {
 	wxMutexLocker lock(mutex);
-	target = _target;
+	this->target = target;
 }
 
 //==========================================================================
@@ -109,19 +109,19 @@ void DebugLog::SetTarget(const LogTarget &_target)
 //		DebugLog* pointing to this object
 //
 //==========================================================================
-void DebugLog::Log(wxString message, int _indent)
+void DebugLog::Log(wxString message, int indent)
 {
 	wxMutexLocker lock(mutex);
 
 	// Handle indentation
 	unsigned long threadID = wxThread::GetCurrentId();
 	unsigned int i, currentIndent(0);
-	for (i = 0; i < indent.size(); i++)
+	for (i = 0; i < this->indent.size(); i++)
 	{
-		if (indent[i].first == threadID)
+		if (this->indent[i].first == threadID)
 		{
-			currentIndent = indent[i].second;
-			indent[i].second += _indent;
+			currentIndent = this->indent[i].second;
+			this->indent[i].second += indent;
 
 			// Apply minus indents prior to this message; positive indents apply for future messages only
 			if (_indent < 0)
@@ -132,8 +132,8 @@ void DebugLog::Log(wxString message, int _indent)
 	}
 
 	// If we didn't find this thread's ID, add it to the list
-	if (i == indent.size())
-		indent.push_back(std::pair<unsigned long, unsigned int>(threadID, _indent));
+	if (i == this->indent.size())
+		indent.push_back(std::pair<unsigned long, unsigned int>(threadID, indent));
 
 	// This string is prepended once per indent level
 	wxString indentChar(_T("  "));
@@ -177,7 +177,7 @@ void DebugLog::Log(wxString message, int _indent)
 //		None
 //
 //==========================================================================
-void DebugLog::Kill(void)
+void DebugLog::Kill()
 {
 	delete logInstance;
 	logInstance = NULL;

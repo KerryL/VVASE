@@ -13,8 +13,8 @@
 // Description:  Contains the class declaration for the EditBrakesPanel class.
 // History:
 
-#ifndef _EDIT_BRAKES_PANEL_CLASS_
-#define _EDIT_BRAKES_PANEL_CLASS_
+#ifndef EDIT_BRAKES_PANEL_CLASS_
+#define EDIT_BRAKES_PANEL_CLASS_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -26,25 +26,20 @@ class Brakes;
 class EditBrakesPanel : public wxScrolledWindow
 {
 public:
-	// Constructor
-	EditBrakesPanel(EditPanel &_parent, wxWindowID id, const wxPoint& pos,
+	EditBrakesPanel(EditPanel &parent, wxWindowID id, const wxPoint& pos,
 		const wxSize& size);
-
-	// Destructor
 	~EditBrakesPanel();
 
-	// Updates the information on the panel
-	void UpdateInformation(Brakes *_currentBrakes);
+	void UpdateInformation(Brakes *currentBrakes);
 
 private:
-	// The parent panel
 	EditPanel &parent;
 
 	// The data with which we are currently associated
 	Brakes *currentBrakes;
 
 	// Creates the controls and positions everything within the panel
-	void CreateControls(void);
+	void CreateControls();
 
 	// Event IDs
 	enum EditBrakesEventIds
@@ -67,8 +62,7 @@ private:
 	wxCheckBox *frontBrakesInboard;
 	wxCheckBox *rearBrakesInboard;
 
-	// For the event table
 	DECLARE_EVENT_TABLE();
 };
 
-#endif// _EDIT_BRAKES_PANEL_CLASS_
+#endif// EDIT_BRAKES_PANEL_CLASS_

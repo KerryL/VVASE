@@ -26,7 +26,7 @@
 // Description:		Constructor for the UndoRedoStack class.
 //
 // Input Arguments:
-//		_mainFrame	= &MainFrame, reference to the main frame object
+//		mainFrame	= &MainFrame, reference to the main frame object
 //
 // Output Arguments:
 //		None
@@ -35,7 +35,7 @@
 //		None
 //
 //==========================================================================
-UndoRedoStack::UndoRedoStack(MainFrame &_mainFrame) : mainFrame(_mainFrame)
+UndoRedoStack::UndoRedoStack(MainFrame &mainFrame) : mainFrame(mainFrame)
 {
 }
 
@@ -189,7 +189,7 @@ UndoRedoStack::Operation UndoRedoStack::UpdateValue(Operation Operation)
 //		None
 //
 //==========================================================================
-void UndoRedoStack::Undo(void)
+void UndoRedoStack::Undo()
 {
 	// Make sure the undo stack isn't empty
 	if (undoStack.empty())
@@ -228,7 +228,7 @@ void UndoRedoStack::Undo(void)
 //		None
 //
 //==========================================================================
-void UndoRedoStack::Redo(void)
+void UndoRedoStack::Redo()
 {
 	// Make sure the redo stack isn't empty
 	if (redoStack.empty())
@@ -338,7 +338,7 @@ void UndoRedoStack::ApplyOperation(Operation &operation)
 //		None
 //
 //==========================================================================
-void UndoRedoStack::Update(void) const
+void UndoRedoStack::Update() const
 {
 	// Update all areas of the GUI screen
 	mainFrame.UpdateAnalysis();
@@ -363,7 +363,7 @@ void UndoRedoStack::Update(void) const
 //		None
 //
 //==========================================================================
-void UndoRedoStack::ClearStacks(void)
+void UndoRedoStack::ClearStacks()
 {
 	// Clear the undo stack
 	while (!undoStack.empty())

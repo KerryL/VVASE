@@ -78,7 +78,7 @@ KinematicOutputs::KinematicOutputs()
 //		None
 //
 //==========================================================================
-void KinematicOutputs::InitializeAllOutputs(void)
+void KinematicOutputs::InitializeAllOutputs()
 {
 	int i;
 
@@ -1193,7 +1193,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 // Description:		Returns a string containing the name of the specified output.
 //
 // Input Arguments:
-//		_output	= const CornerOutputsDouble& specifying the output in which we are
+//		output	= const CornerOutputsDouble& specifying the output in which we are
 //				  interested
 //
 // Output Arguments:
@@ -1203,13 +1203,12 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 //		wxString containing the name of the specified output
 //
 //==========================================================================
-wxString KinematicOutputs::GetCornerDoubleName(const CornerOutputsDouble &_output)
+wxString KinematicOutputs::GetCornerDoubleName(const CornerOutputsDouble &output)
 {
-	// The return value
 	wxString name;
 
 	// Return the name based on the specified output index
-	switch (_output)
+	switch (output)
 	{
 	case Caster:
 		name = _T("Caster");
@@ -1298,7 +1297,7 @@ wxString KinematicOutputs::GetCornerDoubleName(const CornerOutputsDouble &_outpu
 // Description:		Returns a string containing the name of the specified output.
 //
 // Input Arguments:
-//		_output	= const CornerOutputsVector& specifying the output in which we are
+//		output	= const CornerOutputsVector& specifying the output in which we are
 //				  interested
 //
 // Output Arguments:
@@ -1308,13 +1307,12 @@ wxString KinematicOutputs::GetCornerDoubleName(const CornerOutputsDouble &_outpu
 //		wxString containing the name of the specified output
 //
 //==========================================================================
-wxString KinematicOutputs::GetCornerVectorName(const CornerOutputsVector &_output)
+wxString KinematicOutputs::GetCornerVectorName(const CornerOutputsVector &output)
 {
-	// The return value
 	wxString name;
 
 	// Return the name based on the specified output index
-	switch (_output)
+	switch (output)
 	{
 	case InstantCenter:
 		name = _T("Instant Center");
@@ -1339,7 +1337,7 @@ wxString KinematicOutputs::GetCornerVectorName(const CornerOutputsVector &_outpu
 // Description:		Returns a string containing the name of the specified output.
 //
 // Input Arguments:
-//		_output	= const OutputsDouble& specifying the output in which we are
+//		output	= const OutputsDouble& specifying the output in which we are
 //				  interested
 //
 // Output Arguments:
@@ -1349,13 +1347,12 @@ wxString KinematicOutputs::GetCornerVectorName(const CornerOutputsVector &_outpu
 //		wxString containing the name of the specified output
 //
 //==========================================================================
-wxString KinematicOutputs::GetDoubleName(const OutputsDouble &_output)
+wxString KinematicOutputs::GetDoubleName(const OutputsDouble &output)
 {
-	// The return value
 	wxString name;
 
 	// Return the name based on the specified output index
-	switch (_output)
+	switch (output)
 	{
 	case FrontARBTwist:
 		name = _T("Front ARB Twist");
@@ -1444,7 +1441,7 @@ wxString KinematicOutputs::GetDoubleName(const OutputsDouble &_output)
 // Description:		Returns a string containing the name of the specified output.
 //
 // Input Arguments:
-//		_output	= const OutputsVector& specifying the output in which we are
+//		output	= const OutputsVector& specifying the output in which we are
 //				  interested
 //
 // Output Arguments:
@@ -1454,13 +1451,12 @@ wxString KinematicOutputs::GetDoubleName(const OutputsDouble &_output)
 //		wxString containing the name of the specified output
 //
 //==========================================================================
-wxString KinematicOutputs::GetVectorName(const OutputsVector &_output)
+wxString KinematicOutputs::GetVectorName(const OutputsVector &output)
 {
-	// The return value
 	wxString name;
 
 	// Return the name based on the specified output index
-	switch (_output)
+	switch (output)
 	{
 	case FrontKinematicRC:
 		name = _T("Front Kinematic Roll Center");
@@ -1510,7 +1506,7 @@ wxString KinematicOutputs::GetVectorName(const OutputsVector &_output)
 //					class outputs.
 //
 // Input Arguments:
-//		_output	= const &OutputsComplete specifying the output in which we are
+//		output	= const &OutputsComplete specifying the output in which we are
 //				  interested
 //
 // Output Arguments:
@@ -1520,23 +1516,18 @@ wxString KinematicOutputs::GetVectorName(const OutputsVector &_output)
 //		double specifying the value of the requested output
 //
 //==========================================================================
-double KinematicOutputs::GetOutputValue(const OutputsComplete &_output) const
+double KinematicOutputs::GetOutputValue(const OutputsComplete &output) const
 {
-	// The return value
 	double value;
-
-	// Temporary Vector for extracting componenets
 	Vector temp;
-
-	// Temporary OutputsComplete for math
 	OutputsComplete newOutputIndex;
 
 	// Depending on the specified OUTPUTS_COMPLETE, choose which output to return
-	if (_output <= EndRightFrontDoubles)
-		value = rightFront[_output - StartRightFrontDoubles];
-	else if (_output <= EndRightFrontVectors)
+	if (output <= EndRightFrontDoubles)
+		value = rightFront[output - StartRightFrontDoubles];
+	else if (output <= EndRightFrontVectors)
 	{
-		newOutputIndex = OutputsComplete(_output - StartRightFrontVectors);
+		newOutputIndex = OutputsComplete(output - StartRightFrontVectors);
 		temp = rightFrontVectors[int(newOutputIndex / 3)];
 
 		// Choose the value based on the selected componenet
@@ -1556,11 +1547,11 @@ double KinematicOutputs::GetOutputValue(const OutputsComplete &_output) const
 			break;
 		}
 	}
-	else if (_output <= EndLeftFrontDoubles)
-		value = leftFront[_output - StartLeftFrontDoubles];
-	else if (_output <= EndLeftFrontVectors)
+	else if (output <= EndLeftFrontDoubles)
+		value = leftFront[output - StartLeftFrontDoubles];
+	else if (output <= EndLeftFrontVectors)
 	{
-		newOutputIndex = OutputsComplete(_output - StartLeftFrontVectors);
+		newOutputIndex = OutputsComplete(output - StartLeftFrontVectors);
 		temp = leftFrontVectors[int(newOutputIndex / 3)];
 
 		// Choose the value based on the selected componenet
@@ -1580,11 +1571,11 @@ double KinematicOutputs::GetOutputValue(const OutputsComplete &_output) const
 			break;
 		}
 	}
-	else if (_output <= EndRightRearDoubles)
-		value = rightRear[_output - StartRightRearDoubles];
-	else if (_output <= EndRightRearVectors)
+	else if (output <= EndRightRearDoubles)
+		value = rightRear[output - StartRightRearDoubles];
+	else if (output <= EndRightRearVectors)
 	{
-		newOutputIndex = OutputsComplete(_output - StartRightRearVectors);
+		newOutputIndex = OutputsComplete(output - StartRightRearVectors);
 		temp = rightRearVectors[int(newOutputIndex / 3)];
 
 		// Choose the value based on the selected componenet
@@ -1604,11 +1595,11 @@ double KinematicOutputs::GetOutputValue(const OutputsComplete &_output) const
 			break;
 		}
 	}
-	else if (_output <= EndLeftRearDoubles)
-		value = leftRear[_output - StartLeftRearDoubles];
-	else if (_output <= EndLeftRearVectors)
+	else if (output <= EndLeftRearDoubles)
+		value = leftRear[output - StartLeftRearDoubles];
+	else if (output <= EndLeftRearVectors)
 	{
-		newOutputIndex = OutputsComplete(_output - StartLeftRearVectors);
+		newOutputIndex = OutputsComplete(output - StartLeftRearVectors);
 		temp = leftRearVectors[int(newOutputIndex / 3)];
 
 		// Choose the value based on the selected componenet
@@ -1628,11 +1619,11 @@ double KinematicOutputs::GetOutputValue(const OutputsComplete &_output) const
 			break;
 		}
 	}
-	else if (_output <= EndDoubles)
-		value = doubles[_output - StartDoubles];
-	else if (_output <= EndVectors)
+	else if (output <= EndDoubles)
+		value = doubles[output - StartDoubles];
+	else if (output <= EndVectors)
 	{
-		newOutputIndex = OutputsComplete(_output - StartVectors);
+		newOutputIndex = OutputsComplete(output - StartVectors);
 		temp = vectors[int(newOutputIndex / 3)];
 
 		// Choose the value based on the selected componenet
@@ -1666,7 +1657,7 @@ double KinematicOutputs::GetOutputValue(const OutputsComplete &_output) const
 //					list of class outputs.
 //
 // Input Arguments:
-//		_output	= const &OutputsComplete specifying the output in which we are
+//		output	= const &OutputsComplete specifying the output in which we are
 //				  interested
 //
 // Output Arguments:
@@ -1676,48 +1667,46 @@ double KinematicOutputs::GetOutputValue(const OutputsComplete &_output) const
 //		UnitConverter::UnitType specifying the unit type of the requested output
 //
 //==========================================================================
-UnitConverter::UnitType KinematicOutputs::GetOutputUnitType(const OutputsComplete &_output)
+UnitConverter::UnitType KinematicOutputs::GetOutputUnitType(const OutputsComplete &output)
 {
-	// The value to return
 	UnitConverter::UnitType unitType;
 
-	// For some simple math
 	OutputsComplete newOutputIndex;
 
 	// Depending on the specified Output, choose the units string
-	if (_output <= EndRightFrontDoubles)
-		unitType = GetCornerDoubleUnitType((CornerOutputsDouble)(_output - StartRightFrontDoubles));
-	else if (_output <= EndRightFrontVectors)
+	if (output <= EndRightFrontDoubles)
+		unitType = GetCornerDoubleUnitType((CornerOutputsDouble)(output - StartRightFrontDoubles));
+	else if (output <= EndRightFrontVectors)
 	{
-		newOutputIndex = OutputsComplete(_output - StartRightFrontVectors);
+		newOutputIndex = OutputsComplete(output - StartRightFrontVectors);
 		unitType = GetCornerVectorUnitType((CornerOutputsVector)int(newOutputIndex / 3));
 	}
-	else if (_output <= EndLeftFrontDoubles)
-		unitType = GetCornerDoubleUnitType((CornerOutputsDouble)(_output - StartLeftFrontDoubles));
-	else if (_output <= EndLeftFrontVectors)
+	else if (output <= EndLeftFrontDoubles)
+		unitType = GetCornerDoubleUnitType((CornerOutputsDouble)(output - StartLeftFrontDoubles));
+	else if (output <= EndLeftFrontVectors)
 	{
-		newOutputIndex = OutputsComplete(_output - StartLeftFrontVectors);
+		newOutputIndex = OutputsComplete(output - StartLeftFrontVectors);
 		unitType = GetCornerVectorUnitType((CornerOutputsVector)int(newOutputIndex / 3));
 	}
-	else if (_output <= EndRightRearDoubles)
-		unitType = GetCornerDoubleUnitType((CornerOutputsDouble)(_output - StartRightRearDoubles));
-	else if (_output <= EndRightRearVectors)
+	else if (output <= EndRightRearDoubles)
+		unitType = GetCornerDoubleUnitType((CornerOutputsDouble)(output - StartRightRearDoubles));
+	else if (output <= EndRightRearVectors)
 	{
-		newOutputIndex = OutputsComplete(_output - StartRightRearVectors);
+		newOutputIndex = OutputsComplete(output - StartRightRearVectors);
 		unitType = GetCornerVectorUnitType((CornerOutputsVector)int(newOutputIndex / 3));
 	}
-	else if (_output <= EndLeftRearDoubles)
-		unitType = GetCornerDoubleUnitType((CornerOutputsDouble)(_output - StartLeftRearDoubles));
-	else if (_output <= EndLeftRearVectors)
+	else if (output <= EndLeftRearDoubles)
+		unitType = GetCornerDoubleUnitType((CornerOutputsDouble)(output - StartLeftRearDoubles));
+	else if (output <= EndLeftRearVectors)
 	{
-		newOutputIndex = OutputsComplete(_output - StartLeftRearVectors);
+		newOutputIndex = OutputsComplete(output - StartLeftRearVectors);
 		unitType = GetCornerVectorUnitType((CornerOutputsVector)int(newOutputIndex / 3));
 	}
-	else if (_output <= EndDoubles)
-		unitType = GetDoubleUnitType((OutputsDouble)(_output - StartDoubles));
-	else if (_output <= EndVectors)
+	else if (output <= EndDoubles)
+		unitType = GetDoubleUnitType((OutputsDouble)(output - StartDoubles));
+	else if (output <= EndVectors)
 	{
-		newOutputIndex = OutputsComplete(_output - StartVectors);
+		newOutputIndex = OutputsComplete(output - StartVectors);
 		unitType = GetVectorUnitType((OutputsVector)int(newOutputIndex / 3));
 	}
 	else
@@ -1734,7 +1723,7 @@ UnitConverter::UnitType KinematicOutputs::GetOutputUnitType(const OutputsComplet
 //					class outputs.
 //
 // Input Arguments:
-//		_output	= const OutputsComplete& specifying the output in which we are
+//		output	= const OutputsComplete& specifying the output in which we are
 //				  interested
 //
 // Output Arguments:
@@ -1744,25 +1733,22 @@ UnitConverter::UnitType KinematicOutputs::GetOutputUnitType(const OutputsComplet
 //		wxString specifying the name of the requested output
 //
 //==========================================================================
-wxString KinematicOutputs::GetOutputName(const OutputsComplete &_output)
+wxString KinematicOutputs::GetOutputName(const OutputsComplete &output)
 {
-	// The value to return
 	wxString name;
-
-	// For some simple math
 	OutputsComplete newOutputIndex;
 
 	// Depending on the specified PLOT_ID, choose the name of the string
 	// Vectors are a special case - depending on which component of the vector is chosen,
 	// we need to append a different string to the end of the Name
-	if (_output <= EndRightFrontDoubles)
+	if (output <= EndRightFrontDoubles)
 	{
-		name = GetCornerDoubleName((CornerOutputsDouble)(_output - StartRightFrontDoubles));
+		name = GetCornerDoubleName((CornerOutputsDouble)(output - StartRightFrontDoubles));
 		name.Prepend(_T("Right Front "));
 	}
-	else if (_output <= EndRightFrontVectors)
+	else if (output <= EndRightFrontVectors)
 	{
-		newOutputIndex = OutputsComplete((int)_output - (int)StartRightFrontVectors);
+		newOutputIndex = OutputsComplete((int)output - (int)StartRightFrontVectors);
 		name = GetCornerVectorName((CornerOutputsVector)int(newOutputIndex / 3));
 
 		// Append the appropriate tag, depending on the specified component
@@ -1784,14 +1770,14 @@ wxString KinematicOutputs::GetOutputName(const OutputsComplete &_output)
 
 		name.Prepend(_T("Right Front "));
 	}
-	else if (_output <= EndLeftFrontDoubles)
+	else if (output <= EndLeftFrontDoubles)
 	{
-		name = GetCornerDoubleName((CornerOutputsDouble)(_output - StartLeftFrontDoubles));
+		name = GetCornerDoubleName((CornerOutputsDouble)(output - StartLeftFrontDoubles));
 		name.Prepend(_T("Left Front "));
 	}
-	else if (_output <= EndLeftFrontVectors)
+	else if (output <= EndLeftFrontVectors)
 	{
-		newOutputIndex = OutputsComplete((int)_output - (int)StartLeftFrontVectors);
+		newOutputIndex = OutputsComplete((int)output - (int)StartLeftFrontVectors);
 		name = GetCornerVectorName((CornerOutputsVector)int(newOutputIndex / 3));
 
 		// Append the appropriate tag, depending on the specified component
@@ -1813,14 +1799,14 @@ wxString KinematicOutputs::GetOutputName(const OutputsComplete &_output)
 
 		name.Prepend(_T("Left Front "));
 	}
-	else if (_output <= EndRightRearDoubles)
+	else if (output <= EndRightRearDoubles)
 	{
-		name = GetCornerDoubleName((CornerOutputsDouble)(_output - StartRightRearDoubles));
+		name = GetCornerDoubleName((CornerOutputsDouble)(output - StartRightRearDoubles));
 		name.Prepend(_T("Right Rear "));
 	}
-	else if (_output <= EndRightRearVectors)
+	else if (output <= EndRightRearVectors)
 	{
-		newOutputIndex = OutputsComplete((int)_output - (int)StartRightRearVectors);
+		newOutputIndex = OutputsComplete((int)output - (int)StartRightRearVectors);
 		name = GetCornerVectorName((CornerOutputsVector)int(newOutputIndex / 3));
 
 		// Append the appropriate tag, depending on the specified component
@@ -1842,14 +1828,14 @@ wxString KinematicOutputs::GetOutputName(const OutputsComplete &_output)
 
 		name.Prepend(_T("Right Rear "));
 	}
-	else if (_output <= EndLeftRearDoubles)
+	else if (output <= EndLeftRearDoubles)
 	{
-		name = GetCornerDoubleName((CornerOutputsDouble)(_output - StartLeftRearDoubles));
+		name = GetCornerDoubleName((CornerOutputsDouble)(output - StartLeftRearDoubles));
 		name.Prepend(_T("Left Rear "));
 	}
-	else if (_output <= EndLeftRearVectors)
+	else if (output <= EndLeftRearVectors)
 	{
-		newOutputIndex = OutputsComplete((int)_output - (int)StartLeftRearVectors);
+		newOutputIndex = OutputsComplete((int)output - (int)StartLeftRearVectors);
 		name = GetCornerVectorName((CornerOutputsVector)int(newOutputIndex / 3));
 
 		// Append the appropriate tag, depending on the specified component
@@ -1871,11 +1857,11 @@ wxString KinematicOutputs::GetOutputName(const OutputsComplete &_output)
 
 		name.Prepend(_T("Left Rear "));
 	}
-	else if (_output <= EndDoubles)
-		name = GetDoubleName((OutputsDouble)(_output - StartDoubles));
-	else if (_output <= EndVectors)
+	else if (output <= EndDoubles)
+		name = GetDoubleName((OutputsDouble)(output - StartDoubles));
+	else if (output <= EndVectors)
 	{
-		newOutputIndex = OutputsComplete((int)_output - (int)StartVectors);
+		newOutputIndex = OutputsComplete((int)output - (int)StartVectors);
 		name = GetVectorName((OutputsVector)int(newOutputIndex / 3));
 
 		// Append the appropriate tag, depending on the specified component
@@ -1908,7 +1894,7 @@ wxString KinematicOutputs::GetOutputName(const OutputsComplete &_output)
 // Description:		Returns a the type of units for the specified output.
 //
 // Input Arguments:
-//		_output	= const CornerOutputsDouble& specifying the
+//		output	= const CornerOutputsDouble& specifying the
 //				  output in which we are interested
 //
 // Output Arguments:
@@ -1918,12 +1904,12 @@ wxString KinematicOutputs::GetOutputName(const OutputsComplete &_output)
 //		UnitConverter::UnitType describing the units of the specified output
 //
 //==========================================================================
-UnitConverter::UnitType KinematicOutputs::GetCornerDoubleUnitType(const CornerOutputsDouble &_output)
+UnitConverter::UnitType KinematicOutputs::GetCornerDoubleUnitType(const CornerOutputsDouble &output)
 {
 	UnitConverter::UnitType unitType;
 
 	// Determine the units based on it's type
-	switch (_output)
+	switch (output)
 	{
 		// Angles
 	case Caster:
@@ -1975,7 +1961,7 @@ UnitConverter::UnitType KinematicOutputs::GetCornerDoubleUnitType(const CornerOu
 // Description:		Returns a the type of units for the specified output.
 //
 // Input Arguments:
-//		_output	= const CornerOutputsVector& specifying the
+//		output	= const CornerOutputsVector& specifying the
 //				  output in which we are interested
 //
 // Output Arguments:
@@ -1985,12 +1971,12 @@ UnitConverter::UnitType KinematicOutputs::GetCornerDoubleUnitType(const CornerOu
 //		UnitConverter::UnitType describing the units of the specified output
 //
 //==========================================================================
-UnitConverter::UnitType KinematicOutputs::GetCornerVectorUnitType(const CornerOutputsVector &_output)
+UnitConverter::UnitType KinematicOutputs::GetCornerVectorUnitType(const CornerOutputsVector &output)
 {
 	UnitConverter::UnitType unitType;
 
 	// Determine the units based on it's type
-	switch (_output)
+	switch (output)
 	{
 		// Distances
 	case InstantCenter:
@@ -2018,7 +2004,7 @@ UnitConverter::UnitType KinematicOutputs::GetCornerVectorUnitType(const CornerOu
 // Description:		Returns a the type of units for the specified output.
 //
 // Input Arguments:
-//		_output	= const OutputsDouble& specifying the
+//		output	= const OutputsDouble& specifying the
 //				  output in which we are interested
 //
 // Output Arguments:
@@ -2028,12 +2014,12 @@ UnitConverter::UnitType KinematicOutputs::GetCornerVectorUnitType(const CornerOu
 //		UnitConverter::UnitType describing the units of the specified output
 //
 //==========================================================================
-UnitConverter::UnitType KinematicOutputs::GetDoubleUnitType(const OutputsDouble &_output)
+UnitConverter::UnitType KinematicOutputs::GetDoubleUnitType(const OutputsDouble &output)
 {
 	UnitConverter::UnitType unitType;
 
 	// Determine the units based on it's type
-	switch (_output)
+	switch (output)
 	{
 		// Distances
 	case FrontThirdSpring:
@@ -2077,7 +2063,7 @@ UnitConverter::UnitType KinematicOutputs::GetDoubleUnitType(const OutputsDouble 
 // Description:		Returns a the type of units for the specified output.
 //
 // Input Arguments:
-//		_output	= const OutputsVector& specifying the
+//		output	= const OutputsVector& specifying the
 //				  output in which we are interested
 //
 // Output Arguments:
@@ -2087,12 +2073,12 @@ UnitConverter::UnitType KinematicOutputs::GetDoubleUnitType(const OutputsDouble 
 //		UnitConverter::UnitType describing the units of the specified output
 //
 //==========================================================================
-UnitConverter::UnitType KinematicOutputs::GetVectorUnitType(const OutputsVector &_output)
+UnitConverter::UnitType KinematicOutputs::GetVectorUnitType(const OutputsVector &output)
 {
 	UnitConverter::UnitType unitType;
 
 	// Determine the units based on it's type
-	switch (_output)
+	switch (output)
 	{
 		// Distances
 	case FrontKinematicRC:
@@ -2141,12 +2127,10 @@ UnitConverter::UnitType KinematicOutputs::GetVectorUnitType(const OutputsVector 
 //		OUTPUTS_COMPLETE describing the index for the specified output
 //
 //==========================================================================
-KinematicOutputs::OutputsComplete KinematicOutputs::OutputsCompleteIndex(const Corner::Location &location,
-																			const CornerOutputsDouble &cornerDouble,
-																			const CornerOutputsVector &cornerVector,
-																			const OutputsDouble &midDouble,
-																			const OutputsVector &vector,
-																			const Vector::Axis &axis)
+KinematicOutputs::OutputsComplete KinematicOutputs::OutputsCompleteIndex(
+	const Corner::Location &location, const CornerOutputsDouble &cornerDouble,
+	const CornerOutputsVector &cornerVector, const OutputsDouble &midDouble,
+	const OutputsVector &vector, const Vector::Axis &axis)
 {
 	OutputsComplete completeIndex = NumberOfOutputScalars;
 

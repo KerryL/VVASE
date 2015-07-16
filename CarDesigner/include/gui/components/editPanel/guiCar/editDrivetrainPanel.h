@@ -13,8 +13,8 @@
 // Description:  Contains the class declaration for the EDIT_DRIVETRAIN_PANEL class.
 // History:
 
-#ifndef _EDIT_DRIVETRAIN_PANEL_H_
-#define _EDIT_DRIVETRAIN_PANEL_H_
+#ifndef EDIT_DRIVETRAIN_PANEL_H_
+#define EDIT_DRIVETRAIN_PANEL_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -26,19 +26,14 @@ class Debugger;
 class EditDrivetrainPanel : public wxPanel
 {
 public:
-	// Constructor
-	EditDrivetrainPanel(EditPanel* _parent, wxWindowID id, const wxPoint& pos,
-		const wxSize& size, const Debugger &_debugger);
-
-	// Destructor
+	EditDrivetrainPanel(EditPanel* parent, wxWindowID id, const wxPoint& pos,
+		const wxSize& size, const Debugger &debugger);
 	~EditDrivetrainPanel();
 
 private:
-	// Debugger message printing utility
 	const Debugger &debugger;
 
-	// Creates the controls and positions everything within the panel
-	void CreateControls(void);
+	void CreateControls();
 };
 
-#endif// _EDIT_DRIVETRAIN_PANEL_H_
+#endif// EDIT_DRIVETRAIN_PANEL_H_

@@ -222,7 +222,7 @@ wxString AppearanceOptions::GetVisibilityString(const ObjectVisibility& item)
 //		None
 //
 //==========================================================================
-void AppearanceOptions::ShowAppearanceOptionsDialog(void)
+void AppearanceOptions::ShowAppearanceOptionsDialog()
 {
 	AppearanceOptionsDialog optionsDialog(mainFrame, this, wxID_ANY, wxDefaultPosition);
 

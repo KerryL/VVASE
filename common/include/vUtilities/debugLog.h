@@ -13,8 +13,8 @@
 // Description:  Debug log class intended to aid with multi-threaded debugging.
 //				 This class is designed to be optimized out for release builds.
 
-#ifndef _DEBUG_LOG_H_
-#define _DEBUG_LOG_H_
+#ifndef DEBUG_LOG_H_
+#define DEBUG_LOG_H_
 
 // Standard C++ headers
 #include <vector>
@@ -43,10 +43,10 @@ public:
 	};
 // The useful implementation
 #ifdef USE_DEBUG_LOG
-	static DebugLog* GetInstance(void);
-	static void Kill(void);
-	void SetTarget(const LogTarget &_target);
-	void Log(wxString message, int _indent = 0);
+	static DebugLog* GetInstance();
+	static void Kill();
+	void SetTarget(const LogTarget &target);
+	void Log(wxString message, int indent = 0);
 	
 private:
 	// Current indentation level for each thread
@@ -68,8 +68,8 @@ private:
 // The not-implementation
 #else
 	// Include inline, non-functioning versions of all above public methods here
-	static inline DebugLog* GetInstance(void) { return NULL; };
-	static inline void Kill(void) { };
+	static inline DebugLog* GetInstance() { return NULL; };
+	static inline void Kill() { };
 	static inline void SetTarget(const LogTarget &/*target*/) { };
 	static inline void Log(wxString /*message*/) { };
 	static inline void Log(wxString /*message*/, int /*indent*/) { };
@@ -77,9 +77,9 @@ private:
 
 private:
 	// These are private for singletons
-	DebugLog(void) { Log(_T("\n")); };// Always start with a newline
+	DebugLog() { Log(_T("\n")); };// Always start with a newline
 	DebugLog(const DebugLog &/*log*/) { };
 	DebugLog& operator= (const DebugLog &/*log*/) { return *this; };
 };
 
-#endif// _DEBUG_LOG_H_
+#endif// DEBUG_LOG_H_

@@ -15,8 +15,8 @@
 //	4/25/2009	- Changed Update() to include color argument in the form of wxColor, K. Loux.
 //	5/17/2009	- Removed VTK dependencies, K. Loux.
 
-#ifndef _PLANE3D_H_
-#define _PLANE3D_H_
+#ifndef PLANE3D_H_
+#define PLANE3D_H_
 
 // VVASE forward declarations
 class Color;
@@ -25,10 +25,7 @@ class Quadrilateral;
 class Plane3D
 {
 public:
-	// Constructor
-	Plane3D(RenderWindow &_renderer);
-
-	// Destructor
+	Plane3D(RenderWindow &renderer);
 	~Plane3D();
 
 	// Updates the object in the scene
@@ -36,8 +33,7 @@ public:
 		const Color &color, const bool &show);
 
 private:
-	// The plane actor
 	Quadrilateral *plane;
 };
 
-#endif// _PLANE3D_H_
+#endif// PLANE3D_H_

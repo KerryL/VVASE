@@ -17,8 +17,8 @@
 // History:
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
-#ifndef _FUEL_CELL_H_
-#define _FUEL_CELL_H_
+#ifndef FUEL_CELL_H_
+#define FUEL_CELL_H_
 
 // VVASE headers
 #include "vMath/vector.h"
@@ -26,25 +26,19 @@
 class FuelCell
 {
 public:
-	// Constructor
 	FuelCell();
-
-	// Destructor
 	~FuelCell();
 
 	// FIXME:  Need function to set/reset fuel parameters
 	// FIXME:  Need description of how fast fuel is burned (function of load and engine RPM?)
 
 	// Private data accessors
-	double GetFuelWeight(void) const { return fuelWeight; };
-	Vector GetFuelCG(void) const { return fuelCG; };
+	double GetFuelWeight() const { return fuelWeight; };
+	Vector GetFuelCG() const { return fuelCG; };
 
 private:
-	// Weight of fuel remaining
 	double fuelWeight;// [lbf]
-
-	// CG of the fuel remaining
 	Vector fuelCG;
 };
 
-#endif// _FUEL_CELL_H_
+#endif// FUEL_CELL_H_

@@ -28,7 +28,7 @@
 // Description:		Constructor for the MillikenAnalysis class.
 //
 // Input Arguments:
-//		_debugger	= const Debugger&, reference to the debug message printing utility
+//		debugger	= const Debugger&, reference to the debug message printing utility
 //
 // Output Arguments:
 //		None
@@ -37,7 +37,7 @@
 //		None
 //
 //==========================================================================
-MillikenAnalysis::MillikenAnalysis(const Debugger &_debugger) : debugger(_debugger)
+MillikenAnalysis::MillikenAnalysis(const Debugger &debugger) : debugger(debugger)
 {
 }
 

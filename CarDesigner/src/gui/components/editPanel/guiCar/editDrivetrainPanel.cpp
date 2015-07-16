@@ -32,11 +32,11 @@
 // Description:		Constructor for EditDrivetrainPanel class.
 //
 // Input Arguments:
-//		_parent		= EditPanel&, reference to this object's owner
+//		parent		= EditPanel&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
-//		_debugger	= const Debugger& reference to applications debug printing utility
+//		debugger	= const Debugger& reference to applications debug printing utility
 //
 // Output Arguments:
 //		None
@@ -45,10 +45,9 @@
 //		None
 //
 //==========================================================================
-EditDrivetrainPanel::EditDrivetrainPanel(EditPanel* _parent, wxWindowID id,
-										   const wxPoint& pos, const wxSize& size,
-										   const Debugger &_debugger) : wxPanel(_parent, id,
-										   pos, size), debugger(_debugger)
+EditDrivetrainPanel::EditDrivetrainPanel(EditPanel* parent, wxWindowID id,
+	const wxPoint& pos, const wxSize& size, const Debugger &debugger)
+	: wxPanel(parent, id, pos, size), debugger(debugger)
 {
 }
 

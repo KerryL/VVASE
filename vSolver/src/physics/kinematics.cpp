@@ -74,8 +74,8 @@ Kinematics::Kinematics()
 //					values of pitch, roll, heave, and steer.
 //
 // Input Arguments:
-//		_originalCar	= const Car* - for reference only
-//		_workingCar		= Car* to be changed (updated) by this function
+//		originalCar	= const Car* - for reference only
+//		workingCar		= Car* to be changed (updated) by this function
 //		name			= wxString used to print messages about this car
 //
 // Output Arguments:
@@ -85,15 +85,15 @@ Kinematics::Kinematics()
 //		None
 //
 //==========================================================================
-void Kinematics::UpdateKinematics(const Car* _originalCar, Car* _workingCar, wxString name)
+void Kinematics::UpdateKinematics(const Car* originalCar, Car* workingCar, wxString name)
 {
 	wxStopWatch timer;
 	timer.Start();
 
 	Debugger::GetInstance() << "UpdateKinematics() for " << name << Debugger::PriorityMedium;
 
-	originalCar = _originalCar;// This one is for reference and won't be changed by this class
-	workingCar = _workingCar;
+	this->originalCar = originalCar;// This one is for reference and won't be changed by this class
+	this->workingCar = workingCar;
 
 	// Ensure exclusive access to the car objects
 	// NOTE:  Always lock working car first, then lock original car (consistency required to prevent deadlocks)

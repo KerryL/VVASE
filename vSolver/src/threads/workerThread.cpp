@@ -38,9 +38,9 @@
 // Description:		Constructor for the WorkerThread class.
 //
 // Input Arguments:
-//		_jobQueue	= JobQueue*, pointing to the queue from which this
+//		jobQueue	= JobQueue*, pointing to the queue from which this
 //					  thread will pull jobs
-//		_Id			= int representing this thread's ID number
+//		id			= int representing this thread's ID number
 //
 // Output Arguments:
 //		None
@@ -49,13 +49,10 @@
 //		None
 //
 //==========================================================================
-WorkerThread::WorkerThread(JobQueue* _jobQueue, int _id)
-							 : jobQueue(_jobQueue), id(_id)
+WorkerThread::WorkerThread(JobQueue* jobQueue, int id)
+							 : jobQueue(jobQueue), id(id)
 {
-	// Make sure the job queue exists
-	assert(_jobQueue);
-
-	// Create the thread object
+	assert(jobQueue);
 	wxThread::Create();
 }
 
@@ -95,7 +92,7 @@ WorkerThread::~WorkerThread()
 //		wxThread::ExitCode
 //
 //==========================================================================
-wxThread::ExitCode WorkerThread::Entry(void)
+wxThread::ExitCode WorkerThread::Entry()
 {
 	ThreadJob::ThreadCommand error;
 

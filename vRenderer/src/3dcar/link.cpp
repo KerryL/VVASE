@@ -40,14 +40,12 @@
 //		None
 //
 //==========================================================================
-Link::Link(RenderWindow &_renderer)
+Link::Link(RenderWindow &renderer)
 {
-	// Create the objects
-	member = new Cylinder(_renderer);
-	endPoint1 = new Sphere(_renderer);
-	endPoint2 = new Sphere(_renderer);
+	member = new Cylinder(renderer);
+	endPoint1 = new Sphere(renderer);
+	endPoint2 = new Sphere(renderer);
 
-	// Set up the Actors
 	endPoint1->SetColor(Color::ColorWhite);
 	endPoint2->SetColor(Color::ColorWhite);
 }

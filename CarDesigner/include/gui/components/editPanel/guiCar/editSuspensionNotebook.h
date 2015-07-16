@@ -13,8 +13,8 @@
 // Description:  Contains the class declaration for the EDIT_SUSPENSION_NOTEBOOK class.
 // History:
 
-#ifndef _EDIT_SUSPENSION_NOTEBOOK_H_
-#define _EDIT_SUSPENSION_NOTEBOOK_H_
+#ifndef EDIT_SUSPENSION_NOTEBOOK_H_
+#define EDIT_SUSPENSION_NOTEBOOK_H_
 
 // wxWidgets headers
 #include <wx/notebook.h>
@@ -33,32 +33,24 @@ class EditSuspensionPanel;
 class EditSuspensionNotebook : public wxNotebook
 {
 public:
-	// Constructor
-	EditSuspensionNotebook(EditPanel &_parent, wxWindowID id, const wxPoint& pos,
+	EditSuspensionNotebook(EditPanel &parent, wxWindowID id, const wxPoint& pos,
 		const wxSize& size, long style);
-
-	// Destructor
 	~EditSuspensionNotebook();
 
-	// Returns access to this object's parent
-	inline EditPanel &GetParent() { return parent; };
+	inline EditPanel &GetParent() { return parent; }
 
-	// Updates the information on the panel
-	void UpdateInformation(Car *_currentCar);
-	void UpdateInformation(void);
+	void UpdateInformation(Car *currentCar);
+	void UpdateInformation();
 
 	// Keeps the sides of the car identical for symmetric suspensions
-	void UpdateSymmetry(void);
+	void UpdateSymmetry();
 
 private:
-	// The parent window
 	EditPanel &parent;
 
-	// The object with which we are currently associated
 	Car *currentCar;
 
-	// Creates the controls and positions everything within the panel
-	void CreateControls(void);
+	void CreateControls();
 
 	// The different notebook tabs
 	EditSuspensionPanel *suspension;
@@ -68,4 +60,4 @@ private:
 	EditCornerPanel *leftRear;
 };
 
-#endif// _EDIT_SUSPENSION_NOTEBOOK_H_
+#endif// EDIT_SUSPENSION_NOTEBOOK_H_

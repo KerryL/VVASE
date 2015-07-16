@@ -32,7 +32,7 @@
 // Description:		Constructor for the XlsxReader class.
 //
 // Input Arguments:
-//		_pathAndFileName	= wxString describing of the .xlsx file to read.
+//		pathAndFileName	= wxString describing of the .xlsx file to read.
 //
 // Output Arguments:
 //		None
@@ -41,18 +41,16 @@
 //		None
 //
 //==========================================================================
-XlsxReader::XlsxReader(const wxString &_pathAndFileName)
+XlsxReader::XlsxReader(const wxString &pathAndFileName)
 {
 	isOkFlag = false;
-	pathAndFileName = _pathAndFileName;
+	this->pathAndFileName = pathAndFileName;
 	workbook = NULL;
 	sharedStrings = NULL;
 
-	// Make sure the file exists
 	if (!wxFileExists(pathAndFileName))
 		return;
 
-	// Attempt to read relevant information from the file
 	if (Initialize())
 		isOkFlag =  true;
 }
@@ -172,7 +170,7 @@ wxString XlsxReader::GetSheetName(const unsigned int &sheet) const
 //		unsigned int specifying the selected tab
 //
 //==========================================================================
-unsigned int XlsxReader::GetSelectedSheet(void) const
+unsigned int XlsxReader::GetSelectedSheet() const
 {
 	// Check each sheet until we find the selected one
 	unsigned int i;
@@ -239,7 +237,7 @@ wxZipEntry *XlsxReader::GetEntry(wxZipInputStream &zipStream, const wxString &en
 //		wxZipInputStream* for the associated file
 //
 //==========================================================================
-wxZipInputStream *XlsxReader::OpenFile(void) const
+wxZipInputStream *XlsxReader::OpenFile() const
 {
 	// Open the archive
 	wxFFileInputStream *fileInput = new wxFFileInputStream(pathAndFileName);
@@ -269,7 +267,7 @@ wxZipInputStream *XlsxReader::OpenFile(void) const
 //		bool, true for success, false otherwise
 //
 //==========================================================================
-bool XlsxReader::Initialize(void)
+bool XlsxReader::Initialize()
 {
 	// Open the archive
 	wxZipInputStream *zipStream = OpenFile();

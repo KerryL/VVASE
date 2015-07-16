@@ -114,9 +114,9 @@ public:
 
 	// For getting the names of the elements of this class
 	static wxString GetHardpointName(const Hardpoints &point);
-	static wxString GetActuationAttachmentName(const ActuationAttachment &_attachment);
-	static wxString GetActuationTypeName(const ActuationType &_type);
-	static wxString GetLocationName(const Location &_location);
+	static wxString GetActuationAttachmentName(const ActuationAttachment &attachment);
+	static wxString GetActuationTypeName(const ActuationType &type);
+	static wxString GetLocationName(const Location &location);
 
 	// Suspension parameters
 	double staticCamber;			// [rad] - positive top away from the center car

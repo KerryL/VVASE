@@ -21,8 +21,8 @@
 //	3/24/2009	- Moved (physical location) to physics folder, K. Loux.
 //	4/13/2009	- Added boost::threads for SolveCorner(), K. Loux.
 
-#ifndef _KINEMATICS_H_
-#define _KINEMATICS_H_
+#ifndef KINEMATICS_H_
+#define KINEMATICS_H_
 
 // VVASE headers
 #include "vSolver/physics/kinematicOutputs.h"
@@ -46,7 +46,7 @@ public:
 		Vector::Axis firstRotation;
 
 		// Operators
-		bool operator == (const Kinematics::Inputs &target) const
+		bool operator==(const Kinematics::Inputs &target) const
 		{
 			if (pitch == target.pitch &&
 				roll == target.roll &&
@@ -58,27 +58,27 @@ public:
 
 			return false;
 		}
-		bool operator != (const Kinematics::Inputs &target) const { return !(*this == target); };
+		bool operator!=(const Kinematics::Inputs &target) const { return !(*this == target); }
 	};
 
-	inline void SetPitch(const double &pitch) { inputs.pitch = pitch; };
-	inline void SetRoll(const double &roll) { inputs.roll = roll; };
-	inline void SetHeave(const double &heave) { inputs.heave = heave; };
-	inline void SetRackTravel(const double &travel) { inputs.rackTravel = travel; };
-	inline void SetCenterOfRotation(const Vector &center) { inputs.centerOfRotation = center; };
-	inline void SetFirstEulerRotation(const Vector::Axis &first) { inputs.firstRotation = first; };
-	inline void SetInputs(Inputs _inputs) { inputs = _inputs; };
+	inline void SetPitch(const double &pitch) { inputs.pitch = pitch; }
+	inline void SetRoll(const double &roll) { inputs.roll = roll; }
+	inline void SetHeave(const double &heave) { inputs.heave = heave; }
+	inline void SetRackTravel(const double &travel) { inputs.rackTravel = travel; }
+	inline void SetCenterOfRotation(const Vector &center) { inputs.centerOfRotation = center; }
+	inline void SetFirstEulerRotation(const Vector::Axis &first) { inputs.firstRotation = first; }
+	inline void SetInputs(const Inputs& inputs) { this->inputs = inputs; }
 
-	void UpdateKinematics(const Car* _OriginalCar, Car* _WorkingCar, wxString Name);
+	void UpdateKinematics(const Car* originalCar, Car* workingCar, wxString name);
 
-	inline KinematicOutputs GetOutputs(void) { return outputs; };
-	inline double GetPitch(void) { return inputs.pitch; };
-	inline double GetRoll(void) { return inputs.roll; };
-	inline double GetHeave(void) { return inputs.heave; };
-	inline double GetRackTravel(void) { return inputs.rackTravel; };
-	inline Vector GetCenterOfRotation(void) { return inputs.centerOfRotation; };
-	inline Vector::Axis GetFirstEulerRotation(void) { return inputs.firstRotation; };
-	inline Inputs GetInputs(void) { return inputs; };
+	inline KinematicOutputs GetOutputs() { return outputs; }
+	inline double GetPitch() { return inputs.pitch; }
+	inline double GetRoll() { return inputs.roll; }
+	inline double GetHeave() { return inputs.heave; }
+	inline double GetRackTravel() { return inputs.rackTravel; }
+	inline Vector GetCenterOfRotation() { return inputs.centerOfRotation; }
+	inline Vector::Axis GetFirstEulerRotation() { return inputs.firstRotation; }
+	inline Inputs GetInputs() { return inputs; }
 
 private:
 	Inputs inputs;
@@ -92,7 +92,7 @@ private:
 	bool SolveCorner(Corner &corner, const Corner &original,
 		const Vector &rotations, const Vector::Axis &secondRotation);
 
-	void UpdateOutputs(void);
+	void UpdateOutputs();
 
 	// Kinematic solvers
 	static bool SolveForPoint(const Vector &center1, const Vector &center2, const Vector &center3,
@@ -123,4 +123,4 @@ private:
 		const Vector &originalCenter2, const Vector &original, Vector &current);
 };
 
-#endif// _KINEMATICS_H_
+#endif// KINEMATICS_H_

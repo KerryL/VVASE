@@ -26,7 +26,7 @@
 // Description:		Constructor for the FilterBase class.
 //
 // Input Arguments:
-//		_sampleRate		= const double& specifying the sampling rate in Hz
+//		sampleRate		= const double& specifying the sampling rate in Hz
 //
 // Output Arguments:
 //		None
@@ -35,9 +35,8 @@
 //		None
 //
 //==========================================================================
-FilterBase::FilterBase(const double &_sampleRate) : sampleRate(_sampleRate)
+FilterBase::FilterBase(const double &sampleRate) : sampleRate(sampleRate)
 {
-	// Initialize the pointers to NULL
 	a = NULL;
 	b = NULL;
 	u = NULL;

@@ -13,8 +13,8 @@
 // Description:  Dialog box for entering a minimum and maximum value for an axis.
 // History:
 
-#ifndef _RANGE_LIMITS_DIALOG_H_
-#define _RANGE_LIMITS_DIALOG_H_
+#ifndef RANGE_LIMITS_DIALOG_H_
+#define RANGE_LIMITS_DIALOG_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -22,11 +22,10 @@
 class RangeLimitsDialog : public wxDialog
 {
 public:
-	// Constructor
 	RangeLimitsDialog(wxWindow *parent, const double &min, const double &max);
 
-	double GetMinimum(void) const;
-	double GetMaximum(void) const;
+	double GetMinimum() const;
+	double GetMaximum() const;
 
 private:
 	wxTextCtrl *minBox;
@@ -35,8 +34,7 @@ private:
 	// Overload from wxDialog
 	virtual void OnOKButton(wxCommandEvent &event);
 
-	// For the event table
 	DECLARE_EVENT_TABLE();
 };
 
-#endif// _RANGE_LIMITS_DIALOG_H_
+#endif// RANGE_LIMITS_DIALOG_H_

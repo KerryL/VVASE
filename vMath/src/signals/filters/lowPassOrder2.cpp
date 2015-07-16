@@ -129,7 +129,7 @@ void LowPassSecondOrderFilter::Initialize(const double &initialValue)
 // Description:		Applies the filter.
 //
 // Input Arguments:
-//		_u	= const double& specifying the raw data input to the filter
+//		in	= const double& specifying the raw data input to the filter
 //
 // Output Arguments:
 //		None
@@ -138,12 +138,12 @@ void LowPassSecondOrderFilter::Initialize(const double &initialValue)
 //		double indicating the newly filtered data (same units as input data)
 //
 //==========================================================================
-double LowPassSecondOrderFilter::Apply(const double &_u)
+double LowPassSecondOrderFilter::Apply(const double &in)
 {
 	// Shift the inputs one space
 	u[2] = u[1];
 	u[1] = u[0];
-	u[0] = _u;
+	u[0] = in;
 
 	y[2] = y[1];
 	y[1] = y[0];

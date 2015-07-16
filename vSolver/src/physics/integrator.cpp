@@ -27,9 +27,9 @@
 //					parameters that are required for integration to begin.
 //
 // Input Arguments:
-//		_integrationMethod	= const IntegrationMethod& to use for future integrations
-//		_frequency			= const Frequency& at which the integration will occur [Hz]
-//		_debugger			= const Debugger&, reference to debug message printing utility
+//		integrationMethod	= const IntegrationMethod& to use for future integrations
+//		frequency			= const Frequency& at which the integration will occur [Hz]
+//		debugger			= const Debugger&, reference to debug message printing utility
 //
 // Output Arguments:
 //		None
@@ -38,16 +38,11 @@
 //		None
 //
 //==========================================================================
-Integrator::Integrator(const IntegrationMethod &_integrationMethod, const double &_frequency,
-					   const Debugger &_debugger) : debugger(_debugger)
+Integrator::Integrator(const IntegrationMethod &integrationMethod,
+	const double &frequency, const Debugger &debugger) : debugger(debugger)
 {
-	// Assign the arguments to the class members
-	frequency = _frequency;
-
-	// Assign the integration method
-	SetIntegrationMethod(_integrationMethod);
-
-	// Initialize the integrator
+	this->frequency = frequency;
+	SetIntegrationMethod(integrationMethod);
 	Reset();
 }
 
@@ -69,10 +64,7 @@ Integrator::Integrator(const IntegrationMethod &_integrationMethod, const double
 //==========================================================================
 Integrator::Integrator(const Integrator &integrator) : debugger(integrator.debugger)
 {
-	// Initialize the pointers
 	oldStateDerivatives = NULL;
-
-	// Do the copy
 	*this = integrator;
 }
 
@@ -94,7 +86,6 @@ Integrator::Integrator(const Integrator &integrator) : debugger(integrator.debug
 //==========================================================================
 Integrator::~Integrator()
 {
-	// Delete the stored state derivatives
 	delete [] oldStateDerivatives;
 	oldStateDerivatives = 0;
 }
@@ -117,7 +108,7 @@ Integrator::~Integrator()
 //		State of the system at the end of this new time step
 //
 //==========================================================================
-State Integrator::ComputeNewState(void)
+State Integrator::ComputeNewState()
 {
 	// Choose the correct integration function
 	switch (integrationMethod)
@@ -151,7 +142,7 @@ State Integrator::ComputeNewState(void)
 //		State of the system at the end of this new time step
 //
 //==========================================================================
-State Integrator::DoEulerSemiImplicit(void)
+State Integrator::DoEulerSemiImplicit()
 {
 	State nextState;
 
@@ -174,7 +165,7 @@ State Integrator::DoEulerSemiImplicit(void)
 //		State of the system at the end of this new time step
 //
 //==========================================================================
-State Integrator::DoRungeKuttaSecondOrder(void)
+State Integrator::DoRungeKuttaSecondOrder()
 {
 	State nextState;
 
@@ -197,7 +188,7 @@ State Integrator::DoRungeKuttaSecondOrder(void)
 //		State of the system at the end of this new time step
 //
 //==========================================================================
-State Integrator::DoRungeKuttaFourthOrder(void)
+State Integrator::DoRungeKuttaFourthOrder()
 {
 	State nextState;
 
@@ -220,7 +211,7 @@ State Integrator::DoRungeKuttaFourthOrder(void)
 //		State of the system at the end of this new time step
 //
 //==========================================================================
-State Integrator::DoAdamsBashforthThirdOrder(void)
+State Integrator::DoAdamsBashforthThirdOrder()
 {
 	State nextState;
 
@@ -265,7 +256,7 @@ void Integrator::Reset(State /*initialConditions*/)
 //		None
 //
 //==========================================================================
-void Integrator::Reset(void)
+void Integrator::Reset()
 {
 	State initialConditions;
 
@@ -282,7 +273,7 @@ void Integrator::Reset(void)
 //					store.
 //
 // Input Arguments:
-//		_integrationMethod	= IntegrationMethod to use for future integration
+//		integrationMethod	= IntegrationMethod to use for future integration
 //
 // Output Arguments:
 //		None
@@ -291,10 +282,9 @@ void Integrator::Reset(void)
 //		None
 //
 //==========================================================================
-void Integrator::SetIntegrationMethod(IntegrationMethod _integrationMethod)
+void Integrator::SetIntegrationMethod(IntegrationMethod integrationMethod)
 {
-	// Assign the integration method to our class member
-	integrationMethod = _integrationMethod;
+	this->integrationMethod = integrationMethod;
 
 	// Determine the number of state derivatives we need to store
 	switch (integrationMethod)
@@ -329,7 +319,7 @@ void Integrator::SetIntegrationMethod(IntegrationMethod _integrationMethod)
 // Description:		Sets this object's integration frequency.
 //
 // Input Arguments:
-//		_frequency	= double specifying the frequency to use for future
+//		frequency	= double specifying the frequency to use for future
 //					  integrations
 //
 // Output Arguments:
@@ -339,15 +329,14 @@ void Integrator::SetIntegrationMethod(IntegrationMethod _integrationMethod)
 //		None
 //
 //==========================================================================
-void Integrator::SetFrequency(double _frequency)
+void Integrator::SetFrequency(double frequency)
 {
-	// Assign the frequency to the class member
-	frequency = _frequency;
+	this->frequency = frequency;
 }
 
 //==========================================================================
 // Class:			Integrator
-// Function:		operator =
+// Function:		operator=
 //
 // Description:		Assignment operator for Integrator class.
 //
@@ -361,7 +350,7 @@ void Integrator::SetFrequency(double _frequency)
 //		Integrator&, reference to this object
 //
 //==========================================================================
-Integrator& Integrator::operator = (const Integrator &integrator)
+Integrator& Integrator::operator=(const Integrator &integrator)
 {
 	// Check for self-assignment
 	if (this == &integrator)

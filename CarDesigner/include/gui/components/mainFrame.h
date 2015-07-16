@@ -30,8 +30,8 @@
 //				  existence and selecting multiple files to open, K. Loux.
 //	10/18/2010	- Added undo/redo stack object, K. Loux.
 
-#ifndef _MAIN_FRAME_H_
-#define _MAIN_FRAME_H_
+#ifndef MAIN_FRAME_H_
+#define MAIN_FRAME_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -56,17 +56,12 @@ class OutputPanel;
 class JobQueue;
 class ThreadJob;
 
-// The main frame class
 class MainFrame : public wxFrame
 {
 public:
-	// Constructor
 	MainFrame();
-
-	// Destructor
 	~MainFrame();
 
-	// Public class level constant - the name of the config file
 	static const wxString pathToConfigFile;
 
 	// Method for opening files
@@ -76,20 +71,20 @@ public:
 	// for the private list
 	int AddObjectToList(GuiObject *objectToAdd);
 	void RemoveObjectFromList(int index);
-	inline int GetObjectCount(void) const { return openObjectList.GetCount(); };
-	inline GuiObject *GetObjectByIndex(int index) const { return openObjectList[index]; };
+	inline int GetObjectCount() const { return openObjectList.GetCount(); }
+	inline GuiObject *GetObjectByIndex(int index) const { return openObjectList[index]; }
 
 	// Controls the object that is currently "active"
 	void SetActiveIndex(int index, bool selectNotebookTab = true);
-	inline int GetActiveIndex(void) const { return activeIndex; };
+	inline int GetActiveIndex() const { return activeIndex; }
 
 	// Accessor to deletion flag
-	inline bool ObjectIsBeingDeleted(void) const { return beingDeleted; };
+	inline bool ObjectIsBeingDeleted() const { return beingDeleted; }
 
 	// Accessor to reference to other GUI components
-	inline MainTree *GetSystemsTree(void) const { return systemsTree; };
-	inline MainNotebook *GetNotebook(void) const { return notebook; };
-	inline EditPanel *GetEditPanel(void) const { return editPanel; };
+	inline MainTree *GetSystemsTree() const { return systemsTree; }
+	inline MainNotebook *GetNotebook() const { return notebook; }
+	inline EditPanel *GetEditPanel() const { return editPanel; }
 
 	// Adds/removes files to/from the recent history list
 	void AddFileToHistory(wxString pathAndFileName);
@@ -105,98 +100,79 @@ public:
 	wxArrayString GetFileNameFromUser(wxString dialogTitle, wxString defaultDirectory,
 		wxString defaultFileName, wxString wildcard, long style);
 
-	// Updated the kinematics outputs for each car
-	void UpdateAnalysis(void);
+	void UpdateAnalysis();
 
 	// Updates the output panel with current car output information 
 	// (should be called following an analysis update)
-	void UpdateOutputPanel(void);
+	void UpdateOutputPanel();
 
 	// Add a job to the queue to be processed by a worker thread
 	void AddJob(ThreadJob &newJob);
-	JobQueue& GetJobQueue(void) { return *jobQueue; };
+	JobQueue& GetJobQueue() { return *jobQueue; };
 
 	// Returns the current inputs for the kinematics analysis
-	inline Kinematics::Inputs GetInputs(void) const { return kinematicInputs; };
-	inline bool GetUseRackTravel(void) const { return useRackTravel; };
-	inline void SetUseRackTravel(bool _useRackTravel) { useRackTravel = _useRackTravel; };
+	inline Kinematics::Inputs GetInputs() const { return kinematicInputs; }
+	inline bool GetUseRackTravel() const { return useRackTravel; }
+	inline void SetUseRackTravel(bool useRackTravel) { this->useRackTravel = useRackTravel; }
 
-	// Returns true if there are any outstanding jobs
-	bool JobsPending(void) const;
+	bool JobsPending() const;
 
-	// Returns the number of worker threads available for processing
-	inline unsigned int GetNumberOfThreads(void) const { return numberOfThreads; };
-	void SetNumberOfThreads(unsigned int _numberOfThreads);
+	inline unsigned int GetNumberOfThreads() const { return numberOfThreads; }
+	void SetNumberOfThreads(unsigned int numberOfThreads);
 
 	// Returns a reference to the undo/redo stack object
-	inline UndoRedoStack& GetUndoRedoStack(void) { return undoRedo; };
+	inline UndoRedoStack& GetUndoRedoStack() { return undoRedo; };
 
 	// Accessors to enable/disable the Undo/Redo menu items
-	void EnableUndo(void) { menuBar->FindItem(IdMenuEditUndo)->Enable(true); };
-	void EnableRedo(void) { menuBar->FindItem(IdMenuEditRedo)->Enable(true); };
-	void DisableUndo(void) { menuBar->FindItem(IdMenuEditUndo)->Enable(false); };
-	void DisableRedo(void) { menuBar->FindItem(IdMenuEditRedo)->Enable(false); };
+	void EnableUndo() { menuBar->FindItem(IdMenuEditUndo)->Enable(true); }
+	void EnableRedo() { menuBar->FindItem(IdMenuEditRedo)->Enable(true); }
+	void DisableUndo() { menuBar->FindItem(IdMenuEditUndo)->Enable(false); }
+	void DisableRedo() { menuBar->FindItem(IdMenuEditRedo)->Enable(false); }
 	
-	const wxFont& GetOutputFont(void) { return outputFont; };
-	const wxFont& GetPlotFont(void) { return plotFont; };
+	const wxFont& GetOutputFont() { return outputFont; }
+	const wxFont& GetPlotFont() { return plotFont; }
 	
 	void SetOutputFont(const wxFont &font);
 	void SetPlotFont(const wxFont &font);
 
 private:
-	// The form object manager - this controls docking, sub-frame locations, etc.
 	wxAuiManager manager;
 
-	// Object to manage recently viewed file list
 	wxFileHistory *recentFileManager;
 
-	// This object manages the worker threads
 	JobQueue *jobQueue;
-
-	// The actual number of active threads
 	unsigned short activeThreads;
-
-	// The number of worker threads in our thread pool
 	unsigned short numberOfThreads;
-
-	// The number of un-closed jobs
 	unsigned int openJobCount;
 
-	// For creating controls
-	void CreateMenuBar(void);
-	void CreateKinematicAnalysisToolbar(void);
+	void CreateMenuBar();
+	void CreateKinematicAnalysisToolbar();
 
 	// Functions that do some of the frame initialization and control positioning
-	void DoLayout(void);
-	void SetProperties(void);
-	void InitializeSolver(void);
+	void DoLayout();
+	void SetProperties();
+	void InitializeSolver();
 
-	// Sets the notebook page with index Index to be the top page
 	void SetNotebookPage(int index);
 
-	// For object management we need an index specifying the active car
 	int activeIndex;
-
-	// Flag set to true during the deletion process
 	bool beingDeleted;
 
-	// Asks for user confirmation and checks to make sure the cars are saved
-	bool CloseThisForm(void);
+	bool CloseThisForm();
 
 	// Read and writes the configuration information to the registry (called on load and exit)
-	void ReadConfiguration(void);
-	void WriteConfiguration(void);
+	void ReadConfiguration();
+	void WriteConfiguration();
 
-	// Update the object specific menu (called any time the ActiveIndex changes)
-	void UpdateActiveObjectMenu(void);
+	void UpdateActiveObjectMenu();
 
 	// For the context menus we need to store the index of the object
 	// for which the menu was created - it might not be the active car!
 	int objectOfInterestIndex;
 
 	// For dynamically changing the menu bar
-	wxMenu *CreateCarMenu(void);
-	wxMenu *CreateIterationMenu(void);
+	wxMenu *CreateCarMenu();
+	wxMenu *CreateIterationMenu();
 
 	// The input parameters for the kinematic analyses
 	Kinematics::Inputs kinematicInputs;
@@ -205,7 +181,6 @@ private:
 	// Maximum number of recent files to store
 	static const int maxRecentFiles = 9;
 
-	// The event IDs
 	enum MenuEventId
 	{
 		// Menu bar
@@ -327,24 +302,18 @@ private:
 	OutputPanel *outputPanel;
 	wxTextCtrl *debugPane;
 
-	// The menu bar
 	wxMenuBar *menuBar;
-
-	// Toolbars
 	wxToolBar *kinematicToolbar;
 
-	// The list of open objects
 	ManagedList<GuiObject> openObjectList;
 
-	// The undo/redo object
 	UndoRedoStack undoRedo;
 	
 	// The font objects
 	wxFont outputFont;
 	wxFont plotFont;
 
-	// For the event table
 	DECLARE_EVENT_TABLE();
 };
 
-#endif// _MAIN_FRAME_H_
+#endif// MAIN_FRAME_H_

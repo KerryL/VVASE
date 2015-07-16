@@ -13,8 +13,8 @@
 // Description:  Derived from Primitive for creating cylindrical objects.
 // History:
 
-#ifndef _CYLINDER_H_
-#define _CYLINDER_H_
+#ifndef CYLINDER_H_
+#define CYLINDER_H_
 
 // Local headers
 #include "vRenderer/primitives/primitive.h"
@@ -23,37 +23,30 @@
 class Cylinder : public Primitive
 {
 public:
-	// Constructor
-	Cylinder(RenderWindow &_renderWindow);
-
-	// Destructor
+	Cylinder(RenderWindow &renderWindow);
 	~Cylinder();
 
 	// Mandatory overloads from Primitive - for creating geometry and testing the
 	// validity of this object's parameters
-	void GenerateGeometry(void);
-	bool HasValidParameters(void);
+	void GenerateGeometry();
+	bool HasValidParameters();
 
 	// Private data accessors
-	void SetResolution(const int &_resolution);
-	void SetCapping(const bool &_drawCaps);
-	void SetEndPoint1(const Vector &_endPoint1);
-	void SetEndPoint2(const Vector &_endPoint2);
-	void SetRadius(const double &_radius);
+	void SetResolution(const int &resolution);
+	void SetCapping(const bool &drawCaps);
+	void SetEndPoint1(const Vector &endPoint1);
+	void SetEndPoint2(const Vector &endPoint2);
+	void SetRadius(const double &radius);
 
 private:
-	// Capping On/Off
 	bool drawCaps;
 
-	// The resolution
 	int resolution;
 
-	// The locations of the cylinder ends
 	Vector endPoint1;
 	Vector endPoint2;
 
-	// The cylinder's radius
 	double radius;
 };
 
-#endif// _CYLINDER_H_
+#endif// CYLINDER_H_

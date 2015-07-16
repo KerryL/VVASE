@@ -15,8 +15,8 @@
 //	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
-#ifndef _BRAKES_H_
-#define _BRAKES_H_
+#ifndef BRAKES_H_
+#define BRAKES_H_
 
 // Standard C++ headers
 #include <iosfwd>// forward declarations of fstream objects
@@ -27,11 +27,8 @@
 class Brakes
 {
 public:
-	// Constructor
 	Brakes();
 	Brakes(const Brakes &brakes);
-
-	// Destructor
 	~Brakes();
 
 	// File read/write functions
@@ -44,20 +41,19 @@ public:
 	// Class properties
 	FrontRearInteger numberOfDisks;
 	WheelSet brakeDiameter;						// [in] - This is effective diameter, twice the moment arm
-	WheelSet pistonArea;							// [in^2]
+	WheelSet pistonArea;						// [in^2]
 	FrontRearDouble masterCylinderArea;			// [in^2]
-	double pedalRatio;								// [-]
-	FrontRearDouble linePressure;					// [psi]
-	double biasRatio;								// [-]			Front/Rear
-	double percentFrontBraking;						// [-]
+	double pedalRatio;							// [-]
+	FrontRearDouble linePressure;				// [psi]
+	double biasRatio;							// [-]	Front/Rear
+	double percentFrontBraking;					// [-]
 	// FIXME:  Make temperature dependant with thermal and cooling model (include aerodynamics?)
 
 	// Important for determining anti-geometry (see RCVD p. 168)
 	bool frontBrakesInboard;
 	bool rearBrakesInboard;
 
-	// Overloaded operators
-	Brakes& operator = (const Brakes &brakes);
+	Brakes& operator=(const Brakes &brakes);
 };
 
-#endif// _BRAKES_H_
+#endif// BRAKES_H_

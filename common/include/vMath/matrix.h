@@ -14,8 +14,8 @@
 // History:
 //	11/7/2011	- Imported from DataPlotter, K. Loux.
 
-#ifndef _MATRIX_H_
-#define _MATRIX_H_
+#ifndef MATRIX_H_
+#define MATRIX_H_
 
 // wxWidgets forward declarations
 class wxString;
@@ -28,8 +28,8 @@ class Matrix
 public:
 	// Constructors
 	Matrix();
-	Matrix(const unsigned int &_rows, const unsigned int &_columns);
-	Matrix(const unsigned int &_rows, const unsigned int &_columns, double element1, ...);
+	Matrix(const unsigned int &rows, const unsigned int &columns);
+	Matrix(const unsigned int &rows, const unsigned int &columns, double element1, ...);
 	Matrix(const Matrix &m);
 
 	// Destructor
@@ -39,33 +39,33 @@ public:
 	void Set(double Element1, ...);
 
 	// Make all elements zero
-	void Zero(void);
+	void Zero();
 
 	// Makes this matrix an identity matrix
-	Matrix& MakeIdentity(void);
-	static Matrix GetIdentity(const unsigned int &_rows, const unsigned int &_columns = 0);
+	Matrix& MakeIdentity();
+	static Matrix GetIdentity(const unsigned int &rows, const unsigned int &columns = 0);
 
-	bool IsSquare(void) const { return rows == columns; };
-	void Resize(const unsigned int &_rows, const unsigned int &_columns);
+	bool IsSquare() const { return rows == columns; }
+	void Resize(const unsigned int &rows, const unsigned int &columns);
 	Matrix& RemoveRow(const unsigned int &row);
 	Matrix& RemoveColumn(const unsigned int &column);
 
-	unsigned int GetMinimumDimension(void) const { return (rows < columns) ? rows : columns; };
+	unsigned int GetMinimumDimension() const { return (rows < columns) ? rows : columns; }
 
 	// Returns a matrix containing a sub-set of the contents of this matrix
 	Matrix GetSubMatrix(const unsigned int &startRow, const unsigned int &startColumn,
 		const unsigned int &subRows, const unsigned int &subColumns) const;
 
 	// Retrieve properties of this matrix
-	inline unsigned int GetNumberOfRows(void) const { return rows; };
-	inline unsigned int GetNumberOfColumns(void) const { return columns; };
+	inline unsigned int GetNumberOfRows() const { return rows; }
+	inline unsigned int GetNumberOfColumns() const { return columns; }
 	double GetElement(const int &row, const int &column) const;
 
 	// Set value of element at the specified location
 	void SetElement(const unsigned int &row, const unsigned int &column, const double &value);
 
 	// Print this object to a string
-	wxString Print(void) const;
+	wxString Print() const;
 
 	// Operators
 	Matrix& operator += (const Matrix &m);
@@ -86,28 +86,27 @@ public:
 	// Common matrix operations ------------------------------------
 	bool GetSingularValueDecomposition(Matrix &u, Matrix &v, Matrix &w) const;
 
-	Matrix GetTranspose(void) const;
-	Matrix GetInverse(void) const;
-	Matrix GetPsuedoInverse(void) const;
-	Matrix GetDiagonalInverse(void) const;
+	Matrix GetTranspose() const;
+	Matrix GetInverse() const;
+	Matrix GetPsuedoInverse() const;
+	Matrix GetDiagonalInverse() const;
 
 	bool LeftDivide(const Matrix& b, Matrix &x) const;// x = A \ b
-	Matrix GetRowReduced(void) const;
-	unsigned int GetRank(void) const;
+	Matrix GetRowReduced() const;
+	unsigned int GetRank() const;
 
 private:
-	// The size of this matrix
 	unsigned int rows;
 	unsigned int columns;
 
 	// The array of elements of this matrix
 	double **elements;
 
-	void FreeElements(void);
-	void AllocateElements(void);
+	void FreeElements();
+	void AllocateElements();
 
 	// Helper function for SVD algorithm
 	double pythag(const double& a, const double &b) const;
 };
 
-#endif// _MATRIX_H_
+#endif// MATRIX_H_

@@ -39,7 +39,7 @@
 //					and creates the controls, etc.
 //
 // Input Arguments:
-//		_parent		= EditSuspensionNotebook&, reference to this object's owner
+//		parent		= EditSuspensionNotebook&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
@@ -51,9 +51,9 @@
 //		None
 //
 //==========================================================================
-EditCornerPanel::EditCornerPanel(EditSuspensionNotebook & _parent,
+EditCornerPanel::EditCornerPanel(EditSuspensionNotebook& parent,
 	wxWindowID id, const wxPoint& pos, const wxSize& size)
-	: wxScrolledWindow(&_parent, id, pos, size), parent(_parent)
+	: wxScrolledWindow(&parent, id, pos, size), parent(parent)
 {
 	CreateControls();
 }

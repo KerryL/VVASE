@@ -131,7 +131,7 @@ const Atmosphere::Conditions Atmosphere::hotDay =
 // Description:		Sets today's conditions according to the passed argument.
 //
 // Input Arguments:
-//		_currentDay	= Conditions describing the current day's conditions
+//		currentDay	= Conditions describing the current day's conditions
 //
 // Output Arguments:
 //		None
@@ -140,10 +140,9 @@ const Atmosphere::Conditions Atmosphere::hotDay =
 //		None
 //
 //==========================================================================
-void Atmosphere::SetConditions(Atmosphere::Conditions _currentDay)
+void Atmosphere::SetConditions(const Atmosphere::Conditions& currentDay)
 {
-	// Set the current conditions
-	currentDay = _currentDay;
+	this->currentDay = currentDay;
 }
 
 //==========================================================================

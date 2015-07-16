@@ -41,8 +41,8 @@
 // Description:		Constructor for GAObject class.
 //
 // Input Arguments:
-//		_queue			= JobQueue& reference to the job queue
-//		_optimization	= GeneticOptimization pointing to this object's owner
+//		queue			= JobQueue& reference to the job queue
+//		optimization	= GeneticOptimization pointing to this object's owner
 //
 // Output Arguments:
 //		None
@@ -51,10 +51,9 @@
 //		None
 //
 //==========================================================================
-GAObject::GAObject(JobQueue &_queue, GeneticOptimization &_optimization) :
-				  queue(_queue), optimization(_optimization)
+GAObject::GAObject(JobQueue &queue, GeneticOptimization &optimization)
+	: queue(queue), optimization(optimization)
 {
-	// Initialize class members
 	workingCarArray = NULL;
 	originalCarArray = NULL;
 	numberOfCars = 0;
@@ -142,7 +141,7 @@ const int GAObject::currentFileVersion = 0;
 //		None
 //
 //==========================================================================
-void GAObject::SimulateGeneration(void)
+void GAObject::SimulateGeneration()
 {
 	// Set the "optimization is running" flag
 	isRunning = true;
@@ -275,7 +274,7 @@ double GAObject::DetermineFitness(const int *citizen)
 // Description:		Calls the parent class's initialization routine.
 //
 // Input Arguments:
-//		_targetCar	= Car* pointing to the object to optimize
+//		targetCar	= Car* pointing to the object to optimize
 //
 // Output Arguments:
 //		None
@@ -284,9 +283,8 @@ double GAObject::DetermineFitness(const int *citizen)
 //		None
 //
 //==========================================================================
-void GAObject::SetUp(Car *_targetCar)
+void GAObject::SetUp(Car *targetCar)
 {
-	// Ensure exclusive access to this object
 	gsaMutex.Lock();
 	DebugLog::GetInstance()->Log(_T("GAObject::SetUp (lock)"));
 
@@ -296,11 +294,9 @@ void GAObject::SetUp(Car *_targetCar)
 	for (i = 0; i < geneList.GetCount(); i++)
 		phenotypeSizes[i] = geneList[i]->numberOfValues;
 
-	// Store the target car pointer
-	assert(_targetCar);
-	targetCar = _targetCar;
+	assert(targetCar);// TODO:  Should we pass a reference instead?
+	this->targetCar = targetCar;
 
-	// Release the mutex
 	DebugLog::GetInstance()->Log(_T("GAObject::SetUp (unlock)"));
 	gsaMutex.Unlock();
 
@@ -501,7 +497,7 @@ void GAObject::SetCarGenome(int carIndex, const int *currentGenome)
 //		None
 //
 //==========================================================================
-void GAObject::PerformAdditionalActions(void)
+void GAObject::PerformAdditionalActions()
 {
 	double averageFitness = 0.0;
 	int i;
@@ -708,7 +704,7 @@ void GAObject::UpdateGoal(const int &index, const KinematicOutputs::OutputsCompl
 //		None
 //
 //==========================================================================
-void GAObject::DetermineAllInputs(void)
+void GAObject::DetermineAllInputs()
 {
 	inputList.Clear();
 
@@ -779,7 +775,7 @@ void GAObject::DetermineAllInputs(void)
 //		None
 //
 //==========================================================================
-void GAObject::UpdateTargetCar(void)
+void GAObject::UpdateTargetCar()
 {
 	wxMutexLocker lock(gsaMutex);
 	DebugLog::GetInstance()->Log(_T("GAObject::UpdateTargetCar (locker)"));

@@ -81,7 +81,7 @@ Dataset2D::Dataset2D(const Dataset2D& target)
 // Description:		Constructor for the Dataset class.
 //
 // Input Arguments:
-//		_numberOfPoints = const unsigned int &
+//		numberOfPoints = const unsigned int &
 //
 // Output Arguments:
 //		None
@@ -90,11 +90,11 @@ Dataset2D::Dataset2D(const Dataset2D& target)
 //		None
 //
 //==========================================================================
-Dataset2D::Dataset2D(const unsigned int &_numberOfPoints)
+Dataset2D::Dataset2D(const unsigned int &numberOfPoints)
 {
 	xData = NULL;
 	yData = NULL;
-	Resize(_numberOfPoints);
+	Resize(numberOfPoints);
 }
 
 //==========================================================================
@@ -130,7 +130,7 @@ Dataset2D::~Dataset2D()
 //					resizing.
 //
 // Input Arguments:
-//		_numberOfPoints = const unsigned int &
+//		numberOfPoints = const unsigned int &
 //
 // Output Arguments:
 //		None
@@ -139,12 +139,12 @@ Dataset2D::~Dataset2D()
 //		None
 //
 //==========================================================================
-void Dataset2D::Resize(const unsigned int &_numberOfPoints)
+void Dataset2D::Resize(const unsigned int &numberOfPoints)
 {
 	delete [] xData;
 	delete [] yData;
 
-	numberOfPoints = _numberOfPoints;
+	this->numberOfPoints = numberOfPoints;
 
 	xData = new double[numberOfPoints];
 	yData = new double[numberOfPoints];

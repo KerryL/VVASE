@@ -37,12 +37,10 @@
 //		None
 //
 //==========================================================================
-Plane3D::Plane3D(RenderWindow &_renderer)
+Plane3D::Plane3D(RenderWindow &renderer)
 {
-	// Create objects
-	plane = new Quadrilateral(_renderer);
+	plane = new Quadrilateral(renderer);
 
-	// Set up the plane
 	Vector xAxis(1.0, 0.0, 0.0);
 	Vector normal(0.0, 0.0, 1.0);
 	plane->SetAxis(xAxis);

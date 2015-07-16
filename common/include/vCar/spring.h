@@ -15,19 +15,16 @@
 // History:
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
-#ifndef _SPRING_H_
-#define _SPRING_H_
+#ifndef SPRING_H_
+#define SPRING_H_
 
 class Spring
 {
 public:
-	// Constructor
 	Spring();
-
-	// Destructor
 	~Spring();
 
 private:
 };
 
-#endif// _SPRING_H_
+#endif// SPRING_H_

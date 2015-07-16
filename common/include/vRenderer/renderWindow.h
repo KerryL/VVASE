@@ -18,8 +18,8 @@
 // History:
 //	11/22/2009	- Moved to vRenderer.lib, K. Loux.
 
-#ifndef _RENDER_WINDOW_H_
-#define _RENDER_WINDOW_H_
+#ifndef RENDER_WINDOW_H_
+#define RENDER_WINDOW_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -36,11 +36,8 @@ class Matrix;
 class RenderWindow : public wxGLCanvas
 {
 public:
-	// Constructor
 	RenderWindow(wxWindow &parent, wxWindowID id, int args[],
 		const wxPoint& position, const wxSize& size, long style = 0);
-
-	// Destructor
 	virtual ~RenderWindow();
 
 	// Sets up all of the open GL parameters
@@ -119,10 +116,10 @@ private:
 	// List of item indexes and alphas for sorting by alpha
 	struct ListItem
 	{
-		ListItem(const double& _alpha, const int &_i)
+		ListItem(const double& alpha, const int& i)
 		{
-			alpha = _alpha;
-			i = _i;
+			this->alpha = alpha;
+			this->i = i;
 		};
 
 		double alpha;
@@ -168,7 +165,7 @@ private:
 	void DoPan(wxMouseEvent &event);
 
 	// Updates the transformation matrices according to the current modelview matrix
-	void UpdateTransformationMatricies(void);
+	void UpdateTransformationMatricies();
 
 	// The transformation matrices
 	Matrix *modelToView;
@@ -182,7 +179,7 @@ private:
 
 	// Method for re-organizing the PrimitiveList so opaque objects are at the beginning and
 	// transparent objects are at the end
-	void SortPrimitivesByAlpha(void);
+	void SortPrimitivesByAlpha();
 
 	void SortPrimitivesByDrawOrder();
 
@@ -211,14 +208,13 @@ protected:
 	static void ConvertMatrixToGL(const Matrix& matrix, double gl[]);
 	static void ConvertGLToMatrix(Matrix& matrix, const double gl[]);
 
-	void Initialize2D(void) const;
-	void Initialize3D(void) const;
+	void Initialize2D() const;
+	void Initialize3D() const;
 
-	Matrix Generate2DProjectionMatrix(void) const;
-	Matrix Generate3DProjectionMatrix(void) const;
+	Matrix Generate2DProjectionMatrix() const;
+	Matrix Generate3DProjectionMatrix() const;
 
-	// For the event table
 	DECLARE_EVENT_TABLE()
 };
 
-#endif// _RENDER_WINDOW_H_
+#endif// RENDER_WINDOW_H_

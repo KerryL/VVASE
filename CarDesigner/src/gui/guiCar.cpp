@@ -52,9 +52,9 @@
 // Description:		Constructor for the GuiCar class.
 //
 // Input Arguments:
-//		_mainFrame			= MainFrame&, reference to the main application window
-//		_pathAndFileName	= wxString containing the location of this object
-//							  on the hard disk
+//		mainFrame		= MainFrame&, reference to the main application window
+//		pathAndFileName	= wxString containing the location of this object
+//						  on the hard disk
 //
 // Output Arguments:
 //		None
@@ -63,14 +63,12 @@
 //		None
 //
 //==========================================================================
-GuiCar::GuiCar(MainFrame &_mainFrame, wxString _pathAndFileName)
-				 : GuiObject(_mainFrame, _pathAndFileName)
+GuiCar::GuiCar(MainFrame &mainFrame, wxString pathAndFileName)
+	: GuiObject(mainFrame, pathAndFileName)
 {
-	// Allocate memory for the original and working cars
 	originalCar = new Car();
 	workingCar = new Car(*originalCar);
 
-	// Create the appearance options object
 	appearanceOptions = new AppearanceOptions(mainFrame, *this);
 
 	// Create the 3D output window
@@ -93,7 +91,6 @@ GuiCar::GuiCar(MainFrame &_mainFrame, wxString _pathAndFileName)
 	// Create the name based on the index
 	name.Printf("Unsaved Car %i", index + 1);
 
-	// Complete initialization of this object before creating sub-system icons
 	Initialize();
 
 	// Add the children to the systems tree
@@ -105,31 +102,31 @@ GuiCar::GuiCar(MainFrame &_mainFrame, wxString _pathAndFileName)
 		switch (i)
 		{
 		case GuiCar::SubsystemAerodynamics:
-			iconHandle = _mainFrame.GetSystemsTree()->GetIconHandle(MainTree::AerodynamicsIcon);
+			iconHandle = mainFrame.GetSystemsTree()->GetIconHandle(MainTree::AerodynamicsIcon);
 			break;
 
 		case GuiCar::SubsystemBrakes:
-			iconHandle = _mainFrame.GetSystemsTree()->GetIconHandle(MainTree::BrakesIcon);
+			iconHandle = mainFrame.GetSystemsTree()->GetIconHandle(MainTree::BrakesIcon);
 			break;
 
 		case GuiCar::SubsystemDrivetrain:
-			iconHandle = _mainFrame.GetSystemsTree()->GetIconHandle(MainTree::DrivetrainIcon);
+			iconHandle = mainFrame.GetSystemsTree()->GetIconHandle(MainTree::DrivetrainIcon);
 			break;
 
 		case GuiCar::SubsystemEngine:
-			iconHandle = _mainFrame.GetSystemsTree()->GetIconHandle(MainTree::EngineIcon);
+			iconHandle = mainFrame.GetSystemsTree()->GetIconHandle(MainTree::EngineIcon);
 			break;
 
 		case GuiCar::SubsystemMassProperties:
-			iconHandle = _mainFrame.GetSystemsTree()->GetIconHandle(MainTree::MassPropertiesIcon);
+			iconHandle = mainFrame.GetSystemsTree()->GetIconHandle(MainTree::MassPropertiesIcon);
 			break;
 
 		case GuiCar::SubsystemSuspension:
-			iconHandle = _mainFrame.GetSystemsTree()->GetIconHandle(MainTree::SuspensionIcon);
+			iconHandle = mainFrame.GetSystemsTree()->GetIconHandle(MainTree::SuspensionIcon);
 			break;
 
 		case GuiCar::SubsystemTires:
-			iconHandle = _mainFrame.GetSystemsTree()->GetIconHandle(MainTree::TiresIcon);
+			iconHandle = mainFrame.GetSystemsTree()->GetIconHandle(MainTree::TiresIcon);
 			break;
 
 		default:
@@ -138,7 +135,7 @@ GuiCar::GuiCar(MainFrame &_mainFrame, wxString _pathAndFileName)
 		}
 
 		// Add the entry to the tree
-		subsystems[i] = _mainFrame.GetSystemsTree()->AppendItem(treeID,
+		subsystems[i] = mainFrame.GetSystemsTree()->AppendItem(treeID,
 			GetSubsystemName((Subsystems)i), iconHandle, iconHandle);
 	}
 }
@@ -189,7 +186,7 @@ GuiCar::~GuiCar()
 //		integer specifying the icon handle
 //
 //==========================================================================
-int GuiCar::GetIconHandle(void) const
+int GuiCar::GetIconHandle() const
 {
 	// Return the proper icon handle
 	return systemsTree->GetIconHandle(MainTree::CarIcon);
@@ -211,7 +208,7 @@ int GuiCar::GetIconHandle(void) const
 //		None
 //
 //==========================================================================
-void GuiCar::UpdateData(void)
+void GuiCar::UpdateData()
 {
 	// This is called at various points during the load process due to different
 	// GUI screens being created and their requests for data.  This can result in
@@ -245,7 +242,7 @@ void GuiCar::UpdateData(void)
 //		None
 //
 //==========================================================================
-void GuiCar::UpdateDisplay(void)
+void GuiCar::UpdateDisplay()
 {
 	// Update the display associated with this object
 	renderer->UpdateDisplay(kinematicOutputs);
@@ -267,7 +264,7 @@ void GuiCar::UpdateDisplay(void)
 //		bool, true for car was saved, false for car was not saved
 //
 //==========================================================================
-bool GuiCar::PerformSaveToFile(void)
+bool GuiCar::PerformSaveToFile()
 {
 	// Make sure we have exclusive access
 	wxMutexLocker lock(originalCar->GetMutex());
@@ -304,7 +301,7 @@ bool GuiCar::PerformSaveToFile(void)
 //		bool, true for successful load, false otherwise
 //
 //==========================================================================
-bool GuiCar::PerformLoadFromFile(void)
+bool GuiCar::PerformLoadFromFile()
 {
 	std::ifstream inFile;
 	int fileVersion;

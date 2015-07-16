@@ -13,8 +13,8 @@
 // Description:  Panel containing plot renderer and grid listing active plot channels.
 // History:
 
-#ifndef _PLOT_PANEL_H_
-#define _PLOT_PANEL_H_
+#ifndef PLOT_PANEL_H_
+#define PLOT_PANEL_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -52,18 +52,18 @@ public:
 
 	void UpdateCursorValues(const bool &leftVisible, const bool &rightVisible,
 		const double &leftValue, const double &rightValue);
-	void UpdateDisplay(void);
+	void UpdateDisplay();
 
-	void ClearAllCurves(void);
+	void ClearAllCurves();
 	void AddCurve(wxString mathString);
 	void AddCurve(Dataset2D *data, wxString name);
 	void RemoveCurve(const unsigned int &i);
 
 	void SetXAxisGridText(wxString text);
 	
-	PlotRenderer* GetRenderer(void) { return renderer; };
+	PlotRenderer* GetRenderer() { return renderer; };
 
-	inline unsigned int GetCurveCount(void) { return plotList.GetCount(); };
+	inline unsigned int GetCurveCount() { return plotList.GetCount(); };
 	
 	bool WriteImageToFile(wxString pathAndFileName);
 
@@ -76,7 +76,7 @@ private:
 
 	wxBoxSizer *topSizer;
 
-	void CreateControls(void);
+	void CreateControls();
 
 	enum Columns
 	{
@@ -185,4 +185,4 @@ private:
 	DECLARE_EVENT_TABLE();
 };
 
-#endif// _PLOT_PANEL_H_
+#endif// PLOT_PANEL_H_

@@ -16,8 +16,8 @@
 //	11/22/2009	- Moved to vUtilities.lib, K. Loux.
 //	11/7/2011	- Corrected camelCase, K. Loux.
 
-#ifndef _MANAGED_LIST_H_
-#define _MANAGED_LIST_H_
+#ifndef MANAGED_LIST_H_
+#define MANAGED_LIST_H_
 
 // Standard C++ headers
 #include <cstdlib>
@@ -35,21 +35,18 @@ template <class T>
 class ManagedList
 {
 public:
-	// Destructor
 	~ManagedList();
 
 	// Private data accessors
 	unsigned int Add(T *toAdd);
 	void Remove(const unsigned int &index);
-	inline unsigned int GetCount(void) const { return list.size(); };
+	inline unsigned int GetCount() const { return list.size(); };
 
-	// Removes all objects from the list
-	void Clear(void);
+	void Clear();
 
 	// Re-organizes the data in the list
 	void ReorderObjects(const std::vector<unsigned int> &order);
 
-	// Operators
 	T *operator [](const unsigned int &index) const;
 
 private:
@@ -201,7 +198,7 @@ void ManagedList<T>::ReorderObjects(const std::vector<unsigned int> &order)
 //
 //==========================================================================
 template <class T>
-void ManagedList<T>::Clear(void)
+void ManagedList<T>::Clear()
 {
 	unsigned int i;
 	for (i = 0; i < list.size(); i++)
@@ -210,4 +207,4 @@ void ManagedList<T>::Clear(void)
 	list.clear();
 }
 
-#endif// _MANAGED_LIST_H_
+#endif// MANAGED_LIST_H_

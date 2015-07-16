@@ -41,13 +41,11 @@
 //		None
 //
 //==========================================================================
-Vector3D::Vector3D(RenderWindow &_renderer)
+Vector3D::Vector3D(RenderWindow &renderer)
 {
-	// Create the objects
-	shaft = new Cylinder(_renderer);
-	tip = new Cone(_renderer);
+	shaft = new Cylinder(renderer);
+	tip = new Cone(renderer);
 
-	// Set capping on for both objects
 	shaft->SetCapping(true);
 	tip->SetCapping(true);
 }
@@ -97,18 +95,18 @@ Vector3D::~Vector3D()
 //		None
 //
 //==========================================================================
-void Vector3D::Update(const Vector &_tip, const Vector &tail, const double &shaftDiameter,
-					  const double &tipDiameter, double tipLength, const int &resolution,
-					  const Color &color, bool show)
+void Vector3D::Update(const Vector &tip, const Vector &tail, const double &shaftDiameter,
+	const double &tipDiameter, double tipLength, const int &resolution,
+	const Color &color, bool show)
 {
 	// Make sure all vector arguments are valid - if they are not,
 	// the object will not be made visible
-	if (VVASEMath::IsNaN(_tip) || VVASEMath::IsNaN(tail))
+	if (VVASEMath::IsNaN(tip) || VVASEMath::IsNaN(tail))
 		show = false;
 
 	// Set the visibility flags
 	shaft->SetVisibility(show);
-	tip->SetVisibility(show);
+	this->tip->SetVisibility(show);
 
 	// Make sure we want this to be visible before continuing
 	if (!show)
@@ -118,26 +116,26 @@ void Vector3D::Update(const Vector &_tip, const Vector &tail, const double &shaf
 	// The wxColor stores information with unsigned char, but we're looking for
 	// doubles, so we divide by 255
 	shaft->SetColor(color);
-	tip->SetColor(color);
+	this->tip->SetColor(color);
 
 	// Make sure the tip proportion is less than the vector length
-	if (tipLength > _tip.Distance(tail))
-		tipLength = _tip.Distance(tail) * 0.1;
+	if (tipLength > tip.Distance(tail))
+		tipLength = tip.Distance(tail) * 0.1;
 
 	// Set the size and resolution of the shaft
 	shaft->SetRadius(shaftDiameter / 2.0);
 	shaft->SetResolution(resolution);
 
 	// Set the size and resolution of the tip
-	tip->SetRadius(tipDiameter / 2.0);
-	tip->SetResolution(resolution);
+	this->tip->SetRadius(tipDiameter / 2.0);
+	this->tip->SetResolution(resolution);
 
 	// Determine the position where the tip meets the shaft
-	Vector meetingPosition = tail + ((_tip - tail) * (1.0 - tipLength / _tip.Distance(tail)));
+	Vector meetingPosition = tail + ((tip - tail) * (1.0 - tipLength / tip.Distance(tail)));
 
 	// Set the positions of the shaft and tip
 	shaft->SetEndPoint1(tail);
 	shaft->SetEndPoint2(meetingPosition);
-	tip->SetBaseCenter(meetingPosition);
-	tip->SetTip(_tip);
+	this->tip->SetBaseCenter(meetingPosition);
+	this->tip->SetTip(tip);
 }

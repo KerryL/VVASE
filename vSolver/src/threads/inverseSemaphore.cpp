@@ -81,7 +81,7 @@ InverseSemaphore::~InverseSemaphore()
 //		InverseSemaphoreError (error codes for this class)
 //
 //==========================================================================
-InverseSemaphore::InverseSemaphoreError InverseSemaphore::Post(void)
+InverseSemaphore::InverseSemaphoreError InverseSemaphore::Post()
 {
 	// Lock the mutex
 	wxMutexLocker lock(countMutex);
@@ -108,7 +108,7 @@ InverseSemaphore::InverseSemaphoreError InverseSemaphore::Post(void)
 // Description:		Sets the counter to the desired value.
 //
 // Input Arguments:
-//		_count	= unsigned int to which the counter will be set
+//		count	= unsigned int to which the counter will be set
 //
 // Output Arguments:
 //		None
@@ -117,22 +117,18 @@ InverseSemaphore::InverseSemaphoreError InverseSemaphore::Post(void)
 //		InverseSemaphore_ERROR (error codes for this class)
 //
 //==========================================================================
-InverseSemaphore::InverseSemaphoreError InverseSemaphore::Set(unsigned int _count)
+InverseSemaphore::InverseSemaphoreError InverseSemaphore::Set(unsigned int count)
 {
-	// Lock the mutex
 	wxMutexLocker lock(countMutex);
 	DebugLog::GetInstance()->Log(_T("InverseSemaphore::Set (locker)"));
 
-	// Make sure the lock was successfully acquired
 	if (!lock.IsOk())
 		return ErrorMutex;
 
-	// Make sure the count is zero
 	if (count != 0)
 		return ErrorBusy;
 
-	// Set the count to the desired value
-	count = _count;
+	this->count = count;
 
 	return ErrorNone;
 }
@@ -153,7 +149,7 @@ InverseSemaphore::InverseSemaphoreError InverseSemaphore::Set(unsigned int _coun
 //		InverseSemaphoreError (error codes for this class)
 //
 //==========================================================================
-InverseSemaphore::InverseSemaphoreError InverseSemaphore::Wait(void)
+InverseSemaphore::InverseSemaphoreError InverseSemaphore::Wait()
 {
 	countMutex.Lock();
 	unsigned int testCount(count);

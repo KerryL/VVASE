@@ -20,8 +20,8 @@
 //	11/9/2010	- Added provisions for 3D plotting, K. Loux.
 //	11/16/2010	- Moved active plots selection and range inputs to edit panel, K. Loux.
 
-#ifndef _ITERATION_H_
-#define _ITERATION_H_
+#ifndef ITERATION_H_
+#define ITERATION_H_
 
 // wxWidgets headers
 #include <wx/thread.h>
@@ -40,10 +40,7 @@ class PlotPanel;
 class Iteration : public GuiObject
 {
 public:
-	// Constructor
-	Iteration(MainFrame &_mainFrame, wxString _pathAndFileName = wxEmptyString);
-
-	// Destructor
+	Iteration(MainFrame &mainFrame, wxString pathAndFileName = wxEmptyString);
 	~Iteration();
 
 	// Structure that defines the starting and stopping points for
@@ -61,39 +58,39 @@ public:
 	};
 
 	// For getting/setting the number of points in between the start and stop
-	inline int GetNumberOfPoints(void) const { return numberOfPoints; };
-	void SetNumberOfPoints(const int &_numberOfPoints);
+	inline int GetNumberOfPoints() const { return numberOfPoints; }
+	void SetNumberOfPoints(const int &numberOfPoints);
 
 	// For associating/disassociating cars with this analysis
 	void AddCar(GuiCar *toAdd);
 	void RemoveCar(GuiCar *toRemove);
-	void RemoveAllCars(void);
+	void RemoveAllCars();
 
 	// Runs the kinematic analysis for all associated cars (mandatory overload)
-	void UpdateData(void);
+	void UpdateData();
 
 	// Updates the displays associated with this object
-	void UpdateDisplay(void);
+	void UpdateDisplay();
 
 	// Accessors for the range object
-	inline Iteration::Range GetRange(void) const { return range; };
-	void SetRange(const Iteration::Range &_range);
+	inline Iteration::Range GetRange() const { return range; }
+	void SetRange(const Iteration::Range &range);
 
 	// For exporting the data to a comma or tab delimited text file
 	void ExportDataToFile(wxString pathAndFileName) const;
 
 	// Sets/gets the auto-association flag
 	void SetAutoAssociate(bool autoAssociate);
-	inline bool GetAutoAssociate(void) const { return associatedWithAllOpenCars; };
+	inline bool GetAutoAssociate() const { return associatedWithAllOpenCars; }
 
 	// Displays a dialog showing all of the open cars, and allows the user to select them
-	void ShowAssociatedCarsDialog(void);
+	void ShowAssociatedCarsDialog();
 
 	// Returns the number of associated cars
-	inline int GetAssociatedCarCount(void) const { return associatedCars.size(); };
+	inline int GetAssociatedCarCount() const { return associatedCars.size(); }
 
 	// Returns this object's type (mandatory overload)
-	ItemType GetType(void) const { return TypeIteration; };
+	ItemType GetType() const { return TypeIteration; }
 
 	// This is the list of possible plots that we can display
 	// Enumeration picks up where the KINEMATIC_OUTPUTS class left off
@@ -108,7 +105,7 @@ public:
 	};
 
 	// These are the accessors for getting/setting what plots are shown
-	inline bool GetActivePlot(PlotID plotID) const { return plotActive[plotID]; };
+	inline bool GetActivePlot(PlotID plotID) const { return plotActive[plotID]; }
 	void SetActivePlot(PlotID plotID, const bool &active);
 
 	// For specifying the dependant variable
@@ -123,43 +120,43 @@ public:
 	};
 
 	// For accessing the X-Axis data
-	inline AxisType GetXAxisType(void) const { return xAxisType; };
-	void SetXAxisType(AxisType _xAxisType);
+	inline AxisType GetXAxisType() const { return xAxisType; }
+	void SetXAxisType(AxisType xAxisType);
 
 	// For accessing the Y-Axis data
-	inline AxisType GetYAxisType(void) const { return yAxisType; };
-	void SetYAxisType(AxisType _yAxisType);
+	inline AxisType GetYAxisType() const { return yAxisType; }
+	void SetYAxisType(AxisType yAxisType);
 
 	// For accessing the Z-Axis data
 	double GetDataValue(int associatedCarIndex, int point, PlotID id) const;
 
 	// Decrements the number of pending jobs for this object
-	void MarkAnalysisComplete(void);
+	void MarkAnalysisComplete();
 
 	// For retrieving the strings associated with the plots and their units
 	wxString GetPlotName(PlotID id) const;
 	wxString GetPlotUnits(PlotID id) const;
 
 	// Accessors for plot display objects
-	void SetAutoGenerateTitle(const bool &_generateTitleFromFileName) { generateTitleFromFileName = _generateTitleFromFileName; };
-	void SetTitle(const wxString &_title) { title = _title; };
-	void SetAutoGenerateXLabel(const bool &_autoGenerateXLabel) { autoGenerateXLabel = _autoGenerateXLabel; };
-	void SetXLabel(const wxString &_xLabel) { xLabel = _xLabel; };
-	void SetAutoGenerateZLabel(const bool &_autoGenerateZLabel) { autoGenerateZLabel = _autoGenerateZLabel; };
-	void SetZLabel(const wxString &_zLabel) { zLabel = _zLabel; };
-	void SetShowGridLines(const bool &_showGridLines) { showGridLines = _showGridLines; };
+	void SetAutoGenerateTitle(const bool &generateTitleFromFileName) { this->generateTitleFromFileName = generateTitleFromFileName; }
+	void SetTitle(const wxString &title) { this->title = title; }
+	void SetAutoGenerateXLabel(const bool &autoGenerateXLabel) { this->autoGenerateXLabel = autoGenerateXLabel; }
+	void SetXLabel(const wxString &xLabel) { this->xLabel = xLabel; }
+	void SetAutoGenerateZLabel(const bool &autoGenerateZLabel) { this->autoGenerateZLabel = autoGenerateZLabel; }
+	void SetZLabel(const wxString &zLabel) { this->zLabel = zLabel; }
+	void SetShowGridLines(const bool &showGridLines) { this->showGridLines = showGridLines; }
 
-	bool GetAutoGenerateTitle(void) const { return generateTitleFromFileName; };
-	wxString GetTitle(void) const { return title; };
-	bool GetAutoGenerateXLabel(void) const { return autoGenerateXLabel; };
-	wxString GetXLabel(void) const { return xLabel; };
-	bool GetAutoGenerateZLabel(void) const { return autoGenerateZLabel; };
-	wxString GetZLabel(void) const { return zLabel; };
-	bool GetShowGridLines(void) const { return showGridLines; };
+	bool GetAutoGenerateTitle() const { return generateTitleFromFileName; }
+	wxString GetTitle() const { return title; }
+	bool GetAutoGenerateXLabel() const { return autoGenerateXLabel; }
+	wxString GetXLabel() const { return xLabel; }
+	bool GetAutoGenerateZLabel() const { return autoGenerateZLabel; }
+	wxString GetZLabel() const { return zLabel; }
+	bool GetShowGridLines() const { return showGridLines; }
 
 	// Methods for reading and writing default configuration settings
-	void ReadDefaultsFromConfig(void);
-	void WriteDefaultsToConfig(void) const;
+	void ReadDefaultsFromConfig();
+	void WriteDefaultsToConfig() const;
 
 private:
 	// This object's start and stop points
@@ -170,23 +167,20 @@ private:
 	unsigned int numberOfPoints;
 
 	// Gets the icon handle for this object's icon
-	int GetIconHandle(void) const;
+	int GetIconHandle() const;
 
 	// Performs the saving and loading to/from file (mandatory overloads)
-	bool PerformLoadFromFile(void);
-	bool PerformSaveToFile(void);
+	bool PerformLoadFromFile();
+	bool PerformSaveToFile();
 
-	// Updates the list of cars with which we are associated if the auto associate flag is true
-	void UpdateAutoAssociate(void);
+	void UpdateAutoAssociate();
 
-	// Checks to see if the specified car is one with which this object is associated
 	bool AssociatedWithCar(GuiCar *test) const;
 
 	// The data for this analysis - we need one list of outputs for every car
 	// Every list of outputs has one entry for every point within our range
 	ManagedList<ManagedList< KinematicOutputs> > outputLists;
 
-	// List of cars that are associated with this analysis
 	std::vector<GuiCar*> associatedCars;
 
 	// Array of working cars to use for the analyses
@@ -204,8 +198,7 @@ private:
 	AxisType xAxisType;
 	AxisType yAxisType;
 
-	// Clears out all of the lists
-	void ClearAllLists(void);
+	void ClearAllLists();
 
 	// Flag indicating whether or not this object should automatically associate
 	// with all open GUI_CAR objects
@@ -223,11 +216,10 @@ private:
 	wxString zLabel;
 	bool showGridLines;
 
-	// Applies user-defined plot settings
-	void ApplyPlotFormatting(void);
+	void ApplyPlotFormatting();
 
 	// For getting converted values
-	double ConvertValue(KinematicOutputs::OutputsComplete _output);
+	double ConvertValue(KinematicOutputs::OutputsComplete output);
 
 	// File header information
 	struct FileHeaderInfo
@@ -252,4 +244,4 @@ private:
 	PlotPanel *plotPanel;
 };
 
-#endif// _ITERATION_H_
+#endif// ITERATION_H_

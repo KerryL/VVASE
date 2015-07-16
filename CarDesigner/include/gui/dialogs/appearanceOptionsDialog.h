@@ -13,8 +13,8 @@
 // Description:  A dialog object for editing the contents of the AppearanceOptions object.
 // History:
 
-#ifndef _APPEARNACE_OPTIONS_DIALOG_H_
-#define _APPEARNACE_OPTIONS_DIALOG_H_
+#ifndef APPEARNACE_OPTIONS_DIALOG_H_
+#define APPEARNACE_OPTIONS_DIALOG_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -35,11 +35,11 @@ class AppearanceOptionsDialog : public wxDialog
 {
 public:
 	// Constructor
-	AppearanceOptionsDialog(MainFrame &mainFrame, AppearanceOptions *_options,
+	AppearanceOptionsDialog(MainFrame &mainFrame, AppearanceOptions *options,
 		wxWindowID id, const wxPoint &position, long style = wxDEFAULT_DIALOG_STYLE);
 
 private:
-	void CreateControls(void);
+	void CreateControls();
 
 	AppearanceOptions *options;
 	Color colorOptions[AppearanceOptions::ColorCount];
@@ -56,7 +56,6 @@ private:
 	void AlphaChangeEvent(wxGridEvent &event);
 	// End event handlers-------------------------------------------------
 
-	// The controls
 	wxNotebook *notebook;
 
 	wxPanel *colorPanel;
@@ -69,8 +68,7 @@ private:
 	SuperGrid *sizeGrid;
 	SuperGrid *resolutionGrid;
 
-	// The event table
 	DECLARE_EVENT_TABLE()
 };
 
-#endif// _APPEARNACE_OPTIONS_DIALOG_H_
+#endif// APPEARNACE_OPTIONS_DIALOG_H_

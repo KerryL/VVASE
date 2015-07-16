@@ -13,8 +13,8 @@
 // Description:  Performs Fast Fourier Transform on data.
 // History:
 
-#ifndef _FFT_H_
-#define _FFT_H_
+#ifndef FFT_H_
+#define FFT_H_
 
 // Local forward declarations
 class Dataset2D;
@@ -25,4 +25,4 @@ public:
 	static Dataset2D Compute(const Dataset2D &data);
 };
 
-#endif// _FFT_H_
+#endif// FFT_H_

@@ -179,7 +179,7 @@ END_EVENT_TABLE()
 //		wxGLContext*
 //
 //==========================================================================
-wxGLContext* RenderWindow::GetContext(void)
+wxGLContext* RenderWindow::GetContext()
 {
 	if (!context)
 		context = new wxGLContext(this);
@@ -838,7 +838,7 @@ Vector RenderWindow::TransformToModel(const Vector &viewVector) const
 //		None
 //
 //==========================================================================
-void RenderWindow::UpdateTransformationMatricies(void)
+void RenderWindow::UpdateTransformationMatricies()
 {
 	Matrix modelViewMatrix(4, 4);
 	double glMatrix[16];
@@ -875,7 +875,7 @@ void RenderWindow::UpdateTransformationMatricies(void)
 //		None
 //
 //==========================================================================
-void RenderWindow::AutoSetFrustum(void)
+void RenderWindow::AutoSetFrustum()
 {
 	// This method is really for 3D renderers - for 2D, we just re-initialize to handle change in aspect ratio/size
 	if (!view3D)
@@ -916,7 +916,7 @@ void RenderWindow::AutoSetFrustum(void)
 //		wxString containing the error description
 //
 //==========================================================================
-wxString RenderWindow::GetGLError(void) const
+wxString RenderWindow::GetGLError() const
 {
 	int error = glGetError();
 
@@ -1005,7 +1005,7 @@ bool RenderWindow::WriteImageToFile(wxString pathAndFileName) const
 //		wxImage
 //
 //==========================================================================
-wxImage RenderWindow::GetImage(void) const
+wxImage RenderWindow::GetImage() const
 {
 	unsigned int height = GetSize().GetHeight();
 	unsigned int width = GetSize().GetWidth();
@@ -1072,7 +1072,7 @@ bool RenderWindow::IsThisRendererSelected(const Primitive *pickedObject) const
 //		None
 //
 //==========================================================================
-void RenderWindow::SortPrimitivesByAlpha(void)
+void RenderWindow::SortPrimitivesByAlpha()
 {
 	unsigned int i;
 	std::vector<ListItem> primitiveOrder;
@@ -1191,7 +1191,7 @@ void RenderWindow::ConvertGLToMatrix(Matrix& matrix, const double gl[])
 //		None
 //
 //==========================================================================
-void RenderWindow::Initialize2D(void) const
+void RenderWindow::Initialize2D() const
 {
 	// Disable Z-buffering, but allow testing
 	//glEnable(GL_DEPTH_TEST);// NOTE:  Can't uncomment this line or the app fails to paint on any target machine (don't know why)
@@ -1229,7 +1229,7 @@ void RenderWindow::Initialize2D(void) const
 //		None
 //
 //==========================================================================
-void RenderWindow::Initialize3D(void) const
+void RenderWindow::Initialize3D() const
 {
 	// Turn Z-buffering on
 	glEnable(GL_DEPTH_TEST);
@@ -1275,7 +1275,7 @@ void RenderWindow::Initialize3D(void) const
 //		Matrix
 //
 //==========================================================================
-Matrix RenderWindow::Generate2DProjectionMatrix(void) const
+Matrix RenderWindow::Generate2DProjectionMatrix() const
 {
 	// Set up an orthogonal 2D projection matrix (this puts (0,0) at the lower left-hand corner of the window)
 	Matrix projectionMatrix(4, 4);
@@ -1306,7 +1306,7 @@ Matrix RenderWindow::Generate2DProjectionMatrix(void) const
 //		Matrix
 //
 //==========================================================================
-Matrix RenderWindow::Generate3DProjectionMatrix(void) const
+Matrix RenderWindow::Generate3DProjectionMatrix() const
 {
 	Matrix projectionMatrix(4, 4);
 	if (viewOrthogonal)

@@ -36,7 +36,7 @@
 //					the form and creates the controls, etc.
 //
 // Input Arguments:
-//		_parent		= EditPanel&, reference to this object's owner
+//		parent		= EditPanel&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
@@ -49,13 +49,10 @@
 //		None
 //
 //==========================================================================
-EditSuspensionNotebook::EditSuspensionNotebook(EditPanel &_parent, wxWindowID id,
-												 const wxPoint& pos, const wxSize& size,
-												 long style)
-												 : wxNotebook(&_parent, id, pos, size, style),
-												 parent(_parent)
+EditSuspensionNotebook::EditSuspensionNotebook(EditPanel &parent, wxWindowID id,
+	const wxPoint& pos, const wxSize& size, long style)
+	: wxNotebook(&parent, id, pos, size, style), parent(parent)
 {
-	// Initialize the 'Current' class members
 	currentCar = NULL;
 }
 
@@ -96,7 +93,7 @@ EditSuspensionNotebook::~EditSuspensionNotebook()
 //		None
 //
 //==========================================================================
-void EditSuspensionNotebook::UpdateInformation(void)
+void EditSuspensionNotebook::UpdateInformation()
 {
 	// Make sure the object has already been assigned
 	if (currentCar)
@@ -111,7 +108,7 @@ void EditSuspensionNotebook::UpdateInformation(void)
 // Description:		Updates the information in this notebook.
 //
 // Input Arguments:
-//		_currentCar	= Car* pointing to the currenly active object
+//		currentCar	= Car* pointing to the currenly active object
 //
 // Output Arguments:
 //		None
@@ -120,21 +117,16 @@ void EditSuspensionNotebook::UpdateInformation(void)
 //		None
 //
 //==========================================================================
-void EditSuspensionNotebook::UpdateInformation(Car *_currentCar)
+void EditSuspensionNotebook::UpdateInformation(Car *currentCar)
 {
-	// Update the class member
-	currentCar = _currentCar;
+	this->currentCar = currentCar;
 
-	// If the current object is NULL, we no longer have an object to represent
 	if (!currentCar)
 	{
-		// Delete all the notebook pages
 		DeleteAllPages();
-
 		return;
 	}
 
-	// If we don't have any pages, we need to create the controls
 	if (GetPageCount() == 0)
 		CreateControls();
 
@@ -199,7 +191,7 @@ void EditSuspensionNotebook::UpdateInformation(Car *_currentCar)
 //		None
 //
 //==========================================================================
-void EditSuspensionNotebook::CreateControls(void)
+void EditSuspensionNotebook::CreateControls()
 {
 	// Delete the existing pages before we create the new ones
 	DeleteAllPages();
@@ -236,7 +228,7 @@ void EditSuspensionNotebook::CreateControls(void)
 //		None
 //
 //==========================================================================
-void EditSuspensionNotebook::UpdateSymmetry(void)
+void EditSuspensionNotebook::UpdateSymmetry()
 {
 	// Check to make sure this car is symmetric
 	if (currentCar->suspension->isSymmetric)

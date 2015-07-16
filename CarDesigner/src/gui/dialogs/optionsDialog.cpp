@@ -120,7 +120,7 @@ END_EVENT_TABLE();
 //		None
 //
 //==========================================================================
-void OptionsDialog::CreateControls(void)
+void OptionsDialog::CreateControls()
 {
 	wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
 

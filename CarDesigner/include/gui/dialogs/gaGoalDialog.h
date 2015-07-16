@@ -27,28 +27,28 @@ class GAGoalDialog : public wxDialog
 {
 public:
 	// Constructor
-	GAGoalDialog(wxWindow *parent, const KinematicOutputs::OutputsComplete &_output,
-		const double &_desiredValue, const double &_expectedDeviation, const double &_importance,
-		const Kinematics::Inputs &_beforeInputs, const Kinematics::Inputs &_afterInputs,
+	GAGoalDialog(wxWindow *parent, const KinematicOutputs::OutputsComplete &output,
+		const double &desiredValue, const double &expectedDeviation, const double &importance,
+		const Kinematics::Inputs &beforeInputs, const Kinematics::Inputs &afterInputs,
 		wxWindowID id, const wxPoint &position, long style = wxDEFAULT_DIALOG_STYLE);
 
 	// Destructor
 	~GAGoalDialog();
 
 	// Private member accessors
-	KinematicOutputs::OutputsComplete GetOutput(void) const { return output; };
-	double GetDesiredValue(void) const { return desiredValue; };
-	double GetExpectedDeviation(void) const { return expectedDeviation; };
-	double GetImportance(void) const { return importance; };
-	Kinematics::Inputs GetBeforeInputs(void) const { return beforeInputs; };
-	Kinematics::Inputs GetAfterInputs(void) const { return afterInputs; };
+	KinematicOutputs::OutputsComplete GetOutput() const { return output; };
+	double GetDesiredValue() const { return desiredValue; };
+	double GetExpectedDeviation() const { return expectedDeviation; };
+	double GetImportance() const { return importance; };
+	Kinematics::Inputs GetBeforeInputs() const { return beforeInputs; };
+	Kinematics::Inputs GetAfterInputs() const { return afterInputs; };
 
 private:
 	// Method for creating controls
-	void CreateControls(void);
+	void CreateControls();
 
 	// Updates some controls when user clicks the checkbox
-	void FormatDialogDifference(void);
+	void FormatDialogDifference();
 
 	// Controls
 	wxComboBox *outputCombo;

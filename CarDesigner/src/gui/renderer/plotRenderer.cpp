@@ -32,10 +32,10 @@
 // Description:		Constructor for PlotRenderer class.
 //
 // Input Arguments:
-//		_parent		= PlotPanel& reference to this object's parent window
+//		parent		= PlotPanel& reference to this object's parent window
 //		args		= int[] NOTE: Under GTK, must contain WX_GL_DOUBLEBUFFER at minimum
 //		id			= wxWindowID
-//		_mainFrame	= MainFrame&
+//		mainFrame	= MainFrame&
 //
 // Output Arguments:
 //		None
@@ -44,12 +44,10 @@
 //		None
 //
 //==========================================================================
-PlotRenderer::PlotRenderer(PlotPanel &_parent, wxWindowID id, int args[],
-						   MainFrame &_mainFrame)
-						   : RenderWindow(_parent, id, args, wxDefaultPosition,
-						   wxDefaultSize), mainFrame(_mainFrame), parent(_parent)
+PlotRenderer::PlotRenderer(PlotPanel &parent, wxWindowID id, int args[],
+	MainFrame &mainFrame) : RenderWindow(parent, id, args, wxDefaultPosition,
+	wxDefaultSize), mainFrame(mainFrame), parent(parent)
 {
-	// Create the actors
 	CreateActors();
 
 	// Set this to a 2D view by default
@@ -130,7 +128,7 @@ END_EVENT_TABLE()
 //		None
 //
 //==========================================================================
-void PlotRenderer::UpdateDisplay(void)
+void PlotRenderer::UpdateDisplay()
 {
 	// Update the plot
 	plot->Update();
@@ -153,7 +151,7 @@ void PlotRenderer::UpdateDisplay(void)
 //		None
 //
 //==========================================================================
-void PlotRenderer::CreateActors(void)
+void PlotRenderer::CreateActors()
 {
 	// Create plot area
 	plot = new PlotObject(*this);
@@ -526,7 +524,7 @@ void PlotRenderer::OnRightButtonUpEvent(wxMouseEvent &event)
 //		bool, true for visible, false for hidden
 //
 //==========================================================================
-bool PlotRenderer::GetGridOn(void)
+bool PlotRenderer::GetGridOn()
 {
 	return plot->GetGrid();
 }
@@ -591,7 +589,7 @@ void PlotRenderer::SetGridOff()
 //		bool indicating status of bottom grid
 //
 //==========================================================================
-bool PlotRenderer::GetBottomGrid(void) const
+bool PlotRenderer::GetBottomGrid() const
 {
 	return plot->GetBottomAxis()->GetGrid();
 }
@@ -612,7 +610,7 @@ bool PlotRenderer::GetBottomGrid(void) const
 //		bool indicating status of left grid
 //
 //==========================================================================
-bool PlotRenderer::GetLeftGrid(void) const
+bool PlotRenderer::GetLeftGrid() const
 {
 	return plot->GetLeftYAxis()->GetGrid();
 }
@@ -633,7 +631,7 @@ bool PlotRenderer::GetLeftGrid(void) const
 //		bool indicating status of right grid
 //
 //==========================================================================
-bool PlotRenderer::GetRightGrid(void) const
+bool PlotRenderer::GetRightGrid() const
 {
 	return plot->GetRightYAxis()->GetGrid();
 }
@@ -1274,7 +1272,7 @@ void PlotRenderer::OnLeftButtonUpEvent(wxMouseEvent& WXUNUSED(event))
 //		bool indicating status of left cursor visibility flag
 //
 //==========================================================================
-bool PlotRenderer::GetLeftCursorVisible(void) const
+bool PlotRenderer::GetLeftCursorVisible() const
 {
 	return leftCursor->GetIsVisible();
 }
@@ -1295,7 +1293,7 @@ bool PlotRenderer::GetLeftCursorVisible(void) const
 //		bool indicating status of right cursor visibility flag
 //
 //==========================================================================
-bool PlotRenderer::GetRightCursorVisible(void) const
+bool PlotRenderer::GetRightCursorVisible() const
 {
 	return rightCursor->GetIsVisible();
 }
@@ -1316,7 +1314,7 @@ bool PlotRenderer::GetRightCursorVisible(void) const
 //		double
 //
 //==========================================================================
-double PlotRenderer::GetLeftCursorValue(void) const
+double PlotRenderer::GetLeftCursorValue() const
 {
 	return leftCursor->GetValue();
 }
@@ -1337,7 +1335,7 @@ double PlotRenderer::GetLeftCursorValue(void) const
 //		double
 //
 //==========================================================================
-double PlotRenderer::GetRightCursorValue(void) const
+double PlotRenderer::GetRightCursorValue() const
 {
 	return rightCursor->GetValue();
 }
@@ -1358,7 +1356,7 @@ double PlotRenderer::GetRightCursorValue(void) const
 //		None
 //
 //==========================================================================
-void PlotRenderer::UpdateCursors(void)
+void PlotRenderer::UpdateCursors()
 {
 	// Tell the cursors they need to recalculate
 	leftCursor->SetModified();
@@ -1387,7 +1385,7 @@ void PlotRenderer::UpdateCursors(void)
 //		double indicating the minimum value of the X-axis
 //
 //==========================================================================
-double PlotRenderer::GetXMin(void) const
+double PlotRenderer::GetXMin() const
 {
 	return plot->GetBottomAxis()->GetMinimum();
 }
@@ -1408,7 +1406,7 @@ double PlotRenderer::GetXMin(void) const
 //		double indicating the minimum value of the X-axis
 //
 //==========================================================================
-double PlotRenderer::GetXMax(void) const
+double PlotRenderer::GetXMax() const
 {
 	return plot->GetBottomAxis()->GetMaximum();
 }
@@ -1429,7 +1427,7 @@ double PlotRenderer::GetXMax(void) const
 //		double indicating the minimum value of the X-axis
 //
 //==========================================================================
-double PlotRenderer::GetLeftYMin(void) const
+double PlotRenderer::GetLeftYMin() const
 {
 	return plot->GetLeftYAxis()->GetMinimum();
 }
@@ -1450,7 +1448,7 @@ double PlotRenderer::GetLeftYMin(void) const
 //		double indicating the minimum value of the X-axis
 //
 //==========================================================================
-double PlotRenderer::GetLeftYMax(void) const
+double PlotRenderer::GetLeftYMax() const
 {
 	return plot->GetLeftYAxis()->GetMaximum();
 }
@@ -1471,7 +1469,7 @@ double PlotRenderer::GetLeftYMax(void) const
 //		double indicating the minimum value of the X-axis
 //
 //==========================================================================
-double PlotRenderer::GetRightYMin(void) const
+double PlotRenderer::GetRightYMin() const
 {
 	return plot->GetRightYAxis()->GetMinimum();
 }
@@ -1492,7 +1490,7 @@ double PlotRenderer::GetRightYMin(void) const
 //		double indicating the minimum value of the X-axis
 //
 //==========================================================================
-double PlotRenderer::GetRightYMax(void) const
+double PlotRenderer::GetRightYMax() const
 {
 	return plot->GetRightYAxis()->GetMaximum();
 }
@@ -1513,7 +1511,7 @@ double PlotRenderer::GetRightYMax(void) const
 //		Color
 //
 //==========================================================================
-Color PlotRenderer::GetGridColor(void) const
+Color PlotRenderer::GetGridColor() const
 {
 	return plot->GetGridColor();
 }

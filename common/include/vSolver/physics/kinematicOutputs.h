@@ -177,16 +177,16 @@ public:
 		const OutputsDouble &midDouble, const OutputsVector &vector, const Vector::Axis &axis);
 
 	// For accessing an output via the OutputsComplete list
-	double GetOutputValue(const OutputsComplete &_output) const;
+	double GetOutputValue(const OutputsComplete &output) const;
 
 	// For determining unit type of the outputs
-	static UnitConverter::UnitType GetOutputUnitType(const OutputsComplete &_output);
+	static UnitConverter::UnitType GetOutputUnitType(const OutputsComplete &output);
 
 	// For determining the name of an output from the OutputsComplete list
-	static wxString GetOutputName(const OutputsComplete &_output);
+	static wxString GetOutputName(const OutputsComplete &output);
 
 	// Mutex accessor
-	//wxMutex &GetMutex(void) const { return kinematicOutputsMutex; };
+	//wxMutex &GetMutex() const { return kinematicOutputsMutex; };
 
 private:
 	const Car *originalCar;
@@ -196,18 +196,18 @@ private:
 	void UpdateCorner(const Corner *originalCorner, const Corner *currentCorner);
 
 	// For retrieving names of the outputs
-	static wxString GetCornerDoubleName(const CornerOutputsDouble &_output);
-	static wxString GetCornerVectorName(const CornerOutputsVector &_output);
-	static wxString GetDoubleName(const OutputsDouble &_output);
-	static wxString GetVectorName(const OutputsVector &_output);
+	static wxString GetCornerDoubleName(const CornerOutputsDouble &output);
+	static wxString GetCornerVectorName(const CornerOutputsVector &output);
+	static wxString GetDoubleName(const OutputsDouble &output);
+	static wxString GetVectorName(const OutputsVector &output);
 
 	// For retrieving units of the outputs
-	static UnitConverter::UnitType GetCornerDoubleUnitType(const CornerOutputsDouble &_output);
-	static UnitConverter::UnitType GetCornerVectorUnitType(const CornerOutputsVector &_output);
-	static UnitConverter::UnitType GetDoubleUnitType(const OutputsDouble &_output);
-	static UnitConverter::UnitType GetVectorUnitType(const OutputsVector &_output);
+	static UnitConverter::UnitType GetCornerDoubleUnitType(const CornerOutputsDouble &output);
+	static UnitConverter::UnitType GetCornerVectorUnitType(const CornerOutputsVector &output);
+	static UnitConverter::UnitType GetDoubleUnitType(const OutputsDouble &output);
+	static UnitConverter::UnitType GetVectorUnitType(const OutputsVector &output);
 
-	void InitializeAllOutputs(void);
+	void InitializeAllOutputs();
 };
 
 #endif// KINEMATIC_OUTPUTS_H_

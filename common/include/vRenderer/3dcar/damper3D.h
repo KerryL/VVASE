@@ -15,8 +15,8 @@
 //	4/25/2009	- Changed Update() to include color argument in the form of wxColor, K. Loux.
 //	5/17/2009	- Removed VTK dependencies, K. Loux.
 
-#ifndef _DAMPER3D_H_
-#define _DAMPER3D_H_
+#ifndef DAMPER3D_H_
+#define DAMPER3D_H_
 
 // VVASE forward declarations
 class Vector;
@@ -27,10 +27,7 @@ class Sphere;
 class Damper3D
 {
 public:
-	// Constructor
-	Damper3D(RenderWindow &_renderer);
-
-	// Destructor
+	Damper3D(RenderWindow &renderer);
 	~Damper3D();
 
 	// Updates the 3D representation of the damper on the screen
@@ -38,19 +35,14 @@ public:
 		const double &shaftDiameter, const double &bodyLength, const int &resolution,
 		const Color &bodyColor, const Color &shaftColor, bool show);
 
-	// Returns true if the passed reference is to an actor from this object
 	bool ContainsThisActor(const Primitive *actor);
 
 private:
-	// The damper body
 	Cylinder *body;
-
-	// The shaft
 	Cylinder *shaft;
 
-	// The end points
 	Sphere *inboardEndPoint;
 	Sphere *outboardEndPoint;
 };
 
-#endif// _DAMPER3D_H_
+#endif// DAMPER3D_H_

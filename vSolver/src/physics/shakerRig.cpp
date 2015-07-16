@@ -29,7 +29,7 @@
 // Description:		Constructor for the ShakerRig class.
 //
 // Input Arguments:
-//		_debugger	= const Debugger&, reference to the debug message printing utility
+//		debugger	= const Debugger&, reference to the debug message printing utility
 //
 // Output Arguments:
 //		None
@@ -38,7 +38,7 @@
 //		None
 //
 //==========================================================================
-ShakerRig::ShakerRig(const Debugger &_debugger) : debugger(_debugger)
+ShakerRig::ShakerRig(const Debugger &debugger) : debugger(debugger)
 {
 }
 

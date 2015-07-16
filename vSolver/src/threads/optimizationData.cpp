@@ -25,7 +25,7 @@
 // Description:		Constructor for the OptimizationData class.
 //
 // Input Arguments:
-//		_geneticAlgorithm	= GeneticAlgorithm* pointing to the optimization object
+//		geneticAlgorithm	= GeneticAlgorithm* pointing to the optimization object
 //
 // Output Arguments:
 //		None
@@ -34,8 +34,8 @@
 //		None
 //
 //==========================================================================
-OptimizationData::OptimizationData(GeneticAlgorithm *_geneticAlgorithm)
-									 : ThreadData(), geneticAlgorithm(_geneticAlgorithm)
+OptimizationData::OptimizationData(GeneticAlgorithm *geneticAlgorithm)
+	: ThreadData(), geneticAlgorithm(geneticAlgorithm)
 {
 }
 

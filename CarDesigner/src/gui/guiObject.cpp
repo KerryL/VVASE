@@ -46,10 +46,10 @@
 //					depending on the object's type.
 //
 // Input Arguments:
-//		_mainFrame			= MainFrame& pointing to the main frame for
-//							  this application
-//		_pathAndFileName	= wxString specifying the location to load this
-//							  object from
+//		mainFrame		= MainFrame& pointing to the main frame for
+//						  this application
+//		pathAndFileName	= wxString specifying the location to load this
+//						  object from
 //
 // Output Arguments:
 //		None
@@ -58,14 +58,11 @@
 //		None
 //
 //==========================================================================
-GuiObject::GuiObject(MainFrame &_mainFrame,
-					   wxString _pathAndFileName) : mainFrame(_mainFrame)
+GuiObject::GuiObject(MainFrame &mainFrame, wxString pathAndFileName) : mainFrame(mainFrame)
 {
-	// Make sure we know that loading is not complete
 	objectIsInitialized = false;
 
-	// Assign the arguments to the class members
-	pathAndFileName	= _pathAndFileName;
+	this->pathAndFileName = pathAndFileName;
 
 	// Get the pointers to the other gui components from mainFrame
 	notebook		= mainFrame.GetNotebook();
@@ -75,13 +72,10 @@ GuiObject::GuiObject(MainFrame &_mainFrame,
 	modifiedSinceLastSave = true;
 
 	// Check to see if we are loading an object from file
-	if (!_pathAndFileName.IsEmpty())
+	if (!pathAndFileName.IsEmpty())
 	{
-		// Set the modified flag to false (we're loading a car that's already saved)
 		modifiedSinceLastSave = false;
-
-		// Set the path to our class level variable
-		pathAndFileName = _pathAndFileName;
+		this->pathAndFileName = pathAndFileName;// TODO:  Necessary?  We do this above...
 	}
 }
 
@@ -128,7 +122,7 @@ GuiObject::~GuiObject()
 //		None
 //
 //==========================================================================
-void GuiObject::Initialize(void)
+void GuiObject::Initialize()
 {
 	// Declare the icon variables
 	int normalIcon = -1;
@@ -171,7 +165,7 @@ void GuiObject::Initialize(void)
 //					result of the change.
 //
 // Input Arguments:
-//		_name	= wxString specifying the object's new name
+//		name	= wxString specifying the object's new name
 //
 // Output Arguments:
 //		None
@@ -180,10 +174,9 @@ void GuiObject::Initialize(void)
 //		None
 //
 //==========================================================================
-void GuiObject::SetName(wxString _name)
+void GuiObject::SetName(wxString name)
 {
-	// Set the name for this object
-	name = _name;
+	this->name = name;
 
 	// Update the names in the SystemsTree and the Notebook
 	systemsTree->SetItemText(treeID, name);
@@ -211,7 +204,7 @@ void GuiObject::SetName(wxString _name)
 //		wxString representing the cleaned-up name of the object
 //
 //==========================================================================
-wxString GuiObject::GetCleanName(void) const
+wxString GuiObject::GetCleanName() const
 {
 	// If the file has been modified, and it contains an asterisk, remove the
 	// asterisk and return the name
@@ -243,7 +236,7 @@ wxString GuiObject::GetCleanName(void) const
 //		None
 //
 //==========================================================================
-void GuiObject::SetModified(void)
+void GuiObject::SetModified()
 {
 	modifiedSinceLastSave = true;
 
@@ -393,7 +386,7 @@ bool GuiObject::Close(bool notebookPageAlreadyClosed)
 //		bool, true for success
 //
 //==========================================================================
-bool GuiObject::LoadFromFile(void)
+bool GuiObject::LoadFromFile()
 {
 	if (!PerformLoadFromFile())
 	{
@@ -568,7 +561,7 @@ bool GuiObject::WriteImageToFile(wxString pathAndFileName)
 //		None
 //
 //==========================================================================
-void GuiObject::SelectThisObjectInTree(void)
+void GuiObject::SelectThisObjectInTree()
 {
 	// Make sure the tree ID is valid
 	if (treeID.IsOk())
@@ -593,7 +586,7 @@ void GuiObject::SelectThisObjectInTree(void)
 //		wxString containing the stripped-down name
 //
 //==========================================================================
-wxString GuiObject::GetNameFromFileName(void)
+wxString GuiObject::GetNameFromFileName()
 {
 	wxChar pathDelimiter;
 #ifdef __WXGTK__
@@ -628,7 +621,7 @@ wxString GuiObject::GetNameFromFileName(void)
 //		wxString containing the stripped-down name
 //
 //==========================================================================
-bool GuiObject::VerifyUniqueness(void)
+bool GuiObject::VerifyUniqueness()
 {
 	// Check the local path and filename against all those being managed by
 	// the main frame

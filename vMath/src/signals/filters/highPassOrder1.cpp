@@ -116,7 +116,7 @@ void HighPassFirstOrderFilter::Initialize(const double &initialValue)
 // Description:		Applies the filter.
 //
 // Input Arguments:
-//		_u	= const double& specifying the raw data input to the filter
+//		in	= const double& specifying the raw data input to the filter
 //
 // Output Arguments:
 //		None
@@ -125,11 +125,11 @@ void HighPassFirstOrderFilter::Initialize(const double &initialValue)
 //		double indicating the newly filtered data (same units as input data)
 //
 //==========================================================================
-double HighPassFirstOrderFilter::Apply(const double &_u)
+double HighPassFirstOrderFilter::Apply(const double &in)
 {
 	// Shift the inputs one space
 	u[1] = u[0];
-	u[0] = _u;
+	u[0] = in;
 
 	y[1] = y[0];
 	y[0] = (u[0] - u[1]) * a[0] - y[1] * b[0];

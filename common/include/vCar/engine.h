@@ -15,8 +15,8 @@
 //	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
-#ifndef _ENGINE_H_
-#define _ENGINE_H_
+#ifndef ENGINE_H_
+#define ENGINE_H_
 
 // Standard C++ headers
 #include <iosfwd>// forward declarations of fstream objects
@@ -24,11 +24,8 @@
 class Engine
 {
 public:
-	// Constructor
 	Engine();
 	Engine(const Engine &engine);
-
-	// Destructor
 	~Engine();
 
 	// File read/write functions
@@ -36,15 +33,14 @@ public:
 	void Read(std::ifstream *inFile, int fileVersion);
 
 	// Get the outputs from this portion of the simulation
-	double GetEngineSpeed(void) { return crankshaftSpeed; };// [rad/sec]
+	double GetEngineSpeed() { return crankshaftSpeed; }// [rad/sec]
 	double TorqueOutput(const double &engineSpeed, const double &throttlePosition);// [in-lb]
 
 	// Overloaded operators
-	Engine& operator = (const Engine &engine);
+	Engine& operator=(const Engine &engine);
 
 private:
-	// The crankshaft speed
 	double crankshaftSpeed;// [rad/sec]
 };
 
-#endif// _ENGINE_H_
+#endif// ENGINE_H_

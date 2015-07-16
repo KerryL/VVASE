@@ -13,8 +13,8 @@
 // Description:  Handles user-specified mathematical operations on datasets.
 // History:
 
-#ifndef _EXPRESSION_TREE_H_
-#define _EXPRESSION_TREE_H_
+#ifndef EXPRESSION_TREE_H_
+#define EXPRESSION_TREE_H_
 
 // Local headers
 #include "vUtilities/managedList.h"
@@ -26,11 +26,9 @@ class wxString;
 class ExpressionTree
 {
 public:
-	// Constructor
-	ExpressionTree(const ManagedList<const Dataset2D> &_list);
+	ExpressionTree(const ManagedList<const Dataset2D> &list);
 
-	// Main solver method
-	wxString Solve(wxString expression, Dataset2D &solvedData, const double &_xAxisFactor);
+	wxString Solve(wxString expression, Dataset2D &solvedData, const double &xAxisFactor);
 
 private:
 	const ManagedList<const Dataset2D> &list;
@@ -50,4 +48,4 @@ private:
 	Dataset2D GetSetFromList(const unsigned int &i);
 };
 
-#endif// _EXPRESSION_TREE_H_
+#endif// EXPRESSION_TREE_H_

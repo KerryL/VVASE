@@ -13,16 +13,13 @@
 // Description:  Contains class declaration for STATE class.
 // History:
 
-#ifndef _STATE_H_
-#define _STATE_H_
+#ifndef STATE_H_
+#define STATE_H_
 
 class State
 {
 public:
-	// Constructor
 	State();
-
-	// Destructor
 	~State();
 
 	// The 14 degrees-of-freedom
@@ -52,4 +49,4 @@ private:
 	// Operators
 };
 
-#endif// _STATE_H_
+#endif// STATE_H_

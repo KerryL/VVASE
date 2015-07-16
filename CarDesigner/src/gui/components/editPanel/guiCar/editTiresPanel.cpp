@@ -33,7 +33,7 @@
 // Description:		Constructor for EditTiresPanel class.
 //
 // Input Arguments:
-//		_parent		= EditPanel&, reference to this object's owner
+//		parent		= EditPanel&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
@@ -45,13 +45,11 @@
 //		None
 //
 //==========================================================================
-EditTiresPanel::EditTiresPanel(EditPanel &_parent, wxWindowID id,
-								   const wxPoint& pos, const wxSize& size)
-								   : wxScrolledWindow(&_parent, id, pos, size),
-								   parent(_parent)
+EditTiresPanel::EditTiresPanel(EditPanel &parent, wxWindowID id,
+	const wxPoint& pos, const wxSize& size)
+	: wxScrolledWindow(&parent, id, pos, size), parent(parent)
 										   
 {
-	// Create the controls
 	CreateControls();
 }
 
@@ -109,7 +107,7 @@ END_EVENT_TABLE();
 // Description:		Updates the information on this panel.
 //
 // Input Arguments:
-//		_currentTireSet	= TireSet* pointing to the associated tire set
+//		currentTireSet	= TireSet* pointing to the associated tire set
 //
 // Output Arguments:
 //		None
@@ -118,10 +116,9 @@ END_EVENT_TABLE();
 //		None
 //
 //==========================================================================
-void EditTiresPanel::UpdateInformation(TireSet *_currentTireSet)
+void EditTiresPanel::UpdateInformation(TireSet *currentTireSet)
 {
-	// Update the class member
-	currentTireSet = _currentTireSet;
+	this->currentTireSet = currentTireSet;
 
 	// FIXME:  Handle symmetry
 

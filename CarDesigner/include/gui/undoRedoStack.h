@@ -14,8 +14,8 @@
 //				 to provide the opportunity to undo and redo.
 // History:
 
-#ifndef _UNDO_REDO_STACK_H_
-#define _UNDO_REDO_STACK_H_
+#ifndef UNDO_REDO_STACK_H_
+#define UNDO_REDO_STACK_H_
 
 // Standard C++ headers
 #include <stack>
@@ -26,14 +26,10 @@
 // VVASE forward declarations
 class MainFrame;
 
-// The undo/redo stack class
 class UndoRedoStack
 {
 public:
-	// Constructor
-	UndoRedoStack(MainFrame &_mainFrame);
-
-	// Destructor
+	UndoRedoStack(MainFrame &mainFrame);
 	~UndoRedoStack();
 
 	// Data object for storing undo/redo information
@@ -92,9 +88,9 @@ public:
 	// Methods for maintaining the stacks
 	void AddOperation(int index,
 		UndoRedoStack::Operation::OperationDataType dataType, void *location);
-	void Undo(void);
-	void Redo(void);
-	void ClearStacks(void);
+	void Undo();
+	void Redo();
+	void ClearStacks();
 	void RemoveGuiObjectFromStack(int index);
 
 	// Operator overloads (explicitly overloaded due to warning C4512
@@ -102,7 +98,6 @@ public:
 	UndoRedoStack& operator = (const UndoRedoStack &undoRedo);
 
 private:
-	// Main frame reference
 	MainFrame &mainFrame;
 
 	// Method for applying changes (either undo or redo)
@@ -112,11 +107,11 @@ private:
 	Operation UpdateValue(Operation operation);
 
 	// Method for updating the application as a result of a undo/redo
-	void Update(void) const;
+	void Update() const;
 
 	// The stacks
 	std::stack<Operation> undoStack;
 	std::stack<Operation> redoStack;
 };
 
-#endif// _UNDO_REDO_STACK_H_
+#endif// UNDO_REDO_STACK_H_

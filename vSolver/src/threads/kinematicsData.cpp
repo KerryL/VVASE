@@ -24,10 +24,10 @@
 // Description:		Constructor for the KinematicsData class.
 //
 // Input Arguments:
-//		_originalCar		= const Car*
-//		_workingCar			= Car*
-//		_kinematicInputs	= Kinematics::Inputs
-//		_output				= KinematicOutputs*
+//		originalCar		= const Car*
+//		workingCar		= Car*
+//		kinematicInputs	= Kinematics::Inputs
+//		output			= KinematicOutputs*
 //
 // Output Arguments:
 //		None
@@ -36,12 +36,10 @@
 //		None
 //
 //==========================================================================
-KinematicsData::KinematicsData(const Car *_originalCar, Car *_workingCar,
-								 Kinematics::Inputs _kinematicInputs,
-								 KinematicOutputs *_output) : ThreadData(),
-								 originalCar(_originalCar),
-								 workingCar(_workingCar), kinematicInputs(_kinematicInputs),
-								 output(_output)
+KinematicsData::KinematicsData(const Car *originalCar, Car *workingCar,
+	Kinematics::Inputs kinematicInputs, KinematicOutputs *output) : ThreadData(),
+	originalCar(originalCar), workingCar(workingCar),
+	kinematicInputs(kinematicInputs), output(output)
 {
 }
 

@@ -26,26 +26,26 @@ class GAGeneDialog : public wxDialog
 {
 public:
 	// Constructor
-	GAGeneDialog(wxWindow *parent, const Corner::Hardpoints &_hardpoint,
-		const Corner::Hardpoints &_tiedTo, const Vector::Axis &_axisDirection, const Corner::Location &_cornerLocation,
-		const double &_minimum, const double &_maximum, const unsigned int &_numberOfValues,
+	GAGeneDialog(wxWindow *parent, const Corner::Hardpoints &hardpoint,
+		const Corner::Hardpoints &tiedTo, const Vector::Axis &axisDirection, const Corner::Location &cornerLocation,
+		const double &minimum, const double &maximum, const unsigned int &numberOfValues,
 		wxWindowID id, const wxPoint &position, long style = wxDEFAULT_DIALOG_STYLE);
 
 	// Destructor
 	~GAGeneDialog();
 
 	// Private data accessors
-	Corner::Hardpoints GetHardpoint(void) const { return hardpoint; };
-	Corner::Hardpoints GetTiedTo(void) const { return tiedTo; };
-	Vector::Axis GetAxisDirection(void) const { return axisDirection; };
-	Corner::Location GetCornerLocation(void) const { return cornerLocation; };
-	double GetMinimum(void) const { return minimum; };
-	double GetMaximum(void) const { return maximum; };
-	unsigned long GetNumberOfValues(void) const { return numberOfValues; };
+	Corner::Hardpoints GetHardpoint() const { return hardpoint; };
+	Corner::Hardpoints GetTiedTo() const { return tiedTo; };
+	Vector::Axis GetAxisDirection() const { return axisDirection; };
+	Corner::Location GetCornerLocation() const { return cornerLocation; };
+	double GetMinimum() const { return minimum; };
+	double GetMaximum() const { return maximum; };
+	unsigned long GetNumberOfValues() const { return numberOfValues; };
 
 private:
 	// Method for creating controls
-	void CreateControls(void);
+	void CreateControls();
 
 	// Controls
 	wxComboBox *hardpointCombo;

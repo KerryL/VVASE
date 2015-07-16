@@ -17,8 +17,8 @@
 //				 MSW and through TCP on other platforms.
 // History:
 
-#ifndef _IPC_SERVER_H_
-#define _IPC_SERVER_H_
+#ifndef IPC_SERVER_H_
+#define IPC_SERVER_H_
 
 // wxWidgets headers
 #include <wx/ipc.h>
@@ -26,29 +26,24 @@
 // VVASE forward declarations
 class IPCConnection;
 
-// Server class declaration
 class IPCServer : public wxServer
 {
 public:
-	// Constructor
 	IPCServer();
-	
-	// Destructor
 	~IPCServer();
 	
 	// Connection handling functions
-	void Disconnect(void);
-	bool IsConnected(void) const { return connection != NULL; };
+	void Disconnect();
+	bool IsConnected() const { return connection != NULL; }
 	
 	// Accessors
-	IPCConnection *GetConnection(void) { return connection; };
+	IPCConnection *GetConnection() { return connection; }
 	
 	// Overridden method for handling connection initializations
 	wxConnectionBase *OnAcceptConnection(const wxString &topic);
 	
 private:
-	// The connection object
 	IPCConnection *connection;
 };
 
-#endif// _IPC_SERVER_H_
+#endif// IPC_SERVER_H_

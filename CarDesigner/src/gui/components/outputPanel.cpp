@@ -37,7 +37,7 @@
 //					and creates the controls, etc.
 //
 // Input Arguments:
-//		_mainFrame	= MainFrame&, reference to this object's owner
+//		mainFrame	= MainFrame&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
@@ -49,15 +49,11 @@
 //		None
 //
 //==========================================================================
-OutputPanel::OutputPanel(MainFrame &_mainFrame, wxWindowID id, const wxPoint &pos,
-						   const wxSize &size)
-						   : wxPanel(&_mainFrame, id, pos, size),
-						   mainFrame(_mainFrame)
+OutputPanel::OutputPanel(MainFrame &mainFrame, wxWindowID id, const wxPoint &pos,
+	const wxSize &size): wxPanel(&mainFrame, id, pos, size), mainFrame(mainFrame)
 {
-	// Create the controls
 	CreateControls();
 
-	// Initialize the number of data columns to zero
 	numberOfDataColumns = 0;
 }
 
@@ -285,7 +281,7 @@ void OutputPanel::UpdateInformation(KinematicOutputs outputs, Car &car,
 //					removes extra columns, and ends the batch edit for the grid.
 //
 // Input Arguments:
-//		_numberOfDataColumns	= int specifying how many data columns we should have
+//		numberOfDataColumns	= int specifying how many data columns we should have
 //
 // Output Arguments:
 //		None
@@ -294,23 +290,20 @@ void OutputPanel::UpdateInformation(KinematicOutputs outputs, Car &car,
 //		None
 //
 //==========================================================================
-void OutputPanel::FinishUpdate(int _numberOfDataColumns)
+void OutputPanel::FinishUpdate(int numberOfDataColumns)
 {
-	// See if we need to remove any columns
-	while (numberOfDataColumns > _numberOfDataColumns)
+	while (this->numberOfDataColumns > numberOfDataColumns)
 	{
-		// Delete the unnecessary columns
-		if (!outputsList->DeleteCols(_numberOfDataColumns + 1, numberOfDataColumns - _numberOfDataColumns))
+		if (!outputsList->DeleteCols(numberOfDataColumns + 1, this->numberOfDataColumns - numberOfDataColumns))
 		{
 			Debugger::GetInstance() << "Warning (OutputPanel::FinishUpdate):  DeleteCols failed!" << Debugger::PriorityMedium;
 			return;
 		}
 
-		// Decrement the number of data columns
-		numberOfDataColumns--;
+		this->numberOfDataColumns--;
 	}
 
-	outputsList->SetColLabelValue(numberOfDataColumns + 1, _T("Units"));
+	outputsList->SetColLabelValue(this->numberOfDataColumns + 1, _T("Units"));
 
 	// Update all of the unit labels
 	wxString unitString;
@@ -319,7 +312,7 @@ void OutputPanel::FinishUpdate(int _numberOfDataColumns)
 	{
 		unitString.Printf("(%s)", UnitConverter::GetInstance().GetUnitType(KinematicOutputs::GetOutputUnitType(
 			(KinematicOutputs::OutputsComplete)i)).c_str());
-		outputsList->SetCellValue(i, numberOfDataColumns + 1, unitString);
+		outputsList->SetCellValue(i, this->numberOfDataColumns + 1, unitString);
 	}
 
 	// End batch edit of the grid
@@ -446,7 +439,7 @@ void OutputPanel::ColumnResizeEvent(wxGridSizeEvent& WXUNUSED(event))
 //		None
 //
 //==========================================================================
-void OutputPanel::HighlightColumn(wxString _name)
+void OutputPanel::HighlightColumn(wxString name)
 {
 	// Begin a batch edit of the grid
 	outputsList->BeginBatch();
@@ -459,7 +452,7 @@ void OutputPanel::HighlightColumn(wxString _name)
 	{
 		// If the current column belongs to the specified car, use light grey,
 		// otherwise, use white
-		if (outputsList->GetColLabelValue(col).compare(_name) != 0)
+		if (outputsList->GetColLabelValue(col).compare(name) != 0)
 			color = *wxWHITE;
 		else
 			color.Set(220, 220, 220);

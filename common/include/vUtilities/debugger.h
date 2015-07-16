@@ -46,8 +46,8 @@ class Debugger : public std::ostream
 {
 public:
 	// In lieu of a constructor/destructor
-	static Debugger& GetInstance(void);
-	static void Kill(void);
+	static Debugger& GetInstance();
+	static void Kill();
 	
 	// This enumeration describes how many debug messages we want to print
 	enum DebugLevel
@@ -61,7 +61,7 @@ public:
 	friend std::ostream& operator<<(std::ostream &os, const Debugger::DebugLevel& level);
 
 	void SetDebugLevel(const DebugLevel &level);
-	inline DebugLevel GetDebugLevel(void) const { wxMutexLocker lock(debugMutex); return debugLevel; }
+	inline DebugLevel GetDebugLevel() const { wxMutexLocker lock(debugMutex); return debugLevel; }
 	void SetTargetOutput(wxEvtHandler *parent);
 
 private:

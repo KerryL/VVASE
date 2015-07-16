@@ -13,8 +13,8 @@
 // Description:  Contains the class declaration for the EditMassPanel class.
 // History:
 
-#ifndef _EDIT_MASS_PANEL_H_
-#define _EDIT_MASS_PANEL_H_
+#ifndef EDIT_MASS_PANEL_H_
+#define EDIT_MASS_PANEL_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -26,27 +26,18 @@ class MassProperties;
 class EditMassPanel : public wxScrolledWindow
 {
 public:
-	// Constructor
-	EditMassPanel(EditPanel &_Parent, wxWindowID id, const wxPoint& pos,
+	EditMassPanel(EditPanel &parent, wxWindowID id, const wxPoint& pos,
 		const wxSize& size);
-
-	// Destructor
 	~EditMassPanel();
 
-	// Updates the information on the panel
-	void UpdateInformation(MassProperties *_currentMassProperties);
+	void UpdateInformation(MassProperties *currentMassProperties);
 
 private:
-	// The parent panel
 	EditPanel &parent;
 
-	// The data with which we are currently associated
 	MassProperties *currentMassProperties;
+	void CreateControls();
 
-	// Creates the controls and positions everything within the panel
-	void CreateControls(void);
-
-	// Event IDs
 	enum EditMassPropertiesEventIds
 	{
 		TextBoxIxx = 400 + wxID_HIGHEST,
@@ -88,8 +79,7 @@ private:
 	wxStaticText *izx;
 	wxStaticText *izy;
 
-	// For the event table
 	DECLARE_EVENT_TABLE();
 };
 
-#endif// _EDIT_MASS_PANEL_H_
+#endif// EDIT_MASS_PANEL_H_

@@ -51,12 +51,10 @@
 //		None
 //
 //==========================================================================
-EditSuspensionPanel::EditSuspensionPanel(EditSuspensionNotebook &_parent, wxWindowID id,
-											 const wxPoint& pos, const wxSize& size) :
-											 wxScrolledWindow(&_parent, id, pos, size),
-											 parent(_parent)
+EditSuspensionPanel::EditSuspensionPanel(EditSuspensionNotebook &parent,
+	wxWindowID id, const wxPoint& pos, const wxSize& size)
+	: wxScrolledWindow(&parent, id, pos, size), parent(parent)
 {
-	// Create the controls
 	CreateControls();
 }
 
@@ -123,7 +121,7 @@ END_EVENT_TABLE();
 //		None
 //
 //==========================================================================
-void EditSuspensionPanel::UpdateInformation(void)
+void EditSuspensionPanel::UpdateInformation()
 {
 	if (currentSuspension)
 		UpdateInformation(currentSuspension);

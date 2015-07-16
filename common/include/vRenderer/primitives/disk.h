@@ -13,8 +13,8 @@
 // Description:  Derived from Primitive for creating disk objects.
 // History:
 
-#ifndef _DISK_H_
-#define _DISK_H_
+#ifndef DISK_H_
+#define DISK_H_
 
 // Local headers
 #include "vRenderer/primitives/primitive.h"
@@ -23,37 +23,28 @@
 class Disk : public Primitive
 {
 public:
-	// Constructor
-	Disk(RenderWindow &_renderWindow);
-
-	// Destructor
+	Disk(RenderWindow &renderWindow);
 	~Disk();
 
 	// Mandatory overloads from Primitive - for creating geometry and testing the
 	// validity of this object's parameters
-	void GenerateGeometry(void);
-	bool HasValidParameters(void);
+	void GenerateGeometry();
+	bool HasValidParameters();
 
-	// Private data accessors
-	void SetResolution(const int &_resolution);
-	void SetOuterRadius(const double &_outerRadius);
-	void SetInnerRadius(const double &_innerRadius);
-	void SetCenter(const Vector &_center);
-	void SetNormal(const Vector &_normal);
+	void SetResolution(const int &resolution);
+	void SetOuterRadius(const double &outerRadius);
+	void SetInnerRadius(const double &innerRadius);
+	void SetCenter(const Vector &center);
+	void SetNormal(const Vector &normal);
 
 private:
-	// The resolution
 	int resolution;
 
-	// The location of the disk
 	Vector center;
-
-	// The normal direction
 	Vector normal;
 
-	// The inner and outer radii
 	double outerRadius;
 	double innerRadius;
 };
 
-#endif// _DISK_H_
+#endif// DISK_H_

@@ -31,7 +31,7 @@
 //					process necessary to add the object to the scene.
 //
 // Input Arguments:
-//		_renderer	= RenderWindow&, pointer to rendering object
+//		renderer	= RenderWindow&, pointer to rendering object
 //
 // Output Arguments:
 //		None
@@ -40,14 +40,14 @@
 //		None
 //
 //==========================================================================
-AArm::AArm(RenderWindow &_renderer)
+AArm::AArm(RenderWindow &renderer)
 {
 	// Create the actors
-	endPoint1 = new Sphere(_renderer);
-	endPoint2 = new Sphere(_renderer);
-	midPoint = new Sphere(_renderer);
-	member1 = new Cylinder(_renderer);
-	member2 = new Cylinder(_renderer);
+	endPoint1 = new Sphere(renderer);
+	endPoint2 = new Sphere(renderer);
+	midPoint = new Sphere(renderer);
+	member1 = new Cylinder(renderer);
+	member2 = new Cylinder(renderer);
 
 	// Set up the Actors
 	endPoint1->SetColor(Color::ColorWhite);

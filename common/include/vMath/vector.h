@@ -24,8 +24,8 @@
 //	11/22/2009	- Moved to vMath.lib, K. Loux.
 //	11/1/2010	- Removed non-const Normalize(), K. Loux.
 
-#ifndef _Vector_CLASSS_H_
-#define _Vector_CLASSS_H_
+#ifndef VECTOR_CLASS_H_
+#define VECTOR_CLASS_H_
 
 // Standard C++ headers
 #include <cmath>
@@ -44,7 +44,7 @@ class Vector
 public:
 	// Constructors
 	Vector();
-	Vector(const double &_x, const double &_y, const double &_z);
+	Vector(const double &x, const double &y, const double &z);
 	Vector(const Vector &v);
 
 	// Destructor
@@ -62,11 +62,11 @@ public:
 	};
 
 	// Vector norm
-	double Length(void) const { return sqrt(x * x + y * y + z * z); };
+	double Length() const { return sqrt(x * x + y * y + z * z); }
 
 	// Calculates the distance between this and Target
 	double Distance(const Vector &v) const { return sqrt((x - v.x) * (x - v.x)
-		+ (y - v.y) * (y - v.y) + (z - v.z) * (z - v.z)); };
+		+ (y - v.y) * (y - v.y) + (z - v.z) * (z - v.z)); }
 
 	// Rotation functions
 	void Rotate(const Vector &cor, const Vector &rotations, Axis first = AxisX,
@@ -82,13 +82,13 @@ public:
 	Vector AnglesTo(const Vector &v) const;
 
 	// Prints the object to a string
-	wxString Print(void) const;
+	wxString Print() const;
 
 	// Set this object to the specified values
-	void Set(const double &_x, const double &_y, const double &_z);
+	void Set(const double &x, const double &y, const double &z);
 
 	// Force magnitude == 1 while preserving the direction
-	Vector Normalize(void) const;
+	Vector Normalize() const;
 
 	// Multiplication that results in a 3x3 matrix
 	Matrix OuterProduct(const Vector &v) const;
@@ -96,14 +96,14 @@ public:
 	// Operators
 	Vector operator + (const Vector &v) const;
 	Vector operator - (const Vector &v) const;
-	double operator * (const Vector &v) const { return x * v.x + y * v.y + z * v.z; };// Dot product
+	double operator * (const Vector &v) const { return x * v.x + y * v.y + z * v.z; }// Dot product
 	Vector operator * (const double &n) const;// Scalar multiplication
 	Vector operator / (const double &n) const;// Scalar division
 	Vector Cross(const Vector &v) const;
 	Vector& operator += (const Vector &v);
 	Vector& operator -= (const Vector &v);
-	Vector& operator *= (const double &n) { x *= n; y *= n; z *= n; return *this; };
-	Vector& operator /= (const double &n) { x /= n; y /= n; z /= n; return *this; };
+	Vector& operator *= (const double &n) { x *= n; y *= n; z *= n; return *this; }
+	Vector& operator /= (const double &n) { x /= n; y /= n; z /= n; return *this; }
 	bool operator == (const Vector &vector) const;
 	bool operator != (const Vector &vector) const;
 	friend ostream& operator << (ostream &writeOut, const Vector &v);
@@ -111,4 +111,4 @@ public:
 	friend Vector operator*(const double &d, const Vector &v);
 };
 
-#endif// _Vector_CLASSS_H_
+#endif// VECTOR_CLASS_H_

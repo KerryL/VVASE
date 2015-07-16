@@ -15,8 +15,8 @@
 //	1/28/2009	- Changed structure of GUI components so context menu creation for all
 //				  objects is handled by the MAIN_FRAME class.
 
-#ifndef _MAIN_TREE_H_
-#define _MAIN_TREE_H_
+#ifndef MAIN_TREE_H_
+#define MAIN_TREE_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -29,14 +29,10 @@ class GuiObject;
 class MainTree : public wxTreeCtrl
 {
 public:
-	// Constructor
-	MainTree(MainFrame &_parent, wxWindowID id, const wxPoint &pos,
-		const wxSize &_size, long style);
-
-	// Destructor
+	MainTree(MainFrame &parent, wxWindowID id, const wxPoint &pos,
+		const wxSize &size, long style);
 	~MainTree();
 
-	// Returns a poionter to the selected GUI_OBJECT, or NULL if none is selected
 	GuiObject *GetSelectedItem(wxTreeItemId *selectedItem);
 
 	// Returns the number of items below the root for the specified item
@@ -44,7 +40,7 @@ public:
 	int GetItemType(wxTreeItemId itemId);
 
 	// Returns a pointer to this object's owner
-	inline MainFrame& GetMainFrame(void) { return mainFrame; };
+	inline MainFrame& GetMainFrame() { return mainFrame; }
 
 	enum IconHandle
 	{
@@ -65,10 +61,9 @@ public:
 	};
 
 	// For assigning icons, we need to give other objects access to the indeces
-	int GetIconHandle(IconHandle id) { return iconHandle[id]; };
+	int GetIconHandle(IconHandle id) { return iconHandle[id]; }
 
 private:
-	// Pointer to this object's owner
 	MainFrame &mainFrame;
 
 	// Event handlers-----------------------------------------------------
@@ -78,20 +73,16 @@ private:
 	void ItemActivatedEvent(wxTreeEvent &event);
 	// End event handlers-------------------------------------------------
 
-	// Handles selection logic when the selection changes or an item is activated
 	void PerformSelection(bool isActivated);
 
-	// Determines the application's index number for the currently selected item
-	int GetSelectedObjectIndex(void);
+	int GetSelectedObjectIndex();
 
-	// The image list for storing tree item icons
 	wxImageList *iconList;
 
 	// These are for storing the icon indeces as we add them to the image list
 	int iconHandle[NumberOfIcons];
 
-	// For the event table
 	DECLARE_EVENT_TABLE();
 };
 
-#endif// _MAIN_TREE_H_
+#endif// MAIN_TREE_H_

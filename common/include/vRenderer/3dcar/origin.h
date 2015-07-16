@@ -14,8 +14,8 @@
 // History:
 //	5/17/2009	- Removed VTK dependencies, K. Loux.
 
-#ifndef _ORIGIN_H_
-#define _ORIGIN_H_
+#ifndef ORIGIN_H_
+#define ORIGIN_H_
 
 // VVASE forward declarations
 class Vector3D;
@@ -24,10 +24,7 @@ class RenderWindow;
 class Origin
 {
 public:
-	// Constructor
-	Origin(RenderWindow &_renderer);
-
-	// Destructor
+	Origin(RenderWindow &renderer);
 	~Origin();
 
 	// Updates the object in the rendered scene
@@ -35,10 +32,9 @@ public:
 		const double &tipDiameter, const int &resolution, const bool &show);
 
 private:
-	// The objects that make up the origin
 	Vector3D *xDirection;
 	Vector3D *yDirection;
 	Vector3D *zDirection;
 };
 
-#endif// _ORIGIN_H_
+#endif// ORIGIN_H_

@@ -16,8 +16,8 @@
 //				  removed PURPOSE enumeration, K. Loux.
 //	5/17/2009	- Removed VTK dependencies, K. Loux.
 
-#ifndef _POINT3D_H_
-#define _POINT3D_H_
+#ifndef POINT3D_H_
+#define POINT3D_H_
 
 // VVASE forward declarations
 class Vector;
@@ -27,10 +27,7 @@ class Sphere;
 class Point3D
 {
 public:
-	// Constructor
-	Point3D(RenderWindow &_renderer);
-
-	// Destructor
+	Point3D(RenderWindow &renderer);
 	~Point3D();
 
 	// Updates the 3D representation of the point on the screen
@@ -38,8 +35,7 @@ public:
 		const Color &color, bool show);
 
 private:
-	// The point actor
 	Sphere *point;
 };
 
-#endif// _POINT3D_H_
+#endif// POINT3D_H_

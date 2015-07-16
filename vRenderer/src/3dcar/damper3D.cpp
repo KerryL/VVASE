@@ -40,19 +40,16 @@
 //		None
 //
 //==========================================================================
-Damper3D::Damper3D(RenderWindow &_renderer)
+Damper3D::Damper3D(RenderWindow &renderer)
 {
-	// Create the objects
-	inboardEndPoint = new Sphere(_renderer);
-	outboardEndPoint = new Sphere(_renderer);
-	body = new Cylinder(_renderer);
-	shaft = new Cylinder(_renderer);
+	inboardEndPoint = new Sphere(renderer);
+	outboardEndPoint = new Sphere(renderer);
+	body = new Cylinder(renderer);
+	shaft = new Cylinder(renderer);
 
-	// Set up the cylinders
 	body->SetCapping(true);
 	shaft->SetCapping(true);
 
-	// Set up the Actors
 	inboardEndPoint->SetColor(Color::ColorWhite);
 	outboardEndPoint->SetColor(Color::ColorWhite);
 }
@@ -103,9 +100,10 @@ Damper3D::~Damper3D()
 //		None
 //
 //==========================================================================
-void Damper3D::Update(const Vector &outboardEnd, const Vector &inboardEnd, const double &bodyDiameter,
-					  const double &shaftDiameter, const double &bodyLength, const int &resolution,
-					  const Color &bodyColor, const Color &shaftColor, bool show)
+void Damper3D::Update(const Vector &outboardEnd, const Vector &inboardEnd,
+	const double &bodyDiameter, const double &shaftDiameter,
+	const double &bodyLength, const int &resolution, const Color &bodyColor,
+	const Color &shaftColor, bool show)
 {
 	// Make sure all vector arguments are valid - if they are not,
 	// the object will not be made visible

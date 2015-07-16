@@ -14,8 +14,8 @@
 // History:
 //	11/22/2009	- Moved to vUtilities.lib, K. Loux.
 
-#ifndef _WHEELSET_STRUCTS_H_
-#define _WHEELSET_STRUCTS_H_
+#ifndef WHEELSET_STRUCTS_H_
+#define WHEELSET_STRUCTS_H_
 
 // VVASE headers
 #include "vMath/vector.h"
@@ -52,4 +52,4 @@ struct FrontRearDouble
 	double rear;
 };
 
-#endif// _WHEELSET_STRUCTS_H_
+#endif// WHEELSET_STRUCTS_H_

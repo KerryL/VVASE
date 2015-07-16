@@ -44,7 +44,7 @@
 //					and creates the controls, etc.
 //
 // Input Arguments:
-//		_mainFrame	= MainFrame&, reference to this object's owner
+//		mainFrame	= MainFrame&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
@@ -56,9 +56,8 @@
 //		None
 //
 //==========================================================================
-EditPanel::EditPanel(MainFrame &_mainFrame, wxWindowID id, const wxPoint& pos,
-					   const wxSize& size) :
-					   wxPanel(&_mainFrame, id, pos, size), mainFrame(_mainFrame)
+EditPanel::EditPanel(MainFrame &mainFrame, wxWindowID id, const wxPoint& pos,
+	const wxSize& size) : wxPanel(&mainFrame, id, pos, size), mainFrame(mainFrame)
 {
 	systemsTree = mainFrame.GetSystemsTree();
 
@@ -119,7 +118,7 @@ EditPanel::~EditPanel()
 //		None
 //
 //==========================================================================
-void EditPanel::UpdateInformation(void)
+void EditPanel::UpdateInformation()
 {
 	if (currentObject)
 		UpdateInformation(currentObject);
@@ -321,7 +320,7 @@ void EditPanel::CreateControls(bool ignoreSystemsTree)
 //		None
 //
 //==========================================================================
-void EditPanel::DeleteAllControls(void)
+void EditPanel::DeleteAllControls()
 {
 	// Remove the panel from the sizer (if the panel exists)
 	if (editAerodynamics || editBrakes || editDifferential || editDrivetrain

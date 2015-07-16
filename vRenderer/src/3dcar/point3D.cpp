@@ -29,7 +29,7 @@
 //					process necessary to add the object to the scene.
 //
 // Input Arguments:
-//		_renderer	= RenderWindow&, pointer to rendering object
+//		renderer	= RenderWindow&, pointer to rendering object
 //
 // Output Arguments:
 //		None
@@ -38,10 +38,9 @@
 //		None
 //
 //==========================================================================
-Point3D::Point3D(RenderWindow &_renderer)
+Point3D::Point3D(RenderWindow &renderer)
 {
-	// Create the objects
-	point = new Sphere(_renderer);
+	point = new Sphere(renderer);
 }
 
 //==========================================================================

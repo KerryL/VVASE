@@ -15,27 +15,23 @@
 //				 and their object's phenotype.
 // History:
 
-#ifndef _GENETIC_ALGORITHM_H_
-#define _GENETIC_ALGORITHM_H_
+#ifndef GENETIC_ALGORITHM_H_
+#define GENETIC_ALGORITHM_H_
 
 // wxWidgets headers
 #include <wx/thread.h>
 
-// Class declaration
 class GeneticAlgorithm
 {
 public:
-	// Constructor
 	GeneticAlgorithm();
-
-	// Destructor
 	virtual ~GeneticAlgorithm();
 
 	// The algorithm control
-	void InitializeAlgorithm(int _populationSize, int _generationLimit,
-		int _numberOfGenes, int *_numberOfPhenotypes, bool _minimize = false,
-		int _crossover = 0, double _elitism = 0.0, double _mutation = 0.0);
-	bool PerformOptimization(void);
+	void InitializeAlgorithm(int populationSize, int generationLimit,
+		int numberOfGenes, int *numberOfPhenotypes, bool minimize = false,
+		int crossover = 0, double elitism = 0.0, double mutation = 0.0);
+	bool PerformOptimization();
 
 	// Sorting methods - We allow for multiple sorting algorithms
 	// because some problems may have different requirements
@@ -49,23 +45,23 @@ public:
 	};
 
 	// Private data accessors
-	void SetPopulationSize(int _populationSize);
-	inline int GetPopulationSize(void) const { wxMutexLocker lock(gsaMutex); return populationSize; };
+	void SetPopulationSize(int populationSize);
+	inline int GetPopulationSize() const { wxMutexLocker lock(gsaMutex); return populationSize; };
 
-	void SetGenerationLimit(int _generationLimit);
-	inline int GetGenerationLimit(void) const { wxMutexLocker lock(gsaMutex); return generationLimit; };
+	void SetGenerationLimit(int generationLimit);
+	inline int GetGenerationLimit() const { wxMutexLocker lock(gsaMutex); return generationLimit; };
 
-	void SetElitismPercentage(double _elitism);
-	inline double GetElitismPercentage(void) const { wxMutexLocker lock(gsaMutex); return elitism; };
+	void SetElitismPercentage(double elitism);
+	inline double GetElitismPercentage() const { wxMutexLocker lock(gsaMutex); return elitism; };
 
-	void SetMutationProbability(double _mutation);
-	inline double GetMutationProbability(void) const { wxMutexLocker lock(gsaMutex); return mutation; };
+	void SetMutationProbability(double mutation);
+	inline double GetMutationProbability() const { wxMutexLocker lock(gsaMutex); return mutation; };
 
-	void SetCrossoverPoint(int _crossover);
-	inline int GetCrossoverPoint(void) const { wxMutexLocker Lock(gsaMutex); return crossover; };
+	void SetCrossoverPoint(int crossover);
+	inline int GetCrossoverPoint() const { wxMutexLocker Lock(gsaMutex); return crossover; };
 
-	inline void SetSortingMethod(SortingMethod _sortingMethod) { wxMutexLocker lock(gsaMutex); sortingMethod = _sortingMethod; };
-	inline SortingMethod GetSortingMethod(void) const { wxMutexLocker lock(gsaMutex); return sortingMethod; };
+	inline void SetSortingMethod(SortingMethod sortingMethod) { wxMutexLocker lock(gsaMutex); this->sortingMethod = sortingMethod; };
+	inline SortingMethod GetSortingMethod() const { wxMutexLocker lock(gsaMutex); return sortingMethod; };
 
 protected:
 	// The fitness function (MUST be overridden)
@@ -73,27 +69,16 @@ protected:
 
 	// This function allows room for derived classes to take additional actions
 	// (report status, interrupt operation, etc.)
-	virtual void PerformAdditionalActions(void);
+	virtual void PerformAdditionalActions();
 
-	// The maximum number of generations
-	int generationLimit;
-
-	// The current generation
 	int currentGeneration;
 
-	// The population size
+	int generationLimit;
 	int populationSize;
-
-	// The crossover point
 	int crossover;// 0 to NumberOfGenes
-
-	// The elitism percentage
 	double elitism;// 0.0 to 1.0
-
-	// The mutation probability
 	double mutation;// 0.0 to 1.0
 
-	// The genes and phenotypes
 	int numberOfGenes;
 	int *numberOfPhenotypes;
 
@@ -103,36 +88,27 @@ protected:
 	// The fitnesses (first index:  generation, second index:  citizen)
 	double **fitnesses;
 
-	// For thread-safety
 	mutable wxMutex gsaMutex;
 
 private:
-	// Creates the initial list of genomes (random)
-	void CreateFirstGeneration(void);
+	void CreateFirstGeneration();
 
-	// The main working function for the algorithm - made virtual to make threading possible
-	virtual void SimulateGeneration(void);
+	virtual void SimulateGeneration();
 
-	// Breed within the current generation to come up with the next generation
-	// of genomes
-	void Breed(void);
+	void Breed();
 
-	// This object's sorting method
 	SortingMethod sortingMethod;
 
-	// Sorts the current generation's genomes and fitnesses by fitness
-	void SortByFitness(void);
+	void SortByFitness();
 
 	// The actual sorting algorithms
 	void SelectionSort(double *fitnessArray, int **genomeArray, const int arraySize);
 	void MergeSort(double *fitnessArray, int **genomeArray, const int arraySize);
 	void Quicksort(double *fitnessArray, int **genomeArray, const int arraySize);
 
-	// Flag that inidicates we should minimize fitness function rather than maximize it
 	bool minimize;
 
-	// Deletes all dynamically allocated memory
-	void DeleteDynamicMemory(void);
+	void DeleteDynamicMemory();
 };
 
-#endif// _GENETIC_ALGORITHM_H_
+#endif// GENETIC_ALGORITHM_H_

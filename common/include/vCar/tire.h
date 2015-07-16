@@ -17,8 +17,8 @@
 //				  class, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
-#ifndef _TIRE_H_
-#define _TIRE_H_
+#ifndef TIRE_H_
+#define TIRE_H_
 
 // Standard C++ headers
 #include <iosfwd>// forward declarations of fstream objects
@@ -29,11 +29,8 @@
 class Tire
 {
 public:
-	// Constructor
 	Tire();
 	Tire(const Tire &tire);
-
-	// Destructor
 	~Tire();
 
 	// File read/write functions
@@ -59,8 +56,7 @@ public:
 	double width;				// [in]
 	double tirePressure;		// [psi]
 
-	// Operators
-	Tire& operator = (const Tire &tire);
+	Tire& operator=(const Tire &tire);
 
 private:
 	// FIXME:  Eventually, add support for a selection of tire models
@@ -81,4 +77,4 @@ private:
 	TireModel modelType;
 };
 
-#endif// _TIRE_H_
+#endif// TIRE_H_

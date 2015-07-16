@@ -31,7 +31,7 @@
 //					the form and creates the controls, etc.
 //
 // Input Arguments:
-//		_parent		= EditPanel&, reference to this object's owner
+//		parent		= EditPanel&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
@@ -44,13 +44,10 @@
 //		None
 //
 //==========================================================================
-EditIterationNotebook::EditIterationNotebook(EditPanel &_parent, wxWindowID id,
-												 const wxPoint& pos, const wxSize& size,
-												 long style)
-												 : wxNotebook(&_parent, id, pos, size, style),
-												 parent(_parent)
+EditIterationNotebook::EditIterationNotebook(EditPanel &parent, wxWindowID id,
+	const wxPoint& pos, const wxSize& size, long style)
+	: wxNotebook(&parent, id, pos, size, style), parent(parent)
 {
-	// Initialize the 'Current' class members
 	currentIteration = NULL;
 }
 
@@ -91,7 +88,7 @@ EditIterationNotebook::~EditIterationNotebook()
 //		None
 //
 //==========================================================================
-void EditIterationNotebook::UpdateInformation(void)
+void EditIterationNotebook::UpdateInformation()
 {
 	// Make sure the object has already been assigned
 	if (currentIteration)
@@ -115,21 +112,16 @@ void EditIterationNotebook::UpdateInformation(void)
 //		None
 //
 //==========================================================================
-void EditIterationNotebook::UpdateInformation(Iteration *_currentIteration)
+void EditIterationNotebook::UpdateInformation(Iteration *currentIteration)
 {
-	// Update the class member
-	currentIteration = _currentIteration;
+	this->currentIteration = currentIteration;
 
-	// If the current object is NULL, we no longer have an object to represent
 	if (!currentIteration)
 	{
-		// Delete all the notebook pages
 		DeleteAllPages();
-
 		return;
 	}
 
-	// If we don't have any pages, we need to create the controls
 	if (GetPageCount() == 0)
 		CreateControls();
 
@@ -155,9 +147,8 @@ void EditIterationNotebook::UpdateInformation(Iteration *_currentIteration)
 //		None
 //
 //==========================================================================
-void EditIterationNotebook::CreateControls(void)
+void EditIterationNotebook::CreateControls()
 {
-	// Delete the existing pages before we create the new ones
 	DeleteAllPages();
 
 	// Create the notebook pages

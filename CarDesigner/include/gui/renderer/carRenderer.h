@@ -18,8 +18,8 @@
 //				  RENDER_WINDOW base class (eliminated dependence on VTK).
 //	11/22/2009	- Moved to vRenderer.lib, K. Loux.
 
-#ifndef _CAR_RENDERER_H_
-#define _CAR_RENDERER_H_
+#ifndef CAR_RENDERER_H_
+#define CAR_RENDERER_H_
 
 // VVASE headers
 #include "vMath/vector.h"
@@ -51,16 +51,11 @@ class MainFrame;
 class CarRenderer : public RenderWindow
 {
 public:
-	// Constructor
-	CarRenderer(MainFrame &_mainFrame, GuiCar &_car, int args[]);
-
-	// Destructor
+	CarRenderer(MainFrame &mainFrame, GuiCar &car, int args[]);
 	~CarRenderer();
 
-	// Called to update the image on the screen
 	void UpdateDisplay(const KinematicOutputs &outputs);
 
-	// For writing the rendered image to file
 	void WriteImageFile(wxString pathAndFileName);
 
 	// Returns the type of the selected item, or -1 for no selection
@@ -69,17 +64,17 @@ public:
 	// For accessing the helper orb
 	void SetHelperOrbPosition(const Corner::Hardpoints &cornerPoint, const Corner::Location &location,
 		const Suspension::Hardpoints &suspensionPoint);
-	inline void DeactivateHelperOrb(void) { helperOrbIsActive = false; };
+	inline void DeactivateHelperOrb() { helperOrbIsActive = false; };
 
 private:
 	// For context menus
 	MainFrame &mainFrame;
 
 	// Called from the CarRenderer constructor only in order to initialize the display
-	void CreateActors(void);
+	void CreateActors();
 
 	// The methods that perform the updating
-	void UpdateCarDisplay(void);
+	void UpdateCarDisplay();
 	void UpdateKinematicsDisplay(KinematicOutputs oOutputs);
 
 	// Pointers to the car objects that we are rendering
@@ -182,4 +177,4 @@ private:
 	Point3D *helperOrb;
 };
 
-#endif// _CAR_RENDERER_H_
+#endif// CAR_RENDERER_H_

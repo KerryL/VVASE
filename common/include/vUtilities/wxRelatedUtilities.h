@@ -13,8 +13,8 @@
 // Description:  Contains helper functions and wrappers for working with wxWidgets.
 // History:
 
-#ifndef _WX_RELATED_UTILIEIS_H_
-#define _WX_RELATED_UTILIEIS_H_
+#ifndef WX_RELATED_UTILIEIS_H_
+#define WX_RELATED_UTILIEIS_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -26,4 +26,4 @@ void SetMinimumWidthFromContents(wxComboBox *control, unsigned int additional);
 // default value (no selection has been made - fix for GTK)
 int SafelyGetComboBoxSelection(wxComboBox *control);
 
-#endif// _WX_RELATED_UTILIEIS_H_
+#endif// WX_RELATED_UTILIEIS_H_

@@ -15,8 +15,8 @@
 //	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
-#ifndef _AERODYNAMICS_H_
-#define _AERODYNAMICS_H_
+#ifndef AERODYNAMICS_H_
+#define AERODYNAMICS_H_
 
 // Standard C++ headers
 #include <iosfwd>// forward declarations of fstream objects
@@ -27,11 +27,8 @@
 class Aerodynamics
 {
 public:
-	// Constructor
 	Aerodynamics();
 	Aerodynamics(const Aerodynamics &aerodynamics);
-
-	// Destructor
 	~Aerodynamics();
 
 	// File read/write functions
@@ -39,11 +36,11 @@ public:
 	void Read(std::ifstream *inFile, int fileVersion);
 
 	// Functions that retrieve the aerodynamic forces and moments
-	Vector GetAeroForces(void) const;			// [lbf]
-	Vector GetAeroMoments(void) const;			// [in-lbf]
+	Vector GetAeroForces() const;			// [lbf]
+	Vector GetAeroMoments() const;			// [in-lbf]
 
 	// Overloaded operators
-	Aerodynamics& operator = (const Aerodynamics &aerodynamics);
+	Aerodynamics& operator=(const Aerodynamics &aerodynamics);
 
 private:
 	// Class properties
@@ -56,4 +53,4 @@ private:
 	// FIXME:  Add functionality for non-linear look-up table (user option)
 };
 
-#endif// _AERODYNAMICS_H_
+#endif// AERODYNAMICS_H_

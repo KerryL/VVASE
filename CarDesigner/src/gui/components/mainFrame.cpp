@@ -26,10 +26,10 @@
 //	11/28/2010	- Added number of threads to configuration file, K. Loux.
 
 // For difficult debugging problems, use this flag to print messages to file as well as to the output pane
-//#define _DEBUG_TO_FILE_
+//#define DEBUG_TO_FILE_
 
 // Standard C++ headers
-#ifdef _DEBUG_TO_FILE_
+#ifdef DEBUG_TO_FILE_
 #include <fstream>
 #endif
 
@@ -225,7 +225,7 @@ const wxString MainFrame::pathToConfigFile = _T("config.ini");
 //		None
 //
 //==========================================================================
-void MainFrame::DoLayout(void)
+void MainFrame::DoLayout()
 {
 	// Tell the frame manager to manage this window
 	manager.SetManagedWindow(this);
@@ -299,7 +299,7 @@ void MainFrame::DoLayout(void)
 //		None
 //
 //==========================================================================
-void MainFrame::SetProperties(void)
+void MainFrame::SetProperties()
 {
 	// MainFrame properties
 	SetTitle(carDesignerName);
@@ -426,7 +426,7 @@ void MainFrame::SetProperties(void)
 //		None
 //
 //==========================================================================
-void MainFrame::InitializeSolver(void)
+void MainFrame::InitializeSolver()
 {
 	// Initialize the job queue
 	jobQueue = new JobQueue(GetEventHandler());
@@ -568,7 +568,7 @@ void MainFrame::SetPlotFont(const wxFont& font)
 //		None
 //
 //==========================================================================
-void MainFrame::CreateMenuBar(void)
+void MainFrame::CreateMenuBar()
 {
 	menuBar = new wxMenuBar();
 
@@ -665,7 +665,7 @@ void MainFrame::CreateMenuBar(void)
 //		None
 //
 //==========================================================================
-void MainFrame::CreateKinematicAnalysisToolbar(void)
+void MainFrame::CreateKinematicAnalysisToolbar()
 {
 	// Make sure we don't already have one of these
 	if (kinematicToolbar != NULL)
@@ -1758,7 +1758,7 @@ readme.txt file for licensing and other information."));
 //		None
 //
 //==========================================================================
-void MainFrame::UpdateAnalysis(void)
+void MainFrame::UpdateAnalysis()
 {
 	// For every object we've got open, call the update display method
 	unsigned int i;
@@ -1784,7 +1784,7 @@ void MainFrame::UpdateAnalysis(void)
 //		None
 //
 //==========================================================================
-void MainFrame::UpdateOutputPanel(void)
+void MainFrame::UpdateOutputPanel()
 {
 	// For every object we've got open, call the update display method
 	unsigned int i, carCount = 0;
@@ -2105,10 +2105,9 @@ void MainFrame::ThreadCompleteEvent(wxCommandEvent &event)
 //==========================================================================
 void MainFrame::DebugMessageEvent(wxCommandEvent &event)
 {
-	// Print a message to the output pane
 	debugPane->AppendText(event.GetString());
 
-#ifdef _DEBUG_TO_FILE_
+#ifdef DEBUG_TO_FILE_
 	// Useful for cases where the application crashes and text can no longer be viewed in the output pane
 	// FIXME:  Make this part of the Debugger class?
 	std::ofstream file("debug.txt", std::ios::app);
@@ -2329,7 +2328,7 @@ void MainFrame::OnSizeEvent(wxSizeEvent& WXUNUSED(event))
 //		bool, true if the user confirms the close, false otherwise
 //
 //==========================================================================
-bool MainFrame::CloseThisForm(void)
+bool MainFrame::CloseThisForm()
 {
 	// Cycle through all of the cars and close them
 	while (openObjectList.GetCount() > 0)
@@ -2361,7 +2360,7 @@ bool MainFrame::CloseThisForm(void)
 //		None
 //
 //==========================================================================
-void MainFrame::ReadConfiguration(void)
+void MainFrame::ReadConfiguration()
 {
 	// Create a configuration file object
 	wxFileConfig *configurationFile = new wxFileConfig(_T(""), _T(""),
@@ -2477,7 +2476,7 @@ void MainFrame::ReadConfiguration(void)
 //		None
 //
 //==========================================================================
-void MainFrame::WriteConfiguration(void)
+void MainFrame::WriteConfiguration()
 {
 	// Create a configuration file object
 	wxFileConfig *configurationFile = new wxFileConfig(_T(""), _T(""),
@@ -2559,7 +2558,7 @@ void MainFrame::WriteConfiguration(void)
 //		None
 //
 //==========================================================================
-void MainFrame::UpdateActiveObjectMenu(void)
+void MainFrame::UpdateActiveObjectMenu()
 {
 	// Try to get a handle to object specific menus
 	int carMenuIndex = menuBar->FindMenu(_T("Car"));
@@ -2786,7 +2785,7 @@ void MainFrame::CreateContextMenu(int objectIndex, wxPoint position, bool allowC
 //		wxMenu* pointing to the newly created menu
 //
 //==========================================================================
-wxMenu *MainFrame::CreateCarMenu(void)
+wxMenu *MainFrame::CreateCarMenu()
 {
 	// Car menu
 	wxMenu *mnuCar = new wxMenu();
@@ -2811,7 +2810,7 @@ wxMenu *MainFrame::CreateCarMenu(void)
 //		wxMenu* pointing to the newly created menu
 //
 //==========================================================================
-wxMenu *MainFrame::CreateIterationMenu(void)
+wxMenu *MainFrame::CreateIterationMenu()
 {
 	// Iteration menu
 	wxMenu *mnuIteration = new wxMenu();
@@ -2889,7 +2888,7 @@ wxMenu *MainFrame::CreateIterationMenu(void)
 //		bool, true for outstanding jobs, false for all caught up
 //
 //==========================================================================
-bool MainFrame::JobsPending(void) const
+bool MainFrame::JobsPending() const
 {
 	// If there are any jobs in the queue, return false
 	if (jobQueue->PendingJobs() > 0)

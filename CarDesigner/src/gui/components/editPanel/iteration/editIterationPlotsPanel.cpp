@@ -30,7 +30,7 @@
 //					and creates the controls, etc.
 //
 // Input Arguments:
-//		_parent		= EditIterationNotebook&, reference to this object's owner
+//		parent		= EditIterationNotebook&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
@@ -42,16 +42,11 @@
 //		None
 //
 //==========================================================================
-EditIterationPlotsPanel::EditIterationPlotsPanel(EditIterationNotebook &_parent,
-													   wxWindowID id, const wxPoint& pos,
-													   const wxSize& size) :
-													   wxPanel(&_parent, id, pos, size),
-													   parent(_parent)
+EditIterationPlotsPanel::EditIterationPlotsPanel(EditIterationNotebook &parent,
+	wxWindowID id, const wxPoint& pos, const wxSize& size)
+	: wxPanel(&parent, id, pos, size), parent(parent)
 {
-	// Initialize the current object variable
 	currentIteration = NULL;
-
-	// Create the controls
 	CreateControls();
 }
 
@@ -112,7 +107,7 @@ END_EVENT_TABLE();
 //		None
 //
 //==========================================================================
-void EditIterationPlotsPanel::UpdateInformation(void)
+void EditIterationPlotsPanel::UpdateInformation()
 {
 	// Make sure the suspension object exists
 	if (currentIteration)
@@ -127,7 +122,7 @@ void EditIterationPlotsPanel::UpdateInformation(void)
 // Description:		Updates the information on this panel.
 //
 // Input Arguments:
-//		_currentIteration	= Iteration* pointing to the associated iteration
+//		currentIteration	= Iteration* pointing to the associated iteration
 //
 // Output Arguments:
 //		None
@@ -136,12 +131,10 @@ void EditIterationPlotsPanel::UpdateInformation(void)
 //		None
 //
 //==========================================================================
-void EditIterationPlotsPanel::UpdateInformation(Iteration *_currentIteration)
+void EditIterationPlotsPanel::UpdateInformation(Iteration *currentIteration)
 {
-	// Update the class members
-	currentIteration = _currentIteration;
+	this->currentIteration = currentIteration;
 
-	// Make sure the iteration exists
 	if (!currentIteration)
 		return;
 

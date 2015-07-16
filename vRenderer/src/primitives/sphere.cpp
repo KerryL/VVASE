@@ -36,7 +36,7 @@
 // Description:		Constructor for the Sphere class.
 //
 // Input Arguments:
-//		_RenderWindow	= RenderWindow& pointing to the object that owns this
+//		renderWindow	= RenderWindow& pointing to the object that owns this
 //
 // Output Arguments:
 //		None
@@ -45,10 +45,9 @@
 //		None
 //
 //==========================================================================
-Sphere::Sphere(RenderWindow &_renderWindow) : Primitive(_renderWindow)
+Sphere::Sphere(RenderWindow &renderWindow) : Primitive(renderWindow)
 {
-	// Initialize the private data
-	center.Set(0.0,0.0,0.0);
+	center.Set(0.0, 0.0, 0.0);
 	radius = 0.0;
 	resolution = 4;
 }
@@ -90,9 +89,8 @@ Sphere::~Sphere()
 //		None
 //
 //==========================================================================
-void Sphere::GenerateGeometry(void)
+void Sphere::GenerateGeometry()
 {
-	// Resolution must be at least 0
 	if (resolution < 0)
 		resolution = 0;
 
@@ -134,13 +132,10 @@ void Sphere::GenerateGeometry(void)
 	Vector equator3(-radius, 0.0, 0.0), equator4(0.0, -radius, 0.0);
 #endif
 
-	// Push the current matrix
 	glPushMatrix();
 
-		// Translate the current matrix
 		glTranslated(center.x, center.y, center.z);
 
-		// Begin the triangles sequence
 		glBegin(GL_TRIANGLES);
 
 #ifdef ICOSOHEDRON
@@ -181,10 +176,8 @@ void Sphere::GenerateGeometry(void)
 		RecursiveSubdivision(bottom, equator4, equator1, resolution);
 #endif
 
-		// Complete the triangles
 		glEnd();
 
-	// Pop the matrix
 	glPopMatrix();
 }
 
@@ -210,7 +203,7 @@ void Sphere::GenerateGeometry(void)
 //
 //==========================================================================
 void Sphere::RecursiveSubdivision(const Vector &corner1, const Vector &corner2,
-								  const Vector &corner3, int level)
+	const Vector &corner3, int level)
 {
 	// If level is less than 1, add the triangle to the scene instead of
 	// continuing with the sub-division
@@ -300,7 +293,7 @@ void Sphere::AddVertex(const Vector &vertex)
 //		bool, true for OK to draw, false otherwise
 //
 //==========================================================================
-bool Sphere::HasValidParameters(void)
+bool Sphere::HasValidParameters()
 {
 	// Spheres must have a positive radius
 	if (radius > 0.0)
@@ -317,7 +310,7 @@ bool Sphere::HasValidParameters(void)
 // Description:		Sets the number of faces use to approximate the sphere.
 //
 // Input Arguments:
-//		_resolution	= const int&
+//		resolution	= const int&
 //
 // Output Arguments:
 //		None
@@ -326,12 +319,9 @@ bool Sphere::HasValidParameters(void)
 //		None
 //
 //==========================================================================
-void Sphere::SetResolution(const int &_resolution)
+void Sphere::SetResolution(const int &resolution)
 {
-	// Set the resolution to the argument
-	resolution = _resolution;
-	
-	// Reset the modified flag
+	this->resolution = resolution;
 	modified = true;
 }
 
@@ -342,7 +332,7 @@ void Sphere::SetResolution(const int &_resolution)
 // Description:		Sets the location of the center of the sphere.
 //
 // Input Arguments:
-//		_center	= const Vector&
+//		center	= const Vector&
 //
 // Output Arguments:
 //		None
@@ -351,12 +341,9 @@ void Sphere::SetResolution(const int &_resolution)
 //		None
 //
 //==========================================================================
-void Sphere::SetCenter(const Vector &_center)
+void Sphere::SetCenter(const Vector &center)
 {
-	// Set the center point to the argument
-	center = _center;
-	
-	// Reset the modified flag
+	this->center = center;
 	modified = true;
 }
 
@@ -367,7 +354,7 @@ void Sphere::SetCenter(const Vector &_center)
 // Description:		Sets the radius at the base of the sphere.
 //
 // Input Arguments:
-//		_radius	= const double&
+//		radius	= const double&
 //
 // Output Arguments:
 //		None
@@ -376,11 +363,8 @@ void Sphere::SetCenter(const Vector &_center)
 //		None
 //
 //==========================================================================
-void Sphere::SetRadius(const double &_radius)
+void Sphere::SetRadius(const double &radius)
 {
-	// Set the radius to the argument
-	radius = _radius;
-	
-	// Reset the modified flag
+	this->radius = radius;
 	modified = true;
 }

@@ -24,7 +24,7 @@
 // Description:		Constructor for DropTarget class.
 //
 // Input Arguments:
-//		_mainFrame	= &MainFrame, reference to main application window
+//		mainFrame	= &MainFrame, reference to main application window
 //
 // Output Arguments:
 //		None
@@ -33,7 +33,7 @@
 //		None
 //
 //==========================================================================
-DropTarget::DropTarget(MainFrame &_mainFrame) : mainFrame(_mainFrame)
+DropTarget::DropTarget(MainFrame &mainFrame) : mainFrame(mainFrame)
 {
 }
 

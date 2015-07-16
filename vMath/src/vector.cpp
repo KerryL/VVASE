@@ -56,9 +56,9 @@ Vector::Vector()
 // Description:		Constructor for the Vector class.
 //
 // Input Arguments:
-//		_x	= const double& specifying first component of the vector
-//		_y	= const double& specifying second component of the vector
-//		_z	= const double& specifying third component of the vector
+//		x	= const double& specifying first component of the vector
+//		y	= const double& specifying second component of the vector
+//		z	= const double& specifying third component of the vector
 //
 // Output Arguments:
 //		None
@@ -67,12 +67,11 @@ Vector::Vector()
 //		None
 //
 //==========================================================================
-Vector::Vector(const double &_x, const double &_y, const double &_z)
+Vector::Vector(const double &x, const double &y, const double &z)
 {
-	// Assign the arguments to the class members
-	x = _x;
-	y = _y;
-	z = _z;
+	this->x = x;
+	this->y = y;
+	this->z = z;
 }
 
 //==========================================================================
@@ -93,7 +92,6 @@ Vector::Vector(const double &_x, const double &_y, const double &_z)
 //==========================================================================
 Vector::Vector(const Vector &v)
 {
-	// Copy from the argument to this
 	*this = v;
 }
 
@@ -475,7 +473,7 @@ ostream &operator << (ostream &writeOut, const Vector &v)
 //		wxString containing the formatted vector data
 //
 //==========================================================================
-wxString Vector::Print(void) const
+wxString Vector::Print() const
 {
 	// Format and fill the string
 	wxString temp;
@@ -502,12 +500,11 @@ wxString Vector::Print(void) const
 //		None
 //
 //==========================================================================
-void Vector::Set(const double &_x, const double &_y, const double &_z)
+void Vector::Set(const double &x, const double &y, const double &z)
 {
-	// Assign the arguments to the class members
-	x = _x;
-	y = _y;
-	z = _z;
+	this->x = x;
+	this->y = y;
+	this->z = z;
 }
 
 //==========================================================================
@@ -528,7 +525,7 @@ void Vector::Set(const double &_x, const double &_y, const double &_z)
 //		Vector representing the normalized object
 //
 //==========================================================================
-Vector Vector::Normalize(void) const
+Vector Vector::Normalize() const
 {
 	// Get the length of the vector
 	double magnitude = Length();

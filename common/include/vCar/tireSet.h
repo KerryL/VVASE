@@ -15,8 +15,8 @@
 // History:
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
-#ifndef _TIRESET_H_
-#define _TIRESET_H_
+#ifndef TIRESET_H_
+#define TIRESET_H_
 
 // Standard C++ headers
 #include <iosfwd>// forward declarations of fstream objects
@@ -27,25 +27,20 @@ class Tire;
 class TireSet
 {
 public:
-	// Constructor
 	TireSet();
 	TireSet(const TireSet &tireSet);
-
-	// Destructor
 	~TireSet();
 
 	// File read/write functions
 	void Write(std::ofstream *outFile) const;
 	void Read(std::ifstream *inFile, int fileVersion);
 
-	// The four tires
 	Tire *rightFront;
 	Tire *leftFront;
 	Tire *rightRear;
 	Tire *leftRear;
 
-	// This class contains dynamically allocated memory - overload the assignment operator
-	TireSet& operator = (const TireSet &tireSet);
+	TireSet& operator=(const TireSet &tireSet);
 };
 
-#endif// _TIRESET_H_
+#endif// TIRESET_H_

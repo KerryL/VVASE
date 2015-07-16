@@ -32,7 +32,7 @@
 // Description:		Constructor for the MainNotebook class.
 //
 // Input Arguments:
-//		_mainFrame	= MainFrame&, reference to this object's owner
+//		mainFrame	= MainFrame&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
@@ -45,10 +45,9 @@
 //		None
 //
 //==========================================================================
-MainNotebook::MainNotebook(MainFrame &_mainFrame, wxWindowID id, const wxPoint& pos,
-							 const wxSize& size, long style)
-							 : wxAuiNotebook(&_mainFrame, id, pos, size, style),
-							 mainFrame(_mainFrame)
+MainNotebook::MainNotebook(MainFrame &mainFrame, wxWindowID id, const wxPoint& pos,
+	const wxSize& size, long style)
+	: wxAuiNotebook(&mainFrame, id, pos, size, style), mainFrame(mainFrame)
 {
 	SetArtProvider(new wxAuiSimpleTabArt);
 }

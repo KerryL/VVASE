@@ -27,16 +27,13 @@
 //				 MIL-STD Standard Atmosphere.
 // History:
 
-#ifndef _ATMOSPHERE_H_
-#define _ATMOSPHERE_H_
+#ifndef ATMOSPHERE_H_
+#define ATMOSPHERE_H_
 
 class Atmosphere
 {
 public:
-	// Constructor
 	Atmosphere();
-
-	// Destructor
 	~Atmosphere();
 
 	// This strucutre contains all of the data that changes with
@@ -44,24 +41,16 @@ public:
 	// forces and engine output.
 	struct Conditions
 	{
-		// Air density
 		double density;// [slug/in^3]
-
-		// Air pressure
 		double pressure;// [psi]
-
-		// Air temperature
 		double temperature;// [deg R]
-
-		// Dynamic (absolute) viscosity of air (usually denoted by mu)
-		double viscosity;// [psi-sec]
+		double viscosity;// [psi-sec]// Dynamic (absolute) viscosity of air (usually denoted by mu)
 	};
 
 	// Set and retrieve the parameters for the day
-	void SetConditions(Conditions _currentDay);
-	Conditions GetConditions(void) { return currentDay; };
+	void SetConditions(const Conditions& currentDay);
+	Conditions GetConditions() { return currentDay; };
 
-	// Overload for GetConditions - adjusts for not being at sea level
 	Conditions GetConditions(double altitude);
 
 	// Some pre-defined conditions (from coldest to warmest)
@@ -72,8 +61,7 @@ public:
 	static const Conditions hotDay;
 
 private:
-	// Today's conditions
 	Conditions currentDay;
 };
 
-#endif// _ATMOSPHERE_H_
+#endif// ATMOSPHERE_H_

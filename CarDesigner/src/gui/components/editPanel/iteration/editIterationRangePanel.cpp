@@ -30,7 +30,7 @@
 //					and creates the controls, etc.
 //
 // Input Arguments:
-//		_parent		= EditIterationNotebook&, reference to this object's owner
+//		parent		= EditIterationNotebook&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
@@ -42,16 +42,11 @@
 //		None
 //
 //==========================================================================
-EditIterationRangePanel::EditIterationRangePanel(EditIterationNotebook &_parent,
-												 wxWindowID id, const wxPoint& pos,
-												 const wxSize& size) :
-												 wxScrolledWindow(&_parent, id, pos, size),
-												 parent(_parent)
+EditIterationRangePanel::EditIterationRangePanel(EditIterationNotebook &parent,
+	wxWindowID id, const wxPoint& pos, const wxSize& size)
+	: wxScrolledWindow(&parent, id, pos, size), parent(parent)
 {
-	// Initialize the current object variable
 	currentIteration = NULL;
-
-	// Create the controls
 	CreateControls();
 }
 
@@ -113,7 +108,7 @@ END_EVENT_TABLE();
 //		None
 //
 //==========================================================================
-void EditIterationRangePanel::UpdateInformation(void)
+void EditIterationRangePanel::UpdateInformation()
 {
 	// Make sure the suspension object exists
 	if (currentIteration)
@@ -128,7 +123,7 @@ void EditIterationRangePanel::UpdateInformation(void)
 // Description:		Updates the information on this panel.
 //
 // Input Arguments:
-//		_currentIteration	= Iteration* pointing to the associated iteration
+//		currentIteration	= Iteration* pointing to the associated iteration
 //
 // Output Arguments:
 //		None
@@ -137,12 +132,10 @@ void EditIterationRangePanel::UpdateInformation(void)
 //		None
 //
 //==========================================================================
-void EditIterationRangePanel::UpdateInformation(Iteration *_currentIteration)
+void EditIterationRangePanel::UpdateInformation(Iteration *currentIteration)
 {
-	// Update the class members
-	currentIteration = _currentIteration;
+	this->currentIteration = currentIteration;
 
-	// Make sure the iteration object exists
 	if (!currentIteration)
 		return;
 

@@ -29,7 +29,7 @@
 // Description:		Constructor for ExpressionTree class.
 //
 // Input Arguments:
-//		_list		= const ManagedList<const Dataset2D>& reference to the
+//		list		= const ManagedList<const Dataset2D>& reference to the
 //					  other datasets which may be required to complete the calculation
 //
 // Output Arguments:
@@ -39,7 +39,7 @@
 //		None
 //
 //==========================================================================
-ExpressionTree::ExpressionTree(const ManagedList<const Dataset2D> &_list) : list(_list)
+ExpressionTree::ExpressionTree(const ManagedList<const Dataset2D> &list) : list(list)
 {
 }
 
@@ -50,9 +50,9 @@ ExpressionTree::ExpressionTree(const ManagedList<const Dataset2D> &_list) : list
 // Description:		Main solving method for the tree.
 //
 // Input Arguments:
-//		expression		= wxString containing the expression to parse
-//		_xAxisFactor	= const double& specifying the factor required to convert
-//						  X-axis data into seconds (for FFT or filtering operations)
+//		expression	= wxString containing the expression to parse
+//		xAxisFactor	= const double& specifying the factor required to convert
+//					  X-axis data into seconds (for FFT or filtering operations)
 //
 // Output Arguments:
 //		solvedData		= Dataset2D& containing the evaluated data
@@ -61,9 +61,9 @@ ExpressionTree::ExpressionTree(const ManagedList<const Dataset2D> &_list) : list
 //		wxString, empty for success, error string if unsuccessful
 //
 //==========================================================================
-wxString ExpressionTree::Solve(wxString expression, Dataset2D &solvedData, const double &_xAxisFactor)
+wxString ExpressionTree::Solve(wxString expression, Dataset2D &solvedData, const double &xAxisFactor)
 {
-	xAxisFactor = _xAxisFactor;
+	this->xAxisFactor = xAxisFactor;
 	wxString errorString;
 	expression = Parenthesize(expression, errorString);
 

@@ -14,8 +14,8 @@
 //				 objects.
 // History:
 
-#ifndef _FONT_FINDER_H_
-#define _FONT_FINDER_H_
+#ifndef FONT_FINDER_H_
+#define FONT_FINDER_H_
 
 // wxWidgets forward declarations
 class wxString;
@@ -93,4 +93,4 @@ private:
 	}
 };
 
-#endif// _FONT_FINDER_H_
+#endif// FONT_FINDER_H_

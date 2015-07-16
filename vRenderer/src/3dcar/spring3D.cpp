@@ -31,7 +31,7 @@
 //					process necessary to add the object to the scene.
 //
 // Input Arguments:
-//		_renderer	= RenderWindow&, pointer to rendering object
+//		renderer	= RenderWindow&, pointer to rendering object
 //
 // Output Arguments:
 //		None
@@ -40,17 +40,14 @@
 //		None
 //
 //==========================================================================
-Spring3D::Spring3D(RenderWindow &_renderer)
+Spring3D::Spring3D(RenderWindow &renderer)
 {
-	// Create the objects
-	spring = new Cylinder(_renderer);
-	endPoint1 = new Sphere(_renderer);
-	endPoint2 = new Sphere(_renderer);
+	spring = new Cylinder(renderer);
+	endPoint1 = new Sphere(renderer);
+	endPoint2 = new Sphere(renderer);
 
-	// Set up the cylinder
 	spring->SetCapping(false);
 
-	// Set up the spheres
 	endPoint1->SetColor(Color::ColorWhite);
 	endPoint2->SetColor(Color::ColorWhite);
 }

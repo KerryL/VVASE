@@ -17,26 +17,22 @@
 //	11/22/2009	- Moved to vMath.lib, K. Loux.
 //	11/7/2011	- Corrected camelCase, K. Loux.
 
-#ifndef _COMPLEX_H_
-#define _COMPLEX_H_
-
+#ifndef COMPLEX_H_
+#define COMPLEX_H_
+// TODO:  Replace with std::complex
 using namespace std;
 
 class Complex
 {
 public:
-	// Constructor
 	Complex();
-	Complex(const double &_real, const double &_imaginary);
-
-	// Destructor
+	Complex(const double &real, const double &imaginary);
 	~Complex();
 
 	// Prints the value to a string
-	wxString Print(void) const;
+	wxString Print() const;
 
-	// Gets the complex conjugate of this object
-	const Complex GetConjugate(void) const;
+	const Complex GetConjugate() const;
 
 	// Operators
 	const Complex operator + (const Complex &c) const;
@@ -68,4 +64,4 @@ public:
 	static const Complex I;
 };
 
-#endif// _COMPLEX_H_
+#endif// COMPLEX_H_

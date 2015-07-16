@@ -28,7 +28,7 @@
 // Description:		Constructor for the Cylinder class.
 //
 // Input Arguments:
-//		_renderWindow	= RenderWindow& pointing to the object that owns this
+//		renderWindow	= RenderWindow& pointing to the object that owns this
 //
 // Output Arguments:
 //		None
@@ -37,13 +37,12 @@
 //		None
 //
 //==========================================================================
-Cylinder::Cylinder(RenderWindow &_renderWindow) : Primitive(_renderWindow)
+Cylinder::Cylinder(RenderWindow &renderWindow) : Primitive(renderWindow)
 {
-	// Initialize private data
 	drawCaps = false;
 	radius = 0.0;
-	endPoint1.Set(0.0,0.0,0.0);
-	endPoint2.Set(0.0,0.0,0.0);
+	endPoint1.Set(0.0, 0.0, 0.0);
+	endPoint2.Set(0.0, 0.0, 0.0);
 	resolution = 4;
 }
 
@@ -84,32 +83,23 @@ Cylinder::~Cylinder()
 //		None
 //
 //==========================================================================
-void Cylinder::GenerateGeometry(void)
+void Cylinder::GenerateGeometry()
 {
-	// Resolution must be at least 3
 	if (resolution < 3)
 		resolution = 3;
 
-	// Determine the height of the cylinder
 	double halfHeight = endPoint1.Distance(endPoint2) / 2.0;
 
-	// Determine the desired axis for the cylinder
 	Vector axisDirection = (endPoint2 - endPoint1).Normalize();
-
-	// Determine the center of the cylinder
 	Vector center = endPoint1 + axisDirection * halfHeight;
-
-	// Our reference direction will be the X-axis direction
 	Vector referenceDirection(1.0, 0.0, 0.0);
 
 	// Determine the angle and axis of rotation
 	Vector axisOfRotation = referenceDirection.Cross(axisDirection);
 	double angle = acos(axisDirection * referenceDirection);// [rad]
 
-	// Push the current matrix
 	glPushMatrix();
 
-		// Translate the current matrix
 		glTranslated(center.x, center.y, center.z);
 
 		// Rotate the current matrix, if the rotation axis is non-zero
@@ -121,80 +111,53 @@ void Cylinder::GenerateGeometry(void)
 		// We'll use a triangle strip to draw the cylinder
 		glBegin(GL_TRIANGLE_STRIP);
 
-		// Loop to generate the triangles
 		int i;
 		Vector point(halfHeight, 0.0, 0.0);
 		for (i = 0; i <= resolution; i++)
 		{
-			// Determine the angle to the current point
 			angle = (double)i * 2.0 * VVASEMath::Pi / (double)resolution;
-
-			// Determine the Y and Z ordinates based on this angle and the radius
 			point.y = radius * cos(angle);
 			point.z = radius * sin(angle);
 
-			// Set the normal for the next two points
 			glNormal3d(0.0, point.y / radius, point.z / radius);
 
-			// Add the next two points
 			glVertex3d(point.x, point.y, point.z);
 			glVertex3d(-point.x, point.y, point.z);
 		}
 
-		// End the triangle strip
 		glEnd();
 
-		// Draw the end caps, if they are enabled
 		if (drawCaps)
 		{
-			// Set the normal for the first end cap
 			glNormal3d(1.0, 0.0, 0.0);
-
-			// Begin the polygon
 			glBegin(GL_POLYGON);
 
-			// Draw a polygon at the positive end of the cylinder
 			for (i = 0; i <= resolution; i++)
 			{
-				// Determine the angle to the current point
 				angle = (double)i * 2.0 * VVASEMath::Pi / (double)resolution;
-
-				// Determine the Y and Z ordinates based on this angle and the radius
 				point.y = radius * cos(angle);
 				point.z = radius * sin(angle);
 
-				// Add the next point
 				glVertex3d(point.x, point.y, point.z);
 			}
 
-			// End the polygon
 			glEnd();
 
-			// Set the normal for the second end cap
 			glNormal3d(-1.0, 0.0, 0.0);
-
-			// Begin the polygon
 			glBegin(GL_POLYGON);
 
-			// Draw a polygon at the negative end of the cylinder
 			for (i = 0; i <= resolution; i++)
 			{
-				// Determine the angle to the current point
 				angle = (double)i * 2.0 * VVASEMath::Pi / (double)resolution;
-
-				// Determine the Y and Z ordinates based on this angle and the radius
 				point.y = radius * cos(angle);
 				point.z = radius * sin(angle);
 
-				// Add the next point
 				glVertex3d(-point.x, point.y, point.z);
 			}
 
-			// End the polygon
 			glEnd();
 		}
 
-	// Pop the matrix
 	glPopMatrix();
 }
 
@@ -215,13 +178,11 @@ void Cylinder::GenerateGeometry(void)
 //		bool, true for OK to draw, false otherwise
 //
 //==========================================================================
-bool Cylinder::HasValidParameters(void)
+bool Cylinder::HasValidParameters()
 {
-	// Cylinders must have non-zero heights and a positive radius
 	if (!VVASEMath::IsZero(endPoint1.Distance(endPoint2)) && radius > 0.0)
 		return true;
 
-	// Otherwise return false
 	return false;
 }
 
@@ -232,7 +193,7 @@ bool Cylinder::HasValidParameters(void)
 // Description:		Sets the number of faces use to approximate the cylinder.
 //
 // Input Arguments:
-//		_resolution	= const int&
+//		resolution	= const int&
 //
 // Output Arguments:
 //		None
@@ -241,12 +202,9 @@ bool Cylinder::HasValidParameters(void)
 //		None
 //
 //==========================================================================
-void Cylinder::SetResolution(const int &_resolution)
+void Cylinder::SetResolution(const int &resolution)
 {
-	// Set the resolution to the argument
-	resolution = _resolution;
-	
-	// Reset the modified flag
+	this->resolution = resolution;
 	modified = true;
 }
 
@@ -258,7 +216,7 @@ void Cylinder::SetResolution(const int &_resolution)
 //					capped on the base end.
 //
 // Input Arguments:
-//		_drawCaps	= const bool&
+//		drawCaps	= const bool&
 //
 // Output Arguments:
 //		None
@@ -267,12 +225,9 @@ void Cylinder::SetResolution(const int &_resolution)
 //		None
 //
 //==========================================================================
-void Cylinder::SetCapping(const bool &_drawCaps)
+void Cylinder::SetCapping(const bool &drawCaps)
 {
-	// Set the capping flag to the argument
-	drawCaps = _drawCaps;
-	
-	// Reset the modified flag
+	this->drawCaps = drawCaps;
 	modified = true;
 }
 
@@ -283,7 +238,7 @@ void Cylinder::SetCapping(const bool &_drawCaps)
 // Description:		Sets the location of the first end point.
 //
 // Input Arguments:
-//		_endPoint1	= const Vector&
+//		endPoint1	= const Vector&
 //
 // Output Arguments:
 //		None
@@ -292,12 +247,9 @@ void Cylinder::SetCapping(const bool &_drawCaps)
 //		None
 //
 //==========================================================================
-void Cylinder::SetEndPoint1(const Vector &_endPoint1)
+void Cylinder::SetEndPoint1(const Vector &endPoint1)
 {
-	// Set the end point to the argument
-	endPoint1 = _endPoint1;
-	
-	// Reset the modified flag
+	this->endPoint1 = endPoint1;
 	modified = true;
 }
 
@@ -308,7 +260,7 @@ void Cylinder::SetEndPoint1(const Vector &_endPoint1)
 // Description:		Sets the location of the second end point.
 //
 // Input Arguments:
-//		_endPoint2	= const Vector&
+//		endPoint2	= const Vector&
 //
 // Output Arguments:
 //		None
@@ -317,12 +269,9 @@ void Cylinder::SetEndPoint1(const Vector &_endPoint1)
 //		None
 //
 //==========================================================================
-void Cylinder::SetEndPoint2(const Vector &_endPoint2)
+void Cylinder::SetEndPoint2(const Vector &endPoint2)
 {
-	// Set the end point to the argument
-	endPoint2 = _endPoint2;
-	
-	// Reset the modified flag
+	this->endPoint2 = endPoint2;
 	modified = true;
 }
 
@@ -333,7 +282,7 @@ void Cylinder::SetEndPoint2(const Vector &_endPoint2)
 // Description:		Sets the radius at the base of the Cylinder.
 //
 // Input Arguments:
-//		_radius	= const double&
+//		radius	= const double&
 //
 // Output Arguments:
 //		None
@@ -342,11 +291,8 @@ void Cylinder::SetEndPoint2(const Vector &_endPoint2)
 //		None
 //
 //==========================================================================
-void Cylinder::SetRadius(const double &_radius)
+void Cylinder::SetRadius(const double &radius)
 {
-	// Set the radius to the argument
-	radius = _radius;
-	
-	// Reset the modified flag
+	this->radius = radius;
 	modified = true;
 }

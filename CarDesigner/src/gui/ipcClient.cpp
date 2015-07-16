@@ -109,7 +109,7 @@ bool IPCClient::Connect(const wxString &host, const wxString &service, const wxS
 //		None
 //
 //==========================================================================
-void IPCClient::Disconnect(void)
+void IPCClient::Disconnect()
 {
 	if (connection)
 	{
@@ -135,7 +135,7 @@ void IPCClient::Disconnect(void)
 //		wxConnectionBase* pointing to the new connection object
 //
 //==========================================================================
-wxConnectionBase *IPCClient::OnMakeConnection(void)
+wxConnectionBase *IPCClient::OnMakeConnection()
 {
 	return new IPCConnection();
 }

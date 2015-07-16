@@ -457,7 +457,7 @@ double VVASEMath::Clamp(const double &n, const double &lowerLimit, const double 
 //					angle is between -pi and pi.
 //
 // Input Arguments:
-//		angle		= const double& reference to the angle we want to bound
+//		angle		= double reference to the angle we want to bound
 //
 // Output Arguments:
 //		None
@@ -466,9 +466,8 @@ double VVASEMath::Clamp(const double &n, const double &lowerLimit, const double 
 //		double, equal to the re-ranged angle
 //
 //==========================================================================
-double VVASEMath::RangeToPlusMinusPi(const double &_angle)
+double VVASEMath::RangeToPlusMinusPi(double angle)
 {
-	double angle = _angle;
 	while (angle <= Pi)
 		angle += 2 * Pi;
 	while (angle > Pi)

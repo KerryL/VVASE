@@ -15,8 +15,8 @@
 //				 response to different inputs.
 // History:
 
-#ifndef _SHAKER_RIG_H_
-#define _SHAKER_RIG_H_
+#ifndef SHAKER_RIG_H_
+#define SHAKER_RIG_H_
 
 // CarDesigner forward declarations
 class Debugger;
@@ -24,19 +24,15 @@ class Debugger;
 class ShakerRig
 {
 public:
-	// Constructor
-	ShakerRig(const Debugger &_debugger);
+	ShakerRig(const Debugger &debugger);
 	ShakerRig(const ShakerRig &shakerRig);
-
-	// Destructor
 	~ShakerRig();
 
 	// Overloaded operators
-	ShakerRig& operator = (const ShakerRig &shakerRig);
+	ShakerRig& operator=(const ShakerRig &shakerRig);
 
 private:
-	// Debugger message printing utility
 	const Debugger &debugger;
 };
 
-#endif// _SHAKER_RIG_H_
+#endif// SHAKER_RIG_H_

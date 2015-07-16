@@ -15,8 +15,8 @@
 //				 is decremented to zero.
 // History:
 
-#ifndef _INVERSE_SEMAPHORE_H_
-#define _INVERSE_SEMAPHORE_H_
+#ifndef INVERSE_SEMAPHORE_H_
+#define INVERSE_SEMAPHORE_H_
 
 // wxWidgets headers
 #include <wx/thread.h>
@@ -24,10 +24,7 @@
 class InverseSemaphore
 {
 public:
-	// Constructor
 	InverseSemaphore();
-
-	// Destructor
 	~InverseSemaphore();
 
 	// Error codes for this object
@@ -39,24 +36,17 @@ public:
 		ErrorBusy		// Wait() called when object was already in use
 	};
 
-	// Decrements the counter
-	InverseSemaphoreError Post(void);
+	InverseSemaphoreError Post();
+	InverseSemaphoreError Set(unsigned int count);
 
-	// Sets the counter
-	InverseSemaphoreError Set(unsigned int _count);
+	InverseSemaphoreError Wait();
 
-	// Blocks the calling thread until Count is decremented
-	InverseSemaphoreError Wait(void);
-
-	// Retrieves the current count
-	unsigned int GetCount(void) { return count; };
+	unsigned int GetCount() { return count; }
 
 private:
-	// This object's synchronization
 	wxMutex countMutex;
 
-	// The remaining count before the calling thread is freed
 	unsigned int count;
 };
 
-#endif// _INVERSE_SEMAPHORE_H_
+#endif// INVERSE_SEMAPHORE_H_

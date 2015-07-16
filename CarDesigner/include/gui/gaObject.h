@@ -13,8 +13,8 @@
 // Description:  This is a wrapper class for genetic algorithm implementation.
 // History:
 
-#ifndef _GA_OBJECT_H_
-#define _GA_OBJECT_H_
+#ifndef GA_OBJECT_H_
+#define GA_OBJECT_H_
 
 // VVASE headers
 #include "vUtilities/managedList.h"
@@ -35,14 +35,10 @@ class GeneticOptimization;
 class GAObject : public GeneticAlgorithm
 {
 public:
-	// Constructor
-	GAObject(JobQueue &_queue, GeneticOptimization &_optimization);
-
-	// Destructor
+	GAObject(JobQueue &queue, GeneticOptimization &optimization);
 	~GAObject();
 
-	// Sets up for the run
-	void SetUp(Car *_targetCar);
+	void SetUp(Car *targetCar);
 
 	// For storing the information about the genes
 	struct Gene
@@ -59,23 +55,16 @@ public:
 		// The component of the hardpoint to optimize
 		Vector::Axis direction;
 
-		// The minimum value for the gene
 		double minimum;
-
-		// The maximum value for the gene
 		double maximum;
-
-		// The number of possible values (including the min and max) for the gene
 		int numberOfValues;
 	};
 
 	// The structure that represents our goals
 	struct Goal
 	{
-		// The output associated with this goal
 		KinematicOutputs::OutputsComplete output;
 
-		// The desired value
 		double desiredValue;
 
 		// The values used to compute the weight for this output
@@ -90,60 +79,58 @@ public:
 	};
 
 	// For changing what is being optimized
-	void ClearAllGenes(void) { geneList.Clear(); };
+	void ClearAllGenes() { geneList.Clear(); }
 	void AddGene(const Corner::Hardpoints &hardpoint, const Corner::Hardpoints &tiedTo,
 		const Corner::Location &location, const Vector::Axis &direction, const double &minimum,
 		const double &maximum, const int &numberOfValues);
-	void RemoveGene(const int &index) { geneList.Remove(index); };
+	void RemoveGene(const int &index) { geneList.Remove(index); }
 	void UpdateGene(const int &index, const Corner::Hardpoints &hardpoint, const Corner::Hardpoints &tiedTo,
 		const Corner::Location &location, const Vector::Axis &direction, const double &minimum,
 		const double &maximum, const int &numberOfValues);
-	int GetGeneCount(void) const { return geneList.GetCount(); };
-	const Gene &GetGene(const int &index) const { return *(geneList[index]); };
+	int GetGeneCount() const { return geneList.GetCount(); }
+	const Gene &GetGene(const int &index) const { return *(geneList[index]); }
 
 	// For creating the fitness function
-	void ClearAllGoals(void) { goalList.Clear(); };
+	void ClearAllGoals() { goalList.Clear(); }
 	void AddGoal(const KinematicOutputs::OutputsComplete &output, const double &desiredValue,
 		const double &expectedDeviation, const double &importance, const Kinematics::Inputs &beforeInputs,
 		const Kinematics::Inputs &afterInputs);
-	void RemoveGoal(const int &index) { goalList.Remove(index); };
+	void RemoveGoal(const int &index) { goalList.Remove(index); }
 	void UpdateGoal(const int &index, const KinematicOutputs::OutputsComplete &beforeOutput, const double &desiredValue,
 		const double &expectedDeviation, const double &importance, const Kinematics::Inputs &beforeInputs,
 		const Kinematics::Inputs &afterInputs);
-	int GetGoalCount(void) const { return goalList.GetCount(); };
-	const Goal &GetGoal(const int &index) const { return *(goalList[index]); };
+	int GetGoalCount() const { return goalList.GetCount(); }
+	const Goal &GetGoal(const int &index) const { return *(goalList[index]); }
 
 	// File I/O
 	bool Write(wxString fileName);
 	bool Read(wxString fileName);
 
 	// Accessor for synchronization object
-	void MarkAnalysisComplete(void) { inverseSemaphore.Post(); };
+	void MarkAnalysisComplete() { inverseSemaphore.Post(); }
 
 	// Gets the number of analyses to be performed for each generation
-	int GetNumberOfInputs(void) const { wxMutexLocker lock(gsaMutex); DebugLog::GetInstance()->Log(_T("GAObject::GetNumberOfInputs()")); return inputList.GetCount(); };
+	int GetNumberOfInputs() const { wxMutexLocker lock(gsaMutex); DebugLog::GetInstance()->Log(_T("GAObject::GetNumberOfInputs()")); return inputList.GetCount(); }
 
 	// Returns status of this object (running or not)
-	bool OptimizationIsRunning(void) const {  wxMutexLocker lock(gsaMutex); DebugLog::GetInstance()->Log(_T("GAObject::OptimizationIsRunning()")); return isRunning; };
+	bool OptimizationIsRunning() const {  wxMutexLocker lock(gsaMutex); DebugLog::GetInstance()->Log(_T("GAObject::OptimizationIsRunning()")); return isRunning; }
 
 	// Returns the best car with the best fit genome
-	void UpdateTargetCar(void);
+	void UpdateTargetCar();
 
 private:
-	// Main application object
 	JobQueue &queue;
 
-	// The object that owns this optimization
 	GeneticOptimization &optimization;
 
 	// Mandatory override of fitness function
 	double DetermineFitness(const int *citizen);
 
 	// Optional override to display results every step
-	void PerformAdditionalActions(void);
+	void PerformAdditionalActions();
 
 	// Optional override for determining fitnesses - overridden here to make use of threading
-	void SimulateGeneration(void);
+	void SimulateGeneration();
 
 	// Array of cars with which the fitnesses are determined
 	Car **workingCarArray;
@@ -154,20 +141,16 @@ private:
 	// Original car to be optimized (only one needed for reference)
 	Car *targetCar;
 
-	// The list of genes that we're optimizing
 	ManagedList<Gene> geneList;
-
-	// The list of goal's we're optimizing to
 	ManagedList<Goal> goalList;
 
 	// The different input configurations to be run
 	ManagedList<Kinematics::Inputs> inputList;
-	void DetermineAllInputs(void);
+	void DetermineAllInputs();
 
 	// Converts a genome into a citizen
 	void SetCarGenome(int carIndex, const int *currentGenome);
 
-	// Flag for whether or not the optimization is running
 	bool isRunning;
 
 	// Synchronization object allowing this thread to wait for analyses to be completed
@@ -187,4 +170,4 @@ private:
 	static const int currentFileVersion;
 };
 
-#endif// _GA_OBJECT_H_
+#endif// GA_OBJECT_H_

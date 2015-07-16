@@ -14,8 +14,8 @@
 // History:
 //  5/12/2011 - Renamed to PlotCursor from Cursor due to conflict in X.h, K. Loux
 
-#ifndef _CURSOR_H_
-#define _CURSOR_H_
+#ifndef CURSOR_H_
+#define CURSOR_H_
 
 // Local headers
 #include "vRenderer/primitives/primitive.h"
@@ -26,16 +26,15 @@ class Axis;
 class PlotCursor : public Primitive
 {
 public:
-	// Constructor
-	PlotCursor(RenderWindow &_renderWindow, const Axis &_axis);
+	PlotCursor(RenderWindow &renderWindow, const Axis &axis);
 
 	// Mandatory overloads from Primitive - for creating geometry and testing the
 	// validity of this object's parameters
-	void GenerateGeometry(void);
-	bool HasValidParameters(void);
+	void GenerateGeometry();
+	bool HasValidParameters();
 
-	void SetValue(const double& _value);
-	double GetValue(void) const { return value; };
+	void SetValue(const double& value);
+	double GetValue() const { return value; };
 
 	bool IsUnder(const unsigned int &pixel);
 
@@ -53,4 +52,4 @@ private:
 	void RescalePoint(unsigned int &point);
 };
 
-#endif// _CURSOR_H_
+#endif// CURSOR_H_

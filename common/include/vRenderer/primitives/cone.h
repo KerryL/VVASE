@@ -13,8 +13,8 @@
 // Description:  Derived from Primitive for creating conical objects.
 // History:
 
-#ifndef _CONE_H_
-#define _CONE_H_
+#ifndef CONE_H_
+#define CONE_H_
 
 // Local headers
 #include "vRenderer/primitives/primitive.h"
@@ -23,37 +23,30 @@
 class Cone : public Primitive
 {
 public:
-	// Constructor
-	Cone(RenderWindow &_renderWindow);
-
-	// Destructor
+	Cone(RenderWindow &renderWindow);
 	~Cone();
 
 	// Mandatory overloads from Primitive - for creating geometry and testing the
 	// validity of this object's parameters
-	void GenerateGeometry(void);
-	bool HasValidParameters(void);
+	void GenerateGeometry();
+	bool HasValidParameters();
 
 	// Private data accessors
-	void SetResolution(const int &_resolution);
-	void SetCapping(const bool &_drawCaps);
-	void SetTip(const Vector &_tip);
-	void SetBaseCenter(const Vector &_baseCenter);
-	void SetRadius(const double &_radius);
+	void SetResolution(const int &resolution);
+	void SetCapping(const bool &drawCaps);
+	void SetTip(const Vector &tip);
+	void SetBaseCenter(const Vector &baseCenter);
+	void SetRadius(const double &radius);
 
 private:
-	// Capping On/Off
 	bool drawCaps;
 
-	// The resolution
 	int resolution;
 
-	// The locations of the cone's tip and base
 	Vector tip;
 	Vector baseCenter;
 
-	// The cone's radius at the base
 	double radius;
 };
 
-#endif// _CONE_H_
+#endif// CONE_H_

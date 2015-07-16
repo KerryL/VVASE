@@ -101,7 +101,7 @@ PlotPanel::~PlotPanel()
 //		None
 //
 //==========================================================================
-void PlotPanel::CreateControls(void)
+void PlotPanel::CreateControls()
 {
 	// Create the top sizer, and on inside of it just to pad the borders a bit
 	topSizer = new wxBoxSizer(wxHORIZONTAL);
@@ -239,7 +239,7 @@ END_EVENT_TABLE();
 //		None
 //
 //==========================================================================
-void PlotPanel::UpdateDisplay(void)
+void PlotPanel::UpdateDisplay()
 {
 	renderer->UpdateDisplay();
 }
@@ -500,7 +500,7 @@ void PlotPanel::SetXAxisGridText(wxString text)
 //		None
 //
 //==========================================================================
-void PlotPanel::ClearAllCurves(void)
+void PlotPanel::ClearAllCurves()
 {
 	// Remove the curves locally
 	while (plotList.GetCount() > 0)

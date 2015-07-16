@@ -125,7 +125,7 @@ END_EVENT_TABLE();
 //		None
 //
 //==========================================================================
-void GeneticAlgorithmPanel::CreateControls(void)
+void GeneticAlgorithmPanel::CreateControls()
 {
 	// Enable scrolling
 	SetScrollRate(1, 1);
@@ -576,7 +576,7 @@ void GeneticAlgorithmPanel::RemoveGoalButtonClickedEvent(wxCommandEvent& WXUNUSE
 //		None
 //
 //==========================================================================
-void GeneticAlgorithmPanel::EditSelectedGene(void)
+void GeneticAlgorithmPanel::EditSelectedGene()
 {
 	// Get the selected gene
 	GAObject::Gene geneToEdit = optimization.GetAlgorithm().GetGene(geneList->GetSelectedRows()[0]);
@@ -618,7 +618,7 @@ void GeneticAlgorithmPanel::EditSelectedGene(void)
 //		None
 //
 //==========================================================================
-void GeneticAlgorithmPanel::EditSelectedGoal(void)
+void GeneticAlgorithmPanel::EditSelectedGoal()
 {
 	GAObject::Goal goalToEdit = optimization.GetAlgorithm().GetGoal(goalList->GetSelectedRows()[0]);
 
@@ -747,7 +747,7 @@ void GeneticAlgorithmPanel::StartStopOptimizationClickedEvent(wxCommandEvent& WX
 //		None
 //
 //==========================================================================
-void GeneticAlgorithmPanel::UpdateSelectableCars(void)
+void GeneticAlgorithmPanel::UpdateSelectableCars()
 {
 	// NOTE:  If cars are opened or closed, this should follow the associated car, even though
 	// we may need to change the index to do so
@@ -800,7 +800,7 @@ void GeneticAlgorithmPanel::UpdateSelectableCars(void)
 //		None
 //
 //==========================================================================
-void GeneticAlgorithmPanel::UpdateInformation(void)
+void GeneticAlgorithmPanel::UpdateInformation()
 {
 	wxString temp;
 
@@ -840,7 +840,7 @@ void GeneticAlgorithmPanel::UpdateInformation(void)
 //		None
 //
 //==========================================================================
-void GeneticAlgorithmPanel::UpdateGeneList(void)
+void GeneticAlgorithmPanel::UpdateGeneList()
 {
 	// Make sure we have the correct number of rows
 	if (geneList->GetRows() > optimization.GetAlgorithm().GetGeneCount()
@@ -893,7 +893,7 @@ void GeneticAlgorithmPanel::UpdateGeneList(void)
 //		None
 //
 //==========================================================================
-void GeneticAlgorithmPanel::UpdateGoalList(void)
+void GeneticAlgorithmPanel::UpdateGoalList()
 {
 	// Make sure we have the correct number of rows
 	if (goalList->GetRows() > optimization.GetAlgorithm().GetGoalCount()
@@ -948,7 +948,7 @@ void GeneticAlgorithmPanel::UpdateGoalList(void)
 //		None
 //
 //==========================================================================
-void GeneticAlgorithmPanel::ResetStatusBars(void)
+void GeneticAlgorithmPanel::ResetStatusBars()
 {
 	// Set the range for the progress bars
 	// The progress bars get updated every time an analysis completes, so
@@ -982,7 +982,7 @@ void GeneticAlgorithmPanel::ResetStatusBars(void)
 //		None
 //
 //==========================================================================
-void GeneticAlgorithmPanel::IncrementStatusBars(void)
+void GeneticAlgorithmPanel::IncrementStatusBars()
 {
 	// If the generation progress bar is already full, reset it to zero
 	if (generationProgress->GetValue() == generationProgress->GetRange())

@@ -27,13 +27,13 @@
 //
 // Input Arguments:
 //		parent			= wxWindow&, reference to the main application window
-//		_hardpoint		= const Corner::Hardpoints&
-//		_tiedTo			= const Corner::Hardpoints&
-//		_axisDirection	= const Vector::Axis&
-//		_cornerLocation	= const Corner::Location&
-//		_minimum		= const double&
-//		_maximum		= const double&
-//		_numberOfValues	= const unsigned int&
+//		hardpoint		= const Corner::Hardpoints&
+//		tiedTo			= const Corner::Hardpoints&
+//		axisDirection	= const Vector::Axis&
+//		cornerLocation	= const Corner::Location&
+//		minimum		= const double&
+//		maximum		= const double&
+//		numberOfValues	= const unsigned int&
 //		id				= wxWindowID
 //		position		= const wxPoint&
 //		style			= long
@@ -45,19 +45,20 @@
 //		None
 //
 //==========================================================================
-GAGeneDialog::GAGeneDialog(wxWindow *parent, const Corner::Hardpoints &_hardpoint,
-							   const Corner::Hardpoints &_tiedTo, const Vector::Axis &_axisDirection,
-							   const Corner::Location &_cornerLocation, const double &_minimum, const double &_maximum,
-							   const unsigned int &_numberOfValues, wxWindowID id, const wxPoint &position, long style) :
-							   wxDialog(parent, id, _T("Genetic Algorithm Gene"), position, wxDefaultSize, style)
+GAGeneDialog::GAGeneDialog(wxWindow *parent, const Corner::Hardpoints &hardpoint,
+	const Corner::Hardpoints &tiedTo, const Vector::Axis &axisDirection,
+	const Corner::Location &cornerLocation, const double &minimum,
+	const double &maximum, const unsigned int &numberOfValues, wxWindowID id,
+	const wxPoint &position, long style)
+	: wxDialog(parent, id, _T("Genetic Algorithm Gene"), position, wxDefaultSize, style)
 {
-	hardpoint = _hardpoint;
-	tiedTo = _tiedTo;
-	axisDirection = _axisDirection;
-	cornerLocation = _cornerLocation;
-	minimum = _minimum;
-	maximum = _maximum;
-	numberOfValues = _numberOfValues;
+	this->hardpoint = hardpoint;
+	this->tiedTo = tiedTo;
+	this->axisDirection = axisDirection;
+	this->cornerLocation = cornerLocation;
+	this->minimum = minimum;
+	this->maximum = maximum;
+	this->numberOfValues = numberOfValues;
 
 	resolution = NULL;
 
@@ -125,7 +126,7 @@ END_EVENT_TABLE()
 //		None
 //
 //==========================================================================
-void GAGeneDialog::CreateControls(void)
+void GAGeneDialog::CreateControls()
 {
 	wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
 

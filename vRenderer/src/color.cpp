@@ -55,10 +55,10 @@ Color::Color()
 //					as specified by the arguments.
 //
 // Input Arguments:
-//		_red	= const double& specifying the amount of red in this color (0.0 - 1.0)
-//		_green	= const double& specifying the amount of green in this color (0.0 - 1.0)
-//		_blue	= const double& specifying the amount of blue in this color (0.0 - 1.0)
-//		_alpha	= double specifying the opacity of this color (0.0 - 1.0)
+//		red		= const double& specifying the amount of red in this color (0.0 - 1.0)
+//		green	= const double& specifying the amount of green in this color (0.0 - 1.0)
+//		blue	= const double& specifying the amount of blue in this color (0.0 - 1.0)
+//		alpha	= const double& specifying the opacity of this color (0.0 - 1.0)
 //
 // Output Arguments:
 //		None
@@ -67,13 +67,12 @@ Color::Color()
 //		None
 //
 //==========================================================================
-Color::Color(const double &_red, const double &_green, const double &_blue, double _alpha)
+Color::Color(const double &red, const double &green, const double &blue, const double& alpha)
 {
-	// Assign the arguments to the class members
-	red = _red;
-	green = _green;
-	blue = _blue;
-	alpha = _alpha;
+	this->red = red;
+	this->green = green;
+	this->blue = blue;
+	this->alpha = alpha;
 
 	ValidateColor();
 }
@@ -131,10 +130,10 @@ const Color Color::ColorGray(0.5, 0.5, 0.5);
 // Description:		Sets the RGBA values for this color.
 //
 // Input Arguments:
-//		_red	= const double& specifying the amount of red in this color (0.0 - 1.0)
-//		_green	= const double& specifying the amount of green in this color (0.0 - 1.0)
-//		_blue	= const double& specifying the amount of blue in this color (0.0 - 1.0)
-//		_alpha	= double specifying the opacity of this color (0.0 - 1.0)
+//		red		= const double& specifying the amount of red in this color (0.0 - 1.0)
+//		green	= const double& specifying the amount of green in this color (0.0 - 1.0)
+//		blue	= const double& specifying the amount of blue in this color (0.0 - 1.0)
+//		alpha	= const double& specifying the opacity of this color (0.0 - 1.0)
 //
 // Output Arguments:
 //		None
@@ -143,13 +142,13 @@ const Color Color::ColorGray(0.5, 0.5, 0.5);
 //		None
 //
 //==========================================================================
-void Color::Set(const double &_red, const double &_green, const double &_blue, double _alpha)
+void Color::Set(const double &red, const double &green, const double &blue, const double &alpha)
 {
 	// Assign the arguments to the class members
-	red = _red;
-	green = _green;
-	blue = _blue;
-	alpha = _alpha;
+	this->red = red;
+	this->green = green;
+	this->blue = blue;
+	this->alpha = alpha;
 
 	ValidateColor();
 }
@@ -189,7 +188,7 @@ void Color::Set(const wxColor &color)
 // Description:		Sets the alpha value for this object.
 //
 // Input Arguments:
-//		_alpha = const double&
+//		alpha = const double&
 //
 // Output Arguments:
 //		None
@@ -198,10 +197,9 @@ void Color::Set(const wxColor &color)
 //		None
 //
 //==========================================================================
-void Color::SetAlpha(const double &_alpha)
+void Color::SetAlpha(const double &alpha)
 {
-	alpha = _alpha;
-
+	this->alpha = alpha;
 	ValidateColor();
 }
 
@@ -221,7 +219,7 @@ void Color::SetAlpha(const double &_alpha)
 //		wxColor that matches this color
 //
 //==========================================================================
-wxColor Color::ToWxColor(void) const
+wxColor Color::ToWxColor() const
 {
 	// Return object
 	wxColor color;
@@ -249,7 +247,7 @@ wxColor Color::ToWxColor(void) const
 //		None
 //
 //==========================================================================
-void Color::ValidateColor(void)
+void Color::ValidateColor()
 {
 	// Check red
 	if (red < 0.0)

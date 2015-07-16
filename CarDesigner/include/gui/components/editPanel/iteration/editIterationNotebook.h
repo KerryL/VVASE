@@ -13,8 +13,8 @@
 // Description:  Contains the class declaration for the EditIterationNotebook class.
 // History:
 
-#ifndef _EDIT_ITERATION_NOTEBOOK_H_
-#define _EDIT_ITERATION_NOTEBOOK_H_
+#ifndef EDIT_ITERATION_NOTEBOOK_H_
+#define EDIT_ITERATION_NOTEBOOK_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -29,34 +29,25 @@ class EditIterationOptionsPanel;
 class EditIterationNotebook : public wxNotebook
 {
 public:
-	// Constructor
-	EditIterationNotebook(EditPanel &_parent, wxWindowID id, const wxPoint& pos,
+	EditIterationNotebook(EditPanel &parent, wxWindowID id, const wxPoint& pos,
 		const wxSize& size, long style);
-
-	// Destructor
 	~EditIterationNotebook();
 
-	// Returns access to this object's parent
 	inline EditPanel &GetParent() { return parent; };
 
-	// Updates the information on the panel
-	void UpdateInformation(Iteration *_currentIteration);
-	void UpdateInformation(void);
+	void UpdateInformation(Iteration *currentIteration);
+	void UpdateInformation();
 
 private:
-	// The parent window
 	EditPanel &parent;
 
-	// The object with which we are currently associated
 	Iteration *currentIteration;
 
-	// Creates the controls and positions everything within the panel
-	void CreateControls(void);
+	void CreateControls();
 
-	// The different notebook tabs
 	EditIterationRangePanel *editRange;
 	EditIterationPlotsPanel *editPlots;
 	EditIterationOptionsPanel *editOptions;
 };
 
-#endif// _EDIT_ITERATION_NOTEBOOK_H_
+#endif// EDIT_ITERATION_NOTEBOOK_H_

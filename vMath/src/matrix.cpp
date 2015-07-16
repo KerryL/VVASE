@@ -69,15 +69,13 @@ Matrix::Matrix()
 //		None
 //
 //==========================================================================
-Matrix::Matrix(const unsigned int &_rows, const unsigned int &_columns)
+Matrix::Matrix(const unsigned int &rows, const unsigned int &columns)
 {
-	// Initialize the number of rows and columns
-	rows = _rows;
-	columns = _columns;
+	this->rows = rows;
+	this->columns = columns;
 
 	AllocateElements();
 
-	// Initialize the matrix
 	Zero();
 }
 
@@ -102,11 +100,10 @@ Matrix::Matrix(const unsigned int &_rows, const unsigned int &_columns)
 //		None
 //
 //==========================================================================
-Matrix::Matrix(const unsigned int &_rows, const unsigned int &_columns, double element1, ...)
+Matrix::Matrix(const unsigned int &rows, const unsigned int &columns, double element1, ...)
 {
-	// Initialize the number of rows and columns
-	rows = _rows;
-	columns = _columns;
+	this->rows = rows;
+	this->columns = columns;
 
 	AllocateElements();
 
@@ -114,7 +111,6 @@ Matrix::Matrix(const unsigned int &_rows, const unsigned int &_columns, double e
 	va_list argumentList;
 	va_start(argumentList, element1);
 
-	// Assign the first element
 	elements[0][0] = element1;
 
 	// Fill all of the elements with the arguments
@@ -130,7 +126,6 @@ Matrix::Matrix(const unsigned int &_rows, const unsigned int &_columns, double e
 		}
 	}
 
-	// Terminate the variable argument list
 	va_end(argumentList);
 }
 
@@ -296,7 +291,7 @@ double Matrix::GetElement(const int &row, const int &column) const
 //		MATRIX& reference to this
 //
 //==========================================================================
-Matrix& Matrix::MakeIdentity(void)
+Matrix& Matrix::MakeIdentity()
 {
 	// Set everything to zero
 	Zero();
@@ -325,7 +320,7 @@ Matrix& Matrix::MakeIdentity(void)
 //		None
 //
 //==========================================================================
-void Matrix::Zero(void)
+void Matrix::Zero()
 {
 	// Go through all of the elements setting everything to zero
 	unsigned int i, j;
@@ -391,7 +386,7 @@ Matrix Matrix::GetSubMatrix(const unsigned int &startRow, const unsigned int &st
 //		Matrix, transposed version of this
 //
 //==========================================================================
-Matrix Matrix::GetTranspose(void) const
+Matrix Matrix::GetTranspose() const
 {
 	Matrix transpose(columns, rows);
 
@@ -688,7 +683,7 @@ Matrix& Matrix::operator /=(const double &n)
 //		wxString containing the contents of this matrix
 //
 //==========================================================================
-wxString Matrix::Print(void) const
+wxString Matrix::Print() const
 {
 	wxString temp, intermediate;
 
@@ -729,7 +724,7 @@ wxString Matrix::Print(void) const
 //		Matrix equal to row-reduced version of this
 //
 //==========================================================================
-Matrix Matrix::GetRowReduced(void) const
+Matrix Matrix::GetRowReduced() const
 {
 	unsigned int curCol, curRow, pivotCol(0), pivotRow;
 	double factor;
@@ -1012,7 +1007,7 @@ const double &Matrix::operator () (const unsigned int &row, const unsigned int &
 //		Matrix, inverse of this
 //
 //==========================================================================
-Matrix Matrix::GetInverse(void) const
+Matrix Matrix::GetInverse() const
 {
 	if (!IsSquare() || GetRank() != rows)
 		return GetPsuedoInverse();
@@ -1037,7 +1032,7 @@ Matrix Matrix::GetInverse(void) const
 //		Matrix, inverse of this
 //
 //==========================================================================
-Matrix Matrix::GetPsuedoInverse(void) const
+Matrix Matrix::GetPsuedoInverse() const
 {
 	// Use singular value decomposition to compute the inverse
 	// SVD algorithm interpreted from Numerical Recipies in C
@@ -1073,7 +1068,7 @@ Matrix Matrix::GetPsuedoInverse(void) const
 //		Matrix, inverse of this (as long as this is a diagonal matrix)
 //
 //==========================================================================
-Matrix Matrix::GetDiagonalInverse(void) const
+Matrix Matrix::GetDiagonalInverse() const
 {
 	Matrix inverse(*this);
 
@@ -1136,7 +1131,7 @@ double Matrix::pythag(const double& a, const double &b) const
 //		unsigned int indicating the rank of this matrix
 //
 //==========================================================================
-unsigned int Matrix::GetRank(void) const
+unsigned int Matrix::GetRank() const
 {
 	// FIXME:  Is it better to use SVD for this?  Rank = # of non-zero singular values
 	Matrix reduced = GetRowReduced();
@@ -1175,7 +1170,7 @@ unsigned int Matrix::GetRank(void) const
 //		None
 //
 //==========================================================================
-void Matrix::FreeElements(void)
+void Matrix::FreeElements()
 {
 	unsigned int i;
 	for (i = 0; i < rows; i++)
@@ -1201,7 +1196,7 @@ void Matrix::FreeElements(void)
 //		None
 //
 //==========================================================================
-void Matrix::AllocateElements(void)
+void Matrix::AllocateElements()
 {
 	elements = new double*[rows];
 	unsigned int i;
@@ -1217,8 +1212,8 @@ void Matrix::AllocateElements(void)
 //					the specified size.
 //
 // Input Arguments:
-//		_rows		= const unsigned int& specifying new vertical dimension
-//		_columns	= const unsigned int& specifying new horizontal dimension
+//		rows	= const unsigned int& specifying new vertical dimension
+//		columns	= const unsigned int& specifying new horizontal dimension
 //
 // Output Arguments:
 //		None
@@ -1227,12 +1222,12 @@ void Matrix::AllocateElements(void)
 //		None
 //
 //==========================================================================
-void Matrix::Resize(const unsigned int &_rows, const unsigned int &_columns)
+void Matrix::Resize(const unsigned int &rows, const unsigned int &columns)
 {
 	FreeElements();
 
-	rows = _rows;
-	columns = _columns;
+	this->rows = rows;
+	this->columns = columns;
 
 	AllocateElements();
 }
@@ -1753,22 +1748,22 @@ Matrix& Matrix::RemoveColumn(const unsigned int &column)
 //		None
 //
 // Output Arguments:
-//		_rows	= const unsigned int& specifying the number of rows
-//		_column	= const unsigned int& specifying the number of columns; zero
-//				  is interpreted as square (set equal to _rows)
+//		rows	= const unsigned int& specifying the number of rows
+//		column	= const unsigned int& specifying the number of columns; zero
+//				  is interpreted as square (set equal to rows)
 //
 // Return Value:
 //		Matrix containing 1s along diagonal and zeros elsewhere
 //
 //==========================================================================
-Matrix Matrix::GetIdentity(const unsigned int &_rows, const unsigned int &_columns)
+Matrix Matrix::GetIdentity(const unsigned int &rows, const unsigned int &columns)
 {
 	Matrix identity;
 
-	if (_columns == 0)
-		identity.Resize(_rows, _rows);
+	if (columns == 0)
+		identity.Resize(rows, rows);
 	else
-		identity.Resize(_rows, _columns);
+		identity.Resize(rows, columns);
 
 	return identity.MakeIdentity();
 }

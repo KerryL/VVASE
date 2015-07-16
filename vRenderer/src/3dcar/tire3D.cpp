@@ -31,7 +31,7 @@
 //					process necessary to add the object to the scene.
 //
 // Input Arguments:
-//		_renderer	= RenderWindow&, pointer to rendering object
+//		renderer	= RenderWindow&, pointer to rendering object
 //
 // Output Arguments:
 //		None
@@ -40,15 +40,13 @@
 //		None
 //
 //==========================================================================
-Tire3D::Tire3D(RenderWindow &_renderer)
+Tire3D::Tire3D(RenderWindow &renderer)
 {
-	// Create the objects
-	innerSurface = new Cylinder(_renderer);
-	outerSurface = new Cylinder(_renderer);
-	sidewall1 = new Disk(_renderer);
-	sidewall2 = new Disk(_renderer);
+	innerSurface = new Cylinder(renderer);
+	outerSurface = new Cylinder(renderer);
+	sidewall1 = new Disk(renderer);
+	sidewall2 = new Disk(renderer);
 
-	// Set up the cylinders
 	innerSurface->SetCapping(false);
 	outerSurface->SetCapping(false);
 }

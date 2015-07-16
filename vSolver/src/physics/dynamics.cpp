@@ -40,12 +40,9 @@
 //		None
 //
 //==========================================================================
-Dynamics::Dynamics(const Debugger &_debugger) : debugger(_debugger)
+Dynamics::Dynamics(const Debugger &debugger) : debugger(debugger)
 {
-	// Create the integrator object
 	integrator = new Integrator(Integrator::MethodAdamsBashforth3, 100.0, debugger);
-
-	// Create the driver
 	driver = new Driver(debugger);
 }
 
@@ -67,13 +64,8 @@ Dynamics::Dynamics(const Debugger &_debugger) : debugger(_debugger)
 //==========================================================================
 Dynamics::Dynamics(const Dynamics &dynamics) : debugger(dynamics.debugger)
 {
-	// Create the integrator object
 	integrator = new Integrator(Integrator::MethodAdamsBashforth3, 100.0, debugger);
-
-	// Create the driver
 	driver = new Driver(debugger);
-
-	// Do the copy
 	*this = dynamics;
 }
 
@@ -95,11 +87,9 @@ Dynamics::Dynamics(const Dynamics &dynamics) : debugger(dynamics.debugger)
 //==========================================================================
 Dynamics::~Dynamics()
 {
-	// Delete the integrator object
 	delete integrator;
 	integrator = NULL;
 
-	// Delete the driver object
 	delete driver;
 	driver = NULL;
 }
@@ -120,7 +110,7 @@ Dynamics::~Dynamics()
 //		None
 //
 //==========================================================================
-void Dynamics::ResetSimulation(void)
+void Dynamics::ResetSimulation()
 {
 }
 
@@ -161,7 +151,7 @@ void Dynamics::CalculateStateDerivative(State /*state*/, Driver::Inputs /*inputs
 //		None
 //
 //==========================================================================
-void Dynamics::RunSimulation(void)
+void Dynamics::RunSimulation()
 {
 	// Initialize the simulation (initial conditions, environment, etc.)
 

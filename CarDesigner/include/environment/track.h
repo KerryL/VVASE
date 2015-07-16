@@ -15,19 +15,16 @@
 //				 etc.).
 // History:
 
-#ifndef _TRACK_H_
-#define _TRACK_H_
+#ifndef TRACK_H_
+#define TRACK_H_
 
 class Track
 {
 public:
-	// Constructor
 	Track();
-
-	// Destructor
 	~Track();
 
 private:
 };
 
-#endif// _TRACK_H_
+#endif// TRACK_H_

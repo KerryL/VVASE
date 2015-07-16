@@ -63,11 +63,10 @@ Complex::Complex()
 //		None
 //
 //==========================================================================
-Complex::Complex(const double &_real, const double &_imaginary)
+Complex::Complex(const double &real, const double &imaginary)
 {
-	// Assign the arguments to the class members
-	real = _real;
-	imaginary = _imaginary;
+	this->real = real;
+	this->imaginary = imaginary;
 }
 
 //==========================================================================
@@ -148,7 +147,7 @@ ostream &operator << (ostream &writeOut, const Complex &c)
 //		wxString containing the formatted value of this object
 //
 //==========================================================================
-wxString Complex::Print(void) const
+wxString Complex::Print() const
 {
 	wxString temp;
 
@@ -480,7 +479,7 @@ bool Complex::operator != (const Complex &c) const
 //		with opposite magnitude as this
 //
 //==========================================================================
-const Complex Complex::GetConjugate(void) const
+const Complex Complex::GetConjugate() const
 {
 	Complex temp;
 

@@ -34,9 +34,8 @@
 //		None
 //
 //==========================================================================
-Triangle::Triangle(RenderWindow &_renderWindow) : Primitive(_renderWindow)
+Triangle::Triangle(RenderWindow &renderWindow) : Primitive(renderWindow)
 {
-	// Initialize private data
 	corner1.Set(0.0, 0.0, 0.0);
 	corner2.Set(0.0, 0.0, 0.0);
 	corner3.Set(0.0, 0.0, 0.0);
@@ -79,7 +78,7 @@ Triangle::~Triangle()
 //		None
 //
 //==========================================================================
-void Triangle::GenerateGeometry(void)
+void Triangle::GenerateGeometry()
 {
 	// Used as each triangle is created
 	Vector normal = (corner2 - corner1).Cross(corner3 - corner1).Normalize();
@@ -116,7 +115,7 @@ void Triangle::GenerateGeometry(void)
 //		bool, true for OK to draw, false otherwise
 //
 //==========================================================================
-bool Triangle::HasValidParameters(void)
+bool Triangle::HasValidParameters()
 {
 	// Triangles must have non-zero edge lengths
 	if (!VVASEMath::IsZero(corner1.Distance(corner2)) && !VVASEMath::IsZero(corner1.Distance(corner3))
@@ -143,12 +142,9 @@ bool Triangle::HasValidParameters(void)
 //		None
 //
 //==========================================================================
-void Triangle::SetCorner1(const Vector &_corner1)
+void Triangle::SetCorner1(const Vector &corner1)
 {
-	// Set the corner location to the argument
-	corner1 = _corner1;
-	
-	// Reset the modified flag
+	this->corner1 = corner1;
 	modified = true;
 }
 
@@ -159,7 +155,7 @@ void Triangle::SetCorner1(const Vector &_corner1)
 // Description:		Sets the location of the second corner of the triangle.
 //
 // Input Arguments:
-//		_corner2	= const Vector&
+//		corner2	= const Vector&
 //
 // Output Arguments:
 //		None
@@ -168,12 +164,9 @@ void Triangle::SetCorner1(const Vector &_corner1)
 //		None
 //
 //==========================================================================
-void Triangle::SetCorner2(const Vector &_corner2)
+void Triangle::SetCorner2(const Vector &corner2)
 {
-	// Set the corner location to the argument
-	corner2 = _corner2;
-	
-	// Reset the modified flag
+	this->corner2 = corner2;
 	modified = true;
 }
 
@@ -184,7 +177,7 @@ void Triangle::SetCorner2(const Vector &_corner2)
 // Description:		Sets the location of the third corner of the triangle.
 //
 // Input Arguments:
-//		_corner3	= const Vector&
+//		corner3	= const Vector&
 //
 // Output Arguments:
 //		None
@@ -193,11 +186,8 @@ void Triangle::SetCorner2(const Vector &_corner2)
 //		None
 //
 //==========================================================================
-void Triangle::SetCorner3(const Vector &_corner3)
+void Triangle::SetCorner3(const Vector &corner3)
 {
-	// Set the corner location to the argument
-	corner3 = _corner3;
-	
-	// Reset the modified flag
+	this->corner3 = corner3;
 	modified = true;
 }

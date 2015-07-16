@@ -16,8 +16,8 @@
 //				 (in that direction only - reverse communication is handled with events).
 // History:
 
-#ifndef _THREAD_JOB_H_
-#define _THREAD_JOB_H_
+#ifndef THREAD_JOB_H_
+#define THREAD_JOB_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -40,26 +40,21 @@ public:
 		CommandThreadGeneticOptimization
 	};
 
-	// Constructors
 	ThreadJob();
 	ThreadJob(const ThreadJob &threadJob);// For thread safety
-	ThreadJob(ThreadCommand _command);
-	ThreadJob(ThreadCommand _command, ThreadData *_data,
-		const wxString &_name, int &_index);
-
-	// Destructor
+	ThreadJob(ThreadCommand command);
+	ThreadJob(ThreadCommand command, ThreadData *data,
+		const wxString &name, int &index);
 	~ThreadJob();
 
-	// The command to be sent
 	ThreadCommand command;
 
-	// Data to be sent to worker threads
 	ThreadData *data;
 	wxString name;
 	int index;
 	
 	// Operators
-	ThreadJob& operator=(const ThreadJob &job);// For thread safety
+	ThreadJob& operator=(const ThreadJob &job);
 };
 
-#endif// _THREAD_JOB_H_
+#endif// THREAD_JOB_H_

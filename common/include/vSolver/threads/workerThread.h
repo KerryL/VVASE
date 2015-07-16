@@ -16,8 +16,8 @@
 //				 communicating back to the main thread.
 // History:
 
-#ifndef _WORKER_THREAD_H_
-#define _WORKER_THREAD_H_
+#ifndef WORKER_THREAD_H_
+#define WORKER_THREAD_H_
 
 // wxWidgets headers
 #include <wx/thread.h>
@@ -31,27 +31,19 @@ class JobQueue;
 class WorkerThread : public wxThread
 {
 public:
-	// Constructor
-	WorkerThread(JobQueue* _jobQueue, int _id = wxID_ANY);
-
-	// Destructor
+	WorkerThread(JobQueue* jobQueue, int id = wxID_ANY);
 	~WorkerThread();
 
 private:
-	// The queue of jobs to be completed
 	JobQueue* jobQueue;
 
-	// This thread's ID number
 	int id;
-
-	// The thread's entry point
-	virtual wxThread::ExitCode Entry(void);
+	virtual wxThread::ExitCode Entry();
 
 	// The job handler (called when this thread pulls a job from the queue)
-	virtual void OnJob(void);
+	virtual void OnJob();
 
-	// The objects that do the number crunching
 	Kinematics kinematicAnalysis;
 };
 
-#endif// _WORKER_THREAD_H_
+#endif// WORKER_THREAD_H_

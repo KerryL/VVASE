@@ -15,8 +15,8 @@
 //				 as well as OpenGL.
 // History:
 
-#ifndef _COLOR_H_
-#define _COLOR_H_
+#ifndef COLOR_H_
+#define COLOR_H_
 
 // wxWidgets forward declarations
 class wxString;
@@ -25,18 +25,14 @@ class wxColor;
 class Color
 {
 public:
-	// Constructors
 	Color();
-	Color(const double &_red, const double &_green, const double &_blue, double _alpha = 1.0);
-
-	// Destructor
+	Color(const double &red, const double &green, const double &blue, const double & alpha = 1.0);
 	~Color();
 
-	// The color accessors
-	inline double GetRed(void) const { return red; };
-	inline double GetGreen(void) const { return green; };
-	inline double GetBlue(void) const { return blue; };
-	inline double GetAlpha(void)  const { return alpha; };
+	inline double GetRed() const { return red; }
+	inline double GetGreen() const { return green; }
+	inline double GetBlue() const { return blue; }
+	inline double GetAlpha()  const { return alpha; }
 
 	// Constant colors
 	static const Color ColorRed;
@@ -49,13 +45,11 @@ public:
 	static const Color ColorMagenta;
 	static const Color ColorGray;
 
-	// For setting the value
-	void Set(const double &_red, const double &_green, const double &_blue, double _alpha = 1.0);
+	void Set(const double &red, const double &green, const double &blue, const double & alpha = 1.0);
 	void Set(const wxColor &color);
-	void SetAlpha(const double &_alpha);
+	void SetAlpha(const double &alpha);
 
-	// Conversion to a wxColor
-	wxColor ToWxColor(void) const;
+	wxColor ToWxColor() const;
 
 private:
 	// The class data
@@ -65,7 +59,7 @@ private:
 	double alpha;
 
 	// Checks to make sure all values are between 0 and 1 (forces this to be true)
-	void ValidateColor(void);
+	void ValidateColor();
 };
 
-#endif// _COLOR_H_
+#endif// COLOR_H_

@@ -18,8 +18,8 @@
 //				 tasks.
 // History:
 
-#ifndef _THREAD_DATA_H_
-#define _THREAD_DATA_H_
+#ifndef THREAD_DATA_H_
+#define THREAD_DATA_H_
 
 // VVASE headers
 #include "vSolver/threads/threadJob.h"
@@ -27,10 +27,7 @@
 class ThreadData
 {
 public:
-	// Constructors
 	ThreadData();
-
-	// Destructor
 	virtual ~ThreadData();
 
 	// For checking to make sure the proper data was used with
@@ -38,4 +35,4 @@ public:
 	virtual bool OkForCommand(ThreadJob::ThreadCommand &command) = 0;
 };
 
-#endif// _THREAD_DATA_H_
+#endif// THREAD_DATA_H_

@@ -14,8 +14,8 @@
 //				 the screen.
 // History:
 
-#ifndef _PLOT_RENDERER_H_
-#define _PLOT_RENDERER_H_
+#ifndef PLOT_RENDERER_H_
+#define PLOT_RENDERER_H_
 
 // Local headers
 #include "vRenderer/renderWindow.h"
@@ -34,29 +34,26 @@ class MainFrame;
 class PlotRenderer : public RenderWindow
 {
 public:
-	// Constructor
-	PlotRenderer(PlotPanel &_parent, wxWindowID id, int args[], MainFrame &_mainFrame);
-
-	// Destructor
+	PlotRenderer(PlotPanel &parent, wxWindowID id, int args[], MainFrame &mainFrame);
 	~PlotRenderer();
 
 	// Gets properties for actors
-	bool GetBottomGrid(void) const;
-	bool GetLeftGrid(void) const;
-	bool GetRightGrid(void) const;
+	bool GetBottomGrid() const;
+	bool GetLeftGrid() const;
+	bool GetRightGrid() const;
 
-	Color GetGridColor(void) const;
+	Color GetGridColor() const;
 
-	double GetXMin(void) const;
-	double GetXMax(void) const;
-	double GetLeftYMin(void) const;
-	double GetLeftYMax(void) const;
-	double GetRightYMin(void) const;
-	double GetRightYMax(void) const;
+	double GetXMin() const;
+	double GetXMax() const;
+	double GetLeftYMin() const;
+	double GetLeftYMax() const;
+	double GetRightYMin() const;
+	double GetRightYMax() const;
 
 	// Sets properties for actors
 	void SetGridOn(const bool &grid = true);
-	void SetGridOff(void);
+	void SetGridOff();
 	void SetBottomGrid(const bool &grid);
 	void SetLeftGrid(const bool &grid);
 	void SetRightGrid(const bool &grid);
@@ -75,34 +72,33 @@ public:
 	void SetTitle(wxString text);
 
 	void AddCurve(const Dataset2D &data);
-	void RemoveAllCurves(void);
+	void RemoveAllCurves();
 	void RemoveCurve(const unsigned int &index);
 
-	void AutoScale(void);
-	void AutoScaleBottom(void);
-	void AutoScaleLeft(void);
-	void AutoScaleRight(void);
+	void AutoScale();
+	void AutoScaleBottom();
+	void AutoScaleLeft();
+	void AutoScaleRight();
 
-	bool GetGridOn(void);
+	bool GetGridOn();
 
 	// Called to update the screen
-	void UpdateDisplay(void);
+	void UpdateDisplay();
 
-	bool GetLeftCursorVisible(void) const;
-	bool GetRightCursorVisible(void) const;
-	double GetLeftCursorValue(void) const;
-	double GetRightCursorValue(void) const;
+	bool GetLeftCursorVisible() const;
+	bool GetRightCursorVisible() const;
+	double GetLeftCursorValue() const;
+	double GetRightCursorValue() const;
 
-	void UpdateCursors(void);
+	void UpdateCursors();
 
-	MainFrame &GetMainFrame(void) { return mainFrame; };
+	MainFrame &GetMainFrame() { return mainFrame; };
 
 private:
-	// Reference to the MainFrame object
 	MainFrame &mainFrame;
 
 	// Called from the PlotRenderer constructor only in order to initialize the display
-	void CreateActors(void);
+	void CreateActors();
 
 	// The parent panel
 	PlotPanel &parent;
@@ -133,8 +129,7 @@ private:
 	double GetCursorValue(const unsigned int &location);
 
 protected:
-	// For the event table
 	DECLARE_EVENT_TABLE()
 };
 
-#endif// _PLOT_RENDERER_H_
+#endif// PLOT_RENDERER_H_
