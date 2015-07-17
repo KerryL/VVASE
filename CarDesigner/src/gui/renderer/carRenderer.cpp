@@ -90,14 +90,18 @@ CarRenderer::CarRenderer(MainFrame &mainFrame, GuiCar &car, int args[])
 	helperOrbSuspensionPoint = Suspension::NumberOfHardpoints;
 	helperOrbIsActive = false;
 
-	// Set the camera view so that the car is visible
-	// Make some assumptions to compute the horizontal viewing range
-	// The car's wheelbase plus a tire diameter is roughly the longest dimension we need to show on-screen at one time
-	SetTopMinusBottom(car.GetWorkingCar().suspension->leftFront.hardpoints[Corner::ContactPatch].Distance(
-		car.GetWorkingCar().suspension->rightRear.hardpoints[Corner::ContactPatch]) * 3.0);
+	// Set the camera view so that the entire car is visible
 	Vector position(-100.0, -100.0, 60.0), up(0.0, 0.0, 1.0);
-	Vector lookAt(referenceCar.suspension->leftRear.hardpoints[Corner::ContactPatch].x / 2.0, 0.0, 0.0);// FIXME:  This could be better
+	// TODO:  This constructor is called prior to cars being loaded from file
+	Vector lookAt(referenceCar.suspension->rightFront.hardpoints[Corner::ContactPatch] +
+		(referenceCar.suspension->leftRear.hardpoints[Corner::ContactPatch] - 
+		referenceCar.suspension->rightFront.hardpoints[Corner::ContactPatch]) * 0.5);
 	SetCameraView(position, lookAt, up);
+	/*SetTopMinusBottom(referenceCar.suspension->leftFront.hardpoints[Corner::ContactPatch].Distance(
+		referenceCar.suspension->rightRear.hardpoints[Corner::ContactPatch]));*/
+	SetViewOrthogonal(true);
+	SetTopMinusBottom(150.0);
+	SetViewOrthogonal(false);
 
 #ifdef USE_DEBUG_SHAPE
 	DebugShape::SetRenderer(*this);

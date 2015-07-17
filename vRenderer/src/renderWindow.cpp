@@ -50,8 +50,6 @@
 //
 //==========================================================================
 const double RenderWindow::exactPixelShift(0.375);
-const double RenderWindow::topMinusBottomMin(100.0);
-const double RenderWindow::topMinusBottomMax(500.0);
 
 //==========================================================================
 // Class:			RenderWindow
@@ -89,6 +87,8 @@ RenderWindow::RenderWindow(wxWindow &parent, wxWindowID id, int args[],
 	// The car's wheelbase plus a tire diameter is roughly the longest dimension we need to show on-screen at one time
 	// We'll assume this is generally less than 150 inches
 	topMinusBottom = 100.0;
+	nearClip = 1.0;
+	farClip = 500.0;
 
 	AutoSetFrustum();
 
@@ -882,22 +882,14 @@ void RenderWindow::UpdateTransformationMatricies()
 //==========================================================================
 void RenderWindow::AutoSetFrustum()
 {
+	modified = true;
+
 	// This method is really for 3D renderers - for 2D, we just re-initialize to handle change in aspect ratio/size
 	if (!view3D)
-	{
-		modified = true;
 		return;
-	}
 
 	wxSize windowSize = GetSize();
 	aspectRatio = (double)windowSize.GetWidth() / (double)windowSize.GetHeight();
-
-	// Set the clipping plane distances to something reasonable
-	// TODO:  Make this be smarter, or user-adjustable (distance between camera and focal point)
-	nearClip = 5.0;
-	farClip = 500.0;
-
-	modified = true;
 }
 
 //==========================================================================
@@ -1308,10 +1300,17 @@ Matrix RenderWindow::Generate2DProjectionMatrix() const
 //==========================================================================
 Matrix RenderWindow::Generate3DProjectionMatrix() const
 {
+	// For orthogonal projections, top - bottom and left - right give size in
+	// screen coordinates.  For perspective projections, these combined with
+	// the near clipping plane give FOV.
+	//  hFOV = atan(nearClip * 2.0 / leftMinusRight);// [rad]
+	//  vFOV = atan(nearClip * 2.0 / topMinusBottom);// [rad]
+	// The distance at which unity scaling occurs is the cotangent of (top - bottom) / 2.
+	// We can use the distance set in SetCameraView() to determine 
 	Matrix projectionMatrix(4, 4);
+	double rightMinusLeft(topMinusBottom * aspectRatio);
 	if (viewOrthogonal)
 	{
-		double rightMinusLeft(topMinusBottom * aspectRatio);
 		projectionMatrix.SetElement(0, 0, 2.0 / rightMinusLeft);
 		projectionMatrix.SetElement(1, 1, 2.0 / topMinusBottom);
 		projectionMatrix.SetElement(2, 2, 2.0 / (nearClip - farClip));
@@ -1321,9 +1320,8 @@ Matrix RenderWindow::Generate3DProjectionMatrix() const
 	}
 	else
 	{
-		double f(1.0 / tan(ComputeVerticalHalfAngle(topMinusBottom)));
-		projectionMatrix.SetElement(0, 0, f / aspectRatio);
-		projectionMatrix.SetElement(1, 1, f);
+		projectionMatrix.SetElement(0, 0, 2.0 * nearClip / rightMinusLeft);
+		projectionMatrix.SetElement(1, 1, 2.0 * nearClip / topMinusBottom);
 		projectionMatrix.SetElement(2, 2, (nearClip + farClip) / (nearClip - farClip));
 		projectionMatrix.SetElement(2, 3, 2.0 * farClip * nearClip / (nearClip - farClip));
 		projectionMatrix.SetElement(3, 2, -1.0);
@@ -1334,27 +1332,39 @@ Matrix RenderWindow::Generate3DProjectionMatrix() const
 
 //==========================================================================
 // Class:			RenderWindow
-// Function:		ComputeVerticalHalfAngle
+// Function:		SetViewOrthogonal
 //
-// Description:		Computes the vertical half angle for use in projection matrix
-//					calculation.
+// Description:		Switches between perspective and orthogonal projections
+//					while maintaining nominal scale.
 //
 // Input Arguments:
-//		topMinusBottom	= const double&
+//		viewOrthogonal	= const bool&
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		double
+//		None
 //
 //==========================================================================
-double RenderWindow::ComputeVerticalHalfAngle(const double &topMinusBottom) const
+void RenderWindow::SetViewOrthogonal(const bool &viewOrthogonal)
 {
-	// TODO:  This could use a little work to make the rate of dollying more linear
-	const double fovPerInch(20.0 / 150.0);// 20 deg per 150 inches - just picked something that looks nice
-	const double epsilon(1.0e-6);
-	return std::max(std::min(M_PI * 0.5, 0.5 * fovPerInch * topMinusBottom * M_PI / 180.0), epsilon);
+	if (this->viewOrthogonal == viewOrthogonal)
+		return;
+
+	this->viewOrthogonal = viewOrthogonal;
+	modified = true;
+
+	// We can compute the distance at which we are focused (according to last call
+	// to SetCameraPosition()), and then determine the correct value of SetTopMinusBottom()
+	// in order to maintain unit scale at this distance.
+	double nominalDistance = cameraPosition.Distance(focalPoint);
+	if (viewOrthogonal)// was perspective
+	{
+		double oldScale = topMinusBottom;
+	}
+	else// was orthogonal
+		topMinusBottom = nearClip / atan(topMinusBottom * nominalDistance/10000.);
 }
 
 //==========================================================================

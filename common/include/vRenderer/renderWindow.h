@@ -55,27 +55,27 @@ public:
 	void AutoSetFrustum();
 
 	// Adds actors to the primitives list
-	inline void AddActor(Primitive *toAdd) { primitiveList.Add(toAdd); modified = true; };
+	inline void AddActor(Primitive *toAdd) { primitiveList.Add(toAdd); modified = true; }
 
 	// Removes actors from the primitives list
 	bool RemoveActor(Primitive *toRemove);
 
 	// Private data accessors
-	inline void SetWireFrame(const bool& wireFrame) { this->wireFrame = wireFrame; modified = true; };
-	inline void SetViewOrthogonal(const bool& viewOrthogonal) { this->viewOrthogonal = viewOrthogonal; modified = true; };
+	inline void SetWireFrame(const bool& wireFrame) { this->wireFrame = wireFrame; modified = true; }
+	void SetViewOrthogonal(const bool& viewOrthogonal);
 
-	inline void SetTopMinusBottom(const double& topMinusBottom) { this->topMinusBottom = topMinusBottom; modified = true; };
-	inline void SetAspectRatio(const double& aspectRatio) { this->aspectRatio = aspectRatio; modified = true; };
-	inline void SetNearClip(const double& nearClip) { this->nearClip = nearClip; modified = true; };
-	inline void SetFarClip(const double& farClip) { this->farClip = farClip; modified = true; };
-	inline void SetView3D(const bool& view3D) { this->view3D = view3D; modified = true; };
+	inline void SetTopMinusBottom(const double& topMinusBottom) { this->topMinusBottom = topMinusBottom; modified = true; }
+	inline void SetAspectRatio(const double& aspectRatio) { this->aspectRatio = aspectRatio; modified = true; }
+	inline void SetNearClip(const double& nearClip) { this->nearClip = nearClip; modified = true; }
+	inline void SetFarClip(const double& farClip) { this->farClip = farClip; modified = true; }
+	inline void SetView3D(const bool& view3D) { this->view3D = view3D; modified = true; }
 
-	inline void SetBackgroundColor(const Color& backgroundColor) { this->backgroundColor = backgroundColor; modified = true; };
-	inline Color GetBackgroundColor() { return backgroundColor; };
+	inline void SetBackgroundColor(const Color& backgroundColor) { this->backgroundColor = backgroundColor; modified = true; }
+	inline Color GetBackgroundColor() { return backgroundColor; }
 
 	inline bool GetWireFrame() const { return wireFrame; };
-	inline bool GetViewOrthogonal() const { return viewOrthogonal; };
-	inline bool GetView3D() const { return view3D; };
+	inline bool GetViewOrthogonal() const { return viewOrthogonal; }
+	inline bool GetView3D() const { return view3D; }
 
 	// Returns a string containing any OpenGL errors
 	wxString GetGLError() const;
@@ -105,12 +105,6 @@ private:
 	double nearClip;
 	double farClip;
 
-	static const double topMinusBottomMin;
-	static const double topMinusBottomMax;
-
-	double ComputeVerticalHalfAngle(const double &topMinusBottom) const;
-
-	// The background color
 	Color backgroundColor;
 
 	// List of item indexes and alphas for sorting by alpha
@@ -143,10 +137,8 @@ private:
 	void OnEnterWindow(wxMouseEvent &event);
 	// End event handlers-------------------------------------------------
 
-	// The main render method - re-draws the scene
 	void Render();
 
-	// The type of interaction to perform
 	enum InteractionType
 	{
 		InteractionDollyDrag,// zoom
@@ -167,14 +159,10 @@ private:
 	// Updates the transformation matrices according to the current modelview matrix
 	void UpdateTransformationMatricies();
 
-	// The transformation matrices
 	Matrix *modelToView;
 	Matrix *viewToModel;
 
-	// The camera position
 	Vector cameraPosition;
-
-	// The focal point for performing interactions
 	Vector focalPoint;
 
 	// Method for re-organizing the PrimitiveList so opaque objects are at the beginning and
@@ -184,19 +172,12 @@ private:
 	void SortPrimitivesByDrawOrder();
 
 protected:
-	// Flag indicating whether or not this is a 3D rendering
 	bool view3D;
-
-	// Flag indicating whether or not we need to re-initialize this object
 	bool modified;
 
-	// The list of objects to create in this scene
 	ManagedList<Primitive> primitiveList;
 
-	// Some interactions require the previous mouse position (window coordinates)
 	long lastMousePosition[2];
-
-	// Stores the last mouse position variables
 	void StoreMousePosition(wxMouseEvent &event);
 
 	bool Determine2DInteraction(const wxMouseEvent &event, InteractionType &interaction) const;

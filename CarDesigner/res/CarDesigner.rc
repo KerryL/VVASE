@@ -29,6 +29,9 @@ ICON_ID_TIRES			ICON		"res\\icons\\tires.ico"
 ICON_ID_ITERATION		ICON		"res\\icons\\iteration.ico"
 ICON_ID_OPTIMIZATION	ICON		"res\\icons\\optimization.ico"
 
+ICON_ID_PERSPECTIVE		ICON		"res\\icons\\perspective.ico"
+ICON_ID_ORTHO			ICON		"res\\icons\\ortho.ico"
+
 // wxWidgets definitions
 #define wxUSE_NO_MANIFEST 1
 

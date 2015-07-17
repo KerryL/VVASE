@@ -147,6 +147,7 @@ private:
 
 	void CreateMenuBar();
 	void CreateKinematicAnalysisToolbar();
+	void Create3DToolbar();
 
 	// Functions that do some of the frame initialization and control positioning
 	void DoLayout();
@@ -219,6 +220,7 @@ private:
 		IdMenuIterationXAxisRackTravel,
 
 		IdMenuViewToolbarsKinematic,
+		IdMenuViewToolbars3D,
 		IdMenuViewClearOutput,
 
 		IdMenuToolsDoE,
@@ -233,7 +235,11 @@ private:
 		IdToolbarKinematicPitch,
 		IdToolbarKinematicRoll,
 		IdToolbarKinematicHeave,
-		IdToolbarKinematicSteer
+		IdToolbarKinematicSteer,
+
+		// 3D View toolbar
+		IdToolbar3DOrtho,
+		IdToolbar3DPerspective
 	};
 
 	// Event handlers-----------------------------------------------------
@@ -274,6 +280,7 @@ private:
 	void IterationXAxisRackTravelClickEvent(wxCommandEvent &event);
 
 	void ViewToolbarsKinematicEvent(wxCommandEvent &event);
+	void ViewToolbars3DEvent(wxCommandEvent &event);
 	void ViewClearOutputEvent(wxCommandEvent &event);
 
 	void ToolsDoEEvent(wxCommandEvent &event);
@@ -290,6 +297,10 @@ private:
 	void KinematicToolbarHeaveChangeEvent(wxCommandEvent &event);
 	void KinematicToolbarSteerChangeEvent(wxCommandEvent &event);
 
+	// 3D
+	void Toolbar3DPerspectiveClickEvent(wxCommandEvent &event);
+	void Toolbar3DOrthoClickEvent(wxCommandEvent &event);
+
 	// Threads
 	void ThreadCompleteEvent(wxCommandEvent &event);
 	void DebugMessageEvent(wxCommandEvent &event);
@@ -304,6 +315,7 @@ private:
 
 	wxMenuBar *menuBar;
 	wxToolBar *kinematicToolbar;
+	wxToolBar *toolbar3D;
 
 	ManagedList<GuiObject> openObjectList;
 

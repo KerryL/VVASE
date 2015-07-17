@@ -77,6 +77,12 @@
 #include "../res/icons/aavase16.xpm"
 #include "../res/icons/aavase32.xpm"
 #include "../res/icons/aavase48.xpm"
+#include "../res/icons/perspective16.xpm"
+#include "../res/icons/perspective32.xpm"
+#include "../res/icons/perspective48.xpm"
+#include "../res/icons/ortho16.xpm"
+#include "../res/icons/ortho32.xpm"
+#include "../res/icons/ortho48.xpm"
 #endif
 
 //==========================================================================
@@ -114,10 +120,12 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxEmptyString, wxDefaultPositio
 		wxSize(-1, 350), wxTE_PROCESS_TAB | wxTE_MULTILINE | wxHSCROLL | wxTE_READONLY
 		| wxTE_RICH);
 
-	CreateMenuBar();
-
 	kinematicToolbar = NULL;
+	toolbar3D = NULL;
 	CreateKinematicAnalysisToolbar();
+	Create3DToolbar();
+
+	CreateMenuBar();
 
 	// These need to be in this order - otherwise the centering doesn't work (resize first)
 	DoLayout();
@@ -170,19 +178,15 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxEmptyString, wxDefaultPositio
 //==========================================================================
 MainFrame::~MainFrame()
 {
-	// Delete the file history manager
 	delete recentFileManager;
 	recentFileManager = NULL;
 
-	// Delete the job queue object
 	delete jobQueue;
 	jobQueue = NULL;
 
-	// Remove all of the cars we're managing that haven't been closed
 	while (openObjectList.GetCount() > 0)
 		RemoveObjectFromList(0);
 
-	// De-initialize the manager
 	manager.UnInit();
 }
 
@@ -227,7 +231,6 @@ const wxString MainFrame::pathToConfigFile = _T("config.ini");
 //==========================================================================
 void MainFrame::DoLayout()
 {
-	// Tell the frame manager to manage this window
 	manager.SetManagedWindow(this);
 
 	// Add the panes to the manager - this order is important (see below)
@@ -275,10 +278,7 @@ void MainFrame::DoLayout()
 	|			|												|
 	===========================================================*/
 
-	// Have the manager update the layout
 	manager.Update();
-
-	// Configure the output panel to show units
 	outputPanel->FinishUpdate(0);
 }
 
@@ -318,17 +318,12 @@ void MainFrame::SetProperties()
 #endif
 	SetIcons(bundle);
 
-	// Set up the debugger
 	Debugger::GetInstance().SetTargetOutput(debugPane);
 	Debugger::GetInstance().SetDebugLevel(Debugger::PriorityHigh);
 
 	// Add the application level entry to the SystemsTree (this one is hidden, but necessary)
 	systemsTree->AddRoot(_T("Application Level"), -1, -1);
 
-	// Do the disabling/checking of certain controls
-	menuBar->Check(IdMenuViewToolbarsKinematic, true);
-
-	// Disable the undo and redo menu items
 	DisableUndo();
 	DisableRedo();
 
@@ -340,6 +335,10 @@ void MainFrame::SetProperties()
 	menuBar->FindItem(IdMenuToolsDynamic)->Enable(false);
 	
 	ReadConfiguration();
+
+	// Depending on whether the toolbars are shown, check the corresponding menu item
+	menuBar->Check(IdMenuViewToolbarsKinematic, manager.GetPane(kinematicToolbar).IsShown());
+	menuBar->Check(IdMenuViewToolbars3D, manager.GetPane(toolbar3D).IsShown());
 
 	wxString fontFaceName;
 	
@@ -428,15 +427,12 @@ void MainFrame::SetProperties()
 //==========================================================================
 void MainFrame::InitializeSolver()
 {
-	// Initialize the job queue
 	jobQueue = new JobQueue(GetEventHandler());
 
-	// Initialize thread-related variables
 	activeThreads = 0;
 	openJobCount = 0;
 	numberOfThreads = 0;
 
-	// Zero out kinematic inputs
 	kinematicInputs.pitch = 0.0;
 	kinematicInputs.roll = 0.0;
 	kinematicInputs.heave = 0.0;
@@ -616,6 +612,7 @@ void MainFrame::CreateMenuBar()
 	wxMenu *mnuView = new wxMenu();
 	wxMenu *mnuViewToolbars = new wxMenu();
 	mnuViewToolbars->AppendCheckItem(IdMenuViewToolbarsKinematic, _T("Kinematic Analysis"));
+	mnuViewToolbars->AppendCheckItem(IdMenuViewToolbars3D, _T("3D View"));
 	mnuView->AppendSubMenu(mnuViewToolbars, _T("Toolbars"));
 	mnuView->AppendSeparator();
 	mnuView->Append(IdMenuViewClearOutput, _T("&Clear Output Text"),
@@ -639,11 +636,9 @@ void MainFrame::CreateMenuBar()
 	mnuHelp->Append(IdMenuHelpAbout, _T("&About"), _T("Show About dialog"), wxITEM_NORMAL);
 	menuBar->Append(mnuHelp, _T("&Help"));
 
-	// Add the manager for the recently used file menu
 	recentFileManager = new wxFileHistory(maxRecentFiles, IdMenuFileRecentStart);
 	recentFileManager->UseMenu(mnuRecentFiles);
 
-	// Now make it official
 	SetMenuBar(menuBar);
 }
 
@@ -667,40 +662,36 @@ void MainFrame::CreateMenuBar()
 //==========================================================================
 void MainFrame::CreateKinematicAnalysisToolbar()
 {
-	// Make sure we don't already have one of these
 	if (kinematicToolbar != NULL)
 		return;
 
-	// Create the toolbar
 	kinematicToolbar = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
 		wxTB_FLAT | wxTB_NODIVIDER);
 
 	// Create the controls
 	wxStaticText *pitchLabel = new wxStaticText(kinematicToolbar, wxID_ANY, _T("Pitch"),
 		wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
-	wxTextCtrl *pitchSet = new wxTextCtrl(kinematicToolbar, IdToolbarKinematicPitch, _T("0"), wxDefaultPosition,
-		wxSize(40, -1));
+	wxTextCtrl *pitchSet = new wxTextCtrl(kinematicToolbar, IdToolbarKinematicPitch,
+		_T("0"), wxDefaultPosition, wxSize(40, -1));
 	pitchSet->SetMaxLength(5);
 
 	wxStaticText *rollLabel = new wxStaticText(kinematicToolbar, wxID_ANY, _T("Roll"),
 		wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
-	wxTextCtrl *rollSet = new wxTextCtrl(kinematicToolbar, IdToolbarKinematicRoll, _T("0"), wxDefaultPosition,
-		wxSize(40, -1));
+	wxTextCtrl *rollSet = new wxTextCtrl(kinematicToolbar, IdToolbarKinematicRoll,
+		_T("0"), wxDefaultPosition, wxSize(40, -1));
 	rollSet->SetMaxLength(5);
 
 	wxStaticText *heaveLabel = new wxStaticText(kinematicToolbar, wxID_ANY, _T("Heave"),
 		wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
-	wxTextCtrl *heaveSet = new wxTextCtrl(kinematicToolbar, IdToolbarKinematicHeave, _T("0"), wxDefaultPosition,
-		wxSize(40, -1));
+	wxTextCtrl *heaveSet = new wxTextCtrl(kinematicToolbar, IdToolbarKinematicHeave,
+		_T("0"), wxDefaultPosition, wxSize(40, -1));
 	heaveSet->SetMaxLength(5);
 
 	wxStaticText *steerLabel = new wxStaticText(kinematicToolbar, wxID_ANY, _T("Steer"),
 		wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
-	wxTextCtrl *steerSet = new wxTextCtrl(kinematicToolbar, IdToolbarKinematicSteer, _T("0"), wxDefaultPosition,
-		wxSize(40, -1));
+	wxTextCtrl *steerSet = new wxTextCtrl(kinematicToolbar, IdToolbarKinematicSteer,
+		_T("0"), wxDefaultPosition, wxSize(40, -1));
 	steerSet->SetMaxLength(5);
-
-	// Adjust the spacing a little bit
 
 	// Add the controls to the toolbar
 	kinematicToolbar->AddControl(pitchLabel);
@@ -715,12 +706,71 @@ void MainFrame::CreateKinematicAnalysisToolbar()
 	kinematicToolbar->AddControl(steerLabel);
 	kinematicToolbar->AddControl(steerSet);
 
-	// Make the toolbar come alive
 	kinematicToolbar->Realize();
 
-	// And add it to the wxAui Manager
 	manager.AddPane(kinematicToolbar, wxAuiPaneInfo().Name(_T("KinematicToolbar")).
 		Caption(_T("Kinematic Analysis")).ToolbarPane().Top().Row(1).Position(1).
+		LeftDockable(false).RightDockable(false));
+}
+
+//==========================================================================
+// Class:			MainFrame
+// Function:		Create3DToolbar
+//
+// Description:		Creates the 3D toolbar and adds the buttons and icons. Also
+//					adds the toolbar to the frame in the appropriate
+//					position.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void MainFrame::Create3DToolbar()
+{
+	if (toolbar3D != NULL)
+		return;
+
+	toolbar3D = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+		wxTB_FLAT | wxTB_NODIVIDER);
+
+	// TODO:  Cannot figure out why toolbar won't go to proper width.  At the end of
+	// this method, size is correct, but after manager.Update() it becomes far too narrow.
+#ifdef __WXMSW__
+	wxBitmapButton *perspectiveButton = new wxBitmapButton(toolbar3D, IdToolbar3DPerspective,
+		wxBitmap(_T("ICON_ID_PERSPECTIVE"), wxBITMAP_TYPE_ICO_RESOURCE));
+	wxBitmapButton *orthoButton = new wxBitmapButton(toolbar3D, IdToolbar3DPerspective,
+		wxBitmap(_T("ICON_ID_ORTHO"), wxBITMAP_TYPE_ICO_RESOURCE));
+#else
+	wxBitmapButton *perspectiveButton = new wxBitmapButton(toolbar3D, IdToolbar3DPerspective,
+		wxBitmap(perspective16_xpm, wxBITMAP_TYPE_XPM));
+	wxBitmapButton *orthoButton = new wxBitmapButton(toolbar3D, IdToolbar3DPerspective,
+		wxBitmap(ortho16_xpm, wxBITMAP_TYPE_XPM));
+#endif
+	toolbar3D->AddControl(perspectiveButton);
+	toolbar3D->AddControl(orthoButton);
+
+/*#ifdef __WXMSW__
+	toolbar3D->AddRadioTool(IdToolbar3DPerspective, _T("Perspective"),
+		wxBitmap(_T("ICON_ID_PERSPECTIVE"), wxBITMAP_TYPE_ICO_RESOURCE));
+	toolbar3D->AddRadioTool(IdToolbar3DOrtho, _T("Orthogonal"),
+		wxBitmap(_T("ICON_ID_ORTHO"), wxBITMAP_TYPE_ICO_RESOURCE));
+#else
+	toolbar3D->AddRadioTool(IdToolbar3DPerspective, _T("Perspective"),
+		wxBitmap(perspective16_xpm, wxBITMAP_TYPE_XPM));
+	toolbar3D->AddRadioTool(IdToolbar3DOrtho, _T("Orthogonal"),
+		wxBitmap(ortho16_xpm, wxBITMAP_TYPE_XPM));
+#endif*/
+
+	toolbar3D->Realize();
+
+	manager.AddPane(toolbar3D, wxAuiPaneInfo().Name(_T("3DToolbar")).
+		Caption(_T("3D View")).ToolbarPane().Top().Row(1).Position(2).
 		LeftDockable(false).RightDockable(false));
 }
 
@@ -777,6 +827,7 @@ BEGIN_EVENT_TABLE(MainFrame, wxFrame)
 	EVT_MENU(IdMenuIterationXAxisRackTravel,	MainFrame::IterationXAxisRackTravelClickEvent)
 
 	EVT_MENU(IdMenuViewToolbarsKinematic,		MainFrame::ViewToolbarsKinematicEvent)
+	EVT_MENU(IdMenuViewToolbars3D,				MainFrame::ViewToolbars3DEvent)
 	EVT_MENU(IdMenuViewClearOutput,				MainFrame::ViewClearOutputEvent)
 
 	EVT_MENU(IdMenuToolsDoE,					MainFrame::ToolsDoEEvent)
@@ -792,6 +843,9 @@ BEGIN_EVENT_TABLE(MainFrame, wxFrame)
 	EVT_TEXT(IdToolbarKinematicRoll,			MainFrame::KinematicToolbarRollChangeEvent)
 	EVT_TEXT(IdToolbarKinematicHeave,			MainFrame::KinematicToolbarHeaveChangeEvent)
 	EVT_TEXT(IdToolbarKinematicSteer,			MainFrame::KinematicToolbarSteerChangeEvent)
+
+	EVT_BUTTON(IdToolbar3DPerspective,			MainFrame::Toolbar3DPerspectiveClickEvent)
+	EVT_BUTTON(IdToolbar3DOrtho,				MainFrame::Toolbar3DOrthoClickEvent)
 
 	// Threads
 	EVT_COMMAND(wxID_ANY, EVT_THREAD,			MainFrame::ThreadCompleteEvent)
@@ -929,9 +983,7 @@ void MainFrame::FileOpenEvent(wxCommandEvent& WXUNUSED(event))
 //==========================================================================
 void MainFrame::FileCloseEvent(wxCommandEvent& WXUNUSED(event))
 {
-	// Check to make sure there is an object to close
 	if (openObjectList.GetCount() > 0)
-		// Close the object of interest
 		openObjectList[objectOfInterestIndex]->Close();
 }
 
@@ -1551,17 +1603,30 @@ void MainFrame::IterationXAxisRackTravelClickEvent(wxCommandEvent& WXUNUSED(even
 //==========================================================================
 void MainFrame::ViewToolbarsKinematicEvent(wxCommandEvent &event)
 {
-	// Determine if we are supposed to hide or show the menu
-	// FIXME:  This is still a little funky...
-	if (event.IsChecked())
-		CreateKinematicAnalysisToolbar();
-	else if (kinematicToolbar != NULL)
-	{
-		manager.DetachPane(kinematicToolbar);
+	manager.GetPane(kinematicToolbar).Show(event.IsChecked());
+	manager.Update();
+}
 
-		delete kinematicToolbar;
-		kinematicToolbar = NULL;
-	}
+//==========================================================================
+// Class:			MainFrame
+// Function:		ViewToolbars3DEvent
+//
+// Description:		Event handler for the View menu's Kinematic Toolbar item.
+//
+// Input Arguments:
+//		event	= wxCommandEvent&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void MainFrame::ViewToolbars3DEvent(wxCommandEvent &event)
+{
+	manager.GetPane(toolbar3D).Show(event.IsChecked());
+	manager.Update();
 }
 
 //==========================================================================
@@ -1826,13 +1891,9 @@ void MainFrame::UpdateOutputPanel()
 //==========================================================================
 void MainFrame::AddJob(ThreadJob &newJob)
 {
-	// Make sure we have a thread to handle the job
 	assert(activeThreads > 0);
 
-	// Add the job to the queue
 	jobQueue->AddJob(newJob, JobQueue::PriorityNormal);
-
-	// Increment the open job counter
 	openJobCount++;
 }
 
@@ -1981,7 +2042,6 @@ void MainFrame::KinematicToolbarSteerChangeEvent(wxCommandEvent& WXUNUSED(event)
 	// Get the value from the text box and convert it to a double
 	double value;
 	if (!textBox->GetValue().ToDouble(&value))
-		// The value was non-numeric - don't do anything
 		return;
 
 	// Set the value for the kinematic analysis object depending on what the steering input represents
@@ -1993,6 +2053,46 @@ void MainFrame::KinematicToolbarSteerChangeEvent(wxCommandEvent& WXUNUSED(event)
 	// Update the analysis
 	UpdateAnalysis();
 	UpdateOutputPanel();
+}
+
+//==========================================================================
+// Class:			MainFrame
+// Function:		Toolbar3DPerspectiveClickEvent
+//
+// Description:		Switches to perspective view.
+//
+// Input Arguments:
+//		event	= &wxCommandEvent
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void MainFrame::Toolbar3DPerspectiveClickEvent(wxCommandEvent &/*event*/)
+{
+}
+
+//==========================================================================
+// Class:			MainFrame
+// Function:		Toolbar3DOrthoClickEvent
+//
+// Description:		Switches to orthographic view.
+//
+// Input Arguments:
+//		event	= &wxCommandEvent
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void MainFrame::Toolbar3DOrthoClickEvent(wxCommandEvent &/*event*/)
+{
 }
 
 //==========================================================================
@@ -2783,7 +2883,6 @@ void MainFrame::CreateContextMenu(int objectIndex, wxPoint position, bool allowC
 //==========================================================================
 wxMenu *MainFrame::CreateCarMenu()
 {
-	// Car menu
 	wxMenu *mnuCar = new wxMenu();
 	mnuCar->Append(IdMenuCarAppearanceOptions, _T("Appearance Options"));
 
@@ -2808,7 +2907,6 @@ wxMenu *MainFrame::CreateCarMenu()
 //==========================================================================
 wxMenu *MainFrame::CreateIterationMenu()
 {
-	// Iteration menu
 	wxMenu *mnuIteration = new wxMenu();
 
 	// Make sure the active object is a TYPE_ITERATION object
