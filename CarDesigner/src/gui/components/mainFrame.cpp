@@ -2330,16 +2330,12 @@ void MainFrame::OnSizeEvent(wxSizeEvent& WXUNUSED(event))
 //==========================================================================
 bool MainFrame::CloseThisForm()
 {
-	// Cycle through all of the cars and close them
 	while (openObjectList.GetCount() > 0)
 	{
-		// Attempt to close each object
-		if (!openObjectList[openObjectList.GetCount() - 1]->Close(false))
-			// If  the user canceled, we should cancel here, too
+		if (!openObjectList[0]->Close())
 			return false;
 	}
 
-	// If we have not yet returned false, then return true
 	return true;
 }
 

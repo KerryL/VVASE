@@ -195,6 +195,7 @@ CarRenderer::~CarRenderer()
 	delete leftRearInstantAxis;
 
 	delete helperOrb;
+	delete helperOrbOpposite;
 }
 
 //==========================================================================
@@ -217,20 +218,14 @@ CarRenderer::~CarRenderer()
 //==========================================================================
 void CarRenderer::UpdateDisplay(const KinematicOutputs &outputs)
 {
-	// Set the background color
 	SetBackgroundColor(appearanceOptions.GetColor(AppearanceOptions::ColorBackground));
-
-	// Update the car display
 	UpdateCarDisplay();
-
-	// Update the kinematic display
 	UpdateKinematicsDisplay(outputs);
 
 	// Render the image.  We need to reset the frustum every time we do this just in case
 	// the user zooms out very far, etc.
 	AutoSetFrustum();
-	
-	// Force a re-draw
+
 	Refresh();
 }
 
@@ -734,16 +729,29 @@ void CarRenderer::UpdateCarDisplay()
 	// Update the helper orb
 	// Determine which of the location variables is valid
 	Vector helperOrbPosition(0.0, 0.0, 0.0);
+	Vector helperOrbOppositePosition(0.0, 0.0, 0.0);
 	if (helperOrbCornerPoint != Corner::NumberOfHardpoints)
 	{
 		if (helperOrbLocation == Corner::LocationRightFront)
+		{
 			helperOrbPosition = displayCar.suspension->rightFront.hardpoints[helperOrbCornerPoint];
+			helperOrbOppositePosition = displayCar.suspension->leftFront.hardpoints[helperOrbCornerPoint];
+		}
 		else if (helperOrbLocation == Corner::LocationLeftFront)
+		{
 			helperOrbPosition = displayCar.suspension->leftFront.hardpoints[helperOrbCornerPoint];
+			helperOrbOppositePosition = displayCar.suspension->rightFront.hardpoints[helperOrbCornerPoint];
+		}
 		else if (helperOrbLocation == Corner::LocationRightRear)
+		{
 			helperOrbPosition = displayCar.suspension->rightRear.hardpoints[helperOrbCornerPoint];
+			helperOrbOppositePosition = displayCar.suspension->leftRear.hardpoints[helperOrbCornerPoint];
+		}
 		else
+		{
 			helperOrbPosition = displayCar.suspension->leftRear.hardpoints[helperOrbCornerPoint];
+			helperOrbOppositePosition = displayCar.suspension->rightRear.hardpoints[helperOrbCornerPoint];
+		}
 	}
 	else if (helperOrbSuspensionPoint != Suspension::NumberOfHardpoints)
 		helperOrbPosition = displayCar.suspension->hardpoints[helperOrbSuspensionPoint];
@@ -752,6 +760,11 @@ void CarRenderer::UpdateCarDisplay()
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionHelperOrb),
 		appearanceOptions.GetColor(AppearanceOptions::ColorHelperOrb),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityHelperOrb) && helperOrbIsActive);
+	helperOrbOpposite->Update(helperOrbOppositePosition, appearanceOptions.GetSize(AppearanceOptions::SizeHelperOrbDiameter),
+		appearanceOptions.GetResolution(AppearanceOptions::ResolutionHelperOrb),
+		appearanceOptions.GetColor(AppearanceOptions::ColorHelperOrb),
+		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityHelperOrb) && helperOrbIsActive
+		&& displayCar.suspension->isSymmetric && helperOrbCornerPoint != Corner::NumberOfHardpoints);
 }
 
 //==========================================================================
@@ -997,6 +1010,7 @@ void CarRenderer::CreateActors()
 
 	// Helper orb
 	helperOrb = new Point3D(*this);
+	helperOrbOpposite = new Point3D(*this);
 }
 
 //==========================================================================

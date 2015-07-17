@@ -61,22 +61,12 @@
 GuiObject::GuiObject(MainFrame &mainFrame, wxString pathAndFileName) : mainFrame(mainFrame)
 {
 	objectIsInitialized = false;
+	modifiedSinceLastSave = false;
 
 	this->pathAndFileName = pathAndFileName;
 
-	// Get the pointers to the other gui components from mainFrame
-	notebook		= mainFrame.GetNotebook();
-	systemsTree		= mainFrame.GetSystemsTree();
-
-	// We initialize this to true - if we load an object from file we set it to false later
-	modifiedSinceLastSave = true;
-
-	// Check to see if we are loading an object from file
-	if (!pathAndFileName.IsEmpty())
-	{
-		modifiedSinceLastSave = false;
-		this->pathAndFileName = pathAndFileName;// TODO:  Necessary?  We do this above...
-	}
+	notebook = mainFrame.GetNotebook();
+	systemsTree = mainFrame.GetSystemsTree();
 }
 
 //==========================================================================
@@ -333,16 +323,13 @@ bool GuiObject::Close(bool notebookPageAlreadyClosed)
 	/*if (mainFrame.JobsPending())
 		return false;*/
 
-	// Check to see if this object has been modified without being saved
 	if (modifiedSinceLastSave)
 	{
-		// Display the message box
 		int response = wxMessageBox(name + _T(" has not been saved.  Would you like to save")
 			+ _T(" before closing?"), mainFrame.GetName(), wxYES_NO | wxCANCEL, &mainFrame);
 
 		if (response == wxYES)
 		{
-			// Call the object's save method
 			if (!SaveToFile())
 				// If SaveToFile returns false, it is because the user has clicked cancel.
 				// Treat this case the same as if the user clicked cancel when asked the first
@@ -350,21 +337,15 @@ bool GuiObject::Close(bool notebookPageAlreadyClosed)
 				return false;
 		}
 		else if (response == wxCANCEL)
-			// Return false to signify that the car was not closed
 			return false;
 	}
-
-	// If we have not yet returned, then continue with the close...
 
 	// Close the corrsponding notebook page (only if this function is NOT being called
 	// due to a notebook page closing...) (MUST be done BEFORE object is removed from list)
 	if (!notebookPageAlreadyClosed)
 		notebook->DeletePage(index);
 
-	// Remove any undo/redo actions associated with this object
 	mainFrame.GetUndoRedoStack().RemoveGuiObjectFromStack(index);
-
-	// Delete this GuiObject
 	mainFrame.RemoveObjectFromList(index);
 
 	return true;

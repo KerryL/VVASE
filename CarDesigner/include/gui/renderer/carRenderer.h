@@ -175,6 +175,7 @@ private:
 	Suspension::Hardpoints helperOrbSuspensionPoint;
 	bool helperOrbIsActive;
 	Point3D *helperOrb;
+	Point3D *helperOrbOpposite;
 };
 
 #endif// CAR_RENDERER_H_
