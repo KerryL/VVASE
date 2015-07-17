@@ -85,6 +85,11 @@ RenderWindow::RenderWindow(wxWindow &parent, wxWindowID id, int args[],
 	view3D = true;
 	viewOrthogonal = false;
 
+	// Make some assumptions to compute the horizontal viewing range
+	// The car's wheelbase plus a tire diameter is roughly the longest dimension we need to show on-screen at one time
+	// We'll assume this is generally less than 150 inches
+	topMinusBottom = 100.0;
+
 	AutoSetFrustum();
 
 	modelToView = new Matrix(3, 3);
@@ -886,11 +891,6 @@ void RenderWindow::AutoSetFrustum()
 
 	wxSize windowSize = GetSize();
 	aspectRatio = (double)windowSize.GetWidth() / (double)windowSize.GetHeight();
-
-	// Make some assumptions to compute the horizontal viewing range
-	// The car's wheelbase plus a tire diameter is roughly the longest dimension we need to show on-screen at one time
-	// We'll assume this is generally less than 150 inches
-	topMinusBottom = 380.0;
 
 	// Set the clipping plane distances to something reasonable
 	// TODO:  Make this be smarter, or user-adjustable (distance between camera and focal point)

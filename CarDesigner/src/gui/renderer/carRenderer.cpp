@@ -91,6 +91,10 @@ CarRenderer::CarRenderer(MainFrame &mainFrame, GuiCar &car, int args[])
 	helperOrbIsActive = false;
 
 	// Set the camera view so that the car is visible
+	// Make some assumptions to compute the horizontal viewing range
+	// The car's wheelbase plus a tire diameter is roughly the longest dimension we need to show on-screen at one time
+	SetTopMinusBottom(car.GetWorkingCar().suspension->leftFront.hardpoints[Corner::ContactPatch].Distance(
+		car.GetWorkingCar().suspension->rightRear.hardpoints[Corner::ContactPatch]) * 3.0);
 	Vector position(-100.0, -100.0, 60.0), up(0.0, 0.0, 1.0);
 	Vector lookAt(referenceCar.suspension->leftRear.hardpoints[Corner::ContactPatch].x / 2.0, 0.0, 0.0);// FIXME:  This could be better
 	SetCameraView(position, lookAt, up);
