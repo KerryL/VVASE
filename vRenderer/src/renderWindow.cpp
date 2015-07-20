@@ -1360,10 +1360,9 @@ void RenderWindow::SetViewOrthogonal(const bool &viewOrthogonal)
 	// in order to maintain unit scale at this distance.
 	double nominalDistance = cameraPosition.Distance(focalPoint);
 	if (viewOrthogonal)// was perspective
-	{
-		double oldScale = topMinusBottom;
-	}
+		topMinusBottom = tan(nearClip / topMinusBottom) * 10000. / nominalDistance;
 	else// was orthogonal
+	// FIXME:  Magic numbers mean this is obviously wrong...
 		topMinusBottom = nearClip / atan(topMinusBottom * nominalDistance/10000.);
 }
 

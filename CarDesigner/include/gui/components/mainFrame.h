@@ -134,6 +134,8 @@ public:
 	
 	void SetOutputFont(const wxFont &font);
 	void SetPlotFont(const wxFont &font);
+	
+	bool GetUseOrtho() const { return useOrthoView; }
 
 private:
 	wxAuiManager manager;
@@ -178,6 +180,8 @@ private:
 	// The input parameters for the kinematic analyses
 	Kinematics::Inputs kinematicInputs;
 	bool useRackTravel;// if false, we use steering wheel angle
+	
+	bool useOrthoView;
 
 	// Maximum number of recent files to store
 	static const int maxRecentFiles = 9;

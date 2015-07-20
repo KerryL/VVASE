@@ -460,11 +460,9 @@ void MainFrame::InitializeSolver()
 //==========================================================================
 void MainFrame::SetNumberOfThreads(unsigned int newNumberOfThreads)
 {
-	// Make sure we've got at least one thread
 	if (newNumberOfThreads < 1)
 		newNumberOfThreads = 1;
 
-	// Determine if we need to increase or decrease the number of threads we have
 	unsigned int i;
 	if (newNumberOfThreads > numberOfThreads)
 	{
@@ -483,12 +481,10 @@ void MainFrame::SetNumberOfThreads(unsigned int newNumberOfThreads)
 	}
 	else if (newNumberOfThreads < numberOfThreads)
 	{
-		// Kill the necessary number of threads
 		for (i = numberOfThreads; i > newNumberOfThreads; i--)
 			jobQueue->AddJob(ThreadJob(ThreadJob::CommandThreadExit), JobQueue::PriorityVeryHigh);
 	}
 
-	// Update the class member for the desired number of threads
 	numberOfThreads = newNumberOfThreads;
 }
 
@@ -744,17 +740,21 @@ void MainFrame::Create3DToolbar()
 #ifdef __WXMSW__
 	wxBitmapButton *perspectiveButton = new wxBitmapButton(toolbar3D, IdToolbar3DPerspective,
 		wxBitmap(_T("ICON_ID_PERSPECTIVE"), wxBITMAP_TYPE_ICO_RESOURCE));
-	wxBitmapButton *orthoButton = new wxBitmapButton(toolbar3D, IdToolbar3DPerspective,
+	wxBitmapButton *orthoButton = new wxBitmapButton(toolbar3D, IdToolbar3DOrtho,
 		wxBitmap(_T("ICON_ID_ORTHO"), wxBITMAP_TYPE_ICO_RESOURCE));
 #else
-	wxBitmapButton *perspectiveButton = new wxBitmapButton(toolbar3D, IdToolbar3DPerspective,
+// Can't get GTK bitmap buttons working?
+	/*wxBitmapButton *perspectiveButton = new wxBitmapButton(toolbar3D, IdToolbar3DPerspective,
 		wxBitmap(perspective16_xpm, wxBITMAP_TYPE_XPM));
-	wxBitmapButton *orthoButton = new wxBitmapButton(toolbar3D, IdToolbar3DPerspective,
-		wxBitmap(ortho16_xpm, wxBITMAP_TYPE_XPM));
+	wxBitmapButton *orthoButton = new wxBitmapButton(toolbar3D, IdToolbar3DOrtho,
+		wxBitmap(ortho16_xpm, wxBITMAP_TYPE_XPM));*/
+	wxButton *perspectiveButton = new wxButton(toolbar3D, IdToolbar3DPerspective, _T("P"));
+	wxButton *orthoButton = new wxButton(toolbar3D, IdToolbar3DOrtho, _T("O"));
 #endif
 	toolbar3D->AddControl(perspectiveButton);
 	toolbar3D->AddControl(orthoButton);
 
+// RadioTools are preferred, but are not working
 /*#ifdef __WXMSW__
 	toolbar3D->AddRadioTool(IdToolbar3DPerspective, _T("Perspective"),
 		wxBitmap(_T("ICON_ID_PERSPECTIVE"), wxBITMAP_TYPE_ICO_RESOURCE));
@@ -2073,6 +2073,16 @@ void MainFrame::KinematicToolbarSteerChangeEvent(wxCommandEvent& WXUNUSED(event)
 //==========================================================================
 void MainFrame::Toolbar3DPerspectiveClickEvent(wxCommandEvent &/*event*/)
 {
+	useOrthoView = false;
+	unsigned int i;
+	for (i = 0; i < openObjectList.GetCount(); i++)
+	{
+		if (openObjectList[i]->GetType() == GuiObject::TypeCar)
+		{
+			static_cast<GuiCar*>(openObjectList[i])->SetUseOrtho(useOrthoView);
+			openObjectList[i]->UpdateDisplay();
+		}
+	}
 }
 
 //==========================================================================
@@ -2093,6 +2103,16 @@ void MainFrame::Toolbar3DPerspectiveClickEvent(wxCommandEvent &/*event*/)
 //==========================================================================
 void MainFrame::Toolbar3DOrthoClickEvent(wxCommandEvent &/*event*/)
 {
+	useOrthoView = true;
+	unsigned int i;
+	for (i = 0; i < openObjectList.GetCount(); i++)
+	{
+		if (openObjectList[i]->GetType() == GuiObject::TypeCar)
+		{
+			static_cast<GuiCar*>(openObjectList[i])->SetUseOrtho(useOrthoView);
+			openObjectList[i]->UpdateDisplay();
+		}
+	}
 }
 
 //==========================================================================
@@ -2226,7 +2246,7 @@ void MainFrame::DebugMessageEvent(wxCommandEvent &event)
 //					sequence looks something like this (it is also important
 //					to assign the index back to the GuiObject for future use):
 //						GuiObject *NewObject = new GuiObject(this);
-//						 NewObject->SetIndex(AddObjectToList(NewObject));
+//						NewObject->SetIndex(AddObjectToList(NewObject));
 //
 // Input Arguments:
 //		objectToAdd	= *GuiObject
@@ -2265,10 +2285,7 @@ int MainFrame::AddObjectToList(GuiObject *objectToAdd)
 //==========================================================================
 void MainFrame::RemoveObjectFromList(int index)
 {
-	// Set the deletion status flag
 	beingDeleted = true;
-
-	// Delete the specified object from the list
 	openObjectList.Remove(index);
 
 	// Reset the cars' indices and check to see what types we have available
@@ -2295,7 +2312,6 @@ void MainFrame::RemoveObjectFromList(int index)
 	else
 		SetActiveIndex(-1);
 
-	// Update the output display
 	UpdateOutputPanel();
 }
 
@@ -2405,7 +2421,7 @@ void MainFrame::OnSizeEvent(wxSizeEvent& WXUNUSED(event))
 	/*int i;
 	for (i = 0; i < openObjectList.GetCount(); i++)
 		openObjectList[i]->UpdateDisplay();*/
-	// FIXME:  This is out-of-phase with the actualy re-sizing!
+	// FIXME:  This is out-of-phase with the actual re-sizing!
 }
 
 //==========================================================================
@@ -2539,14 +2555,17 @@ void MainFrame::ReadConfiguration()
 	}
 
 	// Read SOLVER configuration from file
-	SetNumberOfThreads(configurationFile->Read(_T("/SOLVER/NumberOfThreads"), wxThread::GetCPUCount() * 2));
+	SetNumberOfThreads(configurationFile->Read(_T("/Solver/NumberOfThreads"), wxThread::GetCPUCount() * 2));
 	
 	// Read FONT configuration from file
 	wxFont font;
-	font.SetNativeFontInfo(configurationFile->Read(_T("/FONTS/OutputFont"), wxEmptyString));
+	font.SetNativeFontInfo(configurationFile->Read(_T("/Fonts/OutputFont"), wxEmptyString));
 	SetOutputFont(font);
-	font.SetNativeFontInfo(configurationFile->Read(_T("/FONTS/PlotFont"), wxEmptyString));
+	font.SetNativeFontInfo(configurationFile->Read(_T("/Fonts/PlotFont"), wxEmptyString));
 	SetPlotFont(font);
+	
+	// Read rendering options
+	configurationFile->Read(_T("/Renderer/useOrtho"), &useOrthoView, false);
 
 	// Read recent file history
 	recentFileManager->Load(*configurationFile);
@@ -2619,15 +2638,17 @@ void MainFrame::WriteConfiguration()
 	configurationFile->Write(_T("/GUI/PositionY"), GetPosition().y);
 
 	// Write SOLVER configuration to file
-	configurationFile->Write(_T("/SOLVER/NumberOfThreads"), numberOfThreads);
+	configurationFile->Write(_T("/Solver/NumberOfThreads"), numberOfThreads);
 	
 	// Write FONTS configuration to file
 	if (outputFont.IsOk())
-		configurationFile->Write(_T("/FONTS/OutputFont"),
+		configurationFile->Write(_T("/Fonts/OutputFont"),
 			outputFont.GetNativeFontInfoDesc());
 	if (plotFont.IsOk())
-		configurationFile->Write(_T("/FONTS/PlotFont"),
+		configurationFile->Write(_T("/Fonts/PlotFont"),
 			plotFont.GetNativeFontInfoDesc());
+			
+	configurationFile->Write(_T("/Renderer/useOrtho"), useOrthoView);
 
 	// Write recent file history
 	recentFileManager->Save(*configurationFile);

@@ -83,6 +83,7 @@ GuiCar::GuiCar(MainFrame &mainFrame, wxString pathAndFileName)
 #endif// TODO:  See DataPlotter for fix...
 
 	notebookTab = reinterpret_cast<wxWindow*>(renderer);
+	renderer->SetViewOrthogonal(mainFrame.GetUseOrtho());
 
 	// Get an index for this item and add it to the list in the mainFrame
 	// MUST be included BEFORE the naming, which must come BEFORE the call to Initialize
@@ -246,6 +247,27 @@ void GuiCar::UpdateDisplay()
 {
 	// Update the display associated with this object
 	renderer->UpdateDisplay(kinematicOutputs);
+}
+
+//==========================================================================
+// Class:			GuiCar
+// Function:		SetUseOrtho
+//
+// Description:		Sets the renderer view to use the specified projection matrix.
+//
+// Input Arguments:
+//		useOrtho	= const bool&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void GuiCar::SetUseOrtho(const bool &useOrtho)
+{
+	renderer->SetViewOrthogonal(useOrtho);
 }
 
 //==========================================================================

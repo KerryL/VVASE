@@ -82,6 +82,8 @@ public:
 
 	// Returns a copy of the kinematic output data
 	KinematicOutputs GetKinematicOutputs() { return kinematicOutputs; }
+	
+	void SetUseOrtho(const bool &useOrtho);
 
 private:
 	// The "real" object containing the original, unmodified information (not rolled, heaved, etc.)
