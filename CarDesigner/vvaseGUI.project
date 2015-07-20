@@ -103,6 +103,7 @@
         <File Name="../common/include/vMath/dataset2D.h"/>
         <File Name="../common/include/vMath/matrix.h"/>
         <File Name="../common/include/vMath/vector.h"/>
+        <File Name="../common/include/vMath/geometryMath.h"/>
       </VirtualDirectory>
       <VirtualDirectory Name="vRenderer">
         <VirtualDirectory Name="3dcar">
@@ -169,6 +170,49 @@
     </VirtualDirectory>
   </VirtualDirectory>
   <VirtualDirectory Name="CarDesigner">
+    <VirtualDirectory Name="res">
+      <VirtualDirectory Name="icons">
+        <File Name="res/icons/car16.xpm"/>
+        <File Name="res/icons/car32.xpm"/>
+        <File Name="res/icons/suspension16.xpm"/>
+        <File Name="res/icons/ortho32.xpm"/>
+        <File Name="res/icons/brakes16.xpm"/>
+        <File Name="res/icons/iteration32.xpm"/>
+        <File Name="res/icons/iteration16.xpm"/>
+        <File Name="res/icons/aavase16.xpm"/>
+        <File Name="res/icons/optimization48.xpm"/>
+        <File Name="res/icons/car48.xpm"/>
+        <File Name="res/icons/aerodynamics16.xpm"/>
+        <File Name="res/icons/ortho16.xpm"/>
+        <File Name="res/icons/massProperties48.xpm"/>
+        <File Name="res/icons/perspective48.xpm"/>
+        <File Name="res/icons/engine32.xpm"/>
+        <File Name="res/icons/suspension48.xpm"/>
+        <File Name="res/icons/aerodynamics48.xpm"/>
+        <File Name="res/icons/aavase32.xpm"/>
+        <File Name="res/icons/drivetrain16.xpm"/>
+        <File Name="res/icons/drivetrain48.xpm"/>
+        <File Name="res/icons/optimization32.xpm"/>
+        <File Name="res/icons/massProperties32.xpm"/>
+        <File Name="res/icons/suspension32.xpm"/>
+        <File Name="res/icons/engine16.xpm"/>
+        <File Name="res/icons/brakes32.xpm"/>
+        <File Name="res/icons/optimization16.xpm"/>
+        <File Name="res/icons/perspective32.xpm"/>
+        <File Name="res/icons/tires16.xpm"/>
+        <File Name="res/icons/tires32.xpm"/>
+        <File Name="res/icons/ortho48.xpm"/>
+        <File Name="res/icons/drivetrain32.xpm"/>
+        <File Name="res/icons/massProperties16.xpm"/>
+        <File Name="res/icons/engine48.xpm"/>
+        <File Name="res/icons/aerodynamics32.xpm"/>
+        <File Name="res/icons/aavase48.xpm"/>
+        <File Name="res/icons/tires48.xpm"/>
+        <File Name="res/icons/brakes48.xpm"/>
+        <File Name="res/icons/perspective16.xpm"/>
+      </VirtualDirectory>
+      <File Name="res/CarDesigner.rc"/>
+    </VirtualDirectory>
     <VirtualDirectory Name="include">
       <VirtualDirectory Name="gui">
         <VirtualDirectory Name="components">
@@ -320,6 +364,7 @@
       <File Name="../vMath/src/expressionTree.cpp"/>
       <File Name="../vMath/src/vector.cpp"/>
       <File Name="../vMath/src/matrix.cpp"/>
+      <File Name="../vMath/src/geometryMath.cpp"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <VirtualDirectory Name="vRenderer">

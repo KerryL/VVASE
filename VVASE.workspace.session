@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Session Name="/home/kerry/Projects/CarDesigner/VVASE.workspace">
-  <int Value="1" Name="m_selectedTab"/>
+  <int Value="0" Name="m_selectedTab"/>
   <wxString Value="/home/kerry/Projects/CarDesigner/VVASE.workspace" Name="m_workspaceName"/>
   <TabInfoArray Name="TabInfoArray">
     <TabInfo>
-      <wxString Value="/home/kerry/Projects/CarDesigner/CarDesigner/src/gui/superGrid.cpp" Name="FileName"/>
-      <int Value="85" Name="FirstVisibleLine"/>
-      <int Value="102" Name="CurrentLine"/>
-      <wxArrayString Name="Bookmarks"/>
-    </TabInfo>
-    <TabInfo>
-      <wxString Value="/home/kerry/Projects/CarDesigner/CarDesigner/src/gui/components/editPanel/guiCar/editCornerPanel.cpp" Name="FileName"/>
-      <int Value="263" Name="FirstVisibleLine"/>
-      <int Value="280" Name="CurrentLine"/>
+      <wxString Value="/home/kerry/Projects/CarDesigner/CarDesigner/src/gui/components/mainFrame.cpp" Name="FileName"/>
+      <int Value="732" Name="FirstVisibleLine"/>
+      <int Value="486" Name="CurrentLine"/>
       <wxArrayString Name="Bookmarks"/>
     </TabInfo>
   </TabInfoArray>
