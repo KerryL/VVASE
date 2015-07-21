@@ -134,6 +134,7 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxEmptyString, wxDefaultPositio
 
 	activeIndex = -1;
 	beingDeleted = false;
+	applicationExiting = false;
 
 	Debugger::GetInstance() << carDesignerName << " Initialized!" << Debugger::PriorityHigh;
 
@@ -1895,6 +1896,8 @@ void MainFrame::UpdateOutputPanel()
 void MainFrame::AddJob(ThreadJob &newJob)
 {
 	assert(activeThreads > 0);
+	if (applicationExiting)
+		return;
 
 	jobQueue->AddJob(newJob, JobQueue::PriorityNormal);
 	openJobCount++;
@@ -2135,19 +2138,24 @@ void MainFrame::Toolbar3DOrthoClickEvent(wxCommandEvent &/*event*/)
 void MainFrame::ThreadCompleteEvent(wxCommandEvent &event)
 {
 	int carCount(0), i;
-
+	
+	// If the application is closing, ignore anything that's not a thread exit event
+	if (applicationExiting && event.GetInt() != ThreadJob::CommandThreadExit)
+	{
+		openJobCount--;
+		return;
+	}
+	
 	// Perform different operations depending on the type of job that has completed
 	switch (event.GetInt())
 	{
 	case ThreadJob::CommandThreadExit:
-		// Decrement the number of active threads
 		activeThreads--;
 		Debugger::GetInstance() << "Thread " << event.GetId() << " exited" << Debugger::PriorityLow;
 
 		// If there are no more active threads, it is now safe to kill this window
 		if (activeThreads == 0)
 		{
-			// Kill the window
 			Destroy();
 			return;
 		}
@@ -2203,7 +2211,6 @@ void MainFrame::ThreadCompleteEvent(wxCommandEvent &event)
 		break;
 	}
 
-	// Decrement the job counter
 	openJobCount--;
 }
 
@@ -2293,7 +2300,6 @@ void MainFrame::RemoveObjectFromList(int index)
 	unsigned int i;
 	for (i = 0; i < openObjectList.GetCount(); i++)
 	{
-		// Re-set the index
 		openObjectList[i]->SetIndex(i);
 
 		// Update the data and displays - data first, because in some cases data is
@@ -2370,7 +2376,6 @@ void MainFrame::SetNotebookPage(int index)
 //==========================================================================
 void MainFrame::WindowCloseEvent(wxCloseEvent& WXUNUSED(event))
 {
-	// Write the application configuration information to the registry
 	WriteConfiguration();
 
 	// Kill this window if there aren't any more worker threads (assumes we've already
@@ -2379,21 +2384,20 @@ void MainFrame::WindowCloseEvent(wxCloseEvent& WXUNUSED(event))
 	// as the window will be destroyed when the last thread exits.
 	if (activeThreads == 0)
 	{
-		// Kill this window
 		Destroy();
-
 		return;
 	}
 
 	// Get the user confirmation
 	if (!CloseThisForm())
-		// Returning without skipping the event will prevent the window from closing
-		return;
+		return;// Don't delete the threads (and don't skip the event) to prevent exiting
 
 	// Delete all of the threads in the thread pool
 	int i;
 	for (i = 0; i < activeThreads; i++)
 		jobQueue->AddJob(ThreadJob(ThreadJob::CommandThreadExit), JobQueue::PriorityVeryHigh);
+		
+	applicationExiting = true;
 }
 
 //==========================================================================

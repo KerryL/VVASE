@@ -35,6 +35,9 @@
 #include "vSolver/threads/threadEvent.h"
 #include "vUtilities/debugLog.h"
 
+// Uncomment to enable writing all debug messages to stdout
+//#define DEBUG_TO_STDOUT
+
 // Define the EVT_DEBUG event type
 DEFINE_LOCAL_EVENT_TYPE(EVT_DEBUG)
 
@@ -263,11 +266,17 @@ std::ostream& operator<<(std::ostream &os, const Debugger::DebugLevel& level)
 			evt.SetString(message);
 			debugger.parent->AddPendingEvent(evt);
 		}
+#ifndef DEBUG_TO_STDOUT
 		else// Send the output to the terminal
 			std::cout << debugger.buffer.str() << std::endl;
 		// TODO:  Modify this to be like CombinedLogger and output to multiple sources?  other std::ostreams?
 		// Then could make another ostream for writing to wxTextCtrl
+#endif
 	}
+	
+#ifdef DEBUG_TO_STDOUT
+	std::cout << debugger.buffer.str() << std::endl;
+#endif
 
 	debugger.buffer.str("");
 	return os;

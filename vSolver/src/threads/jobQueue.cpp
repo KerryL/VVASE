@@ -59,14 +59,11 @@ JobQueue::JobQueue(wxEvtHandler *parent) : parent(parent)
 //==========================================================================
 void JobQueue::AddJob(const ThreadJob& job, const JobPriority& priority)
 {
-	// Lock the queue (lock expires when this function returns)
 	wxMutexLocker lock(mutexQueue);
 	DebugLog::GetInstance()->Log(_T("JobQueue::AddJob (locker)"));
 
-	// Add the job to the queue
 	jobs.insert(std::pair<JobPriority, ThreadJob>(priority, job));
 
-	// Increment the semaphore
 	queueCount.Post();
 }
 
@@ -92,20 +89,16 @@ ThreadJob JobQueue::Pop()
 {
 	ThreadJob nextJob;
 
-	// Wait for the number of pending jobs to be positive
 	queueCount.Wait();
 
-	// Lock the queue
 	mutexQueue.Lock();
 	DebugLog::GetInstance()->Log(_T("JobQueue::Pop (lock)"));
 
 	// Get the first job from the queue (prioritization occurs automatically)
 	nextJob = jobs.begin()->second;
 
-	// Remove the job from the queue
 	jobs.erase(jobs.begin());
 
-	// Unlock the queue
 	DebugLog::GetInstance()->Log(_T("JobQueue::Pop (unlock)"));
 	mutexQueue.Unlock();
 
@@ -133,19 +126,12 @@ ThreadJob JobQueue::Pop()
 //==========================================================================
 void JobQueue::Report(const ThreadJob::ThreadCommand& command, int threadId, int objectID)
 {
-	// Create event with the specified command
 	wxCommandEvent evt(EVT_THREAD, command);
 
-	// Set the thread ID
 	evt.SetId(threadId);
-
-	// The type of command that has completed is also important
 	evt.SetInt((int)command);
-
-	// The object's ID number gets passed back as well
 	evt.SetExtraLong(objectID);
 
-	// Add it to the parent's event queue
 	parent->AddPendingEvent(evt);
 }
 
@@ -167,7 +153,6 @@ void JobQueue::Report(const ThreadJob::ThreadCommand& command, int threadId, int
 //==========================================================================
 size_t JobQueue::PendingJobs()
 {
-	// Lock the queue while we read the size
 	wxMutexLocker lock(mutexQueue);
 	DebugLog::GetInstance()->Log(_T("JobQueue::PendingJobs (locker)"));
 

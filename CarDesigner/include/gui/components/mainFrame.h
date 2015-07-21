@@ -160,6 +160,7 @@ private:
 
 	int activeIndex;
 	bool beingDeleted;
+	bool applicationExiting;
 
 	bool CloseThisForm();
 

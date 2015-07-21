@@ -114,17 +114,12 @@ GuiObject::~GuiObject()
 //==========================================================================
 void GuiObject::Initialize()
 {
-	// Declare the icon variables
 	int normalIcon = -1;
 	int selectedIcon = -1;
 
-	// Get the icon from the systems tree
 	normalIcon = GetIconHandle();
-
-	// Add a page to the notebook for this car
 	notebook->AddPage(notebookTab, name);
 
-	// Add the entry to the SystemsTree
 	treeID = systemsTree->AppendItem(systemsTree->GetRootItem(), name, normalIcon, selectedIcon);
 
 	// If our path variable isn't empty, try to open the file
@@ -133,16 +128,12 @@ void GuiObject::Initialize()
 		// Make sure that when we load the file, we don't have any errors
 		if (!LoadFromFile())
 		{
-			// Prevent this object from being loaded
 			notebook->DeletePage(index);
 			return;
 		}
 	}
 
-	// Set the flag indicating the initialization process is over
 	objectIsInitialized = true;
-
-	// Update the analysis for the new object
 	mainFrame.UpdateAnalysis();
 }
 
@@ -204,7 +195,6 @@ wxString GuiObject::GetCleanName() const
 			return name.substr(0, name.length() - 1);
 	}
 
-	// If we haven't returned yet, return the whole name
 	return name;
 }
 
@@ -318,11 +308,6 @@ bool GuiObject::IsThisObjectSelected(wxTreeItemId selected) const
 //==========================================================================
 bool GuiObject::Close(bool notebookPageAlreadyClosed)
 {
-	// Ensure that there are no pending jobs - if there are, return false
-	// FIXME:  Why is this? - Removed 11/16/2011, minimal testing performed
-	/*if (mainFrame.JobsPending())
-		return false;*/
-
 	if (modifiedSinceLastSave)
 	{
 		int response = wxMessageBox(name + _T(" has not been saved.  Would you like to save")

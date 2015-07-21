@@ -107,11 +107,10 @@ wxThread::ExitCode WorkerThread::Entry()
 	}
 	catch (ThreadJob::ThreadCommand& i)
 	{
-		// Report the error
-		jobQueue->Report(error = i, id);
+		error = i;
+		jobQueue->Report(i, id);
 	}
 
-	// Return the exit code
 	return (wxThread::ExitCode)error;
 }
 
@@ -137,14 +136,11 @@ void WorkerThread::OnJob()
 	// If the queue is empty, this blocks the thread
 	ThreadJob job = jobQueue->Pop();
 
-	// Declare timing variables
 	wxDateTime start;
 
-	// Process each command in the appropriate way
 	switch(job.command)
 	{
 	case ThreadJob::CommandThreadExit:
-		// Throw the exit command to confirm the quit
 		throw ThreadJob::CommandThreadExit;
 
 	case ThreadJob::CommandThreadKinematicsNormal:
@@ -164,12 +160,10 @@ void WorkerThread::OnJob()
 		*(static_cast<KinematicsData*>(job.data)->output) = kinematicAnalysis.GetOutputs();
 		DebugLog::GetInstance()->Log(_T("GetOutputs - End"), -1);
 
-		// Tell the main thread that we've done the job
 	    jobQueue->Report(job.command, id, job.index);
 		break;
 
 	case ThreadJob::CommandThreadGeneticOptimization:
-		// Store the current time for determining elapsed time
 		start = wxDateTime::UNow();
 
 		// The genetic algorithm object MUST have been initialized prior to the call to this thread
@@ -178,12 +172,9 @@ void WorkerThread::OnJob()
 		DebugLog::GetInstance()->Log(_T("Optimization - Start"), 1);
 		static_cast<OptimizationData*>(job.data)->geneticAlgorithm->PerformOptimization();
 		DebugLog::GetInstance()->Log(_T("Optimization - End"), -1);
-
-		// Determine elapsed time and print to the screen
 		Debugger::GetInstance() << "Elapsed Time: %s"
 			<< wxDateTime::UNow().Subtract(start).Format() << Debugger::PriorityVeryHigh;
 
-		// Tell the main thread that we're done the job
 		jobQueue->Report(job.command, id, job.index);
 		break;
 
@@ -192,7 +183,6 @@ void WorkerThread::OnJob()
 		break;
 	}
 
-	// If the data variable is not NULL, delete it
 	if (job.data)
 	{
 		delete job.data;
