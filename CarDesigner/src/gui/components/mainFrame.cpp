@@ -78,11 +78,11 @@
 #include "../res/icons/aavase32.xpm"
 #include "../res/icons/aavase48.xpm"
 #include "../res/icons/perspective16.xpm"
-#include "../res/icons/perspective32.xpm"
-#include "../res/icons/perspective48.xpm"
+//#include "../res/icons/perspective32.xpm"
+//#include "../res/icons/perspective48.xpm"
 #include "../res/icons/ortho16.xpm"
-#include "../res/icons/ortho32.xpm"
-#include "../res/icons/ortho48.xpm"
+//#include "../res/icons/ortho32.xpm"
+//#include "../res/icons/ortho48.xpm"
 #endif
 
 //==========================================================================
@@ -339,6 +339,9 @@ void MainFrame::SetProperties()
 	// Depending on whether the toolbars are shown, check the corresponding menu item
 	menuBar->Check(IdMenuViewToolbarsKinematic, manager.GetPane(kinematicToolbar).IsShown());
 	menuBar->Check(IdMenuViewToolbars3D, manager.GetPane(toolbar3D).IsShown());
+#ifdef __WXGTK_
+	//toolbar3D->FindItem(IdToolbar3DOrtho)->Enable(useOrthoView);// TODO:  Set default choice for radio button
+#endif
 
 	wxString fontFaceName;
 	
@@ -738,34 +741,29 @@ void MainFrame::Create3DToolbar()
 	// TODO:  Cannot figure out why toolbar won't go to proper width.  At the end of
 	// this method, size is correct, but after manager.Update() it becomes far too narrow.
 #ifdef __WXMSW__
+	// RadioTools are preferred, but are not working
+	/*toolbar3D->AddRadioTool(IdToolbar3DPerspective, _T("Perspective"),
+		wxBitmap(_T("ICON_ID_PERSPECTIVE"), wxBITMAP_TYPE_ICO_RESOURCE));
+	toolbar3D->AddRadioTool(IdToolbar3DOrtho, _T("Orthogonal"),
+		wxBitmap(_T("ICON_ID_ORTHO"), wxBITMAP_TYPE_ICO_RESOURCE));*/
 	wxBitmapButton *perspectiveButton = new wxBitmapButton(toolbar3D, IdToolbar3DPerspective,
 		wxBitmap(_T("ICON_ID_PERSPECTIVE"), wxBITMAP_TYPE_ICO_RESOURCE));
 	wxBitmapButton *orthoButton = new wxBitmapButton(toolbar3D, IdToolbar3DOrtho,
 		wxBitmap(_T("ICON_ID_ORTHO"), wxBITMAP_TYPE_ICO_RESOURCE));
-#else
-// Can't get GTK bitmap buttons working?
-	/*wxBitmapButton *perspectiveButton = new wxBitmapButton(toolbar3D, IdToolbar3DPerspective,
-		wxBitmap(perspective16_xpm, wxBITMAP_TYPE_XPM));
-	wxBitmapButton *orthoButton = new wxBitmapButton(toolbar3D, IdToolbar3DOrtho,
-		wxBitmap(ortho16_xpm, wxBITMAP_TYPE_XPM));*/
-	wxButton *perspectiveButton = new wxButton(toolbar3D, IdToolbar3DPerspective, _T("P"));
-	wxButton *orthoButton = new wxButton(toolbar3D, IdToolbar3DOrtho, _T("O"));
-#endif
 	toolbar3D->AddControl(perspectiveButton);
 	toolbar3D->AddControl(orthoButton);
-
-// RadioTools are preferred, but are not working
-/*#ifdef __WXMSW__
-	toolbar3D->AddRadioTool(IdToolbar3DPerspective, _T("Perspective"),
-		wxBitmap(_T("ICON_ID_PERSPECTIVE"), wxBITMAP_TYPE_ICO_RESOURCE));
-	toolbar3D->AddRadioTool(IdToolbar3DOrtho, _T("Orthogonal"),
-		wxBitmap(_T("ICON_ID_ORTHO"), wxBITMAP_TYPE_ICO_RESOURCE));
 #else
+	// Not sure why we can't use the version that's commented out, but it causes
+	// an X error*/
+	wxImage perspectiveImage(perspective16_xpm);
+	wxBitmap perspectiveBitmap(perspectiveImage);
+	wxImage orthoImage(ortho16_xpm);
+	wxBitmap orthoBitmap(orthoImage);
 	toolbar3D->AddRadioTool(IdToolbar3DPerspective, _T("Perspective"),
-		wxBitmap(perspective16_xpm, wxBITMAP_TYPE_XPM));
+		/*wxBitmap(perspective16_xpm, wxBITMAP_TYPE_XPM)*/ perspectiveBitmap);
 	toolbar3D->AddRadioTool(IdToolbar3DOrtho, _T("Orthogonal"),
-		wxBitmap(ortho16_xpm, wxBITMAP_TYPE_XPM));
-#endif*/
+		/*wxBitmap(ortho16_xpm, wxBITMAP_TYPE_XPM)*/orthoBitmap);
+#endif
 
 	toolbar3D->Realize();
 
@@ -844,8 +842,13 @@ BEGIN_EVENT_TABLE(MainFrame, wxFrame)
 	EVT_TEXT(IdToolbarKinematicHeave,			MainFrame::KinematicToolbarHeaveChangeEvent)
 	EVT_TEXT(IdToolbarKinematicSteer,			MainFrame::KinematicToolbarSteerChangeEvent)
 
+#ifdef __WXMSW__
 	EVT_BUTTON(IdToolbar3DPerspective,			MainFrame::Toolbar3DPerspectiveClickEvent)
 	EVT_BUTTON(IdToolbar3DOrtho,				MainFrame::Toolbar3DOrthoClickEvent)
+#else
+	EVT_MENU(IdToolbar3DPerspective,			MainFrame::Toolbar3DPerspectiveClickEvent)
+	EVT_MENU(IdToolbar3DOrtho,					MainFrame::Toolbar3DOrthoClickEvent)
+#endif
 
 	// Threads
 	EVT_COMMAND(wxID_ANY, EVT_THREAD,			MainFrame::ThreadCompleteEvent)
@@ -2032,10 +2035,7 @@ void MainFrame::KinematicToolbarHeaveChangeEvent(wxCommandEvent& WXUNUSED(event)
 //==========================================================================
 void MainFrame::KinematicToolbarSteerChangeEvent(wxCommandEvent& WXUNUSED(event))
 {
-	// Get a pointer to the steer text box
 	wxTextCtrl *textBox = static_cast<wxTextCtrl*>(kinematicToolbar->FindControl(IdToolbarKinematicSteer));
-
-	// Make sure the text box was found (may not be found on startup)
 	if (textBox == NULL)
 		return;
 

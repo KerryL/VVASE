@@ -329,7 +329,7 @@ void RenderWindow::OnEnterWindow(wxMouseEvent &event)
 //					is in the list.
 //
 // Input Arguments:
-//		toRemove	= PRIMITVE* pointing to the object to be removed
+//		toRemove	= Primitive* pointing to the object to be removed
 //
 // Output Arguments:
 //		None
@@ -646,6 +646,7 @@ void RenderWindow::DoWheelDolly(wxMouseEvent &event)
 	{
 		// Nothing here!
 	}
+	//std::cout << topMinusBottom << std::endl;// TODO:  Remove
 }
 
 //==========================================================================
@@ -1355,15 +1356,19 @@ void RenderWindow::SetViewOrthogonal(const bool &viewOrthogonal)
 	this->viewOrthogonal = viewOrthogonal;
 	modified = true;
 
+	// TODO:  Would be better to have some parameter that is common between the
+	// two modes and to just compute the projection matrix accordingly.
+	
 	// We can compute the distance at which we are focused (according to last call
 	// to SetCameraPosition()), and then determine the correct value of SetTopMinusBottom()
 	// in order to maintain unit scale at this distance.
 	double nominalDistance = cameraPosition.Distance(focalPoint);
 	if (viewOrthogonal)// was perspective
-		topMinusBottom = tan(nearClip / topMinusBottom) * 10000. / nominalDistance;
+		topMinusBottom = tan(topMinusBottom * nearClip) * 10000. / nominalDistance;
 	else// was orthogonal
 	// FIXME:  Magic numbers mean this is obviously wrong...
-		topMinusBottom = nearClip / atan(topMinusBottom * nominalDistance/10000.);
+		topMinusBottom = atan(topMinusBottom * nominalDistance/10000.) / nearClip;
+	//std::cout << "t-b = " << topMinusBottom << std::endl;// TODO:  Remove
 }
 
 //==========================================================================
