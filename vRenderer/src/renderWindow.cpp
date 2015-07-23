@@ -537,7 +537,6 @@ void RenderWindow::PerformInteraction(InteractionType interaction, wxMouseEvent 
 //==========================================================================
 void RenderWindow::StoreMousePosition(wxMouseEvent &event)
 {
-	// Store the current position in the last position variables
 	lastMousePosition[0] = event.GetX();
 	lastMousePosition[1] = event.GetY();
 }
@@ -560,7 +559,6 @@ void RenderWindow::StoreMousePosition(wxMouseEvent &event)
 //==========================================================================
 void RenderWindow::OnMouseUpEvent(wxMouseEvent& WXUNUSED(event))
 {
-	// Reset the flag that indicates an interaction is in progress
 	isInteracting = false;
 }
 
@@ -1303,7 +1301,8 @@ Matrix RenderWindow::Generate3DProjectionMatrix() const
 {
 	// For orthogonal projections, top - bottom and left - right give size in
 	// screen coordinates.  For perspective projections, these combined with
-	// the near clipping plane give FOV.
+	// the near clipping plane give FOV (top - bottom specifies screen height at
+	// the near clipping plane).
 	//  hFOV = atan(nearClip * 2.0 / leftMinusRight);// [rad]
 	//  vFOV = atan(nearClip * 2.0 / topMinusBottom);// [rad]
 	// The distance at which unity scaling occurs is the cotangent of (top - bottom) / 2.
@@ -1364,11 +1363,9 @@ void RenderWindow::SetViewOrthogonal(const bool &viewOrthogonal)
 	// in order to maintain unit scale at this distance.
 	double nominalDistance = cameraPosition.Distance(focalPoint);
 	if (viewOrthogonal)// was perspective
-		topMinusBottom = tan(topMinusBottom * nearClip) * 10000. / nominalDistance;
+		topMinusBottom *= nominalDistance / nearClip;
 	else// was orthogonal
-	// FIXME:  Magic numbers mean this is obviously wrong...
-		topMinusBottom = atan(topMinusBottom * nominalDistance/10000.) / nearClip;
-	//std::cout << "t-b = " << topMinusBottom << std::endl;// TODO:  Remove
+		topMinusBottom *= nearClip / nominalDistance;
 }
 
 //==========================================================================
