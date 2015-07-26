@@ -5,8 +5,26 @@
   <TabInfoArray Name="TabInfoArray">
     <TabInfo>
       <wxString Value="/home/kerry/Projects/CarDesigner/CarDesigner/src/gui/components/mainFrame.cpp" Name="FileName"/>
-      <int Value="732" Name="FirstVisibleLine"/>
-      <int Value="486" Name="CurrentLine"/>
+      <int Value="340" Name="FirstVisibleLine"/>
+      <int Value="355" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="/home/kerry/Projects/CarDesigner/CarDesigner/src/gui/guiCar.cpp" Name="FileName"/>
+      <int Value="97" Name="FirstVisibleLine"/>
+      <int Value="114" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="/home/kerry/Projects/CarDesigner/CarDesigner/src/gui/renderer/carRenderer.cpp" Name="FileName"/>
+      <int Value="88" Name="FirstVisibleLine"/>
+      <int Value="90" Name="CurrentLine"/>
+      <wxArrayString Name="Bookmarks"/>
+    </TabInfo>
+    <TabInfo>
+      <wxString Value="/home/kerry/Projects/CarDesigner/vRenderer/src/renderWindow.cpp" Name="FileName"/>
+      <int Value="745" Name="FirstVisibleLine"/>
+      <int Value="754" Name="CurrentLine"/>
       <wxArrayString Name="Bookmarks"/>
     </TabInfo>
   </TabInfoArray>

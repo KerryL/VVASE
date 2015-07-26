@@ -71,19 +71,9 @@ GuiCar::GuiCar(MainFrame &mainFrame, wxString pathAndFileName)
 
 	appearanceOptions = new AppearanceOptions(mainFrame, *this);
 
-	// Create the 3D output window
-#ifdef __WXGTK__
-	// Under GTK, we get a segmentation fault or X error on call to SwapBuffers in RenderWindow.
-	// Adding the double-buffer argument fixes this.  Under windows, the double-buffer argument
-	// causes the colors to go funky.  So we have this #if.
-	int args[] = {WX_GL_DOUBLEBUFFER, 0};
+	int args[] = {WX_GL_RGBA, WX_GL_DOUBLEBUFFER, 0};
 	renderer = new CarRenderer(mainFrame, *this, args);
-#else
-	renderer = new CarRenderer(mainFrame, *this, NULL);
-#endif// TODO:  See DataPlotter for fix...
-
 	notebookTab = reinterpret_cast<wxWindow*>(renderer);
-	renderer->SetViewOrthogonal(mainFrame.GetUseOrtho());
 
 	// Get an index for this item and add it to the list in the mainFrame
 	// MUST be included BEFORE the naming, which must come BEFORE the call to Initialize
@@ -93,6 +83,22 @@ GuiCar::GuiCar(MainFrame &mainFrame, wxString pathAndFileName)
 	name.Printf("Unsaved Car %i", index + 1);
 
 	Initialize();
+	
+	// After calling Initialize() (after loading the car from file, if necessary)
+	// set the size of the view window and the camera view to fit everything in
+	// the scene.
+	Vector position(-100.0, -100.0, 60.0), up(0.0, 0.0, 1.0);
+	Vector lookAt(originalCar->suspension->rightFront.hardpoints[Corner::ContactPatch] +
+		(originalCar->suspension->leftRear.hardpoints[Corner::ContactPatch] - 
+		originalCar->suspension->rightFront.hardpoints[Corner::ContactPatch]) * 0.5);
+	renderer->SetCameraView(position, lookAt, up);
+	
+	const double scale = 1.2;// 20% bigger than car
+	renderer->SetViewOrthogonal(true);
+	renderer->SetTopMinusBottom(originalCar->suspension->leftFront.hardpoints[
+		Corner::ContactPatch].Distance(
+		originalCar->suspension->rightRear.hardpoints[Corner::ContactPatch]) * scale);
+	renderer->SetViewOrthogonal(mainFrame.GetUseOrtho());
 
 	// Add the children to the systems tree
 	int i;

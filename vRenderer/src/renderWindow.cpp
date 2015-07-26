@@ -749,9 +749,12 @@ void RenderWindow::DoPan(wxMouseEvent &event)
 //		None
 //
 //==========================================================================
-void RenderWindow::SetCameraView(const Vector &position, const Vector &lookAt, const Vector &upDirection)
+void RenderWindow::SetCameraView(const Vector &position, const Vector &lookAt,
+	const Vector &upDirection)
 {
-	SetCurrent(*GetContext());
+	//if (GetContext() && IsShownOnScreen())
+	// TODO:  Not working - crash or no car drawn when second car opened
+		SetCurrent(*GetContext());
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();

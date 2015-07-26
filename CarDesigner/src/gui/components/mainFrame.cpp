@@ -340,8 +340,8 @@ void MainFrame::SetProperties()
 	// Depending on whether the toolbars are shown, check the corresponding menu item
 	menuBar->Check(IdMenuViewToolbarsKinematic, manager.GetPane(kinematicToolbar).IsShown());
 	menuBar->Check(IdMenuViewToolbars3D, manager.GetPane(toolbar3D).IsShown());
-#ifdef __WXGTK_
-	//toolbar3D->FindItem(IdToolbar3DOrtho)->Enable(useOrthoView);// TODO:  Set default choice for radio button
+#ifdef __WXGTK__
+	toolbar3D->ToggleTool(IdToolbar3DOrtho, useOrthoView);
 #endif
 
 	wxString fontFaceName;
