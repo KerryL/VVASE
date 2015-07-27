@@ -98,8 +98,7 @@ RenderWindow::RenderWindow(wxWindow &parent, wxWindowID id, int args[],
 	viewToModel = new Matrix(3, 3);
 	viewToModel->MakeIdentity();
 
-	cameraPosition.Set(0.0, 0.0, 0.0);
-	focalPoint.Set(0.0, 0.0, 0.0);
+	SetCameraView(Vector(1.0, 0.0, 0.0), Vector(0.0, 0.0, 0.0), Vector(0.0, 0.0, 1.0));
 	isInteracting = false;
 
 	SetBackgroundStyle(wxBG_STYLE_CUSTOM);// To avoid flashing under MSW
@@ -219,6 +218,9 @@ void RenderWindow::Render()
 
 	if (modified)
 		Initialize();
+
+	if (modelviewModified)
+		UpdateModelviewMatrix();
 
 	glClearColor((float)backgroundColor.GetRed(), (float)backgroundColor.GetGreen(),
 		(float)backgroundColor.GetBlue(), (float)backgroundColor.GetAlpha());
@@ -495,6 +497,7 @@ void RenderWindow::OnMouseMoveEvent(wxMouseEvent &event)
 void RenderWindow::PerformInteraction(InteractionType interaction, wxMouseEvent &event)
 {
 	SetCurrent(*GetContext());
+	glGetDoublev(GL_MODELVIEW_MATRIX, glModelviewMatrix);
 	UpdateTransformationMatricies();
 	glMatrixMode(GL_MODELVIEW);
 
@@ -752,12 +755,7 @@ void RenderWindow::DoPan(wxMouseEvent &event)
 void RenderWindow::SetCameraView(const Vector &position, const Vector &lookAt,
 	const Vector &upDirection)
 {
-	//if (GetContext() && IsShownOnScreen())
-	// TODO:  Not working - crash or no car drawn when second car opened
-		SetCurrent(*GetContext());
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+	modelviewModified = true;
 
 	// Compute the MODELVIEW matrix
 	// (Use calculations from gluLookAt documentation)
@@ -771,16 +769,41 @@ void RenderWindow::SetCameraView(const Vector &position, const Vector &lookAt,
 									 u.x, u.y, u.z, 0.0,
 									 -f.x, -f.y, -f.z, 0.0,
 									 0.0, 0.0, 0.0, 1.0);
+		Matrix translation(4, 4, 1.0, 0.0, 0.0, -position.x,
+								 0.0, 1.0, 0.0, -position.y,
+								 0.0, 0.0, 1.0, -position.z,
+								 0.0, 0.0, 0.0, 1.0);
 
-		double glMatrix[16];
-		ConvertMatrixToGL(modelViewMatrix, glMatrix);
-		glLoadMatrixd(glMatrix);
+		ConvertMatrixToGL(modelViewMatrix * translation, glModelviewMatrix);
 	}
 
-	glTranslated(-position.x, -position.y, -position.z);
 	focalPoint = lookAt;
-
 	UpdateTransformationMatricies();
+}
+
+//==========================================================================
+// Class:			RenderWindow
+// Function:		UpdateModelviewMatrix
+//
+// Description:		Makes the openGL calls to update the modelview matrix.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void RenderWindow::UpdateModelviewMatrix()
+{
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glLoadMatrixd(glModelviewMatrix);
+
+	modelviewModified = false;
 }
 
 //==========================================================================
@@ -848,9 +871,7 @@ Vector RenderWindow::TransformToModel(const Vector &viewVector) const
 void RenderWindow::UpdateTransformationMatricies()
 {
 	Matrix modelViewMatrix(4, 4);
-	double glMatrix[16];
-	glGetDoublev(GL_MODELVIEW_MATRIX, glMatrix);
-	ConvertGLToMatrix(modelViewMatrix, glMatrix);
+	ConvertGLToMatrix(modelViewMatrix, glModelviewMatrix);
 
 	// Extract the orientation matrices
 	(*modelToView) = modelViewMatrix.GetSubMatrix(0, 0, 3, 3);
@@ -862,7 +883,6 @@ void RenderWindow::UpdateTransformationMatricies()
 	cameraPosition.y = modelViewMatrix.GetElement(1, 3);
 	cameraPosition.z = modelViewMatrix.GetElement(2, 3);
 
-	// Transform the camera position into model coordinates
 	cameraPosition = TransformToModel(cameraPosition);
 }
 

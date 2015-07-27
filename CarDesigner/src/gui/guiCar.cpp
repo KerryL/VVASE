@@ -79,7 +79,6 @@ GuiCar::GuiCar(MainFrame &mainFrame, wxString pathAndFileName)
 	// MUST be included BEFORE the naming, which must come BEFORE the call to Initialize
 	index = mainFrame.AddObjectToList(this);
 
-	// Create the name based on the index
 	name.Printf("Unsaved Car %i", index + 1);
 
 	Initialize();

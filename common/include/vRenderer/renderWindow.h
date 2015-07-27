@@ -158,6 +158,10 @@ private:
 
 	// Updates the transformation matrices according to the current modelview matrix
 	void UpdateTransformationMatricies();
+	void UpdateModelviewMatrix();
+
+	bool modelviewModified;
+	double glModelviewMatrix[16];
 
 	Matrix *modelToView;
 	Matrix *viewToModel;
