@@ -734,8 +734,8 @@ void MainFrame::Create3DToolbar()
 	if (toolbar3D != NULL)
 		return;
 
-	toolbar3D = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-		wxAUI_TB_GRIPPER | wxAUI_TB_OVERFLOW);
+	toolbar3D = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+		wxTB_FLAT | wxTB_NODIVIDER);
 
 	// TODO:  Cannot figure out why toolbar won't go to proper width.  At the end of
 	// this method, size is correct, but after manager.Update() it becomes far too narrow.
@@ -750,15 +750,14 @@ void MainFrame::Create3DToolbar()
 	wxBitmap perspectiveBitmap(perspectiveImage);
 	wxBitmap orthoBitmap(orthoImage);
 	toolbar3D->AddRadioTool(IdToolbar3DPerspective, _T("Perspective"),
-		perspectiveBitmap);
+		perspectiveBitmap, perspectiveBitmap, _T("Perspective view"));
 	toolbar3D->AddRadioTool(IdToolbar3DOrtho, _T("Orthogonal"),
-		orthoBitmap);
+		orthoBitmap, orthoBitmap, _T("Orthographic view"));
 
 	toolbar3D->Realize();
 
 	manager.AddPane(toolbar3D, wxAuiPaneInfo().Name(_T("3DToolbar")).
-		Caption(_T("3D View")).ToolbarPane().Top().Row(1).Position(2).
-		LeftDockable(false).RightDockable(false));
+		Caption(_T("3D View")).ToolbarPane().Top().Row(1).Position(2));
 }
 
 //==========================================================================
@@ -831,13 +830,8 @@ BEGIN_EVENT_TABLE(MainFrame, wxFrame)
 	EVT_TEXT(IdToolbarKinematicHeave,			MainFrame::KinematicToolbarHeaveChangeEvent)
 	EVT_TEXT(IdToolbarKinematicSteer,			MainFrame::KinematicToolbarSteerChangeEvent)
 
-#ifdef __WXMSW__
-	EVT_BUTTON(IdToolbar3DPerspective,			MainFrame::Toolbar3DPerspectiveClickEvent)
-	EVT_BUTTON(IdToolbar3DOrtho,				MainFrame::Toolbar3DOrthoClickEvent)
-#else
 	EVT_MENU(IdToolbar3DPerspective,			MainFrame::Toolbar3DPerspectiveClickEvent)
 	EVT_MENU(IdToolbar3DOrtho,					MainFrame::Toolbar3DOrthoClickEvent)
-#endif
 
 	// Threads
 	EVT_COMMAND(wxID_ANY, EVT_THREAD,			MainFrame::ThreadCompleteEvent)

@@ -319,8 +319,8 @@ private:
 	wxTextCtrl *debugPane;
 
 	wxMenuBar *menuBar;
-	wxAuiToolBar *kinematicToolbar;
-	wxAuiToolBar *toolbar3D;
+	wxToolBar *kinematicToolbar;
+	wxToolBar *toolbar3D;
 
 	ManagedList<GuiObject> openObjectList;
 
