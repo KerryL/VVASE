@@ -340,9 +340,7 @@ void MainFrame::SetProperties()
 	// Depending on whether the toolbars are shown, check the corresponding menu item
 	menuBar->Check(IdMenuViewToolbarsKinematic, manager.GetPane(kinematicToolbar).IsShown());
 	menuBar->Check(IdMenuViewToolbars3D, manager.GetPane(toolbar3D).IsShown());
-#ifdef __WXGTK__
 	toolbar3D->ToggleTool(IdToolbar3DOrtho, useOrthoView);
-#endif
 
 	wxString fontFaceName;
 	
@@ -736,35 +734,25 @@ void MainFrame::Create3DToolbar()
 	if (toolbar3D != NULL)
 		return;
 
-	toolbar3D = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-		wxTB_FLAT | wxTB_NODIVIDER);
+	toolbar3D = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+		wxAUI_TB_GRIPPER | wxAUI_TB_OVERFLOW);
 
 	// TODO:  Cannot figure out why toolbar won't go to proper width.  At the end of
 	// this method, size is correct, but after manager.Update() it becomes far too narrow.
 #ifdef __WXMSW__
-	// RadioTools are preferred, but are not working
-	/*toolbar3D->AddRadioTool(IdToolbar3DPerspective, _T("Perspective"),
-		wxBitmap(_T("ICON_ID_PERSPECTIVE"), wxBITMAP_TYPE_ICO_RESOURCE));
-	toolbar3D->AddRadioTool(IdToolbar3DOrtho, _T("Orthogonal"),
-		wxBitmap(_T("ICON_ID_ORTHO"), wxBITMAP_TYPE_ICO_RESOURCE));*/
-	wxBitmapButton *perspectiveButton = new wxBitmapButton(toolbar3D, IdToolbar3DPerspective,
-		wxBitmap(_T("ICON_ID_PERSPECTIVE"), wxBITMAP_TYPE_ICO_RESOURCE));
-	wxBitmapButton *orthoButton = new wxBitmapButton(toolbar3D, IdToolbar3DOrtho,
-		wxBitmap(_T("ICON_ID_ORTHO"), wxBITMAP_TYPE_ICO_RESOURCE));
-	toolbar3D->AddControl(perspectiveButton);
-	toolbar3D->AddControl(orthoButton);
+	const int preferredIconSize(16);
+	wxIcon perspectiveImage(_T("ICON_ID_PERSPECTIVE"), wxBITMAP_TYPE_ICO_RESOURCE, preferredIconSize, preferredIconSize);
+	wxIcon orthoImage(_T("ICON_ID_ORTHO"), wxBITMAP_TYPE_ICO_RESOURCE, preferredIconSize, preferredIconSize);
 #else
-	// Not sure why we can't use the version that's commented out, but it causes
-	// an X error*/
 	wxImage perspectiveImage(perspective16_xpm);
-	wxBitmap perspectiveBitmap(perspectiveImage);
 	wxImage orthoImage(ortho16_xpm);
+#endif
+	wxBitmap perspectiveBitmap(perspectiveImage);
 	wxBitmap orthoBitmap(orthoImage);
 	toolbar3D->AddRadioTool(IdToolbar3DPerspective, _T("Perspective"),
-		/*wxBitmap(perspective16_xpm, wxBITMAP_TYPE_XPM)*/ perspectiveBitmap);
+		perspectiveBitmap);
 	toolbar3D->AddRadioTool(IdToolbar3DOrtho, _T("Orthogonal"),
-		/*wxBitmap(ortho16_xpm, wxBITMAP_TYPE_XPM)*/orthoBitmap);
-#endif
+		orthoBitmap);
 
 	toolbar3D->Realize();
 
