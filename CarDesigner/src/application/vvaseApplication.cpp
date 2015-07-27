@@ -70,14 +70,10 @@ const wxString VVASEApp::connectionTopic = _T("VVASE: Open File");
 //==========================================================================
 bool VVASEApp::OnInit()
 {
-	// Set the application's name and the vendor's name
 	SetAppName(_T("VVASE"));
 	SetVendorName(_T("Kerry Loux"));
 
-	// Create the single instance checker
 	singleInstanceChecker = new wxSingleInstanceChecker(GetAppName() + _T(":") + wxGetUserId());
-
-	// Initialize the dynamic exchange server to NULL
 	dataExchangeServer = NULL;
 
 	// If we have command line arguments (assume they are file names) and
@@ -93,7 +89,6 @@ bool VVASEApp::OnInit()
 			// Send the file names to the server
 			int i;
 			for (i = 1; i < argc; i++)
-				// Don't bother checking for whether the poke was successfully recieved or not
 				client.GetConnection()->Poke(argv[i], (const char *)NULL);
 		}
 
@@ -106,15 +101,10 @@ bool VVASEApp::OnInit()
 	// Proceed with actions for a "normal" execution - display the main form, etc.
 	// Create the MainFrame object - this is the parent for all VVASE objects
 	mainFrame = new MainFrame();
-
-	// Make sure the MainFrame was successfully created
 	if (mainFrame == NULL)
 		return false;
 
-	// Make the window visible
 	mainFrame->Show();
-
-	// Bring the window to the top
 	SetTopWindow(mainFrame);
 
 	// If we had any command line arguments (file to open), open them now
@@ -127,17 +117,14 @@ bool VVASEApp::OnInit()
 			wxMilliSleep(50);
 		}
 
-		// Load all of the files
 		int i;
 		for (i = 1; i < argc; i++)
 			mainFrame->LoadFile(argv[i]);
 	}
 	
-	// Start the data exchange server
 	dataExchangeServer = new IPCServer();
 	if (!dataExchangeServer->Create(serviceName))
 	{
-		// Server creation failed - delete the server object
 		delete dataExchangeServer;
 		dataExchangeServer = NULL;
 	}
@@ -188,11 +175,9 @@ int VVASEApp::OnExit()
 //==========================================================================
 void VVASEApp::DeleteDynamicMemory()
 {
-	// Delete the single instance checker
 	delete singleInstanceChecker;
 	singleInstanceChecker = NULL;
 	
-	// Delete the data exchange server
 	delete dataExchangeServer;
 	dataExchangeServer = NULL;
 }

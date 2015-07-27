@@ -1780,16 +1780,14 @@ void MainFrame::HelpAboutEvent(wxCommandEvent& WXUNUSED(event))
 {
 	wxAboutDialogInfo appInfo;
 
-	// Fill in the information
 	appInfo.SetName(carDesignerLongName);
 	appInfo.SetVersion(carDesignerVersion);
 	appInfo.SetDescription(_T("\n\
 A work in progress...\n\
 This is a vehicle design and analysis tool.  Please see the\n\
 readme.txt file for licensing and other information."));
-	appInfo.SetCopyright(_T("(C) 2008-2010 Kerry Loux"));
+	appInfo.SetCopyright(_T("(C) 2008-2015 Kerry Loux"));
 
-	// Display the information
 	wxAboutBox(appInfo);
 }
 
