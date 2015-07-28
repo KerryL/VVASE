@@ -96,6 +96,7 @@
           <File Name="../common/include/vMath/signals/curveFit.h"/>
           <File Name="../common/include/vMath/signals/derivative.h"/>
           <File Name="../common/include/vMath/signals/fft.h"/>
+          <File Name="../common/include/vMath/signals/filter.h"/>
         </VirtualDirectory>
         <File Name="../common/include/vMath/complex.h"/>
         <File Name="../common/include/vMath/carMath.h"/>
@@ -133,9 +134,11 @@
           <File Name="../common/include/vRenderer/primitives/cylinder.h"/>
           <File Name="../common/include/vRenderer/primitives/cone.h"/>
           <File Name="../common/include/vRenderer/primitives/zoomBox.h"/>
+          <File Name="../common/include/vRenderer/primitives/legend.h"/>
         </VirtualDirectory>
         <File Name="../common/include/vRenderer/color.h"/>
         <File Name="../common/include/vRenderer/renderWindow.h"/>
+        <File Name="../common/include/vRenderer/line.h"/>
       </VirtualDirectory>
       <VirtualDirectory Name="vUtilities">
         <File Name="../common/include/vUtilities/debugger.h"/>
@@ -357,6 +360,7 @@
         <File Name="../vMath/src/signals/derivative.cpp"/>
         <File Name="../vMath/src/signals/integral.cpp"/>
         <File Name="../vMath/src/signals/rms.cpp"/>
+        <File Name="../vMath/src/signals/filter.cpp"/>
       </VirtualDirectory>
       <File Name="../vMath/src/carMath.cpp"/>
       <File Name="../vMath/src/dataset2D.cpp"/>
@@ -396,9 +400,11 @@
         <File Name="../vRenderer/src/primitives/cone.cpp"/>
         <File Name="../vRenderer/src/primitives/disk.cpp"/>
         <File Name="../vRenderer/src/primitives/primitive.cpp"/>
+        <File Name="../vRenderer/src/primitives/legend.cpp"/>
       </VirtualDirectory>
       <File Name="../vRenderer/src/color.cpp"/>
       <File Name="../vRenderer/src/renderWindow.cpp"/>
+      <File Name="../vRenderer/src/line.cpp"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Description/>

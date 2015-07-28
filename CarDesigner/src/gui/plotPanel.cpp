@@ -622,14 +622,14 @@ wxMenu* PlotPanel::CreatePlotAreaContextMenu() const
 	contextMenu->Append(idPlotContextBGColor, _T("Set Background Color"));
 	contextMenu->Append(idPlotContextGridColor, _T("Set Gridline Color"));
 
-	if (wxTheClipboard->Open())
+	/*if (wxTheClipboard->Open())
 	{
 		if (!wxTheClipboard->IsSupported(wxDF_TEXT))
 			contextMenu->Enable(idPlotContextPaste, false);
 		wxTheClipboard->Close();
 	}
 	else
-		contextMenu->Enable(idPlotContextPaste, false);
+		contextMenu->Enable(idPlotContextPaste, false);*/
 
 	contextMenu->Check(idPlotContextMajorGridlines, plotArea->GetMajorGridOn());
 	contextMenu->Check(idPlotContextMinorGridlines, plotArea->GetMinorGridOn());
@@ -918,7 +918,7 @@ unsigned int PlotPanel::AddDataRowToGrid(const wxString &name)
 
 	optionsGrid->SetCellBackgroundColour(index, colColor, color.ToWxColor());
 	optionsGrid->SetCellValue(index, colLineSize, _T("1"));
-	optionsGrid->SetCellValue(index, colMarkerSize, _T("-1"));
+	optionsGrid->SetCellValue(index, colMarkerSize, _T("0"));
 	optionsGrid->SetCellValue(index, colVisible, _T("1"));
 
 	int width = optionsGrid->GetColumnWidth(colName);
