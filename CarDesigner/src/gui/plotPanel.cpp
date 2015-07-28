@@ -119,10 +119,12 @@ void PlotPanel::CreateControls()
 	splitter->SplitHorizontally(plotArea, lowerPanel, plotArea->GetSize().GetHeight());
 	splitter->SetSize(GetClientSize());
 	splitter->SetSashGravity(1.0);
-	splitter->SetMinimumPaneSize(150);
+	splitter->SetMinimumPaneSize(120);
 
 	SetSizerAndFit(topSizer);
 	splitter->SetSashPosition(splitter->GetSashPosition(), false);
+
+	Layout();// Manually calling layout make the plot area expand to the full available space
 }
 
 //==========================================================================

@@ -2148,6 +2148,11 @@ void MainFrame::ThreadCompleteEvent(wxCommandEvent &event)
 		break;
 
 	case ThreadJob::CommandThreadKinematicsNormal:
+		// When closing, if multiple objects are open, it is possible that thread exit commands
+		// are processed prior to others, so we check here and abort if the ID is invalid
+		if (event.GetExtraLong() >= (long)openObjectList.GetCount())
+			break;
+
 		// Get the car count for this car (number of objects before this in the list that are also cars)
 		for (i = 0; i <= event.GetExtraLong(); i++)
 		{
@@ -2168,20 +2173,31 @@ void MainFrame::ThreadCompleteEvent(wxCommandEvent &event)
 		break;
 
 	case ThreadJob::CommandThreadKinematicsIteration:
-		// Decrement the semaphore for the current iteration
+		// When closing, if multiple objects are open, it is possible that thread exit commands
+		// are processed prior to others, so we check here and abort if the ID is invalid
+		if (event.GetExtraLong() >= (long)openObjectList.GetCount())
+			break;
+
 		static_cast<Iteration*>(openObjectList[event.GetExtraLong()])->MarkAnalysisComplete();
 		break;
 
 	case ThreadJob::CommandThreadKinematicsGA:
-		// Tell the GA manager thread that an analysis is done (decrement the count of pending analyses)
+		// When closing, if multiple objects are open, it is possible that thread exit commands
+		// are processed prior to others, so we check here and abort if the ID is invalid
+		if (event.GetExtraLong() >= (long)openObjectList.GetCount())
+			break;
+
 		static_cast<GeneticOptimization*>(openObjectList[event.GetExtraLong()])->MarkAnalysisComplete();
 		break;
 
 	case ThreadJob::CommandThreadGeneticOptimization:
-		// Update the optimized car and mark the optimization object as complete
+		// When closing, if multiple objects are open, it is possible that thread exit commands
+		// are processed prior to others, so we check here and abort if the ID is invalid
+		if (event.GetExtraLong() >= (long)openObjectList.GetCount())
+			break;
+
 		static_cast<GeneticOptimization*>(openObjectList[event.GetExtraLong()])->CompleteOptimization();
 
-		// Update the displays
 		UpdateAnalysis();
 		UpdateOutputPanel();
 		break;
