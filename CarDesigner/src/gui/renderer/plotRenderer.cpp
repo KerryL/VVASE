@@ -2508,6 +2508,9 @@ void PlotRenderer::ProcessRightClick(wxMouseEvent &event)
 void PlotRenderer::ProcessZoomBoxEnd()
 {
 	zoomBox->SetVisibility(false);
+	
+	if (plot->GetCurveCount() == 0)
+		return;
 
 	// Make sure the box isn't too small
 	const int limit = 5;// [pixels]
