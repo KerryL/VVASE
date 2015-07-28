@@ -84,8 +84,6 @@ RenderWindow::RenderWindow(wxWindow &parent, wxWindowID id, int args[],
 	viewOrthogonal = false;
 
 	// Make some assumptions to compute the horizontal viewing range
-	// The car's wheelbase plus a tire diameter is roughly the longest dimension we need to show on-screen at one time
-	// We'll assume this is generally less than 150 inches
 	topMinusBottom = 100.0;
 	nearClip = 1.0;
 	farClip = 500.0;
@@ -647,7 +645,6 @@ void RenderWindow::DoWheelDolly(wxMouseEvent &event)
 	{
 		// Nothing here!
 	}
-	//std::cout << topMinusBottom << std::endl;// TODO:  Remove
 }
 
 //==========================================================================
