@@ -19,6 +19,7 @@
 // Local headers
 #include "vRenderer/primitives/primitive.h"
 #include "vUtilities/managedList.h"
+#include "vRenderer/line.h"
 
 // Local forward declarations
 class Axis;
@@ -39,7 +40,9 @@ public:
 
 	void SetModified() { modified = true; }
 
-	void SetSize(const unsigned int &size) { this->size = size; modified = true; }
+	void SetLineSize(const double &size) { lineSize = size; modified = true; }
+	void SetMarkerSize(const int &size) { markerSize = size; modified = true; }
+	void SetPretty(const bool &pretty) { line.SetPretty(pretty); modified = true; }
 
 	// Remove all data from the plot
 	void SetData(const Dataset2D *data);
@@ -49,10 +52,7 @@ public:
 	void BindToXAxis(Axis *xAxis) { this->xAxis = xAxis; modified = true; }
 	void BindToYAxis(Axis *yAxis) { this->yAxis = yAxis; modified = true; }
 
-	Axis *GetYAxis() { return yAxis; }
-
-	// Gets the Y-value that corresponds to the specified X value
-	bool GetYAt(double &value);
+	Axis *GetYAxis(void) { return yAxis; }
 
 	// Overloaded operators
 	PlotCurve& operator=(const PlotCurve &plotCurve);
@@ -62,12 +62,50 @@ private:
 	Axis *xAxis;
 	Axis *yAxis;
 
-	unsigned int size;
-
-	// For use when the axis scale changes
-	void RescalePoint(const double *xyPoint, int *point);
-
 	const Dataset2D *data;
+
+	Line line;
+	std::vector<std::pair<double, double> > points;
+
+	double lineSize;
+	int markerSize;
+
+	void RescalePoint(const double *value, double *coordinate) const;
+
+	bool PointIsWithinPlotArea(const unsigned int &i) const;
+	void PlotPoint(const unsigned int &i);
+	void PlotPoint(const double &x, const double &y);
+	void PlotInterpolatedPoint(const unsigned int &first, const unsigned int &second, const bool &startingPoint);
+	void PlotInterpolatedJumpPoints(const unsigned int &first, const unsigned int &second);
+
+	bool PointsCrossBottomAxis(const unsigned int &first, const unsigned int &second) const;
+	bool PointsCrossTopAxis(const unsigned int &first, const unsigned int &second) const;
+	bool PointsCrossLeftAxis(const unsigned int &first, const unsigned int &second) const;
+	bool PointsCrossRightAxis(const unsigned int &first, const unsigned int &second) const;
+
+	bool PointsCrossXOrdinate(const unsigned int &first, const unsigned int &second, const double &value) const;
+	bool PointsCrossYOrdinate(const unsigned int &first, const unsigned int &second, const double &value) const;
+
+	bool PointsJumpPlotArea(const unsigned int &first, const unsigned int &second) const;
+
+	bool PointIsValid(const unsigned int &i) const;
+
+	double GetInterpolatedXOrdinate(const unsigned int &first, const unsigned int &second, const double &yValue) const;
+	double GetInterpolatedYOrdinate(const unsigned int &first, const unsigned int &second, const double &xValue) const;
+
+	void PlotMarkers(void) const;
+	void DrawMarker(const double &x, const double &y) const;
+
+	enum RangeSize
+	{
+		RangeSizeSmall,
+		RangeSizeLarge,
+		RangeSizeUndetermined
+	};
+
+	bool SmallRange(void) const;
+	RangeSize SmallXRange(void) const;
+	RangeSize SmallYRange(void) const;
 };
 
 #endif// PLOT_CURVE_H_

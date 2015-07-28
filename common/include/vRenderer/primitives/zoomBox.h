@@ -24,7 +24,7 @@ class ZoomBox : public Primitive
 public:
 	ZoomBox(RenderWindow &renderWindow);
 
-	// Mandatory overloads from PRIMITIVE - for creating geometry and testing the
+	// Mandatory overloads from Primitive - for creating geometry and testing the
 	// validity of this object's parameters
 	void GenerateGeometry();
 	bool HasValidParameters();

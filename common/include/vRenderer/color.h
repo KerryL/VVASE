@@ -26,13 +26,18 @@ class Color
 {
 public:
 	Color();
-	Color(const double &red, const double &green, const double &blue, const double & alpha = 1.0);
-	~Color();
+	Color(const double &red, const double &green, const double &blue, const double &alpha = 1.0);
+	Color(const wxColor &c);
 
 	inline double GetRed() const { return red; }
 	inline double GetGreen() const { return green; }
 	inline double GetBlue() const { return blue; }
 	inline double GetAlpha()  const { return alpha; }
+
+	double GetHue() const;// 0 to 1 for 0 to 360 deg
+	double GetSaturation() const;
+	double GetLightness() const;
+	double GetChroma() const;
 
 	// Constant colors
 	static const Color ColorRed;
@@ -43,13 +48,24 @@ public:
 	static const Color ColorYellow;
 	static const Color ColorCyan;
 	static const Color ColorMagenta;
+	static const Color ColorOrange;
+	static const Color ColorPink;
+	static const Color ColorDrabGreen;
+	static const Color ColorPaleGreen;
+	static const Color ColorPurple;
+	static const Color ColorLightBlue;
 	static const Color ColorGray;
 
-	void Set(const double &red, const double &green, const double &blue, const double & alpha = 1.0);
+	// For setting the value
+	void Set(const double &red, const double &green, const double &blue, const double &alpha = 1.0);
+	void SetHSL(const double &hue, const double &sat, const double &lum, const double &alpha = 1.0);
 	void Set(const wxColor &color);
 	void SetAlpha(const double &alpha);
 
 	wxColor ToWxColor() const;
+
+	static Color GetColorHSL(const double &hue, const double &sat, const double &lum, const double &alpha = 1.0);
+	static Color GetColor(const double &red, const double &green, const double &blue, const double &alpha = 1.0);
 
 private:
 	// The class data

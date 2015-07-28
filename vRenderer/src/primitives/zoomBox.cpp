@@ -16,6 +16,7 @@
 // Local headers
 #include "vRenderer/primitives/zoomBox.h"
 #include "vRenderer/renderWindow.h"
+#include "vRenderer/line.h"
 
 //==========================================================================
 // Class:			ZoomBox
@@ -35,6 +36,7 @@
 //==========================================================================
 ZoomBox::ZoomBox(RenderWindow &renderWindow) : Primitive(renderWindow)
 {
+	// Initially, we don't want to draw this
 	isVisible = false;
 
 	xAnchor = 0;
@@ -64,20 +66,14 @@ ZoomBox::ZoomBox(RenderWindow &renderWindow) : Primitive(renderWindow)
 //==========================================================================
 void ZoomBox::GenerateGeometry()
 {
-	// Set the line width
-	glLineWidth(1.0f);
-
-	// Create the box
-	glBegin(GL_LINE_STRIP);
-
-	// Draw the axis
-	glVertex2i(xAnchor, yAnchor);
-	glVertex2i(xFloat, yAnchor);
-	glVertex2i(xFloat, yFloat);
-	glVertex2i(xAnchor, yFloat);
-	glVertex2i(xAnchor, yAnchor);
-
-	glEnd();
+	Line box;
+	std::vector<std::pair<double, double> > points;
+	points.push_back(std::make_pair(xAnchor, yAnchor));
+	points.push_back(std::make_pair(xFloat, yAnchor));
+	points.push_back(std::make_pair(xFloat, yFloat));
+	points.push_back(std::make_pair(xAnchor, yFloat));
+	points.push_back(std::make_pair(xAnchor, yAnchor));
+	box.Draw(points);
 }
 
 //==========================================================================

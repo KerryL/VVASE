@@ -19,12 +19,487 @@
 
 // Standard C++ headers
 #include <cstdlib>
+#include <cstdio>
 #include <cassert>
+#include <limits>
+#include <cstdarg>
+
+// wxWidgets headers
+#include <wx/wx.h>
 
 // VVASE headers
 #include "vMath/carMath.h"
 #include "vMath/vector.h"
 #include "vMath/matrix.h"
+#include "vMath/dataset2D.h"
+
+//==========================================================================
+// Namespace:		VVASEMath
+// Function:		IsZero
+//
+// Description:		Returns true if a number is small enough to regard as zero.
+//
+// Input Arguments:
+//		n	= const double& to be checked for being close to zero
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		bool, true if the number is less than NEARLY_ZERO
+//
+//==========================================================================
+bool VVASEMath::IsZero(const double &n, const double &eps)
+{
+	if (fabs(n) < eps)
+		return true;
+	else
+		return false;
+}
+
+//==========================================================================
+// Namespace:		VVASEMath
+// Function:		IsZero
+//
+// Description:		Returns true if a number is small enough to regard as zero.
+//					This function checks the magnitude of the Vector.
+//
+// Input Arguments:
+//		v	= const Vector& to be checked for being close to zero
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		bool, true if the magnitude is less than NEARLY_ZERO
+//
+//==========================================================================
+bool VVASEMath::IsZero(const Vector &v, const double &eps)
+{
+	// Check each component of the vector
+	if (v.Length() < eps)
+		return true;
+
+	return false;
+}
+
+//==========================================================================
+// Namespace:		VVASEMath
+// Function:		Clamp
+//
+// Description:		Ensures the specified value is between the limits.  In the
+//					event that the value is out of the specified bounds, the
+//					value that is returned is equal to the limit that the value
+//					has exceeded.
+//
+// Input Arguments:
+//		value		= const double& reference to the value which we want to clamp
+//		lowerLimit	= const double& lower bound of allowable values
+//		upperLimit	= const double& upper bound of allowable values
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		double, equal to the clamped value
+//
+//==========================================================================
+double VVASEMath::Clamp(const double &value, const double &lowerLimit, const double &upperLimit)
+{
+	// Make sure the arguments are valid
+	assert(lowerLimit < upperLimit);
+
+	if (value < lowerLimit)
+		return lowerLimit;
+	else if (value > upperLimit)
+		return upperLimit;
+
+	return value;
+}
+
+//==========================================================================
+// Namespace:		VVASEMath
+// Function:		RangeToPlusMinusPi
+//
+// Description:		Adds or subtracts 2 * pi to the specified angle until the
+//					angle is between -pi and pi.
+//
+// Input Arguments:
+//		angle		= const double& reference to the angle we want to bound
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		double, equal to the re-ranged angle
+//
+//==========================================================================
+double VVASEMath::RangeToPlusMinusPi(const double &angle)
+{
+	return fmod(angle + Pi, 2.0 * Pi) - Pi;
+}
+
+//==========================================================================
+// Namespace:		VVASEMath
+// Function:		RangeToPlusMinus180
+//
+// Description:		Adds or subtracts 180 to the specified angle until the
+//					angle is between -180 and 180.
+//
+// Input Arguments:
+//		angle		= const double& reference to the angle we want to bound
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		double, equal to the re-ranged angle
+//
+//==========================================================================
+double VVASEMath::RangeToPlusMinus180(const double &angle)
+{
+	return fmod(angle + 180.0, 360.0) - 180.0;
+}
+
+//==========================================================================
+// Namespace:		VVASEMath
+// Function:		Unwrap
+//
+// Description:		Minimizes the jump between adjacent points by adding/subtracting
+//					multiples of 2 * Pi.
+//
+// Input Arguments:
+//		data	= Dataset2D&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void VVASEMath::Unwrap(Dataset2D &data)
+{
+	const double threshold(Pi);
+	unsigned int i;
+	for (i = 1; i < data.GetNumberOfPoints(); i++)
+	{
+		if (data.GetYData(i) - data.GetYData(i - 1) > threshold)
+			data.GetYPointer()[i] -= 2 * Pi;
+		if (data.GetYData(i) - data.GetYData(i - 1) < -threshold)
+			data.GetYPointer()[i] += 2 * Pi;
+	}
+}
+
+//==========================================================================
+// Namespace:		VVASEMath
+// Function:		Sign
+//
+// Description:		Returns 1.0 for positive, -1.0 for negative and 0.0 for zero.
+//
+// Input Arguments:
+//		value		= const double&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		double
+//
+//==========================================================================
+double VVASEMath::Sign(const double &value)
+{
+	if (value > 0.0)
+		return 1.0;
+	else if (value < 0.0)
+		return -1.0;
+	else
+		return 0.0;
+}
+
+//==========================================================================
+// Namespace:		VVASEMath
+// Function:		ApplyBitMask
+//
+// Description:		Extracts a single bit from values of the specified dataset.
+//
+// Input Arguments:
+//		data	= const Dataset2D&
+//		bit		= const unsigned int&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		double
+//
+//==========================================================================
+Dataset2D VVASEMath::ApplyBitMask(const Dataset2D &data, const unsigned int &bit)
+{
+	Dataset2D set(data);
+	unsigned int i;
+	for (i = 0; i < set.GetNumberOfPoints(); i++)
+		set.GetYPointer()[i] = ApplyBitMask((unsigned int)set.GetYPointer()[i], bit);
+	return set;
+}
+
+//==========================================================================
+// Namespace:		VVASEMath
+// Function:		ApplyBitMask
+//
+// Description:		Extracts a single bit from the value.
+//
+// Input Arguments:
+//		value	= const unsigned int&
+//		bit		= const unsigned int&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		double
+//
+//==========================================================================
+unsigned int VVASEMath::ApplyBitMask(const unsigned &value, const unsigned int &bit)
+{
+	return (value >> bit) & 1;
+}
+
+//==========================================================================
+// Namespace:		VVASEMath
+// Function:		XDataConsistentlySpaced
+//
+// Description:		Checks to see if the X-data has consistent deltas.
+//
+// Input Arguments:
+//		data				= const Dataset2D&
+//		tolerancePercent	= const double&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		bool, true if the x-data spacing is within the tolerance
+//
+//==========================================================================
+bool VVASEMath::XDataConsistentlySpaced(const Dataset2D &data, const double &tolerancePercent)
+{
+	assert(data.GetNumberOfPoints() > 1);
+
+	unsigned int i;
+	double minSpacing, maxSpacing, spacing;
+
+	minSpacing = data.GetAverageDeltaX();
+	maxSpacing = minSpacing;
+
+	for (i = 2; i < data.GetNumberOfPoints(); i++)
+	{
+		spacing = data.GetXData(i) - data.GetXData(i - 1);
+		if (spacing < minSpacing)
+			minSpacing = spacing;
+		if (spacing > maxSpacing)
+			maxSpacing = spacing;
+	}
+
+	// Handle decreasing data, too
+	if (fabs(minSpacing) > fabs(maxSpacing))
+	{
+		double temp(minSpacing);
+		minSpacing = maxSpacing;
+		maxSpacing = temp;
+	}
+
+	return 1.0 - minSpacing / maxSpacing < tolerancePercent;
+}
+
+//==========================================================================
+// Namespace:		VVASEMath
+// Function:		GetAverageXSpacing
+//
+// Description:		Finds the average period of the data in the set.
+//
+// Input Arguments:
+//		data	= const Dataset2D&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		double
+//
+//==========================================================================
+double VVASEMath::GetAverageXSpacing(const Dataset2D &data)
+{
+	return data.GetXData(data.GetNumberOfPoints() - 1) / (data.GetNumberOfPoints() - 1.0);
+}
+
+//==========================================================================
+// Namespace:		VVASEMath
+// Function:		GetPrecision
+//
+// Description:		Determines the best number of digits after the decimal place
+//					for a string representation of the specified value (for
+//					use with printf-style %0.*f formatting.
+//
+// Input Arguments:
+//		value				= const double&
+//		significantDigits	= const unsigned int&
+//		dropTrailingZeros	= const bool&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		bool, true if the x-data spacing is within the tolerance
+//
+//==========================================================================
+unsigned int VVASEMath::GetPrecision(const double &value,
+	const unsigned int &significantDigits, const bool &dropTrailingZeros)
+{
+	int precision(significantDigits - (unsigned int)floor(log10(value)) - 1);
+	if (precision < 0)
+		precision = 0;
+	if (!dropTrailingZeros)
+		return precision;
+
+	const unsigned int sSize(512);
+	char s[sSize];
+	sprintf(s, sSize, "%0.*f", precision, value);
+
+	std::string number(s);
+	unsigned int i;
+	for (i = number.size() - 1; i > 0; i--)
+	{
+		if (s[i] == '0')
+			precision--;
+		else
+			break;
+	}
+
+	if (precision < 0)
+		precision = 0;
+
+	return precision;
+}
+
+//==========================================================================
+// Namespace:		VVASEMath
+// Function:		CountSignificantDigits
+//
+// Description:		Returns the number of significant digits in the string.
+//
+// Input Arguments:
+//		valueString	= const wxString&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		unsigned int
+//
+//==========================================================================
+unsigned int VVASEMath::CountSignificantDigits(const wxString &valueString)
+{
+	double value;
+	if (!valueString.ToDouble(&value))
+		return 0;
+
+	wxString trimmedValueString = wxString::Format("%+0.15f", value);
+	unsigned int firstDigit, lastDigit;
+	for (firstDigit = 1; firstDigit < trimmedValueString.Len(); firstDigit++)
+	{
+		if (trimmedValueString[firstDigit] != '0' && trimmedValueString[firstDigit] != '.')
+			break;
+	}
+
+	for (lastDigit = trimmedValueString.Len() - 1; lastDigit > firstDigit; lastDigit--)
+	{
+		if (trimmedValueString[lastDigit] != '0' && trimmedValueString[lastDigit] != '.')
+			break;
+	}
+
+	unsigned int i;
+	for (i = firstDigit + 1; i < lastDigit - 1; i++)
+	{
+		if (trimmedValueString[i] == '.')
+		{
+			firstDigit++;
+			break;
+		}
+	}
+
+	return lastDigit - firstDigit + 1;
+}
+
+//==========================================================================
+// Namespace:		VVASEMath
+// Function:		sprintf
+//
+// Description:		Cross-platform friendly sprintf(_s) macro.  Calls sprintf_s
+//					under MSW, sprintf otherwise.
+//
+// Input Arguments:
+//		dest	= char*
+//		size	= const unsigned int&
+//		format	= const char*
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+#ifdef __WXMSW__
+void VVASEMath::sprintf(char *dest, const unsigned int &size, const char *format, ...)
+#else
+void VVASEMath::sprintf(char *dest, const unsigned int&, const char *format, ...)
+#endif
+{
+	va_list list;
+	va_start(list, format);
+
+#ifdef __WXMSW__
+	vsprintf_s(dest, size, format, list);
+#else
+	vsprintf(dest, format, list);
+#endif
+
+	va_end(list);
+}
+
+//==========================================================================
+// Namespace:		VVASEMath
+// Function:		GetPrecision
+//
+// Description:		Returns the required precision (digits past zero) to
+//					distinguish between adjacent graduations.
+//
+// Input Arguments:
+//		minimum			= const double&
+//		majorResolution	= const double&
+//		isLogarithmic	= const bool&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		unsigned int
+//
+//==========================================================================
+unsigned int VVASEMath::GetPrecision(const double &minimum, const double &majorResolution, const bool &isLogarithmic)
+{
+	double baseValue;
+	if (isLogarithmic)
+		baseValue = minimum;
+	else
+		baseValue = majorResolution;
+
+	if (log10(baseValue) >= 0.0)
+		return 0;
+
+	return -log10(baseValue) + 1;
+}
 
 //==========================================================================
 // Namespace:		VVASEMath
@@ -185,99 +660,6 @@ bool VVASEMath::GetIntersectionOfTwoPlanes(const Vector &normal1, const Vector &
 
 //==========================================================================
 // Namespace:		VVASEMath
-// Function:		IsZero
-//
-// Description:		Returns true if a number is small enough to regard as zero.
-//
-// Input Arguments:
-//		n	= const double& to be checked for being close to zero
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		bool, true if the number is less than NEARLY_ZERO
-//
-//==========================================================================
-bool VVASEMath::IsZero(const double &n, const double &eps)
-{
-	if (fabs(n) < eps)
-		return true;
-	else
-		return false;
-}
-
-//==========================================================================
-// Namespace:		VVASEMath
-// Function:		IsZero
-//
-// Description:		Returns true if a number is small enough to regard as zero.
-//					This function checks the magnitude of the Vector.
-//
-// Input Arguments:
-//		v	= const Vector& to be checked for being close to zero
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		bool, true if the magnitude is less than NEARLY_ZERO
-//
-//==========================================================================
-bool VVASEMath::IsZero(const Vector &v, const double &eps)
-{
-	// Check each component of the vector
-	if (v.Length() < eps)
-		return true;
-
-	return false;
-}
-
-//==========================================================================
-// Namespace:		VVASEMath
-// Function:		IsNaN
-//
-// Description:		Determines if the specified number is or is not a number.
-//
-// Input Arguments:
-//		n	= const double& to check
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		bool, true if the argument is NOT a number
-//
-//==========================================================================
-bool VVASEMath::IsNaN(const double &n)
-{
-	return n != n;
-}
-
-//==========================================================================
-// Namespace:		VVASEMath
-// Function:		IsNaN
-//
-// Description:		Determines if the specified number is or is not a number.
-//					Vector version - returns false if any component is NaN.
-//
-// Input Arguments:
-//		v	= Vector& to be checked for containing valid numbers
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		bool, true if the argument is NOT a number
-//
-//==========================================================================
-bool VVASEMath::IsNaN(const Vector &v)
-{
-	return IsNaN(v.x) || IsNaN(v.y) || IsNaN(v.z);
-}
-
-//==========================================================================
-// Namespace:		VVASEMath
 // Function:		NearestPointOnAxis
 //
 // Description:		Returns the point on the given line that is closest to
@@ -413,91 +795,4 @@ Vector VVASEMath::IntersectWithPlane(const Vector &planeNormal, const Vector &po
 
 	// Use the parametric equation to find the point
 	return pointOnAxis + axisDirection * t;
-}
-
-//==========================================================================
-// Namespace:		VVASEMath
-// Function:		Clamp
-//
-// Description:		Ensures the specified value is between the limits.  In the
-//					event that the value is out of the specified bounds, the
-//					value that is returned is equal to the limit that the value
-//					has exceeded.
-//
-// Input Arguments:
-//		n		= const double& reference to the value which we want to clamp
-//		lowerLimit	= const double& lower bound of allowable values
-//		upperLimit	= const double& upper bound of allowable values
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		double, equal to the clamped value
-//
-//==========================================================================
-double VVASEMath::Clamp(const double &n, const double &lowerLimit, const double &upperLimit)
-{
-	// Make sure the arguments are valid
-	assert(lowerLimit < upperLimit);
-
-	if (n < lowerLimit)
-		return lowerLimit;
-	else if (n > upperLimit)
-		return upperLimit;
-
-	return n;
-}
-
-//==========================================================================
-// Namespace:		VVASEMath
-// Function:		RangeToPlusMinusPi
-//
-// Description:		Adds or subtracts 2 * PI to the specified angle until the
-//					angle is between -pi and pi.
-//
-// Input Arguments:
-//		angle		= double reference to the angle we want to bound
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		double, equal to the re-ranged angle
-//
-//==========================================================================
-double VVASEMath::RangeToPlusMinusPi(double angle)
-{
-	while (angle <= Pi)
-		angle += 2 * Pi;
-	while (angle > Pi)
-		angle -= 2 * Pi;
-
-	return angle;
-}
-
-//==========================================================================
-// Namespace:		VVASEMath
-// Function:		Sign
-//
-// Description:		Returns 1 for positive, -1 for negative and 0 for zero.
-//
-// Input Arguments:
-//		n		= const double&
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		double
-//
-//==========================================================================
-double VVASEMath::Sign(const double &n)
-{
-	if (n > 0.0)
-		return 1.0;
-	else if (n < 0.0)
-		return -1.0;
-	else
-		return 0.0;
 }

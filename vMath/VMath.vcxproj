@@ -84,10 +84,7 @@
     <ClInclude Include="..\common\include\vMath\signals\curveFit.h" />
     <ClInclude Include="..\common\include\vMath\signals\derivative.h" />
     <ClInclude Include="..\common\include\vMath\signals\fft.h" />
-    <ClInclude Include="..\common\include\vMath\signals\filters\filterBase.h" />
-    <ClInclude Include="..\common\include\vMath\signals\filters\highPassOrder1.h" />
-    <ClInclude Include="..\common\include\vMath\signals\filters\lowPassOrder1.h" />
-    <ClInclude Include="..\common\include\vMath\signals\filters\lowPassOrder2.h" />
+    <ClInclude Include="..\common\include\vMath\signals\filter.h" />
     <ClInclude Include="..\common\include\vMath\signals\integral.h" />
     <ClInclude Include="..\common\include\vMath\signals\rms.h" />
     <ClInclude Include="..\common\include\vMath\vector.h" />
@@ -102,10 +99,7 @@
     <ClCompile Include="src\signals\curveFit.cpp" />
     <ClCompile Include="src\signals\derivative.cpp" />
     <ClCompile Include="src\signals\fft.cpp" />
-    <ClCompile Include="src\signals\filters\filterBase.cpp" />
-    <ClCompile Include="src\signals\filters\highPassOrder1.cpp" />
-    <ClCompile Include="src\signals\filters\lowPassOrder1.cpp" />
-    <ClCompile Include="src\signals\filters\lowPassOrder2.cpp" />
+    <ClCompile Include="src\signals\filter.cpp" />
     <ClCompile Include="src\signals\integral.cpp" />
     <ClCompile Include="src\signals\rms.cpp" />
     <ClCompile Include="src\vector.cpp" />

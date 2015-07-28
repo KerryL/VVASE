@@ -24,10 +24,12 @@
     <ClInclude Include="..\common\include\vRenderer\3dcar\triangle3D.h" />
     <ClInclude Include="..\common\include\vRenderer\3dcar\vector3D.h" />
     <ClInclude Include="..\common\include\vRenderer\color.h" />
+    <ClInclude Include="..\common\include\vRenderer\line.h" />
     <ClInclude Include="..\common\include\vRenderer\primitives\axis.h" />
     <ClInclude Include="..\common\include\vRenderer\primitives\cone.h" />
     <ClInclude Include="..\common\include\vRenderer\primitives\cylinder.h" />
     <ClInclude Include="..\common\include\vRenderer\primitives\disk.h" />
+    <ClInclude Include="..\common\include\vRenderer\primitives\legend.h" />
     <ClInclude Include="..\common\include\vRenderer\primitives\plotCursor.h" />
     <ClInclude Include="..\common\include\vRenderer\primitives\plotCurve.h" />
     <ClInclude Include="..\common\include\vRenderer\primitives\primitive.h" />
@@ -52,10 +54,12 @@
     <ClCompile Include="src\3dcar\triangle3D.cpp" />
     <ClCompile Include="src\3dcar\vector3D.cpp" />
     <ClCompile Include="src\color.cpp" />
+    <ClCompile Include="src\line.cpp" />
     <ClCompile Include="src\primitives\axis.cpp" />
     <ClCompile Include="src\primitives\cone.cpp" />
     <ClCompile Include="src\primitives\cylinder.cpp" />
     <ClCompile Include="src\primitives\disk.cpp" />
+    <ClCompile Include="src\primitives\legend.cpp" />
     <ClCompile Include="src\primitives\plotCursor.cpp" />
     <ClCompile Include="src\primitives\plotCurve.cpp" />
     <ClCompile Include="src\primitives\primitive.cpp" />

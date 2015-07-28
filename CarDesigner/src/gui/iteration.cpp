@@ -596,7 +596,7 @@ bool Iteration::PerformSaveToFile()
 	outFile.write(xLabel.c_str(), (xLabel.Len() + 1) * sizeof(char));
 	outFile.write((char*)&autoGenerateZLabel, sizeof(bool));
 	outFile.write(zLabel.c_str(), (zLabel.Len() + 1) * sizeof(char));
-	bool temp(plotPanel->GetRenderer()->GetGridOn());
+	bool temp(plotPanel->GetRenderer()->GetMajorGridOn());
 	outFile.write((char*)&temp, sizeof(bool));
 
 	// Close the file
@@ -677,9 +677,9 @@ bool Iteration::PerformLoadFromFile()
 	bool temp;
 	inFile.read((char*)&temp, sizeof(bool));
 	if (temp)
-		plotPanel->GetRenderer()->SetGridOn();
+		plotPanel->GetRenderer()->SetMajorGridOn();
 	else
-		plotPanel->GetRenderer()->SetGridOff();
+		plotPanel->GetRenderer()->SetMajorGridOff();
 
 	// Close the file
 	inFile.close();
@@ -879,7 +879,10 @@ void Iteration::ApplyPlotFormatting()
 	else
 		plotPanel->GetRenderer()->SetTitle(title);
 
-	plotPanel->GetRenderer()->SetGridOn(showGridLines);
+	if (showGridLines)
+		plotPanel->GetRenderer()->SetMajorGridOn();
+	else
+		plotPanel->GetRenderer()->SetMajorGridOff();
 }
 
 //==========================================================================

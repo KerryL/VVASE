@@ -41,18 +41,15 @@
 //		PolynomialFit containing the relevant curve fit data
 //
 //==========================================================================
-/*#include <Windows.h>// Headers to testing matrix operations under MSVC++
+/*#include <Windows.h>// Headers for testing matrix operations under MSVC++
 #include <iostream>
 #include <wx/wx.h>*/
 CurveFit::PolynomialFit CurveFit::DoPolynomialFit(const Dataset2D &data, const unsigned int &order)
 {
 	PolynomialFit fit;
-
-	// Do the fitting
 	fit.coefficients = new double[order + 1];
 	fit.order = order;
 
-	// Create the matrix and vector we need (we're solving the matrix equation Ax = b)
 	Matrix A(data.GetNumberOfPoints(), order + 1);
 	Matrix b(data.GetNumberOfPoints(), 1);
 
@@ -74,17 +71,37 @@ CurveFit::PolynomialFit CurveFit::DoPolynomialFit(const Dataset2D &data, const u
 	}
 
 	Matrix coefficients;
-	A.LeftDivide(b, coefficients);
-
-	// Assign the coefficients to our PolynomialFit data
+	if (!A.LeftDivide(b, coefficients))// we're solving the matrix equation Ax = b
+	{
+		// TODO:  Generate error?
+	}
 	for (i = 0; i <= order; i++)
 		fit.coefficients[i] = coefficients(i,0) / pow(maxX, (int)i);
-
 	ComputeRSquared(data, fit);
+	//DoMatrixText();
 
-	// NOTE:  Highjacked for matrix testing
-	// Example from wikipedia SVD article
-	/*Matrix M(4,5);
+	return fit;
+}
+
+//==========================================================================
+// Class:			CurveFit
+// Function:		DoMatrixTest
+//
+// Description:		Tests SVD algorithm based on example in Wikipedia article.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+/*void CurveFit::DoMatrixTest(void)
+{
+	Matrix M(4,5);
 	M(0,0) = 1.0;
 	M(0,4) = 2.0;
 	M(1,2) = 3.0;
@@ -107,10 +124,8 @@ CurveFit::PolynomialFit CurveFit::DoPolynomialFit(const Dataset2D &data, const u
 	Itest = V * V.GetTranspose();
 	OutputDebugString(_T("V * V':\n") + Itest.Print() + _T("\n"));
 	Matrix originalAgain(U * W * V.GetTranspose());
-	OutputDebugString(_T("U * W * V':\n") + originalAgain.Print() + _T("\n"));*/
-
-	return fit;
-}
+	OutputDebugString(_T("U * W * V':\n") + originalAgain.Print() + _T("\n"));
+}//*/
 
 //==========================================================================
 // Class:			CurveFit

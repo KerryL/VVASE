@@ -75,7 +75,6 @@ Matrix::Matrix(const unsigned int &rows, const unsigned int &columns)
 	this->columns = columns;
 
 	AllocateElements();
-
 	Zero();
 }
 
@@ -107,14 +106,13 @@ Matrix::Matrix(const unsigned int &rows, const unsigned int &columns, double ele
 
 	AllocateElements();
 
-	// Declare a va_list macro and initialize it with va_start
 	va_list argumentList;
 	va_start(argumentList, element1);
 
 	elements[0][0] = element1;
 
 	// Fill all of the elements with the arguments
-	// FIXME:  There is no check to make sure the correct number of elements was
+	// NOTE:  There is no check to make sure the correct number of elements was
 	// passed!  This could result in runtime crash or wrong calculations!
 	unsigned int i, j;
 	for (i = 0; i < rows; i++)
@@ -147,12 +145,10 @@ Matrix::Matrix(const unsigned int &rows, const unsigned int &columns, double ele
 //==========================================================================
 Matrix::Matrix(const Matrix &matrix)
 {
-	// Initialize the elements pointer
 	elements = NULL;
 	rows = 0;
 	columns = 0;
 
-	// Copy from the argument to this
 	*this = matrix;
 }
 
@@ -174,7 +170,6 @@ Matrix::Matrix(const Matrix &matrix)
 //==========================================================================
 Matrix::~Matrix()
 {
-	// Delete the elements
 	FreeElements();
 }
 
@@ -199,10 +194,8 @@ Matrix::~Matrix()
 //==========================================================================
 void Matrix::SetElement(const unsigned int &row, const unsigned int &column, const double &value)
 {
-	// Check to make sure it is a valid index
 	assert(row < rows && column < columns);
 
-	// Set the element as requested
 	elements[row][column] = value;
 }
 
@@ -228,15 +221,13 @@ void Matrix::SetElement(const unsigned int &row, const unsigned int &column, con
 //==========================================================================
 void Matrix::Set(double element1, ...)
 {
-	// Declare a va_list macro and initialize it with va_start
 	va_list argumentList;
 	va_start(argumentList, element1);
 
-	// Assign the first element
 	elements[0][0] = element1;
 
 	// Fill all of the elements with the arguments
-	// FIXME:  There is no check to make sure the correct number of elements was
+	// NOTE:  There is no check to make sure the correct number of elements was
 	// passed!  This could result in runtime crash or wrong calculations!
 	unsigned int i, j;
 	for (i = 0; i < rows; i++)
@@ -248,8 +239,7 @@ void Matrix::Set(double element1, ...)
 		}
 	}
 
-	// Terminate the variable argument list
-	va_end(argumentList);
+	va_end(argumentList);;
 }
 
 //==========================================================================
@@ -271,7 +261,6 @@ void Matrix::Set(double element1, ...)
 //==========================================================================
 double Matrix::GetElement(const int &row, const int &column) const
 {
-	// Return the element at the specified location
 	return elements[row][column];
 }
 
@@ -293,10 +282,8 @@ double Matrix::GetElement(const int &row, const int &column) const
 //==========================================================================
 Matrix& Matrix::MakeIdentity()
 {
-	// Set everything to zero
 	Zero();
 
-	// Make the diagonal elements 1.0
 	unsigned int i;
 	for (i = 0; i < GetMinimumDimension(); i++)
 		elements[i][i] = 1.0;
@@ -322,7 +309,6 @@ Matrix& Matrix::MakeIdentity()
 //==========================================================================
 void Matrix::Zero()
 {
-	// Go through all of the elements setting everything to zero
 	unsigned int i, j;
 	for (i = 0; i < rows; i++)
 	{
@@ -356,10 +342,8 @@ Matrix Matrix::GetSubMatrix(const unsigned int &startRow, const unsigned int &st
 {
 	assert(startRow + subRows < rows && startColumn + subColumns < columns);
 
-	// Our return matrix
 	Matrix subMatrix(subRows, subColumns);
 
-	// Assign the values for the sub-matrix
 	unsigned int i, j;
 	for (i = 0; i < subRows; i++)
 	{
@@ -410,7 +394,7 @@ Matrix Matrix::GetTranspose() const
 //					Same as A^-1 * b.
 //
 // Input Arguments:
-//		b	= const Matrix& vector to divide this int
+//		b	= const Matrix& vector to divide this into
 //
 // Output Arguments:
 //		x	= Matrix& result of the division (x in the above example)
@@ -452,7 +436,7 @@ bool Matrix::LeftDivide(const Matrix& b, Matrix &x) const
 //		const Vector result of the matrix multiplication
 //
 //==========================================================================
-const Vector Matrix::operator * (const Vector &v) const
+const Vector Matrix::operator*(const Vector &v) const
 {
 	assert(rows == 3 && columns == 3);
 
@@ -482,15 +466,12 @@ const Vector Matrix::operator * (const Vector &v) const
 //		Matrix&
 //
 //==========================================================================
-Matrix& Matrix::operator *= (const Matrix &m)
+Matrix& Matrix::operator*=(const Matrix &m)
 {
-	// Make sure the inner dimensions match
 	assert(columns == m.rows);
 
-	// Store the information contained in this matrix
 	Matrix result(rows, m.columns);
 
-	// Now do the multiplication, storing the results in this matrix
 	unsigned int counter, i, j;
 	for (i = 0; i < result.rows; i++)
 	{
@@ -502,9 +483,8 @@ Matrix& Matrix::operator *= (const Matrix &m)
 		}
 	}
 
-	// Assign the result to this
 	*this = result;
-	
+
 	return *this;
 }
 
@@ -524,7 +504,7 @@ Matrix& Matrix::operator *= (const Matrix &m)
 //		Matrix& result of the assignment
 //
 //==========================================================================
-Matrix& Matrix::operator = (const Matrix &m)
+Matrix& Matrix::operator=(const Matrix &m)
 {
 	// Check for self assignment
 	if (this == &m)
@@ -532,7 +512,6 @@ Matrix& Matrix::operator = (const Matrix &m)
 
 	Resize(m.rows, m.columns);
 
-	// Now assign the elements one by one
 	unsigned int i, j;
 	for (i = 0; i < rows; i++)
 	{
@@ -559,12 +538,10 @@ Matrix& Matrix::operator = (const Matrix &m)
 //		Matrix& result of the addition
 //
 //==========================================================================
-Matrix& Matrix::operator += (const Matrix &m)
+Matrix& Matrix::operator+=(const Matrix &m)
 {
-	// Make sure dimensions match
 	assert(columns == m.columns && rows == m.rows);
 
-	// Add target to this element by element
 	unsigned int i, j;
 	for (i = 0; i < rows; i++)
 	{
@@ -591,12 +568,10 @@ Matrix& Matrix::operator += (const Matrix &m)
 //		MATRIX& result of the subtraction
 //
 //==========================================================================
-Matrix& Matrix::operator -= (const Matrix &m)
+Matrix& Matrix::operator-=(const Matrix &m)
 {
-	// Make sure dimensions match
 	assert(columns == m.columns && rows == m.rows);
 
-	// Add target to this element by element
 	unsigned int i, j;
 	for (i = 0; i < rows; i++)
 	{
@@ -624,9 +599,8 @@ Matrix& Matrix::operator -= (const Matrix &m)
 //		Matrix& result of the multiplication
 //
 //==========================================================================
-Matrix& Matrix::operator *=(const double &n)
+Matrix& Matrix::operator*=(const double &n)
 {
-	// Add target to this element by element
 	unsigned int i, j;
 	for (i = 0; i < rows; i++)
 	{
@@ -654,9 +628,8 @@ Matrix& Matrix::operator *=(const double &n)
 //		Matrix& result of the division
 //
 //==========================================================================
-Matrix& Matrix::operator /=(const double &n)
+Matrix& Matrix::operator/=(const double &n)
 {
-	// Add target to this element by element
 	unsigned int i, j;
 	for (i = 0; i < rows; i++)
 	{
@@ -687,14 +660,11 @@ wxString Matrix::Print() const
 {
 	wxString temp, intermediate;
 
-	// Go row-by-row
 	unsigned int i, j;
 	for (i = 0; i < rows; i++)
 	{
-		// Go col-by-col
 		for (j = 0; j < columns; j++)
 		{
-			// Add the current element to the temporary string
 			intermediate.Printf("%7.3f\t", elements[i][j]);
 			temp.Append(intermediate);
 		}
@@ -710,9 +680,8 @@ wxString Matrix::Print() const
 // Class:			Matrix
 // Function:		GetRowReduced
 //
-// Description:		Performs row-reduction on this object until the matrix
-//					is upper-triangular (does not modify this - returns new
-//					Matrix).
+// Description:		Performs row-reduction on copy of this until the matrix
+//					is upper-triangular.
 //
 // Input Arguments:
 //		None
@@ -721,74 +690,40 @@ wxString Matrix::Print() const
 //		None
 //
 // Return Value:
-//		Matrix equal to row-reduced version of this
+//		Matrix& reference to this
 //
 //==========================================================================
-Matrix Matrix::GetRowReduced() const
+Matrix Matrix::GetRowReduced(void) const
 {
-	unsigned int curCol, curRow, pivotCol(0), pivotRow;
-	double factor;
+	unsigned int curRow, pivotCol(0), pivotRow;
 	Matrix reduced(*this);
 
 	for (pivotRow = 0; pivotRow < GetMinimumDimension(); pivotRow++)
 	{
-		// Make sure the pivot is non-zero
-		// If it is zero, move the row to the bottom and start over
-		// (or if it is all zeros below, then advance to the next column)
 		if (!VVASEMath::IsZero(reduced.elements[pivotRow][pivotCol]))
 		{
 			for (curRow = pivotRow + 1; curRow < rows; curRow++)
 			{
-				// Scale the pivot row and add it to this row such that the
-				// element of this row in the pivot column becomes zero
 				if (!VVASEMath::IsZero(reduced.elements[curRow][pivotCol]))
-				{
-					factor = reduced.elements[pivotRow][pivotCol] /
-						reduced.elements[curRow][pivotCol];
-
-					for (curCol = pivotCol; curCol < columns; curCol++)
-						reduced.elements[curRow][curCol] =
-							reduced.elements[curRow][curCol] * factor -
-							reduced.elements[pivotRow][curCol];
-				}
+					reduced.ZeroRowByScalingAndAdding(pivotRow, pivotCol, curRow);
 			}
 		}
 		else
 		{
-			// Find a non-zero row to swap with
 			for (curRow = pivotRow + 1; curRow < rows; curRow++)
 			{
 				if (!VVASEMath::IsZero(reduced.elements[curRow][pivotCol]))
 				{
-					double temp;
-					for (curCol = pivotCol; curCol < columns; curCol++)
-					{
-						temp = reduced.elements[pivotRow][curCol];
-						reduced.elements[pivotRow][curCol] =
-							reduced.elements[curRow][curCol];
-						reduced.elements[curRow][curCol] = temp;
-					}
-
-					// Decrement the pivot column because we need it to
-					// be the pivot column again
+					reduced.SwapRows(pivotRow, curRow);
 					pivotCol--;
-
-					// We did the swap, so we can stop searching
 					break;
 				}
 			}
 
-			// If we didn't find anything, we just move on, but we
-			// decrement the pivot row because we need it to be the
-			// pivot row again
 			pivotRow--;
 		}
 
-		// Increment the pivot column
 		pivotCol++;
-
-		// If we get all the way to the end of the matrix and don't find
-		// anything, then we're done!
 		if (pivotCol >= columns)
 			break;
 	}
@@ -798,7 +733,67 @@ Matrix Matrix::GetRowReduced() const
 
 //==========================================================================
 // Class:			Matrix
-// Function:		operator +
+// Function:		SwapRows
+//
+// Description:		Swaps the values in the specified rows.
+//
+// Input Arguments:
+//		r1	= const unsigned int&
+//		r2	= const unsigned int&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		Matrix&, reference to this
+//
+//==========================================================================
+Matrix& Matrix::SwapRows(const unsigned int &r1, const unsigned int &r2)
+{
+	double swap;
+	unsigned int i;
+	for (i = 0; i < columns; i++)
+	{
+		swap = elements[r1][i];
+		elements[r1][i] = elements[r2][i];
+		elements[r2][i] = swap;
+	}
+
+	return *this;
+}
+
+//==========================================================================
+// Class:			Matrix
+// Function:		ZeroRowByScalingAndAdding
+//
+// Description:		Makes the element at (targtRow, pivotColumn) zero by scaling
+//					the target row and adding it to the pivot row.
+//
+// Input Arguments:
+//		pivotrow		= const unsigned int&
+//		pivotColumn		= const unsigned int&
+//		targetColumn	= const unsigned int&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void Matrix::ZeroRowByScalingAndAdding(const unsigned int &pivotRow,
+	const unsigned int &pivotColumn, const unsigned int &targetRow)
+{
+	double factor = elements[pivotRow][pivotColumn] / elements[targetRow][pivotColumn];
+
+	unsigned int i;
+	for (i = pivotColumn; i < columns; i++)
+		elements[targetRow][i] = elements[targetRow][i] * factor - elements[pivotRow][i];
+}
+
+//==========================================================================
+// Class:			Matrix
+// Function:		operator+
 //
 // Description:		Addition operator for the Matrix class.
 //
@@ -812,13 +807,10 @@ Matrix Matrix::GetRowReduced() const
 //		Matrix contining the result of the addition
 //
 //==========================================================================
-const Matrix Matrix::operator + (const Matrix &m) const
+const Matrix Matrix::operator+(const Matrix &m) const
 {
-	// Create the return matrix
 	Matrix temp(m.rows, m.columns);
 	temp = *this;
-
-	// Do the addition
 	temp += m;
 
 	return temp;
@@ -826,7 +818,7 @@ const Matrix Matrix::operator + (const Matrix &m) const
 
 //==========================================================================
 // Class:			Matrix
-// Function:		operator -
+// Function:		operator-
 //
 // Description:		Subtraction operator for the Matrix class.
 //
@@ -840,13 +832,10 @@ const Matrix Matrix::operator + (const Matrix &m) const
 //		const Matrix contining the result of the subtraction
 //
 //==========================================================================
-const Matrix Matrix::operator - (const Matrix &m) const
+const Matrix Matrix::operator-(const Matrix &m) const
 {
-	// Create the return matrix
 	Matrix temp(m.rows, m.columns);
 	temp = *this;
-
-	// Do the subtraction
 	temp -= m;
 
 	return temp;
@@ -854,7 +843,7 @@ const Matrix Matrix::operator - (const Matrix &m) const
 
 //==========================================================================
 // Class:			Matrix
-// Function:		operator *
+// Function:		operator*
 //
 // Description:		Multiplication operator for the Matrix class.
 //
@@ -868,13 +857,10 @@ const Matrix Matrix::operator - (const Matrix &m) const
 //		const Matrix contining the result of the multiplication
 //
 //==========================================================================
-const Matrix Matrix::operator * (const Matrix &m) const
+const Matrix Matrix::operator*(const Matrix &m) const
 {
-	// Create the return matrix
 	Matrix temp(m.rows, m.columns);
 	temp = *this;
-
-	// Do the multiplication
 	temp *= m;
 
 	return temp;
@@ -882,7 +868,7 @@ const Matrix Matrix::operator * (const Matrix &m) const
 
 //==========================================================================
 // Class:			Matrix
-// Function:		operator *
+// Function:		operator*
 //
 // Description:		Element-wise multiplication operator for the Matrix class.
 //
@@ -896,13 +882,10 @@ const Matrix Matrix::operator * (const Matrix &m) const
 //		const Matrix contining the result of the multiplication
 //
 //==========================================================================
-const Matrix Matrix::operator * (const double &n) const
+const Matrix Matrix::operator*(const double &n) const
 {
-	// Create the return matrix
 	Matrix temp(rows, columns);
 	temp = *this;
-
-	// Do the multiplication
 	temp *= n;
 
 	return temp;
@@ -924,13 +907,10 @@ const Matrix Matrix::operator * (const double &n) const
 //		const Matrix contining the result of the division
 //
 //==========================================================================
-const Matrix Matrix::operator / (const double &n) const
+const Matrix Matrix::operator/(const double &n) const
 {
-	// Create the return matrix
 	Matrix temp(rows, columns);
 	temp = *this;
-
-	// Do the division
 	temp /= n;
 
 	return temp;
@@ -938,7 +918,7 @@ const Matrix Matrix::operator / (const double &n) const
 
 //==========================================================================
 // Class:			Matrix
-// Function:		operator ()
+// Function:		operator()
 //
 // Description:		Overload of the () operator for this object.  Permits accessing
 //					class data by using Matrix(row, column).  Non-const version.
@@ -954,18 +934,15 @@ const Matrix Matrix::operator / (const double &n) const
 //		double&, reference to the specified element
 //
 //==========================================================================
-double &Matrix::operator () (const unsigned int &row, const unsigned int &column)
+double &Matrix::operator()(const unsigned int &row, const unsigned int &column)
 {
-	// Make sure the indecies are valid
 	assert(row < rows && column < columns);
-
-	// Return the specified element
 	return elements[row][column];
 }
 
 //==========================================================================
 // Class:			Matrix
-// Function:		operator ()
+// Function:		operator()
 //
 // Description:		Overload of the () operator for this object.  Permits accessing
 //					class data by using Matrix(Row, Column).  Const version.
@@ -981,12 +958,9 @@ double &Matrix::operator () (const unsigned int &row, const unsigned int &column
 //		const double&, reference to the specified element
 //
 //==========================================================================
-const double &Matrix::operator () (const unsigned int &row, const unsigned int &column) const
+const double &Matrix::operator()(const unsigned int &row, const unsigned int &column) const
 {
-	// Make sure the indecies are valid
 	assert(row < rows && column < columns);
-
-	// Return the specified element
 	return elements[row][column];
 }
 
@@ -1012,7 +986,7 @@ Matrix Matrix::GetInverse() const
 	if (!IsSquare() || GetRank() != rows)
 		return GetPsuedoInverse();
 
-	// FIXME:  I'm not sure there is a point to having two inverse methods?
+	// NOTE:  I'm not sure there is a point to having two inverse methods?
 	return GetPsuedoInverse();
 }
 
@@ -1042,7 +1016,7 @@ Matrix Matrix::GetPsuedoInverse() const
 
 	if (!GetSingularValueDecomposition(u, v, w))
 	{
-		// FIXME:  Generate an error?
+		// TODO:  Generate an error?
 		return *this;
 	}
 
@@ -1087,9 +1061,9 @@ Matrix Matrix::GetDiagonalInverse() const
 
 //==========================================================================
 // Class:			Matrix
-// Function:		pythag
+// Function:		Pythag
 //
-// Description:		Helper method for SVD calculation (used in psuedo-inverse).
+// Description:		Helper method for SVD calculation.
 //
 // Input Arguments:
 //		None
@@ -1101,7 +1075,7 @@ Matrix Matrix::GetDiagonalInverse() const
 //		double
 //
 //==========================================================================
-double Matrix::pythag(const double& a, const double &b) const
+double Matrix::Pythag(const double& a, const double &b) const
 {
 	double absa = fabs(a);
 	double absb = fabs(b);
@@ -1133,7 +1107,7 @@ double Matrix::pythag(const double& a, const double &b) const
 //==========================================================================
 unsigned int Matrix::GetRank() const
 {
-	// FIXME:  Is it better to use SVD for this?  Rank = # of non-zero singular values
+	// TODO:  Is it better to use SVD for this?  Rank = # of non-zero singular values
 	Matrix reduced = GetRowReduced();
 
 	unsigned int rank(0), curRow, curCol;
@@ -1150,7 +1124,7 @@ unsigned int Matrix::GetRank() const
 			}
 		}
 	}
-	
+
 	return rank;
 }
 
@@ -1237,206 +1211,335 @@ void Matrix::Resize(const unsigned int &rows, const unsigned int &columns)
 // Function:		GetSingularValueDecomposition
 //
 // Description:		Computes singular value decomposition of this matrix.
+//					This is the SVD algorithm from Numerical Recipies in C,
+//					modified for readability.  Note that minimal solution
+//					has dimensions U(rows, rows) and W(rows, columns), but
+//					this algorithm does not compute the minimal solution.
 //
 // Input Arguments:
 //		None
 //
 // Output Arguments:
-//		u	= Matrix&
-//		v	= Matrix&
-//		w	= Matrix& containing the singular values along its diagonal
+//		U	= Matrix&
+//		V	= Matrix&
+//		W	= Matrix& containing the singular values along its diagonal
 //
 // Return Value:
 //		true if success, false if iteration limit was reached
 //
 //==========================================================================
-bool Matrix::GetSingularValueDecomposition(Matrix &u, Matrix &v, Matrix &w) const
+bool Matrix::GetSingularValueDecomposition(Matrix &U, Matrix &V, Matrix &W) const
 {
-	// SVD algorithm interpreted from Numerical Recipies in C
-	u.Resize(rows, columns);
-	w.Resize(columns, columns);
-	w.Zero();
-	v.Resize(columns, columns);
+	InitializeSVDMatrices(U, V, W);
+	double *rv1 = new double[V.rows];
 
-	// Copy target to u
-	int i, j;
-	for (i = 0; i < (int)u.rows; i++)
+	double anorm = ReduceToBidiagonalForm(U, V, W, rv1);
+
+	AccumulateRightHandTransforms(U, V, rv1);
+	AccumulateLeftHandTransforms(U, V, W);
+	if (!DiagonalizeBidiagonalForm(U, V, W, rv1, anorm))
+		return false;
+
+	delete [] rv1;
+
+	RemoveZeroSingularValues(U, W);
+	SortSingularValues(U, V, W);
+
+	return true;
+}
+
+//==========================================================================
+// Class:			Matrix
+// Function:		InitializeSVDMatrices
+//
+// Description:		Part of SVD algorithm.  Initializes the matrices (sets sizes)
+//					and copies this matrix to U.
+//
+// Input Arguments:
+//		U	= Matrix&
+//		V	= Matrix&
+//		W	= Matrix&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void Matrix::InitializeSVDMatrices(Matrix &U, Matrix &V, Matrix &W) const
+{
+	U.Resize(rows, columns);
+	W.Resize(columns, columns);
+	W.Zero();
+	V.Resize(columns, columns);
+
+	unsigned int i, j;
+	for (i = 0; i < U.rows; i++)
 	{
-		for (j = 0; j < (int)v.rows; j++)
-			u.elements[i][j] = elements[i][j];
+		for (j = 0; j < V.rows; j++)
+			U.elements[i][j] = elements[i][j];
 	}
+}
 
-	// Reduce to bidiagonal form
-	int its, jj, k, l(0), nm(0);
-	double *rv1 = new double[v.rows];
-	double anorm, c, f, g, h, s, scale, x, y, z;
-	anorm = 0.0;
-	g = 0.0;
-	scale = 0.0;
-	for (i = 0; i < (int)v.rows; i++)
+//==========================================================================
+// Class:			Matrix
+// Function:		ReduceToBidiagonalForm
+//
+// Description:		Part of SVD algorithm.  "Reduces matrix to bidiagonal form."
+//
+// Input Arguments:
+//		U	= Matrix&
+//		V	= Matrix&
+//		W	= Matrix&
+//		rv1	= double*
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		double, value of anorm
+//
+//==========================================================================
+double Matrix::ReduceToBidiagonalForm(Matrix &U, Matrix &V, Matrix &W, double *rv1) const
+{
+	unsigned int i, j, k, l(0);
+	double anorm(0.0), f, g(0.0), h, s, scale(0.0);
+
+	for (i = 0; i < V.rows; i++)
 	{
 		l = i + 2;
 		rv1[i] = scale * g;
 		g = 0.0;
 		scale = 0.0;
 		s = 0.0;
-		if (i < (int)u.rows)
+		if (i < U.rows)
 		{
-			for (k = i; k < (int)u.rows; k++)
-				scale += fabs(u.elements[k][i]);
+			for (k = i; k < U.rows; k++)
+				scale += fabs(U.elements[k][i]);
 
 			if (scale != 0.0)
 			{
-				for (k = i; k < (int)u.rows; k++)
+				for (k = i; k < U.rows; k++)
 				{
-					u.elements[k][i] /= scale;
-					s += u.elements[k][i] * u.elements[k][i];
+					U.elements[k][i] /= scale;
+					s += U.elements[k][i] * U.elements[k][i];
 				}
 
-				f = u.elements[i][i];
+				f = U.elements[i][i];
 				if (f >= 0.0)
 					g = -sqrt(s);
 				else
 					g = sqrt(s);
 
 				h = f * g - s;
-				u.elements[i][i] = f - g;
+				U.elements[i][i] = f - g;
 
-				for (j = l - 1; j < (int)v.rows; j++)
+				for (j = l - 1; j < V.rows; j++)
 				{
 					s = 0.0;
-					for (k = i; k < (int)u.rows; k++)
-						s += u.elements[k][i] * u.elements[k][j];
+					for (k = i; k < U.rows; k++)
+						s += U.elements[k][i] * U.elements[k][j];
 					f = s / h;
-					for (k = i; k < (int)u.rows; k++)
-						u.elements[k][j] += f * u.elements[k][i];
+					for (k = i; k < U.rows; k++)
+						U.elements[k][j] += f * U.elements[k][i];
 				}
-				for (k = i; k < (int)u.rows; k++)
-					u.elements[k][i] *= scale;
+				for (k = i; k < U.rows; k++)
+					U.elements[k][i] *= scale;
 			}
 		}
 
-		w.elements[i][i] = scale * g;
+		W.elements[i][i] = scale * g;
 		g = 0.0;
 		s = 0.0;
 		scale = 0.0;
 
-		if (i < (int)u.rows && i != (int)v.rows - 1)
+		if (i < U.rows && i != V.rows - 1)
 		{
-			for (k = l - 1; k < (int)v.rows; k++)
-				scale += fabs(u.elements[i][k]);
+			for (k = l - 1; k < V.rows; k++)
+				scale += fabs(U.elements[i][k]);
 
 			if (scale != 0.0)
 			{
-				for (k = l - 1; k < (int)v.rows; k++)
+				for (k = l - 1; k < V.rows; k++)
 				{
-					u.elements[i][k] /= scale;
-					s += u.elements[i][k] * u.elements[i][k];
+					U.elements[i][k] /= scale;
+					s += U.elements[i][k] * U.elements[i][k];
 				}
 
-				f = u.elements[i][l - 1];
+				f = U.elements[i][l - 1];
 				if (f >= 0.0)
 					g = -sqrt(s);
 				else
 					g =sqrt(s);
 
 				h = f * g - s;
-				u.elements[i][l - 1] = f - g;
-                    
-				for (k = l - 1; k < (int)v.rows; k++)
-					rv1[k] = u.elements[i][k] / h;
+				U.elements[i][l - 1] = f - g;
 
-				for (j = l - 1; j < (int)u.rows; j++)
+				for (k = l - 1; k < V.rows; k++)
+					rv1[k] = U.elements[i][k] / h;
+
+				for (j = l - 1; j < U.rows; j++)
 				{
 					s = 0.0;
-					for (k = l - 1; k < (int)v.rows; k++)
-						s += u.elements[j][k] * u.elements[i][k];
-					for (k = l - 1; k < (int)v.rows; k++)
-						u.elements[j][k] += s * rv1[k];
+					for (k = l - 1; k < V.rows; k++)
+						s += U.elements[j][k] * U.elements[i][k];
+					for (k = l - 1; k < V.rows; k++)
+						U.elements[j][k] += s * rv1[k];
 				}
 
-				for (k = l - 1; k < (int)v.rows; k++)
-					u.elements[i][k] *= scale;
+				for (k = l - 1; k < V.rows; k++)
+					U.elements[i][k] *= scale;
 			}
 		}
 
-		if (anorm < fabs((w.elements[i][i]) + fabs(rv1[i])))
-			anorm = fabs(w.elements[i][i]) + fabs(rv1[i]);
+		if (anorm < fabs((W.elements[i][i]) + fabs(rv1[i])))
+			anorm = fabs(W.elements[i][i]) + fabs(rv1[i]);
 	}
 
-	// Accumulation of right-hand transforms
-	for (i = v.rows - 1; i >= 0; i--)
+	return anorm;
+}
+
+//==========================================================================
+// Class:			Matrix
+// Function:		AccumulateRightHandTransforms
+//
+// Description:		Part of SVD algorithm.  "Accumulates right-hand transforms."
+//
+// Input Arguments:
+//		U	= Matrix&
+//		V	= Matrix&
+//		rv1	= const double*
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void Matrix::AccumulateRightHandTransforms(Matrix &U, Matrix &V, const double *rv1) const
+{
+	int i(V.rows - 1);
+	unsigned int j, l(i), k;
+	double g(rv1[i]), s;
+	V.elements[i][i] = 1.0;
+
+	for (i = V.rows - 2; i >= 0; i--)
 	{
-		if (i < (int)v.rows - 1)
+		if (g != 0.0)
 		{
-			if (g != 0.0)
+			for (j = l; j < V.rows; j++)
+				V.elements[j][i] = (U.elements[i][j] / U.elements[i][l]) / g;
+
+			for (j = l; j < V.rows; j++)
 			{
-				for (j = l; j < (int)v.rows; j++)
-					v.elements[j][i] =
-							(u.elements[i][j] / u.elements[i][l])
-							/ g;
+				s = 0.0;
+				for (k = l; k < V.rows; k++)
+					s += U.elements[i][k] * V.elements[k][j];
 
-				for (j = l; j < (int)v.rows; j++)
-				{
-					s = 0.0;
-					for (k = l; k < (int)v.rows; k++)
-						s += u.elements[i][k] * v.elements[k][j];
-
-					for (k = l; k < (int)v.rows; k++)
-						v.elements[k][j] += s * v.elements[k][i];
-				}
-			}
-
-			for (j = l; j < (int)v.rows; j++)
-			{
-				v.elements[i][j] = 0.0;
-				v.elements[j][i] = 0.0;
+				for (k = l; k < V.rows; k++)
+					V.elements[k][j] += s * V.elements[k][i];
 			}
 		}
-		v.elements[i][i] = 1.0;
+
+		for (j = l; j < V.rows; j++)
+		{
+			V.elements[i][j] = 0.0;
+			V.elements[j][i] = 0.0;
+		}
+
+		V.elements[i][i] = 1.0;
 		g = rv1[i];
 		l = i;
 	}
+}
 
-	// Accumulation of left-hand transforms
+//==========================================================================
+// Class:			Matrix
+// Function:		AccumulateLeftHandTransforms
+//
+// Description:		Part of SVD algorithm.  "Accumulates left-hand transforms."
+//
+// Input Arguments:
+//		U	= Matrix&
+//		V	= Matrix&
+//		W	= Matrix&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void Matrix::AccumulateLeftHandTransforms(Matrix &U, Matrix &V, Matrix &W) const
+{
+	int i;
+	unsigned int j, l, k;
+	double f, g, s;
 	for (i = GetMinimumDimension() - 1; i >= 0; i--)
 	{
 		l = i + 1;
-		g = w.elements[i][i];
-		for (j = l; j < (int)v.rows; j++)
-			u.elements[i][j] = 0.0;
+		g = W.elements[i][i];
+		for (j = l; j < V.rows; j++)
+			U.elements[i][j] = 0.0;
 
 		if (g != 0.0)
 		{
 			g = 1.0 / g;
-			for (j = l; j < (int)v.rows; j++)
+			for (j = l; j < V.rows; j++)
 			{
 				s = 0.0;
-				for (k = l; k < (int)u.rows; k++)
-					s += u.elements[k][i] * u.elements[k][j];
+				for (k = l; k < U.rows; k++)
+					s += U.elements[k][i] * U.elements[k][j];
 
-				f = (s / u.elements[i][i]) * g;
-
-				for (k = i; k < (int)u.rows; k++)
-					u.elements[k][j] += f * u.elements[k][i];
+				f = (s / U.elements[i][i]) * g;
+				for (k = i; k < U.rows; k++)
+					U.elements[k][j] += f * U.elements[k][i];
 			}
 
-			for (j = i; j < (int)u.rows; j++)
-				u.elements[j][i] *= g;
+			for (j = i; j < U.rows; j++)
+				U.elements[j][i] *= g;
 		}
 		else
 		{
-			for (j = i; j < (int)u.rows; j++)
-				u.elements[j][i] = 0.0;
+			for (j = i; j < U.rows; j++)
+				U.elements[j][i] = 0.0;
 		}
-		u.elements[i][i]++;
+		U.elements[i][i]++;
 	}
+}
 
-	// Diagonalization of the bidiagonal form
+//==========================================================================
+// Class:			Matrix
+// Function:		DiagonalizeBidiagonalForm
+//
+// Description:		Part of SVD algorithm.  "Diagonalizes the bidiagonal form."
+//
+// Input Arguments:
+//		U	= Matrix&
+//		V	= Matrix&
+//		W	= Matrix&
+//		rv1	= double*
+//		anorm	= const double&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		bool, false if iteration limit was reached, true otherwise
+//
+//==========================================================================
+bool Matrix::DiagonalizeBidiagonalForm(Matrix &U, Matrix &V, Matrix &W, double *rv1, const double &anorm) const
+{
+	int i, j, its, jj, k, l(0), nm(0);
+	double c, f, g, h, s, x, y, z;
+
 	bool finished;
-	double eps = 1e-6;
+	double eps = 1.0e-6;
 	int its_limit = 30;
-	for (k = v.rows - 1; k >= 0; k--)
+	for (k = V.rows - 1; k >= 0; k--)
 	{
 		for (its = 0; its < its_limit; its++)
 		{
@@ -1450,7 +1553,7 @@ bool Matrix::GetSingularValueDecomposition(Matrix &u, Matrix &v, Matrix &w) cons
 					break;
 				}
 
-				if (fabs(w.elements[nm][nm]) <= eps * anorm)
+				if (fabs(W.elements[nm][nm]) <= eps * anorm)
 					break;
 			}
 
@@ -1466,48 +1569,44 @@ bool Matrix::GetSingularValueDecomposition(Matrix &u, Matrix &v, Matrix &w) cons
 					if (fabs(f) <= eps * anorm)
 						break;
 
-					g = w.elements[i][i];
-					h = pythag(f, g);
-					w.elements[i][i] = h;
+					g = W.elements[i][i];
+					h = Pythag(f, g);
+					W.elements[i][i] = h;
 					h = 1.0 / h;
 					c = g * h;
 					s = -f * h;
-					for (j = 0; j < (int)u.rows; j++)
+					for (j = 0; j < (int)U.rows; j++)
 					{
-						y = u.elements[j][nm];
-						z = u.elements[j][i];
-						u.elements[j][nm] = y * c + z * s;
-						u.elements[j][i] = z * c - y * s;
+						y = U.elements[j][nm];
+						z = U.elements[j][i];
+						U.elements[j][nm] = y * c + z * s;
+						U.elements[j][i] = z * c - y * s;
 					}
 				}
 			}
 
-			z = w.elements[k][k];
+			z = W.elements[k][k];
 			if (l == k)
 			{
 				if (z < 0.0)
 				{
-					w.elements[k][k] = -z;
-					for (j = 0; j < (int)v.rows; j++)
-						v.elements[j][k] = -v.elements[j][k];
+					W.elements[k][k] = -z;
+					for (j = 0; j < (int)V.rows; j++)
+						V.elements[j][k] = -V.elements[j][k];
 				}
 				break;
 			}
 
-			// Print an error if we've hit the iteration limit
-			if (its == its_limit - 1)
-			{
-				delete [] rv1;
+			if (its == its_limit - 1)// Reached iteration limit
 				return false;
-			}
 
-			x = w.elements[l][l];
+			x = W.elements[l][l];
 			nm = k - 1;
-			y = w.elements[nm][nm];
+			y = W.elements[nm][nm];
 			g = rv1[nm];
 			h = rv1[k];
 			f = ((y-z) * (y+z) + (g-h) * (g+h)) / (2.0 * h * y);
-			g = pythag(f, 1.0);
+			g = Pythag(f, 1.0);
 			if (f >= 0.0)
 				f = ((x-z) * (x+z) + h * ((y / (f + fabs(g))) - h)) / x;
 			else
@@ -1519,10 +1618,10 @@ bool Matrix::GetSingularValueDecomposition(Matrix &u, Matrix &v, Matrix &w) cons
 			{
 				i = j + 1;
 				g = rv1[i];
-				y = w.elements[i][i];
+				y = W.elements[i][i];
 				h = s * g;
 				g = c * g;
-				z = pythag(f,h);
+				z = Pythag(f,h);
 				rv1[j] = z;
 				c = f / z;
 				s = h / z;
@@ -1531,16 +1630,16 @@ bool Matrix::GetSingularValueDecomposition(Matrix &u, Matrix &v, Matrix &w) cons
 				h = y * s;
 				y *= c;
 
-				for (jj = 0; jj < (int)v.rows; jj++)
+				for (jj = 0; jj < (int)V.rows; jj++)
 				{
-					x = v.elements[jj][j];
-					z = v.elements[jj][i];
-					v.elements[jj][j] = x * c + z * s;
-					v.elements[jj][i] = z * c - x * s;
+					x = V.elements[jj][j];
+					z = V.elements[jj][i];
+					V.elements[jj][j] = x * c + z * s;
+					V.elements[jj][i] = z * c - x * s;
 				}
 
-				z = pythag(f, h);
-				w.elements[j][j] = z;
+				z = Pythag(f, h);
+				W.elements[j][j] = z;
 
 				if (z != 0.0)
 				{
@@ -1552,121 +1651,159 @@ bool Matrix::GetSingularValueDecomposition(Matrix &u, Matrix &v, Matrix &w) cons
 				f = c * g + s * y;
 				x = c * y - s * g;
 
-				for (jj = 0; jj < (int)u.rows; jj++)
+				for (jj = 0; jj < (int)U.rows; jj++)
 				{
-					y = u.elements[jj][j];
-					z = u.elements[jj][i];
-					u.elements[jj][j] = y * c + z * s;
-					u.elements[jj][i] = z * c - y * s;
+					y = U.elements[jj][j];
+					z = U.elements[jj][i];
+					U.elements[jj][j] = y * c + z * s;
+					U.elements[jj][i] = z * c - y * s;
 				}
 			}
 
 			rv1[l] = 0.0;
 			rv1[k] = f;
-			w.elements[k][k] = x;
+			W.elements[k][k] = x;
 		}
 	}
-
-	delete [] rv1;
-
-	// Remove zero-value singular values and the corresponding columns and
-	// rows from the U and V matrices
-	// Without this, the results are close, but this makes them much better
-	for (i = 0; i < (int)GetMinimumDimension(); i++)
-	{
-		// No need to use Math.abs - we've already ensured positive values
-		if (VVASEMath::IsZero(w.elements[i][i]))
-		{
-			w.elements[i][i] = 0.0;
-			u.elements[i][i] = 0.0;
-		}
-	}
-
-	// Sort singular values (and corresponding columns of U and V) by decreasing magnitude
-	its = 1;
-	double sw;
-	double *su = new double[u.rows];
-	double *sv = new double[v.rows];
-
-	do
-	{
-		its *= 3;
-		its++;
-	} while (its <= (int)v.rows);
-
-	do
-	{
-		its /= 3;
-		for (i = its; i < (int)v.rows; i++)
-		{
-			sw = w.elements[i][i];
-			for (k = 0; k < (int)u.rows; k++)
-				su[k] = u.elements[k][i];
-
-			for (k = 0; k < (int)v.rows; k++)
-				sv[k] = v.elements[k][i];
-
-			j = i;
-			while (w.elements[j - its][j - its] < sw)
-			{
-				w.elements[j][j] = w.elements[j - its][j - its];
-				for (k = 0; k < (int)u.rows; k++)
-					u.elements[k][j] = u.elements[k][j - its];
-
-				for (k = 0; k < (int)v.rows; k++)
-					v.elements[k][j] = v.elements[k][j - its];
-
-				j -= its;
-				if (j < its)
-					break;
-			}
-
-			w.elements[j][j] = sw;
-
-			for (k = 0; k < (int)u.rows; k++)
-				u.elements[k][j] = su[k];
-
-			for (k = 0; k < (int)v.rows; k++)
-				v.elements[k][j] = sv[k];
-		}
-	} while (its > 1);
-
-	for (k = 0; k < (int)v.rows; k++)
-	{
-		s = 0.0;
-		for (i = 0; i < (int)u.rows; i++)
-		{
-			if (u.elements[i][k] < 0.0)
-				s++;
-		}
-
-		for (j = 0; j < (int)v.rows; j++)
-		{
-			if (v.elements[j][k] < 0.0)
-				s++;
-		}
-
-		if (s > (u.rows + v.rows) / 2)
-		{
-			for (i = 0; i < (int)u.rows; i++)
-				u.elements[i][k] = -u.elements[i][k];
-
-			for (j = 0; j < (int)v.rows; j++)
-				v.elements[j][k] = -v.elements[j][k];
-		}
-	}
-
-	delete [] su;
-	delete [] sv;
 
 	return true;
 }
 
 //==========================================================================
 // Class:			Matrix
+// Function:		RemoveZeroSingularValues
+//
+// Description:		Part of SVD algorithm - removes very small singular values.
+//					Without this step, the results are OK, but this makes them
+//					much better.
+//
+// Input Arguments:
+//		U	= Matrix&
+//		W	= Matrix&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void Matrix::RemoveZeroSingularValues(Matrix &U, Matrix &W) const
+{
+	unsigned int i;
+	for (i = 0; i < GetMinimumDimension(); i++)
+	{
+		if (VVASEMath::IsZero(W.elements[i][i]))
+		{
+			W.elements[i][i] = 0.0;
+			U.elements[i][i] = 0.0;
+		}
+	}
+}
+
+//==========================================================================
+// Class:			Matrix
+// Function:		SortSingularValues
+//
+// Description:		Part of SVD algorithm.  Sorts singular values (and corresponding
+//					columns of U and V) by decreasing magnitude.
+//
+// Input Arguments:
+//		U	= Matrix&
+//		V	= Matrix&
+//		W	= Matrix&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void Matrix::SortSingularValues(Matrix &U, Matrix &V, Matrix &W) const
+{
+	unsigned int its(1), i, j, k;
+	double sw, s;
+	double *su = new double[U.rows];
+	double *sv = new double[V.rows];
+
+	do
+	{
+		its *= 3;
+		its++;
+	} while (its <= V.rows);
+
+	do
+	{
+		its /= 3;
+		for (i = its; i < V.rows; i++)
+		{
+			sw = W.elements[i][i];
+			for (k = 0; k < U.rows; k++)
+				su[k] = U.elements[k][i];
+
+			for (k = 0; k < V.rows; k++)
+				sv[k] = V.elements[k][i];
+
+			j = i;
+			while (W.elements[j - its][j - its] < sw)
+			{
+				W.elements[j][j] = W.elements[j - its][j - its];
+				for (k = 0; k < U.rows; k++)
+					U.elements[k][j] = U.elements[k][j - its];
+
+				for (k = 0; k < V.rows; k++)
+					V.elements[k][j] = V.elements[k][j - its];
+
+				j -= its;
+				if (j < its)
+					break;
+			}
+
+			W.elements[j][j] = sw;
+
+			for (k = 0; k < U.rows; k++)
+				U.elements[k][j] = su[k];
+
+			for (k = 0; k < V.rows; k++)
+				V.elements[k][j] = sv[k];
+		}
+	} while (its > 1);
+
+	for (k = 0; k < V.rows; k++)
+	{
+		s = 0.0;
+		for (i = 0; i < U.rows; i++)
+		{
+			if (U.elements[i][k] < 0.0)
+				s++;
+		}
+
+		for (j = 0; j < V.rows; j++)
+		{
+			if (V.elements[j][k] < 0.0)
+				s++;
+		}
+
+		if (s > (U.rows + V.rows) / 2)
+		{
+			for (i = 0; i < U.rows; i++)
+				U.elements[i][k] = -U.elements[i][k];
+
+			for (j = 0; j < V.rows; j++)
+				V.elements[j][k] = -V.elements[j][k];
+		}
+	}
+
+	delete [] su;
+	delete [] sv;
+}
+
+//==========================================================================
+// Class:			Matrix
 // Function:		RemoveRow
 //
-// Description:		Removes the specified row from the matrix
+// Description:		Removes the specified row from the matrix.
 //
 // Input Arguments:
 //		None

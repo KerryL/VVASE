@@ -33,8 +33,8 @@ public:
 	void GenerateGeometry();
 	bool HasValidParameters();
 
-	void SetValue(const double& value);
-	double GetValue() const { return value; };
+	void SetLocation(const int& location);
+	double GetValue() const { return value; }
 
 	bool IsUnder(const unsigned int &pixel);
 
@@ -47,9 +47,7 @@ private:
 
 	// Current value where this object meets the axis
 	double value;
-	unsigned int locationAlongAxis;
-
-	void RescalePoint(unsigned int &point);
+	int locationAlongAxis;
 };
 
 #endif// CURSOR_H_
