@@ -82,7 +82,6 @@ GAObject::~GAObject()
 	wxMutexLocker lock(gsaMutex);
 	DebugLog::GetInstance()->Log(_T("GAObject::~GAObject()"));
 
-	// Delete this object's CAR members
 	unsigned int i;
 	for (i = 0; i < numberOfCars; i++)
 	{
@@ -281,7 +280,6 @@ void GAObject::SetUp(const Car &targetCar)
 	gsaMutex.Lock();
 	DebugLog::GetInstance()->Log(_T("GAObject::SetUp (lock)"));
 
-	// Initialize the run
 	int *phenotypeSizes = new int[geneList.GetCount()];
 	unsigned int i;
 	for (i = 0; i < geneList.GetCount(); i++)
@@ -292,11 +290,10 @@ void GAObject::SetUp(const Car &targetCar)
 	DebugLog::GetInstance()->Log(_T("GAObject::SetUp (unlock)"));
 	gsaMutex.Unlock();
 
-	// Initialize the algorithm
 	InitializeAlgorithm(populationSize, generationLimit, geneList.GetCount(),
 		phenotypeSizes, true, crossover, elitism, mutation);
 
-	// Ensure exclusive access to this object (again)
+
 	wxMutexLocker lock(gsaMutex);
 	DebugLog::GetInstance()->Log(_T("GAObject::SetUp (locker)"));
 

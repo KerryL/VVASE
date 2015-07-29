@@ -126,10 +126,8 @@ Iteration::Iteration(MainFrame &mainFrame, wxString pathAndFileName)
 //==========================================================================
 Iteration::~Iteration()
 {
-	// Clear out the lists
 	ClearAllLists();
 
-	// Delete the X-axis values
 	delete [] axisValuesPitch;
 	axisValuesPitch = NULL;
 
@@ -142,7 +140,6 @@ Iteration::~Iteration()
 	delete [] axisValuesRackTravel;
 	axisValuesRackTravel = NULL;
 
-	// Delete the working car array
 	int i;
 	for (i = 0; i < numberOfWorkingCars; i++)
 	{
@@ -535,16 +532,11 @@ void Iteration::UpdateDisplay()
 //==========================================================================
 void Iteration::ClearAllLists()
 {
-	// Clear out all of our lists
 	unsigned int currentList;
 	for (currentList = 0; currentList < outputLists.GetCount(); currentList++)
-		// Remove all of the sub-lists
 		outputLists[currentList]->Clear();
 
-	// Remove the parent list
 	outputLists.Clear();
-
-	// Remove the list of associated cars
 	associatedCars.clear();
 }
 

@@ -86,7 +86,6 @@ GeneticOptimization::GeneticOptimization(MainFrame &mainFrame,
 //==========================================================================
 GeneticOptimization::~GeneticOptimization()
 {
-	// Delete the genetic algorithm object
 	delete geneticAlgorithm;
 	geneticAlgorithm = NULL;
 }

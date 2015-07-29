@@ -41,26 +41,19 @@
 //==========================================================================
 GeneticAlgorithm::GeneticAlgorithm()
 {
-	// Ensure exlcusive access to this object
 	gsaMutex.Lock();
 	DebugLog::GetInstance()->Log(_T("GeneticAlgorithm::GeneticAlgorithm() (lock)"));
 
-	// Initialize the pointers
 	genomes = NULL;
 	numberOfPhenotypes = NULL;
 	fitnesses = NULL;
 
-	// Initialize the number of generations
 	generationLimit = 0;
-
-	// Initialize the sorting method
 	sortingMethod = SortMerge;
 
-	// Release the mutex
 	DebugLog::GetInstance()->Log(_T("GeneticAlgorithm::GeneticAlgorithm() (unlock)"));
 	gsaMutex.Unlock();
 
-	// Initialize the class members to zero
 	InitializeAlgorithm(0, 0, 0, NULL, false, 0, 0.0, 0.0);
 }
 
@@ -265,10 +258,9 @@ void GeneticAlgorithm::InitializeAlgorithm(int populationSize, int generationLim
 
 	this->populationSize	= populationSize;
 	this->generationLimit	= generationLimit;
-	this->numberOfGenes	= numberOfGenes;
-	this->minimize		= minimize;
+	this->numberOfGenes		= numberOfGenes;
+	this->minimize			= minimize;
 
-	// Release the mutex to avoid a deadlock in the following "Set" functions
 	DebugLog::GetInstance()->Log(_T("GeneticAlgorithm::InitializeAlgorithm (unlock)"));
 	gsaMutex.Unlock();
 
@@ -277,11 +269,9 @@ void GeneticAlgorithm::InitializeAlgorithm(int populationSize, int generationLim
 	SetElitismPercentage(elitism);
 	SetMutationProbability(mutation);
 
-	// Ensure exclusive access to this object (again)
 	wxMutexLocker lock(gsaMutex);
 	DebugLog::GetInstance()->Log(_T("GeneticAlgorithm::InitializeAlgorithm (locker)"));
 
-	// Initialize the current generation
 	currentGeneration = -1;
 
 	// Handle the memory allocation

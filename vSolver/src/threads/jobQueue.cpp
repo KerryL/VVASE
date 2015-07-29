@@ -91,7 +91,7 @@ ThreadJob JobQueue::Pop()
 
 	queueCount.Wait();
 
-	mutexQueue.Lock();
+	wxMutexLocker lock(mutexQueue);
 	DebugLog::GetInstance()->Log(_T("JobQueue::Pop (lock)"));
 
 	// Get the first job from the queue (prioritization occurs automatically)
@@ -100,7 +100,6 @@ ThreadJob JobQueue::Pop()
 	jobs.erase(jobs.begin());
 
 	DebugLog::GetInstance()->Log(_T("JobQueue::Pop (unlock)"));
-	mutexQueue.Unlock();
 
 	return nextJob;
 }
