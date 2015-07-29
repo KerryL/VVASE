@@ -60,31 +60,10 @@ DEFINE_LOCAL_EVENT_TYPE(EVT_DEBUG)
 //==========================================================================
 Debugger::Debugger() : std::ostream(&buffer), buffer(*this)
 {
-	wxMutexLocker lock(debugMutex);
+	wxMutexLocker lock(mutex);
 
 	debugLevel = PriorityHigh;
 	parent = NULL;
-}
-
-//==========================================================================
-// Class:			Debugger
-// Function:		~Debugger
-//
-// Description:		Destructor for the Debugger class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Debugger::~Debugger()
-{
-	wxMutexLocker lock(debugMutex);
 }
 
 //==========================================================================
@@ -173,7 +152,7 @@ void Debugger::Kill()
 //==========================================================================
 void Debugger::SetDebugLevel(const DebugLevel &level)
 {
-	wxMutexLocker lock(debugMutex);
+	wxMutexLocker lock(mutex);
 	debugLevel = level;
 }
 
@@ -195,8 +174,59 @@ void Debugger::SetDebugLevel(const DebugLevel &level)
 //==========================================================================
 void Debugger::SetTargetOutput(wxEvtHandler *parent)
 {
-	wxMutexLocker lock(debugMutex);
+	wxMutexLocker lock(mutex);
 	this->parent = parent;
+}
+
+//==========================================================================
+// Class:			Debugger::DebuggerStreamBuffer
+// Function:		~DebuggerStreamBuffer
+//
+// Description:		Destructor for DebuggerStreamBuffer class.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		int
+//
+//==========================================================================
+Debugger::DebuggerStreamBuffer::~DebuggerStreamBuffer()
+{
+	BufferMap::iterator it;
+	for (it = threadBuffer.begin(); it != threadBuffer.end(); it++)
+		delete it->second;
+}
+
+//==========================================================================
+// Class:			Debugger::DebuggerStreamBuffer
+// Function:		overflow
+//
+// Description:		Override of the standard overflow method.  Called when
+//					new data is inserted into the stream.  This is overridden
+//					so we can control which buffer the data is inserted into.
+//					The buffers are controlled on a per-thread basis.
+//
+// Input Arguments:
+//		c	= int
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		int
+//
+//==========================================================================
+int Debugger::DebuggerStreamBuffer::overflow(int c)
+{
+	CreateThreadBuffer();
+	if (c != traits_type::eof())
+		*threadBuffer[wxThread::GetCurrentId()] << (char)c;
+
+	return c;
 }
 
 //==========================================================================
@@ -223,6 +253,33 @@ int Debugger::DebuggerStreamBuffer::sync()
 }
 
 //==========================================================================
+// Class:			Debugger::DebuggerStreamBuffer
+// Function:		CreateThreadBuffer
+//
+// Description:		Checks for existance of a buffer for the current thread,
+//					and creates the buffer if it doesn't exist.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void Debugger::DebuggerStreamBuffer::CreateThreadBuffer(void)
+{
+	if (threadBuffer.find(wxThread::GetCurrentId()) == threadBuffer.end())
+	{
+		wxMutexLocker lock(mutex);
+		if (threadBuffer.find(wxThread::GetCurrentId()) == threadBuffer.end())
+			threadBuffer[wxThread::GetCurrentId()] = new std::stringstream;
+	}
+}
+
+//==========================================================================
 // Class:			Debugger (friend)
 // Function:		operator<<
 //
@@ -245,7 +302,9 @@ std::ostream& operator<<(std::ostream &os, const Debugger::DebugLevel& level)
 {
 	assert(typeid(Debugger&) == typeid(os));
 	Debugger& debugger(dynamic_cast<Debugger&>(os));
-	wxMutexLocker lock(debugger.debugMutex);
+
+	debugger.buffer.CreateThreadBuffer();
+	wxMutexLocker lock(debugger.buffer.mutex);
 
 	// Lower debug level -> higher priority
 	// Show messages having a debug level higher than or equal to the set debug level
@@ -258,7 +317,7 @@ std::ostream& operator<<(std::ostream &os, const Debugger::DebugLevel& level)
 			evt.SetInt(level);
 
 			// Format the message
-			wxString message(debugger.buffer.str());
+			wxString message(debugger.buffer.threadBuffer[wxThread::GetCurrentId()]->str());
 			if (level == Debugger::PriorityVeryHigh)
 				message.Prepend(_T("      "));
 			message.append(_T("\n"));
@@ -268,16 +327,16 @@ std::ostream& operator<<(std::ostream &os, const Debugger::DebugLevel& level)
 		}
 #ifndef DEBUG_TO_STDOUT
 		else// Send the output to the terminal
-			std::cout << debugger.buffer.str() << std::endl;
+			std::cout << debugger.buffer.threadBuffer[wxThread::GetCurrentId()]->str() << std::endl;
 		// TODO:  Modify this to be like CombinedLogger and output to multiple sources?  other std::ostreams?
 		// Then could make another ostream for writing to wxTextCtrl
 #endif
 	}
 	
 #ifdef DEBUG_TO_STDOUT
-	std::cout << debugger.buffer.str() << std::endl;
+	std::cout << debugger.buffer.threadBuffer[wxThread::GetCurrentId()]->str() << std::endl;
 #endif
 
-	debugger.buffer.str("");
+	debugger.buffer.threadBuffer[wxThread::GetCurrentId()]->str("");
 	return os;
 }

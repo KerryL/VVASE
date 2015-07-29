@@ -30,6 +30,7 @@
 // Standard C++ headers
 #include <iostream>
 #include <sstream>
+#include <map>
 
 // wxWidgets headers
 #include <wx/event.h>
@@ -61,26 +62,35 @@ public:
 	friend std::ostream& operator<<(std::ostream &os, const Debugger::DebugLevel& level);
 
 	void SetDebugLevel(const DebugLevel &level);
-	inline DebugLevel GetDebugLevel() const { wxMutexLocker lock(debugMutex); return debugLevel; }
+	inline DebugLevel GetDebugLevel() const { wxMutexLocker lock(mutex); return debugLevel; }
 	void SetTargetOutput(wxEvtHandler *parent);
 
 private:
 	// For singletons, the constructors and assignment operators are private
 	Debugger();
-	virtual ~Debugger();
+	virtual ~Debugger() {}
 	
 	static Debugger *debuggerInstance;
 	
 	DebugLevel debugLevel;
 	wxEvtHandler *parent;
-	mutable wxMutex debugMutex;
+	mutable wxMutex mutex;
 
+	// This stream buffer is designed to allow streaming to occur from multiple threads
+	// simultaneously without jumbling the text
 	class DebuggerStreamBuffer : public std::stringbuf
 	{
 	public:
 		DebuggerStreamBuffer(Debugger &log) : log(log) {}
+		virtual ~DebuggerStreamBuffer();
+
+		typedef std::map<wxThreadIdType, std::stringstream*> BufferMap;
+		BufferMap threadBuffer;
+		mutable wxMutex mutex;
+		void CreateThreadBuffer(void);
 
 	protected:
+		virtual int overflow(int c);
 		virtual int sync();
 
 	private:
