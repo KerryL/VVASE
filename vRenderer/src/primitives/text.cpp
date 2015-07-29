@@ -89,7 +89,6 @@ TextRendering::~TextRendering()
 //==========================================================================
 void TextRendering::GenerateGeometry()
 {
-	// Add the text
 	if (font && !text.IsEmpty())
 	{
 		glPushMatrix();
@@ -105,10 +104,32 @@ void TextRendering::GenerateGeometry()
 				glTranslated(x, y, 0.0);
 			glRotated(angle, 0.0, 0.0, 1.0);
 
-			// Render the text
 			font->Render(text.mb_str());
 		glPopMatrix();
 	}
+}
+
+//==========================================================================
+// Class:			TextRendering
+// Function:		SetFont
+//
+// Description:		Sets the font pointer.
+//
+// Input Arguments:
+//		font	= FTFont*
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void TextRendering::SetFont(FTFont *font)
+{
+	this->font = font;
+	font->UseDisplayList(false);// Because we're using our own lists
+	modified = true;
 }
 
 //==========================================================================
@@ -130,7 +151,6 @@ void TextRendering::GenerateGeometry()
 //==========================================================================
 bool TextRendering::HasValidParameters()
 {
-	// Don't draw if the angle is not a number
 	if (VVASEMath::IsNaN(angle))
 		return false;
 

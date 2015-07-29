@@ -122,6 +122,29 @@ void Axis::GenerateGeometry(void)
 
 //==========================================================================
 // Class:			Axis
+// Function:		SetFont
+//
+// Description:		Sets the font pointer.
+//
+// Input Arguments:
+//		font	= FTFont*
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void Axis::SetFont(FTFont *font)
+{
+	this->font = font;
+	font->UseDisplayList(false);// Because we're using our own lists
+	modified = true;
+}
+
+//==========================================================================
+// Class:			Axis
 // Function:		DrawFullAxis
 //
 // Description:		Draws the axis, grid lines and tick marks.

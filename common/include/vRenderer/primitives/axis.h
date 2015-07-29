@@ -65,7 +65,7 @@ public:
 	void SetMajorGrid(const bool &majorGrid) { this->majorGrid = majorGrid; modified = true; }
 	void SetMinorGrid(const bool &minorGrid) { this->minorGrid = minorGrid; modified = true; }
 	void SetLabel(wxString label) { this->label = label; modified = true; }
-	void SetFont(FTFont *font) { this->font = font; modified = true; }
+	void SetFont(FTFont *font);
 	void SetGridColor(const Color &gridColor) { this->gridColor = gridColor; modified = true; }
 	void SetTickStyle(const TickStyle &tickStyle) { this->tickStyle = tickStyle; modified = true; }
 	void SetTickSize(const int &tickSize) { this->tickSize = tickSize; modified = true; }

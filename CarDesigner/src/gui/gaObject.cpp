@@ -143,16 +143,13 @@ const int GAObject::currentFileVersion = 0;
 //==========================================================================
 void GAObject::SimulateGeneration()
 {
-	// Set the "optimization is running" flag
 	isRunning = true;
 
 	// Start a bunch of jobs to evaluate all the different genomes at each different input condition
 	// Use a counter to keep track of the number of pending jobs
 	KinematicsData *data;
 
-	// Initialize the semaphore
-	// FIXME:  Check return value to ensure no errors!
-	inverseSemaphore.Set(numberOfCars);
+	inverseSemaphore.Set(numberOfCars);// TODO:  Check return value to ensure no errors!
 
 	int i, temp(optimization.GetIndex());
 	unsigned int j;
@@ -160,10 +157,8 @@ void GAObject::SimulateGeneration()
 	{
 		for (j = 0; j < inputList.GetCount(); j++)
 		{
-			// Set up the car according to the current genome
 			SetCarGenome(i * inputList.GetCount() + j, genomes[currentGeneration][i]);
 
-			// Create the data and the job to send to the thread pool
 			data = new KinematicsData(originalCarArray[i * inputList.GetCount() + j],
 				workingCarArray[i * inputList.GetCount() + j], *inputList[j],
 				kinematicOutputArray + i * inputList.GetCount() + j);
@@ -173,10 +168,8 @@ void GAObject::SimulateGeneration()
 		}
 	}
 
-	// Wait until the analyses are complete
 	inverseSemaphore.Wait();
 
-	// Determine fitnesses for every genome we just simulated
 	for (i = 0; i < populationSize; i++)
 		fitnesses[currentGeneration][i] = DetermineFitness(&i);
 }
@@ -274,7 +267,7 @@ double GAObject::DetermineFitness(const int *citizen)
 // Description:		Calls the parent class's initialization routine.
 //
 // Input Arguments:
-//		targetCar	= Car* pointing to the object to optimize
+//		targetCar	= const Car& pointing to the object to optimize
 //
 // Output Arguments:
 //		None
@@ -283,7 +276,7 @@ double GAObject::DetermineFitness(const int *citizen)
 //		None
 //
 //==========================================================================
-void GAObject::SetUp(Car *targetCar)
+void GAObject::SetUp(const Car &targetCar)
 {
 	gsaMutex.Lock();
 	DebugLog::GetInstance()->Log(_T("GAObject::SetUp (lock)"));
@@ -294,8 +287,7 @@ void GAObject::SetUp(Car *targetCar)
 	for (i = 0; i < geneList.GetCount(); i++)
 		phenotypeSizes[i] = geneList[i]->numberOfValues;
 
-	assert(targetCar);// TODO:  Should we pass a reference instead?
-	this->targetCar = targetCar;
+	this->targetCar = &targetCar;
 
 	DebugLog::GetInstance()->Log(_T("GAObject::SetUp (unlock)"));
 	gsaMutex.Unlock();
@@ -761,12 +753,12 @@ void GAObject::DetermineAllInputs()
 
 //==========================================================================
 // Class:			GAObject
-// Function:		UpdateTargetCar
+// Function:		UpdateResultingCar
 //
 // Description:		Updates the target car to match the best fit genome.
 //
 // Input Arguments:
-//		None
+//		result	= Car&
 //
 // Output Arguments:
 //		None
@@ -775,13 +767,13 @@ void GAObject::DetermineAllInputs()
 //		None
 //
 //==========================================================================
-void GAObject::UpdateTargetCar()
+void GAObject::UpdateResultingCar(Car &result) const
 {
 	wxMutexLocker lock(gsaMutex);
-	DebugLog::GetInstance()->Log(_T("GAObject::UpdateTargetCar (locker)"));
+	DebugLog::GetInstance()->Log(_T("GAObject::UpdateResultingCar (locker)"));
 
-	wxMutexLocker carLock(targetCar->GetMutex());
-	*targetCar = *originalCarArray[generationLimit - 1];
+	wxMutexLocker carLock(result.GetMutex());
+	result = *originalCarArray[generationLimit - 1];
 }
 
 //==========================================================================

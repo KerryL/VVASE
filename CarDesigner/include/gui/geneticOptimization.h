@@ -35,11 +35,8 @@ class GeneticAlgorithmPanel;
 class GeneticOptimization : public GuiObject
 {
 public:
-	// Constructor
 	GeneticOptimization(MainFrame &mainFrame,
 		wxString pathAndFileName = wxEmptyString);
-
-	// Destructor
 	~GeneticOptimization();
 
 	// Mandatory overload
@@ -67,8 +64,8 @@ public:
 	GAObject &GetAlgorithm() { return *geneticAlgorithm; }
 
 	// Accessors for the car to optimize
-	GuiCar *GetCarToOptimize() { return carToOptimize; }
-	void SetCarToOptimize(GuiCar *carToOptimize);
+	const GuiCar& GetCarToOptimize() { return *carToOptimize; }
+	void SetCarToOptimize(const GuiCar &carToOptimize);
 
 private:
 	int GetIconHandle() const;
@@ -77,13 +74,8 @@ private:
 	bool PerformLoadFromFile();
 	bool PerformSaveToFile();
 
-	// The panel that appears in the main notebook
 	GeneticAlgorithmPanel *gaPanel;
-
-	// The object we're working with
-	GuiCar *carToOptimize;
-
-	// The genetic algorithm object (actually, this is our special wrapper)
+	const GuiCar *carToOptimize;
 	GAObject *geneticAlgorithm;
 };
 

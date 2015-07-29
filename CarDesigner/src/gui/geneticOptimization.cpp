@@ -60,7 +60,6 @@ GeneticOptimization::GeneticOptimization(MainFrame &mainFrame,
 
 	name.Printf("Unsaved Optimization %i", index + 1);
 
-	// Create the panel containing the algorithm's controls
 	gaPanel = new GeneticAlgorithmPanel(mainFrame, *this);
 	notebookTab = reinterpret_cast<wxWindow*>(gaPanel);
 
@@ -232,7 +231,6 @@ void GeneticOptimization::MarkAnalysisComplete()
 //==========================================================================
 int GeneticOptimization::GetIconHandle() const
 {
-	// Return the proper icon handle
 	return systemsTree->GetIconHandle(MainTree::OptimizationIcon);
 }
 
@@ -258,11 +256,12 @@ void GeneticOptimization::CompleteOptimization()
 	// Set the text on the start/stop optimization button back to "Start GA"
 	// FIXME!!!
 
-	// Update the selected car to reflect the optimization
-	geneticAlgorithm->UpdateTargetCar();
-
-	// Mark the target car as modified
-	carToOptimize->SetModified();
+	GuiCar *result = new GuiCar(mainFrame);
+	geneticAlgorithm->UpdateResultingCar(result->GetOriginalCar());
+	result->SetName(_T("Unsaved Result : ") + name);
+	result->SetModified();
+	mainFrame.SetActiveIndex(result->GetIndex());
+	mainFrame.UpdateAnalysis();
 }
 
 //==========================================================================
@@ -273,7 +272,7 @@ void GeneticOptimization::CompleteOptimization()
 //					specified.
 //
 // Input Arguments:
-//		_carToOptimize	= GuiCar* to be optimized
+//		carToOptimize	= const GuiCar& to be optimized
 //
 // Output Arguments:
 //		None
@@ -282,10 +281,9 @@ void GeneticOptimization::CompleteOptimization()
 //		None
 //
 //==========================================================================
-void GeneticOptimization::SetCarToOptimize(GuiCar *carToOptimize)
+void GeneticOptimization::SetCarToOptimize(const GuiCar &carToOptimize)
 {
-	assert(carToOptimize);// TODO:  Pass reference instead?
-	this->carToOptimize = carToOptimize;
+	this->carToOptimize = &carToOptimize;
 }
 
 //==========================================================================
@@ -306,7 +304,6 @@ void GeneticOptimization::SetCarToOptimize(GuiCar *carToOptimize)
 //==========================================================================
 void GeneticOptimization::UpdateDisplay()
 {
-	// Update the display
 	gaPanel->UpdateInformation();
 }
 
@@ -336,6 +333,5 @@ void GeneticOptimization::UpdateData()
 	if (!objectIsInitialized)
 		return;
 
-	// Update the display
 	gaPanel->UpdateInformation();
 }

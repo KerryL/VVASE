@@ -38,21 +38,14 @@ public:
 	GAObject(JobQueue &queue, GeneticOptimization &optimization);
 	~GAObject();
 
-	void SetUp(Car *targetCar);
+	void SetUp(const Car &targetCar);
 
 	// For storing the information about the genes
 	struct Gene
 	{
-		// The value to be altered
 		Corner::Hardpoints hardpoint;
-
-		// A variable that will always be set to the same value as Variable (optional)
 		Corner::Hardpoints tiedTo;
-
-		// The corner containing these points
 		Corner::Location location;
-
-		// The component of the hardpoint to optimize
 		Vector::Axis direction;
 
 		double minimum;
@@ -106,17 +99,11 @@ public:
 	bool Write(wxString fileName);
 	bool Read(wxString fileName);
 
-	// Accessor for synchronization object
 	void MarkAnalysisComplete() { inverseSemaphore.Post(); }
-
-	// Gets the number of analyses to be performed for each generation
 	int GetNumberOfInputs() const { wxMutexLocker lock(gsaMutex); DebugLog::GetInstance()->Log(_T("GAObject::GetNumberOfInputs()")); return inputList.GetCount(); }
-
-	// Returns status of this object (running or not)
 	bool OptimizationIsRunning() const {  wxMutexLocker lock(gsaMutex); DebugLog::GetInstance()->Log(_T("GAObject::OptimizationIsRunning()")); return isRunning; }
 
-	// Returns the best car with the best fit genome
-	void UpdateTargetCar();
+	void UpdateResultingCar(Car& result) const;
 
 private:
 	JobQueue &queue;
@@ -139,7 +126,7 @@ private:
 	unsigned int numberOfCars;
 
 	// Original car to be optimized (only one needed for reference)
-	Car *targetCar;
+	const Car *targetCar;
 
 	ManagedList<Gene> geneList;
 	ManagedList<Goal> goalList;

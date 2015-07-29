@@ -713,10 +713,10 @@ void GeneticAlgorithmPanel::StartStopOptimizationClickedEvent(wxCommandEvent& WX
 			return;
 		}
 
-		optimization.SetCarToOptimize(static_cast<GuiCar*>(mainFrame.GetObjectByIndex(i)));
+		optimization.SetCarToOptimize(static_cast<GuiCar&>(*mainFrame.GetObjectByIndex(i)));
 
 		// Set the parameters for the analysis
-		optimization.GetAlgorithm().SetUp(&(optimization.GetCarToOptimize()->GetOriginalCar()));
+		optimization.GetAlgorithm().SetUp(optimization.GetCarToOptimize().GetOriginalCar());
 
 		// Reset the status bars (must occur after algorithm is SetUp() so we know
 		// how many analyses to expect

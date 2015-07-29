@@ -38,7 +38,7 @@ public:
 
 	// Set option methods
 	void SetAngle(const double& angle) { this->angle = angle; modified = true; }
-	void SetFont(FTFont *font) { this->font = font; modified = true; }
+	void SetFont(FTFont *font);
 	void SetText(const wxString& text) { this->text = text; modified = true; }
 	void SetPosition(const double& x, const double& y) { this->x = x; this->y = y; modified = true; }
 	void SetCentered(const bool& centered) { this->centered = centered; modified = true; }

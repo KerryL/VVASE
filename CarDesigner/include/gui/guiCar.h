@@ -55,8 +55,10 @@ public:
 	void UpdateDisplay();
 
 	// Private member accessors
-	inline Car &GetOriginalCar() { return *originalCar; }
-	inline Car &GetWorkingCar() { return *workingCar; }
+	inline Car& GetOriginalCar() { return *originalCar; }
+	inline const Car& GetOriginalCar() const { return *originalCar; }
+	inline Car& GetWorkingCar() { return *workingCar; }
+	inline const Car& GetWorkingCar() const { return *workingCar; }
 	inline AppearanceOptions &GetAppearanceOptions() { return *appearanceOptions; }
 
 	ItemType GetType() const { return TypeCar; }
