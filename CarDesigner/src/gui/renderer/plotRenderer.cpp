@@ -315,7 +315,7 @@ void PlotRenderer::OnMouseMoveEvent(wxMouseEvent &event)
 
 	if (!event.Dragging() || ignoreNextMouseMove)// ignoreNextMouseMove prevents panning on maximize by double clicking title bar
 	{
-		plot->SetPrettyCurves(true);
+		plot->SetPrettyCurves((curveQuality & QualityHighStatic) != 0);
 		ignoreNextMouseMove = false;
 		StoreMousePosition(event);
 		return;
@@ -342,7 +342,7 @@ void PlotRenderer::OnMouseMoveEvent(wxMouseEvent &event)
 		return;
 	}
 
-	plot->SetPrettyCurves(false);
+	plot->SetPrettyCurves((curveQuality & QualityHighDrag) != 0);
 	StoreMousePosition(event);
 	UpdateDisplay();
 }
@@ -365,7 +365,7 @@ void PlotRenderer::OnMouseMoveEvent(wxMouseEvent &event)
 //==========================================================================
 void PlotRenderer::OnRightButtonUpEvent(wxMouseEvent &event)
 {
-	plot->SetPrettyCurves(true);
+	plot->SetPrettyCurves((curveQuality & QualityHighStatic) != 0);
 
 	if (!zoomBox->GetIsVisible())
 	{
@@ -664,6 +664,27 @@ void PlotRenderer::SetMinorGridOff()
 
 //==========================================================================
 // Class:			PlotRenderer
+// Function:		SetCurveQuality
+//
+// Description:		Updates the internal curve quality flag.
+//
+// Input Arguments:
+//		curveQuality	= const CurveQuality&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotRenderer::SetCurveQuality(const CurveQuality& curveQuality)
+{
+	this->curveQuality = curveQuality;
+}
+
+//==========================================================================
+// Class:			PlotRenderer
 // Function:		LegendIsVisible
 //
 // Description:		Returns the status of the legend visibility.
@@ -678,7 +699,7 @@ void PlotRenderer::SetMinorGridOff()
 //		bool
 //
 //==========================================================================
-bool PlotRenderer::LegendIsVisible(void)
+bool PlotRenderer::LegendIsVisible()
 {
 	if (!legend)
 		return false;
@@ -1630,7 +1651,7 @@ void PlotRenderer::OnLeftButtonDownEvent(wxMouseEvent &event)
 //==========================================================================
 void PlotRenderer::OnLeftButtonUpEvent(wxMouseEvent& WXUNUSED(event))
 {
-	plot->SetPrettyCurves(true);
+	plot->SetPrettyCurves((curveQuality & QualityHighStatic) != 0);
 
 	if (draggingLegend)
 	{
@@ -2751,4 +2772,52 @@ double PlotRenderer::ComputeTickSpacing(const double &min, const double &max,
 		scaledSpacing = 0.1;
 
 	return scaledSpacing * pow(10.0, orderOfMagnitude - 1);
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		GetImage
+//
+// Description:		Returns a copy of the current image.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		wxImage
+//
+//==========================================================================
+wxImage PlotRenderer::GetImage() const
+{
+	plot->SetPrettyCurves((curveQuality & QualityHighWrite) != 0);
+	if (((curveQuality & QualityHighStatic) != 0) != ((curveQuality & QualityHighWrite) != 0))
+		{/*UpdateDisplay();*/}// TODO:  Can't call from const method, so HighQualityWrite flag current doesn't work
+
+	wxImage newImage(RenderWindow::GetImage());
+	plot->SetPrettyCurves((curveQuality & QualityHighStatic) != 0);
+	return newImage;
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		GetTotalPointCount
+//
+// Description:		Returns total number of points stored in plot curves.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		unsigned long long
+//
+//==========================================================================
+unsigned long long PlotRenderer::GetTotalPointCount() const
+{
+	return plot->GetTotalPointCount();
 }

@@ -679,7 +679,7 @@ bool ExpressionTree::NextIsFunction(const wxString &s, unsigned int *stop)
 		return true;
 	else if (BeginningMatchesNoCase(s, _T("int"), stop))
 		return true;
-	else if (BeginningMatchesNoCase(s, _T("ddt"), stop))
+	else if (BeginningMatchesNoCase(s, _T("ddx"), stop))
 		return true;
 	else if (BeginningMatchesNoCase(s, _T("fft"), stop))
 		return true;
@@ -1021,7 +1021,7 @@ Dataset2D ExpressionTree::ApplyFunction(const wxString &function,
 {
 	if (function.CmpNoCase(_T("int")) == 0)
 		return DiscreteIntegral::ComputeTimeHistory(set);
-	else if (function.CmpNoCase(_T("ddt")) == 0)
+	else if (function.CmpNoCase(_T("ddx")) == 0)
 		return DiscreteDerivative::ComputeTimeHistory(set);
 	else if (function.CmpNoCase(_T("fft")) == 0)
 		return FastFourierTransform::ComputeFFT(set).MultiplyXData(xAxisFactor);
@@ -1120,7 +1120,7 @@ double ExpressionTree::ApplyFunction(const wxString &function, const double &val
 bool ExpressionTree::FunctionRequiresDataset(const wxString &function) const
 {
 	if (function.CmpNoCase(_T("int")) == 0 ||
-		function.CmpNoCase(_T("ddt")) == 0 ||
+		function.CmpNoCase(_T("ddx")) == 0 ||
 		function.CmpNoCase(_T("fft")) == 0 ||
 		function.CmpNoCase(_T("frf")) == 0)
 		return true;

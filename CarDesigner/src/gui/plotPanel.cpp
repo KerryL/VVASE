@@ -494,14 +494,14 @@ void PlotPanel::CreateGridContextMenu(const wxPoint &position, const unsigned in
 	wxMenu *contextMenu = new wxMenu();
 
 	contextMenu->Append(idContextAddMathChannel, _T("Add Math Channel"));
-	//contextMenu->Append(idContextFRF, _T("Frequency Response"));
-	//contextMenu->Append(idContextSetXData, _T("Use as X-Axis"));
+	/*contextMenu->Append(idContextFRF, _T("Frequency Response"));
+	contextMenu->Append(idContextSetXData, _T("Use as X-Axis"));
 
 	contextMenu->AppendSeparator();
 
-	//contextMenu->Append(idContextCreateSignal, _T("Create Signal"));
+	contextMenu->Append(idContextCreateSignal, _T("Create Signal"));
 
-	contextMenu->AppendSeparator();
+	contextMenu->AppendSeparator();*/
 
 	/*if (row == 0)
 	{
@@ -510,6 +510,7 @@ void PlotPanel::CreateGridContextMenu(const wxPoint &position, const unsigned in
 	}
 	else*/ if (row > 0)
 	{
+		contextMenu->AppendSeparator();// TODO:  Remove this if the above menu options are re-introduced
 		contextMenu->Append(idContextPlotDerivative, _T("Plot Derivative"));
 		contextMenu->Append(idContextPlotIntegral, _T("Plot Integral"));
 		contextMenu->Append(idContextPlotRMS, _T("Plot RMS"));
@@ -523,9 +524,9 @@ void PlotPanel::CreateGridContextMenu(const wxPoint &position, const unsigned in
 		//contextMenu->Append(idContextFilter, _T("Filter Curve"));
 		contextMenu->Append(idContextFitCurve, _T("Fit Curve"));
 
-		contextMenu->AppendSeparator();
+		/*contextMenu->AppendSeparator();
 
-		//contextMenu->Append(idButtonRemoveCurve, _T("Remove Curve"));
+		contextMenu->Append(idButtonRemoveCurve, _T("Remove Curve"));*/
 	}
 
 	PopupMenu(contextMenu, position);
@@ -1030,7 +1031,8 @@ void PlotPanel::RemoveCurve(const unsigned int &i)
 void PlotPanel::GridRightClickEvent(wxGridEvent &event)
 {
 	optionsGrid->SelectRow(event.GetRow());
-	CreateGridContextMenu(event.GetPosition() + optionsGrid->GetPosition(), event.GetRow());
+	CreateGridContextMenu(event.GetPosition() + optionsGrid->GetPosition()
+		+ optionsGrid->GetParent()->GetPosition(), event.GetRow());
 }
 
 //==========================================================================
@@ -1627,7 +1629,7 @@ void PlotPanel::ContextPlotDerivativeEvent(wxCommandEvent& WXUNUSED(event))
 	unsigned int row = optionsGrid->GetSelectedRows()[0];
 	Dataset2D *newData = new Dataset2D(DiscreteDerivative::ComputeTimeHistory(*plotList[row - 1]));
 
-	wxString name = _T("d/dt(") + optionsGrid->GetCellValue(row, colName) + _T(")");
+	wxString name = _T("d/dx(") + optionsGrid->GetCellValue(row, colName) + _T(")");
 	AddCurve(newData, name);
 }
 
@@ -2307,7 +2309,7 @@ void PlotPanel::DisplayMathChannelDialog(wxString defaultInput)
 	wxString message(_T("Enter the math you would like to perform:\n\n"));
 	message.Append(_T("    Use [x] notation to specify channels, where x = 0 is Time, x = 1 is the first data channel, etc.\n"));
 	//message.Append(_T("    Valid operations are: +, -, *, /, %, ddt, int, fft and trigonometric functions.\n"));
-	message.Append(_T("    Valid operations are: +, -, *, /, %, ddt, int and trigonometric functions.\n"));
+	message.Append(_T("    Valid operations are: +, -, *, /, %, ddx, int and trigonometric functions.\n"));
 	message.Append(_T("    Use () to specify order of operations"));
 
 	AddCurve(::wxGetTextFromUser(message, _T("Specify Math Channel"), defaultInput, this));
