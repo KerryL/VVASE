@@ -249,10 +249,7 @@ void Kinematics::UpdateKinematics(const Car* originalCar, Car* workingCar, wxStr
 			originalCar->suspension->rightFront.hardpoints[Corner::InboardBarLink],
 			localSuspension->leftFront.hardpoints[Corner::InboardBarLink],
 			localSuspension->rightFront.hardpoints[Corner::InboardBarLink]))
-		{
-			// Print an error and switch the success boolean to indicate a failure
 			Debugger::GetInstance() << "ERROR:  Failed to solve for inboard T-bar (front)!" << Debugger::PriorityMedium;
-		}
 	}
 
 	if (localSuspension->rearBarStyle == Suspension::SwayBarTBar)
@@ -270,10 +267,7 @@ void Kinematics::UpdateKinematics(const Car* originalCar, Car* workingCar, wxStr
 			originalCar->suspension->rightRear.hardpoints[Corner::InboardBarLink],
 			localSuspension->leftRear.hardpoints[Corner::InboardBarLink],
 			localSuspension->rightRear.hardpoints[Corner::InboardBarLink]))
-		{
-			// Print an error and switch the success boolean to indicate a failure
 			Debugger::GetInstance() << "ERROR:  Failed to solve for inboard T-bar (rear)!" << Debugger::PriorityMedium;
-		}
 	}
 
 	outputs.Update(originalCar, localSuspension);
