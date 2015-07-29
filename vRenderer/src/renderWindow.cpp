@@ -102,6 +102,8 @@ RenderWindow::RenderWindow(wxWindow &parent, wxWindowID id, int args[],
 	SetBackgroundStyle(wxBG_STYLE_CUSTOM);// To avoid flashing under MSW
 
 	modified = true;
+	sizeUpdateRequired = true;
+	modelviewModified = true;
 }
 
 //==========================================================================
@@ -214,6 +216,9 @@ void RenderWindow::Render()
 	SetCurrent(*context);
 	wxPaintDC(this);
 
+	if (sizeUpdateRequired)
+		DoResize();
+
 	if (modelviewModified)
 		UpdateModelviewMatrix();
 
@@ -284,23 +289,48 @@ void RenderWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
 //==========================================================================
 void RenderWindow::OnSize(wxSizeEvent& WXUNUSED(event))
 {
-    // set GL viewport (not called by wxGLCanvas::OnSize on all platforms...)
+    sizeUpdateRequired = true;
+}
+
+//==========================================================================
+// Class:			RenderWindow
+// Function:		DoResize
+//
+// Description:		Handles actions required to update the screen after resizing.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void RenderWindow::DoResize()
+{
+	// set GL viewport (not called by wxGLCanvas::OnSize on all platforms...)
 	int w, h;
 	GetClientSize(&w, &h);
 
 	if (GetContext() && IsShownOnScreen())
 	{
-		SetCurrent(*context);
+		SetCurrent(*GetContext());
 		glViewport(0, 0, (GLint) w, (GLint) h);
 	}
 	Refresh();
 
 	// This takes care of any change in aspect ratio
 	AutoSetFrustum();
+
+	sizeUpdateRequired = false;
+	modelviewModified = true;
+	modified = true;
 }
 
 //==========================================================================
-// Class:			RENDER_WINDOW
+// Class:			RenderWindow
 // Function:		OnEnterWindow
 //
 // Description:		Event handler for the enter window event.

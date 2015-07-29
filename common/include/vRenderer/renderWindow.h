@@ -172,12 +172,14 @@ private:
 	// Method for re-organizing the PrimitiveList so opaque objects are at the beginning and
 	// transparent objects are at the end
 	void SortPrimitivesByAlpha();
-
 	void SortPrimitivesByDrawOrder();
+
+	void DoResize();
 
 protected:
 	bool view3D;
 	bool modified;
+	bool sizeUpdateRequired;
 
 	ManagedList<Primitive> primitiveList;
 
