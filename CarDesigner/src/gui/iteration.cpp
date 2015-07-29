@@ -461,7 +461,6 @@ void Iteration::UpdateDisplay()
 	if (pendingAnalysisCount != 0)
 		return;
 	
-	// Make sure the renderer exists so we don't do this until after we're fully created
 	if (plotPanel)
 	{
 		// Clear out existing data from the plot
@@ -506,14 +505,10 @@ void Iteration::UpdateDisplay()
 			}
 		}
 
-		// Apply formatting
 		ApplyPlotFormatting();
-
-		// Update the display associated with this object
 		plotPanel->UpdateDisplay();
 	}
 
-	// Reset the "are we caught up?" flag
 	analysesDisplayed = true;
 
 	// If we have a second analysis pending, handle it now

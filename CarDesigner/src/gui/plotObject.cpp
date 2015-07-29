@@ -256,7 +256,7 @@ void PlotObject::CreateFontObjects(const wxString &fontFile)
 //		None
 //
 //==========================================================================
-void PlotObject::Update(void)
+void PlotObject::Update()
 {
 	FormatPlot();
 

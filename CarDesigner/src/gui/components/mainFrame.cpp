@@ -137,27 +137,6 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxEmptyString, wxDefaultPositio
 	applicationExiting = false;
 
 	Debugger::GetInstance() << carDesignerName << " Initialized!" << Debugger::PriorityHigh;
-
-	// Some machine information
-	/*Debugger::GetInstance().Print(wxPlatformInfo::Get().GetArchName());
-	Debugger::GetInstance().Print(wxPlatformInfo::Get().GetEndiannessName());
-
-	Debugger::GetInstance().Print(wxGetOsDescription());
-	wxString temp;
-	temp.Printf("%i cores", wxThread::GetCPUCount());
-	Debugger::GetInstance().Print(temp);//*/
-
-	// Some debugging information
-	/*Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "sizeof(double): %i", sizeof(double));
-	Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "sizeof(short): %i", sizeof(short));
-	Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "sizeof(int): %i", sizeof(int));
-	Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "sizeof(long): %i", sizeof(long));
-	Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "sizeof(bool): %i", sizeof(bool));
-	Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "sizeof(Drivetrain::DriveWheels): %i",
-		sizeof(Drivetrain::DriveWheels));
-	Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "sizeof(Vector): %i", sizeof(Vector));
-	Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "sizeof(VectorSet): %i", sizeof(VectorSet));
-	Debugger::GetInstance().Print(Debugger::PriorityVeryHigh, "sizeof(WheelSet): %i", sizeof(WheelSet));//*/
 }
 
 //==========================================================================
