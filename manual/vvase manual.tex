@@ -1,0 +1,86 @@
+%% vvase manual.tex
+
+\documentclass[oneside, 14pt]{memoir}
+\usepackage{graphicx}
+\usepackage[hidelinks]{hyperref}
+\usepackage{manual}
+
+%\usepackage{amsmath}
+%\usepackage{amsfonts}
+%\usepackage{amssymb}
+%\usepackage{mathtools}
+
+% TODO:  Add space after built-in vvase name commands
+
+% Set ToC depth
+\settocdepth{subsection}
+\setsecnumdepth{subsection}
+
+\begin{document}
+
+\frontmatter
+\chapterstyle{chappell}% This one is OK, but if we wrote our own we could probably do better
+\pagestyle{empty}
+
+% Title page
+\vspace*{\fill}
+\begin{center}
+\HUGE\textsf{\VVASE{}}\par
+\end{center}
+
+\begin{center}
+\Huge\textsf{User's Guide}\par
+\end{center}
+
+\begin{center}
+\LARGE\textsf{Kerry Loux}\par
+\medskip
+\normalsize\textsf{version \version}\par
+\end{center}
+\vspace*{\fill}
+
+\clearpage
+
+% Copyright page
+\begingroup
+\footnotesize
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{\baselineskip}
+\textcopyright{} 2007-2015 Kerry R. Loux \\
+All rights reserved
+
+\begin{center}
+\begin{tabular}{ll}
+v0.8b:   & 29 July 2009 \\
+v0.12a:  & 30 July 2015 \\
+\end{tabular}
+\end{center}
+
+\clearpage
+
+\pagestyle{headings}
+
+\tableofcontents
+\setlength{\unitlength}{1pt}
+\clearpage
+%\listoffigures
+%\clearpage
+%\listoftables
+%\clearpage
+
+\include{chapters/preface}
+\include{chapters/introduction}
+
+\mainmatter
+%\chapterstyle{veelo}%  I like the look, but it doesn't render well and breaks with font size of 14
+
+\include{chapters/gettingStarted}
+\include{chapters/cars}
+\include{chapters/iterations}
+\include{chapters/optimizations}
+
+% Other chapter styles, possible for future use
+%\appendix
+%\backmatter
+
+\end{document}

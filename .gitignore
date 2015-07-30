@@ -10,6 +10,15 @@ vvase.rc
 # Other VVASE-specific logs
 VVASEdebug.log
 
+# Tex auxilliary files
+*.aux
+*.log
+*.tps
+*.bbl
+*.blg
+*.toc
+*.out
+
 # MSVC++-specific ignores
 */Debug/
 /Debug/
