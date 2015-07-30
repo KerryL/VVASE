@@ -93,10 +93,14 @@ GuiCar::GuiCar(MainFrame &mainFrame, wxString pathAndFileName)
 	renderer->SetCameraView(position, lookAt, up);
 	
 	const double scale = 1.2;// 20% bigger than car
-	renderer->SetViewOrthogonal(true);
-	renderer->SetTopMinusBottom(originalCar->suspension->leftFront.hardpoints[
+	const double referenceDimension(originalCar->suspension->leftFront.hardpoints[
 		Corner::ContactPatch].Distance(
-		originalCar->suspension->rightRear.hardpoints[Corner::ContactPatch]) * scale);
+		originalCar->suspension->rightRear.hardpoints[Corner::ContactPatch]));
+	renderer->SetViewOrthogonal(true);
+	if (renderer->GetAspectRatio() > 1.0)// smaller up-down
+		renderer->SetTopMinusBottom(referenceDimension * scale);
+	else// smaller left-right
+		renderer->SetTopMinusBottom(referenceDimension * scale / renderer->GetAspectRatio());
 	renderer->SetViewOrthogonal(mainFrame.GetUseOrtho());
 
 	// Add the children to the systems tree

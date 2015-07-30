@@ -77,6 +77,8 @@ public:
 	inline bool GetViewOrthogonal() const { return viewOrthogonal; }
 	inline bool GetView3D() const { return view3D; }
 
+	inline double GetAspectRatio() const { return aspectRatio; }
+
 	// Returns a string containing any OpenGL errors
 	wxString GetGLError() const;
 
