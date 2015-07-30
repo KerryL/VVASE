@@ -256,7 +256,7 @@ void EditCornerPanel::CreateControls()
 	wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
 
 	// Second sizer gives more space around the controls
-	wxFlexGridSizer *mainSizer = new wxFlexGridSizer(1, 2, 2);
+	wxFlexGridSizer *mainSizer = new wxFlexGridSizer(2, 2, 2);
 	topSizer->Add(mainSizer, 0, wxGROW | wxALL, 5);
 
 	// Create the grid for the hard point entry
@@ -278,9 +278,9 @@ void EditCornerPanel::CreateControls()
 	// We never want the wheel center to be visible
 	hardpoints->SetRowHeight(Corner::WheelCenter + 1, 0);
 
-	// Add the grid to the sizer
-	mainSizer->Add(hardpoints, 0, wxALIGN_TOP | wxEXPAND);
+	mainSizer->Add(hardpoints, 0, wxALIGN_TOP | wxGROW);
 	mainSizer->AddGrowableCol(0);
+	mainSizer->AddSpacer(25);// Fixed width equal to scroll bar width
 
 	// Set the column headings
 	hardpoints->SetColLabelValue(0, _T("Hardpoint"));
@@ -288,15 +288,11 @@ void EditCornerPanel::CreateControls()
 	hardpoints->SetColLabelValue(2, _T("Y"));
 	hardpoints->SetColLabelValue(3, _T("Z"));
 
-	// Center the cells for the column headings
 	for (i = 0; i < hardpoints->GetNumberCols(); i++)
-		// Center the contents
 		hardpoints->SetCellAlignment(0, i, wxALIGN_CENTER, wxALIGN_TOP);
 
-	// Do the processing that needs to be done for each row
 	for (i = 0; i < Corner::NumberOfHardpoints; i++)
 	{
-		// Make the first column read-only
 		hardpoints->SetReadOnly(i + 1, 0, true);
 
 		// Set the alignment for all of the cells that contain numbers to the right
@@ -317,6 +313,7 @@ void EditCornerPanel::CreateControls()
 	hardpoints->SetColumnWidth(2, hardpoints->GetColSize(3));
 	// The value we just put in cell (3,3) will get overwritten with a call to
 	// UpdateInformation()
+	hardpoints->AutoSizeColumn(0);
 	hardpoints->AutoStretchColumn(0);
 
 	hardpoints->EnableDragColMove(false);
@@ -361,7 +358,7 @@ void EditCornerPanel::CreateControls()
 		choices.Add(Corner::GetActuationAttachmentName((Corner::ActuationAttachment)i));
 
 	wxStaticText *attachmentLabel = new wxStaticText(this, wxID_ANY,
-		_T("Actuation Attachment"));
+		_T("Attachment"));
 	actuationAttachment = new wxComboBox(this, ComboBoxActuationAttachment, wxEmptyString, wxDefaultPosition,
 		wxDefaultSize, choices, wxCB_READONLY);
 	SetMinimumWidthFromContents(actuationAttachment, additionalWidth);
@@ -399,7 +396,6 @@ void EditCornerPanel::CreateControls()
 	mainSizer->AddGrowableRow(0);
 	mainSizer->AddGrowableRow(1);
 
-	// Assign the top level sizer to the dialog
 	SetSizerAndFit(topSizer);
 
 	// Initialize the last row selected variable

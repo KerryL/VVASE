@@ -124,7 +124,7 @@ wxString Corner::GetActuationTypeName(const ActuationType &type)
 		break;
 
 	case ActuationOutboardRockerArm:
-		return _T("Outboard/Rocker Arm");
+		return _T("Outboard/Rocker");
 		break;
 
 	default:

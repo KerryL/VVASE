@@ -105,7 +105,7 @@
 MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxEmptyString, wxDefaultPosition,
 	wxDefaultSize, wxDEFAULT_FRAME_STYLE), /*maxRecentFiles(9), */undoRedo(*this)
 {
-	systemsTree = new MainTree(*this, wxID_ANY, wxDefaultPosition, wxSize(320, 384),
+	systemsTree = new MainTree(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
 		wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT | wxTR_DEFAULT_STYLE | wxSUNKEN_BORDER
 		| wxTR_HIDE_ROOT);
 
@@ -114,10 +114,10 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxEmptyString, wxDefaultPositio
 		wxAUI_NB_SCROLL_BUTTONS | wxAUI_NB_CLOSE_ON_ALL_TABS | wxAUI_NB_WINDOWLIST_BUTTON);
 
 	editPanel = new EditPanel(*this);
-	outputPanel = new OutputPanel(*this, wxID_ANY, wxDefaultPosition, wxSize(350, -1));
+	outputPanel = new OutputPanel(*this);
 
 	debugPane = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		wxSize(-1, 350), wxTE_PROCESS_TAB | wxTE_MULTILINE | wxHSCROLL | wxTE_READONLY
+		wxDefaultSize, wxTE_PROCESS_TAB | wxTE_MULTILINE | wxHSCROLL | wxTE_READONLY
 		| wxTE_RICH);
 
 	kinematicToolbar = NULL;
@@ -235,6 +235,13 @@ void MainFrame::DoLayout()
 	manager.GetPane(editPanel).Layer(1);
 	manager.GetPane(outputPanel).Layer(0);
 
+	// Setup default sizes
+	const int minOppositeDirection(100);
+	manager.GetPane(debugPane).MinSize(100, minOppositeDirection);
+	manager.GetPane(outputPanel).MinSize(320, minOppositeDirection);
+	manager.GetPane(editPanel).MinSize(290, minOppositeDirection);
+	manager.GetPane(systemsTree).MinSize(minOppositeDirection, minOppositeDirection);
+
 	/* Desired initial layout is as follows:
 	=============================================================
 	|Toolbars													|
@@ -281,7 +288,6 @@ void MainFrame::DoLayout()
 //==========================================================================
 void MainFrame::SetProperties()
 {
-	// MainFrame properties
 	SetTitle(carDesignerName);
 	SetName(carDesignerName);
 
@@ -2554,7 +2560,6 @@ void MainFrame::ReadConfiguration()
 	// Read recent file history
 	recentFileManager->Load(*configurationFile);
 
-	// Delete file object
 	delete configurationFile;
 	configurationFile = NULL;
 }

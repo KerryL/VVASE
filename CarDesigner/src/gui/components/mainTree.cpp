@@ -126,7 +126,6 @@ MainTree::MainTree(MainFrame &mainFrame, wxWindowID id, const wxPoint& pos,
 //==========================================================================
 MainTree::~MainTree()
 {
-	// Clear out the icon list
 	iconList->RemoveAll();
 
 	// DO NOT delete IconList here - when we make the AssignImageList call
@@ -252,7 +251,6 @@ void MainTree::SelectionChangeEvent(wxTreeEvent &event)
 			changeTab = false;
 	}
 
-	// Perform the appropriate actions
 	PerformSelection(changeTab);
 
 	event.Skip();
@@ -292,9 +290,7 @@ void MainTree::ItemRightClickEvent(wxTreeEvent &event)
 	// coordinates w.r.t. MainFrame.
 	wxPoint menuPosition = event.GetPoint() + GetPosition();
 
-	// Create and display the context menu
 	mainFrame.CreateContextMenu(index, menuPosition);
-
 	event.Skip();
 }
 
@@ -316,7 +312,6 @@ void MainTree::ItemRightClickEvent(wxTreeEvent &event)
 //==========================================================================
 void MainTree::ItemActivatedEvent(wxTreeEvent &event)
 {
-	// Perform the appropriate actions
 	PerformSelection(true);
 
 	event.Skip();
@@ -341,11 +336,9 @@ void MainTree::ItemActivatedEvent(wxTreeEvent &event)
 //==========================================================================
 GuiObject *MainTree::GetSelectedItem(wxTreeItemId *selectedItem)
 {
-	// Assign the output arguement (if we were passed a valid pointer)
 	if (selectedItem)
 		*selectedItem = GetSelection();
 
-	// Iterate through the open objects
 	int index;
 	for (index = 0; index < mainFrame.GetObjectCount(); index++)
 	{
@@ -354,7 +347,6 @@ GuiObject *MainTree::GetSelectedItem(wxTreeItemId *selectedItem)
 			return mainFrame.GetObjectByIndex(index);
 	}
 
-	// No matches - return NULL
 	return NULL;
 }
 
@@ -377,7 +369,6 @@ GuiObject *MainTree::GetSelectedItem(wxTreeItemId *selectedItem)
 //==========================================================================
 int MainTree::GetItemType(wxTreeItemId itemId)
 {
-	// Iterate through the open objects
 	int index;
 	for (index = 0; index < mainFrame.GetObjectCount(); index++)
 	{
