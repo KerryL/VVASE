@@ -1468,11 +1468,8 @@ void Iteration::SetAutoAssociate(bool autoAssociate)
 void Iteration::MarkAnalysisComplete()
 {
 	assert(pendingAnalysisCount > 0);
-	
-	// Decrement the counter
-	pendingAnalysisCount--;
 
-	// If the current count is zero, update the display
+	pendingAnalysisCount--;
 	if (pendingAnalysisCount == 0)
 		UpdateDisplay();
 }

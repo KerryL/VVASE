@@ -1821,7 +1821,6 @@ void MainFrame::UpdateOutputPanel()
 		// Update the kinematics information (ONLY if this is a car)
 		if (openObjectList[i]->GetType() == GuiObject::TypeCar)
 		{
-			// Increment the number of cars we have
 			carCount++;
 
 			// Update the information for this car
@@ -2277,13 +2276,15 @@ void MainFrame::RemoveObjectFromList(int index)
 	{
 		openObjectList[i]->SetIndex(i);
 
-		// Update the data and displays - data first, because in some cases data is
-		// dependent on other open objects, and we may have just closed one
-		openObjectList[i]->UpdateData();// FIXME:  This spawns threads (or multiple threads) - what happens when we close and multiple objects are deleted one after another?
-		openObjectList[i]->UpdateDisplay();
+		if (!applicationExiting)
+		{
+			// Update the data and displays - data first, because in some cases data is
+			// dependent on other open objects, and we may have just closed one
+			openObjectList[i]->UpdateData();
+			openObjectList[i]->UpdateDisplay();
+		}
 	}
 
-	// Reset the deletion status flag
 	beingDeleted = false;
 
 	// Reset the active index - if there is still an open object, show the one with index zero
@@ -2363,16 +2364,20 @@ void MainFrame::WindowCloseEvent(wxCloseEvent& WXUNUSED(event))
 		return;
 	}
 
+	applicationExiting = true;
+
 	// Get the user confirmation
 	if (!CloseThisForm())
+	{
+		applicationExiting = false;
+		UpdateAnalysis();
 		return;// Don't delete the threads (and don't skip the event) to prevent exiting
+	}
 
 	// Delete all of the threads in the thread pool
 	int i;
 	for (i = 0; i < activeThreads; i++)
 		jobQueue->AddJob(ThreadJob(ThreadJob::CommandThreadExit), JobQueue::PriorityVeryHigh);
-		
-	applicationExiting = true;
 }
 
 //==========================================================================

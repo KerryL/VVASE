@@ -297,13 +297,10 @@ void GAObject::SetUp(const Car &targetCar)
 	wxMutexLocker lock(gsaMutex);
 	DebugLog::GetInstance()->Log(_T("GAObject::SetUp (locker)"));
 
-	// Delete the dynamically allocated memory
 	delete [] phenotypeSizes;
 
-	// Clear and re-fill the list of input conditions
 	DetermineAllInputs();
 
-	// Re-allocate the array of working cars
 	for (i = 0; i < numberOfCars; i++)
 	{
 		delete originalCarArray[i];
