@@ -65,7 +65,6 @@
 Iteration::Iteration(MainFrame &mainFrame, wxString pathAndFileName)
 	: GuiObject(mainFrame, pathAndFileName)
 {
-	// Initialize our list of plots to OFF
 	int i;
 	for (i = 0; i < NumberOfPlots; i++)
 		plotActive[i] = false;
@@ -704,7 +703,7 @@ void Iteration::ReadDefaultsFromConfig()
 	configurationFile->Read(_T("/Iteration/XLabel"), &xLabel, wxEmptyString);
 	configurationFile->Read(_T("/Iteration/AutoGenerateZLabel"), &autoGenerateZLabel, true);
 	configurationFile->Read(_T("/Iteration/ZLabel"), &zLabel, wxEmptyString);
-	configurationFile->Read(_T("/Iteration/ShowGridLines"), &showGridLines, false);
+	configurationFile->Read(_T("/Iteration/ShowGridLines"), &showGridLines, true);
 
 	configurationFile->Read(_T("/Iteration/StartPitch"), &range.startPitch, 0.0);
 	configurationFile->Read(_T("/Iteration/StartRoll"), &range.startRoll, 0.0);

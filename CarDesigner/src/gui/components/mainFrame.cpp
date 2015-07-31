@@ -317,8 +317,8 @@ void MainFrame::SetProperties()
 	menuBar->FindItem(IdMenuEditCut)->Enable(false);
 	menuBar->FindItem(IdMenuEditCopy)->Enable(false);
 	menuBar->FindItem(IdMenuEditPaste)->Enable(false);
-	menuBar->FindItem(IdMenuToolsDoE)->Enable(false);
-	menuBar->FindItem(IdMenuToolsDynamic)->Enable(false);
+	/*menuBar->FindItem(IdMenuToolsDoE)->Enable(false);
+	menuBar->FindItem(IdMenuToolsDynamic)->Enable(false);*/
 	
 	ReadConfiguration();
 
@@ -604,11 +604,11 @@ void MainFrame::CreateMenuBar()
 
 	// Tools menu
 	wxMenu *mnuTools = new wxMenu();
-	mnuTools->Append(IdMenuToolsDoE, _T("Design of &Experiment"),
+	/*mnuTools->Append(IdMenuToolsDoE, _T("Design of &Experiment"),
 		_T("Open design of experiments tool"), wxITEM_NORMAL);
 	mnuTools->Append(IdMenuToolsDynamic, _T("&Dynamic Analysis"),
 		_T("Start Dynamic Analysis Wizard"), wxITEM_NORMAL);
-	mnuTools->AppendSeparator();
+	mnuTools->AppendSeparator();*/
 	mnuTools->Append(IdMenuToolsOptions, _T("&Options"), _T("Edit application preferences"), wxITEM_NORMAL);
 	menuBar->Append(mnuTools, _T("&Tools"));
 
