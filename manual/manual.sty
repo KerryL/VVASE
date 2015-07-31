@@ -26,4 +26,17 @@
 	\setlength{\parskip}{0.2\baselineskip}
 }
 
+% Shaded environment for examples
+% \begin{ex}{label}
+\newcommand*{\excolor}{\definecolor{shadecolor}{gray}{0.9}}
+\newenvironment{ex}{%
+  \parskip\z@ \topsep\z@% 
+%  \excolor
+  \shaded
+%  \listeg\centerline{Example~\ref{#1}}%\label{#1}
+  \vspace{\onelineskip}
+  \small\setlength{\baselineskip}{\onelineskip}\nobreak%
+%  \verbatim% TODO:  Causes error
+}
+
 \endinput

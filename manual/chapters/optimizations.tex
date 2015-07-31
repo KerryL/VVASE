@@ -1,1 +1,59 @@
 \chapter{Optimizations} \label{ch:optimizations}
+
+\vvase{} performs optimizations through the use of a genetic search algorithm.  A brief description of genetic search algorithms is given in \sref{sec:geneticAlgorithms}.
+
+% TODO:  Add/edit/remove buttons; double-clicking to edit; progress bars
+
+\section{Genetic Search Algorithms} \label{sec:geneticAlgorithms}
+
+Genetic search algorithms work by applying a ``survival of the fittest'' approach to optimization problems.  Generally, algorithms must take the following steps:
+
+\begin{itemize}
+\item Randomly create initial populate
+\item Assign a fitness score each each population member \label{item:assignFitness}
+\item Sort the population by the fitness score
+\item Breed the members with the highest fitnesses to create the next population \label{item:breed}
+\item Repeat steps~\ref{item:assignFitness}~-~\ref{item:breed} until reaching a predetermined fitness score, number of iterations or other criteria
+\end{itemize}
+
+To fit a problem into the required framework, each member must be representable by some type of code. With respect to the optimization, this code must describe the member entirely.  This code is called the genotype.  Each code describes a unique representation of the population member.  The representation corresponding to a genotype is called a phenotype.
+
+Additionally, a method is required for determining the fitness of each phenotype.  This fitness score must be sortable.
+
+Consider the following example:
+
+\begin{ex}%{ex:geneticAlgorithm}
+something in here
+\end{ex}
+
+\subsection{Algorithm Parameters} \label{ssec:algorithmParameters}
+
+% population size
+% generation limit
+% elitism fraction
+% mutation probability
+% crossoverpoint
+% car to optimize
+
+%genes
+% hardpoint
+% alternate with
+% axis direction
+% minimum
+% maximum
+% number of values
+
+%goals
+% output
+% state 1 inputs
+% state 2 inputs
+% desired value
+% expected deviation
+% importanct
+
+\section{Hints} \label{sec:hints}
+
+% Make population size commensurate with search space
+% Choose number of generations long enough to converge
+% Start coarse, refine
+% If two sets of genes/goals are unrelated, make them separate optimizations
