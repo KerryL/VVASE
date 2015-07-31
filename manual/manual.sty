@@ -1,17 +1,29 @@
 %% vvase.sty    For VVASE
 \ProvidesPackage{manual}[7/30/2015 for VVASE]
 
+%\raggedbottom
+
 % Common commands
 \newcommand{\VVASE}{Virtual Vehicle Analysis and Simulation Environment}
 \newcommand{\vvase}{VVASE}
 \newcommand{\version}{0.12a}
+\newcommand{\sref}[1]{\S~\ref{#1}}
+\newcommand{\figref}[1]{Fig.~\ref{#1}}
 
-% Section styles
-%\renewcommand{\chaptername}{}% Suppress 'Chapter' from chapter titles
-%\setsecheadstyle{\thechapter \textpipe \LARGE \bfseries}
-%\setsubsecheadstyle{\Large\bfseries}
-%\setsubsubsecheadstyle{\large\bfseries}
-%\setparaheadstyle{\large\bfseries}
-%\setsubparaheadstyle{\large\bfseries}
+% Caption fonts are a little too big
+\captionnamefont{\small}
+\captionstyle{\footnotesize}
+
+% Set ToC depth
+\settocdepth{subsection}
+\setsecnumdepth{subsection}
+
+% Set up paragraph defaults after each call to \chapter
+\let\oldchapter\chapter
+\renewcommand{\chapter}[1]{
+	\oldchapter{#1}%\vfil
+	\setlength{\parindent}{15pt}
+	\setlength{\parskip}{0.2\baselineskip}
+}
 
 \endinput

@@ -1,6 +1,6 @@
 %% vvase manual.tex
 
-\documentclass[oneside, 14pt]{memoir}
+\documentclass[oneside]{memoir}
 \usepackage{graphicx}
 \usepackage[hidelinks]{hyperref}
 \usepackage{manual}
@@ -9,12 +9,6 @@
 %\usepackage{amsfonts}
 %\usepackage{amssymb}
 %\usepackage{mathtools}
-
-% TODO:  Add space after built-in vvase name commands
-
-% Set ToC depth
-\settocdepth{subsection}
-\setsecnumdepth{subsection}
 
 \begin{document}
 
@@ -71,11 +65,12 @@ v0.12a:  & 30 July 2015 \\
 %\listoftables
 %\clearpage
 
+\pagestyle{ruled}
+
 \include{chapters/preface}
 \include{chapters/introduction}
 
 \mainmatter
-%\chapterstyle{veelo}%  I like the look, but it doesn't render well and breaks with font size of 14
 
 \include{chapters/gettingStarted}
 \include{chapters/cars}
