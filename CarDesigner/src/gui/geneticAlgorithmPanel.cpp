@@ -368,17 +368,12 @@ void GeneticAlgorithmPanel::AddGeneButtonClickedEvent(wxCommandEvent& WXUNUSED(e
 	GAGeneDialog geneDialog(static_cast<wxWindow*>(&mainFrame), (Corner::Hardpoints)0,
 		(Corner::Hardpoints)0, (Vector::Axis)0, (Corner::Location)0, 0.0, 1.0, 5, wxID_ANY, wxDefaultPosition);
 
-	// Display the dialog
 	if (geneDialog.ShowModal() == wxOK)
 	{
-		// Create the new gene and add it to the list
 		optimization.GetAlgorithm().AddGene(geneDialog.GetHardpoint(), geneDialog.GetTiedTo(), geneDialog.GetCornerLocation(),
 			geneDialog.GetAxisDirection(), geneDialog.GetMinimum(), geneDialog.GetMaximum(), geneDialog.GetNumberOfValues());
 
-		// Update the display for the gene
 		UpdateGeneList();
-
-		// Mark the optimization as modified
 		optimization.SetModified();
 	}
 }
@@ -578,7 +573,12 @@ void GeneticAlgorithmPanel::RemoveGoalButtonClickedEvent(wxCommandEvent& WXUNUSE
 //==========================================================================
 void GeneticAlgorithmPanel::EditSelectedGene()
 {
-	// Get the selected gene
+	// When a new optimization is created, there is an empty row in the grid.
+	// It does not correspond to any real object and so it cannot be edited.
+	// If we don't have any real object to edit, just return
+	if (optimization.GetAlgorithm().GetGeneCount()  == 0)
+		return;
+
 	GAObject::Gene geneToEdit = optimization.GetAlgorithm().GetGene(geneList->GetSelectedRows()[0]);
 
 	// Create the dialog box with properties corresponding to the selected gene
@@ -586,18 +586,13 @@ void GeneticAlgorithmPanel::EditSelectedGene()
 		geneToEdit.tiedTo, geneToEdit.direction, geneToEdit.location, geneToEdit.minimum, geneToEdit.maximum,
 		geneToEdit.numberOfValues, wxID_ANY, wxDefaultPosition);
 
-	// Display the dialog
 	if (geneDialog.ShowModal() == wxOK)
 	{
-		// Update the gene
 		optimization.GetAlgorithm().UpdateGene(geneList->GetSelectedRows()[0], geneDialog.GetHardpoint(),
 			geneDialog.GetTiedTo(), geneDialog.GetCornerLocation(), geneDialog.GetAxisDirection(),
 			geneDialog.GetMinimum(), geneDialog.GetMaximum(), geneDialog.GetNumberOfValues());
 
-		// Update the display for the gene
 		UpdateGeneList();
-
-		// Mark the optimization as modified
 		optimization.SetModified();
 	}
 }
@@ -620,6 +615,12 @@ void GeneticAlgorithmPanel::EditSelectedGene()
 //==========================================================================
 void GeneticAlgorithmPanel::EditSelectedGoal()
 {
+	// When a new optimization is created, there is an empty row in the grid.
+	// It does not correspond to any real object and so it cannot be edited.
+	// If we don't have any real object to edit, just return
+	if (optimization.GetAlgorithm().GetGoalCount()  == 0)
+		return;
+
 	GAObject::Goal goalToEdit = optimization.GetAlgorithm().GetGoal(goalList->GetSelectedRows()[0]);
 
 	GAGoalDialog goalDialog(static_cast<wxWindow*>(&mainFrame), goalToEdit.output, goalToEdit.desiredValue,

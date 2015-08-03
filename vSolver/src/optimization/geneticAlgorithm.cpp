@@ -156,7 +156,7 @@ void GeneticAlgorithm::SetCrossoverPoint(int crossover)
 	// optimization, in which case NumberOfGenes = 0.  We do want to allow the
 	// crossover to be set, however, because when we save an optimization to file,
 	// we need the crossover variable to store what the user wanted.
-	else if (crossover > numberOfGenes && numberOfGenes > 0)
+	else if (crossover > numberOfGenes)
 		this->crossover = numberOfGenes;
 	else
 		this->crossover = crossover;
@@ -431,7 +431,6 @@ void GeneticAlgorithm::Breed()
 	if (currentGeneration == 0)
 	{
 		CreateFirstGeneration();
-
 		return;
 	}
 
@@ -468,7 +467,7 @@ void GeneticAlgorithm::Breed()
 			else if (numberOfOffspring == mother)
 				mother -= 1;
 
-			// Determine what crossover scheme to use.  If Crossover is between 0 and NumberOfGenes,
+			// Determine what crossover scheme to use.  If crossover is between 0 and numberOfGenes,
 			// then all genes before that point come from one parent, and all genes after it come from
 			// the other.  The opposite genes can be combined to form a second child.  If the crossover
 			// point is greater than the NumberOfGenes, we randomly choose a crossover point every time
