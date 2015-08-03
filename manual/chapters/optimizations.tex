@@ -144,11 +144,15 @@ Genetic search algorithms work differently --- the allowable input values are de
 
 This might sound undesirable, but it can be a very useful property.  By limiting the resolution of the solution space, the number of possible solutions is reduced from infinity to a finite number.  For solution spaces with smooth changes and a global optimum that is very different from the local optima, larger steps can be used to reduce the computational effort required to converge.  It is an important point, however, since it behaves differently from other algorithms and can lead to unexpected results if it is not considered.
 
-These differences make genetic search algorithms well-suited to solving optimization problems with complex, high-dimensional solution spaces.  These differences also make genetic search algorithms comparatevly inefficient for simple optimizations.  In the event that a simple optimization is required, it is beneficial to include only genes that directly affect the goals, use a large number of values that these genes may assume, choose a relatively large population size and choose a low generation limit.
+These differences make genetic search algorithms well-suited to solving optimization problems with complex, high-dimensional solution spaces.  These differences also make genetic search algorithms comparatively inefficient for simple optimizations.  In the event that a simple optimization is required, it is beneficial to include only genes that directly affect the goals, use a large number of values that these genes may assume, choose a relatively large population size and choose a low generation limit.
 
 \subsection{Best Practices} \label{ssec:bestPractices}
 
-% Test for population size OK:  If no convergence - too small; if always converges to same value - too big or not enough steps in solution space
-% Choose number of generations long enough to converge
-% Start coarse, refine
-% If two sets of genes/goals are unrelated, make them separate optimizations
+This section summarizes some genetic optimization best practices.
+
+\begin{description}
+\item[Test for Proper Population Size] Too small and the solution may be sub-optimal, too large and CPU cycles are wasted.  A helpful test is to set an artificially low generation limit (maybe just a few generations) and run the optimization several times.  Examine the optimization result.  Do all of the genes have the same phenotype, or is there variation in the results?  If the results are all very similar, it is likely that the solution space is too small for the specified population.  After just a handful of generations, there should be a great deal of variation (for a properly sized population, the phenotypes should be random at this point).  Knowing if the population is too small is more difficult and often required running a full optimization and checking for convergence.
+\item[Using Enough Generations] For complex optimizations, be sure to use a generation limit that is high enough to allow the solution to converge.  As a rough starting point, consider using the following expression:  $limit = 10^{number of goals}$.
+\item[Start coarse and refine] To reduce computational effort and improve solution speed, start with relatively small numbers of values for each gene.  After narrowing the solution space by running this coarse simulation, update the allowable range of each gene to be smaller, centered around the most recent optimum, keeping the number of values constant.  Of course, if the solution space has steep gradients, it may be required to start with a large, finely distributed solution space from the beginning.
+\item[Separate independent optimizations] Genetic search algorithms are helpful for finding solutions to optimization problems that are tightly coupled --- when every gene has some influence over every goal.  If it is desired to optimize two independent goals (for example, front roll center movement and rear roll center movement), it is best to use separate optimizations.
+\end{description}
