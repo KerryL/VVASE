@@ -1724,7 +1724,7 @@ void MainFrame::HelpManualEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Call the shell to display the user's manual
 	wxString openPDFManualCommand;
-	wxString manualFileName(_T("VVASE Manual.pdf"));
+	wxString manualFileName(_T("vvase manual.pdf"));
 	wxMimeTypesManager mimeManager;
 
 	// In Linux, we need to put the file name in quotes
@@ -1733,15 +1733,19 @@ void MainFrame::HelpManualEvent(wxCommandEvent& WXUNUSED(event))
 	manualFileName.Append(_T("'"));
 #endif
 
-	wxFileType *pdfFileType = mimeManager.GetFileTypeFromExtension(_T("pdf"));
-	if (!pdfFileType->GetOpenCommand(&openPDFManualCommand,
+	wxFileType *pdfFileType = mimeManager.GetFileTypeFromExtension(_T("pdf"));// we now own this memory
+	if (!pdfFileType)
+		Debugger::GetInstance() << "ERROR:  Unknown extension 'pdf'" << Debugger::PriorityHigh;
+	else if (!pdfFileType->GetOpenCommand(&openPDFManualCommand,
 		wxFileType::MessageParameters(manualFileName)))
-		Debugger::GetInstance() << "ERROR:  Could not determine how to open .pdf files!" << Debugger::PriorityHigh;
+		Debugger::GetInstance() << "ERROR:  No known OPEN command for .pdf files" << Debugger::PriorityHigh;
 	else
 	{
 		if (wxExecute(openPDFManualCommand) == 0)
-			Debugger::GetInstance() << "ERROR:  Could not find '" << manualFileName << "'!" << Debugger::PriorityHigh;
+			Debugger::GetInstance() << "ERROR:  Could not find '" << manualFileName << "'" << Debugger::PriorityHigh;
 	}
+
+	delete pdfFileType;
 }
 
 //==========================================================================
