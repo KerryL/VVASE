@@ -75,7 +75,6 @@ GeneticAlgorithm::GeneticAlgorithm()
 //==========================================================================
 GeneticAlgorithm::~GeneticAlgorithm()
 {
-	// Delete dynamically allocated memory
 	DeleteDynamicMemory();
 }
 
@@ -151,15 +150,8 @@ void GeneticAlgorithm::SetCrossoverPoint(int crossover)
 
 	if (crossover < 0)
 		crossover = 0;
-	// We add the requirement that number of genes is greater than zero because
-	// this can be used to set the crossover point prior to the start of the
-	// optimization, in which case NumberOfGenes = 0.  We do want to allow the
-	// crossover to be set, however, because when we save an optimization to file,
-	// we need the crossover variable to store what the user wanted.
-	else if (crossover > numberOfGenes)
-		this->crossover = numberOfGenes;
-	else
-		this->crossover = crossover;
+
+	this->crossover = crossover;
 }
 
 //==========================================================================
@@ -265,7 +257,7 @@ void GeneticAlgorithm::InitializeAlgorithm(int populationSize, int generationLim
 	gsaMutex.Unlock();
 
 	// Use set functions to assign the rest to ensure the values are within range
-	SetCrossoverPoint(crossover);
+	SetCrossoverPoint(std::min(crossover, numberOfGenes - 1));// crossover may have been set > than number of genes, but when we actually run the optimization we need to ensure it is not
 	SetElitismPercentage(elitism);
 	SetMutationProbability(mutation);
 
@@ -363,13 +355,8 @@ bool GeneticAlgorithm::PerformOptimization()
 	{
 		currentGeneration++;
 		Breed();
-
-		// Calculate fitnesses
 		SimulateGeneration();
-
 		SortByFitness();
-
-		// Allow room for derived classes to interrupt
 		PerformAdditionalActions();
 	}
 
@@ -441,9 +428,8 @@ void GeneticAlgorithm::Breed()
 	{
 		// Look at elitism first - if we don't have the "elite" citizens in the new
 		// generation, grab them now
-		if (numberOfOffspring < int(elitism * populationSize))
+		if (numberOfOffspring < ceil(elitism * populationSize))
 		{
-			// Copy the genome from the previous generation
 			for (i = 0; i < numberOfGenes; i++)
 				genomes[currentGeneration][numberOfOffspring][i] =
 					genomes[currentGeneration - 1][numberOfOffspring][i];
@@ -469,12 +455,12 @@ void GeneticAlgorithm::Breed()
 
 			// Determine what crossover scheme to use.  If crossover is between 0 and numberOfGenes,
 			// then all genes before that point come from one parent, and all genes after it come from
-			// the other.  The opposite genes can be combined to form a second child.  If the crossover
-			// point is greater than the NumberOfGenes, we randomly choose a crossover point every time
-			// we spawn a new offspring.  If we are not using a crossover point, each gene has an equal
-			// chance of coming from either parent.
+			// the other.  The opposite genes can be combined to form a second child.  If crossover is
+			// zero, randomly select a parent for each gene until 50% of the genes come from one parent,
+			// then choose the remaining genes from the other parent.
 			if (crossover == 0)// Not using a crossover point
 			{
+				int genesFromDad(0);
 				// Determine if we should spawn the opposite child as well
 				if (spawnTwoChildren)
 				{
@@ -482,8 +468,11 @@ void GeneticAlgorithm::Breed()
 					for (i = 0; i < numberOfGenes; i++)
 					{
 						// If the roll is less than 50%, take the gene from the father
-						if (rand() % 2 == 0)
+						if ((rand() % 2 == 0 && genesFromDad < 0.5 * numberOfGenes) ||
+							i - genesFromDad > 0.5 * numberOfGenes)
 						{
+							genesFromDad++;
+
 							// The first child gets this gene from the father
 							genomes[currentGeneration][numberOfOffspring][i] =
 								genomes[currentGeneration - 1][numberOfOffspring][i];
@@ -510,16 +499,20 @@ void GeneticAlgorithm::Breed()
 					for (i = 0; i < numberOfGenes; i++)
 					{
 						// If the roll is less than 50%, take the gene from the father
-						if (rand() % 2 == 0)
+						if ((rand() % 2 == 0 && genesFromDad < 0.5 * numberOfGenes) ||
+							i - genesFromDad > 0.5 * numberOfGenes)
+						{
+							genesFromDad++;
 							genomes[currentGeneration][numberOfOffspring][i] =
 								genomes[currentGeneration - 1][numberOfOffspring][i];
+						}
 						else// This gene come from the mother
 							genomes[currentGeneration][numberOfOffspring][i] =
 								genomes[currentGeneration - 1][mother][i];
 					}
 				}
 			}
-			else if (crossover == numberOfGenes)// Random crossover point
+			/*else if (crossover == numberOfGenes)// Random crossover point
 			{
 				// Determine the crossover point to use for this offspring
 				randomCrossover = rand() % numberOfGenes;
@@ -551,7 +544,7 @@ void GeneticAlgorithm::Breed()
 								genomes[currentGeneration - 1][mother][i];
 					}
 				}
-			}
+			}*/
 			else// Using a static crossover point
 			{
 				// For each gene, see if the gene will come from the mother or father
