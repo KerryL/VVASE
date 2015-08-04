@@ -1170,12 +1170,11 @@ void PlotPanel::UpdateCurveProperties(const unsigned int &index, const Color &co
 {
 	double lineSize;
 	long markerSize;
+	UpdateLegend();// Must come first in order to be updated simultaneously with line
 	optionsGrid->GetCellValue(index + 1, colLineSize).ToDouble(&lineSize);
 	optionsGrid->GetCellValue(index + 1, colMarkerSize).ToLong(&markerSize);
 	plotArea->SetCurveProperties(index, color, visible, rightAxis, lineSize, markerSize);
 	plotArea->SaveCurrentZoom();
-	
-	UpdateLegend();
 }
 
 //==========================================================================
@@ -1196,7 +1195,7 @@ void PlotPanel::UpdateCurveProperties(const unsigned int &index, const Color &co
 //==========================================================================
 void PlotPanel::UpdateLegend()
 {
-	unsigned long lineSize;
+	double lineSize;
 	long markerSize;
 	std::vector<Legend::LegendEntryInfo> entries;
 	Legend::LegendEntryInfo info;
@@ -1206,7 +1205,7 @@ void PlotPanel::UpdateLegend()
 		if (optionsGrid->GetCellValue(i, colVisible).IsEmpty())
 			continue;
 			
-		optionsGrid->GetCellValue(i, colLineSize).ToULong(&lineSize);
+		optionsGrid->GetCellValue(i, colLineSize).ToDouble(&lineSize);
 		optionsGrid->GetCellValue(i, colMarkerSize).ToLong(&markerSize);
 		info.color = Color(optionsGrid->GetCellBackgroundColour(i, colColor));
 		info.lineSize = lineSize;
