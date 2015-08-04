@@ -82,6 +82,8 @@ PlotRenderer::PlotRenderer(wxWindow &wxParent, PlotOwner &plotOwner, wxWindowID 
 	draggingLegend = false;
 
 	ignoreNextMouseMove = false;
+
+	curveQuality = QualityAlwaysHigh;
 }
 
 //==========================================================================
