@@ -2,7 +2,7 @@
 
 \section{Installation} \label{sec:installation}
 
-\vvase{} does not include any installation process or changes to the machine registry.  Simply place the executable and the pdf manual into the same directory.  After running the first time, any changes to the default settings are saved to a configuration file which will appear in the directory from which the application is run.
+\vvase{} does not include an installation application.  Instead, simply place the executable and the pdf manual into the same directory.  After running the first time, any changes to the default settings are saved to a configuration file which will be created in the directory from which the application is run.
 
 \section{Overview} \label{sec:overview}
 
@@ -28,11 +28,11 @@ The \element{Output Pane} primarily contains diagnostic output to inform the use
 
 \subsection{Output List} \label{ssec:outputList}
 
-The \element{Output List} contains a complete listing of all of the computed kinematic outputs for all open car files for the specified kinematic state (see \sref{ssec:kinematicsToolbar}).  The computed outputs are listed in rows and the open car files are listed in columns.  This arrangement makes side-by-side comparisons of kinematic outputs for multiple car files very easy.  When an output is undefined (e.g. when the kinematic roll center crosses the ground plane), the corresponding grid cell is highlighted yellow and the text ``Undef.'' is displayed in the cell.  If an output doesn't apply for a certain car file (e.g. front-wheel axle plunge on a rear-wheel drive car), the text ``N/A'' is displayed.
+The \element{Output List} contains a complete listing of all of the computed kinematic outputs for all open car files and for the specified kinematic state (see \sref{ssec:kinematicsToolbar}).  The computed outputs are listed in rows and the open car files are listed in columns.  This arrangement makes side-by-side comparisons of kinematic outputs for multiple car files easy.  When an output is undefined (e.g. when the kinematic roll center crosses the ground plane), the corresponding grid cell is highlighted yellow and the text ``Undef.'' is displayed in the cell.  If an output doesn't apply for a certain car file (e.g. front-wheel axle plunge on a rear-wheel drive car), the text ``N/A'' is displayed.
 
 \subsection{Main Display Area} \label{ssec:mainDisplayArea}
 
-The \element{Main Display Area} is a tabbed window and contains a tab for each open file.  Each file type contains a unique display.  Car files show a 3D image of the vehicle in the specified kinematic state (see \sref{ch:cars}), iteration files show a 2D plot showing calculated kinematic outputs across a range of kinematic states (see \sref{ch:iterations} and optimizations show a set of controls that allow configuration of the optimization parameters (see \sref{ch:optimizations}).
+The \element{Main Display Area} is a tabbed window and contains a tab for each open file.  Each file type contains a unique display.  Car files show a 3D image of the vehicle in the specified kinematic state (see \sref{ch:cars}), iteration files show a 2D plot showing calculated kinematic outputs across a range of kinematic states (see \sref{ch:iterations}) and optimizations show a set of controls that allow configuration of the optimization parameters (see \sref{ch:optimizations}).
 
 The tabs in this area can be dragged, docked or floated to enable viewing the 3D model of the car adjacent to an iteration plot, or multiple iteration plots simultaneously.  See \figref{fig:multiPlot} for an example.
 
@@ -48,7 +48,7 @@ The \element{Kinematics Toolbar} is where the user can define a kinematic state 
 
 \subsection{3D Toolbar} \label{ssec:3DToolbar}
 
-The \element{3D Toolbar} only affects the \element{Main Display Area} for car files.  There are two toggle buttons which switch between perspective and orthographic view modes.  Perspective mode draws objects in the foreground with a larger scale than objects in the background (the way objects appear in the real world).  Orthographic mode draws all objects at the same scale.  While perspective mode tends to be more pleasing, orthographic view can be helpful for example when visually determining how well points on opposite ends of the car line up.
+The \element{3D Toolbar} only affects the \element{Main Display Area} for car files.  There are two toggle buttons which switch between perspective and orthographic view modes.  Perspective mode draws objects in the foreground with a larger scale than objects in the background (the way objects appear in the real world).  Orthographic mode draws all objects at the same scale.  While perspective mode tends to be more aesthetically pleasing, orthographic view can be helpful, for example, when visually determining how points on opposite ends of the car are aligned.
 
 \subsection{Menu Bar} \label{ssec:menuBar}
 
@@ -62,7 +62,7 @@ In addition to display customization, there are several ways in which the behavi
 
 \subsection{Units} \label{ssec:optionsUnits}
 
-\vvase{} allows the user to specify which units to use for each type of unit.  After selections are made and changes are applied, all inputs and outputs are updated to be consistent with the specified units.  The options tab containing the units options is shown in \figref{fig:optionsUnits}.
+\vvase{} allows the user to specify which units to use for each type of quantity.  After selections are made and changes are applied, all inputs and outputs are updated to be consistent with the specified units.  The options tab containing the units options is shown in \figref{fig:optionsUnits}.
 
 \begin{figure}
   \includegraphics[width=\textwidth]{images/optionsUnits}
@@ -72,7 +72,7 @@ In addition to display customization, there are several ways in which the behavi
 
 \subsection{Digits} \label{ssec:optionsDigits}
 
-If desired, the precision with which values are displayed can be adjusted.  Optionally, value can also be displayed in scientific notation or while preserving a constant number of significant digits.  The options tab containing the digits options is shown in \figref{fig:optionsDigits}.
+If desired, the precision with which values are displayed can be adjusted.  Optionally, values can also be displayed in scientific notation or while preserving a constant number of significant digits.  The options tab containing the digits options is shown in \figref{fig:optionsDigits}.
 
 \begin{figure}
   \includegraphics[width=\textwidth]{images/optionsDigits}
@@ -82,13 +82,13 @@ If desired, the precision with which values are displayed can be adjusted.  Opti
 
 \subsection{Kinematics} \label{ssec:optionsKinematics}
 
-When applying the specified kinematic state to the car, \vvase{} applies the rotations about the center of rotation specified here.  The default location of $\left(0, 0, 0\right)$ is probably fine for applying roll motion, but when applying pitch, the default center of rotation is likely to result in excessive vertical displacement at the rear end.  This can be resolved by moving the center of rotation backwards.
+When applying the specified kinematic state to the car, \vvase{} applies the rotations about the center of rotation specified here.  The default location of $\left(0, 0, 0\right)$ is probably fine for applying roll motion, but when applying pitch, the default center of rotation may result in excessive vertical displacement at one end of the car, depending on the user's choice of origin.  This can be resolved by moving the center of rotation.
 
-A frequently asked question is ``why doesn't the center of rotation match the roll center?''  The answer is that cars do not roll about the roll center.  Since tires and springs (and dynamically, dampers) are involved, the actual instantaneous location of the vehicle's rolling motion is the result of the forces acting on the components of the vehicle.  Since the kinematics model does not include any forces, no attempt is made to compute the actual attitude that a car would reach during dynamic or even steady-state conditions.  Instead, \vvase{} answers the question ``if the car were to attain this attitude, what are the values of the relevant kinematic outputs?''
+A frequently asked question is ``why doesn't the center of rotation match the roll center?''  The answer is that cars do not roll about the roll center.  Since tires and springs (and dynamically, dampers) are involved, the actual instantaneous location of the vehicle's rolling motion is dictated by the forces acting on the components of the vehicle.  Since the kinematics model does not include any forces, no attempt is made to compute the actual attitude that a car would reach during dynamic or even steady-state conditions.  Instead, \vvase{} answers the question ``if the car were to attain this attitude, what are the values of the relevant kinematic outputs?''  By using a combination of roll, pitch, heave and steer inputs, all possible kinematic states may be evaluated.
 
 Additionally, the order in which the pitch and roll rotations are applied can be changed.
 
-The ``Steering Input'' option allows the user to specify how the Steer input should be interpreted.  In the case of ``Use rack travel distance,'' the input is interpreted as a distance and applied directly to the locations of the inboard tie rods.  In the case of ``Use steering wheel angle,'' the input is interpreted as an angle, and converted to linear motion of the steering rack according to the specified steering ratio.
+The \element{Steering Input} option allows the user to specify how the Steer input should be interpreted.  In the case of \selection{Use rack travel distance}, the input is interpreted as a distance and applied directly to the locations of the inboard tie rods.  In the case of \selection{Use steering wheel angle}, the input is interpreted as an angle, and converted to linear motion of the steering rack according to the specified steering ratio.
 
 The number of threads to execute is generated by estimating the value that would make most efficient use of the available CPU cores.  For large optimizations, it may be desirable to fine-tune this value in order to ensure the best possible performance.
 
@@ -102,7 +102,7 @@ The options tab containing the kinematics options is shown in \figref{fig:option
 
 \subsection{Debugging} \label{ssec:optionsDebugging}
 
-The debugging options apply to the messages that appear in the \element{Output Pane}.  Generally, the default level (Normal) is ideal, however in the event that a particular suspension is not properly solving, it can be helpful to make the debug level more verbose.  The options tab containing the debugging options is shown in \figref{fig:optionsDebugging}.
+The debugging options apply to the messages that appear in the \element{Output Pane}.  Generally, the default level (\selection{Normal}) is ideal, however in the event that a particular suspension is not properly solving, it can be helpful to make the debug level more verbose.  The options tab containing the debugging options is shown in \figref{fig:optionsDebugging}.
 
 \begin{figure}
   \includegraphics[width=\textwidth]{images/optionsDebugging}
