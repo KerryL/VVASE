@@ -92,8 +92,9 @@ public:
 	void ShiftForExactPixelization() const;
 
 private:
-	wxGLContext *context;
+	mutable wxGLContext *context;
 	wxGLContext* GetContext();
+	wxGLContext* GetContext() const;
 	
 	static const double exactPixelShift;
 

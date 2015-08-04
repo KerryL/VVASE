@@ -491,16 +491,18 @@ bool GuiObject::SaveToFile(bool saveAsNewFileName)
 //==========================================================================
 bool GuiObject::WriteImageToFile(wxString pathAndFileName)
 {
+	mainFrame.SetActiveIndex(index);// Can't render if we're not visible
+
 	// Ask the renderer to write the image to file (if there is an image)
 	switch (GetType())
 	{
 		// Types that have a renderer
 	case TypeCar:
-			return static_cast<RenderWindow*>(notebookTab)->WriteImageToFile(pathAndFileName);
+		return static_cast<RenderWindow*>(notebookTab)->WriteImageToFile(pathAndFileName);
 		break;
 		
 	case TypeIteration:
-			return static_cast<PlotPanel*>(notebookTab)->WriteImageToFile(pathAndFileName);
+		return static_cast<PlotPanel*>(notebookTab)->WriteImageToFile(pathAndFileName);
 		break;
 		
 		// Everything else

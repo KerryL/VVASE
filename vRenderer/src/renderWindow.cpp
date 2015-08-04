@@ -33,6 +33,7 @@
 #include "vMath/matrix.h"
 #include "vMath/vector.h"
 #include "vMath/carMath.h"
+
 //==========================================================================
 // Class:			RenderWindow
 // Function:		Constant declarations
@@ -193,6 +194,29 @@ wxGLContext* RenderWindow::GetContext()
 
 //==========================================================================
 // Class:			RenderWindow
+// Function:		GetContext
+//
+// Description:		Gets the GL context.  const version - can't create it if
+//					it doesn't already exist.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		wxGLContext*
+//
+//==========================================================================
+wxGLContext* RenderWindow::GetContext() const
+{
+	assert(context);
+	return context;
+}
+
+//==========================================================================
+// Class:			RenderWindow
 // Function:		Render
 //
 // Description:		Updates the scene with all of this object's options and
@@ -213,8 +237,7 @@ void RenderWindow::Render()
 	if (!GetContext() || !IsShownOnScreen())
 		return;
 
-	SetCurrent(*context);
-	wxPaintDC(this);
+	SetCurrent(*GetContext());
 
 	if (sizeUpdateRequired)
 		DoResize();
@@ -235,7 +258,7 @@ void RenderWindow::Render()
 
 	glMatrixMode(GL_MODELVIEW);
 
-	// Sort the primitives by Color.GetAlpha to ensure that transparent objects are rendered last
+	// Sort the primitives by alpha to ensure that transparent objects are rendered last
 	SortPrimitivesByAlpha();
 
 	// Generally, all objects will have the same draw order and this won't do anything,
@@ -268,6 +291,7 @@ void RenderWindow::Render()
 //==========================================================================
 void RenderWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
+	wxPaintDC(this);
     Render();
 }
 
@@ -959,6 +983,7 @@ void RenderWindow::AutoSetFrustum()
 //==========================================================================
 wxString RenderWindow::GetGLError() const
 {
+	//SetCurrent(*GetContext());// Doesn't work if window is not shown on screen!
 	int error = glGetError();
 
 	if (error == GL_NO_ERROR)
@@ -1025,6 +1050,8 @@ wxImage RenderWindow::GetImage() const
 {
 	unsigned int height = GetSize().GetHeight();
 	unsigned int width = GetSize().GetWidth();
+
+	SetCurrent(*GetContext());
 
 	GLubyte *imageBuffer = (GLubyte*)malloc(width * height * sizeof(GLubyte) * 3);
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);

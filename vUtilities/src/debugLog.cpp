@@ -99,7 +99,7 @@ void DebugLog::SetTarget(const LogTarget &target)
 //
 // Input Arguments:
 //		message	= wxString to be logged
-//		_indent	= int specifying wheter the indent level for the current thread
+//		indent	= int specifying wheter the indent level for the current thread
 //				  should be changed
 //
 // Output Arguments:
@@ -124,7 +124,7 @@ void DebugLog::Log(wxString message, int indent)
 			this->indent[i].second += indent;
 
 			// Apply minus indents prior to this message; positive indents apply for future messages only
-			if (_indent < 0)
+			if (indent < 0)
 				currentIndent = indent[i].second;
 
 			break;
