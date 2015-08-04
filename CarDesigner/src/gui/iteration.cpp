@@ -100,10 +100,7 @@ Iteration::Iteration(MainFrame &mainFrame, wxString pathAndFileName)
 	// MUST be included BEFORE the naming, which must come BEFORE the call to Initialize
 	index = mainFrame.AddObjectToList(this);
 
-	// Create the name based on the index
 	name.Printf("Unsaved Iteration %i", index + 1);
-
-	// Complete initialization of this object
 	Initialize();
 }
 
@@ -186,11 +183,9 @@ const int Iteration::currentFileVersion = 1;
 //==========================================================================
 void Iteration::AddCar(GuiCar *toAdd)
 {
-	// Make sure we have a valid pointer
 	if (toAdd == NULL)
 		return;
 
-	// Add the car to the list
 	associatedCars.push_back(toAdd);
 }
 
@@ -212,11 +207,9 @@ void Iteration::AddCar(GuiCar *toAdd)
 //==========================================================================
 void Iteration::RemoveCar(GuiCar *toRemove)
 {
-	// Make sure we have a valid pointer
 	if (toRemove == NULL)
 		return;
 
-	// Find the car to be removed
 	unsigned int indexToRemove;
 	for (indexToRemove = 0; indexToRemove < associatedCars.size(); indexToRemove++)
 	{
@@ -226,15 +219,12 @@ void Iteration::RemoveCar(GuiCar *toRemove)
 			break;
 	}
 
-	// Make sure we found a car
 	if (indexToRemove == associatedCars.size())
 		return;
 
-	// Remove the outputs associated with the car
 	outputLists[indexToRemove]->Clear();
 	outputLists.Remove(indexToRemove);
 
-	// Remove the car itself
 	associatedCars.erase(associatedCars.begin() + indexToRemove);
 }
 
@@ -257,7 +247,6 @@ void Iteration::RemoveCar(GuiCar *toRemove)
 //==========================================================================
 void Iteration::RemoveAllCars()
 {
-	// Remove all entries from the lists
 	ClearAllLists();
 }
 
@@ -279,7 +268,6 @@ void Iteration::RemoveAllCars()
 //==========================================================================
 int Iteration::GetIconHandle() const
 {
-	// Return the proper icon handle
 	return systemsTree->GetIconHandle(MainTree::IterationIcon);
 }
 
@@ -459,13 +447,12 @@ void Iteration::UpdateDisplay()
 	
 	if (plotPanel)
 	{
-		// Clear out existing data from the plot
 		plotPanel->ClearAllCurves();
 
 		// Create the datasets for the plot
 		// Need to create one dataset per curve per car
 		Dataset2D *dataSet;
-		unsigned int i, j, k;
+		unsigned int i, j, k, n;
 		double *x, *y;
 		for (i = 0; i < NumberOfPlots; i++)
 		{
@@ -475,16 +462,21 @@ void Iteration::UpdateDisplay()
 				for (j = 0; j < (unsigned int)associatedCars.size(); j++)
 				{
 					// Create the dataset
-					dataSet = new Dataset2D(numberOfPoints);
+					dataSet = new Dataset2D(CountValidValues(j, (PlotID)i));
 					x = dataSet->GetXPointer();
 					y = dataSet->GetYPointer();
 					
 					// Populate all values
+					n= 0;
 					for (k = 0; k < (unsigned int)numberOfPoints; k++)
 					{
-						x[k] = GetDataValue(j, k,
+						if (VVASEMath::IsNaN(GetDataValue(j, k, (PlotID)i)))
+							continue;
+
+						x[n] = GetDataValue(j, k,
 								(PlotID)(KinematicOutputs::NumberOfOutputScalars + xAxisType));
-						y[k] = GetDataValue(j, k, (PlotID)i);
+						y[n] = GetDataValue(j, k, (PlotID)i);
+						n++;
 					}
 					
 					// Add the dataset to the plot
@@ -510,6 +502,35 @@ void Iteration::UpdateDisplay()
 	// If we have a second analysis pending, handle it now
 	if (secondAnalysisPending)
 		UpdateData();
+}
+
+//==========================================================================
+// Class:			Iteration
+// Function:		CountValidValues
+//
+// Description:		Counts plottable values in the specified data set
+//
+// Input Arguments:
+//		carIndex	= const unsigned int&
+//		index		= const PlotID&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		unsigned int
+//
+//==========================================================================
+unsigned int Iteration::CountValidValues(const unsigned int &carIndex, const PlotID &index) const
+{
+	unsigned int i, count(0);
+	for (i = 0; i < numberOfPoints; i++)
+	{
+		if (!VVASEMath::IsNaN(GetDataValue(carIndex, i, index)))
+			count++;
+	}
+
+	return count;
 }
 
 //==========================================================================

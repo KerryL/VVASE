@@ -89,14 +89,14 @@ MainNotebook::~MainNotebook()
 //
 //==========================================================================
 BEGIN_EVENT_TABLE(MainNotebook, wxAuiNotebook)
-	EVT_AUINOTEBOOK_PAGE_CLOSE(wxID_ANY,		MainNotebook::NotebookPageClose_Event)
-	EVT_AUINOTEBOOK_PAGE_CHANGED(wxID_ANY,		MainNotebook::NotebookPageChanged_Event)
-	EVT_AUINOTEBOOK_TAB_RIGHT_UP(wxID_ANY,		MainNotebook::NotebookTabRightClick_Event)
+	EVT_AUINOTEBOOK_PAGE_CLOSE(wxID_ANY,		MainNotebook::OnNotebookPageClose)
+	EVT_AUINOTEBOOK_PAGE_CHANGED(wxID_ANY,		MainNotebook::OnNotebookPageChanged)
+	EVT_AUINOTEBOOK_TAB_RIGHT_UP(wxID_ANY,		MainNotebook::OnNotebookTabRightClick)
 END_EVENT_TABLE();
 
 //==========================================================================
 // Class:			MainNotebook
-// Function:		NotebookPageClose_Event
+// Function:		OnNotebookPageClose
 //
 // Description:		Calls the close method for the object associated with the
 //					closed tab.  Vetoed if the user does not confirm the
@@ -112,24 +112,19 @@ END_EVENT_TABLE();
 //		None
 //
 //==========================================================================
-void MainNotebook::NotebookPageClose_Event(wxAuiNotebookEvent &event)
+void MainNotebook::OnNotebookPageClose(wxAuiNotebookEvent &event)
 {
-	// Determine the object that was just clicked on
 	GuiObject *clickedObject = mainFrame.GetObjectByIndex(event.GetSelection());
-
-	// Make sure the selection is valid
 	if (clickedObject == NULL)
 		return;
 
-	// Call the close function to make sure everything is saved and the user actually
-	// wants to close the object.
 	if (!clickedObject->Close(true))
 		event.Veto();
 }
 
 //==========================================================================
 // Class:			MainNotebook
-// Function:		NotebookPageChanged_Event
+// Function:		OnNotebookPageChanged
 //
 // Description:		Sets the ActiveCarIndex to the car associated with the
 //					notebook page that was just selected.
@@ -144,15 +139,14 @@ void MainNotebook::NotebookPageClose_Event(wxAuiNotebookEvent &event)
 //		None
 //
 //==========================================================================
-void MainNotebook::NotebookPageChanged_Event(wxAuiNotebookEvent& WXUNUSED(event))
+void MainNotebook::OnNotebookPageChanged(wxAuiNotebookEvent& WXUNUSED(event))
 {
-	// Tell the main application what car we've just selected
 	mainFrame.SetActiveIndex(GetSelection());
 }
 
 //==========================================================================
 // Class:			MainNotebook
-// Function:		NotebookTabRightClick_Event
+// Function:		OnNotebookTabRightClick
 //
 // Description:		Pops-up a menu containing actions that can be performed
 //					on the selected object.
@@ -167,19 +161,12 @@ void MainNotebook::NotebookPageChanged_Event(wxAuiNotebookEvent& WXUNUSED(event)
 //		None
 //
 //==========================================================================
-void MainNotebook::NotebookTabRightClick_Event(wxAuiNotebookEvent &event)
+void MainNotebook::OnNotebookTabRightClick(wxAuiNotebookEvent &event)
 {
-	// Determine the position of the mouse (this is in screen coords)
 	wxPoint mousePosition = wxGetMousePosition();
 
-	// Subtract the location of the top left corner of the window from the
-	// mouse position to get the mouse position w.r.t. this notebook.
 	mousePosition -= GetScreenPosition();
-
-	// To generate a context menu in the correct position, we need to convert
-	// the position to client coordinates w.r.t. mainFrame.
 	mousePosition += GetPosition();
 
-	// Create and display the context menu
 	mainFrame.CreateContextMenu(event.GetSelection(), mousePosition);
 }

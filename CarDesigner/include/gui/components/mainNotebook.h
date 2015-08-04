@@ -37,9 +37,9 @@ private:
 
 	// Event handlers-----------------------------------------------------
 	// Notebook events
-	void NotebookPageClose_Event(wxAuiNotebookEvent &event);
-	void NotebookPageChanged_Event(wxAuiNotebookEvent &event);
-	void NotebookTabRightClick_Event(wxAuiNotebookEvent &event);
+	void OnNotebookPageClose(wxAuiNotebookEvent &event);
+	void OnNotebookPageChanged(wxAuiNotebookEvent &event);
+	void OnNotebookTabRightClick(wxAuiNotebookEvent &event);
 	// End event handlers-------------------------------------------------
 
 	DECLARE_EVENT_TABLE();

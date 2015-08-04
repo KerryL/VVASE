@@ -218,8 +218,8 @@ private:
 
 	void ApplyPlotFormatting();
 
-	// For getting converted values
 	double ConvertValue(KinematicOutputs::OutputsComplete output);
+	unsigned int CountValidValues(const unsigned int &carIndex, const PlotID &index) const;
 
 	// File header information
 	struct FileHeaderInfo
