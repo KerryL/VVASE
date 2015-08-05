@@ -46,6 +46,28 @@ PlotCursor::PlotCursor(RenderWindow &renderWindow, const Axis &axis)
 
 //==========================================================================
 // Class:			PlotCursor
+// Function:		Calculate
+//
+// Description:		Updates the value associated with the cursor.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotCursor::Calculate()
+{
+	// Update the value of the cursor (required for accuracy when zoom changes, for example)
+	value = axis.PixelToValue(locationAlongAxis);
+}
+
+//==========================================================================
+// Class:			PlotCursor
 // Function:		GenerateGeometry
 //
 // Description:		Generates OpenGL commands to draw the cursor.
@@ -76,8 +98,7 @@ void PlotCursor::GenerateGeometry()
 			- axis.GetOppositeAxis()->GetOffsetFromWindowEdge(), locationAlongAxis);
 	}
 
-	// Update the value of the cursor (required for accuracy when zoom changes, for example)
-	value = axis.PixelToValue(locationAlongAxis);
+	Calculate();
 }
 
 //==========================================================================

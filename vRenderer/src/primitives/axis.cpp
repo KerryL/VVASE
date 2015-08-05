@@ -90,6 +90,28 @@ Axis::~Axis()
 
 //==========================================================================
 // Class:			Axis
+// Function:		Calculate
+//
+// Description:		Updates associated limits without going through the
+//					rendering process.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void Axis::Calculate()
+{
+	DrawTickLabels(false);
+}
+
+//==========================================================================
+// Class:			Axis
 // Function:		GenerateGeometry
 //
 // Description:		Creates the OpenGL instructions to create this object in
@@ -623,7 +645,8 @@ double Axis::GetAxisLabelTranslation(const double &offset, const double &fontHei
 //					tick labels accurate).
 //
 // Input Arguments:
-//		None
+//		render	= const bool& flag that permits the calculationg of axis limits
+//				  without actually making OpenGL calls
 //
 // Output Arguments:
 //		None
@@ -632,7 +655,7 @@ double Axis::GetAxisLabelTranslation(const double &offset, const double &fontHei
 //		None
 //
 //==========================================================================
-void Axis::DrawTickLabels(void)
+void Axis::DrawTickLabels(const bool &render)
 {
 	FTBBox boundingBox;
 	int xTranslation, yTranslation;
@@ -650,13 +673,16 @@ void Axis::DrawTickLabels(void)
 		value = std::min(GetNextTickValue(tick == 0, tick == numberOfTicks + 1, tick), maximum);
 		valueLabel.Printf("%0.*f", precision, value);
 
-		// TODO:  Don't draw it if it's too close to the maximum (based on text size)
-		glPushMatrix();
-			glLoadIdentity();
-			ComputeTranslations(value, xTranslation, yTranslation, font->BBox(valueLabel.mb_str()), valueOffsetFromEdge);
-			glTranslated(xTranslation, yTranslation, 0.0);
-			font->Render(valueLabel.mb_str());
-		glPopMatrix();
+		if (render)
+		{
+			// TODO:  Don't draw it if it's too close to the maximum (based on text size)
+			glPushMatrix();
+				glLoadIdentity();
+				ComputeTranslations(value, xTranslation, yTranslation, font->BBox(valueLabel.mb_str()), valueOffsetFromEdge);
+				glTranslated(xTranslation, yTranslation, 0.0);
+				font->Render(valueLabel.mb_str());
+			glPopMatrix();
+		}
 	}
 
 	valueLabel.Printf("%0.*f", precision, maximum);

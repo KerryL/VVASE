@@ -1236,15 +1236,15 @@ void PlotObject::CheckAutoScaling()
 //==========================================================================
 void PlotObject::UpdateLimitValues(void)
 {
-	axisBottom->Draw();
+	axisBottom->Calculate();
 	xMin = axisBottom->GetMinimum();
 	xMax = axisBottom->GetMaximum();
 
-	axisLeft->Draw();
+	axisLeft->Calculate();
 	yLeftMin = axisLeft->GetMinimum();
 	yLeftMax = axisLeft->GetMaximum();
 
-	axisRight->Draw();
+	axisRight->Calculate();
 	yRightMin = axisRight->GetMinimum();
 	yRightMax = axisRight->GetMaximum();
 }

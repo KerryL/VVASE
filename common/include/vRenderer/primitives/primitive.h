@@ -18,9 +18,7 @@
 
 // Local headers
 #include "vRenderer/color.h"
-
-// Forward declarations
-class RenderWindow;
+#include "vRenderer/renderWindow.h"
 
 class Primitive
 {
@@ -29,9 +27,6 @@ public:
 	Primitive(const Primitive &primitive);
 
 	virtual ~Primitive();
-
-	// Performs the drawing operations
-	void Draw();
 
 	// Called when something is modified to re-create this object with
 	// all of the latest information
@@ -69,6 +64,11 @@ private:
 	// The openGL list index
 	unsigned int listIndex;
 	unsigned int drawOrder;
+
+	// Performs the drawing operations
+	// We only want this ever to be called by RenderWindow::Render()
+	void Draw();
+	friend void RenderWindow::Render();
 };
 
 #endif// PRIMITIVE_H_

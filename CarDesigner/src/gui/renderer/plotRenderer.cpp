@@ -1833,8 +1833,8 @@ void PlotRenderer::UpdateCursors()
 	rightCursor->SetModified();
 
 	// Calculations are performed on Draw
-	leftCursor->Draw();
-	rightCursor->Draw();
+	leftCursor->Calculate();
+	rightCursor->Calculate();
 
 	Refresh();
 }

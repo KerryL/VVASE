@@ -217,10 +217,7 @@ void CarRenderer::UpdateDisplay(const KinematicOutputs &outputs)
 	UpdateCarDisplay();
 	UpdateKinematicsDisplay(outputs);
 
-	// Render the image.  We need to reset the frustum every time we do this just in case
-	// the user zooms out very far, etc.
 	AutoSetFrustum();
-
 	Refresh();
 }
 

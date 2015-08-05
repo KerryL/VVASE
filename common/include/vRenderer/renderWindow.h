@@ -28,9 +28,10 @@
 // Local headers
 #include "vUtilities/managedList.h"
 #include "vMath/vector.h"
-#include "vRenderer/primitives/primitive.h"
+#include "vRenderer/color.h"
 
 // Local forward declarations
+class Primitive;
 class Matrix;
 
 class RenderWindow : public wxGLCanvas
@@ -79,8 +80,9 @@ public:
 
 	inline double GetAspectRatio() const { return aspectRatio; }
 
-	// Returns a string containing any OpenGL errors
+	// NOTE:  These methods MUST be called after making the context current, otherwise results are not guaranteed
 	wxString GetGLError() const;
+	wxString GetGLVersion() const;
 
 	// Writes the current image to file
 	bool WriteImageToFile(wxString pathAndFileName) const;
@@ -92,9 +94,7 @@ public:
 	void ShiftForExactPixelization() const;
 
 private:
-	mutable wxGLContext *context;
-	wxGLContext* GetContext();
-	wxGLContext* GetContext() const;
+	mutable wxGLContext context;
 	
 	static const double exactPixelShift;
 
@@ -141,6 +141,7 @@ private:
 	// End event handlers-------------------------------------------------
 
 	void Render();
+	friend Primitive;// Sloppy, but for now we keep it
 
 	enum InteractionType
 	{

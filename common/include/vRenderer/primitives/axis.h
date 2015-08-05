@@ -33,6 +33,8 @@ public:
 	Axis(RenderWindow &renderWindow);
 	~Axis();
 
+	void Calculate();
+
 	// Mandatory overloads from Primitive - for creating geometry and testing the
 	// validity of this object's parameters
 	void GenerateGeometry();
@@ -149,7 +151,7 @@ private:
 	double GetNextGridValue(const unsigned int &tick) const;
 
 	void DrawAxisLabel(void) const;
-	void DrawTickLabels(void);
+	void DrawTickLabels(const bool &render = true);
 
 	double GetAxisLabelTranslation(const double &offset, const double &fontHeight) const;
 	unsigned int GetPrecision(void) const;

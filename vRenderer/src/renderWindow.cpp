@@ -30,9 +30,12 @@
 
 // Local headers
 #include "vRenderer/renderWindow.h"
+#include "vRenderer/primitives/primitive.h"
 #include "vMath/matrix.h"
 #include "vMath/vector.h"
 #include "vMath/carMath.h"
+
+#include "vUtilities/debugger.h"// TODO:  Remove
 
 //==========================================================================
 // Class:			RenderWindow
@@ -76,10 +79,9 @@ const double RenderWindow::exactPixelShift(0.375);
 //==========================================================================
 RenderWindow::RenderWindow(wxWindow &parent, wxWindowID id, int args[],
     const wxPoint& position, const wxSize& size, long style) : wxGLCanvas(
-	&parent, id, args, position, size, style | wxFULL_REPAINT_ON_RESIZE)
+	&parent, id, args, position, size, style | wxFULL_REPAINT_ON_RESIZE),
+	context(this)
 {
-	context = NULL;
-
 	wireFrame = false;
 	view3D = true;
 	viewOrthogonal = false;
@@ -126,6 +128,7 @@ RenderWindow::RenderWindow(wxWindow &parent, wxWindowID id, int args[],
 //==========================================================================
 RenderWindow::~RenderWindow()
 {
+	//SetCurrent(context);// TODO:  Window must be visible - included because deleting primitives makes calls to openGL
 	primitiveList.Clear();
 
 	delete modelToView;
@@ -133,9 +136,6 @@ RenderWindow::~RenderWindow()
 
 	delete viewToModel;
 	viewToModel = NULL;
-
-	delete GetContext();
-	context = NULL;
 }
 
 //==========================================================================
@@ -170,53 +170,6 @@ END_EVENT_TABLE()
 
 //==========================================================================
 // Class:			RenderWindow
-// Function:		GetContext
-//
-// Description:		Gets (or creates, if it doesn't yet exist) the GL context.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		wxGLContext*
-//
-//==========================================================================
-wxGLContext* RenderWindow::GetContext()
-{
-	if (!context)
-		context = new wxGLContext(this);
-
-	return context;
-}
-
-//==========================================================================
-// Class:			RenderWindow
-// Function:		GetContext
-//
-// Description:		Gets the GL context.  const version - can't create it if
-//					it doesn't already exist.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		wxGLContext*
-//
-//==========================================================================
-wxGLContext* RenderWindow::GetContext() const
-{
-	assert(context);
-	return context;
-}
-
-//==========================================================================
-// Class:			RenderWindow
 // Function:		Render
 //
 // Description:		Updates the scene with all of this object's options and
@@ -234,10 +187,10 @@ wxGLContext* RenderWindow::GetContext() const
 //==========================================================================
 void RenderWindow::Render()
 {
-	if (!GetContext() || !IsShownOnScreen())
+	if (!IsShownOnScreen())
 		return;
 
-	SetCurrent(*GetContext());
+	SetCurrent(context);
 
 	if (sizeUpdateRequired)
 		DoResize();
@@ -338,9 +291,9 @@ void RenderWindow::DoResize()
 	int w, h;
 	GetClientSize(&w, &h);
 
-	if (GetContext() && IsShownOnScreen())
+	if (IsShownOnScreen())
 	{
-		SetCurrent(*GetContext());
+		SetCurrent(context);
 		glViewport(0, 0, (GLint) w, (GLint) h);
 	}
 	Refresh();
@@ -548,7 +501,7 @@ void RenderWindow::OnMouseMoveEvent(wxMouseEvent &event)
 //==========================================================================
 void RenderWindow::PerformInteraction(InteractionType interaction, wxMouseEvent &event)
 {
-	SetCurrent(*GetContext());
+	SetCurrent(context);
 	glGetDoublev(GL_MODELVIEW_MATRIX, glModelviewMatrix);
 	UpdateTransformationMatricies();
 	glMatrixMode(GL_MODELVIEW);
@@ -969,7 +922,8 @@ void RenderWindow::AutoSetFrustum()
 // Class:			RenderWindow
 // Function:		GetGLError
 //
-// Description:		Returns a string describing any openGL errors.
+// Description:		Returns a string describing any openGL errors.  NOTE:
+//					This method must be called after making context current.
 //
 // Input Arguments:
 //		None
@@ -983,7 +937,6 @@ void RenderWindow::AutoSetFrustum()
 //==========================================================================
 wxString RenderWindow::GetGLError() const
 {
-	//SetCurrent(*GetContext());// Doesn't work if window is not shown on screen!
 	int error = glGetError();
 
 	if (error == GL_NO_ERROR)
@@ -1002,6 +955,32 @@ wxString RenderWindow::GetGLError() const
 		return _T("Out of memory");
 
 	return _T("Unrecognized error");
+}
+
+//==========================================================================
+// Class:			RenderWindow
+// Function:		GetGLVersion
+//
+// Description:		Returns a string describing openGL version.  NOTE:
+//					This method must be called after making context current.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		wxString containing the error description
+//
+//==========================================================================
+wxString RenderWindow::GetGLVersion() const
+{
+	const GLubyte* version = glGetString(GL_VERSION);
+	if (version)
+		return version;
+
+	return _T("Unable to query OpenGL version");
 }
 
 //==========================================================================
@@ -1051,7 +1030,7 @@ wxImage RenderWindow::GetImage() const
 	unsigned int height = GetSize().GetHeight();
 	unsigned int width = GetSize().GetWidth();
 
-	SetCurrent(*GetContext());
+	SetCurrent(context);
 
 	GLubyte *imageBuffer = (GLubyte*)malloc(width * height * sizeof(GLubyte) * 3);
 	glPixelStorei(GL_PACK_ALIGNMENT, 1);

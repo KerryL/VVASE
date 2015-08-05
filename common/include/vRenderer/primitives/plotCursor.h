@@ -28,6 +28,8 @@ class PlotCursor : public Primitive
 public:
 	PlotCursor(RenderWindow &renderWindow, const Axis &axis);
 
+	void Calculate();
+
 	// Mandatory overloads from Primitive - for creating geometry and testing the
 	// validity of this object's parameters
 	void GenerateGeometry();

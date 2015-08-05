@@ -15,7 +15,6 @@
 
 // Local headers
 #include "vRenderer/primitives/primitive.h"
-#include "vRenderer/renderWindow.h"
 
 //==========================================================================
 // Class:			Primitive
@@ -64,7 +63,6 @@ Primitive::Primitive(RenderWindow &renderWindow) : renderWindow(renderWindow)
 //==========================================================================
 Primitive::Primitive(const Primitive &primitive) : renderWindow(primitive.renderWindow)
 {
-	// Do the copy
 	*this = primitive;
 }
 
