@@ -262,7 +262,7 @@ void EditSuspensionPanel::UpdateInformation(Suspension *currentSuspension)
 void EditSuspensionPanel::CreateControls()
 {
 	// Enable scrolling
-	SetScrollRate(1, 1);
+	SetScrollRate(10, 10);
 
 	wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
 
@@ -273,6 +273,8 @@ void EditSuspensionPanel::CreateControls()
 	// Create the grid for the hard point entry
 	hardpoints = new SuperGrid(this, wxID_ANY);
 	hardpoints->CreateGrid(Suspension::NumberOfHardpoints + 1, 4, wxGrid::wxGridSelectRows);
+	wxObject *data = new EventWindowData(this);
+	hardpoints->Bind(wxEVT_MOUSEWHEEL, SkipMouseEvent, wxID_ANY, wxID_ANY, data);
 
 	hardpoints->BeginBatch();
 

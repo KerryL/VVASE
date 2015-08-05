@@ -251,7 +251,7 @@ void EditCornerPanel::UpdateInformation(Corner *currentCorner,
 void EditCornerPanel::CreateControls()
 {
 	// Enable scrollbars
-	SetScrollRate(1, 1);
+	SetScrollRate(10, 10);
 
 	wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
 
@@ -262,6 +262,8 @@ void EditCornerPanel::CreateControls()
 	// Create the grid for the hard point entry
 	hardpoints = new SuperGrid(this, wxID_ANY);
 	hardpoints->CreateGrid(Corner::NumberOfHardpoints + 1, 4, wxGrid::wxGridSelectRows);
+	wxObject *data = new EventWindowData(this);
+	hardpoints->Bind(wxEVT_MOUSEWHEEL, SkipMouseEvent, wxID_ANY, wxID_ANY, data);
 
 	hardpoints->BeginBatch();
 	int i;

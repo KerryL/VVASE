@@ -91,3 +91,26 @@ int SafelyGetComboBoxSelection(wxComboBox *control)
 	
 	return selection;
 }
+
+//==========================================================================
+// Class:			None
+// Function:		SkipMouseEvent
+//
+// Description:		Mouse events cannot be Skip()ed, so we force propegation
+//					directly to parent.
+//
+// Input Arguments:
+//		event = wxMouseEvent&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void SkipMouseEvent(wxMouseEvent &event)
+{
+	static_cast<EventWindowData*>(event.GetEventUserData())->GetWindow()->
+		GetEventHandler()->ProcessEvent(event);
+}
