@@ -325,6 +325,7 @@ void RenderWindow::DoResize()
 void RenderWindow::OnEnterWindow(wxMouseEvent &event)
 {
 	//SetFocus();
+	Refresh();
 	event.Skip();
 }
 

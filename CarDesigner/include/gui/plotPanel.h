@@ -60,6 +60,12 @@ public:
 	void AddCurve(Dataset2D *data, wxString name);
 	void RemoveCurve(const unsigned int &i);
 
+	double GetDefaultLineSize() const;
+	int GetDefaultMarkerSize() const;
+
+	void SetDefaultLineSize(const double &size) { defaultLineSize = size; }
+	void SetDefaultMarkerSize(const int &size) { defaultMarkerSize = size; }
+
 	void SetXAxisGridText(wxString text);
 	
 	PlotRenderer* GetRenderer() { return plotArea; }
@@ -111,6 +117,9 @@ private:
 	void UpdateCurveProperties(const unsigned int &index);
 
 	ManagedList<const Dataset2D> plotList;
+
+	double defaultLineSize;
+	int defaultMarkerSize;
 
 	// The event IDs
 	enum MainFrameEventID

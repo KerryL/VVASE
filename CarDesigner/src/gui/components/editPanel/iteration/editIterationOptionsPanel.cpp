@@ -316,7 +316,6 @@ void EditIterationOptionsPanel::OptionsTextBoxEvent(wxCommandEvent& WXUNUSED(eve
 //==========================================================================
 void EditIterationOptionsPanel::SetAsDefaultClickedEvent(wxCommandEvent& WXUNUSED(event))
 {
-	// Save the current settings to file
 	currentIteration->WriteDefaultsToConfig();
 
 	// FIXME:  Would be nice if this could save other plot options, like axis associativity, line colors, etc.

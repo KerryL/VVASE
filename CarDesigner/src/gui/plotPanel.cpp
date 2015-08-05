@@ -65,6 +65,8 @@
 PlotPanel::PlotPanel(wxWindow *parent) : wxPanel(parent)
 {
 	CreateControls();
+	defaultLineSize = 1.0;
+	defaultMarkerSize = -1;
 }
 
 //==========================================================================
@@ -918,8 +920,8 @@ unsigned int PlotPanel::AddDataRowToGrid(const wxString &name)
 	Color color = GetNextColor(index);
 
 	optionsGrid->SetCellBackgroundColour(index, colColor, color.ToWxColor());
-	optionsGrid->SetCellValue(index, colLineSize, _T("1"));
-	optionsGrid->SetCellValue(index, colMarkerSize, _T("0"));
+	optionsGrid->SetCellValue(index, colLineSize, wxString::Format(_T("%g"), defaultLineSize));
+	optionsGrid->SetCellValue(index, colMarkerSize, wxString::Format(_T("%i"), defaultMarkerSize));
 	optionsGrid->SetCellValue(index, colVisible, _T("1"));
 
 	int width = optionsGrid->GetColumnWidth(colName);
@@ -1256,6 +1258,62 @@ void PlotPanel::ShowAppropriateXLabel()
 		SetXDataLabel(FormatFrequency);
 	else
 		SetXDataLabel(currentFileFormat);*/
+}
+
+//==========================================================================
+// Class:			PlotPanel
+// Function:		GetDefaultLineSize
+//
+// Description:		Returns the value to be used for default line size.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		double
+//
+//==========================================================================
+double PlotPanel::GetDefaultLineSize() const
+{
+	if (optionsGrid->GetRows() < 2)
+		return defaultLineSize;
+
+	double size;
+	if (!optionsGrid->GetCellValue(1, colLineSize).ToDouble(&size))
+		return defaultLineSize;
+
+	return size;
+}
+
+//==========================================================================
+// Class:			PlotPanel
+// Function:		GetDefaultMarkerSize
+//
+// Description:		Returns the value to be used for default marker size.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		int
+//
+//==========================================================================
+int PlotPanel::GetDefaultMarkerSize() const
+{
+	if (optionsGrid->GetRows() < 2)
+		return defaultMarkerSize;
+
+	long size;
+	if (!optionsGrid->GetCellValue(1, colMarkerSize).ToLong(&size))
+		return defaultMarkerSize;
+
+	return size;
 }
 
 //==========================================================================

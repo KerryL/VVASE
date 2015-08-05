@@ -69,10 +69,6 @@ Iteration::Iteration(MainFrame &mainFrame, wxString pathAndFileName)
 	for (i = 0; i < NumberOfPlots; i++)
 		plotActive[i] = false;
 
-	// Read default settings from config file
-	// Do this prior to initialization so saved files overwrite these defaults
-	ReadDefaultsFromConfig();
-
 	// Initialize the pointers to the X-axis data
 	axisValuesPitch = NULL;
 	axisValuesRoll = NULL;
@@ -95,6 +91,9 @@ Iteration::Iteration(MainFrame &mainFrame, wxString pathAndFileName)
 	// Create the renderer
 	plotPanel = new PlotPanel(dynamic_cast<wxWindow*>(&mainFrame));
 	notebookTab = dynamic_cast<wxWindow*>(plotPanel);
+
+	// Do this prior to initialization so saved files overwrite these defaults
+	ReadDefaultsFromConfig();
 
 	// Get an index for this item and add it to the list in the mainFrame
 	// MUST be included BEFORE the naming, which must come BEFORE the call to Initialize
@@ -456,7 +455,6 @@ void Iteration::UpdateDisplay()
 		double *x, *y;
 		for (i = 0; i < NumberOfPlots; i++)
 		{
-			// Check to see if this plot is active
 			if (plotActive[i])
 			{
 				for (j = 0; j < (unsigned int)associatedCars.size(); j++)
@@ -578,14 +576,10 @@ void Iteration::ClearAllLists()
 //==========================================================================
 bool Iteration::PerformSaveToFile()
 {
-	// Open the specified file
 	std::ofstream outFile(pathAndFileName.mb_str(), ios::out | ios::binary);
-
-	// Make sure the file was opened OK
 	if (!outFile.is_open() || !outFile.good())
 		return false;
 
-	// Write the file header information
 	WriteFileHeader(&outFile);
 
 	// Write this object's data
@@ -606,7 +600,6 @@ bool Iteration::PerformSaveToFile()
 	bool temp(plotPanel->GetRenderer()->GetMajorGridOn());
 	outFile.write((char*)&temp, sizeof(bool));
 
-	// Close the file
 	outFile.close();
 
 	return true;
@@ -630,14 +623,10 @@ bool Iteration::PerformSaveToFile()
 //==========================================================================
 bool Iteration::PerformLoadFromFile()
 {
-	// Open the specified file
 	std::ifstream inFile(pathAndFileName.mb_str(), ios::in | ios::binary);
-
-	// Make sure the file was opened OK
 	if (!inFile.is_open() || !inFile.good())
 		return false;
 
-	// Read the file header information
 	FileHeaderInfo header = ReadFileHeader(&inFile);
 
 	// Check to make sure the version matches
@@ -688,7 +677,6 @@ bool Iteration::PerformLoadFromFile()
 	else
 		plotPanel->GetRenderer()->SetMajorGridOff();
 
-	// Close the file
 	inFile.close();
 
 	return true;
@@ -712,7 +700,6 @@ bool Iteration::PerformLoadFromFile()
 //==========================================================================
 void Iteration::ReadDefaultsFromConfig()
 {
-	// Create a configuration file object
 	wxFileConfig *configurationFile = new wxFileConfig(_T(""), _T(""),
 		wxFileName(wxStandardPaths::Get().GetExecutablePath()).GetPathWithSep() + mainFrame.pathToConfigFile, _T(""),
 		wxCONFIG_USE_RELATIVE_PATH);
@@ -725,6 +712,21 @@ void Iteration::ReadDefaultsFromConfig()
 	configurationFile->Read(_T("/Iteration/AutoGenerateZLabel"), &autoGenerateZLabel, true);
 	configurationFile->Read(_T("/Iteration/ZLabel"), &zLabel, wxEmptyString);
 	configurationFile->Read(_T("/Iteration/ShowGridLines"), &showGridLines, true);
+
+	bool temp;
+	configurationFile->Read(_T("/Iteration/ShowMinorGridLines"), &temp, false);
+	if (temp)
+		plotPanel->GetRenderer()->SetMinorGridOn();
+	else
+		plotPanel->GetRenderer()->SetMinorGridOff();
+	configurationFile->Read(_T("/Iteration/ShowLegend"), &temp, true);
+	if (temp)
+		plotPanel->GetRenderer()->SetLegendOn();
+	else
+		plotPanel->GetRenderer()->SetLegendOff();
+
+	plotPanel->SetDefaultLineSize(configurationFile->Read(_T("/Iteration/LineSize"), 2.0));
+	plotPanel->SetDefaultMarkerSize(configurationFile->Read(_T("/Iteration/MarkerSize"), 0L));
 
 	configurationFile->Read(_T("/Iteration/StartPitch"), &range.startPitch, 0.0);
 	configurationFile->Read(_T("/Iteration/StartRoll"), &range.startRoll, 0.0);
@@ -763,7 +765,6 @@ void Iteration::ReadDefaultsFromConfig()
 		}
 	}
 
-	// Delete file object
 	delete configurationFile;
 	configurationFile = NULL;
 }
@@ -799,6 +800,11 @@ void Iteration::WriteDefaultsToConfig() const
 	configurationFile->Write(_T("/Iteration/AutoGenerateZLabel"), autoGenerateZLabel);
 	configurationFile->Write(_T("/Iteration/ZLabel"), zLabel);
 	configurationFile->Write(_T("/Iteration/ShowGridLines"), showGridLines);
+
+	configurationFile->Write(_T("/Iteration/ShowMinorGridLines"), plotPanel->GetRenderer()->GetMinorGridOn());
+	configurationFile->Write(_T("/Iteration/ShowLegend"), plotPanel->GetRenderer()->LegendIsVisible());
+	configurationFile->Write(_T("/Iteration/LineSize"), plotPanel->GetDefaultLineSize());
+	configurationFile->Write(_T("/Iteration/MarkerSize"), plotPanel->GetDefaultMarkerSize());
 
 	configurationFile->Write(_T("/Iteration/StartPitch"), range.startPitch);
 	configurationFile->Write(_T("/Iteration/StartRoll"), range.startRoll);
