@@ -112,9 +112,7 @@ END_EVENT_TABLE();
 //==========================================================================
 void EditIterationOptionsPanel::UpdateInformation()
 {
-	// Make sure the suspension object exists
 	if (currentIteration)
-		// Call the method that performs the update
 		UpdateInformation(currentIteration);
 }
 
@@ -137,8 +135,6 @@ void EditIterationOptionsPanel::UpdateInformation()
 void EditIterationOptionsPanel::UpdateInformation(Iteration *currentIteration)
 {
 	this->currentIteration = currentIteration;
-
-	// Make sure the iteration is valid
 	if (!currentIteration)
 		return;
 
@@ -286,15 +282,11 @@ void EditIterationOptionsPanel::OptionsTextBoxEvent(wxCommandEvent& WXUNUSED(eve
 		!zLabelText->GetValue().IsAscii())
 		return;
 
-	// Set all of the text box-type parameters
 	currentIteration->SetTitle(titleText->GetValue());
 	currentIteration->SetXLabel(xLabelText->GetValue());
 	currentIteration->SetZLabel(zLabelText->GetValue());
 
-	// Set the modified flag
 	currentIteration->SetModified();
-
-	// Update the display
 	currentIteration->UpdateDisplay();
 }
 

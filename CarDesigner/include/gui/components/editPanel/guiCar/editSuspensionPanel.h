@@ -81,6 +81,9 @@ private:
 	wxComboBox *frontBarStyle;
 	wxComboBox *rearBarStyle;
 
+	void SetFront3rdSpringEnable();
+	void SetRear3rdSpringEnable();
+
 	DECLARE_EVENT_TABLE();
 };
 

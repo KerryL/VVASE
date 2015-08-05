@@ -234,6 +234,10 @@ void EditSuspensionPanel::UpdateInformation(Suspension *currentSuspension)
 
 	hardpoints->FitHeight();
 	hardpoints->EndBatch();
+
+	SetFront3rdSpringEnable();
+	SetRear3rdSpringEnable();
+
 	Layout();
 
 	// FIXME:  Need way to turn grid scrollbars off
@@ -260,7 +264,6 @@ void EditSuspensionPanel::CreateControls()
 	// Enable scrolling
 	SetScrollRate(1, 1);
 
-	// Top-level sizer
 	wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
 
 	// Second sizer gives more space around the controls
@@ -271,10 +274,8 @@ void EditSuspensionPanel::CreateControls()
 	hardpoints = new SuperGrid(this, wxID_ANY);
 	hardpoints->CreateGrid(Suspension::NumberOfHardpoints + 1, 4, wxGrid::wxGridSelectRows);
 
-	// Begin a batch edit of the grid
 	hardpoints->BeginBatch();
 
-	// Make make the heading row read-only
 	int i;
 	for (i = 0; i < hardpoints->GetNumberCols(); i++)
 		hardpoints->SetReadOnly(0, i, true);
@@ -282,7 +283,6 @@ void EditSuspensionPanel::CreateControls()
 	// Do the processing that needs to be done for each row
 	for (i = 0; i < Suspension::NumberOfHardpoints; i++)
 	{
-		// Make the first column read-only
 		hardpoints->SetReadOnly(i + 1, 0, true);
 
 		// Set the alignment for all of the cells that contain numbers to the right
@@ -290,7 +290,6 @@ void EditSuspensionPanel::CreateControls()
 		hardpoints->SetCellAlignment(i + 1, 2, wxALIGN_RIGHT, wxALIGN_TOP);
 		hardpoints->SetCellAlignment(i + 1, 3, wxALIGN_RIGHT, wxALIGN_TOP);
 
-		// Add the names of all of the points to the grid
 		hardpoints->SetCellValue(i + 1, 0, Suspension::GetHardpointName((Suspension::Hardpoints)i));
 	}
 
@@ -305,7 +304,6 @@ void EditSuspensionPanel::CreateControls()
 	mainSizer->Add(hardpoints, 0, wxALIGN_TOP | wxEXPAND);
 	mainSizer->AddGrowableCol(0);
 
-	// Set the column headings
 	hardpoints->SetColLabelValue(0, _T("Hardpoint"));
 	hardpoints->SetColLabelValue(1, _T("X"));
 	hardpoints->SetColLabelValue(2, _T("Y"));
@@ -326,13 +324,11 @@ void EditSuspensionPanel::CreateControls()
 	// The value we just put in cell (3,3) will get overwritten with a call to UpdateInformation()
 	hardpoints->AutoStretchColumn(0);
 
-	// Don't let the user move or re-size the rows or move the columns
 	hardpoints->EnableDragColMove(false);
 	hardpoints->EnableDragColSize(true);
 	hardpoints->EnableDragGridSize(false);
 	hardpoints->EnableDragRowSize(false);
 
-	// End the batch mode edit and re-paint the control
 	hardpoints->EndBatch();
 
 // When setting the control width, we need to account for the width of the
@@ -383,7 +379,6 @@ void EditSuspensionPanel::CreateControls()
 	rearHasThirdSpring = new wxCheckBox(this, CheckBoxRearHasThirdSpring, _T("Rear Has Third Spring"));
 	mainSizer->Add(rearHasThirdSpring, 0, wxALIGN_LEFT);
 
-	// Assign the top level sizer to the panel
 	SetSizer(topSizer);
 
 	// Initialize the last row selected variable
@@ -409,7 +404,6 @@ void EditSuspensionPanel::CreateControls()
 //==========================================================================
 void EditSuspensionPanel::SelectCellEvent(wxGridEvent &event)
 {
-	// Make sure the selection happened in a valid row
 	if (event.GetRow() > 0)
 	{
 		// Test to see if this row is the same as the previously selected row
@@ -426,10 +420,7 @@ void EditSuspensionPanel::SelectCellEvent(wxGridEvent &event)
 		static_cast<CarRenderer*>(parent.GetParent().GetCurrentObject()->GetNotebookTab())->SetHelperOrbPosition(
 			Corner::NumberOfHardpoints, Corner::LocationRightFront, (Suspension::Hardpoints)(event.GetRow() - 1));
 
-		// Update the display
 		parent.GetParent().GetCurrentObject()->UpdateDisplay();
-
-		// Update the last row selected variable
 		lastRowSelected = event.GetRow();
 	}
 	else
@@ -458,10 +449,8 @@ void EditSuspensionPanel::SelectCellEvent(wxGridEvent &event)
 //==========================================================================
 void EditSuspensionPanel::GridCellChangedEvent(wxGridEvent &event)
 {
-	// Make sure the row is a valid row
 	if (event.GetRow() > 0)
 	{
-		// Get the new value
 		wxString valueString = hardpoints->GetCellValue(event.GetRow(), event.GetCol());
 		double value;
 
@@ -470,7 +459,6 @@ void EditSuspensionPanel::GridCellChangedEvent(wxGridEvent &event)
 			// The value is non-numeric - don't do anything
 			return;
 
-		// Get a lock on the car
 		wxMutex *mutex = parent.GetParent().GetCurrentMutex();
 		mutex->Lock();
 
@@ -506,17 +494,14 @@ void EditSuspensionPanel::GridCellChangedEvent(wxGridEvent &event)
 			currentSuspension->hardpoints[event.GetRow() - 1].z = UnitConverter::GetInstance().ConvertDistanceInput(value);
 		}
 
-		// Unlock the car
 		mutex->Unlock();
 
-		// Tell the car object that it was modified
 		parent.GetParent().GetCurrentObject()->SetModified();
 
 		// Set the position of the helper orb
 		static_cast<CarRenderer*>(parent.GetParent().GetCurrentObject()->GetNotebookTab())->SetHelperOrbPosition(
 			Corner::NumberOfHardpoints, Corner::LocationRightFront, (Suspension::Hardpoints)(event.GetRow() - 1));
 
-		// Update the display and the kinematic outputs
 		parent.GetParent().GetMainFrame().UpdateAnalysis();
 		parent.GetParent().GetMainFrame().UpdateOutputPanel();
 	}
@@ -542,20 +527,16 @@ void EditSuspensionPanel::GridCellChangedEvent(wxGridEvent &event)
 //==========================================================================
 void EditSuspensionPanel::SymmetricCheckboxEvent(wxCommandEvent &event)
 {
-	// Add the operation to the undo/redo stack
 	parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
 		parent.GetParent().GetMainFrame().GetActiveIndex(),
 		UndoRedoStack::Operation::DataTypeBool,
 		&(currentSuspension->isSymmetric));
 
-	// Get a lock on the car
 	wxMutex *mutex = parent.GetParent().GetCurrentMutex();
 	mutex->Lock();
 
-	// Set the value of the symmetry flag to the value of this checkbox
 	currentSuspension->isSymmetric = event.IsChecked();
 
-	// Unlock the car
 	mutex->Unlock();
 
 	// In the case that this was symmetric but is not any longer, we should
@@ -569,10 +550,8 @@ void EditSuspensionPanel::SymmetricCheckboxEvent(wxCommandEvent &event)
 	// tabs from the notebook).
 	parent.GetParent().UpdateInformation();
 
-	// Tell the car object that it was modified
 	tempCurrentObject->SetModified();
 
-	// Update the display and the kinematic outputs
 	tempCurrentObject->GetMainFrame().UpdateAnalysis();
 	tempCurrentObject->GetMainFrame().UpdateOutputPanel();
 }
@@ -602,23 +581,17 @@ void EditSuspensionPanel::FrontThirdCheckboxEvent(wxCommandEvent &event)
 		UndoRedoStack::Operation::DataTypeBool,
 		&(currentSuspension->frontHasThirdSpring));
 
-	// Get a lock on the car
 	wxMutex *mutex = parent.GetParent().GetCurrentMutex();
 	mutex->Lock();
 
 	// Set the value of the front third spring flag to the value of this checkbox
 	currentSuspension->frontHasThirdSpring = event.IsChecked();
 
-	// Unlock the car
 	mutex->Unlock();
 
-	// Call the update function for this object
 	UpdateInformation();
-
-	// Tell the car object that it was modified
 	parent.GetParent().GetCurrentObject()->SetModified();
 
-	// Update the display and the kinematic outputs
 	parent.GetParent().GetMainFrame().UpdateAnalysis();
 	parent.GetParent().GetMainFrame().UpdateOutputPanel();
 
@@ -650,23 +623,17 @@ void EditSuspensionPanel::RearThirdCheckboxEvent(wxCommandEvent &event)
 		UndoRedoStack::Operation::DataTypeBool,
 		&(currentSuspension->rearHasThirdSpring));
 
-	// Get a lock on the car
 	wxMutex *mutex = parent.GetParent().GetCurrentMutex();
 	mutex->Lock();
 
 	// Set the value of the rear third spring flag to the value of this checkbox
 	currentSuspension->rearHasThirdSpring = event.IsChecked();
 
-	// Unlock the car
 	mutex->Unlock();
 
-	// Call the update function for this object
 	UpdateInformation();
-
-	// Tell the car object that it was modified
 	parent.GetParent().GetCurrentObject()->SetModified();
 
-	// Update the display and the kinematic outputs
 	parent.GetParent().GetMainFrame().UpdateAnalysis();
 	parent.GetParent().GetMainFrame().UpdateOutputPanel();
 
@@ -697,25 +664,78 @@ void EditSuspensionPanel::FrontBarStyleChangeEvent(wxCommandEvent &event)
 		UndoRedoStack::Operation::DataTypeInteger,
 		&(currentSuspension->frontBarStyle));
 
-	// Get a lock on the car
 	wxMutex *mutex = parent.GetParent().GetCurrentMutex();
 	mutex->Lock();
 
 	// Set the value of the front bar style flag to the value of this checkbox
 	currentSuspension->frontBarStyle = (Suspension::BarStyle)event.GetSelection();
+	SetFront3rdSpringEnable();
 
-	// Unlock the car
 	mutex->Unlock();
 
-	// Call the update function for the parent object
 	parent.UpdateInformation();
-
-	// Tell the car object that it was modified
 	parent.GetParent().GetCurrentObject()->SetModified();
 
-	// Update the display and the kinematic outputs
 	parent.GetParent().GetMainFrame().UpdateAnalysis();
 	parent.GetParent().GetMainFrame().UpdateOutputPanel();
+}
+
+//==========================================================================
+// Class:			EditSuspensionPanel
+// Function:		SetFront3rdSpringEnable
+//
+// Description:		Ensure 3rd spring settings are valid based on sway bar choice.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void EditSuspensionPanel::SetFront3rdSpringEnable()
+{
+	if (currentSuspension->frontBarStyle != Suspension::SwayBarTBar)
+	{
+		// Must already have locked car mutex
+		currentSuspension->frontHasThirdSpring = false;
+		frontHasThirdSpring->SetValue(false);
+		frontHasThirdSpring->Enable(false);
+	}
+	else
+		frontHasThirdSpring->Enable(true);
+}
+
+//==========================================================================
+// Class:			EditSuspensionPanel
+// Function:		SetRear3rdSpringEnable
+//
+// Description:		Ensure 3rd spring settings are valid based on sway bar choice.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void EditSuspensionPanel::SetRear3rdSpringEnable()
+{
+	if (currentSuspension->rearBarStyle != Suspension::SwayBarTBar)
+	{
+		// Must already have locked car mutex
+		currentSuspension->rearHasThirdSpring = false;
+		rearHasThirdSpring->SetValue(false);
+		rearHasThirdSpring->Enable(false);
+	}
+	else
+		rearHasThirdSpring->Enable(true);
 }
 
 //==========================================================================
@@ -742,23 +762,18 @@ void EditSuspensionPanel::RearBarStyleChangeEvent(wxCommandEvent &event)
 		UndoRedoStack::Operation::DataTypeInteger,
 		&(currentSuspension->rearBarStyle));
 
-	// Get a lock on the car
 	wxMutex *mutex = parent.GetParent().GetCurrentMutex();
 	mutex->Lock();
 
 	// Set the value of the rear bar style flag to the value of this checkbox
 	currentSuspension->rearBarStyle = (Suspension::BarStyle)event.GetSelection();
+	SetFront3rdSpringEnable();
 
-	// Unlock the car
 	mutex->Unlock();
 
-	// Call the update function for the parent object
 	parent.UpdateInformation();
-
-	// Tell the car object that it was modified
 	parent.GetParent().GetCurrentObject()->SetModified();
 
-	// Update the display and the kinematic outputs
 	parent.GetParent().GetMainFrame().UpdateAnalysis();
 	parent.GetParent().GetMainFrame().UpdateOutputPanel();
 }

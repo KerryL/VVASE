@@ -178,6 +178,8 @@ private:
 	static const wxString paneNameKinematicsToolbar;
 	static const wxString paneName3DToolbar;
 
+	static const wxSize minFrameSize;
+
 	// For the context menus we need to store the index of the object
 	// for which the menu was created - it might not be the active car!
 	int objectOfInterestIndex;

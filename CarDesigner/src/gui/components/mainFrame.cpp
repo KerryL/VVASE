@@ -192,6 +192,8 @@ const wxString MainFrame::pathToConfigFile = _T("vvase.rc");
 const wxString MainFrame::pathToConfigFile = _T("config.ini");
 #endif
 
+const wxSize MainFrame::minFrameSize(1024, 768);
+
 const wxString MainFrame::paneNameNotebook(_T("MainNotebook"));
 const wxString MainFrame::paneNameSystemsTree(_T("SystemsTree"));
 const wxString MainFrame::paneNameEditPanel(_T("EditPanel"));
@@ -298,6 +300,7 @@ void MainFrame::SetProperties()
 {
 	SetTitle(carDesignerName);
 	SetName(carDesignerName);
+	SetMinSize(minFrameSize);
 
 	// Add the icons
 	wxIconBundle bundle;
@@ -2708,8 +2711,8 @@ void MainFrame::ReadConfiguration()
 		Maximize();
 	else
 	{
-		SetSize(configurationFile->Read(_T("/GUI/SizeX"), 1024l),
-			configurationFile->Read(_T("/GUI/SizeY"), 768l));
+		SetSize(configurationFile->Read(_T("/GUI/SizeX"), minFrameSize.GetWidth()),
+			configurationFile->Read(_T("/GUI/SizeY"), minFrameSize.GetHeight()));
 		int xPosition = 0, yPosition = 0;
 		if (configurationFile->Read(_T("/GUI/PositionX"), &xPosition)
 			&& configurationFile->Read(_T("/GUI/PositionY"), &yPosition))
