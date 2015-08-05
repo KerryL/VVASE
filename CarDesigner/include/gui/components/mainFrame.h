@@ -170,6 +170,14 @@ private:
 
 	void UpdateActiveObjectMenu();
 
+	static const wxString paneNameNotebook;
+	static const wxString paneNameSystemsTree;
+	static const wxString paneNameEditPanel;
+	static const wxString paneNameOutputPane;
+	static const wxString paneNameOutputList;
+	static const wxString paneNameKinematicsToolbar;
+	static const wxString paneName3DToolbar;
+
 	// For the context menus we need to store the index of the object
 	// for which the menu was created - it might not be the active car!
 	int objectOfInterestIndex;
@@ -226,6 +234,10 @@ private:
 
 		IdMenuViewToolbarsKinematic,
 		IdMenuViewToolbars3D,
+		IdMenuViewSystemsTree,
+		IdMenuViewEditPanel,
+		IdMenuViewOutputPane,
+		IdMenuViewOutputList,
 		IdMenuViewClearOutput,
 
 		IdMenuToolsDoE,
@@ -251,6 +263,7 @@ private:
 	// Frame top level
 	void WindowCloseEvent(wxCloseEvent &event);
 	void OnSizeEvent(wxSizeEvent &event);
+	void OnPaneClose(wxAuiManagerEvent &event);
 
 	// For the menu bar
 	void FileNewCarEvent(wxCommandEvent &event);
@@ -286,6 +299,10 @@ private:
 
 	void ViewToolbarsKinematicEvent(wxCommandEvent &event);
 	void ViewToolbars3DEvent(wxCommandEvent &event);
+	void ViewSystemsTreeEvent(wxCommandEvent &event);
+	void ViewEditPanelEvent(wxCommandEvent &event);
+	void ViewOutputPaneEvent(wxCommandEvent &event);
+	void ViewOutputListEvent(wxCommandEvent &event);
 	void ViewClearOutputEvent(wxCommandEvent &event);
 
 	void ToolsDoEEvent(wxCommandEvent &event);
@@ -329,6 +346,8 @@ private:
 	// The font objects
 	wxFont outputFont;
 	wxFont plotFont;
+
+	void UpdateViewMenuChecks();
 
 	DECLARE_EVENT_TABLE();
 };

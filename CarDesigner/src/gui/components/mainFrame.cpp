@@ -192,6 +192,14 @@ const wxString MainFrame::pathToConfigFile = _T("vvase.rc");
 const wxString MainFrame::pathToConfigFile = _T("config.ini");
 #endif
 
+const wxString MainFrame::paneNameNotebook(_T("MainNotebook"));
+const wxString MainFrame::paneNameSystemsTree(_T("SystemsTree"));
+const wxString MainFrame::paneNameEditPanel(_T("EditPanel"));
+const wxString MainFrame::paneNameOutputPane(_T("OutputPane"));
+const wxString MainFrame::paneNameOutputList(_T("OutputList"));
+const wxString MainFrame::paneNameKinematicsToolbar(_T("KinematicsToolbar"));
+const wxString MainFrame::paneName3DToolbar(_T("3DToolbar"));
+
 //==========================================================================
 // Class:			MainFrame
 // Function:		DoLayout
@@ -216,17 +224,17 @@ void MainFrame::DoLayout()
 	// Add the panes to the manager - this order is important (see below)
 	// It's necessary to use the wxAuiPaneInfo() method because we need to assign internal names
 	// to make calls to SavePerspective() and LoadPerspective() work properly.
-	manager.AddPane(notebook, wxAuiPaneInfo().Name(_T("Main Notebook")).CenterPane());
-	manager.AddPane(debugPane, wxAuiPaneInfo().Name(_T("Debug Pane")).Bottom().Caption(_T("Output")));
+	manager.AddPane(notebook, wxAuiPaneInfo().Name(paneNameNotebook).CenterPane());
+	manager.AddPane(debugPane, wxAuiPaneInfo().Name(paneNameOutputPane).Bottom().Caption(_T("Output")));
 	// For some reason, these get reversed under Linux
 #ifdef __WXGTK__
-	manager.AddPane(editPanel, wxAuiPaneInfo().Name(_T("Edit Panel")).Left().Caption(_T("Edit Sub-Systems")));
-	manager.AddPane(systemsTree, wxAuiPaneInfo().Name(_T("Systems Tree")).Left().Caption(_T("Systems Tree")));
+	manager.AddPane(editPanel, wxAuiPaneInfo().Name(paneNameEditPanel).Left().Caption(_T("Edit Sub-Systems")));
+	manager.AddPane(systemsTree, wxAuiPaneInfo().Name(paneNameSystemsTree).Left().Caption(_T("Systems Tree")));
 #else
-	manager.AddPane(systemsTree, wxAuiPaneInfo().Name(_T("Systems Tree")).Left().Caption(_T("Systems Tree")));
-	manager.AddPane(editPanel, wxAuiPaneInfo().Name(_T("Edit Panel")).Left().Caption(_T("Edit Sub-Systems")));
+	manager.AddPane(systemsTree, wxAuiPaneInfo().Name(paneNameSystemsTree).Left().Caption(_T("Systems Tree")));
+	manager.AddPane(editPanel, wxAuiPaneInfo().Name(paneNameEditPanel).Left().Caption(_T("Edit Sub-Systems")));
 #endif
-	manager.AddPane(outputPanel, wxAuiPaneInfo().Name(_T("Output List")).Right().Caption(_T("Output List")));
+	manager.AddPane(outputPanel, wxAuiPaneInfo().Name(paneNameOutputList).Right().Caption(_T("Output List")));
 
 	// This layer stuff is required to get the desired initial layout (see below)
 	manager.GetPane(debugPane).Layer(0);
@@ -259,7 +267,7 @@ void MainFrame::DoLayout()
 	|			|										|		|
 	|			|										|		|
 	|			|-----------------------------------------------|
-	|			| Debug Pane									|
+	|			| Output Pane									|
 	|			|												|
 	|			|												|
 	|			|												|
@@ -322,9 +330,8 @@ void MainFrame::SetProperties()
 	
 	ReadConfiguration();
 
-	// Depending on whether the toolbars are shown, check the corresponding menu item
-	menuBar->Check(IdMenuViewToolbarsKinematic, manager.GetPane(kinematicToolbar).IsShown());
-	menuBar->Check(IdMenuViewToolbars3D, manager.GetPane(toolbar3D).IsShown());
+	UpdateViewMenuChecks();
+
 	toolbar3D->ToggleTool(IdToolbar3DOrtho, useOrthoView);
 
 	wxString fontFaceName;
@@ -394,6 +401,72 @@ void MainFrame::SetProperties()
 
 	// Allow dragging-and-dropping of files onto this window to open them
 	SetDropTarget(dynamic_cast<wxDropTarget*>(new DropTarget(*this)));
+}
+
+//==========================================================================
+// Class:			MainFrame
+// Function:		UpdateViewMenuChecks
+//
+// Description:		Updates the checkboxes in the View menu.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void MainFrame::UpdateViewMenuChecks()
+{
+	// Depending on whether elements are shown, check the corresponding menu item
+	menuBar->Check(IdMenuViewToolbarsKinematic, manager.GetPane(kinematicToolbar).IsShown());
+	menuBar->Check(IdMenuViewToolbars3D, manager.GetPane(toolbar3D).IsShown());
+
+	menuBar->Check(IdMenuViewSystemsTree, manager.GetPane(systemsTree).IsShown());
+	menuBar->Check(IdMenuViewEditPanel, manager.GetPane(editPanel).IsShown());
+	menuBar->Check(IdMenuViewOutputPane, manager.GetPane(debugPane).IsShown());
+	menuBar->Check(IdMenuViewOutputList, manager.GetPane(outputPanel).IsShown());
+}
+
+//==========================================================================
+// Class:			MainFrame
+// Function:		OnPaneClose
+//
+// Description:		Handles pane close events.
+//
+// Input Arguments:
+//		event	= wxAuiManagerEvent&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void MainFrame::OnPaneClose(wxAuiManagerEvent& event)
+{
+	wxString name = event.GetPane()->name;
+	int id;
+	if (name.IsSameAs(paneNameSystemsTree))
+		id = IdMenuViewSystemsTree;
+	else if (name.IsSameAs(paneNameEditPanel))
+		id = IdMenuViewEditPanel;
+	else if (name.IsSameAs(paneNameOutputPane))
+		id = IdMenuViewOutputPane;
+	else if (name.IsSameAs(paneNameOutputList))
+		id = IdMenuViewOutputList;
+	else if (name.IsSameAs(paneNameKinematicsToolbar))
+		id = IdMenuViewToolbarsKinematic;
+	else if (name.IsSameAs(paneName3DToolbar))
+		id = IdMenuViewToolbars3D;
+	else
+		return;
+
+	menuBar->Check(id, false);
 }
 
 //==========================================================================
@@ -593,6 +666,10 @@ void MainFrame::CreateMenuBar()
 
 	// View menu
 	wxMenu *mnuView = new wxMenu();
+	mnuView->AppendCheckItem(IdMenuViewSystemsTree, _T("Systems Tree"));
+	mnuView->AppendCheckItem(IdMenuViewEditPanel, _T("Edit Panel"));
+	mnuView->AppendCheckItem(IdMenuViewOutputPane, _T("Output Pane"));
+	mnuView->AppendCheckItem(IdMenuViewOutputList, _T("Output List"));
 	wxMenu *mnuViewToolbars = new wxMenu();
 	mnuViewToolbars->AppendCheckItem(IdMenuViewToolbarsKinematic, _T("Kinematic Analysis"));
 	mnuViewToolbars->AppendCheckItem(IdMenuViewToolbars3D, _T("3D View"));
@@ -765,6 +842,7 @@ BEGIN_EVENT_TABLE(MainFrame, wxFrame)
 	// Frame top level
 	EVT_CLOSE(MainFrame::WindowCloseEvent)
 	EVT_SIZE(MainFrame::OnSizeEvent)
+	EVT_AUI_PANE_CLOSE(MainFrame::OnPaneClose)
 
 	// Menu bar
 	EVT_MENU(IdMenuFileNewCar,					MainFrame::FileNewCarEvent)
@@ -799,6 +877,10 @@ BEGIN_EVENT_TABLE(MainFrame, wxFrame)
 
 	EVT_MENU(IdMenuViewToolbarsKinematic,		MainFrame::ViewToolbarsKinematicEvent)
 	EVT_MENU(IdMenuViewToolbars3D,				MainFrame::ViewToolbars3DEvent)
+	EVT_MENU(IdMenuViewSystemsTree,				MainFrame::ViewSystemsTreeEvent)
+	EVT_MENU(IdMenuViewEditPanel,				MainFrame::ViewEditPanelEvent)
+	EVT_MENU(IdMenuViewOutputPane,				MainFrame::ViewOutputPaneEvent)
+	EVT_MENU(IdMenuViewOutputList,				MainFrame::ViewOutputListEvent)
 	EVT_MENU(IdMenuViewClearOutput,				MainFrame::ViewClearOutputEvent)
 
 	EVT_MENU(IdMenuToolsDoE,					MainFrame::ToolsDoEEvent)
@@ -1597,6 +1679,94 @@ void MainFrame::ViewToolbarsKinematicEvent(wxCommandEvent &event)
 void MainFrame::ViewToolbars3DEvent(wxCommandEvent &event)
 {
 	manager.GetPane(toolbar3D).Show(event.IsChecked());
+	manager.Update();
+}
+
+//==========================================================================
+// Class:			MainFrame
+// Function:		ViewSystemsTreeEvent
+//
+// Description:		Toggles visibility of the system tree.
+//
+// Input Arguments:
+//		event	= wxCommandEvent&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void MainFrame::ViewSystemsTreeEvent(wxCommandEvent &event)
+{
+	manager.GetPane(systemsTree).Show(event.IsChecked());
+	manager.Update();
+}
+
+//==========================================================================
+// Class:			MainFrame
+// Function:		ViewEditPanelEvent
+//
+// Description:		Toggles visibility of the edit panel.
+//
+// Input Arguments:
+//		event	= wxCommandEvent&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void MainFrame::ViewEditPanelEvent(wxCommandEvent &event)
+{
+	manager.GetPane(editPanel).Show(event.IsChecked());
+	manager.Update();
+}
+
+//==========================================================================
+// Class:			MainFrame
+// Function:		ViewOutputPaneEvent
+//
+// Description:		Toggles visibility of the output pane.
+//
+// Input Arguments:
+//		event	= wxCommandEvent&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void MainFrame::ViewOutputPaneEvent(wxCommandEvent &event)
+{
+	manager.GetPane(debugPane).Show(event.IsChecked());
+	manager.Update();
+}
+
+//==========================================================================
+// Class:			MainFrame
+// Function:		ViewOutputListEvent
+//
+// Description:		Toggles visibility of the output list.
+//
+// Input Arguments:
+//		event	= wxCommandEvent&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void MainFrame::ViewOutputListEvent(wxCommandEvent &event)
+{
+	manager.GetPane(outputPanel).Show(event.IsChecked());
 	manager.Update();
 }
 
