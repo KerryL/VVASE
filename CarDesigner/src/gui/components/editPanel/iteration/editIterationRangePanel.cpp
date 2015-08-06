@@ -192,7 +192,7 @@ void EditIterationRangePanel::UpdateInformation(Iteration *currentIteration)
 void EditIterationRangePanel::CreateControls()
 {
 	// Enable scrolling
-	SetScrollRate(1, 1);
+	SetScrollRate(10, 10);
 
 	// Top-level sizer
 	wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);

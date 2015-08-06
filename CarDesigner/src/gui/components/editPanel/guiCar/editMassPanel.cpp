@@ -173,7 +173,7 @@ void EditMassPanel::UpdateInformation(MassProperties *currentMassProperties)
 void EditMassPanel::CreateControls()
 {
 	// Enable scrolling
-	SetScrollRate(1, 1);
+	SetScrollRate(10, 10);
 	
 	// Top-level sizer
 	wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);

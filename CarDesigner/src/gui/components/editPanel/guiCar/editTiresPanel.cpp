@@ -182,7 +182,7 @@ void EditTiresPanel::UpdateInformation(TireSet *currentTireSet)
 void EditTiresPanel::CreateControls()
 {
 	// Enable scrolling
-	SetScrollRate(1, 1);
+	SetScrollRate(10, 10);
 
 	// Top-level sizer
 	wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);

@@ -135,7 +135,7 @@ void EditBrakesPanel::UpdateInformation(Brakes *currentBrakes)
 void EditBrakesPanel::CreateControls()
 {
 	// Enable scrolling
-	SetScrollRate(1, 1);
+	SetScrollRate(10, 10);
 
 	wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
 
