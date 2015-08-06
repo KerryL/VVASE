@@ -422,7 +422,7 @@ void GeneticAlgorithm::Breed()
 	}
 
 	// Perform the breeding
-	int i, geneToMutate, randomCrossover, numberOfOffspring = 0;
+	int i, geneToMutate, /*randomCrossover,*/ numberOfOffspring = 0;
 	bool spawnTwoChildren;
 	while (numberOfOffspring < populationSize)
 	{
