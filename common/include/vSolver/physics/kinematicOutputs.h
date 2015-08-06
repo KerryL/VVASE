@@ -234,6 +234,22 @@ private:
 	bool ComputeKinematicCenter(const Corner &corner1, const Corner &corner2,
 		const Vector *cornerVectors1, const Vector *cornerVectors2,
 		const Vector &planeNormal, Vector &center, Vector &direction) const;
+
+	void ComputeCaster(const Corner &corner, double *cornerDoubles);
+	void ComputeKingPinInclincation(const Corner &corner, const short &sign, double *cornerDoubles);
+	void ComputeCasterTrail(const Corner &corner, double *cornerDoubles);
+	void ComputeScrubRadius(const Corner &corner, const short &sign, double *cornerDoubles);
+	void ComputeSpindleLength(const Corner &corner, const short &sign, double *cornerDoubles);
+	void ComputeCamberAndSteer(const Corner &originalCorner, const Corner &currentCorner,
+		const short &sign, double *cornerDoubles);
+	void ComputeSpringDisplacement(const Corner &originalCorner,
+		const Corner &currentCorner, double *cornerDoubles);
+	void ComputeDamperDisplacement(const Corner &originalCorner,
+		const Corner &currentCorner, double *cornerDoubles);
+	void ComputeScrub(const Corner &originalCorner, const Corner &currentCorner,
+		const short &sign, double *cornerDoubles);
+	void ComputeAxlePlunge(const Corner &originalCorner,
+		const Corner &currentCorner, double *cornerDoubles);
 };
 
 #endif// KINEMATIC_OUTPUTS_H_

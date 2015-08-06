@@ -719,104 +719,23 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 	}
 	else
 	{
-		// Not one of our recognized locations!!!
 		Debugger::GetInstance() << "ERROR:  Corner location not recognized!" << Debugger::PriorityHigh;
 		return;
 	}
 
-	// Caster [rad]
-	cornerDoubles[Caster] = VVASEMath::RangeToPlusMinusPi(atan2(
-		currentCorner->hardpoints[Corner::UpperBallJoint].x - currentCorner->hardpoints[Corner::LowerBallJoint].x,
-		currentCorner->hardpoints[Corner::UpperBallJoint].z - currentCorner->hardpoints[Corner::LowerBallJoint].z));
+	ComputeCaster(*currentCorner, cornerDoubles);
+	ComputeKingPinInclincation(*currentCorner, sign, cornerDoubles);
+	ComputeCasterTrail(*currentCorner, cornerDoubles);
+	ComputeScrubRadius(*currentCorner, sign, cornerDoubles);
+	ComputeSpindleLength(*currentCorner, sign, cornerDoubles);
+	ComputeCamberAndSteer(*originalCorner, *currentCorner, sign, cornerDoubles);
+	ComputeSpringDisplacement(*originalCorner, *currentCorner, cornerDoubles);
+	ComputeDamperDisplacement(*originalCorner, *currentCorner, cornerDoubles);
+	ComputeScrub(*originalCorner, *currentCorner, sign, cornerDoubles);
 
-	// KPI [rad]
-	cornerDoubles[KPI] = VVASEMath::RangeToPlusMinusPi(sign * atan2(
-		currentCorner->hardpoints[Corner::LowerBallJoint].y - currentCorner->hardpoints[Corner::UpperBallJoint].y,
-		currentCorner->hardpoints[Corner::UpperBallJoint].z - currentCorner->hardpoints[Corner::LowerBallJoint].z));
-
-	// Caster Trail [in]
-	// Note on Caster Trail:  In RCVD p. 713, it is noted that sometimes trail is
-	// measured perpendicular to the steering axis (instead of as a horizontal
-	// distance, like we do here) because this more accurately describes the
-	// moment arm that connects the tire forces to the kingpin.
-	cornerDoubles[CasterTrail] = currentCorner->hardpoints[Corner::ContactPatch].x -
-		(currentCorner->hardpoints[Corner::UpperBallJoint].x - currentCorner->hardpoints[Corner::UpperBallJoint].z *
-		(currentCorner->hardpoints[Corner::UpperBallJoint].x - currentCorner->hardpoints[Corner::LowerBallJoint].x) /
-		(currentCorner->hardpoints[Corner::UpperBallJoint].z - currentCorner->hardpoints[Corner::LowerBallJoint].z));
-
-	// Scrub Radius [in]
-	cornerDoubles[ScrubRadius] = sign * (currentCorner->hardpoints[Corner::ContactPatch].y -
-		 currentCorner->hardpoints[Corner::UpperBallJoint].y - currentCorner->hardpoints[Corner::UpperBallJoint].z *
-		(currentCorner->hardpoints[Corner::LowerBallJoint].y - currentCorner->hardpoints[Corner::UpperBallJoint].y) /
-		(currentCorner->hardpoints[Corner::UpperBallJoint].z - currentCorner->hardpoints[Corner::LowerBallJoint].z));
-
-	// Spindle Length [in]
-	//  Spindle length is the distance between the wheel center and the steer axis, at the
-	//  height of the wheel center.
-	double t = (currentCorner->hardpoints[Corner::WheelCenter].z - currentCorner->hardpoints[Corner::LowerBallJoint].z) /
-		(currentCorner->hardpoints[Corner::UpperBallJoint].z - currentCorner->hardpoints[Corner::LowerBallJoint].z);
-	Vector PointOnSteerAxis = currentCorner->hardpoints[Corner::LowerBallJoint] +
-		(currentCorner->hardpoints[Corner::UpperBallJoint] - currentCorner->hardpoints[Corner::LowerBallJoint]) * t;
-	cornerDoubles[SpindleLength] = (PointOnSteerAxis.y - currentCorner->hardpoints[Corner::WheelCenter].y) /
-		fabs(PointOnSteerAxis.y - currentCorner->hardpoints[Corner::WheelCenter].y) * sign *
-		currentCorner->hardpoints[Corner::WheelCenter].Distance(PointOnSteerAxis);
-
-	// Camber and Steer Angle [rad]
-	Vector originalWheelPlaneNormal;
-	Vector newWheelPlaneNormal;
-	Vector angles;
-
-	originalWheelPlaneNormal = VVASEMath::GetPlaneNormal(
-		originalCorner->hardpoints[Corner::LowerBallJoint],
-		originalCorner->hardpoints[Corner::UpperBallJoint],
-		originalCorner->hardpoints[Corner::OutboardTieRod]);
-	newWheelPlaneNormal = VVASEMath::GetPlaneNormal(
-		currentCorner->hardpoints[Corner::LowerBallJoint],
-		currentCorner->hardpoints[Corner::UpperBallJoint],
-		currentCorner->hardpoints[Corner::OutboardTieRod]);
-
-	// Calculate the wheel angles to get the steer angle
-	angles = originalWheelPlaneNormal.AnglesTo(newWheelPlaneNormal);
-	cornerDoubles[Steer] = angles.z;
-
-	// Rotate the NewWheelPlaneNormal back about Z by the steer angle in preparation for solving for camber
-	newWheelPlaneNormal.Rotate(cornerDoubles[Steer], Vector::AxisZ);
-
-	// Calculate the wheel angles again, this time we want the camber angle
-	angles = originalWheelPlaneNormal.AnglesTo(newWheelPlaneNormal);
-	cornerDoubles[Camber] = sign * angles.x;
-
-	// Add in the effects of static camber and toe settings
-	cornerDoubles[Camber] += currentCorner->staticCamber;
-	cornerDoubles[Steer] += sign * currentCorner->staticToe;
-
-	// Report Camber and Steer angles between -PI and PI
-	cornerDoubles[Camber] = VVASEMath::RangeToPlusMinusPi(cornerDoubles[Camber]);
-	cornerDoubles[Steer] = VVASEMath::RangeToPlusMinusPi(cornerDoubles[Steer]);
-
-	// Spring Displacement [in] - positive is compression
-	cornerDoubles[Spring] = originalCorner->hardpoints[Corner::InboardSpring].Distance(
-		originalCorner->hardpoints[Corner::OutboardSpring]) -
-		currentCorner->hardpoints[Corner::InboardSpring].Distance(
-		currentCorner->hardpoints[Corner::OutboardSpring]);
-
-	// Damper Displacement [in] - positive is compression
-	cornerDoubles[Damper] = originalCorner->hardpoints[Corner::InboardDamper].Distance(
-		originalCorner->hardpoints[Corner::OutboardDamper]) -
-		currentCorner->hardpoints[Corner::InboardDamper].Distance(
-		currentCorner->hardpoints[Corner::OutboardDamper]);
-
-	// Scrub [in]
-	cornerDoubles[Scrub] = sign * (currentCorner->hardpoints[Corner::ContactPatch].y -
-		originalCorner->hardpoints[Corner::ContactPatch].y);
-
-	// Axle Plunge [in] - positive is shortened
-	if ((originalCar->HasFrontHalfShafts() && isAtFront) || (originalCar->HasRearHalfShafts() && !isAtFront))
-		cornerDoubles[AxlePlunge] =
-			originalCorner->hardpoints[Corner::InboardHalfShaft].Distance(
-			originalCorner->hardpoints[Corner::OutboardHalfShaft]) -
-			currentCorner->hardpoints[Corner::InboardHalfShaft].Distance(
-			currentCorner->hardpoints[Corner::OutboardHalfShaft]);
+	if ((originalCar->HasFrontHalfShafts() && isAtFront) ||
+		(originalCar->HasRearHalfShafts() && !isAtFront))
+		ComputeAxlePlunge(*originalCorner, *currentCorner, cornerDoubles);
 
 	// Kinematic Instant Centers and Direction Vectors [in], [-]
 	//  The instant centers here will be defined as the point that lies both on the
@@ -1386,6 +1305,310 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 		if (VVASEMath::IsNaN(cornerDoubles[AntiDrivePitch]))
 			cornerDoubles[AntiDrivePitch] = 0.0;
 	}
+}
+
+//==========================================================================
+// Class:			KinematicOutputs
+// Function:		ComputeCaster
+//
+// Description:		Computes the caster angle for the specified corner.
+//
+// Input Arguments:
+//		currentCorner	= const Corner&
+//		cornerDoubles	= double*
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void KinematicOutputs::ComputeCaster(const Corner &corner, double *cornerDoubles)
+{
+	cornerDoubles[Caster] = VVASEMath::RangeToPlusMinusPi(atan2(
+		corner.hardpoints[Corner::UpperBallJoint].x - corner.hardpoints[Corner::LowerBallJoint].x,
+		corner.hardpoints[Corner::UpperBallJoint].z - corner.hardpoints[Corner::LowerBallJoint].z));
+}
+
+//==========================================================================
+// Class:			KinematicOutputs
+// Function:		ComputeKingPinInclincation
+//
+// Description:		Computes the KPI for the specified corner.
+//
+// Input Arguments:
+//		currentCorner	= const Corner&
+//		sign			= const short&
+//		cornerDoubles	= double*
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void KinematicOutputs::ComputeKingPinInclincation(const Corner &corner,
+	const short &sign, double *cornerDoubles)
+{
+	cornerDoubles[KPI] = VVASEMath::RangeToPlusMinusPi(sign * atan2(
+		corner.hardpoints[Corner::LowerBallJoint].y - corner.hardpoints[Corner::UpperBallJoint].y,
+		corner.hardpoints[Corner::UpperBallJoint].z - corner.hardpoints[Corner::LowerBallJoint].z));
+}
+
+//==========================================================================
+// Class:			KinematicOutputs
+// Function:		ComputeCasterTrail
+//
+// Description:		Computes the caster trail for the specified corner.
+//
+// Input Arguments:
+//		currentCorner	= const Corner&
+//		cornerDoubles	= double*
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void KinematicOutputs::ComputeCasterTrail(const Corner &corner, double *cornerDoubles)
+{
+	// Note on Caster Trail:  In RCVD p. 713, it is noted that sometimes trail is
+	// measured perpendicular to the steering axis (instead of as a horizontal
+	// distance, like we do here) because this more accurately describes the
+	// moment arm that connects the tire forces to the kingpin.
+	cornerDoubles[CasterTrail] = corner.hardpoints[Corner::ContactPatch].x -
+		(corner.hardpoints[Corner::UpperBallJoint].x - corner.hardpoints[Corner::UpperBallJoint].z *
+		(corner.hardpoints[Corner::UpperBallJoint].x - corner.hardpoints[Corner::LowerBallJoint].x) /
+		(corner.hardpoints[Corner::UpperBallJoint].z - corner.hardpoints[Corner::LowerBallJoint].z));
+}
+
+//==========================================================================
+// Class:			KinematicOutputs
+// Function:		ComputeScrubRadius
+//
+// Description:		Computes the scrub radius for the specified corner.
+//
+// Input Arguments:
+//		currentCorner	= const Corner&
+//		sign			= const short&
+//		cornerDoubles	= double*
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void KinematicOutputs::ComputeScrubRadius(const Corner &corner,
+	const short &sign, double *cornerDoubles)
+{
+	cornerDoubles[ScrubRadius] = sign * (corner.hardpoints[Corner::ContactPatch].y -
+		 corner.hardpoints[Corner::UpperBallJoint].y - corner.hardpoints[Corner::UpperBallJoint].z *
+		(corner.hardpoints[Corner::LowerBallJoint].y - corner.hardpoints[Corner::UpperBallJoint].y) /
+		(corner.hardpoints[Corner::UpperBallJoint].z - corner.hardpoints[Corner::LowerBallJoint].z));
+}
+
+//==========================================================================
+// Class:			KinematicOutputs
+// Function:		ComputeSpindleLength
+//
+// Description:		Computes the spindle length for the specified corner.
+//					Spindle length isthe distance between the wheel center and
+//					steer axis, measured at the height of the wheel center.
+//
+// Input Arguments:
+//		currentCorner	= const Corner&
+//		sign			= const short&
+//		cornerDoubles	= double*
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void KinematicOutputs::ComputeSpindleLength(const Corner &corner,
+	const short &sign, double *cornerDoubles)
+{
+	double t = (corner.hardpoints[Corner::WheelCenter].z - corner.hardpoints[Corner::LowerBallJoint].z) /
+		(corner.hardpoints[Corner::UpperBallJoint].z - corner.hardpoints[Corner::LowerBallJoint].z);
+	Vector pointOnSteerAxis = corner.hardpoints[Corner::LowerBallJoint] +
+		(corner.hardpoints[Corner::UpperBallJoint] - corner.hardpoints[Corner::LowerBallJoint]) * t;
+	cornerDoubles[SpindleLength] = (pointOnSteerAxis.y - corner.hardpoints[Corner::WheelCenter].y) /
+		fabs(pointOnSteerAxis.y - corner.hardpoints[Corner::WheelCenter].y) * sign *
+		corner.hardpoints[Corner::WheelCenter].Distance(pointOnSteerAxis);
+}
+
+//==========================================================================
+// Class:			KinematicOutputs
+// Function:		ComputeCamberAndSteer
+//
+// Description:		Computes the camber and steer angles for the specified corner.
+//
+// Input Arguments:
+//		originalCorner	= const Corner&
+//		currentCorner	= const Corner&
+//		sign			= const short&
+//		cornerDoubles	= double*
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void KinematicOutputs::ComputeCamberAndSteer(const Corner &originalCorner,
+	const Corner &currentCorner, const short &sign, double *cornerDoubles)
+{
+	Vector originalWheelPlaneNormal;
+	Vector newWheelPlaneNormal;
+	Vector angles;
+
+	originalWheelPlaneNormal = VVASEMath::GetPlaneNormal(
+		originalCorner.hardpoints[Corner::LowerBallJoint],
+		originalCorner.hardpoints[Corner::UpperBallJoint],
+		originalCorner.hardpoints[Corner::OutboardTieRod]);
+	newWheelPlaneNormal = VVASEMath::GetPlaneNormal(
+		currentCorner.hardpoints[Corner::LowerBallJoint],
+		currentCorner.hardpoints[Corner::UpperBallJoint],
+		currentCorner.hardpoints[Corner::OutboardTieRod]);
+
+	// Calculate the wheel angles to get the steer angle
+	angles = originalWheelPlaneNormal.AnglesTo(newWheelPlaneNormal);
+	cornerDoubles[Steer] = angles.z;
+
+	// Rotate the NewWheelPlaneNormal back about Z by the steer angle in preparation for solving for camber
+	newWheelPlaneNormal.Rotate(cornerDoubles[Steer], Vector::AxisZ);
+
+	// Calculate the wheel angles again, this time we want the camber angle
+	angles = originalWheelPlaneNormal.AnglesTo(newWheelPlaneNormal);
+	cornerDoubles[Camber] = sign * angles.x;
+
+	// Add in the effects of static camber and toe settings
+	cornerDoubles[Camber] += currentCorner.staticCamber;
+	cornerDoubles[Steer] += sign * currentCorner.staticToe;
+
+	cornerDoubles[Camber] = VVASEMath::RangeToPlusMinusPi(cornerDoubles[Camber]);
+	cornerDoubles[Steer] = VVASEMath::RangeToPlusMinusPi(cornerDoubles[Steer]);
+}
+
+//==========================================================================
+// Class:			KinematicOutputs
+// Function:		ComputeSpringDisplacement
+//
+// Description:		Computes the spring displacement for the specified corner.
+//					Positive values indicate compression.
+//
+// Input Arguments:
+//		originalCorner	= const Corner&
+//		currentCorner	= const Corner&
+//		cornerDoubles	= double*
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void KinematicOutputs::ComputeSpringDisplacement(const Corner &originalCorner,
+	const Corner &currentCorner, double *cornerDoubles)
+{
+	// positive is compression
+	cornerDoubles[Spring] = originalCorner.hardpoints[Corner::InboardSpring].Distance(
+		originalCorner.hardpoints[Corner::OutboardSpring]) -
+		currentCorner.hardpoints[Corner::InboardSpring].Distance(
+		currentCorner.hardpoints[Corner::OutboardSpring]);
+}
+
+//==========================================================================
+// Class:			KinematicOutputs
+// Function:		ComputeDamperDisplacement
+//
+// Description:		Computes the damper displacement for the specified corner.
+//					Positive values indicate compression.
+//
+// Input Arguments:
+//		originalCorner	= const Corner&
+//		currentCorner	= const Corner&
+//		cornerDoubles	= double*
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void KinematicOutputs::ComputeDamperDisplacement(const Corner &originalCorner,
+	const Corner &currentCorner, double *cornerDoubles)
+{
+	cornerDoubles[Damper] = originalCorner.hardpoints[Corner::InboardDamper].Distance(
+		originalCorner.hardpoints[Corner::OutboardDamper]) -
+		currentCorner.hardpoints[Corner::InboardDamper].Distance(
+		currentCorner.hardpoints[Corner::OutboardDamper]);
+}
+
+//==========================================================================
+// Class:			KinematicOutputs
+// Function:		ComputeScrub
+//
+// Description:		Computes the scrub for the specified corner.
+//
+// Input Arguments:
+//		originalCorner	= const Corner&
+//		currentCorner	= const Corner&
+//		sign			= const short&
+//		cornerDoubles	= double*
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void KinematicOutputs::ComputeScrub(const Corner &originalCorner,
+	const Corner &currentCorner, const short &sign, double *cornerDoubles)
+{
+	cornerDoubles[Scrub] = sign * (currentCorner.hardpoints[Corner::ContactPatch].y -
+		originalCorner.hardpoints[Corner::ContactPatch].y);
+}
+
+//==========================================================================
+// Class:			KinematicOutputs
+// Function:		ComputeAxlePlunge
+//
+// Description:		Computes the axle plunge for the specified corner.
+//					Positive values indicate that the axle is being shortenend.
+//
+// Input Arguments:
+//		originalCorner	= const Corner&
+//		currentCorner	= const Corner&
+//		cornerDoubles	= double*
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void KinematicOutputs::ComputeAxlePlunge(const Corner &originalCorner,
+	const Corner &currentCorner, double *cornerDoubles)
+{
+	cornerDoubles[AxlePlunge] =
+		originalCorner.hardpoints[Corner::InboardHalfShaft].Distance(
+		originalCorner.hardpoints[Corner::OutboardHalfShaft]) -
+		currentCorner.hardpoints[Corner::InboardHalfShaft].Distance(
+		currentCorner.hardpoints[Corner::OutboardHalfShaft]);
 }
 
 //==========================================================================
