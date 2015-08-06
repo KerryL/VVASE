@@ -769,7 +769,7 @@ void EditSuspensionPanel::RearBarStyleChangeEvent(wxCommandEvent &event)
 
 	// Set the value of the rear bar style flag to the value of this checkbox
 	currentSuspension->rearBarStyle = (Suspension::BarStyle)event.GetSelection();
-	SetFront3rdSpringEnable();
+	SetRear3rdSpringEnable();
 
 	mutex->Unlock();
 

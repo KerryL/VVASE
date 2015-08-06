@@ -1238,7 +1238,10 @@ bool Matrix::GetSingularValueDecomposition(Matrix &U, Matrix &V, Matrix &W) cons
 	AccumulateRightHandTransforms(U, V, rv1);
 	AccumulateLeftHandTransforms(U, V, W);
 	if (!DiagonalizeBidiagonalForm(U, V, W, rv1, anorm))
+	{
+		delete [] rv1;
 		return false;
+	}
 
 	delete [] rv1;
 
