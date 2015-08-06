@@ -785,6 +785,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 
 	// Spring Installation Ratio [inches Spring/inches Wheel]
 	// ARB Installation Ratio [rad bar twist/inches Wheel]
+	// TODO:  Why wheel center and not contact patch?
 	// First, we need to apply a force to the wheel center, and determine the portion of
 	// the force that is reacted through the control arm.
 	// Note that this procedure varies slightly depending on what component the pushrod is
@@ -803,7 +804,6 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 	// if..else)
 	if (currentCorner->actuationType == Corner::ActuationPushPullrod)
 	{
-		// If the actuator attaches to the lower control arm
 		if (currentCorner->actuationAttachment == Corner::AttachmentLowerAArm)
 		{
 			// Identify the rotation axis and a point on that axis

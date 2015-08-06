@@ -590,6 +590,13 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 				Debugger::GetInstance() << "ERROR:  Failed to solve for outboard damper!" << Debugger::PriorityMedium;
 				success = false;
 			}
+
+			if (!SolveForPoint(Corner::OutboardBarLink, Corner::LowerBallJoint,
+				Corner::LowerFrontTubMount, Corner::LowerRearTubMount, originalCorner, corner))
+			{
+				Debugger::GetInstance() << "ERROR:  Failed to solve for outboard bar link!" << Debugger::PriorityMedium;
+				success = false;
+			}
 		}
 		else if (corner.actuationAttachment == Corner::AttachmentUpperAArm)
 		{
@@ -606,6 +613,13 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 				Debugger::GetInstance() << "ERROR:  Failed to solve for outboard damper!" << Debugger::PriorityMedium;
 				success = false;
 			}
+
+			if (!SolveForPoint(Corner::OutboardBarLink, Corner::UpperBallJoint,
+				Corner::UpperFrontTubMount, Corner::UpperRearTubMount, originalCorner, corner))
+			{
+				Debugger::GetInstance() << "ERROR:  Failed to solve for outboard bar link!" << Debugger::PriorityMedium;
+				success = false;
+			}
 		}
 		else if (corner.actuationAttachment == Corner::AttachmentUpright)
 		{
@@ -620,6 +634,13 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 				Corner::LowerBallJoint, Corner::OutboardTieRod, originalCorner, corner))
 			{
 				Debugger::GetInstance() << "ERROR:  Failed to solve for outboard damper!" << Debugger::PriorityMedium;
+				success = false;
+			}
+
+			if (!SolveForPoint(Corner::OutboardBarLink, Corner::UpperBallJoint,
+				Corner::LowerBallJoint, Corner::OutboardTieRod, originalCorner, corner))
+			{
+				Debugger::GetInstance() << "ERROR:  Failed to solve for outboard bar link!" << Debugger::PriorityMedium;
 				success = false;
 			}
 		}
