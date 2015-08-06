@@ -63,7 +63,6 @@
 //==========================================================================
 Car::Car()
 {
-	// Dynamically allocate memory for these objects
 	suspension = new Suspension();
 	drivetrain = new Drivetrain();
 	brakes = new Brakes();
@@ -74,6 +73,7 @@ Car::Car()
 
 	// Test suspension
 	suspension->frontBarStyle = Suspension::SwayBarUBar;
+	suspension->rearBarStyle = Suspension::SwayBarTBar;
 	suspension->isSymmetric = true;
 
 	suspension->rightFront.hardpoints[Corner::ContactPatch].Set(0.0, 21.875, 0.0);
@@ -167,17 +167,19 @@ Car::Car()
 	suspension->leftRear.hardpoints[Corner::BarArmAtPivot].Set(0.0, 0.0, 0.0);
 
 	suspension->hardpoints[Suspension::FrontBarMidPoint].Set(4.518, 0.0, 15.0);
-	suspension->hardpoints[Suspension::RearBarMidPoint].Set(0.0, 0.0, 0.0);
+	suspension->hardpoints[Suspension::FrontBarPivotAxis].Set(0.0, 0.0, 0.0);
+	suspension->hardpoints[Suspension::RearBarMidPoint].Set(78.0, 0.0, 4.0);
+	suspension->hardpoints[Suspension::RearBarPivotAxis].Set(78.0, 1.0, 4.0);
 
 	suspension->rightFront.hardpoints[Corner::InboardBarLink].Set(4.518, 5.0, 19.0);
 	suspension->leftFront.hardpoints[Corner::InboardBarLink].Set(4.518, -5.0, 19.0);
-	suspension->rightRear.hardpoints[Corner::InboardBarLink].Set(0.0, 0.0, 0.0);
-	suspension->leftRear.hardpoints[Corner::InboardBarLink].Set(0.0, 0.0, 0.0);
+	suspension->rightRear.hardpoints[Corner::InboardBarLink].Set(78.0, 4.0, 14.5);
+	suspension->leftRear.hardpoints[Corner::InboardBarLink].Set(78.0, -4.0, 14.5);
 
 	suspension->rightFront.hardpoints[Corner::OutboardBarLink].Set(-1.232, 5.0, 19.0);
 	suspension->leftFront.hardpoints[Corner::OutboardBarLink].Set(-1.232, -5.0, 19.0);
-	suspension->rightRear.hardpoints[Corner::OutboardBarLink].Set(0.0, 0.0, 0.0);
-	suspension->leftRear.hardpoints[Corner::OutboardBarLink].Set(0.0, 0.0, 0.0);
+	suspension->rightRear.hardpoints[Corner::OutboardBarLink].Set(63.0, 3.75, 14.5);
+	suspension->leftRear.hardpoints[Corner::OutboardBarLink].Set(63.0, -3.75, 14.5);
 
 	suspension->rightRear.hardpoints[Corner::InboardHalfShaft].Set(66.5, 7.0, 9.75);
 	suspension->leftRear.hardpoints[Corner::InboardHalfShaft].Set(66.5, -7.0, 9.75);
