@@ -31,10 +31,10 @@
 #include "vMath/vector.h"
 #include "vUtilities/unitConverter.h"
 #include "vCar/corner.h"
+#include "vCar/suspension.h"
 
 // VVASE forward declarations
 class Car;
-class Suspension;
 
 class KinematicOutputs
 {
@@ -185,9 +185,6 @@ public:
 	// For determining the name of an output from the OutputsComplete list
 	static wxString GetOutputName(const OutputsComplete &output);
 
-	// Mutex accessor
-	//wxMutex &GetMutex() const { return kinematicOutputsMutex; };
-
 private:
 	const Car *originalCar;
 	const Suspension *currentSuspension;
@@ -208,6 +205,35 @@ private:
 	static UnitConverter::UnitType GetVectorUnitType(const OutputsVector &output);
 
 	void InitializeAllOutputs();
+
+	void ComputeNetSteer();
+	void ComputeNetScrub();
+	void ComputeFrontARBTwist(const Car *original, const Suspension *current);
+	void ComputeRearARBTwist(const Car *original, const Suspension *current);
+	void ComputeTrack(const Suspension *current);
+	void ComputeWheelbase(const Suspension *current);
+	void ComputeFrontRollCenter(const Suspension *current);
+	void ComputeRearRollCenter(const Suspension *current);
+	void ComputeLeftPitchCenter(const Suspension *current);
+	void ComputeRightPitchCenter(const Suspension *current);
+
+	double ComputeARBTwist(const Corner& originalLeft, const Corner& originalRight,
+		const Corner& currentLeft, const Corner& currentRight,
+		const Suspension::BarStyle &barStyle, const Vector& originalMidPoint,
+		const Vector& originalPivot, const Vector& currentMidPoint,
+		const Vector& currentPivot) const;
+	double ComputeUBarTwist(const Corner& originalLeft, const Corner& originalRight,
+		const Corner& currentLeft, const Corner& currentRight) const;
+	double ComputeTBarTwist(const Corner& originalLeft, const Corner& originalRight,
+		const Corner& currentLeft, const Corner& currentRight,
+		const Vector& originalMidPoint, const Vector& originalPivot,
+		const Vector& currentMidPoint, const Vector& currentPivot) const;
+	double ComputeGearedBarTwist(const Corner& originalLeft, const Corner& originalRight,
+		const Corner& currentLeft, const Corner& currentRight) const;
+
+	bool ComputeKinematicCenter(const Corner &corner1, const Corner &corner2,
+		const Vector *cornerVectors1, const Vector *cornerVectors2,
+		const Vector &planeNormal, Vector &center, Vector &direction) const;
 };
 
 #endif// KINEMATIC_OUTPUTS_H_

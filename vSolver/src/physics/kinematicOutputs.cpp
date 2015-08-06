@@ -128,8 +128,8 @@ void KinematicOutputs::InitializeAllOutputs()
 //==========================================================================
 void KinematicOutputs::Update(const Car *original, const Suspension *current)
 {
-	originalCar = original;
-	currentSuspension = current;
+	originalCar = original;// TODO:  Can we remove these at the class level?  Only used within UpdateCorner
+	currentSuspension = current;// TODO:  Can we remove these at the class level?  Only used within UpdateCorner
 
 	InitializeAllOutputs();
 
@@ -139,327 +139,529 @@ void KinematicOutputs::Update(const Car *original, const Suspension *current)
 	UpdateCorner(&original->suspension->rightRear, &current->rightRear);
 	UpdateCorner(&original->suspension->leftRear, &current->leftRear);
 
-	// Net Steer [rad]
+	ComputeNetSteer();
+	ComputeNetScrub();
+
+	ComputeFrontARBTwist(original, current);
+	ComputeRearARBTwist(original, current);
+
+	ComputeFrontRollCenter(current);
+	ComputeRearRollCenter(current);
+
+	ComputeLeftPitchCenter(current);
+	ComputeRightPitchCenter(current);
+
+	ComputeTrack(current);
+	ComputeWheelbase(current);
+}
+
+//==========================================================================
+// Class:			KinematicOutputs
+// Function:		ComputeNetSteer
+//
+// Description:		Computes the net steer values.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void KinematicOutputs::ComputeNetSteer()
+{
 	doubles[FrontNetSteer] = rightFront[Steer] - leftFront[Steer];
 	doubles[RearNetSteer] = rightRear[Steer] - leftRear[Steer];
+}
 
-	// Net Scrub [in]
+//==========================================================================
+// Class:			KinematicOutputs
+// Function:		ComputeNetScrub
+//
+// Description:		Computes the net scrub values.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void KinematicOutputs::ComputeNetScrub()
+{
 	doubles[FrontNetScrub] = rightFront[Scrub] + leftFront[Scrub];
 	doubles[RearNetScrub] = rightRear[Scrub] + leftRear[Scrub];
+}
 
-	// ARB Twist [rad]
-	// Initialize the twist in case the car has no sway bars
-	doubles[FrontARBTwist] = 0.0;
-	doubles[RearARBTwist] = 0.0;
-	double originalSwayBarAngle;
-	Vector arm1Direction, arm2Direction;
-	Vector swayBarAxis;
-	if (current->frontBarStyle == Suspension::SwayBarUBar)
-	{
-		// First, for the original configuration of the suspension
-		// Project these directions onto the plane whose normal is the sway bar axis
-		swayBarAxis = original->suspension->rightFront.hardpoints[Corner::BarArmAtPivot] -
-			original->suspension->leftFront.hardpoints[Corner::BarArmAtPivot];
+//==========================================================================
+// Class:			KinematicOutputs
+// Function:		ComputeFrontARBTwist
+//
+// Description:		Calls the method to compute front ARB twist.
+//
+// Input Arguments:
+//		original	= const Car*
+//		current		= const Suspension*
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void KinematicOutputs::ComputeFrontARBTwist(const Car *original, const Suspension *current)
+{
+	doubles[FrontARBTwist] = ComputeARBTwist(original->suspension->leftFront,
+		original->suspension->rightFront, current->leftFront, current->rightFront, current->frontBarStyle,
+		original->suspension->hardpoints[Suspension::FrontBarMidPoint],
+		original->suspension->hardpoints[Suspension::FrontBarPivotAxis],
+		current->hardpoints[Suspension::FrontBarMidPoint], current->hardpoints[Suspension::FrontBarPivotAxis]);
+}
 
-		// The references for U-bar twist are the arms at the end of the bar
-		arm1Direction = VVASEMath::ProjectOntoPlane(original->suspension->rightFront.hardpoints[Corner::BarArmAtPivot] -
-			original->suspension->rightFront.hardpoints[Corner::InboardBarLink], swayBarAxis);
-		arm2Direction = VVASEMath::ProjectOntoPlane(original->suspension->leftFront.hardpoints[Corner::BarArmAtPivot] -
-			original->suspension->leftFront.hardpoints[Corner::InboardBarLink], swayBarAxis);
+//==========================================================================
+// Class:			KinematicOutputs
+// Function:		ComputeRearARBTwist
+//
+// Description:		Calls the method to compute front ARB twist.
+//
+// Input Arguments:
+//		original	= const Car*
+//		current		= const Suspension*
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void KinematicOutputs::ComputeRearARBTwist(const Car *original, const Suspension *current)
+{
+	doubles[RearARBTwist] = ComputeARBTwist(original->suspension->leftRear,
+		original->suspension->rightRear, current->leftRear, current->rightRear, current->rearBarStyle,
+		original->suspension->hardpoints[Suspension::RearBarMidPoint],
+		original->suspension->hardpoints[Suspension::RearBarPivotAxis],
+		current->hardpoints[Suspension::RearBarMidPoint], current->hardpoints[Suspension::RearBarPivotAxis]);
+}
 
-		// The angle between these vectors, when projected onto the plane that is normal
-		// to the swaybar axis is given by the dot product
-		originalSwayBarAngle = acos(VVASEMath::Clamp((arm1Direction * arm2Direction) /
-			(arm1Direction.Length() * arm2Direction.Length()), -1.0, 1.0));
+//==========================================================================
+// Class:			KinematicOutputs
+// Function:		ComputeFrontRollCenter
+//
+// Description:		Calls the method to calculate the kinematic center.
+//
+// Input Arguments:
+//		current	= const Suspension*
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void KinematicOutputs::ComputeFrontRollCenter(const Suspension *current)
+{
+	Vector normal(1.0, 0.0, 0.0);
+	if (!ComputeKinematicCenter(current->leftFront, current->rightFront, leftFrontVectors,
+		rightFrontVectors, normal, vectors[FrontKinematicRC], vectors[FrontRollAxisDirection]))
+		Debugger::GetInstance() << "Warning:  Front Kinematic Roll Center is undefined" << Debugger::PriorityHigh;
+}
 
-		// And again as it sits now
-		// Project these directions onto the plane whose normal is the sway bar axis
-		swayBarAxis = current->rightFront.hardpoints[Corner::BarArmAtPivot] -
-			current->leftFront.hardpoints[Corner::BarArmAtPivot];
+//==========================================================================
+// Class:			KinematicOutputs
+// Function:		ComputeRearRollCenter
+//
+// Description:		Calls the method to calculate the kinematic center.
+//
+// Input Arguments:
+//		current	= const Suspension*
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void KinematicOutputs::ComputeRearRollCenter(const Suspension *current)
+{
+	Vector normal(1.0, 0.0, 0.0);
+	if (!ComputeKinematicCenter(current->leftRear, current->rightRear, leftRearVectors,
+		rightRearVectors, normal, vectors[RearKinematicRC], vectors[RearRollAxisDirection]))
+		Debugger::GetInstance() << "Warning:  Rear Kinematic Roll Center is undefined" << Debugger::PriorityHigh;
+}
 
-		// The references for U-bar twist are the arms at the end of the bar
-		arm1Direction = VVASEMath::ProjectOntoPlane(current->rightFront.hardpoints[Corner::BarArmAtPivot] -
-			current->rightFront.hardpoints[Corner::InboardBarLink], swayBarAxis);
-		arm2Direction = VVASEMath::ProjectOntoPlane(current->leftFront.hardpoints[Corner::BarArmAtPivot] -
-			current->leftFront.hardpoints[Corner::InboardBarLink], swayBarAxis);
-
-		// The angle between these vectors, when projected onto the plane that is normal
-		// to the swaybar axis is given by the dot product
-		doubles[FrontARBTwist] = acos(VVASEMath::Clamp((arm1Direction * arm2Direction) /
-			(arm1Direction.Length() * arm2Direction.Length()), -1.0, 1.0)) - originalSwayBarAngle;
-	}
-	else if (current->frontBarStyle == Suspension::SwayBarTBar)
-	{
-		// First, for the original configuration of the suspension
-		Vector stemPlaneNormal = (original->suspension->hardpoints[Suspension::FrontBarMidPoint]
-			- original->suspension->hardpoints[Suspension::FrontBarPivotAxis]);
-		Vector topMidPoint = VVASEMath::IntersectWithPlane(stemPlaneNormal,
-			original->suspension->hardpoints[Suspension::FrontBarMidPoint],
-			original->suspension->leftFront.hardpoints[Corner::InboardBarLink]
-				- original->suspension->rightFront.hardpoints[Corner::InboardBarLink],
-			original->suspension->leftFront.hardpoints[Corner::InboardBarLink]);
-
-		// Project these directions onto the plane whose normal is the sway bar axis
-		swayBarAxis = original->suspension->hardpoints[Suspension::FrontBarMidPoint] - topMidPoint;
-
-		// The references for T-bar twist are the bar pivot axis and the top arm
-		arm1Direction = VVASEMath::ProjectOntoPlane(topMidPoint -
-			original->suspension->rightFront.hardpoints[Corner::InboardBarLink], swayBarAxis);
-
-		// The angle between these vectors, when projected onto the plane that is normal
-		// to the swaybar axis is given by the dot product
-		originalSwayBarAngle = acos(VVASEMath::Clamp((arm1Direction * stemPlaneNormal) /
-			(arm1Direction.Length() * stemPlaneNormal.Length()), -1.0, 1.0));
-
-		// And again as it sits now
-		stemPlaneNormal = (current->hardpoints[Suspension::FrontBarMidPoint]
-			- current->hardpoints[Suspension::RearBarPivotAxis]);
-		topMidPoint = VVASEMath::IntersectWithPlane(stemPlaneNormal,
-			current->hardpoints[Suspension::FrontBarMidPoint],
-			current->leftFront.hardpoints[Corner::InboardBarLink]
-				- current->rightFront.hardpoints[Corner::InboardBarLink],
-			current->leftFront.hardpoints[Corner::InboardBarLink]);
-
-		// Project these directions onto the plane whose normal is the sway bar axis
-		swayBarAxis = current->hardpoints[Suspension::FrontBarMidPoint] - topMidPoint;
-
-		// The references for T-bar twist are the bar pivot axis and the top arm
-		arm1Direction = VVASEMath::ProjectOntoPlane(topMidPoint -
-			current->rightFront.hardpoints[Corner::InboardBarLink], swayBarAxis);
-
-		// The angle between these vectors, when projected onto the plane that is normal
-		// to the swaybar axis is given by the dot product
-		doubles[FrontARBTwist] = acos(VVASEMath::Clamp((arm1Direction * stemPlaneNormal) /
-			(arm1Direction.Length() * stemPlaneNormal.Length()), -1.0, 1.0)) - originalSwayBarAngle;
-	}
-	else if (current->frontBarStyle == Suspension::SwayBarGeared)
-	{
-		// FIXME!!!
-	}
-
-	if (current->rearBarStyle == Suspension::SwayBarUBar)
-	{
-		// First, for the original configuration of the suspension
-		// Project these directions onto the plane whose normal is the sway bar axis
-		swayBarAxis = original->suspension->rightRear.hardpoints[Corner::BarArmAtPivot] -
-			original->suspension->leftRear.hardpoints[Corner::BarArmAtPivot];
-
-		// The references for U-bar twist are the arms at the end of the bar
-		arm1Direction = VVASEMath::ProjectOntoPlane(original->suspension->rightRear.hardpoints[Corner::BarArmAtPivot] -
-			original->suspension->rightRear.hardpoints[Corner::InboardBarLink], swayBarAxis);
-		arm2Direction = VVASEMath::ProjectOntoPlane(original->suspension->leftRear.hardpoints[Corner::BarArmAtPivot] -
-			original->suspension->leftRear.hardpoints[Corner::InboardBarLink], swayBarAxis);
-
-		// The angle between these vectors, when projected onto the plane that is normal
-		// to the swaybar axis is given by the dot product
-		originalSwayBarAngle = acos(VVASEMath::Clamp((arm1Direction * arm2Direction) /
-			(arm1Direction.Length() * arm2Direction.Length()), -1.0, 1.0));
-
-		// And again as it sits now
-		// Project these directions onto the plane whose normal is the sway bar axis
-		swayBarAxis = current->rightRear.hardpoints[Corner::BarArmAtPivot] -
-			current->leftRear.hardpoints[Corner::BarArmAtPivot];
-
-		// The references for U-bar twist are the arms at the end of the bar
-		arm1Direction = VVASEMath::ProjectOntoPlane(current->rightRear.hardpoints[Corner::BarArmAtPivot] -
-			current->rightRear.hardpoints[Corner::InboardBarLink], swayBarAxis);
-		arm2Direction = VVASEMath::ProjectOntoPlane(current->leftRear.hardpoints[Corner::BarArmAtPivot] -
-			current->leftRear.hardpoints[Corner::InboardBarLink], swayBarAxis);
-
-		// The angle between these vectors, when projected onto the plane that is normal
-		// to the swaybar axis is given by the dot product
-		doubles[RearARBTwist] = acos(VVASEMath::Clamp((arm1Direction * arm2Direction) /
-			(arm1Direction.Length() * arm2Direction.Length()), -1.0, 1.0)) - originalSwayBarAngle;
-	}
-	else if (current->rearBarStyle == Suspension::SwayBarTBar)
-	{
-		// First, for the original configuration of the suspension
-		Vector stemPlaneNormal = (original->suspension->hardpoints[Suspension::RearBarMidPoint]
-			- original->suspension->hardpoints[Suspension::RearBarPivotAxis]);
-		Vector topMidPoint = VVASEMath::IntersectWithPlane(stemPlaneNormal,
-			original->suspension->hardpoints[Suspension::RearBarMidPoint],
-			original->suspension->leftRear.hardpoints[Corner::InboardBarLink]
-				- original->suspension->rightRear.hardpoints[Corner::InboardBarLink],
-			original->suspension->leftRear.hardpoints[Corner::InboardBarLink]);
-
-		// Project these directions onto the plane whose normal is the sway bar axis
-		swayBarAxis = original->suspension->hardpoints[Suspension::RearBarMidPoint] - topMidPoint;
-
-		// The references for T-bar twist are the bar pivot axis and the top arm
-		arm1Direction = VVASEMath::ProjectOntoPlane(
-			original->suspension->rightRear.hardpoints[Corner::InboardBarLink] - topMidPoint, swayBarAxis);
-
-		// The angle between these vectors, when projected onto the plane that is normal
-		// to the swaybar axis is given by the dot product
-		originalSwayBarAngle = acos(VVASEMath::Clamp((arm1Direction * stemPlaneNormal) /
-			(arm1Direction.Length() * stemPlaneNormal.Length()), -1.0, 1.0));
-
-		// And again as it sits now
-		stemPlaneNormal = (current->hardpoints[Suspension::RearBarMidPoint]
-			- current->hardpoints[Suspension::RearBarPivotAxis]);
-		topMidPoint = VVASEMath::IntersectWithPlane(stemPlaneNormal,
-			current->hardpoints[Suspension::RearBarMidPoint],
-			current->leftRear.hardpoints[Corner::InboardBarLink]
-				- current->rightRear.hardpoints[Corner::InboardBarLink],
-			current->leftRear.hardpoints[Corner::InboardBarLink]);
-
-		// Project these directions onto the plane whose normal is the sway bar axis
-		swayBarAxis = current->hardpoints[Suspension::RearBarMidPoint] - topMidPoint;
-
-		// The references for T-bar twist are the bar pivot axis and the top arm
-		arm1Direction = VVASEMath::ProjectOntoPlane(
-			current->rightRear.hardpoints[Corner::InboardBarLink] - topMidPoint, swayBarAxis);
-
-		// The angle between these vectors, when projected onto the plane that is normal
-		// to the swaybar axis is given by the dot product
-		doubles[RearARBTwist] = acos(VVASEMath::Clamp((arm1Direction * stemPlaneNormal) /
-			(arm1Direction.Length() * stemPlaneNormal.Length()), -1.0, 1.0)) - originalSwayBarAngle;
-	}
-	else if (current->rearBarStyle == Suspension::SwayBarGeared)
-	{
-		// FIXME!!!
-	}
-
-	// Kinematic Roll Centers and Direction Vectors [in], [-]
-	//  Wm. C. Mitchell makes clear the assumptions that are made when calculating kinematic
-	//  roll centers in his SAE paper "Asymmetric Roll Centers" (983085).  My interpretation
-	//  of these is this:  Kinematic roll centers assume that your tires are pinned to the
-	//  ground.  In other words, it ignores the lateral forces created by the tires on the
-	//  pavement.  It is the point around which the car would roll if your tires couldn't
-	//  move instantaneously.  The advantage to force based roll centers is that you don't
-	//  need to assume that cornering forces are being generated equally on the right and
-	//  left sides of the car.
-	//  The roll center (in 3D) is defined as the intersection of the line from the tire to
-	//  the instant center when projected onto the plane that is normal to the ground plane
-	//  and contains both wheel centers.  To find this point, we find the "instant planes"
-	//  for both side of the car (plane containing the instant axis and the contact patch
-	//  point) and intersect them.  This give us an axis, and we find the intersection of
-	//  this axis with the appropriate plane to find the actual kinematic center point.
-	Vector rightPlaneNormal;
-	Vector leftPlaneNormal;
-	Vector planeNormal(1.0, 0.0, 0.0);// For projecting the vectors to find the kinematic centers
-
-	// Front
-	// Find the normal vectors
-	rightPlaneNormal = VVASEMath::GetPlaneNormal(current->rightFront.hardpoints[Corner::ContactPatch],
-		rightFrontVectors[InstantCenter], rightFrontVectors[InstantCenter] + rightFrontVectors[InstantAxisDirection]);
-	leftPlaneNormal = VVASEMath::GetPlaneNormal(current->leftFront.hardpoints[Corner::ContactPatch],
-		leftFrontVectors[InstantCenter], leftFrontVectors[InstantCenter] + leftFrontVectors[InstantAxisDirection]);
-
-	// Get the intersection of the planes
-	if (!VVASEMath::GetIntersectionOfTwoPlanes(rightPlaneNormal, current->rightFront.hardpoints[Corner::ContactPatch],
-		leftPlaneNormal, current->leftFront.hardpoints[Corner::ContactPatch],
-		vectors[FrontRollAxisDirection], vectors[FrontKinematicRC]))
-		Debugger::GetInstance() << "Warning (KinematicOutputs::Update):  Front Kinematic Roll Center is undefined" << Debugger::PriorityHigh;
-	else
-		// We now have the axis direction and a point on the axis, but we want a specific
-		// point on the axis.  To do that, we determine the place where this vector passes through
-		// the appropriate plane.
-		vectors[FrontKinematicRC] = VVASEMath::IntersectWithPlane(planeNormal,
-			(current->rightFront.hardpoints[Corner::WheelCenter] +
-			current->leftFront.hardpoints[Corner::WheelCenter]) / 2.0,
-			vectors[FrontRollAxisDirection], vectors[FrontKinematicRC]);
-
-	// Rear
-	// Find the normal vectors
-	rightPlaneNormal = VVASEMath::GetPlaneNormal(current->rightRear.hardpoints[Corner::ContactPatch],
-		rightRearVectors[InstantCenter], rightRearVectors[InstantCenter] + rightRearVectors[InstantAxisDirection]);
-	leftPlaneNormal = VVASEMath::GetPlaneNormal(current->leftRear.hardpoints[Corner::ContactPatch],
-		leftRearVectors[InstantCenter], leftRearVectors[InstantCenter] + leftRearVectors[InstantAxisDirection]);
-
-	// Get the intersection of the planes
-	if (!VVASEMath::GetIntersectionOfTwoPlanes(rightPlaneNormal, current->rightRear.hardpoints[Corner::ContactPatch],
-		leftPlaneNormal, current->leftRear.hardpoints[Corner::ContactPatch],
-		vectors[RearRollAxisDirection], vectors[RearKinematicRC]))
-		Debugger::GetInstance() << "Warning (KinematicOutputs::Update):  Rear Kinematic Roll Center is undefined" << Debugger::PriorityHigh;
-	else
-		// Just like we did on for the front, intersect this vector with the wheel plane
-		vectors[RearKinematicRC] = VVASEMath::IntersectWithPlane(planeNormal,
-			(current->rightRear.hardpoints[Corner::WheelCenter] +
-			current->leftRear.hardpoints[Corner::WheelCenter]) / 2.0,
-			vectors[RearRollAxisDirection], vectors[RearKinematicRC]);
-
-	// Kinematic Pitch Centers and Directions [in], [-]
-	// All of the same assumptions that we have for roll centers apply here.
-	// The method is also the same as the roll center calculations.
-	Vector frontPlaneNormal;
-	Vector rearPlaneNormal;
-	planeNormal.Set(0.0, 1.0, 0.0);// For projecting the vectors to find the kinematic centers
-
-	// Right
-	// Find the normal vectors
-	frontPlaneNormal = VVASEMath::GetPlaneNormal(current->rightFront.hardpoints[Corner::ContactPatch],
-		rightFrontVectors[InstantCenter], rightFrontVectors[InstantCenter] + rightFrontVectors[InstantAxisDirection]);
-	rearPlaneNormal = VVASEMath::GetPlaneNormal(current->rightRear.hardpoints[Corner::ContactPatch],
-		rightRearVectors[InstantCenter], rightRearVectors[InstantCenter] + rightRearVectors[InstantAxisDirection]);
-
-	// Get the intersection of the planes
-	if (!VVASEMath::GetIntersectionOfTwoPlanes(frontPlaneNormal, current->rightFront.hardpoints[Corner::ContactPatch],
-		rearPlaneNormal, current->rightRear.hardpoints[Corner::ContactPatch],
-		vectors[RightPitchAxisDirection], vectors[RightKinematicPC]))
-		Debugger::GetInstance() << "Warning (KinematicOutputs::Update):  Right Kinematic Pitch Center is undefined" << Debugger::PriorityHigh;
-	else
-		// We now have the axis direction and a point on the axis, but we want a specific
-		// point on the axis.  To do that, we determine the place where this vector passes through
-		// the appropriate plane.
-		vectors[RightKinematicPC] = VVASEMath::IntersectWithPlane(planeNormal,
-			(current->rightFront.hardpoints[Corner::WheelCenter] +
-			current->rightRear.hardpoints[Corner::WheelCenter]) / 2.0,
-			vectors[RightPitchAxisDirection], vectors[RightKinematicPC]);
-
-	// Left
-	// Find the normal vectors
-	frontPlaneNormal = VVASEMath::GetPlaneNormal(current->leftFront.hardpoints[Corner::ContactPatch],
-		leftFrontVectors[InstantCenter], leftFrontVectors[InstantCenter] + leftFrontVectors[InstantAxisDirection]);
-	rearPlaneNormal = VVASEMath::GetPlaneNormal(current->leftRear.hardpoints[Corner::ContactPatch],
-		leftRearVectors[InstantCenter], leftRearVectors[InstantCenter] + leftRearVectors[InstantAxisDirection]);
-
-	// Get the intersection of the planes
-	if (!VVASEMath::GetIntersectionOfTwoPlanes(frontPlaneNormal, current->leftFront.hardpoints[Corner::ContactPatch],
-		rearPlaneNormal, current->leftRear.hardpoints[Corner::ContactPatch],
-		vectors[LeftPitchAxisDirection], vectors[LeftKinematicPC]))
-		Debugger::GetInstance() << "Warning (KinematicOutputs::Update):  Left Kinematic Pitch Center is undefined" << Debugger::PriorityHigh;
-	else
-		// Just like we did for the right side, intersect this vector with the wheel plane
-		vectors[LeftKinematicPC] = VVASEMath::IntersectWithPlane(planeNormal,
-			(current->leftFront.hardpoints[Corner::WheelCenter] +
-			current->leftRear.hardpoints[Corner::WheelCenter]) / 2.0,
-			vectors[LeftPitchAxisDirection], vectors[LeftKinematicPC]);
+//==========================================================================
+// Class:			KinematicOutputs
+// Function:		ComputeLeftPitchCenter
+//
+// Description:		Calls the method to calculate the kinematic center.
+//
+// Input Arguments:
+//		current	= const Suspension*
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void KinematicOutputs::ComputeLeftPitchCenter(const Suspension *current)
+{
+	Vector normal(0.0, 1.0, 0.0);
+	ComputeKinematicCenter(current->leftFront, current->leftRear, leftFrontVectors,
+		leftRearVectors, normal, vectors[LeftKinematicPC], vectors[LeftPitchAxisDirection]);// No warning - undefined PCs is OK?
 
 	// For the left side, we flip the sign on the axis direction
 	vectors[LeftPitchAxisDirection] *= -1.0;
+}
 
-	// Front track at ground [in]
+//==========================================================================
+// Class:			KinematicOutputs
+// Function:		ComputeRightPitchCenter
+//
+// Description:		Calls the method to calculate the kinematic center.
+//
+// Input Arguments:
+//		current	= const Suspension*
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void KinematicOutputs::ComputeRightPitchCenter(const Suspension *current)
+{
+	Vector normal(0.0, 1.0, 0.0);
+	ComputeKinematicCenter(current->rightFront, current->rightRear, rightFrontVectors,
+		rightRearVectors, normal, vectors[RightKinematicPC], vectors[RightPitchAxisDirection]);// No warning - undefined PCs is OK?
+}
+
+//==========================================================================
+// Class:			KinematicOutputs
+// Function:		ComputeTrack
+//
+// Description:		Computes ground and hub track values.
+//
+// Input Arguments:
+//		current	= const Suspension*
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void KinematicOutputs::ComputeTrack(const Suspension *current)
+{
 	doubles[FrontTrackGround] = current->rightFront.hardpoints[Corner::ContactPatch].Distance(
 		current->leftFront.hardpoints[Corner::ContactPatch]);
-
-	// Rear track at ground [in]
 	doubles[RearTrackGround] = current->rightRear.hardpoints[Corner::ContactPatch].Distance(
 		current->leftRear.hardpoints[Corner::ContactPatch]);
-
-	// Right wheelbase at ground [in]
-	doubles[RightWheelbaseGround] = current->rightFront.hardpoints[Corner::ContactPatch].Distance(
-		current->rightRear.hardpoints[Corner::ContactPatch]);
-
-	// Left wheelbase at ground [in]
-	doubles[LeftWheelbaseGround] = current->leftFront.hardpoints[Corner::ContactPatch].Distance(
-		current->leftRear.hardpoints[Corner::ContactPatch]);
-
-	// Front track at hub [in]
 	doubles[FrontTrackHub] = current->rightFront.hardpoints[Corner::WheelCenter].Distance(
 		current->leftFront.hardpoints[Corner::WheelCenter]);
-
-	// Rear track at hub [in]
 	doubles[RearTrackHub] = current->rightRear.hardpoints[Corner::WheelCenter].Distance(
 		current->leftRear.hardpoints[Corner::WheelCenter]);
+}
 
-	// Right wheelbase at hub [in]
+//==========================================================================
+// Class:			KinematicOutputs
+// Function:		ComputeWheelbase
+//
+// Description:		Computes ground and hub wheelbase values.
+//
+// Input Arguments:
+//		current	= const Suspension*
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void KinematicOutputs::ComputeWheelbase(const Suspension *current)
+{
+	doubles[RightWheelbaseGround] = current->rightFront.hardpoints[Corner::ContactPatch].Distance(
+		current->rightRear.hardpoints[Corner::ContactPatch]);
+	doubles[LeftWheelbaseGround] = current->leftFront.hardpoints[Corner::ContactPatch].Distance(
+		current->leftRear.hardpoints[Corner::ContactPatch]);
 	doubles[RightWheelbaseHub] = current->rightFront.hardpoints[Corner::WheelCenter].Distance(
 		current->rightRear.hardpoints[Corner::WheelCenter]);
-
-	// Left wheelbase at hub [in]
 	doubles[LeftWheelbaseHub] = current->leftFront.hardpoints[Corner::WheelCenter].Distance(
 		current->leftRear.hardpoints[Corner::WheelCenter]);
+}
+
+//==========================================================================
+// Class:			KinematicOutputs
+// Function:		ComputeARBTwist
+//
+// Description:		Calls proper method for calculating ARB twist based on
+//					bar style.
+//
+// Input Arguments:
+//		originalLeft		= const Corner&
+//		originalRight		= const Corner&
+//		currentLeft			= const Corner&
+//		currentRight		= const Corner&
+//		barStyle			= const Suspension::BarStyle&
+//		originalMidPoint	= const Vector&
+//		originalPivot		= const Vector&
+//		currentMidPoint		= const Vector&
+//		currentPivot		= const Vector&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		double [rad]
+//
+//==========================================================================
+double KinematicOutputs::ComputeARBTwist(const Corner& originalLeft,
+	const Corner& originalRight, const Corner& currentLeft,
+	const Corner& currentRight, const Suspension::BarStyle &barStyle,
+	const Vector& originalMidPoint, const Vector& originalPivot,
+	const Vector& currentMidPoint, const Vector& currentPivot) const
+{
+	if (barStyle == Suspension::SwayBarUBar)
+		return ComputeUBarTwist(originalLeft, originalRight, currentLeft, currentRight);
+	else if (barStyle == Suspension::SwayBarTBar)
+		return ComputeTBarTwist(originalLeft, originalRight, currentLeft, currentRight,
+		originalMidPoint, originalPivot, currentMidPoint, currentPivot);
+	else if (barStyle == Suspension::SwayBarGeared)
+		return ComputeGearedBarTwist(originalLeft, originalRight, currentLeft, currentRight);
+
+	return 0.0;
+}
+
+//==========================================================================
+// Class:			KinematicOutputs
+// Function:		ComputeUBarTwist
+//
+// Description:		Computes ARB twist for U-bars.
+//
+// Input Arguments:
+//		originalLeft		= const Corner&
+//		originalRight		= const Corner&
+//		currentLeft			= const Corner&
+//		currentRight		= const Corner&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		double [rad]
+//
+//==========================================================================
+double KinematicOutputs::ComputeUBarTwist(const Corner& originalLeft,
+	const Corner& originalRight, const Corner& currentLeft, const Corner& currentRight) const
+{
+	Vector swayBarAxis;
+	Vector arm1Direction, arm2Direction;
+	double originalSwayBarAngle;
+
+	// First, for the original configuration of the suspension
+	// Project these directions onto the plane whose normal is the sway bar axis
+	swayBarAxis = originalRight.hardpoints[Corner::BarArmAtPivot] -
+		originalLeft.hardpoints[Corner::BarArmAtPivot];
+
+	// The references for U-bar twist are the arms at the end of the bar
+	arm1Direction = VVASEMath::ProjectOntoPlane(originalRight.hardpoints[Corner::BarArmAtPivot] -
+		originalRight.hardpoints[Corner::InboardBarLink], swayBarAxis);
+	arm2Direction = VVASEMath::ProjectOntoPlane(originalLeft.hardpoints[Corner::BarArmAtPivot] -
+		originalLeft.hardpoints[Corner::InboardBarLink], swayBarAxis);
+
+	// The angle between these vectors, when projected onto the plane that is normal
+	// to the swaybar axis is given by the dot product
+	originalSwayBarAngle = acos(VVASEMath::Clamp((arm1Direction * arm2Direction) /
+		(arm1Direction.Length() * arm2Direction.Length()), -1.0, 1.0));
+
+	// And again as it sits now
+	// Project these directions onto the plane whose normal is the sway bar axis
+	swayBarAxis = currentRight.hardpoints[Corner::BarArmAtPivot] -
+		currentLeft.hardpoints[Corner::BarArmAtPivot];
+
+	// The references for U-bar twist are the arms at the end of the bar
+	arm1Direction = VVASEMath::ProjectOntoPlane(currentRight.hardpoints[Corner::BarArmAtPivot] -
+		currentRight.hardpoints[Corner::InboardBarLink], swayBarAxis);
+	arm2Direction = VVASEMath::ProjectOntoPlane(currentLeft.hardpoints[Corner::BarArmAtPivot] -
+		currentLeft.hardpoints[Corner::InboardBarLink], swayBarAxis);
+
+	// The angle between these vectors, when projected onto the plane that is normal
+	// to the swaybar axis is given by the dot product
+	return acos(VVASEMath::Clamp((arm1Direction * arm2Direction) /
+		(arm1Direction.Length() * arm2Direction.Length()), -1.0, 1.0)) - originalSwayBarAngle;
+}
+
+//==========================================================================
+// Class:			KinematicOutputs
+// Function:		ComputeTBarTwist
+//
+// Description:		Computes ARB twist for T-bars.
+//
+// Input Arguments:
+//		originalLeft		= const Corner&
+//		originalRight		= const Corner&
+//		currentLeft			= const Corner&
+//		currentRight		= const Corner&
+//		originalMidPoint	= const Vector&
+//		originalPivot		= const Vector&
+//		currentMidPoint		= const Vector&
+//		currentPivot		= const Vector&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		double [rad]
+//
+//==========================================================================
+double KinematicOutputs::ComputeTBarTwist(const Corner& originalLeft,
+	const Corner& originalRight, const Corner& currentLeft, const Corner& currentRight,
+	const Vector& originalMidPoint, const Vector& originalPivot,
+	const Vector& currentMidPoint, const Vector& currentPivot) const
+{
+	Vector swayBarAxis;
+	Vector arm1Direction, arm2Direction;
+	double originalSwayBarAngle;
+
+	// First, for the original configuration of the suspension
+	Vector stemPlaneNormal = originalMidPoint - originalPivot;
+	Vector topMidPoint = VVASEMath::IntersectWithPlane(stemPlaneNormal,
+		originalMidPoint, originalLeft.hardpoints[Corner::InboardBarLink]
+			- originalRight.hardpoints[Corner::InboardBarLink],
+		originalLeft.hardpoints[Corner::InboardBarLink]);
+
+	// Project these directions onto the plane whose normal is the sway bar axis
+	swayBarAxis = originalMidPoint - topMidPoint;
+
+	// The references for T-bar twist are the bar pivot axis and the top arm
+	arm1Direction = VVASEMath::ProjectOntoPlane(topMidPoint -
+		originalRight.hardpoints[Corner::InboardBarLink], swayBarAxis);
+
+	// The angle between these vectors, when projected onto the plane that is normal
+	// to the swaybar axis is given by the dot product
+	originalSwayBarAngle = acos(VVASEMath::Clamp((arm1Direction * stemPlaneNormal) /
+		(arm1Direction.Length() * stemPlaneNormal.Length()), -1.0, 1.0));
+
+	// And again as it sits now
+	stemPlaneNormal = currentMidPoint - currentPivot;
+	topMidPoint = VVASEMath::IntersectWithPlane(stemPlaneNormal,
+		currentMidPoint, currentLeft.hardpoints[Corner::InboardBarLink]
+			- currentRight.hardpoints[Corner::InboardBarLink],
+		currentLeft.hardpoints[Corner::InboardBarLink]);
+
+	// Project these directions onto the plane whose normal is the sway bar axis
+	swayBarAxis = currentMidPoint - topMidPoint;
+
+	// The references for T-bar twist are the bar pivot axis and the top arm
+	arm1Direction = VVASEMath::ProjectOntoPlane(topMidPoint -
+		currentRight.hardpoints[Corner::InboardBarLink], swayBarAxis);
+
+	// The angle between these vectors, when projected onto the plane that is normal
+	// to the swaybar axis is given by the dot product
+	return acos(VVASEMath::Clamp((arm1Direction * stemPlaneNormal) /
+		(arm1Direction.Length() * stemPlaneNormal.Length()), -1.0, 1.0)) - originalSwayBarAngle;
+}
+
+//==========================================================================
+// Class:			KinematicOutputs
+// Function:		ComputeGearedBarTwist
+//
+// Description:		Computes ARB twist for geared bars.
+//
+// Input Arguments:
+//		originalLeft		= const Corner&
+//		originalRight		= const Corner&
+//		currentLeft			= const Corner&
+//		currentRight		= const Corner&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		double [rad]
+//
+//==========================================================================
+double KinematicOutputs::ComputeGearedBarTwist(const Corner& /*originalLeft*/,
+	const Corner& /*originalRight*/, const Corner& /*currentLeft*/, const Corner& /*currentRight*/) const
+{
+	// TODO:  Impelement
+	Debugger::GetInstance() << "Geared ARB calculations not yet implemented" << Debugger::PriorityMedium;
+	return 0.0;
+}
+
+//==========================================================================
+// Class:			KinematicOutputs
+// Function:		ComputeKinematicCenter
+//
+// Description:		Calculates the specified kinematic center.
+//
+// Kinematic Roll Centers and Direction Vectors [in], [-]
+//  Wm. C. Mitchell makes clear the assumptions that are made when calculating kinematic
+//  roll centers in his SAE paper "Asymmetric Roll Centers" (983085).  My interpretation
+//  of these is this:  Kinematic roll centers assume that your tires are pinned to the
+//  ground.  In other words, it ignores the lateral forces created by the tires on the
+//  pavement.  It is the point around which the car would roll if your tires couldn't
+//  move instantaneously.  The advantage to force based roll centers is that you don't
+//  need to assume that cornering forces are being generated equally on the right and
+//  left sides of the car.
+//  The roll center (in 3D) is defined as the intersection of the line from the tire to
+//  the instant center when projected onto the plane that is normal to the ground plane
+//  and contains both wheel centers.  To find this point, we find the "instant planes"
+//  for both side of the car (plane containing the instant axis and the contact patch
+//  point) and intersect them.  This give us an axis, and we find the intersection of
+//  this axis with the appropriate plane to find the actual kinematic center point.
+//
+// Input Arguments:
+//		corner1			= const Corner&
+//		corner2			= const Corner&
+//		cornerVectors1	= const Vector*
+//		cornerVectors2	= const Vector*
+//		planeNormal		= const Vector&
+//
+// Output Arguments:
+//		center			= Vector&
+//		direction		= Vector&
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+bool KinematicOutputs::ComputeKinematicCenter(const Corner &corner1, const Corner &corner2,
+	const Vector *cornerVectors1, const Vector *cornerVectors2,
+	const Vector &planeNormal, Vector &center, Vector &direction) const
+{
+	Vector normal1, normal2;
+
+	normal1 = VVASEMath::GetPlaneNormal(corner1.hardpoints[Corner::ContactPatch], cornerVectors1[InstantCenter],
+		cornerVectors1[InstantCenter] + cornerVectors1[InstantAxisDirection]);
+	normal2 = VVASEMath::GetPlaneNormal(corner2.hardpoints[Corner::ContactPatch], cornerVectors2[InstantCenter],
+		cornerVectors2[InstantCenter] + cornerVectors2[InstantAxisDirection]);
+
+	if (!VVASEMath::GetIntersectionOfTwoPlanes(normal2, corner2.hardpoints[Corner::ContactPatch],
+		normal1, corner1.hardpoints[Corner::ContactPatch], direction, center))
+		return false;
+
+	// We now have the axis direction and a point on the axis, but we want a specific
+	// point on the axis.  To do that, we determine the place where this vector passes through
+	// the appropriate plane.
+	center = VVASEMath::IntersectWithPlane(planeNormal, (corner2.hardpoints[Corner::WheelCenter] +
+		corner1.hardpoints[Corner::WheelCenter]) * 0.5, direction, center);
+
+	return true;
 }
 
 //==========================================================================
