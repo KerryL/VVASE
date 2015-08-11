@@ -14,6 +14,9 @@
 // History:
 //	11/17/2010	- Fixed some bugs related to rendering of ticks and grid lines, K. Loux.
 
+// Standard C++ headers
+#include <algorithm>
+
 // Local headers
 #include "vRenderer/primitives/axis.h"
 #include "vRenderer/renderWindow.h"
