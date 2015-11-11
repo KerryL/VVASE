@@ -1,0 +1,24 @@
+@ECHO OFF
+REM This script generates a .cpp file containing the current git hash string
+
+REM This is the file to which output will be written
+SET outputPath="%1CarDesigner/src/application/"
+SET outputFile=vvaseConstants.cpp
+
+FOR /f %%i IN ('git describe --tags --abbrev^=0') DO SET gitTag=%%i
+FOR /f %%i IN ('git rev-parse --short HEAD') DO SET gitHash=%%i
+
+ECHO outputPath = %outputPath%
+ECHO outputFile = %outputFile%
+ECHO version = %gitTag%
+ECHO gitHash = %gitHash%
+
+@ECHO // File:  %outputFile%> %outputPath%%outputFile%
+@ECHO // Auth:  getGitHash.bat>> %outputPath%%outputFile%
+@ECHO // Desc:  Automatically generated file containing latest git hash and version info.>> %outputPath%%outputFile%
+@ECHO.>> %outputPath%%outputFile%
+@ECHO // Local headers>> %outputPath%%outputFile%
+@ECHO #include "vvaseConstants.h">> %outputPath%%outputFile%
+@ECHO.>> %outputPath%%outputFile%
+@ECHO const wxString carDesignerVersion = _T("%gitTag%");>> %outputPath%%outputFile%
+@ECHO const wxString carDesignerGitHash = _T("%gitHash%");>> %outputPath%%outputFile%

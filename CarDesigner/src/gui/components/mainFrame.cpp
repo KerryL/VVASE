@@ -1943,7 +1943,7 @@ void MainFrame::HelpAboutEvent(wxCommandEvent& WXUNUSED(event))
 	wxAboutDialogInfo appInfo;
 
 	appInfo.SetName(carDesignerLongName);
-	appInfo.SetVersion(carDesignerVersion);
+	appInfo.SetVersion(carDesignerVersion + _T(" (") + carDesignerGitHash + _T(")"));
 	appInfo.SetDescription(_T("\n\
 A work in progress...\n\
 This is a vehicle design and analysis tool.  Please see the\n\

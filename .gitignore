@@ -10,6 +10,9 @@ vvase.rc
 # Other VVASE-specific logs
 VVASEdebug.log
 
+# Ignore automatically generated files
+vvaseConstants.cpp
+
 # Tex auxilliary files
 *.aux
 *.log

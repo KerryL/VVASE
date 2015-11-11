@@ -64,6 +64,12 @@
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(WXWIN)\include;.\CarDesigner;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
+    <PreBuildEvent>
+      <Command>getGitHash</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Updating git hash and version info</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -87,6 +93,12 @@
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(WXWIN)\include;.\CarDesigner;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
+    <PreBuildEvent>
+      <Command>getGitHash</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Updating git hash and version info</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ResourceCompile Include="CarDesigner\res\CarDesigner.rc" />
@@ -185,6 +197,7 @@
     <ClCompile Include="CarDesigner\src\gui\renderer\carRenderer.cpp" />
     <ClCompile Include="CarDesigner\src\gui\renderer\plotRenderer.cpp" />
     <ClCompile Include="CarDesigner\src\gui\undoRedoStack.cpp" />
+    <ClCompile Include="src\vvaseConstants.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

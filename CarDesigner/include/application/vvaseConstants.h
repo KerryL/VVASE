@@ -24,7 +24,8 @@
 #include <wx/wx.h>
 
 // The current version number
-static const wxString carDesignerVersion = "0.12a";
+static const wxString carDesignerVersion;
+static const wxString carDesignerGitHash;
 
 // The application name
 static const wxString carDesignerName = "VVASE";
