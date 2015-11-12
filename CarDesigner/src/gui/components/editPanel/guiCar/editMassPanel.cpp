@@ -15,7 +15,10 @@
 //				 car.
 // History:
 
-// CarDesigner headers
+// Standard C++ headers
+#include <algorithm>
+
+// Local headers
 #include "vCar/massProperties.h"
 #include "gui/renderer/carRenderer.h"
 #include "gui/guiCar.h"

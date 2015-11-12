@@ -16,6 +16,7 @@
 // Standard C++ headers
 #include <cstdlib>
 #include <algorithm>
+#include <functional>
 
 // Local headers
 #include "vMath/signals/filter.h"

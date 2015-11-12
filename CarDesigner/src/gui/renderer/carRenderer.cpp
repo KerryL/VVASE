@@ -24,6 +24,9 @@
 //				  RenderWindow base class (eliminated dependance on VTK).
 //	11/22/2009	- Moved to vRenderer.lib, K. Loux.
 
+// Standard C++ headers
+#include <algorithm>
+
 // wxWidgets headers
 #include <wx/wx.h>
 

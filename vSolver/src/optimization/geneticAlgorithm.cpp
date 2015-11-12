@@ -15,13 +15,14 @@
 //				 and their object's phenotype.
 // History:
 
-// Local headers
-#include "vSolver/optimization/geneticAlgorithm.h"
-#include "vUtilities/debugLog.h"
-
 // Standard C++ headers
 #include <cstdlib>
 #include <ctime>
+#include <algorithm>
+
+// Local headers
+#include "vSolver/optimization/geneticAlgorithm.h"
+#include "vUtilities/debugLog.h"
 
 //==========================================================================
 // Class:			GeneticAlgorithm
