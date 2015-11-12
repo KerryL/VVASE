@@ -8,8 +8,8 @@ SET outputFile=vvaseConstants.cpp
 FOR /f %%i IN ('git describe --tags --abbrev^=0') DO SET gitTag=%%i
 FOR /f %%i IN ('git rev-parse --short HEAD') DO SET gitHash=%%i
 
-ECHO outputPath = %outputPath%
-ECHO outputFile = %outputFile%
+REM ECHO outputPath = %outputPath%
+REM ECHO outputFile = %outputFile%
 ECHO version = %gitTag%
 ECHO gitHash = %gitHash%
 
@@ -18,7 +18,7 @@ ECHO gitHash = %gitHash%
 @ECHO // Desc:  Automatically generated file containing latest git hash and version info.>> %outputPath%%outputFile%
 @ECHO.>> %outputPath%%outputFile%
 @ECHO // Local headers>> %outputPath%%outputFile%
-@ECHO #include "vvaseConstants.h">> %outputPath%%outputFile%
+@ECHO #include "application/vvaseConstants.h">> %outputPath%%outputFile%
 @ECHO.>> %outputPath%%outputFile%
 @ECHO const wxString carDesignerVersion = _T("%gitTag%");>> %outputPath%%outputFile%
 @ECHO const wxString carDesignerGitHash = _T("%gitHash%");>> %outputPath%%outputFile%

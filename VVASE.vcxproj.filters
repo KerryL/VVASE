@@ -295,7 +295,7 @@
     <ClCompile Include="CarDesigner\src\gui\dialogs\textInputDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\vvaseConstants.cpp">
+    <ClCompile Include="CarDesigner\src\application\vvaseConstants.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -153,6 +153,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CarDesigner\src\application\vvaseApplication.cpp" />
+    <ClCompile Include="CarDesigner\src\application\vvaseConstants.cpp" />
     <ClCompile Include="CarDesigner\src\environment\atmosphere.cpp" />
     <ClCompile Include="CarDesigner\src\environment\track.cpp" />
     <ClCompile Include="CarDesigner\src\gui\appearanceOptions.cpp" />
@@ -197,7 +198,6 @@
     <ClCompile Include="CarDesigner\src\gui\renderer\carRenderer.cpp" />
     <ClCompile Include="CarDesigner\src\gui\renderer\plotRenderer.cpp" />
     <ClCompile Include="CarDesigner\src\gui\undoRedoStack.cpp" />
-    <ClCompile Include="src\vvaseConstants.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

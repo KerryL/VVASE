@@ -20,5 +20,5 @@ echo>> $outputPath$outputFile
 echo // Local headers>> $outputPath$outputFile
 echo \#include \"application/vvaseConstants.h\">> $outputPath$outputFile
 echo>> $outputPath$outputFile
-echo const wxString versionString = _T\(\"$gitTag\"\)\;>> $outputPath$outputFile
-echo const wxString gitHash = _T\(\"$gitHash\"\)\;>> $outputPath$outputFile
+echo const wxString carDesignerVersion = _T\(\"$gitTag\"\)\;>> $outputPath$outputFile
+echo const wxString carDesignerGitHash = _T\(\"$gitHash\"\)\;>> $outputPath$outputFile
