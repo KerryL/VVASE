@@ -26,16 +26,19 @@ SRC = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.cpp))
 # Object files
 OBJS = $(addprefix $(OBJDIR),$(SRC:.cpp=.o))
 
-.PHONY: all clean
+.PHONY: all clean version
 
 all: $(TARGET)
 
 $(TARGET): $(OBJS)
 	$(CC) $(OBJS) -L$(LIBOUTDIR) $(addprefix -l,$(PSLIB)) $(LDFLAGS) -o $(BINDIR)$@
 
-$(OBJDIR)%.o: %.cpp
+$(OBJDIR)%.o: %.cpp version
 	$(MKDIR) $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
+
+version:
+	./../getGitHash.sh ../
 
 clean:
 	# Nothing required here
