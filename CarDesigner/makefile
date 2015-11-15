@@ -22,23 +22,29 @@ DIRS = \
 
 # Source files
 SRC = $(foreach dir, $(DIRS), $(wildcard $(dir)/*.cpp))
+VERSION_FILE = src/application/vvaseConstants.cpp
 
 # Object files
-OBJS = $(addprefix $(OBJDIR),$(SRC:.cpp=.o))
+TEMP_OBJS = $(addprefix $(OBJDIR),$(SRC:.cpp=.o))
+VERSION_FILE_OBJ = $(OBJDIR)$(VERSION_FILE:.cpp=.o)
+OBJS = $(filter-out $(VERSION_FILE_OBJ),$(TEMP_OBJS))
+ALL_OBJS = $(OBJS) $(VERSION_FILE_OBJ)
 
 .PHONY: all clean version
 
 all: $(TARGET)
 
-$(TARGET): $(OBJS)
-	$(CC) $(OBJS) -L$(LIBOUTDIR) $(addprefix -l,$(PSLIB)) $(LDFLAGS) -o $(BINDIR)$@
+$(TARGET): $(OBJS) version
+	$(CC) $(ALL_OBJS) -L$(LIBOUTDIR) $(addprefix -l,$(PSLIB)) $(LDFLAGS) -o $(BINDIR)$@
 
-$(OBJDIR)%.o: %.cpp version
+$(OBJDIR)%.o: %.cpp
 	$(MKDIR) $(dir $@)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 version:
 	./../getGitHash.sh ../
+	$(MKDIR) $(dir $(VERSION_FILE_OBJ))
+	$(CC) $(CFLAGS) -c $(VERSION_FILE) -o $(VERSION_FILE_OBJ)
 
 clean:
-	# Nothing required here
+	$(RM) $(VERSION_FILE)
