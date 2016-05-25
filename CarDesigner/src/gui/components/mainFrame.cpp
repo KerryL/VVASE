@@ -1947,7 +1947,7 @@ void MainFrame::HelpAboutEvent(wxCommandEvent& WXUNUSED(event))
 	appInfo.SetDescription(_T("\n\
 A work in progress...\n\
 This is a vehicle design and analysis tool.  Please see the\n\
-readme.txt file for licensing and other information."));
+readme.md file for licensing and other information."));
 	appInfo.SetCopyright(_T("(C) 2008-2016 Kerry Loux"));
 
 	wxAboutBox(appInfo);
