@@ -1,7 +1,7 @@
 VVASE (Virtual Vehicle Analysis and Simulation Environment)
 ===========================================================
 
-VVASE is a suspension kinematics analysis tool.  It is licsensed under the GPLv3 license.  See [the manual](http://github.com/KerryL/DataPlotter/wiki/Home) for more information.
+VVASE is a suspension kinematics analysis tool.  It is licsensed under the GPLv3 license.  See [the manual](https://github.com/KerryL/VVASE/blob/master/manual/vvase%20manual.pdf) for more information.
 
 VVASE is built upon wxWidgets, OpenGL, Freetype2 and FTGL.  It compiles and runs under both MSW and GTK.
 
