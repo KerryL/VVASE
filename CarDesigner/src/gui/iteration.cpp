@@ -1087,22 +1087,19 @@ void Iteration::ShowAssociatedCarsDialog()
 	}
 
 	if (wxGetSelectedChoices(selections, _T("Select the cars to associate with this iteration:"),
-		_T("Associated Cars"), choices, &mainFrame) <= 0)
+		_T("Associated Cars"), choices, &mainFrame) != -1)
 	{
-		openCars.clear();
-		return;
+		// Remove all items from our lists
+		ClearAllLists();
+
+		// Go through the indices that were selected and add them to our list
+		for (i = 0; i < (signed int)selections.GetCount(); i++)
+			AddCar(openCars[selections[i]]);
+
+		// If not all of the cars in the list are selected, make sure we're not auto-associating
+		if (openCars.size() != associatedCars.size())
+			associatedWithAllOpenCars = false;
 	}
-
-	// Remove all items from our lists
-	ClearAllLists();
-
-	// Go through the indices that were selected and add them to our list
-	for (i = 0; i < (signed int)selections.GetCount(); i++)
-		AddCar(openCars[selections[i]]);
-
-	// If not all of the cars in the list are selected, make sure we're not auto-associating
-	if (openCars.size() != associatedCars.size())
-		associatedWithAllOpenCars = false;
 
 	// Update the analyses
 	UpdateData();
