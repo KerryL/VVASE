@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2011
+                         Copyright Kerry R. Loux 2008-2016
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -1948,7 +1948,7 @@ void MainFrame::HelpAboutEvent(wxCommandEvent& WXUNUSED(event))
 A work in progress...\n\
 This is a vehicle design and analysis tool.  Please see the\n\
 readme.txt file for licensing and other information."));
-	appInfo.SetCopyright(_T("(C) 2008-2015 Kerry Loux"));
+	appInfo.SetCopyright(_T("(C) 2008-2016 Kerry Loux"));
 
 	wxAboutBox(appInfo);
 }
