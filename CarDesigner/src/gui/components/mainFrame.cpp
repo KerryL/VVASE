@@ -3350,3 +3350,29 @@ void MainFrame::RemoveFileFromHistory(wxString pathAndFileName)
 		}
 	}
 }
+
+//==========================================================================
+// Class:			MainFrame
+// Function:		SetAssociateWithAllCars
+//
+// Description:		Checks or unchecks the iteration menu item for associate
+//					with all open cars.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void MainFrame::SetAssociateWithAllCars()
+{
+	if (openObjectList[activeIndex]->GetType() != GuiObject::TypeIteration)
+		return;
+
+	wxMenuItem *item = this->FindItemInMenuBar(IdMenuIterationAssociatedWithAllCars);
+	item->Check(static_cast<Iteration*>(openObjectList[activeIndex])->GetAutoAssociate());
+}

@@ -137,6 +137,8 @@ public:
 	
 	bool GetUseOrtho() const { return useOrthoView; }
 
+	void SetAssociateWithAllCars();
+
 private:
 	wxAuiManager manager;
 

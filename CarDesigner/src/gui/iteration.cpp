@@ -1099,6 +1099,8 @@ void Iteration::ShowAssociatedCarsDialog()
 		// If not all of the cars in the list are selected, make sure we're not auto-associating
 		if (openCars.size() != associatedCars.size())
 			associatedWithAllOpenCars = false;
+
+		mainFrame.SetAssociateWithAllCars();
 	}
 
 	// Update the analyses
@@ -1463,11 +1465,13 @@ void Iteration::SetYAxisType(AxisType yAxisType)
 void Iteration::SetAutoAssociate(bool autoAssociate)
 {
 	associatedWithAllOpenCars = autoAssociate;
+	UpdateAutoAssociate();
 
 	// Set the "this item has changed" flag
 	SetModified();
 
 	// Update this object
+	UpdateData();
 	UpdateDisplay();
 }
 
