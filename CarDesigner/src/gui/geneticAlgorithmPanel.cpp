@@ -216,7 +216,7 @@ void GeneticAlgorithmPanel::CreateControls()
 	geneList->SetColLabelSize(geneList->GetRowSize(0));
 
 	// Add the grid to the sizer
-	geneGoalSizer->Add(geneList, 1, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALIGN_TOP);
+	geneGoalSizer->Add(geneList, 1, wxALIGN_LEFT | wxGROW | wxALIGN_TOP);
 
 	// Set the column headings
 	geneList->SetColLabelValue(0, _T("Hardpoint"));
