@@ -35,6 +35,8 @@ vvaseConstants.cpp
 /vUtilities/.obj/
 *.bak
 *.swp
+*.opendb
+*.db
 
 # Code blocks ignores
 *.tags
