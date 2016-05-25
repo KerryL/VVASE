@@ -167,7 +167,7 @@ void EditIterationPlotsPanel::CreateControls()
 
 	// Second sizer gives more space around the controls
 	wxBoxSizer *mainSizer = new wxBoxSizer(wxVERTICAL);
-	topSizer->Add(mainSizer, 1, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALL, 5);
+	topSizer->Add(mainSizer, 1, wxGROW | wxALL, 5);
 
 	// Add a description of the panel to the sizer
 	wxStaticText *descriptionText = new wxStaticText(this, wxID_STATIC, _T("Select plots to display:"));

@@ -233,7 +233,7 @@ BEGIN_EVENT_TABLE(PlotPanel, wxPanel)
 	EVT_GRID_CELL_RIGHT_CLICK(PlotPanel::GridRightClickEvent)
 	EVT_GRID_CELL_LEFT_DCLICK(PlotPanel::GridDoubleClickEvent)
 	EVT_GRID_CELL_LEFT_CLICK(PlotPanel::GridLeftClickEvent)
-	EVT_GRID_CELL_CHANGE(PlotPanel::GridCellChangeEvent)
+	EVT_GRID_CELL_CHANGED(PlotPanel::GridCellChangeEvent)
 
 	// Context menu
 	EVT_MENU(idContextAddMathChannel,				PlotPanel::ContextAddMathChannelEvent)
@@ -924,10 +924,10 @@ unsigned int PlotPanel::AddDataRowToGrid(const wxString &name)
 	optionsGrid->SetCellValue(index, colMarkerSize, wxString::Format(_T("%i"), defaultMarkerSize));
 	optionsGrid->SetCellValue(index, colVisible, _T("1"));
 
-	int width = optionsGrid->GetColumnWidth(colName);
+	int width = optionsGrid->GetColSize(colName);
 	optionsGrid->AutoSizeColumn(colName, false);
-	if (optionsGrid->GetColumnWidth(colName) < width)
-		optionsGrid->SetColumnWidth(colName, width);
+	if (optionsGrid->GetColSize(colName) < width)
+		optionsGrid->SetColSize(colName, width);
 
 	return index;
 }
@@ -1239,7 +1239,7 @@ void PlotPanel::ShowAppropriateXLabel()
 	// If the only visible curves are frequency plots, change the x-label
 	int i;
 	bool showFrequencyLabel(false);
-	for (i = 1; i < optionsGrid->GetRows(); i++)
+	for (i = 1; i < optionsGrid->GetNumberRows(); i++)
 	{
 		if (optionsGrid->GetCellValue(i, colVisible).Cmp(_T("1")) == 0)
 		{
@@ -1278,7 +1278,7 @@ void PlotPanel::ShowAppropriateXLabel()
 //==========================================================================
 double PlotPanel::GetDefaultLineSize() const
 {
-	if (optionsGrid->GetRows() < 2)
+	if (optionsGrid->GetNumberRows() < 2)
 		return defaultLineSize;
 
 	double size;
@@ -1306,7 +1306,7 @@ double PlotPanel::GetDefaultLineSize() const
 //==========================================================================
 int PlotPanel::GetDefaultMarkerSize() const
 {
-	if (optionsGrid->GetRows() < 2)
+	if (optionsGrid->GetNumberRows() < 2)
 		return defaultMarkerSize;
 
 	long size;
@@ -2271,7 +2271,7 @@ void PlotPanel::UpdateCursorValues(const bool &leftVisible, const bool &rightVis
 	// For each curve, update the cursor values
 	int i;
 	bool showXDifference(false);
-	for (i = 1; i < optionsGrid->GetRows(); i++)
+	for (i = 1; i < optionsGrid->GetNumberRows(); i++)
 	{
 		UpdateSingleCursorValue(i, leftValue, colLeftCursor, leftVisible);
 		UpdateSingleCursorValue(i, rightValue, colRightCursor, rightVisible);

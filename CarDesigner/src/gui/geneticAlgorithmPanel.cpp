@@ -207,7 +207,7 @@ void GeneticAlgorithmPanel::CreateControls()
 		for (j = 0; j < geneList->GetNumberCols(); j++)
 		{
 			geneList->SetReadOnly(i, j, true);
-			geneList->SetCellAlignment(wxALIGN_CENTER, i, j);
+			geneList->SetCellAlignment(i, j, wxALIGN_CENTER, wxALIGN_TOP);
 		}
 	}
 
@@ -239,8 +239,8 @@ void GeneticAlgorithmPanel::CreateControls()
 
 	// Assign column widths
 	// FIXME:  We would rather use auto-size (this is workaround for above)
-	geneList->SetColumnWidth(0, 140);
-	geneList->SetColumnWidth(1, 140);
+	geneList->SetColSize(0, 140);
+	geneList->SetColSize(1, 140);
 	// Default size (after auto-size) is OK for the remaining columns
 
 	// End the batch mode edit and re-paint the control
@@ -269,7 +269,7 @@ void GeneticAlgorithmPanel::CreateControls()
 		for (j = 0; j < goalList->GetNumberCols(); j++)
 		{
 			goalList->SetReadOnly(i, j, true);
-			goalList->SetCellAlignment(wxALIGN_CENTER, i, j);
+			goalList->SetCellAlignment(i, j, wxALIGN_CENTER, wxALIGN_TOP);
 		}
 	}
 
@@ -301,9 +301,9 @@ void GeneticAlgorithmPanel::CreateControls()
 
 	// Assign column widths
 	// FIXME:  We would rather do this automatically (this is workaround for above)
-	goalList->SetColumnWidth(0, 190);
-	goalList->SetColumnWidth(1, 220);
-	goalList->SetColumnWidth(2, 220);
+	goalList->SetColSize(0, 190);
+	goalList->SetColSize(1, 220);
+	goalList->SetColSize(2, 220);
 	// Default size (after auto-size) is OK for the remaining columns
 
 	// End the batch mode edit and re-paint the control
@@ -325,7 +325,7 @@ void GeneticAlgorithmPanel::CreateControls()
 	// Progress bars
 	wxFlexGridSizer *progressSizer = new wxFlexGridSizer(2, 2, 5);
 	progressSizer->SetFlexibleDirection(wxHORIZONTAL);
-	mainSizer->Add(progressSizer, 0, wxALL | wxEXPAND | wxALIGN_BOTTOM, 5);
+	mainSizer->Add(progressSizer, 0, wxALL | wxEXPAND, 5);
 	progressSizer->AddGrowableCol(1);
 
 	wxStaticText *generationProgressLabel = new wxStaticText(this, wxID_ANY, _T("Current Generation"));
@@ -844,11 +844,11 @@ void GeneticAlgorithmPanel::UpdateInformation()
 void GeneticAlgorithmPanel::UpdateGeneList()
 {
 	// Make sure we have the correct number of rows
-	if (geneList->GetRows() > optimization.GetAlgorithm().GetGeneCount()
+	if (geneList->GetNumberRows() > optimization.GetAlgorithm().GetGeneCount()
 		&& optimization.GetAlgorithm().GetGeneCount() > 1)
-		geneList->DeleteRows(0, geneList->GetRows() - optimization.GetAlgorithm().GetGeneCount(), false);
-	else if (geneList->GetRows() < optimization.GetAlgorithm().GetGeneCount())
-		geneList->InsertRows(0, optimization.GetAlgorithm().GetGeneCount() - geneList->GetRows(), false);
+		geneList->DeleteRows(0, geneList->GetNumberRows() - optimization.GetAlgorithm().GetGeneCount(), false);
+	else if (geneList->GetNumberRows() < optimization.GetAlgorithm().GetGeneCount())
+		geneList->InsertRows(0, optimization.GetAlgorithm().GetGeneCount() - geneList->GetNumberRows(), false);
 
 	// Go through row-by-row and populate the cells with the correct information
 	wxString temp;
@@ -869,10 +869,10 @@ void GeneticAlgorithmPanel::UpdateGeneList()
 		geneList->SetCellValue(i, 5, temp);
 
 		// Make the cells read-only and center the text
-		for (j = 0; j < geneList->GetCols(); j++)
+		for (j = 0; j < geneList->GetNumberCols(); j++)
 		{
 			geneList->SetReadOnly(i, j, true);
-			geneList->SetCellAlignment(wxALIGN_CENTER, i, j);
+			geneList->SetCellAlignment(i, j, wxALIGN_CENTER, wxALIGN_TOP);
 		}
 	}
 }
@@ -897,11 +897,11 @@ void GeneticAlgorithmPanel::UpdateGeneList()
 void GeneticAlgorithmPanel::UpdateGoalList()
 {
 	// Make sure we have the correct number of rows
-	if (goalList->GetRows() > optimization.GetAlgorithm().GetGoalCount()
+	if (goalList->GetNumberRows() > optimization.GetAlgorithm().GetGoalCount()
 		&& optimization.GetAlgorithm().GetGoalCount() > 1)
-		goalList->DeleteRows(0, goalList->GetRows() - optimization.GetAlgorithm().GetGoalCount(), false);
-	else if (goalList->GetRows() < optimization.GetAlgorithm().GetGoalCount())
-		goalList->InsertRows(0, optimization.GetAlgorithm().GetGoalCount() - goalList->GetRows(), false);
+		goalList->DeleteRows(0, goalList->GetNumberRows() - optimization.GetAlgorithm().GetGoalCount(), false);
+	else if (goalList->GetNumberRows() < optimization.GetAlgorithm().GetGoalCount())
+		goalList->InsertRows(0, optimization.GetAlgorithm().GetGoalCount() - goalList->GetNumberRows(), false);
 
 	// Go through row-by-row and populate the cells with the correct information
 	int i, j;
@@ -924,10 +924,10 @@ void GeneticAlgorithmPanel::UpdateGoalList()
 			KinematicOutputs::GetOutputUnitType(optimization.GetAlgorithm().GetGoal(i).output))));
 
 		// Make the cells read-only and center the text
-		for (j = 0; j < goalList->GetCols(); j++)
+		for (j = 0; j < goalList->GetNumberCols(); j++)
 		{
 			goalList->SetReadOnly(i, j, true);
-			goalList->SetCellAlignment(wxALIGN_CENTER, i, j);
+			goalList->SetCellAlignment(i, j, wxALIGN_CENTER, wxALIGN_TOP);
 		}
 	}
 }

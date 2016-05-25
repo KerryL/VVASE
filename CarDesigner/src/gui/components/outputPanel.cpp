@@ -137,7 +137,7 @@ void OutputPanel::UpdateInformation(KinematicOutputs outputs, Car &car,
 		}
 
 		// Set the column width
-		outputsList->SetColumnWidth(index, 50);// FIXME:  This should be set based on text width to make it cross-platform friendly
+		outputsList->SetColSize(index, 50);// FIXME:  This should be set based on text width to make it cross-platform friendly
 
 		// Increment the NumberOfDataColums
 		numberOfDataColumns++;
@@ -346,7 +346,7 @@ void OutputPanel::CreateControls()
 
 	// Second sizer gives more space around the controls
 	wxBoxSizer *mainSizer = new wxBoxSizer(wxVERTICAL);
-	topSizer->Add(mainSizer, 1, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALL, 1);
+	topSizer->Add(mainSizer, 1, wxGROW | wxALL, 1);
 
 	// Create the grid for the hard point entry
 	outputsList = new SuperGrid(this, wxID_ANY);
@@ -363,7 +363,7 @@ void OutputPanel::CreateControls()
 	outputsList->SetRowMinimalAcceptableHeight(0);
 
 	// Add the grid to the sizer
-	mainSizer->Add(outputsList, 1, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALL | wxALIGN_TOP, 1);
+	mainSizer->Add(outputsList, 1, wxGROW | wxALL | wxALIGN_TOP, 1);
 
 	// Set the column headings
 	outputsList->SetColLabelValue(0, _T("Output"));

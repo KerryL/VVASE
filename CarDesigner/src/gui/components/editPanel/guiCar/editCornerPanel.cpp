@@ -96,7 +96,7 @@ EditCornerPanel::~EditCornerPanel()
 //==========================================================================
 BEGIN_EVENT_TABLE(EditCornerPanel, wxPanel)
 	EVT_GRID_SELECT_CELL(						EditCornerPanel::SelectCellEvent)
-	EVT_GRID_CELL_CHANGE(						EditCornerPanel::GridCellChangedEvent)
+	EVT_GRID_CELL_CHANGED(						EditCornerPanel::GridCellChangedEvent)
 	EVT_COMBOBOX(ComboBoxActuationAttachment,	EditCornerPanel::ActuationAttachmentChangeEvent)
 	EVT_COMBOBOX(ComboBoxActuationType,			EditCornerPanel::ActuationTypeChangeEvent)
 	EVT_TEXT(TextBoxStaticCamber,				EditCornerPanel::StaticCamberChangeEvent)
@@ -154,57 +154,57 @@ void EditCornerPanel::UpdateInformation(Corner *currentCorner,
 	// Hide or show rows according to this object's configuration
 	// Geared sway bar
 	if (barStyle == Suspension::SwayBarGeared)
-		hardpoints->SetRowHeight(Corner::GearEndBarShaft + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(Corner::GearEndBarShaft + 1, hardpoints->GetRowHeight(0));
 	else
-		hardpoints->SetRowHeight(Corner::GearEndBarShaft + 1, 0);
+		hardpoints->SetRowSize(Corner::GearEndBarShaft + 1, 0);
 
 	if (barStyle == Suspension::SwayBarNone)
 	{
-		hardpoints->SetRowHeight(Corner::OutboardBarLink + 1, 0);
-		hardpoints->SetRowHeight(Corner::InboardBarLink + 1, 0);
-		hardpoints->SetRowHeight(Corner::BarArmAtPivot + 1, 0);
+		hardpoints->SetRowSize(Corner::OutboardBarLink + 1, 0);
+		hardpoints->SetRowSize(Corner::InboardBarLink + 1, 0);
+		hardpoints->SetRowSize(Corner::BarArmAtPivot + 1, 0);
 	}
 	else if (barStyle == Suspension::SwayBarTBar)
 	{
-		hardpoints->SetRowHeight(Corner::OutboardBarLink + 1, hardpoints->GetRowHeight(0));
-		hardpoints->SetRowHeight(Corner::InboardBarLink + 1, hardpoints->GetRowHeight(0));
-		hardpoints->SetRowHeight(Corner::BarArmAtPivot + 1, 0);
+		hardpoints->SetRowSize(Corner::OutboardBarLink + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(Corner::InboardBarLink + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(Corner::BarArmAtPivot + 1, 0);
 	}
 	else
 	{
-		hardpoints->SetRowHeight(Corner::OutboardBarLink + 1, hardpoints->GetRowHeight(0));
-		hardpoints->SetRowHeight(Corner::InboardBarLink + 1, hardpoints->GetRowHeight(0));
-		hardpoints->SetRowHeight(Corner::BarArmAtPivot + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(Corner::OutboardBarLink + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(Corner::InboardBarLink + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(Corner::BarArmAtPivot + 1, hardpoints->GetRowHeight(0));
 	}
 
 	// Half shaft
 	if (hasHalfShaft)
 	{
 		// Show the half shaft points
-		hardpoints->SetRowHeight(Corner::InboardHalfShaft + 1, hardpoints->GetRowHeight(0));
-		hardpoints->SetRowHeight(Corner::OutboardHalfShaft + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(Corner::InboardHalfShaft + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(Corner::OutboardHalfShaft + 1, hardpoints->GetRowHeight(0));
 	}
 	else
 	{
 		// Hide the half shaft points
-		hardpoints->SetRowHeight(Corner::InboardHalfShaft + 1, 0);
-		hardpoints->SetRowHeight(Corner::OutboardHalfShaft + 1, 0);
+		hardpoints->SetRowSize(Corner::InboardHalfShaft + 1, 0);
+		hardpoints->SetRowSize(Corner::OutboardHalfShaft + 1, 0);
 	}
 
 	// Outboard springs/shocks vs. pushrod actuated springs/shocks
 	if (currentCorner->actuationType == Corner::ActuationPushPullrod)
 	{
-		hardpoints->SetRowHeight(Corner::InboardPushrod + 1, hardpoints->GetRowHeight(0));
-		hardpoints->SetRowHeight(Corner::OutboardPushrod + 1, hardpoints->GetRowHeight(0));
-		hardpoints->SetRowHeight(Corner::BellCrankPivot1 + 1, hardpoints->GetRowHeight(0));
-		hardpoints->SetRowHeight(Corner::BellCrankPivot2 + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(Corner::InboardPushrod + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(Corner::OutboardPushrod + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(Corner::BellCrankPivot1 + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(Corner::BellCrankPivot2 + 1, hardpoints->GetRowHeight(0));
 	}
 	else if (currentCorner->actuationType == Corner::ActuationOutboardRockerArm)
 	{
-		hardpoints->SetRowHeight(Corner::InboardPushrod + 1, 0);
-		hardpoints->SetRowHeight(Corner::OutboardPushrod + 1, 0);
-		hardpoints->SetRowHeight(Corner::BellCrankPivot1 + 1, 0);
-		hardpoints->SetRowHeight(Corner::BellCrankPivot2 + 1, 0);
+		hardpoints->SetRowSize(Corner::InboardPushrod + 1, 0);
+		hardpoints->SetRowSize(Corner::OutboardPushrod + 1, 0);
+		hardpoints->SetRowSize(Corner::BellCrankPivot1 + 1, 0);
+		hardpoints->SetRowSize(Corner::BellCrankPivot2 + 1, 0);
 	}
 
 	// Update the values of all of the points
@@ -278,7 +278,7 @@ void EditCornerPanel::CreateControls()
 	hardpoints->SetRowMinimalAcceptableHeight(0);
 
 	// We never want the wheel center to be visible
-	hardpoints->SetRowHeight(Corner::WheelCenter + 1, 0);
+	hardpoints->SetRowSize(Corner::WheelCenter + 1, 0);
 
 	mainSizer->Add(hardpoints, 0, wxALIGN_TOP | wxGROW);
 	mainSizer->AddGrowableCol(0);
@@ -311,8 +311,8 @@ void EditCornerPanel::CreateControls()
 	// by the converter.  First column is stretchable
 	hardpoints->SetCellValue(3, 3, UnitConverter::GetInstance().FormatNumber(80.0));
 	hardpoints->AutoSizeColumn(3);
-	hardpoints->SetColumnWidth(1, hardpoints->GetColSize(3));
-	hardpoints->SetColumnWidth(2, hardpoints->GetColSize(3));
+	hardpoints->SetColSize(1, hardpoints->GetColSize(3));
+	hardpoints->SetColSize(2, hardpoints->GetColSize(3));
 	// The value we just put in cell (3,3) will get overwritten with a call to
 	// UpdateInformation()
 	hardpoints->AutoSizeColumn(0);

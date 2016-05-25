@@ -141,7 +141,7 @@ void EditBrakesPanel::CreateControls()
 
 	// Second sizer gives more space around the controls
 	wxBoxSizer *mainSizer = new wxBoxSizer(wxVERTICAL);
-	topSizer->Add(mainSizer, 1, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALL, 5);
+	topSizer->Add(mainSizer, 1, wxGROW | wxALL, 5);
 	
 	int cellPadding(3);
 

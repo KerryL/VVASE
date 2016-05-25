@@ -85,7 +85,7 @@ BEGIN_EVENT_TABLE(AppearanceOptionsDialog, wxDialog)
 	EVT_BUTTON(wxID_OK,							AppearanceOptionsDialog::OKClickEvent)
 	EVT_BUTTON(wxID_CANCEL,						AppearanceOptionsDialog::CancelClickEvent)
 	EVT_GRID_CMD_CELL_LEFT_DCLICK(IdColorGrid,	AppearanceOptionsDialog::ColorGridDoubleClickEvent)
-	EVT_GRID_CELL_CHANGE(						AppearanceOptionsDialog::AlphaChangeEvent)
+	EVT_GRID_CELL_CHANGED(						AppearanceOptionsDialog::AlphaChangeEvent)
 END_EVENT_TABLE();
 
 //==========================================================================
@@ -122,7 +122,7 @@ void AppearanceOptionsDialog::CreateControls()
 	wxBoxSizer *colorTopSizer = new wxBoxSizer(wxHORIZONTAL);
 
 	wxBoxSizer *colorSizer = new wxBoxSizer(wxVERTICAL);
-	colorTopSizer->Add(colorSizer, 0, wxEXPAND | wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
+	colorTopSizer->Add(colorSizer, 0, wxEXPAND | wxALL, 5);
 
 	wxStaticText *colorPrompt = new wxStaticText(colorPanel, wxID_STATIC,
 		_T("Edit the object colors:"));
@@ -138,7 +138,7 @@ void AppearanceOptionsDialog::CreateControls()
 	colorGrid->SetRowLabelSize(0);
 	colorGrid->SetColLabelSize(colorGrid->GetRowSize(0));
 
-	colorSizer->Add(colorGrid, 0, wxALIGN_CENTER_HORIZONTAL | wxEXPAND | wxALL | wxALIGN_TOP, 5);
+	colorSizer->Add(colorGrid, 0, wxEXPAND | wxALL | wxALIGN_TOP, 5);
 
 	// Set the column headings
 	colorGrid->SetColLabelValue(0, _T("Object"));
@@ -173,7 +173,7 @@ void AppearanceOptionsDialog::CreateControls()
 	// Use another outer sizer to create more room for the controls
 	wxBoxSizer *visibilityTopSizer = new wxBoxSizer(wxVERTICAL);
 	wxBoxSizer *visibilitySizer = new wxBoxSizer(wxVERTICAL);
-	visibilityTopSizer->Add(visibilitySizer, 0, wxALIGN_CENTER_HORIZONTAL | wxALL | wxEXPAND, 5);
+	visibilityTopSizer->Add(visibilitySizer, 1, wxALL | wxEXPAND, 5);
 
 	wxStaticText *visibilityPrompt = new wxStaticText(visibilityPanel, wxID_STATIC,
 		_T("Choose the visible objects:"));
@@ -186,7 +186,7 @@ void AppearanceOptionsDialog::CreateControls()
 		choices.Add(AppearanceOptions::GetVisibilityString((AppearanceOptions::ObjectVisibility)i));
 
 	visibilityList = new wxCheckListBox(visibilityPanel, wxID_ANY, wxDefaultPosition, wxDefaultSize, choices);
-	visibilitySizer->Add(visibilityList, 0, wxALIGN_CENTER_HORIZONTAL | wxEXPAND | wxALL | wxALIGN_TOP, 5);
+	visibilitySizer->Add(visibilityList, 1, wxEXPAND | wxALL | wxALIGN_TOP, 5);
 
 	for (i = 0; i < AppearanceOptions::VisibilityCount; i++)
 		// TODO:  Can DataValidator work with booleans?
@@ -200,7 +200,7 @@ void AppearanceOptionsDialog::CreateControls()
 	wxBoxSizer *sizeTopSizer = new wxBoxSizer(wxHORIZONTAL);
 
 	wxBoxSizer *sizeSizer = new wxBoxSizer(wxVERTICAL);
-	sizeTopSizer->Add(sizeSizer, 0, wxALIGN_CENTER_HORIZONTAL | wxALL | wxEXPAND, 5);
+	sizeTopSizer->Add(sizeSizer, 0, wxALL | wxEXPAND, 5);
 
 	wxStaticText *sizePrompt = new wxStaticText(sizePanel, wxID_STATIC,
 		_T("Edit the object sizes (units are ") + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance)
@@ -218,7 +218,7 @@ void AppearanceOptionsDialog::CreateControls()
 	sizeGrid->SetRowLabelSize(0);
 	sizeGrid->SetColLabelSize(sizeGrid->GetRowSize(0));
 
-	sizeSizer->Add(sizeGrid, 1, wxALIGN_CENTER_HORIZONTAL | wxEXPAND | wxALL | wxALIGN_TOP, 5);
+	sizeSizer->Add(sizeGrid, 1, wxEXPAND | wxALL | wxALIGN_TOP, 5);
 
 	sizeGrid->SetColLabelValue(0, _T("Object"));
 	sizeGrid->SetColLabelValue(1, _T("Size"));
@@ -253,7 +253,7 @@ void AppearanceOptionsDialog::CreateControls()
 	wxBoxSizer *resolutionTopSizer = new wxBoxSizer(wxHORIZONTAL);
 
 	wxBoxSizer *resolutionSizer = new wxBoxSizer(wxVERTICAL);
-	resolutionTopSizer->Add(resolutionSizer, 0, wxALIGN_CENTER_HORIZONTAL | wxALL | wxEXPAND, 5);
+	resolutionTopSizer->Add(resolutionSizer, 0, wxALL | wxEXPAND, 5);
 
 	wxStaticText *resolutionPrompt = new wxStaticText(resolutionPanel, wxID_STATIC,
 		_T("Edit the object resolutions (number of sides\nto use to approximate a round object):"),
@@ -272,7 +272,7 @@ void AppearanceOptionsDialog::CreateControls()
 	resolutionGrid->SetColLabelSize(resolutionGrid->GetRowSize(0));
 
 	// Add the grid to the sizer
-	resolutionSizer->Add(resolutionGrid, 0, wxALIGN_CENTER_HORIZONTAL | wxEXPAND | wxALL | wxALIGN_TOP, 5);
+	resolutionSizer->Add(resolutionGrid, 0, wxEXPAND | wxALL | wxALIGN_TOP, 5);
 
 	// Set the column headings
 	resolutionGrid->SetColLabelValue(0, _T("Object"));

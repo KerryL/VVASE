@@ -96,7 +96,7 @@ EditSuspensionPanel::~EditSuspensionPanel()
 //==========================================================================
 BEGIN_EVENT_TABLE(EditSuspensionPanel, wxPanel)
 	EVT_GRID_SELECT_CELL(						EditSuspensionPanel::SelectCellEvent)
-	EVT_GRID_CELL_CHANGE(						EditSuspensionPanel::GridCellChangedEvent)
+	EVT_GRID_CELL_CHANGED(						EditSuspensionPanel::GridCellChangedEvent)
 	EVT_CHECKBOX(CheckBoxIsSymmetric,			EditSuspensionPanel::SymmetricCheckboxEvent)
 	EVT_CHECKBOX(CheckBoxFrontHasThirdSpring,	EditSuspensionPanel::FrontThirdCheckboxEvent)
 	EVT_CHECKBOX(CheckBoxRearHasThirdSpring,	EditSuspensionPanel::RearThirdCheckboxEvent)
@@ -166,58 +166,58 @@ void EditSuspensionPanel::UpdateInformation(Suspension *currentSuspension)
 	// Front third spring
 	if (currentSuspension->frontHasThirdSpring)
 	{
-		hardpoints->SetRowHeight(Suspension::FrontThirdDamperInboard + 1, hardpoints->GetRowHeight(0));
-		hardpoints->SetRowHeight(Suspension::FrontThirdDamperOutboard + 1, hardpoints->GetRowHeight(0));
-		hardpoints->SetRowHeight(Suspension::FrontThirdSpringInboard + 1, hardpoints->GetRowHeight(0));
-		hardpoints->SetRowHeight(Suspension::FrontThirdSpringOutboard + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(Suspension::FrontThirdDamperInboard + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(Suspension::FrontThirdDamperOutboard + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(Suspension::FrontThirdSpringInboard + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(Suspension::FrontThirdSpringOutboard + 1, hardpoints->GetRowHeight(0));
 	}
 	else
 	{
-		hardpoints->SetRowHeight(Suspension::FrontThirdDamperInboard + 1, 0);
-		hardpoints->SetRowHeight(Suspension::FrontThirdDamperOutboard + 1, 0);
-		hardpoints->SetRowHeight(Suspension::FrontThirdSpringInboard + 1, 0);
-		hardpoints->SetRowHeight(Suspension::FrontThirdSpringOutboard + 1, 0);
+		hardpoints->SetRowSize(Suspension::FrontThirdDamperInboard + 1, 0);
+		hardpoints->SetRowSize(Suspension::FrontThirdDamperOutboard + 1, 0);
+		hardpoints->SetRowSize(Suspension::FrontThirdSpringInboard + 1, 0);
+		hardpoints->SetRowSize(Suspension::FrontThirdSpringOutboard + 1, 0);
 	}
 
 	// Rear third spring
 	if (currentSuspension->rearHasThirdSpring)
 	{
-		hardpoints->SetRowHeight(Suspension::RearThirdDamperInboard + 1, hardpoints->GetRowHeight(0));
-		hardpoints->SetRowHeight(Suspension::RearThirdDamperOutboard + 1, hardpoints->GetRowHeight(0));
-		hardpoints->SetRowHeight(Suspension::RearThirdSpringInboard + 1, hardpoints->GetRowHeight(0));
-		hardpoints->SetRowHeight(Suspension::RearThirdSpringOutboard + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(Suspension::RearThirdDamperInboard + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(Suspension::RearThirdDamperOutboard + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(Suspension::RearThirdSpringInboard + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(Suspension::RearThirdSpringOutboard + 1, hardpoints->GetRowHeight(0));
 	}
 	else
 	{
-		hardpoints->SetRowHeight(Suspension::RearThirdDamperInboard + 1, 0);
-		hardpoints->SetRowHeight(Suspension::RearThirdDamperOutboard + 1, 0);
-		hardpoints->SetRowHeight(Suspension::RearThirdSpringInboard + 1, 0);
-		hardpoints->SetRowHeight(Suspension::RearThirdSpringOutboard + 1, 0);
+		hardpoints->SetRowSize(Suspension::RearThirdDamperInboard + 1, 0);
+		hardpoints->SetRowSize(Suspension::RearThirdDamperOutboard + 1, 0);
+		hardpoints->SetRowSize(Suspension::RearThirdSpringInboard + 1, 0);
+		hardpoints->SetRowSize(Suspension::RearThirdSpringOutboard + 1, 0);
 	}
 
 	// Front sway bar
 	// Removed bar mid points from list - this should be automatically calculated by VVASE
 	if (currentSuspension->frontBarStyle == Suspension::SwayBarTBar)
 	{
-		hardpoints->SetRowHeight(Suspension::FrontBarMidPoint + 1, hardpoints->GetRowHeight(0));
-		hardpoints->SetRowHeight(Suspension::FrontBarPivotAxis + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(Suspension::FrontBarMidPoint + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(Suspension::FrontBarPivotAxis + 1, hardpoints->GetRowHeight(0));
 	}
 	else
 	{
-		hardpoints->SetRowHeight(Suspension::FrontBarMidPoint + 1, 0);
-		hardpoints->SetRowHeight(Suspension::FrontBarPivotAxis + 1, 0);
+		hardpoints->SetRowSize(Suspension::FrontBarMidPoint + 1, 0);
+		hardpoints->SetRowSize(Suspension::FrontBarPivotAxis + 1, 0);
 	}
 
 	// Rear swaybar
 	if (currentSuspension->rearBarStyle == Suspension::SwayBarTBar)
 	{
-		hardpoints->SetRowHeight(Suspension::RearBarMidPoint + 1, hardpoints->GetRowHeight(0));
-		hardpoints->SetRowHeight(Suspension::RearBarPivotAxis + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(Suspension::RearBarMidPoint + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(Suspension::RearBarPivotAxis + 1, hardpoints->GetRowHeight(0));
 	}
 	else
 	{
-		hardpoints->SetRowHeight(Suspension::RearBarMidPoint + 1, 0);
-		hardpoints->SetRowHeight(Suspension::RearBarPivotAxis + 1, 0);
+		hardpoints->SetRowSize(Suspension::RearBarMidPoint + 1, 0);
+		hardpoints->SetRowSize(Suspension::RearBarPivotAxis + 1, 0);
 	}
 
 	// Update the values of all of the points
@@ -268,7 +268,7 @@ void EditSuspensionPanel::CreateControls()
 
 	// Second sizer gives more space around the controls
 	wxFlexGridSizer *mainSizer = new wxFlexGridSizer(1, 2, 2);
-	topSizer->Add(mainSizer, 1, wxALIGN_CENTER_HORIZONTAL | wxGROW | wxALL, 5);
+	topSizer->Add(mainSizer, 1, wxGROW | wxALL, 5);
 
 	// Create the grid for the hard point entry
 	hardpoints = new SuperGrid(this, wxID_ANY);
@@ -321,8 +321,8 @@ void EditSuspensionPanel::CreateControls()
 	// by the converter.  First column is stretchable
 	hardpoints->SetCellValue(3, 3, UnitConverter::GetInstance().FormatNumber(80.0));
 	hardpoints->AutoSizeColumn(3);
-	hardpoints->SetColumnWidth(1, hardpoints->GetColSize(3));
-	hardpoints->SetColumnWidth(2, hardpoints->GetColSize(3));
+	hardpoints->SetColSize(1, hardpoints->GetColSize(3));
+	hardpoints->SetColSize(2, hardpoints->GetColSize(3));
 	// The value we just put in cell (3,3) will get overwritten with a call to UpdateInformation()
 	hardpoints->AutoStretchColumn(0);
 

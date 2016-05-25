@@ -548,7 +548,7 @@ void OptionsDialog::CreateControls()
 	// Add the sizers to the MainSizer
 	kinematicsSizer->Add(corSizer, 0, wxALIGN_CENTER_HORIZONTAL);
 	kinematicsSizer->Add(radioOptionsSizer, 0, wxALIGN_CENTER_HORIZONTAL);
-	kinematicsSizer->Add(numberOfThreadsSizer, 0, wxALIGN_BOTTOM | wxALIGN_CENTER_HORIZONTAL);
+	kinematicsSizer->Add(numberOfThreadsSizer, 0, wxALIGN_CENTER_HORIZONTAL);
 
 	// Set the kinematics page's sizer
 	kinematicsPage->SetSizerAndFit(kinematicsTopSizer);
