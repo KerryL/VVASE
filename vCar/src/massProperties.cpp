@@ -49,15 +49,54 @@ MassProperties::MassProperties()
 {
 	// Initialize the mass properties
 	mass = 0.0;
+
 	ixx = 0.0;
 	iyy = 0.0;
 	izz = 0.0;
 	ixy = 0.0;
 	ixz = 0.0;
 	iyz = 0.0;
+
 	centerOfGravity.x = 0.0;
 	centerOfGravity.y = 0.0;
 	centerOfGravity.z = 0.0;
+
+	unsprungMass.leftFront = 0.0;
+	unsprungMass.rightFront = 0.0;
+	unsprungMass.leftRear = 0.0;
+	unsprungMass.rightRear = 0.0;
+
+	wheelInertias.leftFront.x = 0.0;
+	wheelInertias.leftFront.y = 0.0;
+	wheelInertias.leftFront.z = 0.0;
+
+	wheelInertias.rightFront.x = 0.0;
+	wheelInertias.rightFront.y = 0.0;
+	wheelInertias.rightFront.z = 0.0;
+
+	wheelInertias.leftRear.x = 0.0;
+	wheelInertias.leftRear.y = 0.0;
+	wheelInertias.leftRear.z = 0.0;
+
+	wheelInertias.rightRear.x = 0.0;
+	wheelInertias.rightRear.y = 0.0;
+	wheelInertias.rightRear.z = 0.0;
+
+	unsprungCentersOfGravity.leftFront.x = 0.0;
+	unsprungCentersOfGravity.leftFront.y = 0.0;
+	unsprungCentersOfGravity.leftFront.z = 0.0;
+
+	unsprungCentersOfGravity.rightFront.x = 0.0;
+	unsprungCentersOfGravity.rightFront.y = 0.0;
+	unsprungCentersOfGravity.rightFront.z = 0.0;
+
+	unsprungCentersOfGravity.leftRear.x = 0.0;
+	unsprungCentersOfGravity.leftRear.y = 0.0;
+	unsprungCentersOfGravity.leftRear.z = 0.0;
+
+	unsprungCentersOfGravity.rightRear.x = 0.0;
+	unsprungCentersOfGravity.rightRear.y = 0.0;
+	unsprungCentersOfGravity.rightRear.z = 0.0;
 }
 
 //==========================================================================
@@ -403,6 +442,7 @@ void MassProperties::Write(std::ofstream *outFile) const
 	outFile->write((char*)&centerOfGravity, sizeof(Vector));
 	outFile->write((char*)&unsprungMass, sizeof(WheelSet));
 	outFile->write((char*)&wheelInertias, sizeof(VectorSet));
+	outFile->write((char*)&unsprungCentersOfGravity, sizeof(VectorSet));
 }
 
 //==========================================================================
@@ -425,7 +465,21 @@ void MassProperties::Write(std::ofstream *outFile) const
 void MassProperties::Read(std::ifstream *inFile, int fileVersion)
 {
 	// Read this object from file accoring to the file version we're using
-	if (fileVersion >= 0)// All versions
+	if (fileVersion >= 4)
+	{
+		inFile->read((char*)&mass, sizeof(double));
+		inFile->read((char*)&ixx, sizeof(double));
+		inFile->read((char*)&iyy, sizeof(double));
+		inFile->read((char*)&izz, sizeof(double));
+		inFile->read((char*)&ixy, sizeof(double));
+		inFile->read((char*)&ixz, sizeof(double));
+		inFile->read((char*)&iyz, sizeof(double));
+		inFile->read((char*)&centerOfGravity, sizeof(Vector));
+		inFile->read((char*)&unsprungMass, sizeof(WheelSet));
+		inFile->read((char*)&wheelInertias, sizeof(VectorSet));
+		inFile->read((char*)&unsprungCentersOfGravity, sizeof(VectorSet));
+	}
+	else if (fileVersion >= 0)
 	{
 		inFile->read((char*)&mass, sizeof(double));
 		inFile->read((char*)&ixx, sizeof(double));
@@ -465,16 +519,17 @@ MassProperties& MassProperties::operator = (const MassProperties &massProperties
 		return *this;
 
 	// Perform the assignment
-	mass			= massProperties.mass;
-	ixx				= massProperties.ixx;
-	iyy				= massProperties.iyy;
-	izz				= massProperties.izz;
-	ixy				= massProperties.ixy;
-	ixz				= massProperties.ixz;
-	iyz				= massProperties.iyz;
-	centerOfGravity	= massProperties.centerOfGravity;
-	unsprungMass	= massProperties.unsprungMass;
-	wheelInertias	= massProperties.wheelInertias;
+	mass						= massProperties.mass;
+	ixx							= massProperties.ixx;
+	iyy							= massProperties.iyy;
+	izz							= massProperties.izz;
+	ixy							= massProperties.ixy;
+	ixz							= massProperties.ixz;
+	iyz							= massProperties.iyz;
+	centerOfGravity				= massProperties.centerOfGravity;
+	unsprungMass				= massProperties.unsprungMass;
+	wheelInertias				= massProperties.wheelInertias;
+	unsprungCentersOfGravity	= massProperties.unsprungCentersOfGravity;
 
 	return *this;
 }

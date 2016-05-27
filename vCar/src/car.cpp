@@ -304,7 +304,8 @@ Car::~Car()
 //const int Car::currentFileVersion = 0;// OBSOLETE 4/25/2009 - Added APPEARANCE_OPTIONS
 //const int Car::currentFileVersion = 1;// OBSOLETE 8/17/2009 - Fixed ENGINE::Write()
 //const int Car::currentFileVersion = 2;// OBSOLETE 7/13/2015 - Added Front/RearBarPivotAxis to Suspension
-const int Car::currentFileVersion = 3;
+//const int Car::currentFileVersion = 3;// OBSOLETE 5/27/2016 - Added unsprung mass CGs
+const int Car::currentFileVersion = 4;
 
 //==========================================================================
 // Class:			Car
