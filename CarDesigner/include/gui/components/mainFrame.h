@@ -40,6 +40,7 @@
 // VVASE headers
 #include "vUtilities/managedList.h"
 #include "vSolver/physics/kinematics.h"
+#include "vSolver/physics/quasiStatic.h"
 #include "gui/undoRedoStack.h"
 #include "gui/guiObject.h"	// Can't use a forward declaration here because
 							// ManagedList<GuiObject> can't compile without a definition
@@ -101,6 +102,7 @@ public:
 		wxString defaultFileName, wxString wildcard, long style);
 
 	void UpdateAnalysis();
+	bool ActiveAnalysisIsKinematic() const { return lastAnalysisWasKinematic; }
 
 	// Updates the output panel with current car output information 
 	// (should be called following an analysis update)
@@ -112,6 +114,7 @@ public:
 
 	// Returns the current inputs for the kinematics analysis
 	inline Kinematics::Inputs GetInputs() const { return kinematicInputs; }
+	inline QuasiStatic::Inputs GetQuasiStaticInputs() const { return quasiStaticInputs; }
 	inline bool GetUseRackTravel() const { return useRackTravel; }
 	inline void SetUseRackTravel(bool useRackTravel) { this->useRackTravel = useRackTravel; }
 
@@ -194,6 +197,7 @@ private:
 
 	// The input parameters for the kinematic analyses
 	Kinematics::Inputs kinematicInputs;
+	QuasiStatic::Inputs quasiStaticInputs;
 	bool useRackTravel;// if false, we use steering wheel angle
 	bool lastAnalysisWasKinematic;
 	

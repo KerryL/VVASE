@@ -63,6 +63,9 @@
     <ClInclude Include="..\common\include\vSolver\threads\threadJob.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\common\include\vSolver\physics\quasiStatic.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\optimization\geneticAlgorithm.cpp">
@@ -111,6 +114,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\threads\threadJob.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\physics\quasiStatic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

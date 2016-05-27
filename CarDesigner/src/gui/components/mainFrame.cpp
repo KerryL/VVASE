@@ -2290,6 +2290,8 @@ void MainFrame::KinematicToolbarSteerChangeEvent(wxCommandEvent& WXUNUSED(event)
 	else
 		kinematicInputs.rackTravel = UnitConverter::GetInstance().ConvertAngleInput(value) * 1.0;// * RackRatio;// FIXME:  Use rack ratio
 
+	quasiStaticInputs.rackTravel = kinematicInputs.rackTravel;
+
 	// Update the analysis
 	UpdateAnalysis();
 	UpdateOutputPanel();
@@ -2322,7 +2324,7 @@ void MainFrame::QuasiStaticToolbarGxChangeEvent(wxCommandEvent& /*event*/)
 	if (!textBox->GetValue().ToDouble(&value))
 		return;
 
-	// TODO:  Send input somewhere
+	quasiStaticInputs.gx = value;
 
 	lastAnalysisWasKinematic = false;
 
@@ -2358,7 +2360,7 @@ void MainFrame::QuasiStaticToolbarGyChangeEvent(wxCommandEvent& /*event*/)
 	if (!textBox->GetValue().ToDouble(&value))
 		return;
 
-	// TODO:  Send input somewhere
+	quasiStaticInputs.gy = value;
 
 	lastAnalysisWasKinematic = false;
 
