@@ -208,6 +208,22 @@ Car::Car()
 	// Test mass properties
 	massProperties->centerOfGravity.Set(34.0, 0.0, 8.75);
 	massProperties->mass = 520.0 / 32.174;
+	massProperties->unsprungMass.leftFront = 35.0 / 32.174;
+	massProperties->unsprungMass.rightFront = 35.0 / 32.174;
+	massProperties->unsprungMass.leftRear = 25.0 / 32.174;
+	massProperties->unsprungMass.rightRear = 25.0 / 32.174;
+	massProperties->unsprungCentersOfGravity.leftFront.Set(0.0, -20.0, 10.0);
+	massProperties->unsprungCentersOfGravity.rightFront.Set(0.0, 20.0, 10.0);
+	massProperties->unsprungCentersOfGravity.leftRear.Set(66.5, -20.0, 10.0);
+	massProperties->unsprungCentersOfGravity.rightRear.Set(66.5, 20.0, 10.0);
+
+	// Test spring rates
+	suspension->barRate.front = 100.0;// [in-lbf/rad]
+	suspension->barRate.rear = 100.0;// [in-lbf/rad]
+	suspension->leftFront.spring.rate = 120.0;// [lb/in]
+	suspension->rightFront.spring.rate = 120.0;// [lb/in]
+	suspension->leftRear.spring.rate = 140.0;// [lb/in]
+	suspension->rightRear.spring.rate = 140.0;// [lb/in]
 }
 
 //==========================================================================
