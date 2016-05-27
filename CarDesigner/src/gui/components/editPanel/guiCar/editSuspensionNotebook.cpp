@@ -26,6 +26,7 @@
 #include "gui/components/editPanel/guiCar/editSuspensionNotebook.h"
 #include "gui/components/editPanel/guiCar/editCornerPanel.h"
 #include "gui/components/editPanel/guiCar/editSuspensionPanel.h"
+#include "gui/components/editPanel/guiCar/editSuspensionRatesPanel.h"
 #include "vUtilities/debugger.h"
 
 //==========================================================================
@@ -134,32 +135,33 @@ void EditSuspensionNotebook::UpdateInformation(Car *currentCar)
 	// correct.
 	if (currentCar->suspension->isSymmetric)
 	{
-		// A symmetric car only gets three pages
-		if (GetPageCount() > 3)
+		// A symmetric car only gets four pages
+		if (GetPageCount() > 4)
 		{
 			// Remove the extra pages (the left side pages)
-			DeletePage(4);
-			DeletePage(2);
+			DeletePage(5);
+			DeletePage(3);
 
 			// Set the left side pointers to NULL
 			leftFront = NULL;
 			leftRear = NULL;
 
 			// Rename the tabs
-			SetPageText(1, _T("Front"));
-			SetPageText(2, _T("Rear"));
+			SetPageText(2, _T("Front"));
+			SetPageText(3, _T("Rear"));
 		}
 	}
 	else// Not symmetric
 	{
 		// Make sure we have enough pages
-		if (GetPageCount() != 5)
+		if (GetPageCount() != 6)
 			// Delete and re-create all of the pages
 			CreateControls();
 	}
 
 	// Call the update functions for the pages, too
 	suspension->UpdateInformation(currentCar->suspension);
+	rates->UpdateInformation(currentCar->suspension);
 	rightFront->UpdateInformation(&currentCar->suspension->rightFront,
 		currentCar->suspension->frontBarStyle, currentCar->HasFrontHalfShafts());
 	if (leftFront)
@@ -198,6 +200,7 @@ void EditSuspensionNotebook::CreateControls()
 
 	// Create the notebook pages
 	suspension = new EditSuspensionPanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
+	rates = new EditSuspensionRatesPanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
 	rightFront = new EditCornerPanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
 	leftFront = new EditCornerPanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
 	rightRear = new EditCornerPanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
@@ -205,6 +208,7 @@ void EditSuspensionNotebook::CreateControls()
 
 	// Add them to the notebook
 	AddPage(suspension, _T("General"));
+	AddPage(rates, _T("Rates"));
 	AddPage(rightFront, _T("RF"));
 	AddPage(leftFront, _T("LF"));
 	AddPage(rightRear, _T("RR"));

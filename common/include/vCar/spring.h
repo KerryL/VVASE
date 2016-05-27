@@ -24,6 +24,8 @@ public:
 	Spring();
 	~Spring();
 
+	double rate;// [lb/in]
+
 private:
 };
 

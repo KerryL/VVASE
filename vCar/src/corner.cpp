@@ -368,9 +368,8 @@ void Corner::Write(std::ofstream *outFile) const
 	outFile->write((char*)&staticCamber, sizeof(double));
 	outFile->write((char*)&staticToe, sizeof(double));
 
-	// NOT YET USED!!!
-	/*Spring spring;
-	Damper damper;*/
+	outFile->write((char*)&spring.rate, sizeof(double));
+	//Damper damper;
 
 	outFile->write((char*)&actuationAttachment, sizeof(ActuationAttachment));
 	outFile->write((char*)&actuationType, sizeof(ActuationType));
@@ -398,7 +397,23 @@ void Corner::Write(std::ofstream *outFile) const
 void Corner::Read(std::ifstream *inFile, int fileVersion)
 {
 	// Read this object from file accoring to the file version we're using
-	if (fileVersion >= 0)// All versions
+	if (fileVersion >= 4)
+	{
+		// Read the components that make up this object from file
+		inFile->read((char*)&staticCamber, sizeof(double));
+		inFile->read((char*)&staticToe, sizeof(double));
+
+		inFile->read((char*)&spring.rate, sizeof(double));
+
+		// NOT YET USED!!!
+		//Damper damper;
+
+		inFile->read((char*)&actuationAttachment, sizeof(ActuationAttachment));
+		inFile->read((char*)&actuationType, sizeof(ActuationType));
+		inFile->read((char*)&location, sizeof(Location));
+		inFile->read((char*)hardpoints, sizeof(Vector) * NumberOfHardpoints);
+	}
+	else if (fileVersion >= 0)
 	{
 		// Read the components that make up this object from file
 		inFile->read((char*)&staticCamber, sizeof(double));
