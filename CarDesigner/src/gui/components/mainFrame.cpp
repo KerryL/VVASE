@@ -2832,7 +2832,7 @@ void MainFrame::ReadConfiguration()
 	UnitConverter::GetInstance().SetInertiaUnits(UnitConverter::UnitsOfInertia(
 		configurationFile->Read(_T("/Units/Inertia"), 0l)));
 	UnitConverter::GetInstance().SetMassUnits(UnitConverter::UnitsOfMass(
-		configurationFile->Read(_T("/Units/Mass"), 0l)));
+		configurationFile->Read(_T("/Units/Mass"), 1l)));
 	UnitConverter::GetInstance().SetMomentUnits(UnitConverter::UnitsOfMoment(
 		configurationFile->Read(_T("/Units/Moment"), 0l)));
 	UnitConverter::GetInstance().SetPowerUnits(UnitConverter::UnitsOfPower(
