@@ -151,6 +151,7 @@ private:
 
 	void CreateMenuBar();
 	void CreateKinematicAnalysisToolbar();
+	void CreateQuasiStaticAnalysisToolbar();
 	void Create3DToolbar();
 
 	// Functions that do some of the frame initialization and control positioning
@@ -178,6 +179,7 @@ private:
 	static const wxString paneNameOutputPane;
 	static const wxString paneNameOutputList;
 	static const wxString paneNameKinematicsToolbar;
+	static const wxString paneNameQuasiStaticToolbar;
 	static const wxString paneName3DToolbar;
 
 	static const wxSize minFrameSize;
@@ -193,6 +195,7 @@ private:
 	// The input parameters for the kinematic analyses
 	Kinematics::Inputs kinematicInputs;
 	bool useRackTravel;// if false, we use steering wheel angle
+	bool lastAnalysisWasKinematic;
 	
 	bool useOrthoView;
 
@@ -237,6 +240,7 @@ private:
 		IdMenuIterationXAxisRackTravel,
 
 		IdMenuViewToolbarsKinematic,
+		IdMenuViewToolbarsQuasiStatic,
 		IdMenuViewToolbars3D,
 		IdMenuViewSystemsTree,
 		IdMenuViewEditPanel,
@@ -257,6 +261,10 @@ private:
 		IdToolbarKinematicRoll,
 		IdToolbarKinematicHeave,
 		IdToolbarKinematicSteer,
+
+		// Quasi-Static Analysis toolbar
+		IdToolbarQuasiStaticGx,
+		IdToolbarQuasiStaticGy,
 
 		// 3D View toolbar
 		IdToolbar3DOrtho,
@@ -302,6 +310,7 @@ private:
 	void IterationXAxisRackTravelClickEvent(wxCommandEvent &event);
 
 	void ViewToolbarsKinematicEvent(wxCommandEvent &event);
+	void ViewToolbarsQuasiStaticEvent(wxCommandEvent &event);
 	void ViewToolbars3DEvent(wxCommandEvent &event);
 	void ViewSystemsTreeEvent(wxCommandEvent &event);
 	void ViewEditPanelEvent(wxCommandEvent &event);
@@ -317,11 +326,15 @@ private:
 	void HelpAboutEvent(wxCommandEvent &event);
 
 	// Toolbars
-	// Static Analysis
+	// Kinematic Analysis
 	void KinematicToolbarPitchChangeEvent(wxCommandEvent &event);
 	void KinematicToolbarRollChangeEvent(wxCommandEvent &event);
 	void KinematicToolbarHeaveChangeEvent(wxCommandEvent &event);
 	void KinematicToolbarSteerChangeEvent(wxCommandEvent &event);
+
+	// Quasi-Static Analysis
+	void QuasiStaticToolbarGxChangeEvent(wxCommandEvent &event);
+	void QuasiStaticToolbarGyChangeEvent(wxCommandEvent &event);
 
 	// 3D
 	void Toolbar3DPerspectiveClickEvent(wxCommandEvent &event);
@@ -341,6 +354,7 @@ private:
 
 	wxMenuBar *menuBar;
 	wxToolBar *kinematicToolbar;
+	wxToolBar *quasiStaticToolbar;
 	wxToolBar *toolbar3D;
 
 	ManagedList<GuiObject> openObjectList;
