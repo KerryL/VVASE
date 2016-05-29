@@ -119,6 +119,7 @@
     <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editMassPanel.h" />
     <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editSuspensionNotebook.h" />
     <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editSuspensionPanel.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editSuspensionRatesPanel.h" />
     <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editTiresPanel.h" />
     <ClInclude Include="CarDesigner\include\gui\components\editPanel\iteration\editIterationNotebook.h" />
     <ClInclude Include="CarDesigner\include\gui\components\editPanel\iteration\editIterationOptionsPanel.h" />
@@ -167,6 +168,7 @@
     <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editMassPanel.cpp" />
     <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editSuspensionNotebook.cpp" />
     <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editSuspensionPanel.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editSuspensionRatesPanel.cpp" />
     <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editTiresPanel.cpp" />
     <ClCompile Include="CarDesigner\src\gui\components\editPanel\iteration\editIterationNotebook.cpp" />
     <ClCompile Include="CarDesigner\src\gui\components\editPanel\iteration\editIterationOptionsPanel.cpp" />

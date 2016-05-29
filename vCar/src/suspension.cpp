@@ -71,7 +71,10 @@ Suspension::Suspension() : rightFront(Corner::LocationRightFront),
 	rearBarAttachment = BarAttachmentBellcrank;
 	frontHasThirdSpring = false;
 	rearHasThirdSpring = false;
-	// FIXME:  Third springs and dampers!
+
+	frontThirdSpring.rate = 0.0;
+	rearThirdSpring.rate = 0.0;
+	// FIXME:  Third dampers!
 }
 
 //==========================================================================
@@ -111,6 +114,8 @@ void Suspension::Write(std::ofstream *outFile) const
 	outFile->write((char*)&rearBarAttachment, sizeof(BarAttachment));
 	outFile->write((char*)&frontHasThirdSpring, sizeof(bool));
 	outFile->write((char*)&rearHasThirdSpring, sizeof(bool));
+	outFile->write((char*)&frontThirdSpring.rate, sizeof(double));
+	outFile->write((char*)&rearThirdSpring.rate, sizeof(double));
 }
 
 //==========================================================================
@@ -164,10 +169,13 @@ void Suspension::Read(std::ifstream *inFile, int fileVersion)
 	inFile->read((char*)&rearHasThirdSpring, sizeof(bool));
 
 	// Third spring and damper objects
+	if (fileVersion >= 4)
+	{
+		inFile->read((char*)&frontThirdSpring.rate, sizeof(double));
+		inFile->read((char*)&rearThirdSpring.rate, sizeof(double));
+	}
 	// NOT YET USED!!!
-	/*Spring FrontThirdSpring;
-	Spring RearThirdSpring;
-	Damper FrontThirdDamper;
+	/*Damper FrontThirdDamper;
 	Damper RearThirdDamper;*/
 }
 

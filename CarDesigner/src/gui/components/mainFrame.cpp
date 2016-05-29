@@ -121,8 +121,10 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxEmptyString, wxDefaultPositio
 		| wxTE_RICH);
 
 	kinematicToolbar = NULL;
+	quasiStaticToolbar = NULL;
 	toolbar3D = NULL;
 	CreateKinematicAnalysisToolbar();
+	CreateQuasiStaticAnalysisToolbar();
 	Create3DToolbar();
 
 	CreateMenuBar();
@@ -200,6 +202,7 @@ const wxString MainFrame::paneNameEditPanel(_T("EditPanel"));
 const wxString MainFrame::paneNameOutputPane(_T("OutputPane"));
 const wxString MainFrame::paneNameOutputList(_T("OutputList"));
 const wxString MainFrame::paneNameKinematicsToolbar(_T("KinematicsToolbar"));
+const wxString MainFrame::paneNameQuasiStaticToolbar(_T("QuasiStaticToolbar"));
 const wxString MainFrame::paneName3DToolbar(_T("3DToolbar"));
 
 //==========================================================================
@@ -333,6 +336,8 @@ void MainFrame::SetProperties()
 	
 	ReadConfiguration();
 
+	lastAnalysisWasKinematic = true;
+
 	UpdateViewMenuChecks();
 
 	toolbar3D->ToggleTool(IdToolbar3DOrtho, useOrthoView);
@@ -426,6 +431,7 @@ void MainFrame::UpdateViewMenuChecks()
 {
 	// Depending on whether elements are shown, check the corresponding menu item
 	menuBar->Check(IdMenuViewToolbarsKinematic, manager.GetPane(kinematicToolbar).IsShown());
+	menuBar->Check(IdMenuViewToolbarsQuasiStatic, manager.GetPane(quasiStaticToolbar).IsShown());
 	menuBar->Check(IdMenuViewToolbars3D, manager.GetPane(toolbar3D).IsShown());
 
 	menuBar->Check(IdMenuViewSystemsTree, manager.GetPane(systemsTree).IsShown());
@@ -464,6 +470,8 @@ void MainFrame::OnPaneClose(wxAuiManagerEvent& event)
 		id = IdMenuViewOutputList;
 	else if (name.IsSameAs(paneNameKinematicsToolbar))
 		id = IdMenuViewToolbarsKinematic;
+	else if (name.IsSameAs(paneNameQuasiStaticToolbar))
+		id = IdMenuViewToolbarsQuasiStatic;
 	else if (name.IsSameAs(paneName3DToolbar))
 		id = IdMenuViewToolbars3D;
 	else
@@ -675,6 +683,7 @@ void MainFrame::CreateMenuBar()
 	mnuView->AppendCheckItem(IdMenuViewOutputList, _T("Output List"));
 	wxMenu *mnuViewToolbars = new wxMenu();
 	mnuViewToolbars->AppendCheckItem(IdMenuViewToolbarsKinematic, _T("Kinematic Analysis"));
+	mnuViewToolbars->AppendCheckItem(IdMenuViewToolbarsQuasiStatic, _T("Quasi-Static Analysis"));
 	mnuViewToolbars->AppendCheckItem(IdMenuViewToolbars3D, _T("3D View"));
 	mnuView->AppendSubMenu(mnuViewToolbars, _T("Toolbars"));
 	mnuView->AppendSeparator();
@@ -771,8 +780,61 @@ void MainFrame::CreateKinematicAnalysisToolbar()
 
 	kinematicToolbar->Realize();
 
-	manager.AddPane(kinematicToolbar, wxAuiPaneInfo().Name(_T("KinematicToolbar")).
+	manager.AddPane(kinematicToolbar, wxAuiPaneInfo().Name(paneNameKinematicsToolbar).
 		Caption(_T("Kinematic Analysis")).ToolbarPane().Top().Row(1).Position(1).
+		LeftDockable(false).RightDockable(false));
+}
+
+//==========================================================================
+// Class:			MainFrame
+// Function:		CreateQuasiStaticAnalysisToolbar
+//
+// Description:		Creates the toolbar and adds the buttons and icons. Also
+//					adds the toolbar to the frame in the appropriate
+//					position.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void MainFrame::CreateQuasiStaticAnalysisToolbar()
+{
+	if (quasiStaticToolbar != NULL)
+		return;
+
+	quasiStaticToolbar = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+		wxTB_FLAT | wxTB_NODIVIDER);
+
+	// Create the controls
+	wxStaticText *gxLabel = new wxStaticText(quasiStaticToolbar, wxID_ANY, _T("Gx"),
+		wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
+	wxTextCtrl *gxSet = new wxTextCtrl(quasiStaticToolbar, IdToolbarQuasiStaticGx,
+		_T("0"), wxDefaultPosition, wxSize(40, -1));
+	gxSet->SetMaxLength(5);
+
+	wxStaticText *gyLabel = new wxStaticText(quasiStaticToolbar, wxID_ANY, _T("Gy"),
+		wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
+	wxTextCtrl *gySet = new wxTextCtrl(quasiStaticToolbar, IdToolbarQuasiStaticGy,
+		_T("0"), wxDefaultPosition, wxSize(40, -1));
+	gxSet->SetMaxLength(5);
+
+	// Add the controls to the toolbar
+	quasiStaticToolbar->AddControl(gxLabel);
+	quasiStaticToolbar->AddControl(gxSet);
+	quasiStaticToolbar->AddSeparator();
+	quasiStaticToolbar->AddControl(gyLabel);
+	quasiStaticToolbar->AddControl(gySet);
+
+	quasiStaticToolbar->Realize();
+
+	manager.AddPane(quasiStaticToolbar, wxAuiPaneInfo().Name(paneNameQuasiStaticToolbar).
+		Caption(_T("Quasi-Static Analysis")).ToolbarPane().Top().Row(1).Position(2).
 		LeftDockable(false).RightDockable(false));
 }
 
@@ -822,7 +884,7 @@ void MainFrame::Create3DToolbar()
 	toolbar3D->Realize();
 
 	manager.AddPane(toolbar3D, wxAuiPaneInfo().Name(_T("3DToolbar")).
-		Caption(_T("3D View")).ToolbarPane().Top().Row(1).Position(2));
+		Caption(_T("3D View")).ToolbarPane().Top().Row(1).Position(3));
 }
 
 //==========================================================================
@@ -879,6 +941,7 @@ BEGIN_EVENT_TABLE(MainFrame, wxFrame)
 	EVT_MENU(IdMenuIterationXAxisRackTravel,	MainFrame::IterationXAxisRackTravelClickEvent)
 
 	EVT_MENU(IdMenuViewToolbarsKinematic,		MainFrame::ViewToolbarsKinematicEvent)
+	EVT_MENU(IdMenuViewToolbarsQuasiStatic,		MainFrame::ViewToolbarsQuasiStaticEvent)
 	EVT_MENU(IdMenuViewToolbars3D,				MainFrame::ViewToolbars3DEvent)
 	EVT_MENU(IdMenuViewSystemsTree,				MainFrame::ViewSystemsTreeEvent)
 	EVT_MENU(IdMenuViewEditPanel,				MainFrame::ViewEditPanelEvent)
@@ -894,12 +957,17 @@ BEGIN_EVENT_TABLE(MainFrame, wxFrame)
 	EVT_MENU(IdMenuHelpAbout,					MainFrame::HelpAboutEvent)
 
 	// Toolbars
-	// Static Analysis
+	// Kinematic Analysis
 	EVT_TEXT(IdToolbarKinematicPitch,			MainFrame::KinematicToolbarPitchChangeEvent)
 	EVT_TEXT(IdToolbarKinematicRoll,			MainFrame::KinematicToolbarRollChangeEvent)
 	EVT_TEXT(IdToolbarKinematicHeave,			MainFrame::KinematicToolbarHeaveChangeEvent)
 	EVT_TEXT(IdToolbarKinematicSteer,			MainFrame::KinematicToolbarSteerChangeEvent)
 
+	// Quasi-static Analysis
+	EVT_TEXT(IdToolbarQuasiStaticGx,			MainFrame::QuasiStaticToolbarGxChangeEvent)
+	EVT_TEXT(IdToolbarQuasiStaticGy,			MainFrame::QuasiStaticToolbarGyChangeEvent)
+
+	// 3D
 	EVT_MENU(IdToolbar3DPerspective,			MainFrame::Toolbar3DPerspectiveClickEvent)
 	EVT_MENU(IdToolbar3DOrtho,					MainFrame::Toolbar3DOrthoClickEvent)
 
@@ -1665,6 +1733,28 @@ void MainFrame::ViewToolbarsKinematicEvent(wxCommandEvent &event)
 
 //==========================================================================
 // Class:			MainFrame
+// Function:		ViewToolbarsQuasiStaticEvent
+//
+// Description:		Event handler for the View menu's Quasi-Static Toolbar item.
+//
+// Input Arguments:
+//		event	= wxCommandEvent&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void MainFrame::ViewToolbarsQuasiStaticEvent(wxCommandEvent &event)
+{
+	manager.GetPane(quasiStaticToolbar).Show(event.IsChecked());
+	manager.Update();
+}
+
+//==========================================================================
+// Class:			MainFrame
 // Function:		ViewToolbars3DEvent
 //
 // Description:		Event handler for the View menu's Kinematic Toolbar item.
@@ -2078,6 +2168,8 @@ void MainFrame::KinematicToolbarPitchChangeEvent(wxCommandEvent& WXUNUSED(event)
 	// Set the value for the kinematic analysis object
 	kinematicInputs.pitch = UnitConverter::GetInstance().ConvertAngleInput(value);
 
+	lastAnalysisWasKinematic = true;
+
 	// Update the analysis
 	UpdateAnalysis();
 	UpdateOutputPanel();
@@ -2116,6 +2208,8 @@ void MainFrame::KinematicToolbarRollChangeEvent(wxCommandEvent& WXUNUSED(event))
 
 	// Set the value for the kinematic analysis object
 	kinematicInputs.roll = UnitConverter::GetInstance().ConvertAngleInput(value);
+
+	lastAnalysisWasKinematic = true;
 
 	// Update the analysis
 	UpdateAnalysis();
@@ -2156,6 +2250,8 @@ void MainFrame::KinematicToolbarHeaveChangeEvent(wxCommandEvent& WXUNUSED(event)
 	// Set the value for the kinematic analysis object
 	kinematicInputs.heave = UnitConverter::GetInstance().ConvertDistanceInput(value);
 
+	lastAnalysisWasKinematic = true;
+
 	// Update the analysis
 	UpdateAnalysis();
 	UpdateOutputPanel();
@@ -2193,6 +2289,80 @@ void MainFrame::KinematicToolbarSteerChangeEvent(wxCommandEvent& WXUNUSED(event)
 		kinematicInputs.rackTravel = UnitConverter::GetInstance().ConvertDistanceInput(value);
 	else
 		kinematicInputs.rackTravel = UnitConverter::GetInstance().ConvertAngleInput(value) * 1.0;// * RackRatio;// FIXME:  Use rack ratio
+
+	quasiStaticInputs.rackTravel = kinematicInputs.rackTravel;
+
+	// Update the analysis
+	UpdateAnalysis();
+	UpdateOutputPanel();
+}
+
+//==========================================================================
+// Class:			MainFrame
+// Function:		QuasiStaticToolbarGxChangeEvent
+//
+// Description:		Applies Gx to quasi-static analysis.
+//
+// Input Arguments:
+//		event	= &wxCommandEvent
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void MainFrame::QuasiStaticToolbarGxChangeEvent(wxCommandEvent& /*event*/)
+{
+	wxTextCtrl *textBox = static_cast<wxTextCtrl*>(quasiStaticToolbar->FindControl(IdToolbarQuasiStaticGx));
+
+	if (textBox == NULL)
+		return;
+
+	double value;
+	if (!textBox->GetValue().ToDouble(&value))
+		return;
+
+	quasiStaticInputs.gx = value;
+
+	lastAnalysisWasKinematic = false;
+
+	// Update the analysis
+	UpdateAnalysis();
+	UpdateOutputPanel();
+}
+
+//==========================================================================
+// Class:			MainFrame
+// Function:		QuasiStaticToolbarGyChangeEvent
+//
+// Description:		Applies Gy to quasi-static analysis.
+//
+// Input Arguments:
+//		event	= &wxCommandEvent
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void MainFrame::QuasiStaticToolbarGyChangeEvent(wxCommandEvent& /*event*/)
+{
+	wxTextCtrl *textBox = static_cast<wxTextCtrl*>(quasiStaticToolbar->FindControl(IdToolbarQuasiStaticGy));
+
+	if (textBox == NULL)
+		return;
+
+	double value;
+	if (!textBox->GetValue().ToDouble(&value))
+		return;
+
+	quasiStaticInputs.gy = value;
+
+	lastAnalysisWasKinematic = false;
 
 	// Update the analysis
 	UpdateAnalysis();
@@ -2664,7 +2834,7 @@ void MainFrame::ReadConfiguration()
 	UnitConverter::GetInstance().SetInertiaUnits(UnitConverter::UnitsOfInertia(
 		configurationFile->Read(_T("/Units/Inertia"), 0l)));
 	UnitConverter::GetInstance().SetMassUnits(UnitConverter::UnitsOfMass(
-		configurationFile->Read(_T("/Units/Mass"), 0l)));
+		configurationFile->Read(_T("/Units/Mass"), 1l)));
 	UnitConverter::GetInstance().SetMomentUnits(UnitConverter::UnitsOfMoment(
 		configurationFile->Read(_T("/Units/Moment"), 0l)));
 	UnitConverter::GetInstance().SetPowerUnits(UnitConverter::UnitsOfPower(

@@ -208,6 +208,22 @@ Car::Car()
 	// Test mass properties
 	massProperties->centerOfGravity.Set(34.0, 0.0, 8.75);
 	massProperties->mass = 520.0 / 32.174;
+	massProperties->unsprungMass.leftFront = 35.0 / 32.174;
+	massProperties->unsprungMass.rightFront = 35.0 / 32.174;
+	massProperties->unsprungMass.leftRear = 25.0 / 32.174;
+	massProperties->unsprungMass.rightRear = 25.0 / 32.174;
+	massProperties->unsprungCentersOfGravity.leftFront.Set(0.0, -20.0, 10.0);
+	massProperties->unsprungCentersOfGravity.rightFront.Set(0.0, 20.0, 10.0);
+	massProperties->unsprungCentersOfGravity.leftRear.Set(66.5, -20.0, 10.0);
+	massProperties->unsprungCentersOfGravity.rightRear.Set(66.5, 20.0, 10.0);
+
+	// Test spring rates
+	suspension->barRate.front = 100.0;// [in-lbf/rad]
+	suspension->barRate.rear = 100.0;// [in-lbf/rad]
+	suspension->leftFront.spring.rate = 120.0;// [lb/in]
+	suspension->rightFront.spring.rate = 120.0;// [lb/in]
+	suspension->leftRear.spring.rate = 140.0;// [lb/in]
+	suspension->rightRear.spring.rate = 140.0;// [lb/in]
 }
 
 //==========================================================================
@@ -304,7 +320,8 @@ Car::~Car()
 //const int Car::currentFileVersion = 0;// OBSOLETE 4/25/2009 - Added APPEARANCE_OPTIONS
 //const int Car::currentFileVersion = 1;// OBSOLETE 8/17/2009 - Fixed ENGINE::Write()
 //const int Car::currentFileVersion = 2;// OBSOLETE 7/13/2015 - Added Front/RearBarPivotAxis to Suspension
-const int Car::currentFileVersion = 3;
+//const int Car::currentFileVersion = 3;// OBSOLETE 5/27/2016 - Added unsprung mass CGs
+const int Car::currentFileVersion = 4;
 
 //==========================================================================
 // Class:			Car

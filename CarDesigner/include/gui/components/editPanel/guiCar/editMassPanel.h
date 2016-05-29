@@ -19,9 +19,13 @@
 // wxWidgets headers
 #include <wx/wx.h>
 
+// wxWidgets forward declarations
+class wxGridEvent;
+
 // VVASE forward declarations
 class EditPanel;
 class MassProperties;
+class SuperGrid;
 
 class EditMassPanel : public wxScrolledWindow
 {
@@ -48,13 +52,27 @@ private:
 		TextBoxIyz,
 
 		TextBoxMass,
-		TextBoxCenterOfGravityX,
-		TextBoxCenterOfGravityY,
-		TextBoxCenterOfGravityZ
+		TextBoxUnsprungMassLeftFront,
+		TextBoxUnsprungMassRightFront,
+		TextBoxUnsprungMassLeftRear,
+		TextBoxUnsprungMassRightRear
+	};
+
+	enum GridRows
+	{
+		RowUnits,
+		RowSprungMassCG,
+		RowUnsprungLeftFrontCG,
+		RowUnsprungRightFrontCG,
+		RowUnsprungLeftRearCG,
+		RowUnsprungRightRearCG,
+
+		GridRowCount
 	};
 
 	// Event handlers-----------------------------------------------------
 	void TextBoxEditEvent(wxCommandEvent &event);
+	void GridCellChangeEvent(wxGridEvent &event);
 	// End event handlers-------------------------------------------------
 
 	// The text box controls
@@ -66,14 +84,20 @@ private:
 	wxTextCtrl *iyz;
 
 	wxTextCtrl *mass;
-	wxTextCtrl *centerOfGravityX;
-	wxTextCtrl *centerOfGravityY;
-	wxTextCtrl *centerOfGravityZ;
+	wxTextCtrl *unsprungMassLeftFront;
+	wxTextCtrl *unsprungMassRightFront;
+	wxTextCtrl *unsprungMassLeftRear;
+	wxTextCtrl *unsprungMassRightRear;
+
+	SuperGrid *centerOfGravity;
 
 	// The static text controls
 	wxStaticText *inertiaUnitsLabel;
 	wxStaticText *massUnitsLabel;
-	wxStaticText *cogUnitsLabel;
+	wxStaticText *unsprungMassLeftFrontUnitsLabel;
+	wxStaticText *unsprungMassRightFrontUnitsLabel;
+	wxStaticText *unsprungMassLeftRearUnitsLabel;
+	wxStaticText *unsprungMassRightRearUnitsLabel;
 
 	wxStaticText *iyx;
 	wxStaticText *izx;

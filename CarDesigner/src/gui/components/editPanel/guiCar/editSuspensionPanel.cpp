@@ -17,7 +17,7 @@
 //	3/28/2009	- Changed action on non-numeric input to "do nothing" instead of "replace
 //				  with last value," K. Loux
 
-// CarDesigner headers
+// Local headers
 #include "vCar/drivetrain.h"
 #include "vCar/suspension.h"
 #include "gui/renderer/carRenderer.h"

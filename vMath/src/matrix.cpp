@@ -1108,7 +1108,7 @@ double Matrix::Pythag(const double& a, const double &b) const
 unsigned int Matrix::GetRank() const
 {
 	// TODO:  Is it better to use SVD for this?  Rank = # of non-zero singular values
-	Matrix reduced = GetRowReduced();
+	/*Matrix reduced = GetRowReduced();
 
 	unsigned int rank(0), curRow, curCol;
 	for (curRow = 0; curRow < rows; curRow++)
@@ -1123,6 +1123,22 @@ unsigned int Matrix::GetRank() const
 				break;
 			}
 		}
+	}
+
+	return rank;*/
+	Matrix u;
+	Matrix v;
+	Matrix w;
+
+	if (!GetSingularValueDecomposition(u, v, w))
+		return 0;
+
+	const double epsilon(1.0e-10);// TODO:  Make this an argument
+	unsigned int i, rank(0);
+	for (i = 0; i < w.GetNumberOfRows(); i++)
+	{
+		if (fabs(w(i,i)) > epsilon)
+			rank++;
 	}
 
 	return rank;

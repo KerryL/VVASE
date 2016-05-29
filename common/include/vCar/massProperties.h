@@ -38,16 +38,17 @@ public:
 	void Read(std::ifstream *inFile, int fileVersion);
 
 	// Class properties
-	double mass;					// [slug]
-	double ixx;						// [slug-in^2]
-	double iyy;						// [slug-in^2]
-	double izz;						// [slug-in^2]
-	double ixy;						// [slug-in^2]
-	double ixz;						// [slug-in^2]
-	double iyz;						// [slug-in^2]
-	Vector centerOfGravity;			// [in]
-	WheelSet unsprungMass;			// [slug]
-	VectorSet wheelInertias;		// [slug-in^2]
+	double mass;						// [slug]
+	double ixx;							// [slug-in^2]
+	double iyy;							// [slug-in^2]
+	double izz;							// [slug-in^2]
+	double ixy;							// [slug-in^2]
+	double ixz;							// [slug-in^2]
+	double iyz;							// [slug-in^2]
+	Vector centerOfGravity;				// [in]
+	WheelSet unsprungMass;				// [slug]
+	VectorSet wheelInertias;			// [slug-in^2]
+	VectorSet unsprungCentersOfGravity;	// [in]
 
 	// To check the values that the user inputs
 	bool IsValidInertiaTensor() const;

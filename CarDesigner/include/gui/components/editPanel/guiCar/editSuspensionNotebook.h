@@ -29,6 +29,7 @@ class Car;
 class EditPanel;
 class EditCornerPanel;
 class EditSuspensionPanel;
+class EditSuspensionRatesPanel;
 
 class EditSuspensionNotebook : public wxNotebook
 {
@@ -58,6 +59,7 @@ private:
 	EditCornerPanel *leftFront;
 	EditCornerPanel *rightRear;
 	EditCornerPanel *leftRear;
+	EditSuspensionRatesPanel* rates;
 };
 
 #endif// EDIT_SUSPENSION_NOTEBOOK_H_

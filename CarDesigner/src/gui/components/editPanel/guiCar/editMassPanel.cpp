@@ -20,9 +20,9 @@
 
 // Local headers
 #include "vCar/massProperties.h"
-#include "gui/renderer/carRenderer.h"
 #include "gui/guiCar.h"
 #include "gui/components/mainFrame.h"
+#include "gui/superGrid.h"
 #include "gui/components/editPanel/editPanel.h"
 #include "gui/components/editPanel/guiCar/editMassPanel.h"
 #include "vUtilities/unitConverter.h"
@@ -51,7 +51,6 @@ EditMassPanel::EditMassPanel(EditPanel &parent, wxWindowID id,
 	const wxPoint& pos, const wxSize& size)
 	: wxScrolledWindow(&parent, id, pos, size), parent(parent)
 {
-
 	CreateControls();
 }
 
@@ -93,6 +92,7 @@ EditMassPanel::~EditMassPanel()
 //==========================================================================
 BEGIN_EVENT_TABLE(EditMassPanel, wxPanel)
 	EVT_TEXT(wxID_ANY,	EditMassPanel::TextBoxEditEvent)
+	EVT_GRID_CELL_CHANGED(EditMassPanel::GridCellChangeEvent)
 END_EVENT_TABLE();
 
 //==========================================================================
@@ -119,6 +119,14 @@ void EditMassPanel::UpdateInformation(MassProperties *currentMassProperties)
 	// Update the mass
 	mass->ChangeValue(UnitConverter::GetInstance().FormatNumber(
 		UnitConverter::GetInstance().ConvertMassOutput(currentMassProperties->mass)));
+	unsprungMassLeftFront->ChangeValue(UnitConverter::GetInstance().FormatNumber(
+		UnitConverter::GetInstance().ConvertMassOutput(currentMassProperties->unsprungMass.leftFront)));
+	unsprungMassRightFront->ChangeValue(UnitConverter::GetInstance().FormatNumber(
+		UnitConverter::GetInstance().ConvertMassOutput(currentMassProperties->unsprungMass.rightFront)));
+	unsprungMassLeftRear->ChangeValue(UnitConverter::GetInstance().FormatNumber(
+		UnitConverter::GetInstance().ConvertMassOutput(currentMassProperties->unsprungMass.leftRear)));
+	unsprungMassRightRear->ChangeValue(UnitConverter::GetInstance().FormatNumber(
+		UnitConverter::GetInstance().ConvertMassOutput(currentMassProperties->unsprungMass.rightRear)));
 
 	// Update the inertia
 	ixx->ChangeValue(UnitConverter::GetInstance().FormatNumber(
@@ -140,18 +148,52 @@ void EditMassPanel::UpdateInformation(MassProperties *currentMassProperties)
 	izy->SetLabel(UnitConverter::GetInstance().FormatNumber(
 		UnitConverter::GetInstance().ConvertMassOutput(currentMassProperties->iyz)));
 
-	// Update the center of gravity
-	centerOfGravityX->ChangeValue(UnitConverter::GetInstance().FormatNumber(
+	// Update the centers of gravity
+	centerOfGravity->SetCellValue(RowSprungMassCG, 1, UnitConverter::GetInstance().FormatNumber(
 		UnitConverter::GetInstance().ConvertDistanceOutput(currentMassProperties->centerOfGravity.x)));
-	centerOfGravityY->ChangeValue(UnitConverter::GetInstance().FormatNumber(
+	centerOfGravity->SetCellValue(RowSprungMassCG, 2, UnitConverter::GetInstance().FormatNumber(
 		UnitConverter::GetInstance().ConvertDistanceOutput(currentMassProperties->centerOfGravity.y)));
-	centerOfGravityZ->ChangeValue(UnitConverter::GetInstance().FormatNumber(
+	centerOfGravity->SetCellValue(RowSprungMassCG, 3, UnitConverter::GetInstance().FormatNumber(
 		UnitConverter::GetInstance().ConvertDistanceOutput(currentMassProperties->centerOfGravity.z)));
+
+	centerOfGravity->SetCellValue(RowUnsprungLeftFrontCG, 1, UnitConverter::GetInstance().FormatNumber(
+		UnitConverter::GetInstance().ConvertDistanceOutput(currentMassProperties->unsprungCentersOfGravity.leftFront.x)));
+	centerOfGravity->SetCellValue(RowUnsprungLeftFrontCG, 2, UnitConverter::GetInstance().FormatNumber(
+		UnitConverter::GetInstance().ConvertDistanceOutput(currentMassProperties->unsprungCentersOfGravity.leftFront.y)));
+	centerOfGravity->SetCellValue(RowUnsprungLeftFrontCG, 3, UnitConverter::GetInstance().FormatNumber(
+		UnitConverter::GetInstance().ConvertDistanceOutput(currentMassProperties->unsprungCentersOfGravity.leftFront.z)));
+
+	centerOfGravity->SetCellValue(RowUnsprungRightFrontCG, 1, UnitConverter::GetInstance().FormatNumber(
+		UnitConverter::GetInstance().ConvertDistanceOutput(currentMassProperties->unsprungCentersOfGravity.rightFront.x)));
+	centerOfGravity->SetCellValue(RowUnsprungRightFrontCG, 2, UnitConverter::GetInstance().FormatNumber(
+		UnitConverter::GetInstance().ConvertDistanceOutput(currentMassProperties->unsprungCentersOfGravity.rightFront.y)));
+	centerOfGravity->SetCellValue(RowUnsprungRightFrontCG, 3, UnitConverter::GetInstance().FormatNumber(
+		UnitConverter::GetInstance().ConvertDistanceOutput(currentMassProperties->unsprungCentersOfGravity.rightFront.z)));
+
+	centerOfGravity->SetCellValue(RowUnsprungLeftRearCG, 1, UnitConverter::GetInstance().FormatNumber(
+		UnitConverter::GetInstance().ConvertDistanceOutput(currentMassProperties->unsprungCentersOfGravity.leftRear.x)));
+	centerOfGravity->SetCellValue(RowUnsprungLeftRearCG, 2, UnitConverter::GetInstance().FormatNumber(
+		UnitConverter::GetInstance().ConvertDistanceOutput(currentMassProperties->unsprungCentersOfGravity.leftRear.y)));
+	centerOfGravity->SetCellValue(RowUnsprungLeftRearCG, 3, UnitConverter::GetInstance().FormatNumber(
+		UnitConverter::GetInstance().ConvertDistanceOutput(currentMassProperties->unsprungCentersOfGravity.leftRear.z)));
+
+	centerOfGravity->SetCellValue(RowUnsprungRightRearCG, 1, UnitConverter::GetInstance().FormatNumber(
+		UnitConverter::GetInstance().ConvertDistanceOutput(currentMassProperties->unsprungCentersOfGravity.rightRear.x)));
+	centerOfGravity->SetCellValue(RowUnsprungRightRearCG, 2, UnitConverter::GetInstance().FormatNumber(
+		UnitConverter::GetInstance().ConvertDistanceOutput(currentMassProperties->unsprungCentersOfGravity.rightRear.y)));
+	centerOfGravity->SetCellValue(RowUnsprungRightRearCG, 3, UnitConverter::GetInstance().FormatNumber(
+		UnitConverter::GetInstance().ConvertDistanceOutput(currentMassProperties->unsprungCentersOfGravity.rightRear.z)));
 
 	// Update the units
 	inertiaUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeInertia) + ')');
 	massUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeMass) + ')');
-	cogUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance) + ')');
+	unsprungMassLeftFrontUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeMass) + ')');
+	unsprungMassRightFrontUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeMass) + ')');
+	unsprungMassLeftRearUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeMass) + ')');
+	unsprungMassRightRearUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeMass) + ')');
+	centerOfGravity->SetCellValue(RowUnits, 1, '(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance) + ')');
+	centerOfGravity->SetCellValue(RowUnits, 2, '(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance) + ')');
+	centerOfGravity->SetCellValue(RowUnits, 3, '(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance) + ')');
 
 	// Update sizers
 	Layout();
@@ -195,7 +237,7 @@ void EditMassPanel::CreateControls()
 	inertiaSizer->Add(inertiaUnitsLabel, 0, wxALIGN_CENTER_HORIZONTAL | wxALL, 2);
 
 	// Create sizer of input section
-	wxFlexGridSizer *inertiaInputSizer = new wxFlexGridSizer(5, 3, 3);
+	wxFlexGridSizer *inertiaInputSizer = new wxFlexGridSizer(3, 3, 3);
 
 	// Create the text boxes
 	ixx = new wxTextCtrl(this, TextBoxIxx);
@@ -211,66 +253,138 @@ void EditMassPanel::CreateControls()
 	izy = new wxStaticText(this, wxID_ANY, wxEmptyString);
 
 	// First row
-	inertiaInputSizer->AddSpacer(-1);
 	inertiaInputSizer->Add(ixx, 0, wxEXPAND);
 	inertiaInputSizer->Add(ixy, 0, wxEXPAND);
 	inertiaInputSizer->Add(ixz, 0, wxEXPAND);
-	inertiaInputSizer->AddSpacer(-1);
 
 	// Second row
-	inertiaInputSizer->AddSpacer(-1);
 	inertiaInputSizer->Add(iyx, 0, wxALIGN_CENTER_VERTICAL);
 	inertiaInputSizer->Add(iyy, 0, wxEXPAND);
 	inertiaInputSizer->Add(iyz, 0, wxEXPAND);
-	inertiaInputSizer->AddSpacer(-1);
 
 	// Third row
-	inertiaInputSizer->AddSpacer(-1);
 	inertiaInputSizer->Add(izx, 0, wxALIGN_CENTER_VERTICAL);
 	inertiaInputSizer->Add(izy, 0, wxALIGN_CENTER_VERTICAL);
 	inertiaInputSizer->Add(izz, 0, wxEXPAND);
-	inertiaInputSizer->AddSpacer(-1);
 	
 	// Blank row for space
-	int spaceSize(15);
-	inertiaInputSizer->AddSpacer(spaceSize);
-	inertiaInputSizer->AddSpacer(spaceSize);
-	inertiaInputSizer->AddSpacer(spaceSize);
-	inertiaInputSizer->AddSpacer(spaceSize);
+	int spaceSize(30);
 	inertiaInputSizer->AddSpacer(spaceSize);
 
-	// Create the mass input
-	wxStaticText *massLabel = new wxStaticText(this, wxID_ANY, _T("Mass"));
-	mass = new wxTextCtrl(this, TextBoxMass);
-	massUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
-
-	inertiaInputSizer->Add(massLabel, 0, wxALIGN_CENTER_VERTICAL);
-	inertiaInputSizer->Add(mass, 0, wxEXPAND);
-	inertiaInputSizer->Add(massUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
-	inertiaInputSizer->AddSpacer(-1);
-	inertiaInputSizer->AddSpacer(-1);
-
-	// Create the center of gravity inputs
-	wxStaticText *cogLabel = new wxStaticText(this, wxID_ANY, _T("CG"));
-	centerOfGravityX = new wxTextCtrl(this, TextBoxCenterOfGravityX);
-	centerOfGravityY = new wxTextCtrl(this, TextBoxCenterOfGravityY);
-	centerOfGravityZ = new wxTextCtrl(this, TextBoxCenterOfGravityZ);
-	cogUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
-
-	inertiaInputSizer->Add(cogLabel, 0, wxALIGN_CENTER_VERTICAL);
-	inertiaInputSizer->Add(centerOfGravityX, 0, wxEXPAND);
-	inertiaInputSizer->Add(centerOfGravityY, 0, wxEXPAND);
-	inertiaInputSizer->Add(centerOfGravityZ, 0, wxEXPAND);
-	inertiaInputSizer->Add(cogUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
-	
-	// Make the middle columns growable
+	// Make the columns growable
+	inertiaInputSizer->AddGrowableCol(0, 1);
 	inertiaInputSizer->AddGrowableCol(1, 1);
 	inertiaInputSizer->AddGrowableCol(2, 1);
-	inertiaInputSizer->AddGrowableCol(3, 1);
+
+	// Create the mass inputs
+	wxFlexGridSizer *massInputSizer = new wxFlexGridSizer(3, 3, 3);
+	wxStaticText *massLabel = new wxStaticText(this, wxID_ANY, _T("Total Mass"));
+	wxStaticText *unsprungMassLabelLeftFront = new wxStaticText(this, wxID_ANY, _T("LF Unsprung Mass"));
+	wxStaticText *unsprungMassLabelRightFront = new wxStaticText(this, wxID_ANY, _T("RF Unsprung Mass"));
+	wxStaticText *unsprungMassLabelLeftRear = new wxStaticText(this, wxID_ANY, _T("LR Unsprung Mass"));
+	wxStaticText *unsprungMassLabelRightRear = new wxStaticText(this, wxID_ANY, _T("RR Unsprung Mass"));
+
+	mass = new wxTextCtrl(this, TextBoxMass);
+	unsprungMassLeftFront = new wxTextCtrl(this, TextBoxUnsprungMassLeftFront);
+	unsprungMassRightFront = new wxTextCtrl(this, TextBoxUnsprungMassRightFront);
+	unsprungMassLeftRear = new wxTextCtrl(this, TextBoxUnsprungMassLeftRear);
+	unsprungMassRightRear = new wxTextCtrl(this, TextBoxUnsprungMassRightRear);
+
+	massUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
+	unsprungMassLeftFrontUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
+	unsprungMassRightFrontUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
+	unsprungMassLeftRearUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
+	unsprungMassRightRearUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
+
+	massInputSizer->Add(massLabel, 0, wxALIGN_CENTER_VERTICAL);
+	massInputSizer->Add(mass, 0, wxEXPAND);
+	massInputSizer->Add(massUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
+
+	massInputSizer->Add(unsprungMassLabelLeftFront, 0, wxALIGN_CENTER_VERTICAL);
+	massInputSizer->Add(unsprungMassLeftFront, 0, wxEXPAND);
+	massInputSizer->Add(unsprungMassLeftFrontUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
+
+	massInputSizer->Add(unsprungMassLabelRightFront, 0, wxALIGN_CENTER_VERTICAL);
+	massInputSizer->Add(unsprungMassRightFront, 0, wxEXPAND);
+	massInputSizer->Add(unsprungMassRightFrontUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
+
+	massInputSizer->Add(unsprungMassLabelLeftRear, 0, wxALIGN_CENTER_VERTICAL);
+	massInputSizer->Add(unsprungMassLeftRear, 0, wxEXPAND);
+	massInputSizer->Add(unsprungMassLeftRearUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
+
+	massInputSizer->Add(unsprungMassLabelRightRear, 0, wxALIGN_CENTER_VERTICAL);
+	massInputSizer->Add(unsprungMassRightRear, 0, wxEXPAND);
+	massInputSizer->Add(unsprungMassRightRearUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
+
+	// Blank row for space
+	massInputSizer->AddSpacer(spaceSize);
+
+	// Create the center of gravity inputs
+	wxBoxSizer *cgInputSizer = new wxBoxSizer(wxHORIZONTAL);
+	centerOfGravity = new SuperGrid(this);
+	centerOfGravity->CreateGrid(GridRowCount, 4, wxGrid::wxGridSelectRows);
+
+	centerOfGravity->BeginBatch();
+
+	int i;
+	for (i = 0; i < centerOfGravity->GetNumberCols(); i++)
+		centerOfGravity->SetReadOnly(0, i, true);
+
+	// Do the processing that needs to be done for each row
+	for (i = 0; i < GridRowCount; i++)
+	{
+		centerOfGravity->SetReadOnly(i, 0, true);
+
+		// Set the alignment for all of the cells that contain numbers to the right
+		centerOfGravity->SetCellAlignment(i, 1, wxALIGN_RIGHT, wxALIGN_TOP);
+		centerOfGravity->SetCellAlignment(i, 2, wxALIGN_RIGHT, wxALIGN_TOP);
+		centerOfGravity->SetCellAlignment(i, 3, wxALIGN_RIGHT, wxALIGN_TOP);
+	}
+
+	centerOfGravity->SetCellValue(RowSprungMassCG, 0, _T("Sprung Mass"));
+	centerOfGravity->SetCellValue(RowUnsprungLeftFrontCG, 0, _T("LF Unsprung Mass"));
+	centerOfGravity->SetCellValue(RowUnsprungRightFrontCG, 0, _T("RF Unsprung Mass"));
+	centerOfGravity->SetCellValue(RowUnsprungLeftRearCG, 0, _T("LR Unsprung Mass"));
+	centerOfGravity->SetCellValue(RowUnsprungRightRearCG, 0, _T("RR Unsprung Mass"));
+
+	// Hide the label column and set the size for the label row
+	centerOfGravity->SetRowLabelSize(0);
+	centerOfGravity->SetColLabelSize(centerOfGravity->GetRowSize(0));
+
+	// Add the grid to the sizer
+	cgInputSizer->Add(centerOfGravity, 0, wxALIGN_TOP | wxEXPAND);
+
+	centerOfGravity->SetColLabelValue(0, _T("Body"));
+	centerOfGravity->SetColLabelValue(1, _T("CG X"));
+	centerOfGravity->SetColLabelValue(2, _T("CG Y"));
+	centerOfGravity->SetColLabelValue(3, _T("CG Z"));
+
+	// Center the cells for the column headings
+	for (i = 0; i < centerOfGravity->GetNumberCols(); i++)
+		centerOfGravity->SetCellAlignment(0, i, wxALIGN_CENTER, wxALIGN_TOP);
+
+	// Size the columns
+	// The X, Y, and Z columns should be big enough to fit 80.0 as formatted
+	// by the converter.  First column is stretchable
+	centerOfGravity->SetCellValue(3, 3, UnitConverter::GetInstance().FormatNumber(80.0));
+	centerOfGravity->AutoSizeColumn(3);
+	centerOfGravity->SetColSize(1, centerOfGravity->GetColSize(3));
+	centerOfGravity->SetColSize(2, centerOfGravity->GetColSize(3));
+	// The value we just put in cell (3,3) will get overwritten with a call to UpdateInformation()
+	centerOfGravity->AutoStretchColumn(0);
+
+	centerOfGravity->EnableDragColMove(false);
+	centerOfGravity->EnableDragColSize(true);
+	centerOfGravity->EnableDragGridSize(false);
+	centerOfGravity->EnableDragRowSize(false);
+
+	centerOfGravity->EndBatch();
 
 	// Add the sizers to the main sizer
 	mainSizer->Add(inertiaSizer);
-	mainSizer->Add(inertiaInputSizer, 1, wxEXPAND);
+	mainSizer->Add(inertiaInputSizer);
+	mainSizer->Add(massInputSizer);
+	mainSizer->Add(cgInputSizer);
 
 	// Set the text box minimum widths
 	// Use reasonable values in default units for an average car, add a negative sign, and format
@@ -288,9 +402,10 @@ void EditMassPanel::CreateControls()
 	ixz->SetMinSize(wxSize(minWidth, -1));
 	iyz->SetMinSize(wxSize(minWidth, -1));
 	mass->SetMinSize(wxSize(minWidth, -1));
-	centerOfGravityX->SetMinSize(wxSize(minWidth, -1));
-	centerOfGravityY->SetMinSize(wxSize(minWidth, -1));
-	centerOfGravityZ->SetMinSize(wxSize(minWidth, -1));
+	unsprungMassLeftFront->SetMinSize(wxSize(minWidth, -1));
+	unsprungMassRightFront->SetMinSize(wxSize(minWidth, -1));
+	unsprungMassLeftRear->SetMinSize(wxSize(minWidth, -1));
+	unsprungMassRightRear->SetMinSize(wxSize(minWidth, -1));
 
 	// Assign the top level sizer to the dialog
 	SetSizer(topSizer);
@@ -362,22 +477,28 @@ void EditMassPanel::TextBoxEditEvent(wxCommandEvent &event)
 		units = UnitConverter::UnitTypeMass;
 		break;
 
-	case TextBoxCenterOfGravityX:
-		textBox = centerOfGravityX;
-		dataLocation = &currentMassProperties->centerOfGravity.x;
-		units = UnitConverter::UnitTypeDistance;
+	case TextBoxUnsprungMassLeftFront:
+		textBox = unsprungMassLeftFront;
+		dataLocation = &currentMassProperties->unsprungMass.leftFront;
+		units = UnitConverter::UnitTypeMass;
 		break;
 
-	case TextBoxCenterOfGravityY:
-		textBox = centerOfGravityY;
-		dataLocation = &currentMassProperties->centerOfGravity.y;
-		units = UnitConverter::UnitTypeDistance;
+	case TextBoxUnsprungMassRightFront:
+		textBox = unsprungMassRightFront;
+		dataLocation = &currentMassProperties->unsprungMass.rightFront;
+		units = UnitConverter::UnitTypeMass;
 		break;
 
-	case TextBoxCenterOfGravityZ:
-		textBox = centerOfGravityZ;
-		dataLocation = &currentMassProperties->centerOfGravity.z;
-		units = UnitConverter::UnitTypeDistance;
+	case TextBoxUnsprungMassLeftRear:
+		textBox = unsprungMassLeftRear;
+		dataLocation = &currentMassProperties->unsprungMass.leftRear;
+		units = UnitConverter::UnitTypeMass;
+		break;
+
+	case TextBoxUnsprungMassRightRear:
+		textBox = unsprungMassRightRear;
+		dataLocation = &currentMassProperties->unsprungMass.rightRear;
+		units = UnitConverter::UnitTypeMass;
 		break;
 
 	default:
@@ -410,6 +531,75 @@ void EditMassPanel::TextBoxEditEvent(wxCommandEvent &event)
 	iyx->SetLabel(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertMassOutput(currentMassProperties->ixy)));
 	izx->SetLabel(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertMassOutput(currentMassProperties->ixz)));
 	izy->SetLabel(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertMassOutput(currentMassProperties->iyz)));
+
+	event.Skip();
+}
+
+//==========================================================================
+// Class:			EditMassPanel
+// Function:		GridCellChangeEvent
+//
+// Description:		Event that fires when any grid cell changes.
+//
+// Input Arguments:
+//		event = wxGridEvent&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void EditMassPanel::GridCellChangeEvent(wxGridEvent& event)
+{
+	if (event.GetRow() > 0)
+	{
+		wxString valueString = centerOfGravity->GetCellValue(event.GetRow(), event.GetCol());
+		double value;
+
+		// Make sure the value is numeric
+		if (!valueString.ToDouble(&value))
+			// The value is non-numeric - don't do anything
+			return;
+
+		Vector* vector;
+		double* valueLocation;
+
+		wxMutex *mutex = parent.GetCurrentMutex();
+		mutex->Lock();
+
+		if (event.GetRow() == RowSprungMassCG)
+			vector = &currentMassProperties->centerOfGravity;
+		else if (event.GetRow() == RowUnsprungLeftFrontCG)
+			vector = &currentMassProperties->unsprungCentersOfGravity.leftFront;
+		else if (event.GetRow() == RowUnsprungRightFrontCG)
+			vector = &currentMassProperties->unsprungCentersOfGravity.rightFront;
+		else if (event.GetRow() == RowUnsprungLeftRearCG)
+			vector = &currentMassProperties->unsprungCentersOfGravity.leftRear;
+		else// if (event.GetRow() == RowUnsprungRightRearCG)
+			vector = &currentMassProperties->unsprungCentersOfGravity.rightRear;
+
+		if (event.GetCol() == 1)// X
+			valueLocation = &vector->x;
+		else if (event.GetCol() == 2)// Y
+			valueLocation = &vector->y;
+		else// if (event.GetCol() == 3)// Z
+			valueLocation = &vector->z;
+
+		parent.GetMainFrame().GetUndoRedoStack().AddOperation(
+			parent.GetMainFrame().GetActiveIndex(),
+			UndoRedoStack::Operation::DataTypeDouble,
+			valueLocation);
+
+		*valueLocation = UnitConverter::GetInstance().ConvertDistanceInput(value);
+
+		mutex->Unlock();
+
+		parent.GetCurrentObject()->SetModified();
+		parent.GetMainFrame().UpdateAnalysis();
+		parent.GetMainFrame().UpdateOutputPanel();
+	}
 
 	event.Skip();
 }

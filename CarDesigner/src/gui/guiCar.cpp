@@ -230,6 +230,15 @@ void GuiCar::UpdateData()
 	// Update the wheel centers
 	originalCar->ComputeWheelCenters();
 
+	Kinematics::Inputs inputs;
+	if (mainFrame.ActiveAnalysisIsKinematic())
+		inputs = mainFrame.GetInputs();
+	else
+	{
+		QuasiStatic quasiStatic;
+		inputs = quasiStatic.Solve(originalCar, workingCar, mainFrame.GetInputs(), mainFrame.GetQuasiStaticInputs());// TODO:  What about returning wheel loads?
+	}
+
 	// Re-run the kinematics to update the car's position
 	KinematicsData *data = new KinematicsData(originalCar, workingCar, mainFrame.GetInputs(), &kinematicOutputs);
 	ThreadJob job(ThreadJob::CommandThreadKinematicsNormal, data, name, index);
