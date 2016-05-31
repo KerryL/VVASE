@@ -41,6 +41,7 @@
         <File Name="../vSolver/src/physics/shakerRig.cpp"/>
         <File Name="../vSolver/src/physics/integrator.cpp"/>
         <File Name="../vSolver/src/physics/kinematicOutputs.cpp"/>
+        <File Name="../vSolver/src/physics/quasiStatic.cpp"/>
       </VirtualDirectory>
       <VirtualDirectory Name="threads">
         <File Name="../vSolver/src/threads/jobQueue.cpp"/>
@@ -68,6 +69,7 @@
           <File Name="../common/include/vSolver/physics/state.h"/>
           <File Name="../common/include/vSolver/physics/integrator.h"/>
           <File Name="../common/include/vSolver/physics/millikenAnalysis.h"/>
+          <File Name="../common/include/vSolver/physics/quasiStatic.h"/>
         </VirtualDirectory>
         <VirtualDirectory Name="threads">
           <File Name="../common/include/vSolver/threads/threadJob.h"/>
@@ -231,6 +233,7 @@
               <File Name="include/gui/components/editPanel/guiCar/editSuspensionNotebook.h"/>
               <File Name="include/gui/components/editPanel/guiCar/editTiresPanel.h"/>
               <File Name="include/gui/components/editPanel/guiCar/editEnginePanel.h"/>
+              <File Name="include/gui/components/editPanel/guiCar/editSuspensionRatesPanel.h"/>
             </VirtualDirectory>
             <VirtualDirectory Name="iteration">
               <File Name="include/gui/components/editPanel/iteration/editIterationPlotsPanel.h"/>
@@ -251,6 +254,7 @@
           <File Name="include/gui/dialogs/optionsDialog.h"/>
           <File Name="include/gui/dialogs/rangeLimitsDialog.h"/>
           <File Name="include/gui/dialogs/appearanceOptionsDialog.h"/>
+          <File Name="include/gui/dialogs/textInputDialog.h"/>
         </VirtualDirectory>
         <VirtualDirectory Name="renderer">
           <File Name="include/gui/renderer/plotRenderer.h"/>
@@ -296,6 +300,7 @@
               <File Name="src/gui/components/editPanel/guiCar/editSuspensionNotebook.cpp"/>
               <File Name="src/gui/components/editPanel/guiCar/editDifferentialPanel.cpp"/>
               <File Name="src/gui/components/editPanel/guiCar/editAerodynamicsPanel.cpp"/>
+              <File Name="src/gui/components/editPanel/guiCar/editSuspensionRatesPanel.cpp"/>
             </VirtualDirectory>
             <VirtualDirectory Name="iteration">
               <File Name="src/gui/components/editPanel/iteration/editIterationOptionsPanel.cpp"/>
@@ -316,6 +321,7 @@
           <File Name="src/gui/dialogs/gaGoalDialog.cpp"/>
           <File Name="src/gui/dialogs/appearanceOptionsDialog.cpp"/>
           <File Name="src/gui/dialogs/rangeLimitsDialog.cpp"/>
+          <File Name="src/gui/dialogs/textInputDialog.cpp"/>
         </VirtualDirectory>
         <VirtualDirectory Name="renderer">
           <File Name="src/gui/renderer/carRenderer.cpp"/>

@@ -52,6 +52,11 @@ private:
 		TextBoxIyz,
 
 		TextBoxMass,
+		TextBoxCornerWeightLeftFront,
+		TextBoxCornerWeightRightFront,
+		TextBoxCornerWeightLeftRear,
+		TextBoxCornerWeightRightRear,
+		
 		TextBoxUnsprungMassLeftFront,
 		TextBoxUnsprungMassRightFront,
 		TextBoxUnsprungMassLeftRear,
@@ -61,7 +66,7 @@ private:
 	enum GridRows
 	{
 		RowUnits,
-		RowSprungMassCG,
+		RowTotalCG,
 		RowUnsprungLeftFrontCG,
 		RowUnsprungRightFrontCG,
 		RowUnsprungLeftRearCG,
@@ -84,16 +89,25 @@ private:
 	wxTextCtrl *iyz;
 
 	wxTextCtrl *mass;
+	wxTextCtrl *cornerWeightLeftFront;
+	wxTextCtrl *cornerWeightRightFront;
+	wxTextCtrl *cornerWeightLeftRear;
+	wxTextCtrl *cornerWeightRightRear;
+	
 	wxTextCtrl *unsprungMassLeftFront;
 	wxTextCtrl *unsprungMassRightFront;
 	wxTextCtrl *unsprungMassLeftRear;
 	wxTextCtrl *unsprungMassRightRear;
 
-	SuperGrid *centerOfGravity;
+	SuperGrid *cgHeights;
 
 	// The static text controls
 	wxStaticText *inertiaUnitsLabel;
 	wxStaticText *massUnitsLabel;
+	wxStaticText *cornerWeightLeftFrontUnitsLabel;
+	wxStaticText *cornerWeightRightFrontUnitsLabel;
+	wxStaticText *cornerWeightLeftRearUnitsLabel;
+	wxStaticText *cornerWeightRightRearUnitsLabel;
 	wxStaticText *unsprungMassLeftFrontUnitsLabel;
 	wxStaticText *unsprungMassRightFrontUnitsLabel;
 	wxStaticText *unsprungMassLeftRearUnitsLabel;

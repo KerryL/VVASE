@@ -206,16 +206,20 @@ Car::Car()
 	brakes->percentFrontBraking = 0.667;
 
 	// Test mass properties
-	massProperties->centerOfGravity.Set(34.0, 0.0, 8.75);
 	massProperties->mass = 520.0 / 32.174;
+	massProperties->totalCGHeight = 9.0;
+	massProperties->cornerWeights.leftFront = 110.0;
+	massProperties->cornerWeights.rightFront = 110.0;
+	massProperties->cornerWeights.leftRear = 140.0;
+	massProperties->cornerWeights.rightRear = 140.0;
 	massProperties->unsprungMass.leftFront = 35.0 / 32.174;
 	massProperties->unsprungMass.rightFront = 35.0 / 32.174;
 	massProperties->unsprungMass.leftRear = 25.0 / 32.174;
 	massProperties->unsprungMass.rightRear = 25.0 / 32.174;
-	massProperties->unsprungCentersOfGravity.leftFront.Set(0.0, -20.0, 10.0);
-	massProperties->unsprungCentersOfGravity.rightFront.Set(0.0, 20.0, 10.0);
-	massProperties->unsprungCentersOfGravity.leftRear.Set(66.5, -20.0, 10.0);
-	massProperties->unsprungCentersOfGravity.rightRear.Set(66.5, 20.0, 10.0);
+	massProperties->unsprungCGHeights.leftFront = 10.0;
+	massProperties->unsprungCGHeights.rightFront = 10.0;
+	massProperties->unsprungCGHeights.leftRear = 10.0;
+	massProperties->unsprungCGHeights.rightRear = 10.0;
 
 	// Test spring rates
 	suspension->barRate.front = 100.0;// [in-lbf/rad]

@@ -57,9 +57,12 @@ MassProperties::MassProperties()
 	ixz = 0.0;
 	iyz = 0.0;
 
-	centerOfGravity.x = 0.0;
-	centerOfGravity.y = 0.0;
-	centerOfGravity.z = 0.0;
+	totalCGHeight = 0.0;
+	
+	cornerWeights.leftFront = 0.0;
+	cornerWeights.rightFront = 0.0;
+	cornerWeights.leftRear = 0.0;
+	cornerWeights.rightRear = 0.0;
 
 	unsprungMass.leftFront = 0.0;
 	unsprungMass.rightFront = 0.0;
@@ -82,21 +85,10 @@ MassProperties::MassProperties()
 	wheelInertias.rightRear.y = 0.0;
 	wheelInertias.rightRear.z = 0.0;
 
-	unsprungCentersOfGravity.leftFront.x = 0.0;
-	unsprungCentersOfGravity.leftFront.y = 0.0;
-	unsprungCentersOfGravity.leftFront.z = 0.0;
-
-	unsprungCentersOfGravity.rightFront.x = 0.0;
-	unsprungCentersOfGravity.rightFront.y = 0.0;
-	unsprungCentersOfGravity.rightFront.z = 0.0;
-
-	unsprungCentersOfGravity.leftRear.x = 0.0;
-	unsprungCentersOfGravity.leftRear.y = 0.0;
-	unsprungCentersOfGravity.leftRear.z = 0.0;
-
-	unsprungCentersOfGravity.rightRear.x = 0.0;
-	unsprungCentersOfGravity.rightRear.y = 0.0;
-	unsprungCentersOfGravity.rightRear.z = 0.0;
+	unsprungCGHeights.leftFront = 0.0;
+	unsprungCGHeights.rightFront = 0.0;
+	unsprungCGHeights.leftRear = 0.0;
+	unsprungCGHeights.rightRear = 0.0;
 }
 
 //==========================================================================
@@ -439,10 +431,11 @@ void MassProperties::Write(std::ofstream *outFile) const
 	outFile->write((char*)&ixy, sizeof(double));
 	outFile->write((char*)&ixz, sizeof(double));
 	outFile->write((char*)&iyz, sizeof(double));
-	outFile->write((char*)&centerOfGravity, sizeof(Vector));
-	outFile->write((char*)&unsprungMass, sizeof(WheelSet));
-	outFile->write((char*)&wheelInertias, sizeof(VectorSet));
-	outFile->write((char*)&unsprungCentersOfGravity, sizeof(VectorSet));
+	outFile->write((char*)&totalCGHeight, sizeof(totalCGHeight));
+	outFile->write((char*)&cornerWeights, sizeof(cornerWeights));
+	outFile->write((char*)&unsprungMass, sizeof(unsprungMass));
+	outFile->write((char*)&wheelInertias, sizeof(wheelInertias));
+	outFile->write((char*)&unsprungCGHeights, sizeof(unsprungCGHeights));
 }
 
 //==========================================================================
@@ -474,10 +467,11 @@ void MassProperties::Read(std::ifstream *inFile, int fileVersion)
 		inFile->read((char*)&ixy, sizeof(double));
 		inFile->read((char*)&ixz, sizeof(double));
 		inFile->read((char*)&iyz, sizeof(double));
-		inFile->read((char*)&centerOfGravity, sizeof(Vector));
-		inFile->read((char*)&unsprungMass, sizeof(WheelSet));
-		inFile->read((char*)&wheelInertias, sizeof(VectorSet));
-		inFile->read((char*)&unsprungCentersOfGravity, sizeof(VectorSet));
+		inFile->read((char*)&totalCGHeight, sizeof(totalCGHeight));
+		inFile->read((char*)&cornerWeights, sizeof(cornerWeights));
+		inFile->read((char*)&unsprungMass, sizeof(unsprungMass));
+		inFile->read((char*)&wheelInertias, sizeof(wheelInertias));
+		inFile->read((char*)&unsprungCGHeights, sizeof(unsprungCGHeights));
 	}
 	else if (fileVersion >= 0)
 	{
@@ -488,7 +482,8 @@ void MassProperties::Read(std::ifstream *inFile, int fileVersion)
 		inFile->read((char*)&ixy, sizeof(double));
 		inFile->read((char*)&ixz, sizeof(double));
 		inFile->read((char*)&iyz, sizeof(double));
-		inFile->read((char*)&centerOfGravity, sizeof(Vector));
+		inFile->seekg(inFile->tellg() + 2 * sizeof(double));
+		inFile->read((char*)&totalCGHeight, sizeof(totalCGHeight));
 		inFile->read((char*)&unsprungMass, sizeof(WheelSet));
 		inFile->read((char*)&wheelInertias, sizeof(VectorSet));
 	}
@@ -519,17 +514,18 @@ MassProperties& MassProperties::operator = (const MassProperties &massProperties
 		return *this;
 
 	// Perform the assignment
-	mass						= massProperties.mass;
-	ixx							= massProperties.ixx;
-	iyy							= massProperties.iyy;
-	izz							= massProperties.izz;
-	ixy							= massProperties.ixy;
-	ixz							= massProperties.ixz;
-	iyz							= massProperties.iyz;
-	centerOfGravity				= massProperties.centerOfGravity;
-	unsprungMass				= massProperties.unsprungMass;
-	wheelInertias				= massProperties.wheelInertias;
-	unsprungCentersOfGravity	= massProperties.unsprungCentersOfGravity;
+	mass					= massProperties.mass;
+	ixx						= massProperties.ixx;
+	iyy						= massProperties.iyy;
+	izz						= massProperties.izz;
+	ixy						= massProperties.ixy;
+	ixz						= massProperties.ixz;
+	iyz						= massProperties.iyz;
+	totalCGHeight			= massProperties.totalCGHeight;
+	cornerWeights			= massProperties.cornerWeights;
+	unsprungMass			= massProperties.unsprungMass;
+	wheelInertias			= massProperties.wheelInertias;
+	unsprungCGHeights		= massProperties.unsprungCGHeights;
 
 	return *this;
 }

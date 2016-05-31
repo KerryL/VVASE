@@ -212,11 +212,11 @@ double QuasiStatic::SumXMoments(const Car* workingCar, const WheelSet& wheelLoad
 	Suspension* s = workingCar->suspension;
 	double sum(0.0);
 
-	sum += gravity * gy * mp->centerOfGravity.z + mp->mass * gravity * mp->centerOfGravity.y;
+	/*sum += gravity * gy * cgHeight + mp->mass * gravity * mp->centerOfGravity.y;
 	sum -= wheelLoads.leftFront * s->leftFront.hardpoints[Corner::ContactPatch].y;
 	sum -= wheelLoads.rightFront * s->rightFront.hardpoints[Corner::ContactPatch].y;
 	sum -= wheelLoads.leftRear * s->leftRear.hardpoints[Corner::ContactPatch].y;
-	sum -= wheelLoads.rightRear * s->rightRear.hardpoints[Corner::ContactPatch].y;
+	sum -= wheelLoads.rightRear * s->rightRear.hardpoints[Corner::ContactPatch].y;*/
 
 	return sum;
 }
@@ -246,11 +246,11 @@ double QuasiStatic::SumYMoments(const Car* workingCar, const WheelSet& wheelLoad
 	Suspension* s = workingCar->suspension;
 	double sum(0.0);
 
-	sum += gravity * gx * mp->centerOfGravity.z + mp->mass * gravity * mp->centerOfGravity.x;
+	/*sum += gravity * gx * mp->centerOfGravity.z + mp->mass * gravity * mp->centerOfGravity.x;
 	sum -= wheelLoads.leftFront * s->leftFront.hardpoints[Corner::ContactPatch].x;
 	sum -= wheelLoads.rightFront * s->rightFront.hardpoints[Corner::ContactPatch].x;
 	sum -= wheelLoads.leftRear * s->leftRear.hardpoints[Corner::ContactPatch].x;
-	sum -= wheelLoads.rightRear * s->rightRear.hardpoints[Corner::ContactPatch].x;
+	sum -= wheelLoads.rightRear * s->rightRear.hardpoints[Corner::ContactPatch].x;*/
 
 	return sum;
 }
@@ -259,7 +259,7 @@ double QuasiStatic::SumYMoments(const Car* workingCar, const WheelSet& wheelLoad
 // Class:			QuasiStatic
 // Function:		ComputePreLoad
 //
-// Description:		Computes the spring pre-load at each corner (for a car with
+// Description:		Computes the spring deflection at each corner (for a car with
 //					zero kinematic state).
 //
 // Input Arguments:
@@ -269,103 +269,26 @@ double QuasiStatic::SumYMoments(const Car* workingCar, const WheelSet& wheelLoad
 //		None
 //
 // Return Value:
-//		WheelSet [lb at the tire]
+//		WheelSet [in of spring compression]
 //
 //==========================================================================
 WheelSet QuasiStatic::ComputePreLoad(const Car* originalCar) const
 {
 	const MassProperties* mp = originalCar->massProperties;
 	const Suspension *s = originalCar->suspension;
-
+	
 	// First, compute load at each corner due to sprung mass
+	WheelSet sprungWeight;// [lbf]
+	sprungWeight.leftFront = mp->cornerWeights.leftFront - mp->unsprungMass.leftFront * 32.174;// TODO:  Use unsprung weight instead?
+	sprungWeight.rightFront = mp->cornerWeights.rightFront - mp->unsprungMass.rightFront * 32.174;// TODO:  Use unsprung weight instead?
+	sprungWeight.leftRear = mp->cornerWeights.leftRear - mp->unsprungMass.leftRear * 32.174;// TODO:  Use unsprung weight instead?
+	sprungWeight.rightRear = mp->cornerWeights.rightRear - mp->unsprungMass.rightRear * 32.174;// TODO:  Use unsprung weight instead?
+	
 	WheelSet preLoad;
-	double sprungMass = mp->mass - mp->unsprungMass.leftFront
-		- mp->unsprungMass.rightFront - mp->unsprungMass.leftRear - mp->unsprungMass.rightRear;// [slug]
-
-	// Build a matrix equation of the form:
-	// sum of moments about wheel O = 0 = m * g * x_cg - F_a * (x_a - x_O) - F_b * (x_b - x_O) - F_c * (x_c - x_O)
-	// One equation for each wheel in x and y directions (2 equations per wheel)
-	Matrix A(8, 4), b(8, 1), x;
-	A(0,0) = 0.0;
-	A(0,1) = s->rightFront.hardpoints[Corner::ContactPatch].y - s->leftFront.hardpoints[Corner::ContactPatch].y;
-	A(0,2) = s->leftRear.hardpoints[Corner::ContactPatch].y - s->leftFront.hardpoints[Corner::ContactPatch].y;
-	A(0,3) = s->rightRear.hardpoints[Corner::ContactPatch].y - s->leftFront.hardpoints[Corner::ContactPatch].y;
-	b(0,0) = sprungMass * UnitConverter::G / 12.0 * (mp->centerOfGravity.y
-		- s->leftFront.hardpoints[Corner::ContactPatch].y);// TODO:  Use unit convert to address this?
-
-	A(1,0) = 0.0;
-	A(1,1) = s->rightFront.hardpoints[Corner::ContactPatch].x - s->leftFront.hardpoints[Corner::ContactPatch].x;
-	A(1,2) = s->leftRear.hardpoints[Corner::ContactPatch].x - s->leftFront.hardpoints[Corner::ContactPatch].x;
-	A(1,3) = s->rightRear.hardpoints[Corner::ContactPatch].x - s->leftFront.hardpoints[Corner::ContactPatch].x;
-	b(1,0) = sprungMass * UnitConverter::G / 12.0 * (mp->centerOfGravity.x
-		- s->leftFront.hardpoints[Corner::ContactPatch].x);// TODO:  Use unit convert to address this?
-
-	A(2,0) = s->leftFront.hardpoints[Corner::ContactPatch].y - s->rightFront.hardpoints[Corner::ContactPatch].y;
-	A(2,1) = 0.0;
-	A(2,2) = s->leftRear.hardpoints[Corner::ContactPatch].y - s->rightFront.hardpoints[Corner::ContactPatch].y;
-	A(2,3) = s->rightRear.hardpoints[Corner::ContactPatch].y - s->rightFront.hardpoints[Corner::ContactPatch].y;
-	b(2,0) = sprungMass * UnitConverter::G / 12.0 * (mp->centerOfGravity.y
-		- s->rightFront.hardpoints[Corner::ContactPatch].y);// TODO:  Use unit convert to address this?
-
-	A(3,0) = s->leftFront.hardpoints[Corner::ContactPatch].x - s->rightFront.hardpoints[Corner::ContactPatch].x;
-	A(3,1) = 0.0;
-	A(3,2) = s->leftRear.hardpoints[Corner::ContactPatch].x - s->rightFront.hardpoints[Corner::ContactPatch].x;
-	A(3,3) = s->rightRear.hardpoints[Corner::ContactPatch].x - s->rightFront.hardpoints[Corner::ContactPatch].x;
-	b(3,0) = sprungMass * UnitConverter::G / 12.0 * (mp->centerOfGravity.x
-		- s->rightFront.hardpoints[Corner::ContactPatch].x);// TODO:  Use unit convert to address this?
-
-	A(4,0) = s->leftFront.hardpoints[Corner::ContactPatch].y - s->leftRear.hardpoints[Corner::ContactPatch].y;
-	A(4,1) = s->rightFront.hardpoints[Corner::ContactPatch].y - s->leftRear.hardpoints[Corner::ContactPatch].y;
-	A(4,2) = 0.0;
-	A(4,3) = s->rightRear.hardpoints[Corner::ContactPatch].y - s->leftRear.hardpoints[Corner::ContactPatch].y;
-	b(4,0) = sprungMass * UnitConverter::G / 12.0 * (mp->centerOfGravity.y
-		- s->leftRear.hardpoints[Corner::ContactPatch].y);// TODO:  Use unit convert to address this?
-
-	A(5,0) = s->leftFront.hardpoints[Corner::ContactPatch].x - s->leftRear.hardpoints[Corner::ContactPatch].x;
-	A(5,1) = s->rightFront.hardpoints[Corner::ContactPatch].x - s->leftRear.hardpoints[Corner::ContactPatch].x;
-	A(5,2) = 0.0;
-	A(5,3) = s->rightRear.hardpoints[Corner::ContactPatch].x - s->leftRear.hardpoints[Corner::ContactPatch].x;
-	b(5,0) = sprungMass * UnitConverter::G / 12.0 * (mp->centerOfGravity.x
-		- s->leftRear.hardpoints[Corner::ContactPatch].x);// TODO:  Use unit convert to address this?
-
-	A(6,0) = s->leftFront.hardpoints[Corner::ContactPatch].y - s->rightRear.hardpoints[Corner::ContactPatch].y;
-	A(6,1) = s->rightFront.hardpoints[Corner::ContactPatch].y - s->rightRear.hardpoints[Corner::ContactPatch].y;
-	A(6,2) = s->leftRear.hardpoints[Corner::ContactPatch].y - s->rightRear.hardpoints[Corner::ContactPatch].y;
-	A(6,3) = 0.0;
-	b(6,0) = sprungMass * UnitConverter::G / 12.0 * (mp->centerOfGravity.y
-		- s->rightRear.hardpoints[Corner::ContactPatch].y);// TODO:  Use unit convert to address this?
-
-	A(7,0) = s->leftFront.hardpoints[Corner::ContactPatch].x - s->rightRear.hardpoints[Corner::ContactPatch].x;
-	A(7,1) = s->rightFront.hardpoints[Corner::ContactPatch].x - s->rightRear.hardpoints[Corner::ContactPatch].x;
-	A(7,2) = s->leftRear.hardpoints[Corner::ContactPatch].x - s->rightRear.hardpoints[Corner::ContactPatch].x;
-	A(7,3) = 0.0;
-	b(7,0) = sprungMass * UnitConverter::G / 12.0 * (mp->centerOfGravity.x
-		- s->rightRear.hardpoints[Corner::ContactPatch].x);// TODO:  Use unit convert to address this?
-
-	// TODO:  Test rank of A to identify statically indeterminate problems?
-	//unsigned int rank(A.GetRank());
-	if (!A.LeftDivide(b, x))
-	{
-		Debugger::GetInstance() << "Error:  Failed to solve for pre-load" << Debugger::PriorityMedium;
-		preLoad.leftFront = 0.0;
-		preLoad.rightFront = 0.0;
-		preLoad.leftRear = 0.0;
-		preLoad.rightRear = 0.0;
-		return preLoad;
-	}
-
-	Matrix test = A * x - b;
-	double t[8];
-	int h;
-	for (h = 0; h < 8; h++)
-		t[h] = b(h,0);// TODO:  This should be zero, but it's not!
-
-	assert(x.GetNumberOfRows() == 4);
-
-	preLoad.leftFront = x(0,0);
-	preLoad.rightFront = x(1,0);
-	preLoad.leftRear = x(2,0);
-	preLoad.rightRear = x(3,0);
-
+	preLoad.leftFront = sprungWeight.leftFront / s->leftFront.spring.rate;
+	preLoad.rightFront = sprungWeight.rightFront / s->rightFront.spring.rate;
+	preLoad.leftRear = sprungWeight.leftRear / s->leftRear.spring.rate;
+	preLoad.rightRear = sprungWeight.rightRear / s->rightRear.spring.rate;
+	
 	return preLoad;
 }

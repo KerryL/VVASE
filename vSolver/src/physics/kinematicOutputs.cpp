@@ -1224,7 +1224,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 		- currentSuspension->rightFront.hardpoints[Corner::ContactPatch].x
 		+ currentSuspension->leftRear.hardpoints[Corner::ContactPatch].x
 		- currentSuspension->leftFront.hardpoints[Corner::ContactPatch].x) / 2.0;
-	double cgHeight = originalCar->massProperties->centerOfGravity.z;
+	double cgHeight = originalCar->massProperties->totalCGHeight;
 	double reactionPathAngleTangent;
 
 	// Determine if we are talking about anti-dive (front) or anti-lift (rear)

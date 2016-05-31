@@ -194,7 +194,7 @@ const wxString MainFrame::pathToConfigFile = _T("vvase.rc");
 const wxString MainFrame::pathToConfigFile = _T("config.ini");
 #endif
 
-const wxSize MainFrame::minFrameSize(1024, 768);
+const wxSize MainFrame::minFrameSize(1024, 700);// was 768 vertical - leave some room for taskbar, etc.
 
 const wxString MainFrame::paneNameNotebook(_T("MainNotebook"));
 const wxString MainFrame::paneNameSystemsTree(_T("SystemsTree"));
