@@ -48,7 +48,9 @@ This subsystem is currently unused.
 
 \subsection{Mass Properties} \label{ssec:massProperties}
 
-Although there are several mass properties parameters associated with each car file, only the z-component of the center of gravity is currently used.  Currently it affects only the calculation of the anti-dive and anti-lift values.
+There are several mass properties parameters associated with each car file.  For kinematics analysis, only the z-component of the center of gravity is currently used.  It affects only the calculation of the anti-dive and anti-lift values.
+
+For quasi-static analysis, all parameters except for the inertia tensor are used.
 
 \subsection{Suspension} \label{ssec:suspension}
 
@@ -62,4 +64,6 @@ Static toe and camber settings affect only the calculated steer and camber value
 
 \subsection{Tires} \label{ssec:tires}
 
-The diameter and width of all four tires may be specified individually.  The width is for display purposes only.  The diameter affects the tire rendering as well as the kinematic calculations.  For the purposes of the kinematics analysis, the tires are assumed to be thin, rigid disks.  For all kinematic states the tires are assumed to rest on the ground.
+The diameter, width and stiffness of all four tires may be specified individually.  The width is for display purposes only.  The diameter affects the tire rendering as well as the kinematic calculations.  For the purposes of the kinematics analysis, the tires are assumed to be thin, rigid disks.  For all kinematic states the tires are assumed to rest on the ground.
+
+For quasi-static analysis, the the tire stiffness parameters are used to compute tire deflections.  The rendering will still draw perfectly round tires, which will result in the tire being drawn slightly below the ground plane.
