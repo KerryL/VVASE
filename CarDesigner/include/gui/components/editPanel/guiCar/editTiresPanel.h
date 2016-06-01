@@ -39,56 +39,61 @@ private:
 
 	void CreateControls();
 
+	static double ConvertSpringInput(const double& value);
+	static double ConvertSpringOutput(const double& value);
+
 	// Event IDs
 	enum EditTiresEventIds
 	{
 		TextBoxRightFrontTireDiameter = 500 + wxID_HIGHEST,
 		TextBoxRightFrontTireWidth,
+		TextBoxRightFrontStiffness,
 
 		TextBoxLeftFrontTireDiameter,
 		TextBoxLeftFrontTireWidth,
+		TextBoxLeftFrontStiffness,
 
 		TextBoxRightRearTireDiameter,
 		TextBoxRightRearTireWidth,
+		TextBoxRightRearStiffness,
 
 		TextBoxLeftRearTireDiameter,
-		TextBoxLeftRearTireWidth
+		TextBoxLeftRearTireWidth,
+		TextBoxLeftRearStiffness
 	};
 
 	// Event handlers-----------------------------------------------------
-	void RightFrontTireDiameterChangeEvent(wxCommandEvent &event);
-	void RightFrontTireWidthChangeEvent(wxCommandEvent &event);
-
-	void LeftFrontTireDiameterChangeEvent(wxCommandEvent &event);
-	void LeftFrontTireWidthChangeEvent(wxCommandEvent &event);
-
-	void RightRearTireDiameterChangeEvent(wxCommandEvent &event);
-	void RightRearTireWidthChangeEvent(wxCommandEvent &event);
-
-	void LeftRearTireDiameterChangeEvent(wxCommandEvent &event);
-	void LeftRearTireWidthChangeEvent(wxCommandEvent &event);
+	void TextBoxChangeEvent(wxCommandEvent &event);
 	// End event handlers-------------------------------------------------
 
 	// The controls for the static-setup options
 	wxTextCtrl *rightFrontTireDiameter;
 	wxTextCtrl *rightFrontTireWidth;
+	wxTextCtrl *rightFrontTireStiffness;
 	wxStaticText *rightFrontDiameterUnitsLabel;
 	wxStaticText *rightFrontWidthUnitsLabel;
+	wxStaticText *rightFrontStiffnessUnitsLabel;
 
 	wxTextCtrl *leftFrontTireDiameter;
 	wxTextCtrl *leftFrontTireWidth;
+	wxTextCtrl *leftFrontTireStiffness;
 	wxStaticText *leftFrontDiameterUnitsLabel;
 	wxStaticText *leftFrontWidthUnitsLabel;
+	wxStaticText *leftFrontStiffnessUnitsLabel;
 
 	wxTextCtrl *rightRearTireDiameter;
 	wxTextCtrl *rightRearTireWidth;
+	wxTextCtrl *rightRearTireStiffness;
 	wxStaticText *rightRearDiameterUnitsLabel;
 	wxStaticText *rightRearWidthUnitsLabel;
+	wxStaticText *rightRearStiffnessUnitsLabel;
 
 	wxTextCtrl *leftRearTireDiameter;
 	wxTextCtrl *leftRearTireWidth;
+	wxTextCtrl *leftRearTireStiffness;
 	wxStaticText *leftRearDiameterUnitsLabel;
 	wxStaticText *leftRearWidthUnitsLabel;
+	wxStaticText *leftRearStiffnessUnitsLabel;
 
 	DECLARE_EVENT_TABLE();
 };

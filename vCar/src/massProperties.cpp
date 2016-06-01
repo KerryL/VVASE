@@ -482,7 +482,7 @@ void MassProperties::Read(std::ifstream *inFile, int fileVersion)
 		inFile->read((char*)&ixy, sizeof(double));
 		inFile->read((char*)&ixz, sizeof(double));
 		inFile->read((char*)&iyz, sizeof(double));
-		inFile->seekg(inFile->tellg() + 2 * sizeof(double));
+		inFile->seekg(inFile->tellg() + (std::streamoff)(2 * sizeof(double)));
 		inFile->read((char*)&totalCGHeight, sizeof(totalCGHeight));
 		inFile->read((char*)&unsprungMass, sizeof(WheelSet));
 		inFile->read((char*)&wheelInertias, sizeof(VectorSet));

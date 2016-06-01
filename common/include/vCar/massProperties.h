@@ -46,7 +46,7 @@ public:
 	double ixz;					// [slug-in^2]
 	double iyz;					// [slug-in^2]
 	double totalCGHeight;		// [in]
-	WheelSet cornerWeights;		// [lbf]
+	WheelSet cornerWeights;		// [slug]
 	WheelSet unsprungMass;		// [slug]
 	VectorSet wheelInertias;	// [slug-in^2]
 	WheelSet unsprungCGHeights;	// [in]

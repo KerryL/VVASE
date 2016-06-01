@@ -103,9 +103,10 @@ Tire::~Tire()
 void Tire::Write(std::ofstream *outFile) const
 {
 	// Write this object to file
-	outFile->write((char*)&diameter, sizeof(double));
-	outFile->write((char*)&width, sizeof(double));
-	outFile->write((char*)&tirePressure, sizeof(double));
+	outFile->write((char*)&diameter, sizeof(diameter));
+	outFile->write((char*)&width, sizeof(width));
+	outFile->write((char*)&tirePressure, sizeof(tirePressure));
+	outFile->write((char*)&stiffness, sizeof(stiffness));
 }
 
 //==========================================================================
@@ -128,11 +129,18 @@ void Tire::Write(std::ofstream *outFile) const
 void Tire::Read(std::ifstream *inFile, int fileVersion)
 {
 	// Read this object from file accoring to the file version we're using
-	if (fileVersion >= 0)// All versions
+	if (fileVersion >= 4)
 	{
-		inFile->read((char*)&diameter, sizeof(double));
-		inFile->read((char*)&width, sizeof(double));
-		inFile->read((char*)&tirePressure, sizeof(double));
+		inFile->read((char*)&diameter, sizeof(diameter));
+		inFile->read((char*)&width, sizeof(width));
+		inFile->read((char*)&tirePressure, sizeof(tirePressure));
+		inFile->read((char*)&stiffness, sizeof(stiffness));
+	}
+	else if (fileVersion >= 0)// All versions
+	{
+		inFile->read((char*)&diameter, sizeof(diameter));
+		inFile->read((char*)&width, sizeof(width));
+		inFile->read((char*)&tirePressure, sizeof(tirePressure));
 	}
 	else
 		assert(false);

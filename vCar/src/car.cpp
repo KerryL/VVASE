@@ -191,15 +191,19 @@ Car::Car()
 	// Test tires
 	tires->rightFront->diameter = 20.5;
 	tires->rightFront->width = 7.0;
+	tires->rightFront->stiffness = 1000.0;
 
 	tires->leftFront->diameter = 20.5;
 	tires->leftFront->width = 7.0;
+	tires->leftFront->stiffness = 1000.0;
 
 	tires->rightRear->diameter = 20.5;
 	tires->rightRear->width = 7.0;
+	tires->rightRear->stiffness = 1000.0;
 
 	tires->leftRear->diameter = 20.5;
 	tires->leftRear->width = 7.0;
+	tires->leftRear->stiffness = 1000.0;
 
 	// Test brakes
 	brakes->rearBrakesInboard = true;
@@ -208,10 +212,10 @@ Car::Car()
 	// Test mass properties
 	massProperties->mass = 520.0 / 32.174;
 	massProperties->totalCGHeight = 9.0;
-	massProperties->cornerWeights.leftFront = 110.0;
-	massProperties->cornerWeights.rightFront = 110.0;
-	massProperties->cornerWeights.leftRear = 140.0;
-	massProperties->cornerWeights.rightRear = 140.0;
+	massProperties->cornerWeights.leftFront = 110.0 / 32.174;
+	massProperties->cornerWeights.rightFront = 110.0 / 32.174;
+	massProperties->cornerWeights.leftRear = 140.0 / 32.174;
+	massProperties->cornerWeights.rightRear = 140.0 / 32.174;
 	massProperties->unsprungMass.leftFront = 35.0 / 32.174;
 	massProperties->unsprungMass.rightFront = 35.0 / 32.174;
 	massProperties->unsprungMass.leftRear = 25.0 / 32.174;

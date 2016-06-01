@@ -55,6 +55,7 @@ public:
 	double diameter;			// [in] (unloaded)
 	double width;				// [in]
 	double tirePressure;		// [psi]
+	double stiffness;			// [lb/in]
 
 	Tire& operator=(const Tire &tire);
 

@@ -51,11 +51,10 @@ private:
 		TextBoxIxz,
 		TextBoxIyz,
 
-		TextBoxMass,
-		TextBoxCornerWeightLeftFront,
-		TextBoxCornerWeightRightFront,
-		TextBoxCornerWeightLeftRear,
-		TextBoxCornerWeightRightRear,
+		TextBoxCornerMassLeftFront,
+		TextBoxCornerMassRightFront,
+		TextBoxCornerMassLeftRear,
+		TextBoxCornerMassRightRear,
 		
 		TextBoxUnsprungMassLeftFront,
 		TextBoxUnsprungMassRightFront,
@@ -88,11 +87,10 @@ private:
 	wxTextCtrl *ixz;
 	wxTextCtrl *iyz;
 
-	wxTextCtrl *mass;
-	wxTextCtrl *cornerWeightLeftFront;
-	wxTextCtrl *cornerWeightRightFront;
-	wxTextCtrl *cornerWeightLeftRear;
-	wxTextCtrl *cornerWeightRightRear;
+	wxTextCtrl *cornerMassLeftFront;
+	wxTextCtrl *cornerMassRightFront;
+	wxTextCtrl *cornerMassLeftRear;
+	wxTextCtrl *cornerMassRightRear;
 	
 	wxTextCtrl *unsprungMassLeftFront;
 	wxTextCtrl *unsprungMassRightFront;
@@ -103,11 +101,10 @@ private:
 
 	// The static text controls
 	wxStaticText *inertiaUnitsLabel;
-	wxStaticText *massUnitsLabel;
-	wxStaticText *cornerWeightLeftFrontUnitsLabel;
-	wxStaticText *cornerWeightRightFrontUnitsLabel;
-	wxStaticText *cornerWeightLeftRearUnitsLabel;
-	wxStaticText *cornerWeightRightRearUnitsLabel;
+	wxStaticText *cornerMassLeftFrontUnitsLabel;
+	wxStaticText *cornerMassRightFrontUnitsLabel;
+	wxStaticText *cornerMassLeftRearUnitsLabel;
+	wxStaticText *cornerMassRightRearUnitsLabel;
 	wxStaticText *unsprungMassLeftFrontUnitsLabel;
 	wxStaticText *unsprungMassRightFrontUnitsLabel;
 	wxStaticText *unsprungMassLeftRearUnitsLabel;

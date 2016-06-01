@@ -117,8 +117,6 @@ void EditMassPanel::UpdateInformation(MassProperties *currentMassProperties)
 	this->currentMassProperties = currentMassProperties;
 
 	// Update the mass
-	mass->ChangeValue(UnitConverter::GetInstance().FormatNumber(
-		UnitConverter::GetInstance().ConvertMassOutput(currentMassProperties->mass)));
 	unsprungMassLeftFront->ChangeValue(UnitConverter::GetInstance().FormatNumber(
 		UnitConverter::GetInstance().ConvertMassOutput(currentMassProperties->unsprungMass.leftFront)));
 	unsprungMassRightFront->ChangeValue(UnitConverter::GetInstance().FormatNumber(
@@ -128,34 +126,34 @@ void EditMassPanel::UpdateInformation(MassProperties *currentMassProperties)
 	unsprungMassRightRear->ChangeValue(UnitConverter::GetInstance().FormatNumber(
 		UnitConverter::GetInstance().ConvertMassOutput(currentMassProperties->unsprungMass.rightRear)));
 		
-	cornerWeightLeftFront->ChangeValue(UnitConverter::GetInstance().FormatNumber(
-		UnitConverter::GetInstance().ConvertForceOutput(currentMassProperties->cornerWeights.leftFront)));
-	cornerWeightRightFront->ChangeValue(UnitConverter::GetInstance().FormatNumber(
-		UnitConverter::GetInstance().ConvertForceOutput(currentMassProperties->cornerWeights.rightFront)));
-	cornerWeightLeftRear->ChangeValue(UnitConverter::GetInstance().FormatNumber(
-		UnitConverter::GetInstance().ConvertForceOutput(currentMassProperties->cornerWeights.leftRear)));
-	cornerWeightRightRear->ChangeValue(UnitConverter::GetInstance().FormatNumber(
-		UnitConverter::GetInstance().ConvertForceOutput(currentMassProperties->cornerWeights.rightRear)));
+	cornerMassLeftFront->ChangeValue(UnitConverter::GetInstance().FormatNumber(
+		UnitConverter::GetInstance().ConvertMassOutput(currentMassProperties->cornerWeights.leftFront)));
+	cornerMassRightFront->ChangeValue(UnitConverter::GetInstance().FormatNumber(
+		UnitConverter::GetInstance().ConvertMassOutput(currentMassProperties->cornerWeights.rightFront)));
+	cornerMassLeftRear->ChangeValue(UnitConverter::GetInstance().FormatNumber(
+		UnitConverter::GetInstance().ConvertMassOutput(currentMassProperties->cornerWeights.leftRear)));
+	cornerMassRightRear->ChangeValue(UnitConverter::GetInstance().FormatNumber(
+		UnitConverter::GetInstance().ConvertMassOutput(currentMassProperties->cornerWeights.rightRear)));
 
 	// Update the inertia
 	ixx->ChangeValue(UnitConverter::GetInstance().FormatNumber(
-		UnitConverter::GetInstance().ConvertMassOutput(currentMassProperties->ixx)));
+		UnitConverter::GetInstance().ConvertInertiaOutput(currentMassProperties->ixx)));
 	iyy->ChangeValue(UnitConverter::GetInstance().FormatNumber(
-		UnitConverter::GetInstance().ConvertMassOutput(currentMassProperties->iyy)));
+		UnitConverter::GetInstance().ConvertInertiaOutput(currentMassProperties->iyy)));
 	izz->ChangeValue(UnitConverter::GetInstance().FormatNumber(
-		UnitConverter::GetInstance().ConvertMassOutput(currentMassProperties->izz)));
+		UnitConverter::GetInstance().ConvertInertiaOutput(currentMassProperties->izz)));
 	ixy->ChangeValue(UnitConverter::GetInstance().FormatNumber(
-		UnitConverter::GetInstance().ConvertMassOutput(currentMassProperties->ixy)));
+		UnitConverter::GetInstance().ConvertInertiaOutput(currentMassProperties->ixy)));
 	iyx->SetLabel(UnitConverter::GetInstance().FormatNumber(
-		UnitConverter::GetInstance().ConvertMassOutput(currentMassProperties->ixy)));
+		UnitConverter::GetInstance().ConvertInertiaOutput(currentMassProperties->ixy)));
 	ixz->ChangeValue(UnitConverter::GetInstance().FormatNumber(
-		UnitConverter::GetInstance().ConvertMassOutput(currentMassProperties->ixz)));
+		UnitConverter::GetInstance().ConvertInertiaOutput(currentMassProperties->ixz)));
 	izx->SetLabel(UnitConverter::GetInstance().FormatNumber(
-		UnitConverter::GetInstance().ConvertMassOutput(currentMassProperties->ixz)));
+		UnitConverter::GetInstance().ConvertInertiaOutput(currentMassProperties->ixz)));
 	iyz->ChangeValue(UnitConverter::GetInstance().FormatNumber(
-		UnitConverter::GetInstance().ConvertMassOutput(currentMassProperties->iyz)));
+		UnitConverter::GetInstance().ConvertInertiaOutput(currentMassProperties->iyz)));
 	izy->SetLabel(UnitConverter::GetInstance().FormatNumber(
-		UnitConverter::GetInstance().ConvertMassOutput(currentMassProperties->iyz)));
+		UnitConverter::GetInstance().ConvertInertiaOutput(currentMassProperties->iyz)));
 
 	// Update the centers of gravity
 	cgHeights->SetCellValue(RowTotalCG, 1, UnitConverter::GetInstance().FormatNumber(
@@ -171,15 +169,14 @@ void EditMassPanel::UpdateInformation(MassProperties *currentMassProperties)
 
 	// Update the units
 	inertiaUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeInertia) + ')');
-	massUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeMass) + ')');
 	unsprungMassLeftFrontUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeMass) + ')');
 	unsprungMassRightFrontUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeMass) + ')');
 	unsprungMassLeftRearUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeMass) + ')');
 	unsprungMassRightRearUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeMass) + ')');
-	cornerWeightLeftFrontUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeForce) + ')');
-	cornerWeightRightFrontUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeForce) + ')');
-	cornerWeightLeftRearUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeForce) + ')');
-	cornerWeightRightRearUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeForce) + ')');
+	cornerMassLeftFrontUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeMass) + ')');
+	cornerMassRightFrontUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeMass) + ')');
+	cornerMassLeftRearUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeMass) + ')');
+	cornerMassRightRearUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeMass) + ')');
 	cgHeights->SetCellValue(RowUnits, 1, '(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance) + ')');
 
 	// Update sizers
@@ -265,58 +262,51 @@ void EditMassPanel::CreateControls()
 
 	// Create the mass inputs
 	wxFlexGridSizer *massInputSizer = new wxFlexGridSizer(3, 3, 3);
-	wxStaticText *massLabel = new wxStaticText(this, wxID_ANY, _T("Total Mass"));
-	wxStaticText *cornerWeightLabelLeftFront = new wxStaticText(this, wxID_ANY, _T("LF Corner Weight"));
-	wxStaticText *cornerWeightLabelRightFront = new wxStaticText(this, wxID_ANY, _T("RF Corner Weight"));
-	wxStaticText *cornerWeightLabelLeftRear = new wxStaticText(this, wxID_ANY, _T("LR Corner Weight"));
-	wxStaticText *cornerWeightLabelRightRear = new wxStaticText(this, wxID_ANY, _T("RR Corner Weight"));
+	wxStaticText *cornerMassLabelLeftFront = new wxStaticText(this, wxID_ANY, _T("LF Corner Mass"));
+	wxStaticText *cornerMassLabelRightFront = new wxStaticText(this, wxID_ANY, _T("RF Corner Mass"));
+	wxStaticText *cornerMassLabelLeftRear = new wxStaticText(this, wxID_ANY, _T("LR Corner Mass"));
+	wxStaticText *cornerMassLabelRightRear = new wxStaticText(this, wxID_ANY, _T("RR Corner Mass"));
 	
 	wxStaticText *unsprungMassLabelLeftFront = new wxStaticText(this, wxID_ANY, _T("LF Unsprung Mass"));
 	wxStaticText *unsprungMassLabelRightFront = new wxStaticText(this, wxID_ANY, _T("RF Unsprung Mass"));
 	wxStaticText *unsprungMassLabelLeftRear = new wxStaticText(this, wxID_ANY, _T("LR Unsprung Mass"));
 	wxStaticText *unsprungMassLabelRightRear = new wxStaticText(this, wxID_ANY, _T("RR Unsprung Mass"));
 
-	mass = new wxTextCtrl(this, TextBoxMass);
-	cornerWeightLeftFront = new wxTextCtrl(this, TextBoxCornerWeightLeftFront);
-	cornerWeightRightFront = new wxTextCtrl(this, TextBoxCornerWeightRightFront);
-	cornerWeightLeftRear = new wxTextCtrl(this, TextBoxCornerWeightLeftRear);
-	cornerWeightRightRear = new wxTextCtrl(this, TextBoxCornerWeightRightRear);
+	cornerMassLeftFront = new wxTextCtrl(this, TextBoxCornerMassLeftFront);
+	cornerMassRightFront = new wxTextCtrl(this, TextBoxCornerMassRightFront);
+	cornerMassLeftRear = new wxTextCtrl(this, TextBoxCornerMassLeftRear);
+	cornerMassRightRear = new wxTextCtrl(this, TextBoxCornerMassRightRear);
 	
 	unsprungMassLeftFront = new wxTextCtrl(this, TextBoxUnsprungMassLeftFront);
 	unsprungMassRightFront = new wxTextCtrl(this, TextBoxUnsprungMassRightFront);
 	unsprungMassLeftRear = new wxTextCtrl(this, TextBoxUnsprungMassLeftRear);
 	unsprungMassRightRear = new wxTextCtrl(this, TextBoxUnsprungMassRightRear);
 
-	massUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
-	cornerWeightLeftFrontUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
-	cornerWeightRightFrontUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
-	cornerWeightLeftRearUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
-	cornerWeightRightRearUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
+	cornerMassLeftFrontUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
+	cornerMassRightFrontUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
+	cornerMassLeftRearUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
+	cornerMassRightRearUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
 	
 	unsprungMassLeftFrontUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
 	unsprungMassRightFrontUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
 	unsprungMassLeftRearUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
 	unsprungMassRightRearUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
-
-	massInputSizer->Add(massLabel, 0, wxALIGN_CENTER_VERTICAL);
-	massInputSizer->Add(mass, 0, wxEXPAND);
-	massInputSizer->Add(massUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 	
-	massInputSizer->Add(cornerWeightLabelLeftFront, 0, wxALIGN_CENTER_VERTICAL);
-	massInputSizer->Add(cornerWeightLeftFront, 0, wxEXPAND);
-	massInputSizer->Add(cornerWeightLeftFrontUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
+	massInputSizer->Add(cornerMassLabelLeftFront, 0, wxALIGN_CENTER_VERTICAL);
+	massInputSizer->Add(cornerMassLeftFront, 0, wxEXPAND);
+	massInputSizer->Add(cornerMassLeftFrontUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 
-	massInputSizer->Add(cornerWeightLabelRightFront, 0, wxALIGN_CENTER_VERTICAL);
-	massInputSizer->Add(cornerWeightRightFront, 0, wxEXPAND);
-	massInputSizer->Add(cornerWeightRightFrontUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
+	massInputSizer->Add(cornerMassLabelRightFront, 0, wxALIGN_CENTER_VERTICAL);
+	massInputSizer->Add(cornerMassRightFront, 0, wxEXPAND);
+	massInputSizer->Add(cornerMassRightFrontUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 
-	massInputSizer->Add(cornerWeightLabelLeftRear, 0, wxALIGN_CENTER_VERTICAL);
-	massInputSizer->Add(cornerWeightLeftRear, 0, wxEXPAND);
-	massInputSizer->Add(cornerWeightLeftRearUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
+	massInputSizer->Add(cornerMassLabelLeftRear, 0, wxALIGN_CENTER_VERTICAL);
+	massInputSizer->Add(cornerMassLeftRear, 0, wxEXPAND);
+	massInputSizer->Add(cornerMassLeftRearUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 
-	massInputSizer->Add(cornerWeightLabelRightRear, 0, wxALIGN_CENTER_VERTICAL);
-	massInputSizer->Add(cornerWeightRightRear, 0, wxEXPAND);
-	massInputSizer->Add(cornerWeightRightRearUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
+	massInputSizer->Add(cornerMassLabelRightRear, 0, wxALIGN_CENTER_VERTICAL);
+	massInputSizer->Add(cornerMassRightRear, 0, wxEXPAND);
+	massInputSizer->Add(cornerMassRightRearUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
 
 	massInputSizer->Add(unsprungMassLabelLeftFront, 0, wxALIGN_CENTER_VERTICAL);
 	massInputSizer->Add(unsprungMassLeftFront, 0, wxEXPAND);
@@ -413,11 +403,10 @@ void EditMassPanel::CreateControls()
 	ixy->SetMinSize(wxSize(minWidth, -1));
 	ixz->SetMinSize(wxSize(minWidth, -1));
 	iyz->SetMinSize(wxSize(minWidth, -1));
-	mass->SetMinSize(wxSize(minWidth, -1));
-	cornerWeightLeftFront->SetMinSize(wxSize(minWidth, -1));
-	cornerWeightRightFront->SetMinSize(wxSize(minWidth, -1));
-	cornerWeightLeftRear->SetMinSize(wxSize(minWidth, -1));
-	cornerWeightRightRear->SetMinSize(wxSize(minWidth, -1));
+	cornerMassLeftFront->SetMinSize(wxSize(minWidth, -1));
+	cornerMassRightFront->SetMinSize(wxSize(minWidth, -1));
+	cornerMassLeftRear->SetMinSize(wxSize(minWidth, -1));
+	cornerMassRightRear->SetMinSize(wxSize(minWidth, -1));
 	unsprungMassLeftFront->SetMinSize(wxSize(minWidth, -1));
 	unsprungMassRightFront->SetMinSize(wxSize(minWidth, -1));
 	unsprungMassLeftRear->SetMinSize(wxSize(minWidth, -1));
@@ -487,32 +476,26 @@ void EditMassPanel::TextBoxEditEvent(wxCommandEvent &event)
 		units = UnitConverter::UnitTypeInertia;
 		break;
 
-	case TextBoxMass:
-		textBox = mass;
-		dataLocation = &currentMassProperties->mass;
-		units = UnitConverter::UnitTypeMass;
-		break;
-
-	case TextBoxCornerWeightLeftFront:
-		textBox = cornerWeightLeftFront;
+	case TextBoxCornerMassLeftFront:
+		textBox = cornerMassLeftFront;
 		dataLocation = &currentMassProperties->cornerWeights.leftFront;
 		units = UnitConverter::UnitTypeForce;
 		break;
 
-	case TextBoxCornerWeightRightFront:
-		textBox = cornerWeightRightFront;
+	case TextBoxCornerMassRightFront:
+		textBox = cornerMassRightFront;
 		dataLocation = &currentMassProperties->cornerWeights.rightFront;
 		units = UnitConverter::UnitTypeForce;
 		break;
 
-	case TextBoxCornerWeightLeftRear:
-		textBox = cornerWeightLeftRear;
+	case TextBoxCornerMassLeftRear:
+		textBox = cornerMassLeftRear;
 		dataLocation = &currentMassProperties->cornerWeights.leftRear;
 		units = UnitConverter::UnitTypeForce;
 		break;
 
-	case TextBoxCornerWeightRightRear:
-		textBox = cornerWeightRightRear;
+	case TextBoxCornerMassRightRear:
+		textBox = cornerMassRightRear;
 		dataLocation = &currentMassProperties->cornerWeights.rightRear;
 		units = UnitConverter::UnitTypeForce;
 		break;
