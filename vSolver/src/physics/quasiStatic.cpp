@@ -105,8 +105,8 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 		kinematics.SetTireDeflections(ComputeTireDeflections(originalCar, wheelLoads));
 
 		kinematics.UpdateKinematics(originalCar, workingCar, wxString::Format("Quasi-Static, i = %u (error)", i));
-
-		error = ComputeError(workingCar, inputs.gx, inputs.gy, ComputeWheelLoads(originalCar, kinematics.GetOutputs()), kinematics.GetOutputs());
+		wheelLoads = ComputeWheelLoads(originalCar, kinematics.GetOutputs());
+		error = ComputeError(workingCar, inputs.gx, inputs.gy, wheelLoads, kinematics.GetOutputs());
 
 		kinematics.SetRoll(guess(0,0) + epsilon);
 		kinematics.UpdateKinematics(originalCar, workingCar, wxString::Format("Quasi-Static, i = %u (roll)", i));
@@ -137,8 +137,6 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 		jacobian(2,2) = (tempError(2,0) - error(2,0)) / epsilon;
 		jacobian(3,2) = (tempError(3,0) - error(3,0)) / epsilon;
 
-		wheelLoads = ComputeWheelLoads(originalCar, kinematics.GetOutputs());
-
 		// Compute next guess
 		if (!jacobian.LeftDivide(error, delta))
 		{
@@ -148,15 +146,20 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 		guess -= delta;
 
 		i++;
+
+		// TODO:  Remove
+		Debugger::GetInstance() << "Results:\n" + wxString::Format(_T("%f\t%f\n%f\t%f"), wheelLoads.leftFront, wheelLoads.rightFront, wheelLoads.leftRear, wheelLoads.rightRear) << Debugger::PriorityVeryHigh;
+		Debugger::GetInstance() << "Error:\n" + wxString::Format(_T("%f"),fabs(error(0, 0)) + fabs(error(1, 0)) + fabs(error(2, 0))  + fabs(error(3, 0))) << Debugger::PriorityVeryHigh;
+		Debugger::GetInstance() << "State:\n" + wxString::Format(_T("P = %f, R = %f, H = %f"), guess(0,0), guess(1,0), guess(2,0)) << Debugger::PriorityVeryHigh;
 	}
 
 	if (i == limit)
 		Debugger::GetInstance() << "Warning:  Iteration limit reached (QuasiStatic::Solve)" << Debugger::PriorityMedium;
 
 	// TODO:  Remove
-	Debugger::GetInstance() << "Results:\n" + wxString::Format(_T("%f\t%f\n%f\t%f"), wheelLoads.leftFront, wheelLoads.rightFront, wheelLoads.leftRear, wheelLoads.rightRear) << Debugger::PriorityVeryHigh;
+	/*Debugger::GetInstance() << "Results:\n" + wxString::Format(_T("%f\t%f\n%f\t%f"), wheelLoads.leftFront, wheelLoads.rightFront, wheelLoads.leftRear, wheelLoads.rightRear) << Debugger::PriorityVeryHigh;
 	Debugger::GetInstance() << "Error:\n" + wxString::Format(_T("%f"),fabs(error(0, 0)) + fabs(error(1, 0)) + fabs(error(2, 0))  + fabs(error(3, 0))) << Debugger::PriorityVeryHigh;
-	Debugger::GetInstance() << "State:\n" + wxString::Format(_T("P = %f, R = %f, H = %f"), guess(0,0), guess(1,0), guess(2,0)) << Debugger::PriorityVeryHigh;
+	Debugger::GetInstance() << "State:\n" + wxString::Format(_T("P = %f, R = %f, H = %f"), guess(0,0), guess(1,0), guess(2,0)) << Debugger::PriorityVeryHigh;*/
 
 	// TODO:  Validate return values
 
@@ -511,10 +514,10 @@ Matrix QuasiStatic::BuildRightHandMatrix(const Car* workingCar, const double& gx
 	m(4,0) = gravity * (mp->cornerWeights.leftFront + mp->cornerWeights.rightFront + mp->cornerWeights.leftRear + mp->cornerWeights.rightRear);
 
 	// Co-planar constraints
-	m(5,0) = mp->unsprungMass.leftFront * gravity / t->leftFront->stiffness;
-	m(6,0) = mp->unsprungMass.rightFront * gravity / t->rightFront->stiffness;
-	m(7,0) = mp->unsprungMass.leftRear * gravity / t->leftRear->stiffness;
-	m(8,0) = mp->unsprungMass.rightRear * gravity / t->rightRear->stiffness;
+	m(5,0) = -mp->unsprungMass.leftFront * gravity / t->leftFront->stiffness;
+	m(6,0) = -mp->unsprungMass.rightFront * gravity / t->rightFront->stiffness;
+	m(7,0) = -mp->unsprungMass.leftRear * gravity / t->leftRear->stiffness;
+	m(8,0) = -mp->unsprungMass.rightRear * gravity / t->rightRear->stiffness;
 
 	return m;
 }

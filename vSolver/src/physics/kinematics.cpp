@@ -441,16 +441,16 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 		// If this is the first iteration, initialize the limit variables
 		if (iteration == 1)
 		{
-			upperLimit = corner.hardpoints[Corner::LowerBallJoint].z +
-				3.0 * fabs(corner.hardpoints[Corner::ContactPatch].z);
-			lowerLimit = corner.hardpoints[Corner::LowerBallJoint].z -
-				3.0 * fabs(corner.hardpoints[Corner::ContactPatch].z);
+			upperLimit = corner.hardpoints[Corner::LowerBallJoint].z + 1.0;
+			//	3.0 * fabs(corner.hardpoints[Corner::ContactPatch].z);
+			lowerLimit = corner.hardpoints[Corner::LowerBallJoint].z - 1.0;
+			//	3.0 * fabs(corner.hardpoints[Corner::ContactPatch].z);
 		}
 
 		// Make the adjustment in the guess
-		if (corner.hardpoints[Corner::ContactPatch].z > tolerance)
+		if (corner.hardpoints[Corner::ContactPatch].z + tireDeflection > tolerance)
 			upperLimit = corner.hardpoints[Corner::LowerBallJoint].z;
-		else if (corner.hardpoints[Corner::ContactPatch].z < -tolerance)
+		else if (corner.hardpoints[Corner::ContactPatch].z + tireDeflection < -tolerance)
 			lowerLimit = corner.hardpoints[Corner::LowerBallJoint].z;
 		corner.hardpoints[Corner::LowerBallJoint].z = lowerLimit + (upperLimit - lowerLimit) / 2.0;
 
@@ -459,7 +459,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 
 	// Check to make sure we finished the loop because we were within the tolerance (and not
 	// because we hit the iteration limit)
-	if ((fabs(corner.hardpoints[Corner::ContactPatch].z) > tolerance))
+	if ((fabs(corner.hardpoints[Corner::ContactPatch].z + tireDeflection) > tolerance))
 	{
 		Debugger::GetInstance() << "Warning (SolveCorner):  Contact patch location did not converge" << Debugger::PriorityMedium;
 		success = false;
