@@ -24,6 +24,7 @@
 
 // VVASE headers
 #include "vCar/massProperties.h"
+#include "vCar/suspension.h"
 #include "vMath/matrix.h"
 #include "vMath/complex.h"
 #include "vUtilities/debugger.h"
@@ -528,4 +529,87 @@ MassProperties& MassProperties::operator = (const MassProperties &massProperties
 	unsprungCGHeights		= massProperties.unsprungCGHeights;
 
 	return *this;
+}
+
+//==========================================================================
+// Class:			MassProperties
+// Function:		GetTotalMass
+//
+// Description:		Returns calculated total mass.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		double [slug]
+//
+//==========================================================================
+double MassProperties::GetTotalMass() const
+{
+	return cornerWeights.leftFront + cornerWeights.rightFront
+		+ cornerWeights.leftRear + cornerWeights.rightRear;
+}
+
+//==========================================================================
+// Class:			MassProperties
+// Function:		GetSprungMass
+//
+// Description:		Returns calculated sprung mass.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		double [slug]
+//
+//==========================================================================
+double MassProperties::GetSprungMass() const
+{
+	return GetTotalMass() - unsprungMass.leftFront - unsprungMass.rightFront
+		- unsprungMass.leftRear - unsprungMass.rightRear;
+}
+
+//==========================================================================
+// Class:			MassProperties
+// Function:		GetSprungMassCG
+//
+// Description:		Returns calculated sprung mass CG.
+//
+// Input Arguments:
+//		s	= const Suspension*
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		Vector [in]
+//
+//==========================================================================
+Vector MassProperties::GetSprungMassCG(const Suspension* s) const
+{
+	const double sprungMass(GetSprungMass());
+	Vector cg;
+	cg.x = (s->leftFront.hardpoints[Corner::ContactPatch].x * (cornerWeights.leftFront - unsprungMass.leftFront)
+		+ s->rightFront.hardpoints[Corner::ContactPatch].x * (cornerWeights.rightFront - unsprungMass.rightFront)
+		+ s->leftRear.hardpoints[Corner::ContactPatch].x * (cornerWeights.leftRear - unsprungMass.leftRear)
+		+ s->rightRear.hardpoints[Corner::ContactPatch].x * (cornerWeights.rightRear - unsprungMass.rightRear)) / sprungMass;
+
+	cg.y = (s->leftFront.hardpoints[Corner::ContactPatch].y * (cornerWeights.leftFront - unsprungMass.leftFront)
+		+ s->rightFront.hardpoints[Corner::ContactPatch].y * (cornerWeights.rightFront - unsprungMass.rightFront)
+		+ s->leftRear.hardpoints[Corner::ContactPatch].y * (cornerWeights.leftRear - unsprungMass.leftRear)
+		+ s->rightRear.hardpoints[Corner::ContactPatch].y * (cornerWeights.rightRear - unsprungMass.rightRear)) / sprungMass;
+
+	cg.z = (totalCGHeight * GetTotalMass()
+		- unsprungCGHeights.leftFront * unsprungMass.leftFront
+		- unsprungCGHeights.rightFront * unsprungMass.rightFront
+		- unsprungCGHeights.leftRear * unsprungMass.leftRear
+		- unsprungCGHeights.rightRear * unsprungMass.rightRear) / sprungMass;
+
+	return cg;
 }

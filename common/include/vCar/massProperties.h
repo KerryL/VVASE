@@ -26,6 +26,9 @@
 #include "vMath/vector.h"
 #include "vUtilities/wheelSetStructures.h"
 
+// Local forward declarations
+class Suspension;
+
 class MassProperties
 {
 public:
@@ -59,6 +62,10 @@ public:
 							  Vector *iyyDirection = NULL, Vector *izzDirection = NULL) const;
 
 	MassProperties& operator=(const MassProperties &massProperties);
+
+	double GetTotalMass() const;
+	double GetSprungMass() const;
+	Vector GetSprungMassCG(const Suspension* s) const;
 };
 
 #endif// MASS_H_

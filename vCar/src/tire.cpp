@@ -172,6 +172,7 @@ Tire& Tire::operator = (const Tire &tire)
 	diameter		= tire.diameter;
 	width			= tire.width;
 	tirePressure	= tire.tirePressure;
+	stiffness		= tire.stiffness;
 
 	return *this;
 }

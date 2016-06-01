@@ -512,6 +512,10 @@ void MainFrame::InitializeSolver()
 	kinematicInputs.tireDeflections.rightFront = 0.0;
 	kinematicInputs.tireDeflections.leftRear = 0.0;
 	kinematicInputs.tireDeflections.rightRear = 0.0;
+
+	quasiStaticInputs.gx = 0.0;
+	quasiStaticInputs.gy = 0.0;
+	quasiStaticInputs.rackTravel = 0.0;
 }
 
 //==========================================================================
