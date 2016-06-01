@@ -508,6 +508,10 @@ void MainFrame::InitializeSolver()
 	kinematicInputs.roll = 0.0;
 	kinematicInputs.heave = 0.0;
 	kinematicInputs.rackTravel = 0.0;
+	kinematicInputs.tireDeflections.leftFront = 0.0;
+	kinematicInputs.tireDeflections.rightFront = 0.0;
+	kinematicInputs.tireDeflections.leftRear = 0.0;
+	kinematicInputs.tireDeflections.rightRear = 0.0;
 }
 
 //==========================================================================

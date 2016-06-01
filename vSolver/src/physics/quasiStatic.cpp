@@ -279,10 +279,10 @@ WheelSet QuasiStatic::ComputePreLoad(const Car* originalCar) const
 	
 	// First, compute load at each corner due to sprung mass
 	WheelSet sprungWeight;// [lbf]
-	sprungWeight.leftFront = mp->cornerWeights.leftFront - mp->unsprungMass.leftFront * 32.174;// TODO:  Use unsprung weight instead?
-	sprungWeight.rightFront = mp->cornerWeights.rightFront - mp->unsprungMass.rightFront * 32.174;// TODO:  Use unsprung weight instead?
-	sprungWeight.leftRear = mp->cornerWeights.leftRear - mp->unsprungMass.leftRear * 32.174;// TODO:  Use unsprung weight instead?
-	sprungWeight.rightRear = mp->cornerWeights.rightRear - mp->unsprungMass.rightRear * 32.174;// TODO:  Use unsprung weight instead?
+	sprungWeight.leftFront = (mp->cornerWeights.leftFront - mp->unsprungMass.leftFront) * 32.174;
+	sprungWeight.rightFront = (mp->cornerWeights.rightFront - mp->unsprungMass.rightFront) * 32.174;
+	sprungWeight.leftRear = (mp->cornerWeights.leftRear - mp->unsprungMass.leftRear) * 32.174;
+	sprungWeight.rightRear = (mp->cornerWeights.rightRear - mp->unsprungMass.rightRear) * 32.174;
 	
 	WheelSet preLoad;
 	preLoad.leftFront = sprungWeight.leftFront / s->leftFront.spring.rate;

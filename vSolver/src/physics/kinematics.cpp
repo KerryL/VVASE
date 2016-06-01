@@ -224,13 +224,13 @@ void Kinematics::UpdateKinematics(const Car* originalCar, Car* workingCar, wxStr
 		localSuspension->hardpoints[Suspension::RearThirdDamperInboard].z += inputs.heave;
 	}
 
-	if (!SolveCorner(localSuspension->rightFront, originalCar->suspension->rightFront, rotations, secondRotation))
+	if (!SolveCorner(localSuspension->rightFront, originalCar->suspension->rightFront, rotations, secondRotation, inputs.tireDeflections.rightFront))
 		Debugger::GetInstance() << "ERROR:  Problem solving right front corner!  Increase debug level for more information." <<	Debugger::PriorityHigh;
-	if (!SolveCorner(localSuspension->leftFront, originalCar->suspension->leftFront, rotations, secondRotation))
+	if (!SolveCorner(localSuspension->leftFront, originalCar->suspension->leftFront, rotations, secondRotation, inputs.tireDeflections.leftFront))
 		Debugger::GetInstance() << "ERROR:  Problem solving left front corner!  Increase debug level for more information." << Debugger::PriorityHigh;
-	if (!SolveCorner(localSuspension->rightRear, originalCar->suspension->rightRear, rotations, secondRotation))
+	if (!SolveCorner(localSuspension->rightRear, originalCar->suspension->rightRear, rotations, secondRotation, inputs.tireDeflections.rightRear))
 		Debugger::GetInstance() << "ERROR:  Problem solving right rear corner!  Increase debug level for more information." << Debugger::PriorityHigh;
-	if (!SolveCorner(localSuspension->leftRear, originalCar->suspension->leftRear, rotations, secondRotation))
+	if (!SolveCorner(localSuspension->leftRear, originalCar->suspension->leftRear, rotations, secondRotation, inputs.tireDeflections.leftRear))
 		Debugger::GetInstance() << "ERROR:  Problem solving left rear corner!  Increase debug level for more information." << Debugger::PriorityHigh;
 
 	// Some things need to be solved AFTER all other corners
@@ -292,6 +292,7 @@ void Kinematics::UpdateKinematics(const Car* originalCar, Car* workingCar, wxStr
 //						  about each axis
 //		secondRotation	= const Vector::Axis* describing the second axis of rotation
 //						  (the first is an input quantity)
+//		tireDeflection	= const double&
 //
 // Output Arguments:
 //		corner	= Corner*, the corner of the car we are manipulating
@@ -301,7 +302,7 @@ void Kinematics::UpdateKinematics(const Car* originalCar, Car* workingCar, wxStr
 //
 //==========================================================================
 bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
-	const Vector &rotations, const Vector::Axis &secondRotation)
+	const Vector &rotations, const Vector::Axis &secondRotation, const double& tireDeflection)
 {
 	// Determine if this corner is at the front or the rear of the car
 	bool isAtFront = false;
@@ -372,7 +373,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 	int limit = 100;
 
 	corner.hardpoints[Corner::ContactPatch].z = tolerance * 2;// Must be initialized to > Tolerance
-	while (iteration <= limit && fabs(corner.hardpoints[Corner::ContactPatch].z) > tolerance)
+	while (iteration <= limit && fabs(corner.hardpoints[Corner::ContactPatch].z + tireDeflection) > tolerance)
 	{
 		if (!SolveForXY(Corner::LowerBallJoint, Corner::LowerFrontTubMount,
 			Corner::LowerRearTubMount, originalCorner, corner))

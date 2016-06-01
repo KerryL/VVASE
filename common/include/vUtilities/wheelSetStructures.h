@@ -27,6 +27,17 @@ struct WheelSet
 	double leftFront;
 	double rightRear;
 	double leftRear;
+
+	bool operator==(const WheelSet &target) const
+	{
+		if (rightFront == target.rightFront &&
+			leftFront == target.leftFront &&
+			rightRear == target.rightRear &&
+			leftRear == target.leftRear)
+			return true;
+
+		return false;
+	}
 };
 
 // VectorSet - four Vectors

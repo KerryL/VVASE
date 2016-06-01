@@ -232,7 +232,13 @@ void GuiCar::UpdateData()
 
 	Kinematics::Inputs inputs;
 	if (mainFrame.ActiveAnalysisIsKinematic())
+	{
 		inputs = mainFrame.GetInputs();
+		inputs.tireDeflections.leftFront = 0.0;
+		inputs.tireDeflections.rightFront = 0.0;
+		inputs.tireDeflections.leftRear = 0.0;
+		inputs.tireDeflections.rightRear = 0.0;
+	}
 	else
 	{
 		QuasiStatic quasiStatic;

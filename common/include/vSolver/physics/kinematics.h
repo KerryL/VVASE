@@ -44,6 +44,7 @@ public:
 		double rackTravel;					// [in]
 		Vector centerOfRotation;			// [in]
 		Vector::Axis firstRotation;
+		WheelSet tireDeflections;			// [in]
 
 		// Operators
 		bool operator==(const Kinematics::Inputs &target) const
@@ -53,7 +54,8 @@ public:
 				heave == target.heave &&
 				rackTravel == target.rackTravel &&
 				centerOfRotation == target.centerOfRotation &&
-				firstRotation == target.firstRotation)
+				firstRotation == target.firstRotation &&
+				tireDeflections == target.tireDeflections)
 				return true;
 
 			return false;
@@ -68,17 +70,19 @@ public:
 	inline void SetCenterOfRotation(const Vector &center) { inputs.centerOfRotation = center; }
 	inline void SetFirstEulerRotation(const Vector::Axis &first) { inputs.firstRotation = first; }
 	inline void SetInputs(const Inputs& inputs) { this->inputs = inputs; }
+	inline void SetTireDeflections(const WheelSet& deflections) { inputs.tireDeflections = deflections; }
 
 	void UpdateKinematics(const Car* originalCar, Car* workingCar, wxString name);
 
-	inline KinematicOutputs GetOutputs() { return outputs; }
-	inline double GetPitch() { return inputs.pitch; }
-	inline double GetRoll() { return inputs.roll; }
-	inline double GetHeave() { return inputs.heave; }
-	inline double GetRackTravel() { return inputs.rackTravel; }
-	inline Vector GetCenterOfRotation() { return inputs.centerOfRotation; }
-	inline Vector::Axis GetFirstEulerRotation() { return inputs.firstRotation; }
-	inline Inputs GetInputs() { return inputs; }
+	inline KinematicOutputs GetOutputs() const { return outputs; }
+	inline double GetPitch() const { return inputs.pitch; }
+	inline double GetRoll() const { return inputs.roll; }
+	inline double GetHeave() const { return inputs.heave; }
+	inline double GetRackTravel() const { return inputs.rackTravel; }
+	inline Vector GetCenterOfRotation() const { return inputs.centerOfRotation; }
+	inline Vector::Axis GetFirstEulerRotation() const { return inputs.firstRotation; }
+	inline WheelSet GetTireDeflections() const { return inputs.tireDeflections; }
+	inline Inputs GetInputs() const { return inputs; }
 
 private:
 	Inputs inputs;
@@ -90,7 +94,7 @@ private:
 	KinematicOutputs outputs;
 
 	bool SolveCorner(Corner &corner, const Corner &original,
-		const Vector &rotations, const Vector::Axis &secondRotation);
+		const Vector &rotations, const Vector::Axis &secondRotation, const double& tireDeflection);
 
 	void UpdateOutputs();
 
