@@ -82,14 +82,16 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 	const unsigned int limit(100);
 	const double epsilon(1.0e-3);
 	const double maxError(1.0e-8);
-	Matrix error(4, 1, maxError, maxError), tempError;
-	Matrix jacobian(4,3);
+	Matrix error(8, 1), tempError;
+	Matrix jacobian(8,3);
 	Matrix guess(3,1);// parameteric variables representing remaining kinematic state inputs
 	Matrix delta;
 
 	guess(0,0) = 0.0;
 	guess(1,0) = 0.0;
 	guess(2,0) = 0.0;
+
+	error(0,0) = 2.0 * maxError;
 
 	WheelSet wheelLoads(originalCar->massProperties->cornerWeights);// [lb]
 	wheelLoads.leftFront *= 32.174;
@@ -106,36 +108,48 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 
 		kinematics.UpdateKinematics(originalCar, workingCar, wxString::Format("Quasi-Static, i = %u (error)", i));
 		wheelLoads = ComputeWheelLoads(originalCar, kinematics.GetOutputs());
-		error = ComputeError(workingCar, inputs.gx, inputs.gy, wheelLoads, kinematics.GetOutputs());
+		error = ComputeError(workingCar, inputs.gx, inputs.gy, wheelLoads, kinematics.GetOutputs(), kinematics.GetTireDeflections());
 
 		kinematics.SetRoll(guess(0,0) + epsilon);
 		kinematics.UpdateKinematics(originalCar, workingCar, wxString::Format("Quasi-Static, i = %u (roll)", i));
 
-		tempError = ComputeError(workingCar, inputs.gx, inputs.gy, ComputeWheelLoads(originalCar, kinematics.GetOutputs()), kinematics.GetOutputs());
+		tempError = ComputeError(workingCar, inputs.gx, inputs.gy, ComputeWheelLoads(originalCar, kinematics.GetOutputs()), kinematics.GetOutputs(), kinematics.GetTireDeflections());
 		jacobian(0,0) = (tempError(0,0) - error(0,0)) / epsilon;
 		jacobian(1,0) = (tempError(1,0) - error(1,0)) / epsilon;
 		jacobian(2,0) = (tempError(2,0) - error(2,0)) / epsilon;
 		jacobian(3,0) = (tempError(3,0) - error(3,0)) / epsilon;
+		jacobian(4,0) = (tempError(4,0) - error(4,0)) / epsilon;
+		jacobian(5,0) = (tempError(5,0) - error(5,0)) / epsilon;
+		jacobian(6,0) = (tempError(6,0) - error(6,0)) / epsilon;
+		jacobian(7,0) = (tempError(7,0) - error(7,0)) / epsilon;
 
 		kinematics.SetRoll(guess(0,0));
 		kinematics.SetPitch(guess(1,0) + epsilon);
 		kinematics.UpdateKinematics(originalCar, workingCar, wxString::Format("Quasi-Static, i = %u (pitch)", i));
 
-		tempError = ComputeError(workingCar, inputs.gx, inputs.gy, ComputeWheelLoads(originalCar, kinematics.GetOutputs()), kinematics.GetOutputs());
+		tempError = ComputeError(workingCar, inputs.gx, inputs.gy, ComputeWheelLoads(originalCar, kinematics.GetOutputs()), kinematics.GetOutputs(), kinematics.GetTireDeflections());
 		jacobian(0,1) = (tempError(0,0) - error(0,0)) / epsilon;
 		jacobian(1,1) = (tempError(1,0) - error(1,0)) / epsilon;
 		jacobian(2,1) = (tempError(2,0) - error(2,0)) / epsilon;
 		jacobian(3,1) = (tempError(3,0) - error(3,0)) / epsilon;
+		jacobian(4,0) = (tempError(4,0) - error(4,0)) / epsilon;
+		jacobian(5,0) = (tempError(5,0) - error(5,0)) / epsilon;
+		jacobian(6,0) = (tempError(6,0) - error(6,0)) / epsilon;
+		jacobian(7,0) = (tempError(7,0) - error(7,0)) / epsilon;
 
-		kinematics.SetPitch(guess(0,0));
-		kinematics.SetHeave(guess(1,0) + epsilon);
+		kinematics.SetPitch(guess(1,0));
+		kinematics.SetHeave(guess(2,0) + epsilon);
 		kinematics.UpdateKinematics(originalCar, workingCar, wxString::Format("Quasi-Static, i = %u (heave)", i));
 
-		tempError = ComputeError(workingCar, inputs.gx, inputs.gy, ComputeWheelLoads(originalCar, kinematics.GetOutputs()), kinematics.GetOutputs());
+		tempError = ComputeError(workingCar, inputs.gx, inputs.gy, ComputeWheelLoads(originalCar, kinematics.GetOutputs()), kinematics.GetOutputs(), kinematics.GetTireDeflections());
 		jacobian(0,2) = (tempError(0,0) - error(0,0)) / epsilon;
 		jacobian(1,2) = (tempError(1,0) - error(1,0)) / epsilon;
 		jacobian(2,2) = (tempError(2,0) - error(2,0)) / epsilon;
 		jacobian(3,2) = (tempError(3,0) - error(3,0)) / epsilon;
+		jacobian(4,0) = (tempError(4,0) - error(4,0)) / epsilon;
+		jacobian(5,0) = (tempError(5,0) - error(5,0)) / epsilon;
+		jacobian(6,0) = (tempError(6,0) - error(6,0)) / epsilon;
+		jacobian(7,0) = (tempError(7,0) - error(7,0)) / epsilon;
 
 		// Compute next guess
 		if (!jacobian.LeftDivide(error, delta))
@@ -376,7 +390,7 @@ Matrix QuasiStatic::BuildSystemMatrix(const Car* workingCar,
 	const MassProperties* mp(workingCar->massProperties);
 	const Suspension* s(workingCar->suspension);
 	const TireSet* t(workingCar->tires);
-	Matrix m(9, 4);
+	Matrix m(5, 4);
 
 	// Sum of y-moments about left front wheel
 	m(0,0) = 0.0;
@@ -409,7 +423,7 @@ Matrix QuasiStatic::BuildSystemMatrix(const Car* workingCar,
 	m(4,3) = 1.0;
 
 	// Co-planar constraint LF
-	m(5,0) = 1.0 / t->leftFront->stiffness
+	/*m(5,0) = 1.0 / t->leftFront->stiffness// TODO:  I think these are wrong
 		+ 1.0 / (s->leftFront.spring.rate * outputs.leftFront[KinematicOutputs::SpringInstallationRatio]
 			* outputs.leftFront[KinematicOutputs::SpringInstallationRatio]);
 	m(5,1) = 0.0;
@@ -438,7 +452,7 @@ Matrix QuasiStatic::BuildSystemMatrix(const Car* workingCar,
 	m(8,2) = 0.0;
 	m(8,3) = 1.0 / t->rightRear->stiffness
 		+ 1.0 / (s->rightRear.spring.rate * outputs.rightRear[KinematicOutputs::SpringInstallationRatio]
-			* outputs.rightRear[KinematicOutputs::SpringInstallationRatio]);
+			* outputs.rightRear[KinematicOutputs::SpringInstallationRatio]);*/
 
 	// TODO:  ARBs + 3rd springs
 
@@ -471,7 +485,7 @@ Matrix QuasiStatic::BuildRightHandMatrix(const Car* workingCar, const double& gx
 	const Suspension* s(workingCar->suspension);
 	const TireSet* t(workingCar->tires);
 	const double gravity(32.174);// [ft/sec^2]
-	Matrix m(9, 1);
+	Matrix m(5, 1);
 
 	const double sprungMass(mp->GetSprungMass());
 	const double massMoment(mp->unsprungMass.leftFront * mp->unsprungCGHeights.leftFront +
@@ -514,10 +528,10 @@ Matrix QuasiStatic::BuildRightHandMatrix(const Car* workingCar, const double& gx
 	m(4,0) = gravity * (mp->cornerWeights.leftFront + mp->cornerWeights.rightFront + mp->cornerWeights.leftRear + mp->cornerWeights.rightRear);
 
 	// Co-planar constraints
-	m(5,0) = -mp->unsprungMass.leftFront * gravity / t->leftFront->stiffness;
-	m(6,0) = -mp->unsprungMass.rightFront * gravity / t->rightFront->stiffness;
-	m(7,0) = -mp->unsprungMass.leftRear * gravity / t->leftRear->stiffness;
-	m(8,0) = -mp->unsprungMass.rightRear * gravity / t->rightRear->stiffness;
+	/*m(5,0) = mp->unsprungMass.leftFront * gravity / t->leftFront->stiffness;// TODO:  I think these are wrong
+	m(6,0) = mp->unsprungMass.rightFront * gravity / t->rightFront->stiffness;
+	m(7,0) = mp->unsprungMass.leftRear * gravity / t->leftRear->stiffness;
+	m(8,0) = mp->unsprungMass.rightRear * gravity / t->rightRear->stiffness;*/
 
 	return m;
 }
@@ -534,6 +548,7 @@ Matrix QuasiStatic::BuildRightHandMatrix(const Car* workingCar, const double& gx
 //		gy			= const double&
 //		wheelLoads	= const WheelSet&
 //		outputs		= const KinematicOutputs&
+//		tireDeflections	= const WheelSet&
 //
 // Output Arguments:
 //		None
@@ -543,7 +558,7 @@ Matrix QuasiStatic::BuildRightHandMatrix(const Car* workingCar, const double& gx
 //
 //==========================================================================
 Matrix QuasiStatic::ComputeError(const Car* workingCar, const double& gx,
-	const double& gy, const WheelSet& wheelLoads, const KinematicOutputs& outputs) const
+	const double& gy, const WheelSet& wheelLoads, const KinematicOutputs& outputs, const WheelSet& tireDeflections) const
 {
 	Matrix A(BuildSystemMatrix(workingCar, gx, gy, outputs));
 	Matrix b(BuildRightHandMatrix(workingCar, gx, gy));
@@ -565,10 +580,17 @@ Matrix QuasiStatic::ComputeError(const Car* workingCar, const double& gx,
 	x(3,0) = workingCar->massProperties->cornerWeights.rightRear * 32.174;
 	Debugger::GetInstance() << _T("\nA * x* = \n") + (A * x).Print() << Debugger::PriorityVeryHigh;*/
 
-	x(0,0) -= wheelLoads.leftFront;
-	x(1,0) -= wheelLoads.rightFront;
-	x(2,0) -= wheelLoads.leftRear;
-	x(3,0) -= wheelLoads.rightRear;
+	WheelSet newDeflections(ComputeTireDeflections(workingCar, wheelLoads));
 
-	return x;
+	Matrix error(8,1);
+	error(0,0) = x(0,0) - wheelLoads.leftFront;
+	error(1,0) = x(1,0) - wheelLoads.rightFront;
+	error(2,0) = x(2,0) - wheelLoads.leftRear;
+	error(3,0) = x(3,0) - wheelLoads.rightRear;
+	error(4,0) = newDeflections.leftFront - tireDeflections.leftFront;
+	error(5,0) = newDeflections.rightFront - tireDeflections.rightFront;
+	error(6,0) = newDeflections.leftRear - tireDeflections.leftRear;
+	error(7,0) = newDeflections.rightRear - tireDeflections.rightRear;
+
+	return error;
 }

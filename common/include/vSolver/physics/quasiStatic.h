@@ -50,7 +50,8 @@ private:
 
 	Matrix BuildSystemMatrix(const Car* workingCar, const double& gx, const double& gy, const KinematicOutputs& outputs) const;
 	Matrix BuildRightHandMatrix(const Car* workingCar, const double& gx, const double& gy) const;
-	Matrix ComputeError(const Car* workingCar, const double& gx, const double& gy, const WheelSet& wheelLoads, const KinematicOutputs& outputs) const;
+	Matrix ComputeError(const Car* workingCar, const double& gx, const double& gy,
+		const WheelSet& wheelLoads, const KinematicOutputs& outputs, const WheelSet& tireDeflections) const;
 };
 
 #endif// QUASI_STATIC_H_
