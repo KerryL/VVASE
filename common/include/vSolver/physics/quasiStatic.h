@@ -43,15 +43,14 @@ public:
 
 private:
 	WheelSet ComputeWheelLoads(const Car* originalCar, const KinematicOutputs& outputs) const;
-	double SumXMoments(const Car* workingCar, const WheelSet& wheelLoads, const double& gy) const;
-	double SumYMoments(const Car* workingCar, const WheelSet& wheelLoads, const double& gx) const;
 	WheelSet ComputePreLoad(const Car* workingCar) const;
 	WheelSet ComputeTireDeflections(const Car* originalCar, const WheelSet& wheelLoads) const;
 
-	Matrix BuildSystemMatrix(const Car* workingCar, const double& gx, const double& gy, const KinematicOutputs& outputs) const;
-	Matrix BuildRightHandMatrix(const Car* workingCar, const double& gx, const double& gy) const;
+	Matrix BuildSystemMatrix(const Car* workingCar) const;
+	Matrix BuildRightHandMatrix(const Car* workingCar, const double& gx, const double& gy,
+		const KinematicOutputs& outputs, const WheelSet& preLoad) const;
 	Matrix ComputeError(const Car* workingCar, const double& gx, const double& gy,
-		const WheelSet& wheelLoads, const KinematicOutputs& outputs, const WheelSet& tireDeflections) const;
+		const KinematicOutputs& outputs, const WheelSet& preLoad) const;
 };
 
 #endif// QUASI_STATIC_H_
