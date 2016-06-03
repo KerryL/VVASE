@@ -51,6 +51,7 @@ private:
 		const KinematicOutputs& outputs, const WheelSet& preLoad) const;
 	Matrix ComputeError(const Car* workingCar, const double& gx, const double& gy,
 		const KinematicOutputs& outputs, const WheelSet& preLoad) const;
+	static double ComputeDeltaWheelSets(const WheelSet& w1, const WheelSet& w2);
 };
 
 #endif// QUASI_STATIC_H_

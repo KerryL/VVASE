@@ -1923,3 +1923,32 @@ Matrix Matrix::GetIdentity(const unsigned int &rows, const unsigned int &columns
 
 	return identity.MakeIdentity();
 }
+
+//==========================================================================
+// Class:			Matrix
+// Function:		GetNorm
+//
+// Description:		Returns the sum of the squares of the elements.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		double
+//
+//==========================================================================
+double Matrix::GetNorm() const
+{
+	unsigned int i, j;
+	double norm(0.0);
+	for (i = 0; i < rows; i++)
+	{
+		for (j = 0; j < columns; j++)
+			norm += operator()(i,j) * operator()(i,j);
+	}
+	
+	return norm;
+}

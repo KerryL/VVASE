@@ -99,17 +99,19 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 	wheelLoads.rightFront *= 32.174;
 	wheelLoads.leftRear *= 32.174;
 	wheelLoads.rightRear *= 32.174;
+	WheelSet tireDeflections(ComputeTireDeflections(originalCar, wheelLoads));
 
-	// TODO:  Add another criteria of having tire deflections not change between iterations
-	while (i < limit && fabs(error(0, 0)) + fabs(error(1, 0)) + fabs(error(2, 0))  + fabs(error(3, 0)) > maxError)
+	while (i < limit && (error.GetNorm() > maxError ||
+		ComputeDeltaWheelSets(kinematics.GetTireDeflections(), tireDeflections) > maxError))
 	{
 		kinematics.SetRoll(guess(0,0));
 		kinematics.SetPitch(guess(1,0));
 		kinematics.SetHeave(guess(2,0));
-		kinematics.SetTireDeflections(ComputeTireDeflections(originalCar, wheelLoads));
+		kinematics.SetTireDeflections(tireDeflections);
 
 		kinematics.UpdateKinematics(originalCar, workingCar, wxString::Format("Quasi-Static, i = %u (error)", i));
 		wheelLoads = ComputeWheelLoads(originalCar, kinematics.GetOutputs());
+		tireDeflections = ComputeTireDeflections(originalCar, wheelLoads);
 		error = ComputeError(workingCar, inputs.gx, inputs.gy, kinematics.GetOutputs(), preLoad);
 
 		kinematics.SetRoll(guess(0,0) + epsilon);
@@ -561,4 +563,32 @@ Matrix QuasiStatic::ComputeError(const Car* workingCar, const double& gx,
 	}
 
 	return b - A * x;
+}
+
+//==========================================================================
+// Class:			QuasiStatic
+// Function:		ComputeDeltaWheelSets
+//
+// Description:		Computes the difference between two wheel sets.
+//
+// Input Arguments:
+//		w1	= const WheelSet&
+//		w2	= const WheelSet&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		double
+//
+//==========================================================================
+double QuasiStatic::ComputeDeltaWheelSets(const WheelSet& w1, const WheelSet& w2)
+{
+	double delta(0.0);
+	delta += fabs(w1.leftFront - w2.leftFront);
+	delta += fabs(w1.rightFront - w2.rightFront);
+	delta += fabs(w1.leftRear - w2.leftRear);
+	delta += fabs(w1.rightRear - w2.rightRear);
+	
+	return delta;
 }
