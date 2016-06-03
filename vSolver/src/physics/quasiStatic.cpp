@@ -126,11 +126,11 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 		jacobian(5,0) = (tempError(5,0) - error(5,0)) / epsilon;
 		jacobian(6,0) = (tempError(6,0) - error(6,0)) / epsilon;
 		jacobian(7,0) = (tempError(7,0) - error(7,0)) / epsilon;
-		jacobian(8,0) = (tempError(3,0) - error(3,0)) / epsilon;
-		jacobian(9,0) = (tempError(4,0) - error(4,0)) / epsilon;
-		jacobian(10,0) = (tempError(5,0) - error(5,0)) / epsilon;
-		jacobian(11,0) = (tempError(6,0) - error(6,0)) / epsilon;
-		jacobian(12,0) = (tempError(7,0) - error(7,0)) / epsilon;
+		jacobian(8,0) = (tempError(8,0) - error(8,0)) / epsilon;
+		jacobian(9,0) = (tempError(9,0) - error(9,0)) / epsilon;
+		jacobian(10,0) = (tempError(10,0) - error(10,0)) / epsilon;
+		jacobian(11,0) = (tempError(11,0) - error(11,0)) / epsilon;
+		jacobian(12,0) = (tempError(12,0) - error(12,0)) / epsilon;
 
 		kinematics.SetRoll(guess(0,0));
 		kinematics.SetPitch(guess(1,0) + epsilon);
@@ -145,11 +145,11 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 		jacobian(5,1) = (tempError(5,0) - error(5,0)) / epsilon;
 		jacobian(6,1) = (tempError(6,0) - error(6,0)) / epsilon;
 		jacobian(7,1) = (tempError(7,0) - error(7,0)) / epsilon;
-		jacobian(8,1) = (tempError(3,0) - error(3,0)) / epsilon;
-		jacobian(9,1) = (tempError(4,0) - error(4,0)) / epsilon;
-		jacobian(10,1) = (tempError(5,0) - error(5,0)) / epsilon;
-		jacobian(11,1) = (tempError(6,0) - error(6,0)) / epsilon;
-		jacobian(12,1) = (tempError(7,0) - error(7,0)) / epsilon;
+		jacobian(8,1) = (tempError(8,0) - error(8,0)) / epsilon;
+		jacobian(9,1) = (tempError(9,0) - error(9,0)) / epsilon;
+		jacobian(10,1) = (tempError(10,0) - error(10,0)) / epsilon;
+		jacobian(11,1) = (tempError(11,0) - error(11,0)) / epsilon;
+		jacobian(12,1) = (tempError(12,0) - error(12,0)) / epsilon;
 
 		kinematics.SetPitch(guess(1,0));
 		kinematics.SetHeave(guess(2,0) + epsilon);
@@ -164,11 +164,11 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 		jacobian(5,2) = (tempError(5,0) - error(5,0)) / epsilon;
 		jacobian(6,2) = (tempError(6,0) - error(6,0)) / epsilon;
 		jacobian(7,2) = (tempError(7,0) - error(7,0)) / epsilon;
-		jacobian(8,2) = (tempError(3,0) - error(3,0)) / epsilon;
-		jacobian(9,2) = (tempError(4,0) - error(4,0)) / epsilon;
-		jacobian(10,2) = (tempError(5,0) - error(5,0)) / epsilon;
-		jacobian(11,2) = (tempError(6,0) - error(6,0)) / epsilon;
-		jacobian(12,2) = (tempError(7,0) - error(7,0)) / epsilon;
+		jacobian(8,2) = (tempError(8,0) - error(8,0)) / epsilon;
+		jacobian(9,2) = (tempError(9,0) - error(9,0)) / epsilon;
+		jacobian(10,2) = (tempError(10,0) - error(10,0)) / epsilon;
+		jacobian(11,2) = (tempError(11,0) - error(11,0)) / epsilon;
+		jacobian(12,2) = (tempError(12,0) - error(12,0)) / epsilon;
 
 		// Compute next guess
 		if (!jacobian.LeftDivide(error, delta))
@@ -182,8 +182,9 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 
 		// TODO:  Remove
 		//Debugger::GetInstance() << "J:\n" + jacobian.Print() << Debugger::PriorityVeryHigh;
+		/*Debugger::GetInstance() << "error = \n" << error.Print() << Debugger::PriorityVeryHigh;
 		Debugger::GetInstance() << "Results:\n" + wxString::Format(_T("%f\t%f\n%f\t%f"), wheelLoads.leftFront, wheelLoads.rightFront, wheelLoads.leftRear, wheelLoads.rightRear) << Debugger::PriorityVeryHigh;
-		Debugger::GetInstance() << "Error:\n" + wxString::Format(_T("%f"),fabs(error(0, 0)) + fabs(error(1, 0)) + fabs(error(2, 0))  + fabs(error(3, 0))) << Debugger::PriorityVeryHigh;
+		Debugger::GetInstance() << "Error:\n" + wxString::Format(_T("%f"), error.GetNorm()) << Debugger::PriorityVeryHigh;*/
 		Debugger::GetInstance() << "State:\n" + wxString::Format(_T("R = %f, P = %f, H = %f"), UnitConverter::GetInstance().ConvertAngleOutput(guess(0,0)),
 			UnitConverter::GetInstance().ConvertAngleOutput(guess(1,0)), guess(2,0)) << Debugger::PriorityVeryHigh;
 	}
