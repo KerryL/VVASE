@@ -20,9 +20,11 @@
 #include <wx/wx.h>
 #include <wx/grid.h>
 
+// Local headers
+#include "gui/guiCar.h"
+
 // VVASE forward declarations
 class Car;
-class KinematicOutputs;
 class MainFrame;
 class SuperGrid;
 
@@ -33,7 +35,7 @@ public:
 		const wxSize &size = wxDefaultSize);
 	~OutputPanel();
 
-	void UpdateInformation(KinematicOutputs outputs, Car &car, int index,
+	void UpdateInformation(GuiCar::CarOutputs outputs, Car &car, int index,
 		wxString name);
 	void FinishUpdate(int numberOfDataColumns);
 

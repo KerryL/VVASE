@@ -24,6 +24,7 @@
 // Local forward declarations
 class Car;
 class KinematicOutputs;
+class QuasiStaticOutputs;
 class Matrix;
 
 class QuasiStatic
@@ -39,7 +40,8 @@ public:
 	};
 
 	Kinematics::Inputs Solve(const Car* originalCar, Car* workingCar,
-		const Kinematics::Inputs& kinematicsInputs, const Inputs& inputs) const;
+		const Kinematics::Inputs& kinematicsInputs, const Inputs& inputs,
+		QuasiStaticOutputs& outputs) const;
 
 private:
 	WheelSet ComputeWheelLoads(const Car* originalCar, const KinematicOutputs& outputs) const;

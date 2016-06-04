@@ -104,7 +104,7 @@ END_EVENT_TABLE()*/
 // Description:		Updates the information on this panel.
 //
 // Input Arguments:
-//		outputs		= KinematicOutputs containing the outputs we want to use
+//		outputs		= GuiCar::CarOutputs containing the outputs we want to use
 //					  for the update
 //		car			= Car& pointing to the car with which these outputs are associated
 //		index		= int specifying the data column to edit
@@ -117,7 +117,7 @@ END_EVENT_TABLE()*/
 //		None
 //
 //==========================================================================
-void OutputPanel::UpdateInformation(KinematicOutputs outputs, Car &car,
+void OutputPanel::UpdateInformation(GuiCar::CarOutputs outputs, Car &car,
 									 int index, wxString name)
 {
 	// Begin batch edit of the grid
@@ -153,11 +153,11 @@ void OutputPanel::UpdateInformation(KinematicOutputs outputs, Car &car,
 		// Convert and set the value
 		outputsList->SetCellValue(i, index, UnitConverter::GetInstance().FormatNumber(
 			UnitConverter::GetInstance().ConvertOutput(
-			outputs.GetOutputValue((KinematicOutputs::OutputsComplete)i),
+			outputs.kinematicOutputs.GetOutputValue((KinematicOutputs::OutputsComplete)i),
 			KinematicOutputs::GetOutputUnitType((KinematicOutputs::OutputsComplete)i))));
 
 		// If the current value is undefined, make sure the user knows it
-		if (VVASEMath::IsNaN(outputs.GetOutputValue((KinematicOutputs::OutputsComplete)i)))
+		if (VVASEMath::IsNaN(outputs.kinematicOutputs.GetOutputValue((KinematicOutputs::OutputsComplete)i)))
 		{
 			// Change the cell value "Undef." instead of #1.Q0
 			outputsList->SetCellValue(i, index, _T("Undef."));
@@ -175,6 +175,62 @@ void OutputPanel::UpdateInformation(KinematicOutputs outputs, Car &car,
 
 		// Make the cell read-only
 		outputsList->SetReadOnly(i, index, true);
+	}
+	
+	for (i = KinematicOutputs::NumberOfOutputScalars; i < KinematicOutputs::NumberOfOutputScalars + 7; i++)
+	{
+		outputsList->SetCellBackgroundColour(i, index, *wxWHITE);
+		outputsList->SetCellAlignment(i, index, wxALIGN_CENTER, wxALIGN_TOP);
+		outputsList->SetReadOnly(i, index, true);
+	}
+	
+	if (outputs.hasQuasiStaticOutputs)
+	{
+		outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars, index,
+			UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertOutput(
+			outputs.quasiStaticOutputs.pitch, UnitConverter::UnitTypeAngle)));
+			
+		outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 1, index,
+			UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertOutput(
+			outputs.quasiStaticOutputs.roll, UnitConverter::UnitTypeAngle)));
+			
+		outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 2, index,
+			UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertOutput(
+			outputs.quasiStaticOutputs.heave, UnitConverter::UnitTypeDistance)));
+			
+		outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 3, index,
+			UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertOutput(
+			outputs.quasiStaticOutputs.wheelLoads.leftFront, UnitConverter::UnitTypeForce)));
+			
+		outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 4, index,
+			UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertOutput(
+			outputs.quasiStaticOutputs.wheelLoads.rightFront, UnitConverter::UnitTypeForce)));
+			
+		outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 5, index,
+			UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertOutput(
+			outputs.quasiStaticOutputs.wheelLoads.leftRear, UnitConverter::UnitTypeForce)));
+			
+		outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 6, index,
+			UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertOutput(
+			outputs.quasiStaticOutputs.wheelLoads.rightRear, UnitConverter::UnitTypeForce)));
+			
+		outputsList->SetRowHeight(KinematicOutputs::NumberOfOutputScalars, outputsList->GetRowHeight(0));
+		outputsList->SetRowHeight(KinematicOutputs::NumberOfOutputScalars + 1, outputsList->GetRowHeight(0));
+		outputsList->SetRowHeight(KinematicOutputs::NumberOfOutputScalars + 2, outputsList->GetRowHeight(0));
+		outputsList->SetRowHeight(KinematicOutputs::NumberOfOutputScalars + 3, outputsList->GetRowHeight(0));
+		outputsList->SetRowHeight(KinematicOutputs::NumberOfOutputScalars + 4, outputsList->GetRowHeight(0));
+		outputsList->SetRowHeight(KinematicOutputs::NumberOfOutputScalars + 5, outputsList->GetRowHeight(0));
+		outputsList->SetRowHeight(KinematicOutputs::NumberOfOutputScalars + 6, outputsList->GetRowHeight(0));
+	}
+	else
+	{
+		outputsList->SetRowHeight(KinematicOutputs::NumberOfOutputScalars, 0);
+		outputsList->SetRowHeight(KinematicOutputs::NumberOfOutputScalars + 1, 0);
+		outputsList->SetRowHeight(KinematicOutputs::NumberOfOutputScalars + 2, 0);
+		outputsList->SetRowHeight(KinematicOutputs::NumberOfOutputScalars + 3, 0);
+		outputsList->SetRowHeight(KinematicOutputs::NumberOfOutputScalars + 4, 0);
+		outputsList->SetRowHeight(KinematicOutputs::NumberOfOutputScalars + 5, 0);
+		outputsList->SetRowHeight(KinematicOutputs::NumberOfOutputScalars + 6, 0);
 	}
 
 	// For values that do not pertain to this car (front axle plunge for a car without
@@ -314,6 +370,19 @@ void OutputPanel::FinishUpdate(int numberOfDataColumns)
 			(KinematicOutputs::OutputsComplete)i)).c_str());
 		outputsList->SetCellValue(i, this->numberOfDataColumns + 1, unitString);
 	}
+	
+	unitString.Printf("(%s)", UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeAngle).c_str());
+	outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars, this->numberOfDataColumns + 1, unitString);
+	outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 1, this->numberOfDataColumns + 1, unitString);
+	
+	unitString.Printf("(%s)", UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance).c_str());
+	outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 2, this->numberOfDataColumns + 1, unitString);
+	
+	unitString.Printf("(%s)", UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeForce).c_str());
+	outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 3, this->numberOfDataColumns + 1, unitString);
+	outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 4, this->numberOfDataColumns + 1, unitString);
+	outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 5, this->numberOfDataColumns + 1, unitString);
+	outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 6, this->numberOfDataColumns + 1, unitString);
 
 	// End batch edit of the grid
 	outputsList->EndBatch();
@@ -349,8 +418,10 @@ void OutputPanel::CreateControls()
 	topSizer->Add(mainSizer, 1, wxGROW | wxALL, 1);
 
 	// Create the grid for the hard point entry
+	// Extra 7 rows for quasi-static outputs
+	const unsigned int numberOfQuasiStaticOutputs(7);
 	outputsList = new SuperGrid(this, wxID_ANY);
-	outputsList->CreateGrid(KinematicOutputs::NumberOfOutputScalars, 2, wxGrid::wxGridSelectRows);
+	outputsList->CreateGrid(KinematicOutputs::NumberOfOutputScalars + numberOfQuasiStaticOutputs, 2, wxGrid::wxGridSelectRows);
 
 	// Begin a batch edit of the grid
 	outputsList->BeginBatch();
@@ -371,7 +442,7 @@ void OutputPanel::CreateControls()
 
 	// Do the processing that needs to be done for each row
 	int i;
-	for (i = 0; i < KinematicOutputs::NumberOfOutputScalars; i++)
+	for (i = 0; i < KinematicOutputs::NumberOfOutputScalars + numberOfQuasiStaticOutputs; i++)
 	{
 		// Make all cells read-only
 		outputsList->SetReadOnly(i, 0, true);
@@ -381,8 +452,17 @@ void OutputPanel::CreateControls()
 		outputsList->SetCellAlignment(i, 1, wxALIGN_CENTER, wxALIGN_TOP);
 
 		// Add the names of all of the points to the grid
-		outputsList->SetCellValue(i, 0, KinematicOutputs::GetOutputName((KinematicOutputs::OutputsComplete)i));
+		if (i < KinematicOutputs::NumberOfOutputScalars)
+			outputsList->SetCellValue(i, 0, KinematicOutputs::GetOutputName((KinematicOutputs::OutputsComplete)i));
 	}
+	
+	outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars, 0, _T("Pitch"));
+	outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 1, 0, _T("Roll"));
+	outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 2, 0, _T("Heave"));
+	outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 3, 0, _T("LF Tire Load"));
+	outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 4, 0, _T("RF Tire Load"));
+	outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 5, 0, _T("LR Tire Load"));
+	outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 6, 0, _T("RR Tire Load"));
 
 	// Don't let the user move or re-size the rows and columns
 	outputsList->EnableDragColMove(false);

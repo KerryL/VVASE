@@ -2105,7 +2105,7 @@ void MainFrame::UpdateOutputPanel()
 			carCount++;
 
 			// Update the information for this car
-			outputPanel->UpdateInformation(static_cast<GuiCar*>(openObjectList[i])->GetKinematicOutputs(),
+			outputPanel->UpdateInformation(static_cast<GuiCar*>(openObjectList[i])->GetOutputs(),
 				static_cast<GuiCar*>(openObjectList[i])->GetWorkingCar(),
 				carCount, openObjectList[i]->GetCleanName());
 		}
@@ -2503,7 +2503,7 @@ void MainFrame::ThreadCompleteEvent(wxCommandEvent &event)
 
 		// Update the information for this car
 		outputPanel->UpdateInformation(static_cast<GuiCar*>(openObjectList[
-			event.GetExtraLong()])->GetKinematicOutputs(),
+			event.GetExtraLong()])->GetOutputs(),
 			static_cast<GuiCar*>(openObjectList[event.GetExtraLong()])->GetWorkingCar(),
 			carCount, openObjectList[event.GetExtraLong()]->GetCleanName());
 

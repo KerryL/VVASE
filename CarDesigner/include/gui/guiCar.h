@@ -34,6 +34,7 @@
 // VVASE headers
 #include "gui/guiObject.h"
 #include "vSolver/physics/kinematicOutputs.h"
+#include "vSolver/physics/quasiStaticOutputs.h"
 
 // VVASE forward declarations
 class CarRenderer;
@@ -81,9 +82,21 @@ public:
 
 	// The tree IDs associated with each subsystem object
 	wxTreeItemId subsystems[NumberOfSubsystems];
+	
+	struct CarOutputs
+	{
+		KinematicOutputs kinematicOutputs;
+		QuasiStaticOutputs quasiStaticOutputs;
+		
+		bool hasQuasiStaticOutputs;
+		
+		CarOutputs()
+		{
+			hasQuasiStaticOutputs = false;
+		}
+	};
 
-	// Returns a copy of the kinematic output data
-	KinematicOutputs GetKinematicOutputs() { return kinematicOutputs; }
+	CarOutputs GetOutputs() { return outputs; }
 	
 	void SetUseOrtho(const bool &useOrtho);
 
@@ -104,7 +117,7 @@ private:
 	AppearanceOptions *appearanceOptions;
 
 	// The object that stores the kinematics information for this car
-	KinematicOutputs kinematicOutputs;
+	CarOutputs outputs;
 
 	// The scene visible to the user representing this object
 	CarRenderer *renderer;

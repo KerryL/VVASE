@@ -21,6 +21,7 @@
 #include "vSolver/physics/quasiStatic.h"
 #include "vSolver/physics/kinematics.h"
 #include "vSolver/physics/kinematicOutputs.h"
+#include "vSolver/physics/quasiStaticOutputs.h"
 #include "vCar/car.h"
 #include "vCar/massProperties.h"
 #include "vCar/tireSet.h"
@@ -64,14 +65,15 @@ QuasiStatic::QuasiStatic()
 //		inputs				= const Inputs&
 //
 // Output Arguments:
-//		None
+//		outputs				= QuasiStaticOutputs&
 //
 // Return Value:
 //		Kinematics::Inputs
 //
 //==========================================================================
 Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
-	const Kinematics::Inputs& kinematicsInputs, const Inputs& inputs) const
+	const Kinematics::Inputs& kinematicsInputs, const Inputs& inputs,
+	QuasiStaticOutputs& outputs) const
 {
 	Kinematics kinematics;
 	kinematics.SetCenterOfRotation(kinematicsInputs.centerOfRotation);
@@ -185,14 +187,22 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 		/*Debugger::GetInstance() << "error = \n" << error.Print() << Debugger::PriorityVeryHigh;
 		Debugger::GetInstance() << "Results:\n" + wxString::Format(_T("%f\t%f\n%f\t%f"), wheelLoads.leftFront, wheelLoads.rightFront, wheelLoads.leftRear, wheelLoads.rightRear) << Debugger::PriorityVeryHigh;
 		Debugger::GetInstance() << "Error:\n" + wxString::Format(_T("%f"), error.GetNorm()) << Debugger::PriorityVeryHigh;*/
-		Debugger::GetInstance() << "State:\n" + wxString::Format(_T("R = %f, P = %f, H = %f"), UnitConverter::GetInstance().ConvertAngleOutput(guess(0,0)),
-			UnitConverter::GetInstance().ConvertAngleOutput(guess(1,0)), guess(2,0)) << Debugger::PriorityVeryHigh;
+		/*Debugger::GetInstance() << "State:\n" + wxString::Format(_T("R = %f, P = %f, H = %f"), UnitConverter::GetInstance().ConvertAngleOutput(guess(0,0)),
+			UnitConverter::GetInstance().ConvertAngleOutput(guess(1,0)), guess(2,0)) << Debugger::PriorityVeryHigh;*/
 	}
 
 	if (i == limit)
 		Debugger::GetInstance() << "Warning:  Iteration limit reached (QuasiStatic::Solve)" << Debugger::PriorityMedium;
 
+	/*Debugger::GetInstance() << "State:\n" + wxString::Format(_T("R = %f, P = %f, H = %f"), UnitConverter::GetInstance().ConvertAngleOutput(guess(0,0)),
+		UnitConverter::GetInstance().ConvertAngleOutput(guess(1,0)), guess(2,0)) << Debugger::PriorityVeryHigh;*/
 	// TODO:  Validate return values
+	
+	outputs.wheelLoads = wheelLoads;
+	
+	outputs.pitch = guess(0,0);
+	outputs.roll = guess(1,0);
+	outputs.heave = guess(2,0);
 
 	return kinematics.GetInputs();
 }
@@ -306,6 +316,8 @@ WheelSet QuasiStatic::ComputePreLoad(const Car* originalCar) const
 	preLoad.rightFront = sprungWeight.rightFront / s->rightFront.spring.rate;
 	preLoad.leftRear = sprungWeight.leftRear / s->leftRear.spring.rate;
 	preLoad.rightRear = sprungWeight.rightRear / s->rightRear.spring.rate;
+	
+	// TODO:  3rd springs
 	
 	return preLoad;
 }

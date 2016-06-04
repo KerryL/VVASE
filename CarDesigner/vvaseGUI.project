@@ -70,6 +70,7 @@
           <File Name="../common/include/vSolver/physics/integrator.h"/>
           <File Name="../common/include/vSolver/physics/millikenAnalysis.h"/>
           <File Name="../common/include/vSolver/physics/quasiStatic.h"/>
+          <File Name="../common/include/vSolver/physics/quasiStaticOutputs.h"/>
         </VirtualDirectory>
         <VirtualDirectory Name="threads">
           <File Name="../common/include/vSolver/threads/threadJob.h"/>

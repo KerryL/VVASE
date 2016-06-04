@@ -238,15 +238,18 @@ void GuiCar::UpdateData()
 		inputs.tireDeflections.rightFront = 0.0;
 		inputs.tireDeflections.leftRear = 0.0;
 		inputs.tireDeflections.rightRear = 0.0;
+		outputs.hasQuasiStaticOutputs = false;
 	}
 	else
 	{
 		QuasiStatic quasiStatic;
-		inputs = quasiStatic.Solve(originalCar, workingCar, mainFrame.GetInputs(), mainFrame.GetQuasiStaticInputs());// TODO:  What about returning wheel loads?
+		inputs = quasiStatic.Solve(originalCar, workingCar, mainFrame.GetInputs(),
+			mainFrame.GetQuasiStaticInputs(), outputs.quasiStaticOutputs);
+		outputs.hasQuasiStaticOutputs = true;
 	}
 
 	// Re-run the kinematics to update the car's position
-	KinematicsData *data = new KinematicsData(originalCar, workingCar, inputs, &kinematicOutputs);
+	KinematicsData *data = new KinematicsData(originalCar, workingCar, inputs, &outputs.kinematicOutputs);
 	ThreadJob job(ThreadJob::CommandThreadKinematicsNormal, data, name, index);
 	mainFrame.AddJob(job);
 }
@@ -270,7 +273,7 @@ void GuiCar::UpdateData()
 void GuiCar::UpdateDisplay()
 {
 	// Update the display associated with this object
-	renderer->UpdateDisplay(kinematicOutputs);
+	renderer->UpdateDisplay(outputs.kinematicOutputs);
 }
 
 //==========================================================================
