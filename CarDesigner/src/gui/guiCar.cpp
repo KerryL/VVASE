@@ -246,7 +246,7 @@ void GuiCar::UpdateData()
 	}
 
 	// Re-run the kinematics to update the car's position
-	KinematicsData *data = new KinematicsData(originalCar, workingCar, mainFrame.GetInputs(), &kinematicOutputs);
+	KinematicsData *data = new KinematicsData(originalCar, workingCar, inputs, &kinematicOutputs);
 	ThreadJob job(ThreadJob::CommandThreadKinematicsNormal, data, name, index);
 	mainFrame.AddJob(job);
 }
