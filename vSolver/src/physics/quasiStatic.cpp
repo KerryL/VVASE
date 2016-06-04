@@ -472,56 +472,56 @@ Matrix QuasiStatic::BuildRightHandMatrix(const Car* workingCar, const double& gx
 	const double sprungCGy(mp->GetSprungMassCG(s).y);
 
 	// Sum of y-moments about left front wheel
-	m(0,0) = gravity * (gx * massMoment
+	m(0,0) = gravity * (-gx * massMoment
 		+ mp->unsprungMass.rightFront * (s->rightFront.hardpoints[Corner::ContactPatch].x - s->leftFront.hardpoints[Corner::ContactPatch].x)
 		+ mp->unsprungMass.leftRear * (s->leftRear.hardpoints[Corner::ContactPatch].x - s->leftFront.hardpoints[Corner::ContactPatch].x)
 		+ mp->unsprungMass.rightRear * (s->rightRear.hardpoints[Corner::ContactPatch].x - s->leftFront.hardpoints[Corner::ContactPatch].x)
 		+ sprungMass * (sprungCGx - s->leftFront.hardpoints[Corner::ContactPatch].x));
 
 	// Sum of y-moments about right front wheel
-	m(1,0) = gravity * (gx * massMoment
+	m(1,0) = gravity * (-gx * massMoment
 		+ mp->unsprungMass.leftFront * (s->leftFront.hardpoints[Corner::ContactPatch].x - s->rightFront.hardpoints[Corner::ContactPatch].x)
 		+ mp->unsprungMass.leftRear * (s->leftRear.hardpoints[Corner::ContactPatch].x - s->rightFront.hardpoints[Corner::ContactPatch].x)
 		+ mp->unsprungMass.rightRear * (s->rightRear.hardpoints[Corner::ContactPatch].x - s->rightFront.hardpoints[Corner::ContactPatch].x)
 		+ sprungMass * (sprungCGx - s->rightFront.hardpoints[Corner::ContactPatch].x));
 
 	// Sum of y-moments about left rear wheel
-	m(2,0) = gravity * (gx * massMoment
+	m(2,0) = gravity * (-gx * massMoment
 		+ mp->unsprungMass.leftFront * (s->leftFront.hardpoints[Corner::ContactPatch].x - s->leftRear.hardpoints[Corner::ContactPatch].x)
 		+ mp->unsprungMass.rightFront * (s->rightFront.hardpoints[Corner::ContactPatch].x - s->leftRear.hardpoints[Corner::ContactPatch].x)
 		+ mp->unsprungMass.rightRear * (s->rightRear.hardpoints[Corner::ContactPatch].x - s->leftRear.hardpoints[Corner::ContactPatch].x)
 		+ sprungMass * (sprungCGx - s->leftRear.hardpoints[Corner::ContactPatch].x));
 
 	// Sum of y-moments about right rear wheel
-	m(3,0) = gravity * (gx * massMoment
+	m(3,0) = gravity * (-gx * massMoment
 		+ mp->unsprungMass.leftFront * (s->leftFront.hardpoints[Corner::ContactPatch].x - s->rightRear.hardpoints[Corner::ContactPatch].x)
 		+ mp->unsprungMass.rightFront * (s->rightFront.hardpoints[Corner::ContactPatch].x - s->rightRear.hardpoints[Corner::ContactPatch].x)
 		+ mp->unsprungMass.leftRear * (s->leftRear.hardpoints[Corner::ContactPatch].x - s->rightRear.hardpoints[Corner::ContactPatch].x)
 		+ sprungMass * (sprungCGx - s->rightRear.hardpoints[Corner::ContactPatch].x));
 
 	// Sum of x-moments about left front wheel
-	m(4,0) = -gravity * (gy * massMoment
+	m(4,0) = -gravity * (-gy * massMoment
 		+ mp->unsprungMass.rightFront * (s->rightFront.hardpoints[Corner::ContactPatch].y - s->leftFront.hardpoints[Corner::ContactPatch].y)
 		+ mp->unsprungMass.leftRear * (s->leftRear.hardpoints[Corner::ContactPatch].y - s->leftFront.hardpoints[Corner::ContactPatch].y)
 		+ mp->unsprungMass.rightRear * (s->rightRear.hardpoints[Corner::ContactPatch].y - s->leftFront.hardpoints[Corner::ContactPatch].y)
 		+ sprungMass * (sprungCGy - s->leftFront.hardpoints[Corner::ContactPatch].y));
 
 	// Sum of x-moments about right front wheel
-	m(5,0) = -gravity * (gy * massMoment
+	m(5,0) = -gravity * (-gy * massMoment
 		+ mp->unsprungMass.leftFront * (s->leftFront.hardpoints[Corner::ContactPatch].y - s->rightFront.hardpoints[Corner::ContactPatch].y)
 		+ mp->unsprungMass.leftRear * (s->leftRear.hardpoints[Corner::ContactPatch].y - s->rightFront.hardpoints[Corner::ContactPatch].y)
 		+ mp->unsprungMass.rightRear * (s->rightRear.hardpoints[Corner::ContactPatch].y - s->rightFront.hardpoints[Corner::ContactPatch].y)
 		+ sprungMass * (sprungCGy - s->rightFront.hardpoints[Corner::ContactPatch].y));
 
 	// Sum of x-moments about left rear wheel
-	m(6,0) = -gravity * (gy * massMoment
+	m(6,0) = -gravity * (-gy * massMoment
 		+ mp->unsprungMass.rightFront * (s->rightFront.hardpoints[Corner::ContactPatch].y - s->leftRear.hardpoints[Corner::ContactPatch].y)
 		+ mp->unsprungMass.leftFront * (s->leftFront.hardpoints[Corner::ContactPatch].y - s->leftRear.hardpoints[Corner::ContactPatch].y)
 		+ mp->unsprungMass.rightRear * (s->rightRear.hardpoints[Corner::ContactPatch].y - s->leftRear.hardpoints[Corner::ContactPatch].y)
 		+ sprungMass * (sprungCGy - s->leftRear.hardpoints[Corner::ContactPatch].y));
 
 	// Sum of x-moments about right rear wheel
-	m(7,0) = -gravity * (gy * massMoment
+	m(7,0) = -gravity * (-gy * massMoment
 		+ mp->unsprungMass.leftFront * (s->leftFront.hardpoints[Corner::ContactPatch].y - s->rightRear.hardpoints[Corner::ContactPatch].y)
 		+ mp->unsprungMass.rightFront * (s->rightFront.hardpoints[Corner::ContactPatch].y - s->rightRear.hardpoints[Corner::ContactPatch].y)
 		+ mp->unsprungMass.leftRear * (s->leftRear.hardpoints[Corner::ContactPatch].y - s->rightRear.hardpoints[Corner::ContactPatch].y)
@@ -539,6 +539,9 @@ Matrix QuasiStatic::BuildRightHandMatrix(const Car* workingCar, const double& gx
 		/ outputs.leftRear[KinematicOutputs::SpringInstallationRatio] + mp->unsprungMass.leftRear * gravity;
 	m(12,0) = (outputs.rightRear[KinematicOutputs::Spring] + preLoad.rightRear) * s->rightRear.spring.rate
 		/ outputs.rightRear[KinematicOutputs::SpringInstallationRatio] + mp->unsprungMass.rightRear * gravity;
+		
+	// TODO:  Include ARBs
+	// TODO:  Inlcude 3rd springs
 
 	return m;
 }

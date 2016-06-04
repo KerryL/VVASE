@@ -537,7 +537,7 @@ void OutputPanel::HighlightColumn(wxString name)
 		else
 			color.Set(220, 220, 220);
 
-		for (row = 0; row < KinematicOutputs::NumberOfOutputScalars; row++)
+		for (row = 0; row < outputsList->GetNumberRows(); row++)
 		{
 			// If the cell is "Undef.", leave it alone (it will be yellow).
 			// Otherwise, change it's color to the appropriate color
