@@ -470,7 +470,7 @@ double KinematicOutputs::ComputeUBarTwist(const Corner& originalLeft,
 {
 	Vector swayBarAxis;
 	Vector arm1Direction, arm2Direction;
-	double originalSwayBarAngle;
+	double originalSwayBarAngle, deltaAngle;
 
 	// First, for the original configuration of the suspension
 	// Project these directions onto the plane whose normal is the sway bar axis
@@ -501,8 +501,15 @@ double KinematicOutputs::ComputeUBarTwist(const Corner& originalLeft,
 
 	// The angle between these vectors, when projected onto the plane that is normal
 	// to the swaybar axis is given by the dot product
-	return acos(VVASEMath::Clamp((arm1Direction * arm2Direction) /
+	deltaAngle = acos(VVASEMath::Clamp((arm1Direction * arm2Direction) /
 		(arm1Direction.Length() * arm2Direction.Length()), -1.0, 1.0)) - originalSwayBarAngle;
+	
+	// Change the sign according to the convention:  +ve twist transfers load from left to right
+	// TODO:  Enforce convention
+	if (swayBarAxis * arm1Direction.Cross(arm2Direction) > 0.0)
+		deltaAngle *= -1.0;
+		
+	return deltaAngle;
 }
 
 //==========================================================================
@@ -534,8 +541,8 @@ double KinematicOutputs::ComputeTBarTwist(const Corner& originalLeft,
 	const Vector& currentMidPoint, const Vector& currentPivot) const
 {
 	Vector swayBarAxis;
-	Vector arm1Direction, arm2Direction;
-	double originalSwayBarAngle;
+	Vector armDirection;
+	double originalSwayBarAngle, deltaAngle;
 
 	// First, for the original configuration of the suspension
 	Vector stemPlaneNormal = originalMidPoint - originalPivot;
@@ -548,13 +555,13 @@ double KinematicOutputs::ComputeTBarTwist(const Corner& originalLeft,
 	swayBarAxis = originalMidPoint - topMidPoint;
 
 	// The references for T-bar twist are the bar pivot axis and the top arm
-	arm1Direction = VVASEMath::ProjectOntoPlane(topMidPoint -
+	armDirection = VVASEMath::ProjectOntoPlane(topMidPoint -
 		originalRight.hardpoints[Corner::InboardBarLink], swayBarAxis);
 
 	// The angle between these vectors, when projected onto the plane that is normal
 	// to the swaybar axis is given by the dot product
-	originalSwayBarAngle = acos(VVASEMath::Clamp((arm1Direction * stemPlaneNormal) /
-		(arm1Direction.Length() * stemPlaneNormal.Length()), -1.0, 1.0));
+	originalSwayBarAngle = acos(VVASEMath::Clamp((armDirection * stemPlaneNormal) /
+		(armDirection.Length() * stemPlaneNormal.Length()), -1.0, 1.0));
 
 	// And again as it sits now
 	stemPlaneNormal = currentMidPoint - currentPivot;
@@ -567,13 +574,20 @@ double KinematicOutputs::ComputeTBarTwist(const Corner& originalLeft,
 	swayBarAxis = currentMidPoint - topMidPoint;
 
 	// The references for T-bar twist are the bar pivot axis and the top arm
-	arm1Direction = VVASEMath::ProjectOntoPlane(topMidPoint -
+	armDirection = VVASEMath::ProjectOntoPlane(topMidPoint -
 		currentRight.hardpoints[Corner::InboardBarLink], swayBarAxis);
 
 	// The angle between these vectors, when projected onto the plane that is normal
 	// to the swaybar axis is given by the dot product
-	return acos(VVASEMath::Clamp((arm1Direction * stemPlaneNormal) /
-		(arm1Direction.Length() * stemPlaneNormal.Length()), -1.0, 1.0)) - originalSwayBarAngle;
+	deltaAngle = acos(VVASEMath::Clamp((armDirection * stemPlaneNormal) /
+		(armDirection.Length() * stemPlaneNormal.Length()), -1.0, 1.0)) - originalSwayBarAngle;
+	
+	// Change the sign according to the convention:  +ve twist transfers load from left to right
+	// TODO:  Enforce convention
+	if (swayBarAxis * armDirection.Cross(stemPlaneNormal) > 0.0)
+		deltaAngle *= -1.0;
+		
+	return deltaAngle;
 }
 
 //==========================================================================
