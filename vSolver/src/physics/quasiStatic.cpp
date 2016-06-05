@@ -200,8 +200,8 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 	
 	outputs.wheelLoads = wheelLoads;
 	
-	outputs.pitch = guess(0,0);
-	outputs.roll = guess(1,0);
+	outputs.roll = guess(0,0);
+	outputs.pitch = guess(1,0);
 	outputs.heave = guess(2,0);
 
 	return kinematics.GetInputs();
