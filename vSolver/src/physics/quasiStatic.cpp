@@ -181,22 +181,10 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 		guess -= delta;
 
 		i++;
-
-		// TODO:  Remove
-		//Debugger::GetInstance() << "J:\n" + jacobian.Print() << Debugger::PriorityVeryHigh;
-		/*Debugger::GetInstance() << "error = \n" << error.Print() << Debugger::PriorityVeryHigh;
-		Debugger::GetInstance() << "Results:\n" + wxString::Format(_T("%f\t%f\n%f\t%f"), wheelLoads.leftFront, wheelLoads.rightFront, wheelLoads.leftRear, wheelLoads.rightRear) << Debugger::PriorityVeryHigh;
-		Debugger::GetInstance() << "Error:\n" + wxString::Format(_T("%f"), error.GetNorm()) << Debugger::PriorityVeryHigh;*/
-		/*Debugger::GetInstance() << "State:\n" + wxString::Format(_T("R = %f, P = %f, H = %f"), UnitConverter::GetInstance().ConvertAngleOutput(guess(0,0)),
-			UnitConverter::GetInstance().ConvertAngleOutput(guess(1,0)), guess(2,0)) << Debugger::PriorityVeryHigh;*/
 	}
 
 	if (i == limit)
 		Debugger::GetInstance() << "Warning:  Iteration limit reached (QuasiStatic::Solve)" << Debugger::PriorityMedium;
-
-	/*Debugger::GetInstance() << "State:\n" + wxString::Format(_T("R = %f, P = %f, H = %f"), UnitConverter::GetInstance().ConvertAngleOutput(guess(0,0)),
-		UnitConverter::GetInstance().ConvertAngleOutput(guess(1,0)), guess(2,0)) << Debugger::PriorityVeryHigh;*/
-	// TODO:  Validate return values
 	
 	outputs.wheelLoads = wheelLoads;
 	
@@ -246,9 +234,20 @@ WheelSet QuasiStatic::ComputeWheelLoads(const Car* originalCar,
 		* (preLoad.rightRear + outputs.rightRear[KinematicOutputs::Spring])
 		/ outputs.rightRear[KinematicOutputs::SpringInstallationRatio]
 		+ originalCar->massProperties->unsprungMass.rightRear * 32.174;
-
+	
+	double arbTorque = originalCar->suspension->barRate.front
+		* outputs.doubles[KinematicOutputs::FrontARBTwist];// [in-lbf]
+		
+	// Our convention is +ve bar twist loads the left side and unloads the right side
+	wheelLoads.leftFront += arbTorque / outputs.leftFront[KinematicOutputs::ARBInstallationRatio];
+	wheelLoads.rightFront -= arbTorque / outputs.rightFront[KinematicOutputs::ARBInstallationRatio];
+	
+	arbTorque = originalCar->suspension->barRate.rear
+		* outputs.doubles[KinematicOutputs::RearARBTwist];// [in-lbf]
+	wheelLoads.leftRear += arbTorque / outputs.leftRear[KinematicOutputs::ARBInstallationRatio];
+	wheelLoads.rightRear -= arbTorque / outputs.rightRear[KinematicOutputs::ARBInstallationRatio];
+	
 	// TODO:  3rd springs
-	// TODO:  ARBs
 
 	return wheelLoads;
 }
@@ -532,15 +531,18 @@ Matrix QuasiStatic::BuildRightHandMatrix(const Car* workingCar, const double& gx
 
 	// Constitutive constraints
 	m(9,0) = (outputs.leftFront[KinematicOutputs::Spring] + preLoad.leftFront) * s->leftFront.spring.rate
-		/ outputs.leftFront[KinematicOutputs::SpringInstallationRatio] + mp->unsprungMass.leftFront * gravity;
+		/ outputs.leftFront[KinematicOutputs::SpringInstallationRatio] + mp->unsprungMass.leftFront * gravity
+		+ outputs.doubles[KinematicOutputs::FrontARBTwist] * s->barRate.front / outputs.leftFront[KinematicOutputs::ARBInstallationRatio];
 	m(10,0) = (outputs.rightFront[KinematicOutputs::Spring] + preLoad.rightFront) * s->rightFront.spring.rate
-		/ outputs.rightFront[KinematicOutputs::SpringInstallationRatio] + mp->unsprungMass.rightFront * gravity;
+		/ outputs.rightFront[KinematicOutputs::SpringInstallationRatio] + mp->unsprungMass.rightFront * gravity
+		- outputs.doubles[KinematicOutputs::FrontARBTwist] * s->barRate.front / outputs.rightFront[KinematicOutputs::ARBInstallationRatio];
 	m(11,0) = (outputs.leftRear[KinematicOutputs::Spring] + preLoad.leftRear) * s->leftRear.spring.rate
-		/ outputs.leftRear[KinematicOutputs::SpringInstallationRatio] + mp->unsprungMass.leftRear * gravity;
+		/ outputs.leftRear[KinematicOutputs::SpringInstallationRatio] + mp->unsprungMass.leftRear * gravity
+		+ outputs.doubles[KinematicOutputs::RearARBTwist] * s->barRate.rear / outputs.leftRear[KinematicOutputs::ARBInstallationRatio];
 	m(12,0) = (outputs.rightRear[KinematicOutputs::Spring] + preLoad.rightRear) * s->rightRear.spring.rate
-		/ outputs.rightRear[KinematicOutputs::SpringInstallationRatio] + mp->unsprungMass.rightRear * gravity;
-		
-	// TODO:  Include ARBs
+		/ outputs.rightRear[KinematicOutputs::SpringInstallationRatio] + mp->unsprungMass.rightRear * gravity
+		- outputs.doubles[KinematicOutputs::RearARBTwist] * s->barRate.rear / outputs.rightRear[KinematicOutputs::ARBInstallationRatio];
+
 	// TODO:  Inlcude 3rd springs
 
 	return m;

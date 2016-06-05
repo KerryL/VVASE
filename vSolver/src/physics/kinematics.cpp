@@ -441,10 +441,9 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 		// If this is the first iteration, initialize the limit variables
 		if (iteration == 1)
 		{
+			// TODO:  Don't use magic 1" here
 			upperLimit = corner.hardpoints[Corner::LowerBallJoint].z + 1.0;
-			//	3.0 * fabs(corner.hardpoints[Corner::ContactPatch].z);
 			lowerLimit = corner.hardpoints[Corner::LowerBallJoint].z - 1.0;
-			//	3.0 * fabs(corner.hardpoints[Corner::ContactPatch].z);
 		}
 
 		// Make the adjustment in the guess

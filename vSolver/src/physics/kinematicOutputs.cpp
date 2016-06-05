@@ -504,7 +504,7 @@ double KinematicOutputs::ComputeUBarTwist(const Corner& originalLeft,
 	deltaAngle = acos(VVASEMath::Clamp((arm1Direction * arm2Direction) /
 		(arm1Direction.Length() * arm2Direction.Length()), -1.0, 1.0)) - originalSwayBarAngle;
 	
-	// Change the sign according to the convention:  +ve twist transfers load from left to right
+	// Change the sign according to the convention:  +ve twist transfers load from right to left
 	// TODO:  Enforce convention
 	if (swayBarAxis * arm1Direction.Cross(arm2Direction) > 0.0)
 		deltaAngle *= -1.0;
@@ -582,7 +582,7 @@ double KinematicOutputs::ComputeTBarTwist(const Corner& originalLeft,
 	deltaAngle = acos(VVASEMath::Clamp((armDirection * stemPlaneNormal) /
 		(armDirection.Length() * stemPlaneNormal.Length()), -1.0, 1.0)) - originalSwayBarAngle;
 	
-	// Change the sign according to the convention:  +ve twist transfers load from left to right
+	// Change the sign according to the convention:  +ve twist transfers load from right to left
 	// TODO:  Enforce convention
 	if (swayBarAxis * armDirection.Cross(stemPlaneNormal) > 0.0)
 		deltaAngle *= -1.0;
