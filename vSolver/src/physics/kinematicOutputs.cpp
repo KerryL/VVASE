@@ -584,7 +584,7 @@ double KinematicOutputs::ComputeTBarTwist(const Corner& originalLeft,
 	
 	// Change the sign according to the convention:  +ve twist transfers load from right to left
 	// TODO:  Enforce convention
-	if (swayBarAxis * armDirection.Cross(stemPlaneNormal) > 0.0)
+	if (swayBarAxis * armDirection.Cross(stemPlaneNormal) < 0.0)
 		deltaAngle *= -1.0;
 		
 	return deltaAngle;

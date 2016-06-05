@@ -235,17 +235,24 @@ WheelSet QuasiStatic::ComputeWheelLoads(const Car* originalCar,
 		/ outputs.rightRear[KinematicOutputs::SpringInstallationRatio]
 		+ originalCar->massProperties->unsprungMass.rightRear * 32.174;
 	
-	double arbTorque = originalCar->suspension->barRate.front
-		* outputs.doubles[KinematicOutputs::FrontARBTwist];// [in-lbf]
+	double arbTorque;
+	if (originalCar->suspension->frontBarStyle != Suspension::SwayBarNone)
+	{
+		arbTorque = originalCar->suspension->barRate.front
+			* outputs.doubles[KinematicOutputs::FrontARBTwist];// [in-lbf]
 		
-	// Our convention is +ve bar twist loads the left side and unloads the right side
-	wheelLoads.leftFront += arbTorque / outputs.leftFront[KinematicOutputs::ARBInstallationRatio];
-	wheelLoads.rightFront -= arbTorque / outputs.rightFront[KinematicOutputs::ARBInstallationRatio];
+		// Our convention is +ve bar twist loads the left side and unloads the right side
+		wheelLoads.leftFront += arbTorque / outputs.leftFront[KinematicOutputs::ARBInstallationRatio];
+		wheelLoads.rightFront -= arbTorque / outputs.rightFront[KinematicOutputs::ARBInstallationRatio];
+	}
 	
-	arbTorque = originalCar->suspension->barRate.rear
-		* outputs.doubles[KinematicOutputs::RearARBTwist];// [in-lbf]
-	wheelLoads.leftRear += arbTorque / outputs.leftRear[KinematicOutputs::ARBInstallationRatio];
-	wheelLoads.rightRear -= arbTorque / outputs.rightRear[KinematicOutputs::ARBInstallationRatio];
+	if (originalCar->suspension->rearBarStyle != Suspension::SwayBarNone)
+	{
+		arbTorque = originalCar->suspension->barRate.rear
+			* outputs.doubles[KinematicOutputs::RearARBTwist];// [in-lbf]
+		wheelLoads.leftRear += arbTorque / outputs.leftRear[KinematicOutputs::ARBInstallationRatio];
+		wheelLoads.rightRear -= arbTorque / outputs.rightRear[KinematicOutputs::ARBInstallationRatio];
+	}
 	
 	// TODO:  3rd springs
 
@@ -531,17 +538,29 @@ Matrix QuasiStatic::BuildRightHandMatrix(const Car* workingCar, const double& gx
 
 	// Constitutive constraints
 	m(9,0) = (outputs.leftFront[KinematicOutputs::Spring] + preLoad.leftFront) * s->leftFront.spring.rate
-		/ outputs.leftFront[KinematicOutputs::SpringInstallationRatio] + mp->unsprungMass.leftFront * gravity
-		+ outputs.doubles[KinematicOutputs::FrontARBTwist] * s->barRate.front / outputs.leftFront[KinematicOutputs::ARBInstallationRatio];
+		/ outputs.leftFront[KinematicOutputs::SpringInstallationRatio] + mp->unsprungMass.leftFront * gravity;
 	m(10,0) = (outputs.rightFront[KinematicOutputs::Spring] + preLoad.rightFront) * s->rightFront.spring.rate
-		/ outputs.rightFront[KinematicOutputs::SpringInstallationRatio] + mp->unsprungMass.rightFront * gravity
-		- outputs.doubles[KinematicOutputs::FrontARBTwist] * s->barRate.front / outputs.rightFront[KinematicOutputs::ARBInstallationRatio];
+		/ outputs.rightFront[KinematicOutputs::SpringInstallationRatio] + mp->unsprungMass.rightFront * gravity;
 	m(11,0) = (outputs.leftRear[KinematicOutputs::Spring] + preLoad.leftRear) * s->leftRear.spring.rate
-		/ outputs.leftRear[KinematicOutputs::SpringInstallationRatio] + mp->unsprungMass.leftRear * gravity
-		+ outputs.doubles[KinematicOutputs::RearARBTwist] * s->barRate.rear / outputs.leftRear[KinematicOutputs::ARBInstallationRatio];
+		/ outputs.leftRear[KinematicOutputs::SpringInstallationRatio] + mp->unsprungMass.leftRear * gravity;
 	m(12,0) = (outputs.rightRear[KinematicOutputs::Spring] + preLoad.rightRear) * s->rightRear.spring.rate
-		/ outputs.rightRear[KinematicOutputs::SpringInstallationRatio] + mp->unsprungMass.rightRear * gravity
-		- outputs.doubles[KinematicOutputs::RearARBTwist] * s->barRate.rear / outputs.rightRear[KinematicOutputs::ARBInstallationRatio];
+		/ outputs.rightRear[KinematicOutputs::SpringInstallationRatio] + mp->unsprungMass.rightRear * gravity;
+		
+	if (s->frontBarStyle != Suspension::SwayBarNone)
+	{
+		m(9,0) += outputs.doubles[KinematicOutputs::FrontARBTwist]
+			* s->barRate.front / outputs.leftFront[KinematicOutputs::ARBInstallationRatio];
+		m(10,0) -= outputs.doubles[KinematicOutputs::FrontARBTwist]
+			* s->barRate.front / outputs.rightFront[KinematicOutputs::ARBInstallationRatio];
+	}
+	
+	if (s->rearBarStyle != Suspension::SwayBarNone)
+	{
+		m(11,0) += outputs.doubles[KinematicOutputs::RearARBTwist]
+			* s->barRate.rear / outputs.leftRear[KinematicOutputs::ARBInstallationRatio];
+		m(12,0) -= outputs.doubles[KinematicOutputs::RearARBTwist]
+			* s->barRate.rear / outputs.rightRear[KinematicOutputs::ARBInstallationRatio];
+	}
 
 	// TODO:  Inlcude 3rd springs
 
