@@ -93,9 +93,9 @@ OutputPanel::~OutputPanel()
 //		None
 //
 //==========================================================================
-/*BEGIN_EVENT_TABLE(OutputPanel, wxPanel)
-	EVT_SIZE(OutputPanel::OnSize)
-END_EVENT_TABLE()*/
+BEGIN_EVENT_TABLE(OutputPanel, wxPanel)
+	EVT_GRID_COL_SIZE(OutputPanel::ColumnResizeEvent)
+END_EVENT_TABLE()
 
 //==========================================================================
 // Class:			OutputPanel
@@ -496,11 +496,13 @@ void OutputPanel::CreateControls()
 //		None
 //
 //==========================================================================
-void OutputPanel::ColumnResizeEvent(wxGridSizeEvent& WXUNUSED(event))
+void OutputPanel::ColumnResizeEvent(wxGridSizeEvent& event)
 {
 	// Force a re-paint of the grid
-	outputsList->Refresh();
-	outputsList->Update();
+	// Not sure why this is required, but without this, the grid doesn't
+	// immediately re-paint.
+	mainFrame.Refresh();
+	event.Skip();
 }
 
 //==========================================================================
