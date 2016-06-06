@@ -348,6 +348,8 @@ WheelSet QuasiStatic::ComputePreLoad(const Car* originalCar) const
 		/ kinematics.GetOutputs().rightRear[KinematicOutputs::SpringInstallationRatio];
 	
 	// TODO:  3rd springs
+	if (s->frontHasThirdSpring || s->rearHasThirdSpring)
+		Debugger::GetInstance() << "Warning:  3rd springs are not considered in quasi-static analysis" << Debugger::PriorityVeryHigh;
 	
 	return preLoad;
 }

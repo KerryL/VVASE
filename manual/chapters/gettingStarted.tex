@@ -61,10 +61,11 @@ The \element{Quasi-Static Toolbar} allows the user to define longitudinal and la
 \item Tire stiffnesses
 \end{itemize}
 
-Springs are assumed to be in equilibrium when accelerations are zero.  This assumption is used to compute the pre-load on the springs at ride height.  For cars with third springs, the third springs are assumed to have zero pre-load (but generate forces in extension as well as compression).  A future version will allow independently specified pre-loading for third springs.
+Springs are assumed to be in equilibrium when accelerations are zero.  This assumption is used to compute the pre-load on the springs at ride height.  Currently, third springs are not considered in quasi-static analyses.
 
-Additionally, this analysis currently neglects tire compliance and suspension droop limits.  It may be obvious that if a negative tire load is calculated this can be interpreted as a case where the tire is no longer in contact with the ground, but really the accuracy of the simulation may have been compromised prior to seeing a negative tire load.  If the suspension springs are pre-loaded, for example, the tire will have lost contact with the ground before the model reports negative contact loads.  Use this feature with care.
-%% TODO:  Fix this section!
+Additionally, this analysis currently neglects suspension droop limits.  It may be obvious that if a negative tire load is calculated this can be interpreted as a case where the tire is no longer in contact with the ground, but really the accuracy of the simulation may have been compromised prior to seeing a negative tire load.  If the suspension springs are pre-loaded, for example, the tire will have lost contact with the ground before the model reports negative contact loads.  Use this feature with care.
+
+When inputs are entered in the \element{Quasi-Static Toolbar}, tire load and kinematic state outputs are appended to the data listed in the output pane.  The pitch and roll angle outputs will depend on the user-specified center-of-rotation and rotation order.  The kinematic state may be non-zero even when both input accelerations are zero due to tire compliance.  Steering input specified in the \element{Kinematics Toolbar} is also applied to quasi-static analyses.
 
 \subsection{3D Toolbar} \label{ssec:3DToolbar}
 
