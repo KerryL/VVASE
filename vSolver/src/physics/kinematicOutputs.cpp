@@ -1196,9 +1196,91 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 		cornerDoubles[DamperInstallationRatio] = 1.0 / force.Length()
 			* VVASEMath::Sign(force.Normalize() * forceDirection.Normalize());
 
-		// TODO:  Need to specify attachment options for sway bars with outboard spring/damper
-		// Also, should consider handling rocker arms
-		//cornerDoubles[ARBInstallationRatio] = -1.0;
+		// ARB link force
+		if (((originalCorner->location == Corner::LocationLeftFront ||
+			originalCorner->location == Corner::LocationRightFront) &&
+			originalCar->suspension->frontBarStyle != Suspension::SwayBarNone) ||
+			((originalCorner->location == Corner::LocationLeftRear ||
+			originalCorner->location == Corner::LocationRightRear) &&
+			originalCar->suspension->rearBarStyle != Suspension::SwayBarNone))
+		{
+			momentArm = currentCorner->hardpoints[Corner::OutboardBarLink] - VVASEMath::NearestPointOnAxis(
+				pointOnAxis, momentDirection, currentCorner->hardpoints[Corner::OutboardBarLink]);
+			force = momentDirection.Cross(momentArm).Normalize() * momentMagnitude / momentArm.Length();
+
+			// Determine the force required in the direction of the link
+			forceDirection = (currentCorner->hardpoints[Corner::InboardBarLink]
+				- currentCorner->hardpoints[Corner::OutboardBarLink]).Normalize();
+			force = forceDirection * force.Length() / (force.Normalize() * forceDirection);
+
+			// Different procedures for U-bars and T-bars
+			if (((originalCorner->location == Corner::LocationLeftFront ||
+				originalCorner->location == Corner::LocationRightFront) &&
+				originalCar->suspension->frontBarStyle == Suspension::SwayBarUBar) ||
+				((originalCorner->location == Corner::LocationLeftRear ||
+				originalCorner->location == Corner::LocationRightRear) &&
+				originalCar->suspension->rearBarStyle == Suspension::SwayBarUBar))
+			{
+				if (currentCorner->location == Corner::LocationLeftFront ||
+					currentCorner->location == Corner::LocationRightFront)
+					momentDirection = currentCorner->hardpoints[Corner::BarArmAtPivot] - currentSuspension->hardpoints[Suspension::FrontBarMidPoint];
+				else
+					momentDirection = currentCorner->hardpoints[Corner::BarArmAtPivot] - currentSuspension->hardpoints[Suspension::RearBarMidPoint];
+
+				momentArm = currentCorner->hardpoints[Corner::InboardBarLink] - VVASEMath::NearestPointOnAxis(
+					currentCorner->hardpoints[Corner::BarArmAtPivot], momentDirection, currentCorner->hardpoints[Corner::InboardBarLink]);
+			}
+			else if (((originalCorner->location == Corner::LocationLeftFront ||
+				originalCorner->location == Corner::LocationRightFront) &&
+				originalCar->suspension->frontBarStyle == Suspension::SwayBarTBar) ||
+				((originalCorner->location == Corner::LocationLeftRear ||
+				originalCorner->location == Corner::LocationRightRear) &&
+				originalCar->suspension->rearBarStyle == Suspension::SwayBarTBar))
+			{
+				Vector normal, pivot, oppositeInboard;
+				if (currentCorner->location == Corner::LocationLeftFront ||
+					currentCorner->location == Corner::LocationRightFront)
+				{
+					pivot = currentSuspension->hardpoints[Suspension::FrontBarMidPoint];
+					normal = currentSuspension->hardpoints[Suspension::FrontBarPivotAxis] - pivot;
+
+					if (currentCorner->location == Corner::LocationLeftFront)
+						oppositeInboard = currentSuspension->rightFront.hardpoints[Corner::InboardBarLink];
+					else
+						oppositeInboard = currentSuspension->leftFront.hardpoints[Corner::InboardBarLink];
+				}
+				else
+				{
+					pivot = currentSuspension->hardpoints[Suspension::RearBarMidPoint];
+					normal = currentSuspension->hardpoints[Suspension::RearBarPivotAxis] - pivot;
+
+					if (currentCorner->location == Corner::LocationLeftRear)
+						oppositeInboard = currentSuspension->rightRear.hardpoints[Corner::InboardBarLink];
+					else
+						oppositeInboard = currentSuspension->leftRear.hardpoints[Corner::InboardBarLink];
+				}
+
+				Vector topMidPoint = VVASEMath::IntersectWithPlane(normal, pivot,
+					currentCorner->hardpoints[Corner::InboardBarLink] - oppositeInboard,
+					currentCorner->hardpoints[Corner::InboardBarLink]);
+
+				momentDirection = pivot - topMidPoint;
+				momentArm = topMidPoint - currentCorner->hardpoints[Corner::InboardBarLink];
+			}
+
+			// Torque at bar
+			// Force is not perpendicular to momentDirection - some portion of force goes into strain energy in the strucutre
+			// What value of the bar torque results in the required magnitude of the force in the link?
+			forceDirection = momentDirection.Cross(momentArm).Normalize();
+			force = forceDirection * force.Length() / (force.Normalize() * forceDirection);
+			Vector torque = momentArm.Cross(force);
+			
+			// At this point, torque is the bar torque (in inch-lbf) in response to the unit force at the wheel (in lbf)
+			// If the wheel moves by amount dx, then the bar moves by amount dTheta
+			// By the principle of virtual work, dW = F * dx = T * dTheta => dTheta / dx = F / T
+			//assert(VVASEMath::IsZero(torque.Cross(momentDirection).Length(), 1.0e-10));
+			cornerDoubles[ARBInstallationRatio] = 1.0 / torque.Length();
+		}
 	}
 
 	// Side View Swing Arm Length [in]
