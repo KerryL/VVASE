@@ -79,26 +79,6 @@ OutputPanel::~OutputPanel()
 
 //==========================================================================
 // Class:			OutputPanel
-// Function:		Event Tables
-//
-// Description:		Event table for the OutputPanel class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-BEGIN_EVENT_TABLE(OutputPanel, wxPanel)
-	EVT_GRID_COL_SIZE(OutputPanel::ColumnResizeEvent)
-END_EVENT_TABLE()
-
-//==========================================================================
-// Class:			OutputPanel
 // Function:		UpdateInformation
 //
 // Description:		Updates the information on this panel.
@@ -327,6 +307,9 @@ void OutputPanel::UpdateInformation(GuiCar::CarOutputs outputs, Car &car,
 
 	// Make sure the correct column is highlighted
 	HighlightColumn(mainFrame.GetObjectByIndex(mainFrame.GetActiveIndex())->GetCleanName());
+
+	// End batch edit of the grid
+	outputsList->EndBatch();
 }
 
 //==========================================================================
@@ -348,6 +331,9 @@ void OutputPanel::UpdateInformation(GuiCar::CarOutputs outputs, Car &car,
 //==========================================================================
 void OutputPanel::FinishUpdate(int numberOfDataColumns)
 {
+	// Begin batch editing of the grid
+	outputsList->BeginBatch();
+
 	while (this->numberOfDataColumns > numberOfDataColumns)
 	{
 		if (!outputsList->DeleteCols(numberOfDataColumns + 1, this->numberOfDataColumns - numberOfDataColumns))
@@ -482,31 +468,6 @@ void OutputPanel::CreateControls()
 
 //==========================================================================
 // Class:			OutputPanel
-// Function:		ColumnResizeEvent
-//
-// Description:		Event handler for the column re-size event.
-//
-// Input Arguments:
-//		event	= wxGridSizeEvent&
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-void OutputPanel::ColumnResizeEvent(wxGridSizeEvent& event)
-{
-	// Force a re-paint of the grid
-	// Not sure why this is required, but without this, the grid doesn't
-	// immediately re-paint.
-	mainFrame.Refresh();
-	event.Skip();
-}
-
-//==========================================================================
-// Class:			OutputPanel
 // Function:		HighlightColumn
 //
 // Description:		Highlights the column with the specified column heading
@@ -550,8 +511,4 @@ void OutputPanel::HighlightColumn(wxString name)
 
 	// End the batch mode edit and re-paint the control
 	outputsList->EndBatch();
-
-	// For some reason, this doesn't happen automatically
-	Refresh();
-	Update();
 }

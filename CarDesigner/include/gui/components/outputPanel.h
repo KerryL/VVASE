@@ -54,14 +54,7 @@ private:
 		IdOutputGrid = wxID_HIGHEST + 1100
 	};
 
-	// Event handlers-----------------------------------------------------
-	void ColumnResizeEvent(wxGridSizeEvent &event);
-	// End event handlers-------------------------------------------------
-
 	SuperGrid *outputsList;
-
-protected:
-	DECLARE_EVENT_TABLE()
 };
 
 #endif// OUTPUT_PANEL_H_
