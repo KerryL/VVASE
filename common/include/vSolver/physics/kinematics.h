@@ -118,6 +118,8 @@ private:
 
 	// Other functions
 	void MoveSteeringRack(const double &travel) const;
+	void UpdateCGs(const Vector& cor, const Vector& angles, const Vector::Axis& first,
+		const Vector::Axis& second, const double& heave, const WheelSet& tireDeflections, Car* workingCar) const;
 
 	static Vector FindPerpendicularVector(const Vector &v);
 	static double OptimizeCircleParameter(const Vector &center, const Vector &a,

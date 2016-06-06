@@ -35,6 +35,7 @@
 #include "vCar/corner.h"
 #include "vCar/drivetrain.h"
 #include "vCar/suspension.h"
+#include "vCar/massProperties.h"
 #include "vMath/carMath.h"
 #include "vUtilities/wheelSetStructures.h"
 #include "vUtilities/debugLog.h"
@@ -269,6 +270,9 @@ void Kinematics::UpdateKinematics(const Car* originalCar, Car* workingCar, wxStr
 			localSuspension->rightRear.hardpoints[Corner::InboardBarLink]))
 			Debugger::GetInstance() << "ERROR:  Failed to solve for inboard T-bar (rear)!" << Debugger::PriorityMedium;
 	}
+
+	UpdateCGs(inputs.centerOfRotation, rotations, inputs.firstRotation,
+		secondRotation, inputs.heave, inputs.tireDeflections, workingCar);
 
 	outputs.Update(originalCar, localSuspension);
 	long totalTime = timer.Time();
@@ -1171,10 +1175,20 @@ double Kinematics::OptimizeCircleParameter(const Vector &center, const Vector &a
 //					be found simultaneously.
 //
 // Input Arguments:
-//		
+//		leftOutboard			= const Vector&
+//		rightOutboard			= const Vector&
+//		centerPivot				= const Vector&
+//		pivotAxisPoint			= const Vector&
+//		originalLeftOutboard	= const Vector&
+//		originalRightOutboard	= const Vector&
+//		originalCenterPivot		= const Vector&
+//		originalPivotAxisPoint	= const Vector&
+//		originalLeftInboard		= const Vector&
+//		originalRightInboard	= const Vector&
 //
 // Output Arguments:
-//		
+//		leftInboard				= Vector&
+//		rightInboard			= Vector&
 //
 // Return Value:
 //		bool, true for success, false for error
@@ -1365,4 +1379,49 @@ bool Kinematics::SolveInboardTBarPoints(const Vector &leftOutboard,
 	}
 
 	return true;
+}
+
+//==========================================================================
+// Class:			Kinematics
+// Function:		UpdateCGs
+//
+// Description:		Updates the center-of-gravity heights.
+//
+// Input Arguments:
+//		cor				= const Vector&
+//		angles			= const Vector&
+//		first			= const Vector::Axis&
+//		second			= const Vector::Axis&
+//		heave			= const double&
+//		tireDeflections	= const WheelSet&
+//		workingCar		= Car*
+//
+// Output Arguments:
+//		workingCar	= Car*
+//
+// Return Value:
+//		bool, true for success, false for error
+//		
+//==========================================================================
+void Kinematics::UpdateCGs(const Vector& cor, const Vector& angles, const Vector::Axis& first,
+	const Vector::Axis& second, const double& heave, const WheelSet& tireDeflections, Car* workingCar) const
+{
+	Vector sprungCG(workingCar->massProperties->GetSprungMassCG(workingCar->suspension));
+
+	// NOTE:  Unsprung CG height is assumed to change only due
+	// to tire compliance (tire/upright assembly rotation is not considered)
+
+	workingCar->massProperties->unsprungCGHeights.leftFront -= tireDeflections.leftFront;
+	workingCar->massProperties->unsprungCGHeights.rightFront -= tireDeflections.rightFront;
+	workingCar->massProperties->unsprungCGHeights.leftRear -= tireDeflections.leftRear;
+	workingCar->massProperties->unsprungCGHeights.rightRear -= tireDeflections.rightRear;
+
+	sprungCG.Rotate(cor, angles, first, second);
+	sprungCG.z += heave;
+	workingCar->massProperties->totalCGHeight = (sprungCG.z * workingCar->massProperties->GetSprungMass()
+		+ workingCar->massProperties->unsprungCGHeights.leftFront * workingCar->massProperties->unsprungMass.leftFront
+		+ workingCar->massProperties->unsprungCGHeights.rightFront * workingCar->massProperties->unsprungMass.rightFront
+		+ workingCar->massProperties->unsprungCGHeights.leftRear * workingCar->massProperties->unsprungMass.leftRear
+		+ workingCar->massProperties->unsprungCGHeights.rightRear * workingCar->massProperties->unsprungMass.rightRear)
+		/ workingCar->massProperties->GetTotalMass();
 }
