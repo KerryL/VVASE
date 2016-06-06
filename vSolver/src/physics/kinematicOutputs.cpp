@@ -222,7 +222,8 @@ void KinematicOutputs::ComputeFrontARBTwist(const Car *original, const Suspensio
 		original->suspension->rightFront, current->leftFront, current->rightFront, current->frontBarStyle,
 		original->suspension->hardpoints[Suspension::FrontBarMidPoint],
 		original->suspension->hardpoints[Suspension::FrontBarPivotAxis],
-		current->hardpoints[Suspension::FrontBarMidPoint], current->hardpoints[Suspension::FrontBarPivotAxis]);
+		current->hardpoints[Suspension::FrontBarMidPoint], current->hardpoints[Suspension::FrontBarPivotAxis],
+		original->suspension->frontBarSignGreaterThan);
 }
 
 //==========================================================================
@@ -248,7 +249,8 @@ void KinematicOutputs::ComputeRearARBTwist(const Car *original, const Suspension
 		original->suspension->rightRear, current->leftRear, current->rightRear, current->rearBarStyle,
 		original->suspension->hardpoints[Suspension::RearBarMidPoint],
 		original->suspension->hardpoints[Suspension::RearBarPivotAxis],
-		current->hardpoints[Suspension::RearBarMidPoint], current->hardpoints[Suspension::RearBarPivotAxis]);
+		current->hardpoints[Suspension::RearBarMidPoint], current->hardpoints[Suspension::RearBarPivotAxis],
+		original->suspension->rearBarSignGreaterThan);
 }
 
 //==========================================================================
@@ -421,6 +423,7 @@ void KinematicOutputs::ComputeWheelbase(const Suspension *current)
 //		originalPivot		= const Vector&
 //		currentMidPoint		= const Vector&
 //		currentPivot		= const Vector&
+//		signGreaterThan		= const bool&
 //
 // Output Arguments:
 //		None
@@ -433,15 +436,16 @@ double KinematicOutputs::ComputeARBTwist(const Corner& originalLeft,
 	const Corner& originalRight, const Corner& currentLeft,
 	const Corner& currentRight, const Suspension::BarStyle &barStyle,
 	const Vector& originalMidPoint, const Vector& originalPivot,
-	const Vector& currentMidPoint, const Vector& currentPivot) const
+	const Vector& currentMidPoint, const Vector& currentPivot,
+	const bool& signGreaterThan) const
 {
 	if (barStyle == Suspension::SwayBarUBar)
-		return ComputeUBarTwist(originalLeft, originalRight, currentLeft, currentRight);
+		return ComputeUBarTwist(originalLeft, originalRight, currentLeft, currentRight, signGreaterThan);
 	else if (barStyle == Suspension::SwayBarTBar)
 		return ComputeTBarTwist(originalLeft, originalRight, currentLeft, currentRight,
-		originalMidPoint, originalPivot, currentMidPoint, currentPivot);
+		originalMidPoint, originalPivot, currentMidPoint, currentPivot, signGreaterThan);
 	else if (barStyle == Suspension::SwayBarGeared)
-		return ComputeGearedBarTwist(originalLeft, originalRight, currentLeft, currentRight);
+		return ComputeGearedBarTwist(originalLeft, originalRight, currentLeft, currentRight, signGreaterThan);
 
 	return 0.0;
 }
@@ -457,6 +461,7 @@ double KinematicOutputs::ComputeARBTwist(const Corner& originalLeft,
 //		originalRight		= const Corner&
 //		currentLeft			= const Corner&
 //		currentRight		= const Corner&
+//		signGreaterThan		= const bool&
 //
 // Output Arguments:
 //		None
@@ -466,7 +471,8 @@ double KinematicOutputs::ComputeARBTwist(const Corner& originalLeft,
 //
 //==========================================================================
 double KinematicOutputs::ComputeUBarTwist(const Corner& originalLeft,
-	const Corner& originalRight, const Corner& currentLeft, const Corner& currentRight) const
+	const Corner& originalRight, const Corner& currentLeft,
+	const Corner& currentRight, const bool& signGreaterThan) const
 {
 	Vector swayBarAxis;
 	Vector arm1Direction, arm2Direction;
@@ -505,9 +511,17 @@ double KinematicOutputs::ComputeUBarTwist(const Corner& originalLeft,
 		(arm1Direction.Length() * arm2Direction.Length()), -1.0, 1.0)) - originalSwayBarAngle;
 	
 	// Change the sign according to the convention:  +ve twist transfers load from right to left
-	// TODO:  Enforce convention
-	if (swayBarAxis * arm1Direction.Cross(arm2Direction) > 0.0)
-		deltaAngle *= -1.0;
+	// (or in other words, +ve twist resists roll to the left)
+	if (signGreaterThan)
+	{
+		if (swayBarAxis * arm1Direction.Cross(arm2Direction) > 0.0)
+			deltaAngle *= -1.0;
+	}
+	else
+	{
+		if (swayBarAxis * arm1Direction.Cross(arm2Direction) < 0.0)
+			deltaAngle *= -1.0;
+	}
 		
 	return deltaAngle;
 }
@@ -527,6 +541,7 @@ double KinematicOutputs::ComputeUBarTwist(const Corner& originalLeft,
 //		originalPivot		= const Vector&
 //		currentMidPoint		= const Vector&
 //		currentPivot		= const Vector&
+//		signGreaterThan		= const bool&
 //
 // Output Arguments:
 //		None
@@ -538,7 +553,8 @@ double KinematicOutputs::ComputeUBarTwist(const Corner& originalLeft,
 double KinematicOutputs::ComputeTBarTwist(const Corner& originalLeft,
 	const Corner& originalRight, const Corner& currentLeft, const Corner& currentRight,
 	const Vector& originalMidPoint, const Vector& originalPivot,
-	const Vector& currentMidPoint, const Vector& currentPivot) const
+	const Vector& currentMidPoint, const Vector& currentPivot,
+	const bool& signGreaterThan) const
 {
 	Vector swayBarAxis;
 	Vector armDirection;
@@ -583,9 +599,17 @@ double KinematicOutputs::ComputeTBarTwist(const Corner& originalLeft,
 		(armDirection.Length() * stemPlaneNormal.Length()), -1.0, 1.0)) - originalSwayBarAngle;
 	
 	// Change the sign according to the convention:  +ve twist transfers load from right to left
-	// TODO:  Enforce convention
-	if (swayBarAxis * armDirection.Cross(stemPlaneNormal) < 0.0)
-		deltaAngle *= -1.0;
+	// (or in other words, +ve twist resists roll to the left)
+	if (signGreaterThan)
+	{
+		if (swayBarAxis * armDirection.Cross(stemPlaneNormal) > 0.0)
+			deltaAngle *= -1.0;
+	}
+	else
+	{
+		if (swayBarAxis * armDirection.Cross(stemPlaneNormal) < 0.0)
+			deltaAngle *= -1.0;
+	}
 		
 	return deltaAngle;
 }
@@ -601,6 +625,7 @@ double KinematicOutputs::ComputeTBarTwist(const Corner& originalLeft,
 //		originalRight		= const Corner&
 //		currentLeft			= const Corner&
 //		currentRight		= const Corner&
+//		signGreaterThan		= const bool&
 //
 // Output Arguments:
 //		None
@@ -610,7 +635,8 @@ double KinematicOutputs::ComputeTBarTwist(const Corner& originalLeft,
 //
 //==========================================================================
 double KinematicOutputs::ComputeGearedBarTwist(const Corner& /*originalLeft*/,
-	const Corner& /*originalRight*/, const Corner& /*currentLeft*/, const Corner& /*currentRight*/) const
+	const Corner& /*originalRight*/, const Corner& /*currentLeft*/, const Corner& /*currentRight*/,
+	const bool& /*signGreaterThan*/) const
 {
 	// TODO:  Impelement
 	Debugger::GetInstance() << "Geared ARB calculations not yet implemented" << Debugger::PriorityMedium;

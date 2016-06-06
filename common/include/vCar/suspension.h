@@ -117,6 +117,10 @@ public:
 	bool frontHasThirdSpring;
 	bool rearHasThirdSpring;
 
+	// Flags for enforcing ARB twist sign convention
+	bool frontBarSignGreaterThan;
+	bool rearBarSignGreaterThan;
+
 	// Third spring and damper objects
 	Spring frontThirdSpring;
 	Spring rearThirdSpring;

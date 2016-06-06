@@ -420,6 +420,9 @@ Suspension& Suspension::operator=(const Suspension& suspension)
 	frontHasThirdSpring = suspension.frontHasThirdSpring;
 	rearHasThirdSpring = suspension.rearHasThirdSpring;
 
+	frontBarSignGreaterThan = suspension.frontBarSignGreaterThan;
+	rearBarSignGreaterThan = suspension.rearBarSignGreaterThan;
+
 	// Third spring and damper objects
 	frontThirdSpring = suspension.frontThirdSpring;
 	rearThirdSpring = suspension.rearThirdSpring;

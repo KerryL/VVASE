@@ -121,6 +121,8 @@ private:
 
 	// The scene visible to the user representing this object
 	CarRenderer *renderer;
+
+	void ComputeARBSignConventions();
 };
 
 #endif// GUI_CAR_H_

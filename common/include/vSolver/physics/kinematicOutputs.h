@@ -221,15 +221,15 @@ private:
 		const Corner& currentLeft, const Corner& currentRight,
 		const Suspension::BarStyle &barStyle, const Vector& originalMidPoint,
 		const Vector& originalPivot, const Vector& currentMidPoint,
-		const Vector& currentPivot) const;
+		const Vector& currentPivot, const bool& signGreaterThan) const;
 	double ComputeUBarTwist(const Corner& originalLeft, const Corner& originalRight,
-		const Corner& currentLeft, const Corner& currentRight) const;
+		const Corner& currentLeft, const Corner& currentRight, const bool& signGreaterThan) const;
 	double ComputeTBarTwist(const Corner& originalLeft, const Corner& originalRight,
 		const Corner& currentLeft, const Corner& currentRight,
 		const Vector& originalMidPoint, const Vector& originalPivot,
-		const Vector& currentMidPoint, const Vector& currentPivot) const;
+		const Vector& currentMidPoint, const Vector& currentPivot, const bool& signGreaterThan) const;
 	double ComputeGearedBarTwist(const Corner& originalLeft, const Corner& originalRight,
-		const Corner& currentLeft, const Corner& currentRight) const;
+		const Corner& currentLeft, const Corner& currentRight, const bool& signGreaterThan) const;
 
 	bool ComputeKinematicCenter(const Corner &corner1, const Corner &corner2,
 		const Vector *cornerVectors1, const Vector *cornerVectors2,

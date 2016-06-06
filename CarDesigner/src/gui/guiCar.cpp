@@ -229,6 +229,7 @@ void GuiCar::UpdateData()
 
 	// Update the wheel centers
 	originalCar->ComputeWheelCenters();
+	ComputeARBSignConventions();
 
 	Kinematics::Inputs inputs;
 	if (mainFrame.ActiveAnalysisIsKinematic())
@@ -427,4 +428,51 @@ wxString GuiCar::GetSubsystemName(Subsystems subsystem)
 	}
 
 	return wxEmptyString;
+}
+
+//==========================================================================
+// Class:			GuiCar
+// Function:		ComputeARBSignConventions
+//
+// Description:		Computes the required sign convention for ARB twist.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void GuiCar::ComputeARBSignConventions()
+{
+	// Reset convention
+	originalCar->suspension->frontBarSignGreaterThan = true;
+	originalCar->suspension->rearBarSignGreaterThan = true;
+
+	// Test convention
+	WheelSet tireDeflections;
+	tireDeflections.leftFront = 0.0;
+	tireDeflections.rightFront = 0.0;
+	tireDeflections.leftRear = 0.0;
+	tireDeflections.rightRear = 0.0;
+
+	Kinematics kinematics;
+	kinematics.SetCenterOfRotation(Vector(0.0, 0.0, 0.0));
+	kinematics.SetFirstEulerRotation(Vector::AxisX);
+	kinematics.SetHeave(0.0);
+	kinematics.SetRoll(0.01);
+	kinematics.SetPitch(0.0);
+	kinematics.SetRackTravel(0.0);
+	kinematics.SetTireDeflections(tireDeflections);
+	kinematics.UpdateKinematics(originalCar, workingCar, name + _T(" -> ARB Sign Convention Test"));
+
+	// Adjust convention if necessary
+	if (kinematics.GetOutputs().doubles[KinematicOutputs::FrontARBTwist] < 0.0)
+		originalCar->suspension->frontBarSignGreaterThan = false;
+
+	if (kinematics.GetOutputs().doubles[KinematicOutputs::RearARBTwist] < 0.0)
+		originalCar->suspension->rearBarSignGreaterThan = false;
 }
