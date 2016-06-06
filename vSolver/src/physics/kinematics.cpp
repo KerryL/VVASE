@@ -530,48 +530,6 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 				success = false;
 			}
 		}
-
-		// Sway Bars Inboard
-		if (localSuspension->frontBarStyle == Suspension::SwayBarUBar && isAtFront)
-		{
-			Vector originalBarMidpoint = 0.5 *
-				(originalCar->suspension->leftFront.hardpoints[Corner::BarArmAtPivot]
-				+ originalCar->suspension->rightFront.hardpoints[Corner::BarArmAtPivot]);
-			if (!SolveForPoint(corner.hardpoints[Corner::BarArmAtPivot],
-				corner.hardpoints[Corner::OutboardBarLink], localSuspension->hardpoints[Suspension::FrontBarMidPoint],
-				originalCorner.hardpoints[Corner::BarArmAtPivot], originalCorner.hardpoints[Corner::OutboardBarLink],
-				originalBarMidpoint, originalCorner.hardpoints[Corner::InboardBarLink],
-				corner.hardpoints[Corner::InboardBarLink]))
-			{
-				Debugger::GetInstance() << "ERROR:  Failed to solve for inboard U-bar (front)!" << Debugger::PriorityMedium;
-				success = false;
-			}
-		}
-		else if (localSuspension->rearBarStyle == Suspension::SwayBarUBar && !isAtFront)
-		{
-			Vector originalBarMidpoint = 0.5 *
-				(originalCar->suspension->leftRear.hardpoints[Corner::BarArmAtPivot]
-				+ originalCar->suspension->rightRear.hardpoints[Corner::BarArmAtPivot]);
-			if (!SolveForPoint(corner.hardpoints[Corner::BarArmAtPivot],
-				corner.hardpoints[Corner::OutboardBarLink], localSuspension->hardpoints[Suspension::RearBarMidPoint],
-				originalCorner.hardpoints[Corner::BarArmAtPivot], originalCorner.hardpoints[Corner::OutboardBarLink],
-				originalBarMidpoint, originalCorner.hardpoints[Corner::InboardBarLink],
-				corner.hardpoints[Corner::InboardBarLink]))
-			{
-				Debugger::GetInstance() << "ERROR:  Failed to solve for inboard U-bar (rear)!" << Debugger::PriorityMedium;
-				success = false;
-			}
-		}
-		else if ((localSuspension->frontBarStyle == Suspension::SwayBarGeared && isAtFront) ||
-			(localSuspension->rearBarStyle == Suspension::SwayBarGeared && !isAtFront))
-		{
-			if (!SolveForPoint(Corner::InboardBarLink, Corner::BarArmAtPivot,
-				Corner::OutboardBarLink, Corner::GearEndBarShaft, originalCorner, corner))
-			{
-				Debugger::GetInstance() << "ERROR:  Failed to solve for geared bar!" << Debugger::PriorityMedium;
-				success = false;
-			}
-		}
 	}
 	else if (corner.actuationType == Corner::ActuationOutboardRockerArm)// Outboard spring/damper units  - no pushrod/bell crank
 	{
@@ -654,6 +612,48 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 			Corner::UpperBallJoint, Corner::OutboardTieRod, originalCorner, corner))
 		{
 			Debugger::GetInstance() << "ERROR:  Failed to solve for outboard half shaft!" << Debugger::PriorityMedium;
+			success = false;
+		}
+	}
+
+	// Sway Bars Inboard
+	if (localSuspension->frontBarStyle == Suspension::SwayBarUBar && isAtFront)
+	{
+		Vector originalBarMidpoint = 0.5 *
+			(originalCar->suspension->leftFront.hardpoints[Corner::BarArmAtPivot]
+			+ originalCar->suspension->rightFront.hardpoints[Corner::BarArmAtPivot]);
+		if (!SolveForPoint(corner.hardpoints[Corner::BarArmAtPivot],
+			corner.hardpoints[Corner::OutboardBarLink], localSuspension->hardpoints[Suspension::FrontBarMidPoint],
+			originalCorner.hardpoints[Corner::BarArmAtPivot], originalCorner.hardpoints[Corner::OutboardBarLink],
+			originalBarMidpoint, originalCorner.hardpoints[Corner::InboardBarLink],
+			corner.hardpoints[Corner::InboardBarLink]))
+		{
+			Debugger::GetInstance() << "ERROR:  Failed to solve for inboard U-bar (front)!" << Debugger::PriorityMedium;
+			success = false;
+		}
+	}
+	else if (localSuspension->rearBarStyle == Suspension::SwayBarUBar && !isAtFront)
+	{
+		Vector originalBarMidpoint = 0.5 *
+			(originalCar->suspension->leftRear.hardpoints[Corner::BarArmAtPivot]
+			+ originalCar->suspension->rightRear.hardpoints[Corner::BarArmAtPivot]);
+		if (!SolveForPoint(corner.hardpoints[Corner::BarArmAtPivot],
+			corner.hardpoints[Corner::OutboardBarLink], localSuspension->hardpoints[Suspension::RearBarMidPoint],
+			originalCorner.hardpoints[Corner::BarArmAtPivot], originalCorner.hardpoints[Corner::OutboardBarLink],
+			originalBarMidpoint, originalCorner.hardpoints[Corner::InboardBarLink],
+			corner.hardpoints[Corner::InboardBarLink]))
+		{
+			Debugger::GetInstance() << "ERROR:  Failed to solve for inboard U-bar (rear)!" << Debugger::PriorityMedium;
+			success = false;
+		}
+	}
+	else if ((localSuspension->frontBarStyle == Suspension::SwayBarGeared && isAtFront) ||
+		(localSuspension->rearBarStyle == Suspension::SwayBarGeared && !isAtFront))
+	{
+		if (!SolveForPoint(Corner::InboardBarLink, Corner::BarArmAtPivot,
+			Corner::OutboardBarLink, Corner::GearEndBarShaft, originalCorner, corner))
+		{
+			Debugger::GetInstance() << "ERROR:  Failed to solve for geared bar!" << Debugger::PriorityMedium;
 			success = false;
 		}
 	}
