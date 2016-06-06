@@ -18,6 +18,7 @@
     <ClInclude Include="..\common\include\vSolver\physics\kinematics.h" />
     <ClInclude Include="..\common\include\vSolver\physics\millikenAnalysis.h" />
     <ClInclude Include="..\common\include\vSolver\physics\quasiStatic.h" />
+    <ClInclude Include="..\common\include\vSolver\physics\quasiStaticOutputs.h" />
     <ClInclude Include="..\common\include\vSolver\physics\shakerRig.h" />
     <ClInclude Include="..\common\include\vSolver\physics\state.h" />
     <ClInclude Include="..\common\include\vSolver\threads\inverseSemaphore.h" />

@@ -66,6 +66,9 @@
     <ClInclude Include="..\common\include\vSolver\physics\quasiStatic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\common\include\vSolver\physics\quasiStaticOutputs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\optimization\geneticAlgorithm.cpp">
