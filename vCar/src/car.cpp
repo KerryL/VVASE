@@ -226,12 +226,12 @@ Car::Car()
 	massProperties->unsprungCGHeights.rightRear = 10.0;
 
 	// Test spring rates
-	suspension->barRate.front = 100.0;// [in-lbf/rad]
+	suspension->barRate.front = 2000.0;// [in-lbf/rad]
 	suspension->barRate.rear = 100.0;// [in-lbf/rad]
-	suspension->leftFront.spring.rate = 120.0;// [lb/in]
-	suspension->rightFront.spring.rate = 120.0;// [lb/in]
-	suspension->leftRear.spring.rate = 140.0;// [lb/in]
-	suspension->rightRear.spring.rate = 140.0;// [lb/in]
+	suspension->leftFront.spring.rate = 50.0;// [lb/in]
+	suspension->rightFront.spring.rate = 50.0;// [lb/in]
+	suspension->leftRear.spring.rate = 60.0;// [lb/in]
+	suspension->rightRear.spring.rate = 60.0;// [lb/in]
 }
 
 //==========================================================================

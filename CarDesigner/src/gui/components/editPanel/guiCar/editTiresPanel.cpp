@@ -350,7 +350,7 @@ void EditTiresPanel::CreateControls()
 	// Adjust text box minimum size
 	// Use number larger than actual anticipated value for these boxes to determine appropriate size
 	int minWidth;
-	GetTextExtent(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertDistanceOutput(-4000.0)), &minWidth, NULL);
+	GetTextExtent(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertDistanceOutput(-400000.0)), &minWidth, NULL);
 	rightFrontTireDiameter->SetMinSize(wxSize(minWidth, -1));
 	rightFrontTireWidth->SetMinSize(wxSize(minWidth, -1));
 	rightFrontTireStiffness->SetMinSize(wxSize(minWidth, -1));
