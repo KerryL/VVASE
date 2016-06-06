@@ -44,7 +44,8 @@ public:
 		QuasiStaticOutputs& outputs) const;
 
 private:
-	WheelSet ComputeWheelLoads(const Car* originalCar, const KinematicOutputs& outputs) const;
+	WheelSet ComputeWheelLoads(const Car* originalCar, const KinematicOutputs& outputs,
+		const WheelSet& preLoad) const;
 	WheelSet ComputePreLoad(const Car* workingCar) const;
 	WheelSet ComputeTireDeflections(const Car* originalCar, const WheelSet& wheelLoads) const;
 

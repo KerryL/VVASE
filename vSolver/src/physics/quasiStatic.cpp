@@ -112,7 +112,7 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 		kinematics.SetTireDeflections(tireDeflections);
 
 		kinematics.UpdateKinematics(originalCar, workingCar, wxString::Format("Quasi-Static, i = %u (error)", i));
-		wheelLoads = ComputeWheelLoads(originalCar, kinematics.GetOutputs());
+		wheelLoads = ComputeWheelLoads(originalCar, kinematics.GetOutputs(), preLoad);
 		tireDeflections = ComputeTireDeflections(originalCar, wheelLoads);
 		error = ComputeError(workingCar, inputs.gx, inputs.gy, kinematics.GetOutputs(), preLoad);
 
@@ -204,6 +204,7 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 // Input Arguments:
 //		originalCar		= const Car*
 //		outputs			= const KinematicsOutputs&
+//		preLoad			= const WheelSet& [in] spring compression
 //
 // Output Arguments:
 //		None
@@ -213,9 +214,8 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 //
 //==========================================================================
 WheelSet QuasiStatic::ComputeWheelLoads(const Car* originalCar,
-	const KinematicOutputs& outputs) const
+	const KinematicOutputs& outputs, const WheelSet& preLoad) const
 {
-	WheelSet preLoad(ComputePreLoad(originalCar));// [in]
 	WheelSet wheelLoads;// [lb]
 
 	wheelLoads.leftFront = originalCar->suspension->leftFront.spring.rate
@@ -316,13 +316,36 @@ WheelSet QuasiStatic::ComputePreLoad(const Car* originalCar) const
 	sprungWeight.rightFront = (mp->cornerWeights.rightFront - mp->unsprungMass.rightFront) * 32.174;
 	sprungWeight.leftRear = (mp->cornerWeights.leftRear - mp->unsprungMass.leftRear) * 32.174;
 	sprungWeight.rightRear = (mp->cornerWeights.rightRear - mp->unsprungMass.rightRear) * 32.174;
+
+	// In order to accurately know spring pre-loads, we need to know installation ratio
+	// at zero kinematic state.  TODO:  Might this be better stored as a property of the car?
+	WheelSet zeroDeflections;
+	zeroDeflections.leftFront = 0.0;
+	zeroDeflections.rightFront = 0.0;
+	zeroDeflections.leftRear = 0.0;
+	zeroDeflections.rightRear = 0.0;
+
+	Car workingCar(*originalCar);
+
+	Kinematics kinematics;
+	kinematics.SetRackTravel(0.0);
+	kinematics.SetRoll(0.0);
+	kinematics.SetPitch(0.0);
+	kinematics.SetHeave(0.0);
+	kinematics.SetTireDeflections(zeroDeflections);
+	kinematics.SetCenterOfRotation(Vector(0.0, 0.0, 0.0));// This needs to be set to something valid, but isn't actually used
+	kinematics.SetFirstEulerRotation(Vector::AxisX);// This needs to be set to something valid, but isn't actually used
+	kinematics.UpdateKinematics(originalCar, &workingCar, _T("Pre-Load Calculation"));
 	
-	// TODO:  Include installation ratio
 	WheelSet preLoad;
-	preLoad.leftFront = sprungWeight.leftFront / s->leftFront.spring.rate;
-	preLoad.rightFront = sprungWeight.rightFront / s->rightFront.spring.rate;
-	preLoad.leftRear = sprungWeight.leftRear / s->leftRear.spring.rate;
-	preLoad.rightRear = sprungWeight.rightRear / s->rightRear.spring.rate;
+	preLoad.leftFront = sprungWeight.leftFront / s->leftFront.spring.rate
+		/ kinematics.GetOutputs().leftFront[KinematicOutputs::SpringInstallationRatio];
+	preLoad.rightFront = sprungWeight.rightFront / s->rightFront.spring.rate
+		/ kinematics.GetOutputs().rightFront[KinematicOutputs::SpringInstallationRatio];
+	preLoad.leftRear = sprungWeight.leftRear / s->leftRear.spring.rate
+		/ kinematics.GetOutputs().leftRear[KinematicOutputs::SpringInstallationRatio];
+	preLoad.rightRear = sprungWeight.rightRear / s->rightRear.spring.rate
+		/ kinematics.GetOutputs().rightRear[KinematicOutputs::SpringInstallationRatio];
 	
 	// TODO:  3rd springs
 	
