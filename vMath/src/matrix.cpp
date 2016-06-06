@@ -1947,7 +1947,7 @@ double Matrix::GetNorm() const
 	for (i = 0; i < rows; i++)
 	{
 		for (j = 0; j < columns; j++)
-			norm += operator()(i,j) * operator()(i,j);
+			norm += fabs(elements[i][j]);
 	}
 	
 	return norm;
