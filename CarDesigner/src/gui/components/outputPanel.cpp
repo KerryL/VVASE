@@ -214,23 +214,23 @@ void OutputPanel::UpdateInformation(GuiCar::CarOutputs outputs, Car &car,
 			UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertOutput(
 			outputs.quasiStaticOutputs.wheelLoads.rightRear, UnitConverter::UnitTypeForce)));
 			
-		outputsList->SetRowHeight(KinematicOutputs::NumberOfOutputScalars, outputsList->GetRowHeight(0));
-		outputsList->SetRowHeight(KinematicOutputs::NumberOfOutputScalars + 1, outputsList->GetRowHeight(0));
-		outputsList->SetRowHeight(KinematicOutputs::NumberOfOutputScalars + 2, outputsList->GetRowHeight(0));
-		outputsList->SetRowHeight(KinematicOutputs::NumberOfOutputScalars + 3, outputsList->GetRowHeight(0));
-		outputsList->SetRowHeight(KinematicOutputs::NumberOfOutputScalars + 4, outputsList->GetRowHeight(0));
-		outputsList->SetRowHeight(KinematicOutputs::NumberOfOutputScalars + 5, outputsList->GetRowHeight(0));
-		outputsList->SetRowHeight(KinematicOutputs::NumberOfOutputScalars + 6, outputsList->GetRowHeight(0));
+		outputsList->SetRowSize(KinematicOutputs::NumberOfOutputScalars, outputsList->GetRowHeight(0));
+		outputsList->SetRowSize(KinematicOutputs::NumberOfOutputScalars + 1, outputsList->GetRowHeight(0));
+		outputsList->SetRowSize(KinematicOutputs::NumberOfOutputScalars + 2, outputsList->GetRowHeight(0));
+		outputsList->SetRowSize(KinematicOutputs::NumberOfOutputScalars + 3, outputsList->GetRowHeight(0));
+		outputsList->SetRowSize(KinematicOutputs::NumberOfOutputScalars + 4, outputsList->GetRowHeight(0));
+		outputsList->SetRowSize(KinematicOutputs::NumberOfOutputScalars + 5, outputsList->GetRowHeight(0));
+		outputsList->SetRowSize(KinematicOutputs::NumberOfOutputScalars + 6, outputsList->GetRowHeight(0));
 	}
 	else
 	{
-		outputsList->SetRowHeight(KinematicOutputs::NumberOfOutputScalars, 0);
-		outputsList->SetRowHeight(KinematicOutputs::NumberOfOutputScalars + 1, 0);
-		outputsList->SetRowHeight(KinematicOutputs::NumberOfOutputScalars + 2, 0);
-		outputsList->SetRowHeight(KinematicOutputs::NumberOfOutputScalars + 3, 0);
-		outputsList->SetRowHeight(KinematicOutputs::NumberOfOutputScalars + 4, 0);
-		outputsList->SetRowHeight(KinematicOutputs::NumberOfOutputScalars + 5, 0);
-		outputsList->SetRowHeight(KinematicOutputs::NumberOfOutputScalars + 6, 0);
+		outputsList->SetRowSize(KinematicOutputs::NumberOfOutputScalars, 0);
+		outputsList->SetRowSize(KinematicOutputs::NumberOfOutputScalars + 1, 0);
+		outputsList->SetRowSize(KinematicOutputs::NumberOfOutputScalars + 2, 0);
+		outputsList->SetRowSize(KinematicOutputs::NumberOfOutputScalars + 3, 0);
+		outputsList->SetRowSize(KinematicOutputs::NumberOfOutputScalars + 4, 0);
+		outputsList->SetRowSize(KinematicOutputs::NumberOfOutputScalars + 5, 0);
+		outputsList->SetRowSize(KinematicOutputs::NumberOfOutputScalars + 6, 0);
 	}
 
 	// For values that do not pertain to this car (front axle plunge for a car without
