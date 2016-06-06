@@ -176,6 +176,7 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 		if (!jacobian.LeftDivide(error, delta))
 		{
 			Debugger::GetInstance() << "Error:  Failed to invert jacobian" << Debugger::PriorityLow;
+			Debugger::GetInstance() << "Error:  Failed solve for quasi-static state" << Debugger::PriorityVeryHigh;
 			return kinematics.GetInputs();
 		}
 		guess -= delta;
@@ -621,6 +622,7 @@ Matrix QuasiStatic::ComputeError(const Car* workingCar, const double& gx,
 	if (!A.LeftDivide(b, x))
 	{
 		// TODO:  What here?
+		Debugger::GetInstance() << "Failed to solve for tire loads" << Debugger::PriorityHigh;
 	}
 
 	return b - A * x;

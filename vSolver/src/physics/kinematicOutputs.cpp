@@ -1023,7 +1023,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 					currentCorner->location == Corner::LocationRightFront)
 				{
 					pivot = currentSuspension->hardpoints[Suspension::FrontBarMidPoint];
-					normal = currentCorner->hardpoints[Corner::BarArmAtPivot] - pivot;// TODO:  Using bar arm as pivot incorrectly
+					normal = currentSuspension->hardpoints[Suspension::FrontBarPivotAxis] - pivot;
 
 					if (currentCorner->location == Corner::LocationLeftFront)
 						oppositeInboard = currentSuspension->rightFront.hardpoints[Corner::InboardBarLink];
@@ -1033,7 +1033,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 				else
 				{
 					pivot = currentSuspension->hardpoints[Suspension::RearBarMidPoint];
-					normal = currentCorner->hardpoints[Corner::BarArmAtPivot] - pivot;// TODO:  Using bar arm as pivot incorrectly
+					normal = currentSuspension->hardpoints[Suspension::RearBarPivotAxis] - pivot;
 
 					if (currentCorner->location == Corner::LocationLeftRear)
 						oppositeInboard = currentSuspension->rightRear.hardpoints[Corner::InboardBarLink];
