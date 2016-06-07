@@ -65,6 +65,8 @@ Springs are assumed to be in equilibrium when accelerations are zero.  This assu
 
 Additionally, this analysis currently neglects suspension droop limits.  It may be obvious that if a negative tire load is calculated this can be interpreted as a case where the tire is no longer in contact with the ground, but really the accuracy of the simulation may have been compromised prior to seeing a negative tire load.  If the suspension springs are pre-loaded, for example, the tire will have lost contact with the ground before the model reports negative contact loads.  Use this feature with care.
 
+The quasi-static analysis feature does not currently calculate suspension jacking forces, which results in errors in both the computed vehicle attitude and also tire loads.
+
 When inputs are entered in the \element{Quasi-Static Toolbar}, tire load and kinematic state outputs are appended to the data listed in the output pane.  The pitch and roll angle outputs will depend on the user-specified center-of-rotation and rotation order.  The kinematic state may be non-zero even when both input accelerations are zero due to tire compliance.  Steering input specified in the \element{Kinematics Toolbar} is also applied to quasi-static analyses.
 
 \subsection{3D Toolbar} \label{ssec:3DToolbar}
