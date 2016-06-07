@@ -103,6 +103,12 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 	wheelLoads.rightRear *= 32.174;
 	WheelSet tireDeflections(ComputeTireDeflections(originalCar, wheelLoads));
 
+	const double mu(ComputeFrictionCoefficient(inputs));
+	// TODO:  Compute lateral and longitudinal forces at each corner
+	//        Use them to evaluate jacking effects
+	//        Also, take into account no thrust forces where we don't have driveshafts?
+	//        Consider front/rear brake split?  Does this affect friction calculation?
+
 	while (i < limit && (error.GetNorm() > maxError ||
 		ComputeDeltaWheelSets(kinematics.GetTireDeflections(), tireDeflections) > maxError))
 	{
@@ -654,4 +660,26 @@ double QuasiStatic::ComputeDeltaWheelSets(const WheelSet& w1, const WheelSet& w2
 	delta += fabs(w1.rightRear - w2.rightRear);
 	
 	return delta;
+}
+
+//==========================================================================
+// Class:			QuasiStatic
+// Function:		ComputeFrictionCoefficient
+//
+// Description:		Computes the assumed friction coefficient for our crumby
+//					tire model.
+//
+// Input Arguments:
+//		inputs		= const Inputs&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		double
+//
+//==========================================================================
+double QuasiStatic::ComputeFrictionCoefficient(const Inputs& inputs) const
+{
+	return sqrt(inputs.gx * inputs.gx + inputs.gy * inputs.gy);
 }
