@@ -108,6 +108,11 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 	//        Use them to evaluate jacking effects
 	//        Also, take into account no thrust forces where we don't have driveshafts?
 	//        Consider front/rear brake split?  Does this affect friction calculation?
+	//
+	// Add to the calculation:
+	// - Components of lateral and longitudinal force that add to suspension spring forces
+	// - Braking/drive forces (as well as torque effects - significance of onboard/offboard torques?) (do we need a bias ratio(s)?)
+	// - Solve lateral forces first, then resolve to perpendicular to tires to determine components acting longitudinally?  This can't be quite right - similarly, if front brakes are applied some component of longitudinal tire force will be in the direction of lateral vehicle acceleration
 
 	while (i < limit && (error.GetNorm() > maxError ||
 		ComputeDeltaWheelSets(kinematics.GetTireDeflections(), tireDeflections) > maxError))
