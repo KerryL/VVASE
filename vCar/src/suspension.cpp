@@ -143,7 +143,15 @@ void Suspension::Read(BinaryReader& file, const int& fileVersion)
 	rightRear.Read(file, fileVersion);
 	leftRear.Read(file, fileVersion);
 
-	if (fileVersion < 3)
+	if (fileVersion >= 5)
+		file.Read(hardpoints);
+	else if (fileVersion >= 4)
+	{
+		unsigned int i;
+		for (i = 0; i < NumberOfHardpoints; i++)
+			file.Read(hardpoints[i]);
+	}
+	else// if (fileVersion < 3)
 	{
 		assert(false);
 		// TODO:  Fix this so old files will open
@@ -155,8 +163,6 @@ void Suspension::Read(BinaryReader& file, const int& fileVersion)
 		inFile->read((char*)hardpoints + sizeof(Vector) * (RearBarPivotAxis + 1),
 			sizeof(Vector) * (NumberOfHardpoints - RearBarPivotAxis - 1));*/
 	}
-	else
-		file.Read(hardpoints);
 
 	file.Read(barRate);
 	file.Read(rackRatio);

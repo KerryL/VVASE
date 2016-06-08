@@ -191,8 +191,9 @@ void Drivetrain::Read(BinaryReader& file, const int& fileVersion)
 	}
 	else if (fileVersion >= 0)
 	{
-		file.Read(temp);
-		SetNumberOfGears(temp);
+		short tempShort;
+		file.Read(tempShort);
+		SetNumberOfGears(tempShort);
 
 		double dummy;
 		file.Read(dummy);

@@ -421,7 +421,14 @@ void Corner::Read(BinaryReader& file, const int& fileVersion)
 	if (fileVersion < 5)
 		file.Read(temp);// not used, but was previously written
 
-	file.Read(hardpoints);
+	if (fileVersion >= 5)
+		file.Read(hardpoints);
+	else
+	{
+		unsigned int i;
+		for (i = 0; i < NumberOfHardpoints; i++)
+			file.Read(hardpoints[i]);
+	}
 }
 
 //==========================================================================
