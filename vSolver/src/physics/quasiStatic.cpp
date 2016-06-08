@@ -120,9 +120,12 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 	// What would a real tire model need?  Veloctiy?
 	// - Use sum Fy = 0 = sum(F_lat * cos(steer) + F_lon * sin(steer)) - totalMass * g * Gy
 	// - Similar for sum Fx
+	// - Also need a sum Mz = 0?  To ensure steady-state conditions?
 	// - Add ficticious term to Fz at each corner when computing spring force
 	//   - This term accounts for effect of in-plane tire forces acting in direction of spring actuation
 	//   - Fz_fake = F_lat * RC_z / RC_y + F_lon * PC_z / PC_x (remember to check for undefined RCs and PCs)
+	// ** Looking at MMM plots, I believe that with a proper tire model we could (and must) solve for steering angle as a function of Gx and Gy.
+	//    This is consistent with thoughts I am having about including a real tire model, which would require velocity and yaw velocity inputs.
 
 	while (i < limit && (error.GetNorm() > maxError ||
 		ComputeDeltaWheelSets(kinematics.GetTireDeflections(), tireDeflections) > maxError))
