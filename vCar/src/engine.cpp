@@ -16,12 +16,13 @@
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
 // Standard C++ headers
-#include <fstream>
 #include <cassert>
 
 // VVASE headers
 #include "vCar/engine.h"
 #include "vUtilities/machineDefinitions.h"
+#include "vUtilities/binaryReader.h"
+#include "vUtilities/binaryWriter.h"
 
 //==========================================================================
 // Class:			Engine
@@ -92,7 +93,7 @@ Engine::~Engine()
 // Description:		Writes this engine to file.
 //
 // Input Arguments:
-//		outFile	= std::ofstream* pointing to the output stream
+//		file	= BinaryWriter&
 //
 // Output Arguments:
 //		None
@@ -101,9 +102,9 @@ Engine::~Engine()
 //		None
 //
 //==========================================================================
-void Engine::Write(std::ofstream *outFile) const
+void Engine::Write(BinaryWriter& file) const
 {
-	outFile->write((char*)&crankshaftSpeed, sizeof(double));
+	// Not yet used
 }
 
 //==========================================================================
@@ -113,8 +114,8 @@ void Engine::Write(std::ofstream *outFile) const
 // Description:		Read from file to fill this engine.
 //
 // Input Arguments:
-//		inFile		= std::ifstream* pointing to the input stream
-//		fileVersion	= int specifying which file version we're reading from
+//		file		= BinaryReader&
+//		fileVersion	= const int& specifying which file version we're reading from
 //
 // Output Arguments:
 //		None
@@ -123,12 +124,17 @@ void Engine::Write(std::ofstream *outFile) const
 //		None
 //
 //==========================================================================
-void Engine::Read(std::ifstream *inFile, int fileVersion)
+void Engine::Read(BinaryReader& file, const int& fileVersion)
 {
 	// Read this object from file according to the file version we're using
-	if (fileVersion >= 0)// All versions
+	if (fileVersion >= 5)
 	{
-		inFile->read((char*)&crankshaftSpeed, sizeof(double));
+		// Not used
+	}
+	else if (fileVersion >= 0)// All versions
+	{
+		double dummy;
+		file.Read(dummy);
 	}
 	else
 		assert(false);

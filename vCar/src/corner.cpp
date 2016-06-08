@@ -18,9 +18,6 @@
 //				  point declared individually, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
-// Standard C++ headers
-#include <fstream>
-
 // wxWidgets headers
 #include <wx/wx.h>
 
@@ -28,6 +25,8 @@
 #include "vCar/corner.h"
 #include "vUtilities/debugger.h"
 #include "vUtilities/machineDefinitions.h"
+#include "vUtilities/binaryReader.h"
+#include "vUtilities/binaryWriter.h"
 
 //==========================================================================
 // Class:			Corner
@@ -46,7 +45,7 @@
 //		None
 //
 //==========================================================================
-Corner::Corner(const Location &location) : location(location)
+Corner::Corner(const Location &location) : location(location), hardpoints(NumberOfHardpoints)
 {
 	int i;
 	for (i = 0; i < NumberOfHardpoints; i++)
@@ -353,7 +352,7 @@ void Corner::ComputeWheelCenter(const double &tireDiameter)
 // Description:		Writes this corner to file.
 //
 // Input Arguments:
-//		outFile	= std::ofstream* pointing to the output stream
+//		file	= BinaryWriter&
 //
 // Output Arguments:
 //		None
@@ -362,19 +361,18 @@ void Corner::ComputeWheelCenter(const double &tireDiameter)
 //		None
 //
 //==========================================================================
-void Corner::Write(std::ofstream *outFile) const
+void Corner::Write(BinaryWriter& file) const
 {
 	// Write the components that make up this object to file
-	outFile->write((char*)&staticCamber, sizeof(double));
-	outFile->write((char*)&staticToe, sizeof(double));
-
-	outFile->write((char*)&spring.rate, sizeof(double));
+	file.Write(staticCamber);
+	file.Write(staticToe);
+	file.Write(spring.rate);
 	//Damper damper;
 
-	outFile->write((char*)&actuationAttachment, sizeof(ActuationAttachment));
-	outFile->write((char*)&actuationType, sizeof(ActuationType));
-	outFile->write((char*)&location, sizeof(Location));
-	outFile->write((char*)hardpoints, sizeof(Vector) * NumberOfHardpoints);
+	file.Write(actuationAttachment);
+	file.Write(actuationType);
+	file.Write(location);
+	file.Write(hardpoints);
 }
 
 //==========================================================================
@@ -384,8 +382,8 @@ void Corner::Write(std::ofstream *outFile) const
 // Description:		Read from file to fill this corner.
 //
 // Input Arguments:
-//		inFile		= std::ifstream* pointing to the input stream
-//		fileVersion	= int specifying which file version we're reading from
+//		file		= BinaryReader&
+//		fileVersion	= const int& specifying which file version we're reading from
 //
 // Output Arguments:
 //		None
@@ -394,39 +392,32 @@ void Corner::Write(std::ofstream *outFile) const
 //		None
 //
 //==========================================================================
-void Corner::Read(std::ifstream *inFile, int fileVersion)
+void Corner::Read(BinaryReader& file, const int& fileVersion)
 {
 	// Read this object from file accoring to the file version we're using
 	if (fileVersion >= 4)
 	{
-		// Read the components that make up this object from file
-		inFile->read((char*)&staticCamber, sizeof(double));
-		inFile->read((char*)&staticToe, sizeof(double));
-
-		inFile->read((char*)&spring.rate, sizeof(double));
-
-		// NOT YET USED!!!
+		file.Read(staticCamber);
+		file.Read(staticToe);
+		file.Read(spring.rate);
 		//Damper damper;
 
-		inFile->read((char*)&actuationAttachment, sizeof(ActuationAttachment));
-		inFile->read((char*)&actuationType, sizeof(ActuationType));
-		inFile->read((char*)&location, sizeof(Location));
-		inFile->read((char*)hardpoints, sizeof(Vector) * NumberOfHardpoints);
+		file.Read(actuationAttachment);
+		file.Read(actuationType);
+		file.Read(location);
+		file.Read(hardpoints);
 	}
 	else if (fileVersion >= 0)
 	{
-		// Read the components that make up this object from file
-		inFile->read((char*)&staticCamber, sizeof(double));
-		inFile->read((char*)&staticToe, sizeof(double));
+		file.Read(staticCamber);
+		file.Read(staticToe);
+		//Spring spring;
+		//Damper damper;
 
-		// NOT YET USED!!!
-		/*Spring spring;
-		Damper damper;*/
-
-		inFile->read((char*)&actuationAttachment, sizeof(ActuationAttachment));
-		inFile->read((char*)&actuationType, sizeof(ActuationType));
-		inFile->read((char*)&location, sizeof(Location));
-		inFile->read((char*)hardpoints, sizeof(Vector) * NumberOfHardpoints);
+		file.Read(actuationAttachment);
+		file.Read(actuationType);
+		file.Read(location);
+		file.Read(hardpoints);
 	}
 	else
 		assert(0);

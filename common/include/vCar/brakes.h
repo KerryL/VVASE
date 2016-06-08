@@ -18,11 +18,12 @@
 #ifndef BRAKES_H_
 #define BRAKES_H_
 
-// Standard C++ headers
-#include <iosfwd>// forward declarations of fstream objects
-
 // vUtilities headers
 #include "vUtilities/wheelSetStructures.h"
+
+// Local forward declarations
+class BinaryReader;
+class BinaryWriter;
 
 class Brakes
 {
@@ -32,8 +33,8 @@ public:
 	~Brakes();
 
 	// File read/write functions
-	void Write(std::ofstream *outFile) const;
-	void Read(std::ifstream *inFile, int fileVersion);
+	void Write(BinaryWriter& file) const;
+	void Read(BinaryReader& file, const int& fileVersion);
 
 	// Get the braking torque at each wheel as a function of pedal force
 	WheelSet GetBrakingTorque(const double &pedalForce) const;	// [in-lbf]

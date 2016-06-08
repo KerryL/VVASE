@@ -22,12 +22,16 @@
 #define CORNER_H_
 
 // Standard C++ headers
-#include <iosfwd>// forward declarations of fstream objects
+#include <vector>
 
 // VVASE headers
 #include "vCar/spring.h"
 #include "vCar/damper.h"
 #include "vMath/vector.h"
+
+// Local forward declarations
+class BinaryReader;
+class BinaryWriter;
 
 class Corner
 {
@@ -47,8 +51,8 @@ public:
 	Corner(const Location &location);
 
 	// File read/write functions
-	void Write(std::ofstream *outFile) const;
-	void Read(std::ifstream *inFile, int fileVersion);
+	void Write(BinaryWriter& file) const;
+	void Read(BinaryReader& file, const int& fileVersion);
 
 	// Calculates the wheel center location based on static toe and camber
 	void ComputeWheelCenter(const double &tireDiameter);
@@ -129,7 +133,7 @@ public:
 	ActuationAttachment actuationAttachment;
 	ActuationType actuationType;
 	const Location location;
-	Vector hardpoints[NumberOfHardpoints];
+	std::vector<Vector> hardpoints;
 
 	Corner& operator=(const Corner& corner);
 };

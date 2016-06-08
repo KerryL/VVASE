@@ -26,7 +26,7 @@
 #define SUSPENSION_H_
 
 // Standard C++ headers
-#include <iosfwd>// forward declarations of fstream objects
+#include <vector>
 
 // VVASE headers
 #include "vCar/corner.h"
@@ -35,14 +35,18 @@
 #include "vMath/vector.h"
 #include "vUtilities/wheelSetStructures.h"
 
+// Local forward declarations
+class BinaryReader;
+class BinaryWriter;
+
 class Suspension
 {
 public:
 	Suspension();
 
 	// File read/write functions
-	void Write(std::ofstream *outFile) const;
-	void Read(std::ifstream *inFile, int fileVersion);
+	void Write(BinaryWriter& file) const;
+	void Read(BinaryReader& file, const int& fileVersion);
 
 	// Calls the methods that calculate the wheel center location at each corner
 	void ComputeWheelCenters(const double &rfTireDiameter, const double &lfTireDiameter,
@@ -102,7 +106,7 @@ public:
 	Corner leftRear;
 
 	// The hardpoints that are not within the corner
-	Vector hardpoints[NumberOfHardpoints];
+	std::vector<Vector> hardpoints;
 
 	// Suspension parameters
 	FrontRearDouble barRate;			// [in-lb/rad]

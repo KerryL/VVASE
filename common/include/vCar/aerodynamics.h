@@ -18,11 +18,12 @@
 #ifndef AERODYNAMICS_H_
 #define AERODYNAMICS_H_
 
-// Standard C++ headers
-#include <iosfwd>// forward declarations of fstream objects
-
 // vMath headers
 #include "vMath/vector.h"
+
+// Local forward declarations
+class BinaryReader;
+class BinaryWriter;
 
 class Aerodynamics
 {
@@ -32,8 +33,8 @@ public:
 	~Aerodynamics();
 
 	// File read/write functions
-	void Write(std::ofstream *outFile) const;
-	void Read(std::ifstream *inFile, int fileVersion);
+	void Write(BinaryWriter& file) const;
+	void Read(BinaryReader& file, const int& fileVersion);
 
 	// Functions that retrieve the aerodynamic forces and moments
 	Vector GetAeroForces() const;			// [lbf]

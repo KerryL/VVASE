@@ -54,9 +54,6 @@
 #ifndef CAR_H_
 #define CAR_H_
 
-// Standard C++ headers
-#include <iosfwd>// for forward declarations of fstream objects
-
 // wxWidgets headers
 #include <wx/thread.h>
 
@@ -71,6 +68,8 @@ class Engine;
 class MassProperties;
 class Suspension;
 class TireSet;
+class BinaryWriter;
+class BinaryReader;
 
 class Car
 {
@@ -90,7 +89,7 @@ public:
 	bool HasRearHalfShafts() const;
 
 	// This class contains dynamically allocated memory - overload the assignment operator
-	Car& operator = (const Car &car);
+	Car& operator=(const Car &car);
 
 	// These properties are modifiable ONLY by the user... this program
 	// can only reference these properties, any changes (i.e. locations of
@@ -114,8 +113,8 @@ private:
 	};
 
 	// Writes and reads the file header information for saved cars
-	void WriteFileHeader(std::ofstream *outFile) const;
-	FileHeaderInfo ReadFileHeader(std::ifstream *inFile) const;
+	void WriteFileHeader(BinaryWriter& file) const;
+	FileHeaderInfo ReadFileHeader(BinaryReader& file) const;
 
 	static const int currentFileVersion;
 	mutable wxMutex carMutex;

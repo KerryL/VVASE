@@ -19,15 +19,14 @@
 #ifndef MASS_H_
 #define MASS_H_
 
-// Standard C++ headers
-#include <iosfwd>// forward declarations of fstream objects
-
 // VVASE headers
 #include "vMath/vector.h"
 #include "vUtilities/wheelSetStructures.h"
 
 // Local forward declarations
 class Suspension;
+class BinaryReader;
+class BinaryWriter;
 
 class MassProperties
 {
@@ -37,8 +36,8 @@ public:
 	~MassProperties();
 
 	// File read/write functions
-	void Write(std::ofstream *outFile) const;
-	void Read(std::ifstream *inFile, int fileVersion);
+	void Write(BinaryWriter& file) const;
+	void Read(BinaryReader& file, const int& fileVersion);
 
 	// Class properties
 	double mass;				// [slug]

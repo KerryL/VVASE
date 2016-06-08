@@ -20,8 +20,9 @@
 #ifndef DIFFERENTIAL_H_
 #define DIFFERENTIAL_H_
 
-// Standard C++ headers
-#include <iosfwd>// forward declarations of fstream objects
+// Local forward declarations
+class BinaryReader;
+class BinaryWriter;
 
 class Differential
 {
@@ -32,8 +33,8 @@ public:
 	~Differential();
 
 	// File read/write functions
-	void Write(std::ofstream *outFile) const;
-	void Read(std::ifstream *inFile, int fileVersion);
+	void Write(BinaryWriter& file) const;
+	void Read(BinaryReader& file, const int& fileVersion);
 
 	// Overloaded operators
 	Differential& operator=(const Differential &differential);

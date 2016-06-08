@@ -11,6 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\common\include\vUtilities\binaryReader.h" />
+    <ClInclude Include="..\common\include\vUtilities\binaryWriter.h" />
     <ClInclude Include="..\common\include\vUtilities\dataValidator.h" />
     <ClInclude Include="..\common\include\vUtilities\debugger.h" />
     <ClInclude Include="..\common\include\vUtilities\debugLog.h" />
@@ -23,6 +25,8 @@
     <ClInclude Include="..\common\include\vUtilities\xlsxReader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\binaryReader.cpp" />
+    <ClCompile Include="src\binaryWriter.cpp" />
     <ClCompile Include="src\dataValidator.cpp" />
     <ClCompile Include="src\debugger.cpp" />
     <ClCompile Include="src\debugLog.cpp" />

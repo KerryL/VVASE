@@ -22,7 +22,6 @@
 #define DRIVETRAIN_H_
 
 // Standard C++ headers
-#include <iosfwd>// forward declarations of fstream objects
 #include <vector>
 
 // wxWidgets headers
@@ -30,6 +29,8 @@
 
 // Local forward declarations
 class Differential;
+class BinaryReader;
+class BinaryWriter;
 
 class Drivetrain
 {
@@ -39,8 +40,8 @@ public:
 	~Drivetrain();
 
 	// File read/write functions
-	void Write(std::ofstream *outFile) const;
-	void Read(std::ifstream *inFile, int fileVersion);
+	void Write(BinaryWriter& file) const;
+	void Read(BinaryReader& file, const int& fileVersion);
 
 	short gear;
 
@@ -80,14 +81,9 @@ private:
 	// Should either have one or three diffs
 	// In case of three diffs, first one is rear, second is mid, third is front
 
-	short numberOfGears;
-
-	// The inertia for the rotating components in the drivetrain
-	double transmissionInertia;					// [slug-ft^2] (w.r.t. high speed side)
-
 	// Array of gear ratios for each gear (not including final
 	// drive - that is in the Differential object)
-	double *gearRatio;							// [-]
+	std::vector<double> gearRatios;// [-]
 
 	// The value describing the wheels driven by this drivetrain
 	DriveWheels driveType;

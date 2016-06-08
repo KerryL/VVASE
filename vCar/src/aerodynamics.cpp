@@ -15,13 +15,12 @@
 //	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
-// Standard C++ headers
-#include <fstream>
-
 // VVASE headers
 #include "vCar/aerodynamics.h"
 #include "vUtilities/debugger.h"
 #include "vUtilities/machineDefinitions.h"
+#include "vUtilities/binaryReader.h"
+#include "vUtilities/binaryWriter.h"
 
 //==========================================================================
 // Class:			Aerodynamics
@@ -91,7 +90,7 @@ Aerodynamics::~Aerodynamics()
 // Description:		Writes these aerodynamics to file.
 //
 // Input Arguments:
-//		outFile	= std::ofstream* pointing to the output stream
+//		file	= BinaryWriter&
 //
 // Output Arguments:
 //		None
@@ -100,7 +99,7 @@ Aerodynamics::~Aerodynamics()
 //		None
 //
 //==========================================================================
-void Aerodynamics::Write(std::ofstream * /*outFile*/) const
+void Aerodynamics::Write(BinaryWriter& /*file*/) const
 {
 	// Write this object to file
 	// Not yet used
@@ -113,8 +112,8 @@ void Aerodynamics::Write(std::ofstream * /*outFile*/) const
 // Description:		Read from file to fill this aerodynamics.
 //
 // Input Arguments:
-//		inFile		= std::ifstream* pointing to the input stream
-//		fileVersion	= int specifying what file version we're reading from
+//		file		= BinaryReader&
+//		fileVersion	= const int& specifying which file version we're reading from
 //
 // Output Arguments:
 //		None
@@ -123,7 +122,7 @@ void Aerodynamics::Write(std::ofstream * /*outFile*/) const
 //		None
 //
 //==========================================================================
-void Aerodynamics::Read(std::ifstream * /*inFile*/, int fileVersion)
+void Aerodynamics::Read(BinaryReader& /*file*/, const int& fileVersion)
 {
 	// Read this object from file according to the file version we're using
 	if (fileVersion >= 0)// All versions
@@ -131,7 +130,7 @@ void Aerodynamics::Read(std::ifstream * /*inFile*/, int fileVersion)
 		// Not yet used yet
 	}
 	else
-		assert(0);
+		assert(false);
 }
 
 //==========================================================================

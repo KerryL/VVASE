@@ -20,11 +20,12 @@
 #ifndef TIRE_H_
 #define TIRE_H_
 
-// Standard C++ headers
-#include <iosfwd>// forward declarations of fstream objects
-
 // VVASE headers
 #include "vMath/vector.h"
+
+// Local forward declarations
+class BinaryReader;
+class BinaryWriter;
 
 class Tire
 {
@@ -34,8 +35,8 @@ public:
 	~Tire();
 
 	// File read/write functions
-	void Write(std::ofstream *outFile) const;
-	void Read(std::ifstream *inFile, int fileVersion);
+	void Write(BinaryWriter& file) const;
+	void Read(BinaryReader& file, const int& fileVersion);
 
 	// Enumeration describing the tire models we support
 	enum TireModel

@@ -16,9 +16,6 @@
 //  3/29/2008	- Added IsValidInertiaTensor function, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
-// Standard C++ headers
-#include <fstream>
-
 // wxWidgets headers
 #include <wx/wx.h>
 
@@ -29,6 +26,8 @@
 #include "vMath/complex.h"
 #include "vUtilities/debugger.h"
 #include "vUtilities/machineDefinitions.h"
+#include "vUtilities/binaryReader.h"
+#include "vUtilities/binaryWriter.h"
 
 //==========================================================================
 // Class:			MassProperties
@@ -413,7 +412,7 @@ bool MassProperties::GetPrincipleInertias(Vector *principleInertias, Vector *ixx
 // Description:		Writes these mass properties to file.
 //
 // Input Arguments:
-//		outFile	= std::ofstream* pointing to the file stream to write to
+//		file	= BinaryWriter&
 //
 // Output Arguments:
 //		None
@@ -422,21 +421,21 @@ bool MassProperties::GetPrincipleInertias(Vector *principleInertias, Vector *ixx
 //		None
 //
 //==========================================================================
-void MassProperties::Write(std::ofstream *outFile) const
+void MassProperties::Write(BinaryWriter& file) const
 {
 	// Write this object to file
-	outFile->write((char*)&mass, sizeof(double));
-	outFile->write((char*)&ixx, sizeof(double));
-	outFile->write((char*)&iyy, sizeof(double));
-	outFile->write((char*)&izz, sizeof(double));
-	outFile->write((char*)&ixy, sizeof(double));
-	outFile->write((char*)&ixz, sizeof(double));
-	outFile->write((char*)&iyz, sizeof(double));
-	outFile->write((char*)&totalCGHeight, sizeof(totalCGHeight));
-	outFile->write((char*)&cornerWeights, sizeof(cornerWeights));
-	outFile->write((char*)&unsprungMass, sizeof(unsprungMass));
-	outFile->write((char*)&wheelInertias, sizeof(wheelInertias));
-	outFile->write((char*)&unsprungCGHeights, sizeof(unsprungCGHeights));
+	file.Write(mass);
+	file.Write(ixx);
+	file.Write(iyy);
+	file.Write(izz);
+	file.Write(ixy);
+	file.Write(ixz);
+	file.Write(iyz);
+	file.Write(totalCGHeight);
+	file.Write(cornerWeights);
+	file.Write(unsprungMass);
+	file.Write(wheelInertias);
+	file.Write(unsprungCGHeights);
 }
 
 //==========================================================================
@@ -456,37 +455,51 @@ void MassProperties::Write(std::ofstream *outFile) const
 //		None
 //
 //==========================================================================
-void MassProperties::Read(std::ifstream *inFile, int fileVersion)
+void MassProperties::Read(BinaryReader& file, const int& fileVersion)
 {
 	// Read this object from file accoring to the file version we're using
 	if (fileVersion >= 4)
 	{
-		inFile->read((char*)&mass, sizeof(double));
-		inFile->read((char*)&ixx, sizeof(double));
-		inFile->read((char*)&iyy, sizeof(double));
-		inFile->read((char*)&izz, sizeof(double));
-		inFile->read((char*)&ixy, sizeof(double));
-		inFile->read((char*)&ixz, sizeof(double));
-		inFile->read((char*)&iyz, sizeof(double));
-		inFile->read((char*)&totalCGHeight, sizeof(totalCGHeight));
-		inFile->read((char*)&cornerWeights, sizeof(cornerWeights));
-		inFile->read((char*)&unsprungMass, sizeof(unsprungMass));
-		inFile->read((char*)&wheelInertias, sizeof(wheelInertias));
-		inFile->read((char*)&unsprungCGHeights, sizeof(unsprungCGHeights));
+		file.Read(mass);
+		file.Read(ixx);
+		file.Read(iyy);
+		file.Read(izz);
+		file.Read(ixy);
+		file.Read(ixz);
+		file.Read(iyz);
+		file.Read(totalCGHeight);
+		file.Read(cornerWeights);
+		file.Read(unsprungMass);
+		file.Read(wheelInertias);
+		file.Read(unsprungCGHeights);
 	}
 	else if (fileVersion >= 0)
 	{
-		inFile->read((char*)&mass, sizeof(double));
-		inFile->read((char*)&ixx, sizeof(double));
-		inFile->read((char*)&iyy, sizeof(double));
-		inFile->read((char*)&izz, sizeof(double));
-		inFile->read((char*)&ixy, sizeof(double));
-		inFile->read((char*)&ixz, sizeof(double));
-		inFile->read((char*)&iyz, sizeof(double));
-		inFile->seekg(inFile->tellg() + (std::streamoff)(2 * sizeof(double)));
-		inFile->read((char*)&totalCGHeight, sizeof(totalCGHeight));
-		inFile->read((char*)&unsprungMass, sizeof(WheelSet));
-		inFile->read((char*)&wheelInertias, sizeof(VectorSet));
+		file.Read(mass);
+		file.Read(ixx);
+		file.Read(iyy);
+		file.Read(izz);
+		file.Read(ixy);
+		file.Read(ixz);
+		file.Read(iyz);
+
+		double dummy;
+		file.Read(dummy);
+		file.Read(dummy);
+
+		file.Read(totalCGHeight);
+		file.Read(unsprungMass);
+		file.Read(wheelInertias);
+
+		cornerWeights.leftFront = 600.0 / 32.174;
+		cornerWeights.rightFront = 600.0 / 32.174;
+		cornerWeights.leftRear = 600.0 / 32.174;
+		cornerWeights.rightRear = 600.0 / 32.174;
+
+		unsprungCGHeights.leftFront = 10.0;
+		unsprungCGHeights.rightFront = 10.0;
+		unsprungCGHeights.leftRear = 10.0;
+		unsprungCGHeights.rightRear = 10.0;
 	}
 	else
 		assert(false);

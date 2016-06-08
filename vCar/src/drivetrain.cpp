@@ -19,15 +19,14 @@
 // wxWidgets headers
 #include <wx/wx.h>
 
-// Standard C++ headers
-#include <fstream>
-
 // VVASE headers
 #include "vCar/differential.h"
 #include "vCar/drivetrain.h"
 #include "vUtilities/wheelSetStructures.h"
 #include "vUtilities/debugger.h"
 #include "vUtilities/machineDefinitions.h"
+#include "vUtilities/binaryReader.h"
+#include "vUtilities/binaryWriter.h"
 
 //==========================================================================
 // Class:			Drivetrain
@@ -47,13 +46,11 @@
 //==========================================================================
 Drivetrain::Drivetrain()
 {
-	gearRatio = NULL;
 	SetNumberOfGears(1);
 
 	differentials.push_back(new Differential());
 
 	driveType = DriveRearWheel;
-	transmissionInertia = 0.0;
 }
 
 //==========================================================================
@@ -74,7 +71,6 @@ Drivetrain::Drivetrain()
 //==========================================================================
 Drivetrain::Drivetrain(const Drivetrain &drivetrain)
 {
-	gearRatio = NULL;
 	*this = drivetrain;
 }
 
@@ -96,9 +92,6 @@ Drivetrain::Drivetrain(const Drivetrain &drivetrain)
 //==========================================================================
 Drivetrain::~Drivetrain()
 {
-	delete [] gearRatio;
-	gearRatio = NULL;
-
 	DeleteDifferentials();
 }
 
@@ -128,9 +121,7 @@ void Drivetrain::SetNumberOfGears(const short &numGears)
 		return;
 	}
 
-	numberOfGears = numGears;
-	delete [] gearRatio;
-	gearRatio = new double[numGears];
+	gearRatios.resize(numGears);
 }
 
 //==========================================================================
@@ -140,7 +131,7 @@ void Drivetrain::SetNumberOfGears(const short &numGears)
 // Description:		Writes this drivetrain to file.
 //
 // Input Arguments:
-//		outFile	= std::ofstream* pointing to the files stream to write to
+//		file	= BinaryWriter&
 //
 // Output Arguments:
 //		None
@@ -149,25 +140,22 @@ void Drivetrain::SetNumberOfGears(const short &numGears)
 //		None
 //
 //==========================================================================
-void Drivetrain::Write(std::ofstream *outFile) const
+void Drivetrain::Write(BinaryWriter& file) const
 {
 	// Write this object to file
 	// This is done item by item because NumberOfGears needs to be used to
 	// determine size of GearRatio.  Also, Differential needs to be handled
 	// separately.
-	outFile->write((char*)&driveType, sizeof(DriveWheels));
-	outFile->write((char*)&numberOfGears, sizeof(short));
-	outFile->write((char*)&transmissionInertia, sizeof(double));
-	if (numberOfGears > 0)
-		outFile->write((char*)gearRatio, sizeof(double) * numberOfGears);
+	file.Write(driveType);
+	file.Write(gearRatios);
 
 	// Write the differentials
-	size_t diffCount(differentials.size());
-	outFile->write((char*)&diffCount, sizeof(diffCount));
+	unsigned int diffCount(differentials.size());
+	file.Write(diffCount);
 
 	unsigned int i;
 	for (i = 0; i < differentials.size(); i++)
-		differentials[i]->Write(outFile);
+		differentials[i]->Write(file);
 }
 
 //==========================================================================
@@ -177,8 +165,8 @@ void Drivetrain::Write(std::ofstream *outFile) const
 // Description:		Read from file to fill this drivetrain.
 //
 // Input Arguments:
-//		inFile		= std::ifstream* pointing to the file stream to read from
-//		fileVersion	= int specifying which file version we're reading from
+//		file		= BinaryReader&
+//		fileVersion	= const int& specifying which file version we're reading from
 //
 // Output Arguments:
 //		None
@@ -187,33 +175,25 @@ void Drivetrain::Write(std::ofstream *outFile) const
 //		None
 //
 //==========================================================================
-void Drivetrain::Read(std::ifstream *inFile, int fileVersion)
+void Drivetrain::Read(BinaryReader& file, const int& fileVersion)
 {
 	// Read this object from file - again, this is the same order as found
 	// in the Read() function.
-	inFile->read((char*)&driveType, sizeof(driveType));
-	inFile->read((char*)&numberOfGears, sizeof(numberOfGears));
-	inFile->read((char*)&transmissionInertia, sizeof(transmissionInertia));
-
-	// Re-allocate the memory for the NumberOfGears
-	if (numberOfGears > 0)
-	{
-		SetNumberOfGears(numberOfGears);
-		inFile->read((char*)gearRatio, sizeof(double) * numberOfGears);
-	}
+	file.Read(driveType);
+	file.Read(gearRatios);
 
 	DeleteDifferentials();
 
 	// Read the differentials
-	size_t diffCount(1);
+	unsigned int diffCount(1);
 	if (fileVersion >= 5)
-		inFile->read((char*)&diffCount, sizeof(diffCount));
+		file.Read(diffCount);
 
 	unsigned int i;
 	for (i = 0; i < diffCount; i++)
 	{
 		differentials.push_back(new Differential);
-		differentials.front()->Read(inFile, fileVersion);
+		differentials.front()->Read(file, fileVersion);
 	}
 }
 
@@ -280,18 +260,14 @@ Drivetrain& Drivetrain::operator=(const Drivetrain &drivetrain)
 		return *this;
 
 	// Allocate memory for the gear ratios depending on the number of gears
-	SetNumberOfGears(numberOfGears);
+	SetNumberOfGears(drivetrain.gearRatios.size());
 
-	if (numberOfGears > 0)
-	{
-		int i;
-		for (i = 0; i < numberOfGears; i++)
-			gearRatio[i] = drivetrain.gearRatio[i];
-	}
+	unsigned int i;
+	for (i = 0; i < gearRatios.size(); i++)
+		gearRatios[i] = drivetrain.gearRatios[i];
 
 	DeleteDifferentials();
 
-	unsigned int i;
 	for (i = 0; i < drivetrain.differentials.size(); i++)
 		differentials.push_back(new Differential(*drivetrain.differentials[i]));
 

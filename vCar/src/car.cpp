@@ -38,6 +38,8 @@
 #include "vCar/tireSet.h"
 #include "vUtilities/debugger.h"
 #include "vUtilities/wheelSetStructures.h"
+#include "vUtilities/binaryReader.h"
+#include "vUtilities/binaryWriter.h"
 #include "vUtilities/machineDefinitions.h"
 #include "vMath/vector.h"
 
@@ -232,6 +234,9 @@ Car::Car()
 	suspension->rightFront.spring.rate = 50.0;// [lb/in]
 	suspension->leftRear.spring.rate = 60.0;// [lb/in]
 	suspension->rightRear.spring.rate = 60.0;// [lb/in]
+
+	// Test drivetrain
+	drivetrain->SetRearWheelDrive(1.0);
 }
 
 //==========================================================================
@@ -357,18 +362,20 @@ bool Car::SaveCarToFile(wxString fileName, std::ofstream *poutFile) const
 	if (!outFile.is_open() || !outFile.good())
 		return false;
 
-	WriteFileHeader(&outFile);
+	BinaryWriter binFile(outFile);
+
+	WriteFileHeader(binFile);
 
 	// Call the write functions for each sub-system class
 	// NOTE:  The order that these calls are made must be identical to the
 	// order of the Read() calls in LoadCarFromFile().
-	aerodynamics->Write(&outFile);
-	brakes->Write(&outFile);
-	drivetrain->Write(&outFile);
-	engine->Write(&outFile);
-	massProperties->Write(&outFile);
-	suspension->Write(&outFile);
-	tires->Write(&outFile);
+	aerodynamics->Write(binFile);
+	brakes->Write(binFile);
+	drivetrain->Write(binFile);
+	engine->Write(binFile);
+	massProperties->Write(binFile);
+	suspension->Write(binFile);
+	tires->Write(binFile);
 
 	// If we're saving the options (done elsewhere), open the additional file
 	if (poutFile != NULL)
@@ -406,7 +413,8 @@ bool Car::LoadCarFromFile(wxString fileName, std::ifstream *pinFile, int *fileVe
 	if (!inFile.is_open() || !inFile.good())
 		return false;
 
-	FileHeaderInfo header = ReadFileHeader(&inFile);
+	BinaryReader binFile(inFile);
+	FileHeaderInfo header = ReadFileHeader(binFile);
 
 	// Check to make sure the version matches
 	if (header.fileVersion != currentFileVersion)
@@ -415,13 +423,13 @@ bool Car::LoadCarFromFile(wxString fileName, std::ifstream *pinFile, int *fileVe
 	// Call the read function for each sub-system class
 	// NOTE:  The order that these Read() calls are made must match the order
 	// of the Write() calls in SaveCarToFile().
-	aerodynamics->Read(&inFile, header.fileVersion);
-	brakes->Read(&inFile, header.fileVersion);
-	drivetrain->Read(&inFile, header.fileVersion);
-	engine->Read(&inFile, header.fileVersion);
-	massProperties->Read(&inFile, header.fileVersion);
-	suspension->Read(&inFile, header.fileVersion);
-	tires->Read(&inFile, header.fileVersion);
+	aerodynamics->Read(binFile, header.fileVersion);
+	brakes->Read(binFile, header.fileVersion);
+	drivetrain->Read(binFile, header.fileVersion);
+	engine->Read(binFile, header.fileVersion);
+	massProperties->Read(binFile, header.fileVersion);
+	suspension->Read(binFile, header.fileVersion);
+	tires->Read(binFile, header.fileVersion);
 
 	// If we're reading the options (done elsewhere), open the additional file
 	if (pinFile != NULL)
@@ -443,7 +451,7 @@ bool Car::LoadCarFromFile(wxString fileName, std::ifstream *pinFile, int *fileVe
 // Description:		Writes the file header information to the file stream.
 //
 // Input Arguments:
-//		outFile	= ofstream* to write to
+//		file	= BinaryWriter&
 //
 // Output Arguments:
 //		None
@@ -452,17 +460,11 @@ bool Car::LoadCarFromFile(wxString fileName, std::ifstream *pinFile, int *fileVe
 //		None
 //
 //==========================================================================
-void Car::WriteFileHeader(std::ofstream *outFile) const
+void Car::WriteFileHeader(BinaryWriter& file) const
 {
-	// Set up the header information
 	FileHeaderInfo header;
 	header.fileVersion = currentFileVersion;
-
-	// Set the write pointer to the start of the file
-	outFile->seekp(0);
-
-	// Write the header
-	outFile->write((char*)&header, sizeof(FileHeaderInfo));
+	file.Write(header.fileVersion);
 }
 
 //==========================================================================
@@ -472,7 +474,7 @@ void Car::WriteFileHeader(std::ofstream *outFile) const
 // Description:		Reads the file header information from the file stream.
 //
 // Input Arguments:
-//		inFile	= ifstream* to read from
+//		file	= BinaryReader&
 //
 // Output Arguments:
 //		None
@@ -481,16 +483,11 @@ void Car::WriteFileHeader(std::ofstream *outFile) const
 //		FileHeaderInfo as read from the specified file
 //
 //==========================================================================
-Car::FileHeaderInfo Car::ReadFileHeader(std::ifstream *inFile) const
+Car::FileHeaderInfo Car::ReadFileHeader(BinaryReader& file) const
 {
-	// Set get pointer to the start of the file
-	inFile->seekg(0);
-
-	// Read the header struct
-	char buffer[sizeof(FileHeaderInfo)];
-	inFile->read((char*)buffer, sizeof(FileHeaderInfo));
-
-	return *reinterpret_cast<FileHeaderInfo*>(buffer);
+	FileHeaderInfo header;
+	file.Read(header.fileVersion);
+	return header;
 }
 
 //==========================================================================

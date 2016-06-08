@@ -24,9 +24,6 @@
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 //	1/8/2010	- Modified to correct potential divide by zero in SolveForXY, K. Loux.
 
-// Standard C++ headers
-#include <fstream>
-
 // wxWidgets headers
 #include <wx/wx.h>
 
@@ -34,6 +31,8 @@
 #include "vCar/suspension.h"
 #include "vUtilities/machineDefinitions.h"
 #include "vUtilities/debugger.h"
+#include "vUtilities/binaryReader.h"
+#include "vUtilities/binaryWriter.h"
 
 //==========================================================================
 // Class:			Suspension
@@ -53,7 +52,7 @@
 //==========================================================================
 Suspension::Suspension() : rightFront(Corner::LocationRightFront),
 	leftFront(Corner::LocationLeftFront), rightRear(Corner::LocationRightRear),
-	leftRear(Corner::LocationLeftRear)
+	leftRear(Corner::LocationLeftRear), hardpoints(NumberOfHardpoints)
 {
 	// Initialize the hardpoints within this object as well
 	int i;
@@ -84,7 +83,7 @@ Suspension::Suspension() : rightFront(Corner::LocationRightFront),
 // Description:		Writes this suspension to file.
 //
 // Input Arguments:
-//		outFile	= std::ofstream* pointing to the output stream
+//		file	= BinaryWriter&
 //
 // Output Arguments:
 //		None
@@ -93,29 +92,30 @@ Suspension::Suspension() : rightFront(Corner::LocationRightFront),
 //		None
 //
 //==========================================================================
-void Suspension::Write(std::ofstream *outFile) const
+void Suspension::Write(BinaryWriter& file) const
 {
 	// Write the components that make up this object to file
-	rightFront.Write(outFile);
-	leftFront.Write(outFile);
-	rightRear.Write(outFile);
-	leftRear.Write(outFile);
+	rightFront.Write(file);
+	leftFront.Write(file);
+	rightRear.Write(file);
+	leftRear.Write(file);
 
-	outFile->write((char*)hardpoints, sizeof(Vector) * NumberOfHardpoints);
+	file.Write(hardpoints);
 
-	outFile->write((char*)&barRate, sizeof(FrontRearDouble));
-	outFile->write((char*)&rackRatio, sizeof(double));
+	file.Write(barRate);
+	file.Write(rackRatio);
 
 	// Flags and styles
-	outFile->write((char*)&isSymmetric, sizeof(bool));
-	outFile->write((char*)&frontBarStyle, sizeof(BarStyle));
-	outFile->write((char*)&rearBarStyle, sizeof(BarStyle));
-	outFile->write((char*)&frontBarAttachment, sizeof(BarAttachment));
-	outFile->write((char*)&rearBarAttachment, sizeof(BarAttachment));
-	outFile->write((char*)&frontHasThirdSpring, sizeof(bool));
-	outFile->write((char*)&rearHasThirdSpring, sizeof(bool));
-	outFile->write((char*)&frontThirdSpring.rate, sizeof(double));
-	outFile->write((char*)&rearThirdSpring.rate, sizeof(double));
+	file.Write(isSymmetric);
+	file.Write(frontBarStyle);
+	file.Write(rearBarStyle);
+	file.Write(frontBarAttachment);
+	file.Write(rearBarAttachment);
+	file.Write(frontHasThirdSpring);
+	file.Write(rearHasThirdSpring);
+
+	file.Write(frontThirdSpring.rate);
+	file.Write(rearThirdSpring.rate);
 }
 
 //==========================================================================
@@ -125,8 +125,8 @@ void Suspension::Write(std::ofstream *outFile) const
 // Description:		Read from file to fill this suspension.
 //
 // Input Arguments:
-//		inFile		= std::ifstream* pointing to the input stream
-//		fileVersion	= int specifying which file version we're reading from
+//		file		= BinaryReader&
+//		fileVersion	= const int& specifying which file version we're reading from
 //
 // Output Arguments:
 //		None
@@ -135,13 +135,13 @@ void Suspension::Write(std::ofstream *outFile) const
 //		None
 //
 //==========================================================================
-void Suspension::Read(std::ifstream *inFile, int fileVersion)
+void Suspension::Read(BinaryReader& file, const int& fileVersion)
 {
 	// Read the components that make up this object from file
-	rightFront.Read(inFile, fileVersion);
-	leftFront.Read(inFile, fileVersion);
-	rightRear.Read(inFile, fileVersion);
-	leftRear.Read(inFile, fileVersion);
+	rightFront.Read(file, fileVersion);
+	leftFront.Read(file, fileVersion);
+	rightRear.Read(file, fileVersion);
+	leftRear.Read(file, fileVersion);
 
 	if (fileVersion < 3)
 	{
@@ -154,25 +154,25 @@ void Suspension::Read(std::ifstream *inFile, int fileVersion)
 			sizeof(Vector) * (NumberOfHardpoints - RearBarPivotAxis - 1));
 	}
 	else
-		inFile->read((char*)hardpoints, sizeof(Vector) * NumberOfHardpoints);
+		file.Read(hardpoints);
 
-	inFile->read((char*)&barRate, sizeof(FrontRearDouble));
-	inFile->read((char*)&rackRatio, sizeof(double));
+	file.Read(barRate);
+	file.Read(rackRatio);
 
 	// Flags and styles
-	inFile->read((char*)&isSymmetric, sizeof(bool));
-	inFile->read((char*)&frontBarStyle, sizeof(BarStyle));
-	inFile->read((char*)&rearBarStyle, sizeof(BarStyle));
-	inFile->read((char*)&frontBarAttachment, sizeof(BarAttachment));
-	inFile->read((char*)&rearBarAttachment, sizeof(BarAttachment));
-	inFile->read((char*)&frontHasThirdSpring, sizeof(bool));
-	inFile->read((char*)&rearHasThirdSpring, sizeof(bool));
+	file.Read(isSymmetric);
+	file.Read(frontBarStyle);
+	file.Read(rearBarStyle);
+	file.Read(frontBarAttachment);
+	file.Read(rearBarAttachment);
+	file.Read(frontHasThirdSpring);
+	file.Read(rearHasThirdSpring);
 
 	// Third spring and damper objects
 	if (fileVersion >= 4)
 	{
-		inFile->read((char*)&frontThirdSpring.rate, sizeof(double));
-		inFile->read((char*)&rearThirdSpring.rate, sizeof(double));
+		file.Read(frontThirdSpring.rate);
+		file.Read(rearThirdSpring.rate);
 	}
 	// NOT YET USED!!!
 	/*Damper FrontThirdDamper;

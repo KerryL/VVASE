@@ -16,12 +16,13 @@
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
 // Standard C++ headers
-#include <fstream>
 #include <cassert>
 
 // VVASE headers
 #include "vCar/tire.h"
 #include "vUtilities/machineDefinitions.h"
+#include "vUtilities/binaryReader.h"
+#include "vUtilities/binaryWriter.h"
 
 //==========================================================================
 // Class:			Tire
@@ -91,7 +92,7 @@ Tire::~Tire()
 // Description:		Writes this tire to file.
 //
 // Input Arguments:
-//		outFile	= std::ofstream* pointing to the output stream
+//		file	= BinaryWriter&
 //
 // Output Arguments:
 //		None
@@ -100,14 +101,14 @@ Tire::~Tire()
 //		None
 //
 //==========================================================================
-void Tire::Write(std::ofstream *outFile) const
+void Tire::Write(BinaryWriter& file) const
 {
 	// Write this object to file
-	outFile->write((char*)&diameter, sizeof(diameter));
-	outFile->write((char*)&width, sizeof(width));
-	outFile->write((char*)&tirePressure, sizeof(tirePressure));
-	outFile->write((char*)&stiffness, sizeof(stiffness));
-	outFile->write((char*)&modelType, sizeof(modelType));
+	file.Write(diameter);
+	file.Write(width);
+	file.Write(tirePressure);
+	file.Write(stiffness);
+	file.Write(modelType);
 }
 
 //==========================================================================
@@ -117,8 +118,8 @@ void Tire::Write(std::ofstream *outFile) const
 // Description:		Read from file to fill this tire.
 //
 // Input Arguments:
-//		inFile		= std::ifstream* pointing to the input stream
-//		fileVersion	= int specifying the file version we're reading from
+//		file		= BinaryReader&
+//		fileVersion	= const int& specifying which file version we're reading from
 //
 // Output Arguments:
 //		None
@@ -127,29 +128,32 @@ void Tire::Write(std::ofstream *outFile) const
 //		None
 //
 //==========================================================================
-void Tire::Read(std::ifstream *inFile, int fileVersion)
+void Tire::Read(BinaryReader& file, const int& fileVersion)
 {
 	// Read this object from file accoring to the file version we're using
 	if (fileVersion >= 5)
 	{
-		inFile->read((char*)&diameter, sizeof(diameter));
-		inFile->read((char*)&width, sizeof(width));
-		inFile->read((char*)&tirePressure, sizeof(tirePressure));
-		inFile->read((char*)&stiffness, sizeof(stiffness));
-		inFile->read((char*)&modelType, sizeof(modelType));
+		file.Read(diameter);
+		file.Read(width);
+		file.Read(tirePressure);
+		file.Read(stiffness);
+		file.Read(modelType);
 	}
 	else if (fileVersion >= 4)
 	{
-		inFile->read((char*)&diameter, sizeof(diameter));
-		inFile->read((char*)&width, sizeof(width));
-		inFile->read((char*)&tirePressure, sizeof(tirePressure));
-		inFile->read((char*)&stiffness, sizeof(stiffness));
+		file.Read(diameter);
+		file.Read(width);
+		file.Read(tirePressure);
+		file.Read(stiffness);
+		modelType = ModelConstantMu;
 	}
 	else if (fileVersion >= 0)// All versions
 	{
-		inFile->read((char*)&diameter, sizeof(diameter));
-		inFile->read((char*)&width, sizeof(width));
-		inFile->read((char*)&tirePressure, sizeof(tirePressure));
+		file.Read(diameter);
+		file.Read(width);
+		file.Read(tirePressure);
+		stiffness = 1000.0;
+		modelType = ModelConstantMu;
 	}
 	else
 		assert(false);

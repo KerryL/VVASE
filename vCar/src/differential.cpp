@@ -15,13 +15,12 @@
 //	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
-// Standard C++ headers
-#include <fstream>
-
 // VVASE headers
 #include "vCar/differential.h"
 #include "vUtilities/debugger.h"
 #include "vUtilities/machineDefinitions.h"
+#include "vUtilities/binaryReader.h"
+#include "vUtilities/binaryWriter.h"
 
 //==========================================================================
 // Class:			Differential
@@ -112,7 +111,7 @@ Differential::~Differential()
 // Description:		Writes this differential to file.
 //
 // Input Arguments:
-//		outFile	= std::ofstream* pointing to the files stream to write to
+//		file	= BinaryWriter&
 //
 // Output Arguments:
 //		None
@@ -121,10 +120,10 @@ Differential::~Differential()
 //		None
 //
 //==========================================================================
-void Differential::Write(std::ofstream* outFile) const
+void Differential::Write(BinaryWriter& file) const
 {
 	// Write this object to file
-	outFile->write((char*)&biasRatio, sizeof(biasRatio));
+	file.Write(biasRatio);
 }
 
 //==========================================================================
@@ -134,8 +133,8 @@ void Differential::Write(std::ofstream* outFile) const
 // Description:		Read from file to fill this differential.
 //
 // Input Arguments:
-//		inFile		= std::ifstream* pointing to the file stream to read from
-//		fileVersion	= int specifying which file version we're reading from
+//		file		= BinaryReader&
+//		fileVersion	= const int& specifying which file version we're reading from
 //
 // Output Arguments:
 //		None
@@ -144,14 +143,19 @@ void Differential::Write(std::ofstream* outFile) const
 //		None
 //
 //==========================================================================
-void Differential::Read(std::ifstream* inFile, int fileVersion)
+void Differential::Read(BinaryReader& file, const int& fileVersion)
 {
 	// Read this object from file accoring to the file version we're using
 	if (fileVersion >= 5)
 	{
-		inFile->read((char*)&biasRatio, sizeof(biasRatio));
+		file.Read(biasRatio);
 	}
-	//else// Not used
+	else if (fileVersion >= 0)
+	{
+		// Not used
+	}
+	else
+		assert(false);
 }
 
 //==========================================================================

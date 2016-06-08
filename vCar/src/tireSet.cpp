@@ -15,14 +15,13 @@
 // History:
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
-// Standard C++ headers
-#include <fstream>
-
 // VVASE headers
 #include "vCar/tire.h"
 #include "vCar/tireSet.h"
 #include "vUtilities/debugger.h"
 #include "vUtilities/machineDefinitions.h"
+#include "vUtilities/binaryReader.h"
+#include "vUtilities/binaryWriter.h"
 
 //==========================================================================
 // Class:			TireSet
@@ -115,7 +114,7 @@ TireSet::~TireSet()
 // Description:		Writes this tire set to file.
 //
 // Input Arguments:
-//		outFile	= std::ofstream* point to the file stream to write to
+//		file	= BinaryWriter&
 //
 // Output Arguments:
 //		None
@@ -124,13 +123,13 @@ TireSet::~TireSet()
 //		None
 //
 //==========================================================================
-void TireSet::Write(std::ofstream *outFile) const
+void TireSet::Write(BinaryWriter& file) const
 {
 	// Call the write functions for each of the four tires
-	rightFront->Write(outFile);
-	leftFront->Write(outFile);
-	rightRear->Write(outFile);
-	leftRear->Write(outFile);
+	rightFront->Write(file);
+	leftFront->Write(file);
+	rightRear->Write(file);
+	leftRear->Write(file);
 }
 
 //==========================================================================
@@ -140,8 +139,8 @@ void TireSet::Write(std::ofstream *outFile) const
 // Description:		Read from file to fill this tire set.
 //
 // Input Arguments:
-//		inFile		= std::ifstream* pointing to the file stream to read from
-//		fileVersion	= int specifying which file version we're reading from
+//		file		= BinaryReader&
+//		fileVersion	= const int& specifying which file version we're reading from
 //
 // Output Arguments:
 //		None
@@ -150,13 +149,13 @@ void TireSet::Write(std::ofstream *outFile) const
 //		None
 //
 //==========================================================================
-void TireSet::Read(std::ifstream *inFile, int fileVersion)
+void TireSet::Read(BinaryReader& file, const int& fileVersion)
 {
 	// Call the read functions for each of the four tires
-	rightFront->Read(inFile, fileVersion);
-	leftFront->Read(inFile, fileVersion);
-	rightRear->Read(inFile, fileVersion);
-	leftRear->Read(inFile, fileVersion);
+	rightFront->Read(file, fileVersion);
+	leftFront->Read(file, fileVersion);
+	rightRear->Read(file, fileVersion);
+	leftRear->Read(file, fileVersion);
 }
 
 //==========================================================================

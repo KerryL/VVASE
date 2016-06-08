@@ -15,13 +15,12 @@
 //	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
 //	11/22/2009	- Moved to vCar.lib, K. Loux.
 
-// Standard C++ headers
-#include <fstream>
-
 // VVASE headers
 #include "vCar/brakes.h"
 #include "vUtilities/debugger.h"
 #include "vUtilities/machineDefinitions.h"
+#include "vUtilities/binaryReader.h"
+#include "vUtilities/binaryWriter.h"
 
 //==========================================================================
 // Class:			Brakes
@@ -94,7 +93,7 @@ Brakes::~Brakes()
 // Description:		Writes these brakes to file.
 //
 // Input Arguments:
-//		outFile	= std::ofstream* pointing to the file stream to write to
+//		file	= BinaryWriter&
 //
 // Output Arguments:
 //		None
@@ -103,11 +102,11 @@ Brakes::~Brakes()
 //		None
 //
 //==========================================================================
-void Brakes::Write(std::ofstream *outFile) const
+void Brakes::Write(BinaryWriter& file) const
 {
-	outFile->write((char*)&percentFrontBraking, sizeof(double));
-	outFile->write((char*)&frontBrakesInboard, sizeof(bool));
-	outFile->write((char*)&rearBrakesInboard, sizeof(bool));
+	file.Write(percentFrontBraking);
+	file.Write(frontBrakesInboard);
+	file.Write(rearBrakesInboard);
 }
 
 //==========================================================================
@@ -117,8 +116,8 @@ void Brakes::Write(std::ofstream *outFile) const
 // Description:		Read from file to fill these brakes.
 //
 // Input Arguments:
-//		inFile		= std::ifstream* pointing to the file stream to read from
-//		fileVersion	= int specifying which file version we're reading from
+//		file		= BinaryReader&
+//		fileVersion	= const int& specifying which file version we're reading from
 //
 // Output Arguments:
 //		None
@@ -127,17 +126,17 @@ void Brakes::Write(std::ofstream *outFile) const
 //		None
 //
 //==========================================================================
-void Brakes::Read(std::ifstream *inFile, int fileVersion)
+void Brakes::Read(BinaryReader& file, const int& fileVersion)
 {
 	// Read this object from file according to the file version we're using
 	if (fileVersion >= 0)// All versions
 	{
-		inFile->read((char*)&percentFrontBraking, sizeof(double));
-		inFile->read((char*)&frontBrakesInboard, sizeof(bool));
-		inFile->read((char*)&rearBrakesInboard, sizeof(bool));
+		file.Read(percentFrontBraking);
+		file.Read(frontBrakesInboard);
+		file.Read(rearBrakesInboard);
 	}
 	else
-		assert(0);
+		assert(false);
 }
 
 //==========================================================================

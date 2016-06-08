@@ -18,8 +18,9 @@
 #ifndef ENGINE_H_
 #define ENGINE_H_
 
-// Standard C++ headers
-#include <iosfwd>// forward declarations of fstream objects
+// Local forward declarations
+class BinaryReader;
+class BinaryWriter;
 
 class Engine
 {
@@ -29,18 +30,15 @@ public:
 	~Engine();
 
 	// File read/write functions
-	void Write(std::ofstream *outFile) const;
-	void Read(std::ifstream *inFile, int fileVersion);
+	void Write(BinaryWriter& file) const;
+	void Read(BinaryReader& file, const int& fileVersion);
 
 	// Get the outputs from this portion of the simulation
-	double GetEngineSpeed() { return crankshaftSpeed; }// [rad/sec]
+	double GetEngineSpeed();// [rad/sec]
 	double TorqueOutput(const double &engineSpeed, const double &throttlePosition);// [in-lb]
 
 	// Overloaded operators
 	Engine& operator=(const Engine &engine);
-
-private:
-	double crankshaftSpeed;// [rad/sec]
 };
 
 #endif// ENGINE_H_
