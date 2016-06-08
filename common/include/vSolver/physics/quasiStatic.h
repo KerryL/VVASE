@@ -26,6 +26,7 @@ class Car;
 class KinematicOutputs;
 class QuasiStaticOutputs;
 class Matrix;
+class TireSet;
 
 class QuasiStatic
 {
@@ -47,7 +48,7 @@ private:
 	WheelSet ComputeWheelLoads(const Car* originalCar, const KinematicOutputs& outputs,
 		const WheelSet& preLoad) const;
 	WheelSet ComputePreLoad(const Car* workingCar) const;
-	WheelSet ComputeTireDeflections(const Car* originalCar, const WheelSet& wheelLoads) const;
+	WheelSet ComputeTireDeflections(const TireSet& tires, const WheelSet& wheelLoads) const;
 	double ComputeFrictionCoefficient(const Inputs& inputs) const;
 
 	Matrix BuildSystemMatrix(const Car* workingCar) const;

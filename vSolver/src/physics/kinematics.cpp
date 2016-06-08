@@ -376,6 +376,9 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 	double tolerance = 5.0e-8;
 	int limit = 100;
 
+	// NOTE:  Tire deflections here are assumed to be vertical.  For large wheel
+	// inclinations, this may introduce some error.
+
 	corner.hardpoints[Corner::ContactPatch].z = tolerance * 2;// Must be initialized to > Tolerance
 	while (iteration <= limit && fabs(corner.hardpoints[Corner::ContactPatch].z + tireDeflection) > tolerance)
 	{

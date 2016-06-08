@@ -101,7 +101,7 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 	wheelLoads.rightFront *= 32.174;
 	wheelLoads.leftRear *= 32.174;
 	wheelLoads.rightRear *= 32.174;
-	WheelSet tireDeflections(ComputeTireDeflections(originalCar, wheelLoads));
+	WheelSet tireDeflections(ComputeTireDeflections(*originalCar->tires, wheelLoads));
 
 	const double mu(ComputeFrictionCoefficient(inputs));
 	// TODO:  Compute lateral and longitudinal forces at each corner
@@ -112,7 +112,13 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 	// Add to the calculation:
 	// - Components of lateral and longitudinal force that add to suspension spring forces
 	// - Braking/drive forces (as well as torque effects - significance of onboard/offboard torques?) (do we need a bias ratio(s)?)
-	// - Solve lateral forces first, then resolve to perpendicular to tires to determine components acting longitudinally?  This can't be quite right - similarly, if front brakes are applied some component of longitudinal tire force will be in the direction of lateral vehicle acceleration
+	// - Tractive tire force =
+	//   if (braking)
+	//      one variable, torques calculated according to f/r brake split (and bias ratio if inboard rear?), resolved to forces using effective radius
+	//   else// traction
+	//      0 at ends that don't have drive wheels
+	//      one variable, torques calculated according to bias ratio, resolved to forces using effective radius
+	// - Can we make this part function independent of tire model?  Then we use our crumby tire model elsewhere, but allow it to be easily replaced?
 
 	while (i < limit && (error.GetNorm() > maxError ||
 		ComputeDeltaWheelSets(kinematics.GetTireDeflections(), tireDeflections) > maxError))
@@ -278,7 +284,7 @@ WheelSet QuasiStatic::ComputeWheelLoads(const Car* originalCar,
 // Description:		Computes the tire deflections at each corner.
 //
 // Input Arguments:
-//		originalCar	= const Car*
+//		tires		= const TireSet&
 //		wheelLoads	= const WheelSet&
 //
 // Output Arguments:
@@ -288,14 +294,14 @@ WheelSet QuasiStatic::ComputeWheelLoads(const Car* originalCar,
 //		WheelSet [in]
 //
 //==========================================================================
-WheelSet QuasiStatic::ComputeTireDeflections(const Car* originalCar,
+WheelSet QuasiStatic::ComputeTireDeflections(const TireSet& tires,
 	const WheelSet& wheelLoads) const
 {
 	WheelSet deflections;
-	deflections.leftFront = wheelLoads.leftFront / originalCar->tires->leftFront->stiffness;
-	deflections.rightFront = wheelLoads.leftFront / originalCar->tires->rightFront->stiffness;
-	deflections.leftRear = wheelLoads.leftFront / originalCar->tires->leftRear->stiffness;
-	deflections.rightRear = wheelLoads.leftFront / originalCar->tires->rightRear->stiffness;
+	deflections.leftFront = wheelLoads.leftFront / tires.leftFront->stiffness;
+	deflections.rightFront = wheelLoads.leftFront / tires.rightFront->stiffness;
+	deflections.leftRear = wheelLoads.leftFront / tires.leftRear->stiffness;
+	deflections.rightRear = wheelLoads.leftFront / tires.rightRear->stiffness;
 
 	return deflections;
 }
@@ -686,5 +692,13 @@ double QuasiStatic::ComputeDeltaWheelSets(const WheelSet& w1, const WheelSet& w2
 //==========================================================================
 double QuasiStatic::ComputeFrictionCoefficient(const Inputs& inputs) const
 {
+	// TODO:  This can be a little more complicated (or made part of the NR search?)
+	// Need to consider that all wheels can generate forces perpendicular to wheel plane,
+	// but all wheels can only generate forces in direction of wheel if in braking.
+	// For tractive forces, only drive wheels have non-zero forces.
+	// Also consider the pure Gy case with steered front wheels:
+	// - Front wheels have some drag force due to steer angle
+	// - Drive wheels must generate some tractive force to counteract
+	// - Thus friction coefficient must be greater than naive calculation
 	return sqrt(inputs.gx * inputs.gx + inputs.gy * inputs.gy);
 }
