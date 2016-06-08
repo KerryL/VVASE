@@ -108,7 +108,7 @@ void Tire::Write(BinaryWriter& file) const
 	file.Write(width);
 	file.Write(tirePressure);
 	file.Write(stiffness);
-	file.Write(modelType);
+	file.Write((unsigned int)modelType);
 }
 
 //==========================================================================
@@ -137,7 +137,10 @@ void Tire::Read(BinaryReader& file, const int& fileVersion)
 		file.Read(width);
 		file.Read(tirePressure);
 		file.Read(stiffness);
-		file.Read(modelType);
+
+		unsigned int temp;
+		file.Read(temp);
+		modelType = static_cast<TireModel>(temp);
 	}
 	else if (fileVersion >= 4)
 	{

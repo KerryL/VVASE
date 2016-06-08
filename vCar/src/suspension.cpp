@@ -107,10 +107,10 @@ void Suspension::Write(BinaryWriter& file) const
 
 	// Flags and styles
 	file.Write(isSymmetric);
-	file.Write(frontBarStyle);
-	file.Write(rearBarStyle);
-	file.Write(frontBarAttachment);
-	file.Write(rearBarAttachment);
+	file.Write((unsigned int)frontBarStyle);
+	file.Write((unsigned int)rearBarStyle);
+	file.Write((unsigned int)frontBarAttachment);
+	file.Write((unsigned int)rearBarAttachment);
 	file.Write(frontHasThirdSpring);
 	file.Write(rearHasThirdSpring);
 
@@ -145,13 +145,15 @@ void Suspension::Read(BinaryReader& file, const int& fileVersion)
 
 	if (fileVersion < 3)
 	{
-		inFile->read((char*)hardpoints, sizeof(Vector) * FrontBarPivotAxis);
+		assert(false);
+		// TODO:  Fix this so old files will open
+		/*inFile->read((char*)hardpoints, sizeof(Vector) * FrontBarPivotAxis);
 		hardpoints[FrontBarPivotAxis] = Vector(0.0, 0.0, 0.0);
 		inFile->read((char*)hardpoints + sizeof(Vector) * (FrontBarPivotAxis + 1),
 			sizeof(Vector) * (RearBarPivotAxis - FrontBarPivotAxis - 1));
 		hardpoints[RearBarPivotAxis] = Vector(0.0, 0.0, 0.0);
 		inFile->read((char*)hardpoints + sizeof(Vector) * (RearBarPivotAxis + 1),
-			sizeof(Vector) * (NumberOfHardpoints - RearBarPivotAxis - 1));
+			sizeof(Vector) * (NumberOfHardpoints - RearBarPivotAxis - 1));*/
 	}
 	else
 		file.Read(hardpoints);
@@ -161,10 +163,20 @@ void Suspension::Read(BinaryReader& file, const int& fileVersion)
 
 	// Flags and styles
 	file.Read(isSymmetric);
-	file.Read(frontBarStyle);
-	file.Read(rearBarStyle);
-	file.Read(frontBarAttachment);
-	file.Read(rearBarAttachment);
+
+	unsigned int temp;
+	file.Read(temp);
+	frontBarStyle = static_cast<BarStyle>(temp);
+
+	file.Read(temp);
+	rearBarStyle = static_cast<BarStyle>(temp);
+
+	file.Read(temp);
+	frontBarAttachment = static_cast<BarAttachment>(temp);
+
+	file.Read(temp);
+	rearBarAttachment = static_cast<BarAttachment>(temp);
+
 	file.Read(frontHasThirdSpring);
 	file.Read(rearHasThirdSpring);
 

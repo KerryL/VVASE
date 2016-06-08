@@ -152,7 +152,7 @@ void Differential::Read(BinaryReader& file, const int& fileVersion)
 	}
 	else if (fileVersion >= 0)
 	{
-		// Not used
+		biasRatio = 1.0;
 	}
 	else
 		assert(false);

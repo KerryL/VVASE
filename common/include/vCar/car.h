@@ -54,6 +54,9 @@
 #ifndef CAR_H_
 #define CAR_H_
 
+// Standard C++ headers
+#include <iosfwd>// For forward declarations of ostream objects
+
 // wxWidgets headers
 #include <wx/thread.h>
 

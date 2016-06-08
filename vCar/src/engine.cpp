@@ -42,7 +42,6 @@
 //==========================================================================
 Engine::Engine()
 {
-	crankshaftSpeed = 0.0;
 }
 
 //==========================================================================
@@ -102,7 +101,7 @@ Engine::~Engine()
 //		None
 //
 //==========================================================================
-void Engine::Write(BinaryWriter& file) const
+void Engine::Write(BinaryWriter& /*file*/) const
 {
 	// Not yet used
 }
@@ -161,8 +160,6 @@ Engine& Engine::operator = (const Engine &engine)
 	// Check for self-assignment
 	if (this == &engine)
 		return *this;
-
-	crankshaftSpeed	= engine.crankshaftSpeed;
 
 	return *this;
 }

@@ -369,9 +369,8 @@ void Corner::Write(BinaryWriter& file) const
 	file.Write(spring.rate);
 	//Damper damper;
 
-	file.Write(actuationAttachment);
-	file.Write(actuationType);
-	file.Write(location);
+	file.Write((unsigned int)actuationAttachment);
+	file.Write((unsigned int)actuationType);
 	file.Write(hardpoints);
 }
 
@@ -401,11 +400,6 @@ void Corner::Read(BinaryReader& file, const int& fileVersion)
 		file.Read(staticToe);
 		file.Read(spring.rate);
 		//Damper damper;
-
-		file.Read(actuationAttachment);
-		file.Read(actuationType);
-		file.Read(location);
-		file.Read(hardpoints);
 	}
 	else if (fileVersion >= 0)
 	{
@@ -413,14 +407,21 @@ void Corner::Read(BinaryReader& file, const int& fileVersion)
 		file.Read(staticToe);
 		//Spring spring;
 		//Damper damper;
-
-		file.Read(actuationAttachment);
-		file.Read(actuationType);
-		file.Read(location);
-		file.Read(hardpoints);
 	}
 	else
 		assert(0);
+
+	unsigned int temp;
+	file.Read(temp);
+	actuationAttachment = static_cast<ActuationAttachment>(temp);
+
+	file.Read(temp);
+	actuationType = static_cast<ActuationType>(temp);
+
+	if (fileVersion < 5)
+		file.Read(temp);// not used, but was previously written
+
+	file.Read(hardpoints);
 }
 
 //==========================================================================

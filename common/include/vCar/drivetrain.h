@@ -85,9 +85,6 @@ private:
 	// drive - that is in the Differential object)
 	std::vector<double> gearRatios;// [-]
 
-	// The value describing the wheels driven by this drivetrain
-	DriveWheels driveType;
-
 	void DeleteDifferentials();
 
 	// Clutch stuff in here, too?

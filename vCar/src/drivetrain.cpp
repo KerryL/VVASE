@@ -146,7 +146,7 @@ void Drivetrain::Write(BinaryWriter& file) const
 	// This is done item by item because NumberOfGears needs to be used to
 	// determine size of GearRatio.  Also, Differential needs to be handled
 	// separately.
-	file.Write(driveType);
+	file.Write((unsigned int)driveType);
 	file.Write(gearRatios);
 
 	// Write the differentials
@@ -179,8 +179,30 @@ void Drivetrain::Read(BinaryReader& file, const int& fileVersion)
 {
 	// Read this object from file - again, this is the same order as found
 	// in the Read() function.
-	file.Read(driveType);
-	file.Read(gearRatios);
+	unsigned int temp;
+	file.Read(temp);
+	driveType = static_cast<DriveWheels>(temp);
+
+	temp = sizeof(driveType);
+
+	if (fileVersion >= 5)
+	{
+		file.Read(gearRatios);
+	}
+	else if (fileVersion >= 0)
+	{
+		file.Read(temp);
+		SetNumberOfGears(temp);
+
+		double dummy;
+		file.Read(dummy);
+
+		unsigned int i;
+		for (i = 0; i < gearRatios.size(); i++)
+			file.Read(gearRatios[i]);
+	}
+	else
+		assert(false);
 
 	DeleteDifferentials();
 

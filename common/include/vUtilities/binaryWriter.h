@@ -34,35 +34,64 @@ public:
 	BinaryWriter(std::ofstream& file);
 
 	bool Write(const std::string& v);
+	bool Write(const char& v);
 	bool Write(const short& v);
 	bool Write(const int& v);
 	bool Write(const long& v);
 	bool Write(const long long& v);
+	bool Write(const unsigned char& v);
 	bool Write(const unsigned short& v);
 	bool Write(const unsigned int& v);
 	bool Write(const unsigned long& v);
 	bool Write(const unsigned long long& v);
 	bool Write(const float& v);
 	bool Write(const double& v);
-	bool Write(const long double& v);
 	bool Write(const bool& v);
 
 	bool Write(const Vector& v);
 
 	template<typename T>
-	bool Write(const CornerSet<T>& v);
+	bool Write(const CornerSet<T>& v)
+	{
+		bool ok(true);
+		ok = Write(v.leftFront) && ok;
+		ok = Write(v.rightFront) && ok;
+		ok = Write(v.leftRear) && ok;
+		ok = Write(v.rightRear) && ok;
+
+		return ok;
+	}
 
 	template<typename T>
-	bool Write(const EndSet<T>& v);
+	bool Write(const EndSet<T>& v)
+	{
+		bool ok(true);
+		ok = Write(v.front) && ok;
+		ok = Write(v.rear) && ok;
+
+		return ok;
+	}
 
 	template<typename T>
-	bool Write(const std::vector<T>& v);
+	bool Write(const std::vector<T>& v)
+	{
+		bool ok(true);
+		ok = Write((unsigned int)v.size()) && ok;
+
+		unsigned int i;
+		for (i = 0; i < v.size(); i++)
+			ok = Write(v[i]) && ok;
+
+		return ok;
+	}
 
 private:
-	bool Write8Bit(const char& v);
-	bool Write16Bit(const char& v);
-	bool Write32Bit(const char& v);
-	bool Write64Bit(const char& v);
+	std::ofstream& file;
+
+	bool Write8Bit(const char* const v);
+	bool Write16Bit(const char* const v);
+	bool Write32Bit(const char* const v);
+	bool Write64Bit(const char* const v);
 };
 
 #endif// BINARY_WRITER_H_
