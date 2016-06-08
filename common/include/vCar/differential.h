@@ -27,6 +27,7 @@ class Differential
 {
 public:
 	Differential();
+	Differential(const double& biasRatio);
 	Differential(const Differential &differential);
 	~Differential();
 
@@ -34,33 +35,10 @@ public:
 	void Write(std::ofstream *outFile) const;
 	void Read(std::ifstream *inFile, int fileVersion);
 
-	// Retrieves the output torque on each side of the differential
-	double GetTorque1(const double &inputTorque) const;// Front or right
-	double GetToruqe2(const double &inputTorque) const;// Rear or left
-
-	// Enumeration describing the different differentials that can be modeled
-	enum DifferentialStyle
-	{
-		TorsionType1,
-		TorsionType2,
-		Salisbury,
-		Locked,
-		Open,
-		CamAndPawl,
-
-		NumberOfStyles
-	};
-
 	// Overloaded operators
-	Differential& operator = (const Differential &differential);
+	Differential& operator=(const Differential &differential);
 
-private:
-	// The parameters that describe the differential physics
-	double biasRatio;		// [-]
-	double preload;			// [lbf]
-
-	// The style differential modeled by this object
-	DifferentialStyle style;
+	double biasRatio;
 };
 
 #endif// DIFFERENTIAL_H_

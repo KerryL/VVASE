@@ -107,6 +107,7 @@ void Tire::Write(std::ofstream *outFile) const
 	outFile->write((char*)&width, sizeof(width));
 	outFile->write((char*)&tirePressure, sizeof(tirePressure));
 	outFile->write((char*)&stiffness, sizeof(stiffness));
+	outFile->write((char*)&modelType, sizeof(modelType));
 }
 
 //==========================================================================
@@ -129,7 +130,15 @@ void Tire::Write(std::ofstream *outFile) const
 void Tire::Read(std::ifstream *inFile, int fileVersion)
 {
 	// Read this object from file accoring to the file version we're using
-	if (fileVersion >= 4)
+	if (fileVersion >= 5)
+	{
+		inFile->read((char*)&diameter, sizeof(diameter));
+		inFile->read((char*)&width, sizeof(width));
+		inFile->read((char*)&tirePressure, sizeof(tirePressure));
+		inFile->read((char*)&stiffness, sizeof(stiffness));
+		inFile->read((char*)&modelType, sizeof(modelType));
+	}
+	else if (fileVersion >= 4)
 	{
 		inFile->read((char*)&diameter, sizeof(diameter));
 		inFile->read((char*)&width, sizeof(width));
@@ -173,6 +182,7 @@ Tire& Tire::operator = (const Tire &tire)
 	width			= tire.width;
 	tirePressure	= tire.tirePressure;
 	stiffness		= tire.stiffness;
+	modelType		= tire.modelType;
 
 	return *this;
 }

@@ -106,8 +106,6 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 	const double mu(ComputeFrictionCoefficient(inputs));
 	// TODO:  Compute lateral and longitudinal forces at each corner
 	//        Use them to evaluate jacking effects
-	//        Also, take into account no thrust forces where we don't have driveshafts?
-	//        Consider front/rear brake split?  Does this affect friction calculation?
 	//
 	// Add to the calculation:
 	// - Components of lateral and longitudinal force that add to suspension spring forces
@@ -118,7 +116,8 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 	//   else// traction
 	//      0 at ends that don't have drive wheels
 	//      one variable, torques calculated according to bias ratio, resolved to forces using effective radius
-	// - Can we make this part function independent of tire model?  Then we use our crumby tire model elsewhere, but allow it to be easily replaced?
+	// - Can we make this part function independent of tire model?  Then we implement our crumby tire model elsewhere, but allow it to be easily replaced?
+	// What would a real tire model need?  Veloctiy?
 
 	while (i < limit && (error.GetNorm() > maxError ||
 		ComputeDeltaWheelSets(kinematics.GetTireDeflections(), tireDeflections) > maxError))
@@ -252,6 +251,9 @@ WheelSet QuasiStatic::ComputeWheelLoads(const Car* originalCar,
 		* (preLoad.rightRear + outputs.rightRear[KinematicOutputs::Spring])
 		* outputs.rightRear[KinematicOutputs::SpringInstallationRatio]
 		+ originalCar->massProperties->unsprungMass.rightRear * 32.174;
+
+	// TODO:  Need to also consider in-plane tire forces here
+	//        A portion of the spring forces at each corner (and ARBs?) can come from in-plane forces
 	
 	double arbTorque;
 	if (originalCar->suspension->frontBarStyle != Suspension::SwayBarNone)
@@ -475,6 +477,8 @@ Matrix QuasiStatic::BuildSystemMatrix(const Car* workingCar) const
 	m(12,2) = 0.0;
 	m(12,3) = 1.0;
 
+	// TODO:  Add sum of x and sum of y forces?
+
 	return m;
 }
 
@@ -579,6 +583,7 @@ Matrix QuasiStatic::BuildRightHandMatrix(const Car* workingCar, const double& gx
 	m(8,0) = gravity * (mp->cornerWeights.leftFront + mp->cornerWeights.rightFront + mp->cornerWeights.leftRear + mp->cornerWeights.rightRear);
 
 	// Constitutive constraints
+	// TODO:  These equations need to consider lateral and longitudinal forces
 	m(9,0) = (outputs.leftFront[KinematicOutputs::Spring] + preLoad.leftFront) * s->leftFront.spring.rate
 		* outputs.leftFront[KinematicOutputs::SpringInstallationRatio] + mp->unsprungMass.leftFront * gravity;
 	m(10,0) = (outputs.rightFront[KinematicOutputs::Spring] + preLoad.rightFront) * s->rightFront.spring.rate
@@ -587,6 +592,8 @@ Matrix QuasiStatic::BuildRightHandMatrix(const Car* workingCar, const double& gx
 		* outputs.leftRear[KinematicOutputs::SpringInstallationRatio] + mp->unsprungMass.leftRear * gravity;
 	m(12,0) = (outputs.rightRear[KinematicOutputs::Spring] + preLoad.rightRear) * s->rightRear.spring.rate
 		* outputs.rightRear[KinematicOutputs::SpringInstallationRatio] + mp->unsprungMass.rightRear * gravity;
+
+	// TODO:  Add sum of x and sum of y forces?
 		
 	if (s->frontBarStyle != Suspension::SwayBarNone)
 	{

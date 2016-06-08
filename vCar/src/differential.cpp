@@ -66,6 +66,27 @@ Differential::Differential(const Differential &differential)
 
 //==========================================================================
 // Class:			Differential
+// Function:		Differential
+//
+// Description:		Copy constructor for the Differential class.
+//
+// Input Arguments:
+//		biasRatio	= const double&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+Differential::Differential(const double& biasRatio)
+{
+	this->biasRatio = biasRatio;
+}
+
+//==========================================================================
+// Class:			Differential
 // Function:		~Differential
 //
 // Description:		Destructor for the Differential class.
@@ -100,10 +121,10 @@ Differential::~Differential()
 //		None
 //
 //==========================================================================
-void Differential::Write(std::ofstream * /*outFile*/) const
+void Differential::Write(std::ofstream* outFile) const
 {
 	// Write this object to file
-	// Not yet used
+	outFile->write((char*)&biasRatio, sizeof(biasRatio));
 }
 
 //==========================================================================
@@ -123,20 +144,19 @@ void Differential::Write(std::ofstream * /*outFile*/) const
 //		None
 //
 //==========================================================================
-void Differential::Read(std::ifstream * /*inFile*/, int fileVersion)
+void Differential::Read(std::ifstream* inFile, int fileVersion)
 {
 	// Read this object from file accoring to the file version we're using
-	if (fileVersion >= 0)// All versions
+	if (fileVersion >= 5)
 	{
-		// Not yet used
+		inFile->read((char*)&biasRatio, sizeof(biasRatio));
 	}
-	else
-		assert(0);
+	//else// Not used
 }
 
 //==========================================================================
 // Class:			Differential
-// Function:		operator =
+// Function:		operator=
 //
 // Description:		Assignment operator for Differential class.
 //
@@ -150,16 +170,13 @@ void Differential::Read(std::ifstream * /*inFile*/, int fileVersion)
 //		Differential&, reference to this object
 //
 //==========================================================================
-Differential& Differential::operator = (const Differential &differential)
+Differential& Differential::operator=(const Differential &differential)
 {
 	// Check for self-assignment
 	if (this == &differential)
 		return *this;
 
-	biasRatio	= differential.biasRatio;
-	preload		= differential.preload;
-
-	style		= differential.style;
+	biasRatio = differential.biasRatio;
 
 	return *this;
 }

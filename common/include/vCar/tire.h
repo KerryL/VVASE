@@ -40,9 +40,7 @@ public:
 	// Enumeration describing the tire models we support
 	enum TireModel
 	{
-		Pacejka96,
-		MRANonDimensional,
-		Lugre
+		ModelConstantMu
 	};
 
 	// The functions that calculate the tire's forces and moments
@@ -60,19 +58,8 @@ public:
 	Tire& operator=(const Tire &tire);
 
 private:
-	// FIXME:  Eventually, add support for a selection of tire models
-	// These parameters come from SAE Paper # 2006-01-1968, Tire Asymmetries and Pressure
-	// Variations in the Radt/Milliken Tire Model, by Kasprzak and Milliken.  This is an
-	// expansion of the MRA tire model to include asymmetric tire data.
+	// TODO:  Eventually, add support for a selection of tire models
 	// Ideal tire model:  temperature dependant, dynamic, works for combined slips
-	double bright;
-	double cright;
-	double dright;
-	double eright;
-	double bleft;
-	double cleft;
-	double dleft;
-	double eleft;
 
 	// Model type
 	TireModel modelType;

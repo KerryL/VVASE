@@ -23,6 +23,7 @@
 
 // Standard C++ headers
 #include <iosfwd>// forward declarations of fstream objects
+#include <vector>
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -67,8 +68,17 @@ public:
 
 	Drivetrain& operator=(const Drivetrain &drivetrain);
 
+	DriveWheels GetDriveWheels() const { return driveType; }
+	void SetAllWheelDrive(const double& rearBias, const double& midBias, const double& frontBias);
+	void SetFrontWheelDrive(const double& bias);
+	void SetRearWheelDrive(const double& bias);
+
+	std::vector<double> GetBiasRatios() const;
+
 private:
-	Differential *differential;
+	std::vector<Differential*> differentials;
+	// Should either have one or three diffs
+	// In case of three diffs, first one is rear, second is mid, third is front
 
 	short numberOfGears;
 
@@ -78,6 +88,11 @@ private:
 	// Array of gear ratios for each gear (not including final
 	// drive - that is in the Differential object)
 	double *gearRatio;							// [-]
+
+	// The value describing the wheels driven by this drivetrain
+	DriveWheels driveType;
+
+	void DeleteDifferentials();
 
 	// Clutch stuff in here, too?
 };

@@ -50,7 +50,7 @@ Drivetrain::Drivetrain()
 	gearRatio = NULL;
 	SetNumberOfGears(1);
 
-	differential = new Differential();
+	differentials.push_back(new Differential());
 
 	driveType = DriveRearWheel;
 	transmissionInertia = 0.0;
@@ -75,7 +75,6 @@ Drivetrain::Drivetrain()
 Drivetrain::Drivetrain(const Drivetrain &drivetrain)
 {
 	gearRatio = NULL;
-	differential = new Differential();
 	*this = drivetrain;
 }
 
@@ -100,8 +99,7 @@ Drivetrain::~Drivetrain()
 	delete [] gearRatio;
 	gearRatio = NULL;
 
-	delete differential;
-	differential = NULL;
+	DeleteDifferentials();
 }
 
 //==========================================================================
@@ -163,8 +161,13 @@ void Drivetrain::Write(std::ofstream *outFile) const
 	if (numberOfGears > 0)
 		outFile->write((char*)gearRatio, sizeof(double) * numberOfGears);
 
-	// Write the differential
-	differential->Write(outFile);
+	// Write the differentials
+	size_t diffCount(differentials.size());
+	outFile->write((char*)&diffCount, sizeof(diffCount));
+
+	unsigned int i;
+	for (i = 0; i < differentials.size(); i++)
+		differentials[i]->Write(outFile);
 }
 
 //==========================================================================
@@ -199,8 +202,19 @@ void Drivetrain::Read(std::ifstream *inFile, int fileVersion)
 		inFile->read((char*)gearRatio, sizeof(double) * numberOfGears);
 	}
 
-	// Read the differential
-	differential->Read(inFile, fileVersion);
+	DeleteDifferentials();
+
+	// Read the differentials
+	size_t diffCount(1);
+	if (fileVersion >= 5)
+		inFile->read((char*)&diffCount, sizeof(diffCount));
+
+	unsigned int i;
+	for (i = 0; i < diffCount; i++)
+	{
+		differentials.push_back(new Differential);
+		differentials.front()->Read(inFile, fileVersion);
+	}
 }
 
 //==========================================================================
@@ -275,8 +289,139 @@ Drivetrain& Drivetrain::operator=(const Drivetrain &drivetrain)
 			gearRatio[i] = drivetrain.gearRatio[i];
 	}
 
-	*differential = *drivetrain.differential;
+	DeleteDifferentials();
+
+	unsigned int i;
+	for (i = 0; i < drivetrain.differentials.size(); i++)
+		differentials.push_back(new Differential(*drivetrain.differentials[i]));
+
 	driveType = drivetrain.driveType;
 
+	assert((differentials.size() == 1 && (driveType == DriveFrontWheel || driveType == DriveRearWheel)) ||
+		(differentials.size() == 3 && driveType == DriveAllWheel));
+
 	return *this;
+}
+
+//==========================================================================
+// Class:			Drivetrain
+// Function:		SetAllWheelDrive
+//
+// Description:		Sets the drive type to all wheel drive.
+//
+// Input Arguments:
+//		rearBias	= const double&
+//		midBias		= const double&
+//		frontBias	= const double&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void Drivetrain::SetAllWheelDrive(const double& rearBias, const double& midBias, const double& frontBias)
+{
+	DeleteDifferentials();
+	driveType = DriveAllWheel;
+	differentials.push_back(new Differential(rearBias));
+	differentials.push_back(new Differential(midBias));
+	differentials.push_back(new Differential(frontBias));
+}
+
+//==========================================================================
+// Class:			Drivetrain
+// Function:		SetFrontWheelDrive
+//
+// Description:		Sets the drive type to front wheel drive.
+//
+// Input Arguments:
+//		bias	= const double&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void Drivetrain::SetFrontWheelDrive(const double& bias)
+{
+	DeleteDifferentials();
+	driveType = DriveFrontWheel;
+	differentials.push_back(new Differential(bias));
+}
+
+//==========================================================================
+// Class:			Drivetrain
+// Function:		SetRearWheelDrive
+//
+// Description:		Sets the drive type to rear wheel drive.
+//
+// Input Arguments:
+//		bias	= const double&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void Drivetrain::SetRearWheelDrive(const double& bias)
+{
+	DeleteDifferentials();
+	driveType = DriveRearWheel;
+	differentials.push_back(new Differential(bias));
+}
+
+//==========================================================================
+// Class:			Drivetrain
+// Function:		GetBiasRatios
+//
+// Description:		Returns all bias ratios.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		std::vector<double>
+//
+//==========================================================================
+std::vector<double> Drivetrain::GetBiasRatios() const
+{
+	std::vector<double> ratios;
+	unsigned int i;
+	for (i = 0; i < differentials.size(); i++)
+		ratios.push_back(differentials[i]->biasRatio);
+
+	return ratios;
+}
+
+//==========================================================================
+// Class:			Drivetrain
+// Function:		DeleteDifferentials
+//
+// Description:		Frees memory for differential objects.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void Drivetrain::DeleteDifferentials()
+{
+	unsigned int i;
+	for (i = 0; i < differentials.size(); i++)
+		delete differentials[i];
+	differentials.clear();
 }
