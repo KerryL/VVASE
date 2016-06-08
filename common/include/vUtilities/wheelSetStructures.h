@@ -20,15 +20,15 @@
 // VVASE headers
 #include "vMath/vector.h"
 
-// WheelSet - four doubles
-struct WheelSet
+template<typename T>
+struct CornerSet
 {
-	double rightFront;
-	double leftFront;
-	double rightRear;
-	double leftRear;
+	T rightFront;
+	T leftFront;
+	T rightRear;
+	T leftRear;
 
-	bool operator==(const WheelSet &target) const
+	bool operator==(const CornerSet<T>& target) const
 	{
 		if (rightFront == target.rightFront &&
 			leftFront == target.leftFront &&
@@ -38,29 +38,39 @@ struct WheelSet
 
 		return false;
 	}
+
+	bool operator!=(const CornerSet<T>& target) const
+	{
+		return !(*this == target);
+	}
 };
 
-// VectorSet - four Vectors
-struct VectorSet
+template<typename T>
+struct EndSet
 {
-	Vector rightFront;
-	Vector leftFront;
-	Vector rightRear;
-	Vector leftRear;
+	T front;
+	T rear;
+
+	bool operator==(const EndSet<T> &target) const
+	{
+		if (front == target.front &&
+			rear == target.rear)
+			return true;
+
+		return false;
+	}
+
+	bool operator!=(const EndSet<T>& target) const
+	{
+		return !(*this == target);
+	}
 };
 
-// FrontRearInteger - two integers
-struct FrontRearInteger
-{
-	int front;
-	int rear;
-};
+// Predefined types
+typedef CornerSet<double> WheelSet;
+typedef CornerSet<Vector> VectorSet;
 
-// FrontRearDouble - two doubles
-struct FrontRearDouble
-{
-	double front;
-	double rear;
-};
+typedef EndSet<int> FrontRearInteger;
+typedef EndSet<double> FrontRearDouble;
 
 #endif// WHEELSET_STRUCTS_H_

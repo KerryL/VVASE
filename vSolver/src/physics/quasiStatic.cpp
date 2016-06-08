@@ -130,7 +130,7 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 
 		kinematics.UpdateKinematics(originalCar, workingCar, wxString::Format("Quasi-Static, i = %u (error)", i));
 		wheelLoads = ComputeWheelLoads(originalCar, kinematics.GetOutputs(), preLoad);
-		tireDeflections = ComputeTireDeflections(originalCar, wheelLoads);
+		tireDeflections = ComputeTireDeflections(*originalCar->tires, wheelLoads);
 		error = ComputeError(workingCar, inputs.gx, inputs.gy, kinematics.GetOutputs(), preLoad);
 
 		kinematics.SetRoll(guess(0,0) + epsilon);
