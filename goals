@@ -24,5 +24,3 @@ Goals for re-write:
 	- Forces analysis
 - Better UI design
 	- Hide vehicle options in context menus (or dialogs accessed from context menus) and file menus
-	- More options (perspective vs. orthographic projections, etc.)
-- Documentation
