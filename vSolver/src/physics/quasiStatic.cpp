@@ -103,7 +103,6 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 	wheelLoads.rightRear *= 32.174;
 	WheelSet tireDeflections(ComputeTireDeflections(*originalCar->tires, wheelLoads));
 
-	const double mu(ComputeFrictionCoefficient(inputs));
 	// TODO:  Compute lateral and longitudinal forces at each corner
 	//        Use them to evaluate jacking effects
 	//
@@ -686,34 +685,4 @@ double QuasiStatic::ComputeDeltaWheelSets(const WheelSet& w1, const WheelSet& w2
 	delta += fabs(w1.rightRear - w2.rightRear);
 	
 	return delta;
-}
-
-//==========================================================================
-// Class:			QuasiStatic
-// Function:		ComputeFrictionCoefficient
-//
-// Description:		Computes the assumed friction coefficient for our crumby
-//					tire model.
-//
-// Input Arguments:
-//		inputs		= const Inputs&
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		double
-//
-//==========================================================================
-double QuasiStatic::ComputeFrictionCoefficient(const Inputs& inputs) const
-{
-	// TODO:  This can be a little more complicated (or made part of the NR search?)
-	// Need to consider that all wheels can generate forces perpendicular to wheel plane,
-	// but all wheels can only generate forces in direction of wheel if in braking.
-	// For tractive forces, only drive wheels have non-zero forces.
-	// Also consider the pure Gy case with steered front wheels:
-	// - Front wheels have some drag force due to steer angle
-	// - Drive wheels must generate some tractive force to counteract
-	// - Thus friction coefficient must be greater than naive calculation
-	return sqrt(inputs.gx * inputs.gx + inputs.gy * inputs.gy);
 }

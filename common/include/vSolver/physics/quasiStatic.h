@@ -49,7 +49,6 @@ private:
 		const WheelSet& preLoad) const;
 	WheelSet ComputePreLoad(const Car* workingCar) const;
 	WheelSet ComputeTireDeflections(const TireSet& tires, const WheelSet& wheelLoads) const;
-	double ComputeFrictionCoefficient(const Inputs& inputs) const;
 
 	Matrix BuildSystemMatrix(const Car* workingCar) const;
 	Matrix BuildRightHandMatrix(const Car* workingCar, const double& gx, const double& gy,
