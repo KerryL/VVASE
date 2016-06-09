@@ -431,7 +431,7 @@ void MainFrame::UpdateViewMenuChecks()
 {
 	// Depending on whether elements are shown, check the corresponding menu item
 	menuBar->Check(IdMenuViewToolbarsKinematic, manager.GetPane(kinematicToolbar).IsShown());
-	menuBar->Check(IdMenuViewToolbarsQuasiStatic, manager.GetPane(quasiStaticToolbar).IsShown());
+	//menuBar->Check(IdMenuViewToolbarsQuasiStatic, manager.GetPane(quasiStaticToolbar).IsShown());
 	menuBar->Check(IdMenuViewToolbars3D, manager.GetPane(toolbar3D).IsShown());
 
 	menuBar->Check(IdMenuViewSystemsTree, manager.GetPane(systemsTree).IsShown());
@@ -691,7 +691,7 @@ void MainFrame::CreateMenuBar()
 	mnuView->AppendCheckItem(IdMenuViewOutputList, _T("Output List"));
 	wxMenu *mnuViewToolbars = new wxMenu();
 	mnuViewToolbars->AppendCheckItem(IdMenuViewToolbarsKinematic, _T("Kinematic Analysis"));
-	mnuViewToolbars->AppendCheckItem(IdMenuViewToolbarsQuasiStatic, _T("Quasi-Static Analysis"));
+	//mnuViewToolbars->AppendCheckItem(IdMenuViewToolbarsQuasiStatic, _T("Quasi-Static Analysis"));
 	mnuViewToolbars->AppendCheckItem(IdMenuViewToolbars3D, _T("3D View"));
 	mnuView->AppendSubMenu(mnuViewToolbars, _T("Toolbars"));
 	mnuView->AppendSeparator();
@@ -816,7 +816,7 @@ void MainFrame::CreateQuasiStaticAnalysisToolbar()
 	if (quasiStaticToolbar != NULL)
 		return;
 
-	quasiStaticToolbar = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+	/*quasiStaticToolbar = new wxToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
 		wxTB_FLAT | wxTB_NODIVIDER);
 
 	// Create the controls
@@ -843,7 +843,7 @@ void MainFrame::CreateQuasiStaticAnalysisToolbar()
 
 	manager.AddPane(quasiStaticToolbar, wxAuiPaneInfo().Name(paneNameQuasiStaticToolbar).
 		Caption(_T("Quasi-Static Analysis")).ToolbarPane().Top().Row(1).Position(2).
-		LeftDockable(false).RightDockable(false));
+		LeftDockable(false).RightDockable(false));*/
 }
 
 //==========================================================================
