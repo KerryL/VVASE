@@ -100,7 +100,6 @@ OutputPanel::~OutputPanel()
 void OutputPanel::UpdateInformation(GuiCar::CarOutputs outputs, Car &car,
 									 int index, wxString name)
 {
-	// Begin batch edit of the grid
 	outputsList->BeginBatch();
 
 	// See if we need to add a column
@@ -116,10 +115,6 @@ void OutputPanel::UpdateInformation(GuiCar::CarOutputs outputs, Car &car,
 			return;
 		}
 
-		// Set the column width
-		outputsList->SetColSize(index, 50);// FIXME:  This should be set based on text width to make it cross-platform friendly
-
-		// Increment the NumberOfDataColums
 		numberOfDataColumns++;
 	}
 
@@ -308,6 +303,10 @@ void OutputPanel::UpdateInformation(GuiCar::CarOutputs outputs, Car &car,
 	// Make sure the correct column is highlighted
 	HighlightColumn(mainFrame.GetObjectByIndex(mainFrame.GetActiveIndex())->GetCleanName());
 
+	// Set cell sizes
+	outputsList->AutoSizeColumns();
+	outputsList->SetColLabelSize(wxGRID_AUTOSIZE);
+
 	// End batch edit of the grid
 	outputsList->EndBatch();
 }
@@ -370,12 +369,11 @@ void OutputPanel::FinishUpdate(int numberOfDataColumns)
 	outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 5, this->numberOfDataColumns + 1, unitString);
 	outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 6, this->numberOfDataColumns + 1, unitString);
 
+	// Set column sizes
+	outputsList->AutoSizeColumns();
+
 	// End batch edit of the grid
 	outputsList->EndBatch();
-
-	// Force a re-paint of this pane - for some reason this doesn't happen automatically
-	Refresh();
-	Update();
 }
 
 //==========================================================================
@@ -414,7 +412,6 @@ void OutputPanel::CreateControls()
 
 	// Hide the label column and set the size for the label row
 	outputsList->SetRowLabelSize(0);
-	outputsList->SetColLabelSize(outputsList->GetRowSize(0));
 
 	// To enable hiding of the non-label rows, we need to set the minimum height to zero
 	outputsList->SetRowMinimalAcceptableHeight(0);
@@ -425,6 +422,8 @@ void OutputPanel::CreateControls()
 	// Set the column headings
 	outputsList->SetColLabelValue(0, _T("Output"));
 	outputsList->SetColLabelValue(1, _T("Units"));
+
+	outputsList->SetColLabelTextOrientation(wxVERTICAL);
 
 	// Do the processing that needs to be done for each row
 	int i;
@@ -456,8 +455,9 @@ void OutputPanel::CreateControls()
 	outputsList->EnableDragGridSize(false);
 	outputsList->EnableDragRowSize(false);
 	
-	// Set the column widths automatically
+	// Set the sizes automatically
 	outputsList->AutoSizeColumns();
+	outputsList->SetColLabelSize(wxGRID_AUTOSIZE);
 
 	// End the batch mode edit and re-paint the control
 	outputsList->EndBatch();
