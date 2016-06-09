@@ -6,7 +6,7 @@
 
 \section{Overview} \label{sec:overview}
 
-Upon starting \vvase{} for the first time, the screen will look like \figref{fig:defaultStartup}.  Counter-clockwise from the top left corner of the window are the \element{Systems Tree} (\sref{ssec:systemsTree}), \element{Edit Panel} (\sref{ssec:editPanel}), \element{Output Pane} (\sref{ssec:outputPane}), \element{Output List} (\sref{ssec:outputList}) and \element{Main Display Area} (\sref{ssec:mainDisplayArea}).  Above these elements are three toolbars, the \element{Kinematics Toolbar} (\sref{ssec:kinematicsToolbar}), the \element{Quasi-Static Toolbar} (\sref{ssec:quasiStaticToolbar}) and the \element{3D Toolbar} (\sref{ssec:3DToolbar}).  Across the top of the window is a typical menu bar, the contents of which are described in \sref{ssec:menuBar}.  All of these elements can be dragged, floated or docked to create the desired layout.
+Upon starting \vvase{} for the first time, the screen will look like \figref{fig:defaultStartup}.  Counter-clockwise from the top left corner of the window are the \element{Systems Tree} (\sref{ssec:systemsTree}), \element{Edit Panel} (\sref{ssec:editPanel}), \element{Output Pane} (\sref{ssec:outputPane}), \element{Output List} (\sref{ssec:outputList}) and \element{Main Display Area} (\sref{ssec:mainDisplayArea}).  Above these elements are three toolbars, the \element{Kinematics Toolbar} (\sref{ssec:kinematicsToolbar}) and the \element{3D Toolbar} (\sref{ssec:3DToolbar}).  Across the top of the window is a typical menu bar, the contents of which are described in \sref{ssec:menuBar}.  All of these elements can be dragged, floated or docked to create the desired layout.
 
 \begin{figure}
   \includegraphics[width=\textwidth]{images/defaultStartup}
@@ -46,28 +46,28 @@ The tabs in this area can be dragged, docked or floated to enable viewing the 3D
 
 The \element{Kinematics Toolbar} is where the user can define a kinematic state for which the kinematic outputs shall be calculated.  As the user types in the Pitch, Roll, Heave and Steer boxes, the kinematic outputs are computed for all open car files and the \element{Main Display Area} and \element{Output Lists} are updated.  The units for these inputs are determined by the options set in the options dialog (see \sref{ssec:optionsUnits}).
 
-\subsection{Quasi-Static Toolbar} \label{ssec:quasiStaticToolbar}
+%\subsection{Quasi-Static Toolbar} \label{ssec:quasiStaticToolbar}
 
-The \element{Quasi-Static Toolbar} allows the user to define longitudinal and lateral accelerations.  As the user types in the Gx and Gy boxes, the steady-state vehicle attitude and tire loads are computed for all open car files and the \element{Main Display Area} and \element{Output Lists} are updated.  The units for these inputs are Gs.  A quasi-static analysis requires more input information than a kinematic analysis.  In addition to suspension geometry, the following quantities must be defined:
+%The \element{Quasi-Static Toolbar} allows the user to define longitudinal and lateral accelerations.  As the user types in the Gx and Gy boxes, the steady-state vehicle attitude and tire loads are computed for all open car files and the \element{Main Display Area} and \element{Output Lists} are updated.  The units for these inputs are Gs.  A quasi-static analysis requires more input information than a kinematic analysis.  In addition to suspension geometry, the following quantities must be defined:
 
-\begin{itemize}
-\item Vehicle mass
-\item Unsprung masses
-\item Sprung mass center-of-gravity
-\item Unsprung mass centers-of-gravity
-\item Corner weights
-\item Spring rates
-\item Anti-roll bar rates
-\item Tire stiffnesses
-\end{itemize}
+%\begin{itemize}
+%\item Vehicle mass
+%\item Unsprung masses
+%\item Sprung mass center-of-gravity
+%\item Unsprung mass centers-of-gravity
+%\item Corner weights
+%\item Spring rates
+%\item Anti-roll bar rates
+%\item Tire stiffnesses
+%\end{itemize}
 
-Springs are assumed to be in equilibrium when accelerations are zero.  This assumption is used to compute the pre-load on the springs at ride height.  Currently, third springs are not considered in quasi-static analyses.
+%Springs are assumed to be in equilibrium when accelerations are zero.  This assumption is used to compute the pre-load on the springs at ride height.  Currently, third springs are not considered in quasi-static analyses.
 
-Additionally, this analysis currently neglects suspension droop limits.  It may be obvious that if a negative tire load is calculated this can be interpreted as a case where the tire is no longer in contact with the ground, but really the accuracy of the simulation may have been compromised prior to seeing a negative tire load.  If the suspension springs are pre-loaded, for example, the tire will have lost contact with the ground before the model reports negative contact loads.  Use this feature with care.
+%Additionally, this analysis currently neglects suspension droop limits.  It may be obvious that if a negative tire load is calculated this can be interpreted as a case where the tire is no longer in contact with the ground, but really the accuracy of the simulation may have been compromised prior to seeing a negative tire load.  If the suspension springs are pre-loaded, for example, the tire will have lost contact with the ground before the model reports negative contact loads.  Use this feature with care.
 
-The quasi-static analysis feature does not currently calculate suspension jacking forces, which results in errors in both the computed vehicle attitude and also tire loads.
+%The quasi-static analysis feature does not currently calculate suspension jacking forces, which results in errors in both the computed vehicle attitude and also tire loads.
 
-When inputs are entered in the \element{Quasi-Static Toolbar}, tire load and kinematic state outputs are appended to the data listed in the output pane.  The pitch and roll angle outputs will depend on the user-specified center-of-rotation and rotation order.  The kinematic state may be non-zero even when both input accelerations are zero due to tire compliance.  Steering input specified in the \element{Kinematics Toolbar} is also applied to quasi-static analyses.
+%When inputs are entered in the \element{Quasi-Static Toolbar}, tire load and kinematic state outputs are appended to the data listed in the output pane.  The pitch and roll angle outputs will depend on the user-specified center-of-rotation and rotation order.  The kinematic state may be non-zero even when both input accelerations are zero due to tire compliance.  Steering input specified in the \element{Kinematics Toolbar} is also applied to quasi-static analyses.
 
 \subsection{3D Toolbar} \label{ssec:3DToolbar}
 
