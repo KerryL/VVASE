@@ -189,3 +189,42 @@ bool AArm::ContainsThisActor(const Primitive *actor)
 	else
 		return false;
 }
+
+//==========================================================================
+// Class:			AArm
+// Function:		FindClosestPoint
+//
+// Description:		Finds the closest input point to the specified vector.
+//
+// Input Arguments:
+//		point		= const Vector&
+//		direction	= const Vector&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		Vector
+//
+//==========================================================================
+Vector AArm::FindClosestPoint(const Vector& point, const Vector& direction) const
+{
+	Vector endPoint1Center(endPoint1->GetCenter());
+	Vector endPoint2Center(endPoint2->GetCenter());
+	Vector midPointCenter(midPoint->GetCenter());
+	Vector endPoint1Test(VVASEMath::NearestPointOnAxis(point, direction, endPoint1Center));
+	Vector endPoint2Test(VVASEMath::NearestPointOnAxis(point, direction, endPoint2Center));
+	Vector midPointTest(VVASEMath::NearestPointOnAxis(point, direction, midPointCenter));
+
+	if (endPoint1Center.Distance(endPoint1Test) < endPoint2Center.Distance(endPoint2Test))
+	{
+		if (endPoint1Center.Distance(endPoint1Test) < midPointCenter.Distance(midPointTest))
+			return endPoint1Center;
+		else
+			return midPointCenter;
+	}
+	else if (endPoint2Center.Distance(endPoint2Test) < midPointCenter.Distance(midPointTest))
+		return endPoint2Center;
+	
+	return midPointCenter;
+}

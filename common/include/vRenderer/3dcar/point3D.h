@@ -34,6 +34,9 @@ public:
 	void Update(const Vector &position, const double &diameter, const int &resolution,
 		const Color &color, bool show);
 
+	// Returns true if the passed reference is to an actor from this object
+	bool ContainsThisActor(const Primitive *actor);
+
 private:
 	Sphere *point;
 };

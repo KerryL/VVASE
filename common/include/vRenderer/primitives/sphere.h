@@ -37,6 +37,8 @@ public:
 	void SetCenter(const Vector &center);
 	void SetRadius(const double &radius);
 
+	Vector GetCenter() const { return center; }
+
 private:
 	int resolution;
 

@@ -31,6 +31,9 @@ public:
 	void Update(const double &shaftLength, const double &shaftDiameter, const double &tipLength,
 		const double &tipDiameter, const int &resolution, const bool &show);
 
+	// Returns true if the passed reference is to an actor from this object
+	bool ContainsThisActor(const Primitive *actor);
+
 private:
 	Vector3D *xDirection;
 	Vector3D *yDirection;

@@ -158,3 +158,33 @@ bool Link::ContainsThisActor(const Primitive *actor)
 	else
 		return false;
 }
+
+//==========================================================================
+// Class:			Link
+// Function:		FindClosestPoint
+//
+// Description:		Finds the closest input point to the specified vector.
+//
+// Input Arguments:
+//		point		= const Vector&
+//		direction	= const Vector&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		Vector
+//
+//==========================================================================
+Vector Link::FindClosestPoint(const Vector& point, const Vector& direction) const
+{
+	Vector endPoint1Center(endPoint1->GetCenter());
+	Vector endPoint2Center(endPoint2->GetCenter());
+	Vector endPoint1Test(VVASEMath::NearestPointOnAxis(point, direction, endPoint1Center));
+	Vector endPoint2Test(VVASEMath::NearestPointOnAxis(point, direction, endPoint2Center));
+
+	if (endPoint1Center.Distance(endPoint1Test) < endPoint2Center.Distance(endPoint2Test))
+		return endPoint1Center;
+	
+	return endPoint2Center;
+}

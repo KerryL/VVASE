@@ -187,6 +187,11 @@ private:
 
 	std::vector<const Primitive*> IntersectWithPrimitive(const Vector& point,
 		const Vector& direction) const;
+	const Primitive* GetClosestPrimitive(const std::vector<const Primitive*>& intersected) const;
+	void GetSelectedHardpoint(const Vector& point, const Vector& direction, const Primitive* selected,
+		Suspension::Hardpoints& suspensionPoint, Corner::Hardpoints& leftFrontPoint,
+		Corner::Hardpoints& rightFrontPoint, Corner::Hardpoints& leftRearPoint,
+		Corner::Hardpoints& rightRearPoint) const;
 
 	DECLARE_EVENT_TABLE()
 };

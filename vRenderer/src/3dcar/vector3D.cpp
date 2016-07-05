@@ -139,3 +139,30 @@ void Vector3D::Update(const Vector &tip, const Vector &tail, const double &shaft
 	this->tip->SetBaseCenter(meetingPosition);
 	this->tip->SetTip(tip);
 }
+
+//==========================================================================
+// Class:			Vector3D
+// Function:		ContainsThisActor
+//
+// Description:		Compares the argument with the actors that make up this
+//					object to determine if the argument actor is part of this
+//					object or not.
+//
+// Input Arguments:
+//		actor	= const Primitive* to compare against this object's actors
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		bool representing whether or not the actor was part of this object
+//
+//==========================================================================
+bool Vector3D::ContainsThisActor(const Primitive *actor)
+{
+	if (shaft == actor ||
+		tip == actor)
+		return true;
+	else
+		return false;
+}

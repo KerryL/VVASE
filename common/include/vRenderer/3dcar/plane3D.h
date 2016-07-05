@@ -32,6 +32,9 @@ public:
 	void Update(const double &length, const double &width, const double &xOffset,
 		const Color &color, const bool &show);
 
+	// Returns true if the passed reference is to an actor from this object
+	bool ContainsThisActor(const Primitive *actor);
+
 private:
 	Quadrilateral *plane;
 };

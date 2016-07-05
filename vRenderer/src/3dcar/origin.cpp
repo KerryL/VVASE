@@ -109,3 +109,31 @@ void Origin::Update(const double &shaftLength, const double &shaftDiameter,
 	yDirection->Update(y, origin, shaftDiameter, tipDiameter, tipLength, resolution, Color::ColorGreen, show);
 	zDirection->Update(z, origin, shaftDiameter, tipDiameter, tipLength, resolution, Color::ColorBlue, show);
 }
+
+//==========================================================================
+// Class:			Origin
+// Function:		ContainsThisActor
+//
+// Description:		Compares the argument with the actors that make up this
+//					object to determine if the argument actor is part of this
+//					object or not.
+//
+// Input Arguments:
+//		actor	= const Primitive* to compare against this object's actors
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		bool representing whether or not the actor was part of this object
+//
+//==========================================================================
+bool Origin::ContainsThisActor(const Primitive *actor)
+{
+	if (xDirection->ContainsThisActor(actor) ||
+		yDirection->ContainsThisActor(actor) ||
+		zDirection->ContainsThisActor(actor))
+		return true;
+
+	return false;
+}

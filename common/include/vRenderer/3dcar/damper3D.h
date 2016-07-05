@@ -35,7 +35,10 @@ public:
 		const double &shaftDiameter, const double &bodyLength, const int &resolution,
 		const Color &bodyColor, const Color &shaftColor, bool show);
 
+	// Returns true if the passed reference is to an actor from this object
 	bool ContainsThisActor(const Primitive *actor);
+
+	Vector FindClosestPoint(const Vector& point, const Vector& direction) const;
 
 private:
 	Cylinder *body;

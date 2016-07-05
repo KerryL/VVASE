@@ -107,3 +107,29 @@ void Plane3D::Update(const double &length, const double &width, const double &xO
 	plane->SetLength(length);
 	plane->SetWidth(width);
 }
+
+//==========================================================================
+// Class:			Plane3D
+// Function:		ContainsThisActor
+//
+// Description:		Compares the argument with the actors that make up this
+//					object to determine if the argument actor is part of this
+//					object or not.
+//
+// Input Arguments:
+//		actor	= const Primitive* to compare against this object's actors
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		bool representing whether or not the actor was part of this object
+//
+//==========================================================================
+bool Plane3D::ContainsThisActor(const Primitive *actor)
+{
+	if (plane == actor)
+		return true;
+	else
+		return false;
+}

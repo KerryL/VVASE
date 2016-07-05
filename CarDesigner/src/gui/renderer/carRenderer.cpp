@@ -1092,13 +1092,60 @@ void CarRenderer::OnLeftClick(wxMouseEvent& event)
 		return;
 
 	std::vector<const Primitive*> intersected(IntersectWithPrimitive(point, direction));
-	if (intersected.size() == 0)
-		return;
 
-	// TODO:  Determine which one is the best candidate
+	while (intersected.size() > 0)
+	{
+		const Primitive* selected(GetClosestPrimitive(intersected));
 
-	// The goal is to highlight the corresponding row in the edit panel
-	// If the edit panel is not visible, only move the helper orb?
+		// Prune away actors that we don't want the user to interact with directly
+		if (origin->ContainsThisActor(selected) ||
+			groundPlane->ContainsThisActor(selected) ||
+			rightFrontTire->ContainsThisActor(selected) ||
+			rightRearTire->ContainsThisActor(selected) ||
+			leftFrontTire->ContainsThisActor(selected) ||
+			leftRearTire->ContainsThisActor(selected) ||
+			rightFrontUpright->ContainsThisActor(selected) ||
+			rightRearUpright->ContainsThisActor(selected) ||
+			leftFrontUpright->ContainsThisActor(selected) ||
+			leftRearUpright->ContainsThisActor(selected) ||
+			rightFrontBellCrank->ContainsThisActor(selected) ||
+			rightRearBellCrank->ContainsThisActor(selected) ||
+			leftFrontBellCrank->ContainsThisActor(selected) ||
+			leftRearBellCrank->ContainsThisActor(selected) ||
+			frontRollCenter->ContainsThisActor(selected) ||
+			rearRollCenter->ContainsThisActor(selected) ||
+			rightPitchCenter->ContainsThisActor(selected) ||
+			leftPitchCenter->ContainsThisActor(selected) ||
+			rightFrontInstantCenter->ContainsThisActor(selected) ||
+			leftFrontInstantCenter->ContainsThisActor(selected) ||
+			rightRearInstantCenter->ContainsThisActor(selected) ||
+			leftRearInstantCenter->ContainsThisActor(selected) ||
+			frontRollAxis->ContainsThisActor(selected) ||
+			rearRollAxis->ContainsThisActor(selected) ||
+			rightPitchAxis->ContainsThisActor(selected) ||
+			leftPitchAxis->ContainsThisActor(selected) ||
+			rightFrontInstantAxis->ContainsThisActor(selected) ||
+			leftFrontInstantAxis->ContainsThisActor(selected) ||
+			rightRearInstantAxis->ContainsThisActor(selected) ||
+			leftRearInstantAxis->ContainsThisActor(selected) ||
+			helperOrb->ContainsThisActor(selected) ||
+			helperOrbOpposite->ContainsThisActor(selected))
+		{
+			intersected.erase(std::find(intersected.begin(), intersected.end(), selected));
+			continue;
+		}
+
+		Suspension::Hardpoints suspensionPoint;
+		Corner::Hardpoints leftFrontPoint;
+		Corner::Hardpoints rightFrontPoint;
+		Corner::Hardpoints leftRearPoint;
+		Corner::Hardpoints rightRearPoint;
+		GetSelectedHardpoint(point, direction, selected, suspensionPoint,
+			leftFrontPoint, rightFrontPoint, leftRearPoint, rightRearPoint);
+
+		// TODO:  Highlight the corresponding row in the edit panel
+		// If the edit panel is not visible, only move the helper orb?
+	}
 }
 
 //==========================================================================
@@ -1149,11 +1196,12 @@ void CarRenderer::OnRightClick(wxMouseEvent& event)
 bool CarRenderer::GetLineUnderPoint(const double& x, const double& y,
 	Vector& point, Vector& direction) const
 {
-	if (!Unproject(x, y, 0.1, point))
+	const double zOrdinate1(0.0), zOrdinate2(1.0);// Must be between 0 and 1 and be different from each other
+	if (!Unproject(x, y, zOrdinate1, point))
 		return false;
 
 	Vector point2;
-	if (!Unproject(x, y, 0.5, point2))
+	if (!Unproject(x, y, zOrdinate2, point2))
 		return false;
 
 	direction = (point2 - point).Normalize();
@@ -1191,4 +1239,147 @@ std::vector<const Primitive*> CarRenderer::IntersectWithPrimitive(
 	}
 
 	return intersected;
+}
+
+//==========================================================================
+// Class:			CarRenderer
+// Function:		GetClosestPrimitive
+//
+// Description:		Selects the primitive closest to the eyepoint.
+//
+// Input Arguments:
+//		intersected	= const std::vector<const Primitive*>&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		const Primitive*
+//
+//==========================================================================
+const Primitive* CarRenderer::GetClosestPrimitive(const std::vector<const Primitive*>& intersected) const
+{
+	double closestDistance(std::numeric_limits<double>::max());
+	unsigned int i;
+	for (i = 0; i < intersected.size(); i++)
+	{
+		//intersected[i]->
+		// TODO:  Implement
+	}
+
+	return intersected.front();
+}
+
+//==========================================================================
+// Class:			CarRenderer
+// Function:		GetSelectedHardpoint
+//
+// Description:		Returns the hardpoint ID corresponding to the selected
+//					primitive.
+//
+// Input Arguments:
+//		point			= const Vector&
+//		direction		= const Vector&
+//		selected		= const Primitive&
+//
+// Output Arguments:
+//		suspensionPoint	= Suspension::Hardpoint&
+//		leftFrontPoint	= Corner::Hardpoint&
+//		leftFrontPoint	= Corner::Hardpoint&
+//		leftFrontPoint	= Corner::Hardpoint&
+//		leftFrontPoint	= Corner::Hardpoint&
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void CarRenderer::GetSelectedHardpoint(const Vector& point, const Vector& direction,
+	const Primitive* selected, Suspension::Hardpoints& suspensionPoint,
+	Corner::Hardpoints& leftFrontPoint, Corner::Hardpoints& rightFrontPoint,
+	Corner::Hardpoints& leftRearPoint, Corner::Hardpoints& rightRearPoint) const
+{
+	suspensionPoint = Suspension::NumberOfHardpoints;
+	leftFrontPoint = Corner::NumberOfHardpoints;
+	rightFrontPoint = Corner::NumberOfHardpoints;
+	leftRearPoint = Corner::NumberOfHardpoints;
+	rightRearPoint = Corner::NumberOfHardpoints;
+
+	if (rightFrontLowerAArm->ContainsThisActor(selected))
+		rightFrontPoint = rightFrontLowerAArm->FindClosestHardpoint(point, direction);
+	else if (rightFrontUpperAArm->ContainsThisActor(selected))
+		rightFrontPoint = rightFrontUpperAArm->FindClosestHardpoint(point, direction);
+	else if (rightFrontTieRod->ContainsThisActor(selected))
+		rightFrontTieRod->FindClosestHardpoint(point, direction, rightFrontPoint);
+	else if (rightFrontPushrod->ContainsThisActor(selected))
+		rightFrontPushrod->FindClosestHardpoint(point, direction, rightFrontPoint);
+	else if (rightFrontDamper->ContainsThisActor(selected))
+		rightFrontDamper->FindClosestHardpoint(point, direction, rightFrontPoint);
+	else if (rightFrontSpring->ContainsThisActor(selected))
+		rightFrontSpring->FindClosestHardpoint(point, direction, rightFrontPoint);
+	else if (rightFrontBarLink->ContainsThisActor(selected))
+		rightFrontBarLink->FindClosestHardpoint(point, direction, rightFrontPoint);
+	else if (rightFrontHalfShaft->ContainsThisActor(selected))
+		rightFrontHalfShaft->FindClosestHardpoint(point, direction, rightFrontPoint);
+	else if (leftFrontLowerAArm->ContainsThisActor(selected))
+		leftFrontPoint = leftFrontLowerAArm->FindClosestHardpoint(point, direction);
+	else if (leftFrontUpperAArm->ContainsThisActor(selected))
+		leftFrontPoint = leftFrontUpperAArm->FindClosestHardpoint(point, direction);
+	else if (leftFrontTieRod->ContainsThisActor(selected))
+		leftFrontTieRod->FindClosestHardpoint(point, direction, leftFrontPoint);
+	else if (leftFrontPushrod->ContainsThisActor(selected))
+		leftFrontPushrod->FindClosestHardpoint(point, direction, leftFrontPoint);
+	else if (leftFrontDamper->ContainsThisActor(selected))
+		leftFrontDamper->FindClosestHardpoint(point, direction, leftFrontPoint);
+	else if (leftFrontSpring->ContainsThisActor(selected))
+		leftFrontSpring->FindClosestHardpoint(point, direction, leftFrontPoint);
+	else if (leftFrontBarLink->ContainsThisActor(selected))
+		leftFrontBarLink->FindClosestHardpoint(point, direction, leftFrontPoint);
+	else if (leftFrontHalfShaft->ContainsThisActor(selected))
+		leftFrontHalfShaft->FindClosestHardpoint(point, direction, leftFrontPoint);
+	else if (rightRearLowerAArm->ContainsThisActor(selected))
+		rightRearPoint = rightRearLowerAArm->FindClosestHardpoint(point, direction);
+	else if (rightRearUpperAArm->ContainsThisActor(selected))
+		rightRearPoint = rightRearUpperAArm->FindClosestHardpoint(point, direction);
+	else if (rightRearTieRod->ContainsThisActor(selected))
+		rightRearTieRod->FindClosestHardpoint(point, direction, rightRearPoint);
+	else if (rightRearPushrod->ContainsThisActor(selected))
+		rightRearPushrod->FindClosestHardpoint(point, direction, rightRearPoint);
+	else if (rightRearDamper->ContainsThisActor(selected))
+		rightRearDamper->FindClosestHardpoint(point, direction, rightRearPoint);
+	else if (rightRearSpring->ContainsThisActor(selected))
+		rightRearSpring->FindClosestHardpoint(point, direction, rightRearPoint);
+	else if (rightRearBarLink->ContainsThisActor(selected))
+		rightRearBarLink->FindClosestHardpoint(point, direction, rightRearPoint);
+	else if (rightRearHalfShaft->ContainsThisActor(selected))
+		rightRearHalfShaft->FindClosestHardpoint(point, direction, rightRearPoint);
+	else if (leftRearLowerAArm->ContainsThisActor(selected))
+		leftRearPoint = leftRearLowerAArm->FindClosestHardpoint(point, direction);
+	else if (leftRearUpperAArm->ContainsThisActor(selected))
+		leftRearPoint = leftRearUpperAArm->FindClosestHardpoint(point, direction);
+	else if (leftRearTieRod->ContainsThisActor(selected))
+		leftRearTieRod->FindClosestHardpoint(point, direction, leftRearPoint);
+	else if (leftRearPushrod->ContainsThisActor(selected))
+		leftRearPushrod->FindClosestHardpoint(point, direction, leftRearPoint);
+	else if (leftRearDamper->ContainsThisActor(selected))
+		leftRearDamper->FindClosestHardpoint(point, direction, leftRearPoint);
+	else if (leftRearSpring->ContainsThisActor(selected))
+		leftRearSpring->FindClosestHardpoint(point, direction, leftRearPoint);
+	else if (leftRearBarLink->ContainsThisActor(selected))
+		leftRearBarLink->FindClosestHardpoint(point, direction, leftRearPoint);
+	else if (leftRearHalfShaft->ContainsThisActor(selected))
+		leftRearHalfShaft->FindClosestHardpoint(point, direction, leftRearPoint);
+	else if (steeringRack->ContainsThisActor(selected))
+		steeringRack->FindClosestHardpoint(point, direction, suspensionPoint);
+	else if (frontSwayBar->ContainsThisActor(selected))
+		frontSwayBar->FindClosestHardpoint(point, direction, suspensionPoint, leftFrontPoint, rightFrontPoint);
+	else if (frontThirdSpring->ContainsThisActor(selected))
+		frontThirdSpring->FindClosestHardpoint(point, direction, suspensionPoint);
+	else if (frontThirdDamper->ContainsThisActor(selected))
+		frontThirdDamper->FindClosestHardpoint(point, direction, suspensionPoint);
+	else if (rearSwayBar->ContainsThisActor(selected))
+		rearSwayBar->FindClosestHardpoint(point, direction, suspensionPoint, leftRearPoint, rightRearPoint);
+	else if (rearThirdSpring->ContainsThisActor(selected))
+		rearThirdSpring->FindClosestHardpoint(point, direction, suspensionPoint);
+	else if (rearThirdDamper->ContainsThisActor(selected))
+		rearThirdDamper->FindClosestHardpoint(point, direction, suspensionPoint);
 }

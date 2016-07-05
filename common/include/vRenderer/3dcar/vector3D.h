@@ -38,6 +38,9 @@ public:
 		const double &tipDiameter, double tipLength, const int &resolution,
 		const Color &color, bool show);
 
+	// Returns true if the passed reference is to an actor from this object
+	bool ContainsThisActor(const Primitive *actor);
+
 private:
 	Cylinder *shaft;
 	Cone *tip;

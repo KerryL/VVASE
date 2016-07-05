@@ -1515,16 +1515,29 @@ bool RenderWindow::Unproject(const double& x, const double& y, const double& z,
 {
 	assert(viewToModel);
 
-	point = *viewToModel * Vector(x, y, z);
-	/*Matrix v(4, 1, x, y, z, 1.0);
-	Matrix out(*viewToModel * v);
+	Matrix modelViewMatrix(4, 4);
+	ConvertGLToMatrix(modelViewMatrix, glModelviewMatrix);
+
+	Matrix projectionMatrix;
+	if (view3D)
+		projectionMatrix = Generate3DProjectionMatrix();
+	else
+		projectionMatrix = Generate2DProjectionMatrix();
+
+	Matrix a(projectionMatrix * modelViewMatrix);
+
+	int w, h;
+	GetSize(&w, &h);
+	Matrix v(4, 1, x / w * 2.0 - 1.0, (h - y) / h * 2.0 - 1.0, z, 1.0);
+
+	Matrix out(a.GetInverse() * v);
 	if (VVASEMath::IsZero(out(3,0)))
 		return false;
 
 	out(3,0) = 1.0 / out(3,0);
 	point.x = out(0,0) * out(3,0);
 	point.y = out(1,0) * out(3,0);
-	point.z = out(2,0) * out(3,0);*/
+	point.z = out(2,0) * out(3,0);
 
 	return true;
 }

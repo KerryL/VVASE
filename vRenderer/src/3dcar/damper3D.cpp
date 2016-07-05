@@ -192,3 +192,33 @@ bool Damper3D::ContainsThisActor(const Primitive *actor)
 	else
 		return false;
 }
+
+//==========================================================================
+// Class:			Damper3D
+// Function:		FindClosestPoint
+//
+// Description:		Finds the closest input point to the specified vector.
+//
+// Input Arguments:
+//		point		= const Vector&
+//		direction	= const Vector&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		Vector
+//
+//==========================================================================
+Vector Damper3D::FindClosestPoint(const Vector& point, const Vector& direction) const
+{
+	Vector endPoint1Center(inboardEndPoint->GetCenter());
+	Vector endPoint2Center(outboardEndPoint->GetCenter());
+	Vector endPoint1Test(VVASEMath::NearestPointOnAxis(point, direction, endPoint1Center));
+	Vector endPoint2Test(VVASEMath::NearestPointOnAxis(point, direction, endPoint2Center));
+
+	if (endPoint1Center.Distance(endPoint1Test) < endPoint2Center.Distance(endPoint2Test))
+		return endPoint1Center;
+	
+	return endPoint2Center;
+}
