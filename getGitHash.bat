@@ -33,6 +33,6 @@ REM Build TeX file
 @ECHO %% %texFile%> %texPath%%texFile%
 @ECHO \ProvidesPackage{gitHash}[6/9/2016 for VVASE]>> %texPath%%texFile%
 @ECHO.>> %texPath%%texFile%
-@ECHO % Common commands>> %texPath%%texFile%
+@ECHO %% Common commands>> %texPath%%texFile%
 @ECHO \newcommand{\version}{%gitTag%}>> %texPath%%texFile%
 @ECHO \newcommand{\gitHash}{%gitHash%}>> %texPath%%texFile%

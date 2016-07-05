@@ -34,6 +34,6 @@ echo const wxString carDesignerGitHash = _T\(\"$gitHash\"\)\;>> $outputPath$outp
 echo %% $texFile> $texPath$texFile
 echo \\ProvidesPackage{gitHash}[6/9/2016 for VVASE]>> $texPath$texFile
 echo>> $texPath$texFile
-echo % Common commands>> $texPath$texFile
+echo %% Common commands>> $texPath$texFile
 echo \\newcommand{\\version}{$gitTag}>> $texPath$texFile
 echo \\newcommand{\\gitHash}{$gitHash}>> $texPath$texFile
