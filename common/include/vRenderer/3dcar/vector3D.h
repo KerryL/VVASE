@@ -26,6 +26,7 @@ class Color;
 class Cylinder;
 class Cone;
 class RenderWindow;
+class Primitive;
 
 class Vector3D
 {

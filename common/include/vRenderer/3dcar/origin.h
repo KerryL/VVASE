@@ -20,6 +20,7 @@
 // VVASE forward declarations
 class Vector3D;
 class RenderWindow;
+class Primitive;
 
 class Origin
 {
