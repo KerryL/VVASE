@@ -20,10 +20,14 @@
 //	6/3/2009	- Added icosohedron for use in lieu of octohedron as base polygon to begin
 //				  subdivision, K. Loux.
 
+// Standard C++ headers
+#include <cassert>
+
 // Local headers
 #include "vRenderer/primitives/sphere.h"
 #include "vRenderer/renderWindow.h"
 #include "vUtilities/unitConverter.h"
+#include "vMath/carMath.h"
 
 // For choosing between an octohedron (8 sides) or a icosohedron (20 sides) as the base polygon
 // for the recursive subdivision to create the sphere.
@@ -367,4 +371,32 @@ void Sphere::SetRadius(const double &radius)
 {
 	this->radius = radius;
 	modified = true;
+}
+
+//==========================================================================
+// Class:			Sphere
+// Function:		IsIntersectedBy
+//
+// Description:		Determines if this object is intersected by the specified
+//					line.
+//
+// Input Arguments:
+//		point		= const Vector&
+//		direction	= const Vector&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		bool
+//
+//==========================================================================
+bool Sphere::IsIntersectedBy(const Vector& point, const Vector& direction) const
+{
+	assert(VVASEMath::IsZero(1.0 - direction.Length()));
+
+	if (pow((point - center).Length(), 2) > pow(direction * (point - center), 2) + radius * radius)
+		return false;
+
+	return true;
 }

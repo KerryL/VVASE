@@ -45,6 +45,8 @@ public:
 	bool GetIsVisible() const { return isVisible; }
 	unsigned int GetDrawOrder() const { return drawOrder; }
 
+	virtual bool IsIntersectedBy(const Vector& point, const Vector& direction) const = 0;
+
 	// Overloaded operators
 	Primitive& operator=(const Primitive &primitive);
 

@@ -30,6 +30,7 @@ public:
 	// validity of this object's parameters
 	void GenerateGeometry();
 	bool HasValidParameters();
+	bool IsIntersectedBy(const Vector& point, const Vector& direction) const;
 
 	void SetResolution(const int &resolution);
 	void SetOuterRadius(const double &outerRadius);

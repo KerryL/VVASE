@@ -40,8 +40,9 @@ public:
 
 	// Mandatory overloads from Primitive - for creating geometry and testing the
 	// validity of this object's parameters
-	void GenerateGeometry(void);
-	bool HasValidParameters(void);
+	void GenerateGeometry();
+	bool HasValidParameters();
+	bool IsIntersectedBy(const Vector& /*point*/, const Vector& /*direction*/) const { return false; }
 
 	// Set option methods
 	void SetFont(FTFont *font) { this->font = font; modified = true; }

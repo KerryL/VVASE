@@ -321,3 +321,27 @@ void Cone::SetRadius(const double &radius)
 	this->radius = radius;
 	modified = true;
 }
+
+//==========================================================================
+// Class:			Cone
+// Function:		IsIntersectedBy
+//
+// Description:		Determines if this object is intersected by the specified
+//					line.
+//
+// Input Arguments:
+//		point		= const Vector&
+//		direction	= const Vector&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		bool
+//
+//==========================================================================
+bool Cone::IsIntersectedBy(const Vector& point, const Vector& direction) const
+{
+	// TODO:  Implement
+	return false;
+}

@@ -28,6 +28,7 @@ public:
 	// validity of this object's parameters
 	void GenerateGeometry();
 	bool HasValidParameters();
+	bool IsIntersectedBy(const Vector& /*point*/, const Vector& /*direction*/) const { return false; }
 
 	void SetAnchorCorner(const unsigned int &xAnchor, const unsigned int &yAnchor);
 	void SetFloatingCorner(const unsigned int &xFloat, const unsigned int &yFloat);

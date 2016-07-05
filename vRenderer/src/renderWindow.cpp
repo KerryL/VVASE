@@ -653,6 +653,8 @@ void RenderWindow::DoWheelDolly(wxMouseEvent &event)
 	{
 		// Nothing here!
 	}
+
+	isInteracting = false;
 }
 
 //==========================================================================
@@ -1488,4 +1490,41 @@ bool RenderWindow::Determine3DInteraction(const wxMouseEvent &event, Interaction
 void RenderWindow::ShiftForExactPixelization() const
 {
 	glTranslated(exactPixelShift, exactPixelShift, 0.0);
+}
+
+//==========================================================================
+// Class:			RenderWindow
+// Function:		Unproject
+//
+// Description:		Returns the 3D location of the specified screen coordinate.
+//
+// Input Arguments:
+//		x	= const double&
+//		y	= const double&
+//		z	= const double&
+//
+// Output Arguments:
+//		point	= Vector&
+//
+// Return Value:
+//		bool, true for success, false otherwise
+//
+//==========================================================================
+bool RenderWindow::Unproject(const double& x, const double& y, const double& z,
+	Vector& point) const
+{
+	assert(viewToModel);
+
+	point = *viewToModel * Vector(x, y, z);
+	/*Matrix v(4, 1, x, y, z, 1.0);
+	Matrix out(*viewToModel * v);
+	if (VVASEMath::IsZero(out(3,0)))
+		return false;
+
+	out(3,0) = 1.0 / out(3,0);
+	point.x = out(0,0) * out(3,0);
+	point.y = out(1,0) * out(3,0);
+	point.z = out(2,0) * out(3,0);*/
+
+	return true;
 }

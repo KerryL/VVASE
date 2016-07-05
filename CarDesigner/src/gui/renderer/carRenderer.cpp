@@ -43,6 +43,7 @@
 #include "vRenderer/3dcar/tire3D.h"
 #include "vRenderer/3dcar/swaybar3D.h"
 #include "vRenderer/3dcar/vector3D.h"
+#include "vRenderer/primitives/primitive.h"
 #include "vCar/car.h"
 #include "vCar/brakes.h"
 #include "vCar/drivetrain.h"
@@ -195,6 +196,27 @@ CarRenderer::~CarRenderer()
 	delete helperOrb;
 	delete helperOrbOpposite;
 }
+
+//==========================================================================
+// Class:			CarRenderer
+// Function:		Event Table
+//
+// Description:		Links GUI events with event handler functions.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+BEGIN_EVENT_TABLE(CarRenderer, RenderWindow)
+	EVT_LEFT_UP(	CarRenderer::OnLeftClick)
+	EVT_RIGHT_UP(	CarRenderer::OnRightClick)
+END_EVENT_TABLE();
 
 //==========================================================================
 // Class:			CarRenderer
@@ -1041,4 +1063,132 @@ void CarRenderer::SetHelperOrbPosition(const Corner::Hardpoints &cornerPoint,
 
 	// If we set the position, we'll assume that we want it to be active
 	helperOrbIsActive = true;
+}
+
+//==========================================================================
+// Class:			CarRenderer
+// Function:		OnLeftClick
+//
+// Description:		Handles left click events for this class.
+//
+// Input Arguments:
+//		event	= wxMouseEvent&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void CarRenderer::OnLeftClick(wxMouseEvent& event)
+{
+	event.Skip();
+	if (isInteracting)
+		return;
+
+	Vector point, direction;
+	if (!GetLineUnderPoint(event.GetX(), event.GetY(), point, direction))
+		return;
+
+	std::vector<const Primitive*> intersected(IntersectWithPrimitive(point, direction));
+	if (intersected.size() == 0)
+		return;
+
+	// TODO:  Determine which one is the best candidate
+
+	// The goal is to highlight the corresponding row in the edit panel
+	// If the edit panel is not visible, only move the helper orb?
+}
+
+//==========================================================================
+// Class:			CarRenderer
+// Function:		OnRightClick
+//
+// Description:		Handles right click events for this class.
+//
+// Input Arguments:
+//		event	= wxMouseEvent&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void CarRenderer::OnRightClick(wxMouseEvent& event)
+{
+	// Start out same as left click, but then display a popup menu that allows
+	// the user to view and edit the current coordinates.  Should also display hardpoint name.
+	// Would also be cool to have a Solve-> menu where you specify which direction(s) to move
+	// the point and what output to set to what, then have it go (like, "set RC here by moving this point").
+
+	event.Skip();
+}
+
+//==========================================================================
+// Class:			CarRenderer
+// Function:		GetLineUnderPoint
+//
+// Description:		Finds the equation of the line under the specified point
+//					on the screen.
+//
+// Input Arguments:
+//		x	= const double&
+//		y	= const double&
+//
+// Output Arguments:
+//		point		= Vector&
+//		direction	= Vector&
+//
+// Return Value:
+//		bool, true for success, false otherwise
+//
+//==========================================================================
+bool CarRenderer::GetLineUnderPoint(const double& x, const double& y,
+	Vector& point, Vector& direction) const
+{
+	if (!Unproject(x, y, 0.1, point))
+		return false;
+
+	Vector point2;
+	if (!Unproject(x, y, 0.5, point2))
+		return false;
+
+	direction = (point2 - point).Normalize();
+	return true;
+}
+
+//==========================================================================
+// Class:			CarRenderer
+// Function:		IntersectWithPrimitive
+//
+// Description:		Generates a list of primitives whose bounding volume is
+//					intersected by the specified line.
+//
+// Input Arguments:
+//		point		= const Vector&
+//		direction	= const Vector&	
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		std::vector<const Primitive*>
+//
+//==========================================================================
+std::vector<const Primitive*> CarRenderer::IntersectWithPrimitive(
+	const Vector& point, const Vector& direction) const
+{
+	std::vector<const Primitive*> intersected;
+
+	unsigned int i;
+	for (i = 0; i < primitiveList.GetCount(); i++)
+	{
+		if (primitiveList[i]->IsIntersectedBy(point, direction))
+			intersected.push_back(primitiveList[i]);
+	}
+
+	return intersected;
 }

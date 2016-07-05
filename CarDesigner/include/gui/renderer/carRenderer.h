@@ -82,6 +82,11 @@ private:
 	Car &displayCar;
 	const Car &referenceCar;// Required for correct representation of the tires - see UpdateDisplay()
 
+	// Event handlers ---------------
+	void OnLeftClick(wxMouseEvent& event);
+	void OnRightClick(wxMouseEvent& event);
+	// End event handlers -----------
+
 	// The actors that we use to represent the car
 	// The origin marker and ground plane
 	Origin *origin;
@@ -176,6 +181,14 @@ private:
 	bool helperOrbIsActive;
 	Point3D *helperOrb;
 	Point3D *helperOrbOpposite;
+
+	bool GetLineUnderPoint(const double& x, const double& y,
+		Vector& point, Vector& direction) const;
+
+	std::vector<const Primitive*> IntersectWithPrimitive(const Vector& point,
+		const Vector& direction) const;
+
+	DECLARE_EVENT_TABLE()
 };
 
 #endif// CAR_RENDERER_H_

@@ -205,6 +205,8 @@ protected:
 	Matrix Generate2DProjectionMatrix() const;
 	Matrix Generate3DProjectionMatrix() const;
 
+	bool Unproject(const double& x, const double& y, const double& z, Vector& point) const;
+
 	DECLARE_EVENT_TABLE()
 };
 

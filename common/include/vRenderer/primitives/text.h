@@ -35,6 +35,7 @@ public:
 	// validity of this object's parameters
 	void GenerateGeometry();
 	bool HasValidParameters();
+	bool IsIntersectedBy(const Vector& /*point*/, const Vector& /*direction*/) const { return false; }
 
 	// Set option methods
 	void SetAngle(const double& angle) { this->angle = angle; modified = true; }
