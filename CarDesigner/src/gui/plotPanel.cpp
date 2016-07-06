@@ -531,7 +531,7 @@ void PlotPanel::CreateGridContextMenu(const wxPoint &position, const unsigned in
 		contextMenu->Append(idButtonRemoveCurve, _T("Remove Curve"));*/
 	}
 
-	PopupMenu(contextMenu, position);
+	PopupMenu(contextMenu);
 
 	delete contextMenu;
 	contextMenu = NULL;
@@ -588,7 +588,7 @@ void PlotPanel::CreatePlotContextMenu(const wxPoint &position, const PlotContext
 		break;
 	}
 
-	PopupMenu(contextMenu, position);
+	PopupMenu(contextMenu);
 
 	delete contextMenu;
 	contextMenu = NULL;
@@ -1368,8 +1368,7 @@ void PlotPanel::GridLabelRightClickEvent(wxGridEvent &event)
 
 	contextMenu->Append(idContextCreateSignal, _T("Create Signal"));
 
-	PopupMenu(contextMenu, event.GetPosition() + optionsGrid->GetPosition()
-		+ optionsGrid->GetParent()->GetPosition());
+	PopupMenu(contextMenu);
 
 	delete contextMenu;
 	contextMenu = NULL;

@@ -1689,7 +1689,7 @@ void MainFrame::IterationXAxisHeaveClickEvent(wxCommandEvent& WXUNUSED(event))
 // Description:		Event handler for setting iteration x-axis to steer.
 //
 // Input Arguments:
-//		event	= wxContextMenuEvent&
+//		event	= wxCommandEvent&
 //
 // Output Arguments:
 //		None
@@ -3219,7 +3219,7 @@ void MainFrame::CreateContextMenu(int objectIndex, wxPoint position, bool allowC
 	contextMenu->Prepend(IdMenuFileSave, _T("&Save"));
 
 	// Show the menu
-	PopupMenu(contextMenu, position);
+	PopupMenu(contextMenu);
 
 	// Delete the context menu object
 	delete contextMenu;
