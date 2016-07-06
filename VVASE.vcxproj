@@ -135,6 +135,7 @@
     <ClInclude Include="CarDesigner\include\gui\dialogs\optionsDialog.h" />
     <ClInclude Include="CarDesigner\include\gui\dialogs\rangeLimitsDialog.h" />
     <ClInclude Include="CarDesigner\include\gui\dialogs\textInputDialog.h" />
+    <ClInclude Include="CarDesigner\include\gui\dialogs\vectorEditDialog.h" />
     <ClInclude Include="CarDesigner\include\gui\dropTarget.h" />
     <ClInclude Include="CarDesigner\include\gui\gaObject.h" />
     <ClInclude Include="CarDesigner\include\gui\geneticAlgorithmPanel.h" />
@@ -184,6 +185,7 @@
     <ClCompile Include="CarDesigner\src\gui\dialogs\optionsDialog.cpp" />
     <ClCompile Include="CarDesigner\src\gui\dialogs\rangeLimitsDialog.cpp" />
     <ClCompile Include="CarDesigner\src\gui\dialogs\textInputDialog.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\dialogs\vectorEditDialog.cpp" />
     <ClCompile Include="CarDesigner\src\gui\dropTarget.cpp" />
     <ClCompile Include="CarDesigner\src\gui\gaObject.cpp" />
     <ClCompile Include="CarDesigner\src\gui\geneticAlgorithmPanel.cpp" />

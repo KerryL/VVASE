@@ -161,6 +161,9 @@
     <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editSuspensionRatesPanel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CarDesigner\include\gui\dialogs\vectorEditDialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CarDesigner\src\application\vvaseApplication.cpp">
@@ -302,6 +305,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editSuspensionRatesPanel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CarDesigner\src\gui\dialogs\vectorEditDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

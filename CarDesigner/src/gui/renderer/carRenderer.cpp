@@ -56,6 +56,7 @@
 #include "gui/guiCar.h"
 #include "gui/appearanceOptions.h"
 #include "gui/components/mainFrame.h"
+#include "gui/dialogs/vectorEditDialog.h"
 #include "vSolver/physics/kinematicOutputs.h"
 #include "vMath/matrix.h"
 #include "vUtilities/debugLog.h"
@@ -1142,11 +1143,10 @@ bool CarRenderer::TraceClickToHardpoint(const double& x, const double& y,
 
 		GetSelectedHardpoint(point, direction, selected, suspensionPoint,
 			leftFrontPoint, rightFrontPoint, leftRearPoint, rightRearPoint);
-
-		break;
+		return true;
 	}
 
-	return true;
+	return false;
 }
 
 //==========================================================================
@@ -1219,45 +1219,62 @@ void CarRenderer::OnRightClick(wxMouseEvent& event)
 	wxString pointName;
 	if (suspensionPoint != Suspension::NumberOfHardpoints)
 	{
-		pointToEdit = &car.GetWorkingCar().suspension->hardpoints[suspensionPoint];
+		pointToEdit = &car.GetOriginalCar().suspension->hardpoints[suspensionPoint];
 		pointName = Suspension::GetHardpointName(suspensionPoint);
 	}
 	else if (leftFrontPoint != Corner::NumberOfHardpoints)
 	{
-		pointToEdit = &car.GetWorkingCar().suspension->leftFront.hardpoints[leftFrontPoint];
+		if (car.GetOriginalCar().suspension->isSymmetric)
+			pointToEdit = &car.GetOriginalCar().suspension->rightFront.hardpoints[leftFrontPoint];
+		else
+			pointToEdit = &car.GetOriginalCar().suspension->leftFront.hardpoints[leftFrontPoint];
+
 		pointName = Corner::GetLocationName(Corner::LocationLeftFront)
 			+ _T(" ") + Corner::GetHardpointName(leftFrontPoint);
 	}
 	else if (rightFrontPoint != Corner::NumberOfHardpoints)
 	{
-		pointToEdit = &car.GetWorkingCar().suspension->rightFront.hardpoints[rightFrontPoint];
+		pointToEdit = &car.GetOriginalCar().suspension->rightFront.hardpoints[rightFrontPoint];
 		pointName = Corner::GetLocationName(Corner::LocationRightFront)
 			+ _T(" ") + Corner::GetHardpointName(rightFrontPoint);
 	}
 	else if (leftRearPoint != Corner::NumberOfHardpoints)
 	{
-		pointToEdit = &car.GetWorkingCar().suspension->leftRear.hardpoints[leftRearPoint];
+		if (car.GetOriginalCar().suspension->isSymmetric)
+			pointToEdit = &car.GetOriginalCar().suspension->rightRear.hardpoints[leftRearPoint];
+		else
+			pointToEdit = &car.GetOriginalCar().suspension->leftRear.hardpoints[leftRearPoint];
+
 		pointName = Corner::GetLocationName(Corner::LocationLeftRear)
 			+ _T(" ") + Corner::GetHardpointName(leftRearPoint);
 	}
 	else if (rightRearPoint != Corner::NumberOfHardpoints)
 	{
-		pointToEdit = &car.GetWorkingCar().suspension->rightRear.hardpoints[rightRearPoint];
+		pointToEdit = &car.GetOriginalCar().suspension->rightRear.hardpoints[rightRearPoint];
 		pointName = Corner::GetLocationName(Corner::LocationRightRear)
 			+ _T(" ") + Corner::GetHardpointName(rightRearPoint);
 	}
 	else
 		return;
 
-	// TODO:  Display a popup menu that allows the user to view and edit
-	// the current coordinates.  Should also display hardpoint name.
+	// TODO:  Clicking off of the context menu causes the car to rotate - how do we prevent that?
+	event.Skip(false);
 
-	wxMutex& mutex(car.GetWorkingCar().GetMutex());
+	Vector tempPoint(*pointToEdit);
+	VectorEditDialog dialog(mainFrame, tempPoint, pointName);
+
+	if (dialog.ShowModal() != wxOK)
+		return;
+
+	if (VVASEMath::IsZero(*pointToEdit - tempPoint))
+		return;
+
+	wxMutex& mutex(car.GetOriginalCar().GetMutex());
 	mutex.Lock();
 	mainFrame.GetUndoRedoStack().AddOperation(mainFrame.GetActiveIndex(),
 		UndoRedoStack::Operation::DataTypeVector, pointToEdit);
-
-	//pointToEdit = ;
+	*pointToEdit = tempPoint;
+	car.GetOriginalCar().suspension->UpdateSymmetry();
 
 	mutex.Unlock();
 
