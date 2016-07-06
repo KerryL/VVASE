@@ -126,51 +126,57 @@ void UndoRedoStack::AddOperation(int index,
 //		Operation after change has been applied
 //
 //==========================================================================
-UndoRedoStack::Operation UndoRedoStack::UpdateValue(Operation Operation)
+UndoRedoStack::Operation UndoRedoStack::UpdateValue(Operation operation)
 {
-	switch (Operation.dataType)
+	switch (operation.dataType)
 	{
 	case Operation::DataTypeBool:
-		Operation.oldValue.boolean = *(bool*)Operation.dataLocation;
+		operation.oldValue.boolean = *static_cast<bool*>(operation.dataLocation);
 		break;
 
 	case Operation::DataTypeShort:
-		Operation.oldValue.shortInteger = *(short*)Operation.dataLocation;
+		operation.oldValue.shortInteger = *static_cast<short*>(operation.dataLocation);
 		break;
 
 	case Operation::DataTypeInteger:
-		Operation.oldValue.integer = *(int*)Operation.dataLocation;
+		operation.oldValue.integer = *static_cast<int*>(operation.dataLocation);
 		break;
 
 	case Operation::DataTypeLong:
-		Operation.oldValue.longInteger = *(long*)Operation.dataLocation;
+		operation.oldValue.longInteger = *static_cast<long*>(operation.dataLocation);
 		break;
 
 	case Operation::DataTypeFloat:
-		Operation.oldValue.singlePrecision = *(float*)Operation.dataLocation;
+		operation.oldValue.singlePrecision = *static_cast<float*>(operation.dataLocation);
 		break;
 
 	case Operation::DataTypeDouble:
-		Operation.oldValue.doublePrecision = *(double*)Operation.dataLocation;
+		operation.oldValue.doublePrecision = *static_cast<double*>(operation.dataLocation);
+		break;
+
+	case Operation::DataTypeVector:
+		operation.oldValue.vector[0] = static_cast<double*>(operation.dataLocation)[0];
+		operation.oldValue.vector[1] = static_cast<double*>(operation.dataLocation)[1];
+		operation.oldValue.vector[2] = static_cast<double*>(operation.dataLocation)[2];
 		break;
 
 	/*case Operation::DATA_TYPE_GA_GENE_ADD:
 	case Operation::DATA_TYPE_GA_GENE_MODIFY:
 	case Operation::DATA_TYPE_GA_GENE_DELETE:
-		Operation.oldValue.GeneData = *(Operation::Operation_DATA::GENE_DATA*)Operation.dataLocation;
+		operation.oldValue.GeneData = *static_cast<Operation::OperationData::GeneData*>(Operation.dataLocation);
 		break;
 
 	case Operation::DATA_TYPE_GA_GOAL_ADD:
 	case Operation::DATA_TYPE_GA_GOAL_MODIFY:
 	case Operation::DATA_TYPE_GA_GOAL_DELETE:
-		Operation.oldValue.GoalData = *(Operation::Operation_DATA::GOAL_DATA*)Operation.dataLocation;
+		operation.oldValue.GoalData = *static_cast<Operation::OperationData::GeneData*>(Operation.dataLocation);
 		break;*/
 
 	default:
 		assert(0);// Fail on unknown data types
 	}
 
-	return Operation;
+	return operation;
 }
 
 //==========================================================================

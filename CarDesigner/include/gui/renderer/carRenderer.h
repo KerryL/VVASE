@@ -70,6 +70,8 @@ private:
 	// For context menus
 	MainFrame &mainFrame;
 
+	GuiCar& car;
+
 	// Called from the CarRenderer constructor only in order to initialize the display
 	void CreateActors();
 

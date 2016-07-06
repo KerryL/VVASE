@@ -45,6 +45,7 @@ public:
 			DataTypeLong,
 			DataTypeFloat,
 			DataTypeDouble,
+			DataTypeVector,
 			DataTypeGAGeneAdd,
 			DataTypeGAGeneModify,
 			DataTypeGAGeneDelete,
@@ -65,6 +66,8 @@ public:
 			long longInteger;
 			float singlePrecision;
 			double doublePrecision;
+
+			double vector[3];
 
 			struct GeneData
 			{

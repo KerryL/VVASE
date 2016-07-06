@@ -97,26 +97,6 @@ Vector::Vector(const Vector &v)
 
 //==========================================================================
 // Class:			Vector
-// Function:		~Vector
-//
-// Description:		Destructor for the Vector class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Vector::~Vector()
-{
-}
-
-//==========================================================================
-// Class:			Vector
 // Function:		Rotate
 //
 // Description:		Performs Euler rotation of this object around point CoR.

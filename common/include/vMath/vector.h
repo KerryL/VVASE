@@ -47,9 +47,6 @@ public:
 	Vector(const double &x, const double &y, const double &z);
 	Vector(const Vector &v);
 
-	// Destructor
-	~Vector();
-
 	// Main class data
 	double	x, y, z;
 

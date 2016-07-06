@@ -82,7 +82,7 @@
 //==========================================================================
 CarRenderer::CarRenderer(MainFrame &mainFrame, GuiCar &car, int args[])
 	: RenderWindow(mainFrame, wxID_ANY, args, wxDefaultPosition, wxDefaultSize,
-	wxWANTS_CHARS | wxNO_FULL_REPAINT_ON_RESIZE), mainFrame(mainFrame),
+	wxWANTS_CHARS | wxNO_FULL_REPAINT_ON_RESIZE), mainFrame(mainFrame), car(car),
 	appearanceOptions(car.GetAppearanceOptions()), displayCar(car.GetWorkingCar()),
 	referenceCar(car.GetOriginalCar())
 {
@@ -1094,7 +1094,7 @@ bool CarRenderer::TraceClickToHardpoint(const double& x, const double& y,
 {
 	Vector point, direction;
 	if (!GetLineUnderPoint(x, y, point, direction))
-		return;
+		return false;
 
 	std::vector<const Primitive*> intersected(IntersectWithPrimitive(point, direction));
 
@@ -1145,6 +1145,8 @@ bool CarRenderer::TraceClickToHardpoint(const double& x, const double& y,
 
 		break;
 	}
+
+	return true;
 }
 
 //==========================================================================
@@ -1213,11 +1215,64 @@ void CarRenderer::OnRightClick(wxMouseEvent& event)
 		leftFrontPoint, rightFrontPoint, leftRearPoint, rightRearPoint))
 		return;
 
+	Vector* pointToEdit;
+	wxString pointName;
+	if (suspensionPoint != Suspension::NumberOfHardpoints)
+	{
+		pointToEdit = &car.GetWorkingCar().suspension->hardpoints[suspensionPoint];
+		pointName = Suspension::GetHardpointName(suspensionPoint);
+	}
+	else if (leftFrontPoint != Corner::NumberOfHardpoints)
+	{
+		pointToEdit = &car.GetWorkingCar().suspension->leftFront.hardpoints[leftFrontPoint];
+		pointName = Corner::GetLocationName(Corner::LocationLeftFront)
+			+ _T(" ") + Corner::GetHardpointName(leftFrontPoint);
+	}
+	else if (rightFrontPoint != Corner::NumberOfHardpoints)
+	{
+		pointToEdit = &car.GetWorkingCar().suspension->rightFront.hardpoints[rightFrontPoint];
+		pointName = Corner::GetLocationName(Corner::LocationRightFront)
+			+ _T(" ") + Corner::GetHardpointName(rightFrontPoint);
+	}
+	else if (leftRearPoint != Corner::NumberOfHardpoints)
+	{
+		pointToEdit = &car.GetWorkingCar().suspension->leftRear.hardpoints[leftRearPoint];
+		pointName = Corner::GetLocationName(Corner::LocationLeftRear)
+			+ _T(" ") + Corner::GetHardpointName(leftRearPoint);
+	}
+	else if (rightRearPoint != Corner::NumberOfHardpoints)
+	{
+		pointToEdit = &car.GetWorkingCar().suspension->rightRear.hardpoints[rightRearPoint];
+		pointName = Corner::GetLocationName(Corner::LocationRightRear)
+			+ _T(" ") + Corner::GetHardpointName(rightRearPoint);
+	}
+	else
+		return;
+
 	// TODO:  Display a popup menu that allows the user to view and edit
 	// the current coordinates.  Should also display hardpoint name.
 
-	// Would also be cool to have a Solve-> menu where you specify which direction(s) to move
-	// the point and what output to set to what, then have it go (like, "set RC here by moving this point").
+	wxMutex& mutex(car.GetWorkingCar().GetMutex());
+	mutex.Lock();
+	mainFrame.GetUndoRedoStack().AddOperation(mainFrame.GetActiveIndex(),
+		UndoRedoStack::Operation::DataTypeVector, pointToEdit);
+
+	//pointToEdit = ;
+
+	mutex.Unlock();
+
+	car.SetModified();
+
+	// Set the position of the helper orb
+	/*static_cast<CarRenderer*>(parent.GetParent().GetCurrentObject()->GetNotebookTab())->SetHelperOrbPosition(
+		Corner::NumberOfHardpoints, Corner::LocationRightFront, (Suspension::Hardpoints)(event.GetRow() - 1));*/
+
+	mainFrame.UpdateAnalysis();
+	mainFrame.UpdateOutputPanel();
+
+	// TODO:  Would also be cool to have a Solve-> menu where the user
+	// specifies which direction(s) to move the point and what output
+	// to set to what, then have it go (like, "set RC here by moving this point").
 }
 
 //==========================================================================
@@ -1305,13 +1360,13 @@ std::vector<const Primitive*> CarRenderer::IntersectWithPrimitive(
 //==========================================================================
 const Primitive* CarRenderer::GetClosestPrimitive(const std::vector<const Primitive*>& intersected) const
 {
-	double closestDistance(std::numeric_limits<double>::max());
+	/*double closestDistance(std::numeric_limits<double>::max());
 	unsigned int i;
 	for (i = 0; i < intersected.size(); i++)
 	{
 		//intersected[i]->
 		// TODO:  Implement
-	}
+	}*/
 
 	return intersected.front();
 }
