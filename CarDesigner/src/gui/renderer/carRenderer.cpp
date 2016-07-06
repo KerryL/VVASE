@@ -1067,28 +1067,33 @@ void CarRenderer::SetHelperOrbPosition(const Corner::Hardpoints &cornerPoint,
 
 //==========================================================================
 // Class:			CarRenderer
-// Function:		OnLeftClick
+// Function:		TraceClickToHardpoint
 //
-// Description:		Handles left click events for this class.
+// Description:		Returns the hardpoint ID for the point beneath the
+//					specified coordinate.
 //
 // Input Arguments:
-//		event	= wxMouseEvent&
+//		x	= const double&
+//		y	= const double&
 //
 // Output Arguments:
-//		None
+//		suspensionPoint	= Suspension::Hardpoint&
+//		leftFrontPoint	= Corner::Hardpoint&
+//		leftFrontPoint	= Corner::Hardpoint&
+//		leftFrontPoint	= Corner::Hardpoint&
+//		leftFrontPoint	= Corner::Hardpoint&
 //
 // Return Value:
-//		None
+//		bool, true if a hardpoint lies beneath the specified point, false otherwise
 //
 //==========================================================================
-void CarRenderer::OnLeftClick(wxMouseEvent& event)
+bool CarRenderer::TraceClickToHardpoint(const double& x, const double& y,
+	Suspension::Hardpoints& suspensionPoint,
+	Corner::Hardpoints& leftFrontPoint, Corner::Hardpoints& rightFrontPoint,
+	Corner::Hardpoints& leftRearPoint, Corner::Hardpoints& rightRearPoint) const
 {
-	event.Skip();
-	if (isInteracting)
-		return;
-
 	Vector point, direction;
-	if (!GetLineUnderPoint(event.GetX(), event.GetY(), point, direction))
+	if (!GetLineUnderPoint(x, y, point, direction))
 		return;
 
 	std::vector<const Primitive*> intersected(IntersectWithPrimitive(point, direction));
@@ -1135,19 +1140,46 @@ void CarRenderer::OnLeftClick(wxMouseEvent& event)
 			continue;
 		}
 
-		Suspension::Hardpoints suspensionPoint;
-		Corner::Hardpoints leftFrontPoint;
-		Corner::Hardpoints rightFrontPoint;
-		Corner::Hardpoints leftRearPoint;
-		Corner::Hardpoints rightRearPoint;
 		GetSelectedHardpoint(point, direction, selected, suspensionPoint,
 			leftFrontPoint, rightFrontPoint, leftRearPoint, rightRearPoint);
 
-		// TODO:  Highlight the corresponding row in the edit panel
-		// If the edit panel is not visible, only move the helper orb?
-
 		break;
 	}
+}
+
+//==========================================================================
+// Class:			CarRenderer
+// Function:		OnLeftClick
+//
+// Description:		Handles left click events for this class.
+//
+// Input Arguments:
+//		event	= wxMouseEvent&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void CarRenderer::OnLeftClick(wxMouseEvent& event)
+{
+	event.Skip();
+	if (isInteracting)
+		return;
+
+	Suspension::Hardpoints suspensionPoint;
+	Corner::Hardpoints leftFrontPoint;
+	Corner::Hardpoints rightFrontPoint;
+	Corner::Hardpoints leftRearPoint;
+	Corner::Hardpoints rightRearPoint;
+	if (!TraceClickToHardpoint(event.GetX(), event.GetY(), suspensionPoint,
+		leftFrontPoint, rightFrontPoint, leftRearPoint, rightRearPoint))
+		return;
+
+	// TODO:  Highlight the corresponding row in the edit panel
+	// If the edit panel is not visible, only move the helper orb?
 }
 
 //==========================================================================
@@ -1168,12 +1200,24 @@ void CarRenderer::OnLeftClick(wxMouseEvent& event)
 //==========================================================================
 void CarRenderer::OnRightClick(wxMouseEvent& event)
 {
-	// Start out same as left click, but then display a popup menu that allows
-	// the user to view and edit the current coordinates.  Should also display hardpoint name.
+	event.Skip();
+	if (isInteracting)
+		return;
+
+	Suspension::Hardpoints suspensionPoint;
+	Corner::Hardpoints leftFrontPoint;
+	Corner::Hardpoints rightFrontPoint;
+	Corner::Hardpoints leftRearPoint;
+	Corner::Hardpoints rightRearPoint;
+	if (!TraceClickToHardpoint(event.GetX(), event.GetY(), suspensionPoint,
+		leftFrontPoint, rightFrontPoint, leftRearPoint, rightRearPoint))
+		return;
+
+	// TODO:  Display a popup menu that allows the user to view and edit
+	// the current coordinates.  Should also display hardpoint name.
+
 	// Would also be cool to have a Solve-> menu where you specify which direction(s) to move
 	// the point and what output to set to what, then have it go (like, "set RC here by moving this point").
-
-	event.Skip();
 }
 
 //==========================================================================

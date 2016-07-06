@@ -182,11 +182,15 @@ private:
 	Point3D *helperOrb;
 	Point3D *helperOrbOpposite;
 
+	bool TraceClickToHardpoint(const double& x, const double& y,
+		Suspension::Hardpoints& suspensionPoint,
+		Corner::Hardpoints& leftFrontPoint, Corner::Hardpoints& rightFrontPoint,
+		Corner::Hardpoints& leftRearPoint, Corner::Hardpoints& rightRearPoint) const;
 	bool GetLineUnderPoint(const double& x, const double& y,
 		Vector& point, Vector& direction) const;
-
 	std::vector<const Primitive*> IntersectWithPrimitive(const Vector& point,
 		const Vector& direction) const;
+
 	const Primitive* GetClosestPrimitive(const std::vector<const Primitive*>& intersected) const;
 	void GetSelectedHardpoint(const Vector& point, const Vector& direction, const Primitive* selected,
 		Suspension::Hardpoints& suspensionPoint, Corner::Hardpoints& leftFrontPoint,
