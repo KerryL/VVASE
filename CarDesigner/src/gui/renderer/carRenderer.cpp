@@ -72,7 +72,8 @@
 // Input Arguments:
 //		mainFrame	= MainFrame& reference to the owner of this object
 //		car			= GuiCar& reference to the car that we are to render
-//		args		= int[] NOTE: Under GTK, must contain WX_GL_DOUBLEBUFFER at minimum
+//		id			= wxWindowID
+//		attributes	= const wxGLAttributes&
 //
 // Output Arguments:
 //		None
@@ -81,8 +82,9 @@
 //		None
 //
 //==========================================================================
-CarRenderer::CarRenderer(MainFrame &mainFrame, GuiCar &car, int args[])
-	: RenderWindow(mainFrame, wxID_ANY, args, wxDefaultPosition, wxDefaultSize,
+CarRenderer::CarRenderer(MainFrame &mainFrame, GuiCar &car,
+	const wxWindowID& id, const wxGLAttributes& attributes)
+	: RenderWindow(mainFrame, id, attributes, wxDefaultPosition, wxDefaultSize,
 	wxWANTS_CHARS | wxNO_FULL_REPAINT_ON_RESIZE), mainFrame(mainFrame), car(car),
 	appearanceOptions(car.GetAppearanceOptions()), displayCar(car.GetWorkingCar()),
 	referenceCar(car.GetOriginalCar())

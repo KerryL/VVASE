@@ -37,7 +37,7 @@ class Matrix;
 class RenderWindow : public wxGLCanvas
 {
 public:
-	RenderWindow(wxWindow &parent, wxWindowID id, int args[],
+	RenderWindow(wxWindow &parent, const wxWindowID& id, const wxGLAttributes& attributes,
 		const wxPoint& position, const wxSize& size, long style = 0);
 	virtual ~RenderWindow();
 

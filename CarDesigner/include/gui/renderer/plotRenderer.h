@@ -40,7 +40,8 @@ class PlotCursor;
 class PlotRenderer : public RenderWindow
 {
 public:
-	PlotRenderer(wxWindow &wxParent, PlotOwner &plotOwner, wxWindowID id, int args[]);
+	PlotRenderer(wxWindow &wxParent, PlotOwner &plotOwner,
+		const wxWindowID& id, const wxGLAttributes& attributes);
 	~PlotRenderer();
 
 	// Gets properties for actors

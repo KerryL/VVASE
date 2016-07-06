@@ -201,9 +201,11 @@ wxGrid* PlotPanel::CreateOptionsGrid(wxWindow *parent)
 //==========================================================================
 PlotRenderer* PlotPanel::CreatePlotArea(wxWindow *parent)
 {
-	int args[] = {WX_GL_RGBA, WX_GL_DOUBLEBUFFER, 0};
-	//wxGLCanvas::IsDisplaySupported();// Added in wxWidgets 3.0
-	plotArea = new PlotRenderer(*parent, *this, wxID_ANY, args);
+	wxGLAttributes displayAttributes;
+	displayAttributes.PlatformDefaults().RGBA().DoubleBuffer().SampleBuffers(1).Samplers(4).Stencil(1).EndList();
+
+	assert(wxGLCanvas::IsDisplaySupported(displayAttributes));
+	plotArea = new PlotRenderer(*parent, *this, wxID_ANY, displayAttributes);
 
 	//plotArea->SetMinSize(wxSize(650, 320));
 	plotArea->SetMajorGridOn();

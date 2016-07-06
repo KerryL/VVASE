@@ -51,7 +51,8 @@ class MainFrame;
 class CarRenderer : public RenderWindow
 {
 public:
-	CarRenderer(MainFrame &mainFrame, GuiCar &car, int args[]);
+	CarRenderer(MainFrame &mainFrame, GuiCar &car,
+		const wxWindowID& id, const wxGLAttributes& attributes);
 	~CarRenderer();
 
 	void UpdateDisplay(const KinematicOutputs &outputs);
