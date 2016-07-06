@@ -87,6 +87,7 @@ private:
 	// Event handlers ---------------
 	void OnLeftClick(wxMouseEvent& event);
 	void OnRightClick(wxMouseEvent& event);
+	void OnContextEdit(wxCommandEvent& event);
 	// End event handlers -----------
 
 	// The actors that we use to represent the car
@@ -198,6 +199,20 @@ private:
 		Suspension::Hardpoints& suspensionPoint, Corner::Hardpoints& leftFrontPoint,
 		Corner::Hardpoints& rightFrontPoint, Corner::Hardpoints& leftRearPoint,
 		Corner::Hardpoints& rightRearPoint) const;
+
+	wxMenu* BuildContextMenu() const;
+	void DoEditPointDialog();
+	
+	Suspension::Hardpoints suspensionPoint;
+	Corner::Hardpoints leftFrontPoint;
+	Corner::Hardpoints rightFrontPoint;
+	Corner::Hardpoints leftRearPoint;
+	Corner::Hardpoints rightRearPoint;
+
+	enum EventIds
+	{
+		idContextEdit = wxID_HIGHEST + 1400
+	};
 
 	DECLARE_EVENT_TABLE()
 };

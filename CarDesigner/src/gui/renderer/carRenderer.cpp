@@ -215,8 +215,9 @@ CarRenderer::~CarRenderer()
 //
 //==========================================================================
 BEGIN_EVENT_TABLE(CarRenderer, RenderWindow)
-	EVT_LEFT_UP(	CarRenderer::OnLeftClick)
-	EVT_RIGHT_UP(	CarRenderer::OnRightClick)
+	EVT_LEFT_UP(				CarRenderer::OnLeftClick)
+	EVT_RIGHT_UP(				CarRenderer::OnRightClick)
+	EVT_MENU(idContextEdit,	CarRenderer::OnContextEdit)
 END_EVENT_TABLE();
 
 //==========================================================================
@@ -1182,6 +1183,10 @@ void CarRenderer::OnLeftClick(wxMouseEvent& event)
 
 	// TODO:  Highlight the corresponding row in the edit panel
 	// If the edit panel is not visible, only move the helper orb?
+
+	// Set the position of the helper orb
+	/*static_cast<CarRenderer*>(parent.GetParent().GetCurrentObject()->GetNotebookTab())->SetHelperOrbPosition(
+		Corner::NumberOfHardpoints, Corner::LocationRightFront, (Suspension::Hardpoints)(event.GetRow() - 1));*/
 }
 
 //==========================================================================
@@ -1206,86 +1211,13 @@ void CarRenderer::OnRightClick(wxMouseEvent& event)
 	if (isInteracting)
 		return;
 
-	Suspension::Hardpoints suspensionPoint;
-	Corner::Hardpoints leftFrontPoint;
-	Corner::Hardpoints rightFrontPoint;
-	Corner::Hardpoints leftRearPoint;
-	Corner::Hardpoints rightRearPoint;
 	if (!TraceClickToHardpoint(event.GetX(), event.GetY(), suspensionPoint,
 		leftFrontPoint, rightFrontPoint, leftRearPoint, rightRearPoint))
 		return;
 
-	Vector* pointToEdit;
-	wxString pointName;
-	if (suspensionPoint != Suspension::NumberOfHardpoints)
-	{
-		pointToEdit = &car.GetOriginalCar().suspension->hardpoints[suspensionPoint];
-		pointName = Suspension::GetHardpointName(suspensionPoint);
-	}
-	else if (leftFrontPoint != Corner::NumberOfHardpoints)
-	{
-		if (car.GetOriginalCar().suspension->isSymmetric)
-			pointToEdit = &car.GetOriginalCar().suspension->rightFront.hardpoints[leftFrontPoint];
-		else
-			pointToEdit = &car.GetOriginalCar().suspension->leftFront.hardpoints[leftFrontPoint];
-
-		pointName = Corner::GetLocationName(Corner::LocationLeftFront)
-			+ _T(" ") + Corner::GetHardpointName(leftFrontPoint);
-	}
-	else if (rightFrontPoint != Corner::NumberOfHardpoints)
-	{
-		pointToEdit = &car.GetOriginalCar().suspension->rightFront.hardpoints[rightFrontPoint];
-		pointName = Corner::GetLocationName(Corner::LocationRightFront)
-			+ _T(" ") + Corner::GetHardpointName(rightFrontPoint);
-	}
-	else if (leftRearPoint != Corner::NumberOfHardpoints)
-	{
-		if (car.GetOriginalCar().suspension->isSymmetric)
-			pointToEdit = &car.GetOriginalCar().suspension->rightRear.hardpoints[leftRearPoint];
-		else
-			pointToEdit = &car.GetOriginalCar().suspension->leftRear.hardpoints[leftRearPoint];
-
-		pointName = Corner::GetLocationName(Corner::LocationLeftRear)
-			+ _T(" ") + Corner::GetHardpointName(leftRearPoint);
-	}
-	else if (rightRearPoint != Corner::NumberOfHardpoints)
-	{
-		pointToEdit = &car.GetOriginalCar().suspension->rightRear.hardpoints[rightRearPoint];
-		pointName = Corner::GetLocationName(Corner::LocationRightRear)
-			+ _T(" ") + Corner::GetHardpointName(rightRearPoint);
-	}
-	else
-		return;
-
-	// TODO:  Clicking off of the context menu causes the car to rotate - how do we prevent that?
-	event.Skip(false);
-
-	Vector tempPoint(*pointToEdit);
-	VectorEditDialog dialog(mainFrame, tempPoint, pointName);
-
-	if (dialog.ShowModal() != wxOK)
-		return;
-
-	if (VVASEMath::IsZero(*pointToEdit - tempPoint))
-		return;
-
-	wxMutex& mutex(car.GetOriginalCar().GetMutex());
-	mutex.Lock();
-	mainFrame.GetUndoRedoStack().AddOperation(mainFrame.GetActiveIndex(),
-		UndoRedoStack::Operation::DataTypeVector, pointToEdit);
-	*pointToEdit = tempPoint;
-	car.GetOriginalCar().suspension->UpdateSymmetry();
-
-	mutex.Unlock();
-
-	car.SetModified();
-
-	// Set the position of the helper orb
-	/*static_cast<CarRenderer*>(parent.GetParent().GetCurrentObject()->GetNotebookTab())->SetHelperOrbPosition(
-		Corner::NumberOfHardpoints, Corner::LocationRightFront, (Suspension::Hardpoints)(event.GetRow() - 1));*/
-
-	mainFrame.UpdateAnalysis();
-	mainFrame.UpdateOutputPanel();
+	wxMenu* contextMenu(BuildContextMenu());
+	PopupMenu(contextMenu);
+	delete contextMenu;
 
 	// TODO:  Would also be cool to have a Solve-> menu where the user
 	// specifies which direction(s) to move the point and what output
@@ -1537,4 +1469,132 @@ void CarRenderer::GetSelectedHardpoint(const Vector& point, const Vector& direct
 			return;
 		}
 	}
+}
+
+//==========================================================================
+// Class:			CarRenderer
+// Function:		BuildContextMenu
+//
+// Description:		Builds a context menu for a hardpoint.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+wxMenu* CarRenderer::BuildContextMenu() const
+{
+	wxMenu* menu(new wxMenu);
+	menu->Append(idContextEdit, _T("Edit"));
+	return menu;
+}
+
+//==========================================================================
+// Class:			CarRenderer
+// Function:		DoEditPointDialog
+//
+// Description:		Displays a dialog for editing hardpoints.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void CarRenderer::DoEditPointDialog()
+{
+	Vector* pointToEdit;
+	wxString pointName;
+	if (suspensionPoint != Suspension::NumberOfHardpoints)
+	{
+		pointToEdit = &car.GetOriginalCar().suspension->hardpoints[suspensionPoint];
+		pointName = Suspension::GetHardpointName(suspensionPoint);
+	}
+	else if (leftFrontPoint != Corner::NumberOfHardpoints)
+	{
+		if (car.GetOriginalCar().suspension->isSymmetric)
+			pointToEdit = &car.GetOriginalCar().suspension->rightFront.hardpoints[leftFrontPoint];
+		else
+			pointToEdit = &car.GetOriginalCar().suspension->leftFront.hardpoints[leftFrontPoint];
+
+		pointName = Corner::GetLocationName(Corner::LocationLeftFront)
+			+ _T(" ") + Corner::GetHardpointName(leftFrontPoint);
+	}
+	else if (rightFrontPoint != Corner::NumberOfHardpoints)
+	{
+		pointToEdit = &car.GetOriginalCar().suspension->rightFront.hardpoints[rightFrontPoint];
+		pointName = Corner::GetLocationName(Corner::LocationRightFront)
+			+ _T(" ") + Corner::GetHardpointName(rightFrontPoint);
+	}
+	else if (leftRearPoint != Corner::NumberOfHardpoints)
+	{
+		if (car.GetOriginalCar().suspension->isSymmetric)
+			pointToEdit = &car.GetOriginalCar().suspension->rightRear.hardpoints[leftRearPoint];
+		else
+			pointToEdit = &car.GetOriginalCar().suspension->leftRear.hardpoints[leftRearPoint];
+
+		pointName = Corner::GetLocationName(Corner::LocationLeftRear)
+			+ _T(" ") + Corner::GetHardpointName(leftRearPoint);
+	}
+	else if (rightRearPoint != Corner::NumberOfHardpoints)
+	{
+		pointToEdit = &car.GetOriginalCar().suspension->rightRear.hardpoints[rightRearPoint];
+		pointName = Corner::GetLocationName(Corner::LocationRightRear)
+			+ _T(" ") + Corner::GetHardpointName(rightRearPoint);
+	}
+	else
+		return;
+
+	Vector tempPoint(*pointToEdit);
+	VectorEditDialog dialog(mainFrame, tempPoint, pointName);
+
+	if (dialog.ShowModal() != wxOK)
+		return;
+
+	if (VVASEMath::IsZero(*pointToEdit - tempPoint))
+		return;
+
+	wxMutex& mutex(car.GetOriginalCar().GetMutex());
+	mutex.Lock();
+	mainFrame.GetUndoRedoStack().AddOperation(mainFrame.GetActiveIndex(),
+		UndoRedoStack::Operation::DataTypeVector, pointToEdit);
+	*pointToEdit = tempPoint;
+	car.GetOriginalCar().suspension->UpdateSymmetry();
+
+	mutex.Unlock();
+
+	car.SetModified();
+
+	mainFrame.UpdateAnalysis();
+	mainFrame.UpdateOutputPanel();
+}
+
+//==========================================================================
+// Class:			CarRenderer
+// Function:		OnContextEdit
+//
+// Description:		Handles context menu Edit click events.
+//
+// Input Arguments:
+//		event	= wxCommandEvent&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void CarRenderer::OnContextEdit(wxCommandEvent& WXUNUSED(event))
+{
+	DoEditPointDialog();
 }
