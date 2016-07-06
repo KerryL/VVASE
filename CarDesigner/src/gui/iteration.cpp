@@ -324,6 +324,12 @@ void Iteration::UpdateData()
 	// Get the original values for the kinematic inputs that we will be changing
 	Kinematics::Inputs kinematicInputs;
 
+	// Set tire deflections to zero
+	kinematicInputs.tireDeflections.leftFront = 0.0;
+	kinematicInputs.tireDeflections.rightFront = 0.0;
+	kinematicInputs.tireDeflections.leftRear = 0.0;
+	kinematicInputs.tireDeflections.rightRear = 0.0;
+
 	// Determine the step size for each input
 	double pitchStep	= (range.endPitch - range.startPitch) / (numberOfPoints - 1);// [rad]
 	double rollStep		= (range.endRoll - range.startRoll) / (numberOfPoints - 1);// [rad]

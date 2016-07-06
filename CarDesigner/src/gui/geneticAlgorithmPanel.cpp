@@ -469,6 +469,10 @@ void GeneticAlgorithmPanel::AddGoalButtonClickedEvent(wxCommandEvent& WXUNUSED(e
 	defaultInputs.pitch = 0.0;
 	defaultInputs.roll = 0.0;
 	defaultInputs.rackTravel = 0.0;
+	defaultInputs.tireDeflections.leftFront = 0.0;
+	defaultInputs.tireDeflections.rightFront = 0.0;
+	defaultInputs.tireDeflections.leftRear = 0.0;
+	defaultInputs.tireDeflections.rightRear = 0.0;
 
 	// Create the dialog box with default goal properties
 	GAGoalDialog goalDialog(static_cast<wxWindow*>(&mainFrame), (KinematicOutputs::OutputsComplete)0, 0.0,
