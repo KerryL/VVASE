@@ -18,6 +18,9 @@
 #include "gui/undoRedoStack.h"
 #include "gui/components/mainFrame.h"
 #include "gui/components/editPanel/editPanel.h"
+#include "gui/guiCar.h"
+#include "vCar/car.h"
+#include "vCar/suspension.h"
 
 //==========================================================================
 // Class:			UndoRedoStack
@@ -173,7 +176,7 @@ UndoRedoStack::Operation UndoRedoStack::UpdateValue(Operation operation)
 		break;*/
 
 	default:
-		assert(0);// Fail on unknown data types
+		assert(false);// Fail on unknown data types
 	}
 
 	return operation;
@@ -279,27 +282,33 @@ void UndoRedoStack::ApplyOperation(Operation &operation)
 	switch (operation.dataType)
 	{
 	case Operation::DataTypeBool:
-		*(bool*)operation.dataLocation = operation.oldValue.boolean;
+		*static_cast<bool*>(operation.dataLocation) = operation.oldValue.boolean;
 		break;
 
 	case Operation::DataTypeShort:
-		*(short*)operation.dataLocation = operation.oldValue.shortInteger;
+		*static_cast<short*>(operation.dataLocation) = operation.oldValue.shortInteger;
 		break;
 
 	case Operation::DataTypeInteger:
-		*(int*)operation.dataLocation = operation.oldValue.integer;
+		*static_cast<int*>(operation.dataLocation) = operation.oldValue.integer;
 		break;
 
 	case Operation::DataTypeLong:
-		*(long*)operation.dataLocation = operation.oldValue.longInteger;
+		*static_cast<long*>(operation.dataLocation) = operation.oldValue.longInteger;
 		break;
 
 	case Operation::DataTypeFloat:
-		*(float*)operation.dataLocation = operation.oldValue.singlePrecision;
+		*static_cast<float*>(operation.dataLocation) = operation.oldValue.singlePrecision;
 		break;
 
 	case Operation::DataTypeDouble:
-		*(double*)operation.dataLocation = operation.oldValue.doublePrecision;
+		*static_cast<double*>(operation.dataLocation) = operation.oldValue.doublePrecision;
+		break;
+
+	case Operation::DataTypeVector:
+		static_cast<double*>(operation.dataLocation)[0] = operation.oldValue.vector[0];
+		static_cast<double*>(operation.dataLocation)[1] = operation.oldValue.vector[1];
+		static_cast<double*>(operation.dataLocation)[2] = operation.oldValue.vector[2];
 		break;
 
 	case Operation::DataTypeGAGeneAdd:
@@ -321,7 +330,7 @@ void UndoRedoStack::ApplyOperation(Operation &operation)
 		break;
 
 	default:
-		assert(0);
+		assert(false);
 	}
 
 	// Update the GUI screens
@@ -346,6 +355,14 @@ void UndoRedoStack::ApplyOperation(Operation &operation)
 //==========================================================================
 void UndoRedoStack::Update() const
 {
+	// In case of a symmetric suspension (where we only store the change to one side here)
+	int i;
+	for (i = 0; i < mainFrame.GetObjectCount(); i++)
+	{
+		if (mainFrame.GetObjectByIndex(i)->GetType() == GuiObject::TypeCar)
+			dynamic_cast<GuiCar*>(mainFrame.GetObjectByIndex(i))->GetOriginalCar().suspension->UpdateSymmetry();
+	}
+
 	// Update all areas of the GUI screen
 	mainFrame.UpdateAnalysis();
 	mainFrame.UpdateOutputPanel();
