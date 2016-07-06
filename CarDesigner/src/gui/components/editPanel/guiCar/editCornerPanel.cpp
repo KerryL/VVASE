@@ -111,10 +111,11 @@ END_EVENT_TABLE();
 // Description:		Updates the information on this panel.
 //
 // Input Arguments:
-//		currentCorner	= Corner* pointing to the associated corner
-//		barStyle		= Suspension::BarStyle describing what kind of sway bar
-//						  is at this end of the car
-//		hasHalfShaft	= bool, true if this corner gets a half shaft
+//		currentCorner		= Corner* pointing to the associated corner
+//		currentSuspension	= Suspension*
+//		barStyle			= Suspension::BarStyle describing what kind of
+//							  sway bar is at this end of the car
+//		hasHalfShaft		= bool, true if this corner gets a half shaft
 //
 // Output Arguments:
 //		None
@@ -123,10 +124,11 @@ END_EVENT_TABLE();
 //		None
 //
 //==========================================================================
-void EditCornerPanel::UpdateInformation(Corner *currentCorner,
+void EditCornerPanel::UpdateInformation(Corner *currentCorner, Suspension* currentSuspension,
 	Suspension::BarStyle barStyle, bool hasHalfShaft)
 {
 	this->currentCorner = currentCorner;
+	this->currentSuspension = currentSuspension;
 
 	// Update the combo boxes
 	actuationType->SetSelection(currentCorner->actuationType);
@@ -536,7 +538,7 @@ void EditCornerPanel::GridCellChangedEvent(wxGridEvent &event)
 				UnitConverter::GetInstance().ConvertDistanceInput(value);
 		}
 		
-		parent.UpdateSymmetry();
+		currentSuspension->UpdateSymmetry();
 		mutex->Unlock();
 
 		parent.GetParent().GetCurrentObject()->SetModified();
@@ -585,7 +587,7 @@ void EditCornerPanel::ActuationAttachmentChangeEvent(wxCommandEvent &event)
 	currentCorner->actuationAttachment = (Corner::ActuationAttachment)event.GetSelection();
 
 	// Call the UpdateSymmetry method in case this is a symmetric suspension
-	parent.UpdateSymmetry();
+	currentSuspension->UpdateSymmetry();
 	
 	// Unlock the car
 	mutex->Unlock();
@@ -632,7 +634,7 @@ void EditCornerPanel::ActuationTypeChangeEvent(wxCommandEvent &event)
 	currentCorner->actuationType = (Corner::ActuationType)event.GetSelection();
 
 	// Call the UpdateSymmetry method in case this is a symmetric suspension
-	parent.UpdateSymmetry();
+	currentSuspension->UpdateSymmetry();
 	
 	// Unlock the car
 	mutex->Unlock();
@@ -693,7 +695,7 @@ void EditCornerPanel::StaticCamberChangeEvent(wxCommandEvent &event)
 	mutex->Lock();
 
 	currentCorner->staticCamber = UnitConverter::GetInstance().ConvertAngleInput(value);
-	parent.UpdateSymmetry();
+	currentSuspension->UpdateSymmetry();
 	
 	mutex->Unlock();
 
@@ -752,7 +754,7 @@ void EditCornerPanel::StaticToeChangeEvent(wxCommandEvent &event)
 	currentCorner->staticToe = UnitConverter::GetInstance().ConvertAngleInput(value);
 
 	// Call the UpdateSymmetry method in case this is a symmetric suspension
-	parent.UpdateSymmetry();
+	currentSuspension->UpdateSymmetry();
 	
 	mutex->Unlock();
 

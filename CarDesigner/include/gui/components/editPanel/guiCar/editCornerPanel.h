@@ -43,8 +43,8 @@ public:
 	~EditCornerPanel();
 
 	// Updates the information on the panel
-	void UpdateInformation(Corner *currentCorner, Suspension::BarStyle barStyle,
-		bool hasHalfShaft);
+	void UpdateInformation(Corner *currentCorner, Suspension* currentSuspension,
+		Suspension::BarStyle barStyle, bool hasHalfShaft);
 
 private:
 	// The parent panel
@@ -52,6 +52,7 @@ private:
 
 	// The corner with which we are currently associated
 	Corner *currentCorner;
+	Suspension *currentSuspension;
 
 	// Creates the controls and positions everything within the panel
 	void CreateControls();

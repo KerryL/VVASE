@@ -449,3 +449,65 @@ Suspension& Suspension::operator=(const Suspension& suspension)
 
 	return *this;
 }
+
+//==========================================================================
+// Class:			Suspension
+// Function:		UpdateSymmetry
+//
+// Description:		Goes through all of the corner point and ensures symmetry
+//					from right to left (updates left to match right).
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void Suspension::UpdateSymmetry()
+{
+	// Check to make sure this car is symmetric
+	if (!isSymmetric)
+		return;
+
+	unsigned int i;
+
+	// Copy the front points
+	for (i = 0; i < Corner::NumberOfHardpoints; i++)
+	{
+		// Copy the point
+		leftFront.hardpoints[i] = rightFront.hardpoints[i];
+
+		// Flip the sign on the Y componenet
+		leftFront.hardpoints[i].y *= -1.0;
+	}
+
+	// Copy the rear points
+	for (i = 0; i < Corner::NumberOfHardpoints; i++)
+	{
+		// Copy the point
+		leftRear.hardpoints[i] = rightRear.hardpoints[i];
+
+		// Flip the sign on the Y componenet
+		leftRear.hardpoints[i].y *= -1.0;
+	}
+
+	// Copy the other information in the front
+	leftFront.actuationAttachment = rightFront.actuationAttachment;
+	leftFront.actuationType = rightFront.actuationType;
+	leftFront.damper = rightFront.damper;
+	leftFront.spring = rightFront.spring;
+	leftFront.staticCamber = rightFront.staticCamber;
+	leftFront.staticToe = rightFront.staticToe;
+
+	// Copy the other information in the rear
+	leftRear.actuationAttachment = rightRear.actuationAttachment;
+	leftRear.actuationType = rightRear.actuationType;
+	leftRear.damper = rightRear.damper;
+	leftRear.spring = rightRear.spring;
+	leftRear.staticCamber = rightRear.staticCamber;
+	leftRear.staticToe = rightRear.staticToe;
+}

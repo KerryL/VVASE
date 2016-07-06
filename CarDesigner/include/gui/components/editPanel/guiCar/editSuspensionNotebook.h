@@ -43,9 +43,6 @@ public:
 	void UpdateInformation(Car *currentCar);
 	void UpdateInformation();
 
-	// Keeps the sides of the car identical for symmetric suspensions
-	void UpdateSymmetry();
-
 private:
 	EditPanel &parent;
 

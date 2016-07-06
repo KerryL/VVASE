@@ -132,6 +132,8 @@ public:
 	Damper rearThirdDamper;
 
 	Suspension& operator=(const Suspension& suspension);
+
+	void UpdateSymmetry();
 };
 
 #endif// SUSPENSION_H_

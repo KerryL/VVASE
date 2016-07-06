@@ -162,19 +162,19 @@ void EditSuspensionNotebook::UpdateInformation(Car *currentCar)
 	// Call the update functions for the pages, too
 	suspension->UpdateInformation(currentCar->suspension);
 	rates->UpdateInformation(currentCar->suspension);
-	rightFront->UpdateInformation(&currentCar->suspension->rightFront,
+	rightFront->UpdateInformation(&currentCar->suspension->rightFront, currentCar->suspension,
 		currentCar->suspension->frontBarStyle, currentCar->HasFrontHalfShafts());
 	if (leftFront)
-		leftFront->UpdateInformation(&currentCar->suspension->leftFront,
+		leftFront->UpdateInformation(&currentCar->suspension->leftFront, currentCar->suspension,
 			currentCar->suspension->frontBarStyle, currentCar->HasFrontHalfShafts());
-	rightRear->UpdateInformation(&currentCar->suspension->rightRear,
+	rightRear->UpdateInformation(&currentCar->suspension->rightRear, currentCar->suspension,
 		currentCar->suspension->rearBarStyle, currentCar->HasRearHalfShafts());
 	if (leftRear)
-		leftRear->UpdateInformation(&currentCar->suspension->leftRear,
+		leftRear->UpdateInformation(&currentCar->suspension->leftRear, currentCar->suspension,
 			currentCar->suspension->rearBarStyle, currentCar->HasRearHalfShafts());
 
 	// Also make sure we're symmetric if we're supposed to be
-	UpdateSymmetry();
+	currentCar->suspension->UpdateSymmetry();
 }
 
 //==========================================================================
@@ -213,66 +213,4 @@ void EditSuspensionNotebook::CreateControls()
 	AddPage(leftFront, _T("LF"));
 	AddPage(rightRear, _T("RR"));
 	AddPage(leftRear, _T("LR"));
-}
-
-//==========================================================================
-// Class:			EditSuspensionNotebook
-// Function:		UpdateSymmetry
-//
-// Description:		Goes through all of the corner point and ensures symmetry
-//					from right to left (updates left to match right).
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-void EditSuspensionNotebook::UpdateSymmetry()
-{
-	// Check to make sure this car is symmetric
-	if (currentCar->suspension->isSymmetric)
-	{
-		int i;
-
-		// Copy the front points
-		for (i = 0; i < Corner::NumberOfHardpoints; i++)
-		{
-			// Copy the point
-			currentCar->suspension->leftFront.hardpoints[i] = currentCar->suspension->rightFront.hardpoints[i];
-
-			// Flip the sign on the Y componenet
-			currentCar->suspension->leftFront.hardpoints[i].y *= -1.0;
-		}
-
-		// Copy the rear points
-		for (i = 0; i < Corner::NumberOfHardpoints; i++)
-		{
-			// Copy the point
-			currentCar->suspension->leftRear.hardpoints[i] = currentCar->suspension->rightRear.hardpoints[i];
-
-			// Flip the sign on the Y componenet
-			currentCar->suspension->leftRear.hardpoints[i].y *= -1.0;
-		}
-
-		// Copy the other information in the front
-		currentCar->suspension->leftFront.actuationAttachment = currentCar->suspension->rightFront.actuationAttachment;
-		currentCar->suspension->leftFront.actuationType = currentCar->suspension->rightFront.actuationType;
-		currentCar->suspension->leftFront.damper = currentCar->suspension->rightFront.damper;
-		currentCar->suspension->leftFront.spring = currentCar->suspension->rightFront.spring;
-		currentCar->suspension->leftFront.staticCamber = currentCar->suspension->rightFront.staticCamber;
-		currentCar->suspension->leftFront.staticToe = currentCar->suspension->rightFront.staticToe;
-
-		// Copy the other information in the rear
-		currentCar->suspension->leftRear.actuationAttachment = currentCar->suspension->rightRear.actuationAttachment;
-		currentCar->suspension->leftRear.actuationType = currentCar->suspension->rightRear.actuationType;
-		currentCar->suspension->leftRear.damper = currentCar->suspension->rightRear.damper;
-		currentCar->suspension->leftRear.spring = currentCar->suspension->rightRear.spring;
-		currentCar->suspension->leftRear.staticCamber = currentCar->suspension->rightRear.staticCamber;
-		currentCar->suspension->leftRear.staticToe = currentCar->suspension->rightRear.staticToe;
-	}
 }
