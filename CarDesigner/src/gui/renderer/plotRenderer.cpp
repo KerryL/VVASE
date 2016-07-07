@@ -225,15 +225,16 @@ void PlotRenderer::OnSize(wxSizeEvent &event)
 {
 	ignoreNextMouseMove = true;
 
-	if (leftCursor->GetIsVisible())
+	if (leftCursor && leftCursor->GetIsVisible())
 		leftCursor->SetVisibility(true);
-	if (rightCursor->GetIsVisible())
+	if (rightCursor && rightCursor->GetIsVisible())
 		rightCursor->SetVisibility(true);
 
 	if (legend)
 		legend->SetModified();
 
-	UpdateDisplay();
+	if (plot)
+		UpdateDisplay();
 
 	// Skip this event so the base class OnSize event fires, too
 	event.Skip();
