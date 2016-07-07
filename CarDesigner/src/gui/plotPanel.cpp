@@ -483,7 +483,6 @@ void PlotPanel::ContextRemoveCurveEvent(wxCommandEvent& WXUNUSED(event))
 // Description:		Displays a context menu for the grid control.
 //
 // Input Arguments:
-//		position	= const wxPoint& specifying the position to display the menu
 //		row			= const unsigned int& specifying the row that was clicked
 //
 // Output Arguments:
@@ -493,7 +492,7 @@ void PlotPanel::ContextRemoveCurveEvent(wxCommandEvent& WXUNUSED(event))
 //		None
 //
 //==========================================================================
-void PlotPanel::CreateGridContextMenu(const wxPoint &position, const unsigned int &row)
+void PlotPanel::CreateGridContextMenu(const unsigned int &row)
 {
 	wxMenu *contextMenu = new wxMenu();
 
@@ -546,7 +545,6 @@ void PlotPanel::CreateGridContextMenu(const wxPoint &position, const unsigned in
 // Description:		Displays a context menu for the plot.
 //
 // Input Arguments:
-//		position	= const wxPoint& specifying the position to display the menu
 //		context		= const PlotContext& describing the area of the plot
 //					  on which the click occured
 //
@@ -557,7 +555,7 @@ void PlotPanel::CreateGridContextMenu(const wxPoint &position, const unsigned in
 //		None
 //
 //==========================================================================
-void PlotPanel::CreatePlotContextMenu(const wxPoint &position, const PlotContext &context)
+void PlotPanel::CreatePlotContextMenu(const PlotContext &context)
 {
 	wxMenu *contextMenu;
 
@@ -1035,8 +1033,7 @@ void PlotPanel::RemoveCurve(const unsigned int &i)
 void PlotPanel::GridRightClickEvent(wxGridEvent &event)
 {
 	optionsGrid->SelectRow(event.GetRow());
-	CreateGridContextMenu(event.GetPosition() + optionsGrid->GetPosition()
-		+ optionsGrid->GetParent()->GetPosition(), event.GetRow());
+	CreateGridContextMenu(event.GetRow());
 }
 
 //==========================================================================
@@ -1364,7 +1361,7 @@ void PlotPanel::GridCellChangeEvent(wxGridEvent &event)
 //		None
 //
 //==========================================================================
-void PlotPanel::GridLabelRightClickEvent(wxGridEvent &event)
+void PlotPanel::GridLabelRightClickEvent(wxGridEvent& WXUNUSED(event))
 {
 	wxMenu *contextMenu = new wxMenu();
 
@@ -1373,7 +1370,6 @@ void PlotPanel::GridLabelRightClickEvent(wxGridEvent &event)
 	PopupMenu(contextMenu);
 
 	delete contextMenu;
-	contextMenu = NULL;
 }
 
 //==========================================================================

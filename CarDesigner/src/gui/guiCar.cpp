@@ -73,7 +73,25 @@ GuiCar::GuiCar(MainFrame &mainFrame, wxString pathAndFileName)
 
 	wxGLAttributes displayAttributes;
 	displayAttributes.PlatformDefaults().RGBA().DoubleBuffer().SampleBuffers(1).Samplers(4).Stencil(1).EndList();
-	assert(wxGLCanvas::IsDisplaySupported(displayAttributes));
+
+	// Test for supported attributes in order of preference
+	if (!wxGLCanvas::IsDisplaySupported(displayAttributes))
+	{
+		displayAttributes.PlatformDefaults().RGBA().DoubleBuffer().SampleBuffers(1).Samplers(4).EndList();
+
+		if (!wxGLCanvas::IsDisplaySupported(displayAttributes))
+		{
+			displayAttributes.PlatformDefaults().RGBA().DoubleBuffer().SampleBuffers(1).EndList();
+
+			if (!wxGLCanvas::IsDisplaySupported(displayAttributes))
+			{
+				displayAttributes.PlatformDefaults().RGBA().DoubleBuffer().EndList();
+
+				if (!wxGLCanvas::IsDisplaySupported(displayAttributes))
+					assert(false && "Failed to find supported graphics context");
+			}
+		}
+	}
 
 	renderer = new CarRenderer(mainFrame, *this, wxID_ANY, displayAttributes);
 	notebookTab = reinterpret_cast<wxWindow*>(renderer);

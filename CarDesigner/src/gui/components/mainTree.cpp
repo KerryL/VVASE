@@ -285,12 +285,7 @@ void MainTree::ItemRightClickEvent(wxTreeEvent &event)
 			break;
 	}
 
-	// The point we get from the event is in client coordinates w.r.t. SystemsTree.
-	// To generate a context menu in the correct position, we need to convert this to client
-	// coordinates w.r.t. MainFrame.
-	wxPoint menuPosition = event.GetPoint() + GetPosition();
-
-	mainFrame.CreateContextMenu(index, menuPosition);
+	mainFrame.CreateContextMenu(index);
 	event.Skip();
 }
 

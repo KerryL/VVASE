@@ -48,7 +48,7 @@ public:
 		PlotContextPlotArea
 	};
 
-	void CreatePlotContextMenu(const wxPoint &position, const PlotContext &context);
+	void CreatePlotContextMenu(const PlotContext &context);
 	void DisplayAxisRangeDialog(const PlotContext &axis);
 
 	void UpdateCursorValues(const bool &leftVisible, const bool &rightVisible,
@@ -106,7 +106,7 @@ private:
 	// NOTE:  When calculating the Position to display this context menu,
 	// consider that the coordinates for the calling object might be different
 	// from the coordinates for this object!
-	void CreateGridContextMenu(const wxPoint &position, const unsigned int &row);
+	void CreateGridContextMenu(const unsigned int &row);
 
 	Color GetNextColor(const unsigned int &index) const;
 	void AddXRowToGrid();

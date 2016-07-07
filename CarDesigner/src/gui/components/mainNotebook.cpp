@@ -168,5 +168,5 @@ void MainNotebook::OnNotebookTabRightClick(wxAuiNotebookEvent &event)
 	mousePosition -= GetScreenPosition();
 	mousePosition += GetPosition();
 
-	mainFrame.CreateContextMenu(event.GetSelection(), mousePosition);
+	mainFrame.CreateContextMenu(event.GetSelection());
 }
