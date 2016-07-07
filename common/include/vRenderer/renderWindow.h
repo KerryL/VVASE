@@ -93,6 +93,8 @@ public:
 	
 	void ShiftForExactPixelization() const;
 
+	static wxGLAttributes GetBestAvailableAttributes();
+
 private:
 	mutable wxGLContext context;
 	

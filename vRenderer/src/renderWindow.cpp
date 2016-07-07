@@ -1541,3 +1541,39 @@ bool RenderWindow::Unproject(const double& x, const double& y, const double& z,
 
 	return true;
 }
+
+//==========================================================================
+// Class:			RenderWindow
+// Function:		GetBestAvailableAttributes
+//
+// Description:		Returns the best set of OpenGL display attributes available.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		wxGLAttributes
+//
+//==========================================================================
+wxGLAttributes RenderWindow::GetBestAvailableAttributes()
+{
+	wxGLAttributes displayAttributes1, displayAttributes2, displayAttributesMin;
+	displayAttributes1.PlatformDefaults().RGBA().DoubleBuffer().SampleBuffers(1).Samplers(4).Stencil(1).Depth(16).EndList();
+	displayAttributes2.PlatformDefaults().RGBA().DoubleBuffer().SampleBuffers(1).Depth(16).EndList();
+	displayAttributesMin.PlatformDefaults().RGBA().DoubleBuffer().Depth(16).EndList();
+
+	// TODO:  Issue on GTK with creating canvases this way?  Maybe better luck using old int[] style attributes?
+
+	// Test for supported attributes in order of preference
+	if (wxGLCanvas::IsDisplaySupported(displayAttributes1))
+		return displayAttributes1;
+	else if (wxGLCanvas::IsDisplaySupported(displayAttributes2))
+		return displayAttributes2;
+	else if (!wxGLCanvas::IsDisplaySupported(displayAttributesMin))
+		assert(false && "Failed to find supported graphics context");
+
+	return displayAttributesMin;
+}
