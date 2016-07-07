@@ -47,10 +47,10 @@ AR = ar rcs
 RANLIB = ranlib
 
 # Compiler flags
-CFLAGS = -g -Wall -Wextra $(INCDIRS) -I./include `wx-config --version=3.0 --cppflags` `pkg-config --cflags ftgl,gl` -DwxUSE_GUI=1 -D_VVASE_64_BIT_ -Wno-unused-local-typedefs -std=c++0x
+CFLAGS = -g -Wall -Wextra $(INCDIRS) -I./include `wx-config --version=3.1 --cppflags` `pkg-config --cflags ftgl,gl` -DwxUSE_GUI=1 -D_VVASE_64_BIT_ -Wno-unused-local-typedefs -std=c++0x
 
 # Linker flags
-LDFLAGS = $(LIBDIRS) $(LIBS) `wx-config --version=3.0 --libs all` `pkg-config --libs ftgl,gl`
+LDFLAGS = $(LIBDIRS) $(LIBS) `wx-config --version=3.1 --libs all` `pkg-config --libs ftgl,gl`
 
 # Object file output directory
 TOP_OBJDIR = .obj/

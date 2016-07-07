@@ -426,7 +426,7 @@ void OutputPanel::CreateControls()
 	outputsList->SetColLabelTextOrientation(wxVERTICAL);
 
 	// Do the processing that needs to be done for each row
-	int i;
+	unsigned int i;
 	for (i = 0; i < KinematicOutputs::NumberOfOutputScalars + numberOfQuasiStaticOutputs; i++)
 	{
 		// Make all cells read-only

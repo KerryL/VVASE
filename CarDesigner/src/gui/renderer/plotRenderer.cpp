@@ -2511,7 +2511,7 @@ void PlotRenderer::ProcessRightClick(wxMouseEvent &event)
 		context = PlotOwner::PlotContextPlotArea;
 
 	// Display the context menu (further events handled by Parent)
-	plotOwner.CreatePlotContextMenu(GetPosition() + event.GetPosition(), context);
+	plotOwner.CreatePlotContextMenu(context);
 	ignoreNextMouseMove = true;
 }
 

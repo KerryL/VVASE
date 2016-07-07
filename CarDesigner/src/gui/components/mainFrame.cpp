@@ -3158,7 +3158,6 @@ void MainFrame::SetActiveIndex(int index, bool selectNotebookTab)
 // Input Arguments:
 //		objectIndex		= integer specifying the object in the openObjectList
 //						  that this menu is being created for
-//		position		= wxPoint specifying the position to display the menu
 //		allowClosing	= bool, specifying whether or not we should add the
 //						  "Close" item to the menu
 //
@@ -3169,7 +3168,7 @@ void MainFrame::SetActiveIndex(int index, bool selectNotebookTab)
 //		None
 //
 //==========================================================================
-void MainFrame::CreateContextMenu(int objectIndex, wxPoint position, bool allowClosing)
+void MainFrame::CreateContextMenu(int objectIndex, bool allowClosing)
 {
 	// Make sure the index is valid before continuing
 	if (objectIndex < 0 || objectIndex >= (signed int)openObjectList.GetCount())

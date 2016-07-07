@@ -95,7 +95,7 @@ public:
 	// NOTE:  When calculating the Position to display this context menu,
 	// consider that the coordinates for the calling object might be different
 	// from the coordinates for this object!
-	void CreateContextMenu(int objectIndex, wxPoint position, bool allowClosing = true);
+	void CreateContextMenu(int objectIndex, bool allowClosing = true);
 
 	// For getting a open/save file name from the user
 	wxArrayString GetFileNameFromUser(wxString dialogTitle, wxString defaultDirectory,
