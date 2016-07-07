@@ -213,11 +213,7 @@ bool FontFinder::GetFontFaceName(wxFontEncoding encoding, const wxArrayString &p
 //==========================================================================
 bool FontFinder::GetFontName(const wxString &fontFile, wxString &fontName)
 {
-	
-	// Open the font file
 	std::ifstream fontStream(fontFile.mb_str(), std::ios::in | std::ios::binary);
-
-	// Make sure it opened OK
 	if (!fontStream.good())
 		return false;
 
