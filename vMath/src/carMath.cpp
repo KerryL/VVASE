@@ -136,7 +136,13 @@ double VVASEMath::Clamp(const double &value, const double &lowerLimit, const dou
 //==========================================================================
 double VVASEMath::RangeToPlusMinusPi(const double &angle)
 {
-	return fmod(angle + Pi, 2.0 * Pi) - Pi;
+	// NOTE:  fmod function returns a *signed* remainder of truncated division.
+	// Other floating-point modulo operations may return a the result differently,
+	// which can make it hard to test the math outside of C/C++ (the result
+	// returned by Excel is always positive, for example).
+	if (angle > -Pi)
+		return fmod(angle + Pi, 2.0 * Pi) - Pi;
+	return fmod(angle + Pi, 2.0 * Pi) + Pi;
 }
 
 //==========================================================================
@@ -158,7 +164,13 @@ double VVASEMath::RangeToPlusMinusPi(const double &angle)
 //==========================================================================
 double VVASEMath::RangeToPlusMinus180(const double &angle)
 {
-	return fmod(angle + 180.0, 360.0) - 180.0;
+	// NOTE:  fmod function returns a *signed* remainder of truncated division.
+	// Other floating-point modulo operations may return a the result differently,
+	// which can make it hard to test the math outside of C/C++ (the result
+	// returned by Excel is always positive, for example).
+	if (angle > -180.0)
+		return fmod(angle + 180.0, 360.0) - 180.0;
+	return fmod(angle + 180.0, 360.0) + 180.0;
 }
 
 //==========================================================================

@@ -173,8 +173,8 @@ void KinematicOutputs::Update(const Car *original, const Suspension *current)
 //==========================================================================
 void KinematicOutputs::ComputeNetSteer()
 {
-	doubles[FrontNetSteer] = rightFront[Steer] - leftFront[Steer];
-	doubles[RearNetSteer] = rightRear[Steer] - leftRear[Steer];
+	doubles[FrontNetSteer] = VVASEMath::RangeToPlusMinusPi(rightFront[Steer] - leftFront[Steer]);
+	doubles[RearNetSteer] = VVASEMath::RangeToPlusMinusPi(rightRear[Steer] - leftRear[Steer]);
 }
 
 //==========================================================================
@@ -523,7 +523,7 @@ double KinematicOutputs::ComputeUBarTwist(const Corner& originalLeft,
 			deltaAngle *= -1.0;
 	}
 		
-	return deltaAngle;
+	return VVASEMath::RangeToPlusMinusPi(deltaAngle);
 }
 
 //==========================================================================
@@ -611,7 +611,7 @@ double KinematicOutputs::ComputeTBarTwist(const Corner& originalLeft,
 			deltaAngle *= -1.0;
 	}
 		
-	return deltaAngle;
+	return VVASEMath::RangeToPlusMinusPi(deltaAngle);
 }
 
 //==========================================================================
