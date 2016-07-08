@@ -234,7 +234,7 @@ bool FontFinder::GetFontName(const wxString &fontFile, wxString &fontName)
 	tblDir.offset = 0;// To avoid MSVC++ Warning C4701
 	bool found = false;
 	wxString tempTagString;
-	wxString tableName("name");
+	const wxString tableName(_T("name"));
 
 	int i;
 	for (i = 0; i < ttOffsetTable.numOfTables; i++)
