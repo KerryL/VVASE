@@ -39,6 +39,8 @@ class RenderWindow : public wxGLCanvas
 public:
 	RenderWindow(wxWindow &parent, const wxWindowID& id, const wxGLAttributes& attributes,
 		const wxPoint& position, const wxSize& size, long style = 0);
+	RenderWindow(wxWindow &parent, const wxWindowID& id, const int attributes[],
+		const wxPoint& position, const wxSize& size, long style = 0);
 	virtual ~RenderWindow();
 
 	// Sets up all of the open GL parameters
@@ -93,12 +95,16 @@ public:
 	
 	void ShiftForExactPixelization() const;
 
-	static wxGLAttributes GetBestAvailableAttributes();
+	//static wxGLAttributes GetBestSupportedAttributes();
+	static const int* GetBestSupportedAttributes();
 
 private:
 	mutable wxGLContext context;
 	
 	static const double exactPixelShift;
+	static const int preferredDisplayAttributes[];
+	static const int okDisplayAttributes[];
+	static const int minimumDisplayAttributes[];
 
 	// Flags describing the options for this object's functionality
 	bool wireFrame;
@@ -111,6 +117,8 @@ private:
 	double farClip;
 
 	Color backgroundColor;
+
+	void InternalInitialization();
 
 	// List of item indexes and alphas for sorting by alpha
 	struct ListItem

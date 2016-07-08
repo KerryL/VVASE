@@ -42,6 +42,8 @@ class PlotRenderer : public RenderWindow
 public:
 	PlotRenderer(wxWindow &wxParent, PlotOwner &plotOwner,
 		const wxWindowID& id, const wxGLAttributes& attributes);
+	PlotRenderer(wxWindow &wxParent, PlotOwner &plotOwner,
+		const wxWindowID& id, const int attributes[]);
 	~PlotRenderer();
 
 	// Gets properties for actors
@@ -165,6 +167,8 @@ public:
 	wxImage GetImage() const;
 
 private:
+	void InternalInitialization();
+
 	// Called from the PlotRenderer constructor only in order to initialize the display
 	void CreateActors();
 

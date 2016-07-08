@@ -72,7 +72,7 @@ GuiCar::GuiCar(MainFrame &mainFrame, wxString pathAndFileName)
 	appearanceOptions = new AppearanceOptions(mainFrame, *this);
 
 	renderer = new CarRenderer(mainFrame, *this, wxID_ANY,
-		RenderWindow::GetBestAvailableAttributes());
+		RenderWindow::GetBestSupportedAttributes());
 	notebookTab = reinterpret_cast<wxWindow*>(renderer);
 
 	// Get an index for this item and add it to the list in the mainFrame

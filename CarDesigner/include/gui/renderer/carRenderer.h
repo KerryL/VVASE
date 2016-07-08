@@ -10,12 +10,12 @@
 // File:  carRenderer.h
 // Created:  4/5/2008
 // Author:  K. Loux
-// Description:  Contains class declaration for the CAR_RENDERER class.  Derived from
-//				 RENDER_WINDOW, this class is associated with a loaded car file
+// Description:  Contains class declaration for the CarRenderer class.  Derived from
+//				 RenderWindow, this class is associated with a loaded car file
 //				 and contains the information and methods required to render a car in 3D.
 // History:
 //	5/17/2009	- Was derived from wxVTKRenderWindowInteractor, switched to custom
-//				  RENDER_WINDOW base class (eliminated dependence on VTK).
+//				  RenderWindow base class (eliminated dependence on VTK).
 //	11/22/2009	- Moved to vRenderer.lib, K. Loux.
 
 #ifndef CAR_RENDERER_H_
@@ -53,14 +53,13 @@ class CarRenderer : public RenderWindow
 public:
 	CarRenderer(MainFrame &mainFrame, GuiCar &car,
 		const wxWindowID& id, const wxGLAttributes& attributes);
+	CarRenderer(MainFrame &mainFrame, GuiCar &car,
+		const wxWindowID& id, const int attributes[]);
 	~CarRenderer();
 
 	void UpdateDisplay(const KinematicOutputs &outputs);
 
-	void WriteImageFile(wxString pathAndFileName);
-
-	// Returns the type of the selected item, or -1 for no selection
-	bool IsThisCarSelected(const Primitive *pickedActor, const GuiObject::ItemType *objectType) const;
+	//void WriteImageFile(wxString pathAndFileName);
 
 	// For accessing the helper orb
 	void SetHelperOrbPosition(const Corner::Hardpoints &cornerPoint, const Corner::Location &location,
@@ -72,6 +71,8 @@ private:
 	MainFrame &mainFrame;
 
 	GuiCar& car;
+
+	void InternalInitialization();
 
 	// Called from the CarRenderer constructor only in order to initialize the display
 	void CreateActors();

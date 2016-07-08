@@ -89,6 +89,57 @@ CarRenderer::CarRenderer(MainFrame &mainFrame, GuiCar &car,
 	appearanceOptions(car.GetAppearanceOptions()), displayCar(car.GetWorkingCar()),
 	referenceCar(car.GetOriginalCar())
 {
+	InternalInitialization();
+}
+
+//==========================================================================
+// Class:			CarRenderer
+// Function:		CarRenderer
+//
+// Description:		Constructor for CarRenderer class.  Initializes the
+//					renderer and sets up the canvas.
+//
+// Input Arguments:
+//		mainFrame	= MainFrame& reference to the owner of this object
+//		car			= GuiCar& reference to the car that we are to render
+//		id			= wxWindowID
+//		attributes	= const int[]
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+CarRenderer::CarRenderer(MainFrame &mainFrame, GuiCar &car,
+	const wxWindowID& id, const int attributes[])
+	: RenderWindow(mainFrame, id, attributes, wxDefaultPosition, wxDefaultSize,
+	wxWANTS_CHARS | wxNO_FULL_REPAINT_ON_RESIZE), mainFrame(mainFrame), car(car),
+	appearanceOptions(car.GetAppearanceOptions()), displayCar(car.GetWorkingCar()),
+	referenceCar(car.GetOriginalCar())
+{
+	InternalInitialization();
+}
+
+//==========================================================================
+// Class:			CarRenderer
+// Function:		InternalInitialization
+//
+// Description:		Initializes internal class variables.  To be called from constructors.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void CarRenderer::InternalInitialization()
+{
 	CreateActors();
 
 	// Initialize the helper orb to NOT active

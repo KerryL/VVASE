@@ -74,6 +74,54 @@ PlotRenderer::PlotRenderer(wxWindow &wxParent, PlotOwner &plotOwner,
 	: RenderWindow(wxParent, id, attributes, wxDefaultPosition, wxDefaultSize),
 	plotOwner(plotOwner)
 {
+	InternalInitialization();
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		PlotRenderer
+//
+// Description:		Constructor for PlotRenderer class.
+//
+// Input Arguments:
+//		wxParent	= wxWindow&
+//		plotOwner	= PlotOwner& reference to this applications's main window
+//		id			= const wxWindowID&
+//		attributes	= const int[]
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+PlotRenderer::PlotRenderer(wxWindow &wxParent, PlotOwner &plotOwner,
+	const wxWindowID& id, const int attributes[])
+	: RenderWindow(wxParent, id, attributes, wxDefaultPosition, wxDefaultSize),
+	plotOwner(plotOwner)
+{
+	InternalInitialization();
+}
+
+//==========================================================================
+// Class:			PlotRenderer
+// Function:		InternalInitialization
+//
+// Description:		Initializes internal class variables.  To be called from constructor.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void PlotRenderer::InternalInitialization()
+{
 	CreateActors();
 
 	SetView3D(false);

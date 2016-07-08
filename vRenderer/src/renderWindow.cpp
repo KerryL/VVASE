@@ -54,6 +54,14 @@
 //
 //==========================================================================
 const double RenderWindow::exactPixelShift(0.375);
+const int RenderWindow::preferredDisplayAttributes[] =
+	{ WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 16,
+	WX_GL_SAMPLE_BUFFERS, 1, WX_GL_SAMPLES, 4, WX_GL_STENCIL_SIZE, 16, 0 };
+const int RenderWindow::okDisplayAttributes[] =
+	{ WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 16,
+	WX_GL_SAMPLE_BUFFERS, 1, WX_GL_SAMPLES, 4, 0 };
+const int RenderWindow::minimumDisplayAttributes[] =
+	{ WX_GL_RGBA, WX_GL_DOUBLEBUFFER, WX_GL_DEPTH_SIZE, 16, 0 };
 
 //==========================================================================
 // Class:			RenderWindow
@@ -81,6 +89,58 @@ RenderWindow::RenderWindow(wxWindow &parent, const wxWindowID& id, const wxGLAtt
     const wxPoint& position, const wxSize& size, long style) : wxGLCanvas(
 	&parent, attributes, id, position, size, style | wxFULL_REPAINT_ON_RESIZE),
 	context(this)
+{
+	InternalInitialization();
+}
+
+//==========================================================================
+// Class:			RenderWindow
+// Function:		RenderWindow
+//
+// Description:		Constructor for RenderWindow class.  Initializes the
+//					renderer and sets up the canvas.
+//
+// Input Arguments:
+//		parent		= wxWindow& reference to the owner of this object
+//		id			= const wxWindowID& to identify this window
+//		attributes	= const int[]
+//		position	= const wxPoint& specifying this object's position
+//		size		= const wxSize& specifying this object's size
+//		style		= long specifying this object's style flags
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+RenderWindow::RenderWindow(wxWindow &parent, const wxWindowID& id, const int attributes[],
+    const wxPoint& position, const wxSize& size, long style) : wxGLCanvas(
+	&parent, id, attributes, position, size, style | wxFULL_REPAINT_ON_RESIZE),
+	context(this)
+{
+	InternalInitialization();
+}
+
+//==========================================================================
+// Class:			RenderWindow
+// Function:		InternalInitialization
+//
+// Description:		Internal variable initialization, etc.  To be called from
+//					the constructors.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void RenderWindow::InternalInitialization()
 {
 	wireFrame = false;
 	view3D = true;
@@ -1544,7 +1604,7 @@ bool RenderWindow::Unproject(const double& x, const double& y, const double& z,
 
 //==========================================================================
 // Class:			RenderWindow
-// Function:		GetBestAvailableAttributes
+// Function:		GetBestSupportedAttributes
 //
 // Description:		Returns the best set of OpenGL display attributes available.
 //
@@ -1558,14 +1618,14 @@ bool RenderWindow::Unproject(const double& x, const double& y, const double& z,
 //		wxGLAttributes
 //
 //==========================================================================
-wxGLAttributes RenderWindow::GetBestAvailableAttributes()
+/*wxGLAttributes RenderWindow::GetBestSupportedAttributes()
 {
+// TODO:  Until I can figure out why older GTK version don't like these
+// display attribute objects, I'll have to use the old-style attribute arrays.
 	wxGLAttributes displayAttributes1, displayAttributes2, displayAttributesMin;
 	displayAttributes1.PlatformDefaults().RGBA().DoubleBuffer().SampleBuffers(1).Samplers(4).Stencil(1).Depth(16).EndList();
 	displayAttributes2.PlatformDefaults().RGBA().DoubleBuffer().SampleBuffers(1).Depth(16).EndList();
 	displayAttributesMin.PlatformDefaults().RGBA().DoubleBuffer().Depth(16).EndList();
-
-	// TODO:  Issue on GTK with creating canvases this way?  Maybe better luck using old int[] style attributes?
 
 	// Test for supported attributes in order of preference
 	if (wxGLCanvas::IsDisplaySupported(displayAttributes1))
@@ -1576,4 +1636,33 @@ wxGLAttributes RenderWindow::GetBestAvailableAttributes()
 		assert(false && "Failed to find supported graphics context");
 
 	return displayAttributesMin;
+}*/
+
+//==========================================================================
+// Class:			RenderWindow
+// Function:		GetBestSupportedAttributes
+//
+// Description:		Returns the best set of OpenGL display attributes available.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		const int*
+//
+//==========================================================================
+const int* RenderWindow::GetBestSupportedAttributes()
+{
+	// Test for supported attributes in order of preference
+	if (wxGLCanvas::IsDisplaySupported(preferredDisplayAttributes))
+		return preferredDisplayAttributes;
+	else if (wxGLCanvas::IsDisplaySupported(okDisplayAttributes))
+		return okDisplayAttributes;
+	else if (!wxGLCanvas::IsDisplaySupported(minimumDisplayAttributes))
+		assert(false && "Failed to find supported graphics context");
+
+	return minimumDisplayAttributes;
 }
