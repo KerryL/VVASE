@@ -35,6 +35,7 @@ ALL_OBJS = $(OBJS) $(VERSION_FILE_OBJ)
 all: $(TARGET)
 
 $(TARGET): $(OBJS) version
+	$(MKDIR) $(BINDIR)
 	$(CC) $(ALL_OBJS) -L$(LIBOUTDIR) $(addprefix -l,$(PSLIB)) $(LDFLAGS) -o $(BINDIR)$@
 
 $(OBJDIR)%.o: %.cpp
