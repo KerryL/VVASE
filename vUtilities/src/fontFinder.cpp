@@ -234,17 +234,15 @@ bool FontFinder::GetFontName(const wxString &fontFile, wxString &fontName)
 	tblDir.offset = 0;// To avoid MSVC++ Warning C4701
 	bool found = false;
 	wxString tempTagString;
-	const wxString tableName(_T("name"));
+	const wxString tableName("name");
 
 	int i;
 	for (i = 0; i < ttOffsetTable.numOfTables; i++)
 	{
 		fontStream.read((char*)&tblDir, sizeof(TT_TABLE_DIRECTORY));
-		tempTagString.clear();
 
 		// Table's tag is <= 4 characters
-		tempTagString.assign(tblDir.tag);
-		tempTagString.resize(4);
+		tempTagString = wxString(tblDir.tag, 4);
 		if(tempTagString.CmpNoCase(tableName) == 0)
 		{
 			// Found the table, make sure to swap the bytes for the offset and length
