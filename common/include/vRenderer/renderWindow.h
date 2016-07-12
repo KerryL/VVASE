@@ -143,6 +143,9 @@ private:
 	virtual void OnMouseWheelEvent(wxMouseEvent &event);
 	virtual void OnMouseMoveEvent(wxMouseEvent &event);
 	virtual void OnMouseUpEvent(wxMouseEvent &event);
+	virtual void OnLeftDownEvent(wxMouseEvent &event);
+	virtual void OnRightDownEvent(wxMouseEvent &event);
+	virtual void OnMiddleDownEvent(wxMouseEvent &event);
 
 	// Window events
 	void OnPaint(wxPaintEvent& event);
@@ -199,6 +202,11 @@ protected:
 
 	long lastMousePosition[2];
 	void StoreMousePosition(wxMouseEvent &event);
+
+	bool sawLeftButtonGoDown;
+	bool sawRightButtonGoDown;
+	bool sawMiddleButtonGoDown;
+	bool SawButtonGoDown(const wxMouseEvent &event) const;
 
 	bool Determine2DInteraction(const wxMouseEvent &event, InteractionType &interaction) const;
 	bool Determine3DInteraction(const wxMouseEvent &event, InteractionType &interaction) const;

@@ -161,6 +161,9 @@ void RenderWindow::InternalInitialization()
 
 	SetCameraView(Vector(1.0, 0.0, 0.0), Vector(0.0, 0.0, 0.0), Vector(0.0, 0.0, 1.0));
 	isInteracting = false;
+	sawLeftButtonGoDown = false;
+	sawRightButtonGoDown = false;
+	sawMiddleButtonGoDown = false;
 
 	SetBackgroundStyle(wxBG_STYLE_CUSTOM);// To avoid flashing under MSW
 
@@ -226,6 +229,9 @@ BEGIN_EVENT_TABLE(RenderWindow, wxGLCanvas)
 	EVT_LEFT_UP(			RenderWindow::OnMouseUpEvent)
 	EVT_MIDDLE_UP(			RenderWindow::OnMouseUpEvent)
 	EVT_RIGHT_UP(			RenderWindow::OnMouseUpEvent)
+	EVT_LEFT_DOWN(			RenderWindow::OnLeftDownEvent)
+	EVT_RIGHT_DOWN(			RenderWindow::OnRightDownEvent)
+	EVT_MIDDLE_DOWN(		RenderWindow::OnMiddleDownEvent)
 END_EVENT_TABLE()
 
 //==========================================================================
@@ -513,7 +519,7 @@ void RenderWindow::OnMouseWheelEvent(wxMouseEvent &event)
 //==========================================================================
 void RenderWindow::OnMouseMoveEvent(wxMouseEvent &event)
 {
-	if (!event.Dragging())
+	if (!event.Dragging() || !SawButtonGoDown(event))
 	{
 		StoreMousePosition(event);
 		return;
@@ -629,6 +635,72 @@ void RenderWindow::StoreMousePosition(wxMouseEvent &event)
 void RenderWindow::OnMouseUpEvent(wxMouseEvent& WXUNUSED(event))
 {
 	isInteracting = false;
+	sawLeftButtonGoDown = false;
+	sawRightButtonGoDown = false;
+	sawMiddleButtonGoDown = false;
+}
+
+//==========================================================================
+// Class:			RenderWindow
+// Function:		OnLeftDownEvent
+//
+// Description:		Handles left mouse button down events.
+//
+// Input Arguments:
+//		event	= wxMouseEvent&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void RenderWindow::OnLeftDownEvent(wxMouseEvent& WXUNUSED(event))
+{
+	sawLeftButtonGoDown = true;
+}
+
+//==========================================================================
+// Class:			RenderWindow
+// Function:		OnRightDownEvent
+//
+// Description:		Handles right mouse button down events.
+//
+// Input Arguments:
+//		event	= wxMouseEvent&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void RenderWindow::OnRightDownEvent(wxMouseEvent& WXUNUSED(event))
+{
+	sawRightButtonGoDown = true;
+}
+
+//==========================================================================
+// Class:			RenderWindow
+// Function:		OnMouseUpEvent
+//
+// Description:		Handles middle mouse button down events.
+//
+// Input Arguments:
+//		event	= wxMouseEvent&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void RenderWindow::OnMiddleDownEvent(wxMouseEvent& WXUNUSED(event))
+{
+	sawMiddleButtonGoDown = true;
 }
 
 //==========================================================================
@@ -1665,4 +1737,33 @@ const int* RenderWindow::GetBestSupportedAttributes()
 		assert(false && "Failed to find supported graphics context");
 
 	return minimumDisplayAttributes;
+}
+
+//==========================================================================
+// Class:			RenderWindow
+// Function:		SawButtonGoDown
+//
+// Description:		Determines if this object observed the currently depressed
+//					mouse button go down.
+//
+// Input Arguments:
+//		event	= const wxMouseEvent&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		bool
+//
+//==========================================================================
+bool RenderWindow::SawButtonGoDown(const wxMouseEvent &event) const
+{
+	if (event.LeftIsDown() && sawLeftButtonGoDown)
+		return true;
+	else if (event.RightIsDown() && sawRightButtonGoDown)
+		return true;
+	else if (event.MiddleIsDown() && sawMiddleButtonGoDown)
+		return true;
+
+	return false;
 }

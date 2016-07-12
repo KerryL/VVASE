@@ -1222,7 +1222,7 @@ bool CarRenderer::TraceClickToHardpoint(const double& x, const double& y,
 void CarRenderer::OnLeftClick(wxMouseEvent& event)
 {
 	event.Skip();
-	if (isInteracting)
+	if (isInteracting || sawLeftButtonGoDown)
 		return;
 
 	Suspension::Hardpoints suspensionPoint;
