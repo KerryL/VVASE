@@ -95,16 +95,12 @@ public:
 	
 	void ShiftForExactPixelization() const;
 
-	//static wxGLAttributes GetBestSupportedAttributes();
-	static const int* GetBestSupportedAttributes();
+	static wxGLAttributes GetBestSupportedAttributes();
 
 private:
 	mutable wxGLContext context;
 	
 	static const double exactPixelShift;
-	static const int preferredDisplayAttributes[];
-	static const int okDisplayAttributes[];
-	static const int minimumDisplayAttributes[];
 
 	// Flags describing the options for this object's functionality
 	bool wireFrame;
