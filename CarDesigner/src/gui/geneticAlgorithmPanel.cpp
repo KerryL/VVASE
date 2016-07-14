@@ -28,6 +28,7 @@
 #include "gui/gaObject.h"
 #include "vSolver/physics/kinematicOutputs.h"
 #include "vCar/corner.h"
+#include "vCar/car.h"
 #include "vUtilities/wxRelatedUtilities.h"
 
 //==========================================================================
@@ -364,8 +365,13 @@ void GeneticAlgorithmPanel::CreateControls()
 //==========================================================================
 void GeneticAlgorithmPanel::AddGeneButtonClickedEvent(wxCommandEvent& WXUNUSED(event))
 {
+	const Suspension* suspension(NULL);
+	const GuiCar* carSelection(GetSelectedCar());
+	if (carSelection)
+		suspension = carSelection->GetOriginalCar().suspension;
+
 	// Create the dialog box with default gene properties
-	GAGeneDialog geneDialog(static_cast<wxWindow*>(&mainFrame), (Corner::Hardpoints)0,
+	GAGeneDialog geneDialog(static_cast<wxWindow*>(&mainFrame), suspension, (Corner::Hardpoints)0,
 		(Corner::Hardpoints)0, (Vector::Axis)0, (Corner::Location)0, 0.0, 1.0, 5, wxID_ANY, wxDefaultPosition);
 
 	if (geneDialog.ShowModal() == wxOK)
@@ -585,8 +591,13 @@ void GeneticAlgorithmPanel::EditSelectedGene()
 
 	GAObject::Gene geneToEdit = optimization.GetAlgorithm().GetGene(geneList->GetSelectedRows()[0]);
 
+	const Suspension* suspension(NULL);
+	const GuiCar* carSelection(GetSelectedCar());
+	if (carSelection)
+		suspension = carSelection->GetOriginalCar().suspension;
+
 	// Create the dialog box with properties corresponding to the selected gene
-	GAGeneDialog geneDialog(static_cast<wxWindow*>(&mainFrame), geneToEdit.hardpoint,
+	GAGeneDialog geneDialog(static_cast<wxWindow*>(&mainFrame), suspension, geneToEdit.hardpoint,
 		geneToEdit.tiedTo, geneToEdit.direction, geneToEdit.location, geneToEdit.minimum, geneToEdit.maximum,
 		geneToEdit.numberOfValues, wxID_ANY, wxDefaultPosition);
 
@@ -698,27 +709,14 @@ void GeneticAlgorithmPanel::StartStopOptimizationClickedEvent(wxCommandEvent& WX
 
 		// Assign our car to optimize
 		// This is necessary for handling GUI interaction and displays
-		int i(0), carIndex(-1);
-		for (i = 0; i < mainFrame.GetObjectCount(); i++)
-		{
-			// If the object with index i is a car, check to see if it is the selected car
-			if (mainFrame.GetObjectByIndex(i)->GetType() == GuiObject::TypeCar)
-			{
-				carIndex++;
-
-				if (carIndex == SafelyGetComboBoxSelection(selectedCar))
-					break;
-			}
-		}
-
-		// Verify that the selection is valid
-		if (i > mainFrame.GetObjectCount())
+		const GuiCar* carSelection(GetSelectedCar());
+		if (!carSelection)
 		{
 			wxMessageBox(_T("Error identifying associated car!  Please re-select."));
 			return;
 		}
 
-		optimization.SetCarToOptimize(static_cast<GuiCar&>(*mainFrame.GetObjectByIndex(i)));
+		optimization.SetCarToOptimize(*carSelection);
 
 		// Set the parameters for the analysis
 		optimization.GetAlgorithm().SetUp(optimization.GetCarToOptimize().GetOriginalCar());
@@ -1173,7 +1171,7 @@ void GeneticAlgorithmPanel::TextBoxChangeEvent(wxCommandEvent &event)
 // Class:			GeneticAlgorithmPanel
 // Function:		UpdateGAParameters
 //
-// Description:		Updates the 
+// Description:		Updates the algorithm parameters.
 //
 // Input Arguments:
 //		showWarnings	= const bool& indicating whether or not to show warning
@@ -1297,4 +1295,43 @@ bool GeneticAlgorithmPanel::UpdateGAParameters(const bool &showWarnings)
 		optimization.GetAlgorithm().SetMutationProbability(tempDouble);
 
 	return true;
+}
+
+//==========================================================================
+// Class:			GeneticAlgorithmPanel
+// Function:		GetSelectedCar
+//
+// Description:		Returns the car object specified in the selection combobox.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		cosnt GuiCar*
+//
+//==========================================================================
+const GuiCar* GeneticAlgorithmPanel::GetSelectedCar()
+{
+	int i, carIndex(-1);
+	for (i = 0; i < mainFrame.GetObjectCount(); i++)
+	{
+		// If the object with index i is a car, check to see if it is the selected car
+		if (mainFrame.GetObjectByIndex(i)->GetType() == GuiObject::TypeCar)
+		{
+			carIndex++;
+
+			if (carIndex == SafelyGetComboBoxSelection(selectedCar))
+				break;
+		}
+	}
+
+	// Verify that the selection is valid
+	if (i >= mainFrame.GetObjectCount() ||
+		mainFrame.GetObjectByIndex(i)->GetType() != GuiObject::TypeCar)
+		return NULL;
+
+	return static_cast<GuiCar*>(mainFrame.GetObjectByIndex(i));
 }

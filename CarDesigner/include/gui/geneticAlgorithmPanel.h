@@ -31,6 +31,7 @@ class wxGauge;
 // VVASE forward declarations
 class MainFrame;
 class GeneticOptimization;
+class GuiCar;
 
 class GeneticAlgorithmPanel : public wxScrolledWindow
 {
@@ -120,6 +121,8 @@ private:
 
 	void EditSelectedGene();
 	void EditSelectedGoal();
+
+	const GuiCar* GetSelectedCar();
 
 	DECLARE_EVENT_TABLE();
 };

@@ -18,6 +18,7 @@
 #include "vUtilities/wxRelatedUtilities.h"
 #include "vUtilities/unitConverter.h"
 #include "vUtilities/dataValidator.h"
+#include "vCar/suspension.h"
 
 //==========================================================================
 // Class:			GAGeneDialog
@@ -26,17 +27,18 @@
 // Description:		Constructor for the GAGeneDialog class.
 //
 // Input Arguments:
-//		parent			= wxWindow&, reference to the main application window
-//		hardpoint		= const Corner::Hardpoints&
-//		tiedTo			= const Corner::Hardpoints&
-//		axisDirection	= const Vector::Axis&
-//		cornerLocation	= const Corner::Location&
-//		minimum		= const double&
-//		maximum		= const double&
-//		numberOfValues	= const unsigned int&
-//		id				= wxWindowID
-//		position		= const wxPoint&
-//		style			= long
+//		parent				= wxWindow&, reference to the main application window
+//		currentSuspension	= const Suspension*
+//		hardpoint			= const Corner::Hardpoints&
+//		tiedTo				= const Corner::Hardpoints&
+//		axisDirection		= const Vector::Axis&
+//		cornerLocation		= const Corner::Location&
+//		minimum				= const double&
+//		maximum				= const double&
+//		numberOfValues		= const unsigned int&
+//		id					= wxWindowID
+//		position			= const wxPoint&
+//		style				= long
 //
 // Output Arguments:
 //		None
@@ -45,12 +47,13 @@
 //		None
 //
 //==========================================================================
-GAGeneDialog::GAGeneDialog(wxWindow *parent, const Corner::Hardpoints &hardpoint,
-	const Corner::Hardpoints &tiedTo, const Vector::Axis &axisDirection,
-	const Corner::Location &cornerLocation, const double &minimum,
-	const double &maximum, const unsigned int &numberOfValues, wxWindowID id,
-	const wxPoint &position, long style)
-	: wxDialog(parent, id, _T("Genetic Algorithm Gene"), position, wxDefaultSize, style)
+GAGeneDialog::GAGeneDialog(wxWindow *parent, const Suspension* currentSuspension,
+	const Corner::Hardpoints &hardpoint, const Corner::Hardpoints &tiedTo,
+	const Vector::Axis &axisDirection, const Corner::Location &cornerLocation,
+	const double &minimum, const double &maximum, const unsigned int &numberOfValues,
+	wxWindowID id, const wxPoint &position, long style)
+	: wxDialog(parent, id, _T("Genetic Algorithm Gene"), position, wxDefaultSize, style),
+	currentSuspension(currentSuspension)
 {
 	this->hardpoint = hardpoint;
 	this->tiedTo = tiedTo;
@@ -107,6 +110,8 @@ BEGIN_EVENT_TABLE(GAGeneDialog, wxDialog)
 	EVT_BUTTON(wxID_OK,			GAGeneDialog::OKClickEvent)
 	EVT_BUTTON(wxID_CANCEL,		GAGeneDialog::CancelClickEvent)
 	EVT_TEXT(wxID_ANY,			GAGeneDialog::TextChangeEvent)
+	EVT_COMBOBOX(idHardpoint,	GAGeneDialog::HardpointComboBoxChangeEvent)
+	EVT_COMBOBOX(idLocation,	GAGeneDialog::HardpointComboBoxChangeEvent)
 END_EVENT_TABLE()
 
 //==========================================================================
@@ -160,7 +165,7 @@ void GAGeneDialog::CreateControls()
 	for (i = 0; i < Corner::NumberOfHardpoints; i++)
 		list.Add(Corner::GetHardpointName((Corner::Hardpoints)i));
 	wxStaticText *hardpointLabel = new wxStaticText(this, wxID_STATIC, _T("Hardpoint"));
-	hardpointCombo = new wxComboBox(this, wxID_ANY, Corner::GetHardpointName(hardpoint), wxDefaultPosition,
+	hardpointCombo = new wxComboBox(this, idHardpoint, Corner::GetHardpointName(hardpoint), wxDefaultPosition,
 		wxDefaultSize, list, wxCB_READONLY);
 	SetMinimumWidthFromContents(hardpointCombo, additionalWidth);
 	inputAreaSizer->Add(hardpointLabel, 0, textSizerFlags);
@@ -195,12 +200,34 @@ void GAGeneDialog::CreateControls()
 	for (i = 0; i < Corner::NumberOfLocations; i++)
 		list.Add(Corner::GetLocationName((Corner::Location)i));
 	wxStaticText *cornerLocationLabel = new wxStaticText(this, wxID_STATIC, _T("Corner Location"));
-	cornerLocationCombo = new wxComboBox(this, wxID_ANY, Corner::GetLocationName(cornerLocation), wxDefaultPosition,
+	cornerLocationCombo = new wxComboBox(this, idLocation, Corner::GetLocationName(cornerLocation), wxDefaultPosition,
 		wxDefaultSize, list, wxCB_READONLY);
 	SetMinimumWidthFromContents(cornerLocationCombo, additionalWidth);
 	inputAreaSizer->Add(cornerLocationLabel, 0, textSizerFlags);
 	inputAreaSizer->Add(cornerLocationCombo, 0, comboSizerFlags);
 	inputAreaSizer->AddSpacer(-1);
+
+	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Current Value")), 0, textSizerFlags);
+	if (currentSuspension)
+	{
+		currentX = new wxStaticText(this, wxID_ANY, wxEmptyString);
+		currentY = new wxStaticText(this, wxID_ANY, wxEmptyString);
+		currentZ = new wxStaticText(this, wxID_ANY, wxEmptyString);
+
+		wxSizer* valueSizer = new wxBoxSizer(wxHORIZONTAL);
+		valueSizer->Add(currentX, 1, wxEXPAND | wxLEFT | wxRIGHT, 5);
+		valueSizer->Add(currentY, 1, wxEXPAND | wxLEFT | wxRIGHT, 5);
+		valueSizer->Add(currentZ, 1, wxEXPAND | wxLEFT | wxRIGHT, 5);
+
+		inputAreaSizer->Add(valueSizer, 0, comboSizerFlags);
+		inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC,
+			UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance)), 0, textSizerFlags);
+	}
+	else
+	{
+		inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC, _T("No car selected")), 0, comboSizerFlags);
+		inputAreaSizer->AddSpacer(-1);
+	}
 
 #ifdef __WXGTK__
 	// Under GTK, the combo box selections are set to -1 until the user changes the selection, even if
@@ -261,6 +288,8 @@ void GAGeneDialog::CreateControls()
 
 	// Assign the top level sizer to the dialog
 	SetSizer(topSizer);
+
+	UpdateCurrentVector();
 }
 
 //==========================================================================
@@ -372,4 +401,72 @@ void GAGeneDialog::TextChangeEvent(wxCommandEvent& WXUNUSED(event))
 	// Set the text
 	resolution->SetLabel(UnitConverter::GetInstance().FormatNumber(
 		UnitConverter::GetInstance().ConvertDistanceOutput(fabs(max - min) / double(valueCount - 1))));
+}
+
+//==========================================================================
+// Class:			GAGeneDialog
+// Function:		HardpointComboBoxChangeEvent
+//
+// Description:		Updates the text displaying the current vector value
+//
+// Input Arguments:
+//		event	= wxCommandEvent&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void GAGeneDialog::HardpointComboBoxChangeEvent(wxCommandEvent& WXUNUSED(event))
+{
+	UpdateCurrentVector();
+}
+
+//==========================================================================
+// Class:			GAGeneDialog
+// Function:		UpdateCurrentVector
+//
+// Description:		Updates the text displaying the current vector value
+//
+// Input Arguments:
+//		event	= wxCommandEvent&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void GAGeneDialog::UpdateCurrentVector()
+{
+	if (!currentX || !currentY || !currentZ)
+		return;
+
+	if (!currentSuspension)
+		return;
+
+	Corner::Location location(static_cast<Corner::Location>(
+		cornerLocationCombo->GetCurrentSelection()));
+	Corner::Hardpoints hardpoint(static_cast<Corner::Hardpoints>(
+		hardpointCombo->GetCurrentSelection()));
+
+	Vector v;
+	if (location == Corner::LocationLeftFront)
+		v = currentSuspension->leftFront.hardpoints[hardpoint];
+	else if (location == Corner::LocationRightFront)
+		v = currentSuspension->rightFront.hardpoints[hardpoint];
+	else if (location == Corner::LocationLeftRear)
+		v = currentSuspension->leftRear.hardpoints[hardpoint];
+	else
+		v = currentSuspension->rightRear.hardpoints[hardpoint];
+
+	currentX->SetLabel(UnitConverter::GetInstance().FormatNumber(
+		UnitConverter::GetInstance().ConvertDistanceOutput(v.x)));
+	currentY->SetLabel(UnitConverter::GetInstance().FormatNumber(
+		UnitConverter::GetInstance().ConvertDistanceOutput(v.y)));
+	currentZ->SetLabel(UnitConverter::GetInstance().FormatNumber(
+		UnitConverter::GetInstance().ConvertDistanceOutput(v.z)));
 }

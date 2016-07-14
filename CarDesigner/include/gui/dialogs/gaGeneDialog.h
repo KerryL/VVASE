@@ -21,13 +21,15 @@
 
 // CarDesigner forward declarations
 class MainFrame;
+class Suspension;
 
 class GAGeneDialog : public wxDialog
 {
 public:
 	// Constructor
-	GAGeneDialog(wxWindow *parent, const Corner::Hardpoints &hardpoint,
-		const Corner::Hardpoints &tiedTo, const Vector::Axis &axisDirection, const Corner::Location &cornerLocation,
+	GAGeneDialog(wxWindow *parent, const Suspension* currentSuspension,
+		const Corner::Hardpoints &hardpoint, const Corner::Hardpoints &tiedTo,
+		const Vector::Axis &axisDirection, const Corner::Location &cornerLocation,
 		const double &minimum, const double &maximum, const unsigned int &numberOfValues,
 		wxWindowID id, const wxPoint &position, long style = wxDEFAULT_DIALOG_STYLE);
 
@@ -44,6 +46,8 @@ public:
 	unsigned long GetNumberOfValues() const { return numberOfValues; };
 
 private:
+	const Suspension* currentSuspension;
+
 	// Method for creating controls
 	void CreateControls();
 
@@ -59,6 +63,16 @@ private:
 
 	wxStaticText *resolution;
 
+	wxStaticText *currentX;
+	wxStaticText *currentY;
+	wxStaticText *currentZ;
+
+	enum EventIDs
+	{
+		idHardpoint = wxID_HIGHEST + 1600,
+		idLocation
+	};
+
 	// Values (populated when OK is clicked)
 	Corner::Hardpoints hardpoint;
 	Corner::Hardpoints tiedTo;
@@ -72,6 +86,9 @@ private:
 	virtual void OKClickEvent(wxCommandEvent &event);
 	virtual void CancelClickEvent(wxCommandEvent &event);
 	virtual void TextChangeEvent(wxCommandEvent &event);
+	virtual void HardpointComboBoxChangeEvent(wxCommandEvent &event);
+
+	void UpdateCurrentVector();
 
 	// For the event table
 	DECLARE_EVENT_TABLE();
