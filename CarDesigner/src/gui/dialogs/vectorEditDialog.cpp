@@ -109,8 +109,7 @@ void VectorEditDialog::CreateControls()
 
 	mainSizer->AddSpacer(15);
 
-	wxSizer *buttonsSizer(CreateButtonSizer(wxOK | wxCANCEL));
-	mainSizer->Add(buttonsSizer, 0, wxGROW);
+	mainSizer->Add(CreateButtonSizer(wxOK | wxCANCEL), 0, wxGROW);
 
 	topSizer->SetSizeHints(this);
 	SetSizer(topSizer);

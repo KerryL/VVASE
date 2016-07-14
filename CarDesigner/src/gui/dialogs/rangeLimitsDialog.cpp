@@ -63,13 +63,7 @@ RangeLimitsDialog::RangeLimitsDialog(wxWindow *parent, const double &min, const 
 	mainSizer->AddSpacer(10);
 
 	// Create the dialog buttons
-	wxBoxSizer *buttonSizer = new wxBoxSizer(wxHORIZONTAL);
-	mainSizer->Add(buttonSizer, 0, wxALIGN_CENTER_HORIZONTAL);
-	wxButton *okButton = new wxButton(this, wxID_OK, _T("OK"));
-	okButton->SetDefault();
-	wxButton *cancelButton = new wxButton(this, wxID_CANCEL, _T("Cancel"));
-	buttonSizer->Add(okButton, 1, wxALL, 5);
-	buttonSizer->Add(cancelButton, 1, wxALL, 5);
+	mainSizer->Add(CreateButtonSizer(wxOK | wxCANCEL), 0, wxGROW);
 
 	// Set the sizer to this dialog
 	SetSizerAndFit(topSizer);

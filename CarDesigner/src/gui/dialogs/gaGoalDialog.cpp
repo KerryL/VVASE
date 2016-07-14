@@ -293,16 +293,8 @@ UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeAngle)),
 	beforeSteerText->SetMinSize(wxSize(inputTextWidth, -1));
 	afterSteerText->SetMinSize(wxSize(inputTextWidth, -1));
 
-	// Create another sizer for the buttons at the bottom and add the buttons
-	wxBoxSizer *buttonsSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxButton *okButton = new wxButton(this, wxID_OK, _T("OK"),
-		wxDefaultPosition, wxDefaultSize, 0);
-	buttonsSizer->Add(okButton, 0, wxALL, 5);
-	buttonsSizer->Add(new wxButton(this, wxID_CANCEL, _T("Cancel")), 0, wxALL, 5);
-	mainSizer->Add(buttonsSizer, 0, wxALIGN_CENTER_HORIZONTAL);
-
-	// Make the OK button default
-	okButton->SetDefault();
+	// Create another sizer for the buttons at the bottom
+	mainSizer->Add(CreateButtonSizer(wxOK | wxCANCEL), 0, wxGROW);
 
 	// Tell the dialog to auto-adjust it's size
 	topSizer->SetSizeHints(this);

@@ -644,13 +644,8 @@ void OptionsDialog::CreateControls()
 	mainSizer->AddSpacer(10);
 
 	// Create another sizer for the buttons at the bottom and add the buttons
-	wxBoxSizer *buttonsSizer = new wxBoxSizer(wxHORIZONTAL);
-	wxButton *okButton = new wxButton(this, wxID_OK, _T("OK"));
-	buttonsSizer->Add(okButton, 0, wxALL, 5);
-	buttonsSizer->Add(new wxButton(this, wxID_CANCEL, _T("Cancel")), 0, wxALL, 5);
-	mainSizer->Add(buttonsSizer, 0, wxALIGN_CENTER_HORIZONTAL);
+	mainSizer->Add(CreateButtonSizer(wxOK | wxCANCEL), 0, wxGROW);
 
-	okButton->SetDefault();
 	topSizer->SetSizeHints(this);
 
 	SetSizer(topSizer);

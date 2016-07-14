@@ -304,9 +304,8 @@ void AppearanceOptionsDialog::CreateControls()
 	// Add a spacer between the notebook and the buttons
 	mainSizer->AddSpacer(10);
 
-	// Create another sizer for the buttons at the bottom and add the buttons
-	wxSizer *buttonsSizer(CreateButtonSizer(wxOK | wxCANCEL));
-	mainSizer->Add(buttonsSizer, 0, wxGROW);
+	// Create another sizer for the buttons at the bottom
+	mainSizer->Add(CreateButtonSizer(wxOK | wxCANCEL), 0, wxGROW);
 
 	topSizer->SetSizeHints(this);
 	SetSizer(topSizer);

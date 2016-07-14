@@ -93,9 +93,7 @@ void TextInputDialog::CreateControls(const wxString &message, const wxString &de
 	mainSizer->Add(text, 1, wxGROW | wxALL, 5);
 	mainSizer->AddSpacer(10);
 
-	wxSizer *buttons = CreateButtonSizer(wxOK | wxCANCEL);
-	if (buttons)
-		mainSizer->Add(buttons, 1, wxGROW);
+	mainSizer->Add(CreateButtonSizer(wxOK | wxCANCEL), 1, wxGROW);
 
 	SetSizerAndFit(topSizer);
 	Center();
