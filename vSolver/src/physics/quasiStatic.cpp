@@ -116,10 +116,12 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 	//      0 at ends that don't have drive wheels
 	//      one variable, torques calculated according to bias ratio, resolved to forces using effective radius
 	// - Can we make this part function independent of tire model?  Then we implement our crumby tire model elsewhere, but allow it to be easily replaced?
+	// Can we try a constant cornering stiffness model?
+	// Add outputs for slip angle, lateral force and longitudinal force
 	// What would a real tire model need?  Veloctiy?
 	// - Use sum Fy = 0 = sum(F_lat * cos(steer) + F_lon * sin(steer)) - totalMass * g * Gy
 	// - Similar for sum Fx
-	// - Also need a sum Mz = 0?  To ensure steady-state conditions?
+	// - Also need a sum Mz = 0?  To ensure steady-state conditions?  Yes.  Sums in all 6 directions are necessary.
 	// - Add ficticious term to Fz at each corner when computing spring force
 	//   - This term accounts for effect of in-plane tire forces acting in direction of spring actuation
 	//   - Fz_fake = F_lat * RC_z / RC_y + F_lon * PC_z / PC_x (remember to check for undefined RCs and PCs)
