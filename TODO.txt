@@ -1,0 +1,13 @@
+Use namespace
+Think through file structure/organization
+Use LibPlot2D
+Write Plugin abstract class and test class
+Re-structure core to include:
+    - Abstract CarSubSystem class
+        - What to do with things like tires, which are a component but we also want to derive from?
+            - Include Tire (subsystem), which allows user to specify which TireModel (abstract) to include
+            - So we need a TireModel abstract class and RegisterTireModel method (register with tire component?)
+    - Car with RegisterSubsystem method
+    - Abstract Analyis class
+    - Gui "manager" class with RegisterAnalysis
+    

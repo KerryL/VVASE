@@ -81,6 +81,8 @@ public:
 	Car(const Car &car);
 	~Car();
 
+	bool RegisterSubsystem(Subsystem::SubsystemFactory f, const wxString& name);
+
 	// Utility methods
 	bool SaveCarToFile(wxString fileName, std::ofstream *outFile = NULL) const;
 	bool LoadCarFromFile(wxString fileName, std::ifstream *inFile = NULL, int *fileVersion = NULL);
