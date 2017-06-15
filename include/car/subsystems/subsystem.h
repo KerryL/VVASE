@@ -4,7 +4,7 @@ namespace VVASE
 class Subsystem
 {
 public:
-	wxPanel* GetEditPanel() = 0;
+	virtual wxPanel* GetEditPanel() = 0;
 
 	typedef SubsystemFactory ;
 
