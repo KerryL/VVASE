@@ -11,42 +11,37 @@
 // Created:  11/3/2007
 // Author:  K. Loux
 // Description:  Contains class declaration for Suspension class.
-// History:
-//	2/24/2008	- Moved half shaft points into here from Drivetrain object, K. Loux.
-//	2/25/2008	- Named BarStyle and ActuationStyle enums, K. Loux.
-//	3/9/2008	- Moved enumerations inside class structure and changed the structure of the
-//				  Debugger class, K. Loux.
-//	3/23/2008	- Changed units for class members and functions from degrees to radians, K. Loux.
-//	2/16/2009	- Changed to use enumeration style array of points instead of having each
-//				  point declared individually, K. Loux.
-//	4/19/2009	- Made all of the Solve...() functions static, and made Debugger static, K. Loux.
-//	11/22/2009	- Moved to vCar.lib, K. Loux.
 
 #ifndef SUSPENSION_H_
 #define SUSPENSION_H_
 
+// Local headers
+#include "subsystem.h"
+#include "corner.h"
+#include "spring.h"
+#include "damper.h"
+#include "utilities/wheelSetStructures.h"
+
+// Eigen headers
+#include <Eigen/Eigen>
+
 // Standard C++ headers
 #include <vector>
-
-// VVASE headers
-#include "vCar/corner.h"
-#include "vCar/spring.h"
-#include "vCar/damper.h"
-#include "vMath/vector.h"
-#include "vUtilities/wheelSetStructures.h"
 
 // Local forward declarations
 class BinaryReader;
 class BinaryWriter;
 
-class Suspension
+class Suspension : public Subsystem
 {
 public:
-	Suspension();
-
 	// File read/write functions
-	void Write(BinaryWriter& file) const;
-	void Read(BinaryReader& file, const int& fileVersion);
+	void Write(BinaryWriter& file) const override;
+	void Read(BinaryReader& file, const int& fileVersion) override;
+    
+    // Required by RegisterableComponent
+    static std::unique_ptr<Suspension> Create() { return std::make_unique<Suspension>(); }
+    static std::string GetName() { return _T("Suspension"); }
 
 	// Calls the methods that calculate the wheel center location at each corner
 	void ComputeWheelCenters(const double &rfTireDiameter, const double &lfTireDiameter,
@@ -106,7 +101,7 @@ public:
 	Corner leftRear;
 
 	// The hardpoints that are not within the corner
-	std::vector<Vector> hardpoints;
+	std::vector<Eigen::Vector3d> hardpoints;
 
 	// Suspension parameters
 	FrontRearDouble barRate;			// [in-lb/rad]
@@ -130,8 +125,6 @@ public:
 	Spring rearThirdSpring;
 	Damper frontThirdDamper;
 	Damper rearThirdDamper;
-
-	Suspension& operator=(const Suspension& suspension);
 
 	void UpdateSymmetry();
 };

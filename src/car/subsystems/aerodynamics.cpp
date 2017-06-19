@@ -11,77 +11,11 @@
 // Created:  11/3/2007
 // Author:  K. Loux
 // Description:  Contains class functionality for aerodynamics class.
-// History:
-//	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
-//	11/22/2009	- Moved to vCar.lib, K. Loux.
 
 // VVASE headers
-#include "vCar/aerodynamics.h"
-#include "vUtilities/debugger.h"
-#include "vUtilities/machineDefinitions.h"
+#include "car/subsystems/aerodynamics.h"
 #include "vUtilities/binaryReader.h"
 #include "vUtilities/binaryWriter.h"
-
-//==========================================================================
-// Class:			Aerodynamics
-// Function:		Aerodynamics
-//
-// Description:		Constructor for the Aerodynamics class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Aerodynamics::Aerodynamics()
-{
-}
-
-//==========================================================================
-// Class:			Aerodynamics
-// Function:		Aerodynamics
-//
-// Description:		Copy constructor for the Aerodynamics class.
-//
-// Input Arguments:
-//		Aerodynamics	= const Aerodynamics& to copy to this object
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Aerodynamics::Aerodynamics(const Aerodynamics &aerodynamics)
-{
-	*this = aerodynamics;
-}
-
-//==========================================================================
-// Class:			Aerodynamics
-// Function:		~Aerodynamics
-//
-// Description:		Destructor for the Aerodynamics class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Aerodynamics::~Aerodynamics()
-{
-}
 
 //==========================================================================
 // Class:			Aerodynamics
@@ -131,36 +65,4 @@ void Aerodynamics::Read(BinaryReader& /*file*/, const int& fileVersion)
 	}
 	else
 		assert(false);
-}
-
-//==========================================================================
-// Class:			Aerodynamics
-// Function:		operator =
-//
-// Description:		Assignment operator for Aerodynamics class.
-//
-// Input Arguments:
-//		aerodynamics	= const Aerodynamics& to assign to this object
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		Aerodynamics&, reference to this object
-//
-//==========================================================================
-Aerodynamics& Aerodynamics::operator = (const Aerodynamics &aerodynamics)
-{
-	// Check for self-assignment
-	if (this == &aerodynamics)
-		return *this;
-
-	centerOfPressure		= aerodynamics.centerOfPressure;
-	referenceArea			= aerodynamics.referenceArea;
-	airDensity				= aerodynamics.airDensity;
-	coefficientOfDownforce	= aerodynamics.coefficientOfDownforce;
-	coefficientOfDrag		= aerodynamics.coefficientOfDrag;
-	coefficientOfMoment		= aerodynamics.coefficientOfMoment;
-
-	return *this;
 }

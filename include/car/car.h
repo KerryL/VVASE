@@ -23,7 +23,7 @@
 //  Y-axis - positive to the driver's right, origin on longitudinal centerline
 //  Z-axis - positive up, origin on the ground plane
 
-// While we're discussing conventions, we will use standard English units (inches, pounds, slugs,
+// Units are standard English units (inches, pounds, slugs,
 // seconds) for all calculations.  Angles will be in radians.  More detail can be found in
 // convert_class.h.
 
@@ -54,8 +54,12 @@
 #ifndef CAR_H_
 #define CAR_H_
 
+// Local headers
+#include "utilities/componentManager.h"
+
 // Standard C++ headers
 #include <iosfwd>// For forward declarations of ostream objects
+#include <type_traits>
 
 // wxWidgets headers
 #include <wx/thread.h>
@@ -64,15 +68,9 @@
 class wxString;
 
 // vCar forward declarations
-class Aerodynamics;
-class Brakes;
-class Drivetrain;
-class Engine;
-class MassProperties;
-class Suspension;
-class TireSet;
 class BinaryWriter;
 class BinaryReader;
+class Subsystem;
 
 class Car
 {
@@ -81,7 +79,14 @@ public:
 	Car(const Car &car);
 	~Car();
 
-	bool RegisterSubsystem(Subsystem::SubsystemFactory f, const wxString& name);
+    template <typename T>
+	static bool RegisterSubsystem();
+    
+    template <typename T>
+    static bool UnregisterSubsystem();
+    
+    // TODO:  Saving/loading will now need to consider the possibility of having different modules loaded
+    // Best way to handle this might be to store a list of all loaded modules, and warn if there is a mismatch
 
 	// Utility methods
 	bool SaveCarToFile(wxString fileName, std::ofstream *outFile = NULL) const;
@@ -95,18 +100,6 @@ public:
 
 	// This class contains dynamically allocated memory - overload the assignment operator
 	Car& operator=(const Car &car);
-
-	// These properties are modifiable ONLY by the user... this program
-	// can only reference these properties, any changes (i.e. locations of
-	// suspension hardpoints during dynamic analysis) will be applied to a
-	// DUPLICATE set of properties to avoid loosing the original data
-	Aerodynamics *aerodynamics;
-	Brakes *brakes;
-	Drivetrain *drivetrain;
-	Engine *engine;
-	MassProperties *massProperties;
-	Suspension *suspension;
-	TireSet *tires;
 
 	wxMutex &GetMutex() const { return carMutex; };
 
@@ -123,6 +116,20 @@ private:
 
 	static const int currentFileVersion;
 	mutable wxMutex carMutex;
+    
+    static ComponentManager<Subsystem> componentManager;
 };
+
+template <typename T>
+bool Car::RegisterSubsystem()
+{
+    componentManager.Register<T>();
+}
+
+template <typename T>
+bool Car::UnregisterSubsystem()
+{
+    componentManager.Unregister<T>();
+}
 
 #endif// CAR_H_

@@ -12,8 +12,6 @@
 // Author:  K. Loux
 // Description:  Contains class declaration for TireSet class.  This class contains a set
 //				 of four tires.  Required to manage dynamic memory allocation of a set of tires.
-// History:
-//	11/22/2009	- Moved to vCar.lib, K. Loux.
 
 #ifndef TIRESET_H_
 #define TIRESET_H_
@@ -26,20 +24,18 @@ class BinaryWriter;
 class TireSet
 {
 public:
-	TireSet();
-	TireSet(const TireSet &tireSet);
-	~TireSet();
+    // Required by RegisterableComponent
+    static std::unique_ptr<TireSet> Create() { return std::make_unique<TireSet>(); }
+    static std::string GetName() { return _T("Tires"); }
 
 	// File read/write functions
-	void Write(BinaryWriter& file) const;
-	void Read(BinaryReader& file, const int& fileVersion);
+	void Write(BinaryWriter& file) const override;
+	void Read(BinaryReader& file, const int& fileVersion) override;
 
-	Tire *rightFront;
-	Tire *leftFront;
-	Tire *rightRear;
-	Tire *leftRear;
-
-	TireSet& operator=(const TireSet &tireSet);
+	std::unique_ptr<Tire> rightFront;
+	std::unique_ptr<Tire> leftFront;
+	std::unique_ptr<Tire> rightRear;
+	std::unique_ptr<Tire> leftRear;
 };
 
 #endif// TIRESET_H_

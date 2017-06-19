@@ -11,30 +11,23 @@
 // Created:  11/6/2007
 // Author:  K. Loux
 // Description:  Contains class declaration for Brakes class (disk brakes only).
-// History:
-//	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
-//	11/22/2009	- Moved to vCar.lib, K. Loux.
 
 #ifndef BRAKES_H_
 #define BRAKES_H_
 
-// vUtilities headers
-#include "vUtilities/wheelSetStructures.h"
+// Local headers
+#include "utilities/wheelSetStructures.h"
 
 // Local forward declarations
 class BinaryReader;
 class BinaryWriter;
 
-class Brakes
+class Brakes : public Subsystem
 {
 public:
-	Brakes();
-	Brakes(const Brakes &brakes);
-	~Brakes();
-
 	// File read/write functions
-	void Write(BinaryWriter& file) const;
-	void Read(BinaryReader& file, const int& fileVersion);
+	void Write(BinaryWriter& file) const override;
+	void Read(BinaryReader& file, const int& fileVersion) override;
 
 	// Get the braking torque at each wheel as a function of pedal force
 	WheelSet GetBrakingTorque(const double &pedalForce) const;	// [in-lbf]
@@ -54,7 +47,9 @@ public:
 	bool frontBrakesInboard;
 	bool rearBrakesInboard;
 
-	Brakes& operator=(const Brakes &brakes);
+	// Required by RegisterableComponent
+    static std::unique_ptr<Brakes> Create() { return std::make_unique<Brakes>(); }
+    static std::string GetName() { return _T("Brake"); }
 };
 
 #endif// BRAKES_H_

@@ -11,15 +11,12 @@
 // Created:  11/3/2007
 // Author:  K. Loux
 // Description:  Contains class declaration for Drivetrain class (transmission).
-// History:
-//	2/24/2008	- Moved half shaft points from here into Suspension object, K. Loux.
-//	2/25/2008	- Named DriveWheels enum, K. Loux.
-//	3/9/2008	- Moved enumerations inside class structure and changed the structure of the
-//				  Debugger class, K. Loux.
-//	11/22/2009	- Moved to vCar.lib, K. Loux.
 
 #ifndef DRIVETRAIN_H_
 #define DRIVETRAIN_H_
+
+// Local headers
+#include "subsystem.h"
 
 // Standard C++ headers
 #include <vector>
@@ -32,16 +29,12 @@ class Differential;
 class BinaryReader;
 class BinaryWriter;
 
-class Drivetrain
+class Drivetrain : public Subsystem
 {
 public:
-	Drivetrain();
-	Drivetrain(const Drivetrain &drivetrain);
-	~Drivetrain();
-
 	// File read/write functions
-	void Write(BinaryWriter& file) const;
-	void Read(BinaryReader& file, const int& fileVersion);
+	void Write(BinaryWriter& file) const override;
+	void Read(BinaryReader& file, const int& fileVersion) override;
 
 	short gear;
 
@@ -67,25 +60,25 @@ public:
 	// Sets the number of gears available with this drivetrain
 	void SetNumberOfGears(const short &numGears);
 
-	Drivetrain& operator=(const Drivetrain &drivetrain);
-
 	DriveWheels GetDriveWheels() const { return driveType; }
 	void SetAllWheelDrive(const double& rearBias, const double& midBias, const double& frontBias);
 	void SetFrontWheelDrive(const double& bias);
 	void SetRearWheelDrive(const double& bias);
 
 	std::vector<double> GetBiasRatios() const;
+    
+    // Required by RegisterableComponent
+    static std::unique_ptr<Drivetrain> Create() { return std::make_unique<Drivetrain>(); }
+    static std::string GetName() { return _T("Drivetrain"); }
 
 private:
-	std::vector<Differential*> differentials;
-	// Should either have one or three diffs
-	// In case of three diffs, first one is rear, second is mid, third is front
+	std::unique_ptr<Differential> rearDifferential;
+    std::unique_ptr<Differential> midDifferential;
+    std::unique_ptr<Differential> frontDifferential;
 
 	// Array of gear ratios for each gear (not including final
 	// drive - that is in the Differential object)
 	std::vector<double> gearRatios;// [-]
-
-	void DeleteDifferentials();
 
 	// Clutch stuff in here, too?
 };

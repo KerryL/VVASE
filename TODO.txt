@@ -10,4 +10,19 @@ Re-structure core to include:
     - Car with RegisterSubsystem method
     - Abstract Analyis class
     - Gui "manager" class with RegisterAnalysis
+    - Better separation of GUI and calculations
     
+Code Quality Review:
+- Use unique_ptr
+- Use for ( a : b)
+- Use STL instead of roll-your-own
+- Use explicit for single arg constructors
+- Rule of 5
+- Newline at end of file
+- Consistent headers
+- Doxygen comments
+- Use of virtual/override/final
+- NULL vs nullptr
+- enum class vs enum
+- In-header initialization
+- Order of includes (local first)

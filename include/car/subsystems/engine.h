@@ -18,17 +18,16 @@
 #ifndef ENGINE_H_
 #define ENGINE_H_
 
+// Local headers
+#include "subsystem.h"
+
 // Local forward declarations
 class BinaryReader;
 class BinaryWriter;
 
-class Engine
+class Engine : public Subsystem
 {
 public:
-	Engine();
-	Engine(const Engine &engine);
-	~Engine();
-
 	// File read/write functions
 	void Write(BinaryWriter& file) const;
 	void Read(BinaryReader& file, const int& fileVersion);
@@ -36,9 +35,10 @@ public:
 	// Get the outputs from this portion of the simulation
 	double GetEngineSpeed();// [rad/sec]
 	double TorqueOutput(const double &engineSpeed, const double &throttlePosition);// [in-lb]
-
-	// Overloaded operators
-	Engine& operator=(const Engine &engine);
+    
+    // Required by RegisterableComponent
+    static std::unique_ptr<Engine> Create() { return std::make_unique<Engine>(); }
+    static std::string GetName() { return _T("Engine"); }
 };
 
 #endif// ENGINE_H_

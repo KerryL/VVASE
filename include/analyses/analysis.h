@@ -1,8 +1,10 @@
 
+#include "utilities/componentManager.h"
+
 namespace VVASE
 {
 
-class Analysis
+class Analysis : public RegisterableComponent
 {
 public:
 	virtual wxPanel* GetEditPanel() = 0;
