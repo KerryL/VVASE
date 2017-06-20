@@ -29,3 +29,6 @@ Code Quality Review:
 - In-header initialization
 - Order of includes (local first)
 - Reduce or eliminate wx classes in core
+- Doxygen comments
+- Add exception safety info for all functions
+- Use m prefix for members

@@ -1,6 +1,6 @@
 /*===================================================================================
                                     CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
+                         Copyright Kerry R. Loux 2008-2017
 
      No requirement for distribution of wxWidgets libraries, source, or binaries.
                              (http://www.wxwidgets.org/)
@@ -8,50 +8,29 @@
 ===================================================================================*/
 
 // File:  car.cpp
-// Created:  11/3/2007
-// Author:  K. Loux
-// Description:  Contains class functionality for car class.
-// History:
-//	2/24/2008	- Changed half shaft points from Drivetrain to Suspension objects, K. Loux.
-//	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
-//	4/25/2009	- Added appearance options to write/read methods, incrementented file version
-//				  to version 1, K. Loux.
-//	5/3/2009	- Added file version argument to SubSystem->Read() calls for backwards compatability
-//				  with file versions, K. Loux.
-//	11/22/2009	- Moved to vCar.lib, K. Loux.
-//	12/12/2010	- Removed calls to lock CarMutex within the car object - this is done to prevent
-//				  race conditions resulting from the need to repeatedly lock and unlock in
-//				  an owner object to prevent a dead lock, K. Loux.
+// Date:  11/3/2007
+// Auth:  K. Loux
+// Desc:  Container class for vehicle subsystems.  Defines primary interface for
+//        getting and setting vehicle data.
 
-// wxWidgets headers
-#include <wx/wx.h>
-
-// VVASE headers
-#include "vCar/aerodynamics.h"
-#include "vCar/brakes.h"
-#include "vCar/car.h"
-#include "vCar/drivetrain.h"
-#include "vCar/engine.h"
-#include "vCar/massProperties.h"
-#include "vCar/suspension.h"
-#include "vCar/tire.h"
-#include "vCar/tireSet.h"
-#include "vUtilities/debugger.h"
+// Local headers
+#include "car.h"
 #include "vUtilities/wheelSetStructures.h"
 #include "vUtilities/binaryReader.h"
 #include "vUtilities/binaryWriter.h"
 #include "vUtilities/machineDefinitions.h"
-#include "vMath/vector.h"
 
 // Standard C++ headers
 #include <fstream>
+
+namespace VVASE
+{
 
 //==========================================================================
 // Class:			Car
 // Function:		Car
 //
-// Description:		Constructor for the Car class.  Creates a set of default
-//					parameters for the object.
+// Description:		Constructor for the Car class.
 //
 // Input Arguments:
 //		None
@@ -62,17 +41,12 @@
 // Return Value:
 //		None
 //
+// Exception Safety:
+//		
+//
 //==========================================================================
-Car::Car()
+Car::Car() : components(CreateComponents())
 {
-	suspension = new Suspension();
-	drivetrain = new Drivetrain();
-	brakes = new Brakes();
-	aerodynamics = new Aerodynamics();
-	engine = new Engine();
-	massProperties = new MassProperties();
-	tires = new TireSet();
-
 	// Test suspension
 	suspension->frontBarStyle = Suspension::SwayBarUBar;
 	suspension->rearBarStyle = Suspension::SwayBarTBar;
@@ -259,59 +233,13 @@ Car::Car()
 //		None
 //
 //==========================================================================
-Car::Car(const Car &car)
+Car::Car(const Car& car) : mComponents(CreateComponents())
 {
-	// Dynamically allocate memory for these objects
-	suspension = new Suspension();
-	drivetrain = new Drivetrain();
-	brakes = new Brakes();
-	aerodynamics = new Aerodynamics();
-	engine = new Engine();
-	massProperties = new MassProperties();
-	tires = new TireSet();
-
 	*this = car;
 }
 
-//==========================================================================
-// Class:			Car
-// Function:		~Car
-//
-// Description:		Destructor for the Car class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Car::~Car()
+Car::Car(Car&& car) : mComponents(std::move(car.mComponents))
 {
-	// Delete our dynamically allocated variables
-	delete suspension;
-	suspension = NULL;
-
-	delete drivetrain;
-	drivetrain = NULL;
-
-	delete brakes;
-	brakes = NULL;
-
-	delete aerodynamics;
-	aerodynamics = NULL;
-
-	delete engine;
-	engine = NULL;
-
-	delete massProperties;
-	massProperties = NULL;
-
-	delete tires;
-	tires = NULL;
 }
 
 //==========================================================================
@@ -330,12 +258,13 @@ Car::~Car()
 //		None
 //
 //==========================================================================
-//const int Car::currentFileVersion = 0;// OBSOLETE 4/25/2009 - Added APPEARANCE_OPTIONS
-//const int Car::currentFileVersion = 1;// OBSOLETE 8/17/2009 - Fixed ENGINE::Write()
+//const int Car::currentFileVersion = 0;// OBSOLETE 4/25/2009 - Added AppearanceOptions
+//const int Car::currentFileVersion = 1;// OBSOLETE 8/17/2009 - Fixed Engine::Write()
 //const int Car::currentFileVersion = 2;// OBSOLETE 7/13/2015 - Added Front/RearBarPivotAxis to Suspension
 //const int Car::currentFileVersion = 3;// OBSOLETE 5/27/2016 - Added unsprung mass CGs
 //const int Car::currentFileVersion = 4;// OBSOLETE 6/8/2016 - Added tire model information and differentials
-const int Car::currentFileVersion = 5;
+//const int Car::currentFileVersion = 5;// OBSOLETE 6/19/2017 - Changed to variable-component car model
+const int Car::currentFileVersion = 6;
 
 //==========================================================================
 // Class:			Car
@@ -588,20 +517,37 @@ bool Car::HasRearHalfShafts() const
 //		Car& reference to this
 //
 //==========================================================================
-Car& Car::operator=(const Car &car)
+Car& Car::operator=(const Car& car)
 {
 	// Check for self-assignment
 	if (this == &car)
 		return *this;
 
-	// Do the copy
-	*suspension		= *car.suspension;
-	*drivetrain		= *car.drivetrain;
-	*brakes			= *car.brakes;
-	*aerodynamics	= *car.aerodynamics;
-	*engine			= *car.engine;
-	*massProperties	= *car.massProperties;
-	*tires			= *car.tires;
-
+	assert(mComponents.size() == car.mComponents.size());
+	std::copy(car.mComponents.begin(), car.mComponents.end(), mComponents.begin());
 	return *this;
 }
+
+Car& Car::operator=(Car&& car)
+{
+	// Check for self-assignment
+	if (this == &car)
+		return *this;
+
+	mComponents.clear();
+	mComponents = std::move(car.mComponents);
+	return *this;
+}
+
+std::vector<std::unique_ptr<Subsystem>> Car::CreateComponents()
+{
+	std::vector<std::unique_ptr<Subsystem>> components(mComponentManager.GetInfo().size());
+	unsigned int i;
+	for (i = 0; i < components.size(); ++i)
+		components[i] = mComponentManager.GetInfo()[i].Create();
+
+	return components;
+}
+
+}// namespace VVASE
+
