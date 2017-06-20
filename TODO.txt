@@ -11,6 +11,8 @@ Re-structure core to include:
     - Abstract Analyis class
     - Gui "manager" class with RegisterAnalysis
     - Better separation of GUI and calculations
+- User-definable unit conversions?  How slow would it get?
+- Single makefile and makefile.inc that can build multiple targets (core, gui, application?)
     
 Code Quality Review:
 - Use unique_ptr
@@ -26,3 +28,4 @@ Code Quality Review:
 - enum class vs enum
 - In-header initialization
 - Order of includes (local first)
+- Reduce or eliminate wx classes in core
