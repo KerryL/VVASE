@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{D3B21E89-DD3A-4071-A3D9-20A11D3DE193}</ProjectGuid>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;__WXMSW__;__WXDEBUG__;WXUSINGDLL;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(LIBPLOT2D)/include;$(EIGEN);$(FREETYPE)\include\freetype2;$(WXWIN)\lib\vc_dll\mswud;$(WXWIN)\include;$(GLEW)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4458;4456</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <AdditionalLibraryDirectories>$(LIBPLOT2D)/lib;$(WXWIN)\lib\vc_dll;$(GLEW)\lib\Debug\Win32;$(FREETYPE)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>vvaseCore.lib;vvaseGUI.lib;wxbase31ud.lib;wxmsw31ud_aui.lib;wxmsw31ud_adv.lib;wxbase31ud_xml.lib;wxmsw31ud_core.lib;wxmsw31ud_gl.lib;wxzlibd.lib;wxpngd.lib;wxtiffd.lib;wxjpegd.lib;opengl32.lib;glew32sd.lib;freetyped.lib;libplot2d_d.lib;comctl32.lib;rpcrt4.lib;winmm.lib;advapi32.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(WXWIN)\include;.\res;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <PreBuildEvent>
+      <Command>getGitHash</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Updating git hash and version info</Message>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>$(LIBPLOT2D)/include;$(EIGEN);$(FREETYPE)\include\freetype2;$(WXWIN)\lib\vc_lib\mswu;$(WXWIN)\include;$(GLEW)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4458;4456</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(GLEW)\lib\Release\Win32;$(WXWIN)\lib\vc_lib;$(FREETYPE)\lib;$(LIBPLOT2D)/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>vvaseCore.lib;vvaseGUI.lib;wxbase31u.lib;wxmsw31u_aui.lib;wxmsw31u_adv.lib;wxbase31u_xml.lib;wxmsw31u_core.lib;wxmsw31u_gl.lib;wxzlib.lib;wxpng.lib;wxtiff.lib;wxjpeg.lib;libPlot2d.lib;opengl32.lib;glew32s.lib;freetype.lib;comctl32.lib;rpcrt4.lib;winmm.lib;advapi32.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+    </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(WXWIN)\include;.\res;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <PreBuildEvent>
+      <Command>getGitHash</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Updating git hash and version info</Message>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ResourceCompile Include="CarDesigner\res\CarDesigner.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CarDesigner\include\application\vvaseApplication.h" />
+    <ClInclude Include="CarDesigner\include\application\vvaseConstants.h" />
+    <ClInclude Include="CarDesigner\include\environment\atmosphere.h" />
+    <ClInclude Include="CarDesigner\include\environment\track.h" />
+    <ClInclude Include="CarDesigner\include\gui\appearanceOptions.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\editPanel\editPanel.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editAerodynamicsPanel.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editBrakesPanel.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editCornerPanel.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editDifferentialPanel.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editDrivetrainPanel.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editEnginePanel.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editMassPanel.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editSuspensionNotebook.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editSuspensionPanel.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editSuspensionRatesPanel.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editTiresPanel.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\editPanel\iteration\editIterationNotebook.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\editPanel\iteration\editIterationOptionsPanel.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\editPanel\iteration\editIterationPlotsPanel.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\editPanel\iteration\editIterationRangePanel.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\mainFrame.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\mainNotebook.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\mainTree.h" />
+    <ClInclude Include="CarDesigner\include\gui\components\outputPanel.h" />
+    <ClInclude Include="CarDesigner\include\gui\dialogs\appearanceOptionsDialog.h" />
+    <ClInclude Include="CarDesigner\include\gui\dialogs\gaGeneDialog.h" />
+    <ClInclude Include="CarDesigner\include\gui\dialogs\gaGoalDialog.h" />
+    <ClInclude Include="CarDesigner\include\gui\dialogs\optionsDialog.h" />
+    <ClInclude Include="CarDesigner\include\gui\dialogs\rangeLimitsDialog.h" />
+    <ClInclude Include="CarDesigner\include\gui\dialogs\textInputDialog.h" />
+    <ClInclude Include="CarDesigner\include\gui\dialogs\vectorEditDialog.h" />
+    <ClInclude Include="CarDesigner\include\gui\dropTarget.h" />
+    <ClInclude Include="CarDesigner\include\gui\gaObject.h" />
+    <ClInclude Include="CarDesigner\include\gui\geneticAlgorithmPanel.h" />
+    <ClInclude Include="CarDesigner\include\gui\geneticOptimization.h" />
+    <ClInclude Include="CarDesigner\include\gui\superGrid.h" />
+    <ClInclude Include="CarDesigner\include\gui\guiCar.h" />
+    <ClInclude Include="CarDesigner\include\gui\guiObject.h" />
+    <ClInclude Include="CarDesigner\include\gui\ipcClient.h" />
+    <ClInclude Include="CarDesigner\include\gui\ipcConnection.h" />
+    <ClInclude Include="CarDesigner\include\gui\ipcServer.h" />
+    <ClInclude Include="CarDesigner\include\gui\iteration.h" />
+    <ClInclude Include="CarDesigner\include\gui\plotObject.h" />
+    <ClInclude Include="CarDesigner\include\gui\plotPanel.h" />
+    <ClInclude Include="CarDesigner\include\gui\renderer\carRenderer.h" />
+    <ClInclude Include="CarDesigner\include\gui\renderer\plotRenderer.h" />
+    <ClInclude Include="CarDesigner\include\gui\undoRedoStack.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CarDesigner\src\application\vvaseApplication.cpp" />
+    <ClCompile Include="CarDesigner\src\application\vvaseConstants.cpp" />
+    <ClCompile Include="CarDesigner\src\environment\atmosphere.cpp" />
+    <ClCompile Include="CarDesigner\src\environment\track.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\appearanceOptions.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\editPanel\editPanel.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editAerodynamicsPanel.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editBrakesPanel.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editCornerPanel.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editDifferentialPanel.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editDrivetrainPanel.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editEnginePanel.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editMassPanel.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editSuspensionNotebook.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editSuspensionPanel.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editSuspensionRatesPanel.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editTiresPanel.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\editPanel\iteration\editIterationNotebook.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\editPanel\iteration\editIterationOptionsPanel.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\editPanel\iteration\editIterationPlotsPanel.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\editPanel\iteration\editIterationRangePanel.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\mainFrame.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\mainNotebook.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\mainTree.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\components\outputPanel.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\dialogs\appearanceOptionsDialog.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\dialogs\gaGeneDialog.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\dialogs\gaGoalDialog.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\dialogs\optionsDialog.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\dialogs\rangeLimitsDialog.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\dialogs\textInputDialog.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\dialogs\vectorEditDialog.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\dropTarget.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\gaObject.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\geneticAlgorithmPanel.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\geneticOptimization.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\superGrid.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\guiCar.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\guiObject.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\ipcClient.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\ipcConnection.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\ipcServer.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\iteration.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\plotObject.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\plotPanel.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\renderer\carRenderer.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\renderer\plotRenderer.cpp" />
+    <ClCompile Include="CarDesigner\src\gui\undoRedoStack.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
