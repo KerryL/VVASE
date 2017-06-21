@@ -1,3 +1,288 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{371dae91-01db-445e-a0c3-794c11b9fb59}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{a3801c2a-7895-4155-b0b6-2dfa2b5245f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\analyses">
+      <UniqueIdentifier>{55812b33-23fd-4f70-b7a2-466b173c887b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\car">
+      <UniqueIdentifier>{19dcf09c-94c2-4c5d-8391-08803af7c673}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\threads">
+      <UniqueIdentifier>{1b9b2fc6-f8b9-4316-aa76-c23a6ca761e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\utilities">
+      <UniqueIdentifier>{21712059-50da-441a-90c8-4be84941284f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\analyses">
+      <UniqueIdentifier>{5dc442fb-ac03-424e-accd-a26114825705}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\car">
+      <UniqueIdentifier>{6bcead55-2b4a-4a05-8675-3b9dbd370fde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\threads">
+      <UniqueIdentifier>{8ad8c7aa-20c3-4f4d-b9d2-6174a7bc3367}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\optimizations">
+      <UniqueIdentifier>{8c682b31-407a-4f4a-aa13-7a9b4b047903}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\car\subsystems">
+      <UniqueIdentifier>{9ccdda36-3876-426b-a9a0-2d1129a6b31c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\utilities">
+      <UniqueIdentifier>{2f75ee28-0f75-4b5c-992c-e296e812d7f7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\VVASE\core\analyses\analysis.h">
+      <Filter>Header Files\analyses</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\analyses\kinematicOutputs.h">
+      <Filter>Header Files\analyses</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\analyses\kinematics.h">
+      <Filter>Header Files\analyses</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\analyses\millikenAnalysis.h">
+      <Filter>Header Files\analyses</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\analyses\quasiStatic.h">
+      <Filter>Header Files\analyses</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\analyses\quasiStaticOutputs.h">
+      <Filter>Header Files\analyses</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\car\car.h">
+      <Filter>Header Files\car</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\threads\inverseSemaphore.h">
+      <Filter>Header Files\threads</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\threads\jobQueue.h">
+      <Filter>Header Files\threads</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\threads\kinematicsData.h">
+      <Filter>Header Files\threads</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\threads\optimizationData.h">
+      <Filter>Header Files\threads</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\threads\threadData.h">
+      <Filter>Header Files\threads</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\threads\threadEvent.h">
+      <Filter>Header Files\threads</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\threads\threadJob.h">
+      <Filter>Header Files\threads</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\threads\workerThread.h">
+      <Filter>Header Files\threads</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\utilities\binaryReader.h">
+      <Filter>Header Files\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\utilities\binaryWriter.h">
+      <Filter>Header Files\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\utilities\carMath.h">
+      <Filter>Header Files\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\utilities\componentManager.h">
+      <Filter>Header Files\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\utilities\dataValidator.h">
+      <Filter>Header Files\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\utilities\debugger.h">
+      <Filter>Header Files\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\utilities\debugLog.h">
+      <Filter>Header Files\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\utilities\geometryMath.h">
+      <Filter>Header Files\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\utilities\unitConverter.h">
+      <Filter>Header Files\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\utilities\wheelSetStructures.h">
+      <Filter>Header Files\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\utilities\wxRelatedUtilities.h">
+      <Filter>Header Files\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\utilities\xlsxReader.h">
+      <Filter>Header Files\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\analyses\analysisManager.h">
+      <Filter>Source Files\analyses</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\car\subsystems\aerodynamics.h">
+      <Filter>Source Files\car\subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\car\subsystems\brakes.h">
+      <Filter>Source Files\car\subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\car\subsystems\corner.h">
+      <Filter>Source Files\car\subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\car\subsystems\damper.h">
+      <Filter>Source Files\car\subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\car\subsystems\differential.h">
+      <Filter>Source Files\car\subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\car\subsystems\driver.h">
+      <Filter>Source Files\car\subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\car\subsystems\drivetrain.h">
+      <Filter>Source Files\car\subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\car\subsystems\engine.h">
+      <Filter>Source Files\car\subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\car\subsystems\fuelCell.h">
+      <Filter>Source Files\car\subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\car\subsystems\massProperties.h">
+      <Filter>Source Files\car\subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\car\subsystems\spring.h">
+      <Filter>Source Files\car\subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\car\subsystems\suspension.h">
+      <Filter>Source Files\car\subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\car\subsystems\tire.h">
+      <Filter>Source Files\car\subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\car\subsystems\tireSet.h">
+      <Filter>Source Files\car\subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\optimizations\geneticAlgorithm.h">
+      <Filter>Source Files\optimizations</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\core\analyses\kinematicOutputs.cpp">
+      <Filter>Source Files\analyses</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\analyses\kinematics.cpp">
+      <Filter>Source Files\analyses</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\analyses\millikenAnalysis.cpp">
+      <Filter>Source Files\analyses</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\analyses\quasiStatic.cpp">
+      <Filter>Source Files\analyses</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\car\car.cpp">
+      <Filter>Source Files\car</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\car\subsystems\aerodynamics.cpp">
+      <Filter>Source Files\car\subsystems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\car\subsystems\brakes.cpp">
+      <Filter>Source Files\car\subsystems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\car\subsystems\corner.cpp">
+      <Filter>Source Files\car\subsystems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\car\subsystems\damper.cpp">
+      <Filter>Source Files\car\subsystems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\car\subsystems\differential.cpp">
+      <Filter>Source Files\car\subsystems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\car\subsystems\driver.cpp">
+      <Filter>Source Files\car\subsystems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\car\subsystems\drivetrain.cpp">
+      <Filter>Source Files\car\subsystems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\car\subsystems\engine.cpp">
+      <Filter>Source Files\car\subsystems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\car\subsystems\fuelCell.cpp">
+      <Filter>Source Files\car\subsystems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\car\subsystems\massProperties.cpp">
+      <Filter>Source Files\car\subsystems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\car\subsystems\spring.cpp">
+      <Filter>Source Files\car\subsystems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\car\subsystems\suspension.cpp">
+      <Filter>Source Files\car\subsystems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\car\subsystems\tire.cpp">
+      <Filter>Source Files\car\subsystems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\car\subsystems\tireSet.cpp">
+      <Filter>Source Files\car\subsystems</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\optimizations\geneticAlgorithm.cpp">
+      <Filter>Source Files\optimizations</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\threads\inverseSemaphore.cpp">
+      <Filter>Source Files\threads</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\threads\jobQueue.cpp">
+      <Filter>Source Files\threads</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\threads\kinematicsData.cpp">
+      <Filter>Source Files\threads</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\threads\optimizationData.cpp">
+      <Filter>Source Files\threads</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\threads\threadData.cpp">
+      <Filter>Source Files\threads</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\threads\threadEvent.cpp">
+      <Filter>Source Files\threads</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\threads\threadJob.cpp">
+      <Filter>Source Files\threads</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\threads\workerThread.cpp">
+      <Filter>Source Files\threads</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\utilities\binaryReader.cpp">
+      <Filter>Source Files\utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\utilities\binaryWriter.cpp">
+      <Filter>Source Files\utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\utilities\carMath.cpp">
+      <Filter>Source Files\utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\utilities\dataValidator.cpp">
+      <Filter>Source Files\utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\utilities\debugger.cpp">
+      <Filter>Source Files\utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\utilities\debugLog.cpp">
+      <Filter>Source Files\utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\utilities\geometryMath.cpp">
+      <Filter>Source Files\utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\utilities\unitConverter.cpp">
+      <Filter>Source Files\utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\utilities\wxRelatedUtilities.cpp">
+      <Filter>Source Files\utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\utilities\xlsxReader.cpp">
+      <Filter>Source Files\utilities</Filter>
+    </ClCompile>
+  </ItemGroup>
 </Project>

@@ -10,6 +10,91 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\VVASE\core\analyses\analysis.h" />
+    <ClInclude Include="include\VVASE\core\analyses\kinematicOutputs.h" />
+    <ClInclude Include="include\VVASE\core\analyses\kinematics.h" />
+    <ClInclude Include="include\VVASE\core\analyses\millikenAnalysis.h" />
+    <ClInclude Include="include\VVASE\core\analyses\quasiStatic.h" />
+    <ClInclude Include="include\VVASE\core\analyses\quasiStaticOutputs.h" />
+    <ClInclude Include="include\VVASE\core\car\car.h" />
+    <ClInclude Include="include\VVASE\core\threads\inverseSemaphore.h" />
+    <ClInclude Include="include\VVASE\core\threads\jobQueue.h" />
+    <ClInclude Include="include\VVASE\core\threads\kinematicsData.h" />
+    <ClInclude Include="include\VVASE\core\threads\optimizationData.h" />
+    <ClInclude Include="include\VVASE\core\threads\threadData.h" />
+    <ClInclude Include="include\VVASE\core\threads\threadEvent.h" />
+    <ClInclude Include="include\VVASE\core\threads\threadJob.h" />
+    <ClInclude Include="include\VVASE\core\threads\workerThread.h" />
+    <ClInclude Include="include\VVASE\core\utilities\binaryReader.h" />
+    <ClInclude Include="include\VVASE\core\utilities\binaryWriter.h" />
+    <ClInclude Include="include\VVASE\core\utilities\carMath.h" />
+    <ClInclude Include="include\VVASE\core\utilities\componentManager.h" />
+    <ClInclude Include="include\VVASE\core\utilities\dataValidator.h" />
+    <ClInclude Include="include\VVASE\core\utilities\debugger.h" />
+    <ClInclude Include="include\VVASE\core\utilities\debugLog.h" />
+    <ClInclude Include="include\VVASE\core\utilities\geometryMath.h" />
+    <ClInclude Include="include\VVASE\core\utilities\unitConverter.h" />
+    <ClInclude Include="include\VVASE\core\utilities\wheelSetStructures.h" />
+    <ClInclude Include="include\VVASE\core\utilities\wxRelatedUtilities.h" />
+    <ClInclude Include="include\VVASE\core\utilities\xlsxReader.h" />
+    <ClInclude Include="src\core\analyses\analysisManager.h" />
+    <ClInclude Include="src\core\car\subsystems\aerodynamics.h" />
+    <ClInclude Include="src\core\car\subsystems\brakes.h" />
+    <ClInclude Include="src\core\car\subsystems\corner.h" />
+    <ClInclude Include="src\core\car\subsystems\damper.h" />
+    <ClInclude Include="src\core\car\subsystems\differential.h" />
+    <ClInclude Include="src\core\car\subsystems\driver.h" />
+    <ClInclude Include="src\core\car\subsystems\drivetrain.h" />
+    <ClInclude Include="src\core\car\subsystems\engine.h" />
+    <ClInclude Include="src\core\car\subsystems\fuelCell.h" />
+    <ClInclude Include="src\core\car\subsystems\massProperties.h" />
+    <ClInclude Include="src\core\car\subsystems\spring.h" />
+    <ClInclude Include="src\core\car\subsystems\suspension.h" />
+    <ClInclude Include="src\core\car\subsystems\tire.h" />
+    <ClInclude Include="src\core\car\subsystems\tireSet.h" />
+    <ClInclude Include="src\core\optimizations\geneticAlgorithm.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\core\analyses\kinematicOutputs.cpp" />
+    <ClCompile Include="src\core\analyses\kinematics.cpp" />
+    <ClCompile Include="src\core\analyses\millikenAnalysis.cpp" />
+    <ClCompile Include="src\core\analyses\quasiStatic.cpp" />
+    <ClCompile Include="src\core\car\car.cpp" />
+    <ClCompile Include="src\core\car\subsystems\aerodynamics.cpp" />
+    <ClCompile Include="src\core\car\subsystems\brakes.cpp" />
+    <ClCompile Include="src\core\car\subsystems\corner.cpp" />
+    <ClCompile Include="src\core\car\subsystems\damper.cpp" />
+    <ClCompile Include="src\core\car\subsystems\differential.cpp" />
+    <ClCompile Include="src\core\car\subsystems\driver.cpp" />
+    <ClCompile Include="src\core\car\subsystems\drivetrain.cpp" />
+    <ClCompile Include="src\core\car\subsystems\engine.cpp" />
+    <ClCompile Include="src\core\car\subsystems\fuelCell.cpp" />
+    <ClCompile Include="src\core\car\subsystems\massProperties.cpp" />
+    <ClCompile Include="src\core\car\subsystems\spring.cpp" />
+    <ClCompile Include="src\core\car\subsystems\suspension.cpp" />
+    <ClCompile Include="src\core\car\subsystems\tire.cpp" />
+    <ClCompile Include="src\core\car\subsystems\tireSet.cpp" />
+    <ClCompile Include="src\core\optimizations\geneticAlgorithm.cpp" />
+    <ClCompile Include="src\core\threads\inverseSemaphore.cpp" />
+    <ClCompile Include="src\core\threads\jobQueue.cpp" />
+    <ClCompile Include="src\core\threads\kinematicsData.cpp" />
+    <ClCompile Include="src\core\threads\optimizationData.cpp" />
+    <ClCompile Include="src\core\threads\threadData.cpp" />
+    <ClCompile Include="src\core\threads\threadEvent.cpp" />
+    <ClCompile Include="src\core\threads\threadJob.cpp" />
+    <ClCompile Include="src\core\threads\workerThread.cpp" />
+    <ClCompile Include="src\core\utilities\binaryReader.cpp" />
+    <ClCompile Include="src\core\utilities\binaryWriter.cpp" />
+    <ClCompile Include="src\core\utilities\carMath.cpp" />
+    <ClCompile Include="src\core\utilities\dataValidator.cpp" />
+    <ClCompile Include="src\core\utilities\debugger.cpp" />
+    <ClCompile Include="src\core\utilities\debugLog.cpp" />
+    <ClCompile Include="src\core\utilities\geometryMath.cpp" />
+    <ClCompile Include="src\core\utilities\unitConverter.cpp" />
+    <ClCompile Include="src\core\utilities\wxRelatedUtilities.cpp" />
+    <ClCompile Include="src\core\utilities\xlsxReader.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{EE1A01F9-26AF-4C43-A507-195A1E5FB45A}</ProjectGuid>
@@ -100,109 +185,6 @@
       <Message>Updating git hash and version info</Message>
     </PreBuildEvent>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ResourceCompile Include="CarDesigner\res\CarDesigner.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="CarDesigner\include\application\vvaseApplication.h" />
-    <ClInclude Include="CarDesigner\include\application\vvaseConstants.h" />
-    <ClInclude Include="CarDesigner\include\environment\atmosphere.h" />
-    <ClInclude Include="CarDesigner\include\environment\track.h" />
-    <ClInclude Include="CarDesigner\include\gui\appearanceOptions.h" />
-    <ClInclude Include="CarDesigner\include\gui\components\editPanel\editPanel.h" />
-    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editAerodynamicsPanel.h" />
-    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editBrakesPanel.h" />
-    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editCornerPanel.h" />
-    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editDifferentialPanel.h" />
-    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editDrivetrainPanel.h" />
-    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editEnginePanel.h" />
-    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editMassPanel.h" />
-    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editSuspensionNotebook.h" />
-    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editSuspensionPanel.h" />
-    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editSuspensionRatesPanel.h" />
-    <ClInclude Include="CarDesigner\include\gui\components\editPanel\guiCar\editTiresPanel.h" />
-    <ClInclude Include="CarDesigner\include\gui\components\editPanel\iteration\editIterationNotebook.h" />
-    <ClInclude Include="CarDesigner\include\gui\components\editPanel\iteration\editIterationOptionsPanel.h" />
-    <ClInclude Include="CarDesigner\include\gui\components\editPanel\iteration\editIterationPlotsPanel.h" />
-    <ClInclude Include="CarDesigner\include\gui\components\editPanel\iteration\editIterationRangePanel.h" />
-    <ClInclude Include="CarDesigner\include\gui\components\mainFrame.h" />
-    <ClInclude Include="CarDesigner\include\gui\components\mainNotebook.h" />
-    <ClInclude Include="CarDesigner\include\gui\components\mainTree.h" />
-    <ClInclude Include="CarDesigner\include\gui\components\outputPanel.h" />
-    <ClInclude Include="CarDesigner\include\gui\dialogs\appearanceOptionsDialog.h" />
-    <ClInclude Include="CarDesigner\include\gui\dialogs\gaGeneDialog.h" />
-    <ClInclude Include="CarDesigner\include\gui\dialogs\gaGoalDialog.h" />
-    <ClInclude Include="CarDesigner\include\gui\dialogs\optionsDialog.h" />
-    <ClInclude Include="CarDesigner\include\gui\dialogs\rangeLimitsDialog.h" />
-    <ClInclude Include="CarDesigner\include\gui\dialogs\textInputDialog.h" />
-    <ClInclude Include="CarDesigner\include\gui\dialogs\vectorEditDialog.h" />
-    <ClInclude Include="CarDesigner\include\gui\dropTarget.h" />
-    <ClInclude Include="CarDesigner\include\gui\gaObject.h" />
-    <ClInclude Include="CarDesigner\include\gui\geneticAlgorithmPanel.h" />
-    <ClInclude Include="CarDesigner\include\gui\geneticOptimization.h" />
-    <ClInclude Include="CarDesigner\include\gui\superGrid.h" />
-    <ClInclude Include="CarDesigner\include\gui\guiCar.h" />
-    <ClInclude Include="CarDesigner\include\gui\guiObject.h" />
-    <ClInclude Include="CarDesigner\include\gui\ipcClient.h" />
-    <ClInclude Include="CarDesigner\include\gui\ipcConnection.h" />
-    <ClInclude Include="CarDesigner\include\gui\ipcServer.h" />
-    <ClInclude Include="CarDesigner\include\gui\iteration.h" />
-    <ClInclude Include="CarDesigner\include\gui\plotObject.h" />
-    <ClInclude Include="CarDesigner\include\gui\plotPanel.h" />
-    <ClInclude Include="CarDesigner\include\gui\renderer\carRenderer.h" />
-    <ClInclude Include="CarDesigner\include\gui\renderer\plotRenderer.h" />
-    <ClInclude Include="CarDesigner\include\gui\undoRedoStack.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="CarDesigner\src\application\vvaseApplication.cpp" />
-    <ClCompile Include="CarDesigner\src\application\vvaseConstants.cpp" />
-    <ClCompile Include="CarDesigner\src\environment\atmosphere.cpp" />
-    <ClCompile Include="CarDesigner\src\environment\track.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\appearanceOptions.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\components\editPanel\editPanel.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editAerodynamicsPanel.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editBrakesPanel.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editCornerPanel.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editDifferentialPanel.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editDrivetrainPanel.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editEnginePanel.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editMassPanel.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editSuspensionNotebook.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editSuspensionPanel.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editSuspensionRatesPanel.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\components\editPanel\guiCar\editTiresPanel.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\components\editPanel\iteration\editIterationNotebook.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\components\editPanel\iteration\editIterationOptionsPanel.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\components\editPanel\iteration\editIterationPlotsPanel.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\components\editPanel\iteration\editIterationRangePanel.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\components\mainFrame.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\components\mainNotebook.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\components\mainTree.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\components\outputPanel.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\dialogs\appearanceOptionsDialog.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\dialogs\gaGeneDialog.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\dialogs\gaGoalDialog.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\dialogs\optionsDialog.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\dialogs\rangeLimitsDialog.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\dialogs\textInputDialog.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\dialogs\vectorEditDialog.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\dropTarget.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\gaObject.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\geneticAlgorithmPanel.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\geneticOptimization.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\superGrid.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\guiCar.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\guiObject.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\ipcClient.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\ipcConnection.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\ipcServer.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\iteration.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\plotObject.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\plotPanel.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\renderer\carRenderer.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\renderer\plotRenderer.cpp" />
-    <ClCompile Include="CarDesigner\src\gui\undoRedoStack.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
