@@ -4,8 +4,8 @@
 /bin/
 
 # Linux binaries
-VVASE
-vvase.rc
+vvaseGUI
+vvaseGUI.rc
 
 # Other VVASE-specific logs
 VVASEdebug.log
