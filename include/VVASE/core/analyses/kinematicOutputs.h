@@ -1,37 +1,33 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
+                                       VVASE
+                         Copyright Kerry R. Loux 2008-2017
 ===================================================================================*/
 
 // File:  kinematicOutputs.h
-// Created:  3/23/2008
-// Author:  K. Loux
-// Description:  Contains class declaration for KinematicOutputs class.  This class does the
-//				 calculations for all of the kinematic simulation outputs.  That includes any
-//				 kind of wheel angle/orientation, chassis attitude, spring/damper positions, but
-//				 doesn't include any thing that requires forces to calculate (force-based roll
-//				 center, etc.).
-// History:
-//	3/24/2008	- Created CornerOutputs structure, K. Loux.
-//	2/23/2009	- Changed to enum/array style for outputs instead of individually declared variables
-//				  for each output, K. Loux.
-//	3/11/2009	- Finished implementation of enum/array style data members, K. Loux.
+// Date:  3/23/2008
+// Auth:  K. Loux
+// Desc:  Contains class declaration for KinematicOutputs class.  This class does the
+//        calculations for all of the kinematic simulation outputs.  That includes any
+//        kind of wheel angle/orientation, chassis attitude, spring/damper positions, but
+//        doesn't include any thing that requires forces to calculate (force-based roll
+//        center, etc.).
 
 #ifndef KINEMATIC_OUTPUTS_H_
 #define KINEMATIC_OUTPUTS_H_
 
+// VVASE headers
+#include "VVASE/core/utilities/unitConverter.h"
+#include "vCar/corner.h"// TODO:  Need to move this to include/VVASE or users won't be able to include for making plugins
+#include "vCar/suspension.h"
+
+// Eigen headers
+#include <Eigen/Eigen>
+
 // wxWidgets headers
 #include <wx/thread.h>
 
-// VVASE headers
-#include "vMath/vector.h"
-#include "vUtilities/unitConverter.h"
-#include "vCar/corner.h"
-#include "vCar/suspension.h"
+namespace VVASE
+{
 
 // VVASE forward declarations
 class Car;
@@ -251,5 +247,7 @@ private:
 	void ComputeAxlePlunge(const Corner &originalCorner,
 		const Corner &currentCorner, double *cornerDoubles);
 };
+
+}// namespace VVASE
 
 #endif// KINEMATIC_OUTPUTS_H_

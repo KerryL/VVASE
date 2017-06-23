@@ -1,4 +1,13 @@
+/*===================================================================================
+                                       VVASE
+                         Copyright Kerry R. Loux 2008-2017
+===================================================================================*/
 
+// File:  componentManager.h
+// Date:  6/20/2017
+// Auth:  K. Loux
+// Desc:  Module for manager-component pattern, where factories can be
+//        registered with the manager to create components as required.
 
 #ifndef COMPONENT_MANAGER_H_
 
