@@ -1,4 +1,17 @@
+/*===================================================================================
+                                       VVASE
+                         Copyright Kerry R. Loux 2008-2017
+===================================================================================*/
 
+// File:  subsystem.h
+// Date:  6/20/2017
+// Auth:  K. Loux
+// Desc:  Abstract base class for car components.
+
+#ifndef SUBSYSTEM_H_
+#define SUBSYSTEM_H_
+
+// Local headers
 #include "utilities/componentManager.h"
 
 namespace VVASE
@@ -16,3 +29,6 @@ public:
 };
 
 }// namespace VVASE
+
+#endif// SUBSYSTEM_H_
+

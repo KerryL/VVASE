@@ -1,19 +1,14 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
+                                       VVASE
+                         Copyright Kerry R. Loux 2008-2017
 ===================================================================================*/
 
 // File:  threadEvent.h
-// Created:  11/3/2009
-// Author:  K. Loux
-// Description:  Eventually might house an actual event class - for now just an event
-//				 declaration.  This event is used for communication from the worker threads
-//				 to the GUI thread.
-// History:
+// Date:  11/3/2009
+// Auth:  K. Loux
+// Desc:  Eventually might house an actual event class - for now just an event
+//        declaration.  This event is used for communication from the worker threads
+//        to the GUI thread.
 
 #ifndef THREAD_EVENT_H_
 #define THREAD_EVENT_H_
@@ -25,3 +20,4 @@
 DECLARE_LOCAL_EVENT_TYPE(EVT_THREAD, -1)
 
 #endif// THREAD_EVENT_H_
+

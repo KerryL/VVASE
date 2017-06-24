@@ -1,21 +1,17 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
+                                       VVASE
+                         Copyright Kerry R. Loux 2007-2017
 ===================================================================================*/
 
 // File:  unitConverter.h
-// Created:  3/9/2008
-// Author:  K. Loux
-// Description:  Class declaration for a conversion from our "standard" units into the
-//				 user-specified units.  Also contains some inline functions for other
-//				 conversions.  The "standard" units are the units in which all of the
-//				 calculations are performed.  The "default" units are the units for
-//				 input and output.  This class is for converting from the units used
-//				 for calculation to/from the units the user has selected.
+// Date:  3/9/2008
+// Auth:  K. Loux
+// Desc:  Class declaration for a conversion from our "standard" units into the
+//        user-specified units.  Also contains some inline functions for other
+//        conversions.  The "standard" units are the units in which all of the
+//        calculations are performed.  The "default" units are the units for
+//        input and output.  This class is for converting from the units used
+//        for calculation to/from the units the user has selected.
 
 // Our "standard" units will be defined below.  All calculations will be done with
 // these units, and this converter will be called to convert to/from anything else.
@@ -42,7 +38,10 @@
 #ifndef UNIT_CONVERTER_H_
 #define UNIT_CONVERTER_H_
 
-// VVASE forward declarations
+namespace VVASE
+{
+
+// Local forward declarations
 class Vector;
 class wxString;
 
@@ -131,7 +130,8 @@ public:
 	static inline double RANKINE_TO_KELVIN(const double& x) {return x / 1.8; }
 	static inline double KELVIN_TO_RANKINE(const double& x) { return x * 1.8; }
 
-	enum UnitsOfAngle
+	// TODO:  Make these registerable?  Would greatly simplify implementation file
+	enum class UnitsOfAngle
 	{
 		AngleRadians,
 		AngleDegrees,
@@ -139,7 +139,7 @@ public:
 		AngleUnitCount
 	};
 
-	enum UnitsOfDistance
+	enum class UnitsOfDistance
 	{
 		DistanceInch,
 		DistanceFoot,
@@ -152,7 +152,7 @@ public:
 		DistanceUnitCount
 	};
 
-	enum UnitsOfArea
+	enum class UnitsOfArea
 	{
 		AreaInchesSquared,
 		AreaFeetSquared,
@@ -163,7 +163,7 @@ public:
 		AreaUnitCount
 	};
 
-	enum UnitsOfForce
+	enum class UnitsOfForce
 	{
 		ForcePound,
 		ForceKip,
@@ -173,7 +173,7 @@ public:
 		ForceUnitCount
 	};
 
-	enum UnitsOfPressure
+	enum class UnitsOfPressure
 	{
 		PressurePoundPerSquareInch,
 		PressurePoundPerSquareFoot,
@@ -186,7 +186,7 @@ public:
 		PressureUnitCount
 	};
 
-	enum UnitsOfMoment
+	enum class UnitsOfMoment
 	{
 		MomentInchPound,
 		MomentFootPound,
@@ -196,7 +196,7 @@ public:
 		MomentUnitCount
 	};
 
-	enum UnitsOfMass
+	enum class UnitsOfMass
 	{
 		MassSlug,
 		MassPoundMass,
@@ -205,7 +205,7 @@ public:
 		MassUnitCount
 	};
 
-	enum UnitsOfVelocity
+	enum class UnitsOfVelocity
 	{
 		VelocityInchesPerSecond,
 		VelocityFeetPerSecond,
@@ -218,7 +218,7 @@ public:
 		VelocityUnitCount
 	};
 
-	enum UnitsOfAcceleration
+	enum class UnitsOfAcceleration
 	{
 		AccelerationInchesPerSecondSquared,
 		AccelerationFeetPerSecondSquared,
@@ -230,7 +230,7 @@ public:
 		AccelerationUnitCount
 	};
 
-	enum UnitsOfInertia
+	enum class UnitsOfInertia
 	{
 		InertiaSlugInchesSquared,
 		InertiaSlugFeetSquared,
@@ -242,7 +242,7 @@ public:
 		InertiaUnitCount
 	};
 
-	enum UnitsOfDensity
+	enum class UnitsOfDensity
 	{
 		DensitySlugPerInchCubed,
 		DensityPoundMassPerInchCubed,
@@ -254,7 +254,7 @@ public:
 		DensityUnitCount
 	};
 
-	enum UnitsOfPower
+	enum class UnitsOfPower
 	{
 		PowerInchPoundPerSecond,
 		PowerFootPoundPerSecond,
@@ -265,7 +265,7 @@ public:
 		PowerUnitCount
 	};
 	
-	enum UnitsOfEnergy
+	enum class UnitsOfEnergy
 	{
 		EnergyPoundInch,
 		EnergyPoundFoot,
@@ -277,7 +277,7 @@ public:
 		EnergyUnitCount
 	};
 
-	enum UnitsOfTemperature
+	enum class UnitsOfTemperature
 	{
 		TemperatureRankine,
 		TemperatureFahrenheit,
@@ -287,7 +287,7 @@ public:
 		TemperatureUnitCount
 	};
 
-	enum UnitType
+	enum class UnitType
 	{
 		UnitTypeUnknown,
 		UnitTypeUnitless,
@@ -482,4 +482,7 @@ private:
 	bool useScientificNotation;
 };
 
+}// namespace VVASE
+
 #endif// UNIT_CONVERTER_H_
+

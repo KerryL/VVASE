@@ -1,31 +1,16 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
+                                       VVASE
+                         Copyright Kerry R. Loux 2007-2017
 ===================================================================================*/
 
 // File:  debugger.h
-// Created:  2/24/2008
-// Author:  K. Loux
-// Description:  Contains class declaration for Debugger.  This is a simple class that
-//				 prints information to a wxTextCtrl.  This cleans up the rest of the program.
-// History:
-//	3/5/2008	- Transformed from function to class and added DebugLevel, K. Loux
-//	3/8/2008	- Modified to use wxString instead of char *, K. Loux
-//	3/9/2008	- Changed the structure of this class to allow one object at a high level
-//				  with pointers passed downstream.  Also moved the enumerations inside the
-//				  class body, K. Loux.
-//	5/2/2009	- Made Print() functions const to allow passing this object as a constant, K. Loux.
-//	11/22/2009	- Moved to vUtilities.lib, K. Loux.
-//	12/20/2009	- Modified for thread-safe operation, K. Loux.
-//	11/7/2011	- Corrected camelCase, K. Loux.
-//	12/5/2011	- Made this object a singleton, K. Loux.
+// Date:  2/24/2008
+// Auth:  K. Loux
+// Desc:  Contains class declaration for Debugger.  This is a simple class that
+//        prints information to a wxTextCtrl.  This cleans up the rest of the program.
 
-#ifndef DEBUG_H_
-#define DEBUG_H_
+#ifndef DEBUGGER_H_
+#define DEBUGGER_H_
 
 // Standard C++ headers
 #include <iostream>
@@ -42,6 +27,9 @@ class wxTextCtrl;
 
 // Declaration of the EVT_DEBUG event
 DECLARE_LOCAL_EVENT_TYPE(EVT_DEBUG, -1)
+
+namespace VVASE
+{
 
 class Debugger : public std::ostream
 {
@@ -98,4 +86,7 @@ private:
 	} buffer;
 };
 
-#endif// DEBUG_H_
+}// namespace VVASE
+
+#endif// DEBUGGER_H_
+

@@ -1,33 +1,23 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
+                                       VVASE
+                         Copyright Kerry R. Loux 2008-2017
 ===================================================================================*/
 
 // File:  kinematics.h
-// Created:  11/3/2007
-// Author:  K. Loux
-// Description:  Contains class declaration for the Kinematics class.
-// History:
-//	2/24/2008	- Changed Static from type Car to Suspension.  Removed Drivetrain object, K. Loux.
-//	3/9/2008	- Changed structure of Debugger class and added input quantities to StaticOutputs
-//				  structure, K. Loux.
-//	3/23/2008	- Changed units for class members and functions from degrees to radians and
-//				  renamed class from Kinematics.  Also introduce Outputs class and CCORNERorner class
-//				  (major restructuring of kinematic solvers), K. Loux.
-//	3/24/2009	- Moved (physical location) to physics folder, K. Loux.
-//	4/13/2009	- Added boost::threads for SolveCorner(), K. Loux.
+// Date:  11/3/2007
+// Auth:  K. Loux
+// Descr:  Contains class declaration for the Kinematics class.
 
 #ifndef KINEMATICS_H_
 #define KINEMATICS_H_
 
-// VVASE headers
-#include "vSolver/physics/kinematicOutputs.h"
+// Local headers
+#include "VVASE/core/physics/kinematicOutputs.h"
 
-// VVASE forward declarations
+namespace VVASE
+{
+
+// Local forward declarations
 class Car;
 
 class Kinematics
@@ -129,4 +119,7 @@ private:
 		const Vector &originalCenter2, const Vector &original, Vector &current);
 };
 
+}// namespace VVASE
+
 #endif// KINEMATICS_H_
+

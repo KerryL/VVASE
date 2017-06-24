@@ -1,23 +1,21 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
+                                       VVASE
+                         Copyright Kerry R. Loux 2008-2017
 ===================================================================================*/
 
 // File:  quasiStaticOutputs.h
-// Created:  6/2/2016
-// Author:  K. Loux
-// Description:  Quasi-static analysis outputs.
-// History:
+// Date:  6/2/2016
+// Auth:  K. Loux
+// Desc:  Quasi-static analysis outputs.
 
 #ifndef QUASI_STATIC_OUTPUTS_H_
 #define QUASI_STATIC_OUTPUTS_H_
 
 // Local headers
 #include "vUtilities/wheelSetStructures.h"
+
+namespace VVASE
+{
 
 class QuasiStaticOutputs
 {
@@ -28,4 +26,7 @@ public:
 	double heave;// [in]
 };
 
+}// namespace VVASE
+
 #endif// QUASI_STATIC_OUTPUTS_H_
+

@@ -1,23 +1,24 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
+                                       VVASE
+                         Copyright Kerry R. Loux 2007-2017
 ===================================================================================*/
 
 // File:  wxRelatedUtilities.h
-// Created:  11/5/2011
-// Author:  K. Loux
-// Description:  Contains helper functions and wrappers for working with wxWidgets.
-// History:
+// Date:  11/5/2011
+// Auth:  K. Loux
+// Desc:  Contains helper functions and wrappers for working with wxWidgets.
 
 #ifndef WX_RELATED_UTILIEIS_H_
 #define WX_RELATED_UTILIEIS_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
+
+namespace VVASE
+{
+
+namespace wxUtilities
+{
 
 // Method for finding the width of the longest string in the list
 void SetMinimumWidthFromContents(wxComboBox *control, unsigned int additional);
@@ -28,6 +29,8 @@ int SafelyGetComboBoxSelection(wxComboBox *control);
 
 // Mouse event don't propegate - but we can force them to by binding controls to this method
 void SkipMouseEvent(wxMouseEvent &event);
+
+}// namespace Utilities
 
 class EventWindowData : public wxObject
 {
@@ -41,5 +44,7 @@ public:
 private:
 	wxWindow *window;
 };
+
+}// namespace VVASE
 
 #endif// WX_RELATED_UTILIEIS_H_

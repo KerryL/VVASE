@@ -1,22 +1,14 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
+                                       VVASE
+                         Copyright Kerry R. Loux 2007-2017
 ===================================================================================*/
 
 // File:  carMath.h
-// Created:  3/24/2008
-// Author:  K. Loux
-// Description:  Contains useful functions that don't fit better in another class.  Hopefully this
-//				 file will one day be absolved into a real class instead of just being a kludgy
-//				 collection of functions.
-// History:
-//	4/11/2009	- Changed all functions to take addresses of and use const, K. Loux.
-//	11/22/2009	- Moved to vMath.lib, K. Loux.
-//	11/7/2011	- Corrected camelCase, K. Loux.
+// Date:  3/24/2008
+// Auth:  K. Loux
+// Desc:  Contains useful functions that don't fit better in another class.  Hopefully this
+//        file will one day be absolved into a real class instead of just being a kludgy
+//        collection of functions.
 
 #ifndef CAR_MATH_H_
 #define CAR_MATH_H_
@@ -24,80 +16,88 @@
 // Standard C++ headers
 #include <limits>// For QNaN
 
-// Local forward declarations
-class Vector;
-class Dataset2D;
+// wxWidgets forward declarations
 class wxString;
+
+// libPlot2D forward declarations
+namespace LibPlot2D
+{
+class Dataset2D;
+}// namespace LibPlot2D
+
+namespace VVASE
+{
 
 namespace VVASEMath
 {
-	// Constant declarations
-	const double NearlyZero = 1.0e-12;
-	const double QNAN = std::numeric_limits<double>::quiet_NaN();
-	const double Pi = 3.141592653589793238462643;
 
-	// Prototypes =====================================================
-	// For determining if a number is close enough to zero to regard as zero
-	bool IsZero(const double &n, const double &eps = NearlyZero);
-	bool IsZero(const Vector &v, const double &eps = NearlyZero);
+// Constant declarations
+const double NearlyZero = 1.0e-12;
+const double QNAN = std::numeric_limits<double>::quiet_NaN();
+const double Pi = 3.141592653589793238462643;
 
-	template<typename T>
-	bool IsNaN(const T &value);
+// Prototypes =====================================================
+// For determining if a number is close enough to zero to regard as zero
+bool IsZero(const double &n, const double &eps = NearlyZero);
+bool IsZero(const Vector &v, const double &eps = NearlyZero);
 
-	template<typename T>
-	bool IsInf(const T &value);
+template<typename T>
+bool IsNaN(const T &value);
 
-	template<typename T>
-	bool IsValid(const T &value);
+template<typename T>
+bool IsInf(const T &value);
 
-	// Ensure the value is between two definined limits
-	double Clamp(const double &value, const double &lowerLimit, const double &upperLimit);
+template<typename T>
+bool IsValid(const T &value);
 
-	double RangeToPlusMinusPi(const double &angle);
-	double RangeToPlusMinus180(const double &angle);
+// Ensure the value is between two definined limits
+double Clamp(const double &value, const double &lowerLimit, const double &upperLimit);
 
-	void Unwrap(Dataset2D &data);
+double RangeToPlusMinusPi(const double &angle);
+double RangeToPlusMinus180(const double &angle);
 
-	bool XDataConsistentlySpaced(const Dataset2D &data, const double &tolerancePercent = 0.01);
-	double GetAverageXSpacing(const Dataset2D &data);
+void Unwrap(Dataset2D &data);
 
-	// Returns the sign of the argument
-	double Sign(const double &value);
+bool XDataConsistentlySpaced(const Dataset2D &data, const double &tolerancePercent = 0.01);
+double GetAverageXSpacing(const Dataset2D &data);
 
-	Dataset2D ApplyBitMask(const Dataset2D &data, const unsigned int &bit);
-	unsigned int ApplyBitMask(const unsigned &value, const unsigned int &bit);
+// Returns the sign of the argument
+double Sign(const double &value);
 
-	unsigned int GetPrecision(const double &value,
-		const unsigned int &significantDigits = 2, const bool &dropTrailingZeros = true);
+Dataset2D ApplyBitMask(const Dataset2D &data, const unsigned int &bit);
+unsigned int ApplyBitMask(const unsigned &value, const unsigned int &bit);
 
-	unsigned int CountSignificantDigits(const wxString &valueString);
+unsigned int GetPrecision(const double &value,
+	const unsigned int &significantDigits = 2, const bool &dropTrailingZeros = true);
 
-	void sprintf(char *dest, const unsigned int &size, const char *format, ...);
+unsigned int CountSignificantDigits(const wxString &valueString);
 
-	unsigned int GetPrecision(const double &minimum, const double &majorResolution, const bool &isLogarithmic = false);
+void sprintf(char *dest, const unsigned int &size, const char *format, ...);
 
-	// Returns the normal direction to the plane containing the three points
-	Vector GetPlaneNormal(const Vector &point1, const Vector &point2, const Vector &point3);
+unsigned int GetPrecision(const double &minimum, const double &majorResolution, const bool &isLogarithmic = false);
 
-	// Determines the axis created by the intersection of two planes
-	bool GetIntersectionOfTwoPlanes(const Vector &normal1, const Vector &pointOnPlane1,
-		const Vector &normal2, const Vector &pointOnPlane2, Vector &axisDirection, Vector &pointOnAxis);
+// Returns the normal direction to the plane containing the three points
+Vector GetPlaneNormal(const Vector &point1, const Vector &point2, const Vector &point3);
 
-	// Returns a point on a line that is closest to the specified point
-	Vector NearestPointOnAxis(const Vector &pointOnAxis,
-		const Vector &directionOfAxis, const Vector &targetPoint);
+// Determines the axis created by the intersection of two planes
+bool GetIntersectionOfTwoPlanes(const Vector &normal1, const Vector &pointOnPlane1,
+	const Vector &normal2, const Vector &pointOnPlane2, Vector &axisDirection, Vector &pointOnAxis);
 
-	// Returns a point in a plane that is closest to the specified point
-	/*Vector NearestPointInPlane(const Vector &pointInPlane, const Vector &planeNormal,
-		const Vector &targetPoint);*/
+// Returns a point on a line that is closest to the specified point
+Vector NearestPointOnAxis(const Vector &pointOnAxis,
+	const Vector &directionOfAxis, const Vector &targetPoint);
 
-	// Projects the specified vector on the specified plane
-	Vector ProjectOntoPlane(const Vector &vectorToProject, const Vector &planeNormal);
+// Returns a point in a plane that is closest to the specified point
+/*Vector NearestPointInPlane(const Vector &pointInPlane, const Vector &planeNormal,
+	const Vector &targetPoint);*/
 
-	// Returns the intersection of the specified plane and axis
-	Vector IntersectWithPlane(const Vector &planeNormal, const Vector &pointOnPlane,
-		Vector axisDirection, const Vector &pointOnAxis);
-}
+// Projects the specified vector on the specified plane
+Vector ProjectOntoPlane(const Vector &vectorToProject, const Vector &planeNormal);
+
+// Returns the intersection of the specified plane and axis
+Vector IntersectWithPlane(const Vector &planeNormal, const Vector &pointOnPlane,
+	Vector axisDirection, const Vector &pointOnAxis);
+}// namespace Math
 
 // Template methods must be defined here:
 //==========================================================================
@@ -117,7 +117,7 @@ namespace VVASEMath
 //
 //==========================================================================
 template<typename T>
-bool VVASEMath::IsNaN(const T &value)
+bool Math::IsNaN(const T &value)
 {
 	return value != value;
 }
@@ -139,7 +139,7 @@ bool VVASEMath::IsNaN(const T &value)
 //
 //==========================================================================
 template<typename T>
-bool VVASEMath::IsInf(const T &value)
+bool Math::IsInf(const T &value)
 {
 	return std::numeric_limits<T>::has_infinity &&
 		value == std::numeric_limits<T>::infinity();
@@ -162,9 +162,12 @@ bool VVASEMath::IsInf(const T &value)
 //
 //==========================================================================
 template<typename T>
-bool VVASEMath::IsValid(const T &value)
+bool Math::IsValid(const T &value)
 {
 	return !IsNaN<T>(value) && !IsInf<T>(value);
 }
 
+}// namespace VVASE
+
 #endif// CAR_MATH_H_
+

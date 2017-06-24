@@ -1,20 +1,16 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
+                                       VVASE
+                         Copyright Kerry R. Loux 2007-2017
 ===================================================================================*/
 
 // File:  dataValidator.h
-// Created:  12/12/2011
-// Author:  K. Loux
-// Description:  Class derived from wxTextValidator, used for converting to/from
-//				 the various default units in the Convert class.  Also handles
-//				 UndoRedoStack entries.  NOTE:  When dialog controls are not direct
-//				 children of the dialog, the dialog must call
-//				 SetExtraStyle(wxWS_EX_VALIDATE_RECURSIVELY) in the constructor.
+// Date:  12/12/2011
+// Auth:  K. Loux
+// Desc:  Class derived from wxTextValidator, used for converting to/from
+//        the various default units in the Convert class.  Also handles
+//        UndoRedoStack entries.  NOTE:  When dialog controls are not direct
+//        children of the dialog, the dialog must call
+//        SetExtraStyle(wxWS_EX_VALIDATE_RECURSIVELY) in the constructor.
 
 #ifndef DATA_VALIDATOR_H_
 #define DATA_VALIDATOR_H_
@@ -28,6 +24,9 @@
 
 // Local headers
 #include "vUtilities/unitConverter.h"
+
+namespace VVASE
+{
 
 template<class T>
 class DataValidator : public wxTextValidator
@@ -312,4 +311,7 @@ bool DataValidator<T>::Validate(wxWindow * /*parent*/)
 	return true;
 }
 
+}// namespace VVASE
+
 #endif// DATA_VALIDATOR_H_
+

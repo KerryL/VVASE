@@ -1,10 +1,6 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
+                                       VVASE
+                         Copyright Kerry R. Loux 2008-2017
 ===================================================================================*/
 
 // File:  threadJob.h
@@ -14,7 +10,6 @@
 //				 class containing information that is stored in the job queue, i.e. this
 //				 class is used for communication from the GUI thread to the worker threads
 //				 (in that direction only - reverse communication is handled with events).
-// History:
 
 #ifndef THREAD_JOB_H_
 #define THREAD_JOB_H_
@@ -22,7 +17,10 @@
 // wxWidgets headers
 #include <wx/wx.h>
 
-// VVASE forward declarations
+namespace VVASE
+{
+
+// Local forward declarations
 class ThreadData;
 
 class ThreadJob
@@ -39,6 +37,7 @@ public:
 		CommandThreadKinematicsGA,
 		CommandThreadGeneticOptimization
 	};
+// TODO:  Make this more object oriented
 
 	ThreadJob();
 	ThreadJob(const ThreadJob &threadJob);// For thread safety
@@ -56,5 +55,7 @@ public:
 	// Operators
 	ThreadJob& operator=(const ThreadJob &job);
 };
+
+}// namespace VVASE
 
 #endif// THREAD_JOB_H_

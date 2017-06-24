@@ -1,19 +1,12 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
+                                       VVASE
+                         Copyright Kerry R. Loux 2008-2017
 ===================================================================================*/
 
 // File:  car.h
-// Created:  11/2/2007
-// Author:  K. Loux
-// Description:  Contains class declaration for Car class.
-// History:
-//	3/9/2008	- Changed structure of Debugger class, K. Loux.
-//	11/22/2009	- Moved to vCar.lib, K. Loux.
+// Date:  11/2/2007
+// Auth:  K. Loux
+// Desc:  Contains class declaration for Car class.
 
 // Car coordinate system:  (SAE vehicle coordinate system)
 // For some reason, SAE uses one coordinate system for vehicle development, and another one for
@@ -67,7 +60,10 @@
 // wxWidgets forward declarations
 class wxString;
 
-// vCar forward declarations
+namespace VVASE
+{
+
+// Local forward declarations
 class BinaryWriter;
 class BinaryReader;
 class Subsystem;
@@ -132,4 +128,7 @@ bool Car::UnregisterSubsystem()
     componentManager.Unregister<T>();
 }
 
+}// namespace VVASE
+
 #endif// CAR_H_
+

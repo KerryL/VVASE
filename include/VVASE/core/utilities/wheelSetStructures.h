@@ -1,24 +1,21 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
+                                       VVASE
+                         Copyright Kerry R. Loux 2007-2017
 ===================================================================================*/
 
 // File:  wheelSetStructures.h
-// Created:  11/3/2007
-// Author:  K. Loux
-// Description:  Contains structures that are useful when defined at each corner of the car.
-// History:
-//	11/22/2009	- Moved to vUtilities.lib, K. Loux.
+// Date:  11/3/2007
+// Auth:  K. Loux
+// Desc:  Contains structures that are useful when defined at each corner of the car.
 
 #ifndef WHEELSET_STRUCTS_H_
 #define WHEELSET_STRUCTS_H_
 
-// VVASE headers
+// Local headers
 #include "vMath/vector.h"
+
+namespace VVASE
+{
 
 template<typename T>
 struct CornerSet
@@ -73,4 +70,7 @@ typedef CornerSet<Vector> VectorSet;
 typedef EndSet<int> FrontRearInteger;
 typedef EndSet<double> FrontRearDouble;
 
+}// namespace VVASE
+
 #endif// WHEELSET_STRUCTS_H_
+

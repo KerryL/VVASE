@@ -1,4 +1,17 @@
+/*===================================================================================
+                                       VVASE
+                         Copyright Kerry R. Loux 2008-2017
+===================================================================================*/
 
+// File:  vvasePlugin.h
+// Date:  6/20/2017
+// Auth:  K. Loux
+// Desc:  Abstract base class for plugin objects.
+
+#ifndef VVASE_PLUGIN_H_
+#define VVASE_PLUGIN_H_
+
+// Standard C++ headers
 #include <string>
 
 namespace VVASE
@@ -15,3 +28,6 @@ public:
 };
 
 }// namespace VVASE
+
+#endif// VVASE_PLUGIN_H_
+

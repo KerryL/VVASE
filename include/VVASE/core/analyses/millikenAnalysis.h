@@ -1,26 +1,24 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
+                                       VVASE
+                         Copyright Kerry R. Loux 2008-2017
 ===================================================================================*/
 
 // File:  millikenAnalysis.h
-// Created:  3/23/2008
-// Author:  K. Loux
-// Description:  Contains class declaration for MILLIKEN_ANALYSIS (Milliken Moment
-//				 Method analysis) class.  See RCVD for more information.
-// History:
+// Date:  3/23/2008
+// Auth:  K. Loux
+// Desc:  Contains class declaration for MILLIKEN_ANALYSIS (Milliken Moment
+//        Method analysis) class.  See RCVD for more information.
 
 #ifndef MILLIKEN_ANALYSIS_H_
 #define MILLIKEN_ANALYSIS_H_
 
-// CarDesigner forward declarations
+namespace VVASE
+{
+
+// Local forward declarations
 class Debugger;
 
-class MillikenAnalysis
+class MillikenAnalysis : public Analysis
 {
 public:
 	MillikenAnalysis(const Debugger &debugger);
@@ -35,4 +33,7 @@ private:
 	const Debugger &debugger;
 };
 
+}// namespace VVASE
+
 #endif// MILLIKEN_ANALYSIS_H_
+

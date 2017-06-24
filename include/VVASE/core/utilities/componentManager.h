@@ -1,6 +1,6 @@
 /*===================================================================================
                                        VVASE
-                         Copyright Kerry R. Loux 2008-2017
+                         Copyright Kerry R. Loux 2007-2017
 ===================================================================================*/
 
 // File:  componentManager.h
@@ -82,3 +82,4 @@ void ComponentManager<Base>::Unregister()
 }// namespace VVASE
 
 #endif// COMPONENT_MANAGER_H_
+

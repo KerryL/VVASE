@@ -1,17 +1,13 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
+                                       VVASE
+                         Copyright Kerry R. Loux 2007-2017
 ===================================================================================*/
 
 // File:  debugLog.h
-// Created:  12/5/2011
-// Author:  K. Loux
-// Description:  Debug log class intended to aid with multi-threaded debugging.
-//				 This class is designed to be optimized out for release builds.
+// Date:  12/5/2011
+// Auth:  K. Loux
+// Desc:  Debug log class intended to aid with multi-threaded debugging.
+//        This class is designed to be optimized out for release builds.
 
 #ifndef DEBUG_LOG_H_
 #define DEBUG_LOG_H_
@@ -32,6 +28,9 @@
 // Or comment it out to disable for debug builds
 //#define USE_DEBUG_LOG
 #endif
+
+namespace VVASE
+{
 
 class DebugLog
 {
@@ -82,4 +81,7 @@ private:
 	DebugLog& operator= (const DebugLog &/*log*/) { return *this; };
 };
 
+}// namespace VVASE
+
 #endif// DEBUG_LOG_H_
+

@@ -1,20 +1,15 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
+                                       VVASE
+                         Copyright Kerry R. Loux 2008-2017
 ===================================================================================*/
 
 // File:  workerThread.h
-// Created:  11/3/2009
-// Author:  K. Loux
-// Description:  Contains the class declaration for the WORKER_THREAD class.  Derives
-//				 from wxWidgets thread classes.  Contains a process for checking a queue
-//				 for jobs, pulling jobs from the queue and executing them, and
-//				 communicating back to the main thread.
-// History:
+// Date:  11/3/2009
+// Auth:  K. Loux
+// Desc:  Contains the class declaration for the WORKER_THREAD class.  Derives
+//        from wxWidgets thread classes.  Contains a process for checking a queue
+//        for jobs, pulling jobs from the queue and executing them, and
+//        communicating back to the main thread.
 
 #ifndef WORKER_THREAD_H_
 #define WORKER_THREAD_H_
@@ -25,7 +20,10 @@
 // Local headers
 #include "vSolver/physics/kinematics.h"
 
-// VVASE forward declarations
+namespace VVASE
+{
+
+// Local forward declarations
 class JobQueue;
 
 class WorkerThread : public wxThread
@@ -46,4 +44,7 @@ private:
 	Kinematics kinematicAnalysis;
 };
 
+}// namespace VVASE
+
 #endif// WORKER_THREAD_H_
+

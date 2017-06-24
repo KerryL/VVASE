@@ -1,19 +1,13 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
+                                       VVASE
+                         Copyright Kerry R. Loux 2007-2017
 ===================================================================================*/
 
 // File:  xlsxReader.h
-// Created:  10/21/2010
-// Author:  K. Loux
-// Description:  Class for reading from Excel's XML-based files.  Contains functions
-//				 intended for extracting columns of data.
-// History:
-//	11/7/2011	- Corrected camelCase, K. Loux.XlsxReader
+// Date:  10/21/2010
+// Auth:  K. Loux
+// Desc:  Class for reading from Excel's XML-based files.  Contains functions
+//        intended for extracting columns of data.
 
 #ifndef XLSX_READER_H_
 #define XLSX_READER_H_
@@ -32,6 +26,9 @@
 // wxWidgets forward declarations
 class wxZipInputStream;
 class wxZipEntry;
+
+namespace VVASE
+{
 
 // Main class declaration
 class XlsxReader
@@ -89,4 +86,7 @@ private:
 	bool isOkFlag;
 };
 
+}// namespace VVASE
+
 #endif// XLS_READER_H_
+

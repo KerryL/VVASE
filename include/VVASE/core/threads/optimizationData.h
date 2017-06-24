@@ -1,18 +1,13 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
+                                       VVASE
+                         Copyright Kerry R. Loux 2008-2017
 ===================================================================================*/
 
 // File:  optimizationData.h
-// Created:  1/12/2009
-// Author:  K. Loux
-// Description:  Contains the class declaration for the OptimizationData class.  This contains
-//				 information required to conduct genetic optimizations.
-// History:
+// Date:  1/12/2009
+// Auth:  K. Loux
+// Desc:  Contains the class declaration for the OptimizationData class.  This contains
+//        information required to conduct genetic optimizations.
 
 #ifndef OPTIMIZATION_DATA_H_
 #define OPTIMIZATION_DATA_H_
@@ -20,10 +15,13 @@
 // wxWidgets headers
 #include <wx/wx.h>
 
-// VVASE headers
+// Local headers
 #include "vSolver/threads/threadData.h"
 
-// VVASE forward declarations
+namespace VVASE
+{
+
+// Local forward declarations
 class GeneticAlgorithm;
 
 class OptimizationData : public ThreadData
@@ -39,4 +37,7 @@ public:
 	bool OkForCommand(ThreadJob::ThreadCommand &command);
 };
 
+}// namespace VVASE
+
 #endif// OPTIMIZATION_DATA_H_
+

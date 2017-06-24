@@ -1,19 +1,14 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
+                                       VVASE
+                         Copyright Kerry R. Loux 2008-2017
 ===================================================================================*/
 
 // File:  jobQueue.h
-// Created:  11/3/2009
-// Author:  K. Loux
-// Description:  Contains the class declaration for the JOB_QUEUE class.  This queue
-//				 handles task priorities and is used to communicate from the GUI thread
-//				 to the worker threads (add tasks here to be completed by the workers).
-// History:
+// Date:  11/3/2009
+// Auth:  K. Loux
+// Desc:  Contains the class declaration for the JobQueue class.  This queue
+//        handles task priorities and is used to communicate from the GUI thread
+//        to the worker threads (add tasks here to be completed by the workers).
 
 #ifndef JOB_QUEUE_H_
 #define JOB_QUEUE_H_
@@ -21,7 +16,7 @@
 // wxWidgets headers
 #include <wx/wx.h>
 
-// VVASE headers
+// Local headers
 #include "vSolver/threads/threadJob.h"
 
 // Standard C++ headers
@@ -29,6 +24,9 @@
 
 // wxWidgets forward declarations
 class wxEvtHandler;
+
+namespace VVASE
+{
 
 class JobQueue
 {
@@ -68,4 +66,7 @@ private:
     wxSemaphore queueCount;
 };
 
+}// namespace VVASE
+
 #endif// JOB_QUEUE_H_
+

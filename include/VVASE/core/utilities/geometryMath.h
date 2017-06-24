@@ -1,3 +1,8 @@
+/*===================================================================================
+                                       VVASE
+                         Copyright Kerry R. Loux 2007-2017
+===================================================================================*/
+
 // File:  geometryMath.h
 // Auth:  K. Loux
 // Date:  1/2/2015
@@ -11,6 +16,9 @@
 
 // Local headers
 #include "vMath/vector.h"
+
+namespace VVASE
+{
 
 class GeometryMath
 {
@@ -62,4 +70,7 @@ private:
 		double &b, double &c);
 };
 
+}// namespace VVASE
+
 #endif// GEOMETRY_MATH_H_
+

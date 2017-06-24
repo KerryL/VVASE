@@ -1,18 +1,13 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
+                                       VVASE
+                         Copyright Kerry R. Loux 2008-2017
 ===================================================================================*/
 
 // File:  quasiStatic.h
-// Created:  5/27/2016
-// Author:  K. Loux
-// Description:  Quasi-static analysis object.  Calculates vehicle attitude when subject
-//				 to external accelerations.
-// History:
+// Date:  5/27/2016
+// Auth:  K. Loux
+// Desc:  Quasi-static analysis object.  Calculates vehicle attitude when subject
+//        to external accelerations.
 
 #ifndef QUASI_STATIC_H_
 #define QUASI_STATIC_H_
@@ -21,6 +16,9 @@
 #include "vSolver/physics/kinematics.h"
 #include "vUtilities/wheelSetStructures.h"
 
+namespace VVASE
+{
+
 // Local forward declarations
 class Car;
 class KinematicOutputs;
@@ -28,7 +26,7 @@ class QuasiStaticOutputs;
 class Matrix;
 class TireSet;
 
-class QuasiStatic
+class QuasiStatic : public Analysis
 {
 public:
 	QuasiStatic();
@@ -58,4 +56,7 @@ private:
 	static double ComputeDeltaWheelSets(const WheelSet& w1, const WheelSet& w2);
 };
 
+}// namespace VVASE
+
 #endif// QUASI_STATIC_H_
+
