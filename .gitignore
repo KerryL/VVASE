@@ -11,7 +11,7 @@ vvaseGUI.rc
 VVASEdebug.log
 
 # Ignore automatically generated files
-vvaseConstants.cpp
+gitHash.cpp
 gitHash.sty
 
 # Tex auxilliary files
