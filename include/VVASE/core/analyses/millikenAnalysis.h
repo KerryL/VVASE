@@ -1,6 +1,6 @@
 /*===================================================================================
                                        VVASE
-                         Copyright Kerry R. Loux 2008-2017
+                         Copyright Kerry R. Loux 2007-2017
 ===================================================================================*/
 
 // File:  millikenAnalysis.h
@@ -36,4 +36,3 @@ private:
 }// namespace VVASE
 
 #endif// MILLIKEN_ANALYSIS_H_
-

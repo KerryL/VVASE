@@ -1,27 +1,19 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
+                                       VVASE
+                         Copyright Kerry R. Loux 2007-2017
 ===================================================================================*/
 
 // File:  carRenderer.h
-// Created:  4/5/2008
-// Author:  K. Loux
-// Description:  Contains class declaration for the CarRenderer class.  Derived from
-//				 RenderWindow, this class is associated with a loaded car file
-//				 and contains the information and methods required to render a car in 3D.
-// History:
-//	5/17/2009	- Was derived from wxVTKRenderWindowInteractor, switched to custom
-//				  RenderWindow base class (eliminated dependence on VTK).
-//	11/22/2009	- Moved to vRenderer.lib, K. Loux.
+// Date:  4/5/2008
+// Auth:  K. Loux
+// Desc:  Contains class declaration for the CarRenderer class.  Derived from
+//        RenderWindow, this class is associated with a loaded car file
+//        and contains the information and methods required to render a car in 3D.
 
 #ifndef CAR_RENDERER_H_
 #define CAR_RENDERER_H_
 
-// VVASE headers
+// Local headers
 #include "vMath/vector.h"
 #include "vCar/suspension.h"
 #include "vRenderer/renderWindow.h"
@@ -30,7 +22,10 @@
 // wxWidgets forward declarations
 class wxString;
 
-// VVASE forward declarations
+namespace VVASE
+{
+
+// Local forward declarations
 class Car;
 class AArm;
 class Link;
@@ -204,7 +199,7 @@ private:
 
 	wxMenu* BuildContextMenu() const;
 	void DoEditPointDialog();
-	
+
 	Suspension::Hardpoints suspensionPoint;
 	Corner::Hardpoints leftFrontPoint;
 	Corner::Hardpoints rightFrontPoint;
@@ -218,5 +213,7 @@ private:
 
 	DECLARE_EVENT_TABLE()
 };
+
+}// namespace VVASE
 
 #endif// CAR_RENDERER_H_

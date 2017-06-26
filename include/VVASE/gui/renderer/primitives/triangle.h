@@ -1,17 +1,12 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
+                                       VVASE
+                         Copyright Kerry R. Loux 2007-2017
 ===================================================================================*/
 
 // File:  triangle.h
-// Created:  5/14/2009
-// Author:  K. Loux
-// Description:  Derived from Primitve for creating triangular objects.
-// History:
+// Date:  5/14/2009
+// Auth:  K. Loux
+// Desc:  Derived from Primitve for creating triangular objects.
 
 #ifndef TRIANGLE_H_
 #define TRIANGLE_H_
@@ -19,6 +14,9 @@
 // Local headers
 #include "vRenderer/primitives/primitive.h"
 #include "vMath/vector.h"
+
+namespace VVASE
+{
 
 class Triangle : public Primitive
 {
@@ -42,5 +40,7 @@ private:
 	Vector corner2;
 	Vector corner3;
 };
+
+}// namespace VVASE
 
 #endif// TRIANGLE_H_

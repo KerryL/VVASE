@@ -89,4 +89,3 @@ private:
 }// namespace VVASE
 
 #endif// XLS_READER_H_
-

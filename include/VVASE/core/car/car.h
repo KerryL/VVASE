@@ -1,6 +1,6 @@
 /*===================================================================================
                                        VVASE
-                         Copyright Kerry R. Loux 2008-2017
+                         Copyright Kerry R. Loux 2007-2017
 ===================================================================================*/
 
 // File:  car.h
@@ -77,10 +77,10 @@ public:
 
     template <typename T>
 	static bool RegisterSubsystem();
-    
+
     template <typename T>
     static bool UnregisterSubsystem();
-    
+
     // TODO:  Saving/loading will now need to consider the possibility of having different modules loaded
     // Best way to handle this might be to store a list of all loaded modules, and warn if there is a mismatch
 
@@ -112,7 +112,7 @@ private:
 
 	static const int currentFileVersion;
 	mutable wxMutex carMutex;
-    
+
     static ComponentManager<Subsystem> componentManager;
 };
 
@@ -131,4 +131,3 @@ bool Car::UnregisterSubsystem()
 }// namespace VVASE
 
 #endif// CAR_H_
-

@@ -82,4 +82,3 @@ void ComponentManager<Base>::Unregister()
 }// namespace VVASE
 
 #endif// COMPONENT_MANAGER_H_
-

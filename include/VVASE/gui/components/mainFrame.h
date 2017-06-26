@@ -1,34 +1,14 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
+                                       VVASE
+                         Copyright Kerry R. Loux 2007-2017
 ===================================================================================*/
 
 // File:  mainFrame.h
-// Created:  3/7/2008
-// Author:  K. Loux
-// Description:  Contains the class declaration for the MainFrame class.  Uses wxWidgets
-//				 for the GUI components.  Also contains the application class definition
-//				 and functionality at the bottom of this file (minimal).
-// History:
-//	3/9/2008	- Changed the structure of the Debugger class so one object can debug the
-//				  entire application and we can print the outputs to OutputPane, K. Loux.
-//  5/13/2008	- Added variables and functions to the class for managing GuiCar objects.
-//				  Functionality includes maintaining a list of open objects to prevent
-//				  memory leaks, K. Loux.
-//	1/24/2009	- Major application structure change - MainFrame uses GuiObject instead of
-//				  GuiCar.  GuiObject changed to only contain either GuiCar or Iteration
-//				  objects, K. Loux.
-//	1/28/2009	- Changed structure of GUI components so context menu creation for all
-//				  objects is handled by this class, K. Loux.
-//	2/10/2009	- Added EditPanel to application, K. Loux.
-//	3/24/2009	- Created one, application level Kinematics object, K. Loux.
-//	6/7/2009	- Changed GetFilenameFromUser() to make use of wx functions for checking for file
-//				  existence and selecting multiple files to open, K. Loux.
-//	10/18/2010	- Added undo/redo stack object, K. Loux.
+// Date:  3/7/2008
+// Auth:  K. Loux
+// Desc:  Contains the class declaration for the MainFrame class.  Uses wxWidgets
+//        for the GUI components.  Also contains the application class definition
+//        and functionality at the bottom of this file (minimal).
 
 #ifndef MAIN_FRAME_H_
 #define MAIN_FRAME_H_
@@ -37,18 +17,20 @@
 #include <wx/wx.h>
 #include <wx/aui/aui.h>
 
-// VVASE headers
+// Local headers
 #include "vUtilities/managedList.h"
 #include "vSolver/physics/kinematics.h"
 #include "vSolver/physics/quasiStatic.h"
 #include "gui/undoRedoStack.h"
-#include "gui/guiObject.h"	// Can't use a forward declaration here because
-							// ManagedList<GuiObject> can't compile without a definition
+#include "gui/guiObject.h"
 
 // wxWidgets forward declarations
 class wxFileHistory;
 
-// VVASE forward declarations
+namespace VVASE
+{
+
+// Local forward declarations
 class KinematicOutputs;
 class MainNotebook;
 class MainTree;
@@ -104,7 +86,7 @@ public:
 	void UpdateAnalysis();
 	bool ActiveAnalysisIsKinematic() const { return lastAnalysisWasKinematic; }
 
-	// Updates the output panel with current car output information 
+	// Updates the output panel with current car output information
 	// (should be called following an analysis update)
 	void UpdateOutputPanel();
 
@@ -131,13 +113,13 @@ public:
 	void EnableRedo() { menuBar->FindItem(IdMenuEditRedo)->Enable(true); }
 	void DisableUndo() { menuBar->FindItem(IdMenuEditUndo)->Enable(false); }
 	void DisableRedo() { menuBar->FindItem(IdMenuEditRedo)->Enable(false); }
-	
+
 	const wxFont& GetOutputFont() { return outputFont; }
 	const wxFont& GetPlotFont() { return plotFont; }
-	
+
 	void SetOutputFont(const wxFont &font);
 	void SetPlotFont(const wxFont &font);
-	
+
 	bool GetUseOrtho() const { return useOrthoView; }
 
 	void SetAssociateWithAllCars();
@@ -200,7 +182,7 @@ private:
 	QuasiStatic::Inputs quasiStaticInputs;
 	bool useRackTravel;// if false, we use steering wheel angle
 	bool lastAnalysisWasKinematic;
-	
+
 	bool useOrthoView;
 
 	// Maximum number of recent files to store
@@ -364,7 +346,7 @@ private:
 	ManagedList<GuiObject> openObjectList;
 
 	UndoRedoStack undoRedo;
-	
+
 	// The font objects
 	wxFont outputFont;
 	wxFont plotFont;
@@ -373,5 +355,7 @@ private:
 
 	DECLARE_EVENT_TABLE();
 };
+
+}// namespace VVASE
 
 #endif// MAIN_FRAME_H_

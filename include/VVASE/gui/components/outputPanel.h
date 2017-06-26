@@ -1,17 +1,12 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016.
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
+                                       VVASE
+                         Copyright Kerry R. Loux 2007-2017
 ===================================================================================*/
 
 // File:  outputPanel.h
-// Created:  3/15/2009
-// Author:  K. Loux
-// Description:  Contains the class declaration for the OutputPanel class.
-// History:
+// Date:  3/15/2009
+// Auth:  K. Loux
+// Desc:  Contains the class declaration for the OutputPanel class.
 
 #ifndef OUTPUT_PANEL_H_
 #define OUTPUT_PANEL_H_
@@ -22,6 +17,9 @@
 
 // Local headers
 #include "gui/guiCar.h"
+
+namespace VVASE
+{
 
 // VVASE forward declarations
 class Car;
@@ -56,5 +54,7 @@ private:
 
 	SuperGrid *outputsList;
 };
+
+}// namespace VVASE
 
 #endif// OUTPUT_PANEL_H_

@@ -1,6 +1,6 @@
 /*===================================================================================
                                        VVASE
-                         Copyright Kerry R. Loux 2008-2017
+                         Copyright Kerry R. Loux 2007-2017
 ===================================================================================*/
 
 // File:  quasiStaticOutputs.h
@@ -29,4 +29,3 @@ public:
 }// namespace VVASE
 
 #endif// QUASI_STATIC_OUTPUTS_H_
-

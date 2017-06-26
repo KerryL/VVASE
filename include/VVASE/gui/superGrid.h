@@ -1,23 +1,21 @@
 /*===================================================================================
-                                    CarDesigner
-                           Copyright Kerry R. Loux 2011
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
+                                       VVASE
+                         Copyright Kerry R. Loux 2007-2017
 ===================================================================================*/
 
 // File:  superGrid.h
-// Created:  11/11/2011
-// Author:  K. Loux
-// Description:  Derived from wxGrid, implements some additional helper methods and options.
-// History:
+// Date:  11/11/2011
+// Auth:  K. Loux
+// Desc:  Derived from wxGrid, implements some additional helper methods and options.
 
 #ifndef SUPER_GRID_H_
 #define SUPER_GRID_H_
 
 // wxWidgets headers
 #include <wx/grid.h>
+
+namespace VVASE
+{
 
 class SuperGrid : public wxGrid
 {
@@ -38,5 +36,7 @@ private:
 protected:
 	virtual void OnSize(wxSizeEvent &event);
 };
+
+}// namespace VVASE
 
 #endif// SUPER_GRID_H_

@@ -1,6 +1,6 @@
 /*===================================================================================
                                        VVASE
-                         Copyright Kerry R. Loux 2008-2017
+                         Copyright Kerry R. Loux 2007-2017
 ===================================================================================*/
 
 // File:  threadEvent.h
@@ -20,4 +20,3 @@
 DECLARE_LOCAL_EVENT_TYPE(EVT_THREAD, -1)
 
 #endif// THREAD_EVENT_H_
-

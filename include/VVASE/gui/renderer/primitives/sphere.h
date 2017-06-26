@@ -1,17 +1,12 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
+                                       VVASE
+                         Copyright Kerry R. Loux 2007-2017
 ===================================================================================*/
 
 // File:  sphere.h
-// Created:  5/14/2009
-// Author:  K. Loux
-// Description:  Derived from Primitive for creating spherical objects.
-// History:
+// Date:  5/14/2009
+// Auth:  K. Loux
+// Desc:  Derived from Primitive for creating spherical objects.
 
 #ifndef SPHERE_H_
 #define SPHERE_H_
@@ -19,6 +14,9 @@
 // Local headers
 #include "vRenderer/primitives/primitive.h"
 #include "vMath/vector.h"
+
+namespace VVASE
+{
 
 class Sphere : public Primitive
 {
@@ -52,5 +50,7 @@ private:
 
 	void AddVertex(const Vector &vertex);
 };
+
+}// namespace VVASE
 
 #endif// SPHERE_H_

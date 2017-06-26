@@ -93,4 +93,3 @@ private:
 }// namespace VVASE
 
 #endif// BINARY_WRITER_H_
-

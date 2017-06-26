@@ -1,25 +1,13 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
+                                       VVASE
+                         Copyright Kerry R. Loux 2007-2017
 ===================================================================================*/
 
 // File:  guiObject.h
-// Created:  6/5/2008
-// Author:  K. Loux
-// Description:  Contains class declaration for GUI_OBJECT class.  This aids with GUI functionality
-//				 by providing a common link between all the GUI controls and car objects.
-// History:
-//	7/27/2008	- Made ITEM_TYPE static and moved UNIT_TYPE to Convert, K. Loux.
-//	8/18/2008	- Changed name from TREE_ITEM to GUI_OBJECT and broadened the functionality of the
-//				  class to include a link between all of the controls, K. Loux.
-//	1/24/2009	- Major application structure change - MAIN_FRAME uses GUI_OBJECT instead of
-//				  GUI_CAR.  GUI_OBJECT changed to only contain either GUI_CAR or ITERATION
-//				  objects.
-//	5/19/2009	- Made abstract for base class for GUI_CAR and ITERATION, K. Loux.
+// Date:  6/5/2008
+// Auth:  K. Loux
+// Desc:  Contains class declaration for GuiObject class.  This aids with GUI functionality
+//        by providing a common link between all the GUI controls and car objects.
 
 #ifndef GUI_OBJECT_H_
 #define GUI_OBJECT_H_
@@ -28,7 +16,10 @@
 #include <wx/wx.h>
 #include <wx/treebase.h>
 
-// CarDesigner forward declarations
+namespace VVASE
+{
+
+// Local forward declarations
 class GuiCar;
 class Iteration;
 class MainTree;
@@ -152,5 +143,7 @@ protected:
 	// Verifies that no other open object has the same filename
 	bool VerifyUniqueness();
 };
+
+}// namespace VVASE
 
 #endif// GUI_OBJECT_H_

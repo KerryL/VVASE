@@ -1,18 +1,13 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
+                                       VVASE
+                         Copyright Kerry R. Loux 2007-2017
 ===================================================================================*/
 
 // File:  undoRedoStack.h
-// Created:  10/18/2010
-// Author:  K. Loux
-// Description:  Class implementing std::stack to store information about recent operations
-//				 to provide the opportunity to undo and redo.
-// History:
+// Date:  10/18/2010
+// Auth:  K. Loux
+// Desc:  Class implementing std::stack to store information about recent operations
+//        to provide the opportunity to undo and redo.
 
 #ifndef UNDO_REDO_STACK_H_
 #define UNDO_REDO_STACK_H_
@@ -20,10 +15,13 @@
 // Standard C++ headers
 #include <stack>
 
-// VVASE headers
+// Local headers
 #include "gui/gaObject.h"
 
-// VVASE forward declarations
+namespace VVASE
+{
+
+// Local forward declarations
 class MainFrame;
 
 class UndoRedoStack
@@ -116,5 +114,7 @@ private:
 	std::stack<Operation> undoStack;
 	std::stack<Operation> redoStack;
 };
+
+}// namespace VVASE
 
 #endif// UNDO_REDO_STACK_H_

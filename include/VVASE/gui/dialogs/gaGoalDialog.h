@@ -1,26 +1,27 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
+                                       VVASE
+                         Copyright Kerry R. Loux 2007-2017
 ===================================================================================*/
 
 // File:  gaGoalDialog.h
-// Created:  7/30/2009
-// Author:  K. Loux
-// Description:  Dialog for editing goal properties.
-// History:
+// Date:  7/30/2009
+// Auth:  K. Loux
+// Desc:  Dialog for editing goal properties.
+
+#ifndef GA_GOAL_DIALOG_H_
+#define GA_GOAL_DIALOG_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
 
-// CarDesigner headers
+// Local headers
 #include "vSolver/physics/kinematicOutputs.h"
 #include "vSolver/physics/kinematics.h"
 
-// CarDesigner forward declarations
+namespace VVASE
+{
+
+// Local forward declarations
 class MainFrame;
 
 class GAGoalDialog : public wxDialog
@@ -94,3 +95,7 @@ private:
 	// For the event table
 	DECLARE_EVENT_TABLE();
 };
+
+}// namespace VVASE
+
+#endif// GA_GOAL_DIALOG_H_

@@ -1,6 +1,6 @@
 /*===================================================================================
                                        VVASE
-                         Copyright Kerry R. Loux 2008-2017
+                         Copyright Kerry R. Loux 2007-2017
 ===================================================================================*/
 
 // File:  gaInterface.h
@@ -16,4 +16,3 @@ namespace VVASE
 }// namespace VVASE
 
 #endif// GA_INTERFACE_H_
-

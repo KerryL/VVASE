@@ -28,20 +28,20 @@ public:
 		Vector center;
 		double radius;
 	};
-	
+
 	struct Circle
 	{
 		Vector center;
 		Vector normal;
 		double radius;
 	};
-	
+
 	struct Plane
 	{
 		Vector point;
 		Vector normal;
 	};
-	
+
 	struct Axis
 	{
 		Vector direction;
@@ -73,4 +73,3 @@ private:
 }// namespace VVASE
 
 #endif// GEOMETRY_MATH_H_
-

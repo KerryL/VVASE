@@ -95,4 +95,3 @@ private:
 }// namespace VVASE
 
 #endif// BINARY_READER_H_
-

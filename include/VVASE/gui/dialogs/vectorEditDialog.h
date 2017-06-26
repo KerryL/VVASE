@@ -1,10 +1,6 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
+                                       VVASE
+                         Copyright Kerry R. Loux 2007-2017
 ===================================================================================*/
 
 // File:  VectorEditDialog.h
@@ -18,17 +14,17 @@
 // wxWidgets headers
 #include <wx/wx.h>
 
-// Local forward declarations
-class Vector;
+namespace VVASE
+{
 
 class VectorEditDialog : public wxDialog
 {
 public:
-	VectorEditDialog(wxWindow &parent, Vector& vector, const wxString& name,
+	VectorEditDialog(wxWindow &parent, Eigen::Vector3d& vector, const wxString& name,
 		long style = wxDEFAULT_DIALOG_STYLE);
 
 private:
-	Vector& vector;
+	Eigen::Vector3d& vector;
 
 	void CreateControls();
 
@@ -43,5 +39,7 @@ private:
 
 	DECLARE_EVENT_TABLE()
 };
+
+}// namespace VVASE
 
 #endif// VECTOR_EDIT_DIALOG_H_

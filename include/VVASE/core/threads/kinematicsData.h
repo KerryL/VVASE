@@ -1,6 +1,6 @@
 /*===================================================================================
                                        VVASE
-                         Copyright Kerry R. Loux 2008-2017
+                         Copyright Kerry R. Loux 2007-2017
 ===================================================================================*/
 
 // File:  kinematicsData.h
@@ -45,4 +45,3 @@ public:
 }// namespace VVASE
 
 #endif// KINEMATICS_DATA_H_
-

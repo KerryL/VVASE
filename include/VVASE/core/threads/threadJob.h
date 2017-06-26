@@ -1,6 +1,6 @@
 /*===================================================================================
                                        VVASE
-                         Copyright Kerry R. Loux 2008-2017
+                         Copyright Kerry R. Loux 2007-2017
 ===================================================================================*/
 
 // File:  threadJob.h
@@ -51,7 +51,7 @@ public:
 	ThreadData *data;
 	wxString name;
 	int index;
-	
+
 	// Operators
 	ThreadJob& operator=(const ThreadJob &job);
 };

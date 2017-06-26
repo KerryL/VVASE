@@ -46,15 +46,15 @@ public:
 	static void Kill();
 	void SetTarget(const LogTarget &target);
 	void Log(wxString message, int indent = 0);
-	
+
 private:
 	// Current indentation level for each thread
 	// pair is <Thread ID, Indent Level>
 	std::vector<std::pair<unsigned long, unsigned int> > indent;
-	
+
 	// Flag indicating how to log
 	static LogTarget target;
-	
+
 	// Synchronization object
 	wxMutex mutex;
 
@@ -84,4 +84,3 @@ private:
 }// namespace VVASE
 
 #endif// DEBUG_LOG_H_
-

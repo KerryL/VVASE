@@ -1,6 +1,6 @@
 /*===================================================================================
                                        VVASE
-                         Copyright Kerry R. Loux 2008-2017
+                         Copyright Kerry R. Loux 2007-2017
 ===================================================================================*/
 
 // File:  subsystem.h
@@ -22,7 +22,7 @@ class Subsystem : public RegisterableComponent
 public:
 	virtual wxPanel* GetEditPanel() = 0;
 	virtual wxTreeListItem* GetTreeItem() = 0;
-	
+
 	// File read/write functions
 	virtual void Write(BinaryWriter& file) const = 0;
 	virtual void Read(BinaryReader& file, const int& fileVersion) = 0;
@@ -31,4 +31,3 @@ public:
 }// namespace VVASE
 
 #endif// SUBSYSTEM_H_
-

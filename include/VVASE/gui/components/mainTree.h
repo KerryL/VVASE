@@ -1,19 +1,12 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
+                                       VVASE
+                         Copyright Kerry R. Loux 2007-2017
 ===================================================================================*/
 
 // File:  mainTree.h
-// Created:  6/14/2008
-// Author:  K. Loux
-// Description:  Contains the class declaration for the MAIN_TREE class.
-// History:
-//	1/28/2009	- Changed structure of GUI components so context menu creation for all
-//				  objects is handled by the MAIN_FRAME class.
+// Date:  6/14/2008
+// Auth:  K. Loux
+// Desc:  Contains the class declaration for the MAIN_TREE class.
 
 #ifndef MAIN_TREE_H_
 #define MAIN_TREE_H_
@@ -22,7 +15,10 @@
 #include <wx/wx.h>
 #include <wx/treectrl.h>
 
-// VVASE forward declarations
+namespace VVASE
+{
+
+// Local forward declarations
 class MainFrame;
 class GuiObject;
 
@@ -84,5 +80,7 @@ private:
 
 	DECLARE_EVENT_TABLE();
 };
+
+}// namespace VVASE
 
 #endif// MAIN_TREE_H_

@@ -1,24 +1,20 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
+                                       VVASE
+                         Copyright Kerry R. Loux 2007-2017
 ===================================================================================*/
 
 // File:  spring3D.h
-// Created:  1/5/2009
-// Author:  K. Loux
-// Description:  Contains class declaration for the Spring3D class.
-// History:
-//	4/25/2009	- Changed Update() to include color argument in the form of wxColor, K. Loux.
-//	5/17/2009	- Removed VTK dependencies, K. Loux.
+// Date:  1/5/2009
+// Auth:  K. Loux
+// Desc:  Contains class declaration for the Spring3D class.
 
 #ifndef SPRING3D_H_
 #define SPRING3D_H_
 
-// VVASE forward declarations
+namespace VVASE
+{
+
+// Local forward declarations
 class Vector;
 class Color;
 class Cylinder;
@@ -45,5 +41,7 @@ private:
 	Sphere *endPoint1;
 	Sphere *endPoint2;
 };
+
+}// namespace VVASE
 
 #endif// SPRING3D_H_

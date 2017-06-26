@@ -170,4 +170,3 @@ bool Math::IsValid(const T &value)
 }// namespace VVASE
 
 #endif// CAR_MATH_H_
-

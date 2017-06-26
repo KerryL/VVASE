@@ -1,24 +1,17 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
+                                       VVASE
+                         Copyright Kerry R. Loux 2007-2017
 ===================================================================================*/
 
 // File:  geneticOptimization.h
-// Created:  4/7/2009
-// Author:  K. Loux
-// Description:  This is a GUI interface for the genetic algorithm optimization.
-// History:
-//	1/11/2010	- Moved from test class to GuiObject derived object for permanent
-//				  implementation.
+// Date:  4/7/2009
+// Auth:  K. Loux
+// Desc:  This is a GUI interface for the genetic algorithm optimization.
 
 #ifndef GENETIC_OPTIMIZATION_H_
 #define GENETIC_OPTIMIZATION_H_
 
-// VVASE headers
+// Local headers
 #include "gui/guiObject.h"
 #include "vUtilities/managedList.h"
 #include "vCar/corner.h"
@@ -26,7 +19,10 @@
 #include "vSolver/physics/kinematicOutputs.h"
 #include "vSolver/physics/kinematics.h"
 
-// VVASE forward declarations
+namespace VVASE
+{
+
+// Local forward declarations
 class GuiCar;
 class GAObject;
 class MainFrame;
@@ -78,5 +74,7 @@ private:
 	const GuiCar *carToOptimize;
 	GAObject *geneticAlgorithm;
 };
+
+}// namespacde VVASE
 
 #endif// GENETIC_OPTIMIZATION_H_

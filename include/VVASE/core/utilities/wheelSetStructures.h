@@ -73,4 +73,3 @@ typedef EndSet<double> FrontRearDouble;
 }// namespace VVASE
 
 #endif// WHEELSET_STRUCTS_H_
-

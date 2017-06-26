@@ -264,7 +264,7 @@ public:
 
 		PowerUnitCount
 	};
-	
+
 	enum class UnitsOfEnergy
 	{
 		EnergyPoundInch,
@@ -282,7 +282,7 @@ public:
 		TemperatureRankine,
 		TemperatureFahrenheit,
 		TemperatureCelsius,
-		TemperatureKelvin,		
+		TemperatureKelvin,
 
 		TemperatureUnitCount
 	};
@@ -436,7 +436,7 @@ public:
 	Vector ConvertPowerOutput(const Vector& v) const;
 	Vector ConvertEnergyOutput(const Vector& v) const;
 	Vector ConvertTemperatureOutput(const Vector& v) const;
-	
+
 	Vector ConvertVectorOutput(const Vector& v, const UnitType &type) const;
 
 	// For formatting numbers with a specific number of digits
@@ -457,9 +457,9 @@ private:
 	UnitConverter();
 	UnitConverter(const UnitConverter& /*c*/) { };
 	UnitConverter& operator=(const UnitConverter& /*c*/) { return *this; };
-	
+
 	static UnitConverter unitConverter;
-	
+
 	// Units settings
 	UnitsOfAngle angleUnits;
 	UnitsOfDistance distanceUnits;
@@ -485,4 +485,3 @@ private:
 }// namespace VVASE
 
 #endif// UNIT_CONVERTER_H_
-

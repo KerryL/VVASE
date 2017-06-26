@@ -37,7 +37,7 @@ public:
 	// In lieu of a constructor/destructor
 	static Debugger& GetInstance();
 	static void Kill();
-	
+
 	// This enumeration describes how many debug messages we want to print
 	enum DebugLevel
 	{
@@ -57,9 +57,9 @@ private:
 	// For singletons, the constructors and assignment operators are private
 	Debugger();
 	virtual ~Debugger() {}
-	
+
 	static Debugger *debuggerInstance;
-	
+
 	DebugLevel debugLevel;
 	wxEvtHandler *parent;
 	mutable wxMutex mutex;
@@ -89,4 +89,3 @@ private:
 }// namespace VVASE
 
 #endif// DEBUGGER_H_
-

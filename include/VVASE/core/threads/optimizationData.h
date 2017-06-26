@@ -1,6 +1,6 @@
 /*===================================================================================
                                        VVASE
-                         Copyright Kerry R. Loux 2008-2017
+                         Copyright Kerry R. Loux 2007-2017
 ===================================================================================*/
 
 // File:  optimizationData.h
@@ -40,4 +40,3 @@ public:
 }// namespace VVASE
 
 #endif// OPTIMIZATION_DATA_H_
-

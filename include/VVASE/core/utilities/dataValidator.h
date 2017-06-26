@@ -57,10 +57,10 @@ public:
 		const UnitConverter::UnitType &unit = UnitConverter::UnitTypeUnitless);
 
 	virtual wxObject* Clone() const;// Mandatory for children of wxValidator
-	
+
 	// Destructor
 	virtual ~DataValidator() {}
-	
+
 	// Mandatory overloads for validators
 	virtual bool TransferToWindow();
 	virtual bool TransferFromWindow();
@@ -192,7 +192,7 @@ bool DataValidator<T>::TransferToWindow()
 	wxString value;
 	value << data;
 	dynamic_cast<wxTextEntry*>(m_validatorWindow)->SetValue(value);
-	
+
 	return true;
 }
 
@@ -220,7 +220,7 @@ bool DataValidator<T>::TransferFromWindow()
 	ss.str(dynamic_cast<wxTextEntry*>(m_validatorWindow)->GetValue().ToUTF8().data());
 	if ((ss >> data).fail())
 		return false;
-	
+
 	return true;
 }
 
@@ -314,4 +314,3 @@ bool DataValidator<T>::Validate(wxWindow * /*parent*/)
 }// namespace VVASE
 
 #endif// DATA_VALIDATOR_H_
-

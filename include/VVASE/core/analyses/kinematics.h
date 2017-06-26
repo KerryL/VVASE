@@ -122,4 +122,3 @@ private:
 }// namespace VVASE
 
 #endif// KINEMATICS_H_
-

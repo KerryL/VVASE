@@ -1,25 +1,26 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
+                                       VVASE
+                         Copyright Kerry R. Loux 2007-2017
 ===================================================================================*/
 
 // File:  gaGeneDialog.h
-// Created:  7/30/2009
-// Author:  K. Loux
-// Description:  Dialog for editing gene properties.
-// History:
+// Date:  7/30/2009
+// Auth:  K. Loux
+// Desc:  Dialog for editing gene properties.
+
+#ifndef GA_GENE_DIALOG_H_
+#define GA_GENE_DIALOG_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
 
-// CarDesigner headers
+// Local headers
 #include "vCar/corner.h"
 
-// CarDesigner forward declarations
+namespace VVASE
+{
+
+// Local forward declarations
 class MainFrame;
 class Suspension;
 
@@ -93,3 +94,7 @@ private:
 	// For the event table
 	DECLARE_EVENT_TABLE();
 };
+
+}// namespace VVASE
+
+#endif// GA_GENE_DIALOG_H_

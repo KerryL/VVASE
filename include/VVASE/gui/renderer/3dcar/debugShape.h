@@ -1,17 +1,12 @@
 /*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
+                                       VVASE
+                         Copyright Kerry R. Loux 2007-2017
 ===================================================================================*/
 
 // File:  debugShape.h
-// Created:  7/9/2015
-// Author:  K. Loux
-// Description:  Object for displaying 3D shapes to aid with debugging.
-// History:
+// Date:  7/9/2015
+// Auth:  K. Loux
+// Desc:  Object for displaying 3D shapes to aid with debugging.
 
 #ifndef DEBUG_SHAPE_H_
 #define DEBUG_SHAPE_H_
@@ -20,6 +15,10 @@
 //#define USE_DEBUG_SHAPE
 #ifdef USE_DEBUG_SHAPE
 
+namespace VVASE
+{
+
+// Local forward declarations
 class RenderWindow;
 class Vector;
 class Color;
@@ -70,6 +69,8 @@ private:
 	void SetDisk(const Vector &center, const Vector &normal, const double &outR, const double &inR, Disk &disk) const;
 	void SetPoint(const Vector &p, Point3D &point) const;
 };
+
+}// namespace VVASE
 
 #endif// USE_DEBUG_SHAPE
 
