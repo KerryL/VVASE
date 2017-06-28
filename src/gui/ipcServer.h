@@ -1,11 +1,12 @@
-/*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-===================================================================================*/
+/*=============================================================================
+                                     VVASE
+                        Copyright Kerry R. Loux 2007-2017
+=============================================================================*/
 
 // File:  ipcServer.h
 // Date:  10/23/2010
-// Author:  K. Loux
+// Auth:  K. Loux
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Inter-process communication server class.  Used for passing file names
 //        between instances of this application to prevent multiple instances
 //        from starting up when a user opens multiple files from a file browser.

@@ -6,7 +6,7 @@
 // File:  xlsxReader.h
 // Date:  10/21/2010
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Class for reading from Excel's XML-based files.  Contains functions
 //        intended for extracting columns of data.
 

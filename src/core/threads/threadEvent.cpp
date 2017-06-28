@@ -6,7 +6,7 @@
 // File:  threadEvent.cpp
 // Date:  11/3/2009
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Eventually might house an actual event class - for now just an event
 //        definition.  This event is used for communication from the worker threads
 //        to the GUI thread.

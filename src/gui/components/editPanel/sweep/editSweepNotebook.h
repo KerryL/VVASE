@@ -6,7 +6,7 @@
 // File:  editSweepNotebook.h
 // Date:  11/14/2010
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains the class declaration for the EditIterationNotebook class.
 
 #ifndef EDIT_ITERATION_NOTEBOOK_H_

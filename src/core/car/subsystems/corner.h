@@ -6,7 +6,7 @@
 // File:  corner.h
 // Date:  3/23/2008
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains class declaration for Corner class.  This class contains
 //        the suspension information for one corner of the car (four instances
 //        are required to describe the entire suspension).

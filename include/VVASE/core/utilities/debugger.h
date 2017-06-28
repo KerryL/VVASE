@@ -6,7 +6,7 @@
 // File:  debugger.h
 // Date:  2/24/2008
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains class declaration for Debugger.  This is a simple class that
 //        prints information to a wxTextCtrl.  This cleans up the rest of the program.
 

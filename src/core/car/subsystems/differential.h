@@ -6,7 +6,7 @@
 // File:  differential.h
 // Date:  11/6/2007
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains class declaration for DIFFERENTIAL class.
 
 #ifndef DIFFERENTIAL_H_

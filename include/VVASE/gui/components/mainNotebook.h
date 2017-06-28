@@ -6,7 +6,7 @@
 // File:  mainNotebook.h
 // Date:  4/4/2008
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains the class declaration for the MainNotebook class.
 
 #ifndef MAIN_NOTEBOOK_H_

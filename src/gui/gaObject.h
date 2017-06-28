@@ -1,11 +1,12 @@
-/*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-===================================================================================*/
+/*=============================================================================
+                                     VVASE
+                        Copyright Kerry R. Loux 2007-2017
+=============================================================================*/
 
 // File:  gaObject.h
 // Date:  4/7/2009
-// Author:  K. Loux
+// Auth:  K. Loux
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  This is a wrapper class for genetic algorithm implementation.
 
 #ifndef GA_OBJECT_H_

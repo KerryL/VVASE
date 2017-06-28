@@ -6,7 +6,7 @@
 // File:  brakes.cpp
 // Date:  11/6/2007
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains class functionality for brakes class.
 
 // Local headers

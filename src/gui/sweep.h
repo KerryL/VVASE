@@ -1,11 +1,12 @@
-/*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-===================================================================================*/
+/*=============================================================================
+                                     VVASE
+                        Copyright Kerry R. Loux 2007-2017
+=============================================================================*/
 
-// File:  iteration.h
+// File:  sweep.h
 // Date:  1/20/2009
-// Author:  K. Loux
+// Auth:  K. Loux
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  This object maintains an array of the kinematic outputs of a car
 //        and is associated with a plot on which it can draw the outputs
 //        as a function of ride, roll, heave, and steer.

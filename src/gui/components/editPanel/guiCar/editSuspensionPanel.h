@@ -6,7 +6,7 @@
 // File:  editSuspensionPanel.h
 // Date:  2/10/2009
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains the class declaration for the EditSuspensionPanel class.
 
 #ifndef EDIT_SUSPENSION_PANEL_H_

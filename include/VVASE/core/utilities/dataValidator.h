@@ -6,7 +6,7 @@
 // File:  dataValidator.h
 // Date:  12/12/2011
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Class derived from wxTextValidator, used for converting to/from
 //        the various default units in the Convert class.  Also handles
 //        UndoRedoStack entries.  NOTE:  When dialog controls are not direct

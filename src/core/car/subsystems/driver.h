@@ -6,7 +6,7 @@
 // File:  driver.h
 // Date:  11/4/2007
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains class declaration for Driver class.
 
 #ifndef DRIVER_H_

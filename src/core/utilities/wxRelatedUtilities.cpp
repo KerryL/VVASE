@@ -6,7 +6,7 @@
 // File:  wxRelatedUtilities.cpp
 // Date:  11/5/2011
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains helper functions and wrappers for working with wxWidgets.
 
 // Local headers

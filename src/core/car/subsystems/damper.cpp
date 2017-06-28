@@ -6,7 +6,7 @@
 // File:  damper.cpp
 // Date:  1/3/2009
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains class definition for Damper class.  This class contains
 //        the information and methods required to model a non-linear viscous
 //        damper.

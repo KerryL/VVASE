@@ -6,7 +6,7 @@
 // File:  editSuspensionNotebook.cpp
 // Date:  2/19/2009
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains the class definition for the EditSuspensionNotebook class.
 //        This class is used to edit the car parameters.  Different panels
 //        are displayed for editing different sub-systems.

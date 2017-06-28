@@ -6,7 +6,7 @@
 // File:  geneticAlgorithm.h
 // Date:  4/7/2009
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  This is a base class for genetic algorithms.  It works with generic genomes
 //	      to ensure flexibility, so it is up to the user to translate between genomes
 //	      and their object's phenotype.

@@ -6,7 +6,7 @@
 // File:  fuelCell.cpp
 // Date:  12/12/2008
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains class definitions for FuelCell class.  This is for
 //        modeling a shift in weight and CG as fuel is burned.  Future
 //        considerations include modeling fuel slosh for dynamic effects

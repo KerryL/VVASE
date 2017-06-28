@@ -6,7 +6,7 @@
 // File:  unitConverter.h
 // Date:  3/9/2008
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Class declaration for a conversion from our "standard" units into the
 //        user-specified units.  Also contains some inline functions for other
 //        conversions.  The "standard" units are the units in which all of the

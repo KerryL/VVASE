@@ -6,7 +6,7 @@
 // File:  geometryMath.cpp
 // Date:  1/2/2015
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  General purpose geometry methods.
 
 // Standard C++ headers

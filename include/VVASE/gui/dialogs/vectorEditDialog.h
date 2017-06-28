@@ -6,7 +6,7 @@
 // File:  vectorEditDialog.h
 // Date:  7/6/2016
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Class for adding menu items to context menus that function more like
 //        dialogs.
 

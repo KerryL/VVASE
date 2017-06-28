@@ -6,7 +6,7 @@
 // File:  appearanceOptionsDialog.cpp
 // Date:  4/23/2009
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  A dialog object for editing the contents of the AppearanceOptions object.
 
 // wxWidgets headers

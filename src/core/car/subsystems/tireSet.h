@@ -6,7 +6,7 @@
 // File:  tireSet.h
 // Date:  3/9/2008
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains class declaration for TireSet class.  This class contains a set
 //        of four tires.  Required to manage dynamic memory allocation of a set of tires.
 

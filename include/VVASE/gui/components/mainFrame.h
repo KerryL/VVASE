@@ -6,7 +6,7 @@
 // File:  mainFrame.h
 // Date:  3/7/2008
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains the class declaration for the MainFrame class.  Uses wxWidgets
 //        for the GUI components.  Also contains the application class definition
 //        and functionality at the bottom of this file (minimal).

@@ -6,7 +6,7 @@
 // File:  editSuspensionRatesPanel.h
 // Date:  5/27/2016
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains the class definition for the EditSuspensionRatesPanel class.
 //        This class is used to edit the spring and ARB rates.
 

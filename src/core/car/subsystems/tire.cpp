@@ -6,7 +6,7 @@
 // File:  tire.cpp
 // Date:  11/3/2007
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains class definition for tire class.
 
 // Standard C++ headers

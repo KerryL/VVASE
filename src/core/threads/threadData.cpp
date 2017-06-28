@@ -6,7 +6,7 @@
 // File:  threadData.cpp
 // Date:  1/12/2009
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains the class definition for the ThreadData class.  This is an
 //        abstract class from which objects should be derived to pass data to
 //        different types of threads.  Using this class allows for a cleaner

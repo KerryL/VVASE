@@ -6,7 +6,7 @@
 // File:  threadJob.h
 // Date:  11/3/2009
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains the class declaration for the ThreadJob class.  This is the
 //        class containing information that is stored in the job queue, i.e. this
 //        class is used for communication from the GUI thread to the worker threads

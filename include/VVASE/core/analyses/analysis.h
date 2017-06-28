@@ -6,7 +6,7 @@
 // File:  analysis.h
 // Date:  6/20/2017
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Abstract base class for Analysis objects.
 
 #ifndef ANALYSIS_H_

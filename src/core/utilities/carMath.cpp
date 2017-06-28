@@ -6,7 +6,7 @@
 // File:  carMath.cpp
 // Date:  3/24/2008
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains useful functions that don't fit better in another class.  Hopefully this
 //        file will one day be absolved into a real class instead of just being a kludgy
 //        collection of functions.  The goal would be to be able to use Debugger classes again.

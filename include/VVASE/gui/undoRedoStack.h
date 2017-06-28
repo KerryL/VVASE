@@ -6,7 +6,7 @@
 // File:  undoRedoStack.h
 // Date:  10/18/2010
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Class implementing std::stack to store information about recent operations
 //        to provide the opportunity to undo and redo.
 

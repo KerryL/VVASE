@@ -6,7 +6,7 @@
 // File:  kinematics.cpp
 // Date:  11/3/2007
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains class functionality for static state class.  This is where
 //        most of the functionality of the suspension kinematics end of things
 //        will be.

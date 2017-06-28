@@ -6,7 +6,7 @@
 // File:  vvaseApplication.h
 // Date:  5/17/2008
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  The application class.
 
 #ifndef VVASEAPP_H_

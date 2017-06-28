@@ -6,7 +6,7 @@
 // File:  guiObject.h
 // Date:  6/5/2008
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains class declaration for GuiObject class.  This aids with GUI functionality
 //        by providing a common link between all the GUI controls and car objects.
 

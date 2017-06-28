@@ -6,7 +6,7 @@
 // File:  quasiStatic.cpp
 // Created:  5/27/2016
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Quasi-static analysis object.  Calculates vehicle attitude when
 //        subjected to external accelerations.
 

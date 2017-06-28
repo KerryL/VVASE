@@ -6,7 +6,7 @@
 // File:  brakes.h
 // Date:  11/6/2007
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains class declaration for Brakes class (disk brakes only).
 
 #ifndef BRAKES_H_

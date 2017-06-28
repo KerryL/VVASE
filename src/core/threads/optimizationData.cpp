@@ -6,7 +6,7 @@
 // File:  optimizationData.cpp
 // Date:  1/12/2009
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains the class declaration for the OptimizationData class.  This contains
 //        information required to conduct genetic optimizations.
 

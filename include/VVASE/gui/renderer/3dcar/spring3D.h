@@ -6,7 +6,7 @@
 // File:  spring3D.h
 // Date:  1/5/2009
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains class declaration for the Spring3D class.
 
 #ifndef SPRING3D_H_

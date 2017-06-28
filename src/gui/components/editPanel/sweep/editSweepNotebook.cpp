@@ -6,7 +6,7 @@
 // File:  editSweepNotebook.cpp
 // Date:  11/14/2010
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains the class definition for the EditIterationNotebook class.
 
 // Local headers

@@ -6,7 +6,7 @@
 // File:  geneticOptimization.h
 // Date:  4/7/2009
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  This is a GUI interface for the genetic algorithm optimization.
 
 #ifndef GENETIC_OPTIMIZATION_H_

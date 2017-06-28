@@ -6,7 +6,7 @@
 // File:  workerThread.h
 // Date:  11/3/2009
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains the class declaration for the WORKER_THREAD class.  Derives
 //        from wxWidgets thread classes.  Contains a process for checking a queue
 //        for jobs, pulling jobs from the queue and executing them, and

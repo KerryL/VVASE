@@ -6,7 +6,7 @@
 // File:  geometryMath.h
 // Date:  1/2/2015
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  General purpose geometry methods.
 
 #ifndef GEOMETRY_MATH_H_

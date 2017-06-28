@@ -6,7 +6,7 @@
 // File:  gaInterface.h
 // Date:  6/20/2017
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Abstract base class for interfacing to genetic optimization objects.
 
 #ifndef GA_INTERFACE_H_

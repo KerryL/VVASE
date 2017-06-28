@@ -6,7 +6,7 @@
 // File:  sphere.h
 // Date:  5/14/2009
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Derived from Primitive for creating spherical objects.
 
 #ifndef SPHERE_H_

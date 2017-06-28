@@ -6,7 +6,7 @@
 // File:  drivetrain.h
 // Date:  11/3/2007
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains class declaration for Drivetrain class (transmission).
 
 #ifndef DRIVETRAIN_H_

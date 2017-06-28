@@ -6,7 +6,7 @@
 // File:  kinematicOutputs.h
 // Date:  3/23/2008
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains class declaration for KinematicOutputs class.  This class does the
 //        calculations for all of the kinematic simulation outputs.  That includes any
 //        kind of wheel angle/orientation, chassis attitude, spring/damper positions, but

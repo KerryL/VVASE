@@ -6,7 +6,7 @@
 // File:  origin.h
 // Date:  5/23/2008
 // Auth:  K. Loux
-// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains class declaration for the Origin class.
 
 #ifndef ORIGIN_H_
