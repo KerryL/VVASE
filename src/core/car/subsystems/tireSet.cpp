@@ -1,21 +1,15 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  tireSet.cpp
-// Created:  3/9/2008
+// Date:  3/9/2008
 // Author:  K. Loux
-// Description:  Class that contains a set of four tires.  Required to manage
-//				 dynamic memory allocation of a set of tires.
-// History:
-//	11/22/2009	- Moved to vCar.lib, K. Loux.
+// Desc:  Class that contains a set of four tires.  Required to manage
+//        dynamic memory allocation of a set of tires.
 
-// VVASE headers
+// Local headers
 #include "vCar/tire.h"
 #include "vCar/tireSet.h"
 #include "vUtilities/debugger.h"

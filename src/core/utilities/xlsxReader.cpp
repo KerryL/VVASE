@@ -1,19 +1,13 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  xlsxReader.cpp
-// Created:  10/21/2010
+// Date:  10/21/2010
 // Author:  K. Loux
-// Description:  Class for reading from Excel's XML-based files.  Contains functions
-//				 intended for extracting columns of data.
-// History:
-//	11/7/2011	- Corrected camelCase, K. Loux.XlsxReader
+// Desc:  Class for reading from Excel's XML-based files.  Contains functions
+//        intended for extracting columns of data.
 
 // Standard C++ headers
 #include <limits>
@@ -515,7 +509,7 @@ unsigned int XlsxReader::ParseForRowCount(const wxString &dimensionString) const
 		{
 			long lastRow;
 			dimensionString.Mid(i, dimensionString.Length() - i).ToLong(&lastRow);
-			
+
 			// Compute the number of rows containing data
 			return int(lastRow - firstRow) + 1;
 		}

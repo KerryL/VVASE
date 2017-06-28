@@ -8,20 +8,21 @@
 ===================================================================================*/
 
 // File:  fuelCell.h
-// Created:  12/12/2008
+// Date:  12/12/2008
 // Author:  K. Loux
-// Description:  Contains class declaration for FuelCell class.  This is for
-//				 modeling a shift in weight and CG as fuel is burned.  Future
-//				 considerations include modeling fuel slosh for dynamic effects
-//				 as well as fuel pump starvation and out-of-gas engine stalling.
-// History:
-//	11/22/2009	- Moved to vCar.lib, K. Loux.
+// Desc:  Contains class declaration for FuelCell class.  This is for
+//        modeling a shift in weight and CG as fuel is burned.  Future
+//        considerations include modeling fuel slosh for dynamic effects
+//        as well as fuel pump starvation and out-of-gas engine stalling.
 
 #ifndef FUEL_CELL_H_
 #define FUEL_CELL_H_
 
-// VVASE headers
+// Local headers
 #include "vMath/vector.h"
+
+namespace VVASE
+{
 
 class FuelCell
 {
@@ -40,5 +41,7 @@ private:
 	double fuelWeight;// [lbf]
 	Vector fuelCG;
 };
+
+}// namespace VVASE
 
 #endif// FUEL_CELL_H_

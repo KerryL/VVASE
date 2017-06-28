@@ -1,21 +1,14 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  differential.cpp
-// Created:  11/6/2007
+// Date:  11/6/2007
 // Author:  K. Loux
-// Description:  Contains class functionality for differential class.
-// History:
-//	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
-//	11/22/2009	- Moved to vCar.lib, K. Loux.
+// Desc:  Contains class functionality for differential class.
 
-// VVASE headers
+// Local headers
 #include "vCar/differential.h"
 #include "vUtilities/debugger.h"
 #include "vUtilities/machineDefinitions.h"

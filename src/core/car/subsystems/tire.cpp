@@ -1,24 +1,17 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  tire.cpp
-// Created:  11/3/2007
+// Date:  11/3/2007
 // Author:  K. Loux
-// Description:  Contains class definition for tire class.
-// History:
-//	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
-//	11/22/2009	- Moved to vCar.lib, K. Loux.
+// Desc:  Contains class definition for tire class.
 
 // Standard C++ headers
 #include <cassert>
 
-// VVASE headers
+// Local headers
 #include "vCar/tire.h"
 #include "vUtilities/machineDefinitions.h"
 #include "vUtilities/binaryReader.h"

@@ -1,3 +1,8 @@
+
+
+
+
+
 // File:  geometryMath.cpp
 // Auth:  K. Loux
 // Date:  1/2/2015
@@ -106,26 +111,26 @@ bool GeometryMath::FindCircleSphereIntersection(const Circle &c, const Sphere &s
 	Vector *intersections)
 {
 	assert(intersections && "intersections must not be NULL");
-		
+
 	Sphere sphereFromCircle;
 	sphereFromCircle.center = c.center;
 	sphereFromCircle.radius = c.radius;
-		
+
 	Plane intersectionPlane;
 	intersectionPlane = FindSphereSphereIntersectionPlane(s, sphereFromCircle);
-			
+
 	Plane circlePlane;
 	circlePlane.point = c.center;
 	circlePlane.normal = c.normal;
-		
+
 	Axis axis;
 	if (!FindPlanePlaneIntersection(circlePlane, intersectionPlane, axis))
 		return false;
-			
+
 	// Either sphere can be used as the argument to this method
 	if (!FindAxisSphereIntersections(axis, s, intersections))
 		return false;
-			
+
 	return true;
 }
 
@@ -162,7 +167,7 @@ GeometryMath::Plane GeometryMath::FindSphereSphereIntersectionPlane(const Sphere
 
 	double d = 0.5 * (s1.center * s1.center - s2.center * s2.center
 		- s1.radius * s1.radius + s2.radius * s2.radius);
-		
+
 	// To find a point on the plane, set any two components of the point
 	// equal to zero.  We choose which points are zerod to ensure numeric
 	// stability.
@@ -297,24 +302,24 @@ bool GeometryMath::FindAxisSphereIntersections(const Axis &a, const Sphere &s, V
 {
 	assert(intersections && "intersections must not be NULL");
 	assert(VVASEMath::IsZero(a.direction.Length() - 1.0) && "a.direction must have unit magnitude");
-		
+
 	double b, c;
 	b = 2.0 * (a.point * a.direction - s.center * a.direction);
 	c = a.point * a.point + s.center * s.center - s.radius * s.radius
 		-2.0 * a.point * s.center;
-		
+
 	double t[2];
 	if (!SolveQuadratic(1.0, b, c, t))
 		return false;
-			
+
 	intersections[0].x = a.point.x + a.direction.x * t[0];
 	intersections[0].y = a.point.y + a.direction.y * t[0];
 	intersections[0].z = a.point.z + a.direction.z * t[0];
-		
+
 	intersections[1].x = a.point.x + a.direction.x * t[1];
 	intersections[1].y = a.point.y + a.direction.y * t[1];
 	intersections[1].z = a.point.z + a.direction.z * t[1];
-			
+
 	return true;
 }
 
@@ -341,13 +346,13 @@ bool GeometryMath::SolveQuadratic(const double &a, const double &b,
 	const double &c, double *solutions)
 {
 	assert(solutions && "solutions must not be NULL");
-		
+
 	if (b * b < 4.0 * a * c)// negative descriminant
 		return false;
-		
+
 	solutions[0] = 0.5 * (-b + sqrt(b * b - 4.0 * a * c)) / a;
 	solutions[1] = 0.5 * (-b - sqrt(b * b - 4.0 * a * c)) / a;
-		
+
 	return true;
 }
 

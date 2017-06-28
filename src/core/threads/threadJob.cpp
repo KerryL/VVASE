@@ -1,22 +1,17 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  threadJob.cpp
-// Created:  11/3/2009
+// Date:  11/3/2009
 // Author:  K. Loux
-// Description:  Contains the class definition for the ThreadJob class.  This is the
-//				 class containing information that is stored in the job queue, i.e. this
-//				 class is used for communication from the GUI thread to the worker threads
-//				 (in that direction only - reverse communication is handled with events).
-// History:
+// Desc:  Contains the class definition for the ThreadJob class.  This is the
+//        class containing information that is stored in the job queue, i.e. this
+//        class is used for communication from the GUI thread to the worker threads
+//        (in that direction only - reverse communication is handled with events).
 
-// VVASE headers
+// Local headers
 #include "vSolver/threads/threadJob.h"
 #include "vSolver/threads/threadData.h"
 
@@ -154,12 +149,12 @@ ThreadJob& ThreadJob::operator=(const ThreadJob &job)
 	// Check for self-assignment
 	if (this == &job)
 		return *this;
-	
+
 	// Do the copy
 	command = job.command;
 	index = job.index;
 	name = job.name.c_str();// Force deep copy for thread-safety
 	data = job.data;
-	
+
 	return *this;
 }

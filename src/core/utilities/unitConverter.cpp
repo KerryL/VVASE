@@ -1,21 +1,17 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  unitConverter.cpp
-// Created:  3/9/2008
+// Date:  3/9/2008
 // Author:  K. Loux
-// Description:  Class definition for a conversion from our "standard" units into the
-//				 user-specified units.  Also contains some inline functions for other
-//				 conversions.  The "standard" units are the units in which all of the
-//				 calculations are performed.  The "default" units are the units for
-//				 input and output.  This class is for converting from the units used
-//				 for calculation to/from the units the user has selected.
+// Desc:  Class definition for a conversion from our "standard" units into the
+//        user-specified units.  Also contains some inline functions for other
+//        conversions.  The "standard" units are the units in which all of the
+//        calculations are performed.  The "default" units are the units for
+//        input and output.  This class is for converting from the units used
+//        for calculation to/from the units the user has selected.
 
 // Standard C++ headers
 #include <cfloat>
@@ -23,7 +19,7 @@
 // wxWidgets headers
 #include <wx/wx.h>
 
-// VVASE headers
+// Local headers
 #include "vUtilities/unitConverter.h"
 #include "vMath/vector.h"
 #include "vMath/carMath.h"

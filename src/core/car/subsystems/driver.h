@@ -8,17 +8,17 @@
 ===================================================================================*/
 
 // File:  driver.h
-// Created:  11/4/2007
+// Date:  11/4/2007
 // Author:  K. Loux
-// Description:  Contains class declaration for DRIVER class.
-// History:
-//	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
-//	11/22/2009	- Moved to vCar.lib, K. Loux.
+// Desc:  Contains class declaration for DRIVER class.
 
 #ifndef DRIVER_H_
 #define DRIVER_H_
 
-// vUtilities forward declarations
+namespace VVASE
+{
+
+// Local forward declarations
 class Debugger;
 
 class Driver
@@ -51,5 +51,7 @@ private:
 
 	Inputs driverInputs;
 };
+
+}// namespace VVASE
 
 #endif// DRIVER_H_

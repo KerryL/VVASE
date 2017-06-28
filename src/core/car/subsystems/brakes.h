@@ -1,22 +1,21 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  brakes.h
-// Created:  11/6/2007
+// Date:  11/6/2007
 // Author:  K. Loux
-// Description:  Contains class declaration for Brakes class (disk brakes only).
+// Desc:  Contains class declaration for Brakes class (disk brakes only).
 
 #ifndef BRAKES_H_
 #define BRAKES_H_
 
 // Local headers
 #include "utilities/wheelSetStructures.h"
+
+namespace VVASE
+{
 
 // Local forward declarations
 class BinaryReader;
@@ -51,5 +50,7 @@ public:
     static std::unique_ptr<Brakes> Create() { return std::make_unique<Brakes>(); }
     static std::string GetName() { return _T("Brake"); }
 };
+
+}// namespace VVASE
 
 #endif// BRAKES_H_

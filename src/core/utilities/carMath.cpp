@@ -8,14 +8,11 @@
 ===================================================================================*/
 
 // File:  carMath.cpp
-// Created:  3/24/2008
+// Date:  3/24/2008
 // Author:  K. Loux
-// Description:  Contains useful functions that don't fit better in another class.  Hopefully this
-//				 file will one day be absolved into a real class instead of just being a kludgy
-//				 collection of functions.  The goal would be to be able to use Debugger classes again.
-// History:
-//	11/22/2009	- Moved to vMath.lib, K. Loux.
-//	11/7/2011	- Corrected camelCase, K. Loux.
+// Desc:  Contains useful functions that don't fit better in another class.  Hopefully this
+//        file will one day be absolved into a real class instead of just being a kludgy
+//        collection of functions.  The goal would be to be able to use Debugger classes again.
 
 // Standard C++ headers
 #include <cstdlib>

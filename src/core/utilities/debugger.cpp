@@ -1,27 +1,13 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  debugger.cpp
-// Created:  2/24/2008
+// Date:  2/24/2008
 // Author:  K. Loux
-// Description:  A simple class that prints information to a log file.  Just
-//				 to clean up the rest of the program.
-// History:
-//	3/5/2008	- Transformed from function to class and added DebugLevel, K. Loux.
-//	3/8/2008	- Modified to use the wxWidgets class wxString instead of char *, K. Loux.
-//	3/9/2008	- Changed the structure of the Debugger class to handle the entire application
-//				  with one object, and to print the output to a wxTextCtl object, K. Loux.
-//	5/2/2009	- Made Print() functions const to allow passing this object as a constant, K. Loux.
-//	11/22/2009	- Moved to vUtilities.lib, K. Loux.
-//	12/20/2009	- Modified for thread-safe operation, K. Loux.
-//	11/7/2011	- Corrected camelCase, K. Loux.
-//	12/5/2011	- Made this object a singleton, K. Loux.
+// Desc:  A simple class that prints information to a log file.  Just
+//        to clean up the rest of the program.
 
 // Standard C++ headers
 #include <stdarg.h>
@@ -105,7 +91,7 @@ Debugger& Debugger::GetInstance()
 {
 	if (!debuggerInstance)
 		debuggerInstance = new Debugger();
-	
+
 	return *debuggerInstance;
 }
 
@@ -332,7 +318,7 @@ std::ostream& operator<<(std::ostream &os, const Debugger::DebugLevel& level)
 		// Then could make another ostream for writing to wxTextCtrl
 #endif
 	}
-	
+
 #ifdef DEBUG_TO_STDOUT
 	std::cout << debugger.buffer.threadBuffer[wxThread::GetCurrentId()]->str() << std::endl;
 #endif

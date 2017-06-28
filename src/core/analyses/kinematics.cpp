@@ -1,35 +1,20 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  kinematics.cpp
-// Created:  11/3/2007
+// Date:  11/3/2007
 // Author:  K. Loux
-// Description:  Contains class functionality for static state class.  This is where
-//				 most of the functionality of the suspension kinematics end of things
-//				 will be.
-// History:
-//	2/24/2008	- Made major changes to class when Drivetrain object was removed.  Removed
-//				  all dynamic memory allocation from constructor, K. Loux.
-//	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
-//	3/15/2008	- Finished contact patch line search algorithm, K. Loux.
-//	3/23/2008	- Changed units for class members and functions from degrees to radians and
-//				  renamed class from Kinematics.  Also introduce Outputs class and Corner class
-//				  (major restructuring of kinematic solvers), K. Loux.
-//	3/24/2009	- Moved (physical location) to physics folder, K. Loux.
-//	4/19/2009	- Added threading for SolveCorner(), K. Loux.
-//	4/21/2009	- Removed threading (it's slower), K. Loux.
+// Desc:  Contains class functionality for static state class.  This is where
+//        most of the functionality of the suspension kinematics end of things
+//        will be.
 
 // wxWidgets headers
 #include <wx/wx.h>
 #include <wx/stopwatch.h>
 
-// VVASE headers
+// Local headers
 #include "vSolver/physics/kinematics.h"
 #include "vCar/car.h"
 #include "vCar/corner.h"
@@ -102,7 +87,7 @@ void Kinematics::UpdateKinematics(const Car* originalCar, Car* workingCar, wxStr
 	DebugLog::GetInstance()->Log(_T("Kinematics::UpdateKinematics (workingLock)"));
 	wxMutexLocker originalLock(originalCar->GetMutex());
 	DebugLog::GetInstance()->Log(_T("Kinematics::UpdateKinematics (originalLock)"));
-	
+
 	// Copy the information in the original car to the working car.  This minimizes rounding
 	// errors in the calculation of suspension points, and it also ensures that changes made
 	// to other sub-systems are carried over into the working car.
@@ -689,7 +674,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 //
 // Return Value:
 //		bool, true for success, false for error
-//		
+//
 //==========================================================================
 bool Kinematics::SolveForPoint(const Corner::Hardpoints &target, const Corner::Hardpoints& reference1,
 	const Corner::Hardpoints& reference2, const Corner::Hardpoints& reference3,
@@ -734,7 +719,7 @@ bool Kinematics::SolveForPoint(const Corner::Hardpoints &target, const Corner::H
 //
 // Return Value:
 //		bool, true for success, false for error
-//		
+//
 //==========================================================================
 bool Kinematics::SolveForPoint(const Vector &center1, const Vector &center2,
 	const Vector &center3, const Vector &originalCenter1,
@@ -810,7 +795,7 @@ bool Kinematics::SolveForPoint(const Vector &center1, const Vector &center2,
 //
 // Return Value:
 //		None
-//		
+//
 //==========================================================================
 void Kinematics::MoveSteeringRack(const double &travel) const
 {
@@ -867,7 +852,7 @@ void Kinematics::MoveSteeringRack(const double &travel) const
 //
 // Return Value:
 //		bool, true for success, false for error
-//		
+//
 //==========================================================================
 bool Kinematics::SolveForXY(const Corner::Hardpoints &target,
 	const Corner::Hardpoints& reference1, const Corner::Hardpoints& reference2,
@@ -904,7 +889,7 @@ bool Kinematics::SolveForXY(const Corner::Hardpoints &target,
 //
 // Return Value:
 //		bool, true for success, false for error
-//		
+//
 //==========================================================================
 bool Kinematics::SolveForXY(const Vector &center1, const Vector &center2,
 	const Vector &originalCenter1, const Vector &originalCenter2,
@@ -998,7 +983,7 @@ bool Kinematics::SolveForXY(const Vector &center1, const Vector &center2,
 //
 // Return Value:
 //		bool, true for success, false for error
-//		
+//
 //==========================================================================
 bool Kinematics::SolveForContactPatch(const Vector &wheelCenter,
 	const Vector &wheelPlaneNormal, const double &tireRadius, Vector &output)
@@ -1071,7 +1056,7 @@ bool Kinematics::SolveForContactPatch(const Vector &wheelCenter,
 //
 // Return Value:
 //		Vector
-//		
+//
 //==========================================================================
 // Solves the equation a dot v = 0 for a
 Vector Kinematics::FindPerpendicularVector(const Vector &v)
@@ -1145,7 +1130,7 @@ Vector Kinematics::FindPerpendicularVector(const Vector &v)
 //
 // Return Value:
 //		dobule specifying parameter of parametric cirlce equation
-//		
+//
 //==========================================================================
 double Kinematics::OptimizeCircleParameter(const Vector &center, const Vector &a,
 	const Vector &b, const Vector &target)
@@ -1195,7 +1180,7 @@ double Kinematics::OptimizeCircleParameter(const Vector &center, const Vector &a
 //
 // Return Value:
 //		bool, true for success, false for error
-//		
+//
 //==========================================================================
 bool Kinematics::SolveInboardTBarPoints(const Vector &leftOutboard,
 	const Vector &rightOutboard, const Vector &centerPivot, const Vector &pivotAxisPoint,
@@ -1404,7 +1389,7 @@ bool Kinematics::SolveInboardTBarPoints(const Vector &leftOutboard,
 //
 // Return Value:
 //		bool, true for success, false for error
-//		
+//
 //==========================================================================
 void Kinematics::UpdateCGs(const Vector& cor, const Vector& angles, const Vector::Axis& first,
 	const Vector::Axis& second, const double& heave, const WheelSet& tireDeflections, Car* workingCar) const

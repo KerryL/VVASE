@@ -8,13 +8,12 @@
 ===================================================================================*/
 
 // File:  kinematicsData.cpp
-// Created:  1/12/2009
+// Date:  1/12/2009
 // Author:  K. Loux
-// Description:  Contains the class declaration for the KinematicsData class.  This contains
-//				 information required to complete kinematics analyses and return the outputs.
-// History:
+// Desc:  Contains the class declaration for the KinematicsData class.  This contains
+//        information required to complete kinematics analyses and return the outputs.
 
-// VVASE headers
+// Local headers
 #include "vSolver/threads/kinematicsData.h"
 
 //==========================================================================

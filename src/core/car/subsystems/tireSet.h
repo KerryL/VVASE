@@ -1,20 +1,19 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  tireSet.h
-// Created:  3/9/2008
+// Date:  3/9/2008
 // Author:  K. Loux
-// Description:  Contains class declaration for TireSet class.  This class contains a set
-//				 of four tires.  Required to manage dynamic memory allocation of a set of tires.
+// Desc:  Contains class declaration for TireSet class.  This class contains a set
+//        of four tires.  Required to manage dynamic memory allocation of a set of tires.
 
-#ifndef TIRESET_H_
-#define TIRESET_H_
+#ifndef TIRE_SET_H_
+#define TIRE_SET_H_
+
+namespace VVASE
+{
 
 // Local forward declarations
 class Tire;
@@ -38,4 +37,6 @@ public:
 	std::unique_ptr<Tire> leftRear;
 };
 
-#endif// TIRESET_H_
+}// namespace VVASE
+
+#endif// TIRE_SET_H_

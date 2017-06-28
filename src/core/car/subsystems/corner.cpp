@@ -1,27 +1,19 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  corner.cpp
-// Created:  3/23/2008
+// Date:  3/23/2008
 // Author:  K. Loux
-// Description:  Contains class functionality for corner class.  This class contains
-//				 the suspension information for one corner of the car (four instances
-//				 are required to describe the entire suspension).
-// History:
-//	2/16/2009	- Changed to use enumeration style array of points instead of having each
-//				  point declared individually, K. Loux.
-//	11/22/2009	- Moved to vCar.lib, K. Loux.
+// Desc:  Contains class functionality for corner class.  This class contains
+//        the suspension information for one corner of the car (four instances
+//        are required to describe the entire suspension).
 
 // wxWidgets headers
 #include <wx/wx.h>
 
-// VVASE headers
+// Local headers
 #include "vCar/corner.h"
 #include "vUtilities/debugger.h"
 #include "vUtilities/machineDefinitions.h"

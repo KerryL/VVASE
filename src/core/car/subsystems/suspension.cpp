@@ -1,33 +1,17 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  suspension.cpp
-// Created:  11/3/2007
+// Date:  11/3/2007
 // Author:  K. Loux
-// Description:  Contains class functionality for Suspension class.
-// History:
-//	2/17/2008	- Made SolveForPoint and SolveForXY use newly found analytical solution
-//				  for intersection of three spheres problem, K. Loux.
-//	3/9/2008	- Changed structure of Debugger class, K. Loux.
-//	2/16/2009	- Changed to use enumeration style array of points instead of having each
-//				  point declared individually, K. Loux.
-//	4/11/2009	- Changed structure of SolveForPoint and SolveForXY to take original
-//				  and new centers and locations as first step toward making point
-//				  solving more robust, K. Loux.
-//	4/19/2009	- Made all of the Solve...() functions static, and made Debugger static, K. Loux.
-//	11/22/2009	- Moved to vCar.lib, K. Loux.
-//	1/8/2010	- Modified to correct potential divide by zero in SolveForXY, K. Loux.
+// Desc:  Contains class functionality for Suspension class.
 
 // wxWidgets headers
 #include <wx/wx.h>
 
-// VVASE headers
+// Local headers
 #include "vCar/suspension.h"
 #include "vUtilities/machineDefinitions.h"
 #include "vUtilities/debugger.h"

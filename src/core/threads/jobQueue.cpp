@@ -1,21 +1,16 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  jobQueue.cpp
-// Created:  11/3/2009
+// Date:  11/3/2009
 // Author:  K. Loux
-// Description:  Contains the class definition for the JobQueue class.  This queue
-//				 handles task priorities and is used to communicate from the main thread
-//				 to the worker threads (add tasks here to be completed by the workers).
-// History:
+// Desc:  Contains the class definition for the JobQueue class.  This queue
+//        handles task priorities and is used to communicate from the main thread
+//        to the worker threads (add tasks here to be completed by the workers).
 
-// VVASE headers
+// Local headers
 #include "vSolver/threads/jobQueue.h"
 #include "vSolver/threads/threadEvent.h"
 #include "vUtilities/debugLog.h"

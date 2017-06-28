@@ -1,16 +1,12 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  suspension.h
-// Created:  11/3/2007
+// Date:  11/3/2007
 // Author:  K. Loux
-// Description:  Contains class declaration for Suspension class.
+// Desc:  Contains class declaration for Suspension class.
 
 #ifndef SUSPENSION_H_
 #define SUSPENSION_H_
@@ -38,7 +34,7 @@ public:
 	// File read/write functions
 	void Write(BinaryWriter& file) const override;
 	void Read(BinaryReader& file, const int& fileVersion) override;
-    
+
     // Required by RegisterableComponent
     static std::unique_ptr<Suspension> Create() { return std::make_unique<Suspension>(); }
     static std::string GetName() { return _T("Suspension"); }

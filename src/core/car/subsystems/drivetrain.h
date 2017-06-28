@@ -1,16 +1,12 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  drivetrain.h
-// Created:  11/3/2007
+// Date:  11/3/2007
 // Author:  K. Loux
-// Description:  Contains class declaration for Drivetrain class (transmission).
+// Desc:  Contains class declaration for Drivetrain class (transmission).
 
 #ifndef DRIVETRAIN_H_
 #define DRIVETRAIN_H_
@@ -23,6 +19,9 @@
 
 // wxWidgets headers
 #include <wx/wx.h>
+
+namespace VVASE
+{
 
 // Local forward declarations
 class Differential;
@@ -66,7 +65,7 @@ public:
 	void SetRearWheelDrive(const double& bias);
 
 	std::vector<double> GetBiasRatios() const;
-    
+
     // Required by RegisterableComponent
     static std::unique_ptr<Drivetrain> Create() { return std::make_unique<Drivetrain>(); }
     static std::string GetName() { return _T("Drivetrain"); }
@@ -82,5 +81,7 @@ private:
 
 	// Clutch stuff in here, too?
 };
+
+}// namespace VVASE
 
 #endif// DRIVETRAIN_H_

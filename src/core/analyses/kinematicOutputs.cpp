@@ -1,36 +1,20 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  kinematicOutputs.cpp
-// Created:  3/23/2008
+// Date:  3/23/2008
 // Author:  K. Loux
-// Description:  Contains class definition for outputs class.  This class does the calculations
-//				 for all of the kinematic simulation outputs.  That includes any kind of wheel
-//				 angle/orientation, chassis attitude, spring/shock positions, but doesn't include
-//				 any thing that requires forces to calculate (force-based roll center, etc.).
-// History:
-//	3/24/2008	- Created CornerOutputs structure, K. Loux.
-//	2/16/2009	- Changed Corner and Suspension to use enumeration style array of points instead
-//				  of having each point declared individually, K. Loux.
-//	2/26/2009	- Fixed calculation in steer and camber angles.  Also added effects of static camber
-//				  and toe settings, K. Loux.
-//	3/11/2009	- Finished implementation of enum/array style data members, K. Loux.
-//	3/15/2009	- Changed the way kinematic centers are calculated to the "intersection of two planes"
-//				  method, K. Loux.
-//	4/19/2009	- Added threading for UpdateCorner(), K. Loux.
-//	4/21/2009	- Removed threading (it's slower), K. Loux.
-//	11/1/2010	- Revised and completed installation ratio calculations, K. Loux.
+// Desc:  Contains class definition for outputs class.  This class does the calculations
+//        for all of the kinematic simulation outputs.  That includes any kind of wheel
+//        angle/orientation, chassis attitude, spring/shock positions, but doesn't include
+//        any thing that requires forces to calculate (force-based roll center, etc.).
 
 // wxWidgets headers
 #include <wx/wx.h>
 
-// CarDesigner headers
+// Local headers
 #include "vCar/car.h"
 #include "vCar/brakes.h"
 #include "vCar/drivetrain.h"
@@ -509,7 +493,7 @@ double KinematicOutputs::ComputeUBarTwist(const Corner& originalLeft,
 	// to the swaybar axis is given by the dot product
 	deltaAngle = acos(VVASEMath::Clamp((arm1Direction * arm2Direction) /
 		(arm1Direction.Length() * arm2Direction.Length()), -1.0, 1.0)) - originalSwayBarAngle;
-	
+
 	// Change the sign according to the convention:  +ve twist transfers load from right to left
 	// (or in other words, +ve twist resists roll to the left)
 	if (signGreaterThan)
@@ -522,7 +506,7 @@ double KinematicOutputs::ComputeUBarTwist(const Corner& originalLeft,
 		if (swayBarAxis * arm1Direction.Cross(arm2Direction) < 0.0)
 			deltaAngle *= -1.0;
 	}
-		
+
 	return VVASEMath::RangeToPlusMinusPi(deltaAngle);
 }
 
@@ -597,7 +581,7 @@ double KinematicOutputs::ComputeTBarTwist(const Corner& originalLeft,
 	// to the swaybar axis is given by the dot product
 	deltaAngle = acos(VVASEMath::Clamp((armDirection * stemPlaneNormal) /
 		(armDirection.Length() * stemPlaneNormal.Length()), -1.0, 1.0)) - originalSwayBarAngle;
-	
+
 	// Change the sign according to the convention:  +ve twist transfers load from right to left
 	// (or in other words, +ve twist resists roll to the left)
 	if (signGreaterThan)
@@ -610,7 +594,7 @@ double KinematicOutputs::ComputeTBarTwist(const Corner& originalLeft,
 		if (swayBarAxis * armDirection.Cross(stemPlaneNormal) < 0.0)
 			deltaAngle *= -1.0;
 	}
-		
+
 	return VVASEMath::RangeToPlusMinusPi(deltaAngle);
 }
 
@@ -795,7 +779,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 		currentCorner->hardpoints[Corner::LowerFrontTubMount], currentCorner->hardpoints[Corner::LowerRearTubMount]);
 
 	if (!VVASEMath::GetIntersectionOfTwoPlanes(upperPlaneNormal, currentCorner->hardpoints[Corner::UpperBallJoint],
-		lowerPlaneNormal, currentCorner->hardpoints[Corner::LowerBallJoint], 
+		lowerPlaneNormal, currentCorner->hardpoints[Corner::LowerBallJoint],
 		cornerVectors[InstantAxisDirection], cornerVectors[InstantCenter]))
 		Debugger::GetInstance() << "Warning (KinematicOutputs::UpdateCorner):  Instant Center is undefined" << Debugger::PriorityHigh;
 	else
@@ -1081,7 +1065,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 			forceDirection = momentDirection.Cross(momentArm).Normalize();
 			force = forceDirection * force.Length() / (force.Normalize() * forceDirection);
 			Vector torque = momentArm.Cross(force);
-			
+
 			// At this point, torque is the bar torque (in inch-lbf) in response to the unit force at the wheel (in lbf)
 			// If the wheel moves by amount dx, then the bar moves by amount dTheta
 			// By the principle of virtual work, dW = F * dx = T * dTheta => dTheta / dx = F / T
@@ -1300,7 +1284,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 			forceDirection = momentDirection.Cross(momentArm).Normalize();
 			force = forceDirection * force.Length() / (force.Normalize() * forceDirection);
 			Vector torque = momentArm.Cross(force);
-			
+
 			// At this point, torque is the bar torque (in inch-lbf) in response to the unit force at the wheel (in lbf)
 			// If the wheel moves by amount dx, then the bar moves by amount dTheta
 			// By the principle of virtual work, dW = F * dx = T * dTheta => dTheta / dx = F / T

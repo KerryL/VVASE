@@ -1,16 +1,12 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  aerodynamics.h
-// Created:  11/3/2007
+// Date:  11/3/2007
 // Author:  K. Loux
-// Description:  Contains class declaration for Aerodynamics class.
+// Desc:  Contains class declaration for Aerodynamics class.
 
 #ifndef AERODYNAMICS_H_
 #define AERODYNAMICS_H_
@@ -20,6 +16,9 @@
 
 // Local headers
 #include "subsystem.h"
+
+namespace VVASE
+{
 
 // Local forward declarations
 class BinaryReader;
@@ -35,7 +34,7 @@ public:
 	// Functions that retrieve the aerodynamic forces and moments
 	Vector GetAeroForces() const;			// [lbf]
 	Vector GetAeroMoments() const;			// [in-lbf]
-    
+
     // Required by RegisterableComponent
     static std::unique_ptr<Aerodynamics> Create() { return std::make_unique<Aerodynamics>(); }
     static std::string GetName() { return _T("Aerodynamics"); }
@@ -50,5 +49,7 @@ private:
 	double coefficientOfMoment;			// [-]
 	// FIXME:  Add functionality for non-linear look-up table (user option)
 };
+
+}// namespace VVASE
 
 #endif// AERODYNAMICS_H_

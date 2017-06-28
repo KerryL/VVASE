@@ -1,10 +1,6 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  quasiStatic.cpp
@@ -12,7 +8,6 @@
 // Author:  K. Loux
 // Description:  Quasi-static analysis object.  Calculates vehicle attitude when subject
 //				 to external accelerations.
-// History:
 
 // Standard C++ headers
 #include <cassert>
@@ -209,9 +204,9 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 
 	if (i == limit)
 		Debugger::GetInstance() << "Warning:  Iteration limit reached (QuasiStatic::Solve)" << Debugger::PriorityMedium;
-	
+
 	outputs.wheelLoads = wheelLoads;
-	
+
 	outputs.roll = guess(0,0);
 	outputs.pitch = guess(1,0);
 	outputs.heave = guess(2,0);
@@ -261,18 +256,18 @@ WheelSet QuasiStatic::ComputeWheelLoads(const Car* originalCar,
 
 	// TODO:  Need to also consider in-plane tire forces here
 	//        A portion of the spring forces at each corner (and ARBs?) can come from in-plane forces
-	
+
 	double arbTorque;
 	if (originalCar->suspension->frontBarStyle != Suspension::SwayBarNone)
 	{
 		arbTorque = originalCar->suspension->barRate.front
 			* outputs.doubles[KinematicOutputs::FrontARBTwist];// [in-lbf]
-		
+
 		// Our convention is +ve bar twist loads the left side and unloads the right side
 		wheelLoads.leftFront += arbTorque * outputs.leftFront[KinematicOutputs::ARBInstallationRatio];
 		wheelLoads.rightFront -= arbTorque * outputs.rightFront[KinematicOutputs::ARBInstallationRatio];
 	}
-	
+
 	if (originalCar->suspension->rearBarStyle != Suspension::SwayBarNone)
 	{
 		arbTorque = originalCar->suspension->barRate.rear
@@ -280,7 +275,7 @@ WheelSet QuasiStatic::ComputeWheelLoads(const Car* originalCar,
 		wheelLoads.leftRear += arbTorque * outputs.leftRear[KinematicOutputs::ARBInstallationRatio];
 		wheelLoads.rightRear -= arbTorque * outputs.rightRear[KinematicOutputs::ARBInstallationRatio];
 	}
-	
+
 	// TODO:  3rd springs
 
 	return wheelLoads;
@@ -336,7 +331,7 @@ WheelSet QuasiStatic::ComputePreLoad(const Car* originalCar) const
 {
 	const MassProperties* mp = originalCar->massProperties;
 	const Suspension *s = originalCar->suspension;
-	
+
 	// First, compute load at each corner due to sprung mass
 	WheelSet sprungWeight;// [lbf]
 	sprungWeight.leftFront = (mp->cornerWeights.leftFront - mp->unsprungMass.leftFront) * 32.174;
@@ -363,7 +358,7 @@ WheelSet QuasiStatic::ComputePreLoad(const Car* originalCar) const
 	kinematics.SetCenterOfRotation(Vector(0.0, 0.0, 0.0));// This needs to be set to something valid, but isn't actually used
 	kinematics.SetFirstEulerRotation(Vector::AxisX);// This needs to be set to something valid, but isn't actually used
 	kinematics.UpdateKinematics(originalCar, &workingCar, _T("Pre-Load Calculation"));
-	
+
 	WheelSet preLoad;
 	preLoad.leftFront = sprungWeight.leftFront / s->leftFront.spring.rate
 		/ kinematics.GetOutputs().leftFront[KinematicOutputs::SpringInstallationRatio];
@@ -373,11 +368,11 @@ WheelSet QuasiStatic::ComputePreLoad(const Car* originalCar) const
 		/ kinematics.GetOutputs().leftRear[KinematicOutputs::SpringInstallationRatio];
 	preLoad.rightRear = sprungWeight.rightRear / s->rightRear.spring.rate
 		/ kinematics.GetOutputs().rightRear[KinematicOutputs::SpringInstallationRatio];
-	
+
 	// TODO:  3rd springs
 	if (s->frontHasThirdSpring || s->rearHasThirdSpring)
 		Debugger::GetInstance() << "Warning:  3rd springs are not considered in quasi-static analysis" << Debugger::PriorityVeryHigh;
-	
+
 	return preLoad;
 }
 
@@ -601,7 +596,7 @@ Matrix QuasiStatic::BuildRightHandMatrix(const Car* workingCar, const double& gx
 		* outputs.rightRear[KinematicOutputs::SpringInstallationRatio] + mp->unsprungMass.rightRear * gravity;
 
 	// TODO:  Add sum of x and sum of y forces?
-		
+
 	if (s->frontBarStyle != Suspension::SwayBarNone)
 	{
 		m(9,0) += outputs.doubles[KinematicOutputs::FrontARBTwist]
@@ -609,7 +604,7 @@ Matrix QuasiStatic::BuildRightHandMatrix(const Car* workingCar, const double& gx
 		m(10,0) -= outputs.doubles[KinematicOutputs::FrontARBTwist]
 			* s->barRate.front * outputs.rightFront[KinematicOutputs::ARBInstallationRatio];
 	}
-	
+
 	if (s->rearBarStyle != Suspension::SwayBarNone)
 	{
 		m(11,0) += outputs.doubles[KinematicOutputs::RearARBTwist]
@@ -683,6 +678,6 @@ double QuasiStatic::ComputeDeltaWheelSets(const WheelSet& w1, const WheelSet& w2
 	delta += fabs(w1.rightFront - w2.rightFront);
 	delta += fabs(w1.leftRear - w2.leftRear);
 	delta += fabs(w1.rightRear - w2.rightRear);
-	
+
 	return delta;
 }

@@ -1,18 +1,13 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  millikenAnalysis.cpp
-// Created:  3/23/2008
+// Date:  3/23/2008
 // Author:  K. Loux
-// Description:  Contains class definition for Milliken Moment Method analysis class.  See RCVD
-//				 for more information.
-// History:
+// Desc:  Contains class definition for Milliken Moment Method analysis class.
+//        See RCVD for more information.
 
 // Standard C++ headers
 #include <cstdlib>

@@ -1,17 +1,12 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  wxRelatedUtilities.cpp
-// Created:  11/5/2011
+// Date:  11/5/2011
 // Author:  K. Loux
-// Description:  Contains helper functions and wrappers for working with wxWidgets.
-// History:
+// Desc:  Contains helper functions and wrappers for working with wxWidgets.
 
 // Local headers
 #include "vUtilities/wxRelatedUtilities.h"
@@ -46,7 +41,7 @@ void SetMinimumWidthFromContents(wxComboBox *control, unsigned int additional)
 		if (width > maxWidth)
 			maxWidth = width;
 	}
-	
+
 	control->SetMinSize(wxSize(maxWidth + additional, -1));
 }
 
@@ -69,7 +64,7 @@ void SetMinimumWidthFromContents(wxComboBox *control, unsigned int additional)
 int SafelyGetComboBoxSelection(wxComboBox *control)
 {
 	int selection = control->GetCurrentSelection();
-	
+
 #ifndef __WXMSW__
 	// Under MSW, this is not needed, otherwise, an initial value might cause
 	// wxNOT_FOUND to be returned (i.e., text is in the control, but the user
@@ -88,7 +83,7 @@ int SafelyGetComboBoxSelection(wxComboBox *control)
 		}
 	}
 #endif
-	
+
 	return selection;
 }
 

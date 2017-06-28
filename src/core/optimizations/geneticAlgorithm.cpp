@@ -1,19 +1,14 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  geneticAlgorithm.cpp
-// Created:  4/7/2009
+// Date:  4/7/2009
 // Author:  K. Loux
-// Description:  This is a base class for genetic algorithms.  It works with generic genomes
-//				 to ensure flexibility, so it is up to the user to translate between genomes
-//				 and their object's phenotype.
-// History:
+// Desc:  This is a base class for genetic algorithms.  It works with generic genomes
+//        to ensure flexibility, so it is up to the user to translate between genomes
+//        and their object's phenotype.
 
 // Standard C++ headers
 #include <cstdlib>

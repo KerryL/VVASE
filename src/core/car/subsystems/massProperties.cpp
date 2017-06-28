@@ -1,25 +1,17 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  massProperties.cpp
-// Created:  11/3/2007
+// Date:  11/3/2007
 // Author:  K. Loux
-// Description:  Contains class functionality for mass class.
-// History:
-//	3/9/2008	- Changed the structure of the Debugger class, K. Loux.
-//  3/29/2008	- Added IsValidInertiaTensor function, K. Loux.
-//	11/22/2009	- Moved to vCar.lib, K. Loux.
+// Desc:  Contains class functionality for mass class.
 
 // wxWidgets headers
 #include <wx/wx.h>
 
-// VVASE headers
+// Local headers
 #include "vCar/massProperties.h"
 #include "vCar/suspension.h"
 #include "vMath/matrix.h"
@@ -58,7 +50,7 @@ MassProperties::MassProperties()
 	iyz = 0.0;
 
 	totalCGHeight = 0.0;
-	
+
 	cornerWeights.leftFront = 0.0;
 	cornerWeights.rightFront = 0.0;
 	cornerWeights.leftRear = 0.0;

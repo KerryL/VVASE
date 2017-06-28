@@ -1,20 +1,15 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  optimizationData.cpp
-// Created:  1/12/2009
+// Date:  1/12/2009
 // Author:  K. Loux
-// Description:  Contains the class declaration for the OptimizationData class.  This contains
-//				 information required to conduct genetic optimizations.
-// History:
+// Desc:  Contains the class declaration for the OptimizationData class.  This contains
+//        information required to conduct genetic optimizations.
 
-// VVASE headers
+// Local headers
 #include "vSolver/threads/optimizationData.h"
 #include "vSolver/threads/threadJob.h"
 

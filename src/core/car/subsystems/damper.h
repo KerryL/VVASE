@@ -1,23 +1,20 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  damper.h
-// Created:  1/3/2009
+// Date:  1/3/2009
 // Author:  K. Loux
-// Description:  Contains class declaration for DAMPER class.  This class contains
-//				 the information and methods required to model a non-linear viscous
-//				 damper.
-// History:
-//	11/22/2009	- Moved to vCar.lib, K. Loux.
+// Desc:  Contains class declaration for DAMPER class.  This class contains
+//        the information and methods required to model a non-linear viscous
+//        damper.
 
 #ifndef DAMPER_H_
 #define DAMPER_H_
+
+namespace VVASE
+{
 
 class Damper
 {
@@ -27,5 +24,7 @@ public:
 
 private:
 };
+
+}// namespace VVASE
 
 #endif// DAMPER_H_

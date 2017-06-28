@@ -1,18 +1,14 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  aerodynamics.cpp
-// Created:  11/3/2007
+// Date:  11/3/2007
 // Author:  K. Loux
-// Description:  Contains class functionality for aerodynamics class.
+// Desc:  Contains class functionality for aerodynamics class.
 
-// VVASE headers
+// Local headers
 #include "car/subsystems/aerodynamics.h"
 #include "vUtilities/binaryReader.h"
 #include "vUtilities/binaryWriter.h"

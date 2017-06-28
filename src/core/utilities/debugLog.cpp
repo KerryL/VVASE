@@ -1,17 +1,13 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  debugLog.cpp
-// Created:  12/5/2011
+// Date:  12/5/2011
 // Author:  K. Loux
-// Description:  Debug log class intended to aid with multi-threaded debugging.
-//				 This class is designed to be optimized out for release builds.
+// Desc:  Debug log class intended to aid with multi-threaded debugging.
+//        This class is designed to be optimized out for release builds.
 
 // Standard C++ headers
 #include <iostream>
@@ -27,7 +23,7 @@
 // Class:			DebugLog
 // Function:		Static member initialization
 //
-// Description:		Returns a pointer to this object, 
+// Description:		Returns a pointer to this object,
 //
 // Input Arguments:
 //		None
