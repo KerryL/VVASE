@@ -1,18 +1,13 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  dropTarget.h
-// Created:  10/20/2010
+// Date:  10/20/2010
 // Author:  K. Loux
-// Description:  Derives from wxFileDropTarget and overrides OnDropFiles to load files
-//				 when the user drags-and-drops them onto the main window.
-// History:
+// Desc:  Derives from wxFileDropTarget and overrides OnDropFiles to load files
+//        when the user drags-and-drops them onto the main window.
 
 #ifndef DROP_TARGET_H_
 #define DROP_TARGET_H_

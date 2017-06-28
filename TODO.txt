@@ -13,7 +13,6 @@ Re-structure core to include:
     - Better separation of GUI and calculations
 - User-definable unit conversions?  How slow would it get?
 - Single makefile and makefile.inc that can build multiple targets (core, gui, application?)
-- Fix header for vvase.rc
     
 Code Quality Review:
 - Use unique_ptr
@@ -33,3 +32,4 @@ Code Quality Review:
 - Doxygen comments
 - Add exception safety info for all functions
 - Use m prefix for members
+- include guards (and include guard naming)

@@ -1,25 +1,20 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  ipcClient.cpp
-// Created:  10/23/2010
+// Date:  10/23/2010
 // Author:  K. Loux
-// Description:  Inter-process communication client class.  Used for passing file names
-//				 between instances of this application to prevent multiple instances
-//				 from starting up when a user opens multiple files from a file browser.
-//				 wxWidgets implements IPC through a Dynamic Data Exchange process under
-//				 MSW and through TCP on other platforms.
-// History:
+// Desc:  Inter-process communication client class.  Used for passing file names
+//        between instances of this application to prevent multiple instances
+//        from starting up when a user opens multiple files from a file browser.
+//        wxWidgets implements IPC through a Dynamic Data Exchange process under
+//        MSW and through TCP on other platforms.
 
 #include <wx/wx.h>
 
-// VVASE headers
+// Local headers
 #include "gui/ipcClient.h"
 #include "gui/ipcConnection.h"
 

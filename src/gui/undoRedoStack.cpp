@@ -1,20 +1,16 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  undoRedoStack.cpp
-// Created:  10/18/2010
+// Date:  10/18/2010
 // Author:  K. Loux
-// Description:  Class implementing std::stack to store information about recent operations
-//				 to provide the opportunity to undo and redo.
+// Desc:  Class implementing std::stack to store information about recent operations
+//        to provide the opportunity to undo and redo.
 // History:
 
-// VVASE headers
+// Local headers
 #include "gui/undoRedoStack.h"
 #include "gui/components/mainFrame.h"
 #include "gui/components/editPanel/editPanel.h"

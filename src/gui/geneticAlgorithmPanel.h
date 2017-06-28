@@ -1,18 +1,13 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  geneticAlgorithmPanel.h
-// Created:  7/30/2009
+// Date:  7/30/2009
 // Author:  K. Loux
-// Description:  Contains the class declarations for a panel that allows users to specify
-//				 the parameters, genes and goals of a genetic algorithm.
-// History:
+// Desc:  Contains the class declarations for a panel that allows users to specify
+//        the parameters, genes and goals of a genetic algorithm.
 
 #ifndef GENETIC_ALGORITHM_PANEL_H_
 #define GENETIC_ALGORITHM_PANEL_H_
@@ -20,7 +15,7 @@
 // wxWidgets headers
 #include <wx/wx.h>
 
-// VVASE headers
+// Local headers
 #include "vSolver/physics/kinematics.h"
 
 // wxWidgets forward declarations
@@ -28,7 +23,10 @@ class wxGrid;
 class wxGridEvent;
 class wxGauge;
 
-// VVASE forward declarations
+namespace VVASE
+{
+
+// Local forward declarations
 class MainFrame;
 class GeneticOptimization;
 class GuiCar;
@@ -126,5 +124,7 @@ private:
 
 	DECLARE_EVENT_TABLE();
 };
+
+}// namespace VVASE
 
 #endif// GENETIC_ALGORITHM_PANEL_H_

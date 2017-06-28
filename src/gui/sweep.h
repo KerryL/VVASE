@@ -1,39 +1,32 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  iteration.h
-// Created:  1/20/2009
+// Date:  1/20/2009
 // Author:  K. Loux
-// Description:  This object maintains an array of the kinematic outputs of a car
-//				 and is associated with a plot on which it can draw the outputs
-//				 as a function of ride, roll, heave, and steer.
-// History:
-//	3/11/2009	- Finished implementation of enum/array style data members for KinematicOutputs
-//				  class, K. Loux.
-//	5/19/2009	- Changed to derived class from GuiObject, K. Loux.
-//	11/9/2010	- Added provisions for 3D plotting, K. Loux.
-//	11/16/2010	- Moved active plots selection and range inputs to edit panel, K. Loux.
+// Desc:  This object maintains an array of the kinematic outputs of a car
+//        and is associated with a plot on which it can draw the outputs
+//        as a function of ride, roll, heave, and steer.
 
-#ifndef ITERATION_H_
-#define ITERATION_H_
+#ifndef SWEEP_H_
+#define SWEEP_H_
 
 // wxWidgets headers
 #include <wx/thread.h>
 
-// VVASE headers
+// Local headers
 #include "vUtilities/managedList.h"
 #include "gui/guiCar.h"
 #include "vSolver/physics/kinematics.h"
 #include "vSolver/physics/kinematicOutputs.h"
 #include "vSolver/threads/inverseSemaphore.h"
 
-// VVASE forward declarations
+namespace VVASE
+{
+
+// Local forward declarations
 class Car;
 class PlotPanel;
 
@@ -236,7 +229,7 @@ private:
 
 	// Synchronization object
 	unsigned int pendingAnalysisCount;
-	
+
 	// Flag indicating that this object's analyses are complete and another analysis can be started
 	bool analysesDisplayed;// FIXME:  I'd like to see these go away - are they needed?  Is there a cleaner way to handle it?
 	bool secondAnalysisPending;
@@ -244,4 +237,6 @@ private:
 	PlotPanel *plotPanel;
 };
 
-#endif// ITERATION_H_
+}// namespace VVASE
+
+#endif// SWEEP_H_

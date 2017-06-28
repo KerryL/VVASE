@@ -1,21 +1,14 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  geneticOptimization.cpp
-// Created:  4/7/2009
+// Date:  4/7/2009
 // Author:  K. Loux
-// Description:  This is a GUI interface for the genetic algorithm optimization.
-// History:
-//	1/11/2010	- Moved from test class to GuiObject derived object for permanent
-//				  implementation.
+// Desc:  This is a GUI interface for the genetic algorithm optimization.
 
-// CarDesigner headers
+// Local headers
 #include "gui/geneticOptimization.h"
 #include "gui/guiCar.h"
 #include "gui/guiObject.h"

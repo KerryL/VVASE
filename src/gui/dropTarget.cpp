@@ -1,19 +1,14 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  dropTarget.cpp
-// Created:  3/7/2008
+// Date:  3/7/2008
 // Author:  K. Loux
-// Description:  Handles events when users drag-and-drop files onto this application.
-// History:
+// Desc:  Handles events when users drag-and-drop files onto this application.
 
-// VVASE headers
+// Local headers
 #include "gui/dropTarget.h"
 #include "gui/components/mainFrame.h"
 

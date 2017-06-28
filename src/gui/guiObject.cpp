@@ -1,31 +1,22 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  guiObject.cpp
-// Created:  6/5/2008
+// Date:  6/5/2008
 // Author:  K. Loux
-// Description:  Contains class definition for GuiObject class.  This aids with GUI functionality for the
-//				 by serving as a link between all of the GUI components and the Car object.
-// History:
-//	1/24/2009	- Major application structure change - MainFrame uses GuiObject instead of
-//				  GuiCar.  GuiObject changed to only contain either GuiCar or Iteration
-//				  objects (or others, in future), K. Loux.
-//	5/19/2009	- Made abstract for base class for GuiCar and Iteration, K. Loux.
+// Desc:  Contains class definition for GuiObject class.  This aids with GUI functionality for the
+//        by serving as a link between all of the GUI components and the Car object.
 
-// Windows headers (this is still portable to Linux systems...)
+// System headers
 #include <sys/stat.h>
 
 // wxWidgets headers
 //#include <wx/treectrl.h>
 #include <wx/docview.h>
 
-// VVASE headers
+// Local headers
 #include "gui/guiObject.h"
 #include "gui/components/mainNotebook.h"
 #include "gui/components/mainTree.h"

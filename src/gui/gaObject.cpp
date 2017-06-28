@@ -1,17 +1,12 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  gaObject.cpp
-// Created:  4/7/2009
+// Date:  4/7/2009
 // Author:  K. Loux
-// Description:  This is a class for testing genetic algorithm implementation.
-// History:
+// Desc:  This is a class for testing genetic algorithm implementation.
 
 // Standard C++ headers
 #include <fstream>
@@ -19,7 +14,7 @@
 // wxWidgets headers
 #include <wx/wx.h>
 
-// CarDesigner headers
+// Local headers
 #include "gui/gaObject.h"
 #include "gui/geneticOptimization.h"
 #include "vSolver/physics/kinematics.h"

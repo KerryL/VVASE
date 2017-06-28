@@ -1,24 +1,19 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  geneticAlgorithmPanel.cpp
-// Created:  7/30/2009
+// Date:  7/30/2009
 // Author:  K. Loux
-// Description:  Contains the class definitions for a panel that allows users to specify
-//				 the parameters, genes and goals of a genetic algorithm.
-// History:
+// Desc:  Contains the class definitions for a panel that allows users to specify
+//        the parameters, genes and goals of a genetic algorithm.
 
 // wxWidgets headers
 #include <wx/grid.h>
 #include <wx/gauge.h>
 
-// CarDesigner headers
+// Local headers
 #include "gui/geneticAlgorithmPanel.h"
 #include "gui/components/mainFrame.h"
 #include "gui/dialogs/gaGoalDialog.h"

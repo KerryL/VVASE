@@ -1,22 +1,17 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  gaObject.h
-// Created:  4/7/2009
+// Date:  4/7/2009
 // Author:  K. Loux
-// Description:  This is a wrapper class for genetic algorithm implementation.
-// History:
+// Desc:  This is a wrapper class for genetic algorithm implementation.
 
 #ifndef GA_OBJECT_H_
 #define GA_OBJECT_H_
 
-// VVASE headers
+// Local headers
 #include "vUtilities/managedList.h"
 #include "vCar/corner.h"
 #include "vMath/vector.h"
@@ -26,7 +21,10 @@
 #include "vSolver/threads/inverseSemaphore.h"
 #include "vUtilities/debugLog.h"
 
-// VVASE forward declarations
+namespace VVASE
+{
+
+// Local forward declarations
 class JobQueue;
 class GuiCar;
 class Car;
@@ -101,7 +99,7 @@ public:
 
 	void MarkAnalysisComplete() { inverseSemaphore.Post(); }
 	int GetNumberOfInputs() const { wxMutexLocker lock(gsaMutex); DebugLog::GetInstance()->Log(_T("GAObject::GetNumberOfInputs()")); return inputList.GetCount(); }
-	bool OptimizationIsRunning() const {  wxMutexLocker lock(gsaMutex); DebugLog::GetInstance()->Log(_T("GAObject::OptimizationIsRunning()")); return isRunning; }
+	bool OptimizationIsRunning() const { wxMutexLocker lock(gsaMutex); DebugLog::GetInstance()->Log(_T("GAObject::OptimizationIsRunning()")); return isRunning; }
 
 	void UpdateResultingCar(Car& result) const;
 
@@ -156,5 +154,7 @@ private:
 	// Our current file version
 	static const int currentFileVersion;
 };
+
+}// namespace VVASE
 
 #endif// GA_OBJECT_H_

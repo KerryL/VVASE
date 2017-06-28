@@ -1,17 +1,12 @@
 /*===================================================================================
                                     CarDesigner
                            Copyright Kerry R. Loux 2011
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  superGrid.cpp
-// Created:  11/11/2011
+// Date:  11/11/2011
 // Author:  K. Loux
-// Description:  Derived from wxGrid, implements some additional helper methods and options.
-// History:
+// Desc:  Derived from wxGrid, implements some additional helper methods and options.
 
 // Local headers
 #include "gui/superGrid.h"

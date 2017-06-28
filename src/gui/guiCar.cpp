@@ -1,24 +1,13 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  guiCar.cpp
-// Created:  4/15/2008
+// Date:  4/15/2008
 // Author:  K. Loux
-// Description:  A high-level car object.  This class defines the interaction between
-//				 the user and the Car class.
-// History:
-//	1/24/2009	- Major application structure change - MainFrame uses GuiObject instead of
-//				  GuiCar.  GuiObject changed to only contain either GuiCar or Iteration
-//				  objects.
-//	2/17/2009	- Moved the Kinematics object into this class so we can update the 3D car
-//				  more easily.
-//	5/19/2009	- Changed to derived class from GuiObject, K. Loux.
+// Desc:  A high-level car object.  This class defines the interaction between
+//        the user and the Car class.
 
 // Standard C++ headers
 #include <fstream>
@@ -26,7 +15,7 @@
 // wxWidgets headers
 #include <wx/treectrl.h>
 
-// VVASE headers
+// Local headers
 #include "vCar/car.h"
 #include "vCar/aerodynamics.h"
 #include "vCar/brakes.h"

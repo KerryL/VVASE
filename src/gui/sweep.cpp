@@ -1,25 +1,14 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  iteration.cpp
-// Created:  1/20/2009
+// Date:  1/20/2009
 // Author:  K. Loux
-// Description:  This object maintains an array of the kinematic outputs of a car
-//				 and is associated with a 2D plot on which it can draw the outputs
-//				 as a function of ride, roll, heave, and steer.
-// History:
-//	3/11/2009	- Finished implementation of enum/array style data members for KinematicOutputs
-//				  class, K. Loux.
-//	5/19/2009	- Changed to derived class from GuiObject, K. Loux.
-//	10/18/2010	- Fixed bugs causing crash when new Iteration is canceled during creation, K. Loux.
-//	11/9/2010	- Added provisions for 3D plotting, K. Loux.
-//	11/16/2010	- Moved active plots selection and range inputs to edit panel, K. Loux.
+// Desc:  This object maintains an array of the kinematic outputs of a car
+//        and is associated with a 2D plot on which it can draw the outputs
+//        as a function of ride, roll, heave, and steer.
 
 // Standard C++ headers
 #include <fstream>
@@ -30,7 +19,7 @@
 #include <wx/stdpaths.h>
 #include <wx/filename.h>
 
-// VVASE headers
+// Local headers
 #include "gui/iteration.h"
 #include "vUtilities/debugger.h"
 #include "vUtilities/unitConverter.h"
