@@ -1,20 +1,14 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  spring3D.cpp
-// Created:  1/5/2009
+// Date:  1/5/2009
 // Author:  K. Loux
-// Description:  Contains class definition for the Spring3D class.
-// History:
-//	5/17/2009	- Removed VTK dependencies, K. Loux.
+// Desc:  Contains class definition for the Spring3D class.
 
-// VVASE headers
+// Local headers
 #include "vRenderer/primitives/cylinder.h"
 #include "vRenderer/primitives/sphere.h"
 #include "vRenderer/3dcar/spring3D.h"

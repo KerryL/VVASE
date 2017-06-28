@@ -1,24 +1,12 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  sphere.cpp
-// Created:  5/14/2009
+// Date:  5/14/2009
 // Author:  K. Loux
-// Description:  Derived from Primitive for creating spherical objects.
-// History:
-//	6/2/2009	- Modified GenerateGeometry() to make use of openGL matrices for positioning
-//				  and orienting the object, K.Loux.
-//	6/2/2009	- Changed maximum resolution from 5 to 3 - it turns out spheres were the cause
-//				  of the dramatic slow-down between VTK and the new code, with the recursive calls
-//				  being the culprit, K. Loux.
-//	6/3/2009	- Added icosohedron for use in lieu of octohedron as base polygon to begin
-//				  subdivision, K. Loux.
+// Desc:  Derived from Primitive for creating spherical objects.
 
 // Standard C++ headers
 #include <cassert>

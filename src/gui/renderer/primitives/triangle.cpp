@@ -1,17 +1,12 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  triangle.cpp
-// Created:  5/14/2009
+// Date:  5/14/2009
 // Author:  K. Loux
-// Description:  Derived from Primitive for creating triangular objects.
-// History:
+// Desc:  Derived from Primitive for creating triangular objects.
 
 // Local headers
 #include "vRenderer/primitives/triangle.h"

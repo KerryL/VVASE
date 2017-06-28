@@ -1,20 +1,14 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  plane3D.cpp
-// Created:  5/23/2008
+// Date:  5/23/2008
 // Author:  K. Loux
-// Description:  Contains class definition for the Plane3D class.
-// History:
-//	5/17/2009	- Removed VTK dependencies, K. Loux.
+// Desc:  Contains class definition for the Plane3D class.
 
-// VVASE headers
+// Local headers
 #include "vRenderer/primitives/quadrilateral.h"
 #include "vRenderer/3dcar/plane3D.h"
 #include "vRenderer/color.h"

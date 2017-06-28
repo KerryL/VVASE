@@ -1,28 +1,14 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  carRenderer.cpp
-// Created:  4/5/2008
+// Date:  4/5/2008
 // Author:  K. Loux
-// Description:  Contains class declaration for the CarRenderer class.  Derived from
-//				 RenderWindow, this class is associated with a loaded car file
-//				 and contains the information and methods required to render a car in 3D.
-// History:
-//	3/17/2009	- Changed SetHelperOrbPosition() to take a series of enums rather than a Vector to
-//				  allow the position to be taken from the DisplayCar rather than the coordinates
-//				  of the OriginalCar sent from the editing panels, K. Loux.
-//	4/11/2009	- Added call to Renderer->ResetCamera() to constructor to avoid opening a car
-//				  that appears very small in the render window so that the instant centers
-//				  can be seen, K. Loux.
-//	5/17/2009	- Was derived from wxVTKRenderWindowInteractor, switched to custom
-//				  RenderWindow base class (eliminated dependance on VTK).
-//	11/22/2009	- Moved to vRenderer.lib, K. Loux.
+// Desc:  Contains class declaration for the CarRenderer class.  Derived from
+//        RenderWindow, this class is associated with a loaded car file
+//        and contains the information and methods required to render a car in 3D.
 
 // Standard C++ headers
 #include <algorithm>
@@ -30,7 +16,7 @@
 // wxWidgets headers
 #include <wx/wx.h>
 
-// VVASE headers
+// Local headers
 #include "gui/renderer/carRenderer.h"
 #include "vRenderer/3dcar/aarm.h"
 #include "vRenderer/3dcar/link.h"

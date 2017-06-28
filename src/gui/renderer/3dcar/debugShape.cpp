@@ -1,16 +1,12 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  debugShape.cpp
-// Created:  7/9/2015
+// Date:  7/9/2015
 // Author:  K. Loux
-// Description:  Object for displaying 3D shapes to aid with debugging.
+// Desc:  Object for displaying 3D shapes to aid with debugging.
 // History:
 
 // Local headers

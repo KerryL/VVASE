@@ -1,19 +1,12 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  disk.cpp
-// Created:  5/14/2009
+// Date:  5/14/2009
 // Author:  K. Loux
-// Description:  Derived from Primitive for creating disk objects.
-// History:
-//	6/3/2009	- Modified GenerateGeometry() to make use of openGL matrices for positioning
-//				  and orienting the object, K.Loux.
+// Desc:  Derived from Primitive for creating disk objects.
 
 // Local headers
 #include "vRenderer/primitives/disk.h"
