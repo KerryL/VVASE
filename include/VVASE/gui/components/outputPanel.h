@@ -1,11 +1,12 @@
-/*===================================================================================
-                                       VVASE
-                         Copyright Kerry R. Loux 2007-2017
-===================================================================================*/
+/*=============================================================================
+                                     VVASE
+                        Copyright Kerry R. Loux 2007-2017
+=============================================================================*/
 
 // File:  outputPanel.h
 // Date:  3/15/2009
 // Auth:  K. Loux
+// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains the class declaration for the OutputPanel class.
 
 #ifndef OUTPUT_PANEL_H_

@@ -1,12 +1,14 @@
-/*===================================================================================
-                                       VVASE
-                         Copyright Kerry R. Loux 2007-2017
-===================================================================================*/
+/*=============================================================================
+                                     VVASE
+                        Copyright Kerry R. Loux 2007-2017
+=============================================================================*/
 
-// File:  VectorEditDialog.h
-// Created:  7/6/2016
-// Author:  K. Loux
-// Description:  Class for adding menu items to context menus that function more like dialogs.
+// File:  vectorEditDialog.h
+// Date:  7/6/2016
+// Auth:  K. Loux
+// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Desc:  Class for adding menu items to context menus that function more like
+//        dialogs.
 
 #ifndef VECTOR_EDIT_DIALOG_H_
 #define VECTOR_EDIT_DIALOG_H_

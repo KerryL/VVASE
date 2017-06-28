@@ -1,11 +1,12 @@
-/*===================================================================================
-                                       VVASE
-                         Copyright Kerry R. Loux 2007-2017
-===================================================================================*/
+/*=============================================================================
+                                     VVASE
+                        Copyright Kerry R. Loux 2007-2017
+=============================================================================*/
 
 // File:  optimizationData.h
 // Date:  1/12/2009
 // Auth:  K. Loux
+// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains the class declaration for the OptimizationData class.  This contains
 //        information required to conduct genetic optimizations.
 

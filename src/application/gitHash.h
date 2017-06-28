@@ -1,21 +1,13 @@
-/*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
+/*=============================================================================
+                                     VVASE
+                        Copyright Kerry R. Loux 2007-2017
+=============================================================================*/
 
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
-===================================================================================*/
-
-// File:  vvaseConstants.h
-// Created:  5/17/2008
-// Author:  K. Loux
+// File:  gitHash.h
+// Date:  5/17/2008
+// Auth:  K. Loux
+// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Description:  Defines the application-level constants.
-// History:
-//	3/29/2009	- Changed name from "CarDesigner" to "VVASE" and incremented version from 0.0a
-//				  to 0.1a, K. Loux.
-//	11/23/2009	- Renamed from cardesigner_constants.cpp and incremented version to 0.8b, K. Loux.
-//	4/11/2010	- Incremented version to 0.9b, K. Loux.
 
 #ifndef VVASE_CONSTANTS_H_
 #define VVASE_CONSTANTS_H_
@@ -24,11 +16,11 @@
 #include <wx/wx.h>
 
 // The current version number
-extern const wxString carDesignerVersion;
-extern const wxString carDesignerGitHash;
+extern const wxString vvaseVersion;
+extern const wxString vvaseGitHash;
 
 // The application name
-static const wxString carDesignerName = "VVASE";
-static const wxString carDesignerLongName = "Virtual Vehicle Analysis and Simulation Environment";
+static const wxString vvaseName = "VVASE";
+static const wxString vvaseLongName = "Virtual Vehicle Analysis and Simulation Environment";
 
 #endif// VVASE_CONSTANTS_H_

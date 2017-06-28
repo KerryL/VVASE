@@ -1,11 +1,12 @@
-/*===================================================================================
-                                       VVASE
-                         Copyright Kerry R. Loux 2007-2017
-===================================================================================*/
+/*=============================================================================
+                                     VVASE
+                        Copyright Kerry R. Loux 2007-2017
+=============================================================================*/
 
 // File:  jobQueue.h
 // Date:  11/3/2009
 // Auth:  K. Loux
+// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains the class declaration for the JobQueue class.  This queue
 //        handles task priorities and is used to communicate from the GUI thread
 //        to the worker threads (add tasks here to be completed by the workers).

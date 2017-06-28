@@ -1,18 +1,13 @@
-/*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
-===================================================================================*/
+/*=============================================================================
+                                     VVASE
+                        Copyright Kerry R. Loux 2007-2017
+=============================================================================*/
 
 // File:  vvaseApplication.h
-// Created:  5/17/2008
-// Author:  K. Loux
-// Description:  The application class.
-// History:
-//	11/23/2009	- Renamed from cardesignerapp_class.h, K. Loux.
+// Date:  5/17/2008
+// Auth:  K. Loux
+// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Desc:  The application class.
 
 #ifndef VVASEAPP_H_
 #define VVASEAPP_H_

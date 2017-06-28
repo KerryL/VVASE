@@ -1,11 +1,12 @@
-/*===================================================================================
-                                       VVASE
-                         Copyright Kerry R. Loux 2007-2017
-===================================================================================*/
+/*=============================================================================
+                                     VVASE
+                        Copyright Kerry R. Loux 2007-2017
+=============================================================================*/
 
 // File:  quasiStaticOutputs.h
 // Date:  6/2/2016
 // Auth:  K. Loux
+// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Quasi-static analysis outputs.
 
 #ifndef QUASI_STATIC_OUTPUTS_H_

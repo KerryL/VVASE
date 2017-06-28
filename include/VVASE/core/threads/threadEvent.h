@@ -1,11 +1,12 @@
-/*===================================================================================
-                                       VVASE
-                         Copyright Kerry R. Loux 2007-2017
-===================================================================================*/
+/*=============================================================================
+                                     VVASE
+                        Copyright Kerry R. Loux 2007-2017
+=============================================================================*/
 
 // File:  threadEvent.h
 // Date:  11/3/2009
 // Auth:  K. Loux
+// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Eventually might house an actual event class - for now just an event
 //        declaration.  This event is used for communication from the worker threads
 //        to the GUI thread.

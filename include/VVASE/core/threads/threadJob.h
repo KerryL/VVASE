@@ -1,15 +1,16 @@
-/*===================================================================================
-                                       VVASE
-                         Copyright Kerry R. Loux 2007-2017
-===================================================================================*/
+/*=============================================================================
+                                     VVASE
+                        Copyright Kerry R. Loux 2007-2017
+=============================================================================*/
 
 // File:  threadJob.h
-// Created:  11/3/2009
-// Author:  K. Loux
-// Description:  Contains the class declaration for the ThreadJob class.  This is the
-//				 class containing information that is stored in the job queue, i.e. this
-//				 class is used for communication from the GUI thread to the worker threads
-//				 (in that direction only - reverse communication is handled with events).
+// Date:  11/3/2009
+// Auth:  K. Loux
+// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Desc:  Contains the class declaration for the ThreadJob class.  This is the
+//        class containing information that is stored in the job queue, i.e. this
+//        class is used for communication from the GUI thread to the worker threads
+//        (in that direction only - reverse communication is handled with events).
 
 #ifndef THREAD_JOB_H_
 #define THREAD_JOB_H_

@@ -1,12 +1,13 @@
-/*===================================================================================
-                                       VVASE
-                         Copyright Kerry R. Loux 2008-2017
-===================================================================================*/
+/*=============================================================================
+                                     VVASE
+                        Copyright Kerry R. Loux 2007-2017
+=============================================================================*/
 
 // File:  kinematics.h
 // Date:  11/3/2007
 // Auth:  K. Loux
-// Descr:  Contains class declaration for the Kinematics class.
+// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Desc:  Contains class declaration for the Kinematics class.
 
 #ifndef KINEMATICS_H_
 #define KINEMATICS_H_
