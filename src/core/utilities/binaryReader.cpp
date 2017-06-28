@@ -1,11 +1,12 @@
-/*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-===================================================================================*/
+/*=============================================================================
+                                     VVASE
+                        Copyright Kerry R. Loux 2007-2017
+=============================================================================*/
 
-// File:  binaryReader.h
+// File:  binaryReader.cpp
 // Date:   6/8/2016
-// Author:  K. Loux
+// Auth:  K. Loux
+// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Class for assisting reading of binary files.  This object is
 //        intended to provide consistency for file I/O between 32 and 64 bit
 //        platforms.

@@ -1,13 +1,14 @@
-/*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-===================================================================================*/
+/*=============================================================================
+                                     VVASE
+                        Copyright Kerry R. Loux 2007-2017
+=============================================================================*/
 
 // File:  quasiStatic.cpp
 // Created:  5/27/2016
-// Author:  K. Loux
-// Description:  Quasi-static analysis object.  Calculates vehicle attitude when subject
-//				 to external accelerations.
+// Auth:  K. Loux
+// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Desc:  Quasi-static analysis object.  Calculates vehicle attitude when
+//        subjected to external accelerations.
 
 // Standard C++ headers
 #include <cassert>

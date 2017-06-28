@@ -1,11 +1,12 @@
-/*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-===================================================================================*/
+/*=============================================================================
+                                     VVASE
+                        Copyright Kerry R. Loux 2007-2017
+=============================================================================*/
 
 // File:  fuelCell.cpp
 // Date:  12/12/2008
-// Author:  K. Loux
+// Auth:  K. Loux
+// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains class definitions for FuelCell class.  This is for
 //        modeling a shift in weight and CG as fuel is burned.  Future
 //        considerations include modeling fuel slosh for dynamic effects

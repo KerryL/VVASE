@@ -1,11 +1,12 @@
-/*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-===================================================================================*/
+/*=============================================================================
+                                     VVASE
+                        Copyright Kerry R. Loux 2007-2017
+=============================================================================*/
 
 // File:  dataValidator.cpp
 // Date:  12/12/2011
-// Author:  K. Loux
+// Auth:  K. Loux
+// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Class derived from wxTextValidator, used for converting to/from
 //        the various default units in the Convert class.  Also handles
 //        UndoRedoStack entries.

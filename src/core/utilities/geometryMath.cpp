@@ -1,11 +1,12 @@
-
-
-
-
+/*=============================================================================
+                                     VVASE
+                        Copyright Kerry R. Loux 2007-2017
+=============================================================================*/
 
 // File:  geometryMath.cpp
-// Auth:  K. Loux
 // Date:  1/2/2015
+// Auth:  K. Loux
+// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  General purpose geometry methods.
 
 // Standard C++ headers

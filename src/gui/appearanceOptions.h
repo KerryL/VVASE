@@ -1,18 +1,14 @@
-/*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
-===================================================================================*/
+/*=============================================================================
+                                     VVASE
+                        Copyright Kerry R. Loux 2007-2017
+=============================================================================*/
 
 // File:  appearanceOptions.h
-// Created:  4/23/2009
-// Author:  K. Loux
-// Description:  Container class for options that effect the way the car appears in the
-//				 render window.
-// History:
+// Date:  4/23/2009
+// Auth:  K. Loux
+// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Desc:  Container class for options that effect the way the car appears in the
+//        render window.
 
 #ifndef APPEARANCE_OPTIONS_H_
 #define APPEARANCE_OPTIONS_H_
@@ -51,7 +47,7 @@ public:
 		ColorDamperBody,
 		ColorDamperShaft,
 		ColorSpring,
-		
+
 		ColorRollMarker,
 		ColorPitchMarker,
 		ColorInstantMarker,

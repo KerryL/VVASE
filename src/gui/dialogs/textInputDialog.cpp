@@ -1,11 +1,12 @@
-/*===================================================================================
-                                    CarDesigner
-                        Copyright Kerry R. Loux 2011-2015
-===================================================================================*/
+/*=============================================================================
+                                     VVASE
+                        Copyright Kerry R. Loux 2007-2017
+=============================================================================*/
 
 // File:  textInputDialog.cpp
 // Date:  5/20/2013
-// Author:  K. Loux
+// Auth:  K. Loux
+// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Dialog box similar to ::wxGetTextFromUser() but allows differentiation between
 //        canceling and returning an empty string.
 

@@ -1,16 +1,13 @@
-/*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
-===================================================================================*/
+/*=============================================================================
+                                     VVASE
+                        Copyright Kerry R. Loux 2007-2017
+=============================================================================*/
 
 // File:  driver.h
 // Date:  11/4/2007
-// Author:  K. Loux
-// Desc:  Contains class declaration for DRIVER class.
+// Auth:  K. Loux
+// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
+// Desc:  Contains class declaration for Driver class.
 
 #ifndef DRIVER_H_
 #define DRIVER_H_

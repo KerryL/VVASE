@@ -1,11 +1,12 @@
-/*===================================================================================
-                                    CarDesigner
+/*=============================================================================
+                                     VVASE
+                        Copyright Kerry R. Loux 2007-2017
+=============================================================================*/
 
-===================================================================================*/
-
-// File:  editIterationNotebook.h
+// File:  editSweepNotebook.h
 // Date:  11/14/2010
-// Author:  K. Loux
+// Auth:  K. Loux
+// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains the class declaration for the EditIterationNotebook class.
 
 #ifndef EDIT_ITERATION_NOTEBOOK_H_

@@ -1,15 +1,12 @@
-/*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2017
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
-===================================================================================*/
+/*=============================================================================
+                                     VVASE
+                        Copyright Kerry R. Loux 2007-2017
+=============================================================================*/
 
 // File:  car.cpp
 // Date:  11/3/2007
 // Auth:  K. Loux
+// Licn:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Container class for vehicle subsystems.  Defines primary interface for
 //        getting and setting vehicle data.
 
@@ -42,7 +39,7 @@ namespace VVASE
 //		None
 //
 // Exception Safety:
-//		
+//
 //
 //==========================================================================
 Car::Car() : components(CreateComponents())
