@@ -72,16 +72,16 @@ GuiCar::GuiCar(MainFrame &mainFrame, wxString pathAndFileName)
 	name.Printf("Unsaved Car %i", index + 1);
 
 	Initialize();
-	
+
 	// After calling Initialize() (after loading the car from file, if necessary)
 	// set the size of the view window and the camera view to fit everything in
 	// the scene.
 	Vector position(-100.0, -100.0, 60.0), up(0.0, 0.0, 1.0);
 	Vector lookAt(originalCar->suspension->rightFront.hardpoints[Corner::ContactPatch] +
-		(originalCar->suspension->leftRear.hardpoints[Corner::ContactPatch] - 
+		(originalCar->suspension->leftRear.hardpoints[Corner::ContactPatch] -
 		originalCar->suspension->rightFront.hardpoints[Corner::ContactPatch]) * 0.5);
 	renderer->SetCameraView(position, lookAt, up);
-	
+
 	const double scale = 1.2;// 20% bigger than car
 	const double referenceDimension(originalCar->suspension->leftFront.hardpoints[
 		Corner::ContactPatch].Distance(

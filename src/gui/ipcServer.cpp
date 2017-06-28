@@ -114,10 +114,10 @@ wxConnectionBase *IPCServer::OnAcceptConnection(const wxString& topic)
     {
 		// Create and return a new connection
         connection = new IPCConnection();
-		
+
         return connection;
     }
-	
+
 	// We don't recognize the topic
 	return NULL;
 }

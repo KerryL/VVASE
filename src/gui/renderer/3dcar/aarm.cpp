@@ -220,6 +220,6 @@ Vector AArm::FindClosestPoint(const Vector& point, const Vector& direction) cons
 	}
 	else if (endPoint2Center.Distance(endPoint2Test) < midPointCenter.Distance(midPointTest))
 		return endPoint2Center;
-	
+
 	return midPointCenter;
 }

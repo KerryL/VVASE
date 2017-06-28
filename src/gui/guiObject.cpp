@@ -492,16 +492,16 @@ bool GuiObject::WriteImageToFile(wxString pathAndFileName)
 	case TypeCar:
 		return static_cast<RenderWindow*>(notebookTab)->WriteImageToFile(pathAndFileName);
 		break;
-		
+
 	case TypeIteration:
 		return static_cast<PlotPanel*>(notebookTab)->WriteImageToFile(pathAndFileName);
 		break;
-		
+
 		// Everything else
 	default:
 		break;
 	}
-	
+
 	return false;
 }
 

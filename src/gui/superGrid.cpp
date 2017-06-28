@@ -119,7 +119,7 @@ void SuperGrid::OnSize(wxSizeEvent& event)
 				SetColSize(stretchColumns[j], colWidth);
 		}
 	}
-	
+
 	Refresh();
 	event.Skip();
 }

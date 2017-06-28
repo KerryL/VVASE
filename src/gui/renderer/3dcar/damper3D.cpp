@@ -214,6 +214,6 @@ Vector Damper3D::FindClosestPoint(const Vector& point, const Vector& direction) 
 
 	if (endPoint1Center.Distance(endPoint1Test) < endPoint2Center.Distance(endPoint2Test))
 		return endPoint1Center;
-	
+
 	return endPoint2Center;
 }

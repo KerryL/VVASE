@@ -439,7 +439,7 @@ void Iteration::UpdateDisplay()
 	// Make sure we have no more analyses waiting
 	if (pendingAnalysisCount != 0)
 		return;
-	
+
 	if (plotPanel)
 	{
 		plotPanel->ClearAllCurves();
@@ -459,7 +459,7 @@ void Iteration::UpdateDisplay()
 					dataSet = new Dataset2D(CountValidValues(j, (PlotID)i));
 					x = dataSet->GetXPointer();
 					y = dataSet->GetYPointer();
-					
+
 					// Populate all values
 					n= 0;
 					for (k = 0; k < (unsigned int)numberOfPoints; k++)
@@ -472,7 +472,7 @@ void Iteration::UpdateDisplay()
 						y[n] = GetDataValue(j, k, (PlotID)i);
 						n++;
 					}
-					
+
 					// Add the dataset to the plot
 					plotPanel->AddCurve(dataSet, associatedCars[j]->GetCleanName()
 						+ _T(", ") + GetPlotName((PlotID)i) + _T(" [") +

@@ -19,7 +19,13 @@ ECHO version = %gitTag%
 ECHO gitHash = %gitHash%
 
 REM Build source file
-@ECHO // File:  %outputFile%> %outputPath%%outputFile%
+@ECHO /*=============================================================================> %outputPath%%outputFile%
+@ECHO                                      VVASE>> %outputPath%%outputFile%
+@ECHO                         Copyright Kerry R. Loux 2007-2017>> %outputPath%%outputFile%
+@ECHO =============================================================================*/>> %outputPath%%outputFile%
+@ECHO.>> %outputPath%%outputFile%
+@ECHO // File:  %outputFile%>> %outputPath%%outputFile%
+@ECHO // Date:  [last build date]>> %outputPath%%outputFile%
 @ECHO // Auth:  getGitHash.bat>> %outputPath%%outputFile%
 @ECHO // Desc:  Automatically generated file containing latest git hash and version info.>> %outputPath%%outputFile%
 @ECHO.>> %outputPath%%outputFile%

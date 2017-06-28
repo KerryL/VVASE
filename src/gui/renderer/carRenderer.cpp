@@ -1307,7 +1307,7 @@ bool CarRenderer::GetLineUnderPoint(const double& x, const double& y,
 //
 // Input Arguments:
 //		point		= const Vector&
-//		direction	= const Vector&	
+//		direction	= const Vector&
 //
 // Output Arguments:
 //		None

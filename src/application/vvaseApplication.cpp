@@ -116,7 +116,7 @@ bool VVASEApp::OnInit()
 		for (i = 1; i < argc; i++)
 			mainFrame->LoadFile(argv[i]);
 	}
-	
+
 	dataExchangeServer = new IPCServer();
 	if (!dataExchangeServer->Create(serviceName))
 	{
@@ -172,7 +172,7 @@ void VVASEApp::DeleteDynamicMemory()
 {
 	delete singleInstanceChecker;
 	singleInstanceChecker = NULL;
-	
+
 	delete dataExchangeServer;
 	dataExchangeServer = NULL;
 }

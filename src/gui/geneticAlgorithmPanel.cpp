@@ -132,7 +132,7 @@ void GeneticAlgorithmPanel::CreateControls()
 	// Second sizer gives more space around the controls
 	wxBoxSizer *mainSizer = new wxBoxSizer(wxVERTICAL);
 	topSizer->Add(mainSizer, 1, wxALIGN_LEFT | wxGROW | wxALL, 5);
-	
+
 	// Set the sizer flags
 	int labelSizerFlags = wxALIGN_CENTER_VERTICAL;
 	int inputSizerFlags = wxEXPAND | wxALIGN_CENTER_VERTICAL;
@@ -148,7 +148,7 @@ void GeneticAlgorithmPanel::CreateControls()
 	populationSize = new wxTextCtrl(this, wxID_ANY, _T("500"));
 	upperSizer->Add(populationLabel, 0, labelSizerFlags);
 	upperSizer->Add(populationSize, 0, inputSizerFlags);
-	
+
 	// Start/stop button
 	startStopOptimization = new wxButton(this, IdStartStopOptimization, _T("Start GA"));
 	upperSizer->Add(startStopOptimization, 0, wxALIGN_LEFT);
@@ -812,7 +812,7 @@ void GeneticAlgorithmPanel::UpdateInformation()
 		optimization.GetAlgorithm().GetElitismPercentage()));
 	mutationProbability->ChangeValue(UnitConverter::GetInstance().FormatNumber(
 		optimization.GetAlgorithm().GetMutationProbability()));
-	
+
 	temp.Printf("%i", optimization.GetAlgorithm().GetCrossoverPoint());
 	crossoverPoint->ChangeValue(temp);
 
