@@ -1,21 +1,16 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  editPanel.cpp
 // Created:  2/10/2009
 // Author:  K. Loux
-// Description:  Contains the class definition for the EditPanel class.  This
-//				 class is used to edit the car parameters.  Different panels
-//				 are displayed for editing different sub-systems.
-// History:
+// Desc:  Contains the class definition for the EditPanel class.  This
+//        class is used to edit the car parameters.  Different panels
+//        are displayed for editing different sub-systems.
 
-// CarDesigner headers
+// VVASE headers
 #include "vCar/car.h"
 #include "vCar/tireSet.h"
 #include "gui/guiObject.h"
@@ -215,7 +210,7 @@ void EditPanel::UpdateInformation(GuiObject *currentObject)
 		assert(0);
 		break;
 	}
-	
+
 	Layout();
 }
 

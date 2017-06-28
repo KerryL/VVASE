@@ -1,17 +1,12 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  editDrivetrainPanel.h
-// Created:  2/19/2009
+// Date:  2/19/2009
 // Author:  K. Loux
-// Description:  Contains the class declaration for the EDIT_DRIVETRAIN_PANEL class.
-// History:
+// Desc:  Contains the class declaration for the EditDrivetrainPanel class.
 
 #ifndef EDIT_DRIVETRAIN_PANEL_H_
 #define EDIT_DRIVETRAIN_PANEL_H_
@@ -19,7 +14,10 @@
 // wxWidgets headers
 #include <wx/wx.h>
 
-// VVASE forward declarations
+namespace VVASE
+{
+
+// Local forward declarations
 class EditPanel;
 class Debugger;
 
@@ -35,5 +33,7 @@ private:
 
 	void CreateControls();
 };
+
+}// namespace VVASE
 
 #endif// EDIT_DRIVETRAIN_PANEL_H_

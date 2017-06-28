@@ -1,32 +1,30 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
-// File:  editIterationPlotsPanel.h
-// Created:  11/14/2010
+// File:  editSweepPlotsPanel.h
+// Date:  11/14/2010
 // Author:  K. Loux
-// Description:  Contains the class declaration for the EditIterationPlotsPanel class.
-// History:
+// Desc:  Contains the class declaration for the EditSweepPlotsPanel class.
 
-#ifndef EDIT_ITERATION_PLOTS_PANEL_H_
-#define EDIT_ITERATION_PLOTS_PANEL_H_
+#ifndef EDIT_SWEEP_PLOTS_PANEL_H_
+#define EDIT_SWEEP_PLOTS_PANEL_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
 
-// VVASE forward declarations
+namespace VVASE
+{
+
+// Local forward declarations
 class Iteration;
-class EditIterationNotebook;
+class EditSweepNotebook;
 
 class EditIterationPlotsPanel : public wxPanel
 {
 public:
-	EditIterationPlotsPanel(EditIterationNotebook &parent, wxWindowID id,
+	EditIterationPlotsPanel(EditSweepNotebook &parent, wxWindowID id,
 		const wxPoint& pos, const wxSize& size);
 	~EditIterationPlotsPanel();
 
@@ -35,7 +33,7 @@ public:
 	void UpdateInformation();
 
 private:
-	EditIterationNotebook &parent;
+	EditSweepNotebook &parent;
 
 	Iteration *currentIteration;
 
@@ -56,4 +54,6 @@ private:
 	DECLARE_EVENT_TABLE();
 };
 
-#endif// EDIT_ITERATION_PLOTS_PANEL_H_
+}// namespace VVASE
+
+#endif// EDIT_SWEEP_PLOTS_PANEL_H_

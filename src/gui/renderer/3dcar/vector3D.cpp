@@ -1,21 +1,15 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  vector3D.cpp
-// Created:  3/14/2009
+// Date:  3/14/2009
 // Author:  K. Loux
-// Description:  Contains class definition for the Vector3D class.  This class contains
-//				 and maintains the VTK objects that create actors representing vectors.
-// History:
-//	5/17/2009	- Removed VTK dependencies, K. Loux.
+// Desc:  Contains class definition for the Vector3D class.  This class contains
+//        and maintains the VTK objects that create actors representing vectors.
 
-// VVASE headers
+// Local headers
 #include "vRenderer/primitives/cylinder.h"
 #include "vRenderer/primitives/cone.h"
 #include "vRenderer/3dcar/vector3D.h"

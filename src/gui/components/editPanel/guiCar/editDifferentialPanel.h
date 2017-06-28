@@ -1,23 +1,21 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  editDifferentialPanel.h
-// Created:  2/19/2009
+// Date:  2/19/2009
 // Author:  K. Loux
-// Description:  Contains the class declaration for the EditDifferentialPanel class.
-// History:
+// Desc:  Contains the class declaration for the EditDifferentialPanel class.
 
 #ifndef EDIT_DIFFERENTIAL_PANEL_H_
 #define EDIT_DIFFERENTIAL_PANEL_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
+
+namespace VVASE
+{
 
 // VVASE forward declarations
 class EditPanel;
@@ -35,5 +33,7 @@ private:
 
 	void CreateControls();
 };
+
+}// namespace VVASE
 
 #endif// EDIT_DIFFERENTIAL_PANEL_H_

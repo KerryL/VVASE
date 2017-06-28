@@ -8,10 +8,9 @@
 ===================================================================================*/
 
 // File:  editPanel.h
-// Created:  2/10/2009
+// Date:  2/10/2009
 // Author:  K. Loux
-// Description:  Contains the class declaration for the EDIT_PANEL class.
-// History:
+// Desc:  Contains the class declaration for the EditPanel class.
 
 #ifndef EDIT_PANEL_H_
 #define EDIT_PANEL_H_
@@ -19,7 +18,7 @@
 // wxWidgets headers
 #include <wx/wx.h>
 
-// VVASE headers
+// Local headers
 #include "gui/guiObject.h"
 
 // wxWidgets forward declarations
@@ -27,7 +26,10 @@ class wxPanel;
 class wxCombo;
 class wxCheckBox;
 
-// VVASE forward declarations
+namespace VVASE
+{
+
+// Local forward declarations
 class MainFrame;
 class MainTree;
 class EditAerodynamicsPanel;
@@ -70,7 +72,7 @@ private:
 	wxTreeItemId currentTreeID;
 
 	// The various edit panels we need to display
-	// GUI_CAR
+	// GuiCar
 	EditAerodynamicsPanel	*editAerodynamics;
 	EditBrakesPanel			*editBrakes;
 	EditDifferentialPanel	*editDifferential;
@@ -80,12 +82,14 @@ private:
 	EditSuspensionNotebook	*editSuspension;
 	EditTiresPanel			*editTires;
 
-	// ITERATION
-	EditIterationNotebook		*editIteration;
+	// Sweep
+	EditIterationNotebook	*editIteration;
 
 	wxBoxSizer *sizer;
 
 	wxMutex *carMutex;
 };
+
+}// namespace VVASE
 
 #endif// EDIT_PANEL_H_

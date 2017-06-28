@@ -1,19 +1,14 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  editAerodynamicsPanel.cpp
-// Created:  2/10/2009
+// Date:  2/10/2009
 // Author:  K. Loux
-// Description:  Contains the class definition for the EditAerodynamicsPanel class.
-// History:
+// Desc:  Contains the class definition for the EditAerodynamicsPanel class.
 
-// CarDesigner headers
+// Local headers
 #include "vCar/aerodynamics.h"
 #include "gui/renderer/carRenderer.h"
 #include "gui/guiCar.h"

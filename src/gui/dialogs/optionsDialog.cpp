@@ -1,18 +1,12 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  optionsDialog.cpp
-// Created:  2/9/2009
+// Date:  2/9/2009
 // Author:  K. Loux
-// Description:  Contains the definition for the OptionsDialog class.
-// History:
-//	3/24/2009	- Added Kinematics tab, K. Loux.
+// Desc:  Contains the definition for the OptionsDialog class.
 
 // Standard C++ headers
 #include <cfloat>
@@ -23,7 +17,7 @@
 #include <wx/radiobox.h>
 #include <wx/fontdlg.h>
 
-// CarDesigner headers
+// VVASE headers
 #include "gui/dialogs/optionsDialog.h"
 #include "gui/components/mainFrame.h"
 #include "vUtilities/unitConverter.h"
@@ -157,7 +151,7 @@ void OptionsDialog::CreateControls()
 	wxFlexGridSizer *unitSelectionSizer = new wxFlexGridSizer(5, 5, 5);
 	unitSelectionSizer->SetFlexibleDirection(wxHORIZONTAL);
 	unitsSizer->Add(unitSelectionSizer, 0, wxALL, 5);
-	
+
 	// When setting the control width, we need to account for the width of the
 	// "expand" button, etc., so we specify that here
 #ifdef __WXGTK__
@@ -168,7 +162,7 @@ void OptionsDialog::CreateControls()
 
 	// Set some additional space between left and right sets of unit selections
 	int middleSpaceWidth = 15;
-	
+
 	// The column flags
 	int labelFlags = wxALIGN_CENTER_VERTICAL | wxALIGN_LEFT;
 	int unitFlags = wxEXPAND;
@@ -485,7 +479,7 @@ void OptionsDialog::CreateControls()
 		kinematicInputs.centerOfRotation.z, UnitConverter::UnitTypeDistance));
 
 	// Create the center of rotation units label
-	wxStaticText *corUnits = new wxStaticText(kinematicsPage, wxID_ANY, _T("(") + 
+	wxStaticText *corUnits = new wxStaticText(kinematicsPage, wxID_ANY, _T("(") +
 		UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance) + _T(")"));
 
 	// Add the controls to the spacer
@@ -517,7 +511,7 @@ void OptionsDialog::CreateControls()
 		rotationOrder->SetSelection(0);
 	else
 		rotationOrder->SetSelection(1);
-		
+
 	radioOptionsSizer->Add(rotationOrder, 0, wxALL, 5);
 
 	// Add the radio box for the steering input type
@@ -532,7 +526,7 @@ void OptionsDialog::CreateControls()
 		steeringInputType->SetSelection(0);
 	else
 		steeringInputType->SetSelection(1);
-		
+
 	radioOptionsSizer->Add(steeringInputType, 0, wxALL, 5);
 
 	// Create the "Number of Threads" text box
@@ -586,13 +580,13 @@ void OptionsDialog::CreateControls()
 		debugLevel->SetSelection(2);
 	else// Debugger::PriorityVeryHigh
 		debugLevel->SetSelection(3);
-		
+
 	debugLevelsSizer->Add(debugLevel, 0, wxALL, 5);
 
 	debuggerSizer->Add(debugLevelsSizer, 0, wxALIGN_CENTER_HORIZONTAL);
 
 	debuggerPage->SetSizerAndFit(debuggerTopSizer);
-	
+
 	// Add the fonts page
 	fontPage = new wxPanel(notebook);
 	notebook->AddPage(fontPage, _T("Fonts"));
@@ -604,7 +598,7 @@ void OptionsDialog::CreateControls()
 	wxFlexGridSizer *fontsSizer = new wxFlexGridSizer(3, 10, 10);
 	fontsTopSizer->Add(fontsSizer, 0,
 		wxALIGN_TOP | wxALIGN_CENTER_HORIZONTAL | wxALL, 5);
-	
+
 	// Get the plot objects from the main frame
 	outputFont = mainFrame.GetOutputFont();
 	plotFont = mainFrame.GetPlotFont();
@@ -616,7 +610,7 @@ void OptionsDialog::CreateControls()
 	}
 	else
 		outputFontLabel = new wxStaticText(fontPage, wxID_ANY, _T("Not Set"));
-	
+
 	if (plotFont.IsOk())
 	{
 		plotFontLabel = new wxStaticText(fontPage, wxID_ANY, plotFont.GetFaceName());
@@ -624,7 +618,7 @@ void OptionsDialog::CreateControls()
 	}
 	else
 		plotFontLabel = new wxStaticText(fontPage, wxID_ANY, _T("Not Set"));
-	
+
 	// Add the controls to the MainSizer
 	fontsSizer->Add(new wxStaticText(fontPage, wxID_ANY, _T("Output Font")),
 		0, wxALIGN_CENTER_VERTICAL);
@@ -788,7 +782,7 @@ void OptionsDialog::ChangeOutputFontClickEvent(wxCommandEvent& WXUNUSED(event))
 		outputFontLabel->SetFont(outputFont);
 		outputFontLabel->SetLabel(outputFont.GetFaceName());
 	}
-	
+
 	// FIXME:  Re-size sizers in case font name changed length
 }
 
@@ -819,6 +813,6 @@ void OptionsDialog::ChangePlotFontClickEvent(wxCommandEvent& WXUNUSED(event))
 		plotFontLabel->SetFont(plotFont);
 		plotFontLabel->SetLabel(plotFont.GetFaceName());
 	}
-	
+
 	// FIXME:  Re-size sizers in case font name changed length
 }

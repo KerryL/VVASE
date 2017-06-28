@@ -1,21 +1,14 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  editSuspensionPanel.cpp
-// Created:  2/10/2009
+// Date:  2/10/2009
 // Author:  K. Loux
-// Description:  Contains the class definition for the EditSuspensionPanel class.  This
-//				 class is used to edit the hard points on a particular corner of the
-//				 car.
-// History:
-//	3/28/2009	- Changed action on non-numeric input to "do nothing" instead of "replace
-//				  with last value," K. Loux
+// Desc:  Contains the class definition for the EditSuspensionPanel class.  This
+//        class is used to edit the hard points on a particular corner of the
+//        car.
 
 // Local headers
 #include "vCar/drivetrain.h"

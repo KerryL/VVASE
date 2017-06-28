@@ -1,26 +1,18 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  mainTree.cpp
-// Created:  6/14/2008
+// Date:  6/14/2008
 // Author:  K. Loux
-// Description:  Contains the class declaration for the MainTree class.
-// History:
-//	1/28/2009	- Changed structure of GUI components so context menu creation for all
-//				  objects is handled by the MAIN_FRAME class, K. Loux.
-//	11/17/2011	- Added XPM icons for Linux, K. Loux.
+// Desc:  Contains the class declaration for the MainTree class.
 
 // wxWidgets headers
 #include <wx/menu.h>
 #include <wx/imaglist.h>
 
-// CarDesigner headers
+// VVASE headers
 #include "gui/components/mainFrame.h"
 #include "gui/components/mainTree.h"
 #include "gui/guiCar.h"
@@ -233,7 +225,7 @@ void MainTree::SelectionChangeEvent(wxTreeEvent &event)
 
 	// Determine if we should change the tab, or just update the edit panel
 	bool changeTab = true;
-	
+
 	// Make sure the selected object index is still valid - we had some problems
 	// under GTK where this event fires following an object being deleted and
 	// attempts to GetObjectByIndex with an invalid index

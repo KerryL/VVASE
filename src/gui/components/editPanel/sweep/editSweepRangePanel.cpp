@@ -1,20 +1,15 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  editIterationRangePanel.cpp
-// Created:  11/14/2010
+// Date:  11/14/2010
 // Author:  K. Loux
-// Description:  Contains the class definition for the EditIterationRangePanel
-//				 class.
-// History:
+// Desc:  Contains the class definition for the EditSweepRangePanel
+//        class.
 
-// CarDesigner headers
+// VVASE headers
 #include "gui/iteration.h"
 #include "gui/components/mainFrame.h"
 #include "gui/components/editPanel/editPanel.h"
@@ -168,7 +163,7 @@ void EditIterationRangePanel::UpdateInformation(Iteration *currentIteration)
 	wxString temp;
 	temp.Printf("%i", currentIteration->GetNumberOfPoints());
 	numberOfPointsInput->ChangeValue(temp);
-	
+
 	// We do this in case columns widths changed (method of steering input)
 	Layout();
 }

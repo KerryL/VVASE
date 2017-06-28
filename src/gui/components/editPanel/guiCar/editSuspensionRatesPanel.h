@@ -1,18 +1,13 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  editSuspensionRatesPanel.h
-// Created:  5/27/2016
+// Date:  5/27/2016
 // Author:  K. Loux
-// Description:  Contains the class definition for the EditSuspensionRatesPanel class.
-//				 This class is used to edit the spring and ARB rates.
-// History:
+// Desc:  Contains the class definition for the EditSuspensionRatesPanel class.
+//        This class is used to edit the spring and ARB rates.
 
 #ifndef EDIT_SUSPENSION_RATES_PANEL_H_
 #define EDIT_SUSPENSION_RATES_PANEL_H_
@@ -22,6 +17,9 @@
 
 // wxWidgets forward declarations
 class wxGridEvent;
+
+namespace VVASE
+{
 
 // Local forward declarations
 class Suspension;
@@ -86,5 +84,7 @@ private:
 
 	DECLARE_EVENT_TABLE();
 };
+
+}// namespace VVASE
 
 #endif// EDIT_SUSPENSION_RATES_PANEL_H_

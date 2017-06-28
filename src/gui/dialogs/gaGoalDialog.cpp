@@ -1,22 +1,17 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  gaGoalDialog.cpp
-// Created:  7/30/2009
+// Date:  7/30/2009
 // Author:  K. Loux
-// Description:  Dialog for editing goal properties.
-// History:
+// Desc:  Dialog for editing goal properties.
 
 // wxWidgets headers
 #include <wx/gbsizer.h>
 
-// CarDesigner headers
+// VVASE headers
 #include "gui/dialogs/gaGoalDialog.h"
 #include "vUtilities/wxRelatedUtilities.h"
 #include "vUtilities/unitConverter.h"

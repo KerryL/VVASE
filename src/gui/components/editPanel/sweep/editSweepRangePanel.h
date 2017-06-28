@@ -1,40 +1,38 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  editIterationRangePanel.h
-// Created:  11/14/2010
+// Date:  11/14/2010
 // Author:  K. Loux
-// Description:  Contains the class declaration for the EditIterationPanel class.
-// History:
+// Desc:  Contains the class declaration for the EditSweepRangePanel class.
 
-#ifndef EDIT_ITERATION_RANGE_PANEL_H_
-#define EDIT_ITERATION_RANGE_PANEL_H_
+#ifndef EDIT_SWEEP_RANGE_PANEL_H_
+#define EDIT_SWEEP_RANGE_PANEL_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
 
-// VVASE forward declarations
+namespace VVASE
+{
+
+// Local forward declarations
 class Iteration;
 class EditIterationNotebook;
 
-class EditIterationRangePanel : public wxScrolledWindow
+class EditSweepRangePanel : public wxScrolledWindow
 {
 public:
-	EditIterationRangePanel(EditIterationNotebook &parent, wxWindowID id,
+	EditSweepRangePanel(EditSweepNotebook &parent, wxWindowID id,
 		const wxPoint& pos, const wxSize& size);
-	~EditIterationRangePanel();
+	~EditSweepRangePanel();
 
 	void UpdateInformation(Iteration *currentIteration);
 	void UpdateInformation();
 
 private:
-	EditIterationNotebook &parent;
+	EditSweepNotebook &parent;
 
 	Iteration *currentIteration;
 	void CreateControls();
@@ -49,13 +47,13 @@ private:
 	wxTextCtrl *endHeaveInput;
 	wxTextCtrl *endSteerInput;
 	wxTextCtrl *numberOfPointsInput;
-	
+
 	// The unit labels
 	wxStaticText *pitchUnitsLabel;
 	wxStaticText *rollUnitsLabel;
 	wxStaticText *heaveUnitsLabel;
 	wxStaticText *steerUnitsLabel;
-	
+
 	wxStaticText *steerInputLabel;
 
 	enum EditIterationRangePanelEventIds
@@ -70,4 +68,6 @@ private:
 	DECLARE_EVENT_TABLE();
 };
 
-#endif// EDIT_ITERATION_RANGE_PANEL_H_
+}// namespace VVASE
+
+#endif// EDIT_SWEEP_RANGE_PANEL_H_

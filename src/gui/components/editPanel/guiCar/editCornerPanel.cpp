@@ -1,23 +1,16 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  editCornerPanel.cpp
-// Created:  2/10/2009
+// Date:  2/10/2009
 // Author:  K. Loux
-// Description:  Contains the class definition for the EditCornerPanel class.  This
-//				 class is used to edit the hard points on a particular corner of the
-//				 car.
-// History:
-//	2/26/2009	- Changed text box initialization/updating to use ChangeValue() function
-//				  instead of SetValue() function to avoid triggering unnecessary events, K. Loux.
+// Desc:  Contains the class definition for the EditCornerPanel class.  This
+//        class is used to edit the hard points on a particular corner of the
+//        car.
 
-// VVASE headers
+// Local headers
 #include "vCar/corner.h"
 #include "vCar/car.h"
 #include "gui/guiCar.h"
@@ -223,7 +216,7 @@ void EditCornerPanel::UpdateInformation(Corner *currentCorner, Suspension* curre
 	}
 
 	hardpoints->EndBatch();
-	
+
 	// Bug in GTK - without this yeild, the dialog does not update correctly and
 	// we end up with overlapped controls
 #ifdef __WXGTK__
@@ -307,7 +300,7 @@ void EditCornerPanel::CreateControls()
 		// Add the names of all of the points to the grid
 		hardpoints->SetCellValue(i + 1, 0, Corner::GetHardpointName((Corner::Hardpoints)i));
 	}
-	
+
 	// Size the columns
 	// The X, Y, and Z columns should be big enough to fit 80.0 as formatted
 	// by the converter.  First column is stretchable
@@ -334,7 +327,7 @@ void EditCornerPanel::CreateControls()
 #else
 	unsigned int additionalWidth = 30;
 #endif
-	
+
 	wxFlexGridSizer *lowerInputSizer = new wxFlexGridSizer(3, 3, 3);
 	lowerInputSizer->SetFlexibleDirection(wxHORIZONTAL);
 	mainSizer->Add(lowerInputSizer, 0, wxALIGN_BOTTOM);
@@ -345,7 +338,7 @@ void EditCornerPanel::CreateControls()
 	choices.Clear();
 	for (i = 0; i < Corner::NumberOfActuationTypes; i++)
 		choices.Add(Corner::GetActuationTypeName((Corner::ActuationType)i));
-	
+
 	wxStaticText *actuationTypeLabel = new wxStaticText(this, wxID_ANY,
 		_T("Actuation Type"));
 	actuationType = new wxComboBox(this, ComboBoxActuationType, wxEmptyString, wxDefaultPosition,
@@ -392,7 +385,7 @@ void EditCornerPanel::CreateControls()
 	lowerInputSizer->Add(toeLabel, 0, wxALIGN_CENTER_VERTICAL);
 	lowerInputSizer->Add(staticToe, 0, wxEXPAND);
 	lowerInputSizer->Add(toeUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
-	
+
 	// Choose text box min width based on a formatted number in the appropriate units
 	staticCamber->SetMinSize(wxSize(UnitConverter::GetInstance().ConvertAngleOutput(-3.0), -1));
 	staticToe->SetMinSize(wxSize(UnitConverter::GetInstance().ConvertAngleOutput(-3.0), -1));
@@ -537,7 +530,7 @@ void EditCornerPanel::GridCellChangedEvent(wxGridEvent &event)
 			currentCorner->hardpoints[event.GetRow() - 1].z =
 				UnitConverter::GetInstance().ConvertDistanceInput(value);
 		}
-		
+
 		currentSuspension->UpdateSymmetry();
 		mutex->Unlock();
 
@@ -588,7 +581,7 @@ void EditCornerPanel::ActuationAttachmentChangeEvent(wxCommandEvent &event)
 
 	// Call the UpdateSymmetry method in case this is a symmetric suspension
 	currentSuspension->UpdateSymmetry();
-	
+
 	// Unlock the car
 	mutex->Unlock();
 
@@ -635,7 +628,7 @@ void EditCornerPanel::ActuationTypeChangeEvent(wxCommandEvent &event)
 
 	// Call the UpdateSymmetry method in case this is a symmetric suspension
 	currentSuspension->UpdateSymmetry();
-	
+
 	// Unlock the car
 	mutex->Unlock();
 
@@ -696,7 +689,7 @@ void EditCornerPanel::StaticCamberChangeEvent(wxCommandEvent &event)
 
 	currentCorner->staticCamber = UnitConverter::GetInstance().ConvertAngleInput(value);
 	currentSuspension->UpdateSymmetry();
-	
+
 	mutex->Unlock();
 
 	parent.GetParent().GetCurrentObject()->SetModified();
@@ -755,7 +748,7 @@ void EditCornerPanel::StaticToeChangeEvent(wxCommandEvent &event)
 
 	// Call the UpdateSymmetry method in case this is a symmetric suspension
 	currentSuspension->UpdateSymmetry();
-	
+
 	mutex->Unlock();
 
 	// Tell the car object that it was modified

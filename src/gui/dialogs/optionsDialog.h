@@ -1,17 +1,12 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  optionsDialog.h
-// Created:  2/9/2009
+// Date:  2/9/2009
 // Author:  K. Loux
-// Description:  Contains the declaration for the OptionsDialog class.
-// History:
+// Desc:  Contains the declaration for the OptionsDialog class.
 
 #ifndef OPTIONS_DIALOG_H_
 #define OPTIONS_DIALOG_H_
@@ -19,14 +14,17 @@
 // wxWidgets headers
 #include <wx/wx.h>
 
-// VVASE headers
+// Local headers
 #include "vSolver/physics/kinematics.h"
 
 // wxWidgets forward declarations
 class wxNotebook;
 class wxRadioBox;
 
-// VVASE forward declarations
+namespace VVASE
+{
+
+// Local forward declarations
 class MainFrame;
 
 class OptionsDialog : public wxDialog
@@ -42,7 +40,7 @@ private:
 
 	// Sets up the size and position of this dialog and its contents
 	void CreateControls();
-	
+
 	enum OptionsDialogEventIds
 	{
 		ChangeOutputFontButton = 1500 + wxID_HIGHEST,
@@ -95,7 +93,7 @@ private:
 	// DEBUG page
 	wxPanel *debuggerPage;
 	wxRadioBox *debugLevel;
-	
+
 	// FONTS page
 	wxPanel *fontPage;
 	wxStaticText *outputFontLabel;
@@ -105,5 +103,7 @@ private:
 
 	DECLARE_EVENT_TABLE()
 };
+
+}// namespace VVASE
 
 #endif// OPTIONS_DIALOG_H_

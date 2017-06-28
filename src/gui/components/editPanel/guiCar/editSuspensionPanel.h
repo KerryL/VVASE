@@ -1,17 +1,12 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  editSuspensionPanel.h
-// Created:  2/10/2009
+// Date:  2/10/2009
 // Author:  K. Loux
-// Description:  Contains the class declaration for the EditSuspensionPanel class.
-// History:
+// Desc:  Contains the class declaration for the EditSuspensionPanel class.
 
 #ifndef EDIT_SUSPENSION_PANEL_H_
 #define EDIT_SUSPENSION_PANEL_H_
@@ -23,7 +18,10 @@
 class wxCombo;
 class wxGridEvent;
 
-// VVASE forward declarations
+namespace VVASE
+{
+
+// Local forward declarations
 class Suspension;
 class Vector;
 class SuperGrid;
@@ -86,5 +84,7 @@ private:
 
 	DECLARE_EVENT_TABLE();
 };
+
+}// namespace VVASE
 
 #endif// EDIT_SUSPENSION_PANEL_H_

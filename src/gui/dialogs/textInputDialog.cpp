@@ -1,18 +1,13 @@
 /*===================================================================================
                                     CarDesigner
                         Copyright Kerry R. Loux 2011-2015
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  textInputDialog.cpp
-// Created:  5/20/2013
+// Date:  5/20/2013
 // Author:  K. Loux
-// Description:  Dialog box similar to ::wxGetTextFromUser() but allows differentiation between
-//				 canceling and returning an empty string.
-// History:
+// Desc:  Dialog box similar to ::wxGetTextFromUser() but allows differentiation between
+//        canceling and returning an empty string.
 
 // wxWidgets headers
 #include <wx/wx.h>

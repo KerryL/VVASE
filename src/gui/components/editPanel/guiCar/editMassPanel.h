@@ -1,17 +1,12 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  editMassPanel.h
-// Created:  2/19/2009
+// Date:  2/19/2009
 // Author:  K. Loux
-// Description:  Contains the class declaration for the EditMassPanel class.
-// History:
+// Desc:  Contains the class declaration for the EditMassPanel class.
 
 #ifndef EDIT_MASS_PANEL_H_
 #define EDIT_MASS_PANEL_H_
@@ -22,7 +17,10 @@
 // wxWidgets forward declarations
 class wxGridEvent;
 
-// VVASE forward declarations
+namespace VVASE
+{
+
+// Local forward declarations
 class EditPanel;
 class MassProperties;
 class SuperGrid;
@@ -55,7 +53,7 @@ private:
 		TextBoxCornerMassRightFront,
 		TextBoxCornerMassLeftRear,
 		TextBoxCornerMassRightRear,
-		
+
 		TextBoxUnsprungMassLeftFront,
 		TextBoxUnsprungMassRightFront,
 		TextBoxUnsprungMassLeftRear,
@@ -91,7 +89,7 @@ private:
 	wxTextCtrl *cornerMassRightFront;
 	wxTextCtrl *cornerMassLeftRear;
 	wxTextCtrl *cornerMassRightRear;
-	
+
 	wxTextCtrl *unsprungMassLeftFront;
 	wxTextCtrl *unsprungMassRightFront;
 	wxTextCtrl *unsprungMassLeftRear;
@@ -116,5 +114,7 @@ private:
 
 	DECLARE_EVENT_TABLE();
 };
+
+}// namespace VVASE
 
 #endif// EDIT_MASS_PANEL_H_

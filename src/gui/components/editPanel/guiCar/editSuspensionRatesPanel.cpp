@@ -1,18 +1,13 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  editSuspensionRatesPanel.cpp
-// Created:  5/27/2016
+// Date:  5/27/2016
 // Author:  K. Loux
-// Description:  Contains the class definition for the EditSuspensionRatesPanel class.
-//				 This class is used to edit the spring and ARB rates.
-// History:
+// Desc:  Contains the class definition for the EditSuspensionRatesPanel class.
+//        This class is used to edit the spring and ARB rates.
 
 // Local headers
 #include "vCar/suspension.h"
@@ -231,7 +226,7 @@ void EditSuspensionRatesPanel::CreateControls()
 	// Create the grid for the hard point entry
 	rates = new SuperGrid(this, wxID_ANY);
 	rates->CreateGrid(GridRowCount, GridColCount, wxGrid::wxGridSelectRows);
-	
+
 	rates->BeginBatch();
 
 	// Do the processing that needs to be done for each row

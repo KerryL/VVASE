@@ -1,21 +1,16 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  editSuspensionNotebook.cpp
-// Created:  2/19/2009
+// Date:  2/19/2009
 // Author:  K. Loux
-// Description:  Contains the class definition for the EditSuspensionNotebook class.
-//				 This class is used to edit the car parameters.  Different panels
-//				 are displayed for editing different sub-systems.
-// History:
+// Desc:  Contains the class definition for the EditSuspensionNotebook class.
+//        This class is used to edit the car parameters.  Different panels
+//        are displayed for editing different sub-systems.
 
-// VVASE headers
+// Local headers
 #include "vCar/car.h"
 #include "vCar/suspension.h"
 #include "vCar/tireSet.h"

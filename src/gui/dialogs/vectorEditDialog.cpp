@@ -1,16 +1,12 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  VectorEditDialog.cpp
-// Created:  7/6/2016
+// Date:  7/6/2016
 // Author:  K. Loux
-// Description:  Class for adding menu items to context menus that function more like dialogs.
+// Desc:  Class for adding menu items to context menus that function more like dialogs.
 
 // Local headers
 #include "gui/dialogs/vectorEditDialog.h"

@@ -1,17 +1,12 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  editBrakesPanel.h
-// Created:  2/19/2009
+// Date:  2/19/2009
 // Author:  K. Loux
-// Description:  Contains the class declaration for the EditBrakesPanel class.
-// History:
+// Desc:  Contains the class declaration for the EditBrakesPanel class.
 
 #ifndef EDIT_BRAKES_PANEL_CLASS_
 #define EDIT_BRAKES_PANEL_CLASS_
@@ -19,7 +14,10 @@
 // wxWidgets headers
 #include <wx/wx.h>
 
-// VVASE forward declarations
+namespace VVASE
+{
+
+// Local forward declarations
 class EditPanel;
 class Brakes;
 
@@ -45,7 +43,7 @@ private:
 	enum EditBrakesEventIds
 	{
 		TextBoxPercentFrontBraking = 600 + wxID_HIGHEST,
-		
+
 		CheckBoxFrontBrakesInboard,
 		CheckBoxRearBrakesInboard
 	};
@@ -64,5 +62,7 @@ private:
 
 	DECLARE_EVENT_TABLE();
 };
+
+}// namespace VVASE
 
 #endif// EDIT_BRAKES_PANEL_CLASS_

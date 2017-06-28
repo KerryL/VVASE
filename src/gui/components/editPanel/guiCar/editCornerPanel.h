@@ -1,17 +1,12 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  editCornerPanel.h
-// Created:  2/10/2009
+// Date:  2/10/2009
 // Author:  K. Loux
-// Description:  Contains the class declaration for the EditCornerPanel class.
-// History:
+// Desc:  Contains the class declaration for the EditCornerPanel class.
 
 #ifndef EDIT_CORNER_PANEL_H_
 #define EDIT_CORNER_PANEL_H_
@@ -27,7 +22,10 @@
 class wxCombo;
 class wxGridEvent;
 
-// VVASE forward declarations
+namespace VVASE
+{
+
+// Local forward declarations
 class Corner;
 class EditSuspensionNotebook;
 class SuperGrid;
@@ -95,5 +93,7 @@ private:
 	// For the event table
 	DECLARE_EVENT_TABLE();
 };
+
+}// namespace VVASE
 
 #endif// EDIT_CORNER_PANEL_H_

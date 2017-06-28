@@ -1,20 +1,15 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  editIterationPlotsPanel.cpp
-// Created:  11/14/2010
+// Date:  11/14/2010
 // Author:  K. Loux
-// Description:  Contains the class definition for the EditIterationPlotsPanel
-//				 class.
-// History:
+// Desc:  Contains the class definition for the EditSweepPlotsPanel
+//        class.
 
-// CarDesigner headers
+// VVASE headers
 #include "gui/iteration.h"
 #include "gui/components/mainFrame.h"
 #include "gui/components/editPanel/editPanel.h"

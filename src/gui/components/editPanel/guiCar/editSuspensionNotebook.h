@@ -1,17 +1,12 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  editSuspensionNotebook.h
-// Created:  2/19/2009
+// Date:  2/19/2009
 // Author:  K. Loux
-// Description:  Contains the class declaration for the EDIT_SUSPENSION_NOTEBOOK class.
-// History:
+// Desc:  Contains the class declaration for the EditSuspensionNotebook class.
 
 #ifndef EDIT_SUSPENSION_NOTEBOOK_H_
 #define EDIT_SUSPENSION_NOTEBOOK_H_
@@ -24,7 +19,10 @@ class wxPanel;
 class wxCombo;
 class wxCheckBox;
 
-// VVASE forward declarations
+namespace VVASE
+{
+
+// Local forward declarations
 class Car;
 class EditPanel;
 class EditCornerPanel;
@@ -58,5 +56,7 @@ private:
 	EditCornerPanel *leftRear;
 	EditSuspensionRatesPanel* rates;
 };
+
+}// namespace VVASE
 
 #endif// EDIT_SUSPENSION_NOTEBOOK_H_

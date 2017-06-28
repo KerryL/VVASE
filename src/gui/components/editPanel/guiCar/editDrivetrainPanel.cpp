@@ -1,21 +1,16 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  editDrivetrainPanel.cpp
-// Created:  2/10/2009
+// Date:  2/10/2009
 // Author:  K. Loux
-// Description:  Contains the class definition for the EditDrivetrainPanel class.  This
-//				 class is used to edit the hard points on a particular corner of the
-//				 car.
-// History:
+// Desc:  Contains the class definition for the EditDrivetrainPanel class.  This
+//        class is used to edit the hard points on a particular corner of the
+//        car.
 
-// CarDesigner headers
+// Local headers
 #include "vCar/drivetrain.h"
 #include "gui/renderer/carRenderer.h"
 #include "gui/guiCar.h"

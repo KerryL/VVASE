@@ -1,20 +1,12 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  appearanceOptionsDialog.cpp
-// Created:  4/23/2009
+// Date:  4/23/2009
 // Author:  K. Loux
-// Description:  A dialog object for editing the contents of the AppearanceOptions object.
-// History:
-//	5/7/2009	- Made grid columns re-sizable and started using the column labels, K. Loux.
-//	10/17/2010	- Added transparency options for color definition, K. Loux.
-//	11/9/2011	- Corrected use of sizers for better cross-platform usage, K. Loux.
+// Desc:  A dialog object for editing the contents of the AppearanceOptions object.
 
 // wxWidgets headers
 #include <wx/sizer.h>
@@ -22,7 +14,7 @@
 #include <wx/checklst.h>
 #include <wx/colordlg.h>
 
-// VVASE headers
+// Local headers
 #include "gui/dialogs/appearanceOptionsDialog.h"
 #include "gui/components/mainFrame.h"
 #include "gui/superGrid.h"
@@ -360,7 +352,7 @@ void AppearanceOptionsDialog::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 	for (i = 0; i < AppearanceOptions::ResolutionCount; i++)
 	{
 		// Resolution must be a valid number)
-		if (resolutionGrid->GetCellValue(i, 1).ToLong(&resolutionValue))	
+		if (resolutionGrid->GetCellValue(i, 1).ToLong(&resolutionValue))
 			options->SetResolution((AppearanceOptions::ObjectResolution)i, (int)resolutionValue);
 	}
 

@@ -1,21 +1,16 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  editDifferentialPanel.cpp
-// Created:  2/10/2009
+// Date:  2/10/2009
 // Author:  K. Loux
-// Description:  Contains the class definition for the EditDifferentialPanel class.  This
-//				 class is used to edit the hard points on a particular corner of the
-//				 car.
-// History:
+// Desc:  Contains the class definition for the EditDifferentialPanel class.  This
+//        class is used to edit the hard points on a particular corner of the
+//        car.
 
-// CarDesigner headers
+// Local headers
 #include "vCar/differential.h"
 #include "gui/guiCar.h"
 #include "gui/components/mainFrame.h"

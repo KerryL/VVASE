@@ -1,29 +1,13 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  mainFrame.cpp
-// Created:  3/7/2008
+// Date:  3/7/2008
 // Author:  K. Loux
-// Description:  Contains the class functionality (event handlers, etc.) for the
-//				 MainFrame class.  Uses wxWidgets for the GUI components.
-// History:
-//	1/24/2009	- Major application structure change - MainFrame uses GuiObject instead of
-//				  GuiCar.  GuiObject changed to only contain either GuiCar or Iteration
-//				  objects, K. Loux.
-//	1/28/2009	- Changed structure of GUI components so context menu creation for all
-//				  objects is handled by this class, K. Loux.
-//	2/10/2009	- Added EditPanel to application, K. Loux.
-//	2/17/2009	- Moved the Kinematics object for primary analysis into the GUI_CAR class.
-//	6/7/2009	- Changed GetFilenameFromUser() to make use of wx functions for checking for file
-//				  existence and selecting multiple files to open, K. Loux.
-//	10/14/2010	- Added configuration file for storing application level options, K. Loux.
-//	11/28/2010	- Added number of threads to configuration file, K. Loux.
+// Desc:  Contains the class functionality (event handlers, etc.) for the
+//        MainFrame class.  Uses wxWidgets for the GUI components.
 
 // For difficult debugging problems, use this flag to print messages to file as well as to the output pane
 //#define DEBUG_TO_FILE_
@@ -333,7 +317,7 @@ void MainFrame::SetProperties()
 	menuBar->FindItem(IdMenuEditPaste)->Enable(false);
 	/*menuBar->FindItem(IdMenuToolsDoE)->Enable(false);
 	menuBar->FindItem(IdMenuToolsDynamic)->Enable(false);*/
-	
+
 	ReadConfiguration();
 
 	lastAnalysisWasKinematic = true;
@@ -343,7 +327,7 @@ void MainFrame::SetProperties()
 	toolbar3D->ToggleTool(IdToolbar3DOrtho, useOrthoView);
 
 	wxString fontFaceName;
-	
+
 	// Check to see if we read the output font preference from the config file
 	if (outputFont.IsNull() || !outputFont.IsOk())
 	{
@@ -361,7 +345,7 @@ void MainFrame::SetProperties()
 			if (!outputFont.SetFaceName(fontFaceName))
 				Debugger::GetInstance() << "Error setting font face to " << fontFaceName << Debugger::PriorityHigh;
 		}
-		
+
 		if (!foundPreferredFont)
 		{
 			Debugger::GetInstance() << "Could not find preferred fixed-width font; using " << fontFaceName << Debugger::PriorityHigh;
@@ -589,7 +573,7 @@ void MainFrame::SetOutputFont(const wxFont& font)
 	if (!font.IsNull() && font.IsOk())
 	{
 		outputFont = font;
-		
+
 		// Assign the font to the window
 		wxTextAttr outputAttributes;
 		outputAttributes.SetFont(outputFont);
@@ -2457,14 +2441,14 @@ void MainFrame::Toolbar3DOrthoClickEvent(wxCommandEvent &/*event*/)
 void MainFrame::ThreadCompleteEvent(wxCommandEvent &event)
 {
 	int carCount(0), i;
-	
+
 	// If the application is closing, ignore anything that's not a thread exit event
 	if (applicationExiting && event.GetInt() != ThreadJob::CommandThreadExit)
 	{
 		openJobCount--;
 		return;
 	}
-	
+
 	// Perform different operations depending on the type of job that has completed
 	switch (event.GetInt())
 	{
@@ -2901,14 +2885,14 @@ void MainFrame::ReadConfiguration()
 
 	// Read SOLVER configuration from file
 	SetNumberOfThreads(configurationFile->Read(_T("/Solver/NumberOfThreads"), wxThread::GetCPUCount() * 2));
-	
+
 	// Read FONT configuration from file
 	wxFont font;
 	font.SetNativeFontInfo(configurationFile->Read(_T("/Fonts/OutputFont"), wxEmptyString));
 	SetOutputFont(font);
 	font.SetNativeFontInfo(configurationFile->Read(_T("/Fonts/PlotFont"), wxEmptyString));
 	SetPlotFont(font);
-	
+
 	// Read rendering options
 	configurationFile->Read(_T("/Renderer/useOrtho"), &useOrthoView, false);
 
@@ -2983,7 +2967,7 @@ void MainFrame::WriteConfiguration()
 
 	// Write SOLVER configuration to file
 	configurationFile->Write(_T("/Solver/NumberOfThreads"), numberOfThreads);
-	
+
 	// Write FONTS configuration to file
 	if (outputFont.IsOk())
 		configurationFile->Write(_T("/Fonts/OutputFont"),
@@ -2991,7 +2975,7 @@ void MainFrame::WriteConfiguration()
 	if (plotFont.IsOk())
 		configurationFile->Write(_T("/Fonts/PlotFont"),
 			plotFont.GetNativeFontInfoDesc());
-			
+
 	configurationFile->Write(_T("/Renderer/useOrtho"), useOrthoView);
 
 	// Write recent file history

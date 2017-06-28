@@ -1,17 +1,12 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  appearanceOptionsDialog.h
-// Created:  4/23/2009
+// Date:  4/23/2009
 // Author:  K. Loux
-// Description:  A dialog object for editing the contents of the AppearanceOptions object.
-// History:
+// Desc:  A dialog object for editing the contents of the AppearanceOptions object.
 
 #ifndef APPEARNACE_OPTIONS_DIALOG_H_
 #define APPEARNACE_OPTIONS_DIALOG_H_
@@ -19,14 +14,17 @@
 // wxWidgets headers
 #include <wx/wx.h>
 
-// VVASE headers
+// Local headers
 #include "gui/appearanceOptions.h"
 
 // wxWidgets forward declarations
 class wxGridEvent;
 class wxNotebook;
 
-// VVASE forward declarations
+namespace VVASE
+{
+
+// Local forward declarations
 class MainFrame;
 class SuperGrid;
 class Color;
@@ -70,5 +68,7 @@ private:
 
 	DECLARE_EVENT_TABLE()
 };
+
+}// namespace VVASE
 
 #endif// APPEARNACE_OPTIONS_DIALOG_H_

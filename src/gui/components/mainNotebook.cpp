@@ -1,22 +1,15 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  mainNotebook.cpp
-// Created:  4/4/2008
+// Date:  4/4/2008
 // Author:  K. Loux
-// Description:  Contains the class functionality (event handlers, etc.) for the
-//				 MainNotebook class.  Derived from wxAuiNotebook.
-// History:
-//	1/28/2009	- Changed structure of GUI components so context menu creation for all
-//				  objects is handled by the MainFrame class.
+// Desc:  Contains the class functionality (event handlers, etc.) for the
+//        MainNotebook class.  Derived from wxAuiNotebook.
 
-// CarDesigner headers
+// VVASE headers
 #include "gui/components/mainNotebook.h"
 #include "gui/components/mainFrame.h"
 #include "vUtilities/debugger.h"

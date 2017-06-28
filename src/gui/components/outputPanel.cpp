@@ -1,23 +1,15 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  outputPanel.cpp
-// Created:  2/10/2009
+// Date:  2/10/2009
 // Author:  K. Loux
-// Description:  Contains the class definition for the OutputPanel class.  This
-//				 class is used to display the kinematic output variables.
-// History:
-//	3/30/2009	- Added FinishUpdate and changed UpdateInformation to allow for arraying
-//				  outputs for all open cars, K. Loux.
-//	5/7/2009	- Made grid columns re-sizable and started using the column labels, K. Loux.
+// Desc:  Contains the class definition for the OutputPanel class.  This
+//        class is used to display the kinematic output variables.
 
-// CarDesigner headers
+// VVASE headers
 #include "gui/components/outputPanel.h"
 #include "gui/components/mainFrame.h"
 #include "vCar/car.h"
@@ -151,44 +143,44 @@ void OutputPanel::UpdateInformation(GuiCar::CarOutputs outputs, Car &car,
 		// Make the cell read-only
 		outputsList->SetReadOnly(i, index, true);
 	}
-	
+
 	for (i = KinematicOutputs::NumberOfOutputScalars; i < KinematicOutputs::NumberOfOutputScalars + 7; i++)
 	{
 		outputsList->SetCellBackgroundColour(i, index, *wxWHITE);
 		outputsList->SetCellAlignment(i, index, wxALIGN_CENTER, wxALIGN_TOP);
 		outputsList->SetReadOnly(i, index, true);
 	}
-	
+
 	if (outputs.hasQuasiStaticOutputs)
 	{
 		outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars, index,
 			UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertOutput(
 			outputs.quasiStaticOutputs.pitch, UnitConverter::UnitTypeAngle)));
-			
+
 		outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 1, index,
 			UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertOutput(
 			outputs.quasiStaticOutputs.roll, UnitConverter::UnitTypeAngle)));
-			
+
 		outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 2, index,
 			UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertOutput(
 			outputs.quasiStaticOutputs.heave, UnitConverter::UnitTypeDistance)));
-			
+
 		outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 3, index,
 			UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertOutput(
 			outputs.quasiStaticOutputs.wheelLoads.leftFront, UnitConverter::UnitTypeForce)));
-			
+
 		outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 4, index,
 			UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertOutput(
 			outputs.quasiStaticOutputs.wheelLoads.rightFront, UnitConverter::UnitTypeForce)));
-			
+
 		outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 5, index,
 			UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertOutput(
 			outputs.quasiStaticOutputs.wheelLoads.leftRear, UnitConverter::UnitTypeForce)));
-			
+
 		outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 6, index,
 			UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertOutput(
 			outputs.quasiStaticOutputs.wheelLoads.rightRear, UnitConverter::UnitTypeForce)));
-			
+
 		outputsList->SetRowSize(KinematicOutputs::NumberOfOutputScalars, outputsList->GetRowHeight(0));
 		outputsList->SetRowSize(KinematicOutputs::NumberOfOutputScalars + 1, outputsList->GetRowHeight(0));
 		outputsList->SetRowSize(KinematicOutputs::NumberOfOutputScalars + 2, outputsList->GetRowHeight(0));
@@ -355,14 +347,14 @@ void OutputPanel::FinishUpdate(int numberOfDataColumns)
 			(KinematicOutputs::OutputsComplete)i)).c_str());
 		outputsList->SetCellValue(i, this->numberOfDataColumns + 1, unitString);
 	}
-	
+
 	unitString.Printf("(%s)", UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeAngle).c_str());
 	outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars, this->numberOfDataColumns + 1, unitString);
 	outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 1, this->numberOfDataColumns + 1, unitString);
-	
+
 	unitString.Printf("(%s)", UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance).c_str());
 	outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 2, this->numberOfDataColumns + 1, unitString);
-	
+
 	unitString.Printf("(%s)", UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeForce).c_str());
 	outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 3, this->numberOfDataColumns + 1, unitString);
 	outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 4, this->numberOfDataColumns + 1, unitString);
@@ -440,7 +432,7 @@ void OutputPanel::CreateControls()
 		if (i < KinematicOutputs::NumberOfOutputScalars)
 			outputsList->SetCellValue(i, 0, KinematicOutputs::GetOutputName((KinematicOutputs::OutputsComplete)i));
 	}
-	
+
 	outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars, 0, _T("Pitch"));
 	outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 1, 0, _T("Roll"));
 	outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 2, 0, _T("Heave"));
@@ -454,7 +446,7 @@ void OutputPanel::CreateControls()
 	outputsList->EnableDragColSize(true);
 	outputsList->EnableDragGridSize(false);
 	outputsList->EnableDragRowSize(false);
-	
+
 	// Set the sizes automatically
 	outputsList->AutoSizeColumns();
 	outputsList->SetColLabelSize(wxGRID_AUTOSIZE);

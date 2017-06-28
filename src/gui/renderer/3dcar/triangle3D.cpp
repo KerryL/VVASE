@@ -1,21 +1,15 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  triangle3D.cpp
-// Created:  1/5/2009
+// Date:  1/5/2009
 // Author:  K. Loux
-// Description:  Contains class definition for the Triangle3D class.  This is used for
-//				 bell cranks, uprights, etc.
-// History:
-//	5/17/2009	- Removed VTK dependencies, K. Loux.
+// Desc:  Contains class definition for the Triangle3D class.  This is used for
+//        bell cranks, uprights, etc.
 
-// VVASE headers
+// Local headers
 #include "vRenderer/primitives/triangle.h"
 #include "vRenderer/3dcar/triangle3D.h"
 #include "vRenderer/color.h"

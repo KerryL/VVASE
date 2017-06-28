@@ -1,19 +1,14 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2016
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
 // File:  editMassPanel.cpp
-// Created:  2/10/2009
+// Date:  2/10/2009
 // Author:  K. Loux
-// Description:  Contains the class definition for the EditMassPanel class.  This
-//				 class is used to edit the hard points on a particular corner of the
-//				 car.
-// History:
+// Desc:  Contains the class definition for the EditMassPanel class.  This
+//        class is used to edit the hard points on a particular corner of the
+//        car.
 
 // Standard C++ headers
 #include <algorithm>
@@ -125,7 +120,7 @@ void EditMassPanel::UpdateInformation(MassProperties *currentMassProperties)
 		UnitConverter::GetInstance().ConvertMassOutput(currentMassProperties->unsprungMass.leftRear)));
 	unsprungMassRightRear->ChangeValue(UnitConverter::GetInstance().FormatNumber(
 		UnitConverter::GetInstance().ConvertMassOutput(currentMassProperties->unsprungMass.rightRear)));
-		
+
 	cornerMassLeftFront->ChangeValue(UnitConverter::GetInstance().FormatNumber(
 		UnitConverter::GetInstance().ConvertMassOutput(currentMassProperties->cornerWeights.leftFront)));
 	cornerMassRightFront->ChangeValue(UnitConverter::GetInstance().FormatNumber(
@@ -203,7 +198,7 @@ void EditMassPanel::CreateControls()
 {
 	// Enable scrolling
 	SetScrollRate(10, 10);
-	
+
 	// Top-level sizer
 	wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
 
@@ -250,7 +245,7 @@ void EditMassPanel::CreateControls()
 	inertiaInputSizer->Add(izx, 0, wxALIGN_CENTER_VERTICAL);
 	inertiaInputSizer->Add(izy, 0, wxALIGN_CENTER_VERTICAL);
 	inertiaInputSizer->Add(izz, 0, wxEXPAND);
-	
+
 	// Blank row for space
 	int spaceSize(30);
 	inertiaInputSizer->AddSpacer(spaceSize);
@@ -266,7 +261,7 @@ void EditMassPanel::CreateControls()
 	wxStaticText *cornerMassLabelRightFront = new wxStaticText(this, wxID_ANY, _T("RF Corner Mass"));
 	wxStaticText *cornerMassLabelLeftRear = new wxStaticText(this, wxID_ANY, _T("LR Corner Mass"));
 	wxStaticText *cornerMassLabelRightRear = new wxStaticText(this, wxID_ANY, _T("RR Corner Mass"));
-	
+
 	wxStaticText *unsprungMassLabelLeftFront = new wxStaticText(this, wxID_ANY, _T("LF Unsprung Mass"));
 	wxStaticText *unsprungMassLabelRightFront = new wxStaticText(this, wxID_ANY, _T("RF Unsprung Mass"));
 	wxStaticText *unsprungMassLabelLeftRear = new wxStaticText(this, wxID_ANY, _T("LR Unsprung Mass"));
@@ -276,7 +271,7 @@ void EditMassPanel::CreateControls()
 	cornerMassRightFront = new wxTextCtrl(this, TextBoxCornerMassRightFront);
 	cornerMassLeftRear = new wxTextCtrl(this, TextBoxCornerMassLeftRear);
 	cornerMassRightRear = new wxTextCtrl(this, TextBoxCornerMassRightRear);
-	
+
 	unsprungMassLeftFront = new wxTextCtrl(this, TextBoxUnsprungMassLeftFront);
 	unsprungMassRightFront = new wxTextCtrl(this, TextBoxUnsprungMassRightFront);
 	unsprungMassLeftRear = new wxTextCtrl(this, TextBoxUnsprungMassLeftRear);
@@ -286,12 +281,12 @@ void EditMassPanel::CreateControls()
 	cornerMassRightFrontUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
 	cornerMassLeftRearUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
 	cornerMassRightRearUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
-	
+
 	unsprungMassLeftFrontUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
 	unsprungMassRightFrontUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
 	unsprungMassLeftRearUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
 	unsprungMassRightRearUnitsLabel = new wxStaticText(this, wxID_ANY, wxEmptyString);
-	
+
 	massInputSizer->Add(cornerMassLabelLeftFront, 0, wxALIGN_CENTER_VERTICAL);
 	massInputSizer->Add(cornerMassLeftFront, 0, wxEXPAND);
 	massInputSizer->Add(cornerMassLeftFrontUnitsLabel, 0, wxALIGN_CENTER_VERTICAL);
@@ -499,7 +494,7 @@ void EditMassPanel::TextBoxEditEvent(wxCommandEvent &event)
 		dataLocation = &currentMassProperties->cornerWeights.rightRear;
 		units = UnitConverter::UnitTypeForce;
 		break;
-		
+
 	case TextBoxUnsprungMassLeftFront:
 		textBox = unsprungMassLeftFront;
 		dataLocation = &currentMassProperties->unsprungMass.leftFront;
