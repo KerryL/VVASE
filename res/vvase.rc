@@ -1,17 +1,12 @@
 /*===================================================================================
                                     CarDesigner
                          Copyright Kerry R. Loux 2008-2009
-
-     No requirement for distribution of wxWidgets libraries, source, or binaries.
-                             (http://www.wxwidgets.org/)
-
 ===================================================================================*/
 
-// File:  CarDesigner.rc
-// Created:  3/23/2008
+// File:  vvase.rc
+// Date:  3/23/2008
 // Author:  K. Loux
-// Description:  Defines all of the resources for the application (icons, graphics, etc.)
-// History:
+// Desc:  Defines all of the resources for the application (icons, graphics, etc.)
 
 // Main application icon (MUST be first alphabetically)
 ICON_ID_MAIN			ICON		"res\\icons\\aavase.ico"
