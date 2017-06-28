@@ -1,11 +1,12 @@
-/*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-===================================================================================*/
+/*=============================================================================
+                                     VVASE
+                        Copyright Kerry R. Loux 2007-2017
+=============================================================================*/
 
 // File:  carRenderer.cpp
 // Date:  4/5/2008
-// Author:  K. Loux
+// Auth:  K. Loux
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains class declaration for the CarRenderer class.  Derived from
 //        RenderWindow, this class is associated with a loaded car file
 //        and contains the information and methods required to render a car in 3D.

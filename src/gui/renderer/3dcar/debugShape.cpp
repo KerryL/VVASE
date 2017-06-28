@@ -1,11 +1,12 @@
-/*===================================================================================
-                                    CarDesigner
-                         Copyright Kerry R. Loux 2008-2016
-===================================================================================*/
+/*=============================================================================
+                                     VVASE
+                        Copyright Kerry R. Loux 2007-2017
+=============================================================================*/
 
 // File:  debugShape.cpp
 // Date:  7/9/2015
-// Author:  K. Loux
+// Auth:  K. Loux
+// Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Object for displaying 3D shapes to aid with debugging.
 // History:
 
