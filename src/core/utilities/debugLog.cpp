@@ -20,6 +20,9 @@
 // Only build this class if we need to
 #ifdef USE_DEBUG_LOG
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			DebugLog
 // Function:		Static member initialization
@@ -179,4 +182,7 @@ void DebugLog::Kill()
 	delete logInstance;
 	logInstance = NULL;
 }
-#endif
+
+}// namespace VVASE
+
+#endif// USE_DEBUG_LOG

@@ -22,6 +22,9 @@
 #include "vMath/vector.h"
 #include "vRenderer/renderWindow.h"
 
+namespace VVASE
+{
+
 DebugShape* DebugShape::ds = NULL;
 
 void DebugShape::SetRenderer(RenderWindow &renderer)
@@ -101,5 +104,7 @@ void DebugShape::SetPoint(const Vector &p, Point3D &point) const
 {
 	point.Update(p, 1.5, 4, Color::ColorWhite, true);
 }
+
+}// namespace VVASE
 
 #endif// USE_DEBUG_SHAPE

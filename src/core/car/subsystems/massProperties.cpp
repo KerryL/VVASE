@@ -22,6 +22,9 @@
 #include "vUtilities/binaryReader.h"
 #include "vUtilities/binaryWriter.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			MassProperties
 // Function:		MassProperties
@@ -619,3 +622,5 @@ Vector MassProperties::GetSprungMassCG(const Suspension* s) const
 
 	return cg;
 }
+
+}// namespace VVASE

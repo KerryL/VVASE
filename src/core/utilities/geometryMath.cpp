@@ -17,6 +17,9 @@
 #include "vMath/geometryMath.h"
 #include "vMath/carMath.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			GeometryMath
 // Function:		FindThreeSpheresIntersection
@@ -412,3 +415,5 @@ double GeometryMath::GetSignedAngle(const Circle &c, const Vector &v)
 {
 	return asin((v.z - c.center.z) / c.radius);
 }
+
+}// namespace VVASE

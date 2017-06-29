@@ -16,6 +16,9 @@
 #include "vUtilities/binaryReader.h"
 #include "vUtilities/binaryWriter.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			Brakes
 // Function:		Brakes
@@ -169,3 +172,5 @@ Brakes& Brakes::operator = (const Brakes &brakes)
 
 	return *this;
 }
+
+}// namespace VVASE

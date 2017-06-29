@@ -18,6 +18,9 @@
 #include "vMath/vector.h"
 #include "vMath/carMath.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			Spring3D
 // Function:		Spring3D
@@ -187,3 +190,5 @@ Vector Spring3D::FindClosestPoint(const Vector& point, const Vector& direction) 
 
 	return endPoint2Center;
 }
+
+}// namespace VVASE

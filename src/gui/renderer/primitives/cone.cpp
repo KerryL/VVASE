@@ -15,6 +15,9 @@
 #include "vMath/carMath.h"
 #include "vUtilities/unitConverter.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			Cone
 // Function:		Cone
@@ -339,3 +342,5 @@ bool Cone::IsIntersectedBy(const Vector& point, const Vector& direction) const
 	// TODO:  Implement
 	return false;
 }
+
+}// namespace VVASE

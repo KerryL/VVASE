@@ -10,7 +10,7 @@
 // Desc:  Contains the class functionality (event handlers, etc.) for the
 //        MainNotebook class.  Derived from wxAuiNotebook.
 
-// VVASE headers
+// Local headers
 #include "gui/components/mainNotebook.h"
 #include "gui/components/mainFrame.h"
 #include "vUtilities/debugger.h"
@@ -18,6 +18,9 @@
 
 // wxWidgets headers
 #include <wx/utils.h>
+
+namespace VVASE
+{
 
 //==========================================================================
 // Class:			MainNotebook
@@ -164,3 +167,5 @@ void MainNotebook::OnNotebookTabRightClick(wxAuiNotebookEvent &event)
 
 	mainFrame.CreateContextMenu(event.GetSelection());
 }
+
+}// namespace VVASE

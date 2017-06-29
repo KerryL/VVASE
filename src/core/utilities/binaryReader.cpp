@@ -14,6 +14,9 @@
 // Local headers
 #include "vUtilities/binaryReader.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			BinaryReader
 // Function:		BinaryReader
@@ -454,3 +457,5 @@ bool BinaryReader::Read64Bit(char* const v)
 	file.read(v, 8);
 	return file.good();
 }
+
+}// namespace VVASE

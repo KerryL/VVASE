@@ -12,11 +12,14 @@
 // wxWidgets headers
 #include <wx/gbsizer.h>
 
-// VVASE headers
+// Local headers
 #include "gui/dialogs/gaGoalDialog.h"
 #include "vUtilities/wxRelatedUtilities.h"
 #include "vUtilities/unitConverter.h"
 #include "vUtilities/dataValidator.h"
+
+namespace VVASE
+{
 
 //==========================================================================
 // Class:			GAGoalDialog
@@ -493,3 +496,5 @@ void GAGoalDialog::FormatDialogDifference()
 	this->GetSizer()->SetSizeHints(this);
 	this->GetSizer()->Layout();
 }
+
+}// namespace VVASE

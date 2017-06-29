@@ -15,6 +15,9 @@
 #include "vMath/carMath.h"
 #include "vUtilities/unitConverter.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			Cylinder
 // Function:		Cylinder
@@ -314,3 +317,5 @@ bool Cylinder::IsIntersectedBy(const Vector& point, const Vector& direction) con
 	// TODO:  Implement
 	return false;
 }
+
+}// namespace VVASE

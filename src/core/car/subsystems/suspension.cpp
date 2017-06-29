@@ -19,6 +19,9 @@
 #include "vUtilities/binaryReader.h"
 #include "vUtilities/binaryWriter.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			Suspension
 // Function:		Suspension
@@ -496,3 +499,5 @@ void Suspension::UpdateSymmetry()
 	leftRear.staticCamber = rightRear.staticCamber;
 	leftRear.staticToe = rightRear.staticToe;
 }
+
+}// namespace VVASE

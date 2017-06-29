@@ -16,6 +16,9 @@
 #include "vMath/vector.h"
 #include "vMath/carMath.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			Point3D
 // Function:		Point3D
@@ -131,3 +134,5 @@ bool Point3D::ContainsThisActor(const Primitive *actor)
 	else
 		return false;
 }
+
+}// namespace VVASE

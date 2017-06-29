@@ -21,6 +21,9 @@
 #include "vUtilities/unitConverter.h"
 #include "vMath/vector.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			EditDrivetrainPanel
 // Function:		EditDrivetrainPanel
@@ -66,3 +69,5 @@ EditDrivetrainPanel::EditDrivetrainPanel(EditPanel* parent, wxWindowID id,
 EditDrivetrainPanel::~EditDrivetrainPanel()
 {
 }
+
+}// namespace VVASE

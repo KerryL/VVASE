@@ -20,6 +20,9 @@
 #include "gui/components/editPanel/guiCar/editSuspensionNotebook.h"
 #include "vUtilities/unitConverter.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			EditSuspensionRatesPanel
 // Function:		EditSuspensionRatesPanel
@@ -444,3 +447,5 @@ double EditSuspensionRatesPanel::ConvertRotarySpringOutput(const double& value) 
 	double converted = 1.0 / UnitConverter::GetInstance().ConvertMomentOutput(value);
 	return 1.0 / UnitConverter::GetInstance().ConvertAngleOutput(converted);
 }
+
+}// namespace VVASE

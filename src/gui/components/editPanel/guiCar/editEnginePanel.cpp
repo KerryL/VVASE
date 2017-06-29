@@ -21,6 +21,9 @@
 #include "vUtilities/unitConverter.h"
 #include "vMath/vector.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			EditEnginePanel
 // Function:		EditEnginePanel
@@ -66,3 +69,5 @@ EditEnginePanel::EditEnginePanel(EditPanel* parent, wxWindowID id,
 EditEnginePanel::~EditEnginePanel()
 {
 }
+
+}// namespace VVASE

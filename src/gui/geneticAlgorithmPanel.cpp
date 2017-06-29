@@ -27,6 +27,9 @@
 #include "vCar/car.h"
 #include "vUtilities/wxRelatedUtilities.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			GeneticAlgorithmPanel
 // Function:		GeneticAlgorithmPanel
@@ -1331,3 +1334,5 @@ const GuiCar* GeneticAlgorithmPanel::GetSelectedCar()
 
 	return static_cast<GuiCar*>(mainFrame.GetObjectByIndex(i));
 }
+
+}// namespace VVASE

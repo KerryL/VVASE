@@ -25,6 +25,9 @@
 #include "vSolver/threads/optimizationData.h"
 #include "vMath/carMath.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			GeneticOptimization
 // Function:		GeneticOptimization
@@ -328,3 +331,5 @@ void GeneticOptimization::UpdateData()
 
 	gaPanel->UpdateInformation();
 }
+
+}// namespace VVASE

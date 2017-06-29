@@ -25,6 +25,9 @@
 #include "vUtilities/wxRelatedUtilities.h"
 #include "vMath/vector.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			EditSuspensionPanel
 // Function:		EditSuspensionPanel
@@ -773,3 +776,5 @@ void EditSuspensionPanel::RearBarStyleChangeEvent(wxCommandEvent &event)
 	parent.GetParent().GetMainFrame().UpdateAnalysis();
 	parent.GetParent().GetMainFrame().UpdateOutputPanel();
 }
+
+}// namespace VVASE

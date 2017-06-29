@@ -15,6 +15,9 @@
 #include "vRenderer/color.h"
 #include "vMath/vector.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			Plane3D
 // Function:		Plane3D
@@ -128,3 +131,5 @@ bool Plane3D::ContainsThisActor(const Primitive *actor)
 	else
 		return false;
 }
+
+}// namespace VVASE

@@ -19,6 +19,9 @@
 #include "vUtilities/unitConverter.h"
 #include "vUtilities/debugger.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			EditIterationOptionsPanel
 // Function:		EditIterationOptionsPanel
@@ -311,3 +314,5 @@ void EditIterationOptionsPanel::SetAsDefaultClickedEvent(wxCommandEvent& WXUNUSE
 	// Display a message to the user so they know the changes took effect
 	Debugger::GetInstance() << "Current plot settings saved as default" << Debugger::PriorityHigh;
 }
+
+}// namespace VVASE

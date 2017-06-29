@@ -18,6 +18,9 @@
 #include "vUtilities/binaryReader.h"
 #include "vUtilities/binaryWriter.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			Engine
 // Function:		Engine
@@ -157,3 +160,5 @@ Engine& Engine::operator = (const Engine &engine)
 
 	return *this;
 }
+
+}// namespace VVASE

@@ -25,6 +25,9 @@
 #include "gui/components/editPanel/guiCar/editSuspensionRatesPanel.h"
 #include "vUtilities/debugger.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			EditSuspensionNotebook
 // Function:		EditSuspensionNotebook
@@ -210,3 +213,5 @@ void EditSuspensionNotebook::CreateControls()
 	AddPage(rightRear, _T("RR"));
 	AddPage(leftRear, _T("LR"));
 }
+
+}// namespace VVASE

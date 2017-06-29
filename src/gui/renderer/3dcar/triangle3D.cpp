@@ -18,6 +18,9 @@
 #include "vMath/vector.h"
 #include "vMath/carMath.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			Triangle3D
 // Function:		Triangle3D
@@ -132,3 +135,5 @@ bool Triangle3D::ContainsThisActor(const Primitive *actor)
 	else
 		return false;
 }
+
+}// namespace VVASE

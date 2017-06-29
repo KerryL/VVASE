@@ -28,6 +28,9 @@
 #include "gui/plotPanel.h"
 #include "vUtilities/debugger.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			GuiObject
 // Function:		GuiObject
@@ -600,3 +603,5 @@ bool GuiObject::VerifyUniqueness()
 	// No duplicates found
 	return true;
 }
+
+}// namespace VVASE

@@ -11,7 +11,7 @@
 //        definition.  This event is used for communication from the worker threads
 //        to the GUI thread.
 
-// VVASE headers
+// Local headers
 #include "vSolver/threads/threadEvent.h"
 
 // Define the EVT_THREAD event type

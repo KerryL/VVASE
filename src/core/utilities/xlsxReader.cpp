@@ -20,6 +20,9 @@
 // Local headers
 #include "vUtilities/xlsxReader.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			XlsxReader
 // Function:		XlsxReader
@@ -1020,3 +1023,5 @@ wxString XlsxReader::GetSharedString(const unsigned int &index) const
 	// If we can't find anything, return an empty string
 	return wxEmptyString;
 }
+
+}// namespace VVASE

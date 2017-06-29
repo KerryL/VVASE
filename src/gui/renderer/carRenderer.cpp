@@ -49,6 +49,9 @@
 #include "vUtilities/debugLog.h"
 #include "vRenderer/3dcar/debugShape.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			CarRenderer
 // Function:		CarRenderer
@@ -1638,3 +1641,5 @@ void CarRenderer::OnContextEdit(wxCommandEvent& WXUNUSED(event))
 {
 	DoEditPointDialog();
 }
+
+}// namespace VVASE

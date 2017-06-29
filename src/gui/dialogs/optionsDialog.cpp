@@ -18,13 +18,16 @@
 #include <wx/radiobox.h>
 #include <wx/fontdlg.h>
 
-// VVASE headers
+// Local headers
 #include "gui/dialogs/optionsDialog.h"
 #include "gui/components/mainFrame.h"
 #include "vUtilities/unitConverter.h"
 #include "vUtilities/debugger.h"
 #include "vUtilities/wxRelatedUtilities.h"
 #include "vUtilities/dataValidator.h"
+
+namespace VVASE
+{
 
 //==========================================================================
 // Class:			OptionsDialog
@@ -817,3 +820,5 @@ void OptionsDialog::ChangePlotFontClickEvent(wxCommandEvent& WXUNUSED(event))
 
 	// FIXME:  Re-size sizers in case font name changed length
 }
+
+}// namespace VVASE

@@ -24,6 +24,9 @@
 #include "vUtilities/unitConverter.h"
 #include "vMath/vector.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			EditMassPanel
 // Function:		EditMassPanel
@@ -614,3 +617,5 @@ void EditMassPanel::GridCellChangeEvent(wxGridEvent& event)
 
 	event.Skip();
 }
+
+}// namespace VVASE

@@ -15,6 +15,9 @@
 #include "vRenderer/color.h"
 #include "vMath/vector.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			Origin
 // Function:		Origin
@@ -132,3 +135,5 @@ bool Origin::ContainsThisActor(const Primitive *actor)
 
 	return false;
 }
+
+}// namespace VVASE

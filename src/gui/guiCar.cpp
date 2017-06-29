@@ -35,6 +35,9 @@
 #include "vSolver/threads/threadJob.h"
 #include "vSolver/threads/kinematicsData.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			GuiCar
 // Function:		GuiCar
@@ -466,3 +469,5 @@ void GuiCar::ComputeARBSignConventions()
 	if (kinematics.GetOutputs().doubles[KinematicOutputs::RearARBTwist] < 0.0)
 		originalCar->suspension->rearBarSignGreaterThan = false;
 }
+
+}// namespace VVASE

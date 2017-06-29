@@ -25,6 +25,9 @@
 #include "vMath/vector.h"
 #include "vMath/carMath.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			UnitConverter
 // Function:		static member initialization
@@ -2997,3 +3000,5 @@ void UnitConverter::SetNumberOfDigits(const int& numberOfDigits)
 	else
 		this->numberOfDigits = numberOfDigits;
 }
+
+}// namespace VVASE

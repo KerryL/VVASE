@@ -14,6 +14,9 @@
 // Local headers
 #include "vCar/damper.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			Damper
 // Function:		Damper
@@ -53,3 +56,5 @@ Damper::Damper()
 Damper::~Damper()
 {
 }
+
+}// namespace VVASE

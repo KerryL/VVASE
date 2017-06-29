@@ -30,6 +30,9 @@
 #include "vUtilities/machineDefinitions.h"
 #include "vSolver/threads/jobQueue.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			GAObject
 // Function:		GAObject
@@ -938,3 +941,5 @@ bool GAObject::Read(wxString fileName)
 
 	return true;
 }
+
+}// namespace VVASE

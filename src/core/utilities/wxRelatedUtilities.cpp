@@ -12,6 +12,9 @@
 // Local headers
 #include "vUtilities/wxRelatedUtilities.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			None
 // Function:		SetMinimumWidthFromContents
@@ -110,3 +113,5 @@ void SkipMouseEvent(wxMouseEvent &event)
 	static_cast<EventWindowData*>(event.GetEventUserData())->GetWindow()->
 		GetEventHandler()->ProcessEvent(event);
 }
+
+}// namespace VVASE

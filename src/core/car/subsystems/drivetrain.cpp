@@ -21,6 +21,9 @@
 #include "vUtilities/binaryReader.h"
 #include "vUtilities/binaryWriter.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			Drivetrain
 // Function:		Drivetrain
@@ -417,3 +420,5 @@ void Drivetrain::DeleteDifferentials()
 		delete differentials[i];
 	differentials.clear();
 }
+
+}// namespace VVASE

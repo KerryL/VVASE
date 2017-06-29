@@ -14,6 +14,9 @@
 // Local headers
 #include "vUtilities/binaryWriter.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			BinaryWriter
 // Function:		BinaryWriter
@@ -449,3 +452,5 @@ bool BinaryWriter::Write64Bit(const char* const v)
 	file.write(v, 8);
 	return file.good();
 }
+
+}// namespace VVASE

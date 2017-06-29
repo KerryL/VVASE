@@ -21,11 +21,14 @@
 // wxWidgets headers
 #include <wx/wx.h>
 
-// VVASE headers
+// Local headers
 #include "vMath/carMath.h"
 #include "vMath/vector.h"
 #include "vMath/matrix.h"
 #include "vMath/dataset2D.h"
+
+namespace VVASE
+{
 
 //==========================================================================
 // Namespace:		VVASEMath
@@ -802,3 +805,5 @@ Vector VVASEMath::IntersectWithPlane(const Vector &planeNormal, const Vector &po
 	// Use the parametric equation to find the point
 	return pointOnAxis + axisDirection * t;
 }
+
+}// namespace VVASE

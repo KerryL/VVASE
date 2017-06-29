@@ -16,7 +16,7 @@
 #ifndef KINEMATIC_OUTPUTS_H_
 #define KINEMATIC_OUTPUTS_H_
 
-// VVASE headers
+// Local headers
 #include "VVASE/core/utilities/unitConverter.h"
 #include "vCar/corner.h"// TODO:  Need to move this to include/VVASE or users won't be able to include for making plugins
 #include "vCar/suspension.h"
@@ -30,7 +30,7 @@
 namespace VVASE
 {
 
-// VVASE forward declarations
+// Local forward declarations
 class Car;
 
 class KinematicOutputs

@@ -14,6 +14,9 @@
 #include "vRenderer/renderWindow.h"
 #include "vMath/carMath.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			Quadrilateral
 // Function:		Quadrilateral
@@ -294,3 +297,5 @@ bool Quadrilateral::IsIntersectedBy(const Vector& point, const Vector& direction
 	// TODO:  Implement
 	return false;
 }
+
+}// namespace VVASE

@@ -20,6 +20,9 @@
 #include "vSolver/optimization/geneticAlgorithm.h"
 #include "vUtilities/debugLog.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			GeneticAlgorithm
 // Function:		GeneticAlgorithm
@@ -1010,3 +1013,5 @@ void GeneticAlgorithm::Quicksort(double *fitnessArray, int **genomeArray,
 	delete swapGenome;
 	swapGenome = NULL;
 }
+
+}// namespace VVASE

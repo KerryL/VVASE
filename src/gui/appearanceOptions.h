@@ -16,10 +16,13 @@
 // Standard C++ headers
 #include <iosfwd>// for forward declarations of fstream objects
 
-// CarDesigner headers
+// Local headers
 #include "vRenderer/color.h"
 
-// CarDesigner forward declarations
+namespace VVASE
+{
+
+// Local forward declarations
 class MainFrame;
 class GuiCar;
 
@@ -167,5 +170,7 @@ private:
 	double sizeOptions[SizeCount];
 	unsigned int resolutionOptions[ResolutionCount];
 };
+
+}// namespace VVASE
 
 #endif// APPEARANCE_OPTIONS_H_

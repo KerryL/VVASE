@@ -18,6 +18,9 @@
 #include "vUtilities/binaryReader.h"
 #include "vUtilities/binaryWriter.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			Tire
 // Function:		Tire
@@ -187,3 +190,5 @@ Tire& Tire::operator = (const Tire &tire)
 
 	return *this;
 }
+
+}// namespace VVASE

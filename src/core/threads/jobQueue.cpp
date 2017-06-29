@@ -16,6 +16,9 @@
 #include "vSolver/threads/threadEvent.h"
 #include "vUtilities/debugLog.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			JobQueue
 // Function:		JobQueue
@@ -153,3 +156,5 @@ size_t JobQueue::PendingJobs()
 
 	return jobs.size();
 }
+
+}// namespace VVASE

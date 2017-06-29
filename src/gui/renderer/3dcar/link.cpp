@@ -18,6 +18,9 @@
 #include "vMath/vector.h"
 #include "vMath/carMath.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			Link
 // Function:		Link
@@ -183,3 +186,5 @@ Vector Link::FindClosestPoint(const Vector& point, const Vector& direction) cons
 
 	return endPoint2Center;
 }
+
+}// namespace VVASE

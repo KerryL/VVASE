@@ -21,6 +21,9 @@
 #include "vUtilities/binaryReader.h"
 #include "vUtilities/binaryWriter.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			Corner
 // Function:		Corner
@@ -463,3 +466,5 @@ Corner& Corner::operator=(const Corner& corner)
 
 	return *this;
 }
+
+}// namespace VVASE

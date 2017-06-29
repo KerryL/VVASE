@@ -17,6 +17,9 @@
 #include "vMath/vector.h"
 #include "vMath/carMath.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			Swaybar3D
 // Function:		Swaybar3D
@@ -198,3 +201,5 @@ bool Swaybar3D::ContainsThisActor(const Primitive *actor)
 	else
 		return false;
 }
+
+}// namespace VVASE

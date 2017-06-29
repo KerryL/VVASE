@@ -25,6 +25,9 @@
 #include "vUtilities/wxRelatedUtilities.h"
 #include "vMath/vector.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			EditCornerPanel
 // Function:		EditCornerPanel
@@ -761,3 +764,5 @@ void EditCornerPanel::StaticToeChangeEvent(wxCommandEvent &event)
 
 	event.Skip();
 }
+
+}// namespace VVASE

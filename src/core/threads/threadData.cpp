@@ -17,6 +17,9 @@
 // Local headers
 #include "vSolver/threads/threadData.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			ThreadData
 // Function:		ThreadData
@@ -56,3 +59,5 @@ ThreadData::ThreadData()
 ThreadData::~ThreadData()
 {
 }
+
+}// namespace VVASE

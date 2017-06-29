@@ -10,13 +10,16 @@
 // Desc:  Contains the class definition for the EditSweepRangePanel
 //        class.
 
-// VVASE headers
+// Local headers
 #include "gui/iteration.h"
 #include "gui/components/mainFrame.h"
 #include "gui/components/editPanel/editPanel.h"
 #include "gui/components/editPanel/iteration/editIterationRangePanel.h"
 #include "gui/components/editPanel/iteration/editIterationNotebook.h"
 #include "vUtilities/unitConverter.h"
+
+namespace VVASE
+{
 
 //==========================================================================
 // Class:			EditIterationRangePanel
@@ -339,3 +342,5 @@ void EditIterationRangePanel::RangeTextBoxChangeEvent(wxCommandEvent& WXUNUSED(e
 	// Update the display
 	currentIteration->UpdateData();
 }
+
+}// namespace VVASE

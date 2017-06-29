@@ -14,6 +14,9 @@
 #include "vUtilities/binaryReader.h"
 #include "vUtilities/binaryWriter.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			Aerodynamics
 // Function:		Write
@@ -63,3 +66,5 @@ void Aerodynamics::Read(BinaryReader& /*file*/, const int& fileVersion)
 	else
 		assert(false);
 }
+
+}// namespace VVASE

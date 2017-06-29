@@ -34,6 +34,9 @@
 #include "vMath/carMath.h"
 #include "gui/renderer/plotRenderer.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			Iteration
 // Function:		Iteration
@@ -1496,3 +1499,5 @@ void Iteration::MarkAnalysisComplete()
 	if (pendingAnalysisCount == 0)
 		UpdateDisplay();
 }
+
+}// namespace VVASE

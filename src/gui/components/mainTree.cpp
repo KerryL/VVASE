@@ -13,7 +13,7 @@
 #include <wx/menu.h>
 #include <wx/imaglist.h>
 
-// VVASE headers
+// Local headers
 #include "gui/components/mainFrame.h"
 #include "gui/components/mainTree.h"
 #include "gui/guiCar.h"
@@ -34,6 +34,9 @@
 #include "../res/icons/iteration16.xpm"
 #include "../res/icons/optimization16.xpm"
 #endif
+
+namespace VVASE
+{
 
 //==========================================================================
 // Class:			MainTree
@@ -395,3 +398,5 @@ int MainTree::GetItemType(wxTreeItemId itemId)
 
 	return -1;
 }
+
+}// namespace VVASE

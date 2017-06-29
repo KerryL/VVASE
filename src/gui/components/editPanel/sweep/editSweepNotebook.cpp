@@ -19,6 +19,9 @@
 #include "gui/components/editPanel/iteration/editIterationOptionsPanel.h"
 #include "vUtilities/debugger.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			EditIterationNotebook
 // Function:		EditIterationNotebook
@@ -157,3 +160,5 @@ void EditIterationNotebook::CreateControls()
 	AddPage(editPlots, _T("Active Plots"));
 	AddPage(editOptions, _T("Options"));
 }
+
+}// namespace VVASE

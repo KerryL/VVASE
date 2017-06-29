@@ -14,6 +14,9 @@
 #include "vSolver/threads/optimizationData.h"
 #include "vSolver/threads/threadJob.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			OptimizationData
 // Function:		OptimizationData
@@ -77,3 +80,5 @@ bool OptimizationData::OkForCommand(ThreadJob::ThreadCommand &command)
 	// Make sure the command is one of the expected types
 	return command == ThreadJob::CommandThreadGeneticOptimization;
 }
+
+}// namespace VVASE

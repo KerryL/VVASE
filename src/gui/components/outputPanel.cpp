@@ -10,7 +10,7 @@
 // Desc:  Contains the class definition for the OutputPanel class.  This
 //        class is used to display the kinematic output variables.
 
-// VVASE headers
+// Local headers
 #include "gui/components/outputPanel.h"
 #include "gui/components/mainFrame.h"
 #include "vCar/car.h"
@@ -21,6 +21,9 @@
 #include "vUtilities/unitConverter.h"
 #include "gui/superGrid.h"
 #include "vMath/carMath.h"
+
+namespace VVASE
+{
 
 //==========================================================================
 // Class:			OutputPanel
@@ -505,3 +508,5 @@ void OutputPanel::HighlightColumn(wxString name)
 	// End the batch mode edit and re-paint the control
 	outputsList->EndBatch();
 }
+
+}// namespace VVASE

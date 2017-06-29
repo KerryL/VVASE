@@ -16,6 +16,9 @@
 // Local headers
 #include "gui/dialogs/textInputDialog.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			TextInputDialog
 // Function:		TextInputDialog
@@ -96,3 +99,5 @@ void TextInputDialog::CreateControls(const wxString &message, const wxString &de
 
 	text->SetFocus();
 }
+
+}// namespace VVASE

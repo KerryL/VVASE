@@ -12,6 +12,9 @@
 // Local headers
 #include "gui/superGrid.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			SuperGrid
 // Function:		SuperGrid
@@ -154,3 +157,5 @@ void SuperGrid::FitHeight()
 	// Attempt to get scrollbars to dissappear (they are unneeded)
 	ForceRefresh();
 }
+
+}// namespace VVASE

@@ -13,9 +13,12 @@
 // Standard C++ headers
 #include <cstdlib>
 
-// VVASE headers
+// Local headers
 #include "vSolver/physics/millikenAnalysis.h"
 #include "vUtilities/debugger.h"
+
+namespace VVASE
+{
 
 //==========================================================================
 // Class:			MillikenAnalysis
@@ -106,3 +109,5 @@ MillikenAnalysis& MillikenAnalysis::operator = (const MillikenAnalysis &milliken
 
 	return *this;
 }
+
+}// namespace VVASE

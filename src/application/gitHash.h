@@ -9,11 +9,14 @@
 // Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Description:  Defines the application-level constants.
 
-#ifndef VVASE_CONSTANTS_H_
-#define VVASE_CONSTANTS_H_
+#ifndef GIT_HASH_H_
+#define GIT_HASH_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
+
+namespace VVASE
+{
 
 // The current version number
 extern const wxString vvaseVersion;
@@ -23,4 +26,6 @@ extern const wxString vvaseGitHash;
 static const wxString vvaseName = "VVASE";
 static const wxString vvaseLongName = "Virtual Vehicle Analysis and Simulation Environment";
 
-#endif// VVASE_CONSTANTS_H_
+}// namespace VVASE
+
+#endif// GIT_HASH_H_

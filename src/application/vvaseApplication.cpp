@@ -14,7 +14,7 @@
 #include <wx/snglinst.h>
 #include <wx/ipc.h>
 
-// CarDesigner headers
+// Local headers
 #include "application/vvaseApplication.h"
 #include "gui/components/mainFrame.h"
 #include "gui/ipcClient.h"
@@ -26,6 +26,9 @@
 
 // Implement the application (have wxWidgets set up the appropriate entry points, etc.)
 IMPLEMENT_APP(VVASEApp);
+
+namespace VVASE
+{
 
 //==========================================================================
 // Class:			VVASEApp
@@ -176,3 +179,5 @@ void VVASEApp::DeleteDynamicMemory()
 	delete dataExchangeServer;
 	dataExchangeServer = NULL;
 }
+
+}// namespace VVASE

@@ -19,6 +19,9 @@
 #include "vMath/carMath.h"
 #include "vUtilities/unitConverter.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			Vector3D
 // Function:		Vector3D
@@ -161,3 +164,5 @@ bool Vector3D::ContainsThisActor(const Primitive *actor)
 	else
 		return false;
 }
+
+}// namespace VVASE

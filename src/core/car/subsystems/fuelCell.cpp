@@ -15,6 +15,9 @@
 // Local headers
 #include "vCar/fuelCell.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			FuelCell
 // Function:		FuelCell
@@ -54,3 +57,5 @@ FuelCell::FuelCell()
 FuelCell::~FuelCell()
 {
 }
+
+}// namespace VVASE

@@ -17,6 +17,9 @@
 // wxWidgets headers
 #include <wx/thread.h>
 
+namespace VVASE
+{
+
 class GeneticAlgorithm
 {
 public:
@@ -106,5 +109,7 @@ private:
 
 	void DeleteDynamicMemory();
 };
+
+}// namespace VVASE
 
 #endif// GENETIC_ALGORITHM_H_

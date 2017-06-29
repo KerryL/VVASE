@@ -22,6 +22,9 @@
 // for the recursive subdivision to create the sphere.
 #define ICOSOHEDRON
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			Sphere
 // Function:		Sphere
@@ -389,3 +392,5 @@ bool Sphere::IsIntersectedBy(const Vector& point, const Vector& direction) const
 
 	return true;
 }
+
+}// namespace VVASE

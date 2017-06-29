@@ -9,12 +9,15 @@
 // Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Dialog for editing gene properties.
 
-// VVASE headers
+// Local headers
 #include "gui/dialogs/gaGeneDialog.h"
 #include "vUtilities/wxRelatedUtilities.h"
 #include "vUtilities/unitConverter.h"
 #include "vUtilities/dataValidator.h"
 #include "vCar/suspension.h"
+
+namespace VVASE
+{
 
 //==========================================================================
 // Class:			GAGeneDialog
@@ -466,3 +469,5 @@ void GAGeneDialog::UpdateCurrentVector()
 	currentZ->SetLabel(UnitConverter::GetInstance().FormatNumber(
 		UnitConverter::GetInstance().ConvertDistanceOutput(v.z)));
 }
+
+}// namespace VVASE

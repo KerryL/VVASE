@@ -10,8 +10,11 @@
 // Desc:  Contains class definition for Spring class.  This class contains
 //        the information and methods required to model a non-linear spring.
 
-// vCar headers
+// Local headers
 #include "vCar/spring.h"
+
+namespace VVASE
+{
 
 //==========================================================================
 // Class:			Spring
@@ -53,3 +56,5 @@ Spring::Spring()
 Spring::~Spring()
 {
 }
+
+}// namespace VVASE

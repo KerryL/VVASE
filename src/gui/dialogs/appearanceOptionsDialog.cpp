@@ -22,6 +22,9 @@
 #include "vRenderer/color.h"
 #include "vUtilities/unitConverter.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			AppearanceOptionsDialog
 // Function:		AppearanceOptionsDialog
@@ -471,3 +474,5 @@ void AppearanceOptionsDialog::AlphaChangeEvent(wxGridEvent &event)
 		colorGrid->SetCellValue(event.GetRow(), event.GetCol(),
 		UnitConverter::GetInstance().FormatNumber(colorOptions[event.GetRow()].GetAlpha()));
 }
+
+}// namespace VVASE

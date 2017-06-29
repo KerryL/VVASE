@@ -15,7 +15,7 @@
 // wxWidgets headers
 #include <wx/wx.h>
 
-// VVASE headers
+// Local headers
 #include "vCar/suspension.h"
 #include "vCar/drivetrain.h"
 

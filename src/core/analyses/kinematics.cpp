@@ -30,6 +30,9 @@
 #include "vRenderer/3dcar/debugShape.h"
 #include "vMath/geometryMath.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			Kinematics
 // Function:		Kinematics
@@ -1414,3 +1417,5 @@ void Kinematics::UpdateCGs(const Vector& cor, const Vector& angles, const Vector
 		+ workingCar->massProperties->unsprungCGHeights.rightRear * workingCar->massProperties->unsprungMass.rightRear)
 		/ workingCar->massProperties->GetTotalMass();
 }
+
+}// namespace VVASE

@@ -14,6 +14,9 @@
 #include "vMath/vector.h"
 #include "vUtilities/unitConverter.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			VectorEditDialog
 // Function:		VectorEditDialog
@@ -181,3 +184,5 @@ void VectorEditDialog::CancelClickEvent(wxCommandEvent& WXUNUSED(event))
 		Show(false);
 	}
 }
+
+}// namespace VVASE

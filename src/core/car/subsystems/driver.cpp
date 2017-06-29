@@ -13,6 +13,9 @@
 #include "vCar/driver.h"
 #include "vUtilities/debugger.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			Driver
 // Function:		Driver
@@ -120,3 +123,5 @@ Driver& Driver::operator = (const Driver &driver)
 
 	return *this;
 }
+
+}// namespace VVASE

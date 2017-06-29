@@ -21,6 +21,9 @@
 #include "gui/dialogs/appearanceOptionsDialog.h"
 #include "gui/guiCar.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			AppearanceOptions
 // Function:		AppearanceOptions
@@ -548,3 +551,5 @@ void AppearanceOptions::Read(std::ifstream *inFile, int fileVersion)
 	inFile->read((char*)colorOptions, ColorCount * sizeof(Color));
 	inFile->read((char*)resolutionOptions, ResolutionCount * sizeof(int));
 }
+
+}// namespace VVASE

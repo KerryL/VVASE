@@ -14,6 +14,9 @@
 #include "vRenderer/renderWindow.h"
 #include "vMath/carMath.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			Triangle
 // Function:		Triangle
@@ -211,3 +214,5 @@ bool Triangle::IsIntersectedBy(const Vector& point, const Vector& direction) con
 	// TODO:  Implement
 	return false;
 }
+
+}// namespace VVASE

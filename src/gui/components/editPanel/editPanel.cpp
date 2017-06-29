@@ -11,7 +11,7 @@
 //        class is used to edit the car parameters.  Different panels
 //        are displayed for editing different sub-systems.
 
-// VVASE headers
+// Local headers
 #include "vCar/car.h"
 #include "vCar/tireSet.h"
 #include "gui/guiObject.h"
@@ -31,6 +31,9 @@
 #include "gui/components/editPanel/guiCar/editTiresPanel.h"
 #include "gui/components/editPanel/iteration/editIterationNotebook.h"
 #include "vUtilities/debugger.h"
+
+namespace VVASE
+{
 
 //==========================================================================
 // Class:			EditPanel
@@ -360,3 +363,5 @@ void EditPanel::DeleteAllControls()
 		}
 	}
 }
+
+}// namespace VVASE

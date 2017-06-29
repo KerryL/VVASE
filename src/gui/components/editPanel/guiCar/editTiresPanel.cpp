@@ -22,6 +22,9 @@
 #include "vUtilities/unitConverter.h"
 #include "vMath/vector.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			EditTiresPanel
 // Function:		EditTiresPanel
@@ -525,3 +528,5 @@ double EditTiresPanel::ConvertSpringOutput(const double& value)
 	double converted = 1.0 / UnitConverter::GetInstance().ConvertForceOutput(value);
 	return 1.0 / UnitConverter::GetInstance().ConvertDistanceOutput(converted);
 }
+
+}// namespace VVASE

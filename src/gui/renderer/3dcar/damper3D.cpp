@@ -18,6 +18,9 @@
 #include "vMath/vector.h"
 #include "vMath/carMath.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			Damper3D
 // Function:		Damper3D
@@ -217,3 +220,5 @@ Vector Damper3D::FindClosestPoint(const Vector& point, const Vector& direction) 
 
 	return endPoint2Center;
 }
+
+}// namespace VVASE

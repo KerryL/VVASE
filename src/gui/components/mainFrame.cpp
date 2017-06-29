@@ -29,7 +29,7 @@
 
 //#include <wx/platinfo.h>
 
-// CarDesigner headers
+// Local headers
 #include "application/vvaseConstants.h"
 #include "vCar/car.h"
 #include "vCar/drivetrain.h"
@@ -69,6 +69,9 @@
 //#include "../res/icons/ortho32.xpm"
 //#include "../res/icons/ortho48.xpm"
 #endif
+
+namespace VVASE
+{
 
 //==========================================================================
 // Class:			MainFrame
@@ -3538,3 +3541,5 @@ void MainFrame::SetAssociateWithAllCars()
 	wxMenuItem *item = this->FindItemInMenuBar(IdMenuIterationAssociatedWithAllCars);
 	item->Check(static_cast<Iteration*>(openObjectList[activeIndex])->GetAutoAssociate());
 }
+
+}// namespace VVASE

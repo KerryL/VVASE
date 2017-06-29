@@ -16,6 +16,9 @@
 #include "vUtilities/binaryReader.h"
 #include "vUtilities/binaryWriter.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			Differential
 // Function:		Differential
@@ -178,3 +181,5 @@ Differential& Differential::operator=(const Differential &differential)
 
 	return *this;
 }
+
+}// namespace VVASE

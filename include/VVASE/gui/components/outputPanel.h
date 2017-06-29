@@ -22,7 +22,7 @@
 namespace VVASE
 {
 
-// VVASE forward declarations
+// Local forward declarations
 class Car;
 class MainFrame;
 class SuperGrid;

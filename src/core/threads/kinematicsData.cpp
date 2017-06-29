@@ -13,6 +13,9 @@
 // Local headers
 #include "vSolver/threads/kinematicsData.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			KinematicsData
 // Function:		KinematicsData
@@ -83,3 +86,5 @@ bool KinematicsData::OkForCommand(ThreadJob::ThreadCommand &command)
 		command == ThreadJob::CommandThreadKinematicsIteration ||
 		command == ThreadJob::CommandThreadKinematicsGA;
 }
+
+}// namespace VVASE

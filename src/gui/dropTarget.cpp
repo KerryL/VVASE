@@ -13,6 +13,9 @@
 #include "gui/dropTarget.h"
 #include "gui/components/mainFrame.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			DropTarget
 // Function:		DropTarget
@@ -82,3 +85,5 @@ bool DropTarget::OnDropFiles(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
 
 	return true;
 }
+
+}// namespace VVASE

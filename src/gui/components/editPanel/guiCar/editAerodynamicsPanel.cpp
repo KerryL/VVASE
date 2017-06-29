@@ -19,6 +19,9 @@
 #include "vUtilities/unitConverter.h"
 #include "vMath/vector.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			EditAerodynamicsPanel
 // Function:		EditAerodynamicsPanel
@@ -64,3 +67,5 @@ EditAerodynamicsPanel::EditAerodynamicsPanel(EditPanel* parent, wxWindowID id,
 EditAerodynamicsPanel::~EditAerodynamicsPanel()
 {
 }
+
+}// namespace VVASE

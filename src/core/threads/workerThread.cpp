@@ -27,6 +27,9 @@
 #include "vUtilities/debugger.h"
 #include "vUtilities/debugLog.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			WorkerThread
 // Function:		WorkerThread
@@ -185,3 +188,5 @@ void WorkerThread::OnJob()
 		job.data = NULL;
 	}
 }
+
+}// namespace VVASE

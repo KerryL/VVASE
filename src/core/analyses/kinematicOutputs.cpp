@@ -26,6 +26,9 @@
 #include "vUtilities/wheelSetStructures.h"
 #include "vUtilities/debugger.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			KinematicOutputs
 // Function:		KinematicOutputs
@@ -2707,3 +2710,5 @@ KinematicOutputs::OutputsComplete KinematicOutputs::OutputsCompleteIndex(
 
 	return completeIndex;
 }
+
+}// namespace VVASE

@@ -17,7 +17,7 @@
 // wxWidgets headers
 #include <wx/wx.h>
 
-// VVASE headers
+// Local headers
 #include "vUtilities/debugger.h"
 #include "vSolver/threads/threadEvent.h"
 #include "vUtilities/debugLog.h"
@@ -27,6 +27,9 @@
 
 // Define the EVT_DEBUG event type
 DEFINE_LOCAL_EVENT_TYPE(EVT_DEBUG)
+
+namespace VVASE
+{
 
 //==========================================================================
 // Class:			Debugger
@@ -327,3 +330,5 @@ std::ostream& operator<<(std::ostream &os, const Debugger::DebugLevel& level)
 	debugger.buffer.threadBuffer[wxThread::GetCurrentId()]->str("");
 	return os;
 }
+
+}// namespace VVASE

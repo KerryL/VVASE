@@ -18,7 +18,7 @@
 namespace VVASE
 {
 
-// VVASE forward declarations
+// Local forward declarations
 class EditPanel;
 class Debugger;
 

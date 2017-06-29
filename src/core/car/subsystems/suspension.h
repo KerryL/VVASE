@@ -25,6 +25,9 @@
 // Standard C++ headers
 #include <vector>
 
+namespace VVASE
+{
+
 // Local forward declarations
 class BinaryReader;
 class BinaryWriter;
@@ -125,5 +128,7 @@ public:
 
 	void UpdateSymmetry();
 };
+
+}// namespace VVASE
 
 #endif// SUSPENSION_H_

@@ -14,6 +14,9 @@
 // Local headers
 #include "vUtilities/dataValidator.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			DataValidator
 // Function:		TransferToWindow
@@ -68,3 +71,5 @@ bool DataValidator<double>::TransferFromWindow()
 
 	return true;
 }
+
+}// namespace VVASE

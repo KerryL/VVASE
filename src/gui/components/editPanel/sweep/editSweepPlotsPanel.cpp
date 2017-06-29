@@ -10,13 +10,16 @@
 // Desc:  Contains the class definition for the EditSweepPlotsPanel
 //        class.
 
-// VVASE headers
+// Local headers
 #include "gui/iteration.h"
 #include "gui/components/mainFrame.h"
 #include "gui/components/editPanel/editPanel.h"
 #include "gui/components/editPanel/iteration/editIterationPlotsPanel.h"
 #include "gui/components/editPanel/iteration/editIterationNotebook.h"
 #include "vUtilities/unitConverter.h"
+
+namespace VVASE
+{
 
 //==========================================================================
 // Class:			EditIterationPlotsPanel
@@ -209,3 +212,5 @@ void EditIterationPlotsPanel::PlotSelectionChangeEvent(wxCommandEvent &event)
 	// Update the display
 	currentIteration->UpdateDisplay();
 }
+
+}// namespace VVASE

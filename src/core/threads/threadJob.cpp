@@ -16,6 +16,9 @@
 #include "vSolver/threads/threadJob.h"
 #include "vSolver/threads/threadData.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			ThreadJob
 // Function:		ThreadJob
@@ -159,3 +162,5 @@ ThreadJob& ThreadJob::operator=(const ThreadJob &job)
 
 	return *this;
 }
+
+}// namespace VVASE

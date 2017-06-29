@@ -20,6 +20,9 @@
 #include "vUtilities/unitConverter.h"
 #include "vMath/vector.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			EditDifferentialPanel
 // Function:		EditDifferentialPanel
@@ -65,3 +68,5 @@ EditDifferentialPanel::EditDifferentialPanel(EditPanel* parent, wxWindowID id,
 EditDifferentialPanel::~EditDifferentialPanel()
 {
 }
+
+}// namespace VVASE

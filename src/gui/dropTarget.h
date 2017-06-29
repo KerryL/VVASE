@@ -16,7 +16,10 @@
 // wxWidgets headers
 #include <wx/dnd.h>
 
-// VVASE forward declarations
+namespace VVASE
+{
+
+// Local forward declarations
 class MainFrame;
 
 // The main class declaration
@@ -32,5 +35,7 @@ private:
 	// Required override of virtual OnDropFiles handler
 	virtual bool OnDropFiles(wxCoord x, wxCoord y, const wxArrayString &filenames);
 };
+
+}// namespace VVASE
 
 #endif// DROP_TARGET_H_

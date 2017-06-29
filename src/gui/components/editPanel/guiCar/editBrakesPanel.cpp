@@ -18,6 +18,9 @@
 #include "vUtilities/unitConverter.h"
 #include "vMath/vector.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			EditBrakesPanel
 // Function:		EditBrakesPanel
@@ -313,3 +316,5 @@ void EditBrakesPanel::CheckBoxChange(wxCommandEvent &event)
 	parent.GetMainFrame().UpdateAnalysis();
 	parent.GetMainFrame().UpdateOutputPanel();
 }
+
+}// namespace VVASE

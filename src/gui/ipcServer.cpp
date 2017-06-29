@@ -21,6 +21,9 @@
 #include "gui/ipcConnection.h"
 #include "application/vvaseApplication.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			IPCServer
 // Function:		IPCServer
@@ -121,3 +124,5 @@ wxConnectionBase *IPCServer::OnAcceptConnection(const wxString& topic)
 	// We don't recognize the topic
 	return NULL;
 }
+
+}// namespace VVASE

@@ -26,6 +26,9 @@
 #include "vMath/vector.h"
 #include "vUtilities/debugger.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			QuasiStatic
 // Function:		QuasiStatic
@@ -682,3 +685,5 @@ double QuasiStatic::ComputeDeltaWheelSets(const WheelSet& w1, const WheelSet& w2
 
 	return delta;
 }
+
+}// namespace VVASE

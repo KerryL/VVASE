@@ -18,6 +18,9 @@
 #include "vMath/vector.h"
 #include "vMath/carMath.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			AArm
 // Function:		AArm
@@ -223,3 +226,5 @@ Vector AArm::FindClosestPoint(const Vector& point, const Vector& direction) cons
 
 	return midPointCenter;
 }
+
+}// namespace VVASE

@@ -21,6 +21,9 @@
 #include "gui/components/mainFrame.h"
 #include "application/vvaseApplication.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			IPCConnection
 // Function:		IPCConnection
@@ -90,3 +93,5 @@ bool IPCConnection::OnPoke(const wxString &topic, const wxString &item, wxChar* 
 
 	return false;
 }
+
+}// namespace VVASE

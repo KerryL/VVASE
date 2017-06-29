@@ -9,7 +9,6 @@
 // Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Class implementing std::stack to store information about recent operations
 //        to provide the opportunity to undo and redo.
-// History:
 
 // Local headers
 #include "gui/undoRedoStack.h"
@@ -18,6 +17,9 @@
 #include "gui/guiCar.h"
 #include "vCar/car.h"
 #include "vCar/suspension.h"
+
+namespace VVASE
+{
 
 //==========================================================================
 // Class:			UndoRedoStack
@@ -488,3 +490,5 @@ UndoRedoStack& UndoRedoStack::operator = (const UndoRedoStack &undoRedo)
 
 	return *this;
 }
+
+}// namespace VVASE

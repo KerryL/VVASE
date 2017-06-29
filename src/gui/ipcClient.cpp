@@ -19,6 +19,9 @@
 #include "gui/ipcClient.h"
 #include "gui/ipcConnection.h"
 
+namespace VVASE
+{
+
 //==========================================================================
 // Class:			IPCClient
 // Function:		IPCClient
@@ -135,3 +138,5 @@ wxConnectionBase *IPCClient::OnMakeConnection()
 {
 	return new IPCConnection();
 }
+
+}// namespace VVASE

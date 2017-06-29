@@ -19,7 +19,10 @@
 class wxSingleInstanceChecker;
 class wxServer;
 
-// VVASE forward declarations
+namespace VVASE
+{
+
+// Local forward declarations
 class MainFrame;
 
 class VVASEApp : public wxApp
@@ -52,5 +55,7 @@ private:
 
 // Declare the application object (have wxWidgets create the wxGetApp() function)
 DECLARE_APP(VVASEApp);
+
+}// namespace VVASE
 
 #endif// VVASEAPP_H_
