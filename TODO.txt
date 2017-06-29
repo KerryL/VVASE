@@ -1,4 +1,3 @@
-Use namespace
 Think through file structure/organization
 Use LibPlot2D
 Write Plugin abstract class and test class
@@ -21,7 +20,6 @@ Code Quality Review:
 - Use explicit for single arg constructors
 - Rule of 5
 - Newline at end of file
-- Consistent headers
 - Doxygen comments
 - Use of virtual/override/final
 - NULL vs nullptr
