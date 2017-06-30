@@ -13,7 +13,7 @@
 #define QUASI_STATIC_OUTPUTS_H_
 
 // Local headers
-#include "vUtilities/wheelSetStructures.h"
+#include "VVASE/core/utilities/wheelSetStructures.h"
 
 namespace VVASE
 {

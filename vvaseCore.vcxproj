@@ -18,7 +18,7 @@
     <ClInclude Include="include\VVASE\core\analyses\quasiStatic.h" />
     <ClInclude Include="include\VVASE\core\analyses\quasiStaticOutputs.h" />
     <ClInclude Include="include\VVASE\core\car\car.h" />
-    <ClInclude Include="include\VVASE\core\threads\inverseSemaphore.h" />
+    <ClInclude Include="include\VVASE\core\car\subsystem.h" />
     <ClInclude Include="include\VVASE\core\threads\jobQueue.h" />
     <ClInclude Include="include\VVASE\core\threads\kinematicsData.h" />
     <ClInclude Include="include\VVASE\core\threads\optimizationData.h" />
@@ -76,7 +76,6 @@
     <ClCompile Include="src\core\car\subsystems\tire.cpp" />
     <ClCompile Include="src\core\car\subsystems\tireSet.cpp" />
     <ClCompile Include="src\core\optimizations\geneticAlgorithm.cpp" />
-    <ClCompile Include="src\core\threads\inverseSemaphore.cpp" />
     <ClCompile Include="src\core\threads\jobQueue.cpp" />
     <ClCompile Include="src\core\threads\kinematicsData.cpp" />
     <ClCompile Include="src\core\threads\optimizationData.cpp" />

@@ -18,7 +18,7 @@
 #include <wx/wx.h>
 
 // Local headers
-#include "vSolver/threads/threadJob.h"
+#include "VVASE/core/threads/threadJob.h"
 
 // Standard C++ headers
 #include <map>

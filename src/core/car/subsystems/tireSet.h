@@ -13,6 +13,10 @@
 #ifndef TIRE_SET_H_
 #define TIRE_SET_H_
 
+// Standard C++ headers
+#include <memory>
+#include <string>
+
 namespace VVASE
 {
 

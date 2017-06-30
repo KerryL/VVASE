@@ -14,8 +14,8 @@
 #include <cassert>
 
 // Local headers
-#include "vMath/geometryMath.h"
-#include "vMath/carMath.h"
+#include "VVASE/core/utilities/geometryMath.h"
+#include "VVASE/core/utilities/carMath.h"
 
 namespace VVASE
 {

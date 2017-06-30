@@ -13,8 +13,8 @@
 //        (in that direction only - reverse communication is handled with events).
 
 // Local headers
-#include "vSolver/threads/threadJob.h"
-#include "vSolver/threads/threadData.h"
+#include "VVASE/core/threads/threadJob.h"
+#include "VVASE/core/threads/threadData.h"
 
 namespace VVASE
 {

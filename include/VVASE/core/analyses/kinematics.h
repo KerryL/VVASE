@@ -13,7 +13,8 @@
 #define KINEMATICS_H_
 
 // Local headers
-#include "VVASE/core/physics/kinematicOutputs.h"
+#include "VVASE/core/analyses/analysis.h"
+#include "VVASE/core/analyses/kinematicOutputs.h"
 
 namespace VVASE
 {
@@ -21,7 +22,7 @@ namespace VVASE
 // Local forward declarations
 class Car;
 
-class Kinematics
+class Kinematics : public Analysis
 {
 public:
 	Kinematics();

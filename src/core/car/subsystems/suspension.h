@@ -17,7 +17,7 @@
 #include "corner.h"
 #include "spring.h"
 #include "damper.h"
-#include "utilities/wheelSetStructures.h"
+#include "VVASE/core/utilities/wheelSetStructures.h"
 
 // Eigen headers
 #include <Eigen/Eigen>

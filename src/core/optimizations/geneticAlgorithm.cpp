@@ -17,8 +17,8 @@
 #include <algorithm>
 
 // Local headers
-#include "vSolver/optimization/geneticAlgorithm.h"
-#include "vUtilities/debugLog.h"
+#include "geneticAlgorithm.h"
+#include "VVASE/core/utilities/debugLog.h"
 
 namespace VVASE
 {

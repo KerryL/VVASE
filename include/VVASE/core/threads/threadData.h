@@ -18,7 +18,7 @@
 #define THREAD_DATA_H_
 
 // Local headers
-#include "vSolver/threads/threadJob.h"
+#include "VVASE/core/threads/threadJob.h"
 
 namespace VVASE
 {

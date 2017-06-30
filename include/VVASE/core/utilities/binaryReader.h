@@ -14,13 +14,16 @@
 #ifndef BINARY_READER_H_
 #define BINARY_READER_H_
 
+// Eigen headers
+#include <Eigen/Eigen>
+
 // Standard C++ headers
 #include <string>
 #include <fstream>
 #include <vector>
 
 // Local headers
-#include "vUtilities/wheelSetStructures.h"
+#include "VVASE/core/utilities/wheelSetStructures.h"
 
 namespace VVASE
 {
@@ -45,7 +48,7 @@ public:
 	bool Read(double& v);
 	bool Read(bool& v);
 
-	bool Read(Vector& v);
+	bool Read(Eigen::VectorXd& v);
 
 	template<typename T>
 	bool Read(CornerSet<T>& v)

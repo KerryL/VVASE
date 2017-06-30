@@ -14,10 +14,9 @@
 
 // Local headers
 #include "vCar/suspension.h"
-#include "vUtilities/machineDefinitions.h"
-#include "vUtilities/debugger.h"
-#include "vUtilities/binaryReader.h"
-#include "vUtilities/binaryWriter.h"
+#include "VVASE/core/utilities/debugger.h"
+#include "VVASE/core/utilities/binaryReader.h"
+#include "VVASE/core/utilities/binaryWriter.h"
 
 namespace VVASE
 {

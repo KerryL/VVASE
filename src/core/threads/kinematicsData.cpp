@@ -11,7 +11,7 @@
 //        information required to complete kinematics analyses and return the outputs.
 
 // Local headers
-#include "vSolver/threads/kinematicsData.h"
+#include "VVASE/core/threads/kinematicsData.h"
 
 namespace VVASE
 {

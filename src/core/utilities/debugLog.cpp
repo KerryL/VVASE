@@ -15,7 +15,7 @@
 #include <fstream>
 
 // Local headers
-#include "vUtilities/debugLog.h"
+#include "VVASE/core/utilities/debugLog.h"
 
 // Only build this class if we need to
 #ifdef USE_DEBUG_LOG

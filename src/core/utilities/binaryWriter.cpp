@@ -12,7 +12,7 @@
 //        platforms.
 
 // Local headers
-#include "vUtilities/binaryWriter.h"
+#include "VVASE/core/utilities/binaryWriter.h"
 
 namespace VVASE
 {

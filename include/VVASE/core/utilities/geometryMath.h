@@ -15,8 +15,8 @@
 // Standard C++ headers
 #include <cmath>
 
-// Local headers
-#include "vMath/vector.h"
+// Eigen headers
+#include <Eigen/Eigen>
 
 namespace VVASE
 {
@@ -26,41 +26,41 @@ class GeometryMath
 public:
 	struct Sphere
 	{
-		Vector center;
+		Eigen::Vector3d center;
 		double radius;
 	};
 
 	struct Circle
 	{
-		Vector center;
-		Vector normal;
+		Eigen::Vector3d center;
+		Eigen::Vector3d normal;
 		double radius;
 	};
 
 	struct Plane
 	{
-		Vector point;
-		Vector normal;
+		Eigen::Vector3d point;
+		Eigen::Vector3d normal;
 	};
 
 	struct Axis
 	{
-		Vector direction;
-		Vector point;
+		Eigen::Vector3d direction;
+		Eigen::Vector3d point;
 	};
 
 	static bool FindThreeSpheresIntersection(const Sphere& s1, const Sphere& s2,
-		const Sphere& s3, Vector *intersections);
+		const Sphere& s3, Eigen::Vector3d *intersections);
 	static bool FindCircleSphereIntersection(const Circle &c, const Sphere &s,
-		Vector *intersections);
+		Eigen::Vector3d *intersections);
 	static Plane FindSphereSphereIntersectionPlane(const Sphere &s1,
 		const Sphere &s2);
 	static bool FindPlanePlaneIntersection(const Plane &p1, const Plane &p2,
 		Axis &axis);
 	static bool FindAxisSphereIntersections(const Axis &a, const Sphere &s,
-		Vector *intersections);
+		Eigen::Vector3d *intersections);
 
-	static double GetSignedAngle(const Circle &c, const Vector &v);
+	static double GetSignedAngle(const Circle &c, const Eigen::Vector3d &v);
 	static bool SolveQuadratic(const double &a, const double &b,
 		const double &c, double *solutions);
 

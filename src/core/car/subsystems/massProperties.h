@@ -12,9 +12,11 @@
 #ifndef MASS_PROPERTIES_H_
 #define MASS_PROPERTIES_H_
 
+// Eigen headers
+#include <Eigen/Eigen>
+
 // Local headers
-#include "vMath/vector.h"
-#include "vUtilities/wheelSetStructures.h"
+#include "VVASE/core/utilities/wheelSetStructures.h"
 
 namespace VVASE
 {
@@ -53,14 +55,14 @@ public:
 	bool IsValidInertiaTensor() const;
 
 	// Get the principle moments of inertia for this object
-	bool GetPrincipleInertias(Vector *principleInertias, Vector *ixxDirection = NULL,
-							  Vector *iyyDirection = NULL, Vector *izzDirection = NULL) const;
+	bool GetPrincipleInertias(Eigen::Vector3d *principleInertias, Eigen::Vector3d *ixxDirection = NULL,
+							  Eigen::Vector3d *iyyDirection = NULL, Eigen::Vector3d *izzDirection = NULL) const;
 
 	MassProperties& operator=(const MassProperties &massProperties);
 
 	double GetTotalMass() const;
 	double GetSprungMass() const;
-	Vector GetSprungMassCG(const Suspension* s) const;
+	Eigen::Vector3d GetSprungMassCG(const Suspension* s) const;
 };
 
 }// namespace VVASE

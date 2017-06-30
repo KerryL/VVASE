@@ -13,7 +13,7 @@
 #define SUBSYSTEM_H_
 
 // Local headers
-#include "utilities/componentManager.h"
+#include "VVASE/core/utilities/componentManager.h"
 
 namespace VVASE
 {
@@ -21,8 +21,10 @@ namespace VVASE
 class Subsystem : public RegisterableComponent
 {
 public:
+	// GUI factory methods
 	virtual wxPanel* GetEditPanel() = 0;
 	virtual wxTreeListItem* GetTreeItem() = 0;
+	// TODO:  Also, a factory method for primitives (or return nullptr if it's not required to render anything?)
 
 	// File read/write functions
 	virtual void Write(BinaryWriter& file) const = 0;

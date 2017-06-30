@@ -17,8 +17,8 @@
 #include <wx/wx.h>
 
 // Local headers
-#include "vSolver/threads/threadData.h"
-#include "vSolver/physics/kinematics.h"
+#include "VVASE/core/threads/threadData.h"
+#include "VVASE/core/analyses/kinematics.h"
 
 namespace VVASE
 {

@@ -14,13 +14,16 @@
 #ifndef BINARY_WRITER_H_
 #define BINARY_WRITER_H_
 
+// Eigen headers
+#include <Eigen/Eigen>
+
 // Standard C++ headers
 #include <string>
 #include <fstream>
 #include <vector>
 
 // Local headers
-#include "vUtilities/wheelSetStructures.h"
+#include "VVASE/core/utilities/wheelSetStructures.h"
 
 namespace VVASE
 {
@@ -45,7 +48,7 @@ public:
 	bool Write(const double& v);
 	bool Write(const bool& v);
 
-	bool Write(const Vector& v);
+	bool Write(const Eigen::VectorXd& v);
 
 	template<typename T>
 	bool Write(const CornerSet<T>& v)

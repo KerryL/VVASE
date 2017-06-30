@@ -14,9 +14,8 @@
 
 // Local headers
 #include "vCar/tire.h"
-#include "vUtilities/machineDefinitions.h"
-#include "vUtilities/binaryReader.h"
-#include "vUtilities/binaryWriter.h"
+#include "VVASE/core/utilities/binaryReader.h"
+#include "VVASE/core/utilities/binaryWriter.h"
 
 namespace VVASE
 {

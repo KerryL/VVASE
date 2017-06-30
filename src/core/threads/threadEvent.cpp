@@ -12,7 +12,7 @@
 //        to the GUI thread.
 
 // Local headers
-#include "vSolver/threads/threadEvent.h"
+#include "VVASE/core/threads/threadEvent.h"
 
 // Define the EVT_THREAD event type
 DEFINE_LOCAL_EVENT_TYPE(EVT_THREAD)

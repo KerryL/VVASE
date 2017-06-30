@@ -21,11 +21,14 @@
 // wxWidgets headers
 #include <wx/wx.h>
 
+// Eigen headers
+#include <Eigen/Eigen>
+
+// LibPlot2D headers
+#include <lp2d/utilities/dataset2D.h>
+
 // Local headers
-#include "vMath/carMath.h"
-#include "vMath/vector.h"
-#include "vMath/matrix.h"
-#include "vMath/dataset2D.h"
+#include "VVASE/core/utilities/carMath.h"
 
 namespace VVASE
 {
@@ -71,10 +74,9 @@ bool VVASEMath::IsZero(const double &n, const double &eps)
 //		bool, true if the magnitude is less than NEARLY_ZERO
 //
 //==========================================================================
-bool VVASEMath::IsZero(const Vector &v, const double &eps)
+bool VVASEMath::IsZero(const Eigen::VectorXd &v, const double &eps)
 {
-	// Check each component of the vector
-	if (v.Length() < eps)
+	if (v.norm() < eps)
 		return true;
 
 	return false;
@@ -187,7 +189,7 @@ double VVASEMath::RangeToPlusMinus180(const double &angle)
 //		None
 //
 //==========================================================================
-void VVASEMath::Unwrap(Dataset2D &data)
+void VVASEMath::Unwrap(LibPlot2D::Dataset2D &data)
 {
 	const double threshold(Pi);
 	unsigned int i;
@@ -243,9 +245,9 @@ double VVASEMath::Sign(const double &value)
 //		double
 //
 //==========================================================================
-Dataset2D VVASEMath::ApplyBitMask(const Dataset2D &data, const unsigned int &bit)
+LibPlot2D::Dataset2D VVASEMath::ApplyBitMask(const LibPlot2D::Dataset2D &data, const unsigned int &bit)
 {
-	Dataset2D set(data);
+	LibPlot2D::Dataset2D set(data);
 	unsigned int i;
 	for (i = 0; i < set.GetNumberOfPoints(); i++)
 		set.GetYPointer()[i] = ApplyBitMask((unsigned int)set.GetYPointer()[i], bit);
@@ -291,7 +293,7 @@ unsigned int VVASEMath::ApplyBitMask(const unsigned &value, const unsigned int &
 //		bool, true if the x-data spacing is within the tolerance
 //
 //==========================================================================
-bool VVASEMath::XDataConsistentlySpaced(const Dataset2D &data, const double &tolerancePercent)
+bool VVASEMath::XDataConsistentlySpaced(const LibPlot2D::Dataset2D &data, const double &tolerancePercent)
 {
 	assert(data.GetNumberOfPoints() > 1);
 
@@ -337,7 +339,7 @@ bool VVASEMath::XDataConsistentlySpaced(const Dataset2D &data, const double &tol
 //		double
 //
 //==========================================================================
-double VVASEMath::GetAverageXSpacing(const Dataset2D &data)
+double VVASEMath::GetAverageXSpacing(const LibPlot2D::Dataset2D &data)
 {
 	return data.GetXData(data.GetNumberOfPoints() - 1) / (data.GetNumberOfPoints() - 1.0);
 }
@@ -518,24 +520,25 @@ unsigned int VVASEMath::GetPrecision(const double &minimum, const double &majorR
 //					that passes through the three input points.
 //
 // Input Arguments:
-//		point1	= const Vector& describing location of first point on the plane
-//		point2	= const Vector& describing location of second point on the plane
-//		point3	= const Vector& describing location of third point on the plane
+//		point1	= const Eigen::Vector3d& describing location of first point on the plane
+//		point2	= const Eigen::Vector3d& describing location of second point on the plane
+//		point3	= const Eigen::Vector3d& describing location of third point on the plane
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		Vector indicating direction that is normal to the plane that is
+//		Eigen::Vector3d indicating direction that is normal to the plane that is
 //		defined by the three input arguments
 //
 //==========================================================================
-Vector VVASEMath::GetPlaneNormal(const Vector &point1, const Vector &point2, const Vector &point3)
+Eigen::Vector3d VVASEMath::GetPlaneNormal(const Eigen::Vector3d &point1,
+	const Eigen::Vector3d &point2, const Eigen::Vector3d &point3)
 {
 	// Check for existence of a solution
 	if (point1 == point2 || point1 == point3 || point2 == point3)
 	{
-		Vector noSolution(QNAN, QNAN, QNAN);
+		Eigen::Vector3d noSolution(QNAN, QNAN, QNAN);
 		//Debugger->Print(_T("Warning (GetPlaneNormal):  Coincident points"), Debugger::PRIORITY_LOW);
 
 		return noSolution;
@@ -546,7 +549,7 @@ Vector VVASEMath::GetPlaneNormal(const Vector &point1, const Vector &point2, con
 	// obtain another vector that lies in the plane.  The cross product of these
 	// vectors yields the plane normal.
 
-	return (point1 - point2).Cross(point1 - point3).Normalize();
+	return (point1 - point2).cross(point1 - point3).normalized();
 }
 
 //==========================================================================
@@ -557,28 +560,29 @@ Vector VVASEMath::GetPlaneNormal(const Vector &point1, const Vector &point2, con
 //					of two planes.
 //
 // Input Arguments:
-//		normal1			= const Vector& describing normal direciton of first plane
-//		pointOnPlane1	= const Vector& describing a point on the first plane
-//		normal2			= const Vector& describing normal direciton of second plane
-//		pointOnPlane2	= const Vector& describing a point on the second plane
+//		normal1			= const Eigen::Vector3d& describing normal direciton of first plane
+//		pointOnPlane1	= const Eigen::Vector3d& describing a point on the first plane
+//		normal2			= const Eigen::Vector3d& describing normal direciton of second plane
+//		pointOnPlane2	= const Eigen::Vector3d& describing a point on the second plane
 //
 // Output Arguments:
-//		axisDirection	= Vector& describing the direction of the axis
-//		pointOnAxis		= Vector& describing a point on the axis
+//		axisDirection	= Eigen::Vector3d& describing the direction of the axis
+//		pointOnAxis		= Eigen::Vector3d& describing a point on the axis
 //
 // Return Value:
 //		bool indicating whether or not a solution was found
 //
 //==========================================================================
-bool VVASEMath::GetIntersectionOfTwoPlanes(const Vector &normal1, const Vector &pointOnPlane1,
-										   const Vector &normal2, const Vector &pointOnPlane2,
-										   Vector &axisDirection, Vector &pointOnAxis)
+bool VVASEMath::GetIntersectionOfTwoPlanes(const Eigen::Vector3d &normal1,
+	const Eigen::Vector3d &pointOnPlane1, const Eigen::Vector3d &normal2,
+	const Eigen::Vector3d &pointOnPlane2, Eigen::Vector3d &axisDirection,
+	Eigen::Vector3d &pointOnAxis)
 {
 	// Make sure the planes are not parallel - this ensures the existence of a solution
 	if (!IsZero(normal1 - normal2))
 	{
 		// The direction is simply the cross product of the two normal vectors
-		axisDirection = normal1.Cross(normal2).Normalize();
+		axisDirection = normal1.cross(normal2).normalized();
 
 		// Now find a point on that axis
 		// This comes from the vector equation of a plane:
@@ -586,8 +590,8 @@ bool VVASEMath::GetIntersectionOfTwoPlanes(const Vector &normal1, const Vector &
 		// planeNormal * point = someConstant.  Since we know a point that lies on each plane,
 		// we can solve for that constant for each plane, then solve two simultaneous systems
 		// of equations to find a common point between the two planes.
-		double planeConstant1 = normal1 * pointOnPlane1;
-		double planeConstant2 = normal2 * pointOnPlane2;
+		double planeConstant1 = normal1.dot(pointOnPlane1);
+		double planeConstant2 = normal2.dot(pointOnPlane2);
 
 		// To ensure numeric stability (avoid dividing by numbers close to zero),
 		// we will be "smart" about solving these equations.  Since we have two
@@ -661,8 +665,8 @@ bool VVASEMath::GetIntersectionOfTwoPlanes(const Vector &normal1, const Vector &
 	}
 
 	// No solution exists - set the output arguments to QNAN and return false
-	axisDirection.Set(QNAN, QNAN, QNAN);
-	pointOnAxis.Set(QNAN, QNAN, QNAN);
+	axisDirection = Eigen::Vector3d(QNAN, QNAN, QNAN);
+	pointOnAxis = Eigen::Vector3d(QNAN, QNAN, QNAN);
 
 	return false;
 }
@@ -677,24 +681,24 @@ bool VVASEMath::GetIntersectionOfTwoPlanes(const Vector &normal1, const Vector &
 //					is not on the axis.
 //
 // Input Arguments:
-//		pointOnAxis		= const Vector& describing any point on the axis
-//		directionOfAxis	= const Vector& that points in the direction of the axis
-//		targetPoint		= const Vector& describing the point to compare to the
+//		pointOnAxis		= const Eigen::Vector3d& describing any point on the axis
+//		directionOfAxis	= const Eigen::Vector3d& that points in the direction of the axis
+//		targetPoint		= const Eigen::Vector3d& describing the point to compare to the
 //						  axis
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		Vector describing the point on the axis that is closest to
+//		Eigen::Vector3d describing the point on the axis that is closest to
 //		targetPoint
 //
 //==========================================================================
-Vector VVASEMath::NearestPointOnAxis(const Vector &pointOnAxis, const Vector &directionOfAxis,
-						  const Vector &targetPoint)
+Eigen::Vector3d VVASEMath::NearestPointOnAxis(const Eigen::Vector3d &pointOnAxis,
+	const Eigen::Vector3d &directionOfAxis, const Eigen::Vector3d &targetPoint)
 {
 	double t;
-	Vector temp;
+	Eigen::Vector3d temp;
 
 	// The shortest distance is going to to a point on the axis where the line between
 	// TargetPoint and that point is perpendicular to the axis.  This means their dot
@@ -702,7 +706,7 @@ Vector VVASEMath::NearestPointOnAxis(const Vector &pointOnAxis, const Vector &di
 	// the dot product to find the value of the parameteric parameter (t) in the
 	// equation of the line.
 
-	t = (directionOfAxis * (targetPoint - pointOnAxis)) / (directionOfAxis * directionOfAxis);
+	t = directionOfAxis.dot(targetPoint - pointOnAxis) / directionOfAxis.dot(directionOfAxis);
 	temp = pointOnAxis + directionOfAxis * t;
 
 	return temp;
@@ -717,23 +721,23 @@ Vector VVASEMath::NearestPointOnAxis(const Vector &pointOnAxis, const Vector &di
 //					the specified point.
 //
 // Input Arguments:
-//		pointInPlane	= const Vector& describing any point on the plane
-//		planeNormal		= const Vector& defining the plane's orientation
-//		targetPoint		= const Vector& describing the point to compare to the
+//		pointInPlane	= const Eigen::Vector3d& describing any point on the plane
+//		planeNormal		= const Eigen::Vector3d& defining the plane's orientation
+//		targetPoint		= const Eigen::Vector3d& describing the point to compare to the
 //						  axis
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		Vector describing the point on in the plane that is closest to targetPoint
+//		Eigen::Vector3d describing the point on in the plane that is closest to targetPoint
 //
 //==========================================================================
-Vector VVASEMath::NearestPointInPlane(const Vector &pointInPlane, const Vector &planeNormal,
-						   const Vector &targetPoint)
+Eigen::Vector3d VVASEMath::NearestPointInPlane(const Eigen::Vector3d &pointInPlane,
+	const Eigen::Vector3d &planeNormal, const Eigen::Vector3d &targetPoint)
 {
 	double t;
-	Vector temp;
+	Eigen::Vector3d temp;
 
 	t = (directionOfAxis * (targetPoint - pointOnAxis)) / (directionOfAxis * directionOfAxis);
 	temp = pointOnAxis + directionOfAxis * t;
@@ -750,19 +754,20 @@ Vector VVASEMath::NearestPointInPlane(const Vector &pointInPlane, const Vector &
 //					through the origin.
 //
 // Input Arguments:
-//		vectorToProject	= const Vector& to be projected
-//		planeNormal		= const Vector& that defines the plane orientation
+//		vectorToProject	= const Eigen::Vector3d& to be projected
+//		planeNormal		= const Eigen::Vector3d& that defines the plane orientation
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		Vector after the projection
+//		Eigen::Vector3d after the projection
 //
 //==========================================================================
-Vector VVASEMath::ProjectOntoPlane(const Vector &vectorToProject, const Vector &planeNormal)
+Eigen::Vector3d VVASEMath::ProjectOntoPlane(const Eigen::Vector3d &vectorToProject,
+	const Eigen::Vector3d &planeNormal)
 {
-	Vector normalComponent = vectorToProject * planeNormal * planeNormal.Normalize();
+	Eigen::Vector3d normalComponent = vectorToProject.dot(planeNormal) * planeNormal.normalized();
 	return vectorToProject - normalComponent;
 }
 
@@ -774,33 +779,34 @@ Vector VVASEMath::ProjectOntoPlane(const Vector &vectorToProject, const Vector &
 //					the specified plane.
 //
 // Input Arguments:
-//		planeNormal		= const Vector& indicating the direction that is normal to
+//		planeNormal		= const Eigen::Vector3d& indicating the direction that is normal to
 //						  the plane
-//		pointOnPlane	= const Vector& specifying a point that lies on the plane
-//		axisDirection	= Vector specifying the direction of the axis
-//		pointOnAxis		= const Vector& specifying a point on the axis
+//		pointOnPlane	= const Eigen::Vector3d& specifying a point that lies on the plane
+//		axisDirection	= Eigen::Vector3d specifying the direction of the axis
+//		pointOnAxis		= const Eigen::Vector3d& specifying a point on the axis
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		Vector where the intersection occurs
+//		Eigen::Vector3d where the intersection occurs
 //
 //==========================================================================
-Vector VVASEMath::IntersectWithPlane(const Vector &planeNormal, const Vector &pointOnPlane,
-									 Vector axisDirection, const Vector &pointOnAxis)
+Eigen::Vector3d VVASEMath::IntersectWithPlane(const Eigen::Vector3d &planeNormal,
+	const Eigen::Vector3d &pointOnPlane, Eigen::Vector3d axisDirection,
+	const Eigen::Vector3d &pointOnAxis)
 {
 	// Determine what will be used as the denominator to calculate the parameter
 	// in our parametric equation
-	double denominator = planeNormal * axisDirection;
+	double denominator(planeNormal.dot(axisDirection));
 
 	// Make sure this isn't zero (if it is, then there is no solution!)
 	if (IsZero(denominator))
-		return Vector(QNAN, QNAN, QNAN);
+		return Eigen::Vector3d(QNAN, QNAN, QNAN);
 
 	// If we didn't return yet, then a solution does exist.  Determine the paramter
 	// in the parametric equation of the line: P = PointOnAxis + t * AxisDirection
-	double t = planeNormal * (pointOnPlane - pointOnAxis) / denominator;
+	double t = planeNormal.dot(pointOnPlane - pointOnAxis) / denominator;
 
 	// Use the parametric equation to find the point
 	return pointOnAxis + axisDirection * t;

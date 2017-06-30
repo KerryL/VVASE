@@ -15,10 +15,8 @@
 // Local headers
 #include "vCar/massProperties.h"
 #include "vCar/suspension.h"
-#include "vMath/matrix.h"
 #include "vMath/complex.h"
 #include "vUtilities/debugger.h"
-#include "vUtilities/machineDefinitions.h"
 #include "vUtilities/binaryReader.h"
 #include "vUtilities/binaryWriter.h"
 

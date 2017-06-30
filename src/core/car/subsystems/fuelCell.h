@@ -15,8 +15,8 @@
 #ifndef FUEL_CELL_H_
 #define FUEL_CELL_H_
 
-// Local headers
-#include "vMath/vector.h"
+// Eigen headers
+#include <Eigen/Eigen>
 
 namespace VVASE
 {
@@ -32,11 +32,11 @@ public:
 
 	// Private data accessors
 	double GetFuelWeight() const { return fuelWeight; };
-	Vector GetFuelCG() const { return fuelCG; };
+	Eigen::Vector3d GetFuelCG() const { return fuelCG; };
 
 private:
 	double fuelWeight;// [lbf]
-	Vector fuelCG;
+	Eigen::Vector3d fuelCG;
 };
 
 }// namespace VVASE

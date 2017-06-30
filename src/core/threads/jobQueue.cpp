@@ -12,9 +12,9 @@
 //        to the worker threads (add tasks here to be completed by the workers).
 
 // Local headers
-#include "vSolver/threads/jobQueue.h"
-#include "vSolver/threads/threadEvent.h"
-#include "vUtilities/debugLog.h"
+#include "VVASE/core/threads/jobQueue.h"
+#include "VVASE/core/threads/threadEvent.h"
+#include "VVASE/core/utilities/debugLog.h"
 
 namespace VVASE
 {

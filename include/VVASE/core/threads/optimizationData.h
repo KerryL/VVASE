@@ -17,7 +17,7 @@
 #include <wx/wx.h>
 
 // Local headers
-#include "vSolver/threads/threadData.h"
+#include "VVASE/core/threads/threadData.h"
 
 namespace VVASE
 {

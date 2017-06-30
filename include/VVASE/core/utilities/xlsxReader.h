@@ -22,7 +22,7 @@
 #include <wx/xml/xml.h>
 
 // Local headers
-#include "vUtilities/managedList.h"
+#include "VVASE/core/utilities/managedList.h"
 
 // wxWidgets forward declarations
 class wxZipInputStream;

@@ -11,8 +11,8 @@
 //        information required to conduct genetic optimizations.
 
 // Local headers
-#include "vSolver/threads/optimizationData.h"
-#include "vSolver/threads/threadJob.h"
+#include "VVASE/core/threads/optimizationData.h"
+#include "VVASE/core/threads/threadJob.h"
 
 namespace VVASE
 {

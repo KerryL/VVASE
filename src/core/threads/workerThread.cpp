@@ -16,16 +16,16 @@
 #include <cassert>
 
 // Local headers
-#include "vSolver/threads/workerThread.h"
-#include "vSolver/threads/jobQueue.h"
-#include "vSolver/threads/threadJob.h"
-#include "vSolver/threads/kinematicsData.h"
-#include "vSolver/threads/optimizationData.h"
-#include "vSolver/physics/kinematics.h"
-#include "vSolver/optimization/geneticAlgorithm.h"
-#include "vCar/car.h"
-#include "vUtilities/debugger.h"
-#include "vUtilities/debugLog.h"
+#include "VVASE/core/threads/workerThread.h"
+#include "VVASE/core/threads/jobQueue.h"
+#include "VVASE/core/threads/threadJob.h"
+#include "VVASE/core/threads/kinematicsData.h"
+#include "VVASE/core/threads/optimizationData.h"
+#include "VVASE/core/analyses/kinematics.h"
+#include "VVASE/core/optimizations/geneticAlgorithm.h"
+#include "VVASE/core/car/car.h"
+#include "VVASE/core/utilities/debugger.h"
+#include "VVASE/core/utilities/debugLog.h"
 
 namespace VVASE
 {

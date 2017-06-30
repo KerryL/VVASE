@@ -21,7 +21,7 @@
 #include <wx/wx.h>
 
 // Local headers
-#include "vUtilities/unitConverter.h"
+#include "VVASE/core/utilities/unitConverter.h"
 #include "vMath/vector.h"
 #include "vMath/carMath.h"
 

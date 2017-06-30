@@ -12,8 +12,8 @@
 #ifndef TIRE_H_
 #define TIRE_H_
 
-// Local headers
-#include "vMath/vector.h"
+// Eigen headers
+#include <Eigen/Eigen>
 
 namespace VVASE
 {
@@ -40,9 +40,10 @@ public:
 	};
 
 	// The functions that calculate the tire's forces and moments
-	Vector GetTireForces(const double &normalLoad, const double &slipAngle,
+	// TODO:  Combine to one call?
+	Eigen::Vector3d GetTireForces(const double &normalLoad, const double &slipAngle,
 		const double &slipRatio, const double &localMu);// [lbf]
-	Vector GetTireMoments(const double &normalLoad, const double &slipAngle,
+	Eigen::Vector3d GetTireMoments(const double &normalLoad, const double &slipAngle,
 		const double &slipRatio, const double &localMu);// [in-lbf]
 
 	// Tire characteristics

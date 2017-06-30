@@ -11,12 +11,11 @@
 //        dynamic memory allocation of a set of tires.
 
 // Local headers
-#include "vCar/tire.h"
+#include "VVASE/core/car/subsystems/tire.h"
 #include "vCar/tireSet.h"
-#include "vUtilities/debugger.h"
-#include "vUtilities/machineDefinitions.h"
-#include "vUtilities/binaryReader.h"
-#include "vUtilities/binaryWriter.h"
+#include "VVASE/core/utilities/debugger.h"
+#include "VVASE/core/utilities/binaryReader.h"
+#include "VVASE/core/utilities/binaryWriter.h"
 
 namespace VVASE
 {

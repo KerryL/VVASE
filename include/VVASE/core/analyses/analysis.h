@@ -12,6 +12,7 @@
 #ifndef ANALYSIS_H_
 #define ANALYSIS_H_
 
+// Local headers
 #include "VVASE/core/utilities/componentManager.h"
 
 namespace VVASE

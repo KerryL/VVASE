@@ -12,8 +12,8 @@
 #ifndef WHEELSET_STRUCTS_H_
 #define WHEELSET_STRUCTS_H_
 
-// Local headers
-#include "vMath/vector.h"
+// Eigen headers
+#include <Eigen/Eigen>
 
 namespace VVASE
 {
@@ -66,7 +66,7 @@ struct EndSet
 
 // Predefined types
 typedef CornerSet<double> WheelSet;
-typedef CornerSet<Vector> VectorSet;
+typedef CornerSet<Eigen::Vector3d> VectorSet;
 
 typedef EndSet<int> FrontRearInteger;
 typedef EndSet<double> FrontRearDouble;

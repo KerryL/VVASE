@@ -60,9 +60,6 @@
     <ClInclude Include="include\VVASE\core\car\car.h">
       <Filter>Header Files\car</Filter>
     </ClInclude>
-    <ClInclude Include="include\VVASE\core\threads\inverseSemaphore.h">
-      <Filter>Header Files\threads</Filter>
-    </ClInclude>
     <ClInclude Include="include\VVASE\core\threads\jobQueue.h">
       <Filter>Header Files\threads</Filter>
     </ClInclude>
@@ -168,6 +165,9 @@
     <ClInclude Include="src\core\optimizations\geneticAlgorithm.h">
       <Filter>Source Files\optimizations</Filter>
     </ClInclude>
+    <ClInclude Include="include\VVASE\core\car\subsystem.h">
+      <Filter>Header Files\car</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\analyses\kinematicOutputs.cpp">
@@ -229,9 +229,6 @@
     </ClCompile>
     <ClCompile Include="src\core\optimizations\geneticAlgorithm.cpp">
       <Filter>Source Files\optimizations</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\threads\inverseSemaphore.cpp">
-      <Filter>Source Files\threads</Filter>
     </ClCompile>
     <ClCompile Include="src\core\threads\jobQueue.cpp">
       <Filter>Source Files\threads</Filter>

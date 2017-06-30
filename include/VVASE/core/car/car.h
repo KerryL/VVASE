@@ -49,7 +49,7 @@
 #define CAR_H_
 
 // Local headers
-#include "utilities/componentManager.h"
+#include "VVASE/core/utilities/componentManager.h"
 
 // Standard C++ headers
 #include <iosfwd>// For forward declarations of ostream objects

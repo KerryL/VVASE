@@ -18,9 +18,9 @@
 #include <wx/wx.h>
 
 // Local headers
-#include "vUtilities/debugger.h"
-#include "vSolver/threads/threadEvent.h"
-#include "vUtilities/debugLog.h"
+#include "VVASE/core/utilities/debugger.h"
+#include "VVASE/core/threads/threadEvent.h"
+#include "VVASE/core/utilities/debugLog.h"
 
 // Uncomment to enable writing all debug messages to stdout
 //#define DEBUG_TO_STDOUT

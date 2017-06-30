@@ -24,7 +24,7 @@
 #include <wx/valtext.h>
 
 // Local headers
-#include "vUtilities/unitConverter.h"
+#include "VVASE/core/utilities/unitConverter.h"// TODO:  Unit converter probably belongs in gui?
 
 namespace VVASE
 {

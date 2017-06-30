@@ -12,7 +12,7 @@
 //        platforms.
 
 // Local headers
-#include "vUtilities/binaryReader.h"
+#include "VVASE/core/utilities/binaryReader.h"
 
 namespace VVASE
 {
@@ -350,7 +350,7 @@ bool BinaryReader::Read(bool& v)
 // Description:		Reads specified object from file.
 //
 // Input Arguments:
-//		v	= Vector&
+//		v	= Eigen::VectorXd&
 //
 // Output Arguments:
 //		None
@@ -359,10 +359,10 @@ bool BinaryReader::Read(bool& v)
 //		bool
 //
 //==========================================================================
-bool BinaryReader::Read(Vector& v)
+bool BinaryReader::Read(Eigen::VectorXd& v)
 {
 	bool ok(true);
-
+	// TODO:  Handle arbitrary length vectors AND make this read old files OK
 	ok = Read(v.x) && ok;
 	ok = Read(v.y) && ok;
 	ok = Read(v.z) && ok;
