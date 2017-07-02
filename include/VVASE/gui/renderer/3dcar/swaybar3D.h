@@ -12,6 +12,15 @@
 #ifndef SWAYBAR3D_H_
 #define SWAYBAR3D_H_
 
+// Eigen headers
+#include <Eigen/Eigen>
+
+// LibPlot2D forward declarations
+namespace LibPlot2D
+{
+	class RenderWindow;
+}
+
 // Local headers
 #include "vCar/suspension.h"
 
@@ -19,24 +28,22 @@ namespace VVASE
 {
 
 // Local forward declarations
-class Vector;
-class Color;
 class Cylinder;
 
 class Swaybar3D
 {
 public:
-	Swaybar3D(RenderWindow &renderer);
+	Swaybar3D(LibPlot2D::RenderWindow &renderer);
 	~Swaybar3D();
 
 	// Updates the 3D representation of the sway bar on the screen
-	void Update(const Vector &rightLink, const Vector &leftLink, const Vector &torsionMemberTopRight,
-		const Vector &torsionMemberBottomLeft, const Vector &midPoint, const Vector &axisPivot,
+	void Update(const Eigen::Vector3d &rightLink, const Eigen::Vector3d &leftLink, const Eigen::Vector3d &torsionMemberTopRight,
+		const Eigen::Vector3d &torsionMemberBottomLeft, const Vector &midPoint, const Eigen::Vector3d &axisPivot,
 		const Suspension::BarStyle &barStyle, const double &dimension,
 		const int &resolution, const Color &color, bool show);
 
 	// Returns true if the passed reference is to an actor from this object
-	bool ContainsThisActor(const Primitive *actor);
+	bool ContainsThisActor(const LibPlot2D::Primitive *actor);
 
 private:
 	Cylinder *torqueArm1;

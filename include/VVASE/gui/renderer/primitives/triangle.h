@@ -12,14 +12,16 @@
 #ifndef TRIANGLE_H_
 #define TRIANGLE_H_
 
-// Local headers
-#include "vRenderer/primitives/primitive.h"
-#include "vMath/vector.h"
+// LibPlot2D headers
+#include <lp2d/renderer/primitives/primitive.h>
+
+// Eigen headers
+#include <Eigen/Eigen>
 
 namespace VVASE
 {
 
-class Triangle : public Primitive
+class Triangle : public LibPlot2D::Primitive
 {
 public:
 	Triangle(RenderWindow &renderWindow);
@@ -29,17 +31,17 @@ public:
 	// validity of this object's parameters
 	void GenerateGeometry();
 	bool HasValidParameters();
-	bool IsIntersectedBy(const Vector& point, const Vector& direction) const;
+	bool IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector3d& direction) const;
 
 	// Private data accessors
-	void SetCorner1(const Vector &corner1);
-	void SetCorner2(const Vector &corner2);
-	void SetCorner3(const Vector &corner3);
+	void SetCorner1(const Eigen::Vector3d &corner1);
+	void SetCorner2(const Eigen::Vector3d &corner2);
+	void SetCorner3(const Eigen::Vector3d &corner3);
 
 private:
-	Vector corner1;
-	Vector corner2;
-	Vector corner3;
+	Eigen::Vector3d corner1;
+	Eigen::Vector3d corner2;
+	Eigen::Vector3d corner3;
 };
 
 }// namespace VVASE

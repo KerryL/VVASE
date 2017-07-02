@@ -17,7 +17,7 @@
 #include <stack>
 
 // Local headers
-#include "gui/gaObject.h"
+#include "VVASE/gui/gaObject.h"
 
 namespace VVASE
 {

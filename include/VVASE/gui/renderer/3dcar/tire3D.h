@@ -12,27 +12,34 @@
 #ifndef TIRE3D_H_
 #define TIRE3D_H_
 
+// Eigen headers
+#include <Eigen/Eigen>
+
+// LibPlot2D forward declarations
+namespace LibPlot2D
+{
+	class RenderWindow;
+}
+
 namespace VVASE
 {
 
 // Local forward declarations
-class Vector;
-class Color;
 class Cylinder;
 class Disk;
 
 class Tire3D
 {
 public:
-	Tire3D(RenderWindow &renderer);
+	Tire3D(LibPlot2D::RenderWindow &renderer);
 	~Tire3D();
 
 	// Updates the 3D representation of the tire on the screen
-	void Update(const Vector &contactPatch, const Vector &center, Vector originalNormal,
-		Vector targetNormal, const double &width, const double &insideDiameter,
+	void Update(const Eigen::Vector3d &contactPatch, const Eigen::Vector3d &center, Eigen::Vector3d originalNormal,
+		Eigen::Vector3d targetNormal, const double &width, const double &insideDiameter,
 		const int &resolution, const Color &color, bool show);
 
-	bool ContainsThisActor(const Primitive *actor);
+	bool ContainsThisActor(const LibPlot2D::Primitive *actor);
 
 private:
 	Cylinder *outerSurface;

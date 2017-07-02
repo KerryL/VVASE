@@ -13,30 +13,35 @@
 #ifndef VECTOR3D_H_
 #define VECTOR3D_H_
 
+// Eigen headers
+#include <Eigen/Eigen>
+
+// LibPlot2D forward declarations
+namespace LibPlot2D
+{
+	class RenderWindow;
+}
+
 namespace VVASE
 {
 
 // Local forward declarations
-class Vector;
-class Color;
 class Cylinder;
 class Cone;
-class RenderWindow;
-class Primitive;
 
 class Vector3D
 {
 public:
-	Vector3D(RenderWindow &renderer);
+	Vector3D(LibPlot2D::RenderWindow &renderer);
 	~Vector3D();
 
 	// Updates the object in the rendered scene
-	void Update(const Vector &tip, const Vector &tail, const double &shaftDiameter,
+	void Update(const Eigen::Vector3d &tip, const Eigen::Vector3d &tail, const double &shaftDiameter,
 		const double &tipDiameter, double tipLength, const int &resolution,
 		const Color &color, bool show);
 
 	// Returns true if the passed reference is to an actor from this object
-	bool ContainsThisActor(const Primitive *actor);
+	bool ContainsThisActor(const LibPlot2D::Primitive *actor);
 
 private:
 	Cylinder *shaft;

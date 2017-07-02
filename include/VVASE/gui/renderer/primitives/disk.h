@@ -12,14 +12,16 @@
 #ifndef DISK_H_
 #define DISK_H_
 
-// Local headers
-#include "vRenderer/primitives/primitive.h"
-#include "vMath/vector.h"
+// LibPlot2D headers
+#include <lp2d/renderer/primitives/primitive.h>
+
+// Eigen headers
+#include <Eigen/Eigen>
 
 namespace VVASE
 {
 
-class Disk : public Primitive
+class Disk : public LibPlot2D::Primitive
 {
 public:
 	Disk(RenderWindow &renderWindow);

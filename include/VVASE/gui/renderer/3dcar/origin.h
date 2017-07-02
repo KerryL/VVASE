@@ -12,18 +12,22 @@
 #ifndef ORIGIN_H_
 #define ORIGIN_H_
 
+// LibPlot2D forward declarations
+namespace LibPlot2D
+{
+	class RenderWindow;
+}
+
 namespace VVASE
 {
 
 // Local forward declarations
 class Vector3D;
-class RenderWindow;
-class Primitive;
 
 class Origin
 {
 public:
-	Origin(RenderWindow &renderer);
+	Origin(LibPlot2D::RenderWindow &renderer);
 	~Origin();
 
 	// Updates the object in the rendered scene
@@ -31,7 +35,7 @@ public:
 		const double &tipDiameter, const int &resolution, const bool &show);
 
 	// Returns true if the passed reference is to an actor from this object
-	bool ContainsThisActor(const Primitive *actor);
+	bool ContainsThisActor(const LibPlot2D::Primitive *actor);
 
 private:
 	Vector3D *xDirection;

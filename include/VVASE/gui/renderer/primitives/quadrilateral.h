@@ -12,14 +12,16 @@
 #ifndef QUADRILATERAL_H_
 #define QUADRILATERAL_H_
 
-// Local headers
-#include "vRenderer/primitives/primitive.h"
-#include "vMath/vector.h"
+// LibPlot2D headers
+#include <lp2d/renderer/primitives/primitive.h>
+
+// Eigen headers
+#include <Eigen/Eigen>
 
 namespace VVASE
 {
 
-class Quadrilateral : public Primitive
+class Quadrilateral : public LibPlot2D::Primitive
 {
 public:
 	Quadrilateral(RenderWindow &renderWindow);

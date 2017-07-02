@@ -13,6 +13,9 @@
 #ifndef VECTOR_EDIT_DIALOG_H_
 #define VECTOR_EDIT_DIALOG_H_
 
+// Eigen headers
+#include <Eigen/Eigen>
+
 // wxWidgets headers
 #include <wx/wx.h>
 

@@ -12,14 +12,16 @@
 #ifndef CYLINDER_H_
 #define CYLINDER_H_
 
-// Local headers
-#include "vRenderer/primitives/primitive.h"
-#include "vMath/vector.h"
+// LibPlot2D headers
+#include <lp2d/renderer/primitives/primitive.h>
+
+// Eigen headers
+#include <Eigen/Eigen>
 
 namespace VVASE
 {
 
-class Cylinder : public Primitive
+class Cylinder : public LibPlot2D::Primitive
 {
 public:
 	Cylinder(RenderWindow &renderWindow);

@@ -12,14 +12,16 @@
 #ifndef CONE_H_
 #define CONE_H_
 
-// Local headers
-#include "vRenderer/primitives/primitive.h"
-#include "vMath/vector.h"
+// LibPlot2D headers
+#include <lp2d/renderer/primitives/primitive.h>
+
+// Eigen headers
+#include <Eigen/Eigen>
 
 namespace VVASE
 {
 
-class Cone : public Primitive
+class Cone : public LibPlot2D::Primitive
 {
 public:
 	Cone(RenderWindow &renderWindow);

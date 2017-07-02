@@ -13,29 +13,36 @@
 #ifndef LINK_H_
 #define LINK_H_
 
+// Eigen headers
+#include <Eigen/Eigen>
+
+// LibPlot2D forward declarations
+namespace LibPlot2D
+{
+	class RenderWindow;
+}
+
 namespace VVASE
 {
 
 // Local forward declarations
-class Vector;
-class Color;
 class Sphere;
 class Cylinder;
 
 class Link
 {
 public:
-	Link(RenderWindow &renderer);
+	Link(LibPlot2D::RenderWindow &renderer);
 	~Link();
 
 	// Update the position of the link in the render window
-	void Update(const Vector &end1, const Vector &end2, const double &diameter, const int &resolution,
+	void Update(const Eigen::Vector3d &end1, const Eigen::Vector3d &end2, const double &diameter, const int &resolution,
 		const Color &color, bool show);
 
 	// Returns true if the passed reference is to an actor from this object
-	bool ContainsThisActor(const Primitive *actor);
+	bool ContainsThisActor(const LibPlot2D::Primitive *actor);
 
-	Vector FindClosestPoint(const Vector& point, const Vector& direction) const;
+	Vector FindClosestPoint(const Eigen::Vector3d& point, const Eigen::Vector3d& direction) const;
 
 private:
 	Cylinder *member;

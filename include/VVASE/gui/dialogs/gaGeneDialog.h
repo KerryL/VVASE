@@ -16,7 +16,7 @@
 #include <wx/wx.h>
 
 // Local headers
-#include "vCar/corner.h"
+#include "VVASE/core/car/corner.h"
 
 namespace VVASE
 {

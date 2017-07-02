@@ -16,8 +16,8 @@
 #include <wx/wx.h>
 
 // Local headers
-#include "vSolver/physics/kinematicOutputs.h"
-#include "vSolver/physics/kinematics.h"
+#include "VVASE/core/analyses/kinematicOutputs.h"
+#include "VVASE/core/analyses/kinematics.h"
 
 namespace VVASE
 {

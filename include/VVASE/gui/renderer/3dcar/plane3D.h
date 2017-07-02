@@ -12,17 +12,22 @@
 #ifndef PLANE3D_H_
 #define PLANE3D_H_
 
+// LibPlot2D forward declarations
+namespace LibPlot2D
+{
+	class RenderWindow;
+}
+
 namespace VVASE
 {
 
 // Local forward declarations
-class Color;
 class Quadrilateral;
 
 class Plane3D
 {
 public:
-	Plane3D(RenderWindow &renderer);
+	Plane3D(LibPlot2D::RenderWindow &renderer);
 	~Plane3D();
 
 	// Updates the object in the scene
@@ -30,7 +35,7 @@ public:
 		const Color &color, const bool &show);
 
 	// Returns true if the passed reference is to an actor from this object
-	bool ContainsThisActor(const Primitive *actor);
+	bool ContainsThisActor(const LibPlot2D::Primitive *actor);
 
 private:
 	Quadrilateral *plane;

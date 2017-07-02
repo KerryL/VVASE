@@ -12,26 +12,33 @@
 #ifndef POINT3D_H_
 #define POINT3D_H_
 
+// Eigen headers
+#include <Eigen/Eigen>
+
+// LibPlot2D forward declarations
+namespace LibPlot2D
+{
+	class RenderWindow;
+}
+
 namespace VVASE
 {
 
 // Local forward declarations
-class Vector;
-class Color;
 class Sphere;
 
 class Point3D
 {
 public:
-	Point3D(RenderWindow &renderer);
+	Point3D(LibPlot2D::RenderWindow &renderer);
 	~Point3D();
 
 	// Updates the 3D representation of the point on the screen
-	void Update(const Vector &position, const double &diameter, const int &resolution,
+	void Update(const Eigen::Vector3d &position, const double &diameter, const int &resolution,
 		const Color &color, bool show);
 
 	// Returns true if the passed reference is to an actor from this object
-	bool ContainsThisActor(const Primitive *actor);
+	bool ContainsThisActor(const LibPlot2D::Primitive *actor);
 
 private:
 	Sphere *point;

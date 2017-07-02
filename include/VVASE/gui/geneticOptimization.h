@@ -13,12 +13,11 @@
 #define GENETIC_OPTIMIZATION_H_
 
 // Local headers
-#include "gui/guiObject.h"
+#include "VVASE/gui/guiObject.h"
 #include "vUtilities/managedList.h"
-#include "vCar/corner.h"
-#include "vMath/vector.h"
-#include "vSolver/physics/kinematicOutputs.h"
-#include "vSolver/physics/kinematics.h"
+#include "VVASE/core/car/corner.h"
+#include "VVASE/core/analyses/kinematicOutputs.h"
+#include "VVASE/core/analyses/kinematics.h"
 
 namespace VVASE
 {

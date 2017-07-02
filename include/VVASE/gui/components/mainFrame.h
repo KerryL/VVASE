@@ -20,10 +20,10 @@
 
 // Local headers
 #include "vUtilities/managedList.h"
-#include "vSolver/physics/kinematics.h"
-#include "vSolver/physics/quasiStatic.h"
-#include "gui/undoRedoStack.h"
-#include "gui/guiObject.h"
+#include "VVASE/core/analyses/kinematics.h"
+#include "VVASE/core/analyses/quasiStatic.h"
+#include "VVASE/gui/undoRedoStack.h"
+#include "VVASE/gui/guiObject.h"
 
 // wxWidgets forward declarations
 class wxFileHistory;
