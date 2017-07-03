@@ -99,5 +99,5 @@ clean:
 	$(RM) -r $(OBJDIR)
 	$(RM) $(BINDIR)$(TARGET)
 	$(RM) $(BINDIR)$(TARGET_DEBUG)
-	$(RM) r $(LIBOUTDIR)
+	$(RM) -r $(LIBOUTDIR)
 	$(RM) $(VERSION_FILE)
