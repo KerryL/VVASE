@@ -30,7 +30,7 @@ REM Build source file
 @ECHO // Desc:  Automatically generated file containing latest git hash and version info.>> %outputPath%%outputFile%
 @ECHO.>> %outputPath%%outputFile%
 @ECHO // Local headers>> %outputPath%%outputFile%
-@ECHO #include "application/gitHash.h">> %outputPath%%outputFile%
+@ECHO #include "gitHash.h">> %outputPath%%outputFile%
 @ECHO.>> %outputPath%%outputFile%
 @ECHO const wxString vvaseVersion = _T("%gitTag%");>> %outputPath%%outputFile%
 @ECHO const wxString vvaseGitHash = _T("%gitHash%");>> %outputPath%%outputFile%

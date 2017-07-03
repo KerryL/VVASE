@@ -16,19 +16,18 @@
 #include <wx/stopwatch.h>
 
 // Local headers
-#include "vSolver/physics/kinematics.h"
-#include "vCar/car.h"
+#include "VVASE/core/analyses/kinematics.h"
+#include "VVASE/core/car/car.h"
 #include "vCar/corner.h"
 #include "vCar/drivetrain.h"
 #include "vCar/suspension.h"
 #include "vCar/massProperties.h"
-#include "vMath/carMath.h"
-#include "vUtilities/wheelSetStructures.h"
-#include "vUtilities/debugLog.h"
-#include "vUtilities/debugger.h"
-#include "vMath/matrix.h"
-#include "vRenderer/3dcar/debugShape.h"
-#include "vMath/geometryMath.h"
+#include "VVASE/core/utilities/carMath.h"
+#include "VVASE/core/utilities/wheelSetStructures.h"
+#include "VVASE/core/utilities/debugLog.h"
+#include "VVASE/core/utilities/debugger.h"
+#include "VVASE/gui/renderer/3dcar/debugShape.h"
+#include "VVASE/core/utilities/geometryMath.h"
 
 namespace VVASE
 {

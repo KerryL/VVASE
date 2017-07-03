@@ -11,7 +11,7 @@
 //        the information and methods required to model a non-linear spring.
 
 // Local headers
-#include "vCar/spring.h"
+#include "spring.h"
 
 namespace VVASE
 {

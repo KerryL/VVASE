@@ -12,7 +12,8 @@ Re-structure core to include:
     - Better separation of GUI and calculations
 - User-definable unit conversions?  How slow would it get?
 - Single makefile and makefile.inc that can build multiple targets (core, gui, application?)
-    
+- Make debugger object a thread-safe log; allow assigning stream output so it could be console OR to wxTextCtrl
+
 Code Quality Review:
 - Use unique_ptr
 - Use for ( a : b)

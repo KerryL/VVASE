@@ -13,7 +13,7 @@
 //        as well as fuel pump starvation and out-of-gas engine stalling.
 
 // Local headers
-#include "vCar/fuelCell.h"
+#include "fuelCell.h"
 
 namespace VVASE
 {

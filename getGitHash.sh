@@ -29,7 +29,7 @@ echo // Auth:  getGitHash.sh>> $outputPath$outputFile
 echo // Desc:  Automatically generated file containing latest git hash and version info.>> $outputPath$outputFile
 echo>> $outputPath$outputFile
 echo // Local headers>> $outputPath$outputFile
-echo \#include \"application/gitHash.h\">> $outputPath$outputFile
+echo \#include \"gitHash.h\">> $outputPath$outputFile
 echo>> $outputPath$outputFile
 echo const wxString vvaseVersion = _T\(\"$gitTag\"\)\;>> $outputPath$outputFile
 echo const wxString vvaseGitHash = _T\(\"$gitHash\"\)\;>> $outputPath$outputFile

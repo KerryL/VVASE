@@ -14,8 +14,8 @@
 #include <cstdlib>
 
 // Local headers
-#include "vSolver/physics/millikenAnalysis.h"
-#include "vUtilities/debugger.h"
+#include "VVASE/core/analyses/millikenAnalysis.h"
+#include "VVASE/core/utilities/debugger.h"
 
 namespace VVASE
 {

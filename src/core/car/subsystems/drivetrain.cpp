@@ -13,13 +13,12 @@
 #include <wx/wx.h>
 
 // Local headers
-#include "vCar/differential.h"
-#include "vCar/drivetrain.h"
-#include "vUtilities/wheelSetStructures.h"
-#include "vUtilities/debugger.h"
-#include "vUtilities/machineDefinitions.h"
-#include "vUtilities/binaryReader.h"
-#include "vUtilities/binaryWriter.h"
+#include "differential.h"
+#include "drivetrain.h"
+#include "VVASE/core/utilities/wheelSetStructures.h"
+#include "VVASE/core/utilities/debugger.h"
+#include "VVASE/core/utilities/binaryReader.h"
+#include "VVASE/core/utilities/binaryWriter.h"
 
 namespace VVASE
 {

@@ -21,10 +21,10 @@
 #include "vCar/drivetrain.h"
 #include "vCar/massProperties.h"
 #include "vCar/suspension.h"
-#include "vSolver/physics/kinematicOutputs.h"
-#include "vMath/carMath.h"
-#include "vUtilities/wheelSetStructures.h"
-#include "vUtilities/debugger.h"
+#include "VVASE/core/analyses/kinematicOutputs.h"
+#include "VVASE/core/utilities/carMath.h"
+#include "VVASE/core/utilities/wheelSetStructures.h"
+#include "VVASE/core/utilities/debugger.h"
 
 namespace VVASE
 {

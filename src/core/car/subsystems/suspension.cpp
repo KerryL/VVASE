@@ -13,7 +13,7 @@
 #include <wx/wx.h>
 
 // Local headers
-#include "vCar/suspension.h"
+#include "suspension.h"
 #include "VVASE/core/utilities/debugger.h"
 #include "VVASE/core/utilities/binaryReader.h"
 #include "VVASE/core/utilities/binaryWriter.h"

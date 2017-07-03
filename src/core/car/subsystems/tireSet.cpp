@@ -12,7 +12,7 @@
 
 // Local headers
 #include "VVASE/core/car/subsystems/tire.h"
-#include "vCar/tireSet.h"
+#include "tireSet.h"
 #include "VVASE/core/utilities/debugger.h"
 #include "VVASE/core/utilities/binaryReader.h"
 #include "VVASE/core/utilities/binaryWriter.h"

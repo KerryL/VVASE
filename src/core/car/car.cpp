@@ -12,10 +12,9 @@
 
 // Local headers
 #include "car.h"
-#include "vUtilities/wheelSetStructures.h"
-#include "vUtilities/binaryReader.h"
-#include "vUtilities/binaryWriter.h"
-#include "vUtilities/machineDefinitions.h"
+#include "VVASE/core/utilities/wheelSetStructures.h"
+#include "VVASE/core/utilities/binaryReader.h"
+#include "VVASE/core/utilities/binaryWriter.h"
 
 // Standard C++ headers
 #include <fstream>

@@ -13,12 +13,12 @@
 #include <wx/wx.h>
 
 // Local headers
-#include "vCar/massProperties.h"
-#include "vCar/suspension.h"
-#include "vMath/complex.h"
-#include "vUtilities/debugger.h"
-#include "vUtilities/binaryReader.h"
-#include "vUtilities/binaryWriter.h"
+#include "massProperties.h"
+#include "suspension.h"
+#include "VVASE/core/utilities/complex.h"
+#include "VVASE/core/utilities/debugger.h"
+#include "VVASE/core/utilities/binaryReader.h"
+#include "VVASE/core/utilities/binaryWriter.h"
 
 namespace VVASE
 {

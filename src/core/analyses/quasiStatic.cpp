@@ -14,17 +14,15 @@
 #include <cassert>
 
 // Local headers
-#include "vSolver/physics/quasiStatic.h"
-#include "vSolver/physics/kinematics.h"
-#include "vSolver/physics/kinematicOutputs.h"
-#include "vSolver/physics/quasiStaticOutputs.h"
+#include "VVASE/core/analyses/quasiStatic.h"
+#include "VVASE/core/analyses/kinematics.h"
+#include "VVASE/core/analyses/kinematicOutputs.h"
+#include "VVASE/core/analyses/quasiStaticOutputs.h"
 #include "vCar/car.h"
 #include "vCar/massProperties.h"
 #include "vCar/tireSet.h"
 #include "vCar/tire.h"
-#include "vMath/matrix.h"
-#include "vMath/vector.h"
-#include "vUtilities/debugger.h"
+#include "VVASE/core/utilities/debugger.h"
 
 namespace VVASE
 {
