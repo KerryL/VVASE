@@ -2,8 +2,8 @@
 REM This script generates a .cpp file containing the current git hash string
 
 REM This is the file to which output will be written
-SET outputPath="%1CarDesigner/src/application/"
-SET outputFile=vvaseConstants.cpp
+SET outputPath="%1src/application/"
+SET outputFile=gitHash.cpp
 
 SET texPath="%1manual/"
 SET texFile=gitHash.sty
@@ -30,10 +30,10 @@ REM Build source file
 @ECHO // Desc:  Automatically generated file containing latest git hash and version info.>> %outputPath%%outputFile%
 @ECHO.>> %outputPath%%outputFile%
 @ECHO // Local headers>> %outputPath%%outputFile%
-@ECHO #include "application/vvaseConstants.h">> %outputPath%%outputFile%
+@ECHO #include "application/gitHash.h">> %outputPath%%outputFile%
 @ECHO.>> %outputPath%%outputFile%
-@ECHO const wxString carDesignerVersion = _T("%gitTag%");>> %outputPath%%outputFile%
-@ECHO const wxString carDesignerGitHash = _T("%gitHash%");>> %outputPath%%outputFile%
+@ECHO const wxString vvaseVersion = _T("%gitTag%");>> %outputPath%%outputFile%
+@ECHO const wxString vvaseGitHash = _T("%gitHash%");>> %outputPath%%outputFile%
 
 REM Build TeX file
 @ECHO %% %texFile%> %texPath%%texFile%
