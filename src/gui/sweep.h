@@ -18,11 +18,11 @@
 #include <wx/thread.h>
 
 // Local headers
-#include "vUtilities/managedList.h"
-#include "gui/guiCar.h"
-#include "vSolver/physics/kinematics.h"
-#include "vSolver/physics/kinematicOutputs.h"
-#include "vSolver/threads/inverseSemaphore.h"
+#include "VVASE/core/utilities/managedList.h"
+#include "guiCar.h"
+#include "VVASE/core/analyses/kinematics.h"
+#include "VVASE/core/analyses/kinematicOutputs.h"
+#include "VVASE/core/threads/inverseSemaphore.h"
 
 namespace VVASE
 {

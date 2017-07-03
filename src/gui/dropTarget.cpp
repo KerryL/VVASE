@@ -10,8 +10,8 @@
 // Desc:  Handles events when users drag-and-drop files onto this application.
 
 // Local headers
-#include "gui/dropTarget.h"
-#include "gui/components/mainFrame.h"
+#include "dropTarget.h"
+#include "VVASE/gui/components/mainFrame.h"
 
 namespace VVASE
 {

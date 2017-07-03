@@ -10,7 +10,7 @@
 // Desc:  Derived from wxGrid, implements some additional helper methods and options.
 
 // Local headers
-#include "gui/superGrid.h"
+#include "VVASE/gui/superGrid.h"
 
 namespace VVASE
 {

@@ -16,11 +16,11 @@
 #include <wx/wx.h>
 
 // Local headers
-#include "vCar/car.h"
-#include "vCar/brakes.h"
-#include "vCar/drivetrain.h"
-#include "vCar/massProperties.h"
-#include "vCar/suspension.h"
+#include "VVASE/core/car/car.h"
+#include "VVASE/core/car/subsystems/brakes.h"
+#include "VVASE/core/car/subsystems/drivetrain.h"
+#include "VVASE/core/car/subsystems/massProperties.h"
+#include "VVASE/core/car/subsystems/suspension.h"
 #include "VVASE/core/analyses/kinematicOutputs.h"
 #include "VVASE/core/utilities/carMath.h"
 #include "VVASE/core/utilities/wheelSetStructures.h"

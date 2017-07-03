@@ -17,9 +17,9 @@
 #include <wx/wx.h>
 
 // Local headers
-#include "gui/appearanceOptions.h"
-#include "gui/dialogs/appearanceOptionsDialog.h"
-#include "gui/guiCar.h"
+#include "appearanceOptions.h"
+#include "dialogs/appearanceOptionsDialog.h"
+#include "guiCar.h"
 
 namespace VVASE
 {

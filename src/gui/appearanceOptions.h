@@ -16,8 +16,8 @@
 // Standard C++ headers
 #include <iosfwd>// for forward declarations of fstream objects
 
-// Local headers
-#include "vRenderer/color.h"
+// LibPlot2D headers
+#include <lp2d/color.h>
 
 namespace VVASE
 {

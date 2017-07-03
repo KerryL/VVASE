@@ -18,15 +18,15 @@
 #include <wx/docview.h>
 
 // Local headers
-#include "gui/guiObject.h"
-#include "gui/components/mainNotebook.h"
-#include "gui/components/mainTree.h"
-#include "gui/components/mainFrame.h"
-#include "gui/guiCar.h"
-#include "gui/iteration.h"
+#include "VVASE/gui/guiObject.h"
+#include "VVASE/gui/components/mainNotebook.h"
+#include "VVASE/gui/components/mainTree.h"
+#include "VVASE/gui/components/mainFrame.h"
+#include "guiCar.h"
+#include "sweep.h"
 #include "vRenderer/renderWindow.h"
 #include "gui/plotPanel.h"
-#include "vUtilities/debugger.h"
+#include "VVASE/core/utilities/debugger.h"
 
 namespace VVASE
 {

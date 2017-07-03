@@ -16,8 +16,8 @@
 #include <wx/wx.h>
 
 // Local headers
-#include "gui/ipcClient.h"
-#include "gui/ipcConnection.h"
+#include "ipcClient.h"
+#include "ipcConnection.h"
 
 namespace VVASE
 {

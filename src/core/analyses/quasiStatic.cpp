@@ -18,10 +18,10 @@
 #include "VVASE/core/analyses/kinematics.h"
 #include "VVASE/core/analyses/kinematicOutputs.h"
 #include "VVASE/core/analyses/quasiStaticOutputs.h"
-#include "vCar/car.h"
-#include "vCar/massProperties.h"
-#include "vCar/tireSet.h"
-#include "vCar/tire.h"
+#include "VVASE/core/car/car.h"
+#include "VVASE/core/car/subsystems/massProperties.h"
+#include "VVASE/core/car/subsystems/tireSet.h"
+#include "VVASE/core/car/subsystems/tire.h"
 #include "VVASE/core/utilities/debugger.h"
 
 namespace VVASE

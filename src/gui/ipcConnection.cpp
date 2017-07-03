@@ -17,8 +17,8 @@
 #include <wx/wx.h>
 
 // Local headers
-#include "gui/ipcConnection.h"
-#include "gui/components/mainFrame.h"
+#include "ipcConnection.h"
+#include "VVASE/gui/components/mainFrame.h"
 #include "application/vvaseApplication.h"
 
 namespace VVASE

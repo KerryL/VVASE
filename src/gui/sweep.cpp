@@ -21,17 +21,16 @@
 #include <wx/filename.h>
 
 // Local headers
-#include "gui/iteration.h"
-#include "vUtilities/debugger.h"
-#include "vUtilities/unitConverter.h"
-#include "vSolver/threads/threadJob.h"
-#include "vSolver/threads/kinematicsData.h"
-#include "vCar/car.h"
+#include "sweep.h"
+#include "VVASE/core/utilities/debugger.h"
+#include "VVASE/core/utilities/unitConverter.h"
+#include "VVASE/core/threads/threadJob.h"
+#include "VVASE/core/threads/kinematicsData.h"
+#include "VVASE/core/car/car.h"
 #include "gui/components/mainFrame.h"
 #include "gui/components/mainTree.h"
 #include "gui/plotPanel.h"
-#include "vUtilities/machineDefinitions.h"
-#include "vMath/carMath.h"
+#include "VVASE/core/utilities/carMath.h"
 #include "gui/renderer/plotRenderer.h"
 
 namespace VVASE
