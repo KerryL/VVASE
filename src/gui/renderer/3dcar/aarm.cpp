@@ -80,9 +80,9 @@ AArm::~AArm()
 // Description:		Updates the position and size of the a-arm in the scene
 //
 // Input Arguments:
-//		end1		= const Vector&, location of one end of the a-arm
-//		middle		= const Vector&, location of the ball joint on the a-arm
-//		end2		= const Vector&, location of the other end of the a-arm
+//		end1		= const Eigen::Vector3d&, location of one end of the a-arm
+//		middle		= const Eigen::Vector3d&, location of the ball joint on the a-arm
+//		end2		= const Eigen::Vector3d&, location of the other end of the a-arm
 //		diameter	= const double& describing the size of the tubing representing
 //					  the arm
 //		resolution	= const integer& representing the number of planar sides to use
@@ -97,7 +97,7 @@ AArm::~AArm()
 //		None
 //
 //==========================================================================
-void AArm::Update(const Vector &end1, const Vector &middle, const Vector &end2,
+void AArm::Update(const Eigen::Vector3d &end1, const Eigen::Vector3d &middle, const Eigen::Vector3d &end2,
 				  const double &diameter, const int &resolution, const Color &color, bool show)
 {
 	// Make sure all vector arguments are valid - if they are not,
@@ -195,24 +195,24 @@ bool AArm::ContainsThisActor(const Primitive *actor)
 // Description:		Finds the closest input point to the specified vector.
 //
 // Input Arguments:
-//		point		= const Vector&
-//		direction	= const Vector&
+//		point		= const Eigen::Vector3d&
+//		direction	= const Eigen::Vector3d&
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		Vector
+//		Eigen::Vector3d
 //
 //==========================================================================
-Vector AArm::FindClosestPoint(const Vector& point, const Vector& direction) const
+Eigen::Vector3d AArm::FindClosestPoint(const Eigen::Vector3d& point, const Eigen::Vector3d& direction) const
 {
-	Vector endPoint1Center(endPoint1->GetCenter());
-	Vector endPoint2Center(endPoint2->GetCenter());
-	Vector midPointCenter(midPoint->GetCenter());
-	Vector endPoint1Test(VVASEMath::NearestPointOnAxis(point, direction, endPoint1Center));
-	Vector endPoint2Test(VVASEMath::NearestPointOnAxis(point, direction, endPoint2Center));
-	Vector midPointTest(VVASEMath::NearestPointOnAxis(point, direction, midPointCenter));
+	Eigen::Vector3d endPoint1Center(endPoint1->GetCenter());
+	Eigen::Vector3d endPoint2Center(endPoint2->GetCenter());
+	Eigen::Vector3d midPointCenter(midPoint->GetCenter());
+	Eigen::Vector3d endPoint1Test(VVASEMath::NearestPointOnAxis(point, direction, endPoint1Center));
+	Eigen::Vector3d endPoint2Test(VVASEMath::NearestPointOnAxis(point, direction, endPoint2Center));
+	Eigen::Vector3d midPointTest(VVASEMath::NearestPointOnAxis(point, direction, midPointCenter));
 
 	if (endPoint1Center.Distance(endPoint1Test) < endPoint2Center.Distance(endPoint2Test))
 	{

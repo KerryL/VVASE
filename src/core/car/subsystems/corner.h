@@ -129,7 +129,7 @@ public:
 	ActuationAttachment actuationAttachment;
 	ActuationType actuationType;
 	const Location location;
-	std::vector<Vector> hardpoints;
+	std::vector<Eigen::Vector3d> hardpoints;
 
 	Corner& operator=(const Corner& corner);
 };

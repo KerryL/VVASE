@@ -45,14 +45,14 @@ namespace VVASE
 //		s	= const Sphere&
 //
 // Output Arguments:
-//		intersections	= Vector* (must have size of 2)
+//		intersections	= Eigen::Vector3d* (must have size of 2)
 //
 // Return Value:
 //		bool, true for success, false for no solution
 //
 //==========================================================================
 bool GeometryMath::FindThreeSpheresIntersection(const Sphere& s1, const Sphere& s2,
-	const Sphere& s3, Vector *intersections)
+	const Sphere& s3, Eigen::Vector3d *intersections)
 {
 	assert(intersections && "intersections must not be NULL");
 
@@ -105,14 +105,14 @@ bool GeometryMath::FindThreeSpheresIntersection(const Sphere& s1, const Sphere& 
 //		s	= const Sphere&
 //
 // Output Arguments:
-//		intersections	= Vector* (must have size of 2)
+//		intersections	= Eigen::Vector3d* (must have size of 2)
 //
 // Return Value:
 //		bool, true for success, false for no solution
 //
 //==========================================================================
 bool GeometryMath::FindCircleSphereIntersection(const Circle &c, const Sphere &s,
-	Vector *intersections)
+	Eigen::Vector3d *intersections)
 {
 	assert(intersections && "intersections must not be NULL");
 
@@ -296,13 +296,13 @@ bool GeometryMath::FindPlanePlaneIntersection(const Plane &p1, const Plane &p2, 
 //		s	= const Sphere&
 //
 // Output Arguments:
-//		intersection	= Vector* (must have size of 2)
+//		intersection	= Eigen::Vector3d* (must have size of 2)
 //
 // Return Value:
 //		bool, true for success, false for no solution
 //
 //==========================================================================
-bool GeometryMath::FindAxisSphereIntersections(const Axis &a, const Sphere &s, Vector *intersections)
+bool GeometryMath::FindAxisSphereIntersections(const Axis &a, const Sphere &s, Eigen::Vector3d *intersections)
 {
 	assert(intersections && "intersections must not be NULL");
 	assert(VVASEMath::IsZero(a.direction.Length() - 1.0) && "a.direction must have unit magnitude");
@@ -402,7 +402,7 @@ void GeometryMath::SolveForAxisPoint(const double &n1b, const double &n1c,
 //
 // Input Arguments:
 //		c	= const Circle&
-//		v	= const Vector&
+//		v	= const Eigen::Vector3d&
 //
 // Output Arguments:
 //		None
@@ -411,7 +411,7 @@ void GeometryMath::SolveForAxisPoint(const double &n1b, const double &n1c,
 //		double [rad]
 //
 //==========================================================================
-double GeometryMath::GetSignedAngle(const Circle &c, const Vector &v)
+double GeometryMath::GetSignedAngle(const Circle &c, const Eigen::Vector3d &v)
 {
 	return asin((v.z - c.center.z) / c.radius);
 }

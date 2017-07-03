@@ -81,14 +81,14 @@ Swaybar3D::~Swaybar3D()
 //					value, not reference like the first two Vectors.
 //
 // Input Arguments:
-//		leftLink				= const Vector&, point where link meets the left arm
-//		rightLink				= const Vector&, point where link meets the right arm
-//		torsionMemberTopRight	= const Vector&, either the top OR the right end of the
+//		leftLink				= const Eigen::Vector3d&, point where link meets the left arm
+//		rightLink				= const Eigen::Vector3d&, point where link meets the right arm
+//		torsionMemberTopRight	= const Eigen::Vector3d&, either the top OR the right end of the
 //								  sway bar (depends on bar style)
-//		torsionMemberBottomLeft	= const Vector&, either the bottom OR the left end of the
+//		torsionMemberBottomLeft	= const Eigen::Vector3d&, either the bottom OR the left end of the
 //								  sway bar (depends on bar style)
-//		midPoint				= const Vector&, pivot point for T-bars (not used for other bars)
-//		axisPivot				= const Vector&, defines pivot axis for T-bars (not used for other bars)
+//		midPoint				= const Eigen::Vector3d&, pivot point for T-bars (not used for other bars)
+//		axisPivot				= const Eigen::Vector3d&, defines pivot axis for T-bars (not used for other bars)
 //		barStyle				= const Suspension::BarStyle& defining the type of swaybar
 //		dimension				= const double& describing the size of the members
 //		resolution				= const integer& representing the number of planar sides to use
@@ -103,8 +103,8 @@ Swaybar3D::~Swaybar3D()
 //		None
 //
 //==========================================================================
-void Swaybar3D::Update(const Vector &rightLink, const Vector &leftLink, const Vector &torsionMemberTopRight,
-					   const Vector &torsionMemberBottomLeft,  const Vector &midPoint, const Vector &axisPivot,
+void Swaybar3D::Update(const Eigen::Vector3d &rightLink, const Eigen::Vector3d &leftLink, const Eigen::Vector3d &torsionMemberTopRight,
+					   const Eigen::Vector3d &torsionMemberBottomLeft,  const Eigen::Vector3d &midPoint, const Eigen::Vector3d &axisPivot,
 					   const Suspension::BarStyle &barStyle, const double &dimension,
 					   const int &resolution, const Color &color, bool show)
 {
@@ -157,8 +157,8 @@ void Swaybar3D::Update(const Vector &rightLink, const Vector &leftLink, const Ve
 	}
 	else if (barStyle == Suspension::SwayBarTBar)
 	{
-		Vector stemPlaneNormal = (midPoint - axisPivot).Normalize();
-		Vector topMidPoint = VVASEMath::IntersectWithPlane(stemPlaneNormal, midPoint,
+		Eigen::Vector3d stemPlaneNormal = (midPoint - axisPivot).Normalize();
+		Eigen::Vector3d topMidPoint = VVASEMath::IntersectWithPlane(stemPlaneNormal, midPoint,
 			rightLink - leftLink, leftLink);
 
 		// Position the torsion member

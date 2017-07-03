@@ -43,7 +43,7 @@ namespace VVASE
 {
 
 // Local forward declarations
-class Vector;
+class Eigen::Vector3d;
 class wxString;
 
 class UnitConverter
@@ -423,22 +423,22 @@ public:
 	double ConvertEnergyInput(const double& n) const;
 	double ConvertTemperatureInput(const double& n) const;
 
-	Vector ConvertAngleOutput(const Vector& v) const;
-	Vector ConvertDistanceOutput(const Vector& v) const;
-	Vector ConvertAreaOutput(const Vector& v) const;
-	Vector ConvertForceOutput(const Vector& v) const;
-	Vector ConvertPressureOutput(const Vector& v) const;
-	Vector ConvertMomentOutput(const Vector& v) const;
-	Vector ConvertMassOutput(const Vector& v) const;
-	Vector ConvertVelocityOutput(const Vector& v) const;
-	Vector ConvertAccelerationOutput(const Vector& v) const;
-	Vector ConvertInertiaOutput(const Vector& v) const;
-	Vector ConvertDensityOutput(const Vector& v) const;
-	Vector ConvertPowerOutput(const Vector& v) const;
-	Vector ConvertEnergyOutput(const Vector& v) const;
-	Vector ConvertTemperatureOutput(const Vector& v) const;
+	Eigen::Vector3d ConvertAngleOutput(const Eigen::Vector3d& v) const;
+	Eigen::Vector3d ConvertDistanceOutput(const Eigen::Vector3d& v) const;
+	Eigen::Vector3d ConvertAreaOutput(const Eigen::Vector3d& v) const;
+	Eigen::Vector3d ConvertForceOutput(const Eigen::Vector3d& v) const;
+	Eigen::Vector3d ConvertPressureOutput(const Eigen::Vector3d& v) const;
+	Eigen::Vector3d ConvertMomentOutput(const Eigen::Vector3d& v) const;
+	Eigen::Vector3d ConvertMassOutput(const Eigen::Vector3d& v) const;
+	Eigen::Vector3d ConvertVelocityOutput(const Eigen::Vector3d& v) const;
+	Eigen::Vector3d ConvertAccelerationOutput(const Eigen::Vector3d& v) const;
+	Eigen::Vector3d ConvertInertiaOutput(const Eigen::Vector3d& v) const;
+	Eigen::Vector3d ConvertDensityOutput(const Eigen::Vector3d& v) const;
+	Eigen::Vector3d ConvertPowerOutput(const Eigen::Vector3d& v) const;
+	Eigen::Vector3d ConvertEnergyOutput(const Eigen::Vector3d& v) const;
+	Eigen::Vector3d ConvertTemperatureOutput(const Eigen::Vector3d& v) const;
 
-	Vector ConvertVectorOutput(const Vector& v, const UnitType &type) const;
+	Eigen::Vector3d ConvertVectorOutput(const Eigen::Vector3d& v, const UnitType &type) const;
 
 	// For formatting numbers with a specific number of digits
 	wxString FormatNumber(const double& n) const;

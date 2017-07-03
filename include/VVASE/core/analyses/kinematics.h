@@ -34,8 +34,8 @@ public:
 		double roll;						// [rad]
 		double heave;						// [in]
 		double rackTravel;					// [in]
-		Vector centerOfRotation;			// [in]
-		Vector::Axis firstRotation;
+		Eigen::Vector3d centerOfRotation;			// [in]
+		Eigen::Vector3d::Axis firstRotation;
 		WheelSet tireDeflections;			// [in]
 
 		// Operators
@@ -59,8 +59,8 @@ public:
 	inline void SetRoll(const double &roll) { inputs.roll = roll; }
 	inline void SetHeave(const double &heave) { inputs.heave = heave; }
 	inline void SetRackTravel(const double &travel) { inputs.rackTravel = travel; }
-	inline void SetCenterOfRotation(const Vector &center) { inputs.centerOfRotation = center; }
-	inline void SetFirstEulerRotation(const Vector::Axis &first) { inputs.firstRotation = first; }
+	inline void SetCenterOfRotation(const Eigen::Vector3d &center) { inputs.centerOfRotation = center; }
+	inline void SetFirstEulerRotation(const Eigen::Vector3d::Axis &first) { inputs.firstRotation = first; }
 	inline void SetInputs(const Inputs& inputs) { this->inputs = inputs; }
 	inline void SetTireDeflections(const WheelSet& deflections) { inputs.tireDeflections = deflections; }
 
@@ -71,8 +71,8 @@ public:
 	inline double GetRoll() const { return inputs.roll; }
 	inline double GetHeave() const { return inputs.heave; }
 	inline double GetRackTravel() const { return inputs.rackTravel; }
-	inline Vector GetCenterOfRotation() const { return inputs.centerOfRotation; }
-	inline Vector::Axis GetFirstEulerRotation() const { return inputs.firstRotation; }
+	inline Eigen::Vector3d GetCenterOfRotation() const { return inputs.centerOfRotation; }
+	inline Eigen::Vector3d::Axis GetFirstEulerRotation() const { return inputs.firstRotation; }
 	inline WheelSet GetTireDeflections() const { return inputs.tireDeflections; }
 	inline Inputs GetInputs() const { return inputs; }
 
@@ -86,39 +86,39 @@ private:
 	KinematicOutputs outputs;
 
 	bool SolveCorner(Corner &corner, const Corner &original,
-		const Vector &rotations, const Vector::Axis &secondRotation, const double& tireDeflection);
+		const Eigen::Vector3d &rotations, const Eigen::Vector3d::Axis &secondRotation, const double& tireDeflection);
 
 	void UpdateOutputs();
 
 	// Kinematic solvers
-	static bool SolveForPoint(const Vector &center1, const Vector &center2, const Vector &center3,
-		const Vector &originalCenter1, const Vector &originalCenter2, const Vector &originalCenter3,
-		const Vector &original, Vector &current);
+	static bool SolveForPoint(const Eigen::Vector3d &center1, const Eigen::Vector3d &center2, const Eigen::Vector3d &center3,
+		const Eigen::Vector3d &originalCenter1, const Eigen::Vector3d &originalCenter2, const Eigen::Vector3d &originalCenter3,
+		const Eigen::Vector3d &original, Eigen::Vector3d &current);
 	static bool SolveForPoint(const Corner::Hardpoints &target, const Corner::Hardpoints& reference1,
 		const Corner::Hardpoints& reference2, const Corner::Hardpoints& reference3,
 		const Corner& originalCorner, Corner& currentCorner);
 	static bool SolveForXY(const Corner::Hardpoints &target, const Corner::Hardpoints& reference1,
 		const Corner::Hardpoints& reference2, const Corner& originalCorner, Corner& currentCorner);
-	static bool SolveForContactPatch(const Vector &wheelCenter, const Vector &wheelPlaneNormal,
-		const double &tireRadius, Vector &output);
-	static bool SolveInboardTBarPoints(const Vector &leftOutboard, const Vector &rightOutboard,
-		const Vector &centerPivot, const Vector &pivotAxisPoint,
-		const Vector &originalLeftOutboard, const Vector &originalRightOutboard,
-		const Vector &originalCenterPivot, const Vector &originalPivotAxisPoint,
-		const Vector &originalLeftInboard, const Vector &originalRightInboard,
-		Vector &leftInboard, Vector &rightInboard);
+	static bool SolveForContactPatch(const Eigen::Vector3d &wheelCenter, const Eigen::Vector3d &wheelPlaneNormal,
+		const double &tireRadius, Eigen::Vector3d &output);
+	static bool SolveInboardTBarPoints(const Eigen::Vector3d &leftOutboard, const Eigen::Vector3d &rightOutboard,
+		const Eigen::Vector3d &centerPivot, const Eigen::Vector3d &pivotAxisPoint,
+		const Eigen::Vector3d &originalLeftOutboard, const Eigen::Vector3d &originalRightOutboard,
+		const Eigen::Vector3d &originalCenterPivot, const Eigen::Vector3d &originalPivotAxisPoint,
+		const Eigen::Vector3d &originalLeftInboard, const Eigen::Vector3d &originalRightInboard,
+		Eigen::Vector3d &leftInboard, Eigen::Vector3d &rightInboard);
 
 	// Other functions
 	void MoveSteeringRack(const double &travel) const;
-	void UpdateCGs(const Vector& cor, const Vector& angles, const Vector::Axis& first,
-		const Vector::Axis& second, const double& heave, const WheelSet& tireDeflections, Car* workingCar) const;
+	void UpdateCGs(const Eigen::Vector3d& cor, const Eigen::Vector3d& angles, const Eigen::Vector3d::Axis& first,
+		const Eigen::Vector3d::Axis& second, const double& heave, const WheelSet& tireDeflections, Car* workingCar) const;
 
-	static Vector FindPerpendicularVector(const Vector &v);
-	static double OptimizeCircleParameter(const Vector &center, const Vector &a,
-		const Vector &b, const Vector &target);
+	static Eigen::Vector3d FindPerpendicularVector(const Eigen::Vector3d &v);
+	static double OptimizeCircleParameter(const Eigen::Vector3d &center, const Eigen::Vector3d &a,
+		const Eigen::Vector3d &b, const Eigen::Vector3d &target);
 
-	static bool SolveForXY(const Vector &center1, const Vector &center2, const Vector &originalCenter1,
-		const Vector &originalCenter2, const Vector &original, Vector &current);
+	static bool SolveForXY(const Eigen::Vector3d &center1, const Eigen::Vector3d &center2, const Eigen::Vector3d &originalCenter1,
+		const Eigen::Vector3d &originalCenter2, const Eigen::Vector3d &original, Eigen::Vector3d &current);
 };
 
 }// namespace VVASE

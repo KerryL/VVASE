@@ -72,9 +72,9 @@ DebugShape::DebugShape(RenderWindow &renderer)
 	point2 = new Point3D(renderer);
 	point3 = new Point3D(renderer);
 
-	point1->Update(Vector(0.0, 0.0, 0.0), 0.0, 4, Color::ColorWhite, false);
-	point2->Update(Vector(0.0, 0.0, 0.0), 0.0, 4, Color::ColorWhite, false);
-	point3->Update(Vector(0.0, 0.0, 0.0), 0.0, 4, Color::ColorWhite, false);
+	point1->Update(Eigen::Vector3d(0.0, 0.0, 0.0), 0.0, 4, Color::ColorWhite, false);
+	point2->Update(Eigen::Vector3d(0.0, 0.0, 0.0), 0.0, 4, Color::ColorWhite, false);
+	point3->Update(Eigen::Vector3d(0.0, 0.0, 0.0), 0.0, 4, Color::ColorWhite, false);
 }
 
 DebugShape::~DebugShape()
@@ -84,14 +84,14 @@ DebugShape::~DebugShape()
 	delete point3;
 }
 
-void DebugShape::SetSphere(const Vector &center, const double &radius, Sphere &s) const
+void DebugShape::SetSphere(const Eigen::Vector3d &center, const double &radius, Sphere &s) const
 {
 	s.SetVisibility(true);
 	s.SetCenter(center);
 	s.SetRadius(radius);
 }
 
-void DebugShape::SetDisk(const Vector &center, const Vector &normal, const double &outR, const double &inR, Disk &disk) const
+void DebugShape::SetDisk(const Eigen::Vector3d &center, const Eigen::Vector3d &normal, const double &outR, const double &inR, Disk &disk) const
 {
 	disk.SetVisibility(true);
 	disk.SetCenter(center);
@@ -100,7 +100,7 @@ void DebugShape::SetDisk(const Vector &center, const Vector &normal, const doubl
 	disk.SetInnerRadius(inR);
 }
 
-void DebugShape::SetPoint(const Vector &p, Point3D &point) const
+void DebugShape::SetPoint(const Eigen::Vector3d &p, Point3D &point) const
 {
 	point.Update(p, 1.5, 4, Color::ColorWhite, true);
 }

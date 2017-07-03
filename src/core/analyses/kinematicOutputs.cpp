@@ -259,7 +259,7 @@ void KinematicOutputs::ComputeRearARBTwist(const Car *original, const Suspension
 //==========================================================================
 void KinematicOutputs::ComputeFrontRollCenter(const Suspension *current)
 {
-	Vector normal(1.0, 0.0, 0.0);
+	Eigen::Vector3d normal(1.0, 0.0, 0.0);
 	if (!ComputeKinematicCenter(current->leftFront, current->rightFront, leftFrontVectors,
 		rightFrontVectors, normal, vectors[FrontKinematicRC], vectors[FrontRollAxisDirection]))
 		Debugger::GetInstance() << "Warning:  Front Kinematic Roll Center is undefined" << Debugger::PriorityHigh;
@@ -283,7 +283,7 @@ void KinematicOutputs::ComputeFrontRollCenter(const Suspension *current)
 //==========================================================================
 void KinematicOutputs::ComputeRearRollCenter(const Suspension *current)
 {
-	Vector normal(1.0, 0.0, 0.0);
+	Eigen::Vector3d normal(1.0, 0.0, 0.0);
 	if (!ComputeKinematicCenter(current->leftRear, current->rightRear, leftRearVectors,
 		rightRearVectors, normal, vectors[RearKinematicRC], vectors[RearRollAxisDirection]))
 		Debugger::GetInstance() << "Warning:  Rear Kinematic Roll Center is undefined" << Debugger::PriorityHigh;
@@ -307,7 +307,7 @@ void KinematicOutputs::ComputeRearRollCenter(const Suspension *current)
 //==========================================================================
 void KinematicOutputs::ComputeLeftPitchCenter(const Suspension *current)
 {
-	Vector normal(0.0, 1.0, 0.0);
+	Eigen::Vector3d normal(0.0, 1.0, 0.0);
 	ComputeKinematicCenter(current->leftFront, current->leftRear, leftFrontVectors,
 		leftRearVectors, normal, vectors[LeftKinematicPC], vectors[LeftPitchAxisDirection]);// No warning - undefined PCs is OK?
 
@@ -333,7 +333,7 @@ void KinematicOutputs::ComputeLeftPitchCenter(const Suspension *current)
 //==========================================================================
 void KinematicOutputs::ComputeRightPitchCenter(const Suspension *current)
 {
-	Vector normal(0.0, 1.0, 0.0);
+	Eigen::Vector3d normal(0.0, 1.0, 0.0);
 	ComputeKinematicCenter(current->rightFront, current->rightRear, rightFrontVectors,
 		rightRearVectors, normal, vectors[RightKinematicPC], vectors[RightPitchAxisDirection]);// No warning - undefined PCs is OK?
 }
@@ -407,10 +407,10 @@ void KinematicOutputs::ComputeWheelbase(const Suspension *current)
 //		currentLeft			= const Corner&
 //		currentRight		= const Corner&
 //		barStyle			= const Suspension::BarStyle&
-//		originalMidPoint	= const Vector&
-//		originalPivot		= const Vector&
-//		currentMidPoint		= const Vector&
-//		currentPivot		= const Vector&
+//		originalMidPoint	= const Eigen::Vector3d&
+//		originalPivot		= const Eigen::Vector3d&
+//		currentMidPoint		= const Eigen::Vector3d&
+//		currentPivot		= const Eigen::Vector3d&
 //		signGreaterThan		= const bool&
 //
 // Output Arguments:
@@ -423,8 +423,8 @@ void KinematicOutputs::ComputeWheelbase(const Suspension *current)
 double KinematicOutputs::ComputeARBTwist(const Corner& originalLeft,
 	const Corner& originalRight, const Corner& currentLeft,
 	const Corner& currentRight, const Suspension::BarStyle &barStyle,
-	const Vector& originalMidPoint, const Vector& originalPivot,
-	const Vector& currentMidPoint, const Vector& currentPivot,
+	const Eigen::Vector3d& originalMidPoint, const Eigen::Vector3d& originalPivot,
+	const Eigen::Vector3d& currentMidPoint, const Eigen::Vector3d& currentPivot,
 	const bool& signGreaterThan) const
 {
 	if (barStyle == Suspension::SwayBarUBar)
@@ -462,8 +462,8 @@ double KinematicOutputs::ComputeUBarTwist(const Corner& originalLeft,
 	const Corner& originalRight, const Corner& currentLeft,
 	const Corner& currentRight, const bool& signGreaterThan) const
 {
-	Vector swayBarAxis;
-	Vector arm1Direction, arm2Direction;
+	Eigen::Vector3d swayBarAxis;
+	Eigen::Vector3d arm1Direction, arm2Direction;
 	double originalSwayBarAngle, deltaAngle;
 
 	// First, for the original configuration of the suspension
@@ -525,10 +525,10 @@ double KinematicOutputs::ComputeUBarTwist(const Corner& originalLeft,
 //		originalRight		= const Corner&
 //		currentLeft			= const Corner&
 //		currentRight		= const Corner&
-//		originalMidPoint	= const Vector&
-//		originalPivot		= const Vector&
-//		currentMidPoint		= const Vector&
-//		currentPivot		= const Vector&
+//		originalMidPoint	= const Eigen::Vector3d&
+//		originalPivot		= const Eigen::Vector3d&
+//		currentMidPoint		= const Eigen::Vector3d&
+//		currentPivot		= const Eigen::Vector3d&
 //		signGreaterThan		= const bool&
 //
 // Output Arguments:
@@ -540,17 +540,17 @@ double KinematicOutputs::ComputeUBarTwist(const Corner& originalLeft,
 //==========================================================================
 double KinematicOutputs::ComputeTBarTwist(const Corner& originalLeft,
 	const Corner& originalRight, const Corner& currentLeft, const Corner& currentRight,
-	const Vector& originalMidPoint, const Vector& originalPivot,
-	const Vector& currentMidPoint, const Vector& currentPivot,
+	const Eigen::Vector3d& originalMidPoint, const Eigen::Vector3d& originalPivot,
+	const Eigen::Vector3d& currentMidPoint, const Eigen::Vector3d& currentPivot,
 	const bool& signGreaterThan) const
 {
-	Vector swayBarAxis;
-	Vector armDirection;
+	Eigen::Vector3d swayBarAxis;
+	Eigen::Vector3d armDirection;
 	double originalSwayBarAngle, deltaAngle;
 
 	// First, for the original configuration of the suspension
-	Vector stemPlaneNormal = originalMidPoint - originalPivot;
-	Vector topMidPoint = VVASEMath::IntersectWithPlane(stemPlaneNormal,
+	Eigen::Vector3d stemPlaneNormal = originalMidPoint - originalPivot;
+	Eigen::Vector3d topMidPoint = VVASEMath::IntersectWithPlane(stemPlaneNormal,
 		originalMidPoint, originalLeft.hardpoints[Corner::InboardBarLink]
 			- originalRight.hardpoints[Corner::InboardBarLink],
 		originalLeft.hardpoints[Corner::InboardBarLink]);
@@ -656,23 +656,23 @@ double KinematicOutputs::ComputeGearedBarTwist(const Corner& /*originalLeft*/,
 // Input Arguments:
 //		corner1			= const Corner&
 //		corner2			= const Corner&
-//		cornerVectors1	= const Vector*
-//		cornerVectors2	= const Vector*
-//		planeNormal		= const Vector&
+//		cornerVectors1	= const Eigen::Vector3d*
+//		cornerVectors2	= const Eigen::Vector3d*
+//		planeNormal		= const Eigen::Vector3d&
 //
 // Output Arguments:
-//		center			= Vector&
-//		direction		= Vector&
+//		center			= Eigen::Vector3d&
+//		direction		= Eigen::Vector3d&
 //
 // Return Value:
 //		None
 //
 //==========================================================================
 bool KinematicOutputs::ComputeKinematicCenter(const Corner &corner1, const Corner &corner2,
-	const Vector *cornerVectors1, const Vector *cornerVectors2,
-	const Vector &planeNormal, Vector &center, Vector &direction) const
+	const Eigen::Vector3d *cornerVectors1, const Eigen::Vector3d *cornerVectors2,
+	const Eigen::Vector3d &planeNormal, Eigen::Vector3d &center, Eigen::Vector3d &direction) const
 {
-	Vector normal1, normal2;
+	Eigen::Vector3d normal1, normal2;
 
 	normal1 = VVASEMath::GetPlaneNormal(corner1.hardpoints[Corner::ContactPatch], cornerVectors1[InstantCenter],
 		cornerVectors1[InstantCenter] + cornerVectors1[InstantAxisDirection]);
@@ -715,7 +715,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 {
 	// Assign pointers to the corner outputs and our sign conventions
 	double *cornerDoubles;
-	Vector *cornerVectors;
+	Eigen::Vector3d *cornerVectors;
 	short sign;
 	bool isAtFront = false;
 
@@ -774,8 +774,8 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 	//  lower control arm planes.  The direction vector can be determined by taking
 	//  the cross product of the normal vectors for the upper and lower control arm
 	//  planes.
-	Vector upperPlaneNormal;
-	Vector lowerPlaneNormal;
+	Eigen::Vector3d upperPlaneNormal;
+	Eigen::Vector3d lowerPlaneNormal;
 
 	upperPlaneNormal = VVASEMath::GetPlaneNormal(currentCorner->hardpoints[Corner::UpperBallJoint],
 		currentCorner->hardpoints[Corner::UpperFrontTubMount], currentCorner->hardpoints[Corner::UpperRearTubMount]);
@@ -791,7 +791,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 		// We now have the axis direction and a point on the axis, but we want a specific
 		// point on the axis.  To do that, we determine the place where this vector passes through
 		// the appropriate plane.
-		Vector planeNormal(1.0, 0.0, 0.0);
+		Eigen::Vector3d planeNormal(1.0, 0.0, 0.0);
 
 		cornerVectors[InstantCenter] = VVASEMath::IntersectWithPlane(planeNormal, currentCorner->hardpoints[Corner::WheelCenter],
 			cornerVectors[InstantAxisDirection], cornerVectors[InstantCenter]);
@@ -818,14 +818,14 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 	// the force that is reacted through the control arm.
 	// Note that this procedure varies slightly depending on what component the pushrod is
 	// attached to on the outboard suspension.
-	Vector force(0.0, 0.0, 1.0);// Applied to the wheel center
+	Eigen::Vector3d force(0.0, 0.0, 1.0);// Applied to the wheel center
 
-	Vector momentDirection;
+	Eigen::Vector3d momentDirection;
 	double momentMagnitude;
-	Vector momentArm;
+	Eigen::Vector3d momentArm;
 
-	Vector pointOnAxis;
-	Vector forceDirection;
+	Eigen::Vector3d pointOnAxis;
+	Eigen::Vector3d forceDirection;
 
 	// This changes depending on what is actuating the shock/spring (outer in..else)
 	// and also with what the pushrod or spring/shock attach to on the outer suspension (inner
@@ -1032,7 +1032,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 				originalCorner->location == Corner::LocationRightRear) &&
 				originalCar->suspension->rearBarStyle == Suspension::SwayBarTBar))
 			{
-				Vector normal, pivot, oppositeInboard;
+				Eigen::Vector3d normal, pivot, oppositeInboard;
 				if (currentCorner->location == Corner::LocationLeftFront ||
 					currentCorner->location == Corner::LocationRightFront)
 				{
@@ -1055,7 +1055,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 						oppositeInboard = currentSuspension->leftRear.hardpoints[Corner::InboardBarLink];
 				}
 
-				Vector topMidPoint = VVASEMath::IntersectWithPlane(normal, pivot,
+				Eigen::Vector3d topMidPoint = VVASEMath::IntersectWithPlane(normal, pivot,
 					currentCorner->hardpoints[Corner::InboardBarLink] - oppositeInboard,
 					currentCorner->hardpoints[Corner::InboardBarLink]);
 
@@ -1068,7 +1068,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 			// What value of the bar torque results in the required magnitude of the force in the link?
 			forceDirection = momentDirection.Cross(momentArm).Normalize();
 			force = forceDirection * force.Length() / (force.Normalize() * forceDirection);
-			Vector torque = momentArm.Cross(force);
+			Eigen::Vector3d torque = momentArm.Cross(force);
 
 			// At this point, torque is the bar torque (in inch-lbf) in response to the unit force at the wheel (in lbf)
 			// If the wheel moves by amount dx, then the bar moves by amount dTheta
@@ -1251,7 +1251,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 				originalCorner->location == Corner::LocationRightRear) &&
 				originalCar->suspension->rearBarStyle == Suspension::SwayBarTBar))
 			{
-				Vector normal, pivot, oppositeInboard;
+				Eigen::Vector3d normal, pivot, oppositeInboard;
 				if (currentCorner->location == Corner::LocationLeftFront ||
 					currentCorner->location == Corner::LocationRightFront)
 				{
@@ -1274,7 +1274,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 						oppositeInboard = currentSuspension->leftRear.hardpoints[Corner::InboardBarLink];
 				}
 
-				Vector topMidPoint = VVASEMath::IntersectWithPlane(normal, pivot,
+				Eigen::Vector3d topMidPoint = VVASEMath::IntersectWithPlane(normal, pivot,
 					currentCorner->hardpoints[Corner::InboardBarLink] - oppositeInboard,
 					currentCorner->hardpoints[Corner::InboardBarLink]);
 
@@ -1287,7 +1287,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 			// What value of the bar torque results in the required magnitude of the force in the link?
 			forceDirection = momentDirection.Cross(momentArm).Normalize();
 			force = forceDirection * force.Length() / (force.Normalize() * forceDirection);
-			Vector torque = momentArm.Cross(force);
+			Eigen::Vector3d torque = momentArm.Cross(force);
 
 			// At this point, torque is the bar torque (in inch-lbf) in response to the unit force at the wheel (in lbf)
 			// If the wheel moves by amount dx, then the bar moves by amount dTheta
@@ -1301,8 +1301,8 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 	// Find the plane that contains the wheel center and has the Y direction as a
 	// normal, and find the intersection of the Instant Axis and that plane. This
 	// vector's X-coordinate is the SVSA length.
-	Vector planeNormal(0.0, 1.0, 0.0);
-	Vector intersection;
+	Eigen::Vector3d planeNormal(0.0, 1.0, 0.0);
+	Eigen::Vector3d intersection;
 
 	// Get the intersection of the Instant Center with this plane
 	intersection = VVASEMath::IntersectWithPlane(planeNormal, currentCorner->hardpoints[Corner::WheelCenter],
@@ -1548,7 +1548,7 @@ void KinematicOutputs::ComputeSpindleLength(const Corner &corner,
 {
 	double t = (corner.hardpoints[Corner::WheelCenter].z - corner.hardpoints[Corner::LowerBallJoint].z) /
 		(corner.hardpoints[Corner::UpperBallJoint].z - corner.hardpoints[Corner::LowerBallJoint].z);
-	Vector pointOnSteerAxis = corner.hardpoints[Corner::LowerBallJoint] +
+	Eigen::Vector3d pointOnSteerAxis = corner.hardpoints[Corner::LowerBallJoint] +
 		(corner.hardpoints[Corner::UpperBallJoint] - corner.hardpoints[Corner::LowerBallJoint]) * t;
 	cornerDoubles[SpindleLength] = (pointOnSteerAxis.y - corner.hardpoints[Corner::WheelCenter].y) /
 		fabs(pointOnSteerAxis.y - corner.hardpoints[Corner::WheelCenter].y) * sign *
@@ -1577,9 +1577,9 @@ void KinematicOutputs::ComputeSpindleLength(const Corner &corner,
 void KinematicOutputs::ComputeCamberAndSteer(const Corner &originalCorner,
 	const Corner &currentCorner, const short &sign, double *cornerDoubles)
 {
-	Vector originalWheelPlaneNormal;
-	Vector newWheelPlaneNormal;
-	Vector angles;
+	Eigen::Vector3d originalWheelPlaneNormal;
+	Eigen::Vector3d newWheelPlaneNormal;
+	Eigen::Vector3d angles;
 
 	originalWheelPlaneNormal = VVASEMath::GetPlaneNormal(
 		originalCorner.hardpoints[Corner::LowerBallJoint],
@@ -1595,7 +1595,7 @@ void KinematicOutputs::ComputeCamberAndSteer(const Corner &originalCorner,
 	cornerDoubles[Steer] = angles.z;
 
 	// Rotate the NewWheelPlaneNormal back about Z by the steer angle in preparation for solving for camber
-	newWheelPlaneNormal.Rotate(cornerDoubles[Steer], Vector::AxisZ);
+	newWheelPlaneNormal.Rotate(cornerDoubles[Steer], Eigen::Vector3d::AxisZ);
 
 	// Calculate the wheel angles again, this time we want the camber angle
 	angles = originalWheelPlaneNormal.AnglesTo(newWheelPlaneNormal);
@@ -2054,7 +2054,7 @@ wxString KinematicOutputs::GetVectorName(const OutputsVector &output)
 double KinematicOutputs::GetOutputValue(const OutputsComplete &output) const
 {
 	double value;
-	Vector temp;
+	Eigen::Vector3d temp;
 	OutputsComplete newOutputIndex;
 
 	// Depending on the specified OUTPUTS_COMPLETE, choose which output to return
@@ -2653,7 +2653,7 @@ UnitConverter::UnitType KinematicOutputs::GetVectorUnitType(const OutputsVector 
 //		cornerVector	= const &CornerOutputsVector
 //		double			= const &OutputsDouble
 //		vector			= const &OutputsVector
-//		axis			= const &Vector::Axis
+//		axis			= const &Eigen::Vector3d::Axis
 //
 // Output Arguments:
 //		None
@@ -2665,7 +2665,7 @@ UnitConverter::UnitType KinematicOutputs::GetVectorUnitType(const OutputsVector 
 KinematicOutputs::OutputsComplete KinematicOutputs::OutputsCompleteIndex(
 	const Corner::Location &location, const CornerOutputsDouble &cornerDouble,
 	const CornerOutputsVector &cornerVector, const OutputsDouble &midDouble,
-	const OutputsVector &vector, const Vector::Axis &axis)
+	const OutputsVector &vector, const Eigen::Vector3d::Axis &axis)
 {
 	OutputsComplete completeIndex = NumberOfOutputScalars;
 

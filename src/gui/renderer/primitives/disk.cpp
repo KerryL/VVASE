@@ -86,10 +86,10 @@ void Disk::GenerateGeometry()
 		resolution = 3;
 
 	// Our reference direction will be the X-axis direction
-	Vector referenceDirection(1.0, 0.0, 0.0);
+	Eigen::Vector3d referenceDirection(1.0, 0.0, 0.0);
 
 	// Determine the angle and axis of rotation
-	Vector axisOfRotation = referenceDirection.Cross(normal);
+	Eigen::Vector3d axisOfRotation = referenceDirection.Cross(normal);
 	double angle = acos(normal * referenceDirection);// [rad]
 
 	glPushMatrix();
@@ -108,8 +108,8 @@ void Disk::GenerateGeometry()
 		glBegin(GL_TRIANGLE_STRIP);
 
 		// Loop to generate the triangles
-		Vector insidePoint(0.0, 0.0, 0.0);
-		Vector outsidePoint(0.0, 0.0, 0.0);
+		Eigen::Vector3d insidePoint(0.0, 0.0, 0.0);
+		Eigen::Vector3d outsidePoint(0.0, 0.0, 0.0);
 		int i;
 		for (i = 0; i <= resolution; i++)
 		{
@@ -231,7 +231,7 @@ void Disk::SetInnerRadius(const double &innerRadius)
 // Description:		Sets the location of the center of the disk.
 //
 // Input Arguments:
-//		center	= const Vector&
+//		center	= const Eigen::Vector3d&
 //
 // Output Arguments:
 //		None
@@ -240,7 +240,7 @@ void Disk::SetInnerRadius(const double &innerRadius)
 //		None
 //
 //==========================================================================
-void Disk::SetCenter(const Vector &center)
+void Disk::SetCenter(const Eigen::Vector3d &center)
 {
 	this->center = center;
 	modified = true;
@@ -253,7 +253,7 @@ void Disk::SetCenter(const Vector &center)
 // Description:		Sets the disk's normal direction.
 //
 // Input Arguments:
-//		normal	= const Vector&
+//		normal	= const Eigen::Vector3d&
 //
 // Output Arguments:
 //		None
@@ -262,7 +262,7 @@ void Disk::SetCenter(const Vector &center)
 //		None
 //
 //==========================================================================
-void Disk::SetNormal(const Vector &normal)
+void Disk::SetNormal(const Eigen::Vector3d &normal)
 {
 	this->normal = normal.Normalize();
 	modified = true;
@@ -276,8 +276,8 @@ void Disk::SetNormal(const Vector &normal)
 //					line.
 //
 // Input Arguments:
-//		point		= const Vector&
-//		direction	= const Vector&
+//		point		= const Eigen::Vector3d&
+//		direction	= const Eigen::Vector3d&
 //
 // Output Arguments:
 //		None
@@ -286,7 +286,7 @@ void Disk::SetNormal(const Vector &normal)
 //		bool
 //
 //==========================================================================
-bool Disk::IsIntersectedBy(const Vector& point, const Vector& direction) const
+bool Disk::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector3d& direction) const
 {
 	// TODO:  Implement
 	return false;

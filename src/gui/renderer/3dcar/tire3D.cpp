@@ -77,10 +77,10 @@ Tire3D::~Tire3D()
 //					in the scene.
 //
 // Input Arguments:
-//		conctactPatch	= const Vector&, location of the tire's bottom
-//		center			= const Vector&, location of center of the tire
-//		originalNomral	= Vector, the "staring position" of the upright plane
-//		targetNormal	= Vector, the "final position" of the upright plane
+//		conctactPatch	= const Eigen::Vector3d&, location of the tire's bottom
+//		center			= const Eigen::Vector3d&, location of center of the tire
+//		originalNomral	= Eigen::Vector3d, the "staring position" of the upright plane
+//		targetNormal	= Eigen::Vector3d, the "final position" of the upright plane
 //		width			= const double& describing width of the tire
 //		insideDiameter	= const double& describing inner diameter of the tire
 //		resolution		= const integer& representing the number of planar sides to use
@@ -95,8 +95,8 @@ Tire3D::~Tire3D()
 //		None
 //
 //==========================================================================
-void Tire3D::Update(const Vector &contactPatch, const Vector &center, Vector originalNormal,
-					Vector targetNormal, const double &width, const double &insideDiameter,
+void Tire3D::Update(const Eigen::Vector3d &contactPatch, const Eigen::Vector3d &center, Eigen::Vector3d originalNormal,
+					Eigen::Vector3d targetNormal, const double &width, const double &insideDiameter,
 					const int &resolution, const Color &color, bool show)
 {
 	// Make sure all vector arguments are valid - if they are not,
@@ -145,7 +145,7 @@ void Tire3D::Update(const Vector &contactPatch, const Vector &center, Vector ori
 	// Because the car's tires start out in this orientation (zero pitch, roll, heave and steer),
 	// we can use only the original and final normal vectors for the upright plane to define
 	// the wheel orientation.
-	Vector rotationAxis;
+	Eigen::Vector3d rotationAxis;
 	double angleToRotate;// [rad]
 
 	// We allow rotation about any arbitrary axis, so we'll start by determining the axis of rotation
@@ -160,8 +160,8 @@ void Tire3D::Update(const Vector &contactPatch, const Vector &center, Vector ori
 	// axis direction.  To calculate the axis direction, we rotate a reference vector
 	// the same way that we rotate the actors.  This reference starts out aligned with
 	// the Y-axis (tire orientation with zero camber, toe, pitch, roll, etc.)
-	Vector sidewallPosition;
-	Vector axisDirection(0.0, 1.0, 0.0);
+	Eigen::Vector3d sidewallPosition;
+	Eigen::Vector3d axisDirection(0.0, 1.0, 0.0);
 
 	// Check to make sure our rotation axis is non-zero before we do the rotations
 	if (!VVASEMath::IsZero(rotationAxis.Length()))

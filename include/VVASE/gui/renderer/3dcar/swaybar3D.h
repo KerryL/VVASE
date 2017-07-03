@@ -38,7 +38,7 @@ public:
 
 	// Updates the 3D representation of the sway bar on the screen
 	void Update(const Eigen::Vector3d &rightLink, const Eigen::Vector3d &leftLink, const Eigen::Vector3d &torsionMemberTopRight,
-		const Eigen::Vector3d &torsionMemberBottomLeft, const Vector &midPoint, const Eigen::Vector3d &axisPivot,
+		const Eigen::Vector3d &torsionMemberBottomLeft, const Eigen::Vector3d &midPoint, const Eigen::Vector3d &axisPivot,
 		const Suspension::BarStyle &barStyle, const double &dimension,
 		const int &resolution, const Color &color, bool show);
 

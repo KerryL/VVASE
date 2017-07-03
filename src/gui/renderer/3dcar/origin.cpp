@@ -92,10 +92,10 @@ void Origin::Update(const double &shaftLength, const double &shaftDiameter,
 					const bool &show)
 {
 	// All of them start at the origin
-	Vector origin(0.0, 0.0, 0.0);
-	Vector x(1.0, 0.0, 0.0);
-	Vector y(0.0, 1.0, 0.0);
-	Vector z(0.0, 0.0, 1.0);
+	Eigen::Vector3d origin(0.0, 0.0, 0.0);
+	Eigen::Vector3d x(1.0, 0.0, 0.0);
+	Eigen::Vector3d y(0.0, 1.0, 0.0);
+	Eigen::Vector3d z(0.0, 0.0, 1.0);
 
 	// Scale the vectors to meet the specified lengths
 	x *= tipLength + shaftLength;

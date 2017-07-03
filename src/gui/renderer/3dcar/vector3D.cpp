@@ -75,8 +75,8 @@ Vector3D::~Vector3D()
 // Description:		Updates the size of the Vector3D marker
 //
 // Input Arguments:
-//		_tip			= const Vector& indicating the point this vector points to
-//		tail			= const Vector& indicating the point this vector originates
+//		_tip			= const Eigen::Vector3d& indicating the point this vector points to
+//		tail			= const Eigen::Vector3d& indicating the point this vector originates
 //						  from
 //		shaftDiameter	= const double& describing the width of the arrow
 //		tipDiameter		= const double& describing the width of the head
@@ -93,7 +93,7 @@ Vector3D::~Vector3D()
 //		None
 //
 //==========================================================================
-void Vector3D::Update(const Vector &tip, const Vector &tail, const double &shaftDiameter,
+void Vector3D::Update(const Eigen::Vector3d &tip, const Eigen::Vector3d &tail, const double &shaftDiameter,
 	const double &tipDiameter, double tipLength, const int &resolution,
 	const Color &color, bool show)
 {
@@ -129,7 +129,7 @@ void Vector3D::Update(const Vector &tip, const Vector &tail, const double &shaft
 	this->tip->SetResolution(resolution);
 
 	// Determine the position where the tip meets the shaft
-	Vector meetingPosition = tail + ((tip - tail) * (1.0 - tipLength / tip.Distance(tail)));
+	Eigen::Vector3d meetingPosition = tail + ((tip - tail) * (1.0 - tipLength / tip.Distance(tail)));
 
 	// Set the positions of the shaft and tip
 	shaft->SetEndPoint1(tail);

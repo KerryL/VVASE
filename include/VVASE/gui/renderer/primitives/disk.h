@@ -31,19 +31,19 @@ public:
 	// validity of this object's parameters
 	void GenerateGeometry();
 	bool HasValidParameters();
-	bool IsIntersectedBy(const Vector& point, const Vector& direction) const;
+	bool IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector3d& direction) const;
 
 	void SetResolution(const int &resolution);
 	void SetOuterRadius(const double &outerRadius);
 	void SetInnerRadius(const double &innerRadius);
-	void SetCenter(const Vector &center);
-	void SetNormal(const Vector &normal);
+	void SetCenter(const Eigen::Vector3d &center);
+	void SetNormal(const Eigen::Vector3d &normal);
 
 private:
 	int resolution;
 
-	Vector center;
-	Vector normal;
+	Eigen::Vector3d center;
+	Eigen::Vector3d normal;
 
 	double outerRadius;
 	double innerRadius;

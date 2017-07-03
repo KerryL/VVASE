@@ -2861,7 +2861,7 @@ void MainFrame::ReadConfiguration()
 	tempDouble = 0.0;
 	configurationFile->Read(_T("/Kinematics/CenterOfRotationZ"), &tempDouble);
 	kinematicInputs.centerOfRotation.z = tempDouble;
-	kinematicInputs.firstRotation = (Vector::Axis)configurationFile->Read(
+	kinematicInputs.firstRotation = (Eigen::Vector3d::Axis)configurationFile->Read(
 		_T("/Kinematics/FirstRotation"), 0l);
 	configurationFile->Read(_T("/Kinematics/UseRackTravel"), &useRackTravel, true);
 

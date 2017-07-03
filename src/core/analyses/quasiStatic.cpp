@@ -359,8 +359,8 @@ WheelSet QuasiStatic::ComputePreLoad(const Car* originalCar) const
 	kinematics.SetPitch(0.0);
 	kinematics.SetHeave(0.0);
 	kinematics.SetTireDeflections(zeroDeflections);
-	kinematics.SetCenterOfRotation(Vector(0.0, 0.0, 0.0));// This needs to be set to something valid, but isn't actually used
-	kinematics.SetFirstEulerRotation(Vector::AxisX);// This needs to be set to something valid, but isn't actually used
+	kinematics.SetCenterOfRotation(Eigen::Vector3d(0.0, 0.0, 0.0));// This needs to be set to something valid, but isn't actually used
+	kinematics.SetFirstEulerRotation(Eigen::Vector3d::AxisX);// This needs to be set to something valid, but isn't actually used
 	kinematics.UpdateKinematics(originalCar, &workingCar, _T("Pre-Load Calculation"));
 
 	WheelSet preLoad;

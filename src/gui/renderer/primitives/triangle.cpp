@@ -80,7 +80,7 @@ Triangle::~Triangle()
 void Triangle::GenerateGeometry()
 {
 	// Used as each triangle is created
-	Vector normal = (corner2 - corner1).Cross(corner3 - corner1).Normalize();
+	Eigen::Vector3d normal = (corner2 - corner1).Cross(corner3 - corner1).Normalize();
 
 	// Set the normal for the triangle
 	glNormal3d(normal.x, normal.y, normal.z);
@@ -132,7 +132,7 @@ bool Triangle::HasValidParameters()
 // Description:		Sets the location of the first corner of the triangle.
 //
 // Input Arguments:
-//		_corner1	= const Vector&
+//		_corner1	= const Eigen::Vector3d&
 //
 // Output Arguments:
 //		None
@@ -141,7 +141,7 @@ bool Triangle::HasValidParameters()
 //		None
 //
 //==========================================================================
-void Triangle::SetCorner1(const Vector &corner1)
+void Triangle::SetCorner1(const Eigen::Vector3d &corner1)
 {
 	this->corner1 = corner1;
 	modified = true;
@@ -154,7 +154,7 @@ void Triangle::SetCorner1(const Vector &corner1)
 // Description:		Sets the location of the second corner of the triangle.
 //
 // Input Arguments:
-//		corner2	= const Vector&
+//		corner2	= const Eigen::Vector3d&
 //
 // Output Arguments:
 //		None
@@ -163,7 +163,7 @@ void Triangle::SetCorner1(const Vector &corner1)
 //		None
 //
 //==========================================================================
-void Triangle::SetCorner2(const Vector &corner2)
+void Triangle::SetCorner2(const Eigen::Vector3d &corner2)
 {
 	this->corner2 = corner2;
 	modified = true;
@@ -176,7 +176,7 @@ void Triangle::SetCorner2(const Vector &corner2)
 // Description:		Sets the location of the third corner of the triangle.
 //
 // Input Arguments:
-//		corner3	= const Vector&
+//		corner3	= const Eigen::Vector3d&
 //
 // Output Arguments:
 //		None
@@ -185,7 +185,7 @@ void Triangle::SetCorner2(const Vector &corner2)
 //		None
 //
 //==========================================================================
-void Triangle::SetCorner3(const Vector &corner3)
+void Triangle::SetCorner3(const Eigen::Vector3d &corner3)
 {
 	this->corner3 = corner3;
 	modified = true;
@@ -199,8 +199,8 @@ void Triangle::SetCorner3(const Vector &corner3)
 //					line.
 //
 // Input Arguments:
-//		point		= const Vector&
-//		direction	= const Vector&
+//		point		= const Eigen::Vector3d&
+//		direction	= const Eigen::Vector3d&
 //
 // Output Arguments:
 //		None
@@ -209,7 +209,7 @@ void Triangle::SetCorner3(const Vector &corner3)
 //		bool
 //
 //==========================================================================
-bool Triangle::IsIntersectedBy(const Vector& point, const Vector& direction) const
+bool Triangle::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector3d& direction) const
 {
 	// TODO:  Implement
 	return false;

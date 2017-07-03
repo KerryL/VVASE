@@ -80,8 +80,8 @@ Damper3D::~Damper3D()
 //					in the scene.
 //
 // Input Arguments:
-//		outboardEnd		= const Vector&, location of the end of the shaft
-//		inboardEnd		= const Vector&, location of the end of the body
+//		outboardEnd		= const Eigen::Vector3d&, location of the end of the shaft
+//		inboardEnd		= const Eigen::Vector3d&, location of the end of the body
 //		bodyDiameter	= const double& describing the diameter of the damper body
 //		shaftDiameter	= const double& describing the diameter of the shaft
 //		bodyLength		= const double& describing the length of the body section
@@ -98,7 +98,7 @@ Damper3D::~Damper3D()
 //		None
 //
 //==========================================================================
-void Damper3D::Update(const Vector &outboardEnd, const Vector &inboardEnd,
+void Damper3D::Update(const Eigen::Vector3d &outboardEnd, const Eigen::Vector3d &inboardEnd,
 	const double &bodyDiameter, const double &shaftDiameter,
 	const double &bodyLength, const int &resolution, const Color &bodyColor,
 	const Color &shaftColor, bool show)
@@ -145,8 +145,8 @@ void Damper3D::Update(const Vector &outboardEnd, const Vector &inboardEnd,
 	shaft->SetResolution(resolution);
 
 	// Find the point where the body and shaft will meet
-	Vector shaftDirection = outboardEnd - inboardEnd;
-	Vector pointOfIntersection = shaftDirection.Normalize()	* displayBodyLength + inboardEnd;
+	Eigen::Vector3d shaftDirection = outboardEnd - inboardEnd;
+	Eigen::Vector3d pointOfIntersection = shaftDirection.Normalize()	* displayBodyLength + inboardEnd;
 
 	// Set the position of the body - the body should be on the inboard (chassis) side
 	body->SetEndPoint1(inboardEnd);
@@ -198,22 +198,22 @@ bool Damper3D::ContainsThisActor(const Primitive *actor)
 // Description:		Finds the closest input point to the specified vector.
 //
 // Input Arguments:
-//		point		= const Vector&
-//		direction	= const Vector&
+//		point		= const Eigen::Vector3d&
+//		direction	= const Eigen::Vector3d&
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		Vector
+//		Eigen::Vector3d
 //
 //==========================================================================
-Vector Damper3D::FindClosestPoint(const Vector& point, const Vector& direction) const
+Eigen::Vector3d Damper3D::FindClosestPoint(const Eigen::Vector3d& point, const Eigen::Vector3d& direction) const
 {
-	Vector endPoint1Center(inboardEndPoint->GetCenter());
-	Vector endPoint2Center(outboardEndPoint->GetCenter());
-	Vector endPoint1Test(VVASEMath::NearestPointOnAxis(point, direction, endPoint1Center));
-	Vector endPoint2Test(VVASEMath::NearestPointOnAxis(point, direction, endPoint2Center));
+	Eigen::Vector3d endPoint1Center(inboardEndPoint->GetCenter());
+	Eigen::Vector3d endPoint2Center(outboardEndPoint->GetCenter());
+	Eigen::Vector3d endPoint1Test(VVASEMath::NearestPointOnAxis(point, direction, endPoint1Center));
+	Eigen::Vector3d endPoint2Test(VVASEMath::NearestPointOnAxis(point, direction, endPoint2Center));
 
 	if (endPoint1Center.Distance(endPoint1Test) < endPoint2Center.Distance(endPoint2Test))
 		return endPoint1Center;

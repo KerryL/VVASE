@@ -90,16 +90,16 @@ void Cone::GenerateGeometry()
 	double halfHeight = baseCenter.Distance(tip) / 2.0;
 
 	// Determine the desired axis for the cone
-	Vector axisDirection = (tip - baseCenter).Normalize();
+	Eigen::Vector3d axisDirection = (tip - baseCenter).Normalize();
 
 	// Determine the center of the cone
-	Vector center = baseCenter + axisDirection * halfHeight;
+	Eigen::Vector3d center = baseCenter + axisDirection * halfHeight;
 
 	// Our reference direction will be the X-axis direction
-	Vector referenceDirection(1.0, 0.0, 0.0);
+	Eigen::Vector3d referenceDirection(1.0, 0.0, 0.0);
 
 	// Determine the angle and axis of rotation
-	Vector axisOfRotation = referenceDirection.Cross(axisDirection);
+	Eigen::Vector3d axisOfRotation = referenceDirection.Cross(axisDirection);
 	double angle = acos(axisDirection * referenceDirection);// [rad]
 
 	// If the axis direction is opposite the reference direction, we need to rotate 180 degrees
@@ -130,7 +130,7 @@ void Cone::GenerateGeometry()
 
 		// Loop to generate the triangles
 		int i;
-		Vector point(-halfHeight, 0.0, 0.0);
+		Eigen::Vector3d point(-halfHeight, 0.0, 0.0);
 		for (i = 0; i <= resolution; i++)
 		{
 			// Determine the angle to the current point
@@ -260,7 +260,7 @@ void Cone::SetCapping(const bool &drawCaps)
 // Description:		Sets the location of the tip of the cone.
 //
 // Input Arguments:
-//		_tip	= const Vector&
+//		_tip	= const Eigen::Vector3d&
 //
 // Output Arguments:
 //		None
@@ -269,7 +269,7 @@ void Cone::SetCapping(const bool &drawCaps)
 //		None
 //
 //==========================================================================
-void Cone::SetTip(const Vector &tip)
+void Cone::SetTip(const Eigen::Vector3d &tip)
 {
 	this->tip = tip;
 	modified = true;
@@ -282,7 +282,7 @@ void Cone::SetTip(const Vector &tip)
 // Description:		Sets the location of the center of the cone's base.
 //
 // Input Arguments:
-//		_baseCenter	= const Vector&
+//		_baseCenter	= const Eigen::Vector3d&
 //
 // Output Arguments:
 //		None
@@ -291,7 +291,7 @@ void Cone::SetTip(const Vector &tip)
 //		None
 //
 //==========================================================================
-void Cone::SetBaseCenter(const Vector &baseCenter)
+void Cone::SetBaseCenter(const Eigen::Vector3d &baseCenter)
 {
 	this->baseCenter = baseCenter;
 	modified = true;
@@ -327,8 +327,8 @@ void Cone::SetRadius(const double &radius)
 //					line.
 //
 // Input Arguments:
-//		point		= const Vector&
-//		direction	= const Vector&
+//		point		= const Eigen::Vector3d&
+//		direction	= const Eigen::Vector3d&
 //
 // Output Arguments:
 //		None
@@ -337,7 +337,7 @@ void Cone::SetRadius(const double &radius)
 //		bool
 //
 //==========================================================================
-bool Cone::IsIntersectedBy(const Vector& point, const Vector& direction) const
+bool Cone::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector3d& direction) const
 {
 	// TODO:  Implement
 	return false;

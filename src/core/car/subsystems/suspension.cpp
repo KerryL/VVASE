@@ -142,13 +142,13 @@ void Suspension::Read(BinaryReader& file, const int& fileVersion)
 	{
 		assert(false);
 		// TODO:  Fix this so old files will open
-		/*inFile->read((char*)hardpoints, sizeof(Vector) * FrontBarPivotAxis);
-		hardpoints[FrontBarPivotAxis] = Vector(0.0, 0.0, 0.0);
-		inFile->read((char*)hardpoints + sizeof(Vector) * (FrontBarPivotAxis + 1),
-			sizeof(Vector) * (RearBarPivotAxis - FrontBarPivotAxis - 1));
-		hardpoints[RearBarPivotAxis] = Vector(0.0, 0.0, 0.0);
-		inFile->read((char*)hardpoints + sizeof(Vector) * (RearBarPivotAxis + 1),
-			sizeof(Vector) * (NumberOfHardpoints - RearBarPivotAxis - 1));*/
+		/*inFile->read((char*)hardpoints, sizeof(Eigen::Vector3d) * FrontBarPivotAxis);
+		hardpoints[FrontBarPivotAxis] = Eigen::Vector3d(0.0, 0.0, 0.0);
+		inFile->read((char*)hardpoints + sizeof(Eigen::Vector3d) * (FrontBarPivotAxis + 1),
+			sizeof(Eigen::Vector3d) * (RearBarPivotAxis - FrontBarPivotAxis - 1));
+		hardpoints[RearBarPivotAxis] = Eigen::Vector3d(0.0, 0.0, 0.0);
+		inFile->read((char*)hardpoints + sizeof(Eigen::Vector3d) * (RearBarPivotAxis + 1),
+			sizeof(Eigen::Vector3d) * (NumberOfHardpoints - RearBarPivotAxis - 1));*/
 	}
 
 	file.Read(barRate);

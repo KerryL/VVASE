@@ -98,7 +98,7 @@ void Sphere::GenerateGeometry()
 	// Find twelve vertices that define an icosohedron circumscribed within the sphere
 	double t = (1.0 + sqrt(5.0)) / 2.0;
 	double s = sqrt(1 + t * t);
-	Vector vertex[12];
+	Eigen::Vector3d vertex[12];
 	vertex[0].Set(t, 1.0, 0.0);
 	vertex[1].Set(-t, 1.0, 0.0);
 	vertex[2].Set(t, -1.0, 0.0);
@@ -123,9 +123,9 @@ void Sphere::GenerateGeometry()
 		resolution = 3;
 
 	// Find six vertices that define an octohedron circumscribed within the sphere
-	Vector top(0.0, 0.0, radius), bottom(0.0, 0.0, -radius);
-	Vector equator1(radius, 0.0, 0.0), equator2(0.0, radius, 0.0);
-	Vector equator3(-radius, 0.0, 0.0), equator4(0.0, -radius, 0.0);
+	Eigen::Vector3d top(0.0, 0.0, radius), bottom(0.0, 0.0, -radius);
+	Eigen::Vector3d equator1(radius, 0.0, 0.0), equator2(0.0, radius, 0.0);
+	Eigen::Vector3d equator3(-radius, 0.0, 0.0), equator4(0.0, -radius, 0.0);
 #endif
 
 	glPushMatrix();
@@ -186,9 +186,9 @@ void Sphere::GenerateGeometry()
 //					the final resolution of the sphere.
 //
 // Input Arguments:
-//		corner1	= const Vector& specifying the first corner of the triangle
-//		corner2	= const Vector& specifying the second corner of the triangle
-//		corner3	= const Vector& specifying the third corner of the triangle
+//		corner1	= const Eigen::Vector3d& specifying the first corner of the triangle
+//		corner2	= const Eigen::Vector3d& specifying the second corner of the triangle
+//		corner3	= const Eigen::Vector3d& specifying the third corner of the triangle
 //		level	= int specifying remaining number of recursive calls
 //
 // Output Arguments:
@@ -198,8 +198,8 @@ void Sphere::GenerateGeometry()
 //		bool, true for OK to draw, false otherwise
 //
 //==========================================================================
-void Sphere::RecursiveSubdivision(const Vector &corner1, const Vector &corner2,
-	const Vector &corner3, int level)
+void Sphere::RecursiveSubdivision(const Eigen::Vector3d &corner1, const Eigen::Vector3d &corner2,
+	const Eigen::Vector3d &corner3, int level)
 {
 	// If level is less than 1, add the triangle to the scene instead of
 	// continuing with the sub-division
@@ -225,9 +225,9 @@ void Sphere::RecursiveSubdivision(const Vector &corner1, const Vector &corner2,
 	    ------------
 	   Corner 2    Corner 3
 	-----------------------*/
-	Vector midPoint1 = corner1 + (corner2 - corner1).Normalize() * corner1.Distance(corner2) / 2.0;
-	Vector midPoint2 = corner1 + (corner3 - corner1).Normalize() * corner1.Distance(corner3) / 2.0;
-	Vector midPoint3 = corner3 + (corner2 - corner3).Normalize() * corner3.Distance(corner2) / 2.0;
+	Eigen::Vector3d midPoint1 = corner1 + (corner2 - corner1).Normalize() * corner1.Distance(corner2) / 2.0;
+	Eigen::Vector3d midPoint2 = corner1 + (corner3 - corner1).Normalize() * corner1.Distance(corner3) / 2.0;
+	Eigen::Vector3d midPoint3 = corner3 + (corner2 - corner3).Normalize() * corner3.Distance(corner2) / 2.0;
 
 	// These locations now need to be normalized such that they lie at a
 	// distance of 'radius' from the center
@@ -253,7 +253,7 @@ void Sphere::RecursiveSubdivision(const Vector &corner1, const Vector &corner2,
 //					specified vertex to the OpenGL call list.
 //
 // Input Arguments:
-//		vertex	= const Vector& to be added
+//		vertex	= const Eigen::Vector3d& to be added
 //
 // Output Arguments:
 //		None
@@ -262,10 +262,10 @@ void Sphere::RecursiveSubdivision(const Vector &corner1, const Vector &corner2,
 //		None
 //
 //==========================================================================
-void Sphere::AddVertex(const Vector &vertex)
+void Sphere::AddVertex(const Eigen::Vector3d &vertex)
 {
 	// Compute and set the normal
-	Vector normal = vertex.Normalize();
+	Eigen::Vector3d normal = vertex.Normalize();
 	glNormal3d(normal.x, normal.y, normal.z);
 
 	// Add the vertex
@@ -328,7 +328,7 @@ void Sphere::SetResolution(const int &resolution)
 // Description:		Sets the location of the center of the sphere.
 //
 // Input Arguments:
-//		center	= const Vector&
+//		center	= const Eigen::Vector3d&
 //
 // Output Arguments:
 //		None
@@ -337,7 +337,7 @@ void Sphere::SetResolution(const int &resolution)
 //		None
 //
 //==========================================================================
-void Sphere::SetCenter(const Vector &center)
+void Sphere::SetCenter(const Eigen::Vector3d &center)
 {
 	this->center = center;
 	modified = true;
@@ -373,8 +373,8 @@ void Sphere::SetRadius(const double &radius)
 //					line.
 //
 // Input Arguments:
-//		point		= const Vector&
-//		direction	= const Vector&
+//		point		= const Eigen::Vector3d&
+//		direction	= const Eigen::Vector3d&
 //
 // Output Arguments:
 //		None
@@ -383,7 +383,7 @@ void Sphere::SetRadius(const double &radius)
 //		bool
 //
 //==========================================================================
-bool Sphere::IsIntersectedBy(const Vector& point, const Vector& direction) const
+bool Sphere::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector3d& direction) const
 {
 	assert(VVASEMath::IsZero(1.0 - direction.Length()));
 

@@ -45,7 +45,7 @@ public:
 		Corner::Hardpoints hardpoint;
 		Corner::Hardpoints tiedTo;
 		Corner::Location location;
-		Vector::Axis direction;
+		Eigen::Vector3d::Axis direction;
 
 		double minimum;
 		double maximum;
@@ -73,11 +73,11 @@ public:
 	// For changing what is being optimized
 	void ClearAllGenes() { geneList.Clear(); }
 	void AddGene(const Corner::Hardpoints &hardpoint, const Corner::Hardpoints &tiedTo,
-		const Corner::Location &location, const Vector::Axis &direction, const double &minimum,
+		const Corner::Location &location, const Eigen::Vector3d::Axis &direction, const double &minimum,
 		const double &maximum, const int &numberOfValues);
 	void RemoveGene(const int &index) { geneList.Remove(index); }
 	void UpdateGene(const int &index, const Corner::Hardpoints &hardpoint, const Corner::Hardpoints &tiedTo,
-		const Corner::Location &location, const Vector::Axis &direction, const double &minimum,
+		const Corner::Location &location, const Eigen::Vector3d::Axis &direction, const double &minimum,
 		const double &maximum, const int &numberOfValues);
 	int GetGeneCount() const { return geneList.GetCount(); }
 	const Gene &GetGene(const int &index) const { return *(geneList[index]); }

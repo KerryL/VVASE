@@ -385,7 +385,7 @@ void GAObject::SetCarGenome(int carIndex, const int *currentGenome)
 		}
 
 		// Determine which component of the vector to vary
-		if (currentGene->direction == Vector::AxisX)
+		if (currentGene->direction == Eigen::Vector3d::AxisX)
 		{
 			// Set the appropriate variable to the value that corresponds to this phenotype
 			currentCorner->hardpoints[currentGene->hardpoint].x = currentGene->minimum +
@@ -411,7 +411,7 @@ void GAObject::SetCarGenome(int carIndex, const int *currentGenome)
 						oppositeCorner->hardpoints[currentGene->hardpoint].x;
 			}
 		}
-		else if (currentGene->direction == Vector::AxisY)
+		else if (currentGene->direction == Eigen::Vector3d::AxisY)
 		{
 			// Set the appropriate variable to the value that corresponds to this phenotype
 			currentCorner->hardpoints[currentGene->hardpoint].y = currentGene->minimum +
@@ -437,7 +437,7 @@ void GAObject::SetCarGenome(int carIndex, const int *currentGenome)
 						oppositeCorner->hardpoints[currentGene->hardpoint].y;
 			}
 		}
-		else// Vector::AxisZ
+		else// Eigen::Vector3d::AxisZ
 		{
 			// Set the appropriate variable to the value that corresponds to this phenotype
 			currentCorner->hardpoints[currentGene->hardpoint].z = currentGene->minimum +
@@ -513,7 +513,7 @@ void GAObject::PerformAdditionalActions()
 //		tiedTo			= const Corner::Hardpoints& specifying to a value that will always equal
 //						  Variable
 //		location		= const Corner::Location& specifying the associated corner
-//		direction		= const Vector::Axis& specifying the component of the hardpoint
+//		direction		= const Eigen::Vector3d::Axis& specifying the component of the hardpoint
 //						  to optimize
 //		minimum			= const double& minimum value for this gene
 //		maximum			= const double& maximum value for this gene
@@ -528,7 +528,7 @@ void GAObject::PerformAdditionalActions()
 //
 //==========================================================================
 void GAObject::AddGene(const Corner::Hardpoints &hardpoint, const Corner::Hardpoints &tiedTo,
-						const Corner::Location &location, const Vector::Axis &direction,
+						const Corner::Location &location, const Eigen::Vector3d::Axis &direction,
 						const double &minimum, const double &maximum, const int &numberOfValues)
 {
 	Gene *newGene = new Gene;
@@ -601,7 +601,7 @@ void GAObject::AddGoal(const KinematicOutputs::OutputsComplete &output, const do
 //		tiedTo			= const Corner::Hardpoints& specifying to a value that will always equal
 //						  Variable
 //		location		= const Corner::Location& specifying the associated corner
-//		direction		= const Vector::Axis& specifying the component of the hardpoint
+//		direction		= const Eigen::Vector3d::Axis& specifying the component of the hardpoint
 //						  to optimize
 //		minimum			= const double& minimum value for this gene
 //		maximum			= const double& maximum value for this gene
@@ -616,7 +616,7 @@ void GAObject::AddGoal(const KinematicOutputs::OutputsComplete &output, const do
 //
 //==========================================================================
 void GAObject::UpdateGene(const int &index, const Corner::Hardpoints &hardpoint, const Corner::Hardpoints &tiedTo,
-						const Corner::Location &location, const Vector::Axis &direction,
+						const Corner::Location &location, const Eigen::Vector3d::Axis &direction,
 						const double &minimum, const double &maximum, const int &numberOfValues)
 {
 	geneList[index]->hardpoint		= hardpoint;

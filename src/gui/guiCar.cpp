@@ -79,8 +79,8 @@ GuiCar::GuiCar(MainFrame &mainFrame, wxString pathAndFileName)
 	// After calling Initialize() (after loading the car from file, if necessary)
 	// set the size of the view window and the camera view to fit everything in
 	// the scene.
-	Vector position(-100.0, -100.0, 60.0), up(0.0, 0.0, 1.0);
-	Vector lookAt(originalCar->suspension->rightFront.hardpoints[Corner::ContactPatch] +
+	Eigen::Vector3d position(-100.0, -100.0, 60.0), up(0.0, 0.0, 1.0);
+	Eigen::Vector3d lookAt(originalCar->suspension->rightFront.hardpoints[Corner::ContactPatch] +
 		(originalCar->suspension->leftRear.hardpoints[Corner::ContactPatch] -
 		originalCar->suspension->rightFront.hardpoints[Corner::ContactPatch]) * 0.5);
 	renderer->SetCameraView(position, lookAt, up);
@@ -453,8 +453,8 @@ void GuiCar::ComputeARBSignConventions()
 	tireDeflections.rightRear = 0.0;
 
 	Kinematics kinematics;
-	kinematics.SetCenterOfRotation(Vector(0.0, 0.0, 0.0));
-	kinematics.SetFirstEulerRotation(Vector::AxisX);
+	kinematics.SetCenterOfRotation(Eigen::Vector3d(0.0, 0.0, 0.0));
+	kinematics.SetFirstEulerRotation(Eigen::Vector3d::AxisX);
 	kinematics.SetHeave(0.0);
 	kinematics.SetRoll(0.01);
 	kinematics.SetPitch(0.0);

@@ -145,10 +145,10 @@ MassProperties::~MassProperties()
 //==========================================================================
 bool MassProperties::IsValidInertiaTensor() const
 {
-	Vector principleInertias;
-	/*Vector ixxDirection;
-	Vector iyyDirection;
-	Vector izzDirection;*/// FIXME:  Can these be removed?
+	Eigen::Vector3d principleInertias;
+	/*Eigen::Vector3d ixxDirection;
+	Eigen::Vector3d iyyDirection;
+	Eigen::Vector3d izzDirection;*/// FIXME:  Can these be removed?
 
 	if (!GetPrincipleInertias(&principleInertias))
 	{
@@ -180,13 +180,13 @@ bool MassProperties::IsValidInertiaTensor() const
 //		None
 //
 // Output Arguments:
-//		principleInertias	= Vector* specifying the principle moments of
+//		principleInertias	= Eigen::Vector3d* specifying the principle moments of
 //							  inertia for this object
-//		ixxDirection		= Vector* specifying the first principle axis
+//		ixxDirection		= Eigen::Vector3d* specifying the first principle axis
 //							  of rotation
-//		iyyDirection		= Vector* specifying the second principle axis
+//		iyyDirection		= Eigen::Vector3d* specifying the second principle axis
 //							  of rotation
-//		izzDirection		= Vector* specifying the third principle axis
+//		izzDirection		= Eigen::Vector3d* specifying the third principle axis
 //							  of rotation
 //
 // Return Value:
@@ -194,8 +194,8 @@ bool MassProperties::IsValidInertiaTensor() const
 //		errors
 //
 //==========================================================================
-bool MassProperties::GetPrincipleInertias(Vector *principleInertias, Vector *ixxDirection,
-										   Vector *iyyDirection, Vector *izzDirection) const
+bool MassProperties::GetPrincipleInertias(Eigen::Vector3d *principleInertias, Eigen::Vector3d *ixxDirection,
+										   Eigen::Vector3d *iyyDirection, Eigen::Vector3d *izzDirection) const
 {
 	// Lets initialize PrincipleInertias to zero in case we return false
 	principleInertias->Set(0.0, 0.0, 0.0);
@@ -595,13 +595,13 @@ double MassProperties::GetSprungMass() const
 //		None
 //
 // Return Value:
-//		Vector [in]
+//		Eigen::Vector3d [in]
 //
 //==========================================================================
-Vector MassProperties::GetSprungMassCG(const Suspension* s) const
+Eigen::Vector3d MassProperties::GetSprungMassCG(const Suspension* s) const
 {
 	const double sprungMass(GetSprungMass());
-	Vector cg;
+	Eigen::Vector3d cg;
 	cg.x = (s->leftFront.hardpoints[Corner::ContactPatch].x * (cornerWeights.leftFront - unsprungMass.leftFront)
 		+ s->rightFront.hardpoints[Corner::ContactPatch].x * (cornerWeights.rightFront - unsprungMass.rightFront)
 		+ s->leftRear.hardpoints[Corner::ContactPatch].x * (cornerWeights.leftRear - unsprungMass.leftRear)

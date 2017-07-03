@@ -74,7 +74,7 @@ public:
 				GAObject::Gene gene;
 			} geneData;
 
-			// FIXME:  Can't do goals because Kinematics::Inputs containts a Vector, which has a user-defined constructor
+			// FIXME:  Can't do goals because Kinematics::Inputs containts a Eigen::Vector3d, which has a user-defined constructor
 			/*struct GoalData
 			{
 				GAObject *optimization;

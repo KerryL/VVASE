@@ -87,12 +87,12 @@ void Cylinder::GenerateGeometry()
 
 	double halfHeight = endPoint1.Distance(endPoint2) / 2.0;
 
-	Vector axisDirection = (endPoint2 - endPoint1).Normalize();
-	Vector center = endPoint1 + axisDirection * halfHeight;
-	Vector referenceDirection(1.0, 0.0, 0.0);
+	Eigen::Vector3d axisDirection = (endPoint2 - endPoint1).Normalize();
+	Eigen::Vector3d center = endPoint1 + axisDirection * halfHeight;
+	Eigen::Vector3d referenceDirection(1.0, 0.0, 0.0);
 
 	// Determine the angle and axis of rotation
-	Vector axisOfRotation = referenceDirection.Cross(axisDirection);
+	Eigen::Vector3d axisOfRotation = referenceDirection.Cross(axisDirection);
 	double angle = acos(axisDirection * referenceDirection);// [rad]
 
 	glPushMatrix();
@@ -109,7 +109,7 @@ void Cylinder::GenerateGeometry()
 		glBegin(GL_TRIANGLE_STRIP);
 
 		int i;
-		Vector point(halfHeight, 0.0, 0.0);
+		Eigen::Vector3d point(halfHeight, 0.0, 0.0);
 		for (i = 0; i <= resolution; i++)
 		{
 			angle = (double)i * 2.0 * VVASEMath::Pi / (double)resolution;
@@ -235,7 +235,7 @@ void Cylinder::SetCapping(const bool &drawCaps)
 // Description:		Sets the location of the first end point.
 //
 // Input Arguments:
-//		endPoint1	= const Vector&
+//		endPoint1	= const Eigen::Vector3d&
 //
 // Output Arguments:
 //		None
@@ -244,7 +244,7 @@ void Cylinder::SetCapping(const bool &drawCaps)
 //		None
 //
 //==========================================================================
-void Cylinder::SetEndPoint1(const Vector &endPoint1)
+void Cylinder::SetEndPoint1(const Eigen::Vector3d &endPoint1)
 {
 	this->endPoint1 = endPoint1;
 	modified = true;
@@ -257,7 +257,7 @@ void Cylinder::SetEndPoint1(const Vector &endPoint1)
 // Description:		Sets the location of the second end point.
 //
 // Input Arguments:
-//		endPoint2	= const Vector&
+//		endPoint2	= const Eigen::Vector3d&
 //
 // Output Arguments:
 //		None
@@ -266,7 +266,7 @@ void Cylinder::SetEndPoint1(const Vector &endPoint1)
 //		None
 //
 //==========================================================================
-void Cylinder::SetEndPoint2(const Vector &endPoint2)
+void Cylinder::SetEndPoint2(const Eigen::Vector3d &endPoint2)
 {
 	this->endPoint2 = endPoint2;
 	modified = true;
@@ -302,8 +302,8 @@ void Cylinder::SetRadius(const double &radius)
 //					line.
 //
 // Input Arguments:
-//		point		= const Vector&
-//		direction	= const Vector&
+//		point		= const Eigen::Vector3d&
+//		direction	= const Eigen::Vector3d&
 //
 // Output Arguments:
 //		None
@@ -312,7 +312,7 @@ void Cylinder::SetRadius(const double &radius)
 //		bool
 //
 //==========================================================================
-bool Cylinder::IsIntersectedBy(const Vector& point, const Vector& direction) const
+bool Cylinder::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector3d& direction) const
 {
 	// TODO:  Implement
 	return false;

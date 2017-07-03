@@ -69,7 +69,7 @@ Point3D::~Point3D()
 //					in the scene.
 //
 // Input Arguments:
-//		position	= const Vector&, location of the point
+//		position	= const Eigen::Vector3d&, location of the point
 //		diameter	= const double& describing the width of the spring
 //		resolution	= const integer& representing the number of planar sides to use
 //					  to represent the cylinders
@@ -83,7 +83,7 @@ Point3D::~Point3D()
 //		None
 //
 //==========================================================================
-void Point3D::Update(const Vector &position, const double &diameter, const int &resolution,
+void Point3D::Update(const Eigen::Vector3d &position, const double &diameter, const int &resolution,
 					 const Color &color, bool show)
 {
 	// Make sure all vector arguments are valid - if they are not,

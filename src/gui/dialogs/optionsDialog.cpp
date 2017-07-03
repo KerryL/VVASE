@@ -511,7 +511,7 @@ void OptionsDialog::CreateControls()
 		wxDefaultSize, optionsArray, optionsArray.GetCount(), wxRA_SPECIFY_ROWS);
 
 	// Make sure the correct radio button is selected
-	if (kinematicInputs.firstRotation == Vector::AxisX)
+	if (kinematicInputs.firstRotation == Eigen::Vector3d::AxisX)
 		rotationOrder->SetSelection(0);
 	else
 		rotationOrder->SetSelection(1);
@@ -671,9 +671,9 @@ void OptionsDialog::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 		return;
 
 	if (rotationOrder->GetSelection() == 0)
-		kinematicInputs.firstRotation = Vector::AxisX;
+		kinematicInputs.firstRotation = Eigen::Vector3d::AxisX;
 	else
-		kinematicInputs.firstRotation = Vector::AxisY;
+		kinematicInputs.firstRotation = Eigen::Vector3d::AxisY;
 
 	if (steeringInputType->GetSelection() == 0)
 		mainFrame.SetUseRackTravel(true);

@@ -25,7 +25,7 @@ namespace VVASE
 //
 // Input Arguments:
 //		parent	= wxWindow&
-//		vector	= Vector&
+//		vector	= Eigen::Vector3d&
 //		name	= const wxString&
 //		style	= long
 //
@@ -36,7 +36,7 @@ namespace VVASE
 //		None
 //
 //==========================================================================
-VectorEditDialog::VectorEditDialog(wxWindow& parent, Vector& vector,
+VectorEditDialog::VectorEditDialog(wxWindow& parent, Eigen::Vector3d& vector,
 	const wxString& name, long style) : wxDialog(&parent, wxID_ANY,
 	_T("Edit ") + name, wxDefaultPosition, wxDefaultSize, style), vector(vector)
 {

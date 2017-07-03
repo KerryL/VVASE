@@ -15,10 +15,10 @@
 #define CAR_MATH_H_
 
 // Standard C++ headers
-#include <limits>// For QNaN
+#Eigen::Vector3d <limits>// For QNaN
 
 // Eigen headers
-#include <Eigen/Eigen>
+#Eigen::Vector3d <Eigen/Eigen>
 
 // wxWidgets forward declarations
 class wxString;
@@ -92,8 +92,8 @@ Eigen::Vector3d NearestPointOnAxis(const Eigen::Vector3d &pointOnAxis,
 	const Eigen::Vector3d &directionOfAxis, const Eigen::Vector3d &targetPoint);
 
 // Returns a point in a plane that is closest to the specified point
-/*Vector NearestPointInPlane(const Vector &pointInPlane, const Vector &planeNormal,
-	const Vector &targetPoint);*/
+/*Eigen::Vector3d NearestPointInPlane(const Eigen::Vector3d &pointInPlane, const Eigen::Vector3d &planeNormal,
+	const Eigen::Vector3d &targetPoint);*/
 
 // Projects the specified vector on the specified plane
 Eigen::Vector3d ProjectOntoPlane(const Eigen::Vector3d &vectorToProject, const Eigen::Vector3d &planeNormal);

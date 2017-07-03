@@ -311,8 +311,8 @@ void CarRenderer::UpdateDisplay(const KinematicOutputs &outputs)
 void CarRenderer::UpdateCarDisplay()
 {
 	// For drawing the tire
-	Vector targetNormal;
-	Vector originalNormal;
+	Eigen::Vector3d targetNormal;
+	Eigen::Vector3d originalNormal;
 
 	// Get locks on the car's mutexes
 	// NOTE:  Always lock working car first, then lock original car (consistency required to prevent deadlocks)
@@ -384,8 +384,8 @@ void CarRenderer::UpdateCarDisplay()
 
 	// We also need to account for toe and camber settings for the TargetNormal - apply camber first
 	// NOTE:  This corner is on the right side of the car - we flip the sign on the camber and toe angles
-	targetNormal.Rotate(-displayCar.suspension->rightFront.staticCamber, Vector::AxisX);
-	targetNormal.Rotate(-displayCar.suspension->rightFront.staticToe, Vector::AxisZ);
+	targetNormal.Rotate(-displayCar.suspension->rightFront.staticCamber, Eigen::Vector3d::AxisX);
+	targetNormal.Rotate(-displayCar.suspension->rightFront.staticToe, Eigen::Vector3d::AxisZ);
 
 	// Now continue with the update for this corner
 	rightFrontLowerAArm->Update(displayCar.suspension->rightFront.hardpoints[Corner::LowerFrontTubMount],
@@ -479,8 +479,8 @@ void CarRenderer::UpdateCarDisplay()
 							referenceCar.suspension->leftFront.hardpoints[Corner::OutboardTieRod]);
 
 	// We also need to account for toe and camber settings for the TargetNormal - apply camber first
-	targetNormal.Rotate(displayCar.suspension->leftFront.staticCamber, Vector::AxisX);
-	targetNormal.Rotate(displayCar.suspension->leftFront.staticToe, Vector::AxisZ);
+	targetNormal.Rotate(displayCar.suspension->leftFront.staticCamber, Eigen::Vector3d::AxisX);
+	targetNormal.Rotate(displayCar.suspension->leftFront.staticToe, Eigen::Vector3d::AxisZ);
 
 	// Now continue with the update for this corner
 	leftFrontLowerAArm->Update(displayCar.suspension->leftFront.hardpoints[Corner::LowerFrontTubMount],
@@ -582,8 +582,8 @@ void CarRenderer::UpdateCarDisplay()
 
 	// We also need to account for toe and camber settings for the TargetNormal - apply camber first
 	// NOTE:  This corner is on the right side of the car - we flip the sign on the camber and toe angles
-	targetNormal.Rotate(-displayCar.suspension->rightRear.staticCamber, Vector::AxisX);
-	targetNormal.Rotate(-displayCar.suspension->rightRear.staticToe, Vector::AxisZ);
+	targetNormal.Rotate(-displayCar.suspension->rightRear.staticCamber, Eigen::Vector3d::AxisX);
+	targetNormal.Rotate(-displayCar.suspension->rightRear.staticToe, Eigen::Vector3d::AxisZ);
 
 	// Now continue with the update for this corner
 	rightRearLowerAArm->Update(displayCar.suspension->rightRear.hardpoints[Corner::LowerFrontTubMount],
@@ -677,8 +677,8 @@ void CarRenderer::UpdateCarDisplay()
 							referenceCar.suspension->leftRear.hardpoints[Corner::OutboardTieRod]);
 
 	// We also need to account for toe and camber settings for the TargetNormal - apply camber first
-	targetNormal.Rotate(displayCar.suspension->leftRear.staticCamber, Vector::AxisX);
-	targetNormal.Rotate(displayCar.suspension->leftRear.staticToe, Vector::AxisZ);
+	targetNormal.Rotate(displayCar.suspension->leftRear.staticCamber, Eigen::Vector3d::AxisX);
+	targetNormal.Rotate(displayCar.suspension->leftRear.staticToe, Eigen::Vector3d::AxisZ);
 
 	// Now continue with the update for this corner
 	leftRearLowerAArm->Update(displayCar.suspension->leftRear.hardpoints[Corner::LowerFrontTubMount],
@@ -790,8 +790,8 @@ void CarRenderer::UpdateCarDisplay()
 
 	// Update the helper orb
 	// Determine which of the location variables is valid
-	Vector helperOrbPosition(0.0, 0.0, 0.0);
-	Vector helperOrbOppositePosition(0.0, 0.0, 0.0);
+	Eigen::Vector3d helperOrbPosition(0.0, 0.0, 0.0);
+	Eigen::Vector3d helperOrbOppositePosition(0.0, 0.0, 0.0);
 	if (helperOrbCornerPoint != Corner::NumberOfHardpoints)
 	{
 		if (helperOrbLocation == Corner::LocationRightFront)
@@ -1137,7 +1137,7 @@ bool CarRenderer::TraceClickToHardpoint(const double& x, const double& y,
 	Corner::Hardpoints& leftFrontPoint, Corner::Hardpoints& rightFrontPoint,
 	Corner::Hardpoints& leftRearPoint, Corner::Hardpoints& rightRearPoint) const
 {
-	Vector point, direction;
+	Eigen::Vector3d point, direction;
 	if (!GetLineUnderPoint(x, y, point, direction))
 		return false;
 
@@ -1279,21 +1279,21 @@ void CarRenderer::OnRightClick(wxMouseEvent& event)
 //		y	= const double&
 //
 // Output Arguments:
-//		point		= Vector&
-//		direction	= Vector&
+//		point		= Eigen::Vector3d&
+//		direction	= Eigen::Vector3d&
 //
 // Return Value:
 //		bool, true for success, false otherwise
 //
 //==========================================================================
 bool CarRenderer::GetLineUnderPoint(const double& x, const double& y,
-	Vector& point, Vector& direction) const
+	Eigen::Vector3d& point, Eigen::Vector3d& direction) const
 {
 	const double zOrdinate1(0.0), zOrdinate2(1.0);// Must be between 0 and 1 and be different from each other
 	if (!Unproject(x, y, zOrdinate1, point))
 		return false;
 
-	Vector point2;
+	Eigen::Vector3d point2;
 	if (!Unproject(x, y, zOrdinate2, point2))
 		return false;
 
@@ -1309,8 +1309,8 @@ bool CarRenderer::GetLineUnderPoint(const double& x, const double& y,
 //					intersected by the specified line.
 //
 // Input Arguments:
-//		point		= const Vector&
-//		direction	= const Vector&
+//		point		= const Eigen::Vector3d&
+//		direction	= const Eigen::Vector3d&
 //
 // Output Arguments:
 //		None
@@ -1320,7 +1320,7 @@ bool CarRenderer::GetLineUnderPoint(const double& x, const double& y,
 //
 //==========================================================================
 std::vector<const Primitive*> CarRenderer::IntersectWithPrimitive(
-	const Vector& point, const Vector& direction) const
+	const Eigen::Vector3d& point, const Eigen::Vector3d& direction) const
 {
 	std::vector<const Primitive*> intersected;
 
@@ -1371,8 +1371,8 @@ const Primitive* CarRenderer::GetClosestPrimitive(const std::vector<const Primit
 //					primitive.
 //
 // Input Arguments:
-//		point			= const Vector&
-//		direction		= const Vector&
+//		point			= const Eigen::Vector3d&
+//		direction		= const Eigen::Vector3d&
 //		selected		= const Primitive&
 //
 // Output Arguments:
@@ -1386,7 +1386,7 @@ const Primitive* CarRenderer::GetClosestPrimitive(const std::vector<const Primit
 //		None
 //
 //==========================================================================
-void CarRenderer::GetSelectedHardpoint(const Vector& point, const Vector& direction,
+void CarRenderer::GetSelectedHardpoint(const Eigen::Vector3d& point, const Eigen::Vector3d& direction,
 	const Primitive* selected, Suspension::Hardpoints& suspensionPoint,
 	Corner::Hardpoints& leftFrontPoint, Corner::Hardpoints& rightFrontPoint,
 	Corner::Hardpoints& leftRearPoint, Corner::Hardpoints& rightRearPoint) const
@@ -1397,7 +1397,7 @@ void CarRenderer::GetSelectedHardpoint(const Vector& point, const Vector& direct
 	leftRearPoint = Corner::NumberOfHardpoints;
 	rightRearPoint = Corner::NumberOfHardpoints;
 
-	Vector closestPoint;
+	Eigen::Vector3d closestPoint;
 
 	if (rightFrontLowerAArm->ContainsThisActor(selected))
 		closestPoint = rightFrontLowerAArm->FindClosestPoint(point, direction);
@@ -1555,7 +1555,7 @@ wxMenu* CarRenderer::BuildContextMenu() const
 //==========================================================================
 void CarRenderer::DoEditPointDialog()
 {
-	Vector* pointToEdit;
+	Eigen::Vector3d* pointToEdit;
 	wxString pointName;
 	if (suspensionPoint != Suspension::NumberOfHardpoints)
 	{
@@ -1597,7 +1597,7 @@ void CarRenderer::DoEditPointDialog()
 	else
 		return;
 
-	Vector tempPoint(*pointToEdit);
+	Eigen::Vector3d tempPoint(*pointToEdit);
 	VectorEditDialog dialog(mainFrame, tempPoint, pointName);
 
 	if (dialog.ShowModal() != wxOK)

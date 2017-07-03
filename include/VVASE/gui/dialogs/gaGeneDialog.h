@@ -31,7 +31,7 @@ public:
 	// Constructor
 	GAGeneDialog(wxWindow *parent, const Suspension* currentSuspension,
 		const Corner::Hardpoints &hardpoint, const Corner::Hardpoints &tiedTo,
-		const Vector::Axis &axisDirection, const Corner::Location &cornerLocation,
+		const Eigen::Vector3d::Axis &axisDirection, const Corner::Location &cornerLocation,
 		const double &minimum, const double &maximum, const unsigned int &numberOfValues,
 		wxWindowID id, const wxPoint &position, long style = wxDEFAULT_DIALOG_STYLE);
 
@@ -41,7 +41,7 @@ public:
 	// Private data accessors
 	Corner::Hardpoints GetHardpoint() const { return hardpoint; };
 	Corner::Hardpoints GetTiedTo() const { return tiedTo; };
-	Vector::Axis GetAxisDirection() const { return axisDirection; };
+	Eigen::Vector3d::Axis GetAxisDirection() const { return axisDirection; };
 	Corner::Location GetCornerLocation() const { return cornerLocation; };
 	double GetMinimum() const { return minimum; };
 	double GetMaximum() const { return maximum; };
@@ -78,7 +78,7 @@ private:
 	// Values (populated when OK is clicked)
 	Corner::Hardpoints hardpoint;
 	Corner::Hardpoints tiedTo;
-	Vector::Axis axisDirection;
+	Eigen::Vector3d::Axis axisDirection;
 	Corner::Location cornerLocation;
 	double minimum;
 	double maximum;

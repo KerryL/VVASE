@@ -1159,7 +1159,7 @@ bool Iteration::AssociatedWithCar(GuiCar *test) const
 double Iteration::GetDataValue(int associatedCarIndex, int point, PlotID id) const
 {
 	double value = 0.0;
-	Vector temp;
+	Eigen::Vector3d temp;
 
 	// Make sure the arguments are valid
 	if (associatedCarIndex >= (int)associatedCars.size() ||

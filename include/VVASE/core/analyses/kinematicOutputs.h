@@ -68,7 +68,7 @@ public:
 		NumberOfCornerOutputDoubles
 	};
 
-	// Enumeration for Vector outputs that get computed for every corner
+	// Enumeration for Eigen::Vector3d outputs that get computed for every corner
 	enum CornerOutputsVector
 	{
 		InstantCenter,			// [in]
@@ -102,7 +102,7 @@ public:
 		NumberOfOutputDoubles
 	};
 
-	// Enumeration for Vector outputs that only get computed once per car
+	// Enumeration for Eigen::Vector3d outputs that only get computed once per car
 	enum OutputsVector
 	{
 		// Kinematic centers
@@ -124,7 +124,7 @@ public:
 	// but geared bars will include the twist along both lengths of bar.  This way
 	// it can be used to determine forces/stresses directly.
 	double doubles[NumberOfOutputDoubles];
-	Vector vectors[NumberOfOutputVectors];
+	Eigen::Vector3d vectors[NumberOfOutputVectors];
 
 	// The outputs that are associated with just one corner of the car
 	double rightFront[NumberOfCornerOutputDoubles];
@@ -132,10 +132,10 @@ public:
 	double rightRear[NumberOfCornerOutputDoubles];
 	double leftRear[NumberOfCornerOutputDoubles];
 
-	Vector rightFrontVectors[NumberOfCornerOutputVectors];
-	Vector leftFrontVectors[NumberOfCornerOutputVectors];
-	Vector rightRearVectors[NumberOfCornerOutputVectors];
-	Vector leftRearVectors[NumberOfCornerOutputVectors];
+	Eigen::Vector3d rightFrontVectors[NumberOfCornerOutputVectors];
+	Eigen::Vector3d leftFrontVectors[NumberOfCornerOutputVectors];
+	Eigen::Vector3d rightRearVectors[NumberOfCornerOutputVectors];
+	Eigen::Vector3d leftRearVectors[NumberOfCornerOutputVectors];
 
 	// Enumeration that encompasses all of the outputs for the whole car
 	// This makes referencing these outputs from other classes a little easier
@@ -173,7 +173,7 @@ public:
 	// For converting from an output + location to OutputsComplete
 	static OutputsComplete OutputsCompleteIndex(const Corner::Location &location,
 		const CornerOutputsDouble &cornerDouble, const CornerOutputsVector &cornerVector,
-		const OutputsDouble &midDouble, const OutputsVector &vector, const Vector::Axis &axis);
+		const OutputsDouble &midDouble, const OutputsVector &vector, const Eigen::Vector3d::Axis &axis);
 
 	// For accessing an output via the OutputsComplete list
 	double GetOutputValue(const OutputsComplete &output) const;
@@ -218,21 +218,21 @@ private:
 
 	double ComputeARBTwist(const Corner& originalLeft, const Corner& originalRight,
 		const Corner& currentLeft, const Corner& currentRight,
-		const Suspension::BarStyle &barStyle, const Vector& originalMidPoint,
-		const Vector& originalPivot, const Vector& currentMidPoint,
-		const Vector& currentPivot, const bool& signGreaterThan) const;
+		const Suspension::BarStyle &barStyle, const Eigen::Vector3d& originalMidPoint,
+		const Eigen::Vector3d& originalPivot, const Eigen::Vector3d& currentMidPoint,
+		const Eigen::Vector3d& currentPivot, const bool& signGreaterThan) const;
 	double ComputeUBarTwist(const Corner& originalLeft, const Corner& originalRight,
 		const Corner& currentLeft, const Corner& currentRight, const bool& signGreaterThan) const;
 	double ComputeTBarTwist(const Corner& originalLeft, const Corner& originalRight,
 		const Corner& currentLeft, const Corner& currentRight,
-		const Vector& originalMidPoint, const Vector& originalPivot,
-		const Vector& currentMidPoint, const Vector& currentPivot, const bool& signGreaterThan) const;
+		const Eigen::Vector3d& originalMidPoint, const Eigen::Vector3d& originalPivot,
+		const Eigen::Vector3d& currentMidPoint, const Eigen::Vector3d& currentPivot, const bool& signGreaterThan) const;
 	double ComputeGearedBarTwist(const Corner& originalLeft, const Corner& originalRight,
 		const Corner& currentLeft, const Corner& currentRight, const bool& signGreaterThan) const;
 
 	bool ComputeKinematicCenter(const Corner &corner1, const Corner &corner2,
-		const Vector *cornerVectors1, const Vector *cornerVectors2,
-		const Vector &planeNormal, Vector &center, Vector &direction) const;
+		const Eigen::Vector3d *cornerVectors1, const Eigen::Vector3d *cornerVectors2,
+		const Eigen::Vector3d &planeNormal, Eigen::Vector3d &center, Eigen::Vector3d &direction) const;
 
 	void ComputeCaster(const Corner &corner, double *cornerDoubles);
 	void ComputeKingPinInclincation(const Corner &corner, const short &sign, double *cornerDoubles);

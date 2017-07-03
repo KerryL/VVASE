@@ -39,8 +39,8 @@ Plane3D::Plane3D(RenderWindow &renderer)
 {
 	plane = new Quadrilateral(renderer);
 
-	Vector xAxis(1.0, 0.0, 0.0);
-	Vector normal(0.0, 0.0, 1.0);
+	Eigen::Vector3d xAxis(1.0, 0.0, 0.0);
+	Eigen::Vector3d normal(0.0, 0.0, 1.0);
 	plane->SetAxis(xAxis);
 	plane->SetNormal(normal);
 }
@@ -100,7 +100,7 @@ void Plane3D::Update(const double &length, const double &width, const double &xO
 	plane->SetColor(color);
 
 	// Set the correct position and size of the plane
-	Vector center(xOffset, 0.0, 0.0);
+	Eigen::Vector3d center(xOffset, 0.0, 0.0);
 	plane->SetCenter(center);
 	plane->SetLength(length);
 	plane->SetWidth(width);

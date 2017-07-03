@@ -345,7 +345,7 @@ bool BinaryWriter::Write(const bool& v)
 // Description:		Writes specified object to file.
 //
 // Input Arguments:
-//		v	= const Vector&
+//		v	= const Eigen::Vector3d&
 //
 // Output Arguments:
 //		None
@@ -354,7 +354,7 @@ bool BinaryWriter::Write(const bool& v)
 //		bool
 //
 //==========================================================================
-bool BinaryWriter::Write(const Vector& v)
+bool BinaryWriter::Write(const Eigen::Vector3d& v)
 {
 	bool ok(true);
 

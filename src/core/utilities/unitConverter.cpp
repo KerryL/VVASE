@@ -2428,9 +2428,9 @@ double UnitConverter::ConvertTemperatureInput(const double& n) const
 	return ConvertInput(n, temperatureUnits);
 }
 
-Vector UnitConverter::ConvertVectorOutput(const Vector& v, const UnitType &type) const
+Eigen::Vector3d UnitConverter::ConvertVectorOutput(const Eigen::Vector3d& v, const UnitType &type) const
 {
-	return Vector(ConvertOutput(v.x, type),
+	return Eigen::Vector3d(ConvertOutput(v.x, type),
 		ConvertOutput(v.y, type),
 		ConvertOutput(v.z, type));
 }
@@ -2440,19 +2440,19 @@ Vector UnitConverter::ConvertVectorOutput(const Vector& v, const UnitType &type)
 // Function:		ConvertAngleOutput
 //
 // Description:		Converts from our base units (see top of convert.h)
-//					into the default units.  Vector overload.
+//					into the default units.  Eigen::Vector3d overload.
 //
 // Input Arguments:
-//		v	= Vector to be converted
+//		v	= Eigen::Vector3d to be converted
 //
 // Output Arguments:
 //		None
 //
 // Return v:
-//		Vector specifying v in the default units
+//		Eigen::Vector3d specifying v in the default units
 //
 //==========================================================================
-Vector UnitConverter::ConvertAngleOutput(const Vector& v) const
+Eigen::Vector3d UnitConverter::ConvertAngleOutput(const Eigen::Vector3d& v) const
 {
 	return ConvertVectorOutput(v, UnitTypeAngle);
 }
@@ -2462,19 +2462,19 @@ Vector UnitConverter::ConvertAngleOutput(const Vector& v) const
 // Function:		ConvertDistance
 //
 // Description:		Converts from our base units (see top of convert.h)
-//					into the default units.  Vector overload.
+//					into the default units.  Eigen::Vector3d overload.
 //
 // Input Arguments:
-//		v	= Vector to be converted
+//		v	= Eigen::Vector3d to be converted
 //
 // Output Arguments:
 //		None
 //
 // Return v:
-//		Vector specifying v in the default units
+//		Eigen::Vector3d specifying v in the default units
 //
 //==========================================================================
-Vector UnitConverter::ConvertDistanceOutput(const Vector& v) const
+Eigen::Vector3d UnitConverter::ConvertDistanceOutput(const Eigen::Vector3d& v) const
 {
 	return ConvertVectorOutput(v, UnitTypeDistance);
 }
@@ -2484,19 +2484,19 @@ Vector UnitConverter::ConvertDistanceOutput(const Vector& v) const
 // Function:		ConvertAreaOutput
 //
 // Description:		Converts from our base units (see top of convert.h)
-//					into the default units.  Vector overload.
+//					into the default units.  Eigen::Vector3d overload.
 //
 // Input Arguments:
-//		v	= Vector to be converted
+//		v	= Eigen::Vector3d to be converted
 //
 // Output Arguments:
 //		None
 //
 // Return v:
-//		Vector specifying v in the default units
+//		Eigen::Vector3d specifying v in the default units
 //
 //==========================================================================
-Vector UnitConverter::ConvertAreaOutput(const Vector& v) const
+Eigen::Vector3d UnitConverter::ConvertAreaOutput(const Eigen::Vector3d& v) const
 {
 	return ConvertVectorOutput(v, UnitTypeArea);
 }
@@ -2506,19 +2506,19 @@ Vector UnitConverter::ConvertAreaOutput(const Vector& v) const
 // Function:		ConvertForce
 //
 // Description:		Converts from our base units (see top of convert.h)
-//					into the default units.  Vector overload.
+//					into the default units.  Eigen::Vector3d overload.
 //
 // Input Arguments:
-//		v	= Vector to be converted
+//		v	= Eigen::Vector3d to be converted
 //
 // Output Arguments:
 //		None
 //
 // Return v:
-//		Vector specifying v in the default units
+//		Eigen::Vector3d specifying v in the default units
 //
 //==========================================================================
-Vector UnitConverter::ConvertForceOutput(const Vector& v) const
+Eigen::Vector3d UnitConverter::ConvertForceOutput(const Eigen::Vector3d& v) const
 {
 	return ConvertVectorOutput(v, UnitTypeForce);
 }
@@ -2528,19 +2528,19 @@ Vector UnitConverter::ConvertForceOutput(const Vector& v) const
 // Function:		ConvertPressureOutput
 //
 // Description:		Converts from our base units (see top of convert.h)
-//					into the default units.  Vector overload.
+//					into the default units.  Eigen::Vector3d overload.
 //
 // Input Arguments:
-//		v	= Vector to be converted
+//		v	= Eigen::Vector3d to be converted
 //
 // Output Arguments:
 //		None
 //
 // Return v:
-//		Vector specifying v in the default units
+//		Eigen::Vector3d specifying v in the default units
 //
 //==========================================================================
-Vector UnitConverter::ConvertPressureOutput(const Vector& v) const
+Eigen::Vector3d UnitConverter::ConvertPressureOutput(const Eigen::Vector3d& v) const
 {
 	return ConvertVectorOutput(v, UnitTypePressure);
 }
@@ -2550,19 +2550,19 @@ Vector UnitConverter::ConvertPressureOutput(const Vector& v) const
 // Function:		ConvertMomentOutput
 //
 // Description:		Converts from our base units (see top of convert.h)
-//					into the default units.  Vector overload.
+//					into the default units.  Eigen::Vector3d overload.
 //
 // Input Arguments:
-//		v	= Vector to be converted
+//		v	= Eigen::Vector3d to be converted
 //
 // Output Arguments:
 //		None
 //
 // Return v:
-//		Vector specifying v in the default units
+//		Eigen::Vector3d specifying v in the default units
 //
 //==========================================================================
-Vector UnitConverter::ConvertMomentOutput(const Vector& v) const
+Eigen::Vector3d UnitConverter::ConvertMomentOutput(const Eigen::Vector3d& v) const
 {
 	return ConvertVectorOutput(v, UnitTypeMoment);
 }
@@ -2572,19 +2572,19 @@ Vector UnitConverter::ConvertMomentOutput(const Vector& v) const
 // Function:		ConvertMassOutput
 //
 // Description:		Converts from our base units (see top of convert.h)
-//					into the default units.  Vector overload.
+//					into the default units.  Eigen::Vector3d overload.
 //
 // Input Arguments:
-//		v	= Vector to be converted
+//		v	= Eigen::Vector3d to be converted
 //
 // Output Arguments:
 //		None
 //
 // Return v:
-//		Vector specifying v in the default units
+//		Eigen::Vector3d specifying v in the default units
 //
 //==========================================================================
-Vector UnitConverter::ConvertMassOutput(const Vector& v) const
+Eigen::Vector3d UnitConverter::ConvertMassOutput(const Eigen::Vector3d& v) const
 {
 	return ConvertVectorOutput(v, UnitTypeMass);
 }
@@ -2594,19 +2594,19 @@ Vector UnitConverter::ConvertMassOutput(const Vector& v) const
 // Function:		ConvertVelocityOutput
 //
 // Description:		Converts from our base units (see top of convert.h)
-//					into the default units.  Vector overload.
+//					into the default units.  Eigen::Vector3d overload.
 //
 // Input Arguments:
-//		v	= Vector to be converted
+//		v	= Eigen::Vector3d to be converted
 //
 // Output Arguments:
 //		None
 //
 // Return v:
-//		Vector specifying v in the default units
+//		Eigen::Vector3d specifying v in the default units
 //
 //==========================================================================
-Vector UnitConverter::ConvertVelocityOutput(const Vector& v) const
+Eigen::Vector3d UnitConverter::ConvertVelocityOutput(const Eigen::Vector3d& v) const
 {
 	return ConvertVectorOutput(v, UnitTypeVelocity);
 }
@@ -2616,19 +2616,19 @@ Vector UnitConverter::ConvertVelocityOutput(const Vector& v) const
 // Function:		ConvertAccelerationOutput
 //
 // Description:		Converts from our base units (see top of convert.h)
-//					into the default units.  Vector overload.
+//					into the default units.  Eigen::Vector3d overload.
 //
 // Input Arguments:
-//		v	= Vector to be converted
+//		v	= Eigen::Vector3d to be converted
 //
 // Output Arguments:
 //		None
 //
 // Return v:
-//		Vector specifying v in the default units
+//		Eigen::Vector3d specifying v in the default units
 //
 //==========================================================================
-Vector UnitConverter::ConvertAccelerationOutput(const Vector& v) const
+Eigen::Vector3d UnitConverter::ConvertAccelerationOutput(const Eigen::Vector3d& v) const
 {
 	return ConvertVectorOutput(v, UnitTypeAcceleration);
 }
@@ -2638,19 +2638,19 @@ Vector UnitConverter::ConvertAccelerationOutput(const Vector& v) const
 // Function:		ConvertInertia
 //
 // Description:		Converts from our base units (see top of convert.h)
-//					into the default units.  Vector overload.
+//					into the default units.  Eigen::Vector3d overload.
 //
 // Input Arguments:
-//		v	= Vector to be converted
+//		v	= Eigen::Vector3d to be converted
 //
 // Output Arguments:
 //		None
 //
 // Return v:
-//		Vector specifying v in the default units
+//		Eigen::Vector3d specifying v in the default units
 //
 //==========================================================================
-Vector UnitConverter::ConvertInertiaOutput(const Vector& v) const
+Eigen::Vector3d UnitConverter::ConvertInertiaOutput(const Eigen::Vector3d& v) const
 {
 	return ConvertVectorOutput(v, UnitTypeInertia);
 }
@@ -2660,19 +2660,19 @@ Vector UnitConverter::ConvertInertiaOutput(const Vector& v) const
 // Function:		ConvertDensityOutput
 //
 // Description:		Converts from our base units (see top of convert.h)
-//					into the default units.  Vector overload.
+//					into the default units.  Eigen::Vector3d overload.
 //
 // Input Arguments:
-//		v	= Vector to be converted
+//		v	= Eigen::Vector3d to be converted
 //
 // Output Arguments:
 //		None
 //
 // Return v:
-//		Vector specifying v in the default units
+//		Eigen::Vector3d specifying v in the default units
 //
 //==========================================================================
-Vector UnitConverter::ConvertDensityOutput(const Vector& v) const
+Eigen::Vector3d UnitConverter::ConvertDensityOutput(const Eigen::Vector3d& v) const
 {
 	return ConvertVectorOutput(v, UnitTypeDensity);
 }
@@ -2682,19 +2682,19 @@ Vector UnitConverter::ConvertDensityOutput(const Vector& v) const
 // Function:		ConvertPowerOutput
 //
 // Description:		Converts from our base units (see top of convert.h)
-//					into the default units.  Vector overload.
+//					into the default units.  Eigen::Vector3d overload.
 //
 // Input Arguments:
-//		v	= Vector to be converted
+//		v	= Eigen::Vector3d to be converted
 //
 // Output Arguments:
 //		None
 //
 // Return v:
-//		Vector specifying v in the default units
+//		Eigen::Vector3d specifying v in the default units
 //
 //==========================================================================
-Vector UnitConverter::ConvertPowerOutput(const Vector& v) const
+Eigen::Vector3d UnitConverter::ConvertPowerOutput(const Eigen::Vector3d& v) const
 {
 	return ConvertVectorOutput(v, UnitTypePower);
 }
@@ -2704,19 +2704,19 @@ Vector UnitConverter::ConvertPowerOutput(const Vector& v) const
 // Function:		ConvertEnergyOutput
 //
 // Description:		Converts from our base units (see top of convert.h)
-//					into the default units.  Vector overload.
+//					into the default units.  Eigen::Vector3d overload.
 //
 // Input Arguments:
-//		v	= Vector to be converted
+//		v	= Eigen::Vector3d to be converted
 //
 // Output Arguments:
 //		None
 //
 // Return v:
-//		Vector specifying v in the default units
+//		Eigen::Vector3d specifying v in the default units
 //
 //==========================================================================
-Vector UnitConverter::ConvertEnergyOutput(const Vector& v) const
+Eigen::Vector3d UnitConverter::ConvertEnergyOutput(const Eigen::Vector3d& v) const
 {
 	return ConvertVectorOutput(v, UnitTypeEnergy);
 }
@@ -2726,19 +2726,19 @@ Vector UnitConverter::ConvertEnergyOutput(const Vector& v) const
 // Function:		ConvertTemperatureOutput
 //
 // Description:		Converts from our base units (see top of convert.h)
-//					into the default units.  Vector overload.
+//					into the default units.  Eigen::Vector3d overload.
 //
 // Input Arguments:
-//		v	= Vector to be converted
+//		v	= Eigen::Vector3d to be converted
 //
 // Output Arguments:
 //		None
 //
 // Return v:
-//		Vector specifying v in the default units
+//		Eigen::Vector3d specifying v in the default units
 //
 //==========================================================================
-Vector UnitConverter::ConvertTemperatureOutput(const Vector& v) const
+Eigen::Vector3d UnitConverter::ConvertTemperatureOutput(const Eigen::Vector3d& v) const
 {
 	return ConvertVectorOutput(v, UnitTypeTemperature);
 }

@@ -31,13 +31,13 @@ public:
 	// validity of this object's parameters
 	void GenerateGeometry();
 	bool HasValidParameters();
-	bool IsIntersectedBy(const Vector& point, const Vector& direction) const;
+	bool IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector3d& direction) const;
 
 	// Private data accessors
 	void SetResolution(const int &resolution);
 	void SetCapping(const bool &drawCaps);
-	void SetTip(const Vector &tip);
-	void SetBaseCenter(const Vector &baseCenter);
+	void SetTip(const Eigen::Vector3d &tip);
+	void SetBaseCenter(const Eigen::Vector3d &baseCenter);
 	void SetRadius(const double &radius);
 
 private:
@@ -45,8 +45,8 @@ private:
 
 	int resolution;
 
-	Vector tip;
-	Vector baseCenter;
+	Eigen::Vector3d tip;
+	Eigen::Vector3d baseCenter;
 
 	double radius;
 };

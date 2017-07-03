@@ -218,7 +218,7 @@ void EditSuspensionPanel::UpdateInformation(Suspension *currentSuspension)
 	}
 
 	// Update the values of all of the points
-	Vector point;
+	Eigen::Vector3d point;
 	int i;
 	for (i = 0; i < Suspension::NumberOfHardpoints; i++)
 	{

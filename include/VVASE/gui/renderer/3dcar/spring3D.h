@@ -41,7 +41,7 @@ public:
 	// Returns true if the passed reference is to an actor from this object
 	bool ContainsThisActor(const LibPlot2D::Primitive *actor);
 
-	Vector FindClosestPoint(const Eigen::Vector3d& point, const Eigen::Vector3d& direction) const;
+	Eigen::Vector3d FindClosestPoint(const Eigen::Vector3d& point, const Eigen::Vector3d& direction) const;
 
 private:
 	Cylinder *spring;

@@ -207,7 +207,7 @@ void EditCornerPanel::UpdateInformation(Corner *currentCorner, Suspension* curre
 	}
 
 	// Update the values of all of the points
-	Vector point;
+	Eigen::Vector3d point;
 	int i;
 	for (i = 0; i < Corner::NumberOfHardpoints; i++)
 	{

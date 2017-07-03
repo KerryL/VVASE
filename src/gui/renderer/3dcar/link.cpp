@@ -75,8 +75,8 @@ Link::~Link()
 // Description:		Updates the position and size of the link in the scene
 //
 // Input Arguments:
-//		end1		= const Vector&, location of one end of the a-arm
-//		end2		= const Vector&, location of the other end of the a-arm
+//		end1		= const Eigen::Vector3d&, location of one end of the a-arm
+//		end2		= const Eigen::Vector3d&, location of the other end of the a-arm
 //		radius		= const double& describing the size of the tubing representing
 //					  the arm
 //		resolution	= const integer& representing the number of planar sides to use
@@ -91,7 +91,7 @@ Link::~Link()
 //		None
 //
 //==========================================================================
-void Link::Update(const Vector &end1, const Vector &end2, const double &diameter,
+void Link::Update(const Eigen::Vector3d &end1, const Eigen::Vector3d &end2, const double &diameter,
 				  const int &resolution, const Color &color, bool show)
 {
 	// Make sure all vector arguments are valid - if they are not,
@@ -164,22 +164,22 @@ bool Link::ContainsThisActor(const Primitive *actor)
 // Description:		Finds the closest input point to the specified vector.
 //
 // Input Arguments:
-//		point		= const Vector&
-//		direction	= const Vector&
+//		point		= const Eigen::Vector3d&
+//		direction	= const Eigen::Vector3d&
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		Vector
+//		Eigen::Vector3d
 //
 //==========================================================================
-Vector Link::FindClosestPoint(const Vector& point, const Vector& direction) const
+Eigen::Vector3d Link::FindClosestPoint(const Eigen::Vector3d& point, const Eigen::Vector3d& direction) const
 {
-	Vector endPoint1Center(endPoint1->GetCenter());
-	Vector endPoint2Center(endPoint2->GetCenter());
-	Vector endPoint1Test(VVASEMath::NearestPointOnAxis(point, direction, endPoint1Center));
-	Vector endPoint2Test(VVASEMath::NearestPointOnAxis(point, direction, endPoint2Center));
+	Eigen::Vector3d endPoint1Center(endPoint1->GetCenter());
+	Eigen::Vector3d endPoint2Center(endPoint2->GetCenter());
+	Eigen::Vector3d endPoint1Test(VVASEMath::NearestPointOnAxis(point, direction, endPoint1Center));
+	Eigen::Vector3d endPoint2Test(VVASEMath::NearestPointOnAxis(point, direction, endPoint2Center));
 
 	if (endPoint1Center.Distance(endPoint1Test) < endPoint2Center.Distance(endPoint2Test))
 		return endPoint1Center;

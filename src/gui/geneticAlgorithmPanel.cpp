@@ -371,7 +371,7 @@ void GeneticAlgorithmPanel::AddGeneButtonClickedEvent(wxCommandEvent& WXUNUSED(e
 
 	// Create the dialog box with default gene properties
 	GAGeneDialog geneDialog(static_cast<wxWindow*>(&mainFrame), suspension, (Corner::Hardpoints)0,
-		(Corner::Hardpoints)0, (Vector::Axis)0, (Corner::Location)0, 0.0, 1.0, 5, wxID_ANY, wxDefaultPosition);
+		(Corner::Hardpoints)0, (Eigen::Vector3d::Axis)0, (Corner::Location)0, 0.0, 1.0, 5, wxID_ANY, wxDefaultPosition);
 
 	if (geneDialog.ShowModal() == wxOK)
 	{
@@ -861,7 +861,7 @@ void GeneticAlgorithmPanel::UpdateGeneList()
 			geneList->SetCellValue(i, 1, _T("None"));
 		else
 			geneList->SetCellValue(i, 1, Corner::GetHardpointName(optimization.GetAlgorithm().GetGene(i).tiedTo));
-		geneList->SetCellValue(i, 2, Vector::GetAxisName(optimization.GetAlgorithm().GetGene(i).direction));
+		geneList->SetCellValue(i, 2, Eigen::Vector3d::GetAxisName(optimization.GetAlgorithm().GetGene(i).direction));
 		geneList->SetCellValue(i, 3, UnitConverter::GetInstance().FormatNumber(
 			UnitConverter::GetInstance().ConvertDistanceOutput(optimization.GetAlgorithm().GetGene(i).minimum)));
 		geneList->SetCellValue(i, 4, UnitConverter::GetInstance().FormatNumber(

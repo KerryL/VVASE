@@ -107,18 +107,18 @@ void Kinematics::UpdateKinematics(const Car* originalCar, Car* workingCar, wxStr
 
 	// FIXME:  As it is right now, this section is not compatible with monoshocks
 
-	Vector rotations;// (X = First, Y = Second, Z = Third)
-	Vector::Axis secondRotation;
+	Eigen::Vector3d rotations;// (X = First, Y = Second, Z = Third)
+	Eigen::Vector3d::Axis secondRotation;
 
 	// Determine the order to perform the Euler rotations
-	if (inputs.firstRotation == Vector::AxisX)// Do roll first, then pitch
+	if (inputs.firstRotation == Eigen::Vector3d::AxisX)// Do roll first, then pitch
 	{
-		secondRotation = Vector::AxisY;
+		secondRotation = Eigen::Vector3d::AxisY;
 		rotations.Set(inputs.roll, inputs.pitch, 0.0);
 	}
-	else if (inputs.firstRotation == Vector::AxisY)// Do pitch first, then roll
+	else if (inputs.firstRotation == Eigen::Vector3d::AxisY)// Do pitch first, then roll
 	{
-		secondRotation = Vector::AxisX;
+		secondRotation = Eigen::Vector3d::AxisX;
 		rotations.Set(inputs.pitch, inputs.roll, 0.0);
 	}
 	else
@@ -281,9 +281,9 @@ void Kinematics::UpdateKinematics(const Car* originalCar, Car* workingCar, wxStr
 // Input Arguments:
 //		originalCorner	= const Corner*, the un-perturbed locations of the
 //						  suspension hardpoints
-//		rotations		= const Vector* specifying the amount to rotate the chassis
+//		rotations		= const Eigen::Vector3d* specifying the amount to rotate the chassis
 //						  about each axis
-//		secondRotation	= const Vector::Axis* describing the second axis of rotation
+//		secondRotation	= const Eigen::Vector3d::Axis* describing the second axis of rotation
 //						  (the first is an input quantity)
 //		tireDeflection	= const double&
 //
@@ -295,7 +295,7 @@ void Kinematics::UpdateKinematics(const Car* originalCar, Car* workingCar, wxStr
 //
 //==========================================================================
 bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
-	const Vector &rotations, const Vector::Axis &secondRotation, const double& tireDeflection)
+	const Eigen::Vector3d &rotations, const Eigen::Vector3d::Axis &secondRotation, const double& tireDeflection)
 {
 	// Determine if this corner is at the front or the rear of the car
 	bool isAtFront = false;
@@ -356,10 +356,10 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 	// Solve outboard points and work in through the pushrods and bell cranks.
 	// We will iterate the z-location of the lower ball joint and the solution of
 	// the first three outboard points until the bottom of the tire is at z = 0.
-	Vector wheelNormal;
-	Vector originalPlaneNormal;
-	Vector newPlaneNormal;
-	Vector wheelRotations;
+	Eigen::Vector3d wheelNormal;
+	Eigen::Vector3d originalPlaneNormal;
+	Eigen::Vector3d newPlaneNormal;
+	Eigen::Vector3d wheelRotations;
 	double upperLimit(0.0), lowerLimit(0.0);// Initialized here to avoid MSVC++ compiler warning C4701
 	int iteration = 1;
 	double tolerance = 5.0e-8;
@@ -413,15 +413,15 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 		// get NewPlaneNormal.  Do one angle at a time because order of rotations matters.
 		wheelRotations = originalPlaneNormal.AnglesTo(newPlaneNormal);
 		wheelNormal.Set(0.0, sign * 1.0, 0.0);
-		wheelNormal.Rotate(wheelRotations.z, Vector::AxisZ);
-		wheelNormal.Rotate(wheelRotations.x, Vector::AxisX);
+		wheelNormal.Rotate(wheelRotations.z, Eigen::Vector3d::AxisZ);
+		wheelNormal.Rotate(wheelRotations.x, Eigen::Vector3d::AxisX);
 
 		// Add in the effects of camber and toe settings (contact patch location should not be affected
 		// by camber and toe settings - WheelCenter is calculated based on camber and toe, so we need to
 		// back that out in the contact patch solver to avoid making contact patch a function of camber
 		// and toe).
-		wheelNormal.Rotate(sign * originalCorner.staticCamber, Vector::AxisX);
-		wheelNormal.Rotate(sign * originalCorner.staticToe, Vector::AxisZ);
+		wheelNormal.Rotate(sign * originalCorner.staticCamber, Eigen::Vector3d::AxisX);
+		wheelNormal.Rotate(sign * originalCorner.staticToe, Eigen::Vector3d::AxisZ);
 
 		// Do the actual solving for the contact patch
 		SolveForContactPatch(corner.hardpoints[Corner::WheelCenter], wheelNormal,
@@ -615,7 +615,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 	// Sway Bars Inboard
 	if (localSuspension->frontBarStyle == Suspension::SwayBarUBar && isAtFront)
 	{
-		Vector originalBarMidpoint = 0.5 *
+		Eigen::Vector3d originalBarMidpoint = 0.5 *
 			(originalCar->suspension->leftFront.hardpoints[Corner::BarArmAtPivot]
 			+ originalCar->suspension->rightFront.hardpoints[Corner::BarArmAtPivot]);
 		if (!SolveForPoint(corner.hardpoints[Corner::BarArmAtPivot],
@@ -630,7 +630,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 	}
 	else if (localSuspension->rearBarStyle == Suspension::SwayBarUBar && !isAtFront)
 	{
-		Vector originalBarMidpoint = 0.5 *
+		Eigen::Vector3d originalBarMidpoint = 0.5 *
 			(originalCar->suspension->leftRear.hardpoints[Corner::BarArmAtPivot]
 			+ originalCar->suspension->rightRear.hardpoints[Corner::BarArmAtPivot]);
 		if (!SolveForPoint(corner.hardpoints[Corner::BarArmAtPivot],
@@ -705,30 +705,30 @@ bool Kinematics::SolveForPoint(const Corner::Hardpoints &target, const Corner::H
 //					is returned.
 //
 // Input Arguments:
-//		center1			= const Vector& specifying the center of the first sphere
-//		center2			= const Vector& specifying the center of the second sphere
-//		center3			= const Vector& specifying the center of the third sphere
-//		originalCenter1	= const Vector& specifying the original center of the
+//		center1			= const Eigen::Vector3d& specifying the center of the first sphere
+//		center2			= const Eigen::Vector3d& specifying the center of the second sphere
+//		center3			= const Eigen::Vector3d& specifying the center of the third sphere
+//		originalCenter1	= const Eigen::Vector3d& specifying the original center of the
 //						  first sphere
-//		originalCenter2	= const Vector& specifying the original center of the
+//		originalCenter2	= const Eigen::Vector3d& specifying the original center of the
 //						  second sphere
-//		originalCenter3	= const Vector& specifying the original center of the
+//		originalCenter3	= const Eigen::Vector3d& specifying the original center of the
 //						  third sphere
-//		original		= const Vector& specifying the original location of the point
+//		original		= const Eigen::Vector3d& specifying the original location of the point
 //						  we are solving for
 //
 // Output Arguments:
-//		current	= Vector& specifying the result of the intersection of
+//		current	= Eigen::Vector3d& specifying the result of the intersection of
 //				  three spheres algorithm
 //
 // Return Value:
 //		bool, true for success, false for error
 //
 //==========================================================================
-bool Kinematics::SolveForPoint(const Vector &center1, const Vector &center2,
-	const Vector &center3, const Vector &originalCenter1,
-	const Vector &originalCenter2, const Vector &originalCenter3,
-	const Vector &original, Vector &current)
+bool Kinematics::SolveForPoint(const Eigen::Vector3d &center1, const Eigen::Vector3d &center2,
+	const Eigen::Vector3d &center3, const Eigen::Vector3d &originalCenter1,
+	const Eigen::Vector3d &originalCenter2, const Eigen::Vector3d &originalCenter3,
+	const Eigen::Vector3d &original, Eigen::Vector3d &current)
 {
 	GeometryMath::Sphere s1;
 	GeometryMath::Sphere s2;
@@ -741,7 +741,7 @@ bool Kinematics::SolveForPoint(const Vector &center1, const Vector &center2,
 	s3.center = center3;
 	s3.radius = originalCenter3.Distance(original);
 
-	Vector intersections[2];
+	Eigen::Vector3d intersections[2];
 	if (!GeometryMath::FindThreeSpheresIntersection(s1, s2, s3, intersections))
 	{
 		Debugger::GetInstance() << "Error (SolveForPoint):  Solution does not exist" << Debugger::PriorityLow;
@@ -762,12 +762,12 @@ bool Kinematics::SolveForPoint(const Vector &center1, const Vector &center2,
 	// of the solutions is on.
 
 	// Get the plane normals
-	Vector originalNormal = VVASEMath::GetPlaneNormal(originalCenter1, originalCenter2, originalCenter3);
-	Vector newNormal = VVASEMath::GetPlaneNormal(center1, center2, center3);
+	Eigen::Vector3d originalNormal = VVASEMath::GetPlaneNormal(originalCenter1, originalCenter2, originalCenter3);
+	Eigen::Vector3d newNormal = VVASEMath::GetPlaneNormal(center1, center2, center3);
 
 	// Get a vector from the location of the point to some point in the plane
-	Vector originalVectorToPlane = originalCenter1 - original;
-	Vector newVectorToPlane = center1 - intersections[0];
+	Eigen::Vector3d originalVectorToPlane = originalCenter1 - original;
+	Eigen::Vector3d newVectorToPlane = center1 - intersections[0];
 
 	// The dot products of the normal and the vector to the plane will give an indication
 	// of which side of the plane the point is on
@@ -808,7 +808,7 @@ void Kinematics::MoveSteeringRack(const double &travel) const
 	// Here we'll use a parametric equation of the line in 3-space for convenience.
 
 	double t = 1.0;// Parametric parameter
-	Vector slope;
+	Eigen::Vector3d slope;
 
 	slope = localSuspension->rightFront.hardpoints[Corner::InboardTieRod]
 		-localSuspension->leftFront.hardpoints[Corner::InboardTieRod];
@@ -851,7 +851,7 @@ void Kinematics::MoveSteeringRack(const double &travel) const
 //		currentCorner	= const Corner&
 //
 // Output Arguments:
-//		current	= Vector& specifying the result of the intersection of
+//		current	= Eigen::Vector3d& specifying the result of the intersection of
 //				  three spheres algorithm
 //
 // Return Value:
@@ -878,26 +878,26 @@ bool Kinematics::SolveForXY(const Corner::Hardpoints &target,
 //					the event of an error, the original value is returned.
 //
 // Input Arguments:
-//		center1			= const Vector& specifying the center of the first sphere
-//		center2			= const Vector& specifying the center of the second sphere
-//		originalCenter1	= const Vector& specifying the original center of the
+//		center1			= const Eigen::Vector3d& specifying the center of the first sphere
+//		center2			= const Eigen::Vector3d& specifying the center of the second sphere
+//		originalCenter1	= const Eigen::Vector3d& specifying the original center of the
 //						  first sphere
-//		originalCenter2	= const Vector& specifying the original center of the
+//		originalCenter2	= const Eigen::Vector3d& specifying the original center of the
 //						  second sphere
-//		original		= const Vector& specifying the original location of the point
+//		original		= const Eigen::Vector3d& specifying the original location of the point
 //						  we are solving for
 //
 // Output Arguments:
-//		current	= Vector& specifying the result of the intersection of
+//		current	= Eigen::Vector3d& specifying the result of the intersection of
 //				  three spheres algorithm
 //
 // Return Value:
 //		bool, true for success, false for error
 //
 //==========================================================================
-bool Kinematics::SolveForXY(const Vector &center1, const Vector &center2,
-	const Vector &originalCenter1, const Vector &originalCenter2,
-	const Vector &original, Vector &current)
+bool Kinematics::SolveForXY(const Eigen::Vector3d &center1, const Eigen::Vector3d &center2,
+	const Eigen::Vector3d &originalCenter1, const Eigen::Vector3d &originalCenter2,
+	const Eigen::Vector3d &original, Eigen::Vector3d &current)
 {
 	GeometryMath::Sphere s1;
 	GeometryMath::Sphere s2;
@@ -908,7 +908,7 @@ bool Kinematics::SolveForXY(const Vector &center1, const Vector &center2,
 
 	GeometryMath::Plane p1;
 	p1.point = current;
-	p1.normal = Vector(0.0, 0.0, 1.0);
+	p1.normal = Eigen::Vector3d(0.0, 0.0, 1.0);
 
 	GeometryMath::Plane p2 = GeometryMath::FindSphereSphereIntersectionPlane(s1, s2);
 	GeometryMath::Axis a;
@@ -918,7 +918,7 @@ bool Kinematics::SolveForXY(const Vector &center1, const Vector &center2,
 		return false;
 	}
 
-	Vector intersections[2];
+	Eigen::Vector3d intersections[2];
 	if (!GeometryMath::FindAxisSphereIntersections(a, s1, intersections))
 	{
 		Debugger::GetInstance() << "Error (SolveForXY):  Solution does not exist" << Debugger::PriorityLow;
@@ -939,16 +939,16 @@ bool Kinematics::SolveForXY(const Vector &center1, const Vector &center2,
 	// point was on, and which side of the new plane either one of the solutions is on.
 
 	// Get the plane normals
-	Vector pointInPlane = originalCenter1;
+	Eigen::Vector3d pointInPlane = originalCenter1;
 	pointInPlane.z = 0.0;
-	Vector originalNormal = (originalCenter1 - originalCenter2).Cross(originalCenter1 - pointInPlane);
+	Eigen::Vector3d originalNormal = (originalCenter1 - originalCenter2).Cross(originalCenter1 - pointInPlane);
 	pointInPlane = center1;
 	pointInPlane.z = 0.0;
-	Vector newNormal = (center1 - center2).Cross(center1 - pointInPlane);
+	Eigen::Vector3d newNormal = (center1 - center2).Cross(center1 - pointInPlane);
 
 	// Get a vector from the location of the point to some point in the plane
-	Vector originalVectorToPlane = originalCenter1 - original;
-	Vector newVectorToPlane = center1 - intersections[0];
+	Eigen::Vector3d originalVectorToPlane = originalCenter1 - original;
+	Eigen::Vector3d newVectorToPlane = center1 - intersections[0];
 
 	// The dot products of the normal and the vector to the plane will give an indication
 	// of which side of the plane the point is on
@@ -977,22 +977,22 @@ bool Kinematics::SolveForXY(const Vector &center1, const Vector &center2,
 //					the event of an error, a zero length vector is returned.
 //
 // Input Arguments:
-//		wheelCenter			= const Vector& specifying the center of the wheel
-//		wheelPlaneNormal	= const Vector& specifying the orientation of the wheel
+//		wheelCenter			= const Eigen::Vector3d& specifying the center of the wheel
+//		wheelPlaneNormal	= const Eigen::Vector3d& specifying the orientation of the wheel
 //		tireRadius			= const double& specifying the loaded radius of the tire
 //
 // Output Arguments:
-//		output	= Vector& specifying the location of the center of the tire's
+//		output	= Eigen::Vector3d& specifying the location of the center of the tire's
 //				  contact patch
 //
 // Return Value:
 //		bool, true for success, false for error
 //
 //==========================================================================
-bool Kinematics::SolveForContactPatch(const Vector &wheelCenter,
-	const Vector &wheelPlaneNormal, const double &tireRadius, Vector &output)
+bool Kinematics::SolveForContactPatch(const Eigen::Vector3d &wheelCenter,
+	const Eigen::Vector3d &wheelPlaneNormal, const double &tireRadius, Eigen::Vector3d &output)
 {
-	Vector minimumZPoint;
+	Eigen::Vector3d minimumZPoint;
 
 	// Equation for sphere as described above:
 	// (x - WheelCenter.x)^2 + (y - WheelCenter.y)^2 + (z - WheelCenter.z)^2 - TireRadius^2 = 0
@@ -1053,23 +1053,23 @@ bool Kinematics::SolveForContactPatch(const Vector &wheelCenter,
 //					Solves x dot v = 0 for x.
 //
 // Input Arguments:
-//		v	= Vector&
+//		v	= Eigen::Vector3d&
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		Vector
+//		Eigen::Vector3d
 //
 //==========================================================================
 // Solves the equation a dot v = 0 for a
-Vector Kinematics::FindPerpendicularVector(const Vector &v)
+Eigen::Vector3d Kinematics::FindPerpendicularVector(const Eigen::Vector3d &v)
 {
 	// a dot v => ax * vx + ay * vy + az * vz = 0
 	// Find the minimum element of v; set the corresponding element of a to zero
 	// Find the second minimum element of v; set the corresponding element of a to one
 	// Solve for the remaining element of a
-	Vector a;
+	Eigen::Vector3d a;
 	if (fabs(v.x) < fabs(v.y) && fabs(v.x) < fabs(v.z))// x smallest
 	{
 		a.x = 0;
@@ -1124,10 +1124,10 @@ Vector Kinematics::FindPerpendicularVector(const Vector &v)
 //					method for T-bar solution.
 //
 // Input Arguments:
-//		center	= const Vector& specifying the circle center
-//		a		= const Vector& specifying a vector having length equal to circle radius and lying in the circle plane
-//		b		= const Vector& specifying a vector having length equal to circle radius and lying in the circle plane, perpendicular to a
-//		target	= const Vector& original location of point we are solving for
+//		center	= const Eigen::Vector3d& specifying the circle center
+//		a		= const Eigen::Vector3d& specifying a vector having length equal to circle radius and lying in the circle plane
+//		b		= const Eigen::Vector3d& specifying a vector having length equal to circle radius and lying in the circle plane, perpendicular to a
+//		target	= const Eigen::Vector3d& original location of point we are solving for
 //
 // Output Arguments:
 //		None
@@ -1136,15 +1136,15 @@ Vector Kinematics::FindPerpendicularVector(const Vector &v)
 //		dobule specifying parameter of parametric cirlce equation
 //
 //==========================================================================
-double Kinematics::OptimizeCircleParameter(const Vector &center, const Vector &a,
-	const Vector &b, const Vector &target)
+double Kinematics::OptimizeCircleParameter(const Eigen::Vector3d &center, const Eigen::Vector3d &a,
+	const Eigen::Vector3d &b, const Eigen::Vector3d &target)
 {
 	double t;
 	const unsigned int steps(12);
 	const double step(2.0 * M_PI / steps);
 	double bestT(-1.0), bestError(0.0);
 	unsigned int i;
-	Vector p;
+	Eigen::Vector3d p;
 	for (i = 0; i < steps; i++)
 	{
 		t = step * i;
@@ -1167,40 +1167,40 @@ double Kinematics::OptimizeCircleParameter(const Vector &center, const Vector &a
 //					be found simultaneously.
 //
 // Input Arguments:
-//		leftOutboard			= const Vector&
-//		rightOutboard			= const Vector&
-//		centerPivot				= const Vector&
-//		pivotAxisPoint			= const Vector&
-//		originalLeftOutboard	= const Vector&
-//		originalRightOutboard	= const Vector&
-//		originalCenterPivot		= const Vector&
-//		originalPivotAxisPoint	= const Vector&
-//		originalLeftInboard		= const Vector&
-//		originalRightInboard	= const Vector&
+//		leftOutboard			= const Eigen::Vector3d&
+//		rightOutboard			= const Eigen::Vector3d&
+//		centerPivot				= const Eigen::Vector3d&
+//		pivotAxisPoint			= const Eigen::Vector3d&
+//		originalLeftOutboard	= const Eigen::Vector3d&
+//		originalRightOutboard	= const Eigen::Vector3d&
+//		originalCenterPivot		= const Eigen::Vector3d&
+//		originalPivotAxisPoint	= const Eigen::Vector3d&
+//		originalLeftInboard		= const Eigen::Vector3d&
+//		originalRightInboard	= const Eigen::Vector3d&
 //
 // Output Arguments:
-//		leftInboard				= Vector&
-//		rightInboard			= Vector&
+//		leftInboard				= Eigen::Vector3d&
+//		rightInboard			= Eigen::Vector3d&
 //
 // Return Value:
 //		bool, true for success, false for error
 //
 //==========================================================================
-bool Kinematics::SolveInboardTBarPoints(const Vector &leftOutboard,
-	const Vector &rightOutboard, const Vector &centerPivot, const Vector &pivotAxisPoint,
-	const Vector &originalLeftOutboard, const Vector &originalRightOutboard,
-	const Vector &originalCenterPivot, const Vector &originalPivotAxisPoint,
-	const Vector &originalLeftInboard, const Vector &originalRightInboard,
-	Vector &leftInboard, Vector &rightInboard)
+bool Kinematics::SolveInboardTBarPoints(const Eigen::Vector3d &leftOutboard,
+	const Eigen::Vector3d &rightOutboard, const Eigen::Vector3d &centerPivot, const Eigen::Vector3d &pivotAxisPoint,
+	const Eigen::Vector3d &originalLeftOutboard, const Eigen::Vector3d &originalRightOutboard,
+	const Eigen::Vector3d &originalCenterPivot, const Eigen::Vector3d &originalPivotAxisPoint,
+	const Eigen::Vector3d &originalLeftInboard, const Eigen::Vector3d &originalRightInboard,
+	Eigen::Vector3d &leftInboard, Eigen::Vector3d &rightInboard)
 {
 	// We'll use parametric version of 3D circle equation
 	// Additional parameters a and b are orthogonal to each other and circle plane normal
 	// a and b have length equal to circle radius
-	Vector normal;
+	Eigen::Vector3d normal;
 	double angle, f, g;// f, g and angle are for law of cosines calcs
 	double radius;
 
-	Vector leftCenter, leftA, leftB;
+	Eigen::Vector3d leftCenter, leftA, leftB;
 	// on the left
 	// sphere1 -> center = leftOutboard, R = leftOutboard - leftInboard
 	// sphere2 -> center = centerPivot, R = centerPivot - leftInboard
@@ -1227,7 +1227,7 @@ bool Kinematics::SolveInboardTBarPoints(const Vector &leftOutboard,
 	//DebugShape::Get()->SetSphere3(rightOutboard, (originalRightOutboard - originalRightInboard).Length());
 #endif*/
 
-	Vector rightCenter, rightA, rightB;
+	Eigen::Vector3d rightCenter, rightA, rightB;
 	// on the right
 	// sphere1 -> center = rightOutboard, R = rightOutboard - rightInboard
 	// sphere2 -> center = centerPivot, R = centerPivot - rightInboard
@@ -1248,13 +1248,13 @@ bool Kinematics::SolveInboardTBarPoints(const Vector &leftOutboard,
 	rightA = rightA.Normalize() * radius;
 	rightB = rightB.Normalize() * radius;
 
-	Vector centerA, centerB;
+	Eigen::Vector3d centerA, centerB;
 	// in the center
 	// plane1 -> normal = centerPivot - pivotAxisPoint
 	// point1 -> where line (leftInboard - rightInboard) intersects plane1
 	// circle3 -> center = centerPivot, normal = centerPivot - pivotAxisPoint, R = (centerPivot - point1).Length()
 	normal = originalCenterPivot - originalPivotAxisPoint;
-	Vector originalTopMidPoint = VVASEMath::IntersectWithPlane(normal, originalCenterPivot,
+	Eigen::Vector3d originalTopMidPoint = VVASEMath::IntersectWithPlane(normal, originalCenterPivot,
 		originalLeftInboard - originalRightInboard, originalLeftInboard);
 	normal = centerPivot - pivotAxisPoint;
 	radius = (originalCenterPivot - originalTopMidPoint).Length();
@@ -1286,7 +1286,7 @@ bool Kinematics::SolveInboardTBarPoints(const Vector &leftOutboard,
 	Matrix error(3, 1, epsilon, epsilon, epsilon);
 	Matrix jacobian(3,3);
 	Matrix guess(3,1);// parameteric variables for the three points
-	Vector left(0.0, 0.0, 0.0), right(0.0, 0.0, 0.0), center(0.0, 0.0, 0.0);
+	Eigen::Vector3d left(0.0, 0.0, 0.0), right(0.0, 0.0, 0.0), center(0.0, 0.0, 0.0);
 	Matrix delta;
 
 	// Initialize parameteric variables such that result aligns as best
@@ -1380,10 +1380,10 @@ bool Kinematics::SolveInboardTBarPoints(const Vector &leftOutboard,
 // Description:		Updates the center-of-gravity heights.
 //
 // Input Arguments:
-//		cor				= const Vector&
-//		angles			= const Vector&
-//		first			= const Vector::Axis&
-//		second			= const Vector::Axis&
+//		cor				= const Eigen::Vector3d&
+//		angles			= const Eigen::Vector3d&
+//		first			= const Eigen::Vector3d::Axis&
+//		second			= const Eigen::Vector3d::Axis&
 //		heave			= const double&
 //		tireDeflections	= const WheelSet&
 //		workingCar		= Car*
@@ -1395,10 +1395,10 @@ bool Kinematics::SolveInboardTBarPoints(const Vector &leftOutboard,
 //		bool, true for success, false for error
 //
 //==========================================================================
-void Kinematics::UpdateCGs(const Vector& cor, const Vector& angles, const Vector::Axis& first,
-	const Vector::Axis& second, const double& heave, const WheelSet& tireDeflections, Car* workingCar) const
+void Kinematics::UpdateCGs(const Eigen::Vector3d& cor, const Eigen::Vector3d& angles, const Eigen::Vector3d::Axis& first,
+	const Eigen::Vector3d::Axis& second, const double& heave, const WheelSet& tireDeflections, Car* workingCar) const
 {
-	Vector sprungCG(workingCar->massProperties->GetSprungMassCG(workingCar->suspension));
+	Eigen::Vector3d sprungCG(workingCar->massProperties->GetSprungMassCG(workingCar->suspension));
 
 	// NOTE:  Unsprung CG height is assumed to change only due
 	// to tire compliance (tire/upright assembly rotation is not considered)

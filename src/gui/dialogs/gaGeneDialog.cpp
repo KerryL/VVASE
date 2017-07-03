@@ -30,7 +30,7 @@ namespace VVASE
 //		currentSuspension	= const Suspension*
 //		hardpoint			= const Corner::Hardpoints&
 //		tiedTo				= const Corner::Hardpoints&
-//		axisDirection		= const Vector::Axis&
+//		axisDirection		= const Eigen::Vector3d::Axis&
 //		cornerLocation		= const Corner::Location&
 //		minimum				= const double&
 //		maximum				= const double&
@@ -48,7 +48,7 @@ namespace VVASE
 //==========================================================================
 GAGeneDialog::GAGeneDialog(wxWindow *parent, const Suspension* currentSuspension,
 	const Corner::Hardpoints &hardpoint, const Corner::Hardpoints &tiedTo,
-	const Vector::Axis &axisDirection, const Corner::Location &cornerLocation,
+	const Eigen::Vector3d::Axis &axisDirection, const Corner::Location &cornerLocation,
 	const double &minimum, const double &maximum, const unsigned int &numberOfValues,
 	wxWindowID id, const wxPoint &position, long style)
 	: wxDialog(parent, id, _T("Genetic Algorithm Gene"), position, wxDefaultSize, style),
@@ -185,9 +185,9 @@ void GAGeneDialog::CreateControls()
 	// Axis Direction
 	list.Clear();
 	for (i = 0; i < 3; i++)
-		list.Add(Vector::GetAxisName((Vector::Axis)i));
+		list.Add(Eigen::Vector3d::GetAxisName((Eigen::Vector3d::Axis)i));
 	wxStaticText *axisDirectionLabel = new wxStaticText(this, wxID_STATIC, _T("Axis Direction"));
-	axisDirectionCombo = new wxComboBox(this, wxID_ANY, Vector::GetAxisName(axisDirection), wxDefaultPosition,
+	axisDirectionCombo = new wxComboBox(this, wxID_ANY, Eigen::Vector3d::GetAxisName(axisDirection), wxDefaultPosition,
 		wxDefaultSize, list, wxCB_READONLY);
 	SetMinimumWidthFromContents(axisDirectionCombo, additionalWidth);
 	inputAreaSizer->Add(axisDirectionLabel, 0, textSizerFlags);
@@ -322,7 +322,7 @@ void GAGeneDialog::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 		tiedTo = (Corner::Hardpoints)hardpointCombo->GetCurrentSelection();
 	else
 		tiedTo = (Corner::Hardpoints)(tiedToCombo->GetCurrentSelection() - 1);
-	axisDirection = (Vector::Axis)axisDirectionCombo->GetCurrentSelection();
+	axisDirection = (Eigen::Vector3d::Axis)axisDirectionCombo->GetCurrentSelection();
 	cornerLocation = (Corner::Location)cornerLocationCombo->GetCurrentSelection();
 
 	// The way we handle this changes depending on how this form was displayed
@@ -452,7 +452,7 @@ void GAGeneDialog::UpdateCurrentVector()
 	Corner::Hardpoints hardpoint(static_cast<Corner::Hardpoints>(
 		hardpointCombo->GetCurrentSelection()));
 
-	Vector v;
+	Eigen::Vector3d v;
 	if (location == Corner::LocationLeftFront)
 		v = currentSuspension->leftFront.hardpoints[hardpoint];
 	else if (location == Corner::LocationRightFront)

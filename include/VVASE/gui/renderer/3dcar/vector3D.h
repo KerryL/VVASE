@@ -8,7 +8,7 @@
 // Auth:  K. Loux
 // Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains class declaration for the Vector3D class.  This class contains
-//        and maintains the VTK objects that create actors that represent vectors.
+//        and maintains the primitives that create actors that represent vectors.
 
 #ifndef VECTOR3D_H_
 #define VECTOR3D_H_

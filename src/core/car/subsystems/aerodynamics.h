@@ -33,8 +33,8 @@ public:
 	void Read(BinaryReader& file, const int& fileVersion) override;
 
 	// Functions that retrieve the aerodynamic forces and moments
-	Vector GetAeroForces() const;			// [lbf]
-	Vector GetAeroMoments() const;			// [in-lbf]
+	Eigen::Vector3d GetAeroForces() const;			// [lbf]
+	Eigen::Vector3d GetAeroMoments() const;			// [in-lbf]
 
     // Required by RegisterableComponent
     static std::unique_ptr<Aerodynamics> Create() { return std::make_unique<Aerodynamics>(); }

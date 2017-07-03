@@ -27,7 +27,7 @@ namespace VVASE
 {
 
 // Local forward declarations
-class Vector;
+class Eigen::Vector3d;
 class Sphere;
 class Cylinder;
 
@@ -38,13 +38,13 @@ public:
 	~AArm();
 
 	// Updates the actor with the new position and size for the a-arm
-	void Update(const Vector &end1, const Eigen::Vector3d &middle, const Eigen::Vector3d &end2, const double &diameter,
+	void Update(const Eigen::Vector3d &end1, const Eigen::Vector3d &middle, const Eigen::Vector3d &end2, const double &diameter,
 		const int &resolution, const Color &color, bool show);
 
 	// Returns true if the passed reference is to an actor from this object
 	bool ContainsThisActor(const LibPlot2D::Primitive *actor);
 
-	Vector FindClosestPoint(const Eigen::Vector3d& point, const Eigen::Vector3d& direction) const;
+	Eigen::Vector3d FindClosestPoint(const Eigen::Vector3d& point, const Eigen::Vector3d& direction) const;
 
 private:
 	// The members

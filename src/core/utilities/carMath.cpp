@@ -62,10 +62,10 @@ bool VVASEMath::IsZero(const double &n, const double &eps)
 // Function:		IsZero
 //
 // Description:		Returns true if a number is small enough to regard as zero.
-//					This function checks the magnitude of the Vector.
+//					This function checks the magnitude of the Eigen::Vector3d.
 //
 // Input Arguments:
-//		v	= const Vector& to be checked for being close to zero
+//		v	= const Eigen::Vector3d& to be checked for being close to zero
 //
 // Output Arguments:
 //		None

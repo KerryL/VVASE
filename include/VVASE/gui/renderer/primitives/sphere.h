@@ -31,27 +31,27 @@ public:
 	// validity of this object's parameters
 	void GenerateGeometry();
 	bool HasValidParameters();
-	bool IsIntersectedBy(const Vector& point, const Vector& direction) const;
+	bool IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector3d& direction) const;
 
 	// Private data accessors
 	void SetResolution(const int &resolution);
-	void SetCenter(const Vector &center);
+	void SetCenter(const Eigen::Vector3d &center);
 	void SetRadius(const double &radius);
 
-	Vector GetCenter() const { return center; }
+	Eigen::Vector3d GetCenter() const { return center; }
 
 private:
 	int resolution;
 
-	Vector center;
+	Eigen::Vector3d center;
 
 	double radius;
 
 	// Performs subdivision of the triangles to achieve a "rounder" sphere
-	void RecursiveSubdivision(const Vector &corner1, const Vector &corner2,
-		const Vector &corner3, int level);
+	void RecursiveSubdivision(const Eigen::Vector3d &corner1, const Eigen::Vector3d &corner2,
+		const Eigen::Vector3d &corner3, int level);
 
-	void AddVertex(const Vector &vertex);
+	void AddVertex(const Eigen::Vector3d &vertex);
 };
 
 }// namespace VVASE

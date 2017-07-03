@@ -331,14 +331,14 @@ void Corner::ComputeWheelCenter(const double &tireDiameter)
 	if (location == LocationRightFront || location == LocationRightRear)
 		rotationAngle *= -1.0;
 
-	hardpoints[WheelCenter].Rotate(hardpoints[ContactPatch], rotationAngle, Vector::AxisX);
+	hardpoints[WheelCenter].Rotate(hardpoints[ContactPatch], rotationAngle, Eigen::Vector3d::AxisX);
 
 	// Rotate the wheel center about the Z axis for toe effects
 	rotationAngle = staticToe;
 	if (location == LocationRightFront || location == LocationRightRear)
 		rotationAngle *= -1.0;
 
-	hardpoints[WheelCenter].Rotate(hardpoints[ContactPatch], rotationAngle, Vector::AxisZ);
+	hardpoints[WheelCenter].Rotate(hardpoints[ContactPatch], rotationAngle, Eigen::Vector3d::AxisZ);
 }
 
 //==========================================================================

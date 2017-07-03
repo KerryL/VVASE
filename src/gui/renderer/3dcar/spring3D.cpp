@@ -78,8 +78,8 @@ Spring3D::~Spring3D()
 //					in the scene.
 //
 // Input Arguments:
-//		end1			= const Vector&, location of one end of the spring
-//		end2			= const Vector&, location of the other end of the spring
+//		end1			= const Eigen::Vector3d&, location of one end of the spring
+//		end2			= const Eigen::Vector3d&, location of the other end of the spring
 //		diameter		= const double& describing the width of the spring
 //		pointDiameter	= const double& describing diameter of the end point actors
 //		resolution		= const integer& representing the number of planar sides to use
@@ -94,7 +94,7 @@ Spring3D::~Spring3D()
 //		None
 //
 //==========================================================================
-void Spring3D::Update(const Vector &end1, const Vector &end2, const double &diameter,
+void Spring3D::Update(const Eigen::Vector3d &end1, const Eigen::Vector3d &end2, const double &diameter,
 					  const double &pointDiameter, const int &resolution,
 					  const Color &color, bool show)
 {
@@ -168,22 +168,22 @@ bool Spring3D::ContainsThisActor(const Primitive *actor)
 // Description:		Finds the closest input point to the specified vector.
 //
 // Input Arguments:
-//		point		= const Vector&
-//		direction	= const Vector&
+//		point		= const Eigen::Vector3d&
+//		direction	= const Eigen::Vector3d&
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		Vector
+//		Eigen::Vector3d
 //
 //==========================================================================
-Vector Spring3D::FindClosestPoint(const Vector& point, const Vector& direction) const
+Eigen::Vector3d Spring3D::FindClosestPoint(const Eigen::Vector3d& point, const Eigen::Vector3d& direction) const
 {
-	Vector endPoint1Center(endPoint1->GetCenter());
-	Vector endPoint2Center(endPoint2->GetCenter());
-	Vector endPoint1Test(VVASEMath::NearestPointOnAxis(point, direction, endPoint1Center));
-	Vector endPoint2Test(VVASEMath::NearestPointOnAxis(point, direction, endPoint2Center));
+	Eigen::Vector3d endPoint1Center(endPoint1->GetCenter());
+	Eigen::Vector3d endPoint2Center(endPoint2->GetCenter());
+	Eigen::Vector3d endPoint1Test(VVASEMath::NearestPointOnAxis(point, direction, endPoint1Center));
+	Eigen::Vector3d endPoint2Test(VVASEMath::NearestPointOnAxis(point, direction, endPoint2Center));
 
 	if (endPoint1Center.Distance(endPoint1Test) < endPoint2Center.Distance(endPoint2Test))
 		return endPoint1Center;

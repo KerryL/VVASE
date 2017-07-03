@@ -72,9 +72,9 @@ Triangle3D::~Triangle3D()
 //					value, not reference like the first two Vectors.
 //
 // Input Arguments:
-//		node1		= const Vector&, location of the first vertex
-//		node2		= const Vector&, location of the second vertex
-//		node3		= const Vector&, location of the third vertex
+//		node1		= const Eigen::Vector3d&, location of the first vertex
+//		node2		= const Eigen::Vector3d&, location of the second vertex
+//		node3		= const Eigen::Vector3d&, location of the third vertex
 //		color		= const Color& specifying the color of this object
 //		show		= bool, visibility flag
 //
@@ -85,7 +85,7 @@ Triangle3D::~Triangle3D()
 //		None
 //
 //==========================================================================
-void Triangle3D::Update(const Vector &node1, const Vector &node2, const Vector &node3,
+void Triangle3D::Update(const Eigen::Vector3d &node1, const Eigen::Vector3d &node2, const Eigen::Vector3d &node3,
 					  const Color &color, bool show)
 {
 	// Make sure all vector arguments are valid - if they are not,

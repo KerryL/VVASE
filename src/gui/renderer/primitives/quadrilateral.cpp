@@ -93,13 +93,13 @@ void Quadrilateral::GenerateGeometry()
 	double diagonalAngle = atan2(width, length);
 
 	// Force the axis direction to be perpendicular to the normal
-	Vector axisDirection = axis.Cross(normal).Cross(normal);
+	Eigen::Vector3d axisDirection = axis.Cross(normal).Cross(normal);
 
 	// Compute the locations of the four corners of the quad
-	Vector corner1 = center + axisDirection.Normalize() * halfDiagonal;
-	Vector corner2 = center + axisDirection.Normalize() * halfDiagonal;
-	Vector corner3 = center - axisDirection.Normalize() * halfDiagonal;
-	Vector corner4 = center - axisDirection.Normalize() * halfDiagonal;
+	Eigen::Vector3d corner1 = center + axisDirection.Normalize() * halfDiagonal;
+	Eigen::Vector3d corner2 = center + axisDirection.Normalize() * halfDiagonal;
+	Eigen::Vector3d corner3 = center - axisDirection.Normalize() * halfDiagonal;
+	Eigen::Vector3d corner4 = center - axisDirection.Normalize() * halfDiagonal;
 
 	corner1 -= center;
 	corner1.Rotate(diagonalAngle, normal);
@@ -169,7 +169,7 @@ bool Quadrilateral::HasValidParameters()
 // Description:		Sets the rectangle's normal direction.
 //
 // Input Arguments:
-//		_normal	= const Vector&
+//		_normal	= const Eigen::Vector3d&
 //
 // Output Arguments:
 //		None
@@ -178,7 +178,7 @@ bool Quadrilateral::HasValidParameters()
 //		None
 //
 //==========================================================================
-void Quadrilateral::SetNormal(const Vector &normal)
+void Quadrilateral::SetNormal(const Eigen::Vector3d &normal)
 {
 	this->normal = normal;
 	modified = true;
@@ -191,7 +191,7 @@ void Quadrilateral::SetNormal(const Vector &normal)
 // Description:		Sets the location of the center of the rectangle.
 //
 // Input Arguments:
-//		center	= const Vector&
+//		center	= const Eigen::Vector3d&
 //
 // Output Arguments:
 //		None
@@ -200,7 +200,7 @@ void Quadrilateral::SetNormal(const Vector &normal)
 //		None
 //
 //==========================================================================
-void Quadrilateral::SetCenter(const Vector &center)
+void Quadrilateral::SetCenter(const Eigen::Vector3d &center)
 {
 	this->center = center;
 	modified = true;
@@ -214,7 +214,7 @@ void Quadrilateral::SetCenter(const Vector &center)
 //					This vector must not be parallel to the normal direction.
 //
 // Input Arguments:
-//		axis	= const Vector&
+//		axis	= const Eigen::Vector3d&
 //
 // Output Arguments:
 //		None
@@ -223,7 +223,7 @@ void Quadrilateral::SetCenter(const Vector &center)
 //		None
 //
 //==========================================================================
-void Quadrilateral::SetAxis(const Vector &axis)
+void Quadrilateral::SetAxis(const Eigen::Vector3d &axis)
 {
 	this->axis = axis;
 	modified = true;
@@ -282,8 +282,8 @@ void Quadrilateral::SetLength(const double &length)
 //					line.
 //
 // Input Arguments:
-//		point		= const Vector&
-//		direction	= const Vector&
+//		point		= const Eigen::Vector3d&
+//		direction	= const Eigen::Vector3d&
 //
 // Output Arguments:
 //		None
@@ -292,7 +292,7 @@ void Quadrilateral::SetLength(const double &length)
 //		bool
 //
 //==========================================================================
-bool Quadrilateral::IsIntersectedBy(const Vector& point, const Vector& direction) const
+bool Quadrilateral::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector3d& direction) const
 {
 	// TODO:  Implement
 	return false;
