@@ -20,6 +20,9 @@
 #include <wx/stdpaths.h>
 #include <wx/filename.h>
 
+// LibPlot2D headers
+#include <lp2d/renderer/plotRenderer.h>
+
 // Local headers
 #include "sweep.h"
 #include "VVASE/core/utilities/debugger.h"
@@ -29,9 +32,7 @@
 #include "VVASE/core/car/car.h"
 #include "gui/components/mainFrame.h"
 #include "gui/components/mainTree.h"
-#include "gui/plotPanel.h"
 #include "VVASE/core/utilities/carMath.h"
-#include "gui/renderer/plotRenderer.h"
 
 namespace VVASE
 {

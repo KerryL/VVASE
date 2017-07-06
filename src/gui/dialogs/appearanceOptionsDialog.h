@@ -16,11 +16,17 @@
 #include <wx/wx.h>
 
 // Local headers
-#include "gui/appearanceOptions.h"
+#include "../appearanceOptions.h"
 
 // wxWidgets forward declarations
 class wxGridEvent;
 class wxNotebook;
+
+// LibPlot2D forward declarations
+namespace LibPlot2D
+{
+class Color;
+}
 
 namespace VVASE
 {
@@ -28,7 +34,6 @@ namespace VVASE
 // Local forward declarations
 class MainFrame;
 class SuperGrid;
-class Color;
 
 class AppearanceOptionsDialog : public wxDialog
 {
@@ -41,7 +46,7 @@ private:
 	void CreateControls();
 
 	AppearanceOptions *options;
-	Color colorOptions[AppearanceOptions::ColorCount];
+	LibPlot2D::Color colorOptions[AppearanceOptions::ColorCount];
 
 	enum EventId
 	{

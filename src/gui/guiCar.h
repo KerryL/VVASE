@@ -17,9 +17,9 @@
 #include <wx/treebase.h>
 
 // Local headers
-#include "gui/guiObject.h"
-#include "vSolver/physics/kinematicOutputs.h"
-#include "vSolver/physics/quasiStaticOutputs.h"
+#include "VVASE/gui/guiObject.h"
+#include "VVASE/core/analyses/kinematicOutputs.h"
+#include "VVASE/core/analyses/quasiStaticOutputs.h"
 
 // wxWidgets forward declarations
 class wxTreeItemId;

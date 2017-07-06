@@ -18,9 +18,8 @@
 #include <vector>
 
 // Local headers
-#include "vCar/spring.h"
-#include "vCar/damper.h"
-#include "vMath/vector.h"
+#include "VVASE/core/car/subsystems/spring.h"
+#include "VVASE/core/car/subsystems/damper.h"
 
 namespace VVASE
 {

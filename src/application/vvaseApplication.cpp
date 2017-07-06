@@ -15,14 +15,14 @@
 #include <wx/ipc.h>
 
 // Local headers
-#include "application/vvaseApplication.h"
-#include "gui/components/mainFrame.h"
-#include "gui/ipcClient.h"
-#include "gui/ipcServer.h"
-#include "gui/ipcConnection.h"
-#include "vUtilities/debugLog.h"
-#include "vUtilities/debugger.h"
-#include "vUtilities/unitConverter.h"
+#include "vvaseApplication.h"
+#include "VVASE/gui/components/mainFrame.h"
+#include "../gui/ipcClient.h"
+#include "../gui/ipcServer.h"
+#include "../gui/ipcConnection.h"
+#include "VVASE/core/utilities/debugLog.h"
+#include "VVASE/core/utilities/debugger.h"
+#include "VVASE/core/utilities/unitConverter.h"
 
 // Implement the application (have wxWidgets set up the appropriate entry points, etc.)
 IMPLEMENT_APP(VVASEApp);

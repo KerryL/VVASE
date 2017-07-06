@@ -519,7 +519,7 @@ void AppearanceOptions::Write(std::ofstream *outFile)
 {
 	outFile->write((char*)visibilityOptions, VisibilityCount * sizeof(bool));
 	outFile->write((char*)sizeOptions, SizeCount * sizeof(double));
-	outFile->write((char*)colorOptions, ColorCount * sizeof(Color));
+	outFile->write((char*)colorOptions, ColorCount * sizeof(LibPlot2D::Color));
 	outFile->write((char*)resolutionOptions, ResolutionCount * sizeof(int));
 }
 
@@ -548,7 +548,7 @@ void AppearanceOptions::Read(std::ifstream *inFile, int fileVersion)
 
 	inFile->read((char*)visibilityOptions, VisibilityCount * sizeof(bool));
 	inFile->read((char*)sizeOptions, SizeCount * sizeof(double));
-	inFile->read((char*)colorOptions, ColorCount * sizeof(Color));
+	inFile->read((char*)colorOptions, ColorCount * sizeof(LibPlot2D::Color));
 	inFile->read((char*)resolutionOptions, ResolutionCount * sizeof(int));
 }
 

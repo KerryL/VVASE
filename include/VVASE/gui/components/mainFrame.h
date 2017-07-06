@@ -19,11 +19,14 @@
 #include <wx/aui/aui.h>
 
 // Local headers
-#include "vUtilities/managedList.h"
 #include "VVASE/core/analyses/kinematics.h"
 #include "VVASE/core/analyses/quasiStatic.h"
 #include "VVASE/gui/undoRedoStack.h"
 #include "VVASE/gui/guiObject.h"
+
+// Standard C++ headers
+#include <vector>
+#include <memory>
 
 // wxWidgets forward declarations
 class wxFileHistory;
@@ -344,7 +347,7 @@ private:
 	wxToolBar *quasiStaticToolbar;
 	wxToolBar *toolbar3D;
 
-	ManagedList<GuiObject> openObjectList;
+	std::vector<std::unique_ptr<GuiObject>> openObjectList;
 
 	UndoRedoStack undoRedo;
 

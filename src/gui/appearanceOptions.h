@@ -17,7 +17,7 @@
 #include <iosfwd>// for forward declarations of fstream objects
 
 // LibPlot2D headers
-#include <lp2d/color.h>
+#include <lp2d/renderer/color.h>
 
 namespace VVASE
 {
@@ -62,8 +62,8 @@ public:
 	static wxString GetColorString(const ObjectColor& item);
 
 	// For accessing the color options
-	inline void SetColor(const ObjectColor& item, const Color& value) { colorOptions[item] = value; }
-	inline Color GetColor(const ObjectColor& item) const { return colorOptions[item]; }
+	inline void SetColor(const ObjectColor& item, const LibPlot2D::Color& value) { colorOptions[item] = value; }
+	inline LibPlot2D::Color GetColor(const ObjectColor& item) const { return colorOptions[item]; }
 
 	// Visibility options
 	enum ObjectVisibility
@@ -165,7 +165,7 @@ private:
 	MainFrame &mainFrame;
 	GuiCar &owner;
 
-	Color colorOptions[ColorCount];
+	LibPlot2D::Color colorOptions[ColorCount];
 	bool visibilityOptions[VisibilityCount];
 	double sizeOptions[SizeCount];
 	unsigned int resolutionOptions[ResolutionCount];

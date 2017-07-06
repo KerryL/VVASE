@@ -15,11 +15,11 @@
 #define CAR_RENDERER_H_
 
 // Local headers
-#include "VVASE/core/car/suspension.h"
+#include "VVASE/core/car/subsystems/suspension.h"
 #include "VVASE/gui/guiObject.h"
 
 // LibPlot2D headers
-#include <lp2d/renderWindow.h>
+#include <lp2d/renderer/renderWindow.h>
 
 // wxWidgets forward declarations
 class wxString;

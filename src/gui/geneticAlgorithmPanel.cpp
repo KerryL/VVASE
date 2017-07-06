@@ -15,17 +15,17 @@
 #include <wx/gauge.h>
 
 // Local headers
-#include "gui/geneticAlgorithmPanel.h"
-#include "gui/components/mainFrame.h"
-#include "gui/dialogs/gaGoalDialog.h"
-#include "gui/dialogs/gaGeneDialog.h"
-#include "gui/guiCar.h"
-#include "gui/geneticOptimization.h"
-#include "gui/gaObject.h"
-#include "vSolver/physics/kinematicOutputs.h"
-#include "vCar/corner.h"
-#include "vCar/car.h"
-#include "vUtilities/wxRelatedUtilities.h"
+#include "geneticAlgorithmPanel.h"
+#include "VVASE/gui/components/mainFrame.h"
+#include "dialogs/gaGoalDialog.h"
+#include "dialogs/gaGeneDialog.h"
+#include "guiCar.h"
+#include "geneticOptimization.h"
+#include "gaObject.h"
+#include "VVASE/core/analyses/kinematicOutputs.h"
+#include "VVASE/core/car/subsystems/corner.h"
+#include "VVASE/core/car/car.h"
+#include "VVASE/core/utilities/wxRelatedUtilities.h"
 
 namespace VVASE
 {

@@ -50,7 +50,7 @@ public:
     template <typename ComponentType>
     void Unregister();
 
-    typedef std::unique_ptr<Base>() Factory;
+    typedef std::unique_ptr<Base>(*Factory)();
 
     struct ComponentInfo
     {
@@ -66,6 +66,7 @@ private:
     std::vector<ComponentInfo> componentInfo;
 };
 
+template <typename Base>
 template <typename ComponentType>
 void ComponentManager<Base>::Register()
 {
@@ -73,6 +74,7 @@ void ComponentManager<Base>::Register()
     componentInfo.push_back(ComponentInfo(ComponentType::Create(), ComponentType::GetName()));
 }
 
+template <typename Base>
 template <typename ComponentType>
 void ComponentManager<Base>::Unregister()
 {

@@ -39,12 +39,14 @@
 #ifndef UNIT_CONVERTER_H_
 #define UNIT_CONVERTER_H_
 
+// Eigen headers
+#include <Eigen/Eigen>
+
+// wxWidgets forward declarations
+class wxString;
+
 namespace VVASE
 {
-
-// Local forward declarations
-class Eigen::Vector3d;
-class wxString;
 
 class UnitConverter
 {

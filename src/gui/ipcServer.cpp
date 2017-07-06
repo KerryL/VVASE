@@ -19,7 +19,7 @@
 // Local headers
 #include "ipcServer.h"
 #include "ipcConnection.h"
-#include "application/vvaseApplication.h"
+#include "../application/vvaseApplication.h"
 
 namespace VVASE
 {

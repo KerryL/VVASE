@@ -16,19 +16,18 @@
 #include <wx/wx.h>
 
 // Local headers
-#include "gui/gaObject.h"
-#include "gui/geneticOptimization.h"
-#include "vSolver/physics/kinematics.h"
-#include "vSolver/physics/kinematicOutputs.h"
-#include "vSolver/threads/kinematicsData.h"
-#include "vSolver/threads/threadEvent.h"
-#include "vCar/car.h"
-#include "vCar/suspension.h"
-#include "vMath/carMath.h"
-#include "vUtilities/unitConverter.h"
-#include "vUtilities/debugger.h"
-#include "vUtilities/machineDefinitions.h"
-#include "vSolver/threads/jobQueue.h"
+#include "gaObject.h"
+#include "geneticOptimization.h"
+#include "VVASE/core/analyses/kinematics.h"
+#include "VVASE/core/analyses/kinematicOutputs.h"
+#include "VVASE/core/threads/kinematicsData.h"
+#include "VVASE/core/threads/threadEvent.h"
+#include "VVASE/core/car/car.h"
+#include "VVASE/core/car/subsystems/suspension.h"
+#include "VVASE/core/utilities/carMath.h"
+#include "VVASE/core/utilities/unitConverter.h"
+#include "VVASE/core/utilities/debugger.h"
+#include "VVASE/core/threads/jobQueue.h"
 
 namespace VVASE
 {

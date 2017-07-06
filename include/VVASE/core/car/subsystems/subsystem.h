@@ -15,8 +15,16 @@
 // Local headers
 #include "VVASE/core/utilities/componentManager.h"
 
+// wxWidgets forward declarations
+class wxPanel;
+class wxTreeListItem;
+
 namespace VVASE
 {
+
+// Local forward declarations
+class BinaryReader;
+class BinayrWriter;
 
 class Subsystem : public RegisterableComponent
 {

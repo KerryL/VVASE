@@ -20,8 +20,8 @@
 #include "VVASE/core/utilities/unitConverter.h"
 
 // TODO:  Do I really need these here?
-#include "VVASE/core/car/corner.h"// TODO:  Need to move this to include/VVASE or users won't be able to include for making plugins
-#include "VVASE/core/car/suspension.h"
+#include "VVASE/core/car/subsystems/corner.h"// TODO:  Need to move this to include/VVASE or users won't be able to include for making plugins
+#include "VVASE/core/car/subsystems/suspension.h"
 
 // Eigen headers
 #include <Eigen/Eigen>

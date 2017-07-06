@@ -13,7 +13,7 @@
 #define BRAKES_H_
 
 // Local headers
-#include "utilities/wheelSetStructures.h"
+#include "VVASE/core/utilities/wheelSetStructures.h"
 
 namespace VVASE
 {

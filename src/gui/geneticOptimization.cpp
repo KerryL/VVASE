@@ -10,20 +10,20 @@
 // Desc:  This is a GUI interface for the genetic algorithm optimization.
 
 // Local headers
-#include "gui/geneticOptimization.h"
-#include "gui/guiCar.h"
-#include "gui/guiObject.h"
-#include "gui/gaObject.h"
-#include "gui/components/mainTree.h"
-#include "gui/components/mainFrame.h"
-#include "gui/geneticAlgorithmPanel.h"
-#include "vCar/car.h"
-#include "vCar/suspension.h"
-#include "vSolver/physics/kinematics.h"
-#include "vSolver/physics/kinematicOutputs.h"
-#include "vSolver/threads/threadJob.h"
-#include "vSolver/threads/optimizationData.h"
-#include "vMath/carMath.h"
+#include "geneticOptimization.h"
+#include "guiCar.h"
+#include "guiObject.h"
+#include "gaObject.h"
+#include "components/mainTree.h"
+#include "components/mainFrame.h"
+#include "geneticAlgorithmPanel.h"
+#include "VVASE/core/car/car.h"
+#include "VVASE/core/car/subsystems/suspension.h"
+#include "VVASE/core/analyses/kinematics.h"
+#include "VVASE/core/analyses/kinematicOutputs.h"
+#include "VVASE/core/threads/threadJob.h"
+#include "VVASE/core/threads/optimizationData.h"
+#include "VVASE/core/utilities/carMath.h"
 
 namespace VVASE
 {

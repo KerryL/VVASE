@@ -13,14 +13,14 @@
 #define GA_OBJECT_H_
 
 // Local headers
-#include "vUtilities/managedList.h"
-#include "vCar/corner.h"
-#include "vMath/vector.h"
-#include "vSolver/physics/kinematicOutputs.h"
-#include "vSolver/physics/kinematics.h"
-#include "vSolver/optimization/geneticAlgorithm.h"
-#include "vSolver/threads/inverseSemaphore.h"
-#include "vUtilities/debugLog.h"
+#include "VVASE/core/car/subsystems/corner.h"
+#include "VVASE/core/analyses/kinematicOutputs.h"
+#include "VVASE/core/analyses/kinematics.h"
+#include "../core/optimizations/geneticAlgorithm.h"
+#include "VVASE/core/utilities/debugLog.h"
+
+// Eigen headers
+#include <Eigen/Eigen>
 
 namespace VVASE
 {

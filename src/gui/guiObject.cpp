@@ -17,6 +17,9 @@
 //#include <wx/treectrl.h>
 #include <wx/docview.h>
 
+// LibPlot2D headers
+#include <lp2d/renderer/renderWindow.h>
+
 // Local headers
 #include "VVASE/gui/guiObject.h"
 #include "VVASE/gui/components/mainNotebook.h"
@@ -24,8 +27,6 @@
 #include "VVASE/gui/components/mainFrame.h"
 #include "guiCar.h"
 #include "sweep.h"
-#include "vRenderer/renderWindow.h"
-#include "gui/plotPanel.h"
 #include "VVASE/core/utilities/debugger.h"
 
 namespace VVASE
