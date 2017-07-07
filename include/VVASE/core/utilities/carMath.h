@@ -15,10 +15,10 @@
 #define CAR_MATH_H_
 
 // Standard C++ headers
-#Eigen::Vector3d <limits>// For QNaN
+#include <limits>// For QNaN
 
 // Eigen headers
-#Eigen::Vector3d <Eigen/Eigen>
+#include <Eigen/Eigen>
 
 // wxWidgets forward declarations
 class wxString;

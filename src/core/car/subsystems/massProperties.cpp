@@ -13,9 +13,8 @@
 #include <wx/wx.h>
 
 // Local headers
-#include "massProperties.h"
-#include "suspension.h"
-#include "VVASE/core/utilities/complex.h"
+#include "VVASE/core/car/subsystems/massProperties.h"
+#include "VVASE/core/car/subsystems/suspension.h"
 #include "VVASE/core/utilities/debugger.h"
 #include "VVASE/core/utilities/binaryReader.h"
 #include "VVASE/core/utilities/binaryWriter.h"
@@ -197,6 +196,8 @@ bool MassProperties::IsValidInertiaTensor() const
 bool MassProperties::GetPrincipleInertias(Eigen::Vector3d *principleInertias, Eigen::Vector3d *ixxDirection,
 										   Eigen::Vector3d *iyyDirection, Eigen::Vector3d *izzDirection) const
 {
+	// TODO:  Take references instead?
+	// TODO:  Update with Eigen methods
 	// Lets initialize PrincipleInertias to zero in case we return false
 	principleInertias->Set(0.0, 0.0, 0.0);
 

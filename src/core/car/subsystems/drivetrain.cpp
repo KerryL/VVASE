@@ -13,8 +13,8 @@
 #include <wx/wx.h>
 
 // Local headers
-#include "differential.h"
-#include "drivetrain.h"
+#include "VVASE/core/car/subsystems/differential.h"
+#include "VVASE/core/car/subsystems/drivetrain.h"
 #include "VVASE/core/utilities/wheelSetStructures.h"
 #include "VVASE/core/utilities/debugger.h"
 #include "VVASE/core/utilities/binaryReader.h"
@@ -42,52 +42,8 @@ namespace VVASE
 Drivetrain::Drivetrain()
 {
 	SetNumberOfGears(1);
-
-	differentials.push_back(new Differential());
-
+	rearDifferential = std::make_unique<Differential>();
 	driveType = DriveRearWheel;
-}
-
-//==========================================================================
-// Class:			Drivetrain
-// Function:		Drivetrain
-//
-// Description:		Copy constructor for the Drivetrain class.
-//
-// Input Arguments:
-//		drivetrain	= const Drivetrain&, object to be copied
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Drivetrain::Drivetrain(const Drivetrain &drivetrain)
-{
-	*this = drivetrain;
-}
-
-//==========================================================================
-// Class:			Drivetrain
-// Function:		~Drivetrain
-//
-// Description:		Destructor for the Drivetrain class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Drivetrain::~Drivetrain()
-{
-	DeleteDifferentials();
 }
 
 //==========================================================================
@@ -200,13 +156,12 @@ void Drivetrain::Read(BinaryReader& file, const int& fileVersion)
 	else
 		assert(false);
 
-	DeleteDifferentials();
-
 	// Read the differentials
 	unsigned int diffCount(1);
 	if (fileVersion >= 5)
 		file.Read(diffCount);
 
+	// TODO:  Handle different file versions
 	unsigned int i;
 	for (i = 0; i < diffCount; i++)
 	{
@@ -257,48 +212,6 @@ wxString Drivetrain::GetDriveWheelsName(const DriveWheels &driveWheels)
 
 //==========================================================================
 // Class:			Drivetrain
-// Function:		operator=
-//
-// Description:		Assignment operator for Drivetrain class.
-//
-// Input Arguments:
-//		drivetrain	= const Drivetrain& to copy from
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Drivetrain& Drivetrain::operator=(const Drivetrain &drivetrain)
-{
-	// Check for self-assignment
-	if (this == &drivetrain)
-		return *this;
-
-	// Allocate memory for the gear ratios depending on the number of gears
-	SetNumberOfGears(drivetrain.gearRatios.size());
-
-	unsigned int i;
-	for (i = 0; i < gearRatios.size(); i++)
-		gearRatios[i] = drivetrain.gearRatios[i];
-
-	DeleteDifferentials();
-
-	for (i = 0; i < drivetrain.differentials.size(); i++)
-		differentials.push_back(new Differential(*drivetrain.differentials[i]));
-
-	driveType = drivetrain.driveType;
-
-	assert((differentials.size() == 1 && (driveType == DriveFrontWheel || driveType == DriveRearWheel)) ||
-		(differentials.size() == 3 && driveType == DriveAllWheel));
-
-	return *this;
-}
-
-//==========================================================================
-// Class:			Drivetrain
 // Function:		SetAllWheelDrive
 //
 // Description:		Sets the drive type to all wheel drive.
@@ -317,11 +230,10 @@ Drivetrain& Drivetrain::operator=(const Drivetrain &drivetrain)
 //==========================================================================
 void Drivetrain::SetAllWheelDrive(const double& rearBias, const double& midBias, const double& frontBias)
 {
-	DeleteDifferentials();
 	driveType = DriveAllWheel;
-	differentials.push_back(new Differential(rearBias));
-	differentials.push_back(new Differential(midBias));
-	differentials.push_back(new Differential(frontBias));
+	rearDifferential = std::make_unique<Differential>(rearBias);
+	midDifferential = std::make_unique<Differential>(midBias);
+	frontDifferential = std::make_unique<Differential>(frontBias);
 }
 
 //==========================================================================
@@ -342,9 +254,10 @@ void Drivetrain::SetAllWheelDrive(const double& rearBias, const double& midBias,
 //==========================================================================
 void Drivetrain::SetFrontWheelDrive(const double& bias)
 {
-	DeleteDifferentials();
 	driveType = DriveFrontWheel;
-	differentials.push_back(new Differential(bias));
+	frontDifferential = std::make_unique<Differential>(bias);
+	rearDifferential = nullptr;
+	midDifferential = nullptr;
 }
 
 //==========================================================================
@@ -365,59 +278,10 @@ void Drivetrain::SetFrontWheelDrive(const double& bias)
 //==========================================================================
 void Drivetrain::SetRearWheelDrive(const double& bias)
 {
-	DeleteDifferentials();
 	driveType = DriveRearWheel;
-	differentials.push_back(new Differential(bias));
-}
-
-//==========================================================================
-// Class:			Drivetrain
-// Function:		GetBiasRatios
-//
-// Description:		Returns all bias ratios.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		std::vector<double>
-//
-//==========================================================================
-std::vector<double> Drivetrain::GetBiasRatios() const
-{
-	std::vector<double> ratios;
-	unsigned int i;
-	for (i = 0; i < differentials.size(); i++)
-		ratios.push_back(differentials[i]->biasRatio);
-
-	return ratios;
-}
-
-//==========================================================================
-// Class:			Drivetrain
-// Function:		DeleteDifferentials
-//
-// Description:		Frees memory for differential objects.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-void Drivetrain::DeleteDifferentials()
-{
-	unsigned int i;
-	for (i = 0; i < differentials.size(); i++)
-		delete differentials[i];
-	differentials.clear();
+	rearDifferential = std::make_unique<Differential>(bias);
+	frontDifferential = nullptr;
+	midDifferential = nullptr;
 }
 
 }// namespace VVASE

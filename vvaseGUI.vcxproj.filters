@@ -64,6 +64,12 @@
     <Filter Include="Source Files\gui\renderer\3dcar">
       <UniqueIdentifier>{41036b2b-8b7c-4795-8d41-5c5b614c9afd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\gui\utilities">
+      <UniqueIdentifier>{656d90a5-a225-405f-814f-892f8c97cb32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\gui\utilities">
+      <UniqueIdentifier>{a68c399e-a6ba-4b41-9e76-4c04bf9f55e8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="res\vvase.rc">
@@ -254,6 +260,15 @@
     <ClInclude Include="src\gui\dialogs\optionsDialog.h">
       <Filter>Source Files\gui\dialogs</Filter>
     </ClInclude>
+    <ClInclude Include="include\VVASE\gui\utilities\dataValidator.h">
+      <Filter>Header Files\gui\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\gui\utilities\unitConverter.h">
+      <Filter>Header Files\gui\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\gui\utilities\wxRelatedUtilities.h">
+      <Filter>Header Files\gui\utilities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\application\pluginManager.cpp">
@@ -438,6 +453,15 @@
     </ClCompile>
     <ClCompile Include="src\gui\renderer\3dcar\vector3D.cpp">
       <Filter>Source Files\gui\renderer\3dcar</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gui\utilities\dataValidator.cpp">
+      <Filter>Source Files\gui\utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gui\utilities\unitConverter.cpp">
+      <Filter>Source Files\gui\utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gui\utilities\wxRelatedUtilities.cpp">
+      <Filter>Source Files\gui\utilities</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

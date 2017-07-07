@@ -37,6 +37,9 @@
     <Filter Include="Source Files\utilities">
       <UniqueIdentifier>{2f75ee28-0f75-4b5c-992c-e296e812d7f7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\car\subsystems">
+      <UniqueIdentifier>{43221cf0-eeae-4b70-a87c-22b3aa491356}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\VVASE\core\analyses\analysis.h">
@@ -93,9 +96,6 @@
     <ClInclude Include="include\VVASE\core\utilities\componentManager.h">
       <Filter>Header Files\utilities</Filter>
     </ClInclude>
-    <ClInclude Include="include\VVASE\core\utilities\dataValidator.h">
-      <Filter>Header Files\utilities</Filter>
-    </ClInclude>
     <ClInclude Include="include\VVASE\core\utilities\debugger.h">
       <Filter>Header Files\utilities</Filter>
     </ClInclude>
@@ -105,13 +105,7 @@
     <ClInclude Include="include\VVASE\core\utilities\geometryMath.h">
       <Filter>Header Files\utilities</Filter>
     </ClInclude>
-    <ClInclude Include="include\VVASE\core\utilities\unitConverter.h">
-      <Filter>Header Files\utilities</Filter>
-    </ClInclude>
     <ClInclude Include="include\VVASE\core\utilities\wheelSetStructures.h">
-      <Filter>Header Files\utilities</Filter>
-    </ClInclude>
-    <ClInclude Include="include\VVASE\core\utilities\wxRelatedUtilities.h">
       <Filter>Header Files\utilities</Filter>
     </ClInclude>
     <ClInclude Include="include\VVASE\core\utilities\xlsxReader.h">
@@ -120,53 +114,56 @@
     <ClInclude Include="src\core\analyses\analysisManager.h">
       <Filter>Source Files\analyses</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\car\subsystems\aerodynamics.h">
-      <Filter>Source Files\car\subsystems</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\car\subsystems\brakes.h">
-      <Filter>Source Files\car\subsystems</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\car\subsystems\corner.h">
-      <Filter>Source Files\car\subsystems</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\car\subsystems\damper.h">
-      <Filter>Source Files\car\subsystems</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\car\subsystems\differential.h">
-      <Filter>Source Files\car\subsystems</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\car\subsystems\driver.h">
-      <Filter>Source Files\car\subsystems</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\car\subsystems\drivetrain.h">
-      <Filter>Source Files\car\subsystems</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\car\subsystems\engine.h">
-      <Filter>Source Files\car\subsystems</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\car\subsystems\fuelCell.h">
-      <Filter>Source Files\car\subsystems</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\car\subsystems\massProperties.h">
-      <Filter>Source Files\car\subsystems</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\car\subsystems\spring.h">
-      <Filter>Source Files\car\subsystems</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\car\subsystems\suspension.h">
-      <Filter>Source Files\car\subsystems</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\car\subsystems\tire.h">
-      <Filter>Source Files\car\subsystems</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\car\subsystems\tireSet.h">
-      <Filter>Source Files\car\subsystems</Filter>
-    </ClInclude>
     <ClInclude Include="src\core\optimizations\geneticAlgorithm.h">
       <Filter>Source Files\optimizations</Filter>
     </ClInclude>
-    <ClInclude Include="include\VVASE\core\car\subsystem.h">
-      <Filter>Header Files\car</Filter>
+    <ClInclude Include="include\VVASE\core\car\subsystems\aerodynamics.h">
+      <Filter>Header Files\car\subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\car\subsystems\brakes.h">
+      <Filter>Header Files\car\subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\car\subsystems\corner.h">
+      <Filter>Header Files\car\subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\car\subsystems\damper.h">
+      <Filter>Header Files\car\subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\car\subsystems\differential.h">
+      <Filter>Header Files\car\subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\car\subsystems\driver.h">
+      <Filter>Header Files\car\subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\car\subsystems\drivetrain.h">
+      <Filter>Header Files\car\subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\car\subsystems\engine.h">
+      <Filter>Header Files\car\subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\car\subsystems\fuelCell.h">
+      <Filter>Header Files\car\subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\car\subsystems\massProperties.h">
+      <Filter>Header Files\car\subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\car\subsystems\spring.h">
+      <Filter>Header Files\car\subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\car\subsystems\subsystem.h">
+      <Filter>Header Files\car\subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\car\subsystems\suspension.h">
+      <Filter>Header Files\car\subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\car\subsystems\tire.h">
+      <Filter>Header Files\car\subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\car\subsystems\tireSet.h">
+      <Filter>Header Files\car\subsystems</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\utilities\unitType.h">
+      <Filter>Header Files\utilities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -260,9 +257,6 @@
     <ClCompile Include="src\core\utilities\carMath.cpp">
       <Filter>Source Files\utilities</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\utilities\dataValidator.cpp">
-      <Filter>Source Files\utilities</Filter>
-    </ClCompile>
     <ClCompile Include="src\core\utilities\debugger.cpp">
       <Filter>Source Files\utilities</Filter>
     </ClCompile>
@@ -270,12 +264,6 @@
       <Filter>Source Files\utilities</Filter>
     </ClCompile>
     <ClCompile Include="src\core\utilities\geometryMath.cpp">
-      <Filter>Source Files\utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\utilities\unitConverter.cpp">
-      <Filter>Source Files\utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\utilities\wxRelatedUtilities.cpp">
       <Filter>Source Files\utilities</Filter>
     </ClCompile>
     <ClCompile Include="src\core\utilities\xlsxReader.cpp">

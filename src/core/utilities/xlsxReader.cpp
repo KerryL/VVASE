@@ -55,34 +55,6 @@ XlsxReader::XlsxReader(const wxString &pathAndFileName)
 
 //==========================================================================
 // Class:			XlsxReader
-// Function:		~XlsxReader
-//
-// Description:		Destructor for the XlsxReader class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-XlsxReader::~XlsxReader()
-{
-	// Delete dynamic memory
-	worksheets.Clear();
-
-	delete workbook;
-	workbook = NULL;
-
-	delete sharedStrings;
-	sharedStrings = NULL;
-}
-
-//==========================================================================
-// Class:			XlsxReader
 // Function:		GetNumberOfColumns
 //
 // Description:		Returns the numer of columns for the specified sheet.
@@ -172,14 +144,14 @@ unsigned int XlsxReader::GetSelectedSheet() const
 {
 	// Check each sheet until we find the selected one
 	unsigned int i;
-	for (i = 0; i < worksheets.GetCount(); i++)
+	for (i = 0; i < worksheets.size(); i++)
 	{
 		if (SheetIsSelected(*worksheets[i]))
 			return i;
 	}
 
 	// If we can't find the selected sheet, return an invalid number
-	return worksheets.GetCount();
+	return worksheets.size();
 }
 
 //==========================================================================
@@ -198,25 +170,21 @@ unsigned int XlsxReader::GetSelectedSheet() const
 //		None
 //
 // Return Value:
-//		wxZipEntry* pointing to the part of the stream where the specified
-//		entry is located
+//		std::unique_ptr<wxZipEntry>
 //
 //==========================================================================
-wxZipEntry *XlsxReader::GetEntry(wxZipInputStream &zipStream, const wxString &entryString) const
+std::unique_ptr<wxZipEntry> XlsxReader::GetEntry(wxZipInputStream &zipStream, const wxString &entryString) const
 {
 	// Parse the file and record relevant information
-	wxZipEntry *zipPointer = NULL;
-	while (zipPointer = zipStream.GetNextEntry(), zipPointer != NULL)
+	std::unique_ptr<wxZipEntry> zipPointer;
+	while (zipPointer = std::make_unique<wxZipEntry>(zipStream.GetNextEntry()), zipPointer != nullptr)
 	{
 		// Look for the workbook pointer
 		if (zipPointer->GetInternalName().CompareTo(wxZipEntry::GetInternalName(entryString)) == 0)
 			return zipPointer;
-
-		delete zipPointer;
-		zipPointer = NULL;
 	}
 
-	return NULL;
+	return nullptr;
 }
 
 //==========================================================================
@@ -232,21 +200,22 @@ wxZipEntry *XlsxReader::GetEntry(wxZipInputStream &zipStream, const wxString &en
 //		None
 //
 // Return Value:
-//		wxZipInputStream* for the associated file
+//		std::unique_ptr<wxZipInputStream>
 //
 //==========================================================================
-wxZipInputStream *XlsxReader::OpenFile() const
+std::unique_ptr<wxZipInputStream> XlsxReader::OpenFile() const
 {
 	// Open the archive
 	wxFFileInputStream *fileInput = new wxFFileInputStream(pathAndFileName);
 	if (fileInput->IsOk())
 	{
-		wxZipInputStream *sipStream = new wxZipInputStream(fileInput);
+		std::unique_ptr<wxZipInputStream> sipStream(std::make_unique<wxZipInputStream>(fileInput));
 		if (sipStream->IsOk())
 			return sipStream;
 	}
 
-	return NULL;
+	delete fileInput;
+	return nullptr;
 }
 
 //==========================================================================
@@ -268,21 +237,17 @@ wxZipInputStream *XlsxReader::OpenFile() const
 bool XlsxReader::Initialize()
 {
 	// Open the archive
-	wxZipInputStream *zipStream = OpenFile();
+	std::unique_ptr<wxZipInputStream> zipStream(OpenFile());
 
 	// Locate the workbook entry
-	wxZipEntry *zipPointer = GetEntry(*zipStream, _T("xl\\workbook.xml"));
+	std::unique_ptr<wxZipEntry> zipPointer(GetEntry(*zipStream, _T("xl\\workbook.xml")));
 	if (zipPointer == NULL)
 		return false;
 
 	// Open the workbook stream as an XML document
-	workbook = new wxXmlDocument(*zipStream);
+	workbook = std::make_unique<wxXmlDocument>(*zipStream);
 	if (!workbook->IsOk())
 		return false;
-
-	// Delete the ZipPointer
-	delete zipPointer;
-	zipPointer = NULL;
 
 	// Locate the shared strings entry
 	// FIXME:  This only works because sharedStrings.xml is AFTER workbook.xml
@@ -293,13 +258,9 @@ bool XlsxReader::Initialize()
 		return false;
 
 	// Open the shared strings stream
-	sharedStrings = new wxXmlDocument(*zipStream);
+	sharedStrings = std::make_unique<wxXmlDocument>(*zipStream);
 	if (!sharedStrings->IsOk())
 		return false;
-
-	// Delete the ZipPointer
-	delete zipPointer;
-	zipPointer = NULL;
 
 	// Locate the sheets
 	wxXmlNode *node = workbook->GetRoot()->GetChildren();
@@ -327,10 +288,6 @@ bool XlsxReader::Initialize()
 		// Get the next child
 		node = node->GetNext();
 	}
-
-	// Close the file
-	delete zipStream;
-	zipStream = NULL;
 
 	// Now that we know how many sheets we're looking for, load the data from each sheet
 	unsigned int sheet;
@@ -363,25 +320,17 @@ bool XlsxReader::Initialize()
 bool XlsxReader::LoadSheet(const unsigned int &sheet)
 {
 	// Open the stream
-	wxZipInputStream *zipStream = OpenFile();
+	std::unique_ptr<wxZipInputStream> zipStream(OpenFile());
 
 	// Locate the relevant entry point
 	wxString sheetString;
 	sheetString.Printf("xl\\worksheets\\sheet%i.xml", sheets[sheet].second);
-	wxZipEntry *zipPointer = GetEntry(*zipStream, sheetString);
+	std::unique_ptr<wxZipEntry> zipPointer(GetEntry(*zipStream, sheetString));
 
 	// Open the stream as an XML file
-	worksheets.Add(new wxXmlDocument(*zipStream));
+	worksheets.push_back(std::make_unique<wxXmlDocument>(*zipStream));
 	if (!worksheets[sheet]->IsOk())
 		return false;
-
-	// Delete the ZipPointer
-	delete zipPointer;
-	zipPointer = NULL;
-
-	// Close the file
-	delete zipStream;
-	zipStream = NULL;
 
 	return true;
 }
@@ -622,7 +571,7 @@ unsigned int XlsxReader::ColumnNumberFromString(const wxString &column) const
 wxString XlsxReader::GetCellData(const unsigned int &sheet,
 		const unsigned int &row, const unsigned int &column) const
 {
-	assert(sheet < (unsigned int)worksheets.GetCount());
+	assert(sheet < (unsigned int)worksheets.size());
 
 	// Locate the desired cell
 	wxXmlNode *sheetDataNode = worksheets[sheet]->GetRoot()->GetChildren();
@@ -733,7 +682,7 @@ wxString XlsxReader::GetCellData(const unsigned int &sheet,
 double XlsxReader::GetNumericCellData(const unsigned int &sheet,
 		const unsigned int &row, const unsigned int &column) const
 {
-	assert(sheet < (unsigned int)worksheets.GetCount());
+	assert(sheet < (unsigned int)worksheets.size());
 
 	// Locate the desired cell
 	wxXmlNode *sheetDataNode = worksheets[sheet]->GetRoot()->GetChildren();
@@ -828,7 +777,7 @@ double XlsxReader::GetNumericCellData(const unsigned int &sheet,
 bool XlsxReader::CellIsNumeric(const unsigned int &sheet,
 		const unsigned int &row, const unsigned int &column) const
 {
-	assert(sheet < (unsigned int)worksheets.GetCount());
+	assert(sheet < (unsigned int)worksheets.size());
 
 	// Locate the desired cell
 	wxXmlNode *sheetDataNode = worksheets[sheet]->GetRoot()->GetChildren();

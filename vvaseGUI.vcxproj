@@ -45,6 +45,9 @@
     <ClInclude Include="include\VVASE\gui\renderer\primitives\triangle.h" />
     <ClInclude Include="include\VVASE\gui\superGrid.h" />
     <ClInclude Include="include\VVASE\gui\undoRedoStack.h" />
+    <ClInclude Include="include\VVASE\gui\utilities\dataValidator.h" />
+    <ClInclude Include="include\VVASE\gui\utilities\unitConverter.h" />
+    <ClInclude Include="include\VVASE\gui\utilities\wxRelatedUtilities.h" />
     <ClInclude Include="src\application\pluginManager.h" />
     <ClInclude Include="src\application\vvaseApplication.h" />
     <ClInclude Include="src\application\vvaseConstants.h" />
@@ -138,10 +141,14 @@
     <ClCompile Include="src\gui\superGrid.cpp" />
     <ClCompile Include="src\gui\sweep.cpp" />
     <ClCompile Include="src\gui\undoRedoStack.cpp" />
+    <ClCompile Include="src\gui\utilities\dataValidator.cpp" />
+    <ClCompile Include="src\gui\utilities\unitConverter.cpp" />
+    <ClCompile Include="src\gui\utilities\wxRelatedUtilities.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{D3B21E89-DD3A-4071-A3D9-20A11D3DE193}</ProjectGuid>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -169,9 +176,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

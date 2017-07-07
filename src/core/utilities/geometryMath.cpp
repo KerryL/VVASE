@@ -165,11 +165,9 @@ bool GeometryMath::FindCircleSphereIntersection(const Circle &c, const Sphere &s
 GeometryMath::Plane GeometryMath::FindSphereSphereIntersectionPlane(const Sphere &s1, const Sphere &s2)
 {
 	Plane p;
-	p.normal.x = s1.center.x - s2.center.x;
-	p.normal.y = s1.center.y - s2.center.y;
-	p.normal.z = s1.center.z - s2.center.z;
+	p.normal = s1.center - s2.center;
 
-	double d = 0.5 * (s1.center * s1.center - s2.center * s2.center
+	double d = 0.5 * (s1.center.dot(s1.center) - s2.center.dot(s2.center)
 		- s1.radius * s1.radius + s2.radius * s2.radius);
 
 	// To find a point on the plane, set any two components of the point
@@ -218,10 +216,10 @@ GeometryMath::Plane GeometryMath::FindSphereSphereIntersectionPlane(const Sphere
 bool GeometryMath::FindPlanePlaneIntersection(const Plane &p1, const Plane &p2, Axis &axis)
 {
 	// If the planes are parallel, then there is no solution
-	if (VVASEMath::IsZero(p1.normal.Cross(p2.normal)))
+	if (VVASEMath::IsZero(p1.normal.cross(p2.normal)))
 		return false;
 
-	axis.direction = p1.normal.Cross(p2.normal).Normalize();
+	axis.direction = p1.normal.cross(p2.normal).normalized();
 
 	// Now find a point on that axis
 	// This comes from the vector equation of a plane:
@@ -229,8 +227,8 @@ bool GeometryMath::FindPlanePlaneIntersection(const Plane &p1, const Plane &p2, 
 	// planeNormal *dot* point = someConstant.  Since we know a point that lies on each plane,
 	// we can solve for that constant for each plane, then solve two simultaneous systems
 	// of equations to find a common point between the two planes.
-	double planeConstant1 = p1.normal * p1.point;
-	double planeConstant2 = p2.normal * p2.point;
+	double planeConstant1 = p1.normal.dot(p1.point);
+	double planeConstant2 = p2.normal.dot(p2.point);
 
 	// To ensure numeric stability we implement three solutions here.  Each
 	// version of the solution solves for a different component of the point
@@ -305,12 +303,12 @@ bool GeometryMath::FindPlanePlaneIntersection(const Plane &p1, const Plane &p2, 
 bool GeometryMath::FindAxisSphereIntersections(const Axis &a, const Sphere &s, Eigen::Vector3d *intersections)
 {
 	assert(intersections && "intersections must not be NULL");
-	assert(VVASEMath::IsZero(a.direction.Length() - 1.0) && "a.direction must have unit magnitude");
+	assert(VVASEMath::IsZero(a.direction.norm() - 1.0) && "a.direction must have unit magnitude");
 
 	double b, c;
-	b = 2.0 * (a.point * a.direction - s.center * a.direction);
-	c = a.point * a.point + s.center * s.center - s.radius * s.radius
-		-2.0 * a.point * s.center;
+	b = 2.0 * (a.point.dot(a.direction) - s.center.dot(a.direction));
+	c = a.point.dot(a.point) + s.center.dot(s.center) - s.radius * s.radius
+		-2.0 * a.point.dot(s.center);
 
 	double t[2];
 	if (!SolveQuadratic(1.0, b, c, t))
