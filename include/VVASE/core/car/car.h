@@ -50,6 +50,7 @@
 
 // Local headers
 #include "VVASE/core/utilities/componentManager.h"
+#include "VVASE/core/car/subsystems/subsystem.h"
 
 // Standard C++ headers
 #include <iosfwd>// For forward declarations of ostream objects
@@ -67,7 +68,6 @@ namespace VVASE
 // Local forward declarations
 class BinaryWriter;
 class BinaryReader;
-class Subsystem;
 
 class Car
 {
@@ -121,12 +121,14 @@ template <typename T>
 bool Car::RegisterSubsystem()
 {
     componentManager.Register<T>();
+    return true;// TODO:  Always true?
 }
 
 template <typename T>
 bool Car::UnregisterSubsystem()
 {
     componentManager.Unregister<T>();
+    return true;// TODO:  Always true?
 }
 
 }// namespace VVASE

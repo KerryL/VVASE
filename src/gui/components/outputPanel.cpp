@@ -13,14 +13,14 @@
 // Local headers
 #include "gui/components/outputPanel.h"
 #include "gui/components/mainFrame.h"
-#include "vCar/car.h"
-#include "vCar/drivetrain.h"
-#include "vCar/suspension.h"
-#include "vSolver/physics/kinematicOutputs.h"
-#include "vUtilities/debugger.h"
-#include "vUtilities/unitConverter.h"
+#include "VVASE/core/car/car.h"
+#include "VVASE/core/car/subsystems/drivetrain.h"
+#include "VVASE/core/car/subsystems/suspension.h"
+#include "VVASE/core/analysis/kinematicOutputs.h"
+#include "VVASE/core/utilities/debugger.h"
+#include "VVASE/gui/utilities/unitConverter.h"
 #include "gui/superGrid.h"
-#include "vMath/carMath.h"
+#include "VVASE/core/utilities/carMath.h"
 
 namespace VVASE
 {

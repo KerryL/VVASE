@@ -11,10 +11,10 @@
 //        MainNotebook class.  Derived from wxAuiNotebook.
 
 // Local headers
-#include "gui/components/mainNotebook.h"
-#include "gui/components/mainFrame.h"
-#include "vUtilities/debugger.h"
-#include "gui/guiObject.h"
+#include "VVASE/gui/components/mainNotebook.h"
+#include "VVASE/gui/components/mainFrame.h"
+#include "VVASE/core/utilities/debugger.h"
+#include "VVASE/gui/guiObject.h"
 
 // wxWidgets headers
 #include <wx/utils.h>

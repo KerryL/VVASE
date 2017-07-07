@@ -11,9 +11,9 @@
 //        to provide the opportunity to undo and redo.
 
 // Local headers
-#include "VVASE/gui/undoRedoStack.h"
+#include "undoRedoStack.h"
 #include "VVASE/gui/components/mainFrame.h"
-#include "VVASE/gui/components/editPanel/editPanel.h"
+#include "components/editPanel/editPanel.h"
 #include "VVASE/gui/guiCar.h"
 #include "VVASE/core/car/car.h"
 #include "VVASE/core/car/subsystems/suspension.h"

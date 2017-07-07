@@ -14,12 +14,12 @@
 #include <wx/imaglist.h>
 
 // Local headers
-#include "gui/components/mainFrame.h"
-#include "gui/components/mainTree.h"
-#include "gui/guiCar.h"
-#include "gui/guiObject.h"
-#include "vUtilities/debugger.h"
-#include "gui/iteration.h"
+#include "VVASE/gui/components/mainFrame.h"
+#include "VVASE/gui/components/mainTree.h"
+#include "../gui/guiCar.h"
+#include "VVASE/gui/guiObject.h"
+#include "VVASE/core/utilities/debugger.h"
+#include "../gui/sweep.h"
 
 // Icons (only for GTK)
 #ifdef __WXGTK__

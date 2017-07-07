@@ -18,7 +18,7 @@
 
 // Local headers
 #include "VVASE/core/threads/threadData.h"
-#include "VVASE/core/analyses/kinematics.h"
+#include "VVASE/core/analysis/kinematics.h"
 
 namespace VVASE
 {

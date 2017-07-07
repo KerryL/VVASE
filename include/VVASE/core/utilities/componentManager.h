@@ -11,6 +11,7 @@
 //        registered with the manager to create components as required.
 
 #ifndef COMPONENT_MANAGER_H_
+#define COMPONENT_MANAGER_H_
 
 // Standard C++ headers
 #include <vector>

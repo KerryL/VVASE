@@ -19,10 +19,13 @@
 #include <wx/aui/aui.h>
 
 // Local headers
-#include "VVASE/core/analyses/kinematics.h"
-#include "VVASE/core/analyses/quasiStatic.h"
-#include "VVASE/gui/undoRedoStack.h"
+#include "VVASE/core/analysis/kinematics.h"
+#include "VVASE/core/analysis/quasiStatic.h"
+//#include "../undoRedoStack.h"
 #include "VVASE/gui/guiObject.h"
+
+// TODO:  FIX
+class UndoRedoStack {};
 
 // Standard C++ headers
 #include <vector>
@@ -58,7 +61,7 @@ public:
 	// for the private list
 	int AddObjectToList(GuiObject *objectToAdd);
 	void RemoveObjectFromList(int index);
-	inline int GetObjectCount() const { return openObjectList.GetCount(); }
+	inline int GetObjectCount() const { return openObjectList.size(); }
 	inline GuiObject *GetObjectByIndex(int index) const { return openObjectList[index]; }
 
 	// Controls the object that is currently "active"

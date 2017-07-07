@@ -11,10 +11,10 @@
 
 // Local headers
 #include "gui/dialogs/gaGeneDialog.h"
-#include "vUtilities/wxRelatedUtilities.h"
-#include "vUtilities/unitConverter.h"
-#include "vUtilities/dataValidator.h"
-#include "vCar/suspension.h"
+#include "VVASE/gui/utilities/wxRelatedUtilities.h"
+#include "VVASE/gui/utilities/unitConverter.h"
+#include "VVASE/gui/utilities/dataValidator.h"
+#include "VVASE/core/car/subsystems/suspension.h"
 
 namespace VVASE
 {

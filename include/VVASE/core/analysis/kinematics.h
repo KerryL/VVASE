@@ -27,6 +27,12 @@ class Kinematics : public Analysis
 public:
 	Kinematics();
 
+	enum class RotationSequence
+	{
+		PitchRoll,
+		RollPitch
+	};
+
 	// Definition for the inputs to the kinematics solver
 	struct Inputs
 	{
@@ -34,8 +40,8 @@ public:
 		double roll;						// [rad]
 		double heave;						// [in]
 		double rackTravel;					// [in]
-		Eigen::Vector3d centerOfRotation;			// [in]
-		Eigen::Vector3d::Axis firstRotation;
+		Eigen::Vector3d centerOfRotation;	// [in]
+		RotationSequence sequence;
 		WheelSet tireDeflections;			// [in]
 
 		// Operators
@@ -60,7 +66,7 @@ public:
 	inline void SetHeave(const double &heave) { inputs.heave = heave; }
 	inline void SetRackTravel(const double &travel) { inputs.rackTravel = travel; }
 	inline void SetCenterOfRotation(const Eigen::Vector3d &center) { inputs.centerOfRotation = center; }
-	inline void SetFirstEulerRotation(const Eigen::Vector3d::Axis &first) { inputs.firstRotation = first; }
+	inline void SetRotationSequence(const RotationSequence &sequence) { inputs.sequence = sequence; }
 	inline void SetInputs(const Inputs& inputs) { this->inputs = inputs; }
 	inline void SetTireDeflections(const WheelSet& deflections) { inputs.tireDeflections = deflections; }
 
@@ -72,7 +78,7 @@ public:
 	inline double GetHeave() const { return inputs.heave; }
 	inline double GetRackTravel() const { return inputs.rackTravel; }
 	inline Eigen::Vector3d GetCenterOfRotation() const { return inputs.centerOfRotation; }
-	inline Eigen::Vector3d::Axis GetFirstEulerRotation() const { return inputs.firstRotation; }
+	inline RotationSequence GetRotationSequence() const { return inputs.sequence; }
 	inline WheelSet GetTireDeflections() const { return inputs.tireDeflections; }
 	inline Inputs GetInputs() const { return inputs; }
 
@@ -86,7 +92,7 @@ private:
 	KinematicOutputs outputs;
 
 	bool SolveCorner(Corner &corner, const Corner &original,
-		const Eigen::Vector3d &rotations, const Eigen::Vector3d::Axis &secondRotation, const double& tireDeflection);
+		const Eigen::Vector3d &rotations, const RotationSequence& sequence, const double& tireDeflection);
 
 	void UpdateOutputs();
 
@@ -110,8 +116,8 @@ private:
 
 	// Other functions
 	void MoveSteeringRack(const double &travel) const;
-	void UpdateCGs(const Eigen::Vector3d& cor, const Eigen::Vector3d& angles, const Eigen::Vector3d::Axis& first,
-		const Eigen::Vector3d::Axis& second, const double& heave, const WheelSet& tireDeflections, Car* workingCar) const;
+	void UpdateCGs(const Eigen::Vector3d& cor, const Eigen::Vector3d& angles, const RotationSequence& sequence,
+		const double& heave, const WheelSet& tireDeflections, Car* workingCar) const;
 
 	static Eigen::Vector3d FindPerpendicularVector(const Eigen::Vector3d &v);
 	static double OptimizeCircleParameter(const Eigen::Vector3d &center, const Eigen::Vector3d &a,

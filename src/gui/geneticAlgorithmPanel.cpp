@@ -17,8 +17,8 @@
 // Local headers
 #include "geneticAlgorithmPanel.h"
 #include "VVASE/gui/components/mainFrame.h"
-#include "dialogs/gaGoalDialog.h"
-#include "dialogs/gaGeneDialog.h"
+#include "VVASE/gui/dialogs/gaGoalDialog.h"
+#include "VVASE/gui/dialogs/gaGeneDialog.h"
 #include "guiCar.h"
 #include "geneticOptimization.h"
 #include "gaObject.h"

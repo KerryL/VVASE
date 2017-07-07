@@ -2653,7 +2653,7 @@ UnitConverter::UnitType KinematicOutputs::GetVectorUnitType(const OutputsVector 
 //		cornerVector	= const &CornerOutputsVector
 //		double			= const &OutputsDouble
 //		vector			= const &OutputsVector
-//		axis			= const &Eigen::Vector3d::Axis
+//		component		= const &VectorComponent
 //
 // Output Arguments:
 //		None
@@ -2665,7 +2665,7 @@ UnitConverter::UnitType KinematicOutputs::GetVectorUnitType(const OutputsVector 
 KinematicOutputs::OutputsComplete KinematicOutputs::OutputsCompleteIndex(
 	const Corner::Location &location, const CornerOutputsDouble &cornerDouble,
 	const CornerOutputsVector &cornerVector, const OutputsDouble &midDouble,
-	const OutputsVector &vector, const Eigen::Vector3d::Axis &axis)
+	const OutputsVector &vector, const VectorComponent &component)
 {
 	OutputsComplete completeIndex = NumberOfOutputScalars;
 
@@ -2676,35 +2676,35 @@ KinematicOutputs::OutputsComplete KinematicOutputs::OutputsCompleteIndex(
 		if (cornerDouble != NumberOfCornerOutputDoubles)
 			completeIndex = (KinematicOutputs::OutputsComplete)(StartLeftFrontDoubles + cornerDouble);
 		else
-			completeIndex = (KinematicOutputs::OutputsComplete)(StartLeftFrontVectors + cornerVector * 3 + axis);
+			completeIndex = (KinematicOutputs::OutputsComplete)(StartLeftFrontVectors + cornerVector * 3 + static_cast<int>(axis));
 		break;
 
 	case Corner::LocationRightFront:
 		if (cornerDouble != NumberOfCornerOutputDoubles)
 			completeIndex = (KinematicOutputs::OutputsComplete)(StartRightFrontDoubles + cornerDouble);
 		else
-			completeIndex = (KinematicOutputs::OutputsComplete)(StartRightFrontVectors + cornerVector * 3 + axis);
+			completeIndex = (KinematicOutputs::OutputsComplete)(StartRightFrontVectors + cornerVector * 3 + static_cast<int>(axis));
 		break;
 
 	case Corner::LocationLeftRear:
 		if (cornerDouble != NumberOfCornerOutputDoubles)
 			completeIndex = (KinematicOutputs::OutputsComplete)(StartLeftRearDoubles + cornerDouble);
 		else
-			completeIndex = (KinematicOutputs::OutputsComplete)(StartLeftRearVectors + cornerVector * 3 + axis);
+			completeIndex = (KinematicOutputs::OutputsComplete)(StartLeftRearVectors + cornerVector * 3 + static_cast<int>(axis));
 		break;
 
 	case Corner::LocationRightRear:
 		if (cornerDouble != NumberOfCornerOutputDoubles)
 			completeIndex = (KinematicOutputs::OutputsComplete)(StartRightRearDoubles + cornerDouble);
 		else
-			completeIndex = (KinematicOutputs::OutputsComplete)(StartRightRearVectors + cornerVector * 3 + axis);
+			completeIndex = (KinematicOutputs::OutputsComplete)(StartRightRearVectors + cornerVector * 3 + static_cast<int>(axis));
 		break;
 
 	default:// Not a corner output
 		if (midDouble != NumberOfOutputDoubles)
 			completeIndex = (KinematicOutputs::OutputsComplete)(StartDoubles + midDouble);
 		else
-			completeIndex = (KinematicOutputs::OutputsComplete)(StartVectors + vector * 3 + axis);
+			completeIndex = (KinematicOutputs::OutputsComplete)(StartVectors + vector * 3 + static_cast<int>(axis));
 		break;
 	}
 

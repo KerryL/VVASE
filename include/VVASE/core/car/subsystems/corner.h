@@ -21,6 +21,9 @@
 #include "VVASE/core/car/subsystems/spring.h"
 #include "VVASE/core/car/subsystems/damper.h"
 
+// Eigen headers
+#include <Eigen/Eigen>
+
 namespace VVASE
 {
 

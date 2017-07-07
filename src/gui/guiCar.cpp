@@ -454,7 +454,7 @@ void GuiCar::ComputeARBSignConventions()
 
 	Kinematics kinematics;
 	kinematics.SetCenterOfRotation(Eigen::Vector3d(0.0, 0.0, 0.0));
-	kinematics.SetFirstEulerRotation(Eigen::Vector3d::AxisX);
+	kinematics.SetRotationSequence(Kinematics::RotationSequence::PitchRoll);
 	kinematics.SetHeave(0.0);
 	kinematics.SetRoll(0.01);
 	kinematics.SetPitch(0.0);

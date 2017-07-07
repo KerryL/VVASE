@@ -25,7 +25,7 @@ namespace VVASE
 // Local forward declarations
 class MainFrame;
 
-class VVASEApp : public wxApp
+class VVASEApplication : public wxApp
 {
 public:
 	// Initialization function
@@ -54,7 +54,7 @@ private:
 };
 
 // Declare the application object (have wxWidgets create the wxGetApp() function)
-DECLARE_APP(VVASEApp);
+DECLARE_APP(VVASEApplication);
 
 }// namespace VVASE
 

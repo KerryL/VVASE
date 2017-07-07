@@ -22,19 +22,18 @@
 #include "../gui/ipcConnection.h"
 #include "VVASE/core/utilities/debugLog.h"
 #include "VVASE/core/utilities/debugger.h"
-#include "VVASE/core/utilities/unitConverter.h"
 
 // Implement the application (have wxWidgets set up the appropriate entry points, etc.)
-IMPLEMENT_APP(VVASEApp);
+IMPLEMENT_APP(VVASEApplication);
 
 namespace VVASE
 {
 
 //==========================================================================
-// Class:			VVASEApp
+// Class:			VVASEApplication
 // Function:		Constant Definitions
 //
-// Description:		Constant definitions for the VVASEApp class.
+// Description:		Constant definitions for the VVASEApplication class.
 //
 // Input Arguments:
 //		None
@@ -46,12 +45,12 @@ namespace VVASE
 //		None
 //
 //==========================================================================
-const wxString VVASEApp::hostName = _T("localhost");
-const wxString VVASEApp::serviceName = _T("/tmp/VVASE_DDE");
-const wxString VVASEApp::connectionTopic = _T("VVASE: Open File");
+const wxString VVASEApplication::hostName = _T("localhost");
+const wxString VVASEApplication::serviceName = _T("/tmp/VVASE_DDE");
+const wxString VVASEApplication::connectionTopic = _T("VVASE: Open File");
 
 //==========================================================================
-// Class:			VVASEApp
+// Class:			VVASEApplication
 // Function:		OnInit
 //
 // Description:		Initializes the VVASE application window.
@@ -66,7 +65,7 @@ const wxString VVASEApp::connectionTopic = _T("VVASE: Open File");
 //		bool = true for successful window initialization, false for error
 //
 //==========================================================================
-bool VVASEApp::OnInit()
+bool VVASEApplication::OnInit()
 {
 	SetAppName(_T("VVASE"));
 	SetVendorName(_T("Kerry Loux"));
@@ -131,7 +130,7 @@ bool VVASEApp::OnInit()
 }
 
 //==========================================================================
-// Class:			VVASEApp
+// Class:			VVASEApplication
 // Function:		OnExit
 //
 // Description:		Initializes the VVASE application window.
@@ -146,7 +145,7 @@ bool VVASEApp::OnInit()
 //		bool = true for successful window initialization, false for error
 //
 //==========================================================================
-int VVASEApp::OnExit()
+int VVASEApplication::OnExit()
 {
 	DeleteDynamicMemory();
 	DebugLog::Kill();
@@ -156,7 +155,7 @@ int VVASEApp::OnExit()
 }
 
 //==========================================================================
-// Class:			VVASEApp
+// Class:			VVASEApplication
 // Function:		DeleteDynamicMemory
 //
 // Description:		Frees class-level dynamic memory.
@@ -171,7 +170,7 @@ int VVASEApp::OnExit()
 //		None
 //
 //==========================================================================
-void VVASEApp::DeleteDynamicMemory()
+void VVASEApplication::DeleteDynamicMemory()
 {
 	delete singleInstanceChecker;
 	singleInstanceChecker = NULL;

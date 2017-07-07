@@ -39,6 +39,9 @@
 #ifndef UNIT_CONVERTER_H_
 #define UNIT_CONVERTER_H_
 
+// Local headers
+#include "VVASE/core/utilities/unitType.h"
+
 // Eigen headers
 #include <Eigen/Eigen>
 
@@ -288,27 +291,6 @@ public:
 		TemperatureKelvin,
 
 		TemperatureUnitCount
-	};
-
-	enum class UnitType
-	{
-		UnitTypeUnknown,
-		UnitTypeUnitless,
-		UnitTypeAngle,
-		UnitTypeDistance,
-		UnitTypeArea,
-		UnitTypeForce,
-		UnitTypePressure,
-		UnitTypeMoment,
-		UnitTypeMass,
-		UnitTypeVelocity,
-		UnitTypeAcceleration,
-		UnitTypeInertia,
-		UnitTypeDensity,
-		UnitTypePower,
-		UnitTypeEnergy,
-		UnitTypeTemperature,
-		UnitTypeAnglePerDistance
 	};
 
 	// For displaying the user defined units of a specific type

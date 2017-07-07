@@ -17,7 +17,8 @@
 #define KINEMATIC_OUTPUTS_H_
 
 // Local headers
-#include "VVASE/core/utilities/unitConverter.h"
+#include "VVASE/core/utilities/unitType.h"
+// TODO:  Have input/output objects that are strongly typed?  Also interface to undo/redo?
 
 // TODO:  Do I really need these here?
 #include "VVASE/core/car/subsystems/corner.h"// TODO:  Need to move this to include/VVASE or users won't be able to include for making plugins
@@ -170,16 +171,23 @@ public:
 		NumberOfOutputScalars// Called "scalars" because each vector component is treated as one output
 	};
 
+	enum class VectorComponent : int
+	{
+		X = 0,
+		Y,
+		Z
+	};
+
 	// For converting from an output + location to OutputsComplete
 	static OutputsComplete OutputsCompleteIndex(const Corner::Location &location,
 		const CornerOutputsDouble &cornerDouble, const CornerOutputsVector &cornerVector,
-		const OutputsDouble &midDouble, const OutputsVector &vector, const Eigen::Vector3d::Axis &axis);
+		const OutputsDouble &midDouble, const OutputsVector &vector, const VectorComponent& component);
 
 	// For accessing an output via the OutputsComplete list
 	double GetOutputValue(const OutputsComplete &output) const;
 
 	// For determining unit type of the outputs
-	static UnitConverter::UnitType GetOutputUnitType(const OutputsComplete &output);
+	static UnitType GetOutputUnitType(const OutputsComplete &output);
 
 	// For determining the name of an output from the OutputsComplete list
 	static wxString GetOutputName(const OutputsComplete &output);
@@ -198,10 +206,10 @@ private:
 	static wxString GetVectorName(const OutputsVector &output);
 
 	// For retrieving units of the outputs
-	static UnitConverter::UnitType GetCornerDoubleUnitType(const CornerOutputsDouble &output);
-	static UnitConverter::UnitType GetCornerVectorUnitType(const CornerOutputsVector &output);
-	static UnitConverter::UnitType GetDoubleUnitType(const OutputsDouble &output);
-	static UnitConverter::UnitType GetVectorUnitType(const OutputsVector &output);
+	static UnitType GetCornerDoubleUnitType(const CornerOutputsDouble &output);
+	static UnitType GetCornerVectorUnitType(const CornerOutputsVector &output);
+	static UnitType GetDoubleUnitType(const OutputsDouble &output);
+	static UnitType GetVectorUnitType(const OutputsVector &output);
 
 	void InitializeAllOutputs();
 
