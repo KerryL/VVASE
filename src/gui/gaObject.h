@@ -14,9 +14,9 @@
 
 // Local headers
 #include "VVASE/core/car/subsystems/corner.h"
-#include "VVASE/core/analyses/kinematicOutputs.h"
-#include "VVASE/core/analyses/kinematics.h"
-#include "../core/optimizations/geneticAlgorithm.h"
+#include "VVASE/core/analysis/kinematicOutputs.h"
+#include "VVASE/core/analysis/kinematics.h"
+#include "../core/optimization/geneticAlgorithm.h"
 #include "VVASE/core/utilities/debugLog.h"
 
 // Eigen headers

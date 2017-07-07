@@ -31,7 +31,7 @@
 #include "VVASE/gui/components/mainNotebook.h"
 #include "guiCar.h"
 #include "VVASE/gui/components/mainTree.h"
-#include "VVASE/core/analyses/kinematics.h"
+#include "VVASE/core/analysis/kinematics.h"
 #include "VVASE/core/threads/threadJob.h"
 #include "VVASE/core/threads/kinematicsData.h"
 

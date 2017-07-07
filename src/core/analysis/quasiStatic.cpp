@@ -14,10 +14,10 @@
 #include <cassert>
 
 // Local headers
-#include "VVASE/core/analyses/quasiStatic.h"
-#include "VVASE/core/analyses/kinematics.h"
-#include "VVASE/core/analyses/kinematicOutputs.h"
-#include "VVASE/core/analyses/quasiStaticOutputs.h"
+#include "VVASE/core/analysis/quasiStatic.h"
+#include "VVASE/core/analysis/kinematics.h"
+#include "VVASE/core/analysis/kinematicOutputs.h"
+#include "VVASE/core/analysis/quasiStaticOutputs.h"
 #include "VVASE/core/car/car.h"
 #include "VVASE/core/car/subsystems/massProperties.h"
 #include "VVASE/core/car/subsystems/tireSet.h"

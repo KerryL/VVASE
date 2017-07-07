@@ -17,7 +17,7 @@
 #include <wx/wx.h>
 
 // Local headers
-#include "VVASE/core/analyses/kinematics.h"
+#include "VVASE/core/analysis/kinematics.h"
 
 // wxWidgets forward declarations
 class wxGrid;

@@ -14,8 +14,8 @@
 #define QUASI_STATIC_H_
 
 // Local headers
-#include "VVASE/core/analyses/analysis.h"
-#include "VVASE/core/analyses/kinematics.h"
+#include "VVASE/core/analysis/analysis.h"
+#include "VVASE/core/analysis/kinematics.h"
 #include "VVASE/core/utilities/wheelSetStructures.h"
 
 namespace VVASE

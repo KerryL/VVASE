@@ -18,8 +18,8 @@
 
 // Local headers
 #include "VVASE/gui/guiObject.h"
-#include "VVASE/core/analyses/kinematicOutputs.h"
-#include "VVASE/core/analyses/quasiStaticOutputs.h"
+#include "VVASE/core/analysis/kinematicOutputs.h"
+#include "VVASE/core/analysis/quasiStaticOutputs.h"
 
 // wxWidgets forward declarations
 class wxTreeItemId;

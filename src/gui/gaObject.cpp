@@ -18,8 +18,8 @@
 // Local headers
 #include "gaObject.h"
 #include "geneticOptimization.h"
-#include "VVASE/core/analyses/kinematics.h"
-#include "VVASE/core/analyses/kinematicOutputs.h"
+#include "VVASE/core/analysis/kinematics.h"
+#include "VVASE/core/analysis/kinematicOutputs.h"
 #include "VVASE/core/threads/kinematicsData.h"
 #include "VVASE/core/threads/threadEvent.h"
 #include "VVASE/core/car/car.h"

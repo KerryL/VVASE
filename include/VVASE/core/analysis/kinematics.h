@@ -13,8 +13,8 @@
 #define KINEMATICS_H_
 
 // Local headers
-#include "VVASE/core/analyses/analysis.h"
-#include "VVASE/core/analyses/kinematicOutputs.h"
+#include "VVASE/core/analysis/analysis.h"
+#include "VVASE/core/analysis/kinematicOutputs.h"
 
 namespace VVASE
 {

@@ -16,7 +16,7 @@
 #include <wx/stopwatch.h>
 
 // Local headers
-#include "VVASE/core/analyses/kinematics.h"
+#include "VVASE/core/analysis/kinematics.h"
 #include "VVASE/core/car/car.h"
 #include "VVASE/core/car/subsystems/corner.h"
 #include "VVASE/core/car/subsystems/drivetrain.h"

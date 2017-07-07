@@ -21,7 +21,7 @@
 #include "VVASE/core/car/subsystems/drivetrain.h"
 #include "VVASE/core/car/subsystems/massProperties.h"
 #include "VVASE/core/car/subsystems/suspension.h"
-#include "VVASE/core/analyses/kinematicOutputs.h"
+#include "VVASE/core/analysis/kinematicOutputs.h"
 #include "VVASE/core/utilities/carMath.h"
 #include "VVASE/core/utilities/wheelSetStructures.h"
 #include "VVASE/core/utilities/debugger.h"

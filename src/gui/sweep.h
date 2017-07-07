@@ -20,8 +20,8 @@
 // Local headers
 #include "VVASE/core/utilities/managedList.h"
 #include "guiCar.h"
-#include "VVASE/core/analyses/kinematics.h"
-#include "VVASE/core/analyses/kinematicOutputs.h"
+#include "VVASE/core/analysis/kinematics.h"
+#include "VVASE/core/analysis/kinematicOutputs.h"
 #include "VVASE/core/threads/inverseSemaphore.h"
 
 namespace VVASE

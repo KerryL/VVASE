@@ -14,7 +14,7 @@
 #define MILLIKEN_ANALYSIS_H_
 
 // Local headers
-#include "VVASE/core/analyses/analysis.h"
+#include "VVASE/core/analysis/analysis.h"
 
 namespace VVASE
 {
