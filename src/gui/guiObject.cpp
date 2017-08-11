@@ -494,11 +494,11 @@ bool GuiObject::WriteImageToFile(wxString pathAndFileName)
 	{
 		// Types that have a renderer
 	case TypeCar:
-		return static_cast<RenderWindow*>(notebookTab)->WriteImageToFile(pathAndFileName);
+		return static_cast<LibPlot2D::RenderWindow*>(notebookTab)->WriteImageToFile(pathAndFileName);
 		break;
 
 	case TypeIteration:
-		return static_cast<PlotPanel*>(notebookTab)->WriteImageToFile(pathAndFileName);
+		return static_cast<LibPlot2D::PlotPanel*>(notebookTab)->WriteImageToFile(pathAndFileName);
 		break;
 
 		// Everything else

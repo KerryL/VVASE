@@ -13,7 +13,9 @@
 #define BRAKES_H_
 
 // Local headers
+#include "subsystem.h"
 #include "VVASE/core/utilities/wheelSetStructures.h"
+#include "VVASE/core/utilities/vvaseString.h"
 
 namespace VVASE
 {
@@ -49,7 +51,7 @@ public:
 
 	// Required by RegisterableComponent
     static std::unique_ptr<Brakes> Create() { return std::make_unique<Brakes>(); }
-    static std::string GetName() { return _T("Brake"); }
+    static vvaseString GetName() { return _T("Brake"); }
 };
 
 }// namespace VVASE

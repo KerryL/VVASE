@@ -17,7 +17,7 @@
 
 // Local headers
 #include "gaObject.h"
-#include "geneticOptimization.h"
+#include "VVASE/gui/geneticOptimization.h"
 #include "VVASE/core/analysis/kinematics.h"
 #include "VVASE/core/analysis/kinematicOutputs.h"
 #include "VVASE/core/threads/kinematicsData.h"
@@ -25,7 +25,7 @@
 #include "VVASE/core/car/car.h"
 #include "VVASE/core/car/subsystems/suspension.h"
 #include "VVASE/core/utilities/carMath.h"
-#include "VVASE/core/utilities/unitConverter.h"
+#include "VVASE/gui/utilities/unitConverter.h"
 #include "VVASE/core/utilities/debugger.h"
 #include "VVASE/core/threads/jobQueue.h"
 
@@ -98,9 +98,9 @@ GAObject::~GAObject()
 	kinematicOutputArray = NULL;
 
 	// Clean up the lists
-	geneList.Clear();
-	goalList.Clear();
-	inputList.Clear();
+	geneList.clear();
+	goalList.clear();
+	inputList.clear();
 }
 
 //==========================================================================
@@ -146,18 +146,19 @@ void GAObject::SimulateGeneration()
 	// Use a counter to keep track of the number of pending jobs
 	KinematicsData *data;
 
-	inverseSemaphore.Set(numberOfCars);// TODO:  Check return value to ensure no errors!
+	//inverseSemaphore.Set(numberOfCars);// TODO:  Check return value to ensure no errors!
+	// TODO:  Re-implement
 
 	int i, temp(optimization.GetIndex());
 	unsigned int j;
 	for (i = 0; i < populationSize; i++)
 	{
-		for (j = 0; j < inputList.GetCount(); j++)
+		for (j = 0; j < inputList.size(); j++)
 		{
-			SetCarGenome(i * inputList.GetCount() + j, genomes[currentGeneration][i]);
+			SetCarGenome(i * inputList.size() + j, genomes[currentGeneration][i]);
 
-			data = new KinematicsData(originalCarArray[i * inputList.GetCount() + j],
-				workingCarArray[i * inputList.GetCount() + j], *inputList[j],
+			data = new KinematicsData(originalCarArray[i * inputList.size() + j],
+				workingCarArray[i * inputList.size() + j], inputList[j],
 				kinematicOutputArray + i * inputList.GetCount() + j);
 			ThreadJob newJob(ThreadJob::CommandThreadKinematicsGA, data,
 				optimization.GetCleanName(), temp);
@@ -200,21 +201,21 @@ double GAObject::DetermineFitness(const int *citizen)
 	// Get the outputs of interest from each analysis that was conducted
 	unsigned int i, j, k;
 	double fitness(0.0);
-	for (i = 0; i < inputList.GetCount(); i++)
+	for (i = 0; i < inputList.size(); i++)
 	{
 		// Go through all the goals
-		for (j = 0; j < goalList.GetCount(); j++)
+		for (j = 0; j < goalList.size(); j++)
 		{
 			// Check to see if the current goal's input matches the current input list item
-			if (goalList[j]->beforeInputs == *(inputList[i]))
+			if (goalList[j].beforeInputs == *(inputList[i]))
 			{
 				// Check to see if the current goal is a delta between two inputs, or if we
 				// only need to consider the current input
-				if (goalList[j]->beforeInputs == goalList[i]->afterInputs)
+				if (goalList[j].beforeInputs == goalList[i].afterInputs)
 				{
 					// If the output is undefined, make it a really big number (ruin the fitness)
 					if (VVASEMath::IsNaN(kinematicOutputArray[
-						citizen[0] * inputList.GetCount() + i].GetOutputValue(goalList[j]->output)))
+						citizen[0] * inputList.size() + i].GetOutputValue(goalList[j].output)))
 						fitness += 1e10;
 					else
 						// The output is not undefined.  Add to the fitness according to the
@@ -222,22 +223,22 @@ double GAObject::DetermineFitness(const int *citizen)
 						// Fitness (for each goal) = fabs(DesiredValue - ActualValue) * Importance / ExpectedDeviation
 						// Total fitness is the sum of the individual fitnesses
 						fitness += fabs(goalList[j]->desiredValue - kinematicOutputArray[
-							citizen[0] * inputList.GetCount() + i].GetOutputValue(goalList[j]->output))
-							* goalList[j]->importance / goalList[j]->expectedDeviation;
+							citizen[0] * inputList.size() + i].GetOutputValue(goalList[j].output))
+							* goalList[j].importance / goalList[j].expectedDeviation;
 				}
 				else// This goal requires examining the difference between two sets of inputs
 				{
 					// Determine the index for the second set of inputs
-					for (k = 0; k < inputList.GetCount(); k++)
+					for (k = 0; k < inputList.size(); k++)
 					{
-						if (goalList[j]->afterInputs == *(inputList[k]))
+						if (goalList[j].afterInputs == *(inputList[k]))
 							break;
 					}
 
 					// Proceed just as we did for the single input case:
 					// If the output is undefined, make it a really big number (ruin the fitness)
 					if (VVASEMath::IsNaN(kinematicOutputArray[
-						citizen[0] * inputList.GetCount() + k].GetOutputValue(goalList[j]->output)))
+						citizen[0] * inputList.size() + k].GetOutputValue(goalList[j]->output)))
 						fitness += 1e10;
 					else
 						// The output is not undefined.  Add to the fitness according to the
@@ -245,10 +246,10 @@ double GAObject::DetermineFitness(const int *citizen)
 						// Fitness (for each goal) = fabs(DesiredValue - ChangeInActualValue)
 						//     * Importance / ExpectedDeviation
 						// Total fitness is the sum of the individual fitnesses
-						fitness += fabs(goalList[j]->desiredValue - (kinematicOutputArray[
-							citizen[0] * inputList.GetCount() + k].GetOutputValue(goalList[j]->output) - kinematicOutputArray[
-							citizen[0] * inputList.GetCount() + i].GetOutputValue(goalList[j]->output)))
-							* goalList[j]->importance / goalList[j]->expectedDeviation;
+						fitness += fabs(goalList[j].desiredValue - (kinematicOutputArray[
+							citizen[0] * inputList.size() + k].GetOutputValue(goalList[j].output) - kinematicOutputArray[
+							citizen[0] * inputList.size() + i].GetOutputValue(goalList[j].output)))
+							* goalList[j].importance / goalList[j].expectedDeviation;
 				}
 			}
 		}
@@ -384,7 +385,7 @@ void GAObject::SetCarGenome(int carIndex, const int *currentGenome)
 		}
 
 		// Determine which component of the vector to vary
-		if (currentGene->direction == Eigen::Vector3d::AxisX)
+		if (currentGene->direction == Eigen::Vector3d::Axis::X)
 		{
 			// Set the appropriate variable to the value that corresponds to this phenotype
 			currentCorner->hardpoints[currentGene->hardpoint].x = currentGene->minimum +
@@ -410,7 +411,7 @@ void GAObject::SetCarGenome(int carIndex, const int *currentGenome)
 						oppositeCorner->hardpoints[currentGene->hardpoint].x;
 			}
 		}
-		else if (currentGene->direction == Eigen::Vector3d::AxisY)
+		else if (currentGene->direction == Eigen::Vector3d::Axis::Y)
 		{
 			// Set the appropriate variable to the value that corresponds to this phenotype
 			currentCorner->hardpoints[currentGene->hardpoint].y = currentGene->minimum +
@@ -436,7 +437,7 @@ void GAObject::SetCarGenome(int carIndex, const int *currentGenome)
 						oppositeCorner->hardpoints[currentGene->hardpoint].y;
 			}
 		}
-		else// Eigen::Vector3d::AxisZ
+		else// Eigen::Vector3d::Axis::Z
 		{
 			// Set the appropriate variable to the value that corresponds to this phenotype
 			currentCorner->hardpoints[currentGene->hardpoint].z = currentGene->minimum +

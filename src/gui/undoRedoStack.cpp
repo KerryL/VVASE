@@ -14,7 +14,7 @@
 #include "undoRedoStack.h"
 #include "VVASE/gui/components/mainFrame.h"
 #include "components/editPanel/editPanel.h"
-#include "VVASE/gui/guiCar.h"
+#include "guiCar.h"
 #include "VVASE/core/car/car.h"
 #include "VVASE/core/car/subsystems/suspension.h"
 

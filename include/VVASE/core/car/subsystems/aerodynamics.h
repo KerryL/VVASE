@@ -17,6 +17,7 @@
 
 // Local headers
 #include "subsystem.h"
+#include "VVASE/core/utilities/vvaseString.h"
 
 namespace VVASE
 {
@@ -38,7 +39,7 @@ public:
 
     // Required by RegisterableComponent
     static std::unique_ptr<Aerodynamics> Create() { return std::make_unique<Aerodynamics>(); }
-    static std::string GetName() { return _T("Aerodynamics"); }
+    static vvaseString GetName() { return _T("Aerodynamics"); }
 
 private:
 	// Class properties

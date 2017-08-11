@@ -21,7 +21,6 @@
 #include "guiCar.h"
 #include "VVASE/core/analysis/kinematics.h"
 #include "VVASE/core/analysis/kinematicOutputs.h"
-#include "VVASE/core/threads/inverseSemaphore.h"
 
 // Standard C++ headers
 #include <memory>
@@ -175,7 +174,7 @@ private:
 
 	// The data for this analysis - we need one list of outputs for every car
 	// Every list of outputs has one entry for every point within our range
-	std::vector<std::vector<std::unque_ptr<KinematicOutputs>>> outputLists;
+	std::vector<std::vector<std::unique_ptr<KinematicOutputs>>> outputLists;
 
 	std::vector<GuiCar*> associatedCars;
 

@@ -20,6 +20,7 @@
 // Local headers
 #include "VVASE/core/car/subsystems/spring.h"
 #include "VVASE/core/car/subsystems/damper.h"
+#include "VVASE/core/utilities/vvaseString.h"
 
 // Eigen headers
 #include <Eigen/Eigen>
@@ -115,10 +116,10 @@ public:
 	};
 
 	// For getting the names of the elements of this class
-	static wxString GetHardpointName(const Hardpoints &point);
-	static wxString GetActuationAttachmentName(const ActuationAttachment &attachment);
-	static wxString GetActuationTypeName(const ActuationType &type);
-	static wxString GetLocationName(const Location &location);
+	static vvaseString GetHardpointName(const Hardpoints &point);
+	static vvaseString GetActuationAttachmentName(const ActuationAttachment &attachment);
+	static vvaseString GetActuationTypeName(const ActuationType &type);
+	static vvaseString GetLocationName(const Location &location);
 
 	// Suspension parameters
 	double staticCamber;			// [rad] - positive top away from the center car

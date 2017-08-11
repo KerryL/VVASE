@@ -20,12 +20,12 @@
 #include "VVASE/gui/dialogs/gaGoalDialog.h"
 #include "VVASE/gui/dialogs/gaGeneDialog.h"
 #include "guiCar.h"
-#include "geneticOptimization.h"
+#include "VVASE/gui/geneticOptimization.h"
 #include "gaObject.h"
 #include "VVASE/core/analysis/kinematicOutputs.h"
 #include "VVASE/core/car/subsystems/corner.h"
 #include "VVASE/core/car/car.h"
-#include "VVASE/core/utilities/wxRelatedUtilities.h"
+#include "VVASE/gui/utilities/wxRelatedUtilities.h"
 
 namespace VVASE
 {

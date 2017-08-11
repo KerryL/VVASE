@@ -24,7 +24,7 @@ namespace VVASE
 
 // Local forward declarations
 class BinaryReader;
-class BinayrWriter;
+class BinaryWriter;
 
 class Subsystem : public RegisterableComponent
 {

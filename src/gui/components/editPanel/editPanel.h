@@ -16,7 +16,7 @@
 #include <wx/wx.h>
 
 // Local headers
-#include "../../guiObject.h"
+#include "VVASE/gui/guiObject.h"
 
 // wxWidgets forward declarations
 class wxPanel;

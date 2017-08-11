@@ -87,7 +87,7 @@ bool IPCConnection::OnPoke(const wxString &topic, const wxString &item, wxChar* 
 							int WXUNUSED(size), wxIPCFormat WXUNUSED(format))
 {
 	// Make sure we recognize the topic
-	if (topic.CompareTo(VVASEApp::connectionTopic) == 0)
+	if (topic.CompareTo(VVASEApplication::connectionTopic) == 0)
 		// Tell the main frame to load the file
 		return wxGetApp().GetMainFrame()->LoadFile(item);
 

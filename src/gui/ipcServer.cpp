@@ -113,7 +113,7 @@ void IPCServer::Disconnect()
 wxConnectionBase *IPCServer::OnAcceptConnection(const wxString& topic)
 {
 	// Check to see if we recognize the topic
-	if (topic.CompareTo(VVASEApp::connectionTopic) == 0)
+	if (topic.CompareTo(VVASEApplication::connectionTopic) == 0)
     {
 		// Create and return a new connection
         connection = new IPCConnection();

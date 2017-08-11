@@ -14,6 +14,7 @@
 
 // Local headers
 #include "subsystem.h"
+#include "VVASE/core/utilities/vvaseString.h"
 
 namespace VVASE
 {
@@ -35,7 +36,7 @@ public:
 
     // Required by RegisterableComponent
     static std::unique_ptr<Engine> Create() { return std::make_unique<Engine>(); }
-    static std::string GetName() { return _T("Engine"); }
+    static vvaseString GetName() { return _T("Engine"); }
 };
 
 }// namespace VVASE

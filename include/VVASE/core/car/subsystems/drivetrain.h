@@ -14,6 +14,7 @@
 
 // Local headers
 #include "subsystem.h"
+#include "VVASE/core/utilities/vvaseString.h"
 
 // Standard C++ headers
 #include <vector>
@@ -69,7 +70,7 @@ public:
 
     // Required by RegisterableComponent
     static std::unique_ptr<Drivetrain> Create() { return std::make_unique<Drivetrain>(); }
-    static std::string GetName() { return _T("Drivetrain"); }
+    static vvaseString GetName() { return _T("Drivetrain"); }
 
 private:
 	std::unique_ptr<Differential> rearDifferential;

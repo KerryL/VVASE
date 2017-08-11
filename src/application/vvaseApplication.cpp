@@ -23,11 +23,11 @@
 #include "VVASE/core/utilities/debugLog.h"
 #include "VVASE/core/utilities/debugger.h"
 
-// Implement the application (have wxWidgets set up the appropriate entry points, etc.)
-IMPLEMENT_APP(VVASEApplication);
-
 namespace VVASE
 {
+
+// Implement the application (have wxWidgets set up the appropriate entry points, etc.)
+IMPLEMENT_APP(VVASEApplication);
 
 //==========================================================================
 // Class:			VVASEApplication
@@ -76,7 +76,7 @@ bool VVASEApplication::OnInit()
 	// If we have command line arguments (assume they are file names) and
 	// another instance of this application is already running - pass the
 	// filenames to the other application
-	if (VVASEApp::argc > 1 && singleInstanceChecker->IsAnotherRunning())
+	if (VVASEApplication::argc > 1 && singleInstanceChecker->IsAnotherRunning())
 	{
 		// Another instance is already active - pass the file name to that instance to open
 		// Create a client object to connect to the server

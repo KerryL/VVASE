@@ -35,6 +35,9 @@
 #include "VVASE/core/threads/threadJob.h"
 #include "VVASE/core/threads/kinematicsData.h"
 
+// LibPlot2D headers
+#include <lp2d/renderer/renderWindow.h>
+
 namespace VVASE
 {
 
@@ -65,7 +68,7 @@ GuiCar::GuiCar(MainFrame &mainFrame, wxString pathAndFileName)
 	appearanceOptions = new AppearanceOptions(mainFrame, *this);
 
 	renderer = new CarRenderer(mainFrame, *this, wxID_ANY,
-		RenderWindow::GetBestSupportedAttributes());
+		LibPlot2D::RenderWindow::GetBestSupportedAttributes());
 	notebookTab = reinterpret_cast<wxWindow*>(renderer);
 
 	// Get an index for this item and add it to the list in the mainFrame

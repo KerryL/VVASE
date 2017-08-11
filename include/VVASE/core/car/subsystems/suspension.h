@@ -18,6 +18,7 @@
 #include "spring.h"
 #include "damper.h"
 #include "VVASE/core/utilities/wheelSetStructures.h"
+#include "VVASE/core/utilities/vvaseString.h"
 
 // Eigen headers
 #include <Eigen/Eigen>
@@ -41,7 +42,7 @@ public:
 
     // Required by RegisterableComponent
     static std::unique_ptr<Suspension> Create() { return std::make_unique<Suspension>(); }
-    static std::string GetName() { return _T("Suspension"); }
+    static vvaseString GetName() { return _T("Suspension"); }
 
 	// Calls the methods that calculate the wheel center location at each corner
 	void ComputeWheelCenters(const double &rfTireDiameter, const double &lfTireDiameter,
@@ -90,9 +91,9 @@ public:
 	};
 
 	// For getting the name of the elements of this class
-	static wxString GetHardpointName(const Hardpoints &point);
-	static wxString GetBarStyleName(const BarStyle &barStyle);
-	static wxString GetBarAttachmentname(const BarAttachment &barAttachment);
+	static vvaseString GetHardpointName(const Hardpoints &point);
+	static vvaseString GetBarStyleName(const BarStyle &barStyle);
+	static vvaseString GetBarAttachmentname(const BarAttachment &barAttachment);
 
 	// Suspension hardpoints
 	Corner rightFront;

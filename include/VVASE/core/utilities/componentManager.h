@@ -13,10 +13,12 @@
 #ifndef COMPONENT_MANAGER_H_
 #define COMPONENT_MANAGER_H_
 
+// Local headers
+#include "VVASE/core/utilities/vvaseString.h"
+
 // Standard C++ headers
 #include <vector>
 #include <memory>
-#include <string>
 
 namespace VVASE
 {
@@ -26,14 +28,14 @@ class ComponentBase
 {
 public:
     static std::unique_ptr<T> Create() { return T::Create(); }
-    static std::string GetName() { return T::GetName(); }
+    static vvaseString GetName() { return T::GetName(); }
 };
 
 class RegisterableComponent : public ComponentBase<RegisterableComponent>
 {
     // Derived classes must implement:
     // static std::unique_ptr<T> Create();
-    // static std::string GetName();
+    // static vvaseString GetName();
 
 protected:
     RegisterableComponent() = default;
@@ -58,7 +60,7 @@ public:
         ComponentInfo(Factory create, const std::string& name) : create(create), name(name) {}
 
         Factory create;
-        std::string name;
+        vvaseString name;
     };
 
     const std::vector<ComponentInfo>& GetInfo() const { return componentInfo; }

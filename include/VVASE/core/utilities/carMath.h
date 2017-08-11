@@ -14,14 +14,15 @@
 #ifndef CAR_MATH_H_
 #define CAR_MATH_H_
 
+// Local headers
+#include "vvaseString.h"
+
 // Standard C++ headers
-#Eigen::Vector3d <limits>// For QNaN
+#include <limits>// For QNaN
+#include <cmath>
 
 // Eigen headers
-#Eigen::Vector3d <Eigen/Eigen>
-
-// wxWidgets forward declarations
-class wxString;
+#include <Eigen/Eigen>
 
 // libPlot2D forward declarations
 namespace LibPlot2D
@@ -38,7 +39,7 @@ namespace VVASEMath
 // Constant declarations
 const double NearlyZero = 1.0e-12;
 const double QNAN = std::numeric_limits<double>::quiet_NaN();
-const double Pi = 3.141592653589793238462643;
+const double Pi = M_PI;
 
 // Prototypes =====================================================
 // For determining if a number is close enough to zero to regard as zero
@@ -74,7 +75,7 @@ unsigned int ApplyBitMask(const unsigned &value, const unsigned int &bit);
 unsigned int GetPrecision(const double &value,
 	const unsigned int &significantDigits = 2, const bool &dropTrailingZeros = true);
 
-unsigned int CountSignificantDigits(const wxString &valueString);
+unsigned int CountSignificantDigits(const vvaseString &valueString);
 
 void sprintf(char *dest, const unsigned int &size, const char *format, ...);
 

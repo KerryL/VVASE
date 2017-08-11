@@ -14,10 +14,9 @@
 
 // Local headers
 #include "VVASE/gui/guiObject.h"
-#include "vUtilities/managedList.h"
-#include "VVASE/core/car/corner.h"
-#include "VVASE/core/analyses/kinematicOutputs.h"
-#include "VVASE/core/analyses/kinematics.h"
+#include "VVASE/core/car/subsystems/corner.h"
+#include "VVASE/core/analysis/kinematicOutputs.h"
+#include "VVASE/core/analysis/kinematics.h"
 
 namespace VVASE
 {

@@ -62,7 +62,7 @@ public:
 	int AddObjectToList(GuiObject *objectToAdd);
 	void RemoveObjectFromList(int index);
 	inline int GetObjectCount() const { return openObjectList.size(); }
-	inline GuiObject *GetObjectByIndex(int index) const { return openObjectList[index]; }
+	inline GuiObject* GetObjectByIndex(int index) const { return openObjectList[index].get(); }
 
 	// Controls the object that is currently "active"
 	void SetActiveIndex(int index, bool selectNotebookTab = true);

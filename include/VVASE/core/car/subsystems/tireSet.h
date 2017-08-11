@@ -13,6 +13,9 @@
 #ifndef TIRE_SET_H_
 #define TIRE_SET_H_
 
+// Local headers
+#include "VVASE/core/utilities/vvaseString.h"
+
 // Standard C++ headers
 #include <memory>
 #include <string>
@@ -30,7 +33,7 @@ class TireSet
 public:
     // Required by RegisterableComponent
     static std::unique_ptr<TireSet> Create() { return std::make_unique<TireSet>(); }
-    static std::string GetName() { return _T("Tires"); }
+    static vvaseString GetName() { return _T("Tires"); }
 
 	// File read/write functions
 	void Write(BinaryWriter& file) const override;
