@@ -28,7 +28,7 @@ public:
 
 	// The algorithm control
 	void InitializeAlgorithm(int populationSize, int generationLimit,
-		int numberOfGenes, int *numberOfPhenotypes, bool minimize = false,
+		int numberOfGenes, const int *numberOfPhenotypes, bool minimize = false,
 		int crossover = 0, double elitism = 0.0, double mutation = 0.0);
 	bool PerformOptimization();
 

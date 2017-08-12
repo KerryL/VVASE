@@ -159,14 +159,15 @@ void GAObject::SimulateGeneration()
 
 			data = new KinematicsData(originalCarArray[i * inputList.size() + j],
 				workingCarArray[i * inputList.size() + j], inputList[j],
-				kinematicOutputArray + i * inputList.GetCount() + j);
+				kinematicOutputArray + i * inputList.size() + j);
 			ThreadJob newJob(ThreadJob::CommandThreadKinematicsGA, data,
 				optimization.GetCleanName(), temp);
 			queue.AddJob(newJob);
 		}
 	}
 
-	inverseSemaphore.Wait();
+	//inverseSemaphore.Wait();
+	// TODO:  Re-implement
 
 	for (i = 0; i < populationSize; i++)
 		fitnesses[currentGeneration][i] = DetermineFitness(&i);
@@ -207,14 +208,14 @@ double GAObject::DetermineFitness(const int *citizen)
 		for (j = 0; j < goalList.size(); j++)
 		{
 			// Check to see if the current goal's input matches the current input list item
-			if (goalList[j].beforeInputs == *(inputList[i]))
+			if (goalList[j].beforeInputs == inputList[i])
 			{
 				// Check to see if the current goal is a delta between two inputs, or if we
 				// only need to consider the current input
 				if (goalList[j].beforeInputs == goalList[i].afterInputs)
 				{
 					// If the output is undefined, make it a really big number (ruin the fitness)
-					if (VVASEMath::IsNaN(kinematicOutputArray[
+					if (Math::IsNaN(kinematicOutputArray[
 						citizen[0] * inputList.size() + i].GetOutputValue(goalList[j].output)))
 						fitness += 1e10;
 					else
@@ -222,7 +223,7 @@ double GAObject::DetermineFitness(const int *citizen)
 						// following formula:
 						// Fitness (for each goal) = fabs(DesiredValue - ActualValue) * Importance / ExpectedDeviation
 						// Total fitness is the sum of the individual fitnesses
-						fitness += fabs(goalList[j]->desiredValue - kinematicOutputArray[
+						fitness += fabs(goalList[j].desiredValue - kinematicOutputArray[
 							citizen[0] * inputList.size() + i].GetOutputValue(goalList[j].output))
 							* goalList[j].importance / goalList[j].expectedDeviation;
 				}
@@ -231,14 +232,14 @@ double GAObject::DetermineFitness(const int *citizen)
 					// Determine the index for the second set of inputs
 					for (k = 0; k < inputList.size(); k++)
 					{
-						if (goalList[j].afterInputs == *(inputList[k]))
+						if (goalList[j].afterInputs == inputList[k])
 							break;
 					}
 
 					// Proceed just as we did for the single input case:
 					// If the output is undefined, make it a really big number (ruin the fitness)
-					if (VVASEMath::IsNaN(kinematicOutputArray[
-						citizen[0] * inputList.size() + k].GetOutputValue(goalList[j]->output)))
+					if (Math::IsNaN(kinematicOutputArray[
+						citizen[0] * inputList.size() + k].GetOutputValue(goalList[j].output)))
 						fitness += 1e10;
 					else
 						// The output is not undefined.  Add to the fitness according to the
@@ -279,24 +280,22 @@ void GAObject::SetUp(const Car &targetCar)
 	gsaMutex.Lock();
 	DebugLog::GetInstance()->Log(_T("GAObject::SetUp (lock)"));
 
-	int *phenotypeSizes = new int[geneList.GetCount()];
+	std::vector<int> phenotypeSizes(geneList.size());
 	unsigned int i;
-	for (i = 0; i < geneList.GetCount(); i++)
-		phenotypeSizes[i] = geneList[i]->numberOfValues;
+	for (i = 0; i < geneList.size(); i++)
+		phenotypeSizes[i] = geneList[i].numberOfValues;
 
 	this->targetCar = &targetCar;
 
 	DebugLog::GetInstance()->Log(_T("GAObject::SetUp (unlock)"));
 	gsaMutex.Unlock();
 
-	InitializeAlgorithm(populationSize, generationLimit, geneList.GetCount(),
-		phenotypeSizes, true, crossover, elitism, mutation);
-
+	const int phenotypeCount(phenotypeSizes.size());
+	InitializeAlgorithm(populationSize, generationLimit, geneList.size(),
+		&phenotypeCount, true, crossover, elitism, mutation);
 
 	wxMutexLocker lock(gsaMutex);
 	DebugLog::GetInstance()->Log(_T("GAObject::SetUp (locker)"));
-
-	delete [] phenotypeSizes;
 
 	DetermineAllInputs();
 
@@ -309,7 +308,7 @@ void GAObject::SetUp(const Car &targetCar)
 	delete [] workingCarArray;
 	delete [] kinematicOutputArray;
 
-	numberOfCars = populationSize * inputList.GetCount();
+	numberOfCars = populationSize * inputList.size();
 
 	kinematicOutputArray = new KinematicOutputs[numberOfCars];
 	originalCarArray = new Car*[numberOfCars];
@@ -357,10 +356,10 @@ void GAObject::SetCarGenome(int carIndex, const int *currentGenome)
 	// Go through all of the genes, and adjust the variables to match the current genome
 	Gene *currentGene;
 	unsigned int i;
-	for (i = 0; i < geneList.GetCount(); i++)
+	for (i = 0; i < geneList.size(); i++)
 	{
 		// Get the current gene
-		currentGene = geneList[i];
+		currentGene = &geneList[i];
 
 		// Set the current and opposite corners
 		if (currentGene->location == Corner::LocationLeftFront)
@@ -385,82 +384,82 @@ void GAObject::SetCarGenome(int carIndex, const int *currentGenome)
 		}
 
 		// Determine which component of the vector to vary
-		if (currentGene->direction == Eigen::Vector3d::Axis::X)
+		if (currentGene->direction == Math::Axis::X)
 		{
 			// Set the appropriate variable to the value that corresponds to this phenotype
-			currentCorner->hardpoints[currentGene->hardpoint].x = currentGene->minimum +
+			currentCorner->hardpoints[currentGene->hardpoint].x() = currentGene->minimum +
 				double(currentGene->numberOfValues - currentGenome[i] - 1)
 				* (currentGene->maximum - currentGene->minimum) / double(currentGene->numberOfValues - 1);
 
 			// If there is a tied-to variable specified, update that as well
 			if (currentGene->tiedTo != Corner::NumberOfHardpoints)
-				currentCorner->hardpoints[currentGene->tiedTo].x =
-					currentCorner->hardpoints[currentGene->hardpoint].x;
+				currentCorner->hardpoints[currentGene->tiedTo].x() =
+					currentCorner->hardpoints[currentGene->hardpoint].x();
 
 			// If the suspension is symmetric, also update the point on the opposite corner
 			if (targetCar->suspension->isSymmetric)
 			{
 				// Copy the values from one side to the other
-				oppositeCorner->hardpoints[currentGene->hardpoint].x =
-					currentCorner->hardpoints[currentGene->hardpoint].x;
+				oppositeCorner->hardpoints[currentGene->hardpoint].x() =
+					currentCorner->hardpoints[currentGene->hardpoint].x();
 
 				// If there was a tied-to variable specified, we must update that on
 				// the other side of the car, too
 				if (currentGene->tiedTo != Corner::NumberOfHardpoints)
-					oppositeCorner->hardpoints[currentGene->tiedTo].x =
-						oppositeCorner->hardpoints[currentGene->hardpoint].x;
+					oppositeCorner->hardpoints[currentGene->tiedTo].x() =
+						oppositeCorner->hardpoints[currentGene->hardpoint].x();
 			}
 		}
-		else if (currentGene->direction == Eigen::Vector3d::Axis::Y)
+		else if (currentGene->direction == Math::Axis::Y)
 		{
 			// Set the appropriate variable to the value that corresponds to this phenotype
-			currentCorner->hardpoints[currentGene->hardpoint].y = currentGene->minimum +
+			currentCorner->hardpoints[currentGene->hardpoint].y() = currentGene->minimum +
 				double(currentGene->numberOfValues - currentGenome[i] - 1)
 				* (currentGene->maximum - currentGene->minimum) / double(currentGene->numberOfValues - 1);
 
 			// If there is a tied-to variable specified, update that as well
 			if (currentGene->tiedTo != Corner::NumberOfHardpoints)
-				currentCorner->hardpoints[currentGene->tiedTo].y =
-					currentCorner->hardpoints[currentGene->hardpoint].y;
+				currentCorner->hardpoints[currentGene->tiedTo].y() =
+					currentCorner->hardpoints[currentGene->hardpoint].y();
 
 			// If the suspension is symmetric, also update the point on the opposite corner
 			if (targetCar->suspension->isSymmetric)
 			{
 				// Copy the values from one side to the other (Note Y is flipped)
-				oppositeCorner->hardpoints[currentGene->hardpoint].y =
-					-currentCorner->hardpoints[currentGene->hardpoint].y;
+				oppositeCorner->hardpoints[currentGene->hardpoint].y() =
+					-currentCorner->hardpoints[currentGene->hardpoint].y();
 
 				// If there was a tied-to variable specified, we must update that on
 				// the other side of the car, too
 				if (currentGene->tiedTo != Corner::NumberOfHardpoints)
-					oppositeCorner->hardpoints[currentGene->tiedTo].y =
-						oppositeCorner->hardpoints[currentGene->hardpoint].y;
+					oppositeCorner->hardpoints[currentGene->tiedTo].y() =
+						oppositeCorner->hardpoints[currentGene->hardpoint].y();
 			}
 		}
-		else// Eigen::Vector3d::Axis::Z
+		else// Math::Axis::Z
 		{
 			// Set the appropriate variable to the value that corresponds to this phenotype
-			currentCorner->hardpoints[currentGene->hardpoint].z = currentGene->minimum +
+			currentCorner->hardpoints[currentGene->hardpoint].z() = currentGene->minimum +
 				double(currentGene->numberOfValues - currentGenome[i] - 1)
 				* (currentGene->maximum - currentGene->minimum) / double(currentGene->numberOfValues - 1);
 
 			// If there is a tied-to variable specified, update that as well
 			if (currentGene->tiedTo != Corner::NumberOfHardpoints)
-				currentCorner->hardpoints[currentGene->tiedTo].z =
-					currentCorner->hardpoints[currentGene->hardpoint].z;
+				currentCorner->hardpoints[currentGene->tiedTo].z() =
+					currentCorner->hardpoints[currentGene->hardpoint].z();
 
 			// If the suspension is symmetric, also update the point on the opposite corner
 			if (targetCar->suspension->isSymmetric)
 			{
 				// Copy the values from one side to the other
-				oppositeCorner->hardpoints[currentGene->hardpoint].z =
-					currentCorner->hardpoints[currentGene->hardpoint].z;
+				oppositeCorner->hardpoints[currentGene->hardpoint].z() =
+					currentCorner->hardpoints[currentGene->hardpoint].z();
 
 				// If there was a tied-to variable specified, we must update that on
 				// the other side of the car, too
 				if (currentGene->tiedTo != Corner::NumberOfHardpoints)
-					oppositeCorner->hardpoints[currentGene->tiedTo].z =
-						oppositeCorner->hardpoints[currentGene->hardpoint].z;
+					oppositeCorner->hardpoints[currentGene->tiedTo].z() =
+						oppositeCorner->hardpoints[currentGene->hardpoint].z();
 			}
 		}
 	}
@@ -513,7 +512,7 @@ void GAObject::PerformAdditionalActions()
 //		tiedTo			= const Corner::Hardpoints& specifying to a value that will always equal
 //						  Variable
 //		location		= const Corner::Location& specifying the associated corner
-//		direction		= const Eigen::Vector3d::Axis& specifying the component of the hardpoint
+//		direction		= const Math::Axis& specifying the component of the hardpoint
 //						  to optimize
 //		minimum			= const double& minimum value for this gene
 //		maximum			= const double& maximum value for this gene
@@ -528,20 +527,19 @@ void GAObject::PerformAdditionalActions()
 //
 //==========================================================================
 void GAObject::AddGene(const Corner::Hardpoints &hardpoint, const Corner::Hardpoints &tiedTo,
-						const Corner::Location &location, const Eigen::Vector3d::Axis &direction,
+						const Corner::Location &location, const Math::Axis &direction,
 						const double &minimum, const double &maximum, const int &numberOfValues)
 {
-	Gene *newGene = new Gene;
+	Gene newGene;
+	newGene.hardpoint		= hardpoint;
+	newGene.tiedTo			= tiedTo;
+	newGene.location		= location;
+	newGene.direction		= direction;
+	newGene.minimum			= minimum;
+	newGene.maximum			= maximum;
+	newGene.numberOfValues	= numberOfValues;
 
-	newGene->hardpoint		= hardpoint;
-	newGene->tiedTo			= tiedTo;
-	newGene->location		= location;
-	newGene->direction		= direction;
-	newGene->minimum		= minimum;
-	newGene->maximum		= maximum;
-	newGene->numberOfValues	= numberOfValues;
-
-	geneList.Add(newGene);
+	geneList.push_back(newGene);
 }
 
 //==========================================================================
@@ -577,16 +575,15 @@ void GAObject::AddGoal(const KinematicOutputs::OutputsComplete &output, const do
 		const double &expectedDeviation, const double &importance, const Kinematics::Inputs &beforeInputs,
 		const Kinematics::Inputs &afterInputs)
 {
-	Goal *newGoal = new Goal;
+	Goal newGoal;
+	newGoal.output				= output;
+	newGoal.desiredValue		= desiredValue;
+	newGoal.expectedDeviation	= expectedDeviation;
+	newGoal.importance			= importance;
+	newGoal.beforeInputs		= beforeInputs;
+	newGoal.afterInputs			= afterInputs;
 
-	newGoal->output				= output;
-	newGoal->desiredValue		= desiredValue;
-	newGoal->expectedDeviation	= expectedDeviation;
-	newGoal->importance			= importance;
-	newGoal->beforeInputs		= beforeInputs;
-	newGoal->afterInputs		= afterInputs;
-
-	goalList.Add(newGoal);
+	goalList.push_back(newGoal);
 }
 
 //==========================================================================
@@ -616,16 +613,16 @@ void GAObject::AddGoal(const KinematicOutputs::OutputsComplete &output, const do
 //
 //==========================================================================
 void GAObject::UpdateGene(const int &index, const Corner::Hardpoints &hardpoint, const Corner::Hardpoints &tiedTo,
-						const Corner::Location &location, const Eigen::Vector3d::Axis &direction,
+						const Corner::Location &location, const Math::Axis &direction,
 						const double &minimum, const double &maximum, const int &numberOfValues)
 {
-	geneList[index]->hardpoint		= hardpoint;
-	geneList[index]->tiedTo			= tiedTo;
-	geneList[index]->location		= location;
-	geneList[index]->direction		= direction;
-	geneList[index]->minimum		= minimum;
-	geneList[index]->maximum		= maximum;
-	geneList[index]->numberOfValues	= numberOfValues;
+	geneList[index].hardpoint		= hardpoint;
+	geneList[index].tiedTo			= tiedTo;
+	geneList[index].location		= location;
+	geneList[index].direction		= direction;
+	geneList[index].minimum			= minimum;
+	geneList[index].maximum			= maximum;
+	geneList[index].numberOfValues	= numberOfValues;
 }
 
 //==========================================================================
@@ -662,12 +659,12 @@ void GAObject::UpdateGoal(const int &index, const KinematicOutputs::OutputsCompl
 		const double &expectedDeviation, const double &importance, const Kinematics::Inputs &beforeInputs,
 		const Kinematics::Inputs &afterInputs)
 {
-	goalList[index]->output				= output;
-	goalList[index]->desiredValue		= desiredValue;
-	goalList[index]->expectedDeviation	= expectedDeviation;
-	goalList[index]->importance			= importance;
-	goalList[index]->beforeInputs		= beforeInputs;
-	goalList[index]->afterInputs		= afterInputs;
+	goalList[index].output				= output;
+	goalList[index].desiredValue		= desiredValue;
+	goalList[index].expectedDeviation	= expectedDeviation;
+	goalList[index].importance			= importance;
+	goalList[index].beforeInputs		= beforeInputs;
+	goalList[index].afterInputs			= afterInputs;
 }
 
 
@@ -691,55 +688,35 @@ void GAObject::UpdateGoal(const int &index, const KinematicOutputs::OutputsCompl
 //==========================================================================
 void GAObject::DetermineAllInputs()
 {
-	inputList.Clear();
+	inputList.clear();
+	inputList.push_back(goalList[0].beforeInputs);
 
-	Kinematics::Inputs *input = new Kinematics::Inputs;
-	*input = goalList[0]->beforeInputs;
-	inputList.Add(input);
-
-	unsigned int i, j;
-	for (i = 0; i < goalList.GetCount(); i++)
+	for (const auto& goal : goalList)
 	{
 		// Compare the before input with all of the inputs in the list
-		j = 0;
 		bool needsToBeAdded = true;
-		while (j < inputList.GetCount())
+		for (const auto& input : inputList)
 		{
-			if (goalList[i]->beforeInputs == *(inputList[j]))
+			if (goal.beforeInputs == input)
 				needsToBeAdded = false;
-
-			j++;
 		}
 
 		if (needsToBeAdded)
-		{
-			// Since we're adding this to a managed list, we're allowed to reassign this pointer
-			input = new Kinematics::Inputs;
-			*input = goalList[i]->beforeInputs;
-			inputList.Add(input);
-		}
+			inputList.push_back(goal.beforeInputs);
 
 		// If the before and after inputs are not the same, then check the after inputs, too
-		if (goalList[i]->beforeInputs != goalList[i]->afterInputs)
+		if (goal.beforeInputs != goal.afterInputs)
 		{
 			// Compare the after input with all of the inputs in the list
-			j = 0;
 			needsToBeAdded = true;
-			while (j < inputList.GetCount())
+			for (const auto& input : inputList)
 			{
-				if (goalList[i]->afterInputs == *(inputList[j]))
+				if (goal.afterInputs == input)
 					needsToBeAdded = false;
-
-				j++;
 			}
 
 			if (needsToBeAdded)
-			{
-				// Since we're adding this to a managed list, we're allowed to reassign this pointer
-				input = new Kinematics::Inputs;
-				*input = goalList[i]->afterInputs;
-				inputList.Add(input);
-			}
+				inputList.push_back(goal.afterInputs);
 		}
 	}
 }
@@ -843,7 +820,7 @@ bool GAObject::Write(wxString fileName)
 	wxMutexLocker lock(gsaMutex);
 
 	// Open the specified file
-	std::ofstream outFile(fileName.mb_str(), ios::out | ios::binary);
+	std::ofstream outFile(fileName.mb_str(), std::ios::binary);
 
 	// Make sure the file was opened OK
 	if (!outFile.is_open() || !outFile.good())
@@ -853,21 +830,21 @@ bool GAObject::Write(wxString fileName)
 	WriteFileHeader(&outFile);
 
 	// Write this object's data
-	outFile.write((char*)&populationSize, sizeof(int));
-	outFile.write((char*)&generationLimit, sizeof(int));
-	outFile.write((char*)&elitism, sizeof(double));
-	outFile.write((char*)&mutation, sizeof(double));
-	outFile.write((char*)&crossover, sizeof(int));
+	outFile.write(reinterpret_cast<const char*>(&populationSize), sizeof(populationSize));
+	outFile.write(reinterpret_cast<const char*>(&generationLimit), sizeof(generationLimit));
+	outFile.write(reinterpret_cast<const char*>(&elitism), sizeof(elitism));
+	outFile.write(reinterpret_cast<const char*>(&mutation), sizeof(mutation));
+	outFile.write(reinterpret_cast<const char*>(&crossover), sizeof(crossover));
 
-	unsigned int i = geneList.GetCount();
-	outFile.write((char*)&i, sizeof(int));
-	for (i = 0; i < geneList.GetCount(); i++)
-		outFile.write((char*)geneList[i], sizeof(Gene));
+	const unsigned int geneCount(geneList.size());
+	outFile.write(reinterpret_cast<const char*>(&geneCount), sizeof(geneCount));
+	for (const auto& gene : geneList)
+		outFile.write(reinterpret_cast<const char*>(&gene), sizeof(gene));
 
-	i = goalList.GetCount();
-	outFile.write((char*)&i, sizeof(int));
-	for (i = 0; i < goalList.GetCount(); i++)
-		outFile.write((char*)goalList[i], sizeof(Goal));
+	const unsigned int goalCount(goalList.size());
+	outFile.write(reinterpret_cast<const char*>(&goalCount), sizeof(goalCount));
+	for (const auto& goal : goalList)
+		outFile.write(reinterpret_cast<const char*>(&goal), sizeof(goal));
 
 	// Close the file
 	outFile.close();
@@ -895,10 +872,10 @@ bool GAObject::Read(wxString fileName)
 {
 	wxMutexLocker lock(gsaMutex);
 
-	geneList.Clear();
-	goalList.Clear();
+	geneList.clear();
+	goalList.clear();
 
-	std::ifstream inFile(fileName.mb_str(), ios::in | ios::binary);
+	std::ifstream inFile(fileName.mb_str(), std::ios::binary);
 	if (!inFile.is_open() || !inFile.good())
 		return false;
 
@@ -912,29 +889,27 @@ bool GAObject::Read(wxString fileName)
 	}
 
 	// Read this object's data
-	inFile.read((char*)&populationSize, sizeof(int));
-	inFile.read((char*)&generationLimit, sizeof(int));
-	inFile.read((char*)&elitism, sizeof(double));
-	inFile.read((char*)&mutation, sizeof(double));
-	inFile.read((char*)&crossover, sizeof(int));
+	inFile.read(reinterpret_cast<char*>(&populationSize), sizeof(populationSize));
+	inFile.read(reinterpret_cast<char*>(&generationLimit), sizeof(generationLimit));
+	inFile.read(reinterpret_cast<char*>(&elitism), sizeof(elitism));
+	inFile.read(reinterpret_cast<char*>(&mutation), sizeof(mutation));
+	inFile.read(reinterpret_cast<char*>(&crossover), sizeof(crossover));
 
 	int tempCount, i;
-	Gene *tempGene;
-	inFile.read((char*)&tempCount, sizeof(int));
+	Gene tempGene;
+	inFile.read(reinterpret_cast<char*>(&tempCount), sizeof(tempCount));
 	for (i = 0; i < tempCount; i++)
 	{
-		tempGene = new Gene;
-		inFile.read((char*)tempGene, sizeof(Gene));
-		geneList.Add(tempGene);
+		inFile.read(reinterpret_cast<char*>(&tempGene), sizeof(tempGene));
+		geneList.push_back(tempGene);
 	}
 
-	Goal *tempGoal;
-	inFile.read((char*)&tempCount, sizeof(int));
+	Goal tempGoal;
+	inFile.read(reinterpret_cast<char*>(&tempCount), sizeof(tempCount));
 	for (i = 0; i < tempCount; i++)
 	{
-		tempGoal = new Goal;
-		inFile.read((char*)tempGoal, sizeof(Goal));
-		goalList.Add(tempGoal);
+		inFile.read(reinterpret_cast<char*>(&tempGoal), sizeof(tempGoal));
+		goalList.push_back(tempGoal);
 	}
 
 	inFile.close();

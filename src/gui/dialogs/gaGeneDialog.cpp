@@ -185,9 +185,9 @@ void GAGeneDialog::CreateControls()
 	// Axis Direction
 	list.Clear();
 	for (i = 0; i < 3; i++)
-		list.Add(Eigen::Vector3d::GetAxisName((Eigen::Vector3d::Axis)i));
+		list.Add(Math::GetAxisName((Eigen::Vector3d::Axis)i));
 	wxStaticText *axisDirectionLabel = new wxStaticText(this, wxID_STATIC, _T("Axis Direction"));
-	axisDirectionCombo = new wxComboBox(this, wxID_ANY, Eigen::Vector3d::GetAxisName(axisDirection), wxDefaultPosition,
+	axisDirectionCombo = new wxComboBox(this, wxID_ANY, Math::GetAxisName(axisDirection), wxDefaultPosition,
 		wxDefaultSize, list, wxCB_READONLY);
 	SetMinimumWidthFromContents(axisDirectionCombo, additionalWidth);
 	inputAreaSizer->Add(axisDirectionLabel, 0, textSizerFlags);

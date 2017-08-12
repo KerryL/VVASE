@@ -240,7 +240,7 @@ void GeneticAlgorithm::SetMutationProbability(double mutation)
 //
 //==========================================================================
 void GeneticAlgorithm::InitializeAlgorithm(int populationSize, int generationLimit,
-	int numberOfGenes, int *numberOfPhenotypes, bool minimize, int crossover,
+	int numberOfGenes, const int *numberOfPhenotypes, bool minimize, int crossover,
 	double elitism, double mutation)
 {
 	DeleteDynamicMemory();

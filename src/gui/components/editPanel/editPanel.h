@@ -19,7 +19,6 @@
 #include "VVASE/gui/guiObject.h"
 
 // wxWidgets forward declarations
-class wxPanel;
 class wxCombo;
 class wxCheckBox;
 

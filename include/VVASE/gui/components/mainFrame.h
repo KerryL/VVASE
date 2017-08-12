@@ -21,11 +21,8 @@
 // Local headers
 #include "VVASE/core/analysis/kinematics.h"
 #include "VVASE/core/analysis/quasiStatic.h"
-//#include "../undoRedoStack.h"
+#include "../undoRedoStack.h"
 #include "VVASE/gui/guiObject.h"
-
-// TODO:  FIX
-class UndoRedoStack {};
 
 // Standard C++ headers
 #include <vector>

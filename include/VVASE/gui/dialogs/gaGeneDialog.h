@@ -17,6 +17,7 @@
 
 // Local headers
 #include "VVASE/core/car/subsystems/corner.h"
+#include "VVASE/core/utilities/carMath.h"
 
 namespace VVASE
 {
@@ -31,7 +32,7 @@ public:
 	// Constructor
 	GAGeneDialog(wxWindow *parent, const Suspension* currentSuspension,
 		const Corner::Hardpoints &hardpoint, const Corner::Hardpoints &tiedTo,
-		const Eigen::Vector3d::Axis &axisDirection, const Corner::Location &cornerLocation,
+		const Math::Axis &axisDirection, const Corner::Location &cornerLocation,
 		const double &minimum, const double &maximum, const unsigned int &numberOfValues,
 		wxWindowID id, const wxPoint &position, long style = wxDEFAULT_DIALOG_STYLE);
 
@@ -41,7 +42,7 @@ public:
 	// Private data accessors
 	Corner::Hardpoints GetHardpoint() const { return hardpoint; };
 	Corner::Hardpoints GetTiedTo() const { return tiedTo; };
-	Eigen::Vector3d::Axis GetAxisDirection() const { return axisDirection; };
+	Math::Axis GetAxisDirection() const { return axisDirection; };
 	Corner::Location GetCornerLocation() const { return cornerLocation; };
 	double GetMinimum() const { return minimum; };
 	double GetMaximum() const { return maximum; };
@@ -78,7 +79,7 @@ private:
 	// Values (populated when OK is clicked)
 	Corner::Hardpoints hardpoint;
 	Corner::Hardpoints tiedTo;
-	Eigen::Vector3d::Axis axisDirection;
+	Math::Axis axisDirection;
 	Corner::Location cornerLocation;
 	double minimum;
 	double maximum;

@@ -43,6 +43,18 @@ public:
 		Eigen::Vector3d centerOfRotation;	// [in]
 		RotationSequence sequence;
 		WheelSet tireDeflections;			// [in]
+
+		bool operator==(const Inputs& target) const
+		{
+			return pitch == target.pitch &&
+			roll == target.roll &&
+			heave == target.heave &&
+			rackTravel == target.rackTravel &&
+			centerOfRotation == target.centerOfRotation &&
+			sequence == target.sequence &&
+			tireDeflections == target.tireDeflections;
+		}
+		bool operator!=(const Inputs& target) const { return !(*this == target); }
 	};
 
 	inline void SetPitch(const double &pitch) { inputs.pitch = pitch; }

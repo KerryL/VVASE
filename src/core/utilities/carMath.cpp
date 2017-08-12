@@ -34,7 +34,7 @@ namespace VVASE
 {
 
 //==========================================================================
-// Namespace:		VVASEMath
+// Namespace:		Math
 // Function:		IsZero
 //
 // Description:		Returns true if a number is small enough to regard as zero.
@@ -49,7 +49,7 @@ namespace VVASE
 //		bool, true if the number is less than NEARLY_ZERO
 //
 //==========================================================================
-bool VVASEMath::IsZero(const double &n, const double &eps)
+bool Math::IsZero(const double &n, const double &eps)
 {
 	if (fabs(n) < eps)
 		return true;
@@ -58,7 +58,7 @@ bool VVASEMath::IsZero(const double &n, const double &eps)
 }
 
 //==========================================================================
-// Namespace:		VVASEMath
+// Namespace:		Math
 // Function:		IsZero
 //
 // Description:		Returns true if a number is small enough to regard as zero.
@@ -74,7 +74,7 @@ bool VVASEMath::IsZero(const double &n, const double &eps)
 //		bool, true if the magnitude is less than NEARLY_ZERO
 //
 //==========================================================================
-bool VVASEMath::IsZero(const Eigen::VectorXd &v, const double &eps)
+bool Math::IsZero(const Eigen::VectorXd &v, const double &eps)
 {
 	if (v.norm() < eps)
 		return true;
@@ -83,7 +83,7 @@ bool VVASEMath::IsZero(const Eigen::VectorXd &v, const double &eps)
 }
 
 //==========================================================================
-// Namespace:		VVASEMath
+// Namespace:		Math
 // Function:		Clamp
 //
 // Description:		Ensures the specified value is between the limits.  In the
@@ -103,7 +103,7 @@ bool VVASEMath::IsZero(const Eigen::VectorXd &v, const double &eps)
 //		double, equal to the clamped value
 //
 //==========================================================================
-double VVASEMath::Clamp(const double &value, const double &lowerLimit, const double &upperLimit)
+double Math::Clamp(const double &value, const double &lowerLimit, const double &upperLimit)
 {
 	// Make sure the arguments are valid
 	assert(lowerLimit < upperLimit);
@@ -117,7 +117,7 @@ double VVASEMath::Clamp(const double &value, const double &lowerLimit, const dou
 }
 
 //==========================================================================
-// Namespace:		VVASEMath
+// Namespace:		Math
 // Function:		RangeToPlusMinusPi
 //
 // Description:		Adds or subtracts 2 * pi to the specified angle until the
@@ -133,7 +133,7 @@ double VVASEMath::Clamp(const double &value, const double &lowerLimit, const dou
 //		double, equal to the re-ranged angle
 //
 //==========================================================================
-double VVASEMath::RangeToPlusMinusPi(const double &angle)
+double Math::RangeToPlusMinusPi(const double &angle)
 {
 	// NOTE:  fmod function returns a *signed* remainder of truncated division.
 	// Other floating-point modulo operations may return a the result differently,
@@ -145,7 +145,7 @@ double VVASEMath::RangeToPlusMinusPi(const double &angle)
 }
 
 //==========================================================================
-// Namespace:		VVASEMath
+// Namespace:		Math
 // Function:		RangeToPlusMinus180
 //
 // Description:		Adds or subtracts 180 to the specified angle until the
@@ -161,7 +161,7 @@ double VVASEMath::RangeToPlusMinusPi(const double &angle)
 //		double, equal to the re-ranged angle
 //
 //==========================================================================
-double VVASEMath::RangeToPlusMinus180(const double &angle)
+double Math::RangeToPlusMinus180(const double &angle)
 {
 	// NOTE:  fmod function returns a *signed* remainder of truncated division.
 	// Other floating-point modulo operations may return a the result differently,
@@ -173,7 +173,7 @@ double VVASEMath::RangeToPlusMinus180(const double &angle)
 }
 
 //==========================================================================
-// Namespace:		VVASEMath
+// Namespace:		Math
 // Function:		Unwrap
 //
 // Description:		Minimizes the jump between adjacent points by adding/subtracting
@@ -189,7 +189,7 @@ double VVASEMath::RangeToPlusMinus180(const double &angle)
 //		None
 //
 //==========================================================================
-void VVASEMath::Unwrap(LibPlot2D::Dataset2D &data)
+void Math::Unwrap(LibPlot2D::Dataset2D &data)
 {
 	const double threshold(Pi);
 	unsigned int i;
@@ -203,7 +203,7 @@ void VVASEMath::Unwrap(LibPlot2D::Dataset2D &data)
 }
 
 //==========================================================================
-// Namespace:		VVASEMath
+// Namespace:		Math
 // Function:		Sign
 //
 // Description:		Returns 1.0 for positive, -1.0 for negative and 0.0 for zero.
@@ -218,7 +218,7 @@ void VVASEMath::Unwrap(LibPlot2D::Dataset2D &data)
 //		double
 //
 //==========================================================================
-double VVASEMath::Sign(const double &value)
+double Math::Sign(const double &value)
 {
 	if (value > 0.0)
 		return 1.0;
@@ -229,7 +229,7 @@ double VVASEMath::Sign(const double &value)
 }
 
 //==========================================================================
-// Namespace:		VVASEMath
+// Namespace:		Math
 // Function:		ApplyBitMask
 //
 // Description:		Extracts a single bit from values of the specified dataset.
@@ -245,7 +245,7 @@ double VVASEMath::Sign(const double &value)
 //		double
 //
 //==========================================================================
-LibPlot2D::Dataset2D VVASEMath::ApplyBitMask(const LibPlot2D::Dataset2D &data, const unsigned int &bit)
+LibPlot2D::Dataset2D Math::ApplyBitMask(const LibPlot2D::Dataset2D &data, const unsigned int &bit)
 {
 	LibPlot2D::Dataset2D set(data);
 	unsigned int i;
@@ -255,7 +255,7 @@ LibPlot2D::Dataset2D VVASEMath::ApplyBitMask(const LibPlot2D::Dataset2D &data, c
 }
 
 //==========================================================================
-// Namespace:		VVASEMath
+// Namespace:		Math
 // Function:		ApplyBitMask
 //
 // Description:		Extracts a single bit from the value.
@@ -271,13 +271,13 @@ LibPlot2D::Dataset2D VVASEMath::ApplyBitMask(const LibPlot2D::Dataset2D &data, c
 //		double
 //
 //==========================================================================
-unsigned int VVASEMath::ApplyBitMask(const unsigned &value, const unsigned int &bit)
+unsigned int Math::ApplyBitMask(const unsigned &value, const unsigned int &bit)
 {
 	return (value >> bit) & 1;
 }
 
 //==========================================================================
-// Namespace:		VVASEMath
+// Namespace:		Math
 // Function:		XDataConsistentlySpaced
 //
 // Description:		Checks to see if the X-data has consistent deltas.
@@ -293,7 +293,7 @@ unsigned int VVASEMath::ApplyBitMask(const unsigned &value, const unsigned int &
 //		bool, true if the x-data spacing is within the tolerance
 //
 //==========================================================================
-bool VVASEMath::XDataConsistentlySpaced(const LibPlot2D::Dataset2D &data, const double &tolerancePercent)
+bool Math::XDataConsistentlySpaced(const LibPlot2D::Dataset2D &data, const double &tolerancePercent)
 {
 	assert(data.GetNumberOfPoints() > 1);
 
@@ -324,7 +324,7 @@ bool VVASEMath::XDataConsistentlySpaced(const LibPlot2D::Dataset2D &data, const 
 }
 
 //==========================================================================
-// Namespace:		VVASEMath
+// Namespace:		Math
 // Function:		GetAverageXSpacing
 //
 // Description:		Finds the average period of the data in the set.
@@ -339,13 +339,13 @@ bool VVASEMath::XDataConsistentlySpaced(const LibPlot2D::Dataset2D &data, const 
 //		double
 //
 //==========================================================================
-double VVASEMath::GetAverageXSpacing(const LibPlot2D::Dataset2D &data)
+double Math::GetAverageXSpacing(const LibPlot2D::Dataset2D &data)
 {
 	return data.GetXData(data.GetNumberOfPoints() - 1) / (data.GetNumberOfPoints() - 1.0);
 }
 
 //==========================================================================
-// Namespace:		VVASEMath
+// Namespace:		Math
 // Function:		GetPrecision
 //
 // Description:		Determines the best number of digits after the decimal place
@@ -364,7 +364,7 @@ double VVASEMath::GetAverageXSpacing(const LibPlot2D::Dataset2D &data)
 //		bool, true if the x-data spacing is within the tolerance
 //
 //==========================================================================
-unsigned int VVASEMath::GetPrecision(const double &value,
+unsigned int Math::GetPrecision(const double &value,
 	const unsigned int &significantDigits, const bool &dropTrailingZeros)
 {
 	int precision(significantDigits - (unsigned int)floor(log10(value)) - 1);
@@ -394,7 +394,7 @@ unsigned int VVASEMath::GetPrecision(const double &value,
 }
 
 //==========================================================================
-// Namespace:		VVASEMath
+// Namespace:		Math
 // Function:		CountSignificantDigits
 //
 // Description:		Returns the number of significant digits in the string.
@@ -409,7 +409,7 @@ unsigned int VVASEMath::GetPrecision(const double &value,
 //		unsigned int
 //
 //==========================================================================
-unsigned int VVASEMath::CountSignificantDigits(const wxString &valueString)
+unsigned int Math::CountSignificantDigits(const wxString &valueString)
 {
 	double value;
 	if (!valueString.ToDouble(&value))
@@ -443,7 +443,7 @@ unsigned int VVASEMath::CountSignificantDigits(const wxString &valueString)
 }
 
 //==========================================================================
-// Namespace:		VVASEMath
+// Namespace:		Math
 // Function:		sprintf
 //
 // Description:		Cross-platform friendly sprintf(_s) macro.  Calls sprintf_s
@@ -462,9 +462,9 @@ unsigned int VVASEMath::CountSignificantDigits(const wxString &valueString)
 //
 //==========================================================================
 #ifdef __WXMSW__
-void VVASEMath::sprintf(char *dest, const unsigned int &size, const char *format, ...)
+void Math::sprintf(char *dest, const unsigned int &size, const char *format, ...)
 #else
-void VVASEMath::sprintf(char *dest, const unsigned int&, const char *format, ...)
+void Math::sprintf(char *dest, const unsigned int&, const char *format, ...)
 #endif
 {
 	va_list list;
@@ -480,7 +480,7 @@ void VVASEMath::sprintf(char *dest, const unsigned int&, const char *format, ...
 }
 
 //==========================================================================
-// Namespace:		VVASEMath
+// Namespace:		Math
 // Function:		GetPrecision
 //
 // Description:		Returns the required precision (digits past zero) to
@@ -498,7 +498,7 @@ void VVASEMath::sprintf(char *dest, const unsigned int&, const char *format, ...
 //		unsigned int
 //
 //==========================================================================
-unsigned int VVASEMath::GetPrecision(const double &minimum, const double &majorResolution, const bool &isLogarithmic)
+unsigned int Math::GetPrecision(const double &minimum, const double &majorResolution, const bool &isLogarithmic)
 {
 	double baseValue;
 	if (isLogarithmic)
@@ -513,7 +513,7 @@ unsigned int VVASEMath::GetPrecision(const double &minimum, const double &majorR
 }
 
 //==========================================================================
-// Namespace:		VVASEMath
+// Namespace:		Math
 // Function:		GetPlaneNormal
 //
 // Description:		Calculates the direction that is normal to the plane
@@ -532,7 +532,7 @@ unsigned int VVASEMath::GetPrecision(const double &minimum, const double &majorR
 //		defined by the three input arguments
 //
 //==========================================================================
-Eigen::Vector3d VVASEMath::GetPlaneNormal(const Eigen::Vector3d &point1,
+Eigen::Vector3d Math::GetPlaneNormal(const Eigen::Vector3d &point1,
 	const Eigen::Vector3d &point2, const Eigen::Vector3d &point3)
 {
 	// Check for existence of a solution
@@ -553,7 +553,7 @@ Eigen::Vector3d VVASEMath::GetPlaneNormal(const Eigen::Vector3d &point1,
 }
 
 //==========================================================================
-// Namespace:		VVASEMath
+// Namespace:		Math
 // Function:		GetIntersectionOfTwoPlanes
 //
 // Description:		Calculates the axis that is created by the intersection
@@ -573,7 +573,7 @@ Eigen::Vector3d VVASEMath::GetPlaneNormal(const Eigen::Vector3d &point1,
 //		bool indicating whether or not a solution was found
 //
 //==========================================================================
-bool VVASEMath::GetIntersectionOfTwoPlanes(const Eigen::Vector3d &normal1,
+bool Math::GetIntersectionOfTwoPlanes(const Eigen::Vector3d &normal1,
 	const Eigen::Vector3d &pointOnPlane1, const Eigen::Vector3d &normal2,
 	const Eigen::Vector3d &pointOnPlane2, Eigen::Vector3d &axisDirection,
 	Eigen::Vector3d &pointOnAxis)
@@ -672,7 +672,7 @@ bool VVASEMath::GetIntersectionOfTwoPlanes(const Eigen::Vector3d &normal1,
 }
 
 //==========================================================================
-// Namespace:		VVASEMath
+// Namespace:		Math
 // Function:		NearestPointOnAxis
 //
 // Description:		Returns the point on the given line that is closest to
@@ -694,7 +694,7 @@ bool VVASEMath::GetIntersectionOfTwoPlanes(const Eigen::Vector3d &normal1,
 //		targetPoint
 //
 //==========================================================================
-Eigen::Vector3d VVASEMath::NearestPointOnAxis(const Eigen::Vector3d &pointOnAxis,
+Eigen::Vector3d Math::NearestPointOnAxis(const Eigen::Vector3d &pointOnAxis,
 	const Eigen::Vector3d &directionOfAxis, const Eigen::Vector3d &targetPoint)
 {
 	double t;
@@ -714,7 +714,7 @@ Eigen::Vector3d VVASEMath::NearestPointOnAxis(const Eigen::Vector3d &pointOnAxis
 
 /*
 //==========================================================================
-// Namespace:		VVASEMath
+// Namespace:		Math
 // Function:		NearestPointInPlane
 //
 // Description:		Returns the point in a specified plane that is closest to
@@ -733,7 +733,7 @@ Eigen::Vector3d VVASEMath::NearestPointOnAxis(const Eigen::Vector3d &pointOnAxis
 //		Eigen::Vector3d describing the point on in the plane that is closest to targetPoint
 //
 //==========================================================================
-Eigen::Vector3d VVASEMath::NearestPointInPlane(const Eigen::Vector3d &pointInPlane,
+Eigen::Vector3d Math::NearestPointInPlane(const Eigen::Vector3d &pointInPlane,
 	const Eigen::Vector3d &planeNormal, const Eigen::Vector3d &targetPoint)
 {
 	double t;
@@ -746,7 +746,7 @@ Eigen::Vector3d VVASEMath::NearestPointInPlane(const Eigen::Vector3d &pointInPla
 }*/
 
 //==========================================================================
-// Namespace:		VVASEMath
+// Namespace:		Math
 // Function:		ProjectOntoPlane
 //
 // Description:		Returns the vector after it is projected onto the
@@ -764,7 +764,7 @@ Eigen::Vector3d VVASEMath::NearestPointInPlane(const Eigen::Vector3d &pointInPla
 //		Eigen::Vector3d after the projection
 //
 //==========================================================================
-Eigen::Vector3d VVASEMath::ProjectOntoPlane(const Eigen::Vector3d &vectorToProject,
+Eigen::Vector3d Math::ProjectOntoPlane(const Eigen::Vector3d &vectorToProject,
 	const Eigen::Vector3d &planeNormal)
 {
 	Eigen::Vector3d normalComponent = vectorToProject.dot(planeNormal) * planeNormal.normalized();
@@ -772,7 +772,7 @@ Eigen::Vector3d VVASEMath::ProjectOntoPlane(const Eigen::Vector3d &vectorToProje
 }
 
 //==========================================================================
-// Namespace:		VVASEMath
+// Namespace:		Math
 // Function:		IntersectWithPlane
 //
 // Description:		Returns the point where the specified axis passes through
@@ -792,7 +792,7 @@ Eigen::Vector3d VVASEMath::ProjectOntoPlane(const Eigen::Vector3d &vectorToProje
 //		Eigen::Vector3d where the intersection occurs
 //
 //==========================================================================
-Eigen::Vector3d VVASEMath::IntersectWithPlane(const Eigen::Vector3d &planeNormal,
+Eigen::Vector3d Math::IntersectWithPlane(const Eigen::Vector3d &planeNormal,
 	const Eigen::Vector3d &pointOnPlane, Eigen::Vector3d axisDirection,
 	const Eigen::Vector3d &pointOnAxis)
 {
@@ -810,6 +810,32 @@ Eigen::Vector3d VVASEMath::IntersectWithPlane(const Eigen::Vector3d &planeNormal
 
 	// Use the parametric equation to find the point
 	return pointOnAxis + axisDirection * t;
+}
+
+//==========================================================================
+// Namespace:		Math
+// Function:		GetAxisName
+//
+// Description:		Returns the name of the specified axis.
+//
+// Input Arguments:
+//		axis	= const Axis&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		vvaseString
+//
+//==========================================================================
+vvaseString Math::GetAxisName(const Axis& axis)
+{
+	if (axis == Axis::X)
+		return _T("X");
+	else if (axis == Axis::Y)
+		return _T("Y");
+	//else if (axis == Axis::Z)
+		return _T("Z");
 }
 
 }// namespace VVASE

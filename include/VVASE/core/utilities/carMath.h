@@ -33,8 +33,15 @@ class Dataset2D;
 namespace VVASE
 {
 
-namespace VVASEMath
+namespace Math
 {
+
+enum class Axis
+{
+	X,
+	Y,
+	Z
+};
 
 // Constant declarations
 const double NearlyZero = 1.0e-12;
@@ -102,6 +109,8 @@ Eigen::Vector3d ProjectOntoPlane(const Eigen::Vector3d &vectorToProject, const E
 // Returns the intersection of the specified plane and axis
 Eigen::Vector3d IntersectWithPlane(const Eigen::Vector3d &planeNormal, const Eigen::Vector3d &pointOnPlane,
 	Eigen::Vector3d axisDirection, const Eigen::Vector3d &pointOnAxis);
+
+vvaseString GetAxisName(const Axis& axis);
 }// namespace Math
 
 // Template methods must be defined here:

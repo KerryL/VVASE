@@ -18,6 +18,7 @@
 #include "VVASE/core/analysis/kinematics.h"
 #include "../core/optimization/geneticAlgorithm.h"
 #include "VVASE/core/utilities/debugLog.h"
+#include "VVASE/core/utilities/carMath.h"
 
 // Eigen headers
 #include <Eigen/Eigen>
@@ -48,7 +49,7 @@ public:
 		Corner::Hardpoints hardpoint;
 		Corner::Hardpoints tiedTo;
 		Corner::Location location;
-		Eigen::Vector3d::Axis direction;
+		Math::Axis direction;
 
 		double minimum;
 		double maximum;
@@ -76,11 +77,11 @@ public:
 	// For changing what is being optimized
 	void ClearAllGenes() { geneList.clear(); }
 	void AddGene(const Corner::Hardpoints &hardpoint, const Corner::Hardpoints &tiedTo,
-		const Corner::Location &location, const Eigen::Vector3d::Axis &direction, const double &minimum,
+		const Corner::Location &location, const Math::Axis &direction, const double &minimum,
 		const double &maximum, const int &numberOfValues);
 	void RemoveGene(const int &index) { geneList.erase(geneList.begin() + index); }
 	void UpdateGene(const int &index, const Corner::Hardpoints &hardpoint, const Corner::Hardpoints &tiedTo,
-		const Corner::Location &location, const Eigen::Vector3d::Axis &direction, const double &minimum,
+		const Corner::Location &location, const Math::Axis &direction, const double &minimum,
 		const double &maximum, const int &numberOfValues);
 	int GetGeneCount() const { return geneList.size(); }
 	const Gene& GetGene(const int &index) const { return geneList[index]; }
