@@ -13,7 +13,7 @@
 #include <cassert>
 
 // Local headers
-#include "engine.h"
+#include "VVASE/core/car/subsystems/engine.h"
 #include "VVASE/core/utilities/binaryReader.h"
 #include "VVASE/core/utilities/binaryWriter.h"
 
@@ -59,26 +59,6 @@ Engine::Engine()
 Engine::Engine(const Engine &engine)
 {
 	*this = engine;
-}
-
-//==========================================================================
-// Class:			Engine
-// Function:		~Engine
-//
-// Description:		Destructor for the Engine class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Engine::~Engine()
-{
 }
 
 //==========================================================================
@@ -133,31 +113,6 @@ void Engine::Read(BinaryReader& file, const int& fileVersion)
 	}
 	else
 		assert(false);
-}
-
-//==========================================================================
-// Class:			Engine
-// Function:		operator =
-//
-// Description:		Assignment operator for Engine class.
-//
-// Input Arguments:
-//		engine	= const Engine& to assign to this object
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		Engine&, reference to this object
-//
-//==========================================================================
-Engine& Engine::operator = (const Engine &engine)
-{
-	// Check for self-assignment
-	if (this == &engine)
-		return *this;
-
-	return *this;
 }
 
 }// namespace VVASE

@@ -16,13 +16,11 @@
 // Standard C++ headers
 #include <utility>
 #include <vector>
+#include <memory>
 
 // wxWidgets headers
 #include <wx/wx.h>
 #include <wx/xml/xml.h>
-
-// Local headers
-#include "VVASE/core/utilities/managedList.h"
 
 // wxWidgets forward declarations
 class wxZipInputStream;
@@ -35,11 +33,7 @@ namespace VVASE
 class XlsxReader
 {
 public:
-	// Constructor
 	XlsxReader(const wxString &pathAndFileName);
-
-	// Destructor
-	~XlsxReader();
 
 	// For checking to make sure it opened OK
 	bool IsOk() const { return isOkFlag; }
@@ -61,8 +55,8 @@ private:
 	wxString pathAndFileName;
 
 	// Objects for initial access and unzipping of the files
-	wxZipInputStream *OpenFile() const;
-	wxZipEntry *GetEntry(wxZipInputStream &zipStream, const wxString &entryString) const;
+	std::unique_ptr<wxZipInputStream> OpenFile() const;
+	std::unique_ptr<wxZipEntry> GetEntry(wxZipInputStream &zipStream, const wxString &entryString) const;
 	bool LoadSheet(const unsigned int &sheet);
 
 	// Functions and objects required for object initialization
@@ -79,9 +73,9 @@ private:
 	wxString GetReferenceCell(const wxString &dimensionString) const;
 
 	// Objects for storing the XML documents and related information
-	wxXmlDocument *workbook;
-	wxXmlDocument *sharedStrings;
-	ManagedList<wxXmlDocument> worksheets;
+	std::unique_ptr<wxXmlDocument> workbook;
+	std::unique_ptr<wxXmlDocument> sharedStrings;
+	std::vector<std::unique_ptr<wxXmlDocument>> worksheets;
 	std::vector<std::pair<wxString, unsigned int> > sheets;
 
 	bool isOkFlag;

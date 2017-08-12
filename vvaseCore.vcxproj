@@ -18,7 +18,21 @@
     <ClInclude Include="include\VVASE\core\analyses\quasiStatic.h" />
     <ClInclude Include="include\VVASE\core\analyses\quasiStaticOutputs.h" />
     <ClInclude Include="include\VVASE\core\car\car.h" />
-    <ClInclude Include="include\VVASE\core\car\subsystem.h" />
+    <ClInclude Include="include\VVASE\core\car\subsystems\aerodynamics.h" />
+    <ClInclude Include="include\VVASE\core\car\subsystems\brakes.h" />
+    <ClInclude Include="include\VVASE\core\car\subsystems\corner.h" />
+    <ClInclude Include="include\VVASE\core\car\subsystems\damper.h" />
+    <ClInclude Include="include\VVASE\core\car\subsystems\differential.h" />
+    <ClInclude Include="include\VVASE\core\car\subsystems\driver.h" />
+    <ClInclude Include="include\VVASE\core\car\subsystems\drivetrain.h" />
+    <ClInclude Include="include\VVASE\core\car\subsystems\engine.h" />
+    <ClInclude Include="include\VVASE\core\car\subsystems\fuelCell.h" />
+    <ClInclude Include="include\VVASE\core\car\subsystems\massProperties.h" />
+    <ClInclude Include="include\VVASE\core\car\subsystems\spring.h" />
+    <ClInclude Include="include\VVASE\core\car\subsystems\subsystem.h" />
+    <ClInclude Include="include\VVASE\core\car\subsystems\suspension.h" />
+    <ClInclude Include="include\VVASE\core\car\subsystems\tire.h" />
+    <ClInclude Include="include\VVASE\core\car\subsystems\tireSet.h" />
     <ClInclude Include="include\VVASE\core\threads\jobQueue.h" />
     <ClInclude Include="include\VVASE\core\threads\kinematicsData.h" />
     <ClInclude Include="include\VVASE\core\threads\optimizationData.h" />
@@ -30,29 +44,13 @@
     <ClInclude Include="include\VVASE\core\utilities\binaryWriter.h" />
     <ClInclude Include="include\VVASE\core\utilities\carMath.h" />
     <ClInclude Include="include\VVASE\core\utilities\componentManager.h" />
-    <ClInclude Include="include\VVASE\core\utilities\dataValidator.h" />
     <ClInclude Include="include\VVASE\core\utilities\debugger.h" />
     <ClInclude Include="include\VVASE\core\utilities\debugLog.h" />
     <ClInclude Include="include\VVASE\core\utilities\geometryMath.h" />
-    <ClInclude Include="include\VVASE\core\utilities\unitConverter.h" />
+    <ClInclude Include="include\VVASE\core\utilities\unitType.h" />
     <ClInclude Include="include\VVASE\core\utilities\wheelSetStructures.h" />
-    <ClInclude Include="include\VVASE\core\utilities\wxRelatedUtilities.h" />
     <ClInclude Include="include\VVASE\core\utilities\xlsxReader.h" />
     <ClInclude Include="src\core\analyses\analysisManager.h" />
-    <ClInclude Include="src\core\car\subsystems\aerodynamics.h" />
-    <ClInclude Include="src\core\car\subsystems\brakes.h" />
-    <ClInclude Include="src\core\car\subsystems\corner.h" />
-    <ClInclude Include="src\core\car\subsystems\damper.h" />
-    <ClInclude Include="src\core\car\subsystems\differential.h" />
-    <ClInclude Include="src\core\car\subsystems\driver.h" />
-    <ClInclude Include="src\core\car\subsystems\drivetrain.h" />
-    <ClInclude Include="src\core\car\subsystems\engine.h" />
-    <ClInclude Include="src\core\car\subsystems\fuelCell.h" />
-    <ClInclude Include="src\core\car\subsystems\massProperties.h" />
-    <ClInclude Include="src\core\car\subsystems\spring.h" />
-    <ClInclude Include="src\core\car\subsystems\suspension.h" />
-    <ClInclude Include="src\core\car\subsystems\tire.h" />
-    <ClInclude Include="src\core\car\subsystems\tireSet.h" />
     <ClInclude Include="src\core\optimizations\geneticAlgorithm.h" />
   </ItemGroup>
   <ItemGroup>
@@ -86,17 +84,15 @@
     <ClCompile Include="src\core\utilities\binaryReader.cpp" />
     <ClCompile Include="src\core\utilities\binaryWriter.cpp" />
     <ClCompile Include="src\core\utilities\carMath.cpp" />
-    <ClCompile Include="src\core\utilities\dataValidator.cpp" />
     <ClCompile Include="src\core\utilities\debugger.cpp" />
     <ClCompile Include="src\core\utilities\debugLog.cpp" />
     <ClCompile Include="src\core\utilities\geometryMath.cpp" />
-    <ClCompile Include="src\core\utilities\unitConverter.cpp" />
-    <ClCompile Include="src\core\utilities\wxRelatedUtilities.cpp" />
     <ClCompile Include="src\core\utilities\xlsxReader.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{EE1A01F9-26AF-4C43-A507-195A1E5FB45A}</ProjectGuid>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -124,9 +120,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IntDir>$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

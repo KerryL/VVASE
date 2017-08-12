@@ -66,8 +66,6 @@ public:
 	void SetFrontWheelDrive(const double& bias);
 	void SetRearWheelDrive(const double& bias);
 
-	std::vector<double> GetBiasRatios() const;
-
     // Required by RegisterableComponent
     static std::unique_ptr<Drivetrain> Create() { return std::make_unique<Drivetrain>(); }
     static vvaseString GetName() { return _T("Drivetrain"); }
