@@ -70,6 +70,10 @@ public:
     static std::unique_ptr<Drivetrain> Create() { return std::make_unique<Drivetrain>(); }
     static vvaseString GetName() { return _T("Drivetrain"); }
 
+    // Required by Subsystem
+    wxPanel* GetEditPanel() override;
+	wxTreeListItem* GetTreeItem() override;
+
 private:
 	std::unique_ptr<Differential> rearDifferential;
     std::unique_ptr<Differential> midDifferential;

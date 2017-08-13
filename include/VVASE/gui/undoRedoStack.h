@@ -17,7 +17,7 @@
 #include <stack>
 
 // Local headers
-#include "gaObject.h"
+//#include "gaObject.h"
 
 namespace VVASE
 {
@@ -68,12 +68,14 @@ public:
 
 			double vector[3];
 
-			struct GeneData
+			// TODO:  Re-implement
+			/*struct GeneData
 			{
 				GAObject *optimization;
 				GAObject::Gene gene;
-			} geneData;
+			} geneData;*/
 
+			// TODO:  Can templates help clean this up?
 			// FIXME:  Can't do goals because Kinematics::Inputs containts a Eigen::Vector3d, which has a user-defined constructor
 			/*struct GoalData
 			{
@@ -96,7 +98,7 @@ public:
 	void RemoveGuiObjectFromStack(int index);
 
 	// Operator overloads (explicitly overloaded due to warning C4512
-	// caused by reference to MAIN_FRAME)
+	// caused by reference to MainFrame)
 	UndoRedoStack& operator = (const UndoRedoStack &undoRedo);
 
 private:

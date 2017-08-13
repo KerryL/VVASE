@@ -52,6 +52,10 @@ public:
 	// Required by RegisterableComponent
     static std::unique_ptr<Brakes> Create() { return std::make_unique<Brakes>(); }
     static vvaseString GetName() { return _T("Brake"); }
+
+    // Required by Subsystem
+    wxPanel* GetEditPanel() override;
+	wxTreeListItem* GetTreeItem() override;
 };
 
 }// namespace VVASE

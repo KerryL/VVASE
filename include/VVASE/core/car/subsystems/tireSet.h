@@ -35,6 +35,10 @@ public:
     static std::unique_ptr<TireSet> Create() { return std::make_unique<TireSet>(); }
     static vvaseString GetName() { return _T("Tires"); }
 
+    // Required by Subsystem
+    wxPanel* GetEditPanel() override;
+	wxTreeListItem* GetTreeItem() override;
+
 	// File read/write functions
 	void Write(BinaryWriter& file) const override;
 	void Read(BinaryReader& file, const int& fileVersion) override;
@@ -43,6 +47,8 @@ public:
 	std::unique_ptr<Tire> leftFront;
 	std::unique_ptr<Tire> rightRear;
 	std::unique_ptr<Tire> leftRear;
+
+	static
 };
 
 }// namespace VVASE

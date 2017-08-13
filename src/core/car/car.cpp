@@ -545,5 +545,13 @@ std::vector<std::unique_ptr<Subsystem>> Car::CreateComponents()
 	return components;
 }
 
+const Subsystem* Car::GetSubsystem(const vvaseString& key) const
+{
+	const auto it(subsystems.find(key));
+	if (it == subsystems.end())
+		return nullptr;
+	return *it;
+}
+
 }// namespace VVASE
 

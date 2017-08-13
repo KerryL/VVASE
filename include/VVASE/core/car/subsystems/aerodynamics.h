@@ -41,6 +41,10 @@ public:
     static std::unique_ptr<Aerodynamics> Create() { return std::make_unique<Aerodynamics>(); }
     static vvaseString GetName() { return _T("Aerodynamics"); }
 
+    // Required by Subsystem
+    wxPanel* GetEditPanel() override;
+	wxTreeListItem* GetTreeItem() override;
+
 private:
 	// Class properties
 	Eigen::Vector3d centerOfPressure;	// [in]

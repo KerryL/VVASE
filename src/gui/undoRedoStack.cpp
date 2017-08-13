@@ -11,7 +11,7 @@
 //        to provide the opportunity to undo and redo.
 
 // Local headers
-#include "undoRedoStack.h"
+#include "VVASE/gui/undoRedoStack.h"
 #include "VVASE/gui/components/mainFrame.h"
 #include "components/editPanel/editPanel.h"
 #include "guiCar.h"
@@ -359,7 +359,7 @@ void UndoRedoStack::Update() const
 	for (i = 0; i < mainFrame.GetObjectCount(); i++)
 	{
 		if (mainFrame.GetObjectByIndex(i)->GetType() == GuiObject::TypeCar)
-			dynamic_cast<GuiCar*>(mainFrame.GetObjectByIndex(i))->GetOriginalCar().suspension->UpdateSymmetry();
+			dynamic_cast<Suspension*>(dynamic_cast<GuiCar*>(mainFrame.GetObjectByIndex(i))->GetOriginalCar()->GetSubsystem(Suspension::GetName()))->UpdateSymmetry();
 	}
 
 	// Update all areas of the GUI screen

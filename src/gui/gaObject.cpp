@@ -356,6 +356,8 @@ void GAObject::SetCarGenome(int carIndex, const int *currentGenome)
 	// Go through all of the genes, and adjust the variables to match the current genome
 	Gene *currentGene;
 	unsigned int i;
+	Suspension* currentSuspension(dynamic_cast<Suspension*>(originalCarArray[carIndex]->GetSubsystem(Suspension::GetName()))));
+	Suspension* targetSuspension(dynamic_cast<Suspension*>(targetCar->GetSubsystem(Suspension::GetName())));
 	for (i = 0; i < geneList.size(); i++)
 	{
 		// Get the current gene
@@ -364,23 +366,23 @@ void GAObject::SetCarGenome(int carIndex, const int *currentGenome)
 		// Set the current and opposite corners
 		if (currentGene->location == Corner::LocationLeftFront)
 		{
-			currentCorner = &originalCarArray[carIndex]->suspension->leftFront;
-			oppositeCorner = &originalCarArray[carIndex]->suspension->rightFront;
+			currentCorner = &suspension->leftFront;
+			oppositeCorner = &suspension->rightFront;
 		}
 		else if (currentGene->location == Corner::LocationRightFront)
 		{
-			currentCorner = &originalCarArray[carIndex]->suspension->rightFront;
-			oppositeCorner = &originalCarArray[carIndex]->suspension->leftFront;
+			currentCorner = &suspension->rightFront;
+			oppositeCorner = &suspension->leftFront;
 		}
 		else if (currentGene->location == Corner::LocationLeftRear)
 		{
-			currentCorner = &originalCarArray[carIndex]->suspension->leftRear;
-			oppositeCorner = &originalCarArray[carIndex]->suspension->rightRear;
+			currentCorner = &suspension->leftRear;
+			oppositeCorner = &suspension->rightRear;
 		}
 		else
 		{
-			currentCorner = &originalCarArray[carIndex]->suspension->rightRear;
-			oppositeCorner = &originalCarArray[carIndex]->suspension->leftRear;
+			currentCorner = &suspension->rightRear;
+			oppositeCorner = &suspension->leftRear;
 		}
 
 		// Determine which component of the vector to vary
@@ -397,7 +399,7 @@ void GAObject::SetCarGenome(int carIndex, const int *currentGenome)
 					currentCorner->hardpoints[currentGene->hardpoint].x();
 
 			// If the suspension is symmetric, also update the point on the opposite corner
-			if (targetCar->suspension->isSymmetric)
+			if (targetSuspension->isSymmetric)
 			{
 				// Copy the values from one side to the other
 				oppositeCorner->hardpoints[currentGene->hardpoint].x() =
@@ -423,7 +425,7 @@ void GAObject::SetCarGenome(int carIndex, const int *currentGenome)
 					currentCorner->hardpoints[currentGene->hardpoint].y();
 
 			// If the suspension is symmetric, also update the point on the opposite corner
-			if (targetCar->suspension->isSymmetric)
+			if (targetSuspension->isSymmetric)
 			{
 				// Copy the values from one side to the other (Note Y is flipped)
 				oppositeCorner->hardpoints[currentGene->hardpoint].y() =
@@ -449,7 +451,7 @@ void GAObject::SetCarGenome(int carIndex, const int *currentGenome)
 					currentCorner->hardpoints[currentGene->hardpoint].z();
 
 			// If the suspension is symmetric, also update the point on the opposite corner
-			if (targetCar->suspension->isSymmetric)
+			if (targetSuspension->isSymmetric)
 			{
 				// Copy the values from one side to the other
 				oppositeCorner->hardpoints[currentGene->hardpoint].z() =

@@ -44,6 +44,10 @@ public:
     static std::unique_ptr<Suspension> Create() { return std::make_unique<Suspension>(); }
     static vvaseString GetName() { return _T("Suspension"); }
 
+    // Required by Subsystem
+    wxPanel* GetEditPanel() override;
+	wxTreeListItem* GetTreeItem() override;
+
 	// Calls the methods that calculate the wheel center location at each corner
 	void ComputeWheelCenters(const double &rfTireDiameter, const double &lfTireDiameter,
 		const double &rrTireDiameter, const double &lrTireDiameter);

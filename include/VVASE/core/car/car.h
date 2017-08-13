@@ -51,10 +51,12 @@
 // Local headers
 #include "VVASE/core/utilities/componentManager.h"
 #include "VVASE/core/car/subsystems/subsystem.h"
+#include "VVASE/core/utilities/vvaseString.h"
 
 // Standard C++ headers
-#include <iosfwd>// For forward declarations of ostream objects
 #include <type_traits>
+#include <memory>
+#include <unordered_map>
 
 // wxWidgets headers
 #include <wx/thread.h>
@@ -100,6 +102,9 @@ public:
 
 	wxMutex &GetMutex() const { return carMutex; };
 
+	Subsystem* GetSubsystem(const vvaseString& key) { return subsystems[key].get(); }
+	const Subsystem* GetSubsystem(const vvaseString& key) const;
+
 private:
 	// File header information
 	struct FileHeaderInfo
@@ -114,20 +119,21 @@ private:
 	static const int currentFileVersion;
 	mutable wxMutex carMutex;
 
-    static ComponentManager<Subsystem> componentManager;
+    static ComponentManager<Subsystem> subsystemManager;
+    std::unordered_map<vvaseString, std::unique_ptr<Subsystem>> subsystems;
 };
 
 template <typename T>
 bool Car::RegisterSubsystem()
 {
-    componentManager.Register<T>();
+    subsystemManager.Register<T>();
     return true;// TODO:  Always true?
 }
 
 template <typename T>
 bool Car::UnregisterSubsystem()
 {
-    componentManager.Unregister<T>();
+    subsystemManager.Unregister<T>();
     return true;// TODO:  Always true?
 }
 

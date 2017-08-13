@@ -21,7 +21,7 @@
 // Local headers
 #include "VVASE/core/analysis/kinematics.h"
 #include "VVASE/core/analysis/quasiStatic.h"
-#include "../undoRedoStack.h"
+#include "VVASE/gui/undoRedoStack.h"
 #include "VVASE/gui/guiObject.h"
 
 // Standard C++ headers
