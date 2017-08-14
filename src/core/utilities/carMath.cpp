@@ -195,10 +195,10 @@ void Math::Unwrap(LibPlot2D::Dataset2D &data)
 	unsigned int i;
 	for (i = 1; i < data.GetNumberOfPoints(); i++)
 	{
-		if (data.GetYData(i) - data.GetYData(i - 1) > threshold)
-			data.GetYPointer()[i] -= 2 * Pi;
-		if (data.GetYData(i) - data.GetYData(i - 1) < -threshold)
-			data.GetYPointer()[i] += 2 * Pi;
+		if (data.GetY()[i] - data.GetY()[i - 1] > threshold)
+			data.GetY()[i] -= 2 * Pi;
+		if (data.GetY()[i] - data.GetY()[i - 1] < -threshold)
+			data.GetY()[i] += 2 * Pi;
 	}
 }
 
@@ -250,7 +250,7 @@ LibPlot2D::Dataset2D Math::ApplyBitMask(const LibPlot2D::Dataset2D &data, const 
 	LibPlot2D::Dataset2D set(data);
 	unsigned int i;
 	for (i = 0; i < set.GetNumberOfPoints(); i++)
-		set.GetYPointer()[i] = ApplyBitMask((unsigned int)set.GetYPointer()[i], bit);
+		set.GetY()[i] = ApplyBitMask(static_cast<unsigned int>(set.GetY()[i]), bit);
 	return set;
 }
 
@@ -305,7 +305,7 @@ bool Math::XDataConsistentlySpaced(const LibPlot2D::Dataset2D &data, const doubl
 
 	for (i = 2; i < data.GetNumberOfPoints(); i++)
 	{
-		spacing = data.GetXData(i) - data.GetXData(i - 1);
+		spacing = data.GetX()[i] - data.GetX()[i - 1];
 		if (spacing < minSpacing)
 			minSpacing = spacing;
 		if (spacing > maxSpacing)
@@ -341,7 +341,7 @@ bool Math::XDataConsistentlySpaced(const LibPlot2D::Dataset2D &data, const doubl
 //==========================================================================
 double Math::GetAverageXSpacing(const LibPlot2D::Dataset2D &data)
 {
-	return data.GetXData(data.GetNumberOfPoints() - 1) / (data.GetNumberOfPoints() - 1.0);
+	return data.GetX().back() / (data.GetNumberOfPoints() - 1.0);
 }
 
 //==========================================================================
@@ -409,7 +409,7 @@ unsigned int Math::GetPrecision(const double &value,
 //		unsigned int
 //
 //==========================================================================
-unsigned int Math::CountSignificantDigits(const wxString &valueString)
+unsigned int Math::CountSignificantDigits(const vvaseString &valueString)
 {
 	double value;
 	if (!valueString.ToDouble(&value))
@@ -600,64 +600,64 @@ bool Math::GetIntersectionOfTwoPlanes(const Eigen::Vector3d &normal1,
 		// and we choose the component that is farthest from zero.  For example,
 		// if the axis direction is (1.0, 0.0, 0.0), we set X = 0 because we know
 		// the axis must pass through the Y-Z plane.
-		if (fabs(axisDirection.x) > fabs(axisDirection.y) && fabs(axisDirection.x) > fabs(axisDirection.z))
+		if (fabs(axisDirection.x()) > fabs(axisDirection.y()) && fabs(axisDirection.x()) > fabs(axisDirection.z()))
 		{
 			// Choose x = 0
-			pointOnAxis.x = 0.0;
+			pointOnAxis.x() = 0.0;
 
 			// Again, to ensure numerical stability we need to be smart about whether we
 			// solve y or z next and whether we use the first or second plane's normal
 			// vector in the denominator of the last solved component.
 			// FIxME:  This can probably be made to be safer (can we prove we will never have a divide by zero?)
-			if (fabs(normal1.y) > fabs(normal1.z))
+			if (fabs(normal1.y()) > fabs(normal1.z()))
 			{
-				pointOnAxis.z = (planeConstant1 * normal2.y - planeConstant2 * normal1.y)
-					/ (normal2.y * normal1.z - normal2.z * normal1.y);
-				pointOnAxis.y = (planeConstant1 - normal1.z * pointOnAxis.z) / normal1.y;
+				pointOnAxis.z() = (planeConstant1 * normal2.y() - planeConstant2 * normal1.y())
+					/ (normal2.y() * normal1.z() - normal2.z() * normal1.y());
+				pointOnAxis.y() = (planeConstant1 - normal1.z() * pointOnAxis.z()) / normal1.y();
 			}
 			else
 			{
-				pointOnAxis.y = (planeConstant1 * normal2.z - planeConstant2 * normal1.z)
-					/ (normal2.z * normal1.y - normal2.y * normal1.z);
-				pointOnAxis.z = (planeConstant1 - normal1.y * pointOnAxis.y) / normal1.z;
+				pointOnAxis.y() = (planeConstant1 * normal2.z() - planeConstant2 * normal1.z())
+					/ (normal2.z() * normal1.y() - normal2.y() * normal1.z());
+				pointOnAxis.z() = (planeConstant1 - normal1.y() * pointOnAxis.y()) / normal1.z();
 			}
 		}
-		else if (fabs(axisDirection.y) > fabs(axisDirection.x) && fabs(axisDirection.y) > fabs(axisDirection.z))
+		else if (fabs(axisDirection.y()) > fabs(axisDirection.x()) && fabs(axisDirection.y()) > fabs(axisDirection.z()))
 		{
 			// Choose y = 0
-			pointOnAxis.y = 0.0;
+			pointOnAxis.y() = 0.0;
 
 			// Solve the other two components
-			if (fabs(normal1.x) > fabs(normal1.z))
+			if (fabs(normal1.x()) > fabs(normal1.z()))
 			{
-				pointOnAxis.z = (planeConstant1 * normal2.x - planeConstant2 * normal1.x)
-					/ (normal2.x * normal1.z - normal2.z * normal1.x);
-				pointOnAxis.x = (planeConstant1 - normal1.z * pointOnAxis.z) / normal1.x;
+				pointOnAxis.z() = (planeConstant1 * normal2.x() - planeConstant2 * normal1.x())
+					/ (normal2.x() * normal1.z() - normal2.z() * normal1.x());
+				pointOnAxis.x() = (planeConstant1 - normal1.z() * pointOnAxis.z()) / normal1.x();
 			}
 			else
 			{
-				pointOnAxis.x = (planeConstant1 * normal2.z - planeConstant2 * normal1.z)
-					/ (normal2.z * normal1.x - normal2.x * normal1.z);
-				pointOnAxis.z = (planeConstant1 - normal1.x * pointOnAxis.x) / normal1.z;
+				pointOnAxis.x() = (planeConstant1 * normal2.z() - planeConstant2 * normal1.z())
+					/ (normal2.z() * normal1.x() - normal2.x() * normal1.z());
+				pointOnAxis.z() = (planeConstant1 - normal1.x() * pointOnAxis.x()) / normal1.z();
 			}
 		}
 		else
 		{
 			// Choose z = 0
-			pointOnAxis.z = 0.0;
+			pointOnAxis.z() = 0.0;
 
 			// Solve the other two components
-			if (fabs(normal1.x) > fabs(normal1.y))
+			if (fabs(normal1.x()) > fabs(normal1.y()))
 			{
-				pointOnAxis.y = (planeConstant1 * normal2.x - planeConstant2 * normal1.x)
-					/ (normal2.x * normal1.y - normal2.y * normal1.x);
-				pointOnAxis.x = (planeConstant1 - normal1.y * pointOnAxis.y) / normal1.x;
+				pointOnAxis.y() = (planeConstant1 * normal2.x() - planeConstant2 * normal1.x())
+					/ (normal2.x() * normal1.y() - normal2.y() * normal1.x());
+				pointOnAxis.x() = (planeConstant1 - normal1.y() * pointOnAxis.y()) / normal1.x();
 			}
 			else
 			{
-				pointOnAxis.x = (planeConstant1 * normal2.y - planeConstant2 * normal1.y)
-					/ (normal2.y * normal1.x - normal2.x * normal1.y);
-				pointOnAxis.y = (planeConstant1 - normal1.x * pointOnAxis.x) / normal1.y;
+				pointOnAxis.x() = (planeConstant1 * normal2.y() - planeConstant2 * normal1.y())
+					/ (normal2.y() * normal1.x() - normal2.x() * normal1.y());
+				pointOnAxis.y() = (planeConstant1 - normal1.x() * pointOnAxis.x()) / normal1.y();
 			}
 		}
 

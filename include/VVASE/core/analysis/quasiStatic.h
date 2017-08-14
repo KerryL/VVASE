@@ -44,6 +44,13 @@ public:
 		const Kinematics::Inputs& kinematicsInputs, const Inputs& inputs,
 		QuasiStaticOutputs& outputs) const;
 
+	// Required by Analysis
+	wxPanel* GetEditPanel() override;
+	wxPanel* GetNotebookPage() override;
+	wxTreeNode* GetTreeNode() override;
+	OptimizationInterface* GetOptimizationInterface() override;
+	bool Compute(const Car& car) override;
+
 private:
 	WheelSet ComputeWheelLoads(const Car* originalCar, const KinematicOutputs& outputs,
 		const WheelSet& preLoad) const;

@@ -38,6 +38,8 @@ public:
 	void Read(BinaryReader& file, const int& fileVersion);
 
 	// Class properties
+	// TODO:  Eliminate raw values in favor of matrix
+	Eigen::Matrix3d inertia;
 	double mass;				// [slug]
 	double ixx;					// [slug-in^2]
 	double iyy;					// [slug-in^2]
@@ -55,8 +57,8 @@ public:
 	bool IsValidInertiaTensor() const;
 
 	// Get the principle moments of inertia for this object
-	bool GetPrincipleInertias(Eigen::Vector3d *principleInertias, Eigen::Vector3d *ixxDirection = NULL,
-							  Eigen::Vector3d *iyyDirection = NULL, Eigen::Vector3d *izzDirection = NULL) const;
+	void GetPrincipleInertias(Eigen::Vector3d& principleInertias, Eigen::Vector3d *direction1 = nullptr,
+		Eigen::Vector3d *direction2 = nullptr, Eigen::Vector3d *direction3 = nullptr) const;
 
 	MassProperties& operator=(const MassProperties &massProperties);
 

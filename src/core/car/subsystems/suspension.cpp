@@ -13,7 +13,7 @@
 #include <wx/wx.h>
 
 // Local headers
-#include "suspension.h"
+#include "VVASE/core/car/subsystems/suspension.h"
 #include "VVASE/core/utilities/debugger.h"
 #include "VVASE/core/utilities/binaryReader.h"
 #include "VVASE/core/utilities/binaryWriter.h"
@@ -44,7 +44,7 @@ Suspension::Suspension() : rightFront(Corner::LocationRightFront),
 	// Initialize the hardpoints within this object as well
 	int i;
 	for (i = 0; i < NumberOfHardpoints; i++)
-		hardpoints[i].Set(0.0, 0.0, 0.0);
+		hardpoints[i].setZero();
 
 	// Initialize the other suspension parameters
 	barRate.front = 0.0;
@@ -197,10 +197,10 @@ void Suspension::Read(BinaryReader& file, const int& fileVersion)
 //		None
 //
 // Return Value:
-//		wxString containing the name of the bar style
+//		vvaseString containing the name of the bar style
 //
 //==========================================================================
-wxString Suspension::GetBarStyleName(const BarStyle &barStyle)
+vvaseString Suspension::GetBarStyleName(const BarStyle &barStyle)
 {
 	switch (barStyle)
 	{
@@ -241,10 +241,10 @@ wxString Suspension::GetBarStyleName(const BarStyle &barStyle)
 //		None
 //
 // Return Value:
-//		wxString containing the name of the point
+//		vvaseString containing the name of the point
 //
 //==========================================================================
-wxString Suspension::GetHardpointName(const Hardpoints& point)
+vvaseString Suspension::GetHardpointName(const Hardpoints& point)
 {
 	switch (point)
 	{
@@ -317,10 +317,10 @@ wxString Suspension::GetHardpointName(const Hardpoints& point)
 //		None
 //
 // Return Value:
-//		wxString containing the name of the attachment method
+//		vvaseString containing the name of the attachment method
 //
 //==========================================================================
-wxString Suspension::GetBarAttachmentname(const BarAttachment &barAttachment)
+vvaseString Suspension::GetBarAttachmentname(const BarAttachment &barAttachment)
 {
 	switch (barAttachment)
 	{
@@ -395,7 +395,7 @@ void Suspension::ComputeWheelCenters(const double &rfTireDiameter, const double 
 //		Suspension&, reference to this
 //
 //==========================================================================
-Suspension& Suspension::operator=(const Suspension& suspension)
+/*Suspension& Suspension::operator=(const Suspension& suspension)
 {
 	// Check for self assignment
 	if (this == &suspension)
@@ -435,7 +435,7 @@ Suspension& Suspension::operator=(const Suspension& suspension)
 	rearThirdDamper = suspension.rearThirdDamper;
 
 	return *this;
-}
+}*/
 
 //==========================================================================
 // Class:			Suspension
@@ -469,7 +469,7 @@ void Suspension::UpdateSymmetry()
 		leftFront.hardpoints[i] = rightFront.hardpoints[i];
 
 		// Flip the sign on the Y componenet
-		leftFront.hardpoints[i].y *= -1.0;
+		leftFront.hardpoints[i].y() *= -1.0;
 	}
 
 	// Copy the rear points
@@ -479,7 +479,7 @@ void Suspension::UpdateSymmetry()
 		leftRear.hardpoints[i] = rightRear.hardpoints[i];
 
 		// Flip the sign on the Y componenet
-		leftRear.hardpoints[i].y *= -1.0;
+		leftRear.hardpoints[i].y() *= -1.0;
 	}
 
 	// Copy the other information in the front

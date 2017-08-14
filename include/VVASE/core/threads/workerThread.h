@@ -19,7 +19,7 @@
 #include <wx/thread.h>
 
 // Local headers
-#include "VVASE/core/analyses/kinematics.h"
+#include "VVASE/core/analysis/kinematics.h"
 
 namespace VVASE
 {

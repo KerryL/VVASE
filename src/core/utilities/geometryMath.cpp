@@ -173,23 +173,23 @@ GeometryMath::Plane GeometryMath::FindSphereSphereIntersectionPlane(const Sphere
 	// To find a point on the plane, set any two components of the point
 	// equal to zero.  We choose which points are zerod to ensure numeric
 	// stability.
-	if (fabs(p.normal.x) > fabs(p.normal.y) && fabs(p.normal.x) > fabs(p.normal.z))
+	if (fabs(p.normal.x()) > fabs(p.normal.y()) && fabs(p.normal.x()) > fabs(p.normal.z()))
 	{
-		p.point.y = 0.0;
-		p.point.z = 0.0;
-		p.point.x = d / p.normal.x;
+		p.point.y() = 0.0;
+		p.point.z() = 0.0;
+		p.point.x() = d / p.normal.x();
 	}
-	else if (fabs(p.normal.y) > fabs(p.normal.z))
+	else if (fabs(p.normal.y()) > fabs(p.normal.z()))
 	{
-		p.point.x = 0.0;
-		p.point.z = 0.0;
-		p.point.y = d / p.normal.y;
+		p.point.x() = 0.0;
+		p.point.z() = 0.0;
+		p.point.y() = d / p.normal.y();
 	}
 	else
 	{
-		p.point.x = 0.0;
-		p.point.y = 0.0;
-		p.point.z = d / p.normal.z;
+		p.point.x() = 0.0;
+		p.point.y() = 0.0;
+		p.point.z() = d / p.normal.z();
 	}
 
 	return p;
@@ -216,7 +216,7 @@ GeometryMath::Plane GeometryMath::FindSphereSphereIntersectionPlane(const Sphere
 bool GeometryMath::FindPlanePlaneIntersection(const Plane &p1, const Plane &p2, Axis &axis)
 {
 	// If the planes are parallel, then there is no solution
-	if (VVASEMath::IsZero(p1.normal.cross(p2.normal)))
+	if (VVASE::Math::IsZero(p1.normal.cross(p2.normal)))
 		return false;
 
 	axis.direction = p1.normal.cross(p2.normal).normalized();
@@ -235,48 +235,48 @@ bool GeometryMath::FindPlanePlaneIntersection(const Plane &p1, const Plane &p2, 
 	// on the line, selecting the direction component with the largest magnitude
 	// for the denominator in the solution (we do this to avoid dividing by
 	// numbers close to zero).
-	if (fabs(axis.direction.x) > fabs(axis.direction.y) &&
-		fabs(axis.direction.x) > fabs(axis.direction.z))
+	if (fabs(axis.direction.x()) > fabs(axis.direction.y()) &&
+		fabs(axis.direction.x()) > fabs(axis.direction.z()))
 	{
-		axis.point.x = 0.0;
+		axis.point.x() = 0.0;
 
 		// Another check to ensure numeric stability
-		if (fabs(p1.normal.y) > fabs(p1.normal.z))
-			SolveForAxisPoint(p1.normal.y, p1.normal.z,
-				p2.normal.y, p2.normal.z, planeConstant1, planeConstant2,
-				axis.point.y, axis.point.z);
+		if (fabs(p1.normal.y()) > fabs(p1.normal.z()))
+			SolveForAxisPoint(p1.normal.y(), p1.normal.z(),
+				p2.normal.y(), p2.normal.z(), planeConstant1, planeConstant2,
+				axis.point.y(), axis.point.z());
 		else
-			SolveForAxisPoint(p1.normal.z, p1.normal.y,
-				p2.normal.z, p2.normal.y, planeConstant1, planeConstant2,
-				axis.point.z, axis.point.y);
+			SolveForAxisPoint(p1.normal.z(), p1.normal.y(),
+				p2.normal.z(), p2.normal.y(), planeConstant1, planeConstant2,
+				axis.point.z(), axis.point.y());
 	}
-	else if (fabs(axis.direction.y) > fabs(axis.direction.z))
+	else if (fabs(axis.direction.y()) > fabs(axis.direction.z()))
 	{
-		axis.point.y = 0.0;
+		axis.point.y() = 0.0;
 
 		// Another check to ensure numeric stability
-		if (fabs(p1.normal.x) > fabs(p1.normal.z))
-			SolveForAxisPoint(p1.normal.x, p1.normal.z,
-				p2.normal.x, p2.normal.z, planeConstant1, planeConstant2,
-				axis.point.x, axis.point.z);
+		if (fabs(p1.normal.x()) > fabs(p1.normal.z()))
+			SolveForAxisPoint(p1.normal.x(), p1.normal.z(),
+				p2.normal.x(), p2.normal.z(), planeConstant1, planeConstant2,
+				axis.point.x(), axis.point.z());
 		else
-			SolveForAxisPoint(p1.normal.z, p1.normal.x,
-				p2.normal.z, p2.normal.x, planeConstant1, planeConstant2,
-				axis.point.z, axis.point.x);
+			SolveForAxisPoint(p1.normal.z(), p1.normal.x(),
+				p2.normal.z(), p2.normal.x(), planeConstant1, planeConstant2,
+				axis.point.z(), axis.point.x());
 	}
 	else
 	{
-		axis.point.z = 0.0;
+		axis.point.z() = 0.0;
 
 		// Another check to ensure numeric stability
-		if (fabs(p1.normal.x) > fabs(p1.normal.y))
-			SolveForAxisPoint(p1.normal.x, p1.normal.y,
-				p2.normal.x, p2.normal.y, planeConstant1, planeConstant2,
-				axis.point.x, axis.point.y);
+		if (fabs(p1.normal.x()) > fabs(p1.normal.y()))
+			SolveForAxisPoint(p1.normal.x(), p1.normal.y(),
+				p2.normal.x(), p2.normal.y(), planeConstant1, planeConstant2,
+				axis.point.x(), axis.point.y());
 		else
-			SolveForAxisPoint(p1.normal.y, p1.normal.x,
-				p2.normal.y, p2.normal.x, planeConstant1, planeConstant2,
-				axis.point.y, axis.point.x);
+			SolveForAxisPoint(p1.normal.y(), p1.normal.x(),
+				p2.normal.y(), p2.normal.x(), planeConstant1, planeConstant2,
+				axis.point.y(), axis.point.x());
 	}
 
 	return true;
@@ -303,7 +303,7 @@ bool GeometryMath::FindPlanePlaneIntersection(const Plane &p1, const Plane &p2, 
 bool GeometryMath::FindAxisSphereIntersections(const Axis &a, const Sphere &s, Eigen::Vector3d *intersections)
 {
 	assert(intersections && "intersections must not be NULL");
-	assert(VVASEMath::IsZero(a.direction.norm() - 1.0) && "a.direction must have unit magnitude");
+	assert(VVASE::Math::IsZero(a.direction.norm() - 1.0) && "a.direction must have unit magnitude");
 
 	double b, c;
 	b = 2.0 * (a.point.dot(a.direction) - s.center.dot(a.direction));
@@ -314,13 +314,13 @@ bool GeometryMath::FindAxisSphereIntersections(const Axis &a, const Sphere &s, E
 	if (!SolveQuadratic(1.0, b, c, t))
 		return false;
 
-	intersections[0].x = a.point.x + a.direction.x * t[0];
-	intersections[0].y = a.point.y + a.direction.y * t[0];
-	intersections[0].z = a.point.z + a.direction.z * t[0];
+	intersections[0].x() = a.point.x() + a.direction.x() * t[0];
+	intersections[0].y() = a.point.y() + a.direction.y() * t[0];
+	intersections[0].z() = a.point.z() + a.direction.z() * t[0];
 
-	intersections[1].x = a.point.x + a.direction.x * t[1];
-	intersections[1].y = a.point.y + a.direction.y * t[1];
-	intersections[1].z = a.point.z + a.direction.z * t[1];
+	intersections[1].x() = a.point.x() + a.direction.x() * t[1];
+	intersections[1].y() = a.point.y() + a.direction.y() * t[1];
+	intersections[1].z() = a.point.z() + a.direction.z() * t[1];
 
 	return true;
 }
@@ -411,7 +411,7 @@ void GeometryMath::SolveForAxisPoint(const double &n1b, const double &n1c,
 //==========================================================================
 double GeometryMath::GetSignedAngle(const Circle &c, const Eigen::Vector3d &v)
 {
-	return asin((v.z - c.center.z) / c.radius);
+	return asin((v.z() - c.center.z()) / c.radius);
 }
 
 }// namespace VVASE

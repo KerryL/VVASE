@@ -10,7 +10,7 @@
 // Desc:  Contains helper functions and wrappers for working with wxWidgets.
 
 // Local headers
-#include "VVASE/core/utilities/wxRelatedUtilities.h"
+#include "VVASE/gui/utilities/wxRelatedUtilities.h"
 
 namespace VVASE
 {

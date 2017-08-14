@@ -177,7 +177,7 @@ std::unique_ptr<wxZipEntry> XlsxReader::GetEntry(wxZipInputStream &zipStream, co
 {
 	// Parse the file and record relevant information
 	std::unique_ptr<wxZipEntry> zipPointer;
-	while (zipPointer = std::make_unique<wxZipEntry>(zipStream.GetNextEntry()), zipPointer != nullptr)
+	while (zipPointer = std::unique_ptr<wxZipEntry>(zipStream.GetNextEntry()), zipPointer != nullptr)
 	{
 		// Look for the workbook pointer
 		if (zipPointer->GetInternalName().CompareTo(wxZipEntry::GetInternalName(entryString)) == 0)

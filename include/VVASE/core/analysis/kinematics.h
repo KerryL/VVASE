@@ -78,6 +78,13 @@ public:
 	inline WheelSet GetTireDeflections() const { return inputs.tireDeflections; }
 	inline Inputs GetInputs() const { return inputs; }
 
+	// Required by Analysis
+	wxPanel* GetEditPanel() override;
+	wxPanel* GetNotebookPage() override;
+	wxTreeNode* GetTreeNode() override;
+	OptimizationInterface* GetOptimizationInterface() override;
+	bool Compute(const Car& car) override;
+
 private:
 	Inputs inputs;
 

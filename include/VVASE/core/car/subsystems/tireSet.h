@@ -14,11 +14,16 @@
 #define TIRE_SET_H_
 
 // Local headers
+#include "VVASE/core/car/subsystems/subsystem.h"
 #include "VVASE/core/utilities/vvaseString.h"
 
 // Standard C++ headers
 #include <memory>
 #include <string>
+
+// wxWidgets forward declarations
+class wxPanel;
+class wxTreeListItem;
 
 namespace VVASE
 {
@@ -28,7 +33,7 @@ class Tire;
 class BinaryReader;
 class BinaryWriter;
 
-class TireSet
+class TireSet : public Subsystem
 {
 public:
     // Required by RegisterableComponent
@@ -47,8 +52,6 @@ public:
 	std::unique_ptr<Tire> leftFront;
 	std::unique_ptr<Tire> rightRear;
 	std::unique_ptr<Tire> leftRear;
-
-	static
 };
 
 }// namespace VVASE

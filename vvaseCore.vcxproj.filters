@@ -7,7 +7,7 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{a3801c2a-7895-4155-b0b6-2dfa2b5245f2}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\analyses">
+    <Filter Include="Header Files\analysis">
       <UniqueIdentifier>{55812b33-23fd-4f70-b7a2-466b173c887b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\car">
@@ -19,7 +19,7 @@
     <Filter Include="Header Files\utilities">
       <UniqueIdentifier>{21712059-50da-441a-90c8-4be84941284f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\analyses">
+    <Filter Include="Source Files\analysis">
       <UniqueIdentifier>{5dc442fb-ac03-424e-accd-a26114825705}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\car">
@@ -27,9 +27,6 @@
     </Filter>
     <Filter Include="Source Files\threads">
       <UniqueIdentifier>{8ad8c7aa-20c3-4f4d-b9d2-6174a7bc3367}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\optimizations">
-      <UniqueIdentifier>{8c682b31-407a-4f4a-aa13-7a9b4b047903}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\car\subsystems">
       <UniqueIdentifier>{9ccdda36-3876-426b-a9a0-2d1129a6b31c}</UniqueIdentifier>
@@ -40,25 +37,28 @@
     <Filter Include="Header Files\car\subsystems">
       <UniqueIdentifier>{43221cf0-eeae-4b70-a87c-22b3aa491356}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\optimization">
+      <UniqueIdentifier>{8c682b31-407a-4f4a-aa13-7a9b4b047903}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\VVASE\core\analyses\analysis.h">
-      <Filter>Header Files\analyses</Filter>
+    <ClInclude Include="include\VVASE\core\analysis\analysis.h">
+      <Filter>Header Files\analysis</Filter>
     </ClInclude>
-    <ClInclude Include="include\VVASE\core\analyses\kinematicOutputs.h">
-      <Filter>Header Files\analyses</Filter>
+    <ClInclude Include="include\VVASE\core\analysis\kinematicOutputs.h">
+      <Filter>Header Files\analysis</Filter>
     </ClInclude>
-    <ClInclude Include="include\VVASE\core\analyses\kinematics.h">
-      <Filter>Header Files\analyses</Filter>
+    <ClInclude Include="include\VVASE\core\analysis\kinematics.h">
+      <Filter>Header Files\analysis</Filter>
     </ClInclude>
-    <ClInclude Include="include\VVASE\core\analyses\millikenAnalysis.h">
-      <Filter>Header Files\analyses</Filter>
+    <ClInclude Include="include\VVASE\core\analysis\millikenAnalysis.h">
+      <Filter>Header Files\analysis</Filter>
     </ClInclude>
-    <ClInclude Include="include\VVASE\core\analyses\quasiStatic.h">
-      <Filter>Header Files\analyses</Filter>
+    <ClInclude Include="include\VVASE\core\analysis\quasiStatic.h">
+      <Filter>Header Files\analysis</Filter>
     </ClInclude>
-    <ClInclude Include="include\VVASE\core\analyses\quasiStaticOutputs.h">
-      <Filter>Header Files\analyses</Filter>
+    <ClInclude Include="include\VVASE\core\analysis\quasiStaticOutputs.h">
+      <Filter>Header Files\analysis</Filter>
     </ClInclude>
     <ClInclude Include="include\VVASE\core\car\car.h">
       <Filter>Header Files\car</Filter>
@@ -111,11 +111,8 @@
     <ClInclude Include="include\VVASE\core\utilities\xlsxReader.h">
       <Filter>Header Files\utilities</Filter>
     </ClInclude>
-    <ClInclude Include="src\core\analyses\analysisManager.h">
-      <Filter>Source Files\analyses</Filter>
-    </ClInclude>
-    <ClInclude Include="src\core\optimizations\geneticAlgorithm.h">
-      <Filter>Source Files\optimizations</Filter>
+    <ClInclude Include="src\core\analysis\analysisManager.h">
+      <Filter>Source Files\analysis</Filter>
     </ClInclude>
     <ClInclude Include="include\VVASE\core\car\subsystems\aerodynamics.h">
       <Filter>Header Files\car\subsystems</Filter>
@@ -165,19 +162,25 @@
     <ClInclude Include="include\VVASE\core\utilities\unitType.h">
       <Filter>Header Files\utilities</Filter>
     </ClInclude>
+    <ClInclude Include="include\VVASE\core\utilities\vvaseString.h">
+      <Filter>Header Files\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core\optimization\geneticAlgorithm.h">
+      <Filter>Source Files\optimization</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\core\analyses\kinematicOutputs.cpp">
-      <Filter>Source Files\analyses</Filter>
+    <ClCompile Include="src\core\analysis\kinematicOutputs.cpp">
+      <Filter>Source Files\analysis</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\analyses\kinematics.cpp">
-      <Filter>Source Files\analyses</Filter>
+    <ClCompile Include="src\core\analysis\kinematics.cpp">
+      <Filter>Source Files\analysis</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\analyses\millikenAnalysis.cpp">
-      <Filter>Source Files\analyses</Filter>
+    <ClCompile Include="src\core\analysis\millikenAnalysis.cpp">
+      <Filter>Source Files\analysis</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\analyses\quasiStatic.cpp">
-      <Filter>Source Files\analyses</Filter>
+    <ClCompile Include="src\core\analysis\quasiStatic.cpp">
+      <Filter>Source Files\analysis</Filter>
     </ClCompile>
     <ClCompile Include="src\core\car\car.cpp">
       <Filter>Source Files\car</Filter>
@@ -224,9 +227,6 @@
     <ClCompile Include="src\core\car\subsystems\tireSet.cpp">
       <Filter>Source Files\car\subsystems</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\optimizations\geneticAlgorithm.cpp">
-      <Filter>Source Files\optimizations</Filter>
-    </ClCompile>
     <ClCompile Include="src\core\threads\jobQueue.cpp">
       <Filter>Source Files\threads</Filter>
     </ClCompile>
@@ -268,6 +268,9 @@
     </ClCompile>
     <ClCompile Include="src\core\utilities\xlsxReader.cpp">
       <Filter>Source Files\utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\optimization\geneticAlgorithm.cpp">
+      <Filter>Source Files\optimization</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

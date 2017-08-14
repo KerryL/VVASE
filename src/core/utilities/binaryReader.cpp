@@ -362,10 +362,28 @@ bool BinaryReader::Read(bool& v)
 bool BinaryReader::Read(Eigen::VectorXd& v)
 {
 	bool ok(true);
-	// TODO:  Handle arbitrary length vectors AND make this read old files OK
-	ok = Read(v.x) && ok;
-	ok = Read(v.y) && ok;
-	ok = Read(v.z) && ok;
+	double element;
+	if (true)// Assume vector is only 3 elements and has no size information TODO:  Fix this - need to handle both cases to support old files
+	{
+		ok = Read(element) && ok;
+		v.x() = element;
+		ok = Read(element) && ok;
+		v.y() = element;
+		ok = Read(element) && ok;
+		v.z() = element;
+	}
+	else
+	{
+		Eigen::DenseIndex size;
+		ok = Read(size) && ok;
+		v.resize(size);
+		int i;
+		for (i = 0; i < size; ++i)
+		{
+			ok = Read(element) && ok;
+			v(i) = element;
+		}
+	}
 
 	return ok;
 }

@@ -32,6 +32,13 @@ public:
 	// Overloaded operators
 	MillikenAnalysis& operator = (const MillikenAnalysis &millikenAnalysis);
 
+	// Required by Analysis
+	wxPanel* GetEditPanel() override;
+	wxPanel* GetNotebookPage() override;
+	wxTreeNode* GetTreeNode() override;
+	OptimizationInterface* GetOptimizationInterface() override;
+	bool Compute(const Car& car) override;
+
 private:
 	// Debugger message printing utility
 	const Debugger &debugger;

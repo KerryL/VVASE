@@ -43,7 +43,7 @@
 #include "../appearanceOptions.h"
 #include "../components/mainFrame.h"
 #include "../dialogs/vectorEditDialog.h"
-#include "VVASE/core/analyses/kinematicOutputs.h"
+#include "VVASE/core/analysis/kinematicOutputs.h"
 #include "VVASE/core/utilities/debugLog.h"
 #include "VVASE/gui/renderer/3dcar/debugShape.h"
 

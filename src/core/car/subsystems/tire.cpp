@@ -13,7 +13,7 @@
 #include <cassert>
 
 // Local headers
-#include "tire.h"
+#include "VVASE/core/car/subsystems/tire.h"
 #include "VVASE/core/utilities/binaryReader.h"
 #include "VVASE/core/utilities/binaryWriter.h"
 
