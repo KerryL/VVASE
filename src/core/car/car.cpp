@@ -289,7 +289,7 @@ const int Car::currentFileVersion = 6;
 bool Car::SaveCarToFile(vvaseString fileName, vvaseOutFileStream *poutFile) const
 {
 	// Open the specified file
-	std::ofstream outFile(fileName.c_str(), std::ios::binary);
+	vvaseOutFileStream outFile(fileName.c_str(), std::ios::binary);
 	if (!outFile.is_open() || !outFile.good())
 		return false;
 
@@ -298,15 +298,14 @@ bool Car::SaveCarToFile(vvaseString fileName, vvaseOutFileStream *poutFile) cons
 	WriteFileHeader(binFile);
 
 	// Call the write functions for each sub-system class
-	// NOTE:  The order that these calls are made must be identical to the
-	// order of the Read() calls in LoadCarFromFile().
-	aerodynamics->Write(binFile);
-	brakes->Write(binFile);
-	drivetrain->Write(binFile);
-	engine->Write(binFile);
-	massProperties->Write(binFile);
-	suspension->Write(binFile);
-	tires->Write(binFile);
+	for (const auto& subsystem : subsystems)
+	{
+		const vvaseString name(subsystem.first);
+		binFile.Write(name);
+		//binFile.Write(sizeof(subsystems[name]));
+		// TODO:  Need to write size information here?  Or as first part of write method for subsystem derivatives?
+		subsystem.second->Write(binFile);
+	}
 
 	// If we're saving the options (done elsewhere), open the additional file
 	if (poutFile != nullptr)
@@ -340,7 +339,7 @@ bool Car::SaveCarToFile(vvaseString fileName, vvaseOutFileStream *poutFile) cons
 //==========================================================================
 bool Car::LoadCarFromFile(vvaseString fileName, vvaseInFileStream *pinFile, int *fileVersion)
 {
-	std::ifstream inFile(fileName.c_str(), std::ios::binary);
+	vvaseInFileStream inFile(fileName.c_str(), std::ios::binary);
 	if (!inFile.is_open() || !inFile.good())
 		return false;
 

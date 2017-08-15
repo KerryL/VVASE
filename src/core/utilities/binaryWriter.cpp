@@ -24,7 +24,7 @@ namespace VVASE
 // Description:		Constructor for BinaryWriter class.
 //
 // Input Arguments:
-//		file	= std::ofstream&
+//		file	= vvaseOutFileStream&
 //
 // Output Arguments:
 //		None
@@ -33,7 +33,7 @@ namespace VVASE
 //		None
 //
 //==========================================================================
-BinaryWriter::BinaryWriter(std::ofstream& file) : file(file)
+BinaryWriter::BinaryWriter(vvaseOutFileStream& file) : file(file)
 {
 }
 
@@ -44,7 +44,7 @@ BinaryWriter::BinaryWriter(std::ofstream& file) : file(file)
 // Description:		Writes specified object to file.
 //
 // Input Arguments:
-//		v	= const std::string&
+//		v	= const vvaseString&
 //
 // Output Arguments:
 //		None
@@ -53,7 +53,7 @@ BinaryWriter::BinaryWriter(std::ofstream& file) : file(file)
 //		bool
 //
 //==========================================================================
-bool BinaryWriter::Write(const std::string& v)
+bool BinaryWriter::Write(const vvaseString& v)
 {
 	bool ok(true);
 	ok = Write((unsigned int)v.length());
@@ -336,34 +336,6 @@ bool BinaryWriter::Write(const double& v)
 bool BinaryWriter::Write(const bool& v)
 {
 	return Write8Bit(reinterpret_cast<const char* const>(&v));
-}
-
-//==========================================================================
-// Class:			BinaryWriter
-// Function:		Write
-//
-// Description:		Writes specified object to file.
-//
-// Input Arguments:
-//		v	= const Eigen::VectorXd&
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		bool
-//
-//==========================================================================
-bool BinaryWriter::Write(const Eigen::VectorXd& v)
-{
-	bool ok(true);
-
-	ok = Write(v.size()) && ok;
-	int i;
-	for (i = 0; i < v.size(); ++i)
-		ok = Write(v[i]) && ok;
-
-	return ok;
 }
 
 //==========================================================================

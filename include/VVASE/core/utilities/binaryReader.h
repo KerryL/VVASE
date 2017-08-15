@@ -24,6 +24,7 @@
 
 // Local headers
 #include "VVASE/core/utilities/wheelSetStructures.h"
+#include "VVASE/core/utilities/vvaseString.h"
 
 namespace VVASE
 {
@@ -31,9 +32,9 @@ namespace VVASE
 class BinaryReader
 {
 public:
-	BinaryReader(std::ifstream& file);
+	BinaryReader(vvaseInFileStream& file);
 
-	bool Read(std::string& v);
+	bool Read(vvaseString& v);
 	bool Read(char& v);
 	bool Read(short& v);
 	bool Read(int& v);
@@ -48,7 +49,24 @@ public:
 	bool Read(double& v);
 	bool Read(bool& v);
 
-	bool Read(Eigen::VectorXd& v);
+	template <typename _Scalar, int _Rows, int _Cols>
+	bool Read(Eigen::Matrix<_Scalar, _Rows, _Cols>& v)
+	{
+		bool ok(true);
+		int rows, cols;
+		ok = Read(rows) && ok;
+		ok = Read(cols) && ok;
+		assert(rows == _Rows || _Rows == Eigen::Dynamic);
+		assert(cols == _Cols || _Cols == Eigen::Dynamic);
+
+		if (rows == Eigen::Dynamic || cols == Eigen::Dynamic)
+			v.resize(rows, cols);
+
+		int i;
+		for (i = 0; i < _Rows * _Cols; ++i)
+			ok = Read(v.data()[i]) && ok;
+		return ok;
+	}
 
 	template<typename T>
 	bool Read(CornerSet<T>& v)
@@ -88,7 +106,7 @@ public:
 	}
 
 private:
-	std::ifstream& file;
+	vvaseInFileStream& file;
 
 	bool Read8Bit(char* const v);
 	bool Read16Bit(char* const v);

@@ -24,6 +24,7 @@
 
 // Local headers
 #include "VVASE/core/utilities/wheelSetStructures.h"
+#include "VVASE/core/utilities/vvaseString.h"
 
 namespace VVASE
 {
@@ -31,9 +32,9 @@ namespace VVASE
 class BinaryWriter
 {
 public:
-	BinaryWriter(std::ofstream& file);
+	BinaryWriter(vvaseOutFileStream& file);
 
-	bool Write(const std::string& v);
+	bool Write(const vvaseString& v);
 	bool Write(const char& v);
 	bool Write(const short& v);
 	bool Write(const int& v);
@@ -48,7 +49,17 @@ public:
 	bool Write(const double& v);
 	bool Write(const bool& v);
 
-	bool Write(const Eigen::VectorXd& v);
+	template <typename _Scalar, int _Rows, int _Cols>
+	bool Write(const Eigen::Matrix<_Scalar, _Rows, _Cols>& v)
+	{
+		bool ok(true);
+		ok = Write(_Rows) && ok;
+		ok = Write(_Cols) && ok;
+		int i;
+		for (i = 0; i < _Rows * _Cols; ++i)
+			ok = Write(v.data()[i]) && ok;
+		return ok;
+	}
 
 	template<typename T>
 	bool Write(const CornerSet<T>& v)
@@ -86,7 +97,7 @@ public:
 	}
 
 private:
-	std::ofstream& file;
+	vvaseOutFileStream& file;
 
 	bool Write8Bit(const char* const v);
 	bool Write16Bit(const char* const v);

@@ -24,7 +24,7 @@ namespace VVASE
 // Description:		Constructor for BinaryReader class.
 //
 // Input Arguments:
-//		file	= std::ifstream&
+//		file	= vvaseInFileStream&
 //
 // Output Arguments:
 //		None
@@ -33,7 +33,7 @@ namespace VVASE
 //		None
 //
 //==========================================================================
-BinaryReader::BinaryReader(std::ifstream& file) : file(file)
+BinaryReader::BinaryReader(vvaseInFileStream& file) : file(file)
 {
 }
 
@@ -44,7 +44,7 @@ BinaryReader::BinaryReader(std::ifstream& file) : file(file)
 // Description:		Reads specified object from file.
 //
 // Input Arguments:
-//		v	= std::string&
+//		v	= vvaseString&
 //
 // Output Arguments:
 //		None
@@ -53,7 +53,7 @@ BinaryReader::BinaryReader(std::ifstream& file) : file(file)
 //		bool
 //
 //==========================================================================
-bool BinaryReader::Read(std::string& v)
+bool BinaryReader::Read(vvaseString& v)
 {
 	bool ok(true);
 	unsigned int length;
@@ -341,51 +341,6 @@ bool BinaryReader::Read(double& v)
 bool BinaryReader::Read(bool& v)
 {
 	return Read8Bit(reinterpret_cast<char* const>(&v));
-}
-
-//==========================================================================
-// Class:			BinaryReader
-// Function:		Read
-//
-// Description:		Reads specified object from file.
-//
-// Input Arguments:
-//		v	= Eigen::VectorXd&
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		bool
-//
-//==========================================================================
-bool BinaryReader::Read(Eigen::VectorXd& v)
-{
-	bool ok(true);
-	double element;
-	if (true)// Assume vector is only 3 elements and has no size information TODO:  Fix this - need to handle both cases to support old files
-	{
-		ok = Read(element) && ok;
-		v.x() = element;
-		ok = Read(element) && ok;
-		v.y() = element;
-		ok = Read(element) && ok;
-		v.z() = element;
-	}
-	else
-	{
-		Eigen::DenseIndex size;
-		ok = Read(size) && ok;
-		v.resize(size);
-		int i;
-		for (i = 0; i < size; ++i)
-		{
-			ok = Read(element) && ok;
-			v(i) = element;
-		}
-	}
-
-	return ok;
 }
 
 //==========================================================================
