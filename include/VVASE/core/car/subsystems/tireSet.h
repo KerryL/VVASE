@@ -36,6 +36,8 @@ class BinaryWriter;
 class TireSet : public Subsystem
 {
 public:
+	TireSet();
+
     // Required by RegisterableComponent
     static std::unique_ptr<TireSet> Create() { return std::make_unique<TireSet>(); }
     static vvaseString GetName() { return _T("Tires"); }

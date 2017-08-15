@@ -10,9 +10,9 @@
 // Desc:  Contains class functionality for aerodynamics class.
 
 // Local headers
-#include "car/subsystems/aerodynamics.h"
-#include "vUtilities/binaryReader.h"
-#include "vUtilities/binaryWriter.h"
+#include "VVASE/core/car/subsystems/aerodynamics.h"
+#include "VVASE/core/utilities/binaryReader.h"
+#include "VVASE/core/utilities/binaryWriter.h"
 
 namespace VVASE
 {

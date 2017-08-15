@@ -18,6 +18,9 @@
 #include "VVASE/core/analysis/kinematics.h"
 #include "VVASE/core/utilities/wheelSetStructures.h"
 
+// Eigen headers
+#include <Eigen/Eigen>
+
 namespace VVASE
 {
 
@@ -57,10 +60,13 @@ private:
 	WheelSet ComputePreLoad(const Car* workingCar) const;
 	WheelSet ComputeTireDeflections(const TireSet& tires, const WheelSet& wheelLoads) const;
 
-	Matrix BuildSystemMatrix(const Car* workingCar) const;
-	Matrix BuildRightHandMatrix(const Car* workingCar, const double& gx, const double& gy,
+	typedef Eigen::Matrix<double, 13, 1> SystemVector;
+	typedef Eigen::Matrix<double, 13, 4> SystemMatrix;
+
+	SystemMatrix BuildSystemMatrix(const Car* workingCar) const;
+	SystemVector BuildRightHandMatrix(const Car* workingCar, const double& gx, const double& gy,
 		const KinematicOutputs& outputs, const WheelSet& preLoad) const;
-	Matrix ComputeError(const Car* workingCar, const double& gx, const double& gy,
+	SystemVector ComputeError(const Car* workingCar, const double& gx, const double& gy,
 		const KinematicOutputs& outputs, const WheelSet& preLoad) const;
 	static double ComputeDeltaWheelSets(const WheelSet& w1, const WheelSet& w2);
 };

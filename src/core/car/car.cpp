@@ -11,7 +11,12 @@
 //        getting and setting vehicle data.
 
 // Local headers
-#include "car.h"
+#include "VVASE/core/car/car.h"
+#include "VVASE/core/car/subsystems/drivetrain.h"// TODO:  Redesign to eliminate need for including these here
+#include "VVASE/core/car/subsystems/brakes.h"
+#include "VVASE/core/car/subsystems/suspension.h"
+#include "VVASE/core/car/subsystems/tireset.h"
+#include "VVASE/core/car/subsystems/tire.h"
 #include "VVASE/core/utilities/wheelSetStructures.h"
 #include "VVASE/core/utilities/binaryReader.h"
 #include "VVASE/core/utilities/binaryWriter.h"
@@ -41,10 +46,11 @@ namespace VVASE
 //
 //
 //==========================================================================
-Car::Car() : components(CreateComponents())
+Car::Car() : subsystems(CreateComponents())
 {
+	// TODO:  Need to make these default assignments within each subsystem
 	// Test suspension
-	suspension->frontBarStyle = Suspension::SwayBarUBar;
+	/*suspension->frontBarStyle = Suspension::SwayBarUBar;
 	suspension->rearBarStyle = Suspension::SwayBarTBar;
 	suspension->isSymmetric = true;
 
@@ -206,7 +212,7 @@ Car::Car() : components(CreateComponents())
 	suspension->rightRear.spring.rate = 60.0;// [lb/in]
 
 	// Test drivetrain
-	drivetrain->SetRearWheelDrive(1.0);
+	drivetrain->SetRearWheelDrive(1.0);*/
 }
 
 //==========================================================================
@@ -229,14 +235,14 @@ Car::Car() : components(CreateComponents())
 //		None
 //
 //==========================================================================
-Car::Car(const Car& car) : mComponents(CreateComponents())
+/*Car::Car(const Car& car) : subsystems(CreateComponents())
 {
 	*this = car;
 }
 
-Car::Car(Car&& car) : mComponents(std::move(car.mComponents))
+Car::Car(Car&& car) : subsystems(std::move(car.mComponents))
 {
-}
+}*/
 
 //==========================================================================
 // Class:			Car
@@ -269,8 +275,8 @@ const int Car::currentFileVersion = 6;
 // Description:		Calls all of the sub-system Write() functions.
 //
 // Input Arguments:
-//		fileName	= wxString specifying the location to write to
-//		poutFile	= std::ofstream* used to allow writing of the appearance options in
+//		fileName	= vvaseString specifying the location to write to
+//		poutFile	= vvaseOutFileStream* used to allow writing of the appearance options in
 //					  an external function
 //
 // Output Arguments:
@@ -280,10 +286,10 @@ const int Car::currentFileVersion = 6;
 //		returns true for successful write, false otherwise
 //
 //==========================================================================
-bool Car::SaveCarToFile(wxString fileName, std::ofstream *poutFile) const
+bool Car::SaveCarToFile(vvaseString fileName, vvaseOutFileStream *poutFile) const
 {
 	// Open the specified file
-	std::ofstream outFile(fileName.mb_str(), ios::out | ios::binary);
+	std::ofstream outFile(fileName.c_str(), std::ios::binary);
 	if (!outFile.is_open() || !outFile.good())
 		return false;
 
@@ -303,9 +309,9 @@ bool Car::SaveCarToFile(wxString fileName, std::ofstream *poutFile) const
 	tires->Write(binFile);
 
 	// If we're saving the options (done elsewhere), open the additional file
-	if (poutFile != NULL)
+	if (poutFile != nullptr)
 	{
-		poutFile->open(fileName.mb_str(), ios::out | ios::binary);
+		poutFile->open(fileName.c_str(), std::ios::binary);
 		poutFile->seekp(outFile.tellp());
 	}
 
@@ -321,8 +327,8 @@ bool Car::SaveCarToFile(wxString fileName, std::ofstream *poutFile) const
 // Description:		Calls the Read() functions for each sub-system class.
 //
 // Input Arguments:
-//		fileName	= wxString specifying the location to read from
-//		pinFile		= std::ifstream* used to allow reading of the appearance options in
+//		fileName	= vvaseString specifying the location to read from
+//		pinFile		= vvaseInFileStream* used to allow reading of the appearance options in
 //					  an external function
 //
 // Output Arguments:
@@ -332,9 +338,9 @@ bool Car::SaveCarToFile(wxString fileName, std::ofstream *poutFile) const
 //		None
 //
 //==========================================================================
-bool Car::LoadCarFromFile(wxString fileName, std::ifstream *pinFile, int *fileVersion)
+bool Car::LoadCarFromFile(vvaseString fileName, vvaseInFileStream *pinFile, int *fileVersion)
 {
-	std::ifstream inFile(fileName.mb_str(), ios::in | ios::binary);
+	std::ifstream inFile(fileName.c_str(), std::ios::binary);
 	if (!inFile.is_open() || !inFile.good())
 		return false;
 
@@ -357,9 +363,9 @@ bool Car::LoadCarFromFile(wxString fileName, std::ifstream *pinFile, int *fileVe
 	tires->Read(binFile, header.fileVersion);
 
 	// If we're reading the options (done elsewhere), open the additional file
-	if (pinFile != NULL)
+	if (pinFile != nullptr)
 	{
-		pinFile->open(fileName.mb_str(), ios::in | ios::binary);
+		pinFile->open(fileName.c_str(), std::ios::binary);
 		pinFile->seekg(inFile.tellg());
 		*fileVersion = header.fileVersion;
 	}
@@ -435,7 +441,8 @@ Car::FileHeaderInfo Car::ReadFileHeader(BinaryReader& file) const
 void Car::ComputeWheelCenters()
 {
 	// Call the compute method with the correct tire diameters
-	suspension->ComputeWheelCenters(tires->rightFront->diameter, tires->leftFront->diameter,
+	const auto* tires(GetSubsystem<TireSet>());
+	GetSubsystem<Suspension>()->ComputeWheelCenters(tires->rightFront->diameter, tires->leftFront->diameter,
 		tires->rightRear->diameter, tires->leftRear->diameter);
 }
 
@@ -460,9 +467,10 @@ bool Car::HasFrontHalfShafts() const
 {
 	// If the car is all wheel drive, front wheel drive, or has inboard front
 	// brakes, this car has front half shafts
+	const auto* drivetrain(GetSubsystem<Drivetrain>());
 	if (drivetrain->driveType == Drivetrain::DriveAllWheel ||
 		drivetrain->driveType == Drivetrain::DriveFrontWheel ||
-		brakes->frontBrakesInboard)
+		GetSubsystem<Brakes>()->frontBrakesInboard)
 		return true;
 
 	return false;
@@ -489,9 +497,10 @@ bool Car::HasRearHalfShafts() const
 {
 	// If the car is all wheel drive, front wheel drive, or has inboard front
 	// brakes, this car has front half shafts
+	const auto* drivetrain(GetSubsystem<Drivetrain>());
 	if (drivetrain->driveType == Drivetrain::DriveAllWheel ||
 		drivetrain->driveType == Drivetrain::DriveRearWheel ||
-		brakes->rearBrakesInboard)
+		GetSubsystem<Brakes>()->rearBrakesInboard)
 		return true;
 
 	return false;
@@ -519,38 +528,29 @@ Car& Car::operator=(const Car& car)
 	if (this == &car)
 		return *this;
 
-	assert(mComponents.size() == car.mComponents.size());
-	std::copy(car.mComponents.begin(), car.mComponents.end(), mComponents.begin());
+	assert(subsystems.size() == car.subsystems.size());
+	std::copy(car.subsystems.begin(), car.subsystems.end(), subsystems.begin());
 	return *this;
 }
 
-Car& Car::operator=(Car&& car)
+/*Car& Car::operator=(Car&& car)
 {
 	// Check for self-assignment
 	if (this == &car)
 		return *this;
 
-	mComponents.clear();
-	mComponents = std::move(car.mComponents);
+	subsystems.clear();
+	subsystems = std::move(car.subsystems);
 	return *this;
-}
+}*/
 
-std::vector<std::unique_ptr<Subsystem>> Car::CreateComponents()
+std::unordered_map<vvaseString, std::unique_ptr<Subsystem>> Car::CreateComponents()
 {
-	std::vector<std::unique_ptr<Subsystem>> components(mComponentManager.GetInfo().size());
-	unsigned int i;
-	for (i = 0; i < components.size(); ++i)
-		components[i] = mComponentManager.GetInfo()[i].Create();
+	std::unordered_map<vvaseString, std::unique_ptr<Subsystem>> subsystems;
+	for (const auto& subsystem : subsystemManager.GetInfo())
+		subsystems[subsystem.name] = subsystem.create();
 
-	return components;
-}
-
-const Subsystem* Car::GetSubsystem(const vvaseString& key) const
-{
-	const auto it(subsystems.find(key));
-	if (it == subsystems.end())
-		return nullptr;
-	return *it;
+	return subsystems;
 }
 
 }// namespace VVASE

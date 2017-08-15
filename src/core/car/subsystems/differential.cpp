@@ -10,55 +10,13 @@
 // Desc:  Contains class functionality for differential class.
 
 // Local headers
-#include "vCar/differential.h"
-#include "vUtilities/debugger.h"
-#include "vUtilities/machineDefinitions.h"
-#include "vUtilities/binaryReader.h"
-#include "vUtilities/binaryWriter.h"
+#include "VVASE/core/car/subsystems/differential.h"
+#include "VVASE/core/utilities/debugger.h"
+#include "VVASE/core/utilities/binaryReader.h"
+#include "VVASE/core/utilities/binaryWriter.h"
 
 namespace VVASE
 {
-
-//==========================================================================
-// Class:			Differential
-// Function:		Differential
-//
-// Description:		Constructor for the Differential class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Differential::Differential()
-{
-}
-
-//==========================================================================
-// Class:			Differential
-// Function:		Differential
-//
-// Description:		Copy constructor for the Differential class.
-//
-// Input Arguments:
-//		differential	= const Differential& to copy to this object
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Differential::Differential(const Differential &differential)
-{
-	*this = differential;
-}
 
 //==========================================================================
 // Class:			Differential
@@ -79,26 +37,6 @@ Differential::Differential(const Differential &differential)
 Differential::Differential(const double& biasRatio)
 {
 	this->biasRatio = biasRatio;
-}
-
-//==========================================================================
-// Class:			Differential
-// Function:		~Differential
-//
-// Description:		Destructor for the Differential class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Differential::~Differential()
-{
 }
 
 //==========================================================================

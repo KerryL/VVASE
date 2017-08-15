@@ -74,17 +74,17 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 {
 	Kinematics kinematics;
 	kinematics.SetCenterOfRotation(kinematicsInputs.centerOfRotation);
-	kinematics.SetFirstEulerRotation(kinematicsInputs.firstRotation);
+	kinematics.SetRotationSequence(kinematicsInputs.sequence);
 	kinematics.SetRackTravel(inputs.rackTravel);
 
 	unsigned int i(0);
 	const unsigned int limit(100);
 	const double epsilon(1.0e-3);
 	const double maxError(1.0e-8);
-	Matrix error(13, 1), tempError;
-	Matrix guess(3, 1);// parameteric variables representing remaining kinematic state inputs
-	Matrix jacobian(error.GetNumberOfRows(), guess.GetNumberOfRows());
-	Matrix delta;
+	SystemVector error, tempError;
+	Eigen::Vector3d guess;// parameteric variables representing remaining kinematic state inputs
+	Eigen::MatrixXd jacobian(error.rows(), guess.rows());
+	SystemVector delta;
 
 	guess(0,0) = 0.0;
 	guess(1,0) = 0.0;
@@ -92,13 +92,16 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 
 	error(0,0) = 2.0 * maxError;
 
+	const auto* massProperties(originalCar->GetSubsystem<MassProperties>());
+	const auto* tires(originalCar->GetSubsystem<TireSet>());
+
 	WheelSet preLoad(ComputePreLoad(originalCar));
-	WheelSet wheelLoads(originalCar->massProperties->cornerWeights);// [lb]
+	WheelSet wheelLoads(massProperties->cornerWeights);// [lb]
 	wheelLoads.leftFront *= 32.174;
 	wheelLoads.rightFront *= 32.174;
 	wheelLoads.leftRear *= 32.174;
 	wheelLoads.rightRear *= 32.174;
-	WheelSet tireDeflections(ComputeTireDeflections(*originalCar->tires, wheelLoads));
+	WheelSet tireDeflections(ComputeTireDeflections(*tires, wheelLoads));
 
 	// TODO:  Compute lateral and longitudinal forces at each corner
 	//        Use them to evaluate jacking effects
@@ -123,7 +126,7 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 	// ** Looking at MMM plots, I believe that with a proper tire model we could (and must) solve for steering angle as a function of Gx and Gy.
 	//    This is consistent with thoughts I am having about including a real tire model, which would require velocity and yaw velocity inputs.
 
-	while (i < limit && (error.GetNorm() > maxError ||
+	while (i < limit && (error.norm() > maxError ||
 		ComputeDeltaWheelSets(kinematics.GetTireDeflections(), tireDeflections) > maxError))
 	{
 		kinematics.SetRoll(guess(0,0));
@@ -133,7 +136,7 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 
 		kinematics.UpdateKinematics(originalCar, workingCar, wxString::Format("Quasi-Static, i = %u (error)", i));
 		wheelLoads = ComputeWheelLoads(originalCar, kinematics.GetOutputs(), preLoad);
-		tireDeflections = ComputeTireDeflections(*originalCar->tires, wheelLoads);
+		tireDeflections = ComputeTireDeflections(*tires, wheelLoads);
 		error = ComputeError(workingCar, inputs.gx, inputs.gy, kinematics.GetOutputs(), preLoad);
 
 		kinematics.SetRoll(guess(0,0) + epsilon);
@@ -239,30 +242,33 @@ WheelSet QuasiStatic::ComputeWheelLoads(const Car* originalCar,
 {
 	WheelSet wheelLoads;// [lb]
 
-	wheelLoads.leftFront = originalCar->suspension->leftFront.spring.rate
+	const auto* massProperties(originalCar->GetSubsystem<MassProperties>());
+	const auto* suspension(originalCar->GetSubsystem<Suspension>());
+
+	wheelLoads.leftFront = suspension->leftFront.spring.rate
 		* (preLoad.leftFront + outputs.leftFront[KinematicOutputs::Spring])
 		* outputs.leftFront[KinematicOutputs::SpringInstallationRatio]
-		+ originalCar->massProperties->unsprungMass.leftFront * 32.174;
-	wheelLoads.rightFront = originalCar->suspension->rightFront.spring.rate
+		+ massProperties->unsprungMass.leftFront * 32.174;
+	wheelLoads.rightFront = suspension->rightFront.spring.rate
 		* (preLoad.rightFront + outputs.rightFront[KinematicOutputs::Spring])
 		* outputs.rightFront[KinematicOutputs::SpringInstallationRatio]
-		+ originalCar->massProperties->unsprungMass.rightFront * 32.174;
-	wheelLoads.leftRear = originalCar->suspension->leftRear.spring.rate
+		+ massProperties->unsprungMass.rightFront * 32.174;
+	wheelLoads.leftRear = suspension->leftRear.spring.rate
 		* (preLoad.leftRear + outputs.leftRear[KinematicOutputs::Spring])
 		* outputs.leftRear[KinematicOutputs::SpringInstallationRatio]
-		+ originalCar->massProperties->unsprungMass.leftRear * 32.174;
-	wheelLoads.rightRear = originalCar->suspension->rightRear.spring.rate
+		+ massProperties->unsprungMass.leftRear * 32.174;
+	wheelLoads.rightRear = suspension->rightRear.spring.rate
 		* (preLoad.rightRear + outputs.rightRear[KinematicOutputs::Spring])
 		* outputs.rightRear[KinematicOutputs::SpringInstallationRatio]
-		+ originalCar->massProperties->unsprungMass.rightRear * 32.174;
+		+ massProperties->unsprungMass.rightRear * 32.174;
 
 	// TODO:  Need to also consider in-plane tire forces here
 	//        A portion of the spring forces at each corner (and ARBs?) can come from in-plane forces
 
 	double arbTorque;
-	if (originalCar->suspension->frontBarStyle != Suspension::SwayBarNone)
+	if (suspension->frontBarStyle != Suspension::SwayBarNone)
 	{
-		arbTorque = originalCar->suspension->barRate.front
+		arbTorque = suspension->barRate.front
 			* outputs.doubles[KinematicOutputs::FrontARBTwist];// [in-lbf]
 
 		// Our convention is +ve bar twist loads the left side and unloads the right side
@@ -270,9 +276,9 @@ WheelSet QuasiStatic::ComputeWheelLoads(const Car* originalCar,
 		wheelLoads.rightFront -= arbTorque * outputs.rightFront[KinematicOutputs::ARBInstallationRatio];
 	}
 
-	if (originalCar->suspension->rearBarStyle != Suspension::SwayBarNone)
+	if (suspension->rearBarStyle != Suspension::SwayBarNone)
 	{
-		arbTorque = originalCar->suspension->barRate.rear
+		arbTorque = suspension->barRate.rear
 			* outputs.doubles[KinematicOutputs::RearARBTwist];// [in-lbf]
 		wheelLoads.leftRear += arbTorque * outputs.leftRear[KinematicOutputs::ARBInstallationRatio];
 		wheelLoads.rightRear -= arbTorque * outputs.rightRear[KinematicOutputs::ARBInstallationRatio];
@@ -331,8 +337,8 @@ WheelSet QuasiStatic::ComputeTireDeflections(const TireSet& tires,
 //==========================================================================
 WheelSet QuasiStatic::ComputePreLoad(const Car* originalCar) const
 {
-	const MassProperties* mp = originalCar->massProperties;
-	const Suspension *s = originalCar->suspension;
+	const auto* mp(originalCar->GetSubsystem<MassProperties>());
+	const auto *s(originalCar->GetSubsystem<Suspension>());
 
 	// First, compute load at each corner due to sprung mass
 	WheelSet sprungWeight;// [lbf]
@@ -357,8 +363,8 @@ WheelSet QuasiStatic::ComputePreLoad(const Car* originalCar) const
 	kinematics.SetPitch(0.0);
 	kinematics.SetHeave(0.0);
 	kinematics.SetTireDeflections(zeroDeflections);
-	kinematics.SetCenterOfRotation(Eigen::Vector3d(0.0, 0.0, 0.0));// This needs to be set to something valid, but isn't actually used
-	kinematics.SetFirstEulerRotation(Eigen::Vector3d::AxisX);// This needs to be set to something valid, but isn't actually used
+	kinematics.SetCenterOfRotation(Eigen::Vector3d::Zero());// This needs to be set to something valid, but isn't actually used
+	kinematics.SetRotationSequence(Kinematics::RotationSequence::PitchRoll);// This needs to be set to something valid, but isn't actually used
 	kinematics.UpdateKinematics(originalCar, &workingCar, _T("Pre-Load Calculation"));
 
 	WheelSet preLoad;
@@ -391,64 +397,64 @@ WheelSet QuasiStatic::ComputePreLoad(const Car* originalCar) const
 //		None
 //
 // Return Value:
-//		Matrix
+//		SystemMatrix
 //
 //==========================================================================
-Matrix QuasiStatic::BuildSystemMatrix(const Car* workingCar) const
+QuasiStatic::SystemMatrix QuasiStatic::BuildSystemMatrix(const Car* workingCar) const
 {
 	// This is the "A" matrix in A * x = b
 	// x is the vector of vertical tire loads:
 	// x = [F_LF; F_RF; F_LR; F_RR]
 
-	const Suspension* s(workingCar->suspension);
-	Matrix m(13, 4);
+	const auto* s(workingCar->GetSubsystem<Suspension>());
+	SystemMatrix m;
 
 	// Sum of y-moments about left front wheel
 	m(0,0) = 0.0;
-	m(0,1) = s->rightFront.hardpoints[Corner::ContactPatch].x - s->leftFront.hardpoints[Corner::ContactPatch].x;
-	m(0,2) = s->leftRear.hardpoints[Corner::ContactPatch].x - s->leftFront.hardpoints[Corner::ContactPatch].x;
-	m(0,3) = s->rightRear.hardpoints[Corner::ContactPatch].x - s->leftFront.hardpoints[Corner::ContactPatch].x;
+	m(0,1) = s->rightFront.hardpoints[Corner::ContactPatch].x() - s->leftFront.hardpoints[Corner::ContactPatch].x();
+	m(0,2) = s->leftRear.hardpoints[Corner::ContactPatch].x() - s->leftFront.hardpoints[Corner::ContactPatch].x();
+	m(0,3) = s->rightRear.hardpoints[Corner::ContactPatch].x() - s->leftFront.hardpoints[Corner::ContactPatch].x();
 
 	// Sum of y-moments about right front wheel
-	m(1,0) = s->leftFront.hardpoints[Corner::ContactPatch].x - s->rightFront.hardpoints[Corner::ContactPatch].x;
+	m(1,0) = s->leftFront.hardpoints[Corner::ContactPatch].x() - s->rightFront.hardpoints[Corner::ContactPatch].x();
 	m(1,1) = 0.0;
-	m(1,2) = s->leftRear.hardpoints[Corner::ContactPatch].x - s->rightFront.hardpoints[Corner::ContactPatch].x;
-	m(1,3) = s->rightRear.hardpoints[Corner::ContactPatch].x - s->rightFront.hardpoints[Corner::ContactPatch].x;
+	m(1,2) = s->leftRear.hardpoints[Corner::ContactPatch].x() - s->rightFront.hardpoints[Corner::ContactPatch].x();
+	m(1,3) = s->rightRear.hardpoints[Corner::ContactPatch].x() - s->rightFront.hardpoints[Corner::ContactPatch].x();
 
 	// Sum of y-moments about left rear wheel
-	m(2,0) = s->leftFront.hardpoints[Corner::ContactPatch].x - s->leftRear.hardpoints[Corner::ContactPatch].x;
-	m(2,1) = s->rightFront.hardpoints[Corner::ContactPatch].x - s->leftRear.hardpoints[Corner::ContactPatch].x;
+	m(2,0) = s->leftFront.hardpoints[Corner::ContactPatch].x() - s->leftRear.hardpoints[Corner::ContactPatch].x();
+	m(2,1) = s->rightFront.hardpoints[Corner::ContactPatch].x() - s->leftRear.hardpoints[Corner::ContactPatch].x();
 	m(2,2) = 0.0;
-	m(2,3) = s->rightRear.hardpoints[Corner::ContactPatch].x - s->leftRear.hardpoints[Corner::ContactPatch].x;
+	m(2,3) = s->rightRear.hardpoints[Corner::ContactPatch].x() - s->leftRear.hardpoints[Corner::ContactPatch].x();
 
 	// Sum of y-moments about right rear wheel
-	m(3,0) = s->leftFront.hardpoints[Corner::ContactPatch].x - s->rightRear.hardpoints[Corner::ContactPatch].x;
-	m(3,1) = s->rightFront.hardpoints[Corner::ContactPatch].x - s->rightRear.hardpoints[Corner::ContactPatch].x;
-	m(3,2) = s->leftRear.hardpoints[Corner::ContactPatch].x - s->rightRear.hardpoints[Corner::ContactPatch].x;
+	m(3,0) = s->leftFront.hardpoints[Corner::ContactPatch].x() - s->rightRear.hardpoints[Corner::ContactPatch].x();
+	m(3,1) = s->rightFront.hardpoints[Corner::ContactPatch].x() - s->rightRear.hardpoints[Corner::ContactPatch].x();
+	m(3,2) = s->leftRear.hardpoints[Corner::ContactPatch].x() - s->rightRear.hardpoints[Corner::ContactPatch].x();
 	m(3,3) = 0.0;
 
 	// Sum of x-moments about left front wheel
 	m(4,0) = 0.0;
-	m(4,1) = s->leftFront.hardpoints[Corner::ContactPatch].y - s->rightFront.hardpoints[Corner::ContactPatch].y;
-	m(4,2) = s->leftFront.hardpoints[Corner::ContactPatch].y - s->leftRear.hardpoints[Corner::ContactPatch].y;
-	m(4,3) = s->leftFront.hardpoints[Corner::ContactPatch].y - s->rightRear.hardpoints[Corner::ContactPatch].y;
+	m(4,1) = s->leftFront.hardpoints[Corner::ContactPatch].y() - s->rightFront.hardpoints[Corner::ContactPatch].y();
+	m(4,2) = s->leftFront.hardpoints[Corner::ContactPatch].y() - s->leftRear.hardpoints[Corner::ContactPatch].y();
+	m(4,3) = s->leftFront.hardpoints[Corner::ContactPatch].y() - s->rightRear.hardpoints[Corner::ContactPatch].y();
 
 	// Sum of x-moments about right front wheel
-	m(5,0) = s->rightFront.hardpoints[Corner::ContactPatch].y - s->leftFront.hardpoints[Corner::ContactPatch].y;
+	m(5,0) = s->rightFront.hardpoints[Corner::ContactPatch].y() - s->leftFront.hardpoints[Corner::ContactPatch].y();
 	m(5,1) = 0.0;
-	m(5,2) = s->rightFront.hardpoints[Corner::ContactPatch].y - s->leftRear.hardpoints[Corner::ContactPatch].y;
-	m(5,3) = s->rightFront.hardpoints[Corner::ContactPatch].y - s->rightRear.hardpoints[Corner::ContactPatch].y;
+	m(5,2) = s->rightFront.hardpoints[Corner::ContactPatch].y() - s->leftRear.hardpoints[Corner::ContactPatch].y();
+	m(5,3) = s->rightFront.hardpoints[Corner::ContactPatch].y() - s->rightRear.hardpoints[Corner::ContactPatch].y();
 
 	// Sum of x-moments about left rear wheel
-	m(6,0) = s->leftRear.hardpoints[Corner::ContactPatch].y - s->leftFront.hardpoints[Corner::ContactPatch].y;
-	m(6,1) = s->leftRear.hardpoints[Corner::ContactPatch].y - s->rightFront.hardpoints[Corner::ContactPatch].y;
+	m(6,0) = s->leftRear.hardpoints[Corner::ContactPatch].y() - s->leftFront.hardpoints[Corner::ContactPatch].y();
+	m(6,1) = s->leftRear.hardpoints[Corner::ContactPatch].y() - s->rightFront.hardpoints[Corner::ContactPatch].y();
 	m(6,2) = 0.0;
-	m(6,3) = s->leftRear.hardpoints[Corner::ContactPatch].y - s->rightRear.hardpoints[Corner::ContactPatch].y;
+	m(6,3) = s->leftRear.hardpoints[Corner::ContactPatch].y() - s->rightRear.hardpoints[Corner::ContactPatch].y();
 
 	// Sum of x-moments about right rear wheel
-	m(7,0) = s->rightRear.hardpoints[Corner::ContactPatch].y - s->leftFront.hardpoints[Corner::ContactPatch].y;
-	m(7,1) = s->rightRear.hardpoints[Corner::ContactPatch].y - s->rightFront.hardpoints[Corner::ContactPatch].y;
-	m(7,2) = s->rightRear.hardpoints[Corner::ContactPatch].y - s->leftRear.hardpoints[Corner::ContactPatch].y;
+	m(7,0) = s->rightRear.hardpoints[Corner::ContactPatch].y() - s->leftFront.hardpoints[Corner::ContactPatch].y();
+	m(7,1) = s->rightRear.hardpoints[Corner::ContactPatch].y() - s->rightFront.hardpoints[Corner::ContactPatch].y();
+	m(7,2) = s->rightRear.hardpoints[Corner::ContactPatch].y() - s->leftRear.hardpoints[Corner::ContactPatch].y();
 	m(7,3) = 0.0;
 
 	// Sum of z-forces
@@ -503,18 +509,18 @@ Matrix QuasiStatic::BuildSystemMatrix(const Car* workingCar) const
 //		None
 //
 // Return Value:
-//		Matrix
+//		SystemVector
 //
 //==========================================================================
-Matrix QuasiStatic::BuildRightHandMatrix(const Car* workingCar, const double& gx,
+QuasiStatic::SystemVector QuasiStatic::BuildRightHandMatrix(const Car* workingCar, const double& gx,
 	const double& gy, const KinematicOutputs& outputs, const WheelSet& preLoad) const
 {
 	// This is the "b" matrix in A * x = b
 
-	const MassProperties* mp(workingCar->massProperties);
-	const Suspension* s(workingCar->suspension);
+	const auto* mp(workingCar->GetSubsystem<MassProperties>());
+	const auto* s(workingCar->GetSubsystem<Suspension>());
 	const double gravity(32.174);// [ft/sec^2]
-	Matrix m(13, 1);
+	SystemVector m;
 
 	// TODO:  Consider (vertical) motion of sprung mass CG?
 
@@ -637,15 +643,15 @@ Matrix QuasiStatic::BuildRightHandMatrix(const Car* workingCar, const double& gx
 //		None
 //
 // Return Value:
-//		Matrix
+//		SystemVector
 //
 //==========================================================================
-Matrix QuasiStatic::ComputeError(const Car* workingCar, const double& gx,
+QuasiStatic::SystemVector QuasiStatic::ComputeError(const Car* workingCar, const double& gx,
 	const double& gy, const KinematicOutputs& outputs, const WheelSet& preLoad) const
 {
-	Matrix A(BuildSystemMatrix(workingCar));
-	Matrix b(BuildRightHandMatrix(workingCar, gx, gy, outputs, preLoad));
-	Matrix x;
+	SystemMatrix A(BuildSystemMatrix(workingCar));
+	SystemVector b(BuildRightHandMatrix(workingCar, gx, gy, outputs, preLoad));
+	SystemVector x;
 
 	if (!A.LeftDivide(b, x))
 	{

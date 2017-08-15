@@ -17,6 +17,7 @@
 #include <cassert>
 #include <limits>
 #include <cstdarg>
+#include <sstream>
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -412,29 +413,34 @@ unsigned int Math::GetPrecision(const double &value,
 unsigned int Math::CountSignificantDigits(const vvaseString &valueString)
 {
 	double value;
-	if (!valueString.ToDouble(&value))
+	vvaseStringStream ss(valueString);
+	if ((ss >> value).fail())
 		return 0;
 
-	wxString trimmedValueString = wxString::Format("%+0.15f", value);
+	ss.clear();
+	ss.str(_T(""));
+	ss.precision(15);
+	ss << std::showpos << std::fixed << value;
+	vvaseString trimmedValueString(ss.str());
 	unsigned int firstDigit, lastDigit;
-	for (firstDigit = 1; firstDigit < trimmedValueString.Len(); firstDigit++)
+	for (firstDigit = 1; firstDigit < trimmedValueString.length(); ++firstDigit)
 	{
 		if (trimmedValueString[firstDigit] != '0' && trimmedValueString[firstDigit] != '.')
 			break;
 	}
 
-	for (lastDigit = trimmedValueString.Len() - 1; lastDigit > firstDigit; lastDigit--)
+	for (lastDigit = trimmedValueString.length() - 1; lastDigit > firstDigit; --lastDigit)
 	{
 		if (trimmedValueString[lastDigit] != '0' && trimmedValueString[lastDigit] != '.')
 			break;
 	}
 
 	unsigned int i;
-	for (i = firstDigit + 1; i < lastDigit - 1; i++)
+	for (i = firstDigit + 1; i < lastDigit - 1; ++i)
 	{
 		if (trimmedValueString[i] == '.')
 		{
-			firstDigit++;
+			++firstDigit;
 			break;
 		}
 	}

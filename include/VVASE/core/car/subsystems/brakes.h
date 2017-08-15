@@ -46,8 +46,8 @@ public:
 	// FIXME:  Make temperature dependant with thermal and cooling model (include aerodynamics?)
 
 	// Important for determining anti-geometry (see RCVD p. 168)
-	bool frontBrakesInboard;
-	bool rearBrakesInboard;
+	bool frontBrakesInboard = false;
+	bool rearBrakesInboard = false;
 
 	// Required by RegisterableComponent
     static std::unique_ptr<Brakes> Create() { return std::make_unique<Brakes>(); }

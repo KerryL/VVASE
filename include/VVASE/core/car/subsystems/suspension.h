@@ -36,6 +36,8 @@ class BinaryWriter;
 class Suspension : public Subsystem
 {
 public:
+	Suspension();
+
 	// File read/write functions
 	void Write(BinaryWriter& file) const override;
 	void Read(BinaryReader& file, const int& fileVersion) override;

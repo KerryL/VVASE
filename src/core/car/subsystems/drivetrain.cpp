@@ -100,13 +100,25 @@ void Drivetrain::Write(BinaryWriter& file) const
 	file.Write((unsigned int)driveType);
 	file.Write(gearRatios);
 
-	// Write the differentials
-	unsigned int diffCount(differentials.size());
-	file.Write(diffCount);
+	WriteDifferential(file, rearDifferential.get());
+	WriteDifferential(file, midDifferential.get());
+	WriteDifferential(file, frontDifferential.get());
+}
 
-	unsigned int i;
-	for (i = 0; i < differentials.size(); i++)
-		differentials[i]->Write(file);
+void Drivetrain::WriteDifferential(BinaryWriter& file, const Differential* differential)
+{
+	if (differential)
+	{
+		file.Write(true);
+		differential->Write(file);
+	}
+	else
+		file.Write(false);
+}
+
+void Drivetrain::ReadDifferential(BinaryReader& file, Differential* differential)
+{
+	// TODO:  Implement
 }
 
 //==========================================================================
@@ -136,7 +148,14 @@ void Drivetrain::Read(BinaryReader& file, const int& fileVersion)
 
 	temp = sizeof(driveType);
 
-	if (fileVersion >= 5)
+	if (fileVersion >= 6)// TODO:  Check this # is correct
+	{
+		file.Read(gearRatios);
+		ReadDifferential(file, rearDifferential.get());
+		ReadDifferential(file, midDifferential.get());
+		ReadDifferential(file, frontDifferential.get());
+	}
+	else if (fileVersion >= 5)
 	{
 		file.Read(gearRatios);
 	}
@@ -160,14 +179,6 @@ void Drivetrain::Read(BinaryReader& file, const int& fileVersion)
 	unsigned int diffCount(1);
 	if (fileVersion >= 5)
 		file.Read(diffCount);
-
-	// TODO:  Handle different file versions
-	unsigned int i;
-	for (i = 0; i < diffCount; i++)
-	{
-		differentials.push_back(new Differential);
-		differentials.front()->Read(file, fileVersion);
-	}
 }
 
 //==========================================================================

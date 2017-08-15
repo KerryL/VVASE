@@ -22,10 +22,8 @@ class BinaryWriter;
 class Differential
 {
 public:
-	Differential();
-	Differential(const double& biasRatio);
-	Differential(const Differential &differential);
-	~Differential();
+	Differential() = default;
+	explicit Differential(const double& biasRatio);
 
 	// File read/write functions
 	void Write(BinaryWriter& file) const;

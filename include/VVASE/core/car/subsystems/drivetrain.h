@@ -33,6 +33,8 @@ class BinaryWriter;
 class Drivetrain : public Subsystem
 {
 public:
+	Drivetrain();
+
 	// File read/write functions
 	void Write(BinaryWriter& file) const override;
 	void Read(BinaryReader& file, const int& fileVersion) override;
@@ -78,6 +80,9 @@ private:
 	std::unique_ptr<Differential> rearDifferential;
     std::unique_ptr<Differential> midDifferential;
     std::unique_ptr<Differential> frontDifferential;
+
+	static void WriteDifferential(BinaryWriter& file, const Differential* differential);
+	static void ReadDifferential(BinaryReader& file, Differential* differential);
 
 	// Array of gear ratios for each gear (not including final
 	// drive - that is in the Differential object)

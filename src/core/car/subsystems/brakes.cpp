@@ -10,78 +10,13 @@
 // Desc:  Contains class functionality for brakes class.
 
 // Local headers
-#include "vCar/brakes.h"
-#include "vUtilities/debugger.h"
-#include "vUtilities/machineDefinitions.h"
-#include "vUtilities/binaryReader.h"
-#include "vUtilities/binaryWriter.h"
+#include "VVASE/core/car/subsystems/brakes.h"
+#include "VVASE/core/utilities/debugger.h"
+#include "VVASE/core/utilities/binaryReader.h"
+#include "VVASE/core/utilities/binaryWriter.h"
 
 namespace VVASE
 {
-
-//==========================================================================
-// Class:			Brakes
-// Function:		Brakes
-//
-// Description:		Constructor for the Brakes class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Brakes::Brakes()
-{
-	// Initialize the class members
-	frontBrakesInboard = false;
-	rearBrakesInboard = false;
-}
-
-//==========================================================================
-// Class:			Brakes
-// Function:		Brakes
-//
-// Description:		Copy constructor for the Brakes class.
-//
-// Input Arguments:
-//		brakes	= const Brakes& to copy to this object
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Brakes::Brakes(const Brakes &brakes)
-{
-	*this = brakes;
-}
-
-//==========================================================================
-// Class:			Brakes
-// Function:		~Brakes
-//
-// Description:		Destructor for the Brakes class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Brakes::~Brakes()
-{
-}
 
 //==========================================================================
 // Class:			Brakes
@@ -152,7 +87,7 @@ void Brakes::Read(BinaryReader& file, const int& fileVersion)
 //		Brakes&, reference to this object
 //
 //==========================================================================
-Brakes& Brakes::operator = (const Brakes &brakes)
+/*Brakes& Brakes::operator = (const Brakes &brakes)
 {
 	// Check for self-assignment
 	if (this == &brakes)
@@ -171,6 +106,6 @@ Brakes& Brakes::operator = (const Brakes &brakes)
 	rearBrakesInboard	= brakes.rearBrakesInboard;
 
 	return *this;
-}
+}*/
 
 }// namespace VVASE

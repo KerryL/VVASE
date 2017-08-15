@@ -75,8 +75,8 @@ class Car
 {
 public:
 	Car();
-	Car(const Car &car);
-	~Car();
+	//Car(const Car &car);
+	//~Car();
 
     template <typename T>
 	static bool RegisterSubsystem();
@@ -88,8 +88,8 @@ public:
     // Best way to handle this might be to store a list of all loaded modules, and warn if there is a mismatch
 
 	// Utility methods
-	bool SaveCarToFile(wxString fileName, std::ofstream *outFile = NULL) const;
-	bool LoadCarFromFile(wxString fileName, std::ifstream *inFile = NULL, int *fileVersion = NULL);
+	bool SaveCarToFile(vvaseString fileName, vvaseOutFileStream *outFile = NULL) const;
+	bool LoadCarFromFile(vvaseString fileName, vvaseInFileStream *inFile = NULL, int *fileVersion = NULL);
 
 	void ComputeWheelCenters();
 
@@ -102,8 +102,10 @@ public:
 
 	wxMutex &GetMutex() const { return carMutex; };
 
-	Subsystem* GetSubsystem(const vvaseString& key) { return subsystems[key].get(); }
-	const Subsystem* GetSubsystem(const vvaseString& key) const;
+	template<typename T>
+	T* GetSubsystem() { return dynamic_cast<T*>(subsystems[T::GetName()].get()); }
+	template<typename T>
+	T* GetSubsystem() const;
 
 private:
 	// File header information
@@ -121,6 +123,7 @@ private:
 
     static ComponentManager<Subsystem> subsystemManager;
     std::unordered_map<vvaseString, std::unique_ptr<Subsystem>> subsystems;
+	std::unordered_map<vvaseString, std::unique_ptr<Subsystem>> CreateComponents();
 };
 
 template <typename T>
@@ -135,6 +138,15 @@ bool Car::UnregisterSubsystem()
 {
     subsystemManager.Unregister<T>();
     return true;// TODO:  Always true?
+}
+
+template <typename T>
+T* Car::GetSubsystem() const
+{
+	const auto it(subsystems.find(T::GetName()));
+	if (it == subsystems.end())
+		return nullptr;
+	return dynamic_cast<T*>(it->second.get());
 }
 
 }// namespace VVASE

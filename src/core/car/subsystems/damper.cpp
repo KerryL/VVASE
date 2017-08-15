@@ -12,7 +12,7 @@
 //        damper.
 
 // Local headers
-#include "vCar/damper.h"
+#include "VVASE/core/car/subsystems/damper.h"
 
 namespace VVASE
 {

@@ -10,8 +10,8 @@
 // Desc:  Contains class functionality for driver class.
 
 // Local headers
-#include "vCar/driver.h"
-#include "vUtilities/debugger.h"
+#include "VVASE/core/car/subsystems/driver.h"
+#include "VVASE/core/utilities/debugger.h"
 
 namespace VVASE
 {

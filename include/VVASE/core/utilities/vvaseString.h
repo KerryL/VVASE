@@ -30,9 +30,9 @@ namespace VVASE
 
 typedef wchar_t vvaseChar;
 typedef std::wstring vvaseString;
-typedef std::wfstream vvaseTextFileStream;
-typedef std::wifstream vvaseInTextFileStream;
-typedef std::wofstream vvaseOutTextFileStream;
+typedef std::wfstream vvaseFileStream;
+typedef std::wifstream vvaseInFileStream;
+typedef std::wofstream vvaseOutFileStream;
 typedef std::wstringstream vvaseStringStream;
 typedef std::wostringstream vvaseOStringStream;
 typedef std::wistringstream vvaseIStringStream;
@@ -49,9 +49,9 @@ typedef std::wistream vvaseIStream;
 
 typedef char vvaseChar;
 typedef std::string vvaseString;
-typedef std::fstream vvaseTextFileStream;
-typedef std::ifstream vvaseInTextFileStream;
-typedef std::ofstream vvaseOutTextFileStream;
+typedef std::fstream vvaseFileStream;
+typedef std::ifstream vvaseInFileStream;
+typedef std::ofstream vvaseOutFileStream;
 typedef std::stringstream vvaseStringStream;
 typedef std::ostringstream vvaseOStringStream;
 typedef std::istringstream vvaseIStringStream;

@@ -15,11 +15,10 @@
 #include <wx/wx.h>
 
 // Local headers
-#include "vCar/corner.h"
-#include "vUtilities/debugger.h"
-#include "vUtilities/machineDefinitions.h"
-#include "vUtilities/binaryReader.h"
-#include "vUtilities/binaryWriter.h"
+#include "VVASE/core/car/subsystems/corner.h"
+#include "VVASE/core/utilities/debugger.h"
+#include "VVASE/core/utilities/binaryReader.h"
+#include "VVASE/core/utilities/binaryWriter.h"
 
 namespace VVASE
 {
@@ -45,7 +44,7 @@ Corner::Corner(const Location &location) : location(location), hardpoints(Number
 {
 	int i;
 	for (i = 0; i < NumberOfHardpoints; i++)
-		hardpoints[i].Set(0.0, 0.0, 0.0);
+		hardpoints[i].setZero();
 
 	staticCamber = 0.0;
 	staticToe = 0.0;
@@ -67,10 +66,10 @@ Corner::Corner(const Location &location) : location(location), hardpoints(Number
 //		None
 //
 // Return Value:
-//		wxString containg the name of the specified attachment method
+//		vvaseString containg the name of the specified attachment method
 //
 //==========================================================================
-wxString Corner::GetActuationAttachmentName(const ActuationAttachment &attachment)
+vvaseString Corner::GetActuationAttachmentName(const ActuationAttachment &attachment)
 {
 	switch (attachment)
 	{
@@ -107,10 +106,10 @@ wxString Corner::GetActuationAttachmentName(const ActuationAttachment &attachmen
 //		None
 //
 // Return Value:
-//		wxString containg the name of the specified actuation type
+//		vvaseString containg the name of the specified actuation type
 //
 //==========================================================================
-wxString Corner::GetActuationTypeName(const ActuationType &type)
+vvaseString Corner::GetActuationTypeName(const ActuationType &type)
 {
 	switch (type)
 	{
@@ -143,10 +142,10 @@ wxString Corner::GetActuationTypeName(const ActuationType &type)
 //		None
 //
 // Return Value:
-//		wxString containing the name of the point
+//		vvaseString containing the name of the point
 //
 //==========================================================================
-wxString Corner::GetHardpointName(const Hardpoints &point)
+vvaseString Corner::GetHardpointName(const Hardpoints &point)
 {
 	switch (point)
 	{
@@ -267,10 +266,10 @@ wxString Corner::GetHardpointName(const Hardpoints &point)
 //		None
 //
 // Return Value:
-//		wxString containg the name of the specified actuation type
+//		vvaseString containg the name of the specified actuation type
 //
 //==========================================================================
-wxString Corner::GetLocationName(const Location &location)
+vvaseString Corner::GetLocationName(const Location &location)
 {
 	switch (location)
 	{
@@ -319,7 +318,7 @@ void Corner::ComputeWheelCenter(const double &tireDiameter)
 {
 	// Get the "unperturbed" wheel center from the diameter and the contact patch location
 	hardpoints[WheelCenter] = hardpoints[ContactPatch];
-	hardpoints[WheelCenter].z = tireDiameter / 2.0;
+	hardpoints[WheelCenter].z() = tireDiameter / 2.0;
 
 	// These next two operations have sign changes depending on which
 	// side of the car this corner is on:
@@ -331,14 +330,20 @@ void Corner::ComputeWheelCenter(const double &tireDiameter)
 	if (location == LocationRightFront || location == LocationRightRear)
 		rotationAngle *= -1.0;
 
-	hardpoints[WheelCenter].Rotate(hardpoints[ContactPatch], rotationAngle, Eigen::Vector3d::AxisX);
+	Eigen::AngleAxis<double> camberRotation(rotationAngle, Eigen::Vector3d::UnitX());
+	hardpoints[WheelCenter] -= hardpoints[ContactPatch];
+	hardpoints[WheelCenter] = camberRotation * hardpoints[WheelCenter];
+	hardpoints[WheelCenter] += hardpoints[ContactPatch];
 
 	// Rotate the wheel center about the Z axis for toe effects
 	rotationAngle = staticToe;
 	if (location == LocationRightFront || location == LocationRightRear)
 		rotationAngle *= -1.0;
 
-	hardpoints[WheelCenter].Rotate(hardpoints[ContactPatch], rotationAngle, Eigen::Vector3d::AxisZ);
+	Eigen::AngleAxis<double> toeRotation(rotationAngle, Eigen::Vector3d::UnitZ());
+	hardpoints[WheelCenter] -= hardpoints[ContactPatch];
+	hardpoints[WheelCenter] = toeRotation * hardpoints[WheelCenter];
+	hardpoints[WheelCenter] += hardpoints[ContactPatch];
 }
 
 //==========================================================================

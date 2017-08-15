@@ -22,47 +22,6 @@ namespace VVASE
 
 //==========================================================================
 // Class:			Engine
-// Function:		Engine
-//
-// Description:		Constructor for the Engine class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Engine::Engine()
-{
-}
-
-//==========================================================================
-// Class:			Engine
-// Function:		Engine
-//
-// Description:		Copy constructor for the Engine class.
-//
-// Input Arguments:
-//		engine	= const Engine& to copy to this object
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Engine::Engine(const Engine &engine)
-{
-	*this = engine;
-}
-
-//==========================================================================
-// Class:			Engine
 // Function:		Write
 //
 // Description:		Writes this engine to file.
