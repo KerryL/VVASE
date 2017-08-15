@@ -15,6 +15,7 @@
 // Local headers
 #include "subsystem.h"
 #include "VVASE/core/utilities/vvaseString.h"
+#include "VVASE/core/car/subsystems/differential.h"
 
 // Standard C++ headers
 #include <vector>

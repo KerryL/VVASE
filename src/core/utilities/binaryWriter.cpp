@@ -14,6 +14,10 @@
 // Local headers
 #include "VVASE/core/utilities/binaryWriter.h"
 
+// Standard C++ headers
+#include <locale>
+#include <codecvt>
+
 namespace VVASE
 {
 
@@ -24,7 +28,7 @@ namespace VVASE
 // Description:		Constructor for BinaryWriter class.
 //
 // Input Arguments:
-//		file	= vvaseOutFileStream&
+//		file	= std::ofstream&
 //
 // Output Arguments:
 //		None
@@ -33,7 +37,7 @@ namespace VVASE
 //		None
 //
 //==========================================================================
-BinaryWriter::BinaryWriter(vvaseOutFileStream& file) : file(file)
+BinaryWriter::BinaryWriter(std::ofstream& file) : file(file)
 {
 }
 
@@ -44,7 +48,7 @@ BinaryWriter::BinaryWriter(vvaseOutFileStream& file) : file(file)
 // Description:		Writes specified object to file.
 //
 // Input Arguments:
-//		v	= const vvaseString&
+//		v	= const std::string&
 //
 // Output Arguments:
 //		None
@@ -53,14 +57,44 @@ BinaryWriter::BinaryWriter(vvaseOutFileStream& file) : file(file)
 //		bool
 //
 //==========================================================================
-bool BinaryWriter::Write(const vvaseString& v)
+bool BinaryWriter::Write(const std::string& v)
 {
 	bool ok(true);
-	ok = Write((unsigned int)v.length());
+	ok = Write(static_cast<unsigned int>(v.length()));
 
 	unsigned int i;
 	for (i = 0; i < v.length(); i++)
 		ok = Write(v[i]) && ok;
+
+	return ok;
+}
+
+//==========================================================================
+// Class:			BinaryWriter
+// Function:		Write
+//
+// Description:		Writes specified object to file.
+//
+// Input Arguments:
+//		v	= const std::wstring&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		bool
+//
+//==========================================================================
+bool BinaryWriter::Write(const std::wstring& v)
+{
+	bool ok(true);
+	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+	const std::string narrowString(converter.to_bytes(v));
+	ok = Write(static_cast<unsigned int>(narrowString.length()));
+
+	unsigned int i;
+	for (i = 0; i < narrowString.length(); i++)
+		ok = Write(narrowString[i]) && ok;
 
 	return ok;
 }

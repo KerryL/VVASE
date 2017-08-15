@@ -13,7 +13,6 @@
 #include <wx/wx.h>
 
 // Local headers
-#include "VVASE/core/car/subsystems/differential.h"
 #include "VVASE/core/car/subsystems/drivetrain.h"
 #include "VVASE/core/utilities/wheelSetStructures.h"
 #include "VVASE/core/utilities/debugger.h"

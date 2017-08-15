@@ -14,6 +14,10 @@
 // Local headers
 #include "VVASE/core/utilities/binaryReader.h"
 
+// Standard C++ headers
+#include <locale>
+#include <codecvt>
+
 namespace VVASE
 {
 
@@ -24,7 +28,7 @@ namespace VVASE
 // Description:		Constructor for BinaryReader class.
 //
 // Input Arguments:
-//		file	= vvaseInFileStream&
+//		file	= std::ifstream&
 //
 // Output Arguments:
 //		None
@@ -33,7 +37,7 @@ namespace VVASE
 //		None
 //
 //==========================================================================
-BinaryReader::BinaryReader(vvaseInFileStream& file) : file(file)
+BinaryReader::BinaryReader(std::ifstream& file) : file(file)
 {
 }
 
@@ -44,7 +48,7 @@ BinaryReader::BinaryReader(vvaseInFileStream& file) : file(file)
 // Description:		Reads specified object from file.
 //
 // Input Arguments:
-//		v	= vvaseString&
+//		v	= std::string&
 //
 // Output Arguments:
 //		None
@@ -53,7 +57,7 @@ BinaryReader::BinaryReader(vvaseInFileStream& file) : file(file)
 //		bool
 //
 //==========================================================================
-bool BinaryReader::Read(vvaseString& v)
+bool BinaryReader::Read(std::string& v)
 {
 	bool ok(true);
 	unsigned int length;
@@ -66,6 +70,43 @@ bool BinaryReader::Read(vvaseString& v)
 		ok = Read(c) && ok;
 		v.push_back(c);
 	}
+
+	return ok;
+}
+
+//==========================================================================
+// Class:			BinaryReader
+// Function:		Read
+//
+// Description:		Reads specified object from file.
+//
+// Input Arguments:
+//		v	= std::wstring&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		bool
+//
+//==========================================================================
+bool BinaryReader::Read(std::wstring& v)
+{
+	bool ok(true);
+	unsigned int length;
+	ok = Read(length);
+
+	std::string narrowString;
+	char c;
+	unsigned int i;
+	for (i = 0; i < length; i++)
+	{
+		ok = Read(c) && ok;
+		narrowString.push_back(c);
+	}
+
+	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+	v = converter.from_bytes(narrowString);
 
 	return ok;
 }

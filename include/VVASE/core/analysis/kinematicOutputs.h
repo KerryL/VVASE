@@ -194,6 +194,7 @@ public:
 
 private:
 	const Car *originalCar;
+	const Suspension *originalSuspension;
 	const Suspension *currentSuspension;
 
 	// Updates the outputs associated with the associated corner
@@ -215,8 +216,8 @@ private:
 
 	void ComputeNetSteer();
 	void ComputeNetScrub();
-	void ComputeFrontARBTwist(const Car *original, const Suspension *current);
-	void ComputeRearARBTwist(const Car *original, const Suspension *current);
+	void ComputeFrontARBTwist(const Suspension *original, const Suspension *current);
+	void ComputeRearARBTwist(const Suspension *original, const Suspension *current);
 	void ComputeTrack(const Suspension *current);
 	void ComputeWheelbase(const Suspension *current);
 	void ComputeFrontRollCenter(const Suspension *current);

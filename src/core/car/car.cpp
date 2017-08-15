@@ -20,6 +20,7 @@
 #include "VVASE/core/utilities/wheelSetStructures.h"
 #include "VVASE/core/utilities/binaryReader.h"
 #include "VVASE/core/utilities/binaryWriter.h"
+#include "VVASE/core/utilities/debugger.h"
 
 // Standard C++ headers
 #include <fstream>
@@ -289,7 +290,7 @@ const int Car::currentFileVersion = 6;
 bool Car::SaveCarToFile(vvaseString fileName, vvaseOutFileStream *poutFile) const
 {
 	// Open the specified file
-	vvaseOutFileStream outFile(fileName.c_str(), std::ios::binary);
+	std::ofstream outFile(fileName.c_str(), std::ios::binary);// NOT vvaseOutFileStream - always use narrow char here
 	if (!outFile.is_open() || !outFile.good())
 		return false;
 
@@ -339,7 +340,7 @@ bool Car::SaveCarToFile(vvaseString fileName, vvaseOutFileStream *poutFile) cons
 //==========================================================================
 bool Car::LoadCarFromFile(vvaseString fileName, vvaseInFileStream *pinFile, int *fileVersion)
 {
-	vvaseInFileStream inFile(fileName.c_str(), std::ios::binary);
+	std::ifstream inFile(fileName.c_str(), std::ios::binary);// NOT vvaseInFileStream - always use narrow char here
 	if (!inFile.is_open() || !inFile.good())
 		return false;
 
@@ -353,13 +354,14 @@ bool Car::LoadCarFromFile(vvaseString fileName, vvaseInFileStream *pinFile, int 
 	// Call the read function for each sub-system class
 	// NOTE:  The order that these Read() calls are made must match the order
 	// of the Write() calls in SaveCarToFile().
-	aerodynamics->Read(binFile, header.fileVersion);
+/*	aerodynamics->Read(binFile, header.fileVersion);
 	brakes->Read(binFile, header.fileVersion);
 	drivetrain->Read(binFile, header.fileVersion);
 	engine->Read(binFile, header.fileVersion);
 	massProperties->Read(binFile, header.fileVersion);
 	suspension->Read(binFile, header.fileVersion);
-	tires->Read(binFile, header.fileVersion);
+	tires->Read(binFile, header.fileVersion);*/
+	// TODO:  Re-implement (and also handle old file versions!)
 
 	// If we're reading the options (done elsewhere), open the additional file
 	if (pinFile != nullptr)

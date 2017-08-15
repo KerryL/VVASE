@@ -32,9 +32,10 @@ namespace VVASE
 class BinaryWriter
 {
 public:
-	BinaryWriter(vvaseOutFileStream& file);
+	BinaryWriter(std::ofstream& file);
 
-	bool Write(const vvaseString& v);
+	bool Write(const std::string& v);
+	bool Write(const std::wstring& v);
 	bool Write(const char& v);
 	bool Write(const short& v);
 	bool Write(const int& v);
@@ -97,7 +98,7 @@ public:
 	}
 
 private:
-	vvaseOutFileStream& file;
+	std::ofstream& file;
 
 	bool Write8Bit(const char* const v);
 	bool Write16Bit(const char* const v);

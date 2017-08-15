@@ -196,12 +196,7 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 		jacobian(12,2) = (tempError(12,0) - error(12,0)) / epsilon;
 
 		// Compute next guess
-		if (!jacobian.LeftDivide(error, delta))
-		{
-			Debugger::GetInstance() << "Error:  Failed to invert jacobian" << Debugger::PriorityLow;
-			Debugger::GetInstance() << "Error:  Failed solve for quasi-static state" << Debugger::PriorityVeryHigh;
-			return kinematics.GetInputs();
-		}
+		delta = jacobian.colPivHouseholderQr().solve(error);
 		guess -= delta;
 
 		i++;
@@ -529,65 +524,65 @@ QuasiStatic::SystemVector QuasiStatic::BuildRightHandMatrix(const Car* workingCa
 		mp->unsprungMass.rightFront * mp->unsprungCGHeights.rightFront +
 		mp->unsprungMass.leftRear * mp->unsprungCGHeights.leftRear +
 		mp->unsprungMass.rightRear * mp->unsprungCGHeights.rightRear +
-		sprungMass * mp->GetSprungMassCG(s).z);
-	const double sprungCGx(mp->GetSprungMassCG(s).x);
-	const double sprungCGy(mp->GetSprungMassCG(s).y);
+		sprungMass * mp->GetSprungMassCG(s).z());
+	const double sprungCGx(mp->GetSprungMassCG(s).x());
+	const double sprungCGy(mp->GetSprungMassCG(s).y());
 
 	// Sum of y-moments about left front wheel
 	m(0,0) = gravity * (-gx * massMoment
-		+ mp->unsprungMass.rightFront * (s->rightFront.hardpoints[Corner::ContactPatch].x - s->leftFront.hardpoints[Corner::ContactPatch].x)
-		+ mp->unsprungMass.leftRear * (s->leftRear.hardpoints[Corner::ContactPatch].x - s->leftFront.hardpoints[Corner::ContactPatch].x)
-		+ mp->unsprungMass.rightRear * (s->rightRear.hardpoints[Corner::ContactPatch].x - s->leftFront.hardpoints[Corner::ContactPatch].x)
-		+ sprungMass * (sprungCGx - s->leftFront.hardpoints[Corner::ContactPatch].x));
+		+ mp->unsprungMass.rightFront * (s->rightFront.hardpoints[Corner::ContactPatch].x() - s->leftFront.hardpoints[Corner::ContactPatch].x())
+		+ mp->unsprungMass.leftRear * (s->leftRear.hardpoints[Corner::ContactPatch].x() - s->leftFront.hardpoints[Corner::ContactPatch].x())
+		+ mp->unsprungMass.rightRear * (s->rightRear.hardpoints[Corner::ContactPatch].x() - s->leftFront.hardpoints[Corner::ContactPatch].x())
+		+ sprungMass * (sprungCGx - s->leftFront.hardpoints[Corner::ContactPatch].x()));
 
 	// Sum of y-moments about right front wheel
 	m(1,0) = gravity * (-gx * massMoment
-		+ mp->unsprungMass.leftFront * (s->leftFront.hardpoints[Corner::ContactPatch].x - s->rightFront.hardpoints[Corner::ContactPatch].x)
-		+ mp->unsprungMass.leftRear * (s->leftRear.hardpoints[Corner::ContactPatch].x - s->rightFront.hardpoints[Corner::ContactPatch].x)
-		+ mp->unsprungMass.rightRear * (s->rightRear.hardpoints[Corner::ContactPatch].x - s->rightFront.hardpoints[Corner::ContactPatch].x)
-		+ sprungMass * (sprungCGx - s->rightFront.hardpoints[Corner::ContactPatch].x));
+		+ mp->unsprungMass.leftFront * (s->leftFront.hardpoints[Corner::ContactPatch].x() - s->rightFront.hardpoints[Corner::ContactPatch].x())
+		+ mp->unsprungMass.leftRear * (s->leftRear.hardpoints[Corner::ContactPatch].x() - s->rightFront.hardpoints[Corner::ContactPatch].x())
+		+ mp->unsprungMass.rightRear * (s->rightRear.hardpoints[Corner::ContactPatch].x() - s->rightFront.hardpoints[Corner::ContactPatch].x())
+		+ sprungMass * (sprungCGx - s->rightFront.hardpoints[Corner::ContactPatch].x()));
 
 	// Sum of y-moments about left rear wheel
 	m(2,0) = gravity * (-gx * massMoment
-		+ mp->unsprungMass.leftFront * (s->leftFront.hardpoints[Corner::ContactPatch].x - s->leftRear.hardpoints[Corner::ContactPatch].x)
-		+ mp->unsprungMass.rightFront * (s->rightFront.hardpoints[Corner::ContactPatch].x - s->leftRear.hardpoints[Corner::ContactPatch].x)
-		+ mp->unsprungMass.rightRear * (s->rightRear.hardpoints[Corner::ContactPatch].x - s->leftRear.hardpoints[Corner::ContactPatch].x)
-		+ sprungMass * (sprungCGx - s->leftRear.hardpoints[Corner::ContactPatch].x));
+		+ mp->unsprungMass.leftFront * (s->leftFront.hardpoints[Corner::ContactPatch].x() - s->leftRear.hardpoints[Corner::ContactPatch].x())
+		+ mp->unsprungMass.rightFront * (s->rightFront.hardpoints[Corner::ContactPatch].x() - s->leftRear.hardpoints[Corner::ContactPatch].x())
+		+ mp->unsprungMass.rightRear * (s->rightRear.hardpoints[Corner::ContactPatch].x() - s->leftRear.hardpoints[Corner::ContactPatch].x())
+		+ sprungMass * (sprungCGx - s->leftRear.hardpoints[Corner::ContactPatch].x()));
 
 	// Sum of y-moments about right rear wheel
 	m(3,0) = gravity * (-gx * massMoment
-		+ mp->unsprungMass.leftFront * (s->leftFront.hardpoints[Corner::ContactPatch].x - s->rightRear.hardpoints[Corner::ContactPatch].x)
-		+ mp->unsprungMass.rightFront * (s->rightFront.hardpoints[Corner::ContactPatch].x - s->rightRear.hardpoints[Corner::ContactPatch].x)
-		+ mp->unsprungMass.leftRear * (s->leftRear.hardpoints[Corner::ContactPatch].x - s->rightRear.hardpoints[Corner::ContactPatch].x)
-		+ sprungMass * (sprungCGx - s->rightRear.hardpoints[Corner::ContactPatch].x));
+		+ mp->unsprungMass.leftFront * (s->leftFront.hardpoints[Corner::ContactPatch].x() - s->rightRear.hardpoints[Corner::ContactPatch].x())
+		+ mp->unsprungMass.rightFront * (s->rightFront.hardpoints[Corner::ContactPatch].x() - s->rightRear.hardpoints[Corner::ContactPatch].x())
+		+ mp->unsprungMass.leftRear * (s->leftRear.hardpoints[Corner::ContactPatch].x() - s->rightRear.hardpoints[Corner::ContactPatch].x())
+		+ sprungMass * (sprungCGx - s->rightRear.hardpoints[Corner::ContactPatch].x()));
 
 	// Sum of x-moments about left front wheel
 	m(4,0) = -gravity * (-gy * massMoment
-		+ mp->unsprungMass.rightFront * (s->rightFront.hardpoints[Corner::ContactPatch].y - s->leftFront.hardpoints[Corner::ContactPatch].y)
-		+ mp->unsprungMass.leftRear * (s->leftRear.hardpoints[Corner::ContactPatch].y - s->leftFront.hardpoints[Corner::ContactPatch].y)
-		+ mp->unsprungMass.rightRear * (s->rightRear.hardpoints[Corner::ContactPatch].y - s->leftFront.hardpoints[Corner::ContactPatch].y)
-		+ sprungMass * (sprungCGy - s->leftFront.hardpoints[Corner::ContactPatch].y));
+		+ mp->unsprungMass.rightFront * (s->rightFront.hardpoints[Corner::ContactPatch].y() - s->leftFront.hardpoints[Corner::ContactPatch].y())
+		+ mp->unsprungMass.leftRear * (s->leftRear.hardpoints[Corner::ContactPatch].y() - s->leftFront.hardpoints[Corner::ContactPatch].y())
+		+ mp->unsprungMass.rightRear * (s->rightRear.hardpoints[Corner::ContactPatch].y() - s->leftFront.hardpoints[Corner::ContactPatch].y())
+		+ sprungMass * (sprungCGy - s->leftFront.hardpoints[Corner::ContactPatch].y()));
 
 	// Sum of x-moments about right front wheel
 	m(5,0) = -gravity * (-gy * massMoment
-		+ mp->unsprungMass.leftFront * (s->leftFront.hardpoints[Corner::ContactPatch].y - s->rightFront.hardpoints[Corner::ContactPatch].y)
-		+ mp->unsprungMass.leftRear * (s->leftRear.hardpoints[Corner::ContactPatch].y - s->rightFront.hardpoints[Corner::ContactPatch].y)
-		+ mp->unsprungMass.rightRear * (s->rightRear.hardpoints[Corner::ContactPatch].y - s->rightFront.hardpoints[Corner::ContactPatch].y)
-		+ sprungMass * (sprungCGy - s->rightFront.hardpoints[Corner::ContactPatch].y));
+		+ mp->unsprungMass.leftFront * (s->leftFront.hardpoints[Corner::ContactPatch].y() - s->rightFront.hardpoints[Corner::ContactPatch].y())
+		+ mp->unsprungMass.leftRear * (s->leftRear.hardpoints[Corner::ContactPatch].y() - s->rightFront.hardpoints[Corner::ContactPatch].y())
+		+ mp->unsprungMass.rightRear * (s->rightRear.hardpoints[Corner::ContactPatch].y() - s->rightFront.hardpoints[Corner::ContactPatch].y())
+		+ sprungMass * (sprungCGy - s->rightFront.hardpoints[Corner::ContactPatch].y()));
 
 	// Sum of x-moments about left rear wheel
 	m(6,0) = -gravity * (-gy * massMoment
-		+ mp->unsprungMass.rightFront * (s->rightFront.hardpoints[Corner::ContactPatch].y - s->leftRear.hardpoints[Corner::ContactPatch].y)
-		+ mp->unsprungMass.leftFront * (s->leftFront.hardpoints[Corner::ContactPatch].y - s->leftRear.hardpoints[Corner::ContactPatch].y)
-		+ mp->unsprungMass.rightRear * (s->rightRear.hardpoints[Corner::ContactPatch].y - s->leftRear.hardpoints[Corner::ContactPatch].y)
-		+ sprungMass * (sprungCGy - s->leftRear.hardpoints[Corner::ContactPatch].y));
+		+ mp->unsprungMass.rightFront * (s->rightFront.hardpoints[Corner::ContactPatch].y() - s->leftRear.hardpoints[Corner::ContactPatch].y())
+		+ mp->unsprungMass.leftFront * (s->leftFront.hardpoints[Corner::ContactPatch].y() - s->leftRear.hardpoints[Corner::ContactPatch].y())
+		+ mp->unsprungMass.rightRear * (s->rightRear.hardpoints[Corner::ContactPatch].y() - s->leftRear.hardpoints[Corner::ContactPatch].y())
+		+ sprungMass * (sprungCGy - s->leftRear.hardpoints[Corner::ContactPatch].y()));
 
 	// Sum of x-moments about right rear wheel
 	m(7,0) = -gravity * (-gy * massMoment
-		+ mp->unsprungMass.leftFront * (s->leftFront.hardpoints[Corner::ContactPatch].y - s->rightRear.hardpoints[Corner::ContactPatch].y)
-		+ mp->unsprungMass.rightFront * (s->rightFront.hardpoints[Corner::ContactPatch].y - s->rightRear.hardpoints[Corner::ContactPatch].y)
-		+ mp->unsprungMass.leftRear * (s->leftRear.hardpoints[Corner::ContactPatch].y - s->rightRear.hardpoints[Corner::ContactPatch].y)
-		+ sprungMass * (sprungCGy - s->rightRear.hardpoints[Corner::ContactPatch].y));
+		+ mp->unsprungMass.leftFront * (s->leftFront.hardpoints[Corner::ContactPatch].y() - s->rightRear.hardpoints[Corner::ContactPatch].y())
+		+ mp->unsprungMass.rightFront * (s->rightFront.hardpoints[Corner::ContactPatch].y() - s->rightRear.hardpoints[Corner::ContactPatch].y())
+		+ mp->unsprungMass.leftRear * (s->leftRear.hardpoints[Corner::ContactPatch].y() - s->rightRear.hardpoints[Corner::ContactPatch].y())
+		+ sprungMass * (sprungCGy - s->rightRear.hardpoints[Corner::ContactPatch].y()));
 
 	// Sum of z-forces
 	m(8,0) = gravity * (mp->cornerWeights.leftFront + mp->cornerWeights.rightFront + mp->cornerWeights.leftRear + mp->cornerWeights.rightRear);
@@ -653,11 +648,7 @@ QuasiStatic::SystemVector QuasiStatic::ComputeError(const Car* workingCar, const
 	SystemVector b(BuildRightHandMatrix(workingCar, gx, gy, outputs, preLoad));
 	SystemVector x;
 
-	if (!A.LeftDivide(b, x))
-	{
-		// TODO:  What here?
-		Debugger::GetInstance() << "Failed to solve for tire loads" << Debugger::PriorityHigh;
-	}
+	x = A.colPivHouseholderQr().solve(b);
 
 	return b - A * x;
 }

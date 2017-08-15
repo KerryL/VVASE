@@ -95,7 +95,7 @@ private:
 	KinematicOutputs outputs;
 
 	bool SolveCorner(Corner &corner, const Corner &original,
-		const Eigen::Vector3d &rotations, const RotationSequence& sequence, const double& tireDeflection);
+		const Eigen::Vector3d &rotations, const double& tireDeflection);
 
 	void UpdateOutputs();
 

@@ -32,9 +32,10 @@ namespace VVASE
 class BinaryReader
 {
 public:
-	BinaryReader(vvaseInFileStream& file);
+	BinaryReader(std::ifstream& file);
 
-	bool Read(vvaseString& v);
+	bool Read(std::string& v);
+	bool Read(std::wstring& v);
 	bool Read(char& v);
 	bool Read(short& v);
 	bool Read(int& v);
@@ -106,7 +107,7 @@ public:
 	}
 
 private:
-	vvaseInFileStream& file;
+	std::ifstream& file;
 
 	bool Read8Bit(char* const v);
 	bool Read16Bit(char* const v);
