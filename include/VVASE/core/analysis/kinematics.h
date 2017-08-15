@@ -95,7 +95,7 @@ private:
 	KinematicOutputs outputs;
 
 	bool SolveCorner(Corner &corner, const Corner &original,
-		const Eigen::Vector3d &rotations, const double& tireDeflection);
+		const double& tireDeflection);
 
 	void UpdateOutputs();
 
@@ -119,8 +119,7 @@ private:
 
 	// Other functions
 	void MoveSteeringRack(const double &travel) const;
-	void UpdateCGs(const Eigen::Vector3d& cor, const Eigen::Vector3d& angles, const RotationSequence& sequence,
-		const double& heave, const WheelSet& tireDeflections, Car* workingCar) const;
+	void UpdateCGs(Car* workingCar) const;
 
 	static Eigen::Vector3d FindPerpendicularVector(const Eigen::Vector3d &v);
 	static double OptimizeCircleParameter(const Eigen::Vector3d &center, const Eigen::Vector3d &a,
@@ -128,6 +127,8 @@ private:
 
 	static bool SolveForXY(const Eigen::Vector3d &center1, const Eigen::Vector3d &center2, const Eigen::Vector3d &originalCenter1,
 		const Eigen::Vector3d &originalCenter2, const Eigen::Vector3d &original, Eigen::Vector3d &current);
+
+	void ApplyRotations(Eigen::Vector3d& v) const;
 };
 
 }// namespace VVASE

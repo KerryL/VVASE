@@ -414,4 +414,134 @@ double GeometryMath::GetSignedAngle(const Circle &c, const Eigen::Vector3d &v)
 	return asin((v.z() - c.center.z()) / c.radius);
 }
 
+//==========================================================================
+// Class:			GeometryMath
+// Function:		Rotate
+//
+// Description:		Rotates the specified vector about the specified point and axis.
+//
+// Input Arguments:
+//		v					= Eigen::Vector3d&
+//		centerOfRotation	= const Eigen::Vector3d&
+//		angle				= const double& [rad]
+//		axis				= const Eigen::Vector3d&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		Eigen::Vector3d&
+//
+//==========================================================================
+Eigen::Vector3d& GeometryMath::Rotate(Eigen::Vector3d& v, const Eigen::Vector3d& centerOfRotation,
+	const double& angle, const Eigen::Vector3d& axis)
+{
+	v -= centerOfRotation;
+	Eigen::AngleAxisd rotation(angle, axis);
+	v = rotation * v;
+	v += centerOfRotation;
+
+	return v;
+}
+
+//==========================================================================
+// Class:			GeometryMath
+// Function:		Rotate
+//
+// Description:		Rotates the specified vector about the specified point and axis.
+//
+// Input Arguments:
+//		v					= const Eigen::Vector3d&
+//		centerOfRotation	= const Eigen::Vector3d&
+//		angle				= const double& [rad]
+//		axis				= const Eigen::Vector3d&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		Eigen::Vector3d
+//
+//==========================================================================
+Eigen::Vector3d GeometryMath::Rotate(const Eigen::Vector3d& v, const Eigen::Vector3d& centerOfRotation,
+	const double& angle, const Eigen::Vector3d& axis)
+{
+	Eigen::Vector3d outVector(v);
+	return Rotate(outVector, centerOfRotation, angle, axis);
+}
+
+//==========================================================================
+// Class:			GeometryMath
+// Function:		Rotate
+//
+// Description:		Rotates the specified vector about the specified axis.
+//
+// Input Arguments:
+//		v					= Eigen::Vector3d&
+//		angle				= const double& [rad]
+//		axis				= const Eigen::Vector3d&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		Eigen::Vector3d&
+//
+//==========================================================================
+Eigen::Vector3d& GeometryMath::Rotate(Eigen::Vector3d& v,
+	const double& angle, const Eigen::Vector3d& axis)
+{
+	Eigen::AngleAxisd rotation(angle, axis);
+	v = rotation * v;
+
+	return v;
+}
+
+//==========================================================================
+// Class:			GeometryMath
+// Function:		Rotate
+//
+// Description:		Rotates the specified vector about the specified axis.
+//
+// Input Arguments:
+//		v					= const Eigen::Vector3d&
+//		angle				= const double& [rad]
+//		axis				= const Eigen::Vector3d&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		Eigen::Vector3d
+//
+//==========================================================================
+Eigen::Vector3d GeometryMath::Rotate(const Eigen::Vector3d& v,
+	const double& angle, const Eigen::Vector3d& axis)
+{
+	Eigen::Vector3d outVector(v);
+	return Rotate(outVector, angle, axis);
+}
+
+Eigen::Vector3d GeometryMath::AnglesBetween(const Eigen::Vector3d& v1, const Eigen::Vector2d& v2)
+{
+	Eigen::Vector3d temp;
+
+	// When projected onto one of the planes, we ignore the component
+	// of the vectors in the normal-to-the-plane direction.
+	// First we find the angle (relative to one of the axes) of v1,
+	// then we find the angle of v2 (relative to the same axis).
+	// The difference is the angle between the vectors.
+
+	// Y-Z Plane
+	temp.x() = atan2(v2.y(), v2.z()) - atan2(v1.y(), v1.z());
+
+	// X-Z Plane
+	temp.y() = atan2(v2.x(), v2.z()) - atan2(v1.x(), v1.z());
+
+	// X-Y Plane
+	temp.z() = atan2(v2.x(), v2.y()) - atan2(v1.x(), v1.y());
+
+	return temp;
+}
+
 }// namespace VVASE

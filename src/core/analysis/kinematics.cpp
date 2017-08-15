@@ -110,26 +110,6 @@ void Kinematics::UpdateKinematics(const Car* originalCar, Car* workingCar, wxStr
 
 	// FIXME:  As it is right now, this section is not compatible with monoshocks
 
-	Eigen::Vector3d rotations;// (X = First, Y = Second, Z = Third)
-	Eigen::Vector3d::Axis secondRotation;
-
-	// Determine the order to perform the Euler rotations
-	if (inputs.firstRotation == Eigen::Vector3d::AxisX)// Do roll first, then pitch
-	{
-		secondRotation = Eigen::Vector3d::AxisY;
-		rotations.Set(inputs.roll, inputs.pitch, 0.0);
-	}
-	else if (inputs.firstRotation == Eigen::Vector3d::AxisY)// Do pitch first, then roll
-	{
-		secondRotation = Eigen::Vector3d::AxisX;
-		rotations.Set(inputs.pitch, inputs.roll, 0.0);
-	}
-	else
-	{
-		Debugger::GetInstance() << "ERROR (UpdateKinematics):  Unable to determine order of Euler rotations" << Debugger::PriorityHigh;
-		return;
-	}
-
 	// Solve the chassis-mounted points for left-right common items (3rd springs/dampers, sway bars)
 	// Front sway bars
 	// NOTE:  This is only for points that are NOT in the Corner class
@@ -144,10 +124,8 @@ void Kinematics::UpdateKinematics(const Car* originalCar, Car* workingCar, wxStr
 
 	case Suspension::SwayBarTBar:
 		// Rotations
-		localSuspension->hardpoints[Suspension::FrontBarMidPoint].Rotate(inputs.centerOfRotation, rotations,
-			inputs.firstRotation, secondRotation);
-		localSuspension->hardpoints[Suspension::FrontBarPivotAxis].Rotate(inputs.centerOfRotation, rotations,
-			inputs.firstRotation, secondRotation);
+		ApplyRotations(localSuspension->hardpoints[Suspension::FrontBarMidPoint]);
+		ApplyRotations(localSuspension->hardpoints[Suspension::FrontBarPivotAxis]);
 
 		// Translations
 		localSuspension->hardpoints[Suspension::FrontBarMidPoint].z() += inputs.heave;
@@ -173,10 +151,8 @@ void Kinematics::UpdateKinematics(const Car* originalCar, Car* workingCar, wxStr
 
 	case Suspension::SwayBarTBar:
 		// Rotations
-		localSuspension->hardpoints[Suspension::RearBarMidPoint].Rotate(inputs.centerOfRotation,
-			rotations, inputs.firstRotation, secondRotation);
-		localSuspension->hardpoints[Suspension::RearBarPivotAxis].Rotate(inputs.centerOfRotation, rotations,
-			inputs.firstRotation, secondRotation);
+		ApplyRotations(localSuspension->hardpoints[Suspension::RearBarMidPoint]);
+		ApplyRotations(localSuspension->hardpoints[Suspension::RearBarPivotAxis]);
 
 		// Translations
 		localSuspension->hardpoints[Suspension::RearBarMidPoint].z() += inputs.heave;
@@ -194,10 +170,8 @@ void Kinematics::UpdateKinematics(const Car* originalCar, Car* workingCar, wxStr
 	if (localSuspension->frontHasThirdSpring)
 	{
 		// Rotations
-		localSuspension->hardpoints[Suspension::FrontThirdSpringInboard].Rotate(inputs.centerOfRotation,
-			rotations, inputs.firstRotation, secondRotation);
-		localSuspension->hardpoints[Suspension::FrontThirdDamperInboard].Rotate(inputs.centerOfRotation,
-			rotations, inputs.firstRotation, secondRotation);
+		ApplyRotations(localSuspension->hardpoints[Suspension::FrontThirdSpringInboard]);
+		ApplyRotations(localSuspension->hardpoints[Suspension::FrontThirdDamperInboard]);
 
 		// Translations
 		localSuspension->hardpoints[Suspension::FrontThirdSpringInboard].z() += inputs.heave;
@@ -207,23 +181,21 @@ void Kinematics::UpdateKinematics(const Car* originalCar, Car* workingCar, wxStr
 	if (localSuspension->rearHasThirdSpring)
 	{
 		// Rotations
-		localSuspension->hardpoints[Suspension::RearThirdSpringInboard].Rotate(inputs.centerOfRotation,
-			rotations, inputs.firstRotation, secondRotation);
-		localSuspension->hardpoints[Suspension::RearThirdDamperInboard].Rotate(inputs.centerOfRotation,
-			rotations, inputs.firstRotation, secondRotation);
+		ApplyRotations(localSuspension->hardpoints[Suspension::RearThirdSpringInboard]);
+		ApplyRotations(localSuspension->hardpoints[Suspension::RearThirdDamperInboard]);
 
 		// Translations
 		localSuspension->hardpoints[Suspension::RearThirdSpringInboard].z() += inputs.heave;
 		localSuspension->hardpoints[Suspension::RearThirdDamperInboard].z() += inputs.heave;
 	}
 
-	if (!SolveCorner(localSuspension->rightFront, originalSuspension->rightFront, rotations, secondRotation, inputs.tireDeflections.rightFront))
+	if (!SolveCorner(localSuspension->rightFront, originalSuspension->rightFront, inputs.tireDeflections.rightFront))
 		Debugger::GetInstance() << "ERROR:  Problem solving right front corner!  Increase debug level for more information." <<	Debugger::PriorityHigh;
-	if (!SolveCorner(localSuspension->leftFront, originalSuspension->leftFront, rotations, secondRotation, inputs.tireDeflections.leftFront))
+	if (!SolveCorner(localSuspension->leftFront, originalSuspension->leftFront, inputs.tireDeflections.leftFront))
 		Debugger::GetInstance() << "ERROR:  Problem solving left front corner!  Increase debug level for more information." << Debugger::PriorityHigh;
-	if (!SolveCorner(localSuspension->rightRear, originalSuspension->rightRear, rotations, secondRotation, inputs.tireDeflections.rightRear))
+	if (!SolveCorner(localSuspension->rightRear, originalSuspension->rightRear, inputs.tireDeflections.rightRear))
 		Debugger::GetInstance() << "ERROR:  Problem solving right rear corner!  Increase debug level for more information." << Debugger::PriorityHigh;
-	if (!SolveCorner(localSuspension->leftRear, originalSuspension->leftRear, rotations, secondRotation, inputs.tireDeflections.leftRear))
+	if (!SolveCorner(localSuspension->leftRear, originalSuspension->leftRear, inputs.tireDeflections.leftRear))
 		Debugger::GetInstance() << "ERROR:  Problem solving left rear corner!  Increase debug level for more information." << Debugger::PriorityHigh;
 
 	// Some things need to be solved AFTER all other corners
@@ -263,8 +235,7 @@ void Kinematics::UpdateKinematics(const Car* originalCar, Car* workingCar, wxStr
 			Debugger::GetInstance() << "ERROR:  Failed to solve for inboard T-bar (rear)!" << Debugger::PriorityMedium;
 	}
 
-	UpdateCGs(inputs.centerOfRotation, rotations, inputs.sequence,
-		inputs.heave, inputs.tireDeflections, workingCar);
+	UpdateCGs(workingCar);
 
 	outputs.Update(originalCar, localSuspension);
 	long totalTime = timer.Time();
@@ -284,7 +255,6 @@ void Kinematics::UpdateKinematics(const Car* originalCar, Car* workingCar, wxStr
 // Input Arguments:
 //		originalCorner	= const Corner*, the un-perturbed locations of the
 //						  suspension hardpoints
-//		sequence		= const RotationSequence& describing the order of rotations
 //		tireDeflection	= const double&
 //
 // Output Arguments:
@@ -295,7 +265,7 @@ void Kinematics::UpdateKinematics(const Car* originalCar, Car* workingCar, wxStr
 //
 //==========================================================================
 bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
-	const Eigen::Vector3d &rotations, const double& tireDeflection)
+	const double& tireDeflection)
 {
 	// Determine if this corner is at the front or the rear of the car
 	bool isAtFront = false;
@@ -303,22 +273,14 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 		isAtFront = true;
 
 	// First move all of the body-fixed points (rotations first)
-	corner.hardpoints[Corner::LowerFrontTubMount].Rotate(inputs.centerOfRotation,
-		rotations, inputs.firstRotation, secondRotation);
-	corner.hardpoints[Corner::LowerRearTubMount].Rotate(inputs.centerOfRotation,
-		rotations, inputs.firstRotation, secondRotation);
-	corner.hardpoints[Corner::UpperFrontTubMount].Rotate(inputs.centerOfRotation,
-		rotations, inputs.firstRotation, secondRotation);
-	corner.hardpoints[Corner::UpperRearTubMount].Rotate(inputs.centerOfRotation,
-		rotations, inputs.firstRotation, secondRotation);
-	corner.hardpoints[Corner::BarArmAtPivot].Rotate(inputs.centerOfRotation,
-		rotations, inputs.firstRotation, secondRotation);
-	corner.hardpoints[Corner::InboardSpring].Rotate(inputs.centerOfRotation,
-		rotations, inputs.firstRotation, secondRotation);
-	corner.hardpoints[Corner::InboardDamper].Rotate(inputs.centerOfRotation,
-		rotations, inputs.firstRotation, secondRotation);
-	corner.hardpoints[Corner::InboardTieRod].Rotate(inputs.centerOfRotation,
-		rotations, inputs.firstRotation, secondRotation);
+	ApplyRotations(corner.hardpoints[Corner::LowerFrontTubMount]);
+	ApplyRotations(corner.hardpoints[Corner::LowerRearTubMount]);
+	ApplyRotations(corner.hardpoints[Corner::UpperFrontTubMount]);
+	ApplyRotations(corner.hardpoints[Corner::UpperRearTubMount]);
+	ApplyRotations(corner.hardpoints[Corner::BarArmAtPivot]);
+	ApplyRotations(corner.hardpoints[Corner::InboardSpring]);
+	ApplyRotations(corner.hardpoints[Corner::InboardDamper]);
+	ApplyRotations(corner.hardpoints[Corner::InboardTieRod]);
 
 	// Now do the translations on the same points
 	corner.hardpoints[Corner::LowerFrontTubMount].z() += inputs.heave;
@@ -333,10 +295,8 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 	// Depending on the type of actuation, we might have to move some additional points, as well
 	if (corner.actuationType == Corner::ActuationPushPullrod)
 	{
-		corner.hardpoints[Corner::BellCrankPivot1].Rotate(inputs.centerOfRotation,
-			rotations, inputs.firstRotation, secondRotation);
-		corner.hardpoints[Corner::BellCrankPivot2].Rotate(inputs.centerOfRotation,
-			rotations, inputs.firstRotation, secondRotation);
+		ApplyRotations(corner.hardpoints[Corner::BellCrankPivot1]);
+		ApplyRotations(corner.hardpoints[Corner::BellCrankPivot2]);
 
 		corner.hardpoints[Corner::BellCrankPivot1].z() += inputs.heave;
 		corner.hardpoints[Corner::BellCrankPivot2].z() += inputs.heave;
@@ -346,8 +306,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 	if ((originalCar->HasFrontHalfShafts() && isAtFront) ||
 		(originalCar->HasRearHalfShafts() && !isAtFront))
 	{
-		corner.hardpoints[Corner::InboardHalfShaft].Rotate(inputs.centerOfRotation,
-			rotations, inputs.firstRotation, secondRotation);
+		ApplyRotations(corner.hardpoints[Corner::InboardHalfShaft]);
 		corner.hardpoints[Corner::InboardHalfShaft].z() += inputs.heave;
 	}
 
@@ -368,7 +327,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 	// NOTE:  Tire deflections here are assumed to be vertical.  For large wheel
 	// inclinations, this may introduce some error.
 
-	corner.hardpoints[Corner::ContactPatch].z = tolerance * 2;// Must be initialized to > Tolerance
+	corner.hardpoints[Corner::ContactPatch].z() = tolerance * 2;// Must be initialized to > Tolerance
 	while (iteration <= limit && fabs(corner.hardpoints[Corner::ContactPatch].z() + tireDeflection) > tolerance)
 	{
 		if (!SolveForXY(Corner::LowerBallJoint, Corner::LowerFrontTubMount,
@@ -411,18 +370,18 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 
 		// Determine what Euler angles I need to rotate OriginalPlaneNormal through to
 		// get NewPlaneNormal.  Do one angle at a time because order of rotations matters.
-		wheelRotations = originalPlaneNormal.AnglesTo(newPlaneNormal);
+		wheelRotations = GeometryMath::AnglesBetween(originalPlaneNormal, newPlaneNormal);
 		wheelNormal = Eigen::Vector3d::Zero();
 		wheelNormal(1) = sign * 1.0;
-		wheelNormal.Rotate(wheelRotations.z(), Eigen::Vector3d::AxisZ);
-		wheelNormal.Rotate(wheelRotations.x(), Eigen::Vector3d::AxisX);
+		GeometryMath::Rotate(wheelNormal, wheelRotations.z(), Eigen::Vector3d::UnitZ());
+		GeometryMath::Rotate(wheelNormal, wheelRotations.x(), Eigen::Vector3d::UnitX());
 
 		// Add in the effects of camber and toe settings (contact patch location should not be affected
 		// by camber and toe settings - WheelCenter is calculated based on camber and toe, so we need to
 		// back that out in the contact patch solver to avoid making contact patch a function of camber
 		// and toe).
-		wheelNormal.Rotate(sign * originalCorner.staticCamber, Eigen::Vector3d::AxisX);
-		wheelNormal.Rotate(sign * originalCorner.staticToe, Eigen::Vector3d::AxisZ);
+		GeometryMath::Rotate(wheelNormal, sign * originalCorner.staticCamber, Eigen::Vector3d::UnitX());
+		GeometryMath::Rotate(wheelNormal, sign * originalCorner.staticToe, Eigen::Vector3d::UnitZ());
 
 		// Do the actual solving for the contact patch
 		SolveForContactPatch(corner.hardpoints[Corner::WheelCenter], wheelNormal,
@@ -1010,7 +969,7 @@ bool Kinematics::SolveForContactPatch(const Eigen::Vector3d &wheelCenter,
 	// the circle we originally set out to find -> z(x) and y(x, z).  To find our minimum Z point, we
 	// differentiate z(x) and set equal to zero.  This gives us x as a function of the inputs to
 	// SolveForContactPatch only.
-	minimumZPoint.x = (wheelCenter.x() * (pow(wheelPlaneNormal.x(), 4) + 2 * pow(wheelPlaneNormal.x(), 2)
+	minimumZPoint.x() = (wheelCenter.x() * (pow(wheelPlaneNormal.x(), 4) + 2 * pow(wheelPlaneNormal.x(), 2)
 		* pow(wheelPlaneNormal.y(), 2) + pow(wheelPlaneNormal.y(), 4) + pow(wheelPlaneNormal.x(), 2)
 		* pow(wheelPlaneNormal.z(), 2) + pow(wheelPlaneNormal.y(), 2) * pow(wheelPlaneNormal.z(), 2))
 		- sqrt(pow(tireRadius * wheelPlaneNormal.x() * wheelPlaneNormal.z(), 2)	* (pow(wheelPlaneNormal.x(), 4)
@@ -1031,8 +990,8 @@ bool Kinematics::SolveForContactPatch(const Eigen::Vector3d &wheelCenter,
 		* minimumZPoint.x(), 2) / pow(wheelPlaneNormal.y(), 2) - 2 * wheelCenter.y() / wheelPlaneNormal.y()
 		* (wheelCenter.dot(wheelPlaneNormal) - wheelPlaneNormal.x() * minimumZPoint.x()) + pow(wheelCenter.y(), 2)
 		+ pow(wheelCenter.z(), 2) - pow(tireRadius, 2);
-	minimumZPoint.z = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
-	minimumZPoint.y = (wheelCenter.dot(wheelPlaneNormal) - minimumZPoint.x() * wheelPlaneNormal.x()
+	minimumZPoint.z() = (-b - sqrt(b * b - 4 * a * c)) / (2 * a);
+	minimumZPoint.y() = (wheelCenter.dot(wheelPlaneNormal) - minimumZPoint.x() * wheelPlaneNormal.x()
 		- minimumZPoint.z() * wheelPlaneNormal.z()) / wheelPlaneNormal.y();
 
 	// Check to make sure the solution is valid
@@ -1073,46 +1032,46 @@ Eigen::Vector3d Kinematics::FindPerpendicularVector(const Eigen::Vector3d &v)
 	// Find the second minimum element of v; set the corresponding element of a to one
 	// Solve for the remaining element of a
 	Eigen::Vector3d a;
-	if (fabs(v.x) < fabs(v.y) && fabs(v.x) < fabs(v.z))// x smallest
+	if (fabs(v.x()) < fabs(v.y()) && fabs(v.x()) < fabs(v.z()))// x smallest
 	{
-		a.x = 0;
-		if (fabs(v.y) < fabs(v.z))// y second smallest
+		a.x() = 0;
+		if (fabs(v.y()) < fabs(v.z()))// y second smallest
 		{
-			a.y = 1.0;
-			a.z = -v.y / v.z;
+			a.y() = 1.0;
+			a.z() = -v.y() / v.z();
 		}
 		else// z second smallest
 		{
-			a.z = 1.0;
-			a.y = -v.z / v.y;
+			a.z() = 1.0;
+			a.y() = -v.z() / v.y();
 		}
 	}
-	else if (fabs(v.y) < v.z)// y smallest
+	else if (fabs(v.y()) < v.z())// y smallest
 	{
-		a.y = 0;
-		if (fabs(v.x) < fabs(v.z))// x second smallest
+		a.y() = 0;
+		if (fabs(v.x()) < fabs(v.z()))// x second smallest
 		{
-			a.x = 1.0;
-			a.z = -v.x / v.z;
+			a.x() = 1.0;
+			a.z() = -v.x() / v.z();
 		}
 		else// z second smallest
 		{
-			a.z = 1.0;
-			a.x = -v.z / v.x;
+			a.z() = 1.0;
+			a.x() = -v.z() / v.x();
 		}
 	}
 	else// z smallest
 	{
-		a.z = 0;
-		if (fabs(v.x) < fabs(v.y))// x second smallest
+		a.z() = 0;
+		if (fabs(v.x()) < fabs(v.y()))// x second smallest
 		{
-			a.x = 1.0;
-			a.y = -v.x / v.y;
+			a.x() = 1.0;
+			a.y() = -v.x() / v.y();
 		}
 		else// y second smallest
 		{
-			a.y = 1.0;
-			a.x = -v.y / v.x;
+			a.y() = 1.0;
+			a.x() = -v.y() / v.x();
 		}
 	}
 
@@ -1379,11 +1338,6 @@ bool Kinematics::SolveInboardTBarPoints(const Eigen::Vector3d &leftOutboard,
 // Description:		Updates the center-of-gravity heights.
 //
 // Input Arguments:
-//		cor				= const Eigen::Vector3d&
-//		angles			= const Eigen::Vector3d&
-//		sequence		= const KinematicInputs::RotationSequence&
-//		heave			= const double&
-//		tireDeflections	= const WheelSet&
 //		workingCar		= Car*
 //
 // Output Arguments:
@@ -1393,9 +1347,7 @@ bool Kinematics::SolveInboardTBarPoints(const Eigen::Vector3d &leftOutboard,
 //		bool, true for success, false for error
 //
 //==========================================================================
-void Kinematics::UpdateCGs(const Eigen::Vector3d& cor, const Eigen::Vector3d& angles,
-	const Kinematics::RotationSequence& sequence, const double& heave,
-	const WheelSet& tireDeflections, Car* workingCar) const
+void Kinematics::UpdateCGs(Car* workingCar) const
 {
 	auto* massProperties(workingCar->GetSubsystem<MassProperties>());
 	Eigen::Vector3d sprungCG(massProperties->GetSprungMassCG(workingCar->GetSubsystem<Suspension>()));
@@ -1403,19 +1355,33 @@ void Kinematics::UpdateCGs(const Eigen::Vector3d& cor, const Eigen::Vector3d& an
 	// NOTE:  Unsprung CG height is assumed to change only due
 	// to tire compliance (tire/upright assembly rotation is not considered)
 
-	massProperties->unsprungCGHeights.leftFront -= tireDeflections.leftFront;
-	massProperties->unsprungCGHeights.rightFront -= tireDeflections.rightFront;
-	massProperties->unsprungCGHeights.leftRear -= tireDeflections.leftRear;
-	massProperties->unsprungCGHeights.rightRear -= tireDeflections.rightRear;
+	massProperties->unsprungCGHeights.leftFront -= inputs.tireDeflections.leftFront;
+	massProperties->unsprungCGHeights.rightFront -= inputs.tireDeflections.rightFront;
+	massProperties->unsprungCGHeights.leftRear -= inputs.tireDeflections.leftRear;
+	massProperties->unsprungCGHeights.rightRear -= inputs.tireDeflections.rightRear;
 
-	sprungCG.Rotate(cor, angles, first, second);
-	sprungCG.z += heave;
-	massProperties->totalCGHeight = (sprungCG.z * massProperties->GetSprungMass()
+	ApplyRotations(sprungCG);
+	sprungCG.z() += inputs.heave;
+	massProperties->totalCGHeight = (sprungCG.z() * massProperties->GetSprungMass()
 		+ massProperties->unsprungCGHeights.leftFront * massProperties->unsprungMass.leftFront
 		+ massProperties->unsprungCGHeights.rightFront * massProperties->unsprungMass.rightFront
 		+ massProperties->unsprungCGHeights.leftRear * massProperties->unsprungMass.leftRear
 		+ massProperties->unsprungCGHeights.rightRear * massProperties->unsprungMass.rightRear)
 		/ massProperties->GetTotalMass();
+}
+
+void Kinematics::ApplyRotations(Eigen::Vector3d& v) const
+{
+	if (inputs.sequence == RotationSequence::PitchRoll)
+	{
+		GeometryMath::Rotate(v, inputs.centerOfRotation, inputs.pitch, Eigen::Vector3d::UnitY());
+		GeometryMath::Rotate(v, inputs.centerOfRotation, inputs.roll, Eigen::Vector3d::UnitX());
+	}
+	else//RotationSequence::RollPitch
+	{
+		GeometryMath::Rotate(v, inputs.centerOfRotation, inputs.roll, Eigen::Vector3d::UnitX());
+		GeometryMath::Rotate(v, inputs.centerOfRotation, inputs.pitch, Eigen::Vector3d::UnitY());
+	}
 }
 
 }// namespace VVASE

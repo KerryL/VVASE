@@ -12,7 +12,7 @@
 //        UndoRedoStack entries.
 
 // Local headers
-#include "VVASE/core/utilities/dataValidator.h"
+#include "VVASE/gui/utilities/dataValidator.h"
 
 namespace VVASE
 {

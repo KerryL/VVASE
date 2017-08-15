@@ -19,6 +19,7 @@
 #include "VVASE/core/utilities/debugger.h"
 #include "VVASE/core/utilities/binaryReader.h"
 #include "VVASE/core/utilities/binaryWriter.h"
+#include "VVASE/core/utilities/geometryMath.h"
 
 namespace VVASE
 {
@@ -330,20 +331,14 @@ void Corner::ComputeWheelCenter(const double &tireDiameter)
 	if (location == LocationRightFront || location == LocationRightRear)
 		rotationAngle *= -1.0;
 
-	Eigen::AngleAxis<double> camberRotation(rotationAngle, Eigen::Vector3d::UnitX());
-	hardpoints[WheelCenter] -= hardpoints[ContactPatch];
-	hardpoints[WheelCenter] = camberRotation * hardpoints[WheelCenter];
-	hardpoints[WheelCenter] += hardpoints[ContactPatch];
+	GeometryMath::Rotate(hardpoints[WheelCenter], hardpoints[ContactPatch], rotationAngle, Eigen::Vector3d::UnitX());
 
 	// Rotate the wheel center about the Z axis for toe effects
 	rotationAngle = staticToe;
 	if (location == LocationRightFront || location == LocationRightRear)
 		rotationAngle *= -1.0;
 
-	Eigen::AngleAxis<double> toeRotation(rotationAngle, Eigen::Vector3d::UnitZ());
-	hardpoints[WheelCenter] -= hardpoints[ContactPatch];
-	hardpoints[WheelCenter] = toeRotation * hardpoints[WheelCenter];
-	hardpoints[WheelCenter] += hardpoints[ContactPatch];
+	GeometryMath::Rotate(hardpoints[WheelCenter], hardpoints[ContactPatch], rotationAngle, Eigen::Vector3d::UnitZ());
 }
 
 //==========================================================================

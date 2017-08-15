@@ -25,6 +25,7 @@
 #include "VVASE/core/utilities/carMath.h"
 #include "VVASE/core/utilities/wheelSetStructures.h"
 #include "VVASE/core/utilities/debugger.h"
+#include "VVASE/core/utilities/geometryMath.h"
 
 namespace VVASE
 {
@@ -1598,14 +1599,14 @@ void KinematicOutputs::ComputeCamberAndSteer(const Corner &originalCorner,
 		currentCorner.hardpoints[Corner::OutboardTieRod]);
 
 	// Calculate the wheel angles to get the steer angle
-	angles = originalWheelPlaneNormal.AnglesTo(newWheelPlaneNormal);
+	angles = GeometryMath::AnglesBetween(originalWheelPlaneNormal, newWheelPlaneNormal);
 	cornerDoubles[Steer] = angles.z();
 
 	// Rotate the NewWheelPlaneNormal back about Z by the steer angle in preparation for solving for camber
-	newWheelPlaneNormal.Rotate(cornerDoubles[Steer], Eigen::Vector3d::AxisZ);
+	GeometryMath::Rotate(newWheelPlaneNormal, cornerDoubles[Steer], Eigen::Vector3d::UnitZ());
 
 	// Calculate the wheel angles again, this time we want the camber angle
-	angles = originalWheelPlaneNormal.AnglesTo(newWheelPlaneNormal);
+	angles = GeometryMath::AnglesBetween(originalWheelPlaneNormal, newWheelPlaneNormal);
 	cornerDoubles[Camber] = sign * angles.x();
 
 	// Add in the effects of static camber and toe settings
