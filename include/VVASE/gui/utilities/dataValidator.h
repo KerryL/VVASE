@@ -51,11 +51,11 @@ public:
 	};
 
 	// Constructors
-	DataValidator(T &data, const UnitConverter::UnitType &unit = UnitConverter::UnitTypeUnitless,
+	DataValidator(T &data, const UnitType &unit = UnitConverter::UnitTypeUnitless,
 		const NumberClass &numberClass = ClassAll);
 	DataValidator(T &data,  const T &min, const T &max,
 		const NumberClass &numberClass = ClassInclusiveRange,
-		const UnitConverter::UnitType &unit = UnitConverter::UnitTypeUnitless);
+		const UnitType &unit = UnitConverter::UnitTypeUnitless);
 
 	virtual wxObject* Clone() const;// Mandatory for children of wxValidator
 
@@ -67,10 +67,10 @@ public:
 	virtual bool TransferFromWindow();
 	virtual bool Validate(wxWindow *parent);
 
-	void SetUnitType(const UnitConverter::UnitType& unit) { this->unit = unit; }
+	void SetUnitType(const UnitType& unit) { this->unit = unit; }
 
 private:
-	UnitConverter::UnitType unit;
+	UnitType unit;
 	T &data;
 
 	// Additional limits to place on the value

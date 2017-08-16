@@ -117,8 +117,9 @@ private:
 	mutable std::mutex carMutex;
 
     static ComponentManager<Subsystem> subsystemManager;
-    std::unordered_map<vvaseString, std::unique_ptr<Subsystem>> subsystems;
-	static std::unordered_map<vvaseString, std::unique_ptr<Subsystem>> CreateComponents();
+	typedef std::unordered_map<vvaseString, std::unique_ptr<Subsystem>> SubsystemsMap;
+    SubsystemsMap subsystems;
+	static SubsystemsMap CreateComponents();
 };
 
 template <typename T>

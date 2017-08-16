@@ -18,7 +18,7 @@
 #include <wx/wfstream.h>
 
 // Local headers
-#include "VVASE/core/utilities/xlsxReader.h"
+#include "VVASE/gui/utilities/xlsxReader.h"
 
 namespace VVASE
 {

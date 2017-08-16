@@ -544,9 +544,9 @@ Car& Car::operator=(const Car& car)
 	return *this;
 }*/
 
-std::unordered_map<vvaseString, std::unique_ptr<Subsystem>> Car::CreateComponents()
+Car::SubsystemsMap Car::CreateComponents()
 {
-	std::unordered_map<vvaseString, std::unique_ptr<Subsystem>> subsystems;
+	SubsystemsMap subsystems;
 	for (const auto& subsystem : subsystemManager.GetInfo())
 		subsystems[subsystem.name] = subsystem.create();
 
