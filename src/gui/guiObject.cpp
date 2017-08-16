@@ -352,7 +352,7 @@ bool GuiObject::LoadFromFile()
 {
 	if (!PerformLoadFromFile())
 	{
-		Debugger::GetInstance() << "ERROR:  Could not read from file '" << pathAndFileName << "'!" << Debugger::PriorityHigh;
+		Debugger::GetInstance() << "ERROR:  Could not read from file '" << pathAndFileName << "'!" << Debugger::Priority::High;
 		mainFrame.RemoveFileFromHistory(pathAndFileName);
 		return false;
 	}
@@ -360,12 +360,12 @@ bool GuiObject::LoadFromFile()
 	// Make sure the desired file isn't already open - if it is, return false
 	if (!VerifyUniqueness())
 	{
-		Debugger::GetInstance() << "Object at '" << pathAndFileName << "' already open!" << Debugger::PriorityMedium;
+		Debugger::GetInstance() << "Object at '" << pathAndFileName << "' already open!" << Debugger::Priority::Medium;
 		return false;
 	}
 
 	SetName(GetNameFromFileName());
-	Debugger::GetInstance() << "File loaded from '" << pathAndFileName << "'!" << Debugger::PriorityMedium;
+	Debugger::GetInstance() << "File loaded from '" << pathAndFileName << "'!" << Debugger::Priority::Medium;
 
 	mainFrame.AddFileToHistory(pathAndFileName);
 
@@ -454,13 +454,13 @@ bool GuiObject::SaveToFile(bool saveAsNewFileName)
 
 	if (!PerformSaveToFile())
 	{
-		Debugger::GetInstance() << "ERROR:  Could not save file to '" << pathAndFileName << "'!" << Debugger::PriorityHigh;
+		Debugger::GetInstance() << "ERROR:  Could not save file to '" << pathAndFileName << "'!" << Debugger::Priority::High;
 		return false;
 	}
 
 	modifiedSinceLastSave = false;
 
-	Debugger::GetInstance() << "File saved to '" << pathAndFileName << "'!" << Debugger::PriorityMedium;
+	Debugger::GetInstance() << "File saved to '" << pathAndFileName << "'!" << Debugger::Priority::Medium;
 
 	mainFrame.GetUndoRedoStack().RemoveGuiObjectFromStack(index);
 

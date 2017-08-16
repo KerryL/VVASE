@@ -48,6 +48,7 @@
     <ClInclude Include="include\VVASE\gui\utilities\dataValidator.h" />
     <ClInclude Include="include\VVASE\gui\utilities\unitConverter.h" />
     <ClInclude Include="include\VVASE\gui\utilities\wxRelatedUtilities.h" />
+    <ClInclude Include="include\VVASE\gui\utilities\xlsxReader.h" />
     <ClInclude Include="src\application\pluginManager.h" />
     <ClInclude Include="src\application\vvaseApplication.h" />
     <ClInclude Include="src\application\vvaseConstants.h" />
@@ -144,6 +145,7 @@
     <ClCompile Include="src\gui\utilities\dataValidator.cpp" />
     <ClCompile Include="src\gui\utilities\unitConverter.cpp" />
     <ClCompile Include="src\gui\utilities\wxRelatedUtilities.cpp" />
+    <ClCompile Include="src\gui\utilities\xlsxReader.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <Keyword>Win32Proj</Keyword>

@@ -522,7 +522,7 @@ Eigen::Vector3d GeometryMath::Rotate(const Eigen::Vector3d& v,
 	return Rotate(outVector, angle, axis);
 }
 
-Eigen::Vector3d GeometryMath::AnglesBetween(const Eigen::Vector3d& v1, const Eigen::Vector2d& v2)
+Eigen::Vector3d GeometryMath::AnglesBetween(const Eigen::Vector3d& v1, const Eigen::Vector3d& v2)
 {
 	Eigen::Vector3d temp;
 

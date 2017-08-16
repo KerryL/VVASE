@@ -139,158 +139,158 @@ public:
 	// TODO:  Make these registerable?  Would greatly simplify implementation file
 	enum class UnitsOfAngle
 	{
-		AngleRadians,
-		AngleDegrees,
+		Radians,
+		Degrees,
 
-		AngleUnitCount
+		Count
 	};
 
 	enum class UnitsOfDistance
 	{
-		DistanceInch,
-		DistanceFoot,
-		DistanceMile,
-		DistanceMillimeter,
-		DistanceCentimeter,
-		DistanceMeter,
-		DistanceKilometer,
+		Inch,
+		Foot,
+		Mile,
+		Millimeter,
+		Centimeter,
+		Meter,
+		Kilometer,
 
-		DistanceUnitCount
+		Count
 	};
 
 	enum class UnitsOfArea
 	{
-		AreaInchesSquared,
-		AreaFeetSquared,
-		AreaMillimetersSquared,
-		AreaCentimetersSquared,
-		AreaMetersSquared,
+		InchesSquared,
+		FeetSquared,
+		MillimetersSquared,
+		CentimetersSquared,
+		MetersSquared,
 
-		AreaUnitCount
+		Count
 	};
 
 	enum class UnitsOfForce
 	{
-		ForcePound,
-		ForceKip,
-		ForceNewton,
-		ForceKilonewton,
+		Pound,
+		Kip,
+		Newton,
+		Kilonewton,
 
-		ForceUnitCount
+		Count
 	};
 
 	enum class UnitsOfPressure
 	{
-		PressurePoundPerSquareInch,
-		PressurePoundPerSquareFoot,
-		PressureAtmosphere,
-		PressurePascal,
-		PressureKilopascal,
-		PressureMillimetersMercury,
-		PressureInchesMercury,
+		PoundPerSquareInch,
+		PoundPerSquareFoot,
+		Atmosphere,
+		Pascal,
+		Kilopascal,
+		MillimetersMercury,
+		InchesMercury,
 
-		PressureUnitCount
+		Count
 	};
 
 	enum class UnitsOfMoment
 	{
-		MomentInchPound,
-		MomentFootPound,
-		MomentNewtonMeter,
-		MomentMillinewtonMeter,
+		InchPound,
+		FootPound,
+		NewtonMeter,
+		MillinewtonMeter,
 
-		MomentUnitCount
+		Count
 	};
 
 	enum class UnitsOfMass
 	{
-		MassSlug,
-		MassPoundMass,
-		MassKilogram,
+		Slug,
+		PoundMass,
+		Kilogram,
 
-		MassUnitCount
+		Count
 	};
 
 	enum class UnitsOfVelocity
 	{
-		VelocityInchesPerSecond,
-		VelocityFeetPerSecond,
-		VelocityMilesPerHour,
-		VelocityMillimetersPerSecond,
-		VelocityCentimetersPerSecond,
-		VelocityMetersPerSecond,
-		VelocityKilometersPerHour,
+		InchesPerSecond,
+		FeetPerSecond,
+		MilesPerHour,
+		MillimetersPerSecond,
+		CentimetersPerSecond,
+		MetersPerSecond,
+		KilometersPerHour,
 
-		VelocityUnitCount
+		Count
 	};
 
 	enum class UnitsOfAcceleration
 	{
-		AccelerationInchesPerSecondSquared,
-		AccelerationFeetPerSecondSquared,
-		AccelerationMillimetersPerSecondSquared,
-		AccelerationCentimetersPerSecondSquared,
-		AccelerationMetersPerSecondSquared,
-		AccelerationFreefall,
+		InchesPerSecondSquared,
+		FeetPerSecondSquared,
+		MillimetersPerSecondSquared,
+		CentimetersPerSecondSquared,
+		MetersPerSecondSquared,
+		Freefall,
 
-		AccelerationUnitCount
+		Count
 	};
 
 	enum class UnitsOfInertia
 	{
-		InertiaSlugInchesSquared,
-		InertiaSlugFeetSquared,
-		InertiaPoundMassInchesSquared,
-		InertiaPoundMassFeetSquared,
-		InertiaKilogramMetersSquared,
-		InertiaKilogramMillimetersSquared,
+		SlugInchesSquared,
+		SlugFeetSquared,
+		PoundMassInchesSquared,
+		PoundMassFeetSquared,
+		KilogramMetersSquared,
+		KilogramMillimetersSquared,
 
-		InertiaUnitCount
+		Count
 	};
 
 	enum class UnitsOfDensity
 	{
-		DensitySlugPerInchCubed,
-		DensityPoundMassPerInchCubed,
-		DensitySlugPerFootCubed,
-		DensityPoundMassPerFootCubed,
-		DensityKilogramPerMeterCubed,
-		DensityGramPerCentimeterCubed,
+		SlugPerInchCubed,
+		PoundMassPerInchCubed,
+		SlugPerFootCubed,
+		PoundMassPerFootCubed,
+		KilogramPerMeterCubed,
+		GramPerCentimeterCubed,
 
-		DensityUnitCount
+		Count
 	};
 
 	enum class UnitsOfPower
 	{
-		PowerInchPoundPerSecond,
-		PowerFootPoundPerSecond,
-		PowerHorsepower,
-		PowerWatt,
-		PowerKilowatt,
+		InchPoundPerSecond,
+		FootPoundPerSecond,
+		Horsepower,
+		Watt,
+		Kilowatt,
 
-		PowerUnitCount
+		Count
 	};
 
 	enum class UnitsOfEnergy
 	{
-		EnergyPoundInch,
-		EnergyPoundFoot,
-		EnergyBTU,
-		EnergyJoule,
-		EnergyMillijoule,
-		EnergyKilojoule,
+		PoundInch,
+		PoundFoot,
+		BTU,
+		Joule,
+		Millijoule,
+		Kilojoule,
 
-		EnergyUnitCount
+		Count
 	};
 
 	enum class UnitsOfTemperature
 	{
-		TemperatureRankine,
-		TemperatureFahrenheit,
-		TemperatureCelsius,
-		TemperatureKelvin,
+		Rankine,
+		Fahrenheit,
+		Celsius,
+		Kelvin,
 
-		TemperatureUnitCount
+		Count
 	};
 
 	// For displaying the user defined units of a specific type

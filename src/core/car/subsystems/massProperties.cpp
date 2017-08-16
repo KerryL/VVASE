@@ -41,7 +41,7 @@ namespace VVASE
 //		None
 //
 //==========================================================================
-MassProperties::MassProperties()
+MassProperties::MassProperties() : Subsystem()
 {
 	// Initialize the mass properties
 	mass = 0.0;

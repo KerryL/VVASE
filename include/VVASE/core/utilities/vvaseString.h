@@ -38,6 +38,7 @@ typedef std::wostringstream vvaseOStringStream;
 typedef std::wistringstream vvaseIStringStream;
 typedef std::wostream vvaseOStream;
 typedef std::wistream vvaseIStream;
+typedef std::wstringbuf vvaseStringBuf;
 
 #else
 
@@ -57,6 +58,7 @@ typedef std::ostringstream vvaseOStringStream;
 typedef std::istringstream vvaseIStringStream;
 typedef std::ostream vvaseOStream;
 typedef std::istream vvaseIStream;
+typedef std::stringbuf vvaseStringBuf;
 
 #endif// UNICODE
 

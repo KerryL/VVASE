@@ -16,6 +16,9 @@
 #include "VVASE/core/threads/threadJob.h"
 #include "VVASE/core/threads/threadData.h"
 
+// Standard C++ headers
+#include <cassert>
+
 namespace VVASE
 {
 
@@ -71,7 +74,7 @@ ThreadJob::ThreadJob(ThreadCommand command) : command(command), data(NULL)
 //
 // Input Arguments:
 //		command	= ThreadCommand specifying the command type for this job
-//		name	= const wxString& Name of the car
+//		name	= const vvaseString& Name of the car
 //		index	= int& representing the object index for the associated object
 //				  in the MainFrame
 //
@@ -83,7 +86,7 @@ ThreadJob::ThreadJob(ThreadCommand command) : command(command), data(NULL)
 //
 //==========================================================================
 ThreadJob::ThreadJob(ThreadCommand command, ThreadData *data,
-	const wxString &name, int &index) : command(command), data(data),
+	const vvaseString &name, int &index) : command(command), data(data),
 	name(name.c_str()), index(index)
 {
 	assert(data);

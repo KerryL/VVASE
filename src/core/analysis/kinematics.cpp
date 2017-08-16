@@ -66,9 +66,9 @@ Kinematics::Kinematics()
 //					values of pitch, roll, heave, and steer.
 //
 // Input Arguments:
-//		originalCar	= const Car* - for reference only
+//		originalCar		= const Car* - for reference only
 //		workingCar		= Car* to be changed (updated) by this function
-//		name			= wxString used to print messages about this car
+//		name			= vvaseString used to print messages about this car
 //
 // Output Arguments:
 //		None
@@ -77,21 +77,21 @@ Kinematics::Kinematics()
 //		None
 //
 //==========================================================================
-void Kinematics::UpdateKinematics(const Car* originalCar, Car* workingCar, wxString name)
+void Kinematics::UpdateKinematics(const Car* originalCar, Car* workingCar, vvaseString name)
 {
 	wxStopWatch timer;
 	timer.Start();
 
-	Debugger::GetInstance() << "UpdateKinematics() for " << name << Debugger::PriorityMedium;
+	Debugger::GetInstance() << "UpdateKinematics() for " << name << Debugger::Priority::Medium;
 
 	this->originalCar = originalCar;// This one is for reference and won't be changed by this class
 	this->workingCar = workingCar;
 
 	// Ensure exclusive access to the car objects
 	// NOTE:  Always lock working car first, then lock original car (consistency required to prevent deadlocks)
-	wxMutexLocker workingLock(workingCar->GetMutex());
+	std::lock_guard<std::mutex> workingLock(workingCar->GetMutex());
 	DebugLog::GetInstance()->Log(_T("Kinematics::UpdateKinematics (workingLock)"));
-	wxMutexLocker originalLock(originalCar->GetMutex());
+	std::lock_guard<std::mutex> originalLock(originalCar->GetMutex());
 	DebugLog::GetInstance()->Log(_T("Kinematics::UpdateKinematics (originalLock)"));
 
 	// Copy the information in the original car to the working car.  This minimizes rounding
@@ -190,13 +190,13 @@ void Kinematics::UpdateKinematics(const Car* originalCar, Car* workingCar, wxStr
 	}
 
 	if (!SolveCorner(localSuspension->rightFront, originalSuspension->rightFront, inputs.tireDeflections.rightFront))
-		Debugger::GetInstance() << "ERROR:  Problem solving right front corner!  Increase debug level for more information." <<	Debugger::PriorityHigh;
+		Debugger::GetInstance() << "ERROR:  Problem solving right front corner!  Increase debug level for more information." <<	Debugger::Priority::High;
 	if (!SolveCorner(localSuspension->leftFront, originalSuspension->leftFront, inputs.tireDeflections.leftFront))
-		Debugger::GetInstance() << "ERROR:  Problem solving left front corner!  Increase debug level for more information." << Debugger::PriorityHigh;
+		Debugger::GetInstance() << "ERROR:  Problem solving left front corner!  Increase debug level for more information." << Debugger::Priority::High;
 	if (!SolveCorner(localSuspension->rightRear, originalSuspension->rightRear, inputs.tireDeflections.rightRear))
-		Debugger::GetInstance() << "ERROR:  Problem solving right rear corner!  Increase debug level for more information." << Debugger::PriorityHigh;
+		Debugger::GetInstance() << "ERROR:  Problem solving right rear corner!  Increase debug level for more information." << Debugger::Priority::High;
 	if (!SolveCorner(localSuspension->leftRear, originalSuspension->leftRear, inputs.tireDeflections.leftRear))
-		Debugger::GetInstance() << "ERROR:  Problem solving left rear corner!  Increase debug level for more information." << Debugger::PriorityHigh;
+		Debugger::GetInstance() << "ERROR:  Problem solving left rear corner!  Increase debug level for more information." << Debugger::Priority::High;
 
 	// Some things need to be solved AFTER all other corners
 	if (localSuspension->frontBarStyle == Suspension::SwayBarTBar)
@@ -214,7 +214,7 @@ void Kinematics::UpdateKinematics(const Car* originalCar, Car* workingCar, wxStr
 			originalSuspension->rightFront.hardpoints[Corner::InboardBarLink],
 			localSuspension->leftFront.hardpoints[Corner::InboardBarLink],
 			localSuspension->rightFront.hardpoints[Corner::InboardBarLink]))
-			Debugger::GetInstance() << "ERROR:  Failed to solve for inboard T-bar (front)!" << Debugger::PriorityMedium;
+			Debugger::GetInstance() << "ERROR:  Failed to solve for inboard T-bar (front)!" << Debugger::Priority::Medium;
 	}
 
 	if (localSuspension->rearBarStyle == Suspension::SwayBarTBar)
@@ -232,7 +232,7 @@ void Kinematics::UpdateKinematics(const Car* originalCar, Car* workingCar, wxStr
 			originalSuspension->rightRear.hardpoints[Corner::InboardBarLink],
 			localSuspension->leftRear.hardpoints[Corner::InboardBarLink],
 			localSuspension->rightRear.hardpoints[Corner::InboardBarLink]))
-			Debugger::GetInstance() << "ERROR:  Failed to solve for inboard T-bar (rear)!" << Debugger::PriorityMedium;
+			Debugger::GetInstance() << "ERROR:  Failed to solve for inboard T-bar (rear)!" << Debugger::Priority::Medium;
 	}
 
 	UpdateCGs(workingCar);
@@ -240,7 +240,7 @@ void Kinematics::UpdateKinematics(const Car* originalCar, Car* workingCar, wxStr
 	outputs.Update(originalCar, localSuspension);
 	long totalTime = timer.Time();
 	Debugger::GetInstance() << "Finished UpdateKinematcs() for " << name
-		<< " in " << totalTime / 1000.0 << " sec" << Debugger::PriorityLow;// TODO:  Set stream precision for time
+		<< " in " << totalTime / 1000.0 << " sec" << Debugger::Priority::Low;// TODO:  Set stream precision for time
 }
 
 //==========================================================================
@@ -333,28 +333,28 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 		if (!SolveForXY(Corner::LowerBallJoint, Corner::LowerFrontTubMount,
 			Corner::LowerRearTubMount, originalCorner, corner))
 		{
-			Debugger::GetInstance() << "ERROR:  Failed to solve for lower ball joint!" << Debugger::PriorityMedium;
+			Debugger::GetInstance() << "ERROR:  Failed to solve for lower ball joint!" << Debugger::Priority::Medium;
 			success = false;
 		}
 
 		if (!SolveForPoint(Corner::UpperBallJoint, Corner::LowerBallJoint,
 			Corner::UpperFrontTubMount, Corner::UpperRearTubMount,originalCorner, corner))
 		{
-			Debugger::GetInstance() << "ERROR:  Failed to solve for upper ball joint!" << Debugger::PriorityMedium;
+			Debugger::GetInstance() << "ERROR:  Failed to solve for upper ball joint!" << Debugger::Priority::Medium;
 			success = false;
 		}
 
 		if (!SolveForPoint(Corner::OutboardTieRod, Corner::LowerBallJoint,
 			Corner::UpperBallJoint, Corner::InboardTieRod, originalCorner, corner))
 		{
-			Debugger::GetInstance() << "ERROR:  Failed to solve for outboard tie rod!" << Debugger::PriorityMedium;
+			Debugger::GetInstance() << "ERROR:  Failed to solve for outboard tie rod!" << Debugger::Priority::Medium;
 			success = false;
 		}
 
 		if (!SolveForPoint(Corner::WheelCenter, Corner::LowerBallJoint,
 			Corner::UpperBallJoint, Corner::OutboardTieRod, originalCorner, corner))
 		{
-			Debugger::GetInstance() << "ERROR:  Failed to solve for wheel center!" << Debugger::PriorityMedium;
+			Debugger::GetInstance() << "ERROR:  Failed to solve for wheel center!" << Debugger::Priority::Medium;
 			success = false;
 		}
 
@@ -416,7 +416,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 	// because we hit the iteration limit)
 	if ((fabs(corner.hardpoints[Corner::ContactPatch].z() + tireDeflection) > tolerance))
 	{
-		Debugger::GetInstance() << "Warning (SolveCorner):  Contact patch location did not converge" << Debugger::PriorityMedium;
+		Debugger::GetInstance() << "Warning (SolveCorner):  Contact patch location did not converge" << Debugger::Priority::Medium;
 		success = false;
 	}
 
@@ -428,7 +428,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 			if (!SolveForPoint(Corner::OutboardPushrod, Corner::LowerBallJoint,
 				Corner::LowerFrontTubMount, Corner::LowerRearTubMount, originalCorner, corner))
 			{
-				Debugger::GetInstance() << "ERROR:  Failed to solve for outboard pushrod!" << Debugger::PriorityMedium;
+				Debugger::GetInstance() << "ERROR:  Failed to solve for outboard pushrod!" << Debugger::Priority::Medium;
 				success = false;
 			}
 		}
@@ -437,7 +437,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 			if (!SolveForPoint(Corner::OutboardPushrod, Corner::UpperBallJoint,
 				Corner::UpperFrontTubMount, Corner::UpperRearTubMount, originalCorner, corner))
 			{
-				Debugger::GetInstance() << "ERROR:  Failed to solve for outboard pullrod!" << Debugger::PriorityMedium;
+				Debugger::GetInstance() << "ERROR:  Failed to solve for outboard pullrod!" << Debugger::Priority::Medium;
 				success = false;
 			}
 		}
@@ -446,7 +446,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 			if (!SolveForPoint(Corner::OutboardPushrod, Corner::UpperBallJoint,
 				Corner::LowerBallJoint, Corner::OutboardTieRod, originalCorner, corner))
 			{
-				Debugger::GetInstance() << "ERROR:  Failed to solve for outboard push/pullrod!" << Debugger::PriorityMedium;
+				Debugger::GetInstance() << "ERROR:  Failed to solve for outboard push/pullrod!" << Debugger::Priority::Medium;
 				success = false;
 			}
 		}
@@ -455,7 +455,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 		if (!SolveForPoint(Corner::InboardPushrod, Corner::BellCrankPivot1,
 			Corner::BellCrankPivot2, Corner::OutboardPushrod, originalCorner, corner))
 		{
-			Debugger::GetInstance() << "ERROR:  Failed to solve for inboard push/pullrod!" << Debugger::PriorityMedium;
+			Debugger::GetInstance() << "ERROR:  Failed to solve for inboard push/pullrod!" << Debugger::Priority::Medium;
 			success = false;
 		}
 
@@ -463,7 +463,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 		if (!SolveForPoint(Corner::OutboardDamper, Corner::BellCrankPivot1,
 			Corner::BellCrankPivot2, Corner::InboardPushrod, originalCorner, corner))
 		{
-			Debugger::GetInstance() << "ERROR:  Failed to solve for outboard damper!" << Debugger::PriorityMedium;
+			Debugger::GetInstance() << "ERROR:  Failed to solve for outboard damper!" << Debugger::Priority::Medium;
 			success = false;
 		}
 
@@ -471,7 +471,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 		if (!SolveForPoint(Corner::OutboardSpring, Corner::BellCrankPivot1,
 			Corner::BellCrankPivot2, Corner::InboardPushrod, originalCorner, corner))
 		{
-			Debugger::GetInstance() << "ERROR:  Failed to solve for outboard spring!" << Debugger::PriorityMedium;
+			Debugger::GetInstance() << "ERROR:  Failed to solve for outboard spring!" << Debugger::Priority::Medium;
 			success = false;
 		}
 
@@ -482,7 +482,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 			if (!SolveForPoint(Corner::OutboardBarLink, Corner::BellCrankPivot1,
 				Corner::BellCrankPivot2, Corner::InboardPushrod, originalCorner, corner))
 			{
-				Debugger::GetInstance() << "ERROR:  Failed to solve for outboard swaybar!" << Debugger::PriorityMedium;
+				Debugger::GetInstance() << "ERROR:  Failed to solve for outboard swaybar!" << Debugger::Priority::Medium;
 				success = false;
 			}
 		}
@@ -494,21 +494,21 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 			if (!SolveForPoint(Corner::OutboardSpring, Corner::LowerBallJoint,
 				Corner::LowerFrontTubMount, Corner::LowerRearTubMount, originalCorner, corner))
 			{
-				Debugger::GetInstance() << "ERROR:  Failed to solve for outboard spring!" << Debugger::PriorityMedium;
+				Debugger::GetInstance() << "ERROR:  Failed to solve for outboard spring!" << Debugger::Priority::Medium;
 				success = false;
 			}
 
 			if (!SolveForPoint(Corner::OutboardDamper, Corner::LowerBallJoint,
 				Corner::LowerFrontTubMount, Corner::LowerRearTubMount, originalCorner, corner))
 			{
-				Debugger::GetInstance() << "ERROR:  Failed to solve for outboard damper!" << Debugger::PriorityMedium;
+				Debugger::GetInstance() << "ERROR:  Failed to solve for outboard damper!" << Debugger::Priority::Medium;
 				success = false;
 			}
 
 			if (!SolveForPoint(Corner::OutboardBarLink, Corner::LowerBallJoint,
 				Corner::LowerFrontTubMount, Corner::LowerRearTubMount, originalCorner, corner))
 			{
-				Debugger::GetInstance() << "ERROR:  Failed to solve for outboard bar link!" << Debugger::PriorityMedium;
+				Debugger::GetInstance() << "ERROR:  Failed to solve for outboard bar link!" << Debugger::Priority::Medium;
 				success = false;
 			}
 		}
@@ -517,21 +517,21 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 			if (!SolveForPoint(Corner::OutboardSpring, Corner::UpperBallJoint,
 				Corner::UpperFrontTubMount, Corner::UpperRearTubMount, originalCorner, corner))
 			{
-				Debugger::GetInstance() << "ERROR:  Failed to solve for outboard spring!" << Debugger::PriorityMedium;
+				Debugger::GetInstance() << "ERROR:  Failed to solve for outboard spring!" << Debugger::Priority::Medium;
 				success = false;
 			}
 
 			if (!SolveForPoint(Corner::OutboardDamper, Corner::UpperBallJoint,
 				Corner::UpperFrontTubMount, Corner::UpperRearTubMount, originalCorner, corner))
 			{
-				Debugger::GetInstance() << "ERROR:  Failed to solve for outboard damper!" << Debugger::PriorityMedium;
+				Debugger::GetInstance() << "ERROR:  Failed to solve for outboard damper!" << Debugger::Priority::Medium;
 				success = false;
 			}
 
 			if (!SolveForPoint(Corner::OutboardBarLink, Corner::UpperBallJoint,
 				Corner::UpperFrontTubMount, Corner::UpperRearTubMount, originalCorner, corner))
 			{
-				Debugger::GetInstance() << "ERROR:  Failed to solve for outboard bar link!" << Debugger::PriorityMedium;
+				Debugger::GetInstance() << "ERROR:  Failed to solve for outboard bar link!" << Debugger::Priority::Medium;
 				success = false;
 			}
 		}
@@ -540,21 +540,21 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 			if (!SolveForPoint(Corner::OutboardSpring, Corner::UpperBallJoint,
 				Corner::LowerBallJoint, Corner::OutboardTieRod, originalCorner, corner))
 			{
-				Debugger::GetInstance() << "ERROR:  Failed to solve for outboard spring!" << Debugger::PriorityMedium;
+				Debugger::GetInstance() << "ERROR:  Failed to solve for outboard spring!" << Debugger::Priority::Medium;
 				success = false;
 			}
 
 			if (!SolveForPoint(Corner::OutboardDamper, Corner::UpperBallJoint,
 				Corner::LowerBallJoint, Corner::OutboardTieRod, originalCorner, corner))
 			{
-				Debugger::GetInstance() << "ERROR:  Failed to solve for outboard damper!" << Debugger::PriorityMedium;
+				Debugger::GetInstance() << "ERROR:  Failed to solve for outboard damper!" << Debugger::Priority::Medium;
 				success = false;
 			}
 
 			if (!SolveForPoint(Corner::OutboardBarLink, Corner::UpperBallJoint,
 				Corner::LowerBallJoint, Corner::OutboardTieRod, originalCorner, corner))
 			{
-				Debugger::GetInstance() << "ERROR:  Failed to solve for outboard bar link!" << Debugger::PriorityMedium;
+				Debugger::GetInstance() << "ERROR:  Failed to solve for outboard bar link!" << Debugger::Priority::Medium;
 				success = false;
 			}
 		}
@@ -567,7 +567,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 		if (!SolveForPoint(Corner::OutboardHalfShaft, Corner::LowerBallJoint,
 			Corner::UpperBallJoint, Corner::OutboardTieRod, originalCorner, corner))
 		{
-			Debugger::GetInstance() << "ERROR:  Failed to solve for outboard half shaft!" << Debugger::PriorityMedium;
+			Debugger::GetInstance() << "ERROR:  Failed to solve for outboard half shaft!" << Debugger::Priority::Medium;
 			success = false;
 		}
 	}
@@ -586,7 +586,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 			originalBarMidpoint, originalCorner.hardpoints[Corner::InboardBarLink],
 			corner.hardpoints[Corner::InboardBarLink]))
 		{
-			Debugger::GetInstance() << "ERROR:  Failed to solve for inboard U-bar (front)!" << Debugger::PriorityMedium;
+			Debugger::GetInstance() << "ERROR:  Failed to solve for inboard U-bar (front)!" << Debugger::Priority::Medium;
 			success = false;
 		}
 	}
@@ -601,7 +601,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 			originalBarMidpoint, originalCorner.hardpoints[Corner::InboardBarLink],
 			corner.hardpoints[Corner::InboardBarLink]))
 		{
-			Debugger::GetInstance() << "ERROR:  Failed to solve for inboard U-bar (rear)!" << Debugger::PriorityMedium;
+			Debugger::GetInstance() << "ERROR:  Failed to solve for inboard U-bar (rear)!" << Debugger::Priority::Medium;
 			success = false;
 		}
 	}
@@ -611,7 +611,7 @@ bool Kinematics::SolveCorner(Corner &corner, const Corner &originalCorner,
 		if (!SolveForPoint(Corner::InboardBarLink, Corner::BarArmAtPivot,
 			Corner::OutboardBarLink, Corner::GearEndBarShaft, originalCorner, corner))
 		{
-			Debugger::GetInstance() << "ERROR:  Failed to solve for geared bar!" << Debugger::PriorityMedium;
+			Debugger::GetInstance() << "ERROR:  Failed to solve for geared bar!" << Debugger::Priority::Medium;
 			success = false;
 		}
 	}
@@ -706,13 +706,13 @@ bool Kinematics::SolveForPoint(const Eigen::Vector3d &center1, const Eigen::Vect
 	Eigen::Vector3d intersections[2];
 	if (!GeometryMath::FindThreeSpheresIntersection(s1, s2, s3, intersections))
 	{
-		Debugger::GetInstance() << "Error (SolveForPoint):  Solution does not exist" << Debugger::PriorityLow;
+		Debugger::GetInstance() << "Error (SolveForPoint):  Solution does not exist" << Debugger::Priority::Low;
 		return false;
 	}
 
 	if (intersections[0] != intersections[0] || intersections[1] != intersections[1])
 	{
-		Debugger::GetInstance() << "Error (SolveForPoint):  Invalid solution" << Debugger::PriorityLow;
+		Debugger::GetInstance() << "Error (SolveForPoint):  Invalid solution" << Debugger::Priority::Low;
 		return false;
 	}
 
@@ -876,20 +876,20 @@ bool Kinematics::SolveForXY(const Eigen::Vector3d &center1, const Eigen::Vector3
 	GeometryMath::Axis a;
 	if (!GeometryMath::FindPlanePlaneIntersection(p1, p2, a))
 	{
-		Debugger::GetInstance() << "Error (SolveForXY):  Solution does not exist" << Debugger::PriorityLow;
+		Debugger::GetInstance() << "Error (SolveForXY):  Solution does not exist" << Debugger::Priority::Low;
 		return false;
 	}
 
 	Eigen::Vector3d intersections[2];
 	if (!GeometryMath::FindAxisSphereIntersections(a, s1, intersections))
 	{
-		Debugger::GetInstance() << "Error (SolveForXY):  Solution does not exist" << Debugger::PriorityLow;
+		Debugger::GetInstance() << "Error (SolveForXY):  Solution does not exist" << Debugger::Priority::Low;
 		return false;
 	}
 
 	if (intersections[0] != intersections[0] || intersections[1] != intersections[1])
 	{
-		Debugger::GetInstance() << "Error (SolveForXY):  Invalid solution" << Debugger::PriorityLow;
+		Debugger::GetInstance() << "Error (SolveForXY):  Invalid solution" << Debugger::Priority::Low;
 		return false;
 	}
 
@@ -998,7 +998,7 @@ bool Kinematics::SolveForContactPatch(const Eigen::Vector3d &wheelCenter,
 	if (minimumZPoint != minimumZPoint)
 	{
 		output.setZero();
-		Debugger::GetInstance() << "Error (SolveForContactPatch):  Invalid solution" << Debugger::PriorityLow;
+		Debugger::GetInstance() << "Error (SolveForContactPatch):  Invalid solution" << Debugger::Priority::Low;
 		return false;
 	}
 
@@ -1170,7 +1170,7 @@ bool Kinematics::SolveInboardTBarPoints(const Eigen::Vector3d &leftOutboard,
 	normal = leftOutboard - centerPivot;
 	if ((leftOutboard - centerPivot).norm() > normal.norm())
 	{
-		Debugger::GetInstance() << "Error (SolveInboardTBarPoints): Center distance exceeds sum of left radii" << Debugger::PriorityLow;
+		Debugger::GetInstance() << "Error (SolveInboardTBarPoints): Center distance exceeds sum of left radii" << Debugger::Priority::Low;
 		return false;
 	}
 	f = (originalLeftOutboard - originalLeftInboard).norm();
@@ -1197,7 +1197,7 @@ bool Kinematics::SolveInboardTBarPoints(const Eigen::Vector3d &leftOutboard,
 	normal = rightOutboard - centerPivot;
 	if ((rightOutboard - centerPivot).norm() > normal.norm())
 	{
-		Debugger::GetInstance() << "Error (SolveInboardTBarPoints): Center distance exceeds sum of right radii" << Debugger::PriorityLow;
+		Debugger::GetInstance() << "Error (SolveInboardTBarPoints): Center distance exceeds sum of right radii" << Debugger::Priority::Low;
 		return false;
 	}
 	f = (originalRightOutboard - originalRightInboard).norm();
@@ -1248,7 +1248,7 @@ bool Kinematics::SolveInboardTBarPoints(const Eigen::Vector3d &leftOutboard,
 	Eigen::Vector3d error(Eigen::Vector3d::Ones() * epsilon);
 	Eigen::Matrix3d jacobian(3,3);
 	Eigen::Vector3d guess;// parameteric variables for the three points
-	Eigen::Vector3d left(Eigen::Vector2cd::Zero()), right(Eigen::Vector2cd::Zero()), center(Eigen::Vector2cd::Zero());
+	Eigen::Vector3d left(Eigen::Vector3d::Zero()), right(Eigen::Vector3d::Zero()), center(Eigen::Vector3d::Zero());
 	Eigen::Vector3d delta;
 
 	// Initialize parameteric variables such that result aligns as best
@@ -1266,7 +1266,7 @@ bool Kinematics::SolveInboardTBarPoints(const Eigen::Vector3d &leftOutboard,
 		error(0,0) = (left - center).norm() - leftTopLength;
 		error(1,0) = (right - center).norm() - rightTopLength;
 		error(2,0) = (left - right).norm() - leftTopLength - rightTopLength;
-		//Debugger::GetInstance().Print(Debugger::PriorityLow, "i = %u; error = \n%s;\nguess = \n%s", i, error.Print().ToUTF8().data(), guess.Print().ToUTF8().data());
+		//Debugger::GetInstance().Print(Debugger::Priority::Low, "i = %u; error = \n%s;\nguess = \n%s", i, error.Print().ToUTF8().data(), guess.Print().ToUTF8().data());
 
 		// Compute jacobian
 		left = leftCenter + leftA * cos(guess(0,0) + epsilon) + leftB * sin(guess(0,0) + epsilon);
@@ -1295,7 +1295,7 @@ bool Kinematics::SolveInboardTBarPoints(const Eigen::Vector3d &leftOutboard,
 	}
 
 	if (i == limit)
-		Debugger::GetInstance() << "Warning:  Iteration limit reached (SolveInboardTBarPoints)" << Debugger::PriorityMedium;
+		Debugger::GetInstance() << "Warning:  Iteration limit reached (SolveInboardTBarPoints)" << Debugger::Priority::Medium;
 
 	rightInboard = right;
 	leftInboard = left;
@@ -1310,21 +1310,21 @@ bool Kinematics::SolveInboardTBarPoints(const Eigen::Vector3d &leftOutboard,
 	if (!VVASE::Math::IsZero((left - center).norm() - leftTopLength, epsilon))
 	{
 		Debugger::GetInstance() << "Warning:  Incorrect left top T-bar length (Error = "
-			<< (left - center).norm() - leftTopLength << ")" << Debugger::PriorityLow;
+			<< (left - center).norm() - leftTopLength << ")" << Debugger::Priority::Low;
 		return false;
 	}
 
 	if (!VVASE::Math::IsZero((right - center).norm() - rightTopLength, epsilon))
 	{
 		Debugger::GetInstance() << "Warning:  Incorrect right top T-bar length (Error = "
-			<< (right - center).norm() - rightTopLength << ")" << Debugger::PriorityLow;
+			<< (right - center).norm() - rightTopLength << ")" << Debugger::Priority::Low;
 		return false;
 	}
 
 	if (!VVASE::Math::IsZero((right - left).norm() - leftTopLength - rightTopLength, epsilon))
 	{
 		Debugger::GetInstance() << "Warning:  Incorrect top T-bar length (Error = " <<
-			(right - left).norm() - leftTopLength - rightTopLength << ")" << Debugger::PriorityLow;
+			(right - left).norm() - leftTopLength - rightTopLength << ")" << Debugger::Priority::Low;
 		return false;
 	}
 

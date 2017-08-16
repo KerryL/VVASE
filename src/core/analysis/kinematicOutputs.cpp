@@ -12,9 +12,6 @@
 //        angle/orientation, chassis attitude, spring/shock positions, but doesn't include
 //        any thing that requires forces to calculate (force-based roll center, etc.).
 
-// wxWidgets headers
-#include <wx/wx.h>
-
 // Local headers
 #include "VVASE/core/car/car.h"
 #include "VVASE/core/car/subsystems/brakes.h"
@@ -265,7 +262,7 @@ void KinematicOutputs::ComputeFrontRollCenter(const Suspension *current)
 	Eigen::Vector3d normal(1.0, 0.0, 0.0);
 	if (!ComputeKinematicCenter(current->leftFront, current->rightFront, leftFrontVectors,
 		rightFrontVectors, normal, vectors[FrontKinematicRC], vectors[FrontRollAxisDirection]))
-		Debugger::GetInstance() << "Warning:  Front Kinematic Roll Center is undefined" << Debugger::PriorityHigh;
+		Debugger::GetInstance() << "Warning:  Front Kinematic Roll Center is undefined" << Debugger::Priority::High;
 }
 
 //==========================================================================
@@ -289,7 +286,7 @@ void KinematicOutputs::ComputeRearRollCenter(const Suspension *current)
 	Eigen::Vector3d normal(1.0, 0.0, 0.0);
 	if (!ComputeKinematicCenter(current->leftRear, current->rightRear, leftRearVectors,
 		rightRearVectors, normal, vectors[RearKinematicRC], vectors[RearRollAxisDirection]))
-		Debugger::GetInstance() << "Warning:  Rear Kinematic Roll Center is undefined" << Debugger::PriorityHigh;
+		Debugger::GetInstance() << "Warning:  Rear Kinematic Roll Center is undefined" << Debugger::Priority::High;
 }
 
 //==========================================================================
@@ -630,7 +627,7 @@ double KinematicOutputs::ComputeGearedBarTwist(const Corner& /*originalLeft*/,
 	const bool& /*signGreaterThan*/) const
 {
 	// TODO:  Impelement
-	Debugger::GetInstance() << "Geared ARB calculations not yet implemented" << Debugger::PriorityMedium;
+	Debugger::GetInstance() << "Geared ARB calculations not yet implemented" << Debugger::Priority::Medium;
 	return 0.0;
 }
 
@@ -750,7 +747,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 	}
 	else
 	{
-		Debugger::GetInstance() << "ERROR:  Corner location not recognized!" << Debugger::PriorityHigh;
+		Debugger::GetInstance() << "ERROR:  Corner location not recognized!" << Debugger::Priority::High;
 		return;
 	}
 
@@ -788,7 +785,7 @@ void KinematicOutputs::UpdateCorner(const Corner *originalCorner, const Corner *
 	if (!VVASE::Math::GetIntersectionOfTwoPlanes(upperPlaneNormal, currentCorner->hardpoints[Corner::UpperBallJoint],
 		lowerPlaneNormal, currentCorner->hardpoints[Corner::LowerBallJoint],
 		cornerVectors[InstantAxisDirection], cornerVectors[InstantCenter]))
-		Debugger::GetInstance() << "Warning (KinematicOutputs::UpdateCorner):  Instant Center is undefined" << Debugger::PriorityHigh;
+		Debugger::GetInstance() << "Warning (KinematicOutputs::UpdateCorner):  Instant Center is undefined" << Debugger::Priority::High;
 	else
 	{
 		// We now have the axis direction and a point on the axis, but we want a specific
@@ -1743,12 +1740,12 @@ void KinematicOutputs::ComputeAxlePlunge(const Corner &originalCorner,
 //		None
 //
 // Return Value:
-//		wxString containing the name of the specified output
+//		vvaseString containing the name of the specified output
 //
 //==========================================================================
-wxString KinematicOutputs::GetCornerDoubleName(const CornerOutputsDouble &output)
+vvaseString KinematicOutputs::GetCornerDoubleName(const CornerOutputsDouble &output)
 {
-	wxString name;
+	vvaseString name;
 
 	// Return the name based on the specified output index
 	switch (output)
@@ -1847,12 +1844,12 @@ wxString KinematicOutputs::GetCornerDoubleName(const CornerOutputsDouble &output
 //		None
 //
 // Return Value:
-//		wxString containing the name of the specified output
+//		vvaseString containing the name of the specified output
 //
 //==========================================================================
-wxString KinematicOutputs::GetCornerVectorName(const CornerOutputsVector &output)
+vvaseString KinematicOutputs::GetCornerVectorName(const CornerOutputsVector &output)
 {
-	wxString name;
+	vvaseString name;
 
 	// Return the name based on the specified output index
 	switch (output)
@@ -1887,12 +1884,12 @@ wxString KinematicOutputs::GetCornerVectorName(const CornerOutputsVector &output
 //		None
 //
 // Return Value:
-//		wxString containing the name of the specified output
+//		vvaseString containing the name of the specified output
 //
 //==========================================================================
-wxString KinematicOutputs::GetDoubleName(const OutputsDouble &output)
+vvaseString KinematicOutputs::GetDoubleName(const OutputsDouble &output)
 {
-	wxString name;
+	vvaseString name;
 
 	// Return the name based on the specified output index
 	switch (output)
@@ -1991,12 +1988,12 @@ wxString KinematicOutputs::GetDoubleName(const OutputsDouble &output)
 //		None
 //
 // Return Value:
-//		wxString containing the name of the specified output
+//		vvaseString containing the name of the specified output
 //
 //==========================================================================
-wxString KinematicOutputs::GetVectorName(const OutputsVector &output)
+vvaseString KinematicOutputs::GetVectorName(const OutputsVector &output)
 {
-	wxString name;
+	vvaseString name;
 
 	// Return the name based on the specified output index
 	switch (output)
@@ -2273,12 +2270,12 @@ UnitType KinematicOutputs::GetOutputUnitType(const OutputsComplete &output)
 //		None
 //
 // Return Value:
-//		wxString specifying the name of the requested output
+//		vvaseString specifying the name of the requested output
 //
 //==========================================================================
-wxString KinematicOutputs::GetOutputName(const OutputsComplete &output)
+vvaseString KinematicOutputs::GetOutputName(const OutputsComplete &output)
 {
-	wxString name;
+	vvaseString name;
 	OutputsComplete newOutputIndex;
 
 	// Depending on the specified PLOT_ID, choose the name of the string
@@ -2287,7 +2284,7 @@ wxString KinematicOutputs::GetOutputName(const OutputsComplete &output)
 	if (output <= EndRightFrontDoubles)
 	{
 		name = GetCornerDoubleName((CornerOutputsDouble)(output - StartRightFrontDoubles));
-		name.Prepend(_T("Right Front "));
+		name = _T("Right Front ") + name;
 	}
 	else if (output <= EndRightFrontVectors)
 	{
@@ -2311,12 +2308,12 @@ wxString KinematicOutputs::GetOutputName(const OutputsComplete &output)
 			break;
 		}
 
-		name.Prepend(_T("Right Front "));
+		name = _T("Right Front ") + name;
 	}
 	else if (output <= EndLeftFrontDoubles)
 	{
 		name = GetCornerDoubleName((CornerOutputsDouble)(output - StartLeftFrontDoubles));
-		name.Prepend(_T("Left Front "));
+		name = _T("Left Front ") + name;
 	}
 	else if (output <= EndLeftFrontVectors)
 	{
@@ -2340,12 +2337,12 @@ wxString KinematicOutputs::GetOutputName(const OutputsComplete &output)
 			break;
 		}
 
-		name.Prepend(_T("Left Front "));
+		name = _T("Left Front ") + name;
 	}
 	else if (output <= EndRightRearDoubles)
 	{
 		name = GetCornerDoubleName((CornerOutputsDouble)(output - StartRightRearDoubles));
-		name.Prepend(_T("Right Rear "));
+		name = _T("Right Rear ") + name;
 	}
 	else if (output <= EndRightRearVectors)
 	{
@@ -2369,12 +2366,12 @@ wxString KinematicOutputs::GetOutputName(const OutputsComplete &output)
 			break;
 		}
 
-		name.Prepend(_T("Right Rear "));
+		name = _T("Right Rear ") + name;
 	}
 	else if (output <= EndLeftRearDoubles)
 	{
 		name = GetCornerDoubleName((CornerOutputsDouble)(output - StartLeftRearDoubles));
-		name.Prepend(_T("Left Rear "));
+		name = _T("Left Rear ") + name;
 	}
 	else if (output <= EndLeftRearVectors)
 	{
@@ -2398,7 +2395,7 @@ wxString KinematicOutputs::GetOutputName(const OutputsComplete &output)
 			break;
 		}
 
-		name.Prepend(_T("Left Rear "));
+		name = _T("Left Rear ") + name;
 	}
 	else if (output <= EndDoubles)
 		name = GetDoubleName((OutputsDouble)(output - StartDoubles));

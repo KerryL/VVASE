@@ -269,6 +269,9 @@
     <ClInclude Include="include\VVASE\gui\utilities\wxRelatedUtilities.h">
       <Filter>Header Files\gui\utilities</Filter>
     </ClInclude>
+    <ClInclude Include="include\VVASE\gui\utilities\xlsxReader.h">
+      <Filter>Header Files\gui\utilities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\application\pluginManager.cpp">
@@ -461,6 +464,9 @@
       <Filter>Source Files\gui\utilities</Filter>
     </ClCompile>
     <ClCompile Include="src\gui\utilities\wxRelatedUtilities.cpp">
+      <Filter>Source Files\gui\utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gui\utilities\xlsxReader.cpp">
       <Filter>Source Files\gui\utilities</Filter>
     </ClCompile>
   </ItemGroup>

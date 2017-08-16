@@ -13,26 +13,23 @@
 #ifndef DEBUGGER_H_
 #define DEBUGGER_H_
 
+// Local headers
+#include "VVASE/core/utilities/vvaseString.h"
+
 // Standard C++ headers
 #include <iostream>
 #include <sstream>
 #include <map>
-
-// wxWidgets headers
-#include <wx/event.h>
-#include <wx/thread.h>
-
-// wxWidgets forward declarations
-class wxString;
-class wxTextCtrl;
+#include <mutex>
+#include <thread>
 
 // Declaration of the EVT_DEBUG event
-DECLARE_LOCAL_EVENT_TYPE(EVT_DEBUG, -1)
+//DECLARE_LOCAL_EVENT_TYPE(EVT_DEBUG, -1)// TODO:  Remove
 
 namespace VVASE
 {
 
-class Debugger : public std::ostream
+class Debugger : public vvaseOStream
 {
 public:
 	// In lieu of a constructor/destructor
@@ -40,43 +37,43 @@ public:
 	static void Kill();
 
 	// This enumeration describes how many debug messages we want to print
-	enum DebugLevel
+	enum class Priority
 	{
-		PriorityVeryHigh,	// These messages ALWAYS print (default) - for critical errors
-		PriorityHigh,		// This type of message would include warnings that affect solution accuracy
-		PriorityMedium,		// This type of message should warn against poor performance
-		PriorityLow			// Anything else we might want to print (usually for debugging - function calls, etc.)
+		VeryHigh,	// These messages ALWAYS print (default) - for critical errors
+		High,		// This type of message would include warnings that affect solution accuracy
+		Medium,		// This type of message should warn against poor performance
+		Low			// Anything else we might want to print (usually for debugging - function calls, etc.)
 	};
 
-	friend std::ostream& operator<<(std::ostream &os, const Debugger::DebugLevel& level);
+	friend vvaseOStream& operator<<(vvaseOStream &os, const Priority& level);
 
-	void SetDebugLevel(const DebugLevel &level);
-	inline DebugLevel GetDebugLevel() const { wxMutexLocker lock(mutex); return debugLevel; }
-	void SetTargetOutput(wxEvtHandler *parent);
+	void SetDebugLevel(const Priority &level);
+	inline Priority GetDebugLevel() const { std::lock_guard<std::mutex> lock(mutex); return debugLevel; }
+	//void SetTargetOutput(wxEvtHandler *parent);// TODO:  Remove
 
 private:
 	// For singletons, the constructors and assignment operators are private
 	Debugger();
-	virtual ~Debugger() {}
+	virtual ~Debugger() = default;
 
 	static Debugger *debuggerInstance;
 
-	DebugLevel debugLevel;
-	wxEvtHandler *parent;
-	mutable wxMutex mutex;
+	Priority debugLevel = Priority::High;
+	//wxEvtHandler *parent;// TODO:  Remove
+	mutable std::mutex mutex;
 
 	// This stream buffer is designed to allow streaming to occur from multiple threads
 	// simultaneously without jumbling the text
-	class DebuggerStreamBuffer : public std::stringbuf
+	class DebuggerStreamBuffer : public vvaseStringBuf
 	{
 	public:
 		DebuggerStreamBuffer(Debugger &log) : log(log) {}
 		virtual ~DebuggerStreamBuffer();
 
-		typedef std::map<wxThreadIdType, std::stringstream*> BufferMap;
+		typedef std::map<std::thread::id, vvaseOStringStream*> BufferMap;
 		BufferMap threadBuffer;
-		mutable wxMutex mutex;
-		void CreateThreadBuffer(void);
+		mutable std::mutex mutex;
+		void CreateThreadBuffer();
 
 	protected:
 		virtual int overflow(int c);

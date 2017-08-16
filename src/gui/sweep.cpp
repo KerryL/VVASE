@@ -631,13 +631,13 @@ bool Iteration::PerformLoadFromFile()
 	// Check to make sure the version matches
 	if (header.fileVersion > currentFileVersion)
 	{
-		Debugger::GetInstance() << "ERROR:  Unrecognized file version - unable to open file!" << Debugger::PriorityHigh;
+		Debugger::GetInstance() << "ERROR:  Unrecognized file version - unable to open file!" << Debugger::Priority::High;
 		inFile.close();
 
 		return false;
 	}
 	else if (header.fileVersion != currentFileVersion)
-		Debugger::GetInstance() << "Warning:  Opening out-of-date file version." << Debugger::PriorityHigh;
+		Debugger::GetInstance() << "Warning:  Opening out-of-date file version." << Debugger::Priority::High;
 
 	// Read this object's data
 	inFile.read((char*)&associatedWithAllOpenCars, sizeof(bool));
@@ -1071,7 +1071,7 @@ void Iteration::ShowAssociatedCarsDialog()
 	// Make sure there is at least one car open
 	if (openCars.size() == 0)
 	{
-		Debugger::GetInstance() << "ERROR:  Cannot display dialog - no open cars!" << Debugger::PriorityHigh;
+		Debugger::GetInstance() << "ERROR:  Cannot display dialog - no open cars!" << Debugger::Priority::High;
 		return;
 	}
 
@@ -1215,7 +1215,7 @@ void Iteration::ExportDataToFile(wxString pathAndFileName) const
 		delimiter = ',';
 	else
 	{
-		Debugger::GetInstance() << "ERROR:  Could not export data!  Unable to determine delimiter choice!" << Debugger::PriorityHigh;
+		Debugger::GetInstance() << "ERROR:  Could not export data!  Unable to determine delimiter choice!" << Debugger::Priority::High;
 		return;
 	}
 
@@ -1229,7 +1229,7 @@ void Iteration::ExportDataToFile(wxString pathAndFileName) const
 	// Warn the user if the file could not be opened failed
 	if (!exportFile.is_open() || !exportFile.good())
 	{
-		Debugger::GetInstance() << "ERROR:  Could not export data to '" <<  pathAndFileName << "'!" << Debugger::PriorityHigh;
+		Debugger::GetInstance() << "ERROR:  Could not export data to '" <<  pathAndFileName << "'!" << Debugger::Priority::High;
 		return;
 	}
 

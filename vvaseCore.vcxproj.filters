@@ -108,9 +108,6 @@
     <ClInclude Include="include\VVASE\core\utilities\wheelSetStructures.h">
       <Filter>Header Files\utilities</Filter>
     </ClInclude>
-    <ClInclude Include="include\VVASE\core\utilities\xlsxReader.h">
-      <Filter>Header Files\utilities</Filter>
-    </ClInclude>
     <ClInclude Include="src\core\analysis\analysisManager.h">
       <Filter>Source Files\analysis</Filter>
     </ClInclude>
@@ -264,9 +261,6 @@
       <Filter>Source Files\utilities</Filter>
     </ClCompile>
     <ClCompile Include="src\core\utilities\geometryMath.cpp">
-      <Filter>Source Files\utilities</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\utilities\xlsxReader.cpp">
       <Filter>Source Files\utilities</Filter>
     </ClCompile>
     <ClCompile Include="src\core\optimization\geneticAlgorithm.cpp">

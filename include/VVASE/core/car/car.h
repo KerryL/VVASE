@@ -57,12 +57,7 @@
 #include <type_traits>
 #include <memory>
 #include <unordered_map>
-
-// wxWidgets headers
-#include <wx/thread.h>
-
-// wxWidgets forward declarations
-class wxString;
+#include <mutex>
 
 namespace VVASE
 {
@@ -75,7 +70,7 @@ class Car
 {
 public:
 	Car();
-	//Car(const Car &car);
+	Car(const Car &car);
 	//~Car();
 
     template <typename T>
@@ -100,12 +95,12 @@ public:
 	// This class contains dynamically allocated memory - overload the assignment operator
 	Car& operator=(const Car &car);
 
-	wxMutex &GetMutex() const { return carMutex; };
+	std::mutex &GetMutex() const { return carMutex; };
 
 	template<typename T>
 	T* GetSubsystem() { return dynamic_cast<T*>(subsystems[T::GetName()].get()); }
 	template<typename T>
-	T* GetSubsystem() const;
+	const T* GetSubsystem() const;
 
 private:
 	// File header information
@@ -119,11 +114,11 @@ private:
 	FileHeaderInfo ReadFileHeader(BinaryReader& file) const;
 
 	static const int currentFileVersion;
-	mutable wxMutex carMutex;
+	mutable std::mutex carMutex;
 
     static ComponentManager<Subsystem> subsystemManager;
     std::unordered_map<vvaseString, std::unique_ptr<Subsystem>> subsystems;
-	std::unordered_map<vvaseString, std::unique_ptr<Subsystem>> CreateComponents();
+	static std::unordered_map<vvaseString, std::unique_ptr<Subsystem>> CreateComponents();
 };
 
 template <typename T>
@@ -141,12 +136,12 @@ bool Car::UnregisterSubsystem()
 }
 
 template <typename T>
-T* Car::GetSubsystem() const
+const T* Car::GetSubsystem() const
 {
 	const auto it(subsystems.find(T::GetName()));
 	if (it == subsystems.end())
 		return nullptr;
-	return dynamic_cast<T*>(it->second.get());
+	return dynamic_cast<const T*>(it->second.get());
 }
 
 }// namespace VVASE

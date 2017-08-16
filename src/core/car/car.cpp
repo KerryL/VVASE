@@ -301,9 +301,8 @@ bool Car::SaveCarToFile(vvaseString fileName, vvaseOutFileStream *poutFile) cons
 	// Call the write functions for each sub-system class
 	for (const auto& subsystem : subsystems)
 	{
-		const vvaseString name(subsystem.first);
-		binFile.Write(name);
-		//binFile.Write(sizeof(subsystems[name]));
+		binFile.Write(subsystem.first);
+		//binFile.Write(sizeof(subsystems[subsystem.first]));
 		// TODO:  Need to write size information here?  Or as first part of write method for subsystem derivatives?
 		subsystem.second->Write(binFile);
 	}
@@ -349,7 +348,7 @@ bool Car::LoadCarFromFile(vvaseString fileName, vvaseInFileStream *pinFile, int 
 
 	// Check to make sure the version matches
 	if (header.fileVersion != currentFileVersion)
-		Debugger::GetInstance() << "Warning:  Opening file with out-of-date file format." << Debugger::PriorityHigh;
+		Debugger::GetInstance() << "Warning:  Opening file with out-of-date file format." << Debugger::Priority::High;
 
 	// Call the read function for each sub-system class
 	// NOTE:  The order that these Read() calls are made must match the order

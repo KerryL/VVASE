@@ -67,7 +67,7 @@ void Drivetrain::SetNumberOfGears(const short &numGears)
 	// Make sure we have at least one gear
 	if (numGears < 1)
 	{
-		Debugger::GetInstance() << "ERROR:  Must have at least 1 gear!" << Debugger::PriorityHigh;
+		Debugger::GetInstance() << "ERROR:  Must have at least 1 gear!" << Debugger::Priority::High;
 		return;
 	}
 
@@ -193,10 +193,10 @@ void Drivetrain::Read(BinaryReader& file, const int& fileVersion)
 //		None
 //
 // Return Value:
-//		wxString containing the name of the drive style
+//		vvaseString containing the name of the drive style
 //
 //==========================================================================
-wxString Drivetrain::GetDriveWheelsName(const DriveWheels &driveWheels)
+vvaseString Drivetrain::GetDriveWheelsName(const DriveWheels &driveWheels)
 {
 	switch (driveWheels)
 	{

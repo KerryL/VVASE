@@ -20,9 +20,6 @@
 // Standard C++ headers
 #include <vector>
 
-// wxWidgets headers
-#include <wx/wx.h>
-
 namespace VVASE
 {
 
@@ -56,7 +53,7 @@ public:
 		NumberOfDriveTypes
 	};
 
-	static wxString GetDriveWheelsName(const DriveWheels &driveWheels);
+	static vvaseString GetDriveWheelsName(const DriveWheels &driveWheels);
 
 	// The value describing the wheels driven by this drivetrain
 	DriveWheels driveType;

@@ -19,6 +19,7 @@
 // Local headers
 #include "VVASE/core/utilities/unitType.h"
 // TODO:  Have input/output objects that are strongly typed?  Also interface to undo/redo?
+#include "VVASE/core/utilities/vvaseString.h"
 
 // TODO:  Do I really need these here?
 #include "VVASE/core/car/subsystems/corner.h"// TODO:  Need to move this to include/VVASE or users won't be able to include for making plugins
@@ -26,9 +27,6 @@
 
 // Eigen headers
 #include <Eigen/Eigen>
-
-// wxWidgets headers
-#include <wx/thread.h>
 
 namespace VVASE
 {
@@ -190,7 +188,7 @@ public:
 	static UnitType GetOutputUnitType(const OutputsComplete &output);
 
 	// For determining the name of an output from the OutputsComplete list
-	static wxString GetOutputName(const OutputsComplete &output);
+	static vvaseString GetOutputName(const OutputsComplete &output);
 
 private:
 	const Car *originalCar;
@@ -201,10 +199,10 @@ private:
 	void UpdateCorner(const Corner *originalCorner, const Corner *currentCorner);
 
 	// For retrieving names of the outputs
-	static wxString GetCornerDoubleName(const CornerOutputsDouble &output);
-	static wxString GetCornerVectorName(const CornerOutputsVector &output);
-	static wxString GetDoubleName(const OutputsDouble &output);
-	static wxString GetVectorName(const OutputsVector &output);
+	static vvaseString GetCornerDoubleName(const CornerOutputsDouble &output);
+	static vvaseString GetCornerVectorName(const CornerOutputsVector &output);
+	static vvaseString GetDoubleName(const OutputsDouble &output);
+	static vvaseString GetVectorName(const OutputsVector &output);
 
 	// For retrieving units of the outputs
 	static UnitType GetCornerDoubleUnitType(const CornerOutputsDouble &output);

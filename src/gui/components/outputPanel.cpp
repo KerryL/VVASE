@@ -106,7 +106,7 @@ void OutputPanel::UpdateInformation(GuiCar::CarOutputs outputs, Car &car,
 		{
 			// Add column failed - print warning and return
 			Debugger::GetInstance() << "Warning (OutputPanel::UpdateInformation):  InsertCols failed!"
-				<< Debugger::PriorityMedium;
+				<< Debugger::Priority::Medium;
 
 			return;
 		}
@@ -333,7 +333,7 @@ void OutputPanel::FinishUpdate(int numberOfDataColumns)
 	{
 		if (!outputsList->DeleteCols(numberOfDataColumns + 1, this->numberOfDataColumns - numberOfDataColumns))
 		{
-			Debugger::GetInstance() << "Warning (OutputPanel::FinishUpdate):  DeleteCols failed!" << Debugger::PriorityMedium;
+			Debugger::GetInstance() << "Warning (OutputPanel::FinishUpdate):  DeleteCols failed!" << Debugger::Priority::Medium;
 			return;
 		}
 

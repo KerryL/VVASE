@@ -172,7 +172,7 @@ void WorkerThread::OnJob()
 		static_cast<OptimizationData*>(job.data)->geneticAlgorithm->PerformOptimization();
 		DebugLog::GetInstance()->Log(_T("Optimization - End"), -1);
 		Debugger::GetInstance() << "Elapsed Time: %s"
-			<< wxDateTime::UNow().Subtract(start).Format() << Debugger::PriorityVeryHigh;
+			<< wxDateTime::UNow().Subtract(start).Format() << Debugger::Priority::VeryHigh;
 
 		jobQueue->Report(job.command, id, job.index);
 		break;

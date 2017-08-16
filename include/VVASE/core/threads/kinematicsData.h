@@ -13,9 +13,6 @@
 #ifndef KINEMATICS_DATA_H_
 #define KINEMATICS_DATA_H_
 
-// wxWidgets headers
-#include <wx/wx.h>
-
 // Local headers
 #include "VVASE/core/threads/threadData.h"
 #include "VVASE/core/analysis/kinematics.h"

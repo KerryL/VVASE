@@ -16,6 +16,7 @@
 #include <Eigen/Eigen>
 
 // Local headers
+#include "VVASE/core/car/subsystems/subsystem.h"
 #include "VVASE/core/utilities/wheelSetStructures.h"
 
 namespace VVASE
@@ -26,7 +27,7 @@ class Suspension;
 class BinaryReader;
 class BinaryWriter;
 
-class MassProperties
+class MassProperties : public Subsystem
 {
 public:
 	MassProperties();
@@ -65,6 +66,14 @@ public:
 	double GetTotalMass() const;
 	double GetSprungMass() const;
 	Eigen::Vector3d GetSprungMassCG(const Suspension* s) const;
+
+	// Required by RegisterableComponent
+    static std::unique_ptr<MassProperties> Create() { return std::make_unique<MassProperties>(); }
+    static vvaseString GetName() { return _T("MassProperties"); }
+
+    // Required by Subsystem
+    wxPanel* GetEditPanel() override;
+	wxTreeListItem* GetTreeItem() override;
 };
 
 }// namespace VVASE

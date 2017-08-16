@@ -14,14 +14,14 @@
 #ifndef JOB_QUEUE_H_
 #define JOB_QUEUE_H_
 
-// wxWidgets headers
-#include <wx/wx.h>
-
 // Local headers
 #include "VVASE/core/threads/threadJob.h"
 
 // Standard C++ headers
 #include <map>
+
+// wxWidgets headers
+#include <wx/wx.h>// TODO:  Remove wx from this
 
 // wxWidgets forward declarations
 class wxEvtHandler;

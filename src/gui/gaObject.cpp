@@ -493,11 +493,11 @@ void GAObject::PerformAdditionalActions()
 
 	double maximumFitness = fitnesses[currentGeneration][0];
 
-	Debugger::GetInstance() << "Completed Generation " << currentGeneration + 1 << Debugger::PriorityVeryHigh;
+	Debugger::GetInstance() << "Completed Generation " << currentGeneration + 1 << Debugger::Priority::VeryHigh;
 	Debugger::GetInstance() << "\tAverage Fitness:  " <<
-		UnitConverter::GetInstance().FormatNumber(averageFitness) << Debugger::PriorityVeryHigh;
+		UnitConverter::GetInstance().FormatNumber(averageFitness) << Debugger::Priority::VeryHigh;
 	Debugger::GetInstance() << "\tBest Fitness:     " <<
-		UnitConverter::GetInstance().FormatNumber(maximumFitness) << Debugger::PriorityVeryHigh;
+		UnitConverter::GetInstance().FormatNumber(maximumFitness) << Debugger::Priority::VeryHigh;
 
 	if (currentGeneration == generationLimit - 1)
 		isRunning = false;
@@ -885,7 +885,7 @@ bool GAObject::Read(wxString fileName)
 
 	if (header.fileVersion != currentFileVersion)
 	{
-		Debugger::GetInstance() << "ERROR:  Incompatible file versions - could not open file!" << Debugger::PriorityHigh;
+		Debugger::GetInstance() << "ERROR:  Incompatible file versions - could not open file!" << Debugger::Priority::High;
 		inFile.close();
 		return false;
 	}

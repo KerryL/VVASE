@@ -41,7 +41,7 @@ namespace VVASE
 //==========================================================================
 DebugLog* DebugLog::logInstance = NULL;
 DebugLog::LogTarget DebugLog::target = DebugLog::TargetFile;
-const wxString DebugLog::logFileName = _T("VVASEdebug.log");
+const vvaseString DebugLog::logFileName = _T("VVASEdebug.log");
 
 //==========================================================================
 // Class:			DebugLog
@@ -86,7 +86,7 @@ DebugLog* DebugLog::GetInstance()
 //==========================================================================
 void DebugLog::SetTarget(const LogTarget &target)
 {
-	wxMutexLocker lock(mutex);
+	std::lock_guard<std::mutex> lock(mutex);
 	this->target = target;
 }
 
@@ -98,7 +98,7 @@ void DebugLog::SetTarget(const LogTarget &target)
 //					if it doesn't already exist.
 //
 // Input Arguments:
-//		message	= wxString to be logged
+//		message	= vvaseString to be logged
 //		indent	= int specifying wheter the indent level for the current thread
 //				  should be changed
 //
@@ -109,9 +109,9 @@ void DebugLog::SetTarget(const LogTarget &target)
 //		DebugLog* pointing to this object
 //
 //==========================================================================
-void DebugLog::Log(wxString message, int indent)
+void DebugLog::Log(vvaseString message, int indent)
 {
-	wxMutexLocker lock(mutex);
+	std::lock_guard<std::mutex> lock(mutex);
 
 	// Handle indentation
 	unsigned long threadID = wxThread::GetCurrentId();
@@ -136,19 +136,19 @@ void DebugLog::Log(wxString message, int indent)
 		indent.push_back(std::pair<unsigned long, unsigned int>(threadID, indent));
 
 	// This string is prepended once per indent level
-	wxString indentChar(_T("  "));
+	vvaseString indentChar(_T("  "));
 	for (i = 0; i < currentIndent; i++)
 		message.Prepend(indentChar);
 
 	// Also prepend the thread ID
-	wxString idString;
+	vvaseString idString;
 	idString.Printf("[%5lu] ", threadID);
 	message.Prepend(idString);
 
 	// Handle logging depending on specified target
 	if (target == TargetFile)
 	{
-		std::ofstream file(logFileName, std::ios::out | std::ios::app);
+		vvaseOFStream file(logFileName, std::ios::app);
 		if (file.is_open() && file.good())
 		{
 			file << std::endl << message;
@@ -180,7 +180,7 @@ void DebugLog::Log(wxString message, int indent)
 void DebugLog::Kill()
 {
 	delete logInstance;
-	logInstance = NULL;
+	logInstance = nullptr;
 }
 
 }// namespace VVASE

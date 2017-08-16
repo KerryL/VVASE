@@ -73,7 +73,7 @@ public:
 	static Eigen::Vector3d Rotate(const Eigen::Vector3d& v,
 		const double& angle, const Eigen::Vector3d& axis);
 
-	static Eigen::Vector3d AnglesBetween(const Eigen::Vector3d& v1, const Eigen::Vector2d& v2);
+	static Eigen::Vector3d AnglesBetween(const Eigen::Vector3d& v1, const Eigen::Vector3d& v2);
 
 private:
 	// Helper method for solving intersection of two planes problem

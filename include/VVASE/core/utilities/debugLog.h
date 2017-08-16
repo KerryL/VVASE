@@ -13,19 +13,20 @@
 #ifndef DEBUG_LOG_H_
 #define DEBUG_LOG_H_
 
+// Local headers
+#include "VVASE/core/utilities/vvaseString.h"
+
 // Standard C++ headers
 #include <vector>
-
-// wxWidgeths headers
-#include "wx/wx.h"
+#include <mutex>
 
 // Disable compiler warnings for unreferenced formal parameters in MSW
-#ifdef __WXMSW__
+#ifdef _MSC_VER
 #pragma warning(disable:4100)
 #endif
 
 // Remove this flag for release builds
-#ifdef __WXDEBUG__
+#ifdef _DEBUG
 // Or comment it out to disable for debug builds
 //#define USE_DEBUG_LOG
 #endif
@@ -46,7 +47,7 @@ public:
 	static DebugLog* GetInstance();
 	static void Kill();
 	void SetTarget(const LogTarget &target);
-	void Log(wxString message, int indent = 0);
+	void Log(vvaseString message, int indent = 0);
 
 private:
 	// Current indentation level for each thread
@@ -57,13 +58,13 @@ private:
 	static LogTarget target;
 
 	// Synchronization object
-	wxMutex mutex;
+	std::mutex mutex;
 
 	// The "real" DebugLog
 	static DebugLog* logInstance;
 
 	// Log file name
-	const static wxString logFileName;
+	const static vvaseString logFileName;
 
 // The not-implementation
 #else
@@ -71,8 +72,8 @@ private:
 	static inline DebugLog* GetInstance() { return NULL; };
 	static inline void Kill() { };
 	static inline void SetTarget(const LogTarget &/*target*/) { };
-	static inline void Log(wxString /*message*/) { };
-	static inline void Log(wxString /*message*/, int /*indent*/) { };
+	static inline void Log(vvaseString /*message*/) { };
+	static inline void Log(vvaseString /*message*/, int /*indent*/) { };
 #endif
 
 private:

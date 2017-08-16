@@ -11,22 +11,20 @@
 //        to clean up the rest of the program.
 
 // Standard C++ headers
-#include <stdarg.h>
+#include <cstdarg>
 #include <iostream>
-
-// wxWidgets headers
-#include <wx/wx.h>
+#include <cassert>
 
 // Local headers
 #include "VVASE/core/utilities/debugger.h"
-#include "VVASE/core/threads/threadEvent.h"
+//#include "VVASE/core/threads/threadEvent.h"// TODO:  Remove
 #include "VVASE/core/utilities/debugLog.h"
 
 // Uncomment to enable writing all debug messages to stdout
-//#define DEBUG_TO_STDOUT
+//#define DEBUG_TO_STDOUT// TODO:  Remove
 
 // Define the EVT_DEBUG event type
-DEFINE_LOCAL_EVENT_TYPE(EVT_DEBUG)
+//DEFINE_LOCAL_EVENT_TYPE(EVT_DEBUG)// TODO:  Remove
 
 namespace VVASE
 {
@@ -48,13 +46,7 @@ namespace VVASE
 //		None
 //
 //==========================================================================
-Debugger::Debugger() : std::ostream(&buffer), buffer(*this)
-{
-	wxMutexLocker lock(mutex);
-
-	debugLevel = PriorityHigh;
-	parent = NULL;
-}
+Debugger::Debugger() : vvaseOStream(&buffer), buffer(*this) {}
 
 //==========================================================================
 // Class:			Debugger
@@ -72,7 +64,7 @@ Debugger::Debugger() : std::ostream(&buffer), buffer(*this)
 //		None
 //
 //==========================================================================
-Debugger* Debugger::debuggerInstance = NULL;
+Debugger* Debugger::debuggerInstance = nullptr;
 
 //==========================================================================
 // Class:			Debugger
@@ -120,7 +112,7 @@ void Debugger::Kill()
 	if (debuggerInstance)
 	{
 		delete debuggerInstance;
-		debuggerInstance = NULL;
+		debuggerInstance = nullptr;
 	}
 }
 
@@ -131,7 +123,7 @@ void Debugger::Kill()
 // Description:		Sets the debug level to the specified level
 //
 // Input Arguments:
-//		level	= const DebugLevel&, the level to which this will be set
+//		level	= const Priority&, the level to which this will be set
 //
 // Output Arguments:
 //		None
@@ -140,9 +132,9 @@ void Debugger::Kill()
 //		None
 //
 //==========================================================================
-void Debugger::SetDebugLevel(const DebugLevel &level)
+void Debugger::SetDebugLevel(const Priority &level)
 {
-	wxMutexLocker lock(mutex);
+	std::lock_guard<std::mutex> lock(mutex);
 	debugLevel = level;
 }
 
@@ -162,11 +154,11 @@ void Debugger::SetDebugLevel(const DebugLevel &level)
 //		None
 //
 //==========================================================================
-void Debugger::SetTargetOutput(wxEvtHandler *parent)
+/*void Debugger::SetTargetOutput(wxEvtHandler *parent)
 {
 	wxMutexLocker lock(mutex);
 	this->parent = parent;
-}
+}*/// TODO:  Remove
 
 //==========================================================================
 // Class:			Debugger::DebuggerStreamBuffer
@@ -214,7 +206,7 @@ int Debugger::DebuggerStreamBuffer::overflow(int c)
 {
 	CreateThreadBuffer();
 	if (c != traits_type::eof())
-		*threadBuffer[wxThread::GetCurrentId()] << (char)c;
+		*threadBuffer[std::this_thread::get_id()] << (char)c;
 
 	return c;
 }
@@ -259,13 +251,13 @@ int Debugger::DebuggerStreamBuffer::sync()
 //		None
 //
 //==========================================================================
-void Debugger::DebuggerStreamBuffer::CreateThreadBuffer(void)
+void Debugger::DebuggerStreamBuffer::CreateThreadBuffer()
 {
-	if (threadBuffer.find(wxThread::GetCurrentId()) == threadBuffer.end())
+	if (threadBuffer.find(std::this_thread::get_id()) == threadBuffer.end())
 	{
-		wxMutexLocker lock(mutex);
-		if (threadBuffer.find(wxThread::GetCurrentId()) == threadBuffer.end())
-			threadBuffer[wxThread::GetCurrentId()] = new std::stringstream;
+		std::lock_guard<std::mutex> lock(mutex);
+		if (threadBuffer.find(std::this_thread::get_id()) == threadBuffer.end())
+			threadBuffer[std::this_thread::get_id()] = new vvaseOStringStream;
 	}
 }
 
@@ -278,37 +270,37 @@ void Debugger::DebuggerStreamBuffer::CreateThreadBuffer(void)
 //					depending on debug level.
 //
 // Input Arguments:
-//		os		= std::ostream &os
-//		level	= const Debugger::DebugLevel&
+//		os		= vvaseOStream &os
+//		level	= const Debugger::Priority&
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		std::ostream&
+//		vvaseOStream&
 //
 //==========================================================================
-std::ostream& operator<<(std::ostream &os, const Debugger::DebugLevel& level)
+vvaseOStream& operator<<(vvaseOStream &os, const Debugger::Priority& level)
 {
 	assert(typeid(Debugger&) == typeid(os));
 	Debugger& debugger(dynamic_cast<Debugger&>(os));
 
 	debugger.buffer.CreateThreadBuffer();
-	wxMutexLocker lock(debugger.buffer.mutex);
+	std::lock_guard<std::mutex> lock(debugger.buffer.mutex);
 
 	// Lower debug level -> higher priority
 	// Show messages having a debug level higher than or equal to the set debug level
 	if (int(level) <= int(debugger.debugLevel))
 	{
 		// If the event handler is assigned, then use it
-		if (debugger.parent != NULL)
+		/*if (debugger.parent != NULL)
 		{
 			wxCommandEvent evt(EVT_DEBUG, 0);
 			evt.SetInt(level);
 
 			// Format the message
-			wxString message(debugger.buffer.threadBuffer[wxThread::GetCurrentId()]->str());
-			if (level == Debugger::PriorityVeryHigh)
+			wxString message(debugger.buffer.threadBuffer[std::this_thread::get_id()]->str());
+			if (level == Debugger::Priority::VeryHigh)
 				message.Prepend(_T("      "));
 			message.append(_T("\n"));
 
@@ -317,17 +309,18 @@ std::ostream& operator<<(std::ostream &os, const Debugger::DebugLevel& level)
 		}
 #ifndef DEBUG_TO_STDOUT
 		else// Send the output to the terminal
-			std::cout << debugger.buffer.threadBuffer[wxThread::GetCurrentId()]->str() << std::endl;
+			std::cout << debugger.buffer.threadBuffer[std::this_thread::get_id()]->str() << std::endl;
 		// TODO:  Modify this to be like CombinedLogger and output to multiple sources?  other std::ostreams?
 		// Then could make another ostream for writing to wxTextCtrl
-#endif
+#endif*/
+		// TODO:  Make this output to the proper ostream
 	}
 
 #ifdef DEBUG_TO_STDOUT
 	std::cout << debugger.buffer.threadBuffer[wxThread::GetCurrentId()]->str() << std::endl;
 #endif
 
-	debugger.buffer.threadBuffer[wxThread::GetCurrentId()]->str("");
+	*debugger.buffer.threadBuffer[std::this_thread::get_id()] = vvaseOStringStream();
 	return os;
 }
 

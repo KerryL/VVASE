@@ -10,9 +10,6 @@
 // Desc:  Quasi-static analysis object.  Calculates vehicle attitude when
 //        subjected to external accelerations.
 
-// Standard C++ headers
-#include <cassert>
-
 // Local headers
 #include "VVASE/core/analysis/quasiStatic.h"
 #include "VVASE/core/analysis/kinematics.h"
@@ -23,6 +20,9 @@
 #include "VVASE/core/car/subsystems/tireSet.h"
 #include "VVASE/core/car/subsystems/tire.h"
 #include "VVASE/core/utilities/debugger.h"
+
+// Standard C++ headers
+#include <cassert>
 
 namespace VVASE
 {
@@ -84,7 +84,7 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 	SystemVector error, tempError;
 	Eigen::Vector3d guess;// parameteric variables representing remaining kinematic state inputs
 	Eigen::MatrixXd jacobian(error.rows(), guess.rows());
-	SystemVector delta;
+	Eigen::Vector3d delta;
 
 	guess(0,0) = 0.0;
 	guess(1,0) = 0.0;
@@ -134,13 +134,17 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 		kinematics.SetHeave(guess(2,0));
 		kinematics.SetTireDeflections(tireDeflections);
 
-		kinematics.UpdateKinematics(originalCar, workingCar, wxString::Format("Quasi-Static, i = %u (error)", i));
+		vvaseOStringStream ssError;
+		ssError << "Quasi-Static, i = " << i << " (error)";
+		kinematics.UpdateKinematics(originalCar, workingCar, ssError.str());
 		wheelLoads = ComputeWheelLoads(originalCar, kinematics.GetOutputs(), preLoad);
 		tireDeflections = ComputeTireDeflections(*tires, wheelLoads);
 		error = ComputeError(workingCar, inputs.gx, inputs.gy, kinematics.GetOutputs(), preLoad);
 
+		vvaseOStringStream ssRoll;
+		ssRoll << "Quasi-Static, i = " << i << " (roll)";
 		kinematics.SetRoll(guess(0,0) + epsilon);
-		kinematics.UpdateKinematics(originalCar, workingCar, wxString::Format("Quasi-Static, i = %u (roll)", i));
+		kinematics.UpdateKinematics(originalCar, workingCar, ssRoll.str());
 
 		tempError = ComputeError(workingCar, inputs.gx, inputs.gy, kinematics.GetOutputs(), preLoad);
 		jacobian(0,0) = (tempError(0,0) - error(0,0)) / epsilon;
@@ -157,9 +161,11 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 		jacobian(11,0) = (tempError(11,0) - error(11,0)) / epsilon;
 		jacobian(12,0) = (tempError(12,0) - error(12,0)) / epsilon;
 
+		vvaseOStringStream ssPitch;
+		ssPitch << "Quasi-Static, i = " << i << " (pitch)";
 		kinematics.SetRoll(guess(0,0));
 		kinematics.SetPitch(guess(1,0) + epsilon);
-		kinematics.UpdateKinematics(originalCar, workingCar, wxString::Format("Quasi-Static, i = %u (pitch)", i));
+		kinematics.UpdateKinematics(originalCar, workingCar, ssPitch.str());
 
 		tempError = ComputeError(workingCar, inputs.gx, inputs.gy, kinematics.GetOutputs(), preLoad);
 		jacobian(0,1) = (tempError(0,0) - error(0,0)) / epsilon;
@@ -176,9 +182,11 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 		jacobian(11,1) = (tempError(11,0) - error(11,0)) / epsilon;
 		jacobian(12,1) = (tempError(12,0) - error(12,0)) / epsilon;
 
+		vvaseOStringStream ssHeave;
+		ssHeave << "Quasi-Static, i = " << i << " (heave)";
 		kinematics.SetPitch(guess(1,0));
 		kinematics.SetHeave(guess(2,0) + epsilon);
-		kinematics.UpdateKinematics(originalCar, workingCar, wxString::Format("Quasi-Static, i = %u (heave)", i));
+		kinematics.UpdateKinematics(originalCar, workingCar, ssHeave.str());
 
 		tempError = ComputeError(workingCar, inputs.gx, inputs.gy, kinematics.GetOutputs(), preLoad);
 		jacobian(0,2) = (tempError(0,0) - error(0,0)) / epsilon;
@@ -203,7 +211,7 @@ Kinematics::Inputs QuasiStatic::Solve(const Car* originalCar, Car* workingCar,
 	}
 
 	if (i == limit)
-		Debugger::GetInstance() << "Warning:  Iteration limit reached (QuasiStatic::Solve)" << Debugger::PriorityMedium;
+		Debugger::GetInstance() << "Warning:  Iteration limit reached (QuasiStatic::Solve)" << Debugger::Priority::Medium;
 
 	outputs.wheelLoads = wheelLoads;
 
@@ -374,7 +382,7 @@ WheelSet QuasiStatic::ComputePreLoad(const Car* originalCar) const
 
 	// TODO:  3rd springs
 	if (s->frontHasThirdSpring || s->rearHasThirdSpring)
-		Debugger::GetInstance() << "Warning:  3rd springs are not considered in quasi-static analysis" << Debugger::PriorityVeryHigh;
+		Debugger::GetInstance() << "Warning:  3rd springs are not considered in quasi-static analysis" << Debugger::Priority::VeryHigh;
 
 	return preLoad;
 }
@@ -646,7 +654,7 @@ QuasiStatic::SystemVector QuasiStatic::ComputeError(const Car* workingCar, const
 {
 	SystemMatrix A(BuildSystemMatrix(workingCar));
 	SystemVector b(BuildRightHandMatrix(workingCar, gx, gy, outputs, preLoad));
-	SystemVector x;
+	Eigen::Matrix<double, 4, 1> x;
 
 	x = A.colPivHouseholderQr().solve(b);
 

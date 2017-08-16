@@ -576,13 +576,13 @@ void OptionsDialog::CreateControls()
 		wxDefaultSize, optionsArray, optionsArray.GetCount(), wxRA_SPECIFY_ROWS);
 
 	// Make sure the correct radio button is selected
-	if(Debugger::GetInstance().GetDebugLevel() == Debugger::PriorityLow)
+	if(Debugger::GetInstance().GetDebugLevel() == Debugger::Priority::Low)
 		debugLevel->SetSelection(0);
-	else if(Debugger::GetInstance().GetDebugLevel() == Debugger::PriorityMedium)
+	else if(Debugger::GetInstance().GetDebugLevel() == Debugger::Priority::Medium)
 		debugLevel->SetSelection(1);
-	else if(Debugger::GetInstance().GetDebugLevel() == Debugger::PriorityHigh)
+	else if(Debugger::GetInstance().GetDebugLevel() == Debugger::Priority::High)
 		debugLevel->SetSelection(2);
-	else// Debugger::PriorityVeryHigh
+	else// Debugger::Priority::VeryHigh
 		debugLevel->SetSelection(3);
 
 	debugLevelsSizer->Add(debugLevel, 0, wxALL, 5);
@@ -686,7 +686,7 @@ void OptionsDialog::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 	else
 		Debugger::GetInstance() <<
 			"Warning!  Specified number of threads is not valid (must be a number greater than zero) - using previous value of "
-			 << mainFrame.GetNumberOfThreads() << Debugger::PriorityHigh;
+			 << mainFrame.GetNumberOfThreads() << Debugger::Priority::High;
 
 	// Update the default units for the converter object
 	// NOTE:  This section MUST come after the center of rotation is updated in order for
@@ -711,13 +711,13 @@ void OptionsDialog::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 	UnitConverter::GetInstance().SetUseScientificNotation(useScientificNotation->GetValue());
 
 	if (debugLevel->GetSelection() == 0)
-		Debugger::GetInstance().SetDebugLevel(Debugger::PriorityLow);
+		Debugger::GetInstance().SetDebugLevel(Debugger::Priority::Low);
 	else if (debugLevel->GetSelection() == 1)
-		Debugger::GetInstance().SetDebugLevel(Debugger::PriorityMedium);
+		Debugger::GetInstance().SetDebugLevel(Debugger::Priority::Medium);
 	else if (debugLevel->GetSelection() == 2)
-		Debugger::GetInstance().SetDebugLevel(Debugger::PriorityHigh);
+		Debugger::GetInstance().SetDebugLevel(Debugger::Priority::High);
 	else
-		Debugger::GetInstance().SetDebugLevel(Debugger::PriorityVeryHigh);
+		Debugger::GetInstance().SetDebugLevel(Debugger::Priority::VeryHigh);
 
 	mainFrame.SetOutputFont(outputFont);
 	mainFrame.SetPlotFont(plotFont);

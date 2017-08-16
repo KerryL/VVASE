@@ -124,7 +124,7 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxEmptyString, wxDefaultPositio
 	beingDeleted = false;
 	applicationExiting = false;
 
-	Debugger::GetInstance() << carDesignerName << " Initialized!" << Debugger::PriorityHigh;
+	Debugger::GetInstance() << carDesignerName << " Initialized!" << Debugger::Priority::High;
 }
 
 //==========================================================================
@@ -305,7 +305,7 @@ void MainFrame::SetProperties()
 	SetIcons(bundle);
 
 	Debugger::GetInstance().SetTargetOutput(debugPane);
-	Debugger::GetInstance().SetDebugLevel(Debugger::PriorityHigh);
+	Debugger::GetInstance().SetDebugLevel(Debugger::Priority::High);
 
 	// Add the application level entry to the SystemsTree (this one is hidden, but necessary)
 	systemsTree->AddRoot(_T("Application Level"), -1, -1);
@@ -345,13 +345,13 @@ void MainFrame::SetProperties()
 			outputFont.SetPointSize(9);
 			outputFont.SetFamily(wxFONTFAMILY_MODERN);
 			if (!outputFont.SetFaceName(fontFaceName))
-				Debugger::GetInstance() << "Error setting font face to " << fontFaceName << Debugger::PriorityHigh;
+				Debugger::GetInstance() << "Error setting font face to " << fontFaceName << Debugger::Priority::High;
 		}
 
 		if (!foundPreferredFont)
 		{
-			Debugger::GetInstance() << "Could not find preferred fixed-width font; using " << fontFaceName << Debugger::PriorityHigh;
-			Debugger::GetInstance() << "This can be changed in Tools->Options->Fonts" << Debugger::PriorityHigh;
+			Debugger::GetInstance() << "Could not find preferred fixed-width font; using " << fontFaceName << Debugger::Priority::High;
+			Debugger::GetInstance() << "This can be changed in Tools->Options->Fonts" << Debugger::Priority::High;
 		}
 	}
 
@@ -372,9 +372,9 @@ void MainFrame::SetProperties()
 		if (!foundFont)
 		{
 			if (!fontFile.IsEmpty())
-				Debugger::GetInstance() << "Could not find preferred plot font; using " << fontFile << Debugger::PriorityHigh;
+				Debugger::GetInstance() << "Could not find preferred plot font; using " << fontFile << Debugger::Priority::High;
 			else
-				Debugger::GetInstance() << "Could not find any *.ttf files - cannot generate plot fonts" << Debugger::PriorityHigh;
+				Debugger::GetInstance() << "Could not find any *.ttf files - cannot generate plot fonts" << Debugger::Priority::High;
 		}
 		else
 		{
@@ -580,7 +580,7 @@ void MainFrame::SetOutputFont(const wxFont& font)
 		wxTextAttr outputAttributes;
 		outputAttributes.SetFont(outputFont);
 		if (!debugPane->SetDefaultStyle(outputAttributes))
-			Debugger::GetInstance() << "Error setting font style" << Debugger::PriorityHigh;
+			Debugger::GetInstance() << "Error setting font style" << Debugger::Priority::High;
 	}
 }
 
@@ -1271,9 +1271,9 @@ void MainFrame::FileWriteImageFileEvent(wxCommandEvent& WXUNUSED(event))
 
 	// Call the object's write image file method
 	if (openObjectList[objectOfInterestIndex]->WriteImageToFile(pathAndFileName[0]))
-		Debugger::GetInstance() << "Image file written to %s", pathAndFileName[0] << Debugger::PriorityHigh;
+		Debugger::GetInstance() << "Image file written to %s", pathAndFileName[0] << Debugger::Priority::High;
 	else
-		Debugger::GetInstance() << "Image file NOT written!" << Debugger::PriorityHigh;
+		Debugger::GetInstance() << "Image file NOT written!" << Debugger::Priority::High;
 }
 
 //==========================================================================
@@ -1992,14 +1992,14 @@ void MainFrame::HelpManualEvent(wxCommandEvent& WXUNUSED(event))
 
 	wxFileType *pdfFileType = mimeManager.GetFileTypeFromExtension(_T("pdf"));// we now own this memory
 	if (!pdfFileType)
-		Debugger::GetInstance() << "ERROR:  Unknown extension 'pdf'" << Debugger::PriorityHigh;
+		Debugger::GetInstance() << "ERROR:  Unknown extension 'pdf'" << Debugger::Priority::High;
 	else if (!pdfFileType->GetOpenCommand(&openPDFManualCommand,
 		wxFileType::MessageParameters(manualFileName)))
-		Debugger::GetInstance() << "ERROR:  No known OPEN command for .pdf files" << Debugger::PriorityHigh;
+		Debugger::GetInstance() << "ERROR:  No known OPEN command for .pdf files" << Debugger::Priority::High;
 	else
 	{
 		if (wxExecute(openPDFManualCommand) == 0)
-			Debugger::GetInstance() << "ERROR:  Could not find '" << manualFileName << "'" << Debugger::PriorityHigh;
+			Debugger::GetInstance() << "ERROR:  Could not find '" << manualFileName << "'" << Debugger::Priority::High;
 	}
 
 	delete pdfFileType;
@@ -2456,7 +2456,7 @@ void MainFrame::ThreadCompleteEvent(wxCommandEvent &event)
 	{
 	case ThreadJob::CommandThreadExit:
 		activeThreads--;
-		Debugger::GetInstance() << "Thread " << event.GetId() << " exited" << Debugger::PriorityLow;
+		Debugger::GetInstance() << "Thread " << event.GetId() << " exited" << Debugger::Priority::Low;
 
 		// If there are no more active threads, it is now safe to kill this window
 		if (activeThreads == 0)
@@ -2469,7 +2469,7 @@ void MainFrame::ThreadCompleteEvent(wxCommandEvent &event)
 	case ThreadJob::CommandThreadStarted:
 		// Increment the number of active threads
 		activeThreads++;
-		Debugger::GetInstance() << "Thread " << event.GetId() << " started" << Debugger::PriorityLow;
+		Debugger::GetInstance() << "Thread " << event.GetId() << " started" << Debugger::Priority::Low;
 		break;
 
 	case ThreadJob::CommandThreadKinematicsNormal:
@@ -3442,7 +3442,7 @@ bool MainFrame::LoadFile(wxString pathAndFileName)
 		tempObject = new GeneticOptimization(*this, pathAndFileName);
 	else
 	{
-		Debugger::GetInstance() << "ERROR:  Unrecognized file extension: '" << fileExtension << "'" << Debugger::PriorityHigh;
+		Debugger::GetInstance() << "ERROR:  Unrecognized file extension: '" << fileExtension << "'" << Debugger::Priority::High;
 		return false;
 	}
 

@@ -15,8 +15,8 @@
 #ifndef THREAD_JOB_H_
 #define THREAD_JOB_H_
 
-// wxWidgets headers
-#include <wx/wx.h>
+// Local headers
+#include "VVASE/core/utilities/vvaseString.h"
 
 namespace VVASE
 {
@@ -44,13 +44,13 @@ public:
 	ThreadJob(const ThreadJob &threadJob);// For thread safety
 	ThreadJob(ThreadCommand command);
 	ThreadJob(ThreadCommand command, ThreadData *data,
-		const wxString &name, int &index);
+		const vvaseString &name, int &index);
 	~ThreadJob();
 
 	ThreadCommand command;
 
 	ThreadData *data;
-	wxString name;
+	vvaseString name;
 	int index;
 
 	// Operators

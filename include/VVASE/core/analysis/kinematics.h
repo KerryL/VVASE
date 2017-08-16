@@ -66,7 +66,7 @@ public:
 	inline void SetInputs(const Inputs& inputs) { this->inputs = inputs; }
 	inline void SetTireDeflections(const WheelSet& deflections) { inputs.tireDeflections = deflections; }
 
-	void UpdateKinematics(const Car* originalCar, Car* workingCar, wxString name);
+	void UpdateKinematics(const Car* originalCar, Car* workingCar, vvaseString name);
 
 	inline KinematicOutputs GetOutputs() const { return outputs; }
 	inline double GetPitch() const { return inputs.pitch; }

@@ -16,7 +16,7 @@
 #define WORKER_THREAD_H_
 
 // wxWidgets headers
-#include <wx/thread.h>
+#include <wx/thread.h>// TODO:  Remove
 
 // Local headers
 #include "VVASE/core/analysis/kinematics.h"

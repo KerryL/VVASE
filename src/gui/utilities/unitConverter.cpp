@@ -64,20 +64,20 @@ UnitConverter UnitConverter::unitConverter;
 UnitConverter::UnitConverter()
 {
 	// Defaults
-	SetAngleUnits(AngleDegrees);
-	SetDistanceUnits(DistanceInch);
-	SetAreaUnits(AreaInchesSquared);
-	SetForceUnits(ForcePound);
-	SetPressureUnits(PressurePoundPerSquareInch);
-	SetMomentUnits(MomentInchPound);
-	SetMassUnits(MassPoundMass);
-	SetVelocityUnits(VelocityInchesPerSecond);
-	SetAccelerationUnits(AccelerationInchesPerSecondSquared);
-	SetInertiaUnits(InertiaSlugInchesSquared);
-	SetDensityUnits(DensityPoundMassPerInchCubed);
-	SetPowerUnits(PowerHorsepower);
-	SetEnergyUnits(EnergyPoundInch);
-	SetTemperatureUnits(TemperatureFahrenheit);
+	SetAngleUnits(UnitsOfAngle::Degrees);
+	SetDistanceUnits(UnitsOfDistance::Inch);
+	SetAreaUnits(UnitsOfArea::InchesSquared);
+	SetForceUnits(UnitsOfForce::Pound);
+	SetPressureUnits(UnitsOfPressure::PoundPerSquareInch);
+	SetMomentUnits(UnitsOfMoment::InchPound);
+	SetMassUnits(UnitsOfMass::PoundMass);
+	SetVelocityUnits(UnitsOfVelocity::InchesPerSecond);
+	SetAccelerationUnits(UnitsOfAcceleration::InchesPerSecondSquared);
+	SetInertiaUnits(UnitsOfInertia::SlugInchesSquared);
+	SetDensityUnits(UnitsOfDensity::PoundMassPerInchCubed);
+	SetPowerUnits(UnitsOfPower::Horsepower);
+	SetEnergyUnits(UnitsOfEnergy::PoundInch);
+	SetTemperatureUnits(UnitsOfTemperature::Fahrenheit);
 
 	numberOfDigits = 3;
 	useSignificantDigits = false;
@@ -126,67 +126,67 @@ wxString UnitConverter::GetUnitType(const UnitType& type) const
 
 	switch (type)
 	{
-	case UnitTypeUnitless:
+	case UnitType::Unitless:
 		unitString.assign("-");
 		break;
 
-	case UnitTypeAngle:
+	case UnitType::Angle:
 		unitString.assign(GetUnits(angleUnits));
 		break;
 
-	case UnitTypeDistance:
+	case UnitType::Distance:
 		unitString.assign(GetUnits(distanceUnits));
 		break;
 
-	case UnitTypeArea:
+	case UnitType::Area:
 		unitString.assign(GetUnits(areaUnits));
 		break;
 
-	case UnitTypeForce:
+	case UnitType::Force:
 		unitString.assign(GetUnits(forceUnits));
 		break;
 
-	case UnitTypePressure:
+	case UnitType::Pressure:
 		unitString.assign(GetUnits(pressureUnits));
 		break;
 
-	case UnitTypeMoment:
+	case UnitType::Moment:
 		unitString.assign(GetUnits(momentUnits));
 		break;
 
-	case UnitTypeMass:
+	case UnitType::Mass:
 		unitString.assign(GetUnits(massUnits));
 		break;
 
-	case UnitTypeVelocity:
+	case UnitType::Velocity:
 		unitString.assign(GetUnits(velocityUnits));
 		break;
 
-	case UnitTypeAcceleration:
+	case UnitType::Acceleration:
 		unitString.assign(GetUnits(accelerationUnits));
 		break;
 
-	case UnitTypeInertia:
+	case UnitType::Inertia:
 		unitString.assign(GetUnits(inertiaUnits));
 		break;
 
-	case UnitTypeDensity:
+	case UnitType::Density:
 		unitString.assign(GetUnits(densityUnits));
 		break;
 
-	case UnitTypePower:
+	case UnitType::Power:
 		unitString.assign(GetUnits(powerUnits));
 		break;
 
-	case UnitTypeEnergy:
+	case UnitType::Energy:
 		unitString.assign(GetUnits(energyUnits));
 		break;
 
-	case UnitTypeTemperature:
+	case UnitType::Temperature:
 		unitString.assign(GetUnits(temperatureUnits));
 		break;
 
-	case UnitTypeAnglePerDistance:
+	case UnitType::AnglePerDistance:
 		unitString.assign(GetUnits(angleUnits) + _T("/") + GetUnits(distanceUnits));
 		break;
 
@@ -217,9 +217,9 @@ wxString UnitConverter::GetUnitType(const UnitType& type) const
 //==========================================================================
 wxString UnitConverter::GetUnits(const UnitsOfAngle& units) const
 {
-	if (units == AngleRadians)
+	if (units == UnitsOfAngle::Radians)
 		return _T("rad");
-	else if (units == AngleDegrees)
+	else if (units == UnitsOfAngle::Degrees)
 		return _T("deg");
 
 	return wxEmptyString;
@@ -244,19 +244,19 @@ wxString UnitConverter::GetUnits(const UnitsOfAngle& units) const
 //==========================================================================
 wxString UnitConverter::GetUnits(const UnitsOfDistance& units) const
 {
-	if (units == DistanceInch)
+	if (units == UnitsOfDistance::Inch)
 		return _T("inch");
-	else if (units == DistanceFoot)
+	else if (units == UnitsOfDistance::Foot)
 		return _T("foot");
-	else if (units == DistanceMile)
+	else if (units == UnitsOfDistance::Mile)
 		return _T("mile");
-	else if (units == DistanceMillimeter)
+	else if (units == UnitsOfDistance::Millimeter)
 		return _T("mm");
-	else if (units == DistanceCentimeter)
+	else if (units == UnitsOfDistance::Centimeter)
 		return _T("cm");
-	else if (units == DistanceMeter)
+	else if (units == UnitsOfDistance::Meter)
 		return _T("meter");
-	else if (units == DistanceKilometer)
+	else if (units == UnitsOfDistance::Kilometer)
 		return _T("km");
 
 	return wxEmptyString;
@@ -282,15 +282,15 @@ wxString UnitConverter::GetUnits(const UnitsOfDistance& units) const
 wxString UnitConverter::GetUnits(const UnitsOfArea& units) const
 {
 	// \x00b2 is superscript 2
-	if (units == AreaInchesSquared)
+	if (units == UnitsOfArea::InchesSquared)
 		return _T("in\x00b2");
-	else if (units == AreaFeetSquared)
+	else if (units == UnitsOfArea::FeetSquared)
 		return _T("ft\x00b2");
-	else if (units == AreaMillimetersSquared)
+	else if (units == UnitsOfArea::MillimetersSquared)
 		return _T("mm\x00b2");
-	else if (units == AreaCentimetersSquared)
+	else if (units == UnitsOfArea::CentimetersSquared)
 		return _T("cm\x00b2");
-	else if (units == AreaMetersSquared)
+	else if (units == UnitsOfArea::MetersSquared)
 		return _T("m\x00b2");
 
 	return wxEmptyString;
@@ -315,13 +315,13 @@ wxString UnitConverter::GetUnits(const UnitsOfArea& units) const
 //==========================================================================
 wxString UnitConverter::GetUnits(const UnitsOfForce& units) const
 {
-	if (units == ForcePound)
+	if (units == UnitsOfForce::Pound)
 		return _T("lbf");
-	else if (units == ForceKip)
+	else if (units == UnitsOfForce::Kip)
 		return _T("kip");
-	else if (units == ForceNewton)
+	else if (units == UnitsOfForce::Newton)
 		return _T("N");
-	else if (units == ForceKilonewton)
+	else if (units == UnitsOfForce::Kilonewton)
 		return _T("kN");
 
 	return wxEmptyString;
@@ -346,19 +346,19 @@ wxString UnitConverter::GetUnits(const UnitsOfForce& units) const
 //==========================================================================
 wxString UnitConverter::GetUnits(const UnitsOfPressure& units) const
 {
-	if (units == PressurePoundPerSquareInch)
+	if (units == UnitsOfPressure::PoundPerSquareInch)
 		return _T("psi");
-	else if (units == PressurePoundPerSquareFoot)
+	else if (units == UnitsOfPressure::PoundPerSquareFoot)
 		return _T("psf");
-	else if (units == PressureAtmosphere)
+	else if (units == UnitsOfPressure::Atmosphere)
 		return _T("atm");
-	else if (units == PressurePascal)
+	else if (units == UnitsOfPressure::Pascal)
 		return _T("Pa");
-	else if (units == PressureKilopascal)
+	else if (units == UnitsOfPressure::Kilopascal)
 		return _T("kPa");
-	else if (units == PressureMillimetersMercury)
+	else if (units == UnitsOfPressure::MillimetersMercury)
 		return _T("mm Hg");
-	else if (units == PressureInchesMercury)
+	else if (units == UnitsOfPressure::InchesMercury)
 		return _T("in Hg");
 
 	return wxEmptyString;
@@ -383,13 +383,13 @@ wxString UnitConverter::GetUnits(const UnitsOfPressure& units) const
 //==========================================================================
 wxString UnitConverter::GetUnits(const UnitsOfMoment& units) const
 {
-	if (units == MomentInchPound)
+	if (units == UnitsOfMoment::InchPound)
 		return _T("in-lbf");
-	else if (units == MomentFootPound)
+	else if (units == UnitsOfMoment::FootPound)
 		return _T("ft-lbf");
-	else if (units == MomentNewtonMeter)
+	else if (units == UnitsOfMoment::NewtonMeter)
 		return _T("Nm");
-	else if (units == MomentMillinewtonMeter)
+	else if (units == UnitsOfMoment::MillinewtonMeter)
 		return _T("Nmm");
 
 	return wxEmptyString;
@@ -414,11 +414,11 @@ wxString UnitConverter::GetUnits(const UnitsOfMoment& units) const
 //==========================================================================
 wxString UnitConverter::GetUnits(const UnitsOfMass& units) const
 {
-	if (units == MassSlug)
+	if (units == UnitsOfMass::Slug)
 		return _T("slug");
-	else if (units == MassPoundMass)
+	else if (units == UnitsOfMass::PoundMass)
 		return _T("lbm");
-	else if (units == MassKilogram)
+	else if (units == UnitsOfMass::Kilogram)
 		return _T("kg");
 
 	return wxEmptyString;
@@ -443,19 +443,19 @@ wxString UnitConverter::GetUnits(const UnitsOfMass& units) const
 //==========================================================================
 wxString UnitConverter::GetUnits(const UnitsOfVelocity& units) const
 {
-	if (units == VelocityInchesPerSecond)
+	if (units == UnitsOfVelocity::InchesPerSecond)
 		return _T("in/sec");
-	else if (units == VelocityFeetPerSecond)
+	else if (units == UnitsOfVelocity::FeetPerSecond)
 		return _T("ft/sec");
-	else if (units == VelocityMilesPerHour)
+	else if (units == UnitsOfVelocity::MilesPerHour)
 		return _T("mph");
-	else if (units == VelocityMillimetersPerSecond)
+	else if (units == UnitsOfVelocity::MillimetersPerSecond)
 		return _T("mm/sec");
-	else if (units == VelocityCentimetersPerSecond)
+	else if (units == UnitsOfVelocity::CentimetersPerSecond)
 		return _T("cm/sec");
-	else if (units == VelocityMetersPerSecond)
+	else if (units == UnitsOfVelocity::MetersPerSecond)
 		return _T("m/sec");
-	else if (units == VelocityKilometersPerHour)
+	else if (units == UnitsOfVelocity::KilometersPerHour)
 		return _T("km/hr");
 
 	return wxEmptyString;
@@ -480,17 +480,17 @@ wxString UnitConverter::GetUnits(const UnitsOfVelocity& units) const
 //==========================================================================
 wxString UnitConverter::GetUnits(const UnitsOfAcceleration& units) const
 {
-	if (units == AccelerationInchesPerSecondSquared)
+	if (units == UnitsOfAcceleration::InchesPerSecondSquared)
 		return _T("in/sec\x00b2");
-	else if (units == AccelerationFeetPerSecondSquared)
+	else if (units == UnitsOfAcceleration::FeetPerSecondSquared)
 		return _T("ft/sec\x00b2");
-	else if (units == AccelerationMillimetersPerSecondSquared)
+	else if (units == UnitsOfAcceleration::MillimetersPerSecondSquared)
 		return _T("mm/sec\x00b2");
-	else if (units == AccelerationCentimetersPerSecondSquared)
+	else if (units == UnitsOfAcceleration::CentimetersPerSecondSquared)
 		return _T("cm/sec\x00b2");
-	else if (units == AccelerationMetersPerSecondSquared)
+	else if (units == UnitsOfAcceleration::MetersPerSecondSquared)
 		return _T("m/sec\x00b2");
-	else if (units == AccelerationFreefall)
+	else if (units == UnitsOfAcceleration::Freefall)
 		return _T("G");
 
 	return wxEmptyString;
@@ -515,17 +515,17 @@ wxString UnitConverter::GetUnits(const UnitsOfAcceleration& units) const
 //==========================================================================
 wxString UnitConverter::GetUnits(const UnitsOfInertia& units) const
 {
-	if (units == InertiaSlugInchesSquared)
+	if (units == UnitsOfInertia::SlugInchesSquared)
 		return _T("slug-in\x00b2");
-	else if (units == InertiaSlugFeetSquared)
+	else if (units == UnitsOfInertia::SlugFeetSquared)
 		return _T("slug-ft\x00b2");
-	else if (units == InertiaPoundMassInchesSquared)
+	else if (units == UnitsOfInertia::PoundMassInchesSquared)
 		return _T("lbm-in\x00b2");
-	else if (units == InertiaPoundMassFeetSquared)
+	else if (units == UnitsOfInertia::PoundMassFeetSquared)
 		return _T("lbm-ft\x00b2");
-	else if (units == InertiaKilogramMetersSquared)
+	else if (units == UnitsOfInertia::KilogramMetersSquared)
 		return _T("kg-m\x00b2");
-	else if (units == InertiaKilogramMillimetersSquared)
+	else if (units == UnitsOfInertia::KilogramMillimetersSquared)
 		return _T("kg-mm\x00b2");
 
 	return wxEmptyString;
@@ -550,17 +550,17 @@ wxString UnitConverter::GetUnits(const UnitsOfInertia& units) const
 //==========================================================================
 wxString UnitConverter::GetUnits(const UnitsOfDensity& units) const
 {
-	if (units == DensitySlugPerInchCubed)
+	if (units == UnitsOfDensity::SlugPerInchCubed)
 		return _T("slug/in\x00b3");
-	else if (units == DensityPoundMassPerInchCubed)
+	else if (units == UnitsOfDensity::PoundMassPerInchCubed)
 		return _T("lbm/in\x00b3");
-	else if (units == DensitySlugPerFootCubed)
+	else if (units == UnitsOfDensity::SlugPerFootCubed)
 		return _T("slug/ft\x00b3");
-	else if (units == DensityPoundMassPerFootCubed)
+	else if (units == UnitsOfDensity::PoundMassPerFootCubed)
 		return _T("lbm/ft\x00b3");
-	else if (units == DensityKilogramPerMeterCubed)
+	else if (units == UnitsOfDensity::KilogramPerMeterCubed)
 		return _T("kg/m\x00b3");
-	else if (units == DensityGramPerCentimeterCubed)
+	else if (units == UnitsOfDensity::GramPerCentimeterCubed)
 		return _T("g/cc");
 
 	return wxEmptyString;
@@ -585,15 +585,15 @@ wxString UnitConverter::GetUnits(const UnitsOfDensity& units) const
 //==========================================================================
 wxString UnitConverter::GetUnits(const UnitsOfPower& units) const
 {
-	if (units == PowerInchPoundPerSecond)
+	if (units == UnitsOfPower::InchPoundPerSecond)
 		return _T("in-lbf/sec");
-	else if (units == PowerFootPoundPerSecond)
+	else if (units == UnitsOfPower::FootPoundPerSecond)
 		return _T("ft-lbf/sec");
-	else if (units == PowerHorsepower)
+	else if (units == UnitsOfPower::Horsepower)
 		return _T("HP");
-	else if (units == PowerWatt)
+	else if (units == UnitsOfPower::Watt)
 		return _T("W");
-	else if (units == PowerKilowatt)
+	else if (units == UnitsOfPower::Kilowatt)
 		return _T("kW");
 
 	return wxEmptyString;
@@ -618,17 +618,17 @@ wxString UnitConverter::GetUnits(const UnitsOfPower& units) const
 //==========================================================================
 wxString UnitConverter::GetUnits(const UnitsOfEnergy& units) const
 {
-	if (units == EnergyPoundInch)
+	if (units == UnitsOfEnergy::PoundInch)
 		return _T("lbf-in");
-	else if (units == EnergyPoundFoot)
+	else if (units == UnitsOfEnergy::PoundFoot)
 		return _T("lbf-ft");
-	else if (units == EnergyBTU)
+	else if (units == UnitsOfEnergy::BTU)
 		return _T("BTU");
-	else if (units == EnergyJoule)
+	else if (units == UnitsOfEnergy::Joule)
 		return _T("J");
-	else if (units == EnergyMillijoule)
+	else if (units == UnitsOfEnergy::Millijoule)
 		return _T("mJ");
-	else if (units == EnergyKilojoule)
+	else if (units == UnitsOfEnergy::Kilojoule)
 		return _T("kJ");
 
 	return wxEmptyString;
@@ -653,13 +653,13 @@ wxString UnitConverter::GetUnits(const UnitsOfEnergy& units) const
 //==========================================================================
 wxString UnitConverter::GetUnits(const UnitsOfTemperature& units) const
 {
-	if (units == TemperatureRankine)
+	if (units == UnitsOfTemperature::Rankine)
 		return _T("R");
-	else if (units == TemperatureFahrenheit)
+	else if (units == UnitsOfTemperature::Fahrenheit)
 		return _T("deg F");
-	else if (units == TemperatureCelsius)
+	else if (units == UnitsOfTemperature::Celsius)
 		return _T("deg C");
-	else if (units == TemperatureKelvin)
+	else if (units == UnitsOfTemperature::Kelvin)
 		return _T("K");
 
 	return wxEmptyString;
@@ -993,9 +993,9 @@ void UnitConverter::SetTemperatureUnits(const UnitsOfTemperature& units)
 //==========================================================================
 double UnitConverter::ConvertOutput(const double& n, const UnitsOfAngle& units) const
 {
-	if (units == AngleRadians)
+	if (units == UnitsOfAngle::Radians)
 		return n;
-	else if (units == AngleDegrees)
+	else if (units == UnitsOfAngle::Degrees)
 		return RAD_TO_DEG(n);
 
 	assert(false);
@@ -1022,19 +1022,19 @@ double UnitConverter::ConvertOutput(const double& n, const UnitsOfAngle& units) 
 //==========================================================================
 double UnitConverter::ConvertOutput(const double& n, const UnitsOfDistance& units) const
 {
-	if (units == DistanceInch)
+	if (units == UnitsOfDistance::Inch)
 		return n;
-	else if (units == DistanceFoot)
+	else if (units == UnitsOfDistance::Foot)
 		return INCH_TO_FEET(n);
-	else if (units == DistanceMile)
+	else if (units == UnitsOfDistance::Mile)
 		return INCH_TO_MILE(n);
-	else if (units == DistanceMillimeter)
+	else if (units == UnitsOfDistance::Millimeter)
 		return INCH_TO_METER(n) * 1000.0;
-	else if (units == DistanceCentimeter)
+	else if (units == UnitsOfDistance::Centimeter)
 		return INCH_TO_METER(n) *  100.0;
-	else if (units == DistanceMeter)
+	else if (units == UnitsOfDistance::Meter)
 		return INCH_TO_METER(n);
-	else if (units == DistanceKilometer)
+	else if (units == UnitsOfDistance::Kilometer)
 		return INCH_TO_METER(n) * 0.001;
 
 	assert(false);
@@ -1061,15 +1061,15 @@ double UnitConverter::ConvertOutput(const double& n, const UnitsOfDistance& unit
 //==========================================================================
 double UnitConverter::ConvertOutput(const double& n, const UnitsOfArea& units) const
 {
-	if (units == AreaInchesSquared)
+	if (units == UnitsOfArea::InchesSquared)
 		return n;
-	else if (units == AreaFeetSquared)
+	else if (units == UnitsOfArea::FeetSquared)
 		return INCH_SQ_TO_FEET_SQ(n);
-	else if (units == AreaMillimetersSquared)
+	else if (units == UnitsOfArea::MillimetersSquared)
 		return INCH_SQ_TO_METER_SQ(n) * 1000000.0;
-	else if (units == AreaCentimetersSquared)
+	else if (units == UnitsOfArea::CentimetersSquared)
 		return INCH_SQ_TO_METER_SQ(n) * 10000.0;
-	else if (units == AreaMetersSquared)
+	else if (units == UnitsOfArea::MetersSquared)
 		return INCH_SQ_TO_METER_SQ(n);
 
 	assert(false);
@@ -1096,13 +1096,13 @@ double UnitConverter::ConvertOutput(const double& n, const UnitsOfArea& units) c
 //==========================================================================
 double UnitConverter::ConvertOutput(const double& n, const UnitsOfForce& units) const
 {
-	if (units == ForcePound)
+	if (units == UnitsOfForce::Pound)
 		return n;
-	else if (units == ForceKip)
+	else if (units == UnitsOfForce::Kip)
 		return n * 0.001;
-	else if (units == ForceNewton)
+	else if (units == UnitsOfForce::Newton)
 		return LBF_TO_NEWTON(n);
-	else if (units == ForceKilonewton)
+	else if (units == UnitsOfForce::Kilonewton)
 		return LBF_TO_NEWTON(n) * 0.001;
 
 	assert(false);
@@ -1129,19 +1129,19 @@ double UnitConverter::ConvertOutput(const double& n, const UnitsOfForce& units) 
 //==========================================================================
 double UnitConverter::ConvertOutput(const double& n, const UnitsOfPressure& units) const
 {
-	if (units == PressurePoundPerSquareInch)
+	if (units == UnitsOfPressure::PoundPerSquareInch)
 		return n;
-	else if (units == PressurePoundPerSquareFoot)
+	else if (units == UnitsOfPressure::PoundPerSquareFoot)
 		return LBF_IN_SQ_TO_LBF_FT_SQ(n);
-	else if (units == PressureAtmosphere)
+	else if (units == UnitsOfPressure::Atmosphere)
 		return LBF_IN_SQ_TO_ATMOSPHERE(n);
-	else if (units == PressurePascal)
+	else if (units == UnitsOfPressure::Pascal)
 		return LBF_IN_SQ_TO_PASCAL(n);
-	else if (units == PressureKilopascal)
+	else if (units == UnitsOfPressure::Kilopascal)
 		return LBF_IN_SQ_TO_PASCAL(n) / 1000.0;
-	else if(units == PressureMillimetersMercury)
+	else if(units == UnitsOfPressure::MillimetersMercury)
 		return LBF_IN_SQ_TO_MM_HG(n);
-	else if(units == PressureInchesMercury)
+	else if(units == UnitsOfPressure::InchesMercury)
 		return LBF_IN_SQ_TO_IN_HG(n);
 
 	assert(false);
@@ -1168,13 +1168,13 @@ double UnitConverter::ConvertOutput(const double& n, const UnitsOfPressure& unit
 //==========================================================================
 double UnitConverter::ConvertOutput(const double& n, const UnitsOfMoment& units) const
 {
-	if (units == MomentInchPound)
+	if (units == UnitsOfMoment::InchPound)
 		return n;
-	else if (units == MomentFootPound)
+	else if (units == UnitsOfMoment::FootPound)
 		return INCH_TO_FEET(n);
-	else if (units == MomentNewtonMeter)
+	else if (units == UnitsOfMoment::NewtonMeter)
 		return IN_LBF_TO_NEWTON_METER(n);
-	else if (units == MomentMillinewtonMeter)
+	else if (units == UnitsOfMoment::MillinewtonMeter)
 		return IN_LBF_TO_NEWTON_METER(n) * 0.001;
 
 	assert(false);
@@ -1201,11 +1201,11 @@ double UnitConverter::ConvertOutput(const double& n, const UnitsOfMoment& units)
 //==========================================================================
 double UnitConverter::ConvertOutput(const double& n, const UnitsOfMass& units) const
 {
-	if (units == MassSlug)
+	if (units == UnitsOfMass::Slug)
 		return n;
-	else if (units == MassPoundMass)
+	else if (units == UnitsOfMass::PoundMass)
 		return SLUG_TO_LBM(n);
-	else if (units == MassKilogram)
+	else if (units == UnitsOfMass::Kilogram)
 		return SLUG_TO_KG(n);
 
 	assert(false);
@@ -1232,19 +1232,19 @@ double UnitConverter::ConvertOutput(const double& n, const UnitsOfMass& units) c
 //==========================================================================
 double UnitConverter::ConvertOutput(const double& n, const UnitsOfVelocity& units) const
 {
-	if (units == VelocityInchesPerSecond)
+	if (units == UnitsOfVelocity::InchesPerSecond)
 		return n;
-	else if (units == VelocityFeetPerSecond)
+	else if (units == UnitsOfVelocity::FeetPerSecond)
 		return INCH_TO_FEET(n);
-	else if (units == VelocityMilesPerHour)
+	else if (units == UnitsOfVelocity::MilesPerHour)
 		return INCH_TO_MILE(n) * 3600.0;
-	else if (units == VelocityMillimetersPerSecond)
+	else if (units == UnitsOfVelocity::MillimetersPerSecond)
 		return INCH_TO_METER(n) * 1000.0;
-	else if (units == VelocityCentimetersPerSecond)
+	else if (units == UnitsOfVelocity::CentimetersPerSecond)
 		return INCH_TO_METER(n) * 100.0;
-	else if (units == VelocityMetersPerSecond)
+	else if (units == UnitsOfVelocity::MetersPerSecond)
 		return INCH_TO_METER(n);
-	else if (units == VelocityKilometersPerHour)
+	else if (units == UnitsOfVelocity::KilometersPerHour)
 		return INCH_TO_METER(n) * 3.6;
 
 	assert(false);
@@ -1271,17 +1271,17 @@ double UnitConverter::ConvertOutput(const double& n, const UnitsOfVelocity& unit
 //==========================================================================
 double UnitConverter::ConvertOutput(const double& n, const UnitsOfAcceleration& units) const
 {
-	if (units == AccelerationInchesPerSecondSquared)
+	if (units == UnitsOfAcceleration::InchesPerSecondSquared)
 		return n;
-	else if (units == AccelerationFeetPerSecondSquared)
+	else if (units == UnitsOfAcceleration::FeetPerSecondSquared)
 		return INCH_TO_FEET(n);
-	else if (units == AccelerationMillimetersPerSecondSquared)
+	else if (units == UnitsOfAcceleration::MillimetersPerSecondSquared)
 		return INCH_TO_METER(n) * 1000.0;
-	else if (units == AccelerationCentimetersPerSecondSquared)
+	else if (units == UnitsOfAcceleration::CentimetersPerSecondSquared)
 		return INCH_TO_METER(n) * 100.0;
-	else if (units == AccelerationMetersPerSecondSquared)
+	else if (units == UnitsOfAcceleration::MetersPerSecondSquared)
 		return INCH_TO_METER(n);
-	else if (units == AccelerationFreefall)
+	else if (units == UnitsOfAcceleration::Freefall)
 		return n / G;
 
 	assert(false);
@@ -1308,17 +1308,17 @@ double UnitConverter::ConvertOutput(const double& n, const UnitsOfAcceleration& 
 //==========================================================================
 double UnitConverter::ConvertOutput(const double& n, const UnitsOfInertia& units) const
 {
-	if (units == InertiaSlugInchesSquared)
+	if (units == UnitsOfInertia::SlugInchesSquared)
 		return n;
-	else if (units == InertiaSlugFeetSquared)
+	else if (units == UnitsOfInertia::SlugFeetSquared)
 		return INCH_TO_FEET(n);
-	else if (units == InertiaPoundMassInchesSquared)
+	else if (units == UnitsOfInertia::PoundMassInchesSquared)
 		return SLUG_TO_LBM(n);
-	else if (units == InertiaPoundMassFeetSquared)
+	else if (units == UnitsOfInertia::PoundMassFeetSquared)
 		return SLUG_IN_SQ_TO_LBM_FEET_SQ(n);
-	else if (units == InertiaKilogramMetersSquared)
+	else if (units == UnitsOfInertia::KilogramMetersSquared)
 		return SLUG_IN_SQ_TO_KG_METER_SQ(n);
-	else if (units == InertiaKilogramMillimetersSquared)
+	else if (units == UnitsOfInertia::KilogramMillimetersSquared)
 		return SLUG_IN_SQ_TO_KG_METER_SQ(n) * 1000.0;
 
 	assert(false);
@@ -1345,17 +1345,17 @@ double UnitConverter::ConvertOutput(const double& n, const UnitsOfInertia& units
 //==========================================================================
 double UnitConverter::ConvertOutput(const double& n, const UnitsOfDensity& units) const
 {
-	if (units == DensitySlugPerInchCubed)
+	if (units == UnitsOfDensity::SlugPerInchCubed)
 		return n;
-	else if (units == DensityPoundMassPerInchCubed)
+	else if (units == UnitsOfDensity::PoundMassPerInchCubed)
 		return SLUG_IN3_TO_LBM_FT3(n) * 144.0;
-	else if (units == DensitySlugPerFootCubed)
+	else if (units == UnitsOfDensity::SlugPerFootCubed)
 		return SLUG_IN3_TO_SLUG_FT3(n);
-	else if (units == DensityPoundMassPerFootCubed)
+	else if (units == UnitsOfDensity::PoundMassPerFootCubed)
 		return SLUG_IN3_TO_LBM_FT3(n);
-	else if (units == DensityKilogramPerMeterCubed)
+	else if (units == UnitsOfDensity::KilogramPerMeterCubed)
 		return SLUG_IN3_TO_KG_M3(n);
-	else if (units == DensityGramPerCentimeterCubed)
+	else if (units == UnitsOfDensity::GramPerCentimeterCubed)
 		return SLUG_IN3_TO_KG_M3(n) * 0.001;
 
 	assert(false);
@@ -1382,15 +1382,15 @@ double UnitConverter::ConvertOutput(const double& n, const UnitsOfDensity& units
 //==========================================================================
 double UnitConverter::ConvertOutput(const double& n, const UnitsOfPower& units) const
 {
-	if (units == PowerInchPoundPerSecond)
+	if (units == UnitsOfPower::InchPoundPerSecond)
 		return n;
-	else if (units == PowerFootPoundPerSecond)
+	else if (units == UnitsOfPower::FootPoundPerSecond)
 		return INCH_TO_FEET(n);
-	else if (units == PowerHorsepower)
+	else if (units == UnitsOfPower::Horsepower)
 		return IN_LBF_PER_SEC_TO_HP(n);
-	else if (units == PowerWatt)
+	else if (units == UnitsOfPower::Watt)
 		return IN_LBF_PER_SEC_TO_WATTS(n);
-	else if (units == PowerKilowatt)
+	else if (units == UnitsOfPower::Kilowatt)
 		return IN_LBF_PER_SEC_TO_WATTS(n) * 0.001;
 
 	assert(false);
@@ -1417,17 +1417,17 @@ double UnitConverter::ConvertOutput(const double& n, const UnitsOfPower& units) 
 //==========================================================================
 double UnitConverter::ConvertOutput(const double& n, const UnitsOfEnergy& units) const
 {
-	if (units == EnergyPoundInch)
+	if (units == UnitsOfEnergy::PoundInch)
 		return n;
-	else if (units == EnergyPoundFoot)
+	else if (units == UnitsOfEnergy::PoundFoot)
 		return INCH_TO_FEET(n);
-	else if (units == EnergyBTU)
+	else if (units == UnitsOfEnergy::BTU)
 		return LBF_IN_TO_BTU(n);
-	else if (units == EnergyJoule)
+	else if (units == UnitsOfEnergy::Joule)
 		return IN_LBF_TO_NEWTON_METER(n);
-	else if (units == EnergyMillijoule)
+	else if (units == UnitsOfEnergy::Millijoule)
 		return IN_LBF_TO_NEWTON_METER(n) * 1000.0;
-	else if (units == EnergyKilojoule)
+	else if (units == UnitsOfEnergy::Kilojoule)
 		return IN_LBF_TO_NEWTON_METER(n) * 0.001;
 
 	assert(false);
@@ -1454,13 +1454,13 @@ double UnitConverter::ConvertOutput(const double& n, const UnitsOfEnergy& units)
 //==========================================================================
 double UnitConverter::ConvertOutput(const double& n, const UnitsOfTemperature& units) const
 {
-	if (units == TemperatureRankine)
+	if (units == UnitsOfTemperature::Rankine)
 		return n;
-	else if (units == TemperatureFahrenheit)
+	else if (units == UnitsOfTemperature::Fahrenheit)
 		return RANKINE_TO_FAHRENHEIT(n);
-	else if (units == TemperatureCelsius)
+	else if (units == UnitsOfTemperature::Celsius)
 		return RANKINE_TO_CELSIUS(n);
-	else if (units == TemperatureKelvin)
+	else if (units == UnitsOfTemperature::Kelvin)
 		return RANKINE_TO_KELVIN(n);
 
 	assert(false);
@@ -2106,13 +2106,13 @@ double UnitConverter::ConvertInput(const double& n, const UnitsOfEnergy& units) 
 //==========================================================================
 double UnitConverter::ConvertInput(const double& n, const UnitsOfTemperature& units) const
 {
-	if (units == TemperatureRankine)
+	if (units == UnitsOfTemperature::Rankine)
 		return n;
-	else if (units == TemperatureFahrenheit)
+	else if (units == UnitsOfTemperature::Fahrenheit)
 		return FAHRENHEIT_TO_RANKINE(n);
-	else if (units == TemperatureCelsius)
+	else if (units == UnitsOfTemperature::Celsius)
 		return CELSIUS_TO_RANKINE(n);
-	else if (units == TemperatureKelvin)
+	else if (units == UnitsOfTemperature::Kelvin)
 		return KELVIN_TO_RANKINE(n);
 
 	assert(false);
@@ -2429,9 +2429,9 @@ double UnitConverter::ConvertTemperatureInput(const double& n) const
 
 Eigen::Vector3d UnitConverter::ConvertVectorOutput(const Eigen::Vector3d& v, const UnitType &type) const
 {
-	return Eigen::Vector3d(ConvertOutput(v.x, type),
-		ConvertOutput(v.y, type),
-		ConvertOutput(v.z, type));
+	return Eigen::Vector3d(ConvertOutput(v.x(), type),
+		ConvertOutput(v.y(), type),
+		ConvertOutput(v.z(), type));
 }
 
 //==========================================================================
@@ -2453,7 +2453,7 @@ Eigen::Vector3d UnitConverter::ConvertVectorOutput(const Eigen::Vector3d& v, con
 //==========================================================================
 Eigen::Vector3d UnitConverter::ConvertAngleOutput(const Eigen::Vector3d& v) const
 {
-	return ConvertVectorOutput(v, UnitTypeAngle);
+	return ConvertVectorOutput(v, UnitType::Angle);
 }
 
 //==========================================================================
@@ -2475,7 +2475,7 @@ Eigen::Vector3d UnitConverter::ConvertAngleOutput(const Eigen::Vector3d& v) cons
 //==========================================================================
 Eigen::Vector3d UnitConverter::ConvertDistanceOutput(const Eigen::Vector3d& v) const
 {
-	return ConvertVectorOutput(v, UnitTypeDistance);
+	return ConvertVectorOutput(v, UnitType::Distance);
 }
 
 //==========================================================================
@@ -2497,7 +2497,7 @@ Eigen::Vector3d UnitConverter::ConvertDistanceOutput(const Eigen::Vector3d& v) c
 //==========================================================================
 Eigen::Vector3d UnitConverter::ConvertAreaOutput(const Eigen::Vector3d& v) const
 {
-	return ConvertVectorOutput(v, UnitTypeArea);
+	return ConvertVectorOutput(v, UnitType::Area);
 }
 
 //==========================================================================
@@ -2519,7 +2519,7 @@ Eigen::Vector3d UnitConverter::ConvertAreaOutput(const Eigen::Vector3d& v) const
 //==========================================================================
 Eigen::Vector3d UnitConverter::ConvertForceOutput(const Eigen::Vector3d& v) const
 {
-	return ConvertVectorOutput(v, UnitTypeForce);
+	return ConvertVectorOutput(v, UnitType::Force);
 }
 
 //==========================================================================
@@ -2541,7 +2541,7 @@ Eigen::Vector3d UnitConverter::ConvertForceOutput(const Eigen::Vector3d& v) cons
 //==========================================================================
 Eigen::Vector3d UnitConverter::ConvertPressureOutput(const Eigen::Vector3d& v) const
 {
-	return ConvertVectorOutput(v, UnitTypePressure);
+	return ConvertVectorOutput(v, UnitType::Pressure);
 }
 
 //==========================================================================
@@ -2563,7 +2563,7 @@ Eigen::Vector3d UnitConverter::ConvertPressureOutput(const Eigen::Vector3d& v) c
 //==========================================================================
 Eigen::Vector3d UnitConverter::ConvertMomentOutput(const Eigen::Vector3d& v) const
 {
-	return ConvertVectorOutput(v, UnitTypeMoment);
+	return ConvertVectorOutput(v, UnitType::Moment);
 }
 
 //==========================================================================
@@ -2585,7 +2585,7 @@ Eigen::Vector3d UnitConverter::ConvertMomentOutput(const Eigen::Vector3d& v) con
 //==========================================================================
 Eigen::Vector3d UnitConverter::ConvertMassOutput(const Eigen::Vector3d& v) const
 {
-	return ConvertVectorOutput(v, UnitTypeMass);
+	return ConvertVectorOutput(v, UnitType::Mass);
 }
 
 //==========================================================================
@@ -2607,7 +2607,7 @@ Eigen::Vector3d UnitConverter::ConvertMassOutput(const Eigen::Vector3d& v) const
 //==========================================================================
 Eigen::Vector3d UnitConverter::ConvertVelocityOutput(const Eigen::Vector3d& v) const
 {
-	return ConvertVectorOutput(v, UnitTypeVelocity);
+	return ConvertVectorOutput(v, UnitType::Velocity);
 }
 
 //==========================================================================
@@ -2629,7 +2629,7 @@ Eigen::Vector3d UnitConverter::ConvertVelocityOutput(const Eigen::Vector3d& v) c
 //==========================================================================
 Eigen::Vector3d UnitConverter::ConvertAccelerationOutput(const Eigen::Vector3d& v) const
 {
-	return ConvertVectorOutput(v, UnitTypeAcceleration);
+	return ConvertVectorOutput(v, UnitType::Acceleration);
 }
 
 //==========================================================================
@@ -2651,7 +2651,7 @@ Eigen::Vector3d UnitConverter::ConvertAccelerationOutput(const Eigen::Vector3d& 
 //==========================================================================
 Eigen::Vector3d UnitConverter::ConvertInertiaOutput(const Eigen::Vector3d& v) const
 {
-	return ConvertVectorOutput(v, UnitTypeInertia);
+	return ConvertVectorOutput(v, UnitType::Inertia);
 }
 
 //==========================================================================
@@ -2673,7 +2673,7 @@ Eigen::Vector3d UnitConverter::ConvertInertiaOutput(const Eigen::Vector3d& v) co
 //==========================================================================
 Eigen::Vector3d UnitConverter::ConvertDensityOutput(const Eigen::Vector3d& v) const
 {
-	return ConvertVectorOutput(v, UnitTypeDensity);
+	return ConvertVectorOutput(v, UnitType::Density);
 }
 
 //==========================================================================
@@ -2695,7 +2695,7 @@ Eigen::Vector3d UnitConverter::ConvertDensityOutput(const Eigen::Vector3d& v) co
 //==========================================================================
 Eigen::Vector3d UnitConverter::ConvertPowerOutput(const Eigen::Vector3d& v) const
 {
-	return ConvertVectorOutput(v, UnitTypePower);
+	return ConvertVectorOutput(v, UnitType::Power);
 }
 
 //==========================================================================
@@ -2717,7 +2717,7 @@ Eigen::Vector3d UnitConverter::ConvertPowerOutput(const Eigen::Vector3d& v) cons
 //==========================================================================
 Eigen::Vector3d UnitConverter::ConvertEnergyOutput(const Eigen::Vector3d& v) const
 {
-	return ConvertVectorOutput(v, UnitTypeEnergy);
+	return ConvertVectorOutput(v, UnitType::Energy);
 }
 
 //==========================================================================
@@ -2739,7 +2739,7 @@ Eigen::Vector3d UnitConverter::ConvertEnergyOutput(const Eigen::Vector3d& v) con
 //==========================================================================
 Eigen::Vector3d UnitConverter::ConvertTemperatureOutput(const Eigen::Vector3d& v) const
 {
-	return ConvertVectorOutput(v, UnitTypeTemperature);
+	return ConvertVectorOutput(v, UnitType::Temperature);
 }
 
 //==========================================================================
@@ -2766,52 +2766,52 @@ double UnitConverter::ConvertOutput(const double& n, const UnitType& type) const
 
 	switch (type)
 	{
-	case UnitTypeUnitless:
+	case UnitType::Unitless:
 		returnValue = n;
 		break;
-	case UnitTypeAngle:
+	case UnitType::Angle:
 		returnValue = ConvertAngleOutput(n);
 		break;
-	case UnitTypeDistance:
+	case UnitType::Distance:
 		returnValue = ConvertDistanceOutput(n);
 		break;
-	case UnitTypeArea:
+	case UnitType::Area:
 		returnValue = ConvertAreaOutput(n);
 		break;
-	case UnitTypeForce:
+	case UnitType::Force:
 		returnValue = ConvertForceOutput(n);
 		break;
-	case UnitTypePressure:
+	case UnitType::Pressure:
 		returnValue = ConvertPressureOutput(n);
 		break;
-	case UnitTypeMoment:
+	case UnitType::Moment:
 		returnValue = ConvertMomentOutput(n);
 		break;
-	case UnitTypeMass:
+	case UnitType::Mass:
 		returnValue = ConvertMassOutput(n);
 		break;
-	case UnitTypeVelocity:
+	case UnitType::Velocity:
 		returnValue = ConvertVelocityOutput(n);
 		break;
-	case UnitTypeAcceleration:
+	case UnitType::Acceleration:
 		returnValue = ConvertAccelerationOutput(n);
 		break;
-	case UnitTypeInertia:
+	case UnitType::Inertia:
 		returnValue = ConvertInertiaOutput(n);
 		break;
-	case UnitTypeDensity:
+	case UnitType::Density:
 		returnValue = ConvertDensityOutput(n);
 		break;
-	case UnitTypePower:
+	case UnitType::Power:
 		returnValue = ConvertPowerOutput(n);
 		break;
-	case UnitTypeEnergy:
+	case UnitType::Energy:
 		returnValue = ConvertEnergyOutput(n);
 		break;
-	case UnitTypeTemperature:
+	case UnitType::Temperature:
 		returnValue = ConvertTemperatureOutput(n);
 		break;
-	case UnitTypeAnglePerDistance:
+	case UnitType::AnglePerDistance:
 		returnValue = ConvertAngleOutput(1.0 / ConvertDistanceOutput(1.0 / n));
 		break;
 	default:
@@ -2847,52 +2847,52 @@ double UnitConverter::ConvertInput(const double& n, const UnitType& type) const
 
 	switch (type)
 	{
-	case UnitTypeUnitless:
+	case UnitType::Unitless:
 		returnValue = n;
 		break;
-	case UnitTypeAngle:
+	case UnitType::Angle:
 		returnValue = ConvertAngleInput(n);
 		break;
-	case UnitTypeDistance:
+	case UnitType::Distance:
 		returnValue = ConvertDistanceInput(n);
 		break;
-	case UnitTypeArea:
+	case UnitType::Area:
 		returnValue = ConvertAreaInput(n);
 		break;
-	case UnitTypeForce:
+	case UnitType::Force:
 		returnValue = ConvertForceInput(n);
 		break;
-	case UnitTypePressure:
+	case UnitType::Pressure:
 		returnValue = ConvertPressureInput(n);
 		break;
-	case UnitTypeMoment:
+	case UnitType::Moment:
 		returnValue = ConvertMomentInput(n);
 		break;
-	case UnitTypeMass:
+	case UnitType::Mass:
 		returnValue = ConvertMassInput(n);
 		break;
-	case UnitTypeVelocity:
+	case UnitType::Velocity:
 		returnValue = ConvertVelocityInput(n);
 		break;
-	case UnitTypeAcceleration:
+	case UnitType::Acceleration:
 		returnValue = ConvertAccelerationInput(n);
 		break;
-	case UnitTypeInertia:
+	case UnitType::Inertia:
 		returnValue = ConvertInertiaInput(n);
 		break;
-	case UnitTypeDensity:
+	case UnitType::Density:
 		returnValue = ConvertDensityInput(n);
 		break;
-	case UnitTypePower:
+	case UnitType::Power:
 		returnValue = ConvertPowerInput(n);
 		break;
-	case UnitTypeEnergy:
+	case UnitType::Energy:
 		returnValue = ConvertEnergyInput(n);
 		break;
-	case UnitTypeTemperature:
+	case UnitType::Temperature:
 		returnValue = ConvertTemperatureInput(n);
 		break;
-	case UnitTypeAnglePerDistance:
+	case UnitType::AnglePerDistance:
 		returnValue = ConvertAngleInput(1.0 / ConvertDistanceInput(1.0 / n));
 		break;
 	default:
@@ -2933,7 +2933,7 @@ wxString UnitConverter::FormatNumber(const double& n) const
 
 	int orderOfMagnitude = (int)log10(fabs(n));
 
-	if (VVASEMath::IsZero(n))
+	if (VVASE::Math::IsZero(n))
 		orderOfMagnitude = 0;
 	else if (fabs(n) < 1.0)
 		orderOfMagnitude--;
