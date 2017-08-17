@@ -102,7 +102,7 @@ void AArm::Update(const Eigen::Vector3d &end1, const Eigen::Vector3d &middle, co
 {
 	// Make sure all vector arguments are valid - if they are not,
 	// the object will not be made visible
-	if (VVASEMath::IsNaN(end1) || VVASEMath::IsNaN(middle) || VVASEMath::IsNaN(end2))
+	if (VVASE::Math::IsNaN(end1) || VVASE::Math::IsNaN(middle) || VVASE::Math::IsNaN(end2))
 		show = false;
 
 	// Make sure we want this tire to be visible
@@ -210,9 +210,9 @@ Eigen::Vector3d AArm::FindClosestPoint(const Eigen::Vector3d& point, const Eigen
 	Eigen::Vector3d endPoint1Center(endPoint1->GetCenter());
 	Eigen::Vector3d endPoint2Center(endPoint2->GetCenter());
 	Eigen::Vector3d midPointCenter(midPoint->GetCenter());
-	Eigen::Vector3d endPoint1Test(VVASEMath::NearestPointOnAxis(point, direction, endPoint1Center));
-	Eigen::Vector3d endPoint2Test(VVASEMath::NearestPointOnAxis(point, direction, endPoint2Center));
-	Eigen::Vector3d midPointTest(VVASEMath::NearestPointOnAxis(point, direction, midPointCenter));
+	Eigen::Vector3d endPoint1Test(VVASE::Math::NearestPointOnAxis(point, direction, endPoint1Center));
+	Eigen::Vector3d endPoint2Test(VVASE::Math::NearestPointOnAxis(point, direction, endPoint2Center));
+	Eigen::Vector3d midPointTest(VVASE::Math::NearestPointOnAxis(point, direction, midPointCenter));
 
 	if (endPoint1Center.Distance(endPoint1Test) < endPoint2Center.Distance(endPoint2Test))
 	{

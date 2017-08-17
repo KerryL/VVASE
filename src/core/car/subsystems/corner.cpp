@@ -11,9 +11,6 @@
 //        the suspension information for one corner of the car (four instances
 //        are required to describe the entire suspension).
 
-// wxWidgets headers
-#include <wx/wx.h>
-
 // Local headers
 #include "VVASE/core/car/subsystems/corner.h"
 #include "VVASE/core/utilities/debugger.h"
@@ -91,7 +88,7 @@ vvaseString Corner::GetActuationAttachmentName(const ActuationAttachment &attach
 		break;
 	}
 
-	return wxEmptyString;
+	return vvaseString();
 }
 
 //==========================================================================
@@ -127,7 +124,7 @@ vvaseString Corner::GetActuationTypeName(const ActuationType &type)
 		break;
 	}
 
-	return wxEmptyString;
+	return vvaseString();
 }
 
 //==========================================================================
@@ -251,7 +248,7 @@ vvaseString Corner::GetHardpointName(const Hardpoints &point)
 		break;
 	}
 
-	return wxEmptyString;
+	return vvaseString();
 }
 
 //==========================================================================
@@ -295,7 +292,7 @@ vvaseString Corner::GetLocationName(const Location &location)
 		break;
 	}
 
-	return wxEmptyString;
+	return vvaseString();
 }
 
 //==========================================================================

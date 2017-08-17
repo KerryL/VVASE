@@ -103,7 +103,7 @@ void Cone::GenerateGeometry()
 	double angle = acos(axisDirection * referenceDirection);// [rad]
 
 	// If the axis direction is opposite the reference direction, we need to rotate 180 degrees
-	if (VVASEMath::IsZero(axisDirection + referenceDirection))
+	if (VVASE::Math::IsZero(axisDirection + referenceDirection))
 	{
 		angle = UnitConverter::Pi;
 		axisOfRotation.Set(0.0, 1.0, 0.0);
@@ -116,7 +116,7 @@ void Cone::GenerateGeometry()
 		glTranslated(center.x, center.y, center.z);
 
 		// Rotate the current matrix, if the rotation axis is non-zero
-		if (!VVASEMath::IsZero(axisOfRotation.Length()))
+		if (!VVASE::Math::IsZero(axisOfRotation.Length()))
 			glRotated(UnitConverter::RAD_TO_DEG(angle), axisOfRotation.x, axisOfRotation.y, axisOfRotation.z);
 
 		// Create the cone along the X-axis (must match the reference direction above)
@@ -201,7 +201,7 @@ void Cone::GenerateGeometry()
 bool Cone::HasValidParameters()
 {
 	// Cones must have a non-zero distance tip-to-base, and must have a positive radius
-	if (!VVASEMath::IsZero(tip.Distance(baseCenter)) && radius > 0.0)
+	if (!VVASE::Math::IsZero(tip.Distance(baseCenter)) && radius > 0.0)
 		return true;
 
 	// Otherwise return false

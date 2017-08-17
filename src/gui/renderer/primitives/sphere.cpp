@@ -385,7 +385,7 @@ void Sphere::SetRadius(const double &radius)
 //==========================================================================
 bool Sphere::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector3d& direction) const
 {
-	assert(VVASEMath::IsZero(1.0 - direction.Length()));
+	assert(VVASE::Math::IsZero(1.0 - direction.Length()));
 
 	if (pow((point - center).Length(), 2) > pow(direction * (point - center), 2) + radius * radius)
 		return false;

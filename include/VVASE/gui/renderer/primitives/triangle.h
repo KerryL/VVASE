@@ -24,8 +24,8 @@ namespace VVASE
 class Triangle : public LibPlot2D::Primitive
 {
 public:
-	Triangle(RenderWindow &renderWindow);
-	~Triangle();
+	Triangle(LibPlot2D::RenderWindow &renderWindow);
+	~Triangle() = default;
 
 	// Mandatory overloads from Primitive - for creating geometry and testing the
 	// validity of this object's parameters

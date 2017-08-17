@@ -312,7 +312,7 @@ void GuiCar::SetUseOrtho(const bool &useOrtho)
 //==========================================================================
 bool GuiCar::PerformSaveToFile()
 {
-	std::lock_guard<std::mutex> lock(originalCar->GetMutex());
+	MutexLocker lock(originalCar->GetMutex());
 
 	// Perform the save - the object we want to save is OriginalCar - this is the
 	// one that contains the information about the vehicle as it was input by the
@@ -352,7 +352,7 @@ bool GuiCar::PerformLoadFromFile()
 	int fileVersion;
 
 	// Make sure we have exclusive access
-	std::lock_guard<std::mutex> lock(originalCar->GetMutex());
+	MutexLocker lock(originalCar->GetMutex());
 
 	// Open the car
 	bool loadSuccessful(originalCar->LoadCarFromFile(pathAndFileName, &inFile, &fileVersion));

@@ -11,8 +11,17 @@
 //        and is associated with a 2D plot on which it can draw the outputs
 //        as a function of ride, roll, heave, and steer.
 
-// Standard C++ headers
-#include <fstream>
+// Local headers
+#include "sweep.h"
+#include "VVASE/core/utilities/debugger.h"
+#include "VVASE/gui/utilities/unitConverter.h"
+#include "VVASE/core/threads/threadJob.h"
+#include "VVASE/core/threads/kinematicsData.h"
+#include "VVASE/core/car/car.h"
+#include "VVASE/gui/components/mainFrame.h"
+#include "VVASE/gui/components/mainTree.h"
+#include "VVASE/core/utilities/carMath.h"
+#include "VVASE/core/utilities/vvaseString.h"
 
 // wxWidgets headers
 #include <wx/datetime.h>
@@ -22,17 +31,6 @@
 
 // LibPlot2D headers
 #include <lp2d/renderer/plotRenderer.h>
-
-// Local headers
-#include "sweep.h"
-#include "VVASE/core/utilities/debugger.h"
-#include "VVASE/core/utilities/unitConverter.h"
-#include "VVASE/core/threads/threadJob.h"
-#include "VVASE/core/threads/kinematicsData.h"
-#include "VVASE/core/car/car.h"
-#include "gui/components/mainFrame.h"
-#include "gui/components/mainTree.h"
-#include "VVASE/core/utilities/carMath.h"
 
 namespace VVASE
 {
@@ -82,7 +80,7 @@ Iteration::Iteration(MainFrame &mainFrame, wxString pathAndFileName)
 	numberOfWorkingCars = 0;
 
 	// Create the renderer
-	plotPanel = new PlotPanel(dynamic_cast<wxWindow*>(&mainFrame));
+	plotPanel = new LibPlot2D::PlotPanel(dynamic_cast<wxWindow*>(&mainFrame));
 	notebookTab = dynamic_cast<wxWindow*>(plotPanel);
 
 	// Do this prior to initialization so saved files overwrite these defaults
@@ -214,7 +212,7 @@ void Iteration::RemoveCar(GuiCar *toRemove)
 	if (indexToRemove == associatedCars.size())
 		return;
 
-	outputLists[indexToRemove]->Clear();
+	outputLists[indexToRemove].clear();
 	outputLists.Remove(indexToRemove);
 
 	associatedCars.erase(associatedCars.begin() + indexToRemove);
@@ -347,17 +345,14 @@ void Iteration::UpdateData()
 	axisValuesRackTravel	= new double[totalPoints];
 
 	// Clear out and re-allocate our output lists
-	unsigned int i;
-	for (i = 0; i < outputLists.GetCount(); i++)
-		outputLists[i]->Clear();
-	outputLists.Clear();
+	outputLists.clear();
 
 	// Initialize the semaphore count
 	// FIXME:  Check return value to ensure no errors!
 	pendingAnalysisCount = associatedCars.size() * totalPoints;
 
 	// Make sure the working cars are initialized
-	if (pendingAnalysisCount != (unsigned int)numberOfWorkingCars)
+	if (pendingAnalysisCount != static_cast<unsigned int>(numberOfWorkingCars))
 	{
 		int i;
 		for (i = 0; i < numberOfWorkingCars; i++)
@@ -377,10 +372,10 @@ void Iteration::UpdateData()
 	for (currentCar = 0; currentCar < associatedCars.size(); currentCar++)
 	{
 		// Create a list to store the outputs for this car
-		ManagedList<KinematicOutputs> *currentList = new ManagedList<KinematicOutputs>;
+		std::vector<std::unique_ptr<KinematicOutputs>> currentList;
 
 		// Add this list to our list of lists (bit confusing?)
-		outputLists.Add(currentList);
+		outputLists.push_back(currentList);
 
 		// Run the analysis for each point through the range
 		for (currentPoint = 0; currentPoint < totalPoints; currentPoint++)
@@ -404,11 +399,11 @@ void Iteration::UpdateData()
 			kinematicInputs.roll = axisValuesRoll[currentPoint];
 			kinematicInputs.heave = axisValuesHeave[currentPoint];
 			kinematicInputs.rackTravel = axisValuesRackTravel[currentPoint];
-			kinematicInputs.firstRotation = mainFrame.GetInputs().firstRotation;
+			kinematicInputs.sequence = mainFrame.GetInputs().sequence;
 			kinematicInputs.centerOfRotation = mainFrame.GetInputs().centerOfRotation;
 
 			// Run The analysis
-			KinematicOutputs *newOutputs = new KinematicOutputs;
+			std::unique_ptr<KinematicOutputs> newOutputs(std::make_unique<KinematicOutputs>());
 			KinematicsData *data = new KinematicsData(&associatedCars[currentCar]->GetOriginalCar(),
 				workingCarArray[currentCar * numberOfPoints + currentPoint], kinematicInputs, newOutputs);
 			ThreadJob job(ThreadJob::CommandThreadKinematicsIteration, data,
@@ -416,7 +411,7 @@ void Iteration::UpdateData()
 			mainFrame.AddJob(job);
 
 			// Add the outputs to the iteration's list
-			currentList->Add(newOutputs);
+			currentList.push_back(newOutputs);
 		}
 	}
 }
@@ -449,7 +444,7 @@ void Iteration::UpdateDisplay()
 
 		// Create the datasets for the plot
 		// Need to create one dataset per curve per car
-		Dataset2D *dataSet;
+		LibPlot2D::Dataset2D *dataSet;
 		unsigned int i, j, k, n;
 		double *x, *y;
 		for (i = 0; i < NumberOfPlots; i++)
@@ -459,15 +454,15 @@ void Iteration::UpdateDisplay()
 				for (j = 0; j < (unsigned int)associatedCars.size(); j++)
 				{
 					// Create the dataset
-					dataSet = new Dataset2D(CountValidValues(j, (PlotID)i));
-					x = dataSet->GetXPointer();
-					y = dataSet->GetYPointer();
+					dataSet = new LibPlot2D::Dataset2D(CountValidValues(j, (PlotID)i));
+					x = dataSet->GetX();
+					y = dataSet->GetY();
 
 					// Populate all values
 					n= 0;
 					for (k = 0; k < (unsigned int)numberOfPoints; k++)
 					{
-						if (VVASEMath::IsNaN(GetDataValue(j, k, (PlotID)i)))
+						if (VVASE::Math::IsNaN(GetDataValue(j, k, (PlotID)i)))
 							continue;
 
 						x[n] = GetDataValue(j, k,
@@ -523,7 +518,7 @@ unsigned int Iteration::CountValidValues(const unsigned int &carIndex, const Plo
 	unsigned int i, count(0);
 	for (i = 0; i < numberOfPoints; i++)
 	{
-		if (!VVASEMath::IsNaN(GetDataValue(carIndex, i, index)))
+		if (!VVASE::Math::IsNaN(GetDataValue(carIndex, i, index)))
 			count++;
 	}
 
@@ -549,11 +544,7 @@ unsigned int Iteration::CountValidValues(const unsigned int &carIndex, const Plo
 //==========================================================================
 void Iteration::ClearAllLists()
 {
-	unsigned int currentList;
-	for (currentList = 0; currentList < outputLists.GetCount(); currentList++)
-		outputLists[currentList]->Clear();
-
-	outputLists.Clear();
+	outputLists.clear();
 	associatedCars.clear();
 }
 
@@ -575,7 +566,7 @@ void Iteration::ClearAllLists()
 //==========================================================================
 bool Iteration::PerformSaveToFile()
 {
-	std::ofstream outFile(pathAndFileName.mb_str(), ios::out | ios::binary);
+	std::ofstream outFile(pathAndFileName.mb_str(), std::ios::binary);
 	if (!outFile.is_open() || !outFile.good())
 		return false;
 
@@ -622,7 +613,7 @@ bool Iteration::PerformSaveToFile()
 //==========================================================================
 bool Iteration::PerformLoadFromFile()
 {
-	std::ifstream inFile(pathAndFileName.mb_str(), ios::in | ios::binary);
+	std::ifstream inFile(pathAndFileName.mb_str(), std::ios::binary);
 	if (!inFile.is_open() || !inFile.good())
 		return false;
 
@@ -919,10 +910,10 @@ void Iteration::SetRange(const Iteration::Range &range)
 
 	// Make sure the chosen X-axis type is not for a parameter with zero range
 	// This is based on the priority Roll->Steer->Heave->Pitch.
-	if ((xAxisType == Iteration::AxisTypeRoll && VVASEMath::IsZero(range.startRoll - range.endRoll)) ||
-		(xAxisType == Iteration::AxisTypeRackTravel && VVASEMath::IsZero(range.startRackTravel - range.endRackTravel)) ||
-		(xAxisType == Iteration::AxisTypeHeave && VVASEMath::IsZero(range.startHeave - range.endHeave)) ||
-		(xAxisType == Iteration::AxisTypePitch && VVASEMath::IsZero(range.startPitch - range.endPitch)) ||
+	if ((xAxisType == Iteration::AxisTypeRoll && VVASE::Math::IsZero(range.startRoll - range.endRoll)) ||
+		(xAxisType == Iteration::AxisTypeRackTravel && VVASE::Math::IsZero(range.startRackTravel - range.endRackTravel)) ||
+		(xAxisType == Iteration::AxisTypeHeave && VVASE::Math::IsZero(range.startHeave - range.endHeave)) ||
+		(xAxisType == Iteration::AxisTypePitch && VVASE::Math::IsZero(range.startPitch - range.endPitch)) ||
 		xAxisType == Iteration::AxisTypeUnused)
 	{
 		if (fabs(range.startRoll - range.endRoll) > 0.0)
@@ -1220,11 +1211,7 @@ void Iteration::ExportDataToFile(wxString pathAndFileName) const
 	}
 
 	// Perform the save - open the file
-#ifdef UNICODE
-	wofstream exportFile(pathAndFileName.mb_str(), ios::out);
-#else
-	ofstream exportFile(pathAndFileName.mb_str(), ios::out);
-#endif
+	vvaseOFStream exportFile(pathAndFileName.mb_str(), std::ios::out);
 
 	// Warn the user if the file could not be opened failed
 	if (!exportFile.is_open() || !exportFile.good())
@@ -1259,7 +1246,7 @@ void Iteration::ExportDataToFile(wxString pathAndFileName) const
 			}
 		}
 
-		exportFile << endl;
+		exportFile << std::endl;
 	}
 
 	exportFile.close();
@@ -1330,9 +1317,9 @@ wxString Iteration::GetPlotUnits(PlotID id) const
 		units = UnitConverter::GetInstance().GetUnitType(
 			KinematicOutputs::GetOutputUnitType((KinematicOutputs::OutputsComplete)id));
 	else if (id == Pitch || id == Roll)
-		units = UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeAngle);
+		units = UnitConverter::GetInstance().GetUnitType(UnitType::Angle);
 	else if (id == Heave || id == RackTravel)
-		units = UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance);
+		units = UnitConverter::GetInstance().GetUnitType(UnitType::Distance);
 	else
 		units = _T("Unrecognized units");
 

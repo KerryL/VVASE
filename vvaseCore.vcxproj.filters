@@ -165,6 +165,12 @@
     <ClInclude Include="src\core\optimization\geneticAlgorithm.h">
       <Filter>Source Files\optimization</Filter>
     </ClInclude>
+    <ClInclude Include="include\VVASE\core\threads\threadDefs.h">
+      <Filter>Header Files\threads</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\core\utilities\stopWatch.h">
+      <Filter>Header Files\utilities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core\analysis\kinematicOutputs.cpp">
@@ -265,6 +271,9 @@
     </ClCompile>
     <ClCompile Include="src\core\optimization\geneticAlgorithm.cpp">
       <Filter>Source Files\optimization</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\utilities\stopWatch.cpp">
+      <Filter>Source Files\utilities</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

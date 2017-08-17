@@ -12,9 +12,6 @@
 //        for jobs, pulling jobs from the queue and executing them, and
 //        communicating back to the main thread.
 
-// Standard C++ headers
-#include <cassert>
-
 // Local headers
 #include "VVASE/core/threads/workerThread.h"
 #include "VVASE/core/threads/jobQueue.h"
@@ -26,6 +23,10 @@
 #include "VVASE/core/car/car.h"
 #include "VVASE/core/utilities/debugger.h"
 #include "VVASE/core/utilities/debugLog.h"
+#include "VVASE/core/utilities/stopWatch.h"
+
+// Standard C++ headers
+#include <cassert>
 
 namespace VVASE
 {
@@ -37,9 +38,8 @@ namespace VVASE
 // Description:		Constructor for the WorkerThread class.
 //
 // Input Arguments:
-//		jobQueue	= JobQueue*, pointing to the queue from which this
+//		jobQueue	= JobQueue&, pointing to the queue from which this
 //					  thread will pull jobs
-//		id			= int representing this thread's ID number
 //
 // Output Arguments:
 //		None
@@ -48,11 +48,10 @@ namespace VVASE
 //		None
 //
 //==========================================================================
-WorkerThread::WorkerThread(JobQueue* jobQueue, int id)
-							 : jobQueue(jobQueue), id(id)
+WorkerThread::WorkerThread(JobQueue& jobQueue)
+	: jobQueue(jobQueue)
 {
-	assert(jobQueue);
-	wxThread::Create();
+	thread = std::thread(&WorkerThread::ThreadEntry, this);
 }
 
 //==========================================================================
@@ -73,6 +72,8 @@ WorkerThread::WorkerThread(JobQueue* jobQueue, int id)
 //==========================================================================
 WorkerThread::~WorkerThread()
 {
+	if (thread.joinable())
+		thread.join();
 }
 
 //==========================================================================
@@ -88,15 +89,15 @@ WorkerThread::~WorkerThread()
 //		None
 //
 // Return Value:
-//		wxThread::ExitCode
+//		void
 //
 //==========================================================================
-wxThread::ExitCode WorkerThread::Entry()
+void WorkerThread::ThreadEntry()
 {
 	ThreadJob::ThreadCommand error;
 
 	// Tell the main thread that we successfully started
-	jobQueue->Report(ThreadJob::CommandThreadStarted, id);
+	jobQueue.Report(ThreadJob::CommandThreadStarted, std::this_thread::get_id());
 
 	// Run the main loop (job handler) until it throws an exception
 	try
@@ -107,10 +108,8 @@ wxThread::ExitCode WorkerThread::Entry()
 	catch (ThreadJob::ThreadCommand& i)
 	{
 		error = i;
-		jobQueue->Report(i, id);
+		jobQueue.Report(i, std::this_thread::get_id());
 	}
-
-	return (wxThread::ExitCode)error;
 }
 
 //==========================================================================
@@ -133,9 +132,10 @@ void WorkerThread::OnJob()
 {
 	// Get a job from the queue
 	// If the queue is empty, this blocks the thread
-	ThreadJob job = jobQueue->Pop();
+	ThreadJob job = jobQueue.Pop();
 
-	wxDateTime start;
+	StopWatch timer;
+	timer.Start();
 
 	switch(job.command)
 	{
@@ -159,12 +159,10 @@ void WorkerThread::OnJob()
 		*(static_cast<KinematicsData*>(job.data)->output) = kinematicAnalysis.GetOutputs();
 		DebugLog::GetInstance()->Log(_T("GetOutputs - End"), -1);
 
-	    jobQueue->Report(job.command, id, job.index);
+	    jobQueue.Report(job.command, std::this_thread::get_id(), job.index);
 		break;
 
 	case ThreadJob::CommandThreadGeneticOptimization:
-		start = wxDateTime::UNow();
-
 		// The genetic algorithm object MUST have been initialized prior to the call to this thread
 		// Run the GA object - this will only return after the analysis is complete for all generations,
 		// and the target object has been updated
@@ -172,9 +170,9 @@ void WorkerThread::OnJob()
 		static_cast<OptimizationData*>(job.data)->geneticAlgorithm->PerformOptimization();
 		DebugLog::GetInstance()->Log(_T("Optimization - End"), -1);
 		Debugger::GetInstance() << "Elapsed Time: %s"
-			<< wxDateTime::UNow().Subtract(start).Format() << Debugger::Priority::VeryHigh;
+			<< timer.GetElapsedTime<double, std::chrono::seconds>() << Debugger::Priority::VeryHigh;
 
-		jobQueue->Report(job.command, id, job.index);
+		jobQueue.Report(job.command, std::this_thread::get_id(), job.index);
 		break;
 
 	case ThreadJob::CommandThreadNull:
@@ -185,7 +183,7 @@ void WorkerThread::OnJob()
 	if (job.data)
 	{
 		delete job.data;
-		job.data = NULL;
+		job.data = nullptr;
 	}
 }
 

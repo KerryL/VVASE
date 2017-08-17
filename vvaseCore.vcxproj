@@ -37,6 +37,7 @@
     <ClInclude Include="include\VVASE\core\threads\kinematicsData.h" />
     <ClInclude Include="include\VVASE\core\threads\optimizationData.h" />
     <ClInclude Include="include\VVASE\core\threads\threadData.h" />
+    <ClInclude Include="include\VVASE\core\threads\threadDefs.h" />
     <ClInclude Include="include\VVASE\core\threads\threadEvent.h" />
     <ClInclude Include="include\VVASE\core\threads\threadJob.h" />
     <ClInclude Include="include\VVASE\core\threads\workerThread.h" />
@@ -47,6 +48,7 @@
     <ClInclude Include="include\VVASE\core\utilities\debugger.h" />
     <ClInclude Include="include\VVASE\core\utilities\debugLog.h" />
     <ClInclude Include="include\VVASE\core\utilities\geometryMath.h" />
+    <ClInclude Include="include\VVASE\core\utilities\stopWatch.h" />
     <ClInclude Include="include\VVASE\core\utilities\unitType.h" />
     <ClInclude Include="include\VVASE\core\utilities\vvaseString.h" />
     <ClInclude Include="include\VVASE\core\utilities\wheelSetStructures.h" />
@@ -87,6 +89,7 @@
     <ClCompile Include="src\core\utilities\debugger.cpp" />
     <ClCompile Include="src\core\utilities\debugLog.cpp" />
     <ClCompile Include="src\core\utilities\geometryMath.cpp" />
+    <ClCompile Include="src\core\utilities\stopWatch.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <Keyword>Win32Proj</Keyword>
@@ -127,20 +130,20 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;__WXMSW__;__WXDEBUG__;WXUSINGDLL;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(LIBPLOT2D)/include;$(EIGEN);$(FREETYPE)\include\freetype2;$(WXWIN)\lib\vc_dll\mswud;$(WXWIN)\include;$(GLEW)\include;include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EIGEN);include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4458;4456</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <TargetMachine>MachineX86</TargetMachine>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
-      <AdditionalLibraryDirectories>$(LIBPLOT2D)/lib;$(WXWIN)\lib\vc_dll;$(GLEW)\lib\Debug\Win32;$(FREETYPE)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>vvaseCore.lib;vvaseGUI.lib;wxbase31ud.lib;wxmsw31ud_aui.lib;wxmsw31ud_adv.lib;wxbase31ud_xml.lib;wxmsw31ud_core.lib;wxmsw31ud_gl.lib;wxzlibd.lib;wxpngd.lib;wxtiffd.lib;wxjpegd.lib;opengl32.lib;glew32sd.lib;freetyped.lib;libplot2d_d.lib;comctl32.lib;rpcrt4.lib;winmm.lib;advapi32.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(WXWIN)\include;.\res;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -154,11 +157,11 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CRT_SECURE_NO_WARNINGS;__WXMSW__;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <AdditionalIncludeDirectories>$(LIBPLOT2D)/include;$(EIGEN);$(FREETYPE)\include\freetype2;$(WXWIN)\lib\vc_lib\mswu;$(WXWIN)\include;$(GLEW)\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EIGEN);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4458;4456</DisableSpecificWarnings>
     </ClCompile>
     <Link>
@@ -168,7 +171,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(GLEW)\lib\Release\Win32;$(WXWIN)\lib\vc_lib;$(FREETYPE)\lib;$(LIBPLOT2D)/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>vvaseCore.lib;vvaseGUI.lib;wxbase31u.lib;wxmsw31u_aui.lib;wxmsw31u_adv.lib;wxbase31u_xml.lib;wxmsw31u_core.lib;wxmsw31u_gl.lib;wxzlib.lib;wxpng.lib;wxtiff.lib;wxjpeg.lib;libPlot2d.lib;opengl32.lib;glew32s.lib;freetype.lib;comctl32.lib;rpcrt4.lib;winmm.lib;advapi32.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
     <ResourceCompile>

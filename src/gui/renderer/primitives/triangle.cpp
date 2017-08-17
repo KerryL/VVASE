@@ -10,9 +10,11 @@
 // Desc:  Derived from Primitive for creating triangular objects.
 
 // Local headers
-#include "vRenderer/primitives/triangle.h"
-#include "vRenderer/renderWindow.h"
-#include "vMath/carMath.h"
+#include "VVASE/gui/renderer/primitives/triangle.h"
+#include "VVASE/core/utilities/carMath.h"
+
+// LibPlot2D headers
+#include <lp2d/renderer/renderWindow.h>
 
 namespace VVASE
 {
@@ -24,7 +26,7 @@ namespace VVASE
 // Description:		Constructor for the Triangle class.
 //
 // Input Arguments:
-//		_renderWindow	= RenderWindow& pointing to the object that owns this
+//		renderWindow	= LibPlot2D::RenderWindow& pointing to the object that owns this
 //
 // Output Arguments:
 //		None
@@ -33,31 +35,11 @@ namespace VVASE
 //		None
 //
 //==========================================================================
-Triangle::Triangle(RenderWindow &renderWindow) : Primitive(renderWindow)
+Triangle::Triangle(LibPlot2D::RenderWindow &renderWindow) : Primitive(renderWindow)
 {
-	corner1.Set(0.0, 0.0, 0.0);
-	corner2.Set(0.0, 0.0, 0.0);
-	corner3.Set(0.0, 0.0, 0.0);
-}
-
-//==========================================================================
-// Class:			Triangle
-// Function:		~Triangle
-//
-// Description:		Destructor for the Triangle class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Triangle::~Triangle()
-{
+	corner1.setZero();
+	corner2.setZero();
+	corner3.setZero();
 }
 
 //==========================================================================
@@ -80,18 +62,18 @@ Triangle::~Triangle()
 void Triangle::GenerateGeometry()
 {
 	// Used as each triangle is created
-	Eigen::Vector3d normal = (corner2 - corner1).Cross(corner3 - corner1).Normalize();
+	const Eigen::Vector3d normal((corner2 - corner1).cross(corner3 - corner1).normalized());
 
 	// Set the normal for the triangle
-	glNormal3d(normal.x, normal.y, normal.z);
+	glNormal3d(normal.x(), normal.y(), normal.z());
 
 	// This is just one triangle
 	glBegin(GL_TRIANGLES);
 
 	// Add the three vertices
-	glVertex3d(corner1.x, corner1.y, corner1.z);
-	glVertex3d(corner2.x, corner2.y, corner2.z);
-	glVertex3d(corner3.x, corner3.y, corner3.z);
+	glVertex3d(corner1.x(), corner1.y(), corner1.z());
+	glVertex3d(corner2.x(), corner2.y(), corner2.z());
+	glVertex3d(corner3.x(), corner3.y(), corner3.z());
 
 	// Complete the triangle
 	glEnd();
@@ -117,8 +99,8 @@ void Triangle::GenerateGeometry()
 bool Triangle::HasValidParameters()
 {
 	// Triangles must have non-zero edge lengths
-	if (!VVASEMath::IsZero(corner1.Distance(corner2)) && !VVASEMath::IsZero(corner1.Distance(corner3))
-		&& !VVASEMath::IsZero(corner2.Distance(corner3)))
+	if (!VVASE::Math::IsZero(corner1.Distance(corner2)) && !VVASE::Math::IsZero(corner1.Distance(corner3))
+		&& !VVASE::Math::IsZero(corner2.Distance(corner3)))
 		return true;
 
 	// Otherwise return false
@@ -144,7 +126,7 @@ bool Triangle::HasValidParameters()
 void Triangle::SetCorner1(const Eigen::Vector3d &corner1)
 {
 	this->corner1 = corner1;
-	modified = true;
+	mModified = true;
 }
 
 //==========================================================================
@@ -166,7 +148,7 @@ void Triangle::SetCorner1(const Eigen::Vector3d &corner1)
 void Triangle::SetCorner2(const Eigen::Vector3d &corner2)
 {
 	this->corner2 = corner2;
-	modified = true;
+	mModified = true;
 }
 
 //==========================================================================
@@ -188,7 +170,7 @@ void Triangle::SetCorner2(const Eigen::Vector3d &corner2)
 void Triangle::SetCorner3(const Eigen::Vector3d &corner3)
 {
 	this->corner3 = corner3;
-	modified = true;
+	mModified = true;
 }
 
 //==========================================================================

@@ -9,9 +9,6 @@
 // Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains class functionality for mass class.
 
-// wxWidgets headers
-#include <wx/wx.h>
-
 // Local headers
 #include "VVASE/core/car/subsystems/massProperties.h"
 #include "VVASE/core/car/subsystems/suspension.h"

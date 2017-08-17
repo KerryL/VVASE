@@ -9,9 +9,6 @@
 // Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains class functionality for Drivetrain class.
 
-// wxWidgets headers
-#include <wx/wx.h>
-
 // Local headers
 #include "VVASE/core/car/subsystems/drivetrain.h"
 #include "VVASE/core/utilities/wheelSetStructures.h"
@@ -217,7 +214,7 @@ vvaseString Drivetrain::GetDriveWheelsName(const DriveWheels &driveWheels)
 		break;
 	}
 
-	return wxEmptyString;
+	return vvaseString();
 }
 
 //==========================================================================

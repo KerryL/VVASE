@@ -115,7 +115,7 @@ vvaseString GetAxisName(const Axis& axis);
 
 // Template methods must be defined here:
 //==========================================================================
-// Namespace:		VVASEMath
+// Namespace:		VVASE::Math
 // Function:		IsNaN
 //
 // Description:		Determines if the specified number is or is not a number.
@@ -137,7 +137,7 @@ bool Math::IsNaN(const T &value)
 }
 
 //==========================================================================
-// Namespace:		VVASEMath
+// Namespace:		VVASE::Math
 // Function:		IsInf
 //
 // Description:		Determines if the specified number is infinite.
@@ -160,7 +160,7 @@ bool Math::IsInf(const T &value)
 }
 
 //==========================================================================
-// Namespace:		VVASEMath
+// Namespace:		VVASE::Math
 // Function:		IsValid
 //
 // Description:		Determines if the specified value is a valid number.

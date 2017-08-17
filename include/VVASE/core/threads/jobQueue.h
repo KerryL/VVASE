@@ -19,9 +19,7 @@
 
 // Standard C++ headers
 #include <map>
-
-// wxWidgets headers
-#include <wx/wx.h>// TODO:  Remove wx from this
+#include <condition_variable>
 
 // wxWidgets forward declarations
 class wxEvtHandler;
@@ -33,24 +31,24 @@ class JobQueue
 {
 public:
 	// Enumeration of job priority levels
-	enum JobPriority
+	enum class Priority
 	{
-		PriorityVeryHigh,
-		PriorityHigh,
-		PriorityNormal,
-		PriorityLow,
-		PriorityVeryLow,
-		PriorityIdle
+		VeryHigh,
+		High,
+		Normal,
+		Low,
+		VeryLow,
+		Idle
 	};
 
 	JobQueue(wxEvtHandler *parent);
 
-	void AddJob(const ThreadJob& job, const JobPriority& priority = PriorityNormal);
+	void AddJob(const ThreadJob& job, const Priority& priority = Priority::Normal);
 
 	ThreadJob Pop();
 
 	// Reports a message back to the main event handler
-	void Report(const ThreadJob::ThreadCommand& command, int threadId, int objectID = 0);
+	void Report(const ThreadJob::ThreadCommand& command, std::thread::id threadId, int objectId = 0);
 
 	size_t PendingJobs();
 
@@ -60,11 +58,11 @@ private:
     wxEvtHandler *parent;
 
 	// Use of a multimap allow prioritization - lower keys come first, jobs with equal keys are appended
-    std::multimap<JobPriority, ThreadJob> jobs;
+    std::multimap<Priority, ThreadJob> jobs;// TODO:  Is prioritization necessary?  If yes, maybe have separate queues for each priority?  This doesn't seem particularly efficient...
 
 	// Thread protection objects
-    wxMutex mutexQueue;
-    wxSemaphore queueCount;
+    std::mutex mutexQueue;
+	std::condition_variable jobReadyCondition;
 };
 
 }// namespace VVASE

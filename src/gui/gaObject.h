@@ -103,8 +103,8 @@ public:
 	bool Read(wxString fileName);
 
 	void MarkAnalysisComplete() { /*TODO:  Re-implement: inverseSemaphore.Post();*/ }
-	int GetNumberOfInputs() const { std::lock_guard<std::mutex> lock(gsaMutex); DebugLog::GetInstance()->Log(_T("GAObject::GetNumberOfInputs()")); return inputList.size(); }
-	bool OptimizationIsRunning() const { std::lock_guard<std::mutex> lock(gsaMutex); DebugLog::GetInstance()->Log(_T("GAObject::OptimizationIsRunning()")); return isRunning; }
+	int GetNumberOfInputs() const { MutexLocker lock(gsaMutex); DebugLog::GetInstance()->Log(_T("GAObject::GetNumberOfInputs()")); return inputList.size(); }
+	bool OptimizationIsRunning() const { MutexLocker lock(gsaMutex); DebugLog::GetInstance()->Log(_T("GAObject::OptimizationIsRunning()")); return isRunning; }
 
 	void UpdateResultingCar(Car& result) const;
 

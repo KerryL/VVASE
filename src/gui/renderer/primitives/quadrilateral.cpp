@@ -153,8 +153,8 @@ bool Quadrilateral::HasValidParameters()
 {
 	// Quads must have non-zero normal and axis vectors, non-zero dimensions,
 	// and non-parallel normal and axis directions
-	if (!VVASEMath::IsZero(normal.Length()) && !VVASEMath::IsZero(axis.Length()) &&
-		!VVASEMath::IsZero(fabs(axis * normal) / (axis.Length() * normal.Length()) - 1.0)
+	if (!VVASE::Math::IsZero(normal.Length()) && !VVASE::Math::IsZero(axis.Length()) &&
+		!VVASE::Math::IsZero(fabs(axis * normal) / (axis.Length() * normal.Length()) - 1.0)
 		&& width > 0.0 && length > 0.0)
 		return true;
 

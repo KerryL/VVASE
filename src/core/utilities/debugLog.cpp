@@ -86,7 +86,7 @@ DebugLog* DebugLog::GetInstance()
 //==========================================================================
 void DebugLog::SetTarget(const LogTarget &target)
 {
-	std::lock_guard<std::mutex> lock(mutex);
+	MutexLocker lock(mutex);
 	this->target = target;
 }
 
@@ -111,7 +111,7 @@ void DebugLog::SetTarget(const LogTarget &target)
 //==========================================================================
 void DebugLog::Log(vvaseString message, int indent)
 {
-	std::lock_guard<std::mutex> lock(mutex);
+	MutexLocker lock(mutex);
 
 	// Handle indentation
 	unsigned long threadID = wxThread::GetCurrentId();

@@ -359,7 +359,7 @@ void UndoRedoStack::Update() const
 	for (i = 0; i < mainFrame.GetObjectCount(); i++)
 	{
 		if (mainFrame.GetObjectByIndex(i)->GetType() == GuiObject::TypeCar)
-			dynamic_cast<GuiCar*>(mainFrame.GetObjectByIndex(i))->GetOriginalCar()->GetSubsystem<Suspension>()->UpdateSymmetry();
+			dynamic_cast<GuiCar*>(mainFrame.GetObjectByIndex(i))->GetOriginalCar().GetSubsystem<Suspension>()->UpdateSymmetry();
 	}
 
 	// Update all areas of the GUI screen

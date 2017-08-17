@@ -15,11 +15,11 @@
 #ifndef WORKER_THREAD_H_
 #define WORKER_THREAD_H_
 
-// wxWidgets headers
-#include <wx/thread.h>// TODO:  Remove
-
 // Local headers
 #include "VVASE/core/analysis/kinematics.h"
+
+// Standard C++ headers
+#include <thread>
 
 namespace VVASE
 {
@@ -27,17 +27,17 @@ namespace VVASE
 // Local forward declarations
 class JobQueue;
 
-class WorkerThread : public wxThread
+class WorkerThread
 {
 public:
-	WorkerThread(JobQueue* jobQueue, int id = wxID_ANY);
+	WorkerThread(JobQueue& jobQueue);
 	~WorkerThread();
 
 private:
-	JobQueue* jobQueue;
+	JobQueue& jobQueue;
 
-	int id;
-	virtual wxThread::ExitCode Entry();
+	std::thread thread;
+	void ThreadEntry();
 
 	// The job handler (called when this thread pulls a job from the queue)
 	virtual void OnJob();

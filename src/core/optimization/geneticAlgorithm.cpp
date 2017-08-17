@@ -41,18 +41,19 @@ namespace VVASE
 //==========================================================================
 GeneticAlgorithm::GeneticAlgorithm()
 {
-	gsaMutex.Lock();
-	DebugLog::GetInstance()->Log(_T("GeneticAlgorithm::GeneticAlgorithm() (lock)"));
+	{
+		MutexLocker lock(gsaMutex);
+		DebugLog::GetInstance()->Log(_T("GeneticAlgorithm::GeneticAlgorithm() (lock)"));
 
-	genomes = NULL;
-	numberOfPhenotypes = NULL;
-	fitnesses = NULL;
+		genomes = NULL;
+		numberOfPhenotypes = NULL;
+		fitnesses = NULL;
 
-	generationLimit = 0;
-	sortingMethod = SortMerge;
+		generationLimit = 0;
+		sortingMethod = SortMerge;
 
-	DebugLog::GetInstance()->Log(_T("GeneticAlgorithm::GeneticAlgorithm() (unlock)"));
-	gsaMutex.Unlock();
+		DebugLog::GetInstance()->Log(_T("GeneticAlgorithm::GeneticAlgorithm() (unlock)"));
+	}
 
 	InitializeAlgorithm(0, 0, 0, NULL, false, 0, 0.0, 0.0);
 }
@@ -98,7 +99,7 @@ void GeneticAlgorithm::SetPopulationSize(int populationSize)
 {
 	DeleteDynamicMemory();
 
-	wxMutexLocker lock(gsaMutex);
+	MutexLocker lock(gsaMutex);
 	if (populationSize > 0)
 		this->populationSize = populationSize;
 }
@@ -123,7 +124,7 @@ void GeneticAlgorithm::SetGenerationLimit(int generationLimit)
 {
 	DeleteDynamicMemory();
 
-	wxMutexLocker lock(gsaMutex);
+	MutexLocker lock(gsaMutex);
 	if (generationLimit > 0)
 		this->generationLimit = generationLimit;
 }
@@ -146,7 +147,7 @@ void GeneticAlgorithm::SetGenerationLimit(int generationLimit)
 //==========================================================================
 void GeneticAlgorithm::SetCrossoverPoint(int crossover)
 {
-	wxMutexLocker lock(gsaMutex);
+	MutexLocker lock(gsaMutex);
 
 	if (crossover < 0)
 		crossover = 0;
@@ -173,7 +174,7 @@ void GeneticAlgorithm::SetCrossoverPoint(int crossover)
 //==========================================================================
 void GeneticAlgorithm::SetElitismPercentage(double elitism)
 {
-	wxMutexLocker lock(gsaMutex);
+	MutexLocker lock(gsaMutex);
 
 	// Make sure the value is between 0 and 1
 	if (elitism < 0.0)
@@ -202,7 +203,7 @@ void GeneticAlgorithm::SetElitismPercentage(double elitism)
 //==========================================================================
 void GeneticAlgorithm::SetMutationProbability(double mutation)
 {
-	wxMutexLocker lock(gsaMutex);
+	MutexLocker lock(gsaMutex);
 
 	// Make sure the value is between 0 and 1
 	if (mutation < 0.0)
@@ -245,23 +246,24 @@ void GeneticAlgorithm::InitializeAlgorithm(int populationSize, int generationLim
 {
 	DeleteDynamicMemory();
 
-	gsaMutex.Lock();
-	DebugLog::GetInstance()->Log(_T("GeneticAlgorithm::InitializeAlgorithm (lock)"));
+	{
+		MutexLocker lock(gsaMutex);
+		DebugLog::GetInstance()->Log(_T("GeneticAlgorithm::InitializeAlgorithm (lock)"));
 
-	this->populationSize	= populationSize;
-	this->generationLimit	= generationLimit;
-	this->numberOfGenes		= numberOfGenes;
-	this->minimize			= minimize;
+		this->populationSize = populationSize;
+		this->generationLimit = generationLimit;
+		this->numberOfGenes = numberOfGenes;
+		this->minimize = minimize;
 
-	DebugLog::GetInstance()->Log(_T("GeneticAlgorithm::InitializeAlgorithm (unlock)"));
-	gsaMutex.Unlock();
+		DebugLog::GetInstance()->Log(_T("GeneticAlgorithm::InitializeAlgorithm (unlock)"));
+	}
 
 	// Use set functions to assign the rest to ensure the values are within range
 	SetCrossoverPoint(std::min(crossover, numberOfGenes - 1));// crossover may have been set > than number of genes, but when we actually run the optimization we need to ensure it is not
 	SetElitismPercentage(elitism);
 	SetMutationProbability(mutation);
 
-	wxMutexLocker lock(gsaMutex);
+	MutexLocker lock(gsaMutex);
 	DebugLog::GetInstance()->Log(_T("GeneticAlgorithm::InitializeAlgorithm (locker)"));
 
 	currentGeneration = -1;
@@ -342,7 +344,7 @@ void GeneticAlgorithm::SimulateGeneration()
 //==========================================================================
 bool GeneticAlgorithm::PerformOptimization()
 {
-	wxMutexLocker lock(gsaMutex);
+	MutexLocker lock(gsaMutex);
 	DebugLog::GetInstance()->Log(_T("GeneticAlgorithm::PerformOptimization (locker)"));
 
 	// Make sure everything we need has been defined
@@ -668,7 +670,7 @@ void GeneticAlgorithm::SortByFitness()
 //==========================================================================
 void GeneticAlgorithm::DeleteDynamicMemory()
 {
-	wxMutexLocker lock(gsaMutex);
+	MutexLocker lock(gsaMutex);
 	DebugLog::GetInstance()->Log(_T("GeneticAlgorithm::DeleteDynamicMemory (locker)"));
 
 	// Delete the old genomes and fitnesses (if they exist)

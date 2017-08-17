@@ -101,8 +101,8 @@ void Tire3D::Update(const Eigen::Vector3d &contactPatch, const Eigen::Vector3d &
 {
 	// Make sure all vector arguments are valid - if they are not,
 	// the object will not be made visible
-	if (VVASEMath::IsNaN(contactPatch) || VVASEMath::IsNaN(center) ||
-		VVASEMath::IsNaN(originalNormal) || VVASEMath::IsNaN(targetNormal))
+	if (VVASE::Math::IsNaN(contactPatch) || VVASE::Math::IsNaN(center) ||
+		VVASE::Math::IsNaN(originalNormal) || VVASE::Math::IsNaN(targetNormal))
 		show = false;
 
 	// Set the visibility flags
@@ -164,7 +164,7 @@ void Tire3D::Update(const Eigen::Vector3d &contactPatch, const Eigen::Vector3d &
 	Eigen::Vector3d axisDirection(0.0, 1.0, 0.0);
 
 	// Check to make sure our rotation axis is non-zero before we do the rotations
-	if (!VVASEMath::IsZero(rotationAxis.Length()))
+	if (!VVASE::Math::IsZero(rotationAxis.Length()))
 		// Rotate the reference axis
 		axisDirection.Rotate(angleToRotate, rotationAxis);
 

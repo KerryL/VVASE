@@ -88,7 +88,7 @@ void Point3D::Update(const Eigen::Vector3d &position, const double &diameter, co
 {
 	// Make sure all vector arguments are valid - if they are not,
 	// the object will not be made visible
-	if (VVASEMath::IsNaN(position))
+	if (VVASE::Math::IsNaN(position))
 		show = false;
 
 	// Set the visibility flag

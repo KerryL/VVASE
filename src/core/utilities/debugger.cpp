@@ -134,7 +134,7 @@ void Debugger::Kill()
 //==========================================================================
 void Debugger::SetDebugLevel(const Priority &level)
 {
-	std::lock_guard<std::mutex> lock(mutex);
+	MutexLocker lock(mutex);
 	debugLevel = level;
 }
 
@@ -156,7 +156,7 @@ void Debugger::SetDebugLevel(const Priority &level)
 //==========================================================================
 /*void Debugger::SetTargetOutput(wxEvtHandler *parent)
 {
-	wxMutexLocker lock(mutex);
+	MutexLocker lock(mutex);
 	this->parent = parent;
 }*/// TODO:  Remove
 
@@ -255,7 +255,7 @@ void Debugger::DebuggerStreamBuffer::CreateThreadBuffer()
 {
 	if (threadBuffer.find(std::this_thread::get_id()) == threadBuffer.end())
 	{
-		std::lock_guard<std::mutex> lock(mutex);
+		MutexLocker lock(mutex);
 		if (threadBuffer.find(std::this_thread::get_id()) == threadBuffer.end())
 			threadBuffer[std::this_thread::get_id()] = new vvaseOStringStream;
 	}
@@ -286,7 +286,7 @@ vvaseOStream& operator<<(vvaseOStream &os, const Debugger::Priority& level)
 	Debugger& debugger(dynamic_cast<Debugger&>(os));
 
 	debugger.buffer.CreateThreadBuffer();
-	std::lock_guard<std::mutex> lock(debugger.buffer.mutex);
+	MutexLocker lock(debugger.buffer.mutex);
 
 	// Lower debug level -> higher priority
 	// Show messages having a debug level higher than or equal to the set debug level

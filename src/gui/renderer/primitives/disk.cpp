@@ -98,7 +98,7 @@ void Disk::GenerateGeometry()
 		glTranslated(center.x, center.y, center.z);
 
 		// Rotate the current matrix, if the rotation axis is non-zero
-		if (!VVASEMath::IsZero(axisOfRotation.Length()))
+		if (!VVASE::Math::IsZero(axisOfRotation.Length()))
 			glRotated(UnitConverter::RAD_TO_DEG(angle), axisOfRotation.x, axisOfRotation.y, axisOfRotation.z);
 
 		// Set the normal direction
@@ -114,7 +114,7 @@ void Disk::GenerateGeometry()
 		for (i = 0; i <= resolution; i++)
 		{
 			// Determine the angle to the current set of points
-			angle = (double)i * 2.0 * VVASEMath::Pi / (double)resolution;
+			angle = (double)i * 2.0 * VVASE::Math::Pi / (double)resolution;
 
 			// Determine the Y and Z ordinates based on this angle and the radii
 			outsidePoint.y = outerRadius * cos(angle);
@@ -152,7 +152,7 @@ void Disk::GenerateGeometry()
 //==========================================================================
 bool Disk::HasValidParameters()
 {
-	if (outerRadius > 0.0 && !VVASEMath::IsZero(normal.Length()))
+	if (outerRadius > 0.0 && !VVASE::Math::IsZero(normal.Length()))
 		return true;
 
 	return false;

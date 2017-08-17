@@ -120,7 +120,7 @@ void SkipMouseEvent(wxMouseEvent &event)
 vvaseString ToVVASEString(const wxString& s)
 {
 #ifdef _UNICODE
-	return s.ToStdWString();
+	return s.ToStdWstring();
 #else
 	return s.ToStdString();
 #endif

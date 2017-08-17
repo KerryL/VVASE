@@ -9,9 +9,6 @@
 // Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains class functionality for Suspension class.
 
-// wxWidgets headers
-#include <wx/wx.h>
-
 // Local headers
 #include "VVASE/core/car/subsystems/suspension.h"
 #include "VVASE/core/utilities/debugger.h"
@@ -225,7 +222,7 @@ vvaseString Suspension::GetBarStyleName(const BarStyle &barStyle)
 		break;
 	}
 
-	return wxEmptyString;
+	return vvaseString();
 }
 
 //==========================================================================
@@ -301,7 +298,7 @@ vvaseString Suspension::GetHardpointName(const Hardpoints& point)
 		break;
 	}
 
-	return wxEmptyString;
+	return vvaseString();
 }
 
 //==========================================================================
@@ -345,7 +342,7 @@ vvaseString Suspension::GetBarAttachmentname(const BarAttachment &barAttachment)
 		break;
 	}
 
-	return wxEmptyString;
+	return vvaseString();
 }
 
 //==========================================================================

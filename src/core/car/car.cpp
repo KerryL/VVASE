@@ -28,6 +28,8 @@
 namespace VVASE
 {
 
+ComponentManager<Subsystem> Car::subsystemManager;
+
 //==========================================================================
 // Class:			Car
 // Function:		Car
@@ -522,7 +524,7 @@ bool Car::HasRearHalfShafts() const
 //		Car& reference to this
 //
 //==========================================================================
-Car& Car::operator=(const Car& car)
+/*Car& Car::operator=(const Car& car)
 {
 	// Check for self-assignment
 	if (this == &car)
@@ -531,7 +533,7 @@ Car& Car::operator=(const Car& car)
 	assert(subsystems.size() == car.subsystems.size());
 	std::copy(car.subsystems.begin(), car.subsystems.end(), subsystems.begin());
 	return *this;
-}
+}*/
 
 /*Car& Car::operator=(Car&& car)
 {

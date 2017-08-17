@@ -15,12 +15,12 @@
 
 // Local headers
 #include "VVASE/core/utilities/vvaseString.h"
+#include "VVASE/core/threads/threadDefs.h"
 
 // Standard C++ headers
 #include <iostream>
 #include <sstream>
 #include <map>
-#include <mutex>
 #include <thread>
 
 // Declaration of the EVT_DEBUG event
@@ -48,7 +48,7 @@ public:
 	friend vvaseOStream& operator<<(vvaseOStream &os, const Priority& level);
 
 	void SetDebugLevel(const Priority &level);
-	inline Priority GetDebugLevel() const { std::lock_guard<std::mutex> lock(mutex); return debugLevel; }
+	inline Priority GetDebugLevel() const { MutexLocker lock(mutex); return debugLevel; }
 	//void SetTargetOutput(wxEvtHandler *parent);// TODO:  Remove
 
 private:

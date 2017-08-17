@@ -11,6 +11,9 @@
 //        file will one day be absolved into a real class instead of just being a kludgy
 //        collection of functions.  The goal would be to be able to use Debugger classes again.
 
+// Local headers
+#include "VVASE/core/utilities/carMath.h"
+
 // Standard C++ headers
 #include <cstdlib>
 #include <cstdio>
@@ -19,17 +22,8 @@
 #include <cstdarg>
 #include <sstream>
 
-// wxWidgets headers
-#include <wx/wx.h>
-
 // Eigen headers
 #include <Eigen/Eigen>
-
-// LibPlot2D headers
-#include <lp2d/utilities/dataset2D.h>
-
-// Local headers
-#include "VVASE/core/utilities/carMath.h"
 
 namespace VVASE
 {
@@ -175,36 +169,6 @@ double Math::RangeToPlusMinus180(const double &angle)
 
 //==========================================================================
 // Namespace:		Math
-// Function:		Unwrap
-//
-// Description:		Minimizes the jump between adjacent points by adding/subtracting
-//					multiples of 2 * Pi.
-//
-// Input Arguments:
-//		data	= Dataset2D&
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-void Math::Unwrap(LibPlot2D::Dataset2D &data)
-{
-	const double threshold(Pi);
-	unsigned int i;
-	for (i = 1; i < data.GetNumberOfPoints(); i++)
-	{
-		if (data.GetY()[i] - data.GetY()[i - 1] > threshold)
-			data.GetY()[i] -= 2 * Pi;
-		if (data.GetY()[i] - data.GetY()[i - 1] < -threshold)
-			data.GetY()[i] += 2 * Pi;
-	}
-}
-
-//==========================================================================
-// Namespace:		Math
 // Function:		Sign
 //
 // Description:		Returns 1.0 for positive, -1.0 for negative and 0.0 for zero.
@@ -233,32 +197,6 @@ double Math::Sign(const double &value)
 // Namespace:		Math
 // Function:		ApplyBitMask
 //
-// Description:		Extracts a single bit from values of the specified dataset.
-//
-// Input Arguments:
-//		data	= const Dataset2D&
-//		bit		= const unsigned int&
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		double
-//
-//==========================================================================
-LibPlot2D::Dataset2D Math::ApplyBitMask(const LibPlot2D::Dataset2D &data, const unsigned int &bit)
-{
-	LibPlot2D::Dataset2D set(data);
-	unsigned int i;
-	for (i = 0; i < set.GetNumberOfPoints(); i++)
-		set.GetY()[i] = ApplyBitMask(static_cast<unsigned int>(set.GetY()[i]), bit);
-	return set;
-}
-
-//==========================================================================
-// Namespace:		Math
-// Function:		ApplyBitMask
-//
 // Description:		Extracts a single bit from the value.
 //
 // Input Arguments:
@@ -275,74 +213,6 @@ LibPlot2D::Dataset2D Math::ApplyBitMask(const LibPlot2D::Dataset2D &data, const 
 unsigned int Math::ApplyBitMask(const unsigned &value, const unsigned int &bit)
 {
 	return (value >> bit) & 1;
-}
-
-//==========================================================================
-// Namespace:		Math
-// Function:		XDataConsistentlySpaced
-//
-// Description:		Checks to see if the X-data has consistent deltas.
-//
-// Input Arguments:
-//		data				= const Dataset2D&
-//		tolerancePercent	= const double&
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		bool, true if the x-data spacing is within the tolerance
-//
-//==========================================================================
-bool Math::XDataConsistentlySpaced(const LibPlot2D::Dataset2D &data, const double &tolerancePercent)
-{
-	assert(data.GetNumberOfPoints() > 1);
-
-	unsigned int i;
-	double minSpacing, maxSpacing, spacing;
-
-	minSpacing = data.GetAverageDeltaX();
-	maxSpacing = minSpacing;
-
-	for (i = 2; i < data.GetNumberOfPoints(); i++)
-	{
-		spacing = data.GetX()[i] - data.GetX()[i - 1];
-		if (spacing < minSpacing)
-			minSpacing = spacing;
-		if (spacing > maxSpacing)
-			maxSpacing = spacing;
-	}
-
-	// Handle decreasing data, too
-	if (fabs(minSpacing) > fabs(maxSpacing))
-	{
-		double temp(minSpacing);
-		minSpacing = maxSpacing;
-		maxSpacing = temp;
-	}
-
-	return 1.0 - minSpacing / maxSpacing < tolerancePercent;
-}
-
-//==========================================================================
-// Namespace:		Math
-// Function:		GetAverageXSpacing
-//
-// Description:		Finds the average period of the data in the set.
-//
-// Input Arguments:
-//		data	= const Dataset2D&
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		double
-//
-//==========================================================================
-double Math::GetAverageXSpacing(const LibPlot2D::Dataset2D &data)
-{
-	return data.GetX().back() / (data.GetNumberOfPoints() - 1.0);
 }
 
 //==========================================================================

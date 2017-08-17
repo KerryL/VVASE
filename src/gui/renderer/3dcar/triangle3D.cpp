@@ -90,7 +90,7 @@ void Triangle3D::Update(const Eigen::Vector3d &node1, const Eigen::Vector3d &nod
 {
 	// Make sure all vector arguments are valid - if they are not,
 	// the object will not be made visible
-	if (VVASEMath::IsNaN(node1) || VVASEMath::IsNaN(node2) || VVASEMath::IsNaN(node3))
+	if (VVASE::Math::IsNaN(node1) || VVASE::Math::IsNaN(node2) || VVASE::Math::IsNaN(node3))
 		show = false;
 
 	// Set the visibility flag

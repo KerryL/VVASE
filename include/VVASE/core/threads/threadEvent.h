@@ -15,9 +15,9 @@
 #define THREAD_EVENT_H_
 
 // wxWidgets headers
-#include <wx/event.h>// TODO:  Remove
+/*#include <wx/event.h>// TODO:  Remove
 
 // Declaration of the EVT_THREAD event
-DECLARE_LOCAL_EVENT_TYPE(EVT_THREAD, -1)
+DECLARE_LOCAL_EVENT_TYPE(EVT_THREAD, -1)*/
 
 #endif// THREAD_EVENT_H_

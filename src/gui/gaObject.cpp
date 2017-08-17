@@ -78,7 +78,7 @@ GAObject::GAObject(JobQueue &queue, GeneticOptimization &optimization)
 //==========================================================================
 GAObject::~GAObject()
 {
-	std::lock_guard<std::mutex> lock(gsaMutex);
+	MutexLocker lock(gsaMutex);
 	DebugLog::GetInstance()->Log(_T("GAObject::~GAObject()"));
 
 	unsigned int i;
@@ -295,7 +295,7 @@ void GAObject::SetUp(const Car &targetCar)
 	InitializeAlgorithm(populationSize, generationLimit, geneList.size(),
 		&phenotypeCount, true, crossover, elitism, mutation);
 
-	std::lock_guard<std::mutex> lock(gsaMutex);
+	MutexLocker lock(gsaMutex);
 	DebugLog::GetInstance()->Log(_T("GAObject::SetUp (locker)"));
 
 	DetermineAllInputs();
@@ -346,9 +346,9 @@ void GAObject::SetCarGenome(int carIndex, const int *currentGenome)
 
 	// Get locks on all the cars we're manipulating
 	// NOTE:  Always lock working car first, then lock original car (consistency required to prevent deadlocks)
-	std::lock_guard<std::mutex> targetLocker(targetCar->GetMutex());
+	MutexLocker targetLocker(targetCar->GetMutex());
 	DebugLog::GetInstance()->Log(_T("GAObject::SetCarGenome (targetLocker)"));
-	std::lock_guard<std::mutex> originalLocker(originalCarArray[carIndex]->GetMutex());
+	MutexLocker originalLocker(originalCarArray[carIndex]->GetMutex());
 	DebugLog::GetInstance()->Log(_T("GAObject::SetCarGenome (originalLocker)"));
 
 	// Set the original and working cars equal to the target car
@@ -742,10 +742,10 @@ void GAObject::DetermineAllInputs()
 //==========================================================================
 void GAObject::UpdateResultingCar(Car &result) const
 {
-	std::lock_guard<std::mutex> lock(gsaMutex);
+	MutexLocker lock(gsaMutex);
 	DebugLog::GetInstance()->Log(_T("GAObject::UpdateResultingCar (locker)"));
 
-	std::lock_guard<std::mutex> carLock(result.GetMutex());
+	MutexLocker carLock(result.GetMutex());
 	result = *originalCarArray[generationLimit - 1];
 }
 
@@ -819,7 +819,7 @@ GAObject::FileHeaderInfo GAObject::ReadFileHeader(std::ifstream *inFile)
 //==========================================================================
 bool GAObject::Write(wxString fileName)
 {
-	std::lock_guard<std::mutex> lock(gsaMutex);
+	MutexLocker lock(gsaMutex);
 
 	// Open the specified file
 	std::ofstream outFile(fileName.mb_str(), std::ios::binary);
@@ -869,7 +869,7 @@ bool GAObject::Write(wxString fileName)
 //==========================================================================
 bool GAObject::Read(wxString fileName)
 {
-	std::lock_guard<std::mutex> lock(gsaMutex);
+	MutexLocker lock(gsaMutex);
 
 	geneList.clear();
 	goalList.clear();

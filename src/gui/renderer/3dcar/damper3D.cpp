@@ -105,7 +105,7 @@ void Damper3D::Update(const Eigen::Vector3d &outboardEnd, const Eigen::Vector3d 
 {
 	// Make sure all vector arguments are valid - if they are not,
 	// the object will not be made visible
-	if (VVASEMath::IsNaN(outboardEnd) || VVASEMath::IsNaN(inboardEnd))
+	if (VVASE::Math::IsNaN(outboardEnd) || VVASE::Math::IsNaN(inboardEnd))
 		show = false;
 
 	// Set the visibility flags
@@ -212,8 +212,8 @@ Eigen::Vector3d Damper3D::FindClosestPoint(const Eigen::Vector3d& point, const E
 {
 	Eigen::Vector3d endPoint1Center(inboardEndPoint->GetCenter());
 	Eigen::Vector3d endPoint2Center(outboardEndPoint->GetCenter());
-	Eigen::Vector3d endPoint1Test(VVASEMath::NearestPointOnAxis(point, direction, endPoint1Center));
-	Eigen::Vector3d endPoint2Test(VVASEMath::NearestPointOnAxis(point, direction, endPoint2Center));
+	Eigen::Vector3d endPoint1Test(VVASE::Math::NearestPointOnAxis(point, direction, endPoint1Center));
+	Eigen::Vector3d endPoint2Test(VVASE::Math::NearestPointOnAxis(point, direction, endPoint2Center));
 
 	if (endPoint1Center.Distance(endPoint1Test) < endPoint2Center.Distance(endPoint2Test))
 		return endPoint1Center;

@@ -110,8 +110,8 @@ void Swaybar3D::Update(const Eigen::Vector3d &rightLink, const Eigen::Vector3d &
 {
 	// Make sure all vector arguments are valid - if they are not,
 	// the object will not be made visible
-	if (VVASEMath::IsNaN(rightLink) || VVASEMath::IsNaN(leftLink) ||
-		VVASEMath::IsNaN(torsionMemberTopRight) || VVASEMath::IsNaN(torsionMemberBottomLeft))
+	if (VVASE::Math::IsNaN(rightLink) || VVASE::Math::IsNaN(leftLink) ||
+		VVASE::Math::IsNaN(torsionMemberTopRight) || VVASE::Math::IsNaN(torsionMemberBottomLeft))
 		show = false;
 
 	// Check to make sure the sway bar exists
@@ -158,7 +158,7 @@ void Swaybar3D::Update(const Eigen::Vector3d &rightLink, const Eigen::Vector3d &
 	else if (barStyle == Suspension::SwayBarTBar)
 	{
 		Eigen::Vector3d stemPlaneNormal = (midPoint - axisPivot).Normalize();
-		Eigen::Vector3d topMidPoint = VVASEMath::IntersectWithPlane(stemPlaneNormal, midPoint,
+		Eigen::Vector3d topMidPoint = VVASE::Math::IntersectWithPlane(stemPlaneNormal, midPoint,
 			rightLink - leftLink, leftLink);
 
 		// Position the torsion member

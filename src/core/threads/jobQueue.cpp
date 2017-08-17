@@ -13,8 +13,9 @@
 
 // Local headers
 #include "VVASE/core/threads/jobQueue.h"
-#include "VVASE/core/threads/threadEvent.h"
+#include "VVASE/core/threads/threadEvent.h"// TODO:  Need to remove this from core
 #include "VVASE/core/utilities/debugLog.h"
+#include "VVASE/core/threads/threadDefs.h"
 
 namespace VVASE
 {
@@ -47,7 +48,7 @@ JobQueue::JobQueue(wxEvtHandler *parent) : parent(parent)
 //
 // Input Arguments:
 //		job			= const ThreadJob& to be added to the queue
-//		priority	= const JobPriority& of the new job
+//		priority	= const Priority& of the new job
 //
 // Output Arguments:
 //		None
@@ -56,14 +57,13 @@ JobQueue::JobQueue(wxEvtHandler *parent) : parent(parent)
 //		None
 //
 //==========================================================================
-void JobQueue::AddJob(const ThreadJob& job, const JobPriority& priority)
+void JobQueue::AddJob(const ThreadJob& job, const Priority& priority)
 {
-	wxMutexLocker lock(mutexQueue);
+	MutexLocker lock(mutexQueue);
 	DebugLog::GetInstance()->Log(_T("JobQueue::AddJob (locker)"));
 
-	jobs.insert(std::pair<JobPriority, ThreadJob>(priority, job));
-
-	queueCount.Post();
+	jobs.insert(std::make_pair(priority, job));
+	jobReadyCondition.notify_one();
 }
 
 //==========================================================================
@@ -86,16 +86,12 @@ void JobQueue::AddJob(const ThreadJob& job, const JobPriority& priority)
 //==========================================================================
 ThreadJob JobQueue::Pop()
 {
-	ThreadJob nextJob;
-
-	queueCount.Wait();
-
-	wxMutexLocker lock(mutexQueue);
+	UniqueMutexLocker lock(mutexQueue);
+	jobReadyCondition.wait(lock, [this](){ return !jobs.empty(); });
 	DebugLog::GetInstance()->Log(_T("JobQueue::Pop (lock)"));
 
 	// Get the first job from the queue (prioritization occurs automatically)
-	nextJob = jobs.begin()->second;
-
+	ThreadJob nextJob(jobs.begin()->second);
 	jobs.erase(jobs.begin());
 
 	DebugLog::GetInstance()->Log(_T("JobQueue::Pop (unlock)"));
@@ -112,8 +108,8 @@ ThreadJob JobQueue::Pop()
 // Input Arguments:
 //		Command		= const ThreadCommand& to report
 //		Message		= const wxString& containing string information
-//		ThreadI		= int representing the thread's ID
-//		ObjectID	= int representing the object's ID
+//		ThreadId	= std::thread::id representing the thread's ID
+//		ObjectId	= int representing the object's ID
 //
 // Output Arguments:
 //		None
@@ -122,15 +118,15 @@ ThreadJob JobQueue::Pop()
 //		None
 //
 //==========================================================================
-void JobQueue::Report(const ThreadJob::ThreadCommand& command, int threadId, int objectID)
+void JobQueue::Report(const ThreadJob::ThreadCommand& command, std::thread::id threadId, int objectId)
 {
-	wxCommandEvent evt(EVT_THREAD, command);
+	/*wxCommandEvent evt(EVT_THREAD, command);
 
-	evt.SetId(threadId);
-	evt.SetInt((int)command);
-	evt.SetExtraLong(objectID);
+	evt.SetId(std::hash<std::thread::id>()(threadId));// TODO:  Not guaranteed unique?
+	evt.SetInt(static_cast<int>(command));
+	evt.SetExtraLong(objectId);
 
-	parent->AddPendingEvent(evt);
+	parent->AddPendingEvent(evt);*/// TODO:  Re-implement some other way
 }
 
 //==========================================================================
@@ -151,7 +147,7 @@ void JobQueue::Report(const ThreadJob::ThreadCommand& command, int threadId, int
 //==========================================================================
 size_t JobQueue::PendingJobs()
 {
-	wxMutexLocker lock(mutexQueue);
+	MutexLocker lock(mutexQueue);
 	DebugLog::GetInstance()->Log(_T("JobQueue::PendingJobs (locker)"));
 
 	return jobs.size();

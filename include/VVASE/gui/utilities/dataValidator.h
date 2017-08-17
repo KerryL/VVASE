@@ -51,11 +51,11 @@ public:
 	};
 
 	// Constructors
-	DataValidator(T &data, const UnitType &unit = UnitConverter::UnitTypeUnitless,
+	DataValidator(T &data, const UnitType &unit = UnitType::Unitless,
 		const NumberClass &numberClass = ClassAll);
 	DataValidator(T &data,  const T &min, const T &max,
 		const NumberClass &numberClass = ClassInclusiveRange,
-		const UnitType &unit = UnitConverter::UnitTypeUnitless);
+		const UnitType &unit = UnitType::Unitless);
 
 	virtual wxObject* Clone() const;// Mandatory for children of wxValidator
 
@@ -129,7 +129,7 @@ DataValidator<T>::DataValidator(T &data, const UnitConverter::UnitType &unit,
 //		min			= const double&, minimum acceptable value for the data
 //		max			= const double&, maximum acceptable value for the data
 //		numberClass	= const NumberClass&, specifying whether the range is inclusive or exclusive
-//		unit		= const UnitConverter::UnitType& specifying the type of data we
+//		unit		= const UnitType& specifying the type of data we
 //					  represent
 //
 // Output Arguments:
@@ -141,7 +141,7 @@ DataValidator<T>::DataValidator(T &data, const UnitConverter::UnitType &unit,
 //==========================================================================
 template<class T>
 DataValidator<T>::DataValidator(T &data, const T &min, const T &max,
-	const NumberClass &numberClass, const UnitConverter::UnitType &unit)
+	const NumberClass &numberClass, const UnitType &unit)
 	: wxTextValidator(wxFILTER_NUMERIC), unit(unit), data(data),
 	numberClass(numberClass), min(min), max(max)
 {

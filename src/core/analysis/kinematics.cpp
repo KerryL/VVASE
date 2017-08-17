@@ -11,10 +11,6 @@
 //        most of the functionality of the suspension kinematics end of things
 //        will be.
 
-// wxWidgets headers
-#include <wx/wx.h>
-#include <wx/stopwatch.h>
-
 // Local headers
 #include "VVASE/core/analysis/kinematics.h"
 #include "VVASE/core/car/car.h"
@@ -28,6 +24,7 @@
 #include "VVASE/core/utilities/debugger.h"
 #include "VVASE/gui/renderer/3dcar/debugShape.h"
 #include "VVASE/core/utilities/geometryMath.h"
+#include "VVASE/core/utilities/stopWatch.h"
 
 // Eigen headers
 #include <Eigen/Dense>
@@ -79,7 +76,7 @@ Kinematics::Kinematics()
 //==========================================================================
 void Kinematics::UpdateKinematics(const Car* originalCar, Car* workingCar, vvaseString name)
 {
-	wxStopWatch timer;
+	StopWatch timer;
 	timer.Start();
 
 	Debugger::GetInstance() << "UpdateKinematics() for " << name << Debugger::Priority::Medium;
@@ -89,9 +86,9 @@ void Kinematics::UpdateKinematics(const Car* originalCar, Car* workingCar, vvase
 
 	// Ensure exclusive access to the car objects
 	// NOTE:  Always lock working car first, then lock original car (consistency required to prevent deadlocks)
-	std::lock_guard<std::mutex> workingLock(workingCar->GetMutex());
+	MutexLocker workingLock(workingCar->GetMutex());
 	DebugLog::GetInstance()->Log(_T("Kinematics::UpdateKinematics (workingLock)"));
-	std::lock_guard<std::mutex> originalLock(originalCar->GetMutex());
+	MutexLocker originalLock(originalCar->GetMutex());
 	DebugLog::GetInstance()->Log(_T("Kinematics::UpdateKinematics (originalLock)"));
 
 	// Copy the information in the original car to the working car.  This minimizes rounding
@@ -238,9 +235,8 @@ void Kinematics::UpdateKinematics(const Car* originalCar, Car* workingCar, vvase
 	UpdateCGs(workingCar);
 
 	outputs.Update(originalCar, localSuspension);
-	long totalTime = timer.Time();
 	Debugger::GetInstance() << "Finished UpdateKinematcs() for " << name
-		<< " in " << totalTime / 1000.0 << " sec" << Debugger::Priority::Low;// TODO:  Set stream precision for time
+		<< " in " << timer.GetElapsedTime<double, std::chrono::seconds>() << " sec" << Debugger::Priority::Low;// TODO:  Set stream precision for time
 }
 
 //==========================================================================

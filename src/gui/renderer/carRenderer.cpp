@@ -314,9 +314,9 @@ void CarRenderer::UpdateCarDisplay()
 
 	// Get locks on the car's mutexes
 	// NOTE:  Always lock working car first, then lock original car (consistency required to prevent deadlocks)
-	wxMutexLocker displayLock(displayCar.GetMutex());
+	MutexLocker displayLock(displayCar.GetMutex());
 	DebugLog::GetInstance()->Log("CarRenderer::UpdateCarDisplay (displayLock)", 0);
-	wxMutexLocker referenceLock(referenceCar.GetMutex());
+	MutexLocker referenceLock(referenceCar.GetMutex());
 	DebugLog::GetInstance()->Log("CarRenderer::UpdateCarDisplay (referenceLock)", 0);
 
 	// Update the origin
@@ -373,10 +373,10 @@ void CarRenderer::UpdateCarDisplay()
 		ShowBellCranksPushrods = false;
 
 	// First, calculate the normal vectors for the original and new upright planes
-	targetNormal = VVASEMath::GetPlaneNormal(displayCar.suspension->rightFront.hardpoints[Corner::LowerBallJoint],
+	targetNormal = VVASE::Math::GetPlaneNormal(displayCar.suspension->rightFront.hardpoints[Corner::LowerBallJoint],
 							displayCar.suspension->rightFront.hardpoints[Corner::UpperBallJoint],
 							displayCar.suspension->rightFront.hardpoints[Corner::OutboardTieRod]);
-	originalNormal = VVASEMath::GetPlaneNormal(referenceCar.suspension->rightFront.hardpoints[Corner::LowerBallJoint],
+	originalNormal = VVASE::Math::GetPlaneNormal(referenceCar.suspension->rightFront.hardpoints[Corner::LowerBallJoint],
 							referenceCar.suspension->rightFront.hardpoints[Corner::UpperBallJoint],
 							referenceCar.suspension->rightFront.hardpoints[Corner::OutboardTieRod]);
 
@@ -442,7 +442,7 @@ void CarRenderer::UpdateCarDisplay()
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityUpright));
 	rightFrontBellCrank->Update(displayCar.suspension->rightFront.hardpoints[Corner::OutboardDamper],
 		displayCar.suspension->rightFront.hardpoints[Corner::InboardPushrod],
-		VVASEMath::NearestPointOnAxis(displayCar.suspension->rightFront.hardpoints[Corner::BellCrankPivot1],
+		VVASE::Math::NearestPointOnAxis(displayCar.suspension->rightFront.hardpoints[Corner::BellCrankPivot1],
 		displayCar.suspension->rightFront.hardpoints[Corner::BellCrankPivot2] -
 		displayCar.suspension->rightFront.hardpoints[Corner::BellCrankPivot1],
 		displayCar.suspension->rightFront.hardpoints[Corner::InboardPushrod]),
@@ -469,10 +469,10 @@ void CarRenderer::UpdateCarDisplay()
 		ShowBellCranksPushrods = false;
 
 	// First, calculate the normal vectors for the original and new upright planes
-	targetNormal = VVASEMath::GetPlaneNormal(displayCar.suspension->leftFront.hardpoints[Corner::LowerBallJoint],
+	targetNormal = VVASE::Math::GetPlaneNormal(displayCar.suspension->leftFront.hardpoints[Corner::LowerBallJoint],
 							displayCar.suspension->leftFront.hardpoints[Corner::UpperBallJoint],
 							displayCar.suspension->leftFront.hardpoints[Corner::OutboardTieRod]);
-	originalNormal = VVASEMath::GetPlaneNormal(referenceCar.suspension->leftFront.hardpoints[Corner::LowerBallJoint],
+	originalNormal = VVASE::Math::GetPlaneNormal(referenceCar.suspension->leftFront.hardpoints[Corner::LowerBallJoint],
 							referenceCar.suspension->leftFront.hardpoints[Corner::UpperBallJoint],
 							referenceCar.suspension->leftFront.hardpoints[Corner::OutboardTieRod]);
 
@@ -537,7 +537,7 @@ void CarRenderer::UpdateCarDisplay()
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityUpright));
 	leftFrontBellCrank->Update(displayCar.suspension->leftFront.hardpoints[Corner::OutboardDamper],
 		displayCar.suspension->leftFront.hardpoints[Corner::InboardPushrod],
-		VVASEMath::NearestPointOnAxis(displayCar.suspension->leftFront.hardpoints[Corner::BellCrankPivot1],
+		VVASE::Math::NearestPointOnAxis(displayCar.suspension->leftFront.hardpoints[Corner::BellCrankPivot1],
 		displayCar.suspension->leftFront.hardpoints[Corner::BellCrankPivot2] -
 		displayCar.suspension->leftFront.hardpoints[Corner::BellCrankPivot1],
 		displayCar.suspension->leftFront.hardpoints[Corner::InboardPushrod]),
@@ -571,10 +571,10 @@ void CarRenderer::UpdateCarDisplay()
 		ShowBellCranksPushrods = false;
 
 	// First, calculate the normal vectors for the original and new upright planes
-	targetNormal = VVASEMath::GetPlaneNormal(displayCar.suspension->rightRear.hardpoints[Corner::LowerBallJoint],
+	targetNormal = VVASE::Math::GetPlaneNormal(displayCar.suspension->rightRear.hardpoints[Corner::LowerBallJoint],
 							displayCar.suspension->rightRear.hardpoints[Corner::UpperBallJoint],
 							displayCar.suspension->rightRear.hardpoints[Corner::OutboardTieRod]);
-	originalNormal = VVASEMath::GetPlaneNormal(referenceCar.suspension->rightRear.hardpoints[Corner::LowerBallJoint],
+	originalNormal = VVASE::Math::GetPlaneNormal(referenceCar.suspension->rightRear.hardpoints[Corner::LowerBallJoint],
 							referenceCar.suspension->rightRear.hardpoints[Corner::UpperBallJoint],
 							referenceCar.suspension->rightRear.hardpoints[Corner::OutboardTieRod]);
 
@@ -640,7 +640,7 @@ void CarRenderer::UpdateCarDisplay()
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityUpright));
 	rightRearBellCrank->Update(displayCar.suspension->rightRear.hardpoints[Corner::OutboardDamper],
 		displayCar.suspension->rightRear.hardpoints[Corner::InboardPushrod],
-		VVASEMath::NearestPointOnAxis(displayCar.suspension->rightRear.hardpoints[Corner::BellCrankPivot1],
+		VVASE::Math::NearestPointOnAxis(displayCar.suspension->rightRear.hardpoints[Corner::BellCrankPivot1],
 		displayCar.suspension->rightRear.hardpoints[Corner::BellCrankPivot2] -
 		displayCar.suspension->rightRear.hardpoints[Corner::BellCrankPivot1],
 		displayCar.suspension->rightRear.hardpoints[Corner::InboardPushrod]),
@@ -667,10 +667,10 @@ void CarRenderer::UpdateCarDisplay()
 		ShowBellCranksPushrods = false;
 
 	// First, calculate the normal vectors for the original and new upright planes
-	targetNormal = VVASEMath::GetPlaneNormal(displayCar.suspension->leftRear.hardpoints[Corner::LowerBallJoint],
+	targetNormal = VVASE::Math::GetPlaneNormal(displayCar.suspension->leftRear.hardpoints[Corner::LowerBallJoint],
 							displayCar.suspension->leftRear.hardpoints[Corner::UpperBallJoint],
 							displayCar.suspension->leftRear.hardpoints[Corner::OutboardTieRod]);
-	originalNormal = VVASEMath::GetPlaneNormal(referenceCar.suspension->leftRear.hardpoints[Corner::LowerBallJoint],
+	originalNormal = VVASE::Math::GetPlaneNormal(referenceCar.suspension->leftRear.hardpoints[Corner::LowerBallJoint],
 							referenceCar.suspension->leftRear.hardpoints[Corner::UpperBallJoint],
 							referenceCar.suspension->leftRear.hardpoints[Corner::OutboardTieRod]);
 
@@ -735,7 +735,7 @@ void CarRenderer::UpdateCarDisplay()
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityUpright));
 	leftRearBellCrank->Update(displayCar.suspension->leftRear.hardpoints[Corner::OutboardDamper],
 		displayCar.suspension->leftRear.hardpoints[Corner::InboardPushrod],
-		VVASEMath::NearestPointOnAxis(displayCar.suspension->leftRear.hardpoints[Corner::BellCrankPivot1],
+		VVASE::Math::NearestPointOnAxis(displayCar.suspension->leftRear.hardpoints[Corner::BellCrankPivot1],
 		displayCar.suspension->leftRear.hardpoints[Corner::BellCrankPivot2] -
 		displayCar.suspension->leftRear.hardpoints[Corner::BellCrankPivot1],
 		displayCar.suspension->leftRear.hardpoints[Corner::InboardPushrod]),
@@ -1480,22 +1480,22 @@ void CarRenderer::GetSelectedHardpoint(const Eigen::Vector3d& point, const Eigen
 	unsigned int i;
 	for (i = 0; i < Corner::NumberOfHardpoints; i++)
 	{
-		if (VVASEMath::IsZero(displayCar.suspension->leftFront.hardpoints[i] - closestPoint))
+		if (VVASE::Math::IsZero(displayCar.suspension->leftFront.hardpoints[i] - closestPoint))
 		{
 			leftFrontPoint = static_cast<Corner::Hardpoints>(i);
 			return;
 		}
-		else if (VVASEMath::IsZero(displayCar.suspension->rightFront.hardpoints[i] - closestPoint))
+		else if (VVASE::Math::IsZero(displayCar.suspension->rightFront.hardpoints[i] - closestPoint))
 		{
 			rightFrontPoint = static_cast<Corner::Hardpoints>(i);
 			return;
 		}
-		else if (VVASEMath::IsZero(displayCar.suspension->leftRear.hardpoints[i] - closestPoint))
+		else if (VVASE::Math::IsZero(displayCar.suspension->leftRear.hardpoints[i] - closestPoint))
 		{
 			leftRearPoint = static_cast<Corner::Hardpoints>(i);
 			return;
 		}
-		else if (VVASEMath::IsZero(displayCar.suspension->rightRear.hardpoints[i] - closestPoint))
+		else if (VVASE::Math::IsZero(displayCar.suspension->rightRear.hardpoints[i] - closestPoint))
 		{
 			rightRearPoint = static_cast<Corner::Hardpoints>(i);
 			return;
@@ -1504,7 +1504,7 @@ void CarRenderer::GetSelectedHardpoint(const Eigen::Vector3d& point, const Eigen
 
 	for (i = 0; i < Suspension::NumberOfHardpoints; i++)
 	{
-		if (VVASEMath::IsZero(displayCar.suspension->hardpoints[i] - closestPoint))
+		if (VVASE::Math::IsZero(displayCar.suspension->hardpoints[i] - closestPoint))
 		{
 			suspensionPoint = static_cast<Suspension::Hardpoints>(i);
 			return;
@@ -1601,7 +1601,7 @@ void CarRenderer::DoEditPointDialog()
 	if (dialog.ShowModal() != wxOK)
 		return;
 
-	if (VVASEMath::IsZero(*pointToEdit - tempPoint))
+	if (VVASE::Math::IsZero(*pointToEdit - tempPoint))
 		return;
 
 	wxMutex& mutex(car.GetOriginalCar().GetMutex());

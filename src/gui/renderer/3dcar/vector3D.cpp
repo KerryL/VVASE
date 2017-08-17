@@ -99,7 +99,7 @@ void Vector3D::Update(const Eigen::Vector3d &tip, const Eigen::Vector3d &tail, c
 {
 	// Make sure all vector arguments are valid - if they are not,
 	// the object will not be made visible
-	if (VVASEMath::IsNaN(tip) || VVASEMath::IsNaN(tail))
+	if (VVASE::Math::IsNaN(tip) || VVASE::Math::IsNaN(tail))
 		show = false;
 
 	// Set the visibility flags

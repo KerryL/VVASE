@@ -70,7 +70,7 @@ class Car
 {
 public:
 	Car();
-	Car(const Car &car);
+	//Car(const Car &car);
 	//~Car();
 
     template <typename T>
@@ -93,7 +93,7 @@ public:
 	bool HasRearHalfShafts() const;
 
 	// This class contains dynamically allocated memory - overload the assignment operator
-	Car& operator=(const Car &car);
+	//Car& operator=(const Car &car);
 
 	std::mutex &GetMutex() const { return carMutex; };
 

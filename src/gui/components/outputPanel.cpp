@@ -128,7 +128,7 @@ void OutputPanel::UpdateInformation(GuiCar::CarOutputs outputs, Car &car,
 			KinematicOutputs::GetOutputUnitType((KinematicOutputs::OutputsComplete)i))));
 
 		// If the current value is undefined, make sure the user knows it
-		if (VVASEMath::IsNaN(outputs.kinematicOutputs.GetOutputValue((KinematicOutputs::OutputsComplete)i)))
+		if (VVASE::Math::IsNaN(outputs.kinematicOutputs.GetOutputValue((KinematicOutputs::OutputsComplete)i)))
 		{
 			// Change the cell value "Undef." instead of #1.Q0
 			outputsList->SetCellValue(i, index, _T("Undef."));
@@ -209,7 +209,7 @@ void OutputPanel::UpdateInformation(GuiCar::CarOutputs outputs, Car &car,
 	// white - otherwise it might appear to be "Undef." instead of "N/A".
 
 	// Get a lock on the car's mutex
-	wxMutexLocker lock(car.GetMutex());
+	MutexLocker lock(car.GetMutex());
 	DebugLog::GetInstance()->Log(_T("OutputPanel::UpdateInformation (locker)"));
 
 	// Front half shafts
