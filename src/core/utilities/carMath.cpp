@@ -385,7 +385,7 @@ unsigned int Math::GetPrecision(const double &minimum, const double &majorResolu
 	if (log10(baseValue) >= 0.0)
 		return 0;
 
-	return -log10(baseValue) + 1;
+	return static_cast<unsigned int>(-log10(baseValue) + 1);
 }
 
 //==========================================================================

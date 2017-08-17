@@ -70,8 +70,11 @@ class Car
 {
 public:
 	Car();
-	//Car(const Car &car);
-	//~Car();
+	Car(const Car& car);
+	Car(Car&& car);
+	~Car() = default;
+	Car& operator=(const Car& car);
+	Car& operator=(Car&& car);
 
     template <typename T>
 	static bool RegisterSubsystem();
@@ -91,9 +94,6 @@ public:
 	// For ease of determining whether or not a car has certain features
 	bool HasFrontHalfShafts() const;
 	bool HasRearHalfShafts() const;
-
-	// This class contains dynamically allocated memory - overload the assignment operator
-	//Car& operator=(const Car &car);
 
 	std::mutex &GetMutex() const { return carMutex; };
 
@@ -120,6 +120,9 @@ private:
 	typedef std::unordered_map<vvaseString, std::unique_ptr<Subsystem>> SubsystemsMap;
     SubsystemsMap subsystems;
 	static SubsystemsMap CreateComponents();
+
+	//template <typename T>
+	void CopySubsystem(const Subsystem& from, Subsystem& to);
 };
 
 template <typename T>
@@ -144,6 +147,11 @@ const T* Car::GetSubsystem() const
 		return nullptr;
 	return dynamic_cast<const T*>(it->second.get());
 }
+
+/*template <typename T>
+void Car::CopySubsystem(const Subsystem& from, Subsystem& to)
+{
+}*/
 
 }// namespace VVASE
 

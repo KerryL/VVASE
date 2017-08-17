@@ -28,8 +28,6 @@
 namespace VVASE
 {
 
-ComponentManager<Subsystem> Car::subsystemManager;
-
 //==========================================================================
 // Class:			Car
 // Function:		Car
@@ -222,14 +220,10 @@ Car::Car() : subsystems(CreateComponents())
 // Class:			Car
 // Function:		Car
 //
-// Description:		Copy Constructor for the Car class.  This call the copy
-//					constructors for all of the subsystems as well.  This
-//					DOES NOT allocate memory for this car.  Correct usage is
-//					something like:
-//						Car NewCar = new Car(OldCar);
+// Description:		Copy Constructor for the Car class.
 //
 // Input Arguments:
-//		car	= const &Car that is to be copied
+//		car	= const Car& that is to be copied
 //
 // Output Arguments:
 //		None
@@ -238,14 +232,31 @@ Car::Car() : subsystems(CreateComponents())
 //		None
 //
 //==========================================================================
-/*Car::Car(const Car& car) : subsystems(CreateComponents())
+Car::Car(const Car& car)
 {
 	*this = car;
 }
 
-Car::Car(Car&& car) : subsystems(std::move(car.mComponents))
+//==========================================================================
+// Class:			Car
+// Function:		Car
+//
+// Description:		Move copy Constructor for the Car class.
+//
+// Input Arguments:
+//		car	= Car&& that is to be copied
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+Car::Car(Car&& car)
 {
-}*/
+	*this = std::move(car);
+}
 
 //==========================================================================
 // Class:			Car
@@ -263,6 +274,8 @@ Car::Car(Car&& car) : subsystems(std::move(car.mComponents))
 //		None
 //
 //==========================================================================
+ComponentManager<Subsystem> Car::subsystemManager;
+
 //const int Car::currentFileVersion = 0;// OBSOLETE 4/25/2009 - Added AppearanceOptions
 //const int Car::currentFileVersion = 1;// OBSOLETE 8/17/2009 - Fixed Engine::Write()
 //const int Car::currentFileVersion = 2;// OBSOLETE 7/13/2015 - Added Front/RearBarPivotAxis to Suspension
@@ -524,28 +537,65 @@ bool Car::HasRearHalfShafts() const
 //		Car& reference to this
 //
 //==========================================================================
-/*Car& Car::operator=(const Car& car)
+Car& Car::operator=(const Car& car)
 {
-	// Check for self-assignment
 	if (this == &car)
 		return *this;
 
 	assert(subsystems.size() == car.subsystems.size());
-	std::copy(car.subsystems.begin(), car.subsystems.end(), subsystems.begin());
-	return *this;
-}*/
+	for (const auto& subsystem : car.subsystems)
+	{
+		/*auto& to(subsystems[subsystem.second->GetName()]);// TODO:  Recursive!  Also requires knowing the type...
+		assert(to && "target does not have subsystem that exists in source");
 
-/*Car& Car::operator=(Car&& car)
+		CopySubsystem(*subsystem.second.get(), *to.get());// TODO:  Need to be able to know types here to ensure proper assignment operator is called*/
+	}
+
+	return *this;
+}
+
+//==========================================================================
+// Class:			Car
+// Function:		operator=
+//
+// Description:		Move assignment operator for the Car class.
+//
+// Input Arguments:
+//		car	= Car&& to assign to this
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		Car& reference to this
+//
+//==========================================================================
+Car& Car::operator=(Car&& car)
 {
-	// Check for self-assignment
 	if (this == &car)
 		return *this;
 
 	subsystems.clear();
 	subsystems = std::move(car.subsystems);
 	return *this;
-}*/
+}
 
+//==========================================================================
+// Class:			Car
+// Function:		CreateComponents
+//
+// Description:		Generates instances of the subsystems currently registered.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		Car::SubsystemsMap
+//
+//==========================================================================
 Car::SubsystemsMap Car::CreateComponents()
 {
 	SubsystemsMap subsystems;
