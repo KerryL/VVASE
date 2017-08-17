@@ -10,10 +10,12 @@
 // Desc:  Derived from Primitive for creating cylindrical objects.
 
 // Local headers
-#include "vRenderer/primitives/cylinder.h"
-#include "vRenderer/renderWindow.h"
-#include "vMath/carMath.h"
-#include "vUtilities/unitConverter.h"
+#include "VVASE/gui/renderer/primitives/cylinder.h"
+#include "VVASE/gui/utilities/unitConverter.h"
+#include "VVASE/core/utilities/carMath.h"
+
+// LibPlot2D headers
+#include <lp2d/renderer/renderWindow.h>
 
 namespace VVASE
 {
@@ -25,7 +27,7 @@ namespace VVASE
 // Description:		Constructor for the Cylinder class.
 //
 // Input Arguments:
-//		renderWindow	= RenderWindow& pointing to the object that owns this
+//		renderWindow	= LibPlot2D::RenderWindow& pointing to the object that owns this
 //
 // Output Arguments:
 //		None
@@ -34,12 +36,12 @@ namespace VVASE
 //		None
 //
 //==========================================================================
-Cylinder::Cylinder(RenderWindow &renderWindow) : Primitive(renderWindow)
+Cylinder::Cylinder(LibPlot2D::RenderWindow &renderWindow) : Primitive(renderWindow)
 {
 	drawCaps = false;
 	radius = 0.0;
-	endPoint1.Set(0.0, 0.0, 0.0);
-	endPoint2.Set(0.0, 0.0, 0.0);
+	endPoint1.setZero();
+	endPoint2.setZero();
 	resolution = 4;
 }
 
@@ -87,12 +89,12 @@ void Cylinder::GenerateGeometry()
 
 	double halfHeight = endPoint1.Distance(endPoint2) / 2.0;
 
-	Eigen::Vector3d axisDirection = (endPoint2 - endPoint1).Normalize();
-	Eigen::Vector3d center = endPoint1 + axisDirection * halfHeight;
-	Eigen::Vector3d referenceDirection(1.0, 0.0, 0.0);
+	const Eigen::Vector3d axisDirection((endPoint2 - endPoint1).normalized());
+	const Eigen::Vector3d center(endPoint1 + axisDirection * halfHeight);
+	const Eigen::Vector3d referenceDirection(1.0, 0.0, 0.0);
 
 	// Determine the angle and axis of rotation
-	Eigen::Vector3d axisOfRotation = referenceDirection.Cross(axisDirection);
+	Eigen::Vector3d axisOfRotation = referenceDirection.cross(axisDirection);
 	double angle = acos(axisDirection * referenceDirection);// [rad]
 
 	glPushMatrix();
@@ -100,7 +102,7 @@ void Cylinder::GenerateGeometry()
 		glTranslated(center.x, center.y, center.z);
 
 		// Rotate the current matrix, if the rotation axis is non-zero
-		if (!VVASE::Math::IsZero(axisOfRotation.Length()))
+		if (!VVASE::Math::IsZero(axisOfRotation.norm()))
 			glRotated(UnitConverter::RAD_TO_DEG(angle), axisOfRotation.x, axisOfRotation.y, axisOfRotation.z);
 
 		// Create the cylinder along the X-axis (must match the reference direction above)
@@ -202,7 +204,7 @@ bool Cylinder::HasValidParameters()
 void Cylinder::SetResolution(const int &resolution)
 {
 	this->resolution = resolution;
-	modified = true;
+	mModified = true;
 }
 
 //==========================================================================
@@ -225,7 +227,7 @@ void Cylinder::SetResolution(const int &resolution)
 void Cylinder::SetCapping(const bool &drawCaps)
 {
 	this->drawCaps = drawCaps;
-	modified = true;
+	mModified = true;
 }
 
 //==========================================================================
@@ -247,7 +249,7 @@ void Cylinder::SetCapping(const bool &drawCaps)
 void Cylinder::SetEndPoint1(const Eigen::Vector3d &endPoint1)
 {
 	this->endPoint1 = endPoint1;
-	modified = true;
+	mModified = true;
 }
 
 //==========================================================================
@@ -269,7 +271,7 @@ void Cylinder::SetEndPoint1(const Eigen::Vector3d &endPoint1)
 void Cylinder::SetEndPoint2(const Eigen::Vector3d &endPoint2)
 {
 	this->endPoint2 = endPoint2;
-	modified = true;
+	mModified = true;
 }
 
 //==========================================================================
@@ -291,7 +293,7 @@ void Cylinder::SetEndPoint2(const Eigen::Vector3d &endPoint2)
 void Cylinder::SetRadius(const double &radius)
 {
 	this->radius = radius;
-	modified = true;
+	mModified = true;
 }
 
 //==========================================================================

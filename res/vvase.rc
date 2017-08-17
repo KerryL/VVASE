@@ -22,7 +22,7 @@ ICON_ID_MASS_PROPS		ICON		"res\\icons\\mass_properties.ico"
 ICON_ID_SUSPENSION		ICON		"res\\icons\\suspension.ico"
 ICON_ID_TIRES			ICON		"res\\icons\\tires.ico"
 
-ICON_ID_ITERATION		ICON		"res\\icons\\iteration.ico"
+ICON_ID_SWEEP			ICON		"res\\icons\\iteration.ico"
 ICON_ID_OPTIMIZATION	ICON		"res\\icons\\optimization.ico"
 
 ICON_ID_PERSPECTIVE		ICON		"res\\icons\\perspective.ico"

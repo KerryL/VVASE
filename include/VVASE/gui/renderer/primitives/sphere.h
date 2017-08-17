@@ -24,8 +24,7 @@ namespace VVASE
 class Sphere : public LibPlot2D::Primitive
 {
 public:
-	Sphere(RenderWindow &renderWindow);
-	~Sphere();
+	Sphere(LibPlot2D::RenderWindow &renderWindow);
 
 	// Mandatory overloads from Primitive - for creating geometry and testing the
 	// validity of this object's parameters

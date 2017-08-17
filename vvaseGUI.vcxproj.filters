@@ -70,6 +70,15 @@
     <Filter Include="Source Files\gui\utilities">
       <UniqueIdentifier>{a68c399e-a6ba-4b41-9e76-4c04bf9f55e8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\gui\components\editPanel">
+      <UniqueIdentifier>{3b71c718-bb50-4730-ae0f-02bc35090a8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\gui\components\editPanel\guiCar">
+      <UniqueIdentifier>{43a05472-a996-4203-9c3f-cb67009d4ad3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\gui\components\editPanel\sweep">
+      <UniqueIdentifier>{7e118724-1556-4036-9342-b7940f3101ac}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="res\vvase.rc">
@@ -179,87 +188,6 @@
     <ClInclude Include="src\application\vvaseConstants.h">
       <Filter>Source Files\application</Filter>
     </ClInclude>
-    <ClInclude Include="src\gui\appearanceOptions.h">
-      <Filter>Source Files\gui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gui\dropTarget.h">
-      <Filter>Source Files\gui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gui\gaObject.h">
-      <Filter>Source Files\gui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gui\geneticAlgorithmPanel.h">
-      <Filter>Source Files\gui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gui\guiCar.h">
-      <Filter>Source Files\gui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gui\ipcClient.h">
-      <Filter>Source Files\gui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gui\ipcConnection.h">
-      <Filter>Source Files\gui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gui\ipcServer.h">
-      <Filter>Source Files\gui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gui\sweep.h">
-      <Filter>Source Files\gui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gui\components\editPanel\editPanel.h">
-      <Filter>Source Files\gui\components\editPanel</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gui\components\editPanel\guiCar\editAerodynamicsPanel.h">
-      <Filter>Source Files\gui\components\editPanel\guiCar</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gui\components\editPanel\guiCar\editBrakesPanel.h">
-      <Filter>Source Files\gui\components\editPanel\guiCar</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gui\components\editPanel\guiCar\editCornerPanel.h">
-      <Filter>Source Files\gui\components\editPanel\guiCar</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gui\components\editPanel\guiCar\editDifferentialPanel.h">
-      <Filter>Source Files\gui\components\editPanel\guiCar</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gui\components\editPanel\guiCar\editDrivetrainPanel.h">
-      <Filter>Source Files\gui\components\editPanel\guiCar</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gui\components\editPanel\guiCar\editEnginePanel.h">
-      <Filter>Source Files\gui\components\editPanel\guiCar</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gui\components\editPanel\guiCar\editMassPanel.h">
-      <Filter>Source Files\gui\components\editPanel\guiCar</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gui\components\editPanel\guiCar\editSuspensionNotebook.h">
-      <Filter>Source Files\gui\components\editPanel\guiCar</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gui\components\editPanel\guiCar\editSuspensionPanel.h">
-      <Filter>Source Files\gui\components\editPanel\guiCar</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gui\components\editPanel\guiCar\editSuspensionRatesPanel.h">
-      <Filter>Source Files\gui\components\editPanel\guiCar</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gui\components\editPanel\guiCar\editTiresPanel.h">
-      <Filter>Source Files\gui\components\editPanel\guiCar</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gui\components\editPanel\sweep\editSweepNotebook.h">
-      <Filter>Source Files\gui\components\editPanel\sweep</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gui\components\editPanel\sweep\editSweepOptionsPanel.h">
-      <Filter>Source Files\gui\components\editPanel\sweep</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gui\components\editPanel\sweep\editSweepPlotsPanel.h">
-      <Filter>Source Files\gui\components\editPanel\sweep</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gui\components\editPanel\sweep\editSweepRangePanel.h">
-      <Filter>Source Files\gui\components\editPanel\sweep</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gui\dialogs\appearanceOptionsDialog.h">
-      <Filter>Source Files\gui\dialogs</Filter>
-    </ClInclude>
-    <ClInclude Include="src\gui\dialogs\optionsDialog.h">
-      <Filter>Source Files\gui\dialogs</Filter>
-    </ClInclude>
     <ClInclude Include="include\VVASE\gui\utilities\dataValidator.h">
       <Filter>Header Files\gui\utilities</Filter>
     </ClInclude>
@@ -271,6 +199,87 @@
     </ClInclude>
     <ClInclude Include="include\VVASE\gui\utilities\xlsxReader.h">
       <Filter>Header Files\gui\utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gui\sweep.h">
+      <Filter>Header Files\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gui\ipcServer.h">
+      <Filter>Header Files\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gui\ipcConnection.h">
+      <Filter>Header Files\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gui\ipcClient.h">
+      <Filter>Header Files\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gui\guiCar.h">
+      <Filter>Header Files\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gui\geneticAlgorithmPanel.h">
+      <Filter>Header Files\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gui\gaObject.h">
+      <Filter>Header Files\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gui\dropTarget.h">
+      <Filter>Header Files\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gui\appearanceOptions.h">
+      <Filter>Header Files\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gui\dialogs\appearanceOptionsDialog.h">
+      <Filter>Header Files\gui\dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gui\dialogs\optionsDialog.h">
+      <Filter>Header Files\gui\dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gui\components\editPanel\guiCar\editAerodynamicsPanel.h">
+      <Filter>Header Files\gui\components\editPanel\guiCar</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gui\components\editPanel\guiCar\editBrakesPanel.h">
+      <Filter>Header Files\gui\components\editPanel\guiCar</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gui\components\editPanel\guiCar\editCornerPanel.h">
+      <Filter>Header Files\gui\components\editPanel\guiCar</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gui\components\editPanel\guiCar\editDifferentialPanel.h">
+      <Filter>Header Files\gui\components\editPanel\guiCar</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gui\components\editPanel\guiCar\editDrivetrainPanel.h">
+      <Filter>Header Files\gui\components\editPanel\guiCar</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gui\components\editPanel\guiCar\editEnginePanel.h">
+      <Filter>Header Files\gui\components\editPanel\guiCar</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gui\components\editPanel\guiCar\editMassPanel.h">
+      <Filter>Header Files\gui\components\editPanel\guiCar</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gui\components\editPanel\guiCar\editSuspensionNotebook.h">
+      <Filter>Header Files\gui\components\editPanel\guiCar</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gui\components\editPanel\guiCar\editSuspensionPanel.h">
+      <Filter>Header Files\gui\components\editPanel\guiCar</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gui\components\editPanel\guiCar\editSuspensionRatesPanel.h">
+      <Filter>Header Files\gui\components\editPanel\guiCar</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gui\components\editPanel\guiCar\editTiresPanel.h">
+      <Filter>Header Files\gui\components\editPanel\guiCar</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gui\components\editPanel\sweep\editSweepNotebook.h">
+      <Filter>Header Files\gui\components\editPanel\sweep</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gui\components\editPanel\sweep\editSweepOptionsPanel.h">
+      <Filter>Header Files\gui\components\editPanel\sweep</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gui\components\editPanel\sweep\editSweepPlotsPanel.h">
+      <Filter>Header Files\gui\components\editPanel\sweep</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gui\components\editPanel\sweep\editSweepRangePanel.h">
+      <Filter>Header Files\gui\components\editPanel\sweep</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gui\components\editPanel\editPanel.h">
+      <Filter>Header Files\gui\components\editPanel</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

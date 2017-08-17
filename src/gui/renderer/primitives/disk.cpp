@@ -10,10 +10,12 @@
 // Desc:  Derived from Primitive for creating disk objects.
 
 // Local headers
-#include "vRenderer/primitives/disk.h"
-#include "vRenderer/renderWindow.h"
-#include "vMath/carMath.h"
-#include "vUtilities/unitConverter.h"
+#include "VVASE/gui/renderer/primitives/disk.h"
+#include "VVASE/gui/utilities/unitConverter.h"
+#include "VVASE/core/utilities/carMath.h"
+
+// LibPlot2D headers
+#include <lp2d/renderer/renderWindow.h>
 
 namespace VVASE
 {
@@ -25,7 +27,7 @@ namespace VVASE
 // Description:		Constructor for the Disk class.
 //
 // Input Arguments:
-//		_renderWindow	= RenderWindow* pointing to the object that owns this
+//		renderWindow	= RenderWindow* pointing to the object that owns this
 //
 // Output Arguments:
 //		None
@@ -34,33 +36,13 @@ namespace VVASE
 //		None
 //
 //==========================================================================
-Disk::Disk(RenderWindow &renderWindow) : Primitive(renderWindow)
+Disk::Disk(LibPlot2D::RenderWindow &renderWindow) : Primitive(renderWindow)
 {
 	outerRadius = 0.0;
 	innerRadius = 0.0;
-	center.Set(0.0, 0.0, 0.0);
-	normal.Set(0.0, 0.0, 0.0);
+	center.setZero();
+	normal.setZero();
 	resolution = 4;
-}
-
-//==========================================================================
-// Class:			Disk
-// Function:		~Disk
-//
-// Description:		Destructor for the Disk class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Disk::~Disk()
-{
 }
 
 //==========================================================================
@@ -89,7 +71,7 @@ void Disk::GenerateGeometry()
 	Eigen::Vector3d referenceDirection(1.0, 0.0, 0.0);
 
 	// Determine the angle and axis of rotation
-	Eigen::Vector3d axisOfRotation = referenceDirection.Cross(normal);
+	Eigen::Vector3d axisOfRotation = referenceDirection.cross(normal);
 	double angle = acos(normal * referenceDirection);// [rad]
 
 	glPushMatrix();
@@ -98,7 +80,7 @@ void Disk::GenerateGeometry()
 		glTranslated(center.x, center.y, center.z);
 
 		// Rotate the current matrix, if the rotation axis is non-zero
-		if (!VVASE::Math::IsZero(axisOfRotation.Length()))
+		if (!VVASE::Math::IsZero(axisOfRotation.norm()))
 			glRotated(UnitConverter::RAD_TO_DEG(angle), axisOfRotation.x, axisOfRotation.y, axisOfRotation.z);
 
 		// Set the normal direction
@@ -152,7 +134,7 @@ void Disk::GenerateGeometry()
 //==========================================================================
 bool Disk::HasValidParameters()
 {
-	if (outerRadius > 0.0 && !VVASE::Math::IsZero(normal.Length()))
+	if (outerRadius > 0.0 && !VVASE::Math::IsZero(normal.norm()))
 		return true;
 
 	return false;
@@ -177,7 +159,7 @@ bool Disk::HasValidParameters()
 void Disk::SetResolution(const int &resolution)
 {
 	this->resolution = resolution;
-	modified = true;
+	mModified = true;
 }
 
 //==========================================================================
@@ -199,7 +181,7 @@ void Disk::SetResolution(const int &resolution)
 void Disk::SetOuterRadius(const double &outerRadius)
 {
 	this->outerRadius = outerRadius;
-	modified = true;
+	mModified = true;
 }
 
 //==========================================================================
@@ -221,7 +203,7 @@ void Disk::SetOuterRadius(const double &outerRadius)
 void Disk::SetInnerRadius(const double &innerRadius)
 {
 	this->innerRadius = innerRadius;
-	modified = true;
+	mModified = true;
 }
 
 //==========================================================================
@@ -243,7 +225,7 @@ void Disk::SetInnerRadius(const double &innerRadius)
 void Disk::SetCenter(const Eigen::Vector3d &center)
 {
 	this->center = center;
-	modified = true;
+	mModified = true;
 }
 
 //==========================================================================
@@ -264,8 +246,8 @@ void Disk::SetCenter(const Eigen::Vector3d &center)
 //==========================================================================
 void Disk::SetNormal(const Eigen::Vector3d &normal)
 {
-	this->normal = normal.Normalize();
-	modified = true;
+	this->normal = normal.normalized();
+	mModified = true;
 }
 
 //==========================================================================

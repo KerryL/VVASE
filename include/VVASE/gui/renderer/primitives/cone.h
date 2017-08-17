@@ -24,7 +24,7 @@ namespace VVASE
 class Cone : public LibPlot2D::Primitive
 {
 public:
-	Cone(RenderWindow &renderWindow);
+	Cone(LibPlot2D::RenderWindow &renderWindow);
 	~Cone();
 
 	// Mandatory overloads from Primitive - for creating geometry and testing the

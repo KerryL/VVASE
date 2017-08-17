@@ -24,8 +24,7 @@ namespace VVASE
 class Quadrilateral : public LibPlot2D::Primitive
 {
 public:
-	Quadrilateral(RenderWindow &renderWindow);
-	~Quadrilateral();
+	Quadrilateral(LibPlot2D::RenderWindow &renderWindow);
 
 	// Mandatory overloads from Primitive - for creating geometry and testing the
 	// validity of this object's parameters

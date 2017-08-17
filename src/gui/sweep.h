@@ -14,13 +14,13 @@
 #ifndef SWEEP_H_
 #define SWEEP_H_
 
-// wxWidgets headers
-#include <wx/thread.h>
-
 // Local headers
 #include "guiCar.h"
 #include "VVASE/core/analysis/kinematics.h"
 #include "VVASE/core/analysis/kinematicOutputs.h"
+
+// LibPlot2D headers
+#include <lp2d/gui/guiInterface.h>
 
 // Standard C++ headers
 #include <memory>
@@ -30,13 +30,12 @@ namespace VVASE
 
 // Local forward declarations
 class Car;
-class PlotPanel;
 
-class Iteration : public GuiObject
+class Sweep : public GuiObject
 {
 public:
-	Iteration(MainFrame &mainFrame, wxString pathAndFileName = wxEmptyString);
-	~Iteration();
+	Sweep(MainFrame &mainFrame, wxString pathAndFileName = wxEmptyString);
+	~Sweep();
 
 	// Structure that defines the starting and stopping points for
 	// this analysis
@@ -68,8 +67,8 @@ public:
 	void UpdateDisplay();
 
 	// Accessors for the range object
-	inline Iteration::Range GetRange() const { return range; }
-	void SetRange(const Iteration::Range &range);
+	inline Range GetRange() const { return range; }
+	void SetRange(const Range &range);
 
 	// For exporting the data to a comma or tab delimited text file
 	void ExportDataToFile(wxString pathAndFileName) const;
@@ -236,7 +235,10 @@ private:
 	bool analysesDisplayed;// FIXME:  I'd like to see these go away - are they needed?  Is there a cleaner way to handle it?
 	bool secondAnalysisPending;
 
-	PlotPanel *plotPanel;
+	void CreateGUI();
+	wxWindow *plotPanel;
+
+	LibPlot2D::GuiInterface plotInterface;
 };
 
 }// namespace VVASE

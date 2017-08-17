@@ -10,10 +10,12 @@
 // Desc:  Derived from Primitive for creating conical objects.
 
 // Local headers
-#include "vRenderer/primitives/cone.h"
-#include "vRenderer/renderWindow.h"
-#include "vMath/carMath.h"
-#include "vUtilities/unitConverter.h"
+#include "VVASE/gui/renderer/primitives/cone.h"
+#include "VVASE/gui/utilities/unitConverter.h"
+#include "VVASE/core/utilities/carMath.h"
+
+// LibPlot2D headers
+#include <lp2d/renderer/renderWindow.h>
 
 namespace VVASE
 {
@@ -25,7 +27,7 @@ namespace VVASE
 // Description:		Constructor for the Cone class.
 //
 // Input Arguments:
-//		renderWindow	= RenderWindow& reference to the object that owns this
+//		renderWindow	= LibPlot2D::RenderWindow& reference to the object that owns this
 //
 // Output Arguments:
 //		None
@@ -34,12 +36,12 @@ namespace VVASE
 //		None
 //
 //==========================================================================
-Cone::Cone(RenderWindow &renderWindow) : Primitive(renderWindow)
+Cone::Cone(LibPlot2D::RenderWindow &renderWindow) : Primitive(renderWindow)
 {
 	drawCaps = false;
 	radius = 0.0;
-	tip.Set(0.0, 0.0, 0.0);
-	baseCenter.Set(0.0, 0.0, 0.0);
+	tip.setZero();
+	baseCenter.setZero();
 	resolution = 4;
 }
 
@@ -87,10 +89,10 @@ void Cone::GenerateGeometry()
 		resolution = 3;
 
 	// Determine the height of the cone
-	double halfHeight = baseCenter.Distance(tip) / 2.0;
+	const double halfHeight(baseCenter.Distance(tip) / 2.0);
 
 	// Determine the desired axis for the cone
-	Eigen::Vector3d axisDirection = (tip - baseCenter).Normalize();
+	const Eigen::Vector3d axisDirection((tip - baseCenter).normalized());
 
 	// Determine the center of the cone
 	Eigen::Vector3d center = baseCenter + axisDirection * halfHeight;
@@ -99,14 +101,14 @@ void Cone::GenerateGeometry()
 	Eigen::Vector3d referenceDirection(1.0, 0.0, 0.0);
 
 	// Determine the angle and axis of rotation
-	Eigen::Vector3d axisOfRotation = referenceDirection.Cross(axisDirection);
+	Eigen::Vector3d axisOfRotation = referenceDirection.cross(axisDirection);
 	double angle = acos(axisDirection * referenceDirection);// [rad]
 
 	// If the axis direction is opposite the reference direction, we need to rotate 180 degrees
 	if (VVASE::Math::IsZero(axisDirection + referenceDirection))
 	{
 		angle = UnitConverter::Pi;
-		axisOfRotation.Set(0.0, 1.0, 0.0);
+		axisOfRotation = Eigen::Vector3d(0.0, 1.0, 0.0);
 	}
 
 	// Push the current matrix
@@ -116,7 +118,7 @@ void Cone::GenerateGeometry()
 		glTranslated(center.x, center.y, center.z);
 
 		// Rotate the current matrix, if the rotation axis is non-zero
-		if (!VVASE::Math::IsZero(axisOfRotation.Length()))
+		if (!VVASE::Math::IsZero(axisOfRotation.norm()))
 			glRotated(UnitConverter::RAD_TO_DEG(angle), axisOfRotation.x, axisOfRotation.y, axisOfRotation.z);
 
 		// Create the cone along the X-axis (must match the reference direction above)
@@ -227,7 +229,7 @@ bool Cone::HasValidParameters()
 void Cone::SetResolution(const int &resolution)
 {
 	this->resolution = resolution;
-	modified = true;
+	mModified = true;
 }
 
 //==========================================================================
@@ -250,7 +252,7 @@ void Cone::SetResolution(const int &resolution)
 void Cone::SetCapping(const bool &drawCaps)
 {
 	this->drawCaps = drawCaps;
-	modified = true;
+	mModified = true;
 }
 
 //==========================================================================
@@ -272,7 +274,7 @@ void Cone::SetCapping(const bool &drawCaps)
 void Cone::SetTip(const Eigen::Vector3d &tip)
 {
 	this->tip = tip;
-	modified = true;
+	mModified = true;
 }
 
 //==========================================================================
@@ -294,7 +296,7 @@ void Cone::SetTip(const Eigen::Vector3d &tip)
 void Cone::SetBaseCenter(const Eigen::Vector3d &baseCenter)
 {
 	this->baseCenter = baseCenter;
-	modified = true;
+	mModified = true;
 }
 
 //==========================================================================
@@ -316,7 +318,7 @@ void Cone::SetBaseCenter(const Eigen::Vector3d &baseCenter)
 void Cone::SetRadius(const double &radius)
 {
 	this->radius = radius;
-	modified = true;
+	mModified = true;
 }
 
 //==========================================================================

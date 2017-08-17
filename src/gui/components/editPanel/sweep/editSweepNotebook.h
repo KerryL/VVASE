@@ -13,7 +13,7 @@
 #define EDIT_ITERATION_NOTEBOOK_H_
 
 // wxWidgets headers
-#include <wx/wx.h>
+#include <wx/notebook.h>
 
 namespace VVASE
 {

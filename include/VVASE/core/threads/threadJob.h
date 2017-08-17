@@ -18,6 +18,9 @@
 // Local headers
 #include "VVASE/core/utilities/vvaseString.h"
 
+// Standard C++ headers
+#include <memory>
+
 namespace VVASE
 {
 
@@ -34,7 +37,7 @@ public:
 		CommandThreadNull =  0,
 		CommandThreadStarted,
 		CommandThreadKinematicsNormal,
-		CommandThreadKinematicsIteration,
+		CommandThreadKinematicsSweep,
 		CommandThreadKinematicsGA,
 		CommandThreadGeneticOptimization
 	};
@@ -43,13 +46,13 @@ public:
 	ThreadJob();
 	ThreadJob(const ThreadJob &threadJob);// For thread safety
 	ThreadJob(ThreadCommand command);
-	ThreadJob(ThreadCommand command, ThreadData *data,
+	ThreadJob(ThreadCommand command, std::unique_ptr<ThreadData> data,
 		const vvaseString &name, int &index);
 	~ThreadJob();
 
 	ThreadCommand command;
 
-	ThreadData *data;
+	std::unique_ptr<ThreadData> data;
 	vvaseString name;
 	int index;
 

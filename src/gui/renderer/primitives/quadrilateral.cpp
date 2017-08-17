@@ -10,9 +10,11 @@
 // Desc:  Derived from Primitive for creating rectangular objects.
 
 // Local headers
-#include "vRenderer/primitives/quadrilateral.h"
-#include "vRenderer/renderWindow.h"
-#include "vMath/carMath.h"
+#include "VVASE/gui/renderer/primitives/quadrilateral.h"
+#include "VVASE/core/utilities/carMath.h"
+
+// LibPlot2D headers
+#include <lp2d/renderer/renderWindow.h>
 
 namespace VVASE
 {
@@ -24,7 +26,7 @@ namespace VVASE
 // Description:		Constructor for the Quadrilateral class.
 //
 // Input Arguments:
-//		renderWindow	= RenderWindow& pointing to the object that owns this
+//		renderWindow	= LibPlot2D::RenderWindow& pointing to the object that owns this
 //
 // Output Arguments:
 //		None
@@ -33,10 +35,10 @@ namespace VVASE
 //		None
 //
 //==========================================================================
-Quadrilateral::Quadrilateral(RenderWindow &renderWindow) : Primitive(renderWindow)
+Quadrilateral::Quadrilateral(LibPlot2D::RenderWindow &renderWindow) : Primitive(renderWindow)
 {
-	normal.Set(0.0, 0.0, 0.0);
-	axis.Set(0.0, 0.0, 0.0);
+	normal.setZero();
+	axis.setZero();
 	width = 0.0;
 	length = 0.0;
 }
@@ -93,13 +95,13 @@ void Quadrilateral::GenerateGeometry()
 	double diagonalAngle = atan2(width, length);
 
 	// Force the axis direction to be perpendicular to the normal
-	Eigen::Vector3d axisDirection = axis.Cross(normal).Cross(normal);
+	Eigen::Vector3d axisDirection = axis.cross(normal).cross(normal);
 
 	// Compute the locations of the four corners of the quad
-	Eigen::Vector3d corner1 = center + axisDirection.Normalize() * halfDiagonal;
-	Eigen::Vector3d corner2 = center + axisDirection.Normalize() * halfDiagonal;
-	Eigen::Vector3d corner3 = center - axisDirection.Normalize() * halfDiagonal;
-	Eigen::Vector3d corner4 = center - axisDirection.Normalize() * halfDiagonal;
+	Eigen::Vector3d corner1 = center + axisDirection.normalized() * halfDiagonal;
+	Eigen::Vector3d corner2 = center + axisDirection.normalized() * halfDiagonal;
+	Eigen::Vector3d corner3 = center - axisDirection.normalized() * halfDiagonal;
+	Eigen::Vector3d corner4 = center - axisDirection.normalized() * halfDiagonal;
 
 	corner1 -= center;
 	corner1.Rotate(diagonalAngle, normal);
@@ -153,8 +155,8 @@ bool Quadrilateral::HasValidParameters()
 {
 	// Quads must have non-zero normal and axis vectors, non-zero dimensions,
 	// and non-parallel normal and axis directions
-	if (!VVASE::Math::IsZero(normal.Length()) && !VVASE::Math::IsZero(axis.Length()) &&
-		!VVASE::Math::IsZero(fabs(axis * normal) / (axis.Length() * normal.Length()) - 1.0)
+	if (!VVASE::Math::IsZero(normal.norm()) && !VVASE::Math::IsZero(axis.norm()) &&
+		!VVASE::Math::IsZero(fabs(axis * normal) / (axis.Length() * normal.norm()) - 1.0)
 		&& width > 0.0 && length > 0.0)
 		return true;
 
@@ -181,7 +183,7 @@ bool Quadrilateral::HasValidParameters()
 void Quadrilateral::SetNormal(const Eigen::Vector3d &normal)
 {
 	this->normal = normal;
-	modified = true;
+	mModified = true;
 }
 
 //==========================================================================
@@ -203,7 +205,7 @@ void Quadrilateral::SetNormal(const Eigen::Vector3d &normal)
 void Quadrilateral::SetCenter(const Eigen::Vector3d &center)
 {
 	this->center = center;
-	modified = true;
+	mModified = true;
 }
 
 //==========================================================================
@@ -226,7 +228,7 @@ void Quadrilateral::SetCenter(const Eigen::Vector3d &center)
 void Quadrilateral::SetAxis(const Eigen::Vector3d &axis)
 {
 	this->axis = axis;
-	modified = true;
+	mModified = true;
 }
 
 //==========================================================================
@@ -249,7 +251,7 @@ void Quadrilateral::SetAxis(const Eigen::Vector3d &axis)
 void Quadrilateral::SetWidth(const double &width)
 {
 	this->width = width;
-	modified = true;
+	mModified = true;
 }
 
 //==========================================================================
@@ -271,7 +273,7 @@ void Quadrilateral::SetWidth(const double &width)
 void Quadrilateral::SetLength(const double &length)
 {
 	this->length = length;
-	modified = true;
+	mModified = true;
 }
 
 //==========================================================================

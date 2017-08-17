@@ -27,14 +27,13 @@ class KinematicsData : public ThreadData
 {
 public:
 	KinematicsData(const Car *originalCar, Car *workingCar,
-		Kinematics::Inputs kinematicInputs, KinematicOutputs *output);
-	~KinematicsData();
+		Kinematics::Inputs kinematicInputs, KinematicOutputs* output);
 
 	// Data required to perform kinematic analyses (for GuiCar or Iteration objects)
 	const Car *originalCar;
 	Car *workingCar;
 	Kinematics::Inputs kinematicInputs;
-	KinematicOutputs *output;
+	KinematicOutputs* output;
 
 	// Mandatory overload from ThreadData
 	bool OkForCommand(ThreadJob::ThreadCommand &Command);

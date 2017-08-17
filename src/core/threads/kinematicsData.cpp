@@ -36,29 +36,9 @@ namespace VVASE
 //
 //==========================================================================
 KinematicsData::KinematicsData(const Car *originalCar, Car *workingCar,
-	Kinematics::Inputs kinematicInputs, KinematicOutputs *output) : ThreadData(),
+	Kinematics::Inputs kinematicInputs, KinematicOutputs* output) : ThreadData(),
 	originalCar(originalCar), workingCar(workingCar),
 	kinematicInputs(kinematicInputs), output(output)
-{
-}
-
-//==========================================================================
-// Class:			KinematicsData
-// Function:		~KinematicsData
-//
-// Description:		Destructor for the KinematicsData class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-KinematicsData::~KinematicsData()
 {
 }
 
@@ -83,7 +63,7 @@ bool KinematicsData::OkForCommand(ThreadJob::ThreadCommand &command)
 {
 	// Make sure the command is one of the expected types
 	return command == ThreadJob::CommandThreadKinematicsNormal ||
-		command == ThreadJob::CommandThreadKinematicsIteration ||
+		command == ThreadJob::CommandThreadKinematicsSweep ||
 		command == ThreadJob::CommandThreadKinematicsGA;
 }
 

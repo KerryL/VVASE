@@ -50,7 +50,7 @@ public:
 		SuspensionIcon,
 		TiresIcon,
 
-		IterationIcon,
+		SweepIcon,
 
 		OptimizationIcon,
 

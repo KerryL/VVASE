@@ -132,7 +132,7 @@ void WorkerThread::OnJob()
 {
 	// Get a job from the queue
 	// If the queue is empty, this blocks the thread
-	ThreadJob job = jobQueue.Pop();
+	ThreadJob job(jobQueue.Pop());
 
 	StopWatch timer;
 	timer.Start();
@@ -143,20 +143,20 @@ void WorkerThread::OnJob()
 		throw ThreadJob::CommandThreadExit;
 
 	case ThreadJob::CommandThreadKinematicsNormal:
-	case ThreadJob::CommandThreadKinematicsIteration:
+	case ThreadJob::CommandThreadKinematicsSweep:
 	case ThreadJob::CommandThreadKinematicsGA:
 		// Do the kinematics calculations
 		DebugLog::GetInstance()->Log(_T("SetInputs - Start"), 1);
-		kinematicAnalysis.SetInputs(static_cast<KinematicsData*>(job.data)->kinematicInputs);
+		kinematicAnalysis.SetInputs(static_cast<KinematicsData*>(job.data.get())->kinematicInputs);
 		DebugLog::GetInstance()->Log(_T("SetInputs - End"), -1);
 		DebugLog::GetInstance()->Log(_T("UpdateKinematics - Start"), 1);
-		kinematicAnalysis.UpdateKinematics(static_cast<KinematicsData*>(job.data)->originalCar,
-			static_cast<KinematicsData*>(job.data)->workingCar, job.name);
+		kinematicAnalysis.UpdateKinematics(static_cast<KinematicsData*>(job.data.get())->originalCar,
+			static_cast<KinematicsData*>(job.data.get())->workingCar, job.name);
 		DebugLog::GetInstance()->Log(_T("UpdateKinematics - End"), -1);
 
 		// Get the outputs
 		DebugLog::GetInstance()->Log(_T("GetOutputs - Start"), 1);
-		*(static_cast<KinematicsData*>(job.data)->output) = kinematicAnalysis.GetOutputs();
+		*(static_cast<KinematicsData*>(job.data.get())->output) = kinematicAnalysis.GetOutputs();
 		DebugLog::GetInstance()->Log(_T("GetOutputs - End"), -1);
 
 	    jobQueue.Report(job.command, std::this_thread::get_id(), job.index);
@@ -167,7 +167,7 @@ void WorkerThread::OnJob()
 		// Run the GA object - this will only return after the analysis is complete for all generations,
 		// and the target object has been updated
 		DebugLog::GetInstance()->Log(_T("Optimization - Start"), 1);
-		static_cast<OptimizationData*>(job.data)->geneticAlgorithm->PerformOptimization();
+		static_cast<OptimizationData*>(job.data.get())->geneticAlgorithm->PerformOptimization();
 		DebugLog::GetInstance()->Log(_T("Optimization - End"), -1);
 		Debugger::GetInstance() << "Elapsed Time: %s"
 			<< timer.GetElapsedTime<double, std::chrono::seconds>() << Debugger::Priority::VeryHigh;
@@ -178,12 +178,6 @@ void WorkerThread::OnJob()
 	case ThreadJob::CommandThreadNull:
 	default:
 		break;
-	}
-
-	if (job.data)
-	{
-		delete job.data;
-		job.data = nullptr;
 	}
 }
 

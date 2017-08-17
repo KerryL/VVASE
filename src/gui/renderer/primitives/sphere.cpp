@@ -13,10 +13,12 @@
 #include <cassert>
 
 // Local headers
-#include "vRenderer/primitives/sphere.h"
-#include "vRenderer/renderWindow.h"
-#include "vUtilities/unitConverter.h"
-#include "vMath/carMath.h"
+#include "VVASE/gui/renderer/primitives/sphere.h"
+#include "VVASE/gui/utilities/unitConverter.h"
+#include "VVASE/core/utilities/carMath.h"
+
+// LibPlot2D headers
+#include <lp2d/renderer/renderWindow.h>
 
 // For choosing between an octohedron (8 sides) or a icosohedron (20 sides) as the base polygon
 // for the recursive subdivision to create the sphere.
@@ -41,9 +43,9 @@ namespace VVASE
 //		None
 //
 //==========================================================================
-Sphere::Sphere(RenderWindow &renderWindow) : Primitive(renderWindow)
+Sphere::Sphere(LibPlot2D::RenderWindow &renderWindow) : Primitive(renderWindow)
 {
-	center.Set(0.0, 0.0, 0.0);
+	center.setZero();
 	radius = 0.0;
 	resolution = 4;
 }

@@ -38,7 +38,7 @@ namespace VVASE
 //		None
 //
 //==========================================================================
-ThreadJob::ThreadJob() : command(ThreadJob::CommandThreadNull), data(NULL)
+ThreadJob::ThreadJob() : command(ThreadJob::CommandThreadNull)
 {
 }
 
@@ -58,7 +58,7 @@ ThreadJob::ThreadJob() : command(ThreadJob::CommandThreadNull), data(NULL)
 //		None
 //
 //==========================================================================
-ThreadJob::ThreadJob(ThreadCommand command) : command(command), data(NULL)
+ThreadJob::ThreadJob(ThreadCommand command) : command(command)
 {
 	// Only permit certain types of jobs
 	assert(command == ThreadJob::CommandThreadExit ||
@@ -74,6 +74,7 @@ ThreadJob::ThreadJob(ThreadCommand command) : command(command), data(NULL)
 //
 // Input Arguments:
 //		command	= ThreadCommand specifying the command type for this job
+//		data	= std::unique_ptr<ThreadData>
 //		name	= const vvaseString& Name of the car
 //		index	= int& representing the object index for the associated object
 //				  in the MainFrame
@@ -85,8 +86,8 @@ ThreadJob::ThreadJob(ThreadCommand command) : command(command), data(NULL)
 //		None
 //
 //==========================================================================
-ThreadJob::ThreadJob(ThreadCommand command, ThreadData *data,
-	const vvaseString &name, int &index) : command(command), data(data),
+ThreadJob::ThreadJob(ThreadCommand command, std::unique_ptr<ThreadData> data,
+	const vvaseString &name, int &index) : command(command), data(std::move(data)),
 	name(name.c_str()), index(index)
 {
 	assert(data);
@@ -161,7 +162,7 @@ ThreadJob& ThreadJob::operator=(const ThreadJob &job)
 	command = job.command;
 	index = job.index;
 	name = job.name.c_str();// Force deep copy for thread-safety
-	data = job.data;
+	*data = *job.data;
 
 	return *this;
 }

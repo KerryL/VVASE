@@ -24,8 +24,7 @@ namespace VVASE
 class Disk : public LibPlot2D::Primitive
 {
 public:
-	Disk(RenderWindow &renderWindow);
-	~Disk();
+	Disk(LibPlot2D::RenderWindow &renderWindow);
 
 	// Mandatory overloads from Primitive - for creating geometry and testing the
 	// validity of this object's parameters

@@ -22,6 +22,7 @@
 #include "VVASE/gui/components/mainTree.h"
 #include "VVASE/core/utilities/carMath.h"
 #include "VVASE/core/utilities/vvaseString.h"
+#include "VVASE/gui/utilities/wxRelatedUtilities.h"
 
 // wxWidgets headers
 #include <wx/datetime.h>
@@ -31,15 +32,16 @@
 
 // LibPlot2D headers
 #include <lp2d/renderer/plotRenderer.h>
+#include <lp2d/utilities/dataset2D.h>
 
 namespace VVASE
 {
 
 //==========================================================================
-// Class:			Iteration
-// Function:		Iteration
+// Class:			Sweep
+// Function:		Sweep
 //
-// Description:		Constructor for the Iteration class.
+// Description:		Constructor for the Sweep class.
 //
 // Input Arguments:
 //		mainFrame			= MainFrame& reference to main application window
@@ -53,8 +55,8 @@ namespace VVASE
 //		None
 //
 //==========================================================================
-Iteration::Iteration(MainFrame &mainFrame, wxString pathAndFileName)
-	: GuiObject(mainFrame, pathAndFileName)
+Sweep::Sweep(MainFrame &mainFrame, wxString pathAndFileName)
+	: GuiObject(mainFrame, pathAndFileName), plotInterface(&mainFrame)// TODO:  Correct?  Maybe needs to be notebookTab?
 {
 	int i;
 	for (i = 0; i < NumberOfPlots; i++)
@@ -80,7 +82,7 @@ Iteration::Iteration(MainFrame &mainFrame, wxString pathAndFileName)
 	numberOfWorkingCars = 0;
 
 	// Create the renderer
-	plotPanel = new LibPlot2D::PlotPanel(dynamic_cast<wxWindow*>(&mainFrame));
+	CreateGUI();
 	notebookTab = dynamic_cast<wxWindow*>(plotPanel);
 
 	// Do this prior to initialization so saved files overwrite these defaults
@@ -90,15 +92,15 @@ Iteration::Iteration(MainFrame &mainFrame, wxString pathAndFileName)
 	// MUST be included BEFORE the naming, which must come BEFORE the call to Initialize
 	index = mainFrame.AddObjectToList(this);
 
-	name.Printf("Unsaved Iteration %i", index + 1);
+	name.Printf("Unsaved Sweep %i", index + 1);
 	Initialize();
 }
 
 //==========================================================================
-// Class:			Iteration
-// Function:		~Iteration
+// Class:			Sweep
+// Function:		~Sweep
 //
-// Description:		Destructor for the Iteration class.
+// Description:		Destructor for the Sweep class.
 //
 // Input Arguments:
 //		None
@@ -110,7 +112,7 @@ Iteration::Iteration(MainFrame &mainFrame, wxString pathAndFileName)
 //		None
 //
 //==========================================================================
-Iteration::~Iteration()
+Sweep::~Sweep()
 {
 	ClearAllLists();
 
@@ -136,11 +138,38 @@ Iteration::~Iteration()
 	workingCarArray = NULL;
 }
 
+void Sweep::CreateGUI()
+{
+	// TODO:  Implement
+	// From DataPlotter:
+	/*wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
+	wxSplitterWindow *splitter = new wxSplitterWindow(this);
+	topSizer->Add(splitter, 1, wxGROW);
+
+	wxPanel *lowerPanel = new wxPanel(splitter);
+	wxBoxSizer *lowerSizer = new wxBoxSizer(wxHORIZONTAL);
+	lowerSizer->Add(CreateButtons(lowerPanel), 0, wxGROW | wxALL, 5);
+	lowerSizer->Add(new LibPlot2D::PlotListGrid(mPlotInterface, lowerPanel), 1, wxGROW | wxALL, 5);
+	lowerPanel->SetSizer(lowerSizer);
+
+	CreatePlotArea(splitter);
+	splitter->SplitHorizontally(mPlotArea, lowerPanel, mPlotArea->GetSize().GetHeight());
+	splitter->SetSize(GetClientSize());
+	splitter->SetSashGravity(1.0);
+	splitter->SetMinimumPaneSize(150);
+
+	SetSizerAndFit(topSizer);
+	splitter->SetSashPosition(splitter->GetSashPosition(), false);*/
+
+	// Must also have:
+	//plotPanel = ;
+}
+
 //==========================================================================
-// Class:			Iteration
+// Class:			Sweep
 // Function:		Constant declarations
 //
-// Description:		Where constants for the Iteration class are delcared.
+// Description:		Where constants for the Sweep class are delcared.
 //
 // Input Arguments:
 //		None
@@ -152,11 +181,11 @@ Iteration::~Iteration()
 //		None
 //
 //==========================================================================
-//const int Iteration::currentFileVersion = 0;// OBSOLETE 11/17/2010 - Added alternative title and axis labels, etc.
-const int Iteration::currentFileVersion = 1;
+//const int Sweep::currentFileVersion = 0;// OBSOLETE 11/17/2010 - Added alternative title and axis labels, etc.
+const int Sweep::currentFileVersion = 1;
 
 //==========================================================================
-// Class:			Iteration
+// Class:			Sweep
 // Function:		AddCar
 //
 // Description:		Adds the passed car to the list for the analysis.
@@ -171,7 +200,7 @@ const int Iteration::currentFileVersion = 1;
 //		None
 //
 //==========================================================================
-void Iteration::AddCar(GuiCar *toAdd)
+void Sweep::AddCar(GuiCar *toAdd)
 {
 	if (toAdd == NULL)
 		return;
@@ -180,7 +209,7 @@ void Iteration::AddCar(GuiCar *toAdd)
 }
 
 //==========================================================================
-// Class:			Iteration
+// Class:			Sweep
 // Function:		RemoveCar
 //
 // Description:		Removes the car at the passed address from the analysis.
@@ -195,7 +224,7 @@ void Iteration::AddCar(GuiCar *toAdd)
 //		None
 //
 //==========================================================================
-void Iteration::RemoveCar(GuiCar *toRemove)
+void Sweep::RemoveCar(GuiCar *toRemove)
 {
 	if (toRemove == NULL)
 		return;
@@ -213,13 +242,13 @@ void Iteration::RemoveCar(GuiCar *toRemove)
 		return;
 
 	outputLists[indexToRemove].clear();
-	outputLists.Remove(indexToRemove);
+	outputLists.erase(outputLists.begin() + indexToRemove);
 
 	associatedCars.erase(associatedCars.begin() + indexToRemove);
 }
 
 //==========================================================================
-// Class:			Iteration
+// Class:			Sweep
 // Function:		RemoveAllCars
 //
 // Description:		Resets this object back to a state representative of
@@ -235,13 +264,13 @@ void Iteration::RemoveCar(GuiCar *toRemove)
 //		None
 //
 //==========================================================================
-void Iteration::RemoveAllCars()
+void Sweep::RemoveAllCars()
 {
 	ClearAllLists();
 }
 
 //==========================================================================
-// Class:			Iteration
+// Class:			Sweep
 // Function:		GetIconHandle
 //
 // Description:		Gets the icon handle from the systems tree.
@@ -256,13 +285,13 @@ void Iteration::RemoveAllCars()
 //		integer specifying the icon handle
 //
 //==========================================================================
-int Iteration::GetIconHandle() const
+int Sweep::GetIconHandle() const
 {
-	return systemsTree->GetIconHandle(MainTree::IterationIcon);
+	return systemsTree->GetIconHandle(MainTree::SweepIcon);
 }
 
 //==========================================================================
-// Class:			Iteration
+// Class:			Sweep
 // Function:		UpdateData
 //
 // Description:		Updates the iteration outputs for all of the cars for
@@ -278,7 +307,7 @@ int Iteration::GetIconHandle() const
 //		None
 //
 //==========================================================================
-void Iteration::UpdateData()
+void Sweep::UpdateData()
 {
 	// Make sure we are in a state from which we can handle this analysis
 	if (!analysesDisplayed)
@@ -403,21 +432,21 @@ void Iteration::UpdateData()
 			kinematicInputs.centerOfRotation = mainFrame.GetInputs().centerOfRotation;
 
 			// Run The analysis
-			std::unique_ptr<KinematicOutputs> newOutputs(std::make_unique<KinematicOutputs>());
-			KinematicsData *data = new KinematicsData(&associatedCars[currentCar]->GetOriginalCar(),
-				workingCarArray[currentCar * numberOfPoints + currentPoint], kinematicInputs, newOutputs);
-			ThreadJob job(ThreadJob::CommandThreadKinematicsIteration, data,
-				associatedCars[currentCar]->GetCleanName() + _T(":") + name, index);
+			auto newOutputs(std::make_unique<KinematicOutputs>());
+			std::unique_ptr<KinematicsData> data(std::make_unique<KinematicsData>(&associatedCars[currentCar]->GetOriginalCar(),
+				workingCarArray[currentCar * numberOfPoints + currentPoint], kinematicInputs, newOutputs.get()));
+			ThreadJob job(ThreadJob::CommandThreadKinematicsSweep, std::move(data),
+				wxUtilities::ToVVASEString(associatedCars[currentCar]->GetCleanName() + _T(":") + name), index);
 			mainFrame.AddJob(job);
 
 			// Add the outputs to the iteration's list
-			currentList.push_back(newOutputs);
+			currentList.push_back(std::move(newOutputs));
 		}
 	}
 }
 
 //==========================================================================
-// Class:			Iteration
+// Class:			Sweep
 // Function:		UpdateDisplay
 //
 // Description:		Updates the visual display of this object.
@@ -432,7 +461,7 @@ void Iteration::UpdateData()
 //		None
 //
 //==========================================================================
-void Iteration::UpdateDisplay()
+void Sweep::UpdateDisplay()
 {
 	// Make sure we have no more analyses waiting
 	if (pendingAnalysisCount != 0)
@@ -440,23 +469,23 @@ void Iteration::UpdateDisplay()
 
 	if (plotPanel)
 	{
-		plotPanel->ClearAllCurves();
+		plotInterface.ClearAllCurves();
 
 		// Create the datasets for the plot
 		// Need to create one dataset per curve per car
-		LibPlot2D::Dataset2D *dataSet;
-		unsigned int i, j, k, n;
-		double *x, *y;
+		unsigned int i;
 		for (i = 0; i < NumberOfPlots; i++)
 		{
 			if (plotActive[i])
 			{
+				unsigned int j;
 				for (j = 0; j < (unsigned int)associatedCars.size(); j++)
 				{
-					// Create the dataset
-					dataSet = new LibPlot2D::Dataset2D(CountValidValues(j, (PlotID)i));
-					x = dataSet->GetX();
-					y = dataSet->GetY();
+					std::unique_ptr<LibPlot2D::Dataset2D> dataSet(std::make_unique<LibPlot2D::Dataset2D>(CountValidValues(j, static_cast<PlotID>(i))));
+					
+					std::vector<double>& x(dataSet->GetX()), &y(dataSet->GetY());
+
+					unsigned int k, n;
 
 					// Populate all values
 					n= 0;
@@ -472,13 +501,13 @@ void Iteration::UpdateDisplay()
 					}
 
 					// Add the dataset to the plot
-					plotPanel->AddCurve(dataSet, associatedCars[j]->GetCleanName()
+					plotInterface.AddCurve(std::move(dataSet), associatedCars[j]->GetCleanName()
 						+ _T(", ") + GetPlotName((PlotID)i) + _T(" [") +
 						GetPlotUnits((PlotID)i) + _T("]"));
 
 					// Set the x-axis information if this is the first pass
-					if (plotPanel->GetCurveCount() == 1)
-						plotPanel->SetXAxisGridText(
+					if (plotInterface.GetCurveCount() == 1)
+						plotInterface.SetXDataLabel(
 						GetPlotName((PlotID)(KinematicOutputs::NumberOfOutputScalars + xAxisType)) + _T(" [") +
 						GetPlotUnits((PlotID)(KinematicOutputs::NumberOfOutputScalars + xAxisType)) + _T("]"));
 				}
@@ -486,7 +515,7 @@ void Iteration::UpdateDisplay()
 		}
 
 		ApplyPlotFormatting();
-		plotPanel->UpdateDisplay();
+		//plotInterface.UpdateDisplay();// TODO:  Still necessary?
 	}
 
 	analysesDisplayed = true;
@@ -497,7 +526,7 @@ void Iteration::UpdateDisplay()
 }
 
 //==========================================================================
-// Class:			Iteration
+// Class:			Sweep
 // Function:		CountValidValues
 //
 // Description:		Counts plottable values in the specified data set
@@ -513,7 +542,7 @@ void Iteration::UpdateDisplay()
 //		unsigned int
 //
 //==========================================================================
-unsigned int Iteration::CountValidValues(const unsigned int &carIndex, const PlotID &index) const
+unsigned int Sweep::CountValidValues(const unsigned int &carIndex, const PlotID &index) const
 {
 	unsigned int i, count(0);
 	for (i = 0; i < numberOfPoints; i++)
@@ -526,7 +555,7 @@ unsigned int Iteration::CountValidValues(const unsigned int &carIndex, const Plo
 }
 
 //==========================================================================
-// Class:			Iteration
+// Class:			Sweep
 // Function:		ClearAllLists
 //
 // Description:		Updates the iteration outputs for all of the cars for
@@ -542,14 +571,14 @@ unsigned int Iteration::CountValidValues(const unsigned int &carIndex, const Plo
 //		None
 //
 //==========================================================================
-void Iteration::ClearAllLists()
+void Sweep::ClearAllLists()
 {
 	outputLists.clear();
 	associatedCars.clear();
 }
 
 //==========================================================================
-// Class:			Iteration
+// Class:			Sweep
 // Function:		PerformSaveToFile
 //
 // Description:		Saves this object to file.
@@ -564,7 +593,7 @@ void Iteration::ClearAllLists()
 //		bool, true for success
 //
 //==========================================================================
-bool Iteration::PerformSaveToFile()
+bool Sweep::PerformSaveToFile()
 {
 	std::ofstream outFile(pathAndFileName.mb_str(), std::ios::binary);
 	if (!outFile.is_open() || !outFile.good())
@@ -596,7 +625,7 @@ bool Iteration::PerformSaveToFile()
 }
 
 //==========================================================================
-// Class:			Iteration
+// Class:			Sweep
 // Function:		PerformLoadFromFile
 //
 // Description:		Loads this object from file.
@@ -611,7 +640,7 @@ bool Iteration::PerformSaveToFile()
 //		bool, true for success
 //
 //==========================================================================
-bool Iteration::PerformLoadFromFile()
+bool Sweep::PerformLoadFromFile()
 {
 	std::ifstream inFile(pathAndFileName.mb_str(), std::ios::binary);
 	if (!inFile.is_open() || !inFile.good())
@@ -673,7 +702,7 @@ bool Iteration::PerformLoadFromFile()
 }
 
 //==========================================================================
-// Class:			Iteration
+// Class:			Sweep
 // Function:		ReadDefaultsFromConfig
 //
 // Description:		Read the default iteration settings from the config file.
@@ -688,53 +717,53 @@ bool Iteration::PerformLoadFromFile()
 //		None
 //
 //==========================================================================
-void Iteration::ReadDefaultsFromConfig()
+void Sweep::ReadDefaultsFromConfig()
 {
 	wxFileConfig *configurationFile = new wxFileConfig(_T(""), _T(""),
 		wxFileName(wxStandardPaths::Get().GetExecutablePath()).GetPathWithSep() + mainFrame.pathToConfigFile, _T(""),
 		wxCONFIG_USE_RELATIVE_PATH);
 
 	// Attempt to read from the config file; set the defaults if the value isn't found
-	configurationFile->Read(_T("/Iteration/GenerateTitleFromFileName"), &generateTitleFromFileName, true);
-	configurationFile->Read(_T("/Iteration/Title"), &title, wxEmptyString);
-	configurationFile->Read(_T("/Iteration/AutoGenerateXLabel"), &autoGenerateXLabel, true);
-	configurationFile->Read(_T("/Iteration/XLabel"), &xLabel, wxEmptyString);
-	configurationFile->Read(_T("/Iteration/AutoGenerateZLabel"), &autoGenerateZLabel, true);
-	configurationFile->Read(_T("/Iteration/ZLabel"), &zLabel, wxEmptyString);
-	configurationFile->Read(_T("/Iteration/ShowGridLines"), &showGridLines, true);
+	configurationFile->Read(_T("/Sweep/GenerateTitleFromFileName"), &generateTitleFromFileName, true);
+	configurationFile->Read(_T("/Sweep/Title"), &title, wxEmptyString);
+	configurationFile->Read(_T("/Sweep/AutoGenerateXLabel"), &autoGenerateXLabel, true);
+	configurationFile->Read(_T("/Sweep/XLabel"), &xLabel, wxEmptyString);
+	configurationFile->Read(_T("/Sweep/AutoGenerateZLabel"), &autoGenerateZLabel, true);
+	configurationFile->Read(_T("/Sweep/ZLabel"), &zLabel, wxEmptyString);
+	configurationFile->Read(_T("/Sweep/ShowGridLines"), &showGridLines, true);
 
 	bool temp;
-	configurationFile->Read(_T("/Iteration/ShowMinorGridLines"), &temp, false);
+	configurationFile->Read(_T("/Sweep/ShowMinorGridLines"), &temp, false);
 	if (temp)
 		plotPanel->GetRenderer()->SetMinorGridOn();
 	else
 		plotPanel->GetRenderer()->SetMinorGridOff();
-	configurationFile->Read(_T("/Iteration/ShowLegend"), &temp, true);
+	configurationFile->Read(_T("/Sweep/ShowLegend"), &temp, true);
 	if (temp)
 		plotPanel->GetRenderer()->SetLegendOn();
 	else
 		plotPanel->GetRenderer()->SetLegendOff();
 
-	plotPanel->SetDefaultLineSize(configurationFile->Read(_T("/Iteration/LineSize"), 2.0));
-	plotPanel->SetDefaultMarkerSize(configurationFile->Read(_T("/Iteration/MarkerSize"), 0L));
+	plotPanel->SetDefaultLineSize(configurationFile->Read(_T("/Sweep/LineSize"), 2.0));
+	plotPanel->SetDefaultMarkerSize(configurationFile->Read(_T("/Sweep/MarkerSize"), 0L));
 
-	configurationFile->Read(_T("/Iteration/StartPitch"), &range.startPitch, 0.0);
-	configurationFile->Read(_T("/Iteration/StartRoll"), &range.startRoll, 0.0);
-	configurationFile->Read(_T("/Iteration/StartHeave"), &range.startHeave, 0.0);
-	configurationFile->Read(_T("/Iteration/StartRackTravel"), &range.startRackTravel, 0.0);
+	configurationFile->Read(_T("/Sweep/StartPitch"), &range.startPitch, 0.0);
+	configurationFile->Read(_T("/Sweep/StartRoll"), &range.startRoll, 0.0);
+	configurationFile->Read(_T("/Sweep/StartHeave"), &range.startHeave, 0.0);
+	configurationFile->Read(_T("/Sweep/StartRackTravel"), &range.startRackTravel, 0.0);
 
-	configurationFile->Read(_T("/Iteration/EndPitch"), &range.endPitch, 0.0);
-	configurationFile->Read(_T("/Iteration/EndRoll"), &range.endRoll, 0.0);
-	configurationFile->Read(_T("/Iteration/EndHeave"), &range.endHeave, 0.0);
-	configurationFile->Read(_T("/Iteration/EndRackTravel"), &range.endRackTravel, 0.0);
+	configurationFile->Read(_T("/Sweep/EndPitch"), &range.endPitch, 0.0);
+	configurationFile->Read(_T("/Sweep/EndRoll"), &range.endRoll, 0.0);
+	configurationFile->Read(_T("/Sweep/EndHeave"), &range.endHeave, 0.0);
+	configurationFile->Read(_T("/Sweep/EndRackTravel"), &range.endRackTravel, 0.0);
 
-	configurationFile->Read(_T("/Iteration/NumberOfPoints"), (int*)&numberOfPoints, 10);
+	configurationFile->Read(_T("/Sweep/NumberOfPoints"), (int*)&numberOfPoints, 10);
 
-	configurationFile->Read(_T("/Iteration/XAxisType"), (int*)&xAxisType, (int)AxisTypeUnused);
-	configurationFile->Read(_T("/Iteration/YAxisType"), (int*)&yAxisType, (int)AxisTypeUnused);
+	configurationFile->Read(_T("/Sweep/XAxisType"), (int*)&xAxisType, (int)AxisTypeUnused);
+	configurationFile->Read(_T("/Sweep/YAxisType"), (int*)&yAxisType, (int)AxisTypeUnused);
 
 	wxString activePlotString;
-	configurationFile->Read(_T("Iteration/ActivePlots"), &activePlotString, wxEmptyString);
+	configurationFile->Read(_T("Sweep/ActivePlots"), &activePlotString, wxEmptyString);
 
 	// Process the empty plot string to turn it into booleans
 	if (activePlotString.Len() > 0)
@@ -760,7 +789,7 @@ void Iteration::ReadDefaultsFromConfig()
 }
 
 //==========================================================================
-// Class:			Iteration
+// Class:			Sweep
 // Function:		WriteDefaultsToConfig
 //
 // Description:		Writes the current iteration settings to the config file.
@@ -775,7 +804,7 @@ void Iteration::ReadDefaultsFromConfig()
 //		None
 //
 //==========================================================================
-void Iteration::WriteDefaultsToConfig() const
+void Sweep::WriteDefaultsToConfig() const
 {
 	// Create a configuration file object
 	wxFileConfig *configurationFile = new wxFileConfig(_T(""), _T(""),
@@ -783,33 +812,33 @@ void Iteration::WriteDefaultsToConfig() const
 		wxCONFIG_USE_RELATIVE_PATH);
 
 	// Write to the config file
-	configurationFile->Write(_T("/Iteration/GenerateTitleFromFileName"), generateTitleFromFileName);
-	configurationFile->Write(_T("/Iteration/Title"), title);
-	configurationFile->Write(_T("/Iteration/AutoGenerateXLabel"), autoGenerateXLabel);
-	configurationFile->Write(_T("/Iteration/XLabel"), xLabel);
-	configurationFile->Write(_T("/Iteration/AutoGenerateZLabel"), autoGenerateZLabel);
-	configurationFile->Write(_T("/Iteration/ZLabel"), zLabel);
-	configurationFile->Write(_T("/Iteration/ShowGridLines"), showGridLines);
+	configurationFile->Write(_T("/Sweep/GenerateTitleFromFileName"), generateTitleFromFileName);
+	configurationFile->Write(_T("/Sweep/Title"), title);
+	configurationFile->Write(_T("/Sweep/AutoGenerateXLabel"), autoGenerateXLabel);
+	configurationFile->Write(_T("/Sweep/XLabel"), xLabel);
+	configurationFile->Write(_T("/Sweep/AutoGenerateZLabel"), autoGenerateZLabel);
+	configurationFile->Write(_T("/Sweep/ZLabel"), zLabel);
+	configurationFile->Write(_T("/Sweep/ShowGridLines"), showGridLines);
 
-	configurationFile->Write(_T("/Iteration/ShowMinorGridLines"), plotPanel->GetRenderer()->GetMinorGridOn());
-	configurationFile->Write(_T("/Iteration/ShowLegend"), plotPanel->GetRenderer()->LegendIsVisible());
-	configurationFile->Write(_T("/Iteration/LineSize"), plotPanel->GetDefaultLineSize());
-	configurationFile->Write(_T("/Iteration/MarkerSize"), plotPanel->GetDefaultMarkerSize());
+	configurationFile->Write(_T("/Sweep/ShowMinorGridLines"), plotPanel->GetRenderer()->GetMinorGridOn());
+	configurationFile->Write(_T("/Sweep/ShowLegend"), plotPanel->GetRenderer()->LegendIsVisible());
+	configurationFile->Write(_T("/Sweep/LineSize"), plotPanel->GetDefaultLineSize());
+	configurationFile->Write(_T("/Sweep/MarkerSize"), plotPanel->GetDefaultMarkerSize());
 
-	configurationFile->Write(_T("/Iteration/StartPitch"), range.startPitch);
-	configurationFile->Write(_T("/Iteration/StartRoll"), range.startRoll);
-	configurationFile->Write(_T("/Iteration/StartHeave"), range.startHeave);
-	configurationFile->Write(_T("/Iteration/StartRackTravel"), range.startRackTravel);
+	configurationFile->Write(_T("/Sweep/StartPitch"), range.startPitch);
+	configurationFile->Write(_T("/Sweep/StartRoll"), range.startRoll);
+	configurationFile->Write(_T("/Sweep/StartHeave"), range.startHeave);
+	configurationFile->Write(_T("/Sweep/StartRackTravel"), range.startRackTravel);
 
-	configurationFile->Write(_T("/Iteration/EndPitch"), range.endPitch);
-	configurationFile->Write(_T("/Iteration/EndRoll"), range.endRoll);
-	configurationFile->Write(_T("/Iteration/EndHeave"), range.endHeave);
-	configurationFile->Write(_T("/Iteration/EndRackTravel"), range.endRackTravel);
+	configurationFile->Write(_T("/Sweep/EndPitch"), range.endPitch);
+	configurationFile->Write(_T("/Sweep/EndRoll"), range.endRoll);
+	configurationFile->Write(_T("/Sweep/EndHeave"), range.endHeave);
+	configurationFile->Write(_T("/Sweep/EndRackTravel"), range.endRackTravel);
 
-	configurationFile->Write(_T("/Iteration/NumberOfPoints"), numberOfPoints);
+	configurationFile->Write(_T("/Sweep/NumberOfPoints"), numberOfPoints);
 
-	configurationFile->Write(_T("/Iteration/XAxisType"), (int)xAxisType);
-	configurationFile->Write(_T("/Iteration/YAxisType"), (int)yAxisType);
+	configurationFile->Write(_T("/Sweep/XAxisType"), (int)xAxisType);
+	configurationFile->Write(_T("/Sweep/YAxisType"), (int)yAxisType);
 
 	// Encode the active plots into a string that can be saved into the configuration file
 	wxString activePlotString(wxEmptyString), temp;
@@ -822,7 +851,7 @@ void Iteration::WriteDefaultsToConfig() const
 			activePlotString += temp;
 		}
 	}
-	configurationFile->Write(_T("Iteration/ActivePlots"), activePlotString);
+	configurationFile->Write(_T("Sweep/ActivePlots"), activePlotString);
 
 	// Delete file object
 	delete configurationFile;
@@ -830,7 +859,7 @@ void Iteration::WriteDefaultsToConfig() const
 }
 
 //==========================================================================
-// Class:			Iteration
+// Class:			Sweep
 // Function:		ApplyPlotFormatting
 //
 // Description:		Applies formatting (names, etc.) to plot curves.
@@ -845,7 +874,7 @@ void Iteration::WriteDefaultsToConfig() const
 //		None
 //
 //==========================================================================
-void Iteration::ApplyPlotFormatting()
+void Sweep::ApplyPlotFormatting()
 {
 	if (autoGenerateZLabel)
 	{
@@ -889,13 +918,13 @@ void Iteration::ApplyPlotFormatting()
 }
 
 //==========================================================================
-// Class:			Iteration
+// Class:			Sweep
 // Function:		SetRange
 //
 // Description:		Sets this object's range to the specified values.
 //
 // Input Arguments:
-//		_range	= const Iteration::Range& specifying the desired range
+//		_range	= const Sweep::Range& specifying the desired range
 //
 // Output Arguments:
 //		None
@@ -904,17 +933,17 @@ void Iteration::ApplyPlotFormatting()
 //		None
 //
 //==========================================================================
-void Iteration::SetRange(const Iteration::Range &range)
+void Sweep::SetRange(const Sweep::Range &range)
 {
 	this->range = range;
 
 	// Make sure the chosen X-axis type is not for a parameter with zero range
 	// This is based on the priority Roll->Steer->Heave->Pitch.
-	if ((xAxisType == Iteration::AxisTypeRoll && VVASE::Math::IsZero(range.startRoll - range.endRoll)) ||
-		(xAxisType == Iteration::AxisTypeRackTravel && VVASE::Math::IsZero(range.startRackTravel - range.endRackTravel)) ||
-		(xAxisType == Iteration::AxisTypeHeave && VVASE::Math::IsZero(range.startHeave - range.endHeave)) ||
-		(xAxisType == Iteration::AxisTypePitch && VVASE::Math::IsZero(range.startPitch - range.endPitch)) ||
-		xAxisType == Iteration::AxisTypeUnused)
+	if ((xAxisType == Sweep::AxisTypeRoll && VVASE::Math::IsZero(range.startRoll - range.endRoll)) ||
+		(xAxisType == Sweep::AxisTypeRackTravel && VVASE::Math::IsZero(range.startRackTravel - range.endRackTravel)) ||
+		(xAxisType == Sweep::AxisTypeHeave && VVASE::Math::IsZero(range.startHeave - range.endHeave)) ||
+		(xAxisType == Sweep::AxisTypePitch && VVASE::Math::IsZero(range.startPitch - range.endPitch)) ||
+		xAxisType == Sweep::AxisTypeUnused)
 	{
 		if (fabs(range.startRoll - range.endRoll) > 0.0)
 			xAxisType = AxisTypeRoll;
@@ -933,7 +962,7 @@ void Iteration::SetRange(const Iteration::Range &range)
 }
 
 //==========================================================================
-// Class:			Iteration
+// Class:			Sweep
 // Function:		SetNumberOfPoints
 //
 // Description:		Sets the number of points used to generate the plots for
@@ -949,7 +978,7 @@ void Iteration::SetRange(const Iteration::Range &range)
 //		None
 //
 //==========================================================================
-void Iteration::SetNumberOfPoints(const int &numberOfPoints)
+void Sweep::SetNumberOfPoints(const int &numberOfPoints)
 {
 	if (numberOfPoints >= 2)
 		this->numberOfPoints = numberOfPoints;
@@ -958,14 +987,14 @@ void Iteration::SetNumberOfPoints(const int &numberOfPoints)
 }
 
 //==========================================================================
-// Class:			Iteration
+// Class:			Sweep
 // Function:		SetActivePlot
 //
 // Description:		Sets the flag indicating whether the specified plot is
 //					active or not.
 //
 // Input Arguments:
-//		plotID	=	Iteration::PlotID specifying the plot we're intersted in
+//		plotID	=	Sweep::PlotID specifying the plot we're intersted in
 //		active	=	const bool& true for plot is shown, false otherwise
 //
 // Output Arguments:
@@ -975,7 +1004,7 @@ void Iteration::SetNumberOfPoints(const int &numberOfPoints)
 //		None
 //
 //==========================================================================
-void Iteration::SetActivePlot(PlotID plotID, const bool &active)
+void Sweep::SetActivePlot(PlotID plotID, const bool &active)
 {
 	// Make sure the plot ID is valid
 	assert(plotID < NumberOfPlots);
@@ -988,7 +1017,7 @@ void Iteration::SetActivePlot(PlotID plotID, const bool &active)
 }
 
 //==========================================================================
-// Class:			Iteration
+// Class:			Sweep
 // Function:		UpdateAutoAssociate
 //
 // Description:		Updates the list of associated cars, if auto-associated
@@ -1004,7 +1033,7 @@ void Iteration::SetActivePlot(PlotID plotID, const bool &active)
 //		None
 //
 //==========================================================================
-void Iteration::UpdateAutoAssociate()
+void Sweep::UpdateAutoAssociate()
 {
 	// Make sure auto-associate is on
 	if (!associatedWithAllOpenCars)
@@ -1024,7 +1053,7 @@ void Iteration::UpdateAutoAssociate()
 }
 
 //==========================================================================
-// Class:			Iteration
+// Class:			Sweep
 // Function:		ShowassociatedCarsDialog
 //
 // Description:		Allows the user to update the list of associated cars.
@@ -1039,7 +1068,7 @@ void Iteration::UpdateAutoAssociate()
 //		None
 //
 //==========================================================================
-void Iteration::ShowAssociatedCarsDialog()
+void Sweep::ShowAssociatedCarsDialog()
 {
 	// Call the auto-associate update function
 	UpdateAutoAssociate();
@@ -1098,7 +1127,7 @@ void Iteration::ShowAssociatedCarsDialog()
 }
 
 //==========================================================================
-// Class:			Iteration
+// Class:			Sweep
 // Function:		AssociatedWithCar
 //
 // Description:		Checks to see if the specified car is associated with
@@ -1114,7 +1143,7 @@ void Iteration::ShowAssociatedCarsDialog()
 //		bool, true if the argument matches a car in our list
 //
 //==========================================================================
-bool Iteration::AssociatedWithCar(GuiCar *test) const
+bool Sweep::AssociatedWithCar(GuiCar *test) const
 {
 	// Go through our list of associated cars, and see if Test points to any of
 	// those cars
@@ -1129,7 +1158,7 @@ bool Iteration::AssociatedWithCar(GuiCar *test) const
 }
 
 //==========================================================================
-// Class:			Iteration
+// Class:			Sweep
 // Function:		GetDataValue
 //
 // Description:		Accesses the output data for the specified car and the
@@ -1147,7 +1176,7 @@ bool Iteration::AssociatedWithCar(GuiCar *test) const
 //		double, the value of the requested point, converted to user units
 //
 //==========================================================================
-double Iteration::GetDataValue(int associatedCarIndex, int point, PlotID id) const
+double Sweep::GetDataValue(int associatedCarIndex, int point, PlotID id) const
 {
 	double value = 0.0;
 	Eigen::Vector3d temp;
@@ -1160,7 +1189,7 @@ double Iteration::GetDataValue(int associatedCarIndex, int point, PlotID id) con
 	// Depending on the specified PlotID, choose which member of the KinematicOutputs
 	// object to return
 	if (id < Pitch)
-		value = UnitConverter::GetInstance().ConvertOutput((*outputLists[associatedCarIndex])[point]->GetOutputValue(
+		value = UnitConverter::GetInstance().ConvertOutput(outputLists[associatedCarIndex][point]->GetOutputValue(
 			(KinematicOutputs::OutputsComplete)id), KinematicOutputs::GetOutputUnitType(
 			(KinematicOutputs::OutputsComplete)id));
 	else if (id == Pitch)
@@ -1178,7 +1207,7 @@ double Iteration::GetDataValue(int associatedCarIndex, int point, PlotID id) con
 }
 
 //==========================================================================
-// Class:			Iteration
+// Class:			Sweep
 // Function:		ExportDataToFile
 //
 // Description:		Exports the data for this object to a comma or tab-delimited
@@ -1195,7 +1224,7 @@ double Iteration::GetDataValue(int associatedCarIndex, int point, PlotID id) con
 //		None
 //
 //==========================================================================
-void Iteration::ExportDataToFile(wxString pathAndFileName) const
+void Sweep::ExportDataToFile(wxString pathAndFileName) const
 {
 	// Determine what type of delimiter to use
 	wxString extension(pathAndFileName.substr(pathAndFileName.find_last_of('.') + 1));
@@ -1211,7 +1240,7 @@ void Iteration::ExportDataToFile(wxString pathAndFileName) const
 	}
 
 	// Perform the save - open the file
-	vvaseOFStream exportFile(pathAndFileName.mb_str(), std::ios::out);
+	vvaseOutFileStream exportFile(pathAndFileName.mb_str(), std::ios::out);
 
 	// Warn the user if the file could not be opened failed
 	if (!exportFile.is_open() || !exportFile.good())
@@ -1253,7 +1282,7 @@ void Iteration::ExportDataToFile(wxString pathAndFileName) const
 }
 
 //==========================================================================
-// Class:			Iteration
+// Class:			Sweep
 // Function:		GetPlotName
 //
 // Description:		Returns a string containing the name of the specified plot.
@@ -1268,7 +1297,7 @@ void Iteration::ExportDataToFile(wxString pathAndFileName) const
 //		wxString containing the name of the plot
 //
 //==========================================================================
-wxString Iteration::GetPlotName(PlotID id) const
+wxString Sweep::GetPlotName(PlotID id) const
 {
 	wxString name;
 
@@ -1292,7 +1321,7 @@ wxString Iteration::GetPlotName(PlotID id) const
 }
 
 //==========================================================================
-// Class:			Iteration
+// Class:			Sweep
 // Function:		GetPlotUnits
 //
 // Description:		Returns a string containing the units of the specified plot.
@@ -1307,7 +1336,7 @@ wxString Iteration::GetPlotName(PlotID id) const
 //		wxString containing the units of the plot
 //
 //==========================================================================
-wxString Iteration::GetPlotUnits(PlotID id) const
+wxString Sweep::GetPlotUnits(PlotID id) const
 {
 	// The value to return
 	wxString units;
@@ -1327,7 +1356,7 @@ wxString Iteration::GetPlotUnits(PlotID id) const
 }
 
 //==========================================================================
-// Class:			Iteration
+// Class:			Sweep
 // Function:		WriteFileHeader
 //
 // Description:		Writes the file header to the specified output stream.
@@ -1342,7 +1371,7 @@ wxString Iteration::GetPlotUnits(PlotID id) const
 //		None
 //
 //==========================================================================
-void Iteration::WriteFileHeader(std::ofstream *outFile)
+void Sweep::WriteFileHeader(std::ofstream *outFile)
 {
 	// Set up the header information
 	FileHeaderInfo header;
@@ -1356,7 +1385,7 @@ void Iteration::WriteFileHeader(std::ofstream *outFile)
 }
 
 //==========================================================================
-// Class:			Iteration
+// Class:			Sweep
 // Function:		ReadFileHeader
 //
 // Description:		Reads the file header information from the specified input stream.
@@ -1371,7 +1400,7 @@ void Iteration::WriteFileHeader(std::ofstream *outFile)
 //		FileHeaderInfo containing the header information
 //
 //==========================================================================
-Iteration::FileHeaderInfo Iteration::ReadFileHeader(std::ifstream *inFile)
+Sweep::FileHeaderInfo Sweep::ReadFileHeader(std::ifstream *inFile)
 {
 	// Set get pointer to the start of the file
 	inFile->seekg(0);
@@ -1384,7 +1413,7 @@ Iteration::FileHeaderInfo Iteration::ReadFileHeader(std::ifstream *inFile)
 }
 
 //==========================================================================
-// Class:			Iteration
+// Class:			Sweep
 // Function:		SetXAxisType
 //
 // Description:		Sets the X axis to the specified quantity.
@@ -1399,7 +1428,7 @@ Iteration::FileHeaderInfo Iteration::ReadFileHeader(std::ifstream *inFile)
 //		None
 //
 //==========================================================================
-void Iteration::SetXAxisType(AxisType xAxisType)
+void Sweep::SetXAxisType(AxisType xAxisType)
 {
 	this->xAxisType = xAxisType;
 
@@ -1408,7 +1437,7 @@ void Iteration::SetXAxisType(AxisType xAxisType)
 }
 
 //==========================================================================
-// Class:			Iteration
+// Class:			Sweep
 // Function:		SetYAxisType
 //
 // Description:		Sets the Y axis to the specified quantity.
@@ -1423,7 +1452,7 @@ void Iteration::SetXAxisType(AxisType xAxisType)
 //		None
 //
 //==========================================================================
-void Iteration::SetYAxisType(AxisType yAxisType)
+void Sweep::SetYAxisType(AxisType yAxisType)
 {
 	this->yAxisType = yAxisType;
 
@@ -1432,7 +1461,7 @@ void Iteration::SetYAxisType(AxisType yAxisType)
 }
 
 //==========================================================================
-// Class:			Iteration
+// Class:			Sweep
 // Function:		SetAutoAssociate
 //
 // Description:		Sets the auto-associate with all cars flag.
@@ -1448,7 +1477,7 @@ void Iteration::SetYAxisType(AxisType yAxisType)
 //		None
 //
 //==========================================================================
-void Iteration::SetAutoAssociate(bool autoAssociate)
+void Sweep::SetAutoAssociate(bool autoAssociate)
 {
 	associatedWithAllOpenCars = autoAssociate;
 	UpdateAutoAssociate();
@@ -1462,7 +1491,7 @@ void Iteration::SetAutoAssociate(bool autoAssociate)
 }
 
 //==========================================================================
-// Class:			Iteration
+// Class:			Sweep
 // Function:		MarkAnalysisComplete
 //
 // Description:		To be called after one of this object's kinematics analyses
@@ -1478,7 +1507,7 @@ void Iteration::SetAutoAssociate(bool autoAssociate)
 //		None
 //
 //==========================================================================
-void Iteration::MarkAnalysisComplete()
+void Sweep::MarkAnalysisComplete()
 {
 	assert(pendingAnalysisCount > 0);
 
