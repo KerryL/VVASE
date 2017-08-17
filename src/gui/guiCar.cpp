@@ -79,13 +79,15 @@ GuiCar::GuiCar(MainFrame &mainFrame, wxString pathAndFileName)
 
 	Initialize();
 
+	const Suspension* currentSuspension(originalCar->GetSubsystem<Suspension>());
+
 	// After calling Initialize() (after loading the car from file, if necessary)
 	// set the size of the view window and the camera view to fit everything in
 	// the scene.
 	Eigen::Vector3d position(-100.0, -100.0, 60.0), up(0.0, 0.0, 1.0);
 	Eigen::Vector3d lookAt(originalCar->suspension->rightFront.hardpoints[Corner::ContactPatch] +
-		(originalCar->suspension->leftRear.hardpoints[Corner::ContactPatch] -
-		originalCar->suspension->rightFront.hardpoints[Corner::ContactPatch]) * 0.5);
+		(originalSuspension->leftRear.hardpoints[Corner::ContactPatch] -
+		originalSuspension->rightFront.hardpoints[Corner::ContactPatch]) * 0.5);
 	renderer->SetCameraView(position, lookAt, up);
 
 	const double scale = 1.2;// 20% bigger than car
@@ -164,16 +166,14 @@ GuiCar::GuiCar(MainFrame &mainFrame, wxString pathAndFileName)
 //==========================================================================
 GuiCar::~GuiCar()
 {
-	// Delete the car objects
 	delete originalCar;
-	originalCar = NULL;
+	originalCar = nullptr;
 
 	delete workingCar;
-	workingCar = NULL;
+	workingCar = nullptr;
 
-	// Delete the appearance options
 	delete appearanceOptions;
-	appearanceOptions = NULL;
+	appearanceOptions = nullptr;
 }
 
 //==========================================================================
@@ -312,8 +312,7 @@ void GuiCar::SetUseOrtho(const bool &useOrtho)
 //==========================================================================
 bool GuiCar::PerformSaveToFile()
 {
-	// Make sure we have exclusive access
-	wxMutexLocker lock(originalCar->GetMutex());
+	std::lock_guard<std::mutex> lock(originalCar->GetMutex());
 
 	// Perform the save - the object we want to save is OriginalCar - this is the
 	// one that contains the information about the vehicle as it was input by the
@@ -353,7 +352,7 @@ bool GuiCar::PerformLoadFromFile()
 	int fileVersion;
 
 	// Make sure we have exclusive access
-	wxMutexLocker lock(originalCar->GetMutex());
+	std::lock_guard<std::mutex> lock(originalCar->GetMutex());
 
 	// Open the car
 	bool loadSuccessful(originalCar->LoadCarFromFile(pathAndFileName, &inFile, &fileVersion));
@@ -444,9 +443,11 @@ wxString GuiCar::GetSubsystemName(Subsystems subsystem)
 //==========================================================================
 void GuiCar::ComputeARBSignConventions()
 {
+	Suspension* originalSuspension(originalCar->GetSubsystem<Suspension>());
+
 	// Reset convention
-	originalCar->suspension->frontBarSignGreaterThan = true;
-	originalCar->suspension->rearBarSignGreaterThan = true;
+	originalSuspension->frontBarSignGreaterThan = true;
+	originalSuspension->rearBarSignGreaterThan = true;
 
 	// Test convention
 	WheelSet tireDeflections;
@@ -467,10 +468,10 @@ void GuiCar::ComputeARBSignConventions()
 
 	// Adjust convention if necessary
 	if (kinematics.GetOutputs().doubles[KinematicOutputs::FrontARBTwist] < 0.0)
-		originalCar->suspension->frontBarSignGreaterThan = false;
+		originalSuspension->frontBarSignGreaterThan = false;
 
 	if (kinematics.GetOutputs().doubles[KinematicOutputs::RearARBTwist] < 0.0)
-		originalCar->suspension->rearBarSignGreaterThan = false;
+		originalSuspension->rearBarSignGreaterThan = false;
 }
 
 }// namespace VVASE

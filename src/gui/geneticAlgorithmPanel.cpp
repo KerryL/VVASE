@@ -26,6 +26,7 @@
 #include "VVASE/core/car/subsystems/corner.h"
 #include "VVASE/core/car/car.h"
 #include "VVASE/gui/utilities/wxRelatedUtilities.h"
+#include "VVASE/gui/utilities/unitConverter.h"
 
 namespace VVASE
 {
@@ -364,10 +365,10 @@ void GeneticAlgorithmPanel::CreateControls()
 //==========================================================================
 void GeneticAlgorithmPanel::AddGeneButtonClickedEvent(wxCommandEvent& WXUNUSED(event))
 {
-	const Suspension* suspension(NULL);
+	const Suspension* suspension(nullptr);
 	const GuiCar* carSelection(GetSelectedCar());
 	if (carSelection)
-		suspension = carSelection->GetOriginalCar().suspension;
+		suspension = carSelection->GetOriginalCar().GetSubsystem<Suspension>();
 
 	// Create the dialog box with default gene properties
 	GAGeneDialog geneDialog(static_cast<wxWindow*>(&mainFrame), suspension, (Corner::Hardpoints)0,
@@ -590,10 +591,10 @@ void GeneticAlgorithmPanel::EditSelectedGene()
 
 	GAObject::Gene geneToEdit = optimization.GetAlgorithm().GetGene(geneList->GetSelectedRows()[0]);
 
-	const Suspension* suspension(NULL);
+	const Suspension* suspension(nullptr);
 	const GuiCar* carSelection(GetSelectedCar());
 	if (carSelection)
-		suspension = carSelection->GetOriginalCar().suspension;
+		suspension = carSelection->GetOriginalCar().GetSubsystem<Suspension>();
 
 	// Create the dialog box with properties corresponding to the selected gene
 	GAGeneDialog geneDialog(static_cast<wxWindow*>(&mainFrame), suspension, geneToEdit.hardpoint,

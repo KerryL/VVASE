@@ -12,6 +12,9 @@
 #ifndef WX_RELATED_UTILIEIS_H_
 #define WX_RELATED_UTILIEIS_H_
 
+// Core headers
+#include "VVASE/core/utilities/vvaseString.h"
+
 // wxWidgets headers
 #include <wx/wx.h>
 
@@ -31,7 +34,9 @@ int SafelyGetComboBoxSelection(wxComboBox *control);
 // Mouse event don't propegate - but we can force them to by binding controls to this method
 void SkipMouseEvent(wxMouseEvent &event);
 
-}// namespace Utilities
+vvaseString ToVVASEString(const wxString& s);
+
+}// namespace wxUtilities
 
 class EventWindowData : public wxObject
 {

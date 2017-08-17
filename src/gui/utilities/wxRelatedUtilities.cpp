@@ -15,6 +15,9 @@
 namespace VVASE
 {
 
+namespace wxUtilities
+{
+
 //==========================================================================
 // Class:			None
 // Function:		SetMinimumWidthFromContents
@@ -113,5 +116,16 @@ void SkipMouseEvent(wxMouseEvent &event)
 	static_cast<EventWindowData*>(event.GetEventUserData())->GetWindow()->
 		GetEventHandler()->ProcessEvent(event);
 }
+
+vvaseString ToVVASEString(const wxString& s)
+{
+#ifdef _UNICODE
+	return s.ToStdWString();
+#else
+	return s.ToStdString();
+#endif
+}
+
+}// namespace wxUtilities
 
 }// namespace VVASE

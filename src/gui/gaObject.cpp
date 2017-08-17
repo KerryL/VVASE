@@ -26,6 +26,7 @@
 #include "VVASE/core/car/subsystems/suspension.h"
 #include "VVASE/core/utilities/carMath.h"
 #include "VVASE/gui/utilities/unitConverter.h"
+#include "VVASE/gui/utilities/wxRelatedUtilities.h"
 #include "VVASE/core/utilities/debugger.h"
 #include "VVASE/core/threads/jobQueue.h"
 
@@ -77,7 +78,7 @@ GAObject::GAObject(JobQueue &queue, GeneticOptimization &optimization)
 //==========================================================================
 GAObject::~GAObject()
 {
-	wxMutexLocker lock(gsaMutex);
+	std::lock_guard<std::mutex> lock(gsaMutex);
 	DebugLog::GetInstance()->Log(_T("GAObject::~GAObject()"));
 
 	unsigned int i;
@@ -161,7 +162,7 @@ void GAObject::SimulateGeneration()
 				workingCarArray[i * inputList.size() + j], inputList[j],
 				kinematicOutputArray + i * inputList.size() + j);
 			ThreadJob newJob(ThreadJob::CommandThreadKinematicsGA, data,
-				optimization.GetCleanName(), temp);
+				optimization.GetCleanName(), wxUtilities::ToVVASEString(temp));
 			queue.AddJob(newJob);
 		}
 	}
@@ -294,7 +295,7 @@ void GAObject::SetUp(const Car &targetCar)
 	InitializeAlgorithm(populationSize, generationLimit, geneList.size(),
 		&phenotypeCount, true, crossover, elitism, mutation);
 
-	wxMutexLocker lock(gsaMutex);
+	std::lock_guard<std::mutex> lock(gsaMutex);
 	DebugLog::GetInstance()->Log(_T("GAObject::SetUp (locker)"));
 
 	DetermineAllInputs();
@@ -345,9 +346,9 @@ void GAObject::SetCarGenome(int carIndex, const int *currentGenome)
 
 	// Get locks on all the cars we're manipulating
 	// NOTE:  Always lock working car first, then lock original car (consistency required to prevent deadlocks)
-	wxMutexLocker targetLocker(targetCar->GetMutex());
+	std::lock_guard<std::mutex> targetLocker(targetCar->GetMutex());
 	DebugLog::GetInstance()->Log(_T("GAObject::SetCarGenome (targetLocker)"));
-	wxMutexLocker originalLocker(originalCarArray[carIndex]->GetMutex());
+	std::lock_guard<std::mutex> originalLocker(originalCarArray[carIndex]->GetMutex());
 	DebugLog::GetInstance()->Log(_T("GAObject::SetCarGenome (originalLocker)"));
 
 	// Set the original and working cars equal to the target car
@@ -356,8 +357,8 @@ void GAObject::SetCarGenome(int carIndex, const int *currentGenome)
 	// Go through all of the genes, and adjust the variables to match the current genome
 	Gene *currentGene;
 	unsigned int i;
-	Suspension* currentSuspension(dynamic_cast<Suspension*>(originalCarArray[carIndex]->GetSubsystem(Suspension::GetName()))));
-	Suspension* targetSuspension(dynamic_cast<Suspension*>(targetCar->GetSubsystem(Suspension::GetName())));
+	const Suspension* currentSuspension(originalCarArray[carIndex]->GetSubsystem<Suspension>());
+	Suspension* targetSuspension(targetCar->GetSubsystem<Suspension>());
 	for (i = 0; i < geneList.size(); i++)
 	{
 		// Get the current gene
@@ -366,23 +367,23 @@ void GAObject::SetCarGenome(int carIndex, const int *currentGenome)
 		// Set the current and opposite corners
 		if (currentGene->location == Corner::LocationLeftFront)
 		{
-			currentCorner = &suspension->leftFront;
-			oppositeCorner = &suspension->rightFront;
+			currentCorner = &currentSuspension->leftFront;
+			oppositeCorner = &currentSuspension->rightFront;
 		}
 		else if (currentGene->location == Corner::LocationRightFront)
 		{
-			currentCorner = &suspension->rightFront;
-			oppositeCorner = &suspension->leftFront;
+			currentCorner = &currentSuspension->rightFront;
+			oppositeCorner = &currentSuspension->leftFront;
 		}
 		else if (currentGene->location == Corner::LocationLeftRear)
 		{
-			currentCorner = &suspension->leftRear;
-			oppositeCorner = &suspension->rightRear;
+			currentCorner = &currentSuspension->leftRear;
+			oppositeCorner = &currentSuspension->rightRear;
 		}
 		else
 		{
-			currentCorner = &suspension->rightRear;
-			oppositeCorner = &suspension->leftRear;
+			currentCorner = &currentSuspension->rightRear;
+			oppositeCorner = &currentSuspension->leftRear;
 		}
 
 		// Determine which component of the vector to vary
@@ -741,10 +742,10 @@ void GAObject::DetermineAllInputs()
 //==========================================================================
 void GAObject::UpdateResultingCar(Car &result) const
 {
-	wxMutexLocker lock(gsaMutex);
+	std::lock_guard<std::mutex> lock(gsaMutex);
 	DebugLog::GetInstance()->Log(_T("GAObject::UpdateResultingCar (locker)"));
 
-	wxMutexLocker carLock(result.GetMutex());
+	std::lock_guard<std::mutex> carLock(result.GetMutex());
 	result = *originalCarArray[generationLimit - 1];
 }
 
@@ -818,8 +819,7 @@ GAObject::FileHeaderInfo GAObject::ReadFileHeader(std::ifstream *inFile)
 //==========================================================================
 bool GAObject::Write(wxString fileName)
 {
-	// Ensure exclusive access to this object
-	wxMutexLocker lock(gsaMutex);
+	std::lock_guard<std::mutex> lock(gsaMutex);
 
 	// Open the specified file
 	std::ofstream outFile(fileName.mb_str(), std::ios::binary);
@@ -848,9 +848,6 @@ bool GAObject::Write(wxString fileName)
 	for (const auto& goal : goalList)
 		outFile.write(reinterpret_cast<const char*>(&goal), sizeof(goal));
 
-	// Close the file
-	outFile.close();
-
 	return true;
 }
 
@@ -872,7 +869,7 @@ bool GAObject::Write(wxString fileName)
 //==========================================================================
 bool GAObject::Read(wxString fileName)
 {
-	wxMutexLocker lock(gsaMutex);
+	std::lock_guard<std::mutex> lock(gsaMutex);
 
 	geneList.clear();
 	goalList.clear();
@@ -913,8 +910,6 @@ bool GAObject::Read(wxString fileName)
 		inFile.read(reinterpret_cast<char*>(&tempGoal), sizeof(tempGoal));
 		goalList.push_back(tempGoal);
 	}
-
-	inFile.close();
 
 	return true;
 }

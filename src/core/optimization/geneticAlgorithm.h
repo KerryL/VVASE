@@ -14,8 +14,8 @@
 #ifndef GENETIC_ALGORITHM_H_
 #define GENETIC_ALGORITHM_H_
 
-// wxWidgets headers
-#include <wx/thread.h>
+// Standard C++ headers
+#include <mutex>
 
 namespace VVASE
 {
@@ -45,22 +45,22 @@ public:
 
 	// Private data accessors
 	void SetPopulationSize(int populationSize);
-	inline int GetPopulationSize() const { wxMutexLocker lock(gsaMutex); return populationSize; };
+	inline int GetPopulationSize() const { std::lock_guard<std::mutex> lock(gsaMutex); return populationSize; };
 
 	void SetGenerationLimit(int generationLimit);
-	inline int GetGenerationLimit() const { wxMutexLocker lock(gsaMutex); return generationLimit; };
+	inline int GetGenerationLimit() const { std::lock_guard<std::mutex> lock(gsaMutex); return generationLimit; };
 
 	void SetElitismPercentage(double elitism);
-	inline double GetElitismPercentage() const { wxMutexLocker lock(gsaMutex); return elitism; };
+	inline double GetElitismPercentage() const { std::lock_guard<std::mutex> lock(gsaMutex); return elitism; };
 
 	void SetMutationProbability(double mutation);
-	inline double GetMutationProbability() const { wxMutexLocker lock(gsaMutex); return mutation; };
+	inline double GetMutationProbability() const { std::lock_guard<std::mutex> lock(gsaMutex); return mutation; };
 
 	void SetCrossoverPoint(int crossover);
-	inline int GetCrossoverPoint() const { wxMutexLocker Lock(gsaMutex); return crossover; };
+	inline int GetCrossoverPoint() const { std::lock_guard<std::mutex> lock(gsaMutex); return crossover; };
 
-	inline void SetSortingMethod(SortingMethod sortingMethod) { wxMutexLocker lock(gsaMutex); this->sortingMethod = sortingMethod; };
-	inline SortingMethod GetSortingMethod() const { wxMutexLocker lock(gsaMutex); return sortingMethod; };
+	inline void SetSortingMethod(SortingMethod sortingMethod) { std::lock_guard<std::mutex> lock(gsaMutex); this->sortingMethod = sortingMethod; };
+	inline SortingMethod GetSortingMethod() const { std::lock_guard<std::mutex> lock(gsaMutex); return sortingMethod; };
 
 protected:
 	// The fitness function (MUST be overridden)
@@ -87,7 +87,7 @@ protected:
 	// The fitnesses (first index:  generation, second index:  citizen)
 	double **fitnesses;
 
-	mutable wxMutex gsaMutex;
+	mutable std::mutex gsaMutex;
 
 private:
 	void CreateFirstGeneration();
