@@ -52,26 +52,6 @@ Sphere::Sphere(LibPlot2D::RenderWindow &renderWindow) : Primitive(renderWindow)
 
 //==========================================================================
 // Class:			Sphere
-// Function:		~Sphere
-//
-// Description:		Destructor for the Sphere class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Sphere::~Sphere()
-{
-}
-
-//==========================================================================
-// Class:			Sphere
 // Function:		GenerateGeometry
 //
 // Description:		Creates the OpenGL instructions to create this object in
@@ -132,7 +112,7 @@ void Sphere::GenerateGeometry()
 
 	glPushMatrix();
 
-		glTranslated(center.x, center.y, center.z);
+		glTranslated(center.x(), center.y(), center.z());
 
 		glBegin(GL_TRIANGLES);
 
@@ -227,15 +207,15 @@ void Sphere::RecursiveSubdivision(const Eigen::Vector3d &corner1, const Eigen::V
 	    ------------
 	   Corner 2    Corner 3
 	-----------------------*/
-	Eigen::Vector3d midPoint1 = corner1 + (corner2 - corner1).Normalize() * corner1.Distance(corner2) / 2.0;
-	Eigen::Vector3d midPoint2 = corner1 + (corner3 - corner1).Normalize() * corner1.Distance(corner3) / 2.0;
-	Eigen::Vector3d midPoint3 = corner3 + (corner2 - corner3).Normalize() * corner3.Distance(corner2) / 2.0;
+	Eigen::Vector3d midPoint1 = corner1 + (corner2 - corner1).normalized() * corner1.Distance(corner2) / 2.0;
+	Eigen::Vector3d midPoint2 = corner1 + (corner3 - corner1).normalized() * corner1.Distance(corner3) / 2.0;
+	Eigen::Vector3d midPoint3 = corner3 + (corner2 - corner3).normalized() * corner3.Distance(corner2) / 2.0;
 
 	// These locations now need to be normalized such that they lie at a
 	// distance of 'radius' from the center
-	midPoint1 = midPoint1.Normalize() * radius;
-	midPoint2 = midPoint2.Normalize() * radius;
-	midPoint3 = midPoint3.Normalize() * radius;
+	midPoint1 = midPoint1.normalized() * radius;
+	midPoint2 = midPoint2.normalized() * radius;
+	midPoint3 = midPoint3.normalized() * radius;
 
 	// Call this method for each of the four sub-triangles, with one less level
 	// Note that the order in which the points are supplied is important to make
@@ -267,11 +247,11 @@ void Sphere::RecursiveSubdivision(const Eigen::Vector3d &corner1, const Eigen::V
 void Sphere::AddVertex(const Eigen::Vector3d &vertex)
 {
 	// Compute and set the normal
-	Eigen::Vector3d normal = vertex.Normalize();
-	glNormal3d(normal.x, normal.y, normal.z);
+	Eigen::Vector3d normal = vertex.normalized();
+	glNormal3d(normal.x(), normal.y(), normal.z());
 
 	// Add the vertex
-	glVertex3d(vertex.x, vertex.y, vertex.z);
+	glVertex3d(vertex.x(), vertex.y(), vertex.z());
 }
 
 //==========================================================================
@@ -320,7 +300,7 @@ bool Sphere::HasValidParameters()
 void Sphere::SetResolution(const int &resolution)
 {
 	this->resolution = resolution;
-	modified = true;
+	mModified = true;
 }
 
 //==========================================================================
@@ -342,7 +322,7 @@ void Sphere::SetResolution(const int &resolution)
 void Sphere::SetCenter(const Eigen::Vector3d &center)
 {
 	this->center = center;
-	modified = true;
+	mModified = true;
 }
 
 //==========================================================================
@@ -364,7 +344,7 @@ void Sphere::SetCenter(const Eigen::Vector3d &center)
 void Sphere::SetRadius(const double &radius)
 {
 	this->radius = radius;
-	modified = true;
+	mModified = true;
 }
 
 //==========================================================================
@@ -387,9 +367,9 @@ void Sphere::SetRadius(const double &radius)
 //==========================================================================
 bool Sphere::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector3d& direction) const
 {
-	assert(VVASE::Math::IsZero(1.0 - direction.Length()));
+	assert(VVASE::Math::IsZero(1.0 - direction.norm()));
 
-	if (pow((point - center).Length(), 2) > pow(direction * (point - center), 2) + radius * radius)
+	if (pow((point - center).norm(), 2) > pow(direction * (point - center), 2) + radius * radius)
 		return false;
 
 	return true;
