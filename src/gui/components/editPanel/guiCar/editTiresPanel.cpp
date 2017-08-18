@@ -12,15 +12,17 @@
 //        car.
 
 // Local headers
-#include "vCar/tire.h"
-#include "vCar/tireSet.h"
-#include "gui/renderer/carRenderer.h"
-#include "gui/guiCar.h"
-#include "gui/components/mainFrame.h"
-#include "gui/components/editPanel/editPanel.h"
-#include "gui/components/editPanel/guiCar/editTiresPanel.h"
-#include "vUtilities/unitConverter.h"
-#include "vMath/vector.h"
+#include "VVASE/core/car/subsystems/tire.h"
+#include "VVASE/core/car/subsystems/tireSet.h"
+#include "VVASE/gui/renderer/carRenderer.h"
+#include "../../../guiCar.h"
+#include "VVASE/gui/components/mainFrame.h"
+#include "../editPanel.h"
+#include "editTiresPanel.h"
+#include "VVASE/gui/utilities/unitConverter.h"
+
+// Eigen headers
+#include <Eigen/Eigen>
 
 namespace VVASE
 {
@@ -143,10 +145,10 @@ void EditTiresPanel::UpdateInformation(TireSet *currentTireSet)
 		currentTireSet->leftRear->stiffness)));
 
 	// And their units
-	rightFrontDiameterUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance));
-	rightFrontWidthUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance));
-	rightFrontStiffnessUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeForce)
-		+ _T("/") + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance));
+	rightFrontDiameterUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitType::Distance));
+	rightFrontWidthUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitType::Distance));
+	rightFrontStiffnessUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitType::Force)
+		+ _T("/") + UnitConverter::GetInstance().GetUnitType(UnitType::Distance));
 
 	leftFrontDiameterUnitsLabel->SetLabel(rightFrontDiameterUnitsLabel->GetLabel());
 	leftFrontWidthUnitsLabel->SetLabel(rightFrontWidthUnitsLabel->GetLabel());
@@ -475,7 +477,7 @@ void EditTiresPanel::TextBoxChangeEvent(wxCommandEvent &event)
 		event.GetId() == TextBoxLeftRearStiffness)
 		*dataLocation = ConvertSpringInput(value);
 	else
-		*dataLocation = UnitConverter::GetInstance().ConvertInput(value, UnitConverter::UnitTypeDistance);
+		*dataLocation = UnitConverter::GetInstance().ConvertInput(value, UnitType::Distance);
 
 	mutex->Unlock();
 

@@ -12,18 +12,20 @@
 //        car.
 
 // Local headers
-#include "vCar/drivetrain.h"
-#include "vCar/suspension.h"
-#include "gui/renderer/carRenderer.h"
-#include "gui/guiCar.h"
-#include "gui/superGrid.h"
-#include "gui/components/mainFrame.h"
-#include "gui/components/editPanel/editPanel.h"
-#include "gui/components/editPanel/guiCar/editSuspensionPanel.h"
-#include "gui/components/editPanel/guiCar/editSuspensionNotebook.h"
-#include "vUtilities/unitConverter.h"
-#include "vUtilities/wxRelatedUtilities.h"
-#include "vMath/vector.h"
+#include "VVASE/core/car/subsystems/drivetrain.h"
+#include "VVASE/core/car/subsystems/suspension.h"
+#include "VVASE/gui/renderer/carRenderer.h"
+#include "../../../guiCar.h"
+#include "VVASE/gui/superGrid.h"
+#include "VVASE/gui/components/mainFrame.h"
+#include "../editPanel.h"
+#include "editSuspensionPanel.h"
+#include "editSuspensionNotebook.h"
+#include "VVASE/gui/utilities/unitConverter.h"
+#include "VVASE/gui/utilities/wxRelatedUtilities.h"
+
+// Eigen headers
+#include <Eigen/Eigen>
 
 namespace VVASE
 {
@@ -154,7 +156,7 @@ void EditSuspensionPanel::UpdateInformation(Suspension *currentSuspension)
 	hardpoints->BeginBatch();
 
 	wxString unitString;
-	unitString.Printf("(%s)", UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance).c_str());
+	unitString.Printf("(%s)", UnitConverter::GetInstance().GetUnitType(UnitType::Distance).c_str());
 	hardpoints->SetCellValue(0, 1, unitString);
 	hardpoints->SetCellValue(0, 2, unitString);
 	hardpoints->SetCellValue(0, 3, unitString);
@@ -224,9 +226,9 @@ void EditSuspensionPanel::UpdateInformation(Suspension *currentSuspension)
 	{
 		point = UnitConverter::GetInstance().ConvertDistanceOutput(currentSuspension->hardpoints[i]);
 
-		hardpoints->SetCellValue(i + 1, 1, UnitConverter::GetInstance().FormatNumber(point.x));
-		hardpoints->SetCellValue(i + 1, 2, UnitConverter::GetInstance().FormatNumber(point.y));
-		hardpoints->SetCellValue(i + 1, 3, UnitConverter::GetInstance().FormatNumber(point.z));
+		hardpoints->SetCellValue(i + 1, 1, UnitConverter::GetInstance().FormatNumber(point.x()));
+		hardpoints->SetCellValue(i + 1, 2, UnitConverter::GetInstance().FormatNumber(point.y()));
+		hardpoints->SetCellValue(i + 1, 3, UnitConverter::GetInstance().FormatNumber(point.z()));
 	}
 
 	hardpoints->FitHeight();
@@ -271,7 +273,7 @@ void EditSuspensionPanel::CreateControls()
 	hardpoints = new SuperGrid(this, wxID_ANY);
 	hardpoints->CreateGrid(Suspension::NumberOfHardpoints + 1, 4, wxGrid::wxGridSelectRows);
 	wxObject *data = new EventWindowData(this);
-	hardpoints->Bind(wxEVT_MOUSEWHEEL, SkipMouseEvent, wxID_ANY, wxID_ANY, data);
+	hardpoints->Bind(wxEVT_MOUSEWHEEL, wxUtilities::SkipMouseEvent, wxID_ANY, wxID_ANY, data);
 
 	hardpoints->BeginBatch();
 
@@ -351,7 +353,7 @@ void EditSuspensionPanel::CreateControls()
 	wxStaticText *frontBarLabel = new wxStaticText(this, wxID_ANY, _T("Front Sway Bar Style"));
 	frontBarStyle = new wxComboBox(this, ComboBoxFrontBarStyle, wxEmptyString, wxDefaultPosition,
 		wxDefaultSize, choices, wxCB_READONLY);
-	SetMinimumWidthFromContents(frontBarStyle, additionalWidth);
+	wxUtilities::SetMinimumWidthFromContents(frontBarStyle, additionalWidth);
 
 	comboSizer->Add(frontBarLabel, 0, wxALIGN_CENTER_VERTICAL);
 	comboSizer->Add(frontBarStyle, 0, wxEXPAND);
@@ -360,7 +362,7 @@ void EditSuspensionPanel::CreateControls()
 	wxStaticText *rearBarLabel = new wxStaticText(this, wxID_ANY, _T("Rear Sway Bar Style"));
 	rearBarStyle = new wxComboBox(this, ComboBoxRearBarStyle, wxEmptyString, wxDefaultPosition,
 		wxDefaultSize, choices, wxCB_READONLY);
-	SetMinimumWidthFromContents(rearBarStyle, additionalWidth);
+	wxUtilities::SetMinimumWidthFromContents(rearBarStyle, additionalWidth);
 
 	comboSizer->Add(rearBarLabel, 0, wxALIGN_CENTER_VERTICAL);
 	comboSizer->Add(rearBarStyle, 0, wxEXPAND);

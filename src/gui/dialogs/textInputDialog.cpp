@@ -10,11 +10,11 @@
 // Desc:  Dialog box similar to ::wxGetTextFromUser() but allows differentiation between
 //        canceling and returning an empty string.
 
+// Local headers
+#include "VVASE/gui/dialogs/textInputDialog.h"
+
 // wxWidgets headers
 #include <wx/wx.h>
-
-// Local headers
-#include "gui/dialogs/textInputDialog.h"
 
 namespace VVASE
 {
@@ -42,26 +42,6 @@ TextInputDialog::TextInputDialog(const wxString &message, const wxString &title,
 	const wxString &defaultText, wxWindow *parent) : wxDialog(parent, wxID_ANY, title)
 {
 	CreateControls(message, defaultText);
-}
-
-//==========================================================================
-// Class:			TextInputDialog
-// Function:		~TextInputDialog
-//
-// Description:		Destructor for TextInputDialog class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-TextInputDialog::~TextInputDialog()
-{
 }
 
 //==========================================================================

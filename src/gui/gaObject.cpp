@@ -145,7 +145,6 @@ void GAObject::SimulateGeneration()
 
 	// Start a bunch of jobs to evaluate all the different genomes at each different input condition
 	// Use a counter to keep track of the number of pending jobs
-	KinematicsData *data;
 
 	//inverseSemaphore.Set(numberOfCars);// TODO:  Check return value to ensure no errors!
 	// TODO:  Re-implement
@@ -158,9 +157,9 @@ void GAObject::SimulateGeneration()
 		{
 			SetCarGenome(i * inputList.size() + j, genomes[currentGeneration][i]);
 
-			data = new KinematicsData(originalCarArray[i * inputList.size() + j],
+			std::unique_ptr<KinematicsData> data(std::make_unique<KinematicsData>(originalCarArray[i * inputList.size() + j],
 				workingCarArray[i * inputList.size() + j], inputList[j],
-				kinematicOutputArray + i * inputList.size() + j);
+				kinematicOutputArray + i * inputList.size() + j));
 			ThreadJob newJob(ThreadJob::CommandThreadKinematicsGA, data,
 				optimization.GetCleanName(), wxUtilities::ToVVASEString(temp));
 			queue.AddJob(newJob);
@@ -168,7 +167,7 @@ void GAObject::SimulateGeneration()
 	}
 
 	//inverseSemaphore.Wait();
-	// TODO:  Re-implement
+	// TODO:  Re-implement:  Wait for all jobs to complete
 
 	for (i = 0; i < populationSize; i++)
 		fitnesses[currentGeneration][i] = DetermineFitness(&i);
@@ -278,18 +277,21 @@ double GAObject::DetermineFitness(const int *citizen)
 //==========================================================================
 void GAObject::SetUp(const Car &targetCar)
 {
-	gsaMutex.Lock();
-	DebugLog::GetInstance()->Log(_T("GAObject::SetUp (lock)"));
+	std::vector<int> phenotypeSizes;
 
-	std::vector<int> phenotypeSizes(geneList.size());
-	unsigned int i;
-	for (i = 0; i < geneList.size(); i++)
-		phenotypeSizes[i] = geneList[i].numberOfValues;
+	{
+		MutexLocker lock(gsaMutex);
+		DebugLog::GetInstance()->Log(_T("GAObject::SetUp (lock)"));
 
-	this->targetCar = &targetCar;
+		phenotypeSizes.resize(geneList.size());
+		unsigned int i;
+		for (i = 0; i < geneList.size(); i++)
+			phenotypeSizes[i] = geneList[i].numberOfValues;
 
-	DebugLog::GetInstance()->Log(_T("GAObject::SetUp (unlock)"));
-	gsaMutex.Unlock();
+		this->targetCar = &targetCar;
+
+		DebugLog::GetInstance()->Log(_T("GAObject::SetUp (unlock)"));
+	}
 
 	const int phenotypeCount(phenotypeSizes.size());
 	InitializeAlgorithm(populationSize, generationLimit, geneList.size(),
@@ -300,6 +302,7 @@ void GAObject::SetUp(const Car &targetCar)
 
 	DetermineAllInputs();
 
+	unsigned int i;
 	for (i = 0; i < numberOfCars; i++)
 	{
 		delete originalCarArray[i];

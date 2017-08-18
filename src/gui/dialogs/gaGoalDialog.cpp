@@ -13,10 +13,10 @@
 #include <wx/gbsizer.h>
 
 // Local headers
-#include "gui/dialogs/gaGoalDialog.h"
-#include "vUtilities/wxRelatedUtilities.h"
-#include "vUtilities/unitConverter.h"
-#include "vUtilities/dataValidator.h"
+#include "VVASE/gui/dialogs/gaGoalDialog.h"
+#include "VVASE/gui/utilities/wxRelatedUtilities.h"
+#include "VVASE/gui/utilities/unitConverter.h"
+#include "VVASE/gui/utilities/dataValidator.h"
 
 namespace VVASE
 {
@@ -159,7 +159,7 @@ void GAGoalDialog::CreateControls()
 		list.Add(KinematicOutputs::GetOutputName((KinematicOutputs::OutputsComplete)i));
 	outputCombo = new wxComboBox(this, wxID_ANY, KinematicOutputs::GetOutputName(output), wxDefaultPosition,
 		wxDefaultSize, list, wxCB_READONLY);
-	SetMinimumWidthFromContents(outputCombo, additionalWidth);
+	wxUtilities::SetMinimumWidthFromContents(outputCombo, additionalWidth);
 	inputAreaSizer->Add( new wxStaticText(this, wxID_STATIC, _T("Output Parameter")), wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
 	inputAreaSizer->Add(outputCombo, wxGBPosition(row, 2), wxGBSpan(1, 3), inputSizerFlags);
 	row++;
@@ -191,11 +191,11 @@ void GAGoalDialog::CreateControls()
 	// Pitch inputs
 	wxStaticText *pitchLabel = new wxStaticText(this, wxID_STATIC, _T("Pitch"));// FIXME:  Can we get rid of this?
 	beforePitchText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		wxDefaultSize, 0, UnitValidator(beforeInputs.pitch, UnitConverter::UnitTypeAngle));
+		wxDefaultSize, 0, UnitValidator(beforeInputs.pitch, UnitType::Angle));
 	afterPitchText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		wxDefaultSize, 0, UnitValidator(afterInputs.pitch, UnitConverter::UnitTypeAngle));
+		wxDefaultSize, 0, UnitValidator(afterInputs.pitch, UnitType::Angle));
 	wxStaticText *pitchUnitsLabel = new wxStaticText(this, wxID_STATIC,
-		UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeAngle));// FIXME:  Can we get rid of this?
+		UnitConverter::GetInstance().GetUnitType(UnitType::Angle));// FIXME:  Can we get rid of this?
 	inputAreaSizer->Add(pitchLabel,
 		wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
 	inputAreaSizer->Add(beforePitchText, wxGBPosition(row, 2), wxGBSpan(), inputSizerFlags);
@@ -206,43 +206,43 @@ void GAGoalDialog::CreateControls()
 
 	// Roll inputs
 	beforeRollText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		wxDefaultSize, 0, UnitValidator(beforeInputs.roll, UnitConverter::UnitTypeAngle));
+		wxDefaultSize, 0, UnitValidator(beforeInputs.roll, UnitType::Angle));
 	afterRollText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		wxDefaultSize, 0, UnitValidator(afterInputs.roll, UnitConverter::UnitTypeAngle));
+		wxDefaultSize, 0, UnitValidator(afterInputs.roll, UnitType::Angle));
 	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Roll")),
 		wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
 	inputAreaSizer->Add(beforeRollText, wxGBPosition(row, 2), wxGBSpan(), inputSizerFlags);
 	inputAreaSizer->Add(afterRollText, wxGBPosition(row, 3), wxGBSpan(), inputSizerFlags);
 	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC,
-UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeAngle)),
+UnitConverter::GetInstance().GetUnitType(UnitType::Angle)),
 		wxGBPosition(row, 4), wxGBSpan(), textSizerFlags);
 	row++;
 
 	// Heave inputs
 	beforeHeaveText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		wxDefaultSize, 0, UnitValidator(beforeInputs.heave, UnitConverter::UnitTypeDistance));
+		wxDefaultSize, 0, UnitValidator(beforeInputs.heave, UnitType::Distance));
 	afterHeaveText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		wxDefaultSize, 0, UnitValidator(afterInputs.heave, UnitConverter::UnitTypeDistance));
+		wxDefaultSize, 0, UnitValidator(afterInputs.heave, UnitType::Distance));
 	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Heave")),
 		wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);
 	inputAreaSizer->Add(beforeHeaveText, wxGBPosition(row, 2), wxGBSpan(), inputSizerFlags);
 	inputAreaSizer->Add(afterHeaveText, wxGBPosition(row, 3), wxGBSpan(), inputSizerFlags);
 	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC,
-		UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance)),
+		UnitConverter::GetInstance().GetUnitType(UnitType::Distance)),
 		wxGBPosition(row, 4), wxGBSpan(), textSizerFlags);
 	row++;
 
 	// Steer inputs
 	beforeSteerText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		wxDefaultSize, 0, UnitValidator(beforeInputs.rackTravel, UnitConverter::UnitTypeDistance));// FIXME:  Handle rack travel and wheel angle!
+		wxDefaultSize, 0, UnitValidator(beforeInputs.rackTravel, UnitType::Distance));// FIXME:  Handle rack travel and wheel angle!
 	afterSteerText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		wxDefaultSize, 0, UnitValidator(afterInputs.rackTravel, UnitConverter::UnitTypeDistance));// FIXME:  Handle rack travel and wheel angle!
+		wxDefaultSize, 0, UnitValidator(afterInputs.rackTravel, UnitType::Distance));// FIXME:  Handle rack travel and wheel angle!
 	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Rack Travel")),
 		wxGBPosition(row, 1), wxGBSpan(), textSizerFlags);// FIXME:  Handle rack travel and wheel angle!
 	inputAreaSizer->Add(beforeSteerText, wxGBPosition(row, 2), wxGBSpan(), inputSizerFlags);
 	inputAreaSizer->Add(afterSteerText, wxGBPosition(row, 3), wxGBSpan(), inputSizerFlags);
 	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC,
-		UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance)),// FIXME:  Handle rack travel and wheel angle!
+		UnitConverter::GetInstance().GetUnitType(UnitType::Distance)),// FIXME:  Handle rack travel and wheel angle!
 		wxGBPosition(row, 4), wxGBSpan(), textSizerFlags);
 	row++;
 
@@ -435,8 +435,8 @@ void GAGoalDialog::OnCheckEvent(wxCommandEvent& WXUNUSED(event))
 void GAGoalDialog::OnOutputChangeEvent(wxCommandEvent &event)
 {
 	// Update the units labels for the desired value and expected deviation
-	UnitConverter::UnitType units = KinematicOutputs::GetOutputUnitType(
-		(KinematicOutputs::OutputsComplete)event.GetSelection());
+	const UnitType units(KinematicOutputs::GetOutputUnitType(
+		(KinematicOutputs::OutputsComplete)event.GetSelection()));
 
 	desiredValueUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(units));
 	static_cast<UnitValidator*>(desiredValueText->GetValidator())->SetUnitType(units);

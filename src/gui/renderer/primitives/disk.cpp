@@ -77,14 +77,14 @@ void Disk::GenerateGeometry()
 	glPushMatrix();
 
 		// Translate the current matrix
-		glTranslated(center.x, center.y, center.z);
+		glTranslated(center.x(), center.y(), center.z());
 
 		// Rotate the current matrix, if the rotation axis is non-zero
 		if (!VVASE::Math::IsZero(axisOfRotation.norm()))
 			glRotated(UnitConverter::RAD_TO_DEG(angle), axisOfRotation.x, axisOfRotation.y, axisOfRotation.z);
 
 		// Set the normal direction
-		glNormal3d(normal.x, normal.y, normal.z);
+		glNormal3d(normal.x(), normal.y(), normal.z());
 
 		// We'll use a triangle strip to draw the disk
 		glBegin(GL_TRIANGLE_STRIP);
@@ -106,8 +106,8 @@ void Disk::GenerateGeometry()
 			insidePoint.z = innerRadius * sin(angle);
 
 			// Add the next two points
-			glVertex3d(outsidePoint.x, outsidePoint.y, outsidePoint.z);
-			glVertex3d(insidePoint.x, insidePoint.y, insidePoint.z);
+			glVertex3d(outsidePoint.x(), outsidePoint.y(), outsidePoint.z());
+			glVertex3d(insidePoint.x(), insidePoint.y(), insidePoint.z());
 		}
 
 		glEnd();

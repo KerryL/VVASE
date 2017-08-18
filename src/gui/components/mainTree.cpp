@@ -16,10 +16,10 @@
 // Local headers
 #include "VVASE/gui/components/mainFrame.h"
 #include "VVASE/gui/components/mainTree.h"
-#include "../gui/guiCar.h"
+#include "../guiCar.h"
 #include "VVASE/gui/guiObject.h"
 #include "VVASE/core/utilities/debugger.h"
-#include "../gui/sweep.h"
+#include "../sweep.h"
 
 // Icons (only for GTK)
 #ifdef __WXGTK__
@@ -84,7 +84,7 @@ MainTree::MainTree(MainFrame &mainFrame, wxWindowID id, const wxPoint& pos,
 		wxBITMAP_TYPE_ICO_RESOURCE, iconSize, iconSize));
 	iconHandle[TiresIcon] = iconList->Add(wxIcon(_T("ICON_ID_TIRES"),
 		wxBITMAP_TYPE_ICO_RESOURCE, iconSize, iconSize));
-	iconHandle[IterationIcon] = iconList->Add(wxIcon(_T("ICON_ID_ITERATION"),
+	iconHandle[SweepIcon] = iconList->Add(wxIcon(_T("ICON_ID_ITERATION"),
 		wxBITMAP_TYPE_ICO_RESOURCE, iconSize, iconSize));
 	iconHandle[OptimizationIcon] = iconList->Add(wxIcon(_T("ICON_ID_OPTIMIZATION"),
 		wxBITMAP_TYPE_ICO_RESOURCE, iconSize, iconSize));

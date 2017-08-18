@@ -19,25 +19,25 @@ namespace VVASE
 {
 
 // Local forward declarations
-class Iteration;
+class Sweep;
 class Convert;
-class EditIterationNotebook;
+class EditSweepNotebook;
 
-class EditIterationOptionsPanel : public wxScrolledWindow
+class EditSweepOptionsPanel : public wxScrolledWindow
 {
 public:
-	EditIterationOptionsPanel(EditIterationNotebook &parent, wxWindowID id,
+	EditSweepOptionsPanel(EditSweepNotebook &parent, wxWindowID id,
 		const wxPoint& pos, const wxSize& size);
-	~EditIterationOptionsPanel();
+	~EditSweepOptionsPanel();
 
 	// Updates the information on the panel
-	void UpdateInformation(Iteration *currentIteration);
+	void UpdateInformation(Sweep *currentSweep);
 	void UpdateInformation();
 
 private:
-	EditIterationNotebook &parent;
+	EditSweepNotebook &parent;
 
-	Iteration *currentIteration;
+	Sweep *currentSweep;
 
 	void CreateControls();
 
@@ -53,7 +53,7 @@ private:
 
 	wxButton *setAsDefault;
 
-	enum EditIterationOptionsEventIds
+	enum EditSweepOptionsEventIds
 	{
 		CheckBoxIterationOptions = 900 + wxID_HIGHEST,
 		TextBoxIterationOptions,

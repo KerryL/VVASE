@@ -15,14 +15,16 @@
 #include <algorithm>
 
 // Local headers
-#include "vCar/massProperties.h"
-#include "gui/guiCar.h"
-#include "gui/components/mainFrame.h"
-#include "gui/superGrid.h"
-#include "gui/components/editPanel/editPanel.h"
-#include "gui/components/editPanel/guiCar/editMassPanel.h"
-#include "vUtilities/unitConverter.h"
-#include "vMath/vector.h"
+#include "VVASE/core/car/subsystems/massProperties.h"
+#include "../../../guiCar.h"
+#include "VVASE/gui/components/mainFrame.h"
+#include "VVASE/gui/superGrid.h"
+#include "../editPanel.h"
+#include "editMassPanel.h"
+#include "VVASE/gui/utilities/unitConverter.h"
+
+// Eigen headers
+#include <Eigen/Eigen>
 
 namespace VVASE
 {
@@ -167,16 +169,16 @@ void EditMassPanel::UpdateInformation(MassProperties *currentMassProperties)
 		UnitConverter::GetInstance().ConvertDistanceOutput(currentMassProperties->unsprungCGHeights.rightRear)));
 
 	// Update the units
-	inertiaUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeInertia) + ')');
-	unsprungMassLeftFrontUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeMass) + ')');
-	unsprungMassRightFrontUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeMass) + ')');
-	unsprungMassLeftRearUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeMass) + ')');
-	unsprungMassRightRearUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeMass) + ')');
-	cornerMassLeftFrontUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeMass) + ')');
-	cornerMassRightFrontUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeMass) + ')');
-	cornerMassLeftRearUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeMass) + ')');
-	cornerMassRightRearUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeMass) + ')');
-	cgHeights->SetCellValue(RowUnits, 1, '(' + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance) + ')');
+	inertiaUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitType::Inertia) + ')');
+	unsprungMassLeftFrontUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitType::Mass) + ')');
+	unsprungMassRightFrontUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitType::Mass) + ')');
+	unsprungMassLeftRearUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitType::Mass) + ')');
+	unsprungMassRightRearUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitType::Mass) + ')');
+	cornerMassLeftFrontUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitType::Mass) + ')');
+	cornerMassRightFrontUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitType::Mass) + ')');
+	cornerMassLeftRearUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitType::Mass) + ')');
+	cornerMassRightRearUnitsLabel->SetLabel('(' + UnitConverter::GetInstance().GetUnitType(UnitType::Mass) + ')');
+	cgHeights->SetCellValue(RowUnits, 1, '(' + UnitConverter::GetInstance().GetUnitType(UnitType::Distance) + ')');
 
 	// Update sizers
 	Layout();
@@ -434,7 +436,7 @@ void EditMassPanel::CreateControls()
 void EditMassPanel::TextBoxEditEvent(wxCommandEvent &event)
 {
 	double *dataLocation = NULL;
-	UnitConverter::UnitType units;
+	UnitType units;
 	wxTextCtrl *textBox = NULL;
 
 	switch (event.GetId())
@@ -442,85 +444,85 @@ void EditMassPanel::TextBoxEditEvent(wxCommandEvent &event)
 	case TextBoxIxx:
 		textBox = ixx;
 		dataLocation = &currentMassProperties->ixx;
-		units = UnitConverter::UnitTypeInertia;
+		units = UnitType::Inertia;
 		break;
 
 	case TextBoxIyy:
 		textBox = iyy;
 		dataLocation = &currentMassProperties->iyy;
-		units = UnitConverter::UnitTypeInertia;
+		units = UnitType::Inertia;
 		break;
 
 	case TextBoxIzz:
 		textBox = izz;
 		dataLocation = &currentMassProperties->izz;
-		units = UnitConverter::UnitTypeInertia;
+		units = UnitType::Inertia;
 		break;
 
 	case TextBoxIxy:
 		textBox = ixy;
 		dataLocation = &currentMassProperties->ixy;
-		units = UnitConverter::UnitTypeInertia;
+		units = UnitType::Inertia;
 		break;
 
 	case TextBoxIxz:
 		textBox = ixz;
 		dataLocation = &currentMassProperties->ixz;
-		units = UnitConverter::UnitTypeInertia;
+		units = UnitType::Inertia;
 		break;
 
 	case TextBoxIyz:
 		textBox = iyz;
 		dataLocation = &currentMassProperties->iyz;
-		units = UnitConverter::UnitTypeInertia;
+		units = UnitType::Inertia;
 		break;
 
 	case TextBoxCornerMassLeftFront:
 		textBox = cornerMassLeftFront;
 		dataLocation = &currentMassProperties->cornerWeights.leftFront;
-		units = UnitConverter::UnitTypeForce;
+		units = UnitType::Force;
 		break;
 
 	case TextBoxCornerMassRightFront:
 		textBox = cornerMassRightFront;
 		dataLocation = &currentMassProperties->cornerWeights.rightFront;
-		units = UnitConverter::UnitTypeForce;
+		units = UnitType::Force;
 		break;
 
 	case TextBoxCornerMassLeftRear:
 		textBox = cornerMassLeftRear;
 		dataLocation = &currentMassProperties->cornerWeights.leftRear;
-		units = UnitConverter::UnitTypeForce;
+		units = UnitType::Force;
 		break;
 
 	case TextBoxCornerMassRightRear:
 		textBox = cornerMassRightRear;
 		dataLocation = &currentMassProperties->cornerWeights.rightRear;
-		units = UnitConverter::UnitTypeForce;
+		units = UnitType::Force;
 		break;
 
 	case TextBoxUnsprungMassLeftFront:
 		textBox = unsprungMassLeftFront;
 		dataLocation = &currentMassProperties->unsprungMass.leftFront;
-		units = UnitConverter::UnitTypeMass;
+		units = UnitType::Mass;
 		break;
 
 	case TextBoxUnsprungMassRightFront:
 		textBox = unsprungMassRightFront;
 		dataLocation = &currentMassProperties->unsprungMass.rightFront;
-		units = UnitConverter::UnitTypeMass;
+		units = UnitType::Mass;
 		break;
 
 	case TextBoxUnsprungMassLeftRear:
 		textBox = unsprungMassLeftRear;
 		dataLocation = &currentMassProperties->unsprungMass.leftRear;
-		units = UnitConverter::UnitTypeMass;
+		units = UnitType::Mass;
 		break;
 
 	case TextBoxUnsprungMassRightRear:
 		textBox = unsprungMassRightRear;
 		dataLocation = &currentMassProperties->unsprungMass.rightRear;
-		units = UnitConverter::UnitTypeMass;
+		units = UnitType::Mass;
 		break;
 
 	default:

@@ -7,30 +7,30 @@
 // Date:  11/14/2010
 // Auth:  K. Loux
 // Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
-// Desc:  Contains the class definition for the EditIterationOptionsPanel
+// Desc:  Contains the class definition for the EditSweepOptionsPanel
 //        class.
 
 // Local headers
-#include "gui/iteration.h"
-#include "gui/components/mainFrame.h"
-#include "gui/components/editPanel/editPanel.h"
-#include "gui/components/editPanel/iteration/editIterationOptionsPanel.h"
-#include "gui/components/editPanel/iteration/editIterationNotebook.h"
-#include "vUtilities/unitConverter.h"
-#include "vUtilities/debugger.h"
+#include "editSweepOptionsPanel.h"
+#include "editSweepNotebook.h"
+#include "../../../sweep.h"
+#include "VVASE/gui/components/mainFrame.h"
+#include "../editPanel.h"
+#include "VVASE/gui/utilities/unitConverter.h"
+#include "VVASE/core/utilities/debugger.h"
 
 namespace VVASE
 {
 
 //==========================================================================
-// Class:			EditIterationOptionsPanel
-// Function:		EditIterationOptionsPanel
+// Class:			EditSweepOptionsPanel
+// Function:		EditSweepOptionsPanel
 //
-// Description:		Constructor for EditIterationOptionsPanel class.  Initializes the form
+// Description:		Constructor for EditSweepOptionsPanel class.  Initializes the form
 //					and creates the controls, etc.
 //
 // Input Arguments:
-//		parent		= EditIterationNotebook&, reference to this object's owner
+//		parent		= EditSweepNotebook&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
@@ -42,19 +42,19 @@ namespace VVASE
 //		None
 //
 //==========================================================================
-EditIterationOptionsPanel::EditIterationOptionsPanel(EditIterationNotebook &parent,
+EditSweepOptionsPanel::EditSweepOptionsPanel(EditSweepNotebook &parent,
 	wxWindowID id, const wxPoint& pos, const wxSize& size)
 	: wxScrolledWindow(&parent, id, pos, size), parent(parent)
 {
-	currentIteration = NULL;
+	currentSweep = NULL;
 	CreateControls();
 }
 
 //==========================================================================
-// Class:			EditIterationOptionsPanel
-// Function:		~EditIterationOptionsPanel
+// Class:			EditSweepOptionsPanel
+// Function:		~EditSweepOptionsPanel
 //
-// Description:		Destructor for EditIterationOptionsPanel class.
+// Description:		Destructor for EditSweepOptionsPanel class.
 //
 // Input Arguments:
 //		None
@@ -66,12 +66,12 @@ EditIterationOptionsPanel::EditIterationOptionsPanel(EditIterationNotebook &pare
 //		None
 //
 //==========================================================================
-EditIterationOptionsPanel::~EditIterationOptionsPanel()
+EditSweepOptionsPanel::~EditSweepOptionsPanel()
 {
 }
 
 //==========================================================================
-// Class:			EditIterationOptionsPanel
+// Class:			EditSweepOptionsPanel
 // Function:		Event Table
 //
 // Description:		Links GUI events with event handler functions.
@@ -86,14 +86,14 @@ EditIterationOptionsPanel::~EditIterationOptionsPanel()
 //		None
 //
 //==========================================================================
-BEGIN_EVENT_TABLE(EditIterationOptionsPanel, wxPanel)
-	EVT_CHECKBOX(CheckBoxIterationOptions,	EditIterationOptionsPanel::OptionsCheckBoxEvent)
-	EVT_TEXT(TextBoxIterationOptions,		EditIterationOptionsPanel::OptionsTextBoxEvent)
-	EVT_BUTTON(ButtonSetAsDefault,			EditIterationOptionsPanel::SetAsDefaultClickedEvent)
+BEGIN_EVENT_TABLE(EditSweepOptionsPanel, wxPanel)
+	EVT_CHECKBOX(CheckBoxIterationOptions,	EditSweepOptionsPanel::OptionsCheckBoxEvent)
+	EVT_TEXT(TextBoxIterationOptions,		EditSweepOptionsPanel::OptionsTextBoxEvent)
+	EVT_BUTTON(ButtonSetAsDefault,			EditSweepOptionsPanel::SetAsDefaultClickedEvent)
 END_EVENT_TABLE();
 
 //==========================================================================
-// Class:			EditIterationOptionsPanel
+// Class:			EditSweepOptionsPanel
 // Function:		UpdateInformation
 //
 // Description:		Updates the information on this panel, if the associated
@@ -109,20 +109,20 @@ END_EVENT_TABLE();
 //		None
 //
 //==========================================================================
-void EditIterationOptionsPanel::UpdateInformation()
+void EditSweepOptionsPanel::UpdateInformation()
 {
-	if (currentIteration)
-		UpdateInformation(currentIteration);
+	if (currentSweep)
+		UpdateInformation(currentSweep);
 }
 
 //==========================================================================
-// Class:			EditIterationOptionsPanel
+// Class:			EditSweepOptionsPanel
 // Function:		UpdateInformation
 //
 // Description:		Updates the information on this panel.
 //
 // Input Arguments:
-//		currentIteration	= Iteration* pointing to the associated iteration
+//		currentSweep	= Sweep* pointing to the associated iteration
 //
 // Output Arguments:
 //		None
@@ -131,22 +131,22 @@ void EditIterationOptionsPanel::UpdateInformation()
 //		None
 //
 //==========================================================================
-void EditIterationOptionsPanel::UpdateInformation(Iteration *currentIteration)
+void EditSweepOptionsPanel::UpdateInformation(Sweep *currentSweep)
 {
-	this->currentIteration = currentIteration;
-	if (!currentIteration)
+	this->currentSweep = currentSweep;
+	if (!currentSweep)
 		return;
 
 	// Update the controls
 	// We also enable/disable the label text boxes depending on the state of the checkbox
-	autoTitle->SetValue(currentIteration->GetAutoGenerateTitle());
-	autoLabelXAxis->SetValue(currentIteration->GetAutoGenerateXLabel());
-	autoLabelZAxis->SetValue(currentIteration->GetAutoGenerateZLabel());
-	showGridLines->SetValue(currentIteration->GetShowGridLines());
+	autoTitle->SetValue(currentSweep->GetAutoGenerateTitle());
+	autoLabelXAxis->SetValue(currentSweep->GetAutoGenerateXLabel());
+	autoLabelZAxis->SetValue(currentSweep->GetAutoGenerateZLabel());
+	showGridLines->SetValue(currentSweep->GetShowGridLines());
 
-	titleText->ChangeValue(currentIteration->GetTitle());
-	xLabelText->ChangeValue(currentIteration->GetXLabel());
-	zLabelText->ChangeValue(currentIteration->GetZLabel());
+	titleText->ChangeValue(currentSweep->GetTitle());
+	xLabelText->ChangeValue(currentSweep->GetXLabel());
+	zLabelText->ChangeValue(currentSweep->GetZLabel());
 
 	titleText->Enable(!autoTitle->GetValue());
 	xLabelText->Enable(!autoLabelXAxis->GetValue());
@@ -154,7 +154,7 @@ void EditIterationOptionsPanel::UpdateInformation(Iteration *currentIteration)
 }
 
 //==========================================================================
-// Class:			EditIterationOptionsPanel
+// Class:			EditSweepOptionsPanel
 // Function:		CreateControls
 //
 // Description:		Creates the controls for this panel.
@@ -169,7 +169,7 @@ void EditIterationOptionsPanel::UpdateInformation(Iteration *currentIteration)
 //		None
 //
 //==========================================================================
-void EditIterationOptionsPanel::CreateControls()
+void EditSweepOptionsPanel::CreateControls()
 {
 	// Enable scrolling
 	SetScrollRate(10, 10);
@@ -222,7 +222,7 @@ void EditIterationOptionsPanel::CreateControls()
 }
 
 //==========================================================================
-// Class:			EditIterationOptionsPanel
+// Class:			EditSweepOptionsPanel
 // Function:		OptionsCheckBoxEvent
 //
 // Description:		Event handler for when checkboxes are toggled.
@@ -237,13 +237,13 @@ void EditIterationOptionsPanel::CreateControls()
 //		None
 //
 //==========================================================================
-void EditIterationOptionsPanel::OptionsCheckBoxEvent(wxCommandEvent& WXUNUSED(event))
+void EditSweepOptionsPanel::OptionsCheckBoxEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Set all of the checkbox-type parameters
-	currentIteration->SetAutoGenerateTitle(autoTitle->GetValue());
-	currentIteration->SetAutoGenerateXLabel(autoLabelXAxis->GetValue());
-	currentIteration->SetAutoGenerateZLabel(autoLabelZAxis->GetValue());
-	currentIteration->SetShowGridLines(showGridLines->GetValue());
+	currentSweep->SetAutoGenerateTitle(autoTitle->GetValue());
+	currentSweep->SetAutoGenerateXLabel(autoLabelXAxis->GetValue());
+	currentSweep->SetAutoGenerateZLabel(autoLabelZAxis->GetValue());
+	currentSweep->SetShowGridLines(showGridLines->GetValue());
 
 	// Enable/disable the text boxes depending on the state of the checkboxes
 	titleText->Enable(!autoTitle->GetValue());
@@ -251,14 +251,14 @@ void EditIterationOptionsPanel::OptionsCheckBoxEvent(wxCommandEvent& WXUNUSED(ev
 	zLabelText->Enable(!autoLabelZAxis->GetValue());
 
 	// Set the modified flag
-	currentIteration->SetModified();
+	currentSweep->SetModified();
 
 	// Update the display
-	currentIteration->UpdateDisplay();
+	currentSweep->UpdateDisplay();
 }
 
 //==========================================================================
-// Class:			EditIterationOptionsPanel
+// Class:			EditSweepOptionsPanel
 // Function:		OptionsTextBoxEvent
 //
 // Description:		Event handler for when text boxes are edited.
@@ -273,7 +273,7 @@ void EditIterationOptionsPanel::OptionsCheckBoxEvent(wxCommandEvent& WXUNUSED(ev
 //		None
 //
 //==========================================================================
-void EditIterationOptionsPanel::OptionsTextBoxEvent(wxCommandEvent& WXUNUSED(event))
+void EditSweepOptionsPanel::OptionsTextBoxEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Make sure all values are valid ASCII (or we might crash FTGL)
 	if (!titleText->GetValue().IsAscii() ||
@@ -281,16 +281,16 @@ void EditIterationOptionsPanel::OptionsTextBoxEvent(wxCommandEvent& WXUNUSED(eve
 		!zLabelText->GetValue().IsAscii())
 		return;
 
-	currentIteration->SetTitle(titleText->GetValue());
-	currentIteration->SetXLabel(xLabelText->GetValue());
-	currentIteration->SetZLabel(zLabelText->GetValue());
+	currentSweep->SetTitle(titleText->GetValue());
+	currentSweep->SetXLabel(xLabelText->GetValue());
+	currentSweep->SetZLabel(zLabelText->GetValue());
 
-	currentIteration->SetModified();
-	currentIteration->UpdateDisplay();
+	currentSweep->SetModified();
+	currentSweep->UpdateDisplay();
 }
 
 //==========================================================================
-// Class:			EditIterationOptionsPanel
+// Class:			EditSweepOptionsPanel
 // Function:		SetAsDefaultClickedEvent
 //
 // Description:		Event handler for when the Set As Default button is clicked.
@@ -305,9 +305,9 @@ void EditIterationOptionsPanel::OptionsTextBoxEvent(wxCommandEvent& WXUNUSED(eve
 //		None
 //
 //==========================================================================
-void EditIterationOptionsPanel::SetAsDefaultClickedEvent(wxCommandEvent& WXUNUSED(event))
+void EditSweepOptionsPanel::SetAsDefaultClickedEvent(wxCommandEvent& WXUNUSED(event))
 {
-	currentIteration->WriteDefaultsToConfig();
+	currentSweep->WriteDefaultsToConfig();
 
 	// FIXME:  Would be nice if this could save other plot options, like axis associativity, line colors, etc.
 

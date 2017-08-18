@@ -19,12 +19,12 @@
 #include <wx/fontdlg.h>
 
 // Local headers
-#include "gui/dialogs/optionsDialog.h"
-#include "gui/components/mainFrame.h"
-#include "vUtilities/unitConverter.h"
-#include "vUtilities/debugger.h"
-#include "vUtilities/wxRelatedUtilities.h"
-#include "vUtilities/dataValidator.h"
+#include "optionsDialog.h"
+#include "VVASE/gui/components/mainFrame.h"
+#include "VVASE/gui/utilities/unitConverter.h"
+#include "VVASE/core/utilities/debugger.h"
+#include "VVASE/gui/utilities/wxRelatedUtilities.h"
+#include "VVASE/gui/utilities/dataValidator.h"
 
 namespace VVASE
 {
@@ -120,6 +120,7 @@ END_EVENT_TABLE();
 //==========================================================================
 void OptionsDialog::CreateControls()
 {
+	// TODO:  Break this up into much smaller methods
 	wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
 
 	// Second sizer gives more space around the controls
@@ -178,233 +179,233 @@ void OptionsDialog::CreateControls()
 
 	// Angle
 	choices.Clear();
-	for (i = 0; i < UnitConverter::AngleUnitCount; i++)
-		choices.Add(UnitConverter::GetInstance().GetUnits((UnitConverter::UnitsOfAngle)i));
+	for (i = 0; i < static_cast<int>(UnitConverter::UnitsOfAngle::Count); i++)
+		choices.Add(UnitConverter::GetInstance().GetUnits(static_cast<UnitConverter::UnitsOfAngle>(i)));
 
 	wxStaticText *angleLabelText = new wxStaticText(unitsPage, wxID_STATIC, _T("Units of angle"));
-	unitOfAngle = new wxComboBox(unitsPage, wxID_ANY, UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeAngle),
+	unitOfAngle = new wxComboBox(unitsPage, wxID_ANY, UnitConverter::GetInstance().GetUnitType(UnitType::Angle),
 		wxDefaultPosition, wxDefaultSize, choices, wxCB_READONLY);
-	SetMinimumWidthFromContents(unitOfAngle, additionalWidth);
+	wxUtilities::SetMinimumWidthFromContents(unitOfAngle, additionalWidth);
 	unitSelectionSizer->Add(angleLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfAngle, 0, unitFlags);
 	unitSelectionSizer->AddSpacer(middleSpaceWidth);
 	// Work-around for value not being set properly if initial string contains exponent (GTK ANSI build)
 #if defined(__WXGTK__) && !defined(_UNICODE)
-	unitOfAngle->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeAngle));
+	unitOfAngle->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitType::Angle));
 #endif
 
 	// Distance
 	choices.Clear();
-	for (i = 0; i < UnitConverter::DistanceUnitCount; i++)
-		choices.Add(UnitConverter::GetInstance().GetUnits((UnitConverter::UnitsOfDistance)i));
+	for (i = 0; i < static_cast<int>(UnitConverter::UnitsOfDistance::Count); i++)
+		choices.Add(UnitConverter::GetInstance().GetUnits(static_cast<UnitConverter::UnitsOfDistance>(i)));
 
 	wxStaticText *DistanceLabelText = new wxStaticText(unitsPage, wxID_STATIC, _T("Units of distance"));
-	unitOfDistance = new wxComboBox(unitsPage, wxID_ANY, UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance),
+	unitOfDistance = new wxComboBox(unitsPage, wxID_ANY, UnitConverter::GetInstance().GetUnitType(UnitType::Distance),
 		wxDefaultPosition, wxDefaultSize, choices, wxCB_READONLY);
-	SetMinimumWidthFromContents(unitOfDistance, additionalWidth);
+	wxUtilities::SetMinimumWidthFromContents(unitOfDistance, additionalWidth);
 	unitSelectionSizer->Add(DistanceLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfDistance, 0, unitFlags);
 	// Work-around for value not being set properly if initial string contains exponent (GTK ANSI build)
 #if defined(__WXGTK__) && !defined(_UNICODE)
-	unitOfDistance->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance));
+	unitOfDistance->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitType::Distance));
 #endif
 
 	// Area
 	choices.Clear();
-	for (i = 0; i < UnitConverter::AreaUnitCount; i++)
-		choices.Add(UnitConverter::GetInstance().GetUnits((UnitConverter::UnitsOfArea)i));
+	for (i = 0; i < static_cast<int>(UnitConverter::UnitsOfArea::Count); i++)
+		choices.Add(UnitConverter::GetInstance().GetUnits(static_cast<UnitConverter::UnitsOfArea>(i)));
 
 	wxStaticText *AreaLabelText = new wxStaticText(unitsPage, wxID_STATIC, _T("Units of area"));
-	unitOfArea = new wxComboBox(unitsPage, wxID_ANY, UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeArea),
+	unitOfArea = new wxComboBox(unitsPage, wxID_ANY, UnitConverter::GetInstance().GetUnitType(UnitType::Area),
 		wxDefaultPosition, wxDefaultSize, choices, wxCB_READONLY);
-	SetMinimumWidthFromContents(unitOfArea, additionalWidth);
+	wxUtilities::SetMinimumWidthFromContents(unitOfArea, additionalWidth);
 	unitSelectionSizer->Add(AreaLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfArea, 0, unitFlags);
 	unitSelectionSizer->AddSpacer(middleSpaceWidth);
 	// Work-around for value not being set properly if initial string contains exponent (GTK ANSI build)
 #if defined(__WXGTK__) && !defined(_UNICODE)
-	unitOfArea->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeArea));
+	unitOfArea->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitType::Area));
 #endif
 
 	// Force
 	choices.Clear();
-	for (i = 0; i < UnitConverter::ForceUnitCount; i++)
-		choices.Add(UnitConverter::GetInstance().GetUnits((UnitConverter::UnitsOfForce)i));
+	for (i = 0; i < static_cast<int>(UnitConverter::UnitsOfForce::Count); i++)
+		choices.Add(UnitConverter::GetInstance().GetUnits(static_cast<UnitConverter::UnitsOfForce>(i)));
 
 	wxStaticText *ForceLabelText = new wxStaticText(unitsPage, wxID_STATIC, _T("Units of force"));
-	unitOfForce = new wxComboBox(unitsPage, wxID_ANY, UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeForce),
+	unitOfForce = new wxComboBox(unitsPage, wxID_ANY, UnitConverter::GetInstance().GetUnitType(UnitType::Force),
 		wxDefaultPosition, wxDefaultSize, choices, wxCB_READONLY);
-	SetMinimumWidthFromContents(unitOfForce, additionalWidth);
+	wxUtilities::SetMinimumWidthFromContents(unitOfForce, additionalWidth);
 	unitSelectionSizer->Add(ForceLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfForce, 0, unitFlags);
 	// Work-around for value not being set properly if initial string contains exponent (GTK ANSI build)
 #if defined(__WXGTK__) && !defined(_UNICODE)
-	unitOfForce->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeForce));
+	unitOfForce->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitType::Force));
 #endif
 
 	// Pressure
 	choices.Clear();
-	for (i = 0; i < UnitConverter::PressureUnitCount; i++)
-		choices.Add(UnitConverter::GetInstance().GetUnits((UnitConverter::UnitsOfPressure)i));
+	for (i = 0; i < static_cast<int>(UnitConverter::UnitsOfPressure::Count); i++)
+		choices.Add(UnitConverter::GetInstance().GetUnits(static_cast<UnitConverter::UnitsOfPressure>(i)));
 
 	wxStaticText *PressureLabelText = new wxStaticText(unitsPage, wxID_STATIC, _T("Units of pressure"));
-	unitOfPressure = new wxComboBox(unitsPage, wxID_ANY, UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypePressure),
+	unitOfPressure = new wxComboBox(unitsPage, wxID_ANY, UnitConverter::GetInstance().GetUnitType(UnitType::Pressure),
 		wxDefaultPosition, wxDefaultSize, choices, wxCB_READONLY);
-	SetMinimumWidthFromContents(unitOfPressure, additionalWidth);
+	wxUtilities::SetMinimumWidthFromContents(unitOfPressure, additionalWidth);
 	unitSelectionSizer->Add(PressureLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfPressure, 0, unitFlags);
 	unitSelectionSizer->AddSpacer(middleSpaceWidth);
 	// Work-around for value not being set properly if initial string contains exponent (GTK ANSI build)
 #if defined(__WXGTK__) && !defined(_UNICODE)
-	unitOfPressure->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypePressure));
+	unitOfPressure->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitType::Pressure));
 #endif
 
 	// Moment
 	choices.Clear();
-	for (i = 0; i < UnitConverter::MomentUnitCount; i++)
-		choices.Add(UnitConverter::GetInstance().GetUnits((UnitConverter::UnitsOfMoment)i));
+	for (i = 0; i < static_cast<int>(UnitConverter::UnitsOfMoment::Count); i++)
+		choices.Add(UnitConverter::GetInstance().GetUnits(static_cast<UnitConverter::UnitsOfMoment>(i)));
 
 	wxStaticText *MomentLabelText = new wxStaticText(unitsPage, wxID_STATIC, _T("Units of moment"));
-	unitOfMoment = new wxComboBox(unitsPage, wxID_ANY, UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeMoment),
+	unitOfMoment = new wxComboBox(unitsPage, wxID_ANY, UnitConverter::GetInstance().GetUnitType(UnitType::Moment),
 		wxDefaultPosition, wxDefaultSize, choices, wxCB_READONLY);
-	SetMinimumWidthFromContents(unitOfMoment, additionalWidth);
+	wxUtilities::SetMinimumWidthFromContents(unitOfMoment, additionalWidth);
 	unitSelectionSizer->Add(MomentLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfMoment, 0, unitFlags);
 	// Work-around for value not being set properly if initial string contains exponent (GTK ANSI build)
 #if defined(__WXGTK__) && !defined(_UNICODE)
-	unitOfMoment->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeMoment));
+	unitOfMoment->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitType::Moment));
 #endif
 
 	// Mass
 	choices.Clear();
-	for (i = 0; i < UnitConverter::MassUnitCount; i++)
-		choices.Add(UnitConverter::GetInstance().GetUnits((UnitConverter::UnitsOfMass)i));
+	for (i = 0; i < static_cast<int>(UnitConverter::UnitsOfMass::Count); i++)
+		choices.Add(UnitConverter::GetInstance().GetUnits(static_cast<UnitConverter::UnitsOfMass>(i)));
 
 	wxStaticText *MassLabelText = new wxStaticText(unitsPage, wxID_STATIC, _T("Units of mass"));
-	unitOfMass = new wxComboBox(unitsPage, wxID_ANY, UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeMass),
+	unitOfMass = new wxComboBox(unitsPage, wxID_ANY, UnitConverter::GetInstance().GetUnitType(UnitType::Mass),
 		wxDefaultPosition, wxDefaultSize, choices, wxCB_READONLY);
-	SetMinimumWidthFromContents(unitOfMass, additionalWidth);
+	wxUtilities::SetMinimumWidthFromContents(unitOfMass, additionalWidth);
 	unitSelectionSizer->Add(MassLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfMass, 0, unitFlags);
 	unitSelectionSizer->AddSpacer(middleSpaceWidth);
 	// Work-around for value not being set properly if initial string contains exponent (GTK ANSI build)
 #if defined(__WXGTK__) && !defined(_UNICODE)
-	unitOfMass->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeMass));
+	unitOfMass->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitType::Mass));
 #endif
 
 	// Velocity
 	choices.Clear();
-	for (i = 0; i < UnitConverter::VelocityUnitCount; i++)
-		choices.Add(UnitConverter::GetInstance().GetUnits((UnitConverter::UnitsOfVelocity)i));
+	for (i = 0; i < static_cast<int>(UnitConverter::UnitsOfVelocity::Count); i++)
+		choices.Add(UnitConverter::GetInstance().GetUnits(static_cast<UnitConverter::UnitsOfVelocity>(i)));
 
 	wxStaticText *VelocityLabelText = new wxStaticText(unitsPage, wxID_STATIC, _T("Units of velocity"));
-	unitOfVelocity = new wxComboBox(unitsPage, wxID_ANY, UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeVelocity),
+	unitOfVelocity = new wxComboBox(unitsPage, wxID_ANY, UnitConverter::GetInstance().GetUnitType(UnitType::Velocity),
 		wxDefaultPosition, wxDefaultSize, choices, wxCB_READONLY);
-	SetMinimumWidthFromContents(unitOfVelocity, additionalWidth);
+	wxUtilities::SetMinimumWidthFromContents(unitOfVelocity, additionalWidth);
 	unitSelectionSizer->Add(VelocityLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfVelocity, 0, unitFlags);
 	// Work-around for value not being set properly if initial string contains exponent (GTK ANSI build)
 #if defined(__WXGTK__) && !defined(_UNICODE)
-	unitOfVelocity->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeVelocity));
+	unitOfVelocity->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitType::Velocity));
 #endif
 
 	// Acceleration
 	choices.Clear();
-	for (i = 0; i < UnitConverter::AccelerationUnitCount; i++)
-		choices.Add(UnitConverter::GetInstance().GetUnits((UnitConverter::UnitsOfAcceleration)i));
+	for (i = 0; i < static_cast<int>(UnitConverter::UnitsOfAcceleration::Count); i++)
+		choices.Add(UnitConverter::GetInstance().GetUnits(static_cast<UnitConverter::UnitsOfAcceleration>(i)));
 
 	wxStaticText *AccelerationLabelText = new wxStaticText(unitsPage, wxID_STATIC, _T("Units of acceleration"));
-	unitOfAcceleration = new wxComboBox(unitsPage, wxID_ANY, UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeAcceleration),
+	unitOfAcceleration = new wxComboBox(unitsPage, wxID_ANY, UnitConverter::GetInstance().GetUnitType(UnitType::Acceleration),
 		wxDefaultPosition, wxDefaultSize, choices, wxCB_READONLY);
-	SetMinimumWidthFromContents(unitOfAcceleration, additionalWidth);
+	wxUtilities::SetMinimumWidthFromContents(unitOfAcceleration, additionalWidth);
 	unitSelectionSizer->Add(AccelerationLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfAcceleration, 0, unitFlags);
 	unitSelectionSizer->AddSpacer(middleSpaceWidth);
 	// Work-around for value not being set properly if initial string contains exponent (GTK ANSI build)
 #if defined(__WXGTK__) && !defined(_UNICODE)
-	unitOfAcceleration->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeAcceleration));
+	unitOfAcceleration->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitType::Acceleration));
 #endif
 
 	// Inertia
 	choices.Clear();
-	for (i = 0; i < UnitConverter::InertiaUnitCount; i++)
-		choices.Add(UnitConverter::GetInstance().GetUnits((UnitConverter::UnitsOfInertia)i));
+	for (i = 0; i < static_cast<int>(UnitConverter::UnitsOfInertia::Count); i++)
+		choices.Add(UnitConverter::GetInstance().GetUnits(static_cast<UnitConverter::UnitsOfInertia>(i)));
 
 	wxStaticText *InertiaLabelText = new wxStaticText(unitsPage, wxID_STATIC, _T("Units of inertia"));
-	unitOfInertia = new wxComboBox(unitsPage, wxID_ANY, UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeInertia),
+	unitOfInertia = new wxComboBox(unitsPage, wxID_ANY, UnitConverter::GetInstance().GetUnitType(UnitType::Inertia),
 		wxDefaultPosition, wxDefaultSize, choices, wxCB_READONLY);
-	SetMinimumWidthFromContents(unitOfInertia, additionalWidth);
+	wxUtilities::SetMinimumWidthFromContents(unitOfInertia, additionalWidth);
 	unitSelectionSizer->Add(InertiaLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfInertia, 0, unitFlags);
 	// Work-around for value not being set properly if initial string contains exponent (GTK ANSI build)
 #if defined(__WXGTK__) && !defined(_UNICODE)
-	unitOfInertia->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeInertia));
+	unitOfInertia->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitType::Inertia));
 #endif
 
 	// Density
 	choices.Clear();
-	for (i = 0; i < UnitConverter::DensityUnitCount; i++)
-		choices.Add(UnitConverter::GetInstance().GetUnits((UnitConverter::UnitsOfDensity)i));
+	for (i = 0; i < static_cast<int>(UnitConverter::UnitsOfDensity::Count); i++)
+		choices.Add(UnitConverter::GetInstance().GetUnits(static_cast<UnitConverter::UnitsOfDensity>(i)));
 
 	wxStaticText *DensityLabelText = new wxStaticText(unitsPage, wxID_STATIC, _T("Units of density"));
-	unitOfDensity = new wxComboBox(unitsPage, wxID_ANY, UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDensity),
+	unitOfDensity = new wxComboBox(unitsPage, wxID_ANY, UnitConverter::GetInstance().GetUnitType(UnitType::Density),
 		wxDefaultPosition, wxDefaultSize, choices, wxCB_READONLY);
-	SetMinimumWidthFromContents(unitOfDensity, additionalWidth);
+	wxUtilities::SetMinimumWidthFromContents(unitOfDensity, additionalWidth);
 	unitSelectionSizer->Add(DensityLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfDensity, 0, unitFlags);
 	unitSelectionSizer->AddSpacer(middleSpaceWidth);
 	// Work-around for value not being set properly if initial string contains exponent (GTK ANSI build)
 #if defined(__WXGTK__) && !defined(_UNICODE)
-	unitOfDensity->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDensity));
+	unitOfDensity->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitType::Density));
 #endif
 
 	// Power
 	choices.Clear();
-	for (i = 0; i < UnitConverter::PowerUnitCount; i++)
-		choices.Add(UnitConverter::GetInstance().GetUnits((UnitConverter::UnitsOfPower)i));
+	for (i = 0; i < static_cast<int>(UnitConverter::UnitsOfPower::Count); i++)
+		choices.Add(UnitConverter::GetInstance().GetUnits(static_cast<UnitConverter::UnitsOfPower>(i)));
 
 	wxStaticText *PowerLabelText = new wxStaticText(unitsPage, wxID_STATIC, _T("Units of power"));
-	unitOfPower = new wxComboBox(unitsPage, wxID_ANY, UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypePower),
+	unitOfPower = new wxComboBox(unitsPage, wxID_ANY, UnitConverter::GetInstance().GetUnitType(UnitType::Power),
 		wxDefaultPosition, wxDefaultSize, choices, wxCB_READONLY);
-	SetMinimumWidthFromContents(unitOfPower, additionalWidth);
+	wxUtilities::SetMinimumWidthFromContents(unitOfPower, additionalWidth);
 	unitSelectionSizer->Add(PowerLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfPower, 0, unitFlags);
 	// Work-around for value not being set properly if initial string contains exponent (GTK ANSI build)
 #if defined(__WXGTK__) && !defined(_UNICODE)
-	unitOfPower->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypePower));
+	unitOfPower->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitType::Power));
 #endif
 
 	// Energy
 	choices.Clear();
-	for (i = 0; i < UnitConverter::EnergyUnitCount; i++)
-		choices.Add(UnitConverter::GetInstance().GetUnits((UnitConverter::UnitsOfEnergy)i));
+	for (i = 0; i < static_cast<int>(UnitConverter::UnitsOfEnergy::Count); i++)
+		choices.Add(UnitConverter::GetInstance().GetUnits(static_cast<UnitConverter::UnitsOfEnergy>(i)));
 
 	wxStaticText *EnergyLabelText = new wxStaticText(unitsPage, wxID_STATIC, _T("Units of energy"));
-	unitOfEnergy = new wxComboBox(unitsPage, wxID_ANY, UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeEnergy),
+	unitOfEnergy = new wxComboBox(unitsPage, wxID_ANY, UnitConverter::GetInstance().GetUnitType(UnitType::Energy),
 		wxDefaultPosition, wxDefaultSize, choices, wxCB_READONLY);
-	SetMinimumWidthFromContents(unitOfEnergy, additionalWidth);
+	wxUtilities::SetMinimumWidthFromContents(unitOfEnergy, additionalWidth);
 	unitSelectionSizer->Add(EnergyLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfEnergy, 0, unitFlags);
 	unitSelectionSizer->AddSpacer(middleSpaceWidth);
 	// Work-around for value not being set properly if initial string contains exponent (GTK ANSI build)
 #if defined(__WXGTK__) && !defined(_UNICODE)
-	unitOfEnergy->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeEnergy));
+	unitOfEnergy->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitType::Energy));
 #endif
 
 	// Temperature
 	choices.Clear();
-	for (i = 0; i < UnitConverter::TemperatureUnitCount; i++)
-		choices.Add(UnitConverter::GetInstance().GetUnits((UnitConverter::UnitsOfTemperature)i));
+	for (i = 0; i < static_cast<int>(UnitConverter::UnitsOfTemperature::Count); i++)
+		choices.Add(UnitConverter::GetInstance().GetUnits(static_cast<UnitConverter::UnitsOfTemperature>(i)));
 
 	wxStaticText *TemperatureLabelText = new wxStaticText(unitsPage, wxID_STATIC, _T("Units of temperature"));
-	unitOfTemperature = new wxComboBox(unitsPage, wxID_ANY, UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeTemperature),
+	unitOfTemperature = new wxComboBox(unitsPage, wxID_ANY, UnitConverter::GetInstance().GetUnitType(UnitType::Temperature),
 		wxDefaultPosition, wxDefaultSize, choices, wxCB_READONLY);
-	SetMinimumWidthFromContents(unitOfTemperature, additionalWidth);
+	wxUtilities::SetMinimumWidthFromContents(unitOfTemperature, additionalWidth);
 	unitSelectionSizer->Add(TemperatureLabelText, 0, labelFlags);
 	unitSelectionSizer->Add(unitOfTemperature, 0, unitFlags);
 	// Work-around for value not being set properly if initial string contains exponent (GTK ANSI build)
 #if defined(__WXGTK__) && !defined(_UNICODE)
-	unitOfTemperature->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeTemperature));
+	unitOfTemperature->ChangeValue(UnitConverter::GetInstance().GetUnitType(UnitType::Temperature));
 #endif
 
 	unitsPage->SetSizer(unitsTopSizer);
@@ -444,7 +445,7 @@ void OptionsDialog::CreateControls()
 	numberOfDigitsSizer->Add(numberOfDigitsLabel, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 	numberOfDigitsSizer->Add(numberOfDigits, 0, wxALIGN_CENTER_VERTICAL | wxALL, 5);
 	digitsSizer->Add(numberOfDigitsSizer, 0, wxALIGN_CENTER_HORIZONTAL);
-	SetMinimumWidthFromContents(numberOfDigits, additionalWidth);
+	wxUtilities::SetMinimumWidthFromContents(numberOfDigits, additionalWidth);
 
 	// Create the checkboxes
 	useSignificantDigits = new wxCheckBox(digitsPage, wxID_ANY,
@@ -474,17 +475,17 @@ void OptionsDialog::CreateControls()
 	wxBoxSizer *corSizer = new wxBoxSizer(wxHORIZONTAL);
 	centerOfRotationX = new wxTextCtrl(kinematicsPage, wxID_ANY, wxEmptyString,
 		wxDefaultPosition, wxDefaultSize, 0, UnitValidator(
-		kinematicInputs.centerOfRotation.x, UnitConverter::UnitTypeDistance));
+		kinematicInputs.centerOfRotation.x(), UnitType::Distance));
 	centerOfRotationY = new wxTextCtrl(kinematicsPage, wxID_ANY, wxEmptyString,
 		wxDefaultPosition, wxDefaultSize, 0, UnitValidator(
-		kinematicInputs.centerOfRotation.y, UnitConverter::UnitTypeDistance));
+		kinematicInputs.centerOfRotation.y(), UnitType::Distance));
 	centerOfRotationZ = new wxTextCtrl(kinematicsPage, wxID_ANY, wxEmptyString,
 		wxDefaultPosition, wxDefaultSize, 0, UnitValidator(
-		kinematicInputs.centerOfRotation.z, UnitConverter::UnitTypeDistance));
+		kinematicInputs.centerOfRotation.z(), UnitType::Distance));
 
 	// Create the center of rotation units label
 	wxStaticText *corUnits = new wxStaticText(kinematicsPage, wxID_ANY, _T("(") +
-		UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance) + _T(")"));
+		UnitConverter::GetInstance().GetUnitType(UnitType::Distance) + _T(")"));
 
 	// Add the controls to the spacer
 	corSizer->Add(new wxStaticText(kinematicsPage, wxID_ANY,
@@ -511,7 +512,7 @@ void OptionsDialog::CreateControls()
 		wxDefaultSize, optionsArray, optionsArray.GetCount(), wxRA_SPECIFY_ROWS);
 
 	// Make sure the correct radio button is selected
-	if (kinematicInputs.firstRotation == Eigen::Vector3d::AxisX)
+	if (kinematicInputs.sequence == Kinematics::RotationSequence::RollPitch)
 		rotationOrder->SetSelection(0);
 	else
 		rotationOrder->SetSelection(1);
@@ -671,9 +672,9 @@ void OptionsDialog::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 		return;
 
 	if (rotationOrder->GetSelection() == 0)
-		kinematicInputs.firstRotation = Eigen::Vector3d::AxisX;
+		kinematicInputs.sequence = Kinematics::RotationSequence::RollPitch;
 	else
-		kinematicInputs.firstRotation = Eigen::Vector3d::AxisY;
+		kinematicInputs.sequence = Kinematics::RotationSequence::PitchRoll;
 
 	if (steeringInputType->GetSelection() == 0)
 		mainFrame.SetUseRackTravel(true);
@@ -691,22 +692,22 @@ void OptionsDialog::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 	// Update the default units for the converter object
 	// NOTE:  This section MUST come after the center of rotation is updated in order for
 	// the units label on the center of rotation input to have been correct
-	UnitConverter::GetInstance().SetAngleUnits((UnitConverter::UnitsOfAngle)SafelyGetComboBoxSelection(unitOfAngle));
-	UnitConverter::GetInstance().SetDistanceUnits((UnitConverter::UnitsOfDistance)SafelyGetComboBoxSelection(unitOfDistance));
-	UnitConverter::GetInstance().SetForceUnits((UnitConverter::UnitsOfForce)SafelyGetComboBoxSelection(unitOfForce));
-	UnitConverter::GetInstance().SetAreaUnits((UnitConverter::UnitsOfArea)SafelyGetComboBoxSelection(unitOfArea));
-	UnitConverter::GetInstance().SetPressureUnits((UnitConverter::UnitsOfPressure)SafelyGetComboBoxSelection(unitOfPressure));
-	UnitConverter::GetInstance().SetMomentUnits((UnitConverter::UnitsOfMoment)SafelyGetComboBoxSelection(unitOfMoment));
-	UnitConverter::GetInstance().SetMassUnits((UnitConverter::UnitsOfMass)SafelyGetComboBoxSelection(unitOfMass));
-	UnitConverter::GetInstance().SetVelocityUnits((UnitConverter::UnitsOfVelocity)SafelyGetComboBoxSelection(unitOfVelocity));
-	UnitConverter::GetInstance().SetAccelerationUnits((UnitConverter::UnitsOfAcceleration)SafelyGetComboBoxSelection(unitOfAcceleration));
-	UnitConverter::GetInstance().SetInertiaUnits((UnitConverter::UnitsOfInertia)SafelyGetComboBoxSelection(unitOfInertia));
-	UnitConverter::GetInstance().SetDensityUnits((UnitConverter::UnitsOfDensity)SafelyGetComboBoxSelection(unitOfDensity));
-	UnitConverter::GetInstance().SetPowerUnits((UnitConverter::UnitsOfPower)SafelyGetComboBoxSelection(unitOfPower));
-	UnitConverter::GetInstance().SetEnergyUnits((UnitConverter::UnitsOfEnergy)SafelyGetComboBoxSelection(unitOfEnergy));
-	UnitConverter::GetInstance().SetTemperatureUnits((UnitConverter::UnitsOfTemperature)SafelyGetComboBoxSelection(unitOfTemperature));
+	UnitConverter::GetInstance().SetAngleUnits(static_cast<UnitConverter::UnitsOfAngle>(wxUtilities::SafelyGetComboBoxSelection(unitOfAngle)));
+	UnitConverter::GetInstance().SetDistanceUnits(static_cast<UnitConverter::UnitsOfDistance>(wxUtilities::SafelyGetComboBoxSelection(unitOfDistance)));
+	UnitConverter::GetInstance().SetForceUnits(static_cast<UnitConverter::UnitsOfForce>(wxUtilities::SafelyGetComboBoxSelection(unitOfForce)));
+	UnitConverter::GetInstance().SetAreaUnits(static_cast<UnitConverter::UnitsOfArea>(wxUtilities::SafelyGetComboBoxSelection(unitOfArea)));
+	UnitConverter::GetInstance().SetPressureUnits(static_cast<UnitConverter::UnitsOfPressure>(wxUtilities::SafelyGetComboBoxSelection(unitOfPressure)));
+	UnitConverter::GetInstance().SetMomentUnits(static_cast<UnitConverter::UnitsOfMoment>(wxUtilities::SafelyGetComboBoxSelection(unitOfMoment)));
+	UnitConverter::GetInstance().SetMassUnits(static_cast<UnitConverter::UnitsOfMass>(wxUtilities::SafelyGetComboBoxSelection(unitOfMass)));
+	UnitConverter::GetInstance().SetVelocityUnits(static_cast<UnitConverter::UnitsOfVelocity>(wxUtilities::SafelyGetComboBoxSelection(unitOfVelocity)));
+	UnitConverter::GetInstance().SetAccelerationUnits(static_cast<UnitConverter::UnitsOfAcceleration>(wxUtilities::SafelyGetComboBoxSelection(unitOfAcceleration)));
+	UnitConverter::GetInstance().SetInertiaUnits(static_cast<UnitConverter::UnitsOfInertia>(wxUtilities::SafelyGetComboBoxSelection(unitOfInertia)));
+	UnitConverter::GetInstance().SetDensityUnits(static_cast<UnitConverter::UnitsOfDensity>(wxUtilities::SafelyGetComboBoxSelection(unitOfDensity)));
+	UnitConverter::GetInstance().SetPowerUnits(static_cast<UnitConverter::UnitsOfPower>(wxUtilities::SafelyGetComboBoxSelection(unitOfPower)));
+	UnitConverter::GetInstance().SetEnergyUnits(static_cast<UnitConverter::UnitsOfEnergy>(wxUtilities::SafelyGetComboBoxSelection(unitOfEnergy)));
+	UnitConverter::GetInstance().SetTemperatureUnits(static_cast<UnitConverter::UnitsOfTemperature>(wxUtilities::SafelyGetComboBoxSelection(unitOfTemperature)));
 
-	UnitConverter::GetInstance().SetNumberOfDigits(SafelyGetComboBoxSelection(numberOfDigits));
+	UnitConverter::GetInstance().SetNumberOfDigits(wxUtilities::SafelyGetComboBoxSelection(numberOfDigits));
 	UnitConverter::GetInstance().SetUseSignificantDigits(useSignificantDigits->GetValue());
 	UnitConverter::GetInstance().SetUseScientificNotation(useScientificNotation->GetValue());
 

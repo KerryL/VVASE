@@ -45,26 +45,6 @@ Quadrilateral::Quadrilateral(LibPlot2D::RenderWindow &renderWindow) : Primitive(
 
 //==========================================================================
 // Class:			Quadrilateral
-// Function:		~Quadrilateral
-//
-// Description:		Destructor for the Quadrilateral class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Quadrilateral::~Quadrilateral()
-{
-}
-
-//==========================================================================
-// Class:			Quadrilateral
 // Function:		GenerateGeometry
 //
 // Description:		Creates the OpenGL instructions to create this object in
@@ -83,7 +63,7 @@ Quadrilateral::~Quadrilateral()
 void Quadrilateral::GenerateGeometry()
 {
 	// Set the normal direction
-	glNormal3d(normal.x, normal.y, normal.z);
+	glNormal3d(normal.x(), normal.y(), normal.z());
 
 	// We'll use a triangle strip to draw the quad
 	glBegin(GL_TRIANGLE_STRIP);
@@ -125,10 +105,10 @@ void Quadrilateral::GenerateGeometry()
 	//  1 ---------- 4
 	//   |          |
 	//  2 ---------- 3
-	glVertex3d(corner1.x, corner1.y, corner1.z);
-	glVertex3d(corner4.x, corner4.y, corner4.z);
-	glVertex3d(corner2.x, corner2.y, corner2.z);
-	glVertex3d(corner3.x, corner3.y, corner3.z);
+	glVertex3d(corner1.x(), corner1.y(), corner1.z());
+	glVertex3d(corner4.x(), corner4.y(), corner4.z());
+	glVertex3d(corner2.x(), corner2.y(), corner2.z());
+	glVertex3d(corner3.x(), corner3.y(), corner3.z());
 
 	// Complete the triangle strip
 	glEnd();
@@ -156,7 +136,7 @@ bool Quadrilateral::HasValidParameters()
 	// Quads must have non-zero normal and axis vectors, non-zero dimensions,
 	// and non-parallel normal and axis directions
 	if (!VVASE::Math::IsZero(normal.norm()) && !VVASE::Math::IsZero(axis.norm()) &&
-		!VVASE::Math::IsZero(fabs(axis * normal) / (axis.Length() * normal.norm()) - 1.0)
+		!VVASE::Math::IsZero(fabs(axis.dot(normal)) / (axis.norm() * normal.norm()) - 1.0)
 		&& width > 0.0 && length > 0.0)
 		return true;
 

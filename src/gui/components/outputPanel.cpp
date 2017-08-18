@@ -11,15 +11,15 @@
 //        class is used to display the kinematic output variables.
 
 // Local headers
-#include "gui/components/outputPanel.h"
-#include "gui/components/mainFrame.h"
+#include "VVASE/gui/components/outputPanel.h"
+#include "VVASE/gui/components/mainFrame.h"
 #include "VVASE/core/car/car.h"
 #include "VVASE/core/car/subsystems/drivetrain.h"
 #include "VVASE/core/car/subsystems/suspension.h"
 #include "VVASE/core/analysis/kinematicOutputs.h"
 #include "VVASE/core/utilities/debugger.h"
 #include "VVASE/gui/utilities/unitConverter.h"
-#include "gui/superGrid.h"
+#include "VVASE/gui/superGrid.h"
 #include "VVASE/core/utilities/carMath.h"
 
 namespace VVASE
@@ -159,31 +159,31 @@ void OutputPanel::UpdateInformation(GuiCar::CarOutputs outputs, Car &car,
 	{
 		outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars, index,
 			UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertOutput(
-			outputs.quasiStaticOutputs.pitch, UnitConverter::UnitTypeAngle)));
+			outputs.quasiStaticOutputs.pitch, UnitType::Angle)));
 
 		outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 1, index,
 			UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertOutput(
-			outputs.quasiStaticOutputs.roll, UnitConverter::UnitTypeAngle)));
+			outputs.quasiStaticOutputs.roll, UnitType::Angle)));
 
 		outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 2, index,
 			UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertOutput(
-			outputs.quasiStaticOutputs.heave, UnitConverter::UnitTypeDistance)));
+			outputs.quasiStaticOutputs.heave, UnitType::Distance)));
 
 		outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 3, index,
 			UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertOutput(
-			outputs.quasiStaticOutputs.wheelLoads.leftFront, UnitConverter::UnitTypeForce)));
+			outputs.quasiStaticOutputs.wheelLoads.leftFront, UnitType::Force)));
 
 		outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 4, index,
 			UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertOutput(
-			outputs.quasiStaticOutputs.wheelLoads.rightFront, UnitConverter::UnitTypeForce)));
+			outputs.quasiStaticOutputs.wheelLoads.rightFront, UnitType::Force)));
 
 		outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 5, index,
 			UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertOutput(
-			outputs.quasiStaticOutputs.wheelLoads.leftRear, UnitConverter::UnitTypeForce)));
+			outputs.quasiStaticOutputs.wheelLoads.leftRear, UnitType::Force)));
 
 		outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 6, index,
 			UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertOutput(
-			outputs.quasiStaticOutputs.wheelLoads.rightRear, UnitConverter::UnitTypeForce)));
+			outputs.quasiStaticOutputs.wheelLoads.rightRear, UnitType::Force)));
 
 		outputsList->SetRowSize(KinematicOutputs::NumberOfOutputScalars, outputsList->GetRowHeight(0));
 		outputsList->SetRowSize(KinematicOutputs::NumberOfOutputScalars + 1, outputsList->GetRowHeight(0));
@@ -232,8 +232,10 @@ void OutputPanel::UpdateInformation(GuiCar::CarOutputs outputs, Car &car,
 			+ KinematicOutputs::AxlePlunge, index, _T("N/A"));
 	}
 
+	const auto* drivetrain(car.GetSubsystem<Drivetrain>());
+
 	// Front anti-drive
-	if (car.drivetrain->driveType == Drivetrain::DriveRearWheel)
+	if (drivetrain->driveType == Drivetrain::DriveRearWheel)
 	{
 		// Change the cell's text
 		outputsList->SetCellValue(KinematicOutputs::StartRightFrontDoubles
@@ -243,7 +245,7 @@ void OutputPanel::UpdateInformation(GuiCar::CarOutputs outputs, Car &car,
 	}
 
 	// Rear anti-drive
-	if (car.drivetrain->driveType == Drivetrain::DriveFrontWheel)
+	if (drivetrain->driveType == Drivetrain::DriveFrontWheel)
 	{
 		// Change the cell's text
 		outputsList->SetCellValue(KinematicOutputs::StartRightRearDoubles
@@ -252,8 +254,10 @@ void OutputPanel::UpdateInformation(GuiCar::CarOutputs outputs, Car &car,
 			+ KinematicOutputs::AntiDrivePitch, index, _T("N/A"));
 	}
 
+	const auto* suspension(car.GetSubsystem<Suspension>());
+
 	// Front third spring
-	if (!car.suspension->frontHasThirdSpring)
+	if (!suspension->frontHasThirdSpring)
 	{
 		// Change the cell's text
 		outputsList->SetCellValue(KinematicOutputs::StartDoubles
@@ -263,7 +267,7 @@ void OutputPanel::UpdateInformation(GuiCar::CarOutputs outputs, Car &car,
 	}
 
 	// Rear third spring
-	if (!car.suspension->rearHasThirdSpring)
+	if (!suspension->rearHasThirdSpring)
 	{
 		// Change the cell's text
 		outputsList->SetCellValue(KinematicOutputs::StartDoubles
@@ -273,7 +277,7 @@ void OutputPanel::UpdateInformation(GuiCar::CarOutputs outputs, Car &car,
 	}
 
 	// Front sway bar
-	if (car.suspension->frontBarStyle == Suspension::SwayBarNone)
+	if (suspension->frontBarStyle == Suspension::SwayBarNone)
 	{
 		// Change the cell's text
 		outputsList->SetCellValue(KinematicOutputs::StartLeftFrontDoubles
@@ -285,7 +289,7 @@ void OutputPanel::UpdateInformation(GuiCar::CarOutputs outputs, Car &car,
 	}
 
 	// Rear sway bar
-	if (car.suspension->rearBarStyle == Suspension::SwayBarNone)
+	if (suspension->rearBarStyle == Suspension::SwayBarNone)
 	{
 		// Change the cell's text
 		outputsList->SetCellValue(KinematicOutputs::StartLeftRearDoubles
@@ -352,14 +356,14 @@ void OutputPanel::FinishUpdate(int numberOfDataColumns)
 		outputsList->SetCellValue(i, this->numberOfDataColumns + 1, unitString);
 	}
 
-	unitString.Printf("(%s)", UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeAngle).c_str());
+	unitString.Printf("(%s)", UnitConverter::GetInstance().GetUnitType(UnitType::Angle).c_str());
 	outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars, this->numberOfDataColumns + 1, unitString);
 	outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 1, this->numberOfDataColumns + 1, unitString);
 
-	unitString.Printf("(%s)", UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance).c_str());
+	unitString.Printf("(%s)", UnitConverter::GetInstance().GetUnitType(UnitType::Distance).c_str());
 	outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 2, this->numberOfDataColumns + 1, unitString);
 
-	unitString.Printf("(%s)", UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeForce).c_str());
+	unitString.Printf("(%s)", UnitConverter::GetInstance().GetUnitType(UnitType::Force).c_str());
 	outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 3, this->numberOfDataColumns + 1, unitString);
 	outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 4, this->numberOfDataColumns + 1, unitString);
 	outputsList->SetCellValue(KinematicOutputs::NumberOfOutputScalars + 5, this->numberOfDataColumns + 1, unitString);

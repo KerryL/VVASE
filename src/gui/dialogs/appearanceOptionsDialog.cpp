@@ -16,11 +16,13 @@
 #include <wx/colordlg.h>
 
 // Local headers
-#include "gui/dialogs/appearanceOptionsDialog.h"
-#include "gui/components/mainFrame.h"
-#include "gui/superGrid.h"
-#include "vRenderer/color.h"
-#include "vUtilities/unitConverter.h"
+#include "appearanceOptionsDialog.h"
+#include "VVASE/gui/components/mainFrame.h"
+#include "VVASE/gui/superGrid.h"
+#include "VVASE/gui/utilities/unitConverter.h"
+
+// LibPlot2D headers
+#include <lp2d/renderer/color.h>
 
 namespace VVASE
 {
@@ -199,7 +201,7 @@ void AppearanceOptionsDialog::CreateControls()
 	sizeTopSizer->Add(sizeSizer, 0, wxALL | wxEXPAND, 5);
 
 	wxStaticText *sizePrompt = new wxStaticText(sizePanel, wxID_STATIC,
-		_T("Edit the object sizes (units are ") + UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance)
+		_T("Edit the object sizes (units are ") + UnitConverter::GetInstance().GetUnitType(UnitType::Distance)
 		+ _T("):"));
 	sizeSizer->Add(sizePrompt, 0, wxALL, 5);
 

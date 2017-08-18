@@ -47,26 +47,6 @@ Cylinder::Cylinder(LibPlot2D::RenderWindow &renderWindow) : Primitive(renderWind
 
 //==========================================================================
 // Class:			Cylinder
-// Function:		~Cylinder
-//
-// Description:		Destructor for the Cylinder class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Cylinder::~Cylinder()
-{
-}
-
-//==========================================================================
-// Class:			Cylinder
 // Function:		GenerateGeometry
 //
 // Description:		Creates the OpenGL instructions to create this object in
@@ -118,10 +98,10 @@ void Cylinder::GenerateGeometry()
 			point.y = radius * cos(angle);
 			point.z = radius * sin(angle);
 
-			glNormal3d(0.0, point.y / radius, point.z / radius);
+			glNormal3d(0.0, point.y() / radius, point.z() / radius);
 
-			glVertex3d(point.x, point.y, point.z);
-			glVertex3d(-point.x, point.y, point.z);
+			glVertex3d(point.x(), point.y(), point.z());
+			glVertex3d(-point.x(), point.y(), point.z());
 		}
 
 		glEnd();
@@ -137,7 +117,7 @@ void Cylinder::GenerateGeometry()
 				point.y = radius * cos(angle);
 				point.z = radius * sin(angle);
 
-				glVertex3d(point.x, point.y, point.z);
+				glVertex3d(point.x(), point.y(), point.z());
 			}
 
 			glEnd();
@@ -151,7 +131,7 @@ void Cylinder::GenerateGeometry()
 				point.y = radius * cos(angle);
 				point.z = radius * sin(angle);
 
-				glVertex3d(-point.x, point.y, point.z);
+				glVertex3d(-point.x(), point.y(), point.z());
 			}
 
 			glEnd();

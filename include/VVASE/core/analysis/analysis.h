@@ -15,16 +15,16 @@
 // Local headers
 #include "VVASE/core/utilities/componentManager.h"
 
+// wxWidgets forward declarations
+class wxPanel;
+class wxTreeNode;
+
 namespace VVASE
 {
 
 // Local forward declarations
 class Car;
 class OptimizationInterface;
-
-// wxWidgets forward declarations
-class wxPanel;
-class wxTreeNode;
 
 class Analysis : public RegisterableComponent
 {

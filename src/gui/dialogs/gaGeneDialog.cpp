@@ -10,7 +10,7 @@
 // Desc:  Dialog for editing gene properties.
 
 // Local headers
-#include "gui/dialogs/gaGeneDialog.h"
+#include "VVASE/gui/dialogs/gaGeneDialog.h"
 #include "VVASE/gui/utilities/wxRelatedUtilities.h"
 #include "VVASE/gui/utilities/unitConverter.h"
 #include "VVASE/gui/utilities/dataValidator.h"
@@ -48,7 +48,7 @@ namespace VVASE
 //==========================================================================
 GAGeneDialog::GAGeneDialog(wxWindow *parent, const Suspension* currentSuspension,
 	const Corner::Hardpoints &hardpoint, const Corner::Hardpoints &tiedTo,
-	const Eigen::Vector3d::Axis &axisDirection, const Corner::Location &cornerLocation,
+	const Math::Axis &axisDirection, const Corner::Location &cornerLocation,
 	const double &minimum, const double &maximum, const unsigned int &numberOfValues,
 	wxWindowID id, const wxPoint &position, long style)
 	: wxDialog(parent, id, _T("Genetic Algorithm Gene"), position, wxDefaultSize, style),
@@ -166,7 +166,7 @@ void GAGeneDialog::CreateControls()
 	wxStaticText *hardpointLabel = new wxStaticText(this, wxID_STATIC, _T("Hardpoint"));
 	hardpointCombo = new wxComboBox(this, idHardpoint, Corner::GetHardpointName(hardpoint), wxDefaultPosition,
 		wxDefaultSize, list, wxCB_READONLY);
-	SetMinimumWidthFromContents(hardpointCombo, additionalWidth);
+	wxUtilities::SetMinimumWidthFromContents(hardpointCombo, additionalWidth);
 	inputAreaSizer->Add(hardpointLabel, 0, textSizerFlags);
 	inputAreaSizer->Add(hardpointCombo, 0, comboSizerFlags);
 	inputAreaSizer->AddSpacer(-1);
@@ -177,7 +177,7 @@ void GAGeneDialog::CreateControls()
 	wxStaticText *tiedToLabel = new wxStaticText(this, wxID_STATIC, _T("Alternate With"));
 	tiedToCombo = new wxComboBox(this, wxID_ANY, Corner::GetHardpointName(tiedTo), wxDefaultPosition,
 		wxDefaultSize, list, wxCB_READONLY);
-	SetMinimumWidthFromContents(tiedToCombo, additionalWidth);
+	wxUtilities::SetMinimumWidthFromContents(tiedToCombo, additionalWidth);
 	inputAreaSizer->Add(tiedToLabel, 0, textSizerFlags);
 	inputAreaSizer->Add(tiedToCombo, 0, comboSizerFlags);
 	inputAreaSizer->AddSpacer(-1);
@@ -185,11 +185,11 @@ void GAGeneDialog::CreateControls()
 	// Axis Direction
 	list.Clear();
 	for (i = 0; i < 3; i++)
-		list.Add(Math::GetAxisName((Eigen::Vector3d::Axis)i));
+		list.Add(Math::GetAxisName(static_cast<Math::Axis>(i)));
 	wxStaticText *axisDirectionLabel = new wxStaticText(this, wxID_STATIC, _T("Axis Direction"));
 	axisDirectionCombo = new wxComboBox(this, wxID_ANY, Math::GetAxisName(axisDirection), wxDefaultPosition,
 		wxDefaultSize, list, wxCB_READONLY);
-	SetMinimumWidthFromContents(axisDirectionCombo, additionalWidth);
+	wxUtilities::SetMinimumWidthFromContents(axisDirectionCombo, additionalWidth);
 	inputAreaSizer->Add(axisDirectionLabel, 0, textSizerFlags);
 	inputAreaSizer->Add(axisDirectionCombo, 0, comboSizerFlags);
 	inputAreaSizer->AddSpacer(-1);
@@ -201,7 +201,7 @@ void GAGeneDialog::CreateControls()
 	wxStaticText *cornerLocationLabel = new wxStaticText(this, wxID_STATIC, _T("Corner Location"));
 	cornerLocationCombo = new wxComboBox(this, idLocation, Corner::GetLocationName(cornerLocation), wxDefaultPosition,
 		wxDefaultSize, list, wxCB_READONLY);
-	SetMinimumWidthFromContents(cornerLocationCombo, additionalWidth);
+	wxUtilities::SetMinimumWidthFromContents(cornerLocationCombo, additionalWidth);
 	inputAreaSizer->Add(cornerLocationLabel, 0, textSizerFlags);
 	inputAreaSizer->Add(cornerLocationCombo, 0, comboSizerFlags);
 	inputAreaSizer->AddSpacer(-1);
@@ -220,7 +220,7 @@ void GAGeneDialog::CreateControls()
 
 		inputAreaSizer->Add(valueSizer, 0, comboSizerFlags);
 		inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC,
-			UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance)), 0, textSizerFlags);
+			UnitConverter::GetInstance().GetUnitType(UnitType::Distance)), 0, textSizerFlags);
 	}
 	else
 	{
@@ -245,20 +245,20 @@ void GAGeneDialog::CreateControls()
 
 	// Minimum
 	minimumText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		wxDefaultSize, 0, UnitValidator(minimum, UnitConverter::UnitTypeDistance));
+		wxDefaultSize, 0, UnitValidator(minimum, UnitType::Distance));
 	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Minimum")), 0, textSizerFlags);
 	inputAreaSizer->Add(minimumText, 0, comboSizerFlags);
 	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC,
-		UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance),
+		UnitConverter::GetInstance().GetUnitType(UnitType::Distance),
 		wxDefaultPosition, wxDefaultSize, 0), 0, textSizerFlags);
 
 	// Maximum
 	maximumText = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-		wxDefaultSize, 0, UnitValidator(maximum, UnitConverter::UnitTypeDistance));
+		wxDefaultSize, 0, UnitValidator(maximum, UnitType::Distance));
 	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Maximum")), 0, textSizerFlags);
 	inputAreaSizer->Add(maximumText, 0, comboSizerFlags);
 	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC,
-		UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance),
+		UnitConverter::GetInstance().GetUnitType(UnitType::Distance),
 		wxDefaultPosition, wxDefaultSize, 0), 0, textSizerFlags);
 
 	// Number of values
@@ -273,7 +273,7 @@ void GAGeneDialog::CreateControls()
 	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC, _T("Resolution")), 0, textSizerFlags);
 	inputAreaSizer->Add(resolution, 0, textSizerFlags);
 	inputAreaSizer->Add(new wxStaticText(this, wxID_STATIC,
-		UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance),
+		UnitConverter::GetInstance().GetUnitType(UnitType::Distance),
 		wxDefaultPosition, wxDefaultSize, 0), 0, textSizerFlags);
 
 	// Add a spacer between the text controls and the buttons
@@ -322,7 +322,7 @@ void GAGeneDialog::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 		tiedTo = (Corner::Hardpoints)hardpointCombo->GetCurrentSelection();
 	else
 		tiedTo = (Corner::Hardpoints)(tiedToCombo->GetCurrentSelection() - 1);
-	axisDirection = (Eigen::Vector3d::Axis)axisDirectionCombo->GetCurrentSelection();
+	axisDirection = static_cast<Math::Axis>(axisDirectionCombo->GetCurrentSelection());
 	cornerLocation = (Corner::Location)cornerLocationCombo->GetCurrentSelection();
 
 	// The way we handle this changes depending on how this form was displayed
@@ -463,11 +463,11 @@ void GAGeneDialog::UpdateCurrentVector()
 		v = currentSuspension->rightRear.hardpoints[hardpoint];
 
 	currentX->SetLabel(UnitConverter::GetInstance().FormatNumber(
-		UnitConverter::GetInstance().ConvertDistanceOutput(v.x)));
+		UnitConverter::GetInstance().ConvertDistanceOutput(v.x())));
 	currentY->SetLabel(UnitConverter::GetInstance().FormatNumber(
-		UnitConverter::GetInstance().ConvertDistanceOutput(v.y)));
+		UnitConverter::GetInstance().ConvertDistanceOutput(v.y())));
 	currentZ->SetLabel(UnitConverter::GetInstance().FormatNumber(
-		UnitConverter::GetInstance().ConvertDistanceOutput(v.z)));
+		UnitConverter::GetInstance().ConvertDistanceOutput(v.z())));
 }
 
 }// namespace VVASE

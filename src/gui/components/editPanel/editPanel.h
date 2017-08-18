@@ -36,7 +36,7 @@ class EditEnginePanel;
 class EditMassPanel;
 class EditSuspensionNotebook;
 class EditTiresPanel;
-class EditIterationNotebook;
+class EditSweepNotebook;
 
 class EditPanel : public wxPanel
 {
@@ -79,7 +79,7 @@ private:
 	EditTiresPanel			*editTires;
 
 	// Sweep
-	EditIterationNotebook	*editIteration;
+	EditSweepNotebook	*editIteration;
 
 	wxBoxSizer *sizer;
 

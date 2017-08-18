@@ -11,14 +11,14 @@
 //        This class is used to edit the spring and ARB rates.
 
 // Local headers
-#include "vCar/suspension.h"
-#include "gui/guiCar.h"
-#include "gui/superGrid.h"
-#include "gui/components/mainFrame.h"
-#include "gui/components/editPanel/editPanel.h"
-#include "gui/components/editPanel/guiCar/editSuspensionRatesPanel.h"
-#include "gui/components/editPanel/guiCar/editSuspensionNotebook.h"
-#include "vUtilities/unitConverter.h"
+#include "VVASE/core/car/subsystems/suspension.h"
+#include "../../../guiCar.h"
+#include "VVASE/gui/superGrid.h"
+#include "VVASE/gui/components/mainFrame.h"
+#include "../editPanel.h"
+#include "editSuspensionRatesPanel.h"
+#include "editSuspensionNotebook.h"
+#include "VVASE/gui/utilities/unitConverter.h"
 
 namespace VVASE
 {
@@ -158,13 +158,13 @@ void EditSuspensionRatesPanel::UpdateInformation(Suspension *currentSuspension)
 
 	wxString linearUnitString;
 	linearUnitString.Printf("(%s/%s)",
-		UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeForce).c_str(),
-		UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance).c_str());
+		UnitConverter::GetInstance().GetUnitType(UnitType::Force).c_str(),
+		UnitConverter::GetInstance().GetUnitType(UnitType::Distance).c_str());
 
 	wxString rotaryUnitString;
 	rotaryUnitString.Printf("(%s/%s)",
-		UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeMoment).c_str(),
-		UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeAngle).c_str());
+		UnitConverter::GetInstance().GetUnitType(UnitType::Moment).c_str(),
+		UnitConverter::GetInstance().GetUnitType(UnitType::Angle).c_str());
 
 	rates->SetCellValue(RowLeftFrontSpring, ColValue, UnitConverter::GetInstance().FormatNumber(
 		ConvertLinearSpringOutput(currentSuspension->leftFront.spring.rate)));

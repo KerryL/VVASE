@@ -10,13 +10,15 @@
 // Desc:  Contains the class definition for the EditBrakesPanel class.
 
 // Local headers
-#include "vCar/brakes.h"
-#include "gui/guiCar.h"
-#include "gui/components/mainFrame.h"
-#include "gui/components/editPanel/editPanel.h"
-#include "gui/components/editPanel/guiCar/editBrakesPanel.h"
-#include "vUtilities/unitConverter.h"
-#include "vMath/vector.h"
+#include "VVASE/core/car/subsystems/brakes.h"
+#include "../../../guiCar.h"
+#include "VVASE/gui/components/mainFrame.h"
+#include "../editPanel.h"
+#include "editBrakesPanel.h"
+#include "VVASE/gui/utilities/unitConverter.h"
+
+// Eigen headers
+#include <Eigen/Eigen>
 
 namespace VVASE
 {
@@ -95,7 +97,7 @@ END_EVENT_TABLE();
 // Description:		Updates the information on this panel.
 //
 // Input Arguments:
-//		_CurrentBrakes	= Brakes* pointing to the associated brakes
+//		currentBrakes	= Brakes* pointing to the associated brakes
 //
 // Output Arguments:
 //		None
@@ -207,7 +209,7 @@ void EditBrakesPanel::TextBoxEditEvent(wxCommandEvent &event)
 		// Get the text box, the location to write it, and the units
 		textBox = percentFrontBraking;
 		dataLocation = &currentBrakes->percentFrontBraking;
-		units = UnitConverter::UnitTypeUnitless;
+		units = UnitType::Unitless;
 		minValue = 0.0;
 		maxValue = 1.0;
 		break;

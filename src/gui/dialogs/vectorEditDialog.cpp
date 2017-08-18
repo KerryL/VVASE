@@ -10,9 +10,8 @@
 // Desc:  Class for adding menu items to context menus that function more like dialogs.
 
 // Local headers
-#include "gui/dialogs/vectorEditDialog.h"
-#include "vMath/vector.h"
-#include "vUtilities/unitConverter.h"
+#include "VVASE/gui/dialogs/vectorEditDialog.h"
+#include "VVASE/gui/utilities/unitConverter.h"
 
 namespace VVASE
 {
@@ -99,9 +98,9 @@ void VectorEditDialog::CreateControls()
 	inputSizer->Add(new wxStaticText(this, wxID_ANY, _T("Y ") + units), 0, wxALIGN_CENTER_HORIZONTAL);
 	inputSizer->Add(new wxStaticText(this, wxID_ANY, _T("Z ") + units), 0, wxALIGN_CENTER_HORIZONTAL);
 
-	xInput = new wxTextCtrl(this, wxID_ANY, converter.FormatNumber(converter.ConvertDistanceOutput(vector.x)));
-	yInput = new wxTextCtrl(this, wxID_ANY, converter.FormatNumber(converter.ConvertDistanceOutput(vector.y)));
-	zInput = new wxTextCtrl(this, wxID_ANY, converter.FormatNumber(converter.ConvertDistanceOutput(vector.z)));
+	xInput = new wxTextCtrl(this, wxID_ANY, converter.FormatNumber(converter.ConvertDistanceOutput(vector.x())));
+	yInput = new wxTextCtrl(this, wxID_ANY, converter.FormatNumber(converter.ConvertDistanceOutput(vector.y())));
+	zInput = new wxTextCtrl(this, wxID_ANY, converter.FormatNumber(converter.ConvertDistanceOutput(vector.z())));
 
 	inputSizer->Add(xInput);
 	inputSizer->Add(yInput);
@@ -143,9 +142,9 @@ void VectorEditDialog::OKClickEvent(wxCommandEvent& WXUNUSED(event))
 	}
 
 	UnitConverter& converter(UnitConverter::GetInstance());
-	vector.x = converter.ConvertDistanceInput(xValue);
-	vector.y = converter.ConvertDistanceInput(yValue);
-	vector.z = converter.ConvertDistanceInput(zValue);
+	vector.x() = converter.ConvertDistanceInput(xValue);
+	vector.y() = converter.ConvertDistanceInput(yValue);
+	vector.z() = converter.ConvertDistanceInput(zValue);
 
 	// The way we handle this changes depending on how this form was displayed
 	if (IsModal())

@@ -16,7 +16,7 @@
 #include <wx/wx.h>
 
 // Local headers
-#include "vSolver/physics/kinematics.h"
+#include "VVASE/core/analysis/kinematics.h"
 
 // wxWidgets forward declarations
 class wxNotebook;

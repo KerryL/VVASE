@@ -7,26 +7,26 @@
 // Date:  11/14/2010
 // Auth:  K. Loux
 // Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
-// Desc:  Contains the class definition for the EditIterationNotebook class.
+// Desc:  Contains the class definition for the EditSweepNotebook class.
 
 // Local headers
-#include "gui/iteration.h"
-#include "gui/components/mainFrame.h"
-#include "gui/components/editPanel/editPanel.h"
-#include "gui/components/editPanel/iteration/editIterationNotebook.h"
-#include "gui/components/editPanel/iteration/editIterationRangePanel.h"
-#include "gui/components/editPanel/iteration/editIterationPlotsPanel.h"
-#include "gui/components/editPanel/iteration/editIterationOptionsPanel.h"
-#include "vUtilities/debugger.h"
+#include "editSweepNotebook.h"
+#include "editSweepRangePanel.h"
+#include "editSweepPlotsPanel.h"
+#include "editSweepOptionsPanel.h"
+#include "../../../sweep.h"
+#include "VVASE/gui/components/mainFrame.h"
+#include "../editPanel.h"
+#include "VVASE/core/utilities/debugger.h"
 
 namespace VVASE
 {
 
 //==========================================================================
-// Class:			EditIterationNotebook
-// Function:		EditIterationNotebook
+// Class:			EditSweepNotebook
+// Function:		EditSweepNotebook
 //
-// Description:		Constructor for EditIterationNotebook class.  Initializes
+// Description:		Constructor for EditSweepNotebook class.  Initializes
 //					the form and creates the controls, etc.
 //
 // Input Arguments:
@@ -43,18 +43,18 @@ namespace VVASE
 //		None
 //
 //==========================================================================
-EditIterationNotebook::EditIterationNotebook(EditPanel &parent, wxWindowID id,
+EditSweepNotebook::EditSweepNotebook(EditPanel &parent, wxWindowID id,
 	const wxPoint& pos, const wxSize& size, long style)
 	: wxNotebook(&parent, id, pos, size, style), parent(parent)
 {
-	currentIteration = NULL;
+	currentSweep = NULL;
 }
 
 //==========================================================================
-// Class:			EditIterationNotebook
-// Function:		~EditIterationNotebook
+// Class:			EditSweepNotebook
+// Function:		~EditSweepNotebook
 //
-// Description:		Destructor for EditIterationNotebook class.
+// Description:		Destructor for EditSweepNotebook class.
 //
 // Input Arguments:
 //		None
@@ -66,12 +66,12 @@ EditIterationNotebook::EditIterationNotebook(EditPanel &parent, wxWindowID id,
 //		None
 //
 //==========================================================================
-EditIterationNotebook::~EditIterationNotebook()
+EditSweepNotebook::~EditSweepNotebook()
 {
 }
 
 //==========================================================================
-// Class:			EditIterationNotebook
+// Class:			EditSweepNotebook
 // Function:		UpdateInformation
 //
 // Description:		Updates the information in this notebook for the current
@@ -87,22 +87,22 @@ EditIterationNotebook::~EditIterationNotebook()
 //		None
 //
 //==========================================================================
-void EditIterationNotebook::UpdateInformation()
+void EditSweepNotebook::UpdateInformation()
 {
 	// Make sure the object has already been assigned
-	if (currentIteration)
+	if (currentSweep)
 		// Call the method that performs the update
-		UpdateInformation(currentIteration);
+		UpdateInformation(currentSweep);
 }
 
 //==========================================================================
-// Class:			EditIterationNotebook
+// Class:			EditSweepNotebook
 // Function:		UpdateInformation
 //
 // Description:		Updates the information in this notebook.
 //
 // Input Arguments:
-//		_currentIteration	= Iteration* pointing to the currenly active object
+//		currentSweep	= Sweep* pointing to the currenly active object
 //
 // Output Arguments:
 //		None
@@ -111,11 +111,11 @@ void EditIterationNotebook::UpdateInformation()
 //		None
 //
 //==========================================================================
-void EditIterationNotebook::UpdateInformation(Iteration *currentIteration)
+void EditSweepNotebook::UpdateInformation(Sweep *currentSweep)
 {
-	this->currentIteration = currentIteration;
+	this->currentSweep = currentSweep;
 
-	if (!currentIteration)
+	if (!currentSweep)
 	{
 		DeleteAllPages();
 		return;
@@ -125,13 +125,13 @@ void EditIterationNotebook::UpdateInformation(Iteration *currentIteration)
 		CreateControls();
 
 	// Call the update functions for the pages, too
-	editRange->UpdateInformation(currentIteration);
-	editPlots->UpdateInformation(currentIteration);
-	editOptions->UpdateInformation(currentIteration);
+	editRange->UpdateInformation(currentSweep);
+	editPlots->UpdateInformation(currentSweep);
+	editOptions->UpdateInformation(currentSweep);
 }
 
 //==========================================================================
-// Class:			EditIterationNotebook
+// Class:			EditSweepNotebook
 // Function:		CreateControls
 //
 // Description:		Creates the controls for this notebook.
@@ -146,14 +146,14 @@ void EditIterationNotebook::UpdateInformation(Iteration *currentIteration)
 //		None
 //
 //==========================================================================
-void EditIterationNotebook::CreateControls()
+void EditSweepNotebook::CreateControls()
 {
 	DeleteAllPages();
 
 	// Create the notebook pages
-	editRange = new EditIterationRangePanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
-	editPlots = new EditIterationPlotsPanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
-	editOptions = new EditIterationOptionsPanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
+	editRange = new EditSweepRangePanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
+	editPlots = new EditSweepPlotsPanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
+	editOptions = new EditSweepOptionsPanel(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
 
 	// Add them to the notebook
 	AddPage(editRange, _T("Range"));

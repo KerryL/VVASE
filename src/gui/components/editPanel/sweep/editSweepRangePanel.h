@@ -19,8 +19,8 @@ namespace VVASE
 {
 
 // Local forward declarations
-class Iteration;
-class EditIterationNotebook;
+class Sweep;
+class EditSweepNotebook;
 
 class EditSweepRangePanel : public wxScrolledWindow
 {
@@ -29,13 +29,13 @@ public:
 		const wxPoint& pos, const wxSize& size);
 	~EditSweepRangePanel();
 
-	void UpdateInformation(Iteration *currentIteration);
+	void UpdateInformation(Sweep *currentSweep);
 	void UpdateInformation();
 
 private:
 	EditSweepNotebook &parent;
 
-	Iteration *currentIteration;
+	Sweep *currentSweep;
 	void CreateControls();
 
 	// The text boxes
@@ -57,7 +57,7 @@ private:
 
 	wxStaticText *steerInputLabel;
 
-	enum EditIterationRangePanelEventIds
+	enum EditSweepRangePanelEventIds
 	{
 		RangeTextBox = wxID_HIGHEST + 1300
 	};

@@ -19,31 +19,31 @@ namespace VVASE
 {
 
 // Local forward declarations
-class Iteration;
+class Sweep;
 class EditSweepNotebook;
 
-class EditIterationPlotsPanel : public wxPanel
+class EditSweepPlotsPanel : public wxPanel
 {
 public:
-	EditIterationPlotsPanel(EditSweepNotebook &parent, wxWindowID id,
+	EditSweepPlotsPanel(EditSweepNotebook &parent, wxWindowID id,
 		const wxPoint& pos, const wxSize& size);
-	~EditIterationPlotsPanel();
+	~EditSweepPlotsPanel();
 
 	// Updates the information on the panel
-	void UpdateInformation(Iteration *currentIteration);
+	void UpdateInformation(Sweep *currentSweep);
 	void UpdateInformation();
 
 private:
 	EditSweepNotebook &parent;
 
-	Iteration *currentIteration;
+	Sweep *currentSweep;
 
 	void CreateControls();
 
 	// The controls on this panel
 	wxCheckListBox *plotListCheckBox;
 
-	enum EditIterationPlotsPanelEventIds
+	enum EditSweepPlotsPanelEventIds
 	{
 		PlotSelectionCheckList = 800 + wxID_HIGHEST
 	};

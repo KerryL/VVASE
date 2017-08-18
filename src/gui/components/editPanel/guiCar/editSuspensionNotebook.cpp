@@ -12,18 +12,18 @@
 //        are displayed for editing different sub-systems.
 
 // Local headers
-#include "vCar/car.h"
-#include "vCar/suspension.h"
-#include "vCar/tireSet.h"
-#include "gui/guiCar.h"
-#include "gui/components/mainFrame.h"
-#include "gui/components/mainTree.h"
-#include "gui/components/editPanel/editPanel.h"
-#include "gui/components/editPanel/guiCar/editSuspensionNotebook.h"
-#include "gui/components/editPanel/guiCar/editCornerPanel.h"
-#include "gui/components/editPanel/guiCar/editSuspensionPanel.h"
-#include "gui/components/editPanel/guiCar/editSuspensionRatesPanel.h"
-#include "vUtilities/debugger.h"
+#include "VVASE/core/car/car.h"
+#include "VVASE/core/car/subsystems/suspension.h"
+#include "VVASE/core/car/subsystems/tireSet.h"
+#include "../../../guiCar.h"
+#include "VVASE/gui/components/mainFrame.h"
+#include "VVASE/gui/components/mainTree.h"
+#include "../editPanel.h"
+#include "editSuspensionNotebook.h"
+#include "editCornerPanel.h"
+#include "editSuspensionPanel.h"
+#include "editSuspensionRatesPanel.h"
+#include "VVASE/core/utilities/debugger.h"
 
 namespace VVASE
 {

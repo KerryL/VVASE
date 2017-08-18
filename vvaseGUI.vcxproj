@@ -49,9 +49,9 @@
     <ClInclude Include="include\VVASE\gui\utilities\unitConverter.h" />
     <ClInclude Include="include\VVASE\gui\utilities\wxRelatedUtilities.h" />
     <ClInclude Include="include\VVASE\gui\utilities\xlsxReader.h" />
+    <ClInclude Include="src\application\gitHash.h" />
     <ClInclude Include="src\application\pluginManager.h" />
     <ClInclude Include="src\application\vvaseApplication.h" />
-    <ClInclude Include="src\application\vvaseConstants.h" />
     <ClInclude Include="src\gui\appearanceOptions.h" />
     <ClInclude Include="src\gui\components\editPanel\editPanel.h" />
     <ClInclude Include="src\gui\components\editPanel\guiCar\editAerodynamicsPanel.h" />
@@ -81,9 +81,9 @@
     <ClInclude Include="src\gui\sweep.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\application\gitHash.cpp" />
     <ClCompile Include="src\application\pluginManager.cpp" />
     <ClCompile Include="src\application\vvaseApplication.cpp" />
-    <ClCompile Include="src\application\vvaseConstants.cpp" />
     <ClCompile Include="src\gui\appearanceOptions.cpp" />
     <ClCompile Include="src\gui\components\editPanel\editPanel.cpp" />
     <ClCompile Include="src\gui\components\editPanel\guiCar\editAerodynamicsPanel.cpp" />

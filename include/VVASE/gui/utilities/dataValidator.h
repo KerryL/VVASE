@@ -98,7 +98,7 @@ bool UnitValidator::TransferFromWindow();
 //
 // Input Arguments:
 //		data		= double& pointer to the data we represent
-//		unit		= const UnitConverter::UnitType& specifying the type of data we
+//		unit		= const UnitType::& specifying the type of data we
 //					  represent
 //		numberClass	= const NumberClass& specifying additional limits
 //

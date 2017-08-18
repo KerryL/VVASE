@@ -11,25 +11,25 @@
 //        class.
 
 // Local headers
-#include "gui/iteration.h"
-#include "gui/components/mainFrame.h"
-#include "gui/components/editPanel/editPanel.h"
-#include "gui/components/editPanel/iteration/editIterationRangePanel.h"
-#include "gui/components/editPanel/iteration/editIterationNotebook.h"
-#include "vUtilities/unitConverter.h"
+#include "editSweepRangePanel.h"
+#include "editSweepNotebook.h"
+#include "../../../sweep.h"
+#include "VVASE/gui/components/mainFrame.h"
+#include "../editPanel.h"
+#include "VVASE/gui/utilities/unitConverter.h"
 
 namespace VVASE
 {
 
 //==========================================================================
-// Class:			EditIterationRangePanel
-// Function:		EditIterationRangePanel
+// Class:			EditSweepRangePanel
+// Function:		EditSweepRangePanel
 //
-// Description:		Constructor for EditIterationRangePanel class.  Initializes the form
+// Description:		Constructor for EditSweepRangePanel class.  Initializes the form
 //					and creates the controls, etc.
 //
 // Input Arguments:
-//		parent		= EditIterationNotebook&, reference to this object's owner
+//		parent		= EditSweepNotebook&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
@@ -41,19 +41,19 @@ namespace VVASE
 //		None
 //
 //==========================================================================
-EditIterationRangePanel::EditIterationRangePanel(EditIterationNotebook &parent,
+EditSweepRangePanel::EditSweepRangePanel(EditSweepNotebook &parent,
 	wxWindowID id, const wxPoint& pos, const wxSize& size)
 	: wxScrolledWindow(&parent, id, pos, size), parent(parent)
 {
-	currentIteration = NULL;
+	currentSweep = NULL;
 	CreateControls();
 }
 
 //==========================================================================
-// Class:			EditIterationRangePanel
-// Function:		~EditIterationRangePanel
+// Class:			EditSweepRangePanel
+// Function:		~EditSweepRangePanel
 //
-// Description:		Destructor for EditIterationRangePanel class.
+// Description:		Destructor for EditSweepRangePanel class.
 //
 // Input Arguments:
 //		None
@@ -65,12 +65,12 @@ EditIterationRangePanel::EditIterationRangePanel(EditIterationNotebook &parent,
 //		None
 //
 //==========================================================================
-EditIterationRangePanel::~EditIterationRangePanel()
+EditSweepRangePanel::~EditSweepRangePanel()
 {
 }
 
 //==========================================================================
-// Class:			EditIterationRangePanel
+// Class:			EditSweepRangePanel
 // Function:		Event Table
 //
 // Description:		Links GUI events with event handler functions.
@@ -85,13 +85,13 @@ EditIterationRangePanel::~EditIterationRangePanel()
 //		None
 //
 //==========================================================================
-BEGIN_EVENT_TABLE(EditIterationRangePanel, wxPanel)
-	EVT_TEXT(RangeTextBox,	EditIterationRangePanel::RangeTextBoxChangeEvent)
-	EVT_TEXT(RangeTextBox,	EditIterationRangePanel::RangeTextBoxChangeEvent)
+BEGIN_EVENT_TABLE(EditSweepRangePanel, wxPanel)
+	EVT_TEXT(RangeTextBox,	EditSweepRangePanel::RangeTextBoxChangeEvent)
+	EVT_TEXT(RangeTextBox,	EditSweepRangePanel::RangeTextBoxChangeEvent)
 END_EVENT_TABLE();
 
 //==========================================================================
-// Class:			EditIterationRangePanel
+// Class:			EditSweepRangePanel
 // Function:		UpdateInformation
 //
 // Description:		Updates the information on this panel, if the associated
@@ -107,22 +107,22 @@ END_EVENT_TABLE();
 //		None
 //
 //==========================================================================
-void EditIterationRangePanel::UpdateInformation()
+void EditSweepRangePanel::UpdateInformation()
 {
 	// Make sure the suspension object exists
-	if (currentIteration)
+	if (currentSweep)
 		// Call the method that performs the update
-		UpdateInformation(currentIteration);
+		UpdateInformation(currentSweep);
 }
 
 //==========================================================================
-// Class:			EditIterationRangePanel
+// Class:			EditSweepRangePanel
 // Function:		UpdateInformation
 //
 // Description:		Updates the information on this panel.
 //
 // Input Arguments:
-//		currentIteration	= Iteration* pointing to the associated iteration
+//		currentSweep	= Sweep* pointing to the associated iteration
 //
 // Output Arguments:
 //		None
@@ -131,41 +131,41 @@ void EditIterationRangePanel::UpdateInformation()
 //		None
 //
 //==========================================================================
-void EditIterationRangePanel::UpdateInformation(Iteration *currentIteration)
+void EditSweepRangePanel::UpdateInformation(Sweep *currentSweep)
 {
-	this->currentIteration = currentIteration;
+	this->currentSweep = currentSweep;
 
-	if (!currentIteration)
+	if (!currentSweep)
 		return;
 
 	// Update the values of our Range and NumberOfPoints to the text boxes
 	// Don't forget to convert the range values to the user specified units!
-	startPitchInput->ChangeValue(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertAngleOutput(currentIteration->GetRange().startPitch)));
-	startRollInput->ChangeValue(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertAngleOutput(currentIteration->GetRange().startRoll)));
-	startHeaveInput->ChangeValue(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertDistanceOutput(currentIteration->GetRange().startHeave)));
-	startSteerInput->ChangeValue(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertDistanceOutput(currentIteration->GetRange().startRackTravel)));
-	endPitchInput->ChangeValue(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertAngleOutput(currentIteration->GetRange().endPitch)));
-	endRollInput->ChangeValue(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertAngleOutput(currentIteration->GetRange().endRoll)));
-	endHeaveInput->ChangeValue(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertDistanceOutput(currentIteration->GetRange().endHeave)));
-	endSteerInput->ChangeValue(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertDistanceOutput(currentIteration->GetRange().endRackTravel)));
+	startPitchInput->ChangeValue(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertAngleOutput(currentSweep->GetRange().startPitch)));
+	startRollInput->ChangeValue(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertAngleOutput(currentSweep->GetRange().startRoll)));
+	startHeaveInput->ChangeValue(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertDistanceOutput(currentSweep->GetRange().startHeave)));
+	startSteerInput->ChangeValue(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertDistanceOutput(currentSweep->GetRange().startRackTravel)));
+	endPitchInput->ChangeValue(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertAngleOutput(currentSweep->GetRange().endPitch)));
+	endRollInput->ChangeValue(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertAngleOutput(currentSweep->GetRange().endRoll)));
+	endHeaveInput->ChangeValue(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertDistanceOutput(currentSweep->GetRange().endHeave)));
+	endSteerInput->ChangeValue(UnitConverter::GetInstance().FormatNumber(UnitConverter::GetInstance().ConvertDistanceOutput(currentSweep->GetRange().endRackTravel)));
 
 	// Update the unit labels
-	pitchUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeAngle));
-	rollUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeAngle));
-	heaveUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance));
-	if (currentIteration->GetMainFrame().GetUseRackTravel())
+	pitchUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitType::Angle));
+	rollUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitType::Angle));
+	heaveUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitType::Distance));
+	if (currentSweep->GetMainFrame().GetUseRackTravel())
 	{
-		steerUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance));
+		steerUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitType::Distance));
 		steerInputLabel->SetLabel(_T("Rack Travel"));
 	}
 	else
 	{
-		steerUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeAngle));
+		steerUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitType::Angle));
 		steerInputLabel->SetLabel(_T("Steering Wheel Angle"));
 	}
 
 	wxString temp;
-	temp.Printf("%i", currentIteration->GetNumberOfPoints());
+	temp.Printf("%i", currentSweep->GetNumberOfPoints());
 	numberOfPointsInput->ChangeValue(temp);
 
 	// We do this in case columns widths changed (method of steering input)
@@ -173,7 +173,7 @@ void EditIterationRangePanel::UpdateInformation(Iteration *currentIteration)
 }
 
 //==========================================================================
-// Class:			EditIterationRangePanel
+// Class:			EditSweepRangePanel
 // Function:		CreateControls
 //
 // Description:		Creates the controls for this panel.
@@ -188,7 +188,7 @@ void EditIterationRangePanel::UpdateInformation(Iteration *currentIteration)
 //		None
 //
 //==========================================================================
-void EditIterationRangePanel::CreateControls()
+void EditSweepRangePanel::CreateControls()
 {
 	// Enable scrolling
 	SetScrollRate(10, 10);
@@ -283,7 +283,7 @@ void EditIterationRangePanel::CreateControls()
 }
 
 //==========================================================================
-// Class:			EditIterationRangePanel
+// Class:			EditSweepRangePanel
 // Function:		RangeTextBoxChangeEvent
 //
 // Description:		Event handler for any text box change on this panel.
@@ -298,9 +298,9 @@ void EditIterationRangePanel::CreateControls()
 //		None
 //
 //==========================================================================
-void EditIterationRangePanel::RangeTextBoxChangeEvent(wxCommandEvent& WXUNUSED(event))
+void EditSweepRangePanel::RangeTextBoxChangeEvent(wxCommandEvent& WXUNUSED(event))
 {
-	Iteration::Range range;
+	Sweep::Range range;
 	unsigned long numberOfPoints(0);
 
 	// Make sure all of the values are numeric as we assign them to our
@@ -330,17 +330,17 @@ void EditIterationRangePanel::RangeTextBoxChangeEvent(wxCommandEvent& WXUNUSED(e
 	range.endRackTravel = UnitConverter::GetInstance().ConvertDistanceInput(range.endRackTravel);
 
 	// Update the iteration's range and number of points
-	currentIteration->SetRange(range);
+	currentSweep->SetRange(range);
 
 	// Make sure the number of points is at least 2
 	if (numberOfPoints < 2)
 		return;
 
 	// Update the iteration's number of points
-	currentIteration->SetNumberOfPoints(numberOfPoints);
+	currentSweep->SetNumberOfPoints(numberOfPoints);
 
 	// Update the display
-	currentIteration->UpdateData();
+	currentSweep->UpdateData();
 }
 
 }// namespace VVASE

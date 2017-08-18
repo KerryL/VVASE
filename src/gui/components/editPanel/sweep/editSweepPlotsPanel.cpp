@@ -11,25 +11,25 @@
 //        class.
 
 // Local headers
-#include "gui/iteration.h"
-#include "gui/components/mainFrame.h"
-#include "gui/components/editPanel/editPanel.h"
-#include "gui/components/editPanel/iteration/editIterationPlotsPanel.h"
-#include "gui/components/editPanel/iteration/editIterationNotebook.h"
-#include "vUtilities/unitConverter.h"
+#include "editSweepPlotsPanel.h"
+#include "editSweepNotebook.h"
+#include "../../../sweep.h"
+#include "VVASE/gui/components/mainFrame.h"
+#include "../editPanel.h"
+#include "VVASE/gui/utilities/unitConverter.h"
 
 namespace VVASE
 {
 
 //==========================================================================
-// Class:			EditIterationPlotsPanel
-// Function:		EditIterationPlotsPanel
+// Class:			EditSweepPlotsPanel
+// Function:		EditSweepPlotsPanel
 //
-// Description:		Constructor for EditIterationPlotsPanel class.  Initializes the form
+// Description:		Constructor for EditSweepPlotsPanel class.  Initializes the form
 //					and creates the controls, etc.
 //
 // Input Arguments:
-//		parent		= EditIterationNotebook&, reference to this object's owner
+//		parent		= EditSweepNotebook&, reference to this object's owner
 //		id			= wxWindowID for passing to parent class's constructor
 //		pos			= wxPoint& for passing to parent class's constructor
 //		size		= wxSize& for passing to parent class's constructor
@@ -41,19 +41,19 @@ namespace VVASE
 //		None
 //
 //==========================================================================
-EditIterationPlotsPanel::EditIterationPlotsPanel(EditIterationNotebook &parent,
+EditSweepPlotsPanel::EditSweepPlotsPanel(EditSweepNotebook &parent,
 	wxWindowID id, const wxPoint& pos, const wxSize& size)
 	: wxPanel(&parent, id, pos, size), parent(parent)
 {
-	currentIteration = NULL;
+	currentSweep = NULL;
 	CreateControls();
 }
 
 //==========================================================================
-// Class:			EditIterationPlotsPanel
-// Function:		~EditIterationPlotsPanel
+// Class:			EditSweepPlotsPanel
+// Function:		~EditSweepPlotsPanel
 //
-// Description:		Destructor for EditIterationPlotsPanel class.
+// Description:		Destructor for EditSweepPlotsPanel class.
 //
 // Input Arguments:
 //		None
@@ -65,12 +65,12 @@ EditIterationPlotsPanel::EditIterationPlotsPanel(EditIterationNotebook &parent,
 //		None
 //
 //==========================================================================
-EditIterationPlotsPanel::~EditIterationPlotsPanel()
+EditSweepPlotsPanel::~EditSweepPlotsPanel()
 {
 }
 
 //==========================================================================
-// Class:			EditIterationPlotsPanel
+// Class:			EditSweepPlotsPanel
 // Function:		Event Table
 //
 // Description:		Links GUI events with event handler functions.
@@ -85,12 +85,12 @@ EditIterationPlotsPanel::~EditIterationPlotsPanel()
 //		None
 //
 //==========================================================================
-BEGIN_EVENT_TABLE(EditIterationPlotsPanel, wxPanel)
-	EVT_CHECKLISTBOX(PlotSelectionCheckList,	EditIterationPlotsPanel::PlotSelectionChangeEvent)
+BEGIN_EVENT_TABLE(EditSweepPlotsPanel, wxPanel)
+	EVT_CHECKLISTBOX(PlotSelectionCheckList,	EditSweepPlotsPanel::PlotSelectionChangeEvent)
 END_EVENT_TABLE();
 
 //==========================================================================
-// Class:			EditIterationPlotsPanel
+// Class:			EditSweepPlotsPanel
 // Function:		UpdateInformation
 //
 // Description:		Updates the information on this panel, if the associated
@@ -106,22 +106,22 @@ END_EVENT_TABLE();
 //		None
 //
 //==========================================================================
-void EditIterationPlotsPanel::UpdateInformation()
+void EditSweepPlotsPanel::UpdateInformation()
 {
 	// Make sure the suspension object exists
-	if (currentIteration)
+	if (currentSweep)
 		// Call the method that performs the update
-		UpdateInformation(currentIteration);
+		UpdateInformation(currentSweep);
 }
 
 //==========================================================================
-// Class:			EditIterationPlotsPanel
+// Class:			EditSweepPlotsPanel
 // Function:		UpdateInformation
 //
 // Description:		Updates the information on this panel.
 //
 // Input Arguments:
-//		currentIteration	= Iteration* pointing to the associated iteration
+//		currentSweep	= Sweep* pointing to the associated iteration
 //
 // Output Arguments:
 //		None
@@ -130,21 +130,21 @@ void EditIterationPlotsPanel::UpdateInformation()
 //		None
 //
 //==========================================================================
-void EditIterationPlotsPanel::UpdateInformation(Iteration *currentIteration)
+void EditSweepPlotsPanel::UpdateInformation(Sweep *currentSweep)
 {
-	this->currentIteration = currentIteration;
+	this->currentSweep = currentSweep;
 
-	if (!currentIteration)
+	if (!currentSweep)
 		return;
 
 	// Check the plots for the plots that are already active with the associated iteration
 	unsigned int i;
-	for (i = 0; i < Iteration::NumberOfPlots; i++)
-		plotListCheckBox->Check(i, currentIteration->GetActivePlot((Iteration::PlotID)i));
+	for (i = 0; i < Sweep::NumberOfPlots; i++)
+		plotListCheckBox->Check(i, currentSweep->GetActivePlot(static_cast<Sweep::PlotID>(i)));
 }
 
 //==========================================================================
-// Class:			EditIterationPlotsPanel
+// Class:			EditSweepPlotsPanel
 // Function:		CreateControls
 //
 // Description:		Creates the controls for this panel.
@@ -159,7 +159,7 @@ void EditIterationPlotsPanel::UpdateInformation(Iteration *currentIteration)
 //		None
 //
 //==========================================================================
-void EditIterationPlotsPanel::CreateControls()
+void EditSweepPlotsPanel::CreateControls()
 {
 	// Top-level sizer
 	wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
@@ -176,8 +176,8 @@ void EditIterationPlotsPanel::CreateControls()
 	// plots to the list
 	unsigned int i;
 	wxArrayString choices;
-	for (i = 0; i < Iteration::NumberOfPlots; i++)
-		choices.Add(currentIteration->GetPlotName((Iteration::PlotID)i));
+	for (i = 0; i < Sweep::NumberOfPlots; i++)
+		choices.Add(currentSweep->GetPlotName(static_cast<Sweep::PlotID>(i)));
 
 	// Create the checklist box and add it to the sizer
 	plotListCheckBox = new wxCheckListBox(this, PlotSelectionCheckList, wxDefaultPosition, wxDefaultSize, choices);
@@ -188,7 +188,7 @@ void EditIterationPlotsPanel::CreateControls()
 }
 
 //==========================================================================
-// Class:			EditIterationPlotsPanel
+// Class:			EditSweepPlotsPanel
 // Function:		PlotSelectionChangeEvent
 //
 // Description:		Creates the controls for this panel.
@@ -203,14 +203,14 @@ void EditIterationPlotsPanel::CreateControls()
 //		None
 //
 //==========================================================================
-void EditIterationPlotsPanel::PlotSelectionChangeEvent(wxCommandEvent &event)
+void EditSweepPlotsPanel::PlotSelectionChangeEvent(wxCommandEvent &event)
 {
 	// Update the iteration to match the checklist
-	currentIteration->SetActivePlot((Iteration::PlotID)event.GetInt(),
+	currentSweep->SetActivePlot(static_cast<Sweep::PlotID>(event.GetInt()),
 		plotListCheckBox->IsChecked(event.GetInt()));
 
 	// Update the display
-	currentIteration->UpdateDisplay();
+	currentSweep->UpdateDisplay();
 }
 
 }// namespace VVASE

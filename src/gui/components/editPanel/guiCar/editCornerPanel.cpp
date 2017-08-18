@@ -12,18 +12,20 @@
 //        car.
 
 // Local headers
-#include "vCar/corner.h"
-#include "vCar/car.h"
-#include "gui/guiCar.h"
-#include "gui/superGrid.h"
-#include "gui/renderer/carRenderer.h"
-#include "gui/components/mainFrame.h"
-#include "gui/components/editPanel/editPanel.h"
-#include "gui/components/editPanel/guiCar/editCornerPanel.h"
-#include "gui/components/editPanel/guiCar/editSuspensionNotebook.h"
-#include "vUtilities/unitConverter.h"
-#include "vUtilities/wxRelatedUtilities.h"
-#include "vMath/vector.h"
+#include "VVASE/core/car/subsystems/corner.h"
+#include "VVASE/core/car/car.h"
+#include "../../../guiCar.h"
+#include "VVASE/gui/superGrid.h"
+#include "VVASE/gui/renderer/carRenderer.h"
+#include "VVASE/gui/components/mainFrame.h"
+#include "../editPanel.h"
+#include "editCornerPanel.h"
+#include "editSuspensionNotebook.h"
+#include "VVASE/gui/utilities/unitConverter.h"
+#include "VVASE/gui/utilities/wxRelatedUtilities.h"
+
+// Eigen headers
+#include <Eigen/Eigen>
 
 namespace VVASE
 {
@@ -138,14 +140,14 @@ void EditCornerPanel::UpdateInformation(Corner *currentCorner, Suspension* curre
 		UnitConverter::GetInstance().ConvertAngleOutput(currentCorner->staticToe)));
 
 	// And their units
-	camberUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeAngle));
-	toeUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeAngle));
+	camberUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitType::Angle));
+	toeUnitsLabel->SetLabel(UnitConverter::GetInstance().GetUnitType(UnitType::Angle));
 
 	hardpoints->BeginBatch();
 
 	// Update the unit labels
 	wxString unitString;
-	unitString.Printf("(%s)", UnitConverter::GetInstance().GetUnitType(UnitConverter::UnitTypeDistance).c_str());
+	unitString.Printf("(%s)", UnitConverter::GetInstance().GetUnitType(UnitType::Distance).c_str());
 	hardpoints->SetCellValue(0, 1, unitString);
 	hardpoints->SetCellValue(0, 2, unitString);
 	hardpoints->SetCellValue(0, 3, unitString);
@@ -262,7 +264,7 @@ void EditCornerPanel::CreateControls()
 	hardpoints = new SuperGrid(this, wxID_ANY);
 	hardpoints->CreateGrid(Corner::NumberOfHardpoints + 1, 4, wxGrid::wxGridSelectRows);
 	wxObject *data = new EventWindowData(this);
-	hardpoints->Bind(wxEVT_MOUSEWHEEL, SkipMouseEvent, wxID_ANY, wxID_ANY, data);
+	hardpoints->Bind(wxEVT_MOUSEWHEEL, wxUtilities::SkipMouseEvent, wxID_ANY, wxID_ANY, data);
 
 	hardpoints->BeginBatch();
 	int i;
@@ -347,7 +349,7 @@ void EditCornerPanel::CreateControls()
 		_T("Actuation Type"));
 	actuationType = new wxComboBox(this, ComboBoxActuationType, wxEmptyString, wxDefaultPosition,
 		wxDefaultSize, choices, wxCB_READONLY);
-	SetMinimumWidthFromContents(actuationType, additionalWidth);
+	wxUtilities::SetMinimumWidthFromContents(actuationType, additionalWidth);
 
 	lowerInputSizer->Add(actuationTypeLabel, 0, wxALIGN_CENTER_VERTICAL);
 	lowerInputSizer->Add(actuationType, 0, wxEXPAND);
@@ -362,7 +364,7 @@ void EditCornerPanel::CreateControls()
 		_T("Attachment"));
 	actuationAttachment = new wxComboBox(this, ComboBoxActuationAttachment, wxEmptyString, wxDefaultPosition,
 		wxDefaultSize, choices, wxCB_READONLY);
-	SetMinimumWidthFromContents(actuationAttachment, additionalWidth);
+	wxUtilities::SetMinimumWidthFromContents(actuationAttachment, additionalWidth);
 
 	lowerInputSizer->Add(attachmentLabel, 0, wxALIGN_CENTER_VERTICAL);
 	lowerInputSizer->Add(actuationAttachment, 0, wxEXPAND);

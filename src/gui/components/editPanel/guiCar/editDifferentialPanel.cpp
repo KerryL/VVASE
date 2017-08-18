@@ -12,13 +12,15 @@
 //        car.
 
 // Local headers
-#include "vCar/differential.h"
-#include "gui/guiCar.h"
-#include "gui/components/mainFrame.h"
-#include "gui/components/editPanel/editPanel.h"
-#include "gui/components/editPanel/guiCar/editDifferentialPanel.h"
-#include "vUtilities/unitConverter.h"
-#include "vMath/vector.h"
+#include "VVASE/core/car/subsystems/differential.h"
+#include "../../../guiCar.h"
+#include "VVASE/gui/components/mainFrame.h"
+#include "../editPanel.h"
+#include "editDifferentialPanel.h"
+#include "VVASE/gui/utilities/unitConverter.h"
+
+// Eigen headers
+#include <Eigen/Eigen>
 
 namespace VVASE
 {

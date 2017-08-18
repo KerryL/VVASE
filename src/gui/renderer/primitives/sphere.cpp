@@ -81,18 +81,18 @@ void Sphere::GenerateGeometry()
 	double t = (1.0 + sqrt(5.0)) / 2.0;
 	double s = sqrt(1 + t * t);
 	Eigen::Vector3d vertex[12];
-	vertex[0].Set(t, 1.0, 0.0);
-	vertex[1].Set(-t, 1.0, 0.0);
-	vertex[2].Set(t, -1.0, 0.0);
-	vertex[3].Set(-t, -1.0, 0.0);
-	vertex[4].Set(1.0, 0.0, t);
-	vertex[5].Set(1.0, 0.0, -t);
-	vertex[6].Set(-1, 0.0, t);
-	vertex[7].Set(-1.0, 0.0, -t);
-	vertex[8].Set(0.0, t, 1.0);
-	vertex[9].Set(0.0, -t, 1.0);
-	vertex[10].Set(0.0, t, -1.0);
-	vertex[11].Set(0.0, -t, -1.0);
+	vertex[0] = Eigen::Vector3d(t, 1.0, 0.0);
+	vertex[1] = Eigen::Vector3d(-t, 1.0, 0.0);
+	vertex[2] = Eigen::Vector3d(t, -1.0, 0.0);
+	vertex[3] = Eigen::Vector3d(-t, -1.0, 0.0);
+	vertex[4] = Eigen::Vector3d(1.0, 0.0, t);
+	vertex[5] = Eigen::Vector3d(1.0, 0.0, -t);
+	vertex[6] = Eigen::Vector3d(-1, 0.0, t);
+	vertex[7] = Eigen::Vector3d(-1.0, 0.0, -t);
+	vertex[8] = Eigen::Vector3d(0.0, t, 1.0);
+	vertex[9] = Eigen::Vector3d(0.0, -t, 1.0);
+	vertex[10] = Eigen::Vector3d(0.0, t, -1.0);
+	vertex[11] = Eigen::Vector3d(0.0, -t, -1.0);
 
 	// Scale all of the vertices up to make the radius correct
 	// Also, include the s term that was not included above
@@ -369,7 +369,7 @@ bool Sphere::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector3d
 {
 	assert(VVASE::Math::IsZero(1.0 - direction.norm()));
 
-	if (pow((point - center).norm(), 2) > pow(direction * (point - center), 2) + radius * radius)
+	if (pow((point - center).norm(), 2) > pow(direction.dot(point - center), 2) + radius * radius)
 		return false;
 
 	return true;

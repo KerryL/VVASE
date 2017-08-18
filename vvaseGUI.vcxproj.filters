@@ -185,9 +185,6 @@
     <ClInclude Include="src\application\vvaseApplication.h">
       <Filter>Source Files\application</Filter>
     </ClInclude>
-    <ClInclude Include="src\application\vvaseConstants.h">
-      <Filter>Source Files\application</Filter>
-    </ClInclude>
     <ClInclude Include="include\VVASE\gui\utilities\dataValidator.h">
       <Filter>Header Files\gui\utilities</Filter>
     </ClInclude>
@@ -281,15 +278,15 @@
     <ClInclude Include="src\gui\components\editPanel\editPanel.h">
       <Filter>Header Files\gui\components\editPanel</Filter>
     </ClInclude>
+    <ClInclude Include="src\application\gitHash.h">
+      <Filter>Source Files\application</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\application\pluginManager.cpp">
       <Filter>Source Files\application</Filter>
     </ClCompile>
     <ClCompile Include="src\application\vvaseApplication.cpp">
-      <Filter>Source Files\application</Filter>
-    </ClCompile>
-    <ClCompile Include="src\application\vvaseConstants.cpp">
       <Filter>Source Files\application</Filter>
     </ClCompile>
     <ClCompile Include="src\gui\appearanceOptions.cpp">
@@ -477,6 +474,9 @@
     </ClCompile>
     <ClCompile Include="src\gui\utilities\xlsxReader.cpp">
       <Filter>Source Files\gui\utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="src\application\gitHash.cpp">
+      <Filter>Source Files\application</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

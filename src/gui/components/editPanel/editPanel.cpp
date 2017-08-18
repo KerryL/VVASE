@@ -14,10 +14,10 @@
 // Local headers
 #include "VVASE/core/car/car.h"
 #include "VVASE/core/car/subsystems/tireSet.h"
-#include "../../guiObject.h"
+#include "VVASE/gui/guiObject.h"
 #include "../../Sweep.h"
 #include "../../guiCar.h"
-#include "../../renderer/carRenderer.h"
+#include "VVASE/gui/renderer/carRenderer.h"
 #include "VVASE/gui/components/mainFrame.h"
 #include "VVASE/gui/components/mainTree.h"
 #include "editPanel.h"
@@ -29,7 +29,7 @@
 #include "guiCar/editSuspensionNotebook.h"
 #include "guiCar/editMassPanel.h"
 #include "guiCar/editTiresPanel.h"
-#include "sweep/editIterationNotebook.h"
+#include "sweep/editSweepNotebook.h"
 #include "VVASE/core/utilities/debugger.h"
 
 namespace VVASE
@@ -174,14 +174,13 @@ void EditPanel::UpdateInformation(GuiObject *currentObject)
 	{
 	case GuiObject::TypeCar:
 		{
-			carMutex = &(static_cast<GuiCar*>(currentObject)->GetOriginalCar().GetMutex());
-			MutexLocker lock(*carMutex);
+			MutexLocker lock(static_cast<GuiCar*>(currentObject)->GetOriginalCar().GetMutex());
 
 			if (editAerodynamics)
 			{
 			}
 			else if (editBrakes)
-				editBrakes->UpdateInformation(static_cast<GuiCar*>(currentObject)->GetOriginalCar().brakes);
+				editBrakes->UpdateInformation(static_cast<GuiCar*>(currentObject)->GetOriginalCar().GetSubsystem<Brakes>());
 			else if (editDifferential)
 			{
 			}
@@ -192,17 +191,17 @@ void EditPanel::UpdateInformation(GuiObject *currentObject)
 			{
 			}
 			else if (editMass)
-				editMass->UpdateInformation(static_cast<GuiCar*>(currentObject)->GetOriginalCar().massProperties);
+				editMass->UpdateInformation(static_cast<GuiCar*>(currentObject)->GetOriginalCar().GetSubsystem<MassProperties>());
 			else if (editSuspension)
 				editSuspension->UpdateInformation(&static_cast<GuiCar*>(currentObject)->GetOriginalCar());
 			else if (editTires)
-				editTires->UpdateInformation(static_cast<GuiCar*>(currentObject)->GetOriginalCar().tires);
+				editTires->UpdateInformation(static_cast<GuiCar*>(currentObject)->GetOriginalCar().GetSubsystem<TireSet>());
 		}
 
 		break;
 
 	case GuiObject::TypeIteration:
-		editIteration->UpdateInformation(static_cast<Iteration*>(currentObject));
+		editIteration->UpdateInformation(static_cast<Sweep*>(currentObject));
 		break;
 
 	case GuiObject::TypeOptimization:
@@ -284,7 +283,7 @@ void EditPanel::CreateControls(bool ignoreSystemsTree)
 		break;
 
 	case GuiObject::TypeIteration:
-		editIteration = new EditIterationNotebook(*this, wxID_ANY,
+		editIteration = new EditSweepNotebook(*this, wxID_ANY,
 			wxDefaultPosition, wxDefaultSize, wxNB_BOTTOM);
 
 		sizer->Add(editIteration, 1, wxEXPAND);

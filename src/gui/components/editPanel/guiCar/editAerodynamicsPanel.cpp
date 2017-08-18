@@ -10,14 +10,16 @@
 // Desc:  Contains the class definition for the EditAerodynamicsPanel class.
 
 // Local headers
-#include "vCar/aerodynamics.h"
-#include "gui/renderer/carRenderer.h"
-#include "gui/guiCar.h"
-#include "gui/components/mainFrame.h"
-#include "gui/components/editPanel/editPanel.h"
-#include "gui/components/editPanel/guiCar/editAerodynamicsPanel.h"
-#include "vUtilities/unitConverter.h"
-#include "vMath/vector.h"
+#include "VVASE/core/car/subsystems/aerodynamics.h"
+#include "VVASE/gui/renderer/carRenderer.h"
+#include "../../../guiCar.h"
+#include "VVASE/gui/components/mainFrame.h"
+#include "../editPanel.h"
+#include "editAerodynamicsPanel.h"
+#include "VVASE/gui/utilities/unitConverter.h"
+
+// Eigen headers
+#include <Eigen/Eigen>
 
 namespace VVASE
 {

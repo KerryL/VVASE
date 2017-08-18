@@ -47,26 +47,6 @@ Cone::Cone(LibPlot2D::RenderWindow &renderWindow) : Primitive(renderWindow)
 
 //==========================================================================
 // Class:			Cone
-// Function:		~Cone
-//
-// Description:		Destructor for the Cone class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Cone::~Cone()
-{
-}
-
-//==========================================================================
-// Class:			Cone
 // Function:		GenerateGeometry
 //
 // Description:		Creates the OpenGL instructions to create this object in
@@ -115,7 +95,7 @@ void Cone::GenerateGeometry()
 	glPushMatrix();
 
 		// Translate the current matrix
-		glTranslated(center.x, center.y, center.z);
+		glTranslated(center.x(), center.y(), center.z());
 
 		// Rotate the current matrix, if the rotation axis is non-zero
 		if (!VVASE::Math::IsZero(axisOfRotation.norm()))
@@ -146,7 +126,7 @@ void Cone::GenerateGeometry()
 			glNormal3d(0.0, point.y / radius, point.z / radius);
 
 			// Add the next point
-			glVertex3d(point.x, point.y, point.z);
+			glVertex3d(point.x(), point.y(), point.z());
 		}
 
 		// End the triangle strip
@@ -172,7 +152,7 @@ void Cone::GenerateGeometry()
 				point.z = radius * sin(angle);
 
 				// Add the next point
-				glVertex3d(point.x, point.y, point.z);
+				glVertex3d(point.x(), point.y(), point.z());
 			}
 
 			// End the polygon
