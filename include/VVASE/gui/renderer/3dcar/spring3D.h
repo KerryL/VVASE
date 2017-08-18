@@ -18,7 +18,9 @@
 // LibPlot2D forward declarations
 namespace LibPlot2D
 {
-	class RenderWindow;
+class RenderWindow;
+class Color;
+class Primitive;
 }
 
 namespace VVASE
@@ -32,11 +34,10 @@ class Spring3D
 {
 public:
 	Spring3D(LibPlot2D::RenderWindow &renderer);
-	~Spring3D();
 
 	// Updates the 3D representation of the spring on the screen
 	void Update(const Eigen::Vector3d &end1, const Eigen::Vector3d &end2, const double &diameter,
-		const double &pointDiameter, const int &resolution, const Color &color, bool show);
+		const double &pointDiameter, const int &resolution, const LibPlot2D::Color &color, bool show);
 
 	// Returns true if the passed reference is to an actor from this object
 	bool ContainsThisActor(const LibPlot2D::Primitive *actor);

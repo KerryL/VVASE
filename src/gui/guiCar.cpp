@@ -10,9 +10,6 @@
 // Desc:  A high-level car object.  This class defines the interaction between
 //        the user and the Car class.
 
-// Standard C++ headers
-#include <fstream>
-
 // wxWidgets headers
 #include <wx/treectrl.h>
 
@@ -34,6 +31,8 @@
 #include "VVASE/core/analysis/kinematics.h"
 #include "VVASE/core/threads/threadJob.h"
 #include "VVASE/core/threads/kinematicsData.h"
+#include "VVASE/core/threads/threadDefs.h"
+#include "VVASE/gui/utilities/wxRelatedUtilities.h"
 
 // LibPlot2D headers
 #include <lp2d/renderer/renderWindow.h>
@@ -79,21 +78,21 @@ GuiCar::GuiCar(MainFrame &mainFrame, wxString pathAndFileName)
 
 	Initialize();
 
-	const Suspension* currentSuspension(originalCar->GetSubsystem<Suspension>());
+	const Suspension* originalSuspension(originalCar->GetSubsystem<Suspension>());
 
 	// After calling Initialize() (after loading the car from file, if necessary)
 	// set the size of the view window and the camera view to fit everything in
 	// the scene.
 	Eigen::Vector3d position(-100.0, -100.0, 60.0), up(0.0, 0.0, 1.0);
-	Eigen::Vector3d lookAt(originalCar->suspension->rightFront.hardpoints[Corner::ContactPatch] +
+	Eigen::Vector3d lookAt(originalSuspension->rightFront.hardpoints[Corner::ContactPatch] +
 		(originalSuspension->leftRear.hardpoints[Corner::ContactPatch] -
 		originalSuspension->rightFront.hardpoints[Corner::ContactPatch]) * 0.5);
 	renderer->SetCameraView(position, lookAt, up);
 
 	const double scale = 1.2;// 20% bigger than car
-	const double referenceDimension(originalCar->suspension->leftFront.hardpoints[
-		Corner::ContactPatch].Distance(
-		originalCar->suspension->rightRear.hardpoints[Corner::ContactPatch]));
+	const double referenceDimension((originalSuspension->leftFront.hardpoints[
+		Corner::ContactPatch] -
+		originalSuspension->rightRear.hardpoints[Corner::ContactPatch]).norm());
 	renderer->SetViewOrthogonal(true);
 	if (renderer->GetAspectRatio() > 1.0)// smaller up-down
 		renderer->SetTopMinusBottom(referenceDimension * scale);
@@ -246,8 +245,8 @@ void GuiCar::UpdateData()
 	}
 
 	// Re-run the kinematics to update the car's position
-	KinematicsData *data = new KinematicsData(originalCar, workingCar, inputs, &outputs.kinematicOutputs);
-	ThreadJob job(ThreadJob::CommandThreadKinematicsNormal, data, name, index);
+	std::unique_ptr<KinematicsData> data(std::make_unique<KinematicsData>(originalCar, workingCar, inputs, &outputs.kinematicOutputs));
+	ThreadJob job(ThreadJob::CommandThreadKinematicsNormal, std::move(data), wxUtilities::ToVVASEString(name), index);
 	mainFrame.AddJob(job);
 }
 
@@ -317,8 +316,8 @@ bool GuiCar::PerformSaveToFile()
 	// Perform the save - the object we want to save is OriginalCar - this is the
 	// one that contains the information about the vehicle as it was input by the
 	// user.
-	std::ofstream outFile;
-	bool saveSuccessful(originalCar->SaveCarToFile(pathAndFileName, &outFile));
+	vvaseOutFileStream outFile;
+	bool saveSuccessful(originalCar->SaveCarToFile(wxUtilities::ToVVASEString(pathAndFileName), &outFile));
 
 	// Also write the appearance options after checking to make sure that OutFile was properly opened
 	if (outFile.is_open() && outFile.good())
@@ -348,14 +347,14 @@ bool GuiCar::PerformSaveToFile()
 //==========================================================================
 bool GuiCar::PerformLoadFromFile()
 {
-	std::ifstream inFile;
+	vvaseInFileStream inFile;
 	int fileVersion;
 
 	// Make sure we have exclusive access
 	MutexLocker lock(originalCar->GetMutex());
 
 	// Open the car
-	bool loadSuccessful(originalCar->LoadCarFromFile(pathAndFileName, &inFile, &fileVersion));
+	bool loadSuccessful(originalCar->LoadCarFromFile(wxUtilities::ToVVASEString(pathAndFileName), &inFile, &fileVersion));
 
 	// Also load the appearance options after checking to make sure InFile was correctly opened
 	if (inFile.is_open() && inFile.good())
@@ -464,7 +463,7 @@ void GuiCar::ComputeARBSignConventions()
 	kinematics.SetPitch(0.0);
 	kinematics.SetRackTravel(0.0);
 	kinematics.SetTireDeflections(tireDeflections);
-	kinematics.UpdateKinematics(originalCar, workingCar, name + _T(" -> ARB Sign Convention Test"));
+	kinematics.UpdateKinematics(originalCar, workingCar, wxUtilities::ToVVASEString(name) + _T(" -> ARB Sign Convention Test"));
 
 	// Adjust convention if necessary
 	if (kinematics.GetOutputs().doubles[KinematicOutputs::FrontARBTwist] < 0.0)

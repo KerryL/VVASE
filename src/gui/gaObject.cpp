@@ -160,8 +160,8 @@ void GAObject::SimulateGeneration()
 			std::unique_ptr<KinematicsData> data(std::make_unique<KinematicsData>(originalCarArray[i * inputList.size() + j],
 				workingCarArray[i * inputList.size() + j], inputList[j],
 				kinematicOutputArray + i * inputList.size() + j));
-			ThreadJob newJob(ThreadJob::CommandThreadKinematicsGA, data,
-				optimization.GetCleanName(), wxUtilities::ToVVASEString(temp));
+			ThreadJob newJob(ThreadJob::CommandThreadKinematicsGA, std::move(data),
+				wxUtilities::ToVVASEString(optimization.GetCleanName()), temp);
 			queue.AddJob(newJob);
 		}
 	}
@@ -360,8 +360,8 @@ void GAObject::SetCarGenome(int carIndex, const int *currentGenome)
 	// Go through all of the genes, and adjust the variables to match the current genome
 	Gene *currentGene;
 	unsigned int i;
-	const Suspension* currentSuspension(originalCarArray[carIndex]->GetSubsystem<Suspension>());
-	Suspension* targetSuspension(targetCar->GetSubsystem<Suspension>());
+	Suspension* currentSuspension(originalCarArray[carIndex]->GetSubsystem<Suspension>());
+	const Suspension* targetSuspension(targetCar->GetSubsystem<Suspension>());
 	for (i = 0; i < geneList.size(); i++)
 	{
 		// Get the current gene

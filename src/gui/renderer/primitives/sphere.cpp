@@ -207,9 +207,9 @@ void Sphere::RecursiveSubdivision(const Eigen::Vector3d &corner1, const Eigen::V
 	    ------------
 	   Corner 2    Corner 3
 	-----------------------*/
-	Eigen::Vector3d midPoint1 = corner1 + (corner2 - corner1).normalized() * corner1.Distance(corner2) / 2.0;
-	Eigen::Vector3d midPoint2 = corner1 + (corner3 - corner1).normalized() * corner1.Distance(corner3) / 2.0;
-	Eigen::Vector3d midPoint3 = corner3 + (corner2 - corner3).normalized() * corner3.Distance(corner2) / 2.0;
+	Eigen::Vector3d midPoint1 = corner1 + (corner2 - corner1).normalized() * (corner1 - corner2).norm() / 2.0;
+	Eigen::Vector3d midPoint2 = corner1 + (corner3 - corner1).normalized() * (corner1 - corner3).norm() / 2.0;
+	Eigen::Vector3d midPoint3 = corner3 + (corner2 - corner3).normalized() * (corner3 - corner2).norm() / 2.0;
 
 	// These locations now need to be normalized such that they lie at a
 	// distance of 'radius' from the center

@@ -130,9 +130,11 @@ void EditSuspensionNotebook::UpdateInformation(Car *currentCar)
 	if (GetPageCount() == 0)
 		CreateControls();
 
+	auto* currentSuspension(currentCar->GetSubsystem<Suspension>());
+
 	// Check to see if the car is symmetric, and if the current number of pages is
 	// correct.
-	if (currentCar->suspension->isSymmetric)
+	if (currentSuspension->isSymmetric)
 	{
 		// A symmetric car only gets four pages
 		if (GetPageCount() > 4)
@@ -142,8 +144,8 @@ void EditSuspensionNotebook::UpdateInformation(Car *currentCar)
 			DeletePage(3);
 
 			// Set the left side pointers to NULL
-			leftFront = NULL;
-			leftRear = NULL;
+			leftFront = nullptr;
+			leftRear = nullptr;
 
 			// Rename the tabs
 			SetPageText(2, _T("Front"));
@@ -159,21 +161,21 @@ void EditSuspensionNotebook::UpdateInformation(Car *currentCar)
 	}
 
 	// Call the update functions for the pages, too
-	suspension->UpdateInformation(currentCar->suspension);
-	rates->UpdateInformation(currentCar->suspension);
-	rightFront->UpdateInformation(&currentCar->suspension->rightFront, currentCar->suspension,
-		currentCar->suspension->frontBarStyle, currentCar->HasFrontHalfShafts());
+	suspension->UpdateInformation(currentSuspension);
+	rates->UpdateInformation(currentSuspension);
+	rightFront->UpdateInformation(&currentSuspension->rightFront, currentSuspension,
+		currentSuspension->frontBarStyle, currentCar->HasFrontHalfShafts());
 	if (leftFront)
-		leftFront->UpdateInformation(&currentCar->suspension->leftFront, currentCar->suspension,
-			currentCar->suspension->frontBarStyle, currentCar->HasFrontHalfShafts());
-	rightRear->UpdateInformation(&currentCar->suspension->rightRear, currentCar->suspension,
-		currentCar->suspension->rearBarStyle, currentCar->HasRearHalfShafts());
+		leftFront->UpdateInformation(&currentSuspension->leftFront, currentSuspension,
+			currentSuspension->frontBarStyle, currentCar->HasFrontHalfShafts());
+	rightRear->UpdateInformation(&currentSuspension->rightRear, currentSuspension,
+		currentSuspension->rearBarStyle, currentCar->HasRearHalfShafts());
 	if (leftRear)
-		leftRear->UpdateInformation(&currentCar->suspension->leftRear, currentCar->suspension,
-			currentCar->suspension->rearBarStyle, currentCar->HasRearHalfShafts());
+		leftRear->UpdateInformation(&currentSuspension->leftRear, currentSuspension,
+			currentSuspension->rearBarStyle, currentCar->HasRearHalfShafts());
 
 	// Also make sure we're symmetric if we're supposed to be
-	currentCar->suspension->UpdateSymmetry();
+	currentSuspension->UpdateSymmetry();
 }
 
 //==========================================================================

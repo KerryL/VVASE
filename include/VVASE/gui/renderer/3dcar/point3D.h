@@ -18,7 +18,9 @@
 // LibPlot2D forward declarations
 namespace LibPlot2D
 {
-	class RenderWindow;
+class RenderWindow;
+class Color;
+class Primitive;
 }
 
 namespace VVASE
@@ -31,11 +33,10 @@ class Point3D
 {
 public:
 	Point3D(LibPlot2D::RenderWindow &renderer);
-	~Point3D();
 
 	// Updates the 3D representation of the point on the screen
 	void Update(const Eigen::Vector3d &position, const double &diameter, const int &resolution,
-		const Color &color, bool show);
+		const LibPlot2D::Color &color, bool show);
 
 	// Returns true if the passed reference is to an actor from this object
 	bool ContainsThisActor(const LibPlot2D::Primitive *actor);

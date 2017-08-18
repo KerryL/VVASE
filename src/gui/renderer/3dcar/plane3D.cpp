@@ -10,10 +10,14 @@
 // Desc:  Contains class definition for the Plane3D class.
 
 // Local headers
-#include "vRenderer/primitives/quadrilateral.h"
-#include "vRenderer/3dcar/plane3D.h"
-#include "vRenderer/color.h"
-#include "vMath/vector.h"
+#include "VVASE/gui/renderer/primitives/quadrilateral.h"
+#include "VVASE/gui/renderer/3dcar/plane3D.h"
+
+// LibPlot2D headers
+#include <lp2d/renderer/color.h>
+
+// Eigen headers
+#include <Eigen/Eigen>
 
 namespace VVASE
 {
@@ -26,7 +30,7 @@ namespace VVASE
 //					process necessary to add the object to the scene.
 //
 // Input Arguments:
-//		_renderer	= RenderWindow&, pointer to rendering object
+//		renderer	= LibPlot2D::RenderWindow&, pointer to rendering object
 //
 // Output Arguments:
 //		None
@@ -35,7 +39,7 @@ namespace VVASE
 //		None
 //
 //==========================================================================
-Plane3D::Plane3D(RenderWindow &renderer)
+Plane3D::Plane3D(LibPlot2D::RenderWindow &renderer)
 {
 	plane = new Quadrilateral(renderer);
 
@@ -43,26 +47,6 @@ Plane3D::Plane3D(RenderWindow &renderer)
 	Eigen::Vector3d normal(0.0, 0.0, 1.0);
 	plane->SetAxis(xAxis);
 	plane->SetNormal(normal);
-}
-
-//==========================================================================
-// Class:			Plane3D
-// Function:		~Plane3D
-//
-// Description:		Destructor for the Plane3D class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Plane3D::~Plane3D()
-{
 }
 
 //==========================================================================
@@ -76,7 +60,7 @@ Plane3D::~Plane3D()
 //		width	= const double&, length of the plane in the y-direction
 //		xOffset	= const double&, offset of the center of the plane in the
 //				  x-direction
-//		color	= const Color& describing this object's color
+//		color	= const LibPlot2D::Color& describing this object's color
 //		show	= const bool&, visibility flag
 //
 // Output Arguments:
@@ -87,7 +71,7 @@ Plane3D::~Plane3D()
 //
 //==========================================================================
 void Plane3D::Update(const double &length, const double &width, const double &xOffset,
-				   const Color &color, const bool &show)
+	const LibPlot2D::Color &color, const bool &show)
 {
 	// Set the visibility flag
 	plane->SetVisibility(show);
@@ -115,7 +99,7 @@ void Plane3D::Update(const double &length, const double &width, const double &xO
 //					object or not.
 //
 // Input Arguments:
-//		actor	= const Primitive* to compare against this object's actors
+//		actor	= const LibPlot2D::Primitive* to compare against this object's actors
 //
 // Output Arguments:
 //		None
@@ -124,7 +108,7 @@ void Plane3D::Update(const double &length, const double &width, const double &xO
 //		bool representing whether or not the actor was part of this object
 //
 //==========================================================================
-bool Plane3D::ContainsThisActor(const Primitive *actor)
+bool Plane3D::ContainsThisActor(const LibPlot2D::Primitive *actor)
 {
 	if (plane == actor)
 		return true;

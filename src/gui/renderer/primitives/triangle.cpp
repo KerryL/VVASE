@@ -99,11 +99,11 @@ void Triangle::GenerateGeometry()
 bool Triangle::HasValidParameters()
 {
 	// Triangles must have non-zero edge lengths
-	if (!VVASE::Math::IsZero(corner1.Distance(corner2)) && !VVASE::Math::IsZero(corner1.Distance(corner3))
-		&& !VVASE::Math::IsZero(corner2.Distance(corner3)))
+	if (!VVASE::Math::IsZero((corner1 - corner2).norm()) &&
+		!VVASE::Math::IsZero((corner1 - corner3).norm()) &&
+		!VVASE::Math::IsZero((corner2 - corner3).norm()))
 		return true;
 
-	// Otherwise return false
 	return false;
 }
 

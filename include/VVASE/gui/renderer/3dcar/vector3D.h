@@ -19,7 +19,9 @@
 // LibPlot2D forward declarations
 namespace LibPlot2D
 {
-	class RenderWindow;
+class RenderWindow;
+class Color;
+class Primitive;
 }
 
 namespace VVASE
@@ -33,12 +35,11 @@ class Vector3D
 {
 public:
 	Vector3D(LibPlot2D::RenderWindow &renderer);
-	~Vector3D();
 
 	// Updates the object in the rendered scene
 	void Update(const Eigen::Vector3d &tip, const Eigen::Vector3d &tail, const double &shaftDiameter,
 		const double &tipDiameter, double tipLength, const int &resolution,
-		const Color &color, bool show);
+		const LibPlot2D::Color& color, bool show);
 
 	// Returns true if the passed reference is to an actor from this object
 	bool ContainsThisActor(const LibPlot2D::Primitive *actor);

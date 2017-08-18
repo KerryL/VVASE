@@ -18,7 +18,9 @@
 // LibPlot2D forward declarations
 namespace LibPlot2D
 {
-	class RenderWindow;
+class RenderWindow;
+class Color;
+class Primitive;
 }
 
 namespace VVASE
@@ -32,12 +34,11 @@ class Tire3D
 {
 public:
 	Tire3D(LibPlot2D::RenderWindow &renderer);
-	~Tire3D();
 
 	// Updates the 3D representation of the tire on the screen
 	void Update(const Eigen::Vector3d &contactPatch, const Eigen::Vector3d &center, Eigen::Vector3d originalNormal,
 		Eigen::Vector3d targetNormal, const double &width, const double &insideDiameter,
-		const int &resolution, const Color &color, bool show);
+		const int &resolution, const LibPlot2D::Color &color, bool show);
 
 	bool ContainsThisActor(const LibPlot2D::Primitive *actor);
 

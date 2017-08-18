@@ -72,7 +72,7 @@ void Disk::GenerateGeometry()
 
 	// Determine the angle and axis of rotation
 	Eigen::Vector3d axisOfRotation = referenceDirection.cross(normal);
-	double angle = acos(normal * referenceDirection);// [rad]
+	double angle = acos(normal.dot(referenceDirection));// [rad]
 
 	glPushMatrix();
 
@@ -81,7 +81,7 @@ void Disk::GenerateGeometry()
 
 		// Rotate the current matrix, if the rotation axis is non-zero
 		if (!VVASE::Math::IsZero(axisOfRotation.norm()))
-			glRotated(UnitConverter::RAD_TO_DEG(angle), axisOfRotation.x, axisOfRotation.y, axisOfRotation.z);
+			glRotated(UnitConverter::RAD_TO_DEG(angle), axisOfRotation.x(), axisOfRotation.y(), axisOfRotation.z());
 
 		// Set the normal direction
 		glNormal3d(normal.x(), normal.y(), normal.z());
@@ -99,11 +99,11 @@ void Disk::GenerateGeometry()
 			angle = (double)i * 2.0 * VVASE::Math::Pi / (double)resolution;
 
 			// Determine the Y and Z ordinates based on this angle and the radii
-			outsidePoint.y = outerRadius * cos(angle);
-			outsidePoint.z = outerRadius * sin(angle);
+			outsidePoint.y() = outerRadius * cos(angle);
+			outsidePoint.z() = outerRadius * sin(angle);
 
-			insidePoint.y = innerRadius * cos(angle);
-			insidePoint.z = innerRadius * sin(angle);
+			insidePoint.y() = innerRadius * cos(angle);
+			insidePoint.z() = innerRadius * sin(angle);
 
 			// Add the next two points
 			glVertex3d(outsidePoint.x(), outsidePoint.y(), outsidePoint.z());

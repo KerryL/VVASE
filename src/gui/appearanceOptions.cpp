@@ -506,7 +506,7 @@ wxString AppearanceOptions::GetResolutionString(const ObjectResolution& item)
 // Description:		Writes these options to file.
 //
 // Input Arguments:
-//		outFile	= std::ofstream* pointing to the file stream to write to
+//		outFile	= vvaseOutFileStream* pointing to the file stream to write to
 //
 // Output Arguments:
 //		None
@@ -515,7 +515,7 @@ wxString AppearanceOptions::GetResolutionString(const ObjectResolution& item)
 //		None
 //
 //==========================================================================
-void AppearanceOptions::Write(std::ofstream *outFile)
+void AppearanceOptions::Write(vvaseOutFileStream *outFile)
 {
 	outFile->write((char*)visibilityOptions, VisibilityCount * sizeof(bool));
 	outFile->write((char*)sizeOptions, SizeCount * sizeof(double));
@@ -530,7 +530,7 @@ void AppearanceOptions::Write(std::ofstream *outFile)
 // Description:		Read from file to fill these options.
 //
 // Input Arguments:
-//		inFile		= std::ifstream* pointing to the file stream to read from
+//		inFile		= vvaseInFileStream* pointing to the file stream to read from
 //		fileVersion	= int specifying the file version we're reading from
 //
 // Output Arguments:
@@ -540,7 +540,7 @@ void AppearanceOptions::Write(std::ofstream *outFile)
 //		None
 //
 //==========================================================================
-void AppearanceOptions::Read(std::ifstream *inFile, int fileVersion)
+void AppearanceOptions::Read(vvaseInFileStream *inFile, int fileVersion)
 {
 	// These options were new in file version 1
 	if (fileVersion < 1)

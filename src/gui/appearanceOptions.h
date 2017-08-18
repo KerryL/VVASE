@@ -13,6 +13,9 @@
 #ifndef APPEARANCE_OPTIONS_H_
 #define APPEARANCE_OPTIONS_H_
 
+// Local headers
+#incldue "VVASE/core/utilities/vvaseString.h"
+
 // Standard C++ headers
 #include <iosfwd>// for forward declarations of fstream objects
 
@@ -154,8 +157,8 @@ public:
 	inline void SetResolution(const ObjectResolution& item, const int& value) { resolutionOptions[item] = value > 3 ? value : 3; }
 	inline int GetResolution(const ObjectResolution& item) const { return resolutionOptions[item]; }
 
-	void Write(std::ofstream *outFile);
-	void Read(std::ifstream *inFile, int fileVersion);
+	void Write(vvaseOutFileStream *outFile);
+	void Read(vvaseInFileStream *inFile, int fileVersion);
 
 	bool* GetVisibilityPointer() { return visibilityOptions; }
 	double* GetSizePointer() { return sizeOptions; }

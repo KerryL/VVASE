@@ -16,8 +16,8 @@
 #include <wx/wx.h>
 
 // Local headers
-#include "vCar/suspension.h"
-#include "vCar/drivetrain.h"
+#include "VVASE/core/car/subsystems/suspension.h"
+#include "VVASE/core/car/subsystems/drivetrain.h"
 
 // wxWidgets forward declarations
 class wxCombo;

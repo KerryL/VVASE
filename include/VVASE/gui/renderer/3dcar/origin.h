@@ -12,10 +12,14 @@
 #ifndef ORIGIN_H_
 #define ORIGIN_H_
 
+// Standard C++ headers
+#include <memory>
+
 // LibPlot2D forward declarations
 namespace LibPlot2D
 {
-	class RenderWindow;
+class RenderWindow;
+class Primitive;
 }
 
 namespace VVASE
@@ -28,7 +32,6 @@ class Origin
 {
 public:
 	Origin(LibPlot2D::RenderWindow &renderer);
-	~Origin();
 
 	// Updates the object in the rendered scene
 	void Update(const double &shaftLength, const double &shaftDiameter, const double &tipLength,
@@ -38,9 +41,9 @@ public:
 	bool ContainsThisActor(const LibPlot2D::Primitive *actor);
 
 private:
-	Vector3D *xDirection;
-	Vector3D *yDirection;
-	Vector3D *zDirection;
+	std::unique_ptr<Vector3D> xDirection;
+	std::unique_ptr<Vector3D> yDirection;
+	std::unique_ptr<Vector3D> zDirection;
 };
 
 }// namespace VVASE

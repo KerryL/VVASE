@@ -17,7 +17,7 @@
 #include <wx/grid.h>
 
 // Local headers
-#include "gui/guiCar.h"
+#include "VVASE/gui/guiCar.h"
 
 namespace VVASE
 {

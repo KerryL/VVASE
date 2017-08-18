@@ -10,10 +10,14 @@
 // Desc:  Contains class definition for the Origin class.
 
 // Local headers
-#include "vRenderer/3dcar/origin.h"
-#include "vRenderer/3dcar/vector3D.h"
-#include "vRenderer/color.h"
-#include "vMath/vector.h"
+#include "VVASE/gui/renderer/3dcar/origin.h"
+#include "VVASE/gui/renderer/3dcar/vector3D.h"
+
+// LibPlot2D headers
+#include <lp2d/renderer/color.h>
+
+// Eigen headers
+#include <Eigen/Eigen>
 
 namespace VVASE
 {
@@ -26,7 +30,7 @@ namespace VVASE
 //					process necessary to add the object to the scene.
 //
 // Input Arguments:
-//		_renderer	= RenderWindow&, pointer to rendering object
+//		renderer	= LibPlot2D::RenderWindow&, pointer to rendering object
 //
 // Output Arguments:
 //		None
@@ -35,34 +39,11 @@ namespace VVASE
 //		None
 //
 //==========================================================================
-Origin::Origin(RenderWindow &renderer)
+Origin::Origin(LibPlot2D::RenderWindow &renderer)
 {
-	xDirection = new Vector3D(renderer);
-	yDirection = new Vector3D(renderer);
-	zDirection = new Vector3D(renderer);
-}
-
-//==========================================================================
-// Class:			Origin
-// Function:		~Origin
-//
-// Description:		Destructor for the Origin class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Origin::~Origin()
-{
-	delete xDirection;
-	delete yDirection;
-	delete zDirection;
+	xDirection = std::make_unique<Vector3D>(renderer);
+	yDirection = std::make_unique<Vector3D>(renderer);
+	zDirection = std::make_unique<Vector3D>(renderer);
 }
 
 //==========================================================================
@@ -103,9 +84,9 @@ void Origin::Update(const double &shaftLength, const double &shaftDiameter,
 	z *= tipLength + shaftLength;
 
 	// Call the update functions for each of the three vectors
-	xDirection->Update(x, origin, shaftDiameter, tipDiameter, tipLength, resolution, Color::ColorRed, show);
-	yDirection->Update(y, origin, shaftDiameter, tipDiameter, tipLength, resolution, Color::ColorGreen, show);
-	zDirection->Update(z, origin, shaftDiameter, tipDiameter, tipLength, resolution, Color::ColorBlue, show);
+	xDirection->Update(x, origin, shaftDiameter, tipDiameter, tipLength, resolution, LibPlot2D::Color::ColorRed, show);
+	yDirection->Update(y, origin, shaftDiameter, tipDiameter, tipLength, resolution, LibPlot2D::Color::ColorGreen, show);
+	zDirection->Update(z, origin, shaftDiameter, tipDiameter, tipLength, resolution, LibPlot2D::Color::ColorBlue, show);
 }
 
 //==========================================================================
@@ -117,7 +98,7 @@ void Origin::Update(const double &shaftLength, const double &shaftDiameter,
 //					object or not.
 //
 // Input Arguments:
-//		actor	= const Primitive* to compare against this object's actors
+//		actor	= const LibPlot2D::Primitive* to compare against this object's actors
 //
 // Output Arguments:
 //		None
@@ -126,7 +107,7 @@ void Origin::Update(const double &shaftLength, const double &shaftDiameter,
 //		bool representing whether or not the actor was part of this object
 //
 //==========================================================================
-bool Origin::ContainsThisActor(const Primitive *actor)
+bool Origin::ContainsThisActor(const LibPlot2D::Primitive *actor)
 {
 	if (xDirection->ContainsThisActor(actor) ||
 		yDirection->ContainsThisActor(actor) ||

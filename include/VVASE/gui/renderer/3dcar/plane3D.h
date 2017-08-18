@@ -15,7 +15,9 @@
 // LibPlot2D forward declarations
 namespace LibPlot2D
 {
-	class RenderWindow;
+class RenderWindow;
+class Primitive;
+class Color;
 }
 
 namespace VVASE
@@ -28,11 +30,10 @@ class Plane3D
 {
 public:
 	Plane3D(LibPlot2D::RenderWindow &renderer);
-	~Plane3D();
 
 	// Updates the object in the scene
 	void Update(const double &length, const double &width, const double &xOffset,
-		const Color &color, const bool &show);
+		const LibPlot2D::Color &color, const bool &show);
 
 	// Returns true if the passed reference is to an actor from this object
 	bool ContainsThisActor(const LibPlot2D::Primitive *actor);

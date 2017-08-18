@@ -19,7 +19,9 @@
 // LibPlot2D forward declarations
 namespace LibPlot2D
 {
-	class RenderWindow;
+class RenderWindow;
+class Color;
+class Primitive;
 }
 
 namespace VVASE
@@ -32,11 +34,10 @@ class Triangle3D
 {
 public:
 	Triangle3D(LibPlot2D::RenderWindow &renderer);
-	~Triangle3D();
 
 	// Updates the 3D representation of the tire on the screen
 	void Update(const Eigen::Vector3d &node1, const Eigen::Vector3d &node2, const Eigen::Vector3d &node3,
-		const Color &color, bool show);
+		const LibPlot2D::Color &color, bool show);
 
 	bool ContainsThisActor(const LibPlot2D::Primitive *actor);
 

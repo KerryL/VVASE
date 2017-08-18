@@ -30,18 +30,18 @@
 //#include <wx/platinfo.h>
 
 // Local headers
-#include "../../application/vvaseConstants.h"
+#include "../../application/gitHash.h"
 #include "VVASE/core/car/car.h"
 #include "VVASE/core/car/subsystems/drivetrain.h"
-#include "../renderer/carRenderer.h"
+#include "VVASE/gui/renderer/carRenderer.h"
 #include "editPanel/editPanel.h"
-#include "mainFrame.h"
-#include "mainNotebook.h"
-#include "mainTree.h"
-#include "outputPanel.h"
-#include "../gui/guiObject.h"
+#include "VVASE/gui/components/mainFrame.h"
+#include "VVASE/gui/components/mainNotebook.h"
+#include "VVASE/gui/components/mainTree.h"
+#include "VVASE/gui/components/outputPanel.h"
+#include "VVASE/gui/guiObject.h"
 #include "../gui/guiCar.h"
-#include "../gui/iteration.h"
+#include "../gui/sweep.h"
 #include "../gui/geneticOptimization.h"
 #include "../gui/gaObject.h"
 #include "../gui/dialogs/optionsDialog.h"
@@ -52,7 +52,7 @@
 #include "VVASE/core/threads/jobQueue.h"
 #include "VVASE/core/threads/workerThread.h"
 #include "VVASE/core/threads/threadEvent.h"
-#include "VVASE/core/utilities/fontFinder.h"
+#include "VVASE/gui/utilities/fontFinder.h"
 #include "VVASE/core/utilities/debugger.h"
 
 // *nix Icons

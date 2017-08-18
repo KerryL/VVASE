@@ -10,13 +10,17 @@
 // Desc:  Contains class definition for the AArm class.
 
 // Local headers
-#include "vRenderer/color.h"
-#include "vRenderer/3dcar/aarm.h"
-#include "vRenderer/primitives/sphere.h"
-#include "vRenderer/primitives/cylinder.h"
-#include "vUtilities/unitConverter.h"
-#include "vMath/vector.h"
-#include "vMath/carMath.h"
+#include "VVASE/gui/renderer/3dcar/aarm.h"
+#include "VVASE/gui/renderer/primitives/sphere.h"
+#include "VVASE/gui/renderer/primitives/cylinder.h"
+#include "VVASE/gui/utilities/unitConverter.h"
+#include "VVASE/core/utilities/carMath.h"
+
+// LibPlot2D headers
+#include <lp2d/renderer/color.h>
+
+// Eigen headers
+#include <Eigen/Eigen>
 
 namespace VVASE
 {
@@ -38,7 +42,7 @@ namespace VVASE
 //		None
 //
 //==========================================================================
-AArm::AArm(RenderWindow &renderer)
+AArm::AArm(LibPlot2D::RenderWindow &renderer)
 {
 	// Create the actors
 	endPoint1 = new Sphere(renderer);
@@ -48,29 +52,9 @@ AArm::AArm(RenderWindow &renderer)
 	member2 = new Cylinder(renderer);
 
 	// Set up the Actors
-	endPoint1->SetColor(Color::ColorWhite);
-	midPoint->SetColor(Color::ColorWhite);
-	endPoint2->SetColor(Color::ColorWhite);
-}
-
-//==========================================================================
-// Class:			AArm
-// Function:		~AArm
-//
-// Description:		Destructor for the AArm class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-AArm::~AArm()
-{
+	endPoint1->SetColor(LibPlot2D::Color::ColorWhite);
+	midPoint->SetColor(LibPlot2D::Color::ColorWhite);
+	endPoint2->SetColor(LibPlot2D::Color::ColorWhite);
 }
 
 //==========================================================================
@@ -98,7 +82,7 @@ AArm::~AArm()
 //
 //==========================================================================
 void AArm::Update(const Eigen::Vector3d &end1, const Eigen::Vector3d &middle, const Eigen::Vector3d &end2,
-				  const double &diameter, const int &resolution, const Color &color, bool show)
+	const double &diameter, const int &resolution, const LibPlot2D::Color &color, bool show)
 {
 	// Make sure all vector arguments are valid - if they are not,
 	// the object will not be made visible
@@ -166,7 +150,7 @@ void AArm::Update(const Eigen::Vector3d &end1, const Eigen::Vector3d &middle, co
 //					object or not.
 //
 // Input Arguments:
-//		actor	= const Primitive* to compare against this object's actors
+//		actor	= const LibPlot2D::Primitive* to compare against this object's actors
 //
 // Output Arguments:
 //		None
@@ -175,7 +159,7 @@ void AArm::Update(const Eigen::Vector3d &end1, const Eigen::Vector3d &middle, co
 //		bool representing whether or not the Actor was part of this object
 //
 //==========================================================================
-bool AArm::ContainsThisActor(const Primitive *actor)
+bool AArm::ContainsThisActor(const LibPlot2D::Primitive *actor)
 {
 	// Make the comparison
 	if (endPoint1 == actor ||
@@ -214,14 +198,14 @@ Eigen::Vector3d AArm::FindClosestPoint(const Eigen::Vector3d& point, const Eigen
 	Eigen::Vector3d endPoint2Test(VVASE::Math::NearestPointOnAxis(point, direction, endPoint2Center));
 	Eigen::Vector3d midPointTest(VVASE::Math::NearestPointOnAxis(point, direction, midPointCenter));
 
-	if (endPoint1Center.Distance(endPoint1Test) < endPoint2Center.Distance(endPoint2Test))
+	if ((endPoint1Center - endPoint1Test).norm() < (endPoint2Center - endPoint2Test).norm())
 	{
-		if (endPoint1Center.Distance(endPoint1Test) < midPointCenter.Distance(midPointTest))
+		if ((endPoint1Center - endPoint1Test).norm() < (midPointCenter - midPointTest).norm())
 			return endPoint1Center;
 		else
 			return midPointCenter;
 	}
-	else if (endPoint2Center.Distance(endPoint2Test) < midPointCenter.Distance(midPointTest))
+	else if ((endPoint2Center - endPoint2Test).norm() < (midPointCenter - midPointTest).norm())
 		return endPoint2Center;
 
 	return midPointCenter;

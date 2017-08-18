@@ -67,7 +67,7 @@ void Cylinder::GenerateGeometry()
 	if (resolution < 3)
 		resolution = 3;
 
-	double halfHeight = endPoint1.Distance(endPoint2) / 2.0;
+	const double halfHeight((endPoint1 - endPoint2).norm() / 2.0);
 
 	const Eigen::Vector3d axisDirection((endPoint2 - endPoint1).normalized());
 	const Eigen::Vector3d center(endPoint1 + axisDirection * halfHeight);
@@ -75,15 +75,15 @@ void Cylinder::GenerateGeometry()
 
 	// Determine the angle and axis of rotation
 	Eigen::Vector3d axisOfRotation = referenceDirection.cross(axisDirection);
-	double angle = acos(axisDirection * referenceDirection);// [rad]
+	double angle = acos(axisDirection.dot(referenceDirection));// [rad]
 
 	glPushMatrix();
 
-		glTranslated(center.x, center.y, center.z);
+		glTranslated(center.x(), center.y(), center.z());
 
 		// Rotate the current matrix, if the rotation axis is non-zero
 		if (!VVASE::Math::IsZero(axisOfRotation.norm()))
-			glRotated(UnitConverter::RAD_TO_DEG(angle), axisOfRotation.x, axisOfRotation.y, axisOfRotation.z);
+			glRotated(UnitConverter::RAD_TO_DEG(angle), axisOfRotation.x(), axisOfRotation.y(), axisOfRotation.z());
 
 		// Create the cylinder along the X-axis (must match the reference direction above)
 		// (the openGL matrices take care of correct position/orientation in hardware)
@@ -95,8 +95,8 @@ void Cylinder::GenerateGeometry()
 		for (i = 0; i <= resolution; i++)
 		{
 			angle = (double)i * 2.0 * VVASE::Math::Pi / (double)resolution;
-			point.y = radius * cos(angle);
-			point.z = radius * sin(angle);
+			point.y() = radius * cos(angle);
+			point.z() = radius * sin(angle);
 
 			glNormal3d(0.0, point.y() / radius, point.z() / radius);
 
@@ -113,9 +113,9 @@ void Cylinder::GenerateGeometry()
 
 			for (i = 0; i <= resolution; i++)
 			{
-				angle = (double)i * 2.0 * VVASE::Math::Pi / (double)resolution;
-				point.y = radius * cos(angle);
-				point.z = radius * sin(angle);
+				angle = static_cast<double>(i) * 2.0 * VVASE::Math::Pi / (double)resolution;
+				point.y() = radius * cos(angle);
+				point.z() = radius * sin(angle);
 
 				glVertex3d(point.x(), point.y(), point.z());
 			}
@@ -128,8 +128,8 @@ void Cylinder::GenerateGeometry()
 			for (i = 0; i <= resolution; i++)
 			{
 				angle = (double)i * 2.0 * VVASE::Math::Pi / (double)resolution;
-				point.y = radius * cos(angle);
-				point.z = radius * sin(angle);
+				point.y() = radius * cos(angle);
+				point.z() = radius * sin(angle);
 
 				glVertex3d(-point.x(), point.y(), point.z());
 			}
@@ -159,7 +159,7 @@ void Cylinder::GenerateGeometry()
 //==========================================================================
 bool Cylinder::HasValidParameters()
 {
-	if (!VVASE::Math::IsZero(endPoint1.Distance(endPoint2)) && radius > 0.0)
+	if (!VVASE::Math::IsZero((endPoint1 - endPoint2).norm()) && radius > 0.0)
 		return true;
 
 	return false;

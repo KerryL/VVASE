@@ -197,7 +197,7 @@ void EditBrakesPanel::TextBoxEditEvent(wxCommandEvent &event)
 	double minValue, maxValue;
 
 	// We also need to know what kind of data we're retrieving
-	UnitConverter::UnitType units;
+	UnitType units;
 
 	// A pointer to the text box
 	wxTextCtrl *textBox = NULL;

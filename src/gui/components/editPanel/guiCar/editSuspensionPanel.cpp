@@ -470,9 +470,9 @@ void EditSuspensionPanel::GridCellChangedEvent(wxGridEvent &event)
 			parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
 				parent.GetParent().GetMainFrame().GetActiveIndex(),
 				UndoRedoStack::Operation::DataTypeDouble,
-				&(currentSuspension->hardpoints[event.GetRow() - 1].x));
+				&(currentSuspension->hardpoints[event.GetRow() - 1].x()));
 
-			currentSuspension->hardpoints[event.GetRow() - 1].x = UnitConverter::GetInstance().ConvertDistanceInput(value);
+			currentSuspension->hardpoints[event.GetRow() - 1].x() = UnitConverter::GetInstance().ConvertDistanceInput(value);
 		}
 		else if (event.GetCol() == 2)// Y
 		{
@@ -480,9 +480,9 @@ void EditSuspensionPanel::GridCellChangedEvent(wxGridEvent &event)
 			parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
 				parent.GetParent().GetMainFrame().GetActiveIndex(),
 				UndoRedoStack::Operation::DataTypeDouble,
-				&(currentSuspension->hardpoints[event.GetRow() - 1].y));
+				&(currentSuspension->hardpoints[event.GetRow() - 1].y()));
 
-			currentSuspension->hardpoints[event.GetRow() - 1].y = UnitConverter::GetInstance().ConvertDistanceInput(value);
+			currentSuspension->hardpoints[event.GetRow() - 1].y() = UnitConverter::GetInstance().ConvertDistanceInput(value);
 		}
 		else// Z
 		{
@@ -490,9 +490,9 @@ void EditSuspensionPanel::GridCellChangedEvent(wxGridEvent &event)
 			parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
 				parent.GetParent().GetMainFrame().GetActiveIndex(),
 				UndoRedoStack::Operation::DataTypeDouble,
-				&(currentSuspension->hardpoints[event.GetRow() - 1].z));
+				&(currentSuspension->hardpoints[event.GetRow() - 1].z()));
 
-			currentSuspension->hardpoints[event.GetRow() - 1].z = UnitConverter::GetInstance().ConvertDistanceInput(value);
+			currentSuspension->hardpoints[event.GetRow() - 1].z() = UnitConverter::GetInstance().ConvertDistanceInput(value);
 		}
 
 		mutex->Unlock();

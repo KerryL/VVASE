@@ -10,13 +10,17 @@
 // Desc:  Contains class definition for the Link class.
 
 // Local headers
-#include "vRenderer/primitives/sphere.h"
-#include "vRenderer/primitives/cylinder.h"
-#include "vRenderer/3dcar/link.h"
-#include "vRenderer/color.h"
-#include "vUtilities/unitConverter.h"
-#include "vMath/vector.h"
-#include "vMath/carMath.h"
+#include "VVASE/gui/renderer/primitives/sphere.h"
+#include "VVASE/gui/renderer/primitives/cylinder.h"
+#include "VVASE/gui/renderer/3dcar/link.h"
+#include "VVASE/gui/utilities/unitConverter.h"
+#include "VVASE/core/utilities/carMath.h"
+
+// LibPlot2D headers
+#include <lp2d/renderer/color.h>
+
+// Eigen headers
+#include <Eigen/Eigen>
 
 namespace VVASE
 {
@@ -29,7 +33,7 @@ namespace VVASE
 //					process necessary to add the object to the scene.
 //
 // Input Arguments:
-//		_renderer	= RenderWindow&, pointer to rendering object
+//		renderer	= LibPlot2D::RenderWindow&, pointer to rendering object
 //
 // Output Arguments:
 //		None
@@ -38,34 +42,14 @@ namespace VVASE
 //		None
 //
 //==========================================================================
-Link::Link(RenderWindow &renderer)
+Link::Link(LibPlot2D::RenderWindow &renderer)
 {
 	member = new Cylinder(renderer);
 	endPoint1 = new Sphere(renderer);
 	endPoint2 = new Sphere(renderer);
 
-	endPoint1->SetColor(Color::ColorWhite);
-	endPoint2->SetColor(Color::ColorWhite);
-}
-
-//==========================================================================
-// Class:			Link
-// Function:		~Link
-//
-// Description:		Destructor for the Link class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Link::~Link()
-{
+	endPoint1->SetColor(LibPlot2D::Color::ColorWhite);
+	endPoint2->SetColor(LibPlot2D::Color::ColorWhite);
 }
 
 //==========================================================================
@@ -81,7 +65,7 @@ Link::~Link()
 //					  the arm
 //		resolution	= const integer& representing the number of planar sides to use
 //					  to represent the cylindrical members
-//		color		= const Color& describing this object's color
+//		color		= const LibPlot2D::Color& describing this object's color
 //		show		= bool, visibility flag
 //
 // Output Arguments:
@@ -92,7 +76,7 @@ Link::~Link()
 //
 //==========================================================================
 void Link::Update(const Eigen::Vector3d &end1, const Eigen::Vector3d &end2, const double &diameter,
-				  const int &resolution, const Color &color, bool show)
+				  const int &resolution, const LibPlot2D::Color &color, bool show)
 {
 	// Make sure all vector arguments are valid - if they are not,
 	// the object will not be made visible
@@ -137,7 +121,7 @@ void Link::Update(const Eigen::Vector3d &end1, const Eigen::Vector3d &end2, cons
 //					object or not.
 //
 // Input Arguments:
-//		actor	= const Primitive* to compare against this object's actors
+//		actor	= const LibPlot2D::Primitive* to compare against this object's actors
 //
 // Output Arguments:
 //		None
@@ -146,7 +130,7 @@ void Link::Update(const Eigen::Vector3d &end1, const Eigen::Vector3d &end2, cons
 //		bool representing whether or not the Actor was part of this object
 //
 //==========================================================================
-bool Link::ContainsThisActor(const Primitive *actor)
+bool Link::ContainsThisActor(const LibPlot2D::Primitive *actor)
 {
 	// Make the comparison
 	if (endPoint1 == actor ||
@@ -181,7 +165,7 @@ Eigen::Vector3d Link::FindClosestPoint(const Eigen::Vector3d& point, const Eigen
 	Eigen::Vector3d endPoint1Test(VVASE::Math::NearestPointOnAxis(point, direction, endPoint1Center));
 	Eigen::Vector3d endPoint2Test(VVASE::Math::NearestPointOnAxis(point, direction, endPoint2Center));
 
-	if (endPoint1Center.Distance(endPoint1Test) < endPoint2Center.Distance(endPoint2Test))
+	if ((endPoint1Center - endPoint1Test).norm() < (endPoint2Center - endPoint2Test).norm())
 		return endPoint1Center;
 
 	return endPoint2Center;

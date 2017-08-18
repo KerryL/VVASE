@@ -10,13 +10,17 @@
 // Desc:  Contains class definition for the Spring3D class.
 
 // Local headers
-#include "vRenderer/primitives/cylinder.h"
-#include "vRenderer/primitives/sphere.h"
-#include "vRenderer/3dcar/spring3D.h"
-#include "vRenderer/color.h"
-#include "vUtilities/unitConverter.h"
-#include "vMath/vector.h"
-#include "vMath/carMath.h"
+#include "VVASE/gui/renderer/primitives/cylinder.h"
+#include "VVASE/gui/renderer/primitives/sphere.h"
+#include "VVASE/gui/renderer/3dcar/spring3D.h"
+#include "VVASE/gui/utilities/unitConverter.h"
+#include "VVASE/core/utilities/carMath.h"
+
+// LibPlot2D headers
+#include <lp2d/renderer/color.h>
+
+// Eigen headers
+#include <Eigen/Eigen>
 
 namespace VVASE
 {
@@ -29,7 +33,7 @@ namespace VVASE
 //					process necessary to add the object to the scene.
 //
 // Input Arguments:
-//		renderer	= RenderWindow&, pointer to rendering object
+//		renderer	= LibPlot2D::RenderWindow&, pointer to rendering object
 //
 // Output Arguments:
 //		None
@@ -38,7 +42,7 @@ namespace VVASE
 //		None
 //
 //==========================================================================
-Spring3D::Spring3D(RenderWindow &renderer)
+Spring3D::Spring3D(LibPlot2D::RenderWindow &renderer)
 {
 	spring = new Cylinder(renderer);
 	endPoint1 = new Sphere(renderer);
@@ -46,28 +50,8 @@ Spring3D::Spring3D(RenderWindow &renderer)
 
 	spring->SetCapping(false);
 
-	endPoint1->SetColor(Color::ColorWhite);
-	endPoint2->SetColor(Color::ColorWhite);
-}
-
-//==========================================================================
-// Class:			Spring3D
-// Function:		~Spring3D
-//
-// Description:		Destructor for the Spring3D class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Spring3D::~Spring3D()
-{
+	endPoint1->SetColor(LibPlot2D::Color::ColorWhite);
+	endPoint2->SetColor(LibPlot2D::Color::ColorWhite);
 }
 
 //==========================================================================
@@ -84,7 +68,7 @@ Spring3D::~Spring3D()
 //		pointDiameter	= const double& describing diameter of the end point actors
 //		resolution		= const integer& representing the number of planar sides to use
 //						  to represent the cylinders
-//		color			= const Color& describing this object's color
+//		color			= const LibPlot2D::Color& describing this object's color
 //		show			= bool, visibility flag
 //
 // Output Arguments:
@@ -94,9 +78,9 @@ Spring3D::~Spring3D()
 //		None
 //
 //==========================================================================
-void Spring3D::Update(const Eigen::Vector3d &end1, const Eigen::Vector3d &end2, const double &diameter,
-					  const double &pointDiameter, const int &resolution,
-					  const Color &color, bool show)
+void Spring3D::Update(const Eigen::Vector3d &end1, const Eigen::Vector3d &end2,
+	const double &diameter, const double &pointDiameter, const int &resolution,
+	const LibPlot2D::Color &color, bool show)
 {
 	// Make sure all vector arguments are valid - if they are not,
 	// the object will not be made visible
@@ -141,7 +125,7 @@ void Spring3D::Update(const Eigen::Vector3d &end1, const Eigen::Vector3d &end2, 
 //					object or not.
 //
 // Input Arguments:
-//		actor	= const Primitive* to compare against this object's actors
+//		actor	= const LibPlot2D::Primitive* to compare against this object's actors
 //
 // Output Arguments:
 //		None
@@ -150,7 +134,7 @@ void Spring3D::Update(const Eigen::Vector3d &end1, const Eigen::Vector3d &end2, 
 //		bool representing whether or not the actor was part of this object
 //
 //==========================================================================
-bool Spring3D::ContainsThisActor(const Primitive *actor)
+bool Spring3D::ContainsThisActor(const LibPlot2D::Primitive *actor)
 {
 	// Make the comparison
 	if (spring == actor ||
@@ -185,7 +169,7 @@ Eigen::Vector3d Spring3D::FindClosestPoint(const Eigen::Vector3d& point, const E
 	Eigen::Vector3d endPoint1Test(VVASE::Math::NearestPointOnAxis(point, direction, endPoint1Center));
 	Eigen::Vector3d endPoint2Test(VVASE::Math::NearestPointOnAxis(point, direction, endPoint2Center));
 
-	if (endPoint1Center.Distance(endPoint1Test) < endPoint2Center.Distance(endPoint2Test))
+	if ((endPoint1Center - endPoint1Test).norm() < (endPoint2Center - endPoint2Test).norm())
 		return endPoint1Center;
 
 	return endPoint2Center;

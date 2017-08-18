@@ -11,12 +11,16 @@
 //        bell cranks, uprights, etc.
 
 // Local headers
-#include "vRenderer/primitives/triangle.h"
-#include "vRenderer/3dcar/triangle3D.h"
-#include "vRenderer/color.h"
-#include "vUtilities/unitConverter.h"
-#include "vMath/vector.h"
-#include "vMath/carMath.h"
+#include "VVASE/gui/renderer/primitives/triangle.h"
+#include "VVASE/gui/renderer/3dcar/triangle3D.h"
+#include "VVASE/gui/utilities/unitConverter.h"
+#include "VVASE/core/utilities/carMath.h"
+
+// LibPlot2D headers
+#include <lp2d/renderer/color.h>
+
+// Eigen headers
+#include <Eigen/Eigen>
 
 namespace VVASE
 {
@@ -29,7 +33,7 @@ namespace VVASE
 //					process necessary to add the object to the scene.
 //
 // Input Arguments:
-//		renderer	= &RenderWindow, pointer to rendering object
+//		renderer	= &LibPlot2D::RenderWindow, pointer to rendering object
 //
 // Output Arguments:
 //		None
@@ -38,29 +42,9 @@ namespace VVASE
 //		None
 //
 //==========================================================================
-Triangle3D::Triangle3D(RenderWindow &renderer)
+Triangle3D::Triangle3D(LibPlot2D::RenderWindow &renderer)
 {
 	triangle = new Triangle(renderer);
-}
-
-//==========================================================================
-// Class:			Triangle3D
-// Function:		~Triangle3D
-//
-// Description:		Destructor for the Triangle3D class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Triangle3D::~Triangle3D()
-{
 }
 
 //==========================================================================
@@ -75,7 +59,7 @@ Triangle3D::~Triangle3D()
 //		node1		= const Eigen::Vector3d&, location of the first vertex
 //		node2		= const Eigen::Vector3d&, location of the second vertex
 //		node3		= const Eigen::Vector3d&, location of the third vertex
-//		color		= const Color& specifying the color of this object
+//		color		= const LibPlot2D::Color& specifying the color of this object
 //		show		= bool, visibility flag
 //
 // Output Arguments:
@@ -86,7 +70,7 @@ Triangle3D::~Triangle3D()
 //
 //==========================================================================
 void Triangle3D::Update(const Eigen::Vector3d &node1, const Eigen::Vector3d &node2, const Eigen::Vector3d &node3,
-					  const Color &color, bool show)
+	const LibPlot2D::Color &color, bool show)
 {
 	// Make sure all vector arguments are valid - if they are not,
 	// the object will not be made visible
@@ -118,7 +102,7 @@ void Triangle3D::Update(const Eigen::Vector3d &node1, const Eigen::Vector3d &nod
 //					object or not.
 //
 // Input Arguments:
-//		actor	= const Primitive* to compare against this object's actors
+//		actor	= const LibPlot2D::Primitive* to compare against this object's actors
 //
 // Output Arguments:
 //		None
@@ -127,7 +111,7 @@ void Triangle3D::Update(const Eigen::Vector3d &node1, const Eigen::Vector3d &nod
 //		bool representing whether or not the Actor was part of this object
 //
 //==========================================================================
-bool Triangle3D::ContainsThisActor(const Primitive *actor)
+bool Triangle3D::ContainsThisActor(const LibPlot2D::Primitive *actor)
 {
 	// Make the comparison
 	if (triangle == actor)

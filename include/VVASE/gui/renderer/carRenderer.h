@@ -188,11 +188,11 @@ private:
 		Corner::Hardpoints& leftRearPoint, Corner::Hardpoints& rightRearPoint) const;
 	bool GetLineUnderPoint(const double& x, const double& y,
 		Eigen::Vector3d& point, Eigen::Vector3d& direction) const;
-	std::vector<const Primitive*> IntersectWithPrimitive(const Eigen::Vector3d& point,
+	std::vector<const LibPlot2D::Primitive*> IntersectWithPrimitive(const Eigen::Vector3d& point,
 		const Eigen::Vector3d& direction) const;
 
-	const Primitive* GetClosestPrimitive(const std::vector<const Primitive*>& intersected) const;
-	void GetSelectedHardpoint(const Eigen::Vector3d& point, const Eigen::Vector3d& direction, const Primitive* selected,
+	const LibPlot2D::Primitive* GetClosestPrimitive(const std::vector<const LibPlot2D::Primitive*>& intersected) const;
+	void GetSelectedHardpoint(const Eigen::Vector3d& point, const Eigen::Vector3d& direction, const LibPlot2D::Primitive* selected,
 		Suspension::Hardpoints& suspensionPoint, Corner::Hardpoints& leftFrontPoint,
 		Corner::Hardpoints& rightFrontPoint, Corner::Hardpoints& leftRearPoint,
 		Corner::Hardpoints& rightRearPoint) const;

@@ -10,13 +10,17 @@
 // Desc:  Contains class definition for the Tire3D class.
 
 // Local headers
-#include "vRenderer/primitives/cylinder.h"
-#include "vRenderer/primitives/disk.h"
-#include "vRenderer/3dcar/tire3D.h"
-#include "vRenderer/color.h"
-#include "vUtilities/unitConverter.h"
-#include "vMath/vector.h"
-#include "vMath/carMath.h"
+#include "VVASE/gui/renderer/primitives/cylinder.h"
+#include "VVASE/gui/renderer/primitives/disk.h"
+#include "VVASE/gui/renderer/3dcar/tire3D.h"
+#include "VVASE/gui/utilities/unitConverter.h"
+#include "VVASE/core/utilities/carMath.h"
+
+// LibPlot2D headers
+#include <lp2d/renderer/color.h>
+
+// Eigen headers
+#include <Eigen/Eigen>
 
 namespace VVASE
 {
@@ -29,7 +33,7 @@ namespace VVASE
 //					process necessary to add the object to the scene.
 //
 // Input Arguments:
-//		renderer	= RenderWindow&, pointer to rendering object
+//		renderer	= LibPlot2D::RenderWindow&, pointer to rendering object
 //
 // Output Arguments:
 //		None
@@ -38,7 +42,7 @@ namespace VVASE
 //		None
 //
 //==========================================================================
-Tire3D::Tire3D(RenderWindow &renderer)
+Tire3D::Tire3D(LibPlot2D::RenderWindow &renderer)
 {
 	innerSurface = new Cylinder(renderer);
 	outerSurface = new Cylinder(renderer);
@@ -47,26 +51,6 @@ Tire3D::Tire3D(RenderWindow &renderer)
 
 	innerSurface->SetCapping(false);
 	outerSurface->SetCapping(false);
-}
-
-//==========================================================================
-// Class:			Tire3D
-// Function:		~Tire3D
-//
-// Description:		Destructor for the Tire3D class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Tire3D::~Tire3D()
-{
 }
 
 //==========================================================================
@@ -85,7 +69,7 @@ Tire3D::~Tire3D()
 //		insideDiameter	= const double& describing inner diameter of the tire
 //		resolution		= const integer& representing the number of planar sides to use
 //						  to represent the cylinders
-//		color			= const Color& describing this object's color
+//		color			= const LibPlot2D::Color& describing this object's color
 //		show			= bool, visibility flag
 //
 // Output Arguments:
@@ -95,9 +79,9 @@ Tire3D::~Tire3D()
 //		None
 //
 //==========================================================================
-void Tire3D::Update(const Eigen::Vector3d &contactPatch, const Eigen::Vector3d &center, Eigen::Vector3d originalNormal,
-					Eigen::Vector3d targetNormal, const double &width, const double &insideDiameter,
-					const int &resolution, const Color &color, bool show)
+void Tire3D::Update(const Eigen::Vector3d &contactPatch, const Eigen::Vector3d &center,
+	Eigen::Vector3d originalNormal,Eigen::Vector3d targetNormal, const double &width,
+	const double &insideDiameter, const int &resolution, const LibPlot2D::Color &color, bool show)
 {
 	// Make sure all vector arguments are valid - if they are not,
 	// the object will not be made visible
@@ -122,24 +106,24 @@ void Tire3D::Update(const Eigen::Vector3d &contactPatch, const Eigen::Vector3d &
 	sidewall2->SetColor(color);
 
 	// Set the size and resolution of the cylinders
-	innerSurface->SetRadius(contactPatch.Distance(center));
+	innerSurface->SetRadius((contactPatch - center).norm());
 	innerSurface->SetResolution(resolution);
 
 	outerSurface->SetRadius(insideDiameter / 2.0);
 	outerSurface->SetResolution(resolution);
 
 	// Set the size and resolution of the disks
-	sidewall1->SetOuterRadius(contactPatch.Distance(center));
+	sidewall1->SetOuterRadius((contactPatch - center).norm());
 	sidewall1->SetInnerRadius(insideDiameter / 2.0);
 	sidewall1->SetResolution(resolution);
 
-	sidewall2->SetOuterRadius(contactPatch.Distance(center));
+	sidewall2->SetOuterRadius((contactPatch - center).norm());
 	sidewall2->SetInnerRadius(insideDiameter / 2.0);
 	sidewall2->SetResolution(resolution);
 
 	// Normalize the normal vectors before we use them
-	targetNormal = targetNormal.Normalize();
-	originalNormal = originalNormal.Normalize();
+	targetNormal.normalize();
+	originalNormal.normalize();
 
 	// The orientations are given by the axis direction
 	// Because the car's tires start out in this orientation (zero pitch, roll, heave and steer),
@@ -149,12 +133,12 @@ void Tire3D::Update(const Eigen::Vector3d &contactPatch, const Eigen::Vector3d &
 	double angleToRotate;// [rad]
 
 	// We allow rotation about any arbitrary axis, so we'll start by determining the axis of rotation
-	rotationAxis = originalNormal.Cross(targetNormal);
+	rotationAxis = originalNormal.cross(targetNormal);
 
 	// Determine the distance to rotate
 	// Because the normal vectors were normalized above, the angle between the vectors
 	// is the acos of their dot product.
-	angleToRotate = acos(originalNormal * targetNormal);
+	angleToRotate = acos(originalNormal.dot(targetNormal));
 
 	// The positions of the sidewalls are given by the width of the tire and the
 	// axis direction.  To calculate the axis direction, we rotate a reference vector
@@ -164,7 +148,7 @@ void Tire3D::Update(const Eigen::Vector3d &contactPatch, const Eigen::Vector3d &
 	Eigen::Vector3d axisDirection(0.0, 1.0, 0.0);
 
 	// Check to make sure our rotation axis is non-zero before we do the rotations
-	if (!VVASE::Math::IsZero(rotationAxis.Length()))
+	if (!VVASE::Math::IsZero(rotationAxis.norm()))
 		// Rotate the reference axis
 		axisDirection.Rotate(angleToRotate, rotationAxis);
 
@@ -198,7 +182,7 @@ void Tire3D::Update(const Eigen::Vector3d &contactPatch, const Eigen::Vector3d &
 //					object or not.
 //
 // Input Arguments:
-//		actor	= const Primitive* to compare against this object's actors
+//		actor	= const LibPlot2D::Primitive* to compare against this object's actors
 //
 // Output Arguments:
 //		None
@@ -207,7 +191,7 @@ void Tire3D::Update(const Eigen::Vector3d &contactPatch, const Eigen::Vector3d &
 //		bool representing whether or not the Actor was part of this object
 //
 //==========================================================================
-bool Tire3D::ContainsThisActor(const Primitive *actor)
+bool Tire3D::ContainsThisActor(const LibPlot2D::Primitive *actor)
 {
 	// Make the comparison
 	if (outerSurface == actor ||

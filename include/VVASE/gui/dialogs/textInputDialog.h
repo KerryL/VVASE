@@ -16,6 +16,9 @@
 // wxWidgets headers
 #include <wx/dialog.h>
 
+// wxWidgets forward declarations
+class wxTextCtrl;
+
 namespace VVASE
 {
 

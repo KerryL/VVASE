@@ -11,16 +11,20 @@
 // History:
 
 // Local headers
-#include "vRenderer/3dcar/debugShape.h"
+#include "VVASE/gui/renderer/3dcar/debugShape.h"
 
 #ifdef USE_DEBUG_SHAPE
 
-#include "vRenderer/primitives/sphere.h"
-#include "vRenderer/primitives/disk.h"
-#include "vRenderer/3dcar/point3d.h"
-#include "vRenderer/color.h"
-#include "vMath/vector.h"
-#include "vRenderer/renderWindow.h"
+#include "VVASE/gui/renderer/primitives/sphere.h"
+#include "VVASE/gui/renderer/primitives/disk.h"
+#include "VVASE/gui/renderer/3dcar/point3d.h"
+#include "VVASE/gui/renderer/renderWindow.h"
+
+// LibPlot2D headers
+#include <lp2d/renderer/color.h>
+
+// Eigen headers
+#include <Eigen/Eigen>
 
 namespace VVASE
 {

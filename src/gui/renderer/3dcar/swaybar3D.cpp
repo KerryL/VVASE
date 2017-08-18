@@ -10,12 +10,16 @@
 // Desc:  Contains class definition for the Swaybar3D class.
 
 // Local headers
-#include "vRenderer/primitives/cylinder.h"
-#include "vRenderer/3dcar/swaybar3D.h"
-#include "vRenderer/color.h"
-#include "vUtilities/unitConverter.h"
-#include "vMath/vector.h"
-#include "vMath/carMath.h"
+#include "VVASE/gui/renderer/primitives/cylinder.h"
+#include "VVASE/gui/renderer/3dcar/swaybar3D.h"
+#include "VVASE/gui/utilities/unitConverter.h"
+#include "VVASE/core/utilities/carMath.h"
+
+// LibPlot2D headers
+#include <lp2d/renderer/color.h>
+
+// Eigen headers
+#include <Eigen/Eigen>
 
 namespace VVASE
 {
@@ -28,7 +32,7 @@ namespace VVASE
 //					process necessary to add the object to the scene.
 //
 // Input Arguments:
-//		renderer	= RenderWindow&, pointer to rendering object
+//		renderer	= LibPlot2D::RenderWindow&, pointer to rendering object
 //
 // Output Arguments:
 //		None
@@ -37,7 +41,7 @@ namespace VVASE
 //		None
 //
 //==========================================================================
-Swaybar3D::Swaybar3D(RenderWindow &renderer)
+Swaybar3D::Swaybar3D(LibPlot2D::RenderWindow &renderer)
 {
 	torqueArm1 = new Cylinder(renderer);
 	torqueArm2 = new Cylinder(renderer);
@@ -50,26 +54,6 @@ Swaybar3D::Swaybar3D(RenderWindow &renderer)
 	// We set it to four to make it look like a rectangular prism
 	torqueArm1->SetResolution(4);
 	torqueArm2->SetResolution(4);
-}
-
-//==========================================================================
-// Class:			Swaybar3D
-// Function:		~Swaybar3D
-//
-// Description:		Destructor for the Swaybar3D class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Swaybar3D::~Swaybar3D()
-{
 }
 
 //==========================================================================
@@ -93,7 +77,7 @@ Swaybar3D::~Swaybar3D()
 //		dimension				= const double& describing the size of the members
 //		resolution				= const integer& representing the number of planar sides to use
 //								  to represent the cylinders
-//		color					= const Color& describing this object's color
+//		color					= const LibPlot2D::Color& describing this object's color
 //		show					= bool, visibility flag
 //
 // Output Arguments:
@@ -103,10 +87,11 @@ Swaybar3D::~Swaybar3D()
 //		None
 //
 //==========================================================================
-void Swaybar3D::Update(const Eigen::Vector3d &rightLink, const Eigen::Vector3d &leftLink, const Eigen::Vector3d &torsionMemberTopRight,
-					   const Eigen::Vector3d &torsionMemberBottomLeft,  const Eigen::Vector3d &midPoint, const Eigen::Vector3d &axisPivot,
-					   const Suspension::BarStyle &barStyle, const double &dimension,
-					   const int &resolution, const Color &color, bool show)
+void Swaybar3D::Update(const Eigen::Vector3d &rightLink, const Eigen::Vector3d &leftLink,
+	const Eigen::Vector3d &torsionMemberTopRight, const Eigen::Vector3d &torsionMemberBottomLeft,
+	const Eigen::Vector3d &midPoint, const Eigen::Vector3d &axisPivot,
+	const Suspension::BarStyle &barStyle, const double &dimension,
+	const int &resolution, const LibPlot2D::Color &color, bool show)
 {
 	// Make sure all vector arguments are valid - if they are not,
 	// the object will not be made visible
@@ -157,7 +142,7 @@ void Swaybar3D::Update(const Eigen::Vector3d &rightLink, const Eigen::Vector3d &
 	}
 	else if (barStyle == Suspension::SwayBarTBar)
 	{
-		Eigen::Vector3d stemPlaneNormal = (midPoint - axisPivot).Normalize();
+		Eigen::Vector3d stemPlaneNormal = (midPoint - axisPivot).normalized();
 		Eigen::Vector3d topMidPoint = VVASE::Math::IntersectWithPlane(stemPlaneNormal, midPoint,
 			rightLink - leftLink, leftLink);
 
@@ -182,7 +167,7 @@ void Swaybar3D::Update(const Eigen::Vector3d &rightLink, const Eigen::Vector3d &
 //					object or not.
 //
 // Input Arguments:
-//		actor	= const Primitive* to compare against this object's actors
+//		actor	= const LibPlot2D::Primitive* to compare against this object's actors
 //
 // Output Arguments:
 //		None
@@ -191,7 +176,7 @@ void Swaybar3D::Update(const Eigen::Vector3d &rightLink, const Eigen::Vector3d &
 //		bool representing whether or not the Actor was part of this object
 //
 //==========================================================================
-bool Swaybar3D::ContainsThisActor(const Primitive *actor)
+bool Swaybar3D::ContainsThisActor(const LibPlot2D::Primitive *actor)
 {
 	// Make the comparison
 	if (torqueArm1 == actor ||

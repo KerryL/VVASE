@@ -110,7 +110,7 @@ bool UnitValidator::TransferFromWindow();
 //
 //==========================================================================
 template<class T>
-DataValidator<T>::DataValidator(T &data, const UnitConverter::UnitType &unit,
+DataValidator<T>::DataValidator(T &data, const UnitType &unit,
 	const NumberClass &numberClass) : wxTextValidator(wxFILTER_NUMERIC),
 	unit(unit), data(data), numberClass(numberClass), min(min), max(max)
 {

@@ -18,7 +18,9 @@
 // LibPlot2D forward declarations
 namespace LibPlot2D
 {
-	class RenderWindow;
+class RenderWindow;
+class Color;
+class Primitive;
 }
 
 namespace VVASE
@@ -32,12 +34,11 @@ class Damper3D
 {
 public:
 	Damper3D(LibPlot2D::RenderWindow &renderer);
-	~Damper3D();
 
 	// Updates the 3D representation of the damper on the screen
 	void Update(const Eigen::Vector3d &inboardEnd, const Eigen::Vector3d &outboardEnd, const double &bodyDiameter,
 		const double &shaftDiameter, const double &bodyLength, const int &resolution,
-		const Color &bodyColor, const Color &shaftColor, bool show);
+		const LibPlot2D::Color &bodyColor, const LibPlot2D::Color &shaftColor, bool show);
 
 	// Returns true if the passed reference is to an actor from this object
 	bool ContainsThisActor(const LibPlot2D::Primitive *actor);

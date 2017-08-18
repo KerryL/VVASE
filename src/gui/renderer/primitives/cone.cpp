@@ -69,20 +69,20 @@ void Cone::GenerateGeometry()
 		resolution = 3;
 
 	// Determine the height of the cone
-	const double halfHeight(baseCenter.Distance(tip) / 2.0);
+	const double halfHeight((baseCenter - tip).norm() / 2.0);
 
 	// Determine the desired axis for the cone
 	const Eigen::Vector3d axisDirection((tip - baseCenter).normalized());
 
 	// Determine the center of the cone
-	Eigen::Vector3d center = baseCenter + axisDirection * halfHeight;
+	const Eigen::Vector3d center(baseCenter + axisDirection * halfHeight);
 
 	// Our reference direction will be the X-axis direction
 	Eigen::Vector3d referenceDirection(1.0, 0.0, 0.0);
 
 	// Determine the angle and axis of rotation
 	Eigen::Vector3d axisOfRotation = referenceDirection.cross(axisDirection);
-	double angle = acos(axisDirection * referenceDirection);// [rad]
+	double angle = acos(axisDirection.dot(referenceDirection));// [rad]
 
 	// If the axis direction is opposite the reference direction, we need to rotate 180 degrees
 	if (VVASE::Math::IsZero(axisDirection + referenceDirection))
@@ -99,7 +99,7 @@ void Cone::GenerateGeometry()
 
 		// Rotate the current matrix, if the rotation axis is non-zero
 		if (!VVASE::Math::IsZero(axisOfRotation.norm()))
-			glRotated(UnitConverter::RAD_TO_DEG(angle), axisOfRotation.x, axisOfRotation.y, axisOfRotation.z);
+			glRotated(UnitConverter::RAD_TO_DEG(angle), axisOfRotation.x(), axisOfRotation.y(), axisOfRotation.z());
 
 		// Create the cone along the X-axis (must match the reference direction above)
 		// (the openGL matrices take care of correct position/orientation in hardware)
@@ -119,11 +119,11 @@ void Cone::GenerateGeometry()
 			angle = (double)i * 2.0 * UnitConverter::Pi / (double)resolution;
 
 			// Determine the Y and Z ordinates based on this angle and the radius
-			point.y = radius * cos(angle);
-			point.z = radius * sin(angle);
+			point.y() = radius * cos(angle);
+			point.z() = radius * sin(angle);
 
 			// Set the normal for the next two points
-			glNormal3d(0.0, point.y / radius, point.z / radius);
+			glNormal3d(0.0, point.y() / radius, point.z() / radius);
 
 			// Add the next point
 			glVertex3d(point.x(), point.y(), point.z());
@@ -148,8 +148,8 @@ void Cone::GenerateGeometry()
 				angle = (double)i * 2.0 * UnitConverter::Pi / (double)resolution;
 
 				// Determine the Y and Z ordinates based on this angle and the radius
-				point.y = radius * cos(angle);
-				point.z = radius * sin(angle);
+				point.y() = radius * cos(angle);
+				point.z() = radius * sin(angle);
 
 				// Add the next point
 				glVertex3d(point.x(), point.y(), point.z());
@@ -183,7 +183,7 @@ void Cone::GenerateGeometry()
 bool Cone::HasValidParameters()
 {
 	// Cones must have a non-zero distance tip-to-base, and must have a positive radius
-	if (!VVASE::Math::IsZero(tip.Distance(baseCenter)) && radius > 0.0)
+	if (!VVASE::Math::IsZero((tip - baseCenter).norm()) && radius > 0.0)
 		return true;
 
 	// Otherwise return false

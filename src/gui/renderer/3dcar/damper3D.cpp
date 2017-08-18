@@ -10,13 +10,17 @@
 // Desc:  Contains class definition for the Damper3D class.
 
 // Local headers
-#include "vRenderer/primitives/sphere.h"
-#include "vRenderer/primitives/cylinder.h"
-#include "vRenderer/3dcar/damper3D.h"
-#include "vRenderer/color.h"
-#include "vUtilities/unitConverter.h"
-#include "vMath/vector.h"
-#include "vMath/carMath.h"
+#include "VVASE/gui/renderer/primitives/sphere.h"
+#include "VVASE/gui/renderer/primitives/cylinder.h"
+#include "VVASE/gui/renderer/3dcar/damper3D.h"
+#include "VVASE/gui/utilities/unitConverter.h"
+#include "VVASE/core/utilities/carMath.h"
+
+// LibPlot2D headers
+#include <lp2d/renderer/color.h>
+
+// Eigen headers
+#include <Eigen/Eigen>
 
 namespace VVASE
 {
@@ -29,7 +33,7 @@ namespace VVASE
 //					process necessary to add the object to the scene.
 //
 // Input Arguments:
-//		_renderer	= RenderWindow&, pointer to rendering object
+//		renderer	= LibPlot2D::RenderWindow&, pointer to rendering object
 //
 // Output Arguments:
 //		None
@@ -38,7 +42,7 @@ namespace VVASE
 //		None
 //
 //==========================================================================
-Damper3D::Damper3D(RenderWindow &renderer)
+Damper3D::Damper3D(LibPlot2D::RenderWindow &renderer)
 {
 	inboardEndPoint = new Sphere(renderer);
 	outboardEndPoint = new Sphere(renderer);
@@ -48,28 +52,8 @@ Damper3D::Damper3D(RenderWindow &renderer)
 	body->SetCapping(true);
 	shaft->SetCapping(true);
 
-	inboardEndPoint->SetColor(Color::ColorWhite);
-	outboardEndPoint->SetColor(Color::ColorWhite);
-}
-
-//==========================================================================
-// Class:			Damper3D
-// Function:		~Damper3D
-//
-// Description:		Destructor for the Damper3D class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Damper3D::~Damper3D()
-{
+	inboardEndPoint->SetColor(LibPlot2D::Color::ColorWhite);
+	outboardEndPoint->SetColor(LibPlot2D::Color::ColorWhite);
 }
 
 //==========================================================================
@@ -87,8 +71,8 @@ Damper3D::~Damper3D()
 //		bodyLength		= const double& describing the length of the body section
 //		resolution		= const integer& representing the number of planar sides to use
 //						  to represent the cylinders
-//		bodyColor		= const Color& describing this object's body color
-//		shaftColor		= const Color& describing this object's shaft color
+//		bodyColor		= const LibPlot2D::Color& describing this object's body color
+//		shaftColor		= const LibPlot2D::Color& describing this object's shaft color
 //		show			= bool, visibility flag
 //
 // Output Arguments:
@@ -100,8 +84,8 @@ Damper3D::~Damper3D()
 //==========================================================================
 void Damper3D::Update(const Eigen::Vector3d &outboardEnd, const Eigen::Vector3d &inboardEnd,
 	const double &bodyDiameter, const double &shaftDiameter,
-	const double &bodyLength, const int &resolution, const Color &bodyColor,
-	const Color &shaftColor, bool show)
+	const double &bodyLength, const int &resolution, const LibPlot2D::Color &bodyColor,
+	const LibPlot2D::Color &shaftColor, bool show)
 {
 	// Make sure all vector arguments are valid - if they are not,
 	// the object will not be made visible
@@ -130,12 +114,12 @@ void Damper3D::Update(const Eigen::Vector3d &outboardEnd, const Eigen::Vector3d 
 
 	// Make sure the shock is longer than just the body
 	double displayBodyLength;
-	if (outboardEnd.Distance(inboardEnd) > bodyLength)
+	if ((outboardEnd - inboardEnd).norm() > bodyLength)
 		// Use the specified body length
 		displayBodyLength = bodyLength;
 	else
 		// Otherwise, split the difference between the shock body and the shaft
-		displayBodyLength = outboardEnd.Distance(inboardEnd) / 2.0;
+		displayBodyLength = (outboardEnd - inboardEnd).norm() / 2.0;
 
 	// Set the size and resolution of the CylinderSources
 	body->SetRadius(bodyDiameter / 2.0);
@@ -145,8 +129,8 @@ void Damper3D::Update(const Eigen::Vector3d &outboardEnd, const Eigen::Vector3d 
 	shaft->SetResolution(resolution);
 
 	// Find the point where the body and shaft will meet
-	Eigen::Vector3d shaftDirection = outboardEnd - inboardEnd;
-	Eigen::Vector3d pointOfIntersection = shaftDirection.Normalize()	* displayBodyLength + inboardEnd;
+	const Eigen::Vector3d shaftDirection(outboardEnd - inboardEnd);
+	const Eigen::Vector3d pointOfIntersection(shaftDirection.normalized() * displayBodyLength + inboardEnd);
 
 	// Set the position of the body - the body should be on the inboard (chassis) side
 	body->SetEndPoint1(inboardEnd);
@@ -170,7 +154,7 @@ void Damper3D::Update(const Eigen::Vector3d &outboardEnd, const Eigen::Vector3d 
 //					object or not.
 //
 // Input Arguments:
-//		actor	= const Primitive* to compare against this object's actors
+//		actor	= const LibPlot2D::Primitive* to compare against this object's actors
 //
 // Output Arguments:
 //		None
@@ -179,7 +163,7 @@ void Damper3D::Update(const Eigen::Vector3d &outboardEnd, const Eigen::Vector3d 
 //		bool representing whether or not the Actor was part of this object
 //
 //==========================================================================
-bool Damper3D::ContainsThisActor(const Primitive *actor)
+bool Damper3D::ContainsThisActor(const LibPlot2D::Primitive *actor)
 {
 	// Make the comparison
 	if (inboardEndPoint == actor ||
@@ -215,7 +199,7 @@ Eigen::Vector3d Damper3D::FindClosestPoint(const Eigen::Vector3d& point, const E
 	Eigen::Vector3d endPoint1Test(VVASE::Math::NearestPointOnAxis(point, direction, endPoint1Center));
 	Eigen::Vector3d endPoint2Test(VVASE::Math::NearestPointOnAxis(point, direction, endPoint2Center));
 
-	if (endPoint1Center.Distance(endPoint1Test) < endPoint2Center.Distance(endPoint2Test))
+	if ((endPoint1Center - endPoint1Test).norm() < (endPoint2Center - endPoint2Test).norm())
 		return endPoint1Center;
 
 	return endPoint2Center;
