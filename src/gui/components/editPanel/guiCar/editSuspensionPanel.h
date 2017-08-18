@@ -24,7 +24,6 @@ namespace VVASE
 
 // Local forward declarations
 class Suspension;
-class Eigen::Vector3d;
 class SuperGrid;
 class EditSuspensionNotebook;
 

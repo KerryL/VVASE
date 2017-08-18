@@ -216,9 +216,9 @@ void EditCornerPanel::UpdateInformation(Corner *currentCorner, Suspension* curre
 		// Get the location of this hardpoint (don't forget to convert it!)
 		point = UnitConverter::GetInstance().ConvertDistanceOutput(currentCorner->hardpoints[i]);
 
-		hardpoints->SetCellValue(i + 1, 1, UnitConverter::GetInstance().FormatNumber(point.x));
-		hardpoints->SetCellValue(i + 1, 2, UnitConverter::GetInstance().FormatNumber(point.y));
-		hardpoints->SetCellValue(i + 1, 3, UnitConverter::GetInstance().FormatNumber(point.z));
+		hardpoints->SetCellValue(i + 1, 1, UnitConverter::GetInstance().FormatNumber(point.x()));
+		hardpoints->SetCellValue(i + 1, 2, UnitConverter::GetInstance().FormatNumber(point.y()));
+		hardpoints->SetCellValue(i + 1, 3, UnitConverter::GetInstance().FormatNumber(point.z()));
 	}
 
 	hardpoints->EndBatch();
@@ -509,9 +509,9 @@ void EditCornerPanel::GridCellChangedEvent(wxGridEvent &event)
 			parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
 				parent.GetParent().GetMainFrame().GetActiveIndex(),
 				UndoRedoStack::Operation::DataTypeDouble,
-				&(currentCorner->hardpoints[event.GetRow() - 1].x));
+				&(currentCorner->hardpoints[event.GetRow() - 1].x()));
 
-			currentCorner->hardpoints[event.GetRow() - 1].x =
+			currentCorner->hardpoints[event.GetRow() - 1].x() =
 				UnitConverter::GetInstance().ConvertDistanceInput(value);
 		}
 		else if (event.GetCol() == 2)// Y
@@ -520,9 +520,9 @@ void EditCornerPanel::GridCellChangedEvent(wxGridEvent &event)
 			parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
 				parent.GetParent().GetMainFrame().GetActiveIndex(),
 				UndoRedoStack::Operation::DataTypeDouble,
-				&(currentCorner->hardpoints[event.GetRow() - 1].y));
+				&(currentCorner->hardpoints[event.GetRow() - 1].y()));
 
-			currentCorner->hardpoints[event.GetRow() - 1].y =
+			currentCorner->hardpoints[event.GetRow() - 1].y() =
 				UnitConverter::GetInstance().ConvertDistanceInput(value);
 		}
 		else// Z
@@ -531,9 +531,9 @@ void EditCornerPanel::GridCellChangedEvent(wxGridEvent &event)
 			parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
 				parent.GetParent().GetMainFrame().GetActiveIndex(),
 				UndoRedoStack::Operation::DataTypeDouble,
-				&(currentCorner->hardpoints[event.GetRow() - 1].z));
+				&(currentCorner->hardpoints[event.GetRow() - 1].z()));
 
-			currentCorner->hardpoints[event.GetRow() - 1].z =
+			currentCorner->hardpoints[event.GetRow() - 1].z() =
 				UnitConverter::GetInstance().ConvertDistanceInput(value);
 		}
 

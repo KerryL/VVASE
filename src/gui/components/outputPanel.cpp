@@ -18,6 +18,7 @@
 #include "VVASE/core/car/subsystems/suspension.h"
 #include "VVASE/core/analysis/kinematicOutputs.h"
 #include "VVASE/core/utilities/debugger.h"
+#include "VVASE/core/utilities/debugLog.h"
 #include "VVASE/gui/utilities/unitConverter.h"
 #include "VVASE/gui/superGrid.h"
 #include "VVASE/core/utilities/carMath.h"
@@ -80,7 +81,7 @@ OutputPanel::~OutputPanel()
 // Description:		Updates the information on this panel.
 //
 // Input Arguments:
-//		outputs		= GuiCar::CarOutputs containing the outputs we want to use
+//		outputs		= GuiCarOutputs containing the outputs we want to use
 //					  for the update
 //		car			= Car& pointing to the car with which these outputs are associated
 //		index		= int specifying the data column to edit
@@ -93,7 +94,7 @@ OutputPanel::~OutputPanel()
 //		None
 //
 //==========================================================================
-void OutputPanel::UpdateInformation(GuiCar::CarOutputs outputs, Car &car,
+void OutputPanel::UpdateInformation(GuiCarOutputs outputs, Car &car,
 									 int index, wxString name)
 {
 	outputsList->BeginBatch();

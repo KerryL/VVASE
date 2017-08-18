@@ -14,6 +14,8 @@
 // Local headers
 #include "VVASE/core/car/car.h"
 #include "VVASE/core/car/subsystems/tireSet.h"
+#include "VVASE/core/car/subsystems/brakes.h"
+#include "VVASE/core/car/subsystems/massProperties.h"
 #include "VVASE/gui/guiObject.h"
 #include "../../Sweep.h"
 #include "../../guiCar.h"
@@ -61,20 +63,20 @@ EditPanel::EditPanel(MainFrame &mainFrame, wxWindowID id, const wxPoint& pos,
 	systemsTree = mainFrame.GetSystemsTree();
 
 	currentType = GuiObject::TypeNone;
-	currentObject = NULL;
+	currentObject = nullptr;
 
-	editAerodynamics = NULL;
-	editBrakes = NULL;
-	editDifferential = NULL;
-	editDrivetrain = NULL;
-	editEngine = NULL;
-	editMass = NULL;
-	editSuspension = NULL;
-	editTires = NULL;
+	editAerodynamics = nullptr;
+	editBrakes = nullptr;
+	editDifferential = nullptr;
+	editDrivetrain = nullptr;
+	editEngine = nullptr;
+	editMass = nullptr;
+	editSuspension = nullptr;
+	editTires = nullptr;
 
-	editIteration = NULL;
+	editSweep = nullptr;
 
-	carMutex = NULL;
+	carMutex = nullptr;
 
 	sizer = new wxBoxSizer(wxVERTICAL);
 	SetSizer(sizer);
@@ -150,7 +152,7 @@ void EditPanel::UpdateInformation(GuiObject *currentObject)
 		return;
 	}
 
-	carMutex = NULL;
+	carMutex = nullptr;
 
 	bool ignoreSystemsTree = true;
 	wxTreeItemId tempTreeID;
@@ -200,8 +202,8 @@ void EditPanel::UpdateInformation(GuiObject *currentObject)
 
 		break;
 
-	case GuiObject::TypeIteration:
-		editIteration->UpdateInformation(static_cast<Sweep*>(currentObject));
+	case GuiObject::TypeSweep:
+		editSweep->UpdateInformation(static_cast<Sweep*>(currentObject));
 		break;
 
 	case GuiObject::TypeOptimization:
@@ -282,11 +284,11 @@ void EditPanel::CreateControls(bool ignoreSystemsTree)
 
 		break;
 
-	case GuiObject::TypeIteration:
-		editIteration = new EditSweepNotebook(*this, wxID_ANY,
+	case GuiObject::TypeSweep:
+		editSweep = new EditSweepNotebook(*this, wxID_ANY,
 			wxDefaultPosition, wxDefaultSize, wxNB_BOTTOM);
 
-		sizer->Add(editIteration, 1, wxEXPAND);
+		sizer->Add(editSweep, 1, wxEXPAND);
 		break;
 
 	// Unused cases
@@ -323,7 +325,7 @@ void EditPanel::DeleteAllControls()
 	// Remove the panel from the sizer (if the panel exists)
 	if (editAerodynamics || editBrakes || editDifferential || editDrivetrain
 		|| editEngine || editMass || editSuspension || editTires ||
-		editIteration)
+		editSweep)
 		sizer->Remove(0);
 	sizer->Layout();
 
@@ -336,19 +338,19 @@ void EditPanel::DeleteAllControls()
 	delete editSuspension;
 	delete editTires;
 
-	delete editIteration;
+	delete editSweep;
 
-	// Set all of the pointers to NULL
-	editAerodynamics = NULL;
-	editBrakes = NULL;
-	editDifferential = NULL;
-	editDrivetrain = NULL;
-	editEngine = NULL;
-	editMass = NULL;
-	editSuspension = NULL;
-	editTires = NULL;
+	// Set all of the pointers to nullptr
+	editAerodynamics = nullptr;
+	editBrakes = nullptr;
+	editDifferential = nullptr;
+	editDrivetrain = nullptr;
+	editEngine = nullptr;
+	editMass = nullptr;
+	editSuspension = nullptr;
+	editTires = nullptr;
 
-	editIteration = NULL;
+	editSweep = nullptr;
 
 	// When we remove these controls, we no longer want the helpr orb to be active
 	// in this car's renderer.  This makes the orb go inactive if we click off of

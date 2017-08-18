@@ -754,7 +754,7 @@ void GeneticAlgorithmPanel::UpdateSelectableCars()
 {
 	// NOTE:  If cars are opened or closed, this should follow the associated car, even though
 	// we may need to change the index to do so
-	// Check iterations for this behavior, too!
+	// Check sweep for this behavior, too!
 
 	wxString currentName = selectedCar->GetValue();
 

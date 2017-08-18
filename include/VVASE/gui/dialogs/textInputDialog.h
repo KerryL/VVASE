@@ -27,7 +27,7 @@ class TextInputDialog : public wxDialog
 public:
 	TextInputDialog(const wxString &message, const wxString &title, const wxString &defaultText, wxWindow *parent);
 
-	wxString GetText() const { return text->GetValue(); }
+	wxString GetText() const;
 
 private:
 	wxTextCtrl *text;

@@ -14,7 +14,7 @@
 #define APPEARANCE_OPTIONS_H_
 
 // Local headers
-#incldue "VVASE/core/utilities/vvaseString.h"
+#include "VVASE/core/utilities/vvaseString.h"
 
 // Standard C++ headers
 #include <iosfwd>// for forward declarations of fstream objects

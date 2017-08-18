@@ -281,6 +281,9 @@
     <ClInclude Include="src\application\gitHash.h">
       <Filter>Source Files\application</Filter>
     </ClInclude>
+    <ClInclude Include="include\VVASE\gui\guiCarOutputs.h">
+      <Filter>Header Files\gui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\application\pluginManager.cpp">

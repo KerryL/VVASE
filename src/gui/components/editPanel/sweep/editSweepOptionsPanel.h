@@ -9,8 +9,8 @@
 // Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains the class declaration for the EditSweepOptionsPanel class.
 
-#ifndef EDIT_ITERATION_OPTIONS_PANEL_H_
-#define EDIT_ITERATION_OPTIONS_PANEL_H_
+#ifndef EDIT_SWEEP_OPTIONS_PANEL_H_
+#define EDIT_SWEEP_OPTIONS_PANEL_H_
 
 // wxWidgets headers
 #include <wx/wx.h>
@@ -55,8 +55,8 @@ private:
 
 	enum EditSweepOptionsEventIds
 	{
-		CheckBoxIterationOptions = 900 + wxID_HIGHEST,
-		TextBoxIterationOptions,
+		CheckBoxSweepOptions = 900 + wxID_HIGHEST,
+		TextBoxSweepOptions,
 		ButtonSetAsDefault
 	};
 
@@ -71,4 +71,4 @@ private:
 
 }// namespace VVASE
 
-#endif// EDIT_ITERATION_OPTIONS_PANEL_H_
+#endif// EDIT_SWEEP_OPTIONS_PANEL_H_

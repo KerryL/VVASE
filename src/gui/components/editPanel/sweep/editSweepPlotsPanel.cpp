@@ -121,7 +121,7 @@ void EditSweepPlotsPanel::UpdateInformation()
 // Description:		Updates the information on this panel.
 //
 // Input Arguments:
-//		currentSweep	= Sweep* pointing to the associated iteration
+//		currentSweep	= Sweep* pointing to the associated sweep
 //
 // Output Arguments:
 //		None
@@ -137,7 +137,7 @@ void EditSweepPlotsPanel::UpdateInformation(Sweep *currentSweep)
 	if (!currentSweep)
 		return;
 
-	// Check the plots for the plots that are already active with the associated iteration
+	// Check the plots for the plots that are already active with the associated sweep
 	unsigned int i;
 	for (i = 0; i < Sweep::NumberOfPlots; i++)
 		plotListCheckBox->Check(i, currentSweep->GetActivePlot(static_cast<Sweep::PlotID>(i)));
@@ -205,7 +205,7 @@ void EditSweepPlotsPanel::CreateControls()
 //==========================================================================
 void EditSweepPlotsPanel::PlotSelectionChangeEvent(wxCommandEvent &event)
 {
-	// Update the iteration to match the checklist
+	// Update the sweep to match the checklist
 	currentSweep->SetActivePlot(static_cast<Sweep::PlotID>(event.GetInt()),
 		plotListCheckBox->IsChecked(event.GetInt()));
 

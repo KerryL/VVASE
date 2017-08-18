@@ -9,8 +9,8 @@
 // Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Contains the class declaration for the EditSweepNotebook class.
 
-#ifndef EDIT_ITERATION_NOTEBOOK_H_
-#define EDIT_ITERATION_NOTEBOOK_H_
+#ifndef EDIT_SWEEP_NOTEBOOK_H_
+#define EDIT_SWEEP_NOTEBOOK_H_
 
 // wxWidgets headers
 #include <wx/notebook.h>
@@ -51,4 +51,4 @@ private:
 
 }// namespace VVASE
 
-#endif// EDIT_ITERATION_NOTEBOOK_H_
+#endif// EDIT_SWEEP_NOTEBOOK_H_

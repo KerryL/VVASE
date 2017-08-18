@@ -31,7 +31,7 @@
 #include "../res/icons/massProperties16.xpm"
 #include "../res/icons/suspension16.xpm"
 #include "../res/icons/tires16.xpm"
-#include "../res/icons/iteration16.xpm"
+#include "../res/icons/sweep16.xpm"
 #include "../res/icons/optimization16.xpm"
 #endif
 
@@ -84,7 +84,7 @@ MainTree::MainTree(MainFrame &mainFrame, wxWindowID id, const wxPoint& pos,
 		wxBITMAP_TYPE_ICO_RESOURCE, iconSize, iconSize));
 	iconHandle[TiresIcon] = iconList->Add(wxIcon(_T("ICON_ID_TIRES"),
 		wxBITMAP_TYPE_ICO_RESOURCE, iconSize, iconSize));
-	iconHandle[SweepIcon] = iconList->Add(wxIcon(_T("ICON_ID_ITERATION"),
+	iconHandle[SweepIcon] = iconList->Add(wxIcon(_T("ICON_ID_SWEEP"),
 		wxBITMAP_TYPE_ICO_RESOURCE, iconSize, iconSize));
 	iconHandle[OptimizationIcon] = iconList->Add(wxIcon(_T("ICON_ID_OPTIMIZATION"),
 		wxBITMAP_TYPE_ICO_RESOURCE, iconSize, iconSize));
@@ -97,7 +97,7 @@ MainTree::MainTree(MainFrame &mainFrame, wxWindowID id, const wxPoint& pos,
 	iconHandle[MassPropertiesIcon] = iconList->Add(wxIcon(massProperties16_xpm));
 	iconHandle[SuspensionIcon] = iconList->Add(wxIcon(suspension16_xpm));
 	iconHandle[TiresIcon] = iconList->Add(wxIcon(tires16_xpm));
-	iconHandle[IterationIcon] = iconList->Add(wxIcon(iteration16_xpm));
+	iconHandle[SweepIcon] = iconList->Add(wxIcon(sweep16_xpm));
 	iconHandle[OptimizationIcon] = iconList->Add(wxIcon(optimization16_xpm));
 #endif
 
@@ -383,7 +383,7 @@ int MainTree::GetItemType(wxTreeItemId itemId)
 				break;
 
 			// Unused types
-			case GuiObject::TypeIteration:
+			case GuiObject::TypeSweep:
 			case GuiObject::TypeOptimization:
 			case GuiObject::TypeNone:
 				break;

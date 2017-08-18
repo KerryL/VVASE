@@ -29,6 +29,7 @@
 #include <wx/fileconf.h>
 #include <wx/stdpaths.h>
 #include <wx/filename.h>
+#include <wx/splitter.h>
 
 // LibPlot2D headers
 #include <lp2d/renderer/plotRenderer.h>
@@ -56,7 +57,7 @@ namespace VVASE
 //
 //==========================================================================
 Sweep::Sweep(MainFrame &mainFrame, wxString pathAndFileName)
-	: GuiObject(mainFrame, pathAndFileName), plotInterface(&mainFrame)// TODO:  Correct?  Maybe needs to be notebookTab?
+	: GuiObject(mainFrame, pathAndFileName), mPlotInterface(nullptr)
 {
 	int i;
 	for (i = 0; i < NumberOfPlots; i++)
@@ -83,7 +84,6 @@ Sweep::Sweep(MainFrame &mainFrame, wxString pathAndFileName)
 
 	// Create the renderer
 	CreateGUI();
-	notebookTab = dynamic_cast<wxWindow*>(plotPanel);
 
 	// Do this prior to initialization so saved files overwrite these defaults
 	ReadDefaultsFromConfig();
@@ -138,31 +138,74 @@ Sweep::~Sweep()
 	workingCarArray = NULL;
 }
 
+//==========================================================================
+// Class:			Sweep
+// Function:		CreateGUI
+//
+// Description:		Creates sizers and controls and lays them out in the window.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
 void Sweep::CreateGUI()
 {
-	// TODO:  Implement
-	// From DataPlotter:
-	/*wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
-	wxSplitterWindow *splitter = new wxSplitterWindow(this);
+	notebookTab = new wxPanel(&mainFrame);
+
+	wxBoxSizer *topSizer = new wxBoxSizer(wxVERTICAL);
+	wxSplitterWindow *splitter = new wxSplitterWindow(notebookTab);
 	topSizer->Add(splitter, 1, wxGROW);
 
 	wxPanel *lowerPanel = new wxPanel(splitter);
 	wxBoxSizer *lowerSizer = new wxBoxSizer(wxHORIZONTAL);
-	lowerSizer->Add(CreateButtons(lowerPanel), 0, wxGROW | wxALL, 5);
+	//lowerSizer->Add(CreateButtons(lowerPanel), 0, wxGROW | wxALL, 5);
 	lowerSizer->Add(new LibPlot2D::PlotListGrid(mPlotInterface, lowerPanel), 1, wxGROW | wxALL, 5);
 	lowerPanel->SetSizer(lowerSizer);
 
 	CreatePlotArea(splitter);
 	splitter->SplitHorizontally(mPlotArea, lowerPanel, mPlotArea->GetSize().GetHeight());
-	splitter->SetSize(GetClientSize());
+	splitter->SetSize(notebookTab->GetClientSize());
 	splitter->SetSashGravity(1.0);
 	splitter->SetMinimumPaneSize(150);
 
-	SetSizerAndFit(topSizer);
-	splitter->SetSashPosition(splitter->GetSashPosition(), false);*/
+	notebookTab->SetSizerAndFit(topSizer);
+	splitter->SetSashPosition(splitter->GetSashPosition(), false);
+}
 
-	// Must also have:
-	//plotPanel = ;
+//==========================================================================
+// Class:			Sweep
+// Function:		CreatePlotArea
+//
+// Description:		Creates the main plot control.
+//
+// Input Arguments:
+//		parent	= wxWindow*
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		LibPlot2D::PlotRenderer* pointing to plotArea
+//
+//==========================================================================
+LibPlot2D::PlotRenderer* Sweep::CreatePlotArea(wxWindow *parent)
+{
+	wxGLAttributes displayAttributes;
+	displayAttributes.PlatformDefaults().RGBA().DoubleBuffer().SampleBuffers(1).Samplers(4).Stencil(1).EndList();
+	assert(wxGLCanvas::IsDisplaySupported(displayAttributes));
+	mPlotArea = new LibPlot2D::PlotRenderer(mPlotInterface, *parent, wxID_ANY, displayAttributes);
+
+	mPlotArea->SetMinSize(wxSize(650, 320));
+	mPlotArea->SetMajorGridOn();
+	mPlotArea->SetCurveQuality(LibPlot2D::PlotRenderer::CurveQuality::HighWrite);
+
+	return mPlotArea;
 }
 
 //==========================================================================
@@ -241,7 +284,7 @@ void Sweep::RemoveCar(GuiCar *toRemove)
 	if (indexToRemove == associatedCars.size())
 		return;
 
-	outputLists[indexToRemove].clear();
+	outputLists[indexToRemove].clear();// TODO:  necessary?
 	outputLists.erase(outputLists.begin() + indexToRemove);
 
 	associatedCars.erase(associatedCars.begin() + indexToRemove);
@@ -294,7 +337,7 @@ int Sweep::GetIconHandle() const
 // Class:			Sweep
 // Function:		UpdateData
 //
-// Description:		Updates the iteration outputs for all of the cars for
+// Description:		Updates the sweep outputs for all of the cars for
 //					the entire range.
 //
 // Input Arguments:
@@ -403,9 +446,6 @@ void Sweep::UpdateData()
 		// Create a list to store the outputs for this car
 		std::vector<std::unique_ptr<KinematicOutputs>> currentList;
 
-		// Add this list to our list of lists (bit confusing?)
-		outputLists.push_back(currentList);
-
 		// Run the analysis for each point through the range
 		for (currentPoint = 0; currentPoint < totalPoints; currentPoint++)
 		{
@@ -439,9 +479,12 @@ void Sweep::UpdateData()
 				wxUtilities::ToVVASEString(associatedCars[currentCar]->GetCleanName() + _T(":") + name), index);
 			mainFrame.AddJob(job);
 
-			// Add the outputs to the iteration's list
+			// Add the outputs to the sweep's list
 			currentList.push_back(std::move(newOutputs));
 		}
+
+		// Add this list to our list of lists (bit confusing?)
+		outputLists.push_back(std::move(currentList));
 	}
 }
 
@@ -467,9 +510,9 @@ void Sweep::UpdateDisplay()
 	if (pendingAnalysisCount != 0)
 		return;
 
-	if (plotPanel)
+	if (mPlotArea)
 	{
-		plotInterface.ClearAllCurves();
+		mPlotInterface.ClearAllCurves();
 
 		// Create the datasets for the plot
 		// Need to create one dataset per curve per car
@@ -501,15 +544,15 @@ void Sweep::UpdateDisplay()
 					}
 
 					// Add the dataset to the plot
-					plotInterface.AddCurve(std::move(dataSet), associatedCars[j]->GetCleanName()
+					mPlotInterface.AddCurve(std::move(dataSet), associatedCars[j]->GetCleanName()
 						+ _T(", ") + GetPlotName((PlotID)i) + _T(" [") +
 						GetPlotUnits((PlotID)i) + _T("]"));
 
 					// Set the x-axis information if this is the first pass
-					if (plotInterface.GetCurveCount() == 1)
-						plotInterface.SetXDataLabel(
-						GetPlotName((PlotID)(KinematicOutputs::NumberOfOutputScalars + xAxisType)) + _T(" [") +
-						GetPlotUnits((PlotID)(KinematicOutputs::NumberOfOutputScalars + xAxisType)) + _T("]"));
+					if (mPlotInterface.GetCurveCount() == 1)
+						mPlotInterface.SetXDataLabel(
+						GetPlotName(static_cast<PlotID>(KinematicOutputs::NumberOfOutputScalars + xAxisType)) + _T(" [") +
+						GetPlotUnits(static_cast<PlotID>(KinematicOutputs::NumberOfOutputScalars + xAxisType)) + _T("]"));
 				}
 			}
 		}
@@ -558,7 +601,7 @@ unsigned int Sweep::CountValidValues(const unsigned int &carIndex, const PlotID 
 // Class:			Sweep
 // Function:		ClearAllLists
 //
-// Description:		Updates the iteration outputs for all of the cars for
+// Description:		Updates the sweep outputs for all of the cars for
 //					the entire range.
 //
 // Input Arguments:
@@ -616,7 +659,8 @@ bool Sweep::PerformSaveToFile()
 	outFile.write(xLabel.c_str(), (xLabel.Len() + 1) * sizeof(char));
 	outFile.write((char*)&autoGenerateZLabel, sizeof(bool));
 	outFile.write(zLabel.c_str(), (zLabel.Len() + 1) * sizeof(char));
-	bool temp(plotPanel->GetRenderer()->GetMajorGridOn());
+
+	bool temp(mPlotArea->GetMajorGridOn());
 	outFile.write((char*)&temp, sizeof(bool));
 
 	outFile.close();
@@ -692,9 +736,9 @@ bool Sweep::PerformLoadFromFile()
 	bool temp;
 	inFile.read((char*)&temp, sizeof(bool));
 	if (temp)
-		plotPanel->GetRenderer()->SetMajorGridOn();
+		mPlotArea->SetMajorGridOn();
 	else
-		plotPanel->GetRenderer()->SetMajorGridOff();
+		mPlotArea->SetMajorGridOff();
 
 	inFile.close();
 
@@ -705,7 +749,7 @@ bool Sweep::PerformLoadFromFile()
 // Class:			Sweep
 // Function:		ReadDefaultsFromConfig
 //
-// Description:		Read the default iteration settings from the config file.
+// Description:		Read the default sweep settings from the config file.
 //
 // Input Arguments:
 //		None
@@ -735,17 +779,17 @@ void Sweep::ReadDefaultsFromConfig()
 	bool temp;
 	configurationFile->Read(_T("/Sweep/ShowMinorGridLines"), &temp, false);
 	if (temp)
-		plotPanel->GetRenderer()->SetMinorGridOn();
+		mPlotArea->SetMinorGridOn();
 	else
-		plotPanel->GetRenderer()->SetMinorGridOff();
+		mPlotArea->SetMinorGridOff();
 	configurationFile->Read(_T("/Sweep/ShowLegend"), &temp, true);
 	if (temp)
-		plotPanel->GetRenderer()->SetLegendOn();
+		mPlotArea->SetLegendOn();
 	else
-		plotPanel->GetRenderer()->SetLegendOff();
+		mPlotArea->SetLegendOff();
 
-	plotPanel->SetDefaultLineSize(configurationFile->Read(_T("/Sweep/LineSize"), 2.0));
-	plotPanel->SetDefaultMarkerSize(configurationFile->Read(_T("/Sweep/MarkerSize"), 0L));
+	/*mPlotArea->SetDefaultLineSize(configurationFile->Read(_T("/Sweep/LineSize"), 2.0));
+	mPlotArea->SetDefaultMarkerSize(configurationFile->Read(_T("/Sweep/MarkerSize"), 0L));*/// TODO:  Modify lp2d to accomodate
 
 	configurationFile->Read(_T("/Sweep/StartPitch"), &range.startPitch, 0.0);
 	configurationFile->Read(_T("/Sweep/StartRoll"), &range.startRoll, 0.0);
@@ -792,7 +836,7 @@ void Sweep::ReadDefaultsFromConfig()
 // Class:			Sweep
 // Function:		WriteDefaultsToConfig
 //
-// Description:		Writes the current iteration settings to the config file.
+// Description:		Writes the current sweep settings to the config file.
 //
 // Input Arguments:
 //		None
@@ -820,10 +864,10 @@ void Sweep::WriteDefaultsToConfig() const
 	configurationFile->Write(_T("/Sweep/ZLabel"), zLabel);
 	configurationFile->Write(_T("/Sweep/ShowGridLines"), showGridLines);
 
-	configurationFile->Write(_T("/Sweep/ShowMinorGridLines"), plotPanel->GetRenderer()->GetMinorGridOn());
-	configurationFile->Write(_T("/Sweep/ShowLegend"), plotPanel->GetRenderer()->LegendIsVisible());
-	configurationFile->Write(_T("/Sweep/LineSize"), plotPanel->GetDefaultLineSize());
-	configurationFile->Write(_T("/Sweep/MarkerSize"), plotPanel->GetDefaultMarkerSize());
+	configurationFile->Write(_T("/Sweep/ShowMinorGridLines"), mPlotArea->GetMinorGridOn());
+	configurationFile->Write(_T("/Sweep/ShowLegend"), mPlotArea->LegendIsVisible());
+	/*configurationFile->Write(_T("/Sweep/LineSize"), mPlotArea->GetDefaultLineSize());
+	configurationFile->Write(_T("/Sweep/MarkerSize"), mPlotArea->GetDefaultMarkerSize());*/// TODO:  Modify lp2d to accomodate
 
 	configurationFile->Write(_T("/Sweep/StartPitch"), range.startPitch);
 	configurationFile->Write(_T("/Sweep/StartRoll"), range.startRoll);
@@ -837,8 +881,8 @@ void Sweep::WriteDefaultsToConfig() const
 
 	configurationFile->Write(_T("/Sweep/NumberOfPoints"), numberOfPoints);
 
-	configurationFile->Write(_T("/Sweep/XAxisType"), (int)xAxisType);
-	configurationFile->Write(_T("/Sweep/YAxisType"), (int)yAxisType);
+	configurationFile->Write(_T("/Sweep/XAxisType"), static_cast<int>(xAxisType));
+	configurationFile->Write(_T("/Sweep/YAxisType"), static_cast<int>(yAxisType));
 
 	// Encode the active plots into a string that can be saved into the configuration file
 	wxString activePlotString(wxEmptyString), temp;
@@ -891,30 +935,30 @@ void Sweep::ApplyPlotFormatting()
 			}
 		}
 
-		plotPanel->GetRenderer()->SetLeftYLabel(label);
+		mPlotArea->SetLeftYLabel(label);
 	}
 	else
-		plotPanel->GetRenderer()->SetLeftYLabel(zLabel);
+		mPlotArea->SetLeftYLabel(zLabel);
 
 	// FIXME:  Implement dual labels
 	//plotPanel->GetRenderer()->SetRightYLabel();
 
 	if (autoGenerateXLabel)
-		plotPanel->GetRenderer()->SetXLabel(
+		mPlotArea->SetXLabel(
 		GetPlotName((PlotID)(KinematicOutputs::NumberOfOutputScalars + xAxisType)) + _T(" [")
 		+ GetPlotUnits((PlotID)(KinematicOutputs::NumberOfOutputScalars + xAxisType)) + _T("]"));
 	else
-		plotPanel->GetRenderer()->SetXLabel(xLabel);
+		mPlotArea->SetXLabel(xLabel);
 
 	if (generateTitleFromFileName)
-		plotPanel->GetRenderer()->SetTitle(GetCleanName());
+		mPlotArea->SetTitle(GetCleanName());
 	else
-		plotPanel->GetRenderer()->SetTitle(title);
+		mPlotArea->SetTitle(title);
 
 	if (showGridLines)
-		plotPanel->GetRenderer()->SetMajorGridOn();
+		mPlotArea->SetMajorGridOn();
 	else
-		plotPanel->GetRenderer()->SetMajorGridOff();
+		mPlotArea->SetMajorGridOff();
 }
 
 //==========================================================================
@@ -1100,12 +1144,12 @@ void Sweep::ShowAssociatedCarsDialog()
     wxArrayInt selections;
 	for (i = 0; i < (int)openCars.size(); i++)
 	{
-		// If the item is associated with this iteration, add its index to the array
+		// If the item is associated with this sweep, add its index to the array
 		if (AssociatedWithCar(openCars[i]))
 			selections.Add(i);
 	}
 
-	if (wxGetSelectedChoices(selections, _T("Select the cars to associate with this iteration:"),
+	if (wxGetSelectedChoices(selections, _T("Select the cars to associate with this sweep:"),
 		_T("Associated Cars"), choices, &mainFrame) != -1)
 	{
 		// Remove all items from our lists

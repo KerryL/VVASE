@@ -10,12 +10,12 @@
 // Desc:  This is a GUI interface for the genetic algorithm optimization.
 
 // Local headers
-#include "geneticOptimization.h"
+#include "VVASE/gui/geneticOptimization.h"
 #include "guiCar.h"
-#include "guiObject.h"
+#include "VVASE/gui/guiObject.h"
 #include "gaObject.h"
-#include "components/mainTree.h"
-#include "components/mainFrame.h"
+#include "VVASE/gui/components/mainTree.h"
+#include "VVASE/gui/components/mainFrame.h"
 #include "geneticAlgorithmPanel.h"
 #include "VVASE/core/car/car.h"
 #include "VVASE/core/car/subsystems/suspension.h"
@@ -24,6 +24,7 @@
 #include "VVASE/core/threads/threadJob.h"
 #include "VVASE/core/threads/optimizationData.h"
 #include "VVASE/core/utilities/carMath.h"
+#include "VVASE/gui/utilities/wxRelatedUtilities.h"
 
 namespace VVASE
 {
@@ -112,9 +113,9 @@ void GeneticOptimization::BeginOptimization()
 
 	// Add a job for the genetic algorithm - this is the manager thread from which
 	// the analysis jobs are created
-	OptimizationData *data = new OptimizationData(geneticAlgorithm);
-	ThreadJob job(ThreadJob::CommandThreadGeneticOptimization, data,
-		name, index);
+	std::unique_ptr<OptimizationData> data(std::make_unique<OptimizationData>(geneticAlgorithm));
+	ThreadJob job(ThreadJob::CommandThreadGeneticOptimization, std::move(data),
+		wxUtilities::ToVVASEString(name), index);
 	mainFrame.AddJob(job);
 }
 

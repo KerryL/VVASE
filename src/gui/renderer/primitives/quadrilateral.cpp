@@ -12,6 +12,7 @@
 // Local headers
 #include "VVASE/gui/renderer/primitives/quadrilateral.h"
 #include "VVASE/core/utilities/carMath.h"
+#include "VVASE/core/utilities/geometryMath.h"
 
 // LibPlot2D headers
 #include <lp2d/renderer/renderWindow.h>
@@ -84,19 +85,19 @@ void Quadrilateral::GenerateGeometry()
 	Eigen::Vector3d corner4 = center - axisDirection.normalized() * halfDiagonal;
 
 	corner1 -= center;
-	corner1.Rotate(diagonalAngle, normal);
+	GeometryMath::Rotate(corner1, diagonalAngle, normal);
 	corner1 += center;
 
 	corner2 -= center;
-	corner2.Rotate(-diagonalAngle, normal);
+	GeometryMath::Rotate(corner2, -diagonalAngle, normal);
 	corner2 += center;
 
 	corner3 -= center;
-	corner3.Rotate(diagonalAngle, normal);
+	GeometryMath::Rotate(corner3, diagonalAngle, normal);
 	corner3 += center;
 
 	corner4 -= center;
-	corner4.Rotate(-diagonalAngle, normal);
+	GeometryMath::Rotate(corner4, -diagonalAngle, normal);
 	corner4 += center;
 
 	// Add the vertices to create two triangles

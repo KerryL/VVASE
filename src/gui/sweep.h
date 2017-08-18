@@ -84,7 +84,7 @@ public:
 	inline int GetAssociatedCarCount() const { return associatedCars.size(); }
 
 	// Returns this object's type (mandatory overload)
-	ItemType GetType() const { return TypeIteration; }
+	ItemType GetType() const { return TypeSweep; }
 
 	// This is the list of possible plots that we can display
 	// Enumeration picks up where the KINEMATIC_OUTPUTS class left off
@@ -157,7 +157,7 @@ private:
 	Range range;
 
 	// The number of points at which the analysis will be performed
-	// (per axis for iterations with multiple independent variables)
+	// (per axis for sweep with multiple independent variables)
 	unsigned int numberOfPoints;
 
 	// Gets the icon handle for this object's icon
@@ -236,9 +236,9 @@ private:
 	bool secondAnalysisPending;
 
 	void CreateGUI();
-	wxWindow *plotPanel;
-
-	LibPlot2D::GuiInterface plotInterface;
+	LibPlot2D::PlotRenderer* CreatePlotArea(wxWindow *parent);
+	LibPlot2D::PlotRenderer *mPlotArea;
+	LibPlot2D::GuiInterface mPlotInterface;
 };
 
 }// namespace VVASE

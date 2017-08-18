@@ -18,8 +18,7 @@
 
 // Local headers
 #include "VVASE/gui/guiObject.h"
-#include "VVASE/core/analysis/kinematicOutputs.h"
-#include "VVASE/core/analysis/quasiStaticOutputs.h"
+#include "VVASE/gui/guiCarOutputs.h"
 
 // wxWidgets forward declarations
 class wxTreeItemId;
@@ -71,20 +70,7 @@ public:
 	// The tree IDs associated with each subsystem object
 	wxTreeItemId subsystems[NumberOfSubsystems];
 
-	struct CarOutputs
-	{
-		KinematicOutputs kinematicOutputs;
-		QuasiStaticOutputs quasiStaticOutputs;
-
-		bool hasQuasiStaticOutputs;
-
-		CarOutputs()
-		{
-			hasQuasiStaticOutputs = false;
-		}
-	};
-
-	CarOutputs GetOutputs() { return outputs; }
+	GuiCarOutputs GetOutputs() { return outputs; }
 
 	void SetUseOrtho(const bool &useOrtho);
 
@@ -105,7 +91,7 @@ private:
 	AppearanceOptions *appearanceOptions;
 
 	// The object that stores the kinematics information for this car
-	CarOutputs outputs;
+	GuiCarOutputs outputs;
 
 	// The scene visible to the user representing this object
 	CarRenderer *renderer;

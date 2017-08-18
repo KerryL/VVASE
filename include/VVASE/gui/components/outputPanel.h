@@ -17,7 +17,7 @@
 #include <wx/grid.h>
 
 // Local headers
-#include "VVASE/gui/guiCar.h"
+#include "VVASE/gui/guiCarOutputs.h"
 
 namespace VVASE
 {
@@ -34,7 +34,7 @@ public:
 		const wxSize &size = wxDefaultSize);
 	~OutputPanel();
 
-	void UpdateInformation(GuiCar::CarOutputs outputs, Car &car, int index,
+	void UpdateInformation(GuiCarOutputs outputs, Car &car, int index,
 		wxString name);
 	void FinishUpdate(int numberOfDataColumns);
 

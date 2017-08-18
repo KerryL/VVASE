@@ -80,4 +80,25 @@ void TextInputDialog::CreateControls(const wxString &message, const wxString &de
 	text->SetFocus();
 }
 
+//==========================================================================
+// Class:			TextInputDialog
+// Function:		GetText
+//
+// Description:		Returns the text entered by the user.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		wxString
+//
+//==========================================================================
+wxString TextInputDialog::GetText() const
+{
+	return text->GetValue();
+}
+
 }// namespace VVASE

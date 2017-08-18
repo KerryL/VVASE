@@ -38,6 +38,11 @@ class KinematicOutputs
 {
 public:
 	KinematicOutputs();
+	/*KinematicOutputs(const KinematicOutputs&) = delete;
+	/*KinematicOutputs(KinematicOutputs&&) = delete;
+	KinematicOutputs& operator=(const KinematicOutputs&) = delete;
+	KinematicOutputs& operator=(KinematicOutputs&&) = delete;
+	~KinematicOutputs() = default;*/
 
 	// Updates the kinematic variables associated with the current Suspension
 	void Update(const Car *original, const Suspension *current);
@@ -174,7 +179,7 @@ public:
 		X = 0,
 		Y,
 		Z
-	};
+	};// TODO:  Use Math::Axis instead?
 
 	// For converting from an output + location to OutputsComplete
 	static OutputsComplete OutputsCompleteIndex(const Corner::Location &location,

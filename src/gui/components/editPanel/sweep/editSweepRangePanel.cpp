@@ -122,7 +122,7 @@ void EditSweepRangePanel::UpdateInformation()
 // Description:		Updates the information on this panel.
 //
 // Input Arguments:
-//		currentSweep	= Sweep* pointing to the associated iteration
+//		currentSweep	= Sweep* pointing to the associated sweep
 //
 // Output Arguments:
 //		None
@@ -329,14 +329,14 @@ void EditSweepRangePanel::RangeTextBoxChangeEvent(wxCommandEvent& WXUNUSED(event
 	range.endHeave = UnitConverter::GetInstance().ConvertDistanceInput(range.endHeave);
 	range.endRackTravel = UnitConverter::GetInstance().ConvertDistanceInput(range.endRackTravel);
 
-	// Update the iteration's range and number of points
+	// Update the sweep's range and number of points
 	currentSweep->SetRange(range);
 
 	// Make sure the number of points is at least 2
 	if (numberOfPoints < 2)
 		return;
 
-	// Update the iteration's number of points
+	// Update the sweep's number of points
 	currentSweep->SetNumberOfPoints(numberOfPoints);
 
 	// Update the display

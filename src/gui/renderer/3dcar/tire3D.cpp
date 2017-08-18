@@ -15,6 +15,7 @@
 #include "VVASE/gui/renderer/3dcar/tire3D.h"
 #include "VVASE/gui/utilities/unitConverter.h"
 #include "VVASE/core/utilities/carMath.h"
+#include "VVASE/core/utilities/geometryMath.h"
 
 // LibPlot2D headers
 #include <lp2d/renderer/color.h>
@@ -150,7 +151,7 @@ void Tire3D::Update(const Eigen::Vector3d &contactPatch, const Eigen::Vector3d &
 	// Check to make sure our rotation axis is non-zero before we do the rotations
 	if (!VVASE::Math::IsZero(rotationAxis.norm()))
 		// Rotate the reference axis
-		axisDirection.Rotate(angleToRotate, rotationAxis);
+		GeometryMath::Rotate(axisDirection, angleToRotate, rotationAxis);
 
 	// Compute the sidewall position (positive along axis)
 	sidewallPosition = center + axisDirection * (width / 2.0);

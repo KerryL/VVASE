@@ -45,6 +45,7 @@
 #include "VVASE/core/analysis/kinematicOutputs.h"
 #include "VVASE/core/utilities/debugLog.h"
 #include "VVASE/gui/renderer/3dcar/debugShape.h"
+#include "VVASE/core/utilities/geometryMath.h"
 
 // LibPlot2D headers
 #include <lp2d/renderer/primitives/primitive.h>
@@ -75,36 +76,6 @@ namespace VVASE
 CarRenderer::CarRenderer(MainFrame &mainFrame, GuiCar &car,
 	const wxWindowID& id, const wxGLAttributes& attributes)
 	: RenderWindow(mainFrame, id, attributes, wxDefaultPosition, wxDefaultSize,
-	wxWANTS_CHARS | wxNO_FULL_REPAINT_ON_RESIZE), mainFrame(mainFrame), car(car),
-	appearanceOptions(car.GetAppearanceOptions()), displayCar(car.GetWorkingCar()),
-	referenceCar(car.GetOriginalCar())
-{
-	InternalInitialization();
-}
-
-//==========================================================================
-// Class:			CarRenderer
-// Function:		CarRenderer
-//
-// Description:		Constructor for CarRenderer class.  Initializes the
-//					renderer and sets up the canvas.
-//
-// Input Arguments:
-//		mainFrame	= MainFrame& reference to the owner of this object
-//		car			= GuiCar& reference to the car that we are to render
-//		id			= wxWindowID
-//		attributes	= const wxGLAttributes&
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-CarRenderer::CarRenderer(MainFrame &mainFrame, GuiCar &car,
-	const wxWindowID& id, const wxGLAttributes& attributes)
-	: LibPlot2D::RenderWindow(mainFrame, id, attributes, wxDefaultPosition, wxDefaultSize,
 	wxWANTS_CHARS | wxNO_FULL_REPAINT_ON_RESIZE), mainFrame(mainFrame), car(car),
 	appearanceOptions(car.GetAppearanceOptions()), displayCar(car.GetWorkingCar()),
 	referenceCar(car.GetOriginalCar())
@@ -334,21 +305,21 @@ void CarRenderer::UpdateCarDisplay()
 
 	// Figure out how big the ground plane should be
 	double groundPlaneScaleUp = 1.1;
-	double rightMostPoint = std::max(referenceSuspension->rightFront.hardpoints[Corner::ContactPatch].y +
+	double rightMostPoint = std::max(referenceSuspension->rightFront.hardpoints[Corner::ContactPatch].y() +
 		referenceTires->rightFront->width / 2.0,
-		referenceSuspension->rightRear.hardpoints[Corner::ContactPatch].y +
+		referenceSuspension->rightRear.hardpoints[Corner::ContactPatch].y() +
 		referenceTires->rightRear->width / 2.0);
-	double leftMostPoint = std::min(referenceSuspension->leftFront.hardpoints[Corner::ContactPatch].y -
+	double leftMostPoint = std::min(referenceSuspension->leftFront.hardpoints[Corner::ContactPatch].y() -
 		referenceTires->leftFront->width / 2.0,
-		referenceSuspension->leftRear.hardpoints[Corner::ContactPatch].y -
+		referenceSuspension->leftRear.hardpoints[Corner::ContactPatch].y() -
 		referenceTires->leftRear->width / 2.0);
-	double frontMostPoint = std::min(referenceSuspension->rightFront.hardpoints[Corner::ContactPatch].x -
+	double frontMostPoint = std::min(referenceSuspension->rightFront.hardpoints[Corner::ContactPatch].x() -
 		referenceTires->rightFront->diameter / 2.0,
-		referenceSuspension->leftFront.hardpoints[Corner::ContactPatch].x -
+		referenceSuspension->leftFront.hardpoints[Corner::ContactPatch].x() -
 		referenceTires->leftFront->diameter / 2.0);
-	double rearMostPoint = std::max(referenceSuspension->rightRear.hardpoints[Corner::ContactPatch].x +
+	double rearMostPoint = std::max(referenceSuspension->rightRear.hardpoints[Corner::ContactPatch].x() +
 		referenceTires->rightRear->diameter / 2.0,
-		referenceSuspension->leftRear.hardpoints[Corner::ContactPatch].x +
+		referenceSuspension->leftRear.hardpoints[Corner::ContactPatch].x() +
 		referenceTires->leftRear->diameter / 2.0);
 
 	double xLength = fabs(frontMostPoint - rearMostPoint) * groundPlaneScaleUp;
@@ -388,10 +359,10 @@ void CarRenderer::UpdateCarDisplay()
 							referenceSuspension->rightFront.hardpoints[Corner::UpperBallJoint],
 							referenceSuspension->rightFront.hardpoints[Corner::OutboardTieRod]);
 
-	// We also need to account for toe and camber settings for the TargetNormal - apply camber first
+	// We also need to account for toe and camber settings for the targetNormal - apply camber first
 	// NOTE:  This corner is on the right side of the car - we flip the sign on the camber and toe angles
-	targetNormal.Rotate(-displaySuspension->rightFront.staticCamber, Math::Axis::X);
-	targetNormal.Rotate(-displaySuspension->rightFront.staticToe, Math::Axis::Z);
+	GeometryMath::Rotate(targetNormal, -displaySuspension->rightFront.staticCamber, Eigen::Vector3d::UnitX());
+	GeometryMath::Rotate(targetNormal, -displaySuspension->rightFront.staticToe, Eigen::Vector3d::UnitZ());
 
 	// Now continue with the update for this corner
 	rightFrontLowerAArm->Update(displaySuspension->rightFront.hardpoints[Corner::LowerFrontTubMount],
@@ -484,9 +455,9 @@ void CarRenderer::UpdateCarDisplay()
 							referenceSuspension->leftFront.hardpoints[Corner::UpperBallJoint],
 							referenceSuspension->leftFront.hardpoints[Corner::OutboardTieRod]);
 
-	// We also need to account for toe and camber settings for the TargetNormal - apply camber first
-	targetNormal.Rotate(displaySuspension->leftFront.staticCamber, Math::Axis::X);
-	targetNormal.Rotate(displaySuspension->leftFront.staticToe, Math::Axis::Z);
+	// We also need to account for toe and camber settings for the targetNormal - apply camber first
+	GeometryMath::Rotate(targetNormal, displaySuspension->leftFront.staticCamber, Eigen::Vector3d::UnitX());
+	GeometryMath::Rotate(targetNormal, displaySuspension->leftFront.staticToe, Eigen::Vector3d::UnitZ());
 
 	// Now continue with the update for this corner
 	leftFrontLowerAArm->Update(displaySuspension->leftFront.hardpoints[Corner::LowerFrontTubMount],
@@ -586,10 +557,10 @@ void CarRenderer::UpdateCarDisplay()
 							referenceSuspension->rightRear.hardpoints[Corner::UpperBallJoint],
 							referenceSuspension->rightRear.hardpoints[Corner::OutboardTieRod]);
 
-	// We also need to account for toe and camber settings for the TargetNormal - apply camber first
+	// We also need to account for toe and camber settings for the targetNormal - apply camber first
 	// NOTE:  This corner is on the right side of the car - we flip the sign on the camber and toe angles
-	targetNormal.Rotate(-displaySuspension->rightRear.staticCamber, Math::Axis::X);
-	targetNormal.Rotate(-displaySuspension->rightRear.staticToe, Math::Axis::Z);
+	GeometryMath::Rotate(targetNormal, -displaySuspension->rightRear.staticCamber, Eigen::Vector3d::UnitX());
+	GeometryMath::Rotate(targetNormal, -displaySuspension->rightRear.staticToe, Eigen::Vector3d::UnitZ());
 
 	// Now continue with the update for this corner
 	rightRearLowerAArm->Update(displaySuspension->rightRear.hardpoints[Corner::LowerFrontTubMount],
@@ -682,9 +653,9 @@ void CarRenderer::UpdateCarDisplay()
 							referenceSuspension->leftRear.hardpoints[Corner::UpperBallJoint],
 							referenceSuspension->leftRear.hardpoints[Corner::OutboardTieRod]);
 
-	// We also need to account for toe and camber settings for the TargetNormal - apply camber first
-	targetNormal.Rotate(displaySuspension->leftRear.staticCamber, Math::Axis::X);
-	targetNormal.Rotate(displaySuspension->leftRear.staticToe, Math::Axis::Z);
+	// We also need to account for toe and camber settings for the targetNormal - apply camber first
+	GeometryMath::Rotate(targetNormal, displaySuspension->leftRear.staticCamber, Eigen::Vector3d::UnitX());
+	GeometryMath::Rotate(targetNormal, displaySuspension->leftRear.staticToe, Eigen::Vector3d::UnitZ());
 
 	// Now continue with the update for this corner
 	leftRearLowerAArm->Update(displaySuspension->leftRear.hardpoints[Corner::LowerFrontTubMount],

@@ -79,7 +79,7 @@ private:
 	EditTiresPanel			*editTires;
 
 	// Sweep
-	EditSweepNotebook	*editIteration;
+	EditSweepNotebook	*editSweep;
 
 	wxBoxSizer *sizer;
 

@@ -22,7 +22,7 @@ namespace VVASE
 
 // Local forward declarations
 class GuiCar;
-class Iteration;
+class Sweep;
 class MainTree;
 class MainNotebook;
 class MainFrame;
@@ -39,7 +39,7 @@ public:
 	enum ItemType
 	{
 		TypeCar,
-		TypeIteration,
+		TypeSweep,
 		TypeOptimization,
 
 		TypeNone// Indicates an object doesn't exist

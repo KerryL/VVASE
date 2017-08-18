@@ -87,9 +87,9 @@ EditSweepOptionsPanel::~EditSweepOptionsPanel()
 //
 //==========================================================================
 BEGIN_EVENT_TABLE(EditSweepOptionsPanel, wxPanel)
-	EVT_CHECKBOX(CheckBoxIterationOptions,	EditSweepOptionsPanel::OptionsCheckBoxEvent)
-	EVT_TEXT(TextBoxIterationOptions,		EditSweepOptionsPanel::OptionsTextBoxEvent)
-	EVT_BUTTON(ButtonSetAsDefault,			EditSweepOptionsPanel::SetAsDefaultClickedEvent)
+	EVT_CHECKBOX(CheckBoxSweepOptions,	EditSweepOptionsPanel::OptionsCheckBoxEvent)
+	EVT_TEXT(TextBoxSweepOptions,		EditSweepOptionsPanel::OptionsTextBoxEvent)
+	EVT_BUTTON(ButtonSetAsDefault,		EditSweepOptionsPanel::SetAsDefaultClickedEvent)
 END_EVENT_TABLE();
 
 //==========================================================================
@@ -122,7 +122,7 @@ void EditSweepOptionsPanel::UpdateInformation()
 // Description:		Updates the information on this panel.
 //
 // Input Arguments:
-//		currentSweep	= Sweep* pointing to the associated iteration
+//		currentSweep	= Sweep* pointing to the associated sweep
 //
 // Output Arguments:
 //		None
@@ -184,14 +184,14 @@ void EditSweepOptionsPanel::CreateControls()
 	int cellPadding(3);
 
 	// Creat the checkboxes
-	showGridLines = new wxCheckBox(this, CheckBoxIterationOptions, _T("Show Grid Lines"));
-	autoLabelXAxis = new wxCheckBox(this, CheckBoxIterationOptions, _T("Automatic"));
-	autoLabelZAxis = new wxCheckBox(this, CheckBoxIterationOptions, _T("Automatic"));
-	autoTitle = new wxCheckBox(this, CheckBoxIterationOptions, _T("From File Name"));
+	showGridLines = new wxCheckBox(this, CheckBoxSweepOptions, _T("Show Grid Lines"));
+	autoLabelXAxis = new wxCheckBox(this, CheckBoxSweepOptions, _T("Automatic"));
+	autoLabelZAxis = new wxCheckBox(this, CheckBoxSweepOptions, _T("Automatic"));
+	autoTitle = new wxCheckBox(this, CheckBoxSweepOptions, _T("From File Name"));
 
-	titleText = new wxTextCtrl(this, TextBoxIterationOptions);
-	xLabelText = new wxTextCtrl(this, TextBoxIterationOptions);
-	zLabelText = new wxTextCtrl(this, TextBoxIterationOptions);
+	titleText = new wxTextCtrl(this, TextBoxSweepOptions);
+	xLabelText = new wxTextCtrl(this, TextBoxSweepOptions);
+	zLabelText = new wxTextCtrl(this, TextBoxSweepOptions);
 
 	setAsDefault = new wxButton(this, ButtonSetAsDefault, _T("Set As Default Properties"));
 

@@ -40,20 +40,23 @@
 #include "VVASE/gui/components/mainTree.h"
 #include "VVASE/gui/components/outputPanel.h"
 #include "VVASE/gui/guiObject.h"
-#include "../gui/guiCar.h"
-#include "../gui/sweep.h"
-#include "../gui/geneticOptimization.h"
-#include "../gui/gaObject.h"
-#include "../gui/dialogs/optionsDialog.h"
-#include "../gui/appearanceOptions.h"
-#include "../gui/dropTarget.h"
+#include "../guiCar.h"
+#include "../sweep.h"
+#include "VVASE/gui/geneticOptimization.h"
+#include "../gaObject.h"
+#include "../dialogs/optionsDialog.h"
+#include "../appearanceOptions.h"
+#include "../dropTarget.h"
 #include "VVASE/core/analysis/kinematics.h"
 #include "VVASE/core/analysis/kinematicOutputs.h"
 #include "VVASE/core/threads/jobQueue.h"
 #include "VVASE/core/threads/workerThread.h"
 #include "VVASE/core/threads/threadEvent.h"
-#include "VVASE/gui/utilities/fontFinder.h"
 #include "VVASE/core/utilities/debugger.h"
+#include "VVASE/gui/utilities/unitConverter.h"
+
+// LibPlot2D headers
+#include <lp2d/utilities/fontFinder.h>
 
 // *nix Icons
 #ifdef __WXGTK__
@@ -124,7 +127,7 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxEmptyString, wxDefaultPositio
 	beingDeleted = false;
 	applicationExiting = false;
 
-	Debugger::GetInstance() << carDesignerName << " Initialized!" << Debugger::Priority::High;
+	Debugger::GetInstance() << vvaseName << " Initialized!" << Debugger::Priority::High;
 }
 
 //==========================================================================
@@ -152,7 +155,7 @@ MainFrame::~MainFrame()
 	delete jobQueue;
 	jobQueue = NULL;
 
-	while (openObjectList.GetCount() > 0)
+	while (openObjectList.size() > 0)
 		RemoveObjectFromList(0);
 
 	manager.UnInit();
@@ -287,8 +290,8 @@ void MainFrame::DoLayout()
 //==========================================================================
 void MainFrame::SetProperties()
 {
-	SetTitle(carDesignerName);
-	SetName(carDesignerName);
+	SetTitle(vvaseName);
+	SetName(vvaseName);
 	SetMinSize(minFrameSize);
 
 	// Add the icons
@@ -304,7 +307,7 @@ void MainFrame::SetProperties()
 #endif
 	SetIcons(bundle);
 
-	Debugger::GetInstance().SetTargetOutput(debugPane);
+	//Debugger::GetInstance().SetTargetOutput(debugPane);// TODO:  Fix this
 	Debugger::GetInstance().SetDebugLevel(Debugger::Priority::High);
 
 	// Add the application level entry to the SystemsTree (this one is hidden, but necessary)
@@ -336,7 +339,7 @@ void MainFrame::SetProperties()
 		wxArrayString preferredFonts;
 		preferredFonts.Add(_T("Monospace"));// GTK preference
 		preferredFonts.Add(_T("Courier New"));// MSW preference
-		bool foundPreferredFont = FontFinder::GetFontFaceName(
+		bool foundPreferredFont = LibPlot2D::FontFinder::GetFontFaceName(
 			wxFONTENCODING_SYSTEM, preferredFonts, true, fontFaceName);
 
 		if (!fontFaceName.IsEmpty())
@@ -365,7 +368,7 @@ void MainFrame::SetProperties()
 		preferredFonts.Add(_T("Arial"));// MSW preference
 
 		wxString fontFile;
-		bool foundFont = FontFinder::GetPreferredFontFileName(wxFONTENCODING_SYSTEM,
+		bool foundFont = LibPlot2D::FontFinder::GetPreferredFontFileName(wxFONTENCODING_SYSTEM,
 			preferredFonts, false, fontFile);
 
 		// Tell the user if we're unsure of the font
@@ -380,7 +383,7 @@ void MainFrame::SetProperties()
 		{
 			// Store what we found in the MainFrame configuration
 			wxString fontName;
-			if (FontFinder::GetFontName(fontFile, fontName))
+			if (LibPlot2D::FontFinder::GetFontName(fontFile, fontName))
 			{
 				if (plotFont.SetFaceName(fontName))
 					SetPlotFont(plotFont);
@@ -539,15 +542,15 @@ void MainFrame::SetNumberOfThreads(unsigned int newNumberOfThreads)
 			openJobCount++;
 
 			// These threads will delete themselves after an EXIT job
-			WorkerThread *newThread = new WorkerThread(jobQueue, i);
+			WorkerThread *newThread = new WorkerThread(*jobQueue);
 			// FIXME:  If we want to set priority, this is where it needs to happen
-			newThread->Run();
+			//newThread->Run();// TODO:  I think we loose the threads here?  Do we need to maintain handles?
 		}
 	}
 	else if (newNumberOfThreads < numberOfThreads)
 	{
 		for (i = numberOfThreads; i > newNumberOfThreads; i--)
-			jobQueue->AddJob(ThreadJob(ThreadJob::CommandThreadExit), JobQueue::PriorityVeryHigh);
+			jobQueue->AddJob(ThreadJob(ThreadJob::CommandThreadExit), JobQueue::Priority::VeryHigh);
 	}
 
 	numberOfThreads = newNumberOfThreads;
@@ -633,8 +636,8 @@ void MainFrame::CreateMenuBar()
 	wxMenu *mnuFile = new wxMenu();
 	wxMenu *mnuFileNew = new wxMenu();
 	mnuFileNew->Append(IdMenuFileNewCar, _T("&Car\tCtrl+N"), _T("Create new car file"), wxITEM_NORMAL);
-	mnuFileNew->Append(IdMenuFileNewIteration, _T("&Static Iteration\tCtrl+I"),
-		_T("Create new static iteration analysis"), wxITEM_NORMAL);
+	mnuFileNew->Append(IdMenuFileNewSweep, _T("&Sweep\tCtrl+I"),
+		_T("Create new kinematic sweep"), wxITEM_NORMAL);
 	mnuFileNew->Append(IdMenuFileNewOptimization, _T("&Genetic Optimization\tCtrl+G"),
 		_T("Create new genetic algorithm optimization"), wxITEM_NORMAL);
 	mnuFile->AppendSubMenu(mnuFileNew, _T("New"));
@@ -656,7 +659,7 @@ void MainFrame::CreateMenuBar()
 	mnuFile->Append(IdMenuFileOpenAllRecent, _T("Open All Recent Files"),
 		_T("Open all files in the Recent Files list"), wxITEM_NORMAL);
 	mnuFile->AppendSeparator();
-	mnuFile->Append(IdMenuFileExit, _T("E&xit\tAlt+F4"), _T("Exit ") + carDesignerName, wxITEM_NORMAL);
+	mnuFile->Append(IdMenuFileExit, _T("E&xit\tAlt+F4"), _T("Exit ") + vvaseName, wxITEM_NORMAL);
 	menuBar->Append(mnuFile, _T("&File"));
 
 	// Edit menu
@@ -905,7 +908,7 @@ BEGIN_EVENT_TABLE(MainFrame, wxFrame)
 
 	// Menu bar
 	EVT_MENU(IdMenuFileNewCar,					MainFrame::FileNewCarEvent)
-	EVT_MENU(IdMenuFileNewIteration,			MainFrame::FileNewIterationEvent)
+	EVT_MENU(IdMenuFileNewSweep,				MainFrame::FileNewSweepEvent)
 	EVT_MENU(IdMenuFileNewOptimization,			MainFrame::FileNewOptimizationEvent)
 	EVT_MENU(IdMenuFileOpen,					MainFrame::FileOpenEvent)
 	EVT_MENU(IdMenuFileClose,					MainFrame::FileCloseEvent)
@@ -926,13 +929,13 @@ BEGIN_EVENT_TABLE(MainFrame, wxFrame)
 
 	EVT_MENU(IdMenuCarAppearanceOptions,		MainFrame::CarAppearanceOptionsEvent)
 
-	EVT_MENU(IdMenuIterationShowAssociatedCars,	MainFrame::IterationShowAssociatedCarsClickEvent)
-	EVT_MENU(IdMenuIterationAssociatedWithAllCars,	MainFrame::IterationAssociatedWithAllCarsClickEvent)
-	EVT_MENU(IdMenuIterationExportDataToFile,	MainFrame::IterationExportDataToFileClickEvent)
-	EVT_MENU(IdMenuIterationXAxisPitch,			MainFrame::IterationXAxisPitchClickEvent)
-	EVT_MENU(IdMenuIterationXAxisRoll,			MainFrame::IterationXAxisRollClickEvent)
-	EVT_MENU(IdMenuIterationXAxisHeave,			MainFrame::IterationXAxisHeaveClickEvent)
-	EVT_MENU(IdMenuIterationXAxisRackTravel,	MainFrame::IterationXAxisRackTravelClickEvent)
+	EVT_MENU(IdMenuSweepShowAssociatedCars,		MainFrame::SweepShowAssociatedCarsClickEvent)
+	EVT_MENU(IdMenuSweepAssociatedWithAllCars,	MainFrame::SweepAssociatedWithAllCarsClickEvent)
+	EVT_MENU(IdMenuSweepExportDataToFile,		MainFrame::SweepExportDataToFileClickEvent)
+	EVT_MENU(IdMenuSweepXAxisPitch,				MainFrame::SweepXAxisPitchClickEvent)
+	EVT_MENU(IdMenuSweepXAxisRoll,				MainFrame::SweepXAxisRollClickEvent)
+	EVT_MENU(IdMenuSweepXAxisHeave,				MainFrame::SweepXAxisHeaveClickEvent)
+	EVT_MENU(IdMenuSweepXAxisRackTravel,		MainFrame::SweepXAxisRackTravelClickEvent)
 
 	EVT_MENU(IdMenuViewToolbarsKinematic,		MainFrame::ViewToolbarsKinematicEvent)
 	EVT_MENU(IdMenuViewToolbarsQuasiStatic,		MainFrame::ViewToolbarsQuasiStaticEvent)
@@ -995,9 +998,9 @@ void MainFrame::FileNewCarEvent(wxCommandEvent& WXUNUSED(event))
 
 //==========================================================================
 // Class:			MainFrame
-// Function:		FileNewIterationEvent
+// Function:		FileNewSweepEvent
 //
-// Description:		Generates a new Iteration object and adds the it to the
+// Description:		Generates a new Sweep object and adds the it to the
 //					list of managed objects
 //
 // Input Arguments:
@@ -1010,9 +1013,9 @@ void MainFrame::FileNewCarEvent(wxCommandEvent& WXUNUSED(event))
 //		None
 //
 //==========================================================================
-void MainFrame::FileNewIterationEvent(wxCommandEvent& WXUNUSED(event))
+void MainFrame::FileNewSweepEvent(wxCommandEvent& WXUNUSED(event))
 {
-	GuiObject *tempObject = new Iteration(*this);
+	GuiObject *tempObject = new Sweep(*this);
 	if (tempObject->IsInitialized())
 		SetActiveIndex(tempObject->GetIndex());
 	else
@@ -1064,9 +1067,9 @@ void MainFrame::FileOpenEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Set up the wildcard specifications
 	// (Done here for readability)
-	wxString wildcard("VVASE files (*.car; *.iteration; *.ga)|*.car;*.iteration;*.ga|");
+	wxString wildcard("VVASE files (*.car; *.sweep; *.ga)|*.car;*.sweep;*.ga|");
 	wildcard.append("Car files (*.car)|*.car");
-	wildcard.append("|Iteration files (*.iteration)|*.iteration");
+	wildcard.append("|Sweep files (*.sweep)|*.sweep");
 	wildcard.append("|Optimization files (*.ga)|*ga");
 
 	// Get the file name to open from the user
@@ -1101,7 +1104,7 @@ void MainFrame::FileOpenEvent(wxCommandEvent& WXUNUSED(event))
 //==========================================================================
 void MainFrame::FileCloseEvent(wxCommandEvent& WXUNUSED(event))
 {
-	if (openObjectList.GetCount() > 0)
+	if (openObjectList.size() > 0)
 		openObjectList[objectOfInterestIndex]->Close();
 }
 
@@ -1125,7 +1128,7 @@ void MainFrame::FileCloseAllEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Close all of the objects
 	unsigned int indexToDelete = 0;
-	while (openObjectList.GetCount() > indexToDelete)
+	while (openObjectList.size() > indexToDelete)
 	{
 		// If the user chooses not to close a particular object, we need to
 		// increment our target index so that we don't keep asking about the same object.
@@ -1153,7 +1156,7 @@ void MainFrame::FileCloseAllEvent(wxCommandEvent& WXUNUSED(event))
 void MainFrame::FileSaveEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Check to make sure there is an object to save
-	if (openObjectList.GetCount() > 0)
+	if (openObjectList.size() > 0)
 		// Save the object of interest
 		openObjectList[objectOfInterestIndex]->SaveToFile();
 }
@@ -1178,7 +1181,7 @@ void MainFrame::FileSaveEvent(wxCommandEvent& WXUNUSED(event))
 void MainFrame::FileSaveAsEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Check to make sure there is an object to save
-	if (openObjectList.GetCount() > 0)
+	if (openObjectList.size() > 0)
 		// Save the object of interest
 		openObjectList[objectOfInterestIndex]->SaveToFile(true);
 }
@@ -1203,7 +1206,7 @@ void MainFrame::FileSaveAllEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Save all of the objects
 	unsigned int indexToSave = 0;
-	while (openObjectList.GetCount() > indexToSave)
+	while (openObjectList.size() > indexToSave)
 	{
 		// Save the object with index IndexToSave
 		if (!openObjectList[indexToSave]->SaveToFile())
@@ -1257,7 +1260,7 @@ void MainFrame::FileOpenAllRecentEvent(wxCommandEvent& WXUNUSED(event))
 void MainFrame::FileWriteImageFileEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Check to make sure there is an object open
-	if (openObjectList.GetCount() < 1)
+	if (openObjectList.size() < 1)
 		return;
 
 	// Get the file name to open from the user
@@ -1271,7 +1274,7 @@ void MainFrame::FileWriteImageFileEvent(wxCommandEvent& WXUNUSED(event))
 
 	// Call the object's write image file method
 	if (openObjectList[objectOfInterestIndex]->WriteImageToFile(pathAndFileName[0]))
-		Debugger::GetInstance() << "Image file written to %s", pathAndFileName[0] << Debugger::Priority::High;
+		Debugger::GetInstance() << "Image file written to" << pathAndFileName[0] << Debugger::Priority::High;
 	else
 		Debugger::GetInstance() << "Image file NOT written!" << Debugger::Priority::High;
 }
@@ -1465,15 +1468,15 @@ void MainFrame::CarAppearanceOptionsEvent(wxCommandEvent& WXUNUSED(event))
 		return;
 
 	// Show the appearance options dialog for the car
-	static_cast<GuiCar*>(openObjectList[objectOfInterestIndex])
+	static_cast<GuiCar*>(openObjectList[objectOfInterestIndex].get())
 		->GetAppearanceOptions().ShowAppearanceOptionsDialog();
 }
 
 //==========================================================================
 // Class:			MainFrame
-// Function:		IterationShowAssociatedCarsClickEvent
+// Function:		SweepShowAssociatedCarsClickEvent
 //
-// Description:		For Iteration objects - calls the method that displays
+// Description:		For Sweep objects - calls the method that displays
 //					a dialog allowing the user to select the associated cars.
 //
 // Input Arguments:
@@ -1486,21 +1489,21 @@ void MainFrame::CarAppearanceOptionsEvent(wxCommandEvent& WXUNUSED(event))
 //		None
 //
 //==========================================================================
-void MainFrame::IterationShowAssociatedCarsClickEvent(wxCommandEvent& WXUNUSED(event))
+void MainFrame::SweepShowAssociatedCarsClickEvent(wxCommandEvent& WXUNUSED(event))
 {
-	// Make sure the object is TypeIteration
-	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::TypeIteration)
+	// Make sure the object is TypeSweep
+	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::TypeSweep)
 		return;
 
 	// Call the ShowAssociatedCarsDialog() method
-	static_cast<Iteration*>(openObjectList[objectOfInterestIndex])->ShowAssociatedCarsDialog();
+	static_cast<Sweep*>(openObjectList[objectOfInterestIndex].get())->ShowAssociatedCarsDialog();
 }
 
 //==========================================================================
 // Class:			MainFrame
-// Function:		IterationAssociatedWithAllCarsClickEvent
+// Function:		SweepAssociatedWithAllCarsClickEvent
 //
-// Description:		For Iteration objects - toggles the auto-associate function
+// Description:		For Sweep objects - toggles the auto-associate function
 //					for the object of interest.
 //
 // Input Arguments:
@@ -1513,25 +1516,25 @@ void MainFrame::IterationShowAssociatedCarsClickEvent(wxCommandEvent& WXUNUSED(e
 //		None
 //
 //==========================================================================
-void MainFrame::IterationAssociatedWithAllCarsClickEvent(wxCommandEvent &event)
+void MainFrame::SweepAssociatedWithAllCarsClickEvent(wxCommandEvent &event)
 {
-	// Make sure the object is TypeIteration
-	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::TypeIteration)
+	// Make sure the object is TypeSweep
+	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::TypeSweep)
 		return;
 
 	// If this object is checked, set the auto-associate flag to true, otherwise
 	// set it to false
 	if (event.IsChecked())
-		static_cast<Iteration*>(openObjectList[objectOfInterestIndex])->SetAutoAssociate(true);
+		static_cast<Sweep*>(openObjectList[objectOfInterestIndex].get())->SetAutoAssociate(true);
 	else
-		static_cast<Iteration*>(openObjectList[objectOfInterestIndex])->SetAutoAssociate(false);
+		static_cast<Sweep*>(openObjectList[objectOfInterestIndex].get())->SetAutoAssociate(false);
 }
 
 //==========================================================================
 // Class:			MainFrame
-// Function:		IterationExportDataToFileClickEvent
+// Function:		SweepExportDataToFileClickEvent
 //
-// Description:		For Iteration objects.  Calls a method that exports the
+// Description:		For Sweep objects.  Calls a method that exports the
 //					kinematic output data to a user-specified file.
 //
 // Input Arguments:
@@ -1544,10 +1547,10 @@ void MainFrame::IterationAssociatedWithAllCarsClickEvent(wxCommandEvent &event)
 //		None
 //
 //==========================================================================
-void MainFrame::IterationExportDataToFileClickEvent(wxCommandEvent& WXUNUSED(event))
+void MainFrame::SweepExportDataToFileClickEvent(wxCommandEvent& WXUNUSED(event))
 {
-	// Make sure the object is TypeIteration
-	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::TypeIteration)
+	// Make sure the object is TypeSweep
+	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::TypeSweep)
 		return;
 
 	// Get the file name to export to
@@ -1559,15 +1562,15 @@ void MainFrame::IterationExportDataToFileClickEvent(wxCommandEvent& WXUNUSED(eve
 	if (pathAndFileName.IsEmpty())
 		return;
 
-	static_cast<Iteration*>(openObjectList[objectOfInterestIndex])
+	static_cast<Sweep*>(openObjectList[objectOfInterestIndex].get())
 		->ExportDataToFile(pathAndFileName.Item(0));
 }
 
 //==========================================================================
 // Class:			MainFrame
-// Function:		IterationXAxisPitchClickEvent
+// Function:		SweepXAxisPitchClickEvent
 //
-// Description:		Event handler for setting iteration x-axis to pitch.
+// Description:		Event handler for setting Sweep x-axis to pitch.
 //
 // Input Arguments:
 //		event	= wxCommandEvent&
@@ -1579,30 +1582,30 @@ void MainFrame::IterationExportDataToFileClickEvent(wxCommandEvent& WXUNUSED(eve
 //		None
 //
 //==========================================================================
-void MainFrame::IterationXAxisPitchClickEvent(wxCommandEvent& WXUNUSED(event))
+void MainFrame::SweepXAxisPitchClickEvent(wxCommandEvent& WXUNUSED(event))
 {
-	// Make sure the object is TypeIteration
-	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::TypeIteration)
+	// Make sure the object is TypeSweep
+	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::TypeSweep)
 		return;
 
 	// Set the X axis to pitch
-	static_cast<Iteration*>(openObjectList[objectOfInterestIndex])
-		->SetXAxisType(Iteration::AxisTypePitch);
+	static_cast<Sweep*>(openObjectList[objectOfInterestIndex].get())
+		->SetXAxisType(Sweep::AxisTypePitch);
 
 	// Uncheck all other X axis options
-	if (menuBar->FindItem(IdMenuIterationXAxisPitch) != NULL)
+	if (menuBar->FindItem(IdMenuSweepXAxisPitch) != NULL)
 	{
-		menuBar->Check(IdMenuIterationXAxisRoll, false);
-		menuBar->Check(IdMenuIterationXAxisHeave, false);
-		menuBar->Check(IdMenuIterationXAxisRackTravel, false);
+		menuBar->Check(IdMenuSweepXAxisRoll, false);
+		menuBar->Check(IdMenuSweepXAxisHeave, false);
+		menuBar->Check(IdMenuSweepXAxisRackTravel, false);
 	}
 }
 
 //==========================================================================
 // Class:			MainFrame
-// Function:		IterationXAxisRollClickEvent
+// Function:		SweepXAxisRollClickEvent
 //
-// Description:		Event handler for setting iteration x-axis to roll.
+// Description:		Event handler for setting Sweep x-axis to roll.
 //
 // Input Arguments:
 //		event	= wxCommandEvent&
@@ -1614,30 +1617,30 @@ void MainFrame::IterationXAxisPitchClickEvent(wxCommandEvent& WXUNUSED(event))
 //		None
 //
 //==========================================================================
-void MainFrame::IterationXAxisRollClickEvent(wxCommandEvent& WXUNUSED(event))
+void MainFrame::SweepXAxisRollClickEvent(wxCommandEvent& WXUNUSED(event))
 {
-	// Make sure the object is TypeIteration
-	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::TypeIteration)
+	// Make sure the object is TypeSweep
+	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::TypeSweep)
 		return;
 
 	// Set the X axis to roll
-	static_cast<Iteration*>(openObjectList[objectOfInterestIndex])
-		->SetXAxisType(Iteration::AxisTypeRoll);
+	static_cast<Sweep*>(openObjectList[objectOfInterestIndex].get())
+		->SetXAxisType(Sweep::AxisTypeRoll);
 
 	// Uncheck all other X axis options
-	if (menuBar->FindItem(IdMenuIterationXAxisRoll) != NULL)
+	if (menuBar->FindItem(IdMenuSweepXAxisRoll) != NULL)
 	{
-		menuBar->Check(IdMenuIterationXAxisPitch, false);
-		menuBar->Check(IdMenuIterationXAxisHeave, false);
-		menuBar->Check(IdMenuIterationXAxisRackTravel, false);
+		menuBar->Check(IdMenuSweepXAxisPitch, false);
+		menuBar->Check(IdMenuSweepXAxisHeave, false);
+		menuBar->Check(IdMenuSweepXAxisRackTravel, false);
 	}
 }
 
 //==========================================================================
 // Class:			MainFrame
-// Function:		IterationXAxisHeaveClickEvent
+// Function:		SweepXAxisHeaveClickEvent
 //
-// Description:		Event handler for setting iteration x-axis to heave.
+// Description:		Event handler for setting Sweep x-axis to heave.
 //
 // Input Arguments:
 //		event	= wxCommandEvent&
@@ -1649,30 +1652,30 @@ void MainFrame::IterationXAxisRollClickEvent(wxCommandEvent& WXUNUSED(event))
 //		None
 //
 //==========================================================================
-void MainFrame::IterationXAxisHeaveClickEvent(wxCommandEvent& WXUNUSED(event))
+void MainFrame::SweepXAxisHeaveClickEvent(wxCommandEvent& WXUNUSED(event))
 {
-	// Make sure the object is TypeIteration
-	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::TypeIteration)
+	// Make sure the object is TypeSweep
+	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::TypeSweep)
 		return;
 
 	// Set the X axis to heave
-	static_cast<Iteration*>(openObjectList[objectOfInterestIndex])
-		->SetXAxisType(Iteration::AxisTypeHeave);
+	static_cast<Sweep*>(openObjectList[objectOfInterestIndex].get())
+		->SetXAxisType(Sweep::AxisTypeHeave);
 
 	// Uncheck all other X axis options
-	if (menuBar->FindItem(IdMenuIterationXAxisHeave) != NULL)
+	if (menuBar->FindItem(IdMenuSweepXAxisHeave) != NULL)
 	{
-		menuBar->Check(IdMenuIterationXAxisPitch, false);
-		menuBar->Check(IdMenuIterationXAxisRoll, false);
-		menuBar->Check(IdMenuIterationXAxisRackTravel, false);
+		menuBar->Check(IdMenuSweepXAxisPitch, false);
+		menuBar->Check(IdMenuSweepXAxisRoll, false);
+		menuBar->Check(IdMenuSweepXAxisRackTravel, false);
 	}
 }
 
 //==========================================================================
 // Class:			MainFrame
-// Function:		IterationXAxisRackTravelClickEvent
+// Function:		SweepXAxisRackTravelClickEvent
 //
-// Description:		Event handler for setting iteration x-axis to steer.
+// Description:		Event handler for setting Sweep x-axis to steer.
 //
 // Input Arguments:
 //		event	= wxCommandEvent&
@@ -1684,22 +1687,22 @@ void MainFrame::IterationXAxisHeaveClickEvent(wxCommandEvent& WXUNUSED(event))
 //		None
 //
 //==========================================================================
-void MainFrame::IterationXAxisRackTravelClickEvent(wxCommandEvent& WXUNUSED(event))
+void MainFrame::SweepXAxisRackTravelClickEvent(wxCommandEvent& WXUNUSED(event))
 {
-	// Make sure the object is TypeIteration
-	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::TypeIteration)
+	// Make sure the object is TypeSweep
+	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::TypeSweep)
 		return;
 
 	// Set the X axis to rack travel
-	static_cast<Iteration*>(openObjectList[objectOfInterestIndex])
-		->SetXAxisType(Iteration::AxisTypeRackTravel);
+	static_cast<Sweep*>(openObjectList[objectOfInterestIndex].get())
+		->SetXAxisType(Sweep::AxisTypeRackTravel);
 
 	// Uncheck all other X axis options
-	if (menuBar->FindItem(IdMenuIterationXAxisRackTravel) != NULL)
+	if (menuBar->FindItem(IdMenuSweepXAxisRackTravel) != NULL)
 	{
-		menuBar->Check(IdMenuIterationXAxisPitch, false);
-		menuBar->Check(IdMenuIterationXAxisRoll, false);
-		menuBar->Check(IdMenuIterationXAxisHeave, false);
+		menuBar->Check(IdMenuSweepXAxisPitch, false);
+		menuBar->Check(IdMenuSweepXAxisRoll, false);
+		menuBar->Check(IdMenuSweepXAxisHeave, false);
 	}
 }
 
@@ -1956,7 +1959,7 @@ void MainFrame::ToolsOptionsEvent(wxCommandEvent& WXUNUSED(event))
 		UpdateOutputPanel();
 
 		// Make sure we have an object to update before we try to update it
-		if (openObjectList.GetCount() > 0)
+		if (openObjectList.size() > 0)
 			openObjectList[activeIndex]->UpdateData();
 	}
 }
@@ -2026,8 +2029,8 @@ void MainFrame::HelpAboutEvent(wxCommandEvent& WXUNUSED(event))
 {
 	wxAboutDialogInfo appInfo;
 
-	appInfo.SetName(carDesignerLongName);
-	appInfo.SetVersion(carDesignerVersion + _T(" (") + carDesignerGitHash + _T(")"));
+	appInfo.SetName(vvaseLongName);
+	appInfo.SetVersion(vvaseVersion + _T(" (") + vvaseGitHash + _T(")"));
 	appInfo.SetDescription(_T("\n\
 A work in progress...\n\
 This is a vehicle design and analysis tool.  Please see the\n\
@@ -2057,7 +2060,7 @@ void MainFrame::UpdateAnalysis()
 {
 	// For every object we've got open, call the update display method
 	unsigned int i;
-	for (i = 0; i < openObjectList.GetCount(); i++)
+	for (i = 0; i < openObjectList.size(); i++)
 		// Update the display (this performs the kinematic analysis)
 		openObjectList[i]->UpdateData();
 }
@@ -2083,7 +2086,7 @@ void MainFrame::UpdateOutputPanel()
 {
 	// For every object we've got open, call the update display method
 	unsigned int i, carCount = 0;
-	for (i = 0; i < openObjectList.GetCount(); i++)
+	for (i = 0; i < openObjectList.size(); i++)
 	{
 		// Update the kinematics information (ONLY if this is a car)
 		if (openObjectList[i]->GetType() == GuiObject::TypeCar)
@@ -2091,8 +2094,8 @@ void MainFrame::UpdateOutputPanel()
 			carCount++;
 
 			// Update the information for this car
-			outputPanel->UpdateInformation(static_cast<GuiCar*>(openObjectList[i])->GetOutputs(),
-				static_cast<GuiCar*>(openObjectList[i])->GetWorkingCar(),
+			outputPanel->UpdateInformation(static_cast<GuiCar*>(openObjectList[i].get())->GetOutputs(),
+				static_cast<GuiCar*>(openObjectList[i].get())->GetWorkingCar(),
 				carCount, openObjectList[i]->GetCleanName());
 		}
 	}
@@ -2124,7 +2127,7 @@ void MainFrame::AddJob(ThreadJob &newJob)
 	if (applicationExiting)
 		return;
 
-	jobQueue->AddJob(newJob, JobQueue::PriorityNormal);
+	jobQueue->AddJob(newJob, JobQueue::Priority::Normal);
 	openJobCount++;
 }
 
@@ -2383,11 +2386,11 @@ void MainFrame::Toolbar3DPerspectiveClickEvent(wxCommandEvent &/*event*/)
 {
 	useOrthoView = false;
 	unsigned int i;
-	for (i = 0; i < openObjectList.GetCount(); i++)
+	for (i = 0; i < openObjectList.size(); i++)
 	{
 		if (openObjectList[i]->GetType() == GuiObject::TypeCar)
 		{
-			static_cast<GuiCar*>(openObjectList[i])->SetUseOrtho(useOrthoView);
+			static_cast<GuiCar*>(openObjectList[i].get())->SetUseOrtho(useOrthoView);
 			openObjectList[i]->UpdateDisplay();
 		}
 	}
@@ -2413,11 +2416,11 @@ void MainFrame::Toolbar3DOrthoClickEvent(wxCommandEvent &/*event*/)
 {
 	useOrthoView = true;
 	unsigned int i;
-	for (i = 0; i < openObjectList.GetCount(); i++)
+	for (i = 0; i < openObjectList.size(); i++)
 	{
 		if (openObjectList[i]->GetType() == GuiObject::TypeCar)
 		{
-			static_cast<GuiCar*>(openObjectList[i])->SetUseOrtho(useOrthoView);
+			static_cast<GuiCar*>(openObjectList[i].get())->SetUseOrtho(useOrthoView);
 			openObjectList[i]->UpdateDisplay();
 		}
 	}
@@ -2475,7 +2478,7 @@ void MainFrame::ThreadCompleteEvent(wxCommandEvent &event)
 	case ThreadJob::CommandThreadKinematicsNormal:
 		// When closing, if multiple objects are open, it is possible that thread exit commands
 		// are processed prior to others, so we check here and abort if the ID is invalid
-		if (event.GetExtraLong() >= (long)openObjectList.GetCount())
+		if (event.GetExtraLong() >= (long)openObjectList.size())
 			break;
 
 		// Get the car count for this car (number of objects before this in the list that are also cars)
@@ -2489,39 +2492,39 @@ void MainFrame::ThreadCompleteEvent(wxCommandEvent &event)
 
 		// Update the information for this car
 		outputPanel->UpdateInformation(static_cast<GuiCar*>(openObjectList[
-			event.GetExtraLong()])->GetOutputs(),
-			static_cast<GuiCar*>(openObjectList[event.GetExtraLong()])->GetWorkingCar(),
+			event.GetExtraLong()].get())->GetOutputs(),
+			static_cast<GuiCar*>(openObjectList[event.GetExtraLong()].get())->GetWorkingCar(),
 			carCount, openObjectList[event.GetExtraLong()]->GetCleanName());
 
 		// Call the 3D display update method
 		openObjectList[event.GetExtraLong()]->UpdateDisplay();
 		break;
 
-	case ThreadJob::CommandThreadKinematicsIteration:
+	case ThreadJob::CommandThreadKinematicsSweep:
 		// When closing, if multiple objects are open, it is possible that thread exit commands
 		// are processed prior to others, so we check here and abort if the ID is invalid
-		if (event.GetExtraLong() >= (long)openObjectList.GetCount())
+		if (event.GetExtraLong() >= (long)openObjectList.size())
 			break;
 
-		static_cast<Iteration*>(openObjectList[event.GetExtraLong()])->MarkAnalysisComplete();
+		static_cast<Sweep*>(openObjectList[event.GetExtraLong()].get())->MarkAnalysisComplete();
 		break;
 
 	case ThreadJob::CommandThreadKinematicsGA:
 		// When closing, if multiple objects are open, it is possible that thread exit commands
 		// are processed prior to others, so we check here and abort if the ID is invalid
-		if (event.GetExtraLong() >= (long)openObjectList.GetCount())
+		if (event.GetExtraLong() >= (long)openObjectList.size())
 			break;
 
-		static_cast<GeneticOptimization*>(openObjectList[event.GetExtraLong()])->MarkAnalysisComplete();
+		static_cast<GeneticOptimization*>(openObjectList[event.GetExtraLong()].get())->MarkAnalysisComplete();
 		break;
 
 	case ThreadJob::CommandThreadGeneticOptimization:
 		// When closing, if multiple objects are open, it is possible that thread exit commands
 		// are processed prior to others, so we check here and abort if the ID is invalid
-		if (event.GetExtraLong() >= (long)openObjectList.GetCount())
+		if (event.GetExtraLong() >= (long)openObjectList.size())
 			break;
 
-		static_cast<GeneticOptimization*>(openObjectList[event.GetExtraLong()])->CompleteOptimization();
+		static_cast<GeneticOptimization*>(openObjectList[event.GetExtraLong()].get())->CompleteOptimization();
 
 		UpdateAnalysis();
 		UpdateOutputPanel();
@@ -2586,10 +2589,11 @@ void MainFrame::DebugMessageEvent(wxCommandEvent &event)
 //		integer = new index for the car that was just added to the list
 //
 //==========================================================================
-int MainFrame::AddObjectToList(GuiObject *objectToAdd)
+int MainFrame::AddObjectToList(std::unique_ptr<GuiObject> objectToAdd)
 {
 	// Add the object to the list (must be done before the menu permissions are updated)
-	return openObjectList.Add(objectToAdd);
+	openObjectList.push_back(std::move(objectToAdd));
+	return openObjectList.size() - 1;
 }
 
 //==========================================================================
@@ -2614,12 +2618,12 @@ int MainFrame::AddObjectToList(GuiObject *objectToAdd)
 void MainFrame::RemoveObjectFromList(int index)
 {
 	beingDeleted = true;
-	openObjectList.Remove(index);
+	openObjectList.erase(openObjectList.begin() + index);
 
 	// Reset the cars' indices and check to see what types we have available
 	// Also refresh the car's displays
 	unsigned int i;
-	for (i = 0; i < openObjectList.GetCount(); i++)
+	for (i = 0; i < openObjectList.size(); i++)
 	{
 		openObjectList[i]->SetIndex(i);
 
@@ -2636,7 +2640,7 @@ void MainFrame::RemoveObjectFromList(int index)
 
 	// Reset the active index - if there is still an open object, show the one with index zero
 	// Otherwise, set the index to an invalid number
-	if (openObjectList.GetCount() > 0)
+	if (openObjectList.size() > 0)
 		SetActiveIndex(0);
 	else
 		SetActiveIndex(-1);
@@ -2665,7 +2669,7 @@ void MainFrame::RemoveObjectFromList(int index)
 void MainFrame::SetNotebookPage(int index)
 {
 	// Make sure the index could possibly be a valid index
-	if (index >= 0 && index < (signed int)openObjectList.GetCount())
+	if (index >= 0 && index < (signed int)openObjectList.size())
 	{
 		// Bring the desired notebook page to the front
 		notebook->SetSelection(index);
@@ -2673,7 +2677,7 @@ void MainFrame::SetNotebookPage(int index)
 		// Update the active object's display
 		// (haven't identified the root cause, but sometimes the car disappears if this isn't done)
 		// FIXME:  This works as a workaround for disappearing cars/plots as happens sometimes, but
-		// causes intermittent crashes (access violations) for cars and always crashes new iterations
+		// causes intermittent crashes (access violations) for cars and always crashes new sweeps
 		// in FormatPlot() (Z values are NaN)
 		//openObjectList[ActiveIndex]->UpdateDisplay();
 	}
@@ -2724,7 +2728,7 @@ void MainFrame::WindowCloseEvent(wxCloseEvent& WXUNUSED(event))
 	// Delete all of the threads in the thread pool
 	int i;
 	for (i = 0; i < activeThreads; i++)
-		jobQueue->AddJob(ThreadJob(ThreadJob::CommandThreadExit), JobQueue::PriorityVeryHigh);
+		jobQueue->AddJob(ThreadJob(ThreadJob::CommandThreadExit), JobQueue::Priority::VeryHigh);
 }
 
 //==========================================================================
@@ -2777,7 +2781,7 @@ void MainFrame::OnSizeEvent(wxSizeEvent& WXUNUSED(event))
 //==========================================================================
 bool MainFrame::CloseThisForm()
 {
-	while (openObjectList.GetCount() > 0)
+	while (openObjectList.size() > 0)
 	{
 		if (!openObjectList[0]->Close())
 			return false;
@@ -2852,19 +2856,19 @@ void MainFrame::ReadConfiguration()
 	// Read KINEMATICS configuration from file
 	double tempDouble = 0.0;
 	configurationFile->Read(_T("/Kinematics/CenterOfRotationX"), &tempDouble);
-	kinematicInputs.centerOfRotation.x = tempDouble;
+	kinematicInputs.centerOfRotation.x() = tempDouble;
 	tempDouble = 0.0;
 	configurationFile->Read(_T("/Kinematics/CenterOfRotationY"), &tempDouble);
-	kinematicInputs.centerOfRotation.y = tempDouble;
+	kinematicInputs.centerOfRotation.y() = tempDouble;
 	tempDouble = 0.0;
 	configurationFile->Read(_T("/Kinematics/CenterOfRotationZ"), &tempDouble);
-	kinematicInputs.centerOfRotation.z = tempDouble;
-	kinematicInputs.firstRotation = (Eigen::Vector3d::Axis)configurationFile->Read(
-		_T("/Kinematics/FirstRotation"), 0l);
+	kinematicInputs.centerOfRotation.z() = tempDouble;
+	kinematicInputs.sequence = static_cast<Kinematics::RotationSequence>(configurationFile->Read(
+		_T("/Kinematics/sequence"), 0l));
 	configurationFile->Read(_T("/Kinematics/UseRackTravel"), &useRackTravel, true);
 
 	// Read DEBUGGING configuration from file
-	Debugger::GetInstance().SetDebugLevel(Debugger::DebugLevel(configurationFile->Read(_T("/Debugging/DebugLevel"), 1l)));
+	Debugger::GetInstance().SetDebugLevel(Debugger::Priority(configurationFile->Read(_T("/Debugging/DebugLevel"), 1l)));
 
 	// Read GUI configuration from file
 	wxString layoutString;
@@ -2950,10 +2954,10 @@ void MainFrame::WriteConfiguration()
 	configurationFile->Write(_T("/NumberFormat/UseSignificantDigits"), UnitConverter::GetInstance().GetUseSignificantDigits());
 
 	// Write KINEMATICS configuration to file
-	configurationFile->Write(_T("/Kinematics/CenterOfRotationX"), kinematicInputs.centerOfRotation.x);
-	configurationFile->Write(_T("/Kinematics/CenterOfRotationY"), kinematicInputs.centerOfRotation.y);
-	configurationFile->Write(_T("/Kinematics/CenterOfRotationZ"), kinematicInputs.centerOfRotation.z);
-	configurationFile->Write(_T("/Kinematics/FirstRotation"), (int)kinematicInputs.firstRotation);
+	configurationFile->Write(_T("/Kinematics/CenterOfRotationX"), kinematicInputs.centerOfRotation.x());
+	configurationFile->Write(_T("/Kinematics/CenterOfRotationY"), kinematicInputs.centerOfRotation.y());
+	configurationFile->Write(_T("/Kinematics/CenterOfRotationZ"), kinematicInputs.centerOfRotation.z());
+	configurationFile->Write(_T("/Kinematics/FirstRotation"), (int)kinematicInputs.sequence);
 	configurationFile->Write(_T("/Kinematics/UseRackTravel"), useRackTravel);
 
 	// Write DEBUGGING configuration to file
@@ -3009,7 +3013,7 @@ void MainFrame::UpdateActiveObjectMenu()
 {
 	// Try to get a handle to object specific menus
 	int carMenuIndex = menuBar->FindMenu(_T("Car"));
-	int iterationMenuIndex = menuBar->FindMenu(_T("Iteration"));
+	int sweepMenuIndex = menuBar->FindMenu(_T("Sweep"));
 	//int gaMenuIndex = menuBar->FindMenu(_T("GA"));
 
 	// Store the type of the active object
@@ -3027,33 +3031,33 @@ void MainFrame::UpdateActiveObjectMenu()
 		// Check to see if the car menu already exists
 		if (carMenuIndex == wxNOT_FOUND)
 		{
-			// Check to see if we first need to remove the iteration menu
-			if (iterationMenuIndex == wxNOT_FOUND)
+			// Check to see if we first need to remove the sweep menu
+			if (sweepMenuIndex == wxNOT_FOUND)
 				// Just insert a new menu
 				menuBar->Insert(3, CreateCarMenu(), _T("&Car"));
 			else
-				// Replace the iteration menu with a new car menu
-				delete menuBar->Replace(iterationMenuIndex, CreateCarMenu(), _T("&Car"));
+				// Replace the sweep menu with a new car menu
+				delete menuBar->Replace(sweepMenuIndex, CreateCarMenu(), _T("&Car"));
 		}
 		break;
 
-	case GuiObject::TypeIteration:
-		// Check to see if the iteration menu already exists
-		if (iterationMenuIndex == wxNOT_FOUND)
+	case GuiObject::TypeSweep:
+		// Check to see if the sweep menu already exists
+		if (sweepMenuIndex == wxNOT_FOUND)
 		{
 			// Check to see if we first need to remove the car menu
 			if (carMenuIndex == wxNOT_FOUND)
 				// Just insert a new menu
-				menuBar->Insert(3, CreateIterationMenu(), _T("&Iteration"));
+				menuBar->Insert(3, CreateSweepMenu(), _T("&Sweep"));
 			else
-				// Replace the car menu with a new iteration menu
-				delete menuBar->Replace(carMenuIndex, CreateIterationMenu(), _T("&Iteration"));
+				// Replace the car menu with a new sweep menu
+				delete menuBar->Replace(carMenuIndex, CreateSweepMenu(), _T("&Sweep"));
 		}
 		else
-			// For iteration objects, we need to update the menu for every object
+			// For sweep objects, we need to update the menu for every object
 			// Just having the menu there already isn't good enough (checks, etc.)
-			// So we replace the existing Iteration menu with a new one
-			delete menuBar->Replace(iterationMenuIndex, CreateIterationMenu(), _T("&Iteration"));
+			// So we replace the existing sweep menu with a new one
+			delete menuBar->Replace(sweepMenuIndex, CreateSweepMenu(), _T("&Sweep"));
 		break;
 
 	// Unused cases
@@ -3063,8 +3067,8 @@ void MainFrame::UpdateActiveObjectMenu()
 		// Remove all menus
 		if (carMenuIndex != wxNOT_FOUND)
 			delete menuBar->Remove(carMenuIndex);
-		else if (iterationMenuIndex != wxNOT_FOUND)
-			delete menuBar->Remove(iterationMenuIndex);
+		else if (sweepMenuIndex != wxNOT_FOUND)
+			delete menuBar->Remove(sweepMenuIndex);
 		/*else if (gaMenuIndex != wxNOT_FOUND)
 			delete menuBar->Remove(gaMenuIndex);*/
 	}
@@ -3092,7 +3096,7 @@ void MainFrame::UpdateActiveObjectMenu()
 void MainFrame::SetActiveIndex(int index, bool selectNotebookTab)
 {
 	// Make sure the index is valid
-	if (index >= (signed int)openObjectList.GetCount())
+	if (index >= (signed int)openObjectList.size())
 		return;
 
 	// Set the active index
@@ -3111,7 +3115,7 @@ void MainFrame::SetActiveIndex(int index, bool selectNotebookTab)
 		outputPanel->HighlightColumn(openObjectList[activeIndex]->GetCleanName());
 
 		// Update the EditPanel
-		editPanel->UpdateInformation(openObjectList[activeIndex]);
+		editPanel->UpdateInformation(openObjectList[activeIndex].get());
 	}
 	else
 		editPanel->UpdateInformation(NULL);
@@ -3157,7 +3161,7 @@ void MainFrame::SetActiveIndex(int index, bool selectNotebookTab)
 void MainFrame::CreateContextMenu(int objectIndex, bool allowClosing)
 {
 	// Make sure the index is valid before continuing
-	if (objectIndex < 0 || objectIndex >= (signed int)openObjectList.GetCount())
+	if (objectIndex < 0 || objectIndex >= (signed int)openObjectList.size())
 		return;
 
 	// Set the object of interest to the specified object
@@ -3173,8 +3177,8 @@ void MainFrame::CreateContextMenu(int objectIndex, bool allowClosing)
 		contextMenu = CreateCarMenu();
 		break;
 
-	case GuiObject::TypeIteration:
-		contextMenu = CreateIterationMenu();
+	case GuiObject::TypeSweep:
+		contextMenu = CreateSweepMenu();
 		break;
 
 	// Unused types
@@ -3241,9 +3245,9 @@ wxMenu *MainFrame::CreateCarMenu()
 
 //==========================================================================
 // Class:			MainFrame
-// Function:		CreateIterationMenu
+// Function:		CreateSweepMenu
 //
-// Description:		Creates a drop-down menu for TypeIteration objects.
+// Description:		Creates a drop-down menu for TypeSweep objects.
 //
 // Input Arguments:
 //		None
@@ -3255,56 +3259,56 @@ wxMenu *MainFrame::CreateCarMenu()
 //		wxMenu* pointing to the newly created menu
 //
 //==========================================================================
-wxMenu *MainFrame::CreateIterationMenu()
+wxMenu *MainFrame::CreateSweepMenu()
 {
-	wxMenu *mnuIteration = new wxMenu();
+	wxMenu *mnuSweep = new wxMenu();
 
-	// Make sure the active object is a TYPE_ITERATION object
-	if (openObjectList[activeIndex]->GetType() != GuiObject::TypeIteration)
-		return mnuIteration;
+	// Make sure the active object is a TypeSweep object
+	if (openObjectList[activeIndex]->GetType() != GuiObject::TypeSweep)
+		return mnuSweep;
 
 	// Allocate the sub-menus
 	wxMenu *associatedCarsMenu = new wxMenu();
 	wxMenu *xAxisMenu = new wxMenu();
 
-	mnuIteration->Append(IdMenuIterationExportDataToFile, _T("Export Data"));
+	mnuSweep->Append(IdMenuSweepExportDataToFile, _T("Export Data"));
 
 	// Create and append the associated cars sub-menu
-	associatedCarsMenu->Append(IdMenuIterationShowAssociatedCars, _T("Choose Associated Cars"));
+	associatedCarsMenu->Append(IdMenuSweepShowAssociatedCars, _T("Choose Associated Cars"));
 	associatedCarsMenu->AppendSeparator();
-	associatedCarsMenu->AppendCheckItem(IdMenuIterationAssociatedWithAllCars, _T("Associate With All Cars"));
-	mnuIteration->AppendSubMenu(associatedCarsMenu, _T("Associated Cars"));
+	associatedCarsMenu->AppendCheckItem(IdMenuSweepAssociatedWithAllCars, _T("Associate With All Cars"));
+	mnuSweep->AppendSubMenu(associatedCarsMenu, _T("Associated Cars"));
 
 	// Create and append the x-axis sub-menu
-	xAxisMenu->AppendCheckItem(IdMenuIterationXAxisPitch, _T("Pitch"));
-	xAxisMenu->AppendCheckItem(IdMenuIterationXAxisRoll, _T("Roll"));
-	xAxisMenu->AppendCheckItem(IdMenuIterationXAxisHeave, _T("Heave"));
-	xAxisMenu->AppendCheckItem(IdMenuIterationXAxisRackTravel, _T("Rack Travel"));
-	mnuIteration->AppendSubMenu(xAxisMenu, _T("Set X-Axis"));
+	xAxisMenu->AppendCheckItem(IdMenuSweepXAxisPitch, _T("Pitch"));
+	xAxisMenu->AppendCheckItem(IdMenuSweepXAxisRoll, _T("Roll"));
+	xAxisMenu->AppendCheckItem(IdMenuSweepXAxisHeave, _T("Heave"));
+	xAxisMenu->AppendCheckItem(IdMenuSweepXAxisRackTravel, _T("Rack Travel"));
+	mnuSweep->AppendSubMenu(xAxisMenu, _T("Set X-Axis"));
 
 	// Determine which items need to be checked
-	if (static_cast<Iteration*>(openObjectList[activeIndex])->GetAutoAssociate())
-		associatedCarsMenu->Check(IdMenuIterationAssociatedWithAllCars, true);
+	if (static_cast<Sweep*>(openObjectList[activeIndex].get())->GetAutoAssociate())
+		associatedCarsMenu->Check(IdMenuSweepAssociatedWithAllCars, true);
 
-	switch (static_cast<Iteration*>(openObjectList[activeIndex])->GetXAxisType())
+	switch (static_cast<Sweep*>(openObjectList[activeIndex].get())->GetXAxisType())
 	{
-	case Iteration::AxisTypePitch:
-		xAxisMenu->Check(IdMenuIterationXAxisPitch, true);
+	case Sweep::AxisTypePitch:
+		xAxisMenu->Check(IdMenuSweepXAxisPitch, true);
 		break;
 
-	case Iteration::AxisTypeRoll:
-		xAxisMenu->Check(IdMenuIterationXAxisRoll, true);
+	case Sweep::AxisTypeRoll:
+		xAxisMenu->Check(IdMenuSweepXAxisRoll, true);
 		break;
 
-	case Iteration::AxisTypeHeave:
-		xAxisMenu->Check(IdMenuIterationXAxisHeave, true);
+	case Sweep::AxisTypeHeave:
+		xAxisMenu->Check(IdMenuSweepXAxisHeave, true);
 		break;
 
-	case Iteration::AxisTypeRackTravel:
-		xAxisMenu->Check(IdMenuIterationXAxisRackTravel, true);
+	case Sweep::AxisTypeRackTravel:
+		xAxisMenu->Check(IdMenuSweepXAxisRackTravel, true);
 		break;
 
-	case Iteration::AxisTypeUnused:
+	case Sweep::AxisTypeUnused:
 		// Take no action
 		break;
 
@@ -3313,7 +3317,7 @@ wxMenu *MainFrame::CreateIterationMenu()
 		break;
 	}
 
-	return mnuIteration;
+	return mnuSweep;
 }
 
 //==========================================================================
@@ -3425,7 +3429,7 @@ bool MainFrame::LoadFile(wxString pathAndFileName)
 {
 	int startOfExtension;
 	wxString fileExtension;
-	GuiObject *tempObject = NULL;
+	GuiObject *tempObject(nullptr);
 
 	// Decipher the file name to figure out what kind of object this is
 	startOfExtension = pathAndFileName.Last('.') + 1;
@@ -3436,8 +3440,8 @@ bool MainFrame::LoadFile(wxString pathAndFileName)
 	// Create the appropriate object
 	if (fileExtension.CmpNoCase("car") == 0)
 		tempObject = new GuiCar(*this, pathAndFileName);
-	else if (fileExtension.CmpNoCase("iteration") == 0)
-		tempObject = new Iteration(*this, pathAndFileName);
+	else if (fileExtension.CmpNoCase("sweep") == 0)
+		tempObject = new Sweep(*this, pathAndFileName);
 	else if (fileExtension.CmpNoCase("ga") == 0)
 		tempObject = new GeneticOptimization(*this, pathAndFileName);
 	else
@@ -3518,7 +3522,7 @@ void MainFrame::RemoveFileFromHistory(wxString pathAndFileName)
 // Class:			MainFrame
 // Function:		SetAssociateWithAllCars
 //
-// Description:		Checks or unchecks the iteration menu item for associate
+// Description:		Checks or unchecks the sweep menu item for associate
 //					with all open cars.
 //
 // Input Arguments:
@@ -3533,11 +3537,11 @@ void MainFrame::RemoveFileFromHistory(wxString pathAndFileName)
 //==========================================================================
 void MainFrame::SetAssociateWithAllCars()
 {
-	if (openObjectList[activeIndex]->GetType() != GuiObject::TypeIteration)
+	if (openObjectList[activeIndex]->GetType() != GuiObject::TypeSweep)
 		return;
 
-	wxMenuItem *item = this->FindItemInMenuBar(IdMenuIterationAssociatedWithAllCars);
-	item->Check(static_cast<Iteration*>(openObjectList[activeIndex])->GetAutoAssociate());
+	wxMenuItem *item = this->FindItemInMenuBar(IdMenuSweepAssociatedWithAllCars);
+	item->Check(static_cast<Sweep*>(openObjectList[activeIndex].get())->GetAutoAssociate());
 }
 
 }// namespace VVASE

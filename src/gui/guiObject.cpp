@@ -264,7 +264,7 @@ bool GuiObject::IsThisObjectSelected(wxTreeItemId selected) const
 		break;
 
 	// Unused types
-	case GuiObject::TypeIteration:
+	case GuiObject::TypeSweep:
 	case GuiObject::TypeOptimization:
 	case GuiObject::TypeNone:
 		break;
@@ -397,8 +397,8 @@ bool GuiObject::SaveToFile(bool saveAsNewFileName)
 	wxString fileTypeExtension;
 	if (GetType() == TypeCar)
 		fileTypeExtension.assign(_T("Car files (*.car)|*.car"));
-	else if (GetType() == TypeIteration)
-		fileTypeExtension.assign(_T("Iteration files (*.iteration)|*.iteration"));
+	else if (GetType() == TypeSweep)
+		fileTypeExtension.assign(_T("Sweep files (*.sweep)|*.sweep"));
 	else if (GetType() == TypeOptimization)
 		fileTypeExtension.assign(_T("Optimization files (*.ga)|*.ga"));
 	else
@@ -429,8 +429,8 @@ bool GuiObject::SaveToFile(bool saveAsNewFileName)
 		wxString endOfFileName;
 		if (GetType() == TypeCar)
 			endOfFileName.assign(_T(".car"));
-		else if (GetType() == TypeIteration)
-			endOfFileName.assign(_T(".iteration"));
+		else if (GetType() == TypeSweep)
+			endOfFileName.assign(_T(".sweep"));
 		else if (GetType() == TypeOptimization)
 			endOfFileName.assign(_T(".ga"));
 		else
@@ -497,8 +497,8 @@ bool GuiObject::WriteImageToFile(wxString pathAndFileName)
 		return static_cast<LibPlot2D::RenderWindow*>(notebookTab)->WriteImageToFile(pathAndFileName);
 		break;
 
-	case TypeIteration:
-		return static_cast<LibPlot2D::PlotPanel*>(notebookTab)->WriteImageToFile(pathAndFileName);
+	case TypeSweep:
+		return static_cast<LibPlot2D::RenderWindow*>(notebookTab)->WriteImageToFile(pathAndFileName);// TODO:  This is wrong - needs to get child of notebook tab?
 		break;
 
 		// Everything else

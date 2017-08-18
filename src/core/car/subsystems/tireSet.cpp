@@ -96,4 +96,25 @@ void TireSet::Read(BinaryReader& file, const int& fileVersion)
 	leftRear->Read(file, fileVersion);
 }
 
+//==========================================================================
+// Class:			TireSet
+// Function:		Create
+//
+// Description:		Creates a new TireSet object.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		std::unique_ptr<TireSet>
+//
+//==========================================================================
+std::unique_ptr<TireSet> TireSet::Create()
+{
+	return std::make_unique<TireSet>();
+}
+
 }// namespace VVASE

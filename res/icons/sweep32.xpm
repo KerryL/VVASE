@@ -1,5 +1,5 @@
 /* XPM */
-static char * iteration_xpm[] = {
+static char * sweep_xpm[] = {
 "32 32 4 1",
 " 	c None",
 ".	c #0000FF",

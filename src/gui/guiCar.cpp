@@ -66,8 +66,10 @@ GuiCar::GuiCar(MainFrame &mainFrame, wxString pathAndFileName)
 
 	appearanceOptions = new AppearanceOptions(mainFrame, *this);
 
-	renderer = new CarRenderer(mainFrame, *this, wxID_ANY,
-		LibPlot2D::RenderWindow::GetBestSupportedAttributes());
+	wxGLAttributes displayAttributes;
+	displayAttributes.PlatformDefaults().RGBA().DoubleBuffer().SampleBuffers(1).Samplers(4).Stencil(1).EndList();
+	assert(wxGLCanvas::IsDisplaySupported(displayAttributes));
+	renderer = new CarRenderer(mainFrame, *this, wxID_ANY, displayAttributes);
 	notebookTab = reinterpret_cast<wxWindow*>(renderer);
 
 	// Get an index for this item and add it to the list in the mainFrame

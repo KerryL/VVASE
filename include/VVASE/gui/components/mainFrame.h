@@ -56,7 +56,7 @@ public:
 
 	// For managing gui objects - these functions are the accessors
 	// for the private list
-	int AddObjectToList(GuiObject *objectToAdd);
+	int AddObjectToList(std::unique_ptr<GuiObject> objectToAdd);
 	void RemoveObjectFromList(int index);
 	inline int GetObjectCount() const { return openObjectList.size(); }
 	inline GuiObject* GetObjectByIndex(int index) const { return openObjectList[index].get(); }
@@ -179,7 +179,7 @@ private:
 
 	// For dynamically changing the menu bar
 	wxMenu *CreateCarMenu();
-	wxMenu *CreateIterationMenu();
+	wxMenu *CreateSweepMenu();
 
 	// The input parameters for the kinematic analyses
 	Kinematics::Inputs kinematicInputs;
@@ -196,7 +196,7 @@ private:
 	{
 		// Menu bar
 		IdMenuFileNewCar = 100 + wxID_HIGHEST,
-		IdMenuFileNewIteration,
+		IdMenuFileNewSweep,
 		IdMenuFileNewOptimization,
 		IdMenuFileOpen,
 		IdMenuFileClose,
@@ -220,14 +220,14 @@ private:
 		IdMenuCar,
 		IdMenuCarAppearanceOptions,
 
-		IdMenuIteration,
-		IdMenuIterationShowAssociatedCars,
-		IdMenuIterationAssociatedWithAllCars,
-		IdMenuIterationExportDataToFile,
-		IdMenuIterationXAxisPitch,
-		IdMenuIterationXAxisRoll,
-		IdMenuIterationXAxisHeave,
-		IdMenuIterationXAxisRackTravel,
+		IdMenuSweep,
+		IdMenuSweepShowAssociatedCars,
+		IdMenuSweepAssociatedWithAllCars,
+		IdMenuSweepExportDataToFile,
+		IdMenuSweepXAxisPitch,
+		IdMenuSweepXAxisRoll,
+		IdMenuSweepXAxisHeave,
+		IdMenuSweepXAxisRackTravel,
 
 		IdMenuViewToolbarsKinematic,
 		IdMenuViewToolbarsQuasiStatic,
@@ -269,7 +269,7 @@ private:
 
 	// For the menu bar
 	void FileNewCarEvent(wxCommandEvent &event);
-	void FileNewIterationEvent(wxCommandEvent &event);
+	void FileNewSweepEvent(wxCommandEvent &event);
 	void FileNewOptimizationEvent(wxCommandEvent &event);
 	void FileOpenEvent(wxCommandEvent &event);
 	void FileCloseEvent(wxCommandEvent &event);
@@ -291,13 +291,13 @@ private:
 
 	void CarAppearanceOptionsEvent(wxCommandEvent &event);
 
-	void IterationShowAssociatedCarsClickEvent(wxCommandEvent &event);
-	void IterationAssociatedWithAllCarsClickEvent(wxCommandEvent &event);
-	void IterationExportDataToFileClickEvent(wxCommandEvent &event);
-	void IterationXAxisPitchClickEvent(wxCommandEvent &event);
-	void IterationXAxisRollClickEvent(wxCommandEvent &event);
-	void IterationXAxisHeaveClickEvent(wxCommandEvent &event);
-	void IterationXAxisRackTravelClickEvent(wxCommandEvent &event);
+	void SweepShowAssociatedCarsClickEvent(wxCommandEvent &event);
+	void SweepAssociatedWithAllCarsClickEvent(wxCommandEvent &event);
+	void SweepExportDataToFileClickEvent(wxCommandEvent &event);
+	void SweepXAxisPitchClickEvent(wxCommandEvent &event);
+	void SweepXAxisRollClickEvent(wxCommandEvent &event);
+	void SweepXAxisHeaveClickEvent(wxCommandEvent &event);
+	void SweepXAxisRackTravelClickEvent(wxCommandEvent &event);
 
 	void ViewToolbarsKinematicEvent(wxCommandEvent &event);
 	void ViewToolbarsQuasiStaticEvent(wxCommandEvent &event);
