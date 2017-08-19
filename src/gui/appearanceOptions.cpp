@@ -506,7 +506,7 @@ wxString AppearanceOptions::GetResolutionString(const ObjectResolution& item)
 // Description:		Writes these options to file.
 //
 // Input Arguments:
-//		outFile	= vvaseOutFileStream* pointing to the file stream to write to
+//		outFile	= std::ofstream& pointing to the file stream to write to
 //
 // Output Arguments:
 //		None
@@ -515,12 +515,12 @@ wxString AppearanceOptions::GetResolutionString(const ObjectResolution& item)
 //		None
 //
 //==========================================================================
-void AppearanceOptions::Write(vvaseOutFileStream *outFile)
+void AppearanceOptions::Write(std::ofstream& outFile)
 {
-	outFile->write((char*)visibilityOptions, VisibilityCount * sizeof(bool));
-	outFile->write((char*)sizeOptions, SizeCount * sizeof(double));
-	outFile->write((char*)colorOptions, ColorCount * sizeof(LibPlot2D::Color));
-	outFile->write((char*)resolutionOptions, ResolutionCount * sizeof(int));
+	outFile.write((char*)visibilityOptions, VisibilityCount * sizeof(bool));
+	outFile.write((char*)sizeOptions, SizeCount * sizeof(double));
+	outFile.write((char*)colorOptions, ColorCount * sizeof(LibPlot2D::Color));
+	outFile.write((char*)resolutionOptions, ResolutionCount * sizeof(int));
 }
 
 //==========================================================================
@@ -530,7 +530,7 @@ void AppearanceOptions::Write(vvaseOutFileStream *outFile)
 // Description:		Read from file to fill these options.
 //
 // Input Arguments:
-//		inFile		= vvaseInFileStream* pointing to the file stream to read from
+//		inFile		= std::ifstream& pointing to the file stream to read from
 //		fileVersion	= int specifying the file version we're reading from
 //
 // Output Arguments:
@@ -540,16 +540,16 @@ void AppearanceOptions::Write(vvaseOutFileStream *outFile)
 //		None
 //
 //==========================================================================
-void AppearanceOptions::Read(vvaseInFileStream *inFile, int fileVersion)
+void AppearanceOptions::Read(std::ifstream& inFile, int fileVersion)
 {
 	// These options were new in file version 1
 	if (fileVersion < 1)
 		return;// At some point, it may be necessary to keep track of the size of this object with every file version
 
-	inFile->read((char*)visibilityOptions, VisibilityCount * sizeof(bool));
-	inFile->read((char*)sizeOptions, SizeCount * sizeof(double));
-	inFile->read((char*)colorOptions, ColorCount * sizeof(LibPlot2D::Color));
-	inFile->read((char*)resolutionOptions, ResolutionCount * sizeof(int));
+	inFile.read((char*)visibilityOptions, VisibilityCount * sizeof(bool));
+	inFile.read((char*)sizeOptions, SizeCount * sizeof(double));
+	inFile.read((char*)colorOptions, ColorCount * sizeof(LibPlot2D::Color));
+	inFile.read((char*)resolutionOptions, ResolutionCount * sizeof(int));
 }
 
 }// namespace VVASE

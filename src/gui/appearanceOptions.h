@@ -157,8 +157,8 @@ public:
 	inline void SetResolution(const ObjectResolution& item, const int& value) { resolutionOptions[item] = value > 3 ? value : 3; }
 	inline int GetResolution(const ObjectResolution& item) const { return resolutionOptions[item]; }
 
-	void Write(vvaseOutFileStream *outFile);
-	void Read(vvaseInFileStream *inFile, int fileVersion);
+	void Write(std::ofstream& outFile);
+	void Read(std::ifstream& inFile, int fileVersion);
 
 	bool* GetVisibilityPointer() { return visibilityOptions; }
 	double* GetSizePointer() { return sizeOptions; }

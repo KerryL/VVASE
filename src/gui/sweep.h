@@ -35,7 +35,6 @@ class Sweep : public GuiObject
 {
 public:
 	Sweep(MainFrame &mainFrame, wxString pathAndFileName = wxEmptyString);
-	~Sweep();
 
 	// Structure that defines the starting and stopping points for
 	// this analysis
@@ -178,15 +177,14 @@ private:
 	std::vector<GuiCar*> associatedCars;
 
 	// Array of working cars to use for the analyses
-	Car **workingCarArray;
-	int numberOfWorkingCars;
+	std::vector<std::unique_ptr<Car>> workingCarArray;
 
 	// This array holds the values against which the data can be plotted
 	// (user gets to choose what the X axis should be)
-	double *axisValuesPitch;//		[rad]
-	double *axisValuesRoll;//		[rad]
-	double *axisValuesHeave;//		[in]
-	double *axisValuesRackTravel;//	[in]
+	std::vector<double> axisValuesPitch;//		[rad]
+	std::vector<double> axisValuesRoll;//		[rad]
+	std::vector<double> axisValuesHeave;//		[in]
+	std::vector<double> axisValuesRackTravel;//	[in]
 
 	// Specifies the independent variables for the plot
 	AxisType xAxisType;

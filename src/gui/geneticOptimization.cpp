@@ -50,11 +50,11 @@ namespace VVASE
 GeneticOptimization::GeneticOptimization(MainFrame &mainFrame,
 	wxString pathAndFileName) : GuiObject(mainFrame, pathAndFileName)
 {
-	geneticAlgorithm = new GAObject(mainFrame.GetJobQueue(), *this);
-
 	// Get an index for this item and add it to the list in the mainFrame
 	// MUST be included BEFORE the naming, which must come BEFORE the call to Initialize
-	index = mainFrame.AddObjectToList(this);
+	index = mainFrame.AddObjectToList(std::unique_ptr<GeneticOptimization>(this));
+
+	geneticAlgorithm = std::make_unique<GAObject>(mainFrame.GetJobQueue(), *this);
 
 	name.Printf("Unsaved Optimization %i", index + 1);
 
@@ -64,28 +64,6 @@ GeneticOptimization::GeneticOptimization(MainFrame &mainFrame,
 	carToOptimize = NULL;
 
 	Initialize();
-}
-
-//==========================================================================
-// Class:			GeneticOptimization
-// Function:		~GeneticOptimization
-//
-// Description:		Destructor for GeneticOptimization class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-GeneticOptimization::~GeneticOptimization()
-{
-	delete geneticAlgorithm;
-	geneticAlgorithm = NULL;
 }
 
 //==========================================================================
@@ -113,7 +91,7 @@ void GeneticOptimization::BeginOptimization()
 
 	// Add a job for the genetic algorithm - this is the manager thread from which
 	// the analysis jobs are created
-	std::unique_ptr<OptimizationData> data(std::make_unique<OptimizationData>(geneticAlgorithm));
+	std::unique_ptr<OptimizationData> data(std::make_unique<OptimizationData>(geneticAlgorithm.get()));
 	ThreadJob job(ThreadJob::CommandThreadGeneticOptimization, std::move(data),
 		wxUtilities::ToVVASEString(name), index);
 	mainFrame.AddJob(job);

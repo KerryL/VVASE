@@ -18,6 +18,9 @@
 #include "VVASE/core/analysis/kinematicOutputs.h"
 #include "VVASE/core/analysis/kinematics.h"
 
+// Standard C++ headers
+#include <memory>
+
 namespace VVASE
 {
 
@@ -71,7 +74,7 @@ private:
 
 	GeneticAlgorithmPanel *gaPanel;
 	const GuiCar *carToOptimize;
-	GAObject *geneticAlgorithm;
+	std::unique_ptr<GAObject> geneticAlgorithm;
 };
 
 }// namespacde VVASE

@@ -59,15 +59,13 @@ namespace VVASE
 Sweep::Sweep(MainFrame &mainFrame, wxString pathAndFileName)
 	: GuiObject(mainFrame, pathAndFileName), mPlotInterface(nullptr)
 {
+	// Get an index for this item and add it to the list in the mainFrame
+	// MUST be included BEFORE the naming, which must come BEFORE the call to Initialize
+	index = mainFrame.AddObjectToList(std::unique_ptr<Sweep>(this));
+
 	int i;
 	for (i = 0; i < NumberOfPlots; i++)
 		plotActive[i] = false;
-
-	// Initialize the pointers to the X-axis data
-	axisValuesPitch = NULL;
-	axisValuesRoll = NULL;
-	axisValuesHeave = NULL;
-	axisValuesRackTravel = NULL;
 
 	// Unless we know anything different, assume we want to associate ourselves with
 	// all of the open car objects
@@ -78,64 +76,14 @@ Sweep::Sweep(MainFrame &mainFrame, wxString pathAndFileName)
 	secondAnalysisPending = false;
 	pendingAnalysisCount = 0;
 
-	// Initialize the working car variables
-	workingCarArray = NULL;
-	numberOfWorkingCars = 0;
-
 	// Create the renderer
 	CreateGUI();
 
 	// Do this prior to initialization so saved files overwrite these defaults
 	ReadDefaultsFromConfig();
 
-	// Get an index for this item and add it to the list in the mainFrame
-	// MUST be included BEFORE the naming, which must come BEFORE the call to Initialize
-	index = mainFrame.AddObjectToList(this);
-
 	name.Printf("Unsaved Sweep %i", index + 1);
 	Initialize();
-}
-
-//==========================================================================
-// Class:			Sweep
-// Function:		~Sweep
-//
-// Description:		Destructor for the Sweep class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Sweep::~Sweep()
-{
-	ClearAllLists();
-
-	delete [] axisValuesPitch;
-	axisValuesPitch = NULL;
-
-	delete [] axisValuesRoll;
-	axisValuesRoll = NULL;
-
-	delete [] axisValuesHeave;
-	axisValuesHeave = NULL;
-
-	delete [] axisValuesRackTravel;
-	axisValuesRackTravel = NULL;
-
-	int i;
-	for (i = 0; i < numberOfWorkingCars; i++)
-	{
-		delete workingCarArray[i];
-		workingCarArray[i] = NULL;
-	}
-	delete [] workingCarArray;
-	workingCarArray = NULL;
 }
 
 //==========================================================================
@@ -245,7 +193,7 @@ const int Sweep::currentFileVersion = 1;
 //==========================================================================
 void Sweep::AddCar(GuiCar *toAdd)
 {
-	if (toAdd == NULL)
+	if (toAdd == nullptr)
 		return;
 
 	associatedCars.push_back(toAdd);
@@ -269,7 +217,7 @@ void Sweep::AddCar(GuiCar *toAdd)
 //==========================================================================
 void Sweep::RemoveCar(GuiCar *toRemove)
 {
-	if (toRemove == NULL)
+	if (toRemove == nullptr)
 		return;
 
 	unsigned int indexToRemove;
@@ -399,22 +347,16 @@ void Sweep::UpdateData()
 	double heaveStep	= (range.endHeave - range.startHeave) / (numberOfPoints - 1);// [in]
 	double rackStep		= (range.endRackTravel - range.startRackTravel) / (numberOfPoints - 1);// [in]
 
-	// Delete the X-axis variables
-	delete [] axisValuesPitch;
-	delete [] axisValuesRoll;
-	delete [] axisValuesHeave;
-	delete [] axisValuesRackTravel;
-
 	// Determine the number of points required to store data in the case of 3D plots
 	unsigned int totalPoints = numberOfPoints;
 	if (yAxisType != AxisTypeUnused)
 		totalPoints *= numberOfPoints;
 
 	// Re-create the arrays with the appropriate number of points
-	axisValuesPitch			= new double[totalPoints];
-	axisValuesRoll			= new double[totalPoints];
-	axisValuesHeave			= new double[totalPoints];
-	axisValuesRackTravel	= new double[totalPoints];
+	axisValuesPitch.resize(totalPoints);
+	axisValuesRoll.resize(totalPoints);
+	axisValuesHeave.resize(totalPoints);
+	axisValuesRackTravel.resize(totalPoints);
 
 	// Clear out and re-allocate our output lists
 	outputLists.clear();
@@ -424,19 +366,12 @@ void Sweep::UpdateData()
 	pendingAnalysisCount = associatedCars.size() * totalPoints;
 
 	// Make sure the working cars are initialized
-	if (pendingAnalysisCount != static_cast<unsigned int>(numberOfWorkingCars))
+	if (pendingAnalysisCount != workingCarArray.size())
 	{
-		int i;
-		for (i = 0; i < numberOfWorkingCars; i++)
-		{
-			delete workingCarArray[i];
-			workingCarArray[i] = NULL;
-		}
-		delete [] workingCarArray;
-		numberOfWorkingCars = pendingAnalysisCount;
-		workingCarArray = new Car*[numberOfWorkingCars];
-		for (i = 0; i < numberOfWorkingCars; i++)
-			workingCarArray[i] = new Car();
+		workingCarArray.resize(pendingAnalysisCount);
+		unsigned int i;
+		for (auto& car : workingCarArray)
+			car = std::make_unique<Car>();
 	}
 
 	// Go through car-by-car
@@ -474,7 +409,7 @@ void Sweep::UpdateData()
 			// Run The analysis
 			auto newOutputs(std::make_unique<KinematicOutputs>());
 			std::unique_ptr<KinematicsData> data(std::make_unique<KinematicsData>(&associatedCars[currentCar]->GetOriginalCar(),
-				workingCarArray[currentCar * numberOfPoints + currentPoint], kinematicInputs, newOutputs.get()));
+				workingCarArray[currentCar * numberOfPoints + currentPoint].get(), kinematicInputs, newOutputs.get()));
 			ThreadJob job(ThreadJob::CommandThreadKinematicsSweep, std::move(data),
 				wxUtilities::ToVVASEString(associatedCars[currentCar]->GetCleanName() + _T(":") + name), index);
 			mainFrame.AddJob(job);
@@ -525,28 +460,28 @@ void Sweep::UpdateDisplay()
 				for (j = 0; j < (unsigned int)associatedCars.size(); j++)
 				{
 					std::unique_ptr<LibPlot2D::Dataset2D> dataSet(std::make_unique<LibPlot2D::Dataset2D>(CountValidValues(j, static_cast<PlotID>(i))));
-					
+
 					std::vector<double>& x(dataSet->GetX()), &y(dataSet->GetY());
 
 					unsigned int k, n;
 
 					// Populate all values
 					n= 0;
-					for (k = 0; k < (unsigned int)numberOfPoints; k++)
+					for (k = 0; k < static_cast<unsigned int>(numberOfPoints); k++)
 					{
 						if (VVASE::Math::IsNaN(GetDataValue(j, k, (PlotID)i)))
 							continue;
 
 						x[n] = GetDataValue(j, k,
 								(PlotID)(KinematicOutputs::NumberOfOutputScalars + xAxisType));
-						y[n] = GetDataValue(j, k, (PlotID)i);
+						y[n] = GetDataValue(j, k, static_cast<PlotID>(i));
 						n++;
 					}
 
 					// Add the dataset to the plot
 					mPlotInterface.AddCurve(std::move(dataSet), associatedCars[j]->GetCleanName()
-						+ _T(", ") + GetPlotName((PlotID)i) + _T(" [") +
-						GetPlotUnits((PlotID)i) + _T("]"));
+						+ _T(", ") + GetPlotName(static_cast<PlotID>(i)) + _T(" [") +
+						GetPlotUnits(static_cast<PlotID>(i)) + _T("]"));
 
 					// Set the x-axis information if this is the first pass
 					if (mPlotInterface.GetCurveCount() == 1)
@@ -763,9 +698,9 @@ bool Sweep::PerformLoadFromFile()
 //==========================================================================
 void Sweep::ReadDefaultsFromConfig()
 {
-	wxFileConfig *configurationFile = new wxFileConfig(_T(""), _T(""),
+	std::unique_ptr<wxFileConfig> configurationFile(std::make_unique<wxFileConfig>((_T(""), _T(""),
 		wxFileName(wxStandardPaths::Get().GetExecutablePath()).GetPathWithSep() + mainFrame.pathToConfigFile, _T(""),
-		wxCONFIG_USE_RELATIVE_PATH);
+		wxCONFIG_USE_RELATIVE_PATH)));
 
 	// Attempt to read from the config file; set the defaults if the value isn't found
 	configurationFile->Read(_T("/Sweep/GenerateTitleFromFileName"), &generateTitleFromFileName, true);
@@ -827,9 +762,6 @@ void Sweep::ReadDefaultsFromConfig()
 			lasti = i + 1;
 		}
 	}
-
-	delete configurationFile;
-	configurationFile = NULL;
 }
 
 //==========================================================================
@@ -851,9 +783,9 @@ void Sweep::ReadDefaultsFromConfig()
 void Sweep::WriteDefaultsToConfig() const
 {
 	// Create a configuration file object
-	wxFileConfig *configurationFile = new wxFileConfig(_T(""), _T(""),
+	std::unique_ptr<wxFileConfig> configurationFile(std::make_unique<wxFileConfig>(_T(""), _T(""),
 		wxFileName(wxStandardPaths::Get().GetExecutablePath()).GetPathWithSep() + mainFrame.pathToConfigFile, _T(""),
-		wxCONFIG_USE_RELATIVE_PATH);
+		wxCONFIG_USE_RELATIVE_PATH));
 
 	// Write to the config file
 	configurationFile->Write(_T("/Sweep/GenerateTitleFromFileName"), generateTitleFromFileName);
@@ -896,10 +828,6 @@ void Sweep::WriteDefaultsToConfig() const
 		}
 	}
 	configurationFile->Write(_T("Sweep/ActivePlots"), activePlotString);
-
-	// Delete file object
-	delete configurationFile;
-	configurationFile = NULL;
 }
 
 //==========================================================================
@@ -1284,7 +1212,7 @@ void Sweep::ExportDataToFile(wxString pathAndFileName) const
 	}
 
 	// Perform the save - open the file
-	vvaseOutFileStream exportFile(pathAndFileName.mb_str(), std::ios::out);
+	vvaseOutFileStream exportFile(pathAndFileName.mb_str());
 
 	// Warn the user if the file could not be opened failed
 	if (!exportFile.is_open() || !exportFile.good())

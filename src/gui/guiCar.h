@@ -13,12 +13,16 @@
 #ifndef GUI_CAR_H_
 #define GUI_CAR_H_
 
-// wxWidgets headers
-#include <wx/treebase.h>
-
 // Local headers
 #include "VVASE/gui/guiObject.h"
 #include "VVASE/gui/guiCarOutputs.h"
+
+// wxWidgets headers
+#include <wx/treebase.h>
+
+
+// Standard C++ headers
+#include <memory>
 
 // wxWidgets forward declarations
 class wxTreeItemId;
@@ -35,7 +39,6 @@ class GuiCar : public GuiObject
 {
 public:
 	GuiCar(MainFrame &mainFrame, wxString pathAndFileName = wxEmptyString);
-	~GuiCar();
 
 	// To be called after either the WorkingCar or the OriginalCar
 	// has changed to update the analysis data (mandatory overload)
@@ -76,10 +79,10 @@ public:
 
 private:
 	// The "real" object containing the original, unmodified information (not rolled, heaved, etc.)
-	Car *originalCar;
+	std::unique_ptr<Car> originalCar;
 
 	// Reference to the object that we manipulate as we do our analyses
-	Car *workingCar;
+	std::unique_ptr<Car> workingCar;
 
 	// Performs the saving and loading to/from file (mandatory overloads)
 	bool PerformLoadFromFile();
@@ -88,7 +91,7 @@ private:
 	int GetIconHandle() const;
 
 	// Reference to the options that affect this object's appearance
-	AppearanceOptions *appearanceOptions;
+	std::unique_ptr<AppearanceOptions> appearanceOptions;
 
 	// The object that stores the kinematics information for this car
 	GuiCarOutputs outputs;

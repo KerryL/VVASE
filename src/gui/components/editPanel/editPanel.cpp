@@ -17,7 +17,7 @@
 #include "VVASE/core/car/subsystems/brakes.h"
 #include "VVASE/core/car/subsystems/massProperties.h"
 #include "VVASE/gui/guiObject.h"
-#include "../../Sweep.h"
+#include "../../sweep.h"
 #include "../../guiCar.h"
 #include "VVASE/gui/renderer/carRenderer.h"
 #include "VVASE/gui/components/mainFrame.h"

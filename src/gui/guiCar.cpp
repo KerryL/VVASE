@@ -61,20 +61,20 @@ namespace VVASE
 GuiCar::GuiCar(MainFrame &mainFrame, wxString pathAndFileName)
 	: GuiObject(mainFrame, pathAndFileName)
 {
-	originalCar = new Car();
-	workingCar = new Car(*originalCar);
+	// Get an index for this item and add it to the list in the mainFrame
+	// MUST be included BEFORE the naming, which must come BEFORE the call to Initialize
+	index = mainFrame.AddObjectToList(std::unique_ptr<GuiCar>(this));
 
-	appearanceOptions = new AppearanceOptions(mainFrame, *this);
+	originalCar = std::make_unique<Car>();
+	workingCar = std::make_unique<Car>(*originalCar);
+
+	appearanceOptions = std::make_unique<AppearanceOptions>(mainFrame, *this);
 
 	wxGLAttributes displayAttributes;
 	displayAttributes.PlatformDefaults().RGBA().DoubleBuffer().SampleBuffers(1).Samplers(4).Stencil(1).EndList();
 	assert(wxGLCanvas::IsDisplaySupported(displayAttributes));
 	renderer = new CarRenderer(mainFrame, *this, wxID_ANY, displayAttributes);
 	notebookTab = reinterpret_cast<wxWindow*>(renderer);
-
-	// Get an index for this item and add it to the list in the mainFrame
-	// MUST be included BEFORE the naming, which must come BEFORE the call to Initialize
-	index = mainFrame.AddObjectToList(this);
 
 	name.Printf("Unsaved Car %i", index + 1);
 
@@ -151,34 +151,6 @@ GuiCar::GuiCar(MainFrame &mainFrame, wxString pathAndFileName)
 
 //==========================================================================
 // Class:			GuiCar
-// Function:		~GuiCar
-//
-// Description:		Destructor for the GuiCar class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-GuiCar::~GuiCar()
-{
-	delete originalCar;
-	originalCar = nullptr;
-
-	delete workingCar;
-	workingCar = nullptr;
-
-	delete appearanceOptions;
-	appearanceOptions = nullptr;
-}
-
-//==========================================================================
-// Class:			GuiCar
 // Function:		GetIconHandle
 //
 // Description:		Gets the icon handle from the systems tree.
@@ -241,13 +213,13 @@ void GuiCar::UpdateData()
 	else
 	{
 		QuasiStatic quasiStatic;
-		inputs = quasiStatic.Solve(originalCar, workingCar, mainFrame.GetInputs(),
+		inputs = quasiStatic.Solve(originalCar.get(), workingCar.get(), mainFrame.GetInputs(),
 			mainFrame.GetQuasiStaticInputs(), outputs.quasiStaticOutputs);
 		outputs.hasQuasiStaticOutputs = true;
 	}
 
 	// Re-run the kinematics to update the car's position
-	std::unique_ptr<KinematicsData> data(std::make_unique<KinematicsData>(originalCar, workingCar, inputs, &outputs.kinematicOutputs));
+	std::unique_ptr<KinematicsData> data(std::make_unique<KinematicsData>(originalCar.get(), workingCar.get(), inputs, &outputs.kinematicOutputs));
 	ThreadJob job(ThreadJob::CommandThreadKinematicsNormal, std::move(data), wxUtilities::ToVVASEString(name), index);
 	mainFrame.AddJob(job);
 }
@@ -318,7 +290,7 @@ bool GuiCar::PerformSaveToFile()
 	// Perform the save - the object we want to save is OriginalCar - this is the
 	// one that contains the information about the vehicle as it was input by the
 	// user.
-	vvaseOutFileStream outFile;
+	std::ofstream outFile;
 	bool saveSuccessful(originalCar->SaveCarToFile(wxUtilities::ToVVASEString(pathAndFileName), &outFile));
 
 	// Also write the appearance options after checking to make sure that OutFile was properly opened
@@ -349,7 +321,7 @@ bool GuiCar::PerformSaveToFile()
 //==========================================================================
 bool GuiCar::PerformLoadFromFile()
 {
-	vvaseInFileStream inFile;
+	std::ifstream inFile;
 	int fileVersion;
 
 	// Make sure we have exclusive access
@@ -465,7 +437,7 @@ void GuiCar::ComputeARBSignConventions()
 	kinematics.SetPitch(0.0);
 	kinematics.SetRackTravel(0.0);
 	kinematics.SetTireDeflections(tireDeflections);
-	kinematics.UpdateKinematics(originalCar, workingCar, wxUtilities::ToVVASEString(name) + _T(" -> ARB Sign Convention Test"));
+	kinematics.UpdateKinematics(originalCar.get(), workingCar.get(), wxUtilities::ToVVASEString(name) + _T(" -> ARB Sign Convention Test"));
 
 	// Adjust convention if necessary
 	if (kinematics.GetOutputs().doubles[KinematicOutputs::FrontARBTwist] < 0.0)

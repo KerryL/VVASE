@@ -20,6 +20,7 @@
 // Standard C++ headers
 #include <map>
 #include <condition_variable>
+#include <thread>
 
 // wxWidgets forward declarations
 class wxEvtHandler;
