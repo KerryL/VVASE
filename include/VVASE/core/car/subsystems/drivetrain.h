@@ -80,7 +80,7 @@ private:
     std::unique_ptr<Differential> frontDifferential;
 
 	static void WriteDifferential(BinaryWriter& file, const Differential* differential);
-	static void ReadDifferential(BinaryReader& file, Differential* differential);
+	static void ReadDifferential(BinaryReader& file, std::unique_ptr<Differential>& differential, const int& fileVersion);
 
 	// Array of gear ratios for each gear (not including final
 	// drive - that is in the Differential object)

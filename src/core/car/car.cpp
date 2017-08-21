@@ -292,7 +292,7 @@ const int Car::currentFileVersion = 6;
 //
 // Input Arguments:
 //		fileName	= vvaseString specifying the location to write to
-//		poutFile	= vvaseOutFileStream* used to allow writing of the appearance options in
+//		outFile		= std::ofstream& used to allow writing of the appearance options in
 //					  an external function
 //
 // Output Arguments:
@@ -302,10 +302,10 @@ const int Car::currentFileVersion = 6;
 //		returns true for successful write, false otherwise
 //
 //==========================================================================
-bool Car::SaveCarToFile(vvaseString fileName, vvaseOutFileStream *poutFile) const
+bool Car::SaveCarToFile(vvaseString fileName, std::ofstream& outFile) const
 {
 	// Open the specified file
-	std::ofstream outFile(fileName.c_str(), std::ios::binary);// NOT vvaseOutFileStream - always use narrow char here
+	outFile.open(fileName.c_str(), std::ios::binary);// NOT vvaseOutFileStream - always use narrow char here
 	if (!outFile.is_open() || !outFile.good())
 		return false;
 
@@ -322,15 +322,6 @@ bool Car::SaveCarToFile(vvaseString fileName, vvaseOutFileStream *poutFile) cons
 		subsystem.second->Write(binFile);
 	}
 
-	// If we're saving the options (done elsewhere), open the additional file
-	if (poutFile != nullptr)
-	{
-		poutFile->open(fileName.c_str(), std::ios::binary);
-		poutFile->seekp(outFile.tellp());
-	}
-
-	outFile.close();
-
 	return true;
 }
 
@@ -342,19 +333,19 @@ bool Car::SaveCarToFile(vvaseString fileName, vvaseOutFileStream *poutFile) cons
 //
 // Input Arguments:
 //		fileName	= vvaseString specifying the location to read from
-//		pinFile		= vvaseInFileStream* used to allow reading of the appearance options in
+//		inFile		= std::ifstream* used to allow reading of the appearance options in&
 //					  an external function
 //
 // Output Arguments:
-//		fileVersion	= int* specifying the version of the file we're reading from
+//		fileVersion	= int& specifying the version of the file we're reading from
 //
 // Return Value:
 //		None
 //
 //==========================================================================
-bool Car::LoadCarFromFile(vvaseString fileName, vvaseInFileStream *pinFile, int *fileVersion)
+bool Car::LoadCarFromFile(vvaseString fileName, std::ifstream& inFile, int& fileVersion)
 {
-	std::ifstream inFile(fileName.c_str(), std::ios::binary);// NOT vvaseInFileStream - always use narrow char here
+	inFile.open(fileName.c_str(), std::ios::binary);// NOT vvaseInFileStream - always use narrow char here
 	if (!inFile.is_open() || !inFile.good())
 		return false;
 
@@ -377,15 +368,7 @@ bool Car::LoadCarFromFile(vvaseString fileName, vvaseInFileStream *pinFile, int 
 	tires->Read(binFile, header.fileVersion);*/
 	// TODO:  Re-implement (and also handle old file versions!)
 
-	// If we're reading the options (done elsewhere), open the additional file
-	if (pinFile != nullptr)
-	{
-		pinFile->open(fileName.c_str(), std::ios::binary);
-		pinFile->seekg(inFile.tellg());
-		*fileVersion = header.fileVersion;
-	}
-	else
-		inFile.close();
+	fileVersion = header.fileVersion;
 
 	return true;
 }

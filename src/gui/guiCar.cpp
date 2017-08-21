@@ -291,14 +291,11 @@ bool GuiCar::PerformSaveToFile()
 	// one that contains the information about the vehicle as it was input by the
 	// user.
 	std::ofstream outFile;
-	bool saveSuccessful(originalCar->SaveCarToFile(wxUtilities::ToVVASEString(pathAndFileName), &outFile));
+	bool saveSuccessful(originalCar->SaveCarToFile(wxUtilities::ToVVASEString(pathAndFileName), outFile));
 
 	// Also write the appearance options after checking to make sure that OutFile was properly opened
 	if (outFile.is_open() && outFile.good())
-	{
-		appearanceOptions->Write(&outFile);
-		outFile.close();
-	}
+		appearanceOptions->Write(outFile);
 
 	return saveSuccessful;
 }
@@ -328,14 +325,11 @@ bool GuiCar::PerformLoadFromFile()
 	MutexLocker lock(originalCar->GetMutex());
 
 	// Open the car
-	bool loadSuccessful(originalCar->LoadCarFromFile(wxUtilities::ToVVASEString(pathAndFileName), &inFile, &fileVersion));
+	bool loadSuccessful(originalCar->LoadCarFromFile(wxUtilities::ToVVASEString(pathAndFileName), inFile, fileVersion));
 
 	// Also load the appearance options after checking to make sure InFile was correctly opened
 	if (inFile.is_open() && inFile.good())
-	{
-		appearanceOptions->Read(&inFile, fileVersion);
-		inFile.close();
-	}
+		appearanceOptions->Read(inFile, fileVersion);
 
 	return loadSuccessful;
 }

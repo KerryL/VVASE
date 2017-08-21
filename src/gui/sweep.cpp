@@ -369,7 +369,6 @@ void Sweep::UpdateData()
 	if (pendingAnalysisCount != workingCarArray.size())
 	{
 		workingCarArray.resize(pendingAnalysisCount);
-		unsigned int i;
 		for (auto& car : workingCarArray)
 			car = std::make_unique<Car>();
 	}

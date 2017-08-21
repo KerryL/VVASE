@@ -112,9 +112,15 @@ void Drivetrain::WriteDifferential(BinaryWriter& file, const Differential* diffe
 		file.Write(false);
 }
 
-void Drivetrain::ReadDifferential(BinaryReader& file, Differential* differential)
+void Drivetrain::ReadDifferential(BinaryReader& file, std::unique_ptr<Differential>& differential, const int& fileVersion)
 {
-	// TODO:  Implement
+	bool hasDifferential;
+	file.Read(hasDifferential);
+	if (hasDifferential)
+	{
+		differential = std::make_unique<Differential>();
+		differential->Read(file, fileVersion);
+	}
 }
 
 //==========================================================================
@@ -147,9 +153,9 @@ void Drivetrain::Read(BinaryReader& file, const int& fileVersion)
 	if (fileVersion >= 6)// TODO:  Check this # is correct
 	{
 		file.Read(gearRatios);
-		ReadDifferential(file, rearDifferential.get());
-		ReadDifferential(file, midDifferential.get());
-		ReadDifferential(file, frontDifferential.get());
+		ReadDifferential(file, rearDifferential, fileVersion);
+		ReadDifferential(file, midDifferential, fileVersion);
+		ReadDifferential(file, frontDifferential, fileVersion);
 	}
 	else if (fileVersion >= 5)
 	{

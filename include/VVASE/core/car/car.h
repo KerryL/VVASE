@@ -86,8 +86,8 @@ public:
     // Best way to handle this might be to store a list of all loaded modules, and warn if there is a mismatch
 
 	// Utility methods
-	bool SaveCarToFile(vvaseString fileName, vvaseOutFileStream *outFile = NULL) const;
-	bool LoadCarFromFile(vvaseString fileName, vvaseInFileStream *inFile = NULL, int *fileVersion = NULL);
+	bool SaveCarToFile(vvaseString fileName, std::ofstream& outFile) const;
+	bool LoadCarFromFile(vvaseString fileName, std::ifstream& inFile, int& fileVersion);
 
 	void ComputeWheelCenters();
 

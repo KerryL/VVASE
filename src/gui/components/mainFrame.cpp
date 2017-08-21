@@ -969,8 +969,8 @@ BEGIN_EVENT_TABLE(MainFrame, wxFrame)
 	EVT_MENU(IdToolbar3DOrtho,					MainFrame::Toolbar3DOrthoClickEvent)
 
 	// Threads
-	EVT_COMMAND(wxID_ANY, EVT_THREAD,			MainFrame::ThreadCompleteEvent)
-	EVT_COMMAND(wxID_ANY, EVT_DEBUG,			MainFrame::DebugMessageEvent)
+	/*EVT_COMMAND(wxID_ANY, EVT_THREAD,			MainFrame::ThreadCompleteEvent)
+	EVT_COMMAND(wxID_ANY, EVT_DEBUG,			MainFrame::DebugMessageEvent)*/
 END_EVENT_TABLE();
 
 //==========================================================================
