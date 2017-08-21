@@ -697,9 +697,9 @@ bool Sweep::PerformLoadFromFile()
 //==========================================================================
 void Sweep::ReadDefaultsFromConfig()
 {
-	std::unique_ptr<wxFileConfig> configurationFile(std::make_unique<wxFileConfig>((_T(""), _T(""),
+	std::unique_ptr<wxFileConfig> configurationFile(std::make_unique<wxFileConfig>(_T(""), _T(""),
 		wxFileName(wxStandardPaths::Get().GetExecutablePath()).GetPathWithSep() + mainFrame.pathToConfigFile, _T(""),
-		wxCONFIG_USE_RELATIVE_PATH)));
+		wxCONFIG_USE_RELATIVE_PATH));
 
 	// Attempt to read from the config file; set the defaults if the value isn't found
 	configurationFile->Read(_T("/Sweep/GenerateTitleFromFileName"), &generateTitleFromFileName, true);
