@@ -229,7 +229,7 @@ Car::Car() : subsystems(CreateComponents())
 //		None
 //
 //==========================================================================
-Car::Car(const Car& car)
+Car::Car(const Car& car) : subsystems(CreateComponents())
 {
 	*this = car;
 }

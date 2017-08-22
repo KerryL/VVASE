@@ -67,7 +67,7 @@ public:
 	void SetRearWheelDrive(const double& bias);
 
     // Required by RegisterableComponent
-    static std::unique_ptr<Drivetrain> Create() { return std::make_unique<Drivetrain>(); }
+    static std::unique_ptr<Subsystem> Create() { return std::make_unique<Drivetrain>(); }
     static vvaseString GetName() { return _T("Drivetrain"); }
 
     // Required by Subsystem

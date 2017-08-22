@@ -57,7 +57,7 @@ public:
 
     struct ComponentInfo
     {
-        ComponentInfo(Factory create, const std::string& name) : create(create), name(name) {}
+        ComponentInfo(Factory create, const vvaseString& name) : create(create), name(name) {}
 
         Factory create;
         vvaseString name;

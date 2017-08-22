@@ -90,8 +90,8 @@ ThreadJob::ThreadJob(ThreadCommand command, std::unique_ptr<ThreadData> data,
 	const vvaseString &name, int &index) : command(command), data(std::move(data)),
 	name(name.c_str()), index(index)
 {
-	assert(data);
-	assert(data->OkForCommand(command));
+	assert(this->data);
+	assert(this->data->OkForCommand(command));
 }
 
 //==========================================================================
@@ -112,28 +112,7 @@ ThreadJob::ThreadJob(ThreadCommand command, std::unique_ptr<ThreadData> data,
 //==========================================================================
 ThreadJob::ThreadJob(const ThreadJob &threadJob)
 {
-	data = NULL;
 	*this = threadJob;
-}
-
-//==========================================================================
-// Class:			ThreadJob
-// Function:		~ThreadJob
-//
-// Description:		Destructor for the ThreadJob class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-ThreadJob::~ThreadJob()
-{
 }
 
 //==========================================================================

@@ -35,7 +35,7 @@ public:
 	double TorqueOutput(const double &engineSpeed, const double &throttlePosition);// [in-lb]
 
     // Required by RegisterableComponent
-    static std::unique_ptr<Engine> Create() { return std::make_unique<Engine>(); }
+    static std::unique_ptr<Subsystem> Create() { return std::make_unique<Engine>(); }
     static vvaseString GetName() { return _T("Engine"); }
 
     // Required by Subsystem

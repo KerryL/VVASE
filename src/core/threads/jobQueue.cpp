@@ -16,6 +16,7 @@
 #include "VVASE/core/threads/threadEvent.h"// TODO:  Need to remove this from core
 #include "VVASE/core/utilities/debugLog.h"
 #include "VVASE/core/threads/threadDefs.h"
+#include "VVASE/core/threads/threadData.h"
 
 namespace VVASE
 {

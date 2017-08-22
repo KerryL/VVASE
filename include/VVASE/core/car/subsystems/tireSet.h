@@ -39,7 +39,7 @@ public:
 	TireSet();
 
     // Required by RegisterableComponent
-    static std::unique_ptr<TireSet> Create();
+	static std::unique_ptr<Subsystem> Create();
     static vvaseString GetName() { return _T("Tires"); }
 
     // Required by Subsystem

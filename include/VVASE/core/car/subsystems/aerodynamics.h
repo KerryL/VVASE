@@ -38,7 +38,7 @@ public:
 	Eigen::Vector3d GetAeroMoments() const;			// [in-lbf]
 
     // Required by RegisterableComponent
-    static std::unique_ptr<Aerodynamics> Create() { return std::make_unique<Aerodynamics>(); }
+    static std::unique_ptr<Subsystem> Create() { return std::make_unique<Aerodynamics>(); }
     static vvaseString GetName() { return _T("Aerodynamics"); }
 
     // Required by Subsystem

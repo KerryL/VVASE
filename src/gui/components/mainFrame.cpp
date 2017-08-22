@@ -50,6 +50,7 @@
 #include "VVASE/core/analysis/kinematics.h"
 #include "VVASE/core/analysis/kinematicOutputs.h"
 #include "VVASE/core/threads/jobQueue.h"
+#include "VVASE/core/threads/threadData.h"
 #include "VVASE/core/threads/workerThread.h"
 #include "VVASE/core/threads/threadEvent.h"
 #include "VVASE/core/utilities/debugger.h"

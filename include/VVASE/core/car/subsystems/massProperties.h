@@ -68,7 +68,7 @@ public:
 	Eigen::Vector3d GetSprungMassCG(const Suspension* s) const;
 
 	// Required by RegisterableComponent
-    static std::unique_ptr<MassProperties> Create() { return std::make_unique<MassProperties>(); }
+    static std::unique_ptr<Subsystem> Create() { return std::make_unique<MassProperties>(); }
     static vvaseString GetName() { return _T("MassProperties"); }
 
     // Required by Subsystem

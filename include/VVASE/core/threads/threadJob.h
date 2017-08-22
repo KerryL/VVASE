@@ -48,7 +48,7 @@ public:
 	ThreadJob(ThreadCommand command);
 	ThreadJob(ThreadCommand command, std::unique_ptr<ThreadData> data,
 		const vvaseString &name, int &index);
-	~ThreadJob();
+	~ThreadJob() = default;
 
 	ThreadCommand command;
 

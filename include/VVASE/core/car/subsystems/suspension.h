@@ -43,7 +43,7 @@ public:
 	void Read(BinaryReader& file, const int& fileVersion) override;
 
     // Required by RegisterableComponent
-    static std::unique_ptr<Suspension> Create() { return std::make_unique<Suspension>(); }
+    static std::unique_ptr<Subsystem> Create() { return std::make_unique<Suspension>(); }
     static vvaseString GetName() { return _T("Suspension"); }
 
     // Required by Subsystem

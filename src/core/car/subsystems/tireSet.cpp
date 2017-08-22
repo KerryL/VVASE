@@ -109,10 +109,10 @@ void TireSet::Read(BinaryReader& file, const int& fileVersion)
 //		None
 //
 // Return Value:
-//		std::unique_ptr<TireSet>
+//		std::unique_ptr<Subsystem>
 //
 //==========================================================================
-std::unique_ptr<TireSet> TireSet::Create()
+std::unique_ptr<Subsystem> TireSet::Create()
 {
 	return std::make_unique<TireSet>();
 }
