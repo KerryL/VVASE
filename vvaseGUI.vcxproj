@@ -23,6 +23,7 @@
     <ClInclude Include="include\VVASE\gui\dialogs\gaGoalDialog.h" />
     <ClInclude Include="include\VVASE\gui\dialogs\textInputDialog.h" />
     <ClInclude Include="include\VVASE\gui\dialogs\vectorEditDialog.h" />
+    <ClInclude Include="include\VVASE\gui\geneticOptimization.h" />
     <ClInclude Include="include\VVASE\gui\guiCarOutputs.h" />
     <ClInclude Include="include\VVASE\gui\guiObject.h" />
     <ClInclude Include="include\VVASE\gui\renderer\3dcar\aarm.h" />

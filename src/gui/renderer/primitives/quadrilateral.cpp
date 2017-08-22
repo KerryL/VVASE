@@ -281,4 +281,8 @@ bool Quadrilateral::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::V
 	return false;
 }
 
+void Quadrilateral::Update(const unsigned int& i)
+{
+}
+
 }// namespace VVASE

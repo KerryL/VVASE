@@ -117,4 +117,16 @@ std::unique_ptr<TireSet> TireSet::Create()
 	return std::make_unique<TireSet>();
 }
 
+wxPanel* TireSet::GetEditPanel()
+{
+	// TODO:  Implement
+	return nullptr;
+}
+
+wxTreeListItem* TireSet::GetTreeItem()
+{
+	// TODO:  Implement
+	return nullptr;
+}
+
 }// namespace VVASE

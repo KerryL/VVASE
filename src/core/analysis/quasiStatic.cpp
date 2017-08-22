@@ -689,4 +689,34 @@ double QuasiStatic::ComputeDeltaWheelSets(const WheelSet& w1, const WheelSet& w2
 	return delta;
 }
 
+wxPanel* QuasiStatic::GetEditPanel()
+{
+	// TODO:  Implement
+	return nullptr;
+}
+
+wxPanel* QuasiStatic::GetNotebookPage()
+{
+	// TODO:  Implement
+	return nullptr;
+}
+
+wxTreeNode* QuasiStatic::GetTreeNode()
+{
+	// TODO:  Implement
+	return nullptr;
+}
+
+OptimizationInterface* QuasiStatic::GetOptimizationInterface()
+{
+	// TODO:  Implement
+	return nullptr;
+}
+
+bool QuasiStatic::Compute(const Car& car)
+{
+	// TODO:  Implement
+	return false;
+}
+
 }// namespace VVASE

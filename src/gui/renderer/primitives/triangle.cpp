@@ -197,4 +197,8 @@ bool Triangle::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector
 	return false;
 }
 
+void Triangle::Update(const unsigned int& i)
+{
+}
+
 }// namespace VVASE

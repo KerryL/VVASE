@@ -33,6 +33,7 @@ public:
 	virtual wxPanel* GetEditPanel() = 0;
 	virtual wxTreeListItem* GetTreeItem() = 0;
 	// TODO:  Also, a factory method for primitives (or return nullptr if it's not required to render anything?)
+	// TODO:  Also possibly a "GetIcon" method?  See MainTree
 
 	// File read/write functions
 	virtual void Write(BinaryWriter& file) const = 0;

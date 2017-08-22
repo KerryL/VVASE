@@ -35,7 +35,6 @@ class GeneticOptimization : public GuiObject
 public:
 	GeneticOptimization(MainFrame &mainFrame,
 		wxString pathAndFileName = wxEmptyString);
-	~GeneticOptimization();
 
 	// Mandatory overload
 	ItemType GetType() const { return TypeOptimization; }

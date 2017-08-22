@@ -300,4 +300,8 @@ bool Cylinder::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector
 	return false;
 }
 
+void Cylinder::Update(const unsigned int& i)
+{
+}
+
 }// namespace VVASE

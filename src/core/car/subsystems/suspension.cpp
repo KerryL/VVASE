@@ -496,4 +496,16 @@ void Suspension::UpdateSymmetry()
 	leftRear.staticToe = rightRear.staticToe;
 }
 
+wxPanel* Suspension::GetEditPanel()
+{
+	// TODO:  Implement
+	return nullptr;
+}
+
+wxTreeListItem* Suspension::GetTreeItem()
+{
+	// TODO:  Implement
+	return nullptr;
+}
+
 }// namespace VVASE

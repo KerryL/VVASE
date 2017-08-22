@@ -418,4 +418,16 @@ Eigen::Vector3d MassProperties::GetSprungMassCG(const Suspension* s) const
 	return cg;
 }
 
+wxPanel* MassProperties::GetEditPanel()
+{
+	// TODO:  Implement
+	return nullptr;
+}
+
+wxTreeListItem* MassProperties::GetTreeItem()
+{
+	// TODO:  Implement
+	return nullptr;
+}
+
 }// namespace VVASE

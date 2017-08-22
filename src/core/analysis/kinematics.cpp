@@ -1380,4 +1380,34 @@ void Kinematics::ApplyRotations(Eigen::Vector3d& v) const
 	}
 }
 
+wxPanel* Kinematics::GetEditPanel()
+{
+	// TODO:  Implement
+	return nullptr;
+}
+
+wxPanel* Kinematics::GetNotebookPage()
+{
+	// TODO:  Implement
+	return nullptr;
+}
+
+wxTreeNode* Kinematics::GetTreeNode()
+{
+	// TODO:  Implement
+	return nullptr;
+}
+
+OptimizationInterface* Kinematics::GetOptimizationInterface()
+{
+	// TODO:  Implement
+	return nullptr;
+}
+
+bool Kinematics::Compute(const Car& car)
+{
+	// TODO:  Implement
+	return false;
+}
+
 }// namespace VVASE

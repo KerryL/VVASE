@@ -32,8 +32,11 @@ REM Build source file
 @ECHO // Local headers>> %outputPath%%outputFile%
 @ECHO #include "gitHash.h">> %outputPath%%outputFile%
 @ECHO.>> %outputPath%%outputFile%
+@ECHO namespace VVASE>> %outputPath%%outputFile%
+@ECHO {>> %outputPath%%outputFile%
 @ECHO const wxString vvaseVersion = _T("%gitTag%");>> %outputPath%%outputFile%
 @ECHO const wxString vvaseGitHash = _T("%gitHash%");>> %outputPath%%outputFile%
+@ECHO }// namespace VVASE>> %outputPath%%outputFile%
 
 REM Build TeX file
 @ECHO %% %texFile%> %texPath%%texFile%

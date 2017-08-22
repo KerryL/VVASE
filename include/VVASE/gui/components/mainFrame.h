@@ -14,6 +14,11 @@
 #ifndef MAIN_FRAME_H_
 #define MAIN_FRAME_H_
 
+// We need to fix the use of macros in Win32 libraries
+#ifdef _MSC_VER
+#undef AddJob
+#endif// _MSC_VER
+
 // wxWidgets headers
 #include <wx/wx.h>
 #include <wx/aui/aui.h>

@@ -108,4 +108,16 @@ void Brakes::Read(BinaryReader& file, const int& fileVersion)
 	return *this;
 }*/
 
+wxPanel* Brakes::GetEditPanel()
+{
+	// TODO:  Implement
+	return nullptr;
+}
+
+wxTreeListItem* Brakes::GetTreeItem()
+{
+	// TODO:  Implement
+	return nullptr;
+}
+
 }// namespace VVASE

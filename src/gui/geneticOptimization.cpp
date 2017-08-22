@@ -61,7 +61,7 @@ GeneticOptimization::GeneticOptimization(MainFrame &mainFrame,
 	gaPanel = new GeneticAlgorithmPanel(mainFrame, *this);
 	notebookTab = reinterpret_cast<wxWindow*>(gaPanel);
 
-	carToOptimize = NULL;
+	carToOptimize = nullptr;
 
 	Initialize();
 }
@@ -206,6 +206,7 @@ void GeneticOptimization::MarkAnalysisComplete()
 //==========================================================================
 int GeneticOptimization::GetIconHandle() const
 {
+	// TODO:  Needs to be re-worked with new scheme
 	return systemsTree->GetIconHandle(MainTree::OptimizationIcon);
 }
 

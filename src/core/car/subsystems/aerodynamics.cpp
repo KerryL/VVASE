@@ -67,4 +67,16 @@ void Aerodynamics::Read(BinaryReader& /*file*/, const int& fileVersion)
 		assert(false);
 }
 
+wxPanel* Aerodynamics::GetEditPanel()
+{
+	// TODO:  Implement
+	return nullptr;
+}
+
+wxTreeListItem* Aerodynamics::GetTreeItem()
+{
+	// TODO:  Implement
+	return nullptr;
+}
+
 }// namespace VVASE

@@ -179,12 +179,6 @@
     <ClInclude Include="include\VVASE\gui\renderer\3dcar\vector3D.h">
       <Filter>Header Files\gui\renderer\3dcar</Filter>
     </ClInclude>
-    <ClInclude Include="src\application\pluginManager.h">
-      <Filter>Source Files\application</Filter>
-    </ClInclude>
-    <ClInclude Include="src\application\vvaseApplication.h">
-      <Filter>Source Files\application</Filter>
-    </ClInclude>
     <ClInclude Include="include\VVASE\gui\utilities\dataValidator.h">
       <Filter>Header Files\gui\utilities</Filter>
     </ClInclude>
@@ -278,10 +272,19 @@
     <ClInclude Include="src\gui\components\editPanel\editPanel.h">
       <Filter>Header Files\gui\components\editPanel</Filter>
     </ClInclude>
-    <ClInclude Include="src\application\gitHash.h">
-      <Filter>Source Files\application</Filter>
-    </ClInclude>
     <ClInclude Include="include\VVASE\gui\guiCarOutputs.h">
+      <Filter>Header Files\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\gitHash.h">
+      <Filter>Header Files\application</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\vvaseApplication.h">
+      <Filter>Header Files\application</Filter>
+    </ClInclude>
+    <ClInclude Include="src\application\pluginManager.h">
+      <Filter>Header Files\application</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\gui\geneticOptimization.h">
       <Filter>Header Files\gui</Filter>
     </ClInclude>
   </ItemGroup>

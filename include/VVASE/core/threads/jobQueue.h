@@ -14,6 +14,11 @@
 #ifndef JOB_QUEUE_H_
 #define JOB_QUEUE_H_
 
+// We need to fix the use of macros in Win32 libraries
+#ifdef _MSC_VER
+#undef AddJob
+#endif// _MSC_VER
+
 // Local headers
 #include "VVASE/core/threads/threadJob.h"
 

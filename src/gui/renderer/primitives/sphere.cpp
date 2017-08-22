@@ -375,4 +375,8 @@ bool Sphere::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector3d
 	return true;
 }
 
+void Sphere::Update(const unsigned int& i)
+{
+}
+
 }// namespace VVASE

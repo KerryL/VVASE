@@ -102,6 +102,7 @@ GuiCar::GuiCar(MainFrame &mainFrame, wxString pathAndFileName)
 		renderer->SetTopMinusBottom(referenceDimension * scale / renderer->GetAspectRatio());
 	renderer->SetViewOrthogonal(mainFrame.GetUseOrtho());
 
+	// TODO:  Needs to be re-worked with new scheme
 	// Add the children to the systems tree
 	int i;
 	int iconHandle = -1;

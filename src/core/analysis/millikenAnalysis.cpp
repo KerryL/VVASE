@@ -110,4 +110,34 @@ MillikenAnalysis& MillikenAnalysis::operator = (const MillikenAnalysis &milliken
 	return *this;
 }
 
+wxPanel* MillikenAnalysis::GetEditPanel()
+{
+	// TODO:  Implement
+	return nullptr;
+}
+
+wxPanel* MillikenAnalysis::GetNotebookPage()
+{
+	// TODO:  Implement
+	return nullptr;
+}
+
+wxTreeNode* MillikenAnalysis::GetTreeNode()
+{
+	// TODO:  Implement
+	return nullptr;
+}
+
+OptimizationInterface* MillikenAnalysis::GetOptimizationInterface()
+{
+	// TODO:  Implement
+	return nullptr;
+}
+
+bool MillikenAnalysis::Compute(const Car& car)
+{
+	// TODO:  Implement
+	return false;
+}
+
 }// namespace VVASE

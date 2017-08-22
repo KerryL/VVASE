@@ -278,6 +278,7 @@ void Sweep::RemoveAllCars()
 //==========================================================================
 int Sweep::GetIconHandle() const
 {
+	// TODO:  Needs to be re-worked with new scheme
 	return systemsTree->GetIconHandle(MainTree::SweepIcon);
 }
 

@@ -274,4 +274,8 @@ bool Disk::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector3d& 
 	return false;
 }
 
+void Disk::Update(const unsigned int& i)
+{
+}
+
 }// namespace VVASE

@@ -297,4 +297,16 @@ void Drivetrain::SetRearWheelDrive(const double& bias)
 	midDifferential = nullptr;
 }
 
+wxPanel* Drivetrain::GetEditPanel()
+{
+	// TODO:  Implement
+	return nullptr;
+}
+
+wxTreeListItem* Drivetrain::GetTreeItem()
+{
+	// TODO:  Implement
+	return nullptr;
+}
+
 }// namespace VVASE

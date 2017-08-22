@@ -74,4 +74,16 @@ void Engine::Read(BinaryReader& file, const int& fileVersion)
 		assert(false);
 }
 
+wxPanel* Engine::GetEditPanel()
+{
+	// TODO:  Implement
+	return nullptr;
+}
+
+wxTreeListItem* Engine::GetTreeItem()
+{
+	// TODO:  Implement
+	return nullptr;
+}
+
 }// namespace VVASE
