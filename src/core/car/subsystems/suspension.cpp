@@ -34,30 +34,46 @@ namespace VVASE
 //		None
 //
 //==========================================================================
-Suspension::Suspension() : rightFront(Corner::LocationRightFront),
-	leftFront(Corner::LocationLeftFront), rightRear(Corner::LocationRightRear),
-	leftRear(Corner::LocationLeftRear), hardpoints(NumberOfHardpoints)
+Suspension::Suspension() : rightFront(Corner::Location::RightFront),
+	leftFront(Corner::Location::LeftFront), rightRear(Corner::Location::RightRear),
+	leftRear(Corner::Location::LeftRear), hardpoints(static_cast<int>(Hardpoints::Count))
 {
 	// Initialize the hardpoints within this object as well
-	int i;
-	for (i = 0; i < NumberOfHardpoints; i++)
-		hardpoints[i].setZero();
+	for (auto& hardpoint : hardpoints)
+		hardpoint.setZero();
 
 	// Initialize the other suspension parameters
 	barRate.front = 0.0;
 	barRate.rear = 0.0;
 	rackRatio = 1.0;
-	isSymmetric = false;
-	frontBarStyle = SwayBarNone;
-	rearBarStyle = SwayBarNone;
-	frontBarAttachment = BarAttachmentBellcrank;
-	rearBarAttachment = BarAttachmentBellcrank;
+	isSymmetric = true;
+	frontBarStyle = BarStyle::None;
+	rearBarStyle = BarStyle::None;
+	frontBarAttachment = BarAttachment::Bellcrank;
+	rearBarAttachment = BarAttachment::Bellcrank;
 	frontHasThirdSpring = false;
 	rearHasThirdSpring = false;
 
 	frontThirdSpring.rate = 0.0;
 	rearThirdSpring.rate = 0.0;
 	// FIXME:  Third dampers!
+
+	/*frontBarStyle = Suspension::BarStyle::UBar;
+	rearBarStyle = Suspension::BarStyle::TBar;*/
+
+	hardpoints[static_cast<int>(Hardpoints::FrontBarMidPoint)] = Eigen::Vector3d(4.518, 0.0, 15.0);
+	hardpoints[static_cast<int>(Hardpoints::FrontBarPivotAxis)] = Eigen::Vector3d(0.0, 0.0, 0.0);
+	hardpoints[static_cast<int>(Hardpoints::RearBarMidPoint)] = Eigen::Vector3d(78.0, 0.0, 4.0);
+	hardpoints[static_cast<int>(Hardpoints::RearBarPivotAxis)] = Eigen::Vector3d(78.0, 1.0, 4.0);
+
+	rackRatio = 0.8 * 2.0 / 3.14159;// [in/rad]
+
+	barRate.front = 2000.0;// [in-lbf/rad]
+	barRate.rear = 100.0;// [in-lbf/rad]
+	leftFront.spring.rate = 50.0;// [lb/in]
+	rightFront.spring.rate = 50.0;// [lb/in]
+	leftRear.spring.rate = 60.0;// [lb/in]
+	rightRear.spring.rate = 60.0;// [lb/in]
 }
 
 //==========================================================================
@@ -131,9 +147,8 @@ void Suspension::Read(BinaryReader& file, const int& fileVersion)
 		file.Read(hardpoints);
 	else if (fileVersion >= 4)
 	{
-		unsigned int i;
-		for (i = 0; i < NumberOfHardpoints; i++)
-			file.Read(hardpoints[i]);
+		for (auto& hardpoint : hardpoints)
+			file.Read(hardpoint);
 	}
 	else// if (fileVersion < 3)
 	{
@@ -201,19 +216,19 @@ vvaseString Suspension::GetBarStyleName(const BarStyle &barStyle)
 {
 	switch (barStyle)
 	{
-	case SwayBarNone:
+	case BarStyle::None:
 		return _T("None");
 		break;
 
-	case SwayBarUBar:
+	case BarStyle::UBar:
 		return _T("U-Bar");
 		break;
 
-	case SwayBarTBar:
+	case BarStyle::TBar:
 		return _T("T-Bar");
 		break;
 
-	case SwayBarGeared:
+	case BarStyle::Geared:
 		return _T("Geared");
 		break;
 
@@ -245,51 +260,51 @@ vvaseString Suspension::GetHardpointName(const Hardpoints& point)
 {
 	switch (point)
 	{
-	case FrontBarMidPoint:
+	case Hardpoints::FrontBarMidPoint:
 		return _T("Front Bar Pivot");
 		break;
 
-	case FrontBarPivotAxis:
+	case Hardpoints::FrontBarPivotAxis:
 		return _T("Front Bar Pivot Axis");
 		break;
 
-	case FrontThirdSpringInboard:
+	case Hardpoints::FrontThirdSpringInboard:
 		return _T("Front Third Spring Inboard");
 		break;
 
-	case FrontThirdSpringOutboard:
+	case Hardpoints::FrontThirdSpringOutboard:
 		return _T("Front Third Spring Outboard");
 		break;
 
-	case FrontThirdDamperInboard:
+	case Hardpoints::FrontThirdDamperInboard:
 		return _T("Front Third Damper Inboard");
 		break;
 
-	case FrontThirdDamperOutboard:
+	case Hardpoints::FrontThirdDamperOutboard:
 		return _T("Front Third Damper Outboard");
 		break;
 
-	case RearBarMidPoint:
+	case Hardpoints::RearBarMidPoint:
 		return _T("Rear Bar Pivot");
 		break;
 
-	case RearBarPivotAxis:
+	case Hardpoints::RearBarPivotAxis:
 		return _T("Rear Bar Pivot Axis");
 		break;
 
-	case RearThirdSpringInboard:
+	case Hardpoints::RearThirdSpringInboard:
 		return _T("Rear Third Spring Inboard");
 		break;
 
-	case RearThirdSpringOutboard:
+	case Hardpoints::RearThirdSpringOutboard:
 		return _T("Rear Third Spring Outboard");
 		break;
 
-	case RearThirdDamperInboard:
+	case Hardpoints::RearThirdDamperInboard:
 		return _T("Rear Third Damper Inboard");
 		break;
 
-	case RearThirdDamperOutboard:
+	case Hardpoints::RearThirdDamperOutboard:
 		return _T("Rear Third Damper Outboard");
 		break;
 
@@ -321,19 +336,19 @@ vvaseString Suspension::GetBarAttachmentname(const BarAttachment &barAttachment)
 {
 	switch (barAttachment)
 	{
-	case BarAttachmentBellcrank:
+	case BarAttachment::Bellcrank:
 		return _T("Bellcrank");
 		break;
 
-	case BarAttachmentLowerAArm:
+	case BarAttachment::LowerAArm:
 		return _T("Lower A-Arm");
 		break;
 
-	case BarAttachmentUpperAArm:
+	case BarAttachment::UpperAArm:
 		return _T("Upper A-Arm");
 		break;
 
-	case BarAttachmentUpright:
+	case BarAttachment::Upright:
 		return _T("Upright");
 		break;
 
@@ -460,7 +475,7 @@ void Suspension::UpdateSymmetry()
 	unsigned int i;
 
 	// Copy the front points
-	for (i = 0; i < Corner::NumberOfHardpoints; i++)
+	for (i = 0; i < static_cast<int>(Corner::Hardpoints::Count); i++)
 	{
 		// Copy the point
 		leftFront.hardpoints[i] = rightFront.hardpoints[i];
@@ -470,7 +485,7 @@ void Suspension::UpdateSymmetry()
 	}
 
 	// Copy the rear points
-	for (i = 0; i < Corner::NumberOfHardpoints; i++)
+	for (i = 0; i < static_cast<int>(Corner::Hardpoints::Count); i++)
 	{
 		// Copy the point
 		leftRear.hardpoints[i] = rightRear.hardpoints[i];

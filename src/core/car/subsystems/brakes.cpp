@@ -73,7 +73,7 @@ void Brakes::Read(BinaryReader& file, const int& fileVersion)
 
 //==========================================================================
 // Class:			Brakes
-// Function:		operator =
+// Function:		operator=
 //
 // Description:		Assignment operator for Brakes class.
 //
@@ -87,7 +87,7 @@ void Brakes::Read(BinaryReader& file, const int& fileVersion)
 //		Brakes&, reference to this object
 //
 //==========================================================================
-/*Brakes& Brakes::operator = (const Brakes &brakes)
+/*Brakes& Brakes::operator=(const Brakes &brakes)
 {
 	// Check for self-assignment
 	if (this == &brakes)

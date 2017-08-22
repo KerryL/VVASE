@@ -55,29 +55,29 @@ public:
 		const double &rrTireDiameter, const double &lrTireDiameter);
 
 	// Enumeration describing the available sway bar models
-	enum BarStyle
+	enum class BarStyle
 	{
-		SwayBarNone,
-		SwayBarUBar,
-		SwayBarTBar,
-		SwayBarGeared,
+		None,
+		UBar,
+		TBar,
+		Geared,
 
-		NumberOfBarStyles
+		Count
 	};
 
 	// Enumeration describing the available sway bar attachment points
-	enum BarAttachment
+	enum class BarAttachment
 	{
-		BarAttachmentBellcrank,
-		BarAttachmentLowerAArm,
-		BarAttachmentUpperAArm,
-		BarAttachmentUpright,
+		Bellcrank,
+		LowerAArm,
+		UpperAArm,
+		Upright,
 
-		NumberOfBarAttachments
+		Count
 	};
 
 	// Enumeration for all of the hardpoints included in this class
-	enum Hardpoints
+	enum class Hardpoints
 	{
 		FrontBarMidPoint,			// U-bar and T-bar only
 		FrontBarPivotAxis,			// T-bar only
@@ -93,7 +93,7 @@ public:
 		RearThirdDamperInboard,
 		RearThirdDamperOutboard,
 
-		NumberOfHardpoints
+		Count
 	};
 
 	// For getting the name of the elements of this class

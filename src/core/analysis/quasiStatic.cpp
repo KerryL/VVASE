@@ -269,7 +269,7 @@ WheelSet QuasiStatic::ComputeWheelLoads(const Car* originalCar,
 	//        A portion of the spring forces at each corner (and ARBs?) can come from in-plane forces
 
 	double arbTorque;
-	if (suspension->frontBarStyle != Suspension::SwayBarNone)
+	if (suspension->frontBarStyle != Suspension::BarStyle::None)
 	{
 		arbTorque = suspension->barRate.front
 			* outputs.doubles[KinematicOutputs::FrontARBTwist];// [in-lbf]
@@ -279,7 +279,7 @@ WheelSet QuasiStatic::ComputeWheelLoads(const Car* originalCar,
 		wheelLoads.rightFront -= arbTorque * outputs.rightFront[KinematicOutputs::ARBInstallationRatio];
 	}
 
-	if (suspension->rearBarStyle != Suspension::SwayBarNone)
+	if (suspension->rearBarStyle != Suspension::BarStyle::None)
 	{
 		arbTorque = suspension->barRate.rear
 			* outputs.doubles[KinematicOutputs::RearARBTwist];// [in-lbf]
@@ -414,50 +414,50 @@ QuasiStatic::SystemMatrix QuasiStatic::BuildSystemMatrix(const Car* workingCar) 
 
 	// Sum of y-moments about left front wheel
 	m(0,0) = 0.0;
-	m(0,1) = s->rightFront.hardpoints[Corner::ContactPatch].x() - s->leftFront.hardpoints[Corner::ContactPatch].x();
-	m(0,2) = s->leftRear.hardpoints[Corner::ContactPatch].x() - s->leftFront.hardpoints[Corner::ContactPatch].x();
-	m(0,3) = s->rightRear.hardpoints[Corner::ContactPatch].x() - s->leftFront.hardpoints[Corner::ContactPatch].x();
+	m(0,1) = s->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x() - s->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x();
+	m(0,2) = s->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x() - s->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x();
+	m(0,3) = s->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x() - s->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x();
 
 	// Sum of y-moments about right front wheel
-	m(1,0) = s->leftFront.hardpoints[Corner::ContactPatch].x() - s->rightFront.hardpoints[Corner::ContactPatch].x();
+	m(1,0) = s->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x() - s->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x();
 	m(1,1) = 0.0;
-	m(1,2) = s->leftRear.hardpoints[Corner::ContactPatch].x() - s->rightFront.hardpoints[Corner::ContactPatch].x();
-	m(1,3) = s->rightRear.hardpoints[Corner::ContactPatch].x() - s->rightFront.hardpoints[Corner::ContactPatch].x();
+	m(1,2) = s->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x() - s->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x();
+	m(1,3) = s->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x() - s->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x();
 
 	// Sum of y-moments about left rear wheel
-	m(2,0) = s->leftFront.hardpoints[Corner::ContactPatch].x() - s->leftRear.hardpoints[Corner::ContactPatch].x();
-	m(2,1) = s->rightFront.hardpoints[Corner::ContactPatch].x() - s->leftRear.hardpoints[Corner::ContactPatch].x();
+	m(2,0) = s->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x() - s->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x();
+	m(2,1) = s->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x() - s->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x();
 	m(2,2) = 0.0;
-	m(2,3) = s->rightRear.hardpoints[Corner::ContactPatch].x() - s->leftRear.hardpoints[Corner::ContactPatch].x();
+	m(2,3) = s->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x() - s->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x();
 
 	// Sum of y-moments about right rear wheel
-	m(3,0) = s->leftFront.hardpoints[Corner::ContactPatch].x() - s->rightRear.hardpoints[Corner::ContactPatch].x();
-	m(3,1) = s->rightFront.hardpoints[Corner::ContactPatch].x() - s->rightRear.hardpoints[Corner::ContactPatch].x();
-	m(3,2) = s->leftRear.hardpoints[Corner::ContactPatch].x() - s->rightRear.hardpoints[Corner::ContactPatch].x();
+	m(3,0) = s->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x() - s->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x();
+	m(3,1) = s->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x() - s->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x();
+	m(3,2) = s->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x() - s->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x();
 	m(3,3) = 0.0;
 
 	// Sum of x-moments about left front wheel
 	m(4,0) = 0.0;
-	m(4,1) = s->leftFront.hardpoints[Corner::ContactPatch].y() - s->rightFront.hardpoints[Corner::ContactPatch].y();
-	m(4,2) = s->leftFront.hardpoints[Corner::ContactPatch].y() - s->leftRear.hardpoints[Corner::ContactPatch].y();
-	m(4,3) = s->leftFront.hardpoints[Corner::ContactPatch].y() - s->rightRear.hardpoints[Corner::ContactPatch].y();
+	m(4,1) = s->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y() - s->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y();
+	m(4,2) = s->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y() - s->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y();
+	m(4,3) = s->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y() - s->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y();
 
 	// Sum of x-moments about right front wheel
-	m(5,0) = s->rightFront.hardpoints[Corner::ContactPatch].y() - s->leftFront.hardpoints[Corner::ContactPatch].y();
+	m(5,0) = s->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y() - s->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y();
 	m(5,1) = 0.0;
-	m(5,2) = s->rightFront.hardpoints[Corner::ContactPatch].y() - s->leftRear.hardpoints[Corner::ContactPatch].y();
-	m(5,3) = s->rightFront.hardpoints[Corner::ContactPatch].y() - s->rightRear.hardpoints[Corner::ContactPatch].y();
+	m(5,2) = s->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y() - s->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y();
+	m(5,3) = s->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y() - s->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y();
 
 	// Sum of x-moments about left rear wheel
-	m(6,0) = s->leftRear.hardpoints[Corner::ContactPatch].y() - s->leftFront.hardpoints[Corner::ContactPatch].y();
-	m(6,1) = s->leftRear.hardpoints[Corner::ContactPatch].y() - s->rightFront.hardpoints[Corner::ContactPatch].y();
+	m(6,0) = s->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y() - s->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y();
+	m(6,1) = s->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y() - s->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y();
 	m(6,2) = 0.0;
-	m(6,3) = s->leftRear.hardpoints[Corner::ContactPatch].y() - s->rightRear.hardpoints[Corner::ContactPatch].y();
+	m(6,3) = s->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y() - s->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y();
 
 	// Sum of x-moments about right rear wheel
-	m(7,0) = s->rightRear.hardpoints[Corner::ContactPatch].y() - s->leftFront.hardpoints[Corner::ContactPatch].y();
-	m(7,1) = s->rightRear.hardpoints[Corner::ContactPatch].y() - s->rightFront.hardpoints[Corner::ContactPatch].y();
-	m(7,2) = s->rightRear.hardpoints[Corner::ContactPatch].y() - s->leftRear.hardpoints[Corner::ContactPatch].y();
+	m(7,0) = s->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y() - s->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y();
+	m(7,1) = s->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y() - s->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y();
+	m(7,2) = s->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y() - s->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y();
 	m(7,3) = 0.0;
 
 	// Sum of z-forces
@@ -538,59 +538,59 @@ QuasiStatic::SystemVector QuasiStatic::BuildRightHandMatrix(const Car* workingCa
 
 	// Sum of y-moments about left front wheel
 	m(0,0) = gravity * (-gx * massMoment
-		+ mp->unsprungMass.rightFront * (s->rightFront.hardpoints[Corner::ContactPatch].x() - s->leftFront.hardpoints[Corner::ContactPatch].x())
-		+ mp->unsprungMass.leftRear * (s->leftRear.hardpoints[Corner::ContactPatch].x() - s->leftFront.hardpoints[Corner::ContactPatch].x())
-		+ mp->unsprungMass.rightRear * (s->rightRear.hardpoints[Corner::ContactPatch].x() - s->leftFront.hardpoints[Corner::ContactPatch].x())
-		+ sprungMass * (sprungCGx - s->leftFront.hardpoints[Corner::ContactPatch].x()));
+		+ mp->unsprungMass.rightFront * (s->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x() - s->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x())
+		+ mp->unsprungMass.leftRear * (s->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x() - s->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x())
+		+ mp->unsprungMass.rightRear * (s->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x() - s->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x())
+		+ sprungMass * (sprungCGx - s->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x()));
 
 	// Sum of y-moments about right front wheel
 	m(1,0) = gravity * (-gx * massMoment
-		+ mp->unsprungMass.leftFront * (s->leftFront.hardpoints[Corner::ContactPatch].x() - s->rightFront.hardpoints[Corner::ContactPatch].x())
-		+ mp->unsprungMass.leftRear * (s->leftRear.hardpoints[Corner::ContactPatch].x() - s->rightFront.hardpoints[Corner::ContactPatch].x())
-		+ mp->unsprungMass.rightRear * (s->rightRear.hardpoints[Corner::ContactPatch].x() - s->rightFront.hardpoints[Corner::ContactPatch].x())
-		+ sprungMass * (sprungCGx - s->rightFront.hardpoints[Corner::ContactPatch].x()));
+		+ mp->unsprungMass.leftFront * (s->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x() - s->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x())
+		+ mp->unsprungMass.leftRear * (s->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x() - s->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x())
+		+ mp->unsprungMass.rightRear * (s->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x() - s->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x())
+		+ sprungMass * (sprungCGx - s->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x()));
 
 	// Sum of y-moments about left rear wheel
 	m(2,0) = gravity * (-gx * massMoment
-		+ mp->unsprungMass.leftFront * (s->leftFront.hardpoints[Corner::ContactPatch].x() - s->leftRear.hardpoints[Corner::ContactPatch].x())
-		+ mp->unsprungMass.rightFront * (s->rightFront.hardpoints[Corner::ContactPatch].x() - s->leftRear.hardpoints[Corner::ContactPatch].x())
-		+ mp->unsprungMass.rightRear * (s->rightRear.hardpoints[Corner::ContactPatch].x() - s->leftRear.hardpoints[Corner::ContactPatch].x())
-		+ sprungMass * (sprungCGx - s->leftRear.hardpoints[Corner::ContactPatch].x()));
+		+ mp->unsprungMass.leftFront * (s->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x() - s->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x())
+		+ mp->unsprungMass.rightFront * (s->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x() - s->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x())
+		+ mp->unsprungMass.rightRear * (s->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x() - s->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x())
+		+ sprungMass * (sprungCGx - s->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x()));
 
 	// Sum of y-moments about right rear wheel
 	m(3,0) = gravity * (-gx * massMoment
-		+ mp->unsprungMass.leftFront * (s->leftFront.hardpoints[Corner::ContactPatch].x() - s->rightRear.hardpoints[Corner::ContactPatch].x())
-		+ mp->unsprungMass.rightFront * (s->rightFront.hardpoints[Corner::ContactPatch].x() - s->rightRear.hardpoints[Corner::ContactPatch].x())
-		+ mp->unsprungMass.leftRear * (s->leftRear.hardpoints[Corner::ContactPatch].x() - s->rightRear.hardpoints[Corner::ContactPatch].x())
-		+ sprungMass * (sprungCGx - s->rightRear.hardpoints[Corner::ContactPatch].x()));
+		+ mp->unsprungMass.leftFront * (s->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x() - s->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x())
+		+ mp->unsprungMass.rightFront * (s->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x() - s->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x())
+		+ mp->unsprungMass.leftRear * (s->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x() - s->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x())
+		+ sprungMass * (sprungCGx - s->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x()));
 
 	// Sum of x-moments about left front wheel
 	m(4,0) = -gravity * (-gy * massMoment
-		+ mp->unsprungMass.rightFront * (s->rightFront.hardpoints[Corner::ContactPatch].y() - s->leftFront.hardpoints[Corner::ContactPatch].y())
-		+ mp->unsprungMass.leftRear * (s->leftRear.hardpoints[Corner::ContactPatch].y() - s->leftFront.hardpoints[Corner::ContactPatch].y())
-		+ mp->unsprungMass.rightRear * (s->rightRear.hardpoints[Corner::ContactPatch].y() - s->leftFront.hardpoints[Corner::ContactPatch].y())
-		+ sprungMass * (sprungCGy - s->leftFront.hardpoints[Corner::ContactPatch].y()));
+		+ mp->unsprungMass.rightFront * (s->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y() - s->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y())
+		+ mp->unsprungMass.leftRear * (s->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y() - s->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y())
+		+ mp->unsprungMass.rightRear * (s->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y() - s->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y())
+		+ sprungMass * (sprungCGy - s->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y()));
 
 	// Sum of x-moments about right front wheel
 	m(5,0) = -gravity * (-gy * massMoment
-		+ mp->unsprungMass.leftFront * (s->leftFront.hardpoints[Corner::ContactPatch].y() - s->rightFront.hardpoints[Corner::ContactPatch].y())
-		+ mp->unsprungMass.leftRear * (s->leftRear.hardpoints[Corner::ContactPatch].y() - s->rightFront.hardpoints[Corner::ContactPatch].y())
-		+ mp->unsprungMass.rightRear * (s->rightRear.hardpoints[Corner::ContactPatch].y() - s->rightFront.hardpoints[Corner::ContactPatch].y())
-		+ sprungMass * (sprungCGy - s->rightFront.hardpoints[Corner::ContactPatch].y()));
+		+ mp->unsprungMass.leftFront * (s->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y() - s->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y())
+		+ mp->unsprungMass.leftRear * (s->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y() - s->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y())
+		+ mp->unsprungMass.rightRear * (s->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y() - s->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y())
+		+ sprungMass * (sprungCGy - s->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y()));
 
 	// Sum of x-moments about left rear wheel
 	m(6,0) = -gravity * (-gy * massMoment
-		+ mp->unsprungMass.rightFront * (s->rightFront.hardpoints[Corner::ContactPatch].y() - s->leftRear.hardpoints[Corner::ContactPatch].y())
-		+ mp->unsprungMass.leftFront * (s->leftFront.hardpoints[Corner::ContactPatch].y() - s->leftRear.hardpoints[Corner::ContactPatch].y())
-		+ mp->unsprungMass.rightRear * (s->rightRear.hardpoints[Corner::ContactPatch].y() - s->leftRear.hardpoints[Corner::ContactPatch].y())
-		+ sprungMass * (sprungCGy - s->leftRear.hardpoints[Corner::ContactPatch].y()));
+		+ mp->unsprungMass.rightFront * (s->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y() - s->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y())
+		+ mp->unsprungMass.leftFront * (s->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y() - s->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y())
+		+ mp->unsprungMass.rightRear * (s->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y() - s->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y())
+		+ sprungMass * (sprungCGy - s->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y()));
 
 	// Sum of x-moments about right rear wheel
 	m(7,0) = -gravity * (-gy * massMoment
-		+ mp->unsprungMass.leftFront * (s->leftFront.hardpoints[Corner::ContactPatch].y() - s->rightRear.hardpoints[Corner::ContactPatch].y())
-		+ mp->unsprungMass.rightFront * (s->rightFront.hardpoints[Corner::ContactPatch].y() - s->rightRear.hardpoints[Corner::ContactPatch].y())
-		+ mp->unsprungMass.leftRear * (s->leftRear.hardpoints[Corner::ContactPatch].y() - s->rightRear.hardpoints[Corner::ContactPatch].y())
-		+ sprungMass * (sprungCGy - s->rightRear.hardpoints[Corner::ContactPatch].y()));
+		+ mp->unsprungMass.leftFront * (s->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y() - s->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y())
+		+ mp->unsprungMass.rightFront * (s->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y() - s->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y())
+		+ mp->unsprungMass.leftRear * (s->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y() - s->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y())
+		+ sprungMass * (sprungCGy - s->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y()));
 
 	// Sum of z-forces
 	m(8,0) = gravity * (mp->cornerWeights.leftFront + mp->cornerWeights.rightFront + mp->cornerWeights.leftRear + mp->cornerWeights.rightRear);
@@ -608,7 +608,7 @@ QuasiStatic::SystemVector QuasiStatic::BuildRightHandMatrix(const Car* workingCa
 
 	// TODO:  Add sum of x and sum of y forces?
 
-	if (s->frontBarStyle != Suspension::SwayBarNone)
+	if (s->frontBarStyle != Suspension::BarStyle::None)
 	{
 		m(9,0) += outputs.doubles[KinematicOutputs::FrontARBTwist]
 			* s->barRate.front * outputs.leftFront[KinematicOutputs::ARBInstallationRatio];
@@ -616,7 +616,7 @@ QuasiStatic::SystemVector QuasiStatic::BuildRightHandMatrix(const Car* workingCa
 			* s->barRate.front * outputs.rightFront[KinematicOutputs::ARBInstallationRatio];
 	}
 
-	if (s->rearBarStyle != Suspension::SwayBarNone)
+	if (s->rearBarStyle != Suspension::BarStyle::None)
 	{
 		m(11,0) += outputs.doubles[KinematicOutputs::RearARBTwist]
 			* s->barRate.rear * outputs.leftRear[KinematicOutputs::ARBInstallationRatio];

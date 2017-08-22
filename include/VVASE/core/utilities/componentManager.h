@@ -74,7 +74,7 @@ template <typename ComponentType>
 void ComponentManager<Base>::Register()
 {
     static_assert(std::is_base_of<Base, ComponentType>::value, "ComponentType must be a descendant of Base");
-    componentInfo.push_back(ComponentInfo(ComponentType::Create(), ComponentType::GetName()));
+    componentInfo.push_back(ComponentInfo(&ComponentType::Create, ComponentType::GetName()));
 }
 
 template <typename Base>

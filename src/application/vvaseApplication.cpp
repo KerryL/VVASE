@@ -71,7 +71,7 @@ bool VVASEApplication::OnInit()
 	SetVendorName(_T("Kerry Loux"));
 
 	singleInstanceChecker = new wxSingleInstanceChecker(GetAppName() + _T(":") + wxGetUserId());
-	dataExchangeServer = NULL;
+	dataExchangeServer = nullptr;
 
 	// If we have command line arguments (assume they are file names) and
 	// another instance of this application is already running - pass the

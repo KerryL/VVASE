@@ -82,6 +82,22 @@ MassProperties::MassProperties() : Subsystem()
 	unsprungCGHeights.rightFront = 0.0;
 	unsprungCGHeights.leftRear = 0.0;
 	unsprungCGHeights.rightRear = 0.0;
+
+	// TODO:  Clean up
+	mass = 520.0 / 32.174;
+	totalCGHeight = 9.0;
+	cornerWeights.leftFront = 110.0 / 32.174;
+	cornerWeights.rightFront = 110.0 / 32.174;
+	cornerWeights.leftRear = 140.0 / 32.174;
+	cornerWeights.rightRear = 140.0 / 32.174;
+	unsprungMass.leftFront = 35.0 / 32.174;
+	unsprungMass.rightFront = 35.0 / 32.174;
+	unsprungMass.leftRear = 25.0 / 32.174;
+	unsprungMass.rightRear = 25.0 / 32.174;
+	unsprungCGHeights.leftFront = 10.0;
+	unsprungCGHeights.rightFront = 10.0;
+	unsprungCGHeights.leftRear = 10.0;
+	unsprungCGHeights.rightRear = 10.0;
 }
 
 //==========================================================================
@@ -399,15 +415,15 @@ Eigen::Vector3d MassProperties::GetSprungMassCG(const Suspension* s) const
 {
 	const double sprungMass(GetSprungMass());
 	Eigen::Vector3d cg;
-	cg.x() = (s->leftFront.hardpoints[Corner::ContactPatch].x() * (cornerWeights.leftFront - unsprungMass.leftFront)
-		+ s->rightFront.hardpoints[Corner::ContactPatch].x() * (cornerWeights.rightFront - unsprungMass.rightFront)
-		+ s->leftRear.hardpoints[Corner::ContactPatch].x() * (cornerWeights.leftRear - unsprungMass.leftRear)
-		+ s->rightRear.hardpoints[Corner::ContactPatch].x() * (cornerWeights.rightRear - unsprungMass.rightRear)) / sprungMass;
+	cg.x() = (s->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x() * (cornerWeights.leftFront - unsprungMass.leftFront)
+		+ s->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x() * (cornerWeights.rightFront - unsprungMass.rightFront)
+		+ s->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x() * (cornerWeights.leftRear - unsprungMass.leftRear)
+		+ s->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x() * (cornerWeights.rightRear - unsprungMass.rightRear)) / sprungMass;
 
-	cg.y() = (s->leftFront.hardpoints[Corner::ContactPatch].y() * (cornerWeights.leftFront - unsprungMass.leftFront)
-		+ s->rightFront.hardpoints[Corner::ContactPatch].y() * (cornerWeights.rightFront - unsprungMass.rightFront)
-		+ s->leftRear.hardpoints[Corner::ContactPatch].y() * (cornerWeights.leftRear - unsprungMass.leftRear)
-		+ s->rightRear.hardpoints[Corner::ContactPatch].y() * (cornerWeights.rightRear - unsprungMass.rightRear)) / sprungMass;
+	cg.y() = (s->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y() * (cornerWeights.leftFront - unsprungMass.leftFront)
+		+ s->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y() * (cornerWeights.rightFront - unsprungMass.rightFront)
+		+ s->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y() * (cornerWeights.leftRear - unsprungMass.leftRear)
+		+ s->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y() * (cornerWeights.rightRear - unsprungMass.rightRear)) / sprungMass;
 
 	cg.z() = (totalCGHeight * GetTotalMass()
 		- unsprungCGHeights.leftFront * unsprungMass.leftFront

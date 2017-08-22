@@ -150,8 +150,8 @@ void EditSuspensionPanel::UpdateInformation(Suspension *currentSuspension)
 	frontHasThirdSpring->SetValue(currentSuspension->frontHasThirdSpring);
 	rearHasThirdSpring->SetValue(currentSuspension->rearHasThirdSpring);
 
-	frontBarStyle->SetSelection(currentSuspension->frontBarStyle);
-	rearBarStyle->SetSelection(currentSuspension->rearBarStyle);
+	frontBarStyle->SetSelection(static_cast<int>(currentSuspension->frontBarStyle));
+	rearBarStyle->SetSelection(static_cast<int>(currentSuspension->rearBarStyle));
 
 	hardpoints->BeginBatch();
 
@@ -165,64 +165,64 @@ void EditSuspensionPanel::UpdateInformation(Suspension *currentSuspension)
 	// Front third spring
 	if (currentSuspension->frontHasThirdSpring)
 	{
-		hardpoints->SetRowSize(Suspension::FrontThirdDamperInboard + 1, hardpoints->GetRowHeight(0));
-		hardpoints->SetRowSize(Suspension::FrontThirdDamperOutboard + 1, hardpoints->GetRowHeight(0));
-		hardpoints->SetRowSize(Suspension::FrontThirdSpringInboard + 1, hardpoints->GetRowHeight(0));
-		hardpoints->SetRowSize(Suspension::FrontThirdSpringOutboard + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(static_cast<int>(Suspension::Hardpoints::FrontThirdDamperInboard) + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(static_cast<int>(Suspension::Hardpoints::FrontThirdDamperOutboard) + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(static_cast<int>(Suspension::Hardpoints::FrontThirdSpringInboard) + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(static_cast<int>(Suspension::Hardpoints::FrontThirdSpringOutboard) + 1, hardpoints->GetRowHeight(0));
 	}
 	else
 	{
-		hardpoints->SetRowSize(Suspension::FrontThirdDamperInboard + 1, 0);
-		hardpoints->SetRowSize(Suspension::FrontThirdDamperOutboard + 1, 0);
-		hardpoints->SetRowSize(Suspension::FrontThirdSpringInboard + 1, 0);
-		hardpoints->SetRowSize(Suspension::FrontThirdSpringOutboard + 1, 0);
+		hardpoints->SetRowSize(static_cast<int>(Suspension::Hardpoints::FrontThirdDamperInboard) + 1, 0);
+		hardpoints->SetRowSize(static_cast<int>(Suspension::Hardpoints::FrontThirdDamperOutboard) + 1, 0);
+		hardpoints->SetRowSize(static_cast<int>(Suspension::Hardpoints::FrontThirdSpringInboard) + 1, 0);
+		hardpoints->SetRowSize(static_cast<int>(Suspension::Hardpoints::FrontThirdSpringOutboard) + 1, 0);
 	}
 
 	// Rear third spring
 	if (currentSuspension->rearHasThirdSpring)
 	{
-		hardpoints->SetRowSize(Suspension::RearThirdDamperInboard + 1, hardpoints->GetRowHeight(0));
-		hardpoints->SetRowSize(Suspension::RearThirdDamperOutboard + 1, hardpoints->GetRowHeight(0));
-		hardpoints->SetRowSize(Suspension::RearThirdSpringInboard + 1, hardpoints->GetRowHeight(0));
-		hardpoints->SetRowSize(Suspension::RearThirdSpringOutboard + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(static_cast<int>(Suspension::Hardpoints::RearThirdDamperInboard) + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(static_cast<int>(Suspension::Hardpoints::RearThirdDamperOutboard) + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(static_cast<int>(Suspension::Hardpoints::RearThirdSpringInboard) + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(static_cast<int>(Suspension::Hardpoints::RearThirdSpringOutboard) + 1, hardpoints->GetRowHeight(0));
 	}
 	else
 	{
-		hardpoints->SetRowSize(Suspension::RearThirdDamperInboard + 1, 0);
-		hardpoints->SetRowSize(Suspension::RearThirdDamperOutboard + 1, 0);
-		hardpoints->SetRowSize(Suspension::RearThirdSpringInboard + 1, 0);
-		hardpoints->SetRowSize(Suspension::RearThirdSpringOutboard + 1, 0);
+		hardpoints->SetRowSize(static_cast<int>(Suspension::Hardpoints::RearThirdDamperInboard) + 1, 0);
+		hardpoints->SetRowSize(static_cast<int>(Suspension::Hardpoints::RearThirdDamperOutboard) + 1, 0);
+		hardpoints->SetRowSize(static_cast<int>(Suspension::Hardpoints::RearThirdSpringInboard) + 1, 0);
+		hardpoints->SetRowSize(static_cast<int>(Suspension::Hardpoints::RearThirdSpringOutboard) + 1, 0);
 	}
 
 	// Front sway bar
 	// Removed bar mid points from list - this should be automatically calculated by VVASE
-	if (currentSuspension->frontBarStyle == Suspension::SwayBarTBar)
+	if (currentSuspension->frontBarStyle == Suspension::BarStyle::TBar)
 	{
-		hardpoints->SetRowSize(Suspension::FrontBarMidPoint + 1, hardpoints->GetRowHeight(0));
-		hardpoints->SetRowSize(Suspension::FrontBarPivotAxis + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(static_cast<int>(Suspension::Hardpoints::FrontBarMidPoint) + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(static_cast<int>(Suspension::Hardpoints::FrontBarPivotAxis) + 1, hardpoints->GetRowHeight(0));
 	}
 	else
 	{
-		hardpoints->SetRowSize(Suspension::FrontBarMidPoint + 1, 0);
-		hardpoints->SetRowSize(Suspension::FrontBarPivotAxis + 1, 0);
+		hardpoints->SetRowSize(static_cast<int>(Suspension::Hardpoints::FrontBarMidPoint) + 1, 0);
+		hardpoints->SetRowSize(static_cast<int>(Suspension::Hardpoints::FrontBarPivotAxis) + 1, 0);
 	}
 
 	// Rear swaybar
-	if (currentSuspension->rearBarStyle == Suspension::SwayBarTBar)
+	if (currentSuspension->rearBarStyle == Suspension::BarStyle::TBar)
 	{
-		hardpoints->SetRowSize(Suspension::RearBarMidPoint + 1, hardpoints->GetRowHeight(0));
-		hardpoints->SetRowSize(Suspension::RearBarPivotAxis + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(static_cast<int>(Suspension::Hardpoints::RearBarMidPoint) + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(static_cast<int>(Suspension::Hardpoints::RearBarPivotAxis) + 1, hardpoints->GetRowHeight(0));
 	}
 	else
 	{
-		hardpoints->SetRowSize(Suspension::RearBarMidPoint + 1, 0);
-		hardpoints->SetRowSize(Suspension::RearBarPivotAxis + 1, 0);
+		hardpoints->SetRowSize(static_cast<int>(Suspension::Hardpoints::RearBarMidPoint) + 1, 0);
+		hardpoints->SetRowSize(static_cast<int>(Suspension::Hardpoints::RearBarPivotAxis) + 1, 0);
 	}
 
 	// Update the values of all of the points
 	Eigen::Vector3d point;
 	int i;
-	for (i = 0; i < Suspension::NumberOfHardpoints; i++)
+	for (i = 0; i < static_cast<int>(Suspension::Hardpoints::Count); i++)
 	{
 		point = UnitConverter::GetInstance().ConvertDistanceOutput(currentSuspension->hardpoints[i]);
 
@@ -271,7 +271,7 @@ void EditSuspensionPanel::CreateControls()
 
 	// Create the grid for the hard point entry
 	hardpoints = new SuperGrid(this, wxID_ANY);
-	hardpoints->CreateGrid(Suspension::NumberOfHardpoints + 1, 4, wxGrid::wxGridSelectRows);
+	hardpoints->CreateGrid(static_cast<int>(Suspension::Hardpoints::Count) + 1, 4, wxGrid::wxGridSelectRows);
 	wxObject *data = new EventWindowData(this);
 	hardpoints->Bind(wxEVT_MOUSEWHEEL, wxUtilities::SkipMouseEvent, wxID_ANY, wxID_ANY, data);
 
@@ -282,7 +282,7 @@ void EditSuspensionPanel::CreateControls()
 		hardpoints->SetReadOnly(0, i, true);
 
 	// Do the processing that needs to be done for each row
-	for (i = 0; i < Suspension::NumberOfHardpoints; i++)
+	for (i = 0; i < static_cast<int>(Suspension::Hardpoints::Count); i++)
 	{
 		hardpoints->SetReadOnly(i + 1, 0, true);
 
@@ -344,8 +344,8 @@ void EditSuspensionPanel::CreateControls()
 	// Front bar style
 	wxArrayString choices;
 	choices.Clear();
-	for (i = 0; i < Suspension::NumberOfBarStyles; i++)
-		choices.Add(Suspension::GetBarStyleName((Suspension::BarStyle)i));
+	for (i = 0; i < static_cast<int>(Suspension::BarStyle::Count); i++)
+		choices.Add(Suspension::GetBarStyleName(static_cast<Suspension::BarStyle>(i)));
 
 	wxFlexGridSizer *comboSizer = new wxFlexGridSizer(2, 3, 3);
 	comboSizer->SetFlexibleDirection(wxHORIZONTAL);
@@ -419,7 +419,7 @@ void EditSuspensionPanel::SelectCellEvent(wxGridEvent &event)
 
 		// Set the position of the helper orb
 		static_cast<CarRenderer*>(parent.GetParent().GetCurrentObject()->GetNotebookTab())->SetHelperOrbPosition(
-			Corner::NumberOfHardpoints, Corner::LocationRightFront, (Suspension::Hardpoints)(event.GetRow() - 1));
+			Corner::Hardpoints::Count, Corner::Location::RightFront, (Suspension::Hardpoints)(event.GetRow() - 1));
 
 		parent.GetParent().GetCurrentObject()->UpdateDisplay();
 		lastRowSelected = event.GetRow();
@@ -501,7 +501,7 @@ void EditSuspensionPanel::GridCellChangedEvent(wxGridEvent &event)
 
 		// Set the position of the helper orb
 		static_cast<CarRenderer*>(parent.GetParent().GetCurrentObject()->GetNotebookTab())->SetHelperOrbPosition(
-			Corner::NumberOfHardpoints, Corner::LocationRightFront, (Suspension::Hardpoints)(event.GetRow() - 1));
+			Corner::Hardpoints::Count, Corner::Location::RightFront, (Suspension::Hardpoints)(event.GetRow() - 1));
 
 		parent.GetParent().GetMainFrame().UpdateAnalysis();
 		parent.GetParent().GetMainFrame().UpdateOutputPanel();
@@ -699,7 +699,7 @@ void EditSuspensionPanel::FrontBarStyleChangeEvent(wxCommandEvent &event)
 //==========================================================================
 void EditSuspensionPanel::SetFront3rdSpringEnable()
 {
-	if (currentSuspension->frontBarStyle != Suspension::SwayBarTBar)
+	if (currentSuspension->frontBarStyle != Suspension::BarStyle::TBar)
 	{
 		// Must already have locked car mutex
 		currentSuspension->frontHasThirdSpring = false;
@@ -728,7 +728,7 @@ void EditSuspensionPanel::SetFront3rdSpringEnable()
 //==========================================================================
 void EditSuspensionPanel::SetRear3rdSpringEnable()
 {
-	if (currentSuspension->rearBarStyle != Suspension::SwayBarTBar)
+	if (currentSuspension->rearBarStyle != Suspension::BarStyle::TBar)
 	{
 		// Must already have locked car mutex
 		currentSuspension->rearHasThirdSpring = false;

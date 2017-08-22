@@ -55,6 +55,12 @@
 #include "VVASE/core/utilities/debugger.h"
 #include "VVASE/gui/utilities/unitConverter.h"
 
+#include "VVASE/core/car/subsystems/aerodynamics.h"
+#include "VVASE/core/car/subsystems/brakes.h"
+#include "VVASE/core/car/subsystems/massProperties.h"
+#include "VVASE/core/car/subsystems/engine.h"
+#include "VVASE/core/car/subsystems/tireSet.h"
+
 // LibPlot2D headers
 #include <lp2d/utilities/fontFinder.h>
 
@@ -94,6 +100,15 @@ namespace VVASE
 MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxEmptyString, wxDefaultPosition,
 	wxDefaultSize, wxDEFAULT_FRAME_STYLE), /*maxRecentFiles(9), */undoRedo(*this)
 {
+	// Add our built-in component types (TODO:  I think this should change)
+	Car::RegisterSubsystem<Aerodynamics>();
+	Car::RegisterSubsystem<Brakes>();
+	Car::RegisterSubsystem<Drivetrain>();
+	Car::RegisterSubsystem<Engine>();
+	Car::RegisterSubsystem<MassProperties>();
+	Car::RegisterSubsystem<Suspension>();
+	Car::RegisterSubsystem<TireSet>();
+
 	systemsTree = new MainTree(*this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
 		wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT | wxTR_DEFAULT_STYLE | wxSUNKEN_BORDER
 		| wxTR_HIDE_ROOT);

@@ -42,7 +42,7 @@ public:
 	double pedalRatio;							// [-]
 	FrontRearDouble linePressure;				// [psi]
 	double biasRatio;							// [-]	Front/Rear
-	double percentFrontBraking;					// [-]
+	double percentFrontBraking = 0.667;			// [-]
 	// FIXME:  Make temperature dependant with thermal and cooling model (include aerodynamics?)
 
 	// Important for determining anti-geometry (see RCVD p. 168)

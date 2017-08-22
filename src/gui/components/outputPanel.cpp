@@ -278,7 +278,7 @@ void OutputPanel::UpdateInformation(GuiCarOutputs outputs, Car &car,
 	}
 
 	// Front sway bar
-	if (suspension->frontBarStyle == Suspension::SwayBarNone)
+	if (suspension->frontBarStyle == Suspension::BarStyle::None)
 	{
 		// Change the cell's text
 		outputsList->SetCellValue(KinematicOutputs::StartLeftFrontDoubles
@@ -290,7 +290,7 @@ void OutputPanel::UpdateInformation(GuiCarOutputs outputs, Car &car,
 	}
 
 	// Rear sway bar
-	if (suspension->rearBarStyle == Suspension::SwayBarNone)
+	if (suspension->rearBarStyle == Suspension::BarStyle::None)
 	{
 		// Change the cell's text
 		outputsList->SetCellValue(KinematicOutputs::StartLeftRearDoubles

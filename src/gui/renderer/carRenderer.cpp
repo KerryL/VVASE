@@ -105,9 +105,9 @@ void CarRenderer::InternalInitialization()
 	CreateActors();
 
 	// Initialize the helper orb to NOT active
-	helperOrbCornerPoint = Corner::NumberOfHardpoints;
-	helperOrbLocation = Corner::LocationRightFront;
-	helperOrbSuspensionPoint = Suspension::NumberOfHardpoints;
+	helperOrbCornerPoint = Corner::Hardpoints::Count;
+	helperOrbLocation = Corner::Location::RightFront;
+	helperOrbSuspensionPoint = Suspension::Hardpoints::Count;
 	helperOrbIsActive = false;
 
 #ifdef USE_DEBUG_SHAPE
@@ -208,21 +208,21 @@ void CarRenderer::UpdateCarDisplay()
 
 	// Figure out how big the ground plane should be
 	double groundPlaneScaleUp = 1.1;
-	double rightMostPoint = std::max(referenceSuspension->rightFront.hardpoints[Corner::ContactPatch].y() +
+	double rightMostPoint = std::max(referenceSuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y() +
 		referenceTires->rightFront->width / 2.0,
-		referenceSuspension->rightRear.hardpoints[Corner::ContactPatch].y() +
+		referenceSuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y() +
 		referenceTires->rightRear->width / 2.0);
-	double leftMostPoint = std::min(referenceSuspension->leftFront.hardpoints[Corner::ContactPatch].y() -
+	double leftMostPoint = std::min(referenceSuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y() -
 		referenceTires->leftFront->width / 2.0,
-		referenceSuspension->leftRear.hardpoints[Corner::ContactPatch].y() -
+		referenceSuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].y() -
 		referenceTires->leftRear->width / 2.0);
-	double frontMostPoint = std::min(referenceSuspension->rightFront.hardpoints[Corner::ContactPatch].x() -
+	double frontMostPoint = std::min(referenceSuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x() -
 		referenceTires->rightFront->diameter / 2.0,
-		referenceSuspension->leftFront.hardpoints[Corner::ContactPatch].x() -
+		referenceSuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x() -
 		referenceTires->leftFront->diameter / 2.0);
-	double rearMostPoint = std::max(referenceSuspension->rightRear.hardpoints[Corner::ContactPatch].x() +
+	double rearMostPoint = std::max(referenceSuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x() +
 		referenceTires->rightRear->diameter / 2.0,
-		referenceSuspension->leftRear.hardpoints[Corner::ContactPatch].x() +
+		referenceSuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)].x() +
 		referenceTires->leftRear->diameter / 2.0);
 
 	double xLength = fabs(frontMostPoint - rearMostPoint) * groundPlaneScaleUp;
@@ -243,24 +243,24 @@ void CarRenderer::UpdateCarDisplay()
 
 	// Determine whether or not the front sway bar links should be visible
 	bool ShowBarLinks = true;
-	if (displaySuspension->frontBarStyle == Suspension::SwayBarNone ||
+	if (displaySuspension->frontBarStyle == Suspension::BarStyle::None ||
 		!appearanceOptions.GetVisibility(AppearanceOptions::VisibilitySwayBar))
 		ShowBarLinks = false;
 
 	// Right front corner
 	// Determine whether or not the bellcranks and pushrods should be drawn for this corner
 	bool ShowBellCranksPushrods = true;
-	if (displaySuspension->rightFront.actuationType == Corner::ActuationOutboardRockerArm ||
+	if (displaySuspension->rightFront.actuationType == Corner::ActuationType::OutboardRockerArm ||
 		!appearanceOptions.GetVisibility(AppearanceOptions::VisibilityPushrod))
 		ShowBellCranksPushrods = false;
 
 	// First, calculate the normal vectors for the original and new upright planes
-	targetNormal = VVASE::Math::GetPlaneNormal(displaySuspension->rightFront.hardpoints[Corner::LowerBallJoint],
-							displaySuspension->rightFront.hardpoints[Corner::UpperBallJoint],
-							displaySuspension->rightFront.hardpoints[Corner::OutboardTieRod]);
-	originalNormal = VVASE::Math::GetPlaneNormal(referenceSuspension->rightFront.hardpoints[Corner::LowerBallJoint],
-							referenceSuspension->rightFront.hardpoints[Corner::UpperBallJoint],
-							referenceSuspension->rightFront.hardpoints[Corner::OutboardTieRod]);
+	targetNormal = VVASE::Math::GetPlaneNormal(displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::LowerBallJoint)],
+							displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::UpperBallJoint)],
+							displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardTieRod)]);
+	originalNormal = VVASE::Math::GetPlaneNormal(referenceSuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::LowerBallJoint)],
+							referenceSuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::UpperBallJoint)],
+							referenceSuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardTieRod)]);
 
 	// We also need to account for toe and camber settings for the targetNormal - apply camber first
 	// NOTE:  This corner is on the right side of the car - we flip the sign on the camber and toe angles
@@ -268,41 +268,41 @@ void CarRenderer::UpdateCarDisplay()
 	GeometryMath::Rotate(targetNormal, -displaySuspension->rightFront.staticToe, Eigen::Vector3d::UnitZ());
 
 	// Now continue with the update for this corner
-	rightFrontLowerAArm->Update(displaySuspension->rightFront.hardpoints[Corner::LowerFrontTubMount],
-		displaySuspension->rightFront.hardpoints[Corner::LowerBallJoint],
-		displaySuspension->rightFront.hardpoints[Corner::LowerRearTubMount],
+	rightFrontLowerAArm->Update(displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::LowerFrontTubMount)],
+		displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::LowerBallJoint)],
+		displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::LowerRearTubMount)],
 		appearanceOptions.GetSize(AppearanceOptions::SizeAArmDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionAArm),
 		appearanceOptions.GetColor(AppearanceOptions::ColorAArm),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityAArm));
-	rightFrontUpperAArm->Update(displaySuspension->rightFront.hardpoints[Corner::UpperFrontTubMount],
-		displaySuspension->rightFront.hardpoints[Corner::UpperBallJoint],
-		displaySuspension->rightFront.hardpoints[Corner::UpperRearTubMount],
+	rightFrontUpperAArm->Update(displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::UpperFrontTubMount)],
+		displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::UpperBallJoint)],
+		displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::UpperRearTubMount)],
 		appearanceOptions.GetSize(AppearanceOptions::SizeAArmDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionAArm),
 		appearanceOptions.GetColor(AppearanceOptions::ColorAArm),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityAArm));
-	rightFrontPushrod->Update(displaySuspension->rightFront.hardpoints[Corner::InboardPushrod],
-		displaySuspension->rightFront.hardpoints[Corner::OutboardPushrod],
+	rightFrontPushrod->Update(displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::InboardPushrod)],
+		displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardPushrod)],
 		appearanceOptions.GetSize(AppearanceOptions::SizeAArmDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionAArm),
 		appearanceOptions.GetColor(AppearanceOptions::ColorPushrod),
 		ShowBellCranksPushrods);
-	rightFrontTieRod->Update(displaySuspension->rightFront.hardpoints[Corner::InboardTieRod],
-		displaySuspension->rightFront.hardpoints[Corner::OutboardTieRod],
+	rightFrontTieRod->Update(displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::InboardTieRod)],
+		displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardTieRod)],
 		appearanceOptions.GetSize(AppearanceOptions::SizeAArmDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionAArm),
 		appearanceOptions.GetColor(AppearanceOptions::ColorTieRod),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityTieRod));
-	rightFrontTire->Update(displaySuspension->rightFront.hardpoints[Corner::ContactPatch],
-		displaySuspension->rightFront.hardpoints[Corner::WheelCenter], originalNormal, targetNormal,
+	rightFrontTire->Update(displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)],
+		displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::WheelCenter)], originalNormal, targetNormal,
 		displayTires->rightFront->width,
 		appearanceOptions.GetSize(AppearanceOptions::SizeTireInsideDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionTire),
 		appearanceOptions.GetColor(AppearanceOptions::ColorTire),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityTire));
-	rightFrontDamper->Update(displaySuspension->rightFront.hardpoints[Corner::OutboardDamper],
-		displaySuspension->rightFront.hardpoints[Corner::InboardDamper],
+	rightFrontDamper->Update(displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardDamper)],
+		displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::InboardDamper)],
 		appearanceOptions.GetSize(AppearanceOptions::SizeDamperBodyDiameter),
 		appearanceOptions.GetSize(AppearanceOptions::SizeDamperShaftDiameter),
 		appearanceOptions.GetSize(AppearanceOptions::SizeDamperBodyLength),
@@ -310,34 +310,34 @@ void CarRenderer::UpdateCarDisplay()
 		appearanceOptions.GetColor(AppearanceOptions::ColorDamperBody),
 		appearanceOptions.GetColor(AppearanceOptions::ColorDamperShaft),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityDamper));
-	rightFrontSpring->Update(displaySuspension->rightFront.hardpoints[Corner::InboardSpring],
-		displaySuspension->rightFront.hardpoints[Corner::OutboardSpring],
+	rightFrontSpring->Update(displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::InboardSpring)],
+		displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardSpring)],
 		appearanceOptions.GetSize(AppearanceOptions::SizeSpringDiameter),
 		appearanceOptions.GetSize(AppearanceOptions::SizeSpringEndPointDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionSpringDamper),
 		appearanceOptions.GetColor(AppearanceOptions::ColorSpring),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilitySpring));
-	rightFrontUpright->Update(displaySuspension->rightFront.hardpoints[Corner::LowerBallJoint],
-		displaySuspension->rightFront.hardpoints[Corner::UpperBallJoint],
-		displaySuspension->rightFront.hardpoints[Corner::OutboardTieRod],
+	rightFrontUpright->Update(displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::LowerBallJoint)],
+		displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::UpperBallJoint)],
+		displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardTieRod)],
 		appearanceOptions.GetColor(AppearanceOptions::ColorUpright),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityUpright));
-	rightFrontBellCrank->Update(displaySuspension->rightFront.hardpoints[Corner::OutboardDamper],
-		displaySuspension->rightFront.hardpoints[Corner::InboardPushrod],
-		VVASE::Math::NearestPointOnAxis(displaySuspension->rightFront.hardpoints[Corner::BellCrankPivot1],
-		displaySuspension->rightFront.hardpoints[Corner::BellCrankPivot2] -
-		displaySuspension->rightFront.hardpoints[Corner::BellCrankPivot1],
-		displaySuspension->rightFront.hardpoints[Corner::InboardPushrod]),
+	rightFrontBellCrank->Update(displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardDamper)],
+		displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::InboardPushrod)],
+		VVASE::Math::NearestPointOnAxis(displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::BellCrankPivot1)],
+		displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::BellCrankPivot2)] -
+		displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::BellCrankPivot1)],
+		displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::InboardPushrod)]),
 		appearanceOptions.GetColor(AppearanceOptions::ColorPushrod),
 		ShowBellCranksPushrods);
-	rightFrontBarLink->Update(displaySuspension->rightFront.hardpoints[Corner::InboardBarLink],
-		displaySuspension->rightFront.hardpoints[Corner::OutboardBarLink],
+	rightFrontBarLink->Update(displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::InboardBarLink)],
+		displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardBarLink)],
 		appearanceOptions.GetSize(AppearanceOptions::SizeSwayBarLinkDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionSwayBar),
 		appearanceOptions.GetColor(AppearanceOptions::ColorSwayBar),
 		ShowBarLinks);
-	rightFrontHalfShaft->Update(displaySuspension->rightFront.hardpoints[Corner::InboardHalfShaft],
-		displaySuspension->rightFront.hardpoints[Corner::OutboardHalfShaft],
+	rightFrontHalfShaft->Update(displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::InboardHalfShaft)],
+		displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardHalfShaft)],
 		appearanceOptions.GetSize(AppearanceOptions::SizeHalfShaftDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionHalfShaft),
 		appearanceOptions.GetColor(AppearanceOptions::ColorHalfShaft),
@@ -346,58 +346,58 @@ void CarRenderer::UpdateCarDisplay()
 	// left front corner
 	// Determine whether or not the bellcranks and pushrods should be drawn for this corner
 	ShowBellCranksPushrods = true;
-	if (displaySuspension->leftFront.actuationType == Corner::ActuationOutboardRockerArm ||
+	if (displaySuspension->leftFront.actuationType == Corner::ActuationType::OutboardRockerArm ||
 		!appearanceOptions.GetVisibility(AppearanceOptions::VisibilityPushrod))
 		ShowBellCranksPushrods = false;
 
 	// First, calculate the normal vectors for the original and new upright planes
-	targetNormal = VVASE::Math::GetPlaneNormal(displaySuspension->leftFront.hardpoints[Corner::LowerBallJoint],
-							displaySuspension->leftFront.hardpoints[Corner::UpperBallJoint],
-							displaySuspension->leftFront.hardpoints[Corner::OutboardTieRod]);
-	originalNormal = VVASE::Math::GetPlaneNormal(referenceSuspension->leftFront.hardpoints[Corner::LowerBallJoint],
-							referenceSuspension->leftFront.hardpoints[Corner::UpperBallJoint],
-							referenceSuspension->leftFront.hardpoints[Corner::OutboardTieRod]);
+	targetNormal = VVASE::Math::GetPlaneNormal(displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::LowerBallJoint)],
+							displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::UpperBallJoint)],
+							displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardTieRod)]);
+	originalNormal = VVASE::Math::GetPlaneNormal(referenceSuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::LowerBallJoint)],
+							referenceSuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::UpperBallJoint)],
+							referenceSuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardTieRod)]);
 
 	// We also need to account for toe and camber settings for the targetNormal - apply camber first
 	GeometryMath::Rotate(targetNormal, displaySuspension->leftFront.staticCamber, Eigen::Vector3d::UnitX());
 	GeometryMath::Rotate(targetNormal, displaySuspension->leftFront.staticToe, Eigen::Vector3d::UnitZ());
 
 	// Now continue with the update for this corner
-	leftFrontLowerAArm->Update(displaySuspension->leftFront.hardpoints[Corner::LowerFrontTubMount],
-		displaySuspension->leftFront.hardpoints[Corner::LowerBallJoint],
-		displaySuspension->leftFront.hardpoints[Corner::LowerRearTubMount],
+	leftFrontLowerAArm->Update(displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::LowerFrontTubMount)],
+		displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::LowerBallJoint)],
+		displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::LowerRearTubMount)],
 		appearanceOptions.GetSize(AppearanceOptions::SizeAArmDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionAArm),
 		appearanceOptions.GetColor(AppearanceOptions::ColorAArm),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityAArm));
-	leftFrontUpperAArm->Update(displaySuspension->leftFront.hardpoints[Corner::UpperFrontTubMount],
-		displaySuspension->leftFront.hardpoints[Corner::UpperBallJoint],
-		displaySuspension->leftFront.hardpoints[Corner::UpperRearTubMount],
+	leftFrontUpperAArm->Update(displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::UpperFrontTubMount)],
+		displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::UpperBallJoint)],
+		displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::UpperRearTubMount)],
 		appearanceOptions.GetSize(AppearanceOptions::SizeAArmDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionAArm),
 		appearanceOptions.GetColor(AppearanceOptions::ColorAArm),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityAArm));
-	leftFrontPushrod->Update(displaySuspension->leftFront.hardpoints[Corner::InboardPushrod],
-		displaySuspension->leftFront.hardpoints[Corner::OutboardPushrod],
+	leftFrontPushrod->Update(displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::InboardPushrod)],
+		displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardPushrod)],
 		appearanceOptions.GetSize(AppearanceOptions::SizeAArmDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionAArm),
 		appearanceOptions.GetColor(AppearanceOptions::ColorPushrod),
 		ShowBellCranksPushrods);
-	leftFrontTieRod->Update(displaySuspension->leftFront.hardpoints[Corner::InboardTieRod],
-		displaySuspension->leftFront.hardpoints[Corner::OutboardTieRod],
+	leftFrontTieRod->Update(displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::InboardTieRod)],
+		displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardTieRod)],
 		appearanceOptions.GetSize(AppearanceOptions::SizeAArmDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionAArm),
 		appearanceOptions.GetColor(AppearanceOptions::ColorTieRod),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityTieRod));
-	leftFrontTire->Update(displaySuspension->leftFront.hardpoints[Corner::ContactPatch],
-		displaySuspension->leftFront.hardpoints[Corner::WheelCenter], originalNormal, targetNormal,
+	leftFrontTire->Update(displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)],
+		displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::WheelCenter)], originalNormal, targetNormal,
 		displayTires->leftFront->width,
 		appearanceOptions.GetSize(AppearanceOptions::SizeTireInsideDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionTire),
 		appearanceOptions.GetColor(AppearanceOptions::ColorTire),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityTire));
-	leftFrontDamper->Update(displaySuspension->leftFront.hardpoints[Corner::OutboardDamper],
-		displaySuspension->leftFront.hardpoints[Corner::InboardDamper],
+	leftFrontDamper->Update(displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardDamper)],
+		displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::InboardDamper)],
 		appearanceOptions.GetSize(AppearanceOptions::SizeDamperBodyDiameter),
 		appearanceOptions.GetSize(AppearanceOptions::SizeDamperShaftDiameter),
 		appearanceOptions.GetSize(AppearanceOptions::SizeDamperBodyLength),
@@ -405,41 +405,41 @@ void CarRenderer::UpdateCarDisplay()
 		appearanceOptions.GetColor(AppearanceOptions::ColorDamperBody),
 		appearanceOptions.GetColor(AppearanceOptions::ColorDamperShaft),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityDamper));
-	leftFrontSpring->Update(displaySuspension->leftFront.hardpoints[Corner::InboardSpring],
-		displaySuspension->leftFront.hardpoints[Corner::OutboardSpring],
+	leftFrontSpring->Update(displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::InboardSpring)],
+		displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardSpring)],
 		appearanceOptions.GetSize(AppearanceOptions::SizeSpringDiameter),
 		appearanceOptions.GetSize(AppearanceOptions::SizeSpringEndPointDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionSpringDamper),
 		appearanceOptions.GetColor(AppearanceOptions::ColorSpring),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilitySpring));
-	leftFrontUpright->Update(displaySuspension->leftFront.hardpoints[Corner::LowerBallJoint],
-		displaySuspension->leftFront.hardpoints[Corner::UpperBallJoint],
-		displaySuspension->leftFront.hardpoints[Corner::OutboardTieRod],
+	leftFrontUpright->Update(displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::LowerBallJoint)],
+		displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::UpperBallJoint)],
+		displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardTieRod)],
 		appearanceOptions.GetColor(AppearanceOptions::ColorUpright),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityUpright));
-	leftFrontBellCrank->Update(displaySuspension->leftFront.hardpoints[Corner::OutboardDamper],
-		displaySuspension->leftFront.hardpoints[Corner::InboardPushrod],
-		VVASE::Math::NearestPointOnAxis(displaySuspension->leftFront.hardpoints[Corner::BellCrankPivot1],
-		displaySuspension->leftFront.hardpoints[Corner::BellCrankPivot2] -
-		displaySuspension->leftFront.hardpoints[Corner::BellCrankPivot1],
-		displaySuspension->leftFront.hardpoints[Corner::InboardPushrod]),
+	leftFrontBellCrank->Update(displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardDamper)],
+		displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::InboardPushrod)],
+		VVASE::Math::NearestPointOnAxis(displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::BellCrankPivot1)],
+		displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::BellCrankPivot2)] -
+		displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::BellCrankPivot1)],
+		displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::InboardPushrod)]),
 		appearanceOptions.GetColor(AppearanceOptions::ColorPushrod),
 		ShowBellCranksPushrods);
-	leftFrontBarLink->Update(displaySuspension->leftFront.hardpoints[Corner::InboardBarLink],
-		displaySuspension->leftFront.hardpoints[Corner::OutboardBarLink],
+	leftFrontBarLink->Update(displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::InboardBarLink)],
+		displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardBarLink)],
 		appearanceOptions.GetSize(AppearanceOptions::SizeSwayBarLinkDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionSwayBar),
 		appearanceOptions.GetColor(AppearanceOptions::ColorSwayBar),
 		ShowBarLinks);
-	leftFrontHalfShaft->Update(displaySuspension->leftFront.hardpoints[Corner::InboardHalfShaft],
-		displaySuspension->leftFront.hardpoints[Corner::OutboardHalfShaft],
+	leftFrontHalfShaft->Update(displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::InboardHalfShaft)],
+		displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardHalfShaft)],
 		appearanceOptions.GetSize(AppearanceOptions::SizeHalfShaftDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionHalfShaft),
 		appearanceOptions.GetColor(AppearanceOptions::ColorHalfShaft),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityHalfShaft) && referenceCar.HasFrontHalfShafts());
 
 	// Determine whether or not the rear sway bar links should be visible
-	if (displaySuspension->rearBarStyle == Suspension::SwayBarNone ||
+	if (displaySuspension->rearBarStyle == Suspension::BarStyle::None ||
 		!appearanceOptions.GetVisibility(AppearanceOptions::VisibilitySwayBar))
 		ShowBarLinks = false;
 	else
@@ -448,17 +448,17 @@ void CarRenderer::UpdateCarDisplay()
 	// right rear corner
 	// Determine whether or not the bellcranks and pushrods should be drawn for this corner
 	ShowBellCranksPushrods = true;
-	if (displaySuspension->rightRear.actuationType == Corner::ActuationOutboardRockerArm ||
+	if (displaySuspension->rightRear.actuationType == Corner::ActuationType::OutboardRockerArm ||
 		!appearanceOptions.GetVisibility(AppearanceOptions::VisibilityPushrod))
 		ShowBellCranksPushrods = false;
 
 	// First, calculate the normal vectors for the original and new upright planes
-	targetNormal = VVASE::Math::GetPlaneNormal(displaySuspension->rightRear.hardpoints[Corner::LowerBallJoint],
-							displaySuspension->rightRear.hardpoints[Corner::UpperBallJoint],
-							displaySuspension->rightRear.hardpoints[Corner::OutboardTieRod]);
-	originalNormal = VVASE::Math::GetPlaneNormal(referenceSuspension->rightRear.hardpoints[Corner::LowerBallJoint],
-							referenceSuspension->rightRear.hardpoints[Corner::UpperBallJoint],
-							referenceSuspension->rightRear.hardpoints[Corner::OutboardTieRod]);
+	targetNormal = VVASE::Math::GetPlaneNormal(displaySuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::LowerBallJoint)],
+							displaySuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::UpperBallJoint)],
+							displaySuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardTieRod)]);
+	originalNormal = VVASE::Math::GetPlaneNormal(referenceSuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::LowerBallJoint)],
+							referenceSuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::UpperBallJoint)],
+							referenceSuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardTieRod)]);
 
 	// We also need to account for toe and camber settings for the targetNormal - apply camber first
 	// NOTE:  This corner is on the right side of the car - we flip the sign on the camber and toe angles
@@ -466,41 +466,41 @@ void CarRenderer::UpdateCarDisplay()
 	GeometryMath::Rotate(targetNormal, -displaySuspension->rightRear.staticToe, Eigen::Vector3d::UnitZ());
 
 	// Now continue with the update for this corner
-	rightRearLowerAArm->Update(displaySuspension->rightRear.hardpoints[Corner::LowerFrontTubMount],
-		displaySuspension->rightRear.hardpoints[Corner::LowerBallJoint],
-		displaySuspension->rightRear.hardpoints[Corner::LowerRearTubMount],
+	rightRearLowerAArm->Update(displaySuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::LowerFrontTubMount)],
+		displaySuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::LowerBallJoint)],
+		displaySuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::LowerRearTubMount)],
 		appearanceOptions.GetSize(AppearanceOptions::SizeAArmDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionAArm),
 		appearanceOptions.GetColor(AppearanceOptions::ColorAArm),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityAArm));
-	rightRearUpperAArm->Update(displaySuspension->rightRear.hardpoints[Corner::UpperFrontTubMount],
-		displaySuspension->rightRear.hardpoints[Corner::UpperBallJoint],
-		displaySuspension->rightRear.hardpoints[Corner::UpperRearTubMount],
+	rightRearUpperAArm->Update(displaySuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::UpperFrontTubMount)],
+		displaySuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::UpperBallJoint)],
+		displaySuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::UpperRearTubMount)],
 		appearanceOptions.GetSize(AppearanceOptions::SizeAArmDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionAArm),
 		appearanceOptions.GetColor(AppearanceOptions::ColorAArm),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityAArm));
-	rightRearPushrod->Update(displaySuspension->rightRear.hardpoints[Corner::InboardPushrod],
-		displaySuspension->rightRear.hardpoints[Corner::OutboardPushrod],
+	rightRearPushrod->Update(displaySuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::InboardPushrod)],
+		displaySuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardPushrod)],
 		appearanceOptions.GetSize(AppearanceOptions::SizeAArmDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionAArm),
 		appearanceOptions.GetColor(AppearanceOptions::ColorPushrod),
 		ShowBellCranksPushrods);
-	rightRearTieRod->Update(displaySuspension->rightRear.hardpoints[Corner::InboardTieRod],
-		displaySuspension->rightRear.hardpoints[Corner::OutboardTieRod],
+	rightRearTieRod->Update(displaySuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::InboardTieRod)],
+		displaySuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardTieRod)],
 		appearanceOptions.GetSize(AppearanceOptions::SizeAArmDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionAArm),
 		appearanceOptions.GetColor(AppearanceOptions::ColorTieRod),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityTieRod));
-	rightRearTire->Update(displaySuspension->rightRear.hardpoints[Corner::ContactPatch],
-		displaySuspension->rightRear.hardpoints[Corner::WheelCenter], originalNormal, targetNormal,
+	rightRearTire->Update(displaySuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)],
+		displaySuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::WheelCenter)], originalNormal, targetNormal,
 		displayTires->rightRear->width,
 		appearanceOptions.GetSize(AppearanceOptions::SizeTireInsideDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionTire),
 		appearanceOptions.GetColor(AppearanceOptions::ColorTire),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityTire));
-	rightRearDamper->Update(displaySuspension->rightRear.hardpoints[Corner::OutboardDamper],
-		displaySuspension->rightRear.hardpoints[Corner::InboardDamper],
+	rightRearDamper->Update(displaySuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardDamper)],
+		displaySuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::InboardDamper)],
 		appearanceOptions.GetSize(AppearanceOptions::SizeDamperBodyDiameter),
 		appearanceOptions.GetSize(AppearanceOptions::SizeDamperShaftDiameter),
 		appearanceOptions.GetSize(AppearanceOptions::SizeDamperBodyLength),
@@ -508,34 +508,34 @@ void CarRenderer::UpdateCarDisplay()
 		appearanceOptions.GetColor(AppearanceOptions::ColorDamperBody),
 		appearanceOptions.GetColor(AppearanceOptions::ColorDamperShaft),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityDamper));
-	rightRearSpring->Update(displaySuspension->rightRear.hardpoints[Corner::InboardSpring],
-		displaySuspension->rightRear.hardpoints[Corner::OutboardSpring],
+	rightRearSpring->Update(displaySuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::InboardSpring)],
+		displaySuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardSpring)],
 		appearanceOptions.GetSize(AppearanceOptions::SizeSpringDiameter),
 		appearanceOptions.GetSize(AppearanceOptions::SizeSpringEndPointDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionSpringDamper),
 		appearanceOptions.GetColor(AppearanceOptions::ColorSpring),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilitySpring));
-	rightRearUpright->Update(displaySuspension->rightRear.hardpoints[Corner::LowerBallJoint],
-		displaySuspension->rightRear.hardpoints[Corner::UpperBallJoint],
-		displaySuspension->rightRear.hardpoints[Corner::OutboardTieRod],
+	rightRearUpright->Update(displaySuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::LowerBallJoint)],
+		displaySuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::UpperBallJoint)],
+		displaySuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardTieRod)],
 		appearanceOptions.GetColor(AppearanceOptions::ColorUpright),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityUpright));
-	rightRearBellCrank->Update(displaySuspension->rightRear.hardpoints[Corner::OutboardDamper],
-		displaySuspension->rightRear.hardpoints[Corner::InboardPushrod],
-		VVASE::Math::NearestPointOnAxis(displaySuspension->rightRear.hardpoints[Corner::BellCrankPivot1],
-		displaySuspension->rightRear.hardpoints[Corner::BellCrankPivot2] -
-		displaySuspension->rightRear.hardpoints[Corner::BellCrankPivot1],
-		displaySuspension->rightRear.hardpoints[Corner::InboardPushrod]),
+	rightRearBellCrank->Update(displaySuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardDamper)],
+		displaySuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::InboardPushrod)],
+		VVASE::Math::NearestPointOnAxis(displaySuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::BellCrankPivot1)],
+		displaySuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::BellCrankPivot2)] -
+		displaySuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::BellCrankPivot1)],
+		displaySuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::InboardPushrod)]),
 		appearanceOptions.GetColor(AppearanceOptions::ColorPushrod),
 		ShowBellCranksPushrods);
-	rightRearBarLink->Update(displaySuspension->rightRear.hardpoints[Corner::InboardBarLink],
-		displaySuspension->rightRear.hardpoints[Corner::OutboardBarLink],
+	rightRearBarLink->Update(displaySuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::InboardBarLink)],
+		displaySuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardBarLink)],
 		appearanceOptions.GetSize(AppearanceOptions::SizeSwayBarLinkDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionSwayBar),
 		appearanceOptions.GetColor(AppearanceOptions::ColorSwayBar),
 		ShowBarLinks);
-	rightRearHalfShaft->Update(displaySuspension->rightRear.hardpoints[Corner::InboardHalfShaft],
-		displaySuspension->rightRear.hardpoints[Corner::OutboardHalfShaft],
+	rightRearHalfShaft->Update(displaySuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::InboardHalfShaft)],
+		displaySuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardHalfShaft)],
 		appearanceOptions.GetSize(AppearanceOptions::SizeHalfShaftDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionHalfShaft),
 		appearanceOptions.GetColor(AppearanceOptions::ColorHalfShaft),
@@ -544,58 +544,58 @@ void CarRenderer::UpdateCarDisplay()
 	// left rear corner
 	// Determine whether or not the bellcranks and pushrods should be drawn for this corner
 	ShowBellCranksPushrods = true;
-	if (displaySuspension->leftRear.actuationType == Corner::ActuationOutboardRockerArm ||
+	if (displaySuspension->leftRear.actuationType == Corner::ActuationType::OutboardRockerArm ||
 		!appearanceOptions.GetVisibility(AppearanceOptions::VisibilityPushrod))
 		ShowBellCranksPushrods = false;
 
 	// First, calculate the normal vectors for the original and new upright planes
-	targetNormal = VVASE::Math::GetPlaneNormal(displaySuspension->leftRear.hardpoints[Corner::LowerBallJoint],
-							displaySuspension->leftRear.hardpoints[Corner::UpperBallJoint],
-							displaySuspension->leftRear.hardpoints[Corner::OutboardTieRod]);
-	originalNormal = VVASE::Math::GetPlaneNormal(referenceSuspension->leftRear.hardpoints[Corner::LowerBallJoint],
-							referenceSuspension->leftRear.hardpoints[Corner::UpperBallJoint],
-							referenceSuspension->leftRear.hardpoints[Corner::OutboardTieRod]);
+	targetNormal = VVASE::Math::GetPlaneNormal(displaySuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::LowerBallJoint)],
+							displaySuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::UpperBallJoint)],
+							displaySuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardTieRod)]);
+	originalNormal = VVASE::Math::GetPlaneNormal(referenceSuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::LowerBallJoint)],
+							referenceSuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::UpperBallJoint)],
+							referenceSuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardTieRod)]);
 
 	// We also need to account for toe and camber settings for the targetNormal - apply camber first
 	GeometryMath::Rotate(targetNormal, displaySuspension->leftRear.staticCamber, Eigen::Vector3d::UnitX());
 	GeometryMath::Rotate(targetNormal, displaySuspension->leftRear.staticToe, Eigen::Vector3d::UnitZ());
 
 	// Now continue with the update for this corner
-	leftRearLowerAArm->Update(displaySuspension->leftRear.hardpoints[Corner::LowerFrontTubMount],
-		displaySuspension->leftRear.hardpoints[Corner::LowerBallJoint],
-		displaySuspension->leftRear.hardpoints[Corner::LowerRearTubMount],
+	leftRearLowerAArm->Update(displaySuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::LowerFrontTubMount)],
+		displaySuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::LowerBallJoint)],
+		displaySuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::LowerRearTubMount)],
 		appearanceOptions.GetSize(AppearanceOptions::SizeAArmDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionAArm),
 		appearanceOptions.GetColor(AppearanceOptions::ColorAArm),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityAArm));
-	leftRearUpperAArm->Update(displaySuspension->leftRear.hardpoints[Corner::UpperFrontTubMount],
-		displaySuspension->leftRear.hardpoints[Corner::UpperBallJoint],
-		displaySuspension->leftRear.hardpoints[Corner::UpperRearTubMount],
+	leftRearUpperAArm->Update(displaySuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::UpperFrontTubMount)],
+		displaySuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::UpperBallJoint)],
+		displaySuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::UpperRearTubMount)],
 		appearanceOptions.GetSize(AppearanceOptions::SizeAArmDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionAArm),
 		appearanceOptions.GetColor(AppearanceOptions::ColorAArm),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityAArm));
-	leftRearPushrod->Update(displaySuspension->leftRear.hardpoints[Corner::InboardPushrod],
-		displaySuspension->leftRear.hardpoints[Corner::OutboardPushrod],
+	leftRearPushrod->Update(displaySuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::InboardPushrod)],
+		displaySuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardPushrod)],
 		appearanceOptions.GetSize(AppearanceOptions::SizeAArmDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionAArm),
 		appearanceOptions.GetColor(AppearanceOptions::ColorPushrod),
 		ShowBellCranksPushrods);
-	leftRearTieRod->Update(displaySuspension->leftRear.hardpoints[Corner::InboardTieRod],
-		displaySuspension->leftRear.hardpoints[Corner::OutboardTieRod],
+	leftRearTieRod->Update(displaySuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::InboardTieRod)],
+		displaySuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardTieRod)],
 		appearanceOptions.GetSize(AppearanceOptions::SizeAArmDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionAArm),
 		appearanceOptions.GetColor(AppearanceOptions::ColorTieRod),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityTieRod));
-	leftRearTire->Update(displaySuspension->leftRear.hardpoints[Corner::ContactPatch],
-		displaySuspension->leftRear.hardpoints[Corner::WheelCenter], originalNormal, targetNormal,
+	leftRearTire->Update(displaySuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)],
+		displaySuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::WheelCenter)], originalNormal, targetNormal,
 		displayTires->leftRear->width,
 		appearanceOptions.GetSize(AppearanceOptions::SizeTireInsideDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionTire),
 		appearanceOptions.GetColor(AppearanceOptions::ColorTire),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityTire));
-	leftRearDamper->Update(displaySuspension->leftRear.hardpoints[Corner::OutboardDamper],
-		displaySuspension->leftRear.hardpoints[Corner::InboardDamper],
+	leftRearDamper->Update(displaySuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardDamper)],
+		displaySuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::InboardDamper)],
 		appearanceOptions.GetSize(AppearanceOptions::SizeDamperBodyDiameter),
 		appearanceOptions.GetSize(AppearanceOptions::SizeDamperShaftDiameter),
 		appearanceOptions.GetSize(AppearanceOptions::SizeDamperBodyLength),
@@ -603,52 +603,52 @@ void CarRenderer::UpdateCarDisplay()
 		appearanceOptions.GetColor(AppearanceOptions::ColorDamperBody),
 		appearanceOptions.GetColor(AppearanceOptions::ColorDamperShaft),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityDamper));
-	leftRearSpring->Update(displaySuspension->leftRear.hardpoints[Corner::InboardSpring],
-		displaySuspension->leftRear.hardpoints[Corner::OutboardSpring],
+	leftRearSpring->Update(displaySuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::InboardSpring)],
+		displaySuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardSpring)],
 		appearanceOptions.GetSize(AppearanceOptions::SizeSpringDiameter),
 		appearanceOptions.GetSize(AppearanceOptions::SizeSpringEndPointDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionSpringDamper),
 		appearanceOptions.GetColor(AppearanceOptions::ColorSpring),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilitySpring));
-	leftRearUpright->Update(displaySuspension->leftRear.hardpoints[Corner::LowerBallJoint],
-		displaySuspension->leftRear.hardpoints[Corner::UpperBallJoint],
-		displaySuspension->leftRear.hardpoints[Corner::OutboardTieRod],
+	leftRearUpright->Update(displaySuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::LowerBallJoint)],
+		displaySuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::UpperBallJoint)],
+		displaySuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardTieRod)],
 		appearanceOptions.GetColor(AppearanceOptions::ColorUpright),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityUpright));
-	leftRearBellCrank->Update(displaySuspension->leftRear.hardpoints[Corner::OutboardDamper],
-		displaySuspension->leftRear.hardpoints[Corner::InboardPushrod],
-		VVASE::Math::NearestPointOnAxis(displaySuspension->leftRear.hardpoints[Corner::BellCrankPivot1],
-		displaySuspension->leftRear.hardpoints[Corner::BellCrankPivot2] -
-		displaySuspension->leftRear.hardpoints[Corner::BellCrankPivot1],
-		displaySuspension->leftRear.hardpoints[Corner::InboardPushrod]),
+	leftRearBellCrank->Update(displaySuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardDamper)],
+		displaySuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::InboardPushrod)],
+		VVASE::Math::NearestPointOnAxis(displaySuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::BellCrankPivot1)],
+		displaySuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::BellCrankPivot2)] -
+		displaySuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::BellCrankPivot1)],
+		displaySuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::InboardPushrod)]),
 		appearanceOptions.GetColor(AppearanceOptions::ColorPushrod),
 		ShowBellCranksPushrods);
-	leftRearBarLink->Update(displaySuspension->leftRear.hardpoints[Corner::InboardBarLink],
-		displaySuspension->leftRear.hardpoints[Corner::OutboardBarLink],
+	leftRearBarLink->Update(displaySuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::InboardBarLink)],
+		displaySuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardBarLink)],
 		appearanceOptions.GetSize(AppearanceOptions::SizeSwayBarLinkDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionSwayBar),
 		appearanceOptions.GetColor(AppearanceOptions::ColorSwayBar),
 		ShowBarLinks);
-	leftRearHalfShaft->Update(displaySuspension->leftRear.hardpoints[Corner::InboardHalfShaft],
-		displaySuspension->leftRear.hardpoints[Corner::OutboardHalfShaft],
+	leftRearHalfShaft->Update(displaySuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::InboardHalfShaft)],
+		displaySuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::OutboardHalfShaft)],
 		appearanceOptions.GetSize(AppearanceOptions::SizeHalfShaftDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionHalfShaft),
 		appearanceOptions.GetColor(AppearanceOptions::ColorHalfShaft),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityHalfShaft) && referenceCar.HasRearHalfShafts());
 
 	// Front end
-	steeringRack->Update(displaySuspension->rightFront.hardpoints[Corner::InboardTieRod],
-		displaySuspension->leftFront.hardpoints[Corner::InboardTieRod],
+	steeringRack->Update(displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::InboardTieRod)],
+		displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::InboardTieRod)],
 		appearanceOptions.GetSize(AppearanceOptions::SizeAArmDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionAArm),
 		appearanceOptions.GetColor(AppearanceOptions::ColorTieRod),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityTieRod));
-	frontSwayBar->Update(displaySuspension->rightFront.hardpoints[Corner::InboardBarLink],
-		displaySuspension->leftFront.hardpoints[Corner::InboardBarLink],
-		displaySuspension->rightFront.hardpoints[Corner::BarArmAtPivot],
-		displaySuspension->leftFront.hardpoints[Corner::BarArmAtPivot],
-		displaySuspension->hardpoints[Suspension::FrontBarMidPoint],
-		displaySuspension->hardpoints[Suspension::FrontBarPivotAxis],
+	frontSwayBar->Update(displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::InboardBarLink)],
+		displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::InboardBarLink)],
+		displaySuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::BarArmAtPivot)],
+		displaySuspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::BarArmAtPivot)],
+		displaySuspension->hardpoints[static_cast<int>(Suspension::Hardpoints::FrontBarMidPoint)],
+		displaySuspension->hardpoints[static_cast<int>(Suspension::Hardpoints::FrontBarPivotAxis)],
 		displaySuspension->frontBarStyle,
 		appearanceOptions.GetSize(AppearanceOptions::SizeSwayBarDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionSwayBar),
@@ -656,12 +656,12 @@ void CarRenderer::UpdateCarDisplay()
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilitySwayBar));
 
 	// Rear end
-	rearSwayBar->Update(displaySuspension->rightRear.hardpoints[Corner::InboardBarLink],
-		displaySuspension->leftRear.hardpoints[Corner::InboardBarLink],
-		displaySuspension->rightRear.hardpoints[Corner::BarArmAtPivot],
-		displaySuspension->leftRear.hardpoints[Corner::BarArmAtPivot],
-		displaySuspension->hardpoints[Suspension::RearBarMidPoint],
-		displaySuspension->hardpoints[Suspension::RearBarPivotAxis],
+	rearSwayBar->Update(displaySuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::InboardBarLink)],
+		displaySuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::InboardBarLink)],
+		displaySuspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::BarArmAtPivot)],
+		displaySuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::BarArmAtPivot)],
+		displaySuspension->hardpoints[static_cast<int>(Suspension::Hardpoints::RearBarMidPoint)],
+		displaySuspension->hardpoints[static_cast<int>(Suspension::Hardpoints::RearBarPivotAxis)],
 		displaySuspension->rearBarStyle,
 		appearanceOptions.GetSize(AppearanceOptions::SizeSwayBarDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionSwayBar),
@@ -672,31 +672,31 @@ void CarRenderer::UpdateCarDisplay()
 	// Determine which of the location variables is valid
 	Eigen::Vector3d helperOrbPosition(0.0, 0.0, 0.0);
 	Eigen::Vector3d helperOrbOppositePosition(0.0, 0.0, 0.0);
-	if (helperOrbCornerPoint != Corner::NumberOfHardpoints)
+	if (helperOrbCornerPoint != Corner::Hardpoints::Count)
 	{
-		if (helperOrbLocation == Corner::LocationRightFront)
+		if (helperOrbLocation == Corner::Location::RightFront)
 		{
-			helperOrbPosition = displaySuspension->rightFront.hardpoints[helperOrbCornerPoint];
-			helperOrbOppositePosition = displaySuspension->leftFront.hardpoints[helperOrbCornerPoint];
+			helperOrbPosition = displaySuspension->rightFront.hardpoints[static_cast<int>(helperOrbCornerPoint)];
+			helperOrbOppositePosition = displaySuspension->leftFront.hardpoints[static_cast<int>(helperOrbCornerPoint)];
 		}
-		else if (helperOrbLocation == Corner::LocationLeftFront)
+		else if (helperOrbLocation == Corner::Location::LeftFront)
 		{
-			helperOrbPosition = displaySuspension->leftFront.hardpoints[helperOrbCornerPoint];
-			helperOrbOppositePosition = displaySuspension->rightFront.hardpoints[helperOrbCornerPoint];
+			helperOrbPosition = displaySuspension->leftFront.hardpoints[static_cast<int>(helperOrbCornerPoint)];
+			helperOrbOppositePosition = displaySuspension->rightFront.hardpoints[static_cast<int>(helperOrbCornerPoint)];
 		}
-		else if (helperOrbLocation == Corner::LocationRightRear)
+		else if (helperOrbLocation == Corner::Location::RightRear)
 		{
-			helperOrbPosition = displaySuspension->rightRear.hardpoints[helperOrbCornerPoint];
-			helperOrbOppositePosition = displaySuspension->leftRear.hardpoints[helperOrbCornerPoint];
+			helperOrbPosition = displaySuspension->rightRear.hardpoints[static_cast<int>(helperOrbCornerPoint)];
+			helperOrbOppositePosition = displaySuspension->leftRear.hardpoints[static_cast<int>(helperOrbCornerPoint)];
 		}
 		else
 		{
-			helperOrbPosition = displaySuspension->leftRear.hardpoints[helperOrbCornerPoint];
-			helperOrbOppositePosition = displaySuspension->rightRear.hardpoints[helperOrbCornerPoint];
+			helperOrbPosition = displaySuspension->leftRear.hardpoints[static_cast<int>(helperOrbCornerPoint)];
+			helperOrbOppositePosition = displaySuspension->rightRear.hardpoints[static_cast<int>(helperOrbCornerPoint)];
 		}
 	}
-	else if (helperOrbSuspensionPoint != Suspension::NumberOfHardpoints)
-		helperOrbPosition = displaySuspension->hardpoints[helperOrbSuspensionPoint];
+	else if (helperOrbSuspensionPoint != Suspension::Hardpoints::Count)
+		helperOrbPosition = displaySuspension->hardpoints[static_cast<int>(helperOrbSuspensionPoint)];
 
 	helperOrb->Update(helperOrbPosition, appearanceOptions.GetSize(AppearanceOptions::SizeHelperOrbDiameter),
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionHelperOrb),
@@ -706,7 +706,7 @@ void CarRenderer::UpdateCarDisplay()
 		appearanceOptions.GetResolution(AppearanceOptions::ResolutionHelperOrb),
 		appearanceOptions.GetColor(AppearanceOptions::ColorHelperOrb),
 		appearanceOptions.GetVisibility(AppearanceOptions::VisibilityHelperOrb) && helperOrbIsActive
-		&& displaySuspension->isSymmetric && helperOrbCornerPoint != Corner::NumberOfHardpoints);
+		&& displaySuspension->isSymmetric && helperOrbCornerPoint != Corner::Hardpoints::Count);
 }
 
 //==========================================================================
@@ -1109,7 +1109,7 @@ void CarRenderer::OnLeftClick(wxMouseEvent& event)
 
 	// Set the position of the helper orb
 	/*static_cast<CarRenderer*>(parent.GetParent().GetCurrentObject()->GetNotebookTab())->SetHelperOrbPosition(
-		Corner::NumberOfHardpoints, Corner::LocationRightFront, (Suspension::Hardpoints)(event.GetRow() - 1));*/
+		Corner::NumberOfHardpoints, Corner::Location::RightFront, (Suspension::Hardpoints)(event.GetRow() - 1));*/
 }
 
 //==========================================================================
@@ -1271,11 +1271,11 @@ void CarRenderer::GetSelectedHardpoint(const Eigen::Vector3d& point, const Eigen
 	Corner::Hardpoints& leftFrontPoint, Corner::Hardpoints& rightFrontPoint,
 	Corner::Hardpoints& leftRearPoint, Corner::Hardpoints& rightRearPoint) const
 {
-	suspensionPoint = Suspension::NumberOfHardpoints;
-	leftFrontPoint = Corner::NumberOfHardpoints;
-	rightFrontPoint = Corner::NumberOfHardpoints;
-	leftRearPoint = Corner::NumberOfHardpoints;
-	rightRearPoint = Corner::NumberOfHardpoints;
+	suspensionPoint = Suspension::Hardpoints::Count;
+	leftFrontPoint = Corner::Hardpoints::Count;
+	rightFrontPoint = Corner::Hardpoints::Count;
+	leftRearPoint = Corner::Hardpoints::Count;
+	rightRearPoint = Corner::Hardpoints::Count;
 
 	Eigen::Vector3d closestPoint;
 
@@ -1362,7 +1362,7 @@ void CarRenderer::GetSelectedHardpoint(const Eigen::Vector3d& point, const Eigen
 
 	// TODO:  Now what... need to find hardpoint from vector point
 	unsigned int i;
-	for (i = 0; i < Corner::NumberOfHardpoints; i++)
+	for (i = 0; i < static_cast<unsigned int>(Corner::Hardpoints::Count); i++)
 	{
 		if (VVASE::Math::IsZero(displaySuspension->leftFront.hardpoints[i] - closestPoint))
 		{
@@ -1386,7 +1386,7 @@ void CarRenderer::GetSelectedHardpoint(const Eigen::Vector3d& point, const Eigen
 		}
 	}
 
-	for (i = 0; i < Suspension::NumberOfHardpoints; i++)
+	for (i = 0; i < static_cast<unsigned int>(Suspension::Hardpoints::Count); i++)
 	{
 		if (VVASE::Math::IsZero(displaySuspension->hardpoints[i] - closestPoint))
 		{
@@ -1442,41 +1442,41 @@ void CarRenderer::DoEditPointDialog()
 
 	auto* originalSuspension(car.GetOriginalCar().GetSubsystem<Suspension>());
 
-	if (suspensionPoint != Suspension::NumberOfHardpoints)
+	if (suspensionPoint != Suspension::Hardpoints::Count)
 	{
-		pointToEdit = &originalSuspension->hardpoints[suspensionPoint];
+		pointToEdit = &originalSuspension->hardpoints[static_cast<int>(suspensionPoint)];
 		pointName = Suspension::GetHardpointName(suspensionPoint);
 	}
-	else if (leftFrontPoint != Corner::NumberOfHardpoints)
+	else if (leftFrontPoint != Corner::Hardpoints::Count)
 	{
 		if (originalSuspension->isSymmetric)
-			pointToEdit = &originalSuspension->rightFront.hardpoints[leftFrontPoint];
+			pointToEdit = &originalSuspension->rightFront.hardpoints[static_cast<int>(leftFrontPoint)];
 		else
-			pointToEdit = &originalSuspension->leftFront.hardpoints[leftFrontPoint];
+			pointToEdit = &originalSuspension->leftFront.hardpoints[static_cast<int>(leftFrontPoint)];
 
-		pointName = Corner::GetLocationName(Corner::LocationLeftFront)
+		pointName = Corner::GetLocationName(Corner::Location::LeftFront)
 			+ _T(" ") + Corner::GetHardpointName(leftFrontPoint);
 	}
-	else if (rightFrontPoint != Corner::NumberOfHardpoints)
+	else if (rightFrontPoint != Corner::Hardpoints::Count)
 	{
-		pointToEdit = &originalSuspension->rightFront.hardpoints[rightFrontPoint];
-		pointName = Corner::GetLocationName(Corner::LocationRightFront)
+		pointToEdit = &originalSuspension->rightFront.hardpoints[static_cast<int>(rightFrontPoint)];
+		pointName = Corner::GetLocationName(Corner::Location::RightFront)
 			+ _T(" ") + Corner::GetHardpointName(rightFrontPoint);
 	}
-	else if (leftRearPoint != Corner::NumberOfHardpoints)
+	else if (leftRearPoint != Corner::Hardpoints::Count)
 	{
 		if (originalSuspension->isSymmetric)
-			pointToEdit = &originalSuspension->rightRear.hardpoints[leftRearPoint];
+			pointToEdit = &originalSuspension->rightRear.hardpoints[static_cast<int>(leftRearPoint)];
 		else
-			pointToEdit = &originalSuspension->leftRear.hardpoints[leftRearPoint];
+			pointToEdit = &originalSuspension->leftRear.hardpoints[static_cast<int>(leftRearPoint)];
 
-		pointName = Corner::GetLocationName(Corner::LocationLeftRear)
+		pointName = Corner::GetLocationName(Corner::Location::LeftRear)
 			+ _T(" ") + Corner::GetHardpointName(leftRearPoint);
 	}
-	else if (rightRearPoint != Corner::NumberOfHardpoints)
+	else if (rightRearPoint != Corner::Hardpoints::Count)
 	{
-		pointToEdit = &originalSuspension->rightRear.hardpoints[rightRearPoint];
-		pointName = Corner::GetLocationName(Corner::LocationRightRear)
+		pointToEdit = &originalSuspension->rightRear.hardpoints[static_cast<int>(rightRearPoint)];
+		pointName = Corner::GetLocationName(Corner::Location::RightRear)
 			+ _T(" ") + Corner::GetHardpointName(rightRearPoint);
 	}
 	else

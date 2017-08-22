@@ -368,17 +368,17 @@ void GAObject::SetCarGenome(int carIndex, const int *currentGenome)
 		currentGene = &geneList[i];
 
 		// Set the current and opposite corners
-		if (currentGene->location == Corner::LocationLeftFront)
+		if (currentGene->location == Corner::Location::LeftFront)
 		{
 			currentCorner = &currentSuspension->leftFront;
 			oppositeCorner = &currentSuspension->rightFront;
 		}
-		else if (currentGene->location == Corner::LocationRightFront)
+		else if (currentGene->location == Corner::Location::RightFront)
 		{
 			currentCorner = &currentSuspension->rightFront;
 			oppositeCorner = &currentSuspension->leftFront;
 		}
-		else if (currentGene->location == Corner::LocationLeftRear)
+		else if (currentGene->location == Corner::Location::LeftRear)
 		{
 			currentCorner = &currentSuspension->leftRear;
 			oppositeCorner = &currentSuspension->rightRear;
@@ -393,79 +393,79 @@ void GAObject::SetCarGenome(int carIndex, const int *currentGenome)
 		if (currentGene->direction == Math::Axis::X)
 		{
 			// Set the appropriate variable to the value that corresponds to this phenotype
-			currentCorner->hardpoints[currentGene->hardpoint].x() = currentGene->minimum +
+			currentCorner->hardpoints[static_cast<int>(currentGene->hardpoint)].x() = currentGene->minimum +
 				double(currentGene->numberOfValues - currentGenome[i] - 1)
 				* (currentGene->maximum - currentGene->minimum) / double(currentGene->numberOfValues - 1);
 
 			// If there is a tied-to variable specified, update that as well
-			if (currentGene->tiedTo != Corner::NumberOfHardpoints)
-				currentCorner->hardpoints[currentGene->tiedTo].x() =
-					currentCorner->hardpoints[currentGene->hardpoint].x();
+			if (currentGene->tiedTo != Corner::Hardpoints::Count)
+				currentCorner->hardpoints[static_cast<int>(currentGene->tiedTo)].x() =
+					currentCorner->hardpoints[static_cast<int>(currentGene->hardpoint)].x();
 
 			// If the suspension is symmetric, also update the point on the opposite corner
 			if (targetSuspension->isSymmetric)
 			{
 				// Copy the values from one side to the other
-				oppositeCorner->hardpoints[currentGene->hardpoint].x() =
-					currentCorner->hardpoints[currentGene->hardpoint].x();
+				oppositeCorner->hardpoints[static_cast<int>(currentGene->hardpoint)].x() =
+					currentCorner->hardpoints[static_cast<int>(currentGene->hardpoint)].x();
 
 				// If there was a tied-to variable specified, we must update that on
 				// the other side of the car, too
-				if (currentGene->tiedTo != Corner::NumberOfHardpoints)
-					oppositeCorner->hardpoints[currentGene->tiedTo].x() =
-						oppositeCorner->hardpoints[currentGene->hardpoint].x();
+				if (currentGene->tiedTo != Corner::Hardpoints::Count)
+					oppositeCorner->hardpoints[static_cast<int>(currentGene->tiedTo)].x() =
+						oppositeCorner->hardpoints[static_cast<int>(currentGene->hardpoint)].x();
 			}
 		}
 		else if (currentGene->direction == Math::Axis::Y)
 		{
 			// Set the appropriate variable to the value that corresponds to this phenotype
-			currentCorner->hardpoints[currentGene->hardpoint].y() = currentGene->minimum +
+			currentCorner->hardpoints[static_cast<int>(currentGene->hardpoint)].y() = currentGene->minimum +
 				double(currentGene->numberOfValues - currentGenome[i] - 1)
 				* (currentGene->maximum - currentGene->minimum) / double(currentGene->numberOfValues - 1);
 
 			// If there is a tied-to variable specified, update that as well
-			if (currentGene->tiedTo != Corner::NumberOfHardpoints)
-				currentCorner->hardpoints[currentGene->tiedTo].y() =
-					currentCorner->hardpoints[currentGene->hardpoint].y();
+			if (currentGene->tiedTo != Corner::Hardpoints::Count)
+				currentCorner->hardpoints[static_cast<int>(currentGene->tiedTo)].y() =
+					currentCorner->hardpoints[static_cast<int>(currentGene->hardpoint)].y();
 
 			// If the suspension is symmetric, also update the point on the opposite corner
 			if (targetSuspension->isSymmetric)
 			{
 				// Copy the values from one side to the other (Note Y is flipped)
-				oppositeCorner->hardpoints[currentGene->hardpoint].y() =
-					-currentCorner->hardpoints[currentGene->hardpoint].y();
+				oppositeCorner->hardpoints[static_cast<int>(currentGene->hardpoint)].y() =
+					-currentCorner->hardpoints[static_cast<int>(currentGene->hardpoint)].y();
 
 				// If there was a tied-to variable specified, we must update that on
 				// the other side of the car, too
-				if (currentGene->tiedTo != Corner::NumberOfHardpoints)
-					oppositeCorner->hardpoints[currentGene->tiedTo].y() =
-						oppositeCorner->hardpoints[currentGene->hardpoint].y();
+				if (currentGene->tiedTo != Corner::Hardpoints::Count)
+					oppositeCorner->hardpoints[static_cast<int>(currentGene->tiedTo)].y() =
+						oppositeCorner->hardpoints[static_cast<int>(currentGene->hardpoint)].y();
 			}
 		}
 		else// Math::Axis::Z
 		{
 			// Set the appropriate variable to the value that corresponds to this phenotype
-			currentCorner->hardpoints[currentGene->hardpoint].z() = currentGene->minimum +
+			currentCorner->hardpoints[static_cast<int>(currentGene->hardpoint)].z() = currentGene->minimum +
 				double(currentGene->numberOfValues - currentGenome[i] - 1)
 				* (currentGene->maximum - currentGene->minimum) / double(currentGene->numberOfValues - 1);
 
 			// If there is a tied-to variable specified, update that as well
-			if (currentGene->tiedTo != Corner::NumberOfHardpoints)
-				currentCorner->hardpoints[currentGene->tiedTo].z() =
-					currentCorner->hardpoints[currentGene->hardpoint].z();
+			if (currentGene->tiedTo != Corner::Hardpoints::Count)
+				currentCorner->hardpoints[static_cast<int>(currentGene->tiedTo)].z() =
+					currentCorner->hardpoints[static_cast<int>(currentGene->hardpoint)].z();
 
 			// If the suspension is symmetric, also update the point on the opposite corner
 			if (targetSuspension->isSymmetric)
 			{
 				// Copy the values from one side to the other
-				oppositeCorner->hardpoints[currentGene->hardpoint].z() =
-					currentCorner->hardpoints[currentGene->hardpoint].z();
+				oppositeCorner->hardpoints[static_cast<int>(currentGene->hardpoint)].z() =
+					currentCorner->hardpoints[static_cast<int>(currentGene->hardpoint)].z();
 
 				// If there was a tied-to variable specified, we must update that on
 				// the other side of the car, too
-				if (currentGene->tiedTo != Corner::NumberOfHardpoints)
-					oppositeCorner->hardpoints[currentGene->tiedTo].z() =
-						oppositeCorner->hardpoints[currentGene->hardpoint].z();
+				if (currentGene->tiedTo != Corner::Hardpoints::Count)
+					oppositeCorner->hardpoints[static_cast<int>(currentGene->tiedTo)].z() =
+						oppositeCorner->hardpoints[static_cast<int>(currentGene->hardpoint)].z();
 			}
 		}
 	}

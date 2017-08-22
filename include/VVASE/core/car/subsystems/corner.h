@@ -36,14 +36,14 @@ class Corner
 {
 public:
 	// Enumeration describing the physical location of the corner on the car
-	enum Location
+	enum class Location
 	{
-		LocationRightFront,
-		LocationLeftFront,
-		LocationRightRear,
-		LocationLeftRear,
+		RightFront,
+		LeftFront,
+		RightRear,
+		LeftRear,
 
-		NumberOfLocations
+		Count
 	};
 
 	// Constructor
@@ -58,26 +58,26 @@ public:
 
 	// Enumeration that describes the different suspension actuation types
 	// we can model
-	enum ActuationAttachment
+	enum class ActuationAttachment
 	{
-		AttachmentLowerAArm,
-		AttachmentUpperAArm,
-		AttachmentUpright,
+		LowerAArm,
+		UpperAArm,
+		Upright,
 
-		NumberOfAttachments
+		Count
 	};
 
 	// Enumeration for actuation type
-	enum ActuationType
+	enum class ActuationType
 	{
-		ActuationPushPullrod,
-		ActuationOutboardRockerArm,
+		PushPullrod,
+		OutboardRockerArm,
 
-		NumberOfActuationTypes
+		Count
 	};
 
 	// Enumberation for suspension hardpoints
-	enum Hardpoints
+	enum class Hardpoints
 	{
 		LowerFrontTubMount,
 		LowerRearTubMount,
@@ -112,7 +112,7 @@ public:
 		OutboardHalfShaft,
 		InboardHalfShaft,
 
-		NumberOfHardpoints
+		Count
 	};
 
 	// For getting the names of the elements of this class

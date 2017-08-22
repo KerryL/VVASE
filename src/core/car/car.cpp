@@ -51,14 +51,14 @@ Car::Car() : subsystems(CreateComponents())
 {
 	// TODO:  Need to make these default assignments within each subsystem
 	// Test suspension
-	/*suspension->frontBarStyle = Suspension::SwayBarUBar;
-	suspension->rearBarStyle = Suspension::SwayBarTBar;
+	/*suspension->frontBarStyle = Suspension::BarStyle::UBar;
+	suspension->rearBarStyle = Suspension::BarStyle::TBar;
 	suspension->isSymmetric = true;
 
-	suspension->rightFront.hardpoints[Corner::ContactPatch].Set(0.0, 21.875, 0.0);
-	suspension->leftFront.hardpoints[Corner::ContactPatch].Set(0.0, -21.875, 0.0);
-	suspension->rightRear.hardpoints[Corner::ContactPatch].Set(66.5, 20.0, 0.0);
-	suspension->leftRear.hardpoints[Corner::ContactPatch].Set(66.5, -20.0, 0.0);
+	suspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)]].Set(0.0, 21.875, 0.0);
+	suspension->leftFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)]].Set(0.0, -21.875, 0.0);
+	suspension->rightRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)]].Set(66.5, 20.0, 0.0);
+	suspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)]].Set(66.5, -20.0, 0.0);
 
 	suspension->rightFront.hardpoints[Corner::LowerFrontTubMount].Set(-6.893, 3.0, 5.0);
 	suspension->leftFront.hardpoints[Corner::LowerFrontTubMount].Set(-6.893, -3.0, 5.0);
@@ -210,10 +210,7 @@ Car::Car() : subsystems(CreateComponents())
 	suspension->leftFront.spring.rate = 50.0;// [lb/in]
 	suspension->rightFront.spring.rate = 50.0;// [lb/in]
 	suspension->leftRear.spring.rate = 60.0;// [lb/in]
-	suspension->rightRear.spring.rate = 60.0;// [lb/in]
-
-	// Test drivetrain
-	drivetrain->SetRearWheelDrive(1.0);*/
+	suspension->rightRear.spring.rate = 60.0;// [lb/in]*/
 }
 
 //==========================================================================

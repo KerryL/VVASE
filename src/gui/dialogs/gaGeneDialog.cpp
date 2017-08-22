@@ -161,7 +161,7 @@ void GAGeneDialog::CreateControls()
 
 	// Add the static text and text controls to these sizers
 	// Hardpoints
-	for (i = 0; i < Corner::NumberOfHardpoints; i++)
+	for (i = 0; i < static_cast<int>(Corner::Hardpoints::Count); i++)
 		list.Add(Corner::GetHardpointName((Corner::Hardpoints)i));
 	wxStaticText *hardpointLabel = new wxStaticText(this, wxID_STATIC, _T("Hardpoint"));
 	hardpointCombo = new wxComboBox(this, idHardpoint, Corner::GetHardpointName(hardpoint), wxDefaultPosition,
@@ -196,7 +196,7 @@ void GAGeneDialog::CreateControls()
 
 	// Corner Location
 	list.Clear();
-	for (i = 0; i < Corner::NumberOfLocations; i++)
+	for (i = 0; i < static_cast<int>(Corner::Location::Count); i++)
 		list.Add(Corner::GetLocationName((Corner::Location)i));
 	wxStaticText *cornerLocationLabel = new wxStaticText(this, wxID_STATIC, _T("Corner Location"));
 	cornerLocationCombo = new wxComboBox(this, idLocation, Corner::GetLocationName(cornerLocation), wxDefaultPosition,
@@ -453,14 +453,14 @@ void GAGeneDialog::UpdateCurrentVector()
 		hardpointCombo->GetCurrentSelection()));
 
 	Eigen::Vector3d v;
-	if (location == Corner::LocationLeftFront)
-		v = currentSuspension->leftFront.hardpoints[hardpoint];
-	else if (location == Corner::LocationRightFront)
-		v = currentSuspension->rightFront.hardpoints[hardpoint];
-	else if (location == Corner::LocationLeftRear)
-		v = currentSuspension->leftRear.hardpoints[hardpoint];
+	if (location == Corner::Location::LeftFront)
+		v = currentSuspension->leftFront.hardpoints[static_cast<int>(hardpoint)];
+	else if (location == Corner::Location::RightFront)
+		v = currentSuspension->rightFront.hardpoints[static_cast<int>(hardpoint)];
+	else if (location == Corner::Location::LeftRear)
+		v = currentSuspension->leftRear.hardpoints[static_cast<int>(hardpoint)];
 	else
-		v = currentSuspension->rightRear.hardpoints[hardpoint];
+		v = currentSuspension->rightRear.hardpoints[static_cast<int>(hardpoint)];
 
 	currentX->SetLabel(UnitConverter::GetInstance().FormatNumber(
 		UnitConverter::GetInstance().ConvertDistanceOutput(v.x())));

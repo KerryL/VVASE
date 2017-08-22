@@ -130,8 +130,8 @@ void EditCornerPanel::UpdateInformation(Corner *currentCorner, Suspension* curre
 	this->currentSuspension = currentSuspension;
 
 	// Update the combo boxes
-	actuationType->SetSelection(currentCorner->actuationType);
-	actuationAttachment->SetSelection(currentCorner->actuationAttachment);
+	actuationType->SetSelection(static_cast<int>(currentCorner->actuationType));
+	actuationAttachment->SetSelection(static_cast<int>(currentCorner->actuationAttachment));
 
 	// Update the static toe and camber
 	staticCamber->ChangeValue(UnitConverter::GetInstance().FormatNumber(
@@ -154,64 +154,64 @@ void EditCornerPanel::UpdateInformation(Corner *currentCorner, Suspension* curre
 
 	// Hide or show rows according to this object's configuration
 	// Geared sway bar
-	if (barStyle == Suspension::SwayBarGeared)
-		hardpoints->SetRowSize(Corner::GearEndBarShaft + 1, hardpoints->GetRowHeight(0));
+	if (barStyle == Suspension::BarStyle::Geared)
+		hardpoints->SetRowSize(static_cast<int>(Corner::Hardpoints::GearEndBarShaft) + 1, hardpoints->GetRowHeight(0));
 	else
-		hardpoints->SetRowSize(Corner::GearEndBarShaft + 1, 0);
+		hardpoints->SetRowSize(static_cast<int>(Corner::Hardpoints::GearEndBarShaft) + 1, 0);
 
-	if (barStyle == Suspension::SwayBarNone)
+	if (barStyle == Suspension::BarStyle::None)
 	{
-		hardpoints->SetRowSize(Corner::OutboardBarLink + 1, 0);
-		hardpoints->SetRowSize(Corner::InboardBarLink + 1, 0);
-		hardpoints->SetRowSize(Corner::BarArmAtPivot + 1, 0);
+		hardpoints->SetRowSize(static_cast<int>(Corner::Hardpoints::OutboardBarLink) + 1, 0);
+		hardpoints->SetRowSize(static_cast<int>(Corner::Hardpoints::InboardBarLink) + 1, 0);
+		hardpoints->SetRowSize(static_cast<int>(Corner::Hardpoints::BarArmAtPivot) + 1, 0);
 	}
-	else if (barStyle == Suspension::SwayBarTBar)
+	else if (barStyle == Suspension::BarStyle::TBar)
 	{
-		hardpoints->SetRowSize(Corner::OutboardBarLink + 1, hardpoints->GetRowHeight(0));
-		hardpoints->SetRowSize(Corner::InboardBarLink + 1, hardpoints->GetRowHeight(0));
-		hardpoints->SetRowSize(Corner::BarArmAtPivot + 1, 0);
+		hardpoints->SetRowSize(static_cast<int>(Corner::Hardpoints::OutboardBarLink) + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(static_cast<int>(Corner::Hardpoints::InboardBarLink) + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(static_cast<int>(Corner::Hardpoints::BarArmAtPivot) + 1, 0);
 	}
 	else
 	{
-		hardpoints->SetRowSize(Corner::OutboardBarLink + 1, hardpoints->GetRowHeight(0));
-		hardpoints->SetRowSize(Corner::InboardBarLink + 1, hardpoints->GetRowHeight(0));
-		hardpoints->SetRowSize(Corner::BarArmAtPivot + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(static_cast<int>(Corner::Hardpoints::OutboardBarLink) + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(static_cast<int>(Corner::Hardpoints::InboardBarLink) + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(static_cast<int>(Corner::Hardpoints::BarArmAtPivot) + 1, hardpoints->GetRowHeight(0));
 	}
 
 	// Half shaft
 	if (hasHalfShaft)
 	{
 		// Show the half shaft points
-		hardpoints->SetRowSize(Corner::InboardHalfShaft + 1, hardpoints->GetRowHeight(0));
-		hardpoints->SetRowSize(Corner::OutboardHalfShaft + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(static_cast<int>(Corner::Hardpoints::InboardHalfShaft) + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(static_cast<int>(Corner::Hardpoints::OutboardHalfShaft) + 1, hardpoints->GetRowHeight(0));
 	}
 	else
 	{
 		// Hide the half shaft points
-		hardpoints->SetRowSize(Corner::InboardHalfShaft + 1, 0);
-		hardpoints->SetRowSize(Corner::OutboardHalfShaft + 1, 0);
+		hardpoints->SetRowSize(static_cast<int>(Corner::Hardpoints::InboardHalfShaft) + 1, 0);
+		hardpoints->SetRowSize(static_cast<int>(Corner::Hardpoints::OutboardHalfShaft) + 1, 0);
 	}
 
 	// Outboard springs/shocks vs. pushrod actuated springs/shocks
-	if (currentCorner->actuationType == Corner::ActuationPushPullrod)
+	if (currentCorner->actuationType == Corner::ActuationType::PushPullrod)
 	{
-		hardpoints->SetRowSize(Corner::InboardPushrod + 1, hardpoints->GetRowHeight(0));
-		hardpoints->SetRowSize(Corner::OutboardPushrod + 1, hardpoints->GetRowHeight(0));
-		hardpoints->SetRowSize(Corner::BellCrankPivot1 + 1, hardpoints->GetRowHeight(0));
-		hardpoints->SetRowSize(Corner::BellCrankPivot2 + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(static_cast<int>(Corner::Hardpoints::InboardPushrod) + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(static_cast<int>(Corner::Hardpoints::OutboardPushrod) + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(static_cast<int>(Corner::Hardpoints::BellCrankPivot1) + 1, hardpoints->GetRowHeight(0));
+		hardpoints->SetRowSize(static_cast<int>(Corner::Hardpoints::BellCrankPivot2) + 1, hardpoints->GetRowHeight(0));
 	}
-	else if (currentCorner->actuationType == Corner::ActuationOutboardRockerArm)
+	else if (currentCorner->actuationType == Corner::ActuationType::OutboardRockerArm)
 	{
-		hardpoints->SetRowSize(Corner::InboardPushrod + 1, 0);
-		hardpoints->SetRowSize(Corner::OutboardPushrod + 1, 0);
-		hardpoints->SetRowSize(Corner::BellCrankPivot1 + 1, 0);
-		hardpoints->SetRowSize(Corner::BellCrankPivot2 + 1, 0);
+		hardpoints->SetRowSize(static_cast<int>(Corner::Hardpoints::InboardPushrod) + 1, 0);
+		hardpoints->SetRowSize(static_cast<int>(Corner::Hardpoints::OutboardPushrod) + 1, 0);
+		hardpoints->SetRowSize(static_cast<int>(Corner::Hardpoints::BellCrankPivot1) + 1, 0);
+		hardpoints->SetRowSize(static_cast<int>(Corner::Hardpoints::BellCrankPivot2) + 1, 0);
 	}
 
 	// Update the values of all of the points
 	Eigen::Vector3d point;
 	int i;
-	for (i = 0; i < Corner::NumberOfHardpoints; i++)
+	for (i = 0; i < static_cast<int>(Corner::Hardpoints::Count); i++)
 	{
 		// Get the location of this hardpoint (don't forget to convert it!)
 		point = UnitConverter::GetInstance().ConvertDistanceOutput(currentCorner->hardpoints[i]);
@@ -262,7 +262,7 @@ void EditCornerPanel::CreateControls()
 
 	// Create the grid for the hard point entry
 	hardpoints = new SuperGrid(this, wxID_ANY);
-	hardpoints->CreateGrid(Corner::NumberOfHardpoints + 1, 4, wxGrid::wxGridSelectRows);
+	hardpoints->CreateGrid(static_cast<int>(Corner::Hardpoints::Count) + 1, 4, wxGrid::wxGridSelectRows);
 	wxObject *data = new EventWindowData(this);
 	hardpoints->Bind(wxEVT_MOUSEWHEEL, wxUtilities::SkipMouseEvent, wxID_ANY, wxID_ANY, data);
 
@@ -279,7 +279,7 @@ void EditCornerPanel::CreateControls()
 	hardpoints->SetRowMinimalAcceptableHeight(0);
 
 	// We never want the wheel center to be visible
-	hardpoints->SetRowSize(Corner::WheelCenter + 1, 0);
+	hardpoints->SetRowSize(static_cast<int>(Corner::Hardpoints::WheelCenter) + 1, 0);
 
 	mainSizer->Add(hardpoints, 0, wxALIGN_TOP | wxGROW);
 	mainSizer->AddGrowableCol(0);
@@ -294,7 +294,7 @@ void EditCornerPanel::CreateControls()
 	for (i = 0; i < hardpoints->GetNumberCols(); i++)
 		hardpoints->SetCellAlignment(0, i, wxALIGN_CENTER, wxALIGN_TOP);
 
-	for (i = 0; i < Corner::NumberOfHardpoints; i++)
+	for (i = 0; i < static_cast<int>(Corner::Hardpoints::Count); i++)
 	{
 		hardpoints->SetReadOnly(i + 1, 0, true);
 
@@ -342,7 +342,7 @@ void EditCornerPanel::CreateControls()
 	// Actuation type
 	wxArrayString choices;
 	choices.Clear();
-	for (i = 0; i < Corner::NumberOfActuationTypes; i++)
+	for (i = 0; i < static_cast<int>(Corner::ActuationType::Count); i++)
 		choices.Add(Corner::GetActuationTypeName((Corner::ActuationType)i));
 
 	wxStaticText *actuationTypeLabel = new wxStaticText(this, wxID_ANY,
@@ -357,7 +357,7 @@ void EditCornerPanel::CreateControls()
 
 	// Actuation attachment
 	choices.Clear();
-	for (i = 0; i < Corner::NumberOfAttachments; i++)
+	for (i = 0; i < static_cast<int>(Corner::ActuationAttachment::Count); i++)
 		choices.Add(Corner::GetActuationAttachmentName((Corner::ActuationAttachment)i));
 
 	wxStaticText *attachmentLabel = new wxStaticText(this, wxID_ANY,
@@ -439,7 +439,7 @@ void EditCornerPanel::SelectCellEvent(wxGridEvent &event)
 
 		// Set the position of the helper orb
 		static_cast<CarRenderer*>(parent.GetParent().GetCurrentObject()->GetNotebookTab())->SetHelperOrbPosition(
-			(Corner::Hardpoints)(event.GetRow() - 1), currentCorner->location, Suspension::NumberOfHardpoints);
+			(Corner::Hardpoints)(event.GetRow() - 1), currentCorner->location, Suspension::Hardpoints::Count);
 
 		// Update the analyses
 		parent.GetParent().GetCurrentObject()->UpdateData();
@@ -484,7 +484,7 @@ void EditCornerPanel::GridCellChangedEvent(wxGridEvent &event)
 		wxString valueString;
 
 		// If this is a contact patch, don't allow modification of the Z location
-		if (event.GetCol() == 3 && event.GetRow() - 1 == Corner::ContactPatch)
+		if (event.GetCol() == 3 && event.GetRow() - 1 == static_cast<int>(Corner::Hardpoints::ContactPatch))
 		{
 			// Reset to zero
 			valueString.Printf("%0.3f", 0.0);
@@ -544,7 +544,7 @@ void EditCornerPanel::GridCellChangedEvent(wxGridEvent &event)
 
 		// Set the position of the helper orb
 		static_cast<CarRenderer*>(parent.GetParent().GetCurrentObject()->GetNotebookTab())->SetHelperOrbPosition(
-			(Corner::Hardpoints)(event.GetRow() - 1), currentCorner->location, Suspension::NumberOfHardpoints);
+			(Corner::Hardpoints)(event.GetRow() - 1), currentCorner->location, Suspension::Hardpoints::Count);
 
 		// Update the display and the kinematic outputs
 		parent.GetParent().GetMainFrame().UpdateAnalysis();

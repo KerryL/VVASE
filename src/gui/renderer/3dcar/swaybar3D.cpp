@@ -100,8 +100,8 @@ void Swaybar3D::Update(const Eigen::Vector3d &rightLink, const Eigen::Vector3d &
 		show = false;
 
 	// Check to make sure the sway bar exists
-	if (barStyle == Suspension::SwayBarNone ||
-		barStyle == Suspension::SwayBarGeared)// FIXME:  Geared bars not yet implemented!
+	if (barStyle == Suspension::BarStyle::None ||
+		barStyle == Suspension::BarStyle::Geared)// FIXME:  Geared bars not yet implemented!
 		show = false;
 
 	// Set the visibility flags
@@ -126,7 +126,7 @@ void Swaybar3D::Update(const Eigen::Vector3d &rightLink, const Eigen::Vector3d &
 	// Set the resolution of the torsion member
 	torsionMember->SetResolution(resolution);
 
-	if (barStyle == Suspension::SwayBarUBar)
+	if (barStyle == Suspension::BarStyle::UBar)
 	{
 		// Position the torsion member
 		torsionMember->SetEndPoint1(torsionMemberBottomLeft);
@@ -140,7 +140,7 @@ void Swaybar3D::Update(const Eigen::Vector3d &rightLink, const Eigen::Vector3d &
 		torqueArm2->SetEndPoint1(leftLink);
 		torqueArm2->SetEndPoint2(torsionMemberBottomLeft);
 	}
-	else if (barStyle == Suspension::SwayBarTBar)
+	else if (barStyle == Suspension::BarStyle::TBar)
 	{
 		Eigen::Vector3d stemPlaneNormal = (midPoint - axisPivot).normalized();
 		Eigen::Vector3d topMidPoint = VVASE::Math::IntersectWithPlane(stemPlaneNormal, midPoint,

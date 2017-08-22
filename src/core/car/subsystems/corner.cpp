@@ -38,17 +38,73 @@ namespace VVASE
 //		None
 //
 //==========================================================================
-Corner::Corner(const Location &location) : location(location), hardpoints(NumberOfHardpoints)
+Corner::Corner(const Location &location) : location(location), hardpoints(static_cast<int>(Hardpoints::Count))
 {
-	int i;
-	for (i = 0; i < NumberOfHardpoints; i++)
-		hardpoints[i].setZero();
+	for (auto& hardpoint : hardpoints)
+		hardpoint.setZero();
 
 	staticCamber = 0.0;
 	staticToe = 0.0;
-	actuationAttachment = AttachmentLowerAArm;
-	actuationType = ActuationPushPullrod;
+	actuationAttachment = ActuationAttachment::LowerAArm;
+	actuationType = ActuationType::PushPullrod;
 	// FIXME!!! Spring and damper!
+
+	if (location == Location::LeftFront ||
+		location == Location::RightFront)
+	{
+		hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)] = Eigen::Vector3d(0.0, 21.875, 0.0);
+		hardpoints[static_cast<int>(Corner::Hardpoints::LowerFrontTubMount)] = Eigen::Vector3d(-6.893, 3.0, 5.0);
+		hardpoints[static_cast<int>(Corner::Hardpoints::LowerRearTubMount)] = Eigen::Vector3d(5.107, 3.0, 5.0);
+		hardpoints[static_cast<int>(Corner::Hardpoints::LowerBallJoint)] = Eigen::Vector3d(0.168, 19.8, 5.0);
+		hardpoints[static_cast<int>(Corner::Hardpoints::UpperFrontTubMount)] = Eigen::Vector3d(0.893, 7.0, 13.75);
+		hardpoints[static_cast<int>(Corner::Hardpoints::UpperRearTubMount)] = Eigen::Vector3d(9.393, 7.0, 13.75);
+		hardpoints[static_cast<int>(Corner::Hardpoints::UpperBallJoint)] = Eigen::Vector3d(0.893, 19.0, 15.25);
+		hardpoints[static_cast<int>(Corner::Hardpoints::InboardTieRod)] = Eigen::Vector3d(-0.482, 7.0, 13.75);
+		hardpoints[static_cast<int>(Corner::Hardpoints::OutboardTieRod)] = Eigen::Vector3d(-0.896, 19.893, 15.36);
+		hardpoints[static_cast<int>(Corner::Hardpoints::BellCrankPivot1)] = Eigen::Vector3d(-0.482, 8.063, 17.625);
+		hardpoints[static_cast<int>(Corner::Hardpoints::BellCrankPivot2)] = Eigen::Vector3d(-0.482, 6.438, 16.161);
+		hardpoints[static_cast<int>(Corner::Hardpoints::InboardPushrod)] = Eigen::Vector3d(2.768, 7.0, 16.75);
+		hardpoints[static_cast<int>(Corner::Hardpoints::OutboardPushrod)] = Eigen::Vector3d(0.107, 17.813, 5.625);
+		hardpoints[static_cast<int>(Corner::Hardpoints::InboardDamper)] = Eigen::Vector3d(-9.232, 4.75, 18.75);
+		hardpoints[static_cast<int>(Corner::Hardpoints::InboardSpring)] = Eigen::Vector3d(-9.232, 4.75, 18.75);
+		hardpoints[static_cast<int>(Corner::Hardpoints::OutboardDamper)] = Eigen::Vector3d(-1.232, 3.375, 19.5);
+		hardpoints[static_cast<int>(Corner::Hardpoints::OutboardSpring)] = Eigen::Vector3d(-1.232, 3.375, 19.5);
+		hardpoints[static_cast<int>(Corner::Hardpoints::BarArmAtPivot)] = Eigen::Vector3d(4.518, 5.0, 15.0);
+		hardpoints[static_cast<int>(Corner::Hardpoints::InboardBarLink)] = Eigen::Vector3d(4.518, 5.0, 19.0);
+		hardpoints[static_cast<int>(Corner::Hardpoints::OutboardBarLink)] = Eigen::Vector3d(-1.232, 5.0, 19.0);
+	}
+	else// Rear
+	{
+		hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)] = Eigen::Vector3d(66.5, 20.0, 0.0);
+		hardpoints[static_cast<int>(Corner::Hardpoints::LowerFrontTubMount)] = Eigen::Vector3d(62.5, 3.2, 5.0);
+		hardpoints[static_cast<int>(Corner::Hardpoints::LowerRearTubMount)] = Eigen::Vector3d(72.5, 3.2, 5.0);
+		hardpoints[static_cast<int>(Corner::Hardpoints::LowerBallJoint)] = Eigen::Vector3d(66.213, 20.35, 5.125);
+		hardpoints[static_cast<int>(Corner::Hardpoints::UpperFrontTubMount)] = Eigen::Vector3d(59.159, 5.0, 12.67);
+		hardpoints[static_cast<int>(Corner::Hardpoints::UpperRearTubMount)] = Eigen::Vector3d(73.659, 5.0, 12.67);
+		hardpoints[static_cast<int>(Corner::Hardpoints::UpperBallJoint)] = Eigen::Vector3d(63.5, 18.025, 14.75);
+		hardpoints[static_cast<int>(Corner::Hardpoints::InboardTieRod)] = Eigen::Vector3d(74.925, 5.0, 12.67);
+		hardpoints[static_cast<int>(Corner::Hardpoints::OutboardTieRod)] = Eigen::Vector3d(69.5, 18.025, 14.75);
+		hardpoints[static_cast<int>(Corner::Hardpoints::BellCrankPivot1)] = Eigen::Vector3d(62.75, 3.986, 13.255);
+		hardpoints[static_cast<int>(Corner::Hardpoints::BellCrankPivot2)] = Eigen::Vector3d(62.75, 4.986, 14.987);
+		hardpoints[static_cast<int>(Corner::Hardpoints::InboardPushrod)] = Eigen::Vector3d(61.31, 4.849, 13.918);
+		hardpoints[static_cast<int>(Corner::Hardpoints::OutboardPushrod)] = Eigen::Vector3d(65.0, 17.86, 6.1);
+		hardpoints[static_cast<int>(Corner::Hardpoints::InboardDamper)] = Eigen::Vector3d(72.25, 1.455, 15.871);
+		hardpoints[static_cast<int>(Corner::Hardpoints::InboardSpring)] = Eigen::Vector3d(72.25, 1.455, 15.871);
+		hardpoints[static_cast<int>(Corner::Hardpoints::OutboardDamper)] = Eigen::Vector3d(62.75, 1.455, 15.871);
+		hardpoints[static_cast<int>(Corner::Hardpoints::OutboardSpring)] = Eigen::Vector3d(62.75, 1.455, 15.871);
+		hardpoints[static_cast<int>(Corner::Hardpoints::BarArmAtPivot)] = Eigen::Vector3d(0.0, 0.0, 0.0);
+		hardpoints[static_cast<int>(Corner::Hardpoints::InboardBarLink)] = Eigen::Vector3d(78.0, 4.0, 14.5);
+		hardpoints[static_cast<int>(Corner::Hardpoints::OutboardBarLink)] = Eigen::Vector3d(63.0, 3.75, 14.5);
+		hardpoints[static_cast<int>(Corner::Hardpoints::InboardHalfShaft)] = Eigen::Vector3d(66.5, 7.0, 9.75);
+		hardpoints[static_cast<int>(Corner::Hardpoints::OutboardHalfShaft)] = Eigen::Vector3d(66.5, 20.0, 10.25);
+	}
+
+	if (location == Location::LeftFront ||
+		location == Location::LeftRear)
+	{
+		for (auto& hardpoint : hardpoints)
+			hardpoint.y() *= -1.0;
+	}
 }
 
 //==========================================================================
@@ -71,15 +127,15 @@ vvaseString Corner::GetActuationAttachmentName(const ActuationAttachment &attach
 {
 	switch (attachment)
 	{
-	case AttachmentLowerAArm:
+	case ActuationAttachment::LowerAArm:
 		return _T("Lower A-Arm");
 		break;
 
-	case AttachmentUpperAArm:
+	case ActuationAttachment::UpperAArm:
 		return _T("Upper A-Arm");
 		break;
 
-	case AttachmentUpright:
+	case ActuationAttachment::Upright:
 		return _T("Upright");
 		break;
 
@@ -111,11 +167,11 @@ vvaseString Corner::GetActuationTypeName(const ActuationType &type)
 {
 	switch (type)
 	{
-	case ActuationPushPullrod:
+	case ActuationType::PushPullrod:
 		return _T("Push/Pullrod");
 		break;
 
-	case ActuationOutboardRockerArm:
+	case ActuationType::OutboardRockerArm:
 		return _T("Outboard/Rocker");
 		break;
 
@@ -147,99 +203,99 @@ vvaseString Corner::GetHardpointName(const Hardpoints &point)
 {
 	switch (point)
 	{
-	case LowerFrontTubMount:
+	case Hardpoints::LowerFrontTubMount:
 		return _T("Lower Front Tub Mount");
 		break;
 
-	case LowerRearTubMount:
+	case Hardpoints::LowerRearTubMount:
 		return _T("Lower Rear Tub Mount");
 		break;
 
-	case UpperFrontTubMount:
+	case Hardpoints::UpperFrontTubMount:
 		return _T("Upper Front Tub Mount");
 		break;
 
-	case UpperRearTubMount:
+	case Hardpoints::UpperRearTubMount:
 		return _T("Upper Rear Tub Mount");
 		break;
 
-	case OutboardTieRod:
+	case Hardpoints::OutboardTieRod:
 		return _T("Outboard Tie Rod");
 		break;
 
-	case InboardTieRod:
+	case Hardpoints::InboardTieRod:
 		return _T("Inboard Tie Rod");
 		break;
 
-	case WheelCenter:
+	case Hardpoints::WheelCenter:
 		return _T("Wheel Center");
 		break;
 
-	case LowerBallJoint:
+	case Hardpoints::LowerBallJoint:
 		return _T("Lower Ball Joint");
 		break;
 
-	case UpperBallJoint:
+	case Hardpoints::UpperBallJoint:
 		return _T("Upper Ball Joint");
 		break;
 
-	case OutboardPushrod:
+	case Hardpoints::OutboardPushrod:
 		return _T("Outboard Pushrod");
 		break;
 
-	case InboardPushrod:
+	case Hardpoints::InboardPushrod:
 		return _T("Inboard Pushrod");
 		break;
 
-	case BellCrankPivot1:
+	case Hardpoints::BellCrankPivot1:
 		return _T("Bell Crank Pivot 1");
 		break;
 
-	case BellCrankPivot2:
+	case Hardpoints::BellCrankPivot2:
 		return _T("Bell Crank Pivot 2");
 		break;
 
-	case OutboardSpring:
+	case Hardpoints::OutboardSpring:
 		return _T("Outboard Spring");
 		break;
 
-	case InboardSpring:
+	case Hardpoints::InboardSpring:
 		return _T("Inboard Spring");
 		break;
 
-	case OutboardDamper:
+	case Hardpoints::OutboardDamper:
 		return _T("Outboard Damper");
 		break;
 
-	case InboardDamper:
+	case Hardpoints::InboardDamper:
 		return _T("Inboard Damper");
 		break;
 
-	case ContactPatch:
+	case Hardpoints::ContactPatch:
 		return _T("Contact Patch");
 		break;
 
-	case OutboardBarLink:
+	case Hardpoints::OutboardBarLink:
 		return _T("Outboard Bar Link");
 		break;
 
-	case InboardBarLink:
+	case Hardpoints::InboardBarLink:
 		return _T("Inboard Bar Link");
 		break;
 
-	case BarArmAtPivot:
+	case Hardpoints::BarArmAtPivot:
 		return _T("Bar Arm At Pivot");
 		break;
 
-	case GearEndBarShaft:
+	case Hardpoints::GearEndBarShaft:
 		return _T("Gear End Bar Shaft");
 		break;
 
-	case OutboardHalfShaft:
+	case Hardpoints::OutboardHalfShaft:
 		return _T("Outboard Half Shaft");
 		break;
 
-	case InboardHalfShaft:
+	case Hardpoints::InboardHalfShaft:
 		return _T("Inboard Half Shaft");
 		break;
 
@@ -271,19 +327,19 @@ vvaseString Corner::GetLocationName(const Location &location)
 {
 	switch (location)
 	{
-	case LocationLeftFront:
+	case Location::LeftFront:
 		return _T("Left Front");
 		break;
 
-	case LocationRightFront:
+	case Location::RightFront:
 		return _T("Right Front");
 		break;
 
-	case LocationLeftRear:
+	case Location::LeftRear:
 		return _T("Left Rear");
 		break;
 
-	case LocationRightRear:
+	case Location::RightRear:
 		return _T("Right Rear");
 		break;
 
@@ -315,8 +371,8 @@ vvaseString Corner::GetLocationName(const Location &location)
 void Corner::ComputeWheelCenter(const double &tireDiameter)
 {
 	// Get the "unperturbed" wheel center from the diameter and the contact patch location
-	hardpoints[WheelCenter] = hardpoints[ContactPatch];
-	hardpoints[WheelCenter].z() = tireDiameter / 2.0;
+	hardpoints[static_cast<int>(Hardpoints::WheelCenter)] = hardpoints[static_cast<int>(Hardpoints::ContactPatch)];
+	hardpoints[static_cast<int>(Hardpoints::WheelCenter)].z() = tireDiameter / 2.0;
 
 	// These next two operations have sign changes depending on which
 	// side of the car this corner is on:
@@ -325,17 +381,17 @@ void Corner::ComputeWheelCenter(const double &tireDiameter)
 
 	// Rotate the wheel center about the X-axis for camber effects
 	double rotationAngle = staticCamber;
-	if (location == LocationRightFront || location == LocationRightRear)
+	if (location == Location::RightFront || location == Location::RightRear)
 		rotationAngle *= -1.0;
 
-	GeometryMath::Rotate(hardpoints[WheelCenter], hardpoints[ContactPatch], rotationAngle, Eigen::Vector3d::UnitX());
+	GeometryMath::Rotate(hardpoints[static_cast<int>(Hardpoints::WheelCenter)], hardpoints[static_cast<int>(Hardpoints::ContactPatch)], rotationAngle, Eigen::Vector3d::UnitX());
 
 	// Rotate the wheel center about the Z axis for toe effects
 	rotationAngle = staticToe;
-	if (location == LocationRightFront || location == LocationRightRear)
+	if (location == Location::RightFront || location == Location::RightRear)
 		rotationAngle *= -1.0;
 
-	GeometryMath::Rotate(hardpoints[WheelCenter], hardpoints[ContactPatch], rotationAngle, Eigen::Vector3d::UnitZ());
+	GeometryMath::Rotate(hardpoints[static_cast<int>(Hardpoints::WheelCenter)], hardpoints[static_cast<int>(Hardpoints::ContactPatch)], rotationAngle, Eigen::Vector3d::UnitZ());
 }
 
 //==========================================================================
@@ -418,9 +474,8 @@ void Corner::Read(BinaryReader& file, const int& fileVersion)
 		file.Read(hardpoints);
 	else
 	{
-		unsigned int i;
-		for (i = 0; i < NumberOfHardpoints; i++)
-			file.Read(hardpoints[i]);
+		for (auto& hardpoint : hardpoints)
+			file.Read(hardpoint);
 	}
 }
 
@@ -458,7 +513,7 @@ Corner& Corner::operator=(const Corner& corner)
 
 	// Copy the hardpoints
 	int i;
-	for (i = 0; i < NumberOfHardpoints; i++)
+	for (i = 0; i < static_cast<int>(Hardpoints::Count); i++)
 		hardpoints[i] = corner.hardpoints[i];
 
 	return *this;

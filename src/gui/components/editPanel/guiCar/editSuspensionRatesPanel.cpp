@@ -146,12 +146,12 @@ void EditSuspensionRatesPanel::UpdateInformation(Suspension *currentSuspension)
 	else
 		rates->SetRowSize(RowRearThirdSpring, 0);
 
-	if (currentSuspension->frontBarStyle != Suspension::SwayBarNone)
+	if (currentSuspension->frontBarStyle != Suspension::BarStyle::None)
 		rates->SetRowSize(RowFrontARB, rates->GetRowHeight(0));
 	else
 		rates->SetRowSize(RowFrontARB, 0);
 
-	if (currentSuspension->rearBarStyle != Suspension::SwayBarNone)
+	if (currentSuspension->rearBarStyle != Suspension::BarStyle::None)
 		rates->SetRowSize(RowRearARB, rates->GetRowHeight(0));
 	else
 		rates->SetRowSize(RowRearARB, 0);
