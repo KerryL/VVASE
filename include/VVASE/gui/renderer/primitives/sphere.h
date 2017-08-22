@@ -24,12 +24,10 @@ namespace VVASE
 class Sphere : public LibPlot2D::Primitive
 {
 public:
-	Sphere(LibPlot2D::RenderWindow &renderWindow);
+	explicit Sphere(LibPlot2D::RenderWindow &renderWindow);
 
 	// Mandatory overloads from Primitive - for creating geometry and testing the
 	// validity of this object's parameters
-	void GenerateGeometry();
-	bool HasValidParameters();
 	bool IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector3d& direction) const;
 
 	// Private data accessors
@@ -38,6 +36,11 @@ public:
 	void SetRadius(const double &radius);
 
 	Eigen::Vector3d GetCenter() const { return center; }
+
+protected:
+	bool HasValidParameters() override;
+	void GenerateGeometry() override;
+	void Update(const unsigned int& i) override;
 
 private:
 	int resolution;

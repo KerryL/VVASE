@@ -80,6 +80,7 @@ CarRenderer::CarRenderer(MainFrame &mainFrame, GuiCar &car,
 	appearanceOptions(car.GetAppearanceOptions()), displayCar(car.GetWorkingCar()),
 	referenceCar(car.GetOriginalCar())
 {
+	SetView3D(true);
 	InternalInitialization();
 }
 
@@ -112,104 +113,6 @@ void CarRenderer::InternalInitialization()
 #ifdef USE_DEBUG_SHAPE
 	DebugShape::SetRenderer(*this);
 #endif
-}
-
-//==========================================================================
-// Class:			CarRenderer
-// Function:		~CarRenderer
-//
-// Description:		Destructor for CarRenderer class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-CarRenderer::~CarRenderer()
-{
-	// Ideally, this stuff would be taken care of by adding these to some
-	// ManagedList, but for now we explicitly delete them one by one...
-	delete origin;
-	delete groundPlane;
-
-	delete rightFrontLowerAArm;
-	delete rightFrontUpperAArm;
-	delete rightFrontPushrod;
-	delete rightFrontTieRod;
-	delete rightFrontTire;
-	delete rightFrontDamper;
-	delete rightFrontSpring;
-	delete rightFrontUpright;
-	delete rightFrontBellCrank;
-	delete rightFrontBarLink;
-	delete rightFrontHalfShaft;
-
-	delete leftFrontLowerAArm;
-	delete leftFrontUpperAArm;
-	delete leftFrontPushrod;
-	delete leftFrontTieRod;
-	delete leftFrontTire;
-	delete leftFrontDamper;
-	delete leftFrontSpring;
-	delete leftFrontUpright;
-	delete leftFrontBellCrank;
-	delete leftFrontBarLink;
-	delete leftFrontHalfShaft;
-
-	delete rightRearLowerAArm;
-	delete rightRearUpperAArm;
-	delete rightRearPushrod;
-	delete rightRearTieRod;
-	delete rightRearTire;
-	delete rightRearDamper;
-	delete rightRearSpring;
-	delete rightRearUpright;
-	delete rightRearBellCrank;
-	delete rightRearBarLink;
-	delete rightRearHalfShaft;
-
-	delete leftRearLowerAArm;
-	delete leftRearUpperAArm;
-	delete leftRearPushrod;
-	delete leftRearTieRod;
-	delete leftRearTire;
-	delete leftRearDamper;
-	delete leftRearSpring;
-	delete leftRearUpright;
-	delete leftRearBellCrank;
-	delete leftRearBarLink;
-	delete leftRearHalfShaft;
-
-	delete steeringRack;
-	delete frontSwayBar;
-
-	delete rearSwayBar;
-
-	delete frontRollCenter;
-	delete rearRollCenter;
-	delete rightPitchCenter;
-	delete leftPitchCenter;
-	delete rightFrontInstantCenter;
-	delete leftFrontInstantCenter;
-	delete rightRearInstantCenter;
-	delete leftRearInstantCenter;
-
-	delete frontRollAxis;
-	delete rearRollAxis;
-	delete rightPitchAxis;
-	delete leftPitchAxis;
-	delete rightFrontInstantAxis;
-	delete leftFrontInstantAxis;
-	delete rightRearInstantAxis;
-	delete leftRearInstantAxis;
-
-	delete helperOrb;
-	delete helperOrbOpposite;
 }
 
 //==========================================================================
@@ -966,90 +869,90 @@ void CarRenderer::UpdateKinematicsDisplay(KinematicOutputs outputs)
 void CarRenderer::CreateActors()
 {
 	// Create the origin and ground plane
-	origin = new Origin(*this);
-	groundPlane = new Plane3D(*this);
+	origin = std::make_unique<Origin>(*this);
+	groundPlane = std::make_unique<Plane3D>(*this);
 
 	// right front corner
-	rightFrontLowerAArm = new AArm(*this);
-	rightFrontUpperAArm = new AArm(*this);
-	rightFrontPushrod = new Link(*this);
-	rightFrontTieRod = new Link(*this);
-	rightFrontTire = new Tire3D(*this);
-	rightFrontDamper = new Damper3D(*this);
-	rightFrontSpring = new Spring3D(*this);
-	rightFrontUpright = new Triangle3D(*this);
-	rightFrontBellCrank = new Triangle3D(*this);
-	rightFrontBarLink = new Link(*this);
-	rightFrontHalfShaft = new Link(*this);
+	rightFrontLowerAArm = std::make_unique<AArm>(*this);
+	rightFrontUpperAArm = std::make_unique<AArm>(*this);
+	rightFrontPushrod = std::make_unique<Link>(*this);
+	rightFrontTieRod = std::make_unique<Link>(*this);
+	rightFrontTire = std::make_unique<Tire3D>(*this);
+	rightFrontDamper = std::make_unique<Damper3D>(*this);
+	rightFrontSpring = std::make_unique<Spring3D>(*this);
+	rightFrontUpright = std::make_unique<Triangle3D>(*this);
+	rightFrontBellCrank = std::make_unique<Triangle3D>(*this);
+	rightFrontBarLink = std::make_unique<Link>(*this);
+	rightFrontHalfShaft = std::make_unique<Link>(*this);
 
 	// left front corner
-	leftFrontLowerAArm = new AArm(*this);
-	leftFrontUpperAArm = new AArm(*this);
-	leftFrontPushrod = new Link(*this);
-	leftFrontTieRod = new Link(*this);
-	leftFrontTire = new Tire3D(*this);
-	leftFrontDamper = new Damper3D(*this);
-	leftFrontSpring = new Spring3D(*this);
-	leftFrontUpright = new Triangle3D(*this);
-	leftFrontBellCrank = new Triangle3D(*this);
-	leftFrontBarLink = new Link(*this);
-	leftFrontHalfShaft = new Link(*this);
+	leftFrontLowerAArm = std::make_unique<AArm>(*this);
+	leftFrontUpperAArm = std::make_unique<AArm>(*this);
+	leftFrontPushrod = std::make_unique<Link>(*this);
+	leftFrontTieRod = std::make_unique<Link>(*this);
+	leftFrontTire = std::make_unique<Tire3D>(*this);
+	leftFrontDamper = std::make_unique<Damper3D>(*this);
+	leftFrontSpring = std::make_unique<Spring3D>(*this);
+	leftFrontUpright = std::make_unique<Triangle3D>(*this);
+	leftFrontBellCrank = std::make_unique<Triangle3D>(*this);
+	leftFrontBarLink = std::make_unique<Link>(*this);
+	leftFrontHalfShaft = std::make_unique<Link>(*this);
 
 	// right rear corner
-	rightRearLowerAArm = new AArm(*this);
-	rightRearUpperAArm = new AArm(*this);
-	rightRearPushrod = new Link(*this);
-	rightRearTieRod = new Link(*this);
-	rightRearTire = new Tire3D(*this);
-	rightRearDamper = new Damper3D(*this);
-	rightRearSpring = new Spring3D(*this);
-	rightRearUpright = new Triangle3D(*this);
-	rightRearBellCrank = new Triangle3D(*this);
-	rightRearBarLink = new Link(*this);
-	rightRearHalfShaft = new Link(*this);
+	rightRearLowerAArm = std::make_unique<AArm>(*this);
+	rightRearUpperAArm = std::make_unique<AArm>(*this);
+	rightRearPushrod = std::make_unique<Link>(*this);
+	rightRearTieRod = std::make_unique<Link>(*this);
+	rightRearTire = std::make_unique<Tire3D>(*this);
+	rightRearDamper = std::make_unique<Damper3D>(*this);
+	rightRearSpring = std::make_unique<Spring3D>(*this);
+	rightRearUpright = std::make_unique<Triangle3D>(*this);
+	rightRearBellCrank = std::make_unique<Triangle3D>(*this);
+	rightRearBarLink = std::make_unique<Link>(*this);
+	rightRearHalfShaft = std::make_unique<Link>(*this);
 
 	// left rear corner
-	leftRearLowerAArm = new AArm(*this);
-	leftRearUpperAArm = new AArm(*this);
-	leftRearPushrod = new Link(*this);
-	leftRearTieRod = new Link(*this);
-	leftRearTire = new Tire3D(*this);
-	leftRearDamper = new Damper3D(*this);
-	leftRearSpring = new Spring3D(*this);
-	leftRearUpright = new Triangle3D(*this);
-	leftRearBellCrank = new Triangle3D(*this);
-	leftRearBarLink = new Link(*this);
-	leftRearHalfShaft = new Link(*this);
+	leftRearLowerAArm = std::make_unique<AArm>(*this);
+	leftRearUpperAArm = std::make_unique<AArm>(*this);
+	leftRearPushrod = std::make_unique<Link>(*this);
+	leftRearTieRod = std::make_unique<Link>(*this);
+	leftRearTire = std::make_unique<Tire3D>(*this);
+	leftRearDamper = std::make_unique<Damper3D>(*this);
+	leftRearSpring = std::make_unique<Spring3D>(*this);
+	leftRearUpright = std::make_unique<Triangle3D>(*this);
+	leftRearBellCrank = std::make_unique<Triangle3D>(*this);
+	leftRearBarLink = std::make_unique<Link>(*this);
+	leftRearHalfShaft = std::make_unique<Link>(*this);
 
 	// Front end
-	steeringRack = new Link(*this);
-	frontSwayBar = new Swaybar3D(*this);
+	steeringRack = std::make_unique<Link>(*this);
+	frontSwayBar = std::make_unique<Swaybar3D>(*this);
 
 	// Rear end
-	rearSwayBar = new Swaybar3D(*this);
+	rearSwayBar = std::make_unique<Swaybar3D>(*this);
 
 	// Kinematic display objects
-	frontRollCenter = new Point3D(*this);
-	rearRollCenter = new Point3D(*this);
-	rightPitchCenter = new Point3D(*this);
-	leftPitchCenter = new Point3D(*this);
-	rightFrontInstantCenter = new Point3D(*this);
-	leftFrontInstantCenter = new Point3D(*this);
-	rightRearInstantCenter = new Point3D(*this);
-	leftRearInstantCenter = new Point3D(*this);
+	frontRollCenter = std::make_unique<Point3D>(*this);
+	rearRollCenter = std::make_unique<Point3D>(*this);
+	rightPitchCenter = std::make_unique<Point3D>(*this);
+	leftPitchCenter = std::make_unique<Point3D>(*this);
+	rightFrontInstantCenter = std::make_unique<Point3D>(*this);
+	leftFrontInstantCenter = std::make_unique<Point3D>(*this);
+	rightRearInstantCenter = std::make_unique<Point3D>(*this);
+	leftRearInstantCenter = std::make_unique<Point3D>(*this);
 
-	frontRollAxis = new Vector3D(*this);
-	rearRollAxis = new Vector3D(*this);
-	rightPitchAxis = new Vector3D(*this);
-	leftPitchAxis = new Vector3D(*this);
-	rightFrontInstantAxis = new Vector3D(*this);
-	leftFrontInstantAxis = new Vector3D(*this);
-	rightRearInstantAxis = new Vector3D(*this);
-	leftRearInstantAxis = new Vector3D(*this);
+	frontRollAxis = std::make_unique<Vector3D>(*this);
+	rearRollAxis = std::make_unique<Vector3D>(*this);
+	rightPitchAxis = std::make_unique<Vector3D>(*this);
+	leftPitchAxis = std::make_unique<Vector3D>(*this);
+	rightFrontInstantAxis = std::make_unique<Vector3D>(*this);
+	leftFrontInstantAxis = std::make_unique<Vector3D>(*this);
+	rightRearInstantAxis = std::make_unique<Vector3D>(*this);
+	leftRearInstantAxis = std::make_unique<Vector3D>(*this);
 
 	// Helper orb
-	helperOrb = new Point3D(*this);
-	helperOrbOpposite = new Point3D(*this);
+	helperOrb = std::make_unique<Point3D>(*this);
+	helperOrbOpposite = std::make_unique<Point3D>(*this);
 }
 
 //==========================================================================
@@ -1189,7 +1092,7 @@ bool CarRenderer::TraceClickToHardpoint(const double& x, const double& y,
 void CarRenderer::OnLeftClick(wxMouseEvent& event)
 {
 	event.Skip();
-	if (isInteracting || sawLeftButtonGoDown)
+	if (mIsInteracting || mObservedLeftButtonDown)
 		return;
 
 	Suspension::Hardpoints suspensionPoint;
@@ -1228,7 +1131,7 @@ void CarRenderer::OnLeftClick(wxMouseEvent& event)
 void CarRenderer::OnRightClick(wxMouseEvent& event)
 {
 	event.Skip();
-	if (isInteracting)
+	if (mIsInteracting)
 		return;
 
 	if (!TraceClickToHardpoint(event.GetX(), event.GetY(), suspensionPoint,
@@ -1301,12 +1204,11 @@ std::vector<const LibPlot2D::Primitive*> CarRenderer::IntersectWithPrimitive(
 {
 	std::vector<const LibPlot2D::Primitive*> intersected;
 
-	unsigned int i;
-	for (i = 0; i < primitiveList.size(); i++)
+	/*for (const auto& primitive : mPrimitiveList)
 	{
-		if (primitiveList[i]->IsIntersectedBy(point, direction))
-			intersected.push_back(primitiveList[i]);
-	}
+		if (primitive->IsIntersectedBy(point, direction))
+			intersected.push_back(primitive);
+	}*/// TODO:  Re-implement
 
 	return intersected;
 }
@@ -1622,6 +1524,56 @@ void CarRenderer::DoEditPointDialog()
 void CarRenderer::OnContextEdit(wxCommandEvent& WXUNUSED(event))
 {
 	DoEditPointDialog();
+}
+
+//==========================================================================
+// Class:			RenderWindow
+// Function:		Unproject
+//
+// Description:		Returns the 3D location of the specified screen coordinate.
+//
+// Input Arguments:
+//		x	= const double&
+//		y	= const double&
+//		z	= const double&
+//
+// Output Arguments:
+//		point	= Eigen::Vector3d&
+//
+// Return Value:
+//		bool, true for success, false otherwise
+//
+//==========================================================================
+bool CarRenderer::Unproject(const double& x, const double& y, const double& z,
+	Eigen::Vector3d& point) const
+{
+	/*assert(viewToModel);
+
+	Matrix modelViewMatrix(4, 4);
+	ConvertGLToMatrix(modelViewMatrix, glModelviewMatrix);
+
+	Matrix projectionMatrix;
+	if (view3D)
+		projectionMatrix = Generate3DProjectionMatrix();
+	else
+		projectionMatrix = Generate2DProjectionMatrix();
+
+	Matrix a(projectionMatrix * modelViewMatrix);
+
+	int w, h;
+	GetSize(&w, &h);
+	Matrix v(4, 1, x / w * 2.0 - 1.0, (h - y) / h * 2.0 - 1.0, z, 1.0);
+
+	Matrix out(a.GetInverse() * v);
+	if (VVASEMath::IsZero(out(3,0)))
+		return false;
+
+	out(3,0) = 1.0 / out(3,0);
+	point.x() = out(0,0) * out(3,0);
+	point.y() = out(1,0) * out(3,0);
+	point.z() = out(2,0) * out(3,0);*/
+
+	return true;
 }
 
 }// namespace VVASE

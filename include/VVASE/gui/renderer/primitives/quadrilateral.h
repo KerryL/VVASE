@@ -24,12 +24,10 @@ namespace VVASE
 class Quadrilateral : public LibPlot2D::Primitive
 {
 public:
-	Quadrilateral(LibPlot2D::RenderWindow &renderWindow);
+	explicit Quadrilateral(LibPlot2D::RenderWindow &renderWindow);
 
 	// Mandatory overloads from Primitive - for creating geometry and testing the
 	// validity of this object's parameters
-	void GenerateGeometry();
-	bool HasValidParameters();
 	bool IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector3d& direction) const;
 
 	// Private data accessors
@@ -38,6 +36,11 @@ public:
 	void SetAxis(const Eigen::Vector3d &axis);
 	void SetWidth(const double &width);
 	void SetLength(const double &length);
+
+protected:
+	bool HasValidParameters() override;
+	void GenerateGeometry() override;
+	void Update(const unsigned int& i) override;
 
 private:
 	Eigen::Vector3d normal;

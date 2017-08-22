@@ -24,12 +24,10 @@ namespace VVASE
 class Cylinder : public LibPlot2D::Primitive
 {
 public:
-	Cylinder(LibPlot2D::RenderWindow &renderWindow);
+	explicit Cylinder(LibPlot2D::RenderWindow &renderWindow);
 
 	// Mandatory overloads from Primitive - for creating geometry and testing the
 	// validity of this object's parameters
-	void GenerateGeometry();
-	bool HasValidParameters();
 	bool IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector3d& direction) const;
 
 	// Private data accessors
@@ -38,6 +36,11 @@ public:
 	void SetEndPoint1(const Eigen::Vector3d &endPoint1);
 	void SetEndPoint2(const Eigen::Vector3d &endPoint2);
 	void SetRadius(const double &radius);
+
+protected:
+	bool HasValidParameters() override;
+	void GenerateGeometry() override;
+	void Update(const unsigned int& i) override;
 
 private:
 	bool drawCaps;

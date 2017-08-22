@@ -24,12 +24,10 @@ namespace VVASE
 class Disk : public LibPlot2D::Primitive
 {
 public:
-	Disk(LibPlot2D::RenderWindow &renderWindow);
+	explicit Disk(LibPlot2D::RenderWindow &renderWindow);
 
 	// Mandatory overloads from Primitive - for creating geometry and testing the
 	// validity of this object's parameters
-	void GenerateGeometry();
-	bool HasValidParameters();
 	bool IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector3d& direction) const;
 
 	void SetResolution(const int &resolution);
@@ -37,6 +35,11 @@ public:
 	void SetInnerRadius(const double &innerRadius);
 	void SetCenter(const Eigen::Vector3d &center);
 	void SetNormal(const Eigen::Vector3d &normal);
+
+protected:
+	bool HasValidParameters() override;
+	void GenerateGeometry() override;
+	void Update(const unsigned int& i) override;
 
 private:
 	int resolution;

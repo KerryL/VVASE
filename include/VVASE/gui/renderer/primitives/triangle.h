@@ -24,19 +24,19 @@ namespace VVASE
 class Triangle : public LibPlot2D::Primitive
 {
 public:
-	Triangle(LibPlot2D::RenderWindow &renderWindow);
-	~Triangle() = default;
+	explicit Triangle(LibPlot2D::RenderWindow &renderWindow);
 
-	// Mandatory overloads from Primitive - for creating geometry and testing the
-	// validity of this object's parameters
-	void GenerateGeometry();
-	bool HasValidParameters();
 	bool IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector3d& direction) const;
 
 	// Private data accessors
 	void SetCorner1(const Eigen::Vector3d &corner1);
 	void SetCorner2(const Eigen::Vector3d &corner2);
 	void SetCorner3(const Eigen::Vector3d &corner3);
+
+protected:
+	bool HasValidParameters() override;
+	void GenerateGeometry() override;
+	void Update(const unsigned int& i) override;
 
 private:
 	Eigen::Vector3d corner1;

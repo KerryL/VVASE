@@ -24,13 +24,10 @@ namespace VVASE
 class Cone : public LibPlot2D::Primitive
 {
 public:
-	Cone(LibPlot2D::RenderWindow &renderWindow);
-	~Cone();
+	explicit Cone(LibPlot2D::RenderWindow &renderWindow);
 
 	// Mandatory overloads from Primitive - for creating geometry and testing the
 	// validity of this object's parameters
-	void GenerateGeometry();
-	bool HasValidParameters();
 	bool IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector3d& direction) const;
 
 	// Private data accessors
@@ -39,6 +36,11 @@ public:
 	void SetTip(const Eigen::Vector3d &tip);
 	void SetBaseCenter(const Eigen::Vector3d &baseCenter);
 	void SetRadius(const double &radius);
+
+protected:
+	bool HasValidParameters() override;
+	void GenerateGeometry() override;
+	void Update(const unsigned int& i) override;
 
 private:
 	bool drawCaps;
