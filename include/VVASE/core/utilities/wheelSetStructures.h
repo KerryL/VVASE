@@ -21,10 +21,10 @@ namespace VVASE
 template<typename T>
 struct CornerSet
 {
-	T rightFront;
-	T leftFront;
-	T rightRear;
-	T leftRear;
+	T rightFront = T();
+	T leftFront = T();
+	T rightRear = T();
+	T leftRear = T();
 
 	bool operator==(const CornerSet<T>& target) const
 	{
@@ -46,8 +46,8 @@ struct CornerSet
 template<typename T>
 struct EndSet
 {
-	T front;
-	T rear;
+	T front = T();
+	T rear = T();
 
 	bool operator==(const EndSet<T> &target) const
 	{

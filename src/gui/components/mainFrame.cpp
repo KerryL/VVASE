@@ -125,9 +125,9 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxEmptyString, wxDefaultPositio
 		wxDefaultSize, wxTE_PROCESS_TAB | wxTE_MULTILINE | wxHSCROLL | wxTE_READONLY
 		| wxTE_RICH);
 
-	kinematicToolbar = NULL;
-	quasiStaticToolbar = NULL;
-	toolbar3D = NULL;
+	kinematicToolbar = nullptr;
+	quasiStaticToolbar = nullptr;
+	toolbar3D = nullptr;
 	CreateKinematicAnalysisToolbar();
 	CreateQuasiStaticAnalysisToolbar();
 	Create3DToolbar();
@@ -136,7 +136,7 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxEmptyString, wxDefaultPositio
 
 	// These need to be in this order - otherwise the centering doesn't work (resize first)
 	DoLayout();
-	InitializeSolver();
+	jobQueue = std::make_unique<JobQueue>(GetEventHandler());
 	SetProperties();// Includes reading configuration file
 
 	activeIndex = -1;
@@ -165,12 +165,6 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxEmptyString, wxDefaultPositio
 //==========================================================================
 MainFrame::~MainFrame()
 {
-	delete recentFileManager;
-	recentFileManager = NULL;
-
-	delete jobQueue;
-	jobQueue = NULL;
-
 	while (openObjectList.size() > 0)
 		RemoveObjectFromList(0);
 
@@ -487,44 +481,6 @@ void MainFrame::OnPaneClose(wxAuiManagerEvent& event)
 
 //==========================================================================
 // Class:			MainFrame
-// Function:		InitializeSolver
-//
-// Description:		Initializes solver settings.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-void MainFrame::InitializeSolver()
-{
-	jobQueue = new JobQueue(GetEventHandler());
-
-	activeThreads = 0;
-	openJobCount = 0;
-	numberOfThreads = 0;
-
-	kinematicInputs.pitch = 0.0;
-	kinematicInputs.roll = 0.0;
-	kinematicInputs.heave = 0.0;
-	kinematicInputs.rackTravel = 0.0;
-	kinematicInputs.tireDeflections.leftFront = 0.0;
-	kinematicInputs.tireDeflections.rightFront = 0.0;
-	kinematicInputs.tireDeflections.leftRear = 0.0;
-	kinematicInputs.tireDeflections.rightRear = 0.0;
-
-	quasiStaticInputs.gx = 0.0;
-	quasiStaticInputs.gy = 0.0;
-	quasiStaticInputs.rackTravel = 0.0;
-}
-
-//==========================================================================
-// Class:			MainFrame
 // Function:		SetNumberOfThreads
 //
 // Description:		Sets the number of worker threads to the specified value.
@@ -558,9 +514,7 @@ void MainFrame::SetNumberOfThreads(unsigned int newNumberOfThreads)
 			openJobCount++;
 
 			// These threads will delete themselves after an EXIT job
-			WorkerThread *newThread = new WorkerThread(*jobQueue);
-			// FIXME:  If we want to set priority, this is where it needs to happen
-			//newThread->Run();// TODO:  I think we loose the threads here?  Do we need to maintain handles?
+			new WorkerThread(*jobQueue);
 		}
 	}
 	else if (newNumberOfThreads < numberOfThreads)
@@ -574,7 +528,7 @@ void MainFrame::SetNumberOfThreads(unsigned int newNumberOfThreads)
 
 //==========================================================================
 // Class:			MainFrame
-// Function:		SetNumberOfThreads
+// Function:		SetOutputFont
 //
 // Description:		Sets the font to use for text output and assigns it to
 //					the panel.
@@ -721,7 +675,7 @@ void MainFrame::CreateMenuBar()
 	mnuHelp->Append(IdMenuHelpAbout, _T("&About"), _T("Show About dialog"), wxITEM_NORMAL);
 	menuBar->Append(mnuHelp, _T("&Help"));
 
-	recentFileManager = new wxFileHistory(maxRecentFiles, IdMenuFileRecentStart);
+	recentFileManager = std::make_unique<wxFileHistory>(maxRecentFiles, IdMenuFileRecentStart);
 	recentFileManager->UseMenu(mnuRecentFiles);
 
 	SetMenuBar(menuBar);
@@ -2009,7 +1963,7 @@ void MainFrame::HelpManualEvent(wxCommandEvent& WXUNUSED(event))
 	manualFileName.Append(_T("'"));
 #endif
 
-	wxFileType *pdfFileType = mimeManager.GetFileTypeFromExtension(_T("pdf"));// we now own this memory
+	std::unique_ptr<wxFileType> pdfFileType(mimeManager.GetFileTypeFromExtension(_T("pdf")));// we now own this memory
 	if (!pdfFileType)
 		Debugger::GetInstance() << "ERROR:  Unknown extension 'pdf'" << Debugger::Priority::High;
 	else if (!pdfFileType->GetOpenCommand(&openPDFManualCommand,
@@ -2020,8 +1974,6 @@ void MainFrame::HelpManualEvent(wxCommandEvent& WXUNUSED(event))
 		if (wxExecute(openPDFManualCommand) == 0)
 			Debugger::GetInstance() << "ERROR:  Could not find '" << manualFileName << "'" << Debugger::Priority::High;
 	}
-
-	delete pdfFileType;
 }
 
 //==========================================================================
@@ -2826,9 +2778,9 @@ bool MainFrame::CloseThisForm()
 void MainFrame::ReadConfiguration()
 {
 	// Create a configuration file object
-	wxFileConfig *configurationFile = new wxFileConfig(_T(""), _T(""),
+	std::unique_ptr<wxFileConfig> configurationFile(std::make_unique<wxFileConfig>(_T(""), _T(""),
 		wxFileName(wxStandardPaths::Get().GetExecutablePath()).GetPathWithSep() + pathToConfigFile, _T(""),
-		wxCONFIG_USE_RELATIVE_PATH);
+		wxCONFIG_USE_RELATIVE_PATH));
 
 	// Read UNITS configuration from file
 	UnitConverter::GetInstance().SetAccelerationUnits(UnitConverter::UnitsOfAcceleration(
@@ -2920,9 +2872,6 @@ void MainFrame::ReadConfiguration()
 
 	// Read recent file history
 	recentFileManager->Load(*configurationFile);
-
-	delete configurationFile;
-	configurationFile = NULL;
 }
 
 //==========================================================================
@@ -2944,9 +2893,9 @@ void MainFrame::ReadConfiguration()
 void MainFrame::WriteConfiguration()
 {
 	// Create a configuration file object
-	wxFileConfig *configurationFile = new wxFileConfig(_T(""), _T(""),
+	std::unique_ptr<wxFileConfig> configurationFile(std::make_unique<wxFileConfig>(_T(""), _T(""),
 		wxFileName(wxStandardPaths::Get().GetExecutablePath()).GetPathWithSep() + pathToConfigFile, _T(""),
-		wxCONFIG_USE_RELATIVE_PATH);
+		wxCONFIG_USE_RELATIVE_PATH));
 
 	// Write UNITS configuration to file
 	configurationFile->Write(_T("/Units/Acceleration"), (int)UnitConverter::GetInstance().GetAccelerationUnits());
@@ -3002,10 +2951,6 @@ void MainFrame::WriteConfiguration()
 
 	// Write recent file history
 	recentFileManager->Save(*configurationFile);
-
-	// Delete file object
-	delete configurationFile;
-	configurationFile = NULL;
 }
 
 //==========================================================================
@@ -3184,17 +3129,17 @@ void MainFrame::CreateContextMenu(int objectIndex, bool allowClosing)
 	objectOfInterestIndex = objectIndex;
 
 	// Declare the menu variable and get the position of the cursor
-	wxMenu *contextMenu(NULL);
+	std::unique_ptr<wxMenu> contextMenu;
 
 	// Depending on the type of the item, we might want additional options (or none at all)
 	switch (openObjectList[objectIndex]->GetType())
 	{
 	case GuiObject::TypeCar:
-		contextMenu = CreateCarMenu();
+		contextMenu = std::unique_ptr<wxMenu>(CreateCarMenu());
 		break;
 
 	case GuiObject::TypeSweep:
-		contextMenu = CreateSweepMenu();
+		contextMenu = std::unique_ptr<wxMenu>(CreateSweepMenu());
 		break;
 
 	// Unused types
@@ -3224,11 +3169,7 @@ void MainFrame::CreateContextMenu(int objectIndex, bool allowClosing)
 	contextMenu->Prepend(IdMenuFileSave, _T("&Save"));
 
 	// Show the menu
-	PopupMenu(contextMenu);
-
-	// Delete the context menu object
-	delete contextMenu;
-	contextMenu = NULL;
+	PopupMenu(contextMenu.get());
 
 	// The event handlers for whatever was clicked get called here
 	// Reset the object index to the active object index

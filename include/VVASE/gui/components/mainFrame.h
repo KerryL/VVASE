@@ -136,12 +136,12 @@ public:
 private:
 	wxAuiManager manager;
 
-	wxFileHistory *recentFileManager;
+	std::unique_ptr<wxFileHistory> recentFileManager;
 
-	JobQueue *jobQueue;
-	unsigned short activeThreads;
-	unsigned short numberOfThreads;
-	unsigned int openJobCount;
+	std::unique_ptr<JobQueue> jobQueue;
+	unsigned short activeThreads = 0;
+	unsigned short numberOfThreads = 0;
+	unsigned int openJobCount = 0;
 
 	void CreateMenuBar();
 	void CreateKinematicAnalysisToolbar();
@@ -151,7 +151,6 @@ private:
 	// Functions that do some of the frame initialization and control positioning
 	void DoLayout();
 	void SetProperties();
-	void InitializeSolver();
 
 	void SetNotebookPage(int index);
 
@@ -183,8 +182,8 @@ private:
 	int objectOfInterestIndex;
 
 	// For dynamically changing the menu bar
-	wxMenu *CreateCarMenu();
-	wxMenu *CreateSweepMenu();
+	wxMenu* CreateCarMenu();
+	wxMenu* CreateSweepMenu();
 
 	// The input parameters for the kinematic analyses
 	Kinematics::Inputs kinematicInputs;

@@ -36,12 +36,12 @@ public:
 	// Definition for the inputs to the kinematics solver
 	struct Inputs
 	{
-		double pitch;						// [rad]
-		double roll;						// [rad]
-		double heave;						// [in]
-		double rackTravel;					// [in]
-		Eigen::Vector3d centerOfRotation;	// [in]
-		RotationSequence sequence;
+		double pitch = 0.0;											// [rad]
+		double roll = 0.0;											// [rad]
+		double heave = 0.0;											// [in]
+		double rackTravel = 0.0;									// [in]
+		Eigen::Vector3d centerOfRotation = Eigen::Vector3d::Zero();	// [in]
+		RotationSequence sequence = RotationSequence::PitchRoll;
 		WheelSet tireDeflections;			// [in]
 
 		bool operator==(const Inputs& target) const

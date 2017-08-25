@@ -38,9 +38,9 @@ public:
 
 	struct Inputs
 	{
-		double rackTravel;// [in]
-		double gx;// [G]
-		double gy;// [G]
+		double rackTravel = 0.0;// [in]
+		double gx = 0.0;// [G]
+		double gy = 0.0;// [G]
 	};
 
 	Kinematics::Inputs Solve(const Car* originalCar, Car* workingCar,
