@@ -38,11 +38,7 @@ namespace VVASE
 //==========================================================================
 Cylinder::Cylinder(LibPlot2D::RenderWindow &renderWindow) : Primitive(renderWindow)
 {
-	drawCaps = false;
-	radius = 0.0;
-	endPoint1.setZero();
-	endPoint2.setZero();
-	resolution = 4;
+	mBufferInfo.resize(1);
 }
 
 //==========================================================================
@@ -64,80 +60,11 @@ Cylinder::Cylinder(LibPlot2D::RenderWindow &renderWindow) : Primitive(renderWind
 //==========================================================================
 void Cylinder::GenerateGeometry()
 {
-	if (resolution < 3)
-		resolution = 3;
+	/*glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
+	glDrawArrays(GL_QUADS, 0, mBufferInfo[0].vertexCount);
+	glBindVertexArray(0);*/
 
-	const double halfHeight((endPoint1 - endPoint2).norm() / 2.0);
-
-	const Eigen::Vector3d axisDirection((endPoint2 - endPoint1).normalized());
-	const Eigen::Vector3d center(endPoint1 + axisDirection * halfHeight);
-	const Eigen::Vector3d referenceDirection(1.0, 0.0, 0.0);
-
-	// Determine the angle and axis of rotation
-	Eigen::Vector3d axisOfRotation = referenceDirection.cross(axisDirection);
-	double angle = acos(axisDirection.dot(referenceDirection));// [rad]
-
-	glPushMatrix();
-
-		glTranslated(center.x(), center.y(), center.z());
-
-		// Rotate the current matrix, if the rotation axis is non-zero
-		if (!VVASE::Math::IsZero(axisOfRotation.norm()))
-			glRotated(UnitConverter::RAD_TO_DEG(angle), axisOfRotation.x(), axisOfRotation.y(), axisOfRotation.z());
-
-		// Create the cylinder along the X-axis (must match the reference direction above)
-		// (the openGL matrices take care of correct position/orientation in hardware)
-		// We'll use a triangle strip to draw the cylinder
-		glBegin(GL_TRIANGLE_STRIP);
-
-		int i;
-		Eigen::Vector3d point(halfHeight, 0.0, 0.0);
-		for (i = 0; i <= resolution; i++)
-		{
-			angle = (double)i * 2.0 * VVASE::Math::Pi / (double)resolution;
-			point.y() = radius * cos(angle);
-			point.z() = radius * sin(angle);
-
-			glNormal3d(0.0, point.y() / radius, point.z() / radius);
-
-			glVertex3d(point.x(), point.y(), point.z());
-			glVertex3d(-point.x(), point.y(), point.z());
-		}
-
-		glEnd();
-
-		if (drawCaps)
-		{
-			glNormal3d(1.0, 0.0, 0.0);
-			glBegin(GL_POLYGON);
-
-			for (i = 0; i <= resolution; i++)
-			{
-				angle = static_cast<double>(i) * 2.0 * VVASE::Math::Pi / (double)resolution;
-				point.y() = radius * cos(angle);
-				point.z() = radius * sin(angle);
-
-				glVertex3d(point.x(), point.y(), point.z());
-			}
-
-			glEnd();
-
-			glNormal3d(-1.0, 0.0, 0.0);
-			glBegin(GL_POLYGON);
-
-			for (i = 0; i <= resolution; i++)
-			{
-				angle = (double)i * 2.0 * VVASE::Math::Pi / (double)resolution;
-				point.y() = radius * cos(angle);
-				point.z() = radius * sin(angle);
-
-				glVertex3d(-point.x(), point.y(), point.z());
-			}
-
-			glEnd();
-		}
-
-	glPopMatrix();
+	assert(!LibPlot2D::RenderWindow::GLHasError());
 }
 
 //==========================================================================
@@ -300,8 +227,100 @@ bool Cylinder::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector
 	return false;
 }
 
+//==========================================================================
+// Class:			Cylinder
+// Function:		Update
+//
+// Description:		Updates the GL buffers associated with this object.
+//
+// Input Arguments:
+//		i	= const unsigned int&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
 void Cylinder::Update(const unsigned int& i)
 {
+	/*if (resolution < 3)
+		resolution = 3;
+
+	const double halfHeight((endPoint1 - endPoint2).norm() / 2.0);
+
+	const Eigen::Vector3d axisDirection((endPoint2 - endPoint1).normalized());
+	const Eigen::Vector3d center(endPoint1 + axisDirection * halfHeight);
+	const Eigen::Vector3d referenceDirection(1.0, 0.0, 0.0);
+
+	// Determine the angle and axis of rotation
+	Eigen::Vector3d axisOfRotation = referenceDirection.cross(axisDirection);
+	double angle = acos(axisDirection.dot(referenceDirection));// [rad]
+
+	glPushMatrix();
+
+		glTranslated(center.x(), center.y(), center.z());
+
+		// Rotate the current matrix, if the rotation axis is non-zero
+		if (!VVASE::Math::IsZero(axisOfRotation.norm()))
+			glRotated(UnitConverter::RAD_TO_DEG(angle), axisOfRotation.x(), axisOfRotation.y(), axisOfRotation.z());
+
+		// Create the cylinder along the X-axis (must match the reference direction above)
+		// (the openGL matrices take care of correct position/orientation in hardware)
+		// We'll use a triangle strip to draw the cylinder
+		glBegin(GL_TRIANGLE_STRIP);
+
+		int i;
+		Eigen::Vector3d point(halfHeight, 0.0, 0.0);
+		for (i = 0; i <= resolution; i++)
+		{
+			angle = (double)i * 2.0 * VVASE::Math::Pi / (double)resolution;
+			point.y() = radius * cos(angle);
+			point.z() = radius * sin(angle);
+
+			glNormal3d(0.0, point.y() / radius, point.z() / radius);
+
+			glVertex3d(point.x(), point.y(), point.z());
+			glVertex3d(-point.x(), point.y(), point.z());
+		}
+
+		glEnd();
+
+		if (drawCaps)
+		{
+			glNormal3d(1.0, 0.0, 0.0);
+			glBegin(GL_POLYGON);
+
+			for (i = 0; i <= resolution; i++)
+			{
+				angle = static_cast<double>(i) * 2.0 * VVASE::Math::Pi / (double)resolution;
+				point.y() = radius * cos(angle);
+				point.z() = radius * sin(angle);
+
+				glVertex3d(point.x(), point.y(), point.z());
+			}
+
+			glEnd();
+
+			glNormal3d(-1.0, 0.0, 0.0);
+			glBegin(GL_POLYGON);
+
+			for (i = 0; i <= resolution; i++)
+			{
+				angle = (double)i * 2.0 * VVASE::Math::Pi / (double)resolution;
+				point.y() = radius * cos(angle);
+				point.z() = radius * sin(angle);
+
+				glVertex3d(-point.x(), point.y(), point.z());
+			}
+
+			glEnd();
+		}
+
+	glPopMatrix();*/
+
+	assert(!LibPlot2D::RenderWindow::GLHasError());
 }
 
 }// namespace VVASE

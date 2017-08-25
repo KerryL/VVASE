@@ -38,11 +38,7 @@ namespace VVASE
 //==========================================================================
 Disk::Disk(LibPlot2D::RenderWindow &renderWindow) : Primitive(renderWindow)
 {
-	outerRadius = 0.0;
-	innerRadius = 0.0;
-	center.setZero();
-	normal.setZero();
-	resolution = 4;
+	mBufferInfo.resize(1);
 }
 
 //==========================================================================
@@ -64,55 +60,11 @@ Disk::Disk(LibPlot2D::RenderWindow &renderWindow) : Primitive(renderWindow)
 //==========================================================================
 void Disk::GenerateGeometry()
 {
-	if (resolution < 3)
-		resolution = 3;
+	/*glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
+	glDrawArrays(GL_QUADS, 0, mBufferInfo[0].vertexCount);
+	glBindVertexArray(0);*/
 
-	// Our reference direction will be the X-axis direction
-	Eigen::Vector3d referenceDirection(1.0, 0.0, 0.0);
-
-	// Determine the angle and axis of rotation
-	Eigen::Vector3d axisOfRotation = referenceDirection.cross(normal);
-	double angle = acos(normal.dot(referenceDirection));// [rad]
-
-	glPushMatrix();
-
-		// Translate the current matrix
-		glTranslated(center.x(), center.y(), center.z());
-
-		// Rotate the current matrix, if the rotation axis is non-zero
-		if (!VVASE::Math::IsZero(axisOfRotation.norm()))
-			glRotated(UnitConverter::RAD_TO_DEG(angle), axisOfRotation.x(), axisOfRotation.y(), axisOfRotation.z());
-
-		// Set the normal direction
-		glNormal3d(normal.x(), normal.y(), normal.z());
-
-		// We'll use a triangle strip to draw the disk
-		glBegin(GL_TRIANGLE_STRIP);
-
-		// Loop to generate the triangles
-		Eigen::Vector3d insidePoint(0.0, 0.0, 0.0);
-		Eigen::Vector3d outsidePoint(0.0, 0.0, 0.0);
-		int i;
-		for (i = 0; i <= resolution; i++)
-		{
-			// Determine the angle to the current set of points
-			angle = (double)i * 2.0 * VVASE::Math::Pi / (double)resolution;
-
-			// Determine the Y and Z ordinates based on this angle and the radii
-			outsidePoint.y() = outerRadius * cos(angle);
-			outsidePoint.z() = outerRadius * sin(angle);
-
-			insidePoint.y() = innerRadius * cos(angle);
-			insidePoint.z() = innerRadius * sin(angle);
-
-			// Add the next two points
-			glVertex3d(outsidePoint.x(), outsidePoint.y(), outsidePoint.z());
-			glVertex3d(insidePoint.x(), insidePoint.y(), insidePoint.z());
-		}
-
-		glEnd();
-
-	glPopMatrix();
+	assert(!LibPlot2D::RenderWindow::GLHasError());
 }
 
 //==========================================================================
@@ -274,8 +226,75 @@ bool Disk::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector3d& 
 	return false;
 }
 
+//==========================================================================
+// Class:			Disk
+// Function:		Update
+//
+// Description:		Updates the GL buffers associated with this object.
+//
+// Input Arguments:
+//		i	= const unsigned int&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
 void Disk::Update(const unsigned int& i)
 {
+	/*if (resolution < 3)
+		resolution = 3;
+
+	// Our reference direction will be the X-axis direction
+	Eigen::Vector3d referenceDirection(1.0, 0.0, 0.0);
+
+	// Determine the angle and axis of rotation
+	Eigen::Vector3d axisOfRotation = referenceDirection.cross(normal);
+	double angle = acos(normal.dot(referenceDirection));// [rad]
+
+	glPushMatrix();
+
+		// Translate the current matrix
+		glTranslated(center.x(), center.y(), center.z());
+
+		// Rotate the current matrix, if the rotation axis is non-zero
+		if (!VVASE::Math::IsZero(axisOfRotation.norm()))
+			glRotated(UnitConverter::RAD_TO_DEG(angle), axisOfRotation.x(), axisOfRotation.y(), axisOfRotation.z());
+
+		// Set the normal direction
+		glNormal3d(normal.x(), normal.y(), normal.z());
+
+		// We'll use a triangle strip to draw the disk
+		glBegin(GL_TRIANGLE_STRIP);
+
+		// Loop to generate the triangles
+		Eigen::Vector3d insidePoint(0.0, 0.0, 0.0);
+		Eigen::Vector3d outsidePoint(0.0, 0.0, 0.0);
+		int i;
+		for (i = 0; i <= resolution; i++)
+		{
+			// Determine the angle to the current set of points
+			angle = (double)i * 2.0 * VVASE::Math::Pi / (double)resolution;
+
+			// Determine the Y and Z ordinates based on this angle and the radii
+			outsidePoint.y() = outerRadius * cos(angle);
+			outsidePoint.z() = outerRadius * sin(angle);
+
+			insidePoint.y() = innerRadius * cos(angle);
+			insidePoint.z() = innerRadius * sin(angle);
+
+			// Add the next two points
+			glVertex3d(outsidePoint.x(), outsidePoint.y(), outsidePoint.z());
+			glVertex3d(insidePoint.x(), insidePoint.y(), insidePoint.z());
+		}
+
+		glEnd();
+
+	glPopMatrix();*/
+
+	assert(!LibPlot2D::RenderWindow::GLHasError());
 }
 
 }// namespace VVASE

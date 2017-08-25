@@ -34,14 +34,16 @@ public:
 	void SetCorner3(const Eigen::Vector3d &corner3);
 
 protected:
+	// Mandatory overloads from Primitive - for creating geometry and testing the
+	// validity of this object's parameters
 	bool HasValidParameters() override;
 	void GenerateGeometry() override;
 	void Update(const unsigned int& i) override;
 
 private:
-	Eigen::Vector3d corner1;
-	Eigen::Vector3d corner2;
-	Eigen::Vector3d corner3;
+	Eigen::Vector3d corner1 = Eigen::Vector3d::Zero();
+	Eigen::Vector3d corner2 = Eigen::Vector3d::Zero();
+	Eigen::Vector3d corner3 = Eigen::Vector3d::Zero();
 };
 
 }// namespace VVASE

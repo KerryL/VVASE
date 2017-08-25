@@ -38,17 +38,19 @@ public:
 	void SetLength(const double &length);
 
 protected:
+	// Mandatory overloads from Primitive - for creating geometry and testing the
+	// validity of this object's parameters
 	bool HasValidParameters() override;
 	void GenerateGeometry() override;
 	void Update(const unsigned int& i) override;
 
 private:
-	Eigen::Vector3d normal;
-	Eigen::Vector3d axis;
-	Eigen::Vector3d center;
+	Eigen::Vector3d normal = Eigen::Vector3d::Zero();
+	Eigen::Vector3d axis = Eigen::Vector3d::Zero();
+	Eigen::Vector3d center = Eigen::Vector3d::Zero();
 
-	double width;
-	double length;
+	double width = 0.0;
+	double length = 0.0;
 };
 
 }// namespace VVASE

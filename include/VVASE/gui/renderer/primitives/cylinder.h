@@ -38,19 +38,21 @@ public:
 	void SetRadius(const double &radius);
 
 protected:
+	// Mandatory overloads from Primitive - for creating geometry and testing the
+	// validity of this object's parameters
 	bool HasValidParameters() override;
 	void GenerateGeometry() override;
 	void Update(const unsigned int& i) override;
 
 private:
-	bool drawCaps;
+	bool drawCaps = false;
 
-	int resolution;
+	int resolution = 4;
 
-	Eigen::Vector3d endPoint1;
-	Eigen::Vector3d endPoint2;
+	Eigen::Vector3d endPoint1 = Eigen::Vector3d::Zero();
+	Eigen::Vector3d endPoint2 = Eigen::Vector3d::Zero();
 
-	double radius;
+	double radius = 0.0;
 };
 
 }// namespace VVASE

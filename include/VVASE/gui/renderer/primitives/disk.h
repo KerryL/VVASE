@@ -37,18 +37,20 @@ public:
 	void SetNormal(const Eigen::Vector3d &normal);
 
 protected:
+	// Mandatory overloads from Primitive - for creating geometry and testing the
+	// validity of this object's parameters
 	bool HasValidParameters() override;
 	void GenerateGeometry() override;
 	void Update(const unsigned int& i) override;
 
 private:
-	int resolution;
+	int resolution = 4;
 
-	Eigen::Vector3d center;
-	Eigen::Vector3d normal;
+	Eigen::Vector3d center = Eigen::Vector3d::Zero();
+	Eigen::Vector3d normal = Eigen::Vector3d::Zero();
 
-	double outerRadius;
-	double innerRadius;
+	double outerRadius = 0.0;
+	double innerRadius = 0.0;
 };
 
 }// namespace VVASE

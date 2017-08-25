@@ -38,10 +38,7 @@ namespace VVASE
 //==========================================================================
 Quadrilateral::Quadrilateral(LibPlot2D::RenderWindow &renderWindow) : Primitive(renderWindow)
 {
-	normal.setZero();
-	axis.setZero();
-	width = 0.0;
-	length = 0.0;
+	mBufferInfo.resize(1);
 }
 
 //==========================================================================
@@ -63,56 +60,11 @@ Quadrilateral::Quadrilateral(LibPlot2D::RenderWindow &renderWindow) : Primitive(
 //==========================================================================
 void Quadrilateral::GenerateGeometry()
 {
-	// Set the normal direction
-	glNormal3d(normal.x(), normal.y(), normal.z());
+	/*glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
+	glDrawArrays(GL_QUADS, 0, mBufferInfo[0].vertexCount);
+	glBindVertexArray(0);*/
 
-	// We'll use a triangle strip to draw the quad
-	glBegin(GL_TRIANGLE_STRIP);
-
-	// Calculate the distance from the center to each corner
-	double halfDiagonal = sqrt(width * width / 4.0 + length * length / 4.0);
-
-	// Calculate the angle between the axis and each diagonal
-	double diagonalAngle = atan2(width, length);
-
-	// Force the axis direction to be perpendicular to the normal
-	Eigen::Vector3d axisDirection = axis.cross(normal).cross(normal);
-
-	// Compute the locations of the four corners of the quad
-	Eigen::Vector3d corner1 = center + axisDirection.normalized() * halfDiagonal;
-	Eigen::Vector3d corner2 = center + axisDirection.normalized() * halfDiagonal;
-	Eigen::Vector3d corner3 = center - axisDirection.normalized() * halfDiagonal;
-	Eigen::Vector3d corner4 = center - axisDirection.normalized() * halfDiagonal;
-
-	corner1 -= center;
-	GeometryMath::Rotate(corner1, diagonalAngle, normal);
-	corner1 += center;
-
-	corner2 -= center;
-	GeometryMath::Rotate(corner2, -diagonalAngle, normal);
-	corner2 += center;
-
-	corner3 -= center;
-	GeometryMath::Rotate(corner3, diagonalAngle, normal);
-	corner3 += center;
-
-	corner4 -= center;
-	GeometryMath::Rotate(corner4, -diagonalAngle, normal);
-	corner4 += center;
-
-	// Add the vertices to create two triangles
-	// The order is 1, 4, 2, 3 because after the rotations, the corners are located
-	// as shown (here, the longer dimension is the length):
-	//  1 ---------- 4
-	//   |          |
-	//  2 ---------- 3
-	glVertex3d(corner1.x(), corner1.y(), corner1.z());
-	glVertex3d(corner4.x(), corner4.y(), corner4.z());
-	glVertex3d(corner2.x(), corner2.y(), corner2.z());
-	glVertex3d(corner3.x(), corner3.y(), corner3.z());
-
-	// Complete the triangle strip
-	glEnd();
+	assert(!LibPlot2D::RenderWindow::GLHasError());
 }
 
 //==========================================================================
@@ -281,8 +233,76 @@ bool Quadrilateral::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::V
 	return false;
 }
 
+//==========================================================================
+// Class:			Quadrilateral
+// Function:		Update
+//
+// Description:		Updates the GL buffers associated with this object.
+//
+// Input Arguments:
+//		i	= const unsigned int&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
 void Quadrilateral::Update(const unsigned int& i)
 {
+	// Set the normal direction
+	/*glNormal3d(normal.x(), normal.y(), normal.z());
+
+	// We'll use a triangle strip to draw the quad
+	glBegin(GL_TRIANGLE_STRIP);
+
+	// Calculate the distance from the center to each corner
+	double halfDiagonal = sqrt(width * width / 4.0 + length * length / 4.0);
+
+	// Calculate the angle between the axis and each diagonal
+	double diagonalAngle = atan2(width, length);
+
+	// Force the axis direction to be perpendicular to the normal
+	Eigen::Vector3d axisDirection = axis.cross(normal).cross(normal);
+
+	// Compute the locations of the four corners of the quad
+	Eigen::Vector3d corner1 = center + axisDirection.normalized() * halfDiagonal;
+	Eigen::Vector3d corner2 = center + axisDirection.normalized() * halfDiagonal;
+	Eigen::Vector3d corner3 = center - axisDirection.normalized() * halfDiagonal;
+	Eigen::Vector3d corner4 = center - axisDirection.normalized() * halfDiagonal;
+
+	corner1 -= center;
+	GeometryMath::Rotate(corner1, diagonalAngle, normal);
+	corner1 += center;
+
+	corner2 -= center;
+	GeometryMath::Rotate(corner2, -diagonalAngle, normal);
+	corner2 += center;
+
+	corner3 -= center;
+	GeometryMath::Rotate(corner3, diagonalAngle, normal);
+	corner3 += center;
+
+	corner4 -= center;
+	GeometryMath::Rotate(corner4, -diagonalAngle, normal);
+	corner4 += center;
+
+	// Add the vertices to create two triangles
+	// The order is 1, 4, 2, 3 because after the rotations, the corners are located
+	// as shown (here, the longer dimension is the length):
+	//  1 ---------- 4
+	//   |          |
+	//  2 ---------- 3
+	glVertex3d(corner1.x(), corner1.y(), corner1.z());
+	glVertex3d(corner4.x(), corner4.y(), corner4.z());
+	glVertex3d(corner2.x(), corner2.y(), corner2.z());
+	glVertex3d(corner3.x(), corner3.y(), corner3.z());
+
+	// Complete the triangle strip
+	glEnd();*/
+
+	assert(!LibPlot2D::RenderWindow::GLHasError());
 }
 
 }// namespace VVASE

@@ -45,9 +45,7 @@ namespace VVASE
 //==========================================================================
 Sphere::Sphere(LibPlot2D::RenderWindow &renderWindow) : Primitive(renderWindow)
 {
-	center.setZero();
-	radius = 0.0;
-	resolution = 4;
+	mBufferInfo.resize(1);
 }
 
 //==========================================================================
@@ -69,94 +67,11 @@ Sphere::Sphere(LibPlot2D::RenderWindow &renderWindow) : Primitive(renderWindow)
 //==========================================================================
 void Sphere::GenerateGeometry()
 {
-	if (resolution < 0)
-		resolution = 0;
+	/*glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
+	glDrawArrays(GL_QUADS, 0, mBufferInfo[0].vertexCount);
+	glBindVertexArray(0);*/
 
-#ifdef ICOSOHEDRON
-	// To avoid performance issues, don't let the resolution go above 2
-	if (resolution > 2)
-		resolution = 2;
-
-	// Find twelve vertices that define an icosohedron circumscribed within the sphere
-	double t = (1.0 + sqrt(5.0)) / 2.0;
-	double s = sqrt(1 + t * t);
-	Eigen::Vector3d vertex[12];
-	vertex[0] = Eigen::Vector3d(t, 1.0, 0.0);
-	vertex[1] = Eigen::Vector3d(-t, 1.0, 0.0);
-	vertex[2] = Eigen::Vector3d(t, -1.0, 0.0);
-	vertex[3] = Eigen::Vector3d(-t, -1.0, 0.0);
-	vertex[4] = Eigen::Vector3d(1.0, 0.0, t);
-	vertex[5] = Eigen::Vector3d(1.0, 0.0, -t);
-	vertex[6] = Eigen::Vector3d(-1, 0.0, t);
-	vertex[7] = Eigen::Vector3d(-1.0, 0.0, -t);
-	vertex[8] = Eigen::Vector3d(0.0, t, 1.0);
-	vertex[9] = Eigen::Vector3d(0.0, -t, 1.0);
-	vertex[10] = Eigen::Vector3d(0.0, t, -1.0);
-	vertex[11] = Eigen::Vector3d(0.0, -t, -1.0);
-
-	// Scale all of the vertices up to make the radius correct
-	// Also, include the s term that was not included above
-	int i;
-	for (i = 0; i < 12; i++)
-		vertex[i] *= radius / s;
-#else
-	// To avoid performance issues, don't let the resolution go above 3
-	if (resolution > 3)
-		resolution = 3;
-
-	// Find six vertices that define an octohedron circumscribed within the sphere
-	Eigen::Vector3d top(0.0, 0.0, radius), bottom(0.0, 0.0, -radius);
-	Eigen::Vector3d equator1(radius, 0.0, 0.0), equator2(0.0, radius, 0.0);
-	Eigen::Vector3d equator3(-radius, 0.0, 0.0), equator4(0.0, -radius, 0.0);
-#endif
-
-	glPushMatrix();
-
-		glTranslated(center.x(), center.y(), center.z());
-
-		glBegin(GL_TRIANGLES);
-
-#ifdef ICOSOHEDRON
-		// Begin recursive subdivision of all twenty faces of the icosohedron
-		RecursiveSubdivision(vertex[0], vertex[8], vertex[4], resolution);
-		RecursiveSubdivision(vertex[0], vertex[5], vertex[10], resolution);
-		RecursiveSubdivision(vertex[2], vertex[4], vertex[9], resolution);
-		RecursiveSubdivision(vertex[2], vertex[11], vertex[5], resolution);
-		RecursiveSubdivision(vertex[1], vertex[6], vertex[8], resolution);
-
-		RecursiveSubdivision(vertex[1], vertex[10], vertex[7], resolution);
-		RecursiveSubdivision(vertex[3], vertex[9], vertex[6], resolution);
-		RecursiveSubdivision(vertex[3], vertex[7], vertex[11], resolution);
-		RecursiveSubdivision(vertex[0], vertex[10], vertex[8], resolution);
-		RecursiveSubdivision(vertex[1], vertex[8], vertex[10], resolution);
-
-		RecursiveSubdivision(vertex[2], vertex[9], vertex[11], resolution);
-		RecursiveSubdivision(vertex[3], vertex[11], vertex[9], resolution);
-		RecursiveSubdivision(vertex[4], vertex[2], vertex[0], resolution);
-		RecursiveSubdivision(vertex[5], vertex[0], vertex[2], resolution);
-		RecursiveSubdivision(vertex[6], vertex[1], vertex[3], resolution);
-
-		RecursiveSubdivision(vertex[7], vertex[3], vertex[1], resolution);
-		RecursiveSubdivision(vertex[8], vertex[6], vertex[4], resolution);
-		RecursiveSubdivision(vertex[9], vertex[4], vertex[6], resolution);
-		RecursiveSubdivision(vertex[10], vertex[5], vertex[7], resolution);
-		RecursiveSubdivision(vertex[11], vertex[7], vertex[5], resolution);
-#else
-		// Begin recursive subdivision of all eight faces of the octohedron
-		RecursiveSubdivision(top, equator1, equator4, resolution);
-		RecursiveSubdivision(top, equator2, equator1, resolution);
-		RecursiveSubdivision(top, equator3, equator2, resolution);
-		RecursiveSubdivision(top, equator4, equator3, resolution);
-
-		RecursiveSubdivision(bottom, equator1, equator2, resolution);
-		RecursiveSubdivision(bottom, equator2, equator3, resolution);
-		RecursiveSubdivision(bottom, equator3, equator4, resolution);
-		RecursiveSubdivision(bottom, equator4, equator1, resolution);
-#endif
-
-		glEnd();
-
-	glPopMatrix();
+	assert(!LibPlot2D::RenderWindow::GLHasError());
 }
 
 //==========================================================================
@@ -207,9 +122,9 @@ void Sphere::RecursiveSubdivision(const Eigen::Vector3d &corner1, const Eigen::V
 	    ------------
 	   Corner 2    Corner 3
 	-----------------------*/
-	Eigen::Vector3d midPoint1 = corner1 + (corner2 - corner1).normalized() * (corner1 - corner2).norm() / 2.0;
-	Eigen::Vector3d midPoint2 = corner1 + (corner3 - corner1).normalized() * (corner1 - corner3).norm() / 2.0;
-	Eigen::Vector3d midPoint3 = corner3 + (corner2 - corner3).normalized() * (corner3 - corner2).norm() / 2.0;
+	Eigen::Vector3d midPoint1(corner1 + (corner2 - corner1).normalized() * (corner1 - corner2).norm() / 2.0);
+	Eigen::Vector3d midPoint2(corner1 + (corner3 - corner1).normalized() * (corner1 - corner3).norm() / 2.0);
+	Eigen::Vector3d midPoint3(corner3 + (corner2 - corner3).normalized() * (corner3 - corner2).norm() / 2.0);
 
 	// These locations now need to be normalized such that they lie at a
 	// distance of 'radius' from the center
@@ -375,8 +290,114 @@ bool Sphere::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector3d
 	return true;
 }
 
+//==========================================================================
+// Class:			Sphere
+// Function:		Update
+//
+// Description:		Updates the GL buffers associated with this object.
+//
+// Input Arguments:
+//		i	= const unsigned int&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
 void Sphere::Update(const unsigned int& i)
 {
+	/*if (resolution < 0)
+		resolution = 0;
+
+#ifdef ICOSOHEDRON
+	// To avoid performance issues, don't let the resolution go above 2
+	if (resolution > 2)
+		resolution = 2;
+
+	// Find twelve vertices that define an icosohedron circumscribed within the sphere
+	double t = (1.0 + sqrt(5.0)) / 2.0;
+	double s = sqrt(1 + t * t);
+	Eigen::Vector3d vertex[12];
+	vertex[0] = Eigen::Vector3d(t, 1.0, 0.0);
+	vertex[1] = Eigen::Vector3d(-t, 1.0, 0.0);
+	vertex[2] = Eigen::Vector3d(t, -1.0, 0.0);
+	vertex[3] = Eigen::Vector3d(-t, -1.0, 0.0);
+	vertex[4] = Eigen::Vector3d(1.0, 0.0, t);
+	vertex[5] = Eigen::Vector3d(1.0, 0.0, -t);
+	vertex[6] = Eigen::Vector3d(-1, 0.0, t);
+	vertex[7] = Eigen::Vector3d(-1.0, 0.0, -t);
+	vertex[8] = Eigen::Vector3d(0.0, t, 1.0);
+	vertex[9] = Eigen::Vector3d(0.0, -t, 1.0);
+	vertex[10] = Eigen::Vector3d(0.0, t, -1.0);
+	vertex[11] = Eigen::Vector3d(0.0, -t, -1.0);
+
+	// Scale all of the vertices up to make the radius correct
+	// Also, include the s term that was not included above
+	int j;
+	for (j = 0; j < 12; j++)
+		vertex[j] *= radius / s;
+#else
+	// To avoid performance issues, don't let the resolution go above 3
+	if (resolution > 3)
+		resolution = 3;
+
+	// Find six vertices that define an octohedron circumscribed within the sphere
+	Eigen::Vector3d top(0.0, 0.0, radius), bottom(0.0, 0.0, -radius);
+	Eigen::Vector3d equator1(radius, 0.0, 0.0), equator2(0.0, radius, 0.0);
+	Eigen::Vector3d equator3(-radius, 0.0, 0.0), equator4(0.0, -radius, 0.0);
+#endif
+
+	glPushMatrix();
+
+		glTranslated(center.x(), center.y(), center.z());
+
+		glBegin(GL_TRIANGLES);
+
+#ifdef ICOSOHEDRON
+		// Begin recursive subdivision of all twenty faces of the icosohedron
+		RecursiveSubdivision(vertex[0], vertex[8], vertex[4], resolution);
+		RecursiveSubdivision(vertex[0], vertex[5], vertex[10], resolution);
+		RecursiveSubdivision(vertex[2], vertex[4], vertex[9], resolution);
+		RecursiveSubdivision(vertex[2], vertex[11], vertex[5], resolution);
+		RecursiveSubdivision(vertex[1], vertex[6], vertex[8], resolution);
+
+		RecursiveSubdivision(vertex[1], vertex[10], vertex[7], resolution);
+		RecursiveSubdivision(vertex[3], vertex[9], vertex[6], resolution);
+		RecursiveSubdivision(vertex[3], vertex[7], vertex[11], resolution);
+		RecursiveSubdivision(vertex[0], vertex[10], vertex[8], resolution);
+		RecursiveSubdivision(vertex[1], vertex[8], vertex[10], resolution);
+
+		RecursiveSubdivision(vertex[2], vertex[9], vertex[11], resolution);
+		RecursiveSubdivision(vertex[3], vertex[11], vertex[9], resolution);
+		RecursiveSubdivision(vertex[4], vertex[2], vertex[0], resolution);
+		RecursiveSubdivision(vertex[5], vertex[0], vertex[2], resolution);
+		RecursiveSubdivision(vertex[6], vertex[1], vertex[3], resolution);
+
+		RecursiveSubdivision(vertex[7], vertex[3], vertex[1], resolution);
+		RecursiveSubdivision(vertex[8], vertex[6], vertex[4], resolution);
+		RecursiveSubdivision(vertex[9], vertex[4], vertex[6], resolution);
+		RecursiveSubdivision(vertex[10], vertex[5], vertex[7], resolution);
+		RecursiveSubdivision(vertex[11], vertex[7], vertex[5], resolution);
+#else
+		// Begin recursive subdivision of all eight faces of the octohedron
+		RecursiveSubdivision(top, equator1, equator4, resolution);
+		RecursiveSubdivision(top, equator2, equator1, resolution);
+		RecursiveSubdivision(top, equator3, equator2, resolution);
+		RecursiveSubdivision(top, equator4, equator3, resolution);
+
+		RecursiveSubdivision(bottom, equator1, equator2, resolution);
+		RecursiveSubdivision(bottom, equator2, equator3, resolution);
+		RecursiveSubdivision(bottom, equator3, equator4, resolution);
+		RecursiveSubdivision(bottom, equator4, equator1, resolution);
+#endif
+
+		glEnd();
+
+	glPopMatrix();*/
+
+	assert(!LibPlot2D::RenderWindow::GLHasError());
 }
 
 }// namespace VVASE

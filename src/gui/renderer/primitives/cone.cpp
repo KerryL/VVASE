@@ -38,11 +38,7 @@ namespace VVASE
 //==========================================================================
 Cone::Cone(LibPlot2D::RenderWindow &renderWindow) : Primitive(renderWindow)
 {
-	drawCaps = false;
-	radius = 0.0;
-	tip.setZero();
-	baseCenter.setZero();
-	resolution = 4;
+	mBufferInfo.resize(1);
 }
 
 //==========================================================================
@@ -64,103 +60,11 @@ Cone::Cone(LibPlot2D::RenderWindow &renderWindow) : Primitive(renderWindow)
 //==========================================================================
 void Cone::GenerateGeometry()
 {
-	// Resolution must be at least 3
-	if (resolution < 3)
-		resolution = 3;
+	/*glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
+	glDrawArrays(GL_QUADS, 0, mBufferInfo[0].vertexCount);
+	glBindVertexArray(0);*/
 
-	// Determine the height of the cone
-	const double halfHeight((baseCenter - tip).norm() / 2.0);
-
-	// Determine the desired axis for the cone
-	const Eigen::Vector3d axisDirection((tip - baseCenter).normalized());
-
-	// Determine the center of the cone
-	const Eigen::Vector3d center(baseCenter + axisDirection * halfHeight);
-
-	// Our reference direction will be the X-axis direction
-	Eigen::Vector3d referenceDirection(1.0, 0.0, 0.0);
-
-	// Determine the angle and axis of rotation
-	Eigen::Vector3d axisOfRotation = referenceDirection.cross(axisDirection);
-	double angle = acos(axisDirection.dot(referenceDirection));// [rad]
-
-	// If the axis direction is opposite the reference direction, we need to rotate 180 degrees
-	if (VVASE::Math::IsZero(axisDirection + referenceDirection))
-	{
-		angle = UnitConverter::Pi;
-		axisOfRotation = Eigen::Vector3d(0.0, 1.0, 0.0);
-	}
-
-	// Push the current matrix
-	glPushMatrix();
-
-		// Translate the current matrix
-		glTranslated(center.x(), center.y(), center.z());
-
-		// Rotate the current matrix, if the rotation axis is non-zero
-		if (!VVASE::Math::IsZero(axisOfRotation.norm()))
-			glRotated(UnitConverter::RAD_TO_DEG(angle), axisOfRotation.x(), axisOfRotation.y(), axisOfRotation.z());
-
-		// Create the cone along the X-axis (must match the reference direction above)
-		// (the openGL matrices take care of correct position/orientation in hardware)
-		// We'll use a triangle fan to draw the cone
-		glBegin(GL_TRIANGLE_FAN);
-
-		// Set the first normal and the tip (center of the fan)
-		glNormal3d(1.0, 0.0, 0.0);
-		glVertex3d(halfHeight, 0.0, 0.0);
-
-		// Loop to generate the triangles
-		int i;
-		Eigen::Vector3d point(-halfHeight, 0.0, 0.0);
-		for (i = 0; i <= resolution; i++)
-		{
-			// Determine the angle to the current point
-			angle = (double)i * 2.0 * UnitConverter::Pi / (double)resolution;
-
-			// Determine the Y and Z ordinates based on this angle and the radius
-			point.y() = radius * cos(angle);
-			point.z() = radius * sin(angle);
-
-			// Set the normal for the next two points
-			glNormal3d(0.0, point.y() / radius, point.z() / radius);
-
-			// Add the next point
-			glVertex3d(point.x(), point.y(), point.z());
-		}
-
-		// End the triangle strip
-		glEnd();
-
-		// Draw the end cap, if it is enabled
-		if (drawCaps)
-		{
-			// Set the normal for the end cap
-			glNormal3d(-1.0, 0.0, 0.0);
-
-			// Begin the polygon
-			glBegin(GL_POLYGON);
-
-			// Draw a polygon at the base of the cone
-			for (i = 0; i <= resolution; i++)
-			{
-				// Determine the angle to the current point
-				angle = (double)i * 2.0 * UnitConverter::Pi / (double)resolution;
-
-				// Determine the Y and Z ordinates based on this angle and the radius
-				point.y() = radius * cos(angle);
-				point.z() = radius * sin(angle);
-
-				// Add the next point
-				glVertex3d(point.x(), point.y(), point.z());
-			}
-
-			// End the polygon
-			glEnd();
-		}
-
-	// Pop the matrix
-	glPopMatrix();
+	assert(!LibPlot2D::RenderWindow::GLHasError());
 }
 
 //==========================================================================
@@ -325,8 +229,123 @@ bool Cone::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector3d& 
 	return false;
 }
 
+//==========================================================================
+// Class:			Cone
+// Function:		Update
+//
+// Description:		Updates the GL buffers associated with this object.
+//
+// Input Arguments:
+//		i	= const unsigned int&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
 void Cone::Update(const unsigned int& i)
 {
+	// Resolution must be at least 3
+	/*if (resolution < 3)
+		resolution = 3;
+
+	// Determine the height of the cone
+	const double halfHeight((baseCenter - tip).norm() / 2.0);
+
+	// Determine the desired axis for the cone
+	const Eigen::Vector3d axisDirection((tip - baseCenter).normalized());
+
+	// Determine the center of the cone
+	const Eigen::Vector3d center(baseCenter + axisDirection * halfHeight);
+
+	// Our reference direction will be the X-axis direction
+	Eigen::Vector3d referenceDirection(1.0, 0.0, 0.0);
+
+	// Determine the angle and axis of rotation
+	Eigen::Vector3d axisOfRotation = referenceDirection.cross(axisDirection);
+	double angle = acos(axisDirection.dot(referenceDirection));// [rad]
+
+	// If the axis direction is opposite the reference direction, we need to rotate 180 degrees
+	if (VVASE::Math::IsZero(axisDirection + referenceDirection))
+	{
+		angle = UnitConverter::Pi;
+		axisOfRotation = Eigen::Vector3d(0.0, 1.0, 0.0);
+	}
+
+	// Push the current matrix
+	glPushMatrix();
+
+		// Translate the current matrix
+		glTranslated(center.x(), center.y(), center.z());
+
+		// Rotate the current matrix, if the rotation axis is non-zero
+		if (!VVASE::Math::IsZero(axisOfRotation.norm()))
+			glRotated(UnitConverter::RAD_TO_DEG(angle), axisOfRotation.x(), axisOfRotation.y(), axisOfRotation.z());
+
+		// Create the cone along the X-axis (must match the reference direction above)
+		// (the openGL matrices take care of correct position/orientation in hardware)
+		// We'll use a triangle fan to draw the cone
+		glBegin(GL_TRIANGLE_FAN);
+
+		// Set the first normal and the tip (center of the fan)
+		glNormal3d(1.0, 0.0, 0.0);
+		glVertex3d(halfHeight, 0.0, 0.0);
+
+		// Loop to generate the triangles
+		int i;
+		Eigen::Vector3d point(-halfHeight, 0.0, 0.0);
+		for (i = 0; i <= resolution; i++)
+		{
+			// Determine the angle to the current point
+			angle = (double)i * 2.0 * UnitConverter::Pi / (double)resolution;
+
+			// Determine the Y and Z ordinates based on this angle and the radius
+			point.y() = radius * cos(angle);
+			point.z() = radius * sin(angle);
+
+			// Set the normal for the next two points
+			glNormal3d(0.0, point.y() / radius, point.z() / radius);
+
+			// Add the next point
+			glVertex3d(point.x(), point.y(), point.z());
+		}
+
+		// End the triangle strip
+		glEnd();
+
+		// Draw the end cap, if it is enabled
+		if (drawCaps)
+		{
+			// Set the normal for the end cap
+			glNormal3d(-1.0, 0.0, 0.0);
+
+			// Begin the polygon
+			glBegin(GL_POLYGON);
+
+			// Draw a polygon at the base of the cone
+			for (i = 0; i <= resolution; i++)
+			{
+				// Determine the angle to the current point
+				angle = (double)i * 2.0 * UnitConverter::Pi / (double)resolution;
+
+				// Determine the Y and Z ordinates based on this angle and the radius
+				point.y() = radius * cos(angle);
+				point.z() = radius * sin(angle);
+
+				// Add the next point
+				glVertex3d(point.x(), point.y(), point.z());
+			}
+
+			// End the polygon
+			glEnd();
+		}
+
+	// Pop the matrix
+	glPopMatrix();*/
+
+	assert(!LibPlot2D::RenderWindow::GLHasError());
 }
 
 }// namespace VVASE

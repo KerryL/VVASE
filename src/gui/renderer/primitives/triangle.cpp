@@ -9,12 +9,15 @@
 // Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Derived from Primitive for creating triangular objects.
 
-// Local headers
-#include "VVASE/gui/renderer/primitives/triangle.h"
-#include "VVASE/core/utilities/carMath.h"
+// GLEW headers
+#include <GL/glew.h>
 
 // LibPlot2D headers
 #include <lp2d/renderer/renderWindow.h>
+
+// Local headers
+#include "VVASE/gui/renderer/primitives/triangle.h"
+#include "VVASE/core/utilities/carMath.h"
 
 namespace VVASE
 {
@@ -37,9 +40,7 @@ namespace VVASE
 //==========================================================================
 Triangle::Triangle(LibPlot2D::RenderWindow &renderWindow) : Primitive(renderWindow)
 {
-	corner1.setZero();
-	corner2.setZero();
-	corner3.setZero();
+	mBufferInfo.resize(1);
 }
 
 //==========================================================================
@@ -61,22 +62,11 @@ Triangle::Triangle(LibPlot2D::RenderWindow &renderWindow) : Primitive(renderWind
 //==========================================================================
 void Triangle::GenerateGeometry()
 {
-	// Used as each triangle is created
-	const Eigen::Vector3d normal((corner2 - corner1).cross(corner3 - corner1).normalized());
+	/*glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
+	glDrawArrays(GL_QUADS, 0, mBufferInfo[0].vertexCount);
+	glBindVertexArray(0);*/
 
-	// Set the normal for the triangle
-	glNormal3d(normal.x(), normal.y(), normal.z());
-
-	// This is just one triangle
-	glBegin(GL_TRIANGLES);
-
-	// Add the three vertices
-	glVertex3d(corner1.x(), corner1.y(), corner1.z());
-	glVertex3d(corner2.x(), corner2.y(), corner2.z());
-	glVertex3d(corner3.x(), corner3.y(), corner3.z());
-
-	// Complete the triangle
-	glEnd();
+	assert(!LibPlot2D::RenderWindow::GLHasError());
 }
 
 //==========================================================================
@@ -197,8 +187,42 @@ bool Triangle::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector
 	return false;
 }
 
+//==========================================================================
+// Class:			Triangle
+// Function:		Update
+//
+// Description:		Updates the GL buffers associated with this object.
+//
+// Input Arguments:
+//		i	= const unsigned int&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
 void Triangle::Update(const unsigned int& i)
 {
+	/*// Used as each triangle is created
+	const Eigen::Vector3d normal((corner2 - corner1).cross(corner3 - corner1).normalized());
+
+	// Set the normal for the triangle
+	glNormal3d(normal.x(), normal.y(), normal.z());
+
+	// This is just one triangle
+	glBegin(GL_TRIANGLES);
+
+	// Add the three vertices
+	glVertex3d(corner1.x(), corner1.y(), corner1.z());
+	glVertex3d(corner2.x(), corner2.y(), corner2.z());
+	glVertex3d(corner3.x(), corner3.y(), corner3.z());
+
+	// Complete the triangle
+	glEnd();*/
+
+	assert(!LibPlot2D::RenderWindow::GLHasError());
 }
 
 }// namespace VVASE

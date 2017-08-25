@@ -38,16 +38,18 @@ public:
 	Eigen::Vector3d GetCenter() const { return center; }
 
 protected:
+	// Mandatory overloads from Primitive - for creating geometry and testing the
+	// validity of this object's parameters
 	bool HasValidParameters() override;
 	void GenerateGeometry() override;
 	void Update(const unsigned int& i) override;
 
 private:
-	int resolution;
+	int resolution = 4;
 
-	Eigen::Vector3d center;
+	Eigen::Vector3d center = Eigen::Vector3d::Zero();
 
-	double radius;
+	double radius = 0.0;
 
 	// Performs subdivision of the triangles to achieve a "rounder" sphere
 	void RecursiveSubdivision(const Eigen::Vector3d &corner1, const Eigen::Vector3d &corner2,
