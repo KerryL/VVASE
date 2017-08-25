@@ -94,7 +94,7 @@ void GeneticOptimization::BeginOptimization()
 	std::unique_ptr<OptimizationData> data(std::make_unique<OptimizationData>(geneticAlgorithm.get()));
 	ThreadJob job(ThreadJob::CommandThreadGeneticOptimization, std::move(data),
 		wxUtilities::ToVVASEString(name), index);
-	mainFrame.AddJob(job);
+	mainFrame.AddJob(std::move(job));
 }
 
 //==========================================================================

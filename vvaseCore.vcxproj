@@ -38,7 +38,6 @@
     <ClInclude Include="include\VVASE\core\threads\optimizationData.h" />
     <ClInclude Include="include\VVASE\core\threads\threadData.h" />
     <ClInclude Include="include\VVASE\core\threads\threadDefs.h" />
-    <ClInclude Include="include\VVASE\core\threads\threadEvent.h" />
     <ClInclude Include="include\VVASE\core\threads\threadJob.h" />
     <ClInclude Include="include\VVASE\core\threads\workerThread.h" />
     <ClInclude Include="include\VVASE\core\utilities\binaryReader.h" />
@@ -80,7 +79,6 @@
     <ClCompile Include="src\core\threads\kinematicsData.cpp" />
     <ClCompile Include="src\core\threads\optimizationData.cpp" />
     <ClCompile Include="src\core\threads\threadData.cpp" />
-    <ClCompile Include="src\core\threads\threadEvent.cpp" />
     <ClCompile Include="src\core\threads\threadJob.cpp" />
     <ClCompile Include="src\core\threads\workerThread.cpp" />
     <ClCompile Include="src\core\utilities\binaryReader.cpp" />

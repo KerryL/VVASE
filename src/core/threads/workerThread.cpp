@@ -145,6 +145,8 @@ void WorkerThread::OnJob()
 	case ThreadJob::CommandThreadKinematicsNormal:
 	case ThreadJob::CommandThreadKinematicsSweep:
 	case ThreadJob::CommandThreadKinematicsGA:
+		assert(job.data);
+
 		// Do the kinematics calculations
 		DebugLog::GetInstance()->Log(_T("SetInputs - Start"), 1);
 		kinematicAnalysis.SetInputs(static_cast<KinematicsData*>(job.data.get())->kinematicInputs);
@@ -163,6 +165,8 @@ void WorkerThread::OnJob()
 		break;
 
 	case ThreadJob::CommandThreadGeneticOptimization:
+		assert(job.data);
+
 		// The genetic algorithm object MUST have been initialized prior to the call to this thread
 		// Run the GA object - this will only return after the analysis is complete for all generations,
 		// and the target object has been updated

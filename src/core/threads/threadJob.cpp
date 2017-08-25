@@ -117,6 +117,27 @@ ThreadJob::ThreadJob(const ThreadJob &threadJob)
 
 //==========================================================================
 // Class:			ThreadJob
+// Function:		ThreadJob
+//
+// Description:		Move constructor for the ThreadJob class.
+//
+// Input Arguments:
+//		threadJob	= const ThreadJob&& to copy to this object
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+ThreadJob::ThreadJob(ThreadJob &&threadJob)
+{
+	*this = std::move(threadJob);
+}
+
+//==========================================================================
+// Class:			ThreadJob
 // Function:		operator=
 //
 // Description:		Assignment operator.
@@ -142,6 +163,37 @@ ThreadJob& ThreadJob::operator=(const ThreadJob &job)
 	index = job.index;
 	name = job.name.c_str();// Force deep copy for thread-safety
 	*data = *job.data;
+
+	return *this;
+}
+
+//==========================================================================
+// Class:			ThreadJob
+// Function:		operator=
+//
+// Description:		Move assignment operator.
+//
+// Input Arguments:
+//		job	= ThreadJob&& to assign to this
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		ThreadJob& reference to this
+//
+//==========================================================================
+ThreadJob& ThreadJob::operator=(ThreadJob &&job)
+{
+	// Check for self-assignment
+	if (this == &job)
+		return *this;
+
+	// Do the copy
+	command = job.command;
+	index = job.index;
+	name = job.name.c_str();// Force deep copy for thread-safety
+	data = std::move(job.data);
 
 	return *this;
 }

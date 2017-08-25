@@ -21,14 +21,14 @@
 #include "VVASE/core/analysis/kinematics.h"
 #include "VVASE/core/analysis/kinematicOutputs.h"
 #include "VVASE/core/threads/kinematicsData.h"
-#include "VVASE/core/threads/threadEvent.h"
+#include "VVASE/gui/threadEvent.h"
 #include "VVASE/core/car/car.h"
 #include "VVASE/core/car/subsystems/suspension.h"
 #include "VVASE/core/utilities/carMath.h"
 #include "VVASE/gui/utilities/unitConverter.h"
 #include "VVASE/gui/utilities/wxRelatedUtilities.h"
 #include "VVASE/core/utilities/debugger.h"
-#include "VVASE/core/threads/jobQueue.h"
+#include "VVASE/gui/guiJobQueue.h"
 
 namespace VVASE
 {
@@ -40,7 +40,7 @@ namespace VVASE
 // Description:		Constructor for GAObject class.
 //
 // Input Arguments:
-//		queue			= JobQueue& reference to the job queue
+//		queue			= GuiJobQueue& reference to the job queue
 //		optimization	= GeneticOptimization pointing to this object's owner
 //
 // Output Arguments:
@@ -50,14 +50,9 @@ namespace VVASE
 //		None
 //
 //==========================================================================
-GAObject::GAObject(JobQueue &queue, GeneticOptimization &optimization)
+GAObject::GAObject(GuiJobQueue &queue, GeneticOptimization &optimization)
 	: queue(queue), optimization(optimization)
 {
-	workingCarArray = NULL;
-	originalCarArray = NULL;
-	numberOfCars = 0;
-	kinematicOutputArray = NULL;
-	isRunning = false;
 }
 
 //==========================================================================
@@ -162,7 +157,7 @@ void GAObject::SimulateGeneration()
 				kinematicOutputArray + i * inputList.size() + j));
 			ThreadJob newJob(ThreadJob::CommandThreadKinematicsGA, std::move(data),
 				wxUtilities::ToVVASEString(optimization.GetCleanName()), temp);
-			queue.AddJob(newJob);
+			queue.AddJob(std::move(newJob));
 		}
 	}
 

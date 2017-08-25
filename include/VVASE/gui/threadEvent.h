@@ -3,16 +3,21 @@
                         Copyright Kerry R. Loux 2007-2017
 =============================================================================*/
 
-// File:  threadEvent.cpp
+// File:  threadEvent.h
 // Date:  11/3/2009
 // Auth:  K. Loux
 // Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Eventually might house an actual event class - for now just an event
-//        definition.  This event is used for communication from the worker threads
+//        declaration.  This event is used for communication from the worker threads
 //        to the GUI thread.
 
-// Local headers
-#include "VVASE/core/threads/threadEvent.h"
+#ifndef THREAD_EVENT_H_
+#define THREAD_EVENT_H_
 
-// Define the EVT_THREAD event type
-//DEFINE_LOCAL_EVENT_TYPE(EVT_THREAD)
+// wxWidgets headers
+#include <wx/event.h>
+
+// Declaration of the EVT_THREAD event
+DECLARE_LOCAL_EVENT_TYPE(EVT_THREAD, -1)
+
+#endif// THREAD_EVENT_H_

@@ -27,9 +27,6 @@
 #include <condition_variable>
 #include <thread>
 
-// wxWidgets forward declarations
-class wxEvtHandler;
-
 namespace VVASE
 {
 
@@ -47,22 +44,17 @@ public:
 		Idle
 	};
 
-	JobQueue(wxEvtHandler *parent);
+	virtual ~JobQueue() = default;
 
-	void AddJob(const ThreadJob& job, const Priority& priority = Priority::Normal);
+	virtual void Report(const ThreadJob::ThreadCommand& /*command*/, const std::thread::id& /*threadId*/, int /*objectId*/ = 0) {};
+
+	void AddJob(ThreadJob&& job, const Priority& priority = Priority::Normal);
 
 	ThreadJob Pop();
 
-	// Reports a message back to the main event handler
-	void Report(const ThreadJob::ThreadCommand& command, std::thread::id threadId, int objectId = 0);
-
 	size_t PendingJobs();
 
-	wxEvtHandler *GetParent() { return parent; }
-
 private:
-    wxEvtHandler *parent;
-
 	// Use of a multimap allow prioritization - lower keys come first, jobs with equal keys are appended
     std::multimap<Priority, ThreadJob> jobs;// TODO:  Is prioritization necessary?  If yes, maybe have separate queues for each priority?  This doesn't seem particularly efficient...
 

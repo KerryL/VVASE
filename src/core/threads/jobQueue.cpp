@@ -13,7 +13,6 @@
 
 // Local headers
 #include "VVASE/core/threads/jobQueue.h"
-#include "VVASE/core/threads/threadEvent.h"// TODO:  Need to remove this from core
 #include "VVASE/core/utilities/debugLog.h"
 #include "VVASE/core/threads/threadDefs.h"
 #include "VVASE/core/threads/threadData.h"
@@ -23,32 +22,12 @@ namespace VVASE
 
 //==========================================================================
 // Class:			JobQueue
-// Function:		JobQueue
-//
-// Description:		Constructor for the JobQueue class (default).
-//
-// Input Arguments:
-//		_parent		= wxEventHandler* pointing to the main application object
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-JobQueue::JobQueue(wxEvtHandler *parent) : parent(parent)
-{
-}
-
-//==========================================================================
-// Class:			JobQueue
 // Function:		AddJob
 //
 // Description:		Adds a job to the queue
 //
 // Input Arguments:
-//		job			= const ThreadJob& to be added to the queue
+//		job			= ThreadJob&& to be added to the queue
 //		priority	= const Priority& of the new job
 //
 // Output Arguments:
@@ -58,12 +37,12 @@ JobQueue::JobQueue(wxEvtHandler *parent) : parent(parent)
 //		None
 //
 //==========================================================================
-void JobQueue::AddJob(const ThreadJob& job, const Priority& priority)
+void JobQueue::AddJob(ThreadJob&& job, const Priority& priority)
 {
 	MutexLocker lock(mutexQueue);
 	DebugLog::GetInstance()->Log(_T("JobQueue::AddJob (locker)"));
 
-	jobs.insert(std::make_pair(priority, job));
+	jobs.insert(std::make_pair(priority, std::move(job)));
 	jobReadyCondition.notify_one();
 }
 
@@ -92,42 +71,12 @@ ThreadJob JobQueue::Pop()
 	DebugLog::GetInstance()->Log(_T("JobQueue::Pop (lock)"));
 
 	// Get the first job from the queue (prioritization occurs automatically)
-	ThreadJob nextJob(jobs.begin()->second);
+	ThreadJob nextJob(std::move(jobs.begin()->second));
 	jobs.erase(jobs.begin());
 
 	DebugLog::GetInstance()->Log(_T("JobQueue::Pop (unlock)"));
 
 	return nextJob;
-}
-
-//==========================================================================
-// Class:			JobQueue
-// Function:		Report
-//
-// Description:		Posts an event to the main thread.
-//
-// Input Arguments:
-//		Command		= const ThreadCommand& to report
-//		Message		= const wxString& containing string information
-//		ThreadId	= std::thread::id representing the thread's ID
-//		ObjectId	= int representing the object's ID
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-void JobQueue::Report(const ThreadJob::ThreadCommand& command, std::thread::id threadId, int objectId)
-{
-	/*wxCommandEvent evt(EVT_THREAD, command);
-
-	evt.SetId(std::hash<std::thread::id>()(threadId));// TODO:  Not guaranteed unique?
-	evt.SetInt(static_cast<int>(command));
-	evt.SetExtraLong(objectId);
-
-	parent->AddPendingEvent(evt);*/// TODO:  Re-implement some other way
 }
 
 //==========================================================================

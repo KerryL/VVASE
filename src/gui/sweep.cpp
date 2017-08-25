@@ -412,7 +412,7 @@ void Sweep::UpdateData()
 				workingCarArray[currentCar * numberOfPoints + currentPoint].get(), kinematicInputs, newOutputs.get()));
 			ThreadJob job(ThreadJob::CommandThreadKinematicsSweep, std::move(data),
 				wxUtilities::ToVVASEString(associatedCars[currentCar]->GetCleanName() + _T(":") + name), index);
-			mainFrame.AddJob(job);
+			mainFrame.AddJob(std::move(job));
 
 			// Add the outputs to the sweep's list
 			currentList.push_back(std::move(newOutputs));

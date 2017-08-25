@@ -287,6 +287,12 @@
     <ClInclude Include="include\VVASE\gui\geneticOptimization.h">
       <Filter>Header Files\gui</Filter>
     </ClInclude>
+    <ClInclude Include="include\VVASE\gui\threadEvent.h">
+      <Filter>Header Files\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\VVASE\gui\guiJobQueue.h">
+      <Filter>Header Files\gui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\application\pluginManager.cpp">
@@ -483,6 +489,12 @@
     </ClCompile>
     <ClCompile Include="src\application\gitHash.cpp">
       <Filter>Source Files\application</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gui\threadEvent.cpp">
+      <Filter>Source Files\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\gui\guiJobQueue.cpp">
+      <Filter>Source Files\gui</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

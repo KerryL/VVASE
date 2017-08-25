@@ -25,6 +25,7 @@
     <ClInclude Include="include\VVASE\gui\dialogs\vectorEditDialog.h" />
     <ClInclude Include="include\VVASE\gui\geneticOptimization.h" />
     <ClInclude Include="include\VVASE\gui\guiCarOutputs.h" />
+    <ClInclude Include="include\VVASE\gui\guiJobQueue.h" />
     <ClInclude Include="include\VVASE\gui\guiObject.h" />
     <ClInclude Include="include\VVASE\gui\renderer\3dcar\aarm.h" />
     <ClInclude Include="include\VVASE\gui\renderer\3dcar\damper3D.h" />
@@ -46,6 +47,7 @@
     <ClInclude Include="include\VVASE\gui\renderer\primitives\sphere.h" />
     <ClInclude Include="include\VVASE\gui\renderer\primitives\triangle.h" />
     <ClInclude Include="include\VVASE\gui\superGrid.h" />
+    <ClInclude Include="include\VVASE\gui\threadEvent.h" />
     <ClInclude Include="include\VVASE\gui\undoRedoStack.h" />
     <ClInclude Include="include\VVASE\gui\utilities\dataValidator.h" />
     <ClInclude Include="include\VVASE\gui\utilities\unitConverter.h" />
@@ -118,6 +120,7 @@
     <ClCompile Include="src\gui\geneticAlgorithmPanel.cpp" />
     <ClCompile Include="src\gui\geneticOptimization.cpp" />
     <ClCompile Include="src\gui\guiCar.cpp" />
+    <ClCompile Include="src\gui\guiJobQueue.cpp" />
     <ClCompile Include="src\gui\guiObject.cpp" />
     <ClCompile Include="src\gui\ipcClient.cpp" />
     <ClCompile Include="src\gui\ipcConnection.cpp" />
@@ -143,6 +146,7 @@
     <ClCompile Include="src\gui\renderer\primitives\triangle.cpp" />
     <ClCompile Include="src\gui\superGrid.cpp" />
     <ClCompile Include="src\gui\sweep.cpp" />
+    <ClCompile Include="src\gui\threadEvent.cpp" />
     <ClCompile Include="src\gui\undoRedoStack.cpp" />
     <ClCompile Include="src\gui\utilities\dataValidator.cpp" />
     <ClCompile Include="src\gui\utilities\unitConverter.cpp" />

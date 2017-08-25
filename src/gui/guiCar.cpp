@@ -221,7 +221,7 @@ void GuiCar::UpdateData()
 	// Re-run the kinematics to update the car's position
 	std::unique_ptr<KinematicsData> data(std::make_unique<KinematicsData>(originalCar.get(), workingCar.get(), inputs, &outputs.kinematicOutputs));
 	ThreadJob job(ThreadJob::CommandThreadKinematicsNormal, std::move(data), wxUtilities::ToVVASEString(name), index);
-	mainFrame.AddJob(job);
+	mainFrame.AddJob(std::move(job));
 }
 
 //==========================================================================

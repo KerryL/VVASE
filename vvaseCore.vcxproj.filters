@@ -78,9 +78,6 @@
     <ClInclude Include="include\VVASE\core\threads\threadData.h">
       <Filter>Header Files\threads</Filter>
     </ClInclude>
-    <ClInclude Include="include\VVASE\core\threads\threadEvent.h">
-      <Filter>Header Files\threads</Filter>
-    </ClInclude>
     <ClInclude Include="include\VVASE\core\threads\threadJob.h">
       <Filter>Header Files\threads</Filter>
     </ClInclude>
@@ -243,9 +240,6 @@
       <Filter>Source Files\threads</Filter>
     </ClCompile>
     <ClCompile Include="src\core\threads\threadData.cpp">
-      <Filter>Source Files\threads</Filter>
-    </ClCompile>
-    <ClCompile Include="src\core\threads\threadEvent.cpp">
       <Filter>Source Files\threads</Filter>
     </ClCompile>
     <ClCompile Include="src\core\threads\threadJob.cpp">

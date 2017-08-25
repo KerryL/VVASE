@@ -45,7 +45,7 @@ class MainNotebook;
 class MainTree;
 class EditPanel;
 class OutputPanel;
-class JobQueue;
+class GuiJobQueue;
 class ThreadJob;
 
 class MainFrame : public wxFrame
@@ -100,8 +100,8 @@ public:
 	void UpdateOutputPanel();
 
 	// Add a job to the queue to be processed by a worker thread
-	void AddJob(ThreadJob &newJob);
-	JobQueue& GetJobQueue() { return *jobQueue; };
+	void AddJob(ThreadJob&& newJob);
+	GuiJobQueue& GetJobQueue() { return *jobQueue; };
 
 	// Returns the current inputs for the kinematics analysis
 	inline Kinematics::Inputs GetInputs() const { return kinematicInputs; }
@@ -138,7 +138,7 @@ private:
 
 	std::unique_ptr<wxFileHistory> recentFileManager;
 
-	std::unique_ptr<JobQueue> jobQueue;
+	std::unique_ptr<GuiJobQueue> jobQueue;
 	unsigned short activeThreads = 0;
 	unsigned short numberOfThreads = 0;
 	unsigned int openJobCount = 0;

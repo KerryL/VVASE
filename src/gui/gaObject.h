@@ -30,7 +30,7 @@ namespace VVASE
 {
 
 // Local forward declarations
-class JobQueue;
+class GuiJobQueue;
 class GuiCar;
 class Car;
 class GeneticOptimization;
@@ -38,7 +38,7 @@ class GeneticOptimization;
 class GAObject : public GeneticAlgorithm
 {
 public:
-	GAObject(JobQueue &queue, GeneticOptimization &optimization);
+	GAObject(GuiJobQueue &queue, GeneticOptimization &optimization);
 	~GAObject();
 
 	void SetUp(const Car &targetCar);
@@ -109,7 +109,7 @@ public:
 	void UpdateResultingCar(Car& result) const;
 
 private:
-	JobQueue &queue;
+	GuiJobQueue &queue;
 
 	GeneticOptimization &optimization;
 
@@ -123,10 +123,10 @@ private:
 	void SimulateGeneration();
 
 	// Array of cars with which the fitnesses are determined
-	Car **workingCarArray;
-	Car **originalCarArray;
-	KinematicOutputs *kinematicOutputArray;
-	unsigned int numberOfCars;
+	Car **workingCarArray = nullptr;
+	Car **originalCarArray = nullptr;
+	KinematicOutputs *kinematicOutputArray = nullptr;
+	unsigned int numberOfCars = 0;
 
 	// Original car to be optimized (only one needed for reference)
 	const Car *targetCar;
@@ -141,7 +141,7 @@ private:
 	// Converts a genome into a citizen
 	void SetCarGenome(int carIndex, const int *currentGenome);
 
-	bool isRunning;
+	bool isRunning = false;
 
 	// Synchronization object allowing this thread to wait for analyses to be completed
 //	InverseSemaphore inverseSemaphore;

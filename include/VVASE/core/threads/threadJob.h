@@ -44,7 +44,8 @@ public:
 // TODO:  Make this more object oriented
 
 	ThreadJob();
-	ThreadJob(const ThreadJob &threadJob);// For thread safety
+	ThreadJob(const ThreadJob &threadJob);
+	ThreadJob(ThreadJob &&threadJob);
 	ThreadJob(ThreadCommand command);
 	ThreadJob(ThreadCommand command, std::unique_ptr<ThreadData> data,
 		const vvaseString &name, int &index);
@@ -58,6 +59,7 @@ public:
 
 	// Operators
 	ThreadJob& operator=(const ThreadJob &job);
+	ThreadJob& operator=(ThreadJob &&job);
 };
 
 }// namespace VVASE

@@ -49,10 +49,10 @@
 #include "../dropTarget.h"
 #include "VVASE/core/analysis/kinematics.h"
 #include "VVASE/core/analysis/kinematicOutputs.h"
-#include "VVASE/core/threads/jobQueue.h"
+#include "VVASE/gui/guiJobQueue.h"
 #include "VVASE/core/threads/threadData.h"
 #include "VVASE/core/threads/workerThread.h"
-#include "VVASE/core/threads/threadEvent.h"
+#include "VVASE/gui/threadEvent.h"
 #include "VVASE/core/utilities/debugger.h"
 #include "VVASE/gui/utilities/unitConverter.h"
 
@@ -136,7 +136,7 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxEmptyString, wxDefaultPositio
 
 	// These need to be in this order - otherwise the centering doesn't work (resize first)
 	DoLayout();
-	jobQueue = std::make_unique<JobQueue>(GetEventHandler());
+	jobQueue = std::make_unique<GuiJobQueue>(GetEventHandler());
 	SetProperties();// Includes reading configuration file
 
 	activeIndex = -1;
@@ -165,9 +165,6 @@ MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxEmptyString, wxDefaultPositio
 //==========================================================================
 MainFrame::~MainFrame()
 {
-	while (openObjectList.size() > 0)
-		RemoveObjectFromList(0);
-
 	manager.UnInit();
 }
 
@@ -939,8 +936,8 @@ BEGIN_EVENT_TABLE(MainFrame, wxFrame)
 	EVT_MENU(IdToolbar3DOrtho,					MainFrame::Toolbar3DOrthoClickEvent)
 
 	// Threads
-	/*EVT_COMMAND(wxID_ANY, EVT_THREAD,			MainFrame::ThreadCompleteEvent)
-	EVT_COMMAND(wxID_ANY, EVT_DEBUG,			MainFrame::DebugMessageEvent)*/
+	EVT_COMMAND(wxID_ANY, EVT_THREAD,			MainFrame::ThreadCompleteEvent)
+	//EVT_COMMAND(wxID_ANY, EVT_DEBUG,			MainFrame::DebugMessageEvent)*/// TODO:  Fix
 END_EVENT_TABLE();
 
 //==========================================================================
@@ -2079,7 +2076,7 @@ void MainFrame::UpdateOutputPanel()
 // Description:		Adds a job to the job queue to be handled by the thread pool.
 //
 // Input Arguments:
-//		newJob	= ThreadJob& containing in the information about the new job to
+//		newJob	= ThreadJob&& containing in the information about the new job to
 //				  be performed
 //
 // Output Arguments:
@@ -2089,13 +2086,13 @@ void MainFrame::UpdateOutputPanel()
 //		None
 //
 //==========================================================================
-void MainFrame::AddJob(ThreadJob &newJob)
+void MainFrame::AddJob(ThreadJob&& newJob)
 {
 	assert(activeThreads > 0);
 	if (applicationExiting)
 		return;
 
-	jobQueue->AddJob(newJob, JobQueue::Priority::Normal);
+	jobQueue->AddJob(std::move(newJob), JobQueue::Priority::Normal);
 	openJobCount++;
 }
 
