@@ -70,13 +70,12 @@ bool VVASEApplication::OnInit()
 	SetAppName(_T("VVASE"));
 	SetVendorName(_T("Kerry Loux"));
 
-	singleInstanceChecker = new wxSingleInstanceChecker(GetAppName() + _T(":") + wxGetUserId());
-	dataExchangeServer = nullptr;
+	wxSingleInstanceChecker singleInstanceChecker(GetAppName() + _T(":") + wxGetUserId());
 
 	// If we have command line arguments (assume they are file names) and
 	// another instance of this application is already running - pass the
 	// filenames to the other application
-	if (VVASEApplication::argc > 1 && singleInstanceChecker->IsAnotherRunning())
+	if (VVASEApplication::argc > 1 && singleInstanceChecker.IsAnotherRunning())
 	{
 		// Another instance is already active - pass the file name to that instance to open
 		// Create a client object to connect to the server
@@ -90,15 +89,13 @@ bool VVASEApplication::OnInit()
 		}
 
 		client.Disconnect();
-
-		DeleteDynamicMemory();
 		return false;
 	}
 
 	// Proceed with actions for a "normal" execution - display the main form, etc.
 	// Create the MainFrame object - this is the parent for all VVASE objects
 	mainFrame = new MainFrame();
-	if (mainFrame == NULL)
+	if (mainFrame == nullptr)
 		return false;
 
 	mainFrame->Show();
@@ -119,11 +116,10 @@ bool VVASEApplication::OnInit()
 			mainFrame->LoadFile(argv[i]);
 	}
 
-	dataExchangeServer = new IPCServer();
-	if (!dataExchangeServer->Create(serviceName))
+	IPCServer dataExchangeServer;
+	if (!dataExchangeServer.Create(serviceName))
 	{
-		delete dataExchangeServer;
-		dataExchangeServer = NULL;
+		// TODO:  Notify user?
 	}
 
 	return true;
@@ -147,36 +143,10 @@ bool VVASEApplication::OnInit()
 //==========================================================================
 int VVASEApplication::OnExit()
 {
-	DeleteDynamicMemory();
 	DebugLog::Kill();
 	Debugger::Kill();
 
 	return 0;
-}
-
-//==========================================================================
-// Class:			VVASEApplication
-// Function:		DeleteDynamicMemory
-//
-// Description:		Frees class-level dynamic memory.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-void VVASEApplication::DeleteDynamicMemory()
-{
-	delete singleInstanceChecker;
-	singleInstanceChecker = NULL;
-
-	delete dataExchangeServer;
-	dataExchangeServer = NULL;
 }
 
 }// namespace VVASE

@@ -47,6 +47,7 @@ class EditPanel;
 class OutputPanel;
 class GuiJobQueue;
 class ThreadJob;
+class WorkerThread;
 
 class MainFrame : public wxFrame
 {
@@ -142,6 +143,9 @@ private:
 	unsigned short activeThreads = 0;
 	unsigned short numberOfThreads = 0;
 	unsigned int openJobCount = 0;
+
+	// TODO:  Get rid of activeThreads?
+	std::vector<std::unique_ptr<WorkerThread>> threads;
 
 	void CreateMenuBar();
 	void CreateKinematicAnalysisToolbar();

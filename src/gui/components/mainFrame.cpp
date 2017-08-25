@@ -510,8 +510,7 @@ void MainFrame::SetNumberOfThreads(unsigned int newNumberOfThreads)
 			// threads (starting a thread counts as a job)
 			openJobCount++;
 
-			// These threads will delete themselves after an EXIT job
-			new WorkerThread(*jobQueue);
+			threads.push_back(std::make_unique<WorkerThread>(*jobQueue));
 		}
 	}
 	else if (newNumberOfThreads < numberOfThreads)

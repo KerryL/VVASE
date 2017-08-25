@@ -43,14 +43,6 @@ private:
 	// The main class for the VVASE application - this object is the parent
 	// for all other VVASE objects
 	MainFrame *mainFrame;
-
-	// To see if there is already another instance open
-	wxSingleInstanceChecker *singleInstanceChecker;
-
-	// Server object to pass data between instances of this application
-	wxServer *dataExchangeServer;
-
-	void DeleteDynamicMemory();
 };
 
 // Declare the application object (have wxWidgets create the wxGetApp() function)
