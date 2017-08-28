@@ -116,6 +116,7 @@ void Sweep::CreateGUI()
 	lowerSizer->Add(new LibPlot2D::PlotListGrid(mPlotInterface, lowerPanel), 1, wxGROW | wxALL, 5);
 	lowerPanel->SetSizer(lowerSizer);
 
+	// TODO:  Plot size not correct - we want to maximize plot size and start with only a small PlotListGrid
 	CreatePlotArea(splitter);
 	splitter->SplitHorizontally(mPlotArea, lowerPanel, mPlotArea->GetSize().GetHeight());
 	splitter->SetSize(notebookTab->GetClientSize());

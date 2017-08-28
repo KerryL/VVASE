@@ -602,7 +602,7 @@ void MainFrame::CreateMenuBar()
 	wxMenu *mnuFile = new wxMenu();
 	wxMenu *mnuFileNew = new wxMenu();
 	mnuFileNew->Append(IdMenuFileNewCar, _T("&Car\tCtrl+N"), _T("Create new car file"), wxITEM_NORMAL);
-	mnuFileNew->Append(IdMenuFileNewSweep, _T("&Sweep\tCtrl+I"),
+	mnuFileNew->Append(IdMenuFileNewSweep, _T("S&weep\tCtrl+W"),
 		_T("Create new kinematic sweep"), wxITEM_NORMAL);
 	mnuFileNew->Append(IdMenuFileNewOptimization, _T("&Genetic Optimization\tCtrl+G"),
 		_T("Create new genetic algorithm optimization"), wxITEM_NORMAL);
