@@ -45,6 +45,8 @@ public:
     wxPanel* GetEditPanel() override;
 	wxTreeListItem* GetTreeItem() override;
 
+	void CloneTo(Subsystem* target) const override;
+
 private:
 	// Class properties
 	Eigen::Vector3d centerOfPressure;	// [in]

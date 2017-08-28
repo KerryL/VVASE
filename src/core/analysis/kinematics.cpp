@@ -34,29 +34,6 @@ namespace VVASE
 
 //==========================================================================
 // Class:			Kinematics
-// Function:		Kinematics
-//
-// Description:		Constructor for Kinematics class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Kinematics::Kinematics()
-{
-	originalCar = NULL;
-	workingCar = NULL;
-	localSuspension = NULL;
-}
-
-//==========================================================================
-// Class:			Kinematics
 // Function:		UpdateKinematics
 //
 // Description:		This updates the position of the car to meet the current

@@ -120,4 +120,12 @@ wxTreeListItem* Brakes::GetTreeItem()
 	return nullptr;
 }
 
+void Brakes::CloneTo(Subsystem* target) const
+{
+	auto* t(dynamic_cast<Brakes*>(target));
+	assert(t);
+
+	*t = *this;
+}
+
 }// namespace VVASE

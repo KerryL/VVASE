@@ -79,4 +79,12 @@ wxTreeListItem* Aerodynamics::GetTreeItem()
 	return nullptr;
 }
 
+void Aerodynamics::CloneTo(Subsystem* target) const
+{
+	auto* t(dynamic_cast<Aerodynamics*>(target));
+	assert(t);
+
+	// TODO:  Implement
+}
+
 }// namespace VVASE

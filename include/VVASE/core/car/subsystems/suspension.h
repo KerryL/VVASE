@@ -50,6 +50,8 @@ public:
     wxPanel* GetEditPanel() override;
 	wxTreeListItem* GetTreeItem() override;
 
+	void CloneTo(Subsystem* target) const override;
+
 	// Calls the methods that calculate the wheel center location at each corner
 	void ComputeWheelCenters(const double &rfTireDiameter, const double &lfTireDiameter,
 		const double &rrTireDiameter, const double &lrTireDiameter);

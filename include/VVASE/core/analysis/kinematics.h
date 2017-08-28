@@ -25,8 +25,6 @@ class Car;
 class Kinematics : public Analysis
 {
 public:
-	Kinematics();
-
 	enum class RotationSequence
 	{
 		PitchRoll,
@@ -88,9 +86,9 @@ public:
 private:
 	Inputs inputs;
 
-	const Car *originalCar;
-	Car *workingCar;
-	Suspension *localSuspension;
+	const Car *originalCar = nullptr;
+	Car *workingCar = nullptr;
+	Suspension *localSuspension = nullptr;
 
 	KinematicOutputs outputs;
 

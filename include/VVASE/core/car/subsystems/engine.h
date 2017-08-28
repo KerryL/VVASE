@@ -41,6 +41,8 @@ public:
     // Required by Subsystem
     wxPanel* GetEditPanel() override;
 	wxTreeListItem* GetTreeItem() override;
+
+	void CloneTo(Subsystem* target) const override;
 };
 
 }// namespace VVASE

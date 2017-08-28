@@ -129,4 +129,15 @@ wxTreeListItem* TireSet::GetTreeItem()
 	return nullptr;
 }
 
+void TireSet::CloneTo(Subsystem* target) const
+{
+	auto* t(dynamic_cast<TireSet*>(target));
+	assert(t);
+
+	*t->rightFront = *rightFront;
+	*t->leftFront = *leftFront;
+	*t->rightRear = *rightRear;
+	*t->leftRear = *leftRear;
+}
+
 }// namespace VVASE

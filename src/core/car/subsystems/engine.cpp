@@ -86,4 +86,12 @@ wxTreeListItem* Engine::GetTreeItem()
 	return nullptr;
 }
 
+void Engine::CloneTo(Subsystem* target) const
+{
+	auto* t(dynamic_cast<Engine*>(target));
+	assert(t);
+
+	// TODO:  Implement
+}
+
 }// namespace VVASE

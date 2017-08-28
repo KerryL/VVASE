@@ -523,4 +523,12 @@ wxTreeListItem* Suspension::GetTreeItem()
 	return nullptr;
 }
 
+void Suspension::CloneTo(Subsystem* target) const
+{
+	auto* t(dynamic_cast<Suspension*>(target));
+	assert(t);
+
+	*t = *this;
+}
+
 }// namespace VVASE

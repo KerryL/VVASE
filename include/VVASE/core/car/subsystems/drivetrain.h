@@ -74,6 +74,10 @@ public:
     wxPanel* GetEditPanel() override;
 	wxTreeListItem* GetTreeItem() override;
 
+	void CloneTo(Subsystem* target) const override;
+
+	Drivetrain& operator=(const Drivetrain& d);
+
 private:
 	std::unique_ptr<Differential> rearDifferential;
     std::unique_ptr<Differential> midDifferential;

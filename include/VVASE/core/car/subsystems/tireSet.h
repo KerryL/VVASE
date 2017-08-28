@@ -46,6 +46,8 @@ public:
     wxPanel* GetEditPanel() override;
 	wxTreeListItem* GetTreeItem() override;
 
+	void CloneTo(Subsystem* target) const override;
+
 	// File read/write functions
 	void Write(BinaryWriter& file) const override;
 	void Read(BinaryReader& file, const int& fileVersion) override;

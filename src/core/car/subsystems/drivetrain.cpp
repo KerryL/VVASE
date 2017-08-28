@@ -297,6 +297,23 @@ void Drivetrain::SetRearWheelDrive(const double& bias)
 	midDifferential = nullptr;
 }
 
+Drivetrain& Drivetrain::operator=(const Drivetrain& d)
+{
+	if (this == &d)
+		return *this;
+
+	if (d.rearDifferential)
+		rearDifferential = std::make_unique<Differential>(*d.rearDifferential);
+	if (d.midDifferential)
+		midDifferential = std::make_unique<Differential>(*d.midDifferential);
+	if (d.frontDifferential)
+		frontDifferential = std::make_unique<Differential>(*d.frontDifferential);
+
+	gearRatios = d.gearRatios;
+
+	return *this;
+}
+
 wxPanel* Drivetrain::GetEditPanel()
 {
 	// TODO:  Implement
@@ -307,6 +324,14 @@ wxTreeListItem* Drivetrain::GetTreeItem()
 {
 	// TODO:  Implement
 	return nullptr;
+}
+
+void Drivetrain::CloneTo(Subsystem* target) const
+{
+	auto* t(dynamic_cast<Drivetrain*>(target));
+	assert(t);
+
+	*t = *this;
 }
 
 }// namespace VVASE

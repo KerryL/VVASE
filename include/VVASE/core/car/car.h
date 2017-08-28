@@ -120,9 +120,6 @@ private:
 	typedef std::unordered_map<vvaseString, std::unique_ptr<Subsystem>> SubsystemsMap;
     SubsystemsMap subsystems;
 	static SubsystemsMap CreateComponents();
-
-	//template <typename T>
-	void CopySubsystem(const Subsystem& from, Subsystem& to);
 };
 
 template <typename T>

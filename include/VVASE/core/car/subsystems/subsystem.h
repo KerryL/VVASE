@@ -35,6 +35,8 @@ public:
 	// TODO:  Also, a factory method for primitives (or return nullptr if it's not required to render anything?)
 	// TODO:  Also possibly a "GetIcon" method?  See MainTree
 
+	virtual void CloneTo(Subsystem* target) const = 0;
+
 	// File read/write functions
 	virtual void Write(BinaryWriter& file) const = 0;
 	virtual void Read(BinaryReader& file, const int& fileVersion) = 0;

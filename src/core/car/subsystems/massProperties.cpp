@@ -446,4 +446,12 @@ wxTreeListItem* MassProperties::GetTreeItem()
 	return nullptr;
 }
 
+void MassProperties::CloneTo(Subsystem* target) const
+{
+	auto* t(dynamic_cast<MassProperties*>(target));
+	assert(t);
+
+	*t = *this;
+}
+
 }// namespace VVASE
