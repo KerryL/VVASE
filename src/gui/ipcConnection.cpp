@@ -46,26 +46,6 @@ IPCConnection::IPCConnection() : wxConnection()
 
 //==========================================================================
 // Class:			IPCConnection
-// Function:		~IPCConnection
-//
-// Description:		Destructor for the IPCConnection class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-IPCConnection::~IPCConnection()
-{
-}
-
-//==========================================================================
-// Class:			IPCConnection
 // Function:		OnPoke
 //
 // Description:		Handled by the server object.  Responds to data sent by
@@ -83,7 +63,7 @@ IPCConnection::~IPCConnection()
 //		None
 //
 //==========================================================================
-bool IPCConnection::OnPoke(const wxString &topic, const wxString &item, wxChar* WXUNUSED(data),
+/*bool IPCConnection::OnPoke(const wxString &topic, const wxString &item, wxChar* WXUNUSED(data),
 							int WXUNUSED(size), wxIPCFormat WXUNUSED(format))
 {
 	// Make sure we recognize the topic
@@ -92,6 +72,6 @@ bool IPCConnection::OnPoke(const wxString &topic, const wxString &item, wxChar* 
 		return wxGetApp().GetMainFrame()->LoadFile(item);
 
 	return false;
-}
+}*/
 
 }// namespace VVASE

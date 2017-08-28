@@ -19,6 +19,9 @@
 // wxWidgets headers
 #include <wx/ipc.h>
 
+// Standard C++ headers
+#include <memory>
+
 namespace VVASE
 {
 
@@ -32,17 +35,16 @@ public:
 	~IPCServer();
 
 	// Connection handling functions
-	void Disconnect();
-	bool IsConnected() const { return connection != NULL; }
+	bool IsConnected() const { return connection != nullptr; }
 
 	// Accessors
-	IPCConnection *GetConnection() { return connection; }
+	IPCConnection* GetConnection() { return connection.get(); }
 
 	// Overridden method for handling connection initializations
-	wxConnectionBase *OnAcceptConnection(const wxString &topic);
+	wxConnectionBase *OnAcceptConnection(const wxString &topic) override;
 
 private:
-	IPCConnection *connection;
+	std::unique_ptr<IPCConnection> connection;
 };
 
 }// namespace VVASE

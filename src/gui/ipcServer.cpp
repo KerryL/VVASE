@@ -42,8 +42,6 @@ namespace VVASE
 //==========================================================================
 IPCServer::IPCServer() : wxServer()
 {
-	// Initialize the connection poiner to NULL
-	connection = NULL;
 }
 
 //==========================================================================
@@ -64,34 +62,8 @@ IPCServer::IPCServer() : wxServer()
 //==========================================================================
 IPCServer::~IPCServer()
 {
-	// Kill the current connection
-	Disconnect();
-}
-
-//==========================================================================
-// Class:			IPCServer
-// Function:		Disconnect
-//
-// Description:		Kills the current connection.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-void IPCServer::Disconnect()
-{
 	if (connection)
-	{
 		connection->Disconnect();
-		delete connection;
-		connection = NULL;
-	}
 }
 
 //==========================================================================
@@ -115,14 +87,12 @@ wxConnectionBase *IPCServer::OnAcceptConnection(const wxString& topic)
 	// Check to see if we recognize the topic
 	if (topic.CompareTo(VVASEApplication::connectionTopic) == 0)
     {
-		// Create and return a new connection
-        connection = new IPCConnection();
-
-        return connection;
+        connection = std::make_unique<IPCConnection>();
+        return connection.get();
     }
 
 	// We don't recognize the topic
-	return NULL;
+	return nullptr;
 }
 
 }// namespace VVASE

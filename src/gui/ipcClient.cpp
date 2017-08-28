@@ -40,8 +40,6 @@ namespace VVASE
 //==========================================================================
 IPCClient::IPCClient() : wxClient()
 {
-	// Initialize the connection poiner to NULL
-	connection = NULL;
 }
 
 //==========================================================================
@@ -62,8 +60,8 @@ IPCClient::IPCClient() : wxClient()
 //==========================================================================
 IPCClient::~IPCClient()
 {
-	// Disconnect from the server
-	Disconnect();
+	if (connection)
+		connection->Disconnect();
 }
 
 //==========================================================================
@@ -88,34 +86,8 @@ IPCClient::~IPCClient()
 bool IPCClient::Connect(const wxString &host, const wxString &service, const wxString &topic)
 {
 	// Attempt to make a connection to the specified host
-	connection = (IPCConnection*)MakeConnection(host, service, topic);
-	return connection != NULL;
-}
-
-//==========================================================================
-// Class:			IPCClient
-// Function:		Disconnect
-//
-// Description:		Kills the current connection.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-void IPCClient::Disconnect()
-{
-	if (connection)
-	{
-		connection->Disconnect();
-		delete connection;
-		connection = NULL;
-	}
+	connection = std::unique_ptr<IPCConnection>(dynamic_cast<IPCConnection*>(MakeConnection(host, service, topic)));
+	return connection != nullptr;
 }
 
 //==========================================================================

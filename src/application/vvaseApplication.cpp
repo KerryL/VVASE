@@ -88,7 +88,6 @@ bool VVASEApplication::OnInit()
 				client.GetConnection()->Poke(argv[i], (const char *)NULL);
 		}
 
-		client.Disconnect();
 		return false;
 	}
 
