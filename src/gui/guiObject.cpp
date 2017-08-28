@@ -254,7 +254,7 @@ bool GuiObject::IsThisObjectSelected(wxTreeItemId selected) const
 	int i;
 	switch (GetType())
 	{
-	case TypeCar:
+	case ItemType::Car:
 		for (i = 0; i < GuiCar::NumberOfSubsystems; i++)
 		{
 			if (selected == static_cast<const GuiCar*>(this)->subsystems[i])
@@ -264,9 +264,9 @@ bool GuiObject::IsThisObjectSelected(wxTreeItemId selected) const
 		break;
 
 	// Unused types
-	case GuiObject::TypeSweep:
-	case GuiObject::TypeOptimization:
-	case GuiObject::TypeNone:
+	case ItemType::Sweep:
+	case ItemType::Optimization:
+	case ItemType::None:
 		break;
 
 	// Fail on unknown types to avoid forgetting any types
@@ -395,11 +395,11 @@ bool GuiObject::SaveToFile(bool saveAsNewFileName)
 {
 	// Get the file extension
 	wxString fileTypeExtension;
-	if (GetType() == TypeCar)
+	if (GetType() == ItemType::Car)
 		fileTypeExtension.assign(_T("Car files (*.car)|*.car"));
-	else if (GetType() == TypeSweep)
+	else if (GetType() == ItemType::Sweep)
 		fileTypeExtension.assign(_T("Sweep files (*.sweep)|*.sweep"));
-	else if (GetType() == TypeOptimization)
+	else if (GetType() == ItemType::Optimization)
 		fileTypeExtension.assign(_T("Optimization files (*.ga)|*.ga"));
 	else
 	{
@@ -427,11 +427,11 @@ bool GuiObject::SaveToFile(bool saveAsNewFileName)
 		// When doing "Save As...", if the default file name is modified (i.e. Rev 1 is changed to Rev 2),
 		// the extension is dropped.  This does not occur if the entire file name is changed.
 		wxString endOfFileName;
-		if (GetType() == TypeCar)
+		if (GetType() == ItemType::Car)
 			endOfFileName.assign(_T(".car"));
-		else if (GetType() == TypeSweep)
+		else if (GetType() == ItemType::Sweep)
 			endOfFileName.assign(_T(".sweep"));
-		else if (GetType() == TypeOptimization)
+		else if (GetType() == ItemType::Optimization)
 			endOfFileName.assign(_T(".ga"));
 		else
 			// Make sure we're not forgetting any types
@@ -493,11 +493,11 @@ bool GuiObject::WriteImageToFile(wxString pathAndFileName)
 	switch (GetType())
 	{
 		// Types that have a renderer
-	case TypeCar:
+	case ItemType::Car:
 		return static_cast<LibPlot2D::RenderWindow*>(notebookTab)->WriteImageToFile(pathAndFileName);
 		break;
 
-	case TypeSweep:
+	case ItemType::Sweep:
 		return static_cast<LibPlot2D::RenderWindow*>(notebookTab)->WriteImageToFile(pathAndFileName);// TODO:  This is wrong - needs to get child of notebook tab?
 		break;
 

@@ -242,7 +242,7 @@ void MainTree::SelectionChangeEvent(wxTreeEvent &event)
 		// do not update the tab
 		if ((mainFrame.GetObjectByIndex(GetSelectedObjectIndex())->GetType() !=
 				mainFrame.GetObjectByIndex(mainFrame.GetActiveIndex())->GetType() &&
-				mainFrame.GetObjectByIndex(GetSelectedObjectIndex())->GetType() == GuiObject::TypeCar) ||
+				mainFrame.GetObjectByIndex(GetSelectedObjectIndex())->GetType() == GuiObject::ItemType::Car) ||
 				GetSelectedObjectIndex() == mainFrame.GetActiveIndex())
 			changeTab = false;
 	}
@@ -373,7 +373,7 @@ int MainTree::GetItemType(wxTreeItemId itemId)
 			int i;
 			switch (selectedObject->GetType())
 			{
-			case GuiObject::TypeCar:
+			case GuiObject::ItemType::Car:
 				for (i = 0; i < GuiCar::NumberOfSubsystems; i++)
 				{
 					// If the ID matches, return this index
@@ -383,9 +383,9 @@ int MainTree::GetItemType(wxTreeItemId itemId)
 				break;
 
 			// Unused types
-			case GuiObject::TypeSweep:
-			case GuiObject::TypeOptimization:
-			case GuiObject::TypeNone:
+			case GuiObject::ItemType::Sweep:
+			case GuiObject::ItemType::Optimization:
+			case GuiObject::ItemType::None:
 				break;
 
 			// Fail on unknown types to avoid forgetting any types

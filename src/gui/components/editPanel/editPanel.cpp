@@ -62,44 +62,8 @@ EditPanel::EditPanel(MainFrame &mainFrame, wxWindowID id, const wxPoint& pos,
 {
 	systemsTree = mainFrame.GetSystemsTree();
 
-	currentType = GuiObject::TypeNone;
-	currentObject = nullptr;
-
-	editAerodynamics = nullptr;
-	editBrakes = nullptr;
-	editDifferential = nullptr;
-	editDrivetrain = nullptr;
-	editEngine = nullptr;
-	editMass = nullptr;
-	editSuspension = nullptr;
-	editTires = nullptr;
-
-	editSweep = nullptr;
-
-	carMutex = nullptr;
-
 	sizer = new wxBoxSizer(wxVERTICAL);
 	SetSizer(sizer);
-}
-
-//==========================================================================
-// Class:			EditPanel
-// Function:		~EditPanel
-//
-// Description:		Destructor for EditPanel class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-EditPanel::~EditPanel()
-{
 }
 
 //==========================================================================
@@ -147,7 +111,7 @@ void EditPanel::UpdateInformation(GuiObject *currentObject)
 
 	if (!currentObject)
 	{
-		currentType = GuiObject::TypeNone;
+		currentType = GuiObject::ItemType::None;
 		DeleteAllControls();
 		return;
 	}
@@ -174,7 +138,7 @@ void EditPanel::UpdateInformation(GuiObject *currentObject)
 
 	switch (currentType)
 	{
-	case GuiObject::TypeCar:
+	case GuiObject::ItemType::Car:
 		{
 			MutexLocker lock(static_cast<GuiCar*>(currentObject)->GetOriginalCar().GetMutex());
 
@@ -202,12 +166,12 @@ void EditPanel::UpdateInformation(GuiObject *currentObject)
 
 		break;
 
-	case GuiObject::TypeSweep:
+	case GuiObject::ItemType::Sweep:
 		editSweep->UpdateInformation(static_cast<Sweep*>(currentObject));
 		break;
 
-	case GuiObject::TypeOptimization:
-	case GuiObject::TypeNone:
+	case GuiObject::ItemType::Optimization:
+	case GuiObject::ItemType::None:
 		break;
 
 	// Fail on unknown cases to prevent forgetting any
@@ -242,7 +206,7 @@ void EditPanel::CreateControls(bool ignoreSystemsTree)
 
 	switch (currentType)
 	{
-	case GuiObject::TypeCar:
+	case GuiObject::ItemType::Car:
 		// Create the appropriate controls, depending on the type of the selected item
 		// If the selected item is the root item, we don't create any controls here
 		if (!ignoreSystemsTree)
@@ -284,7 +248,7 @@ void EditPanel::CreateControls(bool ignoreSystemsTree)
 
 		break;
 
-	case GuiObject::TypeSweep:
+	case GuiObject::ItemType::Sweep:
 		editSweep = new EditSweepNotebook(*this, wxID_ANY,
 			wxDefaultPosition, wxDefaultSize, wxNB_BOTTOM);
 
@@ -292,8 +256,8 @@ void EditPanel::CreateControls(bool ignoreSystemsTree)
 		break;
 
 	// Unused cases
-	case GuiObject::TypeOptimization:
-	case GuiObject::TypeNone:
+	case GuiObject::ItemType::Optimization:
+	case GuiObject::ItemType::None:
 		break;
 
 	default:
@@ -357,7 +321,7 @@ void EditPanel::DeleteAllControls()
 	// the suspension page.
 	if (currentObject)
 	{
-		if (currentObject->GetType() == GuiObject::TypeCar)
+		if (currentObject->GetType() == GuiObject::ItemType::Car)
 		{
 			static_cast<CarRenderer*>(currentObject->GetNotebookTab())->DeactivateHelperOrb();
 			currentObject->UpdateDisplay();

@@ -27,12 +27,17 @@ template <typename T>
 class ComponentBase
 {
 public:
+	virtual ~ComponentBase() = default;
+
     static std::unique_ptr<T> Create() { return T::Create(); }
     static vvaseString GetName() { return T::GetName(); }
 };
 
 class RegisterableComponent : public ComponentBase<RegisterableComponent>
 {
+public:
+	virtual ~RegisterableComponent() = default;
+
     // Derived classes must implement:
     // static std::unique_ptr<T> Create();
     // static vvaseString GetName();

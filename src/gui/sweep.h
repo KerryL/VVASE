@@ -83,7 +83,7 @@ public:
 	inline int GetAssociatedCarCount() const { return associatedCars.size(); }
 
 	// Returns this object's type (mandatory overload)
-	ItemType GetType() const { return TypeSweep; }
+	ItemType GetType() const { return ItemType::Sweep; }
 
 	// This is the list of possible plots that we can display
 	// Enumeration picks up where the KINEMATIC_OUTPUTS class left off

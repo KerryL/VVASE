@@ -27,16 +27,15 @@ class Tire
 public:
 	Tire();
 	Tire(const Tire &tire);
-	~Tire();
 
 	// File read/write functions
 	void Write(BinaryWriter& file) const;
 	void Read(BinaryReader& file, const int& fileVersion);
 
 	// Enumeration describing the tire models we support
-	enum TireModel
+	enum class TireModel
 	{
-		ModelConstantMu
+		ConstantStiffnesses
 	};
 
 	// The functions that calculate the tire's forces and moments
@@ -52,14 +51,12 @@ public:
 	double tirePressure;		// [psi]
 	double stiffness;			// [lb/in]
 
-	Tire& operator=(const Tire &tire);
-
 private:
 	// TODO:  Eventually, add support for a selection of tire models
 	// Ideal tire model:  temperature dependant, dynamic, works for combined slips
 
 	// Model type
-	TireModel modelType;
+	TireModel modelType = TireModel::ConstantStiffnesses;
 };
 
 }// namespace VVASE

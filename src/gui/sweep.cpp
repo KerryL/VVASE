@@ -1019,7 +1019,7 @@ void Sweep::UpdateAutoAssociate()
 	int i;
 	for (i = 0; i < mainFrame.GetObjectCount(); i++)
 	{
-		if (mainFrame.GetObjectByIndex(i)->GetType() == GuiObject::TypeCar)
+		if (mainFrame.GetObjectByIndex(i)->GetType() == GuiObject::ItemType::Car)
 			AddCar(static_cast<GuiCar*>(mainFrame.GetObjectByIndex(i)));
 	}
 }
@@ -1053,7 +1053,7 @@ void Sweep::ShowAssociatedCarsDialog()
 	{
 		// If the object is a car, add the name to our list of choices, and
 		// add the car itself to our list of cars
-		if (mainFrame.GetObjectByIndex(i)->GetType() == GuiObject::TypeCar)
+		if (mainFrame.GetObjectByIndex(i)->GetType() == GuiObject::ItemType::Car)
 		{
 			choices.Add(mainFrame.GetObjectByIndex(i)->GetCleanName());
 			openCars.push_back(static_cast<GuiCar*>(mainFrame.GetObjectByIndex(i)));

@@ -1430,7 +1430,7 @@ void MainFrame::EditPasteEvent(wxCommandEvent &event)
 void MainFrame::CarAppearanceOptionsEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Make sure the object of interest is a car
-	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::TypeCar)
+	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::ItemType::Car)
 		return;
 
 	// Show the appearance options dialog for the car
@@ -1458,7 +1458,7 @@ void MainFrame::CarAppearanceOptionsEvent(wxCommandEvent& WXUNUSED(event))
 void MainFrame::SweepShowAssociatedCarsClickEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Make sure the object is TypeSweep
-	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::TypeSweep)
+	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::ItemType::Sweep)
 		return;
 
 	// Call the ShowAssociatedCarsDialog() method
@@ -1485,7 +1485,7 @@ void MainFrame::SweepShowAssociatedCarsClickEvent(wxCommandEvent& WXUNUSED(event
 void MainFrame::SweepAssociatedWithAllCarsClickEvent(wxCommandEvent &event)
 {
 	// Make sure the object is TypeSweep
-	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::TypeSweep)
+	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::ItemType::Sweep)
 		return;
 
 	// If this object is checked, set the auto-associate flag to true, otherwise
@@ -1516,7 +1516,7 @@ void MainFrame::SweepAssociatedWithAllCarsClickEvent(wxCommandEvent &event)
 void MainFrame::SweepExportDataToFileClickEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Make sure the object is TypeSweep
-	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::TypeSweep)
+	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::ItemType::Sweep)
 		return;
 
 	// Get the file name to export to
@@ -1551,7 +1551,7 @@ void MainFrame::SweepExportDataToFileClickEvent(wxCommandEvent& WXUNUSED(event))
 void MainFrame::SweepXAxisPitchClickEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Make sure the object is TypeSweep
-	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::TypeSweep)
+	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::ItemType::Sweep)
 		return;
 
 	// Set the X axis to pitch
@@ -1586,7 +1586,7 @@ void MainFrame::SweepXAxisPitchClickEvent(wxCommandEvent& WXUNUSED(event))
 void MainFrame::SweepXAxisRollClickEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Make sure the object is TypeSweep
-	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::TypeSweep)
+	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::ItemType::Sweep)
 		return;
 
 	// Set the X axis to roll
@@ -1621,7 +1621,7 @@ void MainFrame::SweepXAxisRollClickEvent(wxCommandEvent& WXUNUSED(event))
 void MainFrame::SweepXAxisHeaveClickEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Make sure the object is TypeSweep
-	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::TypeSweep)
+	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::ItemType::Sweep)
 		return;
 
 	// Set the X axis to heave
@@ -1656,7 +1656,7 @@ void MainFrame::SweepXAxisHeaveClickEvent(wxCommandEvent& WXUNUSED(event))
 void MainFrame::SweepXAxisRackTravelClickEvent(wxCommandEvent& WXUNUSED(event))
 {
 	// Make sure the object is TypeSweep
-	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::TypeSweep)
+	if (openObjectList[objectOfInterestIndex]->GetType() != GuiObject::ItemType::Sweep)
 		return;
 
 	// Set the X axis to rack travel
@@ -2053,7 +2053,7 @@ void MainFrame::UpdateOutputPanel()
 	for (i = 0; i < openObjectList.size(); i++)
 	{
 		// Update the kinematics information (ONLY if this is a car)
-		if (openObjectList[i]->GetType() == GuiObject::TypeCar)
+		if (openObjectList[i]->GetType() == GuiObject::ItemType::Car)
 		{
 			carCount++;
 
@@ -2352,7 +2352,7 @@ void MainFrame::Toolbar3DPerspectiveClickEvent(wxCommandEvent &/*event*/)
 	unsigned int i;
 	for (i = 0; i < openObjectList.size(); i++)
 	{
-		if (openObjectList[i]->GetType() == GuiObject::TypeCar)
+		if (openObjectList[i]->GetType() == GuiObject::ItemType::Car)
 		{
 			static_cast<GuiCar*>(openObjectList[i].get())->SetUseOrtho(useOrthoView);
 			openObjectList[i]->UpdateDisplay();
@@ -2382,7 +2382,7 @@ void MainFrame::Toolbar3DOrthoClickEvent(wxCommandEvent &/*event*/)
 	unsigned int i;
 	for (i = 0; i < openObjectList.size(); i++)
 	{
-		if (openObjectList[i]->GetType() == GuiObject::TypeCar)
+		if (openObjectList[i]->GetType() == GuiObject::ItemType::Car)
 		{
 			static_cast<GuiCar*>(openObjectList[i].get())->SetUseOrtho(useOrthoView);
 			openObjectList[i]->UpdateDisplay();
@@ -2450,7 +2450,7 @@ void MainFrame::ThreadCompleteEvent(wxCommandEvent &event)
 		{
 			// Iterate through the open objects up to the selected object, and if it is a car,
 			// increment the car count
-			if (openObjectList[i]->GetType() == GuiObject::TypeCar)
+			if (openObjectList[i]->GetType() == GuiObject::ItemType::Car)
 				carCount++;
 		}
 
@@ -2978,13 +2978,13 @@ void MainFrame::UpdateActiveObjectMenu()
 
 	// Make sure the active index is valid
 	if (activeIndex < 0)
-		activeType = GuiObject::TypeNone;
+		activeType = GuiObject::ItemType::None;
 	else
 		activeType = openObjectList[activeIndex]->GetType();
 
 	switch (activeType)
 	{
-	case GuiObject::TypeCar:
+	case GuiObject::ItemType::Car:
 		// Check to see if the car menu already exists
 		if (carMenuIndex == wxNOT_FOUND)
 		{
@@ -2998,7 +2998,7 @@ void MainFrame::UpdateActiveObjectMenu()
 		}
 		break;
 
-	case GuiObject::TypeSweep:
+	case GuiObject::ItemType::Sweep:
 		// Check to see if the sweep menu already exists
 		if (sweepMenuIndex == wxNOT_FOUND)
 		{
@@ -3018,8 +3018,8 @@ void MainFrame::UpdateActiveObjectMenu()
 		break;
 
 	// Unused cases
-	case GuiObject::TypeNone:
-	case GuiObject::TypeOptimization:
+	case GuiObject::ItemType::None:
+	case GuiObject::ItemType::Optimization:
 	default:
 		// Remove all menus
 		if (carMenuIndex != wxNOT_FOUND)
@@ -3130,17 +3130,17 @@ void MainFrame::CreateContextMenu(int objectIndex, bool allowClosing)
 	// Depending on the type of the item, we might want additional options (or none at all)
 	switch (openObjectList[objectIndex]->GetType())
 	{
-	case GuiObject::TypeCar:
+	case GuiObject::ItemType::Car:
 		contextMenu = std::unique_ptr<wxMenu>(CreateCarMenu());
 		break;
 
-	case GuiObject::TypeSweep:
+	case GuiObject::ItemType::Sweep:
 		contextMenu = std::unique_ptr<wxMenu>(CreateSweepMenu());
 		break;
 
 	// Unused types
-	case GuiObject::TypeOptimization:
-	case GuiObject::TypeNone:
+	case GuiObject::ItemType::Optimization:
+	case GuiObject::ItemType::None:
 		break;
 
 	// Fail on unknown types to avoid forgetting any
@@ -3152,7 +3152,7 @@ void MainFrame::CreateContextMenu(int objectIndex, bool allowClosing)
 	// Start building the context menu
 
 	// Genetic algorithms do not have image files
-	if (openObjectList[objectIndex]->GetType() != GuiObject::TypeOptimization)
+	if (openObjectList[objectIndex]->GetType() != GuiObject::ItemType::Optimization)
 	{
 		contextMenu->PrependSeparator();
 		contextMenu->Prepend(IdMenuFileWriteImageFile, _T("&Write Image File"));
@@ -3217,7 +3217,7 @@ wxMenu *MainFrame::CreateSweepMenu()
 	wxMenu *mnuSweep = new wxMenu();
 
 	// Make sure the active object is a TypeSweep object
-	if (openObjectList[activeIndex]->GetType() != GuiObject::TypeSweep)
+	if (openObjectList[activeIndex]->GetType() != GuiObject::ItemType::Sweep)
 		return mnuSweep;
 
 	// Allocate the sub-menus
@@ -3490,7 +3490,7 @@ void MainFrame::RemoveFileFromHistory(wxString pathAndFileName)
 //==========================================================================
 void MainFrame::SetAssociateWithAllCars()
 {
-	if (openObjectList[activeIndex]->GetType() != GuiObject::TypeSweep)
+	if (openObjectList[activeIndex]->GetType() != GuiObject::ItemType::Sweep)
 		return;
 
 	wxMenuItem *item = this->FindItemInMenuBar(IdMenuSweepAssociatedWithAllCars);

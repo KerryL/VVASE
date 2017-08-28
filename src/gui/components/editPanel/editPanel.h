@@ -43,7 +43,6 @@ class EditPanel : public wxPanel
 public:
 	EditPanel(MainFrame &mainFrame, wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
 		const wxSize& size = wxDefaultSize);
-	~EditPanel();
 
 	// Updates the information on the panel
 	void UpdateInformation(GuiObject *currentObject);
@@ -57,33 +56,33 @@ private:
 	MainFrame &mainFrame;
 	MainTree *systemsTree;
 
-	GuiObject *currentObject;
+	GuiObject *currentObject = nullptr;
 
 	void CreateControls(bool ignoreSystemsTree);
 
 	void DeleteAllControls();
 
-	GuiObject::ItemType currentType;
+	GuiObject::ItemType currentType = GuiObject::ItemType::None;
 
 	wxTreeItemId currentTreeID;
 
 	// The various edit panels we need to display
 	// GuiCar
-	EditAerodynamicsPanel	*editAerodynamics;
-	EditBrakesPanel			*editBrakes;
-	EditDifferentialPanel	*editDifferential;
-	EditDrivetrainPanel		*editDrivetrain;
-	EditEnginePanel			*editEngine;
-	EditMassPanel			*editMass;
-	EditSuspensionNotebook	*editSuspension;
-	EditTiresPanel			*editTires;
+	EditAerodynamicsPanel	*editAerodynamics = nullptr;
+	EditBrakesPanel			*editBrakes = nullptr;
+	EditDifferentialPanel	*editDifferential = nullptr;
+	EditDrivetrainPanel		*editDrivetrain = nullptr;
+	EditEnginePanel			*editEngine = nullptr;
+	EditMassPanel			*editMass = nullptr;
+	EditSuspensionNotebook	*editSuspension = nullptr;
+	EditTiresPanel			*editTires = nullptr;
 
 	// Sweep
-	EditSweepNotebook	*editSweep;
+	EditSweepNotebook	*editSweep = nullptr;
 
 	wxBoxSizer *sizer;
 
-	wxMutex *carMutex;
+	wxMutex *carMutex = nullptr;
 };
 
 }// namespace VVASE

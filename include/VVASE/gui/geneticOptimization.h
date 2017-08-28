@@ -37,7 +37,7 @@ public:
 		wxString pathAndFileName = wxEmptyString);
 
 	// Mandatory overload
-	ItemType GetType() const { return TypeOptimization; }
+	ItemType GetType() const { return ItemType::Optimization; }
 
 	// Mandatory overloads
 	void UpdateData();

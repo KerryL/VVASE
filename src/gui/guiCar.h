@@ -52,7 +52,7 @@ public:
 	inline const Car& GetWorkingCar() const { return *workingCar; }
 	inline AppearanceOptions &GetAppearanceOptions() { return *appearanceOptions; }
 
-	ItemType GetType() const { return TypeCar; }
+	ItemType GetType() const { return ItemType::Car; }
 
 	// Enumeration for the subsystems that appear in the systems tree under this car
 	enum Subsystems

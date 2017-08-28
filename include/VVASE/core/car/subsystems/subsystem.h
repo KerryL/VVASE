@@ -29,6 +29,8 @@ class BinaryWriter;
 class Subsystem : public RegisterableComponent
 {
 public:
+	virtual ~Subsystem() = default;
+
 	// GUI factory methods
 	virtual wxPanel* GetEditPanel() = 0;
 	virtual wxTreeListItem* GetTreeItem() = 0;

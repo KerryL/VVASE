@@ -768,7 +768,7 @@ void GeneticAlgorithmPanel::UpdateSelectableCars()
 	for (i = 0; i < mainFrame.GetObjectCount(); i++)
 	{
 		// If the current object is a car, add it to the list
-		if (mainFrame.GetObjectByIndex(i)->GetType() == GuiObject::TypeCar)
+		if (mainFrame.GetObjectByIndex(i)->GetType() == GuiObject::ItemType::Car)
 		{
 			selectedCar->Append(mainFrame.GetObjectByIndex(i)->GetCleanName());
 			if (currentName.Cmp(mainFrame.GetObjectByIndex(i)->GetCleanName()) == 0)
@@ -1319,7 +1319,7 @@ const GuiCar* GeneticAlgorithmPanel::GetSelectedCar()
 	for (i = 0; i < mainFrame.GetObjectCount(); i++)
 	{
 		// If the object with index i is a car, check to see if it is the selected car
-		if (mainFrame.GetObjectByIndex(i)->GetType() == GuiObject::TypeCar)
+		if (mainFrame.GetObjectByIndex(i)->GetType() == GuiObject::ItemType::Car)
 		{
 			carIndex++;
 
@@ -1330,7 +1330,7 @@ const GuiCar* GeneticAlgorithmPanel::GetSelectedCar()
 
 	// Verify that the selection is valid
 	if (i >= mainFrame.GetObjectCount() ||
-		mainFrame.GetObjectByIndex(i)->GetType() != GuiObject::TypeCar)
+		mainFrame.GetObjectByIndex(i)->GetType() != GuiObject::ItemType::Car)
 		return NULL;
 
 	return static_cast<GuiCar*>(mainFrame.GetObjectByIndex(i));

@@ -41,6 +41,7 @@ Tire::Tire()
 	diameter = 20.5;
 	width = 7.0;
 	stiffness = 1000.0;
+	tirePressure = 12.0;
 }
 
 //==========================================================================
@@ -62,26 +63,6 @@ Tire::Tire()
 Tire::Tire(const Tire &tire)
 {
 	*this = tire;
-}
-
-//==========================================================================
-// Class:			Tire
-// Function:		~Tire
-//
-// Description:		Destructor for the Tire class.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-Tire::~Tire()
-{
 }
 
 //==========================================================================
@@ -147,7 +128,7 @@ void Tire::Read(BinaryReader& file, const int& fileVersion)
 		file.Read(width);
 		file.Read(tirePressure);
 		file.Read(stiffness);
-		modelType = ModelConstantMu;
+		modelType = TireModel::ConstantStiffnesses;
 	}
 	else if (fileVersion >= 0)// All versions
 	{
@@ -155,42 +136,10 @@ void Tire::Read(BinaryReader& file, const int& fileVersion)
 		file.Read(width);
 		file.Read(tirePressure);
 		stiffness = 1000.0;
-		modelType = ModelConstantMu;
+		modelType = TireModel::ConstantStiffnesses;
 	}
 	else
 		assert(false);
-}
-
-//==========================================================================
-// Class:			Tire
-// Function:		operator=
-//
-// Description:		Assignment operator for the Tire class.
-//
-// Input Arguments:
-//		tire	= const Tire& to assign to this
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		Tire& reference to this
-//
-//==========================================================================
-Tire& Tire::operator = (const Tire &tire)
-{
-	// Check for self-assignment
-	if (this == &tire)
-		return *this;
-
-	// Copy the information to this
-	diameter		= tire.diameter;
-	width			= tire.width;
-	tirePressure	= tire.tirePressure;
-	stiffness		= tire.stiffness;
-	modelType		= tire.modelType;
-
-	return *this;
 }
 
 }// namespace VVASE

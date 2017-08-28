@@ -36,13 +36,13 @@ public:
 	virtual ~GuiObject();
 
 	// Possible types of data contained in a GuiObject
-	enum ItemType
+	enum class ItemType
 	{
-		TypeCar,
-		TypeSweep,
-		TypeOptimization,
+		Car,
+		Sweep,
+		Optimization,
 
-		TypeNone// Indicates an object doesn't exist
+		None// Indicates an object doesn't exist
 	};
 
 	// Returns true of false depending on whether or not this item is selected in
