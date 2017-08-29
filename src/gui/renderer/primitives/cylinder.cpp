@@ -337,13 +337,13 @@ void Cylinder::Update(const unsigned int& /*i*/)
 	{
 		for (j = 0; j < resolution - 2; j++)
 		{
-			mBufferInfo[0].indexBuffer[6 * resolution + j * 3] = 0;// TODO
-			mBufferInfo[0].indexBuffer[6 * resolution + j * 3 + 1] = 0;// TODO
-			mBufferInfo[0].indexBuffer[6 * resolution + j * 3 + 2] = 0;// TODO
+			mBufferInfo[0].indexBuffer[6 * resolution + j * 3] = 0;
+			mBufferInfo[0].indexBuffer[6 * resolution + j * 3 + 1] = j + 1;
+			mBufferInfo[0].indexBuffer[6 * resolution + j * 3 + 2] = j + 2;
 
-			mBufferInfo[0].indexBuffer[9 * resolution - 6 + j * 3] = 0;// TODO
-			mBufferInfo[0].indexBuffer[9 * resolution - 5 + j * 3] = 0;// TODO
-			mBufferInfo[0].indexBuffer[9 * resolution - 4 + j * 3] = 0;// TODO
+			mBufferInfo[0].indexBuffer[9 * resolution - 6 + j * 3] = resolution;
+			mBufferInfo[0].indexBuffer[9 * resolution - 5 + j * 3] = resolution + j + 1;
+			mBufferInfo[0].indexBuffer[9 * resolution - 4 + j * 3] = resolution + j + 2;
 		}
 	}
 
