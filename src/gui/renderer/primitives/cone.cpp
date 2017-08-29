@@ -20,6 +20,9 @@
 // LibPlot2D headers
 #include <lp2d/renderer/renderWindow.h>
 
+// Eigen headers
+#include <Eigen/Geometry>
+
 namespace VVASE
 {
 
@@ -63,9 +66,11 @@ Cone::Cone(LibPlot2D::RenderWindow &renderWindow) : Primitive(renderWindow)
 //==========================================================================
 void Cone::GenerateGeometry()
 {
-	/*glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
-	glDrawArrays(GL_QUADS, 0, mBufferInfo[0].vertexCount);
-	glBindVertexArray(0);*/
+	glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mBufferInfo[0].GetIndexBufferIndex());
+	glDrawElements(GL_TRIANGLES, mBufferInfo[0].indexBuffer.size(), GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	assert(!LibPlot2D::RenderWindow::GLHasError());
 }
@@ -250,103 +255,95 @@ bool Cone::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector3d& 
 //==========================================================================
 void Cone::Update(const unsigned int& /*i*/)
 {
-	// Resolution must be at least 3
-	/*if (resolution < 3)
+	if (resolution < 3)
 		resolution = 3;
 
-	// Determine the height of the cone
-	const double halfHeight((baseCenter - tip).norm() / 2.0);
+	mBufferInfo[0].GetOpenGLIndices(true);
 
-	// Determine the desired axis for the cone
+	mBufferInfo[0].vertexCount = resolution + 1;
+	mBufferInfo[0].vertexBuffer.resize(mBufferInfo[0].vertexCount
+		* (mRenderWindow.GetVertexDimension() + 4));// 3D vertex, RGBA color + 3D normal? TODO
+	assert(mRenderWindow.GetVertexDimension() == 4);
+
+	const unsigned int triangleCount(resolution + (resolution - 2) * static_cast<int>(drawCaps));
+	mBufferInfo[0].indexBuffer.resize(triangleCount * 3);
+
 	const Eigen::Vector3d axisDirection((tip - baseCenter).normalized());
-
-	// Determine the center of the cone
-	const Eigen::Vector3d center(baseCenter + axisDirection * halfHeight);
-
-	// Our reference direction will be the X-axis direction
-	Eigen::Vector3d referenceDirection(1.0, 0.0, 0.0);
-
-	// Determine the angle and axis of rotation
-	Eigen::Vector3d axisOfRotation = referenceDirection.cross(axisDirection);
-	double angle = acos(axisDirection.dot(referenceDirection));// [rad]
-
-	// If the axis direction is opposite the reference direction, we need to rotate 180 degrees
-	if (VVASE::Math::IsZero(axisDirection + referenceDirection))
+	const Eigen::Vector3d radial([axisDirection]()
 	{
-		angle = UnitConverter::Pi;
-		axisOfRotation = Eigen::Vector3d(0.0, 1.0, 0.0);
+		Eigen::Vector3d v(axisDirection);
+		if (fabs(v.x()) < fabs(v.y()) && fabs(v.x()) < fabs(v.z()))// rotate about x
+			return Eigen::AngleAxisd(0.5 * M_PI, Eigen::Vector3d::UnitX()) * v;
+		else if (fabs(v.y()) < fabs(v.z()))// rotate about y
+			return Eigen::AngleAxisd(0.5 * M_PI, Eigen::Vector3d::UnitY()) * v;
+
+		return Eigen::AngleAxisd(0.5 * M_PI, Eigen::Vector3d::UnitZ()) * v;
+	}().normalized() * radius);
+
+	const unsigned int colorStart(4 * (resolution + 1));
+
+	int j;
+	for (j = 0; j < resolution; ++j)
+	{
+		const double angle(2.0 * M_PI * j / static_cast<double>(resolution));
+		const Eigen::AngleAxisd rotation(angle, axisDirection);
+		const Eigen::Vector3d v(rotation * radial);
+
+		mBufferInfo[0].vertexBuffer[j * 4] = static_cast<float>((baseCenter + v).x());
+		mBufferInfo[0].vertexBuffer[j * 4 + 1] = static_cast<float>((baseCenter + v).y());
+		mBufferInfo[0].vertexBuffer[j * 4 + 2] = static_cast<float>((baseCenter + v).z());
+		mBufferInfo[0].vertexBuffer[j * 4 + 3] = 1.0f;
+
+		mBufferInfo[0].vertexBuffer[colorStart + j * 4] = static_cast<float>(mColor.GetRed());
+		mBufferInfo[0].vertexBuffer[colorStart + j * 4 + 1] = static_cast<float>(mColor.GetGreen());
+		mBufferInfo[0].vertexBuffer[colorStart + j * 4 + 2] = static_cast<float>(mColor.GetBlue());
+		mBufferInfo[0].vertexBuffer[colorStart + j * 4 + 3] = static_cast<float>(mColor.GetAlpha());
+
+		mBufferInfo[0].indexBuffer[j * 3] = resolution;
+		mBufferInfo[0].indexBuffer[j * 3 + 1] = j;
+		mBufferInfo[0].indexBuffer[j * 3 + 2] = (j + 1) % resolution;
 	}
 
-	// Push the current matrix
-	glPushMatrix();
+	mBufferInfo[0].vertexBuffer[4 * resolution] = static_cast<float>(tip.x());
+	mBufferInfo[0].vertexBuffer[4 * resolution + 1] = static_cast<float>(tip.y());
+	mBufferInfo[0].vertexBuffer[4 * resolution + 2] = static_cast<float>(tip.z());
+	mBufferInfo[0].vertexBuffer[4 * resolution + 3] = 1.0f;
 
-		// Translate the current matrix
-		glTranslated(center.x(), center.y(), center.z());
+	mBufferInfo[0].vertexBuffer[colorStart + 4 * resolution] = static_cast<float>(mColor.GetRed());
+	mBufferInfo[0].vertexBuffer[colorStart + 4 * resolution + 1] = static_cast<float>(mColor.GetGreen());
+	mBufferInfo[0].vertexBuffer[colorStart + 4 * resolution + 2] = static_cast<float>(mColor.GetBlue());
+	mBufferInfo[0].vertexBuffer[colorStart + 4 * resolution + 3] = static_cast<float>(mColor.GetAlpha());
 
-		// Rotate the current matrix, if the rotation axis is non-zero
-		if (!VVASE::Math::IsZero(axisOfRotation.norm()))
-			glRotated(UnitConverter::RAD_TO_DEG(angle), axisOfRotation.x(), axisOfRotation.y(), axisOfRotation.z());
-
-		// Create the cone along the X-axis (must match the reference direction above)
-		// (the openGL matrices take care of correct position/orientation in hardware)
-		// We'll use a triangle fan to draw the cone
-		glBegin(GL_TRIANGLE_FAN);
-
-		// Set the first normal and the tip (center of the fan)
-		glNormal3d(1.0, 0.0, 0.0);
-		glVertex3d(halfHeight, 0.0, 0.0);
-
-		// Loop to generate the triangles
-		int i;
-		Eigen::Vector3d point(-halfHeight, 0.0, 0.0);
-		for (i = 0; i <= resolution; i++)
+	if (drawCaps)
+	{
+		for (j = 0; j < resolution - 2; ++j)
 		{
-			// Determine the angle to the current point
-			angle = (double)i * 2.0 * UnitConverter::Pi / (double)resolution;
-
-			// Determine the Y and Z ordinates based on this angle and the radius
-			point.y() = radius * cos(angle);
-			point.z() = radius * sin(angle);
-
-			// Set the normal for the next two points
-			glNormal3d(0.0, point.y() / radius, point.z() / radius);
-
-			// Add the next point
-			glVertex3d(point.x(), point.y(), point.z());
+			mBufferInfo[0].indexBuffer[3 * resolution + j * 3] = 0;
+			mBufferInfo[0].indexBuffer[3 * resolution + j * 3 + 1] = j + 1;
+			mBufferInfo[0].indexBuffer[3 * resolution + j * 3 + 2] = j + 2;
 		}
+	}
 
-		// End the triangle strip
-		glEnd();
+	glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
 
-		// Draw the end cap, if it is enabled
-		if (drawCaps)
-		{
-			// Set the normal for the end cap
-			glNormal3d(-1.0, 0.0, 0.0);
+	glBindBuffer(GL_ARRAY_BUFFER, mBufferInfo[0].GetVertexBufferIndex());
+	glBufferData(GL_ARRAY_BUFFER,
+		sizeof(GLfloat) * mBufferInfo[0].vertexCount * (mRenderWindow.GetVertexDimension() + 4),// TODO:  Normals?
+		mBufferInfo[0].vertexBuffer.data(), GL_DYNAMIC_DRAW);
 
-			// Begin the polygon
-			glBegin(GL_POLYGON);
+	glEnableVertexAttribArray(mRenderWindow.GetPositionLocation());
+	glVertexAttribPointer(mRenderWindow.GetPositionLocation(), 4, GL_FLOAT, GL_FALSE, 0, 0);
 
-			// Draw a polygon at the base of the cone
-			for (i = 0; i <= resolution; i++)
-			{
-				// Determine the angle to the current point
-				angle = (double)i * 2.0 * UnitConverter::Pi / (double)resolution;
+	glEnableVertexAttribArray(mRenderWindow.GetColorLocation());
+	glVertexAttribPointer(mRenderWindow.GetColorLocation(), 4, GL_FLOAT, GL_FALSE, 0,
+		(void*)(sizeof(GLfloat) * mRenderWindow.GetVertexDimension() * mBufferInfo[0].vertexCount));
 
-				// Determine the Y and Z ordinates based on this angle and the radius
-				point.y() = radius * cos(angle);
-				point.z() = radius * sin(angle);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mBufferInfo[0].GetIndexBufferIndex());
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * mBufferInfo[0].indexBuffer.size(),
+		mBufferInfo[0].indexBuffer.data(), GL_STATIC_DRAW);
 
-				// Add the next point
-				glVertex3d(point.x(), point.y(), point.z());
-			}
-
-			// End the polygon
-			glEnd();
-		}
-
-	// Pop the matrix
-	glPopMatrix();*/
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 
 	assert(!LibPlot2D::RenderWindow::GLHasError());
 }

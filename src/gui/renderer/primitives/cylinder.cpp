@@ -285,7 +285,7 @@ void Cylinder::Update(const unsigned int& /*i*/)
 	}().normalized() * radius);
 
 	int j;
-	for (j = 0; j < resolution; j++)
+	for (j = 0; j < resolution; ++j)
 	{
 		const double angle(2.0 * M_PI * j / static_cast<double>(resolution));
 		const Eigen::AngleAxisd rotation(angle, axisDirection);
@@ -335,7 +335,7 @@ void Cylinder::Update(const unsigned int& /*i*/)
 
 	if (drawCaps)
 	{
-		for (j = 0; j < resolution - 2; j++)
+		for (j = 0; j < resolution - 2; ++j)
 		{
 			mBufferInfo[0].indexBuffer[6 * resolution + j * 3] = 0;
 			mBufferInfo[0].indexBuffer[6 * resolution + j * 3 + 1] = j + 1;
@@ -365,6 +365,7 @@ void Cylinder::Update(const unsigned int& /*i*/)
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * mBufferInfo[0].indexBuffer.size(),
 		mBufferInfo[0].indexBuffer.data(), GL_STATIC_DRAW);
 
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
 	assert(!LibPlot2D::RenderWindow::GLHasError());
