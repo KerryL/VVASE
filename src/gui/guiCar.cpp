@@ -85,8 +85,8 @@ GuiCar::GuiCar(MainFrame &mainFrame, wxString pathAndFileName)
 	// After calling Initialize() (after loading the car from file, if necessary)
 	// set the size of the view window and the camera view to fit everything in
 	// the scene.
-	Eigen::Vector3d position(-100.0, -100.0, 60.0), up(0.0, 0.0, 1.0);
-	Eigen::Vector3d lookAt(originalSuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)] +
+	const Eigen::Vector3d position(-100.0, -100.0, 60.0), up(0.0, 0.0, 1.0);
+	const Eigen::Vector3d lookAt(originalSuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)] +
 		(originalSuspension->leftRear.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)] -
 		originalSuspension->rightFront.hardpoints[static_cast<int>(Corner::Hardpoints::ContactPatch)]) * 0.5);
 	renderer->SetCameraView(position, lookAt, up);

@@ -9,6 +9,9 @@
 // Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Derived from Primitive for creating rectangular objects.
 
+// GLEW headers
+#include <GL/glew.h>
+
 // Local headers
 #include "VVASE/gui/renderer/primitives/quadrilateral.h"
 #include "VVASE/core/utilities/carMath.h"
@@ -60,9 +63,9 @@ Quadrilateral::Quadrilateral(LibPlot2D::RenderWindow &renderWindow) : Primitive(
 //==========================================================================
 void Quadrilateral::GenerateGeometry()
 {
-	/*glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
-	glDrawArrays(GL_QUADS, 0, mBufferInfo[0].vertexCount);
-	glBindVertexArray(0);*/
+	glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
+	glDrawArrays(GL_TRIANGLES, 0, mBufferInfo[0].vertexCount);
+	glBindVertexArray(0);
 
 	assert(!LibPlot2D::RenderWindow::GLHasError());
 }
@@ -251,26 +254,30 @@ bool Quadrilateral::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::V
 //==========================================================================
 void Quadrilateral::Update(const unsigned int& i)
 {
-	// Set the normal direction
-	/*glNormal3d(normal.x(), normal.y(), normal.z());
+	mBufferInfo[0].GetOpenGLIndices(false);// TODO:  Switch to index array?
 
-	// We'll use a triangle strip to draw the quad
-	glBegin(GL_TRIANGLE_STRIP);
+	mBufferInfo[0].vertexCount = 6;
+	mBufferInfo[0].vertexBuffer.resize(mBufferInfo[0].vertexCount
+		* (mRenderWindow.GetVertexDimension() + 4));// 3D vertex, RGBA color + 3D normal? TODO
+	assert(mRenderWindow.GetVertexDimension() == 4);
+
+	/*const unsigned int triangleCount(2);
+	mBufferInfo[0].indexBuffer.resize(triangleCount * 3);*/
 
 	// Calculate the distance from the center to each corner
-	double halfDiagonal = sqrt(width * width / 4.0 + length * length / 4.0);
+	const double halfDiagonal(sqrt(width * width / 4.0 + length * length / 4.0));
 
 	// Calculate the angle between the axis and each diagonal
-	double diagonalAngle = atan2(width, length);
+	const double diagonalAngle(atan2(width, length));
 
 	// Force the axis direction to be perpendicular to the normal
-	Eigen::Vector3d axisDirection = axis.cross(normal).cross(normal);
+	const Eigen::Vector3d axisDirection(axis.cross(normal).cross(normal));
 
 	// Compute the locations of the four corners of the quad
-	Eigen::Vector3d corner1 = center + axisDirection.normalized() * halfDiagonal;
-	Eigen::Vector3d corner2 = center + axisDirection.normalized() * halfDiagonal;
-	Eigen::Vector3d corner3 = center - axisDirection.normalized() * halfDiagonal;
-	Eigen::Vector3d corner4 = center - axisDirection.normalized() * halfDiagonal;
+	Eigen::Vector3d corner1(center + axisDirection.normalized() * halfDiagonal);
+	Eigen::Vector3d corner2(center + axisDirection.normalized() * halfDiagonal);
+	Eigen::Vector3d corner3(center - axisDirection.normalized() * halfDiagonal);
+	Eigen::Vector3d corner4(center - axisDirection.normalized() * halfDiagonal);
 
 	corner1 -= center;
 	GeometryMath::Rotate(corner1, diagonalAngle, normal);
@@ -288,19 +295,98 @@ void Quadrilateral::Update(const unsigned int& i)
 	GeometryMath::Rotate(corner4, -diagonalAngle, normal);
 	corner4 += center;
 
-	// Add the vertices to create two triangles
-	// The order is 1, 4, 2, 3 because after the rotations, the corners are located
-	// as shown (here, the longer dimension is the length):
-	//  1 ---------- 4
-	//   |          |
-	//  2 ---------- 3
-	glVertex3d(corner1.x(), corner1.y(), corner1.z());
-	glVertex3d(corner4.x(), corner4.y(), corner4.z());
-	glVertex3d(corner2.x(), corner2.y(), corner2.z());
-	glVertex3d(corner3.x(), corner3.y(), corner3.z());
+	mBufferInfo[0].vertexBuffer[0] = static_cast<float>(corner1.x());
+	mBufferInfo[0].vertexBuffer[1] = static_cast<float>(corner1.y());
+	mBufferInfo[0].vertexBuffer[2] = static_cast<float>(corner1.z());
+	mBufferInfo[0].vertexBuffer[3] = 1.0f;
 
-	// Complete the triangle strip
-	glEnd();*/
+	mBufferInfo[0].vertexBuffer[4] = static_cast<float>(corner2.x());
+	mBufferInfo[0].vertexBuffer[5] = static_cast<float>(corner2.y());
+	mBufferInfo[0].vertexBuffer[6] = static_cast<float>(corner2.z());
+	mBufferInfo[0].vertexBuffer[7] = 1.0f;
+
+	mBufferInfo[0].vertexBuffer[8] = static_cast<float>(corner3.x());
+	mBufferInfo[0].vertexBuffer[9] = static_cast<float>(corner3.y());
+	mBufferInfo[0].vertexBuffer[10] = static_cast<float>(corner3.z());
+	mBufferInfo[0].vertexBuffer[11] = 1.0f;
+
+	mBufferInfo[0].vertexBuffer[12] = static_cast<float>(corner1.x());
+	mBufferInfo[0].vertexBuffer[13] = static_cast<float>(corner1.y());
+	mBufferInfo[0].vertexBuffer[14] = static_cast<float>(corner1.z());
+	mBufferInfo[0].vertexBuffer[15] = 1.0f;
+
+	mBufferInfo[0].vertexBuffer[16] = static_cast<float>(corner3.x());
+	mBufferInfo[0].vertexBuffer[17] = static_cast<float>(corner3.y());
+	mBufferInfo[0].vertexBuffer[18] = static_cast<float>(corner3.z());
+	mBufferInfo[0].vertexBuffer[19] = 1.0f;
+
+	mBufferInfo[0].vertexBuffer[20] = static_cast<float>(corner4.x());
+	mBufferInfo[0].vertexBuffer[21] = static_cast<float>(corner4.y());
+	mBufferInfo[0].vertexBuffer[22] = static_cast<float>(corner4.z());
+	mBufferInfo[0].vertexBuffer[23] = 1.0f;
+
+	mBufferInfo[0].vertexBuffer[24] = static_cast<float>(mColor.GetRed());
+	mBufferInfo[0].vertexBuffer[25] = static_cast<float>(mColor.GetGreen());
+	mBufferInfo[0].vertexBuffer[26] = static_cast<float>(mColor.GetBlue());
+	mBufferInfo[0].vertexBuffer[27] = static_cast<float>(mColor.GetAlpha());
+
+	mBufferInfo[0].vertexBuffer[28] = static_cast<float>(mColor.GetRed());
+	mBufferInfo[0].vertexBuffer[29] = static_cast<float>(mColor.GetGreen());
+	mBufferInfo[0].vertexBuffer[30] = static_cast<float>(mColor.GetBlue());
+	mBufferInfo[0].vertexBuffer[31] = static_cast<float>(mColor.GetAlpha());
+
+	mBufferInfo[0].vertexBuffer[32] = static_cast<float>(mColor.GetRed());
+	mBufferInfo[0].vertexBuffer[33] = static_cast<float>(mColor.GetGreen());
+	mBufferInfo[0].vertexBuffer[34] = static_cast<float>(mColor.GetBlue());
+	mBufferInfo[0].vertexBuffer[35] = static_cast<float>(mColor.GetAlpha());
+
+	mBufferInfo[0].vertexBuffer[36] = static_cast<float>(mColor.GetRed());
+	mBufferInfo[0].vertexBuffer[37] = static_cast<float>(mColor.GetGreen());
+	mBufferInfo[0].vertexBuffer[38] = static_cast<float>(mColor.GetBlue());
+	mBufferInfo[0].vertexBuffer[39] = static_cast<float>(mColor.GetAlpha());
+
+	mBufferInfo[0].vertexBuffer[40] = static_cast<float>(mColor.GetRed());
+	mBufferInfo[0].vertexBuffer[41] = static_cast<float>(mColor.GetGreen());
+	mBufferInfo[0].vertexBuffer[42] = static_cast<float>(mColor.GetBlue());
+	mBufferInfo[0].vertexBuffer[43] = static_cast<float>(mColor.GetAlpha());
+
+	mBufferInfo[0].vertexBuffer[44] = static_cast<float>(mColor.GetRed());
+	mBufferInfo[0].vertexBuffer[45] = static_cast<float>(mColor.GetGreen());
+	mBufferInfo[0].vertexBuffer[46] = static_cast<float>(mColor.GetBlue());
+	mBufferInfo[0].vertexBuffer[47] = static_cast<float>(mColor.GetAlpha());
+
+	// TODO:  Normals?
+
+	/*mBufferInfo[0].indexBuffer[0] = 0;
+	mBufferInfo[0].indexBuffer[1] = 1;
+	mBufferInfo[0].indexBuffer[2] = 2;
+
+	mBufferInfo[0].indexBuffer[3] = 0;
+	mBufferInfo[0].indexBuffer[4] = 2;
+	mBufferInfo[0].indexBuffer[5] = 3;*/
+
+	glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
+
+	glBindBuffer(GL_ARRAY_BUFFER, mBufferInfo[0].GetVertexBufferIndex());
+	glBufferData(GL_ARRAY_BUFFER,
+		sizeof(GLfloat) * mBufferInfo[0].vertexCount * (mRenderWindow.GetVertexDimension() + 4),// TODO:  Normals?
+		mBufferInfo[0].vertexBuffer.data(), GL_DYNAMIC_DRAW);
+
+	glEnableVertexAttribArray(mRenderWindow.GetPositionLocation());
+	glVertexAttribPointer(mRenderWindow.GetPositionLocation(), 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+	glEnableVertexAttribArray(mRenderWindow.GetColorLocation());
+	glVertexAttribPointer(mRenderWindow.GetColorLocation(), 4, GL_FLOAT, GL_FALSE, 0,
+		(void*)(sizeof(GLfloat) * mRenderWindow.GetVertexDimension() * mBufferInfo[0].vertexCount));
+
+	/*glBindBuffer(GL_ARRAY_BUFFER, mBufferInfo[0].GetIndexBufferIndex());
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLuint) * mBufferInfo[0].indexBuffer.size(),
+		mBufferInfo[0].indexBuffer.data(), GL_DYNAMIC_DRAW);
+
+	glEnableVertexAttribArray(mRenderWindow.GetIndexLocation());
+	glVertexAttribIPointer(mRenderWindow.GetIndexLocation(), 1, GL_UNSIGNED_INT, 0, 0);*/
+
+	glBindVertexArray(0);
 
 	assert(!LibPlot2D::RenderWindow::GLHasError());
 }

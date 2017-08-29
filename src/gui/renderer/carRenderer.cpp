@@ -134,7 +134,7 @@ void CarRenderer::InternalInitialization()
 BEGIN_EVENT_TABLE(CarRenderer, RenderWindow)
 	EVT_LEFT_UP(				CarRenderer::OnLeftClick)
 	EVT_RIGHT_UP(				CarRenderer::OnRightClick)
-	EVT_MENU(idContextEdit,	CarRenderer::OnContextEdit)
+	EVT_MENU(idContextEdit,		CarRenderer::OnContextEdit)
 END_EVENT_TABLE();
 
 //==========================================================================
@@ -1092,7 +1092,7 @@ bool CarRenderer::TraceClickToHardpoint(const double& x, const double& y,
 void CarRenderer::OnLeftClick(wxMouseEvent& event)
 {
 	event.Skip();
-	if (mIsInteracting || mObservedLeftButtonDown)
+	if (mIsInteracting || !mObservedLeftButtonDown)
 		return;
 
 	Suspension::Hardpoints suspensionPoint;

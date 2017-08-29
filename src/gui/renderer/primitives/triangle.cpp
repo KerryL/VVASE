@@ -62,9 +62,9 @@ Triangle::Triangle(LibPlot2D::RenderWindow &renderWindow) : Primitive(renderWind
 //==========================================================================
 void Triangle::GenerateGeometry()
 {
-	/*glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
-	glDrawArrays(GL_QUADS, 0, mBufferInfo[0].vertexCount);
-	glBindVertexArray(0);*/
+	glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
+	glDrawArrays(GL_TRIANGLES, 0, mBufferInfo[0].vertexCount);
+	glBindVertexArray(0);
 
 	assert(!LibPlot2D::RenderWindow::GLHasError());
 }
@@ -205,22 +205,67 @@ bool Triangle::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector
 //==========================================================================
 void Triangle::Update(const unsigned int& i)
 {
-	/*// Used as each triangle is created
-	const Eigen::Vector3d normal((corner2 - corner1).cross(corner3 - corner1).normalized());
+	mBufferInfo[0].GetOpenGLIndices(true);
 
-	// Set the normal for the triangle
-	glNormal3d(normal.x(), normal.y(), normal.z());
+	mBufferInfo[0].vertexCount = 3;
+	mBufferInfo[0].vertexBuffer.resize(mBufferInfo[0].vertexCount
+		* (mRenderWindow.GetVertexDimension() + 4));// 3D vertex, RGBA color + 3D normal? TODO
+	assert(mRenderWindow.GetVertexDimension() == 4);
 
-	// This is just one triangle
-	glBegin(GL_TRIANGLES);
+	const unsigned int triangleCount(1);
+	mBufferInfo[0].indexBuffer.resize(triangleCount * 3);
 
-	// Add the three vertices
-	glVertex3d(corner1.x(), corner1.y(), corner1.z());
-	glVertex3d(corner2.x(), corner2.y(), corner2.z());
-	glVertex3d(corner3.x(), corner3.y(), corner3.z());
+	mBufferInfo[0].vertexBuffer[0] = static_cast<float>(corner1.x());
+	mBufferInfo[0].vertexBuffer[1] = static_cast<float>(corner1.y());
+	mBufferInfo[0].vertexBuffer[2] = static_cast<float>(corner1.z());
+	mBufferInfo[0].vertexBuffer[3] = 1.0f;
 
-	// Complete the triangle
-	glEnd();*/
+	mBufferInfo[0].vertexBuffer[4] = static_cast<float>(corner2.x());
+	mBufferInfo[0].vertexBuffer[5] = static_cast<float>(corner2.y());
+	mBufferInfo[0].vertexBuffer[6] = static_cast<float>(corner2.z());
+	mBufferInfo[0].vertexBuffer[7] = 1.0f;
+
+	mBufferInfo[0].vertexBuffer[8] = static_cast<float>(corner3.x());
+	mBufferInfo[0].vertexBuffer[9] = static_cast<float>(corner3.y());
+	mBufferInfo[0].vertexBuffer[10] = static_cast<float>(corner3.z());
+	mBufferInfo[0].vertexBuffer[11] = 1.0f;
+
+	mBufferInfo[0].vertexBuffer[12] = static_cast<float>(mColor.GetRed());
+	mBufferInfo[0].vertexBuffer[13] = static_cast<float>(mColor.GetGreen());
+	mBufferInfo[0].vertexBuffer[14] = static_cast<float>(mColor.GetBlue());
+	mBufferInfo[0].vertexBuffer[15] = static_cast<float>(mColor.GetAlpha());
+
+	mBufferInfo[0].vertexBuffer[16] = static_cast<float>(mColor.GetRed());
+	mBufferInfo[0].vertexBuffer[17] = static_cast<float>(mColor.GetGreen());
+	mBufferInfo[0].vertexBuffer[18] = static_cast<float>(mColor.GetBlue());
+	mBufferInfo[0].vertexBuffer[19] = static_cast<float>(mColor.GetAlpha());
+
+	mBufferInfo[0].vertexBuffer[20] = static_cast<float>(mColor.GetRed());
+	mBufferInfo[0].vertexBuffer[21] = static_cast<float>(mColor.GetGreen());
+	mBufferInfo[0].vertexBuffer[22] = static_cast<float>(mColor.GetBlue());
+	mBufferInfo[0].vertexBuffer[23] = static_cast<float>(mColor.GetAlpha());
+
+	// TODO:  Normal?
+
+	mBufferInfo[0].indexBuffer[0] = 0;
+	mBufferInfo[0].indexBuffer[1] = 1;
+	mBufferInfo[0].indexBuffer[2] = 2;
+
+	glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
+
+	glBindBuffer(GL_ARRAY_BUFFER, mBufferInfo[0].GetVertexBufferIndex());
+	glBufferData(GL_ARRAY_BUFFER,
+		sizeof(GLfloat) * mBufferInfo[0].vertexCount * (mRenderWindow.GetVertexDimension() + 4),// TODO:  Normals?
+		mBufferInfo[0].vertexBuffer.data(), GL_DYNAMIC_DRAW);
+
+	glEnableVertexAttribArray(mRenderWindow.GetPositionLocation());
+	glVertexAttribPointer(mRenderWindow.GetPositionLocation(), 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+	glEnableVertexAttribArray(mRenderWindow.GetColorLocation());
+	glVertexAttribPointer(mRenderWindow.GetColorLocation(), 4, GL_FLOAT, GL_FALSE, 0,
+		(void*)(sizeof(GLfloat) * mRenderWindow.GetVertexDimension() * mBufferInfo[0].vertexCount));
+
+	glBindVertexArray(0);
 
 	assert(!LibPlot2D::RenderWindow::GLHasError());
 }
