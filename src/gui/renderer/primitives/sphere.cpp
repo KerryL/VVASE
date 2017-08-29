@@ -9,8 +9,8 @@
 // Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Derived from Primitive for creating spherical objects.
 
-// Standard C++ headers
-#include <cassert>
+// GLEW headers
+#include <GL/glew.h>
 
 // Local headers
 #include "VVASE/gui/renderer/primitives/sphere.h"
@@ -19,6 +19,9 @@
 
 // LibPlot2D headers
 #include <lp2d/renderer/renderWindow.h>
+
+// Standard C++ headers
+#include <cassert>
 
 // For choosing between an octohedron (8 sides) or a icosohedron (20 sides) as the base polygon
 // for the recursive subdivision to create the sphere.
@@ -306,7 +309,7 @@ bool Sphere::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector3d
 //		None
 //
 //==========================================================================
-void Sphere::Update(const unsigned int& i)
+void Sphere::Update(const unsigned int& /*i*/)
 {
 	/*if (resolution < 0)
 		resolution = 0;

@@ -9,6 +9,9 @@
 // Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Derived from Primitive for creating conical objects.
 
+// GLEW headers
+#include <GL/glew.h>
+
 // Local headers
 #include "VVASE/gui/renderer/primitives/cone.h"
 #include "VVASE/gui/utilities/unitConverter.h"
@@ -245,7 +248,7 @@ bool Cone::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector3d& 
 //		None
 //
 //==========================================================================
-void Cone::Update(const unsigned int& i)
+void Cone::Update(const unsigned int& /*i*/)
 {
 	// Resolution must be at least 3
 	/*if (resolution < 3)

@@ -9,6 +9,9 @@
 // Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Derived from Primitive for creating disk objects.
 
+// GLEW headers
+#include <GL/glew.h>
+
 // Local headers
 #include "VVASE/gui/renderer/primitives/disk.h"
 #include "VVASE/gui/utilities/unitConverter.h"
@@ -242,7 +245,7 @@ bool Disk::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector3d& 
 //		None
 //
 //==========================================================================
-void Disk::Update(const unsigned int& i)
+void Disk::Update(const unsigned int& /*i*/)
 {
 	/*if (resolution < 3)
 		resolution = 3;
