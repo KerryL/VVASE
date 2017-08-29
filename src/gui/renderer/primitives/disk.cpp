@@ -20,6 +20,9 @@
 // LibPlot2D headers
 #include <lp2d/renderer/renderWindow.h>
 
+// Eigen headers
+#include <Eigen/Geometry>
+
 namespace VVASE
 {
 
@@ -63,9 +66,11 @@ Disk::Disk(LibPlot2D::RenderWindow &renderWindow) : Primitive(renderWindow)
 //==========================================================================
 void Disk::GenerateGeometry()
 {
-	/*glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
-	glDrawArrays(GL_QUADS, 0, mBufferInfo[0].vertexCount);
-	glBindVertexArray(0);*/
+	glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mBufferInfo[0].GetIndexBufferIndex());
+	glDrawElements(GL_TRIANGLES, mBufferInfo[0].indexBuffer.size(), GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	assert(!LibPlot2D::RenderWindow::GLHasError());
 }
@@ -247,55 +252,122 @@ bool Disk::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector3d& 
 //==========================================================================
 void Disk::Update(const unsigned int& /*i*/)
 {
-	/*if (resolution < 3)
-		resolution = 3;
+	mBufferInfo[0].GetOpenGLIndices(true);
 
-	// Our reference direction will be the X-axis direction
-	Eigen::Vector3d referenceDirection(1.0, 0.0, 0.0);
+	mBufferInfo[0].vertexCount = resolution * (static_cast<int>(innerRadius > 0.0) + 1);
+	mBufferInfo[0].vertexBuffer.resize(mBufferInfo[0].vertexCount
+		* (mRenderWindow.GetVertexDimension() + 4));// 3D vertex, RGBA color + 3D normal? TODO
+	assert(mRenderWindow.GetVertexDimension() == 4);
 
-	// Determine the angle and axis of rotation
-	Eigen::Vector3d axisOfRotation = referenceDirection.cross(normal);
-	double angle = acos(normal.dot(referenceDirection));// [rad]
+	const unsigned int triangleCount([this]()
+	{
+		if (innerRadius == 0.0)
+			return resolution - 2;
+		return resolution * 2;
+	}());
+	mBufferInfo[0].indexBuffer.resize(triangleCount * 3);
 
-	glPushMatrix();
+	const Eigen::Vector3d radial([this]()
+	{
+		Eigen::Vector3d v(normal);
+		if (fabs(v.x()) < fabs(v.y()) && fabs(v.x()) < fabs(v.z()))// rotate about x
+			return Eigen::AngleAxisd(0.5 * M_PI, Eigen::Vector3d::UnitX()) * v;
+		else if (fabs(v.y()) < fabs(v.z()))// rotate about y
+			return Eigen::AngleAxisd(0.5 * M_PI, Eigen::Vector3d::UnitY()) * v;
 
-		// Translate the current matrix
-		glTranslated(center.x(), center.y(), center.z());
+		return Eigen::AngleAxisd(0.5 * M_PI, Eigen::Vector3d::UnitZ()) * v;
+	}().normalized() * outerRadius);
 
-		// Rotate the current matrix, if the rotation axis is non-zero
-		if (!VVASE::Math::IsZero(axisOfRotation.norm()))
-			glRotated(UnitConverter::RAD_TO_DEG(angle), axisOfRotation.x(), axisOfRotation.y(), axisOfRotation.z());
+	const unsigned int colorStart([this]()
+	{
+		if (innerRadius > 0.0)
+			return 8 * resolution;
+		return 4 * resolution;
+	}());
 
-		// Set the normal direction
-		glNormal3d(normal.x(), normal.y(), normal.z());
+	int j;
+	for (j = 0; j < resolution; ++j)
+	{
+		const double angle(2.0 * M_PI * j / static_cast<double>(resolution));
+		const Eigen::AngleAxisd rotation(angle, normal);
+		const Eigen::Vector3d v(rotation * radial);
 
-		// We'll use a triangle strip to draw the disk
-		glBegin(GL_TRIANGLE_STRIP);
+		mBufferInfo[0].vertexBuffer[j * 4] = static_cast<float>((center + v).x());
+		mBufferInfo[0].vertexBuffer[j * 4 + 1] = static_cast<float>((center + v).y());
+		mBufferInfo[0].vertexBuffer[j * 4 + 2] = static_cast<float>((center + v).z());
+		mBufferInfo[0].vertexBuffer[j * 4 + 3] = 1.0f;
 
-		// Loop to generate the triangles
-		Eigen::Vector3d insidePoint(0.0, 0.0, 0.0);
-		Eigen::Vector3d outsidePoint(0.0, 0.0, 0.0);
-		int i;
-		for (i = 0; i <= resolution; i++)
+		mBufferInfo[0].vertexBuffer[colorStart + j * 4] = static_cast<float>(mColor.GetRed());
+		mBufferInfo[0].vertexBuffer[colorStart + j * 4 + 1] = static_cast<float>(mColor.GetGreen());
+		mBufferInfo[0].vertexBuffer[colorStart + j * 4 + 2] = static_cast<float>(mColor.GetBlue());
+		mBufferInfo[0].vertexBuffer[colorStart + j * 4 + 3] = static_cast<float>(mColor.GetAlpha());
+
+		if (innerRadius > 0.0)
 		{
-			// Determine the angle to the current set of points
-			angle = (double)i * 2.0 * VVASE::Math::Pi / (double)resolution;
+			const Eigen::Vector3d u(v.normalized() * innerRadius);
 
-			// Determine the Y and Z ordinates based on this angle and the radii
-			outsidePoint.y() = outerRadius * cos(angle);
-			outsidePoint.z() = outerRadius * sin(angle);
+			mBufferInfo[0].vertexBuffer[4 * resolution + j * 4] = static_cast<float>((center + u).x());
+			mBufferInfo[0].vertexBuffer[4 * resolution + j * 4 + 1] = static_cast<float>((center + u).y());
+			mBufferInfo[0].vertexBuffer[4 * resolution + j * 4 + 2] = static_cast<float>((center + u).z());
+			mBufferInfo[0].vertexBuffer[4 * resolution + j * 4 + 3] = 1.0f;
 
-			insidePoint.y() = innerRadius * cos(angle);
-			insidePoint.z() = innerRadius * sin(angle);
+			mBufferInfo[0].vertexBuffer[colorStart + 4 * resolution + j * 4] = static_cast<float>(mColor.GetRed());
+			mBufferInfo[0].vertexBuffer[colorStart + 4 * resolution + j * 4 + 1] = static_cast<float>(mColor.GetGreen());
+			mBufferInfo[0].vertexBuffer[colorStart + 4 * resolution + j * 4 + 2] = static_cast<float>(mColor.GetBlue());
+			mBufferInfo[0].vertexBuffer[colorStart + 4 * resolution + j * 4 + 3] = static_cast<float>(mColor.GetAlpha());
 
-			// Add the next two points
-			glVertex3d(outsidePoint.x(), outsidePoint.y(), outsidePoint.z());
-			glVertex3d(insidePoint.x(), insidePoint.y(), insidePoint.z());
+			if (j == resolution - 1)// These triangles connect first vertices with last
+			{
+				mBufferInfo[0].indexBuffer[6 * j] = resolution - 1;
+				mBufferInfo[0].indexBuffer[6 * j + 1] = 0;
+				mBufferInfo[0].indexBuffer[6 * j + 2] = 2 * resolution - 1;
+
+				mBufferInfo[0].indexBuffer[6 * j + 3] = 0;
+				mBufferInfo[0].indexBuffer[6 * j + 4] = resolution;
+				mBufferInfo[0].indexBuffer[6 * j + 5] = 2 * resolution - 1;
+			}
+			else
+			{
+				mBufferInfo[0].indexBuffer[6 * j] = j;
+				mBufferInfo[0].indexBuffer[6 * j + 1] = j + 1;
+				mBufferInfo[0].indexBuffer[6 * j + 2] = resolution + j;
+
+				mBufferInfo[0].indexBuffer[6 * j + 3] = j + 1;
+				mBufferInfo[0].indexBuffer[6 * j + 4] = resolution + j + 1;
+				mBufferInfo[0].indexBuffer[6 * j + 5] = resolution + j;
+			}
 		}
+	}
 
-		glEnd();
+	if (innerRadius == 0.0)
+	{
+		for (j = 0; j < resolution - 2; ++j)
+		{
+			mBufferInfo[0].indexBuffer[3 * j] = 0;
+			mBufferInfo[0].indexBuffer[3 * j + 1] = j + 1;
+			mBufferInfo[0].indexBuffer[3 * j + 2] = j + 2;
+		}
+	}
 
-	glPopMatrix();*/
+	glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
+
+	glBindBuffer(GL_ARRAY_BUFFER, mBufferInfo[0].GetVertexBufferIndex());
+	glBufferData(GL_ARRAY_BUFFER,
+		sizeof(GLfloat) * mBufferInfo[0].vertexCount * (mRenderWindow.GetVertexDimension() + 4),// TODO:  Normals?
+		mBufferInfo[0].vertexBuffer.data(), GL_DYNAMIC_DRAW);
+
+	glEnableVertexAttribArray(mRenderWindow.GetPositionLocation());
+	glVertexAttribPointer(mRenderWindow.GetPositionLocation(), 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+	glEnableVertexAttribArray(mRenderWindow.GetColorLocation());
+	glVertexAttribPointer(mRenderWindow.GetColorLocation(), 4, GL_FLOAT, GL_FALSE, 0,
+		(void*)(sizeof(GLfloat) * mRenderWindow.GetVertexDimension() * mBufferInfo[0].vertexCount));
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mBufferInfo[0].GetIndexBufferIndex());
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * mBufferInfo[0].indexBuffer.size(),
+		mBufferInfo[0].indexBuffer.data(), GL_STATIC_DRAW);
+
+	glBindVertexArray(0);
 
 	assert(!LibPlot2D::RenderWindow::GLHasError());
 }
