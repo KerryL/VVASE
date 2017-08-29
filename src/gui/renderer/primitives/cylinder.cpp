@@ -9,6 +9,9 @@
 // Lics:  GPL v3 (see https://www.gnu.org/licenses/gpl-3.0.en.html)
 // Desc:  Derived from Primitive for creating cylindrical objects.
 
+// GLEW headers
+#include <GL/glew.h>
+
 // Local headers
 #include "VVASE/gui/renderer/primitives/cylinder.h"
 #include "VVASE/gui/utilities/unitConverter.h"
@@ -16,6 +19,9 @@
 
 // LibPlot2D headers
 #include <lp2d/renderer/renderWindow.h>
+
+// Eigen headers
+#include <Eigen/Geometry>
 
 namespace VVASE
 {
@@ -60,9 +66,11 @@ Cylinder::Cylinder(LibPlot2D::RenderWindow &renderWindow) : Primitive(renderWind
 //==========================================================================
 void Cylinder::GenerateGeometry()
 {
-	/*glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
-	glDrawArrays(GL_QUADS, 0, mBufferInfo[0].vertexCount);
-	glBindVertexArray(0);*/
+	//glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mBufferInfo[0].GetIndexBufferIndex());
+	glDrawElements(GL_TRIANGLES, mBufferInfo[0].indexBuffer.size(), GL_UNSIGNED_INT, 0);
+	//glBindVertexArray(0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	assert(!LibPlot2D::RenderWindow::GLHasError());
 }
@@ -243,82 +251,121 @@ bool Cylinder::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector
 //		None
 //
 //==========================================================================
-void Cylinder::Update(const unsigned int& i)
+void Cylinder::Update(const unsigned int& /*i*/)
 {
-	/*if (resolution < 3)
+	if (resolution < 3)
 		resolution = 3;
 
-	const double halfHeight((endPoint1 - endPoint2).norm() / 2.0);
+	mBufferInfo[0].GetOpenGLIndices(true);
+
+	mBufferInfo[0].vertexCount = 2 * resolution;
+	mBufferInfo[0].vertexBuffer.resize(mBufferInfo[0].vertexCount
+		* (mRenderWindow.GetVertexDimension() + 4));// 3D vertex, RGBA color + 3D normal? TODO
+	assert(mRenderWindow.GetVertexDimension() == 4);
+
+	const unsigned int triangleCount([this]()
+	{
+		unsigned int count(2 * resolution);
+		if (drawCaps)
+			count += 2 * (resolution - 2);
+		return count;
+	}());
+	mBufferInfo[0].indexBuffer.resize(triangleCount * 3);
 
 	const Eigen::Vector3d axisDirection((endPoint2 - endPoint1).normalized());
-	const Eigen::Vector3d center(endPoint1 + axisDirection * halfHeight);
-	const Eigen::Vector3d referenceDirection(1.0, 0.0, 0.0);
+	const Eigen::Vector3d radial([axisDirection]()
+	{
+		Eigen::Vector3d v(axisDirection);
+		if (v.x() < v.y() && v.x() < v.z())// rotate about x
+			return Eigen::AngleAxisd(0.5 * M_PI, Eigen::Vector3d::UnitX()) * v;
+		else if (v.y() < v.z())// rotate about y
+			return Eigen::AngleAxisd(0.5 * M_PI, Eigen::Vector3d::UnitY()) * v;
 
-	// Determine the angle and axis of rotation
-	Eigen::Vector3d axisOfRotation = referenceDirection.cross(axisDirection);
-	double angle = acos(axisDirection.dot(referenceDirection));// [rad]
+		return Eigen::AngleAxisd(0.5 * M_PI, Eigen::Vector3d::UnitZ()) * v;
+	}().normalized() * radius);
 
-	glPushMatrix();
+	int j;
+	for (j = 0; j < resolution; j++)
+	{
+		const double angle(2.0 * M_PI * j / static_cast<double>(resolution));
+		const Eigen::AngleAxisd rotation(angle, axisDirection);
+		const Eigen::Vector3d v(rotation * radial);
 
-		glTranslated(center.x(), center.y(), center.z());
+		mBufferInfo[0].vertexBuffer[j * 4] = static_cast<float>((endPoint1 + v).x());
+		mBufferInfo[0].vertexBuffer[j * 4 + 1] = static_cast<float>((endPoint1 + v).y());
+		mBufferInfo[0].vertexBuffer[j * 4 + 2] = static_cast<float>((endPoint1 + v).z());
+		mBufferInfo[0].vertexBuffer[j * 4 + 3] = 1.0f;
 
-		// Rotate the current matrix, if the rotation axis is non-zero
-		if (!VVASE::Math::IsZero(axisOfRotation.norm()))
-			glRotated(UnitConverter::RAD_TO_DEG(angle), axisOfRotation.x(), axisOfRotation.y(), axisOfRotation.z());
+		mBufferInfo[0].vertexBuffer[resolution * 4 + j * 4] = static_cast<float>((endPoint2 + v).x());
+		mBufferInfo[0].vertexBuffer[resolution * 4 + j * 4 + 1] = static_cast<float>((endPoint2 + v).x());
+		mBufferInfo[0].vertexBuffer[resolution * 4 + j * 4 + 2] = static_cast<float>((endPoint2 + v).x());
+		mBufferInfo[0].vertexBuffer[resolution * 4 + j * 4 + 3] = 1.0f;
 
-		// Create the cylinder along the X-axis (must match the reference direction above)
-		// (the openGL matrices take care of correct position/orientation in hardware)
-		// We'll use a triangle strip to draw the cylinder
-		glBegin(GL_TRIANGLE_STRIP);
+		mBufferInfo[0].vertexBuffer[8 * resolution + j * 4] = static_cast<float>(mColor.GetRed());
+		mBufferInfo[0].vertexBuffer[8 * resolution + j * 4 + 1] = static_cast<float>(mColor.GetGreen());
+		mBufferInfo[0].vertexBuffer[8 * resolution + j * 4 + 2] = static_cast<float>(mColor.GetBlue());
+		mBufferInfo[0].vertexBuffer[8 * resolution + j * 4 + 3] = 1.0f;
 
-		int i;
-		Eigen::Vector3d point(halfHeight, 0.0, 0.0);
-		for (i = 0; i <= resolution; i++)
+		mBufferInfo[0].vertexBuffer[12 * resolution + j * 4] = static_cast<float>(mColor.GetRed());
+		mBufferInfo[0].vertexBuffer[12 * resolution + j * 4 + 1] = static_cast<float>(mColor.GetGreen());
+		mBufferInfo[0].vertexBuffer[12 * resolution + j * 4 + 2] = static_cast<float>(mColor.GetBlue());
+		mBufferInfo[0].vertexBuffer[12 * resolution + j * 4 + 3] = 1.0f;
+
+		if (j == resolution - 1)// These triangles connect first vertices with last
 		{
-			angle = (double)i * 2.0 * VVASE::Math::Pi / (double)resolution;
-			point.y() = radius * cos(angle);
-			point.z() = radius * sin(angle);
+			mBufferInfo[0].indexBuffer[j * 6] = resolution - 1;
+			mBufferInfo[0].indexBuffer[j * 6 + 1] = 0;
+			mBufferInfo[0].indexBuffer[j * 6 + 2] = 2 * resolution - 1;
 
-			glNormal3d(0.0, point.y() / radius, point.z() / radius);
-
-			glVertex3d(point.x(), point.y(), point.z());
-			glVertex3d(-point.x(), point.y(), point.z());
+			mBufferInfo[0].indexBuffer[j * 6 + 3] = 0;
+			mBufferInfo[0].indexBuffer[j * 6 + 4] = resolution;
+			mBufferInfo[0].indexBuffer[j * 6 + 5] = 2 * resolution - 1;
 		}
-
-		glEnd();
-
-		if (drawCaps)
+		else
 		{
-			glNormal3d(1.0, 0.0, 0.0);
-			glBegin(GL_POLYGON);
+			mBufferInfo[0].indexBuffer[j * 6] = j;
+			mBufferInfo[0].indexBuffer[j * 6 + 1] = j + 1;
+			mBufferInfo[0].indexBuffer[j * 6 + 2] = resolution + j;
 
-			for (i = 0; i <= resolution; i++)
-			{
-				angle = static_cast<double>(i) * 2.0 * VVASE::Math::Pi / (double)resolution;
-				point.y() = radius * cos(angle);
-				point.z() = radius * sin(angle);
-
-				glVertex3d(point.x(), point.y(), point.z());
-			}
-
-			glEnd();
-
-			glNormal3d(-1.0, 0.0, 0.0);
-			glBegin(GL_POLYGON);
-
-			for (i = 0; i <= resolution; i++)
-			{
-				angle = (double)i * 2.0 * VVASE::Math::Pi / (double)resolution;
-				point.y() = radius * cos(angle);
-				point.z() = radius * sin(angle);
-
-				glVertex3d(-point.x(), point.y(), point.z());
-			}
-
-			glEnd();
+			mBufferInfo[0].indexBuffer[j * 6 + 3] = j;
+			mBufferInfo[0].indexBuffer[j * 6 + 4] = resolution + j + 1;
+			mBufferInfo[0].indexBuffer[j * 6 + 5] = resolution + j;
 		}
+	}
 
-	glPopMatrix();*/
+	if (drawCaps)
+	{
+		for (j = 0; j < resolution - 2; j++)
+		{
+			mBufferInfo[0].indexBuffer[6 * resolution + j * 3] = 0;// TODO
+			mBufferInfo[0].indexBuffer[6 * resolution + j * 3 + 1] = 0;// TODO
+			mBufferInfo[0].indexBuffer[6 * resolution + j * 3 + 2] = 0;// TODO
+
+			mBufferInfo[0].indexBuffer[9 * resolution - 6 + j * 3] = 0;// TODO
+			mBufferInfo[0].indexBuffer[9 * resolution - 5 + j * 3] = 0;// TODO
+			mBufferInfo[0].indexBuffer[9 * resolution - 4 + j * 3] = 0;// TODO
+		}
+	}
+
+	glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
+
+	glBindBuffer(GL_ARRAY_BUFFER, mBufferInfo[0].GetVertexBufferIndex());
+	glBufferData(GL_ARRAY_BUFFER,
+		sizeof(GLfloat) * mBufferInfo[0].vertexCount * (mRenderWindow.GetVertexDimension() + 4),// TODO:  Normals?
+		mBufferInfo[0].vertexBuffer.data(), GL_DYNAMIC_DRAW);
+
+	glEnableVertexAttribArray(mRenderWindow.GetPositionLocation());
+	glVertexAttribPointer(mRenderWindow.GetPositionLocation(), 4, GL_FLOAT, GL_FALSE, 0, 0);
+
+	glEnableVertexAttribArray(mRenderWindow.GetColorLocation());
+	glVertexAttribPointer(mRenderWindow.GetColorLocation(), 4, GL_FLOAT, GL_FALSE, 0,
+		(void*)(sizeof(GLfloat) * mRenderWindow.GetVertexDimension() * mBufferInfo[0].vertexCount));
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mBufferInfo[0].GetIndexBufferIndex());
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * mBufferInfo[0].indexBuffer.size(),
+		mBufferInfo[0].indexBuffer.data(), GL_DYNAMIC_DRAW);
+
+	glBindVertexArray(0);
 
 	assert(!LibPlot2D::RenderWindow::GLHasError());
 }
