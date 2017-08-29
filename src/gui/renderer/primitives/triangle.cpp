@@ -205,15 +205,15 @@ bool Triangle::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector
 //==========================================================================
 void Triangle::Update(const unsigned int& i)
 {
-	mBufferInfo[0].GetOpenGLIndices(true);
+	mBufferInfo[0].GetOpenGLIndices(false);
 
 	mBufferInfo[0].vertexCount = 3;
 	mBufferInfo[0].vertexBuffer.resize(mBufferInfo[0].vertexCount
 		* (mRenderWindow.GetVertexDimension() + 4));// 3D vertex, RGBA color + 3D normal? TODO
 	assert(mRenderWindow.GetVertexDimension() == 4);
 
-	const unsigned int triangleCount(1);
-	mBufferInfo[0].indexBuffer.resize(triangleCount * 3);
+	/*const unsigned int triangleCount(1);
+	mBufferInfo[0].indexBuffer.resize(triangleCount * 3);*/
 
 	mBufferInfo[0].vertexBuffer[0] = static_cast<float>(corner1.x());
 	mBufferInfo[0].vertexBuffer[1] = static_cast<float>(corner1.y());
@@ -247,9 +247,9 @@ void Triangle::Update(const unsigned int& i)
 
 	// TODO:  Normal?
 
-	mBufferInfo[0].indexBuffer[0] = 0;
+	/*mBufferInfo[0].indexBuffer[0] = 0;
 	mBufferInfo[0].indexBuffer[1] = 1;
-	mBufferInfo[0].indexBuffer[2] = 2;
+	mBufferInfo[0].indexBuffer[2] = 2;*/
 
 	glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
 
