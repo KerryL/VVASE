@@ -66,10 +66,10 @@ Cylinder::Cylinder(LibPlot2D::RenderWindow &renderWindow) : Primitive(renderWind
 //==========================================================================
 void Cylinder::GenerateGeometry()
 {
-	//glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
+	glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mBufferInfo[0].GetIndexBufferIndex());
 	glDrawElements(GL_TRIANGLES, mBufferInfo[0].indexBuffer.size(), GL_UNSIGNED_INT, 0);
-	//glBindVertexArray(0);
+	glBindVertexArray(0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	assert(!LibPlot2D::RenderWindow::GLHasError());
@@ -276,9 +276,9 @@ void Cylinder::Update(const unsigned int& /*i*/)
 	const Eigen::Vector3d radial([axisDirection]()
 	{
 		Eigen::Vector3d v(axisDirection);
-		if (v.x() < v.y() && v.x() < v.z())// rotate about x
+		if (fabs(v.x()) < fabs(v.y()) && fabs(v.x()) < fabs(v.z()))// rotate about x
 			return Eigen::AngleAxisd(0.5 * M_PI, Eigen::Vector3d::UnitX()) * v;
-		else if (v.y() < v.z())// rotate about y
+		else if (fabs(v.y()) < fabs(v.z()))// rotate about y
 			return Eigen::AngleAxisd(0.5 * M_PI, Eigen::Vector3d::UnitY()) * v;
 
 		return Eigen::AngleAxisd(0.5 * M_PI, Eigen::Vector3d::UnitZ()) * v;
@@ -297,19 +297,19 @@ void Cylinder::Update(const unsigned int& /*i*/)
 		mBufferInfo[0].vertexBuffer[j * 4 + 3] = 1.0f;
 
 		mBufferInfo[0].vertexBuffer[resolution * 4 + j * 4] = static_cast<float>((endPoint2 + v).x());
-		mBufferInfo[0].vertexBuffer[resolution * 4 + j * 4 + 1] = static_cast<float>((endPoint2 + v).x());
-		mBufferInfo[0].vertexBuffer[resolution * 4 + j * 4 + 2] = static_cast<float>((endPoint2 + v).x());
+		mBufferInfo[0].vertexBuffer[resolution * 4 + j * 4 + 1] = static_cast<float>((endPoint2 + v).y());
+		mBufferInfo[0].vertexBuffer[resolution * 4 + j * 4 + 2] = static_cast<float>((endPoint2 + v).z());
 		mBufferInfo[0].vertexBuffer[resolution * 4 + j * 4 + 3] = 1.0f;
 
 		mBufferInfo[0].vertexBuffer[8 * resolution + j * 4] = static_cast<float>(mColor.GetRed());
 		mBufferInfo[0].vertexBuffer[8 * resolution + j * 4 + 1] = static_cast<float>(mColor.GetGreen());
 		mBufferInfo[0].vertexBuffer[8 * resolution + j * 4 + 2] = static_cast<float>(mColor.GetBlue());
-		mBufferInfo[0].vertexBuffer[8 * resolution + j * 4 + 3] = 1.0f;
+		mBufferInfo[0].vertexBuffer[8 * resolution + j * 4 + 3] = static_cast<float>(mColor.GetAlpha());
 
 		mBufferInfo[0].vertexBuffer[12 * resolution + j * 4] = static_cast<float>(mColor.GetRed());
 		mBufferInfo[0].vertexBuffer[12 * resolution + j * 4 + 1] = static_cast<float>(mColor.GetGreen());
 		mBufferInfo[0].vertexBuffer[12 * resolution + j * 4 + 2] = static_cast<float>(mColor.GetBlue());
-		mBufferInfo[0].vertexBuffer[12 * resolution + j * 4 + 3] = 1.0f;
+		mBufferInfo[0].vertexBuffer[12 * resolution + j * 4 + 3] = static_cast<float>(mColor.GetAlpha());
 
 		if (j == resolution - 1)// These triangles connect first vertices with last
 		{
@@ -327,7 +327,7 @@ void Cylinder::Update(const unsigned int& /*i*/)
 			mBufferInfo[0].indexBuffer[j * 6 + 1] = j + 1;
 			mBufferInfo[0].indexBuffer[j * 6 + 2] = resolution + j;
 
-			mBufferInfo[0].indexBuffer[j * 6 + 3] = j;
+			mBufferInfo[0].indexBuffer[j * 6 + 3] = j + 1;
 			mBufferInfo[0].indexBuffer[j * 6 + 4] = resolution + j + 1;
 			mBufferInfo[0].indexBuffer[j * 6 + 5] = resolution + j;
 		}
@@ -363,7 +363,7 @@ void Cylinder::Update(const unsigned int& /*i*/)
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mBufferInfo[0].GetIndexBufferIndex());
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * mBufferInfo[0].indexBuffer.size(),
-		mBufferInfo[0].indexBuffer.data(), GL_DYNAMIC_DRAW);
+		mBufferInfo[0].indexBuffer.data(), GL_STATIC_DRAW);
 
 	glBindVertexArray(0);
 
