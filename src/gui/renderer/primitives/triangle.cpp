@@ -203,7 +203,7 @@ bool Triangle::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector
 //		None
 //
 //==========================================================================
-void Triangle::Update(const unsigned int& i)
+void Triangle::Update(const unsigned int& /*i*/)
 {
 	mBufferInfo[0].GetOpenGLIndices(false);
 

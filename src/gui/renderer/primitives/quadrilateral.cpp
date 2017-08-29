@@ -252,7 +252,7 @@ bool Quadrilateral::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::V
 //		None
 //
 //==========================================================================
-void Quadrilateral::Update(const unsigned int& i)
+void Quadrilateral::Update(const unsigned int& /*i*/)
 {
 	mBufferInfo[0].GetOpenGLIndices(false);// TODO:  Switch to index array?
 
