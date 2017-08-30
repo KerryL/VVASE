@@ -24,6 +24,8 @@
 
 // Standard C++ headers
 #include <fstream>
+#include <locale>
+#include <codecvt>
 
 namespace VVASE
 {
@@ -139,8 +141,14 @@ const int Car::currentFileVersion = 6;
 //==========================================================================
 bool Car::SaveCarToFile(vvaseString fileName, std::ofstream& outFile) const
 {
+#ifdef UNICODE
+	const std::string narrowName(std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().to_bytes(fileName));
+#else
+	const std::string narrowName(fileName);
+#endif
+
 	// Open the specified file
-	outFile.open(fileName.c_str(), std::ios::binary);// NOT vvaseOutFileStream - always use narrow char here
+	outFile.open(narrowName.c_str(), std::ios::binary);// NOT vvaseOutFileStream - always use narrow char here
 	if (!outFile.is_open() || !outFile.good())
 		return false;
 
@@ -180,7 +188,13 @@ bool Car::SaveCarToFile(vvaseString fileName, std::ofstream& outFile) const
 //==========================================================================
 bool Car::LoadCarFromFile(vvaseString fileName, std::ifstream& inFile, int& fileVersion)
 {
-	inFile.open(fileName.c_str(), std::ios::binary);// NOT vvaseInFileStream - always use narrow char here
+#ifdef UNICODE
+	const std::string narrowName(std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().to_bytes(fileName));
+#else
+	const std::string narrowName(fileName);
+#endif
+
+	inFile.open(narrowName.c_str(), std::ios::binary);// NOT vvaseInFileStream - always use narrow char here
 	if (!inFile.is_open() || !inFile.good())
 		return false;
 

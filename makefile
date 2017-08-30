@@ -12,10 +12,10 @@ TARGET_CORE_DEBUG = vvaseCored
 # Directories in which to search for source files
 CORE_DIRS = \
 	src/core \
-	src/core/analyses \
+	src/core/analysis \
 	src/core/car \
 	src/core/car/subsystems \
-	src/core/optimizations \
+	src/core/optimization \
 	src/core/threads \
 	src/core/utilities
 
@@ -29,7 +29,8 @@ GUI_DIRS = \
 	src/gui/dialogs \
 	src/gui/renderer \
 	src/gui/renderer/3dcar \
-	src/gui/renderer/primitives
+	src/gui/renderer/primitives \
+	src/gui/utilities
 
 # Source files
 CORE_SRC = $(foreach dir, $(CORE_DIRS), $(wildcard $(dir)/*.cpp))
@@ -44,12 +45,12 @@ TEMP_OBJS_GUI_RELEASE = $(addprefix $(OBJDIR_RELEASE),$(GUI_SRC:.cpp=.o))
 VERSION_FILE_OBJ_DEBUG = $(OBJDIR_DEBUG)$(VERSION_FILE:.cpp=.o)
 VERSION_FILE_OBJ_RELEASE = $(OBJDIR_RELEASE)$(VERSION_FILE:.cpp=.o)
 OBJS_CORE_DEBUG = $(filter-out $(VERSION_FILE_OBJ_DEBUG),$(TEMP_OBJS_CORE_DEBUG))
-OBJS_GUI_DEBUG = $(filter-out $(VERSION_FILE_OBJ_DEBUG),$(TEMP_OBJS_GUI_DEBUG))
 OBJS_CORE_RELEASE = $(filter-out $(VERSION_FILE_OBJ_RELEASE),$(TEMP_OBJS_CORE_RELEASE))
+OBJS_GUI_DEBUG = $(filter-out $(VERSION_FILE_OBJ_DEBUG),$(TEMP_OBJS_GUI_DEBUG))
 OBJS_GUI_RELEASE = $(filter-out $(VERSION_FILE_OBJ_RELEASE),$(TEMP_OBJS_GUI_RELEASE))
 ALL_OBJS_CORE_DEBUG = $(OBJS_CORE_DEBUG) $(VERSION_FILE_OBJ_DEBUG)
-ALL_OBJS_CORE_DEBUG = $(OBJS_CORE_DEBUG) $(VERSION_FILE_OBJ_DEBUG)
-ALL_OBJS_GUI_RELEASE = $(OBJS_GUI_RELEASE) $(VERSION_FILE_OBJ_RELEASE)
+ALL_OBJS_CORE_RELEASE = $(OBJS_CORE_RELEASE) $(VERSION_FILE_OBJ_RELEASE)
+ALL_OBJS_GUI_DEBUG = $(OBJS_GUI_DEBUG) $(VERSION_FILE_OBJ_DEBUG)
 ALL_OBJS_GUI_RELEASE = $(OBJS_GUI_RELEASE) $(VERSION_FILE_OBJ_RELEASE)
 
 .PHONY: all debug clean version core core_debug
@@ -61,21 +62,21 @@ core_debug: $(TARGET_CORE_DEBUG)
 
 $(TARGET): $(OBJS_GUI_RELEASE) version_release core
 	$(MKDIR) $(BINDIR)
-	$(CC) $(ALL_OBJS_RELEASE) $(LDFLAGS_RELEASE) -L$(LIBOUTDIR) $(addprefix -l,$(PSLIB)) -o $(BINDIR)$@
+	$(CC) $(OBJS_GUI_RELEASE) $(VERSION_FILE_OBJ_RELEASE) $(LDFLAGS_RELEASE) -L$(LIBOUTDIR) $(addprefix -l,$(PSLIB)) -o $(BINDIR)$@
 
-$(TARGET_DEBUG): $(OBJS_DEBUG) version_debug core_debug
+$(TARGET_DEBUG): $(OBJS_GUI_DEBUG) version_debug core_debug
 	$(MKDIR) $(BINDIR)
-	$(CC) $(ALL_OBJS_DEBUG) $(LDFLAGS_DEBUG) -L$(LIBOUTDIR) $(addprefix -l,$(PSLIB)) -o $(BINDIR)$@
+	$(CC) $(OBJS_GUI_DEBUG) $(VERSION_FILE_OBJ_DEBUG) $(LDFLAGS_DEBUG) -L$(LIBOUTDIR) $(addprefix -l,$(PSLIB)) -o $(BINDIR)$@
 
 $(TARGET_CORE): $(OBJS_CORE_RELEASE) version_release
-	$(MKDIR) $(LIBDIR)
-	$(CC) $(ALL_OBJS_RELEASE) $(LDFLAGS_RELEASE) -L$(LIBOUTDIR) $(addprefix -l,$(PSLIB)) -o $(BINDIR)$@
-	# TODO:  Need to modify to build library
+	$(MKDIR) $(LIBOUTDIR)
+	$(AR) $(LIBOUTDIR)lib$@.a $(OBJS_CORE_RELEASE)
+	$(RANLIB) $(LIBOUTDIR)lib$@.a
 
 $(TARGET_CORE_DEBUG): $(OBJS_CORE_DEBUG) version_debug
-	$(MKDIR) $(LIBDIR)
-	$(CC) $(ALL_OBJS_DEBUG) $(LDFLAGS_DEBUG) -L$(LIBOUTDIR) $(addprefix -l,$(PSLIB)) -o $(BINDIR)$@
-	# TODO:  Need to modify to build library
+	$(MKDIR) $(LIBOUTDIR)
+	$(AR) $(LIBOUTDIR)lib$@.a $(OBJS_CORE_DEBUG)
+	$(RANLIB) $(LIBOUTDIR)lib$@.a
 
 $(OBJDIR_RELEASE)%.o: %.cpp
 	$(MKDIR) $(dir $@)
@@ -101,3 +102,4 @@ clean:
 	$(RM) $(BINDIR)$(TARGET_DEBUG)
 	$(RM) -r $(LIBOUTDIR)
 	$(RM) $(VERSION_FILE)
+
