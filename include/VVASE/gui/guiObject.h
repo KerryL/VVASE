@@ -17,6 +17,8 @@
 #include <wx/wx.h>
 #include <wx/treebase.h>
 
+#undef None
+
 namespace VVASE
 {
 

@@ -47,6 +47,8 @@
 #include "VVASE/gui/renderer/3dcar/debugShape.h"
 #include "VVASE/core/utilities/geometryMath.h"
 
+#undef None
+
 // LibPlot2D headers
 #include <lp2d/renderer/primitives/primitive.h>
 

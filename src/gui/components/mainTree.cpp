@@ -19,7 +19,9 @@
 #include "../guiCar.h"
 #include "VVASE/gui/guiObject.h"
 #include "VVASE/core/utilities/debugger.h"
-#include "../sweep.h"
+#include "../sweep.h"// Something included from within this file defines None under GTK (TODO)
+
+#undef None
 
 // Icons (only for GTK)
 #ifdef __WXGTK__

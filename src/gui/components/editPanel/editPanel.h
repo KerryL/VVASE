@@ -15,6 +15,8 @@
 // wxWidgets headers
 #include <wx/wx.h>
 
+#undef None
+
 // Local headers
 #include "VVASE/gui/guiObject.h"
 
