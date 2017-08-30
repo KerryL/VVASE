@@ -15,7 +15,7 @@
 #include "VVASE/core/car/subsystems/drivetrain.h"// TODO:  Redesign to eliminate need for including these here
 #include "VVASE/core/car/subsystems/brakes.h"
 #include "VVASE/core/car/subsystems/suspension.h"
-#include "VVASE/core/car/subsystems/tireset.h"
+#include "VVASE/core/car/subsystems/tireSet.h"
 #include "VVASE/core/car/subsystems/tire.h"
 #include "VVASE/core/utilities/wheelSetStructures.h"
 #include "VVASE/core/utilities/binaryReader.h"
