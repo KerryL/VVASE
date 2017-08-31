@@ -62,20 +62,20 @@ core_debug: $(TARGET_CORE_DEBUG)
 
 $(TARGET): $(OBJS_GUI_RELEASE) version_release core
 	$(MKDIR) $(BINDIR)
-	$(CC) $(OBJS_GUI_RELEASE) $(VERSION_FILE_OBJ_RELEASE) $(LDFLAGS_RELEASE) -L$(LIBOUTDIR) $(addprefix -l,$(PSLIB)) -o $(BINDIR)$@
+	$(CC) $(OBJS_GUI_RELEASE) $(LDFLAGS_RELEASE) -L$(LIBOUTDIR) $(addprefix -l,$(PSLIB)) -o $(BINDIR)$@
 
 $(TARGET_DEBUG): $(OBJS_GUI_DEBUG) version_debug core_debug
 	$(MKDIR) $(BINDIR)
-	$(CC) $(OBJS_GUI_DEBUG) $(VERSION_FILE_OBJ_DEBUG) $(LDFLAGS_DEBUG) -L$(LIBOUTDIR) $(addprefix -l,$(PSLIB)) -o $(BINDIR)$@
+	$(CC) $(OBJS_GUI_DEBUG) $(LDFLAGS_DEBUG) -L$(LIBOUTDIR) $(addprefix -l,$(PSLIB))d -o $(BINDIR)$@
 
 $(TARGET_CORE): $(OBJS_CORE_RELEASE) version_release
 	$(MKDIR) $(LIBOUTDIR)
-	$(AR) $(LIBOUTDIR)lib$@.a $(OBJS_CORE_RELEASE)
+	$(AR) $(LIBOUTDIR)lib$@.a $(ALL_OBJS_CORE_RELEASE)
 	$(RANLIB) $(LIBOUTDIR)lib$@.a
 
 $(TARGET_CORE_DEBUG): $(OBJS_CORE_DEBUG) version_debug
 	$(MKDIR) $(LIBOUTDIR)
-	$(AR) $(LIBOUTDIR)lib$@.a $(OBJS_CORE_DEBUG)
+	$(AR) $(LIBOUTDIR)lib$@.a $(ALL_OBJS_CORE_DEBUG)
 	$(RANLIB) $(LIBOUTDIR)lib$@.a
 
 $(OBJDIR_RELEASE)%.o: %.cpp
