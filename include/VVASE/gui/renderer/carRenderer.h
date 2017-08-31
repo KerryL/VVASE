@@ -207,6 +207,13 @@ private:
 	Corner::Hardpoints leftRearPoint;
 	Corner::Hardpoints rightRearPoint;
 
+	static const std::string mSimpleGeometryShader;
+
+	//bool HasGeometryShader() const override { return true; }
+
+	std::string GetDefaultGeometryShader() const override
+	{ return mSimpleGeometryShader; }
+
 	enum EventIds
 	{
 		idContextEdit = wxID_HIGHEST + 1400

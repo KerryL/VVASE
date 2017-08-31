@@ -55,6 +55,54 @@
 namespace VVASE
 {
 
+//=============================================================================
+// Class:			CarRenderer
+// Function:		mDefaultVertexShader
+//
+// Description:		Default vertex shader.
+//
+// Input Arguments:
+//		0	= position
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//=============================================================================
+const std::string CarRenderer::mSimpleGeometryShader(
+	"#version 300 es\n"
+	"#extension GL_EXT_geometry_shader : enable\n"
+	"\n"
+	"uniform mat4  projectionMatrix;\n"
+	"\n"
+	"layout (triangles) in;\n"
+	"layout (triangle_strip, max_vertices = 3) out;\n"
+	"\n"
+	"out vec3 normal;\n"
+	"\n"
+	"void main (void)\n"
+	"{\n"
+	"    vec3 vector1;\n"
+	"    vec3 vector2;\n"
+	"\n"
+	"    gl_Position = gl_in[0].gl_Position;\n"
+	"    vector1 = gl_in[1].gl_Position.xyz - gl_Position.xyz;\n"
+	"    vector2 = gl_in[2].gl_Position.xyz - gl_Position.xyz;\n"
+	"    normal = normalize(cross(vector1, vector2));\n"
+	"    gl_Position = projectionMatrix * gl_Position;\n"
+	"    EmitVertex();\n"
+	"\n"
+	"    gl_Position = projectionMatrix * gl_in[1].gl_Position;\n"
+	"    EmitVertex();\n"
+	"\n"
+	"    gl_Position = projectionMatrix * gl_in[2].gl_Position;\n"
+	"    EmitVertex();\n"
+	"    EndPrimitive();\n"
+	"}\n"
+);
+
 //==========================================================================
 // Class:			CarRenderer
 // Function:		CarRenderer

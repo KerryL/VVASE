@@ -254,15 +254,12 @@ bool Quadrilateral::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::V
 //==========================================================================
 void Quadrilateral::Update(const unsigned int& /*i*/)
 {
-	mBufferInfo[0].GetOpenGLIndices(false);// TODO:  Switch to index array?
+	mBufferInfo[0].GetOpenGLIndices(false);
 
 	mBufferInfo[0].vertexCount = 6;
 	mBufferInfo[0].vertexBuffer.resize(mBufferInfo[0].vertexCount
-		* (mRenderWindow.GetVertexDimension() + 4));// 3D vertex, RGBA color + 3D normal? TODO
+		* (mRenderWindow.GetVertexDimension() + 4));// 4D vertex, RGBA color
 	assert(mRenderWindow.GetVertexDimension() == 4);
-
-	/*const unsigned int triangleCount(2);
-	mBufferInfo[0].indexBuffer.resize(triangleCount * 3);*/
 
 	// Calculate the distance from the center to each corner
 	const double halfDiagonal(sqrt(width * width / 4.0 + length * length / 4.0));
@@ -355,21 +352,11 @@ void Quadrilateral::Update(const unsigned int& /*i*/)
 	mBufferInfo[0].vertexBuffer[46] = static_cast<float>(mColor.GetBlue());
 	mBufferInfo[0].vertexBuffer[47] = static_cast<float>(mColor.GetAlpha());
 
-	// TODO:  Normals?
-
-	/*mBufferInfo[0].indexBuffer[0] = 0;
-	mBufferInfo[0].indexBuffer[1] = 1;
-	mBufferInfo[0].indexBuffer[2] = 2;
-
-	mBufferInfo[0].indexBuffer[3] = 0;
-	mBufferInfo[0].indexBuffer[4] = 2;
-	mBufferInfo[0].indexBuffer[5] = 3;*/
-
 	glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
 
 	glBindBuffer(GL_ARRAY_BUFFER, mBufferInfo[0].GetVertexBufferIndex());
 	glBufferData(GL_ARRAY_BUFFER,
-		sizeof(GLfloat) * mBufferInfo[0].vertexCount * (mRenderWindow.GetVertexDimension() + 4),// TODO:  Normals?
+		sizeof(GLfloat) * mBufferInfo[0].vertexCount * (mRenderWindow.GetVertexDimension() + 4),
 		mBufferInfo[0].vertexBuffer.data(), GL_DYNAMIC_DRAW);
 
 	glEnableVertexAttribArray(mRenderWindow.GetPositionLocation());
@@ -378,13 +365,6 @@ void Quadrilateral::Update(const unsigned int& /*i*/)
 	glEnableVertexAttribArray(mRenderWindow.GetColorLocation());
 	glVertexAttribPointer(mRenderWindow.GetColorLocation(), 4, GL_FLOAT, GL_FALSE, 0,
 		(void*)(sizeof(GLfloat) * mRenderWindow.GetVertexDimension() * mBufferInfo[0].vertexCount));
-
-	/*glBindBuffer(GL_ARRAY_BUFFER, mBufferInfo[0].GetIndexBufferIndex());
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GLuint) * mBufferInfo[0].indexBuffer.size(),
-		mBufferInfo[0].indexBuffer.data(), GL_DYNAMIC_DRAW);
-
-	glEnableVertexAttribArray(mRenderWindow.GetIndexLocation());
-	glVertexAttribIPointer(mRenderWindow.GetIndexLocation(), 1, GL_UNSIGNED_INT, 0, 0);*/
 
 	glBindVertexArray(0);
 
