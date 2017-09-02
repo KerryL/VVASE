@@ -81,6 +81,8 @@
 namespace VVASE
 {
 
+constexpr int MainFrame::maxRecentFiles;
+
 //==========================================================================
 // Class:			MainFrame
 // Function:		MainFrame
@@ -99,7 +101,7 @@ namespace VVASE
 //
 //==========================================================================
 MainFrame::MainFrame() : wxFrame(NULL, wxID_ANY, wxEmptyString, wxDefaultPosition,
-	wxDefaultSize, wxDEFAULT_FRAME_STYLE), /*maxRecentFiles(9), */undoRedo(*this)
+	wxDefaultSize, wxDEFAULT_FRAME_STYLE), undoRedo(*this)
 {
 	// Add our built-in component types (TODO:  I think this should change)
 	Car::RegisterSubsystem<Aerodynamics>();

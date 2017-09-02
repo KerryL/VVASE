@@ -198,7 +198,7 @@ private:
 	bool useOrthoView;
 
 	// Maximum number of recent files to store
-	static const int maxRecentFiles = 9;
+	static constexpr int maxRecentFiles = 9;
 
 	enum MenuEventId
 	{
