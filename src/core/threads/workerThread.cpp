@@ -94,9 +94,6 @@ WorkerThread::~WorkerThread()
 //==========================================================================
 void WorkerThread::ThreadEntry()
 {
-	ThreadJob::ThreadCommand error;
-
-	// Tell the main thread that we successfully started
 	jobQueue.Report(ThreadJob::CommandThreadStarted, std::this_thread::get_id());
 
 	// Run the main loop (job handler) until it throws an exception
@@ -107,7 +104,6 @@ void WorkerThread::ThreadEntry()
 	}
 	catch (ThreadJob::ThreadCommand& i)
 	{
-		error = i;
 		jobQueue.Report(i, std::this_thread::get_id());
 	}
 }

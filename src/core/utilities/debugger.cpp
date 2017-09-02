@@ -205,7 +205,7 @@ Debugger::DebuggerStreamBuffer::~DebuggerStreamBuffer()
 int Debugger::DebuggerStreamBuffer::overflow(int c)
 {
 	CreateThreadBuffer();
-	if (c != traits_type::eof())
+	if (static_cast<unsigned int>(c) != traits_type::eof())
 		*threadBuffer[std::this_thread::get_id()] << (char)c;
 
 	return c;
