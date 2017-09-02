@@ -23,11 +23,11 @@
 #include "VVASE/core/utilities/debugLog.h"
 #include "VVASE/core/utilities/debugger.h"
 
+// Implement the application (have wxWidgets set up the appropriate entry points, etc.)
+IMPLEMENT_APP(VVASE::VVASEApplication);
+
 namespace VVASE
 {
-
-// Implement the application (have wxWidgets set up the appropriate entry points, etc.)
-IMPLEMENT_APP(VVASEApplication);
 
 //==========================================================================
 // Class:			VVASEApplication
