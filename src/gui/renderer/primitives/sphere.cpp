@@ -71,8 +71,10 @@ Sphere::Sphere(LibPlot2D::RenderWindow &renderWindow) : Primitive(renderWindow)
 void Sphere::GenerateGeometry()
 {
 	/*glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
-	glDrawArrays(GL_QUADS, 0, mBufferInfo[0].vertexCount);
-	glBindVertexArray(0);*/
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mBufferInfo[0].GetIndexBufferIndex());
+	glDrawElements(GL_TRIANGLES, mBufferInfo[0].indexBuffer.size(), GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);*/
 
 	assert(!LibPlot2D::RenderWindow::GLHasError());
 }
@@ -125,9 +127,12 @@ void Sphere::RecursiveSubdivision(const Eigen::Vector3d &corner1, const Eigen::V
 	    ------------
 	   Corner 2    Corner 3
 	-----------------------*/
-	Eigen::Vector3d midPoint1(corner1 + (corner2 - corner1).normalized() * (corner1 - corner2).norm() / 2.0);
+	/*Eigen::Vector3d midPoint1(corner1 + (corner2 - corner1).normalized() * (corner1 - corner2).norm() / 2.0);
 	Eigen::Vector3d midPoint2(corner1 + (corner3 - corner1).normalized() * (corner1 - corner3).norm() / 2.0);
-	Eigen::Vector3d midPoint3(corner3 + (corner2 - corner3).normalized() * (corner3 - corner2).norm() / 2.0);
+	Eigen::Vector3d midPoint3(corner3 + (corner2 - corner3).normalized() * (corner3 - corner2).norm() / 2.0);*/
+	Eigen::Vector3d midPoint1((corner1 + corner2) * 0.5);
+	Eigen::Vector3d midPoint2((corner1 + corner3) * 0.5);
+	Eigen::Vector3d midPoint3((corner2 + corner3) * 0.5);
 
 	// These locations now need to be normalized such that they lie at a
 	// distance of 'radius' from the center
@@ -311,10 +316,10 @@ bool Sphere::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector3d
 //==========================================================================
 void Sphere::Update(const unsigned int& /*i*/)
 {
-	/*if (resolution < 0)
+	if (resolution < 0)
 		resolution = 0;
 
-#ifdef ICOSOHEDRON
+/*#ifdef ICOSOHEDRON
 	// To avoid performance issues, don't let the resolution go above 2
 	if (resolution > 2)
 		resolution = 2;

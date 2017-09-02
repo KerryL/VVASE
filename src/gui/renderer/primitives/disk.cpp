@@ -256,7 +256,7 @@ void Disk::Update(const unsigned int& /*i*/)
 
 	mBufferInfo[0].vertexCount = resolution * (static_cast<int>(innerRadius > 0.0) + 1);
 	mBufferInfo[0].vertexBuffer.resize(mBufferInfo[0].vertexCount
-		* (mRenderWindow.GetVertexDimension() + 4));// 3D vertex, RGBA color + 3D normal? TODO
+		* (mRenderWindow.GetVertexDimension() + 4));// 4D vertex, RGBA color
 	assert(mRenderWindow.GetVertexDimension() == 4);
 
 	const unsigned int triangleCount([this]()
@@ -353,7 +353,7 @@ void Disk::Update(const unsigned int& /*i*/)
 
 	glBindBuffer(GL_ARRAY_BUFFER, mBufferInfo[0].GetVertexBufferIndex());
 	glBufferData(GL_ARRAY_BUFFER,
-		sizeof(GLfloat) * mBufferInfo[0].vertexCount * (mRenderWindow.GetVertexDimension() + 4),// TODO:  Normals?
+		sizeof(GLfloat) * mBufferInfo[0].vertexCount * (mRenderWindow.GetVertexDimension() + 4),
 		mBufferInfo[0].vertexBuffer.data(), GL_DYNAMIC_DRAW);
 
 	glEnableVertexAttribArray(mRenderWindow.GetPositionLocation());

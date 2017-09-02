@@ -209,11 +209,8 @@ void Triangle::Update(const unsigned int& /*i*/)
 
 	mBufferInfo[0].vertexCount = 3;
 	mBufferInfo[0].vertexBuffer.resize(mBufferInfo[0].vertexCount
-		* (mRenderWindow.GetVertexDimension() + 4));// 3D vertex, RGBA color + 3D normal? TODO
+		* (mRenderWindow.GetVertexDimension() + 4));// 4D vertex, RGBA color
 	assert(mRenderWindow.GetVertexDimension() == 4);
-
-	/*const unsigned int triangleCount(1);
-	mBufferInfo[0].indexBuffer.resize(triangleCount * 3);*/
 
 	mBufferInfo[0].vertexBuffer[0] = static_cast<float>(corner1.x());
 	mBufferInfo[0].vertexBuffer[1] = static_cast<float>(corner1.y());
@@ -245,17 +242,11 @@ void Triangle::Update(const unsigned int& /*i*/)
 	mBufferInfo[0].vertexBuffer[22] = static_cast<float>(mColor.GetBlue());
 	mBufferInfo[0].vertexBuffer[23] = static_cast<float>(mColor.GetAlpha());
 
-	// TODO:  Normal?
-
-	/*mBufferInfo[0].indexBuffer[0] = 0;
-	mBufferInfo[0].indexBuffer[1] = 1;
-	mBufferInfo[0].indexBuffer[2] = 2;*/
-
 	glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
 
 	glBindBuffer(GL_ARRAY_BUFFER, mBufferInfo[0].GetVertexBufferIndex());
 	glBufferData(GL_ARRAY_BUFFER,
-		sizeof(GLfloat) * mBufferInfo[0].vertexCount * (mRenderWindow.GetVertexDimension() + 4),// TODO:  Normals?
+		sizeof(GLfloat) * mBufferInfo[0].vertexCount * (mRenderWindow.GetVertexDimension() + 4),
 		mBufferInfo[0].vertexBuffer.data(), GL_DYNAMIC_DRAW);
 
 	glEnableVertexAttribArray(mRenderWindow.GetPositionLocation());
