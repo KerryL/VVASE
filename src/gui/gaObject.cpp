@@ -796,7 +796,9 @@ GAObject::FileHeaderInfo GAObject::ReadFileHeader(std::ifstream *inFile)
 	char buffer[sizeof(FileHeaderInfo)];
 	inFile->read((char*)buffer, sizeof(FileHeaderInfo));
 
-	return *reinterpret_cast<FileHeaderInfo*>(buffer);
+	FileHeaderInfo* headerInfo(reinterpret_cast<FileHeaderInfo*>(buffer));
+
+	return *headerInfo;
 }
 
 //==========================================================================
