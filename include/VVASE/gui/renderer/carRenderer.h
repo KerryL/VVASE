@@ -208,11 +208,15 @@ private:
 	Corner::Hardpoints rightRearPoint;
 
 	static const std::string mSimpleGeometryShader;
+	static const std::string mFragmentShaderWithLighting;
 
-	//bool HasGeometryShader() const override { return true; }
+	bool HasGeometryShader() const override { return true; }
 
 	std::string GetDefaultGeometryShader() const override
 	{ return mSimpleGeometryShader; }
+
+	std::string GetDefaultFragmentShader() const override
+	{ return mFragmentShaderWithLighting; }
 
 	enum EventIds
 	{

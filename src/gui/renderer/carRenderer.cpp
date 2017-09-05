@@ -75,31 +75,73 @@ const std::string CarRenderer::mSimpleGeometryShader(
 	"#version 300 es\n"
 	"#extension GL_EXT_geometry_shader : enable\n"
 	"\n"
-	"uniform mat4  projectionMatrix;\n"
+	//"uniform mat4 projectionMatrix;\n"
 	"\n"
 	"layout (triangles) in;\n"
 	"layout (triangle_strip, max_vertices = 3) out;\n"
 	"\n"
-	"out vec3 normal;\n"
+	"in highp vec4 vertexColor[];\n"
 	"\n"
-	"void main (void)\n"
+	"out fragmentData\n"
+	"{\n"
+	"    highp vec4 color;\n"
+	"    highp vec3 normal;\n"
+	"} f;\n"
+	"\n"
+	"void main(void)\n"
 	"{\n"
 	"    vec3 vector1;\n"
 	"    vec3 vector2;\n"
+	"    vec3 localNormal;\n"
 	"\n"
 	"    gl_Position = gl_in[0].gl_Position;\n"
 	"    vector1 = gl_in[1].gl_Position.xyz - gl_Position.xyz;\n"
 	"    vector2 = gl_in[2].gl_Position.xyz - gl_Position.xyz;\n"
-	"    normal = normalize(cross(vector1, vector2));\n"
-	"    gl_Position = projectionMatrix * gl_Position;\n"
-	"    EmitVertex();\n"
+	"    localNormal = normalize(cross(vector1, vector2));\n"
 	"\n"
-	"    gl_Position = projectionMatrix * gl_in[1].gl_Position;\n"
-	"    EmitVertex();\n"
+	"    for (int i = 0; i < 3; i++)\n"
+	"    {\n"
+	"        gl_Position = gl_in[i].gl_Position;\n"
+	"        f.color = vertexColor[i];\n"
+	"        f.normal = localNormal;\n"
+	"        EmitVertex();\n"
+	"    }\n"
 	"\n"
-	"    gl_Position = projectionMatrix * gl_in[2].gl_Position;\n"
-	"    EmitVertex();\n"
 	"    EndPrimitive();\n"
+	"}\n"
+);
+
+//=============================================================================
+// Class:			CarRenderer
+// Function:		mFragmentShaderWithLighting
+//
+// Description:		Fragment shader including lighting model.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//=============================================================================
+const std::string CarRenderer::mFragmentShaderWithLighting(
+	"#version 300 es\n"
+	"\n"
+	"in fragmentData\n"
+	"{\n"
+	"    highp vec4 color;\n"
+	"    highp vec3 normal;\n"
+	"} f;\n"
+	"\n"
+	"out highp vec4 outputColor;\n"
+	// TODO:  Include lighting model
+	"\n"
+	"void main()\n"
+	"{\n"
+	"    outputColor = f.color;\n"
 	"}\n"
 );
 
