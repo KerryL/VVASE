@@ -11,6 +11,9 @@
 //        RenderWindow, this class is associated with a loaded car file
 //        and contains the information and methods required to render a car in 3D.
 
+// GLEW headers (needs to be first)
+#include <GL/glew.h>
+
 // Standard C++ headers
 #include <algorithm>
 
@@ -75,7 +78,7 @@ const std::string CarRenderer::mSimpleGeometryShader(
 	"#version 300 es\n"
 	"#extension GL_EXT_geometry_shader : enable\n"
 	"\n"
-	//"uniform mat4 projectionMatrix;\n"
+	"uniform mat4 projectionMatrix;\n"
 	"\n"
 	"layout (triangles) in;\n"
 	"layout (triangle_strip, max_vertices = 3) out;\n"
@@ -86,24 +89,22 @@ const std::string CarRenderer::mSimpleGeometryShader(
 	"{\n"
 	"    highp vec4 color;\n"
 	"    highp vec3 normal;\n"
+	"    highp vec3 position;\n"
 	"} f;\n"
 	"\n"
-	"void main(void)\n"
+	"void main()\n"
 	"{\n"
-	"    vec3 vector1;\n"
-	"    vec3 vector2;\n"
-	"    vec3 localNormal;\n"
-	"\n"
 	"    gl_Position = gl_in[0].gl_Position;\n"
-	"    vector1 = gl_in[1].gl_Position.xyz - gl_Position.xyz;\n"
-	"    vector2 = gl_in[2].gl_Position.xyz - gl_Position.xyz;\n"
-	"    localNormal = normalize(cross(vector1, vector2));\n"
+	"    vec3 vector1 = gl_in[1].gl_Position.xyz - gl_Position.xyz;\n"
+	"    vec3 vector2 = gl_in[2].gl_Position.xyz - gl_Position.xyz;\n"
+	"    vec3 localNormal = transpose(inverse(mat3(projectionMatrix))) * normalize(cross(vector1, vector2));\n"// TODO:  Instead of projection matrix, use "normalMatrix" which can be inverted once for all geometry on CPU side
 	"\n"
 	"    for (int i = 0; i < 3; i++)\n"
 	"    {\n"
 	"        gl_Position = gl_in[i].gl_Position;\n"
 	"        f.color = vertexColor[i];\n"
 	"        f.normal = localNormal;\n"
+	"        f.position = vec3(projectionMatrix * gl_Position);\n"
 	"        EmitVertex();\n"
 	"    }\n"
 	"\n"
@@ -130,18 +131,42 @@ const std::string CarRenderer::mSimpleGeometryShader(
 const std::string CarRenderer::mFragmentShaderWithLighting(
 	"#version 300 es\n"
 	"\n"
+	"struct Light\n"
+	"{\n"
+	"    highp vec3 position;\n"
+	"    highp vec4 color;\n"
+	"};\n"
+	"#define LIGHT_COUNT 2\n"
+	"uniform Light light;\n//[LIGHT_COUNT];\n"
+	"\n"
 	"in fragmentData\n"
 	"{\n"
 	"    highp vec4 color;\n"
 	"    highp vec3 normal;\n"
+	"    highp vec3 position;\n"
 	"} f;\n"
 	"\n"
 	"out highp vec4 outputColor;\n"
-	// TODO:  Include lighting model
+	"\n"
+	"highp float Clamp(highp float v, highp float low, highp float high)\n"
+	"{\n"
+	"    if (v > high)\n"
+	"        return high;\n"
+	"    else if (v < low)\n"
+	"        return low;\n"
+	"    return v;\n"
+	"}\n"
 	"\n"
 	"void main()\n"
 	"{\n"
-	"    outputColor = f.color;\n"
+	"    highp vec3 lightDirection = normalize(light.position - f.position);\n"
+	"    highp float diffuseCoefficient = dot(f.normal, lightDirection);\n"
+	"    diffuseCoefficient = Clamp(diffuseCoefficient, 0.0, 1.0);\n"
+	"    highp vec4 diffuse = f.color * diffuseCoefficient * light.color;\n"
+	"\n"
+	"    highp float ambientCoefficient = 0.6;\n"
+	"    highp vec4 ambient = ambientCoefficient * f.color * light.color;\n"
+	"    outputColor = diffuse + ambient;\n"
 	"}\n"
 );
 
@@ -174,6 +199,61 @@ CarRenderer::CarRenderer(MainFrame &mainFrame, GuiCar &car,
 {
 	SetView3D(true);
 	InternalInitialization();
+}
+
+//==========================================================================
+// Class:			CarRenderer
+// Function:		AssignLightingUniforms
+//
+// Description:		Assigns uniforms required for lighting model.
+//
+// Input Arguments:
+//		program	= const GLuint&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void CarRenderer::AssignLightingUniforms(const GLuint& program) const
+{
+	const GLuint light0Position(glGetUniformLocation(program, "light.position"));
+	const GLuint light0Color(glGetUniformLocation(program, "light.color"));
+
+	glUseProgram(program);
+
+	const float position0[3] = {0.0f, 0.0f, 100.0f};
+	glUniform3fv(light0Position, 1, position0);
+
+	const float color0[4] = {1.0f, 1.0f, 1.0f, 1.0f};
+	glUniform4fv(light0Color, 1, color0);
+
+	assert(!LibPlot2D::RenderWindow::GLHasError());
+}
+
+//=============================================================================
+// Class:			CarRenderer
+// Function:		AssignDefaultUniforms
+//
+// Description:		Assigns uniform locations and/or values for default program.
+//
+// Input Arguments:
+//		shader	= ShaderInfo&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//=============================================================================
+void CarRenderer::AssignDefaultUniforms(ShaderInfo& shader)
+{
+	RenderWindow::AssignDefaultUniforms(shader);
+
+	AssignLightingUniforms(shader.programId);
 }
 
 //==========================================================================

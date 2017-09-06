@@ -218,6 +218,9 @@ private:
 	std::string GetDefaultFragmentShader() const override
 	{ return mFragmentShaderWithLighting; }
 
+	void CarRenderer::AssignDefaultUniforms(ShaderInfo& shader) override;
+	void AssignLightingUniforms(const GLuint& program) const;
+
 	enum EventIds
 	{
 		idContextEdit = wxID_HIGHEST + 1400
