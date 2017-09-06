@@ -219,7 +219,10 @@ private:
 	{ return mFragmentShaderWithLighting; }
 
 	void CarRenderer::AssignDefaultUniforms(ShaderInfo& shader) override;
-	void AssignLightingUniforms(const GLuint& program) const;
+	void AssignLightingUniforms(const GLuint& program);
+	GLuint mCameraPositionLocation;
+
+	void UpdateSpecialUniforms() override;
 
 	enum EventIds
 	{

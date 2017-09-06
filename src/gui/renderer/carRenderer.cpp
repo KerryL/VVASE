@@ -138,7 +138,8 @@ const std::string CarRenderer::mFragmentShaderWithLighting(
 	"};\n"
 	"#define LIGHT_COUNT 2\n"
 	"uniform Light light;\n//[LIGHT_COUNT];\n"
-	"\n"// Line 10
+	"uniform highp vec3 cameraPosition;\n"// Line 10
+	"\n"
 	"in fragmentData\n"
 	"{\n"
 	"    highp vec4 color;\n"
@@ -147,8 +148,8 @@ const std::string CarRenderer::mFragmentShaderWithLighting(
 	"} f;\n"
 	"\n"
 	"out highp vec4 outputColor;\n"
-	"\n"
-	"highp float Clamp(highp float v, highp float low, highp float high)\n"// Line 20
+	"\n"// Line 20
+	"highp float Clamp(highp float v, highp float low, highp float high)\n"
 	"{\n"
 	"    if (v > high)\n"
 	"        return high;\n"
@@ -157,14 +158,14 @@ const std::string CarRenderer::mFragmentShaderWithLighting(
 	"    return v;\n"
 	"}\n"
 	"\n"
-	"void main()\n"
-	"{\n"// Line 30
+	"void main()\n"// Line 30
+	"{\n"
 	"    highp vec3 lightDirection = normalize(light.position - f.position);\n"
 	"    highp float diffuseCoefficient = dot(f.normal, lightDirection);\n"
 	"    diffuseCoefficient = Clamp(diffuseCoefficient, 0.0, 1.0);\n"
 	"    highp vec3 diffuse = vec3(f.color) * diffuseCoefficient * light.color;\n"
 	"\n"
-	"    highp float ambientCoefficient = 0.6;\n"
+	"    highp float ambientCoefficient = 0.6;\n"// TODO:  Can constants be optimized?
 	"    highp vec3 ambient = vec3(f.color) * ambientCoefficient * light.color;\n"
 	"    outputColor = vec4(diffuse + ambient, f.color.a);\n"
 	"}\n"
@@ -193,7 +194,7 @@ const std::string CarRenderer::mFragmentShaderWithLighting(
 CarRenderer::CarRenderer(MainFrame &mainFrame, GuiCar &car,
 	const wxWindowID& id, const wxGLAttributes& attributes)
 	: RenderWindow(mainFrame, id, attributes, wxDefaultPosition, wxDefaultSize,
-	wxWANTS_CHARS | wxNO_FULL_REPAINT_ON_RESIZE), mainFrame(mainFrame), car(car),
+		wxWANTS_CHARS | wxNO_FULL_REPAINT_ON_RESIZE), mainFrame(mainFrame), car(car),
 	appearanceOptions(car.GetAppearanceOptions()), displayCar(car.GetWorkingCar()),
 	referenceCar(car.GetOriginalCar())
 {
@@ -217,17 +218,18 @@ CarRenderer::CarRenderer(MainFrame &mainFrame, GuiCar &car,
 //		None
 //
 //==========================================================================
-void CarRenderer::AssignLightingUniforms(const GLuint& program) const
+void CarRenderer::AssignLightingUniforms(const GLuint& program)
 {
 	const GLuint light0Position(glGetUniformLocation(program, "light.position"));
 	const GLuint light0Color(glGetUniformLocation(program, "light.color"));
+	mCameraPositionLocation = glGetUniformLocation(program, "cameraPosition");
 
 	glUseProgram(program);
 
-	const float position0[3] = {0.0f, 0.0f, 100.0f};
+	const float position0[3] = { 0.0f, 0.0f, 100.0f };
 	glUniform3fv(light0Position, 1, position0);
 
-	const float color0[3] = {1.0f, 1.0f, 1.0f};
+	const float color0[3] = { 1.0f, 1.0f, 1.0f };
 	glUniform3fv(light0Color, 1, color0);
 
 	assert(!LibPlot2D::RenderWindow::GLHasError());
@@ -285,6 +287,31 @@ void CarRenderer::InternalInitialization()
 #ifdef USE_DEBUG_SHAPE
 	DebugShape::SetRenderer(*this);
 #endif
+}
+
+//==========================================================================
+// Class:			CarRenderer
+// Function:		UpdateSpecialUniforms
+//
+// Description:		Updates camera position uniform.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void CarRenderer::UpdateSpecialUniforms()
+{
+	const auto cameraPosition(GetCameraPosition());
+	const float cameraPositionFloat[3] = { static_cast<float>(cameraPosition.x()), static_cast<float>(cameraPosition.y()), static_cast<float>(cameraPosition.z()) };
+
+	glUseProgram(mShaders.front().programId);
+	glUniform3fv(mCameraPositionLocation, 1, cameraPositionFloat);
 }
 
 //==========================================================================
