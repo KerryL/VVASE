@@ -218,7 +218,7 @@ private:
 	std::string GetDefaultFragmentShader() const override
 	{ return mFragmentShaderWithLighting; }
 
-	void CarRenderer::AssignDefaultUniforms(ShaderInfo& shader) override;
+	void AssignDefaultUniforms(ShaderInfo& shader) override;
 	void AssignLightingUniforms(const GLuint& program);
 	GLuint mCameraPositionLocation;
 
