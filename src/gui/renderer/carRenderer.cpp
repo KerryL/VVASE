@@ -97,7 +97,7 @@ const std::string CarRenderer::mSimpleGeometryShader(
 	"    gl_Position = gl_in[0].gl_Position;\n"
 	"    vec3 vector1 = gl_in[1].gl_Position.xyz - gl_Position.xyz;\n"
 	"    vec3 vector2 = gl_in[2].gl_Position.xyz - gl_Position.xyz;\n"
-	"    vec3 localNormal = transpose(inverse(mat3(projectionMatrix))) * normalize(cross(vector1, vector2));\n"// TODO:  Instead of projection matrix, use "normalMatrix" which can be inverted once for all geometry on CPU side
+	"    vec3 localNormal = transpose(inverse(mat3(projectionMatrix))) * normalize(cross(vector2, vector1));\n"// TODO:  Instead of projection matrix, use "normalMatrix" which can be inverted once for all geometry on CPU side
 	"\n"
 	"    for (int i = 0; i < 3; i++)\n"
 	"    {\n"
@@ -134,11 +134,11 @@ const std::string CarRenderer::mFragmentShaderWithLighting(
 	"struct Light\n"
 	"{\n"
 	"    highp vec3 position;\n"
-	"    highp vec4 color;\n"
+	"    highp vec3 color;\n"
 	"};\n"
 	"#define LIGHT_COUNT 2\n"
 	"uniform Light light;\n//[LIGHT_COUNT];\n"
-	"\n"
+	"\n"// Line 10
 	"in fragmentData\n"
 	"{\n"
 	"    highp vec4 color;\n"
@@ -148,7 +148,7 @@ const std::string CarRenderer::mFragmentShaderWithLighting(
 	"\n"
 	"out highp vec4 outputColor;\n"
 	"\n"
-	"highp float Clamp(highp float v, highp float low, highp float high)\n"
+	"highp float Clamp(highp float v, highp float low, highp float high)\n"// Line 20
 	"{\n"
 	"    if (v > high)\n"
 	"        return high;\n"
@@ -158,15 +158,15 @@ const std::string CarRenderer::mFragmentShaderWithLighting(
 	"}\n"
 	"\n"
 	"void main()\n"
-	"{\n"
+	"{\n"// Line 30
 	"    highp vec3 lightDirection = normalize(light.position - f.position);\n"
 	"    highp float diffuseCoefficient = dot(f.normal, lightDirection);\n"
 	"    diffuseCoefficient = Clamp(diffuseCoefficient, 0.0, 1.0);\n"
-	"    highp vec4 diffuse = f.color * diffuseCoefficient * light.color;\n"
+	"    highp vec3 diffuse = vec3(f.color) * diffuseCoefficient * light.color;\n"
 	"\n"
 	"    highp float ambientCoefficient = 0.6;\n"
-	"    highp vec4 ambient = ambientCoefficient * f.color * light.color;\n"
-	"    outputColor = diffuse + ambient;\n"
+	"    highp vec3 ambient = vec3(f.color) * ambientCoefficient * light.color;\n"
+	"    outputColor = vec4(diffuse + ambient, f.color.a);\n"
 	"}\n"
 );
 
@@ -227,8 +227,8 @@ void CarRenderer::AssignLightingUniforms(const GLuint& program) const
 	const float position0[3] = {0.0f, 0.0f, 100.0f};
 	glUniform3fv(light0Position, 1, position0);
 
-	const float color0[4] = {1.0f, 1.0f, 1.0f, 1.0f};
-	glUniform4fv(light0Color, 1, color0);
+	const float color0[3] = {1.0f, 1.0f, 1.0f};
+	glUniform3fv(light0Color, 1, color0);
 
 	assert(!LibPlot2D::RenderWindow::GLHasError());
 }
