@@ -23,12 +23,181 @@
 // Standard C++ headers
 #include <cassert>
 
-// For choosing between an octohedron (8 sides) or a icosohedron (20 sides) as the base polygon
-// for the recursive subdivision to create the sphere.
-#define ICOSOHEDRON
-
 namespace VVASE
 {
+
+//==========================================================================
+// Class:			Sphere
+// Function:		Static members
+//
+// Description:		Static members of the Sphere class.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+bool Sphere::mInitialized(false);
+unsigned int Sphere::mProgram;
+unsigned int Sphere::mResolutionLocation;
+
+//==========================================================================
+// Class:			Sphere
+// Function:		mSphereGeometryShader
+//
+// Description:		Geometry shader for spheres.  Uses on-GPU recursive subdivision.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+const std::string Sphere::mSphereGeometryShader(
+	"#version 300 es\n"
+	"#extension GL_EXT_geometry_shader : enable\n"
+	"\n"
+	"uniform mat4 projectionMatrix;\n"
+	"uniform int resolution;\n"
+	"\n"
+	"layout (points) in;\n"
+	"layout (triangle_strip, max_vertices = 3) out;\n"
+	"\n"
+	"in highp vec4 vertexColor[];\n"
+	"\n"
+	"out fragmentData\n"
+	"{\n"
+	"    highp vec4 color;\n"
+	"    highp vec3 normal;\n"
+	"    highp vec3 position;\n"
+	"} f;\n"
+	"\n"
+	"void RecursiveSubdivision(vec3 corner1, vec3 corner2, vec3 corner3, int level)\n"
+	"{\n"
+	/*// If level is less than 1, add the triangle to the scene instead of
+	// continuing with the sub-division
+	"    if (level < 1)\n"
+	"    {\n"
+	"        vec3 localNormal = transpose(inverse(mat3(projectionMatrix))) * normalize(cross(corner2 - corner1, corner3 - corner1));\n"// TODO:  Instead of projection matrix, use "normalMatrix" which can be inverted once for all geometry on CPU side
+	"\n"
+	"        f.color = vertexColor[0];\n"
+	"        f.normal = localNormal;\n"
+	"        f.position = vec3(projectionMatrix * corner1);\n"
+	"        EmitVertex();\n"
+	"\n"
+	"        f.color = vertexColor[0];\n"
+	"        f.normal = localNormal;\n"
+	"        f.position = vec3(projectionMatrix * corner2);\n"
+	"        EmitVertex();\n"
+	"\n"
+	"        f.color = vertexColor[0];\n"
+	"        f.normal = localNormal;\n"
+	"        f.position = vec3(projectionMatrix * corner3);\n"
+	"        EmitVertex();\n"
+	"\n"
+	"        EndPrimitive();\n"
+	"        return;\n"
+	"    }\n"
+	"\n"
+	// Compute the three points that divide this triangle into four sub-triangles
+	// The division works like this:
+	/*-----------------------
+	      Corner 1
+	         /\
+	        /  \
+	       /    \
+	   MP1/\----/\MP2
+	     /  \  /  \
+	    /    \/MP3 \
+	    ------------
+	   Corner 2    Corner 3
+	-----------------------*/
+	/*"    vec3 midPoint1 = normalize((corner1 + corner2) * 0.5) * gl_in[0].gl_Position.w;\n"
+	"    vec3 midPoint2 = normalize((corner1 + corner3) * 0.5) * gl_in[0].gl_Position.w;\n"
+	"    vec3 midPoint3 = normalize((corner2 + corner3) * 0.5) * gl_in[0].gl_Position.w;\n"
+	"\n"
+	// Call this method for each of the four sub-triangles, with one less level
+	// Note that the order in which the points are supplied is important to make
+	// sure that the triangles are created in a consistent manner (clock-wise).
+	"    level--;\n"
+	"    RecursiveSubdivision(corner1, midPoint2, midPoint1, level);\n"
+	"    RecursiveSubdivision(corner2, midPoint1, midPoint3, level);\n"
+	"    RecursiveSubdivision(corner3, midPoint3, midPoint2, level);\n"
+	"    RecursiveSubdivision(midPoint1, midPoint2, midPoint3, level);\n"*/
+	"}\n"
+	"\n"
+	"void main()\n"
+	"{\n"
+	/*"    float t = (1.0 + sqrt(5.0)) / 2.0;\n"
+	"    float s = sqrt(1 + t * t) * gl_in[0].gl_Position.w;\n"// gl_in[0].gl_Position is the radius
+	"    vec3 vertex[12];\n"
+	"    vertex[0] = vec3(t, 1.0, 0.0) / s;\n"
+	"    vertex[1] = vec3(-t, 1.0, 0.0) / s;\n"
+	"    vertex[2] = vec3(t, -1.0, 0.0) / s;\n"
+	"    vertex[3] = vec3(-t, -1.0, 0.0) / s;\n"
+	"    vertex[4] = vec3(1.0, 0.0, t) / s;\n"
+	"    vertex[5] = vec3(1.0, 0.0, -t) / s;\n"
+	"    vertex[6] = vec3(-1, 0.0, t) / s;\n"
+	"    vertex[7] = vec3(-1.0, 0.0, -t) / s;\n"
+	"    vertex[8] = vec3(0.0, t, 1.0) / s;\n"
+	"    vertex[9] = vec3(0.0, -t, 1.0) / s;\n"
+	"    vertex[10] = vec3d(0.0, t, -1.0) / s;\n"
+	"    vertex[11] = vec3(0.0, -t, -1.0) / s;\n"
+	"\n"
+	"    RecursiveSubdivision(vertex[0], vertex[8], vertex[4], resolution);\n"
+	"    RecursiveSubdivision(vertex[0], vertex[5], vertex[10], resolution);\n"
+	"    RecursiveSubdivision(vertex[2], vertex[4], vertex[9], resolution);\n"
+	"    RecursiveSubdivision(vertex[2], vertex[11], vertex[5], resolution);\n"
+	"    RecursiveSubdivision(vertex[1], vertex[6], vertex[8], resolution);\n"
+	"\n"
+	"    RecursiveSubdivision(vertex[1], vertex[10], vertex[7], resolution);\n"
+	"    RecursiveSubdivision(vertex[3], vertex[9], vertex[6], resolution);\n"
+	"    RecursiveSubdivision(vertex[3], vertex[7], vertex[11], resolution);\n"
+	"    RecursiveSubdivision(vertex[0], vertex[10], vertex[8], resolution);\n"
+	"    RecursiveSubdivision(vertex[1], vertex[8], vertex[10], resolution);\n"
+	"\n"
+	"    RecursiveSubdivision(vertex[2], vertex[9], vertex[11], resolution);\n"
+	"    RecursiveSubdivision(vertex[3], vertex[11], vertex[9], resolution);\n"
+	"    RecursiveSubdivision(vertex[4], vertex[2], vertex[0], resolution);\n"
+	"    RecursiveSubdivision(vertex[5], vertex[0], vertex[2], resolution);\n"
+	"    RecursiveSubdivision(vertex[6], vertex[1], vertex[3], resolution);\n"
+	"\n"
+	"    RecursiveSubdivision(vertex[7], vertex[3], vertex[1], resolution);\n"
+	"    RecursiveSubdivision(vertex[8], vertex[6], vertex[4], resolution);\n"
+	"    RecursiveSubdivision(vertex[9], vertex[4], vertex[6], resolution);\n"
+	"    RecursiveSubdivision(vertex[10], vertex[5], vertex[7], resolution);\n"
+	"    RecursiveSubdivision(vertex[11], vertex[7], vertex[5], resolution);\n"
+		*/
+	"    gl_Position = gl_in[0].gl_Position;\n"
+	"    vec3 localNormal = vec3(1.0, 0.0, 0.0);\n"
+	"\n"
+	"    f.color = vertexColor[0];\n"
+	"    f.normal = localNormal;\n"
+	"    f.position = vec3(projectionMatrix * gl_in[0].gl_Position);\n"
+	"    EmitVertex();\n"
+	"\n"
+	"    f.color = vertexColor[0];\n"
+	"    f.normal = localNormal;\n"
+	"    f.position = vec3(projectionMatrix * gl_in[0].gl_Position) + vec3(5.0 * gl_in[0].gl_Position.w, 0.0, 0.0);\n"
+	"    EmitVertex();\n"
+	"\n"
+	"    f.color = vertexColor[0];\n"
+	"    f.normal = localNormal;\n"
+	"    f.position = vec3(projectionMatrix * gl_in[0].gl_Position) + vec3(0.0, 5.0 * gl_in[0].gl_Position.w, 0.0);\n"
+	"    EmitVertex();\n"
+	"\n"
+	"    EndPrimitive();\n"
+	"}\n"
+);
 
 //==========================================================================
 // Class:			Sphere
@@ -70,111 +239,57 @@ Sphere::Sphere(LibPlot2D::RenderWindow &renderWindow) : Primitive(renderWindow)
 //==========================================================================
 void Sphere::GenerateGeometry()
 {
-	/*glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mBufferInfo[0].GetIndexBufferIndex());
-	glDrawElements(GL_TRIANGLES, mBufferInfo[0].indexBuffer.size(), GL_UNSIGNED_INT, 0);
+	glUseProgram(mProgram);
+
+	glUniform1i(mResolutionLocation, resolution);// TODO:  Don't need to do this every time?
+
+	glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
+	glDrawArrays(GL_POINTS, 0, mBufferInfo[0].vertexCount);
 	glBindVertexArray(0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);*/
+
+	mRenderWindow.UseDefaultProgram();
 
 	assert(!LibPlot2D::RenderWindow::GLHasError());
 }
 
 //==========================================================================
 // Class:			Sphere
-// Function:		RecursiveSubdivision
+// Function:		DoGLInitialization
 //
-// Description:		Recursive method for sub-dividing a triangle into four
-//					smaller triangles.  The number of recursive calls determines
-//					the final resolution of the sphere.
+// Description:		Initialized required OpenGL objects.
 //
 // Input Arguments:
-//		corner1	= const Eigen::Vector3d& specifying the first corner of the triangle
-//		corner2	= const Eigen::Vector3d& specifying the second corner of the triangle
-//		corner3	= const Eigen::Vector3d& specifying the third corner of the triangle
-//		level	= int specifying remaining number of recursive calls
+//		None
 //
 // Output Arguments:
 //		None
 //
 // Return Value:
-//		bool, true for OK to draw, false otherwise
+//		None
 //
 //==========================================================================
-void Sphere::RecursiveSubdivision(const Eigen::Vector3d &corner1, const Eigen::Vector3d &corner2,
-	const Eigen::Vector3d &corner3, int level)
+void Sphere::DoGLInitialization()
 {
-	// If level is less than 1, add the triangle to the scene instead of
-	// continuing with the sub-division
-	if (level < 1)
-	{
-		AddVertex(corner1);
-		AddVertex(corner2);
-		AddVertex(corner3);
-
+	if (mInitialized)
 		return;
-	}
 
-	// Compute the three points that divide this triangle into four sub-triangles
-	// The division works like this:
-	/*-----------------------
-	      Corner 1
-	         /\
-	        /  \
-	       /    \
-	   MP1/\----/\MP2
-	     /  \  /  \
-	    /    \/MP3 \
-	    ------------
-	   Corner 2    Corner 3
-	-----------------------*/
-	/*Eigen::Vector3d midPoint1(corner1 + (corner2 - corner1).normalized() * (corner1 - corner2).norm() / 2.0);
-	Eigen::Vector3d midPoint2(corner1 + (corner3 - corner1).normalized() * (corner1 - corner3).norm() / 2.0);
-	Eigen::Vector3d midPoint3(corner3 + (corner2 - corner3).normalized() * (corner3 - corner2).norm() / 2.0);*/
-	Eigen::Vector3d midPoint1((corner1 + corner2) * 0.5);
-	Eigen::Vector3d midPoint2((corner1 + corner3) * 0.5);
-	Eigen::Vector3d midPoint3((corner2 + corner3) * 0.5);
+	std::vector<GLuint> shaderList;
+	shaderList.push_back(mRenderWindow.CreateDefaultVertexShader());
+	shaderList.push_back(mRenderWindow.CreateShader(GL_GEOMETRY_SHADER, mSphereGeometryShader));
+	shaderList.push_back(mRenderWindow.CreateDefaultFragmentShader());
 
-	// These locations now need to be normalized such that they lie at a
-	// distance of 'radius' from the center
-	midPoint1 = midPoint1.normalized() * radius;
-	midPoint2 = midPoint2.normalized() * radius;
-	midPoint3 = midPoint3.normalized() * radius;
+	mProgram = mRenderWindow.CreateProgram(shaderList);
 
-	// Call this method for each of the four sub-triangles, with one less level
-	// Note that the order in which the points are supplied is important to make
-	// sure that the triangles are created in a consistent manner (clock-wise).
-	level--;
-	RecursiveSubdivision(corner1, midPoint2, midPoint1, level);
-	RecursiveSubdivision(corner2, midPoint1, midPoint3, level);
-	RecursiveSubdivision(corner3, midPoint3, midPoint2, level);
-	RecursiveSubdivision(midPoint1, midPoint2, midPoint3, level);
-}
+	LibPlot2D::RenderWindow::ShaderInfo s;
+	s.programId = mProgram;
+	s.needsModelview = true;
+	s.needsProjection = true;
+	s.projectionLocation = glGetUniformLocation(mProgram, "projectionMatrix");
+	s.modelViewLocation = glGetUniformLocation(mProgram, "modelviewMatrix");
+	mResolutionLocation = glGetUniformLocation(mProgram, "resolution");
+	mRenderWindow.AddShader(s);
 
-//==========================================================================
-// Class:			Sphere
-// Function:		AddVertex
-//
-// Description:		Computes and sets the normal vector, then adds the
-//					specified vertex to the OpenGL call list.
-//
-// Input Arguments:
-//		vertex	= const Eigen::Vector3d& to be added
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-void Sphere::AddVertex(const Eigen::Vector3d &vertex)
-{
-	// Compute and set the normal
-	Eigen::Vector3d normal = vertex.normalized();
-	glNormal3d(normal.x(), normal.y(), normal.z());
-
-	// Add the vertex
-	glVertex3d(vertex.x(), vertex.y(), vertex.z());
+	mInitialized = true;
 }
 
 //==========================================================================
@@ -316,94 +431,45 @@ bool Sphere::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector3d
 //==========================================================================
 void Sphere::Update(const unsigned int& /*i*/)
 {
+	DoGLInitialization();
+
 	if (resolution < 0)
 		resolution = 0;
-
-/*#ifdef ICOSOHEDRON
-	// To avoid performance issues, don't let the resolution go above 2
-	if (resolution > 2)
+	else if (resolution > 2)
 		resolution = 2;
 
-	// Find twelve vertices that define an icosohedron circumscribed within the sphere
-	double t = (1.0 + sqrt(5.0)) / 2.0;
-	double s = sqrt(1 + t * t);
-	Eigen::Vector3d vertex[12];
-	vertex[0] = Eigen::Vector3d(t, 1.0, 0.0);
-	vertex[1] = Eigen::Vector3d(-t, 1.0, 0.0);
-	vertex[2] = Eigen::Vector3d(t, -1.0, 0.0);
-	vertex[3] = Eigen::Vector3d(-t, -1.0, 0.0);
-	vertex[4] = Eigen::Vector3d(1.0, 0.0, t);
-	vertex[5] = Eigen::Vector3d(1.0, 0.0, -t);
-	vertex[6] = Eigen::Vector3d(-1, 0.0, t);
-	vertex[7] = Eigen::Vector3d(-1.0, 0.0, -t);
-	vertex[8] = Eigen::Vector3d(0.0, t, 1.0);
-	vertex[9] = Eigen::Vector3d(0.0, -t, 1.0);
-	vertex[10] = Eigen::Vector3d(0.0, t, -1.0);
-	vertex[11] = Eigen::Vector3d(0.0, -t, -1.0);
+	mBufferInfo[0].GetOpenGLIndices(false);
 
-	// Scale all of the vertices up to make the radius correct
-	// Also, include the s term that was not included above
-	int j;
-	for (j = 0; j < 12; j++)
-		vertex[j] *= radius / s;
-#else
-	// To avoid performance issues, don't let the resolution go above 3
-	if (resolution > 3)
-		resolution = 3;
+	mBufferInfo[0].vertexCount = 1;
+	mBufferInfo[0].vertexBuffer.resize(mBufferInfo[0].vertexCount
+		* (mRenderWindow.GetVertexDimension() + 4));// 4D vertex, RGBA color
+	assert(mRenderWindow.GetVertexDimension() == 4);
 
-	// Find six vertices that define an octohedron circumscribed within the sphere
-	Eigen::Vector3d top(0.0, 0.0, radius), bottom(0.0, 0.0, -radius);
-	Eigen::Vector3d equator1(radius, 0.0, 0.0), equator2(0.0, radius, 0.0);
-	Eigen::Vector3d equator3(-radius, 0.0, 0.0), equator4(0.0, -radius, 0.0);
-#endif
+	mBufferInfo[0].vertexBuffer[0] = static_cast<float>(center.x());
+	mBufferInfo[0].vertexBuffer[1] = static_cast<float>(center.y());
+	mBufferInfo[0].vertexBuffer[2] = static_cast<float>(center.z());
+	mBufferInfo[0].vertexBuffer[3] = static_cast<float>(radius);
 
-	glPushMatrix();
+	mBufferInfo[0].vertexBuffer[4] = static_cast<float>(mColor.GetRed());
+	mBufferInfo[0].vertexBuffer[5] = static_cast<float>(mColor.GetGreen());
+	mBufferInfo[0].vertexBuffer[6] = static_cast<float>(mColor.GetBlue());
+	mBufferInfo[0].vertexBuffer[7] = static_cast<float>(mColor.GetAlpha());
 
-		glTranslated(center.x(), center.y(), center.z());
+	glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
 
-		glBegin(GL_TRIANGLES);
+	glBindBuffer(GL_ARRAY_BUFFER, mBufferInfo[0].GetVertexBufferIndex());
+	glBufferData(GL_ARRAY_BUFFER,
+		sizeof(GLfloat) * mBufferInfo[0].vertexCount * (mRenderWindow.GetVertexDimension() + 4),
+		mBufferInfo[0].vertexBuffer.data(), GL_DYNAMIC_DRAW);
 
-#ifdef ICOSOHEDRON
-		// Begin recursive subdivision of all twenty faces of the icosohedron
-		RecursiveSubdivision(vertex[0], vertex[8], vertex[4], resolution);
-		RecursiveSubdivision(vertex[0], vertex[5], vertex[10], resolution);
-		RecursiveSubdivision(vertex[2], vertex[4], vertex[9], resolution);
-		RecursiveSubdivision(vertex[2], vertex[11], vertex[5], resolution);
-		RecursiveSubdivision(vertex[1], vertex[6], vertex[8], resolution);
+	glEnableVertexAttribArray(mRenderWindow.GetPositionLocation());
+	glVertexAttribPointer(mRenderWindow.GetPositionLocation(), 4, GL_FLOAT, GL_FALSE, 0, 0);
 
-		RecursiveSubdivision(vertex[1], vertex[10], vertex[7], resolution);
-		RecursiveSubdivision(vertex[3], vertex[9], vertex[6], resolution);
-		RecursiveSubdivision(vertex[3], vertex[7], vertex[11], resolution);
-		RecursiveSubdivision(vertex[0], vertex[10], vertex[8], resolution);
-		RecursiveSubdivision(vertex[1], vertex[8], vertex[10], resolution);
+	glEnableVertexAttribArray(mRenderWindow.GetColorLocation());
+	glVertexAttribPointer(mRenderWindow.GetColorLocation(), 4, GL_FLOAT, GL_FALSE, 0,
+		(void*)(sizeof(GLfloat) * mRenderWindow.GetVertexDimension() * mBufferInfo[0].vertexCount));
 
-		RecursiveSubdivision(vertex[2], vertex[9], vertex[11], resolution);
-		RecursiveSubdivision(vertex[3], vertex[11], vertex[9], resolution);
-		RecursiveSubdivision(vertex[4], vertex[2], vertex[0], resolution);
-		RecursiveSubdivision(vertex[5], vertex[0], vertex[2], resolution);
-		RecursiveSubdivision(vertex[6], vertex[1], vertex[3], resolution);
-
-		RecursiveSubdivision(vertex[7], vertex[3], vertex[1], resolution);
-		RecursiveSubdivision(vertex[8], vertex[6], vertex[4], resolution);
-		RecursiveSubdivision(vertex[9], vertex[4], vertex[6], resolution);
-		RecursiveSubdivision(vertex[10], vertex[5], vertex[7], resolution);
-		RecursiveSubdivision(vertex[11], vertex[7], vertex[5], resolution);
-#else
-		// Begin recursive subdivision of all eight faces of the octohedron
-		RecursiveSubdivision(top, equator1, equator4, resolution);
-		RecursiveSubdivision(top, equator2, equator1, resolution);
-		RecursiveSubdivision(top, equator3, equator2, resolution);
-		RecursiveSubdivision(top, equator4, equator3, resolution);
-
-		RecursiveSubdivision(bottom, equator1, equator2, resolution);
-		RecursiveSubdivision(bottom, equator2, equator3, resolution);
-		RecursiveSubdivision(bottom, equator3, equator4, resolution);
-		RecursiveSubdivision(bottom, equator4, equator1, resolution);
-#endif
-
-		glEnd();
-
-	glPopMatrix();*/
+	glBindVertexArray(0);
 
 	assert(!LibPlot2D::RenderWindow::GLHasError());
 }

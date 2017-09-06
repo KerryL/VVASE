@@ -52,10 +52,17 @@ private:
 	double radius = 0.0;
 
 	// Performs subdivision of the triangles to achieve a "rounder" sphere
-	void RecursiveSubdivision(const Eigen::Vector3d &corner1, const Eigen::Vector3d &corner2,
-		const Eigen::Vector3d &corner3, int level);
+	/*void RecursiveSubdivision(const Eigen::Vector3d &corner1, const Eigen::Vector3d &corner2,
+		const Eigen::Vector3d &corner3, int level);*/
 
-	void AddVertex(const Eigen::Vector3d &vertex);
+	//void AddVertex(const Eigen::Vector3d &vertex);
+
+	static bool mInitialized;
+	static unsigned int mProgram;
+	static unsigned int mResolutionLocation;
+	static const std::string mSphereGeometryShader;
+
+	void DoGLInitialization();
 };
 
 }// namespace VVASE
