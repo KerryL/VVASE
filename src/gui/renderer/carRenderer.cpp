@@ -84,13 +84,13 @@ const std::string CarRenderer::mSimpleGeometryShader(
 	"layout (triangles) in;\n"
 	"layout (triangle_strip, max_vertices = 3) out;\n"
 	"\n"
-	"in highp vec4 vertexColor[];\n"
+	"in vec4 vertexColor[];\n"
 	"\n"
 	"out fragmentData\n"
 	"{\n"
-	"    highp vec4 color;\n"
-	"    highp vec3 normal;\n"
-	"    highp vec3 position;\n"
+	"    vec4 color;\n"
+	"    vec3 normal;\n"
+	"    vec3 position;\n"
 	"} f;\n"
 	"\n"
 	"void main()\n"
@@ -134,40 +134,32 @@ const std::string CarRenderer::mFragmentShaderWithLighting(
 	"\n"
 	"struct Light\n"
 	"{\n"
-	"    highp vec3 position;\n"
-	"    highp vec3 color;\n"
+	"    vec3 position;\n"
+	"    vec3 color;\n"
 	"};\n"
 	"#define LIGHT_COUNT 2\n"
 	"uniform Light light;\n//[LIGHT_COUNT];\n"
-	"uniform highp vec3 cameraPosition;\n"// Line 10
+	"uniform vec3 cameraPosition;\n"// Line 10
 	"\n"
 	"in fragmentData\n"
 	"{\n"
-	"    highp vec4 color;\n"
-	"    highp vec3 normal;\n"
-	"    highp vec3 position;\n"
+	"    vec4 color;\n"
+	"    vec3 normal;\n"
+	"    vec3 position;\n"
 	"} f;\n"
 	"\n"
-	"out highp vec4 outputColor;\n"
+	"out vec4 outputColor;\n"
 	"\n"// Line 20
-	"highp float Clamp(highp float v, highp float low, highp float high)\n"
-	"{\n"
-	"    if (v > high)\n"
-	"        return high;\n"
-	"    else if (v < low)\n"
-	"        return low;\n"
-	"    return v;\n"
-	"}\n"
 	"\n"
-	"void main()\n"// Line 30
+	"void main()\n"
 	"{\n"
-	"    highp vec3 lightDirection = normalize(light.position - f.position);\n"
-	"    highp float diffuseCoefficient = dot(f.normal, lightDirection);\n"
-	"    diffuseCoefficient = Clamp(diffuseCoefficient, 0.0, 1.0);\n"
-	"    highp vec3 diffuse = vec3(f.color) * diffuseCoefficient * light.color;\n"
+	"    vec3 lightDirection = normalize(light.position - f.position);\n"
+	"    float diffuseCoefficient = dot(f.normal, lightDirection);\n"
+	"    diffuseCoefficient = clamp(diffuseCoefficient, 0.0, 1.0);\n"
+	"    vec3 diffuse = vec3(f.color) * diffuseCoefficient * light.color;\n"
 	"\n"
-	"    highp float ambientCoefficient = 0.6;\n"// TODO:  Can constants be optimized?
-	"    highp vec3 ambient = vec3(f.color) * ambientCoefficient * light.color;\n"
+	"    const float ambientCoefficient = 0.8;\n"
+	"    vec3 ambient = vec3(f.color) * ambientCoefficient * light.color;\n"
 	"    outputColor = vec4(diffuse + ambient, f.color.a);\n"
 	"}\n"
 );
@@ -294,31 +286,6 @@ void CarRenderer::InternalInitialization()
 
 //==========================================================================
 // Class:			CarRenderer
-// Function:		UpdateCameraUniforms
-//
-// Description:		Updates camera position uniform.
-//
-// Input Arguments:
-//		None
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-void CarRenderer::UpdateCameraUniforms()
-{
-	const auto cameraPosition(GetCameraPosition());
-	const float cameraPositionFloat[3] = { static_cast<float>(cameraPosition.x()), static_cast<float>(cameraPosition.y()), static_cast<float>(cameraPosition.z()) };
-
-	glUseProgram(mShaders.front().programId);
-	glUniform3fv(mCameraPositionLocation, 1, cameraPositionFloat);
-}
-
-//==========================================================================
-// Class:			CarRenderer
 // Function:		UpdateUniformWithModelView
 //
 // Description:		Updates normal matrix.
@@ -339,6 +306,11 @@ void CarRenderer::UpdateUniformWithModelView()
 	float glNormalMatrix[9];
 	ConvertMatrixToGL(normalMatrix, glNormalMatrix);
 	glUniformMatrix3fv(mNormalMatrixLocation, 1, GL_FALSE, glNormalMatrix);
+
+	const auto cameraPosition(GetCameraPosition());
+	const float cameraPositionFloat[3] = { static_cast<float>(cameraPosition.x()),
+		static_cast<float>(cameraPosition.y()), static_cast<float>(cameraPosition.z()) };
+	glUniform3fv(mCameraPositionLocation, 1, cameraPositionFloat);
 }
 
 //==========================================================================

@@ -221,7 +221,6 @@ private:
 	void AssignDefaultUniforms(ShaderInfo& shader) override;
 	void AssignLightingUniforms(const GLuint& program);
 	GLuint mCameraPositionLocation;
-	void UpdateCameraUniforms() override;
 
 	void UpdateUniformWithModelView() override;
 	GLuint mNormalMatrixLocation;

@@ -33,3 +33,10 @@ Code Quality Review:
 - Add exception safety info for all functions
 - Use m prefix for members
 - include guards (and include guard naming)
+
+
+
+
+
+Bugs:
+- Crash if plot updates while not visible?  Same for two cars
