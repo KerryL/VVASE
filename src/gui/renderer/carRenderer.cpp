@@ -75,10 +75,11 @@ namespace VVASE
 //
 //=============================================================================
 const std::string CarRenderer::mSimpleGeometryShader(
-	"#version 300 es\n"
+	"#version 400\n"
 	"#extension GL_EXT_geometry_shader : enable\n"
 	"\n"
 	"uniform mat4 projectionMatrix;\n"
+	"uniform mat3 normalMatrix;\n"
 	"\n"
 	"layout (triangles) in;\n"
 	"layout (triangle_strip, max_vertices = 3) out;\n"
@@ -97,7 +98,7 @@ const std::string CarRenderer::mSimpleGeometryShader(
 	"    gl_Position = gl_in[0].gl_Position;\n"
 	"    vec3 vector1 = gl_in[1].gl_Position.xyz - gl_Position.xyz;\n"
 	"    vec3 vector2 = gl_in[2].gl_Position.xyz - gl_Position.xyz;\n"
-	"    vec3 localNormal = transpose(inverse(mat3(projectionMatrix))) * normalize(cross(vector2, vector1));\n"// TODO:  Instead of projection matrix, use "normalMatrix" which can be inverted once for all geometry on CPU side
+	"    vec3 localNormal = normalMatrix * normalize(cross(vector2, vector1));\n"
 	"\n"
 	"    for (int i = 0; i < 3; i++)\n"
 	"    {\n"
@@ -129,7 +130,7 @@ const std::string CarRenderer::mSimpleGeometryShader(
 //
 //=============================================================================
 const std::string CarRenderer::mFragmentShaderWithLighting(
-	"#version 300 es\n"
+	"#version 400\n"
 	"\n"
 	"struct Light\n"
 	"{\n"
@@ -256,6 +257,8 @@ void CarRenderer::AssignDefaultUniforms(ShaderInfo& shader)
 	RenderWindow::AssignDefaultUniforms(shader);
 
 	AssignLightingUniforms(shader.programId);
+
+	mNormalMatrixLocation = glGetUniformLocation(shader.programId, "normalMatrix");
 }
 
 //==========================================================================
@@ -291,7 +294,7 @@ void CarRenderer::InternalInitialization()
 
 //==========================================================================
 // Class:			CarRenderer
-// Function:		UpdateSpecialUniforms
+// Function:		UpdateCameraUniforms
 //
 // Description:		Updates camera position uniform.
 //
@@ -305,13 +308,37 @@ void CarRenderer::InternalInitialization()
 //		None
 //
 //==========================================================================
-void CarRenderer::UpdateSpecialUniforms()
+void CarRenderer::UpdateCameraUniforms()
 {
 	const auto cameraPosition(GetCameraPosition());
 	const float cameraPositionFloat[3] = { static_cast<float>(cameraPosition.x()), static_cast<float>(cameraPosition.y()), static_cast<float>(cameraPosition.z()) };
 
 	glUseProgram(mShaders.front().programId);
 	glUniform3fv(mCameraPositionLocation, 1, cameraPositionFloat);
+}
+
+//==========================================================================
+// Class:			CarRenderer
+// Function:		UpdateUniformWithModelView
+//
+// Description:		Updates normal matrix.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void CarRenderer::UpdateUniformWithModelView()
+{
+	const Eigen::Matrix3d normalMatrix(mModelviewMatrix.topLeftCorner<3, 3>().inverse().transpose());
+	float glNormalMatrix[9];
+	ConvertMatrixToGL(normalMatrix, glNormalMatrix);
+	glUniformMatrix3fv(mNormalMatrixLocation, 1, GL_FALSE, glNormalMatrix);
 }
 
 //==========================================================================
