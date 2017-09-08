@@ -149,9 +149,9 @@ void Sphere::RecursiveSubdivision(const unsigned int& i1, const unsigned int& i2
 	    ------------
 	   Corner 2    Corner 3
 	-----------------------*/
-	const Eigen::Vector3d midPoint1(((GetVertex(i1) + GetVertex(i2)) * 0.5).normalized() * radius);
-	const Eigen::Vector3d midPoint2(((GetVertex(i1) + GetVertex(i3)) * 0.5).normalized() * radius);
-	const Eigen::Vector3d midPoint3(((GetVertex(i2) + GetVertex(i3)) * 0.5).normalized() * radius);
+	const Eigen::Vector3d midPoint1(((GetVertex(i1) + GetVertex(i2)) * 0.5 - center).normalized() * radius + center);
+	const Eigen::Vector3d midPoint2(((GetVertex(i1) + GetVertex(i3)) * 0.5 - center).normalized() * radius + center);
+	const Eigen::Vector3d midPoint3(((GetVertex(i2) + GetVertex(i3)) * 0.5 - center).normalized() * radius + center);
 
 	unsigned int midPoint1Index, midPoint2Index, midPoint3Index;
 	AssignVertex(midPoint1, midPoint1Index);
@@ -187,6 +187,7 @@ void Sphere::RecursiveSubdivision(const unsigned int& i1, const unsigned int& i2
 //==========================================================================
 void Sphere::AssignVertex(const Eigen::Vector3d &vertex)
 {
+	assert(vertexIndex < mBufferInfo[0].vertexCount);
 	mBufferInfo[0].vertexBuffer[4 * vertexIndex] = static_cast<float>(vertex.x());
 	mBufferInfo[0].vertexBuffer[4 * vertexIndex + 1] = static_cast<float>(vertex.y());
 	mBufferInfo[0].vertexBuffer[4 * vertexIndex + 2] = static_cast<float>(vertex.z());
@@ -215,10 +216,11 @@ void Sphere::AssignVertex(const Eigen::Vector3d &vertex)
 //==========================================================================
 void Sphere::AssignVertex(const Eigen::Vector3d &vertex, unsigned int& index)
 {
+	const double epsilon(1.0e-4);
 	unsigned int i;
 	for (i = 0; i < vertexIndex; ++i)
 	{
-		if (Math::IsZero(vertex - GetVertex(i)))
+		if (Math::IsZero(vertex - GetVertex(i), epsilon))
 		{
 			index = i;
 			return;
@@ -396,7 +398,7 @@ bool Sphere::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector3d
 void Sphere::Update(const unsigned int& /*i*/)
 {
 	if (resolution < 0)
-		resolution = 0;
+		resolution = 1;
 
 	mBufferInfo[0].GetOpenGLIndices(true);
 
@@ -485,12 +487,12 @@ void Sphere::Update(const unsigned int& /*i*/)
 	RecursiveSubdivision(11, 7, 5, resolution);
 #else
 	// Find six vertices that define an octohedron circumscribed within the sphere
-	AssignVertex(Eigen::Vector3d(0.0, 0.0, radius) / s + center);
-	AssignVertex(Eigen::Vector3d(0.0, 0.0, -radius) / s + center);
-	AssignVertex(Eigen::Vector3d(radius, 0.0, 0.0) / s + center);
-	AssignVertex(Eigen::Vector3d(0.0, radius, 0.0) / s + center);
-	AssignVertex(Eigen::Vector3d(-radius, 0.0, 0.0) / s + center);
-	AssignVertex(Eigen::Vector3d(0.0, -radius, 0.0) / s + center);
+	AssignVertex(Eigen::Vector3d(0.0, 0.0, radius) + center);
+	AssignVertex(Eigen::Vector3d(0.0, 0.0, -radius) + center);
+	AssignVertex(Eigen::Vector3d(radius, 0.0, 0.0) + center);
+	AssignVertex(Eigen::Vector3d(0.0, radius, 0.0) + center);
+	AssignVertex(Eigen::Vector3d(-radius, 0.0, 0.0) + center);
+	AssignVertex(Eigen::Vector3d(0.0, -radius, 0.0) + center);
 
 	// Begin recursive subdivision of all eight faces of the octohedron
 	RecursiveSubdivision(0, 2, 5, resolution);
@@ -504,6 +506,9 @@ void Sphere::Update(const unsigned int& /*i*/)
 	RecursiveSubdivision(1, 5, 2, resolution);
 #endif
 
+	assert(vertexIndex = mBufferInfo[0].vertexCount);
+	assert(indexIndex = mBufferInfo[0].indexBuffer.size());
+
 	const unsigned int colorStart(mBufferInfo[0].vertexCount * 4);
 	for (i = 0; i < mBufferInfo[0].vertexCount; ++i)
 	{
@@ -512,6 +517,7 @@ void Sphere::Update(const unsigned int& /*i*/)
 		mBufferInfo[0].vertexBuffer[colorStart + i * 4 + 2] = static_cast<float>(mColor.GetBlue());
 		mBufferInfo[0].vertexBuffer[colorStart + i * 4 + 3] = static_cast<float>(mColor.GetAlpha());
 	}
+
 
 	glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
 
