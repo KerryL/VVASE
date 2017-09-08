@@ -331,11 +331,11 @@ void Cone::Update(const unsigned int& /*i*/)
 		sizeof(GLfloat) * mBufferInfo[0].vertexCount * (mRenderWindow.GetVertexDimension() + 4),
 		mBufferInfo[0].vertexBuffer.data(), GL_DYNAMIC_DRAW);
 
-	glEnableVertexAttribArray(mRenderWindow.GetPositionLocation());
-	glVertexAttribPointer(mRenderWindow.GetPositionLocation(), 4, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(mRenderWindow.GetDefaultPositionLocation());
+	glVertexAttribPointer(mRenderWindow.GetDefaultPositionLocation(), 4, GL_FLOAT, GL_FALSE, 0, 0);
 
-	glEnableVertexAttribArray(mRenderWindow.GetColorLocation());
-	glVertexAttribPointer(mRenderWindow.GetColorLocation(), 4, GL_FLOAT, GL_FALSE, 0,
+	glEnableVertexAttribArray(mRenderWindow.GetDefaultColorLocation());
+	glVertexAttribPointer(mRenderWindow.GetDefaultColorLocation(), 4, GL_FLOAT, GL_FALSE, 0,
 		(void*)(sizeof(GLfloat) * mRenderWindow.GetVertexDimension() * mBufferInfo[0].vertexCount));
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mBufferInfo[0].GetIndexBufferIndex());
@@ -346,6 +346,8 @@ void Cone::Update(const unsigned int& /*i*/)
 	glBindVertexArray(0);
 
 	assert(!LibPlot2D::RenderWindow::GLHasError());
+
+	mBufferInfo[0].vertexCountModified = false;
 }
 
 }// namespace VVASE

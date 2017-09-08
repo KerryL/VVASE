@@ -58,6 +58,11 @@
 namespace VVASE
 {
 
+const std::string CarRenderer::mNormalMatrixName("normalMatrix");
+const std::string CarRenderer::mCameraPositionName("cameraPosition");
+const std::string CarRenderer::mLight0PositionName("light.position");
+const std::string CarRenderer::mLight0ColorName("light.color");
+
 //=============================================================================
 // Class:			CarRenderer
 // Function:		mDefaultVertexShader
@@ -76,7 +81,6 @@ namespace VVASE
 //=============================================================================
 const std::string CarRenderer::mSimpleGeometryShader(
 	"#version 400\n"
-	"#extension GL_EXT_geometry_shader : enable\n"
 	"\n"
 	"uniform mat4 projectionMatrix;\n"
 	"uniform mat3 normalMatrix;\n"
@@ -195,42 +199,9 @@ CarRenderer::CarRenderer(MainFrame &mainFrame, GuiCar &car,
 	InternalInitialization();
 }
 
-//==========================================================================
-// Class:			CarRenderer
-// Function:		AssignLightingUniforms
-//
-// Description:		Assigns uniforms required for lighting model.
-//
-// Input Arguments:
-//		program	= const GLuint&
-//
-// Output Arguments:
-//		None
-//
-// Return Value:
-//		None
-//
-//==========================================================================
-void CarRenderer::AssignLightingUniforms(const GLuint& program)
-{
-	const GLuint light0Position(glGetUniformLocation(program, "light.position"));
-	const GLuint light0Color(glGetUniformLocation(program, "light.color"));
-	mCameraPositionLocation = glGetUniformLocation(program, "cameraPosition");
-
-	glUseProgram(program);
-
-	const float position0[3] = { 0.0f, 0.0f, 100.0f };
-	glUniform3fv(light0Position, 1, position0);
-
-	const float color0[3] = { 1.0f, 1.0f, 1.0f };
-	glUniform3fv(light0Color, 1, color0);
-
-	assert(!LibPlot2D::RenderWindow::GLHasError());
-}
-
 //=============================================================================
 // Class:			CarRenderer
-// Function:		AssignDefaultUniforms
+// Function:		AssignDefaultLocations
 //
 // Description:		Assigns uniform locations and/or values for default program.
 //
@@ -244,13 +215,14 @@ void CarRenderer::AssignLightingUniforms(const GLuint& program)
 //		None
 //
 //=============================================================================
-void CarRenderer::AssignDefaultUniforms(ShaderInfo& shader)
+void CarRenderer::AssignDefaultLocations(ShaderInfo& shader)
 {
-	RenderWindow::AssignDefaultUniforms(shader);
+	RenderWindow::AssignDefaultLocations(shader);
 
-	AssignLightingUniforms(shader.programId);
-
-	mNormalMatrixLocation = glGetUniformLocation(shader.programId, "normalMatrix");
+	shader.uniformLocations[mLight0PositionName] = glGetUniformLocation(shader.programId, mLight0PositionName.c_str());
+	shader.uniformLocations[mLight0ColorName] = glGetUniformLocation(shader.programId, mLight0ColorName.c_str());
+	//shader.uniformLocations[mCameraPositionName] = glGetUniformLocation(shader.programId, mCameraPositionName.c_str());
+	shader.uniformLocations[mNormalMatrixName] = glGetUniformLocation(shader.programId, mNormalMatrixName.c_str());
 }
 
 //==========================================================================
@@ -288,7 +260,7 @@ void CarRenderer::InternalInitialization()
 // Class:			CarRenderer
 // Function:		UpdateUniformWithModelView
 //
-// Description:		Updates normal matrix.
+// Description:		Updates uniforms that require update when model view matrix changes.
 //
 // Input Arguments:
 //		None
@@ -305,12 +277,22 @@ void CarRenderer::UpdateUniformWithModelView()
 	const Eigen::Matrix3d normalMatrix(mModelviewMatrix.topLeftCorner<3, 3>().inverse().transpose());
 	float glNormalMatrix[9];
 	ConvertMatrixToGL(normalMatrix, glNormalMatrix);
-	glUniformMatrix3fv(mNormalMatrixLocation, 1, GL_FALSE, glNormalMatrix);
+	glUniformMatrix3fv(GetActiveProgramInfo().uniformLocations.find(mNormalMatrixName)->second, 1, GL_FALSE, glNormalMatrix);
+	assert(!GLHasError());
 
-	const auto cameraPosition(GetCameraPosition());
+	/*const auto cameraPosition(GetCameraPosition());
 	const float cameraPositionFloat[3] = { static_cast<float>(cameraPosition.x()),
 		static_cast<float>(cameraPosition.y()), static_cast<float>(cameraPosition.z()) };
-	glUniform3fv(mCameraPositionLocation, 1, cameraPositionFloat);
+	glUniform3fv(GetActiveProgramInfo().uniformLocations.find(mNormalMatrixName)->second, 1, cameraPositionFloat);*/
+	assert(!GLHasError());
+
+	const float position0[3] = { 0.0f, 0.0f, 100.0f };
+	glUniform3fv(GetDefaultProgramInfo().uniformLocations.find(mLight0PositionName)->second, 1, position0);
+
+	const float color0[3] = { 1.0f, 1.0f, 1.0f };
+	glUniform3fv(GetDefaultProgramInfo().uniformLocations.find(mLight0ColorName)->second, 1, color0);
+
+	assert(!LibPlot2D::RenderWindow::GLHasError());
 }
 
 //==========================================================================

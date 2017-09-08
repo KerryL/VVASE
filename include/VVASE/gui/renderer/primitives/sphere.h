@@ -45,7 +45,8 @@ protected:
 	void Update(const unsigned int& i) override;
 
 private:
-	int resolution = 4;
+	int resolution = 2;
+	bool mResolutionChanged = true;
 
 	Eigen::Vector3d center = Eigen::Vector3d::Zero();
 
@@ -53,8 +54,10 @@ private:
 
 	static bool mInitialized;
 	static unsigned int mProgram;
-	static unsigned int mResolutionLocation;
+	static const std::string mPassThroughVertexShader;
 	static const std::string mSphereGeometryShader;
+
+	static const std::string mResolutionName;
 
 	void DoGLInitialization();
 };

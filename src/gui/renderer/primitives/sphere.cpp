@@ -16,6 +16,7 @@
 #include "VVASE/gui/renderer/primitives/sphere.h"
 #include "VVASE/gui/utilities/unitConverter.h"
 #include "VVASE/core/utilities/carMath.h"
+#include "VVASE/gui/renderer/carRenderer.h"
 
 // LibPlot2D headers
 #include <lp2d/renderer/renderWindow.h>
@@ -44,7 +45,42 @@ namespace VVASE
 //==========================================================================
 bool Sphere::mInitialized(false);
 unsigned int Sphere::mProgram;
-unsigned int Sphere::mResolutionLocation;
+const std::string Sphere::mResolutionName("resolution");
+
+//=============================================================================
+// Class:			Sphere
+// Function:		mPassThroughVertexShader
+//
+// Description:		Vertex shader which does nothing.
+//
+// Input Arguments:
+//		None
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//=============================================================================
+const std::string Sphere::mPassThroughVertexShader(
+	"#version 400\n"
+	"\n"
+	/*"uniform mat4 modelviewMatrix;\n"
+	"uniform mat4 projectionMatrix;\n"*/
+	"\n"
+	"layout(location = 0) in vec4 position;\n"
+	"layout(location = 1) in vec4 color;\n"
+	"\n"
+	"out vec4 vertexColor;\n"
+	"\n"
+	"void main()\n"
+	"{\n"
+	"    vertexColor = color;\n"
+	//"    gl_Position = projectionMatrix * modelviewMatrix * position;\n"
+	"    gl_Position = position;\n"
+	"}\n"
+);
 
 //==========================================================================
 // Class:			Sphere
@@ -64,8 +100,8 @@ unsigned int Sphere::mResolutionLocation;
 //==========================================================================
 const std::string Sphere::mSphereGeometryShader(
 	"#version 400\n"
-	"#extension GL_EXT_geometry_shader : enable\n"
 	"\n"
+	"uniform mat4 modelviewMatrix;\n"
 	"uniform mat4 projectionMatrix;\n"
 	"uniform mat3 normalMatrix;\n"
 	"uniform int resolution;\n"
@@ -84,7 +120,7 @@ const std::string Sphere::mSphereGeometryShader(
 	"\n"
 	"void DoSubdivision(vec3 corner1, vec3 corner2, vec3 corner3, float radius)\n"
 	"{\n"
-	/*"    int i;\n"
+	"    int i;\n"
 	"    for (i = resolution; i > 1; --i)\n"
 	"    {\n"
 	// Compute the three points that divide this triangle into four sub-triangles
@@ -110,28 +146,31 @@ const std::string Sphere::mSphereGeometryShader(
 	"        RecursiveSubdivision(corner1, midPoint2, midPoint1, level);\n"
 	"        RecursiveSubdivision(corner2, midPoint1, midPoint3, level);\n"
 	"        RecursiveSubdivision(corner3, midPoint3, midPoint2, level);\n"
-	"        RecursiveSubdivision(midPoint1, midPoint2, midPoint3, level);\n"
+	"        RecursiveSubdivision(midPoint1, midPoint2, midPoint3, level);\n"*/
 	"    }\n"
 	"\n"
 	// If level is less than 1, add the triangle to the scene instead of
 	// continuing with the sub-division
-	"    if (level < 1)\n"*/
+	//"    if (level < 1)\n"
 	//"    {\n"
-	"        vec3 localNormal = normalMatrix * normalize(cross(corner2 - corner1, corner3 - corner1));\n"
+	"        vec4 corner1Projected = projectionMatrix * modelviewMatrix * vec4(corner1, 1.0);\n"
+	"        vec4 corner2Projected = projectionMatrix * modelviewMatrix * vec4(corner2, 1.0);\n"
+	"        vec4 corner3Projected = projectionMatrix * modelviewMatrix * vec4(corner3, 1.0);\n"
+	"        vec3 localNormal = normalMatrix * normalize(cross(vec3(corner2Projected) - vec3(corner1Projected), vec3(corner3Projected) - vec3(corner1Projected)));\n"
 	"\n"
 	"        f.color = vertexColor[0];\n"
 	"        f.normal = localNormal;\n"
-	"        f.position = vec3(projectionMatrix * vec4(corner1, 1));\n"
+	"        f.position = vec3(corner1Projected);\n"
 	"        EmitVertex();\n"
 	"\n"
 	"        f.color = vertexColor[0];\n"
 	"        f.normal = localNormal;\n"
-	"        f.position = vec3(projectionMatrix * vec4(corner2, 1));\n"
+	"        f.position = vec3(corner2Projected);\n"
 	"        EmitVertex();\n"
 	"\n"
 	"        f.color = vertexColor[0];\n"
 	"        f.normal = localNormal;\n"
-	"        f.position = vec3(projectionMatrix * vec4(corner3, 1));\n"
+	"        f.position = vec3(corner3Projected);\n"
 	"        EmitVertex();\n"
 	"\n"
 	"        EndPrimitive();\n"
@@ -141,22 +180,39 @@ const std::string Sphere::mSphereGeometryShader(
 	"\n"
 	"void main()\n"
 	"{\n"
+	/*"        f.color = vertexColor[0];\n"
+	"        f.normal = vec3(0.0, 0.0, 1.0);\n"
+	"        f.position = vec3(projectionMatrix * vec4(0.0, 0.0, 20.0, 1.0));\n"
+	"        EmitVertex();\n"
+	"\n"
+	"        f.color = vertexColor[0];\n"
+	"        f.normal = vec3(0.0, 0.0, 1.0);\n"
+	"        f.position = vec3(projectionMatrix * vec4(0.0, 10.0, 20.0, 1.0));\n"
+	"        EmitVertex();\n"
+	"\n"
+	"        f.color = vertexColor[0];\n"
+	"        f.normal = vec3(0.0, 0.0, 1.0);\n"
+	"        f.position = vec3(projectionMatrix * vec4(10.0, 0.0, 20.0, 1.0));\n"
+	"        EmitVertex();\n"
+	"\n"
+	"        EndPrimitive();\n"*/
 	"    float radius = gl_in[0].gl_Position.w;\n"
+	"    vec3 center = gl_in[0].gl_Position.xyz;\n"
 	"    float t = (1.0 + sqrt(5.0)) / 2.0;\n"
 	"    float s = sqrt(1.0 + t * t) * radius;\n"
 	"    vec3 vertex[12];\n"
-	"    vertex[0] = vec3(t, 1.0, 0.0) / s;\n"
-	"    vertex[1] = vec3(-t, 1.0, 0.0) / s;\n"
-	"    vertex[2] = vec3(t, -1.0, 0.0) / s;\n"
-	"    vertex[3] = vec3(-t, -1.0, 0.0) / s;\n"
-	"    vertex[4] = vec3(1.0, 0.0, t) / s;\n"
-	"    vertex[5] = vec3(1.0, 0.0, -t) / s;\n"
-	"    vertex[6] = vec3(-1, 0.0, t) / s;\n"
-	"    vertex[7] = vec3(-1.0, 0.0, -t) / s;\n"
-	"    vertex[8] = vec3(0.0, t, 1.0) / s;\n"
-	"    vertex[9] = vec3(0.0, -t, 1.0) / s;\n"
-	"    vertex[10] = vec3(0.0, t, -1.0) / s;\n"
-	"    vertex[11] = vec3(0.0, -t, -1.0) / s;\n"
+	"    vertex[0] = vec3(t, 1.0, 0.0) / s + center;\n"
+	"    vertex[1] = vec3(-t, 1.0, 0.0) / s + center;\n"
+	"    vertex[2] = vec3(t, -1.0, 0.0) / s + center;\n"
+	"    vertex[3] = vec3(-t, -1.0, 0.0) / s + center;\n"
+	"    vertex[4] = vec3(1.0, 0.0, t) / s + center;\n"
+	"    vertex[5] = vec3(1.0, 0.0, -t) / s + center;\n"
+	"    vertex[6] = vec3(-1, 0.0, t) / s + center;\n"
+	"    vertex[7] = vec3(-1.0, 0.0, -t) / s + center;\n"
+	"    vertex[8] = vec3(0.0, t, 1.0) / s + center;\n"
+	"    vertex[9] = vec3(0.0, -t, 1.0) / s + center;\n"
+	"    vertex[10] = vec3(0.0, t, -1.0) / s + center;\n"
+	"    vertex[11] = vec3(0.0, -t, -1.0) / s + center;\n"
 	"\n"
 	"    DoSubdivision(vertex[0], vertex[8], vertex[4], radius);\n"
 	"    DoSubdivision(vertex[0], vertex[5], vertex[10], radius);\n"
@@ -224,9 +280,13 @@ Sphere::Sphere(LibPlot2D::RenderWindow &renderWindow) : Primitive(renderWindow)
 //==========================================================================
 void Sphere::GenerateGeometry()
 {
-	glUseProgram(mProgram);
+	mRenderWindow.UseProgram(mProgram);
 
-	glUniform1i(mResolutionLocation, resolution);// TODO:  Don't need to do this every time?
+	if (mResolutionChanged)
+	{
+		glUniform1i(mRenderWindow.GetActiveProgramInfo().uniformLocations.find(mResolutionName)->second, resolution);
+		mResolutionChanged = false;
+	}
 
 	glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
 	glDrawArrays(GL_POINTS, 0, mBufferInfo[0].vertexCount);
@@ -259,20 +319,17 @@ void Sphere::DoGLInitialization()
 		return;
 
 	std::vector<GLuint> shaderList;
-	shaderList.push_back(mRenderWindow.CreateDefaultVertexShader());
+	shaderList.push_back(mRenderWindow.CreateShader(GL_VERTEX_SHADER, mPassThroughVertexShader));
+	//shaderList.push_back(mRenderWindow.CreateDefaultVertexShader());
 	shaderList.push_back(mRenderWindow.CreateShader(GL_GEOMETRY_SHADER, mSphereGeometryShader));
 	shaderList.push_back(mRenderWindow.CreateDefaultFragmentShader());
 
-	mProgram = mRenderWindow.CreateProgram(shaderList);
-
 	LibPlot2D::RenderWindow::ShaderInfo s;
-	s.programId = mProgram;
-	s.needsModelview = true;
-	s.needsProjection = true;
-	s.projectionLocation = glGetUniformLocation(mProgram, "projectionMatrix");
-	s.modelViewLocation = glGetUniformLocation(mProgram, "modelviewMatrix");
-	mResolutionLocation = glGetUniformLocation(mProgram, "resolution");
+	s.programId = mRenderWindow.CreateProgram(shaderList);
+	mRenderWindow.AssignDefaultLocations(s);
+	s.uniformLocations[mResolutionName] = glGetUniformLocation(s.programId, mResolutionName.c_str());
 	mRenderWindow.AddShader(s);
+	mProgram = mRenderWindow.GetShaderCount() - 1;
 
 	mInitialized = true;
 }
@@ -324,6 +381,7 @@ void Sphere::SetResolution(const int &resolution)
 {
 	this->resolution = resolution;
 	mModified = true;
+	mResolutionChanged = true;
 }
 
 //==========================================================================
@@ -418,7 +476,7 @@ void Sphere::Update(const unsigned int& /*i*/)
 {
 	DoGLInitialization();
 
-	if (resolution < 0)
+	if (resolution < 0)// Don't need to update mResolutionChanged here because it will already have been changed
 		resolution = 0;
 	else if (resolution > 2)
 		resolution = 2;
@@ -447,16 +505,18 @@ void Sphere::Update(const unsigned int& /*i*/)
 		sizeof(GLfloat) * mBufferInfo[0].vertexCount * (mRenderWindow.GetVertexDimension() + 4),
 		mBufferInfo[0].vertexBuffer.data(), GL_DYNAMIC_DRAW);
 
-	glEnableVertexAttribArray(mRenderWindow.GetPositionLocation());
-	glVertexAttribPointer(mRenderWindow.GetPositionLocation(), 4, GL_FLOAT, GL_FALSE, 0, 0);
+	glEnableVertexAttribArray(mRenderWindow.GetProgramInfo(mProgram).attributeLocations.find(LibPlot2D::RenderWindow::mPositionName)->second);
+	glVertexAttribPointer(mRenderWindow.GetProgramInfo(mProgram).attributeLocations.find(LibPlot2D::RenderWindow::mPositionName)->second, 4, GL_FLOAT, GL_FALSE, 0, 0);
 
-	glEnableVertexAttribArray(mRenderWindow.GetColorLocation());
-	glVertexAttribPointer(mRenderWindow.GetColorLocation(), 4, GL_FLOAT, GL_FALSE, 0,
+	glEnableVertexAttribArray(mRenderWindow.GetProgramInfo(mProgram).attributeLocations.find(LibPlot2D::RenderWindow::mColorName)->second);
+	glVertexAttribPointer(mRenderWindow.GetProgramInfo(mProgram).attributeLocations.find(LibPlot2D::RenderWindow::mColorName)->second, 4, GL_FLOAT, GL_FALSE, 0,
 		(void*)(sizeof(GLfloat) * mRenderWindow.GetVertexDimension() * mBufferInfo[0].vertexCount));
 
 	glBindVertexArray(0);
 
 	assert(!LibPlot2D::RenderWindow::GLHasError());
+
+	mBufferInfo[0].vertexCountModified = false;
 }
 
 }// namespace VVASE

@@ -60,11 +60,19 @@ public:
 		const Suspension::Hardpoints &suspensionPoint);
 	inline void DeactivateHelperOrb() { helperOrbIsActive = false; };
 
+	static const std::string mNormalMatrixName;
+
+	void AssignDefaultLocations(ShaderInfo& shader) override;
+
 private:
 	// For context menus
 	MainFrame& mainFrame;
 
 	GuiCar& car;
+
+	static const std::string mCameraPositionName;
+	static const std::string mLight0PositionName;
+	static const std::string mLight0ColorName;
 
 	void InternalInitialization();
 
@@ -218,12 +226,7 @@ private:
 	std::string GetDefaultFragmentShader() const override
 	{ return mFragmentShaderWithLighting; }
 
-	void AssignDefaultUniforms(ShaderInfo& shader) override;
-	void AssignLightingUniforms(const GLuint& program);
-	GLuint mCameraPositionLocation;
-
 	void UpdateUniformWithModelView() override;
-	GLuint mNormalMatrixLocation;
 
 	enum EventIds
 	{
