@@ -46,21 +46,23 @@ protected:
 
 private:
 	int resolution = 2;
-	bool mResolutionChanged = true;
 
 	Eigen::Vector3d center = Eigen::Vector3d::Zero();
 
 	double radius = 0.0;
 
-	static bool mInitialized;
-	static unsigned int mProgram;
-	static const std::string mPassThroughVertexShader;
-	static const std::string mSphereGeometryShader;
+	unsigned int vertexIndex;
+	unsigned int indexIndex;
 
-	static const std::string mResolutionName;
-	static const std::string mRadiusName;
+	// Performs subdivision of the triangles to achieve a "rounder" sphere
+	void RecursiveSubdivision(const unsigned int& i1, const unsigned int& i2,
+		const unsigned int& i3, int level);
 
-	void DoGLInitialization();
+	void AssignVertex(const Eigen::Vector3d &vertex);
+	void AssignVertex(const Eigen::Vector3d &vertex, unsigned int& index);
+	void AssembleFace(const unsigned int& i1, const unsigned int& i2,
+		const unsigned int& i3);
+	Eigen::Vector3d GetVertex(const unsigned int& i) const;
 };
 
 }// namespace VVASE
