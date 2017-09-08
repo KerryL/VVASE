@@ -350,8 +350,7 @@ void Cylinder::Update(const unsigned int& /*i*/)
 	glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
 
 	glBindBuffer(GL_ARRAY_BUFFER, mBufferInfo[0].GetVertexBufferIndex());
-	glBufferData(GL_ARRAY_BUFFER,
-		sizeof(GLfloat) * mBufferInfo[0].vertexCount * (mRenderWindow.GetVertexDimension() + 4),
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * mBufferInfo[0].vertexBuffer.size(),
 		mBufferInfo[0].vertexBuffer.data(), GL_DYNAMIC_DRAW);
 
 	glEnableVertexAttribArray(mRenderWindow.GetDefaultPositionLocation());

@@ -129,7 +129,7 @@ const std::string Sphere::mSphereGeometryShader(
 	"    vec3 position;\n"
 	"} f;\n"
 	"\n"
-	/*"void DoSubdivision(vec3 corner1, vec3 corner2, vec3 corner3)\n"
+	"void DoSubdivision(vec3 corner1, vec3 corner2, vec3 corner3)\n"
 	"{\n"
 	"    int i;\n"
 	"    for (i = resolution; i > 1; --i)\n"
@@ -147,18 +147,19 @@ const std::string Sphere::mSphereGeometryShader(
 	    ------------
 	   Corner 2    Corner 3
 	-----------------------*/
-	/*"        vec3 midPoint1 = normalize((corner1 + corner2) * 0.5) * radius;\n"
-	"        vec3 midPoint2 = normalize((corner1 + corner3) * 0.5) * radius;\n"
-	"        vec3 midPoint3 = normalize((corner2 + corner3) * 0.5) * radius;\n"
+	// TODO:  This is wrong!
+	"        vec3 midPoint1 = normalize((corner1 + corner2) * 0.5) * sphereInfo[0].radius;\n"
+	"        vec3 midPoint2 = normalize((corner1 + corner3) * 0.5) * sphereInfo[0].radius;\n"
+	"        vec3 midPoint3 = normalize((corner2 + corner3) * 0.5) * sphereInfo[0].radius;\n"
 	"\n"
 	// Call this method for each of the four sub-triangles, with one less level
 	// Note that the order in which the points are supplied is important to make
 	// sure that the triangles are created in a consistent manner (clock-wise).
-	"        RecursiveSubdivision(corner1, midPoint2, midPoint1, level);\n"
+	/*"        RecursiveSubdivision(corner1, midPoint2, midPoint1, level);\n"
 	"        RecursiveSubdivision(corner2, midPoint1, midPoint3, level);\n"
 	"        RecursiveSubdivision(corner3, midPoint3, midPoint2, level);\n"
 	"        RecursiveSubdivision(midPoint1, midPoint2, midPoint3, level);\n"*/
-	/*"    }\n"
+	"    }\n"
 	"\n"
 	// If level is less than 1, add the triangle to the scene instead of
 	// continuing with the sub-division
@@ -169,7 +170,7 @@ const std::string Sphere::mSphereGeometryShader(
 	"        vec4 corner3Projected = projectionMatrix * modelviewMatrix * vec4(corner3, 1.0);\n"
 	/*"        vec3 vector1 = vec3(corner2Projected - corner1Projected);\n"
 	"        vec3 vector2 = vec3(corner3Projected - corner1Projected);\n"*/
-	/*"        vec3 vector1 = vec3(corner2 - corner1);\n"
+	"        vec3 vector1 = vec3(corner2 - corner1);\n"
 	"        vec3 vector2 = vec3(corner3 - corner1);\n"
 	"        vec3 localNormal = normalMatrix * normalize(cross(vector1, vector2));\n"
 	"\n"
@@ -194,11 +195,11 @@ const std::string Sphere::mSphereGeometryShader(
 	"        EndPrimitive();\n"
 	"        return;\n"
 	//"    }\n"
-	"}\n"*/
+	"}\n"
 	"\n"
 	"void main()\n"
 	"{\n"
-	"    if (resolution * sphereInfo[0].radius > 10000.0)\n"
+	/*"    if (resolution * sphereInfo[0].radius > 10000.0)\n"
 	"    { return; }\n"
 	"    vec4 center = gl_in[0].gl_Position;\n"
 	"center.w = 0;\n"
@@ -227,8 +228,8 @@ const std::string Sphere::mSphereGeometryShader(
 	"    f.position = vec3(p3);\n"
 	"    EmitVertex();\n"
 	"\n"
-	"    EndPrimitive();\n"
-	/*"    vec3 center = gl_in[0].gl_Position.xyz;\n"
+	"    EndPrimitive();\n"*/
+	"    vec3 center = gl_in[0].gl_Position.xyz;\n"
 	"    float t = (1.0 + sqrt(5.0)) / 2.0;\n"
 	"    float s = sqrt(1.0 + t * t) * sphereInfo[0].radius;\n"
 	"    vec3 vertex[12];\n"
@@ -267,7 +268,7 @@ const std::string Sphere::mSphereGeometryShader(
 	"    DoSubdivision(vertex[8], vertex[6], vertex[4]);\n"
 	"    DoSubdivision(vertex[9], vertex[4], vertex[6]);\n"
 	"    DoSubdivision(vertex[10], vertex[5], vertex[7]);\n"
-	"    DoSubdivision(vertex[11], vertex[7], vertex[5]);\n"*/
+	"    DoSubdivision(vertex[11], vertex[7], vertex[5]);\n"
 	"}\n"
 );
 
