@@ -99,9 +99,8 @@ const std::string CarRenderer::mSimpleGeometryShader(
 	"\n"
 	"void main()\n"
 	"{\n"
-	"    gl_Position = gl_in[0].gl_Position;\n"
-	"    vec3 vector1 = gl_in[1].gl_Position.xyz - gl_Position.xyz;\n"
-	"    vec3 vector2 = gl_in[2].gl_Position.xyz - gl_Position.xyz;\n"
+	"    vec3 vector1 = gl_in[1].gl_Position.xyz - gl_in[0].gl_Position.xyz;\n"
+	"    vec3 vector2 = gl_in[2].gl_Position.xyz - gl_in[0].gl_Position.xyz;\n"
 	"    vec3 localNormal = normalMatrix * normalize(cross(vector2, vector1));\n"
 	"\n"
 	"    for (int i = 0; i < 3; i++)\n"
@@ -109,7 +108,7 @@ const std::string CarRenderer::mSimpleGeometryShader(
 	"        gl_Position = gl_in[i].gl_Position;\n"
 	"        f.color = vertexColor[i];\n"
 	"        f.normal = localNormal;\n"
-	"        f.position = vec3(projectionMatrix * gl_Position);\n"
+	"        f.position = vec3(projectionMatrix * gl_Position);\n"// TODO:  Not sure this is right?
 	"        EmitVertex();\n"
 	"    }\n"
 	"\n"
@@ -157,6 +156,7 @@ const std::string CarRenderer::mFragmentShaderWithLighting(
 	"\n"
 	"void main()\n"
 	"{\n"
+	// TODO:  Draw normals and light direction to make sure this is correct
 	"    vec3 lightDirection = normalize(light.position - f.position);\n"
 	"    float diffuseCoefficient = dot(f.normal, lightDirection);\n"
 	"    diffuseCoefficient = clamp(diffuseCoefficient, 0.0, 1.0);\n"
