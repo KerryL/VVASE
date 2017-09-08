@@ -58,6 +58,7 @@ private:
 	static const std::string mSphereGeometryShader;
 
 	static const std::string mResolutionName;
+	static const std::string mRadiusName;
 
 	void DoGLInitialization();
 };

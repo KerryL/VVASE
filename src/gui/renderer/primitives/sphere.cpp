@@ -46,6 +46,7 @@ namespace VVASE
 bool Sphere::mInitialized(false);
 unsigned int Sphere::mProgram;
 const std::string Sphere::mResolutionName("resolution");
+const std::string Sphere::mRadiusName("radius");
 
 //=============================================================================
 // Class:			Sphere
@@ -71,12 +72,18 @@ const std::string Sphere::mPassThroughVertexShader(
 	"\n"
 	"layout(location = 0) in vec4 position;\n"
 	"layout(location = 1) in vec4 color;\n"
+	"layout(location = 2) in float radius;\n"
 	"\n"
-	"out vec4 vertexColor;\n"
+	"out SphereInfo\n"
+	"{\n"
+	"    vec4 color;\n"
+	"    float radius;\n"
+	"} sphereInfo;\n"
 	"\n"
 	"void main()\n"
 	"{\n"
-	"    vertexColor = color;\n"
+	"    sphereInfo.color = color;\n"
+	"    sphereInfo.radius = radius;\n"
 	//"    gl_Position = projectionMatrix * modelviewMatrix * position;\n"
 	"    gl_Position = position;\n"
 	"}\n"
@@ -109,7 +116,11 @@ const std::string Sphere::mSphereGeometryShader(
 	"layout (points) in;\n"
 	"layout (triangle_strip, max_vertices = 3) out;\n"
 	"\n"
-	"in vec4 vertexColor[];\n"
+	"in SphereInfo\n"
+	"{\n"
+	"    vec4 color;\n"
+	"    float radius;\n"
+	"} sphereInfo[];\n"
 	"\n"
 	"out fragmentData\n"
 	"{\n"
@@ -118,7 +129,7 @@ const std::string Sphere::mSphereGeometryShader(
 	"    vec3 position;\n"
 	"} f;\n"
 	"\n"
-	"void DoSubdivision(vec3 corner1, vec3 corner2, vec3 corner3, float radius)\n"
+	"void DoSubdivision(vec3 corner1, vec3 corner2, vec3 corner3)\n"
 	"{\n"
 	"    int i;\n"
 	"    for (i = resolution; i > 1; --i)\n"
@@ -156,19 +167,21 @@ const std::string Sphere::mSphereGeometryShader(
 	"        vec4 corner1Projected = projectionMatrix * modelviewMatrix * vec4(corner1, 1.0);\n"
 	"        vec4 corner2Projected = projectionMatrix * modelviewMatrix * vec4(corner2, 1.0);\n"
 	"        vec4 corner3Projected = projectionMatrix * modelviewMatrix * vec4(corner3, 1.0);\n"
-	"        vec3 localNormal = normalMatrix * normalize(cross(vec3(corner2Projected) - vec3(corner1Projected), vec3(corner3Projected) - vec3(corner1Projected)));\n"
+	"        vec3 vector1 = vec3(corner2Projected - corner1Projected);\n"
+	"        vec3 vector2 = vec3(corner3Projected - corner1Projected);\n"
+	"        vec3 localNormal = normalMatrix * normalize(cross(vector1, vector2));\n"
 	"\n"
-	"        f.color = vertexColor[0];\n"
+	"        f.color = sphereInfo[0].color;\n"
 	"        f.normal = localNormal;\n"
 	"        f.position = vec3(corner1Projected);\n"
 	"        EmitVertex();\n"
 	"\n"
-	"        f.color = vertexColor[0];\n"
+	"        f.color = sphereInfo[0].color;\n"
 	"        f.normal = localNormal;\n"
 	"        f.position = vec3(corner2Projected);\n"
 	"        EmitVertex();\n"
 	"\n"
-	"        f.color = vertexColor[0];\n"
+	"        f.color = sphereInfo[0].color;\n"
 	"        f.normal = localNormal;\n"
 	"        f.position = vec3(corner3Projected);\n"
 	"        EmitVertex();\n"
@@ -196,10 +209,9 @@ const std::string Sphere::mSphereGeometryShader(
 	"        EmitVertex();\n"
 	"\n"
 	"        EndPrimitive();\n"*/
-	"    float radius = gl_in[0].gl_Position.w;\n"
 	"    vec3 center = gl_in[0].gl_Position.xyz;\n"
 	"    float t = (1.0 + sqrt(5.0)) / 2.0;\n"
-	"    float s = sqrt(1.0 + t * t) * radius;\n"
+		"    float s = sqrt(1.0 + t * t) * sphereInfo[0].radius;\n"
 	"    vec3 vertex[12];\n"
 	"    vertex[0] = vec3(t, 1.0, 0.0) / s + center;\n"
 	"    vertex[1] = vec3(-t, 1.0, 0.0) / s + center;\n"
@@ -214,29 +226,29 @@ const std::string Sphere::mSphereGeometryShader(
 	"    vertex[10] = vec3(0.0, t, -1.0) / s + center;\n"
 	"    vertex[11] = vec3(0.0, -t, -1.0) / s + center;\n"
 	"\n"
-	"    DoSubdivision(vertex[0], vertex[8], vertex[4], radius);\n"
-	"    DoSubdivision(vertex[0], vertex[5], vertex[10], radius);\n"
-	"    DoSubdivision(vertex[2], vertex[4], vertex[9], radius);\n"
-	"    DoSubdivision(vertex[2], vertex[11], vertex[5], radius);\n"
-	"    DoSubdivision(vertex[1], vertex[6], vertex[8], radius);\n"
+	"    DoSubdivision(vertex[0], vertex[8], vertex[4]);\n"
+	"    DoSubdivision(vertex[0], vertex[5], vertex[10]);\n"
+	"    DoSubdivision(vertex[2], vertex[4], vertex[9]);\n"
+	"    DoSubdivision(vertex[2], vertex[11], vertex[5]);\n"
+	"    DoSubdivision(vertex[1], vertex[6], vertex[8]);\n"
 	"\n"
-	"    DoSubdivision(vertex[1], vertex[10], vertex[7], radius);\n"
-	"    DoSubdivision(vertex[3], vertex[9], vertex[6], radius);\n"
-	"    DoSubdivision(vertex[3], vertex[7], vertex[11], radius);\n"
-	"    DoSubdivision(vertex[0], vertex[10], vertex[8], radius);\n"
-	"    DoSubdivision(vertex[1], vertex[8], vertex[10], radius);\n"
+	"    DoSubdivision(vertex[1], vertex[10], vertex[7]);\n"
+	"    DoSubdivision(vertex[3], vertex[9], vertex[6]);\n"
+	"    DoSubdivision(vertex[3], vertex[7], vertex[11]);\n"
+	"    DoSubdivision(vertex[0], vertex[10], vertex[8]);\n"
+	"    DoSubdivision(vertex[1], vertex[8], vertex[10]);\n"
 	"\n"
-	"    DoSubdivision(vertex[2], vertex[9], vertex[11], radius);\n"
-	"    DoSubdivision(vertex[3], vertex[11], vertex[9], radius);\n"
-	"    DoSubdivision(vertex[4], vertex[2], vertex[0], radius);\n"
-	"    DoSubdivision(vertex[5], vertex[0], vertex[2], radius);\n"
-	"    DoSubdivision(vertex[6], vertex[1], vertex[3], radius);\n"
+	"    DoSubdivision(vertex[2], vertex[9], vertex[11]);\n"
+	"    DoSubdivision(vertex[3], vertex[11], vertex[9]);\n"
+	"    DoSubdivision(vertex[4], vertex[2], vertex[0]);\n"
+	"    DoSubdivision(vertex[5], vertex[0], vertex[2]);\n"
+	"    DoSubdivision(vertex[6], vertex[1], vertex[3]);\n"
 	"\n"
-	"    DoSubdivision(vertex[7], vertex[3], vertex[1], radius);\n"
-	"    DoSubdivision(vertex[8], vertex[6], vertex[4], radius);\n"
-	"    DoSubdivision(vertex[9], vertex[4], vertex[6], radius);\n"
-	"    DoSubdivision(vertex[10], vertex[5], vertex[7], radius);\n"
-	"    DoSubdivision(vertex[11], vertex[7], vertex[5], radius);\n"
+	"    DoSubdivision(vertex[7], vertex[3], vertex[1]);\n"
+	"    DoSubdivision(vertex[8], vertex[6], vertex[4]);\n"
+	"    DoSubdivision(vertex[9], vertex[4], vertex[6]);\n"
+	"    DoSubdivision(vertex[10], vertex[5], vertex[7]);\n"
+	"    DoSubdivision(vertex[11], vertex[7], vertex[5]);\n"
 	"}\n"
 );
 
@@ -328,8 +340,8 @@ void Sphere::DoGLInitialization()
 	s.programId = mRenderWindow.CreateProgram(shaderList);
 	mRenderWindow.AssignDefaultLocations(s);
 	s.uniformLocations[mResolutionName] = glGetUniformLocation(s.programId, mResolutionName.c_str());
-	mRenderWindow.AddShader(s);
-	mProgram = mRenderWindow.GetShaderCount() - 1;
+	s.attributeLocations[mRadiusName] = glGetAttribLocation(s.programId, mRadiusName.c_str());
+	mProgram = mRenderWindow.AddShader(s);
 
 	mInitialized = true;
 }
@@ -485,18 +497,20 @@ void Sphere::Update(const unsigned int& /*i*/)
 
 	mBufferInfo[0].vertexCount = 1;
 	mBufferInfo[0].vertexBuffer.resize(mBufferInfo[0].vertexCount
-		* (mRenderWindow.GetVertexDimension() + 4));// 4D vertex, RGBA color
+		* (mRenderWindow.GetVertexDimension() + 5));// 4D vertex, RGBA color, radius
 	assert(mRenderWindow.GetVertexDimension() == 4);
 
 	mBufferInfo[0].vertexBuffer[0] = static_cast<float>(center.x());
 	mBufferInfo[0].vertexBuffer[1] = static_cast<float>(center.y());
 	mBufferInfo[0].vertexBuffer[2] = static_cast<float>(center.z());
-	mBufferInfo[0].vertexBuffer[3] = static_cast<float>(radius);
+	mBufferInfo[0].vertexBuffer[3] = static_cast<float>(1.0);
 
 	mBufferInfo[0].vertexBuffer[4] = static_cast<float>(mColor.GetRed());
 	mBufferInfo[0].vertexBuffer[5] = static_cast<float>(mColor.GetGreen());
 	mBufferInfo[0].vertexBuffer[6] = static_cast<float>(mColor.GetBlue());
 	mBufferInfo[0].vertexBuffer[7] = static_cast<float>(mColor.GetAlpha());
+
+	mBufferInfo[0].vertexBuffer[8] = static_cast<float>(radius);
 
 	glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
 
@@ -511,6 +525,10 @@ void Sphere::Update(const unsigned int& /*i*/)
 	glEnableVertexAttribArray(mRenderWindow.GetProgramInfo(mProgram).attributeLocations.find(LibPlot2D::RenderWindow::mColorName)->second);
 	glVertexAttribPointer(mRenderWindow.GetProgramInfo(mProgram).attributeLocations.find(LibPlot2D::RenderWindow::mColorName)->second, 4, GL_FLOAT, GL_FALSE, 0,
 		(void*)(sizeof(GLfloat) * mRenderWindow.GetVertexDimension() * mBufferInfo[0].vertexCount));
+
+	glEnableVertexAttribArray(mRenderWindow.GetProgramInfo(mProgram).attributeLocations.find(mRadiusName)->second);
+	glVertexAttribPointer(mRenderWindow.GetProgramInfo(mProgram).attributeLocations.find(mRadiusName)->second, 1, GL_FLOAT, GL_FALSE, 0,
+		(void*)(sizeof(GLfloat) * (mRenderWindow.GetVertexDimension() + 4) * mBufferInfo[0].vertexCount));
 
 	glBindVertexArray(0);
 
