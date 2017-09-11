@@ -16,6 +16,7 @@
 
 // Local headers
 #include "VVASE/core/car/subsystems/massProperties.h"
+#include "VVASE/core/threads/threadDefs.h"
 #include "../../../guiCar.h"
 #include "VVASE/gui/components/mainFrame.h"
 #include "VVASE/gui/superGrid.h"
@@ -542,10 +543,10 @@ void EditMassPanel::TextBoxEditEvent(wxCommandEvent &event)
 		UndoRedoStack::Operation::DataTypeDouble,
 		dataLocation);
 
-	wxMutex *mutex = parent.GetCurrentMutex();
-	mutex->Lock();
-	*dataLocation = UnitConverter::GetInstance().ConvertInput(value, units);
-	mutex->Unlock();
+	{
+		MutexLocker lock(*parent.GetCurrentMutex());
+		*dataLocation = UnitConverter::GetInstance().ConvertInput(value, units);
+	}
 
 	parent.GetCurrentObject()->SetModified();
 	parent.GetMainFrame().UpdateAnalysis();
@@ -589,28 +590,27 @@ void EditMassPanel::GridCellChangeEvent(wxGridEvent& event)
 
 		double* valueLocation;
 
-		wxMutex *mutex = parent.GetCurrentMutex();
-		mutex->Lock();
+		{
+			MutexLocker lock(*parent.GetCurrentMutex());
 
-		if (event.GetRow() == RowTotalCG)
-			valueLocation = &currentMassProperties->totalCGHeight;
-		else if (event.GetRow() == RowUnsprungLeftFrontCG)
-			valueLocation = &currentMassProperties->unsprungCGHeights.leftFront;
-		else if (event.GetRow() == RowUnsprungRightFrontCG)
-			valueLocation = &currentMassProperties->unsprungCGHeights.rightFront;
-		else if (event.GetRow() == RowUnsprungLeftRearCG)
-			valueLocation = &currentMassProperties->unsprungCGHeights.leftRear;
-		else// if (event.GetRow() == RowUnsprungRightRearCG)
-			valueLocation = &currentMassProperties->unsprungCGHeights.rightRear;
+			if (event.GetRow() == RowTotalCG)
+				valueLocation = &currentMassProperties->totalCGHeight;
+			else if (event.GetRow() == RowUnsprungLeftFrontCG)
+				valueLocation = &currentMassProperties->unsprungCGHeights.leftFront;
+			else if (event.GetRow() == RowUnsprungRightFrontCG)
+				valueLocation = &currentMassProperties->unsprungCGHeights.rightFront;
+			else if (event.GetRow() == RowUnsprungLeftRearCG)
+				valueLocation = &currentMassProperties->unsprungCGHeights.leftRear;
+			else// if (event.GetRow() == RowUnsprungRightRearCG)
+				valueLocation = &currentMassProperties->unsprungCGHeights.rightRear;
 
-		parent.GetMainFrame().GetUndoRedoStack().AddOperation(
-			parent.GetMainFrame().GetActiveIndex(),
-			UndoRedoStack::Operation::DataTypeDouble,
-			valueLocation);
+			parent.GetMainFrame().GetUndoRedoStack().AddOperation(
+				parent.GetMainFrame().GetActiveIndex(),
+				UndoRedoStack::Operation::DataTypeDouble,
+				valueLocation);
 
-		*valueLocation = UnitConverter::GetInstance().ConvertDistanceInput(value);
-
-		mutex->Unlock();
+			*valueLocation = UnitConverter::GetInstance().ConvertDistanceInput(value);
+		}
 
 		parent.GetCurrentObject()->SetModified();
 		parent.GetMainFrame().UpdateAnalysis();

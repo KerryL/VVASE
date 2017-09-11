@@ -140,7 +140,8 @@ void EditPanel::UpdateInformation(GuiObject *currentObject)
 	{
 	case GuiObject::ItemType::Car:
 		{
-			MutexLocker lock(static_cast<GuiCar*>(currentObject)->GetOriginalCar().GetMutex());
+			carMutex = &static_cast<GuiCar*>(currentObject)->GetOriginalCar().GetMutex();
+			MutexLocker lock(*carMutex);
 
 			if (editAerodynamics)
 			{

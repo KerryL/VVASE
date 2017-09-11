@@ -11,6 +11,7 @@
 
 // Local headers
 #include "VVASE/core/car/subsystems/brakes.h"
+#include "VVASE/core/threads/threadDefs.h"
 #include "../../../guiCar.h"
 #include "VVASE/gui/components/mainFrame.h"
 #include "../editPanel.h"
@@ -236,17 +237,16 @@ void EditBrakesPanel::TextBoxEditEvent(wxCommandEvent &event)
 		UndoRedoStack::Operation::DataTypeDouble,
 		dataLocation);
 
-	wxMutex *mutex = parent.GetCurrentMutex();
-	mutex->Lock();
-	*dataLocation = UnitConverter::GetInstance().ConvertInput(value, units);
+	{
+		MutexLocker lock(*parent.GetCurrentMutex());
+		*dataLocation = UnitConverter::GetInstance().ConvertInput(value, units);
 
-	// Check the limits on the data value
-	if (*dataLocation > maxValue)
-		*dataLocation = maxValue;
-	else if (*dataLocation < minValue)
-		*dataLocation = minValue;
-
-	mutex->Unlock();
+		// Check the limits on the data value
+		if (*dataLocation > maxValue)
+			*dataLocation = maxValue;
+		else if (*dataLocation < minValue)
+			*dataLocation = minValue;
+	}
 
 	parent.GetCurrentObject()->SetModified();
 	parent.GetMainFrame().UpdateAnalysis();
@@ -273,43 +273,40 @@ void EditBrakesPanel::TextBoxEditEvent(wxCommandEvent &event)
 //==========================================================================
 void EditBrakesPanel::CheckBoxChange(wxCommandEvent &event)
 {
-	// Get a lock on the car
-	wxMutex *mutex = parent.GetCurrentMutex();
-	mutex->Lock();
-
-	// Take different action depending on the event ID
-	switch (event.GetId())
 	{
-	case CheckBoxFrontBrakesInboard:
-		// Add the operation to the undo/redo stack
-		parent.GetMainFrame().GetUndoRedoStack().AddOperation(
-			parent.GetMainFrame().GetActiveIndex(),
-			UndoRedoStack::Operation::DataTypeBool,
-			&(currentBrakes->frontBrakesInboard));
+		MutexLocker lock(*parent.GetCurrentMutex());
 
-		// Set the front brakes inboard flag to the value of the check box
-		currentBrakes->frontBrakesInboard = event.IsChecked();
-		break;
+		// Take different action depending on the event ID
+		switch (event.GetId())
+		{
+		case CheckBoxFrontBrakesInboard:
+			// Add the operation to the undo/redo stack
+			parent.GetMainFrame().GetUndoRedoStack().AddOperation(
+				parent.GetMainFrame().GetActiveIndex(),
+				UndoRedoStack::Operation::DataTypeBool,
+				&(currentBrakes->frontBrakesInboard));
 
-	case CheckBoxRearBrakesInboard:
-		// Add the operation to the undo/redo stack
-		parent.GetMainFrame().GetUndoRedoStack().AddOperation(
-			parent.GetMainFrame().GetActiveIndex(),
-			UndoRedoStack::Operation::DataTypeBool,
-			&(currentBrakes->rearBrakesInboard));
+			// Set the front brakes inboard flag to the value of the check box
+			currentBrakes->frontBrakesInboard = event.IsChecked();
+			break;
 
-		// Set the rear brakes inboard flag to the value of the check box
-		currentBrakes->rearBrakesInboard = event.IsChecked();
-		break;
+		case CheckBoxRearBrakesInboard:
+			// Add the operation to the undo/redo stack
+			parent.GetMainFrame().GetUndoRedoStack().AddOperation(
+				parent.GetMainFrame().GetActiveIndex(),
+				UndoRedoStack::Operation::DataTypeBool,
+				&(currentBrakes->rearBrakesInboard));
 
-	default:
-		// Don't do anything if we don't recognize the ID
-		return;
-		break;
+			// Set the rear brakes inboard flag to the value of the check box
+			currentBrakes->rearBrakesInboard = event.IsChecked();
+			break;
+
+		default:
+			// Don't do anything if we don't recognize the ID
+			return;
+			break;
+		}
 	}
-
-	// Unlock the car
-	mutex->Unlock();
 
 	// Tell the car object that it was modified
 	parent.GetCurrentObject()->SetModified();

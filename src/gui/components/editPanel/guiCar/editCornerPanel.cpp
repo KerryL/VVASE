@@ -13,6 +13,7 @@
 
 // Local headers
 #include "VVASE/core/car/subsystems/corner.h"
+#include "VVASE/core/threads/threadDefs.h"
 #include "VVASE/core/car/car.h"
 #include "../../../guiCar.h"
 #include "VVASE/gui/superGrid.h"
@@ -476,69 +477,68 @@ void EditCornerPanel::GridCellChangedEvent(wxGridEvent &event)
 	// Make sure the row is a valid row
 	if (event.GetRow() > 0)
 	{
-		// Get a lock on the car
-		wxMutex *mutex = parent.GetParent().GetCurrentMutex();
-		mutex->Lock();
-
-		// For reading/writing values we use a string
-		wxString valueString;
-
-		// If this is a contact patch, don't allow modification of the Z location
-		if (event.GetCol() == 3 && event.GetRow() - 1 == static_cast<int>(Corner::Hardpoints::ContactPatch))
 		{
-			// Reset to zero
-			valueString.Printf("%0.3f", 0.0);
-			hardpoints->SetCellValue(event.GetRow(), event.GetCol(), valueString);
+			MutexLocker lock(*parent.GetParent().GetCurrentMutex());
 
-			return;
+			// For reading/writing values we use a string
+			wxString valueString;
+
+			// If this is a contact patch, don't allow modification of the Z location
+			if (event.GetCol() == 3 && event.GetRow() - 1 == static_cast<int>(Corner::Hardpoints::ContactPatch))
+			{
+				// Reset to zero
+				valueString.Printf("%0.3f", 0.0);
+				hardpoints->SetCellValue(event.GetRow(), event.GetCol(), valueString);
+
+				return;
+			}
+
+			// Get the new value
+			valueString = hardpoints->GetCellValue(event.GetRow(), event.GetCol());
+			double value;
+
+			// Make sure the value is numeric
+			if (!valueString.ToDouble(&value))
+				// The value is non-numeric - don't do anything
+				return;
+
+			// Update the point (don't forget to convert)
+			if (event.GetCol() == 1)// X
+			{
+				// Add the operation to the undo/redo stack
+				parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
+					parent.GetParent().GetMainFrame().GetActiveIndex(),
+					UndoRedoStack::Operation::DataTypeDouble,
+					&(currentCorner->hardpoints[event.GetRow() - 1].x()));
+
+				currentCorner->hardpoints[event.GetRow() - 1].x() =
+					UnitConverter::GetInstance().ConvertDistanceInput(value);
+			}
+			else if (event.GetCol() == 2)// Y
+			{
+				// Add the operation to the undo/redo stack
+				parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
+					parent.GetParent().GetMainFrame().GetActiveIndex(),
+					UndoRedoStack::Operation::DataTypeDouble,
+					&(currentCorner->hardpoints[event.GetRow() - 1].y()));
+
+				currentCorner->hardpoints[event.GetRow() - 1].y() =
+					UnitConverter::GetInstance().ConvertDistanceInput(value);
+			}
+			else// Z
+			{
+				// Add the operation to the undo/redo stack
+				parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
+					parent.GetParent().GetMainFrame().GetActiveIndex(),
+					UndoRedoStack::Operation::DataTypeDouble,
+					&(currentCorner->hardpoints[event.GetRow() - 1].z()));
+
+				currentCorner->hardpoints[event.GetRow() - 1].z() =
+					UnitConverter::GetInstance().ConvertDistanceInput(value);
+			}
+
+			currentSuspension->UpdateSymmetry();
 		}
-
-		// Get the new value
-		valueString = hardpoints->GetCellValue(event.GetRow(), event.GetCol());
-		double value;
-
-		// Make sure the value is numeric
-		if (!valueString.ToDouble(&value))
-			// The value is non-numeric - don't do anything
-			return;
-
-		// Update the point (don't forget to convert)
-		if (event.GetCol() == 1)// X
-		{
-			// Add the operation to the undo/redo stack
-			parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
-				parent.GetParent().GetMainFrame().GetActiveIndex(),
-				UndoRedoStack::Operation::DataTypeDouble,
-				&(currentCorner->hardpoints[event.GetRow() - 1].x()));
-
-			currentCorner->hardpoints[event.GetRow() - 1].x() =
-				UnitConverter::GetInstance().ConvertDistanceInput(value);
-		}
-		else if (event.GetCol() == 2)// Y
-		{
-			// Add the operation to the undo/redo stack
-			parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
-				parent.GetParent().GetMainFrame().GetActiveIndex(),
-				UndoRedoStack::Operation::DataTypeDouble,
-				&(currentCorner->hardpoints[event.GetRow() - 1].y()));
-
-			currentCorner->hardpoints[event.GetRow() - 1].y() =
-				UnitConverter::GetInstance().ConvertDistanceInput(value);
-		}
-		else// Z
-		{
-			// Add the operation to the undo/redo stack
-			parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
-				parent.GetParent().GetMainFrame().GetActiveIndex(),
-				UndoRedoStack::Operation::DataTypeDouble,
-				&(currentCorner->hardpoints[event.GetRow() - 1].z()));
-
-			currentCorner->hardpoints[event.GetRow() - 1].z() =
-				UnitConverter::GetInstance().ConvertDistanceInput(value);
-		}
-
-		currentSuspension->UpdateSymmetry();
-		mutex->Unlock();
 
 		parent.GetParent().GetCurrentObject()->SetModified();
 
@@ -578,18 +578,15 @@ void EditCornerPanel::ActuationAttachmentChangeEvent(wxCommandEvent &event)
 		UndoRedoStack::Operation::DataTypeInteger,
 		&(currentCorner->actuationAttachment));
 
-	// Get a lock on the car
-	wxMutex *mutex = parent.GetParent().GetCurrentMutex();
-	mutex->Lock();
+	{
+		MutexLocker lock(*parent.GetParent().GetCurrentMutex());
 
-	// Set the value of the actuation attachment enum to the value of this combobox
-	currentCorner->actuationAttachment = (Corner::ActuationAttachment)event.GetSelection();
+		// Set the value of the actuation attachment enum to the value of this combobox
+		currentCorner->actuationAttachment = (Corner::ActuationAttachment)event.GetSelection();
 
-	// Call the UpdateSymmetry method in case this is a symmetric suspension
-	currentSuspension->UpdateSymmetry();
-
-	// Unlock the car
-	mutex->Unlock();
+		// Call the UpdateSymmetry method in case this is a symmetric suspension
+		currentSuspension->UpdateSymmetry();
+	}
 
 	// Tell the car object that it was modified
 	parent.GetParent().GetCurrentObject()->SetModified();
@@ -625,18 +622,15 @@ void EditCornerPanel::ActuationTypeChangeEvent(wxCommandEvent &event)
 		UndoRedoStack::Operation::DataTypeInteger,
 		&(currentCorner->actuationType));
 
-	// Get a lock on the car
-	wxMutex *mutex = parent.GetParent().GetCurrentMutex();
-	mutex->Lock();
+	{
+		MutexLocker lock(*parent.GetParent().GetCurrentMutex());
 
-	// Set the value of the actuation attachment enum to the value of this combobox
-	currentCorner->actuationType = (Corner::ActuationType)event.GetSelection();
+		// Set the value of the actuation attachment enum to the value of this combobox
+		currentCorner->actuationType = (Corner::ActuationType)event.GetSelection();
 
-	// Call the UpdateSymmetry method in case this is a symmetric suspension
-	currentSuspension->UpdateSymmetry();
-
-	// Unlock the car
-	mutex->Unlock();
+		// Call the UpdateSymmetry method in case this is a symmetric suspension
+		currentSuspension->UpdateSymmetry();
+	}
 
 	// Tell the car object that it was modified
 	parent.GetParent().GetCurrentObject()->SetModified();
@@ -690,13 +684,12 @@ void EditCornerPanel::StaticCamberChangeEvent(wxCommandEvent &event)
 		UndoRedoStack::Operation::DataTypeDouble,
 		&(currentCorner->staticCamber));
 
-	wxMutex *mutex = parent.GetParent().GetCurrentMutex();
-	mutex->Lock();
+	{
+		MutexLocker lock(*parent.GetParent().GetCurrentMutex());
 
-	currentCorner->staticCamber = UnitConverter::GetInstance().ConvertAngleInput(value);
-	currentSuspension->UpdateSymmetry();
-
-	mutex->Unlock();
+		currentCorner->staticCamber = UnitConverter::GetInstance().ConvertAngleInput(value);
+		currentSuspension->UpdateSymmetry();
+	}
 
 	parent.GetParent().GetCurrentObject()->SetModified();
 
@@ -746,16 +739,15 @@ void EditCornerPanel::StaticToeChangeEvent(wxCommandEvent &event)
 		UndoRedoStack::Operation::DataTypeDouble,
 		&(currentCorner->staticToe));
 
-	wxMutex *mutex = parent.GetParent().GetCurrentMutex();
-	mutex->Lock();
+	{
+		MutexLocker lock(*parent.GetParent().GetCurrentMutex());
 
-	// Update the corner object
-	currentCorner->staticToe = UnitConverter::GetInstance().ConvertAngleInput(value);
+		// Update the corner object
+		currentCorner->staticToe = UnitConverter::GetInstance().ConvertAngleInput(value);
 
-	// Call the UpdateSymmetry method in case this is a symmetric suspension
-	currentSuspension->UpdateSymmetry();
-
-	mutex->Unlock();
+		// Call the UpdateSymmetry method in case this is a symmetric suspension
+		currentSuspension->UpdateSymmetry();
+	}
 
 	// Tell the car object that it was modified
 	parent.GetParent().GetCurrentObject()->SetModified();

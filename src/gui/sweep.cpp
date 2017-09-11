@@ -118,10 +118,11 @@ void Sweep::CreateGUI()
 
 	// TODO:  Plot size not correct - we want to maximize plot size and start with only a small PlotListGrid
 	CreatePlotArea(splitter);
-	splitter->SplitHorizontally(mPlotArea, lowerPanel, mPlotArea->GetSize().GetHeight());
+	const unsigned int minPaneSize(150);
+	splitter->SplitHorizontally(mPlotArea, lowerPanel, notebookTab->GetClientSize().GetHeight() - minPaneSize);//mPlotArea->GetSize().GetHeight());
 	splitter->SetSize(notebookTab->GetClientSize());
 	splitter->SetSashGravity(1.0);
-	splitter->SetMinimumPaneSize(150);
+	splitter->SetMinimumPaneSize(minPaneSize);
 
 	notebookTab->SetSizerAndFit(topSizer);
 	splitter->SetSashPosition(splitter->GetSashPosition(), false);

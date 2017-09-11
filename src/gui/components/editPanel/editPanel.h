@@ -20,6 +20,9 @@
 // Local headers
 #include "VVASE/gui/guiObject.h"
 
+// Standard C++ headers
+#include <mutex>
+
 // wxWidgets forward declarations
 class wxCombo;
 class wxCheckBox;
@@ -52,7 +55,7 @@ public:
 
 	inline MainFrame &GetMainFrame() { return mainFrame; }
 	inline GuiObject *GetCurrentObject() { return currentObject; }
-	wxMutex *GetCurrentMutex() { return carMutex; }
+	std::mutex *GetCurrentMutex() { return carMutex; }
 
 private:
 	MainFrame &mainFrame;
@@ -84,7 +87,7 @@ private:
 
 	wxBoxSizer *sizer;
 
-	wxMutex *carMutex = nullptr;
+	std::mutex *carMutex = nullptr;
 };
 
 }// namespace VVASE

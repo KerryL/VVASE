@@ -14,6 +14,7 @@
 // Local headers
 #include "VVASE/core/car/subsystems/tire.h"
 #include "VVASE/core/car/subsystems/tireSet.h"
+#include "VVASE/core/threads/threadDefs.h"
 #include "VVASE/gui/renderer/carRenderer.h"
 #include "../../../guiCar.h"
 #include "VVASE/gui/components/mainFrame.h"
@@ -469,17 +470,16 @@ void EditTiresPanel::TextBoxChangeEvent(wxCommandEvent &event)
 		UndoRedoStack::Operation::DataTypeDouble,
 		dataLocation);
 
-	wxMutex *mutex = parent.GetCurrentMutex();
-	mutex->Lock();
-	if (event.GetId() == TextBoxRightFrontStiffness ||
-		event.GetId() == TextBoxLeftFrontStiffness ||
-		event.GetId() == TextBoxRightRearStiffness ||
-		event.GetId() == TextBoxLeftRearStiffness)
-		*dataLocation = ConvertSpringInput(value);
-	else
-		*dataLocation = UnitConverter::GetInstance().ConvertInput(value, UnitType::Distance);
-
-	mutex->Unlock();
+	{
+		MutexLocker lock(*parent.GetCurrentMutex());
+		if (event.GetId() == TextBoxRightFrontStiffness ||
+			event.GetId() == TextBoxLeftFrontStiffness ||
+			event.GetId() == TextBoxRightRearStiffness ||
+			event.GetId() == TextBoxLeftRearStiffness)
+			*dataLocation = ConvertSpringInput(value);
+		else
+			*dataLocation = UnitConverter::GetInstance().ConvertInput(value, UnitType::Distance);
+	}
 
 	parent.GetCurrentObject()->SetModified();
 	parent.GetMainFrame().UpdateAnalysis();

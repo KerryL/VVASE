@@ -14,6 +14,7 @@
 // Local headers
 #include "VVASE/core/car/subsystems/drivetrain.h"
 #include "VVASE/core/car/subsystems/suspension.h"
+#include "VVASE/core/threads/threadDefs.h"
 #include "VVASE/gui/renderer/carRenderer.h"
 #include "../../../guiCar.h"
 #include "VVASE/gui/superGrid.h"
@@ -460,42 +461,41 @@ void EditSuspensionPanel::GridCellChangedEvent(wxGridEvent &event)
 			// The value is non-numeric - don't do anything
 			return;
 
-		wxMutex *mutex = parent.GetParent().GetCurrentMutex();
-		mutex->Lock();
-
-		// Update the point (don't forget to convert)
-		if (event.GetCol() == 1)// X
 		{
-			// Add the operation to the undo/redo stack
-			parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
-				parent.GetParent().GetMainFrame().GetActiveIndex(),
-				UndoRedoStack::Operation::DataTypeDouble,
-				&(currentSuspension->hardpoints[event.GetRow() - 1].x()));
+			MutexLocker lock(*parent.GetParent().GetCurrentMutex());
 
-			currentSuspension->hardpoints[event.GetRow() - 1].x() = UnitConverter::GetInstance().ConvertDistanceInput(value);
+			// Update the point (don't forget to convert)
+			if (event.GetCol() == 1)// X
+			{
+				// Add the operation to the undo/redo stack
+				parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
+					parent.GetParent().GetMainFrame().GetActiveIndex(),
+					UndoRedoStack::Operation::DataTypeDouble,
+					&(currentSuspension->hardpoints[event.GetRow() - 1].x()));
+
+				currentSuspension->hardpoints[event.GetRow() - 1].x() = UnitConverter::GetInstance().ConvertDistanceInput(value);
+			}
+			else if (event.GetCol() == 2)// Y
+			{
+				// Add the operation to the undo/redo stack
+				parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
+					parent.GetParent().GetMainFrame().GetActiveIndex(),
+					UndoRedoStack::Operation::DataTypeDouble,
+					&(currentSuspension->hardpoints[event.GetRow() - 1].y()));
+
+				currentSuspension->hardpoints[event.GetRow() - 1].y() = UnitConverter::GetInstance().ConvertDistanceInput(value);
+			}
+			else// Z
+			{
+				// Add the operation to the undo/redo stack
+				parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
+					parent.GetParent().GetMainFrame().GetActiveIndex(),
+					UndoRedoStack::Operation::DataTypeDouble,
+					&(currentSuspension->hardpoints[event.GetRow() - 1].z()));
+
+				currentSuspension->hardpoints[event.GetRow() - 1].z() = UnitConverter::GetInstance().ConvertDistanceInput(value);
+			}
 		}
-		else if (event.GetCol() == 2)// Y
-		{
-			// Add the operation to the undo/redo stack
-			parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
-				parent.GetParent().GetMainFrame().GetActiveIndex(),
-				UndoRedoStack::Operation::DataTypeDouble,
-				&(currentSuspension->hardpoints[event.GetRow() - 1].y()));
-
-			currentSuspension->hardpoints[event.GetRow() - 1].y() = UnitConverter::GetInstance().ConvertDistanceInput(value);
-		}
-		else// Z
-		{
-			// Add the operation to the undo/redo stack
-			parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
-				parent.GetParent().GetMainFrame().GetActiveIndex(),
-				UndoRedoStack::Operation::DataTypeDouble,
-				&(currentSuspension->hardpoints[event.GetRow() - 1].z()));
-
-			currentSuspension->hardpoints[event.GetRow() - 1].z() = UnitConverter::GetInstance().ConvertDistanceInput(value);
-		}
-
-		mutex->Unlock();
 
 		parent.GetParent().GetCurrentObject()->SetModified();
 
@@ -533,12 +533,10 @@ void EditSuspensionPanel::SymmetricCheckboxEvent(wxCommandEvent &event)
 		UndoRedoStack::Operation::DataTypeBool,
 		&(currentSuspension->isSymmetric));
 
-	wxMutex *mutex = parent.GetParent().GetCurrentMutex();
-	mutex->Lock();
-
-	currentSuspension->isSymmetric = event.IsChecked();
-
-	mutex->Unlock();
+	{
+		MutexLocker lock(*parent.GetParent().GetCurrentMutex());
+		currentSuspension->isSymmetric = event.IsChecked();
+	}
 
 	// In the case that this was symmetric but is not any longer, we should
 	// capture a pointer to the current object so that we can still update the
@@ -582,13 +580,12 @@ void EditSuspensionPanel::FrontThirdCheckboxEvent(wxCommandEvent &event)
 		UndoRedoStack::Operation::DataTypeBool,
 		&(currentSuspension->frontHasThirdSpring));
 
-	wxMutex *mutex = parent.GetParent().GetCurrentMutex();
-	mutex->Lock();
+	{
+		MutexLocker lock(*parent.GetParent().GetCurrentMutex());
 
-	// Set the value of the front third spring flag to the value of this checkbox
-	currentSuspension->frontHasThirdSpring = event.IsChecked();
-
-	mutex->Unlock();
+		// Set the value of the front third spring flag to the value of this checkbox
+		currentSuspension->frontHasThirdSpring = event.IsChecked();
+	}
 
 	UpdateInformation();
 	parent.GetParent().GetCurrentObject()->SetModified();
@@ -624,13 +621,12 @@ void EditSuspensionPanel::RearThirdCheckboxEvent(wxCommandEvent &event)
 		UndoRedoStack::Operation::DataTypeBool,
 		&(currentSuspension->rearHasThirdSpring));
 
-	wxMutex *mutex = parent.GetParent().GetCurrentMutex();
-	mutex->Lock();
+	{
+		MutexLocker lock(*parent.GetParent().GetCurrentMutex());
 
-	// Set the value of the rear third spring flag to the value of this checkbox
-	currentSuspension->rearHasThirdSpring = event.IsChecked();
-
-	mutex->Unlock();
+		// Set the value of the rear third spring flag to the value of this checkbox
+		currentSuspension->rearHasThirdSpring = event.IsChecked();
+	}
 
 	UpdateInformation();
 	parent.GetParent().GetCurrentObject()->SetModified();
@@ -665,14 +661,13 @@ void EditSuspensionPanel::FrontBarStyleChangeEvent(wxCommandEvent &event)
 		UndoRedoStack::Operation::DataTypeInteger,
 		&(currentSuspension->frontBarStyle));
 
-	wxMutex *mutex = parent.GetParent().GetCurrentMutex();
-	mutex->Lock();
+	{
+		MutexLocker lock(*parent.GetParent().GetCurrentMutex());
 
-	// Set the value of the front bar style flag to the value of this checkbox
-	currentSuspension->frontBarStyle = (Suspension::BarStyle)event.GetSelection();
-	SetFront3rdSpringEnable();
-
-	mutex->Unlock();
+		// Set the value of the front bar style flag to the value of this checkbox
+		currentSuspension->frontBarStyle = (Suspension::BarStyle)event.GetSelection();
+		SetFront3rdSpringEnable();
+	}
 
 	parent.UpdateInformation();
 	parent.GetParent().GetCurrentObject()->SetModified();
@@ -763,14 +758,13 @@ void EditSuspensionPanel::RearBarStyleChangeEvent(wxCommandEvent &event)
 		UndoRedoStack::Operation::DataTypeInteger,
 		&(currentSuspension->rearBarStyle));
 
-	wxMutex *mutex = parent.GetParent().GetCurrentMutex();
-	mutex->Lock();
+	{
+		MutexLocker lock(*parent.GetParent().GetCurrentMutex());
 
-	// Set the value of the rear bar style flag to the value of this checkbox
-	currentSuspension->rearBarStyle = (Suspension::BarStyle)event.GetSelection();
-	SetRear3rdSpringEnable();
-
-	mutex->Unlock();
+		// Set the value of the rear bar style flag to the value of this checkbox
+		currentSuspension->rearBarStyle = (Suspension::BarStyle)event.GetSelection();
+		SetRear3rdSpringEnable();
+	}
 
 	parent.UpdateInformation();
 	parent.GetParent().GetCurrentObject()->SetModified();

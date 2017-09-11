@@ -12,6 +12,7 @@
 
 // Local headers
 #include "VVASE/core/car/subsystems/suspension.h"
+#include "VVASE/core/threads/threadDefs.h"
 #include "../../../guiCar.h"
 #include "VVASE/gui/superGrid.h"
 #include "VVASE/gui/components/mainFrame.h"
@@ -319,38 +320,37 @@ void EditSuspensionRatesPanel::GridCellChangedEvent(wxGridEvent &event)
 			// The value is non-numeric - don't do anything
 			return;
 
-		wxMutex *mutex = parent.GetParent().GetCurrentMutex();
-		mutex->Lock();
+		{
+			MutexLocker lock(*parent.GetParent().GetCurrentMutex());
 
-		double *valueLocation;
-		if (event.GetRow() == RowLeftFrontSpring)
-			valueLocation = &currentSuspension->leftFront.spring.rate;
-		else if (event.GetRow() == RowRightFrontSpring)
-			valueLocation = &currentSuspension->rightFront.spring.rate;
-		else if (event.GetRow() == RowLeftRearSpring)
-			valueLocation = &currentSuspension->leftRear.spring.rate;
-		else if (event.GetRow() == RowRightRearSpring)
-			valueLocation = &currentSuspension->rightRear.spring.rate;
-		else if (event.GetRow() == RowFrontThirdSpring)
-			valueLocation = &currentSuspension->frontThirdSpring.rate;
-		else if (event.GetRow() == RowRearThirdSpring)
-			valueLocation = &currentSuspension->rearThirdSpring.rate;
-		else if (event.GetRow() == RowFrontARB)
-			valueLocation = &currentSuspension->barRate.front;
-		else// if (event.GetRow() == RowRearARB)
-			valueLocation = &currentSuspension->barRate.rear;
+			double *valueLocation;
+			if (event.GetRow() == RowLeftFrontSpring)
+				valueLocation = &currentSuspension->leftFront.spring.rate;
+			else if (event.GetRow() == RowRightFrontSpring)
+				valueLocation = &currentSuspension->rightFront.spring.rate;
+			else if (event.GetRow() == RowLeftRearSpring)
+				valueLocation = &currentSuspension->leftRear.spring.rate;
+			else if (event.GetRow() == RowRightRearSpring)
+				valueLocation = &currentSuspension->rightRear.spring.rate;
+			else if (event.GetRow() == RowFrontThirdSpring)
+				valueLocation = &currentSuspension->frontThirdSpring.rate;
+			else if (event.GetRow() == RowRearThirdSpring)
+				valueLocation = &currentSuspension->rearThirdSpring.rate;
+			else if (event.GetRow() == RowFrontARB)
+				valueLocation = &currentSuspension->barRate.front;
+			else// if (event.GetRow() == RowRearARB)
+				valueLocation = &currentSuspension->barRate.rear;
 
-		// Add the operation to the undo/redo stack
-		parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
-			parent.GetParent().GetMainFrame().GetActiveIndex(),
-			UndoRedoStack::Operation::DataTypeDouble, valueLocation);
+			// Add the operation to the undo/redo stack
+			parent.GetParent().GetMainFrame().GetUndoRedoStack().AddOperation(
+				parent.GetParent().GetMainFrame().GetActiveIndex(),
+				UndoRedoStack::Operation::DataTypeDouble, valueLocation);
 
-		if (event.GetRow() == RowFrontARB || event.GetRow() == RowRearARB)
-			*valueLocation = ConvertRotarySpringInput(value);
-		else
-			*valueLocation = ConvertLinearSpringInput(value);
-
-		mutex->Unlock();
+			if (event.GetRow() == RowFrontARB || event.GetRow() == RowRearARB)
+				*valueLocation = ConvertRotarySpringInput(value);
+			else
+				*valueLocation = ConvertLinearSpringInput(value);
+		}
 
 		parent.GetParent().GetCurrentObject()->SetModified();
 		parent.GetParent().GetMainFrame().UpdateAnalysis();
