@@ -114,7 +114,7 @@ const std::string Sphere::mSphereGeometryShader(
 	"uniform int resolution;\n"
 	"\n"
 	"layout (points) in;\n"
-	"layout (triangle_strip, max_vertices = 60) out;\n"
+	"layout (triangle_strip, max_vertices = 960) out;\n"// 960 vertices = 2 subdivision steps on a polygon that starts with 20 faces
 	"\n"
 	"in SphereInfo\n"
 	"{\n"
@@ -131,11 +131,10 @@ const std::string Sphere::mSphereGeometryShader(
 	"\n"
 	"void MakeTriangle(vec3 corner1, vec3 corner2, vec3 corner3)\n"
 	"{\n"
+	// TODO:  Try per-vertex normals instead?
 	"    vec4 corner1Projected = modelviewMatrix * vec4(corner1, 1.0);\n"
 	"    vec4 corner2Projected = modelviewMatrix * vec4(corner2, 1.0);\n"
 	"    vec4 corner3Projected = modelviewMatrix * vec4(corner3, 1.0);\n"
-	/*"    vec3 vector1 = vec3(corner2Projected - corner1Projected);\n"
-	"    vec3 vector2 = vec3(corner3Projected - corner1Projected);\n"*/
 	"    vec3 vector1 = vec3(corner2 - corner1);\n"
 	"    vec3 vector2 = vec3(corner3 - corner1);\n"
 	"    vec3 localNormal = normalMatrix * normalize(cross(vector1, vector2));\n"
@@ -163,9 +162,10 @@ const std::string Sphere::mSphereGeometryShader(
 	"\n"
 	"void DoSubdivision(vec3 corner1, vec3 corner2, vec3 corner3)\n"
 	"{\n"
-	"    int i;\n"
+	//"    vec3 v[];\n"
+	/*"    int i;\n"
 	"    for (i = resolution; i > 1; --i)\n"
-	"    {\n"
+	"    {\n"*/
 	// Compute the three points that divide this triangle into four sub-triangles
 	// The division works like this:
 	/*-----------------------
@@ -187,17 +187,17 @@ const std::string Sphere::mSphereGeometryShader(
 	// Call this method for each of the four sub-triangles, with one less level
 	// Note that the order in which the points are supplied is important to make
 	// sure that the triangles are created in a consistent manner (clock-wise).
-	/*"        RecursiveSubdivision(corner1, midPoint2, midPoint1, level);\n"
-	"        RecursiveSubdivision(corner2, midPoint1, midPoint3, level);\n"
-	"        RecursiveSubdivision(corner3, midPoint3, midPoint2, level);\n"
-	"        RecursiveSubdivision(midPoint1, midPoint2, midPoint3, level);\n"*/
-	"    }\n"
+	"        MakeTriangle(corner1, midPoint2, midPoint1);\n"
+	"        MakeTriangle(corner2, midPoint1, midPoint3);\n"
+	"        MakeTriangle(corner3, midPoint3, midPoint2);\n"
+	"        MakeTriangle(midPoint1, midPoint2, midPoint3);\n"
+	//"    }\n"
 	"\n"
 	// If level is less than 1, add the triangle to the scene instead of
 	// continuing with the sub-division
 	//"    if (level < 1)\n"
 	//"    {\n"
-	"    MakeTriangle(corner1, corner2, corner3);\n"
+	//"    MakeTriangle(corner1, corner2, corner3);\n"
 	//"    }\n"
 	"}\n"
 	"\n"
