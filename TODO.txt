@@ -39,8 +39,7 @@ Code Quality Review:
 
 
 Bugs:
-- Crash if plot updates while not visible?  Same for two cars
+- Crash on plot construction
 - Light placement doesn't matter?
-- Spheres don't work?
 - Need to update NormalMatrix when geometry changes
 - Initial splitter position for sweeps

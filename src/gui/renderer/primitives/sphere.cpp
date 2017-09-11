@@ -44,8 +44,6 @@ namespace VVASE
 //		None
 //
 //==========================================================================
-bool Sphere::mInitialized(false);
-unsigned int Sphere::mProgram;
 const std::string Sphere::mResolutionName("resolution");
 const std::string Sphere::mCenterName("center");
 const std::string Sphere::mRadiusName("radius");
@@ -298,7 +296,7 @@ Sphere::Sphere(LibPlot2D::RenderWindow &renderWindow) : Primitive(renderWindow)
 //==========================================================================
 void Sphere::GenerateGeometry()
 {
-	mRenderWindow.UseProgram(mProgram);
+	mRenderWindow.UseProgram(mRenderWindow.GetPrimitiveTypeProgram<Sphere>());
 
 	if (mResolutionChanged)
 	{
@@ -330,14 +328,11 @@ void Sphere::GenerateGeometry()
 //		None
 //
 // Return Value:
-//		None
+//		GLuint
 //
 //==========================================================================
-void Sphere::DoGLInitialization()
+GLuint Sphere::DoGLInitialization()
 {
-	if (mInitialized)
-		return;
-
 	std::vector<GLuint> shaderList;
 	shaderList.push_back(mRenderWindow.CreateShader(GL_VERTEX_SHADER, mPassThroughVertexShader));
 	//shaderList.push_back(mRenderWindow.CreateDefaultVertexShader());
@@ -350,9 +345,7 @@ void Sphere::DoGLInitialization()
 	s.uniformLocations[mResolutionName] = glGetUniformLocation(s.programId, mResolutionName.c_str());
 	s.attributeLocations[mCenterName] = glGetAttribLocation(s.programId, mCenterName.c_str());
 	s.attributeLocations[mRadiusName] = glGetAttribLocation(s.programId, mRadiusName.c_str());
-	mProgram = mRenderWindow.AddShader(s);
-
-	mInitialized = true;
+	return mRenderWindow.AddShader(s);
 }
 
 //==========================================================================
@@ -561,7 +554,7 @@ void Sphere::AssignTriangleIndices(const unsigned int& i, const unsigned int &v1
 //==========================================================================
 void Sphere::Update(const unsigned int& /*i*/)
 {
-	DoGLInitialization();
+	mRenderWindow.InitializePrimitiveType(*this);
 
 	if (resolution < 0)// Don't need to update mResolutionChanged here because it will already have been changed
 		resolution = 0;
@@ -627,7 +620,7 @@ void Sphere::Update(const unsigned int& /*i*/)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * mBufferInfo[0].vertexBuffer.size(),
 		mBufferInfo[0].vertexBuffer.data(), GL_DYNAMIC_DRAW);
 
-	const auto& attributeMap(mRenderWindow.GetProgramInfo(mProgram).attributeLocations);
+	const auto& attributeMap(mRenderWindow.GetProgramInfo(mRenderWindow.GetPrimitiveTypeProgram<Sphere>()).attributeLocations);
 	glEnableVertexAttribArray(attributeMap.find(LibPlot2D::RenderWindow::mPositionName)->second);
 	glVertexAttribPointer(attributeMap.find(LibPlot2D::RenderWindow::mPositionName)->second, 4, GL_FLOAT, GL_FALSE, 0, 0);
 

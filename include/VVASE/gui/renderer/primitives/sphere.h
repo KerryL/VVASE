@@ -52,8 +52,6 @@ private:
 
 	double radius = 0.0;
 
-	static bool mInitialized;
-	static unsigned int mProgram;
 	static const std::string mPassThroughVertexShader;
 	static const std::string mSphereGeometryShader;
 
@@ -61,7 +59,8 @@ private:
 	static const std::string mCenterName;
 	static const std::string mRadiusName;
 
-	void DoGLInitialization();
+	unsigned int DoGLInitialization();
+	friend LibPlot2D::RenderWindow;
 
 	void AssignVertex(const unsigned int &i, const Eigen::Vector3d& v);
 	void AssignTriangleIndices(const unsigned int& i, const unsigned int &v1, const unsigned int &v2,
