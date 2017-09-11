@@ -163,52 +163,104 @@ const std::string Sphere::mSphereGeometryShader(
 	"    EndPrimitive();\n"
 	"}\n"
 	"\n"
+	"vec3 GetMidpoint(vec3 v1, vec3 v2)\n"
+	"{\n"
+	"    return normalize((v1 + v2) * 0.5 - sphereInfo[0].center) * sphereInfo[0].radius + sphereInfo[0].center;\n"
+	"}\n"
+	"\n"
 	"void DoSubdivision(vec3 corner1, vec3 corner2, vec3 corner3)\n"
 	"{\n"
-	//"    vec3 v[];\n"
-	/*"    int i;\n"
-	"    for (i = resolution; i > 1; --i)\n"
-	"    {\n"*/
+	"    vec3 inputTriangles[48 + 12 + 3];\n"
+	"    inputTriangles[0] = corner1;\n"
+	"    inputTriangles[1] = corner2;\n"
+	"    inputTriangles[2] = corner3;\n"
+	"    int inputWriteIndex = 1;\n"
+	"    int inputReadIndex = 0;\n"
+	"\n"
+	"    vec3 outputTriangles[48];\n"
+	"    int outputWriteIndex = 0;\n"
+	"\n"
+	"    int i;\n"
+	"    for (i = 0; i < resolution; ++i)\n"
+	"    {\n"
+	"        int lastReadIndex = inputWriteIndex;\n"
+	"        while (inputReadIndex < lastReadIndex)\n"// For each triangle in inputTriangles after inputReadIndex
+	"        {\n"
 	// Compute the three points that divide this triangle into four sub-triangles
 	// The division works like this:
-	/*-----------------------
-	      Corner 1
+	/*     Corner 1
 	         /\
 	        /  \
-	       /    \
-	   MP1/\----/\MP2
+	       /____\
+	   MP1/\    /\MP2
 	     /  \  /  \
 	    /    \/MP3 \
 	    ------------
 	   Corner 2    Corner 3
-	-----------------------*/
-	"        vec3 midPoint1 = normalize((corner1 + corner2) * 0.5 - sphereInfo[0].center) * sphereInfo[0].radius + sphereInfo[0].center;\n"
-	"        vec3 midPoint2 = normalize((corner1 + corner3) * 0.5 - sphereInfo[0].center) * sphereInfo[0].radius + sphereInfo[0].center;\n"
-	"        vec3 midPoint3 = normalize((corner2 + corner3) * 0.5 - sphereInfo[0].center) * sphereInfo[0].radius + sphereInfo[0].center;\n"
+	*/
+	"            vec3 midPoint1 = GetMidpoint(inputTriangles[inputReadIndex], inputTriangles[inputReadIndex + 1]);\n"
+	"            vec3 midPoint2 = GetMidpoint(inputTriangles[inputReadIndex], inputTriangles[inputReadIndex + 2]);\n"
+	"            vec3 midPoint3 = GetMidpoint(inputTriangles[inputReadIndex + 1], inputTriangles[inputReadIndex + 2]);\n"
 	"\n"
-	// Call this method for each of the four sub-triangles, with one less level
-	// Note that the order in which the points are supplied is important to make
-	// sure that the triangles are created in a consistent manner (clock-wise).
-	"        MakeTriangle(corner1, midPoint2, midPoint1);\n"
-	"        MakeTriangle(corner2, midPoint1, midPoint3);\n"
-	"        MakeTriangle(corner3, midPoint3, midPoint2);\n"
-	"        MakeTriangle(midPoint1, midPoint2, midPoint3);\n"
-	//"    }\n"
+	"            if (i == resolution - 1)\n"
+	"            {\n"
+	"                outputTriangles[outputWriteIndex++] = inputTriangles[inputReadIndex];\n"
+	"                outputTriangles[outputWriteIndex++] = midPoint2;\n"
+	"                outputTriangles[outputWriteIndex++] = midPoint1;\n"
 	"\n"
-	// If level is less than 1, add the triangle to the scene instead of
-	// continuing with the sub-division
-	//"    if (level < 1)\n"
-	//"    {\n"
-	//"    MakeTriangle(corner1, corner2, corner3);\n"
-	//"    }\n"
+	"                outputTriangles[outputWriteIndex++] = inputTriangles[inputReadIndex + 1];\n"
+	"                outputTriangles[outputWriteIndex++] = midPoint1;\n"
+	"                outputTriangles[outputWriteIndex++] = midPoint3;\n"
+	"\n"
+	"                outputTriangles[outputWriteIndex++] = inputTriangles[inputReadIndex + 2];\n"
+	"                outputTriangles[outputWriteIndex++] = midPoint3;\n"
+	"                outputTriangles[outputWriteIndex++] = midPoint2;\n"
+	"\n"
+	"                outputTriangles[outputWriteIndex++] = midPoint1;\n"
+	"                outputTriangles[outputWriteIndex++] = midPoint2;\n"
+	"                outputTriangles[outputWriteIndex++] = midPoint3;\n"
+	"\n"
+	"                break;\n"
+	"            }\n"
+	"            else\n"
+	"            {\n"
+	"                inputTriangles[inputWriteIndex++] = inputTriangles[inputReadIndex];\n"
+	"                inputTriangles[inputWriteIndex++] = midPoint2;\n"
+	"                inputTriangles[inputWriteIndex++] = midPoint1;\n"
+	"\n"
+	"                inputTriangles[inputWriteIndex++] = inputTriangles[inputReadIndex + 1];\n"
+	"                inputTriangles[inputWriteIndex++] = midPoint1;\n"
+	"                inputTriangles[inputWriteIndex++] = midPoint3;\n"
+	"\n"
+	"                inputTriangles[inputWriteIndex++] = inputTriangles[inputReadIndex + 2];\n"
+	"                inputTriangles[inputWriteIndex++] = midPoint3;\n"
+	"                inputTriangles[inputWriteIndex++] = midPoint2;\n"
+	"\n"
+	"                inputTriangles[inputWriteIndex++] = midPoint1;\n"
+	"                inputTriangles[inputWriteIndex++] = midPoint2;\n"
+	"                inputTriangles[inputWriteIndex++] = midPoint3;\n"
+	"\n"
+	"                inputReadIndex += 3;\n"
+	"            }\n"
+	"        }\n"
+	"    }\n"
+	"\n"
+	"    if (resolution == 0)\n"
+	"    {\n"
+	"        outputTriangles[outputWriteIndex++] = corner1;\n"
+	"        outputTriangles[outputWriteIndex++] = corner2;\n"
+	"        outputTriangles[outputWriteIndex++] = corner3;\n"
+	"    }\n"
+	"\n"
+	"    for (i = 0; i < outputWriteIndex; i += 3)\n"
+	"    {\n"
+	"        MakeTriangle(outputTriangles[i], outputTriangles[i + 1], outputTriangles[i + 2]);\n"
+	"    }\n"
 	"}\n"
 	"\n"
 	"void main()\n"
 	"{\n"
-	"    if (resolution + sphereInfo[0].center.y + sphereInfo[0].radius > 100000.0)\n"
-	"        return;\n"
 	"    DoSubdivision(gl_in[0].gl_Position.xyz, gl_in[1].gl_Position.xyz, gl_in[2].gl_Position.xyz);\n"
-	//"    MakeTriangle(gl_in[0].gl_Position.xyz, gl_in[1].gl_Position.xyz, gl_in[2].gl_Position.xyz);\n"
 	"}\n"
 );
 
