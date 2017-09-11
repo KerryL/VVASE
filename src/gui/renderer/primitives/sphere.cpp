@@ -22,6 +22,7 @@
 #include <lp2d/renderer/renderWindow.h>
 
 // Standard C++ headers
+#include <array>
 #include <cassert>
 
 namespace VVASE
@@ -46,6 +47,7 @@ namespace VVASE
 bool Sphere::mInitialized(false);
 unsigned int Sphere::mProgram;
 const std::string Sphere::mResolutionName("resolution");
+const std::string Sphere::mCenterName("center");
 const std::string Sphere::mRadiusName("radius");
 
 //=============================================================================
@@ -67,24 +69,24 @@ const std::string Sphere::mRadiusName("radius");
 const std::string Sphere::mPassThroughVertexShader(
 	"#version 400\n"
 	"\n"
-	/*"uniform mat4 modelviewMatrix;\n"
-	"uniform mat4 projectionMatrix;\n"*/
 	"\n"
 	"layout(location = 0) in vec4 position;\n"
 	"layout(location = 1) in vec4 color;\n"
-	"layout(location = 2) in float radius;\n"
+	"layout(location = 2) in vec3 center;\n"
+	"layout(location = 3) in float radius;\n"
 	"\n"
 	"out SphereInfo\n"
 	"{\n"
 	"    vec4 color;\n"
+	"    vec3 center;\n"
 	"    float radius;\n"
 	"} sphereInfo;\n"
 	"\n"
 	"void main()\n"
 	"{\n"
 	"    sphereInfo.color = color;\n"
+	"    sphereInfo.center = center;\n"
 	"    sphereInfo.radius = radius;\n"
-	//"    gl_Position = projectionMatrix * modelviewMatrix * position;\n"
 	"    gl_Position = position;\n"
 	"}\n"
 );
@@ -113,12 +115,13 @@ const std::string Sphere::mSphereGeometryShader(
 	"uniform mat3 normalMatrix;\n"
 	"uniform int resolution;\n"
 	"\n"
-	"layout (points) in;\n"
-	"layout (triangle_strip, max_vertices = 960) out;\n"// 960 vertices = 2 subdivision steps on a polygon that starts with 20 faces
+	"layout (triangles) in;\n"
+	"layout (triangle_strip, max_vertices = 48) out;\n"// 48 vertices = 2 subdivision steps per triangle
 	"\n"
 	"in SphereInfo\n"
 	"{\n"
 	"    vec4 color;\n"
+	"    vec3 center;\n"
 	"    float radius;\n"
 	"} sphereInfo[];\n"
 	"\n"
@@ -179,10 +182,9 @@ const std::string Sphere::mSphereGeometryShader(
 	    ------------
 	   Corner 2    Corner 3
 	-----------------------*/
-	"        vec3 center = gl_in[0].gl_Position.xyz;\n"
-	"        vec3 midPoint1 = normalize((corner1 + corner2) * 0.5 - center) * sphereInfo[0].radius + center;\n"
-	"        vec3 midPoint2 = normalize((corner1 + corner3) * 0.5 - center) * sphereInfo[0].radius + center;\n"
-	"        vec3 midPoint3 = normalize((corner2 + corner3) * 0.5 - center) * sphereInfo[0].radius + center;\n"
+	"        vec3 midPoint1 = normalize((corner1 + corner2) * 0.5 - sphereInfo[0].center) * sphereInfo[0].radius + sphereInfo[0].center;\n"
+	"        vec3 midPoint2 = normalize((corner1 + corner3) * 0.5 - sphereInfo[0].center) * sphereInfo[0].radius + sphereInfo[0].center;\n"
+	"        vec3 midPoint3 = normalize((corner2 + corner3) * 0.5 - sphereInfo[0].center) * sphereInfo[0].radius + sphereInfo[0].center;\n"
 	"\n"
 	// Call this method for each of the four sub-triangles, with one less level
 	// Note that the order in which the points are supplied is important to make
@@ -203,46 +205,10 @@ const std::string Sphere::mSphereGeometryShader(
 	"\n"
 	"void main()\n"
 	"{\n"
-	"    vec3 center = gl_in[0].gl_Position.xyz;\n"
-	"    const float t = (1.0 + sqrt(5.0)) * 0.5;\n"
-	"    float s = sqrt(1.0 + t * t) / sphereInfo[0].radius;\n"
-	"    vec3 vertex[12];\n"
-	"    vertex[0] = vec3(t, 1.0, 0.0) / s + center;\n"
-	"    vertex[1] = vec3(-t, 1.0, 0.0) / s + center;\n"
-	"    vertex[2] = vec3(t, -1.0, 0.0) / s + center;\n"
-	"    vertex[3] = vec3(-t, -1.0, 0.0) / s + center;\n"
-	"    vertex[4] = vec3(1.0, 0.0, t) / s + center;\n"
-	"    vertex[5] = vec3(1.0, 0.0, -t) / s + center;\n"
-	"    vertex[6] = vec3(-1, 0.0, t) / s + center;\n"
-	"    vertex[7] = vec3(-1.0, 0.0, -t) / s + center;\n"
-	"    vertex[8] = vec3(0.0, t, 1.0) / s + center;\n"
-	"    vertex[9] = vec3(0.0, -t, 1.0) / s + center;\n"
-	"    vertex[10] = vec3(0.0, t, -1.0) / s + center;\n"
-	"    vertex[11] = vec3(0.0, -t, -1.0) / s + center;\n"
-	"\n"
-	"    DoSubdivision(vertex[0], vertex[8], vertex[4]);\n"
-	"    DoSubdivision(vertex[0], vertex[5], vertex[10]);\n"
-	"    DoSubdivision(vertex[2], vertex[4], vertex[9]);\n"
-	"    DoSubdivision(vertex[2], vertex[11], vertex[5]);\n"
-	"    DoSubdivision(vertex[1], vertex[6], vertex[8]);\n"
-	"\n"
-	"    DoSubdivision(vertex[1], vertex[10], vertex[7]);\n"
-	"    DoSubdivision(vertex[3], vertex[9], vertex[6]);\n"
-	"    DoSubdivision(vertex[3], vertex[7], vertex[11]);\n"
-	"    DoSubdivision(vertex[0], vertex[10], vertex[8]);\n"
-	"    DoSubdivision(vertex[1], vertex[8], vertex[10]);\n"
-	"\n"
-	"    DoSubdivision(vertex[2], vertex[9], vertex[11]);\n"
-	"    DoSubdivision(vertex[3], vertex[11], vertex[9]);\n"
-	"    DoSubdivision(vertex[4], vertex[2], vertex[0]);\n"
-	"    DoSubdivision(vertex[5], vertex[0], vertex[2]);\n"
-	"    DoSubdivision(vertex[6], vertex[1], vertex[3]);\n"
-	"\n"
-	"    DoSubdivision(vertex[7], vertex[3], vertex[1]);\n"
-	"    DoSubdivision(vertex[8], vertex[6], vertex[4]);\n"
-	"    DoSubdivision(vertex[9], vertex[4], vertex[6]);\n"
-	"    DoSubdivision(vertex[10], vertex[5], vertex[7]);\n"
-	"    DoSubdivision(vertex[11], vertex[7], vertex[5]);\n"
+	"    if (resolution + sphereInfo[0].center.y + sphereInfo[0].radius > 100000.0)\n"
+	"        return;\n"
+	"    DoSubdivision(gl_in[0].gl_Position.xyz, gl_in[1].gl_Position.xyz, gl_in[2].gl_Position.xyz);\n"
+	//"    MakeTriangle(gl_in[0].gl_Position.xyz, gl_in[1].gl_Position.xyz, gl_in[2].gl_Position.xyz);\n"
 	"}\n"
 );
 
@@ -295,8 +261,10 @@ void Sphere::GenerateGeometry()
 	}
 
 	glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
-	glDrawArrays(GL_POINTS, 0, mBufferInfo[0].vertexCount);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mBufferInfo[0].GetIndexBufferIndex());
+	glDrawElements(GL_TRIANGLES, mBufferInfo[0].indexBuffer.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 	mRenderWindow.UseDefaultProgram();
 
@@ -334,6 +302,7 @@ void Sphere::DoGLInitialization()
 	s.programId = mRenderWindow.CreateProgram(shaderList);
 	mRenderWindow.AssignDefaultLocations(s);
 	s.uniformLocations[mResolutionName] = glGetUniformLocation(s.programId, mResolutionName.c_str());
+	s.attributeLocations[mCenterName] = glGetAttribLocation(s.programId, mCenterName.c_str());
 	s.attributeLocations[mRadiusName] = glGetAttribLocation(s.programId, mRadiusName.c_str());
 	mProgram = mRenderWindow.AddShader(s);
 
@@ -464,6 +433,72 @@ bool Sphere::IsIntersectedBy(const Eigen::Vector3d& point, const Eigen::Vector3d
 
 //==========================================================================
 // Class:			Sphere
+// Function:		AssignVertex
+//
+// Description:		Assigns the vertex with the specified index in the buffer.
+//
+// Input Arguments:
+//		i	= const unsigned int&
+//		v	= const Eigen::Vector3d&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void Sphere::AssignVertex(const unsigned int &i, const Eigen::Vector3d& v)
+{
+	mBufferInfo[0].vertexBuffer[i * 4] = static_cast<float>(v.x());
+	mBufferInfo[0].vertexBuffer[i * 4 + 1] = static_cast<float>(v.y());
+	mBufferInfo[0].vertexBuffer[i * 4 + 2] = static_cast<float>(v.z());
+	mBufferInfo[0].vertexBuffer[i * 4 + 3] = 1.0f;
+
+	const unsigned int colorStart(4 * 12);
+	mBufferInfo[0].vertexBuffer[colorStart + i * 4] = static_cast<float>(mColor.GetRed());
+	mBufferInfo[0].vertexBuffer[colorStart + i * 4 + 1] = static_cast<float>(mColor.GetGreen());
+	mBufferInfo[0].vertexBuffer[colorStart + i * 4 + 2] = static_cast<float>(mColor.GetBlue());
+	mBufferInfo[0].vertexBuffer[colorStart + i * 4 + 3] = static_cast<float>(mColor.GetAlpha());
+
+	const unsigned int centerStart(colorStart + 4 * 12);
+	mBufferInfo[0].vertexBuffer[centerStart + i * 3] = static_cast<float>(center.x());
+	mBufferInfo[0].vertexBuffer[centerStart + i * 3 + 1] = static_cast<float>(center.y());
+	mBufferInfo[0].vertexBuffer[centerStart + i * 3 + 2] = static_cast<float>(center.z());
+
+	const unsigned int radiusStart(centerStart + 3 * 12);
+	mBufferInfo[0].vertexBuffer[radiusStart + i] = static_cast<float>(radius);
+}
+
+//==========================================================================
+// Class:			Sphere
+// Function:		AssignTriangleIndices
+//
+// Description:		Assigns the indices for the specified triangle to the buffer.
+//
+// Input Arguments:
+//		i	= const unsigned int&
+//		v1	= const unsigned int&
+//		v2	= const unsigned int&
+//		v3	= const unsigned int&
+//
+// Output Arguments:
+//		None
+//
+// Return Value:
+//		None
+//
+//==========================================================================
+void Sphere::AssignTriangleIndices(const unsigned int& i, const unsigned int &v1,
+	const unsigned int &v2, const unsigned int &v3)
+{
+	mBufferInfo[0].indexBuffer[i * 3] = v1;
+	mBufferInfo[0].indexBuffer[i * 3 + 1] = v2;
+	mBufferInfo[0].indexBuffer[i * 3 + 2] = v3;
+}
+
+//==========================================================================
+// Class:			Sphere
 // Function:		Update
 //
 // Description:		Updates the GL buffers associated with this object.
@@ -487,24 +522,58 @@ void Sphere::Update(const unsigned int& /*i*/)
 	else if (resolution > 2)
 		resolution = 2;
 
-	mBufferInfo[0].GetOpenGLIndices(false);
+	mBufferInfo[0].GetOpenGLIndices(true);
 
-	mBufferInfo[0].vertexCount = 1;
+	mBufferInfo[0].vertexCount = 12;
 	mBufferInfo[0].vertexBuffer.resize(mBufferInfo[0].vertexCount
-		* (mRenderWindow.GetVertexDimension() + 5));// 4D vertex, RGBA color, radius
+		* (mRenderWindow.GetVertexDimension() + 8));// 4D vertex, RGBA color, 3D center, radius
 	assert(mRenderWindow.GetVertexDimension() == 4);
 
-	mBufferInfo[0].vertexBuffer[0] = static_cast<float>(center.x());
-	mBufferInfo[0].vertexBuffer[1] = static_cast<float>(center.y());
-	mBufferInfo[0].vertexBuffer[2] = static_cast<float>(center.z());
-	mBufferInfo[0].vertexBuffer[3] = 1.0f;
+	const double t((1.0 + sqrt(5.0)) * 0.5);
+	const double s(sqrt(1.0 + t * t) / radius);
+	std::array<Eigen::Vector3d, 12> vertices;
+	vertices[0] = Eigen::Vector3d(t, 1.0, 0.0) / s + center;
+	vertices[1] = Eigen::Vector3d(-t, 1.0, 0.0) / s + center;
+	vertices[2] = Eigen::Vector3d(t, -1.0, 0.0) / s + center;
+	vertices[3] = Eigen::Vector3d(-t, -1.0, 0.0) / s + center;
+	vertices[4] = Eigen::Vector3d(1.0, 0.0, t) / s + center;
+	vertices[5] = Eigen::Vector3d(1.0, 0.0, -t) / s + center;
+	vertices[6] = Eigen::Vector3d(-1, 0.0, t) / s + center;
+	vertices[7] = Eigen::Vector3d(-1.0, 0.0, -t) / s + center;
+	vertices[8] = Eigen::Vector3d(0.0, t, 1.0) / s + center;
+	vertices[9] = Eigen::Vector3d(0.0, -t, 1.0) / s + center;
+	vertices[10] = Eigen::Vector3d(0.0, t, -1.0) / s + center;
+	vertices[11] = Eigen::Vector3d(0.0, -t, -1.0) / s + center;
 
-	mBufferInfo[0].vertexBuffer[4] = static_cast<float>(mColor.GetRed());
-	mBufferInfo[0].vertexBuffer[5] = static_cast<float>(mColor.GetGreen());
-	mBufferInfo[0].vertexBuffer[6] = static_cast<float>(mColor.GetBlue());
-	mBufferInfo[0].vertexBuffer[7] = static_cast<float>(mColor.GetAlpha());
+	unsigned int vertexIndex(0);
+	for (const auto& v : vertices)
+		AssignVertex(vertexIndex++, v);
 
-	mBufferInfo[0].vertexBuffer[8] = static_cast<float>(radius);
+	const unsigned int triangleCount(20);
+	mBufferInfo[0].indexBuffer.resize(triangleCount * 3);
+	AssignTriangleIndices(0, 0, 8, 4);
+	AssignTriangleIndices(1, 0, 5, 10);
+	AssignTriangleIndices(2, 2, 4, 9);
+	AssignTriangleIndices(3, 2, 11, 5);
+	AssignTriangleIndices(4, 1, 6, 8);
+
+	AssignTriangleIndices(5, 1, 10, 7);
+	AssignTriangleIndices(6, 3, 9, 6);
+	AssignTriangleIndices(7, 3, 7, 11);
+	AssignTriangleIndices(8, 0, 10, 8);
+	AssignTriangleIndices(9, 1, 8, 10);
+
+	AssignTriangleIndices(10, 2, 9, 11);
+	AssignTriangleIndices(11, 3, 11, 9);
+	AssignTriangleIndices(12, 4, 2, 0);
+	AssignTriangleIndices(13, 5, 0, 2);
+	AssignTriangleIndices(14, 6, 1, 3);
+
+	AssignTriangleIndices(15, 7, 3, 1);
+	AssignTriangleIndices(16, 8, 6, 4);
+	AssignTriangleIndices(17, 9, 4, 6);
+	AssignTriangleIndices(18, 10, 5, 7);
+	AssignTriangleIndices(19, 11, 7, 5);
 
 	glBindVertexArray(mBufferInfo[0].GetVertexArrayIndex());
 
@@ -520,10 +589,19 @@ void Sphere::Update(const unsigned int& /*i*/)
 	glVertexAttribPointer(attributeMap.find(LibPlot2D::RenderWindow::mColorName)->second, 4, GL_FLOAT, GL_FALSE, 0,
 		(void*)(sizeof(GLfloat) * mRenderWindow.GetVertexDimension() * mBufferInfo[0].vertexCount));
 
-	glEnableVertexAttribArray(attributeMap.find(mRadiusName)->second);
-	glVertexAttribPointer(attributeMap.find(mRadiusName)->second, 1, GL_FLOAT, GL_FALSE, 0,
+	glEnableVertexAttribArray(attributeMap.find(mCenterName)->second);
+	glVertexAttribPointer(attributeMap.find(mCenterName)->second, 3, GL_FLOAT, GL_FALSE, 0,
 		(void*)(sizeof(GLfloat) * (mRenderWindow.GetVertexDimension() + 4) * mBufferInfo[0].vertexCount));
 
+	glEnableVertexAttribArray(attributeMap.find(mRadiusName)->second);
+	glVertexAttribPointer(attributeMap.find(mRadiusName)->second, 1, GL_FLOAT, GL_FALSE, 0,
+		(void*)(sizeof(GLfloat) * (mRenderWindow.GetVertexDimension() + 7) * mBufferInfo[0].vertexCount));
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mBufferInfo[0].GetIndexBufferIndex());
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * mBufferInfo[0].indexBuffer.size(),
+		mBufferInfo[0].indexBuffer.data(), GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
 	assert(!LibPlot2D::RenderWindow::GLHasError());

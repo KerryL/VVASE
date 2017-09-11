@@ -58,9 +58,14 @@ private:
 	static const std::string mSphereGeometryShader;
 
 	static const std::string mResolutionName;
+	static const std::string mCenterName;
 	static const std::string mRadiusName;
 
 	void DoGLInitialization();
+
+	void AssignVertex(const unsigned int &i, const Eigen::Vector3d& v);
+	void AssignTriangleIndices(const unsigned int& i, const unsigned int &v1, const unsigned int &v2,
+		const unsigned int &v3);
 };
 
 }// namespace VVASE
